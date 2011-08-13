@@ -30,12 +30,12 @@ A manifest that describes the library and its dependencies is called a Pod.
 Consider you want to create a new library that retrieves the latest price of
 your favorite ice cream called IcePop.
 
-    $ pod create IcePop
+    $ pod spec create IcePop
     $ cd IcePop
     $ tree .
       - IcePop
+      |- IcePop.podspec
       |- LICENSE
-      |- PodSpec
       |- README
       |\ Source
       | | - IcePop.h
@@ -43,10 +43,10 @@ your favorite ice cream called IcePop.
       |- Test
 
 You can also initialize a Pod for an existing library, which will only create a
-PodSpec manifest.
+`.podspec` file.
 
     $ cd IcePop
-    $ pod init
+    $ pod spec init IcePop
 
 
 Anatomy of a PodSpec manifest
@@ -74,19 +74,19 @@ attributes and more info.
 Sharing a Pod
 =============
 
-CocoaPod uses git repositories with PodSpec.rb files as it’s database. In order
-to share your pod, its PodSpec.rb file will have to be added to such a repo.
-Luckily CocoaPod provides commands to facilitate this:
+CocoaPod uses git repositories with `.podspec` files as its database. In order
+to share your pod, its `.podspec` file will have to be added to such a repo.
+CocoaPod provides commands to facilitate this:
 
-    $ pod spec-repo add my-spec-repo http://github.com/alloy/spec-repo.git
+    $ pod repo add my-spec-repo http://github.com/alloy/spec-repo.git
     $ pod push my-spec-repo
 
 This will:
 
-1. Update the clone of the PodSpec manifest files repo.
-2. Add the PodSpec.rb file to the repo in a directory with the pod’s name and a
-   subdirectory for each version.
-3. Push the changes from the local clone of your spec-repo to its remote.
+1. Validate the `.podspec` file.
+1. Update the clone of the local spec-repo called `my-spec-repo`.
+2. Add the `.podspec` file to the spec-repo, namespaced by name and version.
+3. Push the changes from the local spec-repo to its remote.
 
 
 Share with everyone
@@ -97,18 +97,18 @@ called the ‘master’ spec-repo. This repo is meant as a central public place 
 any open-source pod. All installations of CocoaPods will have a local clone of
 this repo.
 
-However, normally you will have read-only access only. Thus, to get a PodSpec
-into the ‘master’ spec-repo you will have to push to your own fork of it and
-send a pull request.
+However, normally you will have read-only access only. Thus to get a PodSpec
+into the ‘master’ spec-repo you will have to push to your own fork and send
+a pull request.
 
 Once your first PodSpec has been merged, you will be given push access to the
-‘master’ spec-repo and are allowed to update and add PodSpec.rb files at your
+‘master’ spec-repo and are allowed to update and add `.podspec` files at your
 own leisure.
 
 Once you receive push acces, you will have to change your `master` spec-repo’s
 remote URL with:
 
-    $ pod spec-repo master change https://github.com/alloc/cocoa-pod-specs.git # TODO real URL
+    $ pod repo change master https://github.com/alloc/cocoa-pod-specs.git # TODO real URL
 
 
 [example]: PodSpec.example.rb

@@ -2,15 +2,17 @@ Setup
 =====
 
     $ pod help setup
-      $ pod setup
-        This command will create a directory at `~/.cocoa-pods` which will hold your
-        spec-repos. In addition it will create a clone of the public ‘master’ spec-repo.
+
+      pod setup
+        Creates a directory at `~/.cocoa-pods` which will hold your spec-repos.
+        In addition, it will create a clone of the public ‘master’ spec-repo.
 
 
 Managing PodSpec files
 ======================
 
     $ pod help spec
+
       pod spec create NAME
         Creates a directory for your new pod, named `NAME', with a default
         directory structure and accompanying `NAME.podspec'.
@@ -29,18 +31,20 @@ Managing PodSpec files
         spec-repo. In case `REMOTE' is omitted, it defaults to `master'.
 
 
-Manage spec-repos
-=================
+Managing spec-repos
+===================
 
-    pod repo add NAME URL
-      Clones `URL' in the local spec-repos directory at ~/.cocoa-pods. The
-      remote can later be referred to by `NAME'.
+    $ pod help repo
 
-    pod repo update NAME
-      Updates the local clone of the spec-repo `NAME'.
+      pod repo add NAME URL
+        Clones `URL' in the local spec-repos directory at ~/.cocoa-pods. The
+        remote can later be referred to by `NAME'.
 
-    pod repo change NAME URL
-      Changes the git remote of local spec-repo `NAME' to `URL'.
+      pod repo update NAME
+        Updates the local clone of the spec-repo `NAME'.
 
-    pod repo cd NAME
-      Changes the current working dir to the local spec-repo `NAME'.
+      pod repo change NAME URL
+        Changes the git remote of local spec-repo `NAME' to `URL'.
+
+      pod repo cd NAME
+        Changes the current working dir to the local spec-repo `NAME'.
