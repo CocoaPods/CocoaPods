@@ -19,11 +19,6 @@ Managing PodSpec files
         Creates a PodSpec, in the current working dir, called `NAME.podspec'.
         Use this for existing libraries.
 
-      pod spec edit NAME
-        Opens `NAME.podspec', from a local spec-repo, in the editor specified
-        in your shell environment by the `$EDITOR' variable. In case `NAME' is
-        omitted, it defaults to the PodSpec in the current working dir.
-
       pod spec lint NAME
         Validates `NAME.podspec' from a local spec-repo. In case `NAME' is
         omitted, it defaults to the PodSpec in the current working dir.
