@@ -70,8 +70,8 @@ Anatomy of a PodSpec manifest
 5. Defines a dependency of the library itself, with a version requirement
    of 0.6 trough 0.9.
 
-See the [example PodSpec manifest][example] for a full list of the available
-attributes and more info.
+See the [example PodSpec file][example] for a full list of the available
+attributes and more detailed information.
 
 
 Sharing a Pod
@@ -79,7 +79,6 @@ Sharing a Pod
 
 CocoaPod uses git repositories with `.podspec` files as its database. In order
 to share your pod, its `.podspec` file will have to be added to such a repo.
-CocoaPod provides commands to facilitate this:
 
     $ pod repo add my-spec-repo http://github.com/alloy/spec-repo.git
     $ pod push my-spec-repo
@@ -95,23 +94,22 @@ This will:
 Share with everyone
 ===================
 
-CocoaPods, itself, has a [spec-repo][http://github.com/alloy/cocoa-pod-specs],
-called the ‘master’ spec-repo. This repo is meant as a central public place for
-any open-source pod. All installations of CocoaPods will have a local clone of
-this repo.
+CocoaPods, itself, has a [spec-repo][master], called the `master` spec-repo.
+This repo is meant as a central public place for any open-source pod. All
+installations of CocoaPods will have a local clone of this repo.
 
 However, normally you will have read-only access only. Thus to get a PodSpec
-into the ‘master’ spec-repo you will have to push to your own fork and send
+into the `master` spec-repo you will have to push to your own fork and send
 a pull request.
 
 Once your first PodSpec has been merged, you will be given push access to the
-‘master’ spec-repo and are allowed to update and add `.podspec` files at your
+`master` spec-repo and are allowed to update and add `.podspec` files at your
 own leisure.
 
 Once you receive push acces, you will have to change your `master` spec-repo’s
 remote URL with:
 
-    $ pod repo change master https://github.com/alloc/cocoa-pod-specs.git # TODO real URL
+    $ pod repo change master git@github.com:alloy/cocoa-pod-specs.git
 
 
 Commands overview
@@ -122,8 +120,8 @@ Commands overview
     $ pod help setup
 
       pod setup
-        Creates a directory at `~/.cocoa-pods` which will hold your spec-repos.
-        In addition, it will create a clone of the public ‘master’ spec-repo.
+        Creates a directory at `~/.cocoa-pods' which will hold your spec-repos.
+        This is where it will create a clone of the public `master' spec-repo.
 
 ### Managing PodSpec files
 
@@ -151,7 +149,7 @@ Commands overview
     $ pod help repo
 
       pod repo add NAME URL
-        Clones `URL' in the local spec-repos directory at ~/.cocoa-pods. The
+        Clones `URL' in the local spec-repos directory at `~/.cocoa-pods'. The
         remote can later be referred to by `NAME'.
 
       pod repo update NAME
@@ -181,5 +179,6 @@ These works are available under the MIT license. See the [LICENSE][license] file
 for more info.
 
 
-[example]: cocoa-pods/blob/master/examples/PodSpec.podspec
 [license]: cocoa-pods/blob/master/LICENSE
+[example]: cocoa-pods/blob/master/examples/PodSpec.podspec
+[master]: http://github.com/alloy/cocoa-pod-specs
