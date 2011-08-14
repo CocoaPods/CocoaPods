@@ -11,7 +11,7 @@ end
 
 describe "Pod::Command::Setup" do
   it "complains about unknown arguments" do
-    lambda { Pod::Command::Setup.new('something') }.should.raise
+    lambda { Pod::Command::Setup.new('something') }.should.raise ArgumentError
   end
 
   before do
@@ -25,8 +25,15 @@ describe "Pod::Command::Setup" do
   it "returns the path of the directory where the local spec-repos will be stored" do
     @command.repos_dir.should == File.expand_path("~/.cocoa-pods")
   end
+end
 
-  it "returns the path of the directory where the `master' spec-repo will be" do
-    @command.master_repo_dir.should == File.expand_path("~/.cocoa-pods/master")
+describe "Pod::Command::Repo" do
+  it "complains about unknown arguments" do
+    lambda { Pod::Command::Repo.new('something') }.should.raise ArgumentError
+  end
+
+  it "returns the path of the spec-repo directory" do
+    repo = Pod::Command::Repo.new('cd', 'private')
+    repo.dir.should == File.expand_path("~/.cocoa-pods/private")
   end
 end

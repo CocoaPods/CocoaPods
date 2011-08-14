@@ -17,10 +17,11 @@ module Pod
     end
 
     def initialize(*argv)
-      raise "unknown argument(s): #{argv.join(', ')}" unless argv.empty?
+      raise ArgumentError, "unknown argument(s): #{argv.join(', ')}" unless argv.empty?
     end
 
-    def run
+    def repos_dir
+      File.expand_path('~/.cocoa-pods')
     end
   end
 end

@@ -20,12 +20,12 @@ module SpecHelper
     executable :git
 
     alias_method :git_super, :git
-    def git(command)
-      Dir.chdir(tmp_master_repo_path) { git_super(command).strip }
+    def git(repo, command)
+      Dir.chdir(File.join(tmp_repos_path, repo)) { git_super(command).strip }
     end
 
-    def git_config(attr)
-      git "config --get #{attr}"
+    def git_config(repo, attr)
+      git repo, "config --get #{attr}"
     end
   end
 end
