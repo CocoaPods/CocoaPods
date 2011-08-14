@@ -181,5 +181,5 @@ These works are available under the MIT license. See the [LICENSE][license] file
 for more info.
 
 
-[example]: examples/PodSpec.podspec
-[license]: LICENSE
+[example]: cocoa-pods/blob/master/examples/PodSpec.podspec
+[license]: cocoa-pods/blob/master/LICENSE
