@@ -1,6 +1,6 @@
 module Pod
-  module Command
-    class Repo
+  class Command
+    class Repo < Command
     end
   end
 end

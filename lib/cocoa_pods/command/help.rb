@@ -1,6 +1,6 @@
 module Pod
-  module Command
-    class Help
+  class Command
+    class Help < Command
     end
   end
 end

@@ -1,5 +1,5 @@
 module Pod
-  module Command
+  class Command
     autoload :Help,  'cocoa_pods/command/help'
     autoload :Setup, 'cocoa_pods/command/setup'
     autoload :Spec,  'cocoa_pods/command/spec'
@@ -14,6 +14,13 @@ module Pod
       when 'repo'  then Repo
       end
       command.new(*argv)
+    end
+
+    def initialize(*argv)
+      raise "unknown argument(s): #{argv.join(', ')}" unless argv.empty?
+    end
+
+    def run
     end
   end
 end

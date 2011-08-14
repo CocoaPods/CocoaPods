@@ -1,6 +1,6 @@
 module Pod
-  module Command
-    class Spec
+  class Command
+    class Spec < Command
     end
   end
 end
