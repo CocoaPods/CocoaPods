@@ -13,7 +13,11 @@ module Pod
           unless (@name = argv[1]) && (@url = argv[2])
             raise ArgumentError, "needs a NAME and URL"
           end
-        when 'cd'
+        when 'update'
+          unless @name = argv[1]
+            raise ArgumentError, "needs a NAME"
+          end
+       when 'cd'
           unless @name = argv[1]
             raise ArgumentError, "needs a NAME"
           end
@@ -33,6 +37,10 @@ module Pod
       def add
         FileUtils.mkdir_p(repos_dir)
         Dir.chdir(repos_dir) { git("clone #{@url} #{@name}") }
+      end
+
+      def update
+        Dir.chdir(File.join(repos_dir, @name)) { git("pull") }
       end
     end
   end
