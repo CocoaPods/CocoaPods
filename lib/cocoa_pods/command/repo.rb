@@ -14,9 +14,7 @@ module Pod
             raise ArgumentError, "needs a NAME and URL"
           end
         when 'update'
-          unless @name = argv[1]
-            raise ArgumentError, "needs a NAME"
-          end
+          @name = argv[1]
        when 'cd'
           unless @name = argv[1]
             raise ArgumentError, "needs a NAME"
@@ -40,7 +38,10 @@ module Pod
       end
 
       def update
-        Dir.chdir(File.join(repos_dir, @name)) { git("pull") }
+        names = @name ? [@name] : Dir.entries(repos_dir)[2..-1]
+        names.each do |name|
+          Dir.chdir(File.join(repos_dir, name)) { git("pull") }
+        end
       end
     end
   end
