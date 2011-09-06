@@ -1,5 +1,7 @@
 module Pod
   class Command
+    include Config::Mixin
+
     autoload :Help,  'cocoa_pods/command/help'
     autoload :Setup, 'cocoa_pods/command/setup'
     autoload :Spec,  'cocoa_pods/command/spec'
@@ -18,10 +20,6 @@ module Pod
 
     def initialize(*argv)
       raise ArgumentError, "unknown argument(s): #{argv.join(', ')}" unless argv.empty?
-    end
-
-    def repos_dir
-      File.expand_path('~/.cocoa-pods')
     end
   end
 end

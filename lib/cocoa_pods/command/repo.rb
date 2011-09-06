@@ -25,7 +25,7 @@ module Pod
       end
 
       def dir
-        File.join(repos_dir, @name)
+        File.join(config.repos_dir, @name)
       end
 
       def run
@@ -33,14 +33,14 @@ module Pod
       end
 
       def add
-        FileUtils.mkdir_p(repos_dir)
-        Dir.chdir(repos_dir) { git("clone #{@url} #{@name}") }
+        FileUtils.mkdir_p(config.repos_dir)
+        Dir.chdir(config.repos_dir) { git("clone #{@url} #{@name}") }
       end
 
       def update
-        names = @name ? [@name] : Dir.entries(repos_dir)[2..-1]
+        names = @name ? [@name] : Dir.entries(config.repos_dir)[2..-1]
         names.each do |name|
-          Dir.chdir(File.join(repos_dir, name)) { git("pull") }
+          Dir.chdir(File.join(config.repos_dir, name)) { git("pull") }
         end
       end
     end

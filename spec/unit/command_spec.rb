@@ -21,10 +21,6 @@ describe "Pod::Command::Setup" do
   it "returns the URL of the `master' spec-repo" do
     @command.master_repo_url.should == 'git://github.com/alloy/cocoa-pod-specs.git'
   end
-
-  it "returns the path of the directory where the local spec-repos will be stored" do
-    @command.repos_dir.should == File.expand_path("~/.cocoa-pods")
-  end
 end
 
 describe "Pod::Command::Repo" do
@@ -34,6 +30,6 @@ describe "Pod::Command::Repo" do
 
   it "returns the path of the spec-repo directory" do
     repo = Pod::Command::Repo.new('cd', 'private')
-    repo.dir.should == File.expand_path("~/.cocoa-pods/private")
+    repo.dir.should == File.join(config.repos_dir, 'private')
   end
 end
