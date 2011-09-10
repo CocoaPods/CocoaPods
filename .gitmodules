@@ -1,0 +1,6 @@
+[submodule "vendor/bundler"]
+	path = vendor/bundler
+	url = https://github.com/carlhuda/bundler.git
+[submodule "vendor/rubygems"]
+	path = vendor/rubygems
+	url = https://github.com/rubygems/rubygems.git

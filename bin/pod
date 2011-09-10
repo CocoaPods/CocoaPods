@@ -1,0 +1,8 @@
+#!/usr/bin/env macruby
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+$:.unshift File.expand_path('../../vendor/rubygems/lib', __FILE__)
+
+require 'cocoa_pods'
+
+Pod::Command.parse(*ARGV).run

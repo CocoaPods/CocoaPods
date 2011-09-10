@@ -1,3 +1,5 @@
+require 'pathname'
+
 module Pod
   class Config
     def self.instance
@@ -11,7 +13,7 @@ module Pod
     attr_accessor :repos_dir
 
     def initialize
-      @repos_dir = File.expand_path("~/.cocoa-pods")
+      @repos_dir = Pathname.new(File.expand_path("~/.cocoa-pods"))
     end
 
     module Mixin
