@@ -122,13 +122,18 @@ module Pod
         spec = set.podspec
         spec.read(:source_files).each do |pattern|
           pattern = spec.pod_destroot + pattern
-          pattern = pattern + '*.{m,mm,c,cpp}' if pattern.directory?
-          source_files.concat(Dir.glob(pattern.to_s))
+          pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
+          source_files.concat(Dir.glob(pattern.to_s).map { |f| Pathname.new(f) })
         end
       end
 
       project = XcodeProject.static_library
-      project.source_files = source_files
+      source_files.each do |file|
+        file = file.relative_path_from(config.project_pods_root)
+        project.add_source_file(file)
+      end
+      #project.pretty_print
+      project.create_at(config.project_pods_root + 'Pods.xcodeproj')
     end
 
     include Config::Mixin
