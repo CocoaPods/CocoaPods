@@ -1,3 +1,6 @@
+
+dependency 'SSZipArchive', '>= 1'
+
 #dependency 'ASIHTTPRequest', '1.8'
 dependency 'ASIWebPageRequest', '= 1.8'
 
@@ -16,3 +19,4 @@ dependency 'Reachability' #, '>= 2.0'
 # * the ASIWebPageRequest dependency requirement matches this one so should work
 #dependency 'ASIHTTPRequest', '1.8.1'
 dependency 'ASIHTTPRequest', '>= 1.8'
+

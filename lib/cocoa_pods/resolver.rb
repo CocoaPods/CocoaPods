@@ -12,7 +12,11 @@ module Pod
 
     def find_dependency_sets(specification)
       specification.read(:dependencies).each do |dependency|
-        Source.search(dependency).each do |set|
+        sets = Source.search(dependency)
+        if sets.empty?
+          raise "Unable to find a pod named `#{dependency.name}'"
+        end
+        sets.each do |set|
           # TODO ultimately this compatibility check should be used to try and
           # resolve the conflicts, but for now we'll keep it simple.
           if existing_set = @sets.find { |s| s == set }
