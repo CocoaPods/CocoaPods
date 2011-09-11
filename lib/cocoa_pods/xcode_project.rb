@@ -13,7 +13,6 @@ module Pod
       @template_dir = template_dir
       file = template_dir + template_file
       @template = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
-      pretty_print
     end
 
     def template_file
@@ -28,7 +27,7 @@ module Pod
         "sourceTree" => "SOURCE_ROOT",
         "path" => file.to_s,
       }
-      add_file_to_files_group(file_ref_uuid)
+      add_file_to_group(file_ref_uuid, 'Pods')
 
       if file.extname == '.h'
         add_header(file, file_ref_uuid)
@@ -52,13 +51,37 @@ module Pod
       add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
     end
 
+    def add_framework(path)
+      file_ref_uuid = generate_uuid
+      objects[file_ref_uuid] = {
+        "name" => path.basename.to_s,
+        "isa" => "PBXFileReference",
+        "sourceTree" => "SDKROOT",
+        "path" => path.to_s,
+      }
+      add_file_to_group(file_ref_uuid, 'Frameworks')
+
+      build_file_uuid = generate_uuid
+      objects[build_file_uuid] = {
+        "isa" => "PBXBuildFile",
+        "fileRef" => file_ref_uuid
+      }
+      add_file_to_list('PBXFrameworksBuildPhase', build_file_uuid)
+    end
+
+    def add_header_search_paths(paths)
+      objects_by_isa('XCBuildConfiguration').each do |uuid, object|
+        existing_paths = object['buildSettings']['HEADER_SEARCH_PATHS'] ||= []
+        existing_paths.concat(paths)
+      end
+    end
+
     def to_hash
       @template
     end
 
     def create_in(pods_root)
       @template_dir.children.each do |child|
-        puts "Copy #{child} to #{pods_root + child.relative_path_from(@template_dir)}"
         FileUtils.cp_r(child, pods_root + child.relative_path_from(@template_dir))
       end
       pbxproj = pods_root + template_file
@@ -68,27 +91,25 @@ module Pod
     private
 
     def add_file_to_list(isa, build_file_uuid)
-      object_uuid, object = object_by_isa(isa)
-      #object['files'] ||= []
+      object_uuid, object = objects_by_isa(isa).first
       object['files'] << build_file_uuid
-      objects[object_uuid] = object
+      #objects[object_uuid] = object
     end
 
-    def add_file_to_files_group(file_ref_uuid)
+    def add_file_to_group(file_ref_uuid, name)
       object_uuid, object = objects.find do |_, object|
-        object['isa'] == 'PBXGroup' && object['name'] == 'Pods'
+        object['isa'] == 'PBXGroup' && object['name'] == name
       end
-      #object['children'] ||= []
       object['children'] << file_ref_uuid
-      objects[object_uuid] = object
+      #objects[object_uuid] = object
     end
 
     def objects
       @template['objects']
     end
 
-    def object_by_isa(isa)
-      objects.find { |_, object| object['isa'] == isa }
+    def objects_by_isa(isa)
+      objects.select { |_, object| object['isa'] == isa }
     end
 
     def generate_uuid

@@ -8,15 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		515B0FB9141D52E0001DC3E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B0FB8141D52E0001DC3E6 /* Foundation.framework */; };
-		515B0FBF141D52E0001DC3E6 /* Pods.m in Sources */ = {isa = PBXBuildFile; fileRef = 515B0FBE141D52E0001DC3E6 /* Pods.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		515B0FB5141D52E0001DC3E6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		515B0FB8141D52E0001DC3E6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		515B0FBC141D52E0001DC3E6 /* Pods-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pods-Prefix.pch"; path = "Pods/Pods-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		515B0FBD141D52E0001DC3E6 /* Pods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Pods.h; path = Pods/Pods.h; sourceTree = SOURCE_ROOT; };
-		515B0FBE141D52E0001DC3E6 /* Pods.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Pods.m; path = Pods/Pods.m; sourceTree = SOURCE_ROOT; };
+		515B0FBC141D52E0001DC3E6 /* Pods-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pods-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +65,6 @@
 		515B0FC9141D5FBE001DC3E6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				515B0FBD141D52E0001DC3E6 /* Pods.h */,
-				515B0FBE141D52E0001DC3E6 /* Pods.m */,
 				515B0FBB141D52E0001DC3E6 /* Supporting Files */,
 			);
 			name = Pods;
@@ -132,7 +127,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				515B0FBF141D52E0001DC3E6 /* Pods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,7 +178,7 @@
 			buildSettings = {
 				DSTROOT = /tmp/Pods.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Pods/Pods-Prefix.pch";
+				GCC_PREFIX_HEADER = "Pods-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -196,7 +190,7 @@
 			buildSettings = {
 				DSTROOT = /tmp/Pods.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Pods/Pods-Prefix.pch";
+				GCC_PREFIX_HEADER = "Pods-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

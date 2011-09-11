@@ -132,7 +132,8 @@ module Pod
         file = file.relative_path_from(config.project_pods_root)
         project.add_source_file(file)
       end
-      #project.pretty_print
+      project.add_framework(Pathname.new('usr/lib/libxml2.2.7.3.dylib'))
+      project.add_header_search_paths(%w{ $(SDKROOT)/usr/include/libxml2 })
       project.create_in(config.project_pods_root)
     end
 
