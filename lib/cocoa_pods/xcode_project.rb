@@ -72,6 +72,7 @@ module Pod
     def add_header_search_paths(paths)
       objects_by_isa('XCBuildConfiguration').each do |uuid, object|
         existing_paths = object['buildSettings']['HEADER_SEARCH_PATHS'] ||= []
+        p paths
         existing_paths.concat(paths)
       end
     end

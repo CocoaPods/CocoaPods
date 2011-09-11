@@ -86,6 +86,14 @@ module Pod
       @xcconfig = path
     end
 
+    def frameworks(*frameworks)
+      @frameworks = frameworks.map { |f| Pathname.new(f) }
+    end
+
+    def header_search_paths(*search_paths)
+      @header_search_paths = search_paths
+    end
+
     # Not attributes
 
     # Returns the specification for the pod that this pod's source is a part of.
@@ -113,7 +121,7 @@ module Pod
 
     def create_static_library!
       puts "==> Creating static library"
-      source_files = []
+      source_files, frameworks, header_search_paths = [], [], []
       resolved_dependent_specification_sets.each do |set|
         # In case the set is only part of other pods we don't need to build
         # the pod itself.
@@ -125,6 +133,12 @@ module Pod
           pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
           source_files.concat(Dir.glob(pattern.to_s).map { |f| Pathname.new(f) })
         end
+        if f = spec.read(:frameworks)
+          frameworks.concat(f)
+        end
+        if s = spec.read(:header_search_paths)
+          header_search_paths.concat(s)
+        end
       end
 
       project = XcodeProject.static_library
@@ -132,8 +146,8 @@ module Pod
         file = file.relative_path_from(config.project_pods_root)
         project.add_source_file(file)
       end
-      project.add_framework(Pathname.new('usr/lib/libxml2.2.7.3.dylib'))
-      project.add_header_search_paths(%w{ $(SDKROOT)/usr/include/libxml2 })
+      frameworks.each { |framework| project.add_framework(framework) }
+      project.add_header_search_paths(header_search_paths)
       project.create_in(config.project_pods_root)
     end
 
