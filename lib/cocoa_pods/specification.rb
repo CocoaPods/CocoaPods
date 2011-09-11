@@ -63,7 +63,7 @@ module Pod
 
     def part_of(name, *version_requirements)
       #@part_of = Dependency.new(name, *version_requirements)
-      dependency(name, *version_requirements)
+      @part_of = dependency(name, *version_requirements)
     end
 
     def source_files(*patterns)
@@ -76,10 +76,48 @@ module Pod
 
     attr_reader :dependencies
     def dependency(name, *version_requirements)
-      @dependencies << Dependency.new(name, *version_requirements)
+      dep = Dependency.new(name, *version_requirements)
+      @dependencies << dep
+      dep
     end
 
     # Not attributes
+
+    def resolved_dependent_specifications
+      @resolved_dependent_specifications ||= Resolver.new(self).resolve
+    end
+
+    def install_dependent_specifications!(root)
+      resolved_dependent_specifications.each do |spec|
+        install_spec = spec
+        if part_of_spec_dep = spec.read(:part_of)
+          install_spec = resolved_dependent_specifications.find { |s| s.read(:name) == part_of_spec_dep.name }
+          puts "-- Installing: #{install_spec} for #{spec}"
+        else
+          puts "-- Installing: #{install_spec}"
+        end
+        install_spec.install!(root)
+      end
+    end
+
+    # User can override this for custom installation
+    def install!(pods_root)
+      require 'fileutils'
+      pods_root.mkpath
+      pod_root = pods_root + "#{@name}-#{@version}"
+      if pod_root.exist?
+        puts "   Skipping, the pod already exists: #{pod_root}"
+      else
+        pod_root.mkdir
+        FileUtils.cp(@defined_in_file, pod_root)
+        download_to(pod_root)
+      end
+    end
+
+    # User can override this for custom downloading
+    def download_to(pod_root)
+      Downloader.for_source(@source).download_to(pod_root)
+    end
 
     def from_podfile?
       @name.nil? && @version.nil?

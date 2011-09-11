@@ -3,11 +3,14 @@ module Pod
     class Install < Command
       def run
         if spec = Specification.from_podfile(podfile)
-          p spec
-          Resolver.new(spec).resolve
+          spec.install_dependent_specifications!(pods_root)
         else
           $stderr.puts "No Podfile found in current working directory."
         end
+      end
+
+      def pods_root
+        Pathname.new(Dir.pwd) + 'Pods'
       end
 
       def podfile

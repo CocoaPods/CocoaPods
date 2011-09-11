@@ -7,8 +7,7 @@ module Pod
     def resolve
       @sets = []
       find_dependency_sets(@specification)
-      specs = @sets.map(&:podspec)
-      p specs
+      @sets.map(&:podspec)
     end
 
     def find_dependency_sets(specification)
