@@ -3,9 +3,8 @@ module Pod
     class Install < Command
       def run
         if spec = Specification.from_podfile(podfile)
-          #config.clean = false
           spec.install_dependent_specifications!
-          spec.create_static_library!
+          spec.create_static_library_project!
         else
           $stderr.puts "No Podfile found in current working directory."
         end

@@ -69,11 +69,9 @@ module Pod
       add_file_to_list('PBXFrameworksBuildPhase', build_file_uuid)
     end
 
-    def add_header_search_paths(paths)
-      objects_by_isa('XCBuildConfiguration').each do |uuid, object|
-        existing_paths = object['buildSettings']['HEADER_SEARCH_PATHS'] ||= []
-        p paths
-        existing_paths.concat(paths)
+    def add_header_search_path(path)
+      objects_by_isa('XCBuildConfiguration').each do |_, object|
+        (object['buildSettings']['HEADER_SEARCH_PATHS'] ||= []) << path
       end
     end
 
@@ -94,7 +92,6 @@ module Pod
     def add_file_to_list(isa, build_file_uuid)
       object_uuid, object = objects_by_isa(isa).first
       object['files'] << build_file_uuid
-      #objects[object_uuid] = object
     end
 
     def add_file_to_group(file_ref_uuid, name)
@@ -102,7 +99,6 @@ module Pod
         object['isa'] == 'PBXGroup' && object['name'] == name
       end
       object['children'] << file_ref_uuid
-      #objects[object_uuid] = object
     end
 
     def objects

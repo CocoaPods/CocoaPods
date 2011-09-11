@@ -119,35 +119,33 @@ module Pod
       end
     end
 
-    def create_static_library!
-      puts "==> Creating static library"
-      source_files, frameworks, header_search_paths = [], [], []
+    def create_static_library_project!
+      puts "==> Creating static library project"
+      project = XcodeProject.static_library
       resolved_dependent_specification_sets.each do |set|
         # In case the set is only part of other pods we don't need to build
         # the pod itself.
         next if set.only_part_of_other_pod?
-
         spec = set.podspec
+
         spec.read(:source_files).each do |pattern|
           pattern = spec.pod_destroot + pattern
           pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
-          source_files.concat(Dir.glob(pattern.to_s).map { |f| Pathname.new(f) })
+          Dir.glob(pattern.to_s).each do |file|
+            file = Pathname.new(file)
+            file = file.relative_path_from(config.project_pods_root)
+            project.add_source_file(file)
+          end
         end
-        if f = spec.read(:frameworks)
-          frameworks.concat(f)
-        end
-        if s = spec.read(:header_search_paths)
-          header_search_paths.concat(s)
-        end
-      end
 
-      project = XcodeProject.static_library
-      source_files.each do |file|
-        file = file.relative_path_from(config.project_pods_root)
-        project.add_source_file(file)
+        if frameworks = spec.read(:frameworks)
+          frameworks.each { |framework| project.add_framework(framework) }
+        end
+
+        if search_paths = spec.read(:header_search_paths)
+          search_paths.each { |path| project.add_header_search_path(path) }
+        end
       end
-      frameworks.each { |framework| project.add_framework(framework) }
-      project.add_header_search_paths(header_search_paths)
       project.create_in(config.project_pods_root)
     end
 
