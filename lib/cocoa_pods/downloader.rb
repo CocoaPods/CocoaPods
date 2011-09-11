@@ -1,16 +1,16 @@
 module Pod
   class Downloader
-    def self.for_source(source)
+    def self.for_source(source, pod_root)
       options = source.dup
       if url = options.delete(:git)
-        Git.new(url, options)
+        Git.new(pod_root, url, options)
       else
         raise "Unsupported download strategy `#{source.inspect}'."
       end
     end
 
-    def initialize(url, options)
-      @url, @options = url, options
+    def initialize(pod_root, url, options)
+      @pod_root, @url, @options = pod_root, url, options
     end
 
     class Git < Downloader
@@ -22,11 +22,14 @@ module Pod
       # * sync output
       executable :git
 
-      def download_to(pod_root)
-        checkout = pod_root + 'source'
+      def source_dir
+        @pod_root + 'source'
+      end
+
+      def download
         if tag = @options[:tag]
-          checkout.mkdir
-          Dir.chdir(checkout) do
+          source_dir.mkdir
+          Dir.chdir(source_dir) do
             git "init"
             git "remote add origin '#{@url}'"
             git "fetch origin tags/#{tag} 2>&1"
@@ -34,13 +37,17 @@ module Pod
             git "checkout -b activated-pod-commit 2>&1"
           end
         elsif commit = @options[:commit]
-          git "clone '#{@url}' '#{checkout}'"
-          Dir.chdir(checkout) do
+          git "clone '#{@url}' '#{source_dir}'"
+          Dir.chdir(source_dir) do
             git "checkout -b activated-pod-commit #{commit} 2>&1"
           end
         else
           raise "Either a tag or a commit has to be specified."
         end
+      end
+
+      def clean
+        (source_dir + '.git').rmtree
       end
     end
   end

@@ -87,7 +87,7 @@ module Pod
       @resolved_dependent_specifications ||= Resolver.new(self).resolve
     end
 
-    def install_dependent_specifications!(root)
+    def install_dependent_specifications!(root, clean)
       resolved_dependent_specifications.each do |spec|
         install_spec = spec
         if part_of_spec_dep = spec.read(:part_of)
@@ -96,12 +96,12 @@ module Pod
         else
           puts "-- Installing: #{install_spec}"
         end
-        install_spec.install!(root)
+        install_spec.install!(root, clean)
       end
     end
 
     # User can override this for custom installation
-    def install!(pods_root)
+    def install!(pods_root, clean)
       require 'fileutils'
       pods_root.mkpath
       pod_root = pods_root + "#{@name}-#{@version}"
@@ -110,13 +110,15 @@ module Pod
       else
         pod_root.mkdir
         FileUtils.cp(@defined_in_file, pod_root)
-        download_to(pod_root)
+        download_to(pod_root, clean)
       end
     end
 
     # User can override this for custom downloading
-    def download_to(pod_root)
-      Downloader.for_source(@source).download_to(pod_root)
+    def download_to(pod_root, clean)
+      downloader = Downloader.for_source(@source, pod_root)
+      downloader.download
+      downloader.clean if clean
     end
 
     def from_podfile?

@@ -3,7 +3,7 @@ module Pod
     class Install < Command
       def run
         if spec = Specification.from_podfile(podfile)
-          spec.install_dependent_specifications!(pods_root)
+          spec.install_dependent_specifications!(pods_root, true)
         else
           $stderr.puts "No Podfile found in current working directory."
         end
