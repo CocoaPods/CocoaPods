@@ -1,6 +1,22 @@
 module Pod
   class Specification
     class Set
+      def self.sets
+        @sets ||= {}
+      end
+
+      def self.by_specification_name(name)
+        sets[name]
+      end
+
+      # This keeps an identity map of sets so that you always get the same Set
+      # instance for the same pod directory.
+      def self.by_pod_dir(pod_dir)
+        set = new(pod_dir)
+        sets[set.name] ||= set
+        sets[set.name]
+      end
+
       def initialize(pod_dir)
         @pod_dir = pod_dir
         @required_by = []

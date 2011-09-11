@@ -5,6 +5,7 @@ module Pod
         if spec = Specification.from_podfile(podfile)
           #config.clean = false
           spec.install_dependent_specifications!
+          spec.create_static_library!
         else
           $stderr.puts "No Podfile found in current working directory."
         end

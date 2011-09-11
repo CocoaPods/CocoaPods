@@ -82,7 +82,18 @@ module Pod
       dep
     end
 
+    def xcconfig(path)
+      @xcconfig = path
+    end
+
     # Not attributes
+
+    # Returns the specification for the pod that this pod's source is a part of.
+    def part_of_specification
+      if @part_of
+        Set.by_specification_name(@part_of.name).podspec
+      end
+    end
 
     # This also includes those that are only part of other specs, but are not
     # actually being used themselves.
@@ -96,25 +107,38 @@ module Pod
         # In case the set is only part of other pods we don't need to install
         # the pod itself.
         next if set.only_part_of_other_pod?
+        set.podspec.install!
+      end
+    end
+
+    def create_static_library!
+      puts "==> Creating static library"
+      source_files = []
+      resolved_dependent_specification_sets.each do |set|
+        # In case the set is only part of other pods we don't need to build
+        # the pod itself.
+        next if set.only_part_of_other_pod?
 
         spec = set.podspec
-        spec.install!
-
-        # In case spec is part of another pod we need to dowload the other
-        # pod's source.
-        if spec.part_of_other_pod?
-          # Find the specification of the pod that spec's source is a part of.
-          part_of_name = spec.read(:part_of).name
-          spec = sets.find { |set| set.name == part_of_name }.podspec
+        spec.read(:source_files).each do |pattern|
+          pattern = spec.pod_destroot + pattern
+          pattern = pattern + '*.{m,mm,c,cpp}' if pattern.directory?
+          source_files.concat(Dir.glob(pattern.to_s))
         end
-        spec.download_if_necessary!
       end
+      #p source_files
+      load_paths = source_files.map { |file| File.dirname(file) }.uniq
+      #p load_paths
     end
 
     include Config::Mixin
 
     def pod_destroot
-      config.project_pods_root + "#{@name}-#{@version}"
+      if part_of_other_pod?
+        part_of_specification.pod_destroot
+      else
+        config.project_pods_root + "#{@name}-#{@version}"
+      end
     end
 
     # Places the activated podspec in the project's pods directory.
@@ -123,6 +147,10 @@ module Pod
       config.project_pods_root.mkpath
       require 'fileutils'
       FileUtils.cp(@defined_in_file, config.project_pods_root)
+
+      # In case this spec is part of another pod's source, we need to dowload
+      # the other pod's source.
+      (spart_of_specification || self).download_if_necessary!
     end
 
     def download_if_necessary!
