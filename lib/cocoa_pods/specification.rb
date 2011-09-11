@@ -82,9 +82,9 @@ module Pod
       dep
     end
 
-    def xcconfig(path)
-      @xcconfig = path
-    end
+    #def xcconfig(path)
+      #@xcconfig = path
+    #end
 
     def frameworks(*frameworks)
       @frameworks = frameworks.map { |f| Pathname.new(f) }
