@@ -62,7 +62,8 @@ module Pod
     end
 
     def part_of(name, *version_requirements)
-      @part_of = Dependency.new(name, *version_requirements)
+      #@part_of = Dependency.new(name, *version_requirements)
+      dependency(name, *version_requirements)
     end
 
     def source_files(*patterns)
@@ -75,7 +76,6 @@ module Pod
 
     attr_reader :dependencies
     def dependency(name, *version_requirements)
-      #version = args || [">= 0"]
       @dependencies << Dependency.new(name, *version_requirements)
     end
 
@@ -87,31 +87,14 @@ module Pod
 
     def to_s
       if from_podfile?
-        "#<#{self.class.name} for podfile at `#{@defined_in_file}'>"
+        "podfile at `#{@defined_in_file}'"
       else
-        "#<#{self.class.name} for `#{@name}' version `#{@version}'>"
-      end
-    end
-    alias_method :inspect, :to_s
-
-    # TODO move to seperate installer class
-    def install!
-      #p @name, @version, @authors, @dependencies
-      @dependency_sets = @dependencies.map { |dep| Source.search(dep) }.flatten
-      @dependency_sets.each do |set|
-        p set
-        p set.podspec
+        "`#{@name}' version `#{@version}'"
       end
     end
 
-    private
-
-    def attr(name, arg)
-      if arg.nil? || arg.empty?
-        instance_variable_get("@#{name}")
-      else
-        instance_variable_set("@#{name}", block_given? ? yield : arg)
-      end
+    def inspect
+      "#<#{self.class.name} for #{to_s}>"
     end
   end
 

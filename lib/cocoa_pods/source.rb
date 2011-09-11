@@ -16,9 +16,7 @@ module Pod
 
     def search(dependency)
       if dir = @repo.children.find { |c| c.basename.to_s == dependency.name }
-        set = Specification::Set.new(dir)
-        set.add_dependency(dependency)
-        set
+        Specification::Set.new(dir)
       end
     end
   end
