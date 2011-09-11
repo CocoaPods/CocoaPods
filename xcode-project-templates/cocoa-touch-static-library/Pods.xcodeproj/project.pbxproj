@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		515B0F8E141D3E3A001DC3E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B0F8D141D3E3A001DC3E6 /* Foundation.framework */; };
-		515B0F94141D3E3A001DC3E6 /* Pods.m in Sources */ = {isa = PBXBuildFile; fileRef = 515B0F93141D3E3A001DC3E6 /* Pods.m */; };
+		515B0FA1141D3FB7001DC3E6 /* Pods.h in Headers */ = {isa = PBXBuildFile; fileRef = 515B0F9F141D3FB7001DC3E6 /* Pods.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		515B0FA2141D3FB7001DC3E6 /* Pods.m in Sources */ = {isa = PBXBuildFile; fileRef = 515B0FA0141D3FB7001DC3E6 /* Pods.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		515B0F8A141D3E3A001DC3E6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		515B0F8D141D3E3A001DC3E6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		515B0F91141D3E3A001DC3E6 /* Pods-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pods-Prefix.pch"; sourceTree = "<group>"; };
-		515B0F92141D3E3A001DC3E6 /* Pods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Pods.h; sourceTree = "<group>"; };
-		515B0F93141D3E3A001DC3E6 /* Pods.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Pods.m; sourceTree = "<group>"; };
+		515B0F9F141D3FB7001DC3E6 /* Pods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pods.h; path = nested/files/Pods.h; sourceTree = SOURCE_ROOT; };
+		515B0FA0141D3FB7001DC3E6 /* Pods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Pods.m; path = nested/files/Pods.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,7 +34,7 @@
 		515B0F7F141D3E3A001DC3E6 = {
 			isa = PBXGroup;
 			children = (
-				515B0F8F141D3E3A001DC3E6 /* Pods */,
+				515B0F9E141D3FA0001DC3E6 /* Files */,
 				515B0F8C141D3E3A001DC3E6 /* Frameworks */,
 				515B0F8B141D3E3A001DC3E6 /* Products */,
 			);
@@ -56,22 +56,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		515B0F8F141D3E3A001DC3E6 /* Pods */ = {
+		515B0F9E141D3FA0001DC3E6 /* Files */ = {
 			isa = PBXGroup;
 			children = (
-				515B0F92141D3E3A001DC3E6 /* Pods.h */,
-				515B0F93141D3E3A001DC3E6 /* Pods.m */,
-				515B0F90141D3E3A001DC3E6 /* Supporting Files */,
+				515B0F9F141D3FB7001DC3E6 /* Pods.h */,
+				515B0FA0141D3FB7001DC3E6 /* Pods.m */,
 			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		515B0F90141D3E3A001DC3E6 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				515B0F91141D3E3A001DC3E6 /* Pods-Prefix.pch */,
-			);
-			name = "Supporting Files";
+			name = Files;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -81,6 +72,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				515B0FA1141D3FB7001DC3E6 /* Pods.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,7 +123,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				515B0F94141D3E3A001DC3E6 /* Pods.m in Sources */,
+				515B0FA2141D3FB7001DC3E6 /* Pods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +213,7 @@
 				515B0F99141D3E3A001DC3E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
