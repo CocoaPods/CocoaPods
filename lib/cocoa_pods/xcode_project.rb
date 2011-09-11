@@ -20,52 +20,21 @@ module Pod
     end
 
     def add_source_file(file)
-      file_ref_uuid = generate_uuid
-      objects[file_ref_uuid] = {
-        "name" => file.basename.to_s,
-        "isa" => "PBXFileReference",
-        "sourceTree" => "SOURCE_ROOT",
-        "path" => file.to_s,
-      }
+      file_ref_uuid = add_file_reference(file, 'SOURCE_ROOT')
       add_file_to_group(file_ref_uuid, 'Pods')
-
       if file.extname == '.h'
-        add_header(file, file_ref_uuid)
+        build_file_uuid = add_build_file(file_ref_uuid, "settings" => { "ATTRIBUTES" => ["Public"] })
+        add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
       else
-        build_file_uuid = generate_uuid
-        objects[build_file_uuid] =  {
-          "isa" => "PBXBuildFile",
-          "fileRef" => file_ref_uuid
-        }
+        build_file_uuid = add_build_file(file_ref_uuid)
         add_file_to_list('PBXSourcesBuildPhase', build_file_uuid)
       end
     end
 
-    def add_header(file, file_ref_uuid)
-      build_file_uuid = generate_uuid
-      objects[build_file_uuid] = {
-        "isa" => "PBXBuildFile",
-        "fileRef" => file_ref_uuid,
-        "settings"=> { "ATTRIBUTES" => ["Public"] }
-      }
-      add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
-    end
-
     def add_framework(path)
-      file_ref_uuid = generate_uuid
-      objects[file_ref_uuid] = {
-        "name" => path.basename.to_s,
-        "isa" => "PBXFileReference",
-        "sourceTree" => "SDKROOT",
-        "path" => path.to_s,
-      }
+      file_ref_uuid = add_file_reference(path, 'SDKROOT')
       add_file_to_group(file_ref_uuid, 'Frameworks')
-
-      build_file_uuid = generate_uuid
-      objects[build_file_uuid] = {
-        "isa" => "PBXBuildFile",
-        "fileRef" => file_ref_uuid
-      }
+      build_file_uuid = add_build_file(file_ref_uuid)
       add_file_to_list('PBXFrameworksBuildPhase', build_file_uuid)
     end
 
@@ -88,6 +57,28 @@ module Pod
     end
 
     private
+
+    def add_object(object)
+      uuid = generate_uuid
+      objects[uuid] = object
+      uuid
+    end
+
+    def add_file_reference(path, source_tree)
+      add_object({
+        "name" => path.basename.to_s,
+        "isa" => "PBXFileReference",
+        "sourceTree" => source_tree,
+        "path" => path.to_s,
+      })
+    end
+
+    def add_build_file(file_ref_uuid, extra = {})
+      add_object(extra.merge({
+        "isa" => "PBXBuildFile",
+        "fileRef" => file_ref_uuid
+      }))
+    end
 
     def add_file_to_list(isa, build_file_uuid)
       object_uuid, object = objects_by_isa(isa).first
