@@ -6,12 +6,18 @@ module Pod
 
     # TODO see if we really need different templates for iOS and OS X
     def self.static_library
-      new TEMPLATES_DIR + 'cocoa-touch-static-library/Pods.xcodeproj/project.pbxproj'
+      new TEMPLATES_DIR + 'cocoa-touch-static-library'
     end
 
-    def initialize(template)
-      @template = NSMutableDictionary.dictionaryWithContentsOfFile(template.to_s)
-      #pretty_print
+    def initialize(template_dir)
+      @template_dir = template_dir
+      file = template_dir + template_file
+      @template = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
+      pretty_print
+    end
+
+    def template_file
+      'Pods.xcodeproj/project.pbxproj'
     end
 
     def add_source_file(file)
@@ -50,9 +56,12 @@ module Pod
       @template
     end
 
-    def create_at(xcodeproj)
-      xcodeproj.mkpath
-      pbxproj = xcodeproj + 'project.pbxproj'
+    def create_in(pods_root)
+      @template_dir.children.each do |child|
+        puts "Copy #{child} to #{pods_root + child.relative_path_from(@template_dir)}"
+        FileUtils.cp_r(child, pods_root + child.relative_path_from(@template_dir))
+      end
+      pbxproj = pods_root + template_file
       @template.writeToFile(pbxproj.to_s, atomically:true)
     end
 
@@ -67,7 +76,7 @@ module Pod
 
     def add_file_to_files_group(file_ref_uuid)
       object_uuid, object = objects.find do |_, object|
-        object['isa'] == 'PBXGroup' && object['name'] == 'Files'
+        object['isa'] == 'PBXGroup' && object['name'] == 'Pods'
       end
       #object['children'] ||= []
       object['children'] << file_ref_uuid

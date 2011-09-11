@@ -133,7 +133,7 @@ module Pod
         project.add_source_file(file)
       end
       #project.pretty_print
-      project.create_at(config.project_pods_root + 'Pods.xcodeproj')
+      project.create_in(config.project_pods_root)
     end
 
     include Config::Mixin
