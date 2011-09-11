@@ -20,6 +20,10 @@ module Pod
         @required_by.inject(Dependency.new(name)) { |previous, (_, dep)| previous.merge(dep) }
       end
 
+      def only_part_of_other_pod?
+        @required_by.all? { |_, dep| dep.part_of_other_pod }
+      end
+
       def name
         @pod_dir.basename.to_s
       end

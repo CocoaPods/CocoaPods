@@ -22,32 +22,36 @@ module Pod
       # * sync output
       executable :git
 
-      def source_dir
-        @pod_root + 'source'
-      end
-
       def download
-        if tag = @options[:tag]
-          source_dir.mkdir
-          Dir.chdir(source_dir) do
-            git "init"
-            git "remote add origin '#{@url}'"
-            git "fetch origin tags/#{tag} 2>&1"
-            git "reset --hard FETCH_HEAD"
-            git "checkout -b activated-pod-commit 2>&1"
-          end
-        elsif commit = @options[:commit]
-          git "clone '#{@url}' '#{source_dir}'"
-          Dir.chdir(source_dir) do
-            git "checkout -b activated-pod-commit #{commit} 2>&1"
-          end
+        if @options[:tag]
+          download_tag
+        elsif @options[:commit]
+          download_commit
         else
           raise "Either a tag or a commit has to be specified."
         end
       end
 
+      def download_tag
+        @pod_root.mkdir
+        Dir.chdir(@pod_root) do
+          git "init"
+          git "remote add origin '#{@url}'"
+          git "fetch origin tags/#{@options[:tag]} 2>&1"
+          git "reset --hard FETCH_HEAD"
+          git "checkout -b activated-pod-commit 2>&1"
+        end
+      end
+
+      def download_commit
+        git "clone '#{@url}' '#{@pod_root}'"
+        Dir.chdir(@pod_root) do
+          git "checkout -b activated-pod-commit #{@options[:commit]} 2>&1"
+        end
+      end
+
       def clean
-        (source_dir + '.git').rmtree
+        (@pod_root + '.git').rmtree
       end
     end
   end

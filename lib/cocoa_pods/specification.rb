@@ -64,6 +64,7 @@ module Pod
     def part_of(name, *version_requirements)
       #@part_of = Dependency.new(name, *version_requirements)
       @part_of = dependency(name, *version_requirements)
+      @part_of.part_of_other_pod = true
     end
 
     def source_files(*patterns)
@@ -83,42 +84,68 @@ module Pod
 
     # Not attributes
 
-    def resolved_dependent_specifications
-      @resolved_dependent_specifications ||= Resolver.new(self).resolve
+    # This also includes those that are only part of other specs, but are not
+    # actually being used themselves.
+    def resolved_dependent_specification_sets
+      @resolved_dependent_specifications_sets ||= Resolver.new(self).resolve
     end
 
-    def install_dependent_specifications!(root, clean)
-      resolved_dependent_specifications.each do |spec|
-        install_spec = spec
-        if part_of_spec_dep = spec.read(:part_of)
-          install_spec = resolved_dependent_specifications.find { |s| s.read(:name) == part_of_spec_dep.name }
-          puts "-- Installing: #{install_spec} for #{spec}"
-        else
-          puts "-- Installing: #{install_spec}"
+    def install_dependent_specifications!
+      sets = resolved_dependent_specification_sets
+      sets.each do |set|
+        # In case the set is only part of other pods we don't need to install
+        # the pod itself.
+        next if set.only_part_of_other_pod?
+
+        spec = set.podspec
+        spec.install!
+
+        # In case spec is part of another pod we need to dowload the other
+        # pod's source.
+        if spec.part_of_other_pod?
+          # Find the specification of the pod that spec's source is a part of.
+          part_of_name = spec.read(:part_of).name
+          spec = sets.find { |set| set.name == part_of_name }.podspec
         end
-        install_spec.install!(root, clean)
+        spec.download_if_necessary!
       end
     end
 
-    # User can override this for custom installation
-    def install!(pods_root, clean)
+    include Config::Mixin
+
+    def pod_destroot
+      config.project_pods_root + "#{@name}-#{@version}"
+    end
+
+    # Places the activated podspec in the project's pods directory.
+    def install!
+      puts "==> Installing: #{self}"
+      config.project_pods_root.mkpath
       require 'fileutils'
-      pods_root.mkpath
-      pod_root = pods_root + "#{@name}-#{@version}"
-      if pod_root.exist?
-        puts "   Skipping, the pod already exists: #{pod_root}"
+      FileUtils.cp(@defined_in_file, config.project_pods_root)
+    end
+
+    def download_if_necessary!
+      if pod_destroot.exist?
+        puts "  * Skipping download of #{self}, pod already downloaded"
       else
-        pod_root.mkdir
-        FileUtils.cp(@defined_in_file, pod_root)
-        download_to(pod_root, clean)
+        puts "  * Downloading: #{self}"
+        download!
       end
     end
 
-    # User can override this for custom downloading
-    def download_to(pod_root, clean)
-      downloader = Downloader.for_source(@source, pod_root)
+    # Downloads the source of the pod and places it in the project's pods
+    # directory.
+    #
+    # You can override this for custom downloading.
+    def download!
+      downloader = Downloader.for_source(@source, pod_destroot)
       downloader.download
-      downloader.clean if clean
+      downloader.clean if config.clean
+    end
+
+    def part_of_other_pod?
+      !@part_of.nil?
     end
 
     def from_podfile?

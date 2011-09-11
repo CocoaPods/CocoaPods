@@ -10,10 +10,19 @@ module Pod
       @instance = instance
     end
 
-    attr_accessor :repos_dir
+    attr_accessor :repos_dir, :clean
 
     def initialize
       @repos_dir = Pathname.new(File.expand_path("~/.cocoa-pods"))
+      @clean = true
+    end
+
+    def project_root
+      Pathname.new(Dir.pwd)
+    end
+
+    def project_pods_root
+      project_root + 'Pods'
     end
 
     module Mixin
