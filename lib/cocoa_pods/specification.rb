@@ -126,9 +126,9 @@ module Pod
           source_files.concat(Dir.glob(pattern.to_s))
         end
       end
-      #p source_files
-      load_paths = source_files.map { |file| File.dirname(file) }.uniq
-      #p load_paths
+
+      project = XcodeProject.static_library
+      project.source_files = source_files
     end
 
     include Config::Mixin
@@ -150,7 +150,7 @@ module Pod
 
       # In case this spec is part of another pod's source, we need to dowload
       # the other pod's source.
-      (spart_of_specification || self).download_if_necessary!
+      (part_of_specification || self).download_if_necessary!
     end
 
     def download_if_necessary!
