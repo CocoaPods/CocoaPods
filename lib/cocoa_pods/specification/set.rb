@@ -69,10 +69,8 @@ module Pod
       end
       alias_method :inspect, :to_s
 
-      private
-
       # Returns Pod::Version instances, for each version directory, sorted from
-      # lowest version to highest.
+      # highest version to lowest.
       def versions
         @pod_dir.children.map { |v| Version.new(v.basename) }.sort.reverse
       end
