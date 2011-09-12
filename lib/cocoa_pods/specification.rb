@@ -82,16 +82,8 @@ module Pod
       dep
     end
 
-    #def xcconfig(path)
-      #@xcconfig = path
-    #end
-
-    def frameworks(*frameworks)
-      @frameworks = frameworks.map { |f| Pathname.new(f) }
-    end
-
-    def header_search_paths(*search_paths)
-      @header_search_paths = search_paths
+    def xcconfig(hash)
+      @xcconfig = hash
     end
 
     # Not attributes
@@ -102,6 +94,8 @@ module Pod
         Set.by_specification_name(@part_of.name).podspec
       end
     end
+
+    # TODO move this all to an Installer class
 
     # This also includes those that are only part of other specs, but are not
     # actually being used themselves.
@@ -121,6 +115,7 @@ module Pod
 
     def create_static_library_project!
       puts "==> Creating static library project"
+      xcconfigs = []
       project = XcodeProject.static_library
       resolved_dependent_specification_sets.each do |set|
         # In case the set is only part of other pods we don't need to build
@@ -138,15 +133,35 @@ module Pod
           end
         end
 
-        if frameworks = spec.read(:frameworks)
-          frameworks.each { |framework| project.add_framework(framework) }
-        end
-
-        if search_paths = spec.read(:header_search_paths)
-          search_paths.each { |path| project.add_header_search_path(path) }
+        if xcconfig = spec.read(:xcconfig)
+          xcconfigs << xcconfig
         end
       end
       project.create_in(config.project_pods_root)
+
+      # TODO the static library needs an extra xcconfig which sets the values from issue #1.
+      # Or we could edit the project.pbxproj file, but that seems like more work...
+
+      merged_xcconfig = {
+        # in a workspace this is where the static library headers should be found
+        'USER_HEADER_SEARCH_PATHS' => '$(BUILT_PRODUCTS_DIR)',
+        # search the user headers
+        'ALWAYS_SEARCH_USER_PATHS' => 'YES',
+      }
+      xcconfigs.each do |xcconfig|
+        xcconfig.each do |key, value|
+          if existing_value = merged_xcconfig[key]
+            merged_xcconfig[key] = "#{existing_value} #{value}"
+          else
+            merged_xcconfig[key] = value
+          end
+        end
+      end
+      (config.project_pods_root + 'Pods.xcconfig').open('w') do |file|
+        merged_xcconfig.each do |key, value|
+          file.puts "#{key} = #{value}"
+        end
+      end
     end
 
     include Config::Mixin
