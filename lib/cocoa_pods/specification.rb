@@ -67,6 +67,11 @@ module Pod
       @part_of.part_of_other_pod = true
     end
 
+    def part_of_dependency(name, *version_requirements)
+      part_of(name, *version_requirements)
+      dependency(name, *version_requirements)
+    end
+
     def source_files(*patterns)
       @source_files = patterns
     end

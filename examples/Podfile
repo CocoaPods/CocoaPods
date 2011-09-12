@@ -1,8 +1,8 @@
 
-dependency 'SSZipArchive', '>= 1'
+#dependency 'SSZipArchive', '>= 1'
 
 #dependency 'ASIHTTPRequest', '1.8'
-dependency 'ASIWebPageRequest', '= 1.8'
+#dependency 'ASIWebPageRequest', '= 1.8'
 
 # is part of ASIHTTPRequest 1.8 and 1.8.1
 dependency 'Reachability' #, '>= 2.0'
@@ -18,5 +18,5 @@ dependency 'Reachability' #, '>= 2.0'
 # * the Reachability dependency should be taken from this version
 # * the ASIWebPageRequest dependency requirement matches this one so should work
 #dependency 'ASIHTTPRequest', '1.8.1'
-dependency 'ASIHTTPRequest', '>= 1.8'
+#dependency 'ASIHTTPRequest', '>= 1.8'
 
