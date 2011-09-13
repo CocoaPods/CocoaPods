@@ -2,19 +2,12 @@ module Pod
   class Command
     class Install < Command
       def run
-        if spec = Specification.from_podfile(podfile)
+        if config.project_podfile.exist?
+          spec = Specification.from_podfile(config.project_podfile)
           Installer.new(spec, config.project_pods_root).install!
         else
           $stderr.puts "No Podfile found in current working directory."
         end
-      end
-
-      def pods_root
-        Pathname.new(Dir.pwd) + 'Pods'
-      end
-
-      def podfile
-        File.join(Dir.pwd, 'Podfile')
       end
     end
   end

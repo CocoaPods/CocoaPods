@@ -1,7 +1,9 @@
 #!/usr/bin/env macruby
 
-$:.unshift File.expand_path('../../lib', __FILE__)
-$:.unshift File.expand_path('../../vendor/rubygems/lib', __FILE__)
+if $0 == __FILE__
+  $:.unshift File.expand_path('../../lib', __FILE__)
+  require 'rubygems'
+end
 
 require 'cocoa_pods'
 

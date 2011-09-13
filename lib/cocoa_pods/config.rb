@@ -18,11 +18,15 @@ module Pod
     end
 
     def project_root
-      Pathname.new(Dir.pwd)
+      Pathname.pwd
     end
 
     def project_pods_root
       project_root + 'Pods'
+    end
+
+    def project_podfile
+      project_root + 'Podfile'
     end
 
     module Mixin

@@ -24,6 +24,7 @@ module Pod
     end
 
     def install!
+      puts "Installing dependencies defined in: #{@top_level_specification.defined_in_file}"
       install_dependent_specifications!
       generate_project
       write_files!
