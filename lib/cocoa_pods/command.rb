@@ -10,13 +10,15 @@ module Pod
         @command_class, @argv = command_class, argv
       end
 
-      def run
-        puts @command_class.banner
-        puts
-        puts "Options"
-        puts "-------"
-        puts
-        puts @command_class.options
+      def message
+        [
+          @command_class.banner,
+          '',
+          'Options',
+          '-------',
+          '',
+          @command_class.options
+        ].join("\n")
       end
     end
 
@@ -41,6 +43,19 @@ module Pod
       "    --verbose   Print more information while working"
     end
 
+    def self.run(*argv)
+      parse(*argv).run
+    rescue Exception => e
+      unless e.is_a?(Help)
+        puts "Oh no, an error occurred. Please run with `--verbose' and report " \
+             "on https://github.com/alloy/cocoa-pods/issues."
+        puts ""
+      end
+      puts e.message
+      puts *e.backtrace if Config.instance.verbose
+      exit 1
+    end
+
     def self.parse(*argv)
       argv = ARGV.new(argv)
       show_help = argv.option('--help')
@@ -54,12 +69,10 @@ module Pod
       end
 
       if show_help || command_class.nil?
-        Help.new(command_class || self, argv)
+        raise Help.new(command_class || self, argv)
       else
         command_class.new(argv)
       end
-    rescue Help => help
-      return help
     end
 
     include Config::Mixin

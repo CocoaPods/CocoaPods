@@ -7,4 +7,4 @@ end
 
 require 'cocoa_pods'
 
-Pod::Command.parse(*ARGV).run
+Pod::Command.run(*ARGV)
