@@ -4,6 +4,25 @@ require 'fileutils'
 module Pod
   class Command
     class Repo < Command
+      def self.banner
+%{### Managing spec-repos
+
+    $ pod help repo
+
+      pod repo add NAME URL
+        Clones `URL' in the local spec-repos directory at `~/.cocoa-pods'. The
+        remote can later be referred to by `NAME'.
+
+      pod repo update NAME
+        Updates the local clone of the spec-repo `NAME'.
+
+      pod repo change NAME URL
+        Changes the git remote of local spec-repo `NAME' to `URL'.
+
+      pod repo cd NAME
+        Changes the current working dir to the local spec-repo `NAME'.}
+      end
+
       include Executioner
       executable :git
 

@@ -1,7 +1,17 @@
 module Pod
   class Command
     class Install < Command
+      def self.banner
+        'TODO'
+      end
+
+      def self.options
+        "    --no-clean  Leave SCM dirs like `.git' and `.svn' in tact after downloading\n" +
+        super
+      end
+
       def initialize(*argv)
+        config.clean = !argv.delete('--no-clean')
         if podspec = argv.shift
           @podspec = Pathname.new(podspec)
         end
