@@ -8,5 +8,9 @@ module Pod
   autoload :Spec,          'cocoa_pods/specification'
   autoload :Specification, 'cocoa_pods/specification'
   autoload :Version,       'cocoa_pods/version'
-  autoload :XcodeProject,  'cocoa_pods/xcode_project'
+
+  module Xcode
+    autoload :Config,   'cocoa_pods/xcode/config'
+    autoload :Project,  'cocoa_pods/xcode/project'
+  end
 end

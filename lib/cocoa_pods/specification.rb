@@ -120,8 +120,16 @@ module Pod
 
     def create_static_library_project!
       puts "==> Creating static library project"
-      xcconfigs = []
-      project = XcodeProject.static_library
+
+      xcconfig = Xcode::Config.new({
+        # in a workspace this is where the static library headers should be found
+        'USER_HEADER_SEARCH_PATHS' => '$(BUILT_PRODUCTS_DIR)',
+        # search the user headers
+        'ALWAYS_SEARCH_USER_PATHS' => 'YES',
+      })
+
+      project = Xcode::Project.static_library
+
       resolved_dependent_specification_sets.each do |set|
         # In case the set is only part of other pods we don't need to build
         # the pod itself.
@@ -138,35 +146,15 @@ module Pod
           end
         end
 
-        if xcconfig = spec.read(:xcconfig)
-          xcconfigs << xcconfig
+        if xcconfig_hash = spec.read(:xcconfig)
+          xcconfig << xcconfig_hash
         end
       end
       project.create_in(config.project_pods_root)
 
       # TODO the static library needs an extra xcconfig which sets the values from issue #1.
       # Or we could edit the project.pbxproj file, but that seems like more work...
-
-      merged_xcconfig = {
-        # in a workspace this is where the static library headers should be found
-        'USER_HEADER_SEARCH_PATHS' => '$(BUILT_PRODUCTS_DIR)',
-        # search the user headers
-        'ALWAYS_SEARCH_USER_PATHS' => 'YES',
-      }
-      xcconfigs.each do |xcconfig|
-        xcconfig.each do |key, value|
-          if existing_value = merged_xcconfig[key]
-            merged_xcconfig[key] = "#{existing_value} #{value}"
-          else
-            merged_xcconfig[key] = value
-          end
-        end
-      end
-      (config.project_pods_root + 'Pods.xcconfig').open('w') do |file|
-        merged_xcconfig.each do |key, value|
-          file.puts "#{key} = #{value}"
-        end
-      end
+      xcconfig.create_in(config.project_pods_root)
     end
 
     include Config::Mixin
