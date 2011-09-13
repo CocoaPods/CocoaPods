@@ -14,7 +14,7 @@ module Pod
         puts @command_class.banner
         puts
         puts "Options"
-        puts "======="
+        puts "-------"
         puts
         puts @command_class.options
       end
