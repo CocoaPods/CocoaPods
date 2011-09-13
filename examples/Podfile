@@ -1,7 +1,7 @@
 
-#dependency 'SSZipArchive', '>= 1'
+dependency 'SSZipArchive', '>= 1'
 
-#dependency 'ASIHTTPRequest', '1.8'
+dependency 'ASIHTTPRequest', '1.8'
 #dependency 'ASIWebPageRequest', '= 1.8'
 
 # is part of ASIHTTPRequest 1.8 and 1.8.1

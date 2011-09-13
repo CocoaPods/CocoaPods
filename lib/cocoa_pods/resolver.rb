@@ -20,7 +20,7 @@ module Pod
           set.required_by(specification, dependency)
           unless @sets.include?(set)
             @sets << set
-            find_dependency_sets(set.podspec)
+            find_dependency_sets(set.specification)
           end
         end
       end

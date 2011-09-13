@@ -3,7 +3,7 @@ framework 'Foundation'
 module Pod
   module Xcode
     class Project
-      TEMPLATES_DIR = Pathname.new(File.expand_path('../../../xcode-project-templates', __FILE__))
+      TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', __FILE__))
 
       # TODO see if we really need different templates for iOS and OS X
       def self.static_library

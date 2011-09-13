@@ -48,7 +48,7 @@ module Pod
         @pod_dir + required_version.to_s + "#{name}.podspec"
       end
 
-      def podspec
+      def specification
         Specification.from_podspec(spec_pathname)
       end
 

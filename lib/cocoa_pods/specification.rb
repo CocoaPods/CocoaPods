@@ -21,6 +21,7 @@ module Pod
 
     def initialize(&block)
       @dependencies = []
+      @xcconfig = {}
       instance_eval(&block) if block_given?
     end
 
@@ -62,7 +63,6 @@ module Pod
     end
 
     def part_of(name, *version_requirements)
-      #@part_of = Dependency.new(name, *version_requirements)
       @part_of = dependency(name, *version_requirements)
       @part_of.part_of_other_pod = true
     end
@@ -93,71 +93,14 @@ module Pod
 
     # Not attributes
 
+    include Config::Mixin
+
     # Returns the specification for the pod that this pod's source is a part of.
     def part_of_specification
       if @part_of
-        Set.by_specification_name(@part_of.name).podspec
+        Set.by_specification_name(@part_of.name).specification
       end
     end
-
-    # TODO move this all to an Installer class
-
-    # This also includes those that are only part of other specs, but are not
-    # actually being used themselves.
-    def resolved_dependent_specification_sets
-      @resolved_dependent_specifications_sets ||= Resolver.new(self).resolve
-    end
-
-    def install_dependent_specifications!
-      sets = resolved_dependent_specification_sets
-      sets.each do |set|
-        # In case the set is only part of other pods we don't need to install
-        # the pod itself.
-        next if set.only_part_of_other_pod?
-        set.podspec.install!
-      end
-    end
-
-    def create_static_library_project!
-      puts "==> Creating static library project"
-
-      xcconfig = Xcode::Config.new({
-        # in a workspace this is where the static library headers should be found
-        'USER_HEADER_SEARCH_PATHS' => '$(BUILT_PRODUCTS_DIR)',
-        # search the user headers
-        'ALWAYS_SEARCH_USER_PATHS' => 'YES',
-      })
-
-      project = Xcode::Project.static_library
-
-      resolved_dependent_specification_sets.each do |set|
-        # In case the set is only part of other pods we don't need to build
-        # the pod itself.
-        next if set.only_part_of_other_pod?
-        spec = set.podspec
-
-        spec.read(:source_files).each do |pattern|
-          pattern = spec.pod_destroot + pattern
-          pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
-          Dir.glob(pattern.to_s).each do |file|
-            file = Pathname.new(file)
-            file = file.relative_path_from(config.project_pods_root)
-            project.add_source_file(file)
-          end
-        end
-
-        if xcconfig_hash = spec.read(:xcconfig)
-          xcconfig << xcconfig_hash
-        end
-      end
-      project.create_in(config.project_pods_root)
-
-      # TODO the static library needs an extra xcconfig which sets the values from issue #1.
-      # Or we could edit the project.pbxproj file, but that seems like more work...
-      xcconfig.create_in(config.project_pods_root)
-    end
-
-    include Config::Mixin
 
     def pod_destroot
       if part_of_other_pod?
@@ -167,7 +110,40 @@ module Pod
       end
     end
 
-    # Places the activated podspec in the project's pods directory.
+    def part_of_other_pod?
+      !@part_of.nil?
+    end
+
+    def from_podfile?
+      @name.nil? && @version.nil?
+    end
+
+    def to_s
+      if from_podfile?
+        "podfile at `#{@defined_in_file}'"
+      else
+        "`#{@name}' version `#{@version}'"
+      end
+    end
+
+    def inspect
+      "#<#{self.class.name} for #{to_s}>"
+    end
+
+    # Install and download hooks
+
+    # Places the activated specification in the project's pods directory.
+    #
+    # Override this if you need to perform work before or after activating the
+    # pod. Eg:
+    #
+    #   Pod::Spec.new do
+    #     def install!
+    #       # pre-install
+    #       super
+    #       # post-install
+    #     end
+    #   end
     def install!
       puts "==> Installing: #{self}"
       config.project_pods_root.mkpath
@@ -191,32 +167,22 @@ module Pod
     # Downloads the source of the pod and places it in the project's pods
     # directory.
     #
-    # You can override this for custom downloading.
+    # Override this if you need to perform work before or after downloading the
+    # pod, or if you need to implement custom dowloading. Eg:
+    #
+    #   Pod::Spec.new do
+    #     def download!
+    #       # pre-download
+    #       super # or custom downloading
+    #       # post-download
+    #     end
+    #   end
     def download!
       downloader = Downloader.for_source(@source, pod_destroot)
       downloader.download
       downloader.clean if config.clean
     end
 
-    def part_of_other_pod?
-      !@part_of.nil?
-    end
-
-    def from_podfile?
-      @name.nil? && @version.nil?
-    end
-
-    def to_s
-      if from_podfile?
-        "podfile at `#{@defined_in_file}'"
-      else
-        "`#{@name}' version `#{@version}'"
-      end
-    end
-
-    def inspect
-      "#<#{self.class.name} for #{to_s}>"
-    end
   end
 
   Spec = Specification
