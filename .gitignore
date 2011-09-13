@@ -2,3 +2,4 @@
 *.swo
 .DS_Store
 tmp
+examples/Pods
