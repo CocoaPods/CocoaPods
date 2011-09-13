@@ -18,12 +18,12 @@ module Pod
         super
       end
 
-      def initialize(*argv)
-        config.clean = !argv.delete('--no-clean')
-        if podspec = argv.shift
+      def initialize(argv)
+        config.clean = !argv.option('--no-clean')
+        if podspec = argv.shift_argument
           @podspec = Pathname.new(podspec)
         end
-        super
+        super unless argv.empty?
       end
 
       def run

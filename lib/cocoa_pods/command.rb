@@ -5,7 +5,7 @@ module Pod
     autoload :Setup,   'cocoa_pods/command/setup'
     autoload :Spec,    'cocoa_pods/command/spec'
 
-    class Help
+    class Help < Exception
       def initialize(command_class, argv)
         @command_class, @argv = command_class, argv
       end
@@ -18,6 +18,13 @@ module Pod
         puts
         puts @command_class.options
       end
+    end
+
+    class ARGV < Array
+      def options;        select { |x| x[0,1] == '-' };        end
+      def arguments;      self - options;                      end
+      def option(name);   !!delete(name);                      end
+      def shift_argument; (arg = arguments[0]) && delete(arg); end
     end
 
     def self.banner
@@ -35,11 +42,11 @@ module Pod
     end
 
     def self.parse(*argv)
-      argv = argv.dup
-      show_help = argv.delete('--help')
-      Config.instance.verbose = !!argv.delete('--verbose')
+      argv = ARGV.new(argv)
+      show_help = argv.option('--help')
+      Config.instance.verbose = argv.option('--verbose')
 
-      command_class = case argv.shift
+      command_class = case argv.shift_argument
       when 'install' then Install
       when 'repo'    then Repo
       when 'setup'   then Setup
@@ -49,14 +56,16 @@ module Pod
       if show_help || command_class.nil?
         Help.new(command_class || self, argv)
       else
-        command_class.new(*argv)
+        command_class.new(argv)
       end
+    rescue Help => help
+      return help
     end
 
     include Config::Mixin
 
-    def initialize(*argv)
-      raise ArgumentError, "unknown argument(s): #{argv.join(', ')}" unless argv.empty?
+    def initialize(argv)
+      raise Help.new(self.class, argv)
     end
   end
 end
