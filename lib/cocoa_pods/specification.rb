@@ -3,17 +3,17 @@ require 'cocoa_pods/specification/set'
 module Pod
   class Specification
     def self.from_podfile(path)
-      if File.exist?(path)
+      if path.exist?
         spec = new
-        spec.instance_eval(File.read(path))
+        spec.instance_eval(path.read)
         spec.defined_in_file = path
         spec
       end
     end
 
-    def self.from_podspec(pathname)
-      spec = eval(File.read(pathname), nil, pathname.to_s)
-      spec.defined_in_file = pathname
+    def self.from_podspec(path)
+      spec = eval(path.read, nil, path.to_s)
+      spec.defined_in_file = path
       spec
     end
 
@@ -63,17 +63,16 @@ module Pod
     end
 
     def part_of(name, *version_requirements)
-      @part_of = dependency(name, *version_requirements)
-      @part_of.part_of_other_pod = true
+      part_of_dependency(name, *version_requirements)
+      @part_of.only_part_of_other_pod = true
     end
 
     def part_of_dependency(name, *version_requirements)
-      part_of(name, *version_requirements)
-      dependency(name, *version_requirements)
+      @part_of = dependency(name, *version_requirements)
     end
 
     def source_files(*patterns)
-      @source_files = patterns
+      @source_files = patterns.map { |p| Pathname.new(p) }
     end
 
     def source(remote)
@@ -103,6 +102,7 @@ module Pod
     end
 
     def pod_destroot
+      return if from_podfile?
       if part_of_other_pod?
         part_of_specification.pod_destroot
       else

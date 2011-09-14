@@ -4,8 +4,18 @@ require 'rubygems/dependency'
 
 module Pod
   class Dependency < Gem::Dependency
-    attr_accessor :part_of_other_pod
+    attr_accessor :only_part_of_other_pod
 
+    def initialize(name, *version_requirements)
+      super
+      @only_part_of_other_pod = false
+    end
+
+    def ==(other)
+      super && @only_part_of_other_pod == other.only_part_of_other_pod
+    end
+
+    # Taken from a newer version of RubyGems
     unless public_method_defined?(:merge)
       def merge other
         unless name == other.name then

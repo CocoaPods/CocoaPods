@@ -1,0 +1,4 @@
+dependency 'SSZipArchive',      '>= 1'
+dependency 'ASIHTTPRequest',    '~> 1.8.0'
+dependency 'Reachability'                  # part of ASIHTTPRequest
+dependency 'ASIWebPageRequest', '< 1.8.2'  # part of ASIHTTPRequest

@@ -37,7 +37,7 @@ module Pod
       end
 
       def only_part_of_other_pod?
-        @required_by.all? { |_, dep| dep.part_of_other_pod }
+        @required_by.all? { |_, dep| dep.only_part_of_other_pod }
       end
 
       def name
