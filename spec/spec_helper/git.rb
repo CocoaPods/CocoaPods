@@ -8,12 +8,12 @@ module SpecHelper
 
   module Git
     def tmp_repos_path
-      File.join(SpecHelper.temporary_directory, 'cocoa-pods')
+      SpecHelper.temporary_directory + 'cocoa-pods'
     end
     module_function :tmp_repos_path
 
     def tmp_master_repo_path
-      File.join(tmp_repos_path, 'master')
+      tmp_repos_path + 'master'
     end
 
     include Executioner
@@ -21,7 +21,7 @@ module SpecHelper
 
     alias_method :git_super, :git
     def git(repo, command)
-      Dir.chdir(File.join(tmp_repos_path, repo)) { git_super(command).strip }
+      Dir.chdir(tmp_repos_path + repo) { git_super(command).strip }
     end
 
     def git_config(repo, attr)

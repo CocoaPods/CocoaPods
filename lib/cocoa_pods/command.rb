@@ -23,7 +23,7 @@ module Pod
     end
 
     class ARGV < Array
-      def options;        select { |x| x[0,1] == '-' };        end
+      def options;        select { |x| x.to_s[0,1] == '-' };   end
       def arguments;      self - options;                      end
       def option(name);   !!delete(name);                      end
       def shift_argument; (arg = arguments[0]) && delete(arg); end

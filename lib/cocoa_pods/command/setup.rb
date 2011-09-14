@@ -21,7 +21,7 @@ module Pod
       end
 
       def add_master_repo_command
-        @command ||= Repo.new('add', 'master', master_repo_url)
+        @command ||= Repo.new(ARGV.new(['add', 'master', master_repo_url]))
       end
 
       def run
