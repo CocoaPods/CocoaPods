@@ -33,12 +33,16 @@ describe "Pod::Config" do
   end
 
   describe "concerning default settings" do
+    it "prints out normal information" do
+      config.should.not.be.silent
+    end
+
     it "does not print vebose information" do
-      config.verbose.should == false
+      config.should.not.be.verbose
     end
 
     it "cleans SCM dirs in dependency checkouts" do
-      config.clean.should == true
+      config.should.clean
     end
   end
 end

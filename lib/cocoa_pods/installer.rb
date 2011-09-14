@@ -24,7 +24,9 @@ module Pod
     end
 
     def install!
-      puts "Installing dependencies defined in: #{@top_level_specification.defined_in_file}"
+      unless config.silent?
+        puts "Installing dependencies defined in: #{@top_level_specification.defined_in_file}"
+      end
       install_dependent_specifications!
       generate_project
       write_files!
@@ -40,7 +42,7 @@ module Pod
     end
 
     def generate_project
-      puts "==> Creating Pods project files"
+      puts "==> Creating Pods project files" unless config.silent?
       dependent_specification_sets.each do |set|
         # In case the set is only part of other pods we don't need to build
         # the pod itself.

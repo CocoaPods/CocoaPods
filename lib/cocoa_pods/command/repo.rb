@@ -48,7 +48,7 @@ module Pod
       end
 
       def add
-        puts "==> Cloning spec repo `#{@name}' from `#{@url}'"
+        puts "==> Cloning spec repo `#{@name}' from `#{@url}'" unless config.silent?
         config.repos_dir.mkpath
         Dir.chdir(config.repos_dir) { git("clone #{@url} #{@name}") }
       end
@@ -56,7 +56,7 @@ module Pod
       def update
         dirs = @name ? [dir] : config.repos_dir.children
         dirs.each do |dir|
-          puts "==> Updating spec repo `#{dir.basename}'"
+          puts "==> Updating spec repo `#{dir.basename}'" unless config.silent?
           Dir.chdir(dir) { git("pull") }
         end
       end

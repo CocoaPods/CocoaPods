@@ -145,7 +145,7 @@ module Pod
     #     end
     #   end
     def install!
-      puts "==> Installing: #{self}"
+      puts "==> Installing: #{self}" unless config.silent?
       config.project_pods_root.mkpath
       require 'fileutils'
       FileUtils.cp(@defined_in_file, config.project_pods_root)
@@ -157,9 +157,9 @@ module Pod
 
     def download_if_necessary!
       if pod_destroot.exist?
-        puts "  * Skipping download of #{self}, pod already downloaded"
+        puts "  * Skipping download of #{self}, pod already downloaded" unless config.silent?
       else
-        puts "  * Downloading: #{self}"
+        puts "  * Downloading: #{self}" unless config.silent?
         download!
       end
     end

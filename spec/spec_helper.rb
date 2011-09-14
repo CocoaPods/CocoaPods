@@ -20,6 +20,12 @@ class Bacon::Context
   include Pod::Config::Mixin
 
   include SpecHelper::Fixture
+
+  def argv(*argv)
+    Pod::Command::ARGV.new(argv)
+  end
 end
 
-Pod::Config.instance.repos_dir = SpecHelper.tmp_repos_path
+config = Pod::Config.instance
+config.silent = true
+config.repos_dir = SpecHelper.tmp_repos_path
