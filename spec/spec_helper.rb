@@ -1,12 +1,13 @@
 require 'rubygems'
 require 'mac_bacon'
 
-ROOT = File.expand_path('../../', __FILE__)
+require 'pathname'
+ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 
-$:.unshift File.join(ROOT, 'lib')
+$:.unshift((ROOT + 'lib').to_s)
 require 'cocoa_pods'
 
-$:.unshift File.join(ROOT, 'spec')
+$:.unshift((ROOT + 'spec').to_s)
 require 'spec_helper/fixture'
 require 'spec_helper/git'
 require 'spec_helper/log'
@@ -17,6 +18,8 @@ require 'spec_helper/temporary_directory'
 
 class Bacon::Context
   include Pod::Config::Mixin
+
+  include SpecHelper::Fixture
 end
 
 Pod::Config.instance.repos_dir = SpecHelper.tmp_repos_path

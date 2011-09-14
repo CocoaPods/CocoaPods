@@ -11,7 +11,10 @@ module Pod
   autoload :Version,       'cocoa_pods/version'
 
   module Xcode
-    autoload :Config,   'cocoa_pods/xcode/config'
-    autoload :Project,  'cocoa_pods/xcode/project'
+    autoload :Config,      'cocoa_pods/xcode/config'
+    autoload :Project,     'cocoa_pods/xcode/project'
   end
+
+  autoload :Pathname,      'pathname'
+  autoload :Executioner,   'executioner'
 end

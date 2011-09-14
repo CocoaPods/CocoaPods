@@ -7,16 +7,16 @@ module SpecHelper
 
   module TemporaryDirectory
     def temporary_directory
-      File.join(ROOT, 'tmp')
+      ROOT + 'tmp'
     end
     module_function :temporary_directory
     
     def setup_temporary_directory
-      FileUtils.mkdir_p(temporary_directory)
+      temporary_directory.mkpath
     end
     
     def teardown_temporary_directory
-      FileUtils.rm_rf(temporary_directory)
+      temporary_directory.rmtree
     end
     
     def self.extended(base)

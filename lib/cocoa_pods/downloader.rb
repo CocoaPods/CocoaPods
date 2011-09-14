@@ -1,6 +1,6 @@
 module Pod
   class Downloader
-    def self.for_source(source, pod_root)
+    def self.for_source(pod_root, source)
       options = source.dup
       if url = options.delete(:git)
         Git.new(pod_root, url, options)
@@ -9,12 +9,13 @@ module Pod
       end
     end
 
+    attr_reader :pod_root, :url, :options
+
     def initialize(pod_root, url, options)
       @pod_root, @url, @options = pod_root, url, options
     end
 
     class Git < Downloader
-      require 'rubygems'
       require 'executioner'
       include Executioner
       # TODO make Executioner:

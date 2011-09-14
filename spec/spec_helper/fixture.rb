@@ -4,10 +4,10 @@ module SpecHelper
   end
 
   module Fixture
-    ROOT = File.join(::ROOT, 'spec', 'fixtures')
+    ROOT = ::ROOT + 'spec/fixtures'
 
     def fixture(name)
-      File.join(ROOT, name)
+      ROOT + name
     end
     module_function :fixture
   end

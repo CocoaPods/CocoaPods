@@ -178,7 +178,7 @@ module Pod
     #     end
     #   end
     def download!
-      downloader = Downloader.for_source(@source, pod_destroot)
+      downloader = Downloader.for_source(pod_destroot, @source)
       downloader.download
       downloader.clean if config.clean
     end
