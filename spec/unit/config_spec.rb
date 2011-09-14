@@ -15,6 +15,30 @@ describe "Pod::Config" do
   end
 
   it "returns the path to the spec-repos dir" do
-    config.repos_dir.should == File.expand_path("~/.cocoa-pods")
+    config.repos_dir.should == Pathname.new("~/.cocoa-pods").expand_path
+  end
+
+  describe "concerning a user's project, which is expected in the current working directory" do
+    it "returns the path to the project root" do
+      config.project_root.should == Pathname.pwd
+    end
+
+    it "returns the path to the project Podfile" do
+      config.project_podfile.should == Pathname.pwd + 'Podfile'
+    end
+
+    it "returns the path to the Pods directory that holds the dependencies" do
+      config.project_pods_root.should == Pathname.pwd + 'Pods'
+    end
+  end
+
+  describe "concerning default settings" do
+    it "does not print vebose information" do
+      config.verbose.should == false
+    end
+
+    it "cleans SCM dirs in dependency checkouts" do
+      config.clean.should == true
+    end
   end
 end
