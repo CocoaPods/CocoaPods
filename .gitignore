@@ -3,3 +3,5 @@
 .DS_Store
 tmp
 examples/Pods
+spec/fixtures/banana-lib
+spec/fixtures/master-spec-repo.git
