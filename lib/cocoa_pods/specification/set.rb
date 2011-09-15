@@ -66,7 +66,7 @@ module Pod
       end
 
       def ==(other)
-        self.class === other && name == other.name
+        self.class === other && @pod_dir == other.pod_dir
       end
 
       def to_s
