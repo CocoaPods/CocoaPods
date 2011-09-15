@@ -5,7 +5,8 @@ module Pod
     end
 
     def self.search(dependency)
-      all.map { |source| source.search(dependency) }.compact.first
+      all.map { |source| source.search(dependency) }.compact.first ||
+        raise("Unable to find a pod named `#{dependency.name}'")
     end
 
     attr_reader :repo

@@ -5,6 +5,8 @@ describe "Pod::Source" do
   extend SpecHelper::TemporaryDirectory
 
   before do
+    Pod::Source.reset!
+    Pod::Spec::Set.reset!
     add_repo('repo1', fixture('spec-repos/master'))
     (config.repos_dir + 'repo1/JSONKit').rmtree
     add_repo('repo2', fixture('spec-repos/master'))
@@ -19,5 +21,11 @@ describe "Pod::Source" do
     set = Pod::Source.search(Pod::Dependency.new('JSONKit'))
     set.should.be.instance_of Pod::Specification::Set
     set.pod_dir.should == config.repos_dir + 'repo2/JSONKit'
+  end
+
+  it "raises if a specification set can't be found" do
+    lambda {
+      Pod::Source.search(Pod::Dependency.new('DoesNotExist'))
+    }.should.raise
   end
 end

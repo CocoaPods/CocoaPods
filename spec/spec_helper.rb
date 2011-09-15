@@ -30,3 +30,15 @@ end
 config = Pod::Config.instance
 config.silent = true
 config.repos_dir = SpecHelper.tmp_repos_path
+
+class Pod::Source
+  def self.reset!
+    @sources = nil
+  end
+end
+
+class Pod::Spec::Set
+  def self.reset!
+    @sets = nil
+  end
+end
