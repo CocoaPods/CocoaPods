@@ -16,7 +16,8 @@ require 'spec_helper/temporary_directory'
 #TMP_DIR = SpecHelper::TemporaryDirectory.temporary_directory
 #TMP_COCOA_PODS_DIR = File.join(TMP_DIR, 'cocoa-pods')
 
-class Bacon::Context
+context_class = defined?(BaconContext) ? BaconContext : Bacon::Context
+context_class.class_eval do
   include Pod::Config::Mixin
 
   include SpecHelper::Fixture
