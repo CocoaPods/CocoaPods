@@ -5,6 +5,7 @@ require 'rubygems/dependency'
 module Pod
   class Dependency < Gem::Dependency
     attr_accessor :only_part_of_other_pod
+    alias_method :only_part_of_other_pod?, :only_part_of_other_pod
 
     def initialize(name, *version_requirements)
       super

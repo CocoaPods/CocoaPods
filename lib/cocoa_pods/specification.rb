@@ -94,6 +94,16 @@ module Pod
 
     include Config::Mixin
 
+    def ==(other)
+      self.class === other &&
+        @name && @name == other.read(:name) &&
+          @version && @version == other.read(:version)
+    end
+
+    def dependency_by_name(name)
+      @dependencies.find { |d| d.name == name }
+    end
+
     # Returns the specification for the pod that this pod's source is a part of.
     def part_of_specification
       if @part_of

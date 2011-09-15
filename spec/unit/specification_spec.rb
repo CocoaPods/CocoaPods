@@ -86,15 +86,26 @@ describe "A Pod::Specification loaded from a podspec" do
   end
 
   it "returns the pod's dependencies" do
-    @spec.read(:dependencies).should == [
-      Pod::Dependency.new('monkey', '~> 1.0.1', '< 1.0.9')
-    ]
+    expected = Pod::Dependency.new('monkey', '~> 1.0.1', '< 1.0.9')
+    @spec.read(:dependencies).should == [expected]
+    @spec.dependency_by_name('monkey').should == expected
   end
 
   it "returns the pod's xcconfig settings" do
     @spec.read(:xcconfig).should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration'
     }
+  end
+
+  it "returns that it's equal to another specification if the name and version are equal" do
+    @spec.should == Pod::Spec.new { name 'BananaLib'; version '1.0' }
+    @spec.should.not == Pod::Spec.new { name 'OrangeLib'; version '1.0' }
+    @spec.should.not == Pod::Spec.new { name 'BananaLib'; version '1.1' }
+    @spec.should.not == Pod::Spec.new
+  end
+
+  it "never equals when it's from a Podfile" do
+    Pod::Spec.new.should.not == Pod::Spec.new
   end
 end
 
