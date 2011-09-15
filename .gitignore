@@ -4,4 +4,4 @@
 tmp
 examples/Pods
 spec/fixtures/banana-lib
-spec/fixtures/master-spec-repo.git
+spec/fixtures/spec-repos/master

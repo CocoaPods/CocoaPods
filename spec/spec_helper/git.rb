@@ -21,11 +21,31 @@ module SpecHelper
 
     alias_method :git_super, :git
     def git(repo, command)
-      Dir.chdir(tmp_repos_path + repo) { git_super(command).strip }
+      Dir.chdir(tmp_repos_path + repo) do
+        if output = git_super(command)
+          output.strip
+        end
+      end
     end
 
     def git_config(repo, attr)
       git repo, "config --get #{attr}"
+    end
+
+    def command(*argv)
+      command = Pod::Command.parse(*argv)
+      command.run
+      command
+    end
+
+    def add_repo(name, from)
+      command('repo', 'add', name, from)
+    end
+
+    def make_change(repo, name)
+      (repo.dir + 'README').open('w') { |f| f << 'Added!' }
+      git(name, 'add README')
+      git(name, 'commit -m "changed"')
     end
   end
 end

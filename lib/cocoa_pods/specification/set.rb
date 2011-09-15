@@ -17,6 +17,8 @@ module Pod
         sets[set.name]
       end
 
+      attr_reader :pod_dir
+
       def initialize(pod_dir)
         @pod_dir = pod_dir
         @required_by = []

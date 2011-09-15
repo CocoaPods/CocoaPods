@@ -5,7 +5,7 @@ module Pod
     end
 
     def self.search(dependency)
-      all.map { |source| source.search(dependency) }.compact
+      all.map { |source| source.search(dependency) }.compact.first
     end
 
     attr_reader :repo
