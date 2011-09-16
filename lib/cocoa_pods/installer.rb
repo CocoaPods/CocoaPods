@@ -44,33 +44,17 @@ module Pod
       @xcodeproj ||= Xcode::Project.ios_static_library
     end
 
-    def install!
-      unless config.silent?
-        puts "Installing dependencies defined in: #{@specification.defined_in_file}"
-      end
-      install_dependent_specifications!
-      generate_project
-      write_files!
-    end
-
-    def install_dependent_specifications!
-      dependent_specification_sets.each do |set|
-        # In case the set is only part of other pods we don't need to install
-        # the pod itself.
-        next if set.only_part_of_other_pod?
-        set.specification.install!
-      end
-    end
-
     def generate_project
-      puts "==> Creating Pods project files" unless config.silent?
       source_files.each { |file| xcodeproj.add_source_file(file) }
       build_specification_sets.each do |set|
         xcconfig << set.specification.read(:xcconfig)
       end
     end
 
-    def write_files!
+    def install!
+      puts "Installing dependencies of: #{@specification.defined_in_file}" unless config.silent?
+      generate_project
+      build_specification_sets.each { |set| set.specification.install! }
       xcodeproj.create_in(config.project_pods_root)
       xcconfig.create_in(config.project_pods_root)
     end
