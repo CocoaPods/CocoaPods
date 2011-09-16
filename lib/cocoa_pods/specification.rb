@@ -104,11 +104,15 @@ module Pod
       @dependencies.find { |d| d.name == name }
     end
 
+    def part_of_specification_set
+      if @part_of
+        Set.by_specification_name(@part_of.name)
+      end
+    end
+
     # Returns the specification for the pod that this pod's source is a part of.
     def part_of_specification
-      if @part_of
-        Set.by_specification_name(@part_of.name).specification
-      end
+      (set = part_of_specification_set) && set.specification
     end
 
     def pod_destroot

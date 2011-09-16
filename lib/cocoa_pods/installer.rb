@@ -4,12 +4,31 @@ module Pod
   class Installer
     include Config::Mixin
 
-    def initialize(top_level_specification)
-      @top_level_specification = top_level_specification
+    def initialize(specification)
+      @specification = specification
     end
 
     def dependent_specification_sets
-      @dependent_specifications_sets ||= Resolver.new(@top_level_specification).resolve
+      @dependent_specification_sets ||= Resolver.new(@specification).resolve
+    end
+
+    def build_specification_sets
+      dependent_specification_sets.reject(&:only_part_of_other_pod?)
+    end
+
+    def source_files
+      source_files = []
+      build_specification_sets.each do |set|
+        spec = set.specification
+        spec.read(:source_files).each do |pattern|
+          pattern = spec.pod_destroot + pattern
+          pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
+          pattern.glob.each do |file|
+            source_files << file.relative_path_from(config.project_pods_root)
+          end
+        end
+      end
+      source_files
     end
 
     def xcconfig
@@ -27,7 +46,7 @@ module Pod
 
     def install!
       unless config.silent?
-        puts "Installing dependencies defined in: #{@top_level_specification.defined_in_file}"
+        puts "Installing dependencies defined in: #{@specification.defined_in_file}"
       end
       install_dependent_specifications!
       generate_project
@@ -45,21 +64,9 @@ module Pod
 
     def generate_project
       puts "==> Creating Pods project files" unless config.silent?
-      dependent_specification_sets.each do |set|
-        # In case the set is only part of other pods we don't need to build
-        # the pod itself.
-        next if set.only_part_of_other_pod?
-        spec = set.specification
-        spec.read(:source_files).each do |pattern|
-          pattern = spec.pod_destroot + pattern
-          pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
-          Dir.glob(pattern.to_s).each do |file|
-            file = Pathname.new(file)
-            file = file.relative_path_from(config.project_pods_root)
-            xproj.add_source_file(file)
-          end
-        end
-        xcconfig << spec.read(:xcconfig)
+      source_files.each { |file| xproj.add_source_file(file) }
+      build_specification_sets.each do |set|
+        xcconfig << set.specification.read(:xcconfig)
       end
     end
 

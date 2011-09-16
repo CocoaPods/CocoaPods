@@ -21,3 +21,9 @@ module Pod
   autoload :Pathname,      'pathname'
   autoload :Executioner,   'executioner'
 end
+
+class Pathname
+  def glob(pattern = '')
+    Dir.glob((self + pattern).to_s).map { |f| Pathname.new(f) }
+  end
+end
