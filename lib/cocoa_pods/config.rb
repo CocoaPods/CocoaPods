@@ -10,7 +10,7 @@ module Pod
       @instance = instance
     end
 
-    attr_accessor :repos_dir, :clean, :verbose, :silent
+    attr_accessor :repos_dir, :project_pods_root, :clean, :verbose, :silent
     alias_method :clean?,   :clean
     alias_method :verbose?, :verbose
     alias_method :silent?,  :silent
@@ -27,7 +27,7 @@ module Pod
     end
 
     def project_pods_root
-      project_root + 'Pods'
+      @project_pods_root ||= project_root + 'Pods'
     end
 
     def project_podfile

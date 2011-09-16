@@ -1,7 +1,7 @@
 module Pod
   class Source
     def self.all
-      @sources ||= Config.instance.repos_dir.children.map { |repo| new(repo) }
+      @sources ||= Config.instance.repos_dir.children.select(&:directory?).map { |repo| new(repo) }
     end
 
     def self.search(dependency)

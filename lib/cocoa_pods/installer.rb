@@ -2,6 +2,8 @@ module Pod
   # TODO the static library needs an extra xcconfig which sets the values from issue #1.
   # Or we could edit the project.pbxproj file, but that seems like more work...
   class Installer
+    include Config::Mixin
+
     def initialize(top_level_specification, pods_root)
       @top_level_specification, @pods_root = top_level_specification, pods_root
     end

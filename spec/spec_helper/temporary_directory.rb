@@ -16,7 +16,7 @@ module SpecHelper
     end
     
     def teardown_temporary_directory
-      temporary_directory.rmtree
+      temporary_directory.rmtree if temporary_directory.exist?
     end
     
     def self.extended(base)

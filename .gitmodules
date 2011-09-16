@@ -1,0 +1,9 @@
+[submodule "spec/fixtures/integration/ASIHTTPRequest"]
+	path = spec/fixtures/integration/ASIHTTPRequest
+	url = https://github.com/pokeb/asi-http-request.git
+[submodule "spec/fixtures/integration/SSZipArchive"]
+	path = spec/fixtures/integration/SSZipArchive
+	url = https://github.com/samsoffes/ssziparchive.git
+[submodule "spec/fixtures/integration/JSONKit"]
+	path = spec/fixtures/integration/JSONKit
+	url = https://github.com/johnezang/JSONKit.git
