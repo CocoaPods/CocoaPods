@@ -21,8 +21,8 @@ module SpecHelper
   end
 end
 
-unless SpecHelper.fixture('integration/ASIHTTPRequest').exist?
-  puts "[!] You must init/update the git submodules for the integration spec to work, skipping."
+unless SpecHelper.fixture('integration/ASIHTTPRequest/Classes').exist?
+  puts "[!] You must run `git submodule update --init` for the integration spec to work, skipping."
 else
   describe "A full (integration spec) installation" do
     extend SpecHelper::TemporaryDirectory
