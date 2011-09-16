@@ -1,12 +1,20 @@
 module Pod
   class Source
     def self.all
-      @sources ||= Config.instance.repos_dir.children.select(&:directory?).map { |repo| new(repo) }
+      @sources ||= begin
+        repos_dir = Config.instance.repos_dir
+        sources = repos_dir.children.select(&:directory?).map { |repo| new(repo) }
+        if sources.empty?
+          raise Informative, "No spec repos found in `#{repos_dir}'. " \
+                             "To fetch the `master' repo run: $ pod setup"
+        end
+        sources
+      end
     end
 
     def self.search(dependency)
       all.map { |source| source.search(dependency) }.compact.first ||
-        raise("Unable to find a pod named `#{dependency.name}'")
+        raise(Informative, "Unable to find a pod named `#{dependency.name}'")
     end
 
     attr_reader :repo

@@ -32,13 +32,13 @@ module Pod
           if @podspec.exist?
             spec = Specification.from_podspec(@podspec)
           else
-            raise "The specified podspec `#{@podspec}' doesn't exist."
+            raise Help, "The specified podspec `#{@podspec}' doesn't exist."
           end
         else
           if config.project_podfile.exist?
             spec = Specification.from_podfile(config.project_podfile)
           else
-            raise "No Podfile found in current working directory."
+            raise Help, "No Podfile found in current working directory."
           end
         end
         Installer.new(spec, config.project_pods_root).install!

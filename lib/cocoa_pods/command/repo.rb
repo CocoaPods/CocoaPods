@@ -30,7 +30,7 @@ module Pod
         case @action = argv.arguments[0]
         when 'add'
           unless (@name = argv[1]) && (@url = argv[2])
-            raise ArgumentError, "needs a NAME and URL"
+            raise Help, "Adding a repo needs a `name' and a `url'."
           end
         when 'update'
           @name = argv[1]

@@ -38,12 +38,14 @@ describe "Pod::Specification::Set" do
     @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '> 1.7.9' })
     @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '~> 1.8.0' })
     @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest' })
-    lambda { @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '< 1.8' }) }.should.raise
+    lambda {
+      @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '< 1.8' })
+    }.should.raise Pod::Informative
   end
 
   it "raises if the required version doesn't exist" do
     @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '< 1.8' })
-    lambda { @set.required_version }.should.raise
+    lambda { @set.required_version }.should.raise Pod::Informative
   end
 
   before do

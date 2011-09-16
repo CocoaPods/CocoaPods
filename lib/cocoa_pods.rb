@@ -1,4 +1,7 @@
 module Pod
+  class Informative < StandardError
+  end
+
   autoload :Command,       'cocoa_pods/command'
   autoload :Config,        'cocoa_pods/config'
   autoload :Dependency,    'cocoa_pods/dependency'

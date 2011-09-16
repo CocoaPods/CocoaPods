@@ -23,6 +23,6 @@ describe "Pod::Source" do
   it "raises if a specification set can't be found" do
     lambda {
       Pod::Source.search(Pod::Dependency.new('DoesNotExist'))
-    }.should.raise
+    }.should.raise Pod::Informative
   end
 end

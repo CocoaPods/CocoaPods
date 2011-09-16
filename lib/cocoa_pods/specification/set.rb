@@ -28,9 +28,9 @@ module Pod
         dependency = specification.dependency_by_name(name)
         unless @required_by.empty? || dependency.requirement.satisfied_by?(required_version)
           # TODO add graph that shows which dependencies led to this.
-          raise "#{specification} tries to activate `#{dependency}', " \
-                "but already activated version `#{required_version}' " \
-                "by #{@required_by.join(', ')}."
+          raise Informative, "#{specification} tries to activate `#{dependency}', " \
+                             "but already activated version `#{required_version}' " \
+                             "by #{@required_by.join(', ')}."
         end
         @required_by << specification
       end
@@ -59,10 +59,8 @@ module Pod
 
       # Return the first version that matches the current dependency.
       def required_version
-        unless v = versions.find { |v| dependency.match?(name, v) }
-          raise "Required version (#{dependency}) not found for `#{name}'."
-        end
-        v
+        versions.find { |v| dependency.match?(name, v) } ||
+          raise(Informative, "Required version (#{dependency}) not found for `#{name}'.")
       end
 
       def ==(other)
