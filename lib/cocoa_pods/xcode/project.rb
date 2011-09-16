@@ -6,7 +6,7 @@ module Pod
       TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', __FILE__))
 
       # TODO see if we really need different templates for iOS and OS X
-      def self.static_library
+      def self.ios_static_library
         new TEMPLATES_DIR + 'cocoa-touch-static-library'
       end
 
@@ -20,6 +20,16 @@ module Pod
         'Pods.xcodeproj/project.pbxproj'
       end
 
+      def to_hash
+        @template
+      end
+
+      def find_object(conditions)
+        objects.find do |_, object|
+          object.objectsForKeys(conditions.keys, notFoundMarker:Object.new) == conditions.values
+        end
+      end
+
       def add_source_file(file)
         file_ref_uuid = add_file_reference(file, 'SOURCE_ROOT')
         add_file_to_group(file_ref_uuid, 'Pods')
@@ -30,23 +40,7 @@ module Pod
           build_file_uuid = add_build_file(file_ref_uuid)
           add_file_to_list('PBXSourcesBuildPhase', build_file_uuid)
         end
-      end
-
-      def add_framework(path)
-        file_ref_uuid = add_file_reference(path, 'SDKROOT')
-        add_file_to_group(file_ref_uuid, 'Frameworks')
-        build_file_uuid = add_build_file(file_ref_uuid)
-        add_file_to_list('PBXFrameworksBuildPhase', build_file_uuid)
-      end
-
-      def add_header_search_path(path)
-        objects_by_isa('XCBuildConfiguration').each do |_, object|
-          (object['buildSettings']['HEADER_SEARCH_PATHS'] ||= []) << path
-        end
-      end
-
-      def to_hash
-        @template
+        file_ref_uuid
       end
 
       def create_in(pods_root)

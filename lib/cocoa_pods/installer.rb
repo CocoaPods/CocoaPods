@@ -40,8 +40,8 @@ module Pod
       })
     end
 
-    def xproj
-      @xproj ||= Xcode::Project.static_library
+    def xcodeproj
+      @xcodeproj ||= Xcode::Project.ios_static_library
     end
 
     def install!
@@ -64,7 +64,7 @@ module Pod
 
     def generate_project
       puts "==> Creating Pods project files" unless config.silent?
-      source_files.each { |file| xproj.add_source_file(file) }
+      source_files.each { |file| xcodeproj.add_source_file(file) }
       build_specification_sets.each do |set|
         xcconfig << set.specification.read(:xcconfig)
       end
