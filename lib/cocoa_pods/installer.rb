@@ -71,7 +71,7 @@ module Pod
     end
 
     def write_files!
-      xproj.create_in(config.project_pods_root)
+      xcodeproj.create_in(config.project_pods_root)
       xcconfig.create_in(config.project_pods_root)
     end
   end

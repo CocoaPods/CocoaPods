@@ -24,10 +24,23 @@ module Pod
         @template
       end
 
-      def find_object(conditions)
-        objects.find do |_, object|
+      def find_objects(conditions)
+        objects.select do |_, object|
           object.objectsForKeys(conditions.keys, notFoundMarker:Object.new) == conditions.values
         end
+      end
+
+      def find_object(conditions)
+        find_objects(conditions).first
+      end
+
+      def source_files
+        conditions = { 'isa' => 'PBXFileReference', 'sourceTree' => 'SOURCE_ROOT' }
+        find_objects(conditions).map do |_, object|
+          if %w{ .h .m .mm .c .cpp }.include?(File.extname(object['path']))
+            Pathname.new(object['path'])
+          end 
+        end.compact
       end
 
       def add_source_file(file)

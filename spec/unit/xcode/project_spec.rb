@@ -66,4 +66,10 @@ describe "Pod::Xcode::Project" do
     project_file = (temporary_directory + 'Pods.xcodeproj/project.pbxproj')
     NSDictionary.dictionaryWithContentsOfFile(project_file.to_s).should == @project.to_hash
   end
+
+  it "returns all source files" do
+    files = [Pathname.new('/some/file.h'), Pathname.new('/some/file.m')]
+    files.each { |file| @project.add_source_file(file) }
+    @project.source_files.sort.should == files.sort
+  end
 end

@@ -50,11 +50,17 @@ else
       installer = SpecHelper::Installer.new(spec)
       installer.install!
 
-      (config.project_pods_root + 'Reachability.podspec').should.exist
-      (config.project_pods_root + 'ASIHTTPRequest.podspec').should.exist
-      (config.project_pods_root + 'ASIWebPageRequest.podspec').should.exist
-      (config.project_pods_root + 'JSONKit.podspec').should.exist
-      (config.project_pods_root + 'SSZipArchive.podspec').should.exist
+      root = config.project_pods_root
+      (root + 'Reachability.podspec').should.exist
+      (root + 'ASIHTTPRequest.podspec').should.exist
+      (root + 'ASIWebPageRequest.podspec').should.exist
+      (root + 'JSONKit.podspec').should.exist
+      (root + 'SSZipArchive.podspec').should.exist
+
+      (root + 'Pods.xcconfig').read.should == installer.xcconfig.to_s
+
+      project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
+      NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.xcodeproj.to_hash
 
       puts "\n[!] Compiling static library..."
       Dir.chdir(config.project_pods_root) do
