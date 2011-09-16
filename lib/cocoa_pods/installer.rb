@@ -4,8 +4,8 @@ module Pod
   class Installer
     include Config::Mixin
 
-    def initialize(top_level_specification, pods_root)
-      @top_level_specification, @pods_root = top_level_specification, pods_root
+    def initialize(top_level_specification)
+      @top_level_specification = top_level_specification
     end
 
     def dependent_specification_sets
@@ -55,7 +55,7 @@ module Pod
           pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
           Dir.glob(pattern.to_s).each do |file|
             file = Pathname.new(file)
-            file = file.relative_path_from(@pods_root)
+            file = file.relative_path_from(config.project_pods_root)
             xproj.add_source_file(file)
           end
         end
@@ -64,8 +64,8 @@ module Pod
     end
 
     def write_files!
-      xproj.create_in(@pods_root)
-      xcconfig.create_in(@pods_root)
+      xproj.create_in(config.project_pods_root)
+      xcconfig.create_in(config.project_pods_root)
     end
   end
 end

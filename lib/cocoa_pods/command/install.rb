@@ -41,7 +41,7 @@ module Pod
             raise Help, "No Podfile found in current working directory."
           end
         end
-        Installer.new(spec, config.project_pods_root).install!
+        Installer.new(spec).install!
       end
     end
   end

@@ -31,7 +31,7 @@ else
       Pod::Source.reset!
       Pod::Spec::Set.reset!
       fixture('spec-repos/master') # ensure the archive is unpacked
-      config.project_pods_root = SpecHelper.temporary_directory + 'Pods'
+      config.project_pods_root = temporary_directory + 'Pods'
       config.repos_dir = fixture('spec-repos')
     end
 
@@ -40,27 +40,36 @@ else
       config.repos_dir = SpecHelper.tmp_repos_path
     end
 
-    it "should work" do
+    it "should activate required pods and create a working static library xcode project" do
       spec = Pod::Spec.new do
         dependency 'ASIWebPageRequest', '< 1.8.1'
         dependency 'JSONKit',           '>= 1.0'
         dependency 'SSZipArchive',      '< 2'
       end
-      installer = SpecHelper::Installer.new(spec, SpecHelper.temporary_directory)
+
+      installer = SpecHelper::Installer.new(spec)
       installer.install!
+
       (config.project_pods_root + 'Reachability.podspec').should.exist
       (config.project_pods_root + 'ASIHTTPRequest.podspec').should.exist
       (config.project_pods_root + 'ASIWebPageRequest.podspec').should.exist
       (config.project_pods_root + 'JSONKit.podspec').should.exist
       (config.project_pods_root + 'SSZipArchive.podspec').should.exist
+
+      puts "\n[!] Compiling static library..."
+      Dir.chdir(config.project_pods_root) do
+        system("xcodebuild > /dev/null 2>&1").should == true
+      end
     end
 
     it "does not activate pods that are only part of other pods" do
       spec = Pod::Spec.new do
         dependency 'Reachability'
       end
-      installer = SpecHelper::Installer.new(spec, SpecHelper.temporary_directory)
+
+      installer = SpecHelper::Installer.new(spec)
       installer.install!
+
       (config.project_pods_root + 'Reachability.podspec').should.exist
       (config.project_pods_root + 'ASIHTTPRequest.podspec').should.not.exist
     end
