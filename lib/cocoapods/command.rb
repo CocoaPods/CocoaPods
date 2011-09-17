@@ -2,6 +2,7 @@ module Pod
   class Command
     autoload :Install, 'cocoapods/command/install'
     autoload :Repo,    'cocoapods/command/repo'
+    autoload :Search,  'cocoapods/command/search'
     autoload :Setup,   'cocoapods/command/setup'
     autoload :Spec,    'cocoapods/command/spec'
 
@@ -33,6 +34,7 @@ module Pod
       "To see help for the available commands run:\n" \
       "\n" \
       "  * $ pod setup --help\n" \
+      "  * $ pod search --help\n" \
       "  * $ pod install --help\n" \
       "  * $ pod repo --help"
     end
@@ -68,6 +70,7 @@ module Pod
       command_class = case argv.shift_argument
       when 'install' then Install
       when 'repo'    then Repo
+      when 'search'  then Search
       when 'setup'   then Setup
       when 'spec'    then Spec
       end

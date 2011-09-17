@@ -37,4 +37,40 @@ describe "Pod::Command" do
     (repo2.dir + 'README').read.should.include 'Added!'
     (repo3.dir + 'README').read.should.include 'Added!'
   end
+
+  before do
+    config.repos_dir = fixture('spec-repos')
+  end
+
+  after do
+    config.repos_dir = tmp_repos_path
+  end
+
+  it "searches for a pod who's name matches the given query ignoring case" do
+    [
+      [
+        ' s ',
+        [
+          "ASIHTTPRequest (1.8, 1.8.1)",
+          "ASIWebPageRequest (1.8, 1.8.1)",
+          "JSONKit (1.4)",
+          "SSZipArchive (1.0)"
+        ]
+      ],
+      [
+        'json',
+        [
+          "JSONKit (1.4)"
+        ]
+      ]
+    ].each do |query, result|
+      command = Pod::Command.parse('search', query)
+      def command.puts(msg)
+        (@printed ||= []) << msg
+      end
+      command.run
+      printed = command.instance_variable_get(:@printed)
+      printed.should == result.sort
+    end
+  end
 end

@@ -16,6 +16,14 @@ module Pod
         raise(Informative, "Unable to find a pod named `#{dependency.name}'")
     end
 
+    def self.search_by_name(query)
+      result = all.map { |source| source.search_by_name(query) }.flatten
+      if result.empty?
+        raise(Informative, "Unable to find a pod who's name matches `#{query}'")
+      end
+      result
+    end
+
     attr_reader :repo
 
     def initialize(repo)
@@ -26,6 +34,13 @@ module Pod
       if dir = @repo.children.find { |c| c.basename.to_s == dependency.name }
         Specification::Set.by_pod_dir(dir)
       end
+    end
+
+    def search_by_name(query)
+      dirs = @repo.children.select do |child|
+        child.basename.to_s.downcase.include?(query.downcase)
+      end
+      dirs.map { |dir| Specification::Set.by_pod_dir(dir) }
     end
   end
 end
