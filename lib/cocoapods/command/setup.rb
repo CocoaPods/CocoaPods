@@ -2,12 +2,14 @@ module Pod
   class Command
     class Setup < Command
       def self.banner
-%{### Setup CocoaPods environment
+%{Setup CocoaPods environment:
 
     $ pod setup
 
       Creates a directory at `~/.cocoapods' which will hold your spec-repos.
-      This is where it will create a clone of the public `master' spec-repo.}
+      This is where it will create a clone of the public `master' spec-repo from:
+
+          https://github.com/alloy/cocoapods-specs}
       end
 
       def initialize(argv)

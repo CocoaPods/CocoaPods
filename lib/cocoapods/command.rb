@@ -30,16 +30,16 @@ module Pod
     end
 
     def self.banner
-      "### Commands\n" +
-      "\n" +
-      "  * setup\n" +
-      "  * install\n" +
-      "  * repo"
+      "To see help for the available commands run:\n" \
+      "\n" \
+      "  * $ pod setup --help\n" \
+      "  * $ pod install --help\n" \
+      "  * $ pod repo --help"
     end
 
     def self.options
-      "    --help      Show help information\n" +
-      "    --silent    Print nothing\n" +
+      "    --help      Show help information\n" \
+      "    --silent    Print nothing\n" \
       "    --verbose   Print more information while working"
     end
 

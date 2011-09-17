@@ -4,7 +4,7 @@ module Pod
   class Command
     class Repo < Command
       def self.banner
-%{### Managing spec-repos
+%{Managing spec-repos:
 
     $ pod help repo
 

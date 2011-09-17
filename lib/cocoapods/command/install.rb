@@ -2,14 +2,14 @@ module Pod
   class Command
     class Install < Command
       def self.banner
-%{### Installing dependencies of a spec
+%{Installing dependencies of a pod spec:
 
     $ pod install [NAME]
 
       Downloads all dependencies of the specified podspec file `NAME' and
-      creates an Xcode Pods library project of the specified podspec file
-      `NAME'. In case `NAME' is omitted, it defaults to `Podfile' in the
-      current working directory.
+      creates an Xcode Pods library project in `./Pods'. In case `NAME' is
+      omitted it defaults to either `Podfile' or `*.podspec' in the current
+      working directory.
 }
       end
 
