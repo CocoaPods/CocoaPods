@@ -13,13 +13,8 @@ module Pod
         remote can later be referred to by `NAME'.
 
       pod repo update NAME
-        Updates the local clone of the spec-repo `NAME'.
-
-      pod repo change NAME URL
-        Changes the git remote of local spec-repo `NAME' to `URL'.
-
-      pod repo cd NAME
-        Changes the current working dir to the local spec-repo `NAME'.}
+        Updates the local clone of the spec-repo `NAME'. If `NAME' is omitted
+        this will update all spec-repos in `~/.cocoa-pods'.}
       end
 
       extend Executable

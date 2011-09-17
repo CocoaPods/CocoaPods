@@ -34,8 +34,7 @@ module Pod
       "\n" +
       "  * setup\n" +
       "  * install\n" +
-      "  * repo\n" +
-      "  * spec"
+      "  * repo"
     end
 
     def self.options
