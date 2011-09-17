@@ -18,7 +18,7 @@ CocoaPods will:
 For more in depth information see the [wiki][wiki].
 
 
-### Installing CocoaPods
+## Installing CocoaPods
 
 You’ll need MacRuby. CocoaPods itself installs through RubyGems, the Ruby
 package manager:
@@ -28,7 +28,7 @@ package manager:
     $ pod setup
 
 
-### Contact
+## Contact
 
 Eloy Durán:
 
@@ -37,7 +37,7 @@ Eloy Durán:
 * eloy.de.enige@gmail.com
 
 
-### LICENSE
+## LICENSE
 
 These works are available under the MIT license. See the [LICENSE][license] file
 for more info.
