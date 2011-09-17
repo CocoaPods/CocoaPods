@@ -19,7 +19,9 @@ module Pod
     def self.search_by_name(query, full_text_search)
       result = all.map { |s| s.search_by_name(query, full_text_search) }.flatten
       if result.empty?
-        raise(Informative, "Unable to find a pod who's name matches `#{query}'")
+        extra = ", summary, or description" if full_text_search
+        raise(Informative, "Unable to find a pod who's name" \
+                           "#{extra} matches `#{query}'")
       end
       result
     end

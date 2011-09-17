@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
 
-  s.post_install_message = "To speed up load time of cocoapods consider compiling the Ruby source files:\n\n" \
+  s.post_install_message = "To speed up load time of CocoaPods consider compiling the Ruby source files:\n\n" \
                            "    $ sudo macgem install rubygems-compile\n" \
                            "    $ sudo macgem compile cocoapods\n\n"
 

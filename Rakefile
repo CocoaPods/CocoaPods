@@ -7,5 +7,6 @@ end
 
 desc "Remove rbo files"
 task :clean do
-  sh "rm lib/**/*.rbo"
+  sh "rm -f lib/**/*.rbo"
+  sh "rm -f *.gem"
 end
