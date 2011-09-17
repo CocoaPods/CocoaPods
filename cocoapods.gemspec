@@ -1,8 +1,9 @@
 # -*- encoding: utf-8 -*-
+require File.expand_path('../lib/cocoapods', __FILE__)
 
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
-  s.version  = "0.0.1"
+  s.version  = Pod::VERSION
   s.date     = "2011-09-17"
   s.license  = "MIT"
   s.summary  = "A simple Objective-C library package manager."

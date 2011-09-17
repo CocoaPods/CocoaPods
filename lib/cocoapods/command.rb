@@ -40,7 +40,8 @@ module Pod
     def self.options
       "    --help      Show help information\n" \
       "    --silent    Print nothing\n" \
-      "    --verbose   Print more information while working"
+      "    --verbose   Print more information while working\n" \
+      "    --version   Prints the version of CocoaPods"
     end
 
     def self.run(*argv)
@@ -58,6 +59,8 @@ module Pod
 
     def self.parse(*argv)
       argv = ARGV.new(argv)
+      raise Informative, VERSION if argv.option('--version')
+
       show_help = argv.option('--help')
       Config.instance.silent = argv.option('--silent')
       Config.instance.verbose = argv.option('--verbose')
