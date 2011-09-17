@@ -6,6 +6,7 @@ module Pod
   autoload :Config,        'cocoa_pods/config'
   autoload :Dependency,    'cocoa_pods/dependency'
   autoload :Downloader,    'cocoa_pods/downloader'
+  autoload :Executable,    'cocoa_pods/executable'
   autoload :Installer,     'cocoa_pods/installer'
   autoload :Resolver,      'cocoa_pods/resolver'
   autoload :Source,        'cocoa_pods/source'
@@ -19,7 +20,6 @@ module Pod
   end
 
   autoload :Pathname,      'pathname'
-  autoload :Executioner,   'executioner'
 end
 
 class Pathname

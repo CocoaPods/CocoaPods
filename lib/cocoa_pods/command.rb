@@ -40,6 +40,7 @@ module Pod
 
     def self.options
       "    --help      Show help information\n" +
+      "    --silent    Print nothing\n" +
       "    --verbose   Print more information while working"
     end
 
@@ -59,6 +60,7 @@ module Pod
     def self.parse(*argv)
       argv = ARGV.new(argv)
       show_help = argv.option('--help')
+      Config.instance.silent = argv.option('--silent')
       Config.instance.verbose = argv.option('--verbose')
 
       command_class = case argv.shift_argument

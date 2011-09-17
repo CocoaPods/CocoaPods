@@ -1,5 +1,4 @@
 require 'spec_helper/temporary_directory'
-require 'executioner'
 
 module SpecHelper
   def self.tmp_repos_path
@@ -16,7 +15,7 @@ module SpecHelper
       tmp_repos_path + 'master'
     end
 
-    include Executioner
+    extend Pod::Executable
     executable :git
 
     alias_method :git_super, :git

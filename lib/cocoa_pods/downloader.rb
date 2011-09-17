@@ -16,11 +16,7 @@ module Pod
     end
 
     class Git < Downloader
-      require 'executioner'
-      include Executioner
-      # TODO make Executioner:
-      # * not raise when there's output to either stdout/stderr, but check exit status
-      # * sync output
+      extend Executable
       executable :git
 
       def download
@@ -38,16 +34,16 @@ module Pod
         Dir.chdir(@pod_root) do
           git "init"
           git "remote add origin '#{@url}'"
-          git "fetch origin tags/#{@options[:tag]} 2>&1"
+          git "fetch origin tags/#{@options[:tag]}"
           git "reset --hard FETCH_HEAD"
-          git "checkout -b activated-pod-commit 2>&1"
+          git "checkout -b activated-pod-commit"
         end
       end
 
       def download_commit
         git "clone '#{@url}' '#{@pod_root}'"
         Dir.chdir(@pod_root) do
-          git "checkout -b activated-pod-commit #{@options[:commit]} 2>&1"
+          git "checkout -b activated-pod-commit #{@options[:commit]}"
         end
       end
 

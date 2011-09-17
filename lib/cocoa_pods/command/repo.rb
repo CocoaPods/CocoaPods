@@ -1,4 +1,3 @@
-require 'executioner'
 require 'fileutils'
 
 module Pod
@@ -23,7 +22,7 @@ module Pod
         Changes the current working dir to the local spec-repo `NAME'.}
       end
 
-      include Executioner
+      extend Executable
       executable :git
 
       def initialize(argv)
