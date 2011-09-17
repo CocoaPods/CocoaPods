@@ -27,6 +27,11 @@ package manager:
     $ macgem install cocoapods
     $ pod setup
 
+The load time can be improved a bit by compiling the Ruby source files:
+
+    $ macgem install rubygems-compile
+    $ macgem compile cocoapods
+
 
 ## Contact
 
