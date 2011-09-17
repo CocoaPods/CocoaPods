@@ -19,12 +19,24 @@ describe "Pod::Config" do
   end
 
   describe "concerning a user's project, which is expected in the current working directory" do
+    extend SpecHelper::TemporaryDirectory
+
     it "returns the path to the project root" do
       config.project_root.should == Pathname.pwd
     end
 
-    it "returns the path to the project Podfile" do
-      config.project_podfile.should == Pathname.pwd + 'Podfile'
+    it "returns the path to the project Podfile if it exists" do
+      (temporary_directory + 'Podfile').open('w') { |f| f << '# Yo' }
+      Dir.chdir(temporary_directory) do
+        config.project_podfile.should == Pathname.pwd + 'Podfile'
+      end
+    end
+
+    it "returns the path to an existing podspec file if a Podfile doesn't exist" do
+      (temporary_directory + 'Bananas.podspec').open('w') { |f| f << '# Yo' }
+      Dir.chdir(temporary_directory) do
+        config.project_podfile.should == Pathname.pwd + 'Bananas.podspec'
+      end
     end
 
     it "returns the path to the Pods directory that holds the dependencies" do

@@ -31,7 +31,13 @@ module Pod
     end
 
     def project_podfile
-      project_root + 'Podfile'
+      unless @project_podfile
+        @project_podfile = project_root + 'Podfile'
+        unless @project_podfile.exist?
+          @project_podfile = project_root.glob('*.podspec').first
+        end
+      end
+      @project_podfile
     end
 
     module Mixin
