@@ -16,6 +16,8 @@ CocoaPods will:
 * Set them up to be build as part of a ‘dependency’ static library, which your
   project links against.
 
+For more in depth information see the [wiki][wiki].
+
 
 Installing CocoaPods
 ====================
@@ -45,4 +47,5 @@ These works are available under the MIT license. See the [LICENSE][license] file
 for more info.
 
 
+[wiki]: https://github.com/alloy/cocoapods/wiki
 [license]: cocoa-pods/blob/master/LICENSE
