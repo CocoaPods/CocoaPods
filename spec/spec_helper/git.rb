@@ -32,6 +32,7 @@ module SpecHelper
     end
 
     def command(*argv)
+      argv << '--silent'
       command = Pod::Command.parse(*argv)
       command.run
       command

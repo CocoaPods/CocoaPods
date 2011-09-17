@@ -9,7 +9,7 @@ describe "Pod::Command" do
   end
 
   it "creates the local spec-repos directory and creates a clone of the `master' repo" do
-    command = Pod::Command.parse('setup')
+    command = Pod::Command.parse('setup', '--silent')
     def command.master_repo_url; SpecHelper.fixture('spec-repos/master'); end
     command.run
     git_config('master', 'remote.origin.url').should == fixture('spec-repos/master').to_s
