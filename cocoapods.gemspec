@@ -6,10 +6,20 @@ Gem::Specification.new do |s|
   s.version  = Pod::VERSION
   s.date     = "2011-09-17"
   s.license  = "MIT"
-  s.summary  = "A simple Objective-C library package manager. (Requires MacRuby.)"
   s.email    = "eloy.de.enige@gmail.com"
   s.homepage = "https://github.com/alloy/cocoapods"
   s.authors  = ["Eloy Duran"]
+
+  s.summary     = "A simple Objective-C library package manager. (Requires MacRuby.)"
+  s.description = "CocoaPods is an Objective-C library package manager. It tries " \
+                  "to take away all hard work of maintaining your dependencies, " \
+                  "but in a lean and flexible way. Its goal is to create a more " \
+                  "centralized overview of open-source libraries and unify the way " \
+                  "in which we deal with them.\n" \
+                  "CocoaPods will calculate the right set of versions of all of your " \
+                  "project's dependencies, install them, and set them up to be build " \
+                  "as part of a dependency static library, which your project links " \
+                  "against."
 
   s.files    = Dir["lib/**/*.rb"] +
                Dir["xcode-project-templates/**/*.*"] +
