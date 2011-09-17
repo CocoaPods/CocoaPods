@@ -1,9 +1,9 @@
 module Pod
   class Command
-    autoload :Install, 'cocoa_pods/command/install'
-    autoload :Repo,    'cocoa_pods/command/repo'
-    autoload :Setup,   'cocoa_pods/command/setup'
-    autoload :Spec,    'cocoa_pods/command/spec'
+    autoload :Install, 'cocoapods/command/install'
+    autoload :Repo,    'cocoapods/command/repo'
+    autoload :Setup,   'cocoapods/command/setup'
+    autoload :Spec,    'cocoapods/command/spec'
 
     class Help < Informative
       def initialize(command_class, argv)

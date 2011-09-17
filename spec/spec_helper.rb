@@ -5,7 +5,7 @@ require 'pathname'
 ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 
 $:.unshift((ROOT + 'lib').to_s)
-require 'cocoa_pods'
+require 'cocoapods'
 
 $:.unshift((ROOT + 'spec').to_s)
 require 'spec_helper/fixture'

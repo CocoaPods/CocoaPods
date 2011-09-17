@@ -4,3 +4,8 @@ task :compile do
     sh "macrubyc #{file} -C -o #{file}o"
   end
 end
+
+desc "Remove rbo files"
+task :clean do
+  sh "rm lib/**/*.rbo"
+end

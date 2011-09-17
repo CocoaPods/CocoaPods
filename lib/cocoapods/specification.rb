@@ -1,6 +1,6 @@
 module Pod
   class Specification
-    autoload :Set, 'cocoa_pods/specification/set'
+    autoload :Set, 'cocoapods/specification/set'
 
     def self.from_podfile(path)
       if path.exist?
