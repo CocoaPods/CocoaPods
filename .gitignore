@@ -1,6 +1,7 @@
 *.swp
 *.swo
 *.rbo
+*.gem
 .DS_Store
 tmp
 examples/Pods
