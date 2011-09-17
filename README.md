@@ -18,6 +18,9 @@ CocoaPods will:
 For more in depth information see the [wiki][wiki].
 
 
+**_NOTE: At the moment [only iOS projects are supported][ticket], but this will
+be fixed in the very near future._**
+
 ## Installing CocoaPods
 
 You’ll need MacRuby. CocoaPods itself installs through RubyGems, the Ruby
@@ -48,5 +51,6 @@ These works are available under the MIT license. See the [LICENSE][license] file
 for more info.
 
 
+[ticket]: https://github.com/alloy/cocoapods/issues/3
 [wiki]: https://github.com/alloy/cocoapods/wiki
 [license]: cocoa-pods/blob/master/LICENSE
