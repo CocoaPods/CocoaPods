@@ -15,7 +15,7 @@ describe "Pod::Config" do
   end
 
   it "returns the path to the spec-repos dir" do
-    config.repos_dir.should == Pathname.new("~/.cocoa-pods").expand_path
+    config.repos_dir.should == Pathname.new("~/.cocoapods").expand_path
   end
 
   describe "concerning a user's project, which is expected in the current working directory" do

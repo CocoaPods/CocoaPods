@@ -3,12 +3,11 @@ module Pod
     def self.all
       @sources ||= begin
         repos_dir = Config.instance.repos_dir
-        sources = repos_dir.children.select(&:directory?).map { |repo| new(repo) }
-        if sources.empty?
+        unless repos_dir.exist?
           raise Informative, "No spec repos found in `#{repos_dir}'. " \
                              "To fetch the `master' repo run: $ pod setup"
         end
-        sources
+        repos_dir.children.select(&:directory?).map { |repo| new(repo) }
       end
     end
 

@@ -4,6 +4,6 @@ if $0 == __FILE__
   $:.unshift File.expand_path('../../lib', __FILE__)
 end
 
-require 'cocoa_pods'
+require 'cocoapods'
 
 Pod::Command.run(*ARGV)

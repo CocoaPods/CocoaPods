@@ -7,7 +7,7 @@ module SpecHelper
 
   module Git
     def tmp_repos_path
-      SpecHelper.temporary_directory + 'cocoa-pods'
+      SpecHelper.temporary_directory + 'cocoapods'
     end
     module_function :tmp_repos_path
 

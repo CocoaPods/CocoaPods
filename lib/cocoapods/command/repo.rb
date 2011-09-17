@@ -9,12 +9,12 @@ module Pod
     $ pod help repo
 
       pod repo add NAME URL
-        Clones `URL' in the local spec-repos directory at `~/.cocoa-pods'. The
+        Clones `URL' in the local spec-repos directory at `~/.cocoapods'. The
         remote can later be referred to by `NAME'.
 
       pod repo update NAME
         Updates the local clone of the spec-repo `NAME'. If `NAME' is omitted
-        this will update all spec-repos in `~/.cocoa-pods'.}
+        this will update all spec-repos in `~/.cocoapods'.}
       end
 
       extend Executable

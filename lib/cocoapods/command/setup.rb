@@ -6,7 +6,7 @@ module Pod
 
     $ pod setup
 
-      Creates a directory at `~/.cocoa-pods' which will hold your spec-repos.
+      Creates a directory at `~/.cocoapods' which will hold your spec-repos.
       This is where it will create a clone of the public `master' spec-repo.}
       end
 
@@ -15,7 +15,7 @@ module Pod
       end
 
       def master_repo_url
-        'git://github.com/alloy/cocoa-pod-specs.git'
+        'git://github.com/alloy/cocoapods-specs.git'
       end
 
       def add_master_repo_command

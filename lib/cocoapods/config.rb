@@ -16,7 +16,7 @@ module Pod
     alias_method :silent?,  :silent
 
     def initialize
-      @repos_dir = Pathname.new(File.expand_path("~/.cocoa-pods"))
+      @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
       @clean = true
       @verbose = false
       @silent = false

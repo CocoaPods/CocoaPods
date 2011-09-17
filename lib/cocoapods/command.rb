@@ -48,7 +48,7 @@ module Pod
     rescue Exception => e
       unless e.is_a?(Informative)
         puts "Oh no, an error occurred. Please run with `--verbose' and report " \
-             "on https://github.com/alloy/cocoa-pods/issues."
+             "on https://github.com/alloy/cocoapods/issues."
         puts ""
       end
       puts e.message
