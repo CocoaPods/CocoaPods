@@ -64,7 +64,34 @@ describe "Pod::Command" do
         ]
       ]
     ].each do |query, result|
-      command = Pod::Command.parse('search', query)
+      command = Pod::Command.parse('search', '--silent', query)
+      def command.puts(msg)
+        (@printed ||= []) << msg
+      end
+      command.run
+      printed = command.instance_variable_get(:@printed)
+      printed.should == result.sort
+    end
+  end
+
+  it "searches for a pod who's name, summary, or description matches the given query ignoring case" do
+    [
+      [
+        'systemCONfiguration',
+        [
+          "Reachability (2.0.4)"
+        ]
+      ],
+      [
+        'is',
+        [
+          "ASIHTTPRequest (1.8, 1.8.1)",
+          "Reachability (2.0.4)",
+          "SSZipArchive (1.0)"
+        ]
+      ]
+    ].each do |query, result|
+      command = Pod::Command.parse('search', '--silent', '--full', query)
       def command.puts(msg)
         (@printed ||= []) << msg
       end

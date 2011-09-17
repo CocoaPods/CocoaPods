@@ -12,12 +12,12 @@ module Pod
     end
 
     def self.search(dependency)
-      all.map { |source| source.search(dependency) }.compact.first ||
+      all.map { |s| s.search(dependency) }.compact.first ||
         raise(Informative, "Unable to find a pod named `#{dependency.name}'")
     end
 
-    def self.search_by_name(query)
-      result = all.map { |source| source.search_by_name(query) }.flatten
+    def self.search_by_name(query, full_text_search)
+      result = all.map { |s| s.search_by_name(query, full_text_search) }.flatten
       if result.empty?
         raise(Informative, "Unable to find a pod who's name matches `#{query}'")
       end
@@ -30,17 +30,28 @@ module Pod
       @repo = repo
     end
 
-    def search(dependency)
-      if dir = @repo.children.find { |c| c.basename.to_s == dependency.name }
-        Specification::Set.by_pod_dir(dir)
-      end
+    def pod_sets
+      @repo.children.map do |child|
+        if child.directory? && child.basename.to_s != '.git'
+          Specification::Set.by_pod_dir(child)
+        end
+      end.compact
     end
 
-    def search_by_name(query)
-      dirs = @repo.children.select do |child|
-        child.basename.to_s.downcase.include?(query.downcase)
-      end
-      dirs.map { |dir| Specification::Set.by_pod_dir(dir) }
+    def search(dependency)
+      pod_sets.find { |set| set.name == dependency.name }
+    end
+
+    def search_by_name(query, full_text_search)
+      pod_sets.map do |set|
+        text = if full_text_search
+          s = set.specification
+          "#{s.read(:name)} #{s.read(:summary)} #{s.read(:description)}"
+        else
+          set.name
+        end
+        set if text.downcase.include?(query.downcase)
+      end.compact
     end
   end
 end

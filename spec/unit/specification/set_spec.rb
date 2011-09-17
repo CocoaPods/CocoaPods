@@ -8,6 +8,7 @@ end
 
 describe "Pod::Specification::Set" do
   it "returns nil in case a set hasn't been resolved yet" do
+    Pod::Spec::Set.reset!
     Pod::Spec::Set.by_specification_name('ASIHTTPRequest').should == nil
   end
 
