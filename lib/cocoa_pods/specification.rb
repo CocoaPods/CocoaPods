@@ -1,7 +1,7 @@
-require 'cocoa_pods/specification/set'
-
 module Pod
   class Specification
+    autoload :Set, 'cocoa_pods/specification/set'
+
     def self.from_podfile(path)
       if path.exist?
         spec = new

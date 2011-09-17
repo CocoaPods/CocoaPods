@@ -1,5 +1,3 @@
-require 'cocoa_pods/command/repo'
-
 module Pod
   class Command
     class Setup < Command

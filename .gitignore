@@ -1,5 +1,6 @@
 *.swp
 *.swo
+*.rbo
 .DS_Store
 tmp
 examples/Pods

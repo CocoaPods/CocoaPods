@@ -27,3 +27,4 @@ class Pathname
     Dir.glob((self + pattern).to_s).map { |f| Pathname.new(f) }
   end
 end
+

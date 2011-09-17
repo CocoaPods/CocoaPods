@@ -3,7 +3,12 @@ framework 'Foundation'
 module Pod
   module Xcode
     class Project
-      TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', __FILE__))
+      # TODO this is a workaround for an issue with MacRuby with compiled files
+      # that makes the use of __FILE__ impossible.
+      #
+      #TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', __FILE__))
+      file = $LOADED_FEATURES.find { |file| file =~ %r{cocoa_pods/xcode/project\.rbo?$} }
+      TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', file))
 
       # TODO see if we really need different templates for iOS and OS X
       def self.ios_static_library
