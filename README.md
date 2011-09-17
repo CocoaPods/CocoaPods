@@ -1,5 +1,4 @@
-CocoaPods
----------
+# CocoaPods
 
 CocoaPods is an Objective-C library package manager. It tries to take away all
 hard work of maintaining your dependencies, but in a lean and flexible way.
@@ -19,8 +18,7 @@ CocoaPods will:
 For more in depth information see the [wiki][wiki].
 
 
-Installing CocoaPods
-====================
+### Installing CocoaPods
 
 You’ll need MacRuby. CocoaPods itself installs through RubyGems, the Ruby
 package manager:
@@ -30,8 +28,7 @@ package manager:
     $ pod setup
 
 
-Contact
-=======
+### Contact
 
 Eloy Durán:
 
@@ -40,8 +37,7 @@ Eloy Durán:
 * eloy.de.enige@gmail.com
 
 
-LICENSE
-=======
+### LICENSE
 
 These works are available under the MIT license. See the [LICENSE][license] file
 for more info.
