@@ -25,7 +25,9 @@ module Pod
 
       def run
         Source.search_by_name(@query.strip, @full_text_search).each do |set|
-          puts "#{set.name} (#{set.versions.reverse.join(", ")})"
+          puts "==> #{set.name} (#{set.versions.reverse.join(", ")})"
+          puts "    #{set.specification.read(:summary).strip}"
+          puts
         end
       end
     end

@@ -50,27 +50,31 @@ describe "Pod::Command" do
     [
       [
         ' s ',
-        [
-          "ASIHTTPRequest (1.8, 1.8.1)",
-          "ASIWebPageRequest (1.8, 1.8.1)",
-          "JSONKit (1.4)",
-          "SSZipArchive (1.0)"
-        ]
+        "==> ASIHTTPRequest (1.8, 1.8.1)\n" \
+        "    Easy to use CFNetwork wrapper for HTTP requests, Objective-C, " \
+        "Mac OS X and iPhone\n\n" \
+        "==> ASIWebPageRequest (1.8, 1.8.1)\n" \
+        "    The ASIWebPageRequest class included with ASIHTTPRequest lets you " \
+        "download\n    complete webpages, including external resources like " \
+        "images and stylesheets.\n\n" \
+        "==> JSONKit (1.4)\n" \
+        "    A Very High Performance Objective-C JSON Library.\n\n" \
+        "==> SSZipArchive (1.0)\n" \
+        "    Utility class for unzipping files on iOS and Mac.\n\n"
       ],
       [
         'json',
-        [
-          "JSONKit (1.4)"
-        ]
+        "==> JSONKit (1.4)\n" \
+        "    A Very High Performance Objective-C JSON Library.\n\n",
       ]
     ].each do |query, result|
       command = Pod::Command.parse('search', '--silent', query)
-      def command.puts(msg)
-        (@printed ||= []) << msg
+      def command.puts(msg = '')
+        (@printed ||= '') << "#{msg}\n"
       end
       command.run
       printed = command.instance_variable_get(:@printed)
-      printed.should == result.sort
+      printed.should == result
     end
   end
 
@@ -78,26 +82,27 @@ describe "Pod::Command" do
     [
       [
         'systemCONfiguration',
-        [
-          "Reachability (2.0.4)"
-        ]
+        "==> Reachability (2.0.4)\n" \
+        "    A wrapper for the SystemConfiguration Reachablity APIs.\n\n",
       ],
       [
         'is',
-        [
-          "ASIHTTPRequest (1.8, 1.8.1)",
-          "Reachability (2.0.4)",
-          "SSZipArchive (1.0)"
-        ]
+        "==> ASIHTTPRequest (1.8, 1.8.1)\n" \
+        "    Easy to use CFNetwork wrapper for HTTP requests, Objective-C, " \
+        "Mac OS X and iPhone\n\n" \
+        "==> Reachability (2.0.4)\n" \
+        "    A wrapper for the SystemConfiguration Reachablity APIs.\n\n" \
+        "==> SSZipArchive (1.0)\n" \
+        "    Utility class for unzipping files on iOS and Mac.\n\n"
       ]
     ].each do |query, result|
       command = Pod::Command.parse('search', '--silent', '--full', query)
-      def command.puts(msg)
-        (@printed ||= []) << msg
+      def command.puts(msg = '')
+        (@printed ||= '') << "#{msg}\n"
       end
       command.run
       printed = command.instance_variable_get(:@printed)
-      printed.should == result.sort
+      printed.should == result
     end
   end
 end
