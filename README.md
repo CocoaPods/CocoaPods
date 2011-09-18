@@ -38,14 +38,20 @@ The load time can be improved a bit by compiling the Ruby source files:
     $ macgem compile cocoapods
 
 
-## Roadmap
+## Contributing
 
-* Have. To. Do. A. Lot.
+* We need specifications for as many libraries as possible, which will help in
+  adoption and finding CocoaPods issues that need to be addressed.
 
-So feel free to create [tickets][tickets] with ideas, feedback, and issues.
+* The project is still very young, so there's a lot still on the table. Feel
+  free to create [tickets][tickets] with ideas, feedback, and issues.
 
-I will give out push access to the [cocoapods][cocoapods] and
-[master spec-repo][cocoapods-specs] to anyone that has one patch accepted.
+* If you're looking for other things to do, check the [tickets][tickets] and
+  [the example specification][example-spec] which contains a lot of ideas we
+  may, or may not, want to support.
+
+**I will give out push access to the [cocoapods][cocoapods] and
+[master spec-repo][cocoapods-specs] to anyone that has _one) patch accepted.**
 
 
 ## Contact
@@ -67,5 +73,6 @@ for more info.
 [cocoapods-specs]: https://github.com/alloy/cocoapods-specs
 [tickets]: https://github.com/alloy/cocoapods/issues
 [ticket]: https://github.com/alloy/cocoapods/issues/3
+[example-spec]: https://github.com/alloy/cocoapods/blob/master/examples/PodSpec.podspec
 [wiki]: https://github.com/alloy/cocoapods/wiki
 [license]: cocoa-pods/blob/master/LICENSE
