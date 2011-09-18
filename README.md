@@ -26,6 +26,8 @@ be fixed in the very near future._**
 You’ll need MacRuby. CocoaPods itself installs through RubyGems, the Ruby
 package manager:
 
+**_NOTE: There actually is no MacRuby homebrew formula yet, but it's being worked on as we speak, well, you reading this._**
+
     $ brew install macruby
     $ macgem install cocoapods
     $ pod setup
