@@ -43,6 +43,9 @@ The load time can be improved a bit by compiling the Ruby source files:
 * We need specifications for as many libraries as possible, which will help in
   adoption and finding CocoaPods issues that need to be addressed.
 
+* There needs to be [proper documentation and guides with screenshots][wiki],
+  screencasts, blog posts, etcetera.
+
 * The project is still very young, so there's a lot still on the table. Feel
   free to create [tickets][tickets] with ideas, feedback, and issues.
 
