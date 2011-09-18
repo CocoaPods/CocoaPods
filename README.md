@@ -36,6 +36,16 @@ The load time can be improved a bit by compiling the Ruby source files:
     $ macgem compile cocoapods
 
 
+## Roadmap
+
+* Have. To. Do. A. Lot.
+
+So feel free to create [tickets][tickets] with ideas, feedback, and issues.
+
+I will give out push access to the [cocoapods][cocoapods] and
+[master spec-repo][cocoapods-specs] to anyone that has one patch accepted.
+
+
 ## Contact
 
 Eloy Durán:
@@ -51,6 +61,9 @@ These works are available under the MIT license. See the [LICENSE][license] file
 for more info.
 
 
+[cocoapods]: https://github.com/alloy/cocoapods
+[cocoapods-specs]: https://github.com/alloy/cocoapods-specs
+[tickets]: https://github.com/alloy/cocoapods/issues
 [ticket]: https://github.com/alloy/cocoapods/issues/3
 [wiki]: https://github.com/alloy/cocoapods/wiki
 [license]: cocoa-pods/blob/master/LICENSE

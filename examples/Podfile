@@ -1,6 +1,6 @@
 #dependency 'doesnotexist'
 
-dependency 'SSZipArchive', '>= 1'
+dependency 'SSZipArchive'
 
 #dependency 'ASIHTTPRequest', '1.8'
 dependency 'ASIWebPageRequest', '= 1.8'
