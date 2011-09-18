@@ -4,7 +4,8 @@ CocoaPods is an Objective-C library package manager. It tries to take away all
 hard work of maintaining your dependencies, but in a lean and flexible way.
 
 Its goal is to create a more centralized overview of open-source libraries and
-unify the way in which we deal with them.
+unify the way in which we deal with them, like RubyGems[http://rubygems.org]
+does for the Ruby community.
 
 CocoaPods will:
 
