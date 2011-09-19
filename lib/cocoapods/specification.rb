@@ -45,7 +45,7 @@ module Pod
         authors = list.last.is_a?(Hash) ? list.pop : {}
         list.each { |name| authors[name] = nil }
       end
-      @authors = authors || list
+      @authors = authors || list.first
     end
     alias_method :author, :authors
 

@@ -38,6 +38,23 @@ describe "Pod::Command" do
     (repo3.dir + 'README').read.should.include 'Added!'
   end
 
+  it "creates a new podspec stub file" do
+    Dir.chdir(temporary_directory) do
+      command('spec', 'create', 'Bananas')
+    end
+    path = temporary_directory + 'Bananas.podspec'
+    spec = Pod::Specification.from_podspec(path)
+    spec.read(:name).should == 'Bananas'
+    spec.read(:version).should == Pod::Version.new('1.0.0')
+    spec.read(:summary).should == 'A short description of Bananas.'
+    spec.read(:homepage).should == 'http://example.com/Bananas'
+    spec.read(:authors).should == { `git config --get user.name`.strip => `git config --get user.email`.strip }
+    spec.read(:source).should == { :git => 'http://example.com/Bananas.git', :tag => '1.0.0' }
+    spec.read(:description).should == 'An optional longer description of Bananas.'
+    spec.read(:source_files).should == [Pathname.new('Classes'), Pathname.new('Classes/**/*.{h,m}')]
+    spec.read(:xcconfig).should == { 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework' }
+  end
+
   before do
     config.repos_dir = fixture('spec-repos')
   end
