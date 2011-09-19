@@ -8,28 +8,19 @@ module Pod
 
       pod spec create NAME
         Creates a PodSpec, in the current working dir, called `NAME.podspec'.
-        Use this for existing libraries.
 
       pod spec lint NAME.podspec
         Validates `NAME.podspec'. In case `NAME.podspec' is omitted, it defaults
-        to `*.podspec' in the current working dir.
-
-      pod spec push NAME REMOTE
-        Validates `NAME.podspec' in the current working dir, copies it to the
-        local clone of the `REMOTE' spec-repo, and pushes it to the `REMOTE'
-        spec-repo. In case `REMOTE' is omitted, it defaults to `master'.}
+        to `*.podspec' in the current working dir.}
       end
 
       def initialize(argv)
-        super unless argv.arguments.size == 2
-        case argv.arguments.first
-        when 'create', 'lint'
-          @action, @name = argv.arguments.first(2)
-        when 'push'
-          @action, @name, @remote = argv.arguments.first(3)
-        else
+        args = argv.arguments
+        unless (args[0] == 'create' && args.size == 2) ||
+                  (args[0] == 'lint' && args.size <= 2)
           super
         end
+        @action, @name = args.first(2)
       end
 
       def run
@@ -64,14 +55,10 @@ module Pod
       end
 
       def lint
-        file = @name ? Pathname.new(@name) : config.project_podfile
+        file = @name ? Pathname.new(@name) : Pathname.pwd.glob('*.podspec').first
         spec = Specification.from_podspec(file)
         spec.validate!
       end
-
-      #def push
-        
-      #end
     end
   end
 end

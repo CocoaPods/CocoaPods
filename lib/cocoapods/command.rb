@@ -36,7 +36,8 @@ module Pod
       "  * $ pod setup --help\n" \
       "  * $ pod search --help\n" \
       "  * $ pod install --help\n" \
-      "  * $ pod repo --help"
+      "  * $ pod repo --help\n" \
+      "  * $ pod spec --help"
     end
 
     def self.options
