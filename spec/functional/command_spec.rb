@@ -53,6 +53,7 @@ describe "Pod::Command" do
     spec.read(:description).should == 'An optional longer description of Bananas.'
     spec.read(:source_files).should == [Pathname.new('Classes'), Pathname.new('Classes/**/*.{h,m}')]
     spec.read(:xcconfig).should == { 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework' }
+    spec.read(:dependencies).should == [Pod::Dependency.new('SomeLibraryThatBananasDependsOn', '>= 1.0.0')]
   end
 
   before do

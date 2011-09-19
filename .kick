@@ -5,7 +5,7 @@ Ruby.runner_bin = 'macbacon'
 process do |files|
   specs = files.take_and_map do |file|
     case file
-    when %r{lib/cocoa_pods/(.+?)\.rb$}
+    when %r{lib/cocoapods/(.+?)\.rb$}
       s = Dir.glob("spec/**/#{$1}_spec.rb")
       s unless s.empty?
     end

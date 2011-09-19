@@ -138,3 +138,12 @@ describe "A Pod::Specification that's part of another pod's source" do
   #  @spec.pod_destroot
   #end
 end
+
+describe "A Pod::Specification, in general," do
+  it "raises if the specification does not contain the minimum required attributes" do
+    exception = lambda {
+      Pod::Spec.new.validate!
+    }.should.raise Pod::Informative
+    exception.message =~ /name.+?version.+?summary.+?homepage.+?authors.+?(source|part_of).+?source_files/
+  end
+end

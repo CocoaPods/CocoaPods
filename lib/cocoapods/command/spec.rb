@@ -56,16 +56,18 @@ module Pod
             source_files 'Classes', 'Classes/**/*.{h,m}'
 
             xcconfig 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework'
+
+            dependency 'SomeLibraryThat#{@name}DependsOn', '>= 1.0.0'
           end
         SPEC
         (Pathname.pwd + "#{@name}.podspec").open('w') { |f| f << spec }
       end
 
-      #def lint
-        #file = @name ? Pathname.new(@name) : config.project_podfile
-        #spec = Specification.from_podspec(file)
-        #spec.validate!
-      #end
+      def lint
+        file = @name ? Pathname.new(@name) : config.project_podfile
+        spec = Specification.from_podspec(file)
+        spec.validate!
+      end
 
       #def push
         

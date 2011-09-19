@@ -144,6 +144,22 @@ module Pod
       "#<#{self.class.name} for #{to_s}>"
     end
 
+    def validate!
+      attrs = []
+      attrs << "`name'"                       unless @name
+      attrs << "`version'"                    unless @version
+      attrs << "`summary'"                    unless @summary
+      attrs << "`homepage'"                   unless @homepage
+      attrs << "`author(s)'"                  unless @authors
+      attrs << "either `source' or `part_of'" unless @source || @part_of
+      attrs << "`source_files'"               unless @source_files
+      unless attrs.empty?
+        raise Informative, "The following required " \
+          "#{attrs.size == 1 ? 'attribute is' : 'attributes are'} " \
+          "missing: #{attrs.join(", ")}"
+      end
+    end
+
     # Install and download hooks
 
     # Places the activated specification in the project's pods directory.
