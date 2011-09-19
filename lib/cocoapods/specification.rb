@@ -21,7 +21,7 @@ module Pod
 
     def initialize(&block)
       @dependencies = []
-      @xcconfig = {}
+      @xcconfig = Xcode::Config.new
       instance_eval(&block) if block_given?
     end
 
@@ -87,8 +87,20 @@ module Pod
     end
 
     def xcconfig(hash)
-      @xcconfig = hash
+      @xcconfig.merge!(hash)
     end
+
+    def frameworks(*frameworks)
+      frameworks.unshift('')
+      xcconfig 'OTHER_LDFLAGS' => frameworks.join(' -framework ').strip
+    end
+    alias_method :framework, :frameworks
+
+    def libraries(*libraries)
+      libraries.unshift('')
+      xcconfig 'OTHER_LDFLAGS' => libraries.join(' -l ').strip
+    end
+    alias_method :library, :libraries
 
     # Not attributes
 

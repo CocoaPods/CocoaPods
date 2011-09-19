@@ -92,8 +92,24 @@ describe "A Pod::Specification loaded from a podspec" do
   end
 
   it "returns the pod's xcconfig settings" do
-    @spec.read(:xcconfig).should == {
+    @spec.read(:xcconfig).to_hash.should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration'
+    }
+  end
+
+  it "has a shortcut to add frameworks to the xcconfig" do
+    @spec.frameworks('CFNetwork', 'CoreText')
+    @spec.read(:xcconfig).to_hash.should == {
+      'OTHER_LDFLAGS' => '-framework SystemConfiguration ' \
+                         '-framework CFNetwork ' \
+                         '-framework CoreText'
+    }
+  end
+
+  it "has a shortcut to add libraries to the xcconfig" do
+    @spec.libraries('z', 'xml2')
+    @spec.read(:xcconfig).to_hash.should == {
+      'OTHER_LDFLAGS' => '-framework SystemConfiguration -l z -l xml2'
     }
   end
 

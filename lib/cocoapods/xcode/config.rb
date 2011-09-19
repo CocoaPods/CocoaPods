@@ -1,17 +1,17 @@
 module Pod
   module Xcode
     class Config
-      def initialize(xcconfig_hash = {})
+      def initialize(xcconfig = {})
         @attributes = {}
-        merge!(xcconfig_hash)
+        merge!(xcconfig)
       end
 
       def to_hash
         @attributes
       end
 
-      def merge!(xcconfig_hash)
-        xcconfig_hash.each do |key, value|
+      def merge!(xcconfig)
+        xcconfig.to_hash.each do |key, value|
           if existing_value = @attributes[key]
             @attributes[key] = "#{existing_value} #{value}"
           else
