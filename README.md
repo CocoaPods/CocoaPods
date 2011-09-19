@@ -60,6 +60,10 @@ The load time can be improved a bit by compiling the Ruby source files:
 
 ## Contact
 
+IRC:
+
+* #cocoapods on `irc.freenode.net`
+
 Eloy Durán:
 
 * http://github.com/alloy
