@@ -51,10 +51,12 @@ module Pod
       end
     end
 
+    # TODO we need a spec that tests that all dependencies are first downloaded/installed
+    # before #generate_project is called!
     def install!
       puts "Installing dependencies of: #{@specification.defined_in_file}" unless config.silent?
-      generate_project
       build_specification_sets.each { |set| set.specification.install! }
+      generate_project
       xcodeproj.create_in(config.project_pods_root)
       xcconfig.create_in(config.project_pods_root)
     end
