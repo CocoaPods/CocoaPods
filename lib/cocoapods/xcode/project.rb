@@ -3,6 +3,8 @@ framework 'Foundation'
 module Pod
   module Xcode
     class Project
+      include Pod::Config::Mixin
+
       # TODO this is a workaround for an issue with MacRuby with compiled files
       # that makes the use of __FILE__ impossible.
       #
@@ -62,10 +64,10 @@ module Pod
       end
 
       def create_in(pods_root)
-        @template_dir.children.each do |child|
-          FileUtils.cp_r(child, pods_root + child.relative_path_from(@template_dir))
-        end
+        puts "  * Copying contents of template directory `#{@template_dir}' to `#{pods_root}'" if config.verbose?
+        FileUtils.cp_r("#{@template_dir}/.", pods_root)
         pbxproj = pods_root + template_file
+        puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
         @template.writeToFile(pbxproj.to_s, atomically:true)
       end
 

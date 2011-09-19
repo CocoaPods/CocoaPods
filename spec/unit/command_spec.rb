@@ -24,3 +24,21 @@ describe "Pod::Command::Repo" do
     lambda { Pod::Command::Repo.new(argv('something')) }.should.raise Pod::Command::Help
   end
 end
+
+describe "Pod::Command::Install" do
+  it "tells the user that the specified podspec file doesn't exist" do
+    command = Pod::Command::Install.new(argv('/does/not/exist/Some.podspec'))
+    exception = lambda {
+      command.run
+    }.should.raise Pod::Informative
+    exception.message.should.include "The specified podspec `/does/not/exist/Some.podspec' doesn't exist."
+  end
+
+  it "tells the user that no Podfile or podspec was found in the current working dir" do
+    command = Pod::Command::Install.new(argv)
+    exception = lambda {
+      command.run
+    }.should.raise Pod::Informative
+    exception.message.should.include "No `Podfile' or `.podspec' file found in the current working directory."
+  end
+end

@@ -31,8 +31,14 @@ else
       Pod::Source.reset!
       Pod::Spec::Set.reset!
       fixture('spec-repos/master') # ensure the archive is unpacked
-      config.project_pods_root = temporary_directory + 'Pods'
       config.repos_dir = fixture('spec-repos')
+      config.project_pods_root = temporary_directory + 'Pods'
+      FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
+      Dir.chdir(config.project_pods_root.to_s) do
+        FileUtils.mv('ASIHTTPRequest', 'ASIHTTPRequest-1.8.1')
+        FileUtils.mv('JSONKit', 'JSONKit-1.4')
+        FileUtils.mv('SSZipArchive', 'SSZipArchive-1.0')
+      end
     end
 
     after do
@@ -40,9 +46,10 @@ else
       config.repos_dir = SpecHelper.tmp_repos_path
     end
 
+    # TODO add a simple source file which uses the compiled lib to check that it really really works
     it "should activate required pods and create a working static library xcode project" do
       spec = Pod::Spec.new do
-        dependency 'ASIWebPageRequest', '< 1.8.1'
+        dependency 'ASIWebPageRequest', '>= 1.8.1'
         dependency 'JSONKit',           '>= 1.0'
         dependency 'SSZipArchive',      '< 2'
       end
@@ -78,6 +85,26 @@ else
 
       (config.project_pods_root + 'Reachability.podspec').should.exist
       (config.project_pods_root + 'ASIHTTPRequest.podspec').should.not.exist
+    end
+
+    # TODO we need to do more cleaning and/or add a --prune task
+    it "overwrites an existing project.pbxproj file" do
+      spec = Pod::Spec.new do
+        dependency 'JSONKit'
+      end
+      installer = SpecHelper::Installer.new(spec)
+      installer.install!
+
+      Pod::Source.reset!
+      Pod::Spec::Set.reset!
+      spec = Pod::Spec.new do
+        dependency 'SSZipArchive'
+      end
+      installer = SpecHelper::Installer.new(spec)
+      installer.install!
+
+      project = Pod::Xcode::Project.new(config.project_pods_root)
+      project.source_files.sort.should == Pod::Installer.new(spec).source_files.sort
     end
   end
 end
