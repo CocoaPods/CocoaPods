@@ -19,7 +19,7 @@ describe "Pod::Installer" do
         ['Classes'],
         "{Classes,External/Reachability}/*.{h,m}",
         {
-          "USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)",
+          "USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)/Pods",
           "ALWAYS_SEARCH_USER_PATHS" => "YES",
           "OTHER_LDFLAGS" => "-framework SystemConfiguration -framework CFNetwork " \
                              "-framework MobileCoreServices -l z.1.2.3"
@@ -30,7 +30,7 @@ describe "Pod::Installer" do
         ["External/Reachability/*.h", "External/Reachability/*.m"],
         "External/Reachability/*.{h,m}",
         {
-          "USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)",
+          "USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)/Pods",
           "ALWAYS_SEARCH_USER_PATHS" => "YES"
         }
       ],
@@ -39,7 +39,7 @@ describe "Pod::Installer" do
         ['**/ASIWebPageRequest.*'],
         "{Classes,Classes/ASIWebPageRequest,External/Reachability}/*.{h,m}",
         {
-          "USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)",
+          "USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)/Pods",
           "ALWAYS_SEARCH_USER_PATHS" => "YES",
           "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2",
           "OTHER_LDFLAGS" => "-l xml2.2.7.3 -framework SystemConfiguration " \

@@ -33,8 +33,9 @@ module Pod
 
     def xcconfig
       @xcconfig ||= Xcode::Config.new({
-        # in a workspace this is where the static library headers should be found
-        'USER_HEADER_SEARCH_PATHS' => '$(BUILT_PRODUCTS_DIR)',
+        # In a workspace this is where the static library headers should be found
+        # We could also make this recursive, but let's let the user decide on that.
+        'USER_HEADER_SEARCH_PATHS' => '$(BUILT_PRODUCTS_DIR)/Pods',
         # search the user headers
         'ALWAYS_SEARCH_USER_PATHS' => 'YES',
       })
