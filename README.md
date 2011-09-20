@@ -16,7 +16,8 @@ CocoaPods will:
 * Set them up to be build as part of a ‘dependency’ static library, which your
   project links against.
 
-For more in depth information see the [wiki][wiki].
+For more in depth information see the [wiki][wiki], specifically the page about
+[creating a project that uses CocoaPods][wiki-create].
 
 
 **_NOTE: At the moment [only iOS projects are supported][ticket], but this will
@@ -82,5 +83,6 @@ for more info.
 [tickets]: https://github.com/alloy/cocoapods/issues
 [ticket]: https://github.com/alloy/cocoapods/issues/3
 [example-spec]: https://github.com/alloy/cocoapods/blob/master/examples/PodSpec.podspec
-[wiki]: https://github.com/alloy/cocoapods/wiki
+[wiki-create]: https://github.com/alloy/cocoapods/wiki/Creating-a-project-that-uses-CocoaPods
+[wiki]: https://github.com/alloy/cocoapods/wiki/_pages
 [license]: cocoa-pods/blob/master/LICENSE
