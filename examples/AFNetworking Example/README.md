@@ -19,9 +19,9 @@ Go ahead, open the workspace and build it.
 3. remove ‘always search user header paths’ setting (normally not needed)
 4. create Podfile with:
 
-    dependency 'AFNetworking'
-    dependency 'JSONKit'
-    dependency 'FormatterKit'
+      dependency 'AFNetworking'
+      dependency 'JSONKit'
+      dependency 'FormatterKit'
 
 5. $ pod install
 6. Follow steps from the [‘In Xcode’ section][more].
