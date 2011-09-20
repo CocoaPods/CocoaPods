@@ -1,3 +1,29 @@
+class Array
+  def move_to_front(name, by_basename = true)
+    path = find { |f| (by_basename ? File.basename(f) : f) == name }
+    delete(path)
+    unshift(path)
+  end
+end
+
+task :standalone do
+  files = Dir.glob("lib/**/*.rb")
+  files.move_to_front('executable.rb')
+  files.move_to_front('lib/cocoapods/config.rb', false)
+  files.move_to_front('cocoapods.rb')
+  File.open('concatenated.rb', 'w') do |f|
+    files.each do |file|
+      File.read(file).split("\n").each do |line|
+        f.puts(line) unless line.include?('autoload')
+      end
+    end
+    f.puts 'Pod::Command.run(*ARGV)'
+  end
+  sh "macrubyc concatenated.rb -o pod"
+end
+
+####
+
 desc "Compile the source files (as rbo files)"
 task :compile do
   Dir.glob("lib/**/*.rb").each do |file|
@@ -8,6 +34,7 @@ end
 desc "Remove rbo files"
 task :clean do
   sh "rm -f lib/**/*.rbo"
+  sh "rm -f lib/**/*.o"
   sh "rm -f *.gem"
 end
 
