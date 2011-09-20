@@ -1,7 +1,14 @@
-class IcePop < Pod::Spec
+# NOTE: This is a spec with a lot of ideas I had that _could_ possibly ever be
+#       added. So this list should, for now, not be taken as all the current
+#       possibilities.
+
+Pod::Spec.new do
   #############################################################################
   # Required attributes
   #############################################################################
+
+  # This pod’s name.
+  name 'IcePop'
 
   # This pod’s version.
   #
@@ -31,11 +38,6 @@ class IcePop < Pod::Spec
   #############################################################################
   # Optional attributes
   #############################################################################
-
-  # This pod’s name.
-  #
-  # It default to the name of the manifest class.
-  name 'IcePop'
 
   # A long description of this pod. It should be more detailed than the summary.
   #
