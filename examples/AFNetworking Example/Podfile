@@ -1,0 +1,4 @@
+dependency 'AFNetworking'
+dependency 'JSONKit'
+dependency 'FormatterKit'
+
