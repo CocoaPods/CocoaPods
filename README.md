@@ -26,8 +26,8 @@ be fixed in the very near future._**
 ## Installing CocoaPods
 
 You’ll need MacRuby. CocoaPods itself installs through RubyGems, the Ruby
-package manager. Download [version 0.10][macruby] and then perform the following
-commands:
+package manager. Download and install [version 0.10][macruby] and then perform
+the following commands:
 
     $ sudo macgem install cocoapods
     $ pod setup
