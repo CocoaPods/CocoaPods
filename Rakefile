@@ -45,3 +45,27 @@ task :install do
   sh "sudo macgem install cocoapods-#{Pod::VERSION}.gem"
   sh "sudo macgem compile cocoapods"
 end
+
+namespace :spec do
+  desc "Run the unit specs"
+  task :unit do
+    sh "macbacon spec/unit/**/*_spec.rb"
+  end
+
+  desc "Run the functional specs"
+  task :functional do
+    sh "macbacon spec/functional/*_spec.rb"
+  end
+
+  desc "Run the integration spec"
+  task :integration do
+    sh "macbacon spec/integration_spec.rb"
+  end
+
+  task :all do
+    sh "macbacon -a"
+  end
+end
+
+desc "Run all specs"
+task :spec => 'spec:all'
