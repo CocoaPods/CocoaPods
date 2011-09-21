@@ -26,18 +26,16 @@ be fixed in the very near future._**
 ## Installing CocoaPods
 
 You’ll need MacRuby. CocoaPods itself installs through RubyGems, the Ruby
-package manager:
+package manager. Download [version 0.10][macruby] and then perform the following
+commands:
 
-**_NOTE: There actually is no MacRuby homebrew formula yet, but it's being worked on as we speak, well, you reading this._**
-
-    $ brew install macruby
-    $ macgem install cocoapods
+    $ sudo macgem install cocoapods
     $ pod setup
 
 The load time can be improved a bit by compiling the Ruby source files:
 
-    $ macgem install rubygems-compile
-    $ macgem compile cocoapods
+    $ sudo macgem install rubygems-compile
+    $ sudo macgem compile cocoapods
 
 
 ## Contributing
@@ -51,7 +49,8 @@ The load time can be improved a bit by compiling the Ruby source files:
 * The project is still very young, so there's a lot still on the table. Feel
   free to create [tickets][tickets] with ideas, feedback, and issues.
 
-* If you're looking for other things to do, check the [tickets][tickets] and
+* If you're looking for things to do, start by reading this
+  [setup wiki page][dev-setup], then check the [tickets][tickets] and
   [the example specification][example-spec] which contains a lot of ideas we
   may, or may not, want to support.
 
@@ -78,11 +77,13 @@ These works are available under the MIT license. See the [LICENSE][license] file
 for more info.
 
 
+[macruby]: http://www.macruby.org/files
 [cocoapods]: https://github.com/alloy/cocoapods
 [cocoapods-specs]: https://github.com/alloy/cocoapods-specs
 [tickets]: https://github.com/alloy/cocoapods/issues
 [ticket]: https://github.com/alloy/cocoapods/issues/3
 [example-spec]: https://github.com/alloy/cocoapods/blob/master/examples/PodSpec.podspec
+[dev-setup]: https://github.com/alloy/cocoapods/wiki/Setting-up-for-development-on-CocoaPods
 [wiki-create]: https://github.com/alloy/cocoapods/wiki/Creating-a-project-that-uses-CocoaPods
 [wiki]: https://github.com/alloy/cocoapods/wiki/_pages
 [license]: cocoa-pods/blob/master/LICENSE
