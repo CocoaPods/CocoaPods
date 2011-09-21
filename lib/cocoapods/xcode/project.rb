@@ -50,14 +50,15 @@ module Pod
         end.compact
       end
 
-      def add_source_file(file)
+      def add_source_file(file, compiler_flags = nil)
         file_ref_uuid = add_file_reference(file, 'SOURCE_ROOT')
         add_file_to_group(file_ref_uuid, 'Pods')
         if file.extname == '.h'
           build_file_uuid = add_build_file(file_ref_uuid, "settings" => { "ATTRIBUTES" => ["Public"] })
           add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
         else
-          build_file_uuid = add_build_file(file_ref_uuid)
+          extra = compiler_flags ? {"settings" => { "COMPILER_FLAGS" => compiler_flags }} : {}
+          build_file_uuid = add_build_file(file_ref_uuid, extra)
           add_file_to_list('PBXSourcesBuildPhase', build_file_uuid)
         end
         file_ref_uuid

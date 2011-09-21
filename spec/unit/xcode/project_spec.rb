@@ -38,6 +38,19 @@ describe "Pod::Xcode::Project" do
     end
   end
 
+  it "adds custom compiler flags to the PBXBuildFile object if specified" do
+    build_file_uuids = []
+    %w{ m mm c cpp }.each do |ext|
+      path = Pathname.new("path/to/file.#{ext}")
+      file_ref_uuid = @project.add_source_file(path, '-fno-obj-arc')
+      @project.find_object({
+        'isa' => 'PBXBuildFile',
+        'fileRef' => file_ref_uuid,
+        'settings' => {'COMPILER_FLAGS' => '-fno-obj-arc' }
+      }).should.not == nil
+    end
+  end
+
   it "adds a `h' file as a build file and adds it to the `headers build' phase list" do
     path = Pathname.new("path/to/file.h")
     file_ref_uuid = @project.add_source_file(path)
