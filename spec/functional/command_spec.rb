@@ -44,16 +44,16 @@ describe "Pod::Command" do
     end
     path = temporary_directory + 'Bananas.podspec'
     spec = Pod::Specification.from_podspec(path)
-    spec.read(:name).should == 'Bananas'
-    spec.read(:version).should == Pod::Version.new('1.0.0')
-    spec.read(:summary).should == 'A short description of Bananas.'
-    spec.read(:homepage).should == 'http://example.com/Bananas'
-    spec.read(:authors).should == { `git config --get user.name`.strip => `git config --get user.email`.strip }
-    spec.read(:source).should == { :git => 'http://example.com/Bananas.git', :tag => '1.0.0' }
-    spec.read(:description).should == 'An optional longer description of Bananas.'
-    spec.read(:source_files).should == [Pathname.new('Classes'), Pathname.new('Classes/**/*.{h,m}')]
-    spec.read(:xcconfig).to_hash.should == { 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework' }
-    spec.read(:dependencies).should == [Pod::Dependency.new('SomeLibraryThatBananasDependsOn', '>= 1.0.0')]
+    spec.name.should == 'Bananas'
+    spec.version.should == Pod::Version.new('1.0.0')
+    spec.summary.should == 'A short description of Bananas.'
+    spec.homepage.should == 'http://example.com/Bananas'
+    spec.authors.should == { `git config --get user.name`.strip => `git config --get user.email`.strip }
+    spec.source.should == { :git => 'http://example.com/Bananas.git', :tag => '1.0.0' }
+    spec.description.should == 'An optional longer description of Bananas.'
+    spec.source_files.should == [Pathname.new('Classes'), Pathname.new('Classes/**/*.{h,m}')]
+    spec.xcconfig.to_hash.should == { 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework' }
+    spec.dependencies.should == [Pod::Dependency.new('SomeLibraryThatBananasDependsOn', '>= 1.0.0')]
   end
 
   before do
@@ -77,7 +77,7 @@ describe "Pod::Command" do
         "images and stylesheets.\n\n" \
         "==> JSONKit (1.4)\n" \
         "    A Very High Performance Objective-C JSON Library.\n\n" \
-        "==> SSZipArchive (1.0)\n" \
+        "==> SSZipArchive (0.1.0)\n" \
         "    Utility class for unzipping files on iOS and Mac.\n\n"
       ],
       [
@@ -110,7 +110,7 @@ describe "Pod::Command" do
         "Mac OS X and iPhone\n\n" \
         "==> Reachability (2.0.4)\n" \
         "    A wrapper for the SystemConfiguration Reachablity APIs.\n\n" \
-        "==> SSZipArchive (1.0)\n" \
+        "==> SSZipArchive (0.1.0)\n" \
         "    Utility class for unzipping files on iOS and Mac.\n\n"
       ]
     ].each do |query, result|

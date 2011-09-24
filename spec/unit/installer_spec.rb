@@ -22,7 +22,7 @@ describe "Pod::Installer" do
           "USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)/Pods",
           "ALWAYS_SEARCH_USER_PATHS" => "YES",
           "OTHER_LDFLAGS" => "-framework SystemConfiguration -framework CFNetwork " \
-                             "-framework MobileCoreServices -l z.1.2.3"
+                             "-framework MobileCoreServices -l z.1"
         }
       ],
       [
@@ -43,13 +43,13 @@ describe "Pod::Installer" do
           "ALWAYS_SEARCH_USER_PATHS" => "YES",
           "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2",
           "OTHER_LDFLAGS" => "-l xml2.2.7.3 -framework SystemConfiguration " \
-                             "-framework CFNetwork -framework MobileCoreServices -l z.1.2.3"
+                             "-framework CFNetwork -framework MobileCoreServices -l z.1"
         }
       ],
     ].each do |name, patterns, expected_pattern, xcconfig|
       Pod::Source.reset!
       Pod::Spec::Set.reset!
-      installer = Pod::Installer.new(Pod::Spec.new { dependency(name); source_files(*patterns) })
+      installer = Pod::Installer.new(Pod::Spec.new { |s| s.dependency(name); s.source_files = *patterns })
       expected  = (stubbed_destroot(installer) + expected_pattern).glob.map do |file|
         file.relative_path_from(config.project_pods_root)
       end

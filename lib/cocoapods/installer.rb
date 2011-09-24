@@ -20,7 +20,7 @@ module Pod
       source_files = []
       build_specification_sets.each do |set|
         spec = set.specification
-        spec.read(:source_files).each do |pattern|
+        spec.source_files.each do |pattern|
           pattern = spec.pod_destroot + pattern
           pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
           pattern.glob.each do |file|
@@ -48,7 +48,7 @@ module Pod
     def generate_project
       source_files.each { |file| xcodeproj.add_source_file(file) }
       build_specification_sets.each do |set|
-        xcconfig << set.specification.read(:xcconfig)
+        xcconfig << set.specification.xcconfig
       end
     end
 

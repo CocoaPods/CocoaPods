@@ -19,88 +19,81 @@ module Pod
 
     attr_accessor :defined_in_file
 
-    def initialize(&block)
+    def initialize
       @dependencies = []
       @xcconfig = Xcode::Config.new
-      instance_eval(&block) if block_given?
+      yield self if block_given?
     end
 
     # Attributes
 
-    def read(name)
-      instance_variable_get("@#{name}")
-    end
+    attr_accessor :name
+    attr_accessor :homepage
+    attr_accessor :description
+    attr_accessor :source
 
-    def name(name)
-      @name = name
-    end
-
-    def version(version)
+    attr_reader :version
+    def version=(version)
       @version = Version.new(version)
     end
 
-    def authors(*names_and_email_addresses)
-      list = names_and_email_addresses
+    def authors=(*names_and_email_addresses)
+      list = names_and_email_addresses.flatten
       unless list.first.is_a?(Hash)
         authors = list.last.is_a?(Hash) ? list.pop : {}
         list.each { |name| authors[name] = nil }
       end
       @authors = authors || list.first
     end
-    alias_method :author, :authors
+    alias_method :author=, :authors=
+    attr_reader :authors
 
-    def homepage(url)
-      @homepage = url
-    end
 
-    def summary(summary)
+    def summary=(summary)
       @summary = summary
       @description ||= summary
     end
+    attr_reader :summary
 
-    def description(description)
-      @description = description
-    end
-
-    def part_of(name, *version_requirements)
-      part_of_dependency(name, *version_requirements)
+    def part_of=(*name_and_version_requirements)
+      self.part_of_dependency = *name_and_version_requirements
       @part_of.only_part_of_other_pod = true
     end
+    attr_reader :part_of
 
-    def part_of_dependency(name, *version_requirements)
-      @part_of = dependency(name, *version_requirements)
+    def part_of_dependency=(*name_and_version_requirements)
+      @part_of = dependency(*name_and_version_requirements)
     end
 
-    def source_files(*patterns)
-      @source_files = patterns.map { |p| Pathname.new(p) }
+    def source_files=(*patterns)
+      @source_files = patterns.flatten.map { |p| Pathname.new(p) }
     end
+    attr_reader :source_files
 
-    def source(remote)
-      @source = remote
-    end
-
-    attr_reader :dependencies
-    def dependency(name, *version_requirements)
+    def dependency(*name_and_version_requirements)
+      name, *version_requirements = name_and_version_requirements.flatten
       dep = Dependency.new(name, *version_requirements)
       @dependencies << dep
       dep
     end
+    attr_reader :dependencies
 
-    def xcconfig(hash)
+    def xcconfig=(hash)
       @xcconfig.merge!(hash)
     end
+    attr_reader :xcconfig
 
-    def frameworks(*frameworks)
+    def frameworks=(*frameworks)
       frameworks.unshift('')
-      xcconfig 'OTHER_LDFLAGS' => frameworks.join(' -framework ').strip
+      self.xcconfig = { 'OTHER_LDFLAGS' => frameworks.join(' -framework ').strip }
     end
-    alias_method :framework, :frameworks
+    alias_method :framework=, :frameworks=
 
-    def libraries(*libraries)
+    def libraries=(*libraries)
       libraries.unshift('')
-      xcconfig 'OTHER_LDFLAGS' => libraries.join(' -l ').strip
+      self.xcconfig = { 'OTHER_LDFLAGS' => libraries.join(' -l ').strip }
     end
-    alias_method :library, :libraries
+    alias_method :library=, :libraries=
 
     # Not attributes
 
@@ -108,8 +101,8 @@ module Pod
 
     def ==(other)
       self.class === other &&
-        @name && @name == other.read(:name) &&
-          @version && @version == other.read(:version)
+        @name && @name == other.name &&
+          @version && @version == other.version
     end
 
     def dependency_by_name(name)

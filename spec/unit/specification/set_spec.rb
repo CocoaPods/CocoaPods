@@ -34,23 +34,23 @@ describe "Pod::Specification::Set" do
   end
 
   it "checks if the dependency of the specification is compatible with existing requirements" do
-    @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '1.8' })
-    @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '< 1.8.1' })
-    @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '> 1.7.9' })
-    @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '~> 1.8.0' })
-    @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest' })
+    @set.required_by(Pod::Spec.new { |s| s.dependency 'ASIHTTPRequest', '1.8' })
+    @set.required_by(Pod::Spec.new { |s| s.dependency 'ASIHTTPRequest', '< 1.8.1' })
+    @set.required_by(Pod::Spec.new { |s| s.dependency 'ASIHTTPRequest', '> 1.7.9' })
+    @set.required_by(Pod::Spec.new { |s| s.dependency 'ASIHTTPRequest', '~> 1.8.0' })
+    @set.required_by(Pod::Spec.new { |s| s.dependency 'ASIHTTPRequest' })
     lambda {
-      @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '< 1.8' })
+      @set.required_by(Pod::Spec.new { |s| s.dependency 'ASIHTTPRequest', '< 1.8' })
     }.should.raise Pod::Informative
   end
 
   it "raises if the required version doesn't exist" do
-    @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '< 1.8' })
+    @set.required_by(Pod::Spec.new { |s| s.dependency 'ASIHTTPRequest', '< 1.8' })
     lambda { @set.required_version }.should.raise Pod::Informative
   end
 
   before do
-    @set.required_by(Pod::Spec.new { dependency 'ASIHTTPRequest', '< 1.8.1' })
+    @set.required_by(Pod::Spec.new { |s| s.dependency 'ASIHTTPRequest', '< 1.8.1' })
   end
 
   it "returns the version required for the dependency" do
@@ -62,18 +62,18 @@ describe "Pod::Specification::Set" do
   end
 
   it "returns the specification for the required version" do
-    @set.specification.should == Pod::Spec.new { name 'ASIHTTPRequest'; version '1.8' }
+    @set.specification.should == Pod::Spec.new { |s| s.name = 'ASIHTTPRequest'; s.version = '1.8' }
   end
 
   it "returns that this set is not only part for other pods" do
-    @set.required_by(Pod::Spec.new { part_of 'ASIHTTPRequest' })
+    @set.required_by(Pod::Spec.new { |s| s.part_of = 'ASIHTTPRequest' })
     @set.should.not.be.only_part_of_other_pod
   end
 
   it "returns that this set is only part for other pods" do
     @set.reset!
-    @set.required_by(Pod::Spec.new { part_of 'ASIHTTPRequest' })
-    @set.required_by(Pod::Spec.new { part_of 'ASIHTTPRequest' })
+    @set.required_by(Pod::Spec.new { |s| s.part_of = 'ASIHTTPRequest' })
+    @set.required_by(Pod::Spec.new { |s| s.part_of = 'ASIHTTPRequest' })
     @set.should.be.only_part_of_other_pod
   end
 end

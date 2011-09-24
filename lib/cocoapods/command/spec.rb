@@ -31,24 +31,23 @@ module Pod
         author = `git config --get user.name`.strip
         email = `git config --get user.email`.strip
         spec = <<-SPEC.gsub(/^          /, '')
-          Pod::Spec.new do
-            name     '#{@name}'
-            version  '1.0.0'
-            summary  'A short description of #{@name}.'
-            homepage 'http://example.com/#{@name}'
-            author   '#{author}' => '#{email}'
-            source   :git => 'http://example.com/#{@name}.git',
-                     :tag => '1.0.0'
+          Pod::Spec.new do |s|
+            s.name     = '#{@name}'
+            s.version  = '1.0.0'
+            s.summary  = 'A short description of #{@name}.'
+            s.homepage = 'http://example.com/#{@name}'
+            s.author   = { '#{author}' => '#{email}' }
+            s.source   = { :git => 'http://example.com/#{@name}.git', :tag => '1.0.0' }
 
-            description 'An optional longer description of #{@name}.'
+            s.description = 'An optional longer description of #{@name}.'
 
             # A list of file patterns. If the pattern is a directory then the path will
             # automatically have '*.{h,m,mm,c,cpp' appended.
-            source_files 'Classes', 'Classes/**/*.{h,m}'
+            s.source_files = 'Classes', 'Classes/**/*.{h,m}'
 
-            xcconfig 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework'
+            s.xcconfig = { 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework' }
 
-            dependency 'SomeLibraryThat#{@name}DependsOn', '>= 1.0.0'
+            s.dependency 'SomeLibraryThat#{@name}DependsOn', '>= 1.0.0'
           end
         SPEC
         (Pathname.pwd + "#{@name}.podspec").open('w') { |f| f << spec }

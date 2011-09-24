@@ -11,7 +11,7 @@ module Pod
     end
 
     def find_dependency_sets(specification)
-      specification.read(:dependencies).each do |dependency|
+      specification.dependencies.each do |dependency|
         set = Source.search(dependency)
         set.required_by(specification)
         unless @sets.include?(set)

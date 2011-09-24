@@ -48,7 +48,7 @@ module Pod
       pod_sets.map do |set|
         text = if full_text_search
           s = set.specification
-          "#{s.read(:name)} #{s.read(:summary)} #{s.read(:description)}"
+          "#{s.name} #{s.summary} #{s.description}"
         else
           set.name
         end

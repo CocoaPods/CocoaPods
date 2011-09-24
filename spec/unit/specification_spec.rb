@@ -45,41 +45,41 @@ describe "A Pod::Specification loaded from a podspec" do
   end
 
   it "returns the pod's name" do
-    @spec.read(:name).should == 'BananaLib'
+    @spec.name.should == 'BananaLib'
   end
 
   it "returns the pod's version" do
-    @spec.read(:version).should == Pod::Version.new('1.0')
+    @spec.version.should == Pod::Version.new('1.0')
   end
 
   it "returns a list of authors and their email addresses" do
-    @spec.read(:authors).should == {
+    @spec.authors.should == {
       'Banana Corp' => nil,
       'Monkey Boy' => 'monkey@banana-corp.local'
     }
   end
 
   it "returns the pod's homepage" do
-    @spec.read(:homepage).should == 'http://banana-corp.local/banana-lib.html'
+    @spec.homepage.should == 'http://banana-corp.local/banana-lib.html'
   end
 
   it "returns the pod's summary" do
-    @spec.read(:summary).should == 'Chunky bananas!'
+    @spec.summary.should == 'Chunky bananas!'
   end
 
   it "returns the pod's description" do
-    @spec.read(:description).should == 'Full of chunky bananas.'
+    @spec.description.should == 'Full of chunky bananas.'
   end
 
   it "returns the pod's source" do
-    @spec.read(:source).should == {
+    @spec.source.should == {
       :git => 'http://banana-corp.local/banana-lib.git',
       :tag => 'v1.0'
     }
   end
 
   it "returns the pod's source files" do
-    @spec.read(:source_files).should == [
+    @spec.source_files.should == [
       Pathname.new('Classes/*.{h,m}'),
       Pathname.new('Vendor')
     ]
@@ -87,19 +87,19 @@ describe "A Pod::Specification loaded from a podspec" do
 
   it "returns the pod's dependencies" do
     expected = Pod::Dependency.new('monkey', '~> 1.0.1', '< 1.0.9')
-    @spec.read(:dependencies).should == [expected]
+    @spec.dependencies.should == [expected]
     @spec.dependency_by_name('monkey').should == expected
   end
 
   it "returns the pod's xcconfig settings" do
-    @spec.read(:xcconfig).to_hash.should == {
+    @spec.xcconfig.to_hash.should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration'
     }
   end
 
   it "has a shortcut to add frameworks to the xcconfig" do
-    @spec.frameworks('CFNetwork', 'CoreText')
-    @spec.read(:xcconfig).to_hash.should == {
+    @spec.frameworks = 'CFNetwork', 'CoreText'
+    @spec.xcconfig.to_hash.should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration ' \
                          '-framework CFNetwork ' \
                          '-framework CoreText'
@@ -107,16 +107,16 @@ describe "A Pod::Specification loaded from a podspec" do
   end
 
   it "has a shortcut to add libraries to the xcconfig" do
-    @spec.libraries('z', 'xml2')
-    @spec.read(:xcconfig).to_hash.should == {
+    @spec.libraries = 'z', 'xml2'
+    @spec.xcconfig.to_hash.should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration -l z -l xml2'
     }
   end
 
   it "returns that it's equal to another specification if the name and version are equal" do
-    @spec.should == Pod::Spec.new { name 'BananaLib'; version '1.0' }
-    @spec.should.not == Pod::Spec.new { name 'OrangeLib'; version '1.0' }
-    @spec.should.not == Pod::Spec.new { name 'BananaLib'; version '1.1' }
+    @spec.should == Pod::Spec.new { |s| s.name = 'BananaLib'; s.version = '1.0' }
+    @spec.should.not == Pod::Spec.new { |s| s.name = 'OrangeLib'; s.version = '1.0' }
+    @spec.should.not == Pod::Spec.new { |s| s.name = 'BananaLib'; s.version = '1.1' }
     @spec.should.not == Pod::Spec.new
   end
 
@@ -131,18 +131,18 @@ describe "A Pod::Specification that's part of another pod's source" do
   end
 
   it "adds a dependency on the other pod's source, but not the library" do
-    @spec.part_of 'monkey', '>= 1'
+    @spec.part_of = 'monkey', '>= 1'
     @spec.should.be.part_of_other_pod
     dep = Pod::Dependency.new('monkey', '>= 1')
-    @spec.read(:dependencies).should.not == [dep]
+    @spec.dependencies.should.not == [dep]
     dep.only_part_of_other_pod = true
-    @spec.read(:dependencies).should == [dep]
+    @spec.dependencies.should == [dep]
   end
 
   it "adds a dependency on the other pod's source *and* the library" do
-    @spec.part_of_dependency 'monkey', '>= 1'
+    @spec.part_of_dependency = 'monkey', '>= 1'
     @spec.should.be.part_of_other_pod
-    @spec.read(:dependencies).should == [Pod::Dependency.new('monkey', '>= 1')]
+    @spec.dependencies.should == [Pod::Dependency.new('monkey', '>= 1')]
   end
 
   # TODO

@@ -15,7 +15,7 @@ describe "Pod::Resolver" do
     sets << Pod::Spec::Set.by_pod_dir(fixture('spec-repos/master/Reachability'))
     sets << Pod::Spec::Set.by_pod_dir(fixture('spec-repos/master/ASIHTTPRequest'))
     sets << Pod::Spec::Set.by_pod_dir(fixture('spec-repos/master/ASIWebPageRequest'))
-    resolver = Pod::Resolver.new(Pod::Spec.new { dependency 'ASIWebPageRequest' })
+    resolver = Pod::Resolver.new(Pod::Spec.new { |s| s.dependency 'ASIWebPageRequest' })
     resolver.resolve.sort_by(&:name).should == sets.sort_by(&:name)
   end
 end
