@@ -26,9 +26,9 @@
 
 #import "SpotTableViewCell.h"
 
-#import "TTTLocationFormatter.h"
-#import "AFImageCache.h"
-#import "UIImageView+AFNetworking.h"
+#import "FormatterKit/TTTLocationFormatter.h"
+#import "AFNetworking/AFImageCache.h"
+#import "AFNetworking/UIImageView+AFNetworking.h"
 
 @interface NearbySpotsViewController ()
 @property (readwrite, nonatomic, retain) NSArray *nearbySpots;

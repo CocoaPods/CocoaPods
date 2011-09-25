@@ -61,7 +61,7 @@ module Pod
           # Working around a bug in Xcode 4.2 betas, remove this once the Xcode bug is fixed:
           # https://github.com/alloy/cocoapods/issues/13
           #add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
-          add_file_to_list('PBXCopyFilesBuildPhase', build_file_uuid)
+          add_file_to_list('PBXCopyFilesBuildPhase', build_file_uuid, group)
         else
           extra = compiler_flags ? {"settings" => { "COMPILER_FLAGS" => compiler_flags }} : {}
           build_file_uuid = add_build_file(file_ref_uuid, extra)
@@ -78,7 +78,7 @@ module Pod
           "children" => []
         })
         add_object_to_group(group_uuid, 'Pods')
-        group_uuid
+        add_copy_header_build_phase(name)
       end
 
       def create_in(pods_root)
@@ -113,8 +113,28 @@ module Pod
         }))
       end
 
-      def add_file_to_list(isa, build_file_uuid)
-        object_uuid, object = objects_by_isa(isa).first
+      def add_copy_header_build_phase(name)
+        phase_uuid = add_object({
+           "isa" => "PBXCopyFilesBuildPhase",
+           "buildActionMask" => "2147483647",
+           "dstPath" => "$(PUBLIC_HEADERS_FOLDER_PATH)/#{name}",
+           "dstSubfolderSpec" => "16",
+           "files" => [],
+           "name" => "Copy #{name} Public Headers",
+           "runOnlyForDeploymentPostprocessing" => "0",
+        })
+        
+        object_uuid, object = objects_by_isa('PBXNativeTarget').first
+        object['buildPhases'] << phase_uuid
+      end
+      
+      def add_file_to_list(isa, build_file_uuid, name = nil)
+        isa_objects = objects_by_isa(isa)
+        object_uuid, object = isa_objects.first
+        if name != nil
+          object_uuid, object = isa_objects.select { |_, object| object['name'].include? name }.first
+        end
+
         object['files'] << build_file_uuid
       end
 
