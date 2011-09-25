@@ -50,9 +50,9 @@ module Pod
         end.compact
       end
 
-      def add_source_file(file, compiler_flags = nil)
+      def add_source_file(file, group = 'Pods', compiler_flags = nil)
         file_ref_uuid = add_file_reference(file, 'SOURCE_ROOT')
-        add_file_to_group(file_ref_uuid, 'Pods')
+        add_object_to_group(file_ref_uuid, group)
         if file.extname == '.h'
           build_file_uuid = add_build_file(file_ref_uuid, "settings" => { "ATTRIBUTES" => ["Public"] })
           # Working around a bug in Xcode 4.2 betas, remove this once the Xcode bug is fixed:
@@ -65,6 +65,16 @@ module Pod
           add_file_to_list('PBXSourcesBuildPhase', build_file_uuid)
         end
         file_ref_uuid
+      end
+      
+      def add_group(name)
+        group_uuid = add_object({
+          "name" => name,
+          "isa" => "PBXGroup",
+          "sourceTree" => "<group>",
+          "children" => []
+        })
+        add_object_to_group(group_uuid, 'Pods')
       end
 
       def create_in(pods_root)
@@ -91,7 +101,7 @@ module Pod
           "path" => path.to_s,
         })
       end
-
+      
       def add_build_file(file_ref_uuid, extra = {})
         add_object(extra.merge({
           "isa" => "PBXBuildFile",
@@ -104,11 +114,11 @@ module Pod
         object['files'] << build_file_uuid
       end
 
-      def add_file_to_group(file_ref_uuid, name)
+      def add_object_to_group(object_ref_uuid, name)
         object_uuid, object = objects.find do |_, object|
           object['isa'] == 'PBXGroup' && object['name'] == name
         end
-        object['children'] << file_ref_uuid
+        object['children'] << object_ref_uuid
       end
 
       def objects
