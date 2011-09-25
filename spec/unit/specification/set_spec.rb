@@ -76,4 +76,9 @@ describe "Pod::Specification::Set" do
     @set.required_by(Pod::Spec.new { |s| s.part_of = 'ASIHTTPRequest' })
     @set.should.be.only_part_of_other_pod
   end
+
+  it "ignores dotfiles when getting the version directories" do
+    `touch #{fixture('spec-repos/master/ASIHTTPRequest/.DS_Store')}`
+    lambda { @set.versions }.should.not.raise
+  end
 end

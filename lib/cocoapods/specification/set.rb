@@ -75,7 +75,10 @@ module Pod
       # Returns Pod::Version instances, for each version directory, sorted from
       # highest version to lowest.
       def versions
-        @pod_dir.children.map { |v| Version.new(v.basename) }.sort.reverse
+        @pod_dir.children.map do |v|
+          basename = v.basename.to_s
+          Version.new(basename) if v.directory? && basename[0,1] != '.'
+        end.compact.sort.reverse
       end
     end
   end
