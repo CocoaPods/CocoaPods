@@ -55,7 +55,10 @@ module Pod
         add_file_to_group(file_ref_uuid, 'Pods')
         if file.extname == '.h'
           build_file_uuid = add_build_file(file_ref_uuid, "settings" => { "ATTRIBUTES" => ["Public"] })
-          add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
+          # Working around a bug in Xcode 4.2 betas, remove this once the Xcode bug is fixed:
+          # https://github.com/alloy/cocoapods/issues/13
+          #add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
+          add_file_to_list('PBXCopyFilesBuildPhase', build_file_uuid)
         else
           extra = compiler_flags ? {"settings" => { "COMPILER_FLAGS" => compiler_flags }} : {}
           build_file_uuid = add_build_file(file_ref_uuid, extra)

@@ -65,7 +65,8 @@ describe "Pod::Xcode::Project" do
       'fileRef' => file_ref_uuid
     })
 
-    _, object = @project.find_object('isa' => 'PBXHeadersBuildPhase')
+    #_, object = @project.find_object('isa' => 'PBXHeadersBuildPhase')
+    _, object = @project.find_object('isa' => 'PBXCopyFilesBuildPhase')
     object['files'].should == [build_file_uuid]
 
     _, object = @project.find_object('isa' => 'PBXSourcesBuildPhase')
