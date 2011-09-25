@@ -10,6 +10,19 @@
 		515B0FB9141D52E0001DC3E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 515B0FB8141D52E0001DC3E6 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		82A8B61C142F7EC7006897C9 /* Copy Public Headers */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(PUBLIC_HEADERS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Public Headers";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		515160D0141EC5D100EBB823 /* Pods.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Pods.xcconfig; sourceTree = "<group>"; };
 		515B0FB5141D52E0001DC3E6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,6 +105,7 @@
 				515B0FB1141D52E0001DC3E6 /* Sources */,
 				515B0FB2141D52E0001DC3E6 /* Frameworks */,
 				515B0FB3141D52E0001DC3E6 /* Headers */,
+				82A8B61C142F7EC7006897C9 /* Copy Public Headers */,
 			);
 			buildRules = (
 			);
