@@ -41,16 +41,19 @@ module Pod
         find_objects(conditions).first
       end
 
+      IGNORE_GROUPS = ['Pods', 'Frameworks', 'Products', 'Supporting Files']
       def source_files
-        conditions = { 'isa' => 'PBXFileReference', 'sourceTree' => 'SOURCE_ROOT' }
-        find_objects(conditions).map do |_, object|
-          if %w{ .h .m .mm .c .cpp }.include?(File.extname(object['path']))
-            Pathname.new(object['path'])
-          end 
-        end.compact
+        source_files = {}
+        find_objects('isa' => 'PBXGroup').each do |_, object|
+          next if object['name'].nil? || IGNORE_GROUPS.include?(object['name'])
+          source_files[object['name']] = object['children'].map do |uuid|
+            Pathname.new(objects[uuid]['path'])
+          end
+        end
+        source_files
       end
 
-      def add_source_file(file, group = 'Pods', compiler_flags = nil)
+      def add_source_file(file, group, compiler_flags = nil)
         file_ref_uuid = add_file_reference(file, 'SOURCE_ROOT')
         add_object_to_group(file_ref_uuid, group)
         if file.extname == '.h'
@@ -75,6 +78,7 @@ module Pod
           "children" => []
         })
         add_object_to_group(group_uuid, 'Pods')
+        group_uuid
       end
 
       def create_in(pods_root)

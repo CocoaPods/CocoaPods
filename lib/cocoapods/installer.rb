@@ -17,18 +17,17 @@ module Pod
     end
 
     def source_files
-      source_files = Hash.new
+      source_files = {}
       build_specification_sets.each do |set|
         spec = set.specification
-        spec_files = []
+        source_files[spec.name] = []
         spec.source_files.each do |pattern|
           pattern = spec.pod_destroot + pattern
           pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
           pattern.glob.each do |file|
-            spec_files << file.relative_path_from(config.project_pods_root)
+            source_files[spec.name] << file.relative_path_from(config.project_pods_root)
           end
         end
-        source_files[spec.name] = spec_files
       end
       source_files
     end
@@ -48,10 +47,10 @@ module Pod
     end
 
     def generate_project
-      source_files.each do |group, files| 
+      source_files.each do |group, files|
         xcodeproj.add_group(group)
         files.each do |file|
-          xcodeproj.add_source_file(file, group) 
+          xcodeproj.add_source_file(file, group)
         end
       end
       build_specification_sets.each do |set|
