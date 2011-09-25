@@ -17,16 +17,18 @@ module Pod
     end
 
     def source_files
-      source_files = []
+      source_files = Hash.new
       build_specification_sets.each do |set|
         spec = set.specification
+        spec_files = []
         spec.source_files.each do |pattern|
           pattern = spec.pod_destroot + pattern
           pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
           pattern.glob.each do |file|
-            source_files << file.relative_path_from(config.project_pods_root)
+            spec_files << file.relative_path_from(config.project_pods_root)
           end
         end
+        source_files[spec.name] = spec_files
       end
       source_files
     end
@@ -46,7 +48,12 @@ module Pod
     end
 
     def generate_project
-      source_files.each { |file| xcodeproj.add_source_file(file) }
+      source_files.each do |group, files| 
+        xcodeproj.add_group(group)
+        files.each do |file|
+          xcodeproj.add_source_file(file, group) 
+        end
+      end
       build_specification_sets.each do |set|
         xcconfig << set.specification.xcconfig
       end
@@ -56,7 +63,9 @@ module Pod
     # before #generate_project is called!
     def install!
       puts "Installing dependencies of: #{@specification.defined_in_file}" unless config.silent?
-      build_specification_sets.each { |set| set.specification.install! }
+      build_specification_sets.each do |set|
+         set.specification.install!
+      end
       generate_project
       xcodeproj.create_in(config.project_pods_root)
       xcconfig.create_in(config.project_pods_root)
