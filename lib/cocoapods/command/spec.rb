@@ -42,7 +42,7 @@ module Pod
             s.description = 'An optional longer description of #{@name}.'
 
             # A list of file patterns. If the pattern is a directory then the path will
-            # automatically have '*.{h,m,mm,c,cpp' appended.
+            # automatically have '*.{h,m,mm,c,cpp}' appended.
             s.source_files = 'Classes', 'Classes/**/*.{h,m}'
 
             s.xcconfig = { 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework' }
