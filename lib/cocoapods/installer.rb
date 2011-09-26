@@ -55,7 +55,7 @@ module Pod
       end
       build_specification_sets.each do |set|
         xcconfig << set.specification.xcconfig
-        xcconfig << {'USER_HEADER_SEARCH_PATHS' => "\"$(BUILT_PRODCUTS_DIR)/Pods/#{set.specification.name}\""}
+        xcconfig << {'USER_HEADER_SEARCH_PATHS' => "\"$(BUILT_PRODUCTS_DIR)/Pods/#{set.specification.name}\""}
       end
     end
 
