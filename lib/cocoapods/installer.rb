@@ -32,6 +32,29 @@ module Pod
       source_files
     end
 
+    def grouped_source_files_for_spec(spec)
+      grouped_files = {}
+      spec.source_files.each do |pattern|
+        pattern = spec.pod_destroot + pattern
+        pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
+        pattern.glob.each do |file|
+          dir, _ = file.relative_path_from(spec.pod_destroot).split
+          dir = dir.to_s
+          if dir == "."
+            dir = spec.name
+          else
+            if dir.split('/')[0] != spec.name
+              dir = spec.name + '/' + dir
+            end
+          end
+          
+          grouped_files[dir.to_s] ||= []
+          grouped_files[dir.to_s] << file.relative_path_from(config.project_pods_root)
+        end
+      end
+      grouped_files
+    end
+    
     def xcconfig
       @xcconfig ||= Xcode::Config.new({
         # In a workspace this is where the static library headers should be found
@@ -47,15 +70,19 @@ module Pod
     end
 
     def generate_project
-      source_files.each do |group, files|
-        xcodeproj.add_group(group)
-        files.each do |file|
-          xcodeproj.add_source_file(file, group)
-        end
-      end
       build_specification_sets.each do |set|
-        xcconfig << set.specification.xcconfig
+        xcodeproj.add_group(set.specification.name)
         xcconfig << {'USER_HEADER_SEARCH_PATHS' => "\"$(BUILT_PRODUCTS_DIR)/Pods/#{set.specification.name}\""}
+        grouped_source_files_for_spec(set.specification).each do |path, files|
+          phase_uuid = xcodeproj.add_copy_header_build_phase(set.specification.name, path)
+          xcconfig << {'USER_HEADER_SEARCH_PATHS' => "\"$(BUILT_PRODUCTS_DIR)/Pods/#{path}\""}
+          files.each do |file|
+            xcodeproj.add_source_file(file, set.specification.name, phase_uuid)
+          end
+        end
+        
+        #puts "#{grouped_source_files_for_spec(set.specification)}"
+        xcconfig << set.specification.xcconfig
       end
     end
 

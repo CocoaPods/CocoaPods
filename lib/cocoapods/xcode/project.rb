@@ -53,7 +53,7 @@ module Pod
         source_files
       end
 
-      def add_source_file(file, group, compiler_flags = nil)
+      def add_source_file(file, group, phase_uuid = nil, compiler_flags = nil)
         file_ref_uuid = add_file_reference(file, 'SOURCE_ROOT')
         add_object_to_group(file_ref_uuid, group)
         if file.extname == '.h'
@@ -61,7 +61,7 @@ module Pod
           # Working around a bug in Xcode 4.2 betas, remove this once the Xcode bug is fixed:
           # https://github.com/alloy/cocoapods/issues/13
           #add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
-          add_file_to_list('PBXCopyFilesBuildPhase', build_file_uuid, group)
+          add_file_to_list('PBXCopyFilesBuildPhase', build_file_uuid, lambda {|uuid, _| uuid == phase_uuid})
         else
           extra = compiler_flags ? {"settings" => { "COMPILER_FLAGS" => compiler_flags }} : {}
           build_file_uuid = add_build_file(file_ref_uuid, extra)
@@ -89,6 +89,22 @@ module Pod
         @template.writeToFile(pbxproj.to_s, atomically:true)
       end
 
+      def add_copy_header_build_phase(name, path)
+        phase_uuid = add_object({
+           "isa" => "PBXCopyFilesBuildPhase",
+           "buildActionMask" => "2147483647",
+           "dstPath" => "$(PUBLIC_HEADERS_FOLDER_PATH)/#{path}",
+           "dstSubfolderSpec" => "16",
+           "files" => [],
+           "name" => "Copy #{name} Public Headers",
+           "runOnlyForDeploymentPostprocessing" => "0",
+        })
+        
+        object_uuid, object = objects_by_isa('PBXNativeTarget').first
+        object['buildPhases'] << phase_uuid
+        phase_uuid
+      end
+      
       private
 
       def add_object(object)
@@ -112,27 +128,12 @@ module Pod
           "fileRef" => file_ref_uuid
         }))
       end
-
-      def add_copy_header_build_phase(name)
-        phase_uuid = add_object({
-           "isa" => "PBXCopyFilesBuildPhase",
-           "buildActionMask" => "2147483647",
-           "dstPath" => "$(PUBLIC_HEADERS_FOLDER_PATH)/#{name}",
-           "dstSubfolderSpec" => "16",
-           "files" => [],
-           "name" => "Copy #{name} Public Headers",
-           "runOnlyForDeploymentPostprocessing" => "0",
-        })
-        
-        object_uuid, object = objects_by_isa('PBXNativeTarget').first
-        object['buildPhases'] << phase_uuid
-      end
       
-      def add_file_to_list(isa, build_file_uuid, name = nil)
+      def add_file_to_list(isa, build_file_uuid, condition = nil)
         isa_objects = objects_by_isa(isa)
         object_uuid, object = isa_objects.first
-        if name != nil
-          object_uuid, object = isa_objects.select { |_, object| object['name'].include? name }.first
+        if condition != nil
+          object_uuid, object = isa_objects.select { |uuid, object| condition.call(uuid, object) }.first
         end
 
         object['files'] << build_file_uuid
