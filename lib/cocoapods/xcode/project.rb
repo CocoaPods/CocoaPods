@@ -133,7 +133,7 @@ module Pod
         isa_objects = objects_by_isa(isa)
         object_uuid, object = isa_objects.first
         if condition != nil
-          object_uuid, object = isa_objects.select { |uuid, object| condition.call(uuid, object) }.first
+          object_uuid, object = isa_objects.select(&condition).first
         end
 
         object['files'] << build_file_uuid
