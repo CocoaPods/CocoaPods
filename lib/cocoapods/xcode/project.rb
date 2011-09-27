@@ -131,7 +131,7 @@ module Pod
       
       def add_file_to_list(isa, build_file_uuid, &condition)
         isa_objects = objects_by_isa(isa)
-        object_uuid, object = (condition != nil ? isa_objects.select(&condition) : isa_objects).first
+        object_uuid, object = (condition.nil? ? isa_objects.first : isa_objects.find(&condition))
         object['files'] << build_file_uuid
       end
 
