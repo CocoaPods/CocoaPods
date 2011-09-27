@@ -61,7 +61,7 @@ module Pod
           # Working around a bug in Xcode 4.2 betas, remove this once the Xcode bug is fixed:
           # https://github.com/alloy/cocoapods/issues/13
           #add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
-          add_file_to_list('PBXCopyFilesBuildPhase', build_file_uuid, lambda {|uuid, _| uuid == phase_uuid})
+          add_file_to_list('PBXCopyFilesBuildPhase', build_file_uuid) {|uuid, _| uuid == phase_uuid}
         else
           extra = compiler_flags ? {"settings" => { "COMPILER_FLAGS" => compiler_flags }} : {}
           build_file_uuid = add_build_file(file_ref_uuid, extra)
@@ -129,13 +129,9 @@ module Pod
         }))
       end
       
-      def add_file_to_list(isa, build_file_uuid, condition = nil)
+      def add_file_to_list(isa, build_file_uuid, &condition)
         isa_objects = objects_by_isa(isa)
-        object_uuid, object = isa_objects.first
-        if condition != nil
-          object_uuid, object = isa_objects.select(&condition).first
-        end
-
+        object_uuid, object = (condition != nil ? isa_objects.select(&condition) : isa_objects).first
         object['files'] << build_file_uuid
       end
 
