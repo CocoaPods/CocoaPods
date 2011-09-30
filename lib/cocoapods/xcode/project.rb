@@ -61,7 +61,7 @@ module Pod
           # Working around a bug in Xcode 4.2 betas, remove this once the Xcode bug is fixed:
           # https://github.com/alloy/cocoapods/issues/13
           #add_file_to_list('PBXHeadersBuildPhase', build_file_uuid)
-          add_file_to_list('PBXCopyFilesBuildPhase', build_file_uuid) {|uuid, _| uuid == phase_uuid}
+          add_file_to_list('PBXCopyFilesBuildPhase', build_file_uuid, phase_uuid)
         else
           extra = compiler_flags ? {"settings" => { "COMPILER_FLAGS" => compiler_flags }} : {}
           build_file_uuid = add_build_file(file_ref_uuid, extra)
@@ -89,6 +89,7 @@ module Pod
         @template.writeToFile(pbxproj.to_s, atomically:true)
       end
 
+      # TODO add comments, or even constants, describing what these magic numbers are.
       def add_copy_header_build_phase(name, path)
         phase_uuid = add_object({
            "isa" => "PBXCopyFilesBuildPhase",
@@ -104,7 +105,11 @@ module Pod
         object['buildPhases'] << phase_uuid
         phase_uuid
       end
-      
+
+      def objects_by_isa(isa)
+        objects.select { |_, object| object['isa'] == isa }
+      end
+
       private
 
       def add_object(object)
@@ -129,9 +134,15 @@ module Pod
         }))
       end
       
-      def add_file_to_list(isa, build_file_uuid, &condition)
-        isa_objects = objects_by_isa(isa)
-        object_uuid, object = (condition.nil? ? isa_objects.first : isa_objects.find(&condition))
+      # TODO refactor to create PBX object classes and make this take aither a uuid or a class instead of both.
+      def add_file_to_list(isa, build_file_uuid, phase_uuid = nil)
+        objects = objects_by_isa(isa)
+        _ = object = nil
+        if phase_uuid.nil?
+          _, object = objects.first
+        else
+          object = objects[phase_uuid]
+        end
         object['files'] << build_file_uuid
       end
 
@@ -144,10 +155,6 @@ module Pod
 
       def objects
         @template['objects']
-      end
-
-      def objects_by_isa(isa)
-        objects.select { |_, object| object['isa'] == isa }
       end
 
       def generate_uuid

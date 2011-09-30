@@ -38,18 +38,8 @@ module Pod
         pattern = spec.pod_destroot + pattern
         pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
         pattern.glob.each do |file|
-          dir, _ = file.relative_path_from(spec.pod_destroot).split
-          dir = dir.to_s
-          if dir == "."
-            dir = spec.name
-          else
-            if dir.split('/')[0] != spec.name
-              dir = spec.name + '/' + dir
-            end
-          end
-          
-          grouped_files[dir.to_s] ||= []
-          grouped_files[dir.to_s] << file.relative_path_from(config.project_pods_root)
+          file = file.relative_path_from(config.project_pods_root)
+          (grouped_files[file.dirname.to_s] ||= []) << file
         end
       end
       grouped_files
@@ -71,17 +61,14 @@ module Pod
 
     def generate_project
       build_specification_sets.each do |set|
-        xcodeproj.add_group(set.specification.name)
-        xcconfig << {'USER_HEADER_SEARCH_PATHS' => "\"$(BUILT_PRODUCTS_DIR)/Pods/#{set.specification.name}\""}
-        grouped_source_files_for_spec(set.specification).each do |path, files|
-          phase_uuid = xcodeproj.add_copy_header_build_phase(set.specification.name, path)
-          xcconfig << {'USER_HEADER_SEARCH_PATHS' => "\"$(BUILT_PRODUCTS_DIR)/Pods/#{path}\""}
+        xcconfig << { 'USER_HEADER_SEARCH_PATHS' => %{"$(BUILT_PRODUCTS_DIR)/Pods/#{set.name}"} }
+        xcodeproj.add_group(set.name)
+        grouped_source_files_for_spec(set.specification).each do |dir, files|
+          copy_phase_uuid = xcodeproj.add_copy_header_build_phase(set.name, dir)
           files.each do |file|
-            xcodeproj.add_source_file(file, set.specification.name, phase_uuid)
+            xcodeproj.add_source_file(file, set.name, copy_phase_uuid)
           end
         end
-        
-        #puts "#{grouped_source_files_for_spec(set.specification)}"
         xcconfig << set.specification.xcconfig
       end
     end

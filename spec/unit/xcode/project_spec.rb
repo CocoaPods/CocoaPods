@@ -59,13 +59,25 @@ describe "Pod::Xcode::Project" do
     build_file_uuids = []
     %w{ m mm c cpp }.each do |ext|
       path = Pathname.new("path/to/file.#{ext}")
-      file_ref_uuid = @project.add_source_file(path, 'Pods', '-fno-obj-arc')
+      file_ref_uuid = @project.add_source_file(path, 'Pods', nil, '-fno-obj-arc')
       @project.find_object({
         'isa' => 'PBXBuildFile',
         'fileRef' => file_ref_uuid,
         'settings' => {'COMPILER_FLAGS' => '-fno-obj-arc' }
       }).should.not == nil
     end
+  end
+
+  it "creates a copy build header phase which will copy headers to a specified path" do
+    phase_uuid = @project.add_copy_header_build_phase("SomePod", "Path/To/Source")
+    @project.find_object({
+      'isa' => 'PBXCopyFilesBuildPhase',
+      'dstPath' => '$(PUBLIC_HEADERS_FOLDER_PATH)/Path/To/Source',
+      'name' => 'Copy SomePod Public Headers'
+    }).should.not == nil
+
+    _, target = @project.objects_by_isa('PBXNativeTarget').first
+    target['buildPhases'].should.include phase_uuid
   end
 
   it "adds a `h' file as a build file and adds it to the `headers build' phase list" do

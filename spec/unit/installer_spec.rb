@@ -19,33 +19,39 @@ describe "Pod::Installer" do
         ['Classes'],
         { 'ASIHTTPRequest' => "Classes/*.{h,m}", 'Reachability' => "External/Reachability/*.{h,m}" },
         {
-          "USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)/Pods",
+          "USER_HEADER_SEARCH_PATHS" => '"$(BUILT_PRODUCTS_DIR)/Pods" ' \
+                                        '"$(BUILT_PRODUCTS_DIR)/Pods/ASIHTTPRequest" ' \
+                                        '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
           "ALWAYS_SEARCH_USER_PATHS" => "YES",
           "OTHER_LDFLAGS" => "-framework SystemConfiguration -framework CFNetwork " \
                              "-framework MobileCoreServices -l z.1"
         }
       ],
-      #[
-        #'Reachability',
-        #["External/Reachability/*.h", "External/Reachability/*.m"],
-        #{ 'Reachability' => "External/Reachability/*.{h,m}", },
-        #{
-          #"USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)/Pods",
-          #"ALWAYS_SEARCH_USER_PATHS" => "YES"
-        #}
-      #],
-      #[
-        #'ASIWebPageRequest',
-        #['**/ASIWebPageRequest.*'],
-        #{ 'ASIHTTPRequest' => "Classes/*.{h,m}", 'ASIWebPageRequest' => "Classes/ASIWebPageRequest/*.{h,m}", 'Reachability' => "External/Reachability/*.{h,m}" },
-        #{
-          #"USER_HEADER_SEARCH_PATHS" => "$(BUILT_PRODUCTS_DIR)/Pods",
-          #"ALWAYS_SEARCH_USER_PATHS" => "YES",
-          #"HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2",
-          #"OTHER_LDFLAGS" => "-l xml2.2.7.3 -framework SystemConfiguration " \
-                             #"-framework CFNetwork -framework MobileCoreServices -l z.1"
-        #}
-      #],
+      [
+        'Reachability',
+        ["External/Reachability/*.h", "External/Reachability/*.m"],
+        { 'Reachability' => "External/Reachability/*.{h,m}", },
+        {
+          "USER_HEADER_SEARCH_PATHS" => '"$(BUILT_PRODUCTS_DIR)/Pods" ' \
+                                        '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
+          "ALWAYS_SEARCH_USER_PATHS" => "YES"
+        }
+      ],
+      [
+        'ASIWebPageRequest',
+        ['**/ASIWebPageRequest.*'],
+        { 'ASIHTTPRequest' => "Classes/*.{h,m}", 'ASIWebPageRequest' => "Classes/ASIWebPageRequest/*.{h,m}", 'Reachability' => "External/Reachability/*.{h,m}" },
+        {
+          "USER_HEADER_SEARCH_PATHS" => '"$(BUILT_PRODUCTS_DIR)/Pods" ' \
+                                        '"$(BUILT_PRODUCTS_DIR)/Pods/ASIWebPageRequest" ' \
+                                        '"$(BUILT_PRODUCTS_DIR)/Pods/ASIHTTPRequest" ' \
+                                        '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
+          "ALWAYS_SEARCH_USER_PATHS" => "YES",
+          "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2",
+          "OTHER_LDFLAGS" => "-l xml2.2.7.3 -framework SystemConfiguration " \
+                             "-framework CFNetwork -framework MobileCoreServices -l z.1"
+        }
+      ],
     ].each do |name, patterns, expected_patterns, xcconfig|
       Pod::Source.reset!
       Pod::Spec::Set.reset!
