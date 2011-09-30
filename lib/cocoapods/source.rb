@@ -20,8 +20,8 @@ module Pod
       result = all.map { |s| s.search_by_name(query, full_text_search) }.flatten
       if result.empty?
         extra = ", summary, or description" if full_text_search
-        raise(Informative, "Unable to find a pod who's name" \
-                           "#{extra} matches `#{query}'")
+        raise(Informative, "Unable to find a pod with name" \
+                           "#{extra} matching `#{query}'")
       end
       result
     end
