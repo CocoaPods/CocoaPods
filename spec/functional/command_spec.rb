@@ -64,7 +64,7 @@ describe "Pod::Command" do
     config.repos_dir = tmp_repos_path
   end
 
-  it "searches for a pod who's name matches the given query ignoring case" do
+  it "searches for a pod with name matching the given query ignoring case" do
     [
       [
         ' s ',
@@ -96,7 +96,7 @@ describe "Pod::Command" do
     end
   end
 
-  it "searches for a pod who's name, summary, or description matches the given query ignoring case" do
+  it "searches for a pod with name, summary, or description matching the given query ignoring case" do
     [
       [
         'systemCONfiguration',
