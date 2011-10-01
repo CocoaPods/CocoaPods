@@ -125,7 +125,13 @@ module Pod
       if part_of_other_pod?
         part_of_specification.pod_destroot
       else
-        config.project_pods_root + "#{@name}-#{@version}"
+        config.project_pods_root + @name
+      end
+    end
+
+    def pod_destroot_name
+      if root = pod_destroot
+        root.basename
       end
     end
 
@@ -135,6 +141,56 @@ module Pod
 
     def from_podfile?
       @name.nil? && @version.nil?
+    end
+
+    # Returns all source files of this pod including header files.
+    def expanded_source_files
+      files = []
+      source_files.each do |pattern|
+        pattern = pod_destroot + pattern
+        pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
+        pattern.glob.each do |file|
+          files << file.relative_path_from(pod_destroot)
+        end
+      end
+      files
+    end
+
+    def implementation_files
+      expanded_source_files.select { |f| f.extname != '.h' }
+    end
+
+    # Returns only the header files of this pod.
+    def header_files
+      expanded_source_files.select { |f| f.extname == '.h' }
+    end
+
+    # This method takes a header path and returns the location it should have
+    # in the pod's header dir.
+    #
+    # By default all headers are copied to the pod's header dir without any
+    # namespacing. You can, however, override this method in the podspec, or
+    # copy_header_mappings for full control.
+    def copy_header_mapping(from)
+      from.basename
+    end
+
+    # See copy_header_mapping.
+    def copy_header_mappings
+      header_files.inject({}) do |mappings, from|
+        to = copy_header_mapping(from)
+        (mappings[to.dirname.to_s] ||= []) << from
+        mappings
+      end
+    end
+
+    # Returns a list of search paths where the pod's headers can be found. This
+    # includes the pod's header dir root and any other directories that might
+    # have been added by overriding the copy_header_mapping/copy_header_mappings
+    # methods.
+    def user_header_search_paths
+      dirs = [@name] + copy_header_mappings.keys.reject { |d| d == '.' }.map { |subdir| "#{@name}/#{subdir}" }
+      dirs.map { |dir| %{"$(BUILT_PRODUCTS_DIR)/Pods/#{dir}"} }.uniq
     end
 
     def to_s

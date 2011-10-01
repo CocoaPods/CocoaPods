@@ -32,19 +32,6 @@ module Pod
       source_files
     end
 
-    def grouped_source_files_for_spec(spec)
-      grouped_files = {}
-      spec.source_files.each do |pattern|
-        pattern = spec.pod_destroot + pattern
-        pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
-        pattern.glob.each do |file|
-          file = file.relative_path_from(config.project_pods_root)
-          (grouped_files[file.dirname.to_s] ||= []) << file
-        end
-      end
-      grouped_files
-    end
-    
     def xcconfig
       @xcconfig ||= Xcode::Config.new({
         # In a workspace this is where the static library headers should be found
@@ -61,15 +48,25 @@ module Pod
 
     def generate_project
       build_specification_sets.each do |set|
-        xcconfig << { 'USER_HEADER_SEARCH_PATHS' => %{"$(BUILT_PRODUCTS_DIR)/Pods/#{set.name}"} }
-        xcodeproj.add_group(set.name)
-        grouped_source_files_for_spec(set.specification).each do |dir, files|
-          copy_phase_uuid = xcodeproj.add_copy_header_build_phase(set.name, dir)
+        spec = set.specification
+        xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => spec.user_header_search_paths.join(" "))
+        xcconfig.merge!(spec.xcconfig)
+        xcodeproj.add_group(spec.name)
+
+        # Only add implementation files to the compile phase
+        spec.implementation_files.each do |file|
+          xcodeproj.add_source_file(spec.pod_destroot_name + file, spec.name)
+        end
+
+        # Add header files to a `copy header build phase` for each destination
+        # directory in the pod's header directory.
+        set.specification.copy_header_mappings.each do |header_dir, files|
+          header_dir = spec.pod_destroot_name + header_dir
+          copy_phase_uuid = xcodeproj.add_copy_header_build_phase(spec.name, header_dir)
           files.each do |file|
-            xcodeproj.add_source_file(file, set.name, copy_phase_uuid)
+            xcodeproj.add_source_file(spec.pod_destroot_name + file, spec.name, copy_phase_uuid)
           end
         end
-        xcconfig << set.specification.xcconfig
       end
     end
 

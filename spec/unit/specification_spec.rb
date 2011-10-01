@@ -41,7 +41,7 @@ describe "A Pod::Specification loaded from a podspec" do
   end
 
   it "returns the directory where the pod should be checked out to" do
-    @spec.pod_destroot.should == config.project_pods_root + 'BananaLib-1.0'
+    @spec.pod_destroot.should == config.project_pods_root + 'BananaLib'
   end
 
   it "returns the pod's name" do
@@ -153,6 +153,75 @@ describe "A Pod::Specification that's part of another pod's source" do
   #it "returns the destroot of the pod that it's part of" do
   #  @spec.pod_destroot
   #end
+end
+
+
+describe "A Pod::Specification, with installed source," do
+  before do
+    config.project_pods_root = fixture('integration')
+    podspec   = fixture('spec-repos/master/SSZipArchive/0.1.0/SSZipArchive.podspec')
+    @spec     = Pod::Specification.from_podspec(podspec)
+    @destroot = fixture('integration/SSZipArchive')
+ end
+
+  after do
+    config.project_pods_root = nil
+  end
+
+  it "returns the list of files that the source_files pattern expands to" do
+    files = @destroot.glob('**/*.{h,c,m}')
+    files = files.map { |file| file.relative_path_from(@destroot) }
+    @spec.expanded_source_files.sort.should == files.sort
+  end
+
+  it "returns the list of headers" do
+    files = @destroot.glob('**/*.h')
+    files = files.map { |file| file.relative_path_from(@destroot) }
+    @spec.header_files.sort.should == files.sort
+  end
+
+  it "returns the list of implementation files" do
+    files = @destroot.glob('**/*.{c,m}')
+    files = files.map { |file| file.relative_path_from(@destroot) }
+    @spec.implementation_files.sort.should == files.sort
+  end
+
+  it "returns a hash of mappings from the pod's destroot to its header dirs, which by default is just the pod's header dir" do
+    @spec.copy_header_mappings.size.should == 1
+    @spec.copy_header_mappings['.'].sort.should == %w{
+      SSZipArchive.h
+      minizip/crypt.h
+      minizip/ioapi.h
+      minizip/mztools.h
+      minizip/unzip.h
+      minizip/zip.h
+    }.map { |f| Pathname.new(f) }.sort
+  end
+
+  it "allows for customization of header mappings by overriding copy_header_mapping" do
+    def @spec.copy_header_mapping(from)
+      Pathname.new('ns') + from.basename
+    end
+    @spec.copy_header_mappings.size.should == 1
+    @spec.copy_header_mappings['ns'].sort.should == %w{
+      SSZipArchive.h
+      minizip/crypt.h
+      minizip/ioapi.h
+      minizip/mztools.h
+      minizip/unzip.h
+      minizip/zip.h
+    }.map { |f| Pathname.new(f) }.sort
+  end
+
+  it "returns the user header search paths" do
+    def @spec.copy_header_mapping(from)
+      Pathname.new('ns') + from.basename
+    end
+    @spec.user_header_search_paths.should == %w{
+      "$(BUILT_PRODUCTS_DIR)/Pods/SSZipArchive"
+      "$(BUILT_PRODUCTS_DIR)/Pods/SSZipArchive/ns"
+    }
+  end
 end
 
 describe "A Pod::Specification, in general," do
