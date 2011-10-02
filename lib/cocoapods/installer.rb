@@ -47,27 +47,31 @@ module Pod
     end
 
     def generate_project
+      puts "==> Generating Xcode project and xcconfig" unless config.silent?
+      user_header_search_paths = []
       build_specification_sets.each do |set|
         spec = set.specification
-        xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => spec.user_header_search_paths.join(" "))
         xcconfig.merge!(spec.xcconfig)
         xcodeproj.add_group(spec.name)
 
         # Only add implementation files to the compile phase
         spec.implementation_files.each do |file|
-          xcodeproj.add_source_file(spec.pod_destroot_name + file, spec.name)
+          xcodeproj.add_source_file(file, spec.name)
         end
 
         # Add header files to a `copy header build phase` for each destination
         # directory in the pod's header directory.
         set.specification.copy_header_mappings.each do |header_dir, files|
-          header_dir = spec.pod_destroot_name + header_dir
           copy_phase_uuid = xcodeproj.add_copy_header_build_phase(spec.name, header_dir)
           files.each do |file|
-            xcodeproj.add_source_file(spec.pod_destroot_name + file, spec.name, copy_phase_uuid)
+            xcodeproj.add_source_file(file, spec.name, copy_phase_uuid)
           end
         end
+
+        # Collect all header search paths
+        user_header_search_paths.concat(spec.user_header_search_paths)
       end
+      xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
     end
 
     # TODO we need a spec that tests that all dependencies are first downloaded/installed

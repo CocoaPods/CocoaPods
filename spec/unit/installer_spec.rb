@@ -43,7 +43,6 @@ describe "Pod::Installer" do
         { 'ASIHTTPRequest' => "Classes/*.{h,m}", 'ASIWebPageRequest' => "Classes/ASIWebPageRequest/*.{h,m}", 'Reachability' => "External/Reachability/*.{h,m}" },
         {
           "USER_HEADER_SEARCH_PATHS" => '"$(BUILT_PRODUCTS_DIR)/Pods" ' \
-                                        '"$(BUILT_PRODUCTS_DIR)/Pods/ASIWebPageRequest" ' \
                                         '"$(BUILT_PRODUCTS_DIR)/Pods/ASIHTTPRequest" ' \
                                         '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
           "ALWAYS_SEARCH_USER_PATHS" => "YES",

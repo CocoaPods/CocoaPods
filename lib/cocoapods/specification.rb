@@ -1,5 +1,9 @@
 module Pod
-  class Specification
+  def self._eval_podspec(path)
+    eval(path.read, nil, path.to_s)
+  end
+
+ class Specification
     autoload :Set, 'cocoapods/specification/set'
 
     def self.from_podfile(path)
@@ -12,7 +16,7 @@ module Pod
     end
 
     def self.from_podspec(path)
-      spec = eval(path.read, nil, path.to_s)
+      spec = Pod._eval_podspec(path)
       spec.defined_in_file = path
       spec
     end
@@ -95,6 +99,13 @@ module Pod
     end
     alias_method :library=, :libraries=
 
+    def header_dir=(dir)
+      @header_dir = Pathname.new(dir)
+    end
+    def header_dir
+      @header_dir || pod_destroot_name
+    end
+
     # Not attributes
 
     include Config::Mixin
@@ -150,7 +161,7 @@ module Pod
         pattern = pod_destroot + pattern
         pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
         pattern.glob.each do |file|
-          files << file.relative_path_from(pod_destroot)
+          files << file.relative_path_from(config.project_pods_root)
         end
       end
       files
@@ -178,8 +189,9 @@ module Pod
     # See copy_header_mapping.
     def copy_header_mappings
       header_files.inject({}) do |mappings, from|
-        to = copy_header_mapping(from)
-        (mappings[to.dirname.to_s] ||= []) << from
+        from_without_prefix = from.relative_path_from(pod_destroot_name)
+        to = header_dir + copy_header_mapping(from_without_prefix)
+        (mappings[to.dirname] ||= []) << from
         mappings
       end
     end
@@ -189,8 +201,8 @@ module Pod
     # have been added by overriding the copy_header_mapping/copy_header_mappings
     # methods.
     def user_header_search_paths
-      dirs = [@name] + copy_header_mappings.keys.reject { |d| d == '.' }.map { |subdir| "#{@name}/#{subdir}" }
-      dirs.map { |dir| %{"$(BUILT_PRODUCTS_DIR)/Pods/#{dir}"} }.uniq
+      dirs = [header_dir] + copy_header_mappings.keys
+      dirs.map { |dir| %{"$(BUILT_PRODUCTS_DIR)/Pods/#{dir}"} }
     end
 
     def to_s
