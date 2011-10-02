@@ -1,0 +1,2 @@
+dependency 'RestKit-ObjectMapping'
+dependency 'RestKit-JSON-JSONKit'
