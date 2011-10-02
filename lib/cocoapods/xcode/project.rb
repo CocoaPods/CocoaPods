@@ -78,7 +78,7 @@ module Pod
           "children" => []
         })
         add_object_to_group(group_uuid, 'Pods')
-        add_copy_header_build_phase(name)
+        group_uuid
       end
 
       def create_in(pods_root)
