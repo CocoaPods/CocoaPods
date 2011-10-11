@@ -52,19 +52,19 @@ module Pod
       build_specification_sets.each do |set|
         spec = set.specification
         xcconfig.merge!(spec.xcconfig)
-        xcodeproj.add_group(spec.name)
+        group = xcodeproj.add_pod_group(spec.name)
 
         # Only add implementation files to the compile phase
         spec.implementation_files.each do |file|
-          xcodeproj.add_source_file(file, spec.name, nil, spec.compiler_flags)
+          group.add_source_file(file, nil, spec.compiler_flags)
         end
 
         # Add header files to a `copy header build phase` for each destination
         # directory in the pod's header directory.
         set.specification.copy_header_mappings.each do |header_dir, files|
-          copy_phase_uuid = xcodeproj.add_copy_header_build_phase(spec.name, header_dir)
+          copy_phase = xcodeproj.add_copy_header_build_phase(spec.name, header_dir)
           files.each do |file|
-            xcodeproj.add_source_file(file, spec.name, copy_phase_uuid)
+            group.add_source_file(file, copy_phase)
           end
         end
 

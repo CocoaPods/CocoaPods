@@ -130,6 +130,11 @@ module Pod
         alias_method :file_uuids, :files
         alias_method :file_uuids=, :files=
 
+        def initialize(project, uuid, attributes)
+          super
+          self.file_uuids ||= []
+        end
+
         def files
           list_by_class(file_uuids, PBXBuildFile)
         end
@@ -307,7 +312,7 @@ module Pod
            "runOnlyForDeploymentPostprocessing" => "0",
         })
         targets.first.buildPhases << phase
-        phase.uuid
+        phase
       end
 
       # A silly hack to pretty print the objects hash from MacRuby.

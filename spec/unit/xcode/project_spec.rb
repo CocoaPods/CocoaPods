@@ -144,14 +144,14 @@ describe "Pod::Xcode::Project" do
   end
 
   it "creates a copy build header phase which will copy headers to a specified path" do
-    phase_uuid = @project.add_copy_header_build_phase("SomePod", "Path/To/Source")
+    phase = @project.add_copy_header_build_phase("SomePod", "Path/To/Source")
     find_object({
       'isa' => 'PBXCopyFilesBuildPhase',
       'dstPath' => '$(PUBLIC_HEADERS_FOLDER_PATH)/Path/To/Source',
       'name' => 'Copy SomePod Public Headers'
     }).should.not == nil
     target = @project.targets.first
-    target.attributes['buildPhases'].should.include phase_uuid
+    target.attributes['buildPhases'].should.include phase.uuid
   end
 
   it "adds a `h' file as a build file and adds it to the `headers build' phase list" do
