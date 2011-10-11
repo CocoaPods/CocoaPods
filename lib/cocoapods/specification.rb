@@ -106,6 +106,15 @@ module Pod
       @header_dir || pod_destroot_name
     end
 
+    attr_accessor :requires_arc
+
+    attr_writer :compiler_flags
+    def compiler_flags
+      flags = "#{@compiler_flags} "
+      flags << '-fobj-arc' if @requires_arc
+      flags
+    end
+
     # Not attributes
 
     include Config::Mixin
