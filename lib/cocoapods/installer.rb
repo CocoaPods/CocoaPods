@@ -56,7 +56,7 @@ module Pod
 
         # Only add implementation files to the compile phase
         spec.implementation_files.each do |file|
-          xcodeproj.add_source_file(file, spec.name)
+          xcodeproj.add_source_file(file, spec.name, nil, spec.compiler_flags)
         end
 
         # Add header files to a `copy header build phase` for each destination

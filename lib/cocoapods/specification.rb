@@ -106,6 +106,11 @@ module Pod
       @header_dir || pod_destroot_name
     end
 
+    def compiler_flags=(flags)
+      @compiler_flags = flags
+    end
+    attr_reader :compiler_flags
+
     # Not attributes
 
     include Config::Mixin
