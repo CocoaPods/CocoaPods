@@ -7,15 +7,90 @@ describe "Pod::Xcode::Project" do
     @project = Pod::Xcode::Project.ios_static_library
   end
 
+  def find_objects(conditions)
+    @project.objects_hash.select do |_, object|
+      object.objectsForKeys(conditions.keys, notFoundMarker:Object.new) == conditions.values
+    end
+  end
+
+  def find_object(conditions)
+    find_objects(conditions).first
+  end
+
   it "returns an instance initialized from the iOS static library template" do
     template_dir = Pod::Xcode::Project::TEMPLATES_DIR + 'cocoa-touch-static-library'
     template_file = (template_dir + 'Pods.xcodeproj/project.pbxproj').to_s
     @project.to_hash.should == NSDictionary.dictionaryWithContentsOfFile(template_file)
   end
 
+  it "returns the objects hash" do
+    @project.objects_hash.should == @project.to_hash['objects']
+  end
+
+  describe "PBXObject" do
+    before do
+      @object = Pod::Xcode::Project::PBXObject.new(@project.objects, nil, 'name' => 'AnObject')
+    end
+
+    it "merges the class name into the attributes" do
+      @object.isa.should == 'PBXObject'
+      @object.attributes['isa'].should == 'PBXObject'
+    end
+
+    it "takes a name" do
+      @object.name.should == 'AnObject'
+      @object.name = 'AnotherObject'
+      @object.name.should == 'AnotherObject'
+    end
+
+    it "generates a uuid" do
+      @object.uuid.should.be.instance_of String
+      @object.uuid.size.should == 24
+      @object.uuid.should == @object.uuid
+    end
+  end
+
+  it "returns the objects as PBXObject instances" do
+    @project.objects.each do |object|
+      @project.objects_hash[object.uuid].should == object.attributes
+    end
+  end
+
+  it "adds any type of new PBXObject to the objects hash" do
+    object = @project.objects.add(Pod::Xcode::Project::PBXObject, 'name' => 'An Object')
+    object.name.should == 'An Object'
+    @project.objects_hash[object.uuid].should == object.attributes
+  end
+
+  it "adds a new PBXObject, of the configured type, to the objects hash" do
+    group = @project.groups.new('name' => 'A new group')
+    group.isa.should == 'PBXGroup'
+    group.name.should == 'A new group'
+    @project.objects_hash[group.uuid].should == group.attributes
+  end
+
+  it "adds a new PBXFileReference to the objects hash" do
+    file = @project.files.new('path' => '/some/file.m')
+    file.isa.should == 'PBXFileReference'
+    file.name.should == 'file.m'
+    file.path.should == '/some/file.m'
+    file.sourceTree.should == 'SOURCE_ROOT'
+    @project.objects_hash[file.uuid].should == file.attributes
+  end
+
+  it "adds a new PBXBuildFile to the objects hash when a new PBXFileReference is created" do
+    file = @project.files.new('name' => '/some/source/file.h')
+    build_file = file.build_file
+    build_file.file = file
+    build_file.fileRef.should == file.uuid
+    build_file.isa.should == 'PBXBuildFile'
+    @project.objects_hash[build_file.uuid].should == build_file.attributes
+  end
+
   it "adds a group to the `Pods' group" do
-    @project.add_group('JSONKit')
-    @project.find_object({
+    group = @project.add_pod_group('JSONKit')
+    @project.pods.children.should.include group.uuid
+    find_object({
       'isa' => 'PBXGroup',
       'name' => 'JSONKit',
       'sourceTree' => '<group>',
@@ -25,32 +100,32 @@ describe "Pod::Xcode::Project" do
 
   it "adds an `m' or `c' file as a build file, adds it to the specified group, and adds it to the `sources build' phase list" do
     file_ref_uuids, build_file_uuids = [], []
-    group_uuid = @project.add_group('SomeGroup')
-    group = @project.to_hash['objects'][group_uuid]
+    group = @project.add_pod_group('SomeGroup')
 
     %w{ m mm c cpp }.each do |ext|
       path = Pathname.new("path/to/file.#{ext}")
-      file_ref_uuid = @project.add_source_file(path, 'SomeGroup')
-      @project.to_hash['objects'][file_ref_uuid].should == {
+      file = group.add_source_file(path)
+
+      @project.objects_hash[file.uuid].should == {
         'name'       => path.basename.to_s,
         'isa'        => 'PBXFileReference',
         'sourceTree' => 'SOURCE_ROOT',
         'path'       => path.to_s
       }
-      file_ref_uuids << file_ref_uuid
+      file_ref_uuids << file.uuid
 
-      build_file_uuid, _ = @project.find_object({
+      build_file_uuid, _ = find_object({
         'isa' => 'PBXBuildFile',
-        'fileRef' => file_ref_uuid
+        'fileRef' => file.uuid
       })
       build_file_uuids << build_file_uuid
 
-      group['children'].should == file_ref_uuids
+      group.children.should == file_ref_uuids
 
-      _, object = @project.find_object('isa' => 'PBXSourcesBuildPhase')
+      _, object = find_object('isa' => 'PBXSourcesBuildPhase')
       object['files'].should == build_file_uuids
 
-      _, object = @project.find_object('isa' => 'PBXHeadersBuildPhase')
+      _, object = find_object('isa' => 'PBXHeadersBuildPhase')
       object['files'].should.not.include build_file_uuid
     end
   end
@@ -59,10 +134,10 @@ describe "Pod::Xcode::Project" do
     build_file_uuids = []
     %w{ m mm c cpp }.each do |ext|
       path = Pathname.new("path/to/file.#{ext}")
-      file_ref_uuid = @project.add_source_file(path, 'Pods', nil, '-fno-obj-arc')
-      @project.find_object({
+      file = @project.pods.add_source_file(path, nil, '-fno-obj-arc')
+      find_object({
         'isa' => 'PBXBuildFile',
-        'fileRef' => file_ref_uuid,
+        'fileRef' => file.uuid,
         'settings' => {'COMPILER_FLAGS' => '-fno-obj-arc' }
       }).should.not == nil
     end
@@ -70,36 +145,35 @@ describe "Pod::Xcode::Project" do
 
   it "creates a copy build header phase which will copy headers to a specified path" do
     phase_uuid = @project.add_copy_header_build_phase("SomePod", "Path/To/Source")
-    @project.find_object({
+    find_object({
       'isa' => 'PBXCopyFilesBuildPhase',
       'dstPath' => '$(PUBLIC_HEADERS_FOLDER_PATH)/Path/To/Source',
       'name' => 'Copy SomePod Public Headers'
     }).should.not == nil
-
-    _, target = @project.objects_by_isa('PBXNativeTarget').first
-    target['buildPhases'].should.include phase_uuid
+    target = @project.targets.first
+    target.attributes['buildPhases'].should.include phase_uuid
   end
 
   it "adds a `h' file as a build file and adds it to the `headers build' phase list" do
-    @project.add_group('SomeGroup')
+    group = @project.groups.new('name' => 'SomeGroup')
     path = Pathname.new("path/to/file.h")
-    file_ref_uuid = @project.add_source_file(path, 'SomeGroup')
-    @project.to_hash['objects'][file_ref_uuid].should == {
+    file = group.add_source_file(path)
+    @project.objects_hash[file.uuid].should == {
       'name'       => path.basename.to_s,
       'isa'        => 'PBXFileReference',
       'sourceTree' => 'SOURCE_ROOT',
       'path'       => path.to_s
     }
-    build_file_uuid, _ = @project.find_object({
+    build_file_uuid, _ = find_object({
       'isa' => 'PBXBuildFile',
-      'fileRef' => file_ref_uuid
+      'fileRef' => file.uuid
     })
 
-    #_, object = @project.find_object('isa' => 'PBXHeadersBuildPhase')
-    _, object = @project.find_object('isa' => 'PBXCopyFilesBuildPhase')
+    #_, object = find_object('isa' => 'PBXHeadersBuildPhase')
+    _, object = find_object('isa' => 'PBXCopyFilesBuildPhase')
     object['files'].should == [build_file_uuid]
 
-    _, object = @project.find_object('isa' => 'PBXSourcesBuildPhase')
+    _, object = find_object('isa' => 'PBXSourcesBuildPhase')
     object['files'].should.not.include build_file_uuid
   end
 
@@ -112,9 +186,9 @@ describe "Pod::Xcode::Project" do
   end
 
   it "returns all source files" do
-    @project.add_group('SomeGroup')
+    group = @project.groups.new('name' => 'SomeGroup')
     files = [Pathname.new('/some/file.h'), Pathname.new('/some/file.m')]
-    files.each { |file| @project.add_source_file(file, 'SomeGroup') }
-    @project.source_files['SomeGroup'].sort.should == files.sort
+    files.each { |file| group.add_source_file(file) }
+    group.source_files.map(&:pathname).sort.should == files.sort
   end
 end
