@@ -74,6 +74,11 @@ module Pod
     end
     attr_reader :source_files
 
+    def clean_paths=(*patterns)
+      @clean_paths = patterns.flatten.map { |p| Pathname.new(p) }
+    end
+    attr_reader :clean_paths
+
     def dependency(*name_and_version_requirements)
       name, *version_requirements = name_and_version_requirements.flatten
       dep = Dependency.new(name, *version_requirements)
@@ -292,7 +297,7 @@ module Pod
     def download!
       downloader = Downloader.for_source(pod_destroot, @source)
       downloader.download
-      downloader.clean if config.clean
+      downloader.clean(clean_paths) if config.clean
     end
 
   end
