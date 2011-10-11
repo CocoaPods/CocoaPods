@@ -123,6 +123,14 @@ describe "A Pod::Specification loaded from a podspec" do
   it "never equals when it's from a Podfile" do
     Pod::Spec.new.should.not == Pod::Spec.new
   end
+
+  it "adds compiler flags if ARC is required" do
+    @spec.requires_arc = true
+    @spec.compiler_flags.should == " -fobj-arc"
+
+    @spec.compiler_flags = "-Wunused-value"
+    @spec.compiler_flags.should == "-Wunused-value -fobj-arc"
+  end
 end
 
 describe "A Pod::Specification that's part of another pod's source" do
