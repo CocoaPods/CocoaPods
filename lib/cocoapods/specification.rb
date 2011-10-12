@@ -115,6 +115,8 @@ module Pod
       flags
     end
 
+    attr_accessor :platform
+
     # Not attributes
 
     include Config::Mixin
@@ -161,6 +163,10 @@ module Pod
 
     def from_podfile?
       @name.nil? && @version.nil?
+    end
+
+    def any_platform?
+      @platform.nil?
     end
 
     # Returns all source files of this pod including header files.
@@ -227,18 +233,24 @@ module Pod
     end
 
     def validate!
-      attrs = []
-      attrs << "`name'"                       unless @name
-      attrs << "`version'"                    unless @version
-      attrs << "`summary'"                    unless @summary
-      attrs << "`homepage'"                   unless @homepage
-      attrs << "`author(s)'"                  unless @authors
-      attrs << "either `source' or `part_of'" unless @source || @part_of
-      attrs << "`source_files'"               unless @source_files
-      unless attrs.empty?
-        raise Informative, "The following required " \
-          "#{attrs.size == 1 ? 'attribute is' : 'attributes are'} " \
-          "missing: #{attrs.join(", ")}"
+      missing = []
+      missing << "`name'"                       unless @name
+      missing << "`version'"                    unless @version
+      missing << "`summary'"                    unless @summary
+      missing << "`homepage'"                   unless @homepage
+      missing << "`author(s)'"                  unless @authors
+      missing << "either `source' or `part_of'" unless @source || @part_of
+      missing << "`source_files'"               unless @source_files
+
+      incorrect = []
+      allowed = [nil, :ios, :osx]
+      incorrect << ["`platform'", allowed] unless allowed.include?(@platform)
+
+      unless missing.empty? && incorrect.empty?
+        message = "The following #{(missing + incorrect).size == 1 ? 'attribute is' : 'attributes are'}:\n"
+        message << "* missing: #{missing.join(", ")}" unless missing.empty?
+        message << "* incorrect: #{incorrect.map { |x| "#{x[0]} (#{x[1..-1]})" }.join(", ")}" unless incorrect.empty?
+        raise Informative, message
       end
     end
 

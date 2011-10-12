@@ -131,6 +131,7 @@ describe "A Pod::Specification loaded from a podspec" do
     @spec.compiler_flags = "-Wunused-value"
     @spec.compiler_flags.should == "-Wunused-value -fobj-arc"
   end
+
 end
 
 describe "A Pod::Specification that's part of another pod's source" do
@@ -256,10 +257,33 @@ describe "A Pod::Specification, with installed source," do
 end
 
 describe "A Pod::Specification, in general," do
+  before do
+    @spec = Pod::Spec.new
+  end
+
+  def validate(&block)
+    Proc.new(&block).should.raise(Pod::Informative)
+  end
+
   it "raises if the specification does not contain the minimum required attributes" do
-    exception = lambda {
-      Pod::Spec.new.validate!
-    }.should.raise Pod::Informative
+    exception = validate { @spec.validate! }
     exception.message =~ /name.+?version.+?summary.+?homepage.+?authors.+?(source|part_of).+?source_files/
+  end
+
+  it "raises if the platform is unrecognized" do
+    validate { @spec.validate! }.message.should.not.include 'platform'
+    @spec.platform = :ios
+    validate { @spec.validate! }.message.should.not.include 'platform'
+    @spec.platform = :osx
+    validate { @spec.validate! }.message.should.not.include 'platform'
+    @spec.platform = :windows
+    validate { @spec.validate! }.message.should.include 'platform'
+ end
+
+  it "returns the platform that the static library should be build for" do
+    @spec.should.be.any_platform
+    @spec.platform = :ios
+    @spec.platform.should == :ios
+    @spec.should.not.be.any_platform
   end
 end
