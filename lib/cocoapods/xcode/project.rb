@@ -223,9 +223,15 @@ module Pod
       file = $LOADED_FEATURES.find { |file| file =~ %r{cocoapods/xcode/project\.rbo?$} }
       TEMPLATES_DIR = Pathname.new(::File.expand_path('../../../../xcode-project-templates', file))
 
-      # TODO see if we really need different templates for iOS and OS X
-      def self.ios_static_library
-        new TEMPLATES_DIR + 'cocoa-touch-static-library'
+      def self.static_library(platform)
+        case platform
+        when :osx
+          new TEMPLATES_DIR + 'cocoa-static-library'
+        when :ios
+          new TEMPLATES_DIR + 'cocoa-touch-static-library'
+        else
+          raise "No Xcode project template exists for the platform `#{platform.inspect}'"
+        end
       end
 
       def initialize(template_dir)

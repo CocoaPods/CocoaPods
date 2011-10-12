@@ -43,7 +43,7 @@ module Pod
     end
 
     def xcodeproj
-      @xcodeproj ||= Xcode::Project.ios_static_library
+      @xcodeproj ||= Xcode::Project.static_library(@specification.platform)
     end
 
     def generate_project

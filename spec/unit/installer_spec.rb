@@ -55,7 +55,11 @@ describe "Pod::Installer" do
       Pod::Source.reset!
       Pod::Spec::Set.reset!
 
-      installer = Pod::Installer.new(Pod::Spec.new { |s| s.dependency(name); s.source_files = *patterns })
+      installer = Pod::Installer.new(Pod::Spec.new do |s|
+        s.platform = :ios
+        s.dependency(name)
+        s.source_files = *patterns
+      end)
       destroot = stubbed_destroot(installer)
       installer.generate_project
 

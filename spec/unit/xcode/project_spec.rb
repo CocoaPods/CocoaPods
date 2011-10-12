@@ -4,7 +4,7 @@ describe "Pod::Xcode::Project" do
   extend SpecHelper::TemporaryDirectory
 
   before do
-    @project = Pod::Xcode::Project.ios_static_library
+    @project = Pod::Xcode::Project.static_library(:ios)
   end
 
   def find_objects(conditions)

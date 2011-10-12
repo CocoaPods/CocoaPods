@@ -1,2 +1,1 @@
 * The user *has* to specify the platform of the project in the Podfile.
-* Based on the platform setting of the Podfile the appropriate xcode project template should be used.

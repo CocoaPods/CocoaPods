@@ -33,7 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				518ACD53144605B400F6BE80 /* Pods.xcconfig */,
-				518ACD441446050200F6BE80 /* Pods */,
+				518ACD5B1446449B00F6BE80 /* Pods */,
 				518ACD3D1446050200F6BE80 /* Frameworks */,
 				518ACD3C1446050200F6BE80 /* Products */,
 			);
@@ -55,20 +55,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		518ACD441446050200F6BE80 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				518ACD451446050200F6BE80 /* Supporting Files */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		518ACD451446050200F6BE80 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				518ACD461446050200F6BE80 /* Pods-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		518ACD5B1446449B00F6BE80 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				518ACD451446050200F6BE80 /* Supporting Files */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
