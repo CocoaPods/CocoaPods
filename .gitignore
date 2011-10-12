@@ -3,7 +3,12 @@
 *.rbo
 *.gem
 .DS_Store
+xcuserdata
+project.xcworkspace
+DerivedData
 tmp
+examples/Podfile
 examples/Pods
+examples/**/Pods
 spec/fixtures/banana-lib
 spec/fixtures/spec-repos/master
