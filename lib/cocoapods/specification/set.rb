@@ -54,7 +54,7 @@ module Pod
       end
 
       def specification
-        Specification.from_podspec(specification_path)
+        Specification.from_file(specification_path)
       end
 
       # Return the first version that matches the current dependency.

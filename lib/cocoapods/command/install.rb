@@ -30,13 +30,13 @@ module Pod
         spec = nil
         if @podspec
           if @podspec.exist?
-            spec = Specification.from_podspec(@podspec)
+            spec = Specification.from_file(@podspec)
           else
             raise Informative, "The specified podspec `#{@podspec}' doesn't exist."
           end
         else
           if config.project_podfile
-            spec = Specification.from_podfile(config.project_podfile)
+            spec = Specification.from_file(config.project_podfile)
           else
             raise Informative, "No `Podfile' or `.podspec' file found in the current working directory."
           end

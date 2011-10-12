@@ -55,7 +55,7 @@ module Pod
 
       def lint
         file = @name ? Pathname.new(@name) : Pathname.pwd.glob('*.podspec').first
-        spec = Specification.from_podspec(file)
+        spec = Specification.from_file(file)
         spec.validate!
       end
     end

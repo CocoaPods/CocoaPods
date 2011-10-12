@@ -2,7 +2,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "A Pod::Specification loaded from a Podfile" do
   before do
-    @spec = Pod::Specification.from_podfile(fixture('Podfile'))
+    @spec = Pod::Specification.from_file(fixture('Podfile'))
   end
 
   it "lists the project's dependencies" do
@@ -19,7 +19,7 @@ describe "A Pod::Specification loaded from a Podfile" do
   end
 
   it "returns that it's loaded from a Podfile" do
-    @spec.should.be.from_podfile
+    @spec.should.be.podfile
   end
 
   it "does not have a destroot" do
@@ -29,11 +29,11 @@ end
 
 describe "A Pod::Specification loaded from a podspec" do
   before do
-    @spec = Pod::Specification.from_podspec(fixture('banana-lib/BananaLib.podspec'))
+    @spec = Pod::Specification.from_file(fixture('banana-lib/BananaLib.podspec'))
   end
 
   it "returns that it's not loaded from a podfile" do
-    @spec.should.not.be.from_podfile
+    @spec.should.not.be.podfile
   end
 
   it "returns the path to the podspec" do
@@ -169,7 +169,7 @@ describe "A Pod::Specification, with installed source," do
   before do
     config.project_pods_root = fixture('integration')
     podspec   = fixture('spec-repos/master/SSZipArchive/0.1.0/SSZipArchive.podspec')
-    @spec     = Pod::Specification.from_podspec(podspec)
+    @spec     = Pod::Specification.from_file(podspec)
     @destroot = fixture('integration/SSZipArchive')
  end
 

@@ -6,16 +6,8 @@ module Pod
  class Specification
     autoload :Set, 'cocoapods/specification/set'
 
-    def self.from_podfile(path)
-      if path.exist?
-        spec = new
-        spec.instance_eval(path.read)
-        spec.defined_in_file = path
-        spec
-      end
-    end
-
-    def self.from_podspec(path)
+    # The file is expected to define and return either a Pods::Specification or a Pod::File.
+    def self.from_file(path)
       spec = Pod._eval_podspec(path)
       spec.defined_in_file = path
       spec
@@ -143,7 +135,6 @@ module Pod
     end
 
     def pod_destroot
-      return if from_podfile?
       if part_of_other_pod?
         part_of_specification.pod_destroot
       else
@@ -161,8 +152,8 @@ module Pod
       !@part_of.nil?
     end
 
-    def from_podfile?
-      @name.nil? && @version.nil?
+    def podfile?
+      false
     end
 
     def any_platform?
@@ -221,11 +212,7 @@ module Pod
     end
 
     def to_s
-      if from_podfile?
-        "podfile at `#{@defined_in_file}'"
-      else
-        "`#{@name}' version `#{@version}'"
-      end
+      "`#{@name}' version `#{@version}'"
     end
 
     def inspect
@@ -310,4 +297,18 @@ module Pod
   end
 
   Spec = Specification
+
+  class File < Specification
+    def podfile?
+      true
+    end
+
+    def to_s
+      "podfile at `#{@defined_in_file}'"
+    end
+
+    def pod_destroot
+      # A Podfile has none
+    end
+  end
 end

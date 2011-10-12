@@ -43,7 +43,7 @@ describe "Pod::Command" do
       command('spec', 'create', 'Bananas')
     end
     path = temporary_directory + 'Bananas.podspec'
-    spec = Pod::Specification.from_podspec(path)
+    spec = Pod::Specification.from_file(path)
     spec.name.should == 'Bananas'
     spec.version.should == Pod::Version.new('1.0.0')
     spec.summary.should == 'A short description of Bananas.'
