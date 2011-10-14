@@ -31,5 +31,14 @@ describe "Pod::Downloader" do
     downloader.clean
     (@dir + '.git').should.not.exist
   end
+
+  it "removes the clean_paths files and directories" do
+    downloader = Pod::Downloader.for_source(@dir,
+      :git => fixture('banana-lib'), :tag => 'v1.0'
+    )
+    downloader.download
+    downloader.clean(['README'])
+    (@dir + 'README').should.not.exist
+  end
 end
 
