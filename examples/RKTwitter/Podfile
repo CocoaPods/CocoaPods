@@ -1,2 +1,5 @@
-dependency 'RestKit-ObjectMapping'
-dependency 'RestKit-JSON-JSONKit'
+Pod::File.new do |f|
+  f.platform = :ios
+  f.dependency 'RestKit-ObjectMapping'
+  f.dependency 'RestKit-JSON-JSONKit'
+end

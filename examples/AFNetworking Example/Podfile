@@ -1,2 +1,5 @@
-dependency 'AFNetworking'
-dependency 'FormatterKit'
+Pod::File.new do |f|
+  f.platform = :ios
+  f.dependency 'AFNetworking'
+  f.dependency 'FormatterKit'
+end
