@@ -190,7 +190,9 @@
 			baseConfigurationReference = 518ACD53144605B400F6BE80 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Pods/Pods-Prefix.pch";
+				GCC_PREFIX_HEADER = "Pods-Prefix.pch";
+				OTHER_LDFLAGS = (
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -200,7 +202,9 @@
 			baseConfigurationReference = 518ACD53144605B400F6BE80 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Pods/Pods-Prefix.pch";
+				GCC_PREFIX_HEADER = "Pods-Prefix.pch";
+				OTHER_LDFLAGS = (
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

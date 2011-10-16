@@ -1,0 +1,4 @@
+Pod::File.new do |f|
+  f.platform = :osx
+  f.dependency 'ASIHTTPRequest'
+end

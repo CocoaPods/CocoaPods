@@ -16,22 +16,6 @@ module Pod
       dependent_specification_sets.reject(&:only_part_of_other_pod?)
     end
 
-    def source_files
-      source_files = {}
-      build_specification_sets.each do |set|
-        spec = set.specification
-        source_files[spec.name] = []
-        spec.source_files.each do |pattern|
-          pattern = spec.pod_destroot + pattern
-          pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
-          pattern.glob.each do |file|
-            source_files[spec.name] << file.relative_path_from(config.project_pods_root)
-          end
-        end
-      end
-      source_files
-    end
-
     def xcconfig
       @xcconfig ||= Xcode::Config.new({
         # In a workspace this is where the static library headers should be found

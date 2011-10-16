@@ -35,9 +35,7 @@ module Pod
             raise Informative, "The specified podspec `#{@podspec}' doesn't exist."
           end
         else
-          if config.project_podfile
-            spec = Specification.from_file(config.project_podfile)
-          else
+          unless spec = config.rootspec
             raise Informative, "No `Podfile' or `.podspec' file found in the current working directory."
           end
         end

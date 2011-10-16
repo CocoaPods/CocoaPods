@@ -10,7 +10,7 @@ module Pod
       @instance = instance
     end
 
-    attr_accessor :repos_dir, :project_pods_root, :clean, :verbose, :silent
+    attr_accessor :repos_dir, :project_pods_root, :rootspec, :clean, :verbose, :silent
     alias_method :clean?,   :clean
     alias_method :verbose?, :verbose
     alias_method :silent?,  :silent
@@ -38,6 +38,22 @@ module Pod
         end
       end
       @project_podfile
+    end
+
+    # Returns the spec at the pat returned from `project_podfile`.
+    def rootspec
+      unless @rootspec
+        @rootspec = Specification.from_file(project_podfile) if project_podfile
+      end
+      @rootspec
+    end
+
+    def ios?
+      rootspec.platform == :ios
+    end
+
+    def osx?
+      rootspec.platform == :osx
     end
 
     module Mixin

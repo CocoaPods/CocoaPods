@@ -1,4 +1,6 @@
 module Pod
+  extend Config::Mixin
+
   def self._eval_podspec(path)
     eval(path.read, nil, path.to_s)
   end
@@ -62,7 +64,7 @@ module Pod
     end
 
     def source_files=(*patterns)
-      @source_files = patterns.flatten.map { |p| Pathname.new(p) }
+      @source_files = patterns.flatten
     end
     attr_reader :source_files
 
@@ -92,7 +94,7 @@ module Pod
 
     def libraries=(*libraries)
       libraries.unshift('')
-      self.xcconfig = { 'OTHER_LDFLAGS' => libraries.join(' -l ').strip }
+      self.xcconfig = { 'OTHER_LDFLAGS' => libraries.join(' -l').strip }
     end
     alias_method :library=, :libraries=
 
@@ -120,8 +122,8 @@ module Pod
 
     def ==(other)
       self.class === other &&
-        @name && @name == other.name &&
-          @version && @version == other.version
+        name && name == other.name &&
+          version && version == other.version
     end
 
     def dependency_by_name(name)
@@ -129,8 +131,8 @@ module Pod
     end
 
     def part_of_specification_set
-      if @part_of
-        Set.by_specification_name(@part_of.name)
+      if part_of
+        Set.by_specification_name(part_of.name)
       end
     end
 
@@ -154,7 +156,7 @@ module Pod
     end
 
     def part_of_other_pod?
-      !@part_of.nil?
+      !part_of.nil?
     end
 
     def podfile?
@@ -162,13 +164,13 @@ module Pod
     end
 
     def any_platform?
-      @platform.nil?
+      platform.nil?
     end
 
     # Returns all source files of this pod including header files.
     def expanded_source_files
       files = []
-      source_files.each do |pattern|
+      [*source_files].each do |pattern|
         pattern = pod_destroot + pattern
         pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
         pattern.glob.each do |file|
@@ -217,7 +219,7 @@ module Pod
     end
 
     def to_s
-      "`#{@name}' version `#{@version}'"
+      "`#{name}' version `#{version}'"
     end
 
     def inspect
@@ -226,17 +228,17 @@ module Pod
 
     def validate!
       missing = []
-      missing << "`name'"                       unless @name
-      missing << "`version'"                    unless @version
-      missing << "`summary'"                    unless @summary
-      missing << "`homepage'"                   unless @homepage
-      missing << "`author(s)'"                  unless @authors
-      missing << "either `source' or `part_of'" unless @source || @part_of
-      missing << "`source_files'"               unless @source_files
+      missing << "`name'"                       unless name
+      missing << "`version'"                    unless version
+      missing << "`summary'"                    unless summary
+      missing << "`homepage'"                   unless homepage
+      missing << "`author(s)'"                  unless authors
+      missing << "either `source' or `part_of'" unless source || part_of
+      missing << "`source_files'"               unless source_files
 
       incorrect = []
       allowed = [nil, :ios, :osx]
-      incorrect << ["`platform'", allowed] unless allowed.include?(@platform)
+      incorrect << ["`platform'", allowed] unless allowed.include?(platform)
 
       unless missing.empty? && incorrect.empty?
         message = "The following #{(missing + incorrect).size == 1 ? 'attribute is' : 'attributes are'}:\n"
@@ -264,7 +266,7 @@ module Pod
       puts "==> Installing: #{self}" unless config.silent?
       config.project_pods_root.mkpath
       require 'fileutils'
-      FileUtils.cp(@defined_in_file, config.project_pods_root)
+      FileUtils.cp(defined_in_file, config.project_pods_root)
 
       # In case this spec is part of another pod's source, we need to dowload
       # the other pod's source.
@@ -294,7 +296,7 @@ module Pod
     #     end
     #   end
     def download!
-      downloader = Downloader.for_source(pod_destroot, @source)
+      downloader = Downloader.for_source(pod_destroot, source)
       downloader.download
       downloader.clean(clean_paths) if config.clean
     end
@@ -309,7 +311,7 @@ module Pod
     end
 
     def to_s
-      "podfile at `#{@defined_in_file}'"
+      "podfile at `#{defined_in_file}'"
     end
 
     def pod_destroot
