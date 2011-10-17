@@ -60,7 +60,9 @@ module Pod
 
     def bridge_support_generator
       BridgeSupportGenerator.new(build_specification_sets.map do |set|
-        set.specification.header_files
+        set.specification.header_files.map do |header|
+          config.project_pods_root + header
+        end
       end.flatten)
     end
 
