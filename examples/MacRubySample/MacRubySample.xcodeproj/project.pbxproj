@@ -16,6 +16,7 @@
 		51657584144AFA12002A4EFA /* AppDelegate.rb in Resources */ = {isa = PBXBuildFile; fileRef = 51657583144AFA12002A4EFA /* AppDelegate.rb */; };
 		51657598144B2608002A4EFA /* Pods.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 51657597144B2608002A4EFA /* Pods.xcconfig */; };
 		5165759B144B265B002A4EFA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5165759A144B265B002A4EFA /* libPods.a */; };
+		516575F1144B498E002A4EFA /* Pods.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = 516575F0144B498E002A4EFA /* Pods.bridgesupport */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,7 +31,8 @@
 		51657581144AFA12002A4EFA /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
 		51657583144AFA12002A4EFA /* AppDelegate.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = AppDelegate.rb; sourceTree = "<group>"; };
 		51657597144B2608002A4EFA /* Pods.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
-		5165759A144B265B002A4EFA /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libPods.a; path = Pods/build/Release/libPods.a; sourceTree = "<group>"; };
+		5165759A144B265B002A4EFA /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = Pods/build/Release/libPods.a; sourceTree = "<group>"; };
+		516575F0144B498E002A4EFA /* Pods.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Pods.bridgesupport; path = Pods/Pods.bridgesupport; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 		5165757C144AFA12002A4EFA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				516575F0144B498E002A4EFA /* Pods.bridgesupport */,
 				5165757D144AFA12002A4EFA /* MainMenu.xib */,
 			);
 			name = Resources;
@@ -168,6 +171,7 @@
 				51657582144AFA12002A4EFA /* rb_main.rb in Resources */,
 				51657584144AFA12002A4EFA /* AppDelegate.rb in Resources */,
 				51657598144B2608002A4EFA /* Pods.xcconfig in Resources */,
+				516575F1144B498E002A4EFA /* Pods.bridgesupport in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

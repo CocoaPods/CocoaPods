@@ -45,7 +45,7 @@ module Pod
 
         # Add header files to a `copy header build phase` for each destination
         # directory in the pod's header directory.
-        set.specification.copy_header_mappings.each do |header_dir, files|
+        spec.copy_header_mappings.each do |header_dir, files|
           copy_phase = xcodeproj.add_copy_header_build_phase(spec.name, header_dir)
           files.each do |file|
             group.add_source_file(file, copy_phase)
@@ -58,6 +58,12 @@ module Pod
       xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
     end
 
+    def bridge_support_generator
+      BridgeSupportGenerator.new(build_specification_sets.map do |set|
+        set.specification.header_files
+      end.flatten)
+    end
+
     # TODO we need a spec that tests that all dependencies are first downloaded/installed
     # before #generate_project is called!
     def install!
@@ -66,8 +72,10 @@ module Pod
          set.specification.install!
       end
       generate_project
-      xcodeproj.create_in(config.project_pods_root)
-      xcconfig.create_in(config.project_pods_root)
+      root = config.project_pods_root
+      xcodeproj.create_in(root)
+      xcconfig.create_in(root)
+      bridge_support_generator.create_in(root) if @specification.generate_bridge_support
     end
   end
 end

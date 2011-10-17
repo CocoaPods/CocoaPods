@@ -116,6 +116,8 @@ module Pod
 
     attr_accessor :platform
 
+    attr_accessor :generate_bridge_support
+
     # Not attributes
 
     include Config::Mixin
