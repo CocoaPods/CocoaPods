@@ -51,7 +51,7 @@ describe "Pod::Command" do
     spec.authors.should == { `git config --get user.name`.strip => `git config --get user.email`.strip }
     spec.source.should == { :git => 'http://example.com/Bananas.git', :tag => '1.0.0' }
     spec.description.should == 'An optional longer description of Bananas.'
-    spec.source_files.should == [Pathname.new('Classes'), Pathname.new('Classes/**/*.{h,m}')]
+    spec.source_files.should == ['Classes', 'Classes/**/*.{h,m}']
     spec.xcconfig.to_hash.should == { 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework' }
     spec.dependencies.should == [Pod::Dependency.new('SomeLibraryThatBananasDependsOn', '>= 1.0.0')]
   end

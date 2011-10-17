@@ -60,29 +60,17 @@ describe "Pod::Installer" do
         s.dependency(name)
         s.source_files = *patterns
       end)
-      destroot = stubbed_destroot(installer)
       installer.generate_project
 
       expected_patterns.each do |name, pattern|
-        expected = (destroot + pattern).glob.map do |file|
+        pattern = config.project_pods_root + 'ASIHTTPRequest' + pattern
+        expected = pattern.glob.map do |file|
           file.relative_path_from(config.project_pods_root)
         end
-        installer.source_files[name].size.should == expected.size
-        installer.source_files[name].sort.should == expected.sort
         installer.xcodeproj.source_files[name].size.should == expected.size
         installer.xcodeproj.source_files[name].sort.should == expected.sort
       end
       installer.xcconfig.to_hash.should == xcconfig
     end
-  end
-
-  def stubbed_destroot(installer)
-    set = installer.dependent_specification_sets.find { |s| s.name == 'ASIHTTPRequest' }
-    spec = set.specification
-    set.extend(Module.new { define_method(:specification) { spec }})
-    def spec.pod_destroot
-      config.project_pods_root + 'ASIHTTPRequest' # without name and version
-    end
-    spec.pod_destroot
   end
 end

@@ -79,10 +79,7 @@ describe "A Pod::Specification loaded from a podspec" do
   end
 
   it "returns the pod's source files" do
-    @spec.source_files.should == [
-      Pathname.new('Classes/*.{h,m}'),
-      Pathname.new('Vendor')
-    ]
+    @spec.source_files.should == ['Classes/*.{h,m}', 'Vendor']
   end
 
   it "returns the pod's dependencies" do
@@ -109,7 +106,7 @@ describe "A Pod::Specification loaded from a podspec" do
   it "has a shortcut to add libraries to the xcconfig" do
     @spec.libraries = 'z', 'xml2'
     @spec.xcconfig.to_hash.should == {
-      'OTHER_LDFLAGS' => '-framework SystemConfiguration -l z -l xml2'
+      'OTHER_LDFLAGS' => '-framework SystemConfiguration -lz -lxml2'
     }
   end
 

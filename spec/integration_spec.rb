@@ -109,8 +109,10 @@ else
         installer = SpecHelper::Installer.new(spec)
         installer.install!
 
+        installer = Pod::Installer.new(spec)
+        installer.generate_project
         project = Pod::Xcode::Project.new(config.project_pods_root)
-        project.source_files.sort.should == Pod::Installer.new(spec).source_files.sort
+        project.source_files.should == installer.xcodeproj.source_files
       end
     end
   end
