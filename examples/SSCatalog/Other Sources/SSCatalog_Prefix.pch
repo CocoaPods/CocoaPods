@@ -1,0 +1,14 @@
+//
+//  SSCatalog_Prefix.pch
+//  SSCatalog
+//
+//  Created by Sam Soffes on 9/21/09.
+//  Copyright 2009 Sam Soffes, Inc. All rights reserved.
+//
+//	Prefix header for all source files of the 'SSCatalog' target in the 'SSCatalog' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <SSToolkit/SSToolkit.h>
+#endif
