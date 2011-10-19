@@ -1,4 +1,5 @@
 framework 'Foundation'
+require 'fileutils'
 
 module Pod
   module Xcode
