@@ -35,11 +35,6 @@ else
         config.repos_dir = fixture('spec-repos')
         config.project_pods_root = temporary_directory + 'Pods'
         FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
-        Dir.chdir(config.project_pods_root.to_s) do
-          FileUtils.mv('ASIHTTPRequest', 'ASIHTTPRequest-1.8.1')
-          FileUtils.mv('JSONKit', 'JSONKit-1.4')
-          FileUtils.mv('SSZipArchive', 'SSZipArchive-1.0')
-        end
       end
 
       after do
@@ -89,6 +84,22 @@ else
 
         (config.project_pods_root + 'Reachability.podspec').should.exist
         (config.project_pods_root + 'ASIHTTPRequest.podspec').should.not.exist
+      end
+
+      it "adds resources to the xcode copy script" do
+        spec = Pod::File.new do |s|
+          s.platform = platform
+          s.dependency 'SSZipArchive'
+        end
+
+        installer = SpecHelper::Installer.new(spec)
+        dependency_spec = installer.build_specifications.first
+        dependency_spec.resources = 'LICEN*', 'Readme.*'
+        installer.install!
+
+        contents = (config.project_pods_root + 'PodsResources.sh').read
+        contents.should.include "install_resource 'SSZipArchive/LICENSE'\n" \
+                                "install_resource 'SSZipArchive/Readme.markdown'"
       end
 
       # TODO we need to do more cleaning and/or add a --prune task

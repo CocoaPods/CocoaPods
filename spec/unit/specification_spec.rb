@@ -174,7 +174,7 @@ describe "A Pod::Specification, with installed source," do
     config.project_pods_root = nil
   end
 
-  it "returns the list of files that the source_files pattern expands to" do
+  it "returns the list of files that the source_files pattern expand to" do
     files = @destroot.glob('**/*.{h,c,m}')
     files = files.map { |file| file.relative_path_from(config.project_pods_root) }
     @spec.expanded_source_files.sort.should == files.sort
@@ -250,6 +250,14 @@ describe "A Pod::Specification, with installed source," do
       "$(BUILT_PRODUCTS_DIR)/Pods/AnotherRoot"
       "$(BUILT_PRODUCTS_DIR)/Pods/AnotherRoot/ns"
     }
+  end
+
+  it "returns the list of files that the resources pattern expand to" do
+    @spec.expanded_resources.should == []
+    @spec.resource = 'LICEN*'
+    @spec.expanded_resources.map(&:to_s).should == %w{ SSZipArchive/LICENSE }
+    @spec.resources = 'LICEN*', 'Readme.*'
+    @spec.expanded_resources.map(&:to_s).should == %w{ SSZipArchive/LICENSE SSZipArchive/Readme.markdown }
   end
 end
 

@@ -32,6 +32,7 @@ module Pod
                              "but already activated version `#{required_version}' " \
                              "by #{@required_by.join(', ')}."
         end
+        @specification = nil
         @required_by << specification
       end
 
@@ -54,7 +55,7 @@ module Pod
       end
 
       def specification
-        Specification.from_file(specification_path)
+        @specification ||= Specification.from_file(specification_path)
       end
 
       # Return the first version that matches the current dependency.

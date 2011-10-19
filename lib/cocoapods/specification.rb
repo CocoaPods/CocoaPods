@@ -68,6 +68,12 @@ module Pod
     end
     attr_reader :source_files
 
+    def resources=(*patterns)
+      @resources = patterns.flatten
+    end
+    attr_reader :resources
+    alias_method :resource=, :resources=
+
     def clean_paths=(*patterns)
       @clean_paths = patterns.flatten.map { |p| Pathname.new(p) }
     end
@@ -169,7 +175,22 @@ module Pod
       platform.nil?
     end
 
-    # Returns all source files of this pod including header files.
+    # Returns all resource files of this pod, but relative to the
+    # project pods root.
+    def expanded_resources
+      files = []
+      [*resources].each do |pattern|
+        pattern = pod_destroot + pattern
+        pattern = pattern + '*' if pattern.directory?
+        pattern.glob.each do |file|
+          files << file.relative_path_from(config.project_pods_root)
+        end
+      end
+      files
+    end
+
+    # Returns all source files of this pod including header files,
+    # but relative to the project pods root.
     def expanded_source_files
       files = []
       [*source_files].each do |pattern|

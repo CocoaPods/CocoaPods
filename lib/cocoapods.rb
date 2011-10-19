@@ -19,6 +19,7 @@ module Pod
 
   module Xcode
     autoload :Config,               'cocoapods/xcode/config'
+    autoload :CopyResourcesScript,  'cocoapods/xcode/copy_resources_script'
     autoload :Project,              'cocoapods/xcode/project'
   end
 

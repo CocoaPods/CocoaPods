@@ -32,6 +32,7 @@ module Pod
       @xcodeproj ||= Xcode::Project.static_library(@specification.platform)
     end
 
+    # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
     def generate_project
       puts "==> Generating Xcode project and xcconfig" unless config.silent?
       user_header_search_paths = []
@@ -59,6 +60,10 @@ module Pod
       xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
     end
 
+    def copy_resources_script
+      Xcode::CopyResourcesScript.new(build_specifications.map { |spec| spec.expanded_resources }.flatten)
+    end
+
     def bridge_support_generator
       BridgeSupportGenerator.new(build_specifications.map do |spec|
         spec.header_files.map do |header|
@@ -71,10 +76,13 @@ module Pod
       puts "Installing dependencies of: #{@specification.defined_in_file}" unless config.silent?
       build_specifications.each(&:install!)
       generate_project
+
       root = config.project_pods_root
       xcodeproj.create_in(root)
       xcconfig.create_in(root)
+      copy_resources_script.create_in(root)
       bridge_support_generator.create_in(root) if @specification.generate_bridge_support
+
       build_specifications.each(&:post_install)
     end
   end
