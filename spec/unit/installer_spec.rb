@@ -12,6 +12,21 @@ describe "Pod::Installer" do
     config.repos_dir = SpecHelper.tmp_repos_path
   end
 
+  it "generates a BridgeSupport metadata file from all the pod headers" do
+    spec = Pod::Spec.new do |s|
+      s.platform = :osx
+      s.dependency 'ASIHTTPRequest'
+    end
+    expected = []
+    installer = Pod::Installer.new(spec)
+    installer.build_specifications.each do |spec|
+      spec.header_files.each do |header|
+        expected << config.project_pods_root + header
+      end
+    end
+    installer.bridge_support_generator.headers.should == expected
+  end
+
   it "adds all source files that should be included in the library to the xcode project" do
     [
       [

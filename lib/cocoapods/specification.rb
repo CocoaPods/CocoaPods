@@ -257,8 +257,8 @@ module Pod
     # Override this if you need to perform work before or after activating the
     # pod. Eg:
     #
-    #   Pod::Spec.new do
-    #     def install!
+    #   Pod::Spec.new do |s|
+    #     def s.install!
     #       # pre-install
     #       super
     #       # post-install
@@ -290,8 +290,8 @@ module Pod
     # Override this if you need to perform work before or after downloading the
     # pod, or if you need to implement custom dowloading. Eg:
     #
-    #   Pod::Spec.new do
-    #     def download!
+    #   Pod::Spec.new do |s|
+    #     def s.download!
     #       # pre-download
     #       super # or custom downloading
     #       # post-download
@@ -301,6 +301,21 @@ module Pod
       downloader = Downloader.for_source(pod_destroot, source)
       downloader.download
       downloader.clean(clean_paths) if config.clean
+    end
+
+    # This is a convenience method which gets called after all pods have been
+    # downloaded, installed, and the Xcode project and related files have been
+    # generated. Override this to, for instance, add to the prefix header:
+    #
+    #   Pod::Spec.new do |s|
+    #     def s.post_install
+    #       prefix_header = config.project_pods_root + 'Pods-Prefix.pch'
+    #       prefix_header.open('a') do |file|
+    #         file.puts(%{#ifdef __OBJC__\n#import "SSToolkitDefines.h"\n#endif})
+    #       end
+    #     end
+    #   end
+    def post_install
     end
 
   end

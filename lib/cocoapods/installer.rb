@@ -1,6 +1,4 @@
 module Pod
-  # TODO the static library needs an extra xcconfig which sets the values from issue #1.
-  # Or we could edit the project.pbxproj file, but that seems like more work...
   class Installer
     include Config::Mixin
 
@@ -14,6 +12,10 @@ module Pod
 
     def build_specification_sets
       dependent_specification_sets.reject(&:only_part_of_other_pod?)
+    end
+
+    def build_specifications
+      build_specification_sets.map(&:specification)
     end
 
     def xcconfig
@@ -33,8 +35,7 @@ module Pod
     def generate_project
       puts "==> Generating Xcode project and xcconfig" unless config.silent?
       user_header_search_paths = []
-      build_specification_sets.each do |set|
-        spec = set.specification
+      build_specifications.each do |spec|
         xcconfig.merge!(spec.xcconfig)
         group = xcodeproj.add_pod_group(spec.name)
 
@@ -59,25 +60,22 @@ module Pod
     end
 
     def bridge_support_generator
-      BridgeSupportGenerator.new(build_specification_sets.map do |set|
-        set.specification.header_files.map do |header|
+      BridgeSupportGenerator.new(build_specifications.map do |spec|
+        spec.header_files.map do |header|
           config.project_pods_root + header
         end
       end.flatten)
     end
 
-    # TODO we need a spec that tests that all dependencies are first downloaded/installed
-    # before #generate_project is called!
     def install!
       puts "Installing dependencies of: #{@specification.defined_in_file}" unless config.silent?
-      build_specification_sets.each do |set|
-         set.specification.install!
-      end
+      build_specifications.each(&:install!)
       generate_project
       root = config.project_pods_root
       xcodeproj.create_in(root)
       xcconfig.create_in(root)
       bridge_support_generator.create_in(root) if @specification.generate_bridge_support
+      build_specifications.each(&:post_install)
     end
   end
 end
