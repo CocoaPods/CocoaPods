@@ -52,6 +52,11 @@ module Pod
     #
     # Finally, a list of version requirements can be specified for even more fine
     # grained control.
+    #
+    # For more information, regarding versioning policy, see:
+    #
+    # * http://semver.org
+    # * http://docs.rubygems.org/read/chapter/7
     def dependency(name, *version_requirements)
       @dependencies << Dependency.new(name, *version_requirements)
     end
