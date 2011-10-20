@@ -3,4 +3,4 @@ platform :osx
 generate_bridge_support!
 
 dependency 'ASIHTTPRequest'
-dependency 'CocoaLumberjack'
+dependency 'SBJson'
