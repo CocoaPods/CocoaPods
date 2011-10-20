@@ -1,5 +1,4 @@
-Pod::File.new do |f|
-  f.platform = :ios
-  f.dependency 'SSToolkit'
-  f.dependency 'AFNetworking'
-end
+platform :ios
+
+dependency 'SSToolkit'
+dependency 'AFNetworking'

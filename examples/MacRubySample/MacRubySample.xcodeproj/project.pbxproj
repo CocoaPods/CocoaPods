@@ -126,6 +126,7 @@
 				51657564144AFA12002A4EFA /* Sources */,
 				51657565144AFA12002A4EFA /* Frameworks */,
 				51657566144AFA12002A4EFA /* Resources */,
+				51F33E491450BB7D00C19A4B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -176,6 +177,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		51F33E491450BB7D00C19A4B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SRCROOT}/Pods/PodsResources.sh";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		51657564144AFA12002A4EFA /* Sources */ = {

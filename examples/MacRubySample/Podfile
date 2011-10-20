@@ -1,7 +1,6 @@
-Pod::File.new do |f|
-  f.platform = :osx
-  f.generate_bridge_support = true
-  f.dependency 'ASIHTTPRequest'
-  f.dependency 'AFNetworking'
-  f.dependency 'CocoaLumberjack'
-end
+platform :osx
+
+generate_bridge_support!
+
+dependency 'ASIHTTPRequest'
+dependency 'CocoaLumberjack'

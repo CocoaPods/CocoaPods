@@ -5,10 +5,10 @@ module Pod
     eval(path.read, nil, path.to_s)
   end
 
- class Specification
+  class Specification
     autoload :Set, 'cocoapods/specification/set'
 
-    # The file is expected to define and return either a Pods::Specification or a Pod::File.
+    # The file is expected to define and return a Pods::Specification.
     def self.from_file(path)
       spec = Pod._eval_podspec(path)
       spec.defined_in_file = path
@@ -79,14 +79,6 @@ module Pod
     end
     attr_reader :clean_paths
 
-    def dependency(*name_and_version_requirements)
-      name, *version_requirements = name_and_version_requirements.flatten
-      dep = Dependency.new(name, *version_requirements)
-      @dependencies << dep
-      dep
-    end
-    attr_reader :dependencies
-
     def xcconfig=(hash)
       @xcconfig.merge!(hash)
     end
@@ -111,8 +103,6 @@ module Pod
       @header_dir || pod_destroot_name
     end
 
-    attr_accessor :requires_arc
-
     attr_writer :compiler_flags
     def compiler_flags
       flags = "#{@compiler_flags} "
@@ -120,9 +110,22 @@ module Pod
       flags
     end
 
+    # These are attributes which are also on a Podfile
+
     attr_accessor :platform
 
+    attr_accessor :requires_arc
+
     attr_accessor :generate_bridge_support
+    alias_method :generate_bridge_support?, :generate_bridge_support
+
+    def dependency(*name_and_version_requirements)
+      name, *version_requirements = name_and_version_requirements.flatten
+      dep = Dependency.new(name, *version_requirements)
+      @dependencies << dep
+      dep
+    end
+    attr_reader :dependencies
 
     # Not attributes
 
@@ -169,10 +172,6 @@ module Pod
 
     def podfile?
       false
-    end
-
-    def any_platform?
-      platform.nil?
     end
 
     # Returns all resource files of this pod, but relative to the
@@ -342,18 +341,4 @@ module Pod
   end
 
   Spec = Specification
-
-  class File < Specification
-    def podfile?
-      true
-    end
-
-    def to_s
-      "podfile at `#{defined_in_file}'"
-    end
-
-    def pod_destroot
-      # A Podfile has none
-    end
-  end
 end

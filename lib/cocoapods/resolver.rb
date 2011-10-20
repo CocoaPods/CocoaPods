@@ -28,7 +28,7 @@ module Pod
 
     def validate_platform!(set)
       spec = set.specification
-      unless spec.any_platform? || spec.platform == @specification.platform
+      unless spec.platform.nil? || spec.platform == @specification.platform
         raise Informative, "The platform required by the Podfile (:#{@specification.platform}) " \
                            "does not match that of #{spec} (:#{spec.platform})"
       end

@@ -220,9 +220,9 @@ module Pod
       # TODO this is a workaround for an issue with MacRuby with compiled files
       # that makes the use of __FILE__ impossible.
       #
-      #TEMPLATES_DIR = Pathname.new(::File.expand_path('../../../../xcode-project-templates', __FILE__))
+      #TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', __FILE__))
       file = $LOADED_FEATURES.find { |file| file =~ %r{cocoapods/xcode/project\.rbo?$} }
-      TEMPLATES_DIR = Pathname.new(::File.expand_path('../../../../xcode-project-templates', file))
+      TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', file))
 
       def self.static_library(platform)
         case platform

@@ -62,7 +62,7 @@ module Pod
     end
 
     def copy_resources_script
-      Xcode::CopyResourcesScript.new(build_specifications.map { |spec| spec.expanded_resources }.flatten)
+      @copy_resources_script ||= Xcode::CopyResourcesScript.new(build_specifications.map { |spec| spec.expanded_resources }.flatten)
     end
 
     def bridge_support_generator
@@ -81,8 +81,11 @@ module Pod
       root = config.project_pods_root
       xcodeproj.create_in(root)
       xcconfig.create_in(root)
+      if @specification.generate_bridge_support?
+        path = bridge_support_generator.create_in(root)
+        copy_resources_script.resources << path.relative_path_from(config.project_pods_root)
+      end
       copy_resources_script.create_in(root)
-      bridge_support_generator.create_in(root) if @specification.generate_bridge_support
 
       build_specifications.each(&:post_install)
     end

@@ -1,32 +1,5 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
-describe "A Pod::Specification loaded from a Podfile" do
-  before do
-    @spec = Pod::Specification.from_file(fixture('Podfile'))
-  end
-
-  it "lists the project's dependencies" do
-    @spec.dependencies.should == [
-      Pod::Dependency.new('SSZipArchive',      '>= 1'),
-      Pod::Dependency.new('ASIHTTPRequest',    '~> 1.8.0'),
-      Pod::Dependency.new('Reachability',      '>= 0'),
-      Pod::Dependency.new('ASIWebPageRequest', ' < 1.8.2')
-    ]
-  end
-
-  it "returns the path to the Podfile" do
-    @spec.defined_in_file.should == fixture('Podfile')
-  end
-
-  it "returns that it's loaded from a Podfile" do
-    @spec.should.be.podfile
-  end
-
-  it "does not have a destroot" do
-    @spec.pod_destroot.should == nil
-  end
-end
-
 describe "A Pod::Specification loaded from a podspec" do
   before do
     @spec = Pod::Specification.from_file(fixture('banana-lib/BananaLib.podspec'))
@@ -286,9 +259,7 @@ describe "A Pod::Specification, in general," do
  end
 
   it "returns the platform that the static library should be build for" do
-    @spec.should.be.any_platform
     @spec.platform = :ios
     @spec.platform.should == :ios
-    @spec.should.not.be.any_platform
   end
 end

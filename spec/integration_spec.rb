@@ -44,11 +44,11 @@ else
 
       # TODO add a simple source file which uses the compiled lib to check that it really really works
       it "should activate required pods and create a working static library xcode project" do
-        spec = Pod::File.new do |s|
-          s.platform = platform
-          s.dependency 'ASIWebPageRequest', '>= 1.8.1'
-          s.dependency 'JSONKit',           '>= 1.0'
-          s.dependency 'SSZipArchive',      '< 2'
+        spec = Pod::Podfile.new do
+          self.platform platform
+          dependency 'ASIWebPageRequest', '>= 1.8.1'
+          dependency 'JSONKit',           '>= 1.0'
+          dependency 'SSZipArchive',      '< 2'
         end
 
         installer = SpecHelper::Installer.new(spec)
@@ -74,9 +74,9 @@ else
       end
 
       it "does not activate pods that are only part of other pods" do
-        spec = Pod::File.new do |s|
-          s.platform = platform
-          s.dependency 'Reachability'
+        spec = Pod::Podfile.new do
+          self.platform platform
+          dependency 'Reachability'
         end
 
         installer = SpecHelper::Installer.new(spec)
@@ -87,9 +87,9 @@ else
       end
 
       it "adds resources to the xcode copy script" do
-        spec = Pod::File.new do |s|
-          s.platform = platform
-          s.dependency 'SSZipArchive'
+        spec = Pod::Podfile.new do
+          self.platform platform
+          dependency 'SSZipArchive'
         end
 
         installer = SpecHelper::Installer.new(spec)
@@ -104,18 +104,18 @@ else
 
       # TODO we need to do more cleaning and/or add a --prune task
       it "overwrites an existing project.pbxproj file" do
-        spec = Pod::File.new do |s|
-          s.platform = platform
-          s.dependency 'JSONKit'
+        spec = Pod::Podfile.new do
+          self.platform platform
+          dependency 'JSONKit'
         end
         installer = SpecHelper::Installer.new(spec)
         installer.install!
 
         Pod::Source.reset!
         Pod::Spec::Set.reset!
-        spec = Pod::File.new do |s|
-          s.platform = platform
-          s.dependency 'SSZipArchive'
+        spec = Pod::Podfile.new do
+          self.platform platform
+          dependency 'SSZipArchive'
         end
         installer = SpecHelper::Installer.new(spec)
         installer.install!

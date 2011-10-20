@@ -1,4 +1,3 @@
-Pod::File.new do |f|
-  f.platform = :ios
-  f.dependency 'MGSplitViewController', '1.0.0'
-end
+platform :ios
+
+dependency 'MGSplitViewController', '1.0.0'

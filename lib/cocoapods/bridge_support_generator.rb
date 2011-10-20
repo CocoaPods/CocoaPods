@@ -17,9 +17,9 @@ module Pod
 
     def create_in(root)
       puts "==> Generating BridgeSupport metadata file" unless config.silent?
-      cflags = %{-c "#{search_paths.join(' ')}"}
-      output = %{-o '#{root + "Pods.bridgesupport"}'}
-      gen_bridge_metadata %{#{cflags} #{output} '#{headers.join("' '")}'}
+      file = root + "Pods.bridgesupport"
+      gen_bridge_metadata %{-c "#{search_paths.join(' ')}" -o '#{file}' '#{headers.join("' '")}'}
+      file
     end
   end
 end

@@ -1,6 +1,8 @@
 module Pod
   module Xcode
     class CopyResourcesScript
+      attr_reader :resources
+
       # A list of files relative to the project pods root.
       def initialize(resources)
         @resources = resources

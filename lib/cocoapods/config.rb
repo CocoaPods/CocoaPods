@@ -16,7 +16,7 @@ module Pod
     alias_method :silent?,  :silent
 
     def initialize
-      @repos_dir = Pathname.new(::File.expand_path("~/.cocoapods"))
+      @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
       @clean = true
       @verbose = false
       @silent = false
@@ -43,7 +43,13 @@ module Pod
     # Returns the spec at the pat returned from `project_podfile`.
     def rootspec
       unless @rootspec
-        @rootspec = Specification.from_file(project_podfile) if project_podfile
+        if project_podfile
+          if project_podfile.basename.to_s == 'Podfile'
+            @rootspec = Podfile.from_file(project_podfile)
+          else
+            @rootspec = Specification.from_file(project_podfile)
+          end
+        end
       end
       @rootspec
     end
