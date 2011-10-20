@@ -20,9 +20,6 @@ For more in depth information see the [wiki][wiki], specifically the page about
 [creating a project that uses CocoaPods][wiki-create].
 
 
-**_NOTE: At the moment [only iOS projects are supported][ticket], but this will
-be fixed in the very near future._**
-
 ## Installing CocoaPods
 
 You’ll need MacRuby. CocoaPods itself installs through RubyGems, the Ruby
@@ -81,7 +78,6 @@ for more info.
 [cocoapods]: https://github.com/alloy/cocoapods
 [cocoapods-specs]: https://github.com/alloy/cocoapods-specs
 [tickets]: https://github.com/alloy/cocoapods/issues
-[ticket]: https://github.com/alloy/cocoapods/issues/3
 [example-spec]: https://github.com/alloy/cocoapods/blob/master/examples/PodSpec.podspec
 [dev-setup]: https://github.com/alloy/cocoapods/wiki/Setting-up-for-development-on-CocoaPods
 [wiki-create]: https://github.com/alloy/cocoapods/wiki/Creating-a-project-that-uses-CocoaPods
