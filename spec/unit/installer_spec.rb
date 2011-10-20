@@ -1,6 +1,21 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Installer" do
+  describe ", by default," do
+    before do
+      @xcconfig = Pod::Installer.new(Pod::Spec.new).xcconfig.to_hash
+    end
+
+    it "sets the header search paths where installed Pod headers can be found" do
+      @xcconfig['USER_HEADER_SEARCH_PATHS'].should == '"$(BUILT_PRODUCTS_DIR)/Pods"'
+      @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
+    end
+
+    it "configures the project to load categories from the static library" do
+      @xcconfig['OTHER_LDFLAGS'].should == '-ObjC -all_load'
+    end
+  end
+
   before do
     config.project_pods_root = fixture('integration')
     fixture('spec-repos/master') # ensure the archive is unpacked
@@ -38,7 +53,8 @@ describe "Pod::Installer" do
                                         '"$(BUILT_PRODUCTS_DIR)/Pods/ASIHTTPRequest" ' \
                                         '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
           "ALWAYS_SEARCH_USER_PATHS" => "YES",
-          "OTHER_LDFLAGS" => "-framework SystemConfiguration -framework CFNetwork " \
+          "OTHER_LDFLAGS" => "-ObjC -all_load " \
+                             "-framework SystemConfiguration -framework CFNetwork " \
                              "-framework MobileCoreServices -l z.1"
         }
       ],
@@ -49,7 +65,8 @@ describe "Pod::Installer" do
         {
           "USER_HEADER_SEARCH_PATHS" => '"$(BUILT_PRODUCTS_DIR)/Pods" ' \
                                         '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
-          "ALWAYS_SEARCH_USER_PATHS" => "YES"
+          "ALWAYS_SEARCH_USER_PATHS" => "YES",
+          "OTHER_LDFLAGS" => "-ObjC -all_load"
         }
       ],
       [
@@ -62,7 +79,8 @@ describe "Pod::Installer" do
                                         '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
           "ALWAYS_SEARCH_USER_PATHS" => "YES",
           "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2",
-          "OTHER_LDFLAGS" => "-l xml2.2.7.3 -framework SystemConfiguration " \
+          "OTHER_LDFLAGS" => "-ObjC -all_load " \
+                             "-l xml2.2.7.3 -framework SystemConfiguration " \
                              "-framework CFNetwork -framework MobileCoreServices -l z.1"
         }
       ],
