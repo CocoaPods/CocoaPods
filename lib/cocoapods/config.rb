@@ -55,11 +55,11 @@ module Pod
     end
 
     def ios?
-      rootspec.platform == :ios
+      rootspec.platform == :ios if rootspec
     end
 
     def osx?
-      rootspec.platform == :osx
+      rootspec.platform == :osx if rootspec
     end
 
     module Mixin

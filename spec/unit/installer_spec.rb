@@ -17,14 +17,19 @@ describe "Pod::Installer" do
   end
 
   before do
-    config.project_pods_root = fixture('integration')
     fixture('spec-repos/master') # ensure the archive is unpacked
+
+    @config_before = config
+    Pod::Config.instance = nil
+    config.silent = true
     config.repos_dir = fixture('spec-repos')
+    config.project_pods_root = fixture('integration')
+    def config.ios?; true; end
+    def config.osx?; false; end
   end
 
   after do
-    config.project_pods_root = nil
-    config.repos_dir = SpecHelper.tmp_repos_path
+    Pod::Config.instance = @config_before
   end
 
   it "generates a BridgeSupport metadata file from all the pod headers" do
@@ -54,8 +59,8 @@ describe "Pod::Installer" do
                                         '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
           "ALWAYS_SEARCH_USER_PATHS" => "YES",
           "OTHER_LDFLAGS" => "-ObjC -all_load " \
-                             "-framework SystemConfiguration -framework CFNetwork " \
-                             "-framework MobileCoreServices -l z.1"
+                             "-framework SystemConfiguration -framework MobileCoreServices " \
+                             "-framework CFNetwork -lz.1"
         }
       ],
       [
@@ -81,7 +86,7 @@ describe "Pod::Installer" do
           "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2",
           "OTHER_LDFLAGS" => "-ObjC -all_load " \
                              "-l xml2.2.7.3 -framework SystemConfiguration " \
-                             "-framework CFNetwork -framework MobileCoreServices -l z.1"
+                             "-framework MobileCoreServices -framework CFNetwork -lz.1"
         }
       ],
     ].each do |name, patterns, expected_patterns, xcconfig|

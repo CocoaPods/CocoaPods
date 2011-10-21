@@ -23,11 +23,16 @@ end
 describe "Pod::Resolver" do
   before do
     fixture('spec-repos/master') # ensure the archive is unpacked
+    @config_before = config
+    Pod::Config.instance = nil
+    config.silent = true
     config.repos_dir = fixture('spec-repos')
+    def config.ios?; true; end
+    def config.osx?; false; end
   end
 
   after do
-    config.repos_dir = SpecHelper.tmp_repos_path
+    Pod::Config.instance = @config_before
   end
 
   it "returns all sets needed for the dependency" do

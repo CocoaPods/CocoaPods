@@ -32,14 +32,20 @@ else
         Pod::Source.reset!
         Pod::Spec::Set.reset!
         fixture('spec-repos/master') # ensure the archive is unpacked
+
+        @config_before = config
+        Pod::Config.instance = nil
+        config.silent = true
         config.repos_dir = fixture('spec-repos')
         config.project_pods_root = temporary_directory + 'Pods'
+        def config.ios?; true; end
+        def config.osx?; false; end
+
         FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
       end
 
       after do
-        config.project_pods_root = nil
-        config.repos_dir = SpecHelper.tmp_repos_path
+        Pod::Config.instance = @config_before
       end
 
       # TODO add a simple source file which uses the compiled lib to check that it really really works
