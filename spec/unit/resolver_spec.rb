@@ -22,7 +22,6 @@ end
 
 describe "Pod::Resolver" do
   before do
-    fixture('spec-repos/master') # ensure the archive is unpacked
     @config_before = config
     Pod::Config.instance = nil
     config.silent = true

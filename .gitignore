@@ -11,4 +11,3 @@ examples/Podfile
 examples/Pods
 examples/**/Pods
 spec/fixtures/banana-lib
-spec/fixtures/spec-repos/master
