@@ -85,7 +85,7 @@ describe "Pod::Installer" do
           "ALWAYS_SEARCH_USER_PATHS" => "YES",
           "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2",
           "OTHER_LDFLAGS" => "-ObjC -all_load " \
-                             "-l xml2.2.7.3 -framework SystemConfiguration " \
+                             "-lxml2.2.7.3 -framework SystemConfiguration " \
                              "-framework MobileCoreServices -framework CFNetwork -lz.1"
         }
       ],

@@ -68,10 +68,10 @@ describe "Pod::Command" do
     [
       [
         ' s ',
-        "==> ASIHTTPRequest (1.8, 1.8.1)\n" \
+        "==> ASIHTTPRequest (1.8.1)\n" \
         "    Easy to use CFNetwork wrapper for HTTP requests, Objective-C, " \
         "Mac OS X and iPhone\n\n" \
-        "==> ASIWebPageRequest (1.8, 1.8.1)\n" \
+        "==> ASIWebPageRequest (1.8.1)\n" \
         "    The ASIWebPageRequest class included with ASIHTTPRequest lets you " \
         "download\n    complete webpages, including external resources like " \
         "images and stylesheets.\n\n" \
@@ -92,7 +92,7 @@ describe "Pod::Command" do
       end
       command.run
       printed = command.instance_variable_get(:@printed)
-      printed.should == result
+      result.split("\n\n").each { |pod| printed.should.include? pod }
     end
   end
 
@@ -105,7 +105,7 @@ describe "Pod::Command" do
       ],
       [
         'is',
-        "==> ASIHTTPRequest (1.8, 1.8.1)\n" \
+        "==> ASIHTTPRequest (1.8.1)\n" \
         "    Easy to use CFNetwork wrapper for HTTP requests, Objective-C, " \
         "Mac OS X and iPhone\n\n" \
         "==> Reachability (2.0.4)\n" \
@@ -120,7 +120,7 @@ describe "Pod::Command" do
       end
       command.run
       printed = command.instance_variable_get(:@printed)
-      printed.should == result
+      result.split("\n\n").each { |pod| printed.should.include? pod }
     end
   end
 end
