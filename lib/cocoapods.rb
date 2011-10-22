@@ -22,6 +22,7 @@ module Pod
     autoload :Config,               'cocoapods/xcode/config'
     autoload :CopyResourcesScript,  'cocoapods/xcode/copy_resources_script'
     autoload :Project,              'cocoapods/xcode/project'
+    autoload :Workspace,            'cocoapods/xcode/workspace'
   end
 
   autoload :Pathname,               'pathname'
