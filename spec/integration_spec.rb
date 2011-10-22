@@ -131,6 +131,22 @@ else
         project = Pod::Xcode::Project.new(config.project_pods_root)
         project.source_files.should == installer.xcodeproj.source_files
       end
+      
+      it "sets up an existing project with pods" do
+        basename = platform == :ios ? 'iPhone' : 'Mac'
+        projpath = temporary_directory + 'ASIHTTPRequest.xcodeproj'
+        FileUtils.cp_r(fixture("integration/ASIHTTPRequest/#{basename}.xcodeproj"), projpath)
+        spec = Pod::Podfile.new do
+          self.platform platform
+          dependency 'SSZipArchive'
+        end
+        installer = SpecHelper::Installer.new(spec)
+        installer.install!
+        installer.configure_project(projpath)
+        xcworkspace = temporary_directory + 'ASIHTTPRequest.xcworkspace'
+        workspace = Pod::Xcode::Workspace.new_from_xcworkspace(xcworkspace)
+        workspace.projpaths.sort.should == ['ASIHTTPRequest.xcodeproj', 'Pods/Pods.xcodeproj']
+      end
     end
   end
 end

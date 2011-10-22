@@ -8,16 +8,20 @@ module Pod
         @projpaths = projpaths
       end
       
-      def self.from_xcworkspace(path)
-        from_s(File.read(File.join(path, 'contents.xcworkspacedata')))
+      def self.new_from_xcworkspace(path)
+        begin
+          from_s(File.read(File.join(path, 'contents.xcworkspacedata')))
+        rescue Errno::ENOENT
+          new
+        end
       end
       
       def self.from_s(xml)
         doc = NSXMLDocument.alloc.initWithXMLString(xml, options:0, error:nil)
         projpaths = doc.nodesForXPath("/Workspace/FileRef", error:nil).map do |node|
-          node.attributeWithName("location").stringValue.sub(/^group:/, '')
+          node.attributeForName("location").stringValue.sub(/^group:/, '')
         end
-        new(projpaths)
+        new(*projpaths)
       end
       
       attr_reader :projpaths
@@ -29,7 +33,7 @@ module Pod
       TEMPLATE = %q[<?xml version="1.0" encoding="UTF-8"?><Workspace version="1.0"></Workspace>]
       def to_s
         doc = NSXMLDocument.alloc.initWithXMLString(TEMPLATE, options:0, error:nil)
-        @projpaths.each do |projpath|
+        @projpaths.uniq.each do |projpath|
           el = NSXMLNode.elementWithName("FileRef")
           el.addAttribute(NSXMLNode.attributeWithName("location", stringValue:"group:#{projpath}"))
           doc.rootElement.addChild(el)

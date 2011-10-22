@@ -89,5 +89,18 @@ module Pod
 
       build_specifications.each(&:post_install)
     end
+    
+    def configure_project(projpath)
+      root = File.dirname(projpath)
+      xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')
+      workspace = Xcode::Workspace.new_from_xcworkspace(xcworkspace)
+      paths = [projpath]
+      paths << File.join(config.project_pods_root, File.dirname(xcodeproj.template_file))
+      root = Pathname.new(root).expand_path
+      paths.each do |path|
+        workspace << Pathname.new(path).expand_path.relative_path_from(root)
+      end
+      workspace.save_as(xcworkspace)
+    end
   end
 end
