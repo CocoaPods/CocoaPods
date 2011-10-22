@@ -1,5 +1,23 @@
 module Pod
   class Podfile
+    class Target
+      attr_reader :name, :parent, :target_dependencies
+
+      def initialize(name, parent = nil)
+        @name, @parent, @target_dependencies = name, parent, []
+      end
+
+      def lib_name
+        name == :default ? "libPods" : "libPods-#{name}"
+      end
+
+      # Returns *all* dependencies of this target, not only the target specific
+      # ones in `target_dependencies`.
+      def dependencies
+        @target_dependencies + (@parent ? @parent.dependencies : [])
+      end
+    end
+
     def self.from_file(path)
       podfile = Podfile.new do
         eval(path.read, nil, path.to_s)
@@ -10,7 +28,7 @@ module Pod
     end
 
     def initialize(&block)
-      @dependencies = []
+      @targets = { :default => (@target = Target.new(:default)) }
       instance_eval(&block)
     end
 
@@ -58,10 +76,12 @@ module Pod
     # * http://semver.org
     # * http://docs.rubygems.org/read/chapter/7
     def dependency(name, *version_requirements)
-      @dependencies << Dependency.new(name, *version_requirements)
+      @target.target_dependencies << Dependency.new(name, *version_requirements)
     end
 
-    attr_reader :dependencies
+    def dependencies
+      @targets.values.map(&:target_dependencies).flatten
+    end
 
     # Specifies that a BridgeSupport metadata should be generated from the
     # headers of all installed Pods.
@@ -70,6 +90,15 @@ module Pod
     # it to bridge types, functions, etc better.
     def generate_bridge_support!
       @generate_bridge_support = true
+    end
+
+    attr_reader :targets
+
+    def target(name, options = {})
+      @targets[name] = @target = Target.new(name, @target)
+      yield
+    ensure
+      @target = @target.parent
     end
 
     # This is to be compatible with a Specification for use in the Installer and
@@ -86,13 +115,13 @@ module Pod
     end
 
     def dependency_by_name(name)
-      @dependencies.find { |d| d.name == name }
+      dependencies.find { |d| d.name == name }
     end
 
     def validate!
       lines = []
       lines << "* the `platform` attribute should be either `:osx` or `:ios`" unless [:osx, :ios].include?(@platform)
-      lines << "* no dependencies were specified, which is, well, kinda pointless" if @dependencies.empty?
+      lines << "* no dependencies were specified, which is, well, kinda pointless" if dependencies.empty?
       raise(Informative, (["The Podfile at `#{@defined_in_file}' is invalid:"] + lines).join("\n")) unless lines.empty?
     end
   end
