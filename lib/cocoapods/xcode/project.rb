@@ -122,7 +122,7 @@ module Pod
 
         # Returns a PBXFileReference instance corresponding to the uuid in the fileRef attribute.
         def file
-          project.objects[fileRef]
+          @project.objects[fileRef]
         end
       end
 
