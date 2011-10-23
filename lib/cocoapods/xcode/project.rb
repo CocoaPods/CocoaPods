@@ -140,8 +140,9 @@ module Pod
           list_by_class(file_uuids, PBXBuildFile)
         end
       end
-      class PBXSourcesBuildPhase < PBXBuildPhase;   end
-      class PBXCopyFilesBuildPhase < PBXBuildPhase; end
+      class PBXSourcesBuildPhase < PBXBuildPhase;    end
+      class PBXCopyFilesBuildPhase < PBXBuildPhase;  end
+      class PBXFrameworksBuildPhase < PBXBuildPhase; end
 
       class PBXNativeTarget < PBXObject
         attributes_accessor :buildPhases
@@ -234,6 +235,11 @@ module Pod
 
       def groups
         objects.select_by_class(PBXGroup)
+      end
+      
+      def main_group
+        project = objects[@plist['rootObject']]
+        objects[project.attributes['mainGroup']]
       end
 
       # Shortcut access to the `Pods' PBXGroup.

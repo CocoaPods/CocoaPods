@@ -102,13 +102,31 @@ module Pod
       root = File.dirname(projpath)
       xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')
       workspace = Xcode::Workspace.new_from_xcworkspace(xcworkspace)
-      paths = [projpath]
-      paths << File.join(config.project_pods_root, 'Pods.xcodeproj')
+      pods_projpath = File.join(config.project_pods_root, 'Pods.xcodeproj')
       root = Pathname.new(root).expand_path
-      paths.each do |path|
+      [projpath, pods_projpath].each do |path|
         workspace << Pathname.new(path).expand_path.relative_path_from(root)
       end
       workspace.save_as(xcworkspace)
+
+      app_project = Xcode::Project.new(projpath)
+      return if app_project.files.find { |file| file.path =~ /libPods\.a$/ }
+      
+      libfile = app_project.files.new({
+        'explicitFileType' => 'archive.ar',
+        'includeInIndex' => '0',
+        'path' => 'libPods.a',
+        'sourceTree' => 'BUILT_PRODUCTS_DIR'
+      })
+      lib_buildfile = app_project.build_files.find do |build_file|
+        build_file.file.uuid == libfile.uuid
+      end
+      app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
+        build_phase.files << lib_buildfile
+      end
+      app_project.main_group.children << libfile.uuid
+      
+      app_project.save_as(projpath)
     end
   end
 end
