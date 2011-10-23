@@ -12,6 +12,7 @@ module Pod
   autoload :Executable,             'cocoapods/executable'
   autoload :Installer,              'cocoapods/installer'
   autoload :Podfile,                'cocoapods/podfile'
+  autoload :ProjectTemplate,        'cocoapods/project_template'
   autoload :Resolver,               'cocoapods/resolver'
   autoload :Source,                 'cocoapods/source'
   autoload :Spec,                   'cocoapods/specification'

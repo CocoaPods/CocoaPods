@@ -29,8 +29,12 @@ module Pod
       })
     end
 
+    def template
+      @template ||= ProjectTemplate.new(@specification.platform)
+    end
+
     def xcodeproj
-      @xcodeproj ||= Xcode::Project.static_library(@specification.platform)
+      @xcodeproj ||= Xcode::Project.new(template.xcodeproj_path)
     end
 
     # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
@@ -79,7 +83,11 @@ module Pod
       generate_project
 
       root = config.project_pods_root
-      xcodeproj.create_in(root)
+      puts "  * Copying contents of template directory `#{template.path}' to `#{root}'" if config.verbose?
+      template.copy_to(root)
+      pbxproj = File.join(root, 'Pods.xcodeproj')
+      puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
+      xcodeproj.save_as(pbxproj)
       xcconfig.create_in(root)
       if @specification.generate_bridge_support?
         path = bridge_support_generator.create_in(root)
@@ -95,7 +103,7 @@ module Pod
       xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')
       workspace = Xcode::Workspace.new_from_xcworkspace(xcworkspace)
       paths = [projpath]
-      paths << File.join(config.project_pods_root, File.dirname(xcodeproj.template_file))
+      paths << File.join(config.project_pods_root, 'Pods.xcodeproj')
       root = Pathname.new(root).expand_path
       paths.each do |path|
         workspace << Pathname.new(path).expand_path.relative_path_from(root)

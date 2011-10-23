@@ -215,42 +215,17 @@ module Pod
         end
       end
 
-      include Pod::Config::Mixin
-
-      # TODO this is a workaround for an issue with MacRuby with compiled files
-      # that makes the use of __FILE__ impossible.
-      #
-      #TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', __FILE__))
-      file = $LOADED_FEATURES.find { |file| file =~ %r{cocoapods/xcode/project\.rbo?$} }
-      TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', file))
-
-      def self.static_library(platform)
-        case platform
-        when :osx
-          new TEMPLATES_DIR + 'cocoa-static-library'
-        when :ios
-          new TEMPLATES_DIR + 'cocoa-touch-static-library'
-        else
-          raise "No Xcode project template exists for the platform `#{platform.inspect}'"
-        end
-      end
-
-      def initialize(template_dir)
-        @template_dir = template_dir
-        file = template_dir + template_file
-        @template = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
-      end
-
-      def template_file
-        'Pods.xcodeproj/project.pbxproj'
+      def initialize(xcodeproj)
+        file = File.join(xcodeproj, 'project.pbxproj')
+        @plist = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
       end
 
       def to_hash
-        @template
+        @plist
       end
 
       def objects_hash
-        @template['objects']
+        @plist['objects']
       end
 
       def objects
@@ -301,12 +276,10 @@ module Pod
         source_files
       end
 
-      def create_in(pods_root)
-        puts "  * Copying contents of template directory `#{@template_dir}' to `#{pods_root}'" if config.verbose?
-        FileUtils.cp_r("#{@template_dir}/.", pods_root)
-        pbxproj = pods_root + template_file
-        puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
-        @template.writeToFile(pbxproj.to_s, atomically:true)
+      def save_as(projpath)
+        projpath = projpath.to_s
+        FileUtils.mkdir_p(projpath)
+        @plist.writeToFile(File.join(projpath, 'project.pbxproj'), atomically:true)
       end
 
       # TODO add comments, or even constants, describing what these magic numbers are.
