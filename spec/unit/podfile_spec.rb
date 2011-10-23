@@ -56,6 +56,12 @@ describe "Pod::Podfile" do
         Pod::Dependency.new('SSZipArchive')
       ]
     end
+
+    it "does not add dependencies of the outer target to exclusive targets" do
+      target = @podfile.targets[:test]
+      target.lib_name.should == 'libPods-test'
+      target.dependencies.should == [Pod::Dependency.new('JSONKit')]
+    end
   end
 
   describe "concerning validations" do

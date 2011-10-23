@@ -94,11 +94,38 @@ module Pod
 
     attr_reader :targets
 
+    # Defines a new static library target and scopes dependencies defined from
+    # the given block. The target will by default include the dependencies
+    # defined outside of the block, unless the `:exclusive => true` option is
+    # given.
+    #
+    # Consider the following Podfile:
+    #
+    #   dependency 'ASIHTTPRequest'
+    #
+    #   target :debug do
+    #     dependency 'SSZipArchive'
+    #   end
+    #
+    #   target :test, :exclusive => true do
+    #     dependency 'JSONKit'
+    #   end
+    #
+    # This Podfile defines three targets. The first one is the `:default` target,
+    # which produces the `libPods.a` file. The second and third are the `:debug`
+    # and `:test` ones, which produce the `libPods-debug.a` and `libPods-test.a`
+    # files.
+    #
+    # The `:default` target has only one dependency (ASIHTTPRequest), whereas the
+    # `:debug` target has two (ASIHTTPRequest, SSZipArchive). The `:test` target,
+    # however, is an exclusive target which means it will only have one
+    # dependency (JSONKit).
     def target(name, options = {})
-      @targets[name] = @target = Target.new(name, @target)
+      parent = @target
+      @targets[name] = @target = Target.new(name, options[:exclusive] ? nil : parent)
       yield
     ensure
-      @target = @target.parent
+      @target = parent
     end
 
     # This is to be compatible with a Specification for use in the Installer and
