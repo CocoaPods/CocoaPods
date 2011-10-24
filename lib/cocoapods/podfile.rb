@@ -27,6 +27,8 @@ module Pod
       podfile
     end
 
+    include Config::Mixin
+
     def initialize(&block)
       @targets = { :default => (@target = Target.new(:default)) }
       instance_eval(&block)

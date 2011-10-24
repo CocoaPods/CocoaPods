@@ -38,8 +38,6 @@ else
         config.silent = true
         config.repos_dir = fixture('spec-repos')
         config.project_pods_root = temporary_directory + 'Pods'
-        def config.ios?; true; end
-        def config.osx?; false; end
 
         FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
       end
@@ -51,6 +49,9 @@ else
       # TODO add a simple source file which uses the compiled lib to check that it really really works
       it "should activate required pods and create a working static library xcode project" do
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'ASIWebPageRequest', '>= 1.8.1'
           dependency 'JSONKit',           '>= 1.0'
@@ -61,7 +62,7 @@ else
         installer.install!
 
         root = config.project_pods_root
-        (root + 'Reachability.podspec').should.exist
+        (root + 'Reachability.podspec').should.exist if platform == :ios
         (root + 'ASIHTTPRequest.podspec').should.exist
         (root + 'ASIWebPageRequest.podspec').should.exist
         (root + 'JSONKit.podspec').should.exist
@@ -72,15 +73,18 @@ else
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
         NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.xcodeproj.to_hash
 
-        #puts "\n[!] Compiling static library..."
-        #Dir.chdir(config.project_pods_root) do
-          #system("xcodebuild > /dev/null 2>&1").should == true
+        puts "\n[!] Compiling static library..."
+        Dir.chdir(config.project_pods_root) do
+          system("xcodebuild > /dev/null 2>&1").should == true
           #system("xcodebuild").should == true
-        #end
+        end
       end
 
       it "does not activate pods that are only part of other pods" do
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'Reachability'
         end
@@ -94,6 +98,9 @@ else
 
       it "adds resources to the xcode copy script" do
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'SSZipArchive'
         end
@@ -111,6 +118,9 @@ else
       # TODO we need to do more cleaning and/or add a --prune task
       it "overwrites an existing project.pbxproj file" do
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'JSONKit'
         end
@@ -120,6 +130,9 @@ else
         Pod::Source.reset!
         Pod::Spec::Set.reset!
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'SSZipArchive'
         end
@@ -131,6 +144,7 @@ else
         project = Pod::Xcode::Project.new(config.project_pods_root)
         project.source_files.should == installer.xcodeproj.source_files
       end
+
     end
   end
 end
