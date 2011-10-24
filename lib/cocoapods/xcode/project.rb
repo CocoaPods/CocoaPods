@@ -88,6 +88,10 @@ module Pod
           end
           file
         end
+        
+        def <<(child)
+          children << child.uuid
+        end
       end
 
       class PBXFileReference < PBXObject
@@ -145,12 +149,50 @@ module Pod
       class PBXFrameworksBuildPhase < PBXBuildPhase; end
 
       class PBXNativeTarget < PBXObject
-        attributes_accessor :buildPhases
+        attributes_accessor :buildPhases, :buildConfigurationList
         alias_method :build_phase_uuids, :buildPhases
         alias_method :build_phase_uuids=, :buildPhases=
+        alias_method :build_configuration_list_uuid, :buildConfigurationList
+        alias_method :build_configuration_list_uuid=, :buildConfigurationList=
 
         def buildPhases
           list_by_class(build_phase_uuids, PBXBuildPhase)
+        end
+        
+        def buildConfigurationList
+          @project.objects[build_configuration_list_uuid]
+        end
+        
+        def buildConfigurationList=(config_list)
+          self.build_configuration_list_uuid = config_list.uuid
+        end
+      end
+
+      class XCBuildConfiguration < PBXObject
+        attributes_accessor :baseConfigurationReference
+        alias_method :base_configuration_reference_uuid, :baseConfigurationReference
+        alias_method :base_configuration_reference_uuid=, :baseConfigurationReference=
+        
+        def baseConfigurationReference
+          @project.objects[base_configuration_reference_uuid]
+        end
+        
+        def baseConfigurationReference=(config)
+          self.base_configuration_reference_uuid = config.uuid
+        end
+      end
+      
+      class XCConfigurationList < PBXObject
+        attributes_accessor :buildConfigurations
+        alias_method :build_configuration_uuids, :buildConfigurations
+        alias_method :build_configuration_uuids=, :buildConfigurations=
+        
+        def buildConfigurations
+          list_by_class(build_configuration_uuids, XCBuildConfiguration)
+        end
+        
+        def buildConfigurations=(configs)
+          self.build_configuration_uuids = configs.map(&:uuid)
         end
       end
 
