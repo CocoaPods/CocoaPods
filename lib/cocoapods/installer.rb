@@ -123,6 +123,25 @@ module Pod
       end
       app_project.main_group << configfile
       
+      
+      # This doesn't work yet.
+      # A working example from having dragged libPods.a over:
+      # {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; 
+      #   path = "Pods/build/Release-iphoneos/libPods.a"; sourceTree = "<group>"; };
+      # Need to figure out how to calculate that path, which appears to be 
+      # based on the Pods.xcodeproj's BUILT_PRODUCTS_DIR.
+      # 
+      # libfile = app_project.files.new({
+      #   'path' => 'libPods.a',
+      #   'lastKnownFileType' => 'archive.ar',
+      #   'includeInIndex' => '0',
+      #   'sourceTree' => 'BUILT_PRODUCTS_DIR'
+      # })
+      # app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
+      #   build_phase.files << libfile.build_file
+      # end
+      # app_project.main_group << libfile
+      
       app_project.save_as(projpath)
     end
   end
