@@ -11,3 +11,5 @@ examples/Podfile
 examples/Pods
 examples/**/Pods
 spec/fixtures/banana-lib
+pod
+/concatenated.*
