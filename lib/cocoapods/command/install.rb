@@ -22,7 +22,7 @@ module Pod
       def initialize(argv)
         config.clean = !argv.option('--no-clean')
         projpath = argv.shift_argument
-        projpath =~ /\.xcodeproj$/ ? @projpath = projpath : podspec = projpath
+        projpath =~ /\.xcodeproj\/?$/ ? @projpath = projpath : podspec = projpath
         @podspec = Pathname.new(podspec) if podspec
         @projpath ||= argv.shift_argument
         super unless argv.empty?
