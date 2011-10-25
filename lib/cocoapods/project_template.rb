@@ -10,8 +10,18 @@ module Pod
     # that makes the use of __FILE__ impossible.
     #
     #TEMPLATES_DIR = Pathname.new(File.expand_path('../../../xcode-project-templates', __FILE__))
-    file = $LOADED_FEATURES.find { |file| file =~ %r{cocoapods/project_template\.rbo?$} }
-    TEMPLATES_DIR = Pathname.new(File.expand_path('../../../xcode-project-templates', file))
+    # Rest of this is to handle sourcing template projects from standalone 
+    # executable, for which even the $LOADED_FEATURES workaround fails.
+    possibilities = [
+      [
+        $LOADED_FEATURES.find { |file| file =~ %r{cocoapods/project_template\.rbo?$} },
+        '../../../xcode-project-templates'
+      ],
+      [$0, '../xcode-project-templates']
+    ]
+    TEMPLATES_DIR = possibilities.map do |base, relpath|
+      Pathname.new(File.expand_path(relpath, base))
+    end.find { |path| path && path.exist? }
     
     def path
       @path ||= case @platform
