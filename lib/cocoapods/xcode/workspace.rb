@@ -30,6 +30,10 @@ module Pod
         @projpaths << projpath
       end
       
+      def include?(projpath)
+        @projpaths.include?(projpath)
+      end
+      
       TEMPLATE = %q[<?xml version="1.0" encoding="UTF-8"?><Workspace version="1.0"></Workspace>]
       def to_s
         doc = NSXMLDocument.alloc.initWithXMLString(TEMPLATE, options:0, error:nil)

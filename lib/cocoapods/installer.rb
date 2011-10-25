@@ -105,7 +105,8 @@ module Pod
       pods_projpath = File.join(config.project_pods_root, 'Pods.xcodeproj')
       root = Pathname.new(root).expand_path
       [projpath, pods_projpath].each do |path|
-        workspace << Pathname.new(path).expand_path.relative_path_from(root)
+        path = Pathname.new(path).expand_path.relative_path_from(root).to_s
+        workspace << path unless workspace.include? path
       end
       workspace.save_as(xcworkspace)
 
