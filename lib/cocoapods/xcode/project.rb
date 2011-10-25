@@ -144,9 +144,11 @@ module Pod
           list_by_class(file_uuids, PBXBuildFile)
         end
       end
-      class PBXSourcesBuildPhase < PBXBuildPhase;    end
-      class PBXCopyFilesBuildPhase < PBXBuildPhase;  end
-      class PBXFrameworksBuildPhase < PBXBuildPhase; end
+      
+      class PBXSourcesBuildPhase < PBXBuildPhase;     end
+      class PBXCopyFilesBuildPhase < PBXBuildPhase;   end
+      class PBXFrameworksBuildPhase < PBXBuildPhase;  end
+      class PBXShellScriptBuildPhase < PBXBuildPhase; end
 
       class PBXNativeTarget < PBXObject
         attributes_accessor :buildPhases, :buildConfigurationList

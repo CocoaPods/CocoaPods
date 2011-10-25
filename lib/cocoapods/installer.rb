@@ -135,6 +135,18 @@ module Pod
       end
       app_project.main_group << libfile
       
+      copy_resources = app_project.objects.add(Xcode::Project::PBXShellScriptBuildPhase, {
+        'name' => 'Copy Pods Resources',
+        'buildActionMask' => '2147483647',
+        'files' => [],
+        'inputPaths' => [],
+        'outputPaths' => [],
+        'runOnlyForDeploymentPostprocessing' => '0',
+        'shellPath' => '/bin/sh',
+        'shellScript' => "${SRCROOT}/Pods/PodsResources.sh\n"
+      })
+      app_project.targets.each { |target| target.buildPhases << copy_resources }
+      
       app_project.save_as(projpath)
     end
   end
