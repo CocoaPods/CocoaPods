@@ -37,7 +37,7 @@ module Pod
       TEMPLATE = %q[<?xml version="1.0" encoding="UTF-8"?><Workspace version="1.0"></Workspace>]
       def to_s
         doc = NSXMLDocument.alloc.initWithXMLString(TEMPLATE, options:0, error:nil)
-        @projpaths.uniq.each do |projpath|
+        @projpaths.each do |projpath|
           el = NSXMLNode.elementWithName("FileRef")
           el.addAttribute(NSXMLNode.attributeWithName("location", stringValue:"group:#{projpath}"))
           doc.rootElement.addChild(el)
