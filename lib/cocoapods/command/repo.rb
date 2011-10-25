@@ -44,7 +44,7 @@ module Pod
       def add
         puts "==> Cloning spec repo `#{@name}' from `#{@url}'" unless config.silent?
         config.repos_dir.mkpath
-        Dir.chdir(config.repos_dir) { git("clone #{@url} #{@name}") }
+        Dir.chdir(config.repos_dir) { git("clone '#{@url}' #{@name}") }
       end
 
       def update

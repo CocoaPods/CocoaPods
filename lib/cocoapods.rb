@@ -1,5 +1,5 @@
 module Pod
-  VERSION = '0.1.1'
+  VERSION = '0.2.0'
 
   class Informative < StandardError
   end
@@ -12,6 +12,7 @@ module Pod
   autoload :Executable,             'cocoapods/executable'
   autoload :Installer,              'cocoapods/installer'
   autoload :Podfile,                'cocoapods/podfile'
+  autoload :ProjectTemplate,        'cocoapods/project_template'
   autoload :Resolver,               'cocoapods/resolver'
   autoload :Source,                 'cocoapods/source'
   autoload :Spec,                   'cocoapods/specification'
@@ -22,6 +23,7 @@ module Pod
     autoload :Config,               'cocoapods/xcode/config'
     autoload :CopyResourcesScript,  'cocoapods/xcode/copy_resources_script'
     autoload :Project,              'cocoapods/xcode/project'
+    autoload :Workspace,            'cocoapods/xcode/workspace'
   end
 
   autoload :Pathname,               'pathname'

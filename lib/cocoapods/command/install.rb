@@ -4,10 +4,11 @@ module Pod
       def self.banner
 %{Installing dependencies of a pod spec:
 
-    $ pod install [NAME]
+    $ pod install [NAME] [PROJECT]
 
-      Downloads all dependencies of the specified podspec file `NAME' and
-      creates an Xcode Pods library project in `./Pods'. In case `NAME' is
+      Downloads all dependencies of the specified podspec file `NAME',
+      creates an Xcode Pods library project in `./Pods', and sets up `PROJECT' 
+      to use the specified pods (if `PROJECT' is given). In case `NAME' is
       omitted it defaults to either `Podfile' or `*.podspec' in the current
       working directory.
 }
@@ -20,9 +21,10 @@ module Pod
 
       def initialize(argv)
         config.clean = !argv.option('--no-clean')
-        if podspec = argv.shift_argument
-          @podspec = Pathname.new(podspec)
-        end
+        projpath = argv.shift_argument
+        projpath =~ /\.xcodeproj\/?$/ ? @projpath = projpath : podspec = projpath
+        @podspec = Pathname.new(podspec) if podspec
+        @projpath ||= argv.shift_argument
         super unless argv.empty?
       end
 
@@ -39,7 +41,9 @@ module Pod
             raise Informative, "No `Podfile' or `.podspec' file found in the current working directory."
           end
         end
-        Installer.new(spec).install!
+        installer = Installer.new(spec)
+        installer.install!
+        installer.configure_project(@projpath) if @projpath
       end
     end
   end

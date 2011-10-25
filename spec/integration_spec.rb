@@ -141,7 +141,7 @@ else
 
         installer = Pod::Installer.new(spec)
         installer.generate_project
-        project = Pod::Xcode::Project.new(config.project_pods_root)
+        project = Pod::Xcode::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.source_files.should == installer.xcodeproj.source_files
       end
 
@@ -168,6 +168,39 @@ else
           system("xcodebuild -target Pods").should == true
           system("xcodebuild -target Pods-debug").should == true
           system("xcodebuild -target Pods-test").should == true
+        end
+      end
+
+      it "sets up an existing project with pods" do
+        basename = platform == :ios ? 'iPhone' : 'Mac'
+        projpath = temporary_directory + 'ASIHTTPRequest.xcodeproj'
+        FileUtils.cp_r(fixture("integration/ASIHTTPRequest/#{basename}.xcodeproj"), projpath)
+        spec = Pod::Podfile.new do
+          self.platform platform
+          dependency 'SSZipArchive'
+        end
+        installer = SpecHelper::Installer.new(spec)
+        installer.install!
+        installer.configure_project(projpath)
+        xcworkspace = temporary_directory + 'ASIHTTPRequest.xcworkspace'
+        workspace = Pod::Xcode::Workspace.new_from_xcworkspace(xcworkspace)
+        workspace.projpaths.sort.should == ['ASIHTTPRequest.xcodeproj', 'Pods/Pods.xcodeproj']
+        project = Pod::Xcode::Project.new(projpath)
+        config = project.files.find { |f| f.path =~ /Pods.xcconfig$/ }
+        config.should.not.equal nil
+        copy_resources = project.objects.select_by_class(Pod::Xcode::Project::PBXShellScriptBuildPhase).find do |ss|
+          ss.shellScript['PodsResources.sh']
+        end
+        copy_resources.should.not.equal nil
+        project.targets.each do |target|
+          bases = target.buildConfigurationList.buildConfigurations.map(&:baseConfigurationReference)
+          bases.uniq[0].uuid.should == config.uuid
+          target.buildPhases.map(&:uuid).should.include copy_resources.uuid
+        end
+        lib = project.files.find { |f| f.path =~ /libPods.a$/ }
+        lib.should.not.equal nil
+        project.objects.select_by_class(Pod::Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
+          build_phase.files.map(&:uuid).should.include lib.build_file.uuid
         end
       end
 
