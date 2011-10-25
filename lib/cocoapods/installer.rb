@@ -29,8 +29,12 @@ module Pod
       })
     end
 
+    def template
+      @template ||= ProjectTemplate.new(@specification.platform)
+    end
+
     def xcodeproj
-      @xcodeproj ||= Xcode::Project.static_library(@specification.platform)
+      @xcodeproj ||= Xcode::Project.new(template.xcodeproj_path)
     end
 
     # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
@@ -79,7 +83,11 @@ module Pod
       generate_project
 
       root = config.project_pods_root
-      xcodeproj.create_in(root)
+      puts "  * Copying contents of template directory `#{template.path}' to `#{root}'" if config.verbose?
+      template.copy_to(root)
+      pbxproj = File.join(root, 'Pods.xcodeproj')
+      puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
+      xcodeproj.save_as(pbxproj)
       xcconfig.create_in(root)
       if @specification.generate_bridge_support?
         path = bridge_support_generator.create_in(root)
@@ -88,6 +96,58 @@ module Pod
       copy_resources_script.create_in(root)
 
       build_specifications.each(&:post_install)
+    end
+    
+    def configure_project(projpath)
+      root = File.dirname(projpath)
+      xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')
+      workspace = Xcode::Workspace.new_from_xcworkspace(xcworkspace)
+      pods_projpath = File.join(config.project_pods_root, 'Pods.xcodeproj')
+      root = Pathname.new(root).expand_path
+      [projpath, pods_projpath].each do |path|
+        path = Pathname.new(path).expand_path.relative_path_from(root).to_s
+        workspace << path unless workspace.include? path
+      end
+      workspace.save_as(xcworkspace)
+
+      app_project = Xcode::Project.new(projpath)
+      return if app_project.files.find { |file| file.path =~ /libPods\.a$/ }
+
+      configfile = app_project.files.new({
+        'path' => 'Pods/Pods.xcconfig',
+        'lastKnownFileType' => 'text.xcconfig'
+      })
+      app_project.targets.each do |target|
+        target.buildConfigurationList.buildConfigurations.each do |config|
+          config.baseConfigurationReference = configfile
+        end
+      end
+      app_project.main_group << configfile
+      
+      libfile = app_project.files.new({
+        'path' => 'libPods.a',
+        'lastKnownFileType' => 'archive.ar',
+        'includeInIndex' => '0',
+        'sourceTree' => 'BUILT_PRODUCTS_DIR'
+      })
+      app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
+        build_phase.files << libfile.build_file
+      end
+      app_project.main_group << libfile
+      
+      copy_resources = app_project.objects.add(Xcode::Project::PBXShellScriptBuildPhase, {
+        'name' => 'Copy Pods Resources',
+        'buildActionMask' => '2147483647',
+        'files' => [],
+        'inputPaths' => [],
+        'outputPaths' => [],
+        'runOnlyForDeploymentPostprocessing' => '0',
+        'shellPath' => '/bin/sh',
+        'shellScript' => "${SRCROOT}/Pods/PodsResources.sh\n"
+      })
+      app_project.targets.each { |target| target.buildPhases << copy_resources }
+      
+      app_project.save_as(projpath)
     end
   end
 end

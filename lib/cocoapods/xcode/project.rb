@@ -88,6 +88,10 @@ module Pod
           end
           file
         end
+        
+        def <<(child)
+          children << child.uuid
+        end
       end
 
       class PBXFileReference < PBXObject
@@ -122,7 +126,7 @@ module Pod
 
         # Returns a PBXFileReference instance corresponding to the uuid in the fileRef attribute.
         def file
-          project.objects[fileRef]
+          @project.objects[fileRef]
         end
       end
 
@@ -140,16 +144,59 @@ module Pod
           list_by_class(file_uuids, PBXBuildFile)
         end
       end
-      class PBXSourcesBuildPhase < PBXBuildPhase;   end
-      class PBXCopyFilesBuildPhase < PBXBuildPhase; end
+      
+      class PBXSourcesBuildPhase < PBXBuildPhase;     end
+      class PBXCopyFilesBuildPhase < PBXBuildPhase;   end
+      class PBXFrameworksBuildPhase < PBXBuildPhase;  end
+      class PBXShellScriptBuildPhase < PBXBuildPhase
+        attributes_accessor :shellScript
+      end
 
       class PBXNativeTarget < PBXObject
-        attributes_accessor :buildPhases
+        attributes_accessor :buildPhases, :buildConfigurationList
         alias_method :build_phase_uuids, :buildPhases
         alias_method :build_phase_uuids=, :buildPhases=
+        alias_method :build_configuration_list_uuid, :buildConfigurationList
+        alias_method :build_configuration_list_uuid=, :buildConfigurationList=
 
         def buildPhases
           list_by_class(build_phase_uuids, PBXBuildPhase)
+        end
+        
+        def buildConfigurationList
+          @project.objects[build_configuration_list_uuid]
+        end
+        
+        def buildConfigurationList=(config_list)
+          self.build_configuration_list_uuid = config_list.uuid
+        end
+      end
+
+      class XCBuildConfiguration < PBXObject
+        attributes_accessor :baseConfigurationReference
+        alias_method :base_configuration_reference_uuid, :baseConfigurationReference
+        alias_method :base_configuration_reference_uuid=, :baseConfigurationReference=
+        
+        def baseConfigurationReference
+          @project.objects[base_configuration_reference_uuid]
+        end
+        
+        def baseConfigurationReference=(config)
+          self.base_configuration_reference_uuid = config.uuid
+        end
+      end
+      
+      class XCConfigurationList < PBXObject
+        attributes_accessor :buildConfigurations
+        alias_method :build_configuration_uuids, :buildConfigurations
+        alias_method :build_configuration_uuids=, :buildConfigurations=
+        
+        def buildConfigurations
+          list_by_class(build_configuration_uuids, XCBuildConfiguration)
+        end
+        
+        def buildConfigurations=(configs)
+          self.build_configuration_uuids = configs.map(&:uuid)
         end
       end
 
@@ -215,42 +262,17 @@ module Pod
         end
       end
 
-      include Pod::Config::Mixin
-
-      # TODO this is a workaround for an issue with MacRuby with compiled files
-      # that makes the use of __FILE__ impossible.
-      #
-      #TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', __FILE__))
-      file = $LOADED_FEATURES.find { |file| file =~ %r{cocoapods/xcode/project\.rbo?$} }
-      TEMPLATES_DIR = Pathname.new(File.expand_path('../../../../xcode-project-templates', file))
-
-      def self.static_library(platform)
-        case platform
-        when :osx
-          new TEMPLATES_DIR + 'cocoa-static-library'
-        when :ios
-          new TEMPLATES_DIR + 'cocoa-touch-static-library'
-        else
-          raise "No Xcode project template exists for the platform `#{platform.inspect}'"
-        end
-      end
-
-      def initialize(template_dir)
-        @template_dir = template_dir
-        file = template_dir + template_file
-        @template = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
-      end
-
-      def template_file
-        'Pods.xcodeproj/project.pbxproj'
+      def initialize(xcodeproj)
+        file = File.join(xcodeproj, 'project.pbxproj')
+        @plist = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
       end
 
       def to_hash
-        @template
+        @plist
       end
 
       def objects_hash
-        @template['objects']
+        @plist['objects']
       end
 
       def objects
@@ -259,6 +281,11 @@ module Pod
 
       def groups
         objects.select_by_class(PBXGroup)
+      end
+      
+      def main_group
+        project = objects[@plist['rootObject']]
+        objects[project.attributes['mainGroup']]
       end
 
       # Shortcut access to the `Pods' PBXGroup.
@@ -301,12 +328,10 @@ module Pod
         source_files
       end
 
-      def create_in(pods_root)
-        puts "  * Copying contents of template directory `#{@template_dir}' to `#{pods_root}'" if config.verbose?
-        FileUtils.cp_r("#{@template_dir}/.", pods_root)
-        pbxproj = pods_root + template_file
-        puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
-        @template.writeToFile(pbxproj.to_s, atomically:true)
+      def save_as(projpath)
+        projpath = projpath.to_s
+        FileUtils.mkdir_p(projpath)
+        @plist.writeToFile(File.join(projpath, 'project.pbxproj'), atomically:true)
       end
 
       # TODO add comments, or even constants, describing what these magic numbers are.

@@ -4,7 +4,8 @@ describe "Pod::Xcode::Project" do
   extend SpecHelper::TemporaryDirectory
 
   before do
-    @project = Pod::Xcode::Project.static_library(:ios)
+    @template = Pod::ProjectTemplate.new(:ios)
+    @project = Pod::Xcode::Project.new(@template.xcodeproj_path)
   end
 
   def find_objects(conditions)
@@ -18,8 +19,7 @@ describe "Pod::Xcode::Project" do
   end
 
   it "returns an instance initialized from the iOS static library template" do
-    template_dir = Pod::Xcode::Project::TEMPLATES_DIR + 'cocoa-touch-static-library'
-    template_file = (template_dir + 'Pods.xcodeproj/project.pbxproj').to_s
+    template_file = (@template.xcodeproj_path + '/project.pbxproj').to_s
     @project.to_hash.should == NSDictionary.dictionaryWithContentsOfFile(template_file)
   end
 
@@ -178,7 +178,8 @@ describe "Pod::Xcode::Project" do
   end
 
   it "saves the template with the adjusted project" do
-    @project.create_in(temporary_directory)
+    @template.copy_to(temporary_directory)
+    @project.save_as(temporary_directory + 'Pods.xcodeproj')
     (temporary_directory + 'Pods-Prefix.pch').should.exist
     (temporary_directory + 'Pods.xcconfig').should.exist
     project_file = (temporary_directory + 'Pods.xcodeproj/project.pbxproj')
