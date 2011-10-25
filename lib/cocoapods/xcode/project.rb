@@ -148,7 +148,9 @@ module Pod
       class PBXSourcesBuildPhase < PBXBuildPhase;     end
       class PBXCopyFilesBuildPhase < PBXBuildPhase;   end
       class PBXFrameworksBuildPhase < PBXBuildPhase;  end
-      class PBXShellScriptBuildPhase < PBXBuildPhase; end
+      class PBXShellScriptBuildPhase < PBXBuildPhase
+        attributes_accessor :shellScript
+      end
 
       class PBXNativeTarget < PBXObject
         attributes_accessor :buildPhases, :buildConfigurationList
