@@ -131,33 +131,52 @@ module Pod
       end
 
       class PBXBuildPhase < PBXObject
-        attributes_accessor :files
+        attributes_accessor :files, :buildActionMask, :runOnlyForDeploymentPostprocessing
         alias_method :file_uuids, :files
         alias_method :file_uuids=, :files=
 
-        def initialize(project, uuid, attributes)
+        def initialize(*)
           super
           self.file_uuids ||= []
+          # These are always the same, no idea what they are.
+          self.buildActionMask ||= "2147483647"
+          self.runOnlyForDeploymentPostprocessing ||= "0"
         end
 
         def files
           list_by_class(file_uuids, PBXBuildFile)
         end
       end
-      
+
+      class PBXCopyFilesBuildPhase < PBXBuildPhase
+        attributes_accessor :dstPath, :dstSubfolderSpec
+
+        def initialize(*)
+          super
+          self.dstSubfolderSpec ||= "16"
+        end
+      end
+
       class PBXSourcesBuildPhase < PBXBuildPhase;     end
-      class PBXCopyFilesBuildPhase < PBXBuildPhase;   end
       class PBXFrameworksBuildPhase < PBXBuildPhase;  end
       class PBXShellScriptBuildPhase < PBXBuildPhase
         attributes_accessor :shellScript
       end
 
       class PBXNativeTarget < PBXObject
-        attributes_accessor :buildPhases, :buildConfigurationList
+        attributes_accessor :productName, :productReference, :productType, :buildPhases, :buildRules, :dependencies, :buildConfigurationList
         alias_method :build_phase_uuids, :buildPhases
         alias_method :build_phase_uuids=, :buildPhases=
         alias_method :build_configuration_list_uuid, :buildConfigurationList
         alias_method :build_configuration_list_uuid=, :buildConfigurationList=
+
+        def initialize(project, uuid, attributes)
+          super
+          self.buildPhases ||= []
+          # TODO self.buildConfigurationList ||= new list?
+          #self.buildRules ||= []
+          #self.dependencies ||= []
+        end
 
         def buildPhases
           list_by_class(build_phase_uuids, PBXBuildPhase)

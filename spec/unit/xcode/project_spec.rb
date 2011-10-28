@@ -50,6 +50,88 @@ describe "Pod::Xcode::Project" do
     end
   end
 
+  describe "a new PBXBuildPhase" do
+    before do
+      @phase = @project.objects.add(Pod::Xcode::Project::PBXBuildPhase)
+    end
+
+    it "has an empty list of files" do
+      @phase.files.to_a.should == []
+    end
+
+    it "always returns the same buildActionMask (no idea what it is)" do
+      @phase.buildActionMask.should == "2147483647"
+    end
+
+    it "always returns zero for runOnlyForDeploymentPostprocessing (no idea what it is)" do
+      @phase.runOnlyForDeploymentPostprocessing.should == "0"
+    end
+  end
+
+  describe "a new PBXCopyFilesBuildPhase" do
+    before do
+      @phase = @project.objects.add(Pod::Xcode::Project::PBXCopyFilesBuildPhase, 'dstPath' => 'some/path')
+    end
+
+    it "is a PBXBuildPhase" do
+      @phase.should.be.kind_of Pod::Xcode::Project::PBXBuildPhase
+    end
+
+    it "returns the dstPath" do
+      @phase.dstPath.should == 'some/path'
+    end
+
+    it "returns the dstSubfolderSpec (no idea what it is yet, but it's not always the same)" do
+      @phase.dstSubfolderSpec.should == "16"
+    end
+  end
+
+  describe "a new PBXSourcesBuildPhase" do
+    before do
+      @phase = @project.objects.add(Pod::Xcode::Project::PBXSourcesBuildPhase)
+    end
+
+    it "is a PBXBuildPhase" do
+      @phase.should.be.kind_of Pod::Xcode::Project::PBXBuildPhase
+    end
+  end
+
+  describe "a new PBXFrameworksBuildPhase" do
+    before do
+      @phase = @project.objects.add(Pod::Xcode::Project::PBXFrameworksBuildPhase)
+    end
+
+    it "is a PBXBuildPhase" do
+      @phase.should.be.kind_of Pod::Xcode::Project::PBXBuildPhase
+    end
+  end
+
+  describe "a new PBXNativeTarget" do
+    before do
+      @target = @project.targets.first
+    end
+
+    describe "concerning its build phases" do
+      extend SpecHelper::TemporaryDirectory
+
+      it "returns an empty sources build phase" do
+        phase = @target.buildPhases.select_by_class(Pod::Xcode::Project::PBXSourcesBuildPhase).first
+        phase.files.to_a.should == []
+      end
+
+      it "returns a libraries/frameworks build phase, which by default only contains `Foundation.framework'" do
+        phase = @target.buildPhases.select_by_class(Pod::Xcode::Project::PBXFrameworksBuildPhase).first
+        phase.files.map { |buildFile| buildFile.file.name }.should == ['Foundation.framework']
+      end
+
+      it "returns an empty 'copy headers' phase" do
+        phase = @target.buildPhases.select_by_class(Pod::Xcode::Project::PBXCopyFilesBuildPhase).first
+        phase.dstPath.should == "$(PUBLIC_HEADERS_FOLDER_PATH)"
+        phase.files.to_a.should == []
+      end
+    end
+  end
+
   it "returns the objects as PBXObject instances" do
     @project.objects.each do |object|
       @project.objects_hash[object.uuid].should == object.attributes
