@@ -5,11 +5,36 @@ module Pod
   module Xcode
     class Project
       class PBXObject
-        def self.attributes_accessor(*names)
-          names.each do |name|
-            name = name.to_s
-            define_method(name) { @attributes[name] }
-            define_method("#{name}=") { |value| @attributes[name] = value }
+        def self.attribute(attribute_name, accessor_name = nil)
+          attribute_name = attribute_name.to_s
+          name = (accessor_name || attribute_name).to_s
+          define_method(name) { @attributes[attribute_name] }
+          define_method("#{name}=") { |value| @attributes[attribute_name] = value }
+        end
+
+        def self.has_many(plural_attr_name, options)
+          klass = options[:class]
+          singular_attr_name = plural_attr_name.to_s[0..-2] # strip off 's'
+          uuid_list_name = "#{singular_attr_name}UUIDs"
+          attribute(plural_attr_name, uuid_list_name)
+          define_method(plural_attr_name) do
+            uuids = send(uuid_list_name)
+            list_by_class(uuids, klass)
+          end
+          define_method("#{plural_attr_name}=") do |objects|
+            send("#{uuid_list_name}=", objects.map(&:uuid))
+          end
+        end
+
+        def self.has_one(singular_attr_name, options = {})
+          uuid_name = options[:uuid] || "#{singular_attr_name}UUID" # TODO change UUID to Reference?
+          attribute(options[:uuid] || singular_attr_name, uuid_name)
+          define_method(singular_attr_name) do
+            uuid = send(uuid_name)
+            @project.objects[uuid]
+          end
+          define_method("#{singular_attr_name}=") do |object|
+            send("#{uuid_name}=", object.uuid)
           end
         end
 
@@ -18,7 +43,8 @@ module Pod
         end
 
         attr_reader :uuid, :attributes
-        attributes_accessor :isa, :name
+        attribute :isa
+        attribute :name
 
         def initialize(project, uuid, attributes)
           @project, @uuid, @attributes = project, uuid || generate_uuid, attributes
@@ -52,7 +78,8 @@ module Pod
       end
 
       class PBXGroup < PBXObject
-        attributes_accessor :sourceTree, :children
+        attribute :sourceTree
+        attribute :children
 
         def initialize(project, uuid, attributes)
           super
@@ -95,7 +122,8 @@ module Pod
       end
 
       class PBXFileReference < PBXObject
-        attributes_accessor :path, :sourceTree
+        attribute :path
+        attribute :sourceTree
 
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
@@ -117,7 +145,8 @@ module Pod
       end
 
       class PBXBuildFile < PBXObject
-        attributes_accessor :fileRef, :settings
+        attribute :fileRef
+        attribute :settings
 
         # Takes a PBXFileReference instance and assigns its uuid to the fileRef attribute.
         def file=(file)
@@ -131,25 +160,23 @@ module Pod
       end
 
       class PBXBuildPhase < PBXObject
-        attributes_accessor :files, :buildActionMask, :runOnlyForDeploymentPostprocessing
-        alias_method :file_uuids, :files
-        alias_method :file_uuids=, :files=
+        has_many :files, :class => PBXBuildFile
+
+        attribute :buildActionMask
+        attribute :runOnlyForDeploymentPostprocessing
 
         def initialize(*)
           super
-          self.file_uuids ||= []
+          self.fileUUIDs ||= []
           # These are always the same, no idea what they are.
           self.buildActionMask ||= "2147483647"
           self.runOnlyForDeploymentPostprocessing ||= "0"
         end
-
-        def files
-          list_by_class(file_uuids, PBXBuildFile)
-        end
       end
 
       class PBXCopyFilesBuildPhase < PBXBuildPhase
-        attributes_accessor :dstPath, :dstSubfolderSpec
+        attribute :dstPath
+        attribute :dstSubfolderSpec
 
         def initialize(*)
           super
@@ -160,62 +187,38 @@ module Pod
       class PBXSourcesBuildPhase < PBXBuildPhase;     end
       class PBXFrameworksBuildPhase < PBXBuildPhase;  end
       class PBXShellScriptBuildPhase < PBXBuildPhase
-        attributes_accessor :shellScript
+        attribute :shellScript
       end
 
       class PBXNativeTarget < PBXObject
-        attributes_accessor :productName, :productReference, :productType, :buildPhases, :buildRules, :dependencies, :buildConfigurationList
-        alias_method :build_phase_uuids, :buildPhases
-        alias_method :build_phase_uuids=, :buildPhases=
-        alias_method :build_configuration_list_uuid, :buildConfigurationList
-        alias_method :build_configuration_list_uuid=, :buildConfigurationList=
+        attribute :productName
+        attribute :productReference
+        attribute :productType
+        attribute :buildRules
+        attribute :dependencies
+
+        has_many :buildPhases, :class => PBXBuildPhase
+        has_one :buildConfigurationList
 
         def initialize(project, uuid, attributes)
           super
-          self.buildPhases ||= []
+          self.buildPhaseUUIDs ||= []
           # TODO self.buildConfigurationList ||= new list?
           #self.buildRules ||= []
           #self.dependencies ||= []
         end
-
-        def buildPhases
-          list_by_class(build_phase_uuids, PBXBuildPhase)
-        end
-        
-        def buildConfigurationList
-          @project.objects[build_configuration_list_uuid]
-        end
-        
-        def buildConfigurationList=(config_list)
-          self.build_configuration_list_uuid = config_list.uuid
-        end
       end
 
       class XCBuildConfiguration < PBXObject
-        attributes_accessor :baseConfigurationReference
-        alias_method :base_configuration_reference_uuid, :baseConfigurationReference
-        alias_method :base_configuration_reference_uuid=, :baseConfigurationReference=
-        
-        def baseConfigurationReference
-          @project.objects[base_configuration_reference_uuid]
-        end
-        
-        def baseConfigurationReference=(config)
-          self.base_configuration_reference_uuid = config.uuid
-        end
+        has_one :baseConfiguration, :uuid => :baseConfigurationReference
       end
-      
+
       class XCConfigurationList < PBXObject
-        attributes_accessor :buildConfigurations
-        alias_method :build_configuration_uuids, :buildConfigurations
-        alias_method :build_configuration_uuids=, :buildConfigurations=
-        
-        def buildConfigurations
-          list_by_class(build_configuration_uuids, XCBuildConfiguration)
-        end
-        
-        def buildConfigurations=(configs)
-          self.build_configuration_uuids = configs.map(&:uuid)
+        has_many :buildConfigurations, :class => XCBuildConfiguration
+
+        def initialize(*)
+          super
+          self.buildConfigurationUUIDs ||= []
         end
       end
 

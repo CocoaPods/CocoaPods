@@ -106,9 +106,57 @@ describe "Pod::Xcode::Project" do
     end
   end
 
+  describe "a new XCBuildConfiguration" do
+    before do
+      @configuration = @project.objects.add(Pod::Xcode::Project::XCBuildConfiguration)
+    end
+
+    it "returns the xcconfig that this configuration is based on (baseConfigurationReference)" do
+      p @project.objects['515160D0141EC5D100EBB823']
+      xcconfig = @project.objects.new
+      @configuration.baseConfiguration = xcconfig
+      @configuration.baseConfigurationReference.should == xcconfig.uuid
+    end
+  end
+
+  describe "a new XCConfigurationList" do
+    before do
+      @list = @project.objects.add(Pod::Xcode::Project::XCConfigurationList)
+    end
+
+    it "returns the configurations" do
+      configuration = @project.objects.add(Pod::Xcode::Project::XCBuildConfiguration)
+      @list.buildConfigurations.to_a.should == []
+      @list.buildConfigurations = [configuration]
+      @list.buildConfigurationUUIDs.should == [configuration.uuid]
+    end
+  end
+
   describe "a new PBXNativeTarget" do
     before do
       @target = @project.targets.first
+    end
+
+    it "returns the product name, which is the name of the binary" do
+      @target.productName.should == "Pods"
+    end
+
+    it "returns the product" do
+      product = @target.product
+      product.uuid.should == @target.productReference
+    end
+
+    it "returns that product type is a static library" do
+      @target.productType.should == "com.apple.product-type.library.static"
+    end
+
+    it "returns the buildConfigurationList" do
+      list = @target.buildConfigurationList
+      list.should.be.instance_of Pod::Xcode::Project::XCConfigurationList
+      @target.buildConfigurationListUUID = nil
+      @target.buildConfigurationList.should == nil
+      @target.buildConfigurationListUUID = list.uuid
+      @target.buildConfigurationList.attributes.should == list.attributes
     end
 
     describe "concerning its build phases" do
