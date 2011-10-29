@@ -30,9 +30,9 @@ module Pod
           end
         end
 
-        def self.has_one(singular_attr_name)
-          uuid_name = "#{singular_attr_name}Reference"
-          attribute(singular_attr_name, uuid_name)
+        def self.has_one(singular_attr_name, options = {})
+          uuid_name = options[:uuid] || "#{singular_attr_name}Reference"
+          attribute(options[:uuid] || singular_attr_name, uuid_name)
           define_method(singular_attr_name) do
             uuid = send(uuid_name)
             @project.objects[uuid]
@@ -189,10 +189,11 @@ module Pod
       end
 
       class PBXNativeTarget < PBXObject
-        attributes :productName, :productReference, :productType, :buildRules, :dependencies
+        attributes :productName, :productType, :buildRules, :dependencies
 
         has_many :buildPhases, :class => PBXBuildPhase
         has_one :buildConfigurationList
+        has_one :product, :uuid => :productReference
 
         def initialize(project, uuid, attributes)
           super
