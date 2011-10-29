@@ -15,7 +15,7 @@ module Pod
         def self.has_many(plural_attr_name, options)
           klass = options[:class]
           singular_attr_name = plural_attr_name.to_s[0..-2] # strip off 's'
-          uuid_list_name = "#{singular_attr_name}UUIDs"
+          uuid_list_name = "#{singular_attr_name}References"
           attribute(plural_attr_name, uuid_list_name)
           define_method(plural_attr_name) do
             uuids = send(uuid_list_name)
@@ -26,9 +26,9 @@ module Pod
           end
         end
 
-        def self.has_one(singular_attr_name, options = {})
-          uuid_name = options[:uuid] || "#{singular_attr_name}UUID" # TODO change UUID to Reference?
-          attribute(options[:uuid] || singular_attr_name, uuid_name)
+        def self.has_one(singular_attr_name)
+          uuid_name = "#{singular_attr_name}Reference"
+          attribute(singular_attr_name, uuid_name)
           define_method(singular_attr_name) do
             uuid = send(uuid_name)
             @project.objects[uuid]
@@ -167,7 +167,7 @@ module Pod
 
         def initialize(*)
           super
-          self.fileUUIDs ||= []
+          self.fileReferences ||= []
           # These are always the same, no idea what they are.
           self.buildActionMask ||= "2147483647"
           self.runOnlyForDeploymentPostprocessing ||= "0"
@@ -202,7 +202,7 @@ module Pod
 
         def initialize(project, uuid, attributes)
           super
-          self.buildPhaseUUIDs ||= []
+          self.buildPhaseReferences ||= []
           # TODO self.buildConfigurationList ||= new list?
           #self.buildRules ||= []
           #self.dependencies ||= []
@@ -210,7 +210,7 @@ module Pod
       end
 
       class XCBuildConfiguration < PBXObject
-        has_one :baseConfiguration, :uuid => :baseConfigurationReference
+        has_one :baseConfiguration
       end
 
       class XCConfigurationList < PBXObject
@@ -218,7 +218,7 @@ module Pod
 
         def initialize(*)
           super
-          self.buildConfigurationUUIDs ||= []
+          self.buildConfigurationReferences ||= []
         end
       end
 

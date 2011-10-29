@@ -128,7 +128,7 @@ describe "Pod::Xcode::Project" do
       configuration = @project.objects.add(Pod::Xcode::Project::XCBuildConfiguration)
       @list.buildConfigurations.to_a.should == []
       @list.buildConfigurations = [configuration]
-      @list.buildConfigurationUUIDs.should == [configuration.uuid]
+      @list.buildConfigurationReferences.should == [configuration.uuid]
     end
   end
 
@@ -153,9 +153,9 @@ describe "Pod::Xcode::Project" do
     it "returns the buildConfigurationList" do
       list = @target.buildConfigurationList
       list.should.be.instance_of Pod::Xcode::Project::XCConfigurationList
-      @target.buildConfigurationListUUID = nil
+      @target.buildConfigurationListReference = nil
       @target.buildConfigurationList.should == nil
-      @target.buildConfigurationListUUID = list.uuid
+      @target.buildConfigurationListReference = list.uuid
       @target.buildConfigurationList.attributes.should == list.attributes
     end
 
