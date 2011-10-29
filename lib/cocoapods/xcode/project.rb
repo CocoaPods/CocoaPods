@@ -12,6 +12,10 @@ module Pod
           define_method("#{name}=") { |value| @attributes[attribute_name] = value }
         end
 
+        def self.attributes(*names)
+          names.each { |name| attribute(name) }
+        end
+
         def self.has_many(plural_attr_name, options)
           klass = options[:class]
           singular_attr_name = plural_attr_name.to_s[0..-2] # strip off 's'
@@ -43,8 +47,7 @@ module Pod
         end
 
         attr_reader :uuid, :attributes
-        attribute :isa
-        attribute :name
+        attributes :isa, :name
 
         def initialize(project, uuid, attributes)
           @project, @uuid, @attributes = project, uuid || generate_uuid, attributes
@@ -78,8 +81,7 @@ module Pod
       end
 
       class PBXGroup < PBXObject
-        attribute :sourceTree
-        attribute :children
+        attributes :sourceTree, :children
 
         def initialize(project, uuid, attributes)
           super
@@ -122,8 +124,7 @@ module Pod
       end
 
       class PBXFileReference < PBXObject
-        attribute :path
-        attribute :sourceTree
+        attributes :path, :sourceTree
 
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
@@ -145,8 +146,7 @@ module Pod
       end
 
       class PBXBuildFile < PBXObject
-        attribute :fileRef
-        attribute :settings
+        attributes :fileRef, :settings
 
         # Takes a PBXFileReference instance and assigns its uuid to the fileRef attribute.
         def file=(file)
@@ -162,8 +162,7 @@ module Pod
       class PBXBuildPhase < PBXObject
         has_many :files, :class => PBXBuildFile
 
-        attribute :buildActionMask
-        attribute :runOnlyForDeploymentPostprocessing
+        attributes :buildActionMask, :runOnlyForDeploymentPostprocessing
 
         def initialize(*)
           super
@@ -175,8 +174,7 @@ module Pod
       end
 
       class PBXCopyFilesBuildPhase < PBXBuildPhase
-        attribute :dstPath
-        attribute :dstSubfolderSpec
+        attributes :dstPath, :dstSubfolderSpec
 
         def initialize(*)
           super
@@ -191,11 +189,7 @@ module Pod
       end
 
       class PBXNativeTarget < PBXObject
-        attribute :productName
-        attribute :productReference
-        attribute :productType
-        attribute :buildRules
-        attribute :dependencies
+        attributes :productName, :productReference, :productType, :buildRules, :dependencies
 
         has_many :buildPhases, :class => PBXBuildPhase
         has_one :buildConfigurationList
