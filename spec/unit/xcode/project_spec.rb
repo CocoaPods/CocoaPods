@@ -220,7 +220,7 @@ describe "Pod::Xcode::Project" do
 
   it "adds a group to the `Pods' group" do
     group = @project.add_pod_group('JSONKit')
-    @project.pods.children.should.include group.uuid
+    @project.pods.childReferences.should.include group.uuid
     find_object({
       'isa' => 'PBXGroup',
       'name' => 'JSONKit',
@@ -251,7 +251,7 @@ describe "Pod::Xcode::Project" do
       })
       build_file_uuids << build_file_uuid
 
-      group.children.should == file_ref_uuids
+      group.childReferences.should == file_ref_uuids
 
       _, object = find_object('isa' => 'PBXSourcesBuildPhase')
       object['files'].should == build_file_uuids

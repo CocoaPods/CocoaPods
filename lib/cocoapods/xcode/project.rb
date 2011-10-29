@@ -16,9 +16,9 @@ module Pod
           names.each { |name| attribute(name) }
         end
 
-        def self.has_many(plural_attr_name, options)
-          klass = options[:class]
-          singular_attr_name = plural_attr_name.to_s[0..-2] # strip off 's'
+        def self.has_many(plural_attr_name, options = {})
+          klass = options[:class] || PBXFileReference
+          singular_attr_name = options[:singular] || plural_attr_name.to_s[0..-2] # strip off 's'
           uuid_list_name = "#{singular_attr_name}References"
           attribute(plural_attr_name, uuid_list_name)
           define_method(plural_attr_name) do
@@ -80,25 +80,48 @@ module Pod
         end
       end
 
-      class PBXGroup < PBXObject
-        attributes :sourceTree, :children
+      class PBXFileReference < PBXObject
+        attributes :path, :sourceTree
 
         def initialize(project, uuid, attributes)
+          is_new = uuid.nil?
+          super
+          self.name ||= pathname.basename.to_s
+          self.sourceTree ||= 'SOURCE_ROOT'
+          if is_new
+            @project.build_files.new.file = self
+          end
+        end
+
+        def pathname
+          Pathname.new(path)
+        end
+
+        def build_file
+          @project.build_files.find { |o| o.fileRef == uuid }
+        end
+      end
+
+      class PBXGroup < PBXObject
+        attributes :sourceTree
+        has_many :children, :singular => :child
+
+        def initialize(*)
           super
           self.sourceTree ||= '<group>'
-          self.children ||= []
+          self.childReferences ||= []
         end
 
         def files
-          list_by_class(children, PBXFileReference)
+          list_by_class(childReferences, PBXFileReference)
         end
 
         def source_files
-          list_by_class(children, PBXFileReference, files.select { |file| !file.build_file.nil? })
+          list_by_class(childReferences, PBXFileReference, files.select { |file| !file.build_file.nil? })
         end
 
         def groups
-          list_by_class(children, PBXGroup)
+          list_by_class(childReferences, PBXGroup)
         end
 
         def add_source_file(path, copy_header_phase = nil, compiler_flags = nil)
@@ -119,29 +142,7 @@ module Pod
         end
         
         def <<(child)
-          children << child.uuid
-        end
-      end
-
-      class PBXFileReference < PBXObject
-        attributes :path, :sourceTree
-
-        def initialize(project, uuid, attributes)
-          is_new = uuid.nil?
-          super
-          self.name ||= pathname.basename.to_s
-          self.sourceTree ||= 'SOURCE_ROOT'
-          if is_new
-            @project.build_files.new.file = self
-          end
-        end
-
-        def pathname
-          Pathname.new(path)
-        end
-
-        def build_file
-          @project.build_files.find { |o| o.fileRef == uuid }
+          childReferences << child.uuid
         end
       end
 
