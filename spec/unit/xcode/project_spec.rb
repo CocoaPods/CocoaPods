@@ -137,6 +137,7 @@ describe "Pod::Xcode::Project" do
         'productName' => 'Pods',
         'productType' => Pod::Xcode::Project::PBXNativeTarget::STATIC_LIBRARY
       })
+      #@target = @project.targets.first
     end
 
     it "returns the product name, which is the name of the binary (minus prefix/suffix)" do
@@ -161,11 +162,18 @@ describe "Pod::Xcode::Project" do
     it "returns the buildConfigurationList" do
       list = @target.buildConfigurationList
       list.should.be.instance_of Pod::Xcode::Project::XCConfigurationList
-      list.buildConfigurations.map(&:name).sort.should == %w{ Debug Release }
-      @target.buildConfigurationListReference = nil
-      @target.buildConfigurationList.should == nil
-      @target.buildConfigurationListReference = list.uuid
-      @target.buildConfigurationList.attributes.should == list.attributes
+      list.buildConfigurations.each do |configuration|
+        configuration.buildSettings.should == {
+          'DSTROOT'                      => '/tmp/Pods.dst',
+          'GCC_PRECOMPILE_PREFIX_HEADER' => 'YES',
+          'GCC_PREFIX_HEADER'            => 'Pods-Prefix.pch',
+          # Removed from the default XCBuildConfiguration#buildSettings
+          #'OTHER_LDFLAGS'                => '-ObjC',
+          'GCC_VERSION'                  => 'com.apple.compilers.llvm.clang.1_0',
+          'PRODUCT_NAME'                 => '$(TARGET_NAME)',
+          'SKIP_INSTALL'                 => 'YES',
+        }
+      end
     end
 
     it "returns an empty list of dependencies and buildRules (not sure yet which classes those are yet)" do
