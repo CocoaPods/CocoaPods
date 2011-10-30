@@ -118,8 +118,8 @@ module Pod
         'lastKnownFileType' => 'text.xcconfig'
       })
       app_project.targets.each do |target|
-        target.buildConfigurationList.buildConfigurations.each do |config|
-          config.baseConfigurationReference = configfile
+        target.buildConfigurations.each do |config|
+          config.baseConfiguration = configfile
         end
       end
       app_project.main_group << configfile
@@ -131,7 +131,7 @@ module Pod
         'sourceTree' => 'BUILT_PRODUCTS_DIR'
       })
       app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
-        build_phase.files << libfile.build_file
+        build_phase.files << libfile.buildFile
       end
       app_project.main_group << libfile
       

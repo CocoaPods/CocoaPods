@@ -30,7 +30,7 @@ module Pod
           end
         end
 
-        def self.has_one(singular_attr_name, options = {})
+        def self.belongs_to(singular_attr_name, options = {})
           uuid_name = options[:uuid] || "#{singular_attr_name}Reference"
           attribute(options[:uuid] || singular_attr_name, uuid_name)
           define_method(singular_attr_name) do
@@ -39,6 +39,16 @@ module Pod
           end
           define_method("#{singular_attr_name}=") do |object|
             send("#{uuid_name}=", object.uuid)
+          end
+        end
+
+        def self.has_one(singular_attr_name, options = {})
+          klass = options[:class]
+          uuid_name = options[:uuid] || "#{singular_attr_name}Reference"
+          define_method(singular_attr_name) do
+            @project.objects.select_by_class(klass).find do |object|
+              object.respond_to?(uuid_name) && object.send(uuid_name) == self.uuid
+            end
           end
         end
 
@@ -80,8 +90,22 @@ module Pod
         end
       end
 
+      # Missing constants that begin with either `PBX' or `XC' are assumed to be
+      # valid classes in a Xcode project. A new PBXObject subclass is created
+      # for the constant and returned.
+      def self.const_missing(name)
+        if name =~ /^(PBX|XC)/
+          klass = Class.new(PBXObject)
+          const_set(name, klass)
+          klass
+        else
+          super
+        end
+      end
+
       class PBXFileReference < PBXObject
         attributes :path, :sourceTree, :explicitFileType, :includeInIndex
+        has_one :buildFile, :uuid => :fileRef, :class => Project::PBXBuildFile
 
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
@@ -103,10 +127,6 @@ module Pod
         def pathname
           Pathname.new(path)
         end
-
-        def build_file
-          @project.build_files.find { |o| o.fileRef == uuid }
-        end
       end
 
       class PBXGroup < PBXObject
@@ -124,7 +144,7 @@ module Pod
         end
 
         def source_files
-          list_by_class(childReferences, PBXFileReference, files.select { |file| !file.build_file.nil? })
+          list_by_class(childReferences, PBXFileReference, files.select(&:buildFile))
         end
 
         def groups
@@ -133,7 +153,7 @@ module Pod
 
         def add_source_file(path, copy_header_phase = nil, compiler_flags = nil)
           file = files.new('path' => path.to_s)
-          build_file = file.build_file
+          build_file = file.buildFile
           if path.extname == '.h'
             build_file.settings = { 'ATTRIBUTES' => ["Public"] }
             # Working around a bug in Xcode 4.2 betas, remove this once the Xcode bug is fixed:
@@ -154,17 +174,8 @@ module Pod
       end
 
       class PBXBuildFile < PBXObject
-        attributes :fileRef, :settings
-
-        # Takes a PBXFileReference instance and assigns its uuid to the fileRef attribute.
-        def file=(file)
-          self.fileRef = file.uuid
-        end
-
-        # Returns a PBXFileReference instance corresponding to the uuid in the fileRef attribute.
-        def file
-          @project.objects[fileRef]
-        end
+        attributes :settings
+        belongs_to :file, :uuid => :fileRef
       end
 
       class PBXBuildPhase < PBXObject
@@ -204,8 +215,8 @@ module Pod
         has_many :buildPhases, :class => PBXBuildPhase
         has_many :dependencies, :singular => :dependency # TODO :class => ?
         has_many :buildRules # TODO :class => ?
-        has_one :buildConfigurationList
-        has_one :product, :uuid => :productReference
+        belongs_to :buildConfigurationList
+        belongs_to :product, :uuid => :productReference
 
         def initialize(project, *)
           super
@@ -230,11 +241,15 @@ module Pod
             end
           end
         end
+
+        def buildConfigurations
+          buildConfigurationList.buildConfigurations
+        end
       end
 
       class XCBuildConfiguration < PBXObject
         attribute :buildSettings
-        has_one :baseConfiguration
+        belongs_to :baseConfiguration
 
         def initialize(*)
           super
@@ -256,19 +271,6 @@ module Pod
         def initialize(*)
           super
           self.buildConfigurationReferences ||= []
-        end
-      end
-
-      # Missing constants that begin with either `PBX' or `XC' are assumed to be
-      # valid classes in a Xcode project. A new PBXObject subclass is created
-      # for the constant and returned.
-      def self.const_missing(name)
-        if name =~ /^(PBX|XC)/
-          klass = Class.new(PBXObject)
-          const_set(name, klass)
-          klass
-        else
-          super
         end
       end
 

@@ -180,25 +180,22 @@ else
         installer = SpecHelper::Installer.new(spec)
         installer.install!
         installer.configure_project(projpath)
+
         xcworkspace = temporary_directory + 'ASIHTTPRequest.xcworkspace'
         workspace = Pod::Xcode::Workspace.new_from_xcworkspace(xcworkspace)
         workspace.projpaths.sort.should == ['ASIHTTPRequest.xcodeproj', 'Pods/Pods.xcodeproj']
+
         project = Pod::Xcode::Project.new(projpath)
-        config = project.files.find { |f| f.path =~ /Pods.xcconfig$/ }
-        config.should.not.equal nil
-        copy_resources = project.objects.select_by_class(Pod::Xcode::Project::PBXShellScriptBuildPhase).find do |ss|
-          ss.shellScript['PodsResources.sh']
-        end
-        copy_resources.should.not.equal nil
+        libPods = project.files.find { |f| f.name == 'libPods.a' }
         project.targets.each do |target|
-          bases = target.buildConfigurationList.buildConfigurations.map(&:baseConfigurationReference)
-          bases.uniq[0].uuid.should == config.uuid
-          target.buildPhases.map(&:uuid).should.include copy_resources.uuid
-        end
-        lib = project.files.find { |f| f.path =~ /libPods.a$/ }
-        lib.should.not.equal nil
-        project.objects.select_by_class(Pod::Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
-          build_phase.files.map(&:uuid).should.include lib.build_file.uuid
+          target.buildConfigurations.each do |config|
+            config.baseConfiguration.path.should == 'Pods/Pods.xcconfig'
+          end
+
+          link = target.buildPhases.find { |phase| phase.is_a?(Pod::Xcode::Project::PBXFrameworksBuildPhase) }
+          link.files.map(&:uuid).should.include libPods.buildFile.uuid
+
+          target.buildPhases.to_a.last.shellScript.should == "${SRCROOT}/Pods/PodsResources.sh\n"
         end
       end
 

@@ -232,7 +232,7 @@ describe "Pod::Xcode::Project" do
 
   it "adds a new PBXBuildFile to the objects hash when a new PBXFileReference is created" do
     file = @project.files.new('name' => '/some/source/file.h')
-    build_file = file.build_file
+    build_file = file.buildFile
     build_file.file = file
     build_file.fileRef.should == file.uuid
     build_file.isa.should == 'PBXBuildFile'
