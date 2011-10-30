@@ -86,11 +86,18 @@ module Pod
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
           super
-          self.name ||= pathname.basename.to_s
+          self.path = path if path # sets default name
           self.sourceTree ||= 'SOURCE_ROOT'
           if is_new
             @project.build_files.new.file = self
           end
+        end
+
+        alias_method :_path=, :path=
+        def path=(path)
+          self._path = path
+          self.name ||= pathname.basename.to_s
+          path
         end
 
         def pathname
@@ -190,6 +197,8 @@ module Pod
       end
 
       class PBXNativeTarget < PBXObject
+        STATIC_LIBRARY = 'com.apple.product-type.library.static'
+
         attributes :productName, :productType
 
         has_many :buildPhases, :class => PBXBuildPhase
@@ -198,12 +207,28 @@ module Pod
         has_one :buildConfigurationList
         has_one :product, :uuid => :productReference
 
-        def initialize(project, uuid, attributes)
+        def initialize(project, *)
           super
-          self.buildPhaseReferences ||= []
-          # TODO self.buildConfigurationList ||= new list?
-          self.buildRuleReferences ||= []
-          self.dependencyReferences ||= []
+          self.buildPhaseReferences   ||= []
+          self.buildRuleReferences    ||= []
+          self.dependencyReferences   ||= []
+
+          unless buildConfigurationList
+            self.buildConfigurationList = project.objects.add(XCConfigurationList)
+            # TODO or should this happen in buildConfigurationList?
+            buildConfigurationList.buildConfigurations.new('name' => 'Debug')
+            buildConfigurationList.buildConfigurations.new('name' => 'Release')
+          end
+
+          unless product
+            self.product = project.objects.add(PBXFileReference, 'sourceTree' => 'BUILT_PRODUCTS_DIR')
+            case productType
+            when STATIC_LIBRARY
+              product.path = "lib#{productName}.a"
+              product.includeInIndex = "0" # no idea what this is
+              product.explicitFileType = "archive.ar"
+            end
+          end
         end
       end
 

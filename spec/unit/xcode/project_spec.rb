@@ -133,10 +133,13 @@ describe "Pod::Xcode::Project" do
 
   describe "a new PBXNativeTarget" do
     before do
-      @target = @project.targets.first
+      @target = @project.targets.new({
+        'productName' => 'Pods',
+        'productType' => Pod::Xcode::Project::PBXNativeTarget::STATIC_LIBRARY
+      })
     end
 
-    it "returns the product name, which is the name of the binary" do
+    it "returns the product name, which is the name of the binary (minus prefix/suffix)" do
       @target.productName.should == "Pods"
     end
 
