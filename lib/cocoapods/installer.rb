@@ -25,7 +25,7 @@ module Pod
         'ALWAYS_SEARCH_USER_PATHS' => 'YES',
         # This makes categories from static libraries work, which many libraries
         # require, so we add these by default.
-        'OTHER_LDFLAGS'            => '-ObjC -all_load',
+        'OTHER_LDFLAGS'            => '-ObjC',
       })
     end
 
