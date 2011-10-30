@@ -81,7 +81,7 @@ module Pod
       end
 
       class PBXFileReference < PBXObject
-        attributes :path, :sourceTree
+        attributes :path, :sourceTree, :explicitFileType, :includeInIndex
 
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
@@ -190,9 +190,11 @@ module Pod
       end
 
       class PBXNativeTarget < PBXObject
-        attributes :productName, :productType, :buildRules, :dependencies
+        attributes :productName, :productType
 
         has_many :buildPhases, :class => PBXBuildPhase
+        has_many :dependencies, :singular => :dependency # TODO :class => ?
+        has_many :buildRules # TODO :class => ?
         has_one :buildConfigurationList
         has_one :product, :uuid => :productReference
 
@@ -200,8 +202,8 @@ module Pod
           super
           self.buildPhaseReferences ||= []
           # TODO self.buildConfigurationList ||= new list?
-          #self.buildRules ||= []
-          #self.dependencies ||= []
+          self.buildRuleReferences ||= []
+          self.dependencyReferences ||= []
         end
       end
 

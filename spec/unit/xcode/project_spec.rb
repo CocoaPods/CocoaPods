@@ -112,7 +112,6 @@ describe "Pod::Xcode::Project" do
     end
 
     it "returns the xcconfig that this configuration is based on (baseConfigurationReference)" do
-      p @project.objects['515160D0141EC5D100EBB823']
       xcconfig = @project.objects.new
       @configuration.baseConfiguration = xcconfig
       @configuration.baseConfigurationReference.should == xcconfig.uuid
@@ -143,8 +142,13 @@ describe "Pod::Xcode::Project" do
 
     it "returns the product" do
       product = @target.product
-      p product.attributes # TODO continue from here!!
-      #product.uuid.should == @target.productReference
+      product.uuid.should == @target.productReference
+      product.should.be.instance_of Pod::Xcode::Project::PBXFileReference
+      product.path.should == "libPods.a"
+      product.name.should == "libPods.a"
+      product.sourceTree.should == "BUILT_PRODUCTS_DIR"
+      product.explicitFileType.should == "archive.ar"
+      product.includeInIndex.should == "0"
     end
 
     it "returns that product type is a static library" do
@@ -154,10 +158,16 @@ describe "Pod::Xcode::Project" do
     it "returns the buildConfigurationList" do
       list = @target.buildConfigurationList
       list.should.be.instance_of Pod::Xcode::Project::XCConfigurationList
+      list.buildConfigurations.map(&:name).sort.should == %w{ Debug Release }
       @target.buildConfigurationListReference = nil
       @target.buildConfigurationList.should == nil
       @target.buildConfigurationListReference = list.uuid
       @target.buildConfigurationList.attributes.should == list.attributes
+    end
+
+    it "returns an empty list of dependencies and buildRules (not sure yet which classes those are yet)" do
+      @target.dependencies.to_a.should == []
+      @target.buildRules.to_a.should == []
     end
 
     describe "concerning its build phases" do
