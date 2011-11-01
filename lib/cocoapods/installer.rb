@@ -34,7 +34,12 @@ module Pod
     end
 
     def xcodeproj
-      @xcodeproj ||= Xcode::Project.new(template.xcodeproj_path)
+      unless @xcodeproj
+        @xcodeproj = Xcode::Project.new(template.xcodeproj_path)
+        target = @xcodeproj.targets.new_static_library('Pods')
+        p target.attributes
+      end
+      @xcodeproj
     end
 
     # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.

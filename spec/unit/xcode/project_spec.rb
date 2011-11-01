@@ -23,6 +23,10 @@ describe "Pod::Xcode::Project" do
     @project.to_hash.should == NSDictionary.dictionaryWithContentsOfFile(template_file)
   end
 
+  before do
+    @target = @project.targets.new_static_library('Pods')
+  end
+
   it "returns the objects hash" do
     @project.objects_hash.should == @project.to_hash['objects']
   end
@@ -47,6 +51,22 @@ describe "Pod::Xcode::Project" do
       @object.uuid.should.be.instance_of String
       @object.uuid.size.should == 24
       @object.uuid.should == @object.uuid
+    end
+  end
+
+  describe "a PBXFileReference" do
+    before do
+      @file = @project.files.new('path' => 'some/file.m')
+    end
+
+    it "is automatically added to the main group" do
+      @project.main_group.children.should.include @file
+    end
+
+    it "is removed from the original group when added to another group" do
+      @project.pods.children << @file
+      @project.pods.children.should.include @file
+      @project.main_group.children.should.not.include @file
     end
   end
 
@@ -132,15 +152,8 @@ describe "Pod::Xcode::Project" do
   end
 
   describe "a new PBXNativeTarget" do
-    before do
-      @target = @project.targets.new({
-        'productName' => 'Pods',
-        'productType' => Pod::Xcode::Project::PBXNativeTarget::STATIC_LIBRARY
-      })
-      #@target = @project.targets.first
-    end
-
     it "returns the product name, which is the name of the binary (minus prefix/suffix)" do
+      @target.name.should == "Pods"
       @target.productName.should == "Pods"
     end
 
@@ -232,7 +245,7 @@ describe "Pod::Xcode::Project" do
 
   it "adds a new PBXBuildFile to the objects hash when a new PBXFileReference is created" do
     file = @project.files.new('name' => '/some/source/file.h')
-    build_file = file.buildFile
+    build_file = file.buildFiles.new
     build_file.file = file
     build_file.fileRef.should == file.uuid
     build_file.isa.should == 'PBXBuildFile'
@@ -250,35 +263,18 @@ describe "Pod::Xcode::Project" do
     }).should.not == nil
   end
 
-  it "adds an `m' or `c' file as a build file, adds it to the specified group, and adds it to the `sources build' phase list" do
-    file_ref_uuids, build_file_uuids = [], []
-    group = @project.add_pod_group('SomeGroup')
-
+  it "adds an `m' or `c' file to the `sources build' phase list" do
     %w{ m mm c cpp }.each do |ext|
       path = Pathname.new("path/to/file.#{ext}")
-      file = group.add_source_file(path)
+      file = @target.add_source_file(path)
+      # ensure that it was added to all objects
+      file = @project.objects[file.uuid]
 
-      @project.objects_hash[file.uuid].should == {
-        'name'       => path.basename.to_s,
-        'isa'        => 'PBXFileReference',
-        'sourceTree' => 'SOURCE_ROOT',
-        'path'       => path.to_s
-      }
-      file_ref_uuids << file.uuid
+      phase = @target.buildPhases.find { |phase| phase.is_a?(Pod::Xcode::Project::PBXSourcesBuildPhase) }
+      phase.files.map { |buildFile| buildFile.file }.should.include file
 
-      build_file_uuid, _ = find_object({
-        'isa' => 'PBXBuildFile',
-        'fileRef' => file.uuid
-      })
-      build_file_uuids << build_file_uuid
-
-      group.childReferences.should == file_ref_uuids
-
-      _, object = find_object('isa' => 'PBXSourcesBuildPhase')
-      object['files'].should == build_file_uuids
-
-      _, object = find_object('isa' => 'PBXHeadersBuildPhase')
-      object['files'].should.not.include build_file_uuid
+      phase = @target.buildPhases.find { |phase| phase.is_a?(Pod::Xcode::Project::PBXCopyFilesBuildPhase) }
+      phase.files.map { |buildFile| buildFile.file }.should.not.include file
     end
   end
 
@@ -286,7 +282,7 @@ describe "Pod::Xcode::Project" do
     build_file_uuids = []
     %w{ m mm c cpp }.each do |ext|
       path = Pathname.new("path/to/file.#{ext}")
-      file = @project.pods.add_source_file(path, nil, '-fno-obj-arc')
+      file = @project.targets.first.add_source_file(path, nil, '-fno-obj-arc')
       find_object({
         'isa' => 'PBXBuildFile',
         'fileRef' => file.uuid,
@@ -296,37 +292,28 @@ describe "Pod::Xcode::Project" do
   end
 
   it "creates a copy build header phase which will copy headers to a specified path" do
-    phase = @project.add_copy_header_build_phase("SomePod", "Path/To/Source")
+    phase = @project.targets.first.copy_files_build_phases.new_pod_dir("SomePod", "Path/To/Source")
     find_object({
       'isa' => 'PBXCopyFilesBuildPhase',
       'dstPath' => '$(PUBLIC_HEADERS_FOLDER_PATH)/Path/To/Source',
       'name' => 'Copy SomePod Public Headers'
     }).should.not == nil
-    target = @project.targets.first
-    target.attributes['buildPhases'].should.include phase.uuid
+    @project.targets.first.buildPhases.should.include phase
   end
 
-  it "adds a `h' file as a build file and adds it to the `headers build' phase list" do
-    group = @project.groups.new('name' => 'SomeGroup')
+  # TODO add test for the optional copy_header_phase
+  #it "adds a `h' file as a build file and adds it to the `headers build' phase list" do
+  it "adds a `h' file as a build file and adds it to the `copy header files' build phase list" do
     path = Pathname.new("path/to/file.h")
-    file = group.add_source_file(path)
-    @project.objects_hash[file.uuid].should == {
-      'name'       => path.basename.to_s,
-      'isa'        => 'PBXFileReference',
-      'sourceTree' => 'SOURCE_ROOT',
-      'path'       => path.to_s
-    }
-    build_file_uuid, _ = find_object({
-      'isa' => 'PBXBuildFile',
-      'fileRef' => file.uuid
-    })
+    file = @target.add_source_file(path)
+    # ensure that it was added to all objects
+    file = @project.objects[file.uuid]
 
-    #_, object = find_object('isa' => 'PBXHeadersBuildPhase')
-    _, object = find_object('isa' => 'PBXCopyFilesBuildPhase')
-    object['files'].should == [build_file_uuid]
+    phase = @target.buildPhases.find { |phase| phase.is_a?(Pod::Xcode::Project::PBXSourcesBuildPhase) }
+    phase.files.map { |buildFile| buildFile.file }.should.not.include file
 
-    _, object = find_object('isa' => 'PBXSourcesBuildPhase')
-    object['files'].should.not.include build_file_uuid
+    phase = @target.buildPhases.find { |phase| phase.is_a?(Pod::Xcode::Project::PBXCopyFilesBuildPhase) }
+    phase.files.map { |buildFile| buildFile.file }.should.include file
   end
 
   it "saves the template with the adjusted project" do
@@ -341,7 +328,7 @@ describe "Pod::Xcode::Project" do
   it "returns all source files" do
     group = @project.groups.new('name' => 'SomeGroup')
     files = [Pathname.new('/some/file.h'), Pathname.new('/some/file.m')]
-    files.each { |file| group.add_source_file(file) }
+    files.each { |file| group << @target.add_source_file(file) }
     group.source_files.map(&:pathname).sort.should == files.sort
   end
 end
