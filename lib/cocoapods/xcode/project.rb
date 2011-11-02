@@ -332,9 +332,9 @@ module Pod
             'GCC_PRECOMPILE_PREFIX_HEADER' => 'YES',
             'GCC_PREFIX_HEADER'            => 'Pods-Prefix.pch',
             'GCC_VERSION'                  => 'com.apple.compilers.llvm.clang.1_0',
-            # TODO not sure if this specific flag is needed, but the OTHER_LDFLAGS option *has* to
-            # be overriden so that it does not use those from the xcconfig (for CocoaPods specific).
-            'OTHER_LDFLAGS'                => '-ObjC',
+            # The OTHER_LDFLAGS option *has* to be overriden so that it does not
+            # use those from the xcconfig (for CocoaPods specifically).
+            'OTHER_LDFLAGS'                => '',
             'PRODUCT_NAME'                 => '$(TARGET_NAME)',
             'SKIP_INSTALL'                 => 'YES',
           }.merge(buildSettings || {})

@@ -184,7 +184,7 @@ describe "Pod::Xcode::Project" do
           'DSTROOT'                      => '/tmp/Pods.dst',
           'GCC_PRECOMPILE_PREFIX_HEADER' => 'YES',
           'GCC_PREFIX_HEADER'            => 'Pods-Prefix.pch',
-          'OTHER_LDFLAGS'                => '-ObjC',
+          'OTHER_LDFLAGS'                => '',
           'GCC_VERSION'                  => 'com.apple.compilers.llvm.clang.1_0',
           'PRODUCT_NAME'                 => '$(TARGET_NAME)',
           'SKIP_INSTALL'                 => 'YES',
