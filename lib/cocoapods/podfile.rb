@@ -8,7 +8,7 @@ module Pod
       end
 
       def lib_name
-        name == :default ? "libPods" : "libPods-#{name}"
+        name == :default ? "Pods" : "Pods-#{name}"
       end
 
       # Returns *all* dependencies of this target, not only the target specific

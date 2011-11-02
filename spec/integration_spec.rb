@@ -145,29 +145,31 @@ else
         project.source_files.should == installer.xcodeproj.source_files
       end
 
-      #it "creates a project with multiple targets" do
-        #Pod::Source.reset!
-        #Pod::Spec::Set.reset!
+      it "creates a project with multiple targets" do
+        Pod::Source.reset!
+        Pod::Spec::Set.reset!
 
-        #podfile = Pod::Podfile.new do
-          ## first ensure that the correct info is available to the specs when they load
-          #config.rootspec = self
-          #self.platform platform
-          #target(:debug) { dependency 'SSZipArchive' }
-          #target(:test, :exclusive => true) { dependency 'JSONKit' }
-          #dependency 'ASIHTTPRequest'
-        #end
+        podfile = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+          self.platform platform
+          target(:debug) { dependency 'SSZipArchive' }
+          target(:test, :exclusive => true) { dependency 'JSONKit' }
+          dependency 'ASIHTTPRequest'
+        end
 
-        #installer = Pod::Installer.new(podfile)
-        #installer.install!
+        installer = Pod::Installer.new(podfile)
+        installer.install!
 
-        #puts "\n[!] Compiling static library..."
-        #Dir.chdir(config.project_pods_root) do
-          ##system("xcodebuild -target Pods").should == true
-          #system("xcodebuild -target Pods-debug").should == true
-          #system("xcodebuild -target Pods-test").should == true
-        #end
-      #end
+        Dir.chdir(config.project_pods_root) do
+          puts "\n[!] Compiling static library `Pods'..."
+          system("xcodebuild -target Pods > /dev/null 2>&1").should == true
+          puts "\n[!] Compiling static library `Pods-debug'..."
+          system("xcodebuild -target Pods-debug > /dev/null 2>&1").should == true
+          puts "\n[!] Compiling static library `Pods-test'..."
+          system("xcodebuild -target Pods-test > /dev/null 2>&1").should == true
+        end
+      end
 
       it "sets up an existing project with pods" do
         basename = platform == :ios ? 'iPhone' : 'Mac'

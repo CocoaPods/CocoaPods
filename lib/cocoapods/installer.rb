@@ -1,13 +1,49 @@
 module Pod
   class Installer
+    class Target
+      def initialize(podfile, target, definition)
+        @podfile, @target, @definition = podfile, target, definition
+      end
+
+      def dependent_specification_sets
+        @dependent_specification_sets ||= Resolver.new(@podfile, @definition.dependencies).resolve
+      end
+
+      def build_specification_sets
+        dependent_specification_sets.reject(&:only_part_of_other_pod?)
+      end
+
+      def build_specifications
+        build_specification_sets.map(&:specification)
+      end
+
+      # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
+      def install!
+        build_specifications.each do |spec|
+          # Only add implementation files to the compile phase
+          spec.implementation_files.each do |file|
+            @target.add_source_file(file, nil, spec.compiler_flags)
+          end
+          # Add header files to a `copy header build phase` for each destination
+          # directory in the pod's header directory.
+          spec.copy_header_mappings.each do |header_dir, files|
+            copy_phase = @target.copy_files_build_phases.new_pod_dir(spec.name, header_dir)
+            files.each do |file|
+              @target.add_source_file(file, copy_phase)
+            end
+          end
+        end
+      end
+    end
+
     include Config::Mixin
 
-    def initialize(specification)
-      @specification = specification
+    def initialize(podfile)
+      @podfile = podfile
     end
 
     def dependent_specification_sets
-      @dependent_specification_sets ||= Resolver.new(@specification).resolve
+      @dependent_specification_sets ||= Resolver.new(@podfile).resolve
     end
 
     def build_specification_sets
@@ -30,49 +66,11 @@ module Pod
     end
 
     def template
-      @template ||= ProjectTemplate.new(@specification.platform)
+      @template ||= ProjectTemplate.new(@podfile.platform)
     end
 
     def xcodeproj
-      unless @xcodeproj
-        @xcodeproj = Xcode::Project.new(template.xcodeproj_path)
-        target = @xcodeproj.targets.new_static_library('Pods')
-        # TODO should create one programatically
-        xcconfig_file = @xcodeproj.files.find { |file| file.path == 'Pods.xcconfig' }
-        target.buildConfigurations.each do |config|
-          config.baseConfiguration = xcconfig_file
-        end
-      end
-      @xcodeproj
-    end
-
-    # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
-    def generate_project
-      puts "==> Generating Xcode project and xcconfig" unless config.silent?
-      user_header_search_paths = []
-      target = xcodeproj.targets.first
-      build_specifications.each do |spec|
-        xcconfig.merge!(spec.xcconfig)
-        group = xcodeproj.add_pod_group(spec.name)
-
-        # Only add implementation files to the compile phase
-        spec.implementation_files.each do |file|
-          group << target.add_source_file(file, nil, spec.compiler_flags)
-        end
-
-        # Add header files to a `copy header build phase` for each destination
-        # directory in the pod's header directory.
-        spec.copy_header_mappings.each do |header_dir, files|
-          copy_phase = target.copy_files_build_phases.new_pod_dir(spec.name, header_dir)
-          files.each do |file|
-            group << target.add_source_file(file, copy_phase)
-          end
-        end
-
-        # Collect all header search paths
-        user_header_search_paths.concat(spec.user_header_search_paths)
-      end
-      xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
+      @xcodeproj ||= Xcode::Project.new(template.xcodeproj_path)
     end
 
     def copy_resources_script
@@ -89,23 +87,61 @@ module Pod
       end.flatten)
     end
 
+    def generate_project
+      puts "==> Generating Xcode project and xcconfig" unless config.silent?
+      # First we need to resolve dependencies across *all* targets, so that the
+      # same correct versions of pods are being used for all targets. This
+      # happens when we call `build_specifications'.
+      user_header_search_paths = []
+      build_specifications.each do |spec|
+        xcconfig.merge!(spec.xcconfig)
+        # Add all source files to the project grouped by pod
+        group = xcodeproj.add_pod_group(spec.name)
+        spec.expanded_source_files.each do |path|
+          group.children.new('path' => path.to_s)
+        end
+        # Collect all header search paths
+        user_header_search_paths.concat(spec.user_header_search_paths)
+      end
+      xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
+
+      # Now we can generate the individual targets
+      @podfile.targets.values.each do |target_definition|
+        target = xcodeproj.targets.new_static_library(target_definition.lib_name)
+        Target.new(@podfile, target, target_definition).install!
+      end
+
+      # TODO should create one programatically
+      xcconfig_file = xcodeproj.files.find { |file| file.path == 'Pods.xcconfig' }
+      xcodeproj.targets.each do |target|
+        target.buildConfigurations.each do |config|
+          config.baseConfiguration = xcconfig_file
+        end
+      end
+    end
+
     def install!
-      puts "Installing dependencies of: #{@specification.defined_in_file}" unless config.silent?
+      puts "Installing dependencies of: #{@podfile.defined_in_file}" unless config.silent?
       build_specifications.each(&:install!)
-      generate_project
 
       root = config.project_pods_root
       puts "  * Copying contents of template directory `#{template.path}' to `#{root}'" if config.verbose?
       template.copy_to(root)
-      pbxproj = File.join(root, 'Pods.xcodeproj')
-      puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
-      xcodeproj.save_as(pbxproj)
+
+      # This has to happen before we generate the individual targets to make the specs pass.
+      # TODO However, this will move into the Target installer class as well, because each
+      # target needs its own xcconfig and bridgesupport.
       xcconfig.create_in(root)
-      if @specification.generate_bridge_support?
+      if @podfile.generate_bridge_support?
         path = bridge_support_generator.create_in(root)
         copy_resources_script.resources << path.relative_path_from(config.project_pods_root)
       end
       copy_resources_script.create_in(root)
+
+      generate_project
+      pbxproj = File.join(root, 'Pods.xcodeproj')
+      puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
+      xcodeproj.save_as(pbxproj)
 
       build_specifications.each(&:post_install)
     end

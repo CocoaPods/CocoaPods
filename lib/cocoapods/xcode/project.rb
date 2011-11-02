@@ -302,8 +302,9 @@ module Pod
           buildPhases.select_by_class(PBXFrameworksBuildPhase)
         end
 
+        # Finds an existing file reference or creates a new one.
         def add_source_file(path, copy_header_phase = nil, compiler_flags = nil)
-          file = @project.files.new('path' => path.to_s)
+          file = @project.files.find { |file| file.path == path.to_s } || @project.files.new('path' => path.to_s)
           buildFile = file.buildFiles.new
           if path.extname == '.h'
             buildFile.settings = { 'ATTRIBUTES' => ["Public"] }
@@ -501,12 +502,6 @@ module Pod
         projpath = projpath.to_s
         FileUtils.mkdir_p(projpath)
         @plist.writeToFile(File.join(projpath, 'project.pbxproj'), atomically:true)
-      end
-
-
-      # A silly hack to pretty print the objects hash from MacRuby.
-      def pretty_print
-        puts `ruby -r pp -e 'pp(#{@template.inspect})'`
       end
     end
   end
