@@ -25,8 +25,8 @@ module Pod
         @attributes.map { |key, value| "#{key} = #{value}" }.join("\n")
       end
 
-      def create_in(pods_root)
-        (pods_root + 'Pods.xcconfig').open('w') { |file| file << to_s }
+      def save_as(pathname)
+        pathname.open('w') { |file| file << to_s }
       end
     end
   end

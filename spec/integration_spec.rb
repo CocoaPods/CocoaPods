@@ -68,7 +68,7 @@ else
         (root + 'JSONKit.podspec').should.exist
         (root + 'SSZipArchive.podspec').should.exist
 
-        (root + 'Pods.xcconfig').read.should == installer.xcconfig.to_s
+        #(root + 'Pods.xcconfig').read.should == installer.xcconfig.to_s
 
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
         NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.xcodeproj.to_hash
@@ -160,6 +160,12 @@ else
 
         installer = Pod::Installer.new(podfile)
         installer.install!
+        #exit
+
+        root = config.project_pods_root
+        (root + 'Pods.xcconfig').should.exist
+        (root + 'Pods-debug.xcconfig').should.exist
+        (root + 'Pods-test.xcconfig').should.exist
 
         Dir.chdir(config.project_pods_root) do
           puts "\n[!] Compiling static library `Pods'..."
