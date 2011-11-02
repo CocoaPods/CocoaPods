@@ -77,7 +77,13 @@ module Pod
         attributes :isa, :name
 
         def initialize(project, uuid, attributes)
-          @project, @uuid, @attributes = project, uuid || generate_uuid, attributes
+          @project, @attributes = project, attributes
+          unless uuid
+            # Add new objects to the main hash with a unique UUID
+            begin; uuid = generate_uuid; end while @project.objects_hash.has_key?(uuid)
+            @project.objects_hash[uuid] = @attributes
+          end
+          @uuid = uuid
           self.isa ||= self.class.isa
         end
 
@@ -139,7 +145,6 @@ module Pod
           self.sourceTree ||= 'SOURCE_ROOT'
           if is_new
             @project.main_group.children << self
-            @project.build_files.new.file = self
           end
         end
 
@@ -293,6 +298,10 @@ module Pod
           buildPhases.select_by_class(PBXCopyFilesBuildPhase)
         end
 
+        def frameworks_build_phases
+          buildPhases.select_by_class(PBXFrameworksBuildPhase)
+        end
+
         def add_source_file(path, copy_header_phase = nil, compiler_flags = nil)
           file = @project.files.new('path' => path.to_s)
           buildFile = file.buildFiles.new
@@ -313,7 +322,7 @@ module Pod
 
       class XCBuildConfiguration < PBXObject
         attribute :buildSettings
-        belongs_to :baseConfiguration
+        belongs_to :baseConfiguration, :uuid => :baseConfigurationReference
 
         def initialize(*)
           super
@@ -323,6 +332,9 @@ module Pod
             'GCC_PRECOMPILE_PREFIX_HEADER' => 'YES',
             'GCC_PREFIX_HEADER'            => 'Pods-Prefix.pch',
             'GCC_VERSION'                  => 'com.apple.compilers.llvm.clang.1_0',
+            # TODO not sure if this specific flag is needed, but the OTHER_LDFLAGS option *has* to
+            # be overriden so that it does not use those from the xcconfig (for CocoaPods specific).
+            'OTHER_LDFLAGS'                => '-ObjC',
             'PRODUCT_NAME'                 => '$(TARGET_NAME)',
             'SKIP_INSTALL'                 => 'YES',
           }.merge(buildSettings || {})
@@ -338,6 +350,10 @@ module Pod
         end
       end
 
+      class PBXProject < PBXObject
+        has_many :targets, :class => PBXNativeTarget
+      end
+
       class PBXObjectList
         include Enumerable
 
@@ -345,7 +361,7 @@ module Pod
           @represented_class = represented_class
           @project           = project
           @scoped_hash       = scoped.is_a?(Array) ? scoped.inject({}) { |h, o| h[o.uuid] = o.attributes; h } : scoped
-          @callback          = new_object_callback || lambda { |o| add_object(o) }
+          @callback          = new_object_callback
         end
 
         def empty?
@@ -360,7 +376,6 @@ module Pod
 
         def add(klass, hash = {})
           object = klass.new(@project, nil, hash)
-          add_object(object)
           @callback.call(object) if @callback
           object
         end
@@ -410,20 +425,11 @@ module Pod
             object = @represented_class.send(name, @project, *args)
             # The callbacks are only for PBXObject instances instantiated
             # from the class method that we forwarded the message to.
-            if object.is_a?(PBXObject)
-              add_object(object)
-              @callback.call(object)
-            end
+            @callback.call(object) if object.is_a?(PBXObject)
             object
           else
             super
           end
-        end
-
-        private
-
-        def add_object(object)
-          @project.objects_hash[object.uuid] = object.attributes
         end
       end
 
@@ -444,13 +450,17 @@ module Pod
         @objects ||= PBXObjectList.new(PBXObject, self, objects_hash)
       end
 
+      # TODO This should probably be the actual Project class (PBXProject).
+      def project_object
+        objects[@plist['rootObject']]
+      end
+
       def groups
         objects.select_by_class(PBXGroup)
       end
       
       def main_group
-        project = objects[@plist['rootObject']]
-        objects[project.attributes['mainGroup']]
+        objects[project_object.attributes['mainGroup']]
       end
 
       # Shortcut access to the `Pods' PBXGroup.
@@ -472,7 +482,9 @@ module Pod
       end
 
       def targets
-        objects.select_by_class(PBXNativeTarget)
+        # Better to check the project object for targets to ensure they are
+        # actually there so the project will work
+        project_object.targets
       end
 
       IGNORE_GROUPS = ['Pods', 'Frameworks', 'Products', 'Supporting Files']

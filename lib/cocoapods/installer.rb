@@ -37,7 +37,11 @@ module Pod
       unless @xcodeproj
         @xcodeproj = Xcode::Project.new(template.xcodeproj_path)
         target = @xcodeproj.targets.new_static_library('Pods')
-        p target.attributes
+        # TODO should create one programatically
+        xcconfig_file = @xcodeproj.files.find { |file| file.path == 'Pods.xcconfig' }
+        target.buildConfigurations.each do |config|
+          config.baseConfiguration = xcconfig_file
+        end
       end
       @xcodeproj
     end
@@ -46,21 +50,22 @@ module Pod
     def generate_project
       puts "==> Generating Xcode project and xcconfig" unless config.silent?
       user_header_search_paths = []
+      target = xcodeproj.targets.first
       build_specifications.each do |spec|
         xcconfig.merge!(spec.xcconfig)
         group = xcodeproj.add_pod_group(spec.name)
 
         # Only add implementation files to the compile phase
         spec.implementation_files.each do |file|
-          group.add_source_file(file, nil, spec.compiler_flags)
+          group << target.add_source_file(file, nil, spec.compiler_flags)
         end
 
         # Add header files to a `copy header build phase` for each destination
         # directory in the pod's header directory.
         spec.copy_header_mappings.each do |header_dir, files|
-          copy_phase = xcodeproj.add_copy_header_build_phase(spec.name, header_dir)
+          copy_phase = target.copy_files_build_phases.new_pod_dir(spec.name, header_dir)
           files.each do |file|
-            group.add_source_file(file, copy_phase)
+            group << target.add_source_file(file, copy_phase)
           end
         end
 
@@ -71,7 +76,9 @@ module Pod
     end
 
     def copy_resources_script
-      @copy_resources_script ||= Xcode::CopyResourcesScript.new(build_specifications.map { |spec| spec.expanded_resources }.flatten)
+      @copy_resources_script ||= Xcode::CopyResourcesScript.new(build_specifications.map do |spec|
+        spec.expanded_resources
+      end.flatten)
     end
 
     def bridge_support_generator
@@ -136,7 +143,7 @@ module Pod
         'sourceTree' => 'BUILT_PRODUCTS_DIR'
       })
       app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
-        build_phase.files << libfile.buildFile
+        build_phase.files << libfile.buildFiles.new
       end
       app_project.main_group << libfile
       

@@ -192,10 +192,11 @@ else
             config.baseConfiguration.path.should == 'Pods/Pods.xcconfig'
           end
 
-          link = target.buildPhases.find { |phase| phase.is_a?(Pod::Xcode::Project::PBXFrameworksBuildPhase) }
-          link.files.map(&:uuid).should.include libPods.buildFile.uuid
+          phase = target.frameworks_build_phases.first
+          phase.files.map { |buildFile| buildFile.file }.should.include libPods
 
-          target.buildPhases.to_a.last.shellScript.should == "${SRCROOT}/Pods/PodsResources.sh\n"
+          # should be the last phase
+          target.buildPhases.last.shellScript.should == "${SRCROOT}/Pods/PodsResources.sh\n"
         end
       end
 

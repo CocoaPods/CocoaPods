@@ -33,7 +33,7 @@ describe "Pod::Xcode::Project" do
 
   describe "PBXObject" do
     before do
-      @object = Pod::Xcode::Project::PBXObject.new(@project.objects, nil, 'name' => 'AnObject')
+      @object = Pod::Xcode::Project::PBXObject.new(@project, nil, 'name' => 'AnObject')
     end
 
     it "merges the class name into the attributes" do
@@ -51,6 +51,10 @@ describe "Pod::Xcode::Project" do
       @object.uuid.should.be.instance_of String
       @object.uuid.size.should == 24
       @object.uuid.should == @object.uuid
+    end
+
+    it "adds the object to the objects hash" do
+      @project.objects_hash[@object.uuid].should == @object.attributes
     end
   end
 
@@ -180,8 +184,7 @@ describe "Pod::Xcode::Project" do
           'DSTROOT'                      => '/tmp/Pods.dst',
           'GCC_PRECOMPILE_PREFIX_HEADER' => 'YES',
           'GCC_PREFIX_HEADER'            => 'Pods-Prefix.pch',
-          # Removed from the default XCBuildConfiguration#buildSettings
-          #'OTHER_LDFLAGS'                => '-ObjC',
+          'OTHER_LDFLAGS'                => '-ObjC',
           'GCC_VERSION'                  => 'com.apple.compilers.llvm.clang.1_0',
           'PRODUCT_NAME'                 => '$(TARGET_NAME)',
           'SKIP_INSTALL'                 => 'YES',
