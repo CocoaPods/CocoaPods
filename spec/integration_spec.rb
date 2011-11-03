@@ -68,7 +68,7 @@ else
         (root + 'JSONKit.podspec').should.exist
         (root + 'SSZipArchive.podspec').should.exist
 
-        #(root + 'Pods.xcconfig').read.should == installer.xcconfig.to_s
+        (root + 'Pods.xcconfig').read.should == installer.targets.first.xcconfig.to_s
 
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
         NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.xcodeproj.to_hash
@@ -106,11 +106,10 @@ else
         end
 
         installer = SpecHelper::Installer.new(spec)
-        dependency_spec = installer.build_specifications.first
-        dependency_spec.resources = 'LICEN*', 'Readme.*'
+        installer.targets.first.build_specifications.first.resources = 'LICEN*', 'Readme.*'
         installer.install!
 
-        contents = (config.project_pods_root + 'PodsResources.sh').read
+        contents = (config.project_pods_root + 'Pods-resources.sh').read
         contents.should.include "install_resource 'SSZipArchive/LICENSE'\n" \
                                 "install_resource 'SSZipArchive/Readme.markdown'"
       end
@@ -139,8 +138,6 @@ else
         installer = SpecHelper::Installer.new(spec)
         installer.install!
 
-        installer = Pod::Installer.new(spec)
-        installer.generate_project
         project = Pod::Xcode::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.source_files.should == installer.xcodeproj.source_files
       end
@@ -160,12 +157,20 @@ else
 
         installer = Pod::Installer.new(podfile)
         installer.install!
-        #exit
+
+        #project = Pod::Xcode::Project.new(config.project_pods_root + 'Pods.xcodeproj')
+        #p project
+        #project.targets.each do |target|
+          #target.source_build_phases.
+        #end
 
         root = config.project_pods_root
         (root + 'Pods.xcconfig').should.exist
         (root + 'Pods-debug.xcconfig').should.exist
         (root + 'Pods-test.xcconfig').should.exist
+        (root + 'Pods-resources.sh').should.exist
+        (root + 'Pods-debug-resources.sh').should.exist
+        (root + 'Pods-test-resources.sh').should.exist
 
         Dir.chdir(config.project_pods_root) do
           puts "\n[!] Compiling static library `Pods'..."
