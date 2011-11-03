@@ -15,11 +15,9 @@ module Pod
       @headers.map { |header| "-I '#{header.dirname}'" }.uniq
     end
 
-    def create_in(root)
+    def save_as(pathname)
       puts "==> Generating BridgeSupport metadata file" unless config.silent?
-      file = root + "Pods.bridgesupport"
-      gen_bridge_metadata %{-c "#{search_paths.join(' ')}" -o '#{file}' '#{headers.join("' '")}'}
-      file
+      gen_bridge_metadata %{-c "#{search_paths.join(' ')}" -o '#{pathname}' '#{headers.join("' '")}'}
     end
   end
 end

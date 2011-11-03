@@ -15,6 +15,7 @@ module Pod
     end
 
     class Target
+      include Config::Mixin
       include Shared
 
       attr_reader :target
@@ -46,6 +47,18 @@ module Pod
 
       def copy_resources_filename
         "#{@definition.lib_name}-resources.sh"
+      end
+
+      def bridge_support_generator
+        BridgeSupportGenerator.new(build_specifications.map do |spec|
+          spec.header_files.map do |header|
+            config.project_pods_root + header
+          end
+        end.flatten)
+      end
+
+      def bridge_support_filename
+        "#{@definition.lib_name}.bridgesupport"
       end
 
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
@@ -82,6 +95,10 @@ module Pod
 
       def create_files_in(root)
         xcconfig.save_as(root + xcconfig_filename)
+        if @podfile.generate_bridge_support?
+          bridge_support_generator.save_as(root + bridge_support_filename)
+          copy_resources_script.resources << bridge_support_filename
+        end
         copy_resources_script.save_as(root + copy_resources_filename)
       end
     end
@@ -114,14 +131,6 @@ module Pod
       @xcodeproj
     end
 
-    def bridge_support_generator
-      BridgeSupportGenerator.new(build_specifications.map do |spec|
-        spec.header_files.map do |header|
-          config.project_pods_root + header
-        end
-      end.flatten)
-    end
-
     def targets
       @targets ||= @podfile.targets.values.map do |target_definition|
         Target.new(@podfile, xcodeproj, target_definition)
@@ -135,14 +144,6 @@ module Pod
       root = config.project_pods_root
       puts "  * Copying contents of template directory `#{template.path}' to `#{root}'" if config.verbose?
       template.copy_to(root)
-
-      # This has to happen before we generate the individual targets to make the specs pass.
-      # TODO However, this will move into the Target installer class as well, because each
-      # target needs its own xcconfig and bridgesupport.
-      #if @podfile.generate_bridge_support?
-        #path = bridge_support_generator.create_in(root)
-        #copy_resources_script.resources << path.relative_path_from(config.project_pods_root)
-      #end
 
       puts "==> Generating Xcode project and xcconfig" unless config.silent?
       targets.each do |target|
