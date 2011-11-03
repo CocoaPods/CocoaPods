@@ -44,13 +44,13 @@ describe "Pod::Podfile" do
 
     it "adds dependencies outside of any explicit target block to the default target" do
       target = @podfile.targets[:default]
-      target.lib_name.should == 'libPods'
+      target.lib_name.should == 'Pods'
       target.dependencies.should == [Pod::Dependency.new('ASIHTTPRequest')]
     end
 
     it "adds dependencies of the outer target to non-exclusive targets" do
       target = @podfile.targets[:debug]
-      target.lib_name.should == 'libPods-debug'
+      target.lib_name.should == 'Pods-debug'
       target.dependencies.sort_by(&:name).should == [
         Pod::Dependency.new('ASIHTTPRequest'),
         Pod::Dependency.new('SSZipArchive')
@@ -59,7 +59,7 @@ describe "Pod::Podfile" do
 
     it "does not add dependencies of the outer target to exclusive targets" do
       target = @podfile.targets[:test]
-      target.lib_name.should == 'libPods-test'
+      target.lib_name.should == 'Pods-test'
       target.dependencies.should == [Pod::Dependency.new('JSONKit')]
     end
   end

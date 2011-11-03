@@ -25,7 +25,7 @@ describe "Pod::Xcode::Config" do
   it "creates the config file" do
     @config.merge!('HEADER_SEARCH_PATHS' => '/some/path')
     @config.merge!('OTHER_LD_FLAGS' => '-l xml2.2.7.3')
-    @config.create_in(temporary_directory)
+    @config.save_as(temporary_directory + 'Pods.xcconfig')
     (temporary_directory + 'Pods.xcconfig').read.split("\n").sort.should == [
       "OTHER_LD_FLAGS = -framework Foundation -l xml2.2.7.3",
       "HEADER_SEARCH_PATHS = /some/path"

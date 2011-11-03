@@ -3,7 +3,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 describe "Pod::Installer" do
   describe ", by default," do
     before do
-      @xcconfig = Pod::Installer.new(Pod::Spec.new).xcconfig.to_hash
+      @xcconfig = Pod::Installer.new(Pod::Podfile.new { platform :ios }).targets.first.xcconfig.to_hash
     end
 
     it "sets the header search paths where installed Pod headers can be found" do
@@ -33,9 +33,9 @@ describe "Pod::Installer" do
   end
 
   it "generates a BridgeSupport metadata file from all the pod headers" do
-    spec = Pod::Spec.new do |s|
-      s.platform = :osx
-      s.dependency 'ASIHTTPRequest'
+    spec = Pod::Podfile.new do
+      platform :osx
+      dependency 'ASIHTTPRequest'
     end
     expected = []
     installer = Pod::Installer.new(spec)
@@ -44,71 +44,6 @@ describe "Pod::Installer" do
         expected << config.project_pods_root + header
       end
     end
-    installer.bridge_support_generator.headers.should == expected
-  end
-
-  it "adds all source files that should be included in the library to the xcode project" do
-    [
-      [
-        'ASIHTTPRequest',
-        ['Classes'],
-        { 'ASIHTTPRequest' => "Classes/*.{h,m}", 'Reachability' => "External/Reachability/*.{h,m}" },
-        {
-          "USER_HEADER_SEARCH_PATHS" => '"$(BUILT_PRODUCTS_DIR)/Pods" ' \
-                                        '"$(BUILT_PRODUCTS_DIR)/Pods/ASIHTTPRequest" ' \
-                                        '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
-          "ALWAYS_SEARCH_USER_PATHS" => "YES",
-          "OTHER_LDFLAGS" => "-ObjC -all_load " \
-                             "-framework SystemConfiguration -framework MobileCoreServices " \
-                             "-framework CFNetwork -lz.1"
-        }
-      ],
-      [
-        'Reachability',
-        ["External/Reachability/*.h", "External/Reachability/*.m"],
-        { 'Reachability' => "External/Reachability/*.{h,m}", },
-        {
-          "USER_HEADER_SEARCH_PATHS" => '"$(BUILT_PRODUCTS_DIR)/Pods" ' \
-                                        '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
-          "ALWAYS_SEARCH_USER_PATHS" => "YES",
-          "OTHER_LDFLAGS" => "-ObjC -all_load"
-        }
-      ],
-      [
-        'ASIWebPageRequest',
-        ['**/ASIWebPageRequest.*'],
-        { 'ASIHTTPRequest' => "Classes/*.{h,m}", 'ASIWebPageRequest' => "Classes/ASIWebPageRequest/*.{h,m}", 'Reachability' => "External/Reachability/*.{h,m}" },
-        {
-          "USER_HEADER_SEARCH_PATHS" => '"$(BUILT_PRODUCTS_DIR)/Pods" ' \
-                                        '"$(BUILT_PRODUCTS_DIR)/Pods/ASIHTTPRequest" ' \
-                                        '"$(BUILT_PRODUCTS_DIR)/Pods/Reachability"',
-          "ALWAYS_SEARCH_USER_PATHS" => "YES",
-          "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2",
-          "OTHER_LDFLAGS" => "-ObjC -all_load " \
-                             "-lxml2.2.7.3 -framework SystemConfiguration " \
-                             "-framework MobileCoreServices -framework CFNetwork -lz.1"
-        }
-      ],
-    ].each do |name, patterns, expected_patterns, xcconfig|
-      Pod::Source.reset!
-      Pod::Spec::Set.reset!
-
-      installer = Pod::Installer.new(Pod::Spec.new do |s|
-        s.platform = :ios
-        s.dependency(name)
-        s.source_files = *patterns
-      end)
-      installer.generate_project
-
-      expected_patterns.each do |name, pattern|
-        pattern = config.project_pods_root + 'ASIHTTPRequest' + pattern
-        expected = pattern.glob.map do |file|
-          file.relative_path_from(config.project_pods_root)
-        end
-        installer.xcodeproj.source_files[name].size.should == expected.size
-        installer.xcodeproj.source_files[name].sort.should == expected.sort
-      end
-      installer.xcconfig.to_hash.should == xcconfig
-    end
+    installer.targets.first.bridge_support_generator.headers.should == expected
   end
 end
