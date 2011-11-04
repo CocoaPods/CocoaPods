@@ -48,14 +48,35 @@ module Pod
         end
 
         def self.belongs_to(singular_attr_name, options = {})
-          uuid_name = options[:uuid] || "#{singular_attr_name}Reference"
-          attribute(options[:uuid] || singular_attr_name, uuid_name)
-          define_method(singular_attr_name) do
-            uuid = send(uuid_name)
-            @project.objects[uuid]
-          end
-          define_method("#{singular_attr_name}=") do |object|
-            send("#{uuid_name}=", object.uuid)
+          if uuid_name = options[:uuids]
+            # part of another objects uuid list
+            klass = options[:class]
+            define_method(singular_attr_name) do
+              # Loop over all objects of the class and find the one that includes
+              # this object in the specified uuid list.
+              @project.objects.select_by_class(klass).find do |object|
+                object.send(uuid_name).include?(self.uuid)
+              end
+            end
+            define_method("#{singular_attr_name}=") do |object|
+              # Remove this object from the uuid list of the target
+              # that this object was associated to.
+              if previous = send(singular_attr_name)
+                previous.send(uuid_name).delete(self.uuid)
+              end
+              # Now assign this object to the new object
+              object.send(uuid_name) << self.uuid
+            end
+          else
+            uuid_name = options[:uuid] || "#{singular_attr_name}Reference"
+            attribute(options[:uuid] || singular_attr_name, uuid_name)
+            define_method(singular_attr_name) do
+              uuid = send(uuid_name)
+              @project.objects[uuid]
+            end
+            define_method("#{singular_attr_name}=") do |object|
+              send("#{uuid_name}=", object.uuid)
+            end
           end
         end
 
@@ -137,6 +158,7 @@ module Pod
       class PBXFileReference < PBXObject
         attributes :path, :sourceTree, :explicitFileType, :includeInIndex
         has_many :buildFiles, :uuid => :fileRef, :fkey_on_target => true, :class => Project::PBXBuildFile
+        belongs_to :group, :class => Project::PBXGroup, :uuids => :childReferences
 
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
@@ -164,16 +186,15 @@ module Pod
         attributes :sourceTree
 
         has_many :children, :singular => :child do |object|
-          if object.is_a?(PBXFileReference)
-            # Remove from the group it was in
-            if group = @project.groups.find { |group| group.children.include?(object) }
-              # TODO
-              # * group.children.delete(object)
-              # * object.group = nil
-              group.childReferences.delete(object.uuid)
-            end
+          if object.is_a?(Pod::Xcode::Project::PBXFileReference)
+            # Associating the file to this group through the inverse
+            # association will also remove it from the group it was in.
+            object.group = self
+          else
+            # TODO What objects can actually be in a group and don't they
+            # all need the above treatment.
+            childReferences << object.uuid
           end
-          childReferences << object.uuid
         end
 
         def initialize(*)
@@ -183,15 +204,15 @@ module Pod
         end
 
         def files
-          list_by_class(childReferences, PBXFileReference)
+          list_by_class(childReferences, Pod::Xcode::Project::PBXFileReference)
         end
 
         def source_files
-          list_by_class(childReferences, PBXFileReference, files.reject { |file| file.buildFiles.empty? })
+          list_by_class(childReferences, Pod::Xcode::Project::PBXFileReference, files.reject { |file| file.buildFiles.empty? })
         end
 
         def groups
-          list_by_class(childReferences, PBXGroup)
+          list_by_class(childReferences, Pod::Xcode::Project::PBXGroup)
         end
 
         def <<(child)
@@ -274,6 +295,7 @@ module Pod
           self.name ||= productName
           self.buildRuleReferences  ||= []
           self.dependencyReferences ||= []
+          self.buildPhaseReferences ||= []
 
           unless buildConfigurationList
             self.buildConfigurationList = project.objects.add(XCConfigurationList)
@@ -282,8 +304,10 @@ module Pod
             buildConfigurationList.buildConfigurations.new('name' => 'Release')
           end
 
-          self.product ||= project.files.new('sourceTree' => 'BUILT_PRODUCTS_DIR')
-          self.buildPhaseReferences ||= []
+          unless product
+            self.product = project.files.new('sourceTree' => 'BUILT_PRODUCTS_DIR')
+            product.group = project.products
+          end
         end
 
         def buildConfigurations
@@ -352,6 +376,7 @@ module Pod
 
       class PBXProject < PBXObject
         has_many :targets, :class => PBXNativeTarget
+        belongs_to :products, :uuid => :productRefGroup, :class => PBXGroup
       end
 
       class PBXObjectList
@@ -485,6 +510,10 @@ module Pod
         # Better to check the project object for targets to ensure they are
         # actually there so the project will work
         project_object.targets
+      end
+
+      def products
+        project_object.products
       end
 
       IGNORE_GROUPS = ['Pods', 'Frameworks', 'Products', 'Supporting Files']

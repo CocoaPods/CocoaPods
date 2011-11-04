@@ -210,7 +210,7 @@ else
           phase.files.map { |buildFile| buildFile.file }.should.include libPods
 
           # should be the last phase
-          target.buildPhases.last.shellScript.should == "${SRCROOT}/Pods/PodsResources.sh\n"
+          target.buildPhases.last.shellScript.should == "${SRCROOT}/Pods/Pods-resources.sh\n"
         end
       end
 

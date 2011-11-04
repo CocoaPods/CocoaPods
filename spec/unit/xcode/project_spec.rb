@@ -64,12 +64,12 @@ describe "Pod::Xcode::Project" do
     end
 
     it "is automatically added to the main group" do
-      @project.main_group.children.should.include @file
+      @file.group.should == @project.main_group
     end
 
     it "is removed from the original group when added to another group" do
       @project.pods.children << @file
-      @project.pods.children.should.include @file
+      @file.group.should == @project.pods
       @project.main_group.children.should.not.include @file
     end
   end
@@ -167,6 +167,7 @@ describe "Pod::Xcode::Project" do
       product.should.be.instance_of Pod::Xcode::Project::PBXFileReference
       product.path.should == "libPods.a"
       product.name.should == "libPods.a"
+      product.group.name.should == "Products"
       product.sourceTree.should == "BUILT_PRODUCTS_DIR"
       product.explicitFileType.should == "archive.ar"
       product.includeInIndex.should == "0"

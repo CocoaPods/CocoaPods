@@ -99,8 +99,9 @@ module Pod
         end
         xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
 
-        # Add the prefix header and xcconfig files to the project
-        @xcodeproj.files.new('path' => prefix_header_filename)
+        prefix_file = @xcodeproj.files.new('path' => prefix_header_filename)
+        prefix_file.group = @xcodeproj.pods.groups.find { |child| child.name == "Supporting Files" }
+
         xcconfig_file = @xcodeproj.files.new("path" => xcconfig_filename)
         @target.buildConfigurations.each do |config|
           config.baseConfiguration = xcconfig_file
