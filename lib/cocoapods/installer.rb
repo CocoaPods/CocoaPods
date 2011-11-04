@@ -176,6 +176,18 @@ module Pod
       end
     end
 
+    # For now this assumes just one pods target, i.e. only libPods.a.
+    # Not sure yet if we should try to be smart with apps that have multiple
+    # targets and try to map pod targets to those app targets.
+    #
+    # Possible options are:
+    # 1. Only cater to the most simple setup
+    # 2. Try to automagically figure it out by name. For example, a pod target
+    #    called `:some_target' could map to an app target called `SomeTarget'.
+    #    (A variation would be to not even camelize the target name, but simply
+    #    let the user specify it with the proper case.)
+    # 3. Let the user specify the app target name as an extra argument, but this
+    #    seems to be a less good version of the variation on #2.
     def configure_project(projpath)
       root = File.dirname(projpath)
       xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')
@@ -221,7 +233,7 @@ module Pod
         'outputPaths' => [],
         'runOnlyForDeploymentPostprocessing' => '0',
         'shellPath' => '/bin/sh',
-        'shellScript' => "${SRCROOT}/Pods/PodsResources.sh\n"
+        'shellScript' => "${SRCROOT}/Pods/Pods-resources.sh\n"
       })
       app_project.targets.each { |target| target.buildPhases << copy_resources }
       
