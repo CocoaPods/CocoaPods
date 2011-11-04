@@ -57,8 +57,7 @@ The load time can be improved a bit by compiling the Ruby source files:
 
 ## Contact
 
-IRC:
-
+* Follow [@CocoaPodsOrg](http://twitter.com/CocoaPodsOrg) on Twitter to stay up-to-date on new pods and general release info.
 * #cocoapods on `irc.freenode.net`
 
 Eloy Durán:
