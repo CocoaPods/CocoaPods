@@ -7,16 +7,13 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		515160D0141EC5D100EBB823 /* Pods.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Pods.xcconfig; sourceTree = "<group>"; };
 		515B0FB8141D52E0001DC3E6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		515B0FBC141D52E0001DC3E6 /* Pods-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pods-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		515B0FAA141D52E0001DC3E6 = {
 			isa = PBXGroup;
 			children = (
-				515160D0141EC5D100EBB823 /* Pods.xcconfig */,
 				515B0FC9141D5FBE001DC3E6 /* Pods */,
 				515B0FB7141D52E0001DC3E6 /* Frameworks */,
 				515B0FB6141D52E0001DC3E6 /* Products */,
@@ -41,7 +38,6 @@
 		515B0FBB141D52E0001DC3E6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				515B0FBC141D52E0001DC3E6 /* Pods-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			path = Pods;

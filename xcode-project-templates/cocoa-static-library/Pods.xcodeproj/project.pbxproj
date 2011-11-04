@@ -8,15 +8,12 @@
 
 /* Begin PBXFileReference section */
 		518ACD3E1446050200F6BE80 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		518ACD461446050200F6BE80 /* Pods-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pods-Prefix.pch"; sourceTree = "<group>"; };
-		518ACD53144605B400F6BE80 /* Pods.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		518ACD301446050100F6BE80 = {
 			isa = PBXGroup;
 			children = (
-				518ACD53144605B400F6BE80 /* Pods.xcconfig */,
 				518ACD5B1446449B00F6BE80 /* Pods */,
 				518ACD3D1446050200F6BE80 /* Frameworks */,
 				518ACD3C1446050200F6BE80 /* Products */,
@@ -41,7 +38,6 @@
 		518ACD451446050200F6BE80 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				518ACD461446050200F6BE80 /* Pods-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			path = Pods;

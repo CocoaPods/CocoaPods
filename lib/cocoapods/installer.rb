@@ -61,6 +61,19 @@ module Pod
         "#{@definition.lib_name}.bridgesupport"
       end
 
+      # TODO move out
+      def save_prefix_header_as(pathname)
+        pathname.open('w') do |header|
+          header.puts "#ifdef __OBJC__"
+          header.puts "#import #{@podfile.platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}"
+          header.puts "#endif"
+        end
+      end
+
+      def prefix_header_filename
+        "#{@definition.lib_name}-prefix.pch"
+      end
+
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!
         # First add the target to the project
@@ -86,10 +99,12 @@ module Pod
         end
         xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
 
-        # Add the xcconfig file to the project and make it the base of the target's configurations.
+        # Add the prefix header and xcconfig files to the project
+        @xcodeproj.files.new('path' => prefix_header_filename)
         xcconfig_file = @xcodeproj.files.new("path" => xcconfig_filename)
         @target.buildConfigurations.each do |config|
           config.baseConfiguration = xcconfig_file
+          config.buildSettings['GCC_PREFIX_HEADER'] = prefix_header_filename
         end
       end
 
@@ -99,6 +114,7 @@ module Pod
           bridge_support_generator.save_as(root + bridge_support_filename)
           copy_resources_script.resources << bridge_support_filename
         end
+        save_prefix_header_as(root + prefix_header_filename)
         copy_resources_script.save_as(root + copy_resources_filename)
       end
     end
@@ -154,9 +170,12 @@ module Pod
       puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
       xcodeproj.save_as(pbxproj)
 
-      build_specifications.each(&:post_install)
+      # Post install hooks run last!
+      targets.each do |target|
+        target.build_specifications.each { |spec| spec.post_install(target) }
+      end
     end
-    
+
     def configure_project(projpath)
       root = File.dirname(projpath)
       xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')

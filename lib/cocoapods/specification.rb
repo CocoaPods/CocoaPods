@@ -325,17 +325,18 @@ module Pod
 
     # This is a convenience method which gets called after all pods have been
     # downloaded, installed, and the Xcode project and related files have been
-    # generated. Override this to, for instance, add to the prefix header:
+    # generated. (It receives the Pod::Installer::Target instance for the current
+    # target.) Override this to, for instance, add to the prefix header:
     #
     #   Pod::Spec.new do |s|
-    #     def s.post_install
-    #       prefix_header = config.project_pods_root + 'Pods-Prefix.pch'
+    #     def s.post_install(target)
+    #       prefix_header = config.project_pods_root + target.prefix_header_filename
     #       prefix_header.open('a') do |file|
     #         file.puts(%{#ifdef __OBJC__\n#import "SSToolkitDefines.h"\n#endif})
     #       end
     #     end
     #   end
-    def post_install
+    def post_install(target)
     end
 
   end

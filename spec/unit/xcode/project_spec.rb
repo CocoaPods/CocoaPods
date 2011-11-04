@@ -183,7 +183,8 @@ describe "Pod::Xcode::Project" do
         configuration.buildSettings.should == {
           'DSTROOT'                      => '/tmp/Pods.dst',
           'GCC_PRECOMPILE_PREFIX_HEADER' => 'YES',
-          'GCC_PREFIX_HEADER'            => 'Pods-Prefix.pch',
+          # TODO do we need a default?
+          #'GCC_PREFIX_HEADER'            => 'Pods-Prefix.pch',
           'OTHER_LDFLAGS'                => '',
           'GCC_VERSION'                  => 'com.apple.compilers.llvm.clang.1_0',
           'PRODUCT_NAME'                 => '$(TARGET_NAME)',
@@ -322,8 +323,6 @@ describe "Pod::Xcode::Project" do
   it "saves the template with the adjusted project" do
     @template.copy_to(temporary_directory)
     @project.save_as(temporary_directory + 'Pods.xcodeproj')
-    (temporary_directory + 'Pods-Prefix.pch').should.exist
-    (temporary_directory + 'Pods.xcconfig').should.exist
     project_file = (temporary_directory + 'Pods.xcodeproj/project.pbxproj')
     NSDictionary.dictionaryWithContentsOfFile(project_file.to_s).should == @project.to_hash
   end

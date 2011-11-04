@@ -174,6 +174,7 @@ else
 
         Dir.chdir(config.project_pods_root) do
           puts "\n[!] Compiling static library `Pods'..."
+          #system("xcodebuild -target Pods").should == true
           system("xcodebuild -target Pods > /dev/null 2>&1").should == true
           puts "\n[!] Compiling static library `Pods-debug'..."
           system("xcodebuild -target Pods-debug > /dev/null 2>&1").should == true

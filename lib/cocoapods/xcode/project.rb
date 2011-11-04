@@ -331,7 +331,6 @@ module Pod
           self.buildSettings = {
             'DSTROOT'                      => '/tmp/Pods.dst',
             'GCC_PRECOMPILE_PREFIX_HEADER' => 'YES',
-            'GCC_PREFIX_HEADER'            => 'Pods-Prefix.pch',
             'GCC_VERSION'                  => 'com.apple.compilers.llvm.clang.1_0',
             # The OTHER_LDFLAGS option *has* to be overriden so that it does not
             # use those from the xcconfig (for CocoaPods specifically).
