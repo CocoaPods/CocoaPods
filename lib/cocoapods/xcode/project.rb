@@ -16,15 +16,51 @@ module Pod
           attr_reader :name, :options
 
           def klass
-            @options[:class] ||= Project.const_get("PBX#{@name.classify}")
+            @options[:class] ||= begin
+              name = "PBX#{@name.classify}"
+              name = "XC#{@name.classify}" unless Project.const_defined?(name)
+              Project.const_get(name)
+            end
           end
 
-          def uuids_on_target?
-            !!@options[:uuids]
+          def inverse
+            klass.reflection(@options[:inverse_of])
+          end
+
+          def inverse?
+            !!@options[:inverse_of]
+          end
+
+          def singular_name
+            @name.singularize
+          end
+
+          def singular_getter
+            singular_name
+          end
+
+          def singular_setter
+            "#{singular_name}="
+          end
+
+          def plural_name
+            @name.pluralize
+          end
+
+          def plural_getter
+            plural_name
+          end
+
+          def plural_setter
+            "#{plural_name}="
+          end
+
+          def uuid_attribute
+            @options[:uuid] || @name
           end
 
           def uuid_method_name
-            @options[:uuid] || @options[:uuids].to_s.singularize
+            (@options[:uuid] || @options[:uuids] || "#{singular_name}Reference").to_s.singularize
           end
 
           def uuid_getter
@@ -36,7 +72,7 @@ module Pod
           end
 
           def uuids_method_name
-            @options[:uuids] || @options[:uuid].to_s.pluralize
+            uuid_method_name.pluralize
           end
 
           def uuids_getter
@@ -73,22 +109,22 @@ module Pod
 
         def self.has_many(plural_attr_name, options = {}, &block)
           reflection = create_reflection(plural_attr_name, options)
-          if options[:inverse_of]
+          if reflection.inverse?
             define_method(reflection.name) do
               scoped = @project.objects.select_by_class(reflection.klass).select do |object|
-                object.send(reflection.uuid_getter) == self.uuid
+                object.send(reflection.inverse.uuid_getter) == self.uuid
               end
               PBXObjectList.new(reflection.klass, @project, scoped) do |object|
-                object.send(reflection.uuid_setter, self.uuid)
+                object.send(reflection.inverse.uuid_setter, self.uuid)
               end
             end
           else
-            singular_attr_name = plural_attr_name.to_s.singularize
-            uuid_list_name = "#{singular_attr_name}References"
-            attribute(reflection.name, uuid_list_name)
+            attribute(reflection.name, reflection.uuids_getter)
             define_method(reflection.name) do
-              uuids = send(uuid_list_name)
+              uuids = send(reflection.uuids_getter)
               if block
+                # Evaluate the block, which was specified at the class level, in
+                # the instance’s context.
                 list_by_class(uuids, reflection.klass) do |object|
                   instance_exec(object, &block)
                 end
@@ -96,40 +132,38 @@ module Pod
                 list_by_class(uuids, reflection.klass)
               end
             end
-            define_method("#{plural_attr_name}=") do |objects|
-              send("#{uuid_list_name}=", objects.map(&:uuid))
+            define_method(reflection.plural_setter) do |objects|
+              send(reflection.uuids_setter, objects.map(&:uuid))
             end
           end
         end
 
-        def self.belongs_to(singular_attr_name, options = {})
+        def self.has_one(singular_attr_name, options = {})
           reflection = create_reflection(singular_attr_name, options)
-          if reflection.uuids_on_target?
+          if reflection.inverse?
             define_method(reflection.name) do
               # Loop over all objects of the class and find the one that includes
               # this object in the specified uuid list.
               @project.objects.select_by_class(reflection.klass).find do |object|
-                object.send(reflection.uuids_getter).include?(self.uuid)
+                object.send(reflection.inverse.uuids_getter).include?(self.uuid)
               end
             end
-            define_method("#{reflection.name}=") do |object|
+            define_method(reflection.singular_setter) do |object|
               # Remove this object from the uuid list of the target
               # that this object was associated to.
               if previous = send(reflection.name)
-                previous.send(reflection.uuids_getter).delete(self.uuid)
+                previous.send(reflection.inverse.uuids_getter).delete(self.uuid)
               end
               # Now assign this object to the new object
-              object.send(reflection.uuids_getter) << self.uuid
+              object.send(reflection.inverse.uuids_getter) << self.uuid if object
             end
           else
-            uuid_name = options[:uuid] || "#{reflection.name}Reference"
-            attribute(options[:uuid] || reflection.name, uuid_name)
+            attribute(reflection.uuid_attribute, reflection.uuid_getter)
             define_method(reflection.name) do
-              uuid = send(uuid_name)
-              @project.objects[uuid]
+              @project.objects[send(reflection.uuid_getter)]
             end
-            define_method("#{reflection.name}=") do |object|
-              send("#{uuid_name}=", object.uuid)
+            define_method(reflection.singular_setter) do |object|
+              send(reflection.uuid_setter, object.uuid)
             end
           end
         end
@@ -201,8 +235,8 @@ module Pod
 
       class PBXFileReference < PBXObject
         attributes :path, :sourceTree, :explicitFileType, :includeInIndex
-        has_many :buildFiles, :uuid => :fileRef, :inverse_of => :file
-        belongs_to :group, :uuids => :childReferences
+        has_many :buildFiles, :inverse_of => :file
+        has_one :group, :inverse_of => :children
 
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
@@ -271,7 +305,7 @@ module Pod
 
       class PBXBuildFile < PBXObject
         attributes :settings
-        belongs_to :file, :uuid => :fileRef
+        has_one :file, :uuid => :fileRef
       end
 
       class PBXBuildPhase < PBXObject
@@ -319,8 +353,8 @@ module Pod
         has_many :buildPhases
         has_many :dependencies # TODO :class => ?
         has_many :buildRules # TODO :class => ?
-        belongs_to :buildConfigurationList
-        belongs_to :product, :uuid => :productReference
+        has_one :buildConfigurationList
+        has_one :product
 
         def self.new_static_library(project, productName)
           # TODO should probably switch the uuid and attributes argument
@@ -396,7 +430,7 @@ module Pod
 
       class XCBuildConfiguration < PBXObject
         attribute :buildSettings
-        belongs_to :baseConfiguration, :uuid => :baseConfigurationReference
+        has_one :baseConfiguration, :uuid => :baseConfigurationReference
 
         def initialize(*)
           super
@@ -415,7 +449,7 @@ module Pod
       end
 
       class XCConfigurationList < PBXObject
-        has_many :buildConfigurations, :class => XCBuildConfiguration
+        has_many :buildConfigurations
 
         def initialize(*)
           super
@@ -425,7 +459,7 @@ module Pod
 
       class PBXProject < PBXObject
         has_many :targets, :class => PBXNativeTarget
-        belongs_to :products, :uuid => :productRefGroup, :class => PBXGroup
+        has_one :products, :uuid => :productRefGroup, :class => PBXGroup
       end
 
       class PBXObjectList
