@@ -1,6 +1,9 @@
 framework 'Foundation'
 require 'fileutils'
 
+require 'active_support/inflector'
+require 'active_support/core_ext/string/inflections'
+
 module Pod
   module Xcode
     class Project
@@ -17,8 +20,7 @@ module Pod
         end
 
         def self.has_many(plural_attr_name, options = {}, &block)
-          klass = options[:class] || PBXFileReference
-          singular_attr_name = options[:singular] || plural_attr_name.to_s[0..-2] # strip off 's'
+          klass = options[:class] || Project.const_get("PBX#{plural_attr_name.to_s.classify}")
           if options[:fkey_on_target]
             define_method(plural_attr_name) do
               scoped = @project.objects.select_by_class(klass).select do |object|
@@ -29,7 +31,8 @@ module Pod
               end
             end
           else
-            uuid_list_name = options[:uuid] || "#{singular_attr_name}References"
+            singular_attr_name = plural_attr_name.to_s.singularize
+            uuid_list_name = "#{singular_attr_name}References"
             attribute(plural_attr_name, uuid_list_name)
             define_method(plural_attr_name) do
               uuids = send(uuid_list_name)
@@ -50,7 +53,7 @@ module Pod
         def self.belongs_to(singular_attr_name, options = {})
           if uuid_name = options[:uuids]
             # part of another objects uuid list
-            klass = options[:class]
+            klass = options[:class] || Project.const_get("PBX#{singular_attr_name.to_s.classify}")
             define_method(singular_attr_name) do
               # Loop over all objects of the class and find the one that includes
               # this object in the specified uuid list.
@@ -76,16 +79,6 @@ module Pod
             end
             define_method("#{singular_attr_name}=") do |object|
               send("#{uuid_name}=", object.uuid)
-            end
-          end
-        end
-
-        def self.has_one(singular_attr_name, options = {})
-          klass = options[:class]
-          uuid_name = options[:uuid] || "#{singular_attr_name}Reference"
-          define_method(singular_attr_name) do
-            @project.objects.select_by_class(klass).find do |object|
-              object.respond_to?(uuid_name) && object.send(uuid_name) == self.uuid
             end
           end
         end
@@ -157,8 +150,8 @@ module Pod
 
       class PBXFileReference < PBXObject
         attributes :path, :sourceTree, :explicitFileType, :includeInIndex
-        has_many :buildFiles, :uuid => :fileRef, :fkey_on_target => true, :class => Project::PBXBuildFile
-        belongs_to :group, :class => Project::PBXGroup, :uuids => :childReferences
+        has_many :buildFiles, :uuid => :fileRef, :fkey_on_target => true
+        belongs_to :group, :uuids => :childReferences
 
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
@@ -185,7 +178,7 @@ module Pod
       class PBXGroup < PBXObject
         attributes :sourceTree
 
-        has_many :children, :singular => :child do |object|
+        has_many :children, :class => PBXFileReference do |object|
           if object.is_a?(Pod::Xcode::Project::PBXFileReference)
             # Associating the file to this group through the inverse
             # association will also remove it from the group it was in.
@@ -272,8 +265,8 @@ module Pod
 
         attributes :productName, :productType
 
-        has_many :buildPhases, :class => PBXBuildPhase
-        has_many :dependencies, :singular => :dependency # TODO :class => ?
+        has_many :buildPhases
+        has_many :dependencies # TODO :class => ?
         has_many :buildRules # TODO :class => ?
         belongs_to :buildConfigurationList
         belongs_to :product, :uuid => :productReference
