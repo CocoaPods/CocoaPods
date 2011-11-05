@@ -99,10 +99,15 @@ module Pod
         end
         xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
 
-        prefix_file = @xcodeproj.files.new('path' => prefix_header_filename)
-        prefix_file.group = @xcodeproj.pods.groups.find { |child| child.name == "Supporting Files" }
-
-        xcconfig_file = @xcodeproj.files.new("path" => xcconfig_filename)
+        # Add all the target related support files to the group, even the copy
+        # resources script although the project doesn't actually use them.
+        support_files_group = @xcodeproj.groups.find do |group|
+          group.name == "Targets Support Files"
+        end.groups.new("name" => @definition.lib_name)
+        support_files_group.files.new('path' => copy_resources_filename)
+        prefix_file = support_files_group.files.new('path' => prefix_header_filename)
+        xcconfig_file = support_files_group.files.new("path" => xcconfig_filename)
+        # Assign the xcconfig as the base config of each config.
         @target.buildConfigurations.each do |config|
           config.baseConfiguration = xcconfig_file
           config.buildSettings['GCC_PREFIX_HEADER'] = prefix_header_filename
@@ -144,6 +149,8 @@ module Pod
             group.children.new('path' => path.to_s)
           end
         end
+        # Add a group to hold all the target support files
+        xcodeproj.main_group.groups.new('name' => 'Targets Support Files')
       end
       @xcodeproj
     end

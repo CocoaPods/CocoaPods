@@ -4,3 +4,11 @@ generate_bridge_support!
 
 dependency 'ASIHTTPRequest'
 dependency 'SBJson'
+
+target :debug do
+  dependency 'CocoaLumberjack'
+end
+
+target :test, :exclusive => true do
+  dependency 'Kiwi'
+end

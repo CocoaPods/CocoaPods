@@ -35,18 +35,9 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		515B0FBB141D52E0001DC3E6 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Supporting Files";
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		515B0FC9141D5FBE001DC3E6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				515B0FBB141D52E0001DC3E6 /* Supporting Files */,
 			);
 			name = Pods;
 			sourceTree = "<group>";

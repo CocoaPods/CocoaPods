@@ -204,11 +204,16 @@ module Pod
         end
 
         def files
-          list_by_class(childReferences, Pod::Xcode::Project::PBXFileReference)
+          list_by_class(childReferences, Pod::Xcode::Project::PBXFileReference) do |file|
+            file.group = self
+          end
         end
 
         def source_files
-          list_by_class(childReferences, Pod::Xcode::Project::PBXFileReference, files.reject { |file| file.buildFiles.empty? })
+          files = self.files.reject { |file| file.buildFiles.empty? }
+          list_by_class(childReferences, Pod::Xcode::Project::PBXFileReference, files) do |file|
+            file.group = self
+          end
         end
 
         def groups
