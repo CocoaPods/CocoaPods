@@ -17,11 +17,6 @@ describe "Pod::Xcode::Project" do
     find_objects(conditions).first
   end
 
-  it "returns an instance initialized from the iOS static library template" do
-    template_file = File.join(@template.path, 'Pods.xcodeproj', 'project.pbxproj')
-    @template.project.to_hash.should == NSDictionary.dictionaryWithContentsOfFile(template_file)
-  end
-
   before do
     @target = @template.project.targets.new_static_library('Pods')
   end
@@ -321,8 +316,7 @@ describe "Pod::Xcode::Project" do
   end
 
   it "saves the template with the adjusted project" do
-    @template.copy_to(temporary_directory)
-    @template.project.save_as(temporary_directory + 'Pods.xcodeproj')
+    @template.save_to(temporary_directory)
     project_file = (temporary_directory + 'Pods.xcodeproj/project.pbxproj')
     NSDictionary.dictionaryWithContentsOfFile(project_file.to_s).should == @template.project.to_hash
   end

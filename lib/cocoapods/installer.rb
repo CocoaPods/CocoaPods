@@ -161,9 +161,6 @@ module Pod
       build_specifications.each(&:install!)
 
       root = config.project_pods_root
-      puts "  * Copying contents of template directory `#{template.path}' to `#{root}'" if config.verbose?
-      template.copy_to(root)
-
       puts "==> Generating Xcode project and xcconfig" unless config.silent?
       targets.each do |target|
         target.install!

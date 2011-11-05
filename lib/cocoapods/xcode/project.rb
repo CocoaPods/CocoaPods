@@ -541,9 +541,18 @@ module Pod
         end
       end
 
-      def initialize(xcodeproj)
-        file = File.join(xcodeproj, 'project.pbxproj')
-        @plist = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
+      def initialize(xcodeproj = nil)
+        if xcodeproj
+          file = File.join(xcodeproj, 'project.pbxproj')
+          @plist = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
+        else
+          @plist = {
+            'archiveVersion' => '1',
+            'classes' => {},
+            'objectVersion' => '46',
+            'objects' => {}
+          }
+        end
       end
 
       def to_hash
@@ -558,9 +567,12 @@ module Pod
         @objects ||= PBXObjectList.new(PBXObject, self, objects_hash)
       end
 
-      # TODO This should probably be the actual Project class (PBXProject).
-      def project_object
+      def root_object
         objects[@plist['rootObject']]
+      end
+
+      def root_object=(object)
+        @plist['rootObject'] = object.uuid
       end
 
       def groups
@@ -568,7 +580,7 @@ module Pod
       end
       
       def main_group
-        objects[project_object.attributes['mainGroup']]
+        objects[root_object.attributes['mainGroup']]
       end
 
       # Shortcut access to the `Pods' PBXGroup.
@@ -592,11 +604,11 @@ module Pod
       def targets
         # Better to check the project object for targets to ensure they are
         # actually there so the project will work
-        project_object.targets
+        root_object.targets
       end
 
       def products
-        project_object.products
+        root_object.products
       end
 
       IGNORE_GROUPS = ['Pods', 'Frameworks', 'Products', 'Supporting Files']
