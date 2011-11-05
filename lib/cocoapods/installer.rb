@@ -133,31 +133,26 @@ module Pod
     end
 
     def template
-      @template ||= ProjectTemplate.new(@podfile.platform)
-    end
-
-    def xcodeproj
-      unless @xcodeproj
-        @xcodeproj = Xcode::Project.new(template.xcodeproj_path)
-        # First we need to resolve dependencies across *all* targets, so that the
-        # same correct versions of pods are being used for all targets. This
-        # happens when we call `build_specifications'.
-        build_specifications.each do |spec|
-          # Add all source files to the project grouped by pod
-          group = xcodeproj.add_pod_group(spec.name)
-          spec.expanded_source_files.each do |path|
-            group.children.new('path' => path.to_s)
-          end
+      return @template if @template
+      @template = ProjectTemplate.new(@podfile.platform)
+      # First we need to resolve dependencies across *all* targets, so that the
+      # same correct versions of pods are being used for all targets. This
+      # happens when we call `build_specifications'.
+      build_specifications.each do |spec|
+        # Add all source files to the project grouped by pod
+        group = @template.project.add_pod_group(spec.name)
+        spec.expanded_source_files.each do |path|
+          group.children.new('path' => path.to_s)
         end
-        # Add a group to hold all the target support files
-        xcodeproj.main_group.groups.new('name' => 'Targets Support Files')
       end
-      @xcodeproj
+      # Add a group to hold all the target support files
+      @template.project.main_group.groups.new('name' => 'Targets Support Files')
+      @template
     end
 
     def targets
       @targets ||= @podfile.targets.values.map do |target_definition|
-        Target.new(@podfile, xcodeproj, target_definition)
+        Target.new(@podfile, template.project, target_definition)
       end
     end
 
@@ -176,7 +171,7 @@ module Pod
       end
       pbxproj = File.join(root, 'Pods.xcodeproj')
       puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
-      xcodeproj.save_as(pbxproj)
+      template.project.save_as(pbxproj)
 
       # Post install hooks run last!
       targets.each do |target|

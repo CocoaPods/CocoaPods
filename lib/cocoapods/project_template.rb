@@ -4,7 +4,10 @@ module Pod
   class ProjectTemplate
     def initialize(platform)
       @platform = platform
+      @project = Xcode::Project.new(File.join(path, 'Pods.xcodeproj'))
     end
+    
+    attr_reader :project
     
     # TODO this is a workaround for an issue with MacRuby with compiled files
     # that makes the use of __FILE__ impossible.
@@ -34,12 +37,9 @@ module Pod
       end
     end
     
-    def xcodeproj_path
-      @xcodeproj_path = File.join(path, 'Pods.xcodeproj')
-    end
-    
     def copy_to(pods_root)
       FileUtils.cp_r("#{path}/.", pods_root)
+      @project.save_as(File.join(pods_root, 'Pods.xcodeproj'))
     end
   end
 end
