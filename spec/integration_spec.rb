@@ -46,6 +46,12 @@ else
         Pod::Config.instance = @config_before
       end
 
+      def should_successfully_perform(command)
+        output = `#{command} 2>&1`
+        puts output unless $?.success?
+        $?.should.be.success
+      end
+
       # TODO add a simple source file which uses the compiled lib to check that it really really works
       it "should activate required pods and create a working static library xcode project" do
         spec = Pod::Podfile.new do
@@ -75,8 +81,7 @@ else
 
         puts "\n[!] Compiling static library..."
         Dir.chdir(config.project_pods_root) do
-          system("xcodebuild > /dev/null 2>&1").should == true
-          #system("xcodebuild").should == true
+          should_successfully_perform "xcodebuild"
         end
       end
 
@@ -174,12 +179,11 @@ else
 
         Dir.chdir(config.project_pods_root) do
           puts "\n[!] Compiling static library `Pods'..."
-          #system("xcodebuild -target Pods").should == true
-          system("xcodebuild -target Pods > /dev/null 2>&1").should == true
+          should_successfully_perform "xcodebuild -target Pods"
           puts "\n[!] Compiling static library `Pods-debug'..."
-          system("xcodebuild -target Pods-debug > /dev/null 2>&1").should == true
+          should_successfully_perform "xcodebuild -target Pods-debug"
           puts "\n[!] Compiling static library `Pods-test'..."
-          system("xcodebuild -target Pods-test > /dev/null 2>&1").should == true
+          should_successfully_perform "xcodebuild -target Pods-test"
         end
       end
 
