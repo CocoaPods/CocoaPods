@@ -20,8 +20,8 @@ module Pod
 
       attr_reader :target
 
-      def initialize(podfile, xcodeproj, definition)
-        @podfile, @xcodeproj, @definition = podfile, xcodeproj, definition
+      def initialize(podfile, project, definition)
+        @podfile, @project, @definition = podfile, project, definition
       end
 
       def xcconfig
@@ -77,7 +77,7 @@ module Pod
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!
         # First add the target to the project
-        @target = @xcodeproj.targets.new_static_library(@definition.lib_name)
+        @target = @project.targets.new_static_library(@definition.lib_name)
 
         user_header_search_paths = []
         build_specifications.each do |spec|
@@ -101,7 +101,7 @@ module Pod
 
         # Add all the target related support files to the group, even the copy
         # resources script although the project doesn't actually use them.
-        support_files_group = @xcodeproj.groups.find do |group|
+        support_files_group = @project.groups.find do |group|
           group.name == "Targets Support Files"
         end.groups.new("name" => @definition.lib_name)
         support_files_group.files.new('path' => copy_resources_filename)
@@ -132,27 +132,27 @@ module Pod
       @podfile = podfile
     end
 
-    def template
-      return @template if @template
-      @template = ProjectTemplate.new(@podfile.platform)
+    def project
+      return @project if @project
+      @project = ProjectTemplate.for_platform(@podfile.platform)
       # First we need to resolve dependencies across *all* targets, so that the
       # same correct versions of pods are being used for all targets. This
       # happens when we call `build_specifications'.
       build_specifications.each do |spec|
         # Add all source files to the project grouped by pod
-        group = @template.project.add_pod_group(spec.name)
+        group = @project.add_pod_group(spec.name)
         spec.expanded_source_files.each do |path|
           group.children.new('path' => path.to_s)
         end
       end
       # Add a group to hold all the target support files
-      @template.project.main_group.groups.new('name' => 'Targets Support Files')
-      @template
+      @project.main_group.groups.new('name' => 'Targets Support Files')
+      @project
     end
 
     def targets
       @targets ||= @podfile.targets.values.map do |target_definition|
-        Target.new(@podfile, template.project, target_definition)
+        Target.new(@podfile, project, target_definition)
       end
     end
 
@@ -166,9 +166,9 @@ module Pod
         target.install!
         target.create_files_in(root)
       end
-      pbxproj = File.join(root, 'Pods.xcodeproj')
-      puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
-      template.project.save_as(pbxproj)
+      projpath = File.join(root, 'Pods.xcodeproj')
+      puts "  * Writing Xcode project file to `#{projpath}'" if config.verbose?
+      project.save_as(projpath)
 
       # Post install hooks run last!
       targets.each do |target|

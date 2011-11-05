@@ -77,7 +77,7 @@ else
         (root + 'Pods.xcconfig').read.should == installer.targets.first.xcconfig.to_s
 
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
-        NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.template.project.to_hash
+        NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.project.to_hash
 
         puts "\n[!] Compiling static library..."
         Dir.chdir(config.project_pods_root) do
@@ -144,7 +144,7 @@ else
         installer.install!
 
         project = Pod::Xcode::Project.new(config.project_pods_root + 'Pods.xcodeproj')
-        project.source_files.should == installer.template.project.source_files
+        project.source_files.should == installer.project.source_files
       end
 
       it "creates a project with multiple targets" do

@@ -1,70 +1,61 @@
 require 'fileutils'
 
 module Pod
-  class ProjectTemplate
-    def initialize(platform)
-      @platform = platform
-      generate_template_project!
-    end
-    
-    attr_reader :platform
-    attr_reader :project
-    
-    def save_to(pods_root)
-      @project.save_as(File.join(pods_root, 'Pods.xcodeproj'))
-    end
-    
-    def generate_template_project!
-      @project = Xcode::Project.new
-      root = @project.objects.add(Xcode::Project::PBXProject, {
+  module ProjectTemplate
+    def self.for_platform(platform)
+      project = Xcode::Project.new
+      root = project.objects.add(Xcode::Project::PBXProject, {
         'attributes' => { 'LastUpgradeCheck' => '0420' },
         'compatibilityVersion' => 'Xcode 3.2',
         'developmentRegion' => 'English',
         'hasScannedForEncodings' => '0',
         'knownRegions' => ['en'],
-        'mainGroup' => @project.groups.new({ 'sourceTree' => '<group>' }).uuid,
+        'mainGroup' => project.groups.new({ 'sourceTree' => '<group>' }).uuid,
         'projectDirPath' => '',
         'projectRoot' => '',
         'targets' => []
       })
-      @project.root_object = root
-      @project.main_group << @project.groups.new({
+      project.root_object = root
+      project.main_group << project.groups.new({
         'name' => 'Pods',
         'sourceTree' => '<group>'
       })
-      framework = @project.files.new({
+      framework = project.files.new({
         'lastKnownFileType' => 'wrapper.framework',
         'name' => platform == :ios ? 'Foundation.framework' : 'Cocoa.framework',
         'path' => "System/Library/Frameworks/#{platform == :ios ? 'Framework' : 'Cocoa'}.framework",
         'sourceTree' => 'SDKROOT'
       })
-      framework.group = @project.groups.new({
+      framework.group = project.groups.new({
         'name' => 'Frameworks',
         'sourceTree' => '<group>'
       })
-      @project.main_group << framework.group
-      products = @project.groups.new({
+      project.main_group << framework.group
+      products = project.groups.new({
         'name' => 'Products',
         'sourceTree' => '<group>'
       })
-      @project.main_group << products
-      @project.root_object.products = products
+      project.main_group << products
+      project.root_object.products = products
       
-      @project.root_object.attributes['buildConfigurationList'] = @project.objects.add(Xcode::Project::XCConfigurationList, {
+      project.root_object.attributes['buildConfigurationList'] = project.objects.add(Xcode::Project::XCConfigurationList, {
         'defaultConfigurationIsVisible' => '0',
         'defaultConfigurationName' => 'Release',
         'buildConfigurations' => [
-          @project.objects.add(Xcode::Project::XCBuildConfiguration, {
+          project.objects.add(Xcode::Project::XCBuildConfiguration, {
             'name' => 'Debug',
-            'buildSettings' => build_settings(:debug)
+            'buildSettings' => build_settings(platform, :debug)
           }),
-          @project.objects.add(Xcode::Project::XCBuildConfiguration, {
+          project.objects.add(Xcode::Project::XCBuildConfiguration, {
             'name' => 'Release',
-            'buildSettings' => build_settings(:release)
+            'buildSettings' => build_settings(platform, :release)
           })
         ].map(&:uuid)
       }).uuid
+      project
     end
+    
+    private
     
     COMMON_BUILD_SETTINGS = {
       :all => {
@@ -97,7 +88,7 @@ module Pod
         'SDKROOT' => 'macosx'
       }
     }
-    def build_settings(scheme)
+    def self.build_settings(platform, scheme)
       settings = COMMON_BUILD_SETTINGS[:all].merge(COMMON_BUILD_SETTINGS[platform])
       settings['COPY_PHASE_STRIP'] = scheme == :debug ? 'NO' : 'YES'
       if scheme == :debug
