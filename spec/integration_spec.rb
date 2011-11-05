@@ -38,8 +38,6 @@ else
         config.silent = true
         config.repos_dir = fixture('spec-repos')
         config.project_pods_root = temporary_directory + 'Pods'
-        def config.ios?; true; end
-        def config.osx?; false; end
 
         FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
       end
@@ -51,6 +49,9 @@ else
       # TODO add a simple source file which uses the compiled lib to check that it really really works
       it "should activate required pods and create a working static library xcode project" do
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'ASIWebPageRequest', '>= 1.8.1'
           dependency 'JSONKit',           '>= 1.0'
@@ -61,26 +62,29 @@ else
         installer.install!
 
         root = config.project_pods_root
-        (root + 'Reachability.podspec').should.exist
+        (root + 'Reachability.podspec').should.exist if platform == :ios
         (root + 'ASIHTTPRequest.podspec').should.exist
         (root + 'ASIWebPageRequest.podspec').should.exist
         (root + 'JSONKit.podspec').should.exist
         (root + 'SSZipArchive.podspec').should.exist
 
-        (root + 'Pods.xcconfig').read.should == installer.xcconfig.to_s
+        (root + 'Pods.xcconfig').read.should == installer.targets.first.xcconfig.to_s
 
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
         NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.xcodeproj.to_hash
 
-        #puts "\n[!] Compiling static library..."
-        #Dir.chdir(config.project_pods_root) do
-          #system("xcodebuild > /dev/null 2>&1").should == true
+        puts "\n[!] Compiling static library..."
+        Dir.chdir(config.project_pods_root) do
+          system("xcodebuild > /dev/null 2>&1").should == true
           #system("xcodebuild").should == true
-        #end
+        end
       end
 
       it "does not activate pods that are only part of other pods" do
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'Reachability'
         end
@@ -94,16 +98,18 @@ else
 
       it "adds resources to the xcode copy script" do
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'SSZipArchive'
         end
 
         installer = SpecHelper::Installer.new(spec)
-        dependency_spec = installer.build_specifications.first
-        dependency_spec.resources = 'LICEN*', 'Readme.*'
+        installer.targets.first.build_specifications.first.resources = 'LICEN*', 'Readme.*'
         installer.install!
 
-        contents = (config.project_pods_root + 'PodsResources.sh').read
+        contents = (config.project_pods_root + 'Pods-resources.sh').read
         contents.should.include "install_resource 'SSZipArchive/LICENSE'\n" \
                                 "install_resource 'SSZipArchive/Readme.markdown'"
       end
@@ -111,6 +117,9 @@ else
       # TODO we need to do more cleaning and/or add a --prune task
       it "overwrites an existing project.pbxproj file" do
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'JSONKit'
         end
@@ -120,18 +129,60 @@ else
         Pod::Source.reset!
         Pod::Spec::Set.reset!
         spec = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+
           self.platform platform
           dependency 'SSZipArchive'
         end
         installer = SpecHelper::Installer.new(spec)
         installer.install!
 
-        installer = Pod::Installer.new(spec)
-        installer.generate_project
         project = Pod::Xcode::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.source_files.should == installer.xcodeproj.source_files
       end
-      
+
+      it "creates a project with multiple targets" do
+        Pod::Source.reset!
+        Pod::Spec::Set.reset!
+
+        podfile = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+          self.platform platform
+          target(:debug) { dependency 'SSZipArchive' }
+          target(:test, :exclusive => true) { dependency 'JSONKit' }
+          dependency 'ASIHTTPRequest'
+        end
+
+        installer = Pod::Installer.new(podfile)
+        installer.install!
+
+        #project = Pod::Xcode::Project.new(config.project_pods_root + 'Pods.xcodeproj')
+        #p project
+        #project.targets.each do |target|
+          #target.source_build_phases.
+        #end
+
+        root = config.project_pods_root
+        (root + 'Pods.xcconfig').should.exist
+        (root + 'Pods-debug.xcconfig').should.exist
+        (root + 'Pods-test.xcconfig').should.exist
+        (root + 'Pods-resources.sh').should.exist
+        (root + 'Pods-debug-resources.sh').should.exist
+        (root + 'Pods-test-resources.sh').should.exist
+
+        Dir.chdir(config.project_pods_root) do
+          puts "\n[!] Compiling static library `Pods'..."
+          #system("xcodebuild -target Pods").should == true
+          system("xcodebuild -target Pods > /dev/null 2>&1").should == true
+          puts "\n[!] Compiling static library `Pods-debug'..."
+          system("xcodebuild -target Pods-debug > /dev/null 2>&1").should == true
+          puts "\n[!] Compiling static library `Pods-test'..."
+          system("xcodebuild -target Pods-test > /dev/null 2>&1").should == true
+        end
+      end
+
       it "sets up an existing project with pods" do
         basename = platform == :ios ? 'iPhone' : 'Mac'
         projpath = temporary_directory + 'ASIHTTPRequest.xcodeproj'
@@ -143,27 +194,26 @@ else
         installer = SpecHelper::Installer.new(spec)
         installer.install!
         installer.configure_project(projpath)
+
         xcworkspace = temporary_directory + 'ASIHTTPRequest.xcworkspace'
         workspace = Pod::Xcode::Workspace.new_from_xcworkspace(xcworkspace)
         workspace.projpaths.sort.should == ['ASIHTTPRequest.xcodeproj', 'Pods/Pods.xcodeproj']
+
         project = Pod::Xcode::Project.new(projpath)
-        config = project.files.find { |f| f.path =~ /Pods.xcconfig$/ }
-        config.should.not.equal nil
-        copy_resources = project.objects.select_by_class(Pod::Xcode::Project::PBXShellScriptBuildPhase).find do |ss|
-          ss.shellScript['PodsResources.sh']
-        end
-        copy_resources.should.not.equal nil
+        libPods = project.files.find { |f| f.name == 'libPods.a' }
         project.targets.each do |target|
-          bases = target.buildConfigurationList.buildConfigurations.map(&:baseConfigurationReference)
-          bases.uniq[0].uuid.should == config.uuid
-          target.buildPhases.map(&:uuid).should.include copy_resources.uuid
-        end
-        lib = project.files.find { |f| f.path =~ /libPods.a$/ }
-        lib.should.not.equal nil
-        project.objects.select_by_class(Pod::Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
-          build_phase.files.map(&:uuid).should.include lib.build_file.uuid
+          target.buildConfigurations.each do |config|
+            config.baseConfiguration.path.should == 'Pods/Pods.xcconfig'
+          end
+
+          phase = target.frameworks_build_phases.first
+          phase.files.map { |buildFile| buildFile.file }.should.include libPods
+
+          # should be the last phase
+          target.buildPhases.last.shellScript.should == "${SRCROOT}/Pods/Pods-resources.sh\n"
         end
       end
+
     end
   end
 end

@@ -1,17 +1,17 @@
 module Pod
   class Resolver
-    def initialize(specification)
-      @specification = specification
+    def initialize(specification, dependencies = nil)
+      @specification, @dependencies = specification, dependencies || specification.dependencies
     end
 
     def resolve
       @sets = []
-      find_dependency_sets(@specification)
+      find_dependency_sets(@specification, @dependencies)
       @sets
     end
 
-    def find_dependency_sets(specification)
-      specification.dependencies.each do |dependency|
+    def find_dependency_sets(specification, dependencies = nil)
+      (dependencies || specification.dependencies).each do |dependency|
         set = find_dependency_set(dependency)
         set.required_by(specification)
         unless @sets.include?(set)

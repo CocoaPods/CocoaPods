@@ -6,33 +6,14 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		518ACD3F1446050200F6BE80 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518ACD3E1446050200F6BE80 /* Cocoa.framework */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
-		518ACD3B1446050200F6BE80 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		518ACD3E1446050200F6BE80 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		518ACD461446050200F6BE80 /* Pods-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pods-Prefix.pch"; sourceTree = "<group>"; };
-		518ACD53144605B400F6BE80 /* Pods.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		518ACD381446050200F6BE80 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				518ACD3F1446050200F6BE80 /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		518ACD301446050100F6BE80 = {
 			isa = PBXGroup;
 			children = (
-				518ACD53144605B400F6BE80 /* Pods.xcconfig */,
 				518ACD5B1446449B00F6BE80 /* Pods */,
 				518ACD3D1446050200F6BE80 /* Frameworks */,
 				518ACD3C1446050200F6BE80 /* Products */,
@@ -42,7 +23,6 @@
 		518ACD3C1446050200F6BE80 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				518ACD3B1446050200F6BE80 /* libPods.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,54 +35,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		518ACD451446050200F6BE80 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				518ACD461446050200F6BE80 /* Pods-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		518ACD5B1446449B00F6BE80 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				518ACD451446050200F6BE80 /* Supporting Files */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
-
-/* Begin PBXHeadersBuildPhase section */
-		518ACD391446050200F6BE80 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
-/* Begin PBXNativeTarget section */
-		518ACD3A1446050200F6BE80 /* Pods */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 518ACD4C1446050200F6BE80 /* Build configuration list for PBXNativeTarget "Pods" */;
-			buildPhases = (
-				518ACD371446050200F6BE80 /* Sources */,
-				518ACD381446050200F6BE80 /* Frameworks */,
-				518ACD391446050200F6BE80 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Pods;
-			productName = Pods;
-			productReference = 518ACD3B1446050200F6BE80 /* libPods.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		518ACD321446050100F6BE80 /* Project object */ = {
@@ -122,20 +62,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				518ACD3A1446050200F6BE80 /* Pods */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXSourcesBuildPhase section */
-		518ACD371446050200F6BE80 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		518ACD4A1446050200F6BE80 /* Debug */ = {
@@ -185,30 +114,6 @@
 			};
 			name = Release;
 		};
-		518ACD4D1446050200F6BE80 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 518ACD53144605B400F6BE80 /* Pods.xcconfig */;
-			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Pods-Prefix.pch";
-				OTHER_LDFLAGS = (
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		518ACD4E1446050200F6BE80 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 518ACD53144605B400F6BE80 /* Pods.xcconfig */;
-			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Pods-Prefix.pch";
-				OTHER_LDFLAGS = (
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -217,15 +122,6 @@
 			buildConfigurations = (
 				518ACD4A1446050200F6BE80 /* Debug */,
 				518ACD4B1446050200F6BE80 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		518ACD4C1446050200F6BE80 /* Build configuration list for PBXNativeTarget "Pods" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				518ACD4D1446050200F6BE80 /* Debug */,
-				518ACD4E1446050200F6BE80 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

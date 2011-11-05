@@ -5,11 +5,88 @@ module Pod
   module Xcode
     class Project
       class PBXObject
-        def self.attributes_accessor(*names)
-          names.each do |name|
-            name = name.to_s
-            define_method(name) { @attributes[name] }
-            define_method("#{name}=") { |value| @attributes[name] = value }
+        def self.attribute(attribute_name, accessor_name = nil)
+          attribute_name = attribute_name.to_s
+          name = (accessor_name || attribute_name).to_s
+          define_method(name) { @attributes[attribute_name] }
+          define_method("#{name}=") { |value| @attributes[attribute_name] = value }
+        end
+
+        def self.attributes(*names)
+          names.each { |name| attribute(name) }
+        end
+
+        def self.has_many(plural_attr_name, options = {}, &block)
+          klass = options[:class] || PBXFileReference
+          singular_attr_name = options[:singular] || plural_attr_name.to_s[0..-2] # strip off 's'
+          if options[:fkey_on_target]
+            define_method(plural_attr_name) do
+              scoped = @project.objects.select_by_class(klass).select do |object|
+                object.send(options[:uuid]) == self.uuid
+              end
+              PBXObjectList.new(klass, @project, scoped) do |object|
+                object.send("#{options[:uuid]}=", self.uuid)
+              end
+            end
+          else
+            uuid_list_name = options[:uuid] || "#{singular_attr_name}References"
+            attribute(plural_attr_name, uuid_list_name)
+            define_method(plural_attr_name) do
+              uuids = send(uuid_list_name)
+              if block
+                list_by_class(uuids, klass) do |object|
+                  instance_exec(object, &block)
+                end
+              else
+                list_by_class(uuids, klass)
+              end
+            end
+            define_method("#{plural_attr_name}=") do |objects|
+              send("#{uuid_list_name}=", objects.map(&:uuid))
+            end
+          end
+        end
+
+        def self.belongs_to(singular_attr_name, options = {})
+          if uuid_name = options[:uuids]
+            # part of another objects uuid list
+            klass = options[:class]
+            define_method(singular_attr_name) do
+              # Loop over all objects of the class and find the one that includes
+              # this object in the specified uuid list.
+              @project.objects.select_by_class(klass).find do |object|
+                object.send(uuid_name).include?(self.uuid)
+              end
+            end
+            define_method("#{singular_attr_name}=") do |object|
+              # Remove this object from the uuid list of the target
+              # that this object was associated to.
+              if previous = send(singular_attr_name)
+                previous.send(uuid_name).delete(self.uuid)
+              end
+              # Now assign this object to the new object
+              object.send(uuid_name) << self.uuid
+            end
+          else
+            uuid_name = options[:uuid] || "#{singular_attr_name}Reference"
+            attribute(options[:uuid] || singular_attr_name, uuid_name)
+            define_method(singular_attr_name) do
+              uuid = send(uuid_name)
+              @project.objects[uuid]
+            end
+            define_method("#{singular_attr_name}=") do |object|
+              send("#{uuid_name}=", object.uuid)
+            end
+          end
+        end
+
+        def self.has_one(singular_attr_name, options = {})
+          klass = options[:class]
+          uuid_name = options[:uuid] || "#{singular_attr_name}Reference"
+          define_method(singular_attr_name) do
+            @project.objects.select_by_class(klass).find do |object|
+              object.respond_to?(uuid_name) && object.send(uuid_name) == self.uuid
+            end
           end
         end
 
@@ -18,11 +95,21 @@ module Pod
         end
 
         attr_reader :uuid, :attributes
-        attributes_accessor :isa, :name
+        attributes :isa, :name
 
         def initialize(project, uuid, attributes)
-          @project, @uuid, @attributes = project, uuid || generate_uuid, attributes
+          @project, @attributes = project, attributes
+          unless uuid
+            # Add new objects to the main hash with a unique UUID
+            begin; uuid = generate_uuid; end while @project.objects_hash.has_key?(uuid)
+            @project.objects_hash[uuid] = @attributes
+          end
+          @uuid = uuid
           self.isa ||= self.class.isa
+        end
+
+        def ==(other)
+          other.is_a?(PBXObject) && self.uuid == other.uuid
         end
 
         def inspect
@@ -40,163 +127,18 @@ module Pod
           uuid.gsub('-', '')[0..23]
         end
 
-        def list_by_class(uuids, klass, scoped = nil)
+        def list_by_class(uuids, klass, scoped = nil, &block)
           unless scoped
             scoped = uuids.map { |uuid| @project.objects[uuid] }.select { |o| o.is_a?(klass) }
           end
-          PBXObjectList.new(klass, @project, scoped) do |object|
-            # Add the uuid of a newly created object to the uuids list
-            uuids << object.uuid
-          end
-        end
-      end
-
-      class PBXGroup < PBXObject
-        attributes_accessor :sourceTree, :children
-
-        def initialize(project, uuid, attributes)
-          super
-          self.sourceTree ||= '<group>'
-          self.children ||= []
-        end
-
-        def files
-          list_by_class(children, PBXFileReference)
-        end
-
-        def source_files
-          list_by_class(children, PBXFileReference, files.select { |file| !file.build_file.nil? })
-        end
-
-        def groups
-          list_by_class(children, PBXGroup)
-        end
-
-        def add_source_file(path, copy_header_phase = nil, compiler_flags = nil)
-          file = files.new('path' => path.to_s)
-          build_file = file.build_file
-          if path.extname == '.h'
-            build_file.settings = { 'ATTRIBUTES' => ["Public"] }
-            # Working around a bug in Xcode 4.2 betas, remove this once the Xcode bug is fixed:
-            # https://github.com/alloy/cocoapods/issues/13
-            #phase = copy_header_phase || @project.headers_build_phases.first
-            phase = copy_header_phase || @project.copy_files_build_phases.first # TODO is this really needed?
-            phase.files << build_file
+          if block
+            PBXObjectList.new(klass, @project, scoped, &block)
           else
-            build_file.settings = { 'COMPILER_FLAGS' => compiler_flags } if compiler_flags
-            @project.source_build_phase.files << build_file
+            PBXObjectList.new(klass, @project, scoped) do |object|
+              # Add the uuid of a newly created object to the uuids list
+              uuids << object.uuid
+            end
           end
-          file
-        end
-        
-        def <<(child)
-          children << child.uuid
-        end
-      end
-
-      class PBXFileReference < PBXObject
-        attributes_accessor :path, :sourceTree
-
-        def initialize(project, uuid, attributes)
-          is_new = uuid.nil?
-          super
-          self.name ||= pathname.basename.to_s
-          self.sourceTree ||= 'SOURCE_ROOT'
-          if is_new
-            @project.build_files.new.file = self
-          end
-        end
-
-        def pathname
-          Pathname.new(path)
-        end
-
-        def build_file
-          @project.build_files.find { |o| o.fileRef == uuid }
-        end
-      end
-
-      class PBXBuildFile < PBXObject
-        attributes_accessor :fileRef, :settings
-
-        # Takes a PBXFileReference instance and assigns its uuid to the fileRef attribute.
-        def file=(file)
-          self.fileRef = file.uuid
-        end
-
-        # Returns a PBXFileReference instance corresponding to the uuid in the fileRef attribute.
-        def file
-          @project.objects[fileRef]
-        end
-      end
-
-      class PBXBuildPhase < PBXObject
-        attributes_accessor :files
-        alias_method :file_uuids, :files
-        alias_method :file_uuids=, :files=
-
-        def initialize(project, uuid, attributes)
-          super
-          self.file_uuids ||= []
-        end
-
-        def files
-          list_by_class(file_uuids, PBXBuildFile)
-        end
-      end
-      
-      class PBXSourcesBuildPhase < PBXBuildPhase;     end
-      class PBXCopyFilesBuildPhase < PBXBuildPhase;   end
-      class PBXFrameworksBuildPhase < PBXBuildPhase;  end
-      class PBXShellScriptBuildPhase < PBXBuildPhase
-        attributes_accessor :shellScript
-      end
-
-      class PBXNativeTarget < PBXObject
-        attributes_accessor :buildPhases, :buildConfigurationList
-        alias_method :build_phase_uuids, :buildPhases
-        alias_method :build_phase_uuids=, :buildPhases=
-        alias_method :build_configuration_list_uuid, :buildConfigurationList
-        alias_method :build_configuration_list_uuid=, :buildConfigurationList=
-
-        def buildPhases
-          list_by_class(build_phase_uuids, PBXBuildPhase)
-        end
-        
-        def buildConfigurationList
-          @project.objects[build_configuration_list_uuid]
-        end
-        
-        def buildConfigurationList=(config_list)
-          self.build_configuration_list_uuid = config_list.uuid
-        end
-      end
-
-      class XCBuildConfiguration < PBXObject
-        attributes_accessor :baseConfigurationReference
-        alias_method :base_configuration_reference_uuid, :baseConfigurationReference
-        alias_method :base_configuration_reference_uuid=, :baseConfigurationReference=
-        
-        def baseConfigurationReference
-          @project.objects[base_configuration_reference_uuid]
-        end
-        
-        def baseConfigurationReference=(config)
-          self.base_configuration_reference_uuid = config.uuid
-        end
-      end
-      
-      class XCConfigurationList < PBXObject
-        attributes_accessor :buildConfigurations
-        alias_method :build_configuration_uuids, :buildConfigurations
-        alias_method :build_configuration_uuids=, :buildConfigurations=
-        
-        def buildConfigurations
-          list_by_class(build_configuration_uuids, XCBuildConfiguration)
-        end
-        
-        def buildConfigurations=(configs)
-          self.build_configuration_uuids = configs.map(&:uuid)
         end
       end
 
@@ -213,6 +155,235 @@ module Pod
         end
       end
 
+      class PBXFileReference < PBXObject
+        attributes :path, :sourceTree, :explicitFileType, :includeInIndex
+        has_many :buildFiles, :uuid => :fileRef, :fkey_on_target => true, :class => Project::PBXBuildFile
+        belongs_to :group, :class => Project::PBXGroup, :uuids => :childReferences
+
+        def initialize(project, uuid, attributes)
+          is_new = uuid.nil?
+          super
+          self.path = path if path # sets default name
+          self.sourceTree ||= 'SOURCE_ROOT'
+          if is_new
+            @project.main_group.children << self
+          end
+        end
+
+        alias_method :_path=, :path=
+        def path=(path)
+          self._path = path
+          self.name ||= pathname.basename.to_s
+          path
+        end
+
+        def pathname
+          Pathname.new(path)
+        end
+      end
+
+      class PBXGroup < PBXObject
+        attributes :sourceTree
+
+        has_many :children, :singular => :child do |object|
+          if object.is_a?(Pod::Xcode::Project::PBXFileReference)
+            # Associating the file to this group through the inverse
+            # association will also remove it from the group it was in.
+            object.group = self
+          else
+            # TODO What objects can actually be in a group and don't they
+            # all need the above treatment.
+            childReferences << object.uuid
+          end
+        end
+
+        def initialize(*)
+          super
+          self.sourceTree ||= '<group>'
+          self.childReferences ||= []
+        end
+
+        def files
+          list_by_class(childReferences, Pod::Xcode::Project::PBXFileReference) do |file|
+            file.group = self
+          end
+        end
+
+        def source_files
+          files = self.files.reject { |file| file.buildFiles.empty? }
+          list_by_class(childReferences, Pod::Xcode::Project::PBXFileReference, files) do |file|
+            file.group = self
+          end
+        end
+
+        def groups
+          list_by_class(childReferences, Pod::Xcode::Project::PBXGroup)
+        end
+
+        def <<(child)
+          children << child
+        end
+      end
+
+      class PBXBuildFile < PBXObject
+        attributes :settings
+        belongs_to :file, :uuid => :fileRef
+      end
+
+      class PBXBuildPhase < PBXObject
+        # TODO rename this to buildFiles and add a files :through => :buildFiles shortcut
+        has_many :files, :class => PBXBuildFile
+
+        attributes :buildActionMask, :runOnlyForDeploymentPostprocessing
+
+        def initialize(*)
+          super
+          self.fileReferences ||= []
+          # These are always the same, no idea what they are.
+          self.buildActionMask ||= "2147483647"
+          self.runOnlyForDeploymentPostprocessing ||= "0"
+        end
+      end
+
+      class PBXCopyFilesBuildPhase < PBXBuildPhase
+        attributes :dstPath, :dstSubfolderSpec
+
+        def self.new_pod_dir(project, pod_name, path)
+          new(project, nil, {
+            "dstPath" => "$(PUBLIC_HEADERS_FOLDER_PATH)/#{path}",
+            "name"    => "Copy #{pod_name} Public Headers",
+          })
+        end
+
+        def initialize(*)
+          super
+          self.dstSubfolderSpec ||= "16"
+        end
+      end
+
+      class PBXSourcesBuildPhase < PBXBuildPhase;     end
+      class PBXFrameworksBuildPhase < PBXBuildPhase;  end
+      class PBXShellScriptBuildPhase < PBXBuildPhase
+        attribute :shellScript
+      end
+
+      class PBXNativeTarget < PBXObject
+        STATIC_LIBRARY = 'com.apple.product-type.library.static'
+
+        attributes :productName, :productType
+
+        has_many :buildPhases, :class => PBXBuildPhase
+        has_many :dependencies, :singular => :dependency # TODO :class => ?
+        has_many :buildRules # TODO :class => ?
+        belongs_to :buildConfigurationList
+        belongs_to :product, :uuid => :productReference
+
+        def self.new_static_library(project, productName)
+          # TODO should probably switch the uuid and attributes argument
+          target = new(project, nil, 'productType' => STATIC_LIBRARY, 'productName' => productName)
+          target.product.path = "lib#{productName}.a"
+          target.product.includeInIndex = "0" # no idea what this is
+          target.product.explicitFileType = "archive.ar"
+          target.buildPhases.add(PBXSourcesBuildPhase)
+
+          buildPhase = target.buildPhases.add(PBXFrameworksBuildPhase)
+          project.groups.find { |g| g.name == 'Frameworks' }.files.each do |framework|
+            buildPhase.files << framework.buildFiles.new
+          end
+
+          target.buildPhases.add(PBXCopyFilesBuildPhase, 'dstPath' => '$(PUBLIC_HEADERS_FOLDER_PATH)')
+          target
+        end
+
+        def initialize(project, *)
+          super
+          self.name ||= productName
+          self.buildRuleReferences  ||= []
+          self.dependencyReferences ||= []
+          self.buildPhaseReferences ||= []
+
+          unless buildConfigurationList
+            self.buildConfigurationList = project.objects.add(XCConfigurationList)
+            # TODO or should this happen in buildConfigurationList?
+            buildConfigurationList.buildConfigurations.new('name' => 'Debug')
+            buildConfigurationList.buildConfigurations.new('name' => 'Release')
+          end
+
+          unless product
+            self.product = project.files.new('sourceTree' => 'BUILT_PRODUCTS_DIR')
+            product.group = project.products
+          end
+        end
+
+        def buildConfigurations
+          buildConfigurationList.buildConfigurations
+        end
+
+        def source_build_phases
+          buildPhases.select_by_class(PBXSourcesBuildPhase)
+        end
+
+        def copy_files_build_phases
+          buildPhases.select_by_class(PBXCopyFilesBuildPhase)
+        end
+
+        def frameworks_build_phases
+          buildPhases.select_by_class(PBXFrameworksBuildPhase)
+        end
+
+        # Finds an existing file reference or creates a new one.
+        def add_source_file(path, copy_header_phase = nil, compiler_flags = nil)
+          file = @project.files.find { |file| file.path == path.to_s } || @project.files.new('path' => path.to_s)
+          buildFile = file.buildFiles.new
+          if path.extname == '.h'
+            buildFile.settings = { 'ATTRIBUTES' => ["Public"] }
+            # Working around a bug in Xcode 4.2 betas, remove this once the Xcode bug is fixed:
+            # https://github.com/alloy/cocoapods/issues/13
+            #phase = copy_header_phase || headers_build_phases.first
+            phase = copy_header_phase || copy_files_build_phases.first
+            phase.files << buildFile
+          else
+            buildFile.settings = { 'COMPILER_FLAGS' => compiler_flags } if compiler_flags
+            source_build_phases.first.files << buildFile
+          end
+          file
+        end
+      end
+
+      class XCBuildConfiguration < PBXObject
+        attribute :buildSettings
+        belongs_to :baseConfiguration, :uuid => :baseConfigurationReference
+
+        def initialize(*)
+          super
+          # TODO These are from an iOS static library, need to check if it works for any product type
+          self.buildSettings = {
+            'DSTROOT'                      => '/tmp/Pods.dst',
+            'GCC_PRECOMPILE_PREFIX_HEADER' => 'YES',
+            'GCC_VERSION'                  => 'com.apple.compilers.llvm.clang.1_0',
+            # The OTHER_LDFLAGS option *has* to be overriden so that it does not
+            # use those from the xcconfig (for CocoaPods specifically).
+            'OTHER_LDFLAGS'                => '',
+            'PRODUCT_NAME'                 => '$(TARGET_NAME)',
+            'SKIP_INSTALL'                 => 'YES',
+          }.merge(buildSettings || {})
+        end
+      end
+
+      class XCConfigurationList < PBXObject
+        has_many :buildConfigurations, :class => XCBuildConfiguration
+
+        def initialize(*)
+          super
+          self.buildConfigurationReferences ||= []
+        end
+      end
+
+      class PBXProject < PBXObject
+        has_many :targets, :class => PBXNativeTarget
+        belongs_to :products, :uuid => :productRefGroup, :class => PBXGroup
+      end
+
       class PBXObjectList
         include Enumerable
 
@@ -223,6 +394,10 @@ module Pod
           @callback          = new_object_callback
         end
 
+        def empty?
+          @scoped_hash.empty?
+        end
+
         def [](uuid)
           if hash = @scoped_hash[uuid]
             Project.const_get(hash['isa']).new(@project, uuid, hash)
@@ -231,14 +406,12 @@ module Pod
 
         def add(klass, hash = {})
           object = klass.new(@project, nil, hash)
-          @project.objects_hash[object.uuid] = object.attributes
+          @callback.call(object) if @callback
           object
         end
 
         def new(hash = {})
-          object = add(@represented_class, hash)
-          @callback.call(object) if @callback
-          object
+          add(@represented_class, hash)
         end
 
         def <<(object)
@@ -251,14 +424,42 @@ module Pod
           end
         end
 
+        def ==(other)
+          self.to_a == other.to_a
+        end
+
+        def first
+          to_a.first
+        end
+
+        def last
+          to_a.last
+        end
+
         def inspect
           "<PBXObjectList: #{map(&:inspect)}>"
         end
 
-        # Only makes sense on the list that has the full objects_hash as its scoped hash.
+        # Only makes sense on lists that contain mixed classes.
         def select_by_class(klass)
-          scoped = @project.objects_hash.select { |_, attr| attr['isa'] == klass.isa }
-          PBXObjectList.new(klass, @project, scoped)
+          scoped = @scoped_hash.select { |_, attr| attr['isa'] == klass.isa }
+          PBXObjectList.new(klass, @project, scoped) do |object|
+            # Objects added to the subselection should still use the same
+            # callback as this list.
+            self << object
+          end
+        end
+
+        def method_missing(name, *args, &block)
+          if @represented_class.respond_to?(name)
+            object = @represented_class.send(name, @project, *args)
+            # The callbacks are only for PBXObject instances instantiated
+            # from the class method that we forwarded the message to.
+            @callback.call(object) if object.is_a?(PBXObject)
+            object
+          else
+            super
+          end
         end
       end
 
@@ -279,13 +480,17 @@ module Pod
         @objects ||= PBXObjectList.new(PBXObject, self, objects_hash)
       end
 
+      # TODO This should probably be the actual Project class (PBXProject).
+      def project_object
+        objects[@plist['rootObject']]
+      end
+
       def groups
         objects.select_by_class(PBXGroup)
       end
       
       def main_group
-        project = objects[@plist['rootObject']]
-        objects[project.attributes['mainGroup']]
+        objects[project_object.attributes['mainGroup']]
       end
 
       # Shortcut access to the `Pods' PBXGroup.
@@ -306,16 +511,14 @@ module Pod
         objects.select_by_class(PBXBuildFile)
       end
 
-      def source_build_phase
-        objects.find { |o| o.is_a?(PBXSourcesBuildPhase) }
-      end
-
-      def copy_files_build_phases
-        objects.select_by_class(PBXCopyFilesBuildPhase)
-      end
-
       def targets
-        objects.select_by_class(PBXNativeTarget)
+        # Better to check the project object for targets to ensure they are
+        # actually there so the project will work
+        project_object.targets
+      end
+
+      def products
+        project_object.products
       end
 
       IGNORE_GROUPS = ['Pods', 'Frameworks', 'Products', 'Supporting Files']
@@ -332,24 +535,6 @@ module Pod
         projpath = projpath.to_s
         FileUtils.mkdir_p(projpath)
         @plist.writeToFile(File.join(projpath, 'project.pbxproj'), atomically:true)
-      end
-
-      # TODO add comments, or even constants, describing what these magic numbers are.
-      def add_copy_header_build_phase(name, path)
-        phase = copy_files_build_phases.new({
-           "buildActionMask" => "2147483647",
-           "dstPath" => "$(PUBLIC_HEADERS_FOLDER_PATH)/#{path}",
-           "dstSubfolderSpec" => "16",
-           "name" => "Copy #{name} Public Headers",
-           "runOnlyForDeploymentPostprocessing" => "0",
-        })
-        targets.first.buildPhases << phase
-        phase
-      end
-
-      # A silly hack to pretty print the objects hash from MacRuby.
-      def pretty_print
-        puts `ruby -r pp -e 'pp(#{@template.inspect})'`
       end
     end
   end

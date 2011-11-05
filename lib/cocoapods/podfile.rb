@@ -1,5 +1,23 @@
 module Pod
   class Podfile
+    class Target
+      attr_reader :name, :parent, :target_dependencies
+
+      def initialize(name, parent = nil)
+        @name, @parent, @target_dependencies = name, parent, []
+      end
+
+      def lib_name
+        name == :default ? "Pods" : "Pods-#{name}"
+      end
+
+      # Returns *all* dependencies of this target, not only the target specific
+      # ones in `target_dependencies`.
+      def dependencies
+        @target_dependencies + (@parent ? @parent.dependencies : [])
+      end
+    end
+
     def self.from_file(path)
       podfile = Podfile.new do
         eval(path.read, nil, path.to_s)
@@ -9,8 +27,10 @@ module Pod
       podfile
     end
 
+    include Config::Mixin
+
     def initialize(&block)
-      @dependencies = []
+      @targets = { :default => (@target = Target.new(:default)) }
       instance_eval(&block)
     end
 
@@ -58,10 +78,12 @@ module Pod
     # * http://semver.org
     # * http://docs.rubygems.org/read/chapter/7
     def dependency(name, *version_requirements)
-      @dependencies << Dependency.new(name, *version_requirements)
+      @target.target_dependencies << Dependency.new(name, *version_requirements)
     end
 
-    attr_reader :dependencies
+    def dependencies
+      @targets.values.map(&:target_dependencies).flatten
+    end
 
     # Specifies that a BridgeSupport metadata should be generated from the
     # headers of all installed Pods.
@@ -70,6 +92,42 @@ module Pod
     # it to bridge types, functions, etc better.
     def generate_bridge_support!
       @generate_bridge_support = true
+    end
+
+    attr_reader :targets
+
+    # Defines a new static library target and scopes dependencies defined from
+    # the given block. The target will by default include the dependencies
+    # defined outside of the block, unless the `:exclusive => true` option is
+    # given.
+    #
+    # Consider the following Podfile:
+    #
+    #   dependency 'ASIHTTPRequest'
+    #
+    #   target :debug do
+    #     dependency 'SSZipArchive'
+    #   end
+    #
+    #   target :test, :exclusive => true do
+    #     dependency 'JSONKit'
+    #   end
+    #
+    # This Podfile defines three targets. The first one is the `:default` target,
+    # which produces the `libPods.a` file. The second and third are the `:debug`
+    # and `:test` ones, which produce the `libPods-debug.a` and `libPods-test.a`
+    # files.
+    #
+    # The `:default` target has only one dependency (ASIHTTPRequest), whereas the
+    # `:debug` target has two (ASIHTTPRequest, SSZipArchive). The `:test` target,
+    # however, is an exclusive target which means it will only have one
+    # dependency (JSONKit).
+    def target(name, options = {})
+      parent = @target
+      @targets[name] = @target = Target.new(name, options[:exclusive] ? nil : parent)
+      yield
+    ensure
+      @target = parent
     end
 
     # This is to be compatible with a Specification for use in the Installer and
@@ -86,13 +144,13 @@ module Pod
     end
 
     def dependency_by_name(name)
-      @dependencies.find { |d| d.name == name }
+      dependencies.find { |d| d.name == name }
     end
 
     def validate!
       lines = []
       lines << "* the `platform` attribute should be either `:osx` or `:ios`" unless [:osx, :ios].include?(@platform)
-      lines << "* no dependencies were specified, which is, well, kinda pointless" if @dependencies.empty?
+      lines << "* no dependencies were specified, which is, well, kinda pointless" if dependencies.empty?
       raise(Informative, (["The Podfile at `#{@defined_in_file}' is invalid:"] + lines).join("\n")) unless lines.empty?
     end
   end
