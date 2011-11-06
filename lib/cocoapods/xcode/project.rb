@@ -32,7 +32,7 @@ module Pod
           end
 
           def singular_name
-            @name.singularize
+            @options[:singular_name] || @name.singularize
           end
 
           def singular_getter
@@ -238,6 +238,15 @@ module Pod
         has_many :buildFiles, :inverse_of => :file
         has_one :group, :inverse_of => :children
 
+        def self.new_static_library(project, productName)
+          new(project, nil, {
+            "path"             => "lib#{productName}.a",
+            "includeInIndex"   => "0", # no idea what this is
+            "explicitFileType" => "archive.ar",
+            "sourceTree"       => "BUILT_PRODUCTS_DIR",
+          })
+        end
+
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
           super
@@ -359,9 +368,7 @@ module Pod
         def self.new_static_library(project, productName)
           # TODO should probably switch the uuid and attributes argument
           target = new(project, nil, 'productType' => STATIC_LIBRARY, 'productName' => productName)
-          target.product.path = "lib#{productName}.a"
-          target.product.includeInIndex = "0" # no idea what this is
-          target.product.explicitFileType = "archive.ar"
+          target.product = project.files.new_static_library(productName)
           target.buildPhases.add(PBXSourcesBuildPhase)
 
           buildPhase = target.buildPhases.add(PBXFrameworksBuildPhase)
@@ -373,6 +380,8 @@ module Pod
           target
         end
 
+        # You need to specify a product. For a static library you can use
+        # PBXFileReference.new_static_library.
         def initialize(project, *)
           super
           self.name ||= productName
@@ -386,11 +395,12 @@ module Pod
             buildConfigurationList.buildConfigurations.new('name' => 'Debug')
             buildConfigurationList.buildConfigurations.new('name' => 'Release')
           end
+        end
 
-          unless product
-            self.product = project.files.new('sourceTree' => 'BUILT_PRODUCTS_DIR')
-            product.group = project.products
-          end
+        alias_method :_product=, :product=
+        def product=(product)
+          self._product = product
+          product.group = @project.products
         end
 
         def buildConfigurations
@@ -459,7 +469,7 @@ module Pod
 
       class PBXProject < PBXObject
         has_many :targets, :class => PBXNativeTarget
-        has_one :products, :uuid => :productRefGroup, :class => PBXGroup
+        has_one :products, :singular_name => :products, :uuid => :productRefGroup, :class => PBXGroup
       end
 
       class PBXObjectList
@@ -541,9 +551,18 @@ module Pod
         end
       end
 
-      def initialize(xcodeproj)
-        file = File.join(xcodeproj, 'project.pbxproj')
-        @plist = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
+      def initialize(xcodeproj = nil)
+        if xcodeproj
+          file = File.join(xcodeproj, 'project.pbxproj')
+          @plist = NSMutableDictionary.dictionaryWithContentsOfFile(file.to_s)
+        else
+          @plist = {
+            'archiveVersion' => '1',
+            'classes' => {},
+            'objectVersion' => '46',
+            'objects' => {}
+          }
+        end
       end
 
       def to_hash
@@ -558,9 +577,12 @@ module Pod
         @objects ||= PBXObjectList.new(PBXObject, self, objects_hash)
       end
 
-      # TODO This should probably be the actual Project class (PBXProject).
-      def project_object
+      def root_object
         objects[@plist['rootObject']]
+      end
+
+      def root_object=(object)
+        @plist['rootObject'] = object.uuid
       end
 
       def groups
@@ -568,7 +590,7 @@ module Pod
       end
       
       def main_group
-        objects[project_object.attributes['mainGroup']]
+        objects[root_object.attributes['mainGroup']]
       end
 
       # Shortcut access to the `Pods' PBXGroup.
@@ -592,11 +614,11 @@ module Pod
       def targets
         # Better to check the project object for targets to ensure they are
         # actually there so the project will work
-        project_object.targets
+        root_object.targets
       end
 
       def products
-        project_object.products
+        root_object.products
       end
 
       IGNORE_GROUPS = ['Pods', 'Frameworks', 'Products', 'Supporting Files']

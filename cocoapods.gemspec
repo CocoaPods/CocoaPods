@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
                   "against."
 
   s.files    = Dir["lib/**/*.rb"] +
-               Dir["xcode-project-templates/**/*.*"] +
                %w{ bin/pod README.md LICENSE }
 
   s.executables   = %w{ pod }

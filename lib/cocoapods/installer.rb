@@ -20,8 +20,8 @@ module Pod
 
       attr_reader :target
 
-      def initialize(podfile, xcodeproj, definition)
-        @podfile, @xcodeproj, @definition = podfile, xcodeproj, definition
+      def initialize(podfile, project, definition)
+        @podfile, @project, @definition = podfile, project, definition
       end
 
       def xcconfig
@@ -77,7 +77,7 @@ module Pod
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!
         # First add the target to the project
-        @target = @xcodeproj.targets.new_static_library(@definition.lib_name)
+        @target = @project.targets.new_static_library(@definition.lib_name)
 
         user_header_search_paths = []
         build_specifications.each do |spec|
@@ -101,7 +101,7 @@ module Pod
 
         # Add all the target related support files to the group, even the copy
         # resources script although the project doesn't actually use them.
-        support_files_group = @xcodeproj.groups.find do |group|
+        support_files_group = @project.groups.find do |group|
           group.name == "Targets Support Files"
         end.groups.new("name" => @definition.lib_name)
         support_files_group.files.new('path' => copy_resources_filename)
@@ -132,32 +132,27 @@ module Pod
       @podfile = podfile
     end
 
-    def template
-      @template ||= ProjectTemplate.new(@podfile.platform)
-    end
-
-    def xcodeproj
-      unless @xcodeproj
-        @xcodeproj = Xcode::Project.new(template.xcodeproj_path)
-        # First we need to resolve dependencies across *all* targets, so that the
-        # same correct versions of pods are being used for all targets. This
-        # happens when we call `build_specifications'.
-        build_specifications.each do |spec|
-          # Add all source files to the project grouped by pod
-          group = xcodeproj.add_pod_group(spec.name)
-          spec.expanded_source_files.each do |path|
-            group.children.new('path' => path.to_s)
-          end
+    def project
+      return @project if @project
+      @project = ProjectTemplate.for_platform(@podfile.platform)
+      # First we need to resolve dependencies across *all* targets, so that the
+      # same correct versions of pods are being used for all targets. This
+      # happens when we call `build_specifications'.
+      build_specifications.each do |spec|
+        # Add all source files to the project grouped by pod
+        group = @project.add_pod_group(spec.name)
+        spec.expanded_source_files.each do |path|
+          group.children.new('path' => path.to_s)
         end
-        # Add a group to hold all the target support files
-        xcodeproj.main_group.groups.new('name' => 'Targets Support Files')
       end
-      @xcodeproj
+      # Add a group to hold all the target support files
+      @project.main_group.groups.new('name' => 'Targets Support Files')
+      @project
     end
 
     def targets
       @targets ||= @podfile.targets.values.map do |target_definition|
-        Target.new(@podfile, xcodeproj, target_definition)
+        Target.new(@podfile, project, target_definition)
       end
     end
 
@@ -166,17 +161,14 @@ module Pod
       build_specifications.each(&:install!)
 
       root = config.project_pods_root
-      puts "  * Copying contents of template directory `#{template.path}' to `#{root}'" if config.verbose?
-      template.copy_to(root)
-
       puts "==> Generating Xcode project and xcconfig" unless config.silent?
       targets.each do |target|
         target.install!
         target.create_files_in(root)
       end
-      pbxproj = File.join(root, 'Pods.xcodeproj')
-      puts "  * Writing Xcode project file to `#{pbxproj}'" if config.verbose?
-      xcodeproj.save_as(pbxproj)
+      projpath = File.join(root, 'Pods.xcodeproj')
+      puts "  * Writing Xcode project file to `#{projpath}'" if config.verbose?
+      project.save_as(projpath)
 
       # Post install hooks run last!
       targets.each do |target|
@@ -220,26 +212,17 @@ module Pod
           config.baseConfiguration = configfile
         end
       end
-      app_project.main_group << configfile
       
-      libfile = app_project.files.new({
-        'path' => 'libPods.a',
-        'lastKnownFileType' => 'archive.ar',
-        'includeInIndex' => '0',
-        'sourceTree' => 'BUILT_PRODUCTS_DIR'
-      })
+      libfile = app_project.files.new_static_library('Pods')
       app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
         build_phase.files << libfile.buildFiles.new
       end
-      app_project.main_group << libfile
       
       copy_resources = app_project.objects.add(Xcode::Project::PBXShellScriptBuildPhase, {
         'name' => 'Copy Pods Resources',
-        'buildActionMask' => '2147483647',
         'files' => [],
         'inputPaths' => [],
         'outputPaths' => [],
-        'runOnlyForDeploymentPostprocessing' => '0',
         'shellPath' => '/bin/sh',
         'shellScript' => "${SRCROOT}/Pods/Pods-resources.sh\n"
       })
