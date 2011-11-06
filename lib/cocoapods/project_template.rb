@@ -4,28 +4,11 @@ module Pod
   module ProjectTemplate
     def self.for_platform(platform)
       project = Xcode::Project.new
-      root = project.objects.add(Xcode::Project::PBXProject, {
-        'attributes' => { 'LastUpgradeCheck' => '0420' },
-        'compatibilityVersion' => 'Xcode 3.2',
-        'developmentRegion' => 'English',
-        'hasScannedForEncodings' => '0',
-        'knownRegions' => ['en'],
-        'mainGroup' => project.groups.new.uuid,
-        'projectDirPath' => '',
-        'projectRoot' => '',
-        'targets' => []
-      })
-      project.root_object = root
-      project.main_group << project.groups.new('name' => 'Pods')
-      framework = project.files.new({
-        'lastKnownFileType' => 'wrapper.framework',
-        'name' => platform == :ios ? 'Foundation.framework' : 'Cocoa.framework',
-        'path' => "System/Library/Frameworks/#{platform == :ios ? 'Framework' : 'Cocoa'}.framework",
-        'sourceTree' => 'SDKROOT'
-      })
-      framework.group = project.groups.new('name' => 'Frameworks')
+      project.main_group << project.groups.new({ 'name' => 'Pods' })
+      framework = project.add_system_framework(platform == :ios ? 'Foundation' : 'Cocoa')
+      framework.group = project.groups.new({ 'name' => 'Frameworks' })
       project.main_group << framework.group
-      products = project.groups.new('name' => 'Products')
+      products = project.groups.new({ 'name' => 'Products' })
       project.main_group << products
       project.root_object.products = products
       

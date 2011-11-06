@@ -562,6 +562,17 @@ module Pod
             'objectVersion' => '46',
             'objects' => {}
           }
+          self.root_object = objects.add(Xcode::Project::PBXProject, {
+            'attributes' => { 'LastUpgradeCheck' => '0420' },
+            'compatibilityVersion' => 'Xcode 3.2',
+            'developmentRegion' => 'English',
+            'hasScannedForEncodings' => '0',
+            'knownRegions' => ['en'],
+            'mainGroup' => groups.new.uuid,
+            'projectDirPath' => '',
+            'projectRoot' => '',
+            'targets' => []
+          })
         end
       end
 
@@ -605,6 +616,15 @@ module Pod
 
       def files
         objects.select_by_class(PBXFileReference)
+      end
+
+      def add_system_framework(name)
+        files.new({
+          'lastKnownFileType' => 'wrapper.framework',
+          'name' => "#{name}.framework",
+          'path' => "System/Library/Frameworks/#{name}.framework",
+          'sourceTree' => 'SDKROOT'
+        })
       end
 
       def build_files
