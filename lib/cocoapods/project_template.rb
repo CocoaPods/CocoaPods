@@ -10,31 +10,22 @@ module Pod
         'developmentRegion' => 'English',
         'hasScannedForEncodings' => '0',
         'knownRegions' => ['en'],
-        'mainGroup' => project.groups.new({ 'sourceTree' => '<group>' }).uuid,
+        'mainGroup' => project.groups.new.uuid,
         'projectDirPath' => '',
         'projectRoot' => '',
         'targets' => []
       })
       project.root_object = root
-      project.main_group << project.groups.new({
-        'name' => 'Pods',
-        'sourceTree' => '<group>'
-      })
+      project.main_group << project.groups.new('name' => 'Pods')
       framework = project.files.new({
         'lastKnownFileType' => 'wrapper.framework',
         'name' => platform == :ios ? 'Foundation.framework' : 'Cocoa.framework',
         'path' => "System/Library/Frameworks/#{platform == :ios ? 'Framework' : 'Cocoa'}.framework",
         'sourceTree' => 'SDKROOT'
       })
-      framework.group = project.groups.new({
-        'name' => 'Frameworks',
-        'sourceTree' => '<group>'
-      })
+      framework.group = project.groups.new('name' => 'Frameworks')
       project.main_group << framework.group
-      products = project.groups.new({
-        'name' => 'Products',
-        'sourceTree' => '<group>'
-      })
+      products = project.groups.new('name' => 'Products')
       project.main_group << products
       project.root_object.products = products
       

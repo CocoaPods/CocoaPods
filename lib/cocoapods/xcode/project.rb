@@ -238,6 +238,15 @@ module Pod
         has_many :buildFiles, :inverse_of => :file
         has_one :group, :inverse_of => :children
 
+        def self.new_static_library(project, productName)
+          new(project, nil, {
+            "path"             => "lib#{productName}.a",
+            "includeInIndex"   => "0", # no idea what this is
+            "explicitFileType" => "archive.ar",
+            "sourceTree"       => "BUILT_PRODUCTS_DIR",
+          })
+        end
+
         def initialize(project, uuid, attributes)
           is_new = uuid.nil?
           super
@@ -359,9 +368,7 @@ module Pod
         def self.new_static_library(project, productName)
           # TODO should probably switch the uuid and attributes argument
           target = new(project, nil, 'productType' => STATIC_LIBRARY, 'productName' => productName)
-          target.product.path = "lib#{productName}.a"
-          target.product.includeInIndex = "0" # no idea what this is
-          target.product.explicitFileType = "archive.ar"
+          target.product = project.files.new_static_library(productName)
           target.buildPhases.add(PBXSourcesBuildPhase)
 
           buildPhase = target.buildPhases.add(PBXFrameworksBuildPhase)
@@ -373,6 +380,8 @@ module Pod
           target
         end
 
+        # You need to specify a product. For a static library you can use
+        # PBXFileReference.new_static_library.
         def initialize(project, *)
           super
           self.name ||= productName
@@ -386,11 +395,12 @@ module Pod
             buildConfigurationList.buildConfigurations.new('name' => 'Debug')
             buildConfigurationList.buildConfigurations.new('name' => 'Release')
           end
+        end
 
-          unless product
-            self.product = project.files.new('sourceTree' => 'BUILT_PRODUCTS_DIR')
-            product.group = project.products
-          end
+        alias_method :_product=, :product=
+        def product=(product)
+          self._product = product
+          product.group = @project.products
         end
 
         def buildConfigurations

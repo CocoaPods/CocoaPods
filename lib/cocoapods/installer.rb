@@ -212,26 +212,17 @@ module Pod
           config.baseConfiguration = configfile
         end
       end
-      app_project.main_group << configfile
       
-      libfile = app_project.files.new({
-        'path' => 'libPods.a',
-        'lastKnownFileType' => 'archive.ar',
-        'includeInIndex' => '0',
-        'sourceTree' => 'BUILT_PRODUCTS_DIR'
-      })
+      libfile = app_project.files.new_static_library('Pods')
       app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
         build_phase.files << libfile.buildFiles.new
       end
-      app_project.main_group << libfile
       
       copy_resources = app_project.objects.add(Xcode::Project::PBXShellScriptBuildPhase, {
         'name' => 'Copy Pods Resources',
-        'buildActionMask' => '2147483647',
         'files' => [],
         'inputPaths' => [],
         'outputPaths' => [],
-        'runOnlyForDeploymentPostprocessing' => '0',
         'shellPath' => '/bin/sh',
         'shellScript' => "${SRCROOT}/Pods/Pods-resources.sh\n"
       })
