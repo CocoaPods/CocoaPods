@@ -214,6 +214,7 @@ module Pod
       end
       
       libfile = app_project.files.new_static_library('Pods')
+      libfile.group = app_project.main_group.groups.find { |g| g.name == 'Frameworks' }
       app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
         build_phase.files << libfile.buildFiles.new
       end

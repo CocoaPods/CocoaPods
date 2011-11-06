@@ -18,9 +18,9 @@ describe "Pod::Podfile" do
     podfile.dependency_by_name('SSZipArchive').should == Pod::Dependency.new('SSZipArchive', '>= 0.1')
   end
 
-  it "specifies if BridgeSupport metadata should be generated" do
-    podfile = Pod::Podfile.new { generate_bridge_support! }
-    podfile.generate_bridge_support?.should == true
+  it "specifies that BridgeSupport metadata should be generated" do
+    Pod::Podfile.new {}.should.not.generate_bridge_support
+    Pod::Podfile.new { generate_bridge_support! }.should.generate_bridge_support
   end
 
   describe "concerning targets (dependency groups)" do
