@@ -32,7 +32,7 @@ module Pod
           end
 
           def singular_name
-            @name.singularize
+            @options[:singular_name] || @name.singularize
           end
 
           def singular_getter
@@ -459,7 +459,7 @@ module Pod
 
       class PBXProject < PBXObject
         has_many :targets, :class => PBXNativeTarget
-        has_one :products, :uuid => :productRefGroup, :class => PBXGroup
+        has_one :products, :singular_name => :products, :uuid => :productRefGroup, :class => PBXGroup
       end
 
       class PBXObjectList

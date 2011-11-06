@@ -63,31 +63,32 @@ module Pod
         'GCC_C_LANGUAGE_STANDARD' => 'gnu99',
         'INSTALL_PATH' => "$(BUILT_PRODUCTS_DIR)",
         'GCC_WARN_ABOUT_MISSING_PROTOTYPES' => 'YES',
-    		'GCC_WARN_ABOUT_RETURN_TYPE' => 'YES',
-    		'GCC_WARN_UNUSED_VARIABLE' => 'YES'
-  		},
-  		:debug => {
+        'GCC_WARN_ABOUT_RETURN_TYPE' => 'YES',
+        'GCC_WARN_UNUSED_VARIABLE' => 'YES'
+      },
+      :debug => {
         'GCC_DYNAMIC_NO_PIC' => 'NO',
-    		'GCC_PREPROCESSOR_DEFINITIONS' => ["DEBUG=1", "$(inherited)"],
-  		  'GCC_SYMBOLS_PRIVATE_EXTERN' => 'NO',
+        'GCC_PREPROCESSOR_DEFINITIONS' => ["DEBUG=1", "$(inherited)"],
+        'GCC_SYMBOLS_PRIVATE_EXTERN' => 'NO',
         'GCC_OPTIMIZATION_LEVEL' => '0'
       },
       :ios => {
         'ARCHS' => "$(ARCHS_STANDARD_32_BIT)",
-  		  'GCC_VERSION' => 'com.apple.compilers.llvmgcc42',
+        'GCC_VERSION' => 'com.apple.compilers.llvmgcc42',
         'IPHONEOS_DEPLOYMENT_TARGET' => '4.3',
         'PUBLIC_HEADERS_FOLDER_PATH' => "$(TARGET_NAME)",
         'SDKROOT' => 'iphoneos'
       },
       :osx => {
         'ARCHS' => "$(ARCHS_STANDARD_64_BIT)",
-    		'GCC_ENABLE_OBJC_EXCEPTIONS' => 'YES',
-  		  'GCC_WARN_64_TO_32_BIT_CONVERSION' => 'YES',
-  		  'GCC_VERSION' => 'com.apple.compilers.llvm.clang.1_0',
+        'GCC_ENABLE_OBJC_EXCEPTIONS' => 'YES',
+        'GCC_WARN_64_TO_32_BIT_CONVERSION' => 'YES',
+        'GCC_VERSION' => 'com.apple.compilers.llvm.clang.1_0',
         'MACOSX_DEPLOYMENT_TARGET' => '10.7',
         'SDKROOT' => 'macosx'
       }
     }
+
     def self.build_settings(platform, scheme)
       settings = COMMON_BUILD_SETTINGS[:all].merge(COMMON_BUILD_SETTINGS[platform])
       settings['COPY_PHASE_STRIP'] = scheme == :debug ? 'NO' : 'YES'
