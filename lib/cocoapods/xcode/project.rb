@@ -363,7 +363,7 @@ module Pod
         has_many :dependencies # TODO :class => ?
         has_many :buildRules # TODO :class => ?
         has_one :buildConfigurationList
-        has_one :product
+        has_one :product, :uuid => :productReference
 
         def self.new_static_library(project, productName)
           # TODO should probably switch the uuid and attributes argument
