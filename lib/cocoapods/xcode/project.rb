@@ -626,6 +626,17 @@ module Pod
           'sourceTree' => 'SDKROOT'
         })
       end
+      
+      def add_shell_script_build_phase(name, script_path)
+        objects.add(Xcode::Project::PBXShellScriptBuildPhase, {
+          'name' => name,
+          'files' => [],
+          'inputPaths' => [],
+          'outputPaths' => [],
+          'shellPath' => '/bin/sh',
+          'shellScript' => script_path
+        })
+      end
 
       def build_files
         objects.select_by_class(PBXBuildFile)
