@@ -52,7 +52,7 @@ The load time can be improved a bit by compiling the Ruby source files:
   may, or may not, want to support.
 
 **I will give out push access to the [cocoapods][cocoapods] and
-[master spec-repo][cocoapods-specs] to anyone that has _one_) patch accepted.**
+[master spec-repo][cocoapods-specs] to anyone that has _one_ patch accepted.**
 
 
 ## Contact
