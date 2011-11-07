@@ -18,6 +18,35 @@ describe "Pod::Podfile" do
     podfile.dependency_by_name('SSZipArchive').should == Pod::Dependency.new('SSZipArchive', '>= 0.1')
   end
 
+  it "adds a dependency on a Pod repo outside of a spec repo (the repo is expected to contain a podspec)" do
+    podfile = Pod::Podfile.new do
+      dependency 'SomeExternalPod', :git => 'GIT-URL', :commit => '1234'
+    end
+    dep = podfile.dependency_by_name('SomeExternalPod')
+    dep.should.be.external_podspec
+    dep.external_spec_source.should == { :git => 'GIT-URL', :commit => '1234' }
+  end
+
+  it "adds a dependency on a library outside of a spec repo (the repo does not need to contain a podspec)" do
+    podfile = Pod::Podfile.new do
+      dependency 'SomeExternalPod', :podspec => 'http://gist/SomeExternalPod.podspec'
+    end
+    dep = podfile.dependency_by_name('SomeExternalPod')
+    dep.should.be.external_podspec
+    dep.external_spec_source.should == { :podspec => 'http://gist/SomeExternalPod.podspec' }
+  end
+
+  it "adds a dependency on a library by specifying the podspec inline" do
+    podfile = Pod::Podfile.new do
+      dependency do |s|
+        s.name = 'SomeExternalPod'
+      end
+    end
+    dep = podfile.dependency_by_name('SomeExternalPod')
+    dep.should.be.inline_podspec
+    dep.specification.name.should == 'SomeExternalPod'
+  end
+
   it "specifies that BridgeSupport metadata should be generated" do
     Pod::Podfile.new {}.should.not.generate_bridge_support
     Pod::Podfile.new { generate_bridge_support! }.should.generate_bridge_support

@@ -77,8 +77,68 @@ module Pod
     #
     # * http://semver.org
     # * http://docs.rubygems.org/read/chapter/7
-    def dependency(name, *version_requirements)
-      @target.target_dependencies << Dependency.new(name, *version_requirements)
+    #
+    #
+    # ## Dependency on a library, outside those available in a spec repo.
+    #
+    # ### From a podspec in the root of a library repo.
+    #
+    # Sometimes you may want to use the bleeding edge version of a Pod. Or a
+    # specific revision. If this is the case, you can specify that with your
+    # dependency declaration.
+    #
+    #
+    # To use the `master` branch of the repo:
+    #
+    #   dependency 'TTTFormatterKit', :git => 'https://github.com/gowalla/AFNetworking.git'
+    #
+    #
+    # Or specify a commit:
+    #
+    #   dependency 'TTTFormatterKit', :git => 'https://github.com/gowalla/AFNetworking.git', :commit => '082f8319af'
+    #
+    #
+    # It is important to note, though, that this means that the version will
+    # have to satisfy any other dependencies on the Pod by other Pods.
+    #
+    #
+    # The `podspec` file is expected to be in the root of the repo, if this
+    # library does not have a `podspec` file in its repo yet, you will have to
+    # use one of the approaches outlined in the sections below.
+    #
+    #
+    # ### From a podspec outside a spec repo, for a library without podspec.
+    #
+    # If a podspec is available from another source outside of the library’s
+    # repo. Consider, for instance, a podpsec available via HTTP:
+    #
+    #   dependency 'JSONKit', :podspec => 'https://raw.github.com/gist/1346394/1d26570f68ca27377a27430c65841a0880395d72/JSONKit.podspec'
+    #
+    #
+    # ### For a library without any available podspec
+    #
+    # Finally, if no man alive has created a podspec, for the library you want
+    # to use, yet, you will have to specify the library yourself.
+    #
+    #
+    # When you omit arguments and pass a block to `dependency`, an instance of
+    # Pod::Specification is yielded to the block. This is the same class which
+    # is normally used to specify a Pod.
+    #
+    #   dependency do |spec|
+    #     spec.name         = 'JSONKit'
+    #     spec.version      = '1.4'
+    #     spec.source       = { :git => 'https://github.com/johnezang/JSONKit.git', :tag => 'v1.4' }
+    #     spec.source_files = 'JSONKit.*'
+    #   end
+    #
+    #
+    # For more info on the definition of a Pod::Specification see:
+    # https://github.com/alloy/cocoapods/wiki/A-pod-specification
+    #
+    #
+    def dependency(*name_and_version_requirements, &block)
+      @target.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
     end
 
     def dependencies

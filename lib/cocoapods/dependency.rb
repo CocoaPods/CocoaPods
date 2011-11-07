@@ -7,13 +7,41 @@ module Pod
     attr_accessor :only_part_of_other_pod
     alias_method :only_part_of_other_pod?, :only_part_of_other_pod
 
-    def initialize(name, *version_requirements)
-      super
+    attr_accessor :external_spec_source
+
+    attr_accessor :specification
+
+    def initialize(*name_and_version_requirements, &block)
+      if name_and_version_requirements.empty? && block
+        @specification = Specification.new(&block)
+        super(@specification.name, @specification.version)
+
+      elsif !name_and_version_requirements.empty? && block.nil?
+        if name_and_version_requirements.last.is_a?(Hash)
+          @external_spec_source = name_and_version_requirements.pop
+        end
+        super(name_and_version_requirements.first)
+
+      else
+        raise Informative, "A dependency needs either a name and version requirements, " \
+                           "a source hash, or a block which defines a podspec."
+      end
       @only_part_of_other_pod = false
     end
 
     def ==(other)
-      super && @only_part_of_other_pod == other.only_part_of_other_pod
+      super &&
+        @only_part_of_other_pod == other.only_part_of_other_pod &&
+          @external_spec_source == other.external_spec_source &&
+                 @specification == other.specification
+    end
+
+    def external_podspec?
+      !@external_spec_source.nil?
+    end
+
+    def inline_podspec?
+      !@specification.nil?
     end
 
     # Taken from a newer version of RubyGems
