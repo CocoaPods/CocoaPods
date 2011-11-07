@@ -53,6 +53,23 @@ describe "Pod::Xcode::Project" do
   end
 
   describe "a PBXFileReference" do
+    it "sets a default file type" do
+      framework, library, xcconfig = %w[framework a xcconfig].map { |n| @project.files.new('path' => "Rockin.#{n}") }
+      framework.lastKnownFileType.should == 'wrapper.framework'
+      framework.explicitFileType.should == nil
+      library.lastKnownFileType.should == nil
+      library.explicitFileType.should == 'archive.ar'
+      xcconfig.lastKnownFileType.should == 'text.xcconfig'
+      xcconfig.explicitFileType.should == nil
+    end
+    
+    it "doesn't set a file type when overridden" do
+      fakework = @project.files.new('path' => 'Sup.framework', 'lastKnownFileType' => 'fish')
+      fakework.lastKnownFileType.should == 'fish'
+      makework = @project.files.new('path' => 'n2m.framework', 'explicitFileType' => 'tree')
+      makework.lastKnownFileType.should == nil
+    end
+    
     before do
       @file = @project.files.new('path' => 'some/file.m')
     end

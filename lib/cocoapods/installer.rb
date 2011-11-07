@@ -203,10 +203,7 @@ module Pod
       app_project = Xcode::Project.new(projpath)
       return if app_project.files.find { |file| file.path =~ /libPods\.a$/ }
 
-      configfile = app_project.files.new({
-        'path' => 'Pods/Pods.xcconfig',
-        'lastKnownFileType' => 'text.xcconfig'
-      })
+      configfile = app_project.files.new('path' => 'Pods/Pods.xcconfig')
       app_project.targets.each do |target|
         target.buildConfigurations.each do |config|
           config.baseConfiguration = configfile

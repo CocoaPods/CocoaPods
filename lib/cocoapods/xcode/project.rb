@@ -234,7 +234,7 @@ module Pod
       end
 
       class PBXFileReference < PBXObject
-        attributes :path, :sourceTree, :explicitFileType, :includeInIndex
+        attributes :path, :sourceTree, :explicitFileType, :lastKnownFileType, :includeInIndex
         has_many :buildFiles, :inverse_of => :file
         has_one :group, :inverse_of => :children
 
@@ -242,7 +242,6 @@ module Pod
           new(project, nil, {
             "path"             => "lib#{productName}.a",
             "includeInIndex"   => "0", # no idea what this is
-            "explicitFileType" => "archive.ar",
             "sourceTree"       => "BUILT_PRODUCTS_DIR",
           })
         end
@@ -255,6 +254,7 @@ module Pod
           if is_new
             @project.main_group.children << self
           end
+          set_default_file_type!
         end
 
         alias_method :_path=, :path=
@@ -266,6 +266,18 @@ module Pod
 
         def pathname
           Pathname.new(path)
+        end
+        
+        def set_default_file_type!
+          return if explicitFileType || lastKnownFileType
+          case path
+          when /\.a$/
+            self.explicitFileType = 'archive.ar'
+          when /\.framework$/
+            self.lastKnownFileType = 'wrapper.framework'
+          when /\.xcconfig$/
+            self.lastKnownFileType = 'text.xcconfig'
+          end
         end
       end
 
@@ -620,7 +632,6 @@ module Pod
 
       def add_system_framework(name)
         files.new({
-          'lastKnownFileType' => 'wrapper.framework',
           'name' => "#{name}.framework",
           'path' => "System/Library/Frameworks/#{name}.framework",
           'sourceTree' => 'SDKROOT'
