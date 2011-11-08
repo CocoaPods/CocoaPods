@@ -81,6 +81,40 @@ module Pod
           Version.new(basename) if v.directory? && basename[0,1] != '.'
         end.compact.sort.reverse
       end
+
+      class External < Set
+        def initialize(specification)
+          @specification = specification
+          @required_by = []
+        end
+
+        def name
+          @specification.name
+        end
+
+        def required_by(specification)
+          before = @specification
+          super(specification)
+        ensure
+          @specification = before
+        end
+
+        def only_part_of_other_pod?
+          false
+        end
+
+        def specification_path
+          raise "specification_path"
+        end
+
+        def specification
+          @specification
+        end
+
+        def versions
+          [@specification.version]
+        end
+      end
     end
   end
 end

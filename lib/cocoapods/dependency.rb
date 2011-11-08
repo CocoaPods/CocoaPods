@@ -44,6 +44,17 @@ module Pod
       !@specification.nil?
     end
 
+    def specification
+      @specification ||= begin
+        # This is an external podspec
+        pod_root = Config.instance.project_pods_root + @name
+        downloader = Downloader.for_source(pod_root, @external_spec_source)
+        downloader.download
+        file = pod_root + "#{@name}.podspec"
+        Specification.from_file(file)
+      end
+    end
+
     # Taken from a newer version of RubyGems
     unless public_method_defined?(:merge)
       def merge other

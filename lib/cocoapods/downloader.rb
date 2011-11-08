@@ -25,8 +25,12 @@ module Pod
         elsif @options[:commit]
           download_commit
         else
-          raise "Either a tag or a commit has to be specified."
+          download_head
         end
+      end
+
+      def download_head
+        git "clone '#{@url}' '#{@pod_root}'"
       end
 
       def download_tag

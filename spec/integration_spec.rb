@@ -38,8 +38,6 @@ else
         config.silent = true
         config.repos_dir = fixture('spec-repos')
         config.project_pods_root = temporary_directory + 'Pods'
-
-        FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
       end
 
       after do
@@ -50,6 +48,32 @@ else
         output = `#{command} 2>&1`
         puts output unless $?.success?
         $?.should.be.success
+      end
+
+      # Lame way to run on one platform only
+      if platform == :ios
+        it "installs a Pod directly from its repo" do
+          url = fixture('integration/sstoolkit').to_s
+          podfile = Pod::Podfile.new do
+            self.platform :ios
+            dependency 'SSToolkit', :git => url, :commit => '2adcd0f81740d6b0cd4589af98790eee3bd1ae7b'
+          end
+
+          # Note that we are *not* using the stubbed SpecHelper::Installer subclass.
+          installer = Pod::Installer.new(podfile)
+          installer.install!
+
+          spec = Pod::Spec.from_file(config.project_pods_root + 'SSToolkit.podspec')
+          spec.version.to_s.should == '0.1.3'
+
+          Dir.chdir(config.project_pods_root + 'SSToolkit') do
+            `git config --get remote.origin.url`.strip.should == url
+          end
+        end
+      end
+
+      before do
+        FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
       end
 
       # TODO add a simple source file which uses the compiled lib to check that it really really works
@@ -220,4 +244,5 @@ else
 
     end
   end
+
 end

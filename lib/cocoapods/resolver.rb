@@ -23,7 +23,11 @@ module Pod
     end
 
     def find_dependency_set(dependency)
-      Source.search(dependency)
+      if dependency.external_podspec?
+        Specification::Set::External.new(dependency.specification)
+      else
+        Source.search(dependency)
+      end
     end
 
     def validate_platform!(set)
