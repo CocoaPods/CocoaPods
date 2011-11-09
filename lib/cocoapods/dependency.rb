@@ -20,7 +20,7 @@ module Pod
         if name_and_version_requirements.last.is_a?(Hash)
           @external_spec_source = name_and_version_requirements.pop
         end
-        super(name_and_version_requirements.first)
+        super(*name_and_version_requirements)
 
       else
         raise Informative, "A dependency needs either a name and version requirements, " \
@@ -32,8 +32,7 @@ module Pod
     def ==(other)
       super &&
         @only_part_of_other_pod == other.only_part_of_other_pod &&
-          @external_spec_source == other.external_spec_source &&
-                 @specification == other.specification
+         (@specification ? @specification == other.specification : @external_spec_source == other.external_spec_source)
     end
 
     def external_podspec?
@@ -46,22 +45,23 @@ module Pod
 
     def specification
       @specification ||= begin
-        # This is an external podspec
-        pod_root = Config.instance.project_pods_root + @name
-        spec = nil
-        if @external_spec_source[:podspec]
-          Config.instance.project_pods_root.mkdir
-          spec = Config.instance.project_pods_root + "#{@name}.podspec"
-          # can be http, file, etc
-          require 'open-uri'
-          open(@external_spec_source[:podspec]) do |io|
-            spec.open('w') { |f| f << io.read }
+        if external_podspec?
+          pod_root = Config.instance.project_pods_root + @name
+          spec = nil
+          if @external_spec_source[:podspec]
+            Config.instance.project_pods_root.mkdir
+            spec = Config.instance.project_pods_root + "#{@name}.podspec"
+            # can be http, file, etc
+            require 'open-uri'
+            open(@external_spec_source[:podspec]) do |io|
+              spec.open('w') { |f| f << io.read }
+            end
+          else
+            Downloader.for_source(pod_root, @external_spec_source).download
+            spec = pod_root + "#{@name}.podspec"
           end
-        else
-          Downloader.for_source(pod_root, @external_spec_source).download
-          spec = pod_root + "#{@name}.podspec"
+          Specification.from_file(spec)
         end
-        Specification.from_file(spec)
       end
     end
 

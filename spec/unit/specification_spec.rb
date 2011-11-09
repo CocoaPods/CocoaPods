@@ -101,7 +101,6 @@ describe "A Pod::Specification loaded from a podspec" do
     @spec.compiler_flags = "-Wunused-value"
     @spec.compiler_flags.should == "-Wunused-value -fobj-arc"
   end
-
 end
 
 describe "A Pod::Specification that's part of another pod's source" do
