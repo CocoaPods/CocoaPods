@@ -70,6 +70,22 @@ else
             `git config --get remote.origin.url`.strip.should == url
           end
         end
+
+        it "installs a library with a podspec outside of the repo" do
+          podfile = Pod::Podfile.new do
+            self.platform :ios
+            # TODO use a local file instead of http?
+            dependency 'Reachability', :podspec => 'https://raw.github.com/gist/1349824/3ec6aa60c19113573fc48eac19d0fafd6a69e033/Reachability.podspec'
+          end
+
+          installer = SpecHelper::Installer.new(podfile)
+          installer.install!
+
+          spec = Pod::Spec.from_file(config.project_pods_root + 'Reachability.podspec')
+          spec.version.to_s.should == '1.2.3'
+
+          (config.project_pods_root + 'ASIHTTPRequest').should.exist
+        end
       end
 
       before do

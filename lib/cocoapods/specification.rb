@@ -287,8 +287,9 @@ module Pod
     def install!
       puts "==> Installing: #{self}" unless config.silent?
       config.project_pods_root.mkpath
-      require 'fileutils'
-      FileUtils.cp(defined_in_file, config.project_pods_root)
+      unless (config.project_pods_root + defined_in_file.basename).exist?
+        FileUtils.cp(defined_in_file, config.project_pods_root)
+      end
 
       # In case this spec is part of another pod's source, we need to dowload
       # the other pod's source.

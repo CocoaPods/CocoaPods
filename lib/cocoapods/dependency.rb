@@ -48,10 +48,20 @@ module Pod
       @specification ||= begin
         # This is an external podspec
         pod_root = Config.instance.project_pods_root + @name
-        downloader = Downloader.for_source(pod_root, @external_spec_source)
-        downloader.download
-        file = pod_root + "#{@name}.podspec"
-        Specification.from_file(file)
+        spec = nil
+        if @external_spec_source[:podspec]
+          Config.instance.project_pods_root.mkdir
+          spec = Config.instance.project_pods_root + "#{@name}.podspec"
+          # can be http, file, etc
+          require 'open-uri'
+          open(@external_spec_source[:podspec]) do |io|
+            spec.open('w') { |f| f << io.read }
+          end
+        else
+          Downloader.for_source(pod_root, @external_spec_source).download
+          spec = pod_root + "#{@name}.podspec"
+        end
+        Specification.from_file(spec)
       end
     end
 
