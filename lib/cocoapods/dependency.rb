@@ -41,17 +41,21 @@ module Pod
     def specification
       @specification ||= begin
         if @external_spec_source
-          pod_root = Config.instance.project_pods_root + @name
-          spec = nil
+          config   = Config.instance
+          pod_root = config.project_pods_root + @name
+          spec     = nil
           if @external_spec_source[:podspec]
-            Config.instance.project_pods_root.mkdir
-            spec = Config.instance.project_pods_root + "#{@name}.podspec"
+            config.project_pods_root.mkpath
+            spec = config.project_pods_root + "#{@name}.podspec"
+            source = @external_spec_source[:podspec]
             # can be http, file, etc
             require 'open-uri'
-            open(@external_spec_source[:podspec]) do |io|
+            puts "  * Fetching podspec for `#{@name}' from: #{source}" unless config.silent?
+            open(source) do |io|
               spec.open('w') { |f| f << io.read }
             end
           else
+            puts "  * Pre-downloading: `#{@name}'" unless config.silent?
             Downloader.for_source(pod_root, @external_spec_source).download
             spec = pod_root + "#{@name}.podspec"
           end

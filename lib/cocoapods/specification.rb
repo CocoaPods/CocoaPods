@@ -10,6 +10,9 @@ module Pod
 
     # The file is expected to define and return a Pods::Specification.
     def self.from_file(path)
+      unless path.exist?
+        raise Informative, "No podspec exists at path `#{path}'."
+      end
       spec = Pod._eval_podspec(path)
       spec.defined_in_file = path
       spec
