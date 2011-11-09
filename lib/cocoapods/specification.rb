@@ -286,8 +286,8 @@ module Pod
     #   end
     def install!
       puts "==> Installing: #{self}" unless config.silent?
-      config.project_pods_root.mkpath
-      unless (config.project_pods_root + defined_in_file.basename).exist?
+      if defined_in_file && !(config.project_pods_root + defined_in_file.basename).exist?
+        config.project_pods_root.mkpath
         FileUtils.cp(defined_in_file, config.project_pods_root)
       end
 

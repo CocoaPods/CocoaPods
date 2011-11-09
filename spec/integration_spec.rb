@@ -86,8 +86,32 @@ else
 
           (config.project_pods_root + 'ASIHTTPRequest').should.exist
         end
+
+        it "installs a library with a podspec defined inline" do
+          podfile = Pod::Podfile.new do
+            self.platform :ios
+            dependency do |s|
+              s.name         = 'JSONKit'
+              s.version      = '1.2'
+              s.source       = { :git => 'https://github.com/johnezang/JSONKit.git', :tag => 'v1.2' }
+              s.source_files = 'JSONKit.*'
+            end
+          end
+
+          installer = SpecHelper::Installer.new(podfile)
+          installer.install!
+
+          # TODO do we need the write out the podspec?
+          #spec = Pod::Spec.from_file(config.project_pods_root + 'JSONKit.podspec')
+          #spec.version.to_s.should == '1.2'
+
+          change_log = (config.project_pods_root + 'JSONKit/CHANGELOG.md').read
+          change_log.should.include '1.2'
+          change_log.should.not.include '1.3'
+        end
       end
 
+if false
       before do
         FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
       end
@@ -261,4 +285,5 @@ else
     end
   end
 
+end
 end

@@ -23,7 +23,6 @@ describe "Pod::Podfile" do
       dependency 'SomeExternalPod', :git => 'GIT-URL', :commit => '1234'
     end
     dep = podfile.dependency_by_name('SomeExternalPod')
-    dep.should.be.external_podspec
     dep.external_spec_source.should == { :git => 'GIT-URL', :commit => '1234' }
   end
 
@@ -32,7 +31,6 @@ describe "Pod::Podfile" do
       dependency 'SomeExternalPod', :podspec => 'http://gist/SomeExternalPod.podspec'
     end
     dep = podfile.dependency_by_name('SomeExternalPod')
-    dep.should.be.external_podspec
     dep.external_spec_source.should == { :podspec => 'http://gist/SomeExternalPod.podspec' }
   end
 
@@ -43,7 +41,6 @@ describe "Pod::Podfile" do
       end
     end
     dep = podfile.dependency_by_name('SomeExternalPod')
-    dep.should.be.inline_podspec
     dep.specification.name.should == 'SomeExternalPod'
   end
 

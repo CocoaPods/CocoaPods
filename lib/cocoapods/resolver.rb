@@ -23,8 +23,8 @@ module Pod
     end
 
     def find_dependency_set(dependency)
-      if dependency.external_podspec?
-        Specification::Set::External.new(dependency.specification)
+      if external_spec = dependency.specification
+        Specification::Set::External.new(external_spec)
       else
         Source.search(dependency)
       end

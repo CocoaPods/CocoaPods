@@ -20,6 +20,7 @@ module Pod
       executable :git
 
       def download
+        @pod_root.dirname.mkpath
         if @options[:tag]
           download_tag
         elsif @options[:commit]
@@ -34,7 +35,7 @@ module Pod
       end
 
       def download_tag
-        @pod_root.mkdir
+        @pod_root.mkpath
         Dir.chdir(@pod_root) do
           git "init"
           git "remote add origin '#{@url}'"

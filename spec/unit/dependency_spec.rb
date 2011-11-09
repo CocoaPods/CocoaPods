@@ -7,20 +7,6 @@ describe "Pod::Dependency" do
     dep1.merge(dep2).should == Pod::Dependency.new('bananas', '>= 1.8', '1.9')
   end
 
-  it "returns wether or not the spec for this pod is in a spec repo" do
-    dep = Pod::Dependency.new('bananas')
-    dep.should.not.be.external_podspec
-    dep.external_spec_source = { :git => 'GIT-URL' }
-    dep.should.be.external_podspec
-  end
-
-  it "returns wether or not the spec for this pod is defined inline" do
-    dep = Pod::Dependency.new { |s| s.name = 'bananas' }
-    dep.should.be.inline_podspec
-    dep.specification.should.be.instance_of Pod::Specification
-    dep.specification.name.should == 'bananas'
-  end
-
   it "is equal to another dependency if `part_of_other_pod' is the same" do
     dep1 = Pod::Dependency.new('bananas', '>= 1')
     dep1.only_part_of_other_pod = true

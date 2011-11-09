@@ -13,7 +13,8 @@ module Pod
 
     def initialize(*name_and_version_requirements, &block)
       if name_and_version_requirements.empty? && block
-        @specification = Specification.new(&block)
+        @inline_podspec = true
+        @specification  = Specification.new(&block)
         super(@specification.name, @specification.version)
 
       elsif !name_and_version_requirements.empty? && block.nil?
@@ -35,17 +36,11 @@ module Pod
          (@specification ? @specification == other.specification : @external_spec_source == other.external_spec_source)
     end
 
-    def external_podspec?
-      !@external_spec_source.nil?
-    end
-
-    def inline_podspec?
-      !@specification.nil?
-    end
-
+    # In case this dependency was defined with either a repo url, :podspec, or block,
+    # this method will return the Specification instance.
     def specification
       @specification ||= begin
-        if external_podspec?
+        if @external_spec_source
           pod_root = Config.instance.project_pods_root + @name
           spec = nil
           if @external_spec_source[:podspec]
