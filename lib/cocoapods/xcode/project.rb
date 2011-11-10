@@ -349,7 +349,7 @@ module Pod
 
         def self.new_pod_dir(project, pod_name, path)
           new(project, nil, {
-            "dstPath" => "$(PUBLIC_HEADERS_FOLDER_PATH)/#{path}",
+            "dstPath" => "$(PRODUCT_NAME)/#{path}",
             "name"    => "Copy #{pod_name} Public Headers",
           })
         end
@@ -388,7 +388,7 @@ module Pod
             buildPhase.files << framework.buildFiles.new
           end
 
-          target.buildPhases.add(PBXCopyFilesBuildPhase, 'dstPath' => '$(PUBLIC_HEADERS_FOLDER_PATH)')
+          target.buildPhases.add(PBXCopyFilesBuildPhase, 'dstPath' => '$(PRODUCT_NAME)')
           target
         end
 

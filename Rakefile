@@ -76,6 +76,25 @@ namespace :spec do
   end
 end
 
+desc "Build all examples"
+task :build_examples do
+  require 'pathname'
+  examples = Pathname.new(File.expand_path('../examples', __FILE__))
+  examples.entries.each do |example|
+    next if %w{ . .. ConfigureTest MacRubySample }.include?(example.basename.to_s)
+    example = examples + example
+    next unless example.directory?
+    puts "Building example: #{example}"
+    puts
+    Dir.chdir(example.to_s) do
+      sh "rm -rf Pods DerivedData"
+      sh "../../bin/pod install --verbose"
+      sh "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
+    end
+    puts
+  end
+end
+
 desc "Dumps a Xcode project as YAML, meant for diffing"
 task :dump_xcodeproj do
   require 'yaml'

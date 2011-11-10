@@ -1,4 +1,0 @@
-platform :ios
-
-dependency 'AFNetworking'
-dependency 'FormatterKit'
