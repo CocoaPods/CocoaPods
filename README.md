@@ -22,10 +22,10 @@ After that you can install CocoaPods itself.
     $ sudo macgem install cocoapods
     $ pod setup
 
-Now that you've got CocoaPods installed you can easily add it to your project. Read the Quick guide to learn how to get started.
+Now that you've got CocoaPods installed you can easily add it to your project.
 
 
-## Quick guide
+## Adding it to your project
 
 Search for Pods by name or description.
 
