@@ -1,4 +1,4 @@
-platform :ios
+platform :osx
 
 dependency 'FormatterKit'
 
@@ -16,3 +16,4 @@ dependency do |s|
   s.library = 'z'
   s.dependency 'JSONKit'
 end
+
