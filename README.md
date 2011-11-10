@@ -1,84 +1,72 @@
-# CocoaPods
+# CocoaPods – an Objective-C library manager
 
-CocoaPods is an Objective-C library dependency/package manager. It tries to take
-away all hard work of maintaining your dependencies.
+CocoaPods manages library dependencies for your Xcode project.
 
-Its goal is to create a more centralized overview of open-source libraries and
-unify the way in which we deal with them, like [RubyGems](http://rubygems.org)
-does for the Ruby community.
+You specify the dependencies for your project in one easy text file. CocoaPods resolves dependencies between libraries, fetches source code for the dependencies, and creates and maintains an Xcode workspace to build your project.
 
-CocoaPods will:
-
-* Calculate the right set of versions of all of your project’s dependencies.
-  _Currently the resolver is very naive and any conflicts will have to be solved
-  by you, the user. This will change in the future._
-* Install dependencies.
-* Set them up to be build as part of a ‘dependency’ static library, which your
-  project links against.
-
-For more in depth information see the [wiki][wiki], specifically the page about
-[creating a project that uses CocoaPods][wiki-create].
+Ultimately, the goal is to improve discoverability of, and engagement in, third party open-source libraries, by creating a more centralized ecosystem.
 
 
-## Installing CocoaPods
+## Installation
 
-You’ll need MacRuby. CocoaPods itself installs through RubyGems, the Ruby
-package manager. Download and install [version 0.10][macruby] and then perform
-the following commands:
+Downloading and installing CocoaPods only takes a few minutes.
+
+CocoaPods runs on [MacRuby](http://macruby.org). If you don't have a recent version of MacRuby installed you will need to download it. CocoaPods works best on version 0.10.
+
+    $ curl -O http://www.macruby.org/files/MacRuby%200.10.zip
+    $ open MacRuby%200.10.zip
+    # open MacRuby\ 0.10/MacRuby\ 0.10.pkg
+
+After that you can install CocoaPods itself.
 
     $ sudo macgem install cocoapods
     $ pod setup
 
-The load time can be improved a bit by compiling the Ruby source files:
-
-    $ sudo macgem install rubygems-compile
-    $ sudo macgem compile cocoapods
+Now that you've got CocoaPods installed you can easily add it to your project. Read the Quick guide to learn how to get started.
 
 
-## Contributing
+## Quick guide
 
-* We need specifications for as many libraries as possible, which will help in
-  adoption and finding CocoaPods issues that need to be addressed.
+Search for Pods by name or description.
 
-* There needs to be [proper documentation and guides with screenshots][wiki],
-  screencasts, blog posts, etcetera.
+    $ pod search asi
+    ==> ASIHTTPRequest (1.8.1)
+        Easy to use CFNetwork wrapper for HTTP requests, Objective-C, Mac OS X and iPhone
+    
+    ==> ASIWebPageRequest (1.8.1)
+        The ASIWebPageRequest class included with ASIHTTPRequest lets you download
+        complete webpages, including external resources like images and stylesheets.
 
-* The project is still very young, so there's a lot still on the table. Feel
-  free to create [tickets][tickets] with ideas, feedback, and issues.
+After you've found your favorite dependencies you add them to your [Podfile](https://github.com/alloy/cocoapods/wiki/A-Podfile).
 
-* If you're looking for things to do, start by reading this
-  [setup wiki page][dev-setup], then check the [tickets][tickets] and
-  [the example specification][example-spec] which contains a lot of ideas we
-  may, or may not, want to support.
+    $ edit Podfile
+    platform :ios
+    dependency 'JSONKit',           '~> 1.4'
+    dependency 'Reachability',      '~> 2.0.4'
 
-**I will give out push access to the [cocoapods][cocoapods] and
-[master spec-repo][cocoapods-specs] to anyone that has _one_ patch accepted.**
+And then you [install the dependencies](https://github.com/alloy/cocoapods/wiki/Creating-a-project-that-uses-CocoaPods) in your project.
 
+    $ pod install App.xcodeproj
 
-## Contact
+Remember to always open the Xcode workspace instead of the project file when you're building.
 
-* Follow [@CocoaPodsOrg](http://twitter.com/CocoaPodsOrg) on Twitter to stay up-to-date on new pods and general release info.
-* #cocoapods on `irc.freenode.net`
+    $ open App.xcworkspace
 
-Eloy Durán:
+Sometimes CocoaPods doesn't have a Pod for one of your dependencies yet. Fortunately [creating a Pod](https://github.com/alloy/cocoapods/wiki/A-pod-specification) is really easy.
 
-* http://github.com/alloy
-* http://twitter.com/alloy
-* eloy.de.enige@gmail.com
+    $ pod spec create Peanuts
+    $ edit Peanuts.podspec
+    $ pod spec lint Peanuts.podspec
 
+Once you've got it running [create a ticket](https://github.com/alloy/cocoapods/issues) and upload the Pod. If you're familiar with Git you can also fork the [CocoaPods specs](https://github.com/alloy/cocoapods-specs) repository and send a pull request. We really love contributions!
 
-## LICENSE
-
-These works are available under the MIT license. See the [LICENSE][license] file
-for more info.
+There are several other ways to start using **any** library without a Pod specification, which can be seen in the [SSCatalog example](https://github.com/alloy/cocoapods/blob/master/examples/SSCatalog/Podfile).
 
 
-[macruby]: http://www.macruby.org/files
-[cocoapods]: https://github.com/alloy/cocoapods
-[cocoapods-specs]: https://github.com/alloy/cocoapods-specs
-[tickets]: https://github.com/alloy/cocoapods/issues
-[example-spec]: https://github.com/alloy/cocoapods/blob/master/examples/PodSpec.podspec
-[dev-setup]: https://github.com/alloy/cocoapods/wiki/Setting-up-for-development-on-CocoaPods
-[wiki-create]: https://github.com/alloy/cocoapods/wiki/Creating-a-project-that-uses-CocoaPods
-[wiki]: https://github.com/alloy/cocoapods/wiki/_pages
-[license]: cocoa-pods/blob/master/LICENSE
+## Collaborate
+
+All CocoaPods development happens on GitHub, there is a repository for [CocoaPods](https://github.com/alloy/cocoapods) and one for the [CocoaPods specs](https://github.com/alloy/cocoapods-specs). Contributing patches or Pods is really easy and gratifying. You even get push access when one of your specs or patches is accepted.
+
+Follow [@CocoaPodsOrg](http://twitter.com/CocoaPodsOrg) to get up to date information about what's going on in the CocoaPods world.
+
+If you're really oldschool and you want to discuss CocoaPods development you can join #cocoapods on irc.freenode.net.
