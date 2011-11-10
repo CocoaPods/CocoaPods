@@ -10,17 +10,17 @@ dependency do |s|
   s.author   = { 'Gowalla' => 'live@gowalla.com' }
   s.source   = { :git => 'https://github.com/gowalla/AFNetworking.git', :tag => '0.7.0' }
 
-  if config.ios?
+  #if config.ios?
     s.source_files = 'AFNetworking' # everything
-  else
-    s.source_files = %w{
-      AFNetworking/AFHTTPRequestOperation.h
-      AFNetworking/AFJSONRequestOperation.h
-      AFNetworking/NSData+AFNetworking.h
-      AFNetworking/NSMutableURLRequest+AFNetworking.h
-      AFNetworking/NSString+AFNetworking.h
-    }
-  end
+  #else
+    #s.source_files = %w{
+      #AFNetworking/AFHTTPRequestOperation.h
+      #AFNetworking/AFJSONRequestOperation.h
+      #AFNetworking/NSData+AFNetworking.h
+      #AFNetworking/NSMutableURLRequest+AFNetworking.h
+      #AFNetworking/NSString+AFNetworking.h
+    #}
+  #end
 
   s.clean_paths = ['iOS Example', 'Mac Example', 'AFNetworking.xcworkspace']
 
