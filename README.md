@@ -6,6 +6,8 @@ You specify the dependencies for your project in one easy text file. CocoaPods r
 
 Ultimately, the goal is to improve discoverability of, and engagement in, third party open-source libraries, by creating a more centralized ecosystem.
 
+See [the wiki](https://github.com/alloy/cocoapods/wiki) for more in depth information on several topics.
+
 
 ## Installation
 
