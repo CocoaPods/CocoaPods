@@ -50,6 +50,8 @@ And then you [install the dependencies](https://github.com/alloy/cocoapods/wiki/
 
     $ pod install App.xcodeproj
 
+_Where ‘App.xcodeproj’ is the name of your actual application project._
+
 Remember to always open the Xcode workspace instead of the project file when you're building.
 
     $ open App.xcworkspace
