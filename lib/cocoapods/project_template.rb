@@ -38,7 +38,8 @@ module Pod
         'INSTALL_PATH' => "$(BUILT_PRODUCTS_DIR)",
         'GCC_WARN_ABOUT_MISSING_PROTOTYPES' => 'YES',
         'GCC_WARN_ABOUT_RETURN_TYPE' => 'YES',
-        'GCC_WARN_UNUSED_VARIABLE' => 'YES'
+        'GCC_WARN_UNUSED_VARIABLE' => 'YES',
+        'OTHER_LDFLAGS' => ''
       },
       :debug => {
         'GCC_DYNAMIC_NO_PIC' => 'NO',
