@@ -74,3 +74,14 @@ All CocoaPods development happens on GitHub, there is a repository for [CocoaPod
 Follow [@CocoaPodsOrg](http://twitter.com/CocoaPodsOrg) to get up to date information about what's going on in the CocoaPods world.
 
 If you're really oldschool and you want to discuss CocoaPods development you can join #cocoapods on irc.freenode.net.
+
+
+# Endorsements
+
+* “I am crazy excited about this. With the growing number of Objective-C libraries, this will make things so much better.” –– [Sam Soffes](http://news.ycombinator.com/item?id=3009154)
+* “Are you doing open source iOS components? You really should support @CocoaPodsOrg!” –– [Matthias Tretter](http://twitter.com/#!/myell0w/status/134955697740840961)
+* “So glad someone has finally done this...” –– [Tom Wilson](http://news.ycombinator.com/item?id=3009349)
+* “Anybody who has tasted the coolness of RubyGems (and @gembundler) understands how cool CocoaPods might be.” –– [StuFF mc](http://twitter.com/#!/stuffmc/status/115374231591731200)
+* “I will be working on getting several of my Objective-C libraries ready for CocoaPods this week!” –– [Luke Redpath](http://twitter.com/#!/lukeredpath/status/115510581921988608)
+* “Really digg how @alloy is building a potential game changer” –– [Klaas Speller](https://twitter.com/#!/spllr/status/115914209438601216)
+* “This is awesome, I love endorsements!” –– [Appie Durán](http://twitter.com/#!/AppieDuran)
