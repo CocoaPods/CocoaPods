@@ -142,6 +142,7 @@ EOS
         # Assign the xcconfig as the base config of each config.
         @target.buildConfigurations.each do |config|
           config.baseConfiguration = xcconfig_file
+          config.buildSettings['OTHER_LDFLAGS'] = ''
           config.buildSettings['GCC_PREFIX_HEADER'] = prefix_header_filename
         end
       end

@@ -117,7 +117,6 @@ else
         end
       end
 
-if false
       before do
         FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
       end
@@ -169,7 +168,6 @@ if false
         end
       end
 
-#if false
       it "does not activate pods that are only part of other pods" do
         spec = Pod::Podfile.new do
           # first ensure that the correct info is available to the specs when they load
@@ -182,8 +180,11 @@ if false
         installer = SpecHelper::Installer.new(spec)
         installer.install!
 
-        (config.project_pods_root + 'Reachability.podspec').should.exist
-        (config.project_pods_root + 'ASIHTTPRequest.podspec').should.not.exist
+        YAML.load(installer.lock_file.read).should == {
+          'PODS' => [{ 'Reachability (2.0.4)' => ["ASIHTTPRequest (>= 1.8)"] }],
+          'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
+          'DEPENDENCIES' => ["Reachability"]
+        }
       end
 
       it "adds resources to the xcode copy script" do
@@ -299,12 +300,11 @@ if false
           phase.files.map { |buildFile| buildFile.file }.should.include libPods
 
           # should be the last phase
-          target.buildPhases.last.shellScript.should == "${SRCROOT}/Pods/Pods-resources.sh\n"
+          target.buildPhases.last.shellScript.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
         end
       end
 
     end
   end
 
-end
 end
