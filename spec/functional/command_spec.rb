@@ -15,6 +15,16 @@ describe "Pod::Command" do
     git_config('master', 'remote.origin.url').should == fixture('spec-repos/master').to_s
   end
 
+  it "updates an existing `master' clone to point to the correct remote (migration for version 0.2.0 -> 0.3.0)" do
+    dir = temporary_directory + 'cocoapods'
+    dir.mkpath
+    FileUtils.cp_r(fixture('spec-repos/master').to_s, dir.to_s)
+    command = Pod::Command.parse('setup', '--silent')
+    def command.master_repo_url; 'git://some-other-remote'; end
+    command.run
+    git_config('master', 'remote.origin.url').should == 'git://some-other-remote'
+  end
+
   it "adds a spec-repo" do
     add_repo('private', fixture('spec-repos/master'))
     git_config('private', 'remote.origin.url').should == fixture('spec-repos/master').to_s

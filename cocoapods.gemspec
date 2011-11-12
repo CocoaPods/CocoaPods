@@ -27,9 +27,8 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
 
-  s.post_install_message = "To speed up load time of CocoaPods consider compiling the Ruby source files:\n\n" \
-                           "    $ sudo macgem install rubygems-compile\n" \
-                           "    $ sudo macgem compile cocoapods\n\n"
+  s.post_install_message = "[!] If this is your first time install of CocoaPods, or if " \
+                           "you are upgrading, first run: $ pod setup"
 
   s.add_runtime_dependency 'xcodeproj', '~> 0.0.2'
 
