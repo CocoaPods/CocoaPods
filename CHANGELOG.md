@@ -1,7 +1,9 @@
 ## 0.3.0
 
 * Add support for multiple static library targets in the Pods Xcode project
-  with different sets of depedencies. [[docs][targets-docs] | [example][targets-example]]
+  with different sets of depedencies. This means that you can create a separate
+  library which contains all dependencies, including extra ones that you only
+  use in, for instance, a debug or test build. [[docs][targets-docs] | [example][targets-example]]
 
 * Install libraries from anywhere. A dependency can take a git url if the repo
   contains a podspec file in its root, or a podspec can be loaded from a file
