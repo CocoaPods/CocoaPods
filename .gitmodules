@@ -13,6 +13,3 @@
 [submodule "spec/fixtures/integration/sstoolkit"]
 	path = spec/fixtures/integration/sstoolkit
 	url = https://github.com/samsoffes/sstoolkit.git
-[submodule "external/xcodeproj"]
-	path = external/xcodeproj
-	url = git@github.com:alloy/xcodeproj.git
