@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
                            "    $ sudo macgem install rubygems-compile\n" \
                            "    $ sudo macgem compile cocoapods\n\n"
 
-  s.add_runtime_dependency 'xcodeproj', '~> 0.0.1'
+  s.add_runtime_dependency 'xcodeproj', '~> 0.0.2'
 
   ## Make sure you can build the gem on older versions of RubyGems too:
   s.rubygems_version = "1.6.2"

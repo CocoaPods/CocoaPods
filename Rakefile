@@ -89,7 +89,11 @@ task :build_examples do
     Dir.chdir(example.to_s) do
       sh "rm -rf Pods DerivedData"
       sh "../../bin/pod install --verbose"
-      sh "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
+      command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
+      if (example + 'Podfile').read.include?('platform :ios')
+        command << " -sdk /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk"
+      end
+      sh command
     end
     puts
   end

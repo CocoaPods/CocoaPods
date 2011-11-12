@@ -15,7 +15,7 @@ module Xcodeproj
     class PBXCopyFilesBuildPhase
       def self.new_pod_dir(project, pod_name, path)
         new(project, nil, {
-          "dstPath" => "$(PUBLIC_HEADERS_FOLDER_PATH)/#{path}",
+          "dstPath" => "$(PRODUCT_NAME)/#{path}",
           "name"    => "Copy #{pod_name} Public Headers",
         })
       end
