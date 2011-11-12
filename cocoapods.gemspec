@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
                   "ecosystem."
 
   s.files    = Dir["lib/**/*.rb"] +
-               %w{ bin/pod README.md LICENSE }
+               %w{ bin/pod README.md LICENSE CHANGELOG.md }
 
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
