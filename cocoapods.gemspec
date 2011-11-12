@@ -4,22 +4,21 @@ require File.expand_path('../lib/cocoapods', __FILE__)
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
   s.version  = Pod::VERSION
-  s.date     = "2011-09-17"
+  s.date     = "2011-11-12"
   s.license  = "MIT"
   s.email    = "eloy.de.enige@gmail.com"
   s.homepage = "https://github.com/CocoaPods/CocoaPods"
   s.authors  = ["Eloy Duran"]
 
-  s.summary     = "A simple Objective-C library package manager. (Requires MacRuby.)"
-  s.description = "CocoaPods is an Objective-C library package manager. It tries " \
-                  "to take away all hard work of maintaining your dependencies, " \
-                  "but in a lean and flexible way. Its goal is to create a more " \
-                  "centralized overview of open-source libraries and unify the way " \
-                  "in which we deal with them.\n" \
-                  "CocoaPods will calculate the right set of versions of all of your " \
-                  "project's dependencies, install them, and set them up to be build " \
-                  "as part of a dependency static library, which your project links " \
-                  "against."
+  s.summary     = "An Objective-C library package manager. (Requires MacRuby.)"
+  s.description = "CocoaPods manages library dependencies for your Xcode project.\n\n"     \
+                  "You specify the dependencies for your project in one easy text file. "  \
+                  "CocoaPods resolves dependencies between libraries, fetches source "     \
+                  "code for the dependencies, and creates and maintains an Xcode "         \
+                  "workspace to build your project.\n\n"                                   \
+                  "Ultimately, the goal is to improve discoverability of, and engagement " \
+                  "in, third party open-source libraries, by creating a more centralized " \
+                  "ecosystem."
 
   s.files    = Dir["lib/**/*.rb"] +
                %w{ bin/pod README.md LICENSE }
