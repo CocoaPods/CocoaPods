@@ -7,9 +7,9 @@
 [submodule "spec/fixtures/integration/JSONKit"]
 	path = spec/fixtures/integration/JSONKit
 	url = https://github.com/johnezang/JSONKit.git
-[submodule "spec/fixtures/spec-repos/master"]
-	path = spec/fixtures/spec-repos/master
-	url = git://github.com/alloy/cocoapods-specs.git
 [submodule "spec/fixtures/integration/sstoolkit"]
 	path = spec/fixtures/integration/sstoolkit
 	url = https://github.com/samsoffes/sstoolkit.git
+[submodule "external/Xcodeproj"]
+	path = external/Xcodeproj
+	url = git@github.com:CocoaPods/Xcodeproj.git
