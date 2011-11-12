@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.date     = "2011-09-17"
   s.license  = "MIT"
   s.email    = "eloy.de.enige@gmail.com"
-  s.homepage = "https://github.com/alloy/cocoapods"
+  s.homepage = "https://github.com/CocoaPods/CocoaPods"
   s.authors  = ["Eloy Duran"]
 
   s.summary     = "A simple Objective-C library package manager. (Requires MacRuby.)"

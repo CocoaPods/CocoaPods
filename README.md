@@ -6,7 +6,7 @@ You specify the dependencies for your project in one easy text file. CocoaPods r
 
 Ultimately, the goal is to improve discoverability of, and engagement in, third party open-source libraries, by creating a more centralized ecosystem.
 
-See [the wiki](https://github.com/alloy/cocoapods/wiki) for more in depth information on several topics.
+See [the wiki](https://github.com/CocoaPods/CocoaPods/wiki) for more in depth information on several topics.
 
 
 ## Installation
@@ -34,19 +34,19 @@ Search for Pods by name or description.
     $ pod search asi
     ==> ASIHTTPRequest (1.8.1)
         Easy to use CFNetwork wrapper for HTTP requests, Objective-C, Mac OS X and iPhone
-    
+
     ==> ASIWebPageRequest (1.8.1)
         The ASIWebPageRequest class included with ASIHTTPRequest lets you download
         complete webpages, including external resources like images and stylesheets.
 
-After you've found your favorite dependencies you add them to your [Podfile](https://github.com/alloy/cocoapods/wiki/A-Podfile).
+After you've found your favorite dependencies you add them to your [Podfile](https://github.com/CocoaPods/CocoaPods/wiki/A-Podfile).
 
     $ edit Podfile
     platform :ios
     dependency 'JSONKit',           '~> 1.4'
     dependency 'Reachability',      '~> 2.0.4'
 
-And then you [install the dependencies](https://github.com/alloy/cocoapods/wiki/Creating-a-project-that-uses-CocoaPods) in your project.
+And then you [install the dependencies](https://github.com/CocoaPods/CocoaPods/wiki/Creating-a-project-that-uses-CocoaPods) in your project.
 
     $ pod install App.xcodeproj
 
@@ -56,20 +56,20 @@ Remember to always open the Xcode workspace instead of the project file when you
 
     $ open App.xcworkspace
 
-Sometimes CocoaPods doesn't have a Pod for one of your dependencies yet. Fortunately [creating a Pod](https://github.com/alloy/cocoapods/wiki/A-pod-specification) is really easy.
+Sometimes CocoaPods doesn't have a Pod for one of your dependencies yet. Fortunately [creating a Pod](https://github.com/CocoaPods/CocoaPods/wiki/A-pod-specification) is really easy.
 
     $ pod spec create Peanuts
     $ edit Peanuts.podspec
     $ pod spec lint Peanuts.podspec
 
-Once you've got it running [create a ticket](https://github.com/alloy/cocoapods/issues) and upload the Pod. If you're familiar with Git you can also fork the [CocoaPods specs](https://github.com/alloy/cocoapods-specs) repository and send a pull request. We really love contributions!
+Once you've got it running [create a ticket](https://github.com/CocoaPods/CocoaPods/issues) and upload the Pod. If you're familiar with Git you can also fork the [CocoaPods specs](https://github.com/CocoaPods/Specs) repository and send a pull request. We really love contributions!
 
-There are several other ways to start using **any** library without a Pod specification, which can be seen in the [SSCatalog example](https://github.com/alloy/cocoapods/blob/master/examples/SSCatalog/Podfile).
+There are several other ways to start using **any** library without a Pod specification, which can be seen in the [SSCatalog example](https://github.com/CocoaPods/CocoaPods/blob/master/examples/SSCatalog/Podfile).
 
 
 ## Collaborate
 
-All CocoaPods development happens on GitHub, there is a repository for [CocoaPods](https://github.com/alloy/cocoapods) and one for the [CocoaPods specs](https://github.com/alloy/cocoapods-specs). Contributing patches or Pods is really easy and gratifying. You even get push access when one of your specs or patches is accepted.
+All CocoaPods development happens on GitHub, there is a repository for [CocoaPods](https://github.com/CocoaPods/CocoaPods) and one for the [CocoaPods specs](https://github.com/CocoaPods/Specs). Contributing patches or Pods is really easy and gratifying. You even get push access when one of your specs or patches is accepted.
 
 Follow [@CocoaPodsOrg](http://twitter.com/CocoaPodsOrg) to get up to date information about what's going on in the CocoaPods world.
 
@@ -84,6 +84,6 @@ If you're really oldschool and you want to discuss CocoaPods development you can
 * “Anybody who has tasted the coolness of RubyGems (and @gembundler) understands how cool CocoaPods might be.” –– [StuFF mc](http://twitter.com/#!/stuffmc/status/115374231591731200)
 * “I will be working on getting several of my Objective-C libraries ready for CocoaPods this week!” –– [Luke Redpath](http://twitter.com/#!/lukeredpath/status/115510581921988608)
 * “Really digg how @alloy is building a potential game changer” –– [Klaas Speller](https://twitter.com/#!/spllr/status/115914209438601216)
-* “@alloy's making an Objective-C package manager: github.com/alloy/cocoapods. This is fantastic news kids!” –– [Josh Abernathy](http://twitter.com/#!/joshaber/status/115273577703555073)
+* “@alloy's making an Objective-C package manager: github.com/CocoaPods/CocoaPods. This is fantastic news kids!” –– [Josh Abernathy](http://twitter.com/#!/joshaber/status/115273577703555073)
 * “A package manager for Cocoa/Objective-C, built with @MacRuby. Awesomeness!” –– [Johannes Fahrenkrug](http://twitter.com/#!/jfahrenkrug/status/115303240286998528)
 * “This is awesome, I love endorsements!” –– [Appie Durán](http://twitter.com/#!/AppieDuran)

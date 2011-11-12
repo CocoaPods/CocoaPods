@@ -134,7 +134,7 @@ module Pod
     #
     #
     # For more info on the definition of a Pod::Specification see:
-    # https://github.com/alloy/cocoapods/wiki/A-pod-specification
+    # https://github.com/CocoaPods/CocoaPods/wiki/A-pod-specification
     #
     #
     def dependency(*name_and_version_requirements, &block)

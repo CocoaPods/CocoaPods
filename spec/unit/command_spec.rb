@@ -15,7 +15,7 @@ describe "Pod::Command::Setup" do
 
   it "returns the URL of the `master' spec-repo" do
     command = Pod::Command::Setup.new(argv)
-    command.master_repo_url.should == 'git://github.com/alloy/cocoapods-specs.git'
+    command.master_repo_url.should == 'git://github.com/CocoaPods/Specs.git'
   end
 end
 

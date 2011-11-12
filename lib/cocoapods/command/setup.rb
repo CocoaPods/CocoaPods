@@ -9,7 +9,7 @@ module Pod
       Creates a directory at `~/.cocoapods' which will hold your spec-repos.
       This is where it will create a clone of the public `master' spec-repo from:
 
-          https://github.com/alloy/cocoapods-specs}
+          https://github.com/CocoaPods/Specs}
       end
 
       def initialize(argv)
@@ -17,7 +17,7 @@ module Pod
       end
 
       def master_repo_url
-        'git://github.com/alloy/cocoapods-specs.git'
+        'git://github.com/CocoaPods/Specs.git'
       end
 
       def add_master_repo_command
