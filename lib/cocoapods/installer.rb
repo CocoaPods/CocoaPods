@@ -46,7 +46,7 @@ EOS
       end
     end
 
-    class Target
+    class TargetInstaller
       include Config::Mixin
       include Shared
 
@@ -187,9 +187,9 @@ EOS
       @project
     end
 
-    def targets
-      @targets ||= @podfile.targets.values.map do |target_definition|
-        Target.new(@podfile, project, target_definition)
+    def target_installers
+      @target_installers ||= @podfile.target_definitions.values.map do |definition|
+        TargetInstaller.new(@podfile, project, definition)
       end
     end
 
@@ -199,9 +199,9 @@ EOS
 
       root = config.project_pods_root
       puts "==> Generating Xcode project and xcconfig" unless config.silent?
-      targets.each do |target|
-        target.install!
-        target.create_files_in(root)
+      target_installers.each do |target_installer|
+        target_installer.install!
+        target_installer.create_files_in(root)
       end
       projpath = File.join(root, 'Pods.xcodeproj')
       puts "  * Writing Xcode project file to `#{projpath}'" if config.verbose?
@@ -210,8 +210,8 @@ EOS
       generate_lock_file!
 
       # Post install hooks run last!
-      targets.each do |target|
-        target.build_specifications.each { |spec| spec.post_install(target) }
+      target_installers.each do |target_installer|
+        target_installer.build_specifications.each { |spec| spec.post_install(target_installer) }
       end
     end
 

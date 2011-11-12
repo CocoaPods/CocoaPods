@@ -3,7 +3,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 describe "Pod::Installer" do
   describe ", by default," do
     before do
-      @xcconfig = Pod::Installer.new(Pod::Podfile.new { platform :ios }).targets.first.xcconfig.to_hash
+      @xcconfig = Pod::Installer.new(Pod::Podfile.new { platform :ios }).target_installers.first.xcconfig.to_hash
     end
 
     it "sets the header search paths where installed Pod headers can be found" do
@@ -44,6 +44,6 @@ describe "Pod::Installer" do
         expected << config.project_pods_root + header
       end
     end
-    installer.targets.first.bridge_support_generator.headers.should == expected
+    installer.target_installers.first.bridge_support_generator.headers.should == expected
   end
 end

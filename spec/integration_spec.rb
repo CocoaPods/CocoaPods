@@ -158,7 +158,7 @@ else
         YAML.load(installer.lock_file.read).should == lock_file_contents
 
         root = config.project_pods_root
-        (root + 'Pods.xcconfig').read.should == installer.targets.first.xcconfig.to_s
+        (root + 'Pods.xcconfig').read.should == installer.target_installers.first.xcconfig.to_s
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
         NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.project.to_hash
 
@@ -197,7 +197,7 @@ else
         end
 
         installer = SpecHelper::Installer.new(spec)
-        installer.targets.first.build_specifications.first.resources = 'LICEN*', 'Readme.*'
+        installer.target_installers.first.build_specifications.first.resources = 'LICEN*', 'Readme.*'
         installer.install!
 
         contents = (config.project_pods_root + 'Pods-resources.sh').read

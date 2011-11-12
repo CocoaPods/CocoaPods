@@ -1,6 +1,6 @@
 module Pod
   class Podfile
-    class Target
+    class TargetDefinition
       attr_reader :name, :parent, :target_dependencies
 
       def initialize(name, parent = nil)
@@ -30,7 +30,7 @@ module Pod
     include Config::Mixin
 
     def initialize(&block)
-      @targets = { :default => (@target = Target.new(:default)) }
+      @target_definitions = { :default => (@target_definition = TargetDefinition.new(:default)) }
       instance_eval(&block)
     end
 
@@ -138,11 +138,11 @@ module Pod
     #
     #
     def dependency(*name_and_version_requirements, &block)
-      @target.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
+      @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
     end
 
     def dependencies
-      @targets.values.map(&:target_dependencies).flatten
+      @target_definitions.values.map(&:target_dependencies).flatten
     end
 
     # Specifies that a BridgeSupport metadata should be generated from the
@@ -154,7 +154,7 @@ module Pod
       @generate_bridge_support = true
     end
 
-    attr_reader :targets
+    attr_reader :target_definitions
 
     # Defines a new static library target and scopes dependencies defined from
     # the given block. The target will by default include the dependencies
@@ -183,11 +183,11 @@ module Pod
     # however, is an exclusive target which means it will only have one
     # dependency (JSONKit).
     def target(name, options = {})
-      parent = @target
-      @targets[name] = @target = Target.new(name, options[:exclusive] ? nil : parent)
+      parent = @target_definition
+      @target_definitions[name] = @target_definition = TargetDefinition.new(name, options[:exclusive] ? nil : parent)
       yield
     ensure
-      @target = parent
+      @target_definition = parent
     end
 
     # This is to be compatible with a Specification for use in the Installer and
