@@ -1,6 +1,6 @@
 require 'xcodeproj'
 
-module Xcode
+module Xcodeproj
   class Project
     # Shortcut access to the `Pods' PBXGroup.
     def pods
@@ -22,7 +22,7 @@ module Xcode
     end
 
     def self.for_platform(platform)
-      project = Xcode::Project.new
+      project = Xcodeproj::Project.new
       project.main_group << project.groups.new({ 'name' => 'Pods' })
       framework = project.add_system_framework(platform == :ios ? 'Foundation' : 'Cocoa')
       framework.group = project.groups.new({ 'name' => 'Frameworks' })
@@ -31,15 +31,15 @@ module Xcode
       project.main_group << products
       project.root_object.products = products
       
-      project.root_object.attributes['buildConfigurationList'] = project.objects.add(Xcode::Project::XCConfigurationList, {
+      project.root_object.attributes['buildConfigurationList'] = project.objects.add(Xcodeproj::Project::XCConfigurationList, {
         'defaultConfigurationIsVisible' => '0',
         'defaultConfigurationName' => 'Release',
         'buildConfigurations' => [
-          project.objects.add(Xcode::Project::XCBuildConfiguration, {
+          project.objects.add(Xcodeproj::Project::XCBuildConfiguration, {
             'name' => 'Debug',
             'buildSettings' => build_settings(platform, :debug)
           }),
-          project.objects.add(Xcode::Project::XCBuildConfiguration, {
+          project.objects.add(Xcodeproj::Project::XCBuildConfiguration, {
             'name' => 'Release',
             'buildSettings' => build_settings(platform, :release)
           })

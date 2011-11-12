@@ -55,7 +55,7 @@ EOS
       end
 
       def xcconfig
-        @xcconfig ||= Xcode::Config.new({
+        @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
           'USER_HEADER_SEARCH_PATHS' => '"$(BUILT_PRODUCTS_DIR)/Pods"',
           'ALWAYS_SEARCH_USER_PATHS' => 'YES',
@@ -164,7 +164,7 @@ EOS
 
     def project
       return @project if @project
-      @project = Xcode::Project.for_platform(@podfile.platform)
+      @project = Xcodeproj::Project.for_platform(@podfile.platform)
       # First we need to resolve dependencies across *all* targets, so that the
       # same correct versions of pods are being used for all targets. This
       # happens when we call `build_specifications'.
@@ -221,7 +221,7 @@ EOS
     def configure_project(projpath)
       root = File.dirname(projpath)
       xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')
-      workspace = Xcode::Workspace.new_from_xcworkspace(xcworkspace)
+      workspace = Xcodeproj::Workspace.new_from_xcworkspace(xcworkspace)
       pods_projpath = File.join(config.project_pods_root, 'Pods.xcodeproj')
       root = Pathname.new(root).expand_path
       [projpath, pods_projpath].each do |path|
@@ -230,7 +230,7 @@ EOS
       end
       workspace.save_as(xcworkspace)
 
-      app_project = Xcode::Project.new(projpath)
+      app_project = Xcodeproj::Project.new(projpath)
       return if app_project.files.find { |file| file.path =~ /libPods\.a$/ }
 
       configfile = app_project.files.new('path' => 'Pods/Pods.xcconfig')
@@ -242,7 +242,7 @@ EOS
       
       libfile = app_project.files.new_static_library('Pods')
       libfile.group = app_project.main_group.groups.find { |g| g.name == 'Frameworks' }
-      app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
+      app_project.objects.select_by_class(Xcodeproj::Project::PBXFrameworksBuildPhase).each do |build_phase|
         build_phase.files << libfile.buildFiles.new
       end
       

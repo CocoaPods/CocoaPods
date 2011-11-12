@@ -1,8 +1,8 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
-describe 'Xcode::Project' do
+describe 'Xcodeproj::Project' do
   before do
-    @project = Xcode::Project.new
+    @project = Xcodeproj::Project.new
   end
 
   def find_object(conditions)

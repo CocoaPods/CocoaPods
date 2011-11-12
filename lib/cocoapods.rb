@@ -21,10 +21,10 @@ module Pod
   autoload :Pathname,               'pathname'
 end
 
-module Xcode
-  autoload :Config,                 'cocoapods/xcode_project'
-  autoload :Project,                'cocoapods/xcode_project'
-  autoload :Workspace,              'cocoapods/xcode_project'
+module Xcodeproj
+  autoload :Config,                 'cocoapods/xcodeproj_ext'
+  autoload :Project,                'cocoapods/xcodeproj_ext'
+  autoload :Workspace,              'cocoapods/xcodeproj_ext'
 end
 
 class Pathname
