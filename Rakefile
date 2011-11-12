@@ -81,7 +81,7 @@ task :build_examples do
   require 'pathname'
   examples = Pathname.new(File.expand_path('../examples', __FILE__))
   examples.entries.each do |example|
-    next if %w{ . .. ConfigureTest MacRubySample }.include?(example.basename.to_s)
+    next if %w{ . .. }.include?(example.basename.to_s)
     example = examples + example
     next unless example.directory?
     puts "Building example: #{example}"
@@ -91,6 +91,7 @@ task :build_examples do
       sh "../../bin/pod install --verbose"
       command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
       if (example + 'Podfile').read.include?('platform :ios')
+        # Specifically build against the simulator SDK so we don't have to deal with code signing.
         command << " -sdk /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk"
       end
       sh command

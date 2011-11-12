@@ -135,14 +135,8 @@ module Pod
     #
     # For more info on the definition of a Pod::Specification see:
     # https://github.com/CocoaPods/CocoaPods/wiki/A-pod-specification
-    #
-    #
     def dependency(*name_and_version_requirements, &block)
       @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
-    end
-
-    def dependencies
-      @target_definitions.values.map(&:target_dependencies).flatten
     end
 
     # Specifies that a BridgeSupport metadata should be generated from the
@@ -153,8 +147,6 @@ module Pod
     def generate_bridge_support!
       @generate_bridge_support = true
     end
-
-    attr_reader :target_definitions
 
     # Defines a new static library target and scopes dependencies defined from
     # the given block. The target will by default include the dependencies
@@ -190,21 +182,46 @@ module Pod
       @target_definition = parent
     end
 
-    # This is to be compatible with a Specification for use in the Installer and
-    # Resolver.
+    # This hook allows you to make any last changes to the generated Xcode project
+    # before it is written to disk, or any other tasks you might want to perform.
+    #
+    # For instance, say you'd want to customize the `OTHER_LDFLAGS` of all targets:
+    #
+    #   post_install do |installer|
+    #     installer.project.targets.each do |target|
+    #       target.buildConfigurations.each do |config|
+    #         config.buildSettings['GCC_ENABLE_OBJC_GC'] = 'supported'
+    #       end
+    #     end
+    #   end
+    def post_install(&block)
+      @post_install_callback = block
+    end
+
+
+    # Not attributes
 
     def podfile?
       true
     end
 
     attr_accessor :defined_in_file
+    attr_reader :target_definitions
+
+    def dependencies
+      @target_definitions.values.map(&:target_dependencies).flatten
+    end
+
+    def dependency_by_name(name)
+      dependencies.find { |d| d.name == name }
+    end
 
     def generate_bridge_support?
       @generate_bridge_support
     end
 
-    def dependency_by_name(name)
-      dependencies.find { |d| d.name == name }
+    def post_install!(installer)
+      @post_install_callback.call(installer) if @post_install_callback
     end
 
     def validate!

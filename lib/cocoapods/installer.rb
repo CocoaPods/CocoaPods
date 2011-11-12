@@ -196,23 +196,26 @@ EOS
     def install!
       puts "Installing dependencies of: #{@podfile.defined_in_file}" unless config.silent?
       build_specifications.each(&:install!)
-
       root = config.project_pods_root
-      puts "==> Generating Xcode project and xcconfig" unless config.silent?
+
+      puts "==> Generating support files" unless config.silent?
       target_installers.each do |target_installer|
         target_installer.install!
         target_installer.create_files_in(root)
       end
-      projpath = File.join(root, 'Pods.xcodeproj')
-      puts "  * Writing Xcode project file to `#{projpath}'" if config.verbose?
-      project.save_as(projpath)
-
       generate_lock_file!
 
-      # Post install hooks run last!
+      puts "==> Running post install hooks" unless config.silent?
+      # Post install hooks run _before_ saving of project, so that they can alter it before saving.
       target_installers.each do |target_installer|
         target_installer.build_specifications.each { |spec| spec.post_install(target_installer) }
       end
+      @podfile.post_install!(self)
+
+      puts "==> Generating Xcode project" unless config.silent?
+      projpath = File.join(root, 'Pods.xcodeproj')
+      puts "  * Writing Xcode project file to `#{projpath}'" if config.verbose?
+      project.save_as(projpath)
     end
 
     def generate_lock_file!

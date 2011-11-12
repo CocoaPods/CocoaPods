@@ -121,6 +121,26 @@ else
         FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
       end
 
+      it "runs the optional post_install callback defined in the Podfile _before_ the project is saved to disk" do
+        podfile = Pod::Podfile.new do
+          config.rootspec = self
+          self.platform platform
+          post_install do |installer|
+            target = installer.project.targets.first
+            target.buildConfigurations.each do |config|
+              config.buildSettings['GCC_ENABLE_OBJC_GC'] = 'supported'
+            end
+          end
+        end
+
+        SpecHelper::Installer.new(podfile).install!
+        project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
+        project.targets.first.buildConfigurations.map do |config|
+          config.buildSettings['GCC_ENABLE_OBJC_GC']
+        end.should == %w{ supported supported }
+      end
+
+if false
       # TODO add a simple source file which uses the compiled lib to check that it really really works
       it "should activate required pods and create a working static library xcode project" do
         spec = Pod::Podfile.new do
@@ -307,4 +327,5 @@ else
     end
   end
 
+end
 end

@@ -49,6 +49,16 @@ describe "Pod::Podfile" do
     Pod::Podfile.new { generate_bridge_support! }.should.generate_bridge_support
   end
 
+  it "stores a block that will be called with the Installer instance once installation is finished (but the project is not written to disk yet)" do
+    yielded = nil
+    Pod::Podfile.new do
+      post_install do |installer|
+        yielded = installer
+      end
+    end.post_install!(:an_installer)
+    yielded.should == :an_installer
+  end
+
   describe "concerning targets (dependency groups)" do
     before do
       @podfile = Pod::Podfile.new do

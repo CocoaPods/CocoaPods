@@ -1,3 +1,0 @@
-platform :osx
-
-dependency 'JSONKit'

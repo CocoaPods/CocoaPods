@@ -9,6 +9,15 @@ target :debug do
   dependency 'CocoaLumberjack'
 end
 
-target :test, :exclusive => true do
-  dependency 'Kiwi'
+#target :test, :exclusive => true do
+#  dependency 'Kiwi'
+#end
+
+# Enable garbage collection support, which MacRuby requires.
+post_install do |installer|
+  installer.project.targets.each do |target|
+    target.buildConfigurations.each do |config|
+      config.buildSettings['GCC_ENABLE_OBJC_GC'] = 'supported'
+    end
+  end
 end
