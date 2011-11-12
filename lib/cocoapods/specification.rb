@@ -22,7 +22,7 @@ module Pod
 
     def initialize
       @dependencies = []
-      @xcconfig = Xcode::Config.new
+      @xcconfig = Xcodeproj::Config.new
       yield self if block_given?
     end
 

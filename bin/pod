@@ -1,8 +1,7 @@
 #!/usr/bin/env macruby
 
 if $0 == __FILE__
-  require 'rubygems'
-  gem 'activesupport', '~> 3.1.1'
+  $:.unshift File.expand_path('../../external/xcodeproj/lib', __FILE__)
   $:.unshift File.expand_path('../../lib', __FILE__)
 end
 

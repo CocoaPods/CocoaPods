@@ -1,9 +1,28 @@
-require 'fileutils'
+require 'xcodeproj'
 
-module Pod
-  module ProjectTemplate
+module Xcodeproj
+  class Project
+    # Shortcut access to the `Pods' PBXGroup.
+    def pods
+      groups.find { |g| g.name == 'Pods' } || groups.new({ 'name' => 'Pods' })
+    end
+
+    # Adds a group as child to the `Pods' group.
+    def add_pod_group(name)
+      pods.groups.new('name' => name)
+    end
+
+    class PBXCopyFilesBuildPhase
+      def self.new_pod_dir(project, pod_name, path)
+        new(project, nil, {
+          "dstPath" => "$(PUBLIC_HEADERS_FOLDER_PATH)/#{path}",
+          "name"    => "Copy #{pod_name} Public Headers",
+        })
+      end
+    end
+
     def self.for_platform(platform)
-      project = Xcode::Project.new
+      project = Xcodeproj::Project.new
       project.main_group << project.groups.new({ 'name' => 'Pods' })
       framework = project.add_system_framework(platform == :ios ? 'Foundation' : 'Cocoa')
       framework.group = project.groups.new({ 'name' => 'Frameworks' })
@@ -12,15 +31,15 @@ module Pod
       project.main_group << products
       project.root_object.products = products
       
-      project.root_object.attributes['buildConfigurationList'] = project.objects.add(Xcode::Project::XCConfigurationList, {
+      project.root_object.attributes['buildConfigurationList'] = project.objects.add(Xcodeproj::Project::XCConfigurationList, {
         'defaultConfigurationIsVisible' => '0',
         'defaultConfigurationName' => 'Release',
         'buildConfigurations' => [
-          project.objects.add(Xcode::Project::XCBuildConfiguration, {
+          project.objects.add(Xcodeproj::Project::XCBuildConfiguration, {
             'name' => 'Debug',
             'buildSettings' => build_settings(platform, :debug)
           }),
-          project.objects.add(Xcode::Project::XCBuildConfiguration, {
+          project.objects.add(Xcodeproj::Project::XCBuildConfiguration, {
             'name' => 'Release',
             'buildSettings' => build_settings(platform, :release)
           })
@@ -28,9 +47,9 @@ module Pod
       }).uuid
       project
     end
-    
+
     private
-    
+
     COMMON_BUILD_SETTINGS = {
       :all => {
         'ALWAYS_SEARCH_USER_PATHS' => 'NO',
@@ -38,7 +57,8 @@ module Pod
         'INSTALL_PATH' => "$(BUILT_PRODUCTS_DIR)",
         'GCC_WARN_ABOUT_MISSING_PROTOTYPES' => 'YES',
         'GCC_WARN_ABOUT_RETURN_TYPE' => 'YES',
-        'GCC_WARN_UNUSED_VARIABLE' => 'YES'
+        'GCC_WARN_UNUSED_VARIABLE' => 'YES',
+        'OTHER_LDFLAGS' => ''
       },
       :debug => {
         'GCC_DYNAMIC_NO_PIC' => 'NO',

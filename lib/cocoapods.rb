@@ -12,21 +12,19 @@ module Pod
   autoload :Executable,             'cocoapods/executable'
   autoload :Installer,              'cocoapods/installer'
   autoload :Podfile,                'cocoapods/podfile'
-  autoload :ProjectTemplate,        'cocoapods/project_template'
   autoload :Resolver,               'cocoapods/resolver'
   autoload :Source,                 'cocoapods/source'
   autoload :Spec,                   'cocoapods/specification'
   autoload :Specification,          'cocoapods/specification'
   autoload :Version,                'cocoapods/version'
 
-  module Xcode
-    autoload :Config,               'cocoapods/xcode/config'
-    autoload :CopyResourcesScript,  'cocoapods/xcode/copy_resources_script'
-    autoload :Project,              'cocoapods/xcode/project'
-    autoload :Workspace,            'cocoapods/xcode/workspace'
-  end
-
   autoload :Pathname,               'pathname'
+end
+
+module Xcodeproj
+  autoload :Config,                 'cocoapods/xcodeproj_ext'
+  autoload :Project,                'cocoapods/xcodeproj_ext'
+  autoload :Workspace,              'cocoapods/xcodeproj_ext'
 end
 
 class Pathname
@@ -34,4 +32,3 @@ class Pathname
     Dir.glob((self + pattern).to_s).map { |f| Pathname.new(f) }
   end
 end
-

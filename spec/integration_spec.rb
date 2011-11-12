@@ -207,7 +207,7 @@ if false
         installer = SpecHelper::Installer.new(spec)
         installer.install!
 
-        project = Pod::Xcode::Project.new(config.project_pods_root + 'Pods.xcodeproj')
+        project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.source_files.should == installer.project.source_files
       end
 
@@ -264,10 +264,10 @@ if false
         installer.configure_project(projpath)
 
         xcworkspace = temporary_directory + 'ASIHTTPRequest.xcworkspace'
-        workspace = Pod::Xcode::Workspace.new_from_xcworkspace(xcworkspace)
+        workspace = Xcodeproj::Workspace.new_from_xcworkspace(xcworkspace)
         workspace.projpaths.sort.should == ['ASIHTTPRequest.xcodeproj', 'Pods/Pods.xcodeproj']
 
-        project = Pod::Xcode::Project.new(projpath)
+        project = Xcodeproj::Project.new(projpath)
         libPods = project.files.find { |f| f.name == 'libPods.a' }
         project.targets.each do |target|
           target.buildConfigurations.each do |config|

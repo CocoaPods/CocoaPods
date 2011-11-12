@@ -31,8 +31,7 @@ Gem::Specification.new do |s|
                            "    $ sudo macgem install rubygems-compile\n" \
                            "    $ sudo macgem compile cocoapods\n\n"
 
-  s.add_runtime_dependency 'activesupport', '~> 3.1.1'
-  s.add_runtime_dependency 'i18n', '~> 0.6.0' # only needed for ActiveSupport :-/
+  s.add_runtime_dependency 'xcodeproj', '~> 0.0.1'
 
   ## Make sure you can build the gem on older versions of RubyGems too:
   s.rubygems_version = "1.6.2"

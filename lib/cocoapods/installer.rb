@@ -14,6 +14,36 @@ module Pod
       end
     end
 
+    class CopyResourcesScript
+      CONTENT = <<EOS
+#!/bin/sh
+
+install_resource()
+{
+  echo "cp -R ${SRCROOT}/Pods/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+  cp -R ${SRCROOT}/Pods/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}
+}
+EOS
+
+      attr_reader :resources
+
+      # A list of files relative to the project pods root.
+      def initialize(resources)
+        @resources = resources
+      end
+
+      def save_as(pathname)
+        pathname.open('w') do |script|
+          script.puts CONTENT
+          @resources.each do |resource|
+            script.puts "install_resource '#{resource}'"
+          end
+        end
+        # TODO use File api
+        system("chmod +x '#{pathname}'")
+      end
+    end
+
     class Target
       include Config::Mixin
       include Shared
@@ -25,7 +55,7 @@ module Pod
       end
 
       def xcconfig
-        @xcconfig ||= Xcode::Config.new({
+        @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
           'USER_HEADER_SEARCH_PATHS' => '"$(BUILT_PRODUCTS_DIR)/Pods"',
           'ALWAYS_SEARCH_USER_PATHS' => 'YES',
@@ -40,7 +70,7 @@ module Pod
       end
 
       def copy_resources_script
-        @copy_resources_script ||= Xcode::CopyResourcesScript.new(build_specifications.map do |spec|
+        @copy_resources_script ||= CopyResourcesScript.new(build_specifications.map do |spec|
           spec.expanded_resources
         end.flatten)
       end
@@ -134,7 +164,7 @@ module Pod
 
     def project
       return @project if @project
-      @project = ProjectTemplate.for_platform(@podfile.platform)
+      @project = Xcodeproj::Project.for_platform(@podfile.platform)
       # First we need to resolve dependencies across *all* targets, so that the
       # same correct versions of pods are being used for all targets. This
       # happens when we call `build_specifications'.
@@ -191,7 +221,7 @@ module Pod
     def configure_project(projpath)
       root = File.dirname(projpath)
       xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')
-      workspace = Xcode::Workspace.new_from_xcworkspace(xcworkspace)
+      workspace = Xcodeproj::Workspace.new_from_xcworkspace(xcworkspace)
       pods_projpath = File.join(config.project_pods_root, 'Pods.xcodeproj')
       root = Pathname.new(root).expand_path
       [projpath, pods_projpath].each do |path|
@@ -200,7 +230,7 @@ module Pod
       end
       workspace.save_as(xcworkspace)
 
-      app_project = Xcode::Project.new(projpath)
+      app_project = Xcodeproj::Project.new(projpath)
       return if app_project.files.find { |file| file.path =~ /libPods\.a$/ }
 
       configfile = app_project.files.new('path' => 'Pods/Pods.xcconfig')
@@ -212,7 +242,7 @@ module Pod
       
       libfile = app_project.files.new_static_library('Pods')
       libfile.group = app_project.main_group.groups.find { |g| g.name == 'Frameworks' }
-      app_project.objects.select_by_class(Xcode::Project::PBXFrameworksBuildPhase).each do |build_phase|
+      app_project.objects.select_by_class(Xcodeproj::Project::PBXFrameworksBuildPhase).each do |build_phase|
         build_phase.files << libfile.buildFiles.new
       end
       
