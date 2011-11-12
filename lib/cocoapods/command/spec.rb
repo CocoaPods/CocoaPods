@@ -34,6 +34,7 @@ module Pod
           Pod::Spec.new do |s|
             s.name     = '#{@name}'
             s.version  = '1.0.0'
+            s.license  = 'MIT'
             s.summary  = 'A short description of #{@name}.'
             s.homepage = 'http://example.com/#{@name}'
             s.author   = { '#{author}' => '#{email}' }
@@ -45,7 +46,7 @@ module Pod
             # automatically have '*.{h,m,mm,c,cpp}' appended.
             s.source_files = 'Classes', 'Classes/**/*.{h,m}'
 
-            s.xcconfig = { 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework' }
+            s.framework = 'SomeRequiredFramework'
 
             s.dependency 'SomeLibraryThat#{@name}DependsOn', '>= 1.0.0'
           end
