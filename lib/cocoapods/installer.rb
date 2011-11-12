@@ -164,7 +164,7 @@ EOS
 
     def project
       return @project if @project
-      @project = ProjectTemplate.for_platform(@podfile.platform)
+      @project = Xcode::Project.for_platform(@podfile.platform)
       # First we need to resolve dependencies across *all* targets, so that the
       # same correct versions of pods are being used for all targets. This
       # happens when we call `build_specifications'.
