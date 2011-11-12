@@ -32,6 +32,7 @@ module Pod
     attr_accessor :homepage
     attr_accessor :description
     attr_accessor :source
+    attr_accessor :license
 
     attr_reader :version
     def version=(version)

@@ -261,4 +261,9 @@ describe "A Pod::Specification, in general," do
     @spec.platform = :ios
     @spec.platform.should == :ios
   end
+
+  it "returns the license of the Pod’s code" do
+    @spec.license = 'MIT'
+    @spec.license.should == 'MIT'
+  end
 end
