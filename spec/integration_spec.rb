@@ -37,7 +37,7 @@ else
         Pod::Config.instance = nil
         config.silent = true
         config.repos_dir = fixture('spec-repos')
-        config.project_pods_root = temporary_directory + 'Pods'
+        config.project_root = temporary_directory
       end
 
       after do
@@ -54,17 +54,20 @@ else
       if platform == :ios
         it "installs a Pod directly from its repo" do
           url = fixture('integration/sstoolkit').to_s
+          commit = '2adcd0f81740d6b0cd4589af98790eee3bd1ae7b'
           podfile = Pod::Podfile.new do
             self.platform :ios
-            dependency 'SSToolkit', :git => url, :commit => '2adcd0f81740d6b0cd4589af98790eee3bd1ae7b'
+            dependency 'SSToolkit', :git => url, :commit => commit
           end
 
           # Note that we are *not* using the stubbed SpecHelper::Installer subclass.
           installer = Pod::Installer.new(podfile)
           installer.install!
 
-          spec = Pod::Spec.from_file(config.project_pods_root + 'SSToolkit.podspec')
-          spec.version.to_s.should == '0.1.3'
+          YAML.load(installer.lock_file.read).should == {
+            'PODS' => ['SSToolkit (0.1.3)'],
+            'DEPENDENCIES' => ["SSToolkit (from `#{url}', commit `#{commit}')"]
+          }
 
           Dir.chdir(config.project_pods_root + 'SSToolkit') do
             `git config --get remote.origin.url`.strip.should == url
@@ -72,19 +75,21 @@ else
         end
 
         it "installs a library with a podspec outside of the repo" do
+          url = 'https://raw.github.com/gist/1349824/3ec6aa60c19113573fc48eac19d0fafd6a69e033/Reachability.podspec'
           podfile = Pod::Podfile.new do
             self.platform :ios
             # TODO use a local file instead of http?
-            dependency 'Reachability', :podspec => 'https://raw.github.com/gist/1349824/3ec6aa60c19113573fc48eac19d0fafd6a69e033/Reachability.podspec'
+            dependency 'Reachability', :podspec => url
           end
 
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
 
-          spec = Pod::Spec.from_file(config.project_pods_root + 'Reachability.podspec')
-          spec.version.to_s.should == '1.2.3'
-
-          (config.project_pods_root + 'ASIHTTPRequest').should.exist
+          YAML.load(installer.lock_file.read).should == {
+            'PODS' => [{ 'Reachability (1.2.3)' => ["ASIHTTPRequest (>= 1.8)"] }],
+            'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
+            'DEPENDENCIES' => ["Reachability (from `#{url}')"]
+          }
         end
 
         it "installs a library with a podspec defined inline" do
@@ -101,9 +106,10 @@ else
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
 
-          # TODO do we need the write out the podspec?
-          #spec = Pod::Spec.from_file(config.project_pods_root + 'JSONKit.podspec')
-          #spec.version.to_s.should == '1.2'
+          YAML.load(installer.lock_file.read).should == {
+            'PODS' => ['JSONKit (1.2)'],
+            'DEPENDENCIES' => ["JSONKit (defined in Podfile)"]
+          }
 
           change_log = (config.project_pods_root + 'JSONKit/CHANGELOG.md').read
           change_log.should.include '1.2'
@@ -131,15 +137,29 @@ if false
         installer = SpecHelper::Installer.new(spec)
         installer.install!
 
+        lock_file_contents = {
+          'PODS' => [
+            { 'ASIHTTPRequest (1.8.1)'    => ["Reachability (~> 2.0, >= 2.0.4)"] },
+            { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
+            'JSONKit (1.4)',
+            { 'Reachability (2.0.4)'      => ["ASIHTTPRequest (>= 1.8)"] },
+            'SSZipArchive (0.1.1)',
+          ],
+          'DEPENDENCIES' => [
+            "ASIWebPageRequest (>= 1.8.1)",
+            "JSONKit (>= 1.0)",
+            "SSZipArchive (< 2)",
+          ]
+        }
+        unless platform == :ios
+          # No Reachability is required by ASIHTTPRequest on OSX
+          lock_file_contents['PODS'].delete_at(3)
+          lock_file_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
+        end
+        YAML.load(installer.lock_file.read).should == lock_file_contents
+
         root = config.project_pods_root
-        (root + 'Reachability.podspec').should.exist if platform == :ios
-        (root + 'ASIHTTPRequest.podspec').should.exist
-        (root + 'ASIWebPageRequest.podspec').should.exist
-        (root + 'JSONKit.podspec').should.exist
-        (root + 'SSZipArchive.podspec').should.exist
-
         (root + 'Pods.xcconfig').read.should == installer.targets.first.xcconfig.to_s
-
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
         NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.project.to_hash
 
@@ -149,6 +169,7 @@ if false
         end
       end
 
+#if false
       it "does not activate pods that are only part of other pods" do
         spec = Pod::Podfile.new do
           # first ensure that the correct info is available to the specs when they load

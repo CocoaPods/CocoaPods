@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Pod
   class Installer
     module Shared
@@ -5,12 +7,12 @@ module Pod
         @dependent_specification_sets ||= Resolver.new(@podfile, @definition ? @definition.dependencies : nil).resolve
       end
 
-      def build_specification_sets
-        dependent_specification_sets.reject(&:only_part_of_other_pod?)
+      def build_specifications
+        dependent_specification_sets.reject(&:only_part_of_other_pod?).map(&:specification)
       end
 
-      def build_specifications
-        build_specification_sets.map(&:specification)
+      def download_only_specifications
+        dependent_specification_sets.select(&:only_part_of_other_pod?).map(&:specification)
       end
     end
 
@@ -162,6 +164,10 @@ EOS
       @podfile = podfile
     end
 
+    def lock_file
+      config.project_root + 'Podfile.lock'
+    end
+
     def project
       return @project if @project
       @project = Xcodeproj::Project.for_platform(@podfile.platform)
@@ -200,9 +206,41 @@ EOS
       puts "  * Writing Xcode project file to `#{projpath}'" if config.verbose?
       project.save_as(projpath)
 
+      generate_lock_file!
+
       # Post install hooks run last!
       targets.each do |target|
         target.build_specifications.each { |spec| spec.post_install(target) }
+      end
+    end
+
+    def generate_lock_file!
+      lock_file.open('w') do |file|
+        file.puts "PODS:"
+        pods = build_specifications.map do |spec|
+          [spec.to_s, spec.dependencies.map(&:to_s).sort]
+        end.sort_by(&:first).each do |name, deps|
+          if deps.empty?
+            file.puts "  - #{name}"
+          else
+            file.puts "  - #{name}:"
+            deps.each { |dep| file.puts "    - #{dep}" }
+          end
+        end
+
+        unless download_only_specifications.empty?
+          file.puts
+          file.puts "DOWNLOAD_ONLY:"
+          download_only_specifications.map(&:to_s).sort.each do |name|
+            file.puts "  - #{name}"
+          end
+        end
+
+        file.puts
+        file.puts "DEPENDENCIES:"
+        @podfile.dependencies.map(&:to_s).sort.each do |dep|
+          file.puts "  - #{dep}"
+        end
       end
     end
 

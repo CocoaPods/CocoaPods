@@ -244,7 +244,7 @@ module Pod
     end
 
     def to_s
-      "`#{name}' version `#{version}'"
+      "#{name} (#{version})"
     end
 
     def inspect
@@ -275,8 +275,6 @@ module Pod
 
     # Install and download hooks
 
-    # Places the activated specification in the project's pods directory.
-    #
     # Override this if you need to perform work before or after activating the
     # pod. Eg:
     #
@@ -287,13 +285,10 @@ module Pod
     #       # post-install
     #     end
     #   end
+    #
+    # TODO Do we really need this now that we don’t install the podspec files anymore?
     def install!
       puts "==> Installing: #{self}" unless config.silent?
-      if defined_in_file && !(config.project_pods_root + defined_in_file.basename).exist?
-        config.project_pods_root.mkpath
-        FileUtils.cp(defined_in_file, config.project_pods_root)
-      end
-
       # In case this spec is part of another pod's source, we need to dowload
       # the other pod's source.
       (part_of_specification || self).download_if_necessary!

@@ -36,6 +36,20 @@ module Pod
          (@specification ? @specification == other.specification : @external_spec_source == other.external_spec_source)
     end
 
+    def to_s
+      version = ''
+      if source = @external_spec_source
+        version << "from `#{source[:git] || source[:podspec]}'"
+        version << ", commit `#{source[:commit]}'" if source[:commit]
+        version << ", tag `#{source[:tag]}'"       if source[:tag]
+      elsif @inline_podspec
+        version << "defined in Podfile"
+      elsif @version_requirements != Gem::Requirement.default
+        version << @version_requirements.to_s
+      end
+      version.empty? ? @name : "#{@name} (#{version})"
+    end
+
     # In case this dependency was defined with either a repo url, :podspec, or block,
     # this method will return the Specification instance.
     def specification
