@@ -1,4 +1,4 @@
-### 0.3.0
+## 0.3.0
 
 * Add support for multiple static library targets in the Pods Xcode project
   with different sets of depedencies. [[docs][targets-docs] | [example][targets-example]]
