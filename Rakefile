@@ -88,7 +88,7 @@ task :build_examples do
     puts
     Dir.chdir(example.to_s) do
       sh "rm -rf Pods DerivedData"
-      sh "../../bin/pod install --verbose"
+      sh "#{'../../bin/' unless ENV['FROM_GEM']}pod install --verbose"
       command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
       if (example + 'Podfile').read.include?('platform :ios')
         # Specifically build against the simulator SDK so we don't have to deal with code signing.

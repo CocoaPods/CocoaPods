@@ -4,7 +4,7 @@ require File.expand_path('../lib/cocoapods', __FILE__)
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
   s.version  = Pod::VERSION
-  s.date     = "2011-11-12"
+  s.date     = "2011-11-13"
   s.license  = "MIT"
   s.email    = "eloy.de.enige@gmail.com"
   s.homepage = "https://github.com/CocoaPods/CocoaPods"
@@ -20,8 +20,7 @@ Gem::Specification.new do |s|
                   "in, third party open-source libraries, by creating a more centralized " \
                   "ecosystem."
 
-  s.files    = Dir["lib/**/*.rb"] +
-               %w{ bin/pod README.md LICENSE CHANGELOG.md }
+  s.files = Dir["lib/**/*.rb"] + %w{ bin/pod README.md LICENSE CHANGELOG.md }
 
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
