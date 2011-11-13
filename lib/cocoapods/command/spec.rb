@@ -4,14 +4,14 @@ module Pod
       def self.banner
 %{Managing PodSpec files:
 
-    $ pod help spec
+    $ pod spec create NAME
 
-      pod spec create NAME
-        Creates a PodSpec, in the current working dir, called `NAME.podspec'.
+      Creates a PodSpec, in the current working dir, called `NAME.podspec'.
 
-      pod spec lint NAME.podspec
-        Validates `NAME.podspec'. In case `NAME.podspec' is omitted, it defaults
-        to `*.podspec' in the current working dir.}
+    $ pod spec lint NAME.podspec
+
+      Validates `NAME.podspec'. In case `NAME.podspec' is omitted, it defaults
+      to `*.podspec' in the current working dir.}
       end
 
       def initialize(argv)
