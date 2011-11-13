@@ -84,6 +84,6 @@ If you're really oldschool and you want to discuss CocoaPods development you can
 * “Anybody who has tasted the coolness of RubyGems (and @gembundler) understands how cool CocoaPods might be.” –– [StuFF mc](http://twitter.com/#!/stuffmc/status/115374231591731200)
 * “I will be working on getting several of my Objective-C libraries ready for CocoaPods this week!” –– [Luke Redpath](http://twitter.com/#!/lukeredpath/status/115510581921988608)
 * “Really digg how @alloy is building a potential game changer” –– [Klaas Speller](https://twitter.com/#!/spllr/status/115914209438601216)
-* “@alloy's making an Objective-C package manager: github.com/CocoaPods/CocoaPods. This is fantastic news kids!” –– [Josh Abernathy](http://twitter.com/#!/joshaber/status/115273577703555073)
+* “@alloy's making an Objective-C package manager. This is fantastic news kids!” –– [Josh Abernathy](http://twitter.com/#!/joshaber/status/115273577703555073)
 * “A package manager for Cocoa/Objective-C, built with @MacRuby. Awesomeness!” –– [Johannes Fahrenkrug](http://twitter.com/#!/jfahrenkrug/status/115303240286998528)
 * “This is awesome, I love endorsements!” –– [Appie Durán](http://twitter.com/#!/AppieDuran)
