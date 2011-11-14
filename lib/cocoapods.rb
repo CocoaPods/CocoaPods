@@ -1,5 +1,5 @@
 module Pod
-  VERSION = '0.3.0'
+  VERSION = '0.3.1'
 
   class Informative < StandardError
   end
@@ -22,9 +22,9 @@ module Pod
 end
 
 module Xcodeproj
-  autoload :Config,                 'cocoapods/xcodeproj_ext'
+  autoload :Config,                 'xcodeproj/config'
   autoload :Project,                'cocoapods/xcodeproj_ext'
-  autoload :Workspace,              'cocoapods/xcodeproj_ext'
+  autoload :Workspace,              'xcodeproj/workspace'
 end
 
 class Pathname
