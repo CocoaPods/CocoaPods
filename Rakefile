@@ -76,29 +76,54 @@ namespace :spec do
   end
 end
 
-desc "Build all examples"
-task :build_examples do
-  require 'pathname'
-  examples = Pathname.new(File.expand_path('../examples', __FILE__))
-  examples.entries.each do |example|
-    next if %w{ . .. }.include?(example.basename.to_s)
-    example = examples + example
-    next unless example.directory?
-    puts "Building example: #{example}"
-    puts
-    Dir.chdir(example.to_s) do
-      sh "rm -rf Pods DerivedData"
-      sh "#{'../../bin/' unless ENV['FROM_GEM']}pod install --verbose"
-      command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
-      if (example + 'Podfile').read.include?('platform :ios')
-        # Specifically build against the simulator SDK so we don't have to deal with code signing.
-        command << " -sdk /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk"
-      end
-      sh command
+namespace :examples do
+  def examples
+    require 'pathname'
+    result = []
+    examples = Pathname.new(File.expand_path('../examples', __FILE__))
+    examples.entries.each do |example|
+      next if %w{ . .. }.include?(example.basename.to_s)
+      example = examples + example
+      next unless example.directory?
+      result << example
     end
-    puts
+    result
+  end
+
+  desc "Open all example workspaced in Xcode, which recreates the schemes."
+  task :recreate_workspace_schemes do
+    examples.each do |example|
+      Dir.chdir(example.to_s) do
+        # TODO we need to open the workspace in Xcode at least once, otherwise it might not contain schemes.
+        # The schemes do not seem to survive a SCM round-trip.
+        sh "open '#{example.basename}.xcworkspace'"
+        sleep 5
+      end
+    end
+  end
+
+  desc "Build all examples"
+  task :build do
+    examples.entries.each do |example|
+      puts "Building example: #{example}"
+      puts
+      Dir.chdir(example.to_s) do
+        sh "rm -rf Pods DerivedData"
+        sh "#{'../../bin/' unless ENV['FROM_GEM']}pod install --verbose"
+        command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
+        if (example + 'Podfile').read.include?('platform :ios')
+          # Specifically build against the simulator SDK so we don't have to deal with code signing.
+          command << " -sdk /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk"
+        end
+        sh command
+      end
+      puts
+    end
   end
 end
+
+desc "Build all examples"
+task :build_examples => 'examples:build'
 
 desc "Dumps a Xcode project as YAML, meant for diffing"
 task :dump_xcodeproj do
