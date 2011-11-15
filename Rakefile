@@ -81,6 +81,7 @@ namespace :examples do
     require 'pathname'
     result = []
     examples = Pathname.new(File.expand_path('../examples', __FILE__))
+    return [examples + ENV['example']] if ENV['example']
     examples.entries.each do |example|
       next if %w{ . .. }.include?(example.basename.to_s)
       example = examples + example

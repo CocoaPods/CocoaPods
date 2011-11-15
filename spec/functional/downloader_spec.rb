@@ -37,7 +37,7 @@ describe "Pod::Downloader" do
       :git => fixture('banana-lib'), :tag => 'v1.0'
     )
     downloader.download
-    downloader.clean(['README'])
+    downloader.clean([@dir + 'README'])
     (@dir + 'README').should.not.exist
   end
 end

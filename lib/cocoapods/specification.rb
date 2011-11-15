@@ -1,34 +1,3 @@
-require 'rake'
-
-module Rake
-  class FileList
-    def prepend_patterns(pathname)
-      @pending_add.map! { |pattern| (pathname + pattern).to_s }
-    end
-
-    # This makes Rake::FileList usable with source_files and clean_paths.
-    def directory?
-      false
-    end
-
-    def glob
-      to_a.map { |path| Pathname.new(path) }
-    end
-  end
-end
-
-class Pathname
-  alias_method :_original_sum, :+
-  def +(other)
-    if other.is_a?(Rake::FileList)
-      other.prepend_patterns(self)
-      other
-    else
-      _original_sum(other)
-    end
-  end
-end
-
 module Pod
   extend Config::Mixin
 
@@ -99,30 +68,18 @@ module Pod
     end
 
     def source_files=(patterns)
-      if !patterns.is_a?(Rake::FileList) && patterns.is_a?(Array)
-        @source_files = patterns
-      else
-        @source_files = [patterns]
-      end
+      @source_files = pattern_list(patterns)
     end
     attr_reader :source_files
 
     def resources=(patterns)
-      if !patterns.is_a?(Rake::FileList) && patterns.is_a?(Array)
-        @resources = patterns
-      else
-        @resources = [patterns]
-      end
+      @resources = pattern_list(patterns)
     end
     attr_reader :resources
     alias_method :resource=, :resources=
 
     def clean_paths=(patterns)
-      if !patterns.is_a?(Rake::FileList) && patterns.is_a?(Array)
-        @clean_paths = patterns
-      else
-        @clean_paths = [patterns]
-      end
+      @clean_paths = pattern_list(patterns)
     end
     attr_reader :clean_paths
     alias_method :clean_path=, :clean_paths=
@@ -220,6 +177,14 @@ module Pod
 
     def podfile?
       false
+    end
+
+    def pattern_list(patterns)
+      if patterns.is_a?(Array) && (!defined?(Rake) || !patterns.is_a?(Rake::FileList))
+        patterns
+      else
+        [patterns]
+      end
     end
 
     # Returns all resource files of this pod, but relative to the

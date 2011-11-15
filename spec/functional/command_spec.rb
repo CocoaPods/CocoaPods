@@ -4,10 +4,6 @@ describe "Pod::Command" do
   extend SpecHelper::Git
   extend SpecHelper::TemporaryDirectory
 
-  before do
-    fixture('spec-repos/master') # ensure the archive is unpacked
-  end
-
   it "creates the local spec-repos directory and creates a clone of the `master' repo" do
     command = Pod::Command.parse('setup', '--silent')
     def command.master_repo_url; SpecHelper.fixture('spec-repos/master'); end

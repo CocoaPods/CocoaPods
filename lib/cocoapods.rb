@@ -19,6 +19,7 @@ module Pod
   autoload :Version,                'cocoapods/version'
 
   autoload :Pathname,               'pathname'
+  autoload :FileList,               'cocoapods/file_list'
 end
 
 module Xcodeproj
