@@ -140,7 +140,6 @@ else
         end.should == %w{ supported supported }
       end
 
-if false
       # TODO add a simple source file which uses the compiled lib to check that it really really works
       it "should activate required pods and create a working static library xcode project" do
         spec = Pod::Podfile.new do
@@ -327,5 +326,4 @@ if false
     end
   end
 
-end
 end

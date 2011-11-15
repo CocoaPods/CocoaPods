@@ -1,3 +1,34 @@
+require 'rake'
+
+module Rake
+  class FileList
+    def prepend_patterns(pathname)
+      @pending_add.map! { |pattern| (pathname + pattern).to_s }
+    end
+
+    # This makes Rake::FileList usable with source_files and clean_paths.
+    def directory?
+      false
+    end
+
+    def glob
+      to_a.map { |path| Pathname.new(path) }
+    end
+  end
+end
+
+class Pathname
+  alias_method :_original_sum, :+
+  def +(other)
+    if other.is_a?(Rake::FileList)
+      other.prepend_patterns(self)
+      other
+    else
+      _original_sum(other)
+    end
+  end
+end
+
 module Pod
   extend Config::Mixin
 
@@ -21,7 +52,7 @@ module Pod
     attr_accessor :defined_in_file
 
     def initialize
-      @dependencies = []
+      @dependencies, @resources, @clean_paths = [], [], []
       @xcconfig = Xcodeproj::Config.new
       yield self if block_given?
     end
@@ -67,21 +98,34 @@ module Pod
       @part_of = dependency(*name_and_version_requirements)
     end
 
-    def source_files=(*patterns)
-      @source_files = patterns.flatten
+    def source_files=(patterns)
+      if !patterns.is_a?(Rake::FileList) && patterns.is_a?(Array)
+        @source_files = patterns
+      else
+        @source_files = [patterns]
+      end
     end
     attr_reader :source_files
 
-    def resources=(*patterns)
-      @resources = patterns.flatten
+    def resources=(patterns)
+      if !patterns.is_a?(Rake::FileList) && patterns.is_a?(Array)
+        @resources = patterns
+      else
+        @resources = [patterns]
+      end
     end
     attr_reader :resources
     alias_method :resource=, :resources=
 
-    def clean_paths=(*patterns)
-      @clean_paths = patterns.flatten.map { |p| Pathname.new(p) }
+    def clean_paths=(patterns)
+      if !patterns.is_a?(Rake::FileList) && patterns.is_a?(Array)
+        @clean_paths = patterns
+      else
+        @clean_paths = [patterns]
+      end
     end
     attr_reader :clean_paths
+    alias_method :clean_path=, :clean_paths=
 
     def xcconfig=(hash)
       @xcconfig.merge!(hash)
@@ -182,9 +226,8 @@ module Pod
     # project pods root.
     def expanded_resources
       files = []
-      [*resources].each do |pattern|
+      resources.each do |pattern|
         pattern = pod_destroot + pattern
-        pattern = pattern + '*' if pattern.directory?
         pattern.glob.each do |file|
           files << file.relative_path_from(config.project_pods_root)
         end
@@ -192,11 +235,27 @@ module Pod
       files
     end
 
+    # Returns full paths to clean for this pod.
+    def expanded_clean_paths
+      files = []
+      clean_paths.each do |pattern|
+        pattern = pod_destroot + pattern
+        pattern.glob.each do |file|
+          files << file
+        end
+      end
+      files
+    end
+
     # Returns all source files of this pod including header files,
     # but relative to the project pods root.
+    #
+    # If the pattern is the path to a directory, the pattern will
+    # automatically glob for c, c++, Objective-C, and Objective-C++
+    # files.
     def expanded_source_files
       files = []
-      [*source_files].each do |pattern|
+      source_files.each do |pattern|
         pattern = pod_destroot + pattern
         pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
         pattern.glob.each do |file|
@@ -320,7 +379,7 @@ module Pod
     def download!
       downloader = Downloader.for_source(pod_destroot, source)
       downloader.download
-      downloader.clean(clean_paths) if config.clean
+      downloader.clean(expanded_clean_paths) if config.clean
     end
 
     # This is a convenience method which gets called after all pods have been

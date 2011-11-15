@@ -2,8 +2,8 @@ PODS:
   - AFNetworking (0.7.0):
     - JSONKit
   - JSONKit (1.4)
-  - SSToolkit (0.1.3)
+  - SSToolkit (0.1.2)
 
 DEPENDENCIES:
   - AFNetworking
-  - SSToolkit (defined in Podfile)
+  - SSToolkit

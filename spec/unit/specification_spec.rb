@@ -266,4 +266,16 @@ describe "A Pod::Specification, in general," do
     @spec.license = 'MIT'
     @spec.license.should == 'MIT'
   end
+
+  it "takes a list of paths to clean" do
+    @spec.clean_paths = 'Demo', 'Doc'
+    @spec.clean_paths.should == %w{ Demo Doc }
+  end
+
+  it "takes any object for clean_paths as long as it responds to #glob (we provide this for Rake::FileList)" do
+    require 'rake'
+    @spec.clean_paths = FileList['*'].exclude('Rakefile')
+    list = ROOT + @spec.clean_paths.first
+    list.glob.should == FileList[(ROOT + '*').to_s].exclude('Rakefile').map { |path| Pathname.new(path) }
+  end
 end

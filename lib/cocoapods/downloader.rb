@@ -54,11 +54,8 @@ module Pod
 
       def clean(clean_paths = [])
         (@pod_root + '.git').rmtree
-        clean_paths.each do |pattern|
-          pattern = @pod_root + pattern
-          pattern.glob.each do |path|
-            path.rmtree
-          end
+        clean_paths.each do |path|
+          path.rmtree
         end if clean_paths
       end
     end
