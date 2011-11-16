@@ -20,6 +20,11 @@ module Pod
 
   autoload :Pathname,               'pathname'
   autoload :FileList,               'cocoapods/file_list'
+
+  module Generator
+    autoload :BridgeSupport,        'cocoapods/generator/bridge_support'
+    autoload :CopyResourcesScript,  'cocoapods/generator/copy_resources_script'
+  end
 end
 
 module Xcodeproj
