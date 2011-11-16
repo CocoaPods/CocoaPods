@@ -61,7 +61,7 @@ module Pod
         "#{@definition.lib_name}.bridgesupport"
       end
 
-      # TODO move out
+      # TODO move out to Generator::PrefixHeader
       def save_prefix_header_as(pathname)
         pathname.open('w') do |header|
           header.puts "#ifdef __OBJC__"
@@ -98,6 +98,12 @@ module Pod
           user_header_search_paths.concat(spec.user_header_search_paths)
         end
         xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
+
+        # Now that we have added all the source files and copy header phases,
+        # move the compile build phase to the end, so that headers are copied
+        # to the build products dir first, and thus Pod source files can enjoy
+        # the same namespacing of headers as the app would.
+        @target.move_compile_phase_to_end!
 
         # Add all the target related support files to the group, even the copy
         # resources script although the project doesn't actually use them.
