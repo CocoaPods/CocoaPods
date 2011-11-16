@@ -1,5 +1,3 @@
-require 'yaml'
-
 module Pod
   class Installer
     module Shared
