@@ -235,6 +235,7 @@ module Pod
     # 3. Let the user specify the app target name as an extra argument, but this
     #    seems to be a less good version of the variation on #2.
     def configure_project(projpath)
+      # TODO use more of Pathname’s API here
       root = File.dirname(projpath)
       xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')
       workspace = Xcodeproj::Workspace.new_from_xcworkspace(xcworkspace)
@@ -267,6 +268,10 @@ module Pod
       app_project.targets.each { |target| target.buildPhases << copy_resources }
       
       app_project.save_as(projpath)
+
+      unless config.silent?
+        puts "[!] From now on use `#{File.basename(xcworkspace)}' instead of `#{File.basename(projpath)}'."
+      end
     end
   end
 end
