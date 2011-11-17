@@ -13,3 +13,6 @@
 [submodule "external/Xcodeproj"]
 	path = external/Xcodeproj
 	url = https://github.com/CocoaPods/Xcodeproj.git
+[submodule "spec/fixtures/spec-repos/master"]
+	path = spec/fixtures/spec-repos/master
+	url = https://github.com/CocoaPods/Specs.git
