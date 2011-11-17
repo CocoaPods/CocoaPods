@@ -92,6 +92,10 @@ module Pod
           @specification.name
         end
 
+        def ==(other)
+          self.class === other && name == other.name
+        end
+
         def required_by(specification)
           before = @specification
           super(specification)

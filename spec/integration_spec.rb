@@ -99,8 +99,14 @@ else
             dependency do |s|
               s.name         = 'JSONKit'
               s.version      = '1.2'
-              s.source       = { :git => 'https://github.com/johnezang/JSONKit.git', :tag => 'v1.2' }
+              s.source       = { :git => SpecHelper.fixture('integration/JSONKit').to_s, :tag => 'v1.2' }
               s.source_files = 'JSONKit.*'
+            end
+            dependency do |s|
+              s.name         = 'SSZipArchive'
+              s.version      = '0.1.0'
+              s.source       = { :git => SpecHelper.fixture('integration/SSZipArchive').to_s, :tag => '0.1.0' }
+              s.source_files = 'SSZipArchive.*', 'minizip/*.{h,c}'
             end
           end
 
@@ -108,8 +114,8 @@ else
           installer.install!
 
           YAML.load(installer.lock_file.read).should == {
-            'PODS' => ['JSONKit (1.2)'],
-            'DEPENDENCIES' => ["JSONKit (defined in Podfile)"]
+            'PODS' => ['JSONKit (1.2)', 'SSZipArchive (0.1.0)'],
+            'DEPENDENCIES' => ["JSONKit (defined in Podfile)", "SSZipArchive (defined in Podfile)"]
           }
 
           change_log = (config.project_pods_root + 'JSONKit/CHANGELOG.md').read
