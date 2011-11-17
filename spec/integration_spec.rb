@@ -1,4 +1,5 @@
 require File.expand_path('../spec_helper', __FILE__)
+require 'yaml'
 
 module SpecHelper
   class Installer < Pod::Installer
