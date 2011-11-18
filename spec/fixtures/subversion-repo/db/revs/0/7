@@ -1,0 +1,69 @@
+id: 2-4.0-7.r7/0
+type: dir
+pred: 2-4.0.r6/333
+count: 2
+text: 6 249 71 71 f0c7d69bd9f7850eb2b1bf893a2cff76
+cpath: /tags/tagged-version/trunk
+copyfrom: 6 /trunk
+
+PLAIN
+K 6
+README
+V 17
+file 0-1.0-4.r4/0
+K 3
+dir
+V 18
+dir 0-3.1-4.r4/194
+K 5
+trunk
+V 16
+dir 2-4.0-7.r7/0
+END
+ENDREP
+id: 2-4.0-5.r7/275
+type: dir
+pred: 2-4.0-5.r5/0
+count: 2
+text: 7 160 102 102 9e281f2563f4b0d13b52c88c3756d088
+cpath: /tags/tagged-version
+copyroot: 5 /tags/tagged-version
+
+PLAIN
+K 14
+tagged-version
+V 18
+dir 2-4.0-5.r7/275
+END
+ENDREP
+id: 1-4.0.r7/508
+type: dir
+pred: 1-4.0.r5/213
+count: 2
+text: 7 447 48 48 5754f08c0e6de74d12ccd64c552d9385
+cpath: /tags
+copyroot: 0 /
+
+PLAIN
+K 4
+tags
+V 16
+dir 1-4.0.r7/508
+K 5
+trunk
+V 16
+dir 2-4.0.r6/333
+END
+ENDREP
+id: 0.0.r7/722
+type: dir
+pred: 0.0.r6/548
+count: 7
+text: 7 642 67 67 a4a2261a005434283c7cf5295d77ca6e
+cpath: /
+copyroot: 0 /
+
+2-4._0.t6-6 add-dir false false /tags/tagged-version/trunk
+6 /trunk
+
+722 848

@@ -1,0 +1,73 @@
+id: 0-1.0-4.r4/0
+type: file
+pred: 0-1.0.r2/46
+count: 2
+text: 2 0 26 14 6d2fd4056babc68a3df3615c6361a522 667b7b6d0bf794ffbca8584b60497be5fea181d2 1-1/_1
+cpath: /trunk/README
+copyfrom: 2 /README
+
+id: 0-3.1-4.r4/194
+type: dir
+pred: 0-3.0.r3/246
+count: 1
+text: 3 198 35 35 92805725a0ad7291b2bb1c985a3b096f
+cpath: /trunk/dir
+copyfrom: 3 /dir
+
+PLAIN
+K 6
+README
+V 17
+file 0-1.0-4.r4/0
+K 3
+dir
+V 18
+dir 0-3.1-4.r4/194
+END
+ENDREP
+id: 2-4.0.r4/421
+type: dir
+count: 0
+text: 4 338 70 70 1302e144785b1f29a75c4371550ef7a5
+cpath: /trunk
+copyroot: 0 /
+
+id: 1-4.0.r4/537
+type: dir
+count: 0
+cpath: /tags
+copyroot: 0 /
+
+PLAIN
+K 4
+tags
+V 16
+dir 1-4.0.r4/537
+K 5
+trunk
+V 16
+dir 2-4.0.r4/421
+END
+ENDREP
+id: 0.0.r4/681
+type: dir
+pred: 0.0.r3/440
+count: 4
+text: 4 601 67 67 a93953eb22a6cfcfd64d6f59a1ba8149
+cpath: /
+copyroot: 0 /
+
+0-1._0.t3-3 add-file false false /trunk/README
+2 /README
+0-3._1.t3-3 add-dir false false /trunk/dir
+3 /dir
+_2.0.t3-3 add-dir false false /trunk
+
+0-1.0.r2/46 delete-file false false /README
+
+0-3.0.r3/246 delete-dir false false /dir
+
+_1.0.t3-3 add-dir false false /tags
+
+
+681 807
