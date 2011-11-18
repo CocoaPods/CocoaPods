@@ -60,6 +60,14 @@ describe "Pod::Podfile" do
   end
 
   describe "concerning targets (dependency groups)" do
+    it "returns wether or not a target has any dependencies" do
+      Pod::Podfile.new do
+      end.target_definitions[:default].should.be.empty
+      Pod::Podfile.new do
+        dependency 'JSONKit'
+      end.target_definitions[:default].should.not.be.empty
+    end
+
     before do
       @podfile = Pod::Podfile.new do
         target :debug do
@@ -68,6 +76,9 @@ describe "Pod::Podfile" do
 
         target :test, :exclusive => true do
           dependency 'JSONKit'
+          target :subtarget do
+            dependency 'Reachability'
+          end
         end
 
         dependency 'ASIHTTPRequest'
@@ -75,7 +86,7 @@ describe "Pod::Podfile" do
     end
 
     it "returns all dependencies of all targets combined, which is used during resolving to enusre compatible dependencies" do
-      @podfile.dependencies.map(&:name).sort.should == %w{ ASIHTTPRequest JSONKit SSZipArchive }
+      @podfile.dependencies.map(&:name).sort.should == %w{ ASIHTTPRequest JSONKit Reachability SSZipArchive }
     end
 
     it "adds dependencies outside of any explicit target block to the default target" do
@@ -97,6 +108,12 @@ describe "Pod::Podfile" do
       target = @podfile.target_definitions[:test]
       target.lib_name.should == 'Pods-test'
       target.dependencies.should == [Pod::Dependency.new('JSONKit')]
+    end
+
+    it "adds dependencies of the outer target to nested targets" do
+      target = @podfile.target_definitions[:subtarget]
+      target.lib_name.should == 'Pods-test-subtarget'
+      target.dependencies.should == [Pod::Dependency.new('Reachability'), Pod::Dependency.new('JSONKit')]
     end
   end
 

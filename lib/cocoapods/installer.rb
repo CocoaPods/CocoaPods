@@ -18,7 +18,7 @@ module Pod
       include Config::Mixin
       include Shared
 
-      attr_reader :target
+      attr_reader :podfile, :project, :definition, :target
 
       def initialize(podfile, project, definition)
         @podfile, @project, @definition = podfile, project, definition
@@ -163,8 +163,8 @@ module Pod
 
     def target_installers
       @target_installers ||= @podfile.target_definitions.values.map do |definition|
-        TargetInstaller.new(@podfile, project, definition)
-      end
+        TargetInstaller.new(@podfile, project, definition) unless definition.empty?
+      end.compact
     end
 
     def install!

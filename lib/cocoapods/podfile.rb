@@ -8,13 +8,23 @@ module Pod
       end
 
       def lib_name
-        name == :default ? "Pods" : "Pods-#{name}"
+        if name == :default
+          "Pods"
+        elsif @parent
+          "#{@parent.lib_name}-#{name}"
+        else
+          "Pods-#{name}"
+        end
       end
 
       # Returns *all* dependencies of this target, not only the target specific
       # ones in `target_dependencies`.
       def dependencies
         @target_dependencies + (@parent ? @parent.dependencies : [])
+      end
+
+      def empty?
+        target_dependencies.empty?
       end
     end
 
