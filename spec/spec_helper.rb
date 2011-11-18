@@ -11,7 +11,6 @@ require 'cocoapods'
 $:.unshift((ROOT + 'spec').to_s)
 require 'spec_helper/fixture'
 require 'spec_helper/git'
-require 'spec_helper/log'
 require 'spec_helper/temporary_directory'
 
 context_class = defined?(BaconContext) ? BaconContext : Bacon::Context
