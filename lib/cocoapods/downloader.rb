@@ -1,7 +1,8 @@
 module Pod
   class Downloader
-    autoload :Git,       'cocoapods/downloader/git'
-    autoload :Mercurial, 'cocoapods/downloader/mercurial'
+    autoload :Git,        'cocoapods/downloader/git'
+    autoload :Mercurial,  'cocoapods/downloader/mercurial'
+    autoload :Subversion, 'cocoapods/downloader/subversion'
 
     extend Executable
 
@@ -11,6 +12,8 @@ module Pod
         Git.new(pod_root, url, options)
       elsif url = options.delete(:hg)
         Mercurial.new(pod_root, url, options)
+      elsif url = options.delete(:svn)
+        Subversion.new(pod_root, url, options)
       else
         raise "Unsupported download strategy `#{source.inspect}'."
       end
