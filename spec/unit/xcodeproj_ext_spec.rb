@@ -27,7 +27,7 @@ describe 'Xcodeproj::Project' do
     phase = @project.targets.first.copy_files_build_phases.new_pod_dir("SomePod", "Path/To/Source")
     find_object({
       'isa' => 'PBXCopyFilesBuildPhase',
-      'dstPath' => '$(PRODUCT_NAME)/Path/To/Source',
+      'dstPath' => 'Pods/Path/To/Source',
       'name' => 'Copy SomePod Public Headers'
     }).should.not == nil
     @project.targets.first.buildPhases.should.include phase

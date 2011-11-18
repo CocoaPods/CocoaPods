@@ -66,6 +66,8 @@ namespace :spec do
     sh "macbacon -a"
   end
 
+  task :ci => [:all, 'examples:build']
+
   desc "Rebuild all the fixture tarballs"
   task :rebuild_fixture_tarballs do
     tarballs = FileList['spec/fixtures/**/*.tar.gz']

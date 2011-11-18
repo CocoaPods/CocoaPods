@@ -3,7 +3,10 @@ require File.expand_path('../../spec_helper', __FILE__)
 describe "Pod::Installer" do
   describe ", by default," do
     before do
-      @xcconfig = Pod::Installer.new(Pod::Podfile.new { platform :ios }).target_installers.first.xcconfig.to_hash
+      @xcconfig = Pod::Installer.new(Pod::Podfile.new do
+        platform :ios
+        dependency 'JSONKit'
+      end).target_installers.first.xcconfig.to_hash
     end
 
     it "sets the header search paths where installed Pod headers can be found" do
@@ -17,8 +20,6 @@ describe "Pod::Installer" do
   end
 
   before do
-    fixture('spec-repos/master') # ensure the archive is unpacked
-
     @config_before = config
     Pod::Config.instance = nil
     config.silent = true
@@ -45,5 +46,27 @@ describe "Pod::Installer" do
       end
     end
     installer.target_installers.first.bridge_support_generator.headers.should == expected
+  end
+
+  it "omits empty target definitions" do
+    podfile = Pod::Podfile.new do
+      platform :ios
+      target :not_empty do
+        dependency 'JSONKit'
+      end
+    end
+    installer = Pod::Installer.new(podfile)
+    installer.target_installers.map(&:definition).map(&:name).should == [:not_empty]
+  end
+
+  it "moves the compile and link phases to the end of the build phases list, so Pod headers are copied first and sources can use the same header dir structure" do
+    podfile = Pod::Podfile.new do
+      platform :osx
+      dependency 'ASIHTTPRequest'
+    end
+    installer = Pod::Installer.new(podfile)
+    installer.target_installers.first.install!
+    phases = installer.project.targets.first.buildPhases
+    phases.to_a.last(2).map(&:class).should == [Xcodeproj::Project::PBXSourcesBuildPhase, Xcodeproj::Project::PBXFrameworksBuildPhase]
   end
 end

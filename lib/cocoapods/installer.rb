@@ -1,5 +1,3 @@
-require 'yaml'
-
 module Pod
   class Installer
     module Shared
@@ -16,41 +14,11 @@ module Pod
       end
     end
 
-    class CopyResourcesScript
-      CONTENT = <<EOS
-#!/bin/sh
-
-install_resource()
-{
-  echo "cp -R ${SRCROOT}/Pods/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-  cp -R ${SRCROOT}/Pods/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}
-}
-EOS
-
-      attr_reader :resources
-
-      # A list of files relative to the project pods root.
-      def initialize(resources)
-        @resources = resources
-      end
-
-      def save_as(pathname)
-        pathname.open('w') do |script|
-          script.puts CONTENT
-          @resources.each do |resource|
-            script.puts "install_resource '#{resource}'"
-          end
-        end
-        # TODO use File api
-        system("chmod +x '#{pathname}'")
-      end
-    end
-
     class TargetInstaller
       include Config::Mixin
       include Shared
 
-      attr_reader :target
+      attr_reader :podfile, :project, :definition, :target
 
       def initialize(podfile, project, definition)
         @podfile, @project, @definition = podfile, project, definition
@@ -72,7 +40,7 @@ EOS
       end
 
       def copy_resources_script
-        @copy_resources_script ||= CopyResourcesScript.new(build_specifications.map do |spec|
+        @copy_resources_script ||= Generator::CopyResourcesScript.new(build_specifications.map do |spec|
           spec.expanded_resources
         end.flatten)
       end
@@ -82,7 +50,7 @@ EOS
       end
 
       def bridge_support_generator
-        BridgeSupportGenerator.new(build_specifications.map do |spec|
+        Generator::BridgeSupport.new(build_specifications.map do |spec|
           spec.header_files.map do |header|
             config.project_pods_root + header
           end
@@ -93,7 +61,7 @@ EOS
         "#{@definition.lib_name}.bridgesupport"
       end
 
-      # TODO move out
+      # TODO move out to Generator::PrefixHeader
       def save_prefix_header_as(pathname)
         pathname.open('w') do |header|
           header.puts "#ifdef __OBJC__"
@@ -130,6 +98,12 @@ EOS
           user_header_search_paths.concat(spec.user_header_search_paths)
         end
         xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
+
+        # Now that we have added all the source files and copy header phases,
+        # move the compile build phase to the end, so that headers are copied
+        # to the build products dir first, and thus Pod source files can enjoy
+        # the same namespacing of headers as the app would.
+        @target.move_compile_phase_to_end!
 
         # Add all the target related support files to the group, even the copy
         # resources script although the project doesn't actually use them.
@@ -189,8 +163,8 @@ EOS
 
     def target_installers
       @target_installers ||= @podfile.target_definitions.values.map do |definition|
-        TargetInstaller.new(@podfile, project, definition)
-      end
+        TargetInstaller.new(@podfile, project, definition) unless definition.empty?
+      end.compact
     end
 
     def install!
@@ -261,6 +235,7 @@ EOS
     # 3. Let the user specify the app target name as an extra argument, but this
     #    seems to be a less good version of the variation on #2.
     def configure_project(projpath)
+      # TODO use more of Pathname’s API here
       root = File.dirname(projpath)
       xcworkspace = File.join(root, File.basename(projpath, '.xcodeproj') + '.xcworkspace')
       workspace = Xcodeproj::Workspace.new_from_xcworkspace(xcworkspace)
@@ -293,6 +268,10 @@ EOS
       app_project.targets.each { |target| target.buildPhases << copy_resources }
       
       app_project.save_as(projpath)
+
+      unless config.silent?
+        puts "[!] From now on use `#{File.basename(xcworkspace)}' instead of `#{File.basename(projpath)}'."
+      end
     end
   end
 end

@@ -1,5 +1,5 @@
 module Pod
-  VERSION = '0.3.2'
+  VERSION = '0.3.4'
 
   class Informative < StandardError
   end
@@ -20,6 +20,11 @@ module Pod
 
   autoload :Pathname,               'pathname'
   autoload :FileList,               'cocoapods/file_list'
+
+  module Generator
+    autoload :BridgeSupport,        'cocoapods/generator/bridge_support'
+    autoload :CopyResourcesScript,  'cocoapods/generator/copy_resources_script'
+  end
 end
 
 module Xcodeproj

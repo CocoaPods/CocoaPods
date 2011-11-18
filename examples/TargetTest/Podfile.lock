@@ -1,0 +1,5 @@
+PODS:
+  - JSONKit (1.4)
+
+DEPENDENCIES:
+  - JSONKit

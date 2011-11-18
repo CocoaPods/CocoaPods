@@ -12,7 +12,7 @@
 	url = https://github.com/samsoffes/sstoolkit.git
 [submodule "external/Xcodeproj"]
 	path = external/Xcodeproj
-	url = git@github.com:CocoaPods/Xcodeproj.git
+	url = https://github.com/CocoaPods/Xcodeproj.git
 [submodule "spec/fixtures/spec-repos/master"]
 	path = spec/fixtures/spec-repos/master
-	url = git@github.com:CocoaPods/Specs.git
+	url = https://github.com/CocoaPods/Specs.git

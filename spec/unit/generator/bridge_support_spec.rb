@@ -1,9 +1,9 @@
-require File.expand_path('../../spec_helper', __FILE__)
+require File.expand_path('../../../spec_helper', __FILE__)
 
-describe "Pod::BridgeSupportGenerator" do
+describe "Pod::Generator::BridgeSupport" do
   it "generates a metadata file with the appropriate search paths" do
     headers = %w{ /some/dir/foo.h /some/dir/bar.h /some/other/dir/baz.h }.map { |h| Pathname.new(h) }
-    generator = Pod::BridgeSupportGenerator.new(headers)
+    generator = Pod::Generator::BridgeSupport.new(headers)
     def generator.gen_bridge_metadata(command)
       @command = command
     end
