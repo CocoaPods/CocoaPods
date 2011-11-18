@@ -132,6 +132,8 @@ else
         podfile = Pod::Podfile.new do
           config.rootspec = self
           self.platform platform
+          dependency 'SSZipArchive'
+
           post_install do |installer|
             target = installer.project.targets.first
             target.buildConfigurations.each do |config|
