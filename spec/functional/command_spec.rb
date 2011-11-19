@@ -56,13 +56,11 @@ describe "Pod::Command" do
     spec.license.should == 'MIT'
     spec.version.should == Pod::Version.new('1.0.0')
     spec.summary.should == 'A short description of Bananas.'
-    spec.homepage.should == 'http://example.com/Bananas'
+    spec.homepage.should == 'http://EXAMPLE/Bananas'
     spec.authors.should == { `git config --get user.name`.strip => `git config --get user.email`.strip }
-    spec.source.should == { :git => 'http://example.com/Bananas.git', :tag => '1.0.0' }
+    spec.source.should == { :git => 'http://EXAMPLE/Bananas.git', :tag => '1.0.0' }
     spec.description.should == 'An optional longer description of Bananas.'
     spec.source_files.should == ['Classes', 'Classes/**/*.{h,m}']
-    spec.xcconfig.to_hash.should == { 'OTHER_LDFLAGS' => '-framework SomeRequiredFramework' }
-    spec.dependencies.should == [Pod::Dependency.new('SomeLibraryThatBananasDependsOn', '>= 1.0.0')]
   end
 
   before do
