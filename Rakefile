@@ -66,7 +66,11 @@ namespace :spec do
     sh "macbacon -a"
   end
 
-  task :ci => [:all, 'examples:build']
+  desc "Run all specs and build all examples"
+  task :ci => :all do
+    sh "./bin/pod setup" # ensure the spec repo is up-to-date
+    Rake::Task['examples:build'].invoke
+  end
 
   desc "Rebuild all the fixture tarballs"
   task :rebuild_fixture_tarballs do
