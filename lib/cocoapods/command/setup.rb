@@ -41,6 +41,9 @@ module Pod
         else
           add_master_repo_command.run
         end
+        hook = config.repos_dir + 'master/.git/hooks/pre-commit'
+        hook.open('w') { |f| f << "#!/bin/sh\nrake lint" }
+        `chmod +x '#{hook}'`
       end
     end
   end
