@@ -2,15 +2,18 @@ module Pod
   class Command
     class Install < Command
       def self.banner
-%{Installing dependencies of a pod spec:
+%{Installing dependencies of a project:
 
-    $ pod install [NAME] [PROJECT]
+    $ pod install [PROJECT]
 
-      Downloads all dependencies of the specified podspec file `NAME',
-      creates an Xcode Pods library project in `./Pods', and sets up `PROJECT' 
-      to use the specified pods (if `PROJECT' is given). In case `NAME' is
-      omitted it defaults to either `Podfile' or `*.podspec' in the current
-      working directory.
+      Downloads all dependencies defined in `Podfile' and creates an Xcode
+      Pods library project in `./Pods'.
+
+      In case `PROJECT' is given, it configures it to use the specified Pods
+      and generates a workspace with the Pods project and `PROJECT'. (It is
+      important that once you have run this you open the workspace instead of
+      `PROJECT'.) You usually specify `PROJECT' only the first time that you
+      run `pod install'.
 }
       end
 
@@ -21,27 +24,15 @@ module Pod
 
       def initialize(argv)
         config.clean = !argv.option('--no-clean')
-        projpath = argv.shift_argument
-        projpath =~ /\.xcodeproj\/?$/ ? @projpath = projpath : podspec = projpath
-        @podspec = Pathname.new(podspec) if podspec
-        @projpath ||= argv.shift_argument
+        @projpath = argv.shift_argument
         super unless argv.empty?
       end
 
       def run
-        spec = nil
-        if @podspec
-          if @podspec.exist?
-            spec = Specification.from_file(@podspec)
-          else
-            raise Informative, "The specified podspec `#{@podspec}' doesn't exist."
-          end
-        else
-          unless spec = config.rootspec
-            raise Informative, "No `Podfile' or `.podspec' file found in the current working directory."
-          end
+        unless podfile = config.rootspec
+          raise Informative, "No `Podfile' found in the current working directory."
         end
-        installer = Installer.new(spec)
+        installer = Installer.new(podfile)
         installer.install!
         installer.configure_project(@projpath) if @projpath
       end
