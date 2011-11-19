@@ -32,6 +32,9 @@ module Pod
         unless podfile = config.rootspec
           raise Informative, "No `Podfile' found in the current working directory."
         end
+        if @projpath && !File.exist?(@projpath)
+          raise Informative, "The specified project `#{@projpath}' does not exist."
+        end
         installer = Installer.new(podfile)
         installer.install!
         installer.configure_project(@projpath) if @projpath
