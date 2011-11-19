@@ -1,0 +1,323 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DCFB4494136F7202004B3EE0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCFB4493136F7202004B3EE0 /* UIKit.framework */; };
+		DCFB4496136F7202004B3EE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCFB4495136F7202004B3EE0 /* Foundation.framework */; };
+		DCFB4498136F7202004B3EE0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCFB4497136F7202004B3EE0 /* CoreGraphics.framework */; };
+		DCFB449E136F7203004B3EE0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DCFB449C136F7203004B3EE0 /* InfoPlist.strings */; };
+		DCFB44A1136F7203004B3EE0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DCFB44A0136F7203004B3EE0 /* main.m */; };
+		DCFB44A4136F7203004B3EE0 /* EmbedReaderAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DCFB44A3136F7203004B3EE0 /* EmbedReaderAppDelegate.m */; };
+		DCFB44A7136F7203004B3EE0 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCFB44A5136F7203004B3EE0 /* MainWindow.xib */; };
+		DCFB44AA136F7203004B3EE0 /* EmbedReaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCFB44A9136F7203004B3EE0 /* EmbedReaderViewController.m */; };
+		DCFB44AD136F7203004B3EE0 /* EmbedReaderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCFB44AB136F7203004B3EE0 /* EmbedReaderViewController.xib */; };
+		E8DE6C4C66DC496480E8F626 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC3852633DE446DB87D49964 /* libPods.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		695974AD67234F97820292E4 /* Pods.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		DCFB448F136F7202004B3EE0 /* EmbedReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmbedReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCFB4493136F7202004B3EE0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DCFB4495136F7202004B3EE0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DCFB4497136F7202004B3EE0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		DCFB449B136F7202004B3EE0 /* EmbedReader-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EmbedReader-Info.plist"; sourceTree = "<group>"; };
+		DCFB449D136F7203004B3EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DCFB449F136F7203004B3EE0 /* EmbedReader-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EmbedReader-Prefix.pch"; sourceTree = "<group>"; };
+		DCFB44A0136F7203004B3EE0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DCFB44A2136F7203004B3EE0 /* EmbedReaderAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmbedReaderAppDelegate.h; sourceTree = "<group>"; };
+		DCFB44A3136F7203004B3EE0 /* EmbedReaderAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmbedReaderAppDelegate.m; sourceTree = "<group>"; };
+		DCFB44A6136F7203004B3EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		DCFB44A8136F7203004B3EE0 /* EmbedReaderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmbedReaderViewController.h; sourceTree = "<group>"; };
+		DCFB44A9136F7203004B3EE0 /* EmbedReaderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmbedReaderViewController.m; sourceTree = "<group>"; };
+		DCFB44AC136F7203004B3EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/EmbedReaderViewController.xib; sourceTree = "<group>"; };
+		FC3852633DE446DB87D49964 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DCFB448C136F7202004B3EE0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCFB4494136F7202004B3EE0 /* UIKit.framework in Frameworks */,
+				DCFB4496136F7202004B3EE0 /* Foundation.framework in Frameworks */,
+				DCFB4498136F7202004B3EE0 /* CoreGraphics.framework in Frameworks */,
+				E8DE6C4C66DC496480E8F626 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DCFB4484136F7202004B3EE0 = {
+			isa = PBXGroup;
+			children = (
+				DCFB4499136F7202004B3EE0 /* EmbedReader */,
+				DCFB4492136F7202004B3EE0 /* Frameworks */,
+				DCFB4490136F7202004B3EE0 /* Products */,
+				695974AD67234F97820292E4 /* Pods.xcconfig */,
+			);
+			sourceTree = "<group>";
+		};
+		DCFB4490136F7202004B3EE0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DCFB448F136F7202004B3EE0 /* EmbedReader.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DCFB4492136F7202004B3EE0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DCFB4493136F7202004B3EE0 /* UIKit.framework */,
+				DCFB4495136F7202004B3EE0 /* Foundation.framework */,
+				DCFB4497136F7202004B3EE0 /* CoreGraphics.framework */,
+				FC3852633DE446DB87D49964 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DCFB4499136F7202004B3EE0 /* EmbedReader */ = {
+			isa = PBXGroup;
+			children = (
+				DCFB44A2136F7203004B3EE0 /* EmbedReaderAppDelegate.h */,
+				DCFB44A3136F7203004B3EE0 /* EmbedReaderAppDelegate.m */,
+				DCFB44A5136F7203004B3EE0 /* MainWindow.xib */,
+				DCFB44A8136F7203004B3EE0 /* EmbedReaderViewController.h */,
+				DCFB44A9136F7203004B3EE0 /* EmbedReaderViewController.m */,
+				DCFB44AB136F7203004B3EE0 /* EmbedReaderViewController.xib */,
+				DCFB449A136F7202004B3EE0 /* Supporting Files */,
+			);
+			path = EmbedReader;
+			sourceTree = "<group>";
+		};
+		DCFB449A136F7202004B3EE0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DCFB449B136F7202004B3EE0 /* EmbedReader-Info.plist */,
+				DCFB449C136F7203004B3EE0 /* InfoPlist.strings */,
+				DCFB449F136F7203004B3EE0 /* EmbedReader-Prefix.pch */,
+				DCFB44A0136F7203004B3EE0 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DCFB448E136F7202004B3EE0 /* EmbedReader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCFB44B0136F7203004B3EE0 /* Build configuration list for PBXNativeTarget "EmbedReader" */;
+			buildPhases = (
+				DCFB448B136F7202004B3EE0 /* Sources */,
+				DCFB448C136F7202004B3EE0 /* Frameworks */,
+				DCFB448D136F7202004B3EE0 /* Resources */,
+				14B04CE5BDA24D92BC40FE06 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EmbedReader;
+			productName = EmbedReader;
+			productReference = DCFB448F136F7202004B3EE0 /* EmbedReader.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DCFB4486136F7202004B3EE0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = DCFB4489136F7202004B3EE0 /* Build configuration list for PBXProject "EmbedReader" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DCFB4484136F7202004B3EE0;
+			productRefGroup = DCFB4490136F7202004B3EE0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DCFB448E136F7202004B3EE0 /* EmbedReader */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DCFB448D136F7202004B3EE0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCFB449E136F7203004B3EE0 /* InfoPlist.strings in Resources */,
+				DCFB44A7136F7203004B3EE0 /* MainWindow.xib in Resources */,
+				DCFB44AD136F7203004B3EE0 /* EmbedReaderViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		14B04CE5BDA24D92BC40FE06 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DCFB448B136F7202004B3EE0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCFB44A1136F7203004B3EE0 /* main.m in Sources */,
+				DCFB44A4136F7203004B3EE0 /* EmbedReaderAppDelegate.m in Sources */,
+				DCFB44AA136F7203004B3EE0 /* EmbedReaderViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		DCFB449C136F7203004B3EE0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DCFB449D136F7203004B3EE0 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		DCFB44A5136F7203004B3EE0 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DCFB44A6136F7203004B3EE0 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		DCFB44AB136F7203004B3EE0 /* EmbedReaderViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DCFB44AC136F7203004B3EE0 /* en */,
+			);
+			name = EmbedReaderViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DCFB44AE136F7203004B3EE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		DCFB44AF136F7203004B3EE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		DCFB44B1136F7203004B3EE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 695974AD67234F97820292E4 /* Pods.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EmbedReader/EmbedReader-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "EmbedReader/EmbedReader-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DCFB44B2136F7203004B3EE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 695974AD67234F97820292E4 /* Pods.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EmbedReader/EmbedReader-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "EmbedReader/EmbedReader-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DCFB4489136F7202004B3EE0 /* Build configuration list for PBXProject "EmbedReader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCFB44AE136F7203004B3EE0 /* Debug */,
+				DCFB44AF136F7203004B3EE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCFB44B0136F7203004B3EE0 /* Build configuration list for PBXNativeTarget "EmbedReader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCFB44B1136F7203004B3EE0 /* Debug */,
+				DCFB44B2136F7203004B3EE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DCFB4486136F7202004B3EE0 /* Project object */;
+}
