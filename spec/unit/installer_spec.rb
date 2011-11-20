@@ -25,8 +25,6 @@ describe "Pod::Installer" do
     config.silent = true
     config.repos_dir = fixture('spec-repos')
     config.project_pods_root = fixture('integration')
-    def config.ios?; true; end
-    def config.osx?; false; end
   end
 
   after do
@@ -34,12 +32,13 @@ describe "Pod::Installer" do
   end
 
   it "generates a BridgeSupport metadata file from all the pod headers" do
-    spec = Pod::Podfile.new do
+    podfile = Pod::Podfile.new do
       platform :osx
       dependency 'ASIHTTPRequest'
     end
+    config.rootspec = podfile
     expected = []
-    installer = Pod::Installer.new(spec)
+    installer = Pod::Installer.new(podfile)
     installer.build_specifications.each do |spec|
       spec.header_files.each do |header|
         expected << config.project_pods_root + header
@@ -55,6 +54,7 @@ describe "Pod::Installer" do
         dependency 'JSONKit'
       end
     end
+    config.rootspec = podfile
     installer = Pod::Installer.new(podfile)
     installer.target_installers.map(&:definition).map(&:name).should == [:not_empty]
   end
@@ -64,6 +64,7 @@ describe "Pod::Installer" do
       platform :osx
       dependency 'ASIHTTPRequest'
     end
+    config.rootspec = podfile
     installer = Pod::Installer.new(podfile)
     installer.target_installers.first.install!
     phases = installer.project.targets.first.buildPhases

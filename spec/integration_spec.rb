@@ -156,6 +156,7 @@ else
           config.rootspec = self
 
           self.platform platform
+          dependency 'Reachability',      '< 2.0.5' if platform == :ios
           dependency 'ASIWebPageRequest', '>= 1.8.1'
           dependency 'JSONKit',           '>= 1.0'
           dependency 'SSZipArchive',      '< 2'
@@ -175,11 +176,13 @@ else
           'DEPENDENCIES' => [
             "ASIWebPageRequest (>= 1.8.1)",
             "JSONKit (>= 1.0)",
+            "Reachability (< 2.0.5)",
             "SSZipArchive (< 2)",
           ]
         }
         unless platform == :ios
           # No Reachability is required by ASIHTTPRequest on OSX
+          lock_file_contents['DEPENDENCIES'].delete_at(2)
           lock_file_contents['PODS'].delete_at(3)
           lock_file_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
         end
@@ -196,23 +199,25 @@ else
         end
       end
 
-      it "does not activate pods that are only part of other pods" do
-        spec = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
+      if platform == :ios
+        it "does not activate pods that are only part of other pods" do
+          spec = Pod::Podfile.new do
+            # first ensure that the correct info is available to the specs when they load
+            config.rootspec = self
 
-          self.platform platform
-          dependency 'Reachability'
+            self.platform platform
+            dependency 'Reachability', '2.0.4' # only 2.0.4 is part of ASIHTTPRequest’s source.
+          end
+
+          installer = SpecHelper::Installer.new(spec)
+          installer.install!
+
+          YAML.load(installer.lock_file.read).should == {
+            'PODS' => [{ 'Reachability (2.0.4)' => ["ASIHTTPRequest (>= 1.8)"] }],
+            'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
+            'DEPENDENCIES' => ["Reachability (= 2.0.4)"]
+          }
         end
-
-        installer = SpecHelper::Installer.new(spec)
-        installer.install!
-
-        YAML.load(installer.lock_file.read).should == {
-          'PODS' => [{ 'Reachability (2.0.4)' => ["ASIHTTPRequest (>= 1.8)"] }],
-          'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
-          'DEPENDENCIES' => ["Reachability"]
-        }
       end
 
       it "adds resources to the xcode copy script" do
