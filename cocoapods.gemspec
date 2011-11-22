@@ -4,7 +4,7 @@ require File.expand_path('../lib/cocoapods', __FILE__)
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
   s.version  = Pod::VERSION
-  s.date     = "2011-11-17"
+  s.date     = "2011-11-22"
   s.license  = "MIT"
   s.email    = "eloy.de.enige@gmail.com"
   s.homepage = "https://github.com/CocoaPods/CocoaPods"
