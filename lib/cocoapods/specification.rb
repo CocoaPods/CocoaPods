@@ -21,7 +21,7 @@ module Pod
     attr_accessor :defined_in_file
 
     def initialize
-      @dependencies, @resources, @clean_paths = [], [], []
+      @dependencies, @resources, @clean_paths, @subspecs = [], [], [], []
       @xcconfig = Xcodeproj::Config.new
       yield self if block_given?
     end
@@ -115,14 +115,9 @@ module Pod
       flags
     end
 
-    # These are attributes which are also on a Podfile
-
     attr_accessor :platform
 
     attr_accessor :requires_arc
-
-    attr_accessor :generate_bridge_support
-    alias_method :generate_bridge_support?, :generate_bridge_support
 
     def dependency(*name_and_version_requirements)
       name, *version_requirements = name_and_version_requirements.flatten
@@ -132,14 +127,64 @@ module Pod
     end
     attr_reader :dependencies
 
+    class Subspec < Specification
+      attr_reader :parent
+
+      def initialize(parent, name)
+        @parent, @name = parent, name
+        # TODO a MacRuby bug, the correct super impl `initialize' is not called consistently
+        #super(&block)
+        @dependencies, @resources, @clean_paths, @subspecs = [], [], [], []
+        @xcconfig = Xcodeproj::Config.new
+
+        self.part_of = top_level_parent.name, top_level_parent.version
+
+        yield self if block_given?
+      end
+
+      undef_method :name=, :version=, :source=
+
+      def top_level_parent
+        top_level_parent = @parent
+        top_level_parent = top_level_parent.parent while top_level_parent.is_a?(Subspec)
+        top_level_parent
+      end
+
+      def name
+        "#{@parent.name}/#{@name}"
+      end
+
+      def summary
+        @summary ? @summary : top_level_parent.summary
+      end
+
+      def source
+        top_level_parent.source
+      end
+    end
+
+    def subspec(name, &block)
+      subspec = Subspec.new(self, name, &block)
+      @subspecs << subspec
+      subspec
+    end
+    attr_reader :subspecs
+
+    # These are attributes which are also on a Podfile
+    # TODO remove this, we no longer allow to install specs as Podfile
+
+    attr_accessor :generate_bridge_support
+    alias_method :generate_bridge_support?, :generate_bridge_support
+
     # Not attributes
 
     include Config::Mixin
 
     def ==(other)
-      self.class === other &&
-        name && name == other.name &&
-          version && version == other.version
+      object_id == other.object_id ||
+        (self.class === other &&
+          name && name == other.name &&
+            version && version == other.version)
     end
 
     def dependency_by_name(name)

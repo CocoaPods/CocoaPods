@@ -2,6 +2,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "A Pod::Specification loaded from a podspec" do
   before do
+    fixture('banana-lib') # ensure the archive is unpacked
     @spec = Pod::Specification.from_file(fixture('banana-lib/BananaLib.podspec'))
   end
 
@@ -277,5 +278,44 @@ describe "A Pod::Specification, in general," do
     @spec.clean_paths = FileList['*'].exclude('Rakefile')
     list = ROOT + @spec.clean_paths.first
     list.glob.should == FileList[(ROOT + '*').to_s].exclude('Rakefile').map { |path| Pathname.new(path) }
+  end
+end
+
+describe "A Pod::Specification subspec" do
+  before do
+    @spec = Pod::Spec.new do |s|
+      s.name    = 'MainSpec'
+      s.version = '1.2.3'
+      s.summary = 'A spec with subspecs'
+      s.source  = { :git => '/some/url' }
+
+      s.subspec 'FirstSubSpec' do |fss|
+        fss.subspec 'SecondSubSpec' do |sss|
+        end
+      end
+    end
+  end
+
+  it "returns the top level parent spec" do
+    @spec.subspecs.first.top_level_parent.should == @spec
+    @spec.subspecs.first.subspecs.first.top_level_parent.should == @spec
+  end
+
+  it "is named after the parent spec" do
+    @spec.subspecs.first.name.should == 'MainSpec/FirstSubSpec'
+    @spec.subspecs.first.subspecs.first.name.should == 'MainSpec/FirstSubSpec/SecondSubSpec'
+  end
+
+  it "is a `part_of' the top level parent spec" do
+    dependency = Pod::Dependency.new('MainSpec', '1.2.3').tap { |d| d.only_part_of_other_pod = true }
+    @spec.subspecs.first.part_of.should == dependency
+    @spec.subspecs.first.subspecs.first.part_of.should == dependency
+  end
+
+  it "automatically forwards undefined attributes to the top level parent" do
+    @spec.subspecs.first.summary.should == @spec.summary
+    @spec.subspecs.first.source.should == @spec.source
+    @spec.subspecs.first.subspecs.first.summary.should == @spec.summary
+    @spec.subspecs.first.subspecs.first.source.should == @spec.source
   end
 end
