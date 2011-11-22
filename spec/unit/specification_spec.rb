@@ -96,10 +96,10 @@ describe "A Pod::Specification loaded from a podspec" do
 
   it "adds compiler flags if ARC is required" do
     @spec.requires_arc = true
-    @spec.compiler_flags.should == " -fobj-arc"
+    @spec.compiler_flags.should == " -fobjc-arc"
 
     @spec.compiler_flags = "-Wunused-value"
-    @spec.compiler_flags.should == "-Wunused-value -fobj-arc"
+    @spec.compiler_flags.should == "-Wunused-value -fobjc-arc"
   end
 end
 

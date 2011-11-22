@@ -111,7 +111,7 @@ module Pod
     attr_writer :compiler_flags
     def compiler_flags
       flags = "#{@compiler_flags} "
-      flags << '-fobj-arc' if @requires_arc
+      flags << '-fobjc-arc' if @requires_arc
       flags
     end
 
