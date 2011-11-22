@@ -61,7 +61,7 @@ module Pod
       # Return the first version that matches the current dependency.
       def required_version
         versions.find { |v| dependency.match?(name, v) } ||
-          raise(Informative, "Required version (#{dependency}) not found for `#{name}'.")
+          raise(Informative, "Required version (#{dependency}) not found for `#{name}'.\nAvailable versions: #{versions.join(', ')}")
       end
 
       def ==(other)
