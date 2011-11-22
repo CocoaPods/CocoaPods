@@ -52,6 +52,10 @@ And then you [install the dependencies](https://github.com/CocoaPods/CocoaPods/w
 
 _Where ‘App.xcodeproj’ is the name of your actual application project._
 
+The next time you change your Podfile, you can update your project by simply running:
+
+    $ pod install
+
 Remember to always open the Xcode workspace instead of the project file when you're building.
 
     $ open App.xcworkspace
