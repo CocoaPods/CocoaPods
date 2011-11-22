@@ -13,7 +13,8 @@ module Pod
 
     def self.search(dependency)
       all.map { |s| s.search(dependency) }.compact.first ||
-        raise(Informative, "Unable to find a pod named `#{dependency.name}'")
+        raise(Informative, "Unable to find a pod named `#{dependency.name}'.\n" \
+                           "You might want to run `pod repo update` and try again.")
     end
 
     def self.search_by_name(query, full_text_search)
