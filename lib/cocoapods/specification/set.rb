@@ -55,7 +55,7 @@ module Pod
       end
 
       def specification
-        @specification ||= Specification.from_file(specification_path)
+        @specification ||= Specification.from_file(specification_path).tap { |spec| spec.defined_in_set = self }
       end
 
       # Return the first version that matches the current dependency.
@@ -85,6 +85,7 @@ module Pod
       class External < Set
         def initialize(specification)
           @specification = specification
+          @specification.defined_in_set = self
           @required_by = []
         end
 

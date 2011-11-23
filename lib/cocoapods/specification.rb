@@ -127,41 +127,7 @@ module Pod
     end
     attr_reader :dependencies
 
-    class Subspec < Specification
-      attr_reader :parent
-
-      def initialize(parent, name)
-        @parent, @name = parent, name
-        # TODO a MacRuby bug, the correct super impl `initialize' is not called consistently
-        #super(&block)
-        @dependencies, @resources, @clean_paths, @subspecs = [], [], [], []
-        @xcconfig = Xcodeproj::Config.new
-
-        self.part_of = top_level_parent.name, top_level_parent.version
-
-        yield self if block_given?
-      end
-
-      undef_method :name=, :version=, :source=
-
-      def top_level_parent
-        top_level_parent = @parent
-        top_level_parent = top_level_parent.parent while top_level_parent.is_a?(Subspec)
-        top_level_parent
-      end
-
-      def name
-        "#{@parent.name}/#{@name}"
-      end
-
-      def summary
-        @summary ? @summary : top_level_parent.summary
-      end
-
-      def source
-        top_level_parent.source
-      end
-    end
+    # Subspec related
 
     def subspec(name, &block)
       subspec = Subspec.new(self, name, &block)
@@ -190,6 +156,9 @@ module Pod
     alias_method :generate_bridge_support?, :generate_bridge_support
 
     # Not attributes
+
+    # TODO when we move to use a 'ResolveContext' this should happen there.
+    attr_accessor :defined_in_set
 
     include Config::Mixin
 
@@ -419,6 +388,46 @@ module Pod
     #     end
     #   end
     def post_install(target)
+    end
+
+    class Subspec < Specification
+      attr_reader :parent
+
+      def initialize(parent, name)
+        @parent, @name = parent, name
+        # TODO a MacRuby bug, the correct super impl `initialize' is not called consistently
+        #super(&block)
+        @dependencies, @resources, @clean_paths, @subspecs = [], [], [], []
+        @xcconfig = Xcodeproj::Config.new
+
+        self.part_of = top_level_parent.name, top_level_parent.version
+
+        yield self if block_given?
+      end
+
+      undef_method :name=, :version=, :source=, :defined_in_set=
+
+      def top_level_parent
+        top_level_parent = @parent
+        top_level_parent = top_level_parent.parent while top_level_parent.is_a?(Subspec)
+        top_level_parent
+      end
+
+      def name
+        "#{@parent.name}/#{@name}"
+      end
+
+      def summary
+        @summary ? @summary : top_level_parent.summary
+      end
+
+      def source
+        top_level_parent.source
+      end
+
+      def defined_in_set
+        top_level_parent.defined_in_set
+      end
     end
 
   end
