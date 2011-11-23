@@ -167,7 +167,7 @@ else
 
         lock_file_contents = {
           'PODS' => [
-            { 'ASIHTTPRequest (1.8.1)'    => ["Reachability (~> 2.0, >= 2.0.4)"] },
+            { 'ASIHTTPRequest (1.8.1)'    => ["Reachability"] },
             { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
             'JSONKit (1.4)',
             { 'Reachability (2.0.4)'      => ["ASIHTTPRequest (>= 1.8)"] },
