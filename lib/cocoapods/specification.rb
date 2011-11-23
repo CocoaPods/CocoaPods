@@ -170,6 +170,19 @@ module Pod
     end
     attr_reader :subspecs
 
+    def subspec_by_name(name)
+      # Remove this spec's name from the beginning of the name we’re looking for
+      # and take the first component from the remainder, which is the spec we need
+      # to find now.
+      remainder = name[self.name.size+1..-1].split('/')
+      subspec_name = remainder.shift
+      subspec = subspecs.find { |s| s.name == "#{self.name}/#{subspec_name}" }
+      # If this was the last component in the name, then return the subspec,
+      # otherwise we recursively keep calling subspec_by_name until we reach the
+      # last one and return that
+      remainder.empty? ? subspec : subspec.subspec_by_name(name)
+    end
+
     # These are attributes which are also on a Podfile
     # TODO remove this, we no longer allow to install specs as Podfile
 
@@ -187,8 +200,8 @@ module Pod
             version && version == other.version)
     end
 
-    def dependency_by_name(name)
-      @dependencies.find { |d| d.name == name }
+    def dependency_by_top_level_spec_name(name)
+      @dependencies.find { |d| d.top_level_spec_name == name }
     end
 
     def part_of_specification_set

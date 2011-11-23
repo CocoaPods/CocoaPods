@@ -38,13 +38,10 @@ describe "Pod::Resolver" do
     Pod::Config.instance = @config_before
   end
 
-  it "returns all sets needed for the dependency" do
-    sets = []
-    sets << Pod::Spec::Set.by_pod_dir(fixture('spec-repos/master/Reachability'))
-    sets << Pod::Spec::Set.by_pod_dir(fixture('spec-repos/master/ASIHTTPRequest'))
-    sets << Pod::Spec::Set.by_pod_dir(fixture('spec-repos/master/ASIWebPageRequest'))
-    resolver = Pod::Resolver.new(@podfile)
-    resolver.resolve.sort_by(&:name).should == sets.sort_by(&:name)
+  it "returns all specs needed for the dependency" do
+    specs = Pod::Resolver.new(@podfile).resolve
+    specs.map(&:class).uniq.should == [Pod::Specification]
+    specs.map(&:name).sort.should == %w{ ASIHTTPRequest ASIWebPageRequest Reachability }
   end
 
   it "does not raise if all dependencies match the platform of the root spec (Podfile)" do
@@ -70,6 +67,17 @@ describe "Pod::Resolver" do
     lambda { resolver.resolve }.should.not.raise
     resolver.stub_platform = :ios
     lambda { resolver.resolve }.should.raise Pod::Informative
+  end
+
+  it "resolves subspecs" do
+    @podfile = Pod::Podfile.new do
+      platform :ios
+      dependency 'RestKit/Network'
+      dependency 'RestKit/ObjectMapping'
+    end
+    config.rootspec = @podfile
+    resolver = Pod::Resolver.new(@podfile)
+    resolver.resolve.map(&:name).sort.should == %w{ LibComponentLogging-Core LibComponentLogging-NSLog RestKit RestKit/Network RestKit/ObjectMapping }
   end
 end
 

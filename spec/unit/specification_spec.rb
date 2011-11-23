@@ -59,7 +59,7 @@ describe "A Pod::Specification loaded from a podspec" do
   it "returns the pod's dependencies" do
     expected = Pod::Dependency.new('monkey', '~> 1.0.1', '< 1.0.9')
     @spec.dependencies.should == [expected]
-    @spec.dependency_by_name('monkey').should == expected
+    @spec.dependency_by_top_level_spec_name('monkey').should == expected
   end
 
   it "returns the pod's xcconfig settings" do
@@ -317,5 +317,10 @@ describe "A Pod::Specification subspec" do
     @spec.subspecs.first.source.should == @spec.source
     @spec.subspecs.first.subspecs.first.summary.should == @spec.summary
     @spec.subspecs.first.subspecs.first.source.should == @spec.source
+  end
+
+  it "returns subspecs by name" do
+    @spec.subspec_by_name('MainSpec/FirstSubSpec').should == @spec.subspecs.first
+    @spec.subspec_by_name('MainSpec/FirstSubSpec/SecondSubSpec').should == @spec.subspecs.first.subspecs.first
   end
 end
