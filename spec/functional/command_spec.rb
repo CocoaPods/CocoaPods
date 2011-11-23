@@ -78,8 +78,8 @@ describe "Pod::Command" do
 
   it "searches for a pod with name, summary, or description matching the given query ignoring case" do
     [
-      ['systemCONfiguration', %w{ Reachability }],
-      ['is', %w{ ASIHTTPRequest Reachability SSZipArchive }],
+      ['dROP', %w{ Reachability }],
+      ['is', %w{ ASIHTTPRequest SSZipArchive }],
     ].each do |query, results|
       command = Pod::Command.parse('search', '--silent', '--full', query)
       def command.puts(msg = '')
