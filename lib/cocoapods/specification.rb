@@ -149,6 +149,10 @@ module Pod
 
     include Config::Mixin
 
+    def wrapper?
+      source_files.empty? && !subspecs.empty?
+    end
+
     def subspec_by_name(name)
       # Remove this spec's name from the beginning of the name we’re looking for
       # and take the first component from the remainder, which is the spec we need

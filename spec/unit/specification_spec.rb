@@ -292,10 +292,17 @@ describe "A Pod::Specification subspec" do
       s.requires_arc = true
 
       s.subspec 'FirstSubSpec' do |fss|
+        fss.source_files = 'some/file'
+
         fss.subspec 'SecondSubSpec' do |sss|
         end
       end
     end
+  end
+
+  it "makes a parent spec a wrapper if it has no source files of its own" do
+    @spec.should.be.wrapper
+    @spec.subspecs.first.should.not.be.wrapper
   end
 
   it "returns the top level parent spec" do

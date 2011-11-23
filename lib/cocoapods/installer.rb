@@ -6,7 +6,9 @@ module Pod
       end
 
       def build_specifications
-        dependent_specifications.reject { |spec| spec.defined_in_set.only_part_of_other_pod? }
+        dependent_specifications.reject do |spec|
+          spec.wrapper? || spec.defined_in_set.only_part_of_other_pod?
+        end
       end
 
       def download_only_specifications
