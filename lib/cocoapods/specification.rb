@@ -21,9 +21,14 @@ module Pod
     attr_accessor :defined_in_file
 
     def initialize
-      @dependencies, @resources, @clean_paths, @subspecs = [], [], [], []
-      @xcconfig = Xcodeproj::Config.new
+      post_initialize
       yield self if block_given?
+    end
+
+    # TODO This is just to work around a MacRuby bug
+    def post_initialize
+      @dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
+      @xcconfig = Xcodeproj::Config.new
     end
 
     # Attributes
@@ -306,7 +311,9 @@ module Pod
       missing << "`homepage'"                   unless homepage
       missing << "`author(s)'"                  unless authors
       missing << "either `source' or `part_of'" unless source || part_of
-      missing << "`source_files'"               unless source_files
+      missing << "`source_files'"               if source_files.empty? && subspecs.empty?
+      # TODO
+      # * validate subspecs
 
       incorrect = []
       allowed = [nil, :ios, :osx]
@@ -392,8 +399,7 @@ module Pod
         @parent, @name = parent, name
         # TODO a MacRuby bug, the correct super impl `initialize' is not called consistently
         #super(&block)
-        @dependencies, @resources, @clean_paths, @subspecs = [], [], [], []
-        @xcconfig = Xcodeproj::Config.new
+        post_initialize
 
         # A subspec is _always_ part of the source of its top level spec.
         self.part_of = top_level_parent.name, version
@@ -415,6 +421,9 @@ module Pod
         "#{@parent.name}/#{@name}"
       end
 
+      # TODO manually forwarding the attributes that we have so far needed to forward,
+      # but need to think if there's a better way to do this.
+
       def summary
         @summary ? @summary : top_level_parent.summary
       end
@@ -433,6 +442,10 @@ module Pod
 
       def requires_arc
         top_level_parent.requires_arc
+      end
+
+      def copy_header_mapping(from)
+        top_level_parent.copy_header_mapping(from)
       end
     end
 
