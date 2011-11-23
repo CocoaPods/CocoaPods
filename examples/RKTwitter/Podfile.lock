@@ -3,7 +3,6 @@ PODS:
   - LibComponentLogging-Core (1.1.4)
   - LibComponentLogging-NSLog (1.0.2):
     - LibComponentLogging-Core (>= 1.1.4)
-  - RestKit (0.9.3)
   - RestKit/Network (0.9.3):
     - LibComponentLogging-NSLog
     - RestKit (= 0.9.3)
@@ -14,6 +13,9 @@ PODS:
     - JSONKit
     - RestKit (= 0.9.3)
     - RestKit/ObjectMapping (= 0.9.3)
+
+DOWNLOAD_ONLY:
+  - RestKit (0.9.3)
 
 DEPENDENCIES:
   - RestKit/ObjectMapping/JSONKit
