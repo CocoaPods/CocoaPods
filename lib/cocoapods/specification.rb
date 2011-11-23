@@ -395,7 +395,10 @@ module Pod
         @dependencies, @resources, @clean_paths, @subspecs = [], [], [], []
         @xcconfig = Xcodeproj::Config.new
 
-        self.part_of = top_level_parent.name, top_level_parent.version
+        # A subspec is _always_ part of the source of its top level spec.
+        self.part_of = top_level_parent.name, version
+        # A subspec has a dependency on the parent if the parent is a subspec too.
+        dependency(@parent.name, version) if @parent.is_a?(Subspec)
 
         yield self if block_given?
       end
@@ -414,6 +417,10 @@ module Pod
 
       def summary
         @summary ? @summary : top_level_parent.summary
+      end
+
+      def version
+        top_level_parent.version
       end
 
       def source

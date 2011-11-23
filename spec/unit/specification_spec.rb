@@ -313,6 +313,12 @@ describe "A Pod::Specification subspec" do
     @spec.subspecs.first.subspecs.first.part_of.should == dependency
   end
 
+  it "depends on the parent spec, if it is a subspec" do
+    dependency = Pod::Dependency.new('MainSpec', '1.2.3').tap { |d| d.only_part_of_other_pod = true }
+    @spec.subspecs.first.dependencies.should == [dependency]
+    @spec.subspecs.first.subspecs.first.dependencies.should == [dependency, Pod::Dependency.new('MainSpec/FirstSubSpec', '1.2.3')]
+  end
+
   it "automatically forwards undefined attributes to the top level parent" do
     @spec.subspecs.first.summary.should        == @spec.summary
     @spec.subspecs.first.source.should         == @spec.source
