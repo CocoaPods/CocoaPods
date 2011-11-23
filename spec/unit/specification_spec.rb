@@ -208,7 +208,7 @@ describe "A Pod::Specification, with installed source," do
     def @spec.copy_header_mapping(from)
       Pathname.new('ns') + from.basename
     end
-    @spec.user_header_search_paths.should == %w{
+    @spec.header_search_paths.should == %w{
       "$(BUILT_PRODUCTS_DIR)/Pods/SSZipArchive"
       "$(BUILT_PRODUCTS_DIR)/Pods/SSZipArchive/ns"
     }
@@ -219,7 +219,7 @@ describe "A Pod::Specification, with installed source," do
     def @spec.copy_header_mapping(from)
       Pathname.new('ns') + from.basename
     end
-    @spec.user_header_search_paths.should == %w{
+    @spec.header_search_paths.should == %w{
       "$(BUILT_PRODUCTS_DIR)/Pods/AnotherRoot"
       "$(BUILT_PRODUCTS_DIR)/Pods/AnotherRoot/ns"
     }

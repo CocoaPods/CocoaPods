@@ -29,8 +29,7 @@ module Pod
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'USER_HEADER_SEARCH_PATHS' => '"$(BUILT_PRODUCTS_DIR)/Pods"',
-          'ALWAYS_SEARCH_USER_PATHS' => 'YES',
+          'HEADER_SEARCH_PATHS' => '"$(BUILT_PRODUCTS_DIR)/Pods"',
           # This makes categories from static libraries work, which many libraries
           # require, so we add these by default.
           'OTHER_LDFLAGS'            => '-ObjC -all_load',
@@ -81,7 +80,7 @@ module Pod
         # First add the target to the project
         @target = @project.targets.new_static_library(@definition.lib_name)
 
-        user_header_search_paths = []
+        header_search_paths = []
         build_specifications.each do |spec|
           xcconfig.merge!(spec.xcconfig)
           # Only add implementation files to the compile phase
@@ -97,9 +96,9 @@ module Pod
             end
           end
           # Collect all header search paths
-          user_header_search_paths.concat(spec.user_header_search_paths)
+          header_search_paths.concat(spec.header_search_paths)
         end
-        xcconfig.merge!('USER_HEADER_SEARCH_PATHS' => user_header_search_paths.sort.uniq.join(" "))
+        xcconfig.merge!('HEADER_SEARCH_PATHS' => header_search_paths.sort.uniq.join(" "))
 
         # Now that we have added all the source files and copy header phases,
         # move the compile build phase to the end, so that headers are copied

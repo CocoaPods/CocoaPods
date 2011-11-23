@@ -294,7 +294,7 @@ module Pod
     # includes the pod's header dir root and any other directories that might
     # have been added by overriding the copy_header_mapping/copy_header_mappings
     # methods.
-    def user_header_search_paths
+    def header_search_paths
       dirs = [header_dir] + copy_header_mappings.keys
       dirs.map { |dir| %{"$(BUILT_PRODUCTS_DIR)/Pods/#{dir}"} }
     end

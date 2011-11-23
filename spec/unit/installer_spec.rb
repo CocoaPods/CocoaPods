@@ -10,7 +10,7 @@ describe "Pod::Installer" do
     end
 
     it "sets the header search paths where installed Pod headers can be found" do
-      @xcconfig['USER_HEADER_SEARCH_PATHS'].should == '"$(BUILT_PRODUCTS_DIR)/Pods"'
+      @xcconfig['HEADER_SEARCH_PATHS'].should == '"$(BUILT_PRODUCTS_DIR)/Pods"'
       @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
     end
 
