@@ -432,6 +432,10 @@ module Pod
         top_level_parent.version
       end
 
+      def platform
+        top_level_parent.platform
+      end
+
       def source
         top_level_parent.source
       end

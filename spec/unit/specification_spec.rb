@@ -286,6 +286,7 @@ describe "A Pod::Specification subspec" do
     @spec = Pod::Spec.new do |s|
       s.name    = 'MainSpec'
       s.version = '1.2.3'
+      s.platform = :ios
       s.summary = 'A spec with subspecs'
       s.source  = { :git => '/some/url' }
       s.requires_arc = true
@@ -320,14 +321,10 @@ describe "A Pod::Specification subspec" do
   end
 
   it "automatically forwards undefined attributes to the top level parent" do
-    @spec.subspecs.first.summary.should        == @spec.summary
-    @spec.subspecs.first.source.should         == @spec.source
-    @spec.subspecs.first.requires_arc.should   == true
-    @spec.subspecs.first.compiler_flags.should == ' -fobjc-arc'
-    @spec.subspecs.first.subspecs.first.summary.should        == @spec.summary
-    @spec.subspecs.first.subspecs.first.source.should         == @spec.source
-    @spec.subspecs.first.subspecs.first.requires_arc.should   == true
-    @spec.subspecs.first.subspecs.first.compiler_flags.should == ' -fobjc-arc'
+    [:version, :summary, :platform, :requires_arc, :compiler_flags].each do |attr|
+      @spec.subspecs.first.send(attr).should == @spec.send(attr)
+      @spec.subspecs.first.subspecs.first.send(attr).should == @spec.send(attr)
+    end
   end
 
   it "returns subspecs by name" do
