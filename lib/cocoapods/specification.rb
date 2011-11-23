@@ -432,24 +432,9 @@ module Pod
         @summary ? @summary : top_level_parent.summary
       end
 
-      def version
-        top_level_parent.version
-      end
-
-      def platform
-        top_level_parent.platform
-      end
-
-      def source
-        top_level_parent.source
-      end
-
-      def defined_in_set
-        top_level_parent.defined_in_set
-      end
-
-      def requires_arc
-        top_level_parent.requires_arc
+      # Override the getters to always return the value of the top level parent spec.
+      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags, :defined_in_set].each do |attr|
+        define_method(attr) { top_level_parent.send(attr) }
       end
 
       def copy_header_mapping(from)

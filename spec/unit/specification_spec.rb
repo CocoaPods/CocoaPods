@@ -287,6 +287,8 @@ describe "A Pod::Specification subspec" do
       s.name    = 'MainSpec'
       s.version = '1.2.3'
       s.platform = :ios
+      s.license = 'MIT'
+      s.author = 'Joe the Plumber'
       s.summary = 'A spec with subspecs'
       s.source  = { :git => '/some/url' }
       s.requires_arc = true
@@ -328,7 +330,7 @@ describe "A Pod::Specification subspec" do
   end
 
   it "automatically forwards undefined attributes to the top level parent" do
-    [:version, :summary, :platform, :requires_arc, :compiler_flags].each do |attr|
+    [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags].each do |attr|
       @spec.subspecs.first.send(attr).should == @spec.send(attr)
       @spec.subspecs.first.subspecs.first.send(attr).should == @spec.send(attr)
     end
