@@ -20,6 +20,11 @@ describe "Pod::Source" do
     set.should == Pod::Spec::Set.by_pod_dir(config.repos_dir + 'repo2/JSONKit')
   end
 
+  it "returns a specification set by top level spec name" do
+    set = Pod::Source.search(Pod::Dependency.new('JSONKit/SomeSubspec'))
+    set.should == Pod::Spec::Set.by_pod_dir(config.repos_dir + 'repo2/JSONKit')
+  end
+
   it "raises if a specification set can't be found" do
     lambda {
       Pod::Source.search(Pod::Dependency.new('DoesNotExist'))

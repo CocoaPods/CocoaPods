@@ -36,6 +36,13 @@ module Pod
          (@specification ? @specification == other.specification : @external_spec_source == other.external_spec_source)
     end
 
+    # In case this is a dependency for a subspec, e.g. 'RestKit/Networking',
+    # this returns 'RestKit', which is what the Pod::Source needs to know to
+    # retrieve the correct Set from disk.
+    def top_level_spec_name
+      @name.include?('/') ? @name.split('/').first : @name
+    end
+
     def to_s
       version = ''
       if source = @external_spec_source

@@ -42,7 +42,7 @@ module Pod
     end
 
     def search(dependency)
-      pod_sets.find { |set| set.name == dependency.name }
+      pod_sets.find { |set| set.name == dependency.top_level_spec_name }
     end
 
     def search_by_name(query, full_text_search)
