@@ -1,16 +1,18 @@
 module Pod
   class Installer
     module Shared
-      def dependent_specification_sets
-        @dependent_specification_sets ||= Resolver.new(@podfile, @definition ? @definition.dependencies : nil).resolve
+      def dependent_specifications
+        @dependent_specifications ||= Resolver.new(@podfile, @definition ? @definition.dependencies : nil).resolve
       end
 
       def build_specifications
-        dependent_specification_sets.reject(&:only_part_of_other_pod?).map(&:specification)
+        dependent_specifications.reject do |spec|
+          spec.wrapper? || spec.defined_in_set.only_part_of_other_pod?
+        end
       end
 
       def download_only_specifications
-        dependent_specification_sets.select(&:only_part_of_other_pod?).map(&:specification)
+        dependent_specifications - build_specifications
       end
     end
 

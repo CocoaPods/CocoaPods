@@ -1,4 +1,3 @@
 platform :ios
 
-dependency 'RestKit-ObjectMapping'
-dependency 'RestKit-JSON-JSONKit'
+dependency 'RestKit/ObjectMapping/JSONKit'

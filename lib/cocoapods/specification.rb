@@ -21,9 +21,14 @@ module Pod
     attr_accessor :defined_in_file
 
     def initialize
-      @dependencies, @resources, @clean_paths = [], [], []
-      @xcconfig = Xcodeproj::Config.new
+      post_initialize
       yield self if block_given?
+    end
+
+    # TODO This is just to work around a MacRuby bug
+    def post_initialize
+      @dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
+      @xcconfig = Xcodeproj::Config.new
     end
 
     # Attributes
@@ -53,9 +58,12 @@ module Pod
 
     def summary=(summary)
       @summary = summary
-      @description ||= summary
     end
     attr_reader :summary
+
+    def description
+      @description || summary
+    end
 
     def part_of=(*name_and_version_requirements)
       self.part_of_dependency = *name_and_version_requirements
@@ -111,18 +119,13 @@ module Pod
     attr_writer :compiler_flags
     def compiler_flags
       flags = "#{@compiler_flags} "
-      flags << '-fobjc-arc' if @requires_arc
+      flags << '-fobjc-arc' if requires_arc
       flags
     end
-
-    # These are attributes which are also on a Podfile
 
     attr_accessor :platform
 
     attr_accessor :requires_arc
-
-    attr_accessor :generate_bridge_support
-    alias_method :generate_bridge_support?, :generate_bridge_support
 
     def dependency(*name_and_version_requirements)
       name, *version_requirements = name_and_version_requirements.flatten
@@ -132,18 +135,46 @@ module Pod
     end
     attr_reader :dependencies
 
+    def subspec(name, &block)
+      subspec = Subspec.new(self, name, &block)
+      @subspecs << subspec
+      subspec
+    end
+    attr_reader :subspecs
+
     # Not attributes
+
+    # TODO when we move to use a 'ResolveContext' this should happen there.
+    attr_accessor :defined_in_set
 
     include Config::Mixin
 
-    def ==(other)
-      self.class === other &&
-        name && name == other.name &&
-          version && version == other.version
+    def wrapper?
+      source_files.empty? && !subspecs.empty?
     end
 
-    def dependency_by_name(name)
-      @dependencies.find { |d| d.name == name }
+    def subspec_by_name(name)
+      # Remove this spec's name from the beginning of the name we’re looking for
+      # and take the first component from the remainder, which is the spec we need
+      # to find now.
+      remainder = name[self.name.size+1..-1].split('/')
+      subspec_name = remainder.shift
+      subspec = subspecs.find { |s| s.name == "#{self.name}/#{subspec_name}" }
+      # If this was the last component in the name, then return the subspec,
+      # otherwise we recursively keep calling subspec_by_name until we reach the
+      # last one and return that
+      remainder.empty? ? subspec : subspec.subspec_by_name(name)
+    end
+
+    def ==(other)
+      object_id == other.object_id ||
+        (self.class === other &&
+          name && name == other.name &&
+            version && version == other.version)
+    end
+
+    def dependency_by_top_level_spec_name(name)
+      @dependencies.find { |d| d.top_level_spec_name == name }
     end
 
     def part_of_specification_set
@@ -284,7 +315,9 @@ module Pod
       missing << "`homepage'"                   unless homepage
       missing << "`author(s)'"                  unless authors
       missing << "either `source' or `part_of'" unless source || part_of
-      missing << "`source_files'"               unless source_files
+      missing << "`source_files'"               if source_files.empty? && subspecs.empty?
+      # TODO
+      # * validate subspecs
 
       incorrect = []
       allowed = [nil, :ios, :osx]
@@ -361,6 +394,52 @@ module Pod
     #     end
     #   end
     def post_install(target)
+    end
+
+    class Subspec < Specification
+      attr_reader :parent
+
+      def initialize(parent, name)
+        @parent, @name = parent, name
+        # TODO a MacRuby bug, the correct super impl `initialize' is not called consistently
+        #super(&block)
+        post_initialize
+
+        # A subspec is _always_ part of the source of its top level spec.
+        self.part_of = top_level_parent.name, version
+        # A subspec has a dependency on the parent if the parent is a subspec too.
+        dependency(@parent.name, version) if @parent.is_a?(Subspec)
+
+        yield self if block_given?
+      end
+
+      undef_method :name=, :version=, :source=, :defined_in_set=
+
+      def top_level_parent
+        top_level_parent = @parent
+        top_level_parent = top_level_parent.parent while top_level_parent.is_a?(Subspec)
+        top_level_parent
+      end
+
+      def name
+        "#{@parent.name}/#{@name}"
+      end
+
+      # TODO manually forwarding the attributes that we have so far needed to forward,
+      # but need to think if there's a better way to do this.
+
+      def summary
+        @summary ? @summary : top_level_parent.summary
+      end
+
+      # Override the getters to always return the value of the top level parent spec.
+      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags, :defined_in_set].each do |attr|
+        define_method(attr) { top_level_parent.send(attr) }
+      end
+
+      def copy_header_mapping(from)
+        top_level_parent.copy_header_mapping(from)
+      end
     end
 
   end

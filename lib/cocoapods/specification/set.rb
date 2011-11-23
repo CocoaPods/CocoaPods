@@ -25,7 +25,7 @@ module Pod
       end
 
       def required_by(specification)
-        dependency = specification.dependency_by_name(name)
+        dependency = specification.dependency_by_top_level_spec_name(name)
         unless @required_by.empty? || dependency.requirement.satisfied_by?(required_version)
           # TODO add graph that shows which dependencies led to this.
           raise Informative, "#{specification} tries to activate `#{dependency}', " \
@@ -38,12 +38,12 @@ module Pod
 
       def dependency
         @required_by.inject(Dependency.new(name)) do |previous, spec|
-          previous.merge(spec.dependency_by_name(name))
+          previous.merge(spec.dependency_by_top_level_spec_name(name).to_top_level_spec_dependency)
         end
       end
 
       def only_part_of_other_pod?
-        @required_by.all? { |spec| spec.dependency_by_name(name).only_part_of_other_pod? }
+        @required_by.all? { |spec| spec.dependency_by_top_level_spec_name(name).only_part_of_other_pod? }
       end
 
       def name
@@ -55,7 +55,7 @@ module Pod
       end
 
       def specification
-        @specification ||= Specification.from_file(specification_path)
+        @specification ||= Specification.from_file(specification_path).tap { |spec| spec.defined_in_set = self }
       end
 
       # Return the first version that matches the current dependency.
@@ -85,6 +85,7 @@ module Pod
       class External < Set
         def initialize(specification)
           @specification = specification
+          @specification.defined_in_set = self
           @required_by = []
         end
 

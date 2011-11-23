@@ -14,15 +14,15 @@ describe "Pod::Podfile" do
   it "adds dependencies" do
     podfile = Pod::Podfile.new { dependency 'ASIHTTPRequest'; dependency 'SSZipArchive', '>= 0.1' }
     podfile.dependencies.size.should == 2
-    podfile.dependency_by_name('ASIHTTPRequest').should == Pod::Dependency.new('ASIHTTPRequest')
-    podfile.dependency_by_name('SSZipArchive').should == Pod::Dependency.new('SSZipArchive', '>= 0.1')
+    podfile.dependency_by_top_level_spec_name('ASIHTTPRequest').should == Pod::Dependency.new('ASIHTTPRequest')
+    podfile.dependency_by_top_level_spec_name('SSZipArchive').should == Pod::Dependency.new('SSZipArchive', '>= 0.1')
   end
 
   it "adds a dependency on a Pod repo outside of a spec repo (the repo is expected to contain a podspec)" do
     podfile = Pod::Podfile.new do
       dependency 'SomeExternalPod', :git => 'GIT-URL', :commit => '1234'
     end
-    dep = podfile.dependency_by_name('SomeExternalPod')
+    dep = podfile.dependency_by_top_level_spec_name('SomeExternalPod')
     dep.external_spec_source.should == { :git => 'GIT-URL', :commit => '1234' }
   end
 
@@ -30,7 +30,7 @@ describe "Pod::Podfile" do
     podfile = Pod::Podfile.new do
       dependency 'SomeExternalPod', :podspec => 'http://gist/SomeExternalPod.podspec'
     end
-    dep = podfile.dependency_by_name('SomeExternalPod')
+    dep = podfile.dependency_by_top_level_spec_name('SomeExternalPod')
     dep.external_spec_source.should == { :podspec => 'http://gist/SomeExternalPod.podspec' }
   end
 
@@ -40,7 +40,7 @@ describe "Pod::Podfile" do
         s.name = 'SomeExternalPod'
       end
     end
-    dep = podfile.dependency_by_name('SomeExternalPod')
+    dep = podfile.dependency_by_top_level_spec_name('SomeExternalPod')
     dep.specification.name.should == 'SomeExternalPod'
   end
 

@@ -222,8 +222,8 @@ module Pod
       @target_definitions.values.map(&:target_dependencies).flatten
     end
 
-    def dependency_by_name(name)
-      dependencies.find { |d| d.name == name }
+    def dependency_by_top_level_spec_name(name)
+      dependencies.find { |d| d.top_level_spec_name == name }
     end
 
     def generate_bridge_support?
