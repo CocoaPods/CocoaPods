@@ -19,11 +19,13 @@ module Pod
 
       def self.options
         "    --no-clean  Leave SCM dirs like `.git' and `.svn' in tact after downloading\n" +
+        "    --no-update Skip running `pod repo update` before install\n" +
         super
       end
 
       def initialize(argv)
         config.clean = !argv.option('--no-clean')
+        @update_repo = !argv.option('--no-update')
         @projpath = argv.shift_argument
         super unless argv.empty?
       end
@@ -34,6 +36,9 @@ module Pod
         end
         if @projpath && !File.exist?(@projpath)
           raise Informative, "The specified project `#{@projpath}' does not exist."
+        end
+        if @update_repo
+          Repo.new(ARGV.new(["update"])).run
         end
         installer = Installer.new(podfile)
         installer.install!
