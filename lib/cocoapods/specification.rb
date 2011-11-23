@@ -53,9 +53,12 @@ module Pod
 
     def summary=(summary)
       @summary = summary
-      @description ||= summary
     end
     attr_reader :summary
+
+    def description
+      @description || summary
+    end
 
     def part_of=(*name_and_version_requirements)
       self.part_of_dependency = *name_and_version_requirements
@@ -111,7 +114,7 @@ module Pod
     attr_writer :compiler_flags
     def compiler_flags
       flags = "#{@compiler_flags} "
-      flags << '-fobjc-arc' if @requires_arc
+      flags << '-fobjc-arc' if requires_arc
       flags
     end
 
@@ -127,14 +130,19 @@ module Pod
     end
     attr_reader :dependencies
 
-    # Subspec related
-
     def subspec(name, &block)
       subspec = Subspec.new(self, name, &block)
       @subspecs << subspec
       subspec
     end
     attr_reader :subspecs
+
+    # Not attributes
+
+    # TODO when we move to use a 'ResolveContext' this should happen there.
+    attr_accessor :defined_in_set
+
+    include Config::Mixin
 
     def subspec_by_name(name)
       # Remove this spec's name from the beginning of the name we’re looking for
@@ -148,19 +156,6 @@ module Pod
       # last one and return that
       remainder.empty? ? subspec : subspec.subspec_by_name(name)
     end
-
-    # These are attributes which are also on a Podfile
-    # TODO remove this, we no longer allow to install specs as Podfile
-
-    attr_accessor :generate_bridge_support
-    alias_method :generate_bridge_support?, :generate_bridge_support
-
-    # Not attributes
-
-    # TODO when we move to use a 'ResolveContext' this should happen there.
-    attr_accessor :defined_in_set
-
-    include Config::Mixin
 
     def ==(other)
       object_id == other.object_id ||
@@ -427,6 +422,10 @@ module Pod
 
       def defined_in_set
         top_level_parent.defined_in_set
+      end
+
+      def requires_arc
+        top_level_parent.requires_arc
       end
     end
 
