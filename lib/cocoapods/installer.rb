@@ -31,7 +31,7 @@ module Pod
           # In a workspace this is where the static library headers should be found.
           'PODS_ROOT' => '$(SRCROOT)/Pods',
           'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/Headers"',
-          'ALWAYS_SEARCH_USER_PATHS' => 'YES',
+          'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
           # This makes categories from static libraries work, which many libraries
           # require, so we add these by default.
           'OTHER_LDFLAGS'            => '-ObjC -all_load',
