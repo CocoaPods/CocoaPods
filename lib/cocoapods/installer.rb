@@ -78,7 +78,7 @@ module Pod
       end
 
       def headers_symlink_path_name
-        "Pods/Headers"
+        "#{config.project_pods_root}/Headers"
       end
 
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
@@ -102,7 +102,7 @@ module Pod
             FileUtils.mkdir_p(target_dir)
             target_dir_real_path = Pathname.new(target_dir).realpath
             files.each do |file|
-              source = Pathname.new("Pods/#{file}").realpath.relative_path_from(target_dir_real_path)
+              source = Pathname.new("#{config.project_pods_root}/#{file}").realpath.relative_path_from(target_dir_real_path)
               Dir.chdir(target_dir) do
                 FileUtils.ln_sf(source, File.basename(file))
               end
