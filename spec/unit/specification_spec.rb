@@ -209,8 +209,8 @@ describe "A Pod::Specification, with installed source," do
       Pathname.new('ns') + from.basename
     end
     @spec.header_search_paths.should == %w{
-      "$(BUILT_PRODUCTS_DIR)/Pods/SSZipArchive"
-      "$(BUILT_PRODUCTS_DIR)/Pods/SSZipArchive/ns"
+      "Pods/Headers/SSZipArchive"
+      "Pods/Headers/SSZipArchive/ns"
     }
   end
 
@@ -220,8 +220,8 @@ describe "A Pod::Specification, with installed source," do
       Pathname.new('ns') + from.basename
     end
     @spec.header_search_paths.should == %w{
-      "$(BUILT_PRODUCTS_DIR)/Pods/AnotherRoot"
-      "$(BUILT_PRODUCTS_DIR)/Pods/AnotherRoot/ns"
+      "Pods/Headers/AnotherRoot"
+      "Pods/Headers/AnotherRoot/ns"
     }
   end
 

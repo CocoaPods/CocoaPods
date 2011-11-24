@@ -296,7 +296,7 @@ module Pod
     # methods.
     def header_search_paths
       dirs = [header_dir] + copy_header_mappings.keys
-      dirs.map { |dir| %{"$(BUILT_PRODUCTS_DIR)/Pods/#{dir}"} }
+      dirs.map { |dir| %{"Pods/Headers/#{dir}"} }
     end
 
     def to_s

@@ -29,7 +29,7 @@ module Pod
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'HEADER_SEARCH_PATHS' => '"$(BUILT_PRODUCTS_DIR)/Pods"',
+          'HEADER_SEARCH_PATHS' => '"Pods/Headers"',
           # This makes categories from static libraries work, which many libraries
           # require, so we add these by default.
           'OTHER_LDFLAGS'            => '-ObjC -all_load',
@@ -75,10 +75,17 @@ module Pod
         "#{@definition.lib_name}-prefix.pch"
       end
 
+      def headers_symlink_path_name
+        "Pods/Headers"
+      end
+
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!
         # First add the target to the project
         @target = @project.targets.new_static_library(@definition.lib_name)
+
+        # Clean old header symlinks
+        FileUtils.rm_r(headers_symlink_path_name, :secure => true) if File.exists?(headers_symlink_path_name)
 
         header_search_paths = []
         build_specifications.each do |spec|
@@ -87,12 +94,14 @@ module Pod
           spec.implementation_files.each do |file|
             @target.add_source_file(file, nil, spec.compiler_flags)
           end
-          # Add header files to a `copy header build phase` for each destination
-          # directory in the pod's header directory.
+          # Symlink header files to Pods/Headers
           spec.copy_header_mappings.each do |header_dir, files|
-            copy_phase = @target.copy_files_build_phases.new_pod_dir(spec.name, header_dir)
-            files.each do |file|
-              @target.add_source_file(file, copy_phase)
+            target_dir = "#{headers_symlink_path_name}/#{header_dir}"
+            FileUtils.mkdir_p(target_dir)
+            Dir.chdir(target_dir) do
+              files.each do |file|
+                FileUtils.ln_s("../../#{file}", file.basename)
+              end
             end
           end
           # Collect all header search paths
