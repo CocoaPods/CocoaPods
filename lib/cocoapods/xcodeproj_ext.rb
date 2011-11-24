@@ -99,6 +99,7 @@ module Xcodeproj
     def self.build_settings(platform, scheme)
       settings = COMMON_BUILD_SETTINGS[:all].merge(COMMON_BUILD_SETTINGS[platform])
       settings['COPY_PHASE_STRIP'] = scheme == :debug ? 'NO' : 'YES'
+      settings['POD_SRCROOT'] = '$(SRCROOT)'
       if scheme == :debug
         settings.merge!(COMMON_BUILD_SETTINGS[:debug])
         settings['ONLY_ACTIVE_ARCH'] = 'YES' if platform == :osx

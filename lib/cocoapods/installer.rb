@@ -30,6 +30,7 @@ module Pod
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
           'HEADER_SEARCH_PATHS' => '"Pods/Headers"',
+          'ALWAYS_SEARCH_USER_PATHS' => 'YES',
           # This makes categories from static libraries work, which many libraries
           # require, so we add these by default.
           'OTHER_LDFLAGS'            => '-ObjC -all_load',
@@ -98,9 +99,11 @@ module Pod
           spec.copy_header_mappings.each do |header_dir, files|
             target_dir = "#{headers_symlink_path_name}/#{header_dir}"
             FileUtils.mkdir_p(target_dir)
-            Dir.chdir(target_dir) do
-              files.each do |file|
-                FileUtils.ln_s("../../#{file}", file.basename)
+            target_dir_real_path = Pathname.new(target_dir).realpath
+            files.each do |file|
+              source = Pathname.new("Pods/#{file}").realpath.relative_path_from(target_dir_real_path)
+              Dir.chdir(target_dir) do
+                FileUtils.ln_sf(source, File.basename(file))
               end
             end
           end
