@@ -29,8 +29,8 @@ module Pod
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'POD_SRCROOT' => '$(SRCROOT)/Pods',
-          'HEADER_SEARCH_PATHS' => '"$(POD_SRCROOT)/Headers"',
+          'PODS_ROOT' => '$(SRCROOT)/Pods',
+          'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/Headers"',
           'ALWAYS_SEARCH_USER_PATHS' => 'YES',
           # This makes categories from static libraries work, which many libraries
           # require, so we add these by default.
@@ -132,7 +132,7 @@ module Pod
           config.baseConfiguration = xcconfig_file
           config.buildSettings['OTHER_LDFLAGS'] = ''
           config.buildSettings['GCC_PREFIX_HEADER'] = prefix_header_filename
-          config.buildSettings['POD_SRCROOT'] = '$(SRCROOT)'
+          config.buildSettings['PODS_ROOT'] = '$(SRCROOT)'
         end
       end
 
