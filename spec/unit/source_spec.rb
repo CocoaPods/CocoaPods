@@ -15,14 +15,14 @@ describe "Pod::Source" do
 
   it "returns a specification set by name from any spec repo" do
     set = Pod::Source.search(Pod::Dependency.new('Reachability'))
-    set.should == Pod::Spec::Set.by_pod_dir(config.repos_dir + 'repo1/Reachability')
+    set.should == Pod::Spec::Set.new(config.repos_dir + 'repo1/Reachability')
     set = Pod::Source.search(Pod::Dependency.new('JSONKit'))
-    set.should == Pod::Spec::Set.by_pod_dir(config.repos_dir + 'repo2/JSONKit')
+    set.should == Pod::Spec::Set.new(config.repos_dir + 'repo2/JSONKit')
   end
 
   it "returns a specification set by top level spec name" do
     set = Pod::Source.search(Pod::Dependency.new('RestKit/Network'))
-    set.should == Pod::Spec::Set.by_pod_dir(config.repos_dir + 'repo1/RestKit')
+    set.should == Pod::Spec::Set.new(config.repos_dir + 'repo1/RestKit')
   end
 
   it "raises if a specification set can't be found" do

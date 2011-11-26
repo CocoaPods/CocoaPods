@@ -3,14 +3,14 @@ module Pod
     autoload :TargetInstaller, 'cocoapods/installer/target_installer'
 
     include Config::Mixin
-    
+
     attr_reader :sandbox
 
     def initialize(podfile)
       @podfile = podfile
-      
       # FIXME: pass this into the installer as a parameter
       @sandbox = Sandbox.new(config.project_pods_root)
+      @resolver = Resolver.new(@podfile, @sandbox)
     end
 
     def lock_file
@@ -22,8 +22,8 @@ module Pod
       @project = Pod::Project.for_platform(@podfile.platform)
       # First we need to resolve dependencies across *all* targets, so that the
       # same correct versions of pods are being used for all targets. This
-      # happens when we call `build_specifications'.
-      build_specifications.each do |spec|
+      # happens when we call `activated_specifications'.
+      activated_specifications.each do |spec|
         # Add all source files to the project grouped by pod
         group = @project.add_pod_group(spec.name)
         spec.expanded_source_files.each do |path|
@@ -42,7 +42,7 @@ module Pod
     end
 
     def install_dependencies!
-      build_specifications.map do |spec|
+      activated_specifications.map do |spec|
         LocalPod.new(spec, sandbox).tap do |pod|
           if pod.exists? || spec.local?
             puts "Using #{pod}" unless config.silent?
@@ -63,17 +63,17 @@ module Pod
 
     def install!
       @sandbox.prepare_for_install
-      
+
       puts "Installing dependencies of: #{@podfile.defined_in_file}" if config.verbose?
       pods = install_dependencies!
 
       puts "Generating support files" unless config.silent?
       target_installers.each do |target_installer|
-        target_specs = build_specifications_for_target(target_installer.target_definition)
+        target_specs = activated_specifications_for_target(target_installer.target_definition)
         pods_for_target = pods.select { |pod| target_specs.include?(pod.specification) }
         target_installer.install!(pods_for_target, sandbox)
       end
-      
+
       generate_lock_file!(pods)
 
       puts "* Running post install hooks" if config.verbose?
@@ -83,17 +83,16 @@ module Pod
       puts "* Writing Xcode project file to `#{@sandbox.project_path}'" if config.verbose?
       project.save_as(@sandbox.project_path)
     end
-    
+
     def run_post_install_hooks
       # we loop over target installers instead of pods, because we yield the target installer
       # to the spec post install hook.
-      
       target_installers.each do |target_installer|
-        build_specifications_for_target(target_installer.target_definition).each do |spec|    
+        activated_specifications_for_target(target_installer.target_definition).each do |spec|
           spec.post_install(target_installer)
         end
       end
-      
+
       @podfile.post_install!(self)
     end
 
@@ -126,27 +125,29 @@ module Pod
         end
       end
     end
-    
+
     def dependent_specifications_for_each_target_definition
-      @dependent_specifications_for_each_target_definition ||= Resolver.new(@podfile, @sandbox).resolve
+      @dependent_specifications_for_each_target_definition ||= @resolver.resolve
     end
-    
+
     def dependent_specifications
       dependent_specifications_for_each_target_definition.values.flatten
     end
 
-    def build_specifications
+    def activated_specifications
       dependent_specifications.reject do |spec|
-        spec.wrapper? || spec.defined_in_set.only_part_of_other_pod?
+        # Don't activate specs which are only wrappers of subspecs, or share
+        # source with another pod but aren't activated themselves.
+        spec.wrapper? || @resolver.context.sets[spec.name].only_part_of_other_pod?
       end
     end
-    
-    def build_specifications_for_target(target_definition)
+
+    def activated_specifications_for_target(target_definition)
       dependent_specifications_for_each_target_definition[target_definition]
     end
 
     def download_only_specifications
-      dependent_specifications - build_specifications
+      dependent_specifications - activated_specifications
     end
   end
 end

@@ -1,29 +1,43 @@
 module Pod
   class Source
-    def self.all
-      @sources ||= begin
-        repos_dir = Config.instance.repos_dir
-        unless repos_dir.exist?
-          raise Informative, "No spec repos found in `#{repos_dir}'. " \
-                             "To fetch the `master' repo run: $ pod setup"
+    class Aggregate
+      def all
+        @sources ||= begin
+          repos_dir = Config.instance.repos_dir
+          unless repos_dir.exist?
+            raise Informative, "No spec repos found in `#{repos_dir}'. " \
+                               "To fetch the `master' repo run: $ pod setup"
+          end
+          repos_dir.children.select(&:directory?).map { |repo| Source.new(repo) }
         end
-        repos_dir.children.select(&:directory?).map { |repo| new(repo) }
       end
+
+      def search(dependency)
+        all.map { |s| s.search(dependency) }.compact.first ||
+          raise(Informative, "Unable to find a pod named `#{dependency.name}'")
+      end
+
+      def search_by_name(query, full_text_search)
+        result = all.map { |s| s.search_by_name(query, full_text_search) }.flatten
+        if result.empty?
+          extra = ", summary, or description" if full_text_search
+          raise(Informative, "Unable to find a pod with name" \
+                             "#{extra} matching `#{query}'")
+        end
+        result
+      end
+    end
+
+    def self.all
+      Aggregate.new.all
     end
 
     def self.search(dependency)
-      all.map { |s| s.search(dependency) }.compact.first ||
-        raise(Informative, "Unable to find a pod named `#{dependency.name}'")
+      Aggregate.new.search(dependency)
     end
 
-    def self.search_by_name(query, full_text_search)
-      result = all.map { |s| s.search_by_name(query, full_text_search) }.flatten
-      if result.empty?
-        extra = ", summary, or description" if full_text_search
-        raise(Informative, "Unable to find a pod with name" \
-                           "#{extra} matching `#{query}'")
-      end
-      result
+    def self.search_by_name(name, full_text_search)
+      Aggregate.new.search_by_name(name, full_text_search)
     end
 
     attr_reader :repo
@@ -35,7 +49,7 @@ module Pod
     def pod_sets
       @repo.children.map do |child|
         if child.directory? && child.basename.to_s != '.git'
-          Specification::Set.by_pod_dir(child)
+          Specification::Set.new(child)
         end
       end.compact
     end

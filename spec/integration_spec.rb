@@ -244,7 +244,7 @@ else
 
         installer = SpecHelper::Installer.new(spec)
         target_definition = installer.target_installers.first.target_definition
-        installer.build_specifications_for_target(target_definition).first.resources = 'LICEN*', 'Readme.*'
+        installer.activated_specifications_for_target(target_definition).first.resources = 'LICEN*', 'Readme.*'
         installer.install!
 
         contents = (config.project_pods_root + 'Pods-resources.sh').read

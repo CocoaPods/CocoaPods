@@ -7,22 +7,9 @@ class Pod::Spec::Set
 end
 
 describe "Pod::Specification::Set" do
-  it "returns nil in case a set hasn't been resolved yet" do
-    Pod::Spec::Set.reset!
-    Pod::Spec::Set.by_specification_name('CocoaLumberjack').should == nil
-  end
-
   before do
-    @set = Pod::Spec::Set.by_pod_dir(fixture('spec-repos/master/CocoaLumberjack'))
+    @set = Pod::Spec::Set.new(fixture('spec-repos/master/CocoaLumberjack'))
     @set.reset!
-  end
-
-  it "returns a cached set by name once it has been resolved once" do
-    Pod::Spec::Set.by_specification_name('CocoaLumberjack').should.eql @set
-  end
-
-  it "always returns the same set instance for a pod dir" do
-    Pod::Spec::Set.by_pod_dir(fixture('spec-repos/master/CocoaLumberjack')).should.eql @set
   end
 
   it "returns the name of the pod" do

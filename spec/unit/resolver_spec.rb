@@ -10,7 +10,7 @@ class StubbedSet < Pod::Specification::Set
   end
 end
 
-class StubbedResolver < Pod::Resolver
+class StubbedContext < Pod::Resolver::Context
   attr_accessor :stub_platform
 
   def find_dependency_set(dependency)
@@ -38,6 +38,16 @@ describe "Pod::Resolver" do
     Pod::Config.instance = @config_before
   end
 
+  it "has a ResolveContext which holds global state, such as cached specification sets" do
+    resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
+    resolver.resolve
+    resolver.context.sets.values.sort_by(&:name).should == [
+      Pod::Spec::Set.new(config.repos_dir + 'master/ASIHTTPRequest'),
+      Pod::Spec::Set.new(config.repos_dir + 'master/ASIWebPageRequest'),
+      Pod::Spec::Set.new(config.repos_dir + 'master/Reachability'),
+    ].sort_by(&:name)
+  end
+
   it "returns all specs needed for the dependency" do
     specs = Pod::Resolver.new(@podfile, stub('sandbox')).resolve.values.flatten
     specs.map(&:class).uniq.should == [Pod::Specification]
@@ -54,18 +64,19 @@ describe "Pod::Resolver" do
   end
 
   it "raises once any of the dependencies does not match the platform of the root spec (Podfile)" do
-    resolver = StubbedResolver.new(config.rootspec, stub('sandbox'))
+    resolver = Pod::Resolver.new(config.rootspec, stub('sandbox'))
+    context = resolver.context = StubbedContext.new(resolver.sandbox)
 
     @podfile.platform :ios
-    resolver.stub_platform = :ios
+    context.stub_platform = :ios
     lambda { resolver.resolve }.should.not.raise
-    resolver.stub_platform = :osx
+    context.stub_platform = :osx
     lambda { resolver.resolve }.should.raise Pod::Informative
 
     @podfile.platform :osx
-    resolver.stub_platform = :osx
+    context.stub_platform = :osx
     lambda { resolver.resolve }.should.not.raise
-    resolver.stub_platform = :ios
+    context.stub_platform = :ios
     lambda { resolver.resolve }.should.raise Pod::Informative
   end
 
@@ -77,7 +88,13 @@ describe "Pod::Resolver" do
     end
     config.rootspec = @podfile
     resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
-    resolver.resolve.values.flatten.map(&:name).sort.should == %w{ LibComponentLogging-Core LibComponentLogging-NSLog RestKit RestKit/Network RestKit/ObjectMapping }
+    resolver.resolve.values.flatten.map(&:name).sort.should == %w{
+      LibComponentLogging-Core
+      LibComponentLogging-NSLog
+      RestKit
+      RestKit/Network
+      RestKit/ObjectMapping
+    }
   end
 end
 

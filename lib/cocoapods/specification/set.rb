@@ -1,22 +1,6 @@
 module Pod
   class Specification
     class Set
-      def self.sets
-        @sets ||= {}
-      end
-
-      def self.by_specification_name(name)
-        sets[name]
-      end
-
-      # This keeps an identity map of sets so that you always get the same Set
-      # instance for the same pod directory.
-      def self.by_pod_dir(pod_dir)
-        set = new(pod_dir)
-        sets[set.name] ||= set
-        sets[set.name]
-      end
-
       attr_reader :pod_dir
 
       def initialize(pod_dir)
@@ -56,7 +40,7 @@ module Pod
       end
 
       def specification
-        @specification ||= Specification.from_file(specification_path).tap { |spec| spec.defined_in_set = self }
+        @specification ||= Specification.from_file(specification_path)
       end
 
       # Return the first version that matches the current dependency.
@@ -86,7 +70,6 @@ module Pod
       class External < Set
         def initialize(specification)
           @specification = specification
-          @specification.defined_in_set = self
           @required_by = []
         end
 

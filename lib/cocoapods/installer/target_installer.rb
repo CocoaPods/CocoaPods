@@ -54,7 +54,7 @@ module Pod
       def prefix_header_filename
         "#{@target_definition.lib_name}-prefix.pch"
       end
-      
+
       def target_support_files
         [copy_resources_filename, prefix_header_filename, xcconfig_filename]
       end
@@ -82,7 +82,7 @@ module Pod
         configure_build_configurations(xcconfig_file)
         create_files(pods, sandbox)
       end
-      
+
       def configure_build_configurations(xcconfig_file)
         @target.build_configurations.each do |config|
           config.base_configuration = xcconfig_file

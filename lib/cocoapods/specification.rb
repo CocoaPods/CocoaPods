@@ -150,9 +150,6 @@ module Pod
 
     # Not attributes
 
-    # TODO when we move to use a 'ResolveContext' this should happen there.
-    attr_accessor :defined_in_set
-
     include Config::Mixin
     
     def local?
@@ -162,6 +159,10 @@ module Pod
     def local_path
       Pathname.new(File.expand_path(source[:local]))
     end
+
+    # This is assigned the other spec, of which this pod's source is a part, by
+    # a Resolver.
+    attr_accessor :part_of_specification
 
     def wrapper?
       source_files.empty? && !subspecs.empty?
@@ -189,17 +190,6 @@ module Pod
 
     def dependency_by_top_level_spec_name(name)
       @dependencies.find { |d| d.top_level_spec_name == name }
-    end
-
-    def part_of_specification_set
-      if part_of
-        Set.by_specification_name(part_of.name)
-      end
-    end
-
-    # Returns the specification for the pod that this pod's source is a part of.
-    def part_of_specification
-      (set = part_of_specification_set) && set.specification
     end
 
     def pod_destroot
@@ -368,7 +358,7 @@ module Pod
         yield self if block_given?
       end
 
-      undef_method :name=, :version=, :source=, :defined_in_set=
+      undef_method :name=, :version=, :source=
 
       def top_level_parent
         top_level_parent = @parent
@@ -388,7 +378,7 @@ module Pod
       end
 
       # Override the getters to always return the value of the top level parent spec.
-      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags, :defined_in_set].each do |attr|
+      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags].each do |attr|
         define_method(attr) { top_level_parent.send(attr) }
       end
 
