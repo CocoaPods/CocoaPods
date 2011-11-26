@@ -333,34 +333,6 @@ module Pod
 
     # Install and download hooks
 
-    # Override this if you need to perform work before or after activating the
-    # pod. Eg:
-    #
-    #   Pod::Spec.new do |s|
-    #     def s.install!
-    #       # pre-install
-    #       super
-    #       # post-install
-    #     end
-    #   end
-    #
-    # TODO Do we really need this now that we don’t install the podspec files anymore?
-    def install!
-      puts "==> Installing: #{self}" unless config.silent?
-      # In case this spec is part of another pod's source, we need to dowload
-      # the other pod's source.
-      (part_of_specification || self).download_if_necessary!
-    end
-
-    def download_if_necessary!
-      if pod_destroot.exist?
-        puts "  * Skipping download of #{self}, pod already downloaded" unless config.silent?
-      else
-        puts "  * Downloading: #{self}" unless config.silent?
-        download!
-      end
-    end
-
     # Downloads the source of the pod and places it in the project's pods
     # directory.
     #
@@ -375,9 +347,13 @@ module Pod
     #     end
     #   end
     def download!
-      downloader = Downloader.for_source(pod_destroot, source)
-      downloader.download
-      downloader.clean(expanded_clean_paths) if config.clean
+      if spec = part_of_specification
+        spec.download!
+      else
+        downloader = Downloader.for_source(pod_destroot, source)
+        downloader.download
+        downloader.clean(expanded_clean_paths) if config.clean
+      end
     end
 
     # This is a convenience method which gets called after all pods have been

@@ -182,9 +182,20 @@ module Pod
       end.compact
     end
 
+    def install_dependencies!
+      build_specifications.each do |spec|
+        if spec.pod_destroot.exist?
+          puts "Using #{spec}" unless config.silent?
+        else
+          puts "Installing #{spec}" unless config.silent?
+          spec.download!
+        end
+      end
+    end
+
     def install!
       puts "Installing dependencies of: #{@podfile.defined_in_file}" unless config.silent?
-      build_specifications.each(&:install!)
+      install_dependencies!
       root = config.project_pods_root
 
       puts "==> Generating support files" unless config.silent?
