@@ -331,31 +331,6 @@ module Pod
       end
     end
 
-    # Install and download hooks
-
-    # Downloads the source of the pod and places it in the project's pods
-    # directory.
-    #
-    # Override this if you need to perform work before or after downloading the
-    # pod, or if you need to implement custom dowloading. Eg:
-    #
-    #   Pod::Spec.new do |s|
-    #     def s.download!
-    #       # pre-download
-    #       super # or custom downloading
-    #       # post-download
-    #     end
-    #   end
-    def download!
-      if spec = part_of_specification
-        spec.download!
-      else
-        downloader = Downloader.for_source(pod_destroot, source)
-        downloader.download
-        downloader.clean(expanded_clean_paths) if config.clean
-      end
-    end
-
     # This is a convenience method which gets called after all pods have been
     # downloaded, installed, and the Xcode project and related files have been
     # generated. (It receives the Pod::Installer::Target instance for the current
