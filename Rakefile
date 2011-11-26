@@ -38,12 +38,47 @@ task :clean do
   sh "rm -f *.gem"
 end
 
-desc "Install a gem version of the current code"
-task :install do
-  require 'lib/cocoapods'
-  sh "gem build cocoapods.gemspec"
-  sh "sudo macgem install cocoapods-#{Pod::VERSION}.gem"
-  sh "sudo macgem compile cocoapods"
+namespace :gem do
+  def gem_version
+    require 'lib/cocoapods'
+    Pod::VERSION
+  end
+
+  def gem_filename
+    "cocoapods-#{Pod::VERSION}.gem"
+  end
+
+  desc "Build a gem for the current version"
+  task :build do
+    sh "gem build cocoapods.gemspec"
+  end
+
+  desc "Install a gem version of the current code"
+  task :install => :build do
+    sh "sudo macgem install #{gem_filename}"
+    #sh "sudo macgem compile cocoapods"
+  end
+
+  desc "Build and install gem, then commit version change, tag it, and push everything"
+  task :release do
+    puts "You are about to release `#{gem_version}', is that correct? [y/n]"
+    exit if STDIN.gets.strip.downcase != 'y'
+    lines = `git diff --numstat`.strip.split("\n")
+    if lines.size == 0
+      puts "Change the version number yourself in lib/cocoapods.rb"
+    elsif lines.size == 1 && lines.first.include?('lib/cocoapods.rb')
+      # First see if the gem builds and installs
+      Rake::Task['gem:install'].invoke
+      # Then release
+      `git commit lib/cocoapods.rb -m 'Release #{gem_version}'`
+      `git tag -a #{gem_version} -m 'Release #{gem_version}'`
+      `git push origin master`
+      `git push --tags`
+      `gem push #{gem_filename}`
+    else
+      puts "Only change the version number in a release commit!"
+    end
+  end
 end
 
 namespace :spec do
@@ -127,41 +162,6 @@ namespace :examples do
       puts
     end
   end
-end
-
-desc "Build all examples"
-task :build_examples => 'examples:build'
-
-desc "Dumps a Xcode project as YAML, meant for diffing"
-task :dump_xcodeproj do
-  require 'yaml'
-  hash = NSDictionary.dictionaryWithContentsOfFile(File.join(ENV['xcodeproj'], 'project.pbxproj'))
-  objects = hash['objects']
-  result = objects.values.map do |object|
-    if children = object['children']
-      object['children'] = children.map do |uuid|
-        child = objects[uuid]
-        child['path'] || child['name']
-      end.sort
-    elsif files = object['files']
-      object['files'] = files.map do |uuid|
-        build_file = objects[uuid]
-        file = objects[build_file['fileRef']]
-        file['path']
-      end
-    elsif file_ref = object['fileRef']
-      file = objects[file_ref]
-      object['file'] = file['path']
-    end
-    object
-  end
-  result.each do |object|
-    object.delete('fileRef')
-  end
-  result = result.sort_by do |object|
-    [object['isa'], object['file'], object['path'], object['name']].compact
-  end
-  puts result.to_yaml
 end
 
 desc "Run all specs"
