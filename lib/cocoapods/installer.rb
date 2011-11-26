@@ -69,11 +69,11 @@ module Pod
     end
 
     def install!
-      puts "Installing dependencies of: #{@podfile.defined_in_file}" unless config.silent?
+      puts "Installing dependencies of: #{@podfile.defined_in_file}" if config.verbose?
       install_dependencies!
       root = config.project_pods_root
 
-      puts "Generating support files..." unless config.silent?
+      puts "Generating support files" unless config.silent?
       target_installers.each do |target_installer|
         target_installer.install!
         target_installer.create_files_in(root)

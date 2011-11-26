@@ -121,12 +121,16 @@ module Pod
       end
 
       def create_files_in(root)
-        xcconfig.save_as(root + xcconfig_filename)
         if @podfile.generate_bridge_support?
+          puts "* Generating BridgeSupport metadata file at `#{root + bridge_support_filename}'" if config.verbose?
           bridge_support_generator.save_as(root + bridge_support_filename)
           copy_resources_script.resources << bridge_support_filename
         end
+        puts "* Generating xcconfig file at `#{root + xcconfig_filename}'" if config.verbose?
+        xcconfig.save_as(root + xcconfig_filename)
+        puts "* Generating prefix header at `#{root + prefix_header_filename}'" if config.verbose?
         save_prefix_header_as(root + prefix_header_filename)
+        puts "* Generating copy resources script at `#{root + copy_resources_filename}'" if config.verbose?
         copy_resources_script.save_as(root + copy_resources_filename)
       end
     end
