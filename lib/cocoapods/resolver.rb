@@ -7,7 +7,7 @@ module Pod
     def resolve
       @sets, @loaded_spec_names, @specs = [], [], []
       find_dependency_sets(@specification, @dependencies)
-      @specs
+      @specs.sort_by(&:name)
     end
 
     def find_dependency_sets(specification, dependencies = nil)
