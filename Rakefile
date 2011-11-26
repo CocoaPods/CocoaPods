@@ -70,11 +70,11 @@ namespace :gem do
       # First see if the gem builds and installs
       Rake::Task['gem:install'].invoke
       # Then release
-      `git commit lib/cocoapods.rb -m 'Release #{gem_version}'`
-      `git tag -a #{gem_version} -m 'Release #{gem_version}'`
-      `git push origin master`
-      `git push --tags`
-      `gem push #{gem_filename}`
+      sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
+      sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
+      sh "git push origin master"
+      sh "git push --tags"
+      sh "gem push #{gem_filename}"
     else
       puts "Only change the version number in a release commit!"
     end
