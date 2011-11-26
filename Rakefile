@@ -59,7 +59,7 @@ namespace :gem do
     #sh "sudo macgem compile cocoapods"
   end
 
-  desc "Build and install gem, then commit version change, tag it, and push everything"
+  desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
   task :release do
     puts "You are about to release `#{gem_version}', is that correct? [y/n]"
     exit if STDIN.gets.strip.downcase != 'y'
@@ -67,7 +67,8 @@ namespace :gem do
     if lines.size == 0
       puts "Change the version number yourself in lib/cocoapods.rb"
     elsif lines.size == 1 && lines.first.include?('lib/cocoapods.rb')
-      # First see if the gem builds and installs
+      # First see if the specs pass and gem builds and installs
+      Rake::Task['spec:all'].invoke
       Rake::Task['gem:install'].invoke
       # Then release
       sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
