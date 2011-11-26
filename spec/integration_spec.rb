@@ -296,11 +296,30 @@ else
         installer = Pod::Installer.new(podfile)
         installer.install!
 
-        #project = Pod::Xcode::Project.new(config.project_pods_root + 'Pods.xcodeproj')
-        #p project
-        #project.targets.each do |target|
-          #target.source_build_phases.
-        #end
+        project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
+        project.targets.each do |target|
+          #target.source_build_phase
+          phase = target.buildPhases.find { |phase| phase.is_a?(Xcodeproj::Project::PBXSourcesBuildPhase) }
+          files = phase.files.map(&:file).map(&:name)
+          p target.productName
+          p files
+          case target.productName
+          when 'Pods'
+            files.should.include "ASIHTTPRequest.m"
+            files.should.not.include "SSZipArchive.m"
+            files.should.not.include "JSONKit.m"
+          when 'Pods-debug'
+            files.should.include "ASIHTTPRequest.m"
+            files.should.include "SSZipArchive.m"
+            files.should.not.include "JSONKit.m"
+          when 'Pods-test'
+            files.should.not.include "ASIHTTPRequest.m"
+            files.should.not.include "SSZipArchive.m"
+            files.should.include "JSONKit.m"
+          else
+            raise "ohnoes"
+          end
+        end
 
         root = config.project_pods_root
         (root + 'Pods.xcconfig').should.exist
