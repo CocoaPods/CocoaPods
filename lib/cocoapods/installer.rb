@@ -17,6 +17,11 @@ module Pod
       config.project_root + 'Podfile.lock'
     end
 
+    def dependency_specifications
+      # Resolve *all* dependencies first.
+      @dependency_specifications ||= @resolver.resolve
+    end
+
     def project
       return @project if @project
       @project = Pod::Project.for_platform(@podfile.platform)
@@ -126,28 +131,28 @@ module Pod
       end
     end
 
-    def dependent_specifications_for_each_target_definition
-      @dependent_specifications_for_each_target_definition ||= @resolver.resolve
+    def dependency_specifications_for_each_target_definition
+      @dependency_specifications_for_each_target_definition ||= @resolver.resolve
     end
 
-    def dependent_specifications
-      dependent_specifications_for_each_target_definition.values.flatten
+    def dependency_specifications
+      dependency_specifications_for_each_target_definition.values.flatten
     end
 
     def activated_specifications
-      dependent_specifications.reject do |spec|
+      dependency_specifications.reject do |spec|
         # Don't activate specs which are only wrappers of subspecs, or share
         # source with another pod but aren't activated themselves.
-        spec.wrapper? || @resolver.context.sets[spec.name].only_part_of_other_pod?
+        spec.wrapper? || @resolver.cached_sets[spec.name].only_part_of_other_pod?
       end
     end
 
     def activated_specifications_for_target(target_definition)
-      dependent_specifications_for_each_target_definition[target_definition]
+      dependency_specifications_for_each_target_definition[target_definition]
     end
 
     def download_only_specifications
-      dependent_specifications - activated_specifications
+      dependency_specifications - activated_specifications
     end
   end
 end
