@@ -2,7 +2,6 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Resolver" do
   before do
-    Pod::Spec::Set.reset!
     @config_before = config
     Pod::Config.instance = nil
     config.silent = true

@@ -1,15 +1,8 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
-class Pod::Spec::Set
-  def reset!
-    @required_by = []
-  end
-end
-
 describe "Pod::Specification::Set" do
   before do
     @set = Pod::Spec::Set.new(fixture('spec-repos/master/CocoaLumberjack'))
-    @set.reset!
   end
 
   it "returns the name of the pod" do
@@ -36,6 +29,12 @@ describe "Pod::Specification::Set" do
     lambda { @set.required_version }.should.raise Pod::Informative
   end
 
+  it "returns that this set is only part for other pods" do
+    @set.required_by(Pod::Spec.new { |s| s.part_of = 'CocoaLumberjack' })
+    @set.required_by(Pod::Spec.new { |s| s.part_of = 'CocoaLumberjack' })
+    @set.should.be.only_part_of_other_pod
+  end
+
   before do
     @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack', '< 1.2.1' })
   end
@@ -55,13 +54,6 @@ describe "Pod::Specification::Set" do
   it "returns that this set is not only part for other pods" do
     @set.required_by(Pod::Spec.new { |s| s.part_of = 'CocoaLumberjack' })
     @set.should.not.be.only_part_of_other_pod
-  end
-
-  it "returns that this set is only part for other pods" do
-    @set.reset!
-    @set.required_by(Pod::Spec.new { |s| s.part_of = 'CocoaLumberjack' })
-    @set.required_by(Pod::Spec.new { |s| s.part_of = 'CocoaLumberjack' })
-    @set.should.be.only_part_of_other_pod
   end
 
   it "ignores dotfiles when getting the version directories" do

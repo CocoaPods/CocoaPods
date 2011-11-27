@@ -5,8 +5,6 @@ describe "Pod::Source" do
   extend SpecHelper::TemporaryDirectory
 
   before do
-    Pod::Source.reset!
-    Pod::Spec::Set.reset!
     add_repo('repo1', fixture('spec-repos/master'))
     (config.repos_dir + 'repo1/JSONKit').rmtree
     add_repo('repo2', fixture('spec-repos/master'))

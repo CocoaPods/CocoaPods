@@ -30,18 +30,6 @@ config = Pod::Config.instance
 config.silent = true
 config.repos_dir = SpecHelper.tmp_repos_path
 
-class Pod::Source
-  def self.reset!
-    @sources = nil
-  end
-end
-
-class Pod::Spec::Set
-  def self.reset!
-    @sets = nil
-  end
-end
-
 require 'tmpdir'
 
 def temporary_sandbox
@@ -57,6 +45,5 @@ def copy_fixture_to_pod(name, pod)
   path = SpecHelper::Fixture.fixture(name)
   FileUtils.cp_r(path, pod.root)
 end
-
 
 SpecHelper::Fixture.fixture('banana-lib') # ensure it exists
