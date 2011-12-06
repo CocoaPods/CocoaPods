@@ -80,6 +80,11 @@ Follow [@CocoaPodsOrg](http://twitter.com/CocoaPodsOrg) to get up to date inform
 If you're really oldschool and you want to discuss CocoaPods development you can join #cocoapods on irc.freenode.net.
 
 
+# Donations
+
+* [@fngtps](http://twitter.com/fngtps) is donating time to work on the design of the forthcoming cocoapods.org website and donated the money to hire [Max Steenbergen](http://twitter.com/maxsteenbergen) to design [an icon](http://drbl.in/cpmL) for it.
+* [@sauspiel](http://twitter.com/Sauspiel) uses CocoaPods for their games and have hired me to add features and specs they needed. These are Nimbus, QuincyKit, and HockeyKit. For the [Nimbus spec](https://github.com/CocoaPods/Specs/blob/master/Nimbus/0.9.0/Nimbus.podspec), the ‘subspecs’ feature was added.
+
 # Endorsements
 
 * “I am crazy excited about this. With the growing number of Objective-C libraries, this will make things so much better.” –– [Sam Soffes](http://news.ycombinator.com/item?id=3009154)
