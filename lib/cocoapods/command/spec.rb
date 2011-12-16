@@ -32,7 +32,7 @@ module Pod
         email = `git config --get user.email`.strip
         spec = <<-SPEC.gsub(/^          /, '')
           #
-          # Be sure to run `pod lint #{@name}.podspec' to ensure this is a
+          # Be sure to run `pod spec lint #{@name}.podspec' to ensure this is a
           # valid spec.
           #
           # Remove all comments before submitting the spec.
