@@ -13,10 +13,12 @@ module Pod
       end
 
       def run
-        Source.search_by_name('', false).each do |set|
-          puts "==> #{set.name} (#{set.versions.reverse.join(", ")})"
-          puts "    #{set.specification.summary.strip}"
-          puts
+        Source.all.each do |source|
+          source.pod_sets.each do |set|
+            puts "==> #{set.name} (#{set.versions.reverse.join(", ")})"
+            puts "    #{set.specification.summary.strip}"
+            puts
+          end
         end
       end
     end
