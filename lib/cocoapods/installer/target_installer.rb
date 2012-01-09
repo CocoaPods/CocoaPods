@@ -4,6 +4,10 @@ module Pod
       include Config::Mixin
       include Shared
 
+      class << self
+        attr_accessor :old_headers_cleaned
+      end
+
       attr_reader :podfile, :project, :definition, :target
 
       def initialize(podfile, project, definition)
@@ -65,13 +69,24 @@ module Pod
         "#{config.project_pods_root}/Headers"
       end
 
+      def clean_old_header_symlinks?
+        self.class.old_headers_cleaned
+      end
+
+      def clean_old_header_symlinks
+        self.class.old_headers_cleaned = true
+      end
+
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!
         # First add the target to the project
         @target = @project.targets.new_static_library(@definition.lib_name)
 
         # Clean old header symlinks
-        FileUtils.rm_r(headers_symlink_path_name, :secure => true) if File.exists?(headers_symlink_path_name)
+        unless clean_old_header_symlinks?
+          FileUtils.rm_r(headers_symlink_path_name, :secure => true) if File.exist?(headers_symlink_path_name)
+          clean_old_header_symlinks
+        end
 
         header_search_paths = []
         build_specifications.each do |spec|
