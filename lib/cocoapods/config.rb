@@ -40,6 +40,10 @@ module Pod
       @project_podfile
     end
 
+    def headers_symlink_root
+      @headers_symlink_root ||= "#{project_pods_root}/Headers"
+    end
+
     # Returns the spec at the pat returned from `project_podfile`.
     def rootspec
       unless @rootspec
