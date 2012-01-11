@@ -337,6 +337,33 @@ else
         end
       end
 
+      it "should prevent duplication cleaning headers symlinks with multiple targets" do
+        Pod::Source.reset!
+        Pod::Spec::Set.reset!
+
+        podfile = Pod::Podfile.new do
+          # first ensure that the correct info is available to the specs when they load
+          config.rootspec = self
+          self.platform platform
+          target(:debug) { dependency 'SSZipArchive' }
+          target(:test, :exclusive => true) { dependency 'JSONKit' }
+          dependency 'ASIHTTPRequest'
+        end
+
+        installer = Pod::Installer.new(podfile)
+        installer.install!
+
+        root = config.project_pods_root
+        (root + 'Pods.xcconfig').should.exist
+        (root + 'Headers').should.exist
+        (root + 'Headers/SSZipArchive').should.exist
+        (root + 'Headers/ASIHTTPRequest').should.exist
+        (root + 'Headers/JSONKit').should.exist
+        Pathname.glob(File.join(root.to_s, 'Headers/ASIHTTPRequest/*.h')).size.should.be > 0
+        Pathname.glob(File.join(root.to_s, 'Headers/SSZipArchive/*.h')).size.should.be > 0
+        Pathname.glob(File.join(root.to_s, 'Headers/JSONKit/*.h')).size.should.be > 0
+      end
+
     end
   end
 
