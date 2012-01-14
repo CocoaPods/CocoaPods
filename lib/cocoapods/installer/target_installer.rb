@@ -61,17 +61,10 @@ module Pod
         "#{@definition.lib_name}-prefix.pch"
       end
 
-      def headers_symlink_path_name
-        "#{config.project_pods_root}/Headers"
-      end
-
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!
         # First add the target to the project
         @target = @project.targets.new_static_library(@definition.lib_name)
-
-        # Clean old header symlinks
-        FileUtils.rm_r(headers_symlink_path_name, :secure => true) if File.exists?(headers_symlink_path_name)
 
         header_search_paths = []
         build_specifications.each do |spec|
@@ -82,7 +75,7 @@ module Pod
           end
           # Symlink header files to Pods/Headers
           spec.copy_header_mappings.each do |header_dir, files|
-            target_dir = "#{headers_symlink_path_name}/#{header_dir}"
+            target_dir = "#{config.headers_symlink_root}/#{header_dir}"
             FileUtils.mkdir_p(target_dir)
             target_dir_real_path = Pathname.new(target_dir).realpath
             files.each do |file|

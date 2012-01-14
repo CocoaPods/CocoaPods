@@ -72,6 +72,10 @@ module Pod
       puts "Installing dependencies of: #{@podfile.defined_in_file}" if config.verbose?
       install_dependencies!
       root = config.project_pods_root
+      headers_symlink_root = config.headers_symlink_root
+
+      # Clean old header symlinks
+      FileUtils.rm_r(headers_symlink_root, :secure => true) if File.exists?(headers_symlink_root)
 
       puts "Generating support files" unless config.silent?
       target_installers.each do |target_installer|
