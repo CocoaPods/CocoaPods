@@ -3,6 +3,7 @@ module Pod
     autoload :Install, 'cocoapods/command/install'
     autoload :Repo,    'cocoapods/command/repo'
     autoload :Search,  'cocoapods/command/search'
+    autoload :List,    'cocoapods/command/list'
     autoload :Setup,   'cocoapods/command/setup'
     autoload :Spec,    'cocoapods/command/spec'
 
@@ -35,6 +36,7 @@ module Pod
       "\n" \
       "  * $ pod setup --help\n" \
       "  * $ pod search --help\n" \
+      "  * $ pod list --help\n" \
       "  * $ pod install --help\n" \
       "  * $ pod repo --help\n" \
       "  * $ pod spec --help"
@@ -72,6 +74,7 @@ module Pod
       when 'install' then Install
       when 'repo'    then Repo
       when 'search'  then Search
+      when 'list'    then List
       when 'setup'   then Setup
       when 'spec'    then Spec
       end
