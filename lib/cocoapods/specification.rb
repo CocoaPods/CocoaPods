@@ -27,7 +27,7 @@ module Pod
 
     # TODO This is just to work around a MacRuby bug
     def post_initialize
-      @dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
+      @dependencies, @source_files, @ignored_source_files, @resources, @clean_paths, @subspecs = [], [], [], [], [], []
       @xcconfig = Xcodeproj::Config.new
     end
 
@@ -79,6 +79,11 @@ module Pod
       @source_files = pattern_list(patterns)
     end
     attr_reader :source_files
+    
+    def ignored_source_files=(patterns)
+      @ignored_source_files = pattern_list(patterns)
+    end
+    attr_reader :ignored_source_files
 
     def resources=(patterns)
       @resources = pattern_list(patterns)
@@ -256,6 +261,13 @@ module Pod
         pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
         pattern.glob.each do |file|
           files << file.relative_path_from(config.project_pods_root)
+        end
+      end
+      ignored_source_files.each do |pattern|
+        pattern = pod_destroot + pattern
+        pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
+        pattern.glob.each do |file|
+          files.delete file.relative_path_from(config.project_pods_root)
         end
       end
       files
