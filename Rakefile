@@ -45,7 +45,7 @@ namespace :gem do
   end
 
   def gem_filename
-    "cocoapods-#{Pod::VERSION}.gem"
+    "cocoapods-#{gem_version}.gem"
   end
 
   desc "Build a gem for the current version"
