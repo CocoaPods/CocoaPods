@@ -152,6 +152,14 @@ describe "A Pod::Specification, with installed source," do
     files = files.map { |file| file.relative_path_from(config.project_pods_root) }
     @spec.expanded_source_files.sort.should == files.sort
   end
+  
+  it "returns the list of files that the source_files pattern expand to, minus any ignored files" do
+    files = @destroot.glob('**/*.{h,c,m}')
+    files = files.map { |file| file.relative_path_from(config.project_pods_root) }
+    @spec.ignored_source_files = ["**/zip.*"]
+    @spec.expanded_source_files.include?(Pathname.new("SSZipArchive/minizip/zip.c")).should == false
+    @spec.expanded_source_files.include?(Pathname.new("SSZipArchive/minizip/zip.h")).should == false
+  end
 
   it "returns the list of headers" do
     files = @destroot.glob('**/*.h')
