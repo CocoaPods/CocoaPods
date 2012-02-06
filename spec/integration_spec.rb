@@ -171,7 +171,7 @@ else
             { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
             'JSONKit (1.4)',
             { 'Reachability (2.0.4)'      => ["ASIHTTPRequest (>= 1.8)"] },
-            'SSZipArchive (0.1.1)',
+            'SSZipArchive (0.1.2)',
           ],
           'DEPENDENCIES' => [
             "ASIWebPageRequest (>= 1.8.1)",

@@ -30,7 +30,7 @@ describe "Pod::Specification::Set" do
   end
 
   it "returns the versions available for this pod ordered from highest to lowest" do
-    @set.versions.should == %w[1.2.1 1.2 1.1 1.0].map { |v| Pod::Version.new(v) }
+    @set.versions.should == %w[1.3.2 1.3.1 1.3 1.2.3 1.2.2 1.2.1 1.2 1.1 1.0].map { |v| Pod::Version.new(v) }
   end
 
   it "checks if the dependency of the specification is compatible with existing requirements" do
