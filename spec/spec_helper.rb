@@ -1,9 +1,10 @@
 require 'rubygems'
-require 'mac_bacon'
+require 'bacon'
 
 require 'pathname'
 ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 
+$:.unshift File.expand_path('../../external/xcodeproj/ext', __FILE__)
 $:.unshift File.expand_path('../../external/xcodeproj/lib', __FILE__)
 $:.unshift (ROOT + 'lib').to_s
 require 'cocoapods'

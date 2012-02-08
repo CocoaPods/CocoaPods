@@ -263,7 +263,7 @@ describe "A Pod::Specification, in general," do
     @spec.platform.should == :ios
   end
 
-  it "returns the license of the Pod’s code" do
+  it "returns the license of the Pod's code" do
     @spec.license = 'MIT'
     @spec.license.should == 'MIT'
   end
@@ -274,10 +274,9 @@ describe "A Pod::Specification, in general," do
   end
 
   it "takes any object for clean_paths as long as it responds to #glob (we provide this for Rake::FileList)" do
-    Pod::FileList # autoload
-    @spec.clean_paths = FileList['*'].exclude('Rakefile')
+    @spec.clean_paths = Pod::FileList['*'].exclude('Rakefile')
     list = ROOT + @spec.clean_paths.first
-    list.glob.should == FileList[(ROOT + '*').to_s].exclude('Rakefile').map { |path| Pathname.new(path) }
+    list.glob.should == Pod::FileList[(ROOT + '*').to_s].exclude('Rakefile').map { |path| Pathname.new(path) }
   end
 end
 

@@ -85,21 +85,21 @@ end
 namespace :spec do
   desc "Run the unit specs"
   task :unit do
-    sh "macbacon spec/unit/**/*_spec.rb"
+    sh "bacon spec/unit/**/*_spec.rb"
   end
 
   desc "Run the functional specs"
   task :functional do
-    sh "macbacon spec/functional/*_spec.rb"
+    sh "bacon spec/functional/*_spec.rb"
   end
 
   desc "Run the integration spec"
   task :integration do
-    sh "macbacon spec/integration_spec.rb"
+    sh "bacon spec/integration_spec.rb"
   end
 
   task :all do
-    sh "macbacon -a"
+    sh "bacon spec/**/*_spec.rb"
   end
 
   desc "Run all specs and build all examples"

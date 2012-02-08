@@ -7,7 +7,7 @@ describe 'Xcodeproj::Project' do
 
   def find_object(conditions)
     @project.objects_hash.select do |_, object|
-      object.objectsForKeys(conditions.keys, notFoundMarker:Object.new) == conditions.values
+      (conditions.keys - object.keys).empty? && object.values_at(*conditions.keys) == conditions.values
     end.first
   end
 

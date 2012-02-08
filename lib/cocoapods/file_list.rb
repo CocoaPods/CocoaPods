@@ -1,4 +1,8 @@
-require 'rake'
+if RUBY_VERSION >= "1.9"
+  require 'rake/file_list'
+else
+  require 'rake'
+end
 
 # This makes Rake::FileList usable with the Specification attributes
 # source_files, clean_paths, and resources.
@@ -17,6 +21,10 @@ module Rake
       to_a.map { |path| Pathname.new(path) }
     end
   end
+end
+
+module Pod
+  FileList = Rake::FileList
 end
 
 class Pathname
