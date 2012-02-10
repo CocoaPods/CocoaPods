@@ -11,6 +11,15 @@ module Xcodeproj
     def add_pod_group(name)
       pods.groups.new('name' => name)
     end
+    
+    # Shortcut access to build configurations
+    def build_configurations
+      objects[root_object.attributes['buildConfigurationList']].buildConfigurations
+    end
+    
+    def build_configuration(name)
+      build_configurations.find { |c| c.name == name }
+    end
 
     class PBXNativeTarget
       def move_compile_phase_to_end!

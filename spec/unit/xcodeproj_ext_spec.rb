@@ -32,4 +32,23 @@ describe 'Xcodeproj::Project' do
     }).should.not == nil
     @project.targets.first.buildPhases.should.include phase
   end
+  
+  shared "for any platform" do
+    it "adds a Debug and Release build configuration" do
+      @project.build_configurations.count.should == 2
+      @project.build_configurations.map(&:name).sort.should == %w{Debug Release}.sort
+    end
+  end
+  
+  describe "for the :ios platform" do
+    before do
+      @project = Xcodeproj::Project.for_platform(:ios)
+    end
+    
+    behaves_like "for any platform"
+    
+    it "sets VALIDATE_PRODUCT to YES for the Release configuration" do
+      @project.build_configuration("Release").buildSettings["VALIDATE_PRODUCT"].should == "YES"
+    end
+  end
 end
