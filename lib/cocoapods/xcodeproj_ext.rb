@@ -108,6 +108,9 @@ module Xcodeproj
     def self.build_settings(platform, scheme)
       settings = COMMON_BUILD_SETTINGS[:all].merge(COMMON_BUILD_SETTINGS[platform.name])
       settings['COPY_PHASE_STRIP'] = scheme == :debug ? 'NO' : 'YES'
+      if platform.requires_legacy_ios_archs?
+        settings['ARCHS'] = "armv6 armv7"
+      end
       if scheme == :debug
         settings.merge!(COMMON_BUILD_SETTINGS[:debug])
         settings['ONLY_ACTIVE_ARCH'] = 'YES' if platform == :osx

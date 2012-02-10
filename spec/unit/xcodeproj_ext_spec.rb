@@ -51,4 +51,30 @@ describe 'Xcodeproj::Project' do
       @project.build_configuration("Release").buildSettings["VALIDATE_PRODUCT"].should == "YES"
     end
   end
+  
+  describe "for the :ios platform with a deployment target" do
+    it "sets ARCHS to 'armv6 armv7' for both configurations if the deployment target is less than 4.3" do
+      @project = Xcodeproj::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.0"))
+      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "armv6 armv7"
+      @project.build_configuration("Release").buildSettings["ARCHS"].should == "armv6 armv7"
+      
+      @project = Xcodeproj::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.1"))
+      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "armv6 armv7"
+      @project.build_configuration("Release").buildSettings["ARCHS"].should == "armv6 armv7"
+      
+      @project = Xcodeproj::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.2"))
+      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "armv6 armv7"
+      @project.build_configuration("Release").buildSettings["ARCHS"].should == "armv6 armv7"
+    end
+    
+    it "uses standard ARCHs if deployment target is 4.3 or above" do
+      @project = Xcodeproj::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.3"))
+      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+      @project.build_configuration("Release").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+      
+      @project = Xcodeproj::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.4"))
+      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+      @project.build_configuration("Release").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+    end
+  end
 end

@@ -30,5 +30,16 @@ module Pod
     def nil?
       name.nil?
     end
+    
+    def deployment_target
+      if (opt = options[:deployment_target])
+        Pod::Version.new(opt)
+      end
+    end
+    
+    def requires_legacy_ios_archs?
+      return unless deployment_target
+      (name == :ios) && (deployment_target < Pod::Version.new("4.3"))
+    end
   end
 end
