@@ -55,8 +55,10 @@ module Pod
 
     def install_dependencies!
       build_specifications.each do |spec|
-        if spec.pod_destroot.exist?
-          puts "Using #{spec}" unless config.silent?
+        if spec.pod_destroot.exist? || spec.local?
+          message = "Using #{spec}"
+          message += " [LOCAL]" if spec.local?
+          puts message unless config.silent?
         else
           puts "Installing #{spec}" unless config.silent?
           spec = spec.part_of_specification if spec.part_of_other_pod?

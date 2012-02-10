@@ -7,7 +7,7 @@ describe "Pod::Downloader" do
 
   describe "for Git" do
     extend SpecHelper::TemporaryDirectory
-
+  
     it "check's out a specific commit" do
       downloader = Pod::Downloader.for_source(@dir,
         :git => fixture('banana-lib'), :commit => '02467b074d4dc9f6a75b8cd3ab80d9bf37887b01'
@@ -15,7 +15,7 @@ describe "Pod::Downloader" do
       downloader.download
       (@dir + 'README').read.strip.should == 'first commit'
     end
-
+  
     it "check's out a specific tag" do
       downloader = Pod::Downloader.for_source(@dir,
         :git => fixture('banana-lib'), :tag => 'v1.0'
@@ -23,7 +23,7 @@ describe "Pod::Downloader" do
       downloader.download
       (@dir + 'README').read.strip.should == 'v1.0'
     end
-
+  
     it "removes the .git directory" do
       downloader = Pod::Downloader.for_source(@dir,
         :git => fixture('banana-lib'), :tag => 'v1.0'
@@ -32,7 +32,7 @@ describe "Pod::Downloader" do
       downloader.clean
       (@dir + '.git').should.not.exist
     end
-
+  
     it "removes the clean_paths files and directories" do
       downloader = Pod::Downloader.for_source(@dir,
         :git => fixture('banana-lib'), :tag => 'v1.0'
@@ -42,10 +42,10 @@ describe "Pod::Downloader" do
       (@dir + 'README').should.not.exist
     end
   end
-
+  
   describe "for Mercurial" do
     extend SpecHelper::TemporaryDirectory
-
+  
     it "check's out a specific revision" do
       downloader = Pod::Downloader.for_source(@dir,
         :hg => fixture('mercurial-repo'), :revision => '46198bb3af96'
@@ -53,7 +53,7 @@ describe "Pod::Downloader" do
       downloader.download
       (@dir + 'README').read.strip.should == 'first commit'
     end
-
+  
     it "removes the .hg directory" do
       downloader = Pod::Downloader.for_source(@dir,
         :hg => fixture('mercurial-repo')
@@ -62,7 +62,7 @@ describe "Pod::Downloader" do
       downloader.clean
       (@dir + '.hg').should.not.exist
     end
-
+  
     it "removes the clean_paths files and directories" do
       downloader = Pod::Downloader.for_source(@dir,
         :hg => fixture('mercurial-repo')
@@ -72,10 +72,10 @@ describe "Pod::Downloader" do
       (@dir + 'README').should.not.exist
     end
   end
-
+  
   describe "for Subversion" do
     extend SpecHelper::TemporaryDirectory
-
+  
     it "check's out a specific revision" do
       downloader = Pod::Downloader.for_source(@dir,
         :svn => "file://#{fixture('subversion-repo')}", :revision => '1'
@@ -83,7 +83,7 @@ describe "Pod::Downloader" do
       downloader.download
       (@dir + 'README').read.strip.should == 'first commit'
     end
-
+  
     it "check's out a specific tag" do
       downloader = Pod::Downloader.for_source(@dir,
         :svn => "file://#{fixture('subversion-repo')}/tags/tag-1"
@@ -91,7 +91,7 @@ describe "Pod::Downloader" do
       downloader.download
       (@dir + 'README').read.strip.should == 'tag 1'
     end
-
+  
     it "removes the .svn directories" do
       downloader = Pod::Downloader.for_source(@dir,
         :svn => "file://#{fixture('subversion-repo')}/trunk"
@@ -100,7 +100,7 @@ describe "Pod::Downloader" do
       downloader.clean
       (@dir + '.svn').should.not.exist
     end
-
+  
     it "removes the clean_paths files and directories" do
       downloader = Pod::Downloader.for_source(@dir,
         :svn => "file://#{fixture('subversion-repo')}/trunk"
@@ -110,6 +110,5 @@ describe "Pod::Downloader" do
       (@dir + 'README').should.not.exist
     end
   end
-
 end
 

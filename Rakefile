@@ -40,7 +40,7 @@ end
 
 namespace :gem do
   def gem_version
-    require 'lib/cocoapods'
+    require File.join(File.dirname(__FILE__), *%w[lib cocoapods])
     Pod::VERSION
   end
 
@@ -55,8 +55,8 @@ namespace :gem do
 
   desc "Install a gem version of the current code"
   task :install => :build do
-    sh "sudo macgem install #{gem_filename}"
-    #sh "sudo macgem compile cocoapods"
+    sh "sudo gem install #{gem_filename}"
+    #sh "sudo gem compile cocoapods"
   end
 
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"

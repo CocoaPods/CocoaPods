@@ -38,5 +38,3 @@ class Pathname
     end
   end
 end
-
-

@@ -152,6 +152,14 @@ module Pod
     attr_accessor :defined_in_set
 
     include Config::Mixin
+    
+    def local?
+      !source[:local].nil?
+    end
+    
+    def local_path
+      Pathname.new(File.expand_path(source[:local]))
+    end
 
     def wrapper?
       source_files.empty? && !subspecs.empty?
@@ -195,6 +203,8 @@ module Pod
     def pod_destroot
       if part_of_other_pod?
         part_of_specification.pod_destroot
+      elsif local?
+        local_path
       else
         config.project_pods_root + @name
       end

@@ -340,3 +340,34 @@ describe "A Pod::Specification subspec" do
     @spec.subspec_by_name('MainSpec/FirstSubSpec/SecondSubSpec').should == @spec.subspecs.first.subspecs.first
   end
 end
+
+describe "A Pod::Specification with :local source" do
+  before do
+    @spec = Pod::Spec.new do |s|
+      s.name    = 'MainSpec'
+      s.source  = { :local => fixture("integration/JSONKit") }
+      s.source_files = "."
+    end
+  end
+  
+  it "is marked as local" do
+    @spec.should.be.local
+  end
+  
+  it "it returns the expanded local path" do
+    @spec.local_path.should == fixture("integration/JSONKit")
+  end
+  
+  it "returns the list of files that the source_files pattern expand to within the local path" do
+    files = fixture("integration/JSONKit").glob('**/*.{h,m}')
+    files = files.map { |file| file.relative_path_from(config.project_pods_root) }
+    @spec.expanded_source_files.sort.should == files.sort
+  end
+  
+  it "returns the list of headers that the source_files pattern expand to within the local path" do
+    files = fixture("integration/JSONKit").glob('**/*.{h}')
+    files = files.map { |file| file.relative_path_from(config.project_pods_root) }
+    @spec.header_files.sort.should == files.sort
+  end
+end
+
