@@ -82,9 +82,28 @@ namespace :gem do
   end
 end
 
+namespace :ext do
+  EXT_DIR = "./external/Xcodeproj/ext/xcodeproj"
+  
+  task :clean do
+    Dir.chdir(EXT_DIR) do
+      sh "rm -f Makefile *.o *.bundle"
+    end
+  end
+
+  task :build do
+    Dir.chdir(EXT_DIR) do
+      ruby "extconf.rb"
+      sh "make"
+    end
+  end
+
+  task :cleanbuild => [:clean, :build]
+end
+
 namespace :spec do
   desc "Run the unit specs"
-  task :unit do
+  task :unit => "ext:cleanbuild" do
     sh "bacon spec/unit/**/*_spec.rb"
   end
 
