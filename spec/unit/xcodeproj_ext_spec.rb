@@ -42,7 +42,7 @@ describe 'Xcodeproj::Project' do
   
   describe "for the :ios platform" do
     before do
-      @project = Xcodeproj::Project.for_platform(:ios)
+      @project = Xcodeproj::Project.for_platform(Pod::Platform.new(:ios))
     end
     
     behaves_like "for any platform"

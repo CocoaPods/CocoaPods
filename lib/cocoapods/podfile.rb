@@ -49,7 +49,7 @@ module Pod
     # This can be either `:osx` for Mac OS X applications, or `:ios` for iOS
     # applications.
     def platform(platform = nil)
-      platform ? @platform = platform : @platform
+      platform ? @platform = Platform.new(platform) : @platform
     end
 
     # Specifies a dependency of the project.
@@ -236,7 +236,7 @@ module Pod
 
     def validate!
       lines = []
-      lines << "* the `platform` attribute should be either `:osx` or `:ios`" unless [:osx, :ios].include?(@platform)
+      lines << "* the `platform` attribute should be either `:osx` or `:ios`" unless @platform && [:osx, :ios].include?(@platform.name)
       lines << "* no dependencies were specified, which is, well, kinda pointless" if dependencies.empty?
       raise(Informative, (["The Podfile at `#{@defined_in_file}' is invalid:"] + lines).join("\n")) unless lines.empty?
     end

@@ -106,7 +106,7 @@ module Xcodeproj
     }
 
     def self.build_settings(platform, scheme)
-      settings = COMMON_BUILD_SETTINGS[:all].merge(COMMON_BUILD_SETTINGS[platform])
+      settings = COMMON_BUILD_SETTINGS[:all].merge(COMMON_BUILD_SETTINGS[platform.name])
       settings['COPY_PHASE_STRIP'] = scheme == :debug ? 'NO' : 'YES'
       if scheme == :debug
         settings.merge!(COMMON_BUILD_SETTINGS[:debug])

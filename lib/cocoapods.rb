@@ -11,6 +11,7 @@ module Pod
   autoload :Downloader,             'cocoapods/downloader'
   autoload :Executable,             'cocoapods/executable'
   autoload :Installer,              'cocoapods/installer'
+  autoload :Platform,               'cocoapods/platform'
   autoload :Podfile,                'cocoapods/podfile'
   autoload :Resolver,               'cocoapods/resolver'
   autoload :Source,                 'cocoapods/source'

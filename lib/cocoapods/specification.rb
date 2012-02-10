@@ -28,6 +28,7 @@ module Pod
     # TODO This is just to work around a MacRuby bug
     def post_initialize
       @dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
+      @platform = Platform.new(nil)
       @xcconfig = Xcodeproj::Config.new
     end
 
@@ -123,7 +124,10 @@ module Pod
       flags
     end
 
-    attr_accessor :platform
+    def platform=(platform)
+      @platform = Platform.new(platform)
+    end
+    attr_reader :platform
 
     attr_accessor :requires_arc
 
@@ -321,7 +325,7 @@ module Pod
 
       incorrect = []
       allowed = [nil, :ios, :osx]
-      incorrect << ["`platform'", allowed] unless allowed.include?(platform)
+      incorrect << ["`platform'", allowed] unless allowed.include?(platform.name)
 
       unless missing.empty? && incorrect.empty?
         message = "The following #{(missing + incorrect).size == 1 ? 'attribute is' : 'attributes are'}:\n"
