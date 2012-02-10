@@ -48,8 +48,15 @@ module Pod
     #
     # This can be either `:osx` for Mac OS X applications, or `:ios` for iOS
     # applications.
-    def platform(platform = nil)
-      platform ? @platform = Platform.new(platform) : @platform
+    #
+    # For iOS applications, you can set the deployment target by passing a :deployment_target
+    # option, e.g:
+    #
+    #   platform :ios, :deployment_target => "4.0"
+    #
+    # If the deployment target requires it (< 4.3), armv6 will be added to ARCHS.
+    def platform(platform = nil, options={})
+      platform ? @platform = Platform.new(platform, options) : @platform
     end
 
     # Specifies a dependency of the project.
