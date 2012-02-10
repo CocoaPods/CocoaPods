@@ -30,7 +30,7 @@ end
 
 module Xcodeproj
   autoload :Config,                 'xcodeproj/config'
-  autoload :Project,                'cocoapods/xcodeproj_ext'
+  autoload :Project,                'cocoapods/xcodeproj_pods'
   autoload :Workspace,              'xcodeproj/workspace'
 end
 

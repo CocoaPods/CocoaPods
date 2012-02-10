@@ -1,4 +1,4 @@
-require 'xcodeproj'
+require 'xcodeproj/project'
 
 module Xcodeproj
   class Project
