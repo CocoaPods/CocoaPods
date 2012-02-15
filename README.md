@@ -13,15 +13,9 @@ See [the wiki](https://github.com/CocoaPods/CocoaPods/wiki) for more in depth in
 
 Downloading and installing CocoaPods only takes a few minutes.
 
-CocoaPods runs on [MacRuby](http://macruby.org). If you don't have a recent version of MacRuby installed you will need to download it. CocoaPods works best on version 0.10.
+CocoaPods runs on [Ruby](http://www.ruby-lang.org/en/). To install it run the following commands:
 
-    $ curl -O http://www.macruby.org/files/MacRuby%200.10.zip
-    $ open MacRuby%200.10.zip
-    # open MacRuby\ 0.10/MacRuby\ 0.10.pkg
-
-After that you can install CocoaPods itself.
-
-    $ sudo macgem install cocoapods
+    $ sudo gem install cocoapods
     $ pod setup
 
 Now that you've got CocoaPods installed you can easily add it to your project.
