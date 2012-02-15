@@ -98,6 +98,23 @@ module Pod
       end
     end
 
+    # Taken from RubyGems 1.3.7
+    unless public_method_defined?(:match?)
+      def match?(spec_name, spec_version)
+        pattern = name
+
+        if Regexp === pattern
+          return false unless pattern =~ spec_name
+        else
+          return false unless pattern == spec_name
+        end
+
+        return true if requirement.to_s == ">= 0"
+
+        requirement.satisfied_by? Gem::Version.new(spec_version)
+      end
+    end
+
     # Taken from a newer version of RubyGems
     unless public_method_defined?(:merge)
       def merge other

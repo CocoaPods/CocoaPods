@@ -59,6 +59,8 @@ describe "Pod::Installer" do
     installer.target_installers.map(&:definition).map(&:name).should == [:not_empty]
   end
 
+  # TODO remove this functionality? We create the header structure at `pod install`
+  # time nowadays, so that *is* before anything else already.
   it "moves the compile and link phases to the end of the build phases list, so Pod headers are copied first and sources can use the same header dir structure" do
     podfile = Pod::Podfile.new do
       platform :osx

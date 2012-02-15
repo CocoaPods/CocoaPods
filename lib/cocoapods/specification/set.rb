@@ -26,7 +26,8 @@ module Pod
 
       def required_by(specification)
         dependency = specification.dependency_by_top_level_spec_name(name)
-        unless @required_by.empty? || dependency.requirement.satisfied_by?(required_version)
+        # TODO we don’t actually do anything in our Version subclass. Maybe we should just remove that.
+        unless @required_by.empty? || dependency.requirement.satisfied_by?(Gem::Version.new(required_version.to_s))
           # TODO add graph that shows which dependencies led to this.
           raise Informative, "#{specification} tries to activate `#{dependency}', " \
                              "but already activated version `#{required_version}' " \
