@@ -80,14 +80,15 @@ namespace :spec do
     sh "bacon spec/**/*_spec.rb"
   end
 
-  #desc "Run all specs and build all examples"
-  #task :ci => :all do
-    #sh "./bin/pod setup" # ensure the spec repo is up-to-date
-    #Rake::Task['examples:build'].invoke
-  #end
+  desc "Run all specs and build all examples"
+  task :ci => :all do
+    sh "./bin/pod setup" # ensure the spec repo is up-to-date
+    Rake::Task['examples:build'].invoke
+  end
 
-  # For now we don't run the integration spec, but it should be cleaned up so it can run on Travis.
-  task :ci => :all
+  # For now we don't run the intgration spec, but it should be cleaned up so it can run on Travis.
+  desc "Run the travis CI specs"
+  task :travis => :all
 
   desc "Rebuild all the fixture tarballs"
   task :rebuild_fixture_tarballs do
