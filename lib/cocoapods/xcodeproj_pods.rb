@@ -21,19 +21,6 @@ module Xcodeproj
       build_configurations.find { |c| c.name == name }
     end
 
-    class PBXNativeTarget
-      def move_compile_phase_to_end!
-        reflection = self.class.reflection(:buildPhases)
-        uuids = send(reflection.uuids_getter)
-        phase = buildPhases.find { |phase| phase.is_a?(PBXSourcesBuildPhase) }
-        uuids.delete(phase.uuid)
-        uuids << phase.uuid
-        phase = buildPhases.find { |phase| phase.is_a?(PBXFrameworksBuildPhase) }
-        uuids.delete(phase.uuid)
-        uuids << phase.uuid
-      end
-    end
-
     class PBXCopyFilesBuildPhase
       def self.new_pod_dir(project, pod_name, path)
         new(project, nil, {

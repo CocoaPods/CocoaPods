@@ -58,18 +58,4 @@ describe "Pod::Installer" do
     installer = Pod::Installer.new(podfile)
     installer.target_installers.map(&:definition).map(&:name).should == [:not_empty]
   end
-
-  # TODO remove this functionality? We create the header structure at `pod install`
-  # time nowadays, so that *is* before anything else already.
-  it "moves the compile and link phases to the end of the build phases list, so Pod headers are copied first and sources can use the same header dir structure" do
-    podfile = Pod::Podfile.new do
-      platform :osx
-      dependency 'ASIHTTPRequest'
-    end
-    config.rootspec = podfile
-    installer = Pod::Installer.new(podfile)
-    installer.target_installers.first.install!
-    phases = installer.project.targets.first.buildPhases
-    phases.to_a.last(2).map(&:class).should == [Xcodeproj::Project::PBXSourcesBuildPhase, Xcodeproj::Project::PBXFrameworksBuildPhase]
-  end
 end
