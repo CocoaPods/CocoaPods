@@ -1,43 +1,3 @@
-class Array
-  def move_to_front(name, by_basename = true)
-    path = find { |f| (by_basename ? File.basename(f) : f) == name }
-    delete(path)
-    unshift(path)
-  end
-end
-
-task :standalone do
-  files = Dir.glob("lib/**/*.rb")
-  files.move_to_front('executable.rb')
-  files.move_to_front('lib/cocoapods/config.rb', false)
-  files.move_to_front('cocoapods.rb')
-  File.open('concatenated.rb', 'w') do |f|
-    files.each do |file|
-      File.read(file).split("\n").each do |line|
-        f.puts(line) unless line.include?('autoload')
-      end
-    end
-    f.puts 'Pod::Command.run(*ARGV)'
-  end
-  sh "macrubyc concatenated.rb -o pod"
-end
-
-####
-
-desc "Compile the source files (as rbo files)"
-task :compile do
-  Dir.glob("lib/**/*.rb").each do |file|
-    sh "macrubyc #{file} -C -o #{file}o"
-  end
-end
-
-desc "Remove rbo files"
-task :clean do
-  sh "rm -f lib/**/*.rbo"
-  sh "rm -f lib/**/*.o"
-  sh "rm -f *.gem"
-end
-
 namespace :gem do
   def gem_version
     require File.join(File.dirname(__FILE__), *%w[lib cocoapods])
@@ -56,7 +16,6 @@ namespace :gem do
   desc "Install a gem version of the current code"
   task :install => :build do
     sh "sudo gem install #{gem_filename}"
-    #sh "sudo gem compile cocoapods"
   end
 
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
@@ -108,16 +67,16 @@ namespace :spec do
   end
 
   desc "Run the functional specs"
-  task :functional do
+  task :functional => "ext:cleanbuild" do
     sh "bacon spec/functional/*_spec.rb"
   end
 
   desc "Run the integration spec"
-  task :integration do
+  task :integration => "ext:cleanbuild" do
     sh "bacon spec/integration_spec.rb"
   end
 
-  task :all do
+  task :all => "ext:cleanbuild" do
     sh "bacon spec/**/*_spec.rb"
   end
 
