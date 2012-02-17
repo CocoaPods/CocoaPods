@@ -1,3 +1,8 @@
+# Important
+
+These instructions are for the next release which won’t require MacRuby anymore. Until then, however, see the [README of the latest release](https://github.com/CocoaPods/CocoaPods/blob/0.3.10/README.md).
+
+
 # CocoaPods – an Objective-C library manager
 
 [![Build Status](https://secure.travis-ci.org/CocoaPods/CocoaPods.png)](https://secure.travis-ci.org/CocoaPods/CocoaPods)
