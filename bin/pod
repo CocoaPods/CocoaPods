@@ -1,4 +1,4 @@
-#!/usr/bin/env macruby
+#!/usr/bin/env ruby
 
 if $0 == __FILE__
   $:.unshift File.expand_path('../../external/xcodeproj/lib', __FILE__)
