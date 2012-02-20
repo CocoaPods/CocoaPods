@@ -28,8 +28,7 @@ Gem::Specification.new do |s|
   s.post_install_message = "[!] If this is your first time install of CocoaPods, or if " \
                            "you are upgrading, first run: $ pod setup"
 
-  s.add_runtime_dependency 'xcodeproj', '~> 0.0.2'
-  s.add_development_dependency 'bacon', '~> 1.1'
+  s.add_runtime_dependency 'xcodeproj', '~> 0.1.0'
 
   ## Make sure you can build the gem on older versions of RubyGems too:
   s.rubygems_version = "1.6.2"
