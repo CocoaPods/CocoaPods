@@ -337,12 +337,16 @@ module Pod
       allowed = [nil, :ios, :osx]
       incorrect << ["`platform'", allowed] unless allowed.include?(platform.name)
 
-      unless missing.empty? && incorrect.empty?
+      no_errors_found = missing.empty? && incorrect.empty?
+
+      unless no_errors_found
         message = "The following #{(missing + incorrect).size == 1 ? 'attribute is' : 'attributes are'}:\n"
         message << "* missing: #{missing.join(", ")}" unless missing.empty?
         message << "* incorrect: #{incorrect.map { |x| "#{x[0]} (#{x[1..-1]})" }.join(", ")}" unless incorrect.empty?
         raise Informative, message
       end
+
+      no_errors_found
     end
 
     # This is a convenience method which gets called after all pods have been

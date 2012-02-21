@@ -120,7 +120,7 @@ module Pod
       def lint
         file = @name ? Pathname.new(@name) : Pathname.pwd.glob('*.podspec').first
         spec = Specification.from_file(file)
-        spec.validate!
+        puts "This pod specification contains all required attributes." if spec.validate!
       end
     end
   end
