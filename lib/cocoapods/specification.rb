@@ -154,7 +154,7 @@ module Pod
     include Config::Mixin
     
     def local?
-      !source[:local].nil?
+      !source.nil? && !source[:local].nil?
     end
     
     def local_path
