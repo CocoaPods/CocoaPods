@@ -6,6 +6,7 @@ ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 
 $:.unshift File.expand_path('../../external/xcodeproj/ext', __FILE__)
 $:.unshift File.expand_path('../../external/xcodeproj/lib', __FILE__)
+p $:
 $:.unshift((ROOT + 'lib').to_s)
 require 'cocoapods'
 
