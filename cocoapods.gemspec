@@ -4,13 +4,13 @@ require File.expand_path('../lib/cocoapods', __FILE__)
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
   s.version  = Pod::VERSION
-  s.date     = "2011-11-22"
+  s.date     = Date.today
   s.license  = "MIT"
   s.email    = "eloy.de.enige@gmail.com"
   s.homepage = "https://github.com/CocoaPods/CocoaPods"
   s.authors  = ["Eloy Duran"]
 
-  s.summary     = "An Objective-C library package manager. (Requires MacRuby.)"
+  s.summary     = "An Objective-C library package manager."
   s.description = "CocoaPods manages library dependencies for your Xcode project.\n\n"     \
                   "You specify the dependencies for your project in one easy text file. "  \
                   "CocoaPods resolves dependencies between libraries, fetches source "     \
