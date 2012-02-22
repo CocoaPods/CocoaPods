@@ -42,19 +42,14 @@ namespace :gem do
 end
 
 namespace :ext do
-  EXT_DIR = "./external/Xcodeproj/ext/xcodeproj"
+  XCODEPROJ_DIR = "./external/Xcodeproj"
   
   task :clean do
-    Dir.chdir(EXT_DIR) do
-      sh "rm -f Makefile *.o *.bundle"
-    end
+    sh "cd #{XCODEPROJ_DIR} && rake ext:clean"
   end
 
   task :build do
-    Dir.chdir(EXT_DIR) do
-      ruby "extconf.rb"
-      sh "make"
-    end
+    sh "cd #{XCODEPROJ_DIR} && rake ext:build"
   end
 
   task :cleanbuild => [:clean, :build]
