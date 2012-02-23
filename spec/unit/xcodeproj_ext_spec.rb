@@ -76,5 +76,15 @@ describe 'Xcodeproj::Project' do
       @project.build_configuration("Debug").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
       @project.build_configuration("Release").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
     end
+    
+    it "sets IPHONEOS_DEPLOYMENT_TARGET for both configurations" do
+      @project = Xcodeproj::Project.for_platform(Pod::Platform.new(:ios))
+      @project.build_configuration("Debug").buildSettings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.3"
+      @project.build_configuration("Release").buildSettings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.3"
+
+      @project = Xcodeproj::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.0"))
+      @project.build_configuration("Debug").buildSettings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.0"
+      @project.build_configuration("Release").buildSettings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.0"
+    end
   end
 end
