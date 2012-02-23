@@ -98,6 +98,9 @@ module Xcodeproj
       if platform.requires_legacy_ios_archs?
         settings['ARCHS'] = "armv6 armv7"
       end
+      if platform == :ios && platform.deployment_target
+        settings['IPHONEOS_DEPLOYMENT_TARGET'] = platform.deployment_target.to_s
+      end
       if scheme == :debug
         settings.merge!(COMMON_BUILD_SETTINGS[:debug])
         settings['ONLY_ACTIVE_ARCH'] = 'YES' if platform == :osx
