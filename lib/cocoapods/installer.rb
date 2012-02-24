@@ -23,6 +23,7 @@ module Pod
 
     def initialize(podfile)
       @podfile = podfile
+      @sandbox = Sandbox.new(config.project_pods_root)
     end
 
     def lock_file

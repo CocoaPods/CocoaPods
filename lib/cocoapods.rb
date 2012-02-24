@@ -14,11 +14,12 @@ module Pod
   autoload :Platform,               'cocoapods/platform'
   autoload :Podfile,                'cocoapods/podfile'
   autoload :Resolver,               'cocoapods/resolver'
+  autoload :Sandbox,                'cocoapods/sandbox'
   autoload :Source,                 'cocoapods/source'
   autoload :Spec,                   'cocoapods/specification'
   autoload :Specification,          'cocoapods/specification'
   autoload :Version,                'cocoapods/version'
-
+  
   autoload :Pathname,               'pathname'
   autoload :FileList,               'cocoapods/file_list'
 
