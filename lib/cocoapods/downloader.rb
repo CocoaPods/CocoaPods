@@ -25,12 +25,8 @@ module Pod
       @pod, @url, @options = pod, url, options
     end
 
-    def clean(clean_paths = [])
-      return unless clean_paths
-      
-      clean_paths.each do |path|
-        path.rmtree
-      end
+    def clean
+      # implement in sub-classes
     end
   end
 end

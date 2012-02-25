@@ -19,8 +19,7 @@ module Pod
         hg "clone '#{url}' --rev '#{options[:revision]}' '#{pod.root}'"
       end
 
-      def clean(clean_paths = [])
-        super
+      def clean
         (pod.root + '.hg').rmtree
       end
     end

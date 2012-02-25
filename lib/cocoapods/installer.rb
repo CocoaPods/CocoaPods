@@ -68,8 +68,11 @@ module Pod
           pod = Pod.new(sandbox, spec)
           downloader = Downloader.for_pod(pod)
           downloader.download
-          # TODO move cleaning into the installer as well
-          downloader.clean(spec.expanded_clean_paths) if config.clean
+
+          if config.clean
+            downloader.clean
+            pod.clean
+          end
         end
       end
     end

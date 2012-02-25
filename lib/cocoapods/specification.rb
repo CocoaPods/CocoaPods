@@ -245,18 +245,6 @@ module Pod
       files
     end
 
-    # Returns full paths to clean for this pod.
-    def expanded_clean_paths
-      files = []
-      clean_paths.each do |pattern|
-        pattern = pod_destroot + pattern
-        pattern.glob.each do |file|
-          files << file
-        end
-      end
-      files
-    end
-
     # Returns all source files of this pod including header files,
     # but relative to the project pods root.
     #

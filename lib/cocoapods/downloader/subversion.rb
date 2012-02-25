@@ -19,8 +19,7 @@ module Pod
         svn "checkout '#{url}' -r '#{options[:revision]}' '#{pod.root}'"
       end
 
-      def clean(clean_paths = [])
-        super
+      def clean
         pod.root.glob('**/.svn').each(&:rmtree)
       end
     end

@@ -35,8 +35,7 @@ module Pod
         end
       end
 
-      def clean(clean_paths = [])
-        super
+      def clean
         (pod.root + '.git').rmtree
       end
     end

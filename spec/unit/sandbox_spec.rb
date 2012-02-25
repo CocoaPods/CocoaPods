@@ -22,5 +22,5 @@ describe Pod::Sandbox do
     File.directory?(TMP_POD_ROOT).should.be.false
     FileUtils.mkdir(TMP_POD_ROOT) # put it back again
   end
-
+  
 end
