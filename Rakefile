@@ -83,7 +83,7 @@ namespace :spec do
 
   # For now we don't run the intgration spec, but it should be cleaned up so it can run on Travis.
   desc "Run the travis CI specs"
-  task :travis => :all
+  task :travis => [:unpack_fixture_tarballs, :all]
 
   desc "Rebuild all the fixture tarballs"
   task :rebuild_fixture_tarballs do
@@ -91,6 +91,17 @@ namespace :spec do
     tarballs.each do |tarball|
       basename = File.basename(tarball)
       sh "cd #{File.dirname(tarball)} && rm #{basename} && tar -zcf #{basename} #{basename[0..-8]}"
+    end
+  end
+  
+  desc "Unpacks all the fixture tarballs"
+  task :unpack_fixture_tarballs do
+    tarballs = FileList['spec/fixtures/**/*.tar.gz']
+    tarballs.each do |tarball|
+      basename = File.basename(tarball)
+      Dir.chdir(File.dirname(tarball)) do
+        sh "rm -rf #{basename[0..-8]} && tar zxf #{basename}"
+      end
     end
   end
 end
