@@ -58,7 +58,7 @@ module Pod
 
     def install_dependencies!
       build_specifications.map do |spec|
-        LocalPod.new(sandbox, spec).tap do |pod|
+        LocalPod.new(spec, sandbox).tap do |pod|
           if pod.exists? || spec.local?
             puts "Using #{pod}" unless config.silent?
           else
