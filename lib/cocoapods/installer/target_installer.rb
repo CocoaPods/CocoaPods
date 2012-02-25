@@ -27,9 +27,7 @@ module Pod
       end
 
       def copy_resources_script_for(pods)
-        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map do |pod|
-          pod.expanded_resources
-        end.flatten)
+        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.resources }.flatten)
       end
 
       def copy_resources_filename
@@ -70,7 +68,7 @@ module Pod
           xcconfig.merge!(pod.specification.xcconfig)
 
           pod.implementation_files.each do |file|
-            @target.add_source_file(file, nil, spec.compiler_flags)
+            @target.add_source_file(file, nil, pod.specification.compiler_flags)
           end
           
           pod.link_headers
@@ -110,7 +108,7 @@ module Pod
         puts "* Generating prefix header at `#{sandbox.root + prefix_header_filename}'" if config.verbose?
         save_prefix_header_as(sandbox.root + prefix_header_filename)
         puts "* Generating copy resources script at `#{sandbox.root + copy_resources_filename}'" if config.verbose?
-        copy_resources_script.save_as(sandbox.root + copy_resources_filename)
+        copy_resources_script_for(pods).save_as(sandbox.root + copy_resources_filename)
       end
     end
   end
