@@ -93,7 +93,7 @@ module Pod
         target_installer.install!(pods, sandbox)
       end
       
-      generate_lock_file!
+      generate_lock_file!(pods)
 
       puts "* Running post install hooks" if config.verbose?
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
@@ -107,11 +107,11 @@ module Pod
       project.save_as(projpath)
     end
 
-    def generate_lock_file!
+    def generate_lock_file!(pods)
       lock_file.open('w') do |file|
         file.puts "PODS:"
-        pods = build_specifications.map do |spec|
-          [spec.to_s, spec.dependencies.map(&:to_s).sort]
+        pods.map do |pod|
+          [pod.specification.to_s, pod.specification.dependencies.map(&:to_s).sort]
         end.sort_by(&:first).each do |name, deps|
           if deps.empty?
             file.puts "  - #{name}"
