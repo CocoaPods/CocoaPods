@@ -72,7 +72,7 @@ namespace :spec do
   end
 
   task :all => "ext:cleanbuild" do
-    sh "bacon spec/**/*_spec.rb"
+    sh "bacon #{FileList['spec/**/*_spec.rb'].join(' ')}"
   end
 
   desc "Run all specs and build all examples"
@@ -83,7 +83,9 @@ namespace :spec do
 
   # For now we don't run the intgration spec, but it should be cleaned up so it can run on Travis.
   desc "Run the travis CI specs"
-  task :travis => :all
+  task :travis => "ext:cleanbuild" do
+    sh "bacon #{FileList['spec/{functional,unit}/**/*_spec.rb'].join(' ')}"
+  end
 
   desc "Rebuild all the fixture tarballs"
   task :rebuild_fixture_tarballs do
