@@ -4,10 +4,10 @@ module Pod
       include Config::Mixin
       include Shared
 
-      attr_reader :podfile, :project, :definition, :target
+      attr_reader :podfile, :project, :target_definition, :target
 
-      def initialize(podfile, project, definition)
-        @podfile, @project, @definition = podfile, project, definition
+      def initialize(podfile, project, target_definition)
+        @podfile, @project, @target_definition = podfile, project, target_definition
       end
 
       def xcconfig
@@ -23,7 +23,7 @@ module Pod
       end
 
       def xcconfig_filename
-        "#{@definition.lib_name}.xcconfig"
+        "#{@target_definition.lib_name}.xcconfig"
       end
 
       def copy_resources_script_for(pods)
@@ -31,7 +31,7 @@ module Pod
       end
 
       def copy_resources_filename
-        "#{@definition.lib_name}-resources.sh"
+        "#{@target_definition.lib_name}-resources.sh"
       end
 
       def bridge_support_generator
@@ -43,7 +43,7 @@ module Pod
       end
 
       def bridge_support_filename
-        "#{@definition.lib_name}.bridgesupport"
+        "#{@target_definition.lib_name}.bridgesupport"
       end
 
       # TODO move out to Generator::PrefixHeader
@@ -56,13 +56,17 @@ module Pod
       end
 
       def prefix_header_filename
-        "#{@definition.lib_name}-prefix.pch"
+        "#{@target_definition.lib_name}-prefix.pch"
+      end
+      
+      def target_support_files
+        [copy_resources_filename, prefix_header_filename, xcconfig_filename]
       end
 
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!(pods, sandbox)
         # First add the target to the project
-        @target = @project.targets.new_static_library(@definition.lib_name)
+        @target = @project.targets.new_static_library(@target_definition.lib_name)
 
         pods.each do |pod|
           xcconfig.merge!(pod.specification.xcconfig)
@@ -74,15 +78,16 @@ module Pod
 
         # Add all the target related support files to the group, even the copy
         # resources script although the project doesn't actually use them.
-        support_files_group = @project.groups.find do |group|
-          group.name == "Targets Support Files"
-        end.groups.new("name" => @definition.lib_name)
-        support_files_group.files.new('path' => copy_resources_filename)
-        prefix_file = support_files_group.files.new('path' => prefix_header_filename)
-        xcconfig_file = support_files_group.files.new("path" => xcconfig_filename)
+        support_files_group = @project.groups.object_named("Targets Support Files")
+        support_files_group = support_files_group.create_group(@target_definition.lib_name)
+        
+        target_support_files.each do |file_path|
+          support_files_group.create_file(file_path)
+        end
         
         # Assign the xcconfig as the base config of each config.
         @target.buildConfigurations.each do |config|
+          xcconfig_file = support_files_group.file_with_path(xcconfig_filename)
           config.baseConfiguration = xcconfig_file
           config.buildSettings['OTHER_LDFLAGS'] = ''
           config.buildSettings['GCC_PREFIX_HEADER'] = prefix_header_filename

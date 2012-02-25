@@ -56,6 +56,6 @@ describe "Pod::Installer" do
     end
     config.rootspec = podfile
     installer = Pod::Installer.new(podfile)
-    installer.target_installers.map(&:definition).map(&:name).should == [:not_empty]
+    installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
   end
 end
