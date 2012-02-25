@@ -12,15 +12,15 @@ module Pod
       end
 
       def download_head
-        svn "checkout '#{url}' '#{pod.root}'"
+        svn "checkout '#{url}' '#{target_path}'"
       end
 
       def download_revision
-        svn "checkout '#{url}' -r '#{options[:revision]}' '#{pod.root}'"
+        svn "checkout '#{url}' -r '#{options[:revision]}' '#{target_path}'"
       end
 
       def clean
-        pod.root.glob('**/.svn').each(&:rmtree)
+        target_path.glob('**/.svn').each(&:rmtree)
       end
     end
   end

@@ -14,11 +14,11 @@ module Pod
       end
 
       def download_head
-        git "clone '#{url}' '#{pod.root}'"
+        git "clone '#{url}' '#{target_path}'"
       end
 
       def download_tag
-        pod.chdir do
+        Dir.chdir(target_path) do
           git "init"
           git "remote add origin '#{url}'"
           git "fetch origin tags/#{options[:tag]}"
@@ -28,15 +28,15 @@ module Pod
       end
 
       def download_commit
-        git "clone '#{url}' '#{pod.root}'"
+        git "clone '#{url}' '#{target_path}'"
         
-        pod.chdir do
+        Dir.chdir(target_path) do
           git "checkout -b activated-pod-commit #{options[:commit]}"
         end
       end
 
       def clean
-        (pod.root + '.git').rmtree
+        (target_path + '.git').rmtree
       end
     end
   end

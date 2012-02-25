@@ -90,12 +90,17 @@ module Pod
             end
           else
             puts "  * Pre-downloading: `#{@name}'" unless config.silent?
-            Downloader.for_source(pod_root, @external_spec_source).download
+            pod = LocalPods.new
+            Downloader.for_dependency(self).download
             spec = pod_root + "#{@name}.podspec"
           end
           Specification.from_file(spec)
         end
       end
+    end
+    
+    def pod_root
+      config.project_pods_root + @name
     end
 
     # Taken from RubyGems 1.3.7

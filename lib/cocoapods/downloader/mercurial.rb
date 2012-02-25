@@ -12,15 +12,15 @@ module Pod
       end
 
       def download_head
-        hg "clone '#{url}' '#{pod.root}'"
+        hg "clone '#{url}' '#{target_path}'"
       end
 
       def download_revision
-        hg "clone '#{url}' --rev '#{options[:revision]}' '#{pod.root}'"
+        hg "clone '#{url}' --rev '#{options[:revision]}' '#{target_path}'"
       end
 
       def clean
-        (pod.root + '.hg').rmtree
+        (target_path + '.hg').rmtree
       end
     end
   end
