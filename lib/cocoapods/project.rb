@@ -1,6 +1,7 @@
 require 'xcodeproj/project'
+require 'xcodeproj/project/object/build_phase'
 
-Xcodeproj::Project::PBXCopyFilesBuildPhase.instance_eval do
+Xcodeproj::Project::Object::PBXCopyFilesBuildPhase.instance_eval do
   def self.new_pod_dir(project, pod_name, path)
     new(project, nil, {
       "dstPath" => "Pods/#{path}",
@@ -40,15 +41,15 @@ module Pod
       project.main_group << products
       project.root_object.products = products
       
-      project.root_object.attributes['buildConfigurationList'] = project.objects.add(Xcodeproj::Project::XCConfigurationList, {
+      project.root_object.attributes['buildConfigurationList'] = project.objects.add(Xcodeproj::Project::Object::XCConfigurationList, {
         'defaultConfigurationIsVisible' => '0',
         'defaultConfigurationName' => 'Release',
         'buildConfigurations' => [
-          project.objects.add(Xcodeproj::Project::XCBuildConfiguration, {
+          project.objects.add(Xcodeproj::Project::Object::XCBuildConfiguration, {
             'name' => 'Debug',
             'buildSettings' => build_settings(platform, :debug)
           }),
-          project.objects.add(Xcodeproj::Project::XCBuildConfiguration, {
+          project.objects.add(Xcodeproj::Project::Object::XCBuildConfiguration, {
             'name' => 'Release',
             'buildSettings' => build_settings(platform, :release)
           })

@@ -76,25 +76,22 @@ module Pod
         
         xcconfig.merge!('HEADER_SEARCH_PATHS' => sandbox.header_search_paths.join(" "))
 
-        # Add all the target related support files to the group, even the copy
-        # resources script although the project doesn't actually use them.
-        support_files_group = @project.groups.object_named("Targets Support Files")
-        support_files_group = support_files_group.create_group(@target_definition.lib_name)
-        
-        target_support_files.each do |file_path|
-          support_files_group.create_file(file_path)
-        end
-        
-        # Assign the xcconfig as the base config of each config.
+        support_files_group = @project.group("Targets Support Files").create_group(@target_definition.lib_name)
+        support_files_group.add_file_paths(target_support_files)
+
+        xcconfig_file = support_files_group.file_with_path(xcconfig_filename)
+
+        configure_build_configurations(xcconfig_filename)
+        create_files(pods, sandbox)
+      end
+      
+      def configure_build_configurations(xcconfig_file)
         @target.buildConfigurations.each do |config|
-          xcconfig_file = support_files_group.file_with_path(xcconfig_filename)
           config.baseConfiguration = xcconfig_file
           config.buildSettings['OTHER_LDFLAGS'] = ''
           config.buildSettings['GCC_PREFIX_HEADER'] = prefix_header_filename
           config.buildSettings['PODS_ROOT'] = '$(SRCROOT)'
         end
-        
-        create_files(pods, sandbox)
       end
 
       def create_files(pods, sandbox)
