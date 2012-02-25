@@ -2,29 +2,14 @@ module Pod
   class Installer
     autoload :TargetInstaller, 'cocoapods/installer/target_installer'
 
-    module Shared
-      def dependent_specifications
-        @dependent_specifications ||= Resolver.new(@podfile, @definition ? @definition.dependencies : nil).resolve
-      end
-
-      def build_specifications
-        dependent_specifications.reject do |spec|
-          spec.wrapper? || spec.defined_in_set.only_part_of_other_pod?
-        end
-      end
-
-      def download_only_specifications
-        dependent_specifications - build_specifications
-      end
-    end
-
     include Config::Mixin
-    include Shared
     
     attr_reader :sandbox
 
     def initialize(podfile)
       @podfile = podfile
+      
+      # FIXME: pass this into the installer as a parameter
       @sandbox = Sandbox.new(config.project_pods_root)
     end
 
@@ -188,6 +173,20 @@ module Pod
       unless config.silent?
         puts "[!] From now on use `#{File.basename(xcworkspace)}' instead of `#{File.basename(projpath)}'."
       end
+    end
+    
+    def dependent_specifications
+      @dependent_specifications ||= Resolver.new(@podfile, @definition ? @definition.dependencies : nil).resolve
+    end
+
+    def build_specifications
+      dependent_specifications.reject do |spec|
+        spec.wrapper? || spec.defined_in_set.only_part_of_other_pod?
+      end
+    end
+
+    def download_only_specifications
+      dependent_specifications - build_specifications
     end
   end
 end

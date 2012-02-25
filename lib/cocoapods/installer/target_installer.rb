@@ -2,7 +2,6 @@ module Pod
   class Installer
     class TargetInstaller
       include Config::Mixin
-      include Shared
 
       attr_reader :podfile, :project, :target_definition, :target
 
@@ -34,11 +33,9 @@ module Pod
         "#{@target_definition.lib_name}-resources.sh"
       end
 
-      def bridge_support_generator
-        Generator::BridgeSupport.new(build_specifications.map do |spec|
-          spec.header_files.map do |header|
-            config.project_pods_root + header
-          end
+      def bridge_support_generator_for(pods, sandbox)
+        Generator::BridgeSupport.new(pods.map do |pod|
+          pod.header_files.map { |header| sandbox.root + header }
         end.flatten)
       end
 
@@ -98,7 +95,7 @@ module Pod
         if @podfile.generate_bridge_support?
           bridge_support_metadata_path = sandbox.root + bridge_support_filename
           puts "* Generating BridgeSupport metadata file at `#{bridge_support_metadata_path}'" if config.verbose?
-          bridge_support_generator.save_as(bridge_support_metadata_path)
+          bridge_support_generator_for(pods, sandbox).save_as(bridge_support_metadata_path)
           copy_resources_script_for(pods).resources << bridge_support_filename
         end
         puts "* Generating xcconfig file at `#{sandbox.root + xcconfig_filename}'" if config.verbose?

@@ -39,12 +39,13 @@ describe "Pod::Installer" do
     config.rootspec = podfile
     expected = []
     installer = Pod::Installer.new(podfile)
-    installer.build_specifications.each do |spec|
+    pods = installer.build_specifications.map do |spec|
       spec.header_files.each do |header|
         expected << config.project_pods_root + header
       end
+      Pod::LocalPod.new(spec, installer.sandbox)
     end
-    installer.target_installers.first.bridge_support_generator.headers.should == expected
+    installer.target_installers.first.bridge_support_generator_for(pods, installer.sandbox).headers.should == expected
   end
 
   it "omits empty target definitions" do
