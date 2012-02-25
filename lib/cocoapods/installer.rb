@@ -77,13 +77,10 @@ module Pod
     end
 
     def install!
+      @sandbox.prepare_for_install
+      
       puts "Installing dependencies of: #{@podfile.defined_in_file}" if config.verbose?
       pods = install_dependencies!
-      root = config.project_pods_root
-      headers_symlink_root = config.headers_symlink_root
-
-      # Clean old header symlinks
-      FileUtils.rm_r(headers_symlink_root, :secure => true) if File.exists?(headers_symlink_root)
 
       puts "Generating support files" unless config.silent?
       target_installers.each do |target_installer|
@@ -94,14 +91,21 @@ module Pod
 
       puts "* Running post install hooks" if config.verbose?
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
+      run_post_install_hooks
+
+      puts "* Writing Xcode project file to `#{@sandbox.project_path}'" if config.verbose?
+      project.save_as(@sandbox.project_path)
+    end
+    
+    def run_post_install_hooks
+      # we loop over target installers instead of pods, because we yield the target installer
+      # to the spec post install hook.
+      
       target_installers.each do |target_installer|
         target_installer.build_specifications.each { |spec| spec.post_install(target_installer) }
       end
+      
       @podfile.post_install!(self)
-
-      projpath = File.join(root, 'Pods.xcodeproj')
-      puts "* Writing Xcode project file to `#{projpath}'" if config.verbose?
-      project.save_as(projpath)
     end
 
     def generate_lock_file!(pods)

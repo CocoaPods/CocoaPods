@@ -13,12 +13,16 @@ module Pod
       root.rmtree
     end
     
-    def headers_path
+    def headers_root
       root + "Headers"
     end
     
+    def project_path
+      root + "Pods.xcodeproj"
+    end
+    
     def add_header_file(namespace_path, relative_header_path)
-      namespaced_header_path = headers_path + namespace_path
+      namespaced_header_path = headers_root + namespace_path
       namespaced_header_path.mkpath unless File.exist?(namespaced_header_path)
       source = (root + relative_header_path).relative_path_from(namespaced_header_path)
       Dir.chdir(namespaced_header_path) { FileUtils.ln_sf(source, relative_header_path.basename)}
@@ -32,6 +36,10 @@ module Pod
     
     def header_search_paths
       @header_search_paths.uniq.map { |path| "$(PODS_ROOT)/#{path}" }
+    end
+    
+    def prepare_for_install
+      headers_root.rmtree if headers_root.exist?
     end
   end
 end

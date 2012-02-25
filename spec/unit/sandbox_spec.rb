@@ -23,8 +23,8 @@ describe Pod::Sandbox do
     FileUtils.mkdir(TMP_POD_ROOT) # put it back again
   end
   
-  it "returns it's headers path" do
-    @sandbox.headers_path.should == Pathname.new(File.join(TMP_POD_ROOT, "Headers"))
+  it "returns it's headers root" do
+    @sandbox.headers_root.should == Pathname.new(File.join(TMP_POD_ROOT, "Headers"))
   end
   
   it "can add namespaced headers to it's header path using symlinks and return the relative path" do
@@ -66,6 +66,11 @@ describe Pod::Sandbox do
     end
     @sandbox.add_header_files(namespace_path, relative_header_paths)
     @sandbox.header_search_paths.should == ["$(PODS_ROOT)/Headers/ExampleLib"]
+  end
+  
+  it 'clears out its headers root when preparing for install' do
+    @sandbox.prepare_for_install
+    @sandbox.headers_root.should.not.exist
   end
   
 end

@@ -61,7 +61,7 @@ describe Pod::LocalPod do
   
   it "can link it's headers into the sandbox" do
     @pod.link_headers
-    expected_header_path = @sandbox.headers_path + "BananaLib/Banana.h"
+    expected_header_path = @sandbox.headers_root + "BananaLib/Banana.h"
     expected_header_path.should.be.symlink
     File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
   end
