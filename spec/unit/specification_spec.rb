@@ -160,12 +160,6 @@ describe "A Pod::Specification, with installed source," do
     @spec.header_files.sort.should == files.sort
   end
 
-  it "returns the list of implementation files" do
-    files = @destroot.glob('**/*.{c,m}')
-    files = files.map { |file| file.relative_path_from(config.project_pods_root) }
-    @spec.implementation_files.sort.should == files.sort
-  end
-
   it "returns a hash of mappings from the pod's destroot to its header dirs, which by default is just the pod's header dir" do
     @spec.copy_header_mappings.size.should == 1
     @spec.copy_header_mappings[Pathname.new('SSZipArchive')].sort.should == %w{

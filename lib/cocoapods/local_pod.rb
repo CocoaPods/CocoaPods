@@ -50,10 +50,6 @@ module Pod
     def resources
       expanded_paths(specification.resources, :relative_to_sandbox => true)
     end
-    
-    def implementation_files
-      source_files.select { |f| f.extname != '.h' }
-    end
 
     def header_files
       source_files.select { |f| f.extname == '.h' }
@@ -65,7 +61,17 @@ module Pod
       end
     end
     
+    def add_to_target(target)
+      implementation_files.each do |file|
+        target.add_source_file(file, nil, specification.compiler_flags)
+      end
+    end
+    
     private
+    
+    def implementation_files
+      source_files.select { |f| f.extname != '.h' }
+    end
     
     def relative_root
       root.relative_path_from(@sandbox.root)

@@ -45,10 +45,6 @@ describe Pod::LocalPod do
     @pod.resources.should == [Pathname.new("BananaLib/Resources/logo-sidebar.png")]
   end
   
-  it 'returns a list of implementation files' do
-    @pod.implementation_files.should == [Pathname.new("BananaLib/Classes/Banana.m")]
-  end
-  
   it 'returns a list of header files' do
     @pod.header_files.should == [Pathname.new("BananaLib/Classes/Banana.h")]
   end
@@ -68,6 +64,19 @@ describe Pod::LocalPod do
     expected_header_path = @sandbox.headers_path + "BananaLib/Banana.h"
     expected_header_path.should.be.symlink
     File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
+  end
+  
+  it "can add it's source files to an Xcode project target" do
+    target = mock('target')
+    target.expects(:add_source_file).with(Pathname.new("BananaLib/Classes/Banana.m"), anything, anything)
+    @pod.add_to_target(target)
+  end
+  
+  it "can add it's source files to a target with any specially configured compiler flags" do
+    @pod.specification.compiler_flags = '-d some_flag'
+    target = mock('target')
+    target.expects(:add_source_file).with(anything, anything, "-d some_flag")
+    @pod.add_to_target(target)
   end
   
 end

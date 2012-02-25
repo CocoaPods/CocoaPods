@@ -7,5 +7,5 @@ group :development do
   gem "guard-bacon"
   gem "rb-fsevent"
   gem "growl"
-  gem "mocha"
+  gem "mocha-on-bacon"
 end

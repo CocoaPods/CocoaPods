@@ -66,11 +66,7 @@ module Pod
 
         pods.each do |pod|
           xcconfig.merge!(pod.specification.xcconfig)
-
-          pod.implementation_files.each do |file|
-            @target.add_source_file(file, nil, pod.specification.compiler_flags)
-          end
-          
+          pod.add_to_target(@target)
           pod.link_headers
         end
         

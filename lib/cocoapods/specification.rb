@@ -121,8 +121,8 @@ module Pod
 
     attr_writer :compiler_flags
     def compiler_flags
-      flags = "#{@compiler_flags} "
-      flags << '-fobjc-arc' if requires_arc
+      flags = "#{@compiler_flags}"
+      flags << ' -fobjc-arc' if requires_arc
       flags
     end
 
@@ -263,10 +263,6 @@ module Pod
         end
       end
       files
-    end
-
-    def implementation_files
-      expanded_source_files.select { |f| f.extname != '.h' }
     end
 
     # Returns only the header files of this pod.
