@@ -34,7 +34,7 @@ module Pod
 
     def project
       return @project if @project
-      @project = Xcodeproj::Project.for_platform(@podfile.platform)
+      @project = Pod::Project.for_platform(@podfile.platform)
       # First we need to resolve dependencies across *all* targets, so that the
       # same correct versions of pods are being used for all targets. This
       # happens when we call `build_specifications'.
@@ -162,7 +162,7 @@ module Pod
       end
       workspace.save_as(xcworkspace)
 
-      app_project = Xcodeproj::Project.new(projpath)
+      app_project = Pod::Project.new(projpath)
       return if app_project.files.find { |file| file.path =~ /libPods\.a$/ }
 
       configfile = app_project.files.new('path' => 'Pods/Pods.xcconfig')

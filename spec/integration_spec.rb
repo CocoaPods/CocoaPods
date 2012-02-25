@@ -143,7 +143,7 @@ else
         end
 
         SpecHelper::Installer.new(podfile).install!
-        project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
+        project = Pod::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.targets.first.buildConfigurations.map do |config|
           config.buildSettings['GCC_ENABLE_OBJC_GC']
         end.should == %w{ supported supported }
@@ -262,7 +262,7 @@ else
         installer = SpecHelper::Installer.new(spec)
         installer.install!
 
-        project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
+        project = Pod::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.source_files.should == installer.project.source_files
       end
 
@@ -322,7 +322,7 @@ else
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(xcworkspace)
         workspace.projpaths.sort.should == ['ASIHTTPRequest.xcodeproj', 'Pods/Pods.xcodeproj']
 
-        project = Xcodeproj::Project.new(projpath)
+        project = Pod::Project.new(projpath)
         libPods = project.files.find { |f| f.name == 'libPods.a' }
         project.targets.each do |target|
           target.buildConfigurations.each do |config|

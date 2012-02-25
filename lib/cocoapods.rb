@@ -14,6 +14,7 @@ module Pod
   autoload :LocalPod,               'cocoapods/local_pod'
   autoload :Platform,               'cocoapods/platform'
   autoload :Podfile,                'cocoapods/podfile'
+  autoload :Project,                'cocoapods/project'
   autoload :Resolver,               'cocoapods/resolver'
   autoload :Sandbox,                'cocoapods/sandbox'
   autoload :Source,                 'cocoapods/source'
@@ -28,12 +29,6 @@ module Pod
     autoload :BridgeSupport,        'cocoapods/generator/bridge_support'
     autoload :CopyResourcesScript,  'cocoapods/generator/copy_resources_script'
   end
-end
-
-module Xcodeproj
-  autoload :Config,                 'xcodeproj/config'
-  autoload :Project,                'cocoapods/xcodeproj_pods'
-  autoload :Workspace,              'xcodeproj/workspace'
 end
 
 class Pathname

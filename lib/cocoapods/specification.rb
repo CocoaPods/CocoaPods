@@ -1,3 +1,5 @@
+require 'xcodeproj/config'
+
 module Pod
   extend Config::Mixin
 

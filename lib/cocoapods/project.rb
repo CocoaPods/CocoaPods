@@ -1,7 +1,16 @@
 require 'xcodeproj/project'
 
-module Xcodeproj
-  class Project
+Xcodeproj::Project::PBXCopyFilesBuildPhase.instance_eval do
+  def self.new_pod_dir(project, pod_name, path)
+    new(project, nil, {
+      "dstPath" => "Pods/#{path}",
+      "name"    => "Copy #{pod_name} Public Headers",
+    })
+  end
+end
+
+module Pod
+  class Project < Xcodeproj::Project
     # Shortcut access to the `Pods' PBXGroup.
     def pods
       groups.find { |g| g.name == 'Pods' } || groups.new({ 'name' => 'Pods' })
@@ -21,17 +30,8 @@ module Xcodeproj
       build_configurations.find { |c| c.name == name }
     end
 
-    class PBXCopyFilesBuildPhase
-      def self.new_pod_dir(project, pod_name, path)
-        new(project, nil, {
-          "dstPath" => "Pods/#{path}",
-          "name"    => "Copy #{pod_name} Public Headers",
-        })
-      end
-    end
-
     def self.for_platform(platform)
-      project = Xcodeproj::Project.new
+      project = Pod::Project.new
       project.main_group << project.groups.new({ 'name' => 'Pods' })
       framework = project.add_system_framework(platform == :ios ? 'Foundation' : 'Cocoa')
       framework.group = project.groups.new({ 'name' => 'Frameworks' })
