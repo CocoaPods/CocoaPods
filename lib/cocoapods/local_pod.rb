@@ -10,8 +10,20 @@ module Pod
       @sandbox.root + specification.name
     end
     
+    def to_s
+      if specification.local?
+        "#{specification} [LOCAL]"
+      else
+        specification.to_s
+      end
+    end
+    
     def create
-      root.mkpath unless root.exist?
+      root.mkpath unless exists?
+    end
+    
+    def exists?
+      root.exist?
     end
     
     def chdir(&block)
@@ -20,7 +32,7 @@ module Pod
     end
     
     def implode
-      root.rmtree if root.exist?
+      root.rmtree if exists?
     end
     
     def clean
@@ -39,7 +51,34 @@ module Pod
       expanded_paths(specification.resources, :relative_to_sandbox => true)
     end
     
+    def implementation_files
+      source_files.select { |f| f.extname != '.h' }
+    end
+
+    def header_files
+      source_files.select { |f| f.extname == '.h' }
+    end
+    
+    def link_headers
+      copy_header_mappings.each do |namespaced_path, files|
+        @sandbox.add_header_files(namespaced_path, files)
+      end
+    end
+    
     private
+    
+    def relative_root
+      root.relative_path_from(@sandbox.root)
+    end
+    
+    def copy_header_mappings
+      header_files.inject({}) do |mappings, from|
+        from_without_prefix = from.relative_path_from(relative_root)
+        to = specification.header_dir + specification.copy_header_mapping(from_without_prefix)
+        (mappings[to.dirname] ||= []) << from
+        mappings
+      end
+    end
     
     def expanded_paths(patterns, options={})
       patterns.map do |pattern|

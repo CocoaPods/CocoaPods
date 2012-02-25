@@ -134,7 +134,8 @@ describe "A Pod::Specification that's part of another pod's source" do
   #end
 end
 
-
+# TODO: This is really what a LocalPod now represents
+# Which probably means most of this functionality should move there
 describe "A Pod::Specification, with installed source," do
   before do
     config.project_pods_root = fixture('integration')

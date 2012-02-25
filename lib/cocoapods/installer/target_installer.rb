@@ -26,9 +26,9 @@ module Pod
         "#{@definition.lib_name}.xcconfig"
       end
 
-      def copy_resources_script
-        @copy_resources_script ||= Generator::CopyResourcesScript.new(build_specifications.map do |spec|
-          spec.expanded_resources
+      def copy_resources_script_for(pods)
+        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map do |pod|
+          pod.expanded_resources
         end.flatten)
       end
 
@@ -62,33 +62,21 @@ module Pod
       end
 
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
-      def install!
+      def install!(pods, sandbox)
         # First add the target to the project
         @target = @project.targets.new_static_library(@definition.lib_name)
 
-        header_search_paths = []
-        build_specifications.each do |spec|
-          xcconfig.merge!(spec.xcconfig)
-          # Only add implementation files to the compile phase
-          spec.implementation_files.each do |file|
+        pods.each do |pod|
+          xcconfig.merge!(pod.specification.xcconfig)
+
+          pod.implementation_files.each do |file|
             @target.add_source_file(file, nil, spec.compiler_flags)
           end
-          # Symlink header files to Pods/Headers
-          spec.copy_header_mappings.each do |header_dir, files|
-            target_dir = "#{config.headers_symlink_root}/#{header_dir}"
-            FileUtils.mkdir_p(target_dir)
-            target_dir_real_path = Pathname.new(target_dir).realpath
-            files.each do |file|
-              source = Pathname.new("#{config.project_pods_root}/#{file}").realpath.relative_path_from(target_dir_real_path)
-              Dir.chdir(target_dir) do
-                FileUtils.ln_sf(source, File.basename(file))
-              end
-            end
-          end
-          # Collect all header search paths
-          header_search_paths.concat(spec.header_search_paths)
+          
+          pod.link_headers
         end
-        xcconfig.merge!('HEADER_SEARCH_PATHS' => header_search_paths.sort.uniq.join(" "))
+        
+        xcconfig.merge!('HEADER_SEARCH_PATHS' => sandbox.header_search_paths.join(" "))
 
         # Add all the target related support files to the group, even the copy
         # resources script although the project doesn't actually use them.
@@ -98,6 +86,7 @@ module Pod
         support_files_group.files.new('path' => copy_resources_filename)
         prefix_file = support_files_group.files.new('path' => prefix_header_filename)
         xcconfig_file = support_files_group.files.new("path" => xcconfig_filename)
+        
         # Assign the xcconfig as the base config of each config.
         @target.buildConfigurations.each do |config|
           config.baseConfiguration = xcconfig_file
@@ -105,20 +94,23 @@ module Pod
           config.buildSettings['GCC_PREFIX_HEADER'] = prefix_header_filename
           config.buildSettings['PODS_ROOT'] = '$(SRCROOT)'
         end
+        
+        create_files(pods, sandbox)
       end
 
-      def create_files_in(root)
+      def create_files(pods, sandbox)
         if @podfile.generate_bridge_support?
-          puts "* Generating BridgeSupport metadata file at `#{root + bridge_support_filename}'" if config.verbose?
-          bridge_support_generator.save_as(root + bridge_support_filename)
-          copy_resources_script.resources << bridge_support_filename
+          bridge_support_metadata_path = sandbox.root + bridge_support_filename
+          puts "* Generating BridgeSupport metadata file at `#{bridge_support_metadata_path}'" if config.verbose?
+          bridge_support_generator.save_as(bridge_support_metadata_path)
+          copy_resources_script_for(pods).resources << bridge_support_filename
         end
-        puts "* Generating xcconfig file at `#{root + xcconfig_filename}'" if config.verbose?
-        xcconfig.save_as(root + xcconfig_filename)
-        puts "* Generating prefix header at `#{root + prefix_header_filename}'" if config.verbose?
-        save_prefix_header_as(root + prefix_header_filename)
-        puts "* Generating copy resources script at `#{root + copy_resources_filename}'" if config.verbose?
-        copy_resources_script.save_as(root + copy_resources_filename)
+        puts "* Generating xcconfig file at `#{sandbox.root + xcconfig_filename}'" if config.verbose?
+        xcconfig.save_as(sandbox.root + xcconfig_filename)
+        puts "* Generating prefix header at `#{sandbox.root + prefix_header_filename}'" if config.verbose?
+        save_prefix_header_as(sandbox.root + prefix_header_filename)
+        puts "* Generating copy resources script at `#{sandbox.root + copy_resources_filename}'" if config.verbose?
+        copy_resources_script.save_as(sandbox.root + copy_resources_filename)
       end
     end
   end

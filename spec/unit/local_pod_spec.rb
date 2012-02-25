@@ -45,6 +45,14 @@ describe Pod::LocalPod do
     @pod.resources.should == [Pathname.new("BananaLib/Resources/logo-sidebar.png")]
   end
   
+  it 'returns a list of implementation files' do
+    @pod.implementation_files.should == [Pathname.new("BananaLib/Classes/Banana.m")]
+  end
+  
+  it 'returns a list of header files' do
+    @pod.header_files.should == [Pathname.new("BananaLib/Classes/Banana.h")]
+  end
+  
   it 'can clean up after itself' do
     @pod.clean_paths.tap do |paths|
       @pod.clean
@@ -53,6 +61,13 @@ describe Pod::LocalPod do
         path.should.not.exist
       end
     end
+  end
+  
+  it "can link it's headers into the sandbox" do
+    @pod.link_headers
+    expected_header_path = @sandbox.headers_path + "BananaLib/Banana.h"
+    expected_header_path.should.be.symlink
+    File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
   end
   
 end

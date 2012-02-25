@@ -59,13 +59,14 @@ module Pod
     def install_dependencies!
       build_specifications.map do |spec|
         Pod.new(sandbox, spec).tap do |pod|
-          if spec.pod_destroot.exist? || spec.local?
-            message = "Using #{spec}"
-            message += " [LOCAL]" if spec.local?
-            puts message unless config.silent?
+          if pod.exists? || spec.local?
+            puts "Using #{pod}" unless config.silent?
           else
             puts "Installing #{spec}" unless config.silent?
-            spec = spec.part_of_specification if spec.part_of_other_pod?
+            
+            # TODO: get this working again
+            # spec = spec.part_of_specification if spec.part_of_other_pod?
+            
             downloader = Downloader.for_pod(pod)
             downloader.download
 
@@ -89,9 +90,9 @@ module Pod
 
       puts "Generating support files" unless config.silent?
       target_installers.each do |target_installer|
-        target_installer.install!
-        target_installer.create_files_in(root)
+        target_installer.install!(pods, sandbox)
       end
+      
       generate_lock_file!
 
       puts "* Running post install hooks" if config.verbose?
