@@ -12,7 +12,7 @@ module Pod
       end
 
       def download_head
-        svn "checkout '#{url}' '#{pod_root}'"
+        svn "checkout '#{url}' '#{pod.root}'"
       end
 
       def download_revision

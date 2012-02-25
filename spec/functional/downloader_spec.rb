@@ -2,112 +2,90 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Downloader" do
   before do
-    @dir = temporary_directory + 'banana-lib'
+    @pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), temporary_sandbox)
   end
 
   describe "for Git" do
     extend SpecHelper::TemporaryDirectory
   
     it "check's out a specific commit" do
-      downloader = Pod::Downloader.for_source(@dir,
+      @pod.specification.stubs(:source).returns(
         :git => fixture('banana-lib'), :commit => '02467b074d4dc9f6a75b8cd3ab80d9bf37887b01'
       )
+      downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
-      (@dir + 'README').read.strip.should == 'first commit'
+      
+      (@pod.root + 'README').read.strip.should == 'first commit'
     end
   
     it "check's out a specific tag" do
-      downloader = Pod::Downloader.for_source(@dir,
+      @pod.specification.stubs(:source).returns(
         :git => fixture('banana-lib'), :tag => 'v1.0'
       )
+      downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
-      (@dir + 'README').read.strip.should == 'v1.0'
+      (@pod.root + 'README').read.strip.should == 'v1.0'
     end
   
-    it "removes the .git directory" do
-      downloader = Pod::Downloader.for_source(@dir,
-        :git => fixture('banana-lib'), :tag => 'v1.0'
+    it "removes the .git directory when cleaning" do
+      @pod.specification.stubs(:source).returns(
+        :git => fixture('banana-lib')
       )
+      downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
       downloader.clean
-      (@dir + '.git').should.not.exist
-    end
-  
-    it "removes the clean_paths files and directories" do
-      downloader = Pod::Downloader.for_source(@dir,
-        :git => fixture('banana-lib'), :tag => 'v1.0'
-      )
-      downloader.download
-      downloader.clean([@dir + 'README'])
-      (@dir + 'README').should.not.exist
+      (@pod.root + '.git').should.not.exist
     end
   end
   
   describe "for Mercurial" do
-    extend SpecHelper::TemporaryDirectory
-  
     it "check's out a specific revision" do
-      downloader = Pod::Downloader.for_source(@dir,
+      @pod.specification.stubs(:source).returns(
         :hg => fixture('mercurial-repo'), :revision => '46198bb3af96'
       )
+      downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
-      (@dir + 'README').read.strip.should == 'first commit'
+      (@pod.root + 'README').read.strip.should == 'first commit'
     end
   
-    it "removes the .hg directory" do
-      downloader = Pod::Downloader.for_source(@dir,
+    it "removes the .hg directory when cleaning" do
+      @pod.specification.stubs(:source).returns(
         :hg => fixture('mercurial-repo')
       )
+      downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
       downloader.clean
-      (@dir + '.hg').should.not.exist
-    end
-  
-    it "removes the clean_paths files and directories" do
-      downloader = Pod::Downloader.for_source(@dir,
-        :hg => fixture('mercurial-repo')
-      )
-      downloader.download
-      downloader.clean([@dir + 'README'])
-      (@dir + 'README').should.not.exist
+      (@pod.root + '.hg').should.not.exist
     end
   end
   
   describe "for Subversion" do
-    extend SpecHelper::TemporaryDirectory
-  
     it "check's out a specific revision" do
-      downloader = Pod::Downloader.for_source(@dir,
+      @pod.specification.stubs(:source).returns(
         :svn => "file://#{fixture('subversion-repo')}", :revision => '1'
       )
+      downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
-      (@dir + 'README').read.strip.should == 'first commit'
+      (@pod.root + 'README').read.strip.should == 'first commit'
     end
   
     it "check's out a specific tag" do
-      downloader = Pod::Downloader.for_source(@dir,
+      @pod.specification.stubs(:source).returns(
         :svn => "file://#{fixture('subversion-repo')}/tags/tag-1"
       )
+      downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
-      (@dir + 'README').read.strip.should == 'tag 1'
+      (@pod.root + 'README').read.strip.should == 'tag 1'
     end
   
-    it "removes the .svn directories" do
-      downloader = Pod::Downloader.for_source(@dir,
+    it "removes the .svn directories when cleaning" do
+      @pod.specification.stubs(:source).returns(
         :svn => "file://#{fixture('subversion-repo')}/trunk"
       )
+      downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
       downloader.clean
-      (@dir + '.svn').should.not.exist
-    end
-  
-    it "removes the clean_paths files and directories" do
-      downloader = Pod::Downloader.for_source(@dir,
-        :svn => "file://#{fixture('subversion-repo')}/trunk"
-      )
-      downloader.download
-      downloader.clean([@dir + 'README'])
-      (@dir + 'README').should.not.exist
+      (@pod.root + '.svn').should.not.exist
     end
   end
 end
