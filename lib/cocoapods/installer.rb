@@ -63,10 +63,7 @@ module Pod
             puts "Using #{pod}" unless config.silent?
           else
             puts "Installing #{spec}" unless config.silent?
-            
-            # TODO: get this working again
-            # spec = spec.part_of_specification if spec.part_of_other_pod?
-            
+
             downloader = Downloader.for_pod(pod)
             downloader.download
 

@@ -7,7 +7,9 @@ module Pod
     extend Executable
 
     def self.for_pod(pod)
-      for_target(pod.root, pod.specification.source.dup)
+      spec = pod.specification
+      spec = spec.part_of_specification if spec.part_of_other_pod?
+      for_target(pod.root, spec.source.dup)
     end
     
     def self.for_dependency(dependency)
