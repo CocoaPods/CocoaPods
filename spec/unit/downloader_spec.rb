@@ -1,14 +1,11 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Downloader" do
-  it "returns a git downloader" do
-    downloader = Pod::Downloader.for_source(
-      '/path/to/pod_root',
-      :git => 'http://example.local/banana.git', :tag => 'v1.0'
-    )
+  it "returns a git downloader with parsed options" do
+    pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), temporary_sandbox)
+    downloader = Pod::Downloader.for_pod(pod)
     downloader.should.be.instance_of Pod::Downloader::Git
-    downloader.pod_root.should == '/path/to/pod_root'
-    downloader.url.should == 'http://example.local/banana.git'
+    downloader.url.should == 'http://banana-corp.local/banana-lib.git'
     downloader.options.should == { :tag => 'v1.0' }
   end
 end

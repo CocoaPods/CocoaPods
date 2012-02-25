@@ -20,6 +20,8 @@ module Pod
 
     include Config::Mixin
     include Shared
+    
+    attr_reader :sandbox
 
     def initialize(podfile)
       @podfile = podfile
@@ -63,7 +65,8 @@ module Pod
         else
           puts "Installing #{spec}" unless config.silent?
           spec = spec.part_of_specification if spec.part_of_other_pod?
-          downloader = Downloader.for_source(spec.pod_destroot, spec.source)
+          pod = Pod.new(sandbox, spec)
+          downloader = Downloader.for_pod(pod)
           downloader.download
           # TODO move cleaning into the installer as well
           downloader.clean(spec.expanded_clean_paths) if config.clean

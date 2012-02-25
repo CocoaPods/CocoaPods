@@ -13,7 +13,7 @@ module Pod
       unless path.exist?
         raise Informative, "No podspec exists at path `#{path}'."
       end
-      spec = Pod._eval_podspec(path)
+      spec = ::Pod._eval_podspec(path)
       spec.defined_in_file = path
       spec
     end

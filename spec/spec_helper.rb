@@ -40,3 +40,14 @@ class Pod::Spec::Set
     @sets = nil
   end
 end
+
+require 'tmpdir'
+
+def temporary_sandbox
+  Pod::Sandbox.new(Pathname.new(Dir.mktmpdir))
+end
+
+def fixture_spec(name)
+  file = SpecHelper::Fixture.fixture(name)
+  Pod::Specification.from_file(file)
+end

@@ -6,29 +6,31 @@ module Pod
 
     extend Executable
 
-    def self.for_source(pod_root, source)
-      options = source.dup
+    def self.for_pod(pod)
+      options = pod.specification.source.dup
       if url = options.delete(:git)
-        Git.new(pod_root, url, options)
+        Git.new(pod, url, options)
       elsif url = options.delete(:hg)
-        Mercurial.new(pod_root, url, options)
+        Mercurial.new(pod, url, options)
       elsif url = options.delete(:svn)
-        Subversion.new(pod_root, url, options)
+        Subversion.new(pod, url, options)
       else
-        raise "Unsupported download strategy `#{source.inspect}'."
+        raise "Unsupported download strategy `#{options.inspect}'."
       end
     end
 
-    attr_reader :pod_root, :url, :options
+    attr_reader :pod, :url, :options
 
-    def initialize(pod_root, url, options)
-      @pod_root, @url, @options = pod_root, url, options
+    def initialize(pod, url, options)
+      @pod, @url, @options = pod, url, options
     end
 
     def clean(clean_paths = [])
+      return unless clean_paths
+      
       clean_paths.each do |path|
         path.rmtree
-      end if clean_paths
+      end
     end
   end
 end
