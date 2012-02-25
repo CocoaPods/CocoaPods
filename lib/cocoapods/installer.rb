@@ -57,21 +57,22 @@ module Pod
     end
 
     def install_dependencies!
-      build_specifications.each do |spec|
-        if spec.pod_destroot.exist? || spec.local?
-          message = "Using #{spec}"
-          message += " [LOCAL]" if spec.local?
-          puts message unless config.silent?
-        else
-          puts "Installing #{spec}" unless config.silent?
-          spec = spec.part_of_specification if spec.part_of_other_pod?
-          pod = Pod.new(sandbox, spec)
-          downloader = Downloader.for_pod(pod)
-          downloader.download
+      build_specifications.map do |spec|
+        Pod.new(sandbox, spec).tap do |pod|
+          if spec.pod_destroot.exist? || spec.local?
+            message = "Using #{spec}"
+            message += " [LOCAL]" if spec.local?
+            puts message unless config.silent?
+          else
+            puts "Installing #{spec}" unless config.silent?
+            spec = spec.part_of_specification if spec.part_of_other_pod?
+            downloader = Downloader.for_pod(pod)
+            downloader.download
 
-          if config.clean
-            downloader.clean
-            pod.clean
+            if config.clean
+              downloader.clean
+              pod.clean
+            end
           end
         end
       end
@@ -79,7 +80,7 @@ module Pod
 
     def install!
       puts "Installing dependencies of: #{@podfile.defined_in_file}" if config.verbose?
-      install_dependencies!
+      pods = install_dependencies!
       root = config.project_pods_root
       headers_symlink_root = config.headers_symlink_root
 
