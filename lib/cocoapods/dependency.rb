@@ -90,7 +90,6 @@ module Pod
             end
           else
             puts "  * Pre-downloading: `#{@name}'" unless config.silent?
-            pod = LocalPods.new
             Downloader.for_dependency(self).download
             spec = pod_root + "#{@name}.podspec"
           end
@@ -100,7 +99,7 @@ module Pod
     end
     
     def pod_root
-      config.project_pods_root + @name
+      Config.instance.project_pods_root + @name
     end
 
     # Taken from RubyGems 1.3.7
