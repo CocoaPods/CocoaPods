@@ -2,6 +2,14 @@ module SpecHelper
   def self.fixture(name)
     Fixture.fixture(name)
   end
+  
+  def self.create_sample_app_copy_from_fixture(fixture_name)
+    tmp_dir = Pathname.new(Dir.mktmpdir)
+    fixture_path = ROOT + "spec/fixtures/#{fixture_name}"
+    fixture_copy_path = tmp_dir + fixture_name
+    FileUtils.cp_r(fixture_path, tmp_dir)
+    fixture_copy_path + "#{fixture_name}.xcodeproj"
+  end
 
   module Fixture
     ROOT = ::ROOT + 'spec/fixtures'
