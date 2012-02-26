@@ -5,9 +5,8 @@ GEM
     growl (1.0.3)
     guard (0.8.8)
       thor (~> 0.14.6)
-    guard-bacon (1.0.2)
-      guard (~> 0.8.4)
-      schmurfy-bacon (~> 1.2)
+    guard-shell (0.3.0)
+      guard (>= 0.2.0)
     metaclass (0.0.1)
     mocha (0.10.4)
       metaclass (~> 0.0.1)
@@ -15,9 +14,6 @@ GEM
       mocha (>= 0.9.8)
     rake (0.9.2.2)
     rb-fsevent (0.9.0)
-    schmurfy-bacon (1.2.1)
-      term-ansicolor
-    term-ansicolor (1.0.7)
     thor (0.14.6)
 
 PLATFORMS
@@ -27,7 +23,7 @@ DEPENDENCIES
   bacon
   growl
   guard
-  guard-bacon
+  guard-shell
   mocha-on-bacon
   rake
   rb-fsevent

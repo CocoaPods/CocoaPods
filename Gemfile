@@ -4,7 +4,7 @@ group :development do
   gem "rake"
   gem "bacon"
   gem "guard"
-  gem "guard-bacon"
+  gem "guard-shell"
   gem "rb-fsevent"
   gem "growl"
   gem "mocha-on-bacon"
