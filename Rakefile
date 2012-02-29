@@ -57,8 +57,8 @@ end
 
 namespace :spec do
   desc "Run the unit specs"
-  task :unit => "ext:cleanbuild" do
-    sh "bacon spec/unit/**/*_spec.rb"
+  task :unit do
+    sh "bacon spec/unit/*_spec.rb spec/unit/**/*_spec.rb -q"
   end
 
   desc "Run the functional specs"
