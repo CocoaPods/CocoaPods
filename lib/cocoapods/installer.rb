@@ -122,10 +122,6 @@ module Pod
         end
       end
     end
-
-    def configure_project(projpath)
-      ProjectIntegration.integrate_with_project(projpath)
-    end
     
     def dependent_specifications
       @dependent_specifications ||= Resolver.new(@podfile, @definition ? @definition.dependencies : nil).resolve

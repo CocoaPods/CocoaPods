@@ -42,7 +42,8 @@ module Pod
         end
         installer = Installer.new(podfile)
         installer.install!
-        installer.configure_project(@projpath) if @projpath
+
+        ProjectIntegration.integrate_with_project(@projpath) if @projpath
       end
     end
   end
