@@ -1,19 +1,19 @@
 module Pod
   class Resolver
-    def initialize(specification, dependencies = nil)
-      @specification, @dependencies = specification, dependencies || specification.dependencies
+    def initialize(podfile, dependencies = nil)
+      @podfile, @dependencies = podfile, dependencies || podfile.dependencies
     end
 
     def resolve
       @sets, @loaded_spec_names, @specs = [], [], []
-      find_dependency_sets(@specification, @dependencies)
+      find_dependency_sets(@podfile, @dependencies)
       @specs.sort_by(&:name)
     end
 
-    def find_dependency_sets(specification, dependencies = nil)
-      (dependencies || specification.dependencies).each do |dependency|
+    def find_dependency_sets(podfile, dependencies = nil)
+      (dependencies || podfile.dependencies).each do |dependency|
         set = find_dependency_set(dependency)
-        set.required_by(specification)
+        set.required_by(podfile)
         unless @loaded_spec_names.include?(dependency.name)
           # Get a reference to the spec that’s actually being loaded.
           # If it’s a subspec dependency, e.g. 'RestKit/Network', then
@@ -43,8 +43,8 @@ module Pod
     end
 
     def validate_platform!(spec)
-      unless spec.platform.nil? || spec.platform == @specification.platform
-        raise Informative, "The platform required by the Podfile (:#{@specification.platform}) " \
+      unless spec.platform.nil? || spec.platform == @podfile.platform
+        raise Informative, "The platform required by the Podfile (:#{@podfile.platform}) " \
                            "does not match that of #{spec} (:#{spec.platform})"
       end
     end
