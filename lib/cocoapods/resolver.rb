@@ -1,19 +1,21 @@
 module Pod
   class Resolver
-    def initialize(podfile, dependencies = nil)
-      @podfile, @dependencies = podfile, dependencies || podfile.dependencies
+    def initialize(podfile)
+      @podfile = podfile
     end
 
     def resolve
       @sets, @loaded_spec_names, @specs = [], [], []
-      find_dependency_sets(@podfile, @dependencies)
+      find_dependency_sets(@podfile)
       @specs.sort_by(&:name)
     end
 
-    def find_dependency_sets(podfile, dependencies = nil)
-      (dependencies || podfile.dependencies).each do |dependency|
+    # this can be called with anything that has dependencies
+    # e.g. a Specification or a Podfile.
+    def find_dependency_sets(has_dependencies)
+      has_dependencies.dependencies.each do |dependency|
         set = find_dependency_set(dependency)
-        set.required_by(podfile)
+        set.required_by(has_dependencies)
         unless @loaded_spec_names.include?(dependency.name)
           # Get a reference to the spec that’s actually being loaded.
           # If it’s a subspec dependency, e.g. 'RestKit/Network', then

@@ -124,7 +124,7 @@ module Pod
     end
     
     def dependent_specifications
-      @dependent_specifications ||= Resolver.new(@podfile, @definition ? @definition.dependencies : nil).resolve
+      @dependent_specifications ||= Resolver.new(@podfile).resolve
     end
 
     def build_specifications
