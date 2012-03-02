@@ -2,5 +2,5 @@ language: ruby
 rvm:
   - 1.8.7
   - 1.9.3
-before_install: git submodule update --init && cd external/Xcodeproj && rake travis:install_opencflite_debs && sudo apt-get install subversion
+before_install: git submodule update --init && cd external/Xcodeproj && rake ext:install_opencflite_debs && sudo apt-get install subversion
 script: cd ../.. && bundle exec rake spec:travis
