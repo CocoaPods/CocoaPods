@@ -10,10 +10,16 @@ module Pod
         @podfile, @project, @definition = podfile, project, definition
       end
 
+      def pods_path_relative_to_project
+        pods_path = Pathname.new(config.project_pods_root)
+        source_path = Pathname.new(config.source_root)
+        Pathname.new(pods_path).relative_path_from(source_path)
+      end
+
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'PODS_ROOT' => '$(SRCROOT)/Pods',
+          'PODS_ROOT' => "$(SRCROOT)/#{pods_path_relative_to_project}",
           'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/Headers"',
           'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
           # This makes categories from static libraries work, which many libraries

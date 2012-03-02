@@ -27,6 +27,7 @@ module Pod
         config.clean = !argv.option('--no-clean')
         @update_repo = !argv.option('--no-update')
         @projpath = argv.shift_argument
+        config.source_root = Pathname.new(@projpath) if @projpath
         super unless argv.empty?
       end
 

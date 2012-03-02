@@ -14,6 +14,10 @@ describe "Pod::Installer" do
       @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
     end
 
+    it "sets the PODS_ROOT environment variable relative to the Xcode project" do
+      @xcconfig['PODS_ROOT'].should == "$(SRCROOT)/Pods"
+    end
+
     it "configures the project to load categories from the static library" do
       @xcconfig['OTHER_LDFLAGS'].should == '-ObjC -all_load'
     end
