@@ -26,6 +26,7 @@ CocoaPods runs on [Ruby](http://www.ruby-lang.org/en/). To install it run the fo
 
 Now that you've got CocoaPods installed you can easily add it to your project.
 
+NOTE: If you're using a fresh out of the box Mac with Lion using Xcode from the Mac App Store, you will need to install the Command Line Tools for XCode first: [here](https://developer.apple.com/downloads/index.action)
 
 ## Adding it to your project
 
