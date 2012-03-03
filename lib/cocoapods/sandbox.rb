@@ -1,9 +1,11 @@
+require 'fileutils'
+
 module Pod
   class Sandbox
     attr_reader :root
     
     def initialize(path)
-      @root = path
+      @root = Pathname.new(path)
       @header_search_paths = []
       
       FileUtils.mkdir_p(@root)
@@ -40,6 +42,12 @@ module Pod
     
     def prepare_for_install
       headers_root.rmtree if headers_root.exist?
+    end
+    
+    def installed_pods
+      Dir[root + "**/*.podspec"].map do |podspec|
+        LocalPod.from_podspec(Pathname.new(podspec), self)
+      end
     end
   end
 end

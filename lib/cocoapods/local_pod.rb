@@ -6,6 +6,10 @@ module Pod
       @specification, @sandbox = specification, sandbox
     end
     
+    def self.from_podspec(podspec, sandbox)
+      new(Specification.from_file(podspec), sandbox)
+    end
+    
     def root
       @sandbox.root + specification.name
     end

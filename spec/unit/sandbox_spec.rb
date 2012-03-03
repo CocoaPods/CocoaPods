@@ -72,5 +72,4 @@ describe Pod::Sandbox do
     @sandbox.prepare_for_install
     @sandbox.headers_root.should.not.exist
   end
-  
 end
