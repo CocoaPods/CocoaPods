@@ -12,7 +12,7 @@ You specify the dependencies for your project in one easy text file. CocoaPods r
 
 Ultimately, the goal is to improve discoverability of, and engagement in, third party open-source libraries, by creating a more centralized ecosystem.
 
-See [the wiki](https://github.com/CocoaPods/CocoaPods/wiki) for more in depth information on several topics.
+See the [NSScreencast episode about CocoaPods](http://nsscreencast.com/episodes/5-cocoapods) for a quick overview on how to get started, or [the wiki](https://github.com/CocoaPods/CocoaPods/wiki) for more in depth information on several topics.
 
 
 ## Installation
@@ -25,6 +25,10 @@ CocoaPods runs on [Ruby](http://www.ruby-lang.org/en/). To install it run the fo
     $ pod setup
 
 Now that you've got CocoaPods installed you can easily add it to your project.
+
+NOTE 1: If you're using a fresh out of the box Mac with Lion using Xcode from the Mac App Store, you will need to install the Command Line Tools for Xcode first: [here](https://developer.apple.com/downloads/index.action)
+
+NOTE 2: CocoaPods re-uses some of the RubyGems 1.3.6 classes. If you have an older version (pre OS X 10.7), you will have to update RubyGems: `$ gem update --system`.
 
 
 ## Adding it to your project
