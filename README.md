@@ -28,7 +28,7 @@ Now that you've got CocoaPods installed you can easily add it to your project.
 
 NOTE 1: If you're using a fresh out of the box Mac with Lion using Xcode from the Mac App Store, you will need to install the Command Line Tools for Xcode first: [here](https://developer.apple.com/downloads/index.action)
 
-NOTE 2: If you're on OS X 10.6.x, you will have to update RubyGems: `$ gem update --system`.
+NOTE 2: CocoaPods re-uses some of the RubyGems 1.3.6 classes. If you have an older version (pre OS X 10.7), you will have to update RubyGems: `$ gem update --system`.
 
 
 ## Adding it to your project
