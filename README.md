@@ -26,7 +26,10 @@ CocoaPods runs on [Ruby](http://www.ruby-lang.org/en/). To install it run the fo
 
 Now that you've got CocoaPods installed you can easily add it to your project.
 
-NOTE: If you're using a fresh out of the box Mac with Lion using Xcode from the Mac App Store, you will need to install the Command Line Tools for Xcode first: [here](https://developer.apple.com/downloads/index.action)
+NOTE 1: If you're using a fresh out of the box Mac with Lion using Xcode from the Mac App Store, you will need to install the Command Line Tools for Xcode first: [here](https://developer.apple.com/downloads/index.action)
+
+NOTE 2: If you're on OS X 10.6.x, you will have to update RubyGems: `$ gem update --system`.
+
 
 ## Adding it to your project
 
