@@ -41,25 +41,22 @@ module Pod
         framework = project.add_system_framework(platform == :ios ? 'Foundation' : 'Cocoa')
         framework.group = project.groups.new({ 'name' => 'Frameworks' })
         project.main_group << framework.group
-        products = project.groups.new({ 'name' => 'Products' })
-        project.main_group << products
-        project.root_object.products = products
 
         configuration_list = project.objects.add(Xcodeproj::Project::Object::XCConfigurationList, {
           'defaultConfigurationIsVisible' => '0',
           'defaultConfigurationName' => 'Release',
         })
-      
-        config = configuration_list.build_configurations.new(
+
+        configuration_list.build_configurations.new(
           'name' => 'Debug',
           'buildSettings' => build_settings(platform, :debug)
         )
-      
+
         configuration_list.build_configurations.new(
           'name' => 'Release',
           'buildSettings' => build_settings(platform, :release)
         )
-      
+
         project.root_object.attributes['buildConfigurationList'] = configuration_list.uuid
       end
     end

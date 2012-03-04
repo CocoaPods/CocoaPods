@@ -57,3 +57,6 @@ def copy_fixture_to_pod(name, pod)
   path = SpecHelper::Fixture.fixture(name)
   FileUtils.cp_r(path, pod.root)
 end
+
+
+SpecHelper::Fixture.fixture('banana-lib') # ensure it exists

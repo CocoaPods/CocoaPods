@@ -32,7 +32,7 @@ describe Pod::ProjectIntegration do
     
     @sample_project.targets.each do |target|
       target.build_configurations.each do |config|
-        config.baseConfiguration.should == xcconfig_file
+        config.base_configuration.should == xcconfig_file
       end
     end
   end
@@ -52,7 +52,7 @@ describe Pod::ProjectIntegration do
   it 'adds a Copy Pods Resources build phase to each target' do
     @sample_project.targets.each do |target|
       expected_phase = target.shell_script_build_phases.where(:name => "Copy Pods Resources")
-      expected_phase.shellScript.strip.should == "\"${SRCROOT}/Pods/Pods-resources.sh\"".strip
+      expected_phase.shell_script.strip.should == "\"${SRCROOT}/Pods/Pods-resources.sh\"".strip
     end
   end
 end

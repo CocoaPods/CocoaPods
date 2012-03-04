@@ -68,7 +68,7 @@ module Pod
       def base_project_configurations_on_xcconfig(project, xcconfig_file)
         project.targets.each do |target|
           target.build_configurations.each do |config|
-            config.baseConfiguration = xcconfig_file
+            config.base_configuration = xcconfig_file
           end
         end
       end
@@ -76,7 +76,7 @@ module Pod
       def add_pods_library_to_each_target_in_project(project, pods_library)
         project.targets.each do |target|
           target.frameworks_build_phases.each do |build_phase|
-            build_phase.files << pods_library.buildFiles.new
+            build_phase.files << pods_library.build_files.new
           end
         end
       end
