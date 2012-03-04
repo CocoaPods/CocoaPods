@@ -1,6 +1,8 @@
 require 'rubygems'
+
 require 'bacon'
 require 'mocha-on-bacon'
+Bacon.summary_at_exit
 
 require 'pathname'
 ROOT = Pathname.new(File.expand_path('../../', __FILE__))
