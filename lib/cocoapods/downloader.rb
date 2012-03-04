@@ -11,10 +11,6 @@ module Pod
       spec = spec.part_of_specification if spec.part_of_other_pod?
       for_target(pod.root, spec.source.dup)
     end
-    
-    def self.for_dependency(dependency)
-      for_target(dependency.pod_root, dependency.external_spec_source)
-    end
 
     attr_reader :target_path, :url, :options
 

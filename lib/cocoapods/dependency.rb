@@ -1,14 +1,14 @@
 module Gem
 end
 require 'rubygems/dependency'
+require 'open-uri'
 
 module Pod
   class Dependency < Gem::Dependency
     attr_accessor :only_part_of_other_pod
     alias_method :only_part_of_other_pod?, :only_part_of_other_pod
 
-    attr_accessor :external_spec_source
-
+    attr_reader :external_source
     attr_accessor :specification
 
     def initialize(*name_and_version_requirements, &block)
@@ -19,7 +19,7 @@ module Pod
 
       elsif !name_and_version_requirements.empty? && block.nil?
         if name_and_version_requirements.last.is_a?(Hash)
-          @external_spec_source = name_and_version_requirements.pop
+          @external_source = ExternalSources.from_params(name_and_version_requirements[0], name_and_version_requirements.pop)
         end
         super(*name_and_version_requirements)
 
@@ -33,11 +33,19 @@ module Pod
     def ==(other)
       super &&
         @only_part_of_other_pod == other.only_part_of_other_pod &&
-         (@specification ? @specification == other.specification : @external_spec_source == other.external_spec_source)
+         (@specification ? @specification == other.specification : @external_source == other.external_source)
     end
 
     def subspec_dependency?
       @name.include?('/')
+    end
+    
+    def inline?
+      @inline_podspec
+    end
+    
+    def external?
+      !@external_source.nil?
     end
 
     # In case this is a dependency for a subspec, e.g. 'RestKit/Networking',
@@ -58,48 +66,18 @@ module Pod
 
     def to_s
       version = ''
-      if source = @external_spec_source
-        version << "from `#{source[:git] || source[:podspec]}'"
-        version << ", commit `#{source[:commit]}'" if source[:commit]
-        version << ", tag `#{source[:tag]}'"       if source[:tag]
-      elsif @inline_podspec
+      if external?
+        version << @external_source.description
+      elsif inline?
         version << "defined in Podfile"
       elsif @version_requirements != Gem::Requirement.default
         version << @version_requirements.to_s
       end
       version.empty? ? @name : "#{@name} (#{version})"
     end
-
-    # In case this dependency was defined with either a repo url, :podspec, or block,
-    # this method will return the Specification instance.
-    def specification
-      @specification ||= begin
-        if @external_spec_source
-          config   = Config.instance
-          pod_root = config.project_pods_root + @name
-          spec     = nil
-          if @external_spec_source[:podspec]
-            config.project_pods_root.mkpath
-            spec = config.project_pods_root + "#{@name}.podspec"
-            source = @external_spec_source[:podspec]
-            # can be http, file, etc
-            require 'open-uri'
-            puts "  * Fetching podspec for `#{@name}' from: #{source}" unless config.silent?
-            open(source) do |io|
-              spec.open('w') { |f| f << io.read }
-            end
-          else
-            puts "  * Pre-downloading: `#{@name}'" unless config.silent?
-            Downloader.for_dependency(self).download
-            spec = pod_root + "#{@name}.podspec"
-          end
-          Specification.from_file(spec)
-        end
-      end
-    end
     
-    def pod_root
-      Config.instance.project_pods_root + @name
+    def specification_from_sandbox(sandbox)
+      @external_source.specification_from_sandbox(sandbox)
     end
 
     # Taken from RubyGems 1.3.7
@@ -138,5 +116,68 @@ module Pod
       end
     end
 
+    module ExternalSources
+      def self.from_params(name, params)
+        if params.key?(:git)
+          GitSource.new(name, params)
+        elsif params.key?(:podspec)
+          PodspecSource.new(name, params)
+        else
+          raise Informative, "Unknown external source parameters for #{name}: #{params}"
+        end
+      end
+      
+      class AbstractExternalSource
+        attr_reader :name, :params
+        
+        def initialize(name, params)
+          @name, @params = name, params
+        end
+        
+        def specification_from_sandbox(sandbox)
+          if local_pod = sandbox.installed_pod_named(name)
+            local_pod.specification
+          else
+            copy_external_source_into_sandbox(sandbox)
+            sandbox.installed_pod_named(name).specification
+          end
+        end
+        
+        def ==(other_source)
+          return if other_source.nil?
+          name == other_source.name && 
+          params == other_source.params
+        end
+      end
+      
+      class GitSource < AbstractExternalSource
+        def copy_external_source_into_sandbox(sandbox)
+          puts "  * Pre-downloading: '#{name}'" unless Config.instance.silent?
+          Downloader.for_target(sandbox.root + name, @params).download
+        end
+        
+        def description
+          "from '#{@params[:git]}'".tap do |description|
+            description << ", commit `#{@params[:commit]}'" if @params[:commit]
+            description << ", tag `#{@params[:tag]}'" if @params[:tag]
+          end
+        end
+      end
+      
+      class PodspecSource < AbstractExternalSource
+        def copy_external_source_into_sandbox(sandbox)
+          output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
+          podspec_url = @params[:podspec] # can be http, file, etc
+          puts "  * Fetching podspec for `#{name}' from: #{podspec_url}" unless Config.instance.silent?
+          open(source) do |io|
+            output_path.open('w') { |f| f << io.read }
+          end
+        end
+        
+        def description
+          version << "from '#{source[:podspec]}'"
+        end
+      end
+    end
   end
 end

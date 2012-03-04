@@ -22,6 +22,10 @@ module Pod
       end
     end
     
+    def name
+      specification.name
+    end
+    
     def create
       root.mkpath unless exists?
     end

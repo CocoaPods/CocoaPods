@@ -23,7 +23,7 @@ describe "Pod::Podfile" do
       dependency 'SomeExternalPod', :git => 'GIT-URL', :commit => '1234'
     end
     dep = podfile.dependency_by_top_level_spec_name('SomeExternalPod')
-    dep.external_spec_source.should == { :git => 'GIT-URL', :commit => '1234' }
+    dep.external_source.params.should == { :git => 'GIT-URL', :commit => '1234' }
   end
 
   it "adds a dependency on a library outside of a spec repo (the repo does not need to contain a podspec)" do
@@ -31,7 +31,7 @@ describe "Pod::Podfile" do
       dependency 'SomeExternalPod', :podspec => 'http://gist/SomeExternalPod.podspec'
     end
     dep = podfile.dependency_by_top_level_spec_name('SomeExternalPod')
-    dep.external_spec_source.should == { :podspec => 'http://gist/SomeExternalPod.podspec' }
+    dep.external_source.params.should == { :podspec => 'http://gist/SomeExternalPod.podspec' }
   end
 
   it "adds a dependency on a library by specifying the podspec inline" do

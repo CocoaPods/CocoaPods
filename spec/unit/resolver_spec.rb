@@ -39,13 +39,13 @@ describe "Pod::Resolver" do
   end
 
   it "returns all specs needed for the dependency" do
-    specs = Pod::Resolver.new(@podfile).resolve
+    specs = Pod::Resolver.new(@podfile, stub('sandbox')).resolve
     specs.map(&:class).uniq.should == [Pod::Specification]
     specs.map(&:name).sort.should == %w{ ASIHTTPRequest ASIWebPageRequest Reachability }
   end
 
   it "does not raise if all dependencies match the platform of the root spec (Podfile)" do
-    resolver = Pod::Resolver.new(@podfile)
+    resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
 
     @podfile.platform :ios
     lambda { resolver.resolve }.should.not.raise
@@ -54,7 +54,7 @@ describe "Pod::Resolver" do
   end
 
   it "raises once any of the dependencies does not match the platform of the root spec (Podfile)" do
-    resolver = StubbedResolver.new(config.rootspec)
+    resolver = StubbedResolver.new(config.rootspec, stub('sandbox'))
 
     @podfile.platform :ios
     resolver.stub_platform = :ios
@@ -76,7 +76,7 @@ describe "Pod::Resolver" do
       dependency 'RestKit/ObjectMapping'
     end
     config.rootspec = @podfile
-    resolver = Pod::Resolver.new(@podfile)
+    resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
     resolver.resolve.map(&:name).sort.should == %w{ LibComponentLogging-Core LibComponentLogging-NSLog RestKit RestKit/Network RestKit/ObjectMapping }
   end
 end

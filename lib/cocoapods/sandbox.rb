@@ -49,5 +49,9 @@ module Pod
         LocalPod.from_podspec(Pathname.new(podspec), self)
       end
     end
+    
+    def installed_pod_named(name)
+      installed_pods.find { |pod| pod.name == name }
+    end
   end
 end

@@ -1,7 +1,8 @@
 module Pod
   class Resolver
-    def initialize(podfile)
+    def initialize(podfile, sandbox)
       @podfile = podfile
+      @sandbox = sandbox
     end
 
     def resolve
@@ -37,8 +38,11 @@ module Pod
     end
 
     def find_dependency_set(dependency)
-      if external_spec = dependency.specification
-        Specification::Set::External.new(external_spec)
+      if dependency.specification
+        Specification::Set::External.new(dependency.specification)
+      elsif external_source = dependency.external_source
+        specification = external_source.specification_from_sandbox(@sandbox)
+        Specification::Set::External.new(specification)
       else
         Source.search(dependency)
       end
