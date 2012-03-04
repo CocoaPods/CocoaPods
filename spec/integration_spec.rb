@@ -150,7 +150,7 @@ else
       end
 
       # TODO add a simple source file which uses the compiled lib to check that it really really works
-      it "should activate required pods and create a working static library xcode project" do
+      it "activates required pods and create a working static library xcode project" do
         spec = Pod::Podfile.new do
           # first ensure that the correct info is available to the specs when they load
           config.rootspec = self
@@ -191,7 +191,7 @@ else
         root = config.project_pods_root
         (root + 'Pods.xcconfig').read.should == installer.target_installers.first.xcconfig.to_s
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
-        NSDictionary.dictionaryWithContentsOfFile(project_file).should == installer.project.to_hash
+        Xcodeproj.read_plist(project_file).should == installer.project.to_hash
 
         puts "\n[!] Compiling static library..."
         Dir.chdir(config.project_pods_root) do
@@ -230,7 +230,8 @@ else
         end
 
         installer = SpecHelper::Installer.new(spec)
-        installer.target_installers.first.build_specifications.first.resources = 'LICEN*', 'Readme.*'
+        target_definition = installer.target_installers.first.target_definition
+        installer.build_specifications_for_target(target_definition).first.resources = 'LICEN*', 'Readme.*'
         installer.install!
 
         contents = (config.project_pods_root + 'Pods-resources.sh').read
@@ -316,7 +317,7 @@ else
         end
         installer = SpecHelper::Installer.new(spec)
         installer.install!
-        installer.configure_project(projpath)
+        Pod::ProjectIntegration.integrate_with_project(projpath)
 
         xcworkspace = temporary_directory + 'ASIHTTPRequest.xcworkspace'
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(xcworkspace)
@@ -326,14 +327,14 @@ else
         libPods = project.files.find { |f| f.name == 'libPods.a' }
         project.targets.each do |target|
           target.build_configurations.each do |config|
-            config.baseConfiguration.path.should == 'Pods/Pods.xcconfig'
+            config.base_configuration.path.should == 'Pods/Pods.xcconfig'
           end
 
           phase = target.frameworks_build_phases.first
-          phase.files.map { |buildFile| buildFile.file }.should.include libPods
+          phase.files.map { |build_file| build_file.file }.should.include libPods
 
           # should be the last phase
-          target.build_phases.last.shellScript.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
+          target.build_phases.last.shell_script.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
         end
       end
 

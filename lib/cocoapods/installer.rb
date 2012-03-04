@@ -27,7 +27,7 @@ module Pod
         # Add all source files to the project grouped by pod
         group = @project.add_pod_group(spec.name)
         spec.expanded_source_files.each do |path|
-          group.children.new('path' => path.to_s)
+          group.files.new('path' => path.to_s)
         end
       end
       # Add a group to hold all the target support files
