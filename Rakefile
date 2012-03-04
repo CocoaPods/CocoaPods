@@ -56,14 +56,18 @@ namespace :ext do
 end
 
 namespace :spec do
+  def specs(dir)
+    FileList["spec/#{dir}/*_spec.rb"].shuffle.join(' ')
+  end
+
   desc "Run the unit specs"
   task :unit do
-    sh "bacon spec/unit/*_spec.rb spec/unit/**/*_spec.rb -q"
+    sh "bacon #{specs('unit/**')} -q"
   end
 
   desc "Run the functional specs"
   task :functional => "ext:cleanbuild" do
-    sh "bacon spec/functional/*_spec.rb"
+    sh "bacon #{specs('functional/**')}"
   end
 
   desc "Run the integration spec"
@@ -72,7 +76,7 @@ namespace :spec do
   end
 
   task :all => "ext:cleanbuild" do
-    sh "bacon #{FileList['spec/**/*_spec.rb'].join(' ')}"
+    sh "bacon #{specs('**')}"
   end
 
   desc "Run all specs and build all examples"

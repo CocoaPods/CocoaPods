@@ -54,6 +54,8 @@ describe "Pod::Command" do
   end
 
   before do
+    Pod::Source.reset!
+    Pod::Spec::Set.reset!
     config.repos_dir = fixture('spec-repos')
   end
 

@@ -176,7 +176,6 @@ module Pod
         end
         
         def description
-          # TODO did we have a version number here too before?
           "from `#{@params[:podspec]}'"
         end
       end
