@@ -157,25 +157,27 @@ module Pod
         end
         
         def description
-          "from '#{@params[:git]}'".tap do |description|
+          "from `#{@params[:git]}'".tap do |description|
             description << ", commit `#{@params[:commit]}'" if @params[:commit]
             description << ", tag `#{@params[:tag]}'" if @params[:tag]
           end
         end
       end
-      
+
+      # can be http, file, etc
       class PodspecSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox)
           output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
-          podspec_url = @params[:podspec] # can be http, file, etc
-          puts "  * Fetching podspec for `#{name}' from: #{podspec_url}" unless Config.instance.silent?
-          open(source) do |io|
+          output_path.dirname.mkpath
+          puts "  * Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless Config.instance.silent?
+          open(@params[:podspec]) do |io|
             output_path.open('w') { |f| f << io.read }
           end
         end
         
         def description
-          version << "from '#{source[:podspec]}'"
+          # TODO did we have a version number here too before?
+          "from `#{@params[:podspec]}'"
         end
       end
     end

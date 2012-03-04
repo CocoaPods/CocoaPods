@@ -81,12 +81,6 @@ namespace :spec do
     Rake::Task['examples:build'].invoke
   end
 
-  # For now we don't run the intgration spec, but it should be cleaned up so it can run on Travis.
-  desc "Run the travis CI specs"
-  task :travis => "ext:cleanbuild" do
-    sh "bacon #{FileList['spec/{functional,unit}/**/*_spec.rb'].join(' ')}"
-  end
-
   desc "Rebuild all the fixture tarballs"
   task :rebuild_fixture_tarballs do
     tarballs = FileList['spec/fixtures/**/*.tar.gz']

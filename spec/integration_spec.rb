@@ -1,6 +1,8 @@
 require File.expand_path('../spec_helper', __FILE__)
 require 'yaml'
 
+# TODO Make specs faster by limiting remote network connections
+
 module SpecHelper
   class Installer < Pod::Installer
     # Here we override the `source' of the pod specifications to point to the integration fixtures.
@@ -43,6 +45,15 @@ else
 
       after do
         Pod::Config.instance = @config_before
+      end
+
+      # This is so we can run at least the specs that don't use xcodebuild on Travis.
+      def with_xcodebuild_available
+        unless `which xcodebuild`.strip.empty?
+          yield
+        else
+          puts "\n[!] Skipping xcodebuild, because it can't be found."
+        end
       end
 
       def should_successfully_perform(command)
@@ -193,9 +204,11 @@ else
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
         Xcodeproj.read_plist(project_file).should == installer.project.to_hash
 
-        puts "\n[!] Compiling static library..."
-        Dir.chdir(config.project_pods_root) do
-          should_successfully_perform "xcodebuild"
+        with_xcodebuild_available do
+          puts "\n[!] Compiling static library..."
+          Dir.chdir(config.project_pods_root) do
+            should_successfully_perform "xcodebuild"
+          end
         end
       end
 
@@ -297,13 +310,15 @@ else
         (root + 'Pods-debug-resources.sh').should.exist
         (root + 'Pods-test-resources.sh').should.exist
 
-        Dir.chdir(config.project_pods_root) do
-          puts "\n[!] Compiling static library `Pods'..."
-          should_successfully_perform "xcodebuild -target Pods"
-          puts "\n[!] Compiling static library `Pods-debug'..."
-          should_successfully_perform "xcodebuild -target Pods-debug"
-          puts "\n[!] Compiling static library `Pods-test'..."
-          should_successfully_perform "xcodebuild -target Pods-test"
+        with_xcodebuild_available do
+          Dir.chdir(config.project_pods_root) do
+            puts "\n[!] Compiling static library `Pods'..."
+            should_successfully_perform "xcodebuild -target Pods"
+            puts "\n[!] Compiling static library `Pods-debug'..."
+            should_successfully_perform "xcodebuild -target Pods-debug"
+            puts "\n[!] Compiling static library `Pods-test'..."
+            should_successfully_perform "xcodebuild -target Pods-test"
+          end
         end
       end
 

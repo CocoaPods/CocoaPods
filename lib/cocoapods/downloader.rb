@@ -26,6 +26,7 @@ module Pod
     private
     
     def self.for_target(target_path, options)
+      options = options.dup
       if url = options.delete(:git)
         Git.new(target_path, url, options)
       elsif url = options.delete(:hg)
