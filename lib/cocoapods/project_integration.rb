@@ -30,17 +30,17 @@ module Pod
 
         xcconfig = app_project.files.new('path' => 'Pods/Pods.xcconfig')
         base_project_configurations_on_xcconfig(app_project, xcconfig)
-      
+
         libfile = app_project.files.new_static_library('Pods')
         libfile.group = app_project.group("Frameworks")
-        
+
         add_pods_library_to_each_target_in_project(app_project, libfile)
-      
+
         copy_resources = app_project.add_shell_script_build_phase(
           'Copy Pods Resources', %{"${SRCROOT}/Pods/Pods-resources.sh"\n})
-          
+
         add_copy_resources_script_phase_to_each_target_in_project(app_project, copy_resources)
-      
+
         app_project.save_as(projpath)
 
         unless config.silent?
@@ -48,7 +48,7 @@ module Pod
           puts "[!] From now on use `#{File.basename(xcworkspace)}' instead of `#{File.basename(projpath)}'."
         end
       end
-      
+
       def create_workspace(in_directory, name, project_path)
         workspace_path = File.join(in_directory, name + '.xcworkspace')
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
@@ -59,8 +59,9 @@ module Pod
           workspace << path unless workspace.include?(path)
         end
         workspace.save_as(workspace_path)
+        workspace_path
       end
-      
+
       def project_already_integrated?(project)
         project.files.find { |file| file.path =~ /libPods\.a$/ }
       end

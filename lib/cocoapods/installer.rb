@@ -17,11 +17,6 @@ module Pod
       config.project_root + 'Podfile.lock'
     end
 
-    def dependency_specifications
-      # Resolve *all* dependencies first.
-      @dependency_specifications ||= @resolver.resolve
-    end
-
     def project
       return @project if @project
       @project = Pod::Project.for_platform(@podfile.platform)
