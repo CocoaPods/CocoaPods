@@ -65,7 +65,11 @@ describe Pod::Sandbox do
       File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
     end
     @sandbox.add_header_files(namespace_path, relative_header_paths)
-    @sandbox.header_search_paths.should == ["$(PODS_ROOT)/Headers/ExampleLib"]
+    @sandbox.header_search_paths.should.include("$(PODS_ROOT)/Headers/ExampleLib")
+  end
+  
+  it 'always adds the Headers root to the header search paths' do
+    @sandbox.header_search_paths.should.include("$(PODS_ROOT)/Headers")
   end
   
   it 'clears out its headers root when preparing for install' do

@@ -4,9 +4,11 @@ module Pod
   class Sandbox
     attr_reader :root
     
+    HEADERS_DIR = "Headers"
+    
     def initialize(path)
       @root = Pathname.new(path)
-      @header_search_paths = []
+      @header_search_paths = [HEADERS_DIR]
       
       FileUtils.mkdir_p(@root)
     end
@@ -16,7 +18,7 @@ module Pod
     end
     
     def headers_root
-      root + "Headers"
+      root + HEADERS_DIR
     end
     
     def project_path

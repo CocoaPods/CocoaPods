@@ -13,7 +13,6 @@ module Pod
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
           'PODS_ROOT' => '$(SRCROOT)/Pods',
-          'HEADER_SEARCH_PATHS' => '"$(PODS_ROOT)/Headers"',
           'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
           # This makes categories from static libraries work, which many libraries
           # require, so we add these by default.
@@ -68,10 +67,12 @@ module Pod
         pods.each do |pod|
           xcconfig.merge!(pod.specification.xcconfig)
           pod.add_to_target(@target)
+          
+          # TODO: this doesn't need to be done here, it has nothing to do with the target
           pod.link_headers
         end
         
-        xcconfig.merge!('HEADER_SEARCH_PATHS' => sandbox.header_search_paths.join(" "))
+        xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.header_search_paths).join(" "))
 
         support_files_group = @project.group("Targets Support Files").create_group(@target_definition.lib_name)
         support_files_group.add_file_paths(target_support_files)
@@ -104,6 +105,12 @@ module Pod
         save_prefix_header_as(sandbox.root + prefix_header_filename)
         puts "* Generating copy resources script at `#{sandbox.root + copy_resources_filename}'" if config.verbose?
         copy_resources_script_for(pods).save_as(sandbox.root + copy_resources_filename)
+      end
+      
+      private
+      
+      def quoted(strings)
+        strings.map { |s| "\"#{s}\"" }
       end
     end
   end

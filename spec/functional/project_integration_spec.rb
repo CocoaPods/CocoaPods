@@ -1,7 +1,6 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
-describe Pod::ProjectIntegration do
-  
+describe Pod::ProjectIntegration do 
   before do
     @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
     Pod::ProjectIntegration.integrate_with_project(@sample_project_path)
