@@ -78,7 +78,7 @@ module Pod
 
         xcconfig_file = support_files_group.file_with_path(xcconfig_filename)
 
-        configure_build_configurations(xcconfig_filename)
+        configure_build_configurations(xcconfig_file)
         create_files(pods, sandbox)
       end
       
