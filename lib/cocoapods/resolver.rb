@@ -6,15 +6,18 @@ module Pod
     end
 
     def resolve
-      @sets, @loaded_spec_names, @specs = [], [], []
-      find_dependency_sets(@podfile)
-      @specs.sort_by(&:name)
+      @podfile.target_definitions.values.inject({}) do |result, target_definition|
+        @sets, @loaded_spec_names, @specs = [], [], []
+        find_dependency_sets(@podfile, target_definition.dependencies)
+        result[target_definition] = @specs.sort_by(&:name)
+        result
+      end
     end
 
     # this can be called with anything that has dependencies
     # e.g. a Specification or a Podfile.
-    def find_dependency_sets(has_dependencies)
-      has_dependencies.dependencies.each do |dependency|
+    def find_dependency_sets(has_dependencies, dependency_subset = nil)
+      (dependency_subset || has_dependencies.dependencies).each do |dependency|
         set = find_dependency_set(dependency)
         set.required_by(has_dependencies)
         unless @loaded_spec_names.include?(dependency.name)

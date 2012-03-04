@@ -39,7 +39,7 @@ describe "Pod::Resolver" do
   end
 
   it "returns all specs needed for the dependency" do
-    specs = Pod::Resolver.new(@podfile, stub('sandbox')).resolve
+    specs = Pod::Resolver.new(@podfile, stub('sandbox')).resolve.values.flatten
     specs.map(&:class).uniq.should == [Pod::Specification]
     specs.map(&:name).sort.should == %w{ ASIHTTPRequest ASIWebPageRequest Reachability }
   end
@@ -77,7 +77,7 @@ describe "Pod::Resolver" do
     end
     config.rootspec = @podfile
     resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
-    resolver.resolve.map(&:name).sort.should == %w{ LibComponentLogging-Core LibComponentLogging-NSLog RestKit RestKit/Network RestKit/ObjectMapping }
+    resolver.resolve.values.flatten.map(&:name).sort.should == %w{ LibComponentLogging-Core LibComponentLogging-NSLog RestKit RestKit/Network RestKit/ObjectMapping }
   end
 end
 

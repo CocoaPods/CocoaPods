@@ -69,7 +69,9 @@ module Pod
 
       puts "Generating support files" unless config.silent?
       target_installers.each do |target_installer|
-        target_installer.install!(pods, sandbox)
+        target_specs = build_specifications_for_target(target_installer.target_definition)
+        pods_for_target = pods.select { |pod| target_specs.include?(pod.specification) }
+        target_installer.install!(pods_for_target, sandbox)
       end
       
       generate_lock_file!(pods)
@@ -87,7 +89,9 @@ module Pod
       # to the spec post install hook.
       
       target_installers.each do |target_installer|
-        build_specifications.each { |spec| spec.post_install(target_installer) }
+        build_specifications_for_target(target_installer.target_definition).each do |spec|    
+          spec.post_install(target_installer)
+        end
       end
       
       @podfile.post_install!(self)
@@ -123,14 +127,22 @@ module Pod
       end
     end
     
+    def dependent_specifications_for_each_target_definition
+      @dependent_specifications_for_each_target_definition ||= Resolver.new(@podfile, @sandbox).resolve
+    end
+    
     def dependent_specifications
-      @dependent_specifications ||= Resolver.new(@podfile, @sandbox).resolve
+      dependent_specifications_for_each_target_definition.values.flatten
     end
 
     def build_specifications
       dependent_specifications.reject do |spec|
         spec.wrapper? || spec.defined_in_set.only_part_of_other_pod?
       end
+    end
+    
+    def build_specifications_for_target(target_definition)
+      dependent_specifications_for_each_target_definition[target_definition]
     end
 
     def download_only_specifications
