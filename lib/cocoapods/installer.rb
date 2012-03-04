@@ -87,7 +87,7 @@ module Pod
       # to the spec post install hook.
       
       target_installers.each do |target_installer|
-        target_installer.build_specifications.each { |spec| spec.post_install(target_installer) }
+        build_specifications.each { |spec| spec.post_install(target_installer) }
       end
       
       @podfile.post_install!(self)
@@ -124,7 +124,7 @@ module Pod
     end
     
     def dependent_specifications
-      @dependent_specifications ||= Resolver.new(@podfile).resolve
+      @dependent_specifications ||= Resolver.new(@podfile, @sandbox).resolve
     end
 
     def build_specifications
