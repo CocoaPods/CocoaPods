@@ -13,7 +13,7 @@ describe 'Pod::Project' do
 
   it "adds a group to the `Pods' group" do
     group = @project.add_pod_group('JSONKit')
-    @project.pods.childReferences.should.include group.uuid
+    @project.pods.child_references.should.include group.uuid
     find_object({
       'isa' => 'PBXGroup',
       'name' => 'JSONKit',
@@ -30,7 +30,7 @@ describe 'Pod::Project' do
       'dstPath' => 'Pods/Path/To/Source',
       'name' => 'Copy SomePod Public Headers'
     }).should.not == nil
-    @project.targets.first.buildPhases.should.include phase
+    @project.targets.first.build_phases.should.include phase
   end
   
   shared "for any platform" do
@@ -48,43 +48,43 @@ describe 'Pod::Project' do
     behaves_like "for any platform"
     
     it "sets VALIDATE_PRODUCT to YES for the Release configuration" do
-      @project.build_configuration("Release").buildSettings["VALIDATE_PRODUCT"].should == "YES"
+      @project.build_configuration("Release").build_settings["VALIDATE_PRODUCT"].should == "YES"
     end
   end
   
   describe "for the :ios platform with a deployment target" do
     it "sets ARCHS to 'armv6 armv7' for both configurations if the deployment target is less than 4.3" do
       @project = Pod::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.0"))
-      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "armv6 armv7"
-      @project.build_configuration("Release").buildSettings["ARCHS"].should == "armv6 armv7"
+      @project.build_configuration("Debug").build_settings["ARCHS"].should == "armv6 armv7"
+      @project.build_configuration("Release").build_settings["ARCHS"].should == "armv6 armv7"
       
       @project = Pod::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.1"))
-      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "armv6 armv7"
-      @project.build_configuration("Release").buildSettings["ARCHS"].should == "armv6 armv7"
+      @project.build_configuration("Debug").build_settings["ARCHS"].should == "armv6 armv7"
+      @project.build_configuration("Release").build_settings["ARCHS"].should == "armv6 armv7"
       
       @project = Pod::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.2"))
-      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "armv6 armv7"
-      @project.build_configuration("Release").buildSettings["ARCHS"].should == "armv6 armv7"
+      @project.build_configuration("Debug").build_settings["ARCHS"].should == "armv6 armv7"
+      @project.build_configuration("Release").build_settings["ARCHS"].should == "armv6 armv7"
     end
     
     it "uses standard ARCHs if deployment target is 4.3 or above" do
       @project = Pod::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.3"))
-      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-      @project.build_configuration("Release").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+      @project.build_configuration("Debug").build_settings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+      @project.build_configuration("Release").build_settings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
       
       @project = Pod::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.4"))
-      @project.build_configuration("Debug").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-      @project.build_configuration("Release").buildSettings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+      @project.build_configuration("Debug").build_settings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+      @project.build_configuration("Release").build_settings["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
     end
     
     it "sets IPHONEOS_DEPLOYMENT_TARGET for both configurations" do
       @project = Pod::Project.for_platform(Pod::Platform.new(:ios))
-      @project.build_configuration("Debug").buildSettings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.3"
-      @project.build_configuration("Release").buildSettings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.3"
+      @project.build_configuration("Debug").build_settings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.3"
+      @project.build_configuration("Release").build_settings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.3"
 
       @project = Pod::Project.for_platform(Pod::Platform.new(:ios, :deployment_target => "4.0"))
-      @project.build_configuration("Debug").buildSettings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.0"
-      @project.build_configuration("Release").buildSettings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.0"
+      @project.build_configuration("Debug").build_settings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.0"
+      @project.build_configuration("Release").build_settings["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.0"
     end
   end
 end

@@ -136,16 +136,16 @@ else
 
           post_install do |installer|
             target = installer.project.targets.first
-            target.buildConfigurations.each do |config|
-              config.buildSettings['GCC_ENABLE_OBJC_GC'] = 'supported'
+            target.build_configurations.each do |config|
+              config.build_settings['GCC_ENABLE_OBJC_GC'] = 'supported'
             end
           end
         end
 
         SpecHelper::Installer.new(podfile).install!
         project = Pod::Project.new(config.project_pods_root + 'Pods.xcodeproj')
-        project.targets.first.buildConfigurations.map do |config|
-          config.buildSettings['GCC_ENABLE_OBJC_GC']
+        project.targets.first.build_configurations.map do |config|
+          config.build_settings['GCC_ENABLE_OBJC_GC']
         end.should == %w{ supported supported }
       end
 
@@ -325,7 +325,7 @@ else
         project = Pod::Project.new(projpath)
         libPods = project.files.find { |f| f.name == 'libPods.a' }
         project.targets.each do |target|
-          target.buildConfigurations.each do |config|
+          target.build_configurations.each do |config|
             config.baseConfiguration.path.should == 'Pods/Pods.xcconfig'
           end
 
@@ -333,7 +333,7 @@ else
           phase.files.map { |buildFile| buildFile.file }.should.include libPods
 
           # should be the last phase
-          target.buildPhases.last.shellScript.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
+          target.build_phases.last.shellScript.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
         end
       end
 

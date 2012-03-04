@@ -78,8 +78,8 @@ _before_ it’s written to disk. [[docs][3]]
 # Enable garbage collection support for MacRuby applications.
 post_install do |installer|
   installer.project.targets.each do |target|
-    target.buildConfigurations.each do |config|
-      config.buildSettings['GCC_ENABLE_OBJC_GC'] = 'supported'
+    target.build_configurations.each do |config|
+      config.build_settings['GCC_ENABLE_OBJC_GC'] = 'supported'
     end
   end
 end

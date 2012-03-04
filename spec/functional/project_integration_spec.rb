@@ -31,7 +31,7 @@ describe Pod::ProjectIntegration do
     xcconfig_file = @sample_project.files.where(:path => "Pods/Pods.xcconfig")
     
     @sample_project.targets.each do |target|
-      target.buildConfigurations.each do |config|
+      target.build_configurations.each do |config|
         config.baseConfiguration.should == xcconfig_file
       end
     end

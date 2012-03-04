@@ -67,7 +67,7 @@ module Pod
       
       def base_project_configurations_on_xcconfig(project, xcconfig_file)
         project.targets.each do |target|
-          target.buildConfigurations.each do |config|
+          target.build_configurations.each do |config|
             config.baseConfiguration = xcconfig_file
           end
         end
@@ -82,7 +82,7 @@ module Pod
       end
       
       def add_copy_resources_script_phase_to_each_target_in_project(project, copy_resources_script_phase)
-        project.targets.each { |target| target.buildPhases << copy_resources_script_phase }
+        project.targets.each { |target| target.build_phases << copy_resources_script_phase }
       end
     end
   end

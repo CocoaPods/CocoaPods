@@ -83,11 +83,11 @@ module Pod
       end
       
       def configure_build_configurations(xcconfig_file)
-        @target.buildConfigurations.each do |config|
+        @target.build_configurations.each do |config|
           config.baseConfiguration = xcconfig_file
-          config.buildSettings['OTHER_LDFLAGS'] = ''
-          config.buildSettings['GCC_PREFIX_HEADER'] = prefix_header_filename
-          config.buildSettings['PODS_ROOT'] = '$(SRCROOT)'
+          config.build_settings['OTHER_LDFLAGS'] = ''
+          config.build_settings['GCC_PREFIX_HEADER'] = prefix_header_filename
+          config.build_settings['PODS_ROOT'] = '$(SRCROOT)'
         end
       end
 
