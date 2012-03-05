@@ -1,3 +1,5 @@
+require 'uri'
+
 module Pod
   class Downloader
     autoload :Git,        'cocoapods/downloader/git'
@@ -28,7 +30,11 @@ module Pod
     def self.for_target(target_path, options)
       options = options.dup
       if url = options.delete(:git)
-        Git.new(target_path, url, options)
+        if url.to_s =~ /github.com/
+          GitHub.new(target_path, url, options)
+        else
+          Git.new(target_path, url, options)
+        end
       elsif url = options.delete(:hg)
         Mercurial.new(target_path, url, options)
       elsif url = options.delete(:svn)

@@ -38,6 +38,44 @@ describe "Pod::Downloader" do
     end
   end
   
+  describe "for Github repositories, with :download_only set to true" do
+    extend SpecHelper::TemporaryDirectory
+    
+    it "downloads HEAD with no other options specified" do
+      @pod.specification.stubs(:source).returns(
+        :git => "git://github.com/lukeredpath/libPusher.git", :download_only => true
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.download
+      
+      # deliberately keep this assertion as loose as possible for now
+      (@pod.root + 'README.md').readlines[0].should =~ /libPusher/
+    end
+    
+    it "downloads a specific tag when specified" do
+      @pod.specification.stubs(:source).returns(
+        :git => "git://github.com/lukeredpath/libPusher.git", :tag => 'v1.1', :download_only => true
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.download
+      
+      # deliberately keep this assertion as loose as possible for now
+      (@pod.root + 'libPusher.podspec').readlines.grep(/1.1/).should.not.be.empty
+    end
+    
+    it "downloads a specific commit when specified" do
+      @pod.specification.stubs(:source).returns(
+        :git => "git://github.com/lukeredpath/libPusher.git", :commit => 'eca89998d5', :download_only => true
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.download
+      
+      # deliberately keep this assertion as loose as possible for now
+      (@pod.root + 'README.md').readlines[0].should =~ /PusherTouch/
+    end
+
+  end
+  
   describe "for Mercurial" do
     it "check's out a specific revision" do
       @pod.specification.stubs(:source).returns(
