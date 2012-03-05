@@ -8,4 +8,6 @@ group :development do
   gem "rb-fsevent"
   gem "growl"
   gem "mocha-on-bacon"
+  gem "vcr"
+  gem "webmock"
 end

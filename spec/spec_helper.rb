@@ -49,3 +49,11 @@ def copy_fixture_to_pod(name, pod)
 end
 
 SpecHelper::Fixture.fixture('banana-lib') # ensure it exists
+
+require 'vcr'
+require 'webmock'
+
+VCR.configure do |c|
+  c.cassette_library_dir = (ROOT + 'spec/fixtures/vcr').to_s
+  c.hook_into :webmock # or :fakeweb
+end

@@ -46,7 +46,8 @@ describe "Pod::Downloader" do
         :git => "git://github.com/lukeredpath/libPusher.git", :download_only => true
       )
       downloader = Pod::Downloader.for_pod(@pod)
-      downloader.download
+      
+      VCR.use_cassette('tarballs', :record => :new_episodes) { downloader.download }
       
       # deliberately keep this assertion as loose as possible for now
       (@pod.root + 'README.md').readlines[0].should =~ /libPusher/
@@ -57,7 +58,8 @@ describe "Pod::Downloader" do
         :git => "git://github.com/lukeredpath/libPusher.git", :tag => 'v1.1', :download_only => true
       )
       downloader = Pod::Downloader.for_pod(@pod)
-      downloader.download
+
+      VCR.use_cassette('tarballs', :record => :new_episodes) { downloader.download }
       
       # deliberately keep this assertion as loose as possible for now
       (@pod.root + 'libPusher.podspec').readlines.grep(/1.1/).should.not.be.empty
@@ -68,12 +70,12 @@ describe "Pod::Downloader" do
         :git => "git://github.com/lukeredpath/libPusher.git", :commit => 'eca89998d5', :download_only => true
       )
       downloader = Pod::Downloader.for_pod(@pod)
-      downloader.download
+      
+      VCR.use_cassette('tarballs', :record => :new_episodes) { downloader.download }
       
       # deliberately keep this assertion as loose as possible for now
       (@pod.root + 'README.md').readlines[0].should =~ /PusherTouch/
     end
-
   end
   
   describe "for Mercurial" do
