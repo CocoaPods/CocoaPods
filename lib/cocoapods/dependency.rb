@@ -139,7 +139,9 @@ module Pod
             local_pod.specification
           else
             copy_external_source_into_sandbox(sandbox)
-            sandbox.installed_pod_named(name).specification
+            local_pod = sandbox.installed_pod_named(name)
+            local_pod.clean if Config.instance.clean
+            local_pod.specification
           end
         end
         
@@ -153,7 +155,10 @@ module Pod
       class GitSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox)
           puts "  * Pre-downloading: '#{name}'" unless Config.instance.silent?
-          Downloader.for_target(sandbox.root + name, @params).download
+          Downloader.for_target(sandbox.root + name, @params).tap do |downloader|
+            downloader.download
+            downloader.clean if Config.instance.clean
+          end
         end
         
         def description
