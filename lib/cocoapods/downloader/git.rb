@@ -75,13 +75,17 @@ module Pod
       end
       
       def download_and_extract_tarball(id)
-        Tempfile.open('tarball') do |tmpfile|
+        tmp_path = target_path + "tarball.tar.gz"
+
+        File.open(tmp_path, "w+") do |tmpfile|
           open tarball_url_for(id) do |archive|
             tmpfile.write Zlib::GzipReader.new(archive).read
           end
           
           system "tar zxf #{tmpfile.path} -C #{target_path} --strip-components 1"
         end
+        
+        FileUtils.rm_f(tmp_path)
       end
     end
   end

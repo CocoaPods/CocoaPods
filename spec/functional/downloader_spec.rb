@@ -76,6 +76,17 @@ describe "Pod::Downloader" do
       # deliberately keep this assertion as loose as possible for now
       (@pod.root + 'README.md').readlines[0].should =~ /PusherTouch/
     end
+    
+    it 'deletes the downloaded tarball after unpacking it' do
+      @pod.specification.stubs(:source).returns(
+        :git => "git://github.com/lukeredpath/libPusher.git", :download_only => true
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      
+      VCR.use_cassette('tarballs', :record => :new_episodes) { downloader.download }
+      
+      (@pod.root + 'tarball.tar.gz').should.not.exist
+    end
   end
   
   describe "for Mercurial" do
