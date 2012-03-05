@@ -75,6 +75,10 @@ module Pod
       end
     end
     
+    def requires_arc?
+      specification.requires_arc
+    end
+    
     private
     
     def implementation_files

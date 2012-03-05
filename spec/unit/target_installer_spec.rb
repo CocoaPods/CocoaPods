@@ -44,5 +44,10 @@ describe Pod::Installer::TargetInstaller do
     do_install!
     @installer.xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include("\"#{@sandbox.header_search_paths.join(" ")}\"")
   end
-
+  
+  it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
+    @specification.stubs(:requires_arc).returns(true)
+    do_install!
+    @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
+  end
 end

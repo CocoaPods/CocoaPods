@@ -4,6 +4,7 @@ module Pod
       include Config::Mixin
 
       attr_reader :podfile, :project, :target_definition, :target
+      attr_accessor :requires_arc
 
       def initialize(podfile, project, target_definition)
         @podfile, @project, @target_definition = podfile, project, target_definition
@@ -16,7 +17,7 @@ module Pod
           'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
           # This makes categories from static libraries work, which many libraries
           # require, so we add these by default.
-          'OTHER_LDFLAGS'            => '-ObjC -all_load',
+          'OTHER_LDFLAGS'            => default_ld_flags,
         })
       end
 
@@ -61,6 +62,8 @@ module Pod
 
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!(pods, sandbox)
+        self.requires_arc = pods.any? { |pod| pod.requires_arc? }
+        
         # First add the target to the project
         @target = @project.targets.new_static_library(@target_definition.lib_name)
 
@@ -111,6 +114,12 @@ module Pod
       
       def quoted(strings)
         strings.map { |s| "\"#{s}\"" }
+      end
+      
+      def default_ld_flags
+        flags = %w{-ObjC -all_load}
+        flags << '-fobjc-arc' if self.requires_arc
+        flags.join(" ")
       end
     end
   end
