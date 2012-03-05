@@ -3,6 +3,7 @@ require 'uri'
 module Pod
   class Downloader
     autoload :Git,        'cocoapods/downloader/git'
+    autoload :GitHub,     'cocoapods/downloader/git'
     autoload :Mercurial,  'cocoapods/downloader/mercurial'
     autoload :Subversion, 'cocoapods/downloader/subversion'
 
