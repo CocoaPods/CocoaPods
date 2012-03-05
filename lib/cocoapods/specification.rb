@@ -41,6 +41,9 @@ module Pod
     attr_accessor :description
     attr_accessor :source
     attr_accessor :license
+    attr_accessor :license_text
+    attr_accessor :license_text_lines
+    attr_accessor :documentation
 
     attr_reader :version
     def version=(version)
@@ -378,7 +381,7 @@ module Pod
       end
 
       # Override the getters to always return the value of the top level parent spec.
-      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags].each do |attr|
+      [:version, :summary, :platform, :license, :license_text, :license_text_lines, :authors, :requires_arc, :compiler_flags, :documentation].each do |attr|
         define_method(attr) { top_level_parent.send(attr) }
       end
 

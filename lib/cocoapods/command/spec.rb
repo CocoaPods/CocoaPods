@@ -40,10 +40,12 @@ module Pod
           Pod::Spec.new do |s|
             s.name     = '#{@name}'
             s.version  = '1.0.0'
-            s.license  = 'MIT'
             s.summary  = 'A short description of #{@name}.'
             s.homepage = 'http://EXAMPLE/#{@name}'
             s.author   = { '#{author}' => '#{email}' }
+
+            # Specify the atom link pointing to the documentation set of the Pod.
+            # s.documentation = 'http://example.com/com.company.#{@name}.atom'
 
             # Specify the location from where the source should be retreived.
             #
@@ -52,6 +54,14 @@ module Pod
             # s.source   = { :hg  => 'http://EXAMPLE/#{@name}', :revision => '1.0.0' }
 
             s.description = 'An optional longer description of #{@name}.'
+
+            # Specify the license type and the path of the file containing the license text.
+            # If a single license file is not available specify a file containing the
+            # license text and the range of the relevant lines in a [int]..[int] format.
+            #
+            s.license       = 'MIT'
+            s.license_text  = 'LICENSE'
+            # s.license_text_lines  = '1..15'
 
             # If this Pod runs only on iOS or OS X, then specify that with one of
             # these, or none if it runs on both platforms.
