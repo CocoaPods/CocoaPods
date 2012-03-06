@@ -29,7 +29,8 @@ module Pod
 
     # TODO This is just to work around a MacRuby bug
     def post_initialize
-      @dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
+      @documentation, @license_text = {}, {}
+      @dependencies, @source_files, @resources, @clean_paths, @subspecs, @documentation[:options] = [], [], [], [], [], []
       @platform = Platform.new(nil)
       @xcconfig = Xcodeproj::Config.new
     end
@@ -42,7 +43,6 @@ module Pod
     attr_accessor :source
     attr_accessor :license
     attr_accessor :license_text
-    attr_accessor :license_text_lines
     attr_accessor :documentation
 
     attr_reader :version
@@ -381,7 +381,7 @@ module Pod
       end
 
       # Override the getters to always return the value of the top level parent spec.
-      [:version, :summary, :platform, :license, :license_text, :license_text_lines, :authors, :requires_arc, :compiler_flags, :documentation].each do |attr|
+      [:version, :summary, :platform, :license, :license_text, :authors, :requires_arc, :compiler_flags, :documentation].each do |attr|
         define_method(attr) { top_level_parent.send(attr) }
       end
 

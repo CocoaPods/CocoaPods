@@ -40,12 +40,10 @@ module Pod
           Pod::Spec.new do |s|
             s.name     = '#{@name}'
             s.version  = '1.0.0'
+            s.license  = 'MIT'
             s.summary  = 'A short description of #{@name}.'
             s.homepage = 'http://EXAMPLE/#{@name}'
             s.author   = { '#{author}' => '#{email}' }
-
-            # Specify the atom link pointing to the documentation set of the Pod.
-            # s.documentation = 'http://example.com/com.company.#{@name}.atom'
 
             # Specify the location from where the source should be retreived.
             #
@@ -55,13 +53,30 @@ module Pod
 
             s.description = 'An optional longer description of #{@name}.'
 
-            # Specify the license type and the path of the file containing the license text.
-            # If a single license file is not available specify a file containing the
-            # license text and the range of the relevant lines in a [int]..[int] format.
+            # If available specify the online link for the documentation and
+            # the atom link of the Xcode 4 compatible documentation set.
+            # If the pod supports appledoc documentation generation enable it
+            # and specify the appledoc options. Appledoc will be run on the files
+            # specified in s.source_file.
             #
-            s.license       = 'MIT'
-            s.license_text  = 'LICENSE'
-            # s.license_text_lines  = '1..15'
+            # s.documentation[:html]      = 'http://EXAMPLE/#{@name}/documentation'
+            # s.documentation[:atom]      = 'http://EXAMPLE/#{@name}/com.company.#{@name}.atom'
+            # s.documentation[:appledoc]  = true
+            # s.documentation[:options]   <<  '--project-name' << '#{@name}' <<
+            #                                '--project-company' << '"Company Name"' <<
+            #                                '--company-id' << 'com.company' <<
+            #                                '--output' << './doc' <<
+            #                                '--ignore' << 'Common' <<
+            #                                '--ignore' << '.m'
+
+            # Specify the file containing the license of the pod.
+            # If a dedicated license file is not available specify a file containing 
+            # the license and the ruby range of the relevant lines. If the license 
+            # is not available in any file it is specify the text directly.
+            #
+            s.license_text[:file]  = 'LICENSE'
+            # s.license_text[:range] = 1..15
+            # s.license_text[:text]  = 'Permission is hereby granted ...'
 
             # If this Pod runs only on iOS or OS X, then specify that with one of
             # these, or none if it runs on both platforms.
