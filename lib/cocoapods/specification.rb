@@ -29,8 +29,7 @@ module Pod
 
     # TODO This is just to work around a MacRuby bug
     def post_initialize
-      @documentation, @license_text = {}, {}
-      @dependencies, @source_files, @resources, @clean_paths, @subspecs, @documentation[:options] = [], [], [], [], [], []
+      @dependencies, @source_files, @resources, @clean_paths, @subspecs, = [], [], [], [], []
       @platform = Platform.new(nil)
       @xcconfig = Xcodeproj::Config.new
     end
@@ -41,8 +40,6 @@ module Pod
     attr_accessor :homepage
     attr_accessor :description
     attr_accessor :source
-    attr_accessor :license
-    attr_accessor :license_text
     attr_accessor :documentation
 
     attr_reader :version
@@ -61,11 +58,21 @@ module Pod
     alias_method :author=, :authors=
     attr_reader :authors
 
-
     def summary=(summary)
       @summary = summary
     end
     attr_reader :summary
+
+    def license=(license)
+      if license.kind_of?(Array)
+        @license = license[1].merge({:type => license[0]})
+      elsif license.kind_of?(String)
+        @license = {:type => license}
+      else
+        @license = license
+      end
+    end
+    attr_reader :license
 
     def description
       @description || summary
@@ -154,11 +161,11 @@ module Pod
     # Not attributes
 
     include Config::Mixin
-    
+
     def local?
       !source.nil? && !source[:local].nil?
     end
-    
+
     def local_path
       Pathname.new(File.expand_path(source[:local]))
     end
@@ -381,7 +388,7 @@ module Pod
       end
 
       # Override the getters to always return the value of the top level parent spec.
-      [:version, :summary, :platform, :license, :license_text, :authors, :requires_arc, :compiler_flags, :documentation].each do |attr|
+      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags, :documentation].each do |attr|
         define_method(attr) { top_level_parent.send(attr) }
       end
 
