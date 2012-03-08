@@ -203,7 +203,12 @@ end
 
 desc "Initializes your working copy to run the specs"
 task :bootstrap do
+  puts "Updating submodules..."
   `git submodule update --init --recursive`
+
+  puts "Installing gems"
+  `bundle install`
+  `cd external/XcodeProj && bundle install`
 end
 
 desc "Run all specs"
