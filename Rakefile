@@ -153,6 +153,11 @@ namespace :examples do
   end
 end
 
+desc "Initializes your working copy to run the specs"
+task :bootstrap do
+  `git submodule update --init --recursive`
+end
+
 desc "Run all specs"
 task :spec => 'spec:all'
 
