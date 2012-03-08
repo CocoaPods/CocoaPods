@@ -74,6 +74,20 @@ module Pod
         target.add_source_file(file, nil, specification.compiler_flags)
       end
     end
+
+    def install_documentation
+      if specification.documentation
+        appledoc_options = specification.documentation[:appledoc]
+        if appledoc_options
+          appledoc_options += ['--output', "#{@sandbox.root}/doc"]
+          appledoc_options += source_files
+          Open3.popen3('appledoc', *appledoc_options ) { |stdin, stdout, stderr|
+            puts stdout.read.chomp
+            puts stderr.read.chomp
+          }
+        end
+      end
+    end
     
     def requires_arc?
       specification.requires_arc
@@ -117,3 +131,4 @@ module Pod
     end
   end
 end
+

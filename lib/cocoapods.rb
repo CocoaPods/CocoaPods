@@ -22,9 +22,10 @@ module Pod
   autoload :Spec,                   'cocoapods/specification'
   autoload :Specification,          'cocoapods/specification'
   autoload :Version,                'cocoapods/version'
-  
+
   autoload :Pathname,               'pathname'
   autoload :FileList,               'cocoapods/file_list'
+  autoload :Open3,                  'open3'
 
   module Generator
     autoload :BridgeSupport,        'cocoapods/generator/bridge_support'

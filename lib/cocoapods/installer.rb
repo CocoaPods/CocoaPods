@@ -82,6 +82,9 @@ module Pod
 
       puts "* Writing Xcode project file to `#{@sandbox.project_path}'" if config.verbose?
       project.save_as(@sandbox.project_path)
+
+      puts "Installing documentation" unless config.silent?
+      pods.each { |pod| pod.install_documentation }
     end
 
     def run_post_install_hooks

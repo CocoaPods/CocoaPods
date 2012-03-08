@@ -64,7 +64,6 @@ module Pod
             #  :appledoc => ['--project-name', '#{@name}',
             #     '--project-company', '"Company Name"',
             #     '--company-id', 'com.company',
-            #     '--output', './doc',
             #     '--ignore', 'Common',
             #     '--ignore', '.m'] 
             }
