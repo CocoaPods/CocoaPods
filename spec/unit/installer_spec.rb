@@ -28,6 +28,10 @@ describe "Pod::Installer" do
     it "configures the project to load categories from the static library" do
       @xcconfig['OTHER_LDFLAGS'].should == '-ObjC -all_load'
     end
+
+    it "sets the PODS_ROOT build variable" do
+      @xcconfig['PODS_ROOT'].should == "$(SRCROOT)/Pods"
+    end
   end
 
   it "generates a BridgeSupport metadata file from all the pod headers" do
