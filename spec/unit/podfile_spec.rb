@@ -11,6 +11,11 @@ describe "Pod::Podfile" do
     podfile.target_definitions[:default].platform.should == :ios
   end
 
+  it "assigns the xcodeproj attribute" do
+    podfile = Pod::Podfile.new { platform :ios; xcodeproj "foo.xcodeproj" }
+    podfile.xcodeproj.should == "foo.xcodeproj"
+  end
+
   it "adds dependencies" do
     podfile = Pod::Podfile.new { dependency 'ASIHTTPRequest'; dependency 'SSZipArchive', '>= 0.1' }
     podfile.dependencies.size.should == 2
