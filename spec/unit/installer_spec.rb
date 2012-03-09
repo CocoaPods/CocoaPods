@@ -30,7 +30,7 @@ describe "Pod::Installer" do
     end
 
     it "sets the PODS_ROOT build variable" do
-      @xcconfig['PODS_ROOT'].should == "$(SRCROOT)/Pods"
+      @xcconfig['PODS_ROOT'].should.not == nil
     end
   end
 
