@@ -1,3 +1,7 @@
+# Graciously yanked from https://github.com/zen-cms/Zen-Core
+# MIT License
+# Thanks, YorickPeterse!
+
 #:nodoc:
 module Bacon
   #:nodoc:
@@ -6,13 +10,13 @@ module Bacon
     def handle_specification(name)
       puts spaces + name
       yield
-      puts if Counter[:context_depth] == 1      
+      puts if Counter[:context_depth] == 1
     end
 
     #:nodoc:
     def handle_requirement(description)
       error = yield
-      
+
       if !error.empty?
         puts "#{spaces} \e[31m- #{description} [FAILED]\e[0m"
       else
