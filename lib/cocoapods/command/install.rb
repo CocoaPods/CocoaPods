@@ -4,16 +4,22 @@ module Pod
       def self.banner
 %{Installing dependencies of a project:
 
-    $ pod install [PROJECT]
+    $ pod install
 
       Downloads all dependencies defined in `Podfile' and creates an Xcode
       Pods library project in `./Pods'.
 
-      In case `PROJECT' is given, it configures it to use the specified Pods
-      and generates a workspace with the Pods project and `PROJECT'. (It is
-      important that once you have run this you open the workspace instead of
-      `PROJECT'.) You usually specify `PROJECT' only the first time that you
-      run `pod install'.
+      The Xcode project file should be specified in your `Podfile` like this:
+
+      xcodeproj "path/to/project.xcodeproj"
+
+      If no xcodeproj is specified, then a search for an Xcode project will
+      be made.  If more than one Xcode project is found, the command will
+      raise an error.
+
+      This will configure the project to reference the Pods static library,
+      add a build configuration file, and add a post build script to copy
+      Pod resources.
 }
       end
 
@@ -30,7 +36,6 @@ module Pod
         config.doc = !argv.option('--no-doc')
         config.force_doc = argv.option('--force-doc')
         @update_repo = !argv.option('--no-update')
-        @projpath = argv.shift_argument
         super unless argv.empty?
       end
 
@@ -38,13 +43,22 @@ module Pod
         unless podfile = config.podfile
           raise Informative, "No `Podfile' found in the current working directory."
         end
-        if @projpath && !File.exist?(@projpath)
-          raise Informative, "The specified project `#{@projpath}' does not exist."
+
+        if podfile.xcodeproj.nil?
+          raise Informative, "Please specify a valid xcodeproj path in your Podfile.\n\n" +
+            "Usage:\n\t" +
+            "xcodeproj 'path/to/project.xcodeproj'"
         end
+
+        unless File.exist?(podfile.xcodeproj)
+          raise Informative, "The specified project `#{podfile.xcodeproj}' does not exist."
+        end
+
         if @update_repo
           puts "\nUpdating Spec Repositories\n".yellow if config.verbose?
           Repo.new(ARGV.new(["update"])).run
         end
+
         Installer.new(podfile, @projpath).install!
       end
     end

@@ -91,7 +91,7 @@ module Pod
       puts "* Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
       project.save_as(@sandbox.project_path)
 
-      UserProjectIntegrator.new(@user_project_path, @podfile).integrate! if @user_project_path
+      UserProjectIntegrator.new(@podfile.xcodeproj, @podfile).integrate!
     end
 
     def run_post_install_hooks
