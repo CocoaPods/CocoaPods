@@ -23,6 +23,14 @@ describe "Pod::Command::Install" do
     it "raises an informative error" do
       should.raise(Pod::Informative) { @installer.run }
     end
+
+    it "should include an informative message" do
+      begin
+        @installer.run
+      rescue Pod::Informative => err
+        err.message.should.match /xcodeproj 'path\/to\/project\.xcodeproj/
+      end
+    end
   end
 
   describe "When the Podfile specifies xcodeproj to an invalid path" do
@@ -33,6 +41,14 @@ describe "Pod::Command::Install" do
 
     it "raises an informative error" do
       should.raise(Pod::Informative) {@installer.run}
+    end
+
+    it "should include an informative message" do
+      begin
+        @installer.run
+      rescue Pod::Informative => err
+        err.message.should.match /The specified project `nonexistent\/project\.xcodeproj'/
+      end
     end
 
   end
