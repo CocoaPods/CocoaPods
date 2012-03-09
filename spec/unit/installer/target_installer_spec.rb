@@ -1,6 +1,6 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
-TMP_POD_ROOT = ROOT + "tmp" + "podroot"
+TMP_POD_ROOT = ROOT + "tmp" + "podroot" unless defined? TMP_POD_ROOT
 
 describe Pod::Installer::TargetInstaller do
 
