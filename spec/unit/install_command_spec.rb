@@ -18,11 +18,23 @@ describe "Pod::Command::Install" do
   describe "When the Podfile does not specify the xcodeproject" do
     before do
       config.stubs(:rootspec).returns(Pod::Podfile.new { platform :ios; dependency 'AFNetworking'})
+      @installer = Pod::Command::Install.new(Pod::Command::ARGV.new)
     end
-    it "raises an informative error if the xcodproj is not specified in the podfile" do
-      installer = Pod::Command::Install.new(Pod::Command::ARGV.new)
-      should.raise(Pod::Informative) { installer.run }
+    it "raises an informative error" do
+      should.raise(Pod::Informative) { @installer.run }
     end
+  end
+
+  describe "When the Podfile specifies xcodeproj to an invalid path" do
+    before do
+      config.stubs(:rootspec).returns(Pod::Podfile.new { platform :ios; xcodeproj 'nonexistent/project.xcodeproj'; dependency 'AFNetworking'})
+      @installer = Pod::Command::Install.new(Pod::Command::ARGV.new)
+    end
+
+    it "raises an informative error" do
+      should.raise(Pod::Informative) {@installer.run}
+    end
+
   end
 end
 
