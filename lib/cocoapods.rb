@@ -17,6 +17,7 @@ module Pod
   autoload :Podfile,                'cocoapods/podfile'
   autoload :Project,                'cocoapods/project'
   autoload :Resolver,               'cocoapods/resolver'
+  autoload :PodPathResolver,        'cocoapods/pod_path_resolver' 
   autoload :Sandbox,                'cocoapods/sandbox'
   autoload :Source,                 'cocoapods/source'
   autoload :Spec,                   'cocoapods/specification'

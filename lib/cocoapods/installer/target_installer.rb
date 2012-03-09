@@ -10,10 +10,11 @@ module Pod
         @podfile, @project, @target_definition = podfile, project, target_definition
       end
 
+
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'PODS_ROOT'                => '$(SRCROOT)/Pods',
+          'PODS_ROOT'                => Pod::PodPathResolver.new(@podfile).pods_root,
           'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
           'OTHER_LDFLAGS'            => default_ld_flags,
         })
