@@ -6,17 +6,22 @@ describe Pod::Installer::TargetInstaller do
 
   before do
     platform = Pod::Platform.ios
+
     @target_definition = Pod::Podfile::TargetDefinition.new(:foo)
     @target_definition.platform = platform
-    @podfile = stub('podfile', :platform => platform,
-                  :generate_bridge_support? => false,
-                  :set_arc_compatibility_flag? => false)
+
+    @podfile = stub('podfile',
+      :platform                    => platform,
+      :xcodeproj                   => 'dummy.xcodeproj',
+      :generate_bridge_support?    => false,
+      :set_arc_compatibility_flag? => false
+    )
 
     @project = Pod::Project.new
     @project.main_group.groups.new('name' => 'Targets Support Files')
 
     @installer = Pod::Installer::TargetInstaller.new(@podfile, @project, @target_definition)
-    
+
     @sandbox = Pod::Sandbox.new(TMP_POD_ROOT)
     @specification = fixture_spec('banana-lib/BananaLib.podspec')
     @pods = [Pod::LocalPod.new(@specification, @sandbox, platform)]
