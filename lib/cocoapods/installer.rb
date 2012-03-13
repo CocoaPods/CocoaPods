@@ -51,7 +51,13 @@ module Pod
 
             downloader = Downloader.for_pod(pod)
             downloader.download
-
+            if config.generate_documentation && pod.can_generated_documentation
+              puts "Generating documentation for #{spec}" unless config.silent?
+              pods.each { |pod| pod.generate_documentation }
+            elsif config.install_documentation && pod.can_install_documentation
+              puts "Installing documentation for #{spec}" unless config.silent?
+              pods.each { |pod| pod.install_documentation }
+            end
             if config.clean
               downloader.clean
               pod.clean
@@ -82,9 +88,6 @@ module Pod
 
       puts "* Writing Xcode project file to `#{@sandbox.project_path}'" if config.verbose?
       project.save_as(@sandbox.project_path)
-
-      puts "Installing documentation" unless config.silent?
-      pods.each { |pod| pod.install_documentation }
     end
 
     def run_post_install_hooks

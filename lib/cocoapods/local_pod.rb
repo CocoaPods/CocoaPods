@@ -75,6 +75,28 @@ module Pod
       end
     end
 
+    def can_generated_documentation
+      specification.documentation && specification.documentation[:appledoc]
+    end
+
+    def can_install_documentation
+      specification.documentation && specification.documentation[:appledoc]
+    end
+
+    def generate_documentation
+      if specification.documentation
+        appledoc_options = specification.documentation[:appledoc]
+        if appledoc_options
+          appledoc_options += ['--output', "#{@sandbox.root}/doc", '--no-create-docset']
+          appledoc_options += source_files
+          Open3.popen3('appledoc', *appledoc_options ) { |stdin, stdout, stderr|
+            puts stdout.read.chomp
+            puts stderr.read.chomp
+          }
+        end
+      end
+    end
+
     def install_documentation
       if specification.documentation
         appledoc_options = specification.documentation[:appledoc]
