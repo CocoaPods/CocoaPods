@@ -258,9 +258,47 @@ describe "A Pod::Specification, in general," do
     @spec.platform.should == :ios
   end
 
-  it "returns the license of the Pod's code" do
+  it "returns the license of the Pod" do
+    @spec.license = {
+      :type => 'MIT',
+      :file => 'LICENSE',
+      :range => 1..15,
+      :text => 'Permission is hereby granted ...'
+    }
+    @spec.license.should == {
+      :type => 'MIT',
+      :file => 'LICENSE',
+      :range => 1..15,
+      :text => 'Permission is hereby granted ...'
+    }
+  end
+  
+  it "returns the license of the Pod specified in the old format" do
     @spec.license = 'MIT'
-    @spec.license.should == 'MIT'
+    @spec.license.should == {
+      :type => 'MIT',
+    }
+  end
+
+  it "returns the documentation of the Pod" do
+    @spec.documentation = {
+      :html => 'http://EXAMPLE/#{@name}/documentation',
+      :atom => 'http://EXAMPLE/#{@name}/com.company.#{@name}.atom',
+      :appledoc => ['--project-name', '#{@name}',
+                    '--project-company', '"Company Name"',
+                    '--company-id', 'com.company',
+                    '--ignore', 'Common',
+                    '--ignore', '.m'] 
+    }
+    @spec.documentation.should == {
+      :html => 'http://EXAMPLE/#{@name}/documentation',
+      :atom => 'http://EXAMPLE/#{@name}/com.company.#{@name}.atom',
+      :appledoc => ['--project-name', '#{@name}',
+                    '--project-company', '"Company Name"',
+                    '--company-id', 'com.company',
+                    '--ignore', 'Common',
+                    '--ignore', '.m'] 
+    }
   end
 
   it "takes a list of paths to clean" do
