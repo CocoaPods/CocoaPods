@@ -37,11 +37,10 @@ module Pod
 
     def self.for_platform(platform)
       Pod::Project.new.tap do |project|
-        project.main_group << project.groups.new({ 'name' => 'Pods' })
-        framework = project.add_system_framework(platform == :ios ? 'Foundation' : 'Cocoa')
-        framework.group = project.groups.new({ 'name' => 'Frameworks' })
-        project.main_group << framework.group
+        project.main_group << project.groups.new('name' => 'Pods')
+        project.add_system_framework(platform == :ios ? 'Foundation' : 'Cocoa')
 
+        # TODO this should al move to Xcodeproj as the default behavior of a new project
         configuration_list = project.objects.add(Xcodeproj::Project::Object::XCConfigurationList, {
           'defaultConfigurationIsVisible' => '0',
           'defaultConfigurationName' => 'Release',

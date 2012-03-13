@@ -78,9 +78,9 @@ module Pod
         xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.header_search_paths).join(" "))
 
         support_files_group = @project.group("Targets Support Files").create_group(@target_definition.lib_name)
-        support_files_group.add_file_paths(target_support_files)
+        support_files_group.create_files(target_support_files)
 
-        xcconfig_file = support_files_group.file_with_path(xcconfig_filename)
+        xcconfig_file = support_files_group.files.where(:path => xcconfig_filename)
 
         configure_build_configurations(xcconfig_file)
         create_files(pods, sandbox)
