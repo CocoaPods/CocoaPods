@@ -78,10 +78,6 @@ else
             'PODS' => ['SSToolkit (0.1.3)'],
             'DEPENDENCIES' => ["SSToolkit (from `#{url}', commit `#{commit}')"]
           }
-
-          Dir.chdir(config.project_pods_root + 'SSToolkit') do
-            `git config --get remote.origin.url`.strip.should == url
-          end
         end
 
         it "installs a library with a podspec outside of the repo" do

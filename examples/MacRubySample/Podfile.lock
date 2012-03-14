@@ -1,6 +1,8 @@
 PODS:
   - ASIHTTPRequest (1.8.1)
-  - CocoaLumberjack (1.2.1)
+  - ASIHTTPRequest (1.8.1)
+  - CocoaLumberjack (1.3.2)
+  - SBJson (3.0.4)
   - SBJson (3.0.4)
 
 DEPENDENCIES:
