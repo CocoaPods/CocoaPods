@@ -29,7 +29,7 @@ module Pod
 
     # TODO This is just to work around a MacRuby bug
     def post_initialize
-      @dependencies, @source_files, @resources, @clean_paths, @subspecs, = [], [], [], [], []
+      @dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
       @platform = Platform.new(nil)
       @xcconfig = Xcodeproj::Config.new
     end
