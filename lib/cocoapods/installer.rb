@@ -54,8 +54,8 @@ module Pod
 
             if config.doc?
               if pod.generate_documentation(config.doc_install?, config.doc_force? ,config.verbose?)
-                action = config.doc_install ? 'installed' : 'generated'
-                puts "           #{action} documentation" unless config.silent?
+                action = config.doc_install ? 'Installed' : 'Generated'
+                puts "-> #{action} documentation" unless config.silent?
               end
             end
 

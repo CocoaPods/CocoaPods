@@ -77,9 +77,7 @@ module Pod
 
     # Generates and installs the documentation of the pod.
     #
-    # It returns a human redable string containing the source used
-    # for the documentation. If no source was available it returns
-    # nil.
+    # It returns true if the documentation was generated/installed
     #
     def generate_documentation(install, force = true, verbose = false)
       documentation = specification.documentation ? specification.documentation : {}
