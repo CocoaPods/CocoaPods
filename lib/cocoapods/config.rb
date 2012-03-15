@@ -39,6 +39,7 @@ module Pod
     def project_podfile
       unless @project_podfile
         @project_podfile = project_root + 'Podfile'
+        # TODO this has to go, we don't support this anymore!
         unless @project_podfile.exist?
           @project_podfile = project_root.glob('*.podspec').first
         end

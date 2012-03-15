@@ -1,6 +1,6 @@
 recipe :ruby
 
-Ruby.runner_bin = 'macbacon'
+Kicker::Recipes::Ruby.runner_bin = 'bacon'
 
 process do |files|
   specs = files.take_and_map do |file|
@@ -10,5 +10,5 @@ process do |files|
       s unless s.empty?
     end
   end
-  Ruby.run_tests(specs)
+  Kicker::Recipes::Ruby.run_tests(specs)
 end

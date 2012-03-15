@@ -1,11 +1,12 @@
 module Pod
   class Command
-    autoload :Install, 'cocoapods/command/install'
-    autoload :Repo,    'cocoapods/command/repo'
-    autoload :Search,  'cocoapods/command/search'
-    autoload :List,    'cocoapods/command/list'
-    autoload :Setup,   'cocoapods/command/setup'
-    autoload :Spec,    'cocoapods/command/spec'
+    autoload :ErrorReport, 'cocoapods/command/error_report'
+    autoload :Install,     'cocoapods/command/install'
+    autoload :List,        'cocoapods/command/list'
+    autoload :Repo,        'cocoapods/command/repo'
+    autoload :Search,      'cocoapods/command/search'
+    autoload :Setup,       'cocoapods/command/setup'
+    autoload :Spec,        'cocoapods/command/spec'
 
     class Help < Informative
       def initialize(command_class, argv)
@@ -52,13 +53,12 @@ module Pod
     def self.run(*argv)
       parse(*argv).run
     rescue Exception => e
-      unless e.is_a?(Informative)
-        puts "Oh no, an error occurred. Please run with `--verbose' and report " \
-             "on https://github.com/CocoaPods/CocoaPods/issues."
-        puts ""
+      if e.is_a?(Informative)
+        puts e.message
+        puts *e.backtrace if Config.instance.verbose
+      else
+        puts ErrorReport.report(e)
       end
-      puts e.message
-      puts *e.backtrace if Config.instance.verbose
       exit 1
     end
 
