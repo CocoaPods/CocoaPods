@@ -53,10 +53,9 @@ module Pod
             downloader.download
 
             if config.doc?
-              doc_source = pod.generate_documentation(config.doc_install?, config.doc_force? ,config.verbose?)
-              if doc_source
+              if pod.generate_documentation(config.doc_install?, config.doc_force? ,config.verbose?)
                 action = config.doc_install ? 'installed' : 'generated'
-                puts "           #{action} #{doc_source} documentation" unless config.silent?
+                puts "           #{action} documentation" unless config.silent?
               end
             end
 

@@ -25,7 +25,7 @@ module Pod
       @silent = false
       @doc = true
       @doc_install = true
-      @doc_force = false
+      @doc_force = true
     end
 
     def project_root

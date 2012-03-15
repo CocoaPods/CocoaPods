@@ -283,22 +283,18 @@ describe "A Pod::Specification, in general," do
   it "returns the documentation of the Pod" do
     @spec.documentation = {
       :html => 'http://EXAMPLE/#{@name}/documentation',
-      :atom => 'http://EXAMPLE/#{@name}/com.company.#{@name}.atom',
       :appledoc => ['--project-name', '#{@name}',
                     '--project-company', '"Company Name"',
                     '--company-id', 'com.company',
                     '--ignore', 'Common',
                     '--ignore', '.m'] 
     }
-    @spec.documentation.should == {
-      :html => 'http://EXAMPLE/#{@name}/documentation',
-      :atom => 'http://EXAMPLE/#{@name}/com.company.#{@name}.atom',
-      :appledoc => ['--project-name', '#{@name}',
-                    '--project-company', '"Company Name"',
-                    '--company-id', 'com.company',
-                    '--ignore', 'Common',
-                    '--ignore', '.m'] 
-    }
+    @spec.documentation[:html].should == 'http://EXAMPLE/#{@name}/documentation'
+    @spec.documentation[:appledoc].should == ['--project-name', '#{@name}',
+                                          '--project-company', '"Company Name"',
+                                          '--company-id', 'com.company',
+                                          '--ignore', 'Common',
+                                          '--ignore', '.m']
   end
 
   it "takes a list of paths to clean" do

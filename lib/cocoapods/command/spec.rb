@@ -54,13 +54,11 @@ module Pod
 
             # If available specify the documentation sources.
             # :html       The online link for the documentation.
-            # :atom       The atom link of the Xcode 4 compatible documentation set.
             # :appledoc   If the pod uses appledoc specify the options. The command
             #             will be run on the files specified in s.source_file.
             #
             s.documentation = {
             #  :html => 'http://EXAMPLE/#{@name}/documentation',
-            #  :atom => 'http://EXAMPLE/#{@name}/com.company.#{@name}.atom',
             #  :appledoc => ['--project-name', '#{@name}',
             #     '--project-company', 'Company Name',
             #     '--company-id', 'com.company',

@@ -20,8 +20,8 @@ module Pod
       def self.options
         "    --no-clean  Leave SCM dirs like `.git' and `.svn' in tact after downloading\n" +
         "    --no-update Skip running `pod repo update` before install\n" +
-        "    --doc-force Generate documentation for all pods with appledoc\n" +
         "    --no-doc    Skip documentation generation\n" +
+        "    --no-doc-force Generate documentation only for the pods that support it\n" +
         "    --no-doc-install Skip documentation installation to Xcode\n" +
         super
       end
@@ -30,7 +30,7 @@ module Pod
         config.clean = !argv.option('--no-clean')
         config.doc = !argv.option('--no-doc')
         config.doc_install = !argv.option('--no-doc-install')
-        config.doc_force = argv.option('--doc-force')
+        config.doc_force = !argv.option('--no-doc-force')
         @update_repo = !argv.option('--no-update')
         @projpath = argv.shift_argument
         super unless argv.empty?
