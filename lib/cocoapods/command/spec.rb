@@ -62,9 +62,10 @@ module Pod
             #  :html => 'http://EXAMPLE/#{@name}/documentation',
             #  :atom => 'http://EXAMPLE/#{@name}/com.company.#{@name}.atom',
             #  :appledoc => ['--project-name', '#{@name}',
-            #     '--project-company', '"Company Name"',
+            #     '--project-company', 'Company Name',
             #     '--company-id', 'com.company',
             #     '--ignore', 'Common',
+            #     '--index-desc', 'readme.markdown',
             #     '--ignore', '.m'] 
             }
 
