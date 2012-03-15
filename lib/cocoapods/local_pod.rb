@@ -101,9 +101,9 @@ module Pod
           # options that can't be overridden
           options << '--no-create-docset' unless install
           options << '--keep-intermediate-files'
+          options += ['--print-settings'] if verbose
           options += ['--output', dir]
           options += expanded_paths(specification.source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => false)
-          puts "appledoc #{options.join(" ")}" if verbose
           success = false
           Open3.popen3('appledoc', *options ) do |stdin, stdout, stderr|
             puts stdout.read.chomp if verbose
