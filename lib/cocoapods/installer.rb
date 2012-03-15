@@ -51,13 +51,15 @@ module Pod
 
             downloader = Downloader.for_pod(pod)
             downloader.download
-            if config.generate_documentation && pod.can_generated_documentation
-              puts "Generating documentation for #{spec}" unless config.silent?
-              pods.each { |pod| pod.generate_documentation }
-            elsif config.install_documentation && pod.can_install_documentation
-              puts "Installing documentation for #{spec}" unless config.silent?
-              pods.each { |pod| pod.install_documentation }
+
+            if config.doc?
+              doc_source = pod.generate_documentation(config.doc_install?, config.doc_force? ,config.verbose?)
+              if doc_source
+                action = config.doc_install ? 'installed' : 'generated'
+                puts "           #{action} #{doc_source} documentation" unless config.silent?
+              end
             end
+
             if config.clean
               downloader.clean
               pod.clean

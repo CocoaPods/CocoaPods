@@ -69,8 +69,6 @@ module Pod
       show_help = argv.option('--help')
       Config.instance.silent = argv.option('--silent')
       Config.instance.verbose = argv.option('--verbose')
-      Config.instance.generate_documentation  = argv.option('--generate_documentation')
-      Config.instance.install_documentation  = argv.option('--install_documentation')
 
       command_class = case argv.shift_argument
       when 'install' then Install
