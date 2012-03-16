@@ -39,6 +39,7 @@ else
         config.silent = true
         config.repos_dir = fixture('spec-repos')
         config.project_root = temporary_directory
+        config.doc_install = false
       end
 
       after do
@@ -126,6 +127,23 @@ else
           change_log = (config.project_pods_root + 'JSONKit/CHANGELOG.md').read
           change_log.should.include '1.2'
           change_log.should.not.include '1.3'
+        end
+
+        it "generates documentation of all pods by default" do
+          podfile = Pod::Podfile.new do
+            self.platform :ios
+            dependency 'JSONKit', '1.4'
+            dependency 'SSToolkit'
+          end
+
+          installer = SpecHelper::Installer.new(podfile)
+          installer.install!
+
+          doc = (config.project_pods_root + 'Documentation/JSONKit/html/index.html').read
+          doc.should.include?('JSONKit (1.4)')
+
+          doc = (config.project_pods_root + 'Documentation/SSToolkit/html/index.html').read
+          doc.should.include?('SSToolkit')
         end
       end
 

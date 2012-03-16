@@ -52,16 +52,15 @@ module Pod
             downloader = Downloader.for_pod(pod)
             downloader.download
 
-            if config.doc?
-              if pod.generate_documentation(config.doc_install?, config.doc_force? ,config.verbose?)
-                action = config.doc_install ? 'Installed' : 'Generated'
-                puts "-> #{action} documentation" unless config.silent?
-              end
-            end
-
             if config.clean
               downloader.clean
               pod.clean
+            end
+
+            if config.doc?
+              puts "Installing Documentation for #{spec}" if config.verbose?
+              docs_generator = DocsGenerator.new(pod)
+              docs_generator.generate(config.doc_install?)
             end
           end
         end

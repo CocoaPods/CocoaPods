@@ -8,6 +8,7 @@ module Pod
   autoload :Command,                'cocoapods/command'
   autoload :Config,                 'cocoapods/config'
   autoload :Dependency,             'cocoapods/dependency'
+  autoload :DocsGenerator,          'cocoapods/docs_generator'
   autoload :Downloader,             'cocoapods/downloader'
   autoload :Executable,             'cocoapods/executable'
   autoload :Installer,              'cocoapods/installer'
