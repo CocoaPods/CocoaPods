@@ -40,7 +40,6 @@ module Pod
           Pod::Spec.new do |s|
             s.name     = '#{@name}'
             s.version  = '1.0.0'
-            s.license  = 'MIT'
             s.summary  = 'A short description of #{@name}.'
             s.homepage = 'http://EXAMPLE/#{@name}'
             s.author   = { '#{author}' => '#{email}' }
@@ -52,6 +51,39 @@ module Pod
             # s.source   = { :hg  => 'http://EXAMPLE/#{@name}', :revision => '1.0.0' }
 
             s.description = 'An optional longer description of #{@name}.'
+
+            # If available specify the documentation homepage.
+            # :html       The online link for the documentation.
+            # :appledoc   Ammend the default appledoc options used
+            #             by cocoapods if needed.
+            #
+            s.documentation = {
+            #  :html => 'http://EXAMPLE/#{@name}/documentation',
+            #  :appledoc => [
+            #     '--project-name', '#{@name}',
+            #     '--project-company', 'Company Name',
+            #     '--docset-copyright', copyright,
+            #     '--ignore', 'Common',
+            #     '--index-desc', 'readme.markdown',
+            #     '--no-keep-undocumented-objects',
+            #     '--no-keep-undocumented-members',
+            #     ]
+            }
+
+            # Specify the license of the pod.
+            # :type       The type of the license.
+            # :file       The file containing the license of the pod.
+            # :range      If a dedicated license file is not available specify a file
+            #             that contains the license and the range of the lines
+            #             containing the license.
+            # :text       If the license is not available in any of the files it should be
+            #             included here.
+            s.license  = {
+              :type => 'MIT',
+              :file => 'LICENSE',
+            #  :range => 1..15,
+            #  :text => 'Permission is hereby granted ...'
+            }
 
             # If this Pod runs only on iOS or OS X, then specify that with one of
             # these, or none if it runs on both platforms.

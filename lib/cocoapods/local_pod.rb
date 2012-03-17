@@ -1,6 +1,7 @@
 module Pod
   class LocalPod
     attr_reader :specification
+    attr_reader :sandbox
     
     def initialize(specification, sandbox)
       @specification, @sandbox = specification, sandbox
@@ -49,6 +50,10 @@ module Pod
     
     def source_files
       expanded_paths(specification.source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => true)
+    end
+    
+    def absolute_source_files
+      expanded_paths(specification.source_files, :glob => '*.{h,m,mm,c,cpp}')
     end
     
     def clean_paths

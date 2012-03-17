@@ -19,12 +19,14 @@ module Pod
 
       def self.options
         "    --no-clean  Leave SCM dirs like `.git' and `.svn' in tact after downloading\n" +
+        "    --no-doc    Skip documentation generation with appledoc\n" +
         "    --no-update Skip running `pod repo update` before install\n" +
         super
       end
 
       def initialize(argv)
         config.clean = !argv.option('--no-clean')
+        config.doc = !argv.option('--no-doc')
         @update_repo = !argv.option('--no-update')
         @projpath = argv.shift_argument
         super unless argv.empty?

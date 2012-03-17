@@ -56,6 +56,12 @@ module Pod
               downloader.clean
               pod.clean
             end
+
+            if config.doc?
+              puts "Installing Documentation for #{spec}" if config.verbose?
+              docs_generator = DocsGenerator.new(pod)
+              docs_generator.generate(config.doc_install?)
+            end
           end
         end
       end

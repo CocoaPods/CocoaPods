@@ -10,16 +10,20 @@ module Pod
       @instance = instance
     end
 
-    attr_accessor :repos_dir, :project_root, :project_pods_root, :rootspec, :clean, :verbose, :silent
-    alias_method :clean?,   :clean
-    alias_method :verbose?, :verbose
-    alias_method :silent?,  :silent
+    attr_accessor :repos_dir, :project_root, :project_pods_root, :rootspec, :clean, :verbose, :silent, :doc, :doc_install
+    alias_method :clean?,       :clean
+    alias_method :verbose?,     :verbose
+    alias_method :silent?,      :silent
+    alias_method :doc?,         :doc
+    alias_method :doc_install?, :doc_install
 
     def initialize
       @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
       @clean = true
       @verbose = false
       @silent = false
+      @doc = true
+      @doc_install = true
     end
 
     def project_root
