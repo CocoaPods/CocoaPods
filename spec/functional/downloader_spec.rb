@@ -10,7 +10,7 @@ describe "Pod::Downloader" do
   
     it "check's out a specific commit" do
       @pod.specification.stubs(:source).returns(
-        :git => fixture('banana-lib'), :commit => '02467b074d4dc9f6a75b8cd3ab80d9bf37887b01'
+        :git => fixture('banana-lib'), :commit => 'fd56054'
       )
       downloader = Pod::Downloader.for_pod(@pod)
       downloader.download

@@ -2,13 +2,16 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 
 describe Pod::DocsGenerator do
-
   before do
     @sandbox = temporary_sandbox
     @pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), @sandbox)
     copy_fixture_to_pod('banana-lib', @pod)
     @doc_installer = Pod::DocsGenerator.new(@pod)
     @doc_installer.generate
+  end
+
+  after do
+    @sandbox.implode
   end
 
   it 'returns reads correctly the Pod documentation' do
@@ -39,17 +42,15 @@ describe Pod::DocsGenerator do
       '--keep-undocumented-objects',
       '--keep-undocumented-members',
       '--index-desc', 'README',
+      # TODO We need to either make this a hash so that options can be merged
+      # or not use any defaults in case an options are specified.
       '--project-company', 'Banana Corp',
       '--company-id', 'com.banana'
     ]
   end
 
   if Pod::DocsGenerator.appledoc_installed?
-    it 'it creates the documenation directory' do
-      File.directory?(@sandbox.root + "Documentation").should.be.true
-    end
-
-    it 'it creates the html' do
+    it 'creates the html' do
       File.directory?(@sandbox.root + "Documentation/BananaLib/html").should.be.true
       index = (@sandbox.root + 'Documentation/BananaLib/html/index.html').read
       index.should.include?('BananaObj')

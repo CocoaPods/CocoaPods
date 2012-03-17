@@ -34,8 +34,10 @@ config.repos_dir = SpecHelper.tmp_repos_path
 
 require 'tmpdir'
 
+# TODO why is this no longer using SpecHelper::TemporaryDirectory ?
 def temporary_sandbox
   Pod::Sandbox.new(Pathname.new(Dir.mktmpdir + "/Pods"))
+  #Pod::Sandbox.new(temporary_directory + "Pods")
 end
 
 def fixture_spec(name)
