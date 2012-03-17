@@ -30,15 +30,17 @@ describe Pod::DocsGenerator do
 
   it 'returns the Pod documentation options' do
     @doc_installer.generate_appledoc_options.should == [
-      "--project-name", "BananaLib (1.0)",
-      "--project-company", "Monkey Boy, Banana Corp",
-      "--docset-copyright", "Monkey Boy, Banana Corp",
-      "--company-id", "org.cocoapods",
-      "--ignore", ".m",
-      "--docset-desc", "Full of chunky bananas.",
-      "--index-desc", "README",
-      "--project-company", "Banana Corp",
-      "--company-id", "com.banana"
+      '--project-name', 'BananaLib (1.0)',
+      '--docset-desc', 'Full of chunky bananas.',
+      '--project-company', 'Monkey Boy, Banana Corp',
+      '--docset-copyright', 'Monkey Boy, Banana Corp',
+      '--company-id', 'org.cocoapods',
+      '--ignore', '.m',
+      '--keep-undocumented-objects',
+      '--keep-undocumented-members',
+      '--index-desc', 'README',
+      '--project-company', 'Banana Corp',
+      '--company-id', 'com.banana'
     ]
   end
 
@@ -48,6 +50,10 @@ describe Pod::DocsGenerator do
 
   it 'it creates the html' do
     File.directory?(@sandbox.root + "Documentation/BananaLib/html").should.be.true
+    index = (@sandbox.root + 'Documentation/BananaLib/html/index.html').read
+    index.should.include?('BananaObj')
+    index = (@sandbox.root + 'Documentation/BananaLib/html/Classes/BananaObj.html').read
+    index.should.include?('Bananas are cool')
   end
 end
 

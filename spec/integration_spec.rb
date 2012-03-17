@@ -139,11 +139,11 @@ else
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
 
-          doc = (config.project_pods_root + 'Documentation/JSONKit/html/index.html').read
-          doc.should.include?('JSONKit (1.4)')
-
+          File.directory?(config.project_pods_root + 'Documentation/JSONKit/html/')
           doc = (config.project_pods_root + 'Documentation/SSToolkit/html/index.html').read
           doc.should.include?('SSToolkit')
+
+
         end
       end
 
