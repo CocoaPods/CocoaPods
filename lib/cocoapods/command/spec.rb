@@ -52,19 +52,22 @@ module Pod
 
             s.description = 'An optional longer description of #{@name}.'
 
-            # If available specify the documentation sources.
+            # If available specify the documentation homepage.
             # :html       The online link for the documentation.
-            # :appledoc   If the pod uses appledoc specify the options. The command
-            #             will be run on the files specified in s.source_file.
+            # :appledoc   Ammend the default appledoc options used
+            #             by cocoapods if needed.
             #
             s.documentation = {
             #  :html => 'http://EXAMPLE/#{@name}/documentation',
-            #  :appledoc => ['--project-name', '#{@name}',
+            #  :appledoc => [
+            #     '--project-name', '#{@name}',
             #     '--project-company', 'Company Name',
-            #     '--company-id', 'com.company',
+            #     '--docset-copyright', copyright,
             #     '--ignore', 'Common',
             #     '--index-desc', 'readme.markdown',
-            #     '--ignore', '.m'] 
+            #     '--no-keep-undocumented-objects',
+            #     '--no-keep-undocumented-members',
+            #     ]
             }
 
             # Specify the license of the pod.
