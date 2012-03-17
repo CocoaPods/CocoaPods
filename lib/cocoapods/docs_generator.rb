@@ -5,6 +5,8 @@ module Pod
       !`which appledoc`.strip.empty?
     end
 
+    include Config::Mixin
+
     attr_reader :pod, :specification, :target_path, :options
 
     def initialize(pod)
@@ -83,20 +85,23 @@ module Pod
 
     def appledoc (options)
       unless self.class.appledoc_installed?
-        puts "\n[!] Skipping documentation generation because appledoc can't be found." if Config.instance.verbose?
+        puts "\n[!] Skipping documentation generation because appledoc can't be found." unless config.silent?
         return
       end
       arguments = []
       arguments += options
-      arguments += ['--print-settings'] if Config.instance.verbose?
+      arguments += ['--print-settings'] if config.verbose?
       arguments += files
       Open3.popen3('appledoc', *arguments) do |i, o, e|
-        if Config.instance.verbose?
+        if config.verbose?
           puts o.read.chomp
           puts e.read.chomp
         else
           # TODO: This is needed otherwise appledoc may not install the doc set
           # This is a work around related to poor understanding of the IO class.
+          #
+          # I think we can use the non-block version here, which should read
+          # everything till the end and then return.
           o.read
           e.read
         end
