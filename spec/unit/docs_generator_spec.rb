@@ -44,16 +44,20 @@ describe Pod::DocsGenerator do
     ]
   end
 
-  it 'it creates the documenation directory' do
-    File.directory?(@sandbox.root + "Documentation").should.be.true
-  end
+  if Pod::DocsGenerator.appledoc_installed?
+    it 'it creates the documenation directory' do
+      File.directory?(@sandbox.root + "Documentation").should.be.true
+    end
 
-  it 'it creates the html' do
-    File.directory?(@sandbox.root + "Documentation/BananaLib/html").should.be.true
-    index = (@sandbox.root + 'Documentation/BananaLib/html/index.html').read
-    index.should.include?('BananaObj')
-    index = (@sandbox.root + 'Documentation/BananaLib/html/Classes/BananaObj.html').read
-    index.should.include?('Bananas are cool')
+    it 'it creates the html' do
+      File.directory?(@sandbox.root + "Documentation/BananaLib/html").should.be.true
+      index = (@sandbox.root + 'Documentation/BananaLib/html/index.html').read
+      index.should.include?('BananaObj')
+      index = (@sandbox.root + 'Documentation/BananaLib/html/Classes/BananaObj.html').read
+      index.should.include?('Bananas are cool')
+    end
+  else
+    puts "[!] Skipping documentation generation specs, because appledoc can't be found."
   end
 end
 

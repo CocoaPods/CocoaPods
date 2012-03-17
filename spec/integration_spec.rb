@@ -129,21 +129,23 @@ else
           change_log.should.not.include '1.3'
         end
 
-        it "generates documentation of all pods by default" do
-          podfile = Pod::Podfile.new do
-            self.platform :ios
-            dependency 'JSONKit', '1.4'
-            dependency 'SSToolkit'
+        if Pod::DocsGenerator.appledoc_installed?
+          it "generates documentation of all pods by default" do
+            podfile = Pod::Podfile.new do
+              self.platform :ios
+              dependency 'JSONKit', '1.4'
+              dependency 'SSToolkit'
+            end
+
+            installer = SpecHelper::Installer.new(podfile)
+            installer.install!
+
+            File.directory?(config.project_pods_root + 'Documentation/JSONKit/html/')
+            doc = (config.project_pods_root + 'Documentation/SSToolkit/html/index.html').read
+            doc.should.include?('SSToolkit')
           end
-
-          installer = SpecHelper::Installer.new(podfile)
-          installer.install!
-
-          File.directory?(config.project_pods_root + 'Documentation/JSONKit/html/')
-          doc = (config.project_pods_root + 'Documentation/SSToolkit/html/index.html').read
-          doc.should.include?('SSToolkit')
-
-
+        else
+          puts "[!] Skipping documentation generation specs, because appledoc can't be found."
         end
       end
 

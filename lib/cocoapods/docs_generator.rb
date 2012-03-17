@@ -1,6 +1,10 @@
 
 module Pod
   class DocsGenerator
+    def self.appledoc_installed?
+      !`which appledoc`.strip.empty?
+    end
+
     attr_reader :pod, :specification, :target_path, :options
 
     def initialize(pod)
@@ -78,9 +82,8 @@ module Pod
     end
 
     def appledoc (options)
-      bin = `which appledoc`.strip
-      if bin.empty?
-        puts "\n[!] Skipping documenation generation because appledoc can't be found." if Config.instance.verbose?
+      unless self.class.appledoc_installed?
+        puts "\n[!] Skipping documentation generation because appledoc can't be found." if Config.instance.verbose?
         return
       end
       arguments = []
