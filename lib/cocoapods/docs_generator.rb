@@ -61,7 +61,6 @@ module Pod
                  '--ignore', '.m',
                  '--keep-undocumented-objects',
                  '--keep-undocumented-members']
-
       index = index_file
       options += ['--index-desc', index] if index
       options += spec_appledoc_options
@@ -71,7 +70,7 @@ module Pod
       options = generate_appledoc_options
       options += ['--output', @target_path]
       options += ['--keep-intermediate-files']
-      options += ['--no-create-docset'] unless install
+      options += install ? ['-create-docset'] : ['--no-create-docset']
       @target_path.mkpath
       @pod.chdir do
         appledoc(options)
