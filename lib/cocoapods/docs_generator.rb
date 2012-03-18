@@ -73,6 +73,10 @@ module Pod
     end
 
     def generate(install = false)
+      unless self.class.appledoc_installed?
+        puts "[!] Skipping documentation generation because appledoc can't be found." if config.verbose?
+        return
+      end
       options = generate_appledoc_options
       options += ['--output', @target_path.to_s]
       options += ['--keep-intermediate-files']
@@ -84,10 +88,6 @@ module Pod
     end
 
     def appledoc(options)
-      unless self.class.appledoc_installed?
-        puts "\n[!] Skipping documentation generation because appledoc can't be found." unless config.silent?
-        return
-      end
       arguments = []
       arguments += options
       arguments += ['--print-settings'] if config.verbose?
