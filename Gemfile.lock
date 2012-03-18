@@ -9,6 +9,8 @@ GEM
       thor (~> 0.14.6)
     guard-shell (0.3.0)
       guard (>= 0.2.0)
+    kicker (2.5.0)
+      rb-fsevent
     metaclass (0.0.1)
     mocha (0.10.4)
       metaclass (~> 0.0.1)
@@ -30,6 +32,7 @@ DEPENDENCIES
   growl
   guard
   guard-shell
+  kicker
   mocha-on-bacon
   rake
   rb-fsevent

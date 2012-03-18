@@ -10,4 +10,5 @@ group :development do
   gem "mocha-on-bacon"
   gem "vcr"
   gem "webmock"
+  gem "kicker"
 end
