@@ -1,3 +1,79 @@
+## 0.6.0
+
+A full list of all the changes since 0.5.1 can be found [here][6].
+
+
+### Documentation
+
+CocoaPods will now generate documentation for every library with the
+[`appledoc`][5] tool and install it into Xcode’s documentation viewer.
+
+You can customize the settings used like so:
+
+```ruby
+s.documentation = { :appledoc => ['--product-name', 'My awesome project!'] }
+```
+
+Alternatively, you can specify a URL where an HTML version of the documentation
+can be found:
+
+```ruby
+s.documentation = { :html => 'http://example.com/docs/index.html' }
+```
+
+See #149 and #151.
+
+
+### Introduced two new classes: LocalPod and Sandbox.
+
+The Sandbox represents the entire contents of the `POD_ROOT` (normally
+`SOURCE_ROOT/Pods`). A LocalPod represents a pod that has been installed within
+the Sandbox.
+
+These two classes can be used as better homes for various pieces of logic
+currently spread throughout the installation process and provide a better API
+for working with the contents of this directory.
+
+
+### Enhancements
+
+* #163: Print a template for a new ticket when an error occurs.
+* Added a new Github-specific downloader that can download repositories as a
+  gzipped tarball.
+* No more global state is kept during resolving of dependencies.
+* Updated Xcodeproj to have a friendlier API.
+
+
+### Fixes
+
+* #166: Added printing of homepage and source to search results.
+* #134: Match `IPHONEOS_DEPLOYMENT_TARGET` build setting with
+  `deployment_target` option in generated Pods project file.
+* #142: Add `-fobjc-arc` to `OTHER_LD_FLAGS` if _any_ pods require ARC.
+* #148: External encoding set to UTF-8 on Ruby 1.9 to fix crash caused by
+  non-ascii characters in pod description.
+* Ensure all header search paths are quoted in the xcconfig file.
+* Added weak quoting to `ibtool` input paths.
+
+
+---------------------------------------
+
+## 0.5.0
+
+No longer requires MacRuby. Runs on MRI 1.8.7 (OS X system version) and 1.9.3.
+
+A full list of all the changes since 0.3.0 can be found [here][7].
+
+
+---------------------------------------
+
+## 0.4.0
+
+Oops, accidentally skipped this version.
+
+
+---------------------------------------
+
 ## 0.3.0
 
 ### Multiple targets
@@ -127,3 +203,6 @@ allowing you to automate Xcode related tasks.
 [2]: https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/podfile.rb#L82
 [3]: https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/podfile.rb#L185
 [4]: https://github.com/CocoaPods/Xcodeproj
+[5]: https://github.com/tomaz/appledoc
+[6]: https://github.com/CocoaPods/CocoaPods/compare/0.5.1...0.6.0
+[7]: https://github.com/CocoaPods/CocoaPods/compare/0.3.10...0.5.0
