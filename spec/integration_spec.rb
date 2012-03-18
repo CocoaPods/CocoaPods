@@ -31,15 +31,20 @@ else
     describe "A full (integration spec) installation for platform `#{platform}'" do
       extend SpecHelper::TemporaryDirectory
 
-      before do
-        fixture('spec-repos/master') # ensure the archive is unpacked
-
-        @config_before = config
+      def create_config!
         Pod::Config.instance = nil
         config.silent = true
         config.repos_dir = fixture('spec-repos')
         config.project_root = temporary_directory
         config.doc_install = false
+      end
+
+      before do
+        fixture('spec-repos/master') # ensure the archive is unpacked
+
+        @config_before = config
+        create_config!
+        config.doc = false
       end
 
       after do
@@ -131,6 +136,8 @@ else
 
         if Pod::DocsGenerator.appledoc_installed?
           it "generates documentation of all pods by default" do
+            create_config!
+
             podfile = Pod::Podfile.new do
               self.platform :ios
               dependency 'JSONKit', '1.4'
@@ -140,9 +147,10 @@ else
             installer = SpecHelper::Installer.new(podfile)
             installer.install!
 
-            File.directory?(config.project_pods_root + 'Documentation/JSONKit/html/')
+            doc = (config.project_pods_root + 'Documentation/JSONKit/html/index.html').read
+            doc.should.include?('<title>JSONKit (1.4) Reference</title>')
             doc = (config.project_pods_root + 'Documentation/SSToolkit/html/index.html').read
-            doc.should.include?('SSToolkit')
+            doc.should.include?('<title>SSToolkit (0.1.2) Reference</title>')
           end
         else
           puts "[!] Skipping documentation generation specs, because appledoc can't be found."

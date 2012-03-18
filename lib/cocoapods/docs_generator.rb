@@ -92,8 +92,6 @@ module Pod
       arguments += options
       arguments += ['--print-settings'] if config.verbose?
       arguments += files.map(&:to_s)
-      #p arguments
-      puts "appledoc #{arguments.join("' '")}"
       Open3.popen3('appledoc', *arguments) do |i, o, e|
         if config.verbose?
           puts o.read.chomp
