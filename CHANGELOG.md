@@ -21,7 +21,8 @@ can be found:
 s.documentation = { :html => 'http://example.com/docs/index.html' }
 ```
 
-See #149 and #151.
+See [#149](https://github.com/CocoaPods/CocoaPods/issues/149) and
+[#151](https://github.com/CocoaPods/CocoaPods/issues/151).
 
 
 ### Introduced two new classes: LocalPod and Sandbox.
@@ -37,22 +38,35 @@ for working with the contents of this directory.
 
 ### Enhancements
 
-* #163: Print a template for a new ticket when an error occurs.
+* [#163](https://github.com/CocoaPods/CocoaPods/issues/163): Print a template
+  for a new ticket when an error occurs.
+
 * Added a new Github-specific downloader that can download repositories as a
   gzipped tarball.
+
 * No more global state is kept during resolving of dependencies.
+
 * Updated Xcodeproj to have a friendlier API.
 
 
 ### Fixes
 
-* #166: Added printing of homepage and source to search results.
-* #134: Match `IPHONEOS_DEPLOYMENT_TARGET` build setting with
-  `deployment_target` option in generated Pods project file.
-* #142: Add `-fobjc-arc` to `OTHER_LD_FLAGS` if _any_ pods require ARC.
-* #148: External encoding set to UTF-8 on Ruby 1.9 to fix crash caused by
-  non-ascii characters in pod description.
+* [#166](https://github.com/CocoaPods/CocoaPods/issues/166): Added printing of
+  homepage and source to search results.
+
+* [#134](https://github.com/CocoaPods/CocoaPods/issues/134): Match
+  `IPHONEOS_DEPLOYMENT_TARGET` build setting with `deployment_target` option in
+  generated Pods project file.
+
+* [#142](https://github.com/CocoaPods/CocoaPods/issues/): Add `-fobjc-arc` to
+  `OTHER_LD_FLAGS` if _any_ pods require ARC.
+
+* [#148](https://github.com/CocoaPods/CocoaPods/issues/148): External encoding
+  set to UTF-8 on Ruby 1.9 to fix crash caused by non-ascii characters in pod
+  description.
+
 * Ensure all header search paths are quoted in the xcconfig file.
+
 * Added weak quoting to `ibtool` input paths.
 
 
@@ -204,5 +218,5 @@ allowing you to automate Xcode related tasks.
 [3]: https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/podfile.rb#L185
 [4]: https://github.com/CocoaPods/Xcodeproj
 [5]: https://github.com/tomaz/appledoc
-[6]: https://github.com/CocoaPods/CocoaPods/compare/0.5.1...0.6.0
+[6]: https://github.com/CocoaPods/CocoaPods/compare/0.5.1...HEAD
 [7]: https://github.com/CocoaPods/CocoaPods/compare/0.3.10...0.5.0
