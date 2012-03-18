@@ -45,13 +45,9 @@ module Pod
     end
 
     def index_file
-      candidates = ['README.md', 'README.mdown', 'README.markdown','README']
-      candidates.each do |f|
-        if File.file?(@pod.root + f)
-          return f
-        end
+      @pod.chdir do
+        Dir.glob("README*", File::FNM_CASEFOLD).first
       end
-      nil
     end
 
     def spec_appledoc_options
