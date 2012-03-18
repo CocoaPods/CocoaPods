@@ -74,7 +74,7 @@ module Pod
 
     def generate(install = false)
       options = generate_appledoc_options
-      options += ['--output', @target_path]
+      options += ['--output', @target_path.to_s]
       options += ['--keep-intermediate-files']
       options += install ? ['-create-docset'] : ['--no-create-docset']
       @target_path.mkpath
@@ -83,7 +83,7 @@ module Pod
       end
     end
 
-    def appledoc (options)
+    def appledoc(options)
       unless self.class.appledoc_installed?
         puts "\n[!] Skipping documentation generation because appledoc can't be found." unless config.silent?
         return
@@ -91,7 +91,9 @@ module Pod
       arguments = []
       arguments += options
       arguments += ['--print-settings'] if config.verbose?
-      arguments += files
+      arguments += files.map(&:to_s)
+      #p arguments
+      puts "appledoc #{arguments.join("' '")}"
       Open3.popen3('appledoc', *arguments) do |i, o, e|
         if config.verbose?
           puts o.read.chomp

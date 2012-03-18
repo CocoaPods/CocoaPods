@@ -7,11 +7,6 @@ describe Pod::DocsGenerator do
     @pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), @sandbox)
     copy_fixture_to_pod('banana-lib', @pod)
     @doc_installer = Pod::DocsGenerator.new(@pod)
-    @doc_installer.generate
-  end
-
-  after do
-    @sandbox.implode
   end
 
   it 'returns reads correctly the Pod documentation' do
@@ -50,6 +45,14 @@ describe Pod::DocsGenerator do
   end
 
   if Pod::DocsGenerator.appledoc_installed?
+    before do
+      @doc_installer.generate
+    end
+
+    after do
+      @sandbox.implode
+    end
+
     it 'creates the html' do
       File.directory?(@sandbox.root + "Documentation/BananaLib/html").should.be.true
       index = (@sandbox.root + 'Documentation/BananaLib/html/index.html').read
