@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-Encoding.default_external = Encoding::UTF_8 if RUBY_VERSION > '1.8.7'
-
 if $0 == __FILE__
   $:.unshift File.expand_path('../../external/Xcodeproj/ext', __FILE__)
   $:.unshift File.expand_path('../../external/Xcodeproj/lib', __FILE__)
