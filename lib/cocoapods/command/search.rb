@@ -27,6 +27,13 @@ module Pod
         Source.search_by_name(@query.strip, @full_text_search).each do |set|
           puts "==> #{set.name} (#{set.versions.reverse.join(", ")})"
           puts "    #{set.specification.summary.strip}"
+          puts "    Homepage: #{set.specification.homepage}"
+
+          source = set.specification.source
+          if source
+            url = source[:git] || source[:hg] || source[:svn] || source[:local]
+            puts "    Source: #{url}" if url
+          end
           puts
         end
       end
