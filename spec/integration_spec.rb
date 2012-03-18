@@ -134,7 +134,7 @@ else
           change_log.should.not.include '1.3'
         end
 
-        if Pod::DocsGenerator.appledoc_installed?
+        if Pod::Generator::Documentation.appledoc_installed?
           it "generates documentation of all pods by default" do
             create_config!
 

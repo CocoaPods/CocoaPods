@@ -6,11 +6,9 @@ module Pod
   class Informative < StandardError
   end
 
-  autoload :BridgeSupportGenerator, 'cocoapods/bridge_support_generator'
   autoload :Command,                'cocoapods/command'
   autoload :Config,                 'cocoapods/config'
   autoload :Dependency,             'cocoapods/dependency'
-  autoload :DocsGenerator,          'cocoapods/docs_generator'
   autoload :Downloader,             'cocoapods/downloader'
   autoload :Executable,             'cocoapods/executable'
   autoload :Installer,              'cocoapods/installer'
@@ -28,11 +26,11 @@ module Pod
 
   autoload :Pathname,               'pathname'
   autoload :FileList,               'cocoapods/file_list'
-  autoload :Open3,                  'open3'
 
   module Generator
     autoload :BridgeSupport,        'cocoapods/generator/bridge_support'
     autoload :CopyResourcesScript,  'cocoapods/generator/copy_resources_script'
+    autoload :Documentation,        'cocoapods/generator/documentation'
   end
 end
 

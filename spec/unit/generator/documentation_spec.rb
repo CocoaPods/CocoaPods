@@ -1,12 +1,11 @@
-require File.expand_path('../../spec_helper', __FILE__)
+require File.expand_path('../../../spec_helper', __FILE__)
 
-
-describe Pod::DocsGenerator do
+describe Pod::Generator::Documentation do
   before do
     @sandbox = temporary_sandbox
     @pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), @sandbox)
     copy_fixture_to_pod('banana-lib', @pod)
-    @doc_installer = Pod::DocsGenerator.new(@pod)
+    @doc_installer = Pod::Generator::Documentation.new(@pod)
   end
 
   it 'returns reads correctly the Pod documentation' do
@@ -44,7 +43,7 @@ describe Pod::DocsGenerator do
     ]
   end
 
-  if Pod::DocsGenerator.appledoc_installed?
+  if Pod::Generator::Documentation.appledoc_installed?
     before do
       @doc_installer.generate
     end
