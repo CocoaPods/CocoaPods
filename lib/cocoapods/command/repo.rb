@@ -30,7 +30,7 @@ module Pod
           unless (@name = argv.arguments[1]) && (@url = argv.arguments[2])
             raise Informative, "#{@action == 'add' ? 'Adding' : 'Updating the remote of'} a repo needs a `name' and a `url'."
           end
-        when 'update'
+        when 'update', 'read-url'
           @name = argv.arguments[1]
         else
           super
@@ -64,6 +64,13 @@ module Pod
           git("remote set-url origin '#{@url}'")
         end
       end
+
+      def read_url
+        Dir.chdir(dir) do
+          @output = git("remote -v")
+        end
+      end
+
     end
   end
 end

@@ -8,6 +8,8 @@ module Pod
     autoload :Setup,       'cocoapods/command/setup'
     autoload :Spec,        'cocoapods/command/spec'
 
+    attr_accessor :output
+
     class Help < Informative
       def initialize(command_class, argv)
         @command_class, @argv = command_class, argv
