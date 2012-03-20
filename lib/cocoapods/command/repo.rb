@@ -67,7 +67,7 @@ module Pod
 
       def read_url
         Dir.chdir(dir) do
-          @output = git("remote -v")
+          @output = git('config --get remote.origin.url')
         end
       end
 

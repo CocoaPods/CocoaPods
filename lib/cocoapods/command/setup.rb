@@ -28,7 +28,7 @@ module Pod
       def already_push?
         if master_repo_exists?
           read_master_repo_remote_command.run
-          read_master_repo_remote_command.output.include? master_repo_url_with_push
+          read_master_repo_remote_command.output.chomp == master_repo_url_with_push
         else
           false
         end
