@@ -2,19 +2,23 @@ module Pod
   class LocalPod
     attr_reader :specification
     attr_reader :sandbox
-    
+
     def initialize(specification, sandbox)
       @specification, @sandbox = specification, sandbox
     end
-    
+
     def self.from_podspec(podspec, sandbox)
       new(Specification.from_file(podspec), sandbox)
     end
-    
+
     def root
-      @sandbox.root + specification.name
+      if !specification.local?
+        @sandbox.root + specification.name
+      else
+        specification.local_path
+      end
     end
-    
+
     def to_s
       if specification.local?
         "#{specification} [LOCAL]"
@@ -22,44 +26,44 @@ module Pod
         specification.to_s
       end
     end
-    
+
     def name
       specification.name
     end
-    
+
     def create
       root.mkpath unless exists?
     end
-    
+
     def exists?
       root.exist?
     end
-    
+
     def chdir(&block)
       create
       Dir.chdir(root, &block)
     end
-    
+
     def implode
       root.rmtree if exists?
     end
-    
+
     def clean
       clean_paths.each { |path| FileUtils.rm_rf(path) }
     end
-    
+
     def source_files
       expanded_paths(specification.source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => true)
     end
-    
+
     def absolute_source_files
       expanded_paths(specification.source_files, :glob => '*.{h,m,mm,c,cpp}')
     end
-    
+
     def clean_paths
       expanded_paths(specification.clean_paths)
     end
-    
+
     def resources
       expanded_paths(specification.resources, :relative_to_sandbox => true)
     end
@@ -67,33 +71,33 @@ module Pod
     def header_files
       source_files.select { |f| f.extname == '.h' }
     end
-    
+
     def link_headers
       copy_header_mappings.each do |namespaced_path, files|
         @sandbox.add_header_files(namespaced_path, files)
       end
     end
-    
+
     def add_to_target(target)
       implementation_files.each do |file|
         target.add_source_file(file, nil, specification.compiler_flags)
       end
     end
-    
+
     def requires_arc?
       specification.requires_arc
     end
-    
+
     private
-    
+
     def implementation_files
       source_files.select { |f| f.extname != '.h' }
     end
-    
+
     def relative_root
       root.relative_path_from(@sandbox.root)
     end
-    
+
     def copy_header_mappings
       header_files.inject({}) do |mappings, from|
         from_without_prefix = from.relative_path_from(relative_root)
@@ -102,15 +106,15 @@ module Pod
         mappings
       end
     end
-    
+
     def expanded_paths(patterns, options={})
       patterns.map do |pattern|
         pattern = root + pattern
-        
+
         if pattern.directory? && options[:glob]
           pattern += options[:glob]
         end
-        
+
         pattern.glob.map do |file| 
           if options[:relative_to_sandbox]
             file.relative_path_from(@sandbox.root)
