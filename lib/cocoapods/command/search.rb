@@ -23,16 +23,39 @@ module Pod
         end
       end
 
+      def colorize(text, color_code)
+        "\e[#{color_code}m#{text}\e[0m"
+      end
+
+      def red(text); colorize(text, 31); end
+      def green(text); colorize(text, 32); end
+      def yellow(text); colorize(text, 33); end
+
+
+      def wrap_text(txt, col = 80)
+        txt.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/,
+                 "\\1\\3\n    ")
+      end
       def run
         Source.search_by_name(@query.strip, @full_text_search).each do |set|
-          puts "==> #{set.name} (#{set.versions.reverse.join(", ")})"
-          puts "    #{set.specification.summary.strip}"
-          puts "    Homepage: #{set.specification.homepage}"
+          puts green("--> #{set.name} (#{set.versions.reverse.join(", ")})")
+          puts "    #{wrap_text(set.specification.summary).strip}"
+          puts "    - Homepage: #{set.specification.homepage}"
 
           source = set.specification.source
           if source
             url = source[:git] || source[:hg] || source[:svn] || source[:local]
-            puts "    Source: #{url}" if url
+            puts "    - Source:   #{url}" if url
+            if  url =~ /github.com/
+              original_url, username, reponame = *(url.match(/[:\/](\w+)\/(\w+).git/).to_a)
+              if original_url
+                repo_info = `curl -s -m 2 http://github.com/api/v2/json/repos/show/#{username}/#{reponame}`
+                watchers = repo_info.match(/\"watchers\":([0-9]+)/).to_a[1]
+                forks = repo_info.match(/\"forks\":([0-9]+)/).to_a[1]
+                puts "    - Watchers: " + watchers if watchers
+                puts "    - Forks:    " + forks if forks
+              end
+            end
           end
           puts
         end
