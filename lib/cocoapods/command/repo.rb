@@ -52,7 +52,7 @@ module Pod
       end
 
       def update
-        dirs = @name ? [dir] : config.repos_dir.children
+        dirs = @name ? [dir] : config.repos_dir.children.select {|c| c.directory?}
         dirs.each do |dir|
           puts "Updating spec repo `#{dir.basename}'" unless config.silent?
           Dir.chdir(dir) { git("pull") }
