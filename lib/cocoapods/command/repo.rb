@@ -14,11 +14,7 @@ module Pod
     $ pod repo update NAME
 
       Updates the local clone of the spec-repo `NAME'. If `NAME' is omitted
-      this will update all spec-repos in `~/.cocoapods'.
-
-    $ pod repo set-url NAME URL
-
-      Updates the remote `URL' of the spec-repo `NAME'.}
+      this will update all spec-repos in `~/.cocoapods'.}
       end
 
       extend Executable
@@ -26,11 +22,11 @@ module Pod
 
       def initialize(argv)
         case @action = argv.arguments[0]
-        when 'add', 'set-url'
+        when 'add'
           unless (@name = argv.arguments[1]) && (@url = argv.arguments[2])
             raise Informative, "#{@action == 'add' ? 'Adding' : 'Updating the remote of'} a repo needs a `name' and a `url'."
           end
-        when 'update', 'read-url'
+        when 'update'
           @name = argv.arguments[1]
         else
           super
@@ -58,19 +54,6 @@ module Pod
           Dir.chdir(dir) { git("pull") }
         end
       end
-
-      def set_url
-        Dir.chdir(dir) do
-          git("remote set-url origin '#{@url}'")
-        end
-      end
-
-      def read_url
-        Dir.chdir(dir) do
-          @output = git('config --get remote.origin.url')
-        end
-      end
-
     end
   end
 end

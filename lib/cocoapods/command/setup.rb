@@ -19,47 +19,53 @@ module Pod
         super
       end
 
+      extend Executable
+      executable :git
+
       def initialize(argv)
-        @push_access  = argv.option('--push') || already_push?
-        puts "Setup with push access" if @push_access && !config.silent
+        @push_option  = argv.option('--push')
         super unless argv.empty?
       end
 
-      def already_push?
-        if master_repo_exists?
-          read_master_repo_remote_command.run
-          read_master_repo_remote_command.output.chomp == master_repo_url_with_push
-        else
-          false
-        end
+      def dir
+        config.repos_dir + 'master'
       end
 
-      def master_repo_exists?
-        (config.repos_dir + 'master').exist?
-      end
-
-      def master_repo_url
+      def read_only_url
         'git://github.com/CocoaPods/Specs.git'
       end
 
-      def master_repo_url_with_push
+      def read_write_url
         'git@github.com:CocoaPods/Specs.git'
       end
 
-      def repo_url
-        @push_access ? master_repo_url_with_push : master_repo_url
+      def url
+        if push?
+          read_write_url
+        else
+          read_only_url
+        end
+      end
+
+      def origin_url_push?
+        Dir.chdir(dir) do
+          origin_url = git('config --get remote.origin.url')
+          origin_url.chomp == read_write_url
+        end
+      end
+
+      def push?
+       @push_option || (dir.exist? && origin_url_push?)
+      end
+
+      def set_master_repo_url
+        Dir.chdir(dir) do
+          git("remote set-url origin '#{url}'")
+        end
       end
 
       def add_master_repo_command
-        @command ||= Repo.new(ARGV.new(['add', 'master', repo_url]))
-      end
-
-      def read_master_repo_remote_command
-        @read_command ||= Repo.new(ARGV.new(['read-url', 'master']))
-      end
-
-      def update_master_repo_remote_command
-        Repo.new(ARGV.new(['set-url', 'master', repo_url]))
+        @command ||= Repo.new(ARGV.new(['add', 'master', url]))
       end
 
       def update_master_repo_command
@@ -67,8 +73,9 @@ module Pod
       end
 
       def run
-        if master_repo_exists?
-          update_master_repo_remote_command.run
+        puts "Using push access" if push? && !config.silent
+        if dir.exist?
+          set_master_repo_url
           update_master_repo_command.run
         else
           add_master_repo_command.run

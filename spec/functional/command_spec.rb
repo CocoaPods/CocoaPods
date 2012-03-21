@@ -6,9 +6,19 @@ describe "Pod::Command" do
 
   it "creates the local spec-repos directory and creates a clone of the `master' repo" do
     command = Pod::Command.parse('setup', '--silent')
-    def command.master_repo_url; SpecHelper.fixture('spec-repos/master'); end
+    def command.url; SpecHelper.fixture('spec-repos/master'); end
     command.run
     git_config('master', 'remote.origin.url').should == fixture('spec-repos/master').to_s
+  end
+
+  it "preserve push access for the `master' repo" do
+    command = Pod::Command.parse('setup', '--silent')
+    def command.url; SpecHelper.fixture('spec-repos/master'); end
+    command.run
+    command2 = Pod::Command.parse('setup', '--silent')
+    command2.url.should == 'git://github.com/CocoaPods/Specs.git'
+    git('master', 'remote set-url origin git@github.com:CocoaPods/Specs.git')
+    command2.url.should == 'git@github.com:CocoaPods/Specs.git'
   end
 
   it "adds a spec-repo" do
