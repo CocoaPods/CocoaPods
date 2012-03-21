@@ -47,15 +47,22 @@ module Pod
         end
       end
 
+      def origin_url_read_only?
+        read_master_repo_url.chomp == read_only_url
+      end
+
       def origin_url_push?
-        Dir.chdir(dir) do
-          origin_url = git('config --get remote.origin.url')
-          origin_url.chomp == read_write_url
-        end
+        read_master_repo_url.chomp == read_write_url
       end
 
       def push?
        @push_option || (dir.exist? && origin_url_push?)
+      end
+
+      def read_master_repo_url
+        Dir.chdir(dir) do
+          origin_url = git('config --get remote.origin.url')
+        end
       end
 
       def set_master_repo_url
@@ -70,6 +77,12 @@ module Pod
 
       def update_master_repo_command
         Repo.new(ARGV.new(['update', 'master']))
+      end
+
+      def run_if_needed
+        if !dir.exist? || origin_url_read_only? || origin_url_push?
+          run
+        end
       end
 
       def run
