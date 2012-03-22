@@ -144,7 +144,9 @@ module Pod
             local_pod = sandbox.installed_pod_named(name)
             raise Informative, "Missing podspec for #{name}, :#{params.map{|e| e.join(' => ')}.join(' - :')}" if !local_pod
 
-            if !@params.key?(:link)
+            if @params.key?(:link)
+              local_pod.link_path = @params[:link]
+            else
               local_pod.clean if Config.instance.clean
             end
 
@@ -192,7 +194,6 @@ module Pod
         end
       end
 
-      # TODO: draft
       class LocalSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox)
           puts "  * Linking: '#{name}' to '#{@params[:link]}'" unless Config.instance.silent?
@@ -200,7 +201,7 @@ module Pod
         end
 
         def description
-          "from `#{@params[:link]}' [LOCAL]"
+          "from `#{@params[:link]}'"
         end
       end
     end
