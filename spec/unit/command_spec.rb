@@ -2,6 +2,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Command" do
   it "returns the proper command class" do
+    config.silent.should == true
     Pod::Command.parse('setup').should.be.instance_of Pod::Command::Setup
     #Pod::Command.parse('spec').should.be.instance_of Pod::Command::Spec
     Pod::Command.parse('repo', 'update').should.be.instance_of Pod::Command::Repo
@@ -13,9 +14,15 @@ describe "Pod::Command::Setup" do
     lambda { Pod::Command::Setup.new(argv('something')) }.should.raise Pod::Command::Help
   end
 
-  it "returns the URL of the `master' spec-repo" do
+  it "returns the read only URL of the `master' spec-repo" do
     command = Pod::Command::Setup.new(argv)
-    command.master_repo_url.should == 'git://github.com/CocoaPods/Specs.git'
+    command.url.should == 'git://github.com/CocoaPods/Specs.git'
+  end
+
+  it "returns the push URL of the `master' spec-repo" do
+    config.silent = true
+    command = Pod::Command::Setup.new(argv('--push'))
+    command.url.should == 'git@github.com:CocoaPods/Specs.git'
   end
 end
 
