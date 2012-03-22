@@ -80,9 +80,7 @@ module Pod
       end
 
       def run_if_needed
-        if !dir.exist? || origin_url_read_only? || origin_url_push?
-          run
-        end
+        run if !dir.exist?
       end
 
       def run
