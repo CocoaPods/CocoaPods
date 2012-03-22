@@ -80,7 +80,7 @@ module Pod
         options = generate_appledoc_options
         options += ['--output', @target_path.to_s]
         options += ['--keep-intermediate-files']
-        options += install ? ['-create-docset'] : ['--no-create-docset']
+        options += install ? ['--create-docset'] : ['--no-create-docset']
 
         @target_path.mkpath
         @pod.chdir do
