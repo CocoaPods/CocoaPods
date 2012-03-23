@@ -39,10 +39,9 @@ module Pod
             url = source[:git] || source[:hg] || source[:svn] || source[:local]
             puts "    - Source:   #{url}" if url
             if  url =~ /github.com/
-              original_url, username, reponame = *(url.match(/[:\/](\w+)\/(\w+).git/).to_a)
+              original_url, username, reponame = *(url.match(/[:\/](\w+)\/(\w+)(.git)?/).to_a)
               if original_url
                 repo_info = `curl -s -m 2 http://github.com/api/v2/json/repos/show/#{username}/#{reponame}`
-                puts repo_info
                 watchers = repo_info.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1]
                 forks = repo_info.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1]
                 puts "    - Watchers: " + watchers if watchers
