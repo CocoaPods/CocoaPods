@@ -50,7 +50,7 @@ module Pod
         # 8 is the length of homepage which might be displayed alone
         number_of_spaces = ((8 - title.length) > 0) ? (8 - title.length) : 0
         spaces = ' ' * number_of_spaces
-        puts "    - #{title}: #{spaces + string}"
+        puts "    - #{title}: #{spaces + string}"
       end
 
       def puts_github_info(url)
