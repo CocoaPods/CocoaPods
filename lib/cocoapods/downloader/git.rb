@@ -64,7 +64,7 @@ module Pod
       end
       
       def tarball_url_for(id)
-        original_url, username, reponame = *(url.match(/[:\/](\w+)\/(\w+).git/).to_a)
+        original_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
         "https://github.com/#{username}/#{reponame}/tarball/#{id}"
       end
       
