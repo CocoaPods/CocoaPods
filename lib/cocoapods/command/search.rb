@@ -12,11 +12,13 @@ module Pod
       end
 
       def self.options
+        "    --extended  Show details that require network access (like GitHub stats)\n" +
         "    --full      Search by name, summary, and description\n" +
         super
       end
 
       def initialize(argv)
+        @extended = argv.option('--extended')
         @full_text_search = argv.option('--full')
         unless @query = argv.arguments.first
           super
@@ -33,14 +35,14 @@ module Pod
           puts "    #{wrap_text(set.specification.summary).strip}"
           puts "    - Homepage: #{set.specification.homepage}"
 
-          source = set.specification.source
-          if source
+          if @extended && (source = set.specification.source)
             url = source[:git] || source[:hg] || source[:svn] || source[:local]
             puts "    - Source:   #{url}" if url
             if  url =~ /github.com/
               original_url, username, reponame = *(url.match(/[:\/](\w+)\/(\w+).git/).to_a)
               if original_url
                 repo_info = `curl -s -m 2 http://github.com/api/v2/json/repos/show/#{username}/#{reponame}`
+                puts repo_info
                 watchers = repo_info.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1]
                 forks = repo_info.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1]
                 puts "    - Watchers: " + watchers if watchers
