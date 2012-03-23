@@ -102,7 +102,7 @@ module Pod
         end
 
         # appledoc exits with 1 if a warning was logged
-        if (process.exitstatus >= 2) && !config.silent?
+        if process.exited? && (process.exitstatus >= 2) && !config.silent?
           puts "[!] Appledoc encountered an error. Run 'pod install --verbose' for details."
         end
       end
