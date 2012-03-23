@@ -13,7 +13,7 @@ module Pod
 
       def self.options
         "    --stats     Show additional stats (like GitHub watchers and forks)\n" +
-        "    --full      Search by name, summary, and description\n"
+        "    --full      Search by name, summary, and description\n" +
         super
       end
 
