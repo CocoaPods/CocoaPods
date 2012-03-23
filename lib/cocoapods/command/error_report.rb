@@ -35,7 +35,7 @@ Don't forget to anonymize any private data!
 ### Podfile
 
 ```ruby
-#{Config.instance.project_podfile.read}
+#{Config.instance.project_podfile.read if Config.instance.project_podfile}
 ```
 
 
