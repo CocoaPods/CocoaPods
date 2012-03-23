@@ -2,7 +2,7 @@ module Pod
   class Command
     class Search < Command
       def self.banner
-%{Search pods:
+        %{Search pods:
 
     $ pod search [QUERY]
 
@@ -12,11 +12,13 @@ module Pod
       end
 
       def self.options
+        "    --stats     Show additional stats (like GitHub watchers and forks)\n" +
         "    --full      Search by name, summary, and description\n" +
         super
       end
 
       def initialize(argv)
+        @stats = argv.option('--stats')
         @full_text_search = argv.option('--full')
         unless @query = argv.arguments.first
           super
@@ -25,16 +27,41 @@ module Pod
 
       def run
         Source.search_by_name(@query.strip, @full_text_search).each do |set|
-          puts "==> #{set.name} (#{set.versions.reverse.join(", ")})"
-          puts "    #{set.specification.summary.strip}"
-          puts "    Homepage: #{set.specification.homepage}"
+          puts "\e[32m--> #{set.name} (#{set.versions.reverse.join(", ")})\e[0m"
 
-          source = set.specification.source
-          if source
-            url = source[:git] || source[:hg] || source[:svn] || source[:local]
-            puts "    Source: #{url}" if url
-          end
+          puts_wrapped_text(set.specification.summary)
+          puts_detail('Homepage', set.specification.homepage)
+          source = set.specification.source.values[0]
+          puts_detail('Source', source)
+          puts_github_info(source) if @stats
+
           puts
+        end
+      end
+
+      # adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
+      def puts_wrapped_text(txt, col = 80, indentation = 4)
+        indent = ' ' * indentation
+        puts txt.strip.gsub(/(.{1,#{col}})( +|$)\n?|(.{#{col}})/, indent + "\\1\\3\n")
+      end
+
+      def puts_detail(title,string)
+        return if !string
+        # 8 is the length of homepage which might be displayed alone
+        number_of_spaces = ((8 - title.length) > 0) ? (8 - title.length) : 0
+        spaces = ' ' * number_of_spaces
+        puts "    - #{title}: #{spaces + string}"
+      end
+
+      def puts_github_info(url)
+        original_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
+
+        if original_url
+          repo_info = `curl -s -m 2 http://github.com/api/v2/json/repos/show/#{username}/#{reponame}`
+          watchers = repo_info.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1]
+          forks = repo_info.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1]
+          puts_detail('Watchers', watchers)
+          puts_detail('Forks', forks)
         end
       end
     end
