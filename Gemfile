@@ -1,5 +1,7 @@
 source "http://rubygems.org"
 
+gem "open4"
+
 group :development do
   gem "rake"
   gem "bacon"
