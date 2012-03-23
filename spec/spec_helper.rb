@@ -16,6 +16,9 @@ $:.unshift((ROOT + 'spec').to_s)
 require 'spec_helper/fixture'
 require 'spec_helper/git'
 require 'spec_helper/temporary_directory'
+require 'spec_helper/color_output'
+
+Bacon.extend(Bacon::ColorOutput)
 
 context_class = defined?(BaconContext) ? BaconContext : Bacon::Context
 context_class.class_eval do

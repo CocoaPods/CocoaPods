@@ -1,6 +1,6 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
-TMP_POD_ROOT = ROOT + "tmp" + "podroot"
+TMP_POD_ROOT = ROOT + "tmp" + "podroot" unless defined? TMP_POD_ROOT
 
 describe Pod::Installer::TargetInstaller do
 
@@ -8,7 +8,7 @@ describe Pod::Installer::TargetInstaller do
     @target_definition = stub('target', :lib_name => "FooLib")
 
     platform = Pod::Platform.new(:ios)
-    @podfile = stub('podfile', :platform => platform, :generate_bridge_support? => false)
+    @podfile = stub('podfile', :platform => platform, :xcodeproj => "dummy.xcodeproj", :generate_bridge_support? => false)
 
     @project = Pod::Project.for_platform(platform)
     @project.main_group.groups.new('name' => 'Targets Support Files')

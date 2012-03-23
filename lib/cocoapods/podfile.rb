@@ -59,6 +59,12 @@ module Pod
       platform ? @platform = Platform.new(platform, options) : @platform
     end
 
+    # Specifies the path of the xcode project so it doesn't require the project to be specified
+    # when running pod install each time.
+    def xcodeproj(path = nil)
+      path ? @xcodeproj = path : @xcodeproj
+    end
+
     # Specifies a dependency of the project.
     #
     # A dependency requirement is defined by the name of the Pod and _optionally_
