@@ -6,8 +6,8 @@ module Pod
 
     $ pod search [QUERY]
 
-      Searches for pods, ignoring case, whose name matches `QUERY'. If the
-      `--full' option is specified, this will also search in the summary and
+      Searches for pods, ignoring case, whose name matches 'QUERY'. If the
+      '--full' option is specified, this will also search in the summary and
       description of the pods.}
       end
 
