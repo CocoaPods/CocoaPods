@@ -31,7 +31,7 @@ module Pod
 
           puts_wrapped_text(set.specification.summary)
           puts_detail('Homepage', set.specification.homepage)
-          source = set.specification.source.values[0]
+          source = set.specification.source ? set.specification.source.values[0] : nil
           puts_detail('Source', source)
           puts_github_info(source) if @stats
 
