@@ -12,13 +12,13 @@ module Pod
       end
 
       def self.options
-        "    --extended  Show details that require network access (like GitHub stats)\n" +
+        "    --stats     Show additional stats (like GitHub watchers and forks)\n" +
         "    --full      Search by name, summary, and description\n"
         super
       end
 
       def initialize(argv)
-        @extended = argv.option('--extended')
+        @stats = argv.option('--stats')
         @full_text_search = argv.option('--full')
         unless @query = argv.arguments.first
           super
@@ -31,7 +31,9 @@ module Pod
 
           puts_wrapped_text(set.specification.summary)
           puts_detail('Homepage', set.specification.homepage)
-          print_extended_info(set.specification.source) if @extended
+          source = set.specification.source.values[0]
+          puts_detail('Source', source)
+          puts_github_info(source) if @stats
 
           puts
         end
@@ -45,18 +47,13 @@ module Pod
 
       def puts_detail(title,string)
         return if !string
+        # 8 is the length of homepage which might be displayed alone
         number_of_spaces = ((8 - title.length) > 0) ? (8 - title.length) : 0
         spaces = ' ' * number_of_spaces
         puts "    - #{title}: #{spaces + string}"
       end
 
-      def print_extended_info(source)
-        source_url = source[:git] || source[:hg] || source[:svn] || source[:local]
-        puts_detail('Source', source_url)
-        print_github_info(source_url) if source_url =~ /github.com/
-      end
-
-      def print_github_info(url)
+      def puts_github_info(url)
         original_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
 
         if original_url
