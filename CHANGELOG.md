@@ -38,6 +38,22 @@ for working with the contents of this directory.
 
 ### Enhancements
 
+* [#166](https://github.com/CocoaPods/CocoaPods/issues/166): Added printing
+  of homepage and source to search results.
+
+* [#177](https://github.com/CocoaPods/CocoaPods/issues/177): Added `--stat`
+  option to display watchers and forks for pods hosted on GitHub.
+
+* [#177](https://github.com/CocoaPods/CocoaPods/issues/177): Introduced colors
+  and tuned layout of search.
+
+* [#112](https://github.com/CocoaPods/CocoaPods/issues/112): Introduced `--push`
+  option to `$ pod setup`. It configures the master spec repository to use the private
+  push URL. The change is preserved in future calls to `$ pod setup`.
+
+* [#153](https://github.com/CocoaPods/CocoaPods/issues/153): It is no longer
+  required to call `$ pod setup`.
+
 * [#163](https://github.com/CocoaPods/CocoaPods/issues/163): Print a template
   for a new ticket when an error occurs.
 
@@ -51,8 +67,8 @@ for working with the contents of this directory.
 
 ### Fixes
 
-* [#166](https://github.com/CocoaPods/CocoaPods/issues/166): Added printing of
-  homepage and source to search results.
+* [#183](https://github.com/CocoaPods/CocoaPods/issues/183): Fix for
+  `.DS_Store` file in `~/.cocoapods` prevents `$ pod install` from running.
 
 * [#134](https://github.com/CocoaPods/CocoaPods/issues/134): Match
   `IPHONEOS_DEPLOYMENT_TARGET` build setting with `deployment_target` option in
