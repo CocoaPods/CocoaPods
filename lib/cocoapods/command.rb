@@ -57,7 +57,7 @@ module Pod
       rescue Exception => e
         if e.is_a?(Informative)
           puts e.message
-          puts *e.backtrace if Config.instance.verbose
+          puts *e.backtrace if Config.instance.verbose?
         else
           puts ErrorReport.report(e)
         end

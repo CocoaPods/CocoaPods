@@ -94,16 +94,15 @@ module Pod
         arguments += ['--print-settings'] if config.verbose?
         arguments += files.map(&:to_s)
 
-        process = Open4.popen4('appledoc', *arguments) do |_, _, output, error|
-          if config.verbose?
-            puts output.read.chomp
-            puts error.read.chomp
-          end
+        output = error = nil
+        process = Open4.popen4('appledoc', *arguments) do |_, __, out, err|
+          output, error = out.read, err.read
         end
 
         # appledoc exits with 1 if a warning was logged
-        if process.exited? && (process.exitstatus >= 2) && !config.silent?
-          puts "[!] Appledoc encountered an error. Run 'pod install --verbose' for details."
+        if process.exitstatus >= 2
+          puts output, error
+          raise "Appledoc encountered an error."
         end
       end
     end
