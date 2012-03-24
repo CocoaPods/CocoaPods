@@ -25,7 +25,7 @@ module Pod
 
       def company
         if @specification.authors
-          @specification.authors.keys.join(', ')
+          @specification.authors.keys.sort.join(', ')
         else
           'no-company'
         end

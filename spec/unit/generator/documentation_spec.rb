@@ -29,8 +29,8 @@ describe Pod::Generator::Documentation do
     @doc_installer.generate_appledoc_options.should == [
       '--project-name', 'BananaLib (1.0)',
       '--docset-desc', 'Full of chunky bananas.',
-      '--project-company', 'Monkey Boy, Banana Corp',
-      '--docset-copyright', 'Monkey Boy, Banana Corp',
+      '--project-company', 'Banana Corp, Monkey Boy',
+      '--docset-copyright', 'Banana Corp, Monkey Boy',
       '--company-id', 'org.cocoapods',
       '--ignore', '.m',
       '--keep-undocumented-objects',
