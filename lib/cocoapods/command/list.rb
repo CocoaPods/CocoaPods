@@ -66,12 +66,10 @@ module Pod
       end
 
       def list_new
-        #TODO: find the changes of all repos
-        pods_past = pods_at_days_ago(@days)
-        pods_now = pods_at_days_ago(0)
-        pods_diff = pods_now - pods_past
+        #TODO: find the changes for all repos
+        new_pods = pods_at_days_ago(0) - pods_at_days_ago(@days)
+        sets = all_pods_sets.select {|set| new_pods.include?(set.name) }
 
-        sets = all_pods_sets.select {|set| pods_diff.include?(set.name) }
         puts
         if sets.count != 0
           puts "#{sets.count} new pods were added in the last #{@days} days"
