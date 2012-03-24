@@ -66,16 +66,16 @@ namespace :spec do
   end
 
   desc "Run the functional specs"
-  task :functional => [:unpack_fixture_tarballs, "ext:cleanbuild"] do
+  task :functional => :clean_env do
     sh "bacon #{specs('functional/**')}"
   end
 
   desc "Run the integration spec"
-  task :integration => [:unpack_fixture_tarballs, "ext:cleanbuild"] do
+  task :integration => :clean_env do
     sh "bacon spec/integration_spec.rb"
   end
 
-  task :all => [:unpack_fixture_tarballs, "ext:cleanbuild"] do
+  task :all => :clean_env do
     sh "bacon #{specs('**')}"
   end
 
@@ -104,6 +104,13 @@ namespace :spec do
       end
     end
   end
+
+  desc "Removes the stored VCR fixture"
+  task :clean_vcr do
+    sh "rm -f spec/fixtures/vcr/tarballs.yml"
+  end
+
+  task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
 end
 
 namespace :examples do
