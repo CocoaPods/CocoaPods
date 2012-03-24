@@ -1,7 +1,6 @@
 module Pod
   class Command
     class Search < Command
-
       include DisplayPods
 
       def self.banner

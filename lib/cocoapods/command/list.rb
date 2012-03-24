@@ -1,25 +1,12 @@
-
-# from https://github.com/aanand/deadweight
-begin
-  require 'colored'
-rescue LoadError
-  class String
-    %w(red green blue yellow).each do |color|
-      define_method(color) { self }
-    end
-  end
-end
-
-
 module Pod
   class Command
     class List < Command
-
       include DisplayPods
+
       def self.banner
         %{List all pods:
 
-    $ pod list [DAYS]
+    $ pod list
 
       Lists all available pods.
 
@@ -27,6 +14,7 @@ module Pod
 
       Lists the pods introduced in the master repo since the given number of days.}
       end
+
       def self.options
         "    --stats     Show additional stats (like GitHub watchers and forks)\n" +
         super
