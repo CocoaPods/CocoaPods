@@ -82,7 +82,7 @@ module Pod
             tmpfile.write Zlib::GzipReader.new(archive).read
           end
           
-          system "tar zxf #{tmpfile.path} -C #{target_path} --strip-components 1"
+          system "tar xf #{tmpfile.path} -C #{target_path} --strip-components 1"
         end
         
         FileUtils.rm_f(tmp_path)
