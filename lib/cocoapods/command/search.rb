@@ -31,7 +31,8 @@ module Pod
           puts_wrapped_text(set.specification.summary)
 
           spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
-          source = spec.source.values.first
+
+          source = spec.source.reject {|k,_| k == :commit || k == :tag }.values.first
           puts_detail('Homepage', spec.homepage)
           puts_detail('Source', source)
           puts_github_info(source) if @stats
