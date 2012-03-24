@@ -36,6 +36,13 @@ currently spread throughout the installation process and provide a better API
 for working with the contents of this directory.
 
 
+### Xcodeproj API
+
+All Xcodeproj APIs are now in `snake_case`, instead of `camelCase`. If you are
+manipulating the project from your Podfile's `post_install` hook, or from a
+podspec, then update these method calls.
+
+
 ### Enhancements
 
 * [#166](https://github.com/CocoaPods/CocoaPods/issues/166): Added printing
