@@ -124,6 +124,11 @@ describe "A Pod::Specification that's part of another pod's source" do
     @spec.dependencies.should == [Pod::Dependency.new('monkey', '>= 1')]
   end
 
+  it "searches the sources for a matching specification if it has not been assigned by the Resolver yet (e.g. the search command)" do
+    @spec.part_of_dependency = 'SSZipArchive', '0.1.1'
+    @spec.part_of_specification.to_s.should == 'SSZipArchive (0.1.1)'
+  end
+
   # TODO
   #it "returns the specification of the pod that it's part of" do
   #  @spec.part_of_specification

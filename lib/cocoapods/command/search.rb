@@ -28,10 +28,11 @@ module Pod
       def run
         Source.search_by_name(@query.strip, @full_text_search).each do |set|
           puts "\e[32m--> #{set.name} (#{set.versions.reverse.join(", ")})\e[0m"
-
           puts_wrapped_text(set.specification.summary)
-          puts_detail('Homepage', set.specification.homepage)
-          source = set.specification.source ? set.specification.source.values[0] : nil
+
+          spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
+          source = spec.source.values.first
+          puts_detail('Homepage', spec.homepage)
           puts_detail('Source', source)
           puts_github_info(source) if @stats
 

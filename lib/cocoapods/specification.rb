@@ -173,6 +173,13 @@ module Pod
     # This is assigned the other spec, of which this pod's source is a part, by
     # a Resolver.
     attr_accessor :part_of_specification
+    def part_of_specification
+      @part_of_specification || begin
+        set = Source.search(@part_of)
+        set.required_by(self)
+        set.specification
+      end
+    end
 
     def wrapper?
       source_files.empty? && !subspecs.empty?
