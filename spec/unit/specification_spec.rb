@@ -106,7 +106,12 @@ end
 
 describe "A Pod::Specification that's part of another pod's source" do
   before do
+    config.repos_dir = fixture('spec-repos')
     @spec = Pod::Specification.new
+  end
+
+  after do
+    config.repos_dir = SpecHelper.tmp_repos_path
   end
 
   it "adds a dependency on the other pod's source, but not the library" do
