@@ -1,10 +1,8 @@
 module Pod
   class Command
     class Search < Command
-      include DisplayPods
-
       def self.banner
-        %{Search pods:
+%{Search pods:
 
     $ pod search [QUERY]
 
@@ -18,6 +16,8 @@ module Pod
         "    --full      Search by name, summary, and description\n" +
         super
       end
+
+      include DisplayPods
 
       def initialize(argv)
         @stats = argv.option('--stats')

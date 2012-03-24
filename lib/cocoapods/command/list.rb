@@ -1,10 +1,8 @@
 module Pod
   class Command
     class List < Command
-      include DisplayPods
-
       def self.banner
-        %{List all pods:
+%{List all pods:
 
     $ pod list
 
@@ -20,13 +18,14 @@ module Pod
         super
       end
 
+      include DisplayPods
+      extend Executable
+      executable :git
+
       def initialize(argv)
         @stats = argv.option('--stats')
+        #TODO: accept only integers
         @days = argv.arguments.first
-      end
-
-      def list_all
-        display_pod_list(all_pods_sets, @stats)
       end
 
       def dir
@@ -34,21 +33,18 @@ module Pod
       end
 
       def list_directory_at_commit(commit)
-        Dir.chdir(dir) do |_|
-          `git ls-tree --name-only -r #{commit}`
-        end
+        Dir.chdir(dir) { git("ls-tree --name-only -r #{commit}") }
       end
 
       def commit_at_days_ago (days)
         return 'HEAD' if days == 0
-        Dir.chdir(dir) do |_|
-          `git rev-list -n1 --before="#{days} day ago" master`
-        end
+        Dir.chdir(dir) { git("rev-list -n1 --before=\"#{days} day ago\" master") }
       end
 
-      def pods_at_days_ago (days = 7)
+      def pods_at_days_ago (days)
         commit = commit_at_days_ago(days)
         dir_list = list_directory_at_commit(commit)
+
         # Keep only directories
         dir_list.gsub!(/^[^\/]*$/,'')
         #Clean pod names
@@ -70,20 +66,25 @@ module Pod
       end
 
       def list_new
+        #TODO: find the changes of all repos
         pods_past = pods_at_days_ago(@days)
         pods_now = pods_at_days_ago(0)
         pods_diff = pods_now - pods_past
 
         sets = all_pods_sets.select {|set| pods_diff.include?(set.name) }
         puts
-        if pods_diff.count
-          puts "#{pods_diff.count} new pods were added in the last #{@days} days\n"
+        if sets.count != 0
+          puts "#{sets.count} new pods were added in the last #{@days} days"
           puts
           display_pod_list(sets, @stats)
         else
-          puts "No new pods".red
+          puts "No new pods were added in the last #{@days} days"
         end
         puts
+      end
+
+      def list_all
+        display_pod_list(all_pods_sets, @stats)
       end
 
       def run
