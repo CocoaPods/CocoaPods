@@ -19,6 +19,7 @@ describe "Pod::Source" do
   end
 
   it "returns a specification set by top level spec name" do
+    (config.repos_dir + 'repo2/RestKit').rmtree
     set = Pod::Source.search(Pod::Dependency.new('RestKit/Network'))
     set.should == Pod::Spec::Set.new(config.repos_dir + 'repo1/RestKit')
   end

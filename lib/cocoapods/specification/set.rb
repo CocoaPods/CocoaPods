@@ -54,7 +54,7 @@ module Pod
       end
 
       def to_s
-        "#<#{self.class.name} for `#{name}' with required version `#{required_version}'>"
+        "#<#{self.class.name} for `#{name}' with required version `#{required_version}' at `#{@pod_dir}'>"
       end
       alias_method :inspect, :to_s
 
