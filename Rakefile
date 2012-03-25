@@ -1,3 +1,45 @@
+# Travis support
+def on_rvm?
+  `which ruby`.strip.include?('.rvm')
+end
+
+def rvm_ruby_dir
+  @rvm_ruby_dir ||= File.expand_path('../..', `which ruby`.strip)
+end
+
+namespace :travis do
+  # Used to create the deb package.
+  #
+  # Known to work with opencflite rev 248.
+  task :prepare_deb do
+    sh "sudo apt-get install subversion libicu-dev"
+    sh "svn co https://opencflite.svn.sourceforge.net/svnroot/opencflite/trunk opencflite"
+    sh "cd opencflite && ./configure --target=linux --with-uuid=/usr --with-tz-includes=./include --prefix=/usr/local && make && sudo make install"
+    sh "sudo /sbin/ldconfig"
+  end
+
+  task :install_opencflite_debs do
+    sh "mkdir -p debs"
+    Dir.chdir("debs") do
+      base_url = "https://github.com/downloads/CocoaPods/OpenCFLite"
+      %w{ opencflite1_248-1_i386.deb opencflite-dev_248-1_i386.deb }.each do |deb|
+        sh "wget #{File.join(base_url, deb)}" unless File.exist?(deb)
+      end
+      sh "sudo dpkg -i *.deb"
+    end
+  end
+
+  task :fix_rvm_include_dir do
+    unless File.exist?(File.join(rvm_ruby_dir, 'include'))
+      # Make Ruby headers available, RVM seems to do not create a include dir on 1.8.7, but it does on 1.9.3.
+      sh "mkdir '#{rvm_ruby_dir}/include'"
+      sh "ln -s '#{rvm_ruby_dir}/lib/ruby/1.8/i686-linux' '#{rvm_ruby_dir}/include/ruby'"
+    end
+  end
+
+  task :setup => [:install_opencflite_debs, :fix_rvm_include_dir]
+end
+
 namespace :gem do
   def gem_version
     require File.join(File.dirname(__FILE__), *%w[lib cocoapods])

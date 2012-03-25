@@ -2,5 +2,5 @@ language: ruby
 rvm:
   - 1.8.7
   - 1.9.3
-install: git submodule update --init && bundle install --path bundle && pushd . && cd bundle/ruby/*/bundler/gems/Xcodeproj-* && rake travis:setup && popd && sudo apt-get install subversion
+before_install: git submodule update --init && rake travis:setup && sudo apt-get install subversion
 script: bundle exec rake spec
