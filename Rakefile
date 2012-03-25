@@ -41,20 +41,6 @@ namespace :gem do
   end
 end
 
-namespace :ext do
-  XCODEPROJ_DIR = "./external/Xcodeproj"
-  
-  task :clean do
-    sh "cd #{XCODEPROJ_DIR} && rake ext:clean"
-  end
-
-  task :build do
-    sh "cd #{XCODEPROJ_DIR} && rake ext:build"
-  end
-
-  task :cleanbuild => [:clean, :build]
-end
-
 namespace :spec do
   def specs(dir)
     FileList["spec/#{dir}/*_spec.rb"].shuffle.join(' ')
@@ -110,7 +96,7 @@ namespace :spec do
     sh "rm -f spec/fixtures/vcr/tarballs.yml"
   end
 
-  task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
+  task :clean_env => [:clean_vcr, :unpack_fixture_tarballs]
 end
 
 namespace :examples do

@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'bundler/setup'
 
 require 'bacon'
 require 'mocha-on-bacon'
@@ -7,8 +8,6 @@ Bacon.summary_at_exit
 require 'pathname'
 ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 
-$:.unshift File.expand_path('../../external/Xcodeproj/ext', __FILE__)
-$:.unshift File.expand_path('../../external/Xcodeproj/lib', __FILE__)
 $:.unshift((ROOT + 'lib').to_s)
 require 'cocoapods'
 

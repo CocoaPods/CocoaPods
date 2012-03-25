@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
 if $0 == __FILE__
-  $:.unshift File.expand_path('../../external/Xcodeproj/ext', __FILE__)
-  $:.unshift File.expand_path('../../external/Xcodeproj/lib', __FILE__)
+  require "rubygems"
+  require "bundler/setup"
   $:.unshift File.expand_path('../../lib', __FILE__)
 end
 

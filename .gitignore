@@ -12,7 +12,6 @@ examples/Pods
 examples/**/Pods
 spec/fixtures/banana-lib
 spec/fixtures/integration/Headers/
-pod
 /concatenated.*
 spec/fixtures/mercurial-repo/.hg/*cache
 .hg

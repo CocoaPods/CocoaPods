@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/CocoaPods/Xcodeproj.git
+  revision: 338e4d37f282121754f10f6d169256a57a64860d
+  specs:
+    xcodeproj (0.1.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -40,3 +46,4 @@ DEPENDENCIES
   rb-fsevent
   vcr
   webmock
+  xcodeproj!
