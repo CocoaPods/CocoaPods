@@ -37,7 +37,13 @@ namespace :travis do
     end
   end
 
-  task :setup => [:install_opencflite_debs, :fix_rvm_include_dir]
+  task :install do
+    sh "git submodule update --init"
+    sh "sudo apt-get install subversion"
+    sh "env CFLAGS='-I#{rvm_ruby_dir}/include' bundle install"
+  end
+
+  task :setup => [:install_opencflite_debs, :fix_rvm_include_dir, :install]
 end
 
 namespace :gem do
