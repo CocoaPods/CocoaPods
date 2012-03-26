@@ -32,7 +32,7 @@ describe Pod::Command::SetPresent do
     puts
     puts "\n\n\n\n============================================================="
     puts "TEST FOR CURL"
-    puts `curl -s -m 2 http://github.com/api/v2/json/repos/show/cocoapods/cocoapods`
+    puts `curl -m 2 http://github.com/api/v2/json/repos/show/cocoapods/cocoapods`
     puts "=============================================================\n\n\n\n"
 
     @dummy.parse_set_options(argv('--stats'))
