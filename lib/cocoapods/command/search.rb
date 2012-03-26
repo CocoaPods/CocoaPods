@@ -12,15 +12,15 @@ module Pod
       end
 
       def self.options
-        "    --stats     Show additional stats (like GitHub watchers and forks)\n" +
         "    --full      Search by name, summary, and description\n" +
+        SetPresent.set_present_options +
         super
       end
 
-      include DisplayPods
+      include SetPresent
 
       def initialize(argv)
-        @stats = argv.option('--stats')
+        parse_set_options(argv)
         @full_text_search = argv.option('--full')
         unless @query = argv.arguments.first
           super
@@ -29,7 +29,7 @@ module Pod
 
       def run
         sets = Source.search_by_name(@query.strip, @full_text_search)
-        display_pod_list(sets, @stats)
+        present_sets(sets)
       end
     end
   end

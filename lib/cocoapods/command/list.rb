@@ -14,40 +14,40 @@ module Pod
       end
 
       def self.options
-        "    --stats     Show additional stats (like GitHub watchers and forks)\n" +
+        SetPresent.set_present_options +
         super
       end
 
-      include DisplayPods
+      include SetPresent
       extend Executable
       executable :git
 
       def initialize(argv)
-        @stats = argv.option('--stats')
-        #TODO: accept only integers
+        parse_set_options(argv)
         @days = argv.arguments.first
+        unless @days == nil || @days =~ /^[0-9]+$/
+          super
+        end
       end
 
       def dir
-        File.expand_path '~/.cocoapods/master'
+        config.repos_dir + 'master'
       end
 
-      def list_directory_at_commit(commit)
+      def dir_list_from_commit(commit)
         Dir.chdir(dir) { git("ls-tree --name-only -r #{commit}") }
       end
 
-      def commit_at_days_ago (days)
-        return 'HEAD' if days == 0
+      def commit_from_days_ago (days)
         Dir.chdir(dir) { git("rev-list -n1 --before=\"#{days} day ago\" master") }
       end
 
-      def pods_at_days_ago (days)
-        commit = commit_at_days_ago(days)
-        dir_list = list_directory_at_commit(commit)
+      def spec_names_from_commit (commit)
+        dir_list = dir_list_from_commit(commit)
 
-        # Keep only directories
+        # Keep only subdirectories
         dir_list.gsub!(/^[^\/]*$/,'')
-        #Clean pod names
+        # Keep only subdirectories name
         dir_list.gsub!(/(.*)\/[0-9].*/,'\1')
 
         result = dir_list.split("\n").uniq
@@ -55,7 +55,13 @@ module Pod
         result
       end
 
-      def all_pods_sets
+      def new_specs_set(commit)
+        #TODO: find the changes for all repos
+        new_specs = spec_names_from_commit('HEAD') - spec_names_from_commit(commit)
+        sets = all_specs_set.select { |set| new_specs.include?(set.name) }
+      end
+
+      def all_specs_set
         result = []
         Source.all.each do |source|
           source.pod_sets.each do |set|
@@ -66,23 +72,21 @@ module Pod
       end
 
       def list_new
-        #TODO: find the changes for all repos
-        new_pods = pods_at_days_ago(0) - pods_at_days_ago(@days)
-        sets = all_pods_sets.select {|set| new_pods.include?(set.name) }
-
-        puts
-        if sets.count != 0
-          puts "#{sets.count} new pods were added in the last #{@days} days"
-          puts
-          display_pod_list(sets, @stats)
-        else
-          puts "No new pods were added in the last #{@days} days"
+        sets = new_specs_set(commit_from_days_ago(@days))
+        present_sets(sets)
+        if !list
+          if sets.count != 0
+            puts "#{sets.count} new pods were added in the last #{@days} days"
+            puts
+          else
+            puts "No new pods were added in the last #{@days} days"
+            puts
+          end
         end
-        puts
       end
 
       def list_all
-        display_pod_list(all_pods_sets, @stats)
+        present_sets(all_specs_set)
       end
 
       def run
