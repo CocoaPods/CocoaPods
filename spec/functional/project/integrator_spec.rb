@@ -1,10 +1,41 @@
-require File.expand_path('../../spec_helper', __FILE__)
+require File.expand_path('../../../spec_helper', __FILE__)
 
-describe Pod::ProjectIntegration do 
+describe Pod::Project::Integrator, 'TODO UNIT SPECS!' do
+  extend SpecHelper::TemporaryDirectory
+
   before do
     @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-    Pod::ProjectIntegration.integrate_with_project(@sample_project_path)
+    config.project_root = @sample_project_path.dirname
+    @integrator = Pod::Project::Integrator.new(@sample_project_path)
     @sample_project = Xcodeproj::Project.new(@sample_project_path)
+  end
+
+  after do
+    config.project_root = nil
+  end
+
+  it "returns the path to the workspace in the project's root" do
+    @integrator.workspace_path.should == config.project_root + 'SampleProject.xcworkspace'
+  end
+
+  it "returns the path to the Pods.xcodeproj document" do
+    @integrator.pods_project_path.should == config.project_root + 'Pods/Pods.xcodeproj'
+  end
+end
+
+describe Pod::Project::Integrator do
+  extend SpecHelper::TemporaryDirectory
+
+  before do
+    @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+    config.project_root = @sample_project_path.dirname
+    @integrator = Pod::Project::Integrator.new(@sample_project_path)
+    @integrator.integrate!
+    @sample_project = Xcodeproj::Project.new(@sample_project_path)
+  end
+
+  after do
+    config.project_root = nil
   end
 
   it 'creates a workspace with a name matching the project' do

@@ -16,7 +16,6 @@ module Pod
   autoload :Platform,               'cocoapods/platform'
   autoload :Podfile,                'cocoapods/podfile'
   autoload :Project,                'cocoapods/project'
-  autoload :ProjectIntegration,     'cocoapods/project_integration'
   autoload :Resolver,               'cocoapods/resolver'
   autoload :Sandbox,                'cocoapods/sandbox'
   autoload :Source,                 'cocoapods/source'

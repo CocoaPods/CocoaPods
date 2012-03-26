@@ -41,10 +41,7 @@ module Pod
         if @update_repo
           Repo.new(ARGV.new(["update"])).run
         end
-        installer = Installer.new(podfile)
-        installer.install!
-
-        ProjectIntegration.integrate_with_project(@projpath) if @projpath
+        Installer.new(podfile, @projpath).install!
       end
     end
   end

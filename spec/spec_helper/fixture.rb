@@ -4,10 +4,8 @@ module SpecHelper
   end
   
   def self.create_sample_app_copy_from_fixture(fixture_name)
-    tmp_dir = Pathname.new(Dir.mktmpdir)
-    fixture_path = ROOT + "spec/fixtures/#{fixture_name}"
-    fixture_copy_path = tmp_dir + fixture_name
-    FileUtils.cp_r(fixture_path, tmp_dir)
+    fixture_copy_path = temporary_directory + fixture_name
+    FileUtils.cp_r(fixture(fixture_name), temporary_directory)
     fixture_copy_path + "#{fixture_name}.xcodeproj"
   end
 

@@ -363,12 +363,10 @@ else
           self.platform platform
           dependency 'SSZipArchive'
         end
-        installer = SpecHelper::Installer.new(spec)
+        installer = SpecHelper::Installer.new(spec, projpath)
         installer.install!
-        Pod::ProjectIntegration.integrate_with_project(projpath)
 
-        xcworkspace = temporary_directory + 'ASIHTTPRequest.xcworkspace'
-        workspace = Xcodeproj::Workspace.new_from_xcworkspace(xcworkspace)
+        workspace = Xcodeproj::Workspace.new_from_xcworkspace(temporary_directory + 'ASIHTTPRequest.xcworkspace')
         workspace.projpaths.sort.should == ['ASIHTTPRequest.xcodeproj', 'Pods/Pods.xcodeproj']
 
         project = Pod::Project.new(projpath)
