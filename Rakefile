@@ -1,3 +1,51 @@
+# Travis support
+def on_rvm?
+  `which ruby`.strip.include?('.rvm')
+end
+
+def rvm_ruby_dir
+  @rvm_ruby_dir ||= File.expand_path('../..', `which ruby`.strip)
+end
+
+namespace :travis do
+  # Used to create the deb package.
+  #
+  # Known to work with opencflite rev 248.
+  task :prepare_deb do
+    sh "sudo apt-get install subversion libicu-dev"
+    sh "svn co https://opencflite.svn.sourceforge.net/svnroot/opencflite/trunk opencflite"
+    sh "cd opencflite && ./configure --target=linux --with-uuid=/usr --with-tz-includes=./include --prefix=/usr/local && make && sudo make install"
+    sh "sudo /sbin/ldconfig"
+  end
+
+  task :install_opencflite_debs do
+    sh "mkdir -p debs"
+    Dir.chdir("debs") do
+      base_url = "https://github.com/downloads/CocoaPods/OpenCFLite"
+      %w{ opencflite1_248-1_i386.deb opencflite-dev_248-1_i386.deb }.each do |deb|
+        sh "wget #{File.join(base_url, deb)}" unless File.exist?(deb)
+      end
+      sh "sudo dpkg -i *.deb"
+    end
+  end
+
+  task :fix_rvm_include_dir do
+    unless File.exist?(File.join(rvm_ruby_dir, 'include'))
+      # Make Ruby headers available, RVM seems to do not create a include dir on 1.8.7, but it does on 1.9.3.
+      sh "mkdir '#{rvm_ruby_dir}/include'"
+      sh "ln -s '#{rvm_ruby_dir}/lib/ruby/1.8/i686-linux' '#{rvm_ruby_dir}/include/ruby'"
+    end
+  end
+
+  task :install do
+    sh "git submodule update --init"
+    sh "sudo apt-get install subversion"
+    sh "env CFLAGS='-I#{rvm_ruby_dir}/include' bundle install"
+  end
+
+  task :setup => [:install_opencflite_debs, :fix_rvm_include_dir, :install]
+end
+
 namespace :gem do
   def gem_version
     require File.join(File.dirname(__FILE__), *%w[lib cocoapods])
@@ -41,42 +89,33 @@ namespace :gem do
   end
 end
 
-namespace :ext do
-  XCODEPROJ_DIR = "./external/Xcodeproj"
-  
-  task :clean do
-    sh "cd #{XCODEPROJ_DIR} && rake ext:clean"
-  end
-
-  task :build do
-    sh "cd #{XCODEPROJ_DIR} && rake ext:build"
-  end
-
-  task :cleanbuild => [:clean, :build]
-end
-
 namespace :spec do
   def specs(dir)
     FileList["spec/#{dir}/*_spec.rb"].shuffle.join(' ')
   end
 
+  desc "Automatically run specs for updated files"
+  task :kick do
+    exec "bundle exec kicker -c"
+  end
+
   desc "Run the unit specs"
   task :unit => :unpack_fixture_tarballs do
-    sh "bacon #{specs('unit/**')} -q"
+    sh "bundle exec bacon #{specs('unit/**')} -q"
   end
 
   desc "Run the functional specs"
-  task :functional => :clean_env do
-    sh "bacon #{specs('functional/**')}"
+  task :functional => :unpack_fixture_tarballs do
+    sh "bundle exec bacon #{specs('functional/**')}"
   end
 
   desc "Run the integration spec"
-  task :integration => :clean_env do
-    sh "bacon spec/integration_spec.rb"
+  task :integration => :unpack_fixture_tarballs do
+    sh "bundle exec bacon spec/integration_spec.rb"
   end
 
-  task :all => :clean_env do
-    sh "bacon #{specs('**')}"
+  task :all => :unpack_fixture_tarballs do
+    sh "bundle exec bacon #{specs('**')}"
   end
 
   desc "Run all specs and build all examples"
@@ -104,13 +143,6 @@ namespace :spec do
       end
     end
   end
-
-  desc "Removes the stored VCR fixture"
-  task :clean_vcr do
-    sh "rm -f spec/fixtures/vcr/tarballs.yml"
-  end
-
-  task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
 end
 
 namespace :examples do

@@ -3,14 +3,13 @@ source "http://rubygems.org"
 gem "open4"
 
 group :development do
-  gem "rake"
+  gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git"
+
   gem "bacon"
-  gem "guard"
-  gem "guard-shell"
-  gem "rb-fsevent"
-  gem "growl"
+  gem "kicker"
   gem "mocha-on-bacon"
+  gem "rake"
+  gem "rb-fsevent"
   gem "vcr"
   gem "webmock"
-  gem "kicker"
 end

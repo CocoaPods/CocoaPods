@@ -14,11 +14,20 @@ Search for existing github issues similar to yours:
 
   https://github.com/CocoaPods/CocoaPods/issues/search?q=%22#{CGI.escape(error.message)}%22
 
-If none exists, create a ticket with the following information to:
+If none exists, create a ticket, with the information in the below (markdown formatted) template, on:
 
   https://github.com/CocoaPods/CocoaPods/issues/new
 
-Don't forget to anonymize any private data!
+**Don't forget to anonymize any private data!**
+
+
+### Report
+
+* What did you do?
+
+* What did you expect to happen?
+
+* What happened instead?
 
 
 ### Stack

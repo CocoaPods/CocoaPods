@@ -13,10 +13,8 @@ module Pod
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'PODS_ROOT' => '$(SRCROOT)/Pods',
+          'PODS_ROOT'                => '$(SRCROOT)/Pods',
           'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
-          # This makes categories from static libraries work, which many libraries
-          # require, so we add these by default.
           'OTHER_LDFLAGS'            => default_ld_flags,
         })
       end
@@ -118,7 +116,7 @@ module Pod
       
       def default_ld_flags
         flags = %w{-ObjC -all_load}
-        flags << '-fobjc-arc' if self.requires_arc
+        flags << '-fobjc-arc' if @podfile.set_arc_compatibility_flag? && self.requires_arc
         flags.join(" ")
       end
     end

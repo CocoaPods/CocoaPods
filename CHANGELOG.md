@@ -74,6 +74,12 @@ podspec, then update these method calls.
 
 ### Fixes
 
+* [#142](https://github.com/CocoaPods/CocoaPods/issues/142): Xcode 4.3.2 no longer
+  supports passing the -fobj-arc flag to the linker and will fail to build. The
+  addition of this flag was a workaround for a compiler bug in previous versions.
+  This flag is no longer included by default - to keep using this flag, you need to
+  add `set_arc_compatibility_flag!` to your Podfile.
+
 * [#183](https://github.com/CocoaPods/CocoaPods/issues/183): Fix for
   `.DS_Store` file in `~/.cocoapods` prevents `$ pod install` from running.
 
