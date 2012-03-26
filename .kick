@@ -12,3 +12,7 @@ process do |files|
   end
   Kicker::Recipes::Ruby.run_tests(specs)
 end
+
+recipe :ignore
+ignore(/.*\/?tags/)
+ignore(/.*\/?\.git/)
