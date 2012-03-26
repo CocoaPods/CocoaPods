@@ -1,6 +1,7 @@
 module Pod
   class Command
     autoload :ErrorReport, 'cocoapods/command/error_report'
+    autoload :DisplayPods, 'cocoapods/command/print_pod'
     autoload :Install,     'cocoapods/command/install'
     autoload :List,        'cocoapods/command/list'
     autoload :Repo,        'cocoapods/command/repo'
