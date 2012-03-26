@@ -39,8 +39,9 @@ describe "Pod::Command::List" do
 
   it "returns the new specs introduced after a given commit" do
     new_specs = command(argv('10')).new_specs_set('1c138d254bd39a3ccbe95a720098e2aaad5c5fc1')
-    new_specs[0].name.should == 'iCarousel'
-    new_specs[1].name.should == 'libPusher'
+    new_specs_name = new_specs.map { |spec| spec.name }
+    new_specs_name.should.include 'iCarousel'
+    new_specs_name.should.include 'libPusher'
   end
 end
 

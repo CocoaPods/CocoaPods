@@ -27,12 +27,12 @@ describe Pod::Command::SetPresent do
     @dummy.prinded.should.include? 'https://github.com/robbiehanson/CocoaLumberjack.git'
   end
 
-  it "presents the stats of a specification set" do
-    @dummy.parse_set_options(argv('--stats'))
-    @dummy.present_set(@set)
-    @dummy.prinded.should.match(/Watchers:\W+[0-9]+/)
-    @dummy.prinded.should.match(/Forks:\W+[0-9]+/)
-  end
+  # it "presents the stats of a specification set" do
+  #   @dummy.parse_set_options(argv('--stats'))
+  #   @dummy.present_set(@set)
+  #   @dummy.prinded.should.match(/Watchers:\W+[0-9]+/)
+  #   @dummy.prinded.should.match(/Forks:\W+[0-9]+/)
+  # end
 
 end
 
