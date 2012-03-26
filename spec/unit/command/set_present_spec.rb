@@ -28,13 +28,6 @@ describe Pod::Command::SetPresent do
   end
 
   it "presents the stats of a specification set" do
-
-    puts
-    puts "\n\n\n\n============================================================="
-    puts "TEST FOR CURL"
-    puts `curl -m 2 http://github.com/api/v2/json/repos/show/cocoapods/cocoapods`
-    puts "=============================================================\n\n\n\n"
-
     @dummy.parse_set_options(argv('--stats'))
     @dummy.present_set(@set)
     @dummy.prinded.should.match(/Watchers:\W+[0-9]+/)
