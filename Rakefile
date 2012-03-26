@@ -96,21 +96,21 @@ namespace :spec do
 
   desc "Run the unit specs"
   task :unit => :unpack_fixture_tarballs do
-    sh "bacon #{specs('unit/**')} -q"
+    sh "bundle exec bacon #{specs('unit/**')} -q"
   end
 
   desc "Run the functional specs"
   task :functional => :clean_env do
-    sh "bacon #{specs('functional/**')}"
+    sh "bundle exec bacon #{specs('functional/**')}"
   end
 
   desc "Run the integration spec"
   task :integration => :clean_env do
-    sh "bacon spec/integration_spec.rb"
+    sh "bundle exec bacon spec/integration_spec.rb"
   end
 
   task :all => :clean_env do
-    sh "bacon #{specs('**')}"
+    sh "bundle exec bacon #{specs('**')}"
   end
 
   desc "Run all specs and build all examples"
