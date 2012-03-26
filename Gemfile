@@ -6,9 +6,6 @@ group :development do
   gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git"
 
   gem "bacon"
-  gem "guard"
-  gem "guard-shell"
-  gem "growl"
   gem "kicker"
   gem "mocha-on-bacon"
   gem "rake"

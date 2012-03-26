@@ -94,6 +94,11 @@ namespace :spec do
     FileList["spec/#{dir}/*_spec.rb"].shuffle.join(' ')
   end
 
+  desc "Automatically run specs for updated files"
+  task :kick do
+    exec "bundle exec kicker -c"
+  end
+
   desc "Run the unit specs"
   task :unit => :unpack_fixture_tarballs do
     sh "bundle exec bacon #{specs('unit/**')} -q"
