@@ -74,7 +74,7 @@ describe "Pod::Podfile" do
           dependency 'SSZipArchive'
         end
 
-        target :test, :exclusive => true do
+        target :test, :exclusive => true, :link_with => 'TestRunner' do
           dependency 'JSONKit'
           target :subtarget do
             dependency 'Reachability'
@@ -114,6 +114,16 @@ describe "Pod::Podfile" do
       target = @podfile.target_definitions[:subtarget]
       target.lib_name.should == 'Pods-test-subtarget'
       target.dependencies.should == [Pod::Dependency.new('Reachability'), Pod::Dependency.new('JSONKit')]
+    end
+
+    it "leaves the name of the target, to link with, to be automatically resolved" do
+      target = @podfile.target_definitions[:default]
+      target.link_with.should == nil
+    end
+
+    it "returns the name of the explicit target to link with" do
+      target = @podfile.target_definitions[:test]
+      target.link_with.should == ['TestRunner']
     end
   end
 

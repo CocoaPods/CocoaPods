@@ -1,10 +1,17 @@
 module Pod
   class Podfile
     class TargetDefinition
-      attr_reader :name, :parent, :target_dependencies
+      attr_reader :name, :target_dependencies
+      
+      attr_accessor :link_with, :parent
 
-      def initialize(name, parent = nil)
-        @name, @parent, @target_dependencies = name, parent, []
+      def initialize(name, options = {})
+        @name, @target_dependencies = name, []
+        options.each { |k, v| send("#{k}=", v) }
+      end
+
+      def link_with=(targets)
+        @link_with = targets.is_a?(Array) ? targets : [targets]
       end
 
       def lib_name
@@ -57,6 +64,10 @@ module Pod
     # If the deployment target requires it (< 4.3), armv6 will be added to ARCHS.
     def platform(platform = nil, options={})
       platform ? @platform = Platform.new(platform, options) : @platform
+    end
+
+    def link_with(targets = nil)
+      targets ? @target_definition.link_with = targets : @target_definition.link_with
     end
 
     # Specifies a dependency of the project.
@@ -156,8 +167,8 @@ module Pod
       @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
     end
 
-    # Specifies that a BridgeSupport metadata should be generated from the
-    # headers of all installed Pods.
+    # Specifies that a BridgeSupport metadata document should be generated from
+    # the headers of all installed Pods.
     #
     # This is for scripting languages such as MacRuby, Nu, and JSCocoa, which use
     # it to bridge types, functions, etc better.
@@ -193,7 +204,8 @@ module Pod
     # dependency (JSONKit).
     def target(name, options = {})
       parent = @target_definition
-      @target_definitions[name] = @target_definition = TargetDefinition.new(name, options[:exclusive] ? nil : parent)
+      options[:parent] = parent unless options.delete(:exclusive)
+      @target_definitions[name] = @target_definition = TargetDefinition.new(name, options)
       yield
     ensure
       @target_definition = parent
