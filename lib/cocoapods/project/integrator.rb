@@ -9,8 +9,9 @@ module Pod
 
       attr_reader :user_project_path, :user_project
 
-      def initialize(user_project_path)
+      def initialize(user_project_path, podfile)
         @user_project_path = user_project_path
+        @podfile = podfile
         @user_project = Xcodeproj::Project.new(user_project_path)
       end
 
