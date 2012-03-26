@@ -48,6 +48,10 @@ describe "Pod::Podfile" do
     Pod::Podfile.new {}.should.not.generate_bridge_support
     Pod::Podfile.new { generate_bridge_support! }.should.generate_bridge_support
   end
+  
+  it 'specifies that ARC compatibility flag should be generated' do
+    Pod::Podfile.new { set_arc_compatibility_flag! }.should.set_arc_compatibility_flag
+  end
 
   it "stores a block that will be called with the Installer instance once installation is finished (but the project is not written to disk yet)" do
     yielded = nil

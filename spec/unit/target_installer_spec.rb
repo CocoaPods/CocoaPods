@@ -8,7 +8,9 @@ describe Pod::Installer::TargetInstaller do
     @target_definition = stub('target', :lib_name => "FooLib")
 
     platform = Pod::Platform.new(:ios)
-    @podfile = stub('podfile', :platform => platform, :generate_bridge_support? => false)
+    @podfile = stub('podfile', :platform => platform, 
+                  :generate_bridge_support? => false, 
+                  :set_arc_compatibility_flag? => false)
 
     @project = Pod::Project.for_platform(platform)
     @project.main_group.groups.new('name' => 'Targets Support Files')
@@ -45,9 +47,20 @@ describe Pod::Installer::TargetInstaller do
     @installer.xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include("\"#{@sandbox.header_search_paths.join(" ")}\"")
   end
   
-  it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
-    @specification.stubs(:requires_arc).returns(true)
+  it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do
     do_install!
-    @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
+    @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.not.include("-fobjc-arc")
+  end
+  
+  describe "when ARC compatibility flag is set" do
+    before do
+      @podfile.stubs(:set_arc_compatibility_flag? => true)
+    end
+    
+    it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
+      @specification.stubs(:requires_arc).returns(true)
+      @installer.install!(@pods, @sandbox)
+      @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
+    end
   end
 end

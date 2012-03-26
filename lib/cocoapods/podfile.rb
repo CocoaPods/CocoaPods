@@ -215,6 +215,19 @@ module Pod
       @post_install_callback = block
     end
 
+    # Specifies that the -fobjc-arc flag should be added to the OTHER_LD_FLAGS.
+    #
+    # This is used as a workaround for a compiler bug with non-ARC projects.
+    # (see https://github.com/CocoaPods/CocoaPods/issues/142)
+    #
+    # This was originally done automatically but libtool as of Xcode 4.3.2 no 
+    # longer seems to support the -fobjc-arc flag. Therefore it now has to be
+    # enabled explicitly using this method.
+    #
+    # This may be removed in a future release.
+    def set_arc_compatibility_flag!
+      @set_arc_compatibility_flag = true
+    end
 
     # Not attributes
 
@@ -235,6 +248,10 @@ module Pod
 
     def generate_bridge_support?
       @generate_bridge_support
+    end
+    
+    def set_arc_compatibility_flag?
+      @set_arc_compatibility_flag
     end
 
     def post_install!(installer)
