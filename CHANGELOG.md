@@ -45,6 +45,13 @@ podspec, then update these method calls.
 
 ### Enhancements
 
+* [#188](https://github.com/CocoaPods/CocoaPods/pull/188): `list` command now
+  displays the specifications introduced in the master repo if it is given as an
+  option the number of days to take into account.
+
+* [#188](https://github.com/CocoaPods/CocoaPods/pull/188): Transferred search
+  layout improvements and options to `list` command.
+
 * [#166](https://github.com/CocoaPods/CocoaPods/issues/166): Added printing
   of homepage and source to search results.
 
