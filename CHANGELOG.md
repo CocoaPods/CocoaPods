@@ -3,6 +3,43 @@
 A full list of all the changes since 0.5.1 can be found [here][6].
 
 
+### Link with specific targets
+
+CocoaPods can now integrate all the targets specified in your `Podfile`.
+
+To specify which target, in your Xcode project, a Pods target should be linked
+with, use the `link_with` method like so:
+
+```ruby
+platform :ios
+
+link_with ['MyAppTarget', 'MyOtherAppTarget']
+dependency 'JSONKit'
+
+target :test, :exclusive => true do
+  link_with 'TestRunnerTarget'
+  dependency 'Kiwi'
+end
+```
+
+_NOTE: As you can see it can take either one target name, or an array of names._
+
+Alternatively, you can also specify the target to link with in the target
+options like so:
+
+```ruby
+target :test, :exclusive => true, :link_with => 'TestRunnerTarget' do
+  dependency 'Kiwi'
+end
+```
+
+If no explicit target is specified, then the Pods target will be linked with
+the first target in your project. So if you only have one target you do not
+need to specify the target to link with.
+
+See [#76](https://github.com/CocoaPods/CocoaPods/issues/76) for more info.
+
+
 ### Documentation
 
 CocoaPods will now generate documentation for every library with the
@@ -22,7 +59,7 @@ s.documentation = { :html => 'http://example.com/docs/index.html' }
 ```
 
 See [#149](https://github.com/CocoaPods/CocoaPods/issues/149) and
-[#151](https://github.com/CocoaPods/CocoaPods/issues/151).
+[#151](https://github.com/CocoaPods/CocoaPods/issues/151) for more info.
 
 
 ### Introduced two new classes: LocalPod and Sandbox.

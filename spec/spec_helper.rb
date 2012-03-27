@@ -12,18 +12,23 @@ $:.unshift((ROOT + 'lib').to_s)
 require 'cocoapods'
 
 $:.unshift((ROOT + 'spec').to_s)
+require 'spec_helper/color_output'
 require 'spec_helper/fixture'
 require 'spec_helper/git'
 require 'spec_helper/temporary_directory'
 
-context_class = defined?(BaconContext) ? BaconContext : Bacon::Context
-context_class.class_eval do
-  include Pod::Config::Mixin
+module Bacon
+  extend ColorOutput
+  summary_at_exit
 
-  include SpecHelper::Fixture
+  class Context
+    include Pod::Config::Mixin
 
-  def argv(*argv)
-    Pod::Command::ARGV.new(argv)
+    include SpecHelper::Fixture
+
+    def argv(*argv)
+      Pod::Command::ARGV.new(argv)
+    end
   end
 end
 

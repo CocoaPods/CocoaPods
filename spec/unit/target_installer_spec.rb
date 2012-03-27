@@ -5,7 +5,7 @@ TMP_POD_ROOT = ROOT + "tmp" + "podroot"
 describe Pod::Installer::TargetInstaller do
 
   before do 
-    @target_definition = stub('target', :lib_name => "FooLib")
+    @target_definition = Pod::Podfile::TargetDefinition.new(:foo)
 
     platform = Pod::Platform.new(:ios)
     @podfile = stub('podfile', :platform => platform, 
@@ -29,7 +29,7 @@ describe Pod::Installer::TargetInstaller do
   it 'adds a new static library target to the project' do
     do_install!
     @project.targets.count.should == 1
-    @project.targets.first.name.should == "FooLib"
+    @project.targets.first.name.should == @target_definition.label
   end
   
   it 'adds each pod to the static library target' do

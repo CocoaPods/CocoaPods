@@ -363,27 +363,23 @@ else
           self.platform platform
           dependency 'SSZipArchive'
         end
-        installer = SpecHelper::Installer.new(spec)
+        installer = SpecHelper::Installer.new(spec, projpath)
         installer.install!
-        Pod::ProjectIntegration.integrate_with_project(projpath)
 
-        xcworkspace = temporary_directory + 'ASIHTTPRequest.xcworkspace'
-        workspace = Xcodeproj::Workspace.new_from_xcworkspace(xcworkspace)
+        workspace = Xcodeproj::Workspace.new_from_xcworkspace(temporary_directory + 'ASIHTTPRequest.xcworkspace')
         workspace.projpaths.sort.should == ['ASIHTTPRequest.xcodeproj', 'Pods/Pods.xcodeproj']
 
         project = Pod::Project.new(projpath)
         libPods = project.files.find { |f| f.name == 'libPods.a' }
-        project.targets.each do |target|
-          target.build_configurations.each do |config|
-            config.base_configuration.path.should == 'Pods/Pods.xcconfig'
-          end
 
-          phase = target.frameworks_build_phases.first
-          phase.files.map { |build_file| build_file.file }.should.include libPods
-
-          # should be the last phase
-          target.build_phases.last.shell_script.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
+        target = project.targets.first
+        target.build_configurations.each do |config|
+          config.base_configuration.path.should == 'Pods/Pods.xcconfig'
         end
+        phase = target.frameworks_build_phases.first
+        phase.files.map { |build_file| build_file.file }.should.include libPods
+        # should be the last phase
+        target.build_phases.last.shell_script.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
       end
 
       it "should prevent duplication cleaning headers symlinks with multiple targets" do

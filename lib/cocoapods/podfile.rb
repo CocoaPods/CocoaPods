@@ -1,20 +1,47 @@
 module Pod
   class Podfile
     class TargetDefinition
-      attr_reader :name, :parent, :target_dependencies
+      attr_reader :name, :target_dependencies
+      
+      attr_accessor :link_with, :parent
 
-      def initialize(name, parent = nil)
-        @name, @parent, @target_dependencies = name, parent, []
+      def initialize(name, options = {})
+        @name, @target_dependencies = name, []
+        options.each { |k, v| send("#{k}=", v) }
       end
 
-      def lib_name
+      def link_with=(targets)
+        @link_with = targets.is_a?(Array) ? targets : [targets]
+      end
+
+      def label
         if name == :default
           "Pods"
         elsif @parent
-          "#{@parent.lib_name}-#{name}"
+          "#{@parent.label}-#{name}"
         else
           "Pods-#{name}"
         end
+      end
+
+      def lib_name
+        "lib#{label}.a"
+      end
+
+      def xcconfig_name
+        "#{label}.xcconfig"
+      end
+
+      def copy_resources_script_name
+        "#{label}-resources.sh"
+      end
+
+      def prefix_header_name
+        "#{label}-prefix.pch"
+      end
+
+      def bridge_support_name
+        "#{label}.bridgesupport"
       end
 
       # Returns *all* dependencies of this target, not only the target specific
@@ -57,6 +84,25 @@ module Pod
     # If the deployment target requires it (< 4.3), armv6 will be added to ARCHS.
     def platform(platform = nil, options={})
       platform ? @platform = Platform.new(platform, options) : @platform
+    end
+
+    # Specifies the target(s) in the user’s project that this Pods library
+    # should be linked in.
+    #
+    # @example
+    #
+    #   # Link with a target in the user’s project called ‘MyApp’.
+    #   link_with 'MyApp'
+    #
+    #   # Link with the targets in the user’s project called ‘MyApp’ and ‘MyOtherApp’.
+    #   link_with ['MyApp', 'MyOtherApp']
+    #
+    #   # You can also specify this inline when specifying a new Pods target:
+    #   target :test, :exclusive => true, :link_with => 'TestRunner' do
+    #     dependency 'Kiwi'
+    #   end
+    def link_with(targets)
+      @target_definition.link_with = targets
     end
 
     # Specifies a dependency of the project.
@@ -156,8 +202,8 @@ module Pod
       @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
     end
 
-    # Specifies that a BridgeSupport metadata should be generated from the
-    # headers of all installed Pods.
+    # Specifies that a BridgeSupport metadata document should be generated from
+    # the headers of all installed Pods.
     #
     # This is for scripting languages such as MacRuby, Nu, and JSCocoa, which use
     # it to bridge types, functions, etc better.
@@ -193,7 +239,8 @@ module Pod
     # dependency (JSONKit).
     def target(name, options = {})
       parent = @target_definition
-      @target_definitions[name] = @target_definition = TargetDefinition.new(name, options[:exclusive] ? nil : parent)
+      options[:parent] = parent unless options.delete(:exclusive)
+      @target_definitions[name] = @target_definition = TargetDefinition.new(name, options)
       yield
     ensure
       @target_definition = parent
