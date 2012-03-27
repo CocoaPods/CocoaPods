@@ -145,6 +145,11 @@ describe "Pod::Podfile" do
       @podfile.target_definitions[:default].prefix_header_name.should == 'Pods-prefix.pch'
       @podfile.target_definitions[:test].prefix_header_name.should == 'Pods-test-prefix.pch'
     end
+
+    it "returns the name of the BridgeSupport file for the target" do
+      @podfile.target_definitions[:default].bridge_support_name.should == 'Pods.bridgesupport'
+      @podfile.target_definitions[:test].bridge_support_name.should == 'Pods-test.bridgesupport'
+    end
   end
 
   describe "concerning validations" do

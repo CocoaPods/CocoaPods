@@ -66,11 +66,19 @@ module Pod
           add_copy_resources_script_phase
         end
 
+        # This returns a list of the targets from the user’s project to which
+        # this Pods static library should be linked. If no explicit target was
+        # specified, then the first encountered target is assumed.
+        #
         # @return [Array<PBXNativeTarget>]  Returns the list of targets that
         #                                   the Pods lib should be linked with.
         def targets
-          @integrator.user_project.targets.select do |target|
-            @target_definition.link_with.include? target.name
+          if link_with = @target_definition.link_with
+            @integrator.user_project.targets.select do |target|
+              link_with.include? target.name
+            end
+          else
+            [@integrator.user_project.targets.first]
           end
         end
 

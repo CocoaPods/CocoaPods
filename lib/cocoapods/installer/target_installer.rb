@@ -31,8 +31,9 @@ module Pod
         end.flatten)
       end
 
-      def bridge_support_filename
-        "#{@target_definition.label}.bridgesupport"
+      # TODO This has to be removed, but this means the specs have to be updated if they need a reference to the prefix header.
+      def prefix_header_filename
+        @target_definition.prefix_header_name
       end
 
       # TODO move out to Generator::PrefixHeader
@@ -85,10 +86,10 @@ module Pod
 
       def create_files(pods, sandbox)
         if @podfile.generate_bridge_support?
-          bridge_support_metadata_path = sandbox.root + bridge_support_filename
+          bridge_support_metadata_path = sandbox.root + @target_definition.bridge_support_name
           puts "* Generating BridgeSupport metadata file at `#{bridge_support_metadata_path}'" if config.verbose?
           bridge_support_generator_for(pods, sandbox).save_as(bridge_support_metadata_path)
-          copy_resources_script_for(pods).resources << bridge_support_filename
+          copy_resources_script_for(pods).resources << @target_definition.bridge_support_name
         end
         puts "* Generating xcconfig file at `#{sandbox.root + @target_definition.xcconfig_name}'" if config.verbose?
         xcconfig.save_as(sandbox.root + @target_definition.xcconfig_name)

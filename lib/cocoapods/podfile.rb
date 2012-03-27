@@ -40,6 +40,10 @@ module Pod
         "#{label}-prefix.pch"
       end
 
+      def bridge_support_name
+        "#{label}.bridgesupport"
+      end
+
       # Returns *all* dependencies of this target, not only the target specific
       # ones in `target_dependencies`.
       def dependencies
