@@ -122,7 +122,7 @@ describe Pod::Project::Integrator do
     app, test_runner = @integrator.user_project.targets.to_a
     test_runner.frameworks_build_phases.first.files.last.destroy
 
-    targets = @integrator.targets
+    targets = @integrator.targets.sort_by { |target| target.target_definition.label }
     @integrator.stubs(:targets).returns(targets)
 
     targets.first.expects(:add_pods_library).never
