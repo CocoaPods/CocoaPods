@@ -86,8 +86,23 @@ module Pod
       platform ? @platform = Platform.new(platform, options) : @platform
     end
 
-    def link_with(targets = nil)
-      targets ? @target_definition.link_with = targets : @target_definition.link_with
+    # Specifies the target(s) in the user’s project that this Pods library
+    # should be linked in.
+    #
+    # @example
+    #
+    #   # Link with a target in the user’s project called ‘MyApp’.
+    #   link_with 'MyApp'
+    #
+    #   # Link with the targets in the user’s project called ‘MyApp’ and ‘MyOtherApp’.
+    #   link_with ['MyApp', 'MyOtherApp']
+    #
+    #   # You can also specify this inline when specifying a new Pods target:
+    #   target :test, :exclusive => true, :link_with => 'TestRunner' do
+    #     dependency 'Kiwi'
+    #   end
+    def link_with(targets)
+      @target_definition.link_with = targets
     end
 
     # Specifies a dependency of the project.
