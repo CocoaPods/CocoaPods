@@ -1,3 +1,5 @@
+require 'net/http'
+
 module Pod
   class Command
     module SetPresent
@@ -62,9 +64,9 @@ module Pod
 
         result = {}
         if original_url
-          repo_info = `curl -s -m 2 http://github.com/api/v2/json/repos/show/#{username}/#{reponame}`
-          result[:watchers] = repo_info.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1]
-          result[:forks] = repo_info.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1]
+          gh_response       = Net::HTTP.get('github.com', "/api/v2/json/repos/show/#{username}/#{reponame}")
+          result[:watchers] = gh_response.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1]
+          result[:forks]    = gh_response.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1]
         end
         result
       end

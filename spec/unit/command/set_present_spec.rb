@@ -1,4 +1,5 @@
 require File.expand_path('../../../spec_helper', __FILE__)
+require 'net/http'
 
 describe Pod::Command::SetPresent do
 
@@ -28,6 +29,8 @@ describe Pod::Command::SetPresent do
   end
 
   it "presents the stats of a specification set" do
+    response = '{"repository":{"homepage":"","url":"https://github.com/robbiehanson/CocoaLumberjack","has_downloads":true,"has_issues":true,"language":"Objective-C","master_branch":"master","forks":42,"fork":false,"created_at":"2011/03/30 19:38:39 -0700","has_wiki":true,"description":"A fast & simple, yet powerful & flexible logging framework for Mac and iOS","size":416,"private":false,"name":"CocoaLumberjack","owner":"robbiehanson","open_issues":4,"watchers":318,"pushed_at":"2012/03/26 12:39:36 -0700"}}% '
+    Net::HTTP.expects(:get).with('github.com', '/api/v2/json/repos/show/robbiehanson/CocoaLumberjack').returns(response)
     @dummy.parse_set_options(argv('--stats'))
     @dummy.present_set(@set)
     @dummy.prinded.should.match(/Watchers:\W+[0-9]+/)
