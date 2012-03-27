@@ -15,8 +15,8 @@ module Pod
       @specs = {}
 
       result = @podfile.target_definitions.values.inject({}) do |result, target_definition|
-      puts "\n--> Finding dependencies for #{target_definition.name}" if Config.instance.verbose?
-      @loaded_specs = []
+        puts "\n--> Finding dependencies for #{target_definition.name}" if Config.instance.verbose?
+        @loaded_specs = []
         find_dependency_sets(@podfile, target_definition.dependencies)
         result[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
         result
