@@ -6,14 +6,15 @@ module Pod
 
     $ pod install [PROJECT]
 
-      Downloads all dependencies defined in 'Podfile' and creates an Xcode
-      Pods library project in './Pods'.
+      Downloads all dependencies defined in `Podfile' and creates an Xcode
+      Pods library project in `./Pods'.
 
-      In case 'PROJECT' is given, it configures it to use the specified Pods
-      and generates a workspace with the Pods project and 'PROJECT'. (It is
+      In case `PROJECT' is given, it configures it to use the specified Pods
+      and generates a workspace with the Pods project and `PROJECT'. (It is
       important that once you have run this you open the workspace instead of
-      'PROJECT'.) You usually specify 'PROJECT' only the first time that you
-      run 'pod install'.}
+      `PROJECT'.) You usually specify `PROJECT' only the first time that you
+      run `pod install'.
+}
       end
 
       def self.options
