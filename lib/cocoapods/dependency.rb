@@ -123,7 +123,7 @@ module Pod
         elsif params.key?(:podspec)
           PodspecSource.new(name, params)
         elsif params.key?(:link)
-          LocalSource.new(name, params)
+          LinkedSource.new(name, params)
         else
           raise Informative, "Unknown external source parameters for #{name}: #{params}"
         end
@@ -137,26 +137,23 @@ module Pod
         end
 
         def specification_from_sandbox(sandbox)
-          if local_pod = sandbox.installed_pod_named(name)
-            local_pod.specification
-          else
+          local_pod = sandbox.installed_pod_named(name)
+
+          if !local_pod
             copy_external_source_into_sandbox(sandbox)
             local_pod = sandbox.installed_pod_named(name)
             raise Informative, "Missing podspec for #{name}, :#{params.map{|e| e.join(' => ')}.join(' - :')}" if !local_pod
 
-            if @params.key?(:link)
-              local_pod.link_path = @params[:link]
-            else
-              local_pod.clean if Config.instance.clean
-            end
-
-            local_pod.specification
+            local_pod.clean if Config.instance.clean
           end
+
+          local_pod.specification.link_path = params[:link] if params.key?(:link)
+          local_pod.specification
         end
 
         def ==(other_source)
           return if other_source.nil?
-          name == other_source.name && 
+          name == other_source.name &&
           params == other_source.params
         end
       end
@@ -194,7 +191,7 @@ module Pod
         end
       end
 
-      class LocalSource < AbstractExternalSource
+      class LinkedSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox)
           puts "  * Linking: '#{name}' to '#{@params[:link]}'" unless Config.instance.silent?
           `ln -s -f #{@params[:link]} #{sandbox.root + name}`

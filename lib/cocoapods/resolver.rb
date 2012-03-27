@@ -14,8 +14,8 @@ module Pod
       @specs = {}
 
       result = @podfile.target_definitions.values.inject({}) do |result, target_definition|
-      @log_indent = 0;
-      puts "Finding dependencies for #{target_definition.lib_name}" if Config.instance.verbose?
+        @log_indent = 0;
+        puts "Finding dependencies for #{target_definition.lib_name}" if Config.instance.verbose?
         @loaded_specs = []
         find_dependency_sets(@podfile, target_definition.dependencies)
         result[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
@@ -51,7 +51,7 @@ module Pod
     def find_dependency_sets(dependent_specification, dependencies)
       @log_indent += 1
       dependencies.each do |dependency|
-        puts '  ' * @log_indent + "- #{dependency.name}" if Config.instance.verbose?
+        puts '  ' * @log_indent + "- #{dependency}" if Config.instance.verbose?
         set = find_cached_set(dependency)
         set.required_by(dependent_specification)
         # Ensure we don't resolve the same spec twice

@@ -1,9 +1,7 @@
 module Pod
   class LocalPod
-
-    attr_reader   :specification
-    attr_reader   :sandbox
-    attr_accessor :link_path
+    attr_reader :specification
+    attr_reader :sandbox
 
     def initialize(specification, sandbox)
       @specification, @sandbox = specification, sandbox
@@ -19,9 +17,9 @@ module Pod
     
     def to_s
       if specification.local?
-        "#{specification} [LOCAL]"
-      elsif @link_path
-        "#{specification} -> #{@link_path}"
+        "[LOCAL] #{specification}"
+      elsif specification.linked?
+        "[LINK] #{specification}"
       else
         specification.to_s
       end
@@ -49,7 +47,7 @@ module Pod
     end
     
     def clean
-      clean_paths.each { |path| FileUtils.rm_rf(path) } if !@link_path
+      clean_paths.each { |path| FileUtils.rm_rf(path) } if !specification.linked?
     end
     
     def source_files

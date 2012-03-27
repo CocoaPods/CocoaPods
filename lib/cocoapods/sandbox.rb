@@ -47,16 +47,13 @@ module Pod
     end
 
     def podspec_for_name(name)
-      pod_path = Dir[root + name + "*.podspec"][0] || Dir[root + 'Local Podspecs' + "*.podspec"][0]
-      pod_path = Pathname.new(pod_path) if pod_path
+      path = Dir[root + name + "*.podspec"][0] || Dir[root + 'Local Podspecs' + "*.podspec"][0]
+      podspec_path = Pathname.new(path) if path
     end
 
     def installed_pod_named(name)
-      if podspec_for_name(name)
-        LocalPod.from_podspec(podspec_for_name(name), self)
-      else
-        nil
-      end
+      podspec = podspec_for_name(name)
+      LocalPod.from_podspec(podspec, self) if podspec
     end
   end
 end
