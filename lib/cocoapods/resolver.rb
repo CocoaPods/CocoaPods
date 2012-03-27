@@ -8,17 +8,20 @@ module Pod
       @sandbox = sandbox
       @cached_sets = {}
       @cached_sources = Source::Aggregate.new
+      @log_indent = 1;
     end
 
     def resolve
       @specs = {}
 
       result = @podfile.target_definitions.values.inject({}) do |result, target_definition|
-        @loaded_specs = []
+      puts "\n--> Finding dependencies for #{target_definition.name}" if Config.instance.verbose?
+      @loaded_specs = []
         find_dependency_sets(@podfile, target_definition.dependencies)
         result[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
         result
       end
+      puts
 
       # Specification doesn't need to know more about the context, so we assign
       # the other specification, of which this pod is a part, to the spec.
@@ -47,7 +50,9 @@ module Pod
     end
 
     def find_dependency_sets(dependent_specification, dependencies)
+      @log_indent += 1
       dependencies.each do |dependency|
+        puts '  ' * @log_indent + "- #{dependency}" if Config.instance.verbose?
         set = find_cached_set(dependency)
         set.required_by(dependent_specification)
         # Ensure we don't resolve the same spec twice
@@ -69,6 +74,7 @@ module Pod
           find_dependency_sets(spec, spec.dependencies)
         end
       end
+      @log_indent -= 1
     end
 
     def validate_platform!(spec)
