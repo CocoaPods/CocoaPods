@@ -21,16 +21,8 @@ module Pod
         })
       end
 
-      def xcconfig_filename
-        "#{@target_definition.lib_name}.xcconfig"
-      end
-
       def copy_resources_script_for(pods)
         @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.resources }.flatten)
-      end
-
-      def copy_resources_filename
-        "#{@target_definition.lib_name}-resources.sh"
       end
 
       def bridge_support_generator_for(pods, sandbox)
@@ -40,7 +32,7 @@ module Pod
       end
 
       def bridge_support_filename
-        "#{@target_definition.lib_name}.bridgesupport"
+        "#{@target_definition.label}.bridgesupport"
       end
 
       # TODO move out to Generator::PrefixHeader
@@ -52,12 +44,8 @@ module Pod
         end
       end
 
-      def prefix_header_filename
-        "#{@target_definition.lib_name}-prefix.pch"
-      end
-
       def target_support_files
-        [copy_resources_filename, prefix_header_filename, xcconfig_filename]
+        [:copy_resources_script_name, :prefix_header_name, :xcconfig_name].map { |file| @target_definition.send(file) }
       end
 
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
@@ -65,7 +53,7 @@ module Pod
         self.requires_arc = pods.any? { |pod| pod.requires_arc? }
         
         # First add the target to the project
-        @target = @project.targets.new_static_library(@target_definition.lib_name)
+        @target = @project.targets.new_static_library(@target_definition.label)
 
         pods.each do |pod|
           xcconfig.merge!(pod.specification.xcconfig)
@@ -77,10 +65,10 @@ module Pod
         
         xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.header_search_paths).join(" "))
 
-        support_files_group = @project.group("Targets Support Files").create_group(@target_definition.lib_name)
+        support_files_group = @project.group("Targets Support Files").create_group(@target_definition.label)
         support_files_group.create_files(target_support_files)
 
-        xcconfig_file = support_files_group.files.where(:path => xcconfig_filename)
+        xcconfig_file = support_files_group.files.where(:path => @target_definition.xcconfig_name)
 
         configure_build_configurations(xcconfig_file)
         create_files(pods, sandbox)
@@ -90,7 +78,7 @@ module Pod
         @target.build_configurations.each do |config|
           config.base_configuration = xcconfig_file
           config.build_settings['OTHER_LDFLAGS'] = ''
-          config.build_settings['GCC_PREFIX_HEADER'] = prefix_header_filename
+          config.build_settings['GCC_PREFIX_HEADER'] = @target_definition.prefix_header_name
           config.build_settings['PODS_ROOT'] = '$(SRCROOT)'
         end
       end
@@ -102,12 +90,12 @@ module Pod
           bridge_support_generator_for(pods, sandbox).save_as(bridge_support_metadata_path)
           copy_resources_script_for(pods).resources << bridge_support_filename
         end
-        puts "* Generating xcconfig file at `#{sandbox.root + xcconfig_filename}'" if config.verbose?
-        xcconfig.save_as(sandbox.root + xcconfig_filename)
-        puts "* Generating prefix header at `#{sandbox.root + prefix_header_filename}'" if config.verbose?
-        save_prefix_header_as(sandbox.root + prefix_header_filename)
-        puts "* Generating copy resources script at `#{sandbox.root + copy_resources_filename}'" if config.verbose?
-        copy_resources_script_for(pods).save_as(sandbox.root + copy_resources_filename)
+        puts "* Generating xcconfig file at `#{sandbox.root + @target_definition.xcconfig_name}'" if config.verbose?
+        xcconfig.save_as(sandbox.root + @target_definition.xcconfig_name)
+        puts "* Generating prefix header at `#{sandbox.root + @target_definition.prefix_header_name}'" if config.verbose?
+        save_prefix_header_as(sandbox.root + @target_definition.prefix_header_name)
+        puts "* Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?
+        copy_resources_script_for(pods).save_as(sandbox.root + @target_definition.copy_resources_script_name)
       end
       
       private

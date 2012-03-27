@@ -91,13 +91,13 @@ describe "Pod::Podfile" do
 
     it "adds dependencies outside of any explicit target block to the default target" do
       target = @podfile.target_definitions[:default]
-      target.lib_name.should == 'Pods'
+      target.label.should == 'Pods'
       target.dependencies.should == [Pod::Dependency.new('ASIHTTPRequest')]
     end
 
     it "adds dependencies of the outer target to non-exclusive targets" do
       target = @podfile.target_definitions[:debug]
-      target.lib_name.should == 'Pods-debug'
+      target.label.should == 'Pods-debug'
       target.dependencies.sort_by(&:name).should == [
         Pod::Dependency.new('ASIHTTPRequest'),
         Pod::Dependency.new('SSZipArchive')
@@ -106,13 +106,13 @@ describe "Pod::Podfile" do
 
     it "does not add dependencies of the outer target to exclusive targets" do
       target = @podfile.target_definitions[:test]
-      target.lib_name.should == 'Pods-test'
+      target.label.should == 'Pods-test'
       target.dependencies.should == [Pod::Dependency.new('JSONKit')]
     end
 
     it "adds dependencies of the outer target to nested targets" do
       target = @podfile.target_definitions[:subtarget]
-      target.lib_name.should == 'Pods-test-subtarget'
+      target.label.should == 'Pods-test-subtarget'
       target.dependencies.should == [Pod::Dependency.new('Reachability'), Pod::Dependency.new('JSONKit')]
     end
 
@@ -121,9 +121,29 @@ describe "Pod::Podfile" do
       target.link_with.should == nil
     end
 
-    it "returns the name of the explicit target to link with" do
+    it "returns the names of the explicit targets to link with" do
       target = @podfile.target_definitions[:test]
       target.link_with.should == ['TestRunner']
+    end
+
+    it "returns the name of the Pods static library" do
+      @podfile.target_definitions[:default].lib_name.should == 'libPods.a'
+      @podfile.target_definitions[:test].lib_name.should == 'libPods-test.a'
+    end
+
+    it "returns the name of the xcconfig file for the target" do
+      @podfile.target_definitions[:default].xcconfig_name.should == 'Pods.xcconfig'
+      @podfile.target_definitions[:test].xcconfig_name.should == 'Pods-test.xcconfig'
+    end
+
+    it "returns the name of the 'copy resources script' file for the target" do
+      @podfile.target_definitions[:default].copy_resources_script_name.should == 'Pods-resources.sh'
+      @podfile.target_definitions[:test].copy_resources_script_name.should == 'Pods-test-resources.sh'
+    end
+
+    it "returns the name of the 'prefix header' file for the target" do
+      @podfile.target_definitions[:default].prefix_header_name.should == 'Pods-prefix.pch'
+      @podfile.target_definitions[:test].prefix_header_name.should == 'Pods-test-prefix.pch'
     end
   end
 

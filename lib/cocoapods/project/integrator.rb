@@ -19,9 +19,7 @@ module Pod
         create_workspace!
         return if project_already_integrated?
 
-        base_user_project_configurations_on_xcconfig
-        add_pods_library_to_each_target
-        add_copy_resources_script_phase_to_each_target
+        targets.each(&:integrate!)
         @user_project.save_as(user_project_path)
 
         unless config.silent?
@@ -38,6 +36,10 @@ module Pod
         config.project_root + "Pods/Pods.xcodeproj"
       end
 
+      def targets
+        @podfile.target_definitions.values.map { |definition| Target.new(self, definition) }
+      end
+
       def create_workspace!
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
         [user_project_path, pods_project_path].each do |project_path|
@@ -51,31 +53,54 @@ module Pod
         @user_project.files.find { |file| file.path =~ /libPods\.a$/ }
       end
 
-      def base_user_project_configurations_on_xcconfig
-        xcconfig = @user_project.files.new('path' => 'Pods/Pods.xcconfig')
-        user_project.targets.each do |target|
-          target.build_configurations.each do |config|
-            config.base_configuration = xcconfig
+      class Target
+        attr_reader :integrator, :target_definition
+
+        def initialize(integrator, target_definition)
+          @integrator, @target_definition = integrator, target_definition
+        end
+
+        def integrate!
+          add_xcconfig_base_configuration
+          add_pods_library
+          add_copy_resources_script_phase
+        end
+
+        # @return [Array<PBXNativeTarget>]  Returns the list of targets that
+        #                                   the Pods lib should be linked with.
+        def targets
+          @integrator.user_project.targets.select do |target|
+            @target_definition.link_with.include? target.name
+          end
+        end
+
+        def add_xcconfig_base_configuration
+          xcconfig = @integrator.user_project.files.new('path' => "Pods/#{@target_definition.xcconfig_name}") # TODO use Sandbox?
+          targets.each do |target|
+            target.build_configurations.each do |config|
+              config.base_configuration = xcconfig
+            end
+          end
+        end
+
+        def add_pods_library
+          pods_library = @integrator.user_project.group("Frameworks").files.new_static_library(@target_definition.label)
+          targets.each do |target|
+            target.frameworks_build_phases.each do |build_phase|
+              build_phase.files << pods_library.build_files.new
+            end
+          end
+        end
+
+        def add_copy_resources_script_phase
+          targets.each do |target|
+            phase = target.shell_script_build_phases.new
+            phase.name = 'Copy Pods Resources'
+            phase.shell_script = %{"${SRCROOT}/Pods/#{@target_definition.copy_resources_script_name}"\n}
           end
         end
       end
 
-      def add_pods_library_to_each_target
-        pods_library = @user_project.group("Frameworks").files.new_static_library('Pods')
-        @user_project.targets.each do |target|
-          target.frameworks_build_phases.each do |build_phase|
-            build_phase.files << pods_library.build_files.new
-          end
-        end
-      end
-
-      def add_copy_resources_script_phase_to_each_target
-        @user_project.targets.each do |target|
-          phase = target.shell_script_build_phases.new
-          phase.name = 'Copy Pods Resources'
-          phase.shell_script = %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
-        end
-      end
     end
 
   end

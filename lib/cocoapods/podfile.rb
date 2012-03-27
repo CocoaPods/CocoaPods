@@ -14,14 +14,30 @@ module Pod
         @link_with = targets.is_a?(Array) ? targets : [targets]
       end
 
-      def lib_name
+      def label
         if name == :default
           "Pods"
         elsif @parent
-          "#{@parent.lib_name}-#{name}"
+          "#{@parent.label}-#{name}"
         else
           "Pods-#{name}"
         end
+      end
+
+      def lib_name
+        "lib#{label}.a"
+      end
+
+      def xcconfig_name
+        "#{label}.xcconfig"
+      end
+
+      def copy_resources_script_name
+        "#{label}-resources.sh"
+      end
+
+      def prefix_header_name
+        "#{label}-prefix.pch"
       end
 
       # Returns *all* dependencies of this target, not only the target specific
