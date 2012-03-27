@@ -113,9 +113,26 @@ describe Pod::Project::Integrator do
   it 'adds a Copy Pods Resources build phase to each target' do
     @podfile.target_definitions.each do |_, definition|
       target = @sample_project.targets.where(:name => definition.link_with.first)
-      expected_phase = target.shell_script_build_phases.where(:name => "Copy Pods Resources")
-      expected_phase.shell_script.strip.should == "\"${SRCROOT}/Pods/#{definition.copy_resources_script_name}\"".strip
+      phase = target.shell_script_build_phases.where(:name => "Copy Pods Resources")
+      phase.shell_script.strip.should == "\"${SRCROOT}/Pods/#{definition.copy_resources_script_name}\"".strip
     end
+  end
+
+  it "only tries to integrate Pods libraries into user targets that haven't been integrated yet" do
+    app, test_runner = @integrator.user_project.targets.to_a
+    test_runner.frameworks_build_phases.first.files.last.destroy
+
+    targets = @integrator.targets
+    @integrator.stubs(:targets).returns(targets)
+
+    targets.first.expects(:add_pods_library).never
+    targets.last.expects(:add_pods_library)
+    @integrator.integrate!
+  end
+
+  it "does not even try to save the project if none of the target integrators had any work to do" do
+    @integrator.user_project.expects(:save_as).never
+    @integrator.integrate!
   end
 end
 

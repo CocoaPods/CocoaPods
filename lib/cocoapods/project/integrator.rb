@@ -17,10 +17,12 @@ module Pod
 
       def integrate!
         create_workspace!
-        return if project_already_integrated?
 
-        targets.each(&:integrate!)
-        @user_project.save_as(user_project_path)
+        # Only need to write out the user's project if any of the target
+        # integrators actually did some work.
+        if targets.map(&:integrate!).any?
+          @user_project.save_as(user_project_path)
+        end
 
         unless config.silent?
           # TODO this really shouldn't be here
@@ -49,10 +51,6 @@ module Pod
         workspace.save_as(workspace_path)
       end
 
-      def project_already_integrated?
-        @user_project.files.find { |file| file.path =~ /libPods\.a$/ }
-      end
-
       class Target
         attr_reader :integrator, :target_definition
 
@@ -61,24 +59,36 @@ module Pod
         end
 
         def integrate!
+          return false if targets.empty?
           add_xcconfig_base_configuration
           add_pods_library
           add_copy_resources_script_phase
+          true
         end
 
         # This returns a list of the targets from the user’s project to which
         # this Pods static library should be linked. If no explicit target was
         # specified, then the first encountered target is assumed.
         #
+        # In addition this will only return targets that do **not** already
+        # have the Pods library in their frameworks build phase.
+        #
         # @return [Array<PBXNativeTarget>]  Returns the list of targets that
         #                                   the Pods lib should be linked with.
         def targets
-          if link_with = @target_definition.link_with
-            @integrator.user_project.targets.select do |target|
-              link_with.include? target.name
+          @targets ||= begin
+            if link_with = @target_definition.link_with
+              @integrator.user_project.targets.select do |target|
+                link_with.include? target.name
+              end
+            else
+              [@integrator.user_project.targets.first]
+            end.reject do |target|
+              # reject any target that already has this Pods library in one of its frameworks build phases
+              target.frameworks_build_phases.any? do |phase|
+                phase.files.any? { |build_file| build_file.file.name == @target_definition.lib_name }
+              end
             end
-          else
-            [@integrator.user_project.targets.first]
           end
         end
 
