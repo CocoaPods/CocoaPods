@@ -39,11 +39,11 @@ module Pod
     def subspec_dependency?
       @name.include?('/')
     end
-    
+
     def inline?
       @inline_podspec
     end
-    
+
     def external?
       !@external_source.nil?
     end
@@ -75,7 +75,7 @@ module Pod
       end
       version.empty? ? @name : "#{@name} (#{version})"
     end
-    
+
     def specification_from_sandbox(sandbox)
       @external_source.specification_from_sandbox(sandbox)
     end
@@ -122,36 +122,42 @@ module Pod
           GitSource.new(name, params)
         elsif params.key?(:podspec)
           PodspecSource.new(name, params)
+        elsif params.key?(:link)
+          LinkedSource.new(name, params)
         else
           raise Informative, "Unknown external source parameters for #{name}: #{params}"
         end
       end
-      
+
       class AbstractExternalSource
         attr_reader :name, :params
-        
+
         def initialize(name, params)
           @name, @params = name, params
         end
-        
+
         def specification_from_sandbox(sandbox)
-          if local_pod = sandbox.installed_pod_named(name)
-            local_pod.specification
-          else
+          local_pod = sandbox.installed_pod_named(name)
+
+          if !local_pod
             copy_external_source_into_sandbox(sandbox)
             local_pod = sandbox.installed_pod_named(name)
+            raise Informative, "Missing podspec for #{name}, :#{params.map{|e| e.join(' => ')}.join(' - :')}" if !local_pod
+
             local_pod.clean if Config.instance.clean
-            local_pod.specification
           end
+
+          local_pod.specification.link_path = params[:link] if params.key?(:link)
+          local_pod.specification
         end
-        
+
         def ==(other_source)
           return if other_source.nil?
-          name == other_source.name && 
+          name == other_source.name &&
           params == other_source.params
         end
       end
-      
+
       class GitSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox)
           puts "  * Pre-downloading: '#{name}'" unless Config.instance.silent?
@@ -160,7 +166,7 @@ module Pod
             downloader.clean if Config.instance.clean
           end
         end
-        
+
         def description
           "from `#{@params[:git]}'".tap do |description|
             description << ", commit `#{@params[:commit]}'" if @params[:commit]
@@ -179,9 +185,20 @@ module Pod
             output_path.open('w') { |f| f << io.read }
           end
         end
-        
+
         def description
           "from `#{@params[:podspec]}'"
+        end
+      end
+
+      class LinkedSource < AbstractExternalSource
+        def copy_external_source_into_sandbox(sandbox)
+          puts "  * Linking: '#{name}' to '#{@params[:link]}'" unless Config.instance.silent?
+          `ln -s -f #{@params[:link]} #{sandbox.root + name}`
+        end
+
+        def description
+          "from `#{@params[:link]}'"
         end
       end
     end

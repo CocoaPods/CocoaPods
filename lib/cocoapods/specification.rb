@@ -170,6 +170,11 @@ module Pod
       Pathname.new(File.expand_path(source[:local]))
     end
 
+    attr_accessor :link_path
+    def linked?
+      !link_path.nil?
+    end
+
     # This is assigned the other spec, of which this pod's source is a part, by
     # a Resolver.
     attr_accessor :part_of_specification
