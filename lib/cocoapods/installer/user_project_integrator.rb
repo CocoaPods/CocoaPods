@@ -2,9 +2,9 @@ require 'xcodeproj/workspace'
 require 'xcodeproj/project'
 
 module Pod
-  class Project
+  class Installer
 
-    class Integrator
+    class UserProjectIntegrator
       include Pod::Config::Mixin
 
       attr_reader :user_project_path, :user_project

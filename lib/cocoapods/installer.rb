@@ -1,6 +1,7 @@
 module Pod
   class Installer
-    autoload :TargetInstaller, 'cocoapods/installer/target_installer'
+    autoload :TargetInstaller,       'cocoapods/installer/target_installer'
+    autoload :UserProjectIntegrator, 'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
 
@@ -88,7 +89,7 @@ module Pod
       puts "* Writing Xcode project file to `#{@sandbox.project_path}'" if config.verbose?
       project.save_as(@sandbox.project_path)
 
-      Project::Integrator.new(@user_project_path, @podfile).integrate! if @user_project_path
+      UserProjectIntegrator.new(@user_project_path, @podfile).integrate! if @user_project_path
     end
 
     def run_post_install_hooks

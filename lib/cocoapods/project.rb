@@ -12,7 +12,6 @@ end
 
 module Pod
   class Project < Xcodeproj::Project
-    autoload :Integrator, 'cocoapods/project/integrator'
 
     # Shortcut access to the `Pods' PBXGroup.
     def pods
