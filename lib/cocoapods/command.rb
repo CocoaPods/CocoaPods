@@ -54,7 +54,7 @@ module Pod
     end
 
     def self.run(*argv)
-      Setup.new(ARGV.new()).run_if_needed
+      Setup.new(ARGV.new).run_if_needed
       parse(*argv).run
 
     rescue Interrupt

@@ -94,14 +94,43 @@ module Pod
         arguments += ['--print-settings'] if config.verbose?
         arguments += files.map(&:to_s)
 
-        output = error = nil
-        process = Open4.popen4('appledoc', *arguments) do |_, __, out, err|
-          output, error = out.read, err.read
+        output, error = '', ''
+        process = Open4.popen4('appledoc', *arguments) do |pid, stdin, stdout, stderr|
+          output_buffer, error_buffer = '', ''
+          begin
+            loop do
+              # Check whether stdout, stderr or both are ready to be read from
+              # without blocking.
+              IO.select([stdout, stderr]).flatten.compact.each do |io|
+                case io.fileno
+                when stdout.fileno
+                  output_buffer << io.readpartial(1024)
+                when stderr.fileno
+                  error_buffer << io.readpartial(1024)
+                end
+              end
+
+              # Remove any lines and print them if in verbose mode.
+              output_buffer.sub!(/(.*)\n/m) do
+                $stdout.puts $1 if config.verbose?
+                output << $&
+                ''
+              end
+              error_buffer.sub!(/(.*)\n/m) do
+                $stderr.puts $1 if config.verbose?
+                error << $&
+                ''
+              end
+
+              break if stdout.closed? && stderr.closed?
+            end
+          rescue EOFError
+          end
         end
 
         # appledoc exits with 1 if a warning was logged
         if process.exitstatus >= 2
-          puts output, error
+          puts output, error unless config.verbose?
           raise "Appledoc encountered an error."
         end
       end
