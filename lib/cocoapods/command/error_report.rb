@@ -8,18 +8,8 @@ module Pod
       class << self
         def report(error)
           return <<-EOS
-Oh no, an error occurred. #{error_from_podfile(error)}
 
-Search for existing github issues similar to yours:
-
-  https://github.com/CocoaPods/CocoaPods/issues/search?q=%22#{CGI.escape(error.message)}%22
-
-If none exists, create a ticket, with the information in the below (markdown formatted) template, on:
-
-  https://github.com/CocoaPods/CocoaPods/issues/new
-
-**Don't forget to anonymize any private data!**
-
+#{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
 ### Report
 
@@ -32,29 +22,41 @@ If none exists, create a ticket, with the information in the below (markdown for
 
 ### Stack
 
-* Host version: #{host_information}
-* Xcode version: #{xcode_information}
-* Ruby version: #{RUBY_DESCRIPTION}
-* Ruby lib dir: #{RbConfig::CONFIG['libdir']}
-* RubyGems version: #{Gem::VERSION}
-* CocoaPods version: #{Pod::VERSION}
-* Specification repositories:
-  - #{repo_information.join("\n  - ")}
-
+```
+   CocoaPods : #{Pod::VERSION}
+        Ruby : #{RUBY_DESCRIPTION}
+    RubyGems : #{Gem::VERSION}
+        Host : #{host_information}
+       Xcode : #{xcode_information}
+Ruby lib dir : #{RbConfig::CONFIG['libdir']}
+Repositories : #{repo_information.join("\n               ")}
+```
 
 ### Podfile
 
 ```ruby
-#{Config.instance.project_podfile.read if Config.instance.project_podfile}
+#{Config.instance.project_podfile.read.strip if Config.instance.project_podfile}
 ```
-
 
 ### Error
 
 ```
 #{error.message}
-  #{error.backtrace.join("\n  ")}
+#{error.backtrace.join("\n")}
 ```
+
+#{'――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
+
+#{'[!] Oh no, an error occurred.'.red}
+#{error_from_podfile(error)}
+#{'Search for existing github issues similar to yours:'.yellow}
+#{"https://github.com/CocoaPods/CocoaPods/issues/search?q=#{CGI.escape(error.message)}"}
+
+#{'If none exists, create a ticket, with the template displayed above, on:'.yellow}
+https://github.com/CocoaPods/CocoaPods/issues/new
+
+Don't forget to anonymize any private data!
+
 EOS
         end
 
@@ -62,7 +64,7 @@ EOS
 
         def error_from_podfile(error)
           if error.message =~ /Podfile:(\d*)/
-            "It appears to have originated from your Podfile at line #{$1}."
+            "\nIt appears to have originated from your Podfile at line #{$1}.\n"
           end
         end
 

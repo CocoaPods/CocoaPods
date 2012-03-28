@@ -40,6 +40,7 @@ module Pod
           raise Informative, "The specified project `#{@projpath}' does not exist."
         end
         if @update_repo
+          puts "\nUpdating Spec Repositories\n".yellow if config.verbose?
           Repo.new(ARGV.new(["update"])).run
         end
         Installer.new(podfile, @projpath).install!
