@@ -17,7 +17,7 @@ module Pod
       @specs = {}
 
       result = @podfile.target_definitions.values.inject({}) do |result, target_definition|
-        puts "\Resolving dependencies for target `#{target_definition.name}'".green if config.verbose?
+        puts "\nResolving dependencies for target `#{target_definition.name}'".green if config.verbose?
         @loaded_specs = []
         find_dependency_sets(@podfile, target_definition.dependencies)
         result[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
