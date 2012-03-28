@@ -46,10 +46,10 @@ module Pod
             # Specify the authors of the library, with email addresses. You can often find
             # the email addresses of the authors by using the SCM log. E.g. $ git log
             #
-            s.author   = { '#{author}' => '#{email}', 'other author', => 'and email address' }
+            s.author   = { '#{author}' => '#{email}', 'other author' => 'and email address' }
             # If absolutely no email addresses are available, then you can use this form instead.
             #
-            # s.author   = '#{author}'
+            # s.author   = '#{author}', 'other author'
 
             # Specify the location from where the source should be retreived.
             #
