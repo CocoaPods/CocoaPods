@@ -52,9 +52,6 @@ module Pod
 
         result = dir_list.split("\n").uniq
         result.delete('')
-        puts
-        puts commit.white
-        puts result.join(', ').magenta
         result
       end
 
