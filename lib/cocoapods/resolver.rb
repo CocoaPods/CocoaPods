@@ -1,5 +1,7 @@
 module Pod
   class Resolver
+    include Config::Mixin
+
     attr_reader :podfile, :sandbox
     attr_accessor :cached_sets, :cached_sources
 
@@ -15,13 +17,13 @@ module Pod
       @specs = {}
 
       result = @podfile.target_definitions.values.inject({}) do |result, target_definition|
-        puts "\n--> Finding dependencies for #{target_definition.name}" if Config.instance.verbose?
+        puts "\n--> Finding dependencies for target `#{target_definition.name}'" if config.verbose?
         @loaded_specs = []
         find_dependency_sets(@podfile, target_definition.dependencies)
         result[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
         result
       end
-      puts
+      puts if config.verbose?
 
       # Specification doesn't need to know more about the context, so we assign
       # the other specification, of which this pod is a part, to the spec.
@@ -52,7 +54,7 @@ module Pod
     def find_dependency_sets(dependent_specification, dependencies)
       @log_indent += 1
       dependencies.each do |dependency|
-        puts '  ' * @log_indent + "- #{dependency}" if Config.instance.verbose?
+        puts '  ' * @log_indent + "- #{dependency}" if config.verbose?
         set = find_cached_set(dependency)
         set.required_by(dependent_specification)
         # Ensure we don't resolve the same spec twice
