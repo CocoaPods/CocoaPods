@@ -410,3 +410,102 @@ describe "A Pod::Specification with :local source" do
   end
 end
 
+describe "A Pod::Specification, concerning its attributes that support different values per platform," do
+  describe "when **no** platform specific values are given" do
+    before do
+      @spec = Pod::Spec.new do |s|
+        s.source_files   = 'file1', 'file2'
+        s.resources      = 'file1', 'file2'
+        s.xcconfig       =  { 'OTHER_LDFLAGS' => '-lObjC' }
+        s.framework      = 'QuartzCore'
+        s.library        = 'z'
+        s.compiler_flags = '-Wdeprecated-implementations'
+        s.requires_arc   = true
+
+        s.dependency 'JSONKit'
+        s.dependency 'SSZipArchive'
+      end
+    end
+
+    it "returns the same list of source files for each platform" do
+      @spec.source_files.should == { :ios => %w{ file1 file2 }, :osx => %w{ file1 file2 } }
+    end
+
+    it "returns the same list of resources for each platform" do
+      @spec.resources.should == { :ios => %w{ file1 file2 }, :osx => %w{ file1 file2 } }
+    end
+
+    it "returns the same list of xcconfig build settings for each platform" do
+      build_settings = { 'OTHER_LDFLAGS' => '-lObjC -framework QuartzCore -lz' }
+      @spec.xcconfig.should == { :ios => build_settings, :osx => build_settings }
+    end
+
+    it "returns the same list of compiler flags for each platform" do
+      compiler_flags = '-Wdeprecated-implementations -fobjc-arc'
+      @spec.compiler_flags.should == { :ios => compiler_flags, :osx => compiler_flags }
+    end
+
+    it "returns the same list of dependencies for each platform" do
+      dependencies = %w{ JSONKit SSZipArchive }.map { |name| Pod::Dependency.new(name) }
+      @spec.dependencies.should == { :ios => dependencies, :osx => dependencies }
+    end
+  end
+
+  describe "when platform specific values are given" do
+    before do
+      @spec = Pod::Spec.new do |s|
+        s.ios.source_file    = 'file1'
+        s.osx.source_files   = 'file1', 'file2'
+
+        s.ios.resource       = 'file1'
+        s.osx.resources      = 'file1', 'file2'
+
+        s.ios.xcconfig       = { 'OTHER_LDFLAGS' => '-lObjC' }
+        s.osx.xcconfig       = { 'OTHER_LDFLAGS' => '-lObjC -all_load' }
+
+        s.ios.framework      = 'QuartzCore'
+        s.osx.frameworks     = 'QuartzCore', 'CoreData'
+
+        s.ios.library        = 'z'
+        s.osx.libraries      = 'z', 'xml'
+
+        s.ios.compiler_flags = '-Wdeprecated-implementations'
+        s.osx.compiler_flags = '-Wfloat-equal'
+
+        s.requires_arc   = true # does not take platform options, just here to check it's added to compiler_flags
+
+        s.ios.dependency 'JSONKit'
+        s.osx.dependency 'SSZipArchive'
+      end
+    end
+
+    it "returns a different list of source files for each platform" do
+      @spec.source_files.should == { :ios => %w{ file1 }, :osx => %w{ file1 file2 } }
+    end
+
+    it "returns a different list of resources for each platform" do
+      @spec.resources.should == { :ios => %w{ file1 }, :osx => %w{ file1 file2 } }
+    end
+
+    it "returns a different list of xcconfig build settings for each platform" do
+      @spec.xcconfig.should == {
+        :ios => { 'OTHER_LDFLAGS' => '-lObjC -framework QuartzCore -lz' },
+        :osx => { 'OTHER_LDFLAGS' => '-lObjC -all_load -framework QuartzCore -framework CoreData -lz -lxml' }
+      }
+    end
+
+    it "returns the same list of compiler flags for each platform" do
+      @spec.compiler_flags.should == {
+        :ios => '-Wdeprecated-implementations -fobjc-arc',
+        :osx => '-Wfloat-equal -fobjc-arc'
+      }
+    end
+
+    it "returns the same list of dependencies for each platform" do
+      @spec.dependencies.should == {
+        :ios => Pod::Dependency.new('JSONKit'),
+        :osx => Pod::Dependency.new('SSZipArchive')
+      }
+    end
+  end
+end

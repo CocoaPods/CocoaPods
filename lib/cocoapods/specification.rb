@@ -36,7 +36,7 @@ module Pod
       @xcconfig = Xcodeproj::Config.new
     end
 
-    # Attributes
+    # Attributes **without** multiple platform support
 
     attr_accessor :name
     attr_accessor :homepage
@@ -90,6 +90,35 @@ module Pod
       @part_of = dependency(*name_and_version_requirements)
     end
 
+    def clean_paths=(patterns)
+      @clean_paths = pattern_list(patterns)
+    end
+    attr_reader :clean_paths
+    alias_method :clean_path=, :clean_paths=
+
+    def header_dir=(dir)
+      @header_dir = Pathname.new(dir)
+    end
+    def header_dir
+      @header_dir || pod_destroot_name
+    end
+
+    def platform=(platform)
+      @platform = Platform.new(platform)
+    end
+    attr_reader :platform
+
+    attr_accessor :requires_arc
+
+    def subspec(name, &block)
+      subspec = Subspec.new(self, name, &block)
+      @subspecs << subspec
+      subspec
+    end
+    attr_reader :subspecs
+
+    ### Attributes **with** multiple platform support
+
     def source_files=(patterns)
       @source_files = pattern_list(patterns)
     end
@@ -100,12 +129,6 @@ module Pod
     end
     attr_reader :resources
     alias_method :resource=, :resources=
-
-    def clean_paths=(patterns)
-      @clean_paths = pattern_list(patterns)
-    end
-    attr_reader :clean_paths
-    alias_method :clean_path=, :clean_paths=
 
     def xcconfig=(hash)
       @xcconfig.merge!(hash)
@@ -124,27 +147,12 @@ module Pod
     end
     alias_method :library=, :libraries=
 
-    def header_dir=(dir)
-      @header_dir = Pathname.new(dir)
-    end
-
-    def header_dir
-      @header_dir || pod_destroot_name
-    end
-
     attr_writer :compiler_flags
     def compiler_flags
       flags = "#{@compiler_flags}"
       flags << ' -fobjc-arc' if requires_arc
       flags
     end
-
-    def platform=(platform)
-      @platform = Platform.new(platform)
-    end
-    attr_reader :platform
-
-    attr_accessor :requires_arc
 
     def dependency(*name_and_version_requirements)
       name, *version_requirements = name_and_version_requirements.flatten
@@ -154,14 +162,7 @@ module Pod
     end
     attr_reader :dependencies
 
-    def subspec(name, &block)
-      subspec = Subspec.new(self, name, &block)
-      @subspecs << subspec
-      subspec
-    end
-    attr_reader :subspecs
-
-    # Not attributes
+    ### Not attributes
 
     include Config::Mixin
 
