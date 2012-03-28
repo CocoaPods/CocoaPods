@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'rbconfig'
 require 'cgi'
 require 'rubygems'
