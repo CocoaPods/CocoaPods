@@ -39,7 +39,7 @@ module Pod
       end
 
       def commit_from_days_ago (days)
-        Dir.chdir(dir) { git("rev-list -n1 --before=\"#{days} day ago\" master") }
+        Dir.chdir(dir) { git("rev-list -n1 --before=\"#{days} day ago\" --first-parent master") }
       end
 
       def spec_names_from_commit (commit)
@@ -52,6 +52,9 @@ module Pod
 
         result = dir_list.split("\n").uniq
         result.delete('')
+        puts
+        puts commit.white
+        puts result.join(', ').magenta
         result
       end
 
