@@ -9,6 +9,7 @@ GEM
   specs:
     addressable (2.2.7)
     bacon (1.1.0)
+    colored (1.2)
     crack (0.3.1)
     kicker (2.5.0)
       rb-fsevent
@@ -30,6 +31,7 @@ PLATFORMS
 
 DEPENDENCIES
   bacon
+  colored
   kicker
   mocha-on-bacon
   open4
