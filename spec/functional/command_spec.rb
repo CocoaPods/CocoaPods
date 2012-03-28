@@ -53,11 +53,11 @@ describe "Pod::Command" do
     path = temporary_directory + 'Bananas.podspec'
     spec = Pod::Specification.from_file(path)
     spec.name.should == 'Bananas'
-    spec.license.should == {:type=>"MIT", :file=>"LICENSE"}
+    spec.license.should == { :type => "MIT", :file => "LICENSE" }
     spec.version.should == Pod::Version.new('1.0.0')
     spec.summary.should == 'A short description of Bananas.'
     spec.homepage.should == 'http://EXAMPLE/Bananas'
-    spec.authors.should == { `git config --get user.name`.strip => `git config --get user.email`.strip }
+    spec.authors.should == { `git config --get user.name`.strip => `git config --get user.email`.strip, "other author" => "and email address" }
     spec.source.should == { :git => 'http://EXAMPLE/Bananas.git', :tag => '1.0.0' }
     spec.description.should == 'An optional longer description of Bananas.'
     spec.source_files.should == ['Classes', 'Classes/**/*.{h,m}']
