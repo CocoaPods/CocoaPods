@@ -1,3 +1,5 @@
+require 'colored'
+
 module Pod
   class Command
     autoload :ErrorReport, 'cocoapods/command/error_report'

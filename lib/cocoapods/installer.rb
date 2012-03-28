@@ -5,7 +5,7 @@ module Pod
 
     include Config::Mixin
 
-    attr_reader :sandbox
+    attr_reader   :sandbox
 
     def initialize(podfile, user_project_path = nil)
       @podfile, @user_project_path = podfile, user_project_path
@@ -45,10 +45,11 @@ module Pod
     def install_dependencies!
       activated_specifications.map do |spec|
         LocalPod.new(spec, sandbox).tap do |pod|
+          marker = config.verbose ? "\n-> ".green : ''
           if pod.exists? || spec.local?
-            puts "Using #{pod}" unless config.silent?
+            puts marker + "Using #{pod}" unless config.silent?
           else
-            puts "Installing #{spec}" unless config.silent?
+            puts marker + "Installing #{spec}".green unless config.silent?
 
             downloader = Downloader.for_pod(pod)
             downloader.download
@@ -59,7 +60,7 @@ module Pod
             end
 
             if config.doc?
-              puts "Installing Documentation for #{spec}" if config.verbose?
+              puts "Installing Documentation for #{spec}".green if config.verbose?
               Generator::Documentation.new(pod).generate(config.doc_install?)
             end
           end
@@ -70,10 +71,13 @@ module Pod
     def install!
       @sandbox.prepare_for_install
 
-      puts "Installing dependencies of: #{@podfile.defined_in_file}" if config.verbose?
+      puts_title "Resolving dependencies of: #{@podfile.defined_in_file}"
+      specs_by_target
+
+      puts_title "Installing dependencies"
       pods = install_dependencies!
 
-      puts "Generating support files" unless config.silent?
+      puts_title("Generating support files\n", false)
       target_installers.each do |target_installer|
         target_specs = activated_specifications_for_target(target_installer.target_definition)
         pods_for_target = pods.select { |pod| target_specs.include?(pod.specification) }
@@ -86,7 +90,7 @@ module Pod
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
       run_post_install_hooks
 
-      puts "* Writing Xcode project file to `#{@sandbox.project_path}'" if config.verbose?
+      puts "* Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
       project.save_as(@sandbox.project_path)
 
       UserProjectIntegrator.new(@user_project_path, @podfile).integrate! if @user_project_path
@@ -134,12 +138,12 @@ module Pod
       end
     end
 
-    def dependency_specifications_for_each_target_definition
-      @dependency_specifications_for_each_target_definition ||= @resolver.resolve
+    def specs_by_target
+      @specs_by_target ||= @resolver.resolve
     end
 
     def dependency_specifications
-      dependency_specifications_for_each_target_definition.values.flatten
+      specs_by_target.values.flatten
     end
 
     def activated_specifications
@@ -151,11 +155,21 @@ module Pod
     end
 
     def activated_specifications_for_target(target_definition)
-      dependency_specifications_for_each_target_definition[target_definition]
+      specs_by_target[target_definition]
     end
 
     def download_only_specifications
       dependency_specifications - activated_specifications
+    end
+
+    private
+
+    def puts_title(title, only_verbose = true)
+      if(config.verbose?)
+      puts "\n" + title.yellow
+      elsif(!config.silent? && !only_verbose)
+        puts title
+      end
     end
   end
 end
