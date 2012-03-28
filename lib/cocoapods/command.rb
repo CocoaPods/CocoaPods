@@ -54,18 +54,21 @@ module Pod
     end
 
     def self.run(*argv)
-      begin
-        Setup.new(ARGV.new()).run_if_needed
-        parse(*argv).run
-      rescue Exception => e
-        if e.is_a?(Informative)
-          puts e.message
-          puts *e.backtrace if Config.instance.verbose?
-        else
-          puts ErrorReport.report(e)
-        end
-        exit 1
+      Setup.new(ARGV.new()).run_if_needed
+      parse(*argv).run
+
+    rescue Interrupt
+      puts "[!] Cancelled".red
+      Config.instance.verbose? ? raise : exit(1)
+
+    rescue Exception => e
+      if e.is_a?(Informative)
+        puts e.message
+        puts *e.backtrace if Config.instance.verbose?
+      else
+        puts ErrorReport.report(e)
       end
+      exit 1
     end
 
     def self.parse(*argv)
