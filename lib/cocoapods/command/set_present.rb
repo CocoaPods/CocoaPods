@@ -27,7 +27,7 @@ module Pod
         if @list
           puts set.name
         else
-          puts "\e[32m--> #{set.name} (#{set.versions.reverse.join(", ")})\e[0m"
+          puts "--> #{set.name} (#{set.versions.reverse.join(", ")})".green
           puts_wrapped_text(set.specification.summary)
 
           spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
