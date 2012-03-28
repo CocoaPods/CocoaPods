@@ -5,7 +5,7 @@ module Pod
 
     include Config::Mixin
 
-    attr_reader :sandbox
+    attr_reader   :sandbox
 
     def initialize(podfile, user_project_path = nil)
       @podfile, @user_project_path = podfile, user_project_path
@@ -72,7 +72,7 @@ module Pod
       @sandbox.prepare_for_install
 
       puts_title "Resolving dependencies of: #{@podfile.defined_in_file}"
-      self.dependency_specifications_for_each_target_definition= @resolver.resolve
+      specs_by_target
 
       puts_title "Installing dependencies"
       pods = install_dependencies!
@@ -138,10 +138,12 @@ module Pod
       end
     end
 
-    attr_accessor :dependency_specifications_for_each_target_definition
+    def specs_by_target
+      @specs_by_target ||= @resolver.resolve
+    end
 
     def dependency_specifications
-      dependency_specifications_for_each_target_definition.values.flatten
+      specs_by_target.values.flatten
     end
 
     def activated_specifications
@@ -153,7 +155,7 @@ module Pod
     end
 
     def activated_specifications_for_target(target_definition)
-      dependency_specifications_for_each_target_definition[target_definition]
+      specs_by_target[target_definition]
     end
 
     def download_only_specifications
