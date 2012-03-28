@@ -10,20 +10,19 @@ module Pod
       @sandbox = sandbox
       @cached_sets = {}
       @cached_sources = Source::Aggregate.new
-      @log_indent = 1;
+      @log_indent = 0;
     end
 
     def resolve
       @specs = {}
 
       result = @podfile.target_definitions.values.inject({}) do |result, target_definition|
-        puts "\n--> Finding dependencies for target `#{target_definition.name}'" if config.verbose?
+        puts "\nFinding dependencies for target `#{target_definition.name}'".green if config.verbose?
         @loaded_specs = []
         find_dependency_sets(@podfile, target_definition.dependencies)
         result[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
         result
       end
-      puts if config.verbose?
 
       # Specification doesn't need to know more about the context, so we assign
       # the other specification, of which this pod is a part, to the spec.
