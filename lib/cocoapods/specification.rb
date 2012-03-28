@@ -31,9 +31,14 @@ module Pod
 
     # TODO This is just to work around a MacRuby bug
     def post_initialize
-      @dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
+      @define_for_platforms = [:osx, :ios]
+      #@dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
+      @clean_paths, @subspecs = [], []
+      @dependencies, @source_files, @resources = {}, {}, {}
       @platform = Platform.new(nil)
-      @xcconfig = Xcodeproj::Config.new
+      #@xcconfig = Xcodeproj::Config.new
+      @xcconfig = {}
+      @compiler_flags = {}
     end
 
     # Attributes **without** multiple platform support
@@ -108,7 +113,11 @@ module Pod
     end
     attr_reader :platform
 
-    attr_accessor :requires_arc
+    def requires_arc=(requires_arc)
+      self.compiler_flags = '-fobjc-arc' if requires_arc
+      @requires_arc = requires_arc
+    end
+    attr_reader :requires_arc
 
     def subspec(name, &block)
       subspec = Subspec.new(self, name, &block)
@@ -119,19 +128,47 @@ module Pod
 
     ### Attributes **with** multiple platform support
 
+    class PlatformProxy
+      def initialize(specification, platform)
+        @specification, @platform = specification, platform
+      end
+
+      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= dependency }.each do |method|
+        define_method(method) do |args|
+          @specification._on_platform(@platform) do
+            @specification.send(method, args)
+          end
+        end
+      end
+    end
+
+    def ios
+      PlatformProxy.new(self, :ios)
+    end
+
+    def osx
+      PlatformProxy.new(self, :osx)
+    end
+
     def source_files=(patterns)
-      @source_files = pattern_list(patterns)
+      @define_for_platforms.each do |platform|
+        @source_files[platform] = pattern_list(patterns)
+      end
     end
     attr_reader :source_files
 
     def resources=(patterns)
-      @resources = pattern_list(patterns)
+      @define_for_platforms.each do |platform|
+        @resources[platform] = pattern_list(patterns)
+      end
     end
     attr_reader :resources
     alias_method :resource=, :resources=
 
-    def xcconfig=(hash)
-      @xcconfig.merge!(hash)
+    def xcconfig=(build_settings)
+      @define_for_platforms.each do |platform|
+        (@xcconfig[platform] ||= Xcodeproj::Config.new).merge!(build_settings)
+      end
     end
     attr_reader :xcconfig
 
@@ -147,22 +184,38 @@ module Pod
     end
     alias_method :library=, :libraries=
 
-    attr_writer :compiler_flags
-    def compiler_flags
-      flags = "#{@compiler_flags}"
-      flags << ' -fobjc-arc' if requires_arc
-      flags
+    attr_reader :compiler_flags
+    def compiler_flags=(flags)
+      @define_for_platforms.each do |platform|
+        if @compiler_flags[platform]
+          @compiler_flags[platform] << ' ' << flags
+        else
+          @compiler_flags[platform] = flags.dup
+        end
+      end
     end
 
     def dependency(*name_and_version_requirements)
       name, *version_requirements = name_and_version_requirements.flatten
       dep = Dependency.new(name, *version_requirements)
-      @dependencies << dep
+      @define_for_platforms.each do |platform|
+        (@dependencies[platform] ||= []) << dep
+      end
       dep
     end
     attr_reader :dependencies
 
     ### Not attributes
+
+    # @visibility private
+    #
+    # This is used by PlatformProxy to assign attributes for the scoped platform.
+    def _on_platform(platform)
+      before, @define_for_platforms = @define_for_platforms, [platform]
+      yield
+    ensure
+      @define_for_platforms = before
+    end
 
     include Config::Mixin
 

@@ -454,7 +454,7 @@ describe "A Pod::Specification, concerning its attributes that support different
   describe "when platform specific values are given" do
     before do
       @spec = Pod::Spec.new do |s|
-        s.ios.source_file    = 'file1'
+        s.ios.source_files   = 'file1'
         s.osx.source_files   = 'file1', 'file2'
 
         s.ios.resource       = 'file1'
@@ -503,8 +503,8 @@ describe "A Pod::Specification, concerning its attributes that support different
 
     it "returns the same list of dependencies for each platform" do
       @spec.dependencies.should == {
-        :ios => Pod::Dependency.new('JSONKit'),
-        :osx => Pod::Dependency.new('SSZipArchive')
+        :ios => [Pod::Dependency.new('JSONKit')],
+        :osx => [Pod::Dependency.new('SSZipArchive')]
       }
     end
   end
