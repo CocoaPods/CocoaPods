@@ -39,7 +39,7 @@ describe "Pod::Installer" do
     expected = []
     installer = Pod::Installer.new(podfile)
     pods = installer.activated_specifications.map do |spec|
-      spec.header_files.each do |header|
+      spec.header_files[:ios].each do |header|
         expected << config.project_pods_root + header
       end
       Pod::LocalPod.new(spec, installer.sandbox)

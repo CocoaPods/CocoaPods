@@ -31,8 +31,12 @@ describe Pod::LocalPod do
   end
   
   it 'returns an expanded list of source files, relative to the sandbox root' do
-    @pod.source_files.sort.should == [
-      Pathname.new("BananaLib/Classes/Banana.m"), 
+    @pod.source_files[:ios].sort.should == [
+      Pathname.new("BananaLib/Classes/Banana.m"),
+      Pathname.new("BananaLib/Classes/Banana.h")
+    ].sort
+    @pod.source_files[:osx].sort.should == [
+      Pathname.new("BananaLib/Classes/Banana.m"),
       Pathname.new("BananaLib/Classes/Banana.h")
     ].sort
   end
@@ -46,7 +50,8 @@ describe Pod::LocalPod do
   end
   
   it 'returns a list of header files' do
-    @pod.header_files.should == [Pathname.new("BananaLib/Classes/Banana.h")]
+    @pod.header_files[:ios].should == [Pathname.new("BananaLib/Classes/Banana.h")]
+    @pod.header_files[:osx].should == [Pathname.new("BananaLib/Classes/Banana.h")]
   end
   
   it 'can clean up after itself' do

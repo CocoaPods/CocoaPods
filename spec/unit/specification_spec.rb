@@ -53,24 +53,25 @@ describe "A Pod::Specification loaded from a podspec" do
   end
 
   it "returns the pod's source files" do
-    @spec.source_files.should == ['Classes/*.{h,m}', 'Vendor']
+    @spec.source_files[:ios].should == ['Classes/*.{h,m}', 'Vendor']
+    @spec.source_files[:osx].should == ['Classes/*.{h,m}', 'Vendor']
   end
 
   it "returns the pod's dependencies" do
     expected = Pod::Dependency.new('monkey', '~> 1.0.1', '< 1.0.9')
-    @spec.dependencies.should == [expected]
+    @spec.dependencies.should == { :ios => [expected], :osx => [expected] }
     @spec.dependency_by_top_level_spec_name('monkey').should == expected
   end
 
   it "returns the pod's xcconfig settings" do
-    @spec.xcconfig.to_hash.should == {
+    @spec.xcconfig[:ios].should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration'
     }
   end
 
   it "has a shortcut to add frameworks to the xcconfig" do
     @spec.frameworks = 'CFNetwork', 'CoreText'
-    @spec.xcconfig.to_hash.should == {
+    @spec.xcconfig[:ios].should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration ' \
                          '-framework CFNetwork ' \
                          '-framework CoreText'
@@ -79,7 +80,7 @@ describe "A Pod::Specification loaded from a podspec" do
 
   it "has a shortcut to add libraries to the xcconfig" do
     @spec.libraries = 'z', 'xml2'
-    @spec.xcconfig.to_hash.should == {
+    @spec.xcconfig[:ios].should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration -lz -lxml2'
     }
   end
@@ -97,10 +98,9 @@ describe "A Pod::Specification loaded from a podspec" do
 
   it "adds compiler flags if ARC is required" do
     @spec.requires_arc = true
-    @spec.compiler_flags.should == " -fobjc-arc"
-
+    @spec.compiler_flags.should == { :ios => "-fobjc-arc", :osx => "-fobjc-arc" }
     @spec.compiler_flags = "-Wunused-value"
-    @spec.compiler_flags.should == "-Wunused-value -fobjc-arc"
+    @spec.compiler_flags.should == { :ios => "-fobjc-arc -Wunused-value", :osx => "-fobjc-arc -Wunused-value" }
   end
 end
 
@@ -120,13 +120,13 @@ describe "A Pod::Specification that's part of another pod's source" do
     dep = Pod::Dependency.new('monkey', '>= 1')
     @spec.dependencies.should.not == [dep]
     dep.only_part_of_other_pod = true
-    @spec.dependencies.should == [dep]
+    @spec.dependencies.should == { :ios => [dep], :osx => [dep] }
   end
 
   it "adds a dependency on the other pod's source *and* the library" do
     @spec.part_of_dependency = 'monkey', '>= 1'
     @spec.should.be.part_of_other_pod
-    @spec.dependencies.should == [Pod::Dependency.new('monkey', '>= 1')]
+    @spec.dependencies[:ios].should == [Pod::Dependency.new('monkey', '>= 1')]
   end
 
   it "searches the sources for a matching specification if it has not been assigned by the Resolver yet (e.g. the search command)" do
@@ -161,18 +161,18 @@ describe "A Pod::Specification, with installed source," do
   it "returns the list of files that the source_files pattern expand to" do
     files = @destroot.glob('**/*.{h,c,m}')
     files = files.map { |file| file.relative_path_from(config.project_pods_root) }
-    @spec.expanded_source_files.sort.should == files.sort
+    @spec.expanded_source_files[:ios].sort.should == files.sort
   end
 
   it "returns the list of headers" do
     files = @destroot.glob('**/*.h')
     files = files.map { |file| file.relative_path_from(config.project_pods_root) }
-    @spec.header_files.sort.should == files.sort
+    @spec.header_files[:ios].sort.should == files.sort
   end
 
   it "returns a hash of mappings from the pod's destroot to its header dirs, which by default is just the pod's header dir" do
-    @spec.copy_header_mappings.size.should == 1
-    @spec.copy_header_mappings[Pathname.new('SSZipArchive')].sort.should == %w{
+    @spec.copy_header_mappings[:ios].size.should == 1
+    @spec.copy_header_mappings[:ios][Pathname.new('SSZipArchive')].sort.should == %w{
       SSZipArchive.h
       minizip/crypt.h
       minizip/ioapi.h
@@ -186,8 +186,8 @@ describe "A Pod::Specification, with installed source," do
     def @spec.copy_header_mapping(from)
       Pathname.new('ns') + from.basename
     end
-    @spec.copy_header_mappings.size.should == 1
-    @spec.copy_header_mappings[Pathname.new('SSZipArchive/ns')].sort.should == %w{
+    @spec.copy_header_mappings[:ios].size.should == 1
+    @spec.copy_header_mappings[:ios][Pathname.new('SSZipArchive/ns')].sort.should == %w{
       SSZipArchive.h
       minizip/crypt.h
       minizip/ioapi.h
@@ -199,7 +199,7 @@ describe "A Pod::Specification, with installed source," do
 
   it "returns a hash of mappings with a custom header dir prefix" do
     @spec.header_dir = 'AnotherRoot'
-    @spec.copy_header_mappings[Pathname.new('AnotherRoot')].sort.should == %w{
+    @spec.copy_header_mappings[:ios][Pathname.new('AnotherRoot')].sort.should == %w{
       SSZipArchive.h
       minizip/crypt.h
       minizip/ioapi.h
@@ -231,11 +231,13 @@ describe "A Pod::Specification, with installed source," do
   end
 
   it "returns the list of files that the resources pattern expand to" do
-    @spec.expanded_resources.should == []
+    @spec.expanded_resources.should == {}
     @spec.resource = 'LICEN*'
-    @spec.expanded_resources.map(&:to_s).should == %w{ SSZipArchive/LICENSE }
+    @spec.expanded_resources[:ios].map(&:to_s).should == %w{ SSZipArchive/LICENSE }
+    @spec.expanded_resources[:osx].map(&:to_s).should == %w{ SSZipArchive/LICENSE }
     @spec.resources = 'LICEN*', 'Readme.*'
-    @spec.expanded_resources.map(&:to_s).should == %w{ SSZipArchive/LICENSE SSZipArchive/Readme.markdown }
+    @spec.expanded_resources[:ios].map(&:to_s).should == %w{ SSZipArchive/LICENSE SSZipArchive/Readme.markdown }
+    @spec.expanded_resources[:osx].map(&:to_s).should == %w{ SSZipArchive/LICENSE SSZipArchive/Readme.markdown }
   end
 end
 
@@ -363,8 +365,10 @@ describe "A Pod::Specification subspec" do
 
   it "depends on the parent spec, if it is a subspec" do
     dependency = Pod::Dependency.new('MainSpec', '1.2.3').tap { |d| d.only_part_of_other_pod = true }
-    @spec.subspecs.first.dependencies.should == [dependency]
-    @spec.subspecs.first.subspecs.first.dependencies.should == [dependency, Pod::Dependency.new('MainSpec/FirstSubSpec', '1.2.3')]
+    @spec.subspecs.first.dependencies[:ios].should == [dependency]
+    @spec.subspecs.first.dependencies[:osx].should == [dependency]
+    @spec.subspecs.first.subspecs.first.dependencies[:ios].should == [dependency, Pod::Dependency.new('MainSpec/FirstSubSpec', '1.2.3')]
+    @spec.subspecs.first.subspecs.first.dependencies[:osx].should == [dependency, Pod::Dependency.new('MainSpec/FirstSubSpec', '1.2.3')]
   end
 
   it "automatically forwards undefined attributes to the top level parent" do
@@ -400,13 +404,15 @@ describe "A Pod::Specification with :local source" do
   it "returns the list of files that the source_files pattern expand to within the local path" do
     files = fixture("integration/JSONKit").glob('**/*.{h,m}')
     files = files.map { |file| file.relative_path_from(config.project_pods_root) }
-    @spec.expanded_source_files.sort.should == files.sort
+    @spec.expanded_source_files[:ios].sort.should == files.sort
+    @spec.expanded_source_files[:osx].sort.should == files.sort
   end
   
   it "returns the list of headers that the source_files pattern expand to within the local path" do
     files = fixture("integration/JSONKit").glob('**/*.{h}')
     files = files.map { |file| file.relative_path_from(config.project_pods_root) }
-    @spec.header_files.sort.should == files.sort
+    @spec.header_files[:ios].sort.should == files.sort
+    @spec.header_files[:osx].sort.should == files.sort
   end
 end
 
