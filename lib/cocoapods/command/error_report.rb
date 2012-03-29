@@ -33,13 +33,7 @@ module Pod
 Ruby lib dir : #{RbConfig::CONFIG['libdir']}
 Repositories : #{repo_information.join("\n               ")}
 ```
-
-### Podfile
-
-```ruby
-#{Config.instance.project_podfile.read.strip if Config.instance.project_podfile}
-```
-
+#{markdown_podfile}
 ### Error
 
 ```
@@ -63,6 +57,18 @@ EOS
         end
 
         private
+
+        def markdown_podfile
+        return "" if !Config.instance.project_podfile
+<<-EOS
+
+### Podfile
+
+```ruby
+#{Config.instance.project_podfile.read.strip}
+```
+EOS
+        end
 
         def error_from_podfile(error)
           if error.message =~ /Podfile:(\d*)/
