@@ -14,7 +14,7 @@ module Pod
 
       def search(dependency)
         all.map { |s| s.search(dependency) }.compact.first ||
-          raise(Informative, "Unable to find a pod named `#{dependency.name}'".red)
+          raise(Informative, "[!] Unable to find a pod named `#{dependency.name}'".red)
       end
 
       def search_by_name(query, full_text_search)

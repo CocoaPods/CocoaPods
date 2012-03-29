@@ -87,6 +87,8 @@ module Pod
 
       def list_all
         present_sets(all_specs_set)
+        puts "#{all_specs_set.count} pods were found"
+        puts
       end
 
       def run
