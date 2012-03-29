@@ -2,13 +2,14 @@ module Pod
   class LocalPod
     attr_reader :specification
     attr_reader :sandbox
+    attr_reader :platform
     
-    def initialize(specification, sandbox)
-      @specification, @sandbox = specification, sandbox
+    def initialize(specification, sandbox, platform)
+      @specification, @sandbox, @platform = specification, sandbox, platform
     end
     
-    def self.from_podspec(podspec, sandbox)
-      new(Specification.from_file(podspec), sandbox)
+    def self.from_podspec(podspec, sandbox, platform)
+      new(Specification.from_file(podspec), sandbox, platform)
     end
     
     def root
@@ -57,7 +58,7 @@ module Pod
     end
     
     def clean_paths
-      expand_paths(specification.clean_paths)
+      expanded_paths(specification.clean_paths)
     end
     
     def resources
@@ -65,9 +66,7 @@ module Pod
     end
 
     def header_files
-      result = {}
-      source_files.each { |platform, files| result[platform] = files.select { |f| f.extname == '.h' } }
-      result
+      source_files.select { |f| f.extname == '.h' }
     end
     
     def link_headers
@@ -78,7 +77,7 @@ module Pod
     
     def add_to_target(target)
       implementation_files.each do |file|
-        target.add_source_file(file, nil, specification.compiler_flags)
+        target.add_source_file(file, nil, specification.compiler_flags[@platform.to_sym])
       end
     end
     
@@ -89,24 +88,16 @@ module Pod
     private
     
     def implementation_files
-      result = {}
-      source_files.each { |platform, files| result[platform] = files.select { |f| f.extname != '.h' } }
-      result
+      source_files.select { |f| f.extname != '.h' }
     end
     
     def relative_root
       root.relative_path_from(@sandbox.root)
     end
-    
-    def copy_header_mappings
-      hash = {}
-      header_files.each { |platform, files| hash[platform] = copy_header_mappings_for_files(files) }
-      hash
-    end
 
     # TODO this is being overriden in the RestKit 0.9.4 spec, need to do
     # something with that, and this method also still exists in Specification.
-    def copy_header_mappings_for_files(header_files)
+    def copy_header_mappings
       header_files.inject({}) do |mappings, from|
         from_without_prefix = from.relative_path_from(relative_root)
         to = specification.header_dir + specification.copy_header_mapping(from_without_prefix)
@@ -116,15 +107,9 @@ module Pod
     end
     
     def expanded_paths(platforms_with_patterns, options = {})
-      paths = {}
-      platforms_with_patterns.each do |platform, patterns|
-        paths[platform] = expand_paths(patterns, options)
-      end
-      paths
-    end
-
-    def expand_paths(patterns, options = {})
-     patterns.map do |pattern|
+      patterns = platforms_with_patterns.is_a?(Hash) ? (platforms_with_patterns[@platform.to_sym] || []) : platforms_with_patterns
+      p platforms_with_patterns if patterns.nil?
+      patterns.map do |pattern|
         pattern = root + pattern
 
         if pattern.directory? && options[:glob]

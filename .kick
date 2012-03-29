@@ -6,7 +6,7 @@ process do |files|
   specs = files.take_and_map do |file|
     case file
     when %r{lib/cocoapods/installer.+\.rb$}
-      ['spec/unit/installer_spec.rb', 'spec/unit/target_installer_spec.rb']
+      ['spec/unit/installer_spec.rb', 'spec/unit/installer/target_installer_spec.rb']
     when %r{lib/cocoapods/(.+?)\.rb$}
       s = Dir.glob("spec/**/#{$1}_spec.rb")
       s unless s.empty?

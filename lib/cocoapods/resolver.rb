@@ -15,13 +15,14 @@ module Pod
 
     def resolve
       @specs = {}
+      targets_and_specs = {}
 
-      result = @podfile.target_definitions.values.inject({}) do |result, target_definition|
+      @podfile.target_definitions.values.each do |target_definition|
         puts "\nResolving dependencies for target `#{target_definition.name}'".green if config.verbose?
         @loaded_specs = []
-        find_dependency_sets(@podfile, target_definition.dependencies)
-        result[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
-        result
+        # TODO @podfile.platform will change to target_definition.platform
+        find_dependency_sets(@podfile, target_definition.dependencies, @podfile.platform)
+        targets_and_specs[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
       end
 
       # Specification doesn't need to know more about the context, so we assign
@@ -32,17 +33,20 @@ module Pod
         end
       end
 
-      result
+      targets_and_specs
     end
 
     private
 
-    def find_cached_set(dependency)
+    def find_cached_set(dependency, platform)
       @cached_sets[dependency.name] ||= begin
         if dependency.specification
           Specification::Set::External.new(dependency.specification)
         elsif external_source = dependency.external_source
-          specification = external_source.specification_from_sandbox(@sandbox)
+          # The platform isn't actually being used by the LocalPod instance
+          # that's being used behind the scenes, but passing it anyways for
+          # completeness sake.
+          specification = external_source.specification_from_sandbox(@sandbox, platform)
           Specification::Set::External.new(specification)
         else
           @cached_sources.search(dependency)
@@ -50,13 +54,13 @@ module Pod
       end
     end
 
-    def find_dependency_sets(dependent_specification, dependencies)
+    def find_dependency_sets(dependent_specification, dependencies, platform)
       @log_indent += 1
       dependencies.each do |dependency|
         puts '  ' * @log_indent + "- #{dependency}" if config.verbose?
-        set = find_cached_set(dependency)
+        set = find_cached_set(dependency, platform)
         set.required_by(dependent_specification)
-        # Ensure we don't resolve the same spec twice
+        # Ensure we don't resolve the same spec twice for one target
         unless @loaded_specs.include?(dependency.name)
           # Get a reference to the spec that’s actually being loaded.
           # If it’s a subspec dependency, e.g. 'RestKit/Network', then
@@ -72,7 +76,8 @@ module Pod
           @specs[spec.name] = spec
 
           # And recursively load the dependencies of the spec.
-          find_dependency_sets(spec, spec.dependencies)
+          # TODO fix the need to return an empty arrayf if there are no deps for the given platform
+          find_dependency_sets(spec, (spec.dependencies[platform.to_sym] || []), platform)
         end
       end
       @log_indent -= 1

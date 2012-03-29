@@ -98,9 +98,9 @@ describe "A Pod::Specification loaded from a podspec" do
 
   it "adds compiler flags if ARC is required" do
     @spec.requires_arc = true
-    @spec.compiler_flags.should == { :ios => "-fobjc-arc", :osx => "-fobjc-arc" }
+    @spec.compiler_flags.should == { :ios => " -fobjc-arc", :osx => " -fobjc-arc" }
     @spec.compiler_flags = "-Wunused-value"
-    @spec.compiler_flags.should == { :ios => "-fobjc-arc -Wunused-value", :osx => "-fobjc-arc -Wunused-value" }
+    @spec.compiler_flags.should == { :ios => " -fobjc-arc -Wunused-value", :osx => " -fobjc-arc -Wunused-value" }
   end
 end
 
@@ -447,7 +447,7 @@ describe "A Pod::Specification, concerning its attributes that support different
     end
 
     it "returns the same list of compiler flags for each platform" do
-      compiler_flags = '-Wdeprecated-implementations -fobjc-arc'
+      compiler_flags = ' -Wdeprecated-implementations -fobjc-arc'
       @spec.compiler_flags.should == { :ios => compiler_flags, :osx => compiler_flags }
     end
 
@@ -502,8 +502,8 @@ describe "A Pod::Specification, concerning its attributes that support different
 
     it "returns the same list of compiler flags for each platform" do
       @spec.compiler_flags.should == {
-        :ios => '-Wdeprecated-implementations -fobjc-arc',
-        :osx => '-Wfloat-equal -fobjc-arc'
+        :ios => ' -Wdeprecated-implementations -fobjc-arc',
+        :osx => ' -Wfloat-equal -fobjc-arc'
       }
     end
 

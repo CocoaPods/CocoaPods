@@ -19,7 +19,7 @@ describe Pod::Installer::TargetInstaller do
     
     @sandbox = Pod::Sandbox.new(TMP_POD_ROOT)
     @specification = fixture_spec('banana-lib/BananaLib.podspec')
-    @pods = [Pod::LocalPod.new(@specification, @sandbox)]
+    @pods = [Pod::LocalPod.new(@specification, @sandbox, platform)]
   end
   
   def do_install!

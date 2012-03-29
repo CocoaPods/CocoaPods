@@ -42,7 +42,7 @@ describe "Pod::Installer" do
       spec.header_files[:ios].each do |header|
         expected << config.project_pods_root + header
       end
-      Pod::LocalPod.new(spec, installer.sandbox)
+      Pod::LocalPod.new(spec, installer.sandbox, podfile.platform)
     end
     installer.target_installers.first.bridge_support_generator_for(pods, installer.sandbox).headers.should == expected
   end

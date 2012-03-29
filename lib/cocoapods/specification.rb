@@ -34,11 +34,11 @@ module Pod
       @define_for_platforms = [:osx, :ios]
       #@dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
       @clean_paths, @subspecs = [], []
-      @dependencies, @source_files, @resources = {}, {}, {}
+      @dependencies, @source_files, @resources = { :ios => [], :osx => [] }, { :ios => [], :osx => [] }, { :ios => [], :osx => [] }
       @platform = Platform.new(nil)
       #@xcconfig = Xcodeproj::Config.new
-      @xcconfig = {}
-      @compiler_flags = {}
+      @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
+      @compiler_flags = { :ios => '', :osx => '' }
     end
 
     # Attributes **without** multiple platform support
@@ -167,7 +167,7 @@ module Pod
 
     def xcconfig=(build_settings)
       @define_for_platforms.each do |platform|
-        (@xcconfig[platform] ||= Xcodeproj::Config.new).merge!(build_settings)
+        @xcconfig[platform].merge!(build_settings)
       end
     end
     attr_reader :xcconfig
@@ -187,11 +187,7 @@ module Pod
     attr_reader :compiler_flags
     def compiler_flags=(flags)
       @define_for_platforms.each do |platform|
-        if @compiler_flags[platform]
-          @compiler_flags[platform] << ' ' << flags
-        else
-          @compiler_flags[platform] = flags.dup
-        end
+        @compiler_flags[platform] << ' ' << flags
       end
     end
 
@@ -199,7 +195,7 @@ module Pod
       name, *version_requirements = name_and_version_requirements.flatten
       dep = Dependency.new(name, *version_requirements)
       @define_for_platforms.each do |platform|
-        (@dependencies[platform] ||= []) << dep
+        @dependencies[platform] << dep
       end
       dep
     end
@@ -239,7 +235,7 @@ module Pod
     end
 
     def wrapper?
-      source_files.empty? && !subspecs.empty?
+      source_files.values.flatten.empty? && !subspecs.empty?
     end
 
     def subspec_by_name(name)

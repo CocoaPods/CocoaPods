@@ -54,9 +54,9 @@ module Pod
       end
     end
 
-    def installed_pod_named(name)
+    def installed_pod_named(name, platform)
       if spec_path = podspec_for_name(name)
-        LocalPod.from_podspec(spec_path, self)
+        LocalPod.from_podspec(spec_path, self, platform)
       end
     end
   end

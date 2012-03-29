@@ -44,7 +44,8 @@ module Pod
 
     def install_dependencies!
       activated_specifications.map do |spec|
-        LocalPod.new(spec, sandbox).tap do |pod|
+        # TODO @podfile.platform will change to target_definition.platform
+        LocalPod.new(spec, sandbox, @podfile.platform).tap do |pod|
           marker = config.verbose ? "\n-> ".green : ''
 
           should_install = !pod.exists? && !spec.local?
@@ -115,7 +116,9 @@ module Pod
       lock_file.open('w') do |file|
         file.puts "PODS:"
         pods.map do |pod|
-          [pod.specification.to_s, pod.specification.dependencies.map(&:to_s).sort]
+          # TODO this should list _all_ the pods, so merge the platforms
+          dependencies = pod.specification.dependencies.values.flatten.uniq
+          [pod.specification.to_s, dependencies.map(&:to_s).sort]
         end.sort_by(&:first).each do |name, deps|
           if deps.empty?
             file.puts "  - #{name}"

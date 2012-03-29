@@ -76,8 +76,8 @@ module Pod
       version.empty? ? @name : "#{@name} (#{version})"
     end
     
-    def specification_from_sandbox(sandbox)
-      @external_source.specification_from_sandbox(sandbox)
+    def specification_from_sandbox(sandbox, platform)
+      @external_source.specification_from_sandbox(sandbox, platform)
     end
 
     # Taken from RubyGems 1.3.7
@@ -128,36 +128,37 @@ module Pod
       end
       
       class AbstractExternalSource
+        include Config::Mixin
+
         attr_reader :name, :params
         
         def initialize(name, params)
           @name, @params = name, params
         end
         
-        def specification_from_sandbox(sandbox)
-          if local_pod = sandbox.installed_pod_named(name)
+        def specification_from_sandbox(sandbox, platform)
+          if local_pod = sandbox.installed_pod_named(name, platform)
             local_pod.specification
           else
             copy_external_source_into_sandbox(sandbox)
-            local_pod = sandbox.installed_pod_named(name)
-            local_pod.clean if Config.instance.clean
+            local_pod = sandbox.installed_pod_named(name, platform)
+            local_pod.clean if config.clean?
             local_pod.specification
           end
         end
         
         def ==(other_source)
           return if other_source.nil?
-          name == other_source.name && 
-          params == other_source.params
+          name == other_source.name && params == other_source.params
         end
       end
       
       class GitSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox)
-          puts "  * Pre-downloading: '#{name}'" unless Config.instance.silent?
+          puts "  * Pre-downloading: '#{name}'" unless config.silent?
           Downloader.for_target(sandbox.root + name, @params).tap do |downloader|
             downloader.download
-            downloader.clean if Config.instance.clean
+            downloader.clean if config.clean?
           end
         end
         
@@ -174,7 +175,7 @@ module Pod
         def copy_external_source_into_sandbox(sandbox)
           output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
           output_path.dirname.mkpath
-          puts "  * Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless Config.instance.silent?
+          puts "  * Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
           open(@params[:podspec]) do |io|
             output_path.open('w') { |f| f << io.read }
           end
