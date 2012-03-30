@@ -60,7 +60,7 @@ describe "Pod::Command" do
     spec.authors.should == { `git config --get user.name`.strip => `git config --get user.email`.strip, "other author" => "and email address" }
     spec.source.should == { :git => 'http://EXAMPLE/Bananas.git', :tag => '1.0.0' }
     spec.description.should == 'An optional longer description of Bananas.'
-    spec.source_files.should == ['Classes', 'Classes/**/*.{h,m}']
+    spec.source_files[:ios].should == ['Classes', 'Classes/**/*.{h,m}']
   end
 
   before do

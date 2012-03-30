@@ -184,7 +184,7 @@ else
 
       # TODO add a simple source file which uses the compiled lib to check that it really really works
       it "activates required pods and create a working static library xcode project" do
-        spec = Pod::Podfile.new do
+        podfile = Pod::Podfile.new do
           # first ensure that the correct info is available to the specs when they load
           config.rootspec = self
 
@@ -195,7 +195,7 @@ else
           dependency 'SSZipArchive',      '< 2'
         end
 
-        installer = SpecHelper::Installer.new(spec)
+        installer = SpecHelper::Installer.new(podfile)
         installer.install!
 
         lock_file_contents = {

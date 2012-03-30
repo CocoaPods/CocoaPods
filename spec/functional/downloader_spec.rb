@@ -2,7 +2,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Downloader" do
   before do
-    @pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), temporary_sandbox)
+    @pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), temporary_sandbox, Pod::Platform.ios)
   end
 
   describe "for Git" do

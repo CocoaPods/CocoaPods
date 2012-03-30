@@ -21,13 +21,10 @@ module Pod
     def project
       return @project if @project
       @project = Pod::Project.for_platform(@podfile.platform)
-      # First we need to resolve dependencies across *all* targets, so that the
-      # same correct versions of pods are being used for all targets. This
-      # happens when we call `activated_specifications'.
-      activated_specifications.each do |spec|
+      activated_pods.each do |pod|
         # Add all source files to the project grouped by pod
-        group = @project.add_pod_group(spec.name)
-        spec.expanded_source_files.each do |path|
+        group = @project.add_pod_group(pod.name)
+        pod.source_files.each do |path|
           group.files.new('path' => path.to_s)
         end
       end
@@ -43,31 +40,26 @@ module Pod
     end
 
     def install_dependencies!
-      activated_specifications.map do |spec|
-        # TODO @podfile.platform will change to target_definition.platform
-        LocalPod.new(spec, sandbox, @podfile.platform).tap do |pod|
-          marker = config.verbose ? "\n-> ".green : ''
+      activated_pods.each do |pod|
+        marker = config.verbose ? "\n-> ".green : ''
 
-          should_install = !pod.exists? && !spec.local?
+        unless should_install = !pod.exists? && !pod.specification.local?
+          puts marker + "Using #{pod}" unless config.silent?
+        else
+          puts marker + "Installing #{spec}".green unless config.silent?
 
-          unless should_install
-            puts marker + "Using #{pod}" unless config.silent?
-          else
-            puts marker + "Installing #{spec}".green unless config.silent?
+          downloader = Downloader.for_pod(pod)
+          downloader.download
 
-            downloader = Downloader.for_pod(pod)
-            downloader.download
-
-            if config.clean
-              downloader.clean
-              pod.clean
-            end
+          if config.clean
+            downloader.clean
+            pod.clean
           end
+        end
 
-          if (should_install && config.doc?) || config.force_doc?
-            puts "Installing Documentation for #{spec}".green if config.verbose?
-            Generator::Documentation.new(pod).generate(config.doc_install?)
-          end
+        if (should_install && config.doc?) || config.force_doc?
+          puts "Installing Documentation for #{spec}".green if config.verbose?
+          Generator::Documentation.new(pod).generate(config.doc_install?)
         end
       end
     end
@@ -79,8 +71,9 @@ module Pod
       specs_by_target
 
       puts_title "Installing dependencies"
-      pods = install_dependencies!
+      install_dependencies!
 
+      pods = activated_pods
       puts_title("Generating support files\n", false)
       target_installers.each do |target_installer|
         target_specs = activated_specifications_for_target(target_installer.target_definition)
@@ -117,7 +110,7 @@ module Pod
         file.puts "PODS:"
         pods.map do |pod|
           # TODO this should list _all_ the pods, so merge the platforms
-          dependencies = pod.specification.dependencies.values.flatten.uniq
+          dependencies = pod.specification.dependencies[@podfile.platform.to_sym]
           [pod.specification.to_s, dependencies.map(&:to_s).sort]
         end.sort_by(&:first).each do |name, deps|
           if deps.empty?
@@ -150,6 +143,13 @@ module Pod
 
     def dependency_specifications
       specs_by_target.values.flatten
+    end
+
+    def activated_pods
+      activated_specifications.map do |spec|
+        # TODO @podfile.platform will change to target_definition.platform
+        LocalPod.new(spec, sandbox, @podfile.platform)
+      end
     end
 
     def activated_specifications

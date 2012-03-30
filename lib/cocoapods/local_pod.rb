@@ -77,7 +77,7 @@ module Pod
     
     def add_to_target(target)
       implementation_files.each do |file|
-        target.add_source_file(file, nil, specification.compiler_flags[@platform.to_sym])
+        target.add_source_file(file, nil, specification.compiler_flags[@platform.to_sym].strip)
       end
     end
     
@@ -108,7 +108,6 @@ module Pod
     
     def expanded_paths(platforms_with_patterns, options = {})
       patterns = platforms_with_patterns.is_a?(Hash) ? (platforms_with_patterns[@platform.to_sym] || []) : platforms_with_patterns
-      p platforms_with_patterns if patterns.nil?
       patterns.map do |pattern|
         pattern = root + pattern
 

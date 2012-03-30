@@ -235,7 +235,7 @@ module Pod
     end
 
     def wrapper?
-      source_files.values.flatten.empty? && !subspecs.empty?
+      source_files.values.all?(&:empty?) && !subspecs.empty?
     end
 
     def subspec_by_name(name)

@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 describe Pod::Generator::Documentation do
   before do
     @sandbox = temporary_sandbox
-    @pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), @sandbox)
+    @pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), @sandbox, Pod::Platform.ios)
     copy_fixture_to_pod('banana-lib', @pod)
     @doc_installer = Pod::Generator::Documentation.new(@pod)
   end
