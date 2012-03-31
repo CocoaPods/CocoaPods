@@ -143,6 +143,13 @@ namespace :spec do
       end
     end
   end
+
+  desc "Removes the stored VCR fixture"
+  task :clean_vcr do
+    sh "rm -f spec/fixtures/vcr/tarballs.yml"
+  end
+
+  task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
 end
 
 namespace :examples do

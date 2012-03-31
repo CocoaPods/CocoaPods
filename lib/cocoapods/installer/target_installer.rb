@@ -52,11 +52,11 @@ module Pod
         self.requires_arc = pods.any? { |pod| pod.requires_arc? }
         
         # First add the target to the project
-        @target = @project.targets.new_static_library(@target_definition.label)
+        @target = @project.targets.new_static_library(@target_definition.platform.name, @target_definition.label)
 
         pods.each do |pod|
           # TODO add methods like xcconfig to LocalPod as well? (which returns the correct platform)
-          xcconfig.merge!(pod.specification.xcconfig[@target_definition.platform.to_sym])
+          xcconfig.merge!(pod.specification.xcconfig[@target_definition.platform.name])
           pod.add_to_target(@target)
           
           # TODO: this doesn't need to be done here, it has nothing to do with the target
