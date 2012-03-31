@@ -298,46 +298,6 @@ module Pod
       end
     end
 
-    # Returns all resource files of this pod, but relative to the
-    # project pods root.
-    def expanded_resources
-      files = {}
-      resources.each do |platform, patterns|
-        patterns.each do |pattern|
-          pattern = pod_destroot + pattern
-          pattern.glob.each do |file|
-            (files[platform] ||= []) << file.relative_path_from(config.project_pods_root)
-          end
-        end
-      end
-      files
-    end
-
-    # Returns all source files of this pod including header files,
-    # but relative to the project pods root.
-    #
-    # If the pattern is the path to a directory, the pattern will
-    # automatically glob for c, c++, Objective-C, and Objective-C++
-    # files.
-    def expanded_source_files
-      files = {}
-      source_files.each do |platform, patterns|
-        patterns.each do |pattern|
-          pattern = pod_destroot + pattern
-          pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
-          pattern.glob.each do |file|
-            (files[platform] ||= []) << file.relative_path_from(config.project_pods_root)
-          end
-        end
-      end
-      files
-    end
-
-    # Returns only the header files of this pod.
-    def header_files
-      expanded_source_files.each { |_, files| files.select! { |f| f.extname == '.h' } }
-    end
-
     # This method takes a header path and returns the location it should have
     # in the pod's header dir.
     #
@@ -346,36 +306,6 @@ module Pod
     # copy_header_mappings for full control.
     def copy_header_mapping(from)
       from.basename
-    end
-
-    # See copy_header_mapping.
-    def copy_header_mappings_for_files(header_files)
-      header_files.inject({}) do |mappings, from|
-        from_without_prefix = from.relative_path_from(pod_destroot_name)
-        to = header_dir + copy_header_mapping(from_without_prefix)
-        (mappings[to.dirname] ||= []) << from
-        mappings
-      end
-    end
-
-    def copy_header_mappings
-      header_files.inject({}) do |hash, (platform, files)|
-        hash[platform] = copy_header_mappings_for_files(files)
-        hash
-      end
-    end
-
-    def copy_header_destinations
-      copy_header_mappings.map { |_, mappings| mappings.keys }.flatten.uniq
-    end
-
-    # Returns a list of search paths where the pod's headers can be found. This
-    # includes the pod's header dir root and any other directories that might
-    # have been added by overriding the copy_header_mapping/copy_header_mappings
-    # methods.
-    def header_search_paths
-      dirs = [header_dir] + copy_header_destinations
-      dirs.map { |dir| %{"$(PODS_ROOT)/Headers/#{dir}"} }
     end
 
     def to_s
