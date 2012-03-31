@@ -38,7 +38,7 @@ describe "Pod::Installer" do
     config.rootspec = podfile
     installer = Pod::Installer.new(podfile)
     pods = installer.activated_specifications.map do |spec|
-      Pod::LocalPod.new(spec, installer.sandbox, podfile.platform)
+      Pod::LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
     end
     expected = pods.map { |pod| pod.header_files }.flatten.map { |header| config.project_pods_root + header }
     expected.size.should > 0

@@ -20,7 +20,8 @@ module Pod
 
     def project
       return @project if @project
-      @project = Pod::Project.for_platform(@podfile.platform)
+      # TODO this should not init with platform
+      @project = Pod::Project.for_platform(@podfile.target_definitions[:default].platform)
       activated_pods.each do |pod|
         # Add all source files to the project grouped by pod
         group = @project.add_pod_group(pod.name)
@@ -110,7 +111,7 @@ module Pod
         file.puts "PODS:"
         pods.map do |pod|
           # TODO this should list _all_ the pods, so merge the platforms
-          dependencies = pod.specification.dependencies[@podfile.platform.to_sym]
+          dependencies = pod.specification.dependencies[@podfile.target_definitions[:default].platform.to_sym]
           [pod.specification.to_s, dependencies.map(&:to_s).sort]
         end.sort_by(&:first).each do |name, deps|
           if deps.empty?
@@ -148,7 +149,7 @@ module Pod
     def activated_pods
       activated_specifications.map do |spec|
         # TODO @podfile.platform will change to target_definition.platform
-        LocalPod.new(spec, sandbox, @podfile.platform)
+        LocalPod.new(spec, sandbox, @podfile.target_definitions[:default].platform)
       end
     end
 

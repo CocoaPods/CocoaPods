@@ -21,7 +21,7 @@ module Pod
         puts "\nResolving dependencies for target `#{target_definition.name}'".green if config.verbose?
         @loaded_specs = []
         # TODO @podfile.platform will change to target_definition.platform
-        find_dependency_sets(@podfile, target_definition.dependencies, @podfile.platform)
+        find_dependency_sets(@podfile, target_definition.dependencies, target_definition.platform)
         targets_and_specs[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
       end
 
@@ -84,8 +84,8 @@ module Pod
     end
 
     def validate_platform!(spec)
-      unless spec.platform.nil? || spec.platform == @podfile.platform
-        raise Informative, "The platform required by the Podfile (:#{@podfile.platform}) " \
+      unless spec.platform.nil? || spec.platform == @podfile.target_definitions[:default].platform
+        raise Informative, "The platform required by the Podfile (:#{@podfile.target_definitions[:default].platform}) " \
                            "does not match that of #{spec} (:#{spec.platform})"
       end
     end

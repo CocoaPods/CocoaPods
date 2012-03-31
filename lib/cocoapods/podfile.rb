@@ -3,15 +3,23 @@ module Pod
     class TargetDefinition
       attr_reader :name, :target_dependencies
       
-      attr_accessor :link_with, :parent
+      attr_accessor :link_with, :platform, :parent, :exclusive
 
       def initialize(name, options = {})
         @name, @target_dependencies = name, []
         options.each { |k, v| send("#{k}=", v) }
       end
 
+      def exclusive?
+        @exclusive
+      end
+
       def link_with=(targets)
         @link_with = targets.is_a?(Array) ? targets : [targets]
+      end
+
+      def platform
+        @platform || @parent.platform
       end
 
       def label
@@ -47,7 +55,7 @@ module Pod
       # Returns *all* dependencies of this target, not only the target specific
       # ones in `target_dependencies`.
       def dependencies
-        @target_dependencies + (@parent ? @parent.dependencies : [])
+        @target_dependencies + (exclusive? ? [] : @parent.dependencies)
       end
 
       def empty?
@@ -67,7 +75,7 @@ module Pod
     include Config::Mixin
 
     def initialize(&block)
-      @target_definitions = { :default => (@target_definition = TargetDefinition.new(:default)) }
+      @target_definitions = { :default => (@target_definition = TargetDefinition.new(:default, :exclusive => true)) }
       instance_eval(&block)
     end
 
@@ -82,8 +90,8 @@ module Pod
     #   platform :ios, :deployment_target => "4.0"
     #
     # If the deployment target requires it (< 4.3), armv6 will be added to ARCHS.
-    def platform(platform = nil, options={})
-      platform ? @platform = Platform.new(platform, options) : @platform
+    def platform(platform, options={})
+      @target_definition.platform = Platform.new(platform, options)
     end
 
     # Specifies the target(s) in the user’s project that this Pods library
@@ -239,7 +247,7 @@ module Pod
     # dependency (JSONKit).
     def target(name, options = {})
       parent = @target_definition
-      options[:parent] = parent unless options.delete(:exclusive)
+      options[:parent] = parent
       @target_definitions[name] = @target_definition = TargetDefinition.new(name, options)
       yield
     ensure
@@ -306,10 +314,10 @@ module Pod
     end
 
     def validate!
-      lines = []
-      lines << "* the `platform` attribute should be either `:osx` or `:ios`" unless @platform && [:osx, :ios].include?(@platform.name)
-      lines << "* no dependencies were specified, which is, well, kinda pointless" if dependencies.empty?
-      raise(Informative, (["The Podfile at `#{@defined_in_file}' is invalid:"] + lines).join("\n")) unless lines.empty?
+      #lines = []
+      #lines << "* the `platform` attribute should be either `:osx` or `:ios`" unless @platform && [:osx, :ios].include?(@platform.name)
+      #lines << "* no dependencies were specified, which is, well, kinda pointless" if dependencies.empty?
+      #raise(Informative, (["The Podfile at `#{@defined_in_file}' is invalid:"] + lines).join("\n")) unless lines.empty?
     end
   end
 end

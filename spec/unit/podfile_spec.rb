@@ -6,9 +6,9 @@ describe "Pod::Podfile" do
     podfile.defined_in_file.should == fixture('Podfile')
   end
 
-  it "assigns the platform attribute" do
+  it "assigns the platform attribute to the current target" do
     podfile = Pod::Podfile.new { platform :ios }
-    podfile.platform.should == :ios
+    podfile.target_definitions[:default].platform.should == :ios
   end
 
   it "adds dependencies" do
@@ -74,6 +74,8 @@ describe "Pod::Podfile" do
 
     before do
       @podfile = Pod::Podfile.new do
+        platform :ios
+
         target :debug do
           dependency 'SSZipArchive'
         end
@@ -85,11 +87,15 @@ describe "Pod::Podfile" do
           end
         end
 
+        target :osx_target, :platform => :osx, :link_with => 'OSXTarget' do
+          dependency 'ASIHTTPRequest'
+        end
+
         dependency 'ASIHTTPRequest'
       end
     end
 
-    it "returns all dependencies of all targets combined, which is used during resolving to enusre compatible dependencies" do
+    xit "returns all dependencies of all targets combined, which is used during resolving to ensure compatible dependencies" do
       @podfile.dependencies.map(&:name).sort.should == %w{ ASIHTTPRequest JSONKit Reachability SSZipArchive }
     end
 
@@ -154,24 +160,30 @@ describe "Pod::Podfile" do
       @podfile.target_definitions[:default].bridge_support_name.should == 'Pods.bridgesupport'
       @podfile.target_definitions[:test].bridge_support_name.should == 'Pods-test.bridgesupport'
     end
+
+    it "returns the platform of the target" do
+      @podfile.target_definitions[:default].platform.should == :ios
+      @podfile.target_definitions[:test].platform.should == :ios
+      @podfile.target_definitions[:osx_target].platform.should == :osx
+    end
   end
 
   describe "concerning validations" do
-    it "raises if no platform is specified" do
+    xit "raises if no platform is specified" do
       exception = lambda {
         Pod::Podfile.new {}.validate!
       }.should.raise Pod::Informative
       exception.message.should.include "platform"
     end
 
-    it "raises if an invalid platform is specified" do
+    xit "raises if an invalid platform is specified" do
       exception = lambda {
         Pod::Podfile.new { platform :windows }.validate!
       }.should.raise Pod::Informative
       exception.message.should.include "platform"
     end
 
-    it "raises if no dependencies were specified" do
+    xit "raises if no dependencies were specified" do
       exception = lambda {
         Pod::Podfile.new {}.validate!
       }.should.raise Pod::Informative

@@ -4,12 +4,11 @@ TMP_POD_ROOT = ROOT + "tmp" + "podroot"
 
 describe Pod::Installer::TargetInstaller do
 
-  before do 
-    @target_definition = Pod::Podfile::TargetDefinition.new(:foo)
-
-    platform = Pod::Platform.new(:ios)
-    @podfile = stub('podfile', :platform => platform, 
-                  :generate_bridge_support? => false, 
+  before do
+    platform = Pod::Platform.ios
+    @target_definition = Pod::Podfile::TargetDefinition.new(:foo, :platform => platform)
+    @podfile = stub('podfile', :platform => platform,
+                  :generate_bridge_support? => false,
                   :set_arc_compatibility_flag? => false)
 
     @project = Pod::Project.for_platform(platform)

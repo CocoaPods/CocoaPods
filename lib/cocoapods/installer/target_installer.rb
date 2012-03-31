@@ -38,7 +38,7 @@ module Pod
       def save_prefix_header_as(pathname)
         pathname.open('w') do |header|
           header.puts "#ifdef __OBJC__"
-          header.puts "#import #{@podfile.platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}"
+          header.puts "#import #{@target_definition.platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}"
           header.puts "#endif"
         end
       end
@@ -56,7 +56,7 @@ module Pod
 
         pods.each do |pod|
           # TODO add methods like xcconfig to LocalPod as well? (which returns the correct platform)
-          xcconfig.merge!(pod.specification.xcconfig[@podfile.platform.to_sym])
+          xcconfig.merge!(pod.specification.xcconfig[@target_definition.platform.to_sym])
           pod.add_to_target(@target)
           
           # TODO: this doesn't need to be done here, it has nothing to do with the target

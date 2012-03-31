@@ -29,6 +29,11 @@ module Bacon
     def argv(*argv)
       Pod::Command::ARGV.new(argv)
     end
+
+    def xit(description, *args)
+      puts "\e[34m - #{description} [DISABLED]\e[0m"
+      ErrorLog << "[DISABLED] #{self.name} #{description}\n\n"
+    end
   end
 end
 
