@@ -316,7 +316,7 @@ else
         project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.targets.each do |target|
           phase = target.build_phases.find { |phase| phase.is_a?(Xcodeproj::Project::Object::PBXSourcesBuildPhase) }
-          files = phase.files.map(&:file).map(&:name)
+          files = phase.files.map(&:name)
           case target.product_name
           when 'Pods'
             files.should.include "ASIHTTPRequest.m"
@@ -376,8 +376,7 @@ else
         target.build_configurations.each do |config|
           config.base_configuration.path.should == 'Pods/Pods.xcconfig'
         end
-        phase = target.frameworks_build_phases.first
-        phase.files.map { |build_file| build_file.file }.should.include libPods
+        target.frameworks_build_phases.first.files.should.include libPods
         # should be the last phase
         target.build_phases.last.shell_script.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
       end

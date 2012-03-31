@@ -65,7 +65,7 @@ describe Pod::Installer::UserProjectIntegrator do
     @podfile.target_definitions.each do |_, definition|
       target = @sample_project.targets.where(:name => definition.link_with.first)
       framework_build_phase = target.frameworks_build_phases.first
-      framework_build_phase.files.where(:file => { :name => definition.lib_name }).should.not == nil
+      framework_build_phase.files.where(:name => definition.lib_name).should.not == nil
     end
   end
   
@@ -79,7 +79,7 @@ describe Pod::Installer::UserProjectIntegrator do
 
   it "only tries to integrate Pods libraries into user targets that haven't been integrated yet" do
     app, test_runner = @integrator.user_project.targets.to_a
-    test_runner.frameworks_build_phases.first.files.last.destroy
+    test_runner.frameworks_build_phases.first.build_files.last.destroy
 
     targets = @integrator.targets.sort_by { |target| target.target_definition.label }
     @integrator.stubs(:targets).returns(targets)

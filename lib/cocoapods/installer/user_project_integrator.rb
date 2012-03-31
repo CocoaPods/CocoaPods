@@ -86,7 +86,7 @@ module Pod
             end.reject do |target|
               # reject any target that already has this Pods library in one of its frameworks build phases
               target.frameworks_build_phases.any? do |phase|
-                phase.files.any? { |build_file| build_file.file.name == @target_definition.lib_name }
+                phase.files.any? { |file| file.name == @target_definition.lib_name }
               end
             end
           end
@@ -104,9 +104,7 @@ module Pod
         def add_pods_library
           pods_library = @integrator.user_project.group("Frameworks").files.new_static_library(@target_definition.label)
           targets.each do |target|
-            target.frameworks_build_phases.each do |build_phase|
-              build_phase.files << pods_library.build_files.new
-            end
+            target.frameworks_build_phases.each { |build_phase| build_phase << pods_library }
           end
         end
 
