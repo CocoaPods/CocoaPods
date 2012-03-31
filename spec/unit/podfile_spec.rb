@@ -89,6 +89,8 @@ describe "Pod::Podfile" do
 
         target :osx_target, :platform => :osx, :link_with => 'OSXTarget' do
           dependency 'ASIHTTPRequest'
+          target :nested_osx_target do
+          end
         end
 
         dependency 'ASIHTTPRequest'
@@ -165,6 +167,11 @@ describe "Pod::Podfile" do
       @podfile.target_definitions[:default].platform.should == :ios
       @podfile.target_definitions[:test].platform.should == :ios
       @podfile.target_definitions[:osx_target].platform.should == :osx
+    end
+
+    it "autmatically marks a target as exclusive if the parent platform doesn't match" do
+      @podfile.target_definitions[:osx_target].should.be.exclusive
+      @podfile.target_definitions[:nested_osx_target].should.not.be.exclusive
     end
   end
 

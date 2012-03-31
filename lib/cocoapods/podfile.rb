@@ -10,9 +10,20 @@ module Pod
         options.each { |k, v| send("#{k}=", v) }
       end
 
-      def exclusive?
-        @exclusive
+      # A target is automatically `exclusive` if the `platform` does not match
+      # the parent's `platform`.
+      def exclusive
+        if @exclusive.nil?
+          if @platform.nil?
+            false
+          else
+            @parent.platform != @platform
+          end
+        else
+          @exclusive
+        end
       end
+      alias_method :exclusive?, :exclusive
 
       def link_with=(targets)
         @link_with = targets.is_a?(Array) ? targets : [targets]
