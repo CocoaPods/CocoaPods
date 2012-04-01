@@ -6,16 +6,16 @@ require 'yaml'
 module SpecHelper
   class Installer < Pod::Installer
     # Here we override the `source' of the pod specifications to point to the integration fixtures.
-    def dependency_specifications
-      @dependency_specifications ||= super
-      @dependency_specifications.each do |spec|
-        unless spec.part_of_other_pod?
-          source = spec.source
-          source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
-          spec.source = source
+    def specs_by_target
+      @specs_by_target ||= super.tap do |hash|
+        hash.values.flatten.each do |spec|
+          unless spec.part_of_other_pod?
+            source = spec.source
+            source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
+            spec.source = source
+          end
         end
       end
-      @dependency_specifications
     end
   end
 end
@@ -64,6 +64,18 @@ else
         output = `#{command} 2>&1`
         puts output unless $?.success?
         $?.should.be.success
+      end
+
+      def should_xcodebuild(target_definition)
+        target = target_definition
+        with_xcodebuild_available do
+          Dir.chdir(config.project_pods_root) do
+            puts "\n[!] Compiling #{target.label} static library..."
+            should_successfully_perform "xcodebuild -target '#{target.label}'"
+            lib_path = config.project_pods_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + target.lib_name
+            `lipo -info '#{lib_path}'`.should.include "architecture: #{target.platform == :ios ? 'armv7' : 'x86_64'}"
+          end
+        end
       end
 
       # Lame way to run on one platform only
@@ -134,7 +146,7 @@ else
           change_log.should.not.include '1.3'
         end
 
-        it "creates targets for different targets" do
+        it "creates targets for different platforms" do
           podfile = Pod::Podfile.new do
             self.platform :ios
             dependency 'JSONKit', '1.4'
@@ -156,21 +168,8 @@ else
             "DEPENDENCIES" => ["ASIHTTPRequest", "JSONKit (= 1.4)"]
           }
 
-          with_xcodebuild_available do
-            Dir.chdir(config.project_pods_root) do
-              puts "\n[!] Compiling iOS static library..."
-              target_definition = podfile.target_definitions[:ios_target]
-              should_successfully_perform "xcodebuild -target '#{target_definition.label}'"
-              lib_path = config.project_pods_root + 'build/Release-iphoneos' + target_definition.lib_name
-              `lipo -info '#{lib_path}'`.should.include 'architecture: armv7'
-
-              puts "\n[!] Compiling OS X static library..."
-              target_definition = podfile.target_definitions[:osx_target]
-              should_successfully_perform "xcodebuild -target '#{target_definition.label}'"
-              lib_path = config.project_pods_root + 'build/Release' + target_definition.lib_name
-              `lipo -info '#{lib_path}'`.should.include 'architecture: x86_64'
-            end
-          end
+          should_xcodebuild(podfile.target_definitions[:ios_target])
+          should_xcodebuild(podfile.target_definitions[:osx_target])
         end
 
         if Pod::Generator::Documentation.appledoc_installed?
@@ -228,7 +227,7 @@ else
           config.rootspec = self
 
           self.platform platform
-          dependency 'Reachability',      '< 2.0.5' if platform == :ios
+          dependency 'Reachability',      '> 2.0.5' if platform == :ios
           dependency 'ASIWebPageRequest', '>= 1.8.1'
           dependency 'JSONKit',           '>= 1.0'
           dependency 'SSZipArchive',      '< 2'
@@ -242,13 +241,13 @@ else
             { 'ASIHTTPRequest (1.8.1)'    => ["Reachability"] },
             { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
             'JSONKit (1.4)',
-            { 'Reachability (2.0.4)'      => ["ASIHTTPRequest (>= 1.8)"] },
+            'Reachability (3.0.0)',
             'SSZipArchive (0.1.2)',
           ],
           'DEPENDENCIES' => [
             "ASIWebPageRequest (>= 1.8.1)",
             "JSONKit (>= 1.0)",
-            "Reachability (< 2.0.5)",
+            "Reachability (> 2.0.5)",
             "SSZipArchive (< 2)",
           ]
         }
@@ -265,12 +264,7 @@ else
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
         Xcodeproj.read_plist(project_file).should == installer.project.to_hash
 
-        with_xcodebuild_available do
-          puts "\n[!] Compiling static library..."
-          Dir.chdir(config.project_pods_root) do
-            should_successfully_perform "xcodebuild"
-          end
-        end
+        should_xcodebuild(podfile.target_definitions[:default])
       end
 
       if platform == :ios
@@ -382,16 +376,9 @@ else
         (root + 'Pods-debug-resources.sh').should.exist
         (root + 'Pods-test-resources.sh').should.exist
 
-        with_xcodebuild_available do
-          Dir.chdir(config.project_pods_root) do
-            puts "\n[!] Compiling static library `Pods'..."
-            should_successfully_perform "xcodebuild -target Pods"
-            puts "\n[!] Compiling static library `Pods-debug'..."
-            should_successfully_perform "xcodebuild -target Pods-debug"
-            puts "\n[!] Compiling static library `Pods-test'..."
-            should_successfully_perform "xcodebuild -target Pods-test"
-          end
-        end
+        should_xcodebuild(podfile.target_definitions[:default])
+        should_xcodebuild(podfile.target_definitions[:debug])
+        should_xcodebuild(podfile.target_definitions[:test])
       end
 
       it "sets up an existing project with pods" do
