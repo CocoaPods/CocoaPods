@@ -35,7 +35,7 @@ module Pod
       end
 
       def run
-        unless podfile = config.rootspec
+        unless podfile = config.podfile
           raise Informative, "No `Podfile' found in the current working directory."
         end
         if @projpath && !File.exist?(@projpath)

@@ -10,7 +10,7 @@ module Pod
       @instance = instance
     end
 
-    attr_accessor :repos_dir, :project_root, :project_pods_root, :rootspec, :clean, :verbose, :silent, :doc, :doc_install, :force_doc
+    attr_accessor :repos_dir, :project_root, :project_pods_root, :clean, :verbose, :silent, :doc, :doc_install, :force_doc
     alias_method :clean?,       :clean
     alias_method :verbose?,     :verbose
     alias_method :silent?,      :silent
@@ -45,8 +45,8 @@ module Pod
     end
 
     # Returns the spec at the pat returned from `project_podfile`.
-    def rootspec
-      @rootspec ||= begin
+    def podfile
+      @podfile ||= begin
         Podfile.from_file(project_podfile) if project_podfile.exist?
       end
     end
@@ -55,14 +55,14 @@ module Pod
       require 'colored'
       caller.find { |line| line =~ /^(.+.podspec):\d*/ }
       puts "[!] The use of `config.ios?` is deprecated and will be removed in version 0.7.#{" Called from: #{$1}" if $1}".red
-      rootspec.target_definitions[:default].platform == :ios if rootspec
+      podfile.target_definitions[:default].platform == :ios if podfile
     end
 
     def osx?
       require 'colored'
       caller.find { |line| line =~ /^(.+.podspec):\d*/ }
       puts "[!] The use of `config.ios?` is deprecated and will be removed in version 0.7.#{" Called from: #{$1}" if $1}".red
-      rootspec.target_definitions[:default].platform == :osx if rootspec
+      podfile.target_definitions[:default].platform == :osx if podfile
     end
 
     module Mixin

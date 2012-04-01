@@ -35,7 +35,6 @@ describe "Pod::Installer" do
       platform :osx
       dependency 'ASIHTTPRequest'
     end
-    config.rootspec = podfile
     installer = Pod::Installer.new(podfile)
     pods = installer.activated_specifications.map do |spec|
       Pod::LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
@@ -52,7 +51,6 @@ describe "Pod::Installer" do
         dependency 'JSONKit'
       end
     end
-    config.rootspec = podfile
     installer = Pod::Installer.new(podfile)
     installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
   end

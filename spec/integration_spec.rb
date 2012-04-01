@@ -201,7 +201,6 @@ else
 
       it "runs the optional post_install callback defined in the Podfile _before_ the project is saved to disk" do
         podfile = Pod::Podfile.new do
-          config.rootspec = self
           self.platform platform
           dependency 'SSZipArchive'
 
@@ -223,9 +222,6 @@ else
       # TODO add a simple source file which uses the compiled lib to check that it really really works
       it "activates required pods and create a working static library xcode project" do
         podfile = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
-
           self.platform platform
           dependency 'Reachability',      '> 2.0.5' if platform == :ios
           dependency 'ASIWebPageRequest', '>= 1.8.1'
@@ -270,9 +266,6 @@ else
       if platform == :ios
         it "does not activate pods that are only part of other pods" do
           spec = Pod::Podfile.new do
-            # first ensure that the correct info is available to the specs when they load
-            config.rootspec = self
-
             self.platform platform
             dependency 'Reachability', '2.0.4' # only 2.0.4 is part of ASIHTTPRequest’s source.
           end
@@ -290,9 +283,6 @@ else
 
       it "adds resources to the xcode copy script" do
         spec = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
-
           self.platform platform
           dependency 'SSZipArchive'
         end
@@ -310,9 +300,6 @@ else
       # TODO we need to do more cleaning and/or add a --prune task
       it "overwrites an existing project.pbxproj file" do
         spec = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
-
           self.platform platform
           dependency 'JSONKit'
         end
@@ -320,9 +307,6 @@ else
         installer.install!
 
         spec = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
-
           self.platform platform
           dependency 'SSZipArchive'
         end
@@ -335,8 +319,6 @@ else
 
       it "creates a project with multiple targets" do
         podfile = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
           self.platform platform
           target(:debug) { dependency 'SSZipArchive' }
           target(:test, :exclusive => true) { dependency 'JSONKit' }
@@ -409,8 +391,6 @@ else
 
       it "should prevent duplication cleaning headers symlinks with multiple targets" do
         podfile = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
           self.platform platform
           target(:debug) { dependency 'SSZipArchive' }
           target(:test, :exclusive => true) { dependency 'JSONKit' }
