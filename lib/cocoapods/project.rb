@@ -43,19 +43,5 @@ module Pod
 
       target
     end
-
-    private
-
-    # TODO this needs to be added to each individual target
-    def self.build_settings(platform)
-      settings = {}
-      if platform.requires_legacy_ios_archs?
-        settings['ARCHS'] = "armv6 armv7"
-      end
-      if platform == :ios && platform.deployment_target
-        settings['IPHONEOS_DEPLOYMENT_TARGET'] = platform.deployment_target.to_s
-      end
-      settings
-    end
   end
 end
