@@ -46,7 +46,9 @@ module Pod
 
     # Returns the spec at the pat returned from `project_podfile`.
     def rootspec
-      @rootspec ||= Podfile.from_file(project_podfile)
+      @rootspec ||= begin
+        Podfile.from_file(project_podfile) if project_podfile.exist?
+      end
     end
 
     def ios?
