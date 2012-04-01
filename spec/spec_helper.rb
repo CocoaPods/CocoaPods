@@ -30,8 +30,9 @@ module Bacon
       Pod::Command::ARGV.new(argv)
     end
 
+    require 'colored'
     def xit(description, *args)
-      puts "\e[34m - #{description} [DISABLED]\e[0m"
+      puts "- #{description} [DISABLED]".blue
       ErrorLog << "[DISABLED] #{self.name} #{description}\n\n"
     end
   end

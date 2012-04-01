@@ -77,12 +77,16 @@ module Pod
     
     def add_to_target(target)
       implementation_files.each do |file|
-        target.add_source_file(file, nil, specification.compiler_flags[@platform.to_sym].strip)
+        target.add_source_file(file, nil, specification.compiler_flags[@platform.name].strip)
       end
     end
     
     def requires_arc?
       specification.requires_arc
+    end
+
+    def dependencies
+      specification.dependencies[@platform.name]
     end
     
     private
@@ -107,7 +111,7 @@ module Pod
     end
     
     def expanded_paths(platforms_with_patterns, options = {})
-      patterns = platforms_with_patterns.is_a?(Hash) ? (platforms_with_patterns[@platform.to_sym] || []) : platforms_with_patterns
+      patterns = platforms_with_patterns.is_a?(Hash) ? platforms_with_patterns[@platform.name] : platforms_with_patterns
       patterns.map do |pattern|
         pattern = root + pattern
 

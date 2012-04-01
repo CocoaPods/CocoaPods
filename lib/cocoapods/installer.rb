@@ -1,3 +1,5 @@
+require 'colored'
+
 module Pod
   class Installer
     autoload :TargetInstaller,       'cocoapods/installer/target_installer'
@@ -47,7 +49,7 @@ module Pod
         unless should_install = !pod.exists? && !pod.specification.local?
           puts marker + "Using #{pod}" unless config.silent?
         else
-          puts marker + "Installing #{spec}".green unless config.silent?
+          puts marker + "Installing #{pod.specification}".green unless config.silent?
 
           downloader = Downloader.for_pod(pod)
           downloader.download
@@ -111,9 +113,8 @@ module Pod
         file.puts "PODS:"
         pods.map do |pod|
           # TODO this should list _all_ the pods, so merge the platforms
-          dependencies = pod.specification.dependencies[@podfile.target_definitions[:default].platform.to_sym]
-          [pod.specification.to_s, dependencies.map(&:to_s).sort]
-        end.sort_by(&:first).each do |name, deps|
+          [pod.specification.to_s, pod.dependencies.map(&:to_s).sort]
+        end.uniq.sort_by(&:first).each do |name, deps|
           if deps.empty?
             file.puts "  - #{name}"
           else

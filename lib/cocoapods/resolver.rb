@@ -1,3 +1,5 @@
+require 'colored'
+
 module Pod
   class Resolver
     include Config::Mixin

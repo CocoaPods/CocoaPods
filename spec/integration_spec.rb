@@ -6,20 +6,16 @@ require 'yaml'
 module SpecHelper
   class Installer < Pod::Installer
     # Here we override the `source' of the pod specifications to point to the integration fixtures.
-    def dependent_specification_sets
-      @dependent_specification_sets ||= super
-      @dependent_specification_sets.each do |set|
-        def set.specification
-          spec = super
-          unless spec.part_of_other_pod?
-            source = spec.source
-            source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
-            spec.source = source
-          end
-          spec
+    def dependency_specifications
+      @dependency_specifications ||= super
+      @dependency_specifications.each do |spec|
+        unless spec.part_of_other_pod?
+          source = spec.source
+          source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
+          spec.source = source
         end
       end
-      @dependent_specification_sets
+      @dependency_specifications
     end
   end
 end
@@ -33,7 +29,11 @@ else
 
       def create_config!
         Pod::Config.instance = nil
-        config.silent = true
+        if ENV['VERBOSE_SPECS']
+          config.verbose = true
+        else
+          config.silent = true
+        end
         config.repos_dir = fixture('spec-repos')
         config.project_root = temporary_directory
         config.doc_install = false
@@ -134,7 +134,45 @@ else
           change_log.should.not.include '1.3'
         end
 
-        if !`which appledoc`.strip.empty?
+        it "creates targets for different targets" do
+          podfile = Pod::Podfile.new do
+            self.platform :ios
+            dependency 'JSONKit', '1.4'
+            target :ios_target do
+              # This brings in Reachability on iOS
+              dependency 'ASIHTTPRequest'
+            end
+            target :osx_target do
+              self.platform :osx
+              dependency 'ASIHTTPRequest'
+            end
+          end
+
+          installer = SpecHelper::Installer.new(podfile)
+          installer.install!
+
+          YAML.load(installer.lock_file.read).should == {
+            "PODS" => [{ "ASIHTTPRequest (1.8.1)" => ["Reachability"] }, "JSONKit (1.4)", "Reachability (3.0.0)"],
+            "DEPENDENCIES" => ["ASIHTTPRequest", "JSONKit (= 1.4)"]
+          }
+
+          with_xcodebuild_available do
+            Dir.chdir(config.project_pods_root) do
+              puts "\n[!] Compiling iOS static library..."
+              target_definition = podfile.target_definitions[:ios_target]
+              should_successfully_perform "xcodebuild -target '#{target_definition.label}'"
+              lib_path = config.project_pods_root + 'build/Release-iphoneos' + target_definition.lib_name
+              `lipo -info '#{lib_path}'`.should.include 'architecture: armv7'
+
+              puts "\n[!] Compiling OS X static library..."
+              target_definition = podfile.target_definitions[:osx_target]
+              should_successfully_perform "xcodebuild -target '#{target_definition.label}'"
+              exec 'ls'
+            end
+          end
+        end
+
+        if Pod::Generator::Documentation.appledoc_installed?
           it "generates documentation of all pods by default" do
             create_config!
 
