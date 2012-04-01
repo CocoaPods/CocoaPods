@@ -37,14 +37,7 @@ module Pod
     end
 
     def project_podfile
-      unless @project_podfile
-        @project_podfile = project_root + 'Podfile'
-        # TODO this has to go, we don't support this anymore!
-        unless @project_podfile.exist?
-          @project_podfile = project_root.glob('*.podspec').first
-        end
-      end
-      @project_podfile
+      @project_podfile ||= project_root + 'Podfile'
     end
 
     def headers_symlink_root
@@ -53,24 +46,21 @@ module Pod
 
     # Returns the spec at the pat returned from `project_podfile`.
     def rootspec
-      unless @rootspec
-        if project_podfile
-          if project_podfile.basename.to_s == 'Podfile'
-            @rootspec = Podfile.from_file(project_podfile)
-          else
-            @rootspec = Specification.from_file(project_podfile)
-          end
-        end
-      end
-      @rootspec
+      @rootspec ||= Podfile.from_file(project_podfile)
     end
 
     def ios?
-      rootspec.platform == :ios if rootspec
+      require 'colored'
+      caller.find { |line| line =~ /^(.+.podspec):\d*/ }
+      puts "[!] The use of `config.ios?` is deprecated and will be removed in version 0.7.#{" Called from: #{$1}" if $1}".red
+      rootspec.target_definitions[:default].platform == :ios if rootspec
     end
 
     def osx?
-      rootspec.platform == :osx if rootspec
+      require 'colored'
+      caller.find { |line| line =~ /^(.+.podspec):\d*/ }
+      puts "[!] The use of `config.ios?` is deprecated and will be removed in version 0.7.#{" Called from: #{$1}" if $1}".red
+      rootspec.target_definitions[:default].platform == :osx if rootspec
     end
 
     module Mixin
