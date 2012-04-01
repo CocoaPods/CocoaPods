@@ -12,6 +12,10 @@ end
 
 module Pod
   class Project < Xcodeproj::Project
+    def initialize(*)
+      super
+      main_group << groups.new('name' => 'Pods')
+    end
 
     # Shortcut access to the `Pods' PBXGroup.
     def pods
@@ -22,18 +26,22 @@ module Pod
     def add_pod_group(name)
       pods.groups.new('name' => name)
     end
-    
-    # TODO do we need this?
-    def build_configuration(name)
-      build_configurations.find { |c| c.name == name }
-    end
 
-    def self.for_platform(platform)
-      Pod::Project.new.tap do |project|
-        project.main_group << project.groups.new('name' => 'Pods')
-        project.build_settings('Debug').merge!(build_settings(platform))
-        project.build_settings('Release').merge!(build_settings(platform))
+    def add_pod_target(name, platform)
+      target = targets.new_static_library(platform.name, name)
+
+      settings = {}
+      if platform.requires_legacy_ios_archs?
+        settings['ARCHS'] = "armv6 armv7"
       end
+      if platform == :ios && platform.deployment_target
+        settings['IPHONEOS_DEPLOYMENT_TARGET'] = platform.deployment_target.to_s
+      end
+
+      target.build_settings('Debug').merge!(settings)
+      target.build_settings('Release').merge!(settings)
+
+      target
     end
 
     private

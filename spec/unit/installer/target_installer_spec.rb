@@ -11,7 +11,7 @@ describe Pod::Installer::TargetInstaller do
                   :generate_bridge_support? => false,
                   :set_arc_compatibility_flag? => false)
 
-    @project = Pod::Project.for_platform(platform)
+    @project = Pod::Project.new
     @project.main_group.groups.new('name' => 'Targets Support Files')
 
     @installer = Pod::Installer::TargetInstaller.new(@podfile, @project, @target_definition)

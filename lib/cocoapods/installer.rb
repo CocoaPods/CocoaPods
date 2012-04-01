@@ -21,7 +21,7 @@ module Pod
     def project
       return @project if @project
       # TODO this should not init with platform
-      @project = Pod::Project.for_platform(@podfile.target_definitions[:default].platform)
+      @project = Pod::Project.new
       activated_pods.each do |pod|
         # Add all source files to the project grouped by pod
         group = @project.add_pod_group(pod.name)

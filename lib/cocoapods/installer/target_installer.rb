@@ -50,9 +50,8 @@ module Pod
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!(pods, sandbox)
         self.requires_arc = pods.any? { |pod| pod.requires_arc? }
-        
-        # First add the target to the project
-        @target = @project.targets.new_static_library(@target_definition.platform.name, @target_definition.label)
+
+        @target = @project.add_pod_target(@target_definition.label, @target_definition.platform)
 
         pods.each do |pod|
           # TODO add methods like xcconfig to LocalPod as well? (which returns the correct platform)
