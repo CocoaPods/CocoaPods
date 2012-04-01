@@ -7,7 +7,7 @@ module Pod
 
     include Config::Mixin
 
-    attr_reader   :sandbox
+    attr_reader :sandbox
 
     def initialize(podfile, user_project_path = nil)
       @podfile, @user_project_path = podfile, user_project_path
@@ -22,7 +22,6 @@ module Pod
 
     def project
       return @project if @project
-      # TODO this should not init with platform
       @project = Pod::Project.new
       activated_pods.each do |pod|
         # Add all source files to the project grouped by pod
@@ -79,9 +78,8 @@ module Pod
       pods = activated_pods
       puts_title("Generating support files\n", false)
       target_installers.each do |target_installer|
-        target_specs = activated_specifications_for_target(target_installer.target_definition)
-        pods_for_target = pods.select { |pod| target_specs.include?(pod.specification) }
-        target_installer.install!(pods_for_target, sandbox)
+        pods_for_target = activated_pods_by_target[target_installer.target_definition]
+        target_installer.install!(pods_for_target, @sandbox)
       end
 
       generate_lock_file!(pods)
@@ -111,10 +109,25 @@ module Pod
     def generate_lock_file!(pods)
       lock_file.open('w') do |file|
         file.puts "PODS:"
-        pods.map do |pod|
-          # TODO this should list _all_ the pods, so merge the platforms
+
+        # Get list of [name, dependencies] pairs.
+        activated_pods = pods.map do |pod|
           [pod.specification.to_s, pod.dependencies.map(&:to_s).sort]
-        end.uniq.sort_by(&:first).each do |name, deps|
+        end.uniq
+
+        # Merge dependencies of ios and osx version of the same pod.
+        tmp = {}
+        activated_pods.each do |name, deps|
+          if tmp[name]
+            tmp[name].concat(deps).uniq!
+          else
+            tmp[name] = deps
+          end
+        end
+        activated_pods = tmp
+
+        # Sort by name and print
+        activated_pods.sort_by(&:first).each do |name, deps|
           if deps.empty?
             file.puts "  - #{name}"
           else
@@ -143,27 +156,36 @@ module Pod
       @specs_by_target ||= @resolver.resolve
     end
 
+    # @return [Array<Specification>]  All dependencies that have been resolved.
     def dependency_specifications
       specs_by_target.values.flatten
     end
 
+    # @return [Array<LocalPod>]  A list of LocalPod instances for each
+    #                            dependency that is not a download-only one.
     def activated_pods
-      activated_specifications.map do |spec|
-        # TODO @podfile.platform will change to target_definition.platform
-        LocalPod.new(spec, sandbox, @podfile.target_definitions[:default].platform)
-      end
+      activated_pods_by_target.values.flatten
     end
 
-    def activated_specifications
-      dependency_specifications.reject do |spec|
-        # Don't activate specs which are only wrappers of subspecs, or share
-        # source with another pod but aren't activated themselves.
-        spec.wrapper? || @resolver.cached_sets[spec.name].only_part_of_other_pod?
+    def activated_pods_by_target
+      result = {}
+      specs_by_target.each do |target_definition, specs|
+        result[target_definition] = specs.map do |spec|
+          LocalPod.new(spec, @sandbox, target_definition.platform) if activated_spec?(spec)
+        end.compact
       end
+      result
+    end
+
+    # @return [Array<Specification>]  A list of specifications for each
+    #                                 dependency that is not a download-only
+    #                                 one.
+    def activated_specifications
+      dependency_specifications.select { |spec| activated_spec?(spec) }
     end
 
     def activated_specifications_for_target(target_definition)
-      specs_by_target[target_definition]
+      specs_by_target[target_definition].select { |spec| activated_spec?(spec) }
     end
 
     def download_only_specifications
@@ -171,6 +193,12 @@ module Pod
     end
 
     private
+
+    def activated_spec?(spec)
+      # Don't activate specs which are only wrappers of subspecs, or share
+      # source with another pod but aren't activated themselves.
+      !spec.wrapper? && !@resolver.cached_sets[spec.name].only_part_of_other_pod?
+    end
 
     def puts_title(title, only_verbose = true)
       if(config.verbose?)

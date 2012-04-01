@@ -167,7 +167,8 @@ else
               puts "\n[!] Compiling OS X static library..."
               target_definition = podfile.target_definitions[:osx_target]
               should_successfully_perform "xcodebuild -target '#{target_definition.label}'"
-              exec 'ls'
+              lib_path = config.project_pods_root + 'build/Release' + target_definition.lib_name
+              `lipo -info '#{lib_path}'`.should.include 'architecture: x86_64'
             end
           end
         end
