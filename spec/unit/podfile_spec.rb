@@ -97,7 +97,7 @@ describe "Pod::Podfile" do
       end
     end
 
-    xit "returns all dependencies of all targets combined, which is used during resolving to ensure compatible dependencies" do
+    it "returns all dependencies of all targets combined, which is used during resolving to ensure compatible dependencies" do
       @podfile.dependencies.map(&:name).sort.should == %w{ ASIHTTPRequest JSONKit Reachability SSZipArchive }
     end
 

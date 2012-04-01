@@ -305,7 +305,7 @@ module Pod
     attr_reader :target_definitions
 
     def dependencies
-      @target_definitions.values.map(&:target_dependencies).flatten
+      @target_definitions.values.map(&:target_dependencies).flatten.uniq
     end
 
     def dependency_by_top_level_spec_name(name)

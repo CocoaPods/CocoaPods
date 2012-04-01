@@ -1,1 +1,5 @@
-* The user *has* to specify the platform of the project in the Podfile.
+* Resolve all dependencies together and write out all dependencies to Podfile.lock together.
+* Add integration spec with multiple platforms.
+* Validate platforms for each target definition.
+* Validate that there are dependencies in a Podfile.
+* Validate that the dependencies in the targets don't conflict. E.g. two different versions of the same pod.
