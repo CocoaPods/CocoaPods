@@ -6,7 +6,8 @@ describe Pod::Installer::TargetInstaller do
 
   before do
     platform = Pod::Platform.ios
-    @target_definition = Pod::Podfile::TargetDefinition.new(:foo, :platform => platform)
+    @target_definition = Pod::Podfile::TargetDefinition.new(:foo)
+    @target_definition.platform = platform
     @podfile = stub('podfile', :platform => platform,
                   :generate_bridge_support? => false,
                   :set_arc_compatibility_flag? => false)

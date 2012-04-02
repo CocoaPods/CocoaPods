@@ -7,7 +7,7 @@ module Pod
 
       def initialize(name, options = {})
         @name, @target_dependencies = name, []
-        options.each { |k, v| send("#{k}=", v) }
+        @parent, @exclusive = options.values_at(:parent, :exclusive)
       end
 
       # A target is automatically `exclusive` if the `platform` does not match
@@ -115,11 +115,6 @@ module Pod
     #
     #   # Link with the targets in the user’s project called ‘MyApp’ and ‘MyOtherApp’.
     #   link_with ['MyApp', 'MyOtherApp']
-    #
-    #   # You can also specify this inline when specifying a new Pods target:
-    #   target :test, :exclusive => true, :link_with => 'TestRunner' do
-    #     dependency 'Kiwi'
-    #   end
     def link_with(targets)
       @target_definition.link_with = targets
     end

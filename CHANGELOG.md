@@ -24,15 +24,6 @@ end
 
 _NOTE: As you can see it can take either one target name, or an array of names._
 
-Alternatively, you can also specify the target to link with in the target
-options like so:
-
-```ruby
-target :test, :exclusive => true, :link_with => 'TestRunnerTarget' do
-  dependency 'Kiwi'
-end
-```
-
 If no explicit target is specified, then the Pods target will be linked with
 the first target in your project. So if you only have one target you do not
 need to specify the target to link with.

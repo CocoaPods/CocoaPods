@@ -7,7 +7,8 @@ describe Pod::Installer::UserProjectIntegrator do
     @podfile = Pod::Podfile.new do
       platform :ios
       dependency 'JSONKit'
-      target :test_runner, :exclusive => true, :link_with => 'TestRunner' do
+      target :test_runner, :exclusive => true do
+        link_with 'TestRunner'
         dependency 'Kiwi'
       end
     end

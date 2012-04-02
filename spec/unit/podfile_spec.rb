@@ -80,14 +80,17 @@ describe "Pod::Podfile" do
           dependency 'SSZipArchive'
         end
 
-        target :test, :exclusive => true, :link_with => 'TestRunner' do
+        target :test, :exclusive => true do
+          link_with 'TestRunner'
           dependency 'JSONKit'
           target :subtarget do
             dependency 'Reachability'
           end
         end
 
-        target :osx_target, :platform => :osx, :link_with => 'OSXTarget' do
+        target :osx_target do
+          platform :osx
+          link_with 'OSXTarget'
           dependency 'ASIHTTPRequest'
           target :nested_osx_target do
           end
