@@ -44,14 +44,15 @@ module Pod
           raise Informative, "No `Podfile' found in the current working directory."
         end
 
-        if podfile.xcodeproj.nil?
+        # TODO this should be done for all targets (?)
+        if xcodeproj = podfile.target_definitions[:default].xcodeproj
           raise Informative, "Please specify a valid xcodeproj path in your Podfile.\n\n" +
             "Usage:\n\t" +
             "xcodeproj 'path/to/project.xcodeproj'"
         end
 
-        unless File.exist?(podfile.xcodeproj)
-          raise Informative, "The specified project `#{podfile.xcodeproj}' does not exist."
+        if xcodeproj && !xcodeproj.exist?
+          raise Informative, "The specified project `#{xcodeproj}' does not exist."
         end
 
         if @update_repo

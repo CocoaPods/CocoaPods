@@ -20,12 +20,8 @@ module Pod
 
     def initialize
       @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
-      @clean = true
-      @verbose = false
-      @silent = false
-      @doc = true
-      @doc_install = true
-      @force_doc = false
+      @verbose = @silent = @force_doc = false
+      @clean = @doc = @doc_install = true
     end
 
     def project_root

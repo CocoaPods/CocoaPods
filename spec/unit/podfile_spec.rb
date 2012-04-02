@@ -11,11 +11,6 @@ describe "Pod::Podfile" do
     podfile.target_definitions[:default].platform.should == :ios
   end
 
-  it "assigns the xcodeproj attribute" do
-    podfile = Pod::Podfile.new { platform :ios; xcodeproj "foo.xcodeproj" }
-    podfile.xcodeproj.should == "foo.xcodeproj"
-  end
-
   it "adds dependencies" do
     podfile = Pod::Podfile.new { dependency 'ASIHTTPRequest'; dependency 'SSZipArchive', '>= 0.1' }
     podfile.dependencies.size.should == 2
@@ -80,6 +75,7 @@ describe "Pod::Podfile" do
     before do
       @podfile = Pod::Podfile.new do
         platform :ios
+        xcodeproj 'iOS Project'
 
         target :debug do
           dependency 'SSZipArchive'
@@ -95,6 +91,7 @@ describe "Pod::Podfile" do
 
         target :osx_target do
           platform :osx
+          xcodeproj 'OSX Project.xcodeproj'
           link_with 'OSXTarget'
           dependency 'ASIHTTPRequest'
           target :nested_osx_target do
@@ -134,6 +131,31 @@ describe "Pod::Podfile" do
       target = @podfile.target_definitions[:subtarget]
       target.label.should == 'Pods-test-subtarget'
       target.dependencies.should == [Pod::Dependency.new('Reachability'), Pod::Dependency.new('JSONKit')]
+    end
+
+    it "returns the Xcode project that contains the target to link with" do
+      [:default, :debug, :test, :subtarget].each do |target_name|
+        target = @podfile.target_definitions[target_name]
+        target.xcodeproj.should == Pathname.new('iOS Project.xcodeproj')
+      end
+      [:osx_target, :nested_osx_target].each do |target_name|
+        target = @podfile.target_definitions[target_name]
+        target.xcodeproj.should == Pathname.new('OSX Project.xcodeproj')
+      end
+    end
+
+    it "returns a Xcode project found in the working dir when no explicit project is specified" do
+      xcodeproj1 = config.project_root + '1.xcodeproj'
+      target = Pod::Podfile::TargetDefinition.new(:implicit)
+      config.project_root.expects(:glob).with('*.xcodeproj').returns([xcodeproj1])
+      target.xcodeproj.should == xcodeproj1
+    end
+
+    it "returns `nil' if more than one Xcode project was found in the working when no explicit project is specified" do
+      xcodeproj1, xcodeproj2 = config.project_root + '1.xcodeproj', config.project_root + '2.xcodeproj'
+      target = Pod::Podfile::TargetDefinition.new(:implicit)
+      config.project_root.expects(:glob).with('*.xcodeproj').returns([xcodeproj1, xcodeproj2])
+      target.xcodeproj.should == nil
     end
 
     it "leaves the name of the target, to link with, to be automatically resolved" do

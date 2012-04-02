@@ -34,11 +34,11 @@ describe Pod::Installer::UserProjectIntegrator do
   end
 
   it "returns a Pod::Installer::UserProjectIntegrator::Target for each target definition in the Podfile" do
-    @integrator.targets.map(&:target_definition).should == @podfile.target_definitions.values
+    @integrator.target_integrators.map(&:target_definition).should == @podfile.target_definitions.values
   end
 
   it "uses the first target in the user's project if no explicit target is specified" do
-    target_integrator = @integrator.targets.first
+    target_integrator = @integrator.target_integrators.first
     target_integrator.target_definition.stubs(:link_with).returns(nil)
     target_integrator.targets.should == [Xcodeproj::Project.new(@sample_project_path).targets.first]
   end

@@ -3,7 +3,7 @@ module Pod
     class TargetDefinition
       attr_reader :name, :target_dependencies
       
-      attr_accessor :link_with, :platform, :parent, :exclusive
+      attr_accessor :xcodeproj, :link_with, :platform, :parent, :exclusive
 
       def initialize(name, options = {})
         @name, @target_dependencies = name, []
@@ -24,6 +24,22 @@ module Pod
         end
       end
       alias_method :exclusive?, :exclusive
+
+      def xcodeproj=(path)
+        path = path.to_s
+        @xcodeproj = Pathname.new(File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
+      end
+
+      def xcodeproj
+        if @xcodeproj
+          @xcodeproj
+        elsif @parent
+          @parent.xcodeproj
+        else
+          xcodeprojs = Config.instance.project_root.glob('*.xcodeproj')
+          @xcodeproj = xcodeprojs.first if xcodeprojs.size == 1
+        end
+      end
 
       def link_with=(targets)
         @link_with = targets.is_a?(Array) ? targets : [targets]
@@ -121,8 +137,8 @@ module Pod
 
     # Specifies the path of the xcode project so it doesn't require the project to be specified
     # when running pod install each time.
-    def xcodeproj(path = nil)
-      path ? @xcodeproj = path : @xcodeproj
+    def xcodeproj(path)
+      @target_definition.xcodeproj = path
     end
 
     # Specifies a dependency of the project.
