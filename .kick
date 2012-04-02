@@ -4,12 +4,12 @@ Kicker::Recipes::Ruby.runner_bin = 'bacon'
 
 process do |files|
   specs = files.take_and_map do |file|
-    case file
-    when %r{lib/cocoapods/installer.+\.rb$}
-      ['spec/unit/installer_spec.rb', 'spec/unit/installer/target_installer_spec.rb']
-    when %r{lib/cocoapods/(.+?)\.rb$}
-      s = Dir.glob("spec/**/#{$1}_spec.rb")
-      s unless s.empty?
+    if file =~ %r{lib/cocoapods/(.+?)\.rb$}
+      s = Dir.glob("spec/**/#{File.basename(file, '.rb')}_spec.rb")
+      if file =~ %r{lib/cocoapods/installer.+\.rb$}
+        s.concat(['spec/unit/installer_spec.rb', 'spec/unit/installer/target_installer_spec.rb'])
+      end
+      s.uniq unless s.empty?
     end
   end
   Kicker::Recipes::Ruby.run_tests(specs)

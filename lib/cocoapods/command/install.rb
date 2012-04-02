@@ -11,7 +11,7 @@ module Pod
 
       The Xcode project file should be specified in your `Podfile` like this:
 
-      xcodeproj "path/to/project.xcodeproj"
+        xcodeproj 'path/to/project.xcodeproj'
 
       If no xcodeproj is specified, then a search for an Xcode project will
       be made.  If more than one Xcode project is found, the command will
@@ -59,7 +59,7 @@ module Pod
           Repo.new(ARGV.new(["update"])).run
         end
 
-        Installer.new(podfile, @projpath).install!
+        Installer.new(podfile).install!
       end
     end
   end

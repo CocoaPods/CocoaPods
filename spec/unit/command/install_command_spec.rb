@@ -1,8 +1,8 @@
-require File.expand_path('../../spec_helper', __FILE__)
+require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "Pod::Command::Install" do
   it "should include instructions on how to reference the xcode project" do
-    Pod::Command::Install.banner.should.match /xcodeproj path\/to\/project.xcodeproj/
+    Pod::Command::Install.banner.should.match %r{xcodeproj 'path/to/project\.xcodeproj'}
   end
 
   before do
@@ -17,9 +17,10 @@ describe "Pod::Command::Install" do
 
   describe "When the Podfile does not specify the xcodeproject" do
     before do
-      config.stubs(:rootspec).returns(Pod::Podfile.new { platform :ios; dependency 'AFNetworking'})
+      config.stubs(:podfile).returns(Pod::Podfile.new { platform :ios; dependency 'AFNetworking'})
       @installer = Pod::Command::Install.new(Pod::Command::ARGV.new)
     end
+
     it "raises an informative error" do
       should.raise(Pod::Informative) { @installer.run }
     end
@@ -28,14 +29,14 @@ describe "Pod::Command::Install" do
       begin
         @installer.run
       rescue Pod::Informative => err
-        err.message.should.match /xcodeproj 'path\/to\/project\.xcodeproj/
+        err.message.should.match %r{xcodeproj 'path/to/project\.xcodeproj'}
       end
     end
   end
 
   describe "When the Podfile specifies xcodeproj to an invalid path" do
     before do
-      config.stubs(:rootspec).returns(Pod::Podfile.new { platform :ios; xcodeproj 'nonexistent/project.xcodeproj'; dependency 'AFNetworking'})
+      config.stubs(:podfile).returns(Pod::Podfile.new { platform :ios; xcodeproj 'nonexistent/project.xcodeproj'; dependency 'AFNetworking'})
       @installer = Pod::Command::Install.new(Pod::Command::ARGV.new)
     end
 

@@ -367,11 +367,14 @@ else
         basename = platform == :ios ? 'iPhone' : 'Mac'
         projpath = temporary_directory + 'ASIHTTPRequest.xcodeproj'
         FileUtils.cp_r(fixture("integration/ASIHTTPRequest/#{basename}.xcodeproj"), projpath)
-        spec = Pod::Podfile.new do
+
+        podfile = Pod::Podfile.new do
           self.platform platform
+          xcodeproj projpath
           dependency 'SSZipArchive'
         end
-        installer = SpecHelper::Installer.new(spec, projpath)
+
+        installer = SpecHelper::Installer.new(podfile)
         installer.install!
 
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(temporary_directory + 'ASIHTTPRequest.xcworkspace')

@@ -7,12 +7,8 @@ module Pod
     class UserProjectIntegrator
       include Pod::Config::Mixin
 
-      attr_reader :user_project_path, :user_project
-
-      def initialize(user_project_path, podfile)
-        @user_project_path = config.project_root + user_project_path
+      def initialize(podfile)
         @podfile = podfile
-        @user_project = Xcodeproj::Project.new(user_project_path)
       end
 
       def integrate!
@@ -21,13 +17,21 @@ module Pod
         # Only need to write out the user's project if any of the target
         # integrators actually did some work.
         if targets.map(&:integrate!).any?
-          @user_project.save_as(user_project_path)
+          user_project.save_as(user_project_path)
         end
 
         unless config.silent?
           # TODO this really shouldn't be here
           puts "[!] From now on use `#{workspace_path.basename}' instead of `#{user_project_path.basename}'."
         end
+      end
+
+      def user_project_path
+        @podfile.xcodeproj
+      end
+
+      def user_project
+        @user_project ||= Xcodeproj::Project.new(user_project_path)
       end
 
       def workspace_path

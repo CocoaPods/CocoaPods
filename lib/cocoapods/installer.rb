@@ -9,8 +9,8 @@ module Pod
 
     attr_reader :sandbox
 
-    def initialize(podfile, user_project_path = nil)
-      @podfile, @user_project_path = podfile, user_project_path
+    def initialize(podfile)
+      @podfile = podfile
       # FIXME: pass this into the installer as a parameter
       @sandbox = Sandbox.new(config.project_pods_root)
       @resolver = Resolver.new(@podfile, @sandbox)
@@ -91,7 +91,7 @@ module Pod
       puts "* Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
       project.save_as(@sandbox.project_path)
 
-      UserProjectIntegrator.new(@podfile.xcodeproj, @podfile).integrate!
+      UserProjectIntegrator.new(@podfile).integrate! if @podfile.xcodeproj
     end
 
     def run_post_install_hooks

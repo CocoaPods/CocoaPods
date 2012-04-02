@@ -4,10 +4,16 @@ describe Pod::Installer::UserProjectIntegrator do
   extend SpecHelper::TemporaryDirectory
 
   before do
+    @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+    config.project_root = @sample_project_path.dirname
+
+    sample_project_path = @sample_project_path
     @podfile = Pod::Podfile.new do
       platform :ios
 
+      xcodeproj sample_project_path
       link_with 'SampleProject' # this is an app target!
+
       dependency 'JSONKit'
 
       target :test_runner, :exclusive => true do
@@ -16,11 +22,9 @@ describe Pod::Installer::UserProjectIntegrator do
       end
     end
 
-    @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-    config.project_root = @sample_project_path.dirname
-
-    @integrator = Pod::Installer::UserProjectIntegrator.new(@sample_project_path, @podfile)
+    @integrator = Pod::Installer::UserProjectIntegrator.new(@podfile)
     @integrator.integrate!
+
     @sample_project = Xcodeproj::Project.new(@sample_project_path)
   end
 
