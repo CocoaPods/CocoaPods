@@ -33,14 +33,18 @@ module Pod
       end
 
       def target_integrators
-        @podfile.target_definitions.values.map do |definition|
-          TargetIntegrator.new(definition)
-        end
+        @target_integrators ||= @podfile.target_definitions.values.map do |definition|
+          TargetIntegrator.new(definition) unless definition.empty?
+        end.compact
+      end
+
+      def user_projects
+        @podfile.target_definitions.values.map(&:xcodeproj)
       end
 
       def create_workspace!
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-        [user_project_path, pods_project_path].each do |project_path|
+        [pods_project_path, *user_projects].each do |project_path|
           project_path = project_path.relative_path_from(config.project_root).to_s
           workspace << project_path unless workspace.include?(project_path)
         end
@@ -52,6 +56,10 @@ module Pod
 
         def initialize(target_definition)
           @target_definition = target_definition
+        end
+
+        def inspect
+          "#<#{self.class} for target `#{@target_definition.label}'>"
         end
 
         def integrate!
