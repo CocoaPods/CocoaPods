@@ -134,7 +134,7 @@ else
           change_log.should.not.include '1.3'
         end
 
-        if Pod::Generator::Documentation.appledoc_installed?
+        if !`which appledoc`.strip.empty?
           it "generates documentation of all pods by default" do
             create_config!
 
@@ -148,9 +148,9 @@ else
             installer.install!
 
             doc = (config.project_pods_root + 'Documentation/JSONKit/html/index.html').read
-            doc.should.include?('<title>JSONKit (1.4) Reference</title>')
+            doc.should.include?('<title>JSONKit 1.4 Reference</title>')
             doc = (config.project_pods_root + 'Documentation/SSToolkit/html/index.html').read
-            doc.should.include?('<title>SSToolkit (0.1.2) Reference</title>')
+            doc.should.include?('<title>SSToolkit 0.1.2 Reference</title>')
           end
         else
           puts "[!] Skipping documentation generation specs, because appledoc can't be found."

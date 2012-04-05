@@ -20,14 +20,14 @@ describe Pod::Generator::Documentation do
 
   it 'returns the Pod documentation documentation files' do
     @doc_installer.files.sort.should == [
-      @pod.root + "Classes/Banana.m",
-      @pod.root + "Classes/Banana.h",
+      (@pod.root + "Classes/Banana.m").to_s,
+      (@pod.root + "Classes/Banana.h").to_s,
     ].sort
   end
 
   it 'returns the Pod documentation options' do
-    @doc_installer.generate_appledoc_options.should == [
-      '--project-name', 'BananaLib (1.0)',
+    @doc_installer.appledoc_options.should == [
+      '--project-name', 'BananaLib 1.0',
       '--docset-desc', 'Full of chunky bananas.',
       '--project-company', 'Banana Corp, Monkey Boy',
       '--docset-copyright', 'Banana Corp, Monkey Boy',
@@ -35,6 +35,7 @@ describe Pod::Generator::Documentation do
       '--ignore', '.m',
       '--keep-undocumented-objects',
       '--keep-undocumented-members',
+      '--keep-intermediate-files',
       '--index-desc', 'README',
       # TODO We need to either make this a hash so that options can be merged
       # or not use any defaults in case an options are specified.
@@ -43,7 +44,7 @@ describe Pod::Generator::Documentation do
     ]
   end
 
-  if Pod::Generator::Documentation.appledoc_installed?
+  if !`which appledoc`.strip.empty?
     before do
       @doc_installer.generate
     end
