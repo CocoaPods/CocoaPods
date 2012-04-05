@@ -55,26 +55,28 @@ module Pod
       end
 
       def appledoc_options
-        options = ['--project-name', name,
-                   '--docset-desc', description,
-                   '--project-company', company,
-                   '--docset-copyright', copyright,
-                   '--company-id', docs_id,
-                   '--ignore', '.m',
-                   '--keep-undocumented-objects',
-                   '--keep-undocumented-members']
+        options = [
+          '--project-name', name,
+          '--docset-desc', description,
+          '--project-company', company,
+          '--docset-copyright', copyright,
+          '--company-id', docs_id,
+          '--ignore', '.m',
+          '--keep-undocumented-objects',
+          '--keep-undocumented-members',
+          '--keep-intermediate-files'
+        ]
         index = index_file
         options += ['--index-desc', index] if index
         options += spec_appledoc_options
-        options += ['--output', @target_path.to_s]
-        options += ['--keep-intermediate-files']
       end
 
       def generate(install = false)
         options = appledoc_options
+        options += ['--output', @target_path.to_s]
         options += install ? ['--create-docset'] : ['--no-create-docset']
         options += files
-        options.map!{|s| s !~ /--.*|".*"/ ? %Q["#{s}"] : s }
+        options.map!{|s| s !~ /-.*|".*"/ ? %Q["#{s}"] : s }
         @target_path.mkpath
         @pod.chdir do
           appledoc options.join(' ')
