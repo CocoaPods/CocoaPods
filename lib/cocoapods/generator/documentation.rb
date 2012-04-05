@@ -1,15 +1,12 @@
-require 'open4'
 
 module Pod
   module Generator
 
     class Documentation
-      def self.appledoc_installed?
-        !`which appledoc`.strip.empty?
-      end
-
       include Config::Mixin
+      extend Executable
 
+      executable :appledoc
       attr_reader :pod, :specification, :target_path, :options
 
       def initialize(pod)
@@ -20,7 +17,7 @@ module Pod
       end
 
       def name
-        @specification.to_s
+        @specification.name + ' ' + @specification.version.to_s
       end
 
       def company
@@ -44,7 +41,7 @@ module Pod
       end
 
       def files
-        @pod.absolute_source_files
+        @pod.absolute_source_files.map(&:to_s)
       end
 
       def index_file
@@ -57,7 +54,7 @@ module Pod
         @options[:appledoc] || []
       end
 
-      def generate_appledoc_options
+      def appledoc_options
         options = ['--project-name', name,
                    '--docset-desc', description,
                    '--project-company', company,
@@ -69,69 +66,24 @@ module Pod
         index = index_file
         options += ['--index-desc', index] if index
         options += spec_appledoc_options
+        options += ['--output', @target_path.to_s]
+        options += ['--keep-intermediate-files']
       end
 
       def generate(install = false)
-        unless self.class.appledoc_installed?
-          puts "[!] Skipping documentation generation because appledoc can't be found." if config.verbose?
-          return
-        end
-
-        options = generate_appledoc_options
-        options += ['--output', @target_path.to_s]
-        options += ['--keep-intermediate-files']
+        options = appledoc_options
         options += install ? ['--create-docset'] : ['--no-create-docset']
-
+        options += files
+        options.map!{|s| s !~ /--.*|".*"/ ? %Q["#{s}"] : s }
         @target_path.mkpath
         @pod.chdir do
-          appledoc(options)
+          appledoc options.join(' ')
         end
-      end
-
-      def appledoc(options)
-        arguments = []
-        arguments += options
-        arguments += ['--print-settings'] if config.verbose?
-        arguments += files.map(&:to_s)
-
-        output, error = '', ''
-        process = Open4.popen4('appledoc', *arguments) do |pid, stdin, stdout, stderr|
-          output_buffer, error_buffer = '', ''
-          begin
-            loop do
-              # Check whether stdout, stderr or both are ready to be read from
-              # without blocking.
-              IO.select([stdout, stderr]).flatten.compact.each do |io|
-                case io.fileno
-                when stdout.fileno
-                  output_buffer << io.readpartial(1024)
-                when stderr.fileno
-                  error_buffer << io.readpartial(1024)
-                end
-              end
-
-              # Remove any lines and print them if in verbose mode.
-              output_buffer.sub!(/(.*)\n/m) do
-                $stdout.puts $1 if config.verbose?
-                output << $&
-                ''
-              end
-              error_buffer.sub!(/(.*)\n/m) do
-                $stderr.puts $1 if config.verbose?
-                error << $&
-                ''
-              end
-
-              break if stdout.closed? && stderr.closed?
-            end
-          rescue EOFError
-          end
-        end
-
-        # appledoc exits with 1 if a warning was logged
-        if process.exitstatus >= 2
-          puts output, error unless config.verbose?
-          raise "Appledoc encountered an error."
+      rescue Exception => e
+        if e.is_a?(Informative)
+          puts "[!] Skipping documentation generation because appledoc can't be found." if config.verbose?
+        else
+          throw e
         end
       end
     end
