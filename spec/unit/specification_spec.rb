@@ -250,7 +250,7 @@ describe "A Pod::Specification, in general," do
 
   it "raises if the specification does not contain the minimum required attributes" do
     exception = validate { @spec.validate! }
-    exception.message =~ /name.+?version.+?summary.+?homepage.+?authors.+?(source|part_of).+?source_files/
+    exception.message =~ /name.*version.*summary.*homepage.*authors.*(source.*part_of).*source_files/
   end
 
   it "raises if the platform is unrecognized" do

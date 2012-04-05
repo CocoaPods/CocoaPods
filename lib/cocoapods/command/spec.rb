@@ -159,7 +159,21 @@ module Pod
       def lint
         file = @name ? Pathname.new(@name) : Pathname.pwd.glob('*.podspec').first
         spec = Specification.from_file(file)
-        puts "This pod specification contains all required attributes." if spec.validate!
+
+        puts "\nThe #{spec.name} specification contains all the required attributes.".green if spec.validate!
+
+        warnings = []
+        warnings << 'The name of the specificaiton should match the name of the podspec file' if spec.name + '.podspec' != @name
+        warnings << 'Missing license[:type]' unless spec.license && spec.license[:type]
+        warnings << 'Missing license[:file] or [:text]' unless spec.license && (spec.license[:file] || spec.license[:text])
+        warnings << "Github repositories should end in `.git'" if spec.source[:git] =~ /github.com/ && spec.source[:git] !~ /.*\.git/
+
+
+        unless warnings.empty?
+          puts "\n[!] The #{spec.name} specification raised the following warnings".yellow
+          warnings.each { |warn| puts ' - '+ warn }
+        end
+        puts
       end
     end
   end

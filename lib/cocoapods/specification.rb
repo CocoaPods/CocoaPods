@@ -1,4 +1,5 @@
 require 'xcodeproj/config'
+require 'colored'
 
 module Pod
   extend Config::Mixin
@@ -316,26 +317,32 @@ module Pod
 
     def validate!
       missing = []
-      missing << "`name'"                       unless name
-      missing << "`version'"                    unless version
-      missing << "`summary'"                    unless summary
-      missing << "`homepage'"                   unless homepage
-      missing << "`author(s)'"                  unless authors
-      missing << "either `source' or `part_of'" unless source || part_of
-      missing << "`source_files'"               if source_files.empty? && subspecs.empty?
+      missing << "name"              unless name
+      missing << "version"           unless version
+      missing << "summary"           unless summary
+      missing << "homepage"          unless homepage
+      missing << "author(s)"         unless authors
+      missing << "source or part_of" unless source || part_of
+      missing << "source_files"      if source_files.empty? && subspecs.empty?
       # TODO
       # * validate subspecs
 
       incorrect = []
       allowed = [nil, :ios, :osx]
-      incorrect << ["`platform'", allowed] unless allowed.include?(platform.name)
+      incorrect << "platform - accepted values are (no value, :ios, :osx)" unless allowed.include?(platform.name)
+
+      [:source_files, :resources, :clean_paths].each do |m|
+        incorrect << "#{m} - paths cannot start with a slash" unless self.send(m) && self.send(m).reject{|f| !f.start_with?("/")}.empty?
+      end
+      incorrect << "source[:local] - paths cannot start with a slash" if source && source[:local] && source[:local].start_with?("/")
 
       no_errors_found = missing.empty? && incorrect.empty?
 
       unless no_errors_found
-        message = "The following #{(missing + incorrect).size == 1 ? 'attribute is' : 'attributes are'}:\n"
-        message << "* missing: #{missing.join(", ")}" unless missing.empty?
-        message << "* incorrect: #{incorrect.map { |x| "#{x[0]} (#{x[1..-1]})" }.join(", ")}" unless incorrect.empty?
+        message = "\n[!] The #{name || 'nameless'} specification is incorrect\n".red
+        missing.each {|s| message << " - Missing #{s}\n"}
+        incorrect.each {|s| message << " - Incorrect #{s}\n"}
+        message << "\n"
         raise Informative, message
       end
 
