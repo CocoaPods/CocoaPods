@@ -1,3 +1,4 @@
+require 'escape'
 
 module Pod
   module Generator
@@ -76,11 +77,16 @@ module Pod
         options += ['--output', @target_path.to_s]
         options += install ? ['--create-docset'] : ['--no-create-docset']
         options += files
-        options.map!{|s| s !~ /-.*|".*"/ ? %Q["#{s}"] : s }
+
         @target_path.mkpath
         @pod.chdir do
-          appledoc options.join(' ')
+          appledoc Escape.shell_command(options)
         end
+        # appledoc exits with 1 if a warning was logged
+        if $?.exitstatus >= 2
+          raise "Appledoc encountered an error (exitstatus: #{$?.exitstatus})."
+        end
+
       rescue Exception => e
         if e.is_a?(Informative)
           puts "[!] Skipping documentation generation because appledoc can't be found." if config.verbose?

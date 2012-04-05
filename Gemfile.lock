@@ -11,6 +11,7 @@ GEM
     bacon (1.1.0)
     colored (1.2)
     crack (0.3.1)
+    escape (0.0.4)
     kicker (2.5.0)
       rb-fsevent
     metaclass (0.0.1)
@@ -32,6 +33,7 @@ PLATFORMS
 DEPENDENCIES
   bacon
   colored
+  escape
   kicker
   mocha-on-bacon
   open4
