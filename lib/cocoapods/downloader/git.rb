@@ -33,7 +33,7 @@ module Pod
 
       def download_commit
         git "clone '#{url}' '#{target_path}'"
-        
+
         Dir.chdir(target_path) do
           git "checkout -b activated-pod-commit #{options[:commit]}"
         end
@@ -43,37 +43,37 @@ module Pod
         (target_path + '.git').rmtree
       end
     end
-    
+
     class GitHub < Git
       def download_head
         download_only? ? download_and_extract_tarball('master') : super
       end
-      
+
       def download_tag
         super unless download_only?
         download_only? ? download_and_extract_tarball(options[:tag]) : super
       end
-      
+
       def download_commit
         super unless download_only?
         download_only? ? download_and_extract_tarball(options[:commit]) : super
       end
-      
+
       def clean
         # no-op
       end
-      
+
       def tarball_url_for(id)
         original_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
         "https://github.com/#{username}/#{reponame}/tarball/#{id}"
       end
-      
+
       private
-      
+
       def download_only?
         @options[:download_only]
       end
-      
+
       def download_and_extract_tarball(id)
         tmp_path = target_path + "tarball.tar.gz"
 
@@ -81,10 +81,10 @@ module Pod
           open tarball_url_for(id) do |archive|
             tmpfile.write Zlib::GzipReader.new(archive).read
           end
-          
+
           system "tar xf #{tmpfile.path} -C #{target_path} --strip-components 1"
         end
-        
+
         FileUtils.rm_f(tmp_path)
       end
     end
