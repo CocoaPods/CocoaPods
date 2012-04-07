@@ -12,8 +12,7 @@ module Pod
       end
 
       def self.options
-        "    --full      Search by name, summary, and description\n" +
-        Presenter.options + super
+        [["--full", "Search by name, summary, and description"]].concat(Presenter.options).concat(super)
       end
 
       def initialize(argv)

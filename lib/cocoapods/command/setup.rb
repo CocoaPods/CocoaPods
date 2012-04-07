@@ -15,8 +15,7 @@ module Pod
       end
 
       def self.options
-        "    --push      Use this option to enable push access once granted\n" +
-        super
+        [["--push", "Use this option to enable push access once granted"]].concat(super)
       end
 
       extend Executable
