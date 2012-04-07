@@ -69,14 +69,14 @@ module Pod
     def install!
       @sandbox.prepare_for_install
 
-      puts_title "Resolving dependencies of: #{@podfile.defined_in_file}"
+      print_title "Resolving dependencies of: #{@podfile.defined_in_file}"
       specs_by_target
 
-      puts_title "Installing dependencies"
+      print_title "Installing dependencies"
       install_dependencies!
 
       pods = activated_pods
-      puts_title("Generating support files\n", false)
+      print_title("Generating support files\n", false)
       target_installers.each do |target_installer|
         pods_for_target = activated_pods_by_target[target_installer.target_definition]
         target_installer.install!(pods_for_target, @sandbox)
@@ -200,10 +200,10 @@ module Pod
       !spec.wrapper? && !@resolver.cached_sets[spec.name].only_part_of_other_pod?
     end
 
-    def puts_title(title, only_verbose = true)
-      if(config.verbose?)
-      puts "\n" + title.yellow
-      elsif(!config.silent? && !only_verbose)
+    def print_title(title, only_verbose = true)
+      if config.verbose?
+        puts "\n" + title.yellow
+      elsif !config.silent? && !only_verbose
         puts title
       end
     end
