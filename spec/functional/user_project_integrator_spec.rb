@@ -39,7 +39,7 @@ describe Pod::Installer::UserProjectIntegrator do
 
   it 'adds the project being integrated to the workspace' do
     workspace = Xcodeproj::Workspace.new_from_xcworkspace(@sample_project_path.dirname + "SampleProject.xcworkspace")
-    workspace.should.include?("SampleProject.xcodeproj")
+    workspace.projpaths.sort.should == %w{ Pods/Pods.xcodeproj SampleProject.xcodeproj }
   end
   
   it 'adds the Pods project to the workspace' do
@@ -82,22 +82,27 @@ describe Pod::Installer::UserProjectIntegrator do
     end
   end
 
+  before do
+    # Reset the cached TargetIntegrator#targets lists.
+    @integrator.instance_variable_set(:@target_integrators, nil)
+  end
+
   it "only tries to integrate Pods libraries into user targets that haven't been integrated yet" do
-    app, test_runner = @integrator.target_integrators.first.user_project.targets.to_a
-    p app.frameworks_build_phases.first.files
-    test_runner.frameworks_build_phases.first.build_files.last.destroy
-    #p app, test_runner
+    app_integrator = @integrator.target_integrators.find { |t| t.target_definition.name == :default }
+    test_runner_integrator = @integrator.target_integrators.find { |t| t.target_definition.name == :test_runner }
 
-    target_integrators = @integrator.target_integrators.sort_by { |target| target.target_definition.label }
-    @integrator.stubs(:target_integrators).returns(target_integrators)
-    #p target_integrators
+    # Remove libPods.a from the app target. But don't do it through TargetIntegrator#targets,
+    # as it will return only those that still need integration.
+    app_target = app_integrator.user_project.targets.where(:name => 'SampleProject')
+    app_target.frameworks_build_phases.first.build_files.last.destroy
 
-    target_integrators.first.expects(:add_pods_library).never
-    target_integrators.last.expects(:add_pods_library)
+    app_integrator.expects(:add_pods_library)
+    test_runner_integrator.expects(:add_pods_library).never
+
     @integrator.integrate!
   end
 
-  xit "does not even try to save the project if none of the target integrators had any work to do" do
+  it "does not even try to save the project if none of the target integrators had any work to do" do
     @integrator.target_integrators.first.user_project.expects(:save_as).never
     @integrator.integrate!
   end

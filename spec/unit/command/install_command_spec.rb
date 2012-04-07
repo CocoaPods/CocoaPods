@@ -36,12 +36,16 @@ describe "Pod::Command::Install" do
 
   describe "When the Podfile specifies xcodeproj to an invalid path" do
     before do
-      config.stubs(:podfile).returns(Pod::Podfile.new { platform :ios; xcodeproj 'nonexistent/project.xcodeproj'; dependency 'AFNetworking'})
+      config.stubs(:podfile).returns(Pod::Podfile.new do
+        platform :ios
+        xcodeproj 'nonexistent/project.xcodeproj'
+        dependency 'AFNetworking'
+      end)
       @installer = Pod::Command::Install.new(Pod::Command::ARGV.new)
     end
 
     it "raises an informative error" do
-      should.raise(Pod::Informative) {@installer.run}
+      should.raise(Pod::Informative) { @installer.run }
     end
 
     it "should include an informative message" do

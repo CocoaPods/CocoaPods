@@ -91,8 +91,7 @@ module Pod
       puts "* Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
       project.save_as(@sandbox.project_path)
 
-      # The conditional is actually only so we omit the integration when running the specs.
-      UserProjectIntegrator.new(@podfile).integrate! if @podfile.xcodeproj(false)
+      UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
     end
 
     def run_post_install_hooks

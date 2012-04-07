@@ -37,6 +37,7 @@ else
         config.repos_dir = fixture('spec-repos')
         config.project_root = temporary_directory
         config.doc_install = false
+        config.integrate_targets = false
       end
 
       before do
@@ -364,6 +365,8 @@ else
       end
 
       it "sets up an existing project with pods" do
+        config.integrate_targets = true
+
         basename = platform == :ios ? 'iPhone' : 'Mac'
         projpath = temporary_directory + 'ASIHTTPRequest.xcodeproj'
         FileUtils.cp_r(fixture("integration/ASIHTTPRequest/#{basename}.xcodeproj"), projpath)

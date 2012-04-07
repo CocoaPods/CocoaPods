@@ -24,18 +24,20 @@ module Pod
       end
 
       def self.options
-        "    --no-clean  Leave SCM dirs like `.git' and `.svn' intact after downloading\n" +
-        "    --no-doc    Skip documentation generation with appledoc\n" +
-        "    --force-doc Force the generation of documentation\n" +
-        "    --no-update Skip running `pod repo update` before install\n" +
+        "    --no-clean      Leave SCM dirs like `.git' and `.svn' in tact after downloading\n" +
+        "    --no-doc        Skip documentation generation with appledoc\n" +
+        "    --force-doc     Force the generation of documentation\n" +
+        "    --no-integrate  Skip integration of the Pods libraries in the Xcode project(s)\n" +
+        "    --no-update     Skip running `pod repo update` before install\n" +
         super
       end
 
       def initialize(argv)
-        config.clean = !argv.option('--no-clean')
-        config.doc = !argv.option('--no-doc')
-        config.force_doc = argv.option('--force-doc')
-        @update_repo = !argv.option('--no-update')
+        config.clean             = !argv.option('--no-clean')
+        config.doc               = !argv.option('--no-doc')
+        config.force_doc         =  argv.option('--force-doc')
+        config.integrate_targets = !argv.option('--no-integrate')
+        @update_repo             = !argv.option('--no-update')
         super unless argv.empty?
       end
 
@@ -44,15 +46,17 @@ module Pod
           raise Informative, "No `Podfile' found in the current working directory."
         end
 
-        # TODO this should be done for all targets (?)
-        if xcodeproj = podfile.target_definitions[:default].xcodeproj
-          raise Informative, "Please specify a valid xcodeproj path in your Podfile.\n\n" +
-            "Usage:\n\t" +
-            "xcodeproj 'path/to/project.xcodeproj'"
-        end
+        if config.integrate_targets?
+          # TODO this should be done for all targets (?)
+          unless xcodeproj = podfile.target_definitions[:default].xcodeproj
+            raise Informative, "Please specify a valid xcodeproj path in your Podfile.\n\n" +
+              "Usage:\n\t" +
+              "xcodeproj 'path/to/project.xcodeproj'"
+          end
 
-        if xcodeproj && !xcodeproj.exist?
-          raise Informative, "The specified project `#{xcodeproj}' does not exist."
+          if xcodeproj && !xcodeproj.exist?
+            raise Informative, "The specified project `#{xcodeproj}' does not exist."
+          end
         end
 
         if @update_repo

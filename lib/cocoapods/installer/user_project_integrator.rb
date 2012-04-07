@@ -85,18 +85,20 @@ module Pod
         #                                   the Pods lib should be linked with.
         def targets
           @targets ||= begin
-            if link_with = @target_definition.link_with
-              user_project.targets.select do |target|
-                link_with.include? target.name
-              end
-            else
-              [user_project.targets.first]
-            end.reject do |target|
-              # reject any target that already has this Pods library in one of its frameworks build phases
-              target.frameworks_build_phases.any? do |phase|
-                phase.files.any? { |file| file.name == @target_definition.lib_name }
-              end
+          if link_with = @target_definition.link_with
+            # Find explicitly named targets.
+            user_project.targets.select do |target|
+              link_with.include? target.name
             end
+          else
+            # Default to the first, which in a simple project is probably an app target.
+            [user_project.targets.first]
+          end.reject do |target|
+            # Reject any target that already has this Pods library in one of its frameworks build phases
+            target.frameworks_build_phases.any? do |phase|
+              phase.files.any? { |file| file.name == @target_definition.lib_name }
+            end
+          end
           end
         end
 

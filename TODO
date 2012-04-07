@@ -6,3 +6,4 @@
 * Validate that the dependencies in the targets don't conflict. E.g. two different versions of the same pod.
 * Move Podfile.lock generator from Installer into its own file.
 * Remove better_installer.rb file
+* One or more of the specs are changing the remote URL of the master repo in ~/.cocoapods
