@@ -10,7 +10,7 @@ module Pod
       attr_reader :user_project_path, :user_project
 
       def initialize(user_project_path, podfile)
-        @user_project_path = user_project_path
+        @user_project_path = config.project_root + user_project_path
         @podfile = podfile
         @user_project = Xcodeproj::Project.new(user_project_path)
       end
@@ -26,7 +26,7 @@ module Pod
 
         unless config.silent?
           # TODO this really shouldn't be here
-          puts "[!] From now on use `#{xcworkspace_path.basename}' instead of `#{user_project_path.basename}'."
+          puts "[!] From now on use `#{workspace_path.basename}' instead of `#{user_project_path.basename}'."
         end
       end
 
