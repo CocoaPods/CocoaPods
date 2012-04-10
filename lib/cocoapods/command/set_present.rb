@@ -5,7 +5,7 @@ module Pod
     module SetPresent
       def self.set_present_options
         "    --name-only Show only the names of the pods\n" +
-          "    --stats     Show additional stats (like GitHub watchers and forks)\n"
+        "    --stats     Show additional stats (like GitHub watchers and forks)\n"
       end
 
       def  list
@@ -14,7 +14,7 @@ module Pod
 
       def parse_set_options(argv)
         @stats = argv.option('--stats')
-        @list  = argv.option('--name-only')
+        @list = argv.option('--name-only')
       end
 
       def present_sets(array)
@@ -29,15 +29,12 @@ module Pod
         else
           puts "--> #{set.name} (#{set.versions.reverse.join(", ")})".green
           puts_wrapped_text(set.specification.summary)
-
           spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
-
-          source = spec.source.reject {|k,_| k == :commit || k == :tag }.values.first
           puts_detail('Homepage', spec.homepage)
-          puts_detail('Source', source)
+          puts_detail('Source', spec.source_url)
 
           if @stats
-            stats = stats(source)
+            stats = stats(spec.source_url)
             puts_detail('Watchers', stats[:watchers])
             puts_detail('Forks', stats[:forks])
           end

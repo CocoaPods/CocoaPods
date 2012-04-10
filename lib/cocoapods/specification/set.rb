@@ -67,6 +67,12 @@ module Pod
         end.compact.sort.reverse
       end
 
+      def creation_date
+        Dir.chdir(@pod_dir.dirname) do
+          @creation_date ||= Time.at(`git log --format=%ct ./#{name} | tail -1`.to_i)
+        end
+      end
+
       class External < Set
         def initialize(specification)
           @specification = specification

@@ -126,8 +126,13 @@ module Pod
     def header_dir=(dir)
       @header_dir = Pathname.new(dir)
     end
+
     def header_dir
       @header_dir || pod_destroot_name
+    end
+
+    def source_url
+      source.reject {|k,_| k == :commit || k == :tag }.values.first
     end
 
     attr_writer :compiler_flags

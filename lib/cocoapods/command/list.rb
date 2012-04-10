@@ -1,21 +1,22 @@
+require 'time'
 module Pod
   class Command
     class List < Command
       def self.banner
-%{List all pods:
+        %{List all pods:
 
     $ pod list
 
       Lists all available pods.
 
-    $ pod list [DAYS]
+    $ pod list new
 
-      Lists the pods introduced in the master repo since the given number of days.}
+      Lists the pods introduced in the master repository since the last check.}
       end
 
       def self.options
         SetPresent.set_present_options +
-        super
+          super
       end
 
       include SetPresent
@@ -24,75 +25,59 @@ module Pod
 
       def initialize(argv)
         parse_set_options(argv)
-        @days = argv.arguments.first
-        unless @days == nil || @days =~ /^[0-9]+$/
-          super
-        end
+        @new = argv.option('new')
+        super unless argv.empty?
       end
 
       def dir
         config.repos_dir + 'master'
       end
 
-      def dir_list_from_commit(commit)
-        Dir.chdir(dir) { git("ls-tree --name-only -r #{commit}") }
+      def last_check_file
+        config.repos_dir + 'list_new.txt'
       end
 
-      def commit_from_days_ago (days)
-        Dir.chdir(dir) { git("rev-list -n1 --before=\"#{days} day ago\" --first-parent master") }
+      def update_last_check_time(time)
+        File.open(last_check_file, 'w') {|f| f.write(time)}
       end
 
-      def spec_names_from_commit (commit)
-        dir_list = dir_list_from_commit(commit)
-
-        # Keep only subdirectories
-        dir_list.gsub!(/^[^\/]*$/,'')
-        # Keep only subdirectories name
-        dir_list.gsub!(/(.*)\/[0-9].*/,'\1')
-
-        result = dir_list.split("\n").uniq
-        result.delete('')
-        result
+      def last_check_time
+        string = File.open(last_check_file, "rb").read
+        Time.parse(string)
+      rescue
+        Time.now - 60 * 60 * 24 * 15
       end
 
-      def new_specs_set(commit)
-        #TODO: find the changes for all repos
-        new_specs = spec_names_from_commit('HEAD') - spec_names_from_commit(commit)
-        sets = all_specs_set.select { |set| new_specs.include?(set.name) }
-      end
-
-      def all_specs_set
-        result = []
-        Source.all.each do |source|
-          source.pod_sets.each do |set|
-            result << set
-          end
-        end
-        result
+      def new_specs_since(time)
+        all = Source.all_sets
+        all.reject! {|set| (set.creation_date  - time).to_i <= 0 }
+        all.sort_by {|set| set.creation_date}
       end
 
       def list_new
-        sets = new_specs_set(commit_from_days_ago(@days))
-        present_sets(sets)
-        if !list
-          if sets.count != 0
-            puts "#{sets.count} new pods were added in the last #{@days} days"
-            puts
-          else
-            puts "No new pods were added in the last #{@days} days"
-            puts
-          end
+        time = last_check_time
+        time_string = time.strftime("%A %m %B %Y (%H:%M)")
+        sets = new_specs_since(time)
+        if sets.empty?
+          puts "\nNo new pods were added since #{time.localtime}" unless list
+        else
+          present_sets(sets)
+          update_last_check_time(sets.last.creation_date)
+          puts "#{sets.count} new pods were added since #{time_string}" unless list
         end
+        puts
       end
 
       def list_all
-        present_sets(all_specs_set)
-        puts "#{all_specs_set.count} pods were found"
+        present_sets(all = Source.all_sets)
+        puts "#{all.count} pods were found"
         puts
       end
 
       def run
-        if @days
+        if @new
+          puts "\nUpdating Spec Repositories\n".yellow if config.verbose?
+          #Repo.new(ARGV.new(["update"])).run
           list_new
         else
           list_all
