@@ -29,47 +29,33 @@ module Pod
         super unless argv.empty?
       end
 
-      def last_check_file
-        config.repos_dir + 'list_new'
-      end
-
-      def update_last_check_time(time)
-        File.open(last_check_file, 'w') {|f| f.write(time)}
-      end
-
-      def last_check_time
-        if File.exists?(last_check_file)
-          string = File.open(last_check_file, "rb").read
-          Time.parse(string)
-        else
-          Time.now - 60 * 60 * 24 * 15
-        end
-      end
-
-      def new_sets_since(time)
-        all = Source.all_sets
-        all.reject! {|set| (set.creation_date  - time).to_i <= 0 }
-        all.sort_by {|set| set.creation_date}
-      end
-
-      def list_new
-        time = last_check_time
-        time_string = time.strftime("%A %m %B %Y (%H:%M)")
-        sets = new_sets_since(time)
-        if sets.empty?
-          puts "\nNo new pods were added since #{time.localtime}" unless list
-        else
-          present_sets(sets)
-          update_last_check_time(sets.last.creation_date)
-          puts "#{sets.count} new pods were added since #{time_string}" unless list
-        end
-        puts
-      end
-
       def list_all
         present_sets(all = Source.all_sets)
         puts "#{all.count} pods were found"
         puts
+      end
+
+      def list_new
+        days = [1,2,3,5,8]
+        dates, groups = {}, {}
+        days.each {|d| dates[d] = Time.now - 60 * 60 * 24 * d}
+        Source.all_sets.sort_by {|set| set.creation_date}.each do |set|
+          set_date = set.creation_date
+          days.each do |d|
+            if set_date > dates[d]
+              groups[d] = [] unless groups[d]
+              groups[d] << set
+              break
+            end
+          end
+        end
+        puts
+        days.reverse.each do |d|
+          sets = groups[d]
+          next unless sets
+          puts "Pods added in the last #{d == 1 ? '1 day' : "#{d} days"}\n".yellow
+          present_sets(sets)
+        end
       end
 
       def run
