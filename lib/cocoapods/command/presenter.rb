@@ -1,5 +1,3 @@
-require 'net/http'
-
 module Pod
   class Command
     class Presenter
@@ -18,28 +16,25 @@ module Pod
 
       def present_set(set)
         puts "--> #{set.name} (#{set.versions.reverse.join(", ")})".green
-        puts_wrapped_text(set.summary)
+        puts wrap_string(set.summary)
         spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
-
         puts_detail('Homepage', spec.homepage)
         puts_detail('Source', spec.source_url)
-        if @stats
-          puts_detail('Watchers', spec.github_watchers)
-          puts_detail('Forks', spec.github_forks)
-        end
+        puts_detail('Watchers', spec.github_watchers) if @stats
+        puts_detail('Forks', spec.github_forks)       if @stats
         puts
       end
 
       # adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
-      def puts_wrapped_text(txt, col = 80, indentation = 4)
+      def wrap_string(txt, col = 80, indentation = 4)
         indent = ' ' * indentation
-        puts txt.strip.gsub(/(.{1,#{col}})( +|$)\n?|(.{#{col}})/, indent + "\\1\\3\n")
+        txt.strip.gsub(/(.{1,#{col}})( +|$)\n?|(.{#{col}})/, indent + "\\1\\3\n")
       end
 
-      def puts_detail(title,string)
+      def puts_detail(title, string, preferred_indentation = 8)
+        # 8 is the length of Homepage
         return if !string
-        # 8 is the length of homepage
-        number_of_spaces = ((8 - title.length) > 0) ? (8 - title.length) : 0
+        number_of_spaces = ((preferred_indentation - title.length) > 0) ? (preferred_indentation - title.length) : 0
         spaces = ' ' * number_of_spaces
         puts "    - #{title}: #{spaces + string}"
       end
