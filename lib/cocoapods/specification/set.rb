@@ -67,40 +67,6 @@ module Pod
         end.compact.sort.reverse
       end
 
-      def creation_date
-        Dir.chdir(@pod_dir.dirname) do
-          @creation_date ||= Time.at(`git log --format=%ct ./#{name} | tail -1`.to_i)
-        end
-      end
-
-      def super_specification
-        @super_specification ||= specification.part_of_other_pod? ? specification.part_of_specification : specification
-      end
-
-      def homepage
-        super_specification.homepage
-      end
-
-      def description
-        super_specification.description
-      end
-
-      def summary
-        super_specification.summary
-      end
-
-      def source_url
-        super_specification.source_url
-      end
-
-      def github_watchers
-        super_specification.github_watchers
-      end
-
-      def github_forks
-        super_specification.github_forks
-      end
-
       class External < Set
         def initialize(specification)
           @specification = specification

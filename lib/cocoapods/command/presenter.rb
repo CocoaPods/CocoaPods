@@ -15,13 +15,13 @@ module Pod
       end
 
       def present_set(set)
+        stats = Pod::Specification::Statistics.new(set)
         puts "--> #{set.name} (#{set.versions.reverse.join(", ")})".green
-        puts wrap_string(set.summary)
-        spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
-        puts_detail('Homepage', spec.homepage)
-        puts_detail('Source', spec.source_url)
-        puts_detail('Watchers', spec.github_watchers) if @stats
-        puts_detail('Forks', spec.github_forks)       if @stats
+        puts wrap_string(stats.summary)
+        puts_detail('Homepage', stats.homepage)
+        puts_detail('Source',   stats.source_url)
+        puts_detail('Watchers', stats.github_watchers) if @stats
+        puts_detail('Forks',    stats.github_forks)    if @stats
         puts
       end
 

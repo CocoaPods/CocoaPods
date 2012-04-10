@@ -9,7 +9,8 @@ module Pod
   end
 
   class Specification
-    autoload :Set, 'cocoapods/specification/set'
+    autoload :Set,        'cocoapods/specification/set'
+    autoload :Statistics, 'cocoapods/specification/statistics'
 
     # The file is expected to define and return a Pods::Specification.
     def self.from_file(path)
@@ -129,28 +130,6 @@ module Pod
 
     def header_dir
       @header_dir || pod_destroot_name
-    end
-
-    def source_url
-      source.reject {|k,_| k == :commit || k == :tag }.values.first
-    end
-
-    def github_response
-      return @github_response if @github_response
-      github_url, username, reponame = *(source_url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
-      if github_url
-        @github_response = Net::HTTP.get('github.com', "/api/v2/json/repos/show/#{username}/#{reponame}")
-      end
-    end
-
-    def github_watchers
-      return "123"
-      github_response.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1] if github_response
-    end
-
-    def github_forks
-      return "456"
-      github_response.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1] if github_response
     end
 
     attr_writer :compiler_flags

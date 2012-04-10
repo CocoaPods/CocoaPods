@@ -37,8 +37,8 @@ module Pod
         days = [1,2,3,5,8]
         dates, groups = {}, {}
         days.each {|d| dates[d] = Time.now - 60 * 60 * 24 * d}
-        Source.all_sets.sort_by {|set| set.creation_date}.each do |set|
-          set_date = set.creation_date
+        Source.all_sets.each do |set|
+          set_date = Pod::Specification::Statistics.new(set).creation_date
           days.each do |d|
             if set_date > dates[d]
               groups[d] = [] unless groups[d]
@@ -52,7 +52,7 @@ module Pod
           sets = groups[d]
           next unless sets
           puts "Pods added in the last #{d == 1 ? '1 day' : "#{d} days"}".yellow
-          @presenter.present_sets(sets)
+          @presenter.present_sets(sets.sort_by {|set| Pod::Specification::Statistics.new(set).creation_date})
         end
       end
 

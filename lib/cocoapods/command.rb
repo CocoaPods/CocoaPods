@@ -5,11 +5,12 @@ module Pod
     autoload :ErrorReport, 'cocoapods/command/error_report'
     autoload :Install,     'cocoapods/command/install'
     autoload :List,        'cocoapods/command/list'
+    autoload :Presenter,   'cocoapods/command/presenter'
     autoload :Repo,        'cocoapods/command/repo'
     autoload :Search,      'cocoapods/command/search'
     autoload :Setup,       'cocoapods/command/setup'
     autoload :Spec,        'cocoapods/command/spec'
-    autoload :Presenter,   'cocoapods/command/presenter'
+    autoload :Statistics,  'cocoapods/specification/statistics'
 
     class Help < Informative
       def initialize(command_class, argv)
