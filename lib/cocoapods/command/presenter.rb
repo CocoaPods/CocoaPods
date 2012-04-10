@@ -2,41 +2,32 @@ require 'net/http'
 
 module Pod
   class Command
-    module SetPresent
-      def self.set_present_options
-        "    --name-only Show only the names of the pods\n" +
+    class Presenter
+      def self.options
         "    --stats     Show additional stats (like GitHub watchers and forks)\n"
       end
 
-      def list
-        @list
-      end
-
-      def parse_set_options(argv)
+      def initialize(argv)
         @stats = argv.option('--stats')
-        @list = argv.option('--name-only')
       end
 
       def present_sets(array)
+        puts
         array.each {|set| present_set(set)}
       end
 
       def present_set(set)
-        if @list
-          puts set.name
-        else
-          puts "--> #{set.name} (#{set.versions.reverse.join(", ")})".green
-          puts_wrapped_text(set.summary)
-          spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
+        puts "--> #{set.name} (#{set.versions.reverse.join(", ")})".green
+        puts_wrapped_text(set.summary)
+        spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
 
-          puts_detail('Homepage', spec.homepage)
-          puts_detail('Source', spec.source_url)
-          if @stats
-            puts_detail('Watchers', spec.github_watchers)
-            puts_detail('Forks', spec.github_forks)
-          end
-          puts
+        puts_detail('Homepage', spec.homepage)
+        puts_detail('Source', spec.source_url)
+        if @stats
+          puts_detail('Watchers', spec.github_watchers)
+          puts_detail('Forks', spec.github_forks)
         end
+        puts
       end
 
       # adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/

@@ -13,23 +13,19 @@ module Pod
 
       def self.options
         "    --full      Search by name, summary, and description\n" +
-        SetPresent.set_present_options +
-        super
+        Presenter.options + super
       end
 
-      include SetPresent
-
       def initialize(argv)
-        parse_set_options(argv)
         @full_text_search = argv.option('--full')
-        unless @query = argv.arguments.first
-          super
-        end
+        @presenter = Presenter.new(argv)
+        @query = argv.shift_argument
+        super unless argv.empty? && @query
       end
 
       def run
         sets = Source.search_by_name(@query.strip, @full_text_search)
-        present_sets(sets)
+        @presenter.present_sets(sets)
       end
     end
   end

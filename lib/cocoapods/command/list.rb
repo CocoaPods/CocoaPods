@@ -15,22 +15,20 @@ module Pod
       end
 
       def self.options
-        SetPresent.set_present_options +
-          super
+        SetPresent.options + super
       end
 
-      include SetPresent
       extend Executable
       executable :git
 
       def initialize(argv)
-        parse_set_options(argv)
         @new = argv.option('new')
+        @presenter = Presenter.new(argv)
         super unless argv.empty?
       end
 
       def list_all
-        present_sets(all = Source.all_sets)
+        @presenter.present_sets(all = Source.all_sets)
         puts "#{all.count} pods were found"
         puts
       end
@@ -53,15 +51,15 @@ module Pod
         days.reverse.each do |d|
           sets = groups[d]
           next unless sets
-          puts "Pods added in the last #{d == 1 ? '1 day' : "#{d} days"}\n".yellow
-          present_sets(sets)
+          puts "Pods added in the last #{d == 1 ? '1 day' : "#{d} days"}".yellow
+          @presenter.present_sets(sets)
         end
       end
 
       def run
         if @new
           puts "\nUpdating Spec Repositories\n".yellow if config.verbose?
-          Repo.new(ARGV.new(["update"])).run
+          #Repo.new(ARGV.new(["update"])).run
           list_new
         else
           list_all
