@@ -38,10 +38,12 @@ module Pod
       end
 
       def last_check_time
-        string = File.open(last_check_file, "rb").read
-        Time.parse(string)
-      rescue
-        Time.now - 60 * 60 * 24 * 15
+        if File.exists?(last_check_file)
+          string = File.open(last_check_file, "rb").read
+          Time.parse(string)
+        else
+          Time.now - 60 * 60 * 24 * 15
+        end
       end
 
       def new_sets_since(time)
