@@ -10,7 +10,6 @@ module Pod
     autoload :Search,      'cocoapods/command/search'
     autoload :Setup,       'cocoapods/command/setup'
     autoload :Spec,        'cocoapods/command/spec'
-    autoload :Statistics,  'cocoapods/specification/statistics'
 
     class Help < Informative
       def initialize(command_class, argv)
