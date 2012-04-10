@@ -8,7 +8,7 @@ module Pod
         "    --stats     Show additional stats (like GitHub watchers and forks)\n"
       end
 
-      def  list
+      def list
         @list
       end
 
@@ -18,9 +18,7 @@ module Pod
       end
 
       def present_sets(array)
-        array.each do |set|
-          present_set(set)
-        end
+        array.each {|set| present_set(set)}
       end
 
       def present_set(set)
@@ -28,15 +26,14 @@ module Pod
           puts set.name
         else
           puts "--> #{set.name} (#{set.versions.reverse.join(", ")})".green
-          puts_wrapped_text(set.specification.summary)
+          puts_wrapped_text(set.summary)
           spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
+
           puts_detail('Homepage', spec.homepage)
           puts_detail('Source', spec.source_url)
-
           if @stats
-            stats = stats(spec.source_url)
-            puts_detail('Watchers', stats[:watchers])
-            puts_detail('Forks', stats[:forks])
+            puts_detail('Watchers', spec.github_watchers)
+            puts_detail('Forks', spec.github_forks)
           end
           puts
         end
@@ -54,18 +51,6 @@ module Pod
         number_of_spaces = ((8 - title.length) > 0) ? (8 - title.length) : 0
         spaces = ' ' * number_of_spaces
         puts "    - #{title}: #{spaces + string}"
-      end
-
-      def stats(url)
-        original_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
-
-        result = {}
-        if original_url
-          gh_response       = Net::HTTP.get('github.com', "/api/v2/json/repos/show/#{username}/#{reponame}")
-          result[:watchers] = gh_response.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1]
-          result[:forks]    = gh_response.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1]
-        end
-        result
       end
     end
   end

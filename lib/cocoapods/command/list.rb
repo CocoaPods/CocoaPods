@@ -29,12 +29,8 @@ module Pod
         super unless argv.empty?
       end
 
-      def dir
-        config.repos_dir + 'master'
-      end
-
       def last_check_file
-        config.repos_dir + 'list_new.txt'
+        config.repos_dir + 'list_new'
       end
 
       def update_last_check_time(time)
@@ -48,7 +44,7 @@ module Pod
         Time.now - 60 * 60 * 24 * 15
       end
 
-      def new_specs_since(time)
+      def new_sets_since(time)
         all = Source.all_sets
         all.reject! {|set| (set.creation_date  - time).to_i <= 0 }
         all.sort_by {|set| set.creation_date}
@@ -57,7 +53,7 @@ module Pod
       def list_new
         time = last_check_time
         time_string = time.strftime("%A %m %B %Y (%H:%M)")
-        sets = new_specs_since(time)
+        sets = new_sets_since(time)
         if sets.empty?
           puts "\nNo new pods were added since #{time.localtime}" unless list
         else
@@ -77,7 +73,7 @@ module Pod
       def run
         if @new
           puts "\nUpdating Spec Repositories\n".yellow if config.verbose?
-          #Repo.new(ARGV.new(["update"])).run
+          Repo.new(ARGV.new(["update"])).run
           list_new
         else
           list_all
