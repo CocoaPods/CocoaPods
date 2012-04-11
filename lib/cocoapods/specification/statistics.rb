@@ -44,7 +44,7 @@ module Pod
       private
 
       def cache
-        @cache ||= cache_file.exist? ? YAML::load(cache_file.read) : {}
+        @cache ||= cache_file && cache_file.exist? ? YAML::load(cache_file.read) : {}
       end
 
       def get_value(set, key)
@@ -59,7 +59,7 @@ module Pod
       end
 
       def save_cache
-        File.open(cache_file, 'w') { |f| f.write(YAML::dump(cache)) }
+        File.open(cache_file, 'w') { |f| f.write(YAML::dump(cache)) } if cache_file
       end
 
       def compute_creation_date(set, save = true)
