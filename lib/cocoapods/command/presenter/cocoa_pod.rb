@@ -15,7 +15,7 @@ module Pod
         end
 
         def version
-          @set.version.last
+          @set.versions.last
         end
 
         def versions
@@ -36,6 +36,10 @@ module Pod
 
         def source_url
           spec.source.reject {|k,_| k == :commit || k == :tag }.values.first
+        end
+
+        def creation_date
+          Pod::Specification::Statistics.instance.creation_date(@set)
         end
 
         def github_watchers
