@@ -56,7 +56,7 @@ module Pod
       end
 
       def compute_github_stats_if_needed(set)
-        if @cache[set.name] && @cache[set.name][:github_check_date] && @cache[set.name][:github_check_date] > Time.now - 60 * 60
+        if @cache[set.name] && @cache[set.name][:github_check_date] && @cache[set.name][:github_check_date] > Time.now - 60 * 60 * 24
           return
         end
         spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
