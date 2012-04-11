@@ -11,20 +11,23 @@ module Pod
         @stats = argv.option('--stats')
       end
 
-      def present_sets(array)
-        puts
-        array.each {|set| present_set(set)}
+      def render(array)
+        result = "\n"
+        array.each {|set| result << render_set(set)}
+        result
       end
 
-      def present_set(set)
+      def render_set(set)
         pod = CocoaPod.new(set)
-        puts "--> #{pod.name} (#{pod.versions})".green
-        puts wrap_string(pod.summary)
-        puts_detail('Homepage', pod.homepage)
-        puts_detail('Source',   pod.source_url)
-        puts_detail('Watchers', pod.github_watchers) if @stats
-        puts_detail('Forks',    pod.github_forks)    if @stats
-        puts
+        result = "--> #{pod.name} (#{pod.versions})\n".green
+        result << wrap_string(pod.summary)
+        result << detail('Homepage', pod.homepage)
+        result << detail('Source',   pod.source_url)
+        result << detail('Platform', pod.platform)        if @stats
+        result << detail('License',  pod.license)         if @stats
+        result << detail('Watchers', pod.github_watchers) if @stats
+        result << detail('Forks',    pod.github_forks)    if @stats
+        result << "\n"
       end
 
       private
@@ -35,12 +38,12 @@ module Pod
         txt.strip.gsub(/(.{1,#{col}})( +|$)\n?|(.{#{col}})/, indent + "\\1\\3\n")
       end
 
-      def puts_detail(title, string, preferred_indentation = 8)
+      def detail(title, string, preferred_indentation = 8)
         # 8 is the length of Homepage
-        return if !string
+        return '' if !string
         number_of_spaces = ((preferred_indentation - title.length) > 0) ? (preferred_indentation - title.length) : 0
         spaces = ' ' * number_of_spaces
-        puts "    - #{title}: #{spaces + string}"
+        "    - #{title}: #{spaces + string}\n"
       end
     end
   end

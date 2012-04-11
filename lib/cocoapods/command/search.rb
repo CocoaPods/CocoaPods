@@ -25,7 +25,7 @@ module Pod
 
       def run
         sets = Source.search_by_name(@query.strip, @full_text_search)
-        @presenter.present_sets(sets)
+        puts @presenter.render(sets)
       end
     end
   end

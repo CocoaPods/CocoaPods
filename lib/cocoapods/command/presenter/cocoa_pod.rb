@@ -38,6 +38,14 @@ module Pod
           spec.source.reject {|k,_| k == :commit || k == :tag }.values.first
         end
 
+        def platform
+          spec.platform.to_s
+        end
+
+        def license
+          spec.license[:type] if spec.license
+        end
+
         def creation_date
           Pod::Specification::Statistics.instance.creation_date(@set)
         end

@@ -1,4 +1,3 @@
-require 'time'
 module Pod
   class Command
     class List < Command
@@ -16,22 +15,23 @@ module Pod
 
       def self.options
         "    --update runs `pod repo update` before list\n" +
-        SetPresent.options + super
+        Presenter.options + super
       end
 
       extend Executable
       executable :git
 
       def initialize(argv)
-        @update = argv.option('--update')
-        @new = argv.option('new')
+        @update    = argv.option('--update')
+        @new       = argv.option('new')
         @presenter = Presenter.new(argv)
         super unless argv.empty?
       end
 
       def list_all
-        @presenter.present_sets(all = Source.all_sets)
-        puts "#{all.count} pods were found"
+        sets = Source.all_sets
+        puts @presenter.render(sets)
+        puts "#{sets.count} pods were found"
         puts
       end
 
@@ -57,21 +57,14 @@ module Pod
           sets = groups[d]
           next unless sets
           puts "Pods added in the last #{d == 1 ? '1 day' : "#{d} days"}".yellow
-          @presenter.present_sets(sets.sort_by {|set| creation_dates[set.name]})
+          puts @presenter.render(sets.sort_by {|set| creation_dates[set.name]})
         end
       end
 
       def run
-        if @update
-          puts "\nUpdating Spec Repositories\n".yellow if config.verbose?
-          Repo.new(ARGV.new(["update"])).run
-        end
-
-        if @new
-          list_new
-        else
-          list_all
-        end
+        puts "\nUpdating Spec Repositories\n".yellow if @update && config.verbose?
+        Repo.new(ARGV.new(["update"])).run           if @update
+        @new ? list_new : list_all
       end
     end
   end
