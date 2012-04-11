@@ -1,49 +1,79 @@
 require 'net/http'
+require 'yaml'
 
 module Pod
   class Specification
     class Statistics
-      def initialize(set)
-        @set = set
-        @spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
+      include Config::Mixin
+
+      def self.instance
+        @instance ||= new
       end
 
-      def creation_date
-        Dir.chdir(@set.pod_dir.dirname) do
-          @creation_date ||= Time.at(`git log --format=%ct ./#{@set.name} | tail -1`.to_i)
+      def self.instance=(instance)
+        @instance = instance
+      end
+
+      def initialize
+        @cache = cache_file.exist? ? YAML::load(cache_file.read) : {}
+      end
+
+      def creation_dates(sets)
+        creation_dates = {}
+        sets.each do |set|
+          @cache[set.name] ||= {}
+          date = @cache[set.name][:creation_date] ||= compute_creation_date(set)
+          creation_dates[set.name] = date
+        end
+        save_cache_file
+        creation_dates
+      end
+
+      def github_watchers(set)
+        compute_github_stats_if_needed(set)
+        @cache[set.name][:github_watchers] if @cache[set.name]
+      end
+
+      def github_forks(set)
+        compute_github_stats_if_needed(set)
+        @cache[set.name][:github_forks] if @cache[set.name]
+      end
+
+      private
+
+      def cache_file
+        Config.instance.repos_dir + 'statistics.yml'
+      end
+
+      def save_cache_file
+        File.open(cache_file, 'w') {|f| f.write(YAML::dump(@cache)) }
+      end
+
+      def compute_creation_date(set)
+        Dir.chdir(set.pod_dir.dirname) do
+          Time.at(`git log --first-parent --format=%ct #{set.name}`.split("\n").last.to_i)
         end
       end
 
-      def homepage
-        @spec.homepage
-      end
-
-      def description
-        @spec.description
-      end
-
-      def summary
-        @spec.summary
-      end
-
-      def source_url
-        @spec.source.reject {|k,_| k == :commit || k == :tag }.values.first
-      end
-
-      def github_response
-        return @github_response if @github_response
+      def compute_github_stats_if_needed(set)
+        if @cache[set.name] && @cache[set.name][:github_check_date] && @cache[set.name][:github_check_date] > Time.now - 60 * 60
+          return
+        end
+        spec = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
+        source_url = spec.source.reject {|k,_| k == :commit || k == :tag }.values.first
         github_url, username, reponame = *(source_url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
         if github_url
-          @github_response = Net::HTTP.get('github.com', "/api/v2/json/repos/show/#{username}/#{reponame}")
+          github_response = Net::HTTP.get('github.com', "/api/v2/json/repos/show/#{username}/#{reponame}")
+          watchers = github_response.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1]
+          forks    = github_response.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1]
+          if (watchers && forks)
+            @cache[set.name] ||= {}
+            @cache[set.name][:github_watchers] = watchers
+            @cache[set.name][:github_forks] = forks
+            @cache[set.name][:github_check_date] = Time.now
+            save_cache_file
+          end
         end
-      end
-
-      def github_watchers
-        github_response.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1] if github_response
-      end
-
-      def github_forks
-        github_response.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1] if github_response
       end
     end
   end

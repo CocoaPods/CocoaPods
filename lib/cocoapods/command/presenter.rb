@@ -1,4 +1,38 @@
 module Pod
+  class Specification
+    class Set
+      def main_specification
+        specification.part_of_other_pod? ? specification.part_of_specification : specification
+      end
+
+      def homepage
+        main_specification.homepage
+      end
+
+      def description
+        main_specification.description
+      end
+
+      def summary
+        main_specification.summary
+      end
+
+      def source_url
+        main_specification.source.reject {|k,_| k == :commit || k == :tag }.values.first
+      end
+
+      def github_watchers
+        Pod::Specification::Statistics.instance.github_watchers(self)
+      end
+
+      def github_forks
+        Pod::Specification::Statistics.instance.github_watchers(self)
+      end
+    end
+  end
+end
+
+module Pod
   class Command
     class Presenter
       def self.options
@@ -15,15 +49,16 @@ module Pod
       end
 
       def present_set(set)
-        stats = Pod::Specification::Statistics.new(set)
         puts "--> #{set.name} (#{set.versions.reverse.join(", ")})".green
-        puts wrap_string(stats.summary)
-        puts_detail('Homepage', stats.homepage)
-        puts_detail('Source',   stats.source_url)
-        puts_detail('Watchers', stats.github_watchers) if @stats
-        puts_detail('Forks',    stats.github_forks)    if @stats
+        puts wrap_string(set.summary)
+        puts_detail('Homepage', set.homepage)
+        puts_detail('Source',   set.source_url)
+        puts_detail('Watchers', set.github_watchers) if @stats
+        puts_detail('Forks',    set.github_forks)    if @stats
         puts
       end
+
+      private
 
       # adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
       def wrap_string(txt, col = 80, indentation = 4)
