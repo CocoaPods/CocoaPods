@@ -1,43 +1,11 @@
 module Pod
-  class Specification
-    class Set
-      def main_specification
-        specification.part_of_other_pod? ? specification.part_of_specification : specification
-      end
-
-      def homepage
-        main_specification.homepage
-      end
-
-      def description
-        main_specification.description
-      end
-
-      def summary
-        main_specification.summary
-      end
-
-      def source_url
-        main_specification.source.reject {|k,_| k == :commit || k == :tag }.values.first
-      end
-
-      def github_watchers
-        Pod::Specification::Statistics.instance.github_watchers(self)
-      end
-
-      def github_forks
-        Pod::Specification::Statistics.instance.github_watchers(self)
-      end
-    end
-  end
-end
-
-module Pod
   class Command
     class Presenter
       def self.options
         "    --stats     Show additional stats (like GitHub watchers and forks)\n"
       end
+
+      autoload :CocoaPod, 'cocoapods/command/presenter/cocoa_pod'
 
       def initialize(argv)
         @stats = argv.option('--stats')
@@ -49,12 +17,13 @@ module Pod
       end
 
       def present_set(set)
-        puts "--> #{set.name} (#{set.versions.reverse.join(", ")})".green
-        puts wrap_string(set.summary)
-        puts_detail('Homepage', set.homepage)
-        puts_detail('Source',   set.source_url)
-        puts_detail('Watchers', set.github_watchers) if @stats
-        puts_detail('Forks',    set.github_forks)    if @stats
+        pod = CocoaPod.new(set)
+        puts "--> #{pod.name} (#{pod.versions})".green
+        puts wrap_string(pod.summary)
+        puts_detail('Homepage', pod.homepage)
+        puts_detail('Source',   pod.source_url)
+        puts_detail('Watchers', pod.github_watchers) if @stats
+        puts_detail('Forks',    pod.github_forks)    if @stats
         puts
       end
 
