@@ -15,6 +15,7 @@ module Pod
       end
 
       def self.options
+        "    --update runs `pod repo update` before list\n" +
         SetPresent.options + super
       end
 
@@ -22,6 +23,7 @@ module Pod
       executable :git
 
       def initialize(argv)
+        @update = argv.option('--update')
         @new = argv.option('new')
         @presenter = Presenter.new(argv)
         super unless argv.empty?
@@ -60,9 +62,12 @@ module Pod
       end
 
       def run
-        if @new
+        if @update
           puts "\nUpdating Spec Repositories\n".yellow if config.verbose?
           Repo.new(ARGV.new(["update"])).run
+        end
+
+        if @new
           list_new
         else
           list_all
