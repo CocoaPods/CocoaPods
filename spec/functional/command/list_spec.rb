@@ -13,35 +13,38 @@ describe "Pod::Command::List" do
 
   def command(arguments = argv)
     command = Pod::Command::List.new(arguments)
-    def command.puts(msg = '')
-      (@printed ||= '') << "#{msg}\n"
-    end
-    command
   end
 
-  it "it accepts corret inputs and runs without errors" do
-    lambda { command().run }.should.not.raise
-    lambda { command(argv('10')).run }.should.not.raise
+  it "runs with correct parameters" do
+    lambda { command.run }.should.not.raise
+    lambda { command(argv('new')).run }.should.not.raise
   end
 
-  it "complains if the days parameter is not a number" do
-    lambda { command(argv('10a')).run }.should.raise Pod::Command::Help
+  it "complains for wrong parameters" do
+    lambda { command(argv('wrong')).run }.should.raise Pod::Command::Help
+    lambda { command(argv('--wrong')).run }.should.raise Pod::Command::Help
   end
 
-
-  it "returns the specs know in a given commit" do
-    specs = command(argv('10')).spec_names_from_commit('cad98852103394951850f89f0efde08f9dc41830')
-    specs[00].should == 'A2DynamicDelegate'
-    specs[10].should == 'DCTTextFieldValidator'
-    specs[20].should == 'INKeychainAccess'
-    specs[30].should == 'MKNetworkKit'
+  it "presents the known pods" do
+    list = command()
+    list.run
+    output = list.output
+    output.should.include 'ZBarSDK'
+    output.should.include 'TouchJSON'
+    output.should.include 'SDURLCache'
+    output.should.include 'MagicalRecord'
+    output.should.include 'A2DynamicDelegate'
+    output.should.include '75 pods were found'
   end
 
-  it "returns the new specs introduced after a given commit" do
-    new_specs = command(argv('10')).new_specs_set('1c138d254bd39a3ccbe95a720098e2aaad5c5fc1')
-    new_specs_name = new_specs.map { |spec| spec.name }
-    new_specs_name.should.include 'iCarousel'
-    new_specs_name.should.include 'libPusher'
+  it "returns the new pods" do
+    Time.stubs(:now).returns(Time.mktime(2012,2,1))
+    list = command(argv('new'))
+    list.run
+    output = list.output
+    output.should.include 'iCarousel'
+    output.should.include 'cocoa-oauth'
+    output.should.include 'NLCoreData'
   end
 end
 
