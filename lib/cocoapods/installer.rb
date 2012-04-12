@@ -46,6 +46,7 @@ module Pod
       activated_specifications.map do |spec|
         LocalPod.new(spec, sandbox).tap do |pod|
           marker = config.verbose ? "\n-> ".green : ''
+
           if pod.exists? || spec.local?
             puts marker + "Using #{pod}" unless config.silent?
           else
@@ -58,11 +59,11 @@ module Pod
               downloader.clean
               pod.clean
             end
+          end
 
-            if config.doc?
-              puts "Installing Documentation for #{spec}".green if config.verbose?
-              Generator::Documentation.new(pod).generate(config.doc_install?)
-            end
+          if (!pod.exists? && !pod.local? && config.doc?) || config.force_doc?
+            puts "Installing Documentation for #{spec}".green if config.verbose?
+            Generator::Documentation.new(pod).generate(config.doc_install?)
           end
         end
       end
