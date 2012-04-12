@@ -1,4 +1,5 @@
-require 'net/http'
+require 'net/https'
+require 'uri'
 require 'yaml'
 
 module Pod
@@ -81,9 +82,14 @@ module Pod
         gh_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
 
         return unless gh_url
-        response = Net::HTTP.get('github.com', "/api/v2/json/repos/show/#{username}/#{reponame}")
-        watchers = response.match(/\"watchers\"\W*:\W*([0-9]+)/).to_a[1]
-        forks    = response.match(/\"forks\"\W*:\W*([0-9]+)/).to_a[1]
+        uri               = URI.parse("https://api.github.com/repos/#{username}/#{reponame}")
+        http              = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl      = true
+        http.verify_mode  = OpenSSL::SSL::VERIFY_NONE
+        request           = Net::HTTP::Get.new(uri.request_uri)
+        response          = http.request(request).body
+        watchers          = response.match(/"watchers"\W*:\W*([0-9]+)/).to_a[1]
+        forks             = response.match(/"forks"\W*:\W*([0-9]+)/).to_a[1]
 
         return unless watchers && forks
         cache[set.name] ||= {}
