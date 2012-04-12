@@ -66,3 +66,11 @@ VCR.configure do |c|
   c.hook_into :webmock # or :fakeweb
   c.allow_http_connections_when_no_cassette = true
 end
+
+class Pod::Command
+  attr_accessor :output
+  def puts(msg = '') (@output ||= '') << "#{msg}\n" end
+end
+
+Pod::Specification::Statistics.instance.cache_file = nil
+

@@ -167,6 +167,7 @@ module Pod
         warnings << 'Missing license[:type]' unless spec.license && spec.license[:type]
         warnings << 'Missing license[:file] or [:text]' unless spec.license && (spec.license[:file] || spec.license[:text])
         warnings << "Github repositories should end in `.git'" if spec.source[:git] =~ /github.com/ && spec.source[:git] !~ /.*\.git/
+        warnings << "Github repositories should start with https://github.com" if spec.source[:git] =~ /git:\/\/github\.com/
 
 
         unless warnings.empty?
