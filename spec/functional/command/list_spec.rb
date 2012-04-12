@@ -28,23 +28,28 @@ describe "Pod::Command::List" do
   it "presents the known pods" do
     list = command()
     list.run
-    output = list.output
-    output.should.include 'ZBarSDK'
-    output.should.include 'TouchJSON'
-    output.should.include 'SDURLCache'
-    output.should.include 'MagicalRecord'
-    output.should.include 'A2DynamicDelegate'
-    output.should.include '75 pods were found'
+    [ 'ZBarSDK',
+      'TouchJSON',
+      'SDURLCache',
+      'MagicalRecord',
+      'A2DynamicDelegate',
+      '75 pods were found'
+    ].each {|s| list.output.should.include s }
   end
 
   it "returns the new pods" do
-    Time.stubs(:now).returns(Time.mktime(2012,2,1))
+    Time.stubs(:now).returns(Time.mktime(2012,2,3))
     list = command(argv('new'))
     list.run
-    output = list.output
-    output.should.include 'iCarousel'
-    output.should.include 'cocoa-oauth'
-    output.should.include 'NLCoreData'
+    [ 'iCarousel',
+      'libPusher',
+      'SSCheckBoxView',
+      'KKPasscodeLock',
+      'SOCKit',
+      'FileMD5Hash',
+      'cocoa-oauth',
+      'iRate'
+    ].each {|s| list.output.should.include s }
   end
 end
 
