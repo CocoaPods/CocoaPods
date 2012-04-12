@@ -82,14 +82,11 @@ module Pod
         gh_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
 
         return unless gh_url
-        uri               = URI.parse("https://api.github.com/repos/#{username}/#{reponame}")
-        http              = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl      = true
-        http.verify_mode  = OpenSSL::SSL::VERIFY_NONE
-        request           = Net::HTTP::Get.new(uri.request_uri)
-        response          = http.request(request).body
-        watchers          = response.match(/"watchers"\W*:\W*([0-9]+)/).to_a[1]
-        forks             = response.match(/"forks"\W*:\W*([0-9]+)/).to_a[1]
+        response_body = fetch_stats(username, reponame)
+
+        return unless response_body
+        watchers  = response_body.match(/"watchers"\W*:\W*([0-9]+)/).to_a[1]
+        forks     = response_body.match(/"forks"\W*:\W*([0-9]+)/).to_a[1]
 
         return unless watchers && forks
         cache[set.name] ||= {}
@@ -97,6 +94,16 @@ module Pod
         set_value(set, :gh_forks,     forks)
         set_value(set, :gh_date,      Time.now)
         save_cache
+      end
+
+      def fetch_stats(username, reponame)
+        uri               = URI.parse("https://api.github.com/repos/#{username}/#{reponame}")
+        http              = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl      = true
+        http.verify_mode  = OpenSSL::SSL::VERIFY_NONE
+        request           = Net::HTTP::Get.new(uri.request_uri)
+        response          = http.request(request)
+        response.body if response.is_a?(Net::HTTPSuccess)
       end
     end
   end
