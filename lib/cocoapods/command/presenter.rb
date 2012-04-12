@@ -23,6 +23,8 @@ module Pod
         result << wrap_string(pod.summary)
         result << detail('Homepage', pod.homepage)
         result << detail('Source',   pod.source_url)
+        result << detail('Authors',  pod.authors)         if @stats && pod.authors =~ /,/
+        result << detail('Author',   pod.authors)         if @stats && pod.authors !~ /,/
         result << detail('Platform', pod.platform)        if @stats
         result << detail('License',  pod.license)         if @stats
         result << detail('Watchers', pod.github_watchers) if @stats

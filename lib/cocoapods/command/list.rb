@@ -56,7 +56,7 @@ module Pod
         days.reverse.each do |d|
           sets = groups[d]
           next unless sets
-          puts "Pods added in the last #{d == 1 ? '1 day' : "#{d} days"}".yellow
+          puts "Pods added in the last #{d == 1 ? 'day' : "#{d} days"}".yellow
           puts @presenter.render(sets.sort_by {|set| creation_dates[set.name]})
         end
       end
