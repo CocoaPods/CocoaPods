@@ -47,7 +47,9 @@ module Pod
         LocalPod.new(spec, sandbox).tap do |pod|
           marker = config.verbose ? "\n-> ".green : ''
 
-          if pod.exists? || spec.local?
+          should_install = !pod.exists? && !spec.local?
+
+          unless should_install
             puts marker + "Using #{pod}" unless config.silent?
           else
             puts marker + "Installing #{spec}".green unless config.silent?
@@ -61,7 +63,7 @@ module Pod
             end
           end
 
-          if (!pod.exists? && !pod.local? && config.doc?) || config.force_doc?
+          if (should_install && config.doc?) || config.force_doc?
             puts "Installing Documentation for #{spec}".green if config.verbose?
             Generator::Documentation.new(pod).generate(config.doc_install?)
           end
