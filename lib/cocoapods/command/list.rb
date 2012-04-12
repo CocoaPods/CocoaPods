@@ -30,9 +30,8 @@ module Pod
 
       def list_all
         sets = Source.all_sets
-        puts @presenter.render(sets)
-        puts "#{sets.count} pods were found"
-        puts
+        sets.each {|s| puts @presenter.describe(s)}
+        puts "\n#{sets.count} pods were found"
       end
 
       def list_new
@@ -52,12 +51,11 @@ module Pod
             end
           end
         end
-        puts
         days.reverse.each do |d|
           sets = groups[d]
           next unless sets
-          puts "Pods added in the last #{d == 1 ? 'day' : "#{d} days"}".yellow
-          puts @presenter.render(sets.sort_by {|set| creation_dates[set.name]})
+          puts "\nPods added in the last #{d == 1 ? 'day' : "#{d} days"}".yellow
+          sets.sort_by {|s| creation_dates[s.name]}.each {|s| puts @presenter.describe(s)}
         end
       end
 
@@ -65,6 +63,7 @@ module Pod
         puts "\nUpdating Spec Repositories\n".yellow if @update && config.verbose?
         Repo.new(ARGV.new(["update"])).run           if @update
         @new ? list_new : list_all
+        puts
       end
     end
   end

@@ -12,7 +12,7 @@ describe Pod::Command::Presenter do
 
   it "presents the name, version, description, homepage and source of a specification set" do
     presenter = Presenter.new(argv())
-    output    = presenter.render_set(@set)
+    output    = presenter.describe(@set)
     output.should.include? 'CocoaLumberjack'
     output.should.include? '1.0'
     output.should.include? '1.1'
@@ -25,13 +25,12 @@ describe Pod::Command::Presenter do
     response = '{"repository":{"homepage":"","url":"https://github.com/robbiehanson/CocoaLumberjack","has_downloads":true,"has_issues":true,"language":"Objective-C","master_branch":"master","forks":42,"fork":false,"created_at":"2011/03/30 19:38:39 -0700","has_wiki":true,"description":"A fast & simple, yet powerful & flexible logging framework for Mac and iOS","size":416,"private":false,"name":"CocoaLumberjack","owner":"robbiehanson","open_issues":4,"watchers":318,"pushed_at":"2012/03/26 12:39:36 -0700"}}% '
     Pod::Specification::Statistics.instance.expects(:fetch_stats).with("robbiehanson", "CocoaLumberjack").returns(response)
     presenter = Presenter.new(argv('--stats'))
-    output = presenter.render_set(@set)
+    output = presenter.describe(@set)
     output.should.include? 'Author:   Robbie Hanson'
     output.should.include? 'License:  BSD'
     output.should.include? 'Platform: iOS - OS X'
     output.should.include? 'Watchers: 318'
     output.should.include? 'Forks:    42'
   end
-
 end
 

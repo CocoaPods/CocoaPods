@@ -13,13 +13,13 @@ module Pod
 
       def render(array)
         result = "\n"
-        array.each {|set| result << render_set(set)}
+        seats.each {|s| puts describe(s)}
         result
       end
 
-      def render_set(set)
+      def describe(set)
         pod = CocoaPod.new(set)
-        result = "--> #{pod.name} (#{pod.versions})\n".green
+        result = "\n--> #{pod.name} (#{pod.versions})\n".green
         result << wrap_string(pod.summary)
         result << detail('Homepage', pod.homepage)
         result << detail('Source',   pod.source_url)
@@ -29,7 +29,7 @@ module Pod
         result << detail('License',  pod.license)         if @stats
         result << detail('Watchers', pod.github_watchers) if @stats
         result << detail('Forks',    pod.github_forks)    if @stats
-        result << "\n"
+        result
       end
 
       private

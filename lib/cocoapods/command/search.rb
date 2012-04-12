@@ -25,7 +25,8 @@ module Pod
 
       def run
         sets = Source.search_by_name(@query.strip, @full_text_search)
-        puts @presenter.render(sets)
+        sets.each {|s| puts @presenter.describe(s)}
+        puts
       end
     end
   end
