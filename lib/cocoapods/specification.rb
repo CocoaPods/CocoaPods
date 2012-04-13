@@ -32,11 +32,9 @@ module Pod
     # TODO This is just to work around a MacRuby bug
     def post_initialize
       @define_for_platforms = [:osx, :ios]
-      #@dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
       @clean_paths, @subspecs = [], []
       @dependencies, @source_files, @resources = { :ios => [], :osx => [] }, { :ios => [], :osx => [] }, { :ios => [], :osx => [] }
       @platform = Platform.new(nil)
-      #@xcconfig = Xcodeproj::Config.new
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
       @compiler_flags = { :ios => '', :osx => '' }
     end
@@ -332,10 +330,19 @@ module Pod
       allowed = [nil, :ios, :osx]
       incorrect << "platform - accepted values are (no value, :ios, :osx)" unless allowed.include?(platform.name)
 
-      [:source_files, :resources, :clean_paths].each do |m|
-        incorrect << "#{m} - paths cannot start with a slash" unless self.send(m) && self.send(m).reject{|f| !f.start_with?("/")}.empty?
+      {
+        :source_files => source_files.values,
+        :resources    => resources.values,
+        :clean_paths  => clean_paths
+      }.each do |name, paths|
+        if paths.flatten.any? { |path| path.start_with?("/") }
+          incorrect << "#{name} - paths cannot start with a slash"
+        end
       end
-      incorrect << "source[:local] - paths cannot start with a slash" if source && source[:local] && source[:local].start_with?("/")
+
+      if source && source[:local] && source[:local].start_with?("/")
+        incorrect << "source[:local] - paths cannot start with a slash"
+      end
 
       no_errors_found = missing.empty? && incorrect.empty?
 

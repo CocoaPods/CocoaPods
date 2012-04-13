@@ -28,13 +28,14 @@ describe "Pod::Command::List" do
   it "presents the known pods" do
     list = command()
     list.run
-    [ 'ZBarSDK',
-      'TouchJSON',
-      'SDURLCache',
-      'MagicalRecord',
-      'A2DynamicDelegate',
-      '75 pods were found'
-    ].each {|s| list.output.should.include s }
+    [
+      /ZBarSDK/,
+      /TouchJSON/,
+      /SDURLCache/,
+      /MagicalRecord/,
+      /A2DynamicDelegate/,
+      /\d+ pods were found/
+    ].each { |regex| list.output.should =~ regex }
   end
 
   it "returns the new pods" do

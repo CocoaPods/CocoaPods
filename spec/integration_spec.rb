@@ -173,7 +173,7 @@ else
           should_xcodebuild(podfile.target_definitions[:osx_target])
         end
 
-        if Pod::Generator::Documentation.appledoc_installed?
+        unless `which appledoc`.strip.empty?
           it "generates documentation of all pods by default" do
             create_config!
 

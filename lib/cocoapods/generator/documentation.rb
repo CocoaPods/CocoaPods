@@ -87,12 +87,8 @@ module Pod
           raise "Appledoc encountered an error (exitstatus: #{$?.exitstatus})."
         end
 
-      rescue Exception => e
-        if e.is_a?(Informative)
-          puts "[!] Skipping documentation generation because appledoc can't be found." if config.verbose?
-        else
-          throw e
-        end
+      rescue Informative
+        puts "[!] Skipping documentation generation because appledoc can't be found." if config.verbose?
       end
     end
   end

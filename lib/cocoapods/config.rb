@@ -10,7 +10,11 @@ module Pod
       @instance = instance
     end
 
-    attr_accessor :repos_dir, :project_root, :project_pods_root, :clean, :verbose, :silent, :doc, :doc_install, :force_doc, :integrate_targets
+    attr_accessor :repos_dir, :project_root, :project_pods_root
+    attr_accessor :clean, :verbose, :silent
+    attr_accessor :doc, :doc_install, :force_doc
+    attr_accessor :integrate_targets
+
     alias_method :clean?,             :clean
     alias_method :verbose?,           :verbose
     alias_method :silent?,            :silent
