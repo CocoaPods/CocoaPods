@@ -1,6 +1,8 @@
 module Pod
   class Podfile
     class TargetDefinition
+      include Config::Mixin
+
       attr_reader :name, :target_dependencies
       
       attr_accessor :xcodeproj, :link_with, :platform, :parent, :exclusive
@@ -27,7 +29,7 @@ module Pod
 
       def xcodeproj=(path)
         path = path.to_s
-        @xcodeproj = Pathname.new(File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
+        @xcodeproj = config.project_root + (File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
       end
 
       def xcodeproj
@@ -36,7 +38,7 @@ module Pod
         elsif @parent
           @parent.xcodeproj
         else
-          xcodeprojs = Config.instance.project_root.glob('*.xcodeproj')
+          xcodeprojs = config.project_root.glob('*.xcodeproj')
           @xcodeproj = xcodeprojs.first if xcodeprojs.size == 1
         end
       end
@@ -133,6 +135,19 @@ module Pod
     #   link_with ['MyApp', 'MyOtherApp']
     def link_with(targets)
       @target_definition.link_with = targets
+    end
+
+    def workspace(path = nil)
+      if path
+        @workspace = config.project_root + (File.extname(path) == '.xcworkspace' ? path : "#{path}.xcworkspace")
+      elsif @workspace
+        @workspace
+      else
+        projects = @target_definitions.map { |_, td| td.xcodeproj }.uniq
+        if projects.size == 1 && (xcodeproj = @target_definitions[:default].xcodeproj)
+          xcodeproj.dirname + "#{xcodeproj.basename('.xcodeproj')}.xcworkspace"
+        end
+      end
     end
 
     # Specifies the path of the xcode project so it doesn't require the project to be specified

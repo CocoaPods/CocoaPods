@@ -11,7 +11,7 @@ module Pod
 
       The Xcode project file should be specified in your `Podfile` like this:
 
-        xcodeproj 'path/to/project.xcodeproj'
+        xcodeproj 'path/to/XcodeProject'
 
       If no xcodeproj is specified, then a search for an Xcode project will
       be made.  If more than one Xcode project is found, the command will
@@ -45,19 +45,6 @@ module Pod
       def run
         unless podfile = config.podfile
           raise Informative, "No `Podfile' found in the current working directory."
-        end
-
-        if config.integrate_targets?
-          # TODO this should be done for all targets (?)
-          unless xcodeproj = podfile.target_definitions[:default].xcodeproj
-            raise Informative, "Please specify a valid xcodeproj path in your Podfile.\n\n" +
-              "Usage:\n\t" +
-              "xcodeproj 'path/to/project.xcodeproj'"
-          end
-
-          if xcodeproj && !xcodeproj.exist?
-            raise Informative, "The specified project `#{xcodeproj}' does not exist."
-          end
         end
 
         if @update_repo

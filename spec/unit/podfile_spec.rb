@@ -63,6 +63,48 @@ describe "Pod::Podfile" do
     yielded.should == :an_installer
   end
 
+  it "assumes the xcode project is the only existing project in the root" do
+    podfile = Pod::Podfile.new do
+      target(:another_target) {}
+    end
+
+    path = config.project_root + 'MyProject.xcodeproj'
+    config.project_root.expects(:glob).with('*.xcodeproj').returns([path])
+
+    podfile.target_definitions[:default].xcodeproj.should == path
+    podfile.target_definitions[:another_target].xcodeproj.should == path
+  end
+
+  it "assumes the basename of the workspace is the same as the default target's project basename" do
+    path = config.project_root + 'MyProject.xcodeproj'
+    config.project_root.expects(:glob).with('*.xcodeproj').returns([path])
+    Pod::Podfile.new {}.workspace.should == config.project_root + 'MyProject.xcworkspace'
+
+    Pod::Podfile.new do
+      xcodeproj 'AnotherProject.xcodeproj'
+    end.workspace.should == config.project_root + 'AnotherProject.xcworkspace'
+  end
+
+  it "does not base the workspace name on the default target's project if there are multiple projects specified" do
+    Pod::Podfile.new do
+      xcodeproj 'MyProject'
+      target :another_target do
+        xcodeproj 'AnotherProject'
+      end
+    end.workspace.should == nil
+  end
+
+  it "specifies the Xcode workspace to use" do
+    Pod::Podfile.new do
+      xcodeproj 'AnotherProject'
+      workspace 'MyWorkspace'
+    end.workspace.should == config.project_root + 'MyWorkspace.xcworkspace'
+    Pod::Podfile.new do
+      xcodeproj 'AnotherProject'
+      workspace 'MyWorkspace.xcworkspace'
+    end.workspace.should == config.project_root + 'MyWorkspace.xcworkspace'
+  end
+
   describe "concerning targets (dependency groups)" do
     it "returns wether or not a target has any dependencies" do
       Pod::Podfile.new do
@@ -136,11 +178,11 @@ describe "Pod::Podfile" do
     it "returns the Xcode project that contains the target to link with" do
       [:default, :debug, :test, :subtarget].each do |target_name|
         target = @podfile.target_definitions[target_name]
-        target.xcodeproj.should == Pathname.new('iOS Project.xcodeproj')
+        target.xcodeproj.should == config.project_root + 'iOS Project.xcodeproj'
       end
       [:osx_target, :nested_osx_target].each do |target_name|
         target = @podfile.target_definitions[target_name]
-        target.xcodeproj.should == Pathname.new('OSX Project.xcodeproj')
+        target.xcodeproj.should == config.project_root + 'OSX Project.xcodeproj'
       end
     end
 

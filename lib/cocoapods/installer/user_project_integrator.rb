@@ -25,7 +25,8 @@ module Pod
       end
 
       def workspace_path
-        config.project_root + "#{@podfile.target_definitions[:default].xcodeproj.basename('.xcodeproj')}.xcworkspace"
+        @podfile.workspace || raise(Informative, "Could not automatically select an Xcode workspace. " \
+                                                 "Specify one in your Podfile.")
       end
 
       def pods_project_path
@@ -70,8 +71,21 @@ module Pod
           user_project.save_as(@target_definition.xcodeproj)
         end
 
+        def user_project_path
+          if path = @target_definition.xcodeproj
+            unless path.exist?
+              raise Informative, "The Xcode project `#{path}' does not exist."
+            end
+            path
+          else
+            raise Informative, "Could not automatically select an Xcode project.\n" \
+                               "Specify one in your Podfile like so:\n\n" \
+                               "  xcodeproj 'path/to/XcodeProject'"
+          end
+        end
+
         def user_project
-          @user_project ||= Xcodeproj::Project.new(@target_definition.xcodeproj)
+          @user_project ||= Xcodeproj::Project.new(user_project_path)
         end
 
         # This returns a list of the targets from the user’s project to which
