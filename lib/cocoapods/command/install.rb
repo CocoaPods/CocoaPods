@@ -18,7 +18,7 @@ module Pod
       end
 
       def self.options
-        "    --no-clean  Leave SCM dirs like `.git' and `.svn' in tact after downloading\n" +
+        "    --no-clean  Leave SCM dirs like `.git' and `.svn' intact after downloading\n" +
         "    --no-doc    Skip documentation generation with appledoc\n" +
         "    --force-doc Force the generation of documentation\n" +
         "    --no-update Skip running `pod repo update` before install\n" +
