@@ -3,9 +3,9 @@ require 'colored'
 module Pod
   class Command
     autoload :ErrorReport, 'cocoapods/command/error_report'
-    autoload :SetPresent,  'cocoapods/command/set_present'
     autoload :Install,     'cocoapods/command/install'
     autoload :List,        'cocoapods/command/list'
+    autoload :Presenter,   'cocoapods/command/presenter'
     autoload :Repo,        'cocoapods/command/repo'
     autoload :Search,      'cocoapods/command/search'
     autoload :Setup,       'cocoapods/command/setup'

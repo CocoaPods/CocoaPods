@@ -12,6 +12,10 @@ module Pod
         end
       end
 
+      def all_sets
+        all.map {|source| source.pod_sets}.flatten
+      end
+
       def search(dependency)
         all.map { |s| s.search(dependency) }.compact.first ||
           raise(Informative, "[!] Unable to find a pod named `#{dependency.name}'".red)
@@ -30,6 +34,10 @@ module Pod
 
     def self.all
       Aggregate.new.all
+    end
+
+    def self.all_sets
+      Aggregate.new.all_sets
     end
 
     def self.search(dependency)
