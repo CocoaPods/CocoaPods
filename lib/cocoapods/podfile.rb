@@ -119,24 +119,21 @@ module Pod
     #   platform :ios, :deployment_target => "4.0"
     #
     # If the deployment target requires it (< 4.3), armv6 will be added to ARCHS.
+    #
     def platform(platform, options={})
       @target_definition.platform = Platform.new(platform, options)
     end
 
-    # Specifies the target(s) in the user’s project that this Pods library
-    # should be linked in.
+    # Specifies the Xcode workspace that should contain all the projects.
+    #
+    # If no explicit Xcode workspace is specified and only **one** project exists
+    # in the same directory as the Podfile, then the name of that project is used
+    # as the workspace’s name.
     #
     # @example
     #
-    #   # Link with a target in the user’s project called ‘MyApp’.
-    #   link_with 'MyApp'
+    #   workspace 'MyWorkspace'
     #
-    #   # Link with the targets in the user’s project called ‘MyApp’ and ‘MyOtherApp’.
-    #   link_with ['MyApp', 'MyOtherApp']
-    def link_with(targets)
-      @target_definition.link_with = targets
-    end
-
     def workspace(path = nil)
       if path
         @workspace = config.project_root + (File.extname(path) == '.xcworkspace' ? path : "#{path}.xcworkspace")
@@ -150,10 +147,45 @@ module Pod
       end
     end
 
-    # Specifies the path of the xcode project so it doesn't require the project to be specified
-    # when running pod install each time.
+    # Specifies the Xcode project that contains the target that the Pods library
+    # should be linked with.
+    #
+    # If no explicit project is specified, it will use the Xcode project of the
+    # parent target. If none of the target definitions specify an explicit project
+    # and there is only **one** project in the same directory as the Podfile then
+    # that project will be used.
+    #
+    # @example
+    #
+    #   # Look for target to link with in an Xcode project called ‘MyProject.xcodeproj’.
+    #   xcodeproj 'MyProject'
+    #
+    #   target :test do
+    #     # This Pods library links with a target in another project.
+    #     xcodeproj 'TestProject'
+    #   end
+    #
     def xcodeproj(path)
       @target_definition.xcodeproj = path
+    end
+
+    # Specifies the target(s) in the user’s project that this Pods library
+    # should be linked in.
+    #
+    # If no explicit target is specified, then the Pods target will be linked
+    # with the first target in your project. So if you only have one target you
+    # do not need to specify the target to link with.
+    #
+    # @example
+    #
+    #   # Link with a target called ‘MyApp’ (in the user's project).
+    #   link_with 'MyApp'
+    #
+    #   # Link with the targets in the user’s project called ‘MyApp’ and ‘MyOtherApp’.
+    #   link_with ['MyApp', 'MyOtherApp']
+    #
+    def link_with(targets)
+      @target_definition.link_with = targets
     end
 
     # Specifies a dependency of the project.
