@@ -9,7 +9,8 @@ module Pod
   end
 
   class Specification
-    autoload :Set, 'cocoapods/specification/set'
+    autoload :Set,        'cocoapods/specification/set'
+    autoload :Statistics, 'cocoapods/specification/statistics'
 
     # The file is expected to define and return a Pods::Specification.
     def self.from_file(path)
@@ -126,6 +127,7 @@ module Pod
     def header_dir=(dir)
       @header_dir = Pathname.new(dir)
     end
+
     def header_dir
       @header_dir || pod_destroot_name
     end
