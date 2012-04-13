@@ -3,6 +3,7 @@
 *.rbo
 *.gem
 .DS_Store
+.rbenv-version
 xcuserdata
 project.xcworkspace
 DerivedData

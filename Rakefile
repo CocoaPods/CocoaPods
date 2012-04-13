@@ -143,6 +143,13 @@ namespace :spec do
       end
     end
   end
+
+  desc "Removes the stored VCR fixture"
+  task :clean_vcr do
+    sh "rm -f spec/fixtures/vcr/tarballs.yml"
+  end
+
+  task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
 end
 
 namespace :examples do
@@ -192,6 +199,16 @@ namespace :examples do
       puts
     end
   end
+end
+
+desc "Initializes your working copy to run the specs"
+task :bootstrap do
+  puts "Updating submodules..."
+  `git submodule update --init --recursive`
+
+  puts "Installing gems"
+  `bundle install`
+  `cd external/XcodeProj && bundle install`
 end
 
 desc "Run all specs"

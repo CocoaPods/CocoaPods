@@ -10,22 +10,19 @@ module Pod
       @instance = instance
     end
 
-    attr_accessor :repos_dir, :project_root, :project_pods_root, :rootspec, :clean, :verbose, :silent, :doc, :doc_install, :force_doc
-    alias_method :clean?,       :clean
-    alias_method :verbose?,     :verbose
-    alias_method :silent?,      :silent
-    alias_method :doc?,         :doc
-    alias_method :doc_install?, :doc_install
-    alias_method :force_doc?,   :force_doc
+    attr_accessor :repos_dir, :project_root, :project_pods_root, :clean, :verbose, :silent, :doc, :doc_install, :force_doc, :integrate_targets
+    alias_method :clean?,             :clean
+    alias_method :verbose?,           :verbose
+    alias_method :silent?,            :silent
+    alias_method :doc?,               :doc # TODO rename to generate_docs?
+    alias_method :doc_install?,       :doc_install
+    alias_method :force_doc?,         :force_doc
+    alias_method :integrate_targets?, :integrate_targets
 
     def initialize
       @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
-      @clean = true
-      @verbose = false
-      @silent = false
-      @doc = true
-      @doc_install = true
-      @force_doc = false
+      @verbose = @silent = @force_doc = false
+      @clean = @doc = @doc_install = @integrate_targets = true
     end
 
     def project_root
@@ -37,14 +34,7 @@ module Pod
     end
 
     def project_podfile
-      unless @project_podfile
-        @project_podfile = project_root + 'Podfile'
-        # TODO this has to go, we don't support this anymore!
-        unless @project_podfile.exist?
-          @project_podfile = project_root.glob('*.podspec').first
-        end
-      end
-      @project_podfile
+      @project_podfile ||= project_root + 'Podfile'
     end
 
     def headers_symlink_root
@@ -52,25 +42,24 @@ module Pod
     end
 
     # Returns the spec at the pat returned from `project_podfile`.
-    def rootspec
-      unless @rootspec
-        if project_podfile
-          if project_podfile.basename.to_s == 'Podfile'
-            @rootspec = Podfile.from_file(project_podfile)
-          else
-            @rootspec = Specification.from_file(project_podfile)
-          end
-        end
+    def podfile
+      @podfile ||= begin
+        Podfile.from_file(project_podfile) if project_podfile.exist?
       end
-      @rootspec
     end
 
     def ios?
-      rootspec.platform == :ios if rootspec
+      require 'colored'
+      caller.find { |line| line =~ /^(.+.podspec):\d*/ }
+      puts "[!] The use of `config.ios?` is deprecated and will be removed in version 0.7.#{" Called from: #{$1}" if $1}".red
+      podfile.target_definitions[:default].platform == :ios if podfile
     end
 
     def osx?
-      rootspec.platform == :osx if rootspec
+      require 'colored'
+      caller.find { |line| line =~ /^(.+.podspec):\d*/ }
+      puts "[!] The use of `config.ios?` is deprecated and will be removed in version 0.7.#{" Called from: #{$1}" if $1}".red
+      podfile.target_definitions[:default].platform == :osx if podfile
     end
 
     module Mixin

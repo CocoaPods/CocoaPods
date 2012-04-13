@@ -21,6 +21,16 @@ module Bacon
   extend ColorOutput
   summary_at_exit
 
+  module FilterBacktraces
+    def handle_summary
+      ErrorLog.replace(ErrorLog.split("\n").reject do |line|
+        line =~ %r{(gems/mocha|spec_helper)}
+      end.join("\n").lstrip << "\n\n")
+      super
+    end
+  end
+  extend FilterBacktraces
+
   class Context
     include Pod::Config::Mixin
 
@@ -28,6 +38,12 @@ module Bacon
 
     def argv(*argv)
       Pod::Command::ARGV.new(argv)
+    end
+
+    require 'colored'
+    def xit(description, *args)
+      puts "- #{description} [DISABLED]".yellow
+      ErrorLog << "[DISABLED] #{self.name} #{description}\n\n"
     end
   end
 end

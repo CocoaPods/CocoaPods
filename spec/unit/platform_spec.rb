@@ -1,8 +1,13 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
-describe "Pod::Platform" do
+describe Pod::Platform do
+  it "returns a new Platform instance" do
+    Pod::Platform.ios.should == Pod::Platform.new(:ios)
+    Pod::Platform.osx.should == Pod::Platform.new(:osx)
+  end
+
   before do
-    @platform = Pod::Platform.new(:ios)
+    @platform = Pod::Platform.ios
   end
 
   it "exposes it's symbolic name" do

@@ -13,7 +13,7 @@ module Pod
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'PODS_ROOT'                => '$(SRCROOT)/Pods',
+          'PODS_ROOT'                => Pod::PodPathResolver.new(@target_definition).pods_root,
           'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
           'OTHER_LDFLAGS'            => default_ld_flags,
         })
@@ -38,7 +38,7 @@ module Pod
       def save_prefix_header_as(pathname)
         pathname.open('w') do |header|
           header.puts "#ifdef __OBJC__"
-          header.puts "#import #{@podfile.platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}"
+          header.puts "#import #{@target_definition.platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}"
           header.puts "#endif"
         end
       end
@@ -50,12 +50,12 @@ module Pod
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
       def install!(pods, sandbox)
         self.requires_arc = pods.any? { |pod| pod.requires_arc? }
-        
-        # First add the target to the project
-        @target = @project.targets.new_static_library(@target_definition.label)
+
+        @target = @project.add_pod_target(@target_definition.label, @target_definition.platform)
 
         pods.each do |pod|
-          xcconfig.merge!(pod.specification.xcconfig)
+          # TODO add methods like xcconfig to LocalPod as well? (which returns the correct platform)
+          xcconfig.merge!(pod.specification.xcconfig[@target_definition.platform.name])
           pod.add_to_target(@target)
           
           # TODO: this doesn't need to be done here, it has nothing to do with the target

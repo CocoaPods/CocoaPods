@@ -14,8 +14,7 @@ module Pod
       end
 
       def self.options
-        "    --update runs `pod repo update` before list\n" +
-        Presenter.options + super
+        [["--update", "Run `pod repo update` before listing"]].concat(Presenter.options).concat(super)
       end
 
       extend Executable

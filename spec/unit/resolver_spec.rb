@@ -10,7 +10,6 @@ describe "Pod::Resolver" do
       platform :ios
       dependency 'ASIWebPageRequest'
     end
-    config.rootspec = @podfile
     @resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
   end
 
@@ -66,7 +65,6 @@ describe "Pod::Resolver" do
       dependency 'RestKit/Network'
       dependency 'RestKit/ObjectMapping'
     end
-    config.rootspec = @podfile
     resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
     resolver.resolve.values.flatten.map(&:name).sort.should == %w{
       LibComponentLogging-Core

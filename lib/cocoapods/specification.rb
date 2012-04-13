@@ -31,12 +31,17 @@ module Pod
 
     # TODO This is just to work around a MacRuby bug
     def post_initialize
-      @dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
+      @define_for_platforms = [:osx, :ios]
+      #@dependencies, @source_files, @resources, @clean_paths, @subspecs = [], [], [], [], []
+      @clean_paths, @subspecs = [], []
+      @dependencies, @source_files, @resources = { :ios => [], :osx => [] }, { :ios => [], :osx => [] }, { :ios => [], :osx => [] }
       @platform = Platform.new(nil)
-      @xcconfig = Xcodeproj::Config.new
+      #@xcconfig = Xcodeproj::Config.new
+      @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
+      @compiler_flags = { :ios => '', :osx => '' }
     end
 
-    # Attributes
+    # Attributes **without** multiple platform support
 
     attr_accessor :name
     attr_accessor :homepage
@@ -90,25 +95,80 @@ module Pod
       @part_of = dependency(*name_and_version_requirements)
     end
 
-    def source_files=(patterns)
-      @source_files = pattern_list(patterns)
-    end
-    attr_reader :source_files
-
-    def resources=(patterns)
-      @resources = pattern_list(patterns)
-    end
-    attr_reader :resources
-    alias_method :resource=, :resources=
-
     def clean_paths=(patterns)
       @clean_paths = pattern_list(patterns)
     end
     attr_reader :clean_paths
     alias_method :clean_path=, :clean_paths=
 
-    def xcconfig=(hash)
-      @xcconfig.merge!(hash)
+    def header_dir=(dir)
+      @header_dir = Pathname.new(dir)
+    end
+    def header_dir
+      @header_dir || pod_destroot_name
+    end
+
+    def platform=(platform)
+      @platform = Platform.new(platform)
+    end
+    attr_reader :platform
+
+    def requires_arc=(requires_arc)
+      self.compiler_flags = '-fobjc-arc' if requires_arc
+      @requires_arc = requires_arc
+    end
+    attr_reader :requires_arc
+
+    def subspec(name, &block)
+      subspec = Subspec.new(self, name, &block)
+      @subspecs << subspec
+      subspec
+    end
+    attr_reader :subspecs
+
+    ### Attributes **with** multiple platform support
+
+    class PlatformProxy
+      def initialize(specification, platform)
+        @specification, @platform = specification, platform
+      end
+
+      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= dependency }.each do |method|
+        define_method(method) do |args|
+          @specification._on_platform(@platform) do
+            @specification.send(method, args)
+          end
+        end
+      end
+    end
+
+    def ios
+      PlatformProxy.new(self, :ios)
+    end
+
+    def osx
+      PlatformProxy.new(self, :osx)
+    end
+
+    def source_files=(patterns)
+      @define_for_platforms.each do |platform|
+        @source_files[platform] = pattern_list(patterns)
+      end
+    end
+    attr_reader :source_files
+
+    def resources=(patterns)
+      @define_for_platforms.each do |platform|
+        @resources[platform] = pattern_list(patterns)
+      end
+    end
+    attr_reader :resources
+    alias_method :resource=, :resources=
+
+    def xcconfig=(build_settings)
+      @define_for_platforms.each do |platform|
+        @xcconfig[platform].merge!(build_settings)
+      end
     end
     attr_reader :xcconfig
 
@@ -124,44 +184,34 @@ module Pod
     end
     alias_method :library=, :libraries=
 
-    def header_dir=(dir)
-      @header_dir = Pathname.new(dir)
+    attr_reader :compiler_flags
+    def compiler_flags=(flags)
+      @define_for_platforms.each do |platform|
+        @compiler_flags[platform] << ' ' << flags
+      end
     end
-
-    def header_dir
-      @header_dir || pod_destroot_name
-    end
-
-    attr_writer :compiler_flags
-    def compiler_flags
-      flags = "#{@compiler_flags}"
-      flags << ' -fobjc-arc' if requires_arc
-      flags
-    end
-
-    def platform=(platform)
-      @platform = Platform.new(platform)
-    end
-    attr_reader :platform
-
-    attr_accessor :requires_arc
 
     def dependency(*name_and_version_requirements)
       name, *version_requirements = name_and_version_requirements.flatten
       dep = Dependency.new(name, *version_requirements)
-      @dependencies << dep
+      @define_for_platforms.each do |platform|
+        @dependencies[platform] << dep
+      end
       dep
     end
     attr_reader :dependencies
 
-    def subspec(name, &block)
-      subspec = Subspec.new(self, name, &block)
-      @subspecs << subspec
-      subspec
-    end
-    attr_reader :subspecs
+    ### Not attributes
 
-    # Not attributes
+    # @visibility private
+    #
+    # This is used by PlatformProxy to assign attributes for the scoped platform.
+    def _on_platform(platform)
+      before, @define_for_platforms = @define_for_platforms, [platform]
+      yield
+    ensure
+      @define_for_platforms = before
+    end
 
     include Config::Mixin
 
@@ -185,7 +235,7 @@ module Pod
     end
 
     def wrapper?
-      source_files.empty? && !subspecs.empty?
+      source_files.values.all?(&:empty?) && !subspecs.empty?
     end
 
     def subspec_by_name(name)
@@ -209,7 +259,11 @@ module Pod
     end
 
     def dependency_by_top_level_spec_name(name)
-      @dependencies.find { |d| d.top_level_spec_name == name }
+      @dependencies.each do |_, platform_deps|
+        platform_deps.each do |dep|
+          return dep if dep.top_level_spec_name == name
+        end
+      end
     end
 
     def pod_destroot
@@ -244,42 +298,6 @@ module Pod
       end
     end
 
-    # Returns all resource files of this pod, but relative to the
-    # project pods root.
-    def expanded_resources
-      files = []
-      resources.each do |pattern|
-        pattern = pod_destroot + pattern
-        pattern.glob.each do |file|
-          files << file.relative_path_from(config.project_pods_root)
-        end
-      end
-      files
-    end
-
-    # Returns all source files of this pod including header files,
-    # but relative to the project pods root.
-    #
-    # If the pattern is the path to a directory, the pattern will
-    # automatically glob for c, c++, Objective-C, and Objective-C++
-    # files.
-    def expanded_source_files
-      files = []
-      source_files.each do |pattern|
-        pattern = pod_destroot + pattern
-        pattern = pattern + '*.{h,m,mm,c,cpp}' if pattern.directory?
-        pattern.glob.each do |file|
-          files << file.relative_path_from(config.project_pods_root)
-        end
-      end
-      files
-    end
-
-    # Returns only the header files of this pod.
-    def header_files
-      expanded_source_files.select { |f| f.extname == '.h' }
-    end
-
     # This method takes a header path and returns the location it should have
     # in the pod's header dir.
     #
@@ -288,25 +306,6 @@ module Pod
     # copy_header_mappings for full control.
     def copy_header_mapping(from)
       from.basename
-    end
-
-    # See copy_header_mapping.
-    def copy_header_mappings
-      header_files.inject({}) do |mappings, from|
-        from_without_prefix = from.relative_path_from(pod_destroot_name)
-        to = header_dir + copy_header_mapping(from_without_prefix)
-        (mappings[to.dirname] ||= []) << from
-        mappings
-      end
-    end
-
-    # Returns a list of search paths where the pod's headers can be found. This
-    # includes the pod's header dir root and any other directories that might
-    # have been added by overriding the copy_header_mapping/copy_header_mappings
-    # methods.
-    def header_search_paths
-      dirs = [header_dir] + copy_header_mappings.keys
-      dirs.map { |dir| %{"$(PODS_ROOT)/Headers/#{dir}"} }
     end
 
     def to_s

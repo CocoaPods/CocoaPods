@@ -4,22 +4,27 @@ describe Pod::Installer::UserProjectIntegrator do
   extend SpecHelper::TemporaryDirectory
 
   before do
+    @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+    config.project_root = @sample_project_path.dirname
+
+    sample_project_path = @sample_project_path
     @podfile = Pod::Podfile.new do
       platform :ios
 
+      xcodeproj sample_project_path
       link_with 'SampleProject' # this is an app target!
+
       dependency 'JSONKit'
 
-      target :test_runner, :exclusive => true, :link_with => 'TestRunner' do
+      target :test_runner, :exclusive => true do
+        link_with 'TestRunner'
         dependency 'Kiwi'
       end
     end
 
-    @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-    config.project_root = @sample_project_path.dirname
-
-    @integrator = Pod::Installer::UserProjectIntegrator.new(@sample_project_path, @podfile)
+    @integrator = Pod::Installer::UserProjectIntegrator.new(@podfile)
     @integrator.integrate!
+
     @sample_project = Xcodeproj::Project.new(@sample_project_path)
   end
 
@@ -34,7 +39,7 @@ describe Pod::Installer::UserProjectIntegrator do
 
   it 'adds the project being integrated to the workspace' do
     workspace = Xcodeproj::Workspace.new_from_xcworkspace(@sample_project_path.dirname + "SampleProject.xcworkspace")
-    workspace.should.include?("SampleProject.xcodeproj")
+    workspace.projpaths.sort.should == %w{ Pods/Pods.xcodeproj SampleProject.xcodeproj }
   end
   
   it 'adds the Pods project to the workspace' do
@@ -65,7 +70,7 @@ describe Pod::Installer::UserProjectIntegrator do
     @podfile.target_definitions.each do |_, definition|
       target = @sample_project.targets.where(:name => definition.link_with.first)
       framework_build_phase = target.frameworks_build_phases.first
-      framework_build_phase.files.where(:file => { :name => definition.lib_name }).should.not == nil
+      framework_build_phase.files.where(:name => definition.lib_name).should.not == nil
     end
   end
   
@@ -77,20 +82,28 @@ describe Pod::Installer::UserProjectIntegrator do
     end
   end
 
+  before do
+    # Reset the cached TargetIntegrator#targets lists.
+    @integrator.instance_variable_set(:@target_integrators, nil)
+  end
+
   it "only tries to integrate Pods libraries into user targets that haven't been integrated yet" do
-    app, test_runner = @integrator.user_project.targets.to_a
-    test_runner.frameworks_build_phases.first.files.last.destroy
+    app_integrator = @integrator.target_integrators.find { |t| t.target_definition.name == :default }
+    test_runner_integrator = @integrator.target_integrators.find { |t| t.target_definition.name == :test_runner }
 
-    targets = @integrator.targets.sort_by { |target| target.target_definition.label }
-    @integrator.stubs(:targets).returns(targets)
+    # Remove libPods.a from the app target. But don't do it through TargetIntegrator#targets,
+    # as it will return only those that still need integration.
+    app_target = app_integrator.user_project.targets.where(:name => 'SampleProject')
+    app_target.frameworks_build_phases.first.build_files.last.destroy
 
-    targets.first.expects(:add_pods_library).never
-    targets.last.expects(:add_pods_library)
+    app_integrator.expects(:add_pods_library)
+    test_runner_integrator.expects(:add_pods_library).never
+
     @integrator.integrate!
   end
 
   it "does not even try to save the project if none of the target integrators had any work to do" do
-    @integrator.user_project.expects(:save_as).never
+    @integrator.target_integrators.first.user_project.expects(:save_as).never
     @integrator.integrate!
   end
 end

@@ -23,8 +23,17 @@ module Pod
           'Options',
           '-------',
           '',
-          @command_class.options
+          options
         ].join("\n")
+      end
+
+      private
+
+      def options
+        options  = @command_class.options
+        keys     = options.map(&:first)
+        key_size = keys.inject(0) { |size, key| key.size > size ? key.size : size }
+        options.map { |key, desc| "    #{key.ljust(key_size)}   #{desc}" }.join("\n")
       end
     end
 
@@ -47,10 +56,12 @@ module Pod
     end
 
     def self.options
-      "    --help      Show help information\n" \
-      "    --silent    Print nothing\n" \
-      "    --verbose   Print more information while working\n" \
-      "    --version   Prints the version of CocoaPods"
+      [
+        ['--help',    'Show help information'],
+        ['--silent',  'Print nothing'],
+        ['--verbose', 'Print more information while working'],
+        ['--version', 'Prints the version of CocoaPods'],
+      ]
     end
 
     def self.run(*argv)

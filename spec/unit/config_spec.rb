@@ -32,13 +32,6 @@ describe "Pod::Config" do
       end
     end
 
-    it "returns the path to an existing podspec file if a Podfile doesn't exist" do
-      (temporary_directory + 'Bananas.podspec').open('w') { |f| f << '# Yo' }
-      Dir.chdir(temporary_directory) do
-        config.project_podfile.should == Pathname.pwd + 'Bananas.podspec'
-      end
-    end
-
     it "returns the path to the Pods directory that holds the dependencies" do
       config.project_pods_root.should == Pathname.pwd + 'Pods'
     end

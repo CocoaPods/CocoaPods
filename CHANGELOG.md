@@ -13,10 +13,13 @@ with, use the `link_with` method like so:
 ```ruby
 platform :ios
 
+workspace 'MyWorkspace'
+
 link_with ['MyAppTarget', 'MyOtherAppTarget']
 dependency 'JSONKit'
 
 target :test, :exclusive => true do
+  xcodeproj 'TestProject'
   link_with 'TestRunnerTarget'
   dependency 'Kiwi'
 end
@@ -24,16 +27,16 @@ end
 
 _NOTE: As you can see it can take either one target name, or an array of names._
 
-Alternatively, you can also specify the target to link with in the target
-options like so:
+* If no explicit Xcode workspace is specified and only **one** project exists in
+the same directory as the Podfile, then the name of that project is used as the
+workspace’s name.
 
-```ruby
-target :test, :exclusive => true, :link_with => 'TestRunnerTarget' do
-  dependency 'Kiwi'
-end
-```
+* If no explicit Xcode project is specified for a target, it will use the Xcode
+project of the parent target. If no target specifies an expicit Xcode project
+and there is only **one** project in the same directory as the Podfile then that
+project will be used.
 
-If no explicit target is specified, then the Pods target will be linked with
+* If no explicit target is specified, then the Pods target will be linked with
 the first target in your project. So if you only have one target you do not
 need to specify the target to link with.
 

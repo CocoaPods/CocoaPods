@@ -1,17 +1,54 @@
 module Pod
   class Podfile
     class TargetDefinition
+      include Config::Mixin
+
       attr_reader :name, :target_dependencies
       
-      attr_accessor :link_with, :parent
+      attr_accessor :xcodeproj, :link_with, :platform, :parent, :exclusive
 
       def initialize(name, options = {})
         @name, @target_dependencies = name, []
-        options.each { |k, v| send("#{k}=", v) }
+        @parent, @exclusive = options.values_at(:parent, :exclusive)
+      end
+
+      # A target is automatically `exclusive` if the `platform` does not match
+      # the parent's `platform`.
+      def exclusive
+        if @exclusive.nil?
+          if @platform.nil?
+            false
+          else
+            @parent.platform != @platform
+          end
+        else
+          @exclusive
+        end
+      end
+      alias_method :exclusive?, :exclusive
+
+      def xcodeproj=(path)
+        path = path.to_s
+        @xcodeproj = config.project_root + (File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
+      end
+
+      def xcodeproj
+        if @xcodeproj
+          @xcodeproj
+        elsif @parent
+          @parent.xcodeproj
+        else
+          xcodeprojs = config.project_root.glob('*.xcodeproj')
+          @xcodeproj = xcodeprojs.first if xcodeprojs.size == 1
+        end
       end
 
       def link_with=(targets)
         @link_with = targets.is_a?(Array) ? targets : [targets]
+      end
+
+      def platform
+        @platform || @parent.platform
       end
 
       def label
@@ -47,7 +84,7 @@ module Pod
       # Returns *all* dependencies of this target, not only the target specific
       # ones in `target_dependencies`.
       def dependencies
-        @target_dependencies + (@parent ? @parent.dependencies : [])
+        @target_dependencies + (exclusive? ? [] : @parent.dependencies)
       end
 
       def empty?
@@ -67,7 +104,7 @@ module Pod
     include Config::Mixin
 
     def initialize(&block)
-      @target_definitions = { :default => (@target_definition = TargetDefinition.new(:default)) }
+      @target_definitions = { :default => (@target_definition = TargetDefinition.new(:default, :exclusive => true)) }
       instance_eval(&block)
     end
 
@@ -82,25 +119,71 @@ module Pod
     #   platform :ios, :deployment_target => "4.0"
     #
     # If the deployment target requires it (< 4.3), armv6 will be added to ARCHS.
-    def platform(platform = nil, options={})
-      platform ? @platform = Platform.new(platform, options) : @platform
+    #
+    def platform(platform, options={})
+      @target_definition.platform = Platform.new(platform, options)
+    end
+
+    # Specifies the Xcode workspace that should contain all the projects.
+    #
+    # If no explicit Xcode workspace is specified and only **one** project exists
+    # in the same directory as the Podfile, then the name of that project is used
+    # as the workspace’s name.
+    #
+    # @example
+    #
+    #   workspace 'MyWorkspace'
+    #
+    def workspace(path = nil)
+      if path
+        @workspace = config.project_root + (File.extname(path) == '.xcworkspace' ? path : "#{path}.xcworkspace")
+      elsif @workspace
+        @workspace
+      else
+        projects = @target_definitions.map { |_, td| td.xcodeproj }.uniq
+        if projects.size == 1 && (xcodeproj = @target_definitions[:default].xcodeproj)
+          xcodeproj.dirname + "#{xcodeproj.basename('.xcodeproj')}.xcworkspace"
+        end
+      end
+    end
+
+    # Specifies the Xcode project that contains the target that the Pods library
+    # should be linked with.
+    #
+    # If no explicit project is specified, it will use the Xcode project of the
+    # parent target. If none of the target definitions specify an explicit project
+    # and there is only **one** project in the same directory as the Podfile then
+    # that project will be used.
+    #
+    # @example
+    #
+    #   # Look for target to link with in an Xcode project called ‘MyProject.xcodeproj’.
+    #   xcodeproj 'MyProject'
+    #
+    #   target :test do
+    #     # This Pods library links with a target in another project.
+    #     xcodeproj 'TestProject'
+    #   end
+    #
+    def xcodeproj(path)
+      @target_definition.xcodeproj = path
     end
 
     # Specifies the target(s) in the user’s project that this Pods library
     # should be linked in.
     #
+    # If no explicit target is specified, then the Pods target will be linked
+    # with the first target in your project. So if you only have one target you
+    # do not need to specify the target to link with.
+    #
     # @example
     #
-    #   # Link with a target in the user’s project called ‘MyApp’.
+    #   # Link with a target called ‘MyApp’ (in the user's project).
     #   link_with 'MyApp'
     #
     #   # Link with the targets in the user’s project called ‘MyApp’ and ‘MyOtherApp’.
     #   link_with ['MyApp', 'MyOtherApp']
     #
-    #   # You can also specify this inline when specifying a new Pods target:
-    #   target :test, :exclusive => true, :link_with => 'TestRunner' do
-    #     dependency 'Kiwi'
-    #   end
     def link_with(targets)
       @target_definition.link_with = targets
     end
@@ -239,7 +322,7 @@ module Pod
     # dependency (JSONKit).
     def target(name, options = {})
       parent = @target_definition
-      options[:parent] = parent unless options.delete(:exclusive)
+      options[:parent] = parent
       @target_definitions[name] = @target_definition = TargetDefinition.new(name, options)
       yield
     ensure
@@ -286,7 +369,7 @@ module Pod
     attr_reader :target_definitions
 
     def dependencies
-      @target_definitions.values.map(&:target_dependencies).flatten
+      @target_definitions.values.map(&:target_dependencies).flatten.uniq
     end
 
     def dependency_by_top_level_spec_name(name)
@@ -306,10 +389,10 @@ module Pod
     end
 
     def validate!
-      lines = []
-      lines << "* the `platform` attribute should be either `:osx` or `:ios`" unless @platform && [:osx, :ios].include?(@platform.name)
-      lines << "* no dependencies were specified, which is, well, kinda pointless" if dependencies.empty?
-      raise(Informative, (["The Podfile at `#{@defined_in_file}' is invalid:"] + lines).join("\n")) unless lines.empty?
+      #lines = []
+      #lines << "* the `platform` attribute should be either `:osx` or `:ios`" unless @platform && [:osx, :ios].include?(@platform.name)
+      #lines << "* no dependencies were specified, which is, well, kinda pointless" if dependencies.empty?
+      #raise(Informative, (["The Podfile at `#{@defined_in_file}' is invalid:"] + lines).join("\n")) unless lines.empty?
     end
   end
 end

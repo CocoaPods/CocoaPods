@@ -6,20 +6,16 @@ require 'yaml'
 module SpecHelper
   class Installer < Pod::Installer
     # Here we override the `source' of the pod specifications to point to the integration fixtures.
-    def dependent_specification_sets
-      @dependent_specification_sets ||= super
-      @dependent_specification_sets.each do |set|
-        def set.specification
-          spec = super
+    def specs_by_target
+      @specs_by_target ||= super.tap do |hash|
+        hash.values.flatten.each do |spec|
           unless spec.part_of_other_pod?
             source = spec.source
             source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
             spec.source = source
           end
-          spec
         end
       end
-      @dependent_specification_sets
     end
   end
 end
@@ -33,10 +29,15 @@ else
 
       def create_config!
         Pod::Config.instance = nil
-        config.silent = true
+        if ENV['VERBOSE_SPECS']
+          config.verbose = true
+        else
+          config.silent = true
+        end
         config.repos_dir = fixture('spec-repos')
         config.project_root = temporary_directory
         config.doc_install = false
+        config.integrate_targets = false
       end
 
       before do
@@ -64,6 +65,18 @@ else
         output = `#{command} 2>&1`
         puts output unless $?.success?
         $?.should.be.success
+      end
+
+      def should_xcodebuild(target_definition)
+        target = target_definition
+        with_xcodebuild_available do
+          Dir.chdir(config.project_pods_root) do
+            puts "\n[!] Compiling #{target.label} static library..."
+            should_successfully_perform "xcodebuild -target '#{target.label}'"
+            lib_path = config.project_pods_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + target.lib_name
+            `lipo -info '#{lib_path}'`.should.include "architecture: #{target.platform == :ios ? 'armv7' : 'x86_64'}"
+          end
+        end
       end
 
       # Lame way to run on one platform only
@@ -134,7 +147,33 @@ else
           change_log.should.not.include '1.3'
         end
 
-        if !`which appledoc`.strip.empty?
+        it "creates targets for different platforms" do
+          podfile = Pod::Podfile.new do
+            self.platform :ios
+            dependency 'JSONKit', '1.4'
+            target :ios_target do
+              # This brings in Reachability on iOS
+              dependency 'ASIHTTPRequest'
+            end
+            target :osx_target do
+              self.platform :osx
+              dependency 'ASIHTTPRequest'
+            end
+          end
+
+          installer = SpecHelper::Installer.new(podfile)
+          installer.install!
+
+          YAML.load(installer.lock_file.read).should == {
+            "PODS" => [{ "ASIHTTPRequest (1.8.1)" => ["Reachability"] }, "JSONKit (1.4)", "Reachability (3.0.0)"],
+            "DEPENDENCIES" => ["ASIHTTPRequest", "JSONKit (= 1.4)"]
+          }
+
+          should_xcodebuild(podfile.target_definitions[:ios_target])
+          should_xcodebuild(podfile.target_definitions[:osx_target])
+        end
+
+        if Pod::Generator::Documentation.appledoc_installed?
           it "generates documentation of all pods by default" do
             create_config!
 
@@ -163,7 +202,6 @@ else
 
       it "runs the optional post_install callback defined in the Podfile _before_ the project is saved to disk" do
         podfile = Pod::Podfile.new do
-          config.rootspec = self
           self.platform platform
           dependency 'SSZipArchive'
 
@@ -184,18 +222,15 @@ else
 
       # TODO add a simple source file which uses the compiled lib to check that it really really works
       it "activates required pods and create a working static library xcode project" do
-        spec = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
-
+        podfile = Pod::Podfile.new do
           self.platform platform
-          dependency 'Reachability',      '< 2.0.5' if platform == :ios
+          dependency 'Reachability',      '> 2.0.5' if platform == :ios
           dependency 'ASIWebPageRequest', '>= 1.8.1'
           dependency 'JSONKit',           '>= 1.0'
           dependency 'SSZipArchive',      '< 2'
         end
 
-        installer = SpecHelper::Installer.new(spec)
+        installer = SpecHelper::Installer.new(podfile)
         installer.install!
 
         lock_file_contents = {
@@ -203,13 +238,13 @@ else
             { 'ASIHTTPRequest (1.8.1)'    => ["Reachability"] },
             { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
             'JSONKit (1.4)',
-            { 'Reachability (2.0.4)'      => ["ASIHTTPRequest (>= 1.8)"] },
+            'Reachability (3.0.0)',
             'SSZipArchive (0.1.2)',
           ],
           'DEPENDENCIES' => [
             "ASIWebPageRequest (>= 1.8.1)",
             "JSONKit (>= 1.0)",
-            "Reachability (< 2.0.5)",
+            "Reachability (> 2.0.5)",
             "SSZipArchive (< 2)",
           ]
         }
@@ -226,20 +261,12 @@ else
         project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
         Xcodeproj.read_plist(project_file).should == installer.project.to_hash
 
-        with_xcodebuild_available do
-          puts "\n[!] Compiling static library..."
-          Dir.chdir(config.project_pods_root) do
-            should_successfully_perform "xcodebuild"
-          end
-        end
+        should_xcodebuild(podfile.target_definitions[:default])
       end
 
       if platform == :ios
         it "does not activate pods that are only part of other pods" do
           spec = Pod::Podfile.new do
-            # first ensure that the correct info is available to the specs when they load
-            config.rootspec = self
-
             self.platform platform
             dependency 'Reachability', '2.0.4' # only 2.0.4 is part of ASIHTTPRequest’s source.
           end
@@ -257,9 +284,6 @@ else
 
       it "adds resources to the xcode copy script" do
         spec = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
-
           self.platform platform
           dependency 'SSZipArchive'
         end
@@ -277,9 +301,6 @@ else
       # TODO we need to do more cleaning and/or add a --prune task
       it "overwrites an existing project.pbxproj file" do
         spec = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
-
           self.platform platform
           dependency 'JSONKit'
         end
@@ -287,9 +308,6 @@ else
         installer.install!
 
         spec = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
-
           self.platform platform
           dependency 'SSZipArchive'
         end
@@ -302,8 +320,6 @@ else
 
       it "creates a project with multiple targets" do
         podfile = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
           self.platform platform
           target(:debug) { dependency 'SSZipArchive' }
           target(:test, :exclusive => true) { dependency 'JSONKit' }
@@ -316,7 +332,7 @@ else
         project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.targets.each do |target|
           phase = target.build_phases.find { |phase| phase.is_a?(Xcodeproj::Project::Object::PBXSourcesBuildPhase) }
-          files = phase.files.map(&:file).map(&:name)
+          files = phase.files.map(&:name)
           case target.product_name
           when 'Pods'
             files.should.include "ASIHTTPRequest.m"
@@ -343,27 +359,25 @@ else
         (root + 'Pods-debug-resources.sh').should.exist
         (root + 'Pods-test-resources.sh').should.exist
 
-        with_xcodebuild_available do
-          Dir.chdir(config.project_pods_root) do
-            puts "\n[!] Compiling static library `Pods'..."
-            should_successfully_perform "xcodebuild -target Pods"
-            puts "\n[!] Compiling static library `Pods-debug'..."
-            should_successfully_perform "xcodebuild -target Pods-debug"
-            puts "\n[!] Compiling static library `Pods-test'..."
-            should_successfully_perform "xcodebuild -target Pods-test"
-          end
-        end
+        should_xcodebuild(podfile.target_definitions[:default])
+        should_xcodebuild(podfile.target_definitions[:debug])
+        should_xcodebuild(podfile.target_definitions[:test])
       end
 
       it "sets up an existing project with pods" do
+        config.integrate_targets = true
+
         basename = platform == :ios ? 'iPhone' : 'Mac'
         projpath = temporary_directory + 'ASIHTTPRequest.xcodeproj'
         FileUtils.cp_r(fixture("integration/ASIHTTPRequest/#{basename}.xcodeproj"), projpath)
-        spec = Pod::Podfile.new do
+
+        podfile = Pod::Podfile.new do
           self.platform platform
+          xcodeproj projpath
           dependency 'SSZipArchive'
         end
-        installer = SpecHelper::Installer.new(spec, projpath)
+
+        installer = SpecHelper::Installer.new(podfile)
         installer.install!
 
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(temporary_directory + 'ASIHTTPRequest.xcworkspace')
@@ -376,16 +390,13 @@ else
         target.build_configurations.each do |config|
           config.base_configuration.path.should == 'Pods/Pods.xcconfig'
         end
-        phase = target.frameworks_build_phases.first
-        phase.files.map { |build_file| build_file.file }.should.include libPods
+        target.frameworks_build_phases.first.files.should.include libPods
         # should be the last phase
         target.build_phases.last.shell_script.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
       end
 
       it "should prevent duplication cleaning headers symlinks with multiple targets" do
         podfile = Pod::Podfile.new do
-          # first ensure that the correct info is available to the specs when they load
-          config.rootspec = self
           self.platform platform
           target(:debug) { dependency 'SSZipArchive' }
           target(:test, :exclusive => true) { dependency 'JSONKit' }

@@ -28,6 +28,10 @@ describe "Pod::Installer" do
     it "configures the project to load categories from the static library" do
       @xcconfig['OTHER_LDFLAGS'].should == '-ObjC -all_load'
     end
+
+    it "sets the PODS_ROOT build variable" do
+      @xcconfig['PODS_ROOT'].should.not == nil
+    end
   end
 
   it "generates a BridgeSupport metadata file from all the pod headers" do
@@ -35,15 +39,12 @@ describe "Pod::Installer" do
       platform :osx
       dependency 'ASIHTTPRequest'
     end
-    config.rootspec = podfile
-    expected = []
     installer = Pod::Installer.new(podfile)
     pods = installer.activated_specifications.map do |spec|
-      spec.header_files.each do |header|
-        expected << config.project_pods_root + header
-      end
-      Pod::LocalPod.new(spec, installer.sandbox)
+      Pod::LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
     end
+    expected = pods.map { |pod| pod.header_files }.flatten.map { |header| config.project_pods_root + header }
+    expected.size.should > 0
     installer.target_installers.first.bridge_support_generator_for(pods, installer.sandbox).headers.should == expected
   end
 
@@ -54,7 +55,6 @@ describe "Pod::Installer" do
         dependency 'JSONKit'
       end
     end
-    config.rootspec = podfile
     installer = Pod::Installer.new(podfile)
     installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
   end

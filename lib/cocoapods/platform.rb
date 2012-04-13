@@ -1,5 +1,13 @@
 module Pod
   class Platform
+    def self.ios
+      new :ios
+    end
+
+    def self.osx
+      new :osx
+    end
+
     attr_reader :options
 
     def initialize(symbolic_name, options = {})

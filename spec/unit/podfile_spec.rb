@@ -6,9 +6,9 @@ describe "Pod::Podfile" do
     podfile.defined_in_file.should == fixture('Podfile')
   end
 
-  it "assigns the platform attribute" do
+  it "assigns the platform attribute to the current target" do
     podfile = Pod::Podfile.new { platform :ios }
-    podfile.platform.should == :ios
+    podfile.target_definitions[:default].platform.should == :ios
   end
 
   it "adds dependencies" do
@@ -63,6 +63,48 @@ describe "Pod::Podfile" do
     yielded.should == :an_installer
   end
 
+  it "assumes the xcode project is the only existing project in the root" do
+    podfile = Pod::Podfile.new do
+      target(:another_target) {}
+    end
+
+    path = config.project_root + 'MyProject.xcodeproj'
+    config.project_root.expects(:glob).with('*.xcodeproj').returns([path])
+
+    podfile.target_definitions[:default].xcodeproj.should == path
+    podfile.target_definitions[:another_target].xcodeproj.should == path
+  end
+
+  it "assumes the basename of the workspace is the same as the default target's project basename" do
+    path = config.project_root + 'MyProject.xcodeproj'
+    config.project_root.expects(:glob).with('*.xcodeproj').returns([path])
+    Pod::Podfile.new {}.workspace.should == config.project_root + 'MyProject.xcworkspace'
+
+    Pod::Podfile.new do
+      xcodeproj 'AnotherProject.xcodeproj'
+    end.workspace.should == config.project_root + 'AnotherProject.xcworkspace'
+  end
+
+  it "does not base the workspace name on the default target's project if there are multiple projects specified" do
+    Pod::Podfile.new do
+      xcodeproj 'MyProject'
+      target :another_target do
+        xcodeproj 'AnotherProject'
+      end
+    end.workspace.should == nil
+  end
+
+  it "specifies the Xcode workspace to use" do
+    Pod::Podfile.new do
+      xcodeproj 'AnotherProject'
+      workspace 'MyWorkspace'
+    end.workspace.should == config.project_root + 'MyWorkspace.xcworkspace'
+    Pod::Podfile.new do
+      xcodeproj 'AnotherProject'
+      workspace 'MyWorkspace.xcworkspace'
+    end.workspace.should == config.project_root + 'MyWorkspace.xcworkspace'
+  end
+
   describe "concerning targets (dependency groups)" do
     it "returns wether or not a target has any dependencies" do
       Pod::Podfile.new do
@@ -74,14 +116,27 @@ describe "Pod::Podfile" do
 
     before do
       @podfile = Pod::Podfile.new do
+        platform :ios
+        xcodeproj 'iOS Project'
+
         target :debug do
           dependency 'SSZipArchive'
         end
 
-        target :test, :exclusive => true, :link_with => 'TestRunner' do
+        target :test, :exclusive => true do
+          link_with 'TestRunner'
           dependency 'JSONKit'
           target :subtarget do
             dependency 'Reachability'
+          end
+        end
+
+        target :osx_target do
+          platform :osx
+          xcodeproj 'OSX Project.xcodeproj'
+          link_with 'OSXTarget'
+          dependency 'ASIHTTPRequest'
+          target :nested_osx_target do
           end
         end
 
@@ -89,7 +144,7 @@ describe "Pod::Podfile" do
       end
     end
 
-    it "returns all dependencies of all targets combined, which is used during resolving to enusre compatible dependencies" do
+    it "returns all dependencies of all targets combined, which is used during resolving to ensure compatible dependencies" do
       @podfile.dependencies.map(&:name).sort.should == %w{ ASIHTTPRequest JSONKit Reachability SSZipArchive }
     end
 
@@ -118,6 +173,31 @@ describe "Pod::Podfile" do
       target = @podfile.target_definitions[:subtarget]
       target.label.should == 'Pods-test-subtarget'
       target.dependencies.should == [Pod::Dependency.new('Reachability'), Pod::Dependency.new('JSONKit')]
+    end
+
+    it "returns the Xcode project that contains the target to link with" do
+      [:default, :debug, :test, :subtarget].each do |target_name|
+        target = @podfile.target_definitions[target_name]
+        target.xcodeproj.should == config.project_root + 'iOS Project.xcodeproj'
+      end
+      [:osx_target, :nested_osx_target].each do |target_name|
+        target = @podfile.target_definitions[target_name]
+        target.xcodeproj.should == config.project_root + 'OSX Project.xcodeproj'
+      end
+    end
+
+    it "returns a Xcode project found in the working dir when no explicit project is specified" do
+      xcodeproj1 = config.project_root + '1.xcodeproj'
+      target = Pod::Podfile::TargetDefinition.new(:implicit)
+      config.project_root.expects(:glob).with('*.xcodeproj').returns([xcodeproj1])
+      target.xcodeproj.should == xcodeproj1
+    end
+
+    it "returns `nil' if more than one Xcode project was found in the working when no explicit project is specified" do
+      xcodeproj1, xcodeproj2 = config.project_root + '1.xcodeproj', config.project_root + '2.xcodeproj'
+      target = Pod::Podfile::TargetDefinition.new(:implicit)
+      config.project_root.expects(:glob).with('*.xcodeproj').returns([xcodeproj1, xcodeproj2])
+      target.xcodeproj.should == nil
     end
 
     it "leaves the name of the target, to link with, to be automatically resolved" do
@@ -154,24 +234,35 @@ describe "Pod::Podfile" do
       @podfile.target_definitions[:default].bridge_support_name.should == 'Pods.bridgesupport'
       @podfile.target_definitions[:test].bridge_support_name.should == 'Pods-test.bridgesupport'
     end
+
+    it "returns the platform of the target" do
+      @podfile.target_definitions[:default].platform.should == :ios
+      @podfile.target_definitions[:test].platform.should == :ios
+      @podfile.target_definitions[:osx_target].platform.should == :osx
+    end
+
+    it "autmatically marks a target as exclusive if the parent platform doesn't match" do
+      @podfile.target_definitions[:osx_target].should.be.exclusive
+      @podfile.target_definitions[:nested_osx_target].should.not.be.exclusive
+    end
   end
 
   describe "concerning validations" do
-    it "raises if no platform is specified" do
+    xit "raises if no platform is specified" do
       exception = lambda {
         Pod::Podfile.new {}.validate!
       }.should.raise Pod::Informative
       exception.message.should.include "platform"
     end
 
-    it "raises if an invalid platform is specified" do
+    xit "raises if an invalid platform is specified" do
       exception = lambda {
         Pod::Podfile.new { platform :windows }.validate!
       }.should.raise Pod::Informative
       exception.message.should.include "platform"
     end
 
-    it "raises if no dependencies were specified" do
+    xit "raises if no dependencies were specified" do
       exception = lambda {
         Pod::Podfile.new {}.validate!
       }.should.raise Pod::Informative

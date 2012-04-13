@@ -7,12 +7,8 @@ module Pod
     class UserProjectIntegrator
       include Pod::Config::Mixin
 
-      attr_reader :user_project_path, :user_project
-
-      def initialize(user_project_path, podfile)
-        @user_project_path = config.project_root + user_project_path
+      def initialize(podfile)
         @podfile = podfile
-        @user_project = Xcodeproj::Project.new(user_project_path)
       end
 
       def integrate!
@@ -20,9 +16,7 @@ module Pod
 
         # Only need to write out the user's project if any of the target
         # integrators actually did some work.
-        if targets.map(&:integrate!).any?
-          @user_project.save_as(user_project_path)
-        end
+        target_integrators.map(&:integrate!)
 
         unless config.silent?
           # TODO this really shouldn't be here
@@ -31,39 +25,67 @@ module Pod
       end
 
       def workspace_path
-        config.project_root + "#{user_project_path.basename('.xcodeproj')}.xcworkspace"
+        @podfile.workspace || raise(Informative, "Could not automatically select an Xcode workspace. " \
+                                                 "Specify one in your Podfile.")
       end
 
       def pods_project_path
         config.project_root + "Pods/Pods.xcodeproj"
       end
 
-      def targets
-        @podfile.target_definitions.values.map { |definition| Target.new(self, definition) }
+      def target_integrators
+        @target_integrators ||= @podfile.target_definitions.values.map do |definition|
+          TargetIntegrator.new(definition) unless definition.empty?
+        end.compact
+      end
+
+      def user_projects
+        @podfile.target_definitions.values.map(&:xcodeproj)
       end
 
       def create_workspace!
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-        [user_project_path, pods_project_path].each do |project_path|
+        [pods_project_path, *user_projects].each do |project_path|
           project_path = project_path.relative_path_from(config.project_root).to_s
           workspace << project_path unless workspace.include?(project_path)
         end
         workspace.save_as(workspace_path)
       end
 
-      class Target
-        attr_reader :integrator, :target_definition
+      class TargetIntegrator
+        attr_reader :target_definition
 
-        def initialize(integrator, target_definition)
-          @integrator, @target_definition = integrator, target_definition
+        def initialize(target_definition)
+          @target_definition = target_definition
+        end
+
+        def inspect
+          "#<#{self.class} for target `#{@target_definition.label}'>"
         end
 
         def integrate!
-          return false if targets.empty?
+          return if targets.empty?
           add_xcconfig_base_configuration
           add_pods_library
           add_copy_resources_script_phase
-          true
+          user_project.save_as(@target_definition.xcodeproj)
+        end
+
+        def user_project_path
+          if path = @target_definition.xcodeproj
+            unless path.exist?
+              raise Informative, "The Xcode project `#{path}' does not exist."
+            end
+            path
+          else
+            raise Informative, "Could not automatically select an Xcode project.\n" \
+                               "Specify one in your Podfile like so:\n\n" \
+                               "  xcodeproj 'path/to/XcodeProject'"
+          end
+        end
+
+        def user_project
+          @user_project ||= Xcodeproj::Project.new(user_project_path)
         end
 
         # This returns a list of the targets from the user’s project to which
@@ -77,23 +99,25 @@ module Pod
         #                                   the Pods lib should be linked with.
         def targets
           @targets ||= begin
-            if link_with = @target_definition.link_with
-              @integrator.user_project.targets.select do |target|
-                link_with.include? target.name
-              end
-            else
-              [@integrator.user_project.targets.first]
-            end.reject do |target|
-              # reject any target that already has this Pods library in one of its frameworks build phases
-              target.frameworks_build_phases.any? do |phase|
-                phase.files.any? { |build_file| build_file.file.name == @target_definition.lib_name }
-              end
+          if link_with = @target_definition.link_with
+            # Find explicitly named targets.
+            user_project.targets.select do |target|
+              link_with.include? target.name
             end
+          else
+            # Default to the first, which in a simple project is probably an app target.
+            [user_project.targets.first]
+          end.reject do |target|
+            # Reject any target that already has this Pods library in one of its frameworks build phases
+            target.frameworks_build_phases.any? do |phase|
+              phase.files.any? { |file| file.name == @target_definition.lib_name }
+            end
+          end
           end
         end
 
         def add_xcconfig_base_configuration
-          xcconfig = @integrator.user_project.files.new('path' => "Pods/#{@target_definition.xcconfig_name}") # TODO use Sandbox?
+          xcconfig = user_project.files.new('path' => "Pods/#{@target_definition.xcconfig_name}") # TODO use Sandbox?
           targets.each do |target|
             target.build_configurations.each do |config|
               config.base_configuration = xcconfig
@@ -102,11 +126,9 @@ module Pod
         end
 
         def add_pods_library
-          pods_library = @integrator.user_project.group("Frameworks").files.new_static_library(@target_definition.label)
+          pods_library = user_project.group("Frameworks").files.new_static_library(@target_definition.label)
           targets.each do |target|
-            target.frameworks_build_phases.each do |build_phase|
-              build_phase.files << pods_library.build_files.new
-            end
+            target.frameworks_build_phases.each { |build_phase| build_phase << pods_library }
           end
         end
 

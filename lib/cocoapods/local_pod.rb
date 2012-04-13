@@ -2,13 +2,14 @@ module Pod
   class LocalPod
     attr_reader :specification
     attr_reader :sandbox
+    attr_reader :platform
     
-    def initialize(specification, sandbox)
-      @specification, @sandbox = specification, sandbox
+    def initialize(specification, sandbox, platform)
+      @specification, @sandbox, @platform = specification, sandbox, platform
     end
     
-    def self.from_podspec(podspec, sandbox)
-      new(Specification.from_file(podspec), sandbox)
+    def self.from_podspec(podspec, sandbox, platform)
+      new(Specification.from_file(podspec), sandbox, platform)
     end
     
     def root
@@ -76,12 +77,16 @@ module Pod
     
     def add_to_target(target)
       implementation_files.each do |file|
-        target.add_source_file(file, nil, specification.compiler_flags)
+        target.add_source_file(file, nil, specification.compiler_flags[@platform.name].strip)
       end
     end
     
     def requires_arc?
       specification.requires_arc
+    end
+
+    def dependencies
+      specification.dependencies[@platform.name]
     end
     
     private
@@ -93,7 +98,9 @@ module Pod
     def relative_root
       root.relative_path_from(@sandbox.root)
     end
-    
+
+    # TODO this is being overriden in the RestKit 0.9.4 spec, need to do
+    # something with that, and this method also still exists in Specification.
     def copy_header_mappings
       header_files.inject({}) do |mappings, from|
         from_without_prefix = from.relative_path_from(relative_root)
@@ -103,15 +110,16 @@ module Pod
       end
     end
     
-    def expanded_paths(patterns, options={})
+    def expanded_paths(platforms_with_patterns, options = {})
+      patterns = platforms_with_patterns.is_a?(Hash) ? platforms_with_patterns[@platform.name] : platforms_with_patterns
       patterns.map do |pattern|
         pattern = root + pattern
-        
+
         if pattern.directory? && options[:glob]
           pattern += options[:glob]
         end
-        
-        pattern.glob.map do |file| 
+
+        pattern.glob.map do |file|
           if options[:relative_to_sandbox]
             file.relative_path_from(@sandbox.root)
           else

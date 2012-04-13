@@ -1,3 +1,0 @@
-platform :ios
-
-dependency 'ZBarSDK'

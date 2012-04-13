@@ -1,0 +1,4 @@
+platform :ios
+xcodeproj "RelativePathProject/RelativePathProject.xcodeproj"
+
+dependency "AFNetworking"
