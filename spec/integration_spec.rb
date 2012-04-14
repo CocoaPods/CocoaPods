@@ -400,7 +400,7 @@ else
 
         target = project.targets.first
         target.build_configurations.each do |config|
-          config.base_configuration.path.should == '${SRCROOT}/Pods/Pods.xcconfig'
+          config.base_configuration.path.should == 'Pods/Pods.xcconfig'
         end
         target.frameworks_build_phases.first.files.should.include libPods
         # should be the last phase

@@ -50,7 +50,7 @@ describe Pod::Installer::UserProjectIntegrator do
   it 'sets the Pods xcconfig as the base config for each build configuration' do
     @podfile.target_definitions.each do |_, definition|
       target = @sample_project.targets.where(:name => definition.link_with.first)
-      xcconfig_file = @sample_project.files.where(:path => "${SRCROOT}/Pods/#{definition.xcconfig_name}")
+      xcconfig_file = @sample_project.files.where(:path => "Pods/#{definition.xcconfig_name}")
       target.build_configurations.each do |config|
         config.base_configuration.should == xcconfig_file
       end
