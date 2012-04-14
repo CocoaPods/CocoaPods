@@ -11,6 +11,7 @@ tmp
 examples/Podfile
 examples/Pods
 examples/**/Pods
+examples/RelativePathProject/RelativePathProject/RelativePathProject.xcodeproj
 spec/fixtures/banana-lib
 spec/fixtures/integration/Headers/
 /concatenated.*
