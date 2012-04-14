@@ -2,7 +2,7 @@ PODS:
   - AFNetworking (0.7.0):
     - JSONKit
   - FormatterKit (0.7.0)
-  - JSONKit (1.4)
+  - JSONKit (1.5pre)
 
 DEPENDENCIES:
   - AFNetworking (~> 0.7.0)

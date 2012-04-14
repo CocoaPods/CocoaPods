@@ -17,11 +17,6 @@ module Pod
         # Only need to write out the user's project if any of the target
         # integrators actually did some work.
         target_integrators.map(&:integrate!)
-
-        unless config.silent?
-          # TODO this really shouldn't be here
-          puts "[!] From now on use `#{workspace_path.basename}' instead of `#{user_project_path.basename}'."
-        end
       end
 
       def workspace_path
@@ -48,6 +43,9 @@ module Pod
         [pods_project_path, *user_projects].each do |project_path|
           project_path = project_path.relative_path_from(config.project_root).to_s
           workspace << project_path unless workspace.include?(project_path)
+        end
+        unless workspace_path.exist? || config.silent?
+          puts "[!] From now on use `#{workspace_path.basename}'."
         end
         workspace.save_as(workspace_path)
       end

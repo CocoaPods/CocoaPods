@@ -20,19 +20,21 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D088A498E1E4E6A93B7BED4 /* libPods-debug.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-debug.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51657568144AFA12002A4EFA /* MacRubySample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacRubySample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5165756C144AFA12002A4EFA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		5165756E144AFA12002A4EFA /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = Library/Frameworks/MacRuby.framework; sourceTree = DEVELOPER_DIR; };
+		5165756C144AFA12002A4EFA /* Cocoa.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		5165756E144AFA12002A4EFA /* MacRuby.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = Library/Frameworks/MacRuby.framework; sourceTree = DEVELOPER_DIR; };
 		51657575144AFA12002A4EFA /* MacRubySample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MacRubySample-Info.plist"; sourceTree = "<group>"; };
-		51657577144AFA12002A4EFA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		51657579144AFA12002A4EFA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		5165757B144AFA12002A4EFA /* MacRubySample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacRubySample-Prefix.pch"; sourceTree = "<group>"; };
+		51657577144AFA12002A4EFA /* en */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		51657579144AFA12002A4EFA /* main.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5165757B144AFA12002A4EFA /* MacRubySample-Prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MacRubySample-Prefix.pch"; sourceTree = "<group>"; };
 		5165757E144AFA12002A4EFA /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		51657581144AFA12002A4EFA /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
-		51657583144AFA12002A4EFA /* AppDelegate.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = AppDelegate.rb; sourceTree = "<group>"; };
-		51657597144B2608002A4EFA /* Pods.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
-		5165759A144B265B002A4EFA /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = Pods/build/Release/libPods.a; sourceTree = "<group>"; };
-		516575F0144B498E002A4EFA /* Pods.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Pods.bridgesupport; path = Pods/Pods.bridgesupport; sourceTree = SOURCE_ROOT; };
+		51657581144AFA12002A4EFA /* rb_main.rb */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
+		51657583144AFA12002A4EFA /* AppDelegate.rb */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.ruby; path = AppDelegate.rb; sourceTree = "<group>"; };
+		51657597144B2608002A4EFA /* Pods.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		5165759A144B265B002A4EFA /* libPods.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libPods.a; path = Pods/build/Release/libPods.a; sourceTree = "<group>"; };
+		516575F0144B498E002A4EFA /* Pods.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; includeInIndex = 1; lastKnownFileType = text.xml; name = Pods.bridgesupport; path = Pods/Pods.bridgesupport; sourceTree = SOURCE_ROOT; };
+		B067261347BD4EF3A1CC914B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,8 @@
 			children = (
 				5165756C144AFA12002A4EFA /* Cocoa.framework */,
 				5165756E144AFA12002A4EFA /* MacRuby.framework */,
+				1D088A498E1E4E6A93B7BED4 /* libPods-debug.a */,
+				B067261347BD4EF3A1CC914B /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -127,6 +131,7 @@
 				51657565144AFA12002A4EFA /* Frameworks */,
 				51657566144AFA12002A4EFA /* Resources */,
 				51F33E491450BB7D00C19A4B /* ShellScript */,
+				CB7130C27CA248848BDDB33E /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -192,6 +197,20 @@
 			shellPath = /bin/sh;
 			shellScript = "${SRCROOT}/Pods/Pods-resources.sh";
 			showEnvVarsInLog = 0;
+		};
+		CB7130C27CA248848BDDB33E /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -284,6 +303,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MacRubySample/MacRubySample-Prefix.pch";
 				INFOPLIST_FILE = "MacRubySample/MacRubySample-Info.plist";
+				PODS_ROOT = "${SRCROOT}/Pods";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -302,6 +322,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MacRubySample/MacRubySample-Prefix.pch";
 				INFOPLIST_FILE = "MacRubySample/MacRubySample-Info.plist";
+				PODS_ROOT = "${SRCROOT}/Pods";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

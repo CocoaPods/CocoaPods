@@ -1,5 +1,5 @@
 PODS:
-  - AFNetworking (0.9.0)
+  - AFNetworking (0.9.1)
 
 DEPENDENCIES:
   - AFNetworking
