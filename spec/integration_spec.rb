@@ -86,6 +86,7 @@ else
           commit = '2adcd0f81740d6b0cd4589af98790eee3bd1ae7b'
           podfile = Pod::Podfile.new do
             self.platform :ios
+            xcodeproj 'dummy'
             dependency 'SSToolkit', :git => url, :commit => commit
           end
 
@@ -103,6 +104,7 @@ else
           url = 'https://raw.github.com/gist/1349824/3ec6aa60c19113573fc48eac19d0fafd6a69e033/Reachability.podspec'
           podfile = Pod::Podfile.new do
             self.platform :ios
+            xcodeproj 'dummy'
             # TODO use a local file instead of http?
             dependency 'Reachability', :podspec => url
           end
@@ -120,6 +122,7 @@ else
         it "installs a library with a podspec defined inline" do
           podfile = Pod::Podfile.new do
             self.platform :ios
+            xcodeproj 'dummy'
             dependency do |s|
               s.name         = 'JSONKit'
               s.version      = '1.2'
@@ -150,6 +153,7 @@ else
         it "creates targets for different platforms" do
           podfile = Pod::Podfile.new do
             self.platform :ios
+            xcodeproj 'dummy'
             dependency 'JSONKit', '1.4'
             target :ios_target do
               # This brings in Reachability on iOS
@@ -179,6 +183,7 @@ else
 
             podfile = Pod::Podfile.new do
               self.platform :ios
+              xcodeproj 'dummy'
               dependency 'JSONKit', '1.4'
               dependency 'SSToolkit'
             end
@@ -203,6 +208,7 @@ else
       it "runs the optional post_install callback defined in the Podfile _before_ the project is saved to disk" do
         podfile = Pod::Podfile.new do
           self.platform platform
+          xcodeproj 'dummy'
           dependency 'SSZipArchive'
 
           post_install do |installer|
@@ -224,6 +230,7 @@ else
       it "activates required pods and create a working static library xcode project" do
         podfile = Pod::Podfile.new do
           self.platform platform
+          xcodeproj 'dummy'
           dependency 'Reachability',      '> 2.0.5' if platform == :ios
           dependency 'ASIWebPageRequest', '>= 1.8.1'
           dependency 'JSONKit',           '>= 1.0'
@@ -268,6 +275,7 @@ else
         it "does not activate pods that are only part of other pods" do
           spec = Pod::Podfile.new do
             self.platform platform
+            xcodeproj 'dummy'
             dependency 'Reachability', '2.0.4' # only 2.0.4 is part of ASIHTTPRequest’s source.
           end
 
@@ -285,6 +293,7 @@ else
       it "adds resources to the xcode copy script" do
         spec = Pod::Podfile.new do
           self.platform platform
+          xcodeproj 'dummy'
           dependency 'SSZipArchive'
         end
 
@@ -302,6 +311,7 @@ else
       it "overwrites an existing project.pbxproj file" do
         spec = Pod::Podfile.new do
           self.platform platform
+          xcodeproj 'dummy'
           dependency 'JSONKit'
         end
         installer = SpecHelper::Installer.new(spec)
@@ -309,6 +319,7 @@ else
 
         spec = Pod::Podfile.new do
           self.platform platform
+          xcodeproj 'dummy'
           dependency 'SSZipArchive'
         end
         installer = SpecHelper::Installer.new(spec)
@@ -321,6 +332,7 @@ else
       it "creates a project with multiple targets" do
         podfile = Pod::Podfile.new do
           self.platform platform
+          xcodeproj 'dummy'
           target(:debug) { dependency 'SSZipArchive' }
           target(:test, :exclusive => true) { dependency 'JSONKit' }
           dependency 'ASIHTTPRequest'
@@ -388,7 +400,7 @@ else
 
         target = project.targets.first
         target.build_configurations.each do |config|
-          config.base_configuration.path.should == 'Pods/Pods.xcconfig'
+          config.base_configuration.path.should == '${SRCROOT}/Pods/Pods.xcconfig'
         end
         target.frameworks_build_phases.first.files.should.include libPods
         # should be the last phase
@@ -398,6 +410,7 @@ else
       it "should prevent duplication cleaning headers symlinks with multiple targets" do
         podfile = Pod::Podfile.new do
           self.platform platform
+          xcodeproj 'dummy'
           target(:debug) { dependency 'SSZipArchive' }
           target(:test, :exclusive => true) { dependency 'JSONKit' }
           dependency 'ASIHTTPRequest'

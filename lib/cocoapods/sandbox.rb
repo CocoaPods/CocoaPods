@@ -39,7 +39,7 @@ module Pod
     end
 
     def header_search_paths
-      @header_search_paths.uniq.map { |path| "$(PODS_ROOT)/#{path}" }
+      @header_search_paths.uniq.map { |path| "${PODS_ROOT}/#{path}" }
     end
 
     def prepare_for_install

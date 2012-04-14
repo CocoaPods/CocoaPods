@@ -1,6 +1,5 @@
 platform :ios
 
-workspace "RelativePathProject/TheWorkspaceOfTheRelativeProject.xcworkspace"
 xcodeproj "RelativePathProject/RelativePathProject.xcodeproj"
 
 dependency "AFNetworking"

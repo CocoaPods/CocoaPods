@@ -17,6 +17,7 @@ describe "Pod::Installer" do
     before do
       @xcconfig = Pod::Installer.new(Pod::Podfile.new do
         platform :ios
+        xcodeproj 'MyProject'
         dependency 'JSONKit'
       end).target_installers.first.xcconfig.to_hash
     end

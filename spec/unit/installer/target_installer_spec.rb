@@ -5,17 +5,11 @@ TMP_POD_ROOT = ROOT + "tmp" + "podroot" unless defined? TMP_POD_ROOT
 describe Pod::Installer::TargetInstaller do
 
   before do
-    platform = Pod::Platform.ios
-
-    @target_definition = Pod::Podfile::TargetDefinition.new(:foo)
-    @target_definition.platform = platform
-
-    @podfile = stub('podfile',
-      :platform                    => platform,
-      :xcodeproj                   => 'dummy.xcodeproj',
-      :generate_bridge_support?    => false,
-      :set_arc_compatibility_flag? => false
-    )
+    @podfile = Pod::Podfile.new do
+      platform :ios
+      xcodeproj 'dummy'
+    end
+    @target_definition = @podfile.target_definitions[:default]
 
     @project = Pod::Project.new
     @project.main_group.groups.new('name' => 'Targets Support Files')
@@ -24,7 +18,7 @@ describe Pod::Installer::TargetInstaller do
 
     @sandbox = Pod::Sandbox.new(TMP_POD_ROOT)
     @specification = fixture_spec('banana-lib/BananaLib.podspec')
-    @pods = [Pod::LocalPod.new(@specification, @sandbox, platform)]
+    @pods = [Pod::LocalPod.new(@specification, @sandbox, Pod::Platform.ios)]
   end
   
   def do_install!

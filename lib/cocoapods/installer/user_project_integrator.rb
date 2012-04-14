@@ -63,6 +63,14 @@ module Pod
 
         def integrate!
           return if targets.empty?
+
+          unless Config.instance.silent?
+            # TODO let's just use ActiveSupport.
+            plural = targets.size > 1
+            puts "-> Integrating `#{@target_definition.lib_name}' into target#{'s' if plural} " \
+                 "`#{targets.map(&:name).join(', ')}' of Xcode project `#{user_project_path.basename}'.".green
+          end
+
           add_xcconfig_base_configuration
           add_pods_library
           add_copy_resources_script_phase
@@ -106,16 +114,16 @@ module Pod
             # Default to the first, which in a simple project is probably an app target.
             [user_project.targets.first]
           end.reject do |target|
-            # Reject any target that already has this Pods library in one of its frameworks build phases
-            target.frameworks_build_phases.any? do |phase|
-              phase.files.any? { |file| file.name == @target_definition.lib_name }
+              # Reject any target that already has this Pods library in one of its frameworks build phases
+              target.frameworks_build_phases.any? do |phase|
+                phase.files.any? { |file| file.name == @target_definition.lib_name }
+              end
             end
-          end
           end
         end
 
         def add_xcconfig_base_configuration
-          xcconfig = user_project.files.new('path' => "Pods/#{@target_definition.xcconfig_name}") # TODO use Sandbox?
+          xcconfig = user_project.files.new('path' => @target_definition.xcconfig_relative_path)
           targets.each do |target|
             target.build_configurations.each do |config|
               config.base_configuration = xcconfig
@@ -134,7 +142,7 @@ module Pod
           targets.each do |target|
             phase = target.shell_script_build_phases.new
             phase.name = 'Copy Pods Resources'
-            phase.shell_script = %{"${SRCROOT}/Pods/#{@target_definition.copy_resources_script_name}"\n}
+            phase.shell_script = %{"#{@target_definition.copy_resources_script_relative_path}"\n}
           end
         end
       end

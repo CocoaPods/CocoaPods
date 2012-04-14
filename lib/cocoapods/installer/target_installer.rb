@@ -13,7 +13,7 @@ module Pod
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'PODS_ROOT'                => Pod::PodPathResolver.new(@target_definition).pods_root,
+          'PODS_ROOT'                => @target_definition.relative_pods_root,
           'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
           'OTHER_LDFLAGS'            => default_ld_flags,
         })
@@ -78,7 +78,7 @@ module Pod
           config.base_configuration = xcconfig_file
           config.build_settings['OTHER_LDFLAGS'] = ''
           config.build_settings['GCC_PREFIX_HEADER'] = @target_definition.prefix_header_name
-          config.build_settings['PODS_ROOT'] = '$(SRCROOT)'
+          config.build_settings['PODS_ROOT'] = '${SRCROOT}'
         end
       end
 

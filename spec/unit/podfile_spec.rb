@@ -217,12 +217,16 @@ describe "Pod::Podfile" do
 
     it "returns the name of the xcconfig file for the target" do
       @podfile.target_definitions[:default].xcconfig_name.should == 'Pods.xcconfig'
+      @podfile.target_definitions[:default].xcconfig_relative_path.should == 'Pods/Pods.xcconfig'
       @podfile.target_definitions[:test].xcconfig_name.should == 'Pods-test.xcconfig'
+      @podfile.target_definitions[:test].xcconfig_relative_path.should == 'Pods/Pods-test.xcconfig'
     end
 
     it "returns the name of the 'copy resources script' file for the target" do
       @podfile.target_definitions[:default].copy_resources_script_name.should == 'Pods-resources.sh'
+      @podfile.target_definitions[:default].copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Pods-resources.sh'
       @podfile.target_definitions[:test].copy_resources_script_name.should == 'Pods-test-resources.sh'
+      @podfile.target_definitions[:test].copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Pods-test-resources.sh'
     end
 
     it "returns the name of the 'prefix header' file for the target" do
@@ -244,6 +248,25 @@ describe "Pod::Podfile" do
     it "autmatically marks a target as exclusive if the parent platform doesn't match" do
       @podfile.target_definitions[:osx_target].should.be.exclusive
       @podfile.target_definitions[:nested_osx_target].should.not.be.exclusive
+    end
+
+    describe "with an Xcode project that's not in the project_root" do
+      before do
+        @target_definition = @podfile.target_definitions[:default]
+        @target_definition.stubs(:xcodeproj).returns(config.project_root + 'subdir/iOS Project.xcodeproj')
+      end
+
+      it "returns the $(PODS_ROOT) relative to the project's $(SRCROOT)" do
+        @target_definition.relative_pods_root.should == '${SRCROOT}/../Pods'
+      end
+
+      it "returns the xcconfig file path relative to the project's $(SRCROOT)" do
+        @target_definition.xcconfig_relative_path.should == '../Pods/Pods.xcconfig'
+      end
+
+      it "returns the 'copy resources script' path relative to the project's $(SRCROOT)" do
+        @target_definition.copy_resources_script_relative_path.should == '${SRCROOT}/../Pods/Pods-resources.sh'
+      end
     end
   end
 

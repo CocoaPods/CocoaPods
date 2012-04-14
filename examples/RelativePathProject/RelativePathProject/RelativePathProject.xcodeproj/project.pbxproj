@@ -10,7 +10,40 @@
 	<string>46</string>
 	<key>objects</key>
 	<dict>
-		<key>0D44AD8A79844DBFB547AFE1</key>
+		<key>0655448A743D44CE9C8560F4</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>1BDBB6EEA4904D18883D5049</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>3A4A03DC6930408E8E49B095</key>
+		<dict>
+			<key>fileRef</key>
+			<string>DD3C7BABD6FA4FFB859BA028</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>49592E987DEE4FDBBA2EA98F</key>
 		<dict>
 			<key>buildActionMask</key>
 			<string>2147483647</string>
@@ -29,15 +62,34 @@
 			<key>shellPath</key>
 			<string>/bin/sh</string>
 			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Pods-resources.sh"
+			<string>"${SRCROOT}/../Pods/Pods-resources.sh"
 </string>
 		</dict>
-		<key>4564ED848C694645800D24BF</key>
+		<key>4B73544C9B594609B70257C2</key>
 		<dict>
-			<key>fileRef</key>
-			<string>7BE04F9FCDE24A588AF38CCA</string>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
 			<key>isa</key>
-			<string>PBXBuildFile</string>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>60435663B02542A193962E58</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
 		<key>7BE04F9FCDE24A588AF38CCA</key>
 		<dict>
@@ -47,8 +99,47 @@
 			<string>0</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
-			<key>name</key>
+			<key>path</key>
 			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>8B12F3A90ABA4E47905FE316</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods.xcconfig</string>
+			<key>path</key>
+			<string>../Pods/Pods.xcconfig</string>
+			<key>sourceTree</key>
+			<string>SOURCE_ROOT</string>
+		</dict>
+		<key>968826D4F729428780EB11C7</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>A317BF0E1976499FAF0A148C</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
 			<key>path</key>
 			<string>libPods.a</string>
 			<key>sourceTree</key>
@@ -61,7 +152,7 @@
 				<string>B50504EF1509774600AFAE65</string>
 				<string>B50504E81509774600AFAE65</string>
 				<string>B50504E61509774600AFAE65</string>
-				<string>BE05502664FD4BA7A5C610EA</string>
+				<string>8B12F3A90ABA4E47905FE316</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -144,7 +235,7 @@
 				<string>B50504EA1509774600AFAE65</string>
 				<string>B50504EC1509774600AFAE65</string>
 				<string>B50504EE1509774600AFAE65</string>
-				<string>4564ED848C694645800D24BF</string>
+				<string>3A4A03DC6930408E8E49B095</string>
 			</array>
 			<key>isa</key>
 			<string>PBXFrameworksBuildPhase</string>
@@ -175,7 +266,7 @@
 				<string>B50504E11509774600AFAE65</string>
 				<string>B50504E21509774600AFAE65</string>
 				<string>B50504E31509774600AFAE65</string>
-				<string>0D44AD8A79844DBFB547AFE1</string>
+				<string>49592E987DEE4FDBBA2EA98F</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -228,6 +319,16 @@
 				<string>B50504EB1509774600AFAE65</string>
 				<string>B50504ED1509774600AFAE65</string>
 				<string>7BE04F9FCDE24A588AF38CCA</string>
+				<string>BDDCC8E0B6B44EC5A067C887</string>
+				<string>B883D8352B9842028C5C0F5D</string>
+				<string>60435663B02542A193962E58</string>
+				<string>1BDBB6EEA4904D18883D5049</string>
+				<string>A317BF0E1976499FAF0A148C</string>
+				<string>4B73544C9B594609B70257C2</string>
+				<string>0655448A743D44CE9C8560F4</string>
+				<string>968826D4F729428780EB11C7</string>
+				<string>E3F6CFE58972416FB95F9145</string>
+				<string>DD3C7BABD6FA4FFB859BA028</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -238,6 +339,8 @@
 		</dict>
 		<key>B50504E91509774600AFAE65</key>
 		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
@@ -258,6 +361,8 @@
 		</dict>
 		<key>B50504EB1509774600AFAE65</key>
 		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
@@ -278,6 +383,8 @@
 		</dict>
 		<key>B50504ED1509774600AFAE65</key>
 		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
@@ -337,8 +444,6 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>text.plist.xml</string>
-			<key>name</key>
-			<string>RelativePathProject-Info.plist</string>
 			<key>path</key>
 			<string>RelativePathProject-Info.plist</string>
 			<key>sourceTree</key>
@@ -383,8 +488,6 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>main.m</string>
 			<key>path</key>
 			<string>main.m</string>
 			<key>sourceTree</key>
@@ -403,8 +506,6 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>RelativePathProject-Prefix.pch</string>
 			<key>path</key>
 			<string>RelativePathProject-Prefix.pch</string>
 			<key>sourceTree</key>
@@ -416,8 +517,6 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>CCPAppDelegate.h</string>
 			<key>path</key>
 			<string>CCPAppDelegate.h</string>
 			<key>sourceTree</key>
@@ -429,8 +528,6 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>CCPAppDelegate.m</string>
 			<key>path</key>
 			<string>CCPAppDelegate.m</string>
 			<key>sourceTree</key>
@@ -449,8 +546,6 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>CCPViewController.h</string>
 			<key>path</key>
 			<string>CCPViewController.h</string>
 			<key>sourceTree</key>
@@ -462,8 +557,6 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>CCPViewController.m</string>
 			<key>path</key>
 			<string>CCPViewController.m</string>
 			<key>sourceTree</key>
@@ -634,13 +727,15 @@
 			</array>
 			<key>defaultConfigurationIsVisible</key>
 			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>
 		<key>B50505071509774600AFAE65</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>BE05502664FD4BA7A5C610EA</string>
+			<string>8B12F3A90ABA4E47905FE316</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>DSTROOT</key>
@@ -668,7 +763,7 @@
 		<key>B50505081509774600AFAE65</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>BE05502664FD4BA7A5C610EA</string>
+			<string>8B12F3A90ABA4E47905FE316</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>DSTROOT</key>
@@ -693,18 +788,59 @@
 			<key>name</key>
 			<string>Release</string>
 		</dict>
-		<key>BE05502664FD4BA7A5C610EA</key>
+		<key>B883D8352B9842028C5C0F5D</key>
 		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods.xcconfig</string>
 			<key>path</key>
-			<string>Pods/Pods.xcconfig</string>
+			<string>libPods.a</string>
 			<key>sourceTree</key>
-			<string>SOURCE_ROOT</string>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>BDDCC8E0B6B44EC5A067C887</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>DD3C7BABD6FA4FFB859BA028</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>name</key>
+			<string>libPods.a</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>E3F6CFE58972416FB95F9145</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
 	</dict>
 	<key>rootObject</key>

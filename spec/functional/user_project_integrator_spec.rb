@@ -47,14 +47,10 @@ describe Pod::Installer::UserProjectIntegrator do
     workspace.projpaths.find { |path| path =~ /Pods.xcodeproj/ }.should.not.be.nil
   end
   
-  it 'adds the Pods xcconfig file to the project' do
-    @sample_project.files.where(:path => "Pods/Pods.xcconfig").should.not.be.nil
-  end
-  
   it 'sets the Pods xcconfig as the base config for each build configuration' do
     @podfile.target_definitions.each do |_, definition|
       target = @sample_project.targets.where(:name => definition.link_with.first)
-      xcconfig_file = @sample_project.files.where(:path => "Pods/#{definition.xcconfig_name}")
+      xcconfig_file = @sample_project.files.where(:path => "${SRCROOT}/Pods/#{definition.xcconfig_name}")
       target.build_configurations.each do |config|
         config.base_configuration.should == xcconfig_file
       end
@@ -78,7 +74,7 @@ describe Pod::Installer::UserProjectIntegrator do
     @podfile.target_definitions.each do |_, definition|
       target = @sample_project.targets.where(:name => definition.link_with.first)
       phase = target.shell_script_build_phases.where(:name => "Copy Pods Resources")
-      phase.shell_script.strip.should == "\"${SRCROOT}/Pods/#{definition.copy_resources_script_name}\"".strip
+      phase.shell_script.strip.should == "\"${SRCROOT}/Pods/#{definition.copy_resources_script_name}\""
     end
   end
 

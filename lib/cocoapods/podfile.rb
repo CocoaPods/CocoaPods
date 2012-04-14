@@ -61,6 +61,16 @@ module Pod
         end
       end
 
+      # Returns a path, which is relative to the project_root, relative to the
+      # `$(SRCROOT)` of the user's project.
+      def relative_to_srcroot(path)
+        (config.project_root + path).relative_path_from(xcodeproj.dirname)
+      end
+
+      def relative_pods_root
+        "${SRCROOT}/#{relative_to_srcroot "Pods"}"
+      end
+
       def lib_name
         "lib#{label}.a"
       end
@@ -69,8 +79,16 @@ module Pod
         "#{label}.xcconfig"
       end
 
+      def xcconfig_relative_path
+        relative_to_srcroot("Pods/#{xcconfig_name}").to_s
+      end
+
       def copy_resources_script_name
         "#{label}-resources.sh"
+      end
+
+      def copy_resources_script_relative_path
+        "${SRCROOT}/#{relative_to_srcroot("Pods/#{copy_resources_script_name}")}"
       end
 
       def prefix_header_name
@@ -142,7 +160,7 @@ module Pod
       else
         projects = @target_definitions.map { |_, td| td.xcodeproj }.uniq
         if projects.size == 1 && (xcodeproj = @target_definitions[:default].xcodeproj)
-          xcodeproj.dirname + "#{xcodeproj.basename('.xcodeproj')}.xcworkspace"
+          config.project_root + "#{xcodeproj.basename('.xcodeproj')}.xcworkspace"
         end
       end
     end
