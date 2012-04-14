@@ -1,7 +1,6 @@
 require 'net/https'
 require 'uri'
 require 'octokit'
-require 'awesome_print'
 require 'json'
 
 module Pod
@@ -36,7 +35,7 @@ module Pod
       end
 
       def create
-        if repo_id = @name_or_url[/github.com\/(.*\/.*)/, 1]
+        if repo_id = @name_or_url[/github.com\/([^\/]*\/[^\/]*).*/, 1]
           data = github_data_for_template(repo_id)
           puts semantic_versioning_notice(repo_id, data[:name]) if data[:tag] == 'HEAD'
         else
@@ -74,8 +73,8 @@ module Pod
           clean_tag = tag.gsub(/^v(er)? ?/,'')
           versions_tags[Gem::Version.new(clean_tag)] = tag if Gem::Version.correct?(clean_tag)
         end
-        version = versions_tags.keys.sort.last || 'HEAD'
-        tag     = version == 'HEAD' ? '0.0.1' : versions_tags[version]
+        version = versions_tags.keys.sort.last || '0.0.1'
+        tag     = version == '0.0.1' ? 'HEAD' : versions_tags[version]
         [tag, version.to_s]
       end
 
@@ -102,7 +101,7 @@ module Pod
         data = {}
         data[:name]          = name
         data[:version]       = '0.0.1'
-        data[:summary]       = 'A short description of #{name}.'
+        data[:summary]       = "A short description of #{name}."
         data[:homepage]      = "http://EXAMPLE/#{name}"
         data[:author_name]   = `git config --get user.name`.strip
         data[:author_email]  = `git config --get user.email`.strip
