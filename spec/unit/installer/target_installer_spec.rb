@@ -3,6 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 TMP_POD_ROOT = ROOT + "tmp" + "podroot" unless defined? TMP_POD_ROOT
 
 describe Pod::Installer::TargetInstaller do
+  extend SpecHelper::TemporaryDirectory
 
   before do
     @podfile = Pod::Podfile.new do
@@ -17,6 +18,7 @@ describe Pod::Installer::TargetInstaller do
     @installer = Pod::Installer::TargetInstaller.new(@podfile, @project, @target_definition)
 
     @sandbox = Pod::Sandbox.new(TMP_POD_ROOT)
+    FileUtils.cp_r(fixture('banana-lib'), TMP_POD_ROOT + 'BananaLib')
     @specification = fixture_spec('banana-lib/BananaLib.podspec')
     @pods = [Pod::LocalPod.new(@specification, @sandbox, Pod::Platform.ios)]
   end
@@ -43,23 +45,33 @@ describe Pod::Installer::TargetInstaller do
   
   it 'adds the sandbox header search paths to the xcconfig, with quotes' do
     do_install!
-    @installer.xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include("\"#{@sandbox.header_search_paths.join(" ")}\"")
+    @installer.xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include("\"#{@sandbox.header_search_paths.join('" "')}\"")
   end
-  
+
+ 
   it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do
     do_install!
     @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.not.include("-fobjc-arc")
   end
   
-  describe "when ARC compatibility flag is set" do
-    before do
-      @podfile.stubs(:set_arc_compatibility_flag? => true)
-    end
-    
-    it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
-      @specification.stubs(:requires_arc).returns(true)
-      @installer.install!(@pods, @sandbox)
-      @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
-    end
+  it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
+    @podfile.stubs(:set_arc_compatibility_flag? => true)
+    @specification.stubs(:requires_arc).returns(true)
+    @installer.install!(@pods, @sandbox)
+    @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
+  end
+
+  it "creates a prefix header, including the contents of the specification's prefix header" do
+    do_install!
+    prefix_header = @sandbox.root + 'Pods.pch'
+    @installer.save_prefix_header_as(prefix_header, @pods)
+    prefix_header.read.should == <<-EOS
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#endif
+
+// Pods/BananaLib/Classes/BananaLib.pch
+#import <BananaTree/BananaTree.h>
+EOS
   end
 end

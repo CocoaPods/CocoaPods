@@ -222,6 +222,12 @@ describe "A Pod::Specification, in general," do
     list = ROOT + @spec.clean_paths.first
     list.glob.should == Pod::FileList[(ROOT + '*').to_s].exclude('Rakefile').map { |path| Pathname.new(path) }
   end
+
+  it "takes a prefix header path which will be appended to the Pods pch file" do
+    @spec.prefix_header_file.should == nil
+    @spec.prefix_header_file = 'Classes/Demo.pch'
+    @spec.prefix_header_file.should == Pathname.new('Classes/Demo.pch')
+  end
 end
 
 describe "A Pod::Specification subspec" do

@@ -48,6 +48,12 @@ module Pod
     def clean
       clean_paths.each { |path| FileUtils.rm_rf(path) }
     end
+
+    def prefix_header_file
+      if prefix_header = specification.prefix_header_file
+        @sandbox.root + specification.name + prefix_header
+      end
+    end
     
     def source_files
       expanded_paths(specification.source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => true)

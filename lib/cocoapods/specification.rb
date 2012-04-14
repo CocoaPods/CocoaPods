@@ -93,6 +93,11 @@ module Pod
       @part_of = dependency(*name_and_version_requirements)
     end
 
+    def prefix_header_file=(file)
+      @prefix_header_file = Pathname.new(file)
+    end
+    attr_reader :prefix_header_file
+
     def clean_paths=(patterns)
       @clean_paths = pattern_list(patterns)
     end
