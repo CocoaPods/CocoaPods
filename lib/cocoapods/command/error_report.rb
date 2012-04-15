@@ -59,7 +59,7 @@ EOS
         private
 
         def markdown_podfile
-          return '' unless Config.instance.project_podfile.exist?
+          return '' unless Config.instance.project_podfile && Config.instance.project_podfile.exist?
 <<-EOS
 
 ### Podfile
