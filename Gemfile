@@ -3,6 +3,8 @@ source "http://rubygems.org"
 gem "open4"
 gem "colored"
 gem "escape"
+gem "json"
+gem "octokit"
 
 group :development do
   gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git"
@@ -14,4 +16,5 @@ group :development do
   gem "rb-fsevent"
   gem "vcr"
   gem "webmock"
+  gem "awesome_print"
 end
