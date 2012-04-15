@@ -52,6 +52,11 @@ module Pod
           spec.license[:type] if spec.license
         end
 
+        # will return array of all subspecs (recursevly) or nil
+        def subspecs
+          (spec.recursive_subspecs.any? && spec.recursive_subspecs) || nil
+        end
+
         # Statistics information
         def creation_date
           Pod::Specification::Statistics.instance.creation_date(@set)

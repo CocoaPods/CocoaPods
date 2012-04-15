@@ -29,6 +29,7 @@ module Pod
         result << detail('License',  pod.license)         if @stats
         result << detail('Watchers', pod.github_watchers) if @stats
         result << detail('Forks',    pod.github_forks)    if @stats
+        result << detail('Sub specs', pod.subspecs)
         result
       end
 
@@ -40,12 +41,20 @@ module Pod
         txt.strip.gsub(/(.{1,#{col}})( +|$)\n?|(.{#{col}})/, indent + "\\1\\3\n")
       end
 
-      def detail(title, string, preferred_indentation = 8)
+      def detail(title, value, preferred_indentation = 8)
         # 8 is the length of Homepage
-        return '' if !string
+        return '' if !value
         number_of_spaces = ((preferred_indentation - title.length) > 0) ? (preferred_indentation - title.length) : 0
         spaces = ' ' * number_of_spaces
-        "    - #{title}: #{spaces + string}\n"
+        ''.tap do |t|
+          t << "    - #{title}:"
+          if value.class == Array
+            separator = "\n      - "
+            t << separator + value.join(separator)
+          else
+            t << " #{spaces + value}\n"
+          end
+        end
       end
     end
   end
