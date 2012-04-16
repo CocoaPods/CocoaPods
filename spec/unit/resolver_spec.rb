@@ -67,11 +67,15 @@ describe "Pod::Resolver" do
     end
     resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
     resolver.resolve.values.flatten.map(&:name).sort.should == %w{
+      FileMD5Hash
+      ISO8601DateFormatter
       LibComponentLogging-Core
       LibComponentLogging-NSLog
       RestKit
       RestKit/Network
       RestKit/ObjectMapping
+      SOCKit
+      cocoa-oauth
     }
   end
 end

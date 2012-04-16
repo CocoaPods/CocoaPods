@@ -244,7 +244,7 @@ else
           'PODS' => [
             { 'ASIHTTPRequest (1.8.1)'    => ["Reachability"] },
             { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
-            'JSONKit (1.4)',
+            'JSONKit (1.5pre)',
             'Reachability (3.0.0)',
             'SSZipArchive (0.1.2)',
           ],
