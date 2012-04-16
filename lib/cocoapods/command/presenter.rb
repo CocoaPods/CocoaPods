@@ -23,12 +23,15 @@ module Pod
         result << wrap_string(pod.summary)
         result << detail('Homepage', pod.homepage)
         result << detail('Source',   pod.source_url)
-        result << detail('Authors',  pod.authors)         if @stats && pod.authors =~ /,/
-        result << detail('Author',   pod.authors)         if @stats && pod.authors !~ /,/
-        result << detail('Platform', pod.platform)        if @stats
-        result << detail('License',  pod.license)         if @stats
-        result << detail('Watchers', pod.github_watchers) if @stats
-        result << detail('Forks',    pod.github_forks)    if @stats
+        if @stats
+          result << detail('Authors',  pod.authors) if pod.authors =~ /,/
+          result << detail('Author',   pod.authors) if pod.authors !~ /,/
+          result << detail('Platform', pod.platform)
+          result << detail('License',  pod.license)
+          result << detail('Watchers', pod.github_watchers)
+          result << detail('Forks',    pod.github_forks)
+        end
+        result << detail('Sub specs', pod.subspecs)
         result
       end
 
@@ -40,12 +43,20 @@ module Pod
         txt.strip.gsub(/(.{1,#{col}})( +|$)\n?|(.{#{col}})/, indent + "\\1\\3\n")
       end
 
-      def detail(title, string, preferred_indentation = 8)
+      def detail(title, value, preferred_indentation = 8)
         # 8 is the length of Homepage
-        return '' if !string
+        return '' if !value
         number_of_spaces = ((preferred_indentation - title.length) > 0) ? (preferred_indentation - title.length) : 0
         spaces = ' ' * number_of_spaces
-        "    - #{title}: #{spaces + string}\n"
+        ''.tap do |t|
+          t << "    - #{title}:"
+          if value.class == Array
+            separator = "\n      - "
+            t << separator + value.join(separator)
+          else
+            t << " #{spaces + value}\n"
+          end
+        end
       end
     end
   end

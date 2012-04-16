@@ -32,5 +32,11 @@ describe Pod::Command::Presenter do
     output.should.include? 'Watchers: 318'
     output.should.include? 'Forks:    42'
   end
+
+  it "should print at least one subspec" do
+    presenter = Presenter.new(argv())
+    output = presenter.describe(Pod::Spec::Set.new(fixture('spec-repos/master/RestKit')))
+    output.should.include? "RestKit/Network"
+  end
 end
 

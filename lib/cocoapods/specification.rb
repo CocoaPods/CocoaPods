@@ -129,6 +129,18 @@ module Pod
     end
     attr_reader :subspecs
 
+    def recursive_subspecs
+      unless @recursive_subspecs
+        mapper = lambda do |spec|
+            spec.subspecs.map do |subspec|
+              [subspec, *mapper.call(subspec)]
+            end.flatten
+          end
+          @recursive_subspecs = mapper.call self
+      end
+      @recursive_subspecs
+    end
+
     ### Attributes **with** multiple platform support
 
     class PlatformProxy
