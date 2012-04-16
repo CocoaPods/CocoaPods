@@ -59,7 +59,7 @@ EOS
         private
 
         def markdown_podfile
-        return "" if !Config.instance.project_podfile
+        return "" if !Config.instance.project_podfile.exist?
 <<-EOS
 
 ### Podfile

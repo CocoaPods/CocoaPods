@@ -53,10 +53,6 @@ module Pod
         end
 
         # Statistics information
-        def creation_date
-          Pod::Specification::Statistics.instance.creation_date(@set)
-        end
-
         def github_watchers
           Pod::Specification::Statistics.instance.github_watchers(@set)
         end

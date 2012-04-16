@@ -14,4 +14,6 @@ group :development do
   gem "rb-fsevent"
   gem "vcr"
   gem "webmock"
+  gem "pry"
+  gem "awesome_print"
 end
