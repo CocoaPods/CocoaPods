@@ -1,6 +1,5 @@
-require 'net/https'
-require 'uri'
 require 'yaml'
+require 'octokit'
 
 module Pod
   class Specification
@@ -77,33 +76,22 @@ module Pod
 
       def github_stats_if_needed(set)
         return if get_value(set, :gh_date) && get_value(set, :gh_date) > Time.now - cache_expiration
-        spec  = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
-        url   = spec.source.reject {|k,_| k == :commit || k == :tag }.values.first
-        gh_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
+        spec    = set.specification.part_of_other_pod? ? set.specification.part_of_specification : set.specification
+        url     = spec.source.reject {|k,_| k == :commit || k == :tag }.values.first
+        repo_id = url[/github.com\/([^\/\.]*\/[^\/\.]*)\.*/, 1]
+        return unless repo_id
 
-        return unless gh_url
-        response_body = fetch_stats(username, reponame)
+        begin
+          repo = Octokit.repo(repo_id)
+        rescue
+          return
+        end
 
-        return unless response_body
-        watchers  = response_body.match(/"watchers"\W*:\W*([0-9]+)/).to_a[1]
-        forks     = response_body.match(/"forks"\W*:\W*([0-9]+)/).to_a[1]
-
-        return unless watchers && forks
         cache[set.name] ||= {}
-        set_value(set, :gh_watchers,  watchers)
-        set_value(set, :gh_forks,     forks)
+        set_value(set, :gh_watchers,  repo['watchers'])
+        set_value(set, :gh_forks,     repo['forks'])
         set_value(set, :gh_date,      Time.now)
         save_cache
-      end
-
-      def fetch_stats(username, reponame)
-        uri               = URI.parse("https://api.github.com/repos/#{username}/#{reponame}")
-        http              = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl      = true
-        http.verify_mode  = OpenSSL::SSL::VERIFY_NONE
-        request           = Net::HTTP::Get.new(uri.request_uri)
-        response          = http.request(request)
-        response.body if response.is_a?(Net::HTTPSuccess)
       end
     end
   end

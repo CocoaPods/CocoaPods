@@ -54,7 +54,7 @@ module Pod
             separator = "\n      - "
             t << separator + value.join(separator)
           else
-            t << " #{spaces + value}\n"
+            t << " #{spaces + value.to_s}\n"
           end
         end
       end

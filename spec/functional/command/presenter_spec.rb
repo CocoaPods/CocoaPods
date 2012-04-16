@@ -22,8 +22,8 @@ describe Pod::Command::Presenter do
   end
 
   it "presents the stats of a specification set" do
-    response = '{"repository":{"homepage":"","url":"https://github.com/robbiehanson/CocoaLumberjack","has_downloads":true,"has_issues":true,"language":"Objective-C","master_branch":"master","forks":42,"fork":false,"created_at":"2011/03/30 19:38:39 -0700","has_wiki":true,"description":"A fast & simple, yet powerful & flexible logging framework for Mac and iOS","size":416,"private":false,"name":"CocoaLumberjack","owner":"robbiehanson","open_issues":4,"watchers":318,"pushed_at":"2012/03/26 12:39:36 -0700"}}% '
-    Pod::Specification::Statistics.instance.expects(:fetch_stats).with("robbiehanson", "CocoaLumberjack").returns(response)
+    repo = {"forks"=>42, "watchers"=>318}
+    Octokit.expects(:repo).with("robbiehanson/CocoaLumberjack").returns(repo)
     presenter = Presenter.new(argv('--stats'))
     output = presenter.describe(@set)
     output.should.include? 'Author:   Robbie Hanson'

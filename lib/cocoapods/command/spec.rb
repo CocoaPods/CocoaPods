@@ -37,7 +37,7 @@ module Pod
       end
 
       def create
-        if repo_id = @name_or_url[/github.com\/([^\/]*\/[^\/]*).*/, 1]
+        if repo_id = @name_or_url[/github.com\/([^\/\.]*\/[^\/\.]*)\.*/, 1]
           data = github_data_for_template(repo_id)
           puts semantic_versioning_notice(repo_id, data[:name]) if data[:tag] == 'HEAD'
         else
