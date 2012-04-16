@@ -69,34 +69,41 @@ module Pod
         puts
       end
 
-      def suggest_tag_and_version(tags)
+      def suggested_ref_and_version(repo)
+        tags = Octokit.tags(:username => repo['owner']['login'], :repo => repo['name']).map {|tag| tag.name}
         versions_tags = {}
         tags.each do |tag|
           clean_tag = tag.gsub(/^v(er)? ?/,'')
           versions_tags[Gem::Version.new(clean_tag)] = tag if Gem::Version.correct?(clean_tag)
         end
         version = versions_tags.keys.sort.last || '0.0.1'
-        tag     = version == '0.0.1' ? 'HEAD' : versions_tags[version]
-        [tag, version.to_s]
+        data = {:version => version}
+        if version == '0.0.1'
+          branches        = Octokit.branches(:username => repo['owner']['login'], :repo => repo['name'])
+          master_name     = repo['master_branch'] || 'master'
+          master          = branches.select {|branch| branch['name'] == master_name }.first
+          data[:ref_type] = ':commit'
+          data[:ref]      = master['commit']['sha']
+        else
+          data[:ref_type] = ':tag'
+          data[:ref]      = versions_tags[version]
+        end
+        data
       end
 
       def github_data_for_template(repo_id)
         repo = Octokit.repo(repo_id)
         user = Octokit.user(repo['owner']['login'])
-        tags = Octokit.tags(repo_id).map {|tag| tag.name}
-
-        tag, version = suggest_tag_and_version(tags)
-
         data = {}
+
         data[:name]          = repo['name']
-        data[:version]       = version
         data[:summary]       = repo['description'].gsub(/["]/, '\"')
         data[:homepage]      = repo['homepage'] != "" ? repo['homepage'] : repo['html_url']
         data[:author_name]   = user['name']  || user['login']
         data[:author_email]  = user['email'] || 'email@address.com'
         data[:source_url]    = repo['clone_url']
-        data[:tag]           = tag
-        data
+
+        data.merge suggested_ref_and_version(repo)
       end
 
       def default_data_for_template(name)
@@ -108,7 +115,8 @@ module Pod
         data[:author_name]   = `git config --get user.name`.strip
         data[:author_email]  = `git config --get user.email`.strip
         data[:source_url]    = "http://EXAMPLE/#{name}.git"
-        data[:tag]           = '0.0.1'
+        data[:ref_type]      = ':tag'
+        data[:ref]           = '0.0.1'
         data
       end
 
@@ -141,7 +149,7 @@ Pod::Spec.new do |s|
 
   # Specify the location from where the source should be retreived.
   #
-  s.source    = { :git => "#{data[:source_url]}", :tag => "#{data[:tag]}" }
+  s.source    = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
   # s.source   = { :svn => 'http://EXAMPLE/#{data[:name]}/tags/1.0.0' }
   # s.source   = { :hg  => 'http://EXAMPLE/#{data[:name]}', :revision => '1.0.0' }
 
