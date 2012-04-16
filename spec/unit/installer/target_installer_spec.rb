@@ -61,7 +61,7 @@ describe Pod::Installer::TargetInstaller do
     @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
   end
 
-  it "creates a prefix header, including the contents of the specification's prefix header" do
+  it "creates a prefix header, including the contents of the specification's prefix header file" do
     do_install!
     prefix_header = @sandbox.root + 'Pods.pch'
     @installer.save_prefix_header_as(prefix_header, @pods)
@@ -70,8 +70,21 @@ describe Pod::Installer::TargetInstaller do
 #import <UIKit/UIKit.h>
 #endif
 
-// Pods/BananaLib/Classes/BananaLib.pch
 #import <BananaTree/BananaTree.h>
+EOS
+  end
+
+  it "creates a prefix header, including the contents of the specification's prefix header" do
+    do_install!
+    prefix_header = @sandbox.root + 'Pods.pch'
+    @specification.prefix_header_contents = '#import "BlocksKit.h"'
+    @installer.save_prefix_header_as(prefix_header, @pods)
+    prefix_header.read.should == <<-EOS
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#endif
+
+#import "BlocksKit.h"
 EOS
   end
 end

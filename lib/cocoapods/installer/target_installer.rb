@@ -41,9 +41,11 @@ module Pod
           header.puts "#import #{@target_definition.platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}"
           header.puts "#endif"
           pods.each do |pod|
-            if prefix_header = pod.prefix_header_file
+            if prefix_header_contents = pod.specification.prefix_header_contents
               header.puts
-              header.puts "// Pods/#{prefix_header.relative_path_from(pod.sandbox.root)}"
+              header.puts prefix_header_contents
+            elsif prefix_header = pod.prefix_header_file
+              header.puts
               header.puts prefix_header.read
             end
           end

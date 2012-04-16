@@ -228,6 +228,12 @@ describe "A Pod::Specification, in general," do
     @spec.prefix_header_file = 'Classes/Demo.pch'
     @spec.prefix_header_file.should == Pathname.new('Classes/Demo.pch')
   end
+
+  it "takes code that's to be appended to the Pods pch file" do
+    @spec.prefix_header_contents.should == nil
+    @spec.prefix_header_contents = '#import "BlocksKit.h"'
+    @spec.prefix_header_contents.should == '#import "BlocksKit.h"'
+  end
 end
 
 describe "A Pod::Specification subspec" do

@@ -98,6 +98,8 @@ module Pod
     end
     attr_reader :prefix_header_file
 
+    attr_accessor :prefix_header_contents
+
     def clean_paths=(patterns)
       @clean_paths = pattern_list(patterns)
     end
