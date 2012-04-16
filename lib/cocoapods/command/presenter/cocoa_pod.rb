@@ -2,6 +2,8 @@ module Pod
   class Command
     class Presenter
       class CocoaPod
+        attr_accessor :set
+
         def initialize(set)
           @set = set
         end
@@ -70,6 +72,18 @@ module Pod
           Pod::Specification::Statistics.instance.github_forks(@set)
         end
 
+        def ==(other)
+          self.class === other && @set == other.set
+        end
+
+        def eql?(other)
+         self.class === other && name.eql?(other.name)
+        end
+
+        def hash
+          name.hash
+        end
+
         private
         def oxfordify words
           if words.size < 3
@@ -82,3 +96,4 @@ module Pod
     end
   end
 end
+
