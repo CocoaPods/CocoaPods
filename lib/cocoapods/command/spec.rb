@@ -55,18 +55,25 @@ module Pod
         puts "\nThe #{spec.name} specification contains all the required attributes.".green if spec.validate!
 
         warnings = []
-        warnings << 'The name of the specificaiton should match the name of the podspec file' if spec.name + '.podspec' != name
+        warnings << 'The name of the specification should match the name of the podspec file' unless path_matches_name?(file, spec)
         warnings << 'Missing license[:type]'                    unless spec.license && spec.license[:type]
         warnings << 'Missing license[:file] or [:text]'         unless spec.license && (spec.license[:file] || spec.license[:text])
         warnings << "Github repositories should end in `.git'"  if spec.source[:git] =~ /github.com/ && spec.source[:git] !~ /.*\.git/
         warnings << "Github repositories should end in `.git'"  if spec.source[:git] =~ /github.com/ && spec.source[:git] !~ /.*\.git/
         warnings << "The description should end with a dot"     if spec.description && spec.description !~ /.*\./
         warnings << "The summary should end with a dot"         if spec.summary !~ /.*\./
+
         unless warnings.empty?
           puts "\n[!] The #{spec.name} specification raised the following warnings".yellow
           warnings.each { |warn| puts ' - '+ warn }
         end
         puts
+      end
+
+      private
+
+      def path_matches_name?(path, spec)
+        (path.dirname + "#{spec.name}.podspec").to_s == @name
       end
 
       def suggested_ref_and_version(repo)
