@@ -35,26 +35,30 @@ module Pod
 
       def list_new
         days = [1,2,3,5,8]
-        dates, groups = {}, {}
-        days.each {|d| dates[d] = Time.now - 60 * 60 * 24 * d}
-        sets = Source.all_sets
-        creation_dates = Pod::Specification::Statistics.instance.creation_dates(sets)
+        day_dates, groups = {}, {}
+        days.each {|d| day_dates[d] = Time.now - 60 * 60 * 24 * d}
 
-        sets.each do |set|
+        Source.all.each do |source|
+
+        metadata       = Pod::Source::Metadata.new(source)
+        creation_dates = metadata.creation_dates
+        source.pod_sets.each do |set|
           set_date = creation_dates[set.name]
           days.each do |d|
-            if set_date >= dates[d]
+            if set_date >= day_dates[d]
               groups[d] = [] unless groups[d]
               groups[d] << set
               break
             end
           end
         end
+        end
+
         days.reverse.each do |d|
           sets = groups[d]
           next unless sets
           puts "\nPods added in the last #{d == 1 ? 'day' : "#{d} days"}".yellow
-          sets.sort_by {|s| creation_dates[s.name]}.each {|s| puts @presenter.describe(s)}
+          sets.sort_by {|s| s.name}.each {|s| puts @presenter.describe(s)}
         end
       end
 

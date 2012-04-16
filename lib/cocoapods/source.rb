@@ -1,5 +1,7 @@
 module Pod
   class Source
+    autoload :Metadata, 'cocoapods/source/metadata'
+
     class Aggregate
       def all
         @sources ||= begin

@@ -21,17 +21,6 @@ module Pod
         @cache_expiration = 60 * 60 * 24 * 3
       end
 
-      def creation_date(set)
-        compute_creation_date(set)
-      end
-
-      def creation_dates(sets)
-        dates = {}
-        sets.each { |set| dates[set.name] = compute_creation_date(set, false) }
-        save_cache
-        dates
-      end
-
       def github_watchers(set)
         github_stats_if_needed(set)
         get_value(set, :gh_watchers)
@@ -61,18 +50,6 @@ module Pod
 
       def save_cache
         File.open(cache_file, 'w') { |f| f.write(YAML::dump(cache)) } if cache_file
-      end
-
-      def compute_creation_date(set, save = true)
-        date = get_value(set, :creation_date)
-        unless date
-          Dir.chdir(set.pod_dir.dirname) do
-            date = Time.at(`git log --first-parent --format=%ct #{set.name}`.split("\n").last.to_i)
-          end
-          set_value(set, :creation_date, date)
-        end
-        save_cache if save
-        date
       end
 
       def github_stats_if_needed(set)
