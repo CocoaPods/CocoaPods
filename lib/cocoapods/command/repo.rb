@@ -45,6 +45,7 @@ module Pod
         puts "Cloning spec repo `#{@name}' from `#{@url}'" unless config.silent?
         config.repos_dir.mkpath
         Dir.chdir(config.repos_dir) { git("clone '#{@url}' #{@name}") }
+        check_versions(dir)
       end
 
       def update
@@ -52,7 +53,23 @@ module Pod
         dirs.each do |dir|
           puts "Updating spec repo `#{dir.basename}'" unless config.silent?
           Dir.chdir(dir) { git("pull") }
+          check_versions(dir)
         end
+      end
+
+      def check_versions(dir)
+        bin_version  = Gem::Version.new(VERSION)
+        yaml_file    = dir + 'CocoaPods-version.yml'
+        return unless yaml_file.exist?
+        data         = YAML.load_file(yaml_file)
+        min_version  = Gem::Version.new(data[:min])
+        last_version = Gem::Version.new(data[:last])
+        if min_version > bin_version
+          raise Informative,
+          "\n[!] The `#{dir.basename.to_s}' repo requires CocoaPods #{min_version}\n".red +
+          "Update Cocoapods, or checkout the appropriate tag/commit in the repo\n\n"
+        end
+        puts "Cocoapods #{last_version} is available".green if last_version > bin_version
       end
     end
   end
