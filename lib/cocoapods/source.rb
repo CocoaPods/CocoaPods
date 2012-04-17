@@ -83,5 +83,9 @@ module Pod
         set if text.downcase.include?(query.downcase)
       end.compact
     end
+
+    def to_s
+      @repo.basename.to_s
+    end
   end
 end

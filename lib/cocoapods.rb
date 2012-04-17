@@ -1,7 +1,7 @@
 Encoding.default_external = Encoding::UTF_8 if RUBY_VERSION > '1.8.7'
 
 module Pod
-  VERSION = '0.5.1'
+  VERSION = '0.6.0.a'
 
   class Informative < StandardError
   end

@@ -65,9 +65,23 @@ module Pod
     end
 
     def self.run(*argv)
+      bin_version = Gem::Version.new(VERSION)
+      last_version = bin_version
+      Source.all.each { |source|
+        file = source.repo + 'CocoaPods-version.txt'
+        next unless file.exist?
+        repo_min_version  = Gem::Version.new(YAML.load_file(file)[:min])
+        repo_last_version = Gem::Version.new(YAML.load_file(file)[:last])
+        last_version = repo_last_version if repo_last_version && repo_last_version > last_version
+        if repo_min_version > bin_version
+          raise Informative, "\n[!] The repo `#{source}' requires CocoaPods version #{repo_version}\n".red +
+            "\nPlease, update your gem\n\n"
+        end
+      }
+      puts "\n-> Cocoapods #{last_version} is available \n".green.reversed if last_version > bin_version
+
       Setup.new(ARGV.new).run_if_needed
       parse(*argv).run
-
     rescue Interrupt
       puts "[!] Cancelled".red
       Config.instance.verbose? ? raise : exit(1)
