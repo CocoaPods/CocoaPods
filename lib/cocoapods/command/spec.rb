@@ -187,6 +187,7 @@ Pod::Spec.new do |s|
   # these, or none if it runs on both platforms.
   #
   # s.platform = :ios
+  # s.platform = :ios, :deployment_target => "5.0"
   # s.platform = :osx
 
   # A list of resources included with the Pod. These are copied into the
