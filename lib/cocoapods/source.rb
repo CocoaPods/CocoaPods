@@ -24,7 +24,7 @@ module Pod
       def search_by_name(query, full_text_search)
         result = all.map { |s| s.search_by_name(query, full_text_search) }.flatten
         if result.empty?
-          extra = ", summary, or description" if full_text_search
+          extra = ", author, summary, or description" if full_text_search
           raise(Informative, "Unable to find a pod with name" \
                              "#{extra} matching `#{query}'")
         end
@@ -76,7 +76,7 @@ module Pod
       pod_sets.map do |set|
         text = if full_text_search
           s = set.specification
-          "#{s.name} #{s.summary} #{s.description}"
+          "#{s.name} #{s.authors} #{s.summary} #{s.description}"
         else
           set.name
         end
