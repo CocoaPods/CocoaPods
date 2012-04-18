@@ -39,7 +39,7 @@ module Pod
       def create
         if repo_id = @name_or_url[/github.com\/([^\/\.]*\/[^\/\.]*)\.*/, 1]
           data = github_data_for_template(repo_id)
-          puts semantic_versioning_notice(repo_id, data[:name]) if data[:tag] == 'HEAD'
+          puts semantic_versioning_notice(repo_id, data[:name]) if data[:version] == '0.0.1'
         else
           data = default_data_for_template(@name_or_url)
         end
@@ -73,11 +73,11 @@ module Pod
       private
 
       def path_matches_name?(path, spec)
-        (path.dirname + "#{spec.name}.podspec").to_s == @name
+        (path.dirname + "#{spec.name}.podspec").to_s == @name_or_url
       end
 
       def suggested_ref_and_version(repo)
-        tags = Octokit.tags(:username => repo['owner']['login'], :repo => repo['name']).map {|tag| tag.name}
+        tags = Octokit.tags(:username => repo['owner']['login'], :repo => repo['name']).map {|tag| tag["name"]}
         versions_tags = {}
         tags.each do |tag|
           clean_tag = tag.gsub(/^v(er)? ?/,'')
