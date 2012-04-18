@@ -13,7 +13,7 @@ module Pod
       end
 
       def all_sets
-        all.map {|source| source.pod_sets}.flatten
+        all.map(&:pod_sets).flatten
       end
 
       def search(dependency)
