@@ -13,8 +13,10 @@ require 'cocoapods'
 
 $:.unshift((ROOT + 'spec').to_s)
 require 'spec_helper/color_output'
+require 'spec_helper/command'
 require 'spec_helper/fixture'
 require 'spec_helper/git'
+require 'spec_helper/github'
 require 'spec_helper/temporary_directory'
 
 module Bacon
@@ -81,11 +83,6 @@ VCR.configure do |c|
   c.cassette_library_dir = (ROOT + "spec/fixtures/vcr/#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}").to_s
   c.hook_into :webmock # or :fakeweb
   c.allow_http_connections_when_no_cassette = true
-end
-
-class Pod::Command
-  attr_accessor :output
-  def puts(msg = '') (@output ||= '') << "#{msg}\n" end
 end
 
 Pod::Specification::Statistics.instance.cache_file = nil

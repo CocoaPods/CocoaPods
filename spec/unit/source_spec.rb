@@ -2,6 +2,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Source" do
   extend SpecHelper::Git
+  extend SpecHelper::Command
   extend SpecHelper::TemporaryDirectory
 
   before do

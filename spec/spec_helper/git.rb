@@ -31,15 +31,10 @@ module SpecHelper
       git repo, "config --get #{attr}"
     end
 
-    def command(*argv)
-      argv << '--silent'
-      command = Pod::Command.parse(*argv)
+    def add_repo(name, from)
+      command = command('repo', 'add', name, from)
       command.run
       command
-    end
-
-    def add_repo(name, from)
-      command('repo', 'add', name, from)
     end
 
     def make_change(repo, name)
