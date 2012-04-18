@@ -30,7 +30,7 @@ module Pod
     def to_s
       case @symbolic_name
       when :ios
-        'iOS'
+        'iOS' + (deployment_target ? " #{deployment_target}" : '')
       when :osx
         'OS X'
       else
@@ -47,7 +47,7 @@ module Pod
     end
 
     def deployment_target
-      if (opt = options[:deployment_target])
+      if (options && opt = options[:deployment_target])
         Pod::Version.new(opt)
       end
     end

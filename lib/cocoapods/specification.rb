@@ -114,7 +114,14 @@ module Pod
     end
 
     def platform=(platform)
-      @platform = Platform.new(platform)
+      if platform.class == Array
+        name = platform[0]
+        options = platform[1]
+      else
+        name = platform
+        options = nil
+      end
+      @platform = Platform.new(name, options)
     end
     attr_reader :platform
 
