@@ -83,7 +83,6 @@ module Pod
       end
 
       def run
-        puts "Using push access" if push? && !config.silent
         if dir.exist?
           set_master_repo_url
           update_master_repo_command.run
@@ -93,6 +92,7 @@ module Pod
         hook = config.repos_dir + 'master/.git/hooks/pre-commit'
         hook.open('w') { |f| f << "#!/bin/sh\nrake lint" }
         `chmod +x '#{hook}'`
+        puts "Setup completed (#{push? ? "push" : "read-only"} access)" unless config.silent
       end
     end
   end
