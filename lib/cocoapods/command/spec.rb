@@ -20,7 +20,11 @@ module Pod
     $ pod spec lint [NAME.podspec]
 
       Validates `NAME.podspec'. In case `NAME.podspec' is omitted, it defaults
-      to `*.podspec' in the current working dir.}
+      to `*.podspec' in the current working dir.
+
+    $ pod spec lint all
+
+      Validates all spec-repos.}
       end
 
       def initialize(argv)
@@ -45,35 +49,66 @@ module Pod
         end
         spec = spec_template(data)
         (Pathname.pwd + "#{data[:name]}.podspec").open('w') { |f| f << spec }
-        puts "\nSpecification created at #{data[:name]}.podspec\n".green
+        puts "\nSpecification created at #{data[:name]}.podspec".green
       end
 
       def lint
-        name = @name_or_url
-        file = name ? Pathname.new(name) : Pathname.pwd.glob('*.podspec').first
-        spec = Specification.from_file(file)
-        puts "\nThe #{spec.name} specification contains all the required attributes.".green if spec.validate!
 
-        warnings = []
-        warnings << 'The name of the specification should match the name of the podspec file' unless path_matches_name?(file, spec)
-        warnings << 'Missing license[:type]'                    unless spec.license && spec.license[:type]
-        warnings << 'Missing license[:file] or [:text]'         unless spec.license && (spec.license[:file] || spec.license[:text])
-        warnings << "Github repositories should end in `.git'"  if spec.source[:git] =~ /github.com/ && spec.source[:git] !~ /.*\.git/
-        warnings << "Github repositories should end in `.git'"  if spec.source[:git] =~ /github.com/ && spec.source[:git] !~ /.*\.git/
-        warnings << "The description should end with a dot"     if spec.description && spec.description !~ /.*\./
-        warnings << "The summary should end with a dot"         if spec.summary !~ /.*\./
-
-        unless warnings.empty?
-          puts "\n[!] The #{spec.name} specification raised the following warnings".yellow
-          warnings.each { |warn| puts ' - '+ warn }
+        all_valid = true
+        if @name_or_url == 'all'
+          files = config.repos_dir.glob('**/*.podspec')
+        else
+          name = @name_or_url
+          files = name ? [Pathname.new(name)] : Pathname.pwd.glob('*.podspec')
         end
-        puts
+
+        files.each do |file|
+
+          text = file.read
+          spec = Specification.from_file(file)
+
+          spec.validate!
+
+          deprecations = []
+          if text.include?('config.ios?') || text.include?('config.ios?')
+            deprecations << "`config.ios?' and `config.osx' will be removed in version 0.7"
+          end
+
+          warnings = []
+          warnings << "The name of the spec should match the name of the file" unless path_matches_name?(file, spec)
+          warnings << "Missing license[:type]"                    unless spec.license && spec.license[:type]
+          if @name_or_url != 'all'
+            #TODO: the is here only because at the time of 0.6.0rc1
+            # would be triggered in all specs of if lint all is called
+            warnings << "Missing license[:file] or [:text]"         unless spec.license && (spec.license[:file] || spec.license[:text])
+          end
+          warnings << "Github repositories should end in `.git'"  if spec.source && spec.source[:git] =~ /github.com/ && spec.source[:git] !~ /.*\.git/
+          warnings << "The description should end with a dot"     if spec.description && spec.description !~ /.*\./
+          warnings << "The summary should end with a dot"         if spec.summary !~ /.*\./
+
+          if deprecations.empty? && warnings.empty?
+            puts " -> ".green + "#{spec} passed validation" unless @name_or_url == 'all' || config.silent?
+          else
+            puts " -> ".red + spec.to_s unless config.silent?
+          end
+
+          types = ["WARN", "DPRC"]
+          messages = [warnings, deprecations]
+          types.each_with_index do |type, i|
+            unless messages[i].empty?
+              messages[i].each {|msg| puts "  - #{type} | #{msg}"} unless config.silent?
+              all_valid = false
+            end
+          end
+          puts unless config.silent?
+        end
+        all_valid
       end
 
       private
 
-      def path_matches_name?(path, spec)
-        (path.dirname + "#{spec.name}.podspec").to_s == @name_or_url
+      def path_matches_name?(file, spec)
+        file.basename.to_s == spec.name + '.podspec'
       end
 
       def suggested_ref_and_version(repo)
