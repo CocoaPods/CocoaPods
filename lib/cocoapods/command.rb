@@ -6,6 +6,7 @@ module Pod
     autoload :Install,     'cocoapods/command/install'
     autoload :List,        'cocoapods/command/list'
     autoload :Presenter,   'cocoapods/command/presenter'
+    autoload :Push,        'cocoapods/command/push'
     autoload :Repo,        'cocoapods/command/repo'
     autoload :Search,      'cocoapods/command/search'
     autoload :Setup,       'cocoapods/command/setup'
@@ -47,11 +48,12 @@ module Pod
     def self.banner
       "To see help for the available commands run:\n" \
       "\n" \
-      "  * $ pod setup --help\n" \
-      "  * $ pod search --help\n" \
-      "  * $ pod list --help\n" \
       "  * $ pod install --help\n" \
+      "  * $ pod list --help\n" \
+      "  * $ pod push --help\n" \
       "  * $ pod repo --help\n" \
+      "  * $ pod search --help\n" \
+      "  * $ pod setup --help\n" \
       "  * $ pod spec --help"
     end
 
@@ -97,6 +99,7 @@ module Pod
       when 'list'    then List
       when 'setup'   then Setup
       when 'spec'    then Spec
+      when 'push'    then Push
       end
 
       if show_help || command_class.nil?
