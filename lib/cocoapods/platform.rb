@@ -27,12 +27,17 @@ module Pod
       end
     end
 
+    def support?(other)
+      return true if @symbolic_name.nil? || other.nil?
+      @symbolic_name == other.name && (deployment_target.nil? || other.deployment_target.nil? || deployment_target >= other.deployment_target)
+    end
+
     def to_s
       case @symbolic_name
       when :ios
         'iOS' + (deployment_target ? " #{deployment_target}" : '')
       when :osx
-        'OS X'
+        'OS X' + (deployment_target ? " #{deployment_target}" : '')
       else
         'iOS - OS X'
       end

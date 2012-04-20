@@ -26,6 +26,23 @@ describe Pod::Platform do
     @platform.to_s.should               == "iOS"
     Pod::Platform.new(:osx).to_s.should == 'OS X'
     Pod::Platform.new(nil).to_s.should  == "iOS - OS X"
+    Pod::Platform.new(:ios, { :deployment_target => '5.0.0' }).to_s.should == 'iOS 5.0.0'
+    Pod::Platform.new(:osx, { :deployment_target => '10.7' }).to_s.should == 'OS X 10.7'
+  end
+
+  it "correctly indicates if it supports another platfrom" do
+    ios4 = Pod::Platform.new(:ios, { :deployment_target => '4.0.0' })
+    ios5 = Pod::Platform.new(:ios, { :deployment_target => '5.0.0' })
+    ios5.should.support?(ios4)
+    ios4.should.not.support?(ios5)
+    osx6 = Pod::Platform.new(:osx, { :deployment_target => '10.6' })
+    osx7 = Pod::Platform.new(:osx, { :deployment_target => '10.7' })
+    osx7.should.support?(osx6)
+    osx6.should.not.support?(osx7)
+    both = Pod::Platform.new(nil)
+    both.should.support?(ios4)
+    both.should.support?(osx6)
+    both.should.support?(nil)
   end
 
   it "uses it's name as it's symbold version" do

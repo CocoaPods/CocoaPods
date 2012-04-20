@@ -59,6 +59,30 @@ describe "Pod::Resolver" do
     lambda { @resolver.resolve }.should.raise Pod::Informative
   end
 
+  it "does not raise if all of the dependencies have a deployment target equal or lower of the root spec (Podfile)" do
+    set = Pod::Spec::Set.new(config.repos_dir + 'master/ASIHTTPRequest')
+    @resolver.cached_sets['ASIHTTPRequest'] = set
+
+    def set.stub_platform=(platform); @stubbed_platform = platform; end
+    def set.specification; spec = super; spec.platform = @stubbed_platform; spec; end
+
+    @podfile.platform :ios, { :deployment_target => "4.0.0" }
+    set.stub_platform = :ios, { :deployment_target => "4.0.0" }
+    lambda { @resolver.resolve }.should.not.raise
+  end
+
+  it "raises once any of the dependencies requires a higher deployment target of the root spec (Podfile)" do
+    set = Pod::Spec::Set.new(config.repos_dir + 'master/ASIHTTPRequest')
+    @resolver.cached_sets['ASIHTTPRequest'] = set
+
+    def set.stub_platform=(platform); @stubbed_platform = platform; end
+    def set.specification; spec = super; spec.platform = @stubbed_platform; spec; end
+
+    @podfile.platform :ios, { :deployment_target => "4.0.0" }
+    set.stub_platform = :ios, { :deployment_target => "5.0.0" }
+    lambda { @resolver.resolve }.should.raise Pod::Informative
+  end
+
   it "resolves subspecs" do
     @podfile = Pod::Podfile.new do
       platform :ios
