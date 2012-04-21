@@ -19,12 +19,13 @@ module Pod
 
       def message
         [
-          @command_class.banner,
           '',
-          'Options',
-          '-------',
+          @command_class.banner.gsub(/\$ pod (.*)/, '$ pod \1'.green),
           '',
-          options
+          'Options:',
+          '',
+          options,
+          "\n",
         ].join("\n")
       end
 
@@ -46,15 +47,10 @@ module Pod
     end
 
     def self.banner
-      "To see help for the available commands run:\n" \
-      "\n" \
-      "  * $ pod install --help\n" \
-      "  * $ pod list --help\n" \
-      "  * $ pod push --help\n" \
-      "  * $ pod repo --help\n" \
-      "  * $ pod search --help\n" \
-      "  * $ pod setup --help\n" \
-      "  * $ pod spec --help"
+      commands = ['install', 'list', 'push', 'repo', 'search', 'setup', 'spec'].sort
+      banner   = "\nTo see help for the available commands run:\n\n"
+      commands.each {|cmd| banner << "  * $ pod #{cmd.green} --help\n"}
+      banner
     end
 
     def self.options
