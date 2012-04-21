@@ -208,7 +208,6 @@ task :bootstrap do
 
   puts "Installing gems"
   `bundle install`
-  `cd external/XcodeProj && bundle install`
 end
 
 desc "Run all specs"
