@@ -19,6 +19,7 @@ describe "Pod::Command::Search" do
   end
 
   it "complains for wrong parameters" do
+    lambda { run_command('search') }.should.raise Pod::Command::Help
     lambda { run_command('search', 'too', 'many') }.should.raise Pod::Command::Help
     lambda { run_command('search', 'too', '--wrong') }.should.raise Pod::Command::Help
     lambda { run_command('search', '--wrong') }.should.raise Pod::Command::Help
