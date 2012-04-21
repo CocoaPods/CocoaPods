@@ -49,35 +49,61 @@ module Pod
       end
 
       def lint
-        all_valid = true
-
-        if is_repo = @name_or_url && (config.repos_dir + @name_or_url).exist?
+        is_repo = repo_with_name_exist(@name_or_url)
+        if is_repo
           files = (config.repos_dir + @name_or_url).glob('**/*.podspec')
         else
           name = @name_or_url
           files = name ? [Pathname.new(name)] : Pathname.pwd.glob('*.podspec')
         end
-
         puts
+        lint_specs_files(files, is_repo)
+      end
+
+      private
+
+      def repo_with_name_exist(name)
+        name && (config.repos_dir + name).exist?
+      end
+
+      # Takes an array of podspec files and lints them all
+      #
+      # It returns true if **all** the files passed validation
+      #
+      def lint_specs_files(files, is_repo)
+        tmpdir = Pathname.new('/tmp/CocoaPods').mkpath
+        all_valid = true
         files.each do |file|
+          file = file.realpath
           spec = Specification.from_file(file)
+          print " -> #{spec}\r" unless config.silent? || is_repo
 
           spec.validate!
           warnings     = warnings_for_spec(spec, file, is_repo)
           deprecations = deprecation_notices_for_spec(spec, file, is_repo)
-
-          if deprecations.empty? && warnings.empty?
-            puts " -> ".green + "#{spec} passed validation" unless is_repo || config.silent?
+          # TODO: check that the dependencies of the spec exist
+          if is_repo
+            build_errors, file_errors = [], []
           else
-            puts " -> ".red + spec.to_s unless config.silent?
+            build_errors = Dir.chdir('/tmp/CocoaPods') { build_errors_for_spec(spec, file, is_repo) }
+            file_errors  = Dir.chdir('/tmp/CocoaPods') { file_errors_for_spec(spec, file, is_repo) }
           end
 
-          types    = ["WARN", "DPRC"]
-          messages = [warnings, deprecations]
+          # This overwrites the previous printed text
+          is_valid = deprecations.empty? && warnings.empty? && file_errors.empty?
+          unless config.silent?
+            if is_valid
+              puts " -> ".green + "#{spec} passed validation" unless is_repo
+            else
+              puts " -> ".red + spec.to_s
+              all_valid = false
+            end
+          end
+          types    = ["WARN", "DPRC", "XCDB", "ERFL"]
+          messages = [warnings, deprecations, build_errors, file_errors]
           types.each_with_index do |type, i|
             unless messages[i].empty?
               messages[i].each {|msg| puts "  - #{type} | #{msg}"} unless config.silent?
-              all_valid = false
             end
           end
           puts unless config.silent? || ( is_repo && messages.flatten.empty? )
@@ -85,34 +111,141 @@ module Pod
         all_valid
       end
 
-      private
-
-      def warnings_for_spec(spec, file, all)
+      # It checks a spec for minor non fatal defects
+      #
+      # It returns a array of messages
+      #
+      def warnings_for_spec(spec, file, is_repo)
         license  = spec.license
         source   = spec.source
         warnings = []
-        unless path_matches_name?(file, spec);                                  warnings << "The name of the spec should match the name of the file"; end
-        unless license && license[:type];                                       warnings << "Missing license[:type]"; end
-        if source && source[:git] =~ /github.com/ && source[:git] !~ /.*\.git/; warnings << "Github repositories should end in `.git'"; end
-        if spec.description && spec.description !~ /.*\./;                      warnings << "The description should end with a dot"; end
-        if spec.summary !~ /.*\./;                                              warnings << "The summary should end with a dot"; end
-        unless all || license && (license[:file] || license[:text]);            warnings << "Missing license[:file] or [:text]"; end
-        #TODO: the previous ´all' is here only because at the time of 0.6.0rc1 it would trigger in all specs of if lint all is called
+        warnings << "The name of the spec should match the name of the file" unless path_matches_name?(file, spec)
+        warnings << "Missing license[:type]" unless license && license[:type]
+        warnings << "Github repositories should end in `.git'" if source && source[:git] =~ /github.com/ && source[:git] !~ /.*\.git/
+        warnings << "The description should end with a dot" if spec.description && spec.description !~ /.*\./
+        warnings << "The summary should end with a dot" if spec.summary !~ /.*\./
+        warnings << "Missing license[:file] or [:text]" unless is_repo || license && (license[:file] || license[:text])
+        #TODO: the previous ´is_repo' check is there only because at the time of 0.6.0rc1 it would be triggered in all specs
         warnings
       end
 
-      def deprecation_notices_for_spec(spec, file, all)
+      def path_matches_name?(file, spec)
+        file.basename.to_s == spec.name + '.podspec'
+      end
+
+      # It reads a podspec file and checks for strings corresponding
+      # to a feature that are or will be deprecated
+      #
+      # It returns a array of messages
+      #
+      def deprecation_notices_for_spec(spec, file, is_repo)
         text = file.read
         deprecations = []
-        if text. =~ /config\..os?/
-          deprecations << "`config.ios?' and `config.osx' will be removed in version 0.7"
-        end
+        deprecations << "`config.ios?' and `config.osx' will be removed in version 0.7" if text. =~ /config\..os?/
+        deprecations << "Currently there is no known reason to use the `post_install' hook" if text. =~ /post_install/
         deprecations
       end
 
+      # It creates a podfile in memory and builds a library containing
+      # the pod for all available platfroms with xcodebuild.
+      #
+      # It returns a array of messages
+      #
+      def build_errors_for_spec(spec, file, is_repo)
+        messages = []
+        platform_names(spec).each do |platform_name|
+          config.silent = true
+          config.integrate_targets = false
+          config.project_root = Pathname.pwd
+          podfile = podfile_from_spec(spec, file, platform_name)
+          Installer.new(podfile).install!
 
-      def path_matches_name?(file, spec)
-        file.basename.to_s == spec.name + '.podspec'
+          config.silent = false
+          output        = Dir.chdir('Pods') { `xcodebuild 2>&1` }
+          clean_output  = proces_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
+          messages     += clean_output
+        end
+        messages
+      end
+
+      def podfile_from_spec(spec, file, platform_name)
+        podfile = Pod::Podfile.new do
+          platform platform_name
+          dependency spec.name, :podspec => file.realpath.to_s
+        end
+      end
+
+      def proces_xcode_build_output(output)
+        output_by_line = output.split("\n")
+        selected_lines = output_by_line.select do |l|
+          l.include?('error') || l.include?('warning') && !l.include?('warning generated.')
+        end
+      end
+
+      # It checks that every file pattern specified in a spec yields
+      # at least one file. It requires the pods to be alredy present
+      # in the current working directory under Pods/spec.name
+      #
+      # It returns a array of messages
+      #
+      def file_errors_for_spec(spec, file, is_repo)
+        Dir.chdir('Pods/' + spec.name ) do
+          messages = []
+          messages += check_spec_files_exists(spec, :source_files)
+          messages += check_spec_files_exists(spec, :resources)
+          spec.clean_paths.each do |pattern|
+            messages << "clean_paths = '#{pattern}' -> did not match any file" if Pathname.pwd.glob(pattern).empty?
+          end
+          messages.compact
+        end
+      end
+
+      def check_spec_files_exists(spec, accessor)
+        result = []
+        platform_names(spec).each do |platform_name|
+          patterns = spec.send(accessor)[platform_name]
+          unless patterns.empty?
+            patterns.each do |pattern|
+              result << "#{platform_name}: #{accessor} = '#{pattern}' -> did not match any file" if Pathname.pwd.glob(pattern).empty?
+            end
+          end
+        end
+        result
+      end
+
+      def platform_names(spec)
+        spec.platform.name || [:ios, :osx]
+      end
+
+      # Templates and github information retrival for spec create
+
+      def default_data_for_template(name)
+        data = {}
+        data[:name]          = name
+        data[:version]       = '0.0.1'
+        data[:summary]       = "A short description of #{name}."
+        data[:homepage]      = "http://EXAMPLE/#{name}"
+        data[:author_name]   = `git config --get user.name`.strip
+        data[:author_email]  = `git config --get user.email`.strip
+        data[:source_url]    = "http://EXAMPLE/#{name}.git"
+        data[:ref_type]      = ':tag'
+        data[:ref]           = '0.0.1'
+        data
+      end
+
+      def github_data_for_template(repo_id)
+        repo = Octokit.repo(repo_id)
+        user = Octokit.user(repo['owner']['login'])
+        data = {}
+
+        data[:name]          = repo['name']
+        data[:summary]       = repo['description'].gsub(/["]/, '\"')
+        data[:homepage]      = repo['homepage'] != "" ? repo['homepage'] : repo['html_url']
+        data[:author_name]   = user['name']  || user['login']
+        data[:author_email]  = user['email'] || 'email@address.com'
+        data[:source_url]    = repo['clone_url']
+
+        data.merge suggested_ref_and_version(repo)
       end
 
       def suggested_ref_and_version(repo)
@@ -134,35 +267,6 @@ module Pod
           data[:ref_type] = ':tag'
           data[:ref]      = versions_tags[version]
         end
-        data
-      end
-
-      def github_data_for_template(repo_id)
-        repo = Octokit.repo(repo_id)
-        user = Octokit.user(repo['owner']['login'])
-        data = {}
-
-        data[:name]          = repo['name']
-        data[:summary]       = repo['description'].gsub(/["]/, '\"')
-        data[:homepage]      = repo['homepage'] != "" ? repo['homepage'] : repo['html_url']
-        data[:author_name]   = user['name']  || user['login']
-        data[:author_email]  = user['email'] || 'email@address.com'
-        data[:source_url]    = repo['clone_url']
-
-        data.merge suggested_ref_and_version(repo)
-      end
-
-      def default_data_for_template(name)
-        data = {}
-        data[:name]          = name
-        data[:version]       = '0.0.1'
-        data[:summary]       = "A short description of #{name}."
-        data[:homepage]      = "http://EXAMPLE/#{name}"
-        data[:author_name]   = `git config --get user.name`.strip
-        data[:author_email]  = `git config --get user.email`.strip
-        data[:source_url]    = "http://EXAMPLE/#{name}.git"
-        data[:ref_type]      = ':tag'
-        data[:ref]           = '0.0.1'
         data
       end
 
