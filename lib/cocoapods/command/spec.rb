@@ -49,46 +49,30 @@ module Pod
       end
 
       def lint
-
         all_valid = true
-        if @name_or_url == 'all'
-          files = config.repos_dir.glob('**/*.podspec')
+
+        if is_repo = @name_or_url && (config.repos_dir + @name_or_url).exist?
+          files = (config.repos_dir + @name_or_url).glob('**/*.podspec')
         else
           name = @name_or_url
           files = name ? [Pathname.new(name)] : Pathname.pwd.glob('*.podspec')
         end
 
+        puts
         files.each do |file|
-
-          text = file.read
           spec = Specification.from_file(file)
 
           spec.validate!
-
-          deprecations = []
-          if text.include?('config.ios?') || text.include?('config.ios?')
-            deprecations << "`config.ios?' and `config.osx' will be removed in version 0.7"
-          end
-
-          warnings = []
-          warnings << "The name of the spec should match the name of the file" unless path_matches_name?(file, spec)
-          warnings << "Missing license[:type]"                    unless spec.license && spec.license[:type]
-          if @name_or_url != 'all'
-            #TODO: the is here only because at the time of 0.6.0rc1
-            # would be triggered in all specs of if lint all is called
-            warnings << "Missing license[:file] or [:text]"         unless spec.license && (spec.license[:file] || spec.license[:text])
-          end
-          warnings << "Github repositories should end in `.git'"  if spec.source && spec.source[:git] =~ /github.com/ && spec.source[:git] !~ /.*\.git/
-          warnings << "The description should end with a dot"     if spec.description && spec.description !~ /.*\./
-          warnings << "The summary should end with a dot"         if spec.summary !~ /.*\./
+          warnings     = warnings_for_spec(spec, file, is_repo)
+          deprecations = deprecation_notices_for_spec(spec, file, is_repo)
 
           if deprecations.empty? && warnings.empty?
-            puts " -> ".green + "#{spec} passed validation" unless @name_or_url == 'all' || config.silent?
+            puts " -> ".green + "#{spec} passed validation" unless is_repo || config.silent?
           else
             puts " -> ".red + spec.to_s unless config.silent?
           end
 
-          types = ["WARN", "DPRC"]
+          types    = ["WARN", "DPRC"]
           messages = [warnings, deprecations]
           types.each_with_index do |type, i|
             unless messages[i].empty?
@@ -96,12 +80,36 @@ module Pod
               all_valid = false
             end
           end
-          puts unless config.silent?
+          puts unless config.silent? || ( is_repo && messages.flatten.empty? )
         end
         all_valid
       end
 
       private
+
+      def warnings_for_spec(spec, file, all)
+        license  = spec.license
+        source   = spec.source
+        warnings = []
+        unless path_matches_name?(file, spec);                                  warnings << "The name of the spec should match the name of the file"; end
+        unless license && license[:type];                                       warnings << "Missing license[:type]"; end
+        if source && source[:git] =~ /github.com/ && source[:git] !~ /.*\.git/; warnings << "Github repositories should end in `.git'"; end
+        if spec.description && spec.description !~ /.*\./;                      warnings << "The description should end with a dot"; end
+        if spec.summary !~ /.*\./;                                              warnings << "The summary should end with a dot"; end
+        unless all || license && (license[:file] || license[:text]);            warnings << "Missing license[:file] or [:text]"; end
+        #TODO: the previous ´all' is here only because at the time of 0.6.0rc1 it would trigger in all specs of if lint all is called
+        warnings
+      end
+
+      def deprecation_notices_for_spec(spec, file, all)
+        text = file.read
+        deprecations = []
+        if text. =~ /config\..os?/
+          deprecations << "`config.ios?' and `config.osx' will be removed in version 0.7"
+        end
+        deprecations
+      end
+
 
       def path_matches_name?(file, spec)
         file.basename.to_s == spec.name + '.podspec'
