@@ -61,7 +61,7 @@ module Pod
       end
 
       def validate_podspec_files!
-        puts "\nValidating specs\n".yellow unless config.silent
+        puts "\nValidating specs".yellow unless config.silent
         lint_argv = ["lint"]
         lint_argv << "--silent" if config.silent
         all_valid = Spec.new(ARGV.new(lint_argv)).run

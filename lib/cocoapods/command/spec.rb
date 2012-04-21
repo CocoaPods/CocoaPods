@@ -118,6 +118,7 @@ module Pod
       def warnings_for_spec(spec, file, is_repo)
         license  = spec.license
         source   = spec.source
+        text     = file.read
         warnings = []
         warnings << "The name of the spec should match the name of the file" unless path_matches_name?(file, spec)
         warnings << "Missing license[:type]" unless license && license[:type]
@@ -125,6 +126,7 @@ module Pod
         warnings << "The description should end with a dot" if spec.description && spec.description !~ /.*\./
         warnings << "The summary should end with a dot" if spec.summary !~ /.*\./
         warnings << "Missing license[:file] or [:text]" unless is_repo || license && (license[:file] || license[:text])
+        warnings << "Comments must be deleted" if text =~ /^\w*#/
         #TODO: the previous ´is_repo' check is there only because at the time of 0.6.0rc1 it would be triggered in all specs
         warnings
       end
