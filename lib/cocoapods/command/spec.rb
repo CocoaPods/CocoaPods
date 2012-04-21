@@ -11,20 +11,16 @@ module Pod
       def self.banner
         %{Managing PodSpec files:
 
-    $ pod spec create [NAME]
-    $ pod spec create [https://github.com/USER/REPO]
+  $ pod spec create [ NAME | https://github.com/USER/REPO ]
 
-      Creates a PodSpec, in the current working dir, called `NAME.podspec'.
-      If a GitHub url is passed the spec is prepopulated.
+    Creates a PodSpec, in the current working dir, called `NAME.podspec'.
+    If a GitHub url is passed the spec is prepopulated.
 
-    $ pod spec lint [NAME.podspec]
+  $ pod spec lint [ NAME.podspec | REPO ]
 
-      Validates `NAME.podspec'. In case `NAME.podspec' is omitted, it defaults
-      to `*.podspec' in the current working dir.
-
-    $ pod spec lint all
-
-      Validates all spec-repos.}
+    Validates `NAME.podspec'. In case `NAME.podspec' is omitted, it defaults
+    to `*.podspec' in the current working dir. If the name of a repo is
+    provided it validates all its specs.}
       end
 
       def initialize(argv)
@@ -276,7 +272,7 @@ Pod::Spec.new do |s|
   # s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2' }
 
 end
-        SPEC
+SPEC
       end
 
       def semantic_versioning_notice(repo_id, repo)
