@@ -71,7 +71,7 @@ module Pod
       # It returns true if **all** the files passed validation
       #
       def lint_specs_files(files, is_repo)
-        tmpdir = Pathname.new('/tmp/CocoaPods').mkpath
+        tmp_dir = Pathname.new('/tmp/CocoaPods/Lint')
         all_valid = true
         files.each do |file|
           file = file.realpath
@@ -85,8 +85,10 @@ module Pod
           if is_repo
             build_errors, file_errors = [], []
           else
-            build_errors = Dir.chdir('/tmp/CocoaPods') { build_errors_for_spec(spec, file, is_repo) }
-            file_errors  = Dir.chdir('/tmp/CocoaPods') { file_errors_for_spec(spec, file, is_repo) }
+            tmp_dir.mkpath
+            build_errors = Dir.chdir(tmp_dir) { build_errors_for_spec(spec, file, is_repo) }
+            file_errors  = Dir.chdir(tmp_dir) { file_errors_for_spec(spec, file, is_repo) }
+            tmp_dir.rmtree
           end
 
           # This overwrites the previous printed text
