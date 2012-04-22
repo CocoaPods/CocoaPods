@@ -175,13 +175,14 @@ module Pod
           config.project_root = Pathname.pwd
           podfile = podfile_from_spec(spec, file, platform_name)
           Installer.new(podfile).install!
-
           config.silent = false
+
+          return messages if `which xcodebuild`.strip.empty?
           output        = Dir.chdir('Pods') { `xcodebuild 2>&1` }
           clean_output  = process_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
           messages     += clean_output
 
-          puts(output) if config.verbose?
+          puts("\n" + output) if config.verbose?
         end
         messages
       end
