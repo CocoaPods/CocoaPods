@@ -167,8 +167,10 @@ module Pod
 
           config.silent = false
           output        = Dir.chdir('Pods') { `xcodebuild 2>&1` }
-          clean_output  = proces_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
+          clean_output  = process_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
           messages     += clean_output
+
+          puts(output) if config.verbose?
         end
         messages
       end
@@ -180,7 +182,7 @@ module Pod
         end
       end
 
-      def proces_xcode_build_output(output)
+      def process_xcode_build_output(output)
         output_by_line = output.split("\n")
         selected_lines = output_by_line.select do |l|
           l.include?('error') || l.include?('warning') && !l.include?('warning generated.')
