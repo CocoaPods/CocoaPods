@@ -182,8 +182,12 @@ module Pod
       def proces_xcode_build_output(output)
         output_by_line = output.split("\n")
         selected_lines = output_by_line.select do |l|
-          l.include?('error') || l.include?('warning') && !l.include?('warning generated.')
+          l.include?('error')\
+          || l.include?('warning') && !l.include?('warning generated.')\
+          || l.include?('note')
         end
+        # Remove the unnecessary tmp path
+        selected_lines.map {|l| l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//,'')}
       end
 
       # It checks that every file pattern specified in a spec yields
