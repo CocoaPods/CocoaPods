@@ -215,9 +215,6 @@ module Pod
           messages = []
           messages += check_spec_files_exists(spec, :source_files)
           messages += check_spec_files_exists(spec, :resources)
-          spec.clean_paths.each do |pattern|
-            messages << "clean_paths = '#{pattern}' -> did not match any file" if Pathname.pwd.glob(pattern).empty?
-          end
           messages.compact
         end
       end
