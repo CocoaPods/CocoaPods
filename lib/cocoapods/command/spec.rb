@@ -76,39 +76,46 @@ module Pod
         files.each do |file|
           file = file.realpath
           spec = Specification.from_file(file)
+          # Show immediatly which pod is being processed.
+          # This line will be overwritten once the result is known
           print " -> #{spec}\r" unless config.silent? || is_repo
+          $stdout.flush
 
           spec.validate!
           warnings     = warnings_for_spec(spec, file, is_repo)
           deprecations = deprecation_notices_for_spec(spec, file, is_repo)
           # TODO: check that the dependencies of the spec exist
           if is_repo
-            build_errors, file_errors = [], []
+            build_messages, file_errors = [], []
           else
             tmp_dir.mkpath
-            build_errors = Dir.chdir(tmp_dir) { build_errors_for_spec(spec, file, is_repo) }
+            build_messages = Dir.chdir(tmp_dir) { build_errors_for_spec(spec, file, is_repo) }
             file_errors  = Dir.chdir(tmp_dir) { file_errors_for_spec(spec, file, is_repo) }
             tmp_dir.rmtree
           end
 
-          # This overwrites the previous printed text
-          is_valid = deprecations.empty? && warnings.empty? && file_errors.empty?
+          # Errors compromise the functionality of a spec, warnings can be ignored
+          build_errors   = build_messages.select {|msg| msg.include?('error')}
+          build_warnings = build_messages - build_errors
+          all            = warnings + deprecations + build_messages + file_errors
+          errors         = file_errors + build_errors
+          warnings       = all - errors
+          all_valid = false unless all.empty?
+
+          # This overwrites the previously printed text
           unless config.silent?
-            if is_valid
+            if errors.empty? && warnings.empty?
               puts " -> ".green + "#{spec} passed validation" unless is_repo
+            elsif errors.empty?
+              puts " -> ".yellow + spec.to_s
             else
               puts " -> ".red + spec.to_s
-              all_valid = false
             end
           end
-          types    = ["WARN", "DPRC", "XCDB", "ERFL"]
-          messages = [warnings, deprecations, build_errors, file_errors]
-          types.each_with_index do |type, i|
-            unless messages[i].empty?
-              messages[i].each {|msg| puts "  - #{type} | #{msg}"} unless config.silent?
-            end
-          end
-          puts unless config.silent? || ( is_repo && messages.flatten.empty? )
+
+          warnings.each {|msg| puts "    - WARN  | #{msg}"} unless config.silent?
+          errors.each   {|msg| puts "    - ERROR | #{msg}"} unless config.silent?
+          puts unless config.silent? || ( is_repo && all.flatten.empty? )
         end
         all_valid
       end
