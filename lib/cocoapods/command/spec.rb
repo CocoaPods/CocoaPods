@@ -25,7 +25,7 @@ module Pod
 
       def initialize(argv)
         args = argv.arguments
-        unless (args[0] == 'create' && 2..3 === args.size) ||
+        unless (args[0] == 'create' && (2..3).member?(args.size)) ||
           (args[0] == 'lint' && args.size <= 2)
           super
         end
