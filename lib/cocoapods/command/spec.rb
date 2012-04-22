@@ -25,11 +25,14 @@ module Pod
 
       def initialize(argv)
         args = argv.arguments
-        unless (args[0] == 'create' && args.size == 2) ||
+        unless (args[0] == 'create' && 2..3 === args.size) ||
           (args[0] == 'lint' && args.size <= 2)
           super
         end
         @action, @name_or_url = args.first(2)
+        if @action == 'create' && args.size == 3
+          @url = args[2]
+        end
       end
 
       def run
@@ -37,8 +40,10 @@ module Pod
       end
 
       def create
-        if repo_id = @name_or_url[/github.com\/([^\/\.]*\/[^\/\.]*)\.*/, 1]
+        if repo_id_match = (@url || @name_or_url).match(/github.com\/([^\/\.]*\/[^\/\.]*)\.*/)
+          repo_id = repo_id_match[1]
           data = github_data_for_template(repo_id)
+          data[:name] = @name_or_url if @url
           puts semantic_versioning_notice(repo_id, data[:name]) if data[:version] == '0.0.1'
         else
           data = default_data_for_template(@name_or_url)
@@ -173,8 +178,10 @@ module Pod
 
           config.silent = false
           output        = Dir.chdir('Pods') { `xcodebuild 2>&1` }
-          clean_output  = proces_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
+          clean_output  = process_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
           messages     += clean_output
+
+          puts(output) if config.verbose?
         end
         messages
       end
@@ -186,7 +193,7 @@ module Pod
         end
       end
 
-      def proces_xcode_build_output(output)
+      def process_xcode_build_output(output)
         output_by_line = output.split("\n")
         selected_lines = output_by_line.select do |l|
           l.include?('error')\
