@@ -107,6 +107,18 @@ module Pod
           warnings       = all - errors
           all_valid = false unless all.empty?
 
+          # Clean duplicated multiplatform messages
+          [errors, warnings].each do |messages|
+            duplicate_candiates = messages.select {|l| l.include?("ios: ")}
+            duplicated = duplicate_candiates.select {|l| messages.include?(l.gsub(/ios: /,'osx: ')) }
+            duplicated.each do |l|
+              clean = l.gsub(/ios: /,'')
+              messages.insert(messages.index(l), clean)
+              messages.delete(l)
+              messages.delete('osx: ' + clean)
+            end
+          end
+
           # This overwrites the previously printed text
           unless config.silent?
             if errors.empty? && warnings.empty?
@@ -226,7 +238,7 @@ module Pod
           patterns = spec.send(accessor)[platform_name]
           unless patterns.empty?
             patterns.each do |pattern|
-              result << "#{platform_name}: #{accessor} = '#{pattern}' -> did not match any file" if Pathname.pwd.glob(pattern).empty?
+              result << "#{platform_name}: [#{accessor} = '#{pattern}'] -> did not match any file" if Pathname.pwd.glob(pattern).empty?
             end
           end
         end
