@@ -23,7 +23,13 @@ module Pod
     provided it validates all its specs.}
       end
 
+
+      def self.options
+        [["--no-install", "Skips checks that would require to donwload the spec"]].concat(super)
+      end
+
       def initialize(argv)
+        @no_install = argv.option('--no-install')
         args = argv.arguments
         unless (args[0] == 'create' && (2..3).member?(args.size)) ||
           (args[0] == 'lint' && args.size <= 2)
@@ -90,7 +96,7 @@ module Pod
           warnings     = warnings_for_spec(spec, file, is_repo)
           deprecations = deprecation_notices_for_spec(spec, file, is_repo)
           # TODO: check that the dependencies of the spec exist
-          if is_repo
+          if is_repo || @no_install
             build_messages, file_errors = [], []
           else
             tmp_dir.mkpath
