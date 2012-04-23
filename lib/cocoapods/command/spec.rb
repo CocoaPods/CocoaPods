@@ -67,7 +67,9 @@ module Pod
           files = name ? [Pathname.new(name)] : Pathname.pwd.glob('*.podspec')
         end
         puts
-        lint_specs_files(files, is_repo)
+        all_valid = lint_specs_files(files, is_repo)
+
+        raise Informative, "[!] Not all specs passed validation".red unless all_valid
       end
 
       private
