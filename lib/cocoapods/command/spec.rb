@@ -67,7 +67,10 @@ module Pod
         end
         puts
         all_valid = lint_specs_files(files, is_repo)
-        raise Informative, "[!] Not all specs passed validation".red unless all_valid
+        unless all_valid
+          message = (files.count == 1 ?  "[!] The spec did not pass validation" : "[!] Not all specs passed validation").red
+          raise Informative, message
+        end
       end
 
       private
@@ -117,6 +120,7 @@ module Pod
             if @only_errors
               all_valid = false unless errors.empty?
             else
+              # avoid to fail validation for xcode warnings
               all_valid = false unless (all - build_warnings).empty?
             end
 
@@ -147,7 +151,6 @@ module Pod
         duplicated = duplicate_candiates.select {|l| messages.include?(l.gsub(/ios: /,'osx: ')) }
         duplicated.uniq.each do |l|
           clean = l.gsub(/ios: /,'')
-          puts "duplicated: ".magenta + l
           messages.insert(messages.index(l), clean)
           messages.delete(l)
           messages.delete('osx: ' + clean)
