@@ -18,7 +18,6 @@ module Pod
     provided it validates all its specs.}
       end
 
-
       def self.options
         [ ["--no-install", "Lint skips checks that would require to donwload the spec"],
           ["--only-errors", "Lint validates even if warnings are present"] ].concat(super)
@@ -68,7 +67,6 @@ module Pod
         end
         puts
         all_valid = lint_specs_files(files, is_repo)
-
         raise Informative, "[!] Not all specs passed validation".red unless all_valid
       end
 
@@ -85,68 +83,75 @@ module Pod
       def lint_specs_files(files, is_repo)
         tmp_dir = Pathname.new('/tmp/CocoaPods/Lint')
         all_valid = true
+
         files.each do |file|
           file = file.realpath
-          spec = Specification.from_file(file)
-          # Show immediatly which pod is being processed.
-          # This line will be overwritten once the result is known
-          print " -> #{spec}\r" unless config.silent? || is_repo
-          $stdout.flush
+          file_spec = Specification.from_file(file)
 
-          spec.validate!
-          warnings     = warnings_for_spec(spec, file, is_repo)
-          deprecations = deprecation_notices_for_spec(spec, file, is_repo)
-          # TODO: check that the dependencies of the spec exist
-          if is_repo || @no_install
-            build_messages, file_errors = [], []
-          else
-            tmp_dir.mkpath
-            build_messages = Dir.chdir(tmp_dir) { build_errors_for_spec(spec, file, is_repo) }
-            file_errors  = Dir.chdir(tmp_dir) { file_errors_for_spec(spec, file, is_repo) }
-            tmp_dir.rmtree
-          end
+          specs = file_spec.recursive_subspecs.any? ?  file_spec.recursive_subspecs : [file_spec]
+          specs.each do |spec|
+            # Show immediatly which pod is being processed.
+            # This line will be overwritten once the result is known
+            print " -> #{spec}\r" unless config.silent? || is_repo
+            $stdout.flush
 
-          # Errors compromise the functionality of a spec, warnings can be ignored
-          build_errors   = build_messages.select {|msg| msg.include?('error')}
-          build_warnings = build_messages - build_errors
-          all            = warnings + deprecations + build_messages + file_errors
-          errors         = file_errors + build_errors
-          warnings       = all - errors
-
-          if @only_errors
-            all_valid = false unless errors.empty?
-          else
-            all_valid = false unless (all - build_warnings).empty?
-          end
-
-          # Clean duplicated multiplatform messages
-          [errors, warnings].each do |messages|
-            duplicate_candiates = messages.select {|l| l.include?("ios: ")}
-            duplicated = duplicate_candiates.select {|l| messages.include?(l.gsub(/ios: /,'osx: ')) }
-            duplicated.each do |l|
-              clean = l.gsub(/ios: /,'')
-              messages.insert(messages.index(l), clean)
-              messages.delete(l)
-              messages.delete('osx: ' + clean)
-            end
-          end
-
-          # This overwrites the previously printed text
-          unless config.silent?
-            if errors.empty? && warnings.empty?
-              puts " -> ".green + "#{spec} passed validation" unless is_repo
-            elsif errors.empty?
-              puts " -> ".yellow + spec.to_s
+            spec.validate!
+            warnings     = warnings_for_spec(spec, file, is_repo)
+            deprecations = deprecation_notices_for_spec(spec, file, is_repo)
+            if is_repo || @no_install
+              build_messages, file_errors = [], []
             else
-              puts " -> ".red + spec.to_s
+              tmp_dir.mkpath
+              build_messages = Dir.chdir(tmp_dir) { build_errors_for_spec(spec, file, is_repo) }
+              file_errors  = Dir.chdir(tmp_dir) { file_errors_for_spec(spec, file, is_repo) }
+              tmp_dir.rmtree
             end
-          end
 
-          warnings.each {|msg| puts "    - WARN  | #{msg}"} unless config.silent?
-          errors.each   {|msg| puts "    - ERROR | #{msg}"} unless config.silent?
-          puts unless config.silent? || ( is_repo && all.flatten.empty? )
+            # Errors compromise the functionality of a spec, warnings can be ignored
+            build_errors   = build_messages.select {|msg| msg.include?('error')}
+            build_warnings = build_messages - build_errors
+            all            = warnings + deprecations + build_messages + file_errors
+            errors         = file_errors + build_errors
+            warnings       = all - errors
+
+            if @only_errors
+              all_valid = false unless errors.empty?
+            else
+              all_valid = false unless (all - build_warnings).empty?
+            end
+
+            clean_duplicate_platfrom_messages(errors)
+            clean_duplicate_platfrom_messages(warnings)
+
+            # This overwrites the previously printed text
+            unless config.silent?
+              if errors.empty? && warnings.empty?
+                puts " -> ".green + "#{spec} passed validation" unless is_repo
+              elsif errors.empty?
+                puts " -> ".yellow + spec.to_s
+              else
+                puts " -> ".red + spec.to_s
+              end
+            end
+
+            warnings.each {|msg| puts "    - WARN  | #{msg}"} unless config.silent?
+            errors.each   {|msg| puts "    - ERROR | #{msg}"} unless config.silent?
+            puts unless config.silent? || ( is_repo && all.flatten.empty? )
+          end
         end
         all_valid
+      end
+
+      def clean_duplicate_platfrom_messages(messages)
+        duplicate_candiates = messages.select {|l| l.include?("ios: ")}
+        duplicated = duplicate_candiates.select {|l| messages.include?(l.gsub(/ios: /,'osx: ')) }
+        duplicated.uniq.each do |l|
+          clean = l.gsub(/ios: /,'')
+          puts "duplicated: ".magenta + l
+          messages.insert(messages.index(l), clean)
+          messages.delete(l)
+          messages.delete('osx: ' + clean)
+        end
       end
 
       # It checks a spec for minor non fatal defects
@@ -163,14 +168,16 @@ module Pod
         warnings << "Github repositories should end in `.git'" if source && source[:git] =~ /github.com/ && source[:git] !~ /.*\.git/
         warnings << "The description should end with a dot" if spec.description && spec.description !~ /.*\./
         warnings << "The summary should end with a dot" if spec.summary !~ /.*\./
+        #TODO: the following 'is_repo' and '@no_install' checks are there only because at the time of 0.6.0rc1 it would be triggered in all specs
         warnings << "Missing license[:file] or [:text]" unless is_repo || @no_install || license && (license[:file] || license[:text])
-        warnings << "Comments must be deleted" if text =~ /^\w*#/
-        #TODO: the previous 'is_repo' and '@no_install' checks are there only because at the time of 0.6.0rc1 it would be triggered in all specs
+        # allow a single line comment as it is generally used in subspecs
+        warnings << "Comments must be deleted" if text =~ /^\w*#\n\w*#/
         warnings
       end
 
       def path_matches_name?(file, spec)
-        file.basename.to_s == spec.name + '.podspec'
+        spec_name = spec.name.match(/[^\/]*/)[0]
+        file.basename.to_s == spec_name + '.podspec'
       end
 
       # It reads a podspec file and checks for strings corresponding
@@ -221,7 +228,7 @@ module Pod
       def process_xcode_build_output(output)
         output_by_line = output.split("\n")
         selected_lines = output_by_line.select do |l|
-          l.include?('error')\
+          l.include?('error') && !l.include?('error generated.')\
           || l.include?('warning') && !l.include?('warning generated.')\
           || l.include?('note')
         end
@@ -258,7 +265,7 @@ module Pod
       end
 
       def platform_names(spec)
-        spec.platform.name || [:ios, :osx]
+        spec.platform.name ? [spec.platform.name] : [:ios, :osx]
       end
 
       # Templates and github information retrival for spec create
