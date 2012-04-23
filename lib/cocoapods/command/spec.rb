@@ -20,8 +20,8 @@ module Pod
 
 
       def self.options
-        [ ["--no-install", "lint skips checks that would require to donwload the spec"],
-          ["--only-errors", "lint validates even if warnings are present"] ].concat(super)
+        [ ["--no-install", "Lint skips checks that would require to donwload the spec"],
+          ["--only-errors", "Lint validates even if warnings are present"] ].concat(super)
       end
 
       def initialize(argv)

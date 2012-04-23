@@ -6,24 +6,29 @@ module Pod
       def self.banner
         %{Pushing new specifications to a spec-repo:
 
-    $ pod push [REPO]
+  $ pod push [REPO]
 
-      Validates `*.podspec' in the current working dir, updates
-      the local copy of the repository named REPO, adds specifications
-      to REPO, and finally it pushes REPO to its remote.}
+    Validates `*.podspec' in the current working dir, updates
+    the local copy of the repository named REPO, adds specifications
+    to REPO, and finally it pushes REPO to its remote.}
+      end
+
+      def self.options
+        [["--allow-warnings", "Allows to push if warnings are not evitable"]].concat(super)
       end
 
       extend Executable
       executable :git
 
       def initialize(argv)
+        @allow_warnings = argv.option('--allow-warnings')
         @repo = argv.shift_argument
         super unless argv.empty? && @repo
       end
 
       def run
-        validate_podspec_files!
-        check_repo_status!
+        validate_podspec_files
+        check_repo_status
         update_repo
         add_specs_to_repo
         push_repo
@@ -48,7 +53,7 @@ module Pod
         dir
       end
 
-      def check_repo_status!
+      def check_repo_status
         # TODO: add specs for staged and unstaged files (tested manually)
         status = Dir.chdir(repo_dir) { `git status --porcelain` } == ''
         raise Informative, "[!] `#{@repo}' repo not clean".red unless status
@@ -60,22 +65,19 @@ module Pod
         files
       end
 
-      def validate_podspec_files!
+      def validate_podspec_files
         puts "\nValidating specs".yellow unless config.silent
         lint_argv = ["lint"]
+        lint_argv << "--only-errors" if @allow_warnings
         lint_argv << "--silent" if config.silent
         all_valid = Spec.new(ARGV.new(lint_argv)).run
-        raise Informative, "[!] All specs must pass validation before push".red unless all_valid
       end
 
       def add_specs_to_repo
-
         puts "\nAdding the specs to the #{@repo} repo\n".yellow unless config.silent
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
-
           output_path = File.join(repo_dir, spec.name, spec.version.to_s)
-
           if Pathname.new(output_path).exist?
             message = "[Fix] #{spec}"
           elsif Pathname.new(File.join(repo_dir, spec.name)).exist?
