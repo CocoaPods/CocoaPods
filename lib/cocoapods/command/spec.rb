@@ -153,9 +153,9 @@ module Pod
         warnings << "Github repositories should end in `.git'" if source && source[:git] =~ /github.com/ && source[:git] !~ /.*\.git/
         warnings << "The description should end with a dot" if spec.description && spec.description !~ /.*\./
         warnings << "The summary should end with a dot" if spec.summary !~ /.*\./
-        warnings << "Missing license[:file] or [:text]" unless is_repo || license && (license[:file] || license[:text])
+        warnings << "Missing license[:file] or [:text]" unless is_repo || @no_install || license && (license[:file] || license[:text])
         warnings << "Comments must be deleted" if text =~ /^\w*#/
-        #TODO: the previous ´is_repo' check is there only because at the time of 0.6.0rc1 it would be triggered in all specs
+        #TODO: the previous 'is_repo' and '@no_install' checks are there only because at the time of 0.6.0rc1 it would be triggered in all specs
         warnings
       end
 
