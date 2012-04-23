@@ -10,14 +10,17 @@ module Pod
       executable :unzip
       executable :tar
       
-      attr_accessor :download_file_path
+      attr_accessor :filename, :download_path
       def download
-        type            = options[:type] || type_with_url(url)
-        filename        = filename_with_type type
-        @download_path  = target_path + filename
+        @filename        = filename_with_type type
+        @download_path   = target_path + @filename
 
         download_file @download_path
         extract_with_type @download_path, type
+      end
+
+      def type
+        options[:type] || type_with_url(url)
       end
 
       def clean
