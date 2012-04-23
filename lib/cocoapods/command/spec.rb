@@ -1,10 +1,5 @@
 # encoding: utf-8
 
-require 'net/https'
-require 'uri'
-require 'octokit'
-require 'json'
-
 module Pod
   class Command
     class Spec < Command
@@ -47,6 +42,7 @@ module Pod
 
       def create
         if repo_id_match = (@url || @name_or_url).match(/github.com\/([^\/\.]*\/[^\/\.]*)\.*/)
+          require 'octokit'
           repo_id = repo_id_match[1]
           data = github_data_for_template(repo_id)
           data[:name] = @name_or_url if @url
