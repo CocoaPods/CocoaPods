@@ -29,7 +29,6 @@ Gem::Specification.new do |s|
                            "you are upgrading, first run: $ pod setup"
 
   s.add_runtime_dependency 'xcodeproj', '~> 0.1.0'
-  s.add_runtime_dependency 'popen4', '~> 0.1.2'
   s.add_runtime_dependency 'colored', '~> 1.2'
   s.add_runtime_dependency 'escape', '~> 0.0.4'
   s.add_development_dependency 'bacon', '~> 1.1'
