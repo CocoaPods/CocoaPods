@@ -201,7 +201,7 @@ module Pod
       def build_errors_for_spec(spec, file, is_repo)
         messages = []
         platform_names(spec).each do |platform_name|
-          config.silent = true
+          config.silent = !config.verbose
           config.integrate_targets = false
           config.project_root = Pathname.pwd
           podfile = podfile_from_spec(spec, file, platform_name)
