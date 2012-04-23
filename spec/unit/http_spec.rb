@@ -56,4 +56,20 @@ describe Pod::Downloader::Http do
     downloader.expects(:extract_with_type).with(anything(), :tgz).at_least_once
     downloader.download    
   end
+  
+  it 'should raise error when unsupported filetype is pass' do
+    downloader = Pod::Downloader.for_pod(stub_pod_with_source(
+      :http => 'https://testflightapp.com/media/sdk-downloads/TestFlightSDK1.0.rar'
+    ))
+    downloader.expects(:download).raises(Pod::Downloader::Http::UnsupportedFileTypeError)
+    downloader.download rescue nil
+    
+    downloader = Pod::Downloader.for_pod(stub_pod_with_source(
+      :http => 'https://testflightapp.com/media/sdk-downloads/TestFlightSDK1.0',
+      :type => :rar
+    ))
+    downloader.expects(:download).raises(Pod::Downloader::Http::UnsupportedFileTypeError)
+    downloader.download rescue nil
+    
+  end
 end

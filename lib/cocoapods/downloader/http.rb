@@ -6,6 +6,8 @@ require 'yaml'
 module Pod
   class Downloader
     class Http < Downloader
+      class UnsupportedFileTypeError < StandardError; end
+
       executable :curl
       executable :unzip
       executable :tar
@@ -49,7 +51,7 @@ module Pod
         when :tar
           "file.tar"
         else
-          raise "Pod::Downloader::Http Unsupported file type: #{type}"
+          raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end
       end
       
@@ -66,7 +68,7 @@ module Pod
         when :tar
           tar "xf '#{full_filename}' -d #{target_path}"
         else
-          raise "Http Downloader: Unsupported file type"
+          raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end
       end
 
