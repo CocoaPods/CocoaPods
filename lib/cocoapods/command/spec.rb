@@ -20,11 +20,14 @@ module Pod
 
 
       def self.options
-        [["--no-install", "Skips checks that would require to donwload the spec"]].concat(super)
+        [ ["--no-install", "lint skips checks that would require to donwload the spec"],
+          ["--only-errors", "lint validates even if warnings are present"] ].concat(super)
       end
 
       def initialize(argv)
         @no_install = argv.option('--no-install')
+        @only_errors = argv.option('--only-errors')
+
         args = argv.arguments
         unless (args[0] == 'create' && (2..3).member?(args.size)) ||
           (args[0] == 'lint' && args.size <= 2)
@@ -107,7 +110,12 @@ module Pod
           all            = warnings + deprecations + build_messages + file_errors
           errors         = file_errors + build_errors
           warnings       = all - errors
-          all_valid = false unless all.empty?
+
+          if @only_errors
+            all_valid = false unless errors.empty?
+          else
+            all_valid = false unless (all - build_warnings).empty?
+          end
 
           # Clean duplicated multiplatform messages
           [errors, warnings].each do |messages|
