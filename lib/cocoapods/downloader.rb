@@ -6,6 +6,7 @@ module Pod
     autoload :GitHub,     'cocoapods/downloader/git'
     autoload :Mercurial,  'cocoapods/downloader/mercurial'
     autoload :Subversion, 'cocoapods/downloader/subversion'
+    autoload :Http,       'cocoapods/downloader/http'
 
     extend Executable
 
@@ -40,6 +41,8 @@ module Pod
         Mercurial.new(target_path, url, options)
       elsif url = options.delete(:svn)
         Subversion.new(target_path, url, options)
+      elsif url = options.delete(:http)
+        Http.new(target_path, url, options)
       else
         raise "Unsupported download strategy `#{options.inspect}'."
       end
