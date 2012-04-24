@@ -39,12 +39,12 @@ module Pod
       def update_repo
         puts "Updating the `#{@repo}' repo\n".yellow unless config.silent
         # show the output of git even if not verbose
-        Dir.chdir(repo_dir) { puts `git pull` }
+        Dir.chdir(repo_dir) { puts `git pull 2>&1` }
       end
 
       def push_repo
         puts "\nPushing the `#{@repo}' repo\n".yellow unless config.silent
-        Dir.chdir(repo_dir) { puts `git push` }
+        Dir.chdir(repo_dir) { puts `git push 2>&1` }
       end
 
       def repo_dir
@@ -55,8 +55,8 @@ module Pod
 
       def check_repo_status
         # TODO: add specs for staged and unstaged files (tested manually)
-        status = Dir.chdir(repo_dir) { `git status --porcelain` } == ''
-        raise Informative, "[!] `#{@repo}' repo not clean".red unless status
+        clean = Dir.chdir(repo_dir) { `git status --porcelain  2>&1` } == ''
+        raise Informative, "[!] `#{@repo}' repo not clean".red unless clean
       end
 
       def podspec_files
