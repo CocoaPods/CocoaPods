@@ -58,6 +58,7 @@ module Pod
       end
 
       def check_versions(dir)
+        require 'yaml'
         bin_version  = Gem::Version.new(VERSION)
         yaml_file    = dir + 'CocoaPods-version.yml'
         return unless yaml_file.exist?

@@ -1,6 +1,6 @@
 # CocoaPods – an Objective-C library manager
 
-[![Build Status](https://secure.travis-ci.org/CocoaPods/CocoaPods.png)](https://secure.travis-ci.org/CocoaPods/CocoaPods)
+[![Build Status](https://secure.travis-ci.org/CocoaPods/CocoaPods.png?branch=master)](https://secure.travis-ci.org/CocoaPods/CocoaPods)
 
 CocoaPods manages library dependencies for your Xcode project.
 

@@ -139,5 +139,32 @@ describe "Pod::Downloader" do
       (@pod.root + '.svn').should.not.exist
     end
   end
+
+  describe "for Http" do
+    extend SpecHelper::TemporaryDirectory
+
+    it "download file and unzip it" do
+      @pod.specification.stubs(:source).returns(
+        :http => 'http://dl.google.com/googleadmobadssdk/googleadmobsearchadssdkios.zip'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      VCR.use_cassette('tarballs', :record => :new_episodes) { downloader.download }
+
+      (@pod.root + 'GoogleAdMobSearchAdsSDK/GADSearchRequest.h').should.exist
+      (@pod.root + 'GoogleAdMobSearchAdsSDK/GADSearchRequest.h').read.strip.should =~ /Google Search Ads iOS SDK/
+    end
+
+    it "removes the .zip when cleaning" do
+      @pod.specification.stubs(:source).returns(
+        :http => 'http://dl.google.com/googleadmobadssdk/googleadmobsearchadssdkios.zip'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.download
+      downloader.clean
+      (@pod.root + 'file.zip').should.not.exist
+    end
+  end
+  
+
 end
 
