@@ -93,9 +93,7 @@ module Pod
       # It returns true if **all** the files passed validation
       #
       def lint_specs_files(files, is_repo)
-        tmp_dir = Pathname.new('/tmp/CocoaPods/Lint')
         all_valid = true
-
         files.each do |file|
           file = file.realpath
           file_spec = Specification.from_file(file)
@@ -112,19 +110,19 @@ module Pod
             warnings     = warnings_for_spec(spec, file, is_repo)
             deprecations = deprecation_notices_for_spec(spec, file, is_repo)
             if is_repo || @quick
-              build_messages, file_errors = [], []
+              build_messages, file_patterns_errors = [], []
             else
-              tmp_dir.mkpath
-              build_messages = Dir.chdir(tmp_dir) { build_errors_for_spec(spec, file, is_repo) }
-              file_errors  = Dir.chdir(tmp_dir) { file_errors_for_spec(spec, file, is_repo) }
-              tmp_dir.rmtree
+              set_up_lint_environment
+              build_messages       = build_errors_for_spec(spec, file, is_repo)
+              file_patterns_errors = file_patterns_errors_for_spec(spec, file, is_repo)
+              tear_down_lint_environment
             end
             build_errors   = build_messages.select {|msg| msg.include?('error')}
             build_warnings = build_messages - build_errors
 
             # Errors compromise the functionality of a spec, warnings can be ignored
-            all            = warnings + deprecations + build_messages + file_errors
-            errors         = file_errors + build_errors
+            all            = warnings + deprecations + build_messages + file_patterns_errors
+            errors         = file_patterns_errors + build_errors
             warnings       = all - errors
 
             if @only_errors
@@ -154,6 +152,25 @@ module Pod
           end
         end
         all_valid
+      end
+
+      def tmp_dir
+        Pathname.new('/tmp/CocoaPods/Lint')
+      end
+
+      def set_up_lint_environment
+        tmp_dir.mkpath
+        @original_config = Config.instance.clone
+        config.project_root      = tmp_dir
+        config.project_pods_root = tmp_dir + 'Pods'
+        config.silent            = !config.verbose
+        config.integrate_targets = false
+        config.doc_install       = false
+      end
+
+      def tear_down_lint_environment
+        tmp_dir.rmtree
+        Config.instance = @original_config
       end
 
       def clean_duplicate_platfrom_messages(messages)
@@ -213,18 +230,13 @@ module Pod
       def build_errors_for_spec(spec, file, is_repo)
         messages = []
         platform_names(spec).each do |platform_name|
-          config.silent = !config.verbose
-          config.integrate_targets = false
-          config.project_root = Pathname.pwd
           podfile = podfile_from_spec(spec, file, platform_name)
           Installer.new(podfile).install!
-          config.silent = false
 
           return messages if `which xcodebuild`.strip.empty?
-          output        = Dir.chdir('Pods') { `xcodebuild 2>&1` }
+          output        = Dir.chdir(config.project_pods_root) { `xcodebuild 2>&1` }
           clean_output  = process_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
           messages     += clean_output
-
           puts("\n" + output) if config.verbose?
         end
         messages
@@ -254,8 +266,8 @@ module Pod
       #
       # It returns a array of messages
       #
-      def file_errors_for_spec(spec, file, is_repo)
-        Dir.chdir('Pods/' + spec.name ) do
+      def file_patterns_errors_for_spec(spec, file, is_repo)
+        Dir.chdir(config.project_pods_root + spec.name ) do
           messages = []
           messages += check_spec_files_exists(spec, :source_files)
           messages += check_spec_files_exists(spec, :resources)
