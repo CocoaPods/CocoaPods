@@ -134,7 +134,7 @@ describe "Pod::Command::Spec lint" do
 
   before do
     spec = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
-    spec.gsub!(/https:\/\/github\.com\/johnezang\/JSONKit\.git/, fixture('integration/JSONKit'))
+    spec.gsub!(/https:\/\/github\.com\/johnezang\/JSONKit\.git/, fixture('integration/JSONKit').to_s)
     spec.gsub!(/s\.source_files = 'JSONKit\.\*'/, "s.source_files = 'JSONKit.*'\ns.resources = 'WRONG_FOLDER'")
     File.open(temporary_directory + 'JSONKit.podspec', 'w') {|f| f.write(spec) }
   end
