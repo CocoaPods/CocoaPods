@@ -19,23 +19,26 @@ module Pod
       end
 
       def self.options
-        [ ["--no-install", "Lint skips checks that would require to donwload the spec"],
+        [ ["--quick", "Lint skips checks that would require to donwload and build the spec"],
           ["--only-errors", "Lint validates even if warnings are present"] ].concat(super)
       end
 
       def initialize(argv)
-        @no_install = argv.option('--no-install')
-        @only_errors = argv.option('--only-errors')
-
-        args = argv.arguments
-        unless (args[0] == 'create' && (2..3).member?(args.size)) ||
-          (args[0] == 'lint' && args.size <= 2)
+        @action = argv.shift_argument
+        if @action == 'create'
+          @name_or_url = argv.shift_argument
+          @url = argv.shift_argument
+          super if @name_or_url.nil?
+        elsif @action == 'lint'
+          @quick  = argv.option('--quick')
+          @only_errors = argv.option('--only-errors')
+          @repo_or_podspec = argv.shift_argument unless argv.empty?
+          super unless argv.size <= 1
+        else
           super
         end
-        @action, @name_or_url = args.first(2)
-        if @action == 'create' && args.size == 3
-          @url = args[2]
-        end
+
+        super unless argv.empty?
       end
 
       def run
@@ -58,16 +61,22 @@ module Pod
       end
 
       def lint
-        is_repo = repo_with_name_exist(@name_or_url)
-        if is_repo
-          files = (config.repos_dir + @name_or_url).glob('**/*.podspec')
+        if (is_repo = repo_with_name_exist(@repo_or_podspec))
+          files = (config.repos_dir + @repo_or_podspec).glob('**/*.podspec')
         else
-          name = @name_or_url
-          files = name ? [Pathname.new(name)] : Pathname.pwd.glob('*.podspec')
+          if @repo_or_podspec
+            files = [Pathname.new(@repo_or_podspec)]
+            raise Informative, "[!] Unable to find a spec named #{@repo_or_podspec}".red unless files[0].exist?
+          else
+            files = Pathname.pwd.glob('*.podspec')
+            raise Informative, "[!] No specs found in the current directory".red if files.empty?
+          end
         end
         puts
         all_valid = lint_specs_files(files, is_repo)
-        unless all_valid
+        if all_valid
+          puts (files.count == 1 ? "#{@repo_or_podspec} passed validation" : "All the specs passed validation").green
+        else
           message = (files.count == 1 ?  "[!] The spec did not pass validation" : "[!] Not all specs passed validation").red
           raise Informative, message
         end
@@ -98,10 +107,11 @@ module Pod
             print " -> #{spec}\r" unless config.silent? || is_repo
             $stdout.flush
 
+            # If the spec doesn't validate it raises and informative
             spec.validate!
             warnings     = warnings_for_spec(spec, file, is_repo)
             deprecations = deprecation_notices_for_spec(spec, file, is_repo)
-            if is_repo || @no_install
+            if is_repo || @quick
               build_messages, file_errors = [], []
             else
               tmp_dir.mkpath
@@ -109,10 +119,10 @@ module Pod
               file_errors  = Dir.chdir(tmp_dir) { file_errors_for_spec(spec, file, is_repo) }
               tmp_dir.rmtree
             end
-
-            # Errors compromise the functionality of a spec, warnings can be ignored
             build_errors   = build_messages.select {|msg| msg.include?('error')}
             build_warnings = build_messages - build_errors
+
+            # Errors compromise the functionality of a spec, warnings can be ignored
             all            = warnings + deprecations + build_messages + file_errors
             errors         = file_errors + build_errors
             warnings       = all - errors
@@ -171,10 +181,9 @@ module Pod
         warnings << "Github repositories should end in `.git'" if source && source[:git] =~ /github.com/ && source[:git] !~ /.*\.git/
         warnings << "The description should end with a dot" if spec.description && spec.description !~ /.*\./
         warnings << "The summary should end with a dot" if spec.summary !~ /.*\./
-        #TODO: the following 'is_repo' and '@no_install' checks are there only because at the time of 0.6.0rc1 it would be triggered in all specs
-        warnings << "Missing license[:file] or [:text]" unless is_repo || @no_install || license && (license[:file] || license[:text])
-        # allow a single line comment as it is generally used in subspecs
-        warnings << "Comments must be deleted" if text =~ /^\w*#\n\w*#/
+        warnings << "Missing license[:file] or [:text]" unless license && (license[:file] || license[:text])
+        warnings << "Comments must be deleted" if text =~ /^\w*#\n\w*#/ # allow a single line comment as it is generally used in subspecs
+
         warnings
       end
 
