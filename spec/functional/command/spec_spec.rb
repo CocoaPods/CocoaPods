@@ -162,7 +162,9 @@ describe "Pod::Command::Spec lint" do
     # those two checks are merged because pod install is computationally expensive
     cmd = command('spec', 'lint')
     Dir.chdir(temporary_directory) { lambda { cmd.run }.should.raise Pod::Informative }
-    cmd.output.should.include "JSONKit/JSONKit.m:1640:27: warning: equality comparison with extraneous parentheses"
+    unless `which xcodebuild`.strip.empty?
+      cmd.output.should.include "JSONKit/JSONKit.m:1640:27: warning: equality comparison with extraneous parentheses"
+    end
     cmd.output.should.include "- ERROR | [resources = 'WRONG_FOLDER'] -> did not match any file"
   end
 
