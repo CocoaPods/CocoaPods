@@ -154,7 +154,7 @@ describe "Pod::Downloader" do
       (@pod.root + 'GoogleAdMobSearchAdsSDK/GADSearchRequest.h').read.strip.should =~ /Google Search Ads iOS SDK/
     end
 
-    it "removes the .zip directory when cleaning" do
+    it "removes the .zip when cleaning" do
       @pod.specification.stubs(:source).returns(
         :http => 'http://dl.google.com/googleadmobadssdk/googleadmobsearchadssdkios.zip'
       )
