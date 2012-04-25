@@ -75,6 +75,10 @@ module Pod
       source_files.select { |f| f.extname == '.h' }
     end
     
+    def license
+      specification.license
+    end
+
     def link_headers
       copy_header_mappings.each do |namespaced_path, files|
         @sandbox.add_header_files(namespaced_path, files)
