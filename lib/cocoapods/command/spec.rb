@@ -274,6 +274,7 @@ module Pod
           messages = []
           messages += check_spec_files_exists(spec, :source_files, platform_name)
           messages += check_spec_files_exists(spec, :resources, platform_name)
+          messages << "license[:file] = '#{spec.license[:file]}' -> did not match any file" if spec.license[:file] && Pathname.pwd.glob(spec.license[:file]).empty?
           messages.compact
         end
       end
