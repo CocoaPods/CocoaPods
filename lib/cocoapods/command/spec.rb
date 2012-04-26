@@ -113,10 +113,12 @@ module Pod
             if is_repo || @quick
               build_messages, file_patterns_errors = [], []
             else
-              set_up_lint_environment
-              build_messages       = build_errors_for_spec(spec, file, is_repo)
-              file_patterns_errors = file_patterns_errors_for_spec(spec, file, is_repo)
-              tear_down_lint_environment
+              platform_names(spec).each do |platform_name|
+                set_up_lint_environment
+                build_messages       = build_errors_for_spec(spec, file, platform_name)
+                file_patterns_errors = file_patterns_errors_for_spec(spec, file, platform_name)
+                tear_down_lint_environment
+              end
             end
             build_errors   = build_messages.select {|msg| msg.include?('error')}
             build_warnings = build_messages - build_errors
@@ -229,18 +231,17 @@ module Pod
       #
       # It returns a array of messages
       #
-      def build_errors_for_spec(spec, file, is_repo)
+      def build_errors_for_spec(spec, file, platform_name)
         messages = []
-        platform_names(spec).each do |platform_name|
-          podfile = podfile_from_spec(spec, file, platform_name)
-          Installer.new(podfile).install!
+        puts "\n\nGenerating build errors for #{platform_name} platform".yellow.reversed if config.verbose?
+        podfile = podfile_from_spec(spec, file, platform_name)
+        Installer.new(podfile).install!
 
-          return messages if `which xcodebuild`.strip.empty?
-          output        = Dir.chdir(config.project_pods_root) { `xcodebuild 2>&1` }
-          clean_output  = process_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
-          messages     += clean_output
-          puts("\n" + output) if config.verbose?
-        end
+        return messages if `which xcodebuild`.strip.empty?
+        output        = Dir.chdir(config.project_pods_root) { `xcodebuild 2>&1` }
+        clean_output  = process_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
+        messages     += clean_output
+        puts(output) if config.verbose?
         messages
       end
 
@@ -268,23 +269,21 @@ module Pod
       #
       # It returns a array of messages
       #
-      def file_patterns_errors_for_spec(spec, file, is_repo)
+      def file_patterns_errors_for_spec(spec, file, platform_name)
         Dir.chdir(config.project_pods_root + spec.name ) do
           messages = []
-          messages += check_spec_files_exists(spec, :source_files)
-          messages += check_spec_files_exists(spec, :resources)
+          messages += check_spec_files_exists(spec, :source_files, platform_name)
+          messages += check_spec_files_exists(spec, :resources, platform_name)
           messages.compact
         end
       end
 
-      def check_spec_files_exists(spec, accessor)
+      def check_spec_files_exists(spec, accessor, platform_name)
         result = []
-        platform_names(spec).each do |platform_name|
-          patterns = spec.send(accessor)[platform_name]
-          unless patterns.empty?
-            patterns.each do |pattern|
-              result << "#{platform_name}: [#{accessor} = '#{pattern}'] -> did not match any file" if Pathname.pwd.glob(pattern).empty?
-            end
+        patterns = spec.send(accessor)[platform_name]
+        unless patterns.empty?
+          patterns.each do |pattern|
+            result << "#{platform_name}: [#{accessor} = '#{pattern}'] -> did not match any file" if Pathname.pwd.glob(pattern).empty?
           end
         end
         result
