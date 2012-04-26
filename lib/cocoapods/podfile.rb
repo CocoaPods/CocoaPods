@@ -4,7 +4,7 @@ module Pod
       include Config::Mixin
 
       attr_reader :name, :target_dependencies
-      
+
       attr_accessor :xcodeproj, :link_with, :platform, :parent, :exclusive
 
       def initialize(name, options = {})
@@ -64,7 +64,8 @@ module Pod
       # Returns a path, which is relative to the project_root, relative to the
       # `$(SRCROOT)` of the user's project.
       def relative_to_srcroot(path)
-        (config.project_root + path).relative_path_from(xcodeproj.dirname)
+        raise Informative, "[!] Unable to find an Xcode project to integrate".red unless xcodeproj || !config.integrate_targets
+        xcodeproj ? (config.project_root + path).relative_path_from(xcodeproj.dirname) : path
       end
 
       def relative_pods_root
@@ -368,7 +369,7 @@ module Pod
     # This is used as a workaround for a compiler bug with non-ARC projects.
     # (see https://github.com/CocoaPods/CocoaPods/issues/142)
     #
-    # This was originally done automatically but libtool as of Xcode 4.3.2 no 
+    # This was originally done automatically but libtool as of Xcode 4.3.2 no
     # longer seems to support the -fobjc-arc flag. Therefore it now has to be
     # enabled explicitly using this method.
     #
@@ -397,7 +398,7 @@ module Pod
     def generate_bridge_support?
       @generate_bridge_support
     end
-    
+
     def set_arc_compatibility_flag?
       @set_arc_compatibility_flag
     end

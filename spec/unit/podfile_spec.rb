@@ -48,7 +48,7 @@ describe "Pod::Podfile" do
     Pod::Podfile.new {}.should.not.generate_bridge_support
     Pod::Podfile.new { generate_bridge_support! }.should.generate_bridge_support
   end
-  
+
   it 'specifies that ARC compatibility flag should be generated' do
     Pod::Podfile.new { set_arc_compatibility_flag! }.should.set_arc_compatibility_flag
   end
@@ -260,6 +260,15 @@ describe "Pod::Podfile" do
         @target_definition.relative_pods_root.should == '${SRCROOT}/../Pods'
       end
 
+      it "simply returns the $(PODS_ROOT) path if no xcodeproj file is available and doesn't needs to integrate" do
+        config.integrate_targets.should.equal true
+        config.integrate_targets = false
+        @target_definition.relative_pods_root.should == '${SRCROOT}/../Pods'
+        @target_definition.stubs(:xcodeproj).returns(nil)
+        @target_definition.relative_pods_root.should == '${SRCROOT}/Pods'
+        config.integrate_targets = true
+      end
+
       it "returns the xcconfig file path relative to the project's $(SRCROOT)" do
         @target_definition.xcconfig_relative_path.should == '../Pods/Pods.xcconfig'
       end
@@ -271,6 +280,17 @@ describe "Pod::Podfile" do
   end
 
   describe "concerning validations" do
+
+    it "raises if it should integrate and can't find an xcodeproj" do
+      config.integrate_targets.should.equal true
+      target_definition = Pod::Podfile.new {}.target_definitions[:default]
+      target_definition.stubs(:xcodeproj).returns(nil)
+      exception = lambda {
+        target_definition.relative_pods_root
+        }.should.raise Pod::Informative
+      exception.message.should.include "Xcode project"
+    end
+
     xit "raises if no platform is specified" do
       exception = lambda {
         Pod::Podfile.new {}.validate!

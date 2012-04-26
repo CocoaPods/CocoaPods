@@ -2,7 +2,7 @@ module Pod
   class Command
     class Presenter
       def self.options
-        "    --stats     Show additional stats (like GitHub watchers and forks)\n"
+        [["--stats", "Show additional stats (like GitHub watchers and forks)"]]
       end
 
       autoload :CocoaPod, 'cocoapods/command/presenter/cocoa_pod'
@@ -43,18 +43,15 @@ module Pod
         txt.strip.gsub(/(.{1,#{col}})( +|$)\n?|(.{#{col}})/, indent + "\\1\\3\n")
       end
 
-      def detail(title, value, preferred_indentation = 8)
-        # 8 is the length of Homepage
+      def detail(title, value)
         return '' if !value
-        number_of_spaces = ((preferred_indentation - title.length) > 0) ? (preferred_indentation - title.length) : 0
-        spaces = ' ' * number_of_spaces
         ''.tap do |t|
-          t << "    - #{title}:"
+          t << "    - #{title}:".ljust(16)
           if value.class == Array
             separator = "\n      - "
-            t << separator + value.join(separator)
+            t << separator << value.join(separator)
           else
-            t << " #{spaces + value.to_s}\n"
+            t << value.to_s << "\n"
           end
         end
       end
