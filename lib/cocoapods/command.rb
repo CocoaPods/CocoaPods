@@ -55,10 +55,11 @@ module Pod
 
     def self.options
       [
-        ['--help',    'Show help information'],
-        ['--silent',  'Print nothing'],
-        ['--verbose', 'Print more information while working'],
-        ['--version', 'Prints the version of CocoaPods'],
+        ['--help',     'Show help information'],
+        ['--silent',   'Print nothing'],
+        ['--no-color', 'Print output without color'],
+        ['--verbose',  'Print more information while working'],
+        ['--version',  'Prints the version of CocoaPods'],
       ]
     end
 
