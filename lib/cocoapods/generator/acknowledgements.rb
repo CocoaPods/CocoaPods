@@ -31,7 +31,11 @@ module Pod
 
       def licenses
         licences_array = [header]
-        @pods.each { |pod| licences_array << hash_for_pod(pod) }
+        @pods.each do |pod|
+          if (hash = hash_for_pod(pod))
+            licences_array << hash
+          end
+        end
         licences_array << footnote
       end
 
