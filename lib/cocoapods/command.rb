@@ -84,6 +84,20 @@ module Pod
       argv = ARGV.new(argv)
       raise Informative, VERSION if argv.option('--version')
 
+      if argv.option('--no-color')
+        methods_to_ovverride = Colored::EXTRAS.keys
+        Colored::COLORS.keys.each do |color|
+          methods_to_ovverride << color
+          methods_to_ovverride << "on_#{color}"
+          Colored::COLORS.keys.each do |highlight|
+            methods_to_ovverride << "#{color}_on_#{highlight}"
+          end
+        end
+        methods_to_ovverride.each  do | method_name |
+          String.send(:define_method, method_name.to_sym) { return self }
+        end
+      end
+
       show_help = argv.option('--help')
       Config.instance.silent = argv.option('--silent')
       Config.instance.verbose = argv.option('--verbose')
