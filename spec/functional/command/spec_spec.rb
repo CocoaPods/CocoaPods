@@ -129,8 +129,9 @@ describe "Pod::Command::Spec lint" do
 
   it "lints a givent podspec" do
     spec_file = fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec'
-    output = run_command('spec', 'lint', '--quick', spec_file)
-    output.should.include "passed validation"
+    cmd = command('spec', 'lint', '--quick', spec_file.to_s)
+    lambda { cmd.run }.should.raise Pod::Informative
+    cmd.output.should.include "Missing license[:file] or [:text]"
   end
 
   before do

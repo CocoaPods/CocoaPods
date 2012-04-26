@@ -6,16 +6,16 @@ module Pod
       def self.banner
         %{Managing PodSpec files:
 
-  $ pod spec create [ NAME | https://github.com/USER/REPO ]
+    $ pod spec create [ NAME | https://github.com/USER/REPO ]
 
-    Creates a PodSpec, in the current working dir, called `NAME.podspec'.
-    If a GitHub url is passed the spec is prepopulated.
+      Creates a PodSpec, in the current working dir, called `NAME.podspec'.
+      If a GitHub url is passed the spec is prepopulated.
 
-  $ pod spec lint [ NAME.podspec | REPO ]
+    $ pod spec lint [ NAME.podspec | REPO ]
 
-    Validates `NAME.podspec'. In case `NAME.podspec' is omitted, it defaults
-    to `*.podspec' in the current working dir. If the name of a repo is
-    provided it validates all its specs.}
+      Validates `NAME.podspec'. In case `NAME.podspec' is omitted, it defaults
+      to `*.podspec' in the current working dir. If the name of a repo is
+      provided it validates all its specs.}
       end
 
       def self.options
@@ -66,7 +66,7 @@ module Pod
         else
           if @repo_or_podspec
             files = [Pathname.new(@repo_or_podspec)]
-            raise Informative, "[!] Unable to find a spec named #{@repo_or_podspec}".red unless files[0].exist?
+            raise Informative, "[!] Unable to find a spec named #{@repo_or_podspec}".red unless files[0].exist? && @repo_or_podspec.include?('.podspec')
           else
             files = Pathname.pwd.glob('*.podspec')
             raise Informative, "[!] No specs found in the current directory".red if files.empty?
@@ -75,7 +75,7 @@ module Pod
         puts
         all_valid = lint_specs_files(files, is_repo)
         if all_valid
-          puts (files.count == 1 ? "#{@repo_or_podspec} passed validation" : "All the specs passed validation").green
+          puts (files.count == 1 ? "#{files[0].basename} passed validation" : "All the specs passed validation").green
         else
           message = (files.count == 1 ?  "[!] The spec did not pass validation" : "[!] Not all specs passed validation").red
           raise Informative, message
@@ -85,7 +85,7 @@ module Pod
       private
 
       def repo_with_name_exist(name)
-        name && (config.repos_dir + name).exist?
+        name && (config.repos_dir + name).exist? && !name.include?('/')
       end
 
       # Takes an array of podspec files and lints them all
@@ -107,6 +107,7 @@ module Pod
 
             # If the spec doesn't validate it raises and informative
             spec.validate!
+
             warnings     = warnings_for_spec(spec, file, is_repo)
             deprecations = deprecation_notices_for_spec(spec, file, is_repo)
             if is_repo || @quick
@@ -159,6 +160,7 @@ module Pod
       end
 
       def set_up_lint_environment
+        tmp_dir.rmtree if tmp_dir.exist?
         tmp_dir.mkpath
         @original_config = Config.instance.clone
         config.project_root      = tmp_dir
@@ -196,11 +198,11 @@ module Pod
         warnings << "The name of the spec should match the name of the file" unless path_matches_name?(file, spec)
         warnings << "Missing license[:type]" unless license && license[:type]
         warnings << "Github repositories should end in `.git'" if source && source[:git] =~ /github.com/ && source[:git] !~ /.*\.git/
+        warnings << "Github repositories should start with `https'" if source && source[:git] =~ /github.com/ && source[:git] !~ /https:\/\/github.com/
         warnings << "The description should end with a dot" if spec.description && spec.description !~ /.*\./
         warnings << "The summary should end with a dot" if spec.summary !~ /.*\./
         warnings << "Missing license[:file] or [:text]" unless license && (license[:file] || license[:text])
         warnings << "Comments must be deleted" if text =~ /^\w*#\n\w*#/ # allow a single line comment as it is generally used in subspecs
-
         warnings
       end
 
