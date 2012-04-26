@@ -53,16 +53,12 @@ module Pod
     end
 
     def ios?
-      require 'colored'
-      caller.find { |line| line =~ /^(.+.podspec):\d*/ }
-      puts "[!] The use of `config.ios?` is deprecated and will be removed in version 0.7.#{" Called from: #{$1}" if $1}".red
+      # TODO: deprecate in 0.7
       podfile.target_definitions[:default].platform == :ios if podfile
     end
 
     def osx?
-      require 'colored'
-      caller.find { |line| line =~ /^(.+.podspec):\d*/ }
-      puts "[!] The use of `config.osx?` is deprecated and will be removed in version 0.7.#{" Called from: #{$1}" if $1}".red
+      # TODO: deprecate in 0.7
       podfile.target_definitions[:default].platform == :osx if podfile
     end
 

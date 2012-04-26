@@ -436,7 +436,7 @@ module Pod
       end
 
       # Override the getters to always return the value of the top level parent spec.
-      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags, :documentation].each do |attr|
+      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags, :documentation, :homepage].each do |attr|
         define_method(attr) { top_level_parent.send(attr) }
       end
 
