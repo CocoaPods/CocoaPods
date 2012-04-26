@@ -80,6 +80,7 @@ module Pod
       target_installers.each do |target_installer|
         pods_for_target = activated_pods_by_target[target_installer.target_definition]
         target_installer.install!(pods_for_target, @sandbox)
+        Generator::Acknowledgements.new(target_installer.target_definition, pods_for_target).save_in_directory(config.project_pods_root)
       end
 
       generate_lock_file!(pods)
