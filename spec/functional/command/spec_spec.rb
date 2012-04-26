@@ -2,6 +2,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 describe Pod::Command::Spec do
   extend SpecHelper::Command
+  extend SpecHelper::TemporaryDirectory
 
   it "complains for wrong parameters" do
     lambda { run_command('spec') }.should.raise Pod::Command::Help
