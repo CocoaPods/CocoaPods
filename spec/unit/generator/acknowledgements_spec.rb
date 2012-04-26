@@ -18,6 +18,7 @@ describe Pod::Generator::Acknowledgements do
     @acknowledgements.licenses.count.should == 3
   end
 
+  # TODO Test with a pod that has no licence
   it "returns a correctly formed license hash for each pod" do
     @acknowledgements.hash_for_pod(@pods[0]).should == {
       :Type => "PSGroupSpecifier",
@@ -34,6 +35,7 @@ describe Pod::Generator::Acknowledgements do
     }
   end
 
+  # TODO Test with a target_definition whose label isn't "Pods"
   it "adds \"Pods-\" to the beginning of the filename only if necessary" do
     (@acknowledgements.filename.start_with?"Pods-").should.be.true
     (@acknowledgements.filename.start_with?"Pods-Pods-").should.be.false
