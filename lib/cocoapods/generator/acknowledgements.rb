@@ -8,8 +8,17 @@ module Pod
         @target_definition, @pods = target_definition, pods
       end
 
-      def save_as(pathname)
-        Xcodeproj.write_plist(plist, pathname)
+      def save_in_directory(pathname)
+        Xcodeproj.write_plist(plist, pathname + filename)
+      end
+
+      def filename
+        result = "#{@target_definition.label}-Acknowledgements.plist"
+        if result.start_with?"Pods-"
+          result
+        else
+         "Pods-" + result
+        end
       end
 
       def plist
