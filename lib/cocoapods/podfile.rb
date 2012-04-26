@@ -64,11 +64,8 @@ module Pod
       # Returns a path, which is relative to the project_root, relative to the
       # `$(SRCROOT)` of the user's project.
       def relative_to_srcroot(path)
-        if config.integrate_targets
-          (config.project_root + path).relative_path_from(xcodeproj.dirname)
-        else
-          "Pods"
-        end
+        raise Informative, "[!] Unable to find an Xcode project to integrate".red unless xcodeproj || !config.integrate_targets
+        xcodeproj ? (config.project_root + path).relative_path_from(xcodeproj.dirname) : path
       end
 
       def relative_pods_root
