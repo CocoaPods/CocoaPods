@@ -89,7 +89,7 @@ module Pod
       Config.instance.silent = argv.option('--silent')
       Config.instance.verbose = argv.option('--verbose')
 
-      String.send(:define_method, :colorize) { return self } if argv.option('--no-color')
+      String.send(:define_method, :colorize) { |string , _| string } if argv.option( '--no-color' )
 
       command_class = case argv.shift_argument
       when 'install' then Install
