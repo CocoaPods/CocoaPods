@@ -10,10 +10,6 @@ describe Pod::Generator::DummySource do
   after do
     teardown_temporary_directory
   end
-  
-  def do_install!
-    @installer.install!(@pods, @sandbox)
-  end
 
   it "generates a dummy sourcefile with the appropriate class" do
     generator = Pod::Generator::DummySource.new("Pods")
