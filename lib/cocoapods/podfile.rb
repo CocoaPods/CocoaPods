@@ -94,6 +94,10 @@ module Pod
       def prefix_header_name
         "#{label}-prefix.pch"
       end
+      
+      def dummy_source_name
+        "#{label}Dummy.m"
+      end
 
       def bridge_support_name
         "#{label}.bridgesupport"

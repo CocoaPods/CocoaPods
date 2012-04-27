@@ -75,11 +75,11 @@ module Pod
 
         support_files_group = @project.group("Targets Support Files").create_group(@target_definition.label)
         support_files_group.create_files(target_support_files)
-
+        
         xcconfig_file = support_files_group.files.where(:path => @target_definition.xcconfig_name)
-
         configure_build_configurations(xcconfig_file)
         create_files(pods, sandbox)
+        @target.add_source_file(Pathname.new(@target_definition.dummy_source_name))
       end
 
       def configure_build_configurations(xcconfig_file)
@@ -104,6 +104,8 @@ module Pod
         save_prefix_header_as(sandbox.root + @target_definition.prefix_header_name, pods)
         puts "* Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?
         copy_resources_script_for(pods).save_as(sandbox.root + @target_definition.copy_resources_script_name)
+        puts "* Generating dummy source at `#{sandbox.root + @target_definition.dummy_source_name}'" if config.verbose?
+        Generator::DummySource.new(@target_definition.label).save_as(Pathname.new(sandbox.root + @target_definition.dummy_source_name))
       end
       
       private

@@ -118,6 +118,24 @@ else
             'DEPENDENCIES' => ["Reachability (from `#{url}')"]
           }
         end
+        
+        it "install a dummy source file" do
+          url = 'https://raw.github.com/gist/1349824/3ec6aa60c19113573fc48eac19d0fafd6a69e033/Reachability.podspec'
+          podfile = Pod::Podfile.new do
+            self.platform :ios
+            xcodeproj 'dummy'
+            dependency do |s|
+              s.name         = 'JSONKit'
+              s.version      = '1.2'
+              s.source       = { :git => SpecHelper.fixture('integration/JSONKit').to_s, :tag => 'v1.2' }
+              s.source_files = 'JSONKit.*'
+            end
+          end
+          
+          installer = SpecHelper::Installer.new(podfile)
+          installer.install!
+          
+        end
 
         it "installs a library with a podspec defined inline" do
           podfile = Pod::Podfile.new do

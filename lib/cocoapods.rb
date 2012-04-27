@@ -30,6 +30,7 @@ module Pod
     autoload :BridgeSupport,        'cocoapods/generator/bridge_support'
     autoload :CopyResourcesScript,  'cocoapods/generator/copy_resources_script'
     autoload :Documentation,        'cocoapods/generator/documentation'
+    autoload :DummySource,          'cocoapods/generator/dummy_source'
   end
 end
 
