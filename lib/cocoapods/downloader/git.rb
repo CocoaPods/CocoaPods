@@ -60,12 +60,20 @@ module Pod
       end
 
       def clean
-        # no-op
+        if download_only?
+          FileUtils.rm_f(tmp_path)
+        else
+          super
+        end
       end
 
       def tarball_url_for(id)
         original_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
         "https://github.com/#{username}/#{reponame}/tarball/#{id}"
+      end
+      
+      def tmp_path
+        target_path + "tarball.tar.gz"
       end
 
       private
@@ -75,8 +83,6 @@ module Pod
       end
 
       def download_and_extract_tarball(id)
-        tmp_path = target_path + "tarball.tar.gz"
-
         File.open(tmp_path, "w+") do |tmpfile|
           open tarball_url_for(id) do |archive|
             tmpfile.write Zlib::GzipReader.new(archive).read
@@ -84,8 +90,6 @@ module Pod
 
           system "tar xf #{tmpfile.path} -C #{target_path} --strip-components 1"
         end
-
-        FileUtils.rm_f(tmp_path)
       end
     end
   end
