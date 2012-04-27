@@ -26,8 +26,8 @@ describe "Pod::Installer" do
       @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
     end
 
-    it "configures the project to load categories from the static library" do
-      @xcconfig['OTHER_LDFLAGS'].should == '-ObjC -all_load'
+    it "configures the project to load all members that implement Objective-c classes or categories from the static library" do
+      @xcconfig['OTHER_LDFLAGS'].should == '-ObjC'
     end
 
     it "sets the PODS_ROOT build variable" do
