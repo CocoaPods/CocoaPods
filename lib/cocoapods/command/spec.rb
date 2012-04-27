@@ -73,225 +73,235 @@ module Pod
           end
         end
         puts
-        all_valid = lint_specs_files(files, is_repo)
+        all_valid = Linter.new(files, is_repo).lint!
         if all_valid
-          puts (files.count == 1 ? "#{files[0].basename} passed validation" : "All the specs passed validation").green
+          puts (files.count == 1 ? "#{files[0].basename} passed validation" : "All the specs passed validation").green << "\n\n"
         else
           message = (files.count == 1 ?  "[!] The spec did not pass validation" : "[!] Not all specs passed validation").red
-          raise Informative, message
+        raise Informative, message
         end
       end
-
-      private
 
       def repo_with_name_exist(name)
         name && (config.repos_dir + name).exist? && !name.include?('/')
       end
 
-      # Takes an array of podspec files and lints them all
-      #
-      # It returns true if **all** the files passed validation
-      #
-      def lint_specs_files(files, is_repo)
-        all_valid = true
-        files.each do |file|
-          file = file.realpath
-          file_spec = Specification.from_file(file)
+      class Linter
+        include Config::Mixin
 
-          specs = file_spec.recursive_subspecs.any? ?  file_spec.recursive_subspecs : [file_spec]
-          specs.each do |spec|
-            # Show immediatly which pod is being processed.
-            # This line will be overwritten once the result is known
-            print " -> #{spec}\r" unless config.silent? || is_repo
-            $stdout.flush
+        def initialize(files, is_repo)
+          @files = files
+          @is_repo = is_repo
+        end
 
-            # If the spec doesn't validate it raises and informative
-            spec.validate!
+        # Takes an array of podspec files and lints them all
+        #
+        # It returns true if **all** the files passed validation
+        #
+        def lint!
+          all_valid = true
+          @files.each do |file|
+            file = file.realpath
+            file_spec = Specification.from_file(file)
 
-            warnings     = warnings_for_spec(spec, file, is_repo)
-            deprecations = deprecation_notices_for_spec(spec, file, is_repo)
-            if is_repo || @quick
+            specs = file_spec.recursive_subspecs.any? ?  file_spec.recursive_subspecs : [file_spec]
+            specs.each do |spec|
+              # Show immediatly which pod is being processed.
+              # This line will be overwritten once the result is known
+              print " -> #{spec}\r" unless config.silent? || @is_repo
+              $stdout.flush
+
+              # If the spec doesn't validate it raises and informative
+              spec.validate!
+
+              warnings     = warnings_for_spec(spec, file)
+              deprecations = deprecation_notices_for_spec(spec, file)
               build_messages, file_patterns_errors = [], []
-            else
-              platform_names(spec).each do |platform_name|
-                set_up_lint_environment
-                build_messages       = build_errors_for_spec(spec, file, platform_name)
-                file_patterns_errors = file_patterns_errors_for_spec(spec, file, platform_name)
-                tear_down_lint_environment
+              unless @is_repo || @quick
+                platform_names(spec).each do |platform_name|
+                  set_up_lint_environment
+                  build_messages       += build_errors_for_spec(spec, file, platform_name)
+                  file_patterns_errors += file_patterns_errors_for_spec(spec, file, platform_name)
+                  tear_down_lint_environment
+                end
               end
-            end
-            build_errors   = build_messages.select {|msg| msg.include?('error')}
-            build_warnings = build_messages - build_errors
+              build_errors   = build_messages.select {|msg| msg.include?('error')}
+              build_warnings = build_messages - build_errors
 
-            # Errors compromise the functionality of a spec, warnings can be ignored
-            all            = warnings + deprecations + build_messages + file_patterns_errors
-            errors         = file_patterns_errors + build_errors
-            warnings       = all - errors
+              # Errors compromise the functionality of a spec, warnings can be ignored
+              all            = warnings + deprecations + build_messages + file_patterns_errors
+              errors         = file_patterns_errors + build_errors
+              warnings       = all - errors
 
-            if @only_errors
-              all_valid = false unless errors.empty?
-            else
-              # avoid to fail validation for xcode warnings
-              all_valid = false unless (all - build_warnings).empty?
-            end
-
-            clean_duplicate_platfrom_messages(errors)
-            clean_duplicate_platfrom_messages(warnings)
-
-            # This overwrites the previously printed text
-            unless config.silent?
-              if errors.empty? && warnings.empty?
-                puts " -> ".green + "#{spec} passed validation" unless is_repo
-              elsif errors.empty?
-                puts " -> ".yellow + spec.to_s
+              if @only_errors
+                all_valid = false unless errors.empty?
               else
-                puts " -> ".red + spec.to_s
+                # avoid to fail validation for xcode warnings
+                all_valid = false unless (all - build_warnings).empty?
               end
+
+              clean_duplicate_platfrom_messages(errors)
+              clean_duplicate_platfrom_messages(warnings)
+
+              # This overwrites the previously printed text
+              unless config.silent?
+                if errors.empty? && warnings.empty?
+                  puts " -> ".green + "#{spec} passed validation" unless @is_repo
+                elsif errors.empty?
+                  puts " -> ".yellow + spec.to_s
+                else
+                  puts " -> ".red + spec.to_s
+                end
+              end
+
+              warnings.each {|msg| puts "    - WARN  | #{msg}"} unless config.silent?
+              errors.each   {|msg| puts "    - ERROR | #{msg}"} unless config.silent?
+              puts unless config.silent? || ( @is_repo && all.flatten.empty? )
             end
+          end
+          all_valid
+        end
 
-            warnings.each {|msg| puts "    - WARN  | #{msg}"} unless config.silent?
-            errors.each   {|msg| puts "    - ERROR | #{msg}"} unless config.silent?
-            puts unless config.silent? || ( is_repo && all.flatten.empty? )
+        def tmp_dir
+          Pathname.new('/tmp/CocoaPods/Lint')
+        end
+
+        def set_up_lint_environment
+          tmp_dir.rmtree if tmp_dir.exist?
+          tmp_dir.mkpath
+          @original_config = Config.instance.clone
+          config.project_root      = tmp_dir
+          config.project_pods_root = tmp_dir + 'Pods'
+          config.silent            = !config.verbose
+          config.integrate_targets = false
+          config.doc_install       = false
+        end
+
+        def tear_down_lint_environment
+          tmp_dir.rmtree
+          Config.instance = @original_config
+        end
+
+        def clean_duplicate_platfrom_messages(messages)
+          duplicate_candiates = messages.select {|l| l.include?("ios: ")}
+          duplicated = duplicate_candiates.select {|l| messages.include?(l.gsub(/ios: /,'osx: ')) }
+          duplicated.uniq.each do |l|
+            clean = l.gsub(/ios: /,'')
+            messages.insert(messages.index(l), clean)
+            messages.delete(l)
+            messages.delete('osx: ' + clean)
           end
         end
-        all_valid
-      end
 
-      def tmp_dir
-        Pathname.new('/tmp/CocoaPods/Lint')
-      end
-
-      def set_up_lint_environment
-        tmp_dir.rmtree if tmp_dir.exist?
-        tmp_dir.mkpath
-        @original_config = Config.instance.clone
-        config.project_root      = tmp_dir
-        config.project_pods_root = tmp_dir + 'Pods'
-        config.silent            = !config.verbose
-        config.integrate_targets = false
-        config.doc_install       = false
-      end
-
-      def tear_down_lint_environment
-        tmp_dir.rmtree
-        Config.instance = @original_config
-      end
-
-      def clean_duplicate_platfrom_messages(messages)
-        duplicate_candiates = messages.select {|l| l.include?("ios: ")}
-        duplicated = duplicate_candiates.select {|l| messages.include?(l.gsub(/ios: /,'osx: ')) }
-        duplicated.uniq.each do |l|
-          clean = l.gsub(/ios: /,'')
-          messages.insert(messages.index(l), clean)
-          messages.delete(l)
-          messages.delete('osx: ' + clean)
+        # It checks a spec for minor non fatal defects
+        #
+        # It returns a array of messages
+        #
+        def warnings_for_spec(spec, file)
+          license  = spec.license
+          source   = spec.source
+          text     = file.read
+          warnings = []
+          warnings << "The name of the spec should match the name of the file" unless path_matches_name?(file, spec)
+          warnings << "Missing license[:type]" unless license && license[:type]
+          warnings << "Github repositories should end in `.git'" if source && source[:git] =~ /github.com/ && source[:git] !~ /.*\.git/
+          warnings << "Github repositories should start with `https'" if source && source[:git] =~ /github.com/ && source[:git] !~ /https:\/\/github.com/
+          warnings << "The description should end with a dot" if spec.description != spec.summary && spec.description !~ /.*\./
+          warnings << "The summary should end with a dot" if spec.summary !~ /.*\./
+          warnings << "Missing license[:file] or [:text]" unless license && (license[:file] || license[:text])
+          warnings << "Comments must be deleted" if text =~ /^\w*#\n\w*#/ # allow a single line comment as it is generally used in subspecs
+            warnings
         end
-      end
 
-      # It checks a spec for minor non fatal defects
-      #
-      # It returns a array of messages
-      #
-      def warnings_for_spec(spec, file, is_repo)
-        license  = spec.license
-        source   = spec.source
-        text     = file.read
-        warnings = []
-        warnings << "The name of the spec should match the name of the file" unless path_matches_name?(file, spec)
-        warnings << "Missing license[:type]" unless license && license[:type]
-        warnings << "Github repositories should end in `.git'" if source && source[:git] =~ /github.com/ && source[:git] !~ /.*\.git/
-        warnings << "Github repositories should start with `https'" if source && source[:git] =~ /github.com/ && source[:git] !~ /https:\/\/github.com/
-        warnings << "The description should end with a dot" if spec.description && spec.description !~ /.*\./
-        warnings << "The summary should end with a dot" if spec.summary !~ /.*\./
-        warnings << "Missing license[:file] or [:text]" unless license && (license[:file] || license[:text])
-        warnings << "Comments must be deleted" if text =~ /^\w*#\n\w*#/ # allow a single line comment as it is generally used in subspecs
-        warnings
-      end
-
-      def path_matches_name?(file, spec)
-        spec_name = spec.name.match(/[^\/]*/)[0]
-        file.basename.to_s == spec_name + '.podspec'
-      end
-
-      # It reads a podspec file and checks for strings corresponding
-      # to a feature that are or will be deprecated
-      #
-      # It returns a array of messages
-      #
-      def deprecation_notices_for_spec(spec, file, is_repo)
-        text = file.read
-        deprecations = []
-        deprecations << "`config.ios?' and `config.osx' will be removed in version 0.7" if text. =~ /config\..os?/
-        deprecations << "Currently there is no known reason to use the `post_install' hook" if text. =~ /post_install/
-        deprecations
-      end
-
-      # It creates a podfile in memory and builds a library containing
-      # the pod for all available platfroms with xcodebuild.
-      #
-      # It returns a array of messages
-      #
-      def build_errors_for_spec(spec, file, platform_name)
-        messages = []
-        puts "\n\nGenerating build errors for #{platform_name} platform".yellow.reversed if config.verbose?
-        podfile = podfile_from_spec(spec, file, platform_name)
-        Installer.new(podfile).install!
-
-        return messages if `which xcodebuild`.strip.empty?
-        output        = Dir.chdir(config.project_pods_root) { `xcodebuild 2>&1` }
-        clean_output  = process_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
-        messages     += clean_output
-        puts(output) if config.verbose?
-        messages
-      end
-
-      def podfile_from_spec(spec, file, platform_name)
-        podfile = Pod::Podfile.new do
-          platform platform_name
-          dependency spec.name, :podspec => file.realpath.to_s
+        def path_matches_name?(file, spec)
+          spec_name = spec.name.match(/[^\/]*/)[0]
+          file.basename.to_s == spec_name + '.podspec'
         end
-      end
 
-      def process_xcode_build_output(output)
-        output_by_line = output.split("\n")
-        selected_lines = output_by_line.select do |l|
-          l.include?('error') && !l.include?('error generated.')\
-          || l.include?('warning') && !l.include?('warning generated.')\
-          || l.include?('note')
+        # It reads a podspec file and checks for strings corresponding
+        # to a feature that are or will be deprecated
+        #
+        # It returns a array of messages
+        #
+        def deprecation_notices_for_spec(spec, file)
+          text = file.read
+          deprecations = []
+          deprecations << "`config.ios?' and `config.osx' will be removed in version 0.7" if text. =~ /config\..os?/
+          deprecations << "The `post_install' hook is reserved for edge cases" if text. =~ /post_install/
+          deprecations
         end
-        # Remove the unnecessary tmp path
-        selected_lines.map {|l| l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//,'')}
-      end
 
-      # It checks that every file pattern specified in a spec yields
-      # at least one file. It requires the pods to be alredy present
-      # in the current working directory under Pods/spec.name
-      #
-      # It returns a array of messages
-      #
-      def file_patterns_errors_for_spec(spec, file, platform_name)
-        Dir.chdir(config.project_pods_root + spec.name ) do
+        # It creates a podfile in memory and builds a library containing
+        # the pod for all available platfroms with xcodebuild.
+        #
+        # It returns a array of messages
+        #
+        def build_errors_for_spec(spec, file, platform_name)
           messages = []
-          messages += check_spec_files_exists(spec, :source_files, platform_name)
-          messages += check_spec_files_exists(spec, :resources, platform_name)
-          messages << "license[:file] = '#{spec.license[:file]}' -> did not match any file" if spec.license[:file] && Pathname.pwd.glob(spec.license[:file]).empty?
-          messages.compact
-        end
-      end
+          puts "\n\n#{spec} - generating build errors for #{platform_name} platform".yellow.reversed if config.verbose?
+          podfile = podfile_from_spec(spec, file, platform_name)
+          Installer.new(podfile).install!
 
-      def check_spec_files_exists(spec, accessor, platform_name)
-        result = []
-        patterns = spec.send(accessor)[platform_name]
-        unless patterns.empty?
-          patterns.each do |pattern|
-            result << "#{platform_name}: [#{accessor} = '#{pattern}'] -> did not match any file" if Pathname.pwd.glob(pattern).empty?
+          return messages if `which xcodebuild`.strip.empty?
+          output        = Dir.chdir(config.project_pods_root) { `xcodebuild 2>&1` }
+          clean_output  = process_xcode_build_output(output).map {|l| "#{platform_name}: #{l}"}
+          messages     += clean_output
+          puts(output) if config.verbose?
+          messages
+        end
+
+        def podfile_from_spec(spec, file, platform_name)
+          podfile = Pod::Podfile.new do
+            platform platform_name
+            dependency spec.name, :podspec => file.realpath.to_s
           end
         end
-        result
-      end
 
-      def platform_names(spec)
-        spec.platform.name ? [spec.platform.name] : [:ios, :osx]
+        def process_xcode_build_output(output)
+          output_by_line = output.split("\n")
+          selected_lines = output_by_line.select do |l|
+            l.include?('error') && (l !~ /errors? generated\./) \
+              || l.include?('warning') && (l !~ /warnings? generated\./)\
+              || l.include?('note')
+          end
+          # Remove the unnecessary tmp path
+          selected_lines.map {|l| l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//,'')}
+        end
+
+        # It checks that every file pattern specified in a spec yields
+        # at least one file. It requires the pods to be alredy present
+        # in the current working directory under Pods/spec.name
+        #
+        # It returns a array of messages
+        #
+        def file_patterns_errors_for_spec(spec, file, platform_name)
+          Dir.chdir(config.project_pods_root + spec.name ) do
+            messages = []
+            messages += check_spec_files_exists(spec, :source_files, platform_name, '*.{h,m,mm,c,cpp}')
+            messages += check_spec_files_exists(spec, :resources, platform_name)
+            messages << "license[:file] = '#{spec.license[:file]}' -> did not match any file" if spec.license[:file] && Pathname.pwd.glob(spec.license[:file]).empty?
+            messages.compact
+          end
+        end
+
+        # TODO: FileList doesn't work and always adds the error message
+        # pod spec lint ~/.cocoapods/master/MKNetworkKit/0.83/MKNetworkKit.podspec
+        def check_spec_files_exists(spec, accessor, platform_name, options = {})
+          result = []
+          patterns = spec.send(accessor)[platform_name]
+          patterns.map do |pattern|
+            pattern = Pathname.pwd + pattern
+            if pattern.directory? && options[:glob]
+              pattern += options[:glob]
+            end
+            result << "#{platform_name}: [#{accessor} = '#{pattern}'] -> did not match any file" if pattern.glob.empty?
+          end
+          result
+        end
+
+        def platform_names(spec)
+          spec.platform.name ? [spec.platform.name] : [:ios, :osx]
+        end
       end
 
       # Templates and github information retrival for spec create
@@ -453,21 +463,21 @@ Pod::Spec.new do |s|
   #
   # s.dependency 'JSONKit', '~> 1.4'
 
-  # ――― EXTRA VALUES ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+        # ――― EXTRA VALUES ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
   # If you need to specify any other build settings, add them to the
   # xcconfig hash.
   #
   # s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2' }
 
-end
-SPEC
       end
+      SPEC
+    end
 
       def semantic_versioning_notice(repo_id, repo)
         return <<-EOS
 
-#{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
+        #{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
 I’ve recently added [#{repo}](https://github.com/CocoaPods/Specs/tree/master/#{repo}) to the [CocoaPods](https://github.com/CocoaPods/CocoaPods) package manager repo.
 
@@ -484,14 +494,14 @@ $ git tag -a 1.0.0 -m "Tag release 1.0.0"
 $ git push --tags
 ```
 
-#{'――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
+        #{'――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
-#{'[!] This repo does not appear to have semantic version tags.'.yellow}
+        #{'[!] This repo does not appear to have semantic version tags.'.yellow}
 
 After commiting the specification, consider opening a ticket with the template displayed above:
   - link:  https://github.com/#{repo_id}/issues/new
   - title: Please add semantic version tags
-EOS
+        EOS
       end
     end
   end
