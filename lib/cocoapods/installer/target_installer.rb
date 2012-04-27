@@ -53,7 +53,7 @@ module Pod
       end
 
       def target_support_files
-        [:copy_resources_script_name, :prefix_header_name, :xcconfig_name, :dummy_source_name].map { |file| @target_definition.send(file) }
+        [:copy_resources_script_name, :prefix_header_name, :xcconfig_name].map { |file| @target_definition.send(file) }
       end
 
       # TODO move xcconfig related code into the xcconfig method, like copy_resources_script and generate_bridge_support.
@@ -79,7 +79,6 @@ module Pod
         xcconfig_file = support_files_group.files.where(:path => @target_definition.xcconfig_name)
         configure_build_configurations(xcconfig_file)
         create_files(pods, sandbox)
-        add_dummy_file(support_files_group)
       end
 
       def configure_build_configurations(xcconfig_file)
@@ -89,11 +88,6 @@ module Pod
           config.build_settings['GCC_PREFIX_HEADER'] = @target_definition.prefix_header_name
           config.build_settings['PODS_ROOT'] = '${SRCROOT}'
         end
-      end
-
-      def add_dummy_file(support_files_group)
-        dummy = Pathname.new(@target_definition.dummy_source_name)
-        @target.add_source_file(dummy)
       end
 
       def create_files(pods, sandbox)
@@ -109,8 +103,6 @@ module Pod
         save_prefix_header_as(sandbox.root + @target_definition.prefix_header_name, pods)
         puts "* Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?
         copy_resources_script_for(pods).save_as(sandbox.root + @target_definition.copy_resources_script_name)
-        puts "* Generating dummy source at `#{sandbox.root + @target_definition.dummy_source_name}'" if config.verbose?
-        Generator::DummySource.new(@target_definition.label).save_as(sandbox.root + @target_definition.dummy_source_name)
       end
       
       private
