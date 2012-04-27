@@ -120,7 +120,7 @@ else
         end
         
         it "install a dummy source file" do
-          url = 'https://raw.github.com/gist/1349824/3ec6aa60c19113573fc48eac19d0fafd6a69e033/Reachability.podspec'
+          create_config!
           podfile = Pod::Podfile.new do
             self.platform :ios
             xcodeproj 'dummy'
@@ -134,7 +134,9 @@ else
           
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
-          
+
+          dummy = (config.project_pods_root + 'PodsDummy.m').read
+          dummy.should.include?('@implementation PodsDummy')
         end
 
         it "installs a library with a podspec defined inline" do

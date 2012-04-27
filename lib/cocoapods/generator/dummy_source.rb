@@ -1,8 +1,8 @@
 module Pod
   module Generator
     class DummySource
-      def initialize(label)
-        @label = label
+      def initialize(label="Pods")
+        @label = label.gsub(/[^a-zA-Z]/, '')
       end
 
       def save_as(pathname)
