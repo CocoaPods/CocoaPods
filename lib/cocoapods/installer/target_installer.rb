@@ -120,7 +120,7 @@ module Pod
       end
       
       def default_ld_flags
-        flags = %w{-ObjC -all_load}
+        flags = %w{-ObjC}
         flags << '-fobjc-arc' if @podfile.set_arc_compatibility_flag? && self.requires_arc
         flags.join(" ")
       end
