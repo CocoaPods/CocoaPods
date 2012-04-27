@@ -12,7 +12,7 @@ describe Pod::Generator::DummySource do
   end
 
   it "generates a dummy sourcefile with the appropriate class" do
-    generator = Pod::Generator::DummySource.new("Pods")
+    generator = Pod::Generator::DummySource.new
     file = temporary_directory + 'PodsDummy.m'
     generator.save_as(file)
     file.read.should == <<-EOS
