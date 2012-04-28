@@ -14,7 +14,7 @@ describe Pod::Generator::Acknowledgements do
     @acknowledgements = Pod::Generator::Acknowledgements.new(@target_definition, @pods)
   end
 
-  it "returns the corrent number of licenses (including headera and footnote)" do
+  it "returns the correct number of licenses (including header and footnote)" do
     @acknowledgements.licenses.count.should == 3
   end
 
