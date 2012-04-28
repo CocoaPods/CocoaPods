@@ -1,11 +1,40 @@
 module Pod
   class Podfile
+    class UserProject
+      include Config::Mixin
+
+      DEFAULT_CONFIGURATIONS = { 'Debug' => :debug, 'Release' => :release }.freeze
+
+      attr_reader :configurations
+
+      def initialize(path = nil, configurations = {})
+        self.path = path if path
+        @configurations = configurations.merge(DEFAULT_CONFIGURATIONS)
+      end
+
+      def path=(path)
+        path = path.to_s
+        @path = config.project_root + (File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
+      end
+
+      def path
+        if @path
+          @path
+        else
+          xcodeprojs = config.project_root.glob('*.xcodeproj')
+          if xcodeprojs.size == 1
+            @path = xcodeprojs.first
+          end
+        end
+      end
+    end
+
     class TargetDefinition
       include Config::Mixin
 
       attr_reader :name, :target_dependencies
 
-      attr_accessor :xcodeproj, :link_with, :platform, :parent, :exclusive
+      attr_accessor :user_project, :link_with, :platform, :parent, :exclusive
 
       def initialize(name, options = {})
         @name, @target_dependencies = name, []
@@ -27,20 +56,8 @@ module Pod
       end
       alias_method :exclusive?, :exclusive
 
-      def xcodeproj=(path)
-        path = path.to_s
-        @xcodeproj = config.project_root + (File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
-      end
-
-      def xcodeproj
-        if @xcodeproj
-          @xcodeproj
-        elsif @parent
-          @parent.xcodeproj
-        else
-          xcodeprojs = config.project_root.glob('*.xcodeproj')
-          @xcodeproj = xcodeprojs.first if xcodeprojs.size == 1
-        end
+      def user_project
+        @user_project || @parent.user_project
       end
 
       def link_with=(targets)
@@ -64,8 +81,13 @@ module Pod
       # Returns a path, which is relative to the project_root, relative to the
       # `$(SRCROOT)` of the user's project.
       def relative_to_srcroot(path)
-        raise Informative, "[!] Unable to find an Xcode project to integrate".red unless xcodeproj || !config.integrate_targets
-        xcodeproj ? (config.project_root + path).relative_path_from(xcodeproj.dirname) : path
+        if user_project.path.nil?
+          # TODO this is not in the right place
+          raise Informative, "[!] Unable to find an Xcode project to integrate".red if config.integrate_targets
+          path
+        else
+          (config.project_root + path).relative_path_from(user_project.path.dirname)
+        end
       end
 
       def relative_pods_root
@@ -123,7 +145,9 @@ module Pod
     include Config::Mixin
 
     def initialize(&block)
-      @target_definitions = { :default => (@target_definition = TargetDefinition.new(:default, :exclusive => true)) }
+      @target_definition = TargetDefinition.new(:default, :exclusive => true)
+      @target_definition.user_project = UserProject.new
+      @target_definitions = { :default => @target_definition }
       instance_eval(&block)
     end
 
@@ -159,8 +183,8 @@ module Pod
       elsif @workspace
         @workspace
       else
-        projects = @target_definitions.map { |_, td| td.xcodeproj }.uniq
-        if projects.size == 1 && (xcodeproj = @target_definitions[:default].xcodeproj)
+        projects = @target_definitions.map { |_, td| td.user_project.path }.uniq
+        if projects.size == 1 && (xcodeproj = @target_definitions[:default].user_project.path)
           config.project_root + "#{xcodeproj.basename('.xcodeproj')}.xcworkspace"
         end
       end
@@ -184,8 +208,8 @@ module Pod
     #     xcodeproj 'TestProject'
     #   end
     #
-    def xcodeproj(path)
-      @target_definition.xcodeproj = path
+    def xcodeproj(path, configurations = {})
+      @target_definition.user_project = UserProject.new(path, configurations)
     end
 
     # Specifies the target(s) in the user’s project that this Pods library

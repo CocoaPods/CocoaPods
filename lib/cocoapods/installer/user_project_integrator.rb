@@ -34,13 +34,13 @@ module Pod
         end.compact
       end
 
-      def user_projects
-        @podfile.target_definitions.values.map(&:xcodeproj)
+      def user_project_paths
+        @podfile.target_definitions.values.map { |td| td.user_project.path }
       end
 
       def create_workspace!
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-        [pods_project_path, *user_projects].each do |project_path|
+        [pods_project_path, *user_project_paths].each do |project_path|
           project_path = project_path.relative_path_from(config.project_root).to_s
           workspace << project_path unless workspace.include?(project_path)
         end
@@ -74,11 +74,11 @@ module Pod
           add_xcconfig_base_configuration
           add_pods_library
           add_copy_resources_script_phase
-          user_project.save_as(@target_definition.xcodeproj)
+          user_project.save_as(@target_definition.user_project.path)
         end
 
         def user_project_path
-          if path = @target_definition.xcodeproj
+          if path = @target_definition.user_project.path
             unless path.exist?
               raise Informative, "The Xcode project `#{path}' does not exist."
             end

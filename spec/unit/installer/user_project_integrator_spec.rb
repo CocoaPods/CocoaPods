@@ -52,12 +52,12 @@ describe Pod::Installer::UserProjectIntegrator do
   end
 
   it "raises if no project could be selected" do
-    @target_integrator.target_definition.stubs(:xcodeproj).returns(nil)
+    @target_integrator.target_definition.user_project.stubs(:path).returns(nil)
     lambda { @target_integrator.user_project_path }.should.raise Pod::Informative
   end
 
   it "raises if the project path doesn't exist" do
-    @target_integrator.target_definition.xcodeproj.stubs(:exist?).returns(false)
+    @target_integrator.target_definition.user_project.path.stubs(:exist?).returns(false)
     lambda { @target_integrator.user_project_path }.should.raise Pod::Informative
   end
 
