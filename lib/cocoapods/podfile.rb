@@ -3,13 +3,13 @@ module Pod
     class UserProject
       include Config::Mixin
 
-      DEFAULT_CONFIGURATIONS = { 'Debug' => :debug, 'Release' => :release }.freeze
+      DEFAULT_BUILD_CONFIGURATIONS = { 'Debug' => :debug, 'Release' => :release }.freeze
 
-      attr_reader :configurations
+      attr_reader :build_configurations
 
-      def initialize(path = nil, configurations = {})
+      def initialize(path = nil, build_configurations = {})
         self.path = path if path
-        @configurations = configurations.merge(DEFAULT_CONFIGURATIONS)
+        @build_configurations = build_configurations.merge(DEFAULT_BUILD_CONFIGURATIONS)
       end
 
       def path=(path)
@@ -71,10 +71,10 @@ module Pod
       def label
         if name == :default
           "Pods"
-        elsif @parent
-          "#{@parent.label}-#{name}"
-        else
+        elsif exclusive?
           "Pods-#{name}"
+        else
+          "#{@parent.label}-#{name}"
         end
       end
 
@@ -208,8 +208,8 @@ module Pod
     #     xcodeproj 'TestProject'
     #   end
     #
-    def xcodeproj(path, configurations = {})
-      @target_definition.user_project = UserProject.new(path, configurations)
+    def xcodeproj(path, build_configurations = {})
+      @target_definition.user_project = UserProject.new(path, build_configurations)
     end
 
     # Specifies the target(s) in the user’s project that this Pods library
@@ -425,6 +425,11 @@ module Pod
 
     def set_arc_compatibility_flag?
       @set_arc_compatibility_flag
+    end
+
+    def user_build_configurations
+      configs_array = @target_definitions.values.map { |td| td.user_project.build_configurations }
+      configs_array.inject({}) { |hash, config| hash.merge(config) }
     end
 
     def post_install!(installer)

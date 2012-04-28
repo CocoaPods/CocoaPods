@@ -17,6 +17,14 @@ module Pod
       main_group << groups.new('name' => 'Pods')
     end
 
+    def add_build_configurations(user_configurations)
+      user_configurations.each do |name, _|
+        unless build_configurations.map(&:name).include?(name)
+          build_configurations.new('name' => name)
+        end
+      end
+    end
+
     # Shortcut access to the `Pods' PBXGroup.
     def pods
       groups.find { |g| g.name == 'Pods' } || groups.new({ 'name' => 'Pods' })
