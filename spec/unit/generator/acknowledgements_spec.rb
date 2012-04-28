@@ -35,13 +35,8 @@ describe Pod::Generator::Acknowledgements do
     }
   end
 
-  # TODO Test with a target_definition whose label isn't "Pods"
-  it "adds \"Pods-\" to the beginning of the filename only if necessary" do
-    (@acknowledgements.filename.start_with?"Pods-").should.be.true
-    (@acknowledgements.filename.start_with?"Pods-Pods-").should.be.false
-  end
-
   it "writes a plist to disk" do
-    @acknowledgements.save_in_directory(@sandbox.root).should.be.true
+    path = @sandbox.root + "#{@target_definition.label}-Acknowledgements.plist"
+    @acknowledgements.save_as(path).should.be.true
   end
 end

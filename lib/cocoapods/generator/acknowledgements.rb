@@ -8,17 +8,8 @@ module Pod
         @target_definition, @pods = target_definition, pods
       end
 
-      def save_in_directory(pathname)
-        Xcodeproj.write_plist(plist, pathname + filename)
-      end
-
-      def filename
-        result = "#{@target_definition.label}-Acknowledgements.plist"
-        if result.start_with?"Pods-"
-          result
-        else
-         "Pods-" + result
-        end
+      def save_as(path)
+        Xcodeproj.write_plist(plist, path)
       end
 
       def plist
@@ -41,7 +32,7 @@ module Pod
 
       def hash_for_pod(pod)
         if (license = pod.license)
-          license_hash = {
+          {
             :Type => "PSGroupSpecifier",
             :Title => pod.name,
             :FooterText => license[:text]
