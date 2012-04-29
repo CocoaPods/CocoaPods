@@ -41,6 +41,11 @@ module Pod
         get_value(set, :gh_forks)
       end
 
+      def github_pushed_at(set)
+        github_stats_if_needed(set)
+        get_value(set, :pushed_at)
+      end
+
       private
 
       def cache
@@ -88,9 +93,10 @@ module Pod
         end
 
         cache[set.name] ||= {}
-        set_value(set, :gh_watchers,  repo['watchers'])
-        set_value(set, :gh_forks,     repo['forks'])
-        set_value(set, :gh_date,      Time.now)
+        set_value(set, :gh_watchers,   repo['watchers'])
+        set_value(set, :gh_forks,      repo['forks'])
+        set_value(set, :pushed_at,     repo['pushed_at'])
+        set_value(set, :gh_date,       Time.now)
         save_cache
       end
     end

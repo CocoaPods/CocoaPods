@@ -72,6 +72,10 @@ module Pod
           Pod::Specification::Statistics.instance.github_forks(@set)
         end
 
+        def github_last_activity
+          distance_from_now_in_words(Pod::Specification::Statistics.instance.github_pushed_at(@set))
+        end
+
         def ==(other)
           self.class === other && @set == other.set
         end
@@ -90,6 +94,25 @@ module Pod
             words.join ' and '
           else
             "#{words[0..-2].join(', ')}, and #{words.last}"
+          end
+        end
+
+        def distance_from_now_in_words(from_time)
+          from_time = Time.parse(from_time)
+          to_time = Time.now
+          distance_in_days = (((to_time - from_time).abs)/60/60/24).round
+
+          case distance_in_days
+          when 0..7
+            "less than a week ago"
+          when 8..29
+            "#{distance_in_days} days ago"
+          when 30..45
+            "1 month ago"
+          when 46..365
+            "#{(distance_in_days.to_f / 30).round} months ago"
+          else
+            "more than a year ago"
           end
         end
       end

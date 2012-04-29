@@ -24,10 +24,11 @@ module Pod
         result << detail('Homepage', pod.homepage)
         result << detail('Source',   pod.source_url)
         if @stats
+          result << detail('Pushed',   pod.github_last_activity)
           result << detail('Authors',  pod.authors) if pod.authors =~ /,/
           result << detail('Author',   pod.authors) if pod.authors !~ /,/
-          result << detail('Platform', pod.platform)
           result << detail('License',  pod.license)
+          result << detail('Platform', pod.platform)
           result << detail('Watchers', pod.github_watchers)
           result << detail('Forks',    pod.github_forks)
         end
