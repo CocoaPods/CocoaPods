@@ -36,6 +36,7 @@ describe Pod::Generator::Documentation do
       '--keep-undocumented-objects',
       '--keep-undocumented-members',
       '--keep-intermediate-files',
+      '--exit-threshold', '2',
       '--index-desc', 'README',
       # TODO We need to either make this a hash so that options can be merged
       # or not use any defaults in case an options are specified.
