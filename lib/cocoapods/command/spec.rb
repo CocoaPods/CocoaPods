@@ -90,6 +90,7 @@ module Pod
             print_messages(spec, 'WARN',  linter.warnings)
             print_messages(spec, 'NOTE',  linter.notes)
             puts unless config.silent? || should_skip?(linter)
+            GC.start
           end
         end
         all_valid
