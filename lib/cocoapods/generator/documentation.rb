@@ -86,7 +86,7 @@ module Pod
         end
 
         if $?.exitstatus != 0
-          puts "[!] Appledoc encountered an error (exitstatus: #{$?.exitstatus}), an update might be avilable to solve the issue." unless config.silent?
+          puts "[!] Appledoc encountered an error (exitstatus: #{$?.exitstatus}), an update might be available to solve the issue." unless config.silent?
         end
 
       rescue Informative
