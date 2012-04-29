@@ -65,7 +65,9 @@ module Pod
           '--ignore', '.m',
           '--keep-undocumented-objects',
           '--keep-undocumented-members',
-          '--keep-intermediate-files'
+          '--keep-intermediate-files',
+          '--exit-threshold', '2'
+          # appledoc exits with 1 if a warning was logged
         ]
         index = index_file
         options += ['--index-desc', index] if index
@@ -82,9 +84,9 @@ module Pod
         @pod.chdir do
           appledoc Escape.shell_command(options)
         end
-        # appledoc exits with 1 if a warning was logged
-        if $?.exitstatus >= 2
-          raise "Appledoc encountered an error (exitstatus: #{$?.exitstatus})."
+
+        if $?.exitstatus != 0
+          puts "[!] Appledoc encountered an error (exitstatus: #{$?.exitstatus}), an update might be avilable to solve the issue." unless config.silent?
         end
 
       rescue Informative
