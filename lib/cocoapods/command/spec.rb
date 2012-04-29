@@ -261,6 +261,7 @@ module Pod
           warnings << "Missing license[:file] or [:text]"                       unless license[:file] || license[:text]
           warnings << "The summary should end with a dot"                       if @spec.summary !~ /.*\./
           warnings << "The description should end with a dot"                   if @spec.description !~ /.*\./ && @spec.description != @spec.summary
+          warnings << "Git sources should specify either a tag or a commit"     if source[:git] && ( !source[:commit] || !source[:tag] )
           warnings << "Github repositories should end in `.git'"                if github_source? && source[:git] !~ /.*\.git/
           warnings << "Github repositories should start with `https'"           if github_source? && source[:git] !~ /https:\/\/github.com/
           warnings << "Comments must be deleted"                                if text =~ /^\w*#\n\w*#/ # allow a single line comment as it is generally used in subspecs
