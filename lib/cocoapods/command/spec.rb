@@ -253,7 +253,7 @@ module Pod
         #
         def podspec_warnings
           license  = @spec.license || {}
-          source   = @spec.source
+          source   = @spec.source  || {}
           text     = @file.read
           warnings = []
           warnings << "The name of the spec should match the name of the file"  unless names_match?
