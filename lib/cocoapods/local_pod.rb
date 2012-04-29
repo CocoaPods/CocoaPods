@@ -75,8 +75,14 @@ module Pod
       source_files.select { |f| f.extname == '.h' }
     end
     
-    def license
-      specification.license
+    def license_text
+      if (license_hash = specification.license)
+        if (result = license_hash[:text])
+          result
+        elsif (filename = license_hash[:file])
+          result = IO.read(root + filename)
+        end
+      end
     end
 
     def link_headers

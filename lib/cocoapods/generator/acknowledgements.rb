@@ -31,14 +31,14 @@ module Pod
       end
 
       def hash_for_pod(pod)
-        if (license = pod.license)
+        if (license = pod.license_text)
           {
             :Type => "PSGroupSpecifier",
             :Title => pod.name,
-            :FooterText => license[:text]
+            :FooterText => license
           }
         else
-          puts "[!] No licence for #{pod.name}"
+          puts "[!] No license for #{pod.name}"
         end
       end
 

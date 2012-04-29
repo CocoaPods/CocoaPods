@@ -49,12 +49,8 @@ describe Pod::LocalPod do
     @pod.header_files.should == [Pathname.new("BananaLib/Classes/Banana.h")]
   end
   
-  it 'returns a license' do
-    @pod.license.should == {
-      :type => "MIT",
-      :file => "LICENSE",
-      :text => "Permission is hereby granted ..."
-    }
+  it 'returns some license text' do
+    @pod.license_text.should == "Permission is hereby granted ..."
   end
 
   it 'can clean up after itself' do
