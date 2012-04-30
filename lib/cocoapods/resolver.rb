@@ -86,9 +86,12 @@ module Pod
     end
 
     def validate_platform!(spec)
-      plaform = @podfile.target_definitions[:default].platform
-      unless plaform.support?(spec.platform)
-        raise Informative, "The platform required by the Podfile `#{plaform}' does not match that of #{spec} `#{spec.platform}'"
+      platform = @podfile.target_definitions[:default].platform
+      unless platform.support?(spec.platform)
+        raise Informative, "The platform required by the Podfile `#{platform}' does not match that of #{spec} `#{spec.platform}'"
+      end
+      unless !platform.deployment_target || !spec.deployment_target[platform.name] || spec.deployment_target[platform.name].satisfied_by?(platform.deployment_target)
+        raise Informative, "The platform required by the Podfile `#{platform}' does not match that of #{spec} `#{spec.platform} #{spec.deployment_target[platform.name]}'".magenta
       end
     end
   end

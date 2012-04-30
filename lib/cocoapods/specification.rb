@@ -34,6 +34,7 @@ module Pod
       @define_for_platforms = [:osx, :ios]
       @clean_paths, @subspecs = [], []
       @dependencies, @source_files, @resources = { :ios => [], :osx => [] }, { :ios => [], :osx => [] }, { :ios => [], :osx => [] }
+      @deployment_target = {}
       @platform = Platform.new(nil)
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
       @compiler_flags = { :ios => '', :osx => '' }
@@ -116,12 +117,11 @@ module Pod
     def platform=(platform)
       if platform.class == Array
         name = platform[0]
-        options = platform[1]
+        @deployment_target[name] = Gem::Requirement.new(platform[1])
       else
         name = platform
-        options = nil
       end
-      @platform = Platform.new(name, options)
+      @platform = Platform.new(name)
     end
     attr_reader :platform
 
@@ -157,7 +157,7 @@ module Pod
         @specification, @platform = specification, platform
       end
 
-      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= dependency }.each do |method|
+      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= deployment_target= dependency }.each do |method|
         define_method(method) do |args|
           @specification._on_platform(@platform) do
             @specification.send(method, args)
@@ -180,6 +180,13 @@ module Pod
       end
     end
     attr_reader :source_files
+
+    def deployment_target=(requirement)
+      @define_for_platforms.each do |platform|
+        @deployment_target[platform] = Gem::Requirement.new(requirement)
+      end
+    end
+    attr_reader :deployment_target
 
     def resources=(patterns)
       @define_for_platforms.each do |platform|
