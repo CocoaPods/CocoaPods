@@ -109,9 +109,11 @@ describe "Pod::Command::Spec lint" do
   end
 
   it "lints a repo with --only-errors option and show the warnings" do
-    output = run_command('spec', 'lint', 'master', '--only-errors')
-    output.should.include "passed validation"
-    output.should.include "WARN"
+    # The fixture has an error due to name mismatch
+    cmd = command('spec', 'lint', 'master', '--only-errors')
+    lambda { cmd.run }.should.raise Pod::Informative
+    cmd.output.should.include "InAppSettingKit (0.0.1)\n    - ERROR | The name of the spec should match the name of the file"
+    cmd.output.should.include "WARN"
   end
 
   it "complains if no repo name or url are provided and there a no specs in the current working directory" do
