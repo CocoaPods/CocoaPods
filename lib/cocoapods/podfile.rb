@@ -5,16 +5,16 @@ module Pod
 
       DEFAULT_BUILD_CONFIGURATIONS = { 'Debug' => :debug, 'Release' => :release }.freeze
 
-      attr_reader :build_configurations
-
       def initialize(path = nil, build_configurations = {})
         self.path = path if path
         @build_configurations = build_configurations.merge(DEFAULT_BUILD_CONFIGURATIONS)
       end
 
       def path=(path)
-        path = path.to_s
-        @path = config.project_root + (File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
+        path  = path.to_s
+        @path = Pathname.new(File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
+        @path = config.project_root + @path unless @path.absolute?
+        @path
       end
 
       def path
@@ -25,6 +25,20 @@ module Pod
           if xcodeprojs.size == 1
             @path = xcodeprojs.first
           end
+        end
+      end
+
+      def project
+        Xcodeproj::Project.new(path) if path
+      end
+
+      def build_configurations
+        if project
+          project.build_configurations.map(&:name).inject({}) do |hash, name|
+            hash[name] = :release; hash
+          end.merge(@build_configurations)
+        else
+          @build_configurations
         end
       end
     end

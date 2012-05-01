@@ -248,13 +248,19 @@ describe "Pod::Podfile" do
       @podfile.target_definitions[:nested_osx_target].should.not.be.exclusive
     end
 
-    it "returns the custom configurations, that the user's project contains, and wether it should be based on a debug or a release build" do
+    it "returns the specified configurations and wether it should be based on a debug or a release build" do
+      Pod::Podfile::UserProject.any_instance.stubs(:project)
       all = { 'Release' => :release, 'Debug' => :debug, 'Test' => :debug }
       @podfile.target_definitions[:default].user_project.build_configurations.should == all.merge('iOS App Store' => :release)
       @podfile.target_definitions[:test].user_project.build_configurations.should == all.merge('iOS App Store' => :release)
       @podfile.target_definitions[:osx_target].user_project.build_configurations.should == all.merge('Mac App Store' => :release)
       @podfile.target_definitions[:nested_osx_target].user_project.build_configurations.should == all.merge('Mac App Store' => :release)
       @podfile.user_build_configurations.should == all.merge('iOS App Store' => :release, 'Mac App Store' => :release)
+    end
+
+    it "defaults, for unspecified configurations, to a release build" do
+      project = Pod::Podfile::UserProject.new(fixture('SampleProject/SampleProject.xcodeproj'), 'Test' => :debug)
+      project.build_configurations.should == { 'Release' => :release, 'Debug' => :debug, 'Test' => :debug, 'App Store' => :release }
     end
 
     describe "with an Xcode project that's not in the project_root" do
