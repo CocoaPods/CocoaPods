@@ -32,6 +32,7 @@ module Pod
     autoload :Documentation,        'cocoapods/generator/documentation'
     autoload :Acknowledgements,     'cocoapods/generator/acknowledgements'
     autoload :Plist,                'cocoapods/generator/acknowledgements/plist'
+    autoload :Markdown,             'cocoapods/generator/acknowledgements/markdown'
   end
 end
 
