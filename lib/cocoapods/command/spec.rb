@@ -247,7 +247,7 @@ module Pod
           config.project_pods_root = tmp_dir + 'Pods'
           config.silent            = !config.verbose
           config.integrate_targets = false
-          config.doc_install       = false
+          config.generate_docs     = false
         end
 
         def tear_down_lint_environment
