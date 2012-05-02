@@ -33,7 +33,7 @@ module Pod
       end
 
       def cache_path
-        @cache_path ||= Pathname.new "/var/tmp/CocoaPods/Git/#{Digest::SHA1.hexdigest(url)}/"
+        @cache_path ||= Pathname.new "/var/tmp/CocoaPods/Git/#{Digest::SHA1.hexdigest(url.to_s)}/"
       end
 
       def download_head
