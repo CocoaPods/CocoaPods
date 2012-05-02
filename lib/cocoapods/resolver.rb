@@ -71,9 +71,6 @@ module Pod
           if dependency.subspec_dependency?
             spec = spec.subspec_by_name(dependency.name)
           end
-
-          validate_platform!(spec, target_definition)
-
           @loaded_specs << spec.name
           @specs[spec.name] = spec
 
@@ -81,6 +78,7 @@ module Pod
           # TODO fix the need to return an empty arrayf if there are no deps for the given platform
           find_dependency_sets(spec, (spec.dependencies[target_definition.platform.to_sym] || []), target_definition)
         end
+        validate_platform!(spec || @specs[dependency.name], target_definition)
       end
       @log_indent -= 1
     end
