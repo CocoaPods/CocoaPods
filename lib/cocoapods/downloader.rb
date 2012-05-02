@@ -3,7 +3,6 @@ require 'uri'
 module Pod
   class Downloader
     autoload :Git,        'cocoapods/downloader/git'
-    autoload :GitHub,     'cocoapods/downloader/git'
     autoload :Mercurial,  'cocoapods/downloader/mercurial'
     autoload :Subversion, 'cocoapods/downloader/subversion'
     autoload :Http,       'cocoapods/downloader/http'
@@ -26,17 +25,13 @@ module Pod
     def clean
       # implement in sub-classes
     end
-    
+
     private
-    
+
     def self.for_target(target_path, options)
       options = options.dup
       if url = options.delete(:git)
-        if url.to_s =~ /github.com/
-          GitHub.new(target_path, url, options)
-        else
           Git.new(target_path, url, options)
-        end
       elsif url = options.delete(:hg)
         Mercurial.new(target_path, url, options)
       elsif url = options.delete(:svn)
