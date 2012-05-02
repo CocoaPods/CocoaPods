@@ -45,7 +45,7 @@ else
 
         @config_before = config
         create_config!
-        config.doc = false
+        config.generate_docs = false
       end
 
       after do

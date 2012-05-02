@@ -247,7 +247,7 @@ module Pod
           config.project_pods_root = tmp_dir + 'Pods'
           config.silent            = !config.verbose
           config.integrate_targets = false
-          config.doc_install       = false
+          config.generate_docs     = false
         end
 
         def tear_down_lint_environment
@@ -296,7 +296,8 @@ module Pod
               # Skip Filelist that would otherwise be resolved from the working directory resulting
               # in a potentially very expensi operation
               next if pattern.is_a?(FileList)
-              if pattern.any? { |path| path.start_with?('/') }
+              invalid = pattern.is_a?(Array) ? pattern.any? { |path| path.start_with?('/') } : pattern.start_with?('/')
+              if invalid
                 messages << "Paths cannot start with a slash (#{accessor})"
                 break
               end
