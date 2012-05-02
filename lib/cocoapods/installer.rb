@@ -59,7 +59,7 @@ module Pod
           end
         end
 
-        if (should_install && config.doc?) || config.force_doc?
+        if (should_install && config.generate_docs?) || config.force_doc?
           puts "Installing Documentation for #{pod.specification}".green if config.verbose?
           Generator::Documentation.new(pod).generate(config.doc_install?)
         end
