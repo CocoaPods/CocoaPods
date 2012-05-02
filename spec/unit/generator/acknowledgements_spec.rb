@@ -14,29 +14,16 @@ describe Pod::Generator::Acknowledgements do
     @acknowledgements = Pod::Generator::Acknowledgements.new(@target_definition, @pods)
   end
 
-  it "returns the correct number of licenses (including header and footnote)" do
-    @acknowledgements.licenses.count.should == 3
-  end
-
-  # TODO Test with a pod that has no licence
-  it "returns a correctly formed license hash for each pod" do
-    @acknowledgements.hash_for_pod(@pods[0]).should == {
-      :Type => "PSGroupSpecifier",
-      :Title => "BananaLib",
-      :FooterText => "Permission is hereby granted ..."
-    }
-  end
-
-  it "returns a plist containg the licenses" do
-    @acknowledgements.plist.should == {
-      :Title => "Acknowledgements",
-      :StringsTable => "Acknowledgements",
-      :PreferenceSpecifiers => @acknowledgements.licenses
-    }
-  end
-
-  it "writes a plist to disk" do
+  it "calls save_as on a Plist generator" do
+    Pod::Generator::Plist.any_instance.expects(:save_as)
     path = @sandbox.root + "#{@target_definition.label}-Acknowledgements.plist"
-    @acknowledgements.save_as(path).should.be.true
+    @acknowledgements.save_as(path)
+  end
+
+  it "returns a string for each header and footnote text method" do
+    @acknowledgements.header_title.should.be.kind_of(String)
+    @acknowledgements.header_text.should.be.kind_of(String)
+    @acknowledgements.footnote_title.should.be.kind_of(String)
+    @acknowledgements.footnote_text.should.be.kind_of(String)
   end
 end

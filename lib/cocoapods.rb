@@ -31,6 +31,7 @@ module Pod
     autoload :CopyResourcesScript,  'cocoapods/generator/copy_resources_script'
     autoload :Documentation,        'cocoapods/generator/documentation'
     autoload :Acknowledgements,     'cocoapods/generator/acknowledgements'
+    autoload :Plist,                'cocoapods/generator/acknowledgements/plist'
   end
 end
 

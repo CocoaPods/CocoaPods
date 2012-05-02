@@ -2,60 +2,19 @@ module Pod
   module Generator
 
     class Acknowledgements
-      require "xcodeproj/xcodeproj_ext"
+
+      def self.generators
+        [Plist]
+      end
 
       def initialize(target_definition, pods)
         @target_definition, @pods = target_definition, pods
       end
 
       def save_as(path)
-        Xcodeproj.write_plist(plist, path)
-      end
-
-      def plist
-        {
-          :Title => "Acknowledgements",
-          :StringsTable => "Acknowledgements",
-          :PreferenceSpecifiers => licenses
-        }
-      end
-
-      def licenses
-        licences_array = [header]
-        @pods.each do |pod|
-          if (hash = hash_for_pod(pod))
-            licences_array << hash
-          end
+        Acknowledgements.generators.each do |generator|
+          generator.new(@target_definition, @pods).save_as(path)
         end
-        licences_array << footnote
-      end
-
-      def hash_for_pod(pod)
-        if (license = pod.license_text)
-          {
-            :Type => "PSGroupSpecifier",
-            :Title => pod.name,
-            :FooterText => license
-          }
-        else
-          puts "[!] No license for #{pod.name}"
-        end
-      end
-
-      def header
-        {
-          :Type => "PSGroupSpecifier",
-          :Title => header_title,
-          :FooterText => header_text
-        }
-      end
-
-      def footnote
-        {
-          :Type => "PSGroupSpecifier",
-          :Title => footnote_title,
-          :FooterText => footnote_text
-        }
       end
 
       def header_title
