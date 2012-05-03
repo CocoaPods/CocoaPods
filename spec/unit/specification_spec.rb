@@ -154,6 +154,19 @@ describe "A Pod::Specification, in general," do
     @spec.platform.should == :ios
   end
 
+  it "returns the platform and the deployment target" do
+    @spec.platform = :ios, '4.0'
+    @spec.platform.should == :ios
+    @spec.platform.deployment_target.should == Pod::Version.new('4.0')
+  end
+
+  it "returns the platfroms for which the pod is supported" do
+    @spec.platform = :ios, '4.0'
+    @spec.platforms.count.should == 1
+    @spec.platforms.first.should == :ios
+    @spec.platforms.first.deployment_target.should == Pod::Version.new('4.0')
+  end
+
   it "returns the license of the Pod" do
     @spec.license = {
       :type => 'MIT',
@@ -168,7 +181,7 @@ describe "A Pod::Specification, in general," do
       :text => 'Permission is hereby granted ...'
     }
   end
-  
+
   it "returns the license of the Pod specified in the old format" do
     @spec.license = 'MIT'
     @spec.license.should == {
@@ -183,7 +196,7 @@ describe "A Pod::Specification, in general," do
                     '--project-company', '"Company Name"',
                     '--company-id', 'com.company',
                     '--ignore', 'Common',
-                    '--ignore', '.m'] 
+                    '--ignore', '.m']
     }
     @spec.documentation[:html].should == 'http://EXAMPLE/#{@name}/documentation'
     @spec.documentation[:appledoc].should == ['--project-name', '#{@name}',
@@ -288,11 +301,11 @@ describe "A Pod::Specification with :local source" do
       s.source_files = "."
     end
   end
-  
+
   it "is marked as local" do
     @spec.should.be.local
   end
-  
+
   it "it returns the expanded local path" do
     @spec.local_path.should == fixture("integration/JSONKit")
   end
@@ -364,6 +377,8 @@ describe "A Pod::Specification, concerning its attributes that support different
 
         s.ios.dependency 'JSONKit'
         s.osx.dependency 'SSZipArchive'
+
+        s.ios.deployment_target = '4.0'
       end
     end
 
@@ -380,6 +395,12 @@ describe "A Pod::Specification, concerning its attributes that support different
         :ios => { 'OTHER_LDFLAGS' => '-lObjC -framework QuartzCore -lz' },
         :osx => { 'OTHER_LDFLAGS' => '-lObjC -all_load -framework QuartzCore -framework CoreData -lz -lxml' }
       }
+    end
+
+    it "returns the list of the supported platfroms and deployment targets" do
+     @spec.platforms.count.should == 2
+     @spec.platforms.should.include? Pod::Platform.new(:osx)
+     @spec.platforms.should.include? Pod::Platform.new(:ios, '4.0')
     end
 
     it "returns the same list of compiler flags for each platform" do

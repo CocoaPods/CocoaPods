@@ -535,14 +535,14 @@ Pod::Spec.new do |s|
   # If this Pod runs only on iOS or OS X, then specify the platfrom and
   # the deployment target.
   #
-  # s.platform = :ios, '>= 5.0'
+  # s.platform = :ios, '5.0'
   # s.platform = :ios
 
   # If this Pod runs on boths platforms, then specify the deployment
   # targets.
   #
-  # s.ios.deployment_target = '>= 5.0'
-  # s.osx.deployment_target = '>= 10.7'
+  # s.ios.deployment_target = '5.0'
+  # s.osx.deployment_target = '10.7'
 
   # A list of resources included with the Pod. These are copied into the
   # target bundle with a build phase script.

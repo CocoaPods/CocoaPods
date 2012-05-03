@@ -115,15 +115,13 @@ module Pod
     end
 
     def platform=(platform)
-      if platform.class == Array
-        name = platform[0]
-        @deployment_target[name] = Gem::Requirement.new(platform[1])
-      else
-        name = platform
-      end
-      @platform = Platform.new(name)
+      @platform = Platform.new(*platform)
     end
     attr_reader :platform
+
+    def platforms
+      @platform.nil? ?  @define_for_platforms.map { |platfrom| Platform.new(platfrom, @deployment_target[platfrom]) } : [platform]
+    end
 
     def requires_arc=(requires_arc)
       self.compiler_flags = '-fobjc-arc' if requires_arc
@@ -181,12 +179,10 @@ module Pod
     end
     attr_reader :source_files
 
-    def deployment_target=(requirement)
-      @define_for_platforms.each do |platform|
-        @deployment_target[platform] = Gem::Requirement.new(requirement)
-      end
+    def deployment_target=(version)
+      raise Informative, "The deployment target must be defined per platform like s.ios.deployment_target = '5.0'" unless @define_for_platforms.count == 1
+      @deployment_target[@define_for_platforms.first] = version
     end
-    attr_reader :deployment_target
 
     def resources=(patterns)
       @define_for_platforms.each do |platform|
