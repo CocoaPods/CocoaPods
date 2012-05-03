@@ -18,6 +18,11 @@ describe Pod::Platform do
     @platform.should == Pod::Platform.new(:ios)
   end
 
+  it "can be compared for equality with another platform with the same symbolic name and the same deployment target" do
+    @platform.should.not == Pod::Platform.new(:ios, '4.0')
+    Pod::Platform.new(:ios, '4.0').should == Pod::Platform.new(:ios, '4.0')
+  end
+
   it "can be compared for equality with a matching symbolic name (backwards compatibility reasons)" do
     @platform.should == :ios
   end

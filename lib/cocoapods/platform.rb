@@ -30,7 +30,7 @@ module Pod
       if other_platform_or_symbolic_name.is_a?(Symbol)
         @symbolic_name == other_platform_or_symbolic_name
       else
-        self == (other_platform_or_symbolic_name.name)
+        self.name == (other_platform_or_symbolic_name.name) && self.deployment_target == other_platform_or_symbolic_name.deployment_target
       end
     end
 
