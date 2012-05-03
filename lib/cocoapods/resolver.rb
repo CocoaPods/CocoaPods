@@ -84,11 +84,8 @@ module Pod
     end
 
     def validate_platform!(spec, target)
-      unless target.platform.support?(spec.platform)
-        raise Informative, "[!] The platform required by the target `#{target.name}' `#{target.platform}' does not match that of #{spec} `#{spec.platform}'".red
-      end
-      unless !target.platform.deployment_target || !spec.deployment_target[platform.name] || spec.deployment_target[platform.name].satisfied_by?(target.platform.deployment_target)
-        raise Informative, "[!] The platform required by the target `#{target.name}' `#{target.platform}' does not match that of `#{spec}' `#{spec.platform} #{spec.deployment_target[platform.name]}'".magenta
+      unless spec.platforms.any? { |platform| target.platform.support?(platform) }
+        raise Informative, "[!] The platform of the target `#{target.name}' (#{target.platform}) is not compatible with `#{spec}' which has a minimun requirement of #{spec.platforms.join(' - ')}.".red
       end
     end
   end
