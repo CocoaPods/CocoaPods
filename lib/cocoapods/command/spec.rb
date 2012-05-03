@@ -532,16 +532,17 @@ Pod::Spec.new do |s|
 
   s.description = 'An optional longer description of #{data[:name]}.'
 
-  # If this Pod runs only on iOS or OS X, then specify that with one of
-  # these, or none if it runs on both platforms.
-  # If the pod runs on both plafroms but presents different deployment
-  # targets, source files, etc. create two different pods: `#{data[:name]}-iOS'
-  # and `#{data[:name]}-OSX'.
+  # If this Pod runs only on iOS or OS X, then specify the platform and
+  # the deployment target.
   #
+  # s.platform = :ios, '5.0'
   # s.platform = :ios
-  # s.platform = :ios, { :deployment_target => "5.0" }
-  # s.platform = :osx
-  # s.platform = :osx, { :deployment_target => "10.7" }
+
+  # If this Pod runs on boths platforms, then specify the deployment
+  # targets.
+  #
+  # s.ios.deployment_target = '5.0'
+  # s.osx.deployment_target = '10.7'
 
   # A list of resources included with the Pod. These are copied into the
   # target bundle with a build phase script.
@@ -582,13 +583,14 @@ Pod::Spec.new do |s|
   #
   # s.dependency 'JSONKit', '~> 1.4'
 
-        # ――― EXTRA VALUES ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  # ――― EXTRA VALUES ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
   # If you need to specify any other build settings, add them to the
   # xcconfig hash.
   #
   # s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2' }
 
+  # ――― INFO ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
       end
       SPEC
     end

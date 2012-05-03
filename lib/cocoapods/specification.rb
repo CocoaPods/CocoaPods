@@ -34,6 +34,7 @@ module Pod
       @define_for_platforms = [:osx, :ios]
       @clean_paths, @subspecs = [], []
       @dependencies, @source_files, @resources = { :ios => [], :osx => [] }, { :ios => [], :osx => [] }, { :ios => [], :osx => [] }
+      @deployment_target = {}
       @platform = Platform.new(nil)
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
       @compiler_flags = { :ios => '', :osx => '' }
@@ -114,16 +115,13 @@ module Pod
     end
 
     def platform=(platform)
-      if platform.class == Array
-        name = platform[0]
-        options = platform[1]
-      else
-        name = platform
-        options = nil
-      end
-      @platform = Platform.new(name, options)
+      @platform = Platform.new(*platform)
     end
     attr_reader :platform
+
+    def platforms
+      @platform.nil? ?  @define_for_platforms.map { |platfrom| Platform.new(platfrom, @deployment_target[platfrom]) } : [platform]
+    end
 
     def requires_arc=(requires_arc)
       self.compiler_flags = '-fobjc-arc' if requires_arc
@@ -157,7 +155,7 @@ module Pod
         @specification, @platform = specification, platform
       end
 
-      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= dependency }.each do |method|
+      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= deployment_target= dependency }.each do |method|
         define_method(method) do |args|
           @specification._on_platform(@platform) do
             @specification.send(method, args)
@@ -180,6 +178,11 @@ module Pod
       end
     end
     attr_reader :source_files
+
+    def deployment_target=(version)
+      raise Informative, "The deployment target must be defined per platform like s.ios.deployment_target = '5.0'" unless @define_for_platforms.count == 1
+      @deployment_target[@define_for_platforms.first] = version
+    end
 
     def resources=(patterns)
       @define_for_platforms.each do |platform|
