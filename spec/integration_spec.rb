@@ -208,6 +208,8 @@ else
               dependency 'SSToolkit'
             end
 
+            Pod::Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)
+
             installer = SpecHelper::Installer.new(podfile)
             installer.install!
 

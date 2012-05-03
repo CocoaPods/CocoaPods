@@ -74,6 +74,10 @@ module Pod
         options += spec_appledoc_options
       end
 
+      def already_installed?
+        Pathname.new(File.expand_path("~/Library/Developer/Shared/Documentation/DocSets/org.cocoapods.#{name.gsub(/ /,'-')}.docset")).exist?
+      end
+
       def generate(install = false)
         options = appledoc_options
         options += ['--output', @target_path.to_s]
