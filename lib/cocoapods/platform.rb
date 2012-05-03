@@ -8,15 +8,22 @@ module Pod
       new :osx
     end
 
-    attr_reader :options
+    attr_reader :options, :deployment_target
 
-    def initialize(symbolic_name, options = {})
+    def initialize(symbolic_name, deployment_target = nil)
       @symbolic_name = symbolic_name
-      @options = options
+      if deployment_target
+        version = deployment_target.is_a?(Hash) ? deployment_target[:deployment_target] : deployment_target # backwards compatibility from 0.6
+        @deployment_target = Pod::Version.create(version)
+      end
     end
 
     def name
       @symbolic_name
+    end
+
+    def deployment_target= (version)
+      @deployment_target = Pod::Version.create(version)
     end
 
     def ==(other_platform_or_symbolic_name)
@@ -49,12 +56,6 @@ module Pod
 
     def nil?
       name.nil?
-    end
-
-    def deployment_target
-      if (options && opt = options[:deployment_target])
-        Pod::Version.new(opt)
-      end
     end
 
     def requires_legacy_ios_archs?

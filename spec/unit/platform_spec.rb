@@ -23,30 +23,33 @@ describe Pod::Platform do
   end
 
   it "presents an accurate string representation" do
-    @platform.to_s.should               == "iOS"
+    @platform.to_s.should == "iOS"
     Pod::Platform.new(:osx).to_s.should == 'OS X'
     Pod::Platform.new(nil).to_s.should  == "iOS - OS X"
-    Pod::Platform.new(:ios, { :deployment_target => '5.0.0' }).to_s.should == 'iOS 5.0.0'
-    Pod::Platform.new(:osx, { :deployment_target => '10.7' }).to_s.should == 'OS X 10.7'
-  end
-
-  it "correctly indicates if it supports another platfrom" do
-    ios4 = Pod::Platform.new(:ios, { :deployment_target => '4.0.0' })
-    ios5 = Pod::Platform.new(:ios, { :deployment_target => '5.0.0' })
-    ios5.should.support?(ios4)
-    ios4.should.not.support?(ios5)
-    osx6 = Pod::Platform.new(:osx, { :deployment_target => '10.6' })
-    osx7 = Pod::Platform.new(:osx, { :deployment_target => '10.7' })
-    osx7.should.support?(osx6)
-    osx6.should.not.support?(osx7)
-    both = Pod::Platform.new(nil)
-    both.should.support?(ios4)
-    both.should.support?(osx6)
-    both.should.support?(nil)
+    Pod::Platform.new(:ios, '5.0.0').to_s.should == 'iOS 5.0.0'
+    Pod::Platform.new(:osx, '10.7').to_s.should  == 'OS X 10.7'
   end
 
   it "uses it's name as it's symbold version" do
     @platform.to_sym.should == :ios
+  end
+
+  it "allows to specify the deployment target on initialization" do
+    p = Pod::Platform.new(:ios, '4.0.0')
+    p.deployment_target.should == Pod::Version.new('4.0.0')
+  end
+
+  it "allows to specify the deployment target in a hash on initialization (backwards compatibility from 0.6)" do
+    p = Pod::Platform.new(:ios, { :deployment_target => '4.0.0' })
+    p.deployment_target.should == Pod::Version.new('4.0.0')
+  end
+
+  it "allows to specify the deployment target after initialization" do
+    p = Pod::Platform.new(:ios, '4.0.0')
+    p.deployment_target = '4.0.0'
+    p.deployment_target.should == Pod::Version.new('4.0.0')
+    p.deployment_target = Pod::Version.new('4.0.0')
+    p.deployment_target.should == Pod::Version.new('4.0.0')
   end
 end
 
@@ -57,5 +60,37 @@ describe "Pod::Platform with a nil value" do
 
   it "behaves like a nil object" do
     @platform.should.be.nil
+  end
+end
+
+describe "Pod::Platform#support?" do
+  it "supports another platform is with the same operating system" do
+    p1 = Pod::Platform.new(:ios)
+    p2 = Pod::Platform.new(:ios)
+    p1.should.support?(p2)
+
+    p1 = Pod::Platform.new(:osx)
+    p2 = Pod::Platform.new(:osx)
+    p1.should.support?(p2)
+  end
+
+  it "supports a nil platform" do
+    p1 = Pod::Platform.new(:ios)
+    p1.should.support?(nil)
+  end
+
+  it "supports a platform with a lower or equal deployment_target" do
+    p1 = Pod::Platform.new(:ios, '5.0')
+    p2 = Pod::Platform.new(:ios, '4.0')
+    p1.should.support?(p1)
+    p1.should.support?(p2)
+    p2.should.not.support?(p1)
+  end
+
+  it "supports a platform regardless of the deployment_target if one of the two does not specify it" do
+    p1 = Pod::Platform.new(:ios)
+    p2 = Pod::Platform.new(:ios, '4.0')
+    p1.should.support?(p2)
+    p2.should.support?(p1)
   end
 end
