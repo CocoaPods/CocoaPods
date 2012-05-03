@@ -20,10 +20,10 @@ module Pod
       targets_and_specs = {}
 
       @podfile.target_definitions.values.each do |target_definition|
-        puts "\nResolving dependencies for target `#{target_definition.name}'".green if config.verbose?
+        puts "\nResolving dependencies for target `#{target_definition.name}' (#{target_definition.platform})".green if config.verbose?
         @loaded_specs = []
         # TODO @podfile.platform will change to target_definition.platform
-        find_dependency_sets(@podfile, target_definition.dependencies, target_definition.platform)
+        find_dependency_sets(@podfile, target_definition.dependencies, target_definition)
         targets_and_specs[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
       end
 
@@ -56,11 +56,11 @@ module Pod
       end
     end
 
-    def find_dependency_sets(dependent_specification, dependencies, platform)
+    def find_dependency_sets(dependent_specification, dependencies, target_definition)
       @log_indent += 1
       dependencies.each do |dependency|
         puts '  ' * @log_indent + "- #{dependency}" if config.verbose?
-        set = find_cached_set(dependency, platform)
+        set = find_cached_set(dependency, target_definition.platform)
         set.required_by(dependent_specification)
         # Ensure we don't resolve the same spec twice for one target
         unless @loaded_specs.include?(dependency.name)
@@ -71,27 +71,24 @@ module Pod
           if dependency.subspec_dependency?
             spec = spec.subspec_by_name(dependency.name)
           end
-
-          validate_platform!(spec)
-
           @loaded_specs << spec.name
           @specs[spec.name] = spec
 
           # And recursively load the dependencies of the spec.
           # TODO fix the need to return an empty arrayf if there are no deps for the given platform
-          find_dependency_sets(spec, (spec.dependencies[platform.to_sym] || []), platform)
+          find_dependency_sets(spec, (spec.dependencies[target_definition.platform.to_sym] || []), target_definition)
         end
+        validate_platform!(spec || @specs[dependency.name], target_definition)
       end
       @log_indent -= 1
     end
 
-    def validate_platform!(spec)
-      platform = @podfile.target_definitions[:default].platform
-      unless platform.support?(spec.platform)
-        raise Informative, "The platform required by the Podfile `#{platform}' does not match that of #{spec} `#{spec.platform}'"
+    def validate_platform!(spec, target)
+      unless target.platform.support?(spec.platform)
+        raise Informative, "[!] The platform required by the target `#{target.name}' `#{target.platform}' does not match that of #{spec} `#{spec.platform}'".red
       end
-      unless !platform.deployment_target || !spec.deployment_target[platform.name] || spec.deployment_target[platform.name].satisfied_by?(platform.deployment_target)
-        raise Informative, "The platform required by the Podfile `#{platform}' does not match that of #{spec} `#{spec.platform} #{spec.deployment_target[platform.name]}'".magenta
+      unless !target.platform.deployment_target || !spec.deployment_target[platform.name] || spec.deployment_target[platform.name].satisfied_by?(target.platform.deployment_target)
+        raise Informative, "[!] The platform required by the target `#{target.name}' `#{target.platform}' does not match that of `#{spec}' `#{spec.platform} #{spec.deployment_target[platform.name]}'".magenta
       end
     end
   end

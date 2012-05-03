@@ -45,7 +45,7 @@ else
 
         @config_before = config
         create_config!
-        config.doc = false
+        config.generate_docs = false
       end
 
       after do
@@ -207,6 +207,8 @@ else
               dependency 'JSONKit', '1.4'
               dependency 'SSToolkit'
             end
+
+            Pod::Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)
 
             installer = SpecHelper::Installer.new(podfile)
             installer.install!

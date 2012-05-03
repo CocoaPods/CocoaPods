@@ -14,7 +14,7 @@ describe Pod::Command::Spec do
   end
 end
 
-describe "Pod::Command::Spec create" do
+describe "Pod::Command::Spec#create" do
   extend SpecHelper::Command
   extend SpecHelper::Github
   extend SpecHelper::TemporaryDirectory
@@ -51,7 +51,7 @@ describe "Pod::Command::Spec create" do
     spec.source.should   == { :git => 'https://github.com/lukeredpath/libPusher.git', :tag => 'v1.3' }
   end
 
-  it "accepts the a name when creating a podspec form github" do
+  it "accepts a name when creating a podspec form github" do
     expect_github_repo_request
     expect_github_user_request
     expect_github_tags_request
@@ -90,7 +90,7 @@ describe "Pod::Command::Spec create" do
   end
 end
 
-describe "Pod::Command::Spec lint" do
+describe "Pod::Command::Spec#lint" do
   extend SpecHelper::Command
   extend SpecHelper::TemporaryDirectory
   extend SpecHelper::Git
@@ -104,13 +104,8 @@ describe "Pod::Command::Spec lint" do
   end
 
   it "lints a repo" do
-    # the fixture master repo has warnings and does not validates
-    lambda { run_command('spec', 'lint', 'master') }.should.raise Pod::Informative
-  end
-
-  it "lints a repo with --only-errors option and show the warnings" do
-    # The fixture has an error due to name mismatch
-    cmd = command('spec', 'lint', 'master', '--only-errors')
+    # The fixture has an error due to a name mismatch
+    cmd = command('spec', 'lint', 'master')
     lambda { cmd.run }.should.raise Pod::Informative
     cmd.output.should.include "InAppSettingKit (0.0.1)\n    - ERROR | The name of the spec should match the name of the file"
     cmd.output.should.include "WARN"
@@ -136,51 +131,10 @@ describe "Pod::Command::Spec lint" do
     cmd.output.should.include "Missing license[:file] or [:text]"
   end
 
-  before do
-    spec = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
-    spec.gsub!(/https:\/\/github\.com\/johnezang\/JSONKit\.git/, fixture('integration/JSONKit').to_s)
-    spec.gsub!(/s\.source_files = 'JSONKit\.\*'/, "s.source_files = 'JSONKit.*'\ns.resources = 'WRONG_FOLDER'")
-    File.open(temporary_directory + 'JSONKit.podspec', 'w') {|f| f.write(spec) }
-  end
-
-  it "fails if there are warnings" do
-    cmd = command('spec', 'lint', '--quick')
-    Dir.chdir(temporary_directory) { lambda { cmd.run }.should.raise Pod::Informative }
-    cmd.output.should.include "- WARN  | Missing license[:file] or [:text]"
-  end
-
-  it "respects the --only-errors option" do
-    cmd = command('spec', 'lint', '--quick', '--only-errors')
-    Dir.chdir(temporary_directory) { lambda { cmd.run }.should.not.raise Pod::Informative }
-    cmd.output.should.include "- WARN  | Missing license[:file] or [:text]"
-    cmd.output.should.include "passed validation"
-  end
-
-  it "respects the --quick option" do
-    cmd = command('spec', '--quick', 'lint')
-    Dir.chdir(temporary_directory) { lambda { cmd.run }.should.raise Pod::Informative }
-    cmd.output.should.not.include "JSONKit/JSONKit.m:1640:27: warning: equality comparison with extraneous parentheses"
-  end
-
-  it "uses xcodebuild to generate warnings and checks for file patterns" do
-    # those two checks are merged because pod install is computationally expensive
-    cmd = command('spec', 'lint')
-    Dir.chdir(temporary_directory) { lambda { cmd.run }.should.raise Pod::Informative }
-    unless `which xcodebuild`.strip.empty?
-      cmd.output.should.include "JSONKit/JSONKit.m:1640:27: warning: equality comparison with extraneous parentheses"
-    end
-    cmd.output.should.include "- ERROR | [resources = 'WRONG_FOLDER'] -> did not match any file"
-  end
-
-  before do
-    spec = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
-    spec.gsub!(/s\.source_files = 'JSONKit\.\*'/, "s.source_files = 'JSONKit.*'\n if config.ios?\nend")
-    File.open(temporary_directory + 'JSONKit.podspec', 'w') {|f| f.write(spec) }
-  end
-
-  it "produces deprecation notices" do
-    cmd = command('spec', '--quick', 'lint')
-    Dir.chdir(temporary_directory) { lambda { cmd.run }.should.raise Pod::Informative }
-    cmd.output.should.include "- WARN  | `config.ios?' and `config.osx' will be removed in version 0.7"
+  it "respects the -only--errors option" do
+    spec_file = fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec'
+    cmd = command('spec', 'lint', '--quick', '--only-errors', spec_file.to_s)
+    lambda { cmd.run }.should.not.raise
+    cmd.output.should.include "Missing license[:file] or [:text]"
   end
 end
