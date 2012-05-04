@@ -8,7 +8,7 @@ module Pod
       new :osx
     end
 
-    attr_reader :options, :deployment_target
+    attr_reader :deployment_target
 
     def initialize(symbolic_name, deployment_target = nil)
       @symbolic_name = symbolic_name
