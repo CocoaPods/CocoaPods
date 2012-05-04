@@ -220,7 +220,9 @@ module Pod
         def peform_multiplatform_analysis
           platform_names.each do |platform_name|
             set_up_lint_environment
+            puts "\n\n#{spec} - Analyzing on #{Platform.new platform_name} platform.".green.reversed if config.verbose?
             install_pod(platform_name)
+            puts "Building with xcodebuild.\n".yellow if config.verbose?
             xcodebuild_output.concat(xcodebuild_output_for_platfrom(platform_name))
             file_patterns_errors.concat(file_patterns_errors_for_platfrom(platform_name))
             tear_down_lint_environment
@@ -232,11 +234,19 @@ module Pod
         end
 
         def install_pod(platform_name)
-          puts "\n\n#{spec} - generating build errors for #{platform_name} platform".yellow.reversed if config.verbose?
           podfile = podfile_from_spec(platform_name)
           config.verbose
           Installer.new(podfile).install!
           config.silent
+        end
+
+        def podfile_from_spec(platform_name)
+          name    = spec.name
+          podspec = file.realpath.to_s
+          podfile = Pod::Podfile.new do
+            platform platform_name
+            dependency name, :podspec => podspec
+          end
         end
 
         def set_up_lint_environment
@@ -334,7 +344,7 @@ module Pod
         def deprecation_warnings
           text = @file.read
           deprecations = []
-          deprecations << "`config.ios?' and `config.osx' will be removed in version 0.7" if text. =~ /config\..os?/
+          deprecations << "`config.ios?' and `config.osx?' are deprecated and will be removed in version 0.7" if text. =~ /config\..?os.?/
           deprecations << "The `post_install' hook is reserved for edge cases" if text. =~ /post_install/
           deprecations
         end
@@ -364,15 +374,6 @@ module Pod
           messages     += clean_output
           puts(output) if config.verbose?
           messages
-        end
-
-        def podfile_from_spec(platform_name)
-          name    = spec.name
-          podspec = file.realpath.to_s
-          podfile = Pod::Podfile.new do
-            platform platform_name
-            dependency name, :podspec => podspec
-          end
         end
 
         def process_xcode_build_output(output)
