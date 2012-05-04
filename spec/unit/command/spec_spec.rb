@@ -87,7 +87,7 @@ describe "Pod::Command::Spec::Linter" do
     linter.lenient, linter.quick = false, true
     linter.lint.should == false
     linter.errors.should.be.empty
-    linter.warnings.join(' | ').should =~ /`config.ios\?' and `config.osx' will be removed in version 0.7/
+    linter.warnings.join(' | ').should =~ /`config.ios\?' and `config.osx\?' are deprecated and will be removed in version 0.7/
   end
 
  it "uses xcodebuild to generate notes and warnings" do
