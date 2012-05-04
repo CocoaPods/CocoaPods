@@ -32,6 +32,7 @@ module Pod
         update_repo
         add_specs_to_repo
         push_repo
+        puts
       end
 
       private

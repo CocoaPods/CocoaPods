@@ -14,6 +14,8 @@ module Pod
       # FIXME: pass this into the installer as a parameter
       @sandbox = Sandbox.new(config.project_pods_root)
       @resolver = Resolver.new(@podfile, @sandbox)
+      # TODO: remove in 0.7 (legacy support for config.ios? and config.osx?)
+      config.podfile = podfile
     end
 
     def lock_file

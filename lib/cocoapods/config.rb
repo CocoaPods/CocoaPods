@@ -51,6 +51,7 @@ module Pod
         Podfile.from_file(project_podfile) if project_podfile.exist?
       end
     end
+    attr_writer :podfile
 
     def ios?
       # TODO: deprecate in 0.7
