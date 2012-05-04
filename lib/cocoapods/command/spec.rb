@@ -598,7 +598,7 @@ Pod::Spec.new do |s|
       def semantic_versioning_notice(repo_id, repo)
         return <<-EOS
 
-        #{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
+#{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
 I’ve recently added [#{repo}](https://github.com/CocoaPods/Specs/tree/master/#{repo}) to the [CocoaPods](https://github.com/CocoaPods/CocoaPods) package manager repo.
 
@@ -615,9 +615,9 @@ $ git tag -a 1.0.0 -m "Tag release 1.0.0"
 $ git push --tags
 ```
 
-        #{'――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
+#{'――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
-        #{'[!] This repo does not appear to have semantic version tags.'.yellow}
+#{'[!] This repo does not appear to have semantic version tags.'.yellow}
 
 After commiting the specification, consider opening a ticket with the template displayed above:
   - link:  https://github.com/#{repo_id}/issues/new
