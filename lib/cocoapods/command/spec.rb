@@ -316,9 +316,9 @@ module Pod
           messages << "Missing license[:file] or [:text]"                       unless license[:file] || license[:text]
           messages << "The summary should end with a dot"                       if @spec.summary !~ /.*\./
           messages << "The description should end with a dot"                   if @spec.description !~ /.*\./ && @spec.description != @spec.summary
-          messages << "Git sources should specify either a tag or a commit"     if source[:git] && ( !source[:commit] || !source[:tag] )
+          messages << "Git sources should specify either a tag or a commit"     if source[:git] && !source[:commit] && !source[:tag]
           messages << "Github repositories should end in `.git'"                if github_source? && source[:git] !~ /.*\.git/
-          messages << "Github repositories should start with `https'"           if github_source? && source[:git] !~ /https:\/\/github.com/
+          messages << "Github repositories should use `https' link"             if github_source? && source[:git] !~ /https:\/\/github.com/
           messages << "Comments must be deleted"                                if text =~ /^\w*#\n\w*#/ # allow a single line comment as it is generally used in subspecs
           messages
         end
