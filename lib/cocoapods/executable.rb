@@ -7,7 +7,7 @@ module Pod
           raise Informative, "Unable to locate the executable `#{name}'"
         end
         if Config.instance.verbose?
-          puts "#{bin} #{command}"
+          puts "-> #{bin} #{command}"
           `#{bin} #{command} 1>&2`
         else
           `#{bin} #{command} 2> /dev/null`

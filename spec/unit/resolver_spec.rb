@@ -39,7 +39,7 @@ describe "Pod::Resolver" do
     lambda { @resolver.resolve }.should.not.raise
   end
 
-  it "raises once any of the dependencies does not match the platform of the root spec (Podfile)" do
+  it "raises once any of the dependencies does not match the platform of its podfile target" do
     set = Pod::Spec::Set.new(config.repos_dir + 'master/ASIHTTPRequest')
     @resolver.cached_sets['ASIHTTPRequest'] = set
 
@@ -59,27 +59,15 @@ describe "Pod::Resolver" do
     lambda { @resolver.resolve }.should.raise Pod::Informative
   end
 
-  it "does not raise if all of the dependencies have a deployment target equal or lower of the root spec (Podfile)" do
+  it "raises once any of the dependencies does not have a deployment_target compatible with its podfile target" do
     set = Pod::Spec::Set.new(config.repos_dir + 'master/ASIHTTPRequest')
     @resolver.cached_sets['ASIHTTPRequest'] = set
+    @podfile.platform :ios, "4.0"
 
-    def set.stub_platform=(platform); @stubbed_platform = platform; end
-    def set.specification; spec = super; spec.platform = @stubbed_platform; spec; end
-
-    @podfile.platform :ios, { :deployment_target => "4.0.0" }
-    set.stub_platform = :ios, { :deployment_target => "4.0.0" }
+    Pod::Specification.any_instance.stubs(:platforms).returns([ Pod::Platform.new(:ios, '4.0'), Pod::Platform.new(:osx, '10.7') ])
     lambda { @resolver.resolve }.should.not.raise
-  end
 
-  it "raises once any of the dependencies requires a higher deployment target of the root spec (Podfile)" do
-    set = Pod::Spec::Set.new(config.repos_dir + 'master/ASIHTTPRequest')
-    @resolver.cached_sets['ASIHTTPRequest'] = set
-
-    def set.stub_platform=(platform); @stubbed_platform = platform; end
-    def set.specification; spec = super; spec.platform = @stubbed_platform; spec; end
-
-    @podfile.platform :ios, { :deployment_target => "4.0.0" }
-    set.stub_platform = :ios, { :deployment_target => "5.0.0" }
+    Pod::Specification.any_instance.stubs(:platforms).returns([ Pod::Platform.new(:ios, '5.0'), Pod::Platform.new(:osx, '10.7') ])
     lambda { @resolver.resolve }.should.raise Pod::Informative
   end
 

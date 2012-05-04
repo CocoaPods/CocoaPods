@@ -316,9 +316,9 @@ module Pod
           messages << "Missing license[:file] or [:text]"                       unless license[:file] || license[:text]
           messages << "The summary should end with a dot"                       if @spec.summary !~ /.*\./
           messages << "The description should end with a dot"                   if @spec.description !~ /.*\./ && @spec.description != @spec.summary
-          messages << "Git sources should specify either a tag or a commit"     if source[:git] && ( !source[:commit] || !source[:tag] )
+          messages << "Git sources should specify either a tag or a commit"     if source[:git] && !source[:commit] && !source[:tag]
           messages << "Github repositories should end in `.git'"                if github_source? && source[:git] !~ /.*\.git/
-          messages << "Github repositories should start with `https'"           if github_source? && source[:git] !~ /https:\/\/github.com/
+          messages << "Github repositories should use `https' link"             if github_source? && source[:git] !~ /https:\/\/github.com/
           messages << "Comments must be deleted"                                if text =~ /^\w*#\n\w*#/ # allow a single line comment as it is generally used in subspecs
           messages
         end
@@ -532,16 +532,17 @@ Pod::Spec.new do |s|
 
   s.description = 'An optional longer description of #{data[:name]}.'
 
-  # If this Pod runs only on iOS or OS X, then specify that with one of
-  # these, or none if it runs on both platforms.
-  # If the pod runs on both plafroms but presents different deployment
-  # targets, source files, etc. create two different pods: `#{data[:name]}-iOS'
-  # and `#{data[:name]}-OSX'.
+  # If this Pod runs only on iOS or OS X, then specify the platform and
+  # the deployment target.
   #
+  # s.platform = :ios, '5.0'
   # s.platform = :ios
-  # s.platform = :ios, { :deployment_target => "5.0" }
-  # s.platform = :osx
-  # s.platform = :osx, { :deployment_target => "10.7" }
+
+  # If this Pod runs on boths platforms, then specify the deployment
+  # targets.
+  #
+  # s.ios.deployment_target = '5.0'
+  # s.osx.deployment_target = '10.7'
 
   # A list of resources included with the Pod. These are copied into the
   # target bundle with a build phase script.
@@ -582,13 +583,14 @@ Pod::Spec.new do |s|
   #
   # s.dependency 'JSONKit', '~> 1.4'
 
-        # ――― EXTRA VALUES ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  # ――― EXTRA VALUES ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
   # If you need to specify any other build settings, add them to the
   # xcconfig hash.
   #
   # s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2' }
 
+  # ――― INFO ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
       end
       SPEC
     end
@@ -596,7 +598,7 @@ Pod::Spec.new do |s|
       def semantic_versioning_notice(repo_id, repo)
         return <<-EOS
 
-        #{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
+#{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
 I’ve recently added [#{repo}](https://github.com/CocoaPods/Specs/tree/master/#{repo}) to the [CocoaPods](https://github.com/CocoaPods/CocoaPods) package manager repo.
 
@@ -613,9 +615,9 @@ $ git tag -a 1.0.0 -m "Tag release 1.0.0"
 $ git push --tags
 ```
 
-        #{'――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
+#{'――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
-        #{'[!] This repo does not appear to have semantic version tags.'.yellow}
+#{'[!] This repo does not appear to have semantic version tags.'.yellow}
 
 After commiting the specification, consider opening a ticket with the template displayed above:
   - link:  https://github.com/#{repo_id}/issues/new
