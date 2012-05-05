@@ -2,15 +2,11 @@ require File.expand_path("../../../../spec_helper", __FILE__)
 
 describe Pod::Generator::Plist do
   before do
-    @podfile = Pod::Podfile.new do
-      platform :ios
-      xcodeproj "dummy"
-    end
-    @target_definition = @podfile.target_definitions[:default]
-
     @sandbox = temporary_sandbox
-    @pods = [Pod::LocalPod.new(fixture_spec("banana-lib/BananaLib.podspec"), @sandbox, Pod::Platform.ios)]
-    copy_fixture_to_pod("banana-lib", @pods[0])
+    @target_definition = mock()
+    @pods = [mock()]
+    @pods[0].expects(:license_text).returns("LICENSE_TEXT").at_least_once
+    @pods[0].expects(:name).returns("POD_NAME").at_least_once
     @plist = Pod::Generator::Plist.new(@target_definition, @pods)
   end
 
@@ -18,13 +14,19 @@ describe Pod::Generator::Plist do
     @plist.licenses.count.should == 3
   end
 
-  # TODO Test with a pod that has no licence
   it "returns a correctly formed license hash for each pod" do
     @plist.hash_for_pod(@pods[0]).should == {
       :Type => "PSGroupSpecifier",
-      :Title => "BananaLib",
-      :FooterText => "Permission is hereby granted ..."
+      :Title => "POD_NAME",
+      :FooterText => "LICENSE_TEXT"
     }
+  end
+
+  it "returns nil for a pod with no license text" do
+    @pods[0].unstub(:license_text)
+    @pods[0].unstub(:name)
+    @pods[0].expects(:license_text).returns(nil)
+    @plist.hash_for_pod(@pods[0]).should.be.nil
   end
 
   it "returns a plist containg the licenses" do
@@ -36,7 +38,7 @@ describe Pod::Generator::Plist do
   end
 
   it "writes a plist to disk at the given path" do
-    path = @sandbox.root + "#{@target_definition.label}-Acknowledgements.plist"
+    path = @sandbox.root + "Pods-Acknowledgements.plist"
     Xcodeproj.expects(:write_plist).with(equals(@plist.plist), equals(path))
     @plist.save_as(path)
   end
