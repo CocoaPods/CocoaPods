@@ -4,7 +4,7 @@ module Pod
     class Acknowledgements
 
       def self.generators
-        [Plist]
+        [Plist, Markdown]
       end
 
       def initialize(target_definition, pods)

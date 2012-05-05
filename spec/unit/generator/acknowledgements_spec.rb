@@ -14,8 +14,9 @@ describe Pod::Generator::Acknowledgements do
     @acknowledgements = Pod::Generator::Acknowledgements.new(@target_definition, @pods)
   end
 
-  it "calls save_as on a Plist generator" do
+  it "calls save_as on both a Plist and a Markdown generator" do
     Pod::Generator::Plist.any_instance.expects(:save_as)
+    Pod::Generator::Markdown.any_instance.expects(:save_as)
     path = @sandbox.root + "#{@target_definition.label}-Acknowledgements.plist"
     @acknowledgements.save_as(path)
   end

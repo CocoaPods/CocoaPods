@@ -33,8 +33,6 @@ module Pod
             :Title => pod.name,
             :FooterText => license
           }
-        else
-          puts "[!] No license for #{pod.name}"
         end
       end
 

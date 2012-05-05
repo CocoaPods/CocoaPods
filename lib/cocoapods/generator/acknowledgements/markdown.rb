@@ -3,6 +3,12 @@ module Pod
 
     class Markdown < Acknowledgements
 
+      def save_as(path)
+        file = File.new(path, "w")
+        file.write(licenses)
+        file.close
+      end
+
       def title_from_string(string)
         if string != ""
           "#{string}\n" + '-' * string.length + "\n"
@@ -18,10 +24,12 @@ module Pod
       def licenses
         licenses_string = "#{title_from_string(header_title)}#{header_text}\n"
         @pods.each do |pod|
-          licenses_string += string_for_pod(pod)
+          if (license = string_for_pod(pod))
+            licenses_string += license
+          end
         end
         licenses_string += "#{title_from_string(footnote_title)}#{footnote_text}\n"
       end
-   end
+    end
   end
 end
