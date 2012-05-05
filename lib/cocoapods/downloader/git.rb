@@ -40,6 +40,7 @@ module Pod
       end
 
       def removed_cached_repos_if_needed
+        return unless caches_dir.exist?
         Dir.chdir(caches_dir) do
           repos = Pathname.new(caches_dir).children.select { |c| c.directory? }.sort_by(&:ctime)
           while caches_size >= config.git_cache_size && !repos.empty?
@@ -67,7 +68,7 @@ module Pod
       end
 
       def clone_url
-        # git_cache_size disables the cache
+        # git_cache_size = 0 disables the cache
         config.git_cache_size == 0 ? url : cache_path
       end
 
