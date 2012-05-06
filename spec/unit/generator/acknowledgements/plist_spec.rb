@@ -3,8 +3,8 @@ require File.expand_path("../../../../spec_helper", __FILE__)
 describe Pod::Generator::Plist do
   before do
     @sandbox = temporary_sandbox
-    @target_definition = mock()
-    @pods = [mock()]
+    @target_definition = mock
+    @pods = [mock]
     @pods[0].expects(:license_text).returns("LICENSE_TEXT").at_least_once
     @pods[0].expects(:name).returns("POD_NAME").at_least_once
     @plist = Pod::Generator::Plist.new(@target_definition, @pods)

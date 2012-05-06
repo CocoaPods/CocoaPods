@@ -3,8 +3,8 @@ require File.expand_path("../../../spec_helper", __FILE__)
 describe Pod::Generator::Acknowledgements do
   before do
     @sandbox = temporary_sandbox
-    @target_definition = mock()
-    @pods = [mock()]
+    @target_definition = mock
+    @pods = [mock]
     @acknowledgements = Pod::Generator::Acknowledgements.new(@target_definition, @pods)
   end
 
