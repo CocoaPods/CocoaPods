@@ -15,10 +15,14 @@ module Pod
     def initialize(*)
       super
       main_group << groups.new('name' => 'Pods')
+      @user_build_configurations = []
     end
 
-    def add_build_configurations(user_configurations)
-      user_configurations.each do |name, _|
+    def user_build_configurations=(user_build_configurations)
+      @user_build_configurations = user_build_configurations
+      # The configurations at the top level only need to exist, they don't hold
+      # any build settings themselves, that's left to `add_pod_target`.
+      user_build_configurations.each do |name, _|
         unless build_configurations.map(&:name).include?(name)
           build_configurations.new('name' => name)
         end
@@ -48,6 +52,14 @@ module Pod
 
       target.build_settings('Debug').merge!(settings)
       target.build_settings('Release').merge!(settings)
+
+      @user_build_configurations.each do |name, type|
+        unless target.build_configurations.map(&:name).include?(name)
+          config = target.build_configurations.new('name' => name)
+          # Copy the settings from either the Debug or the Release configuration.
+          config.build_settings = target.build_settings(type.to_s.capitalize).merge(settings)
+        end
+      end
 
       target
     end
