@@ -29,7 +29,7 @@ module Pod
       end
 
       def project
-        Xcodeproj::Project.new(path) if path
+        Xcodeproj::Project.new(path) if path && path.exist?
       end
 
       def build_configurations

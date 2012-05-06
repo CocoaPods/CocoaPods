@@ -32,7 +32,13 @@ describe Pod::Installer::TargetInstaller do
     @project.targets.count.should == 1
     @project.targets.first.name.should == @target_definition.label
   end
-  
+
+  it "adds the user's build configurations to the target" do
+    @project.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
+    do_install!
+    @project.targets.first.build_configurations.map(&:name).sort.should == %w{ AppStore Debug Release Test }
+  end
+
   it 'adds each pod to the static library target' do
     @pods[0].expects(:add_to_target).with(instance_of(Xcodeproj::Project::Object::PBXNativeTarget))
     do_install!
@@ -48,7 +54,6 @@ describe Pod::Installer::TargetInstaller do
     @installer.xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include("\"#{@sandbox.header_search_paths.join('" "')}\"")
   end
 
- 
   it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do
     do_install!
     @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.not.include("-fobjc-arc")

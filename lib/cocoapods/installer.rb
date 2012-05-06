@@ -25,6 +25,7 @@ module Pod
     def project
       return @project if @project
       @project = Pod::Project.new
+      @project.user_build_configurations = @podfile.user_build_configurations
       activated_pods.each do |pod|
         # Add all source files to the project grouped by pod
         group = @project.add_pod_group(pod.name)

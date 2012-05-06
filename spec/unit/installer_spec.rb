@@ -15,11 +15,12 @@ describe "Pod::Installer" do
 
   describe ", by default," do
     before do
-      @xcconfig = Pod::Installer.new(Pod::Podfile.new do
+      podfile = Pod::Podfile.new do
         platform :ios
         xcodeproj 'MyProject'
         dependency 'JSONKit'
-      end).target_installers.first.xcconfig.to_hash
+      end
+      @xcconfig = Pod::Installer.new(podfile).target_installers.first.xcconfig.to_hash
     end
 
     it "sets the header search paths where installed Pod headers can be found" do
@@ -58,5 +59,15 @@ describe "Pod::Installer" do
     end
     installer = Pod::Installer.new(podfile)
     installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
+  end
+
+  it "adds the user's build configurations" do
+    path = fixture('SampleProject/SampleProject.xcodeproj')
+    podfile = Pod::Podfile.new do
+      platform :ios
+      xcodeproj path, 'App Store' => :release
+    end
+    installer = Pod::Installer.new(podfile)
+    installer.project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
   end
 end
