@@ -4,6 +4,9 @@ module Pod
     class Markdown < Acknowledgements
 
       def save_as(path)
+        if (path.extname != ".markdown")
+          path = Pathname.new(path.dirname + "#{path.basename.to_s}.markdown")
+        end
         file = File.new(path, "w")
         file.write(licenses)
         file.close

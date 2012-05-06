@@ -5,6 +5,9 @@ module Pod
       require "xcodeproj/xcodeproj_ext"
 
       def save_as(path)
+        if (path.extname != ".plist")
+          path = Pathname.new(path.dirname + "#{path.basename.to_s}.plist")
+        end
         Xcodeproj.write_plist(plist, path)
       end
 
