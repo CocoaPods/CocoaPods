@@ -13,12 +13,16 @@ module Pod
 
       def plist
         {
-          :Title => "Acknowledgements",
-          :StringsTable => "Acknowledgements",
+          :Title => plist_title,
+          :StringsTable => plist_title,
           :PreferenceSpecifiers => licenses
         }
       end
-  
+ 
+      def plist_title
+        "Acknowledgements"
+      end
+
       def licenses
         licences_array = [header_hash]
         @pods.each do |pod|

@@ -14,6 +14,12 @@ describe Pod::Generator::Plist do
     @plist.licenses.count.should == 3
   end
 
+  it "returns a string for the plist title" do
+    @pods[0].unstub(:license_text)
+    @pods[0].unstub(:name)
+    @plist.plist_title.should.be.kind_of(String)
+  end
+
   it "returns a correctly formed license hash for each pod" do
     @plist.hash_for_pod(@pods[0]).should == {
       :Type => "PSGroupSpecifier",
