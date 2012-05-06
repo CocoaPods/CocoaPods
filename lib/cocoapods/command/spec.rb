@@ -324,6 +324,8 @@ module Pod
           messages = []
           messages << "Missing license[:type]"                                  unless license[:type]
           messages << "Missing license[:file] or [:text]"                       unless license[:file] || license[:text]
+          messages << "The summary is not meaningful"                           if spec.summary =~ /A short description of/
+          messages << "The description is not meaningful"                       if spec.description && spec.description =~ /An optional longer description of/
           messages << "The summary should end with a dot"                       if @spec.summary !~ /.*\./
           messages << "The description should end with a dot"                   if @spec.description !~ /.*\./ && @spec.description != @spec.summary
           messages << "Git sources should specify either a tag or a commit"     if source[:git] && !source[:commit] && !source[:tag]
