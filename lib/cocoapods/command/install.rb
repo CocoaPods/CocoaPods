@@ -35,7 +35,7 @@ module Pod
 
       def initialize(argv)
         config.clean             = !argv.option('--no-clean')
-        config.doc               = !argv.option('--no-doc')
+        config.generate_docs     = !argv.option('--no-doc')
         config.force_doc         =  argv.option('--force-doc')
         config.integrate_targets = !argv.option('--no-integrate')
         @update_repo             = !argv.option('--no-update')

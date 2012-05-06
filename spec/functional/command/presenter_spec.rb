@@ -22,15 +22,16 @@ describe Pod::Command::Presenter do
   end
 
   it "presents the stats of a specification set" do
-    repo = {"forks"=>42, "watchers"=>318}
+    repo = { "forks"=>42, "watchers"=>318, "pushed_at"=>"2011-01-26T19:06:43Z" }
     Octokit.expects(:repo).with("robbiehanson/CocoaLumberjack").returns(repo)
-    presenter = Presenter.new(argv('--stats'))
+    presenter = Presenter.new(argv('--stats', '--no-color'))
     output = presenter.describe(@set)
     output.should.include? 'Author:   Robbie Hanson'
     output.should.include? 'License:  BSD'
     output.should.include? 'Platform: iOS - OS X'
     output.should.include? 'Watchers: 318'
     output.should.include? 'Forks:    42'
+    output.should.include? 'Pushed:   more than a year ago'
   end
 
   it "should print at least one subspec" do

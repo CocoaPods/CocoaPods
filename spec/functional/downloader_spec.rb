@@ -84,9 +84,21 @@ describe "Pod::Downloader" do
       downloader = Pod::Downloader.for_pod(@pod)
       
       VCR.use_cassette('tarballs', :record => :new_episodes) { downloader.download }
-      
+      downloader.clean
+
       (@pod.root + 'tarball.tar.gz').should.not.exist
     end
+    
+    it "removes the .git directory when cleaning" do
+      @pod.specification.stubs(:source).returns(
+        :git => "git://github.com/lukeredpath/libPusher.git", :download_only => false
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.download
+      downloader.clean
+      (@pod.root + '.git').should.not.exist
+    end
+    
   end
   
   describe "for Mercurial" do

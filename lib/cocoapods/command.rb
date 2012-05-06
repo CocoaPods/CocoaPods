@@ -6,6 +6,7 @@ module Pod
     autoload :Install,     'cocoapods/command/install'
     autoload :List,        'cocoapods/command/list'
     autoload :Presenter,   'cocoapods/command/presenter'
+    autoload :Push,        'cocoapods/command/push'
     autoload :Repo,        'cocoapods/command/repo'
     autoload :Search,      'cocoapods/command/search'
     autoload :Setup,       'cocoapods/command/setup'
@@ -18,12 +19,13 @@ module Pod
 
       def message
         [
-          @command_class.banner,
           '',
-          'Options',
-          '-------',
+          @command_class.banner.gsub(/\$ pod (.*)/, '$ pod \1'.green),
           '',
-          options
+          'Options:',
+          '',
+          options,
+          "\n",
         ].join("\n")
       end
 
@@ -45,22 +47,19 @@ module Pod
     end
 
     def self.banner
-      "To see help for the available commands run:\n" \
-      "\n" \
-      "  * $ pod setup --help\n" \
-      "  * $ pod search --help\n" \
-      "  * $ pod list --help\n" \
-      "  * $ pod install --help\n" \
-      "  * $ pod repo --help\n" \
-      "  * $ pod spec --help"
+      commands = ['install', 'list', 'push', 'repo', 'search', 'setup', 'spec'].sort
+      banner   = "\nTo see help for the available commands run:\n\n"
+      commands.each {|cmd| banner << "  * $ pod #{cmd.green} --help\n"}
+      banner
     end
 
     def self.options
       [
-        ['--help',    'Show help information'],
-        ['--silent',  'Print nothing'],
-        ['--verbose', 'Print more information while working'],
-        ['--version', 'Prints the version of CocoaPods'],
+        ['--help',     'Show help information'],
+        ['--silent',   'Print nothing'],
+        ['--no-color', 'Print output without color'],
+        ['--verbose',  'Print more information while working'],
+        ['--version',  'Prints the version of CocoaPods'],
       ]
     end
 
@@ -90,6 +89,8 @@ module Pod
       Config.instance.silent = argv.option('--silent')
       Config.instance.verbose = argv.option('--verbose')
 
+      String.send(:define_method, :colorize) { |string , _| string } if argv.option( '--no-color' )
+
       command_class = case argv.shift_argument
       when 'install' then Install
       when 'repo'    then Repo
@@ -97,6 +98,7 @@ module Pod
       when 'list'    then List
       when 'setup'   then Setup
       when 'spec'    then Spec
+      when 'push'    then Push
       end
 
       if show_help || command_class.nil?

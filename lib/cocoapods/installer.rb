@@ -14,6 +14,8 @@ module Pod
       # FIXME: pass this into the installer as a parameter
       @sandbox = Sandbox.new(config.project_pods_root)
       @resolver = Resolver.new(@podfile, @sandbox)
+      # TODO: remove in 0.7 (legacy support for config.ios? and config.osx?)
+      config.podfile = podfile
     end
 
     def lock_file
@@ -59,9 +61,14 @@ module Pod
           end
         end
 
-        if (should_install && config.doc?) || config.force_doc?
-          puts "Installing Documentation for #{pod.specification}".green if config.verbose?
-          Generator::Documentation.new(pod).generate(config.doc_install?)
+        if (should_install && config.generate_docs?) || config.force_doc?
+          doc_generator = Generator::Documentation.new(pod)
+          if doc_generator.already_installed?
+            puts "Using Existing Documentation for #{pod.specification}".green if config.verbose?
+          else
+            puts "Installing Documentation for #{pod.specification}".green if config.verbose?
+            doc_generator.generate(config.doc_install?)
+          end
         end
       end
     end
@@ -87,6 +94,7 @@ module Pod
       end
 
       generate_lock_file!(pods)
+      generate_dummy_source
 
       puts "* Running post install hooks" if config.verbose?
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
@@ -153,6 +161,19 @@ module Pod
         @podfile.dependencies.map(&:to_s).sort.each do |dep|
           file.puts "  - #{dep}"
         end
+      end
+    end
+
+    def generate_dummy_source
+      filename = "PodsDummy.m"
+      pathname = Pathname.new(sandbox.root + filename)
+      Generator::DummySource.new.save_as(pathname)
+
+      project_file = project.files.new('path' => filename)
+      project.group("Targets Support Files") << project_file
+
+      target_installers.each do |target_installer|
+        target_installer.target.source_build_phases.first << project_file
       end
     end
 

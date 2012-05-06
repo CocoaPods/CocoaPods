@@ -75,9 +75,8 @@ module Pod
 
         support_files_group = @project.group("Targets Support Files").create_group(@target_definition.label)
         support_files_group.create_files(target_support_files)
-
+        
         xcconfig_file = support_files_group.files.where(:path => @target_definition.xcconfig_name)
-
         configure_build_configurations(xcconfig_file)
         create_files(pods, sandbox)
       end
@@ -113,7 +112,7 @@ module Pod
       end
       
       def default_ld_flags
-        flags = %w{-ObjC -all_load}
+        flags = %w{-ObjC}
         flags << '-fobjc-arc' if @podfile.set_arc_compatibility_flag? && self.requires_arc
         flags.join(" ")
       end

@@ -34,6 +34,7 @@ module Pod
       @define_for_platforms = [:osx, :ios]
       @clean_paths, @subspecs = [], []
       @dependencies, @source_files, @resources = { :ios => [], :osx => [] }, { :ios => [], :osx => [] }, { :ios => [], :osx => [] }
+      @deployment_target = {}
       @platform = Platform.new(nil)
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
       @compiler_flags = { :ios => '', :osx => '' }
@@ -114,16 +115,13 @@ module Pod
     end
 
     def platform=(platform)
-      if platform.class == Array
-        name = platform[0]
-        options = platform[1]
-      else
-        name = platform
-        options = nil
-      end
-      @platform = Platform.new(name, options)
+      @platform = Platform.new(*platform)
     end
     attr_reader :platform
+
+    def platforms
+      @platform.nil? ?  @define_for_platforms.map { |platfrom| Platform.new(platfrom, @deployment_target[platfrom]) } : [platform]
+    end
 
     def requires_arc=(requires_arc)
       self.compiler_flags = '-fobjc-arc' if requires_arc
@@ -157,7 +155,7 @@ module Pod
         @specification, @platform = specification, platform
       end
 
-      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= dependency }.each do |method|
+      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= deployment_target= dependency }.each do |method|
         define_method(method) do |args|
           @specification._on_platform(@platform) do
             @specification.send(method, args)
@@ -180,6 +178,11 @@ module Pod
       end
     end
     attr_reader :source_files
+
+    def deployment_target=(version)
+      raise Informative, "The deployment target must be defined per platform like s.ios.deployment_target = '5.0'" unless @define_for_platforms.count == 1
+      @deployment_target[@define_for_platforms.first] = version
+    end
 
     def resources=(patterns)
       @define_for_platforms.each do |platform|
@@ -340,49 +343,6 @@ module Pod
       "#<#{self.class.name} for #{to_s}>"
     end
 
-    def validate!
-      missing = []
-      missing << "name"              unless name
-      missing << "version"           unless version
-      missing << "summary"           unless summary
-      missing << "homepage"          unless homepage
-      missing << "author(s)"         unless authors
-      missing << "source or part_of" unless source || part_of
-      missing << "source_files"      if source_files.empty? && subspecs.empty?
-      # TODO
-      # * validate subspecs
-
-      incorrect = []
-      allowed = [nil, :ios, :osx]
-      incorrect << "platform - accepted values are (no value, :ios, :osx)" unless allowed.include?(platform.name)
-
-      {
-        :source_files => source_files.values,
-        :resources    => resources.values,
-        :clean_paths  => clean_paths
-      }.each do |name, paths|
-        if paths.flatten.any? { |path| path.start_with?("/") }
-          incorrect << "#{name} - paths cannot start with a slash"
-        end
-      end
-
-      if source && source[:local] && source[:local].start_with?("/")
-        incorrect << "source[:local] - paths cannot start with a slash"
-      end
-
-      no_errors_found = missing.empty? && incorrect.empty?
-
-      unless no_errors_found
-        message = "\n[!] The #{name || 'nameless'} specification is incorrect\n".red
-        missing.each {|s| message << " - Missing #{s}\n"}
-        incorrect.each {|s| message << " - Incorrect #{s}\n"}
-        message << "\n"
-        raise Informative, message
-      end
-
-      no_errors_found
-    end
-
     # This is a convenience method which gets called after all pods have been
     # downloaded, installed, and the Xcode project and related files have been
     # generated. (It receives the Pod::Installer::Target instance for the current
@@ -436,7 +396,7 @@ module Pod
       end
 
       # Override the getters to always return the value of the top level parent spec.
-      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags, :documentation].each do |attr|
+      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags, :documentation, :homepage].each do |attr|
         define_method(attr) { top_level_parent.send(attr) }
       end
 

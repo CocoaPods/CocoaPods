@@ -33,6 +33,7 @@ module Pod
     autoload :Acknowledgements,     'cocoapods/generator/acknowledgements'
     autoload :Plist,                'cocoapods/generator/acknowledgements/plist'
     autoload :Markdown,             'cocoapods/generator/acknowledgements/markdown'
+    autoload :DummySource,          'cocoapods/generator/dummy_source'
   end
 end
 
@@ -42,3 +43,7 @@ class Pathname
   end
 end
 
+if ENV['COCOA_PODS_ENV'] == 'development'
+  require 'pry'
+  require 'awesome_print'
+end

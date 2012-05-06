@@ -2,7 +2,7 @@ module Pod
   class Command
     class Presenter
       def self.options
-        "    --stats     Show additional stats (like GitHub watchers and forks)\n"
+        [["--stats", "Show additional stats (like GitHub watchers and forks)"]]
       end
 
       autoload :CocoaPod, 'cocoapods/command/presenter/cocoa_pod'
@@ -24,10 +24,11 @@ module Pod
         result << detail('Homepage', pod.homepage)
         result << detail('Source',   pod.source_url)
         if @stats
+          result << detail('Pushed',   pod.github_last_activity)
           result << detail('Authors',  pod.authors) if pod.authors =~ /,/
           result << detail('Author',   pod.authors) if pod.authors !~ /,/
-          result << detail('Platform', pod.platform)
           result << detail('License',  pod.license)
+          result << detail('Platform', pod.platform)
           result << detail('Watchers', pod.github_watchers)
           result << detail('Forks',    pod.github_forks)
         end
@@ -43,18 +44,15 @@ module Pod
         txt.strip.gsub(/(.{1,#{col}})( +|$)\n?|(.{#{col}})/, indent + "\\1\\3\n")
       end
 
-      def detail(title, value, preferred_indentation = 8)
-        # 8 is the length of Homepage
+      def detail(title, value)
         return '' if !value
-        number_of_spaces = ((preferred_indentation - title.length) > 0) ? (preferred_indentation - title.length) : 0
-        spaces = ' ' * number_of_spaces
         ''.tap do |t|
-          t << "    - #{title}:"
+          t << "    - #{title}:".ljust(16)
           if value.class == Array
             separator = "\n      - "
-            t << separator + value.join(separator)
+            t << separator << value.join(separator)
           else
-            t << " #{spaces + value.to_s}\n"
+            t << value.to_s << "\n"
           end
         end
       end

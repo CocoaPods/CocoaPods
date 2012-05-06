@@ -9,6 +9,7 @@ end
 module SpecHelper
   module Command
     def command(*argv)
+      argv << '--no-color'
       Pod::Command.parse(*argv)
     end
 

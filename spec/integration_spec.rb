@@ -45,7 +45,7 @@ else
 
         @config_before = config
         create_config!
-        config.doc = false
+        config.generate_docs = false
       end
 
       after do
@@ -118,6 +118,26 @@ else
             'DEPENDENCIES' => ["Reachability (from `#{url}')"]
           }
         end
+        
+        it "install a dummy source file" do
+          create_config!
+          podfile = Pod::Podfile.new do
+            self.platform :ios
+            xcodeproj 'dummy'
+            dependency do |s|
+              s.name         = 'JSONKit'
+              s.version      = '1.2'
+              s.source       = { :git => SpecHelper.fixture('integration/JSONKit').to_s, :tag => 'v1.2' }
+              s.source_files = 'JSONKit.*'
+            end
+          end
+          
+          installer = SpecHelper::Installer.new(podfile)
+          installer.install!
+
+          dummy = (config.project_pods_root + 'PodsDummy.m').read
+          dummy.should.include?('@implementation PodsDummy')
+        end
 
         it "installs a library with a podspec defined inline" do
           podfile = Pod::Podfile.new do
@@ -187,6 +207,8 @@ else
               dependency 'JSONKit', '1.4'
               dependency 'SSToolkit'
             end
+
+            Pod::Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)
 
             installer = SpecHelper::Installer.new(podfile)
             installer.install!
