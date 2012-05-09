@@ -298,7 +298,7 @@ module Pod
 
         def paths_starting_with_a_slash_errors
           messages = []
-          %w[source_files resources clean_paths].each do |accessor|
+          %w[source_files public_header_files resources clean_paths].each do |accessor|
             patterns = spec.send(accessor.to_sym)
             # Some values are multiplaform
             patterns = patterns.is_a?(Hash) ? patterns.values.flatten(1) : patterns
@@ -399,6 +399,10 @@ module Pod
         # It checks that every file pattern specified in a spec yields
         # at least one file. It requires the pods to be alredy present
         # in the current working directory under Pods/spec.name
+        #
+        # The exceptions are public_header_files and clean_paths,
+        # since a Spec may declare an explicit empty list of public
+        # header files, and an explicit empty of paths to be cleaned up.
         #
         # It returns a array of messages
         #
@@ -534,6 +538,17 @@ Pod::Spec.new do |s|
   # ――― OPTIONAL VALUES ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
   s.description = 'An optional longer description of #{data[:name]}.'
+
+  # A list of file patterns which select the header files that should be
+  # made available to the application. If the pattern is a directory then the
+  # path will automatically have '*.h' appended.
+  #
+  # Also allows the use of the FileList class like `source_files does.
+  #
+  # If you do not explicitely set the list of public header files,
+  # all headers of source_files will be made public.
+  #
+  # s.public_header_files = 'Classes/**/*.h'
 
   # If this Pod runs only on iOS or OS X, then specify the platform and
   # the deployment target.

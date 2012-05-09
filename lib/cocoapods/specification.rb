@@ -33,7 +33,7 @@ module Pod
     def post_initialize
       @define_for_platforms = [:osx, :ios]
       @clean_paths, @subspecs = [], []
-      @dependencies, @source_files, @resources = { :ios => [], :osx => [] }, { :ios => [], :osx => [] }, { :ios => [], :osx => [] }
+      @dependencies, @source_files, @public_header_files, @resources = { :ios => [], :osx => [] }, { :ios => [], :osx => [] }, { :ios => nil, :osx => nil }, { :ios => [], :osx => [] }
       @deployment_target = {}
       @platform = Platform.new(nil)
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
@@ -155,7 +155,7 @@ module Pod
         @specification, @platform = specification, platform
       end
 
-      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= deployment_target= dependency }.each do |method|
+      %w{ source_files= public_header_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= deployment_target= dependency }.each do |method|
         define_method(method) do |args|
           @specification._on_platform(@platform) do
             @specification.send(method, args)
@@ -178,6 +178,13 @@ module Pod
       end
     end
     attr_reader :source_files
+
+    def public_header_files=(patterns)
+      @define_for_platforms.each do |platform|
+        @public_header_files[platform] = pattern_list(patterns)
+      end
+    end
+    attr_reader :public_header_files
 
     def deployment_target=(version)
       raise Informative, "The deployment target must be defined per platform like s.ios.deployment_target = '5.0'" unless @define_for_platforms.count == 1
