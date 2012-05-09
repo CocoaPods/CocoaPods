@@ -14,6 +14,7 @@ module Pod
     attr_accessor :clean, :verbose, :silent
     attr_accessor :generate_docs, :doc_install, :force_doc
     attr_accessor :integrate_targets
+    attr_accessor :git_cache_size
 
     alias_method :clean?,             :clean
     alias_method :verbose?,           :verbose
@@ -27,6 +28,7 @@ module Pod
       @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
       @verbose = @silent = @force_doc = false
       @clean = @generate_docs = @doc_install = @integrate_targets = true
+      @git_cache_size = 500
     end
 
     def project_root
