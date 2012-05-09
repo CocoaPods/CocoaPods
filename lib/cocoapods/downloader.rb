@@ -12,7 +12,6 @@ module Pod
 
     def self.for_pod(pod)
       spec = pod.specification
-      spec = spec.part_of_specification if spec.part_of_other_pod?
       for_target(pod.root, spec.source.dup)
     end
 
@@ -26,9 +25,9 @@ module Pod
     def clean
       # implement in sub-classes
     end
-    
+
     private
-    
+
     def self.for_target(target_path, options)
       options = options.dup
       if url = options.delete(:git)

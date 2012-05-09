@@ -6,6 +6,10 @@ describe "A Pod::Specification loaded from a podspec" do
     @spec = Pod::Specification.from_file(fixture('banana-lib/BananaLib.podspec'))
   end
 
+  it "has no parent if it is the top level spec" do
+    @spec.parent.nil?.should == true
+  end
+
   it "returns that it's not loaded from a podfile" do
     @spec.should.not.be.podfile
   end
@@ -60,7 +64,6 @@ describe "A Pod::Specification loaded from a podspec" do
   it "returns the pod's dependencies" do
     expected = Pod::Dependency.new('monkey', '~> 1.0.1', '< 1.0.9')
     @spec.dependencies.should == { :ios => [expected], :osx => [expected] }
-    @spec.dependency_by_top_level_spec_name('monkey').should == expected
   end
 
   it "returns the pod's xcconfig settings" do
@@ -97,51 +100,12 @@ describe "A Pod::Specification loaded from a podspec" do
   end
 
   it "adds compiler flags if ARC is required" do
+    @spec.parent.should == nil
     @spec.requires_arc = true
     @spec.compiler_flags.should == { :ios => " -fobjc-arc", :osx => " -fobjc-arc" }
     @spec.compiler_flags = "-Wunused-value"
     @spec.compiler_flags.should == { :ios => " -fobjc-arc -Wunused-value", :osx => " -fobjc-arc -Wunused-value" }
   end
-end
-
-describe "A Pod::Specification that's part of another pod's source" do
-  before do
-    config.repos_dir = fixture('spec-repos')
-    @spec = Pod::Specification.new
-  end
-
-  after do
-    config.repos_dir = SpecHelper.tmp_repos_path
-  end
-
-  it "adds a dependency on the other pod's source, but not the library" do
-    @spec.part_of = 'monkey', '>= 1'
-    @spec.should.be.part_of_other_pod
-    dep = Pod::Dependency.new('monkey', '>= 1')
-    @spec.dependencies.should.not == [dep]
-    dep.only_part_of_other_pod = true
-    @spec.dependencies.should == { :ios => [dep], :osx => [dep] }
-  end
-
-  it "adds a dependency on the other pod's source *and* the library" do
-    @spec.part_of_dependency = 'monkey', '>= 1'
-    @spec.should.be.part_of_other_pod
-    @spec.dependencies[:ios].should == [Pod::Dependency.new('monkey', '>= 1')]
-  end
-
-  it "searches the sources for a matching specification if it has not been assigned by the Resolver yet (e.g. the search command)" do
-    @spec.part_of_dependency = 'SSZipArchive', '0.1.1'
-    @spec.part_of_specification.to_s.should == 'SSZipArchive (0.1.1)'
-  end
-
-  # TODO
-  #it "returns the specification of the pod that it's part of" do
-  #  @spec.part_of_specification
-  #end
-  #
-  #it "returns the destroot of the pod that it's part of" do
-  #  @spec.pod_destroot
-  #end
 end
 
 describe "A Pod::Specification, in general," do
@@ -160,11 +124,11 @@ describe "A Pod::Specification, in general," do
     @spec.platform.deployment_target.should == Pod::Version.new('4.0')
   end
 
-  it "returns the platfroms for which the pod is supported" do
+  it "returns the available platforms for which the pod is supported" do
     @spec.platform = :ios, '4.0'
-    @spec.platforms.count.should == 1
-    @spec.platforms.first.should == :ios
-    @spec.platforms.first.deployment_target.should == Pod::Version.new('4.0')
+    @spec.available_platforms.count.should == 1
+    @spec.available_platforms.first.should == :ios
+    @spec.available_platforms.first.deployment_target.should == Pod::Version.new('4.0')
   end
 
   it "returns the license of the Pod" do
@@ -251,11 +215,6 @@ describe "A Pod::Specification subspec" do
     end
   end
 
-  it "makes a parent spec a wrapper if it has no source files of its own" do
-    @spec.should.be.wrapper
-    @spec.subspecs.first.should.not.be.wrapper
-  end
-
   it "returns the top level parent spec" do
     @spec.subspecs.first.top_level_parent.should == @spec
     @spec.subspecs.first.subspecs.first.top_level_parent.should == @spec
@@ -266,18 +225,9 @@ describe "A Pod::Specification subspec" do
     @spec.subspecs.first.subspecs.first.name.should == 'MainSpec/FirstSubSpec/SecondSubSpec'
   end
 
-  it "is a `part_of' the top level parent spec" do
-    dependency = Pod::Dependency.new('MainSpec', '1.2.3').tap { |d| d.only_part_of_other_pod = true }
-    @spec.subspecs.first.part_of.should == dependency
-    @spec.subspecs.first.subspecs.first.part_of.should == dependency
-  end
-
-  it "depends on the parent spec, if it is a subspec" do
-    dependency = Pod::Dependency.new('MainSpec', '1.2.3').tap { |d| d.only_part_of_other_pod = true }
-    @spec.subspecs.first.dependencies[:ios].should == [dependency]
-    @spec.subspecs.first.dependencies[:osx].should == [dependency]
-    @spec.subspecs.first.subspecs.first.dependencies[:ios].should == [dependency, Pod::Dependency.new('MainSpec/FirstSubSpec', '1.2.3')]
-    @spec.subspecs.first.subspecs.first.dependencies[:osx].should == [dependency, Pod::Dependency.new('MainSpec/FirstSubSpec', '1.2.3')]
+  it "correctly resolves the inheritance chain" do
+    @spec.subspecs.first.subspecs.first.parent.should == @spec.subspecs.first
+    @spec.subspecs.first.parent.should == @spec
   end
 
   it "automatically forwards undefined attributes to the top level parent" do
@@ -288,6 +238,8 @@ describe "A Pod::Specification subspec" do
   end
 
   it "returns subspecs by name" do
+    @spec.subspec_by_name(nil).should == @spec
+    @spec.subspec_by_name('MainSpec').should == @spec
     @spec.subspec_by_name('MainSpec/FirstSubSpec').should == @spec.subspecs.first
     @spec.subspec_by_name('MainSpec/FirstSubSpec/SecondSubSpec').should == @spec.subspecs.first.subspecs.first
   end
@@ -337,12 +289,12 @@ describe "A Pod::Specification, concerning its attributes that support different
     end
 
     it "returns the same list of xcconfig build settings for each platform" do
-      build_settings = { 'OTHER_LDFLAGS' => '-lObjC -framework QuartzCore -lz' }
+      build_settings = { 'OTHER_LDFLAGS' => '-lObjC -lz -framework QuartzCore' }
       @spec.xcconfig.should == { :ios => build_settings, :osx => build_settings }
     end
 
     it "returns the same list of compiler flags for each platform" do
-      compiler_flags = ' -Wdeprecated-implementations -fobjc-arc'
+      compiler_flags = ' -fobjc-arc -Wdeprecated-implementations'
       @spec.compiler_flags.should == { :ios => compiler_flags, :osx => compiler_flags }
     end
 
@@ -392,21 +344,21 @@ describe "A Pod::Specification, concerning its attributes that support different
 
     it "returns a different list of xcconfig build settings for each platform" do
       @spec.xcconfig.should == {
-        :ios => { 'OTHER_LDFLAGS' => '-lObjC -framework QuartzCore -lz' },
-        :osx => { 'OTHER_LDFLAGS' => '-lObjC -all_load -framework QuartzCore -framework CoreData -lz -lxml' }
+        :ios => { 'OTHER_LDFLAGS' => '-lObjC -lz -framework QuartzCore' },
+        :osx => { 'OTHER_LDFLAGS' => '-lObjC -all_load -lz -lxml -framework QuartzCore -framework CoreData' }
       }
     end
 
     it "returns the list of the supported platfroms and deployment targets" do
-     @spec.platforms.count.should == 2
-     @spec.platforms.should.include? Pod::Platform.new(:osx)
-     @spec.platforms.should.include? Pod::Platform.new(:ios, '4.0')
+     @spec.available_platforms.count.should == 2
+     @spec.available_platforms.should.include? Pod::Platform.new(:osx)
+     @spec.available_platforms.should.include? Pod::Platform.new(:ios, '4.0')
     end
 
     it "returns the same list of compiler flags for each platform" do
       @spec.compiler_flags.should == {
-        :ios => ' -Wdeprecated-implementations -fobjc-arc',
-        :osx => ' -Wfloat-equal -fobjc-arc'
+        :ios => ' -fobjc-arc -Wdeprecated-implementations',
+        :osx => ' -fobjc-arc -Wfloat-equal'
       }
     end
 

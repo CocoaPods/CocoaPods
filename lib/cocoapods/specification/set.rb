@@ -27,10 +27,6 @@ module Pod
         end
       end
 
-      def only_part_of_other_pod?
-        @required_by.all? { |spec| spec.dependency_by_top_level_spec_name(name).only_part_of_other_pod? }
-      end
-
       def name
         @pod_dir.basename.to_s
       end
@@ -86,10 +82,6 @@ module Pod
           super(specification)
         ensure
           @specification = before
-        end
-
-        def only_part_of_other_pod?
-          false
         end
 
         def specification_path

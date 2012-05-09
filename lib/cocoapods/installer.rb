@@ -145,14 +145,6 @@ module Pod
           end
         end
 
-        unless download_only_specifications.empty?
-          file.puts
-          file.puts "DOWNLOAD_ONLY:"
-          download_only_specifications.map(&:to_s).sort.each do |name|
-            file.puts "  - #{name}"
-          end
-        end
-
         file.puts
         file.puts "DEPENDENCIES:"
         @podfile.dependencies.map(&:to_s).sort.each do |dep|
@@ -193,7 +185,7 @@ module Pod
       result = {}
       specs_by_target.each do |target_definition, specs|
         result[target_definition] = specs.map do |spec|
-          LocalPod.new(spec, @sandbox, target_definition.platform) if activated_spec?(spec)
+          LocalPod.new(spec, @sandbox, target_definition.platform)
         end.compact
       end
       result
@@ -203,24 +195,15 @@ module Pod
     #                                 dependency that is not a download-only
     #                                 one.
     def activated_specifications
-      dependency_specifications.select { |spec| activated_spec?(spec) }
+      dependency_specifications
     end
 
     def activated_specifications_for_target(target_definition)
-      specs_by_target[target_definition].select { |spec| activated_spec?(spec) }
-    end
-
-    def download_only_specifications
-      dependency_specifications - activated_specifications
+      specs_by_target[target_definition]
     end
 
     private
 
-    def activated_spec?(spec)
-      # Don't activate specs which are only wrappers of subspecs, or share
-      # source with another pod but aren't activated themselves.
-      !spec.wrapper? && !@resolver.cached_sets[spec.name].only_part_of_other_pod?
-    end
 
     def print_title(title, only_verbose = true)
       if config.verbose?

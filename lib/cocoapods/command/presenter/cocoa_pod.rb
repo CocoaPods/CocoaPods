@@ -23,7 +23,7 @@ module Pod
 
         # specification information
         def spec
-          @spec ||= @set.specification.part_of_other_pod? ? @set.specification.part_of_specification : @set.specification
+          @set.specification
         end
 
         def authors

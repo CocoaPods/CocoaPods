@@ -9,11 +9,9 @@ module SpecHelper
     def specs_by_target
       @specs_by_target ||= super.tap do |hash|
         hash.values.flatten.each do |spec|
-          unless spec.part_of_other_pod?
-            source = spec.source
-            source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
-            spec.source = source
-          end
+          source = spec.source
+          source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
+          spec.source = source
         end
       end
     end
@@ -113,12 +111,12 @@ else
           installer.install!
 
           YAML.load(installer.lock_file.read).should == {
-            'PODS' => [{ 'Reachability (1.2.3)' => ["ASIHTTPRequest (>= 1.8)"] }],
-            'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
+            'PODS' => [ 'Reachability (1.2.3)' ],
+            # 'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
             'DEPENDENCIES' => ["Reachability (from `#{url}')"]
           }
         end
-        
+
         it "install a dummy source file" do
           create_config!
           podfile = Pod::Podfile.new do
@@ -131,7 +129,7 @@ else
               s.source_files = 'JSONKit.*'
             end
           end
-          
+
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
 
@@ -254,7 +252,7 @@ else
           self.platform platform
           xcodeproj 'dummy'
           dependency 'Reachability',      '> 2.0.5' if platform == :ios
-          dependency 'ASIWebPageRequest', '>= 1.8.1'
+          # dependency 'ASIWebPageRequest', '>= 1.8.1'
           dependency 'JSONKit',           '>= 1.0'
           dependency 'SSZipArchive',      '< 2'
         end
@@ -264,14 +262,14 @@ else
 
         lock_file_contents = {
           'PODS' => [
-            { 'ASIHTTPRequest (1.8.1)'    => ["Reachability"] },
-            { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
+            # { 'ASIHTTPRequest (1.8.1)'    => ["Reachability"] },
+            # { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
             'JSONKit (1.5pre)',
             'Reachability (3.0.0)',
             'SSZipArchive (0.1.2)',
           ],
           'DEPENDENCIES' => [
-            "ASIWebPageRequest (>= 1.8.1)",
+            # "ASIWebPageRequest (>= 1.8.1)",
             "JSONKit (>= 1.0)",
             "Reachability (> 2.0.5)",
             "SSZipArchive (< 2)",
@@ -279,9 +277,9 @@ else
         }
         unless platform == :ios
           # No Reachability is required by ASIHTTPRequest on OSX
-          lock_file_contents['DEPENDENCIES'].delete_at(2)
-          lock_file_contents['PODS'].delete_at(3)
-          lock_file_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
+          lock_file_contents['DEPENDENCIES'].delete_at(1)
+          lock_file_contents['PODS'].delete_at(1)
+          # lock_file_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
         end
         YAML.load(installer.lock_file.read).should == lock_file_contents
 
@@ -305,8 +303,9 @@ else
           installer.install!
 
           YAML.load(installer.lock_file.read).should == {
-            'PODS' => [{ 'Reachability (2.0.4)' => ["ASIHTTPRequest (>= 1.8)"] }],
-            'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
+            # 'PODS' => [{ 'Reachability (2.0.4)' => ["ASIHTTPRequest (>= 1.8)"] }],
+            'PODS' => [ 'Reachability (2.0.4)' ],
+            # 'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
             'DEPENDENCIES' => ["Reachability (= 2.0.4)"]
           }
         end

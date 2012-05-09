@@ -27,13 +27,7 @@ module Pod
         targets_and_specs[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
       end
 
-      # Specification doesn't need to know more about the context, so we assign
-      # the other specification, of which this pod is a part, to the spec.
-      @specs.values.sort_by(&:name).each do |spec|
-        if spec.part_of_other_pod?
-          spec.part_of_specification = @cached_sets[spec.part_of.name].specification
-        end
-      end
+      @specs.values.sort_by(&:name)
 
       targets_and_specs
     end
@@ -41,7 +35,8 @@ module Pod
     private
 
     def find_cached_set(dependency, platform)
-      @cached_sets[dependency.name] ||= begin
+      set_name = dependency.name.split('/').first
+      @cached_sets[set_name] ||= begin
         if dependency.specification
           Specification::Set::External.new(dependency.specification)
         elsif external_source = dependency.external_source
@@ -71,6 +66,7 @@ module Pod
           if dependency.subspec_dependency?
             spec = spec.subspec_by_name(dependency.name)
           end
+
           @loaded_specs << spec.name
           @specs[spec.name] = spec
 
@@ -84,8 +80,8 @@ module Pod
     end
 
     def validate_platform!(spec, target)
-      unless spec.platforms.any? { |platform| target.platform.support?(platform) }
-        raise Informative, "[!] The platform of the target `#{target.name}' (#{target.platform}) is not compatible with `#{spec}' which has a minimun requirement of #{spec.platforms.join(' - ')}.".red
+      unless spec.available_platforms.any? { |platform| target.platform.support?(platform) }
+        raise Informative, "[!] The platform of the target `#{target.name}' (#{target.platform}) is not compatible with `#{spec}' which has a minimun requirement of #{spec.available_platforms.join(' - ')}.".red
       end
     end
   end
