@@ -26,9 +26,9 @@ module Pod
     def clean
       # implement in sub-classes
     end
-    
+
     private
-    
+
     def self.for_target(target_path, options)
       options = options.dup
       if url = options.delete(:git)
