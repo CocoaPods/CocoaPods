@@ -9,6 +9,9 @@ module Pod
       end
 
       def required_by(specification)
+        # Skip subspecs because the can't require a different version of the top level parent
+        return if !specification.podfile? && specification.top_level_parent.name == name
+
         dependency = specification.dependency_by_top_level_spec_name(name)
         # TODO we don’t actually do anything in our Version subclass. Maybe we should just remove that.
         unless @required_by.empty? || dependency.requirement.satisfied_by?(Gem::Version.new(required_version.to_s))
@@ -19,6 +22,10 @@ module Pod
         end
         @specification = nil
         @required_by << specification
+      end
+
+      def specification_by_name(name)
+        specification.top_level_parent.subspec_by_name(name)
       end
 
       def dependency
@@ -70,7 +77,7 @@ module Pod
         end
 
         def name
-          @specification.name
+          @specification.top_level_parent.name
         end
 
         def ==(other)

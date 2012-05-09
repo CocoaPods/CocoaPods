@@ -74,7 +74,12 @@ module Pod
       @platform.nil? ?  @define_for_platforms.map { |platform| Platform.new(platform, @deployment_target[platform]) } : [ platform ]
     end
 
-    attr_accessor :main_subspec
+    attr_writer :main_subspec
+
+    def main_subspec
+      return self unless @main_subspec
+      subspecs.find { |s| s.name == "#{self.name}/#{@main_subspec}" }
+    end
 
     ### Top level attributes. These attributes represent the unique features of pod and can't be specified by subspecs.
 
@@ -256,7 +261,7 @@ module Pod
     def dependencies
       result = {}
       @define_for_platforms.each do |platform|
-        inherited_subspecs = main_subspec ? [Dependency.new("#{name}/#{main_subspec}", version)] : subspecs.map {|s| Dependency.new(s.name, version) }
+        inherited_subspecs = subspecs.map {|s| Dependency.new(s.name, version) }
         result[platform] = @dependencies[platform] + inherited_subspecs
       end
       result
@@ -306,7 +311,7 @@ module Pod
     end
 
     def subspec_by_name(name)
-      return self if name.nil? || name == self.name
+      return main_subspec if name.nil? || name == self.name
       # Remove this spec's name from the beginning of the name we’re looking for
       # and take the first component from the remainder, which is the spec we need
       # to find now.
@@ -390,20 +395,20 @@ module Pod
       false
     end
 
+    def dependency_by_top_level_spec_name(name)
+      @dependencies.each do |_, platform_deps|
+        platform_deps.each do |dep|
+          return dep if dep.top_level_spec_name == name
+        end
+      end
+    end
+
     def to_s
       "#{name} (#{version})"
     end
 
     def inspect
       "#<#{self.class.name} for #{to_s}>"
-    end
-
-    def dependency_by_top_level_spec_name(name)
-      dependencies.each do |_, platform_deps|
-        platform_deps.each do |dep|
-          return dep if dep.top_level_spec_name == name
-        end
-      end
     end
 
     def ==(other)

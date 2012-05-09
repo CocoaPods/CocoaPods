@@ -14,7 +14,7 @@ module Pod
     def initialize(*name_and_version_requirements, &block)
       if name_and_version_requirements.empty? && block
         @inline_podspec = true
-        @specification  = Specification.new(&block)
+        @specification  = Specification.new(&block).main_subspec
         super(@specification.name, @specification.version)
 
       elsif !name_and_version_requirements.empty? && block.nil?

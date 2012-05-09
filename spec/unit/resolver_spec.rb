@@ -131,7 +131,9 @@ describe "Pod::Resolver" do
           js.dependency 'RestKit/ObjectMapping/CoreData'
         end
 
-        s.subspec 'Network'
+        s.subspec 'Network' do |ns|
+          ns.dependency 'LibComponentLogging-NSLog', '>= 1.0.4'
+        end
         s.subspec 'UI'
         s.subspec 'ObjectMapping' do |os|
           os.subspec 'JSON'
@@ -142,7 +144,8 @@ describe "Pod::Resolver" do
     end
     resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
     resolver.resolve.values.flatten.map(&:name).sort.should == %w{
-      RestKit
+      LibComponentLogging-Core
+      LibComponentLogging-NSLog
       RestKit/JSON
       RestKit/Network
       RestKit/ObjectMapping/CoreData

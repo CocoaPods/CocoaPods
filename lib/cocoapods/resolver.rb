@@ -22,13 +22,11 @@ module Pod
       @podfile.target_definitions.values.each do |target_definition|
         puts "\nResolving dependencies for target `#{target_definition.name}' (#{target_definition.platform})".green if config.verbose?
         @loaded_specs = []
-        # TODO @podfile.platform will change to target_definition.platform
         find_dependency_sets(@podfile, target_definition.dependencies, target_definition)
         targets_and_specs[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
       end
 
       @specs.values.sort_by(&:name)
-
       targets_and_specs
     end
 
@@ -59,20 +57,11 @@ module Pod
         set.required_by(dependent_specification)
         # Ensure we don't resolve the same spec twice for one target
         unless @loaded_specs.include?(dependency.name)
-          # Get a reference to the spec that’s actually being loaded.
-          # If it’s a subspec dependency, e.g. 'RestKit/Network', then
-          # find that subspec.
-          spec = set.specification
-          if dependency.subspec_dependency?
-            spec = spec.subspec_by_name(dependency.name)
-          end
-
+        spec = set.specification_by_name(dependency.name)
           @loaded_specs << spec.name
           @specs[spec.name] = spec
-
           # And recursively load the dependencies of the spec.
-          # TODO fix the need to return an empty arrayf if there are no deps for the given platform
-          find_dependency_sets(spec, (spec.dependencies[target_definition.platform.to_sym] || []), target_definition)
+          find_dependency_sets(spec, (spec.dependencies[target_definition.platform.to_sym]), target_definition) if spec.dependencies[target_definition.platform.to_sym]
         end
         validate_platform!(spec || @specs[dependency.name], target_definition)
       end
