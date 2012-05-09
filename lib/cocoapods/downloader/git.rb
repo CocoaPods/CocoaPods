@@ -23,15 +23,7 @@ module Pod
       end
 
       def prepare_cache
-        return if config.git_cache_size == 0
-        if is_cache_valid?
-          puts '->'.green << " Updating cache git repo (#{cache_path})" if config.verbose?
-          Dir.chdir(cache_path) do
-            git "reset --hard HEAD"
-            git "clean -d -x -f"
-            git "pull"
-          end
-        else
+        unless cache_exist? || config.git_cache_size == 0
           puts '->'.green << " Creating cache git repo (#{cache_path})" if config.verbose?
           cache_path.rmtree if cache_path.exist?
           cache_path.mkpath
@@ -55,7 +47,7 @@ module Pod
         @cache_path ||= caches_dir + "#{Digest::SHA1.hexdigest(url.to_s)}"
       end
 
-      def is_cache_valid?
+      def cache_exist?
         cache_path.exist? && origin_url(cache_path) == url
       end
 
@@ -77,11 +69,33 @@ module Pod
         `du -cm`.split("\n").last.to_i
       end
 
+      def update_cache
+        return if config.git_cache_size == 0
+        puts '->'.green << " Updating cache git repo (#{cache_path})" if config.verbose?
+        Dir.chdir(cache_path) do
+          git "reset --hard HEAD"
+          git "clean -d -x -f"
+          git "pull"
+        end
+      end
+
+      def ensure_ref_exists(ref)
+        return if config.git_cache_size == 0
+        Dir.chdir(cache_path) { git "rev-list --max-count=1 #{ref}" }
+        return if $? == 0
+        # Skip pull if not needed
+        update_cache
+        Dir.chdir(cache_path) { git "rev-list --max-count=1 #{ref}" }
+        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless $? == 0
+      end
+
       def download_head
+        update_cache
         git "clone '#{clone_url}' '#{target_path}'"
       end
 
       def download_tag
+        ensure_ref_exists(options[:tag])
         Dir.chdir(target_path) do
           git "init"
           git "remote add origin '#{clone_url}'"
@@ -92,8 +106,8 @@ module Pod
       end
 
       def download_commit
+        ensure_ref_exists(options[:commit])
         git "clone '#{clone_url}' '#{target_path}'"
-
         Dir.chdir(target_path) do
           git "checkout -b activated-pod-commit #{options[:commit]}"
         end
