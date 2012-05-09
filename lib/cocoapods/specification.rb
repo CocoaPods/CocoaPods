@@ -52,7 +52,7 @@ module Pod
     end
 
     def part_of=(value)
-      puts "[!] `part_of_dependency' is deprecated in #{name}"
+      puts "[!] `part_of' is deprecated in #{name}"
     end
 
     # Normal attributes
@@ -69,6 +69,7 @@ module Pod
 
     attr_writer :summary
 
+    #TODO: handle inheritance
     def available_platforms
       @platform.nil? ?  @define_for_platforms.map { |platform| Platform.new(platform, @deployment_target[platform]) } : [ platform ]
     end
@@ -80,25 +81,25 @@ module Pod
     # Attributes **without** multiple platform support
 
     # Creates a top level attribute reader.
-    def self.top_attr_reader(attr, block = nil)
+    def self.top_attr_reader(attr, read_lambda = nil)
       define_method(attr) do
         ivar = instance_variable_get("@#{attr}")
-        @parent ? top_level_parent.send(attr) : ( block ? block.call(self, ivar) : ivar )
+        @parent ? top_level_parent.send(attr) : ( read_lambda ? read_lambda.call(self, ivar) : ivar )
       end
     end
 
     # Creates a top level attribute writer. A lambda can be passed to initialize the value.
-    def self.top_attr_writer(attr, block = nil)
+    def self.top_attr_writer(attr, init_lambda = nil)
       raise Informative "Can't set #{attr} for subspecs" if @parent
       define_method("#{attr}=") do |value|
-        instance_variable_set("@#{attr}",  block ? block.call(value) : value);
+        instance_variable_set("@#{attr}",  init_lambda ? init_lambda.call(value) : value);
       end
     end
 
     # Creates a top level attribute accessor. A lambda can be passed to initialize the value in the attribute writer.
-    def self.top_attr_accessor(attr, block = nil)
+    def self.top_attr_accessor(attr, writer_labmda = nil)
       top_attr_reader attr
-      top_attr_writer attr, block
+      top_attr_writer attr, writer_labmda
     end
 
     top_attr_accessor :homepage
@@ -133,12 +134,6 @@ module Pod
       end
       authors || list.first
     end
-
-    # # TODO: move logic to compiler_flags
-    # def requires_arc=(requires_arc)
-    #   self.compiler_flags = '-fobjc-arc' if requires_arc
-    #   @requires_arc = requires_arc
-    # end
 
     ### Attributes **with** multiple platform support
 
@@ -194,22 +189,26 @@ module Pod
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
     end
 
-    pltf_chained_attr_reader :source_files
-    platform_attr_writer     :source_files, lambda {|value, current| pattern_list(value) }
+    pltf_chained_attr_reader  :source_files
+    platform_attr_writer      :source_files,
+                              lambda {|value, current| pattern_list(value) }
 
-    pltf_chained_attr_reader :resources
-    platform_attr_writer     :resources, lambda {|value, current| pattern_list(value) }
-    alias_method             :resource=, :resources=
+    pltf_chained_attr_reader  :resources
+    platform_attr_writer      :resources,
+                              lambda {|value, current| pattern_list(value) }
+    alias_method              :resource=, :resources=
 
     # frameworks are chained by the xcofing attr_reader
-    platform_attr_reader :frameworks
-    platform_attr_writer :frameworks, lambda {|value, current| current << value }
-    alias_method         :framework=, :frameworks=
+    platform_attr_reader      :frameworks
+    platform_attr_writer      :frameworks,
+                              lambda {|value, current| current << value }
+    alias_method              :framework=, :frameworks=
 
     # libraries are chained by the xcofing attr_reader
-    platform_attr_reader :libraries
-    platform_attr_writer :libraries, lambda {|value, current| current << value }
-    alias_method         :library=, :libraries=
+    platform_attr_reader      :libraries
+    platform_attr_writer      :libraries,
+                              lambda {|value, current| current << value }
+    alias_method              :library=, :libraries=
 
     def xcconfig
       result = {}
@@ -263,6 +262,7 @@ module Pod
       result
     end
 
+    # TODO: make top level?
     def deployment_target=(version)
       raise Informative, "The deployment target must be defined per platform like s.ios.deployment_target = '5.0'" unless @define_for_platforms.count == 1
       @deployment_target[@define_for_platforms.first] = version
