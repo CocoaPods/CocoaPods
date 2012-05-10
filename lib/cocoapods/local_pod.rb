@@ -75,9 +75,20 @@ module Pod
       source_files.select { |f| f.extname == '.h' }
     end
 
+    def public_header_files
+      if specification.public_header_files[@platform.name]
+        expanded_paths(specification.public_header_files, :glob => '*.h', :relative_to_sandbox => true)
+      else
+        header_files
+      end
+    end
+
     def link_headers
       copy_header_mappings.each do |namespaced_path, files|
-        @sandbox.add_header_files(namespaced_path, files)
+        @sandbox.build_header_storage.add_files(namespaced_path, files)
+      end
+      copy_public_header_mappings.each do |namespaced_path, files|
+        @sandbox.public_header_storage.add_files(namespaced_path, files)
       end
     end
 
@@ -109,6 +120,16 @@ module Pod
     # something with that, and this method also still exists in Specification.
     def copy_header_mappings
       header_files.inject({}) do |mappings, from|
+        from_without_prefix = from.relative_path_from(relative_root)
+        to = specification.header_dir + specification.copy_header_mapping(from_without_prefix)
+        (mappings[to.dirname] ||= []) << from
+        mappings
+      end
+    end
+
+    # TODO comment about copy_header_mappings may well apply to this method as well
+    def copy_public_header_mappings
+      public_header_files.inject({}) do |mappings, from|
         from_without_prefix = from.relative_path_from(relative_root)
         to = specification.header_dir + specification.copy_header_mapping(from_without_prefix)
         (mappings[to.dirname] ||= []) << from

@@ -71,7 +71,7 @@ module Pod
           pod.link_headers
         end
         
-        xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.header_search_paths).join(" "))
+        xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.build_header_storage.search_paths).join(" "))
 
         support_files_group = @project.group("Targets Support Files").create_group(@target_definition.label)
         support_files_group.create_files(target_support_files)

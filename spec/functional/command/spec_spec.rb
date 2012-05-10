@@ -33,6 +33,7 @@ describe "Pod::Command::Spec#create" do
     spec.source.should             == { :git => 'http://EXAMPLE/Bananas.git', :tag => '0.0.1' }
     spec.description.should        == 'An optional longer description of Bananas.'
     spec.source_files[:ios].should == ['Classes', 'Classes/**/*.{h,m}']
+    spec.public_header_files[:ios].should == nil
   end
 
   it "correctly creates a podspec from github" do
