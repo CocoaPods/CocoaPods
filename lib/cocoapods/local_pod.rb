@@ -2,10 +2,10 @@ module Pod
   class LocalPod
     attr_reader :specification
     attr_reader :sandbox
-    attr_reader :platform
 
     def initialize(specification, sandbox, platform)
-      @specification, @sandbox, @platform = specification, sandbox, platform
+      @specification, @sandbox = specification, sandbox
+      @specification.activate_platform(platform)
     end
 
     def self.from_podspec(podspec, sandbox, platform)
@@ -26,6 +26,10 @@ module Pod
 
     def name
       specification.name
+    end
+
+    def platform
+      specification.active_platform
     end
 
     def create
@@ -83,7 +87,7 @@ module Pod
 
     def add_to_target(target)
       implementation_files.each do |file|
-        target.add_source_file(file, nil, specification.compiler_flags[@platform.name].strip)
+        target.add_source_file(file, nil, specification.compiler_flags.strip)
       end
     end
 
@@ -92,7 +96,7 @@ module Pod
     end
 
     def dependencies
-      specification.dependencies[@platform.name]
+      specification.dependencies
     end
 
     private
@@ -116,8 +120,7 @@ module Pod
       end
     end
 
-    def expanded_paths(platforms_with_patterns, options = {})
-      patterns = platforms_with_patterns.is_a?(Hash) ? platforms_with_patterns[@platform.name] : platforms_with_patterns
+    def expanded_paths(patterns, options = {})
       patterns.map do |pattern|
         pattern = root + pattern
 

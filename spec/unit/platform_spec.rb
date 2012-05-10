@@ -68,34 +68,34 @@ describe "Pod::Platform with a nil value" do
   end
 end
 
-describe "Pod::Platform#support?" do
+describe "Pod::Platform#supports?" do
   it "supports another platform is with the same operating system" do
     p1 = Pod::Platform.new(:ios)
     p2 = Pod::Platform.new(:ios)
-    p1.should.support?(p2)
+    p1.should.supports?(p2)
 
     p1 = Pod::Platform.new(:osx)
     p2 = Pod::Platform.new(:osx)
-    p1.should.support?(p2)
+    p1.should.supports?(p2)
   end
 
   it "supports a nil platform" do
     p1 = Pod::Platform.new(:ios)
-    p1.should.support?(nil)
+    p1.should.supports?(nil)
   end
 
   it "supports a platform with a lower or equal deployment_target" do
     p1 = Pod::Platform.new(:ios, '5.0')
     p2 = Pod::Platform.new(:ios, '4.0')
-    p1.should.support?(p1)
-    p1.should.support?(p2)
-    p2.should.not.support?(p1)
+    p1.should.supports?(p1)
+    p1.should.supports?(p2)
+    p2.should.not.supports?(p1)
   end
 
   it "supports a platform regardless of the deployment_target if one of the two does not specify it" do
     p1 = Pod::Platform.new(:ios)
     p2 = Pod::Platform.new(:ios, '4.0')
-    p1.should.support?(p2)
-    p2.should.support?(p1)
+    p1.should.supports?(p2)
+    p2.should.supports?(p1)
   end
 end

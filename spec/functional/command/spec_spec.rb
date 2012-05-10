@@ -23,16 +23,17 @@ describe "Pod::Command::Spec#create" do
   it "creates a new podspec stub file" do
     run_command('spec', 'create', 'Bananas')
     path = temporary_directory + 'Bananas.podspec'
-    spec = Pod::Specification.from_file(path)
-    spec.name.should               == 'Bananas'
-    spec.license.should            == { :type => "MIT", :file => "LICENSE" }
-    spec.version.should            == Pod::Version.new('0.0.1')
-    spec.summary.should            == 'A short description of Bananas.'
-    spec.homepage.should           == 'http://EXAMPLE/Bananas'
-    spec.authors.should            == { `git config --get user.name`.strip => `git config --get user.email`.strip}
-    spec.source.should             == { :git => 'http://EXAMPLE/Bananas.git', :tag => '0.0.1' }
-    spec.description.should        == 'An optional longer description of Bananas.'
-    spec.source_files[:ios].should == ['Classes', 'Classes/**/*.{h,m}']
+    spec = Pod::Specification.from_file(path).activate_platform(:ios)
+
+    spec.name.should         == 'Bananas'
+    spec.license.should      == { :type => "MIT", :file => "LICENSE" }
+    spec.version.should      == Pod::Version.new('0.0.1')
+    spec.summary.should      == 'A short description of Bananas.'
+    spec.homepage.should     == 'http://EXAMPLE/Bananas'
+    spec.authors.should      == { `git config --get user.name`.strip => `git config --get user.email`.strip}
+    spec.source.should       == { :git => 'http://EXAMPLE/Bananas.git', :tag => '0.0.1' }
+    spec.description.should  == 'An optional longer description of Bananas.'
+    spec.source_files.should == ['Classes', 'Classes/**/*.{h,m}']
   end
 
   it "correctly creates a podspec from github" do
@@ -128,13 +129,13 @@ describe "Pod::Command::Spec#lint" do
     spec_file = fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec'
     cmd = command('spec', 'lint', '--quick', spec_file.to_s)
     lambda { cmd.run }.should.raise Pod::Informative
-    cmd.output.should.include "Missing license[:file] or [:text]"
+    cmd.output.should.include "Missing license file or text"
   end
 
   it "respects the -only--errors option" do
     spec_file = fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec'
     cmd = command('spec', 'lint', '--quick', '--only-errors', spec_file.to_s)
     lambda { cmd.run }.should.not.raise
-    cmd.output.should.include "Missing license[:file] or [:text]"
+    cmd.output.should.include "Missing license file or text"
   end
 end

@@ -57,24 +57,23 @@ describe "A Pod::Specification loaded from a podspec" do
   end
 
   it "returns the pod's source files" do
-    @spec.source_files[:ios].should == ['Classes/*.{h,m}', 'Vendor']
-    @spec.source_files[:osx].should == ['Classes/*.{h,m}', 'Vendor']
+    @spec.activate_platform(:ios).source_files.should == ['Classes/*.{h,m}', 'Vendor']
+    @spec.activate_platform(:osx).source_files.should == ['Classes/*.{h,m}', 'Vendor']
   end
 
   it "returns the pod's dependencies" do
     expected = Pod::Dependency.new('monkey', '~> 1.0.1', '< 1.0.9')
-    @spec.dependencies.should == { :ios => [expected], :osx => [expected] }
+    @spec.activate_platform(:ios).dependencies.should == [expected]
+    @spec.activate_platform(:osx).dependencies.should == [expected]
   end
 
   it "returns the pod's xcconfig settings" do
-    @spec.xcconfig[:ios].should == {
-      'OTHER_LDFLAGS' => '-framework SystemConfiguration'
-    }
+    @spec.activate_platform(:ios).xcconfig.should == { 'OTHER_LDFLAGS' => '-framework SystemConfiguration' }
   end
 
   it "has a shortcut to add frameworks to the xcconfig" do
     @spec.frameworks = 'CFNetwork', 'CoreText'
-    @spec.xcconfig[:ios].should == {
+    @spec.activate_platform(:ios).xcconfig.should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration ' \
                          '-framework CFNetwork ' \
                          '-framework CoreText'
@@ -83,7 +82,7 @@ describe "A Pod::Specification loaded from a podspec" do
 
   it "has a shortcut to add libraries to the xcconfig" do
     @spec.libraries = 'z', 'xml2'
-    @spec.xcconfig[:ios].should == {
+    @spec.activate_platform(:ios).xcconfig.should == {
       'OTHER_LDFLAGS' => '-framework SystemConfiguration -lz -lxml2'
     }
   end
@@ -102,9 +101,11 @@ describe "A Pod::Specification loaded from a podspec" do
   it "adds compiler flags if ARC is required" do
     @spec.parent.should == nil
     @spec.requires_arc = true
-    @spec.compiler_flags.should == { :ios => " -fobjc-arc", :osx => " -fobjc-arc" }
+    @spec.activate_platform(:ios).compiler_flags.should == " -fobjc-arc"
+    @spec.activate_platform(:osx).compiler_flags.should == " -fobjc-arc"
     @spec.compiler_flags = "-Wunused-value"
-    @spec.compiler_flags.should == { :ios => " -fobjc-arc -Wunused-value", :osx => " -fobjc-arc -Wunused-value" }
+    @spec.activate_platform(:ios).compiler_flags.should == " -fobjc-arc -Wunused-value"
+    @spec.activate_platform(:osx).compiler_flags.should == " -fobjc-arc -Wunused-value"
   end
 end
 
@@ -231,7 +232,8 @@ describe "A Pod::Specification subspec" do
   end
 
   it "automatically forwards undefined attributes to the top level parent" do
-    [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags].each do |attr|
+    @spec.activate_platform(:ios)
+    [:version, :summary, :platform, :license, :authors, :requires_arc].each do |attr|
       @spec.subspecs.first.send(attr).should == @spec.send(attr)
       @spec.subspecs.first.subspecs.first.send(attr).should == @spec.send(attr)
     end
@@ -243,6 +245,16 @@ describe "A Pod::Specification subspec" do
     @spec.subspec_by_name('MainSpec/FirstSubSpec').should == @spec.subspecs.first
     @spec.subspec_by_name('MainSpec/FirstSubSpec/SecondSubSpec').should == @spec.subspecs.first.subspecs.first
   end
+
+  xit "can be activated for a platorm"
+  xit "raises if not activated"
+  xit "returns self on activation for method chainablity"
+  xit "does not cache platform attributes and can activate another platform"
+  xit "resolves chained attributes"
+  xit "resolves not chained attributes"
+  xit "has the same active platform accross the chain attributes"
+  xit "raises a top level attribute is assigned to a spec with a parent"
+
 end
 
 describe "A Pod::Specification with :local source" do
@@ -281,26 +293,31 @@ describe "A Pod::Specification, concerning its attributes that support different
     end
 
     it "returns the same list of source files for each platform" do
-      @spec.source_files.should == { :ios => %w{ file1 file2 }, :osx => %w{ file1 file2 } }
+      @spec.activate_platform(:ios).source_files.should == %w{ file1 file2 }
+      @spec.activate_platform(:osx).source_files.should == %w{ file1 file2 }
     end
 
     it "returns the same list of resources for each platform" do
-      @spec.resources.should == { :ios => %w{ file1 file2 }, :osx => %w{ file1 file2 } }
+      @spec.activate_platform(:ios).resources.should == %w{ file1 file2 }
+      @spec.activate_platform(:osx).resources.should == %w{ file1 file2 }
     end
 
     it "returns the same list of xcconfig build settings for each platform" do
       build_settings = { 'OTHER_LDFLAGS' => '-lObjC -lz -framework QuartzCore' }
-      @spec.xcconfig.should == { :ios => build_settings, :osx => build_settings }
+      @spec.activate_platform(:ios).xcconfig.should == build_settings 
+      @spec.activate_platform(:osx).xcconfig.should == build_settings 
     end
 
     it "returns the same list of compiler flags for each platform" do
       compiler_flags = ' -fobjc-arc -Wdeprecated-implementations'
-      @spec.compiler_flags.should == { :ios => compiler_flags, :osx => compiler_flags }
+      @spec.activate_platform(:ios).compiler_flags.should == compiler_flags
+      @spec.activate_platform(:osx).compiler_flags.should == compiler_flags
     end
 
     it "returns the same list of dependencies for each platform" do
       dependencies = %w{ JSONKit SSZipArchive }.map { |name| Pod::Dependency.new(name) }
-      @spec.dependencies.should == { :ios => dependencies, :osx => dependencies }
+      @spec.activate_platform(:ios).dependencies.should == dependencies
+      @spec.activate_platform(:osx).dependencies.should == dependencies
     end
   end
 
@@ -335,18 +352,18 @@ describe "A Pod::Specification, concerning its attributes that support different
     end
 
     it "returns a different list of source files for each platform" do
-      @spec.source_files.should == { :ios => %w{ file1 }, :osx => %w{ file1 file2 } }
+      @spec.activate_platform(:ios).source_files.should == %w{ file1 }
+      @spec.activate_platform(:osx).source_files.should == %w{ file1 file2 }
     end
 
     it "returns a different list of resources for each platform" do
-      @spec.resources.should == { :ios => %w{ file1 }, :osx => %w{ file1 file2 } }
+      @spec.activate_platform(:ios).resources.should == %w{ file1 }
+      @spec.activate_platform(:osx).resources.should == %w{ file1 file2 }
     end
 
     it "returns a different list of xcconfig build settings for each platform" do
-      @spec.xcconfig.should == {
-        :ios => { 'OTHER_LDFLAGS' => '-lObjC -lz -framework QuartzCore' },
-        :osx => { 'OTHER_LDFLAGS' => '-lObjC -all_load -lz -lxml -framework QuartzCore -framework CoreData' }
-      }
+      @spec.activate_platform(:ios).xcconfig.should == { 'OTHER_LDFLAGS' => '-lObjC -lz -framework QuartzCore' }
+      @spec.activate_platform(:osx).xcconfig.should == { 'OTHER_LDFLAGS' => '-lObjC -all_load -lz -lxml -framework QuartzCore -framework CoreData' }
     end
 
     it "returns the list of the supported platfroms and deployment targets" do
@@ -356,17 +373,13 @@ describe "A Pod::Specification, concerning its attributes that support different
     end
 
     it "returns the same list of compiler flags for each platform" do
-      @spec.compiler_flags.should == {
-        :ios => ' -fobjc-arc -Wdeprecated-implementations',
-        :osx => ' -fobjc-arc -Wfloat-equal'
-      }
+      @spec.activate_platform(:ios).compiler_flags.should == ' -fobjc-arc -Wdeprecated-implementations'
+      @spec.activate_platform(:osx).compiler_flags.should == ' -fobjc-arc -Wfloat-equal'
     end
 
     it "returns the same list of dependencies for each platform" do
-      @spec.dependencies.should == {
-        :ios => [Pod::Dependency.new('JSONKit')],
-        :osx => [Pod::Dependency.new('SSZipArchive')]
-      }
+      @spec.activate_platform(:ios).dependencies.should == [Pod::Dependency.new('JSONKit')]
+      @spec.activate_platform(:osx).dependencies.should == [Pod::Dependency.new('SSZipArchive')]
     end
   end
 end

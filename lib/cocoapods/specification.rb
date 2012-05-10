@@ -24,7 +24,7 @@ module Pod
       spec.subspec_by_name(subspec_name)
     end
 
-    attr_accessor :defined_in_file, :parent
+    attr_accessor :parent
 
     def initialize(parent = nil, name = nil)
       @parent, @name = parent, name if parent
@@ -37,8 +37,6 @@ module Pod
       @define_for_platforms = [:osx, :ios]
       @clean_paths, @subspecs = [], []
       @deployment_target = {}
-      @platform = Platform.new(nil)
-
       initialized_multiplatform_attributes
 
       # deprecated attributes
@@ -48,11 +46,11 @@ module Pod
     # Deprecated attributes
     # TODO: remove once master repo and fixtures are updated
     def part_of_dependency=(value)
-      puts "[!] `part_of_dependency' is deprecated in #{name}"
+      puts "[!] `part_of_dependency' is deprecated in #{name}".cyan
     end
 
     def part_of=(value)
-      puts "[!] `part_of' is deprecated in #{name}"
+      puts "[!] `part_of' is deprecated in #{name}".cyan
     end
 
     # Normal attributes
@@ -107,13 +105,24 @@ module Pod
       top_attr_writer attr, writer_labmda
     end
 
+
+    # TODO: First defined
+    def platform
+      @platform || ( @parent ? @parent.platform : Platform.new(nil) )
+    end
+
+    def platform=(platform)
+      @platform = Platform.new(*platform)
+    end
+
+
+    top_attr_accessor :defined_in_file
     top_attr_accessor :homepage
     top_attr_accessor :source
     top_attr_accessor :documentation
     top_attr_accessor :requires_arc
     top_attr_accessor :license,     lambda { |l| ( l.kind_of? String ) ? { :type => l } : l }
     top_attr_accessor :version,     lambda { |v| Version.new(v) }
-    top_attr_accessor :platform,    lambda { |p| Platform.new(*p) }
     top_attr_accessor :readme_file, lambda { |file| Pathname.new(file) }
     top_attr_accessor :authors,     lambda { |a| parse_authors(a) }
     alias_method      :author=, :authors=
@@ -167,14 +176,19 @@ module Pod
     # It returns the value of the attribute for the current platform. In this way clients do not need to be aware of wich
     # attributes are multiplatform
     def self.platform_attr_reader(attr)
-      # TODO: implement
-      attr_reader attr
+      define_method(attr) do
+        raise Informative, "#{self.inspect}##{attr} not activated for a platform before consumption." unless active_platform
+        instance_variable_get("@#{attr}")[active_platform]
+      end
     end
 
     # It returns the value of a pod merged with upstream. The optional lambda can specify how to merge the values
     def self.pltf_chained_attr_reader(attr, merge_lambda = nil)
       # TODO: chain the value with the upstream
-      attr_reader attr
+      define_method(attr) do
+        raise Informative, "#{self.inspect}##{attr} not activated for a platform before consumption." unless active_platform
+        instance_variable_get("@#{attr}")[active_platform]
+      end
     end
 
     def self.platform_attr_writer(attr, block = nil)
@@ -216,35 +230,27 @@ module Pod
     alias_method              :library=, :libraries=
 
     def xcconfig
-      result = {}
-      @define_for_platforms.each do |platform|
-        if @parent
-          chained = @xcconfig[platform].dup.unshift @parent.xcconfig[platform]
-        else
-          chained = @xcconfig[platform].dup
-        end
-        chained.merge!({ 'OTHER_LDFLAGS' =>  '-l' << libraries[platform].join(' -l').strip }) unless libraries[platform].empty?
-        chained.merge!({ 'OTHER_LDFLAGS' =>  '-framework ' << frameworks[platform].join(' -framework ').strip }) unless frameworks[platform].empty?
-        result[platform] = chained
+      if @parent
+        chained = @parent.xcconfig.dup.merge! @xcconfig[active_platform]
+      else
+        chained = @xcconfig[active_platform].dup
       end
-      result
+      chained.merge!({ 'OTHER_LDFLAGS' =>  '-l' << libraries.join(' -l').strip }) unless libraries.empty?
+      chained.merge!({ 'OTHER_LDFLAGS' =>  '-framework ' << frameworks.join(' -framework ').strip }) unless frameworks.empty?
+      chained
     end
 
     platform_attr_writer :xcconfig, lambda {|value, current| current.tap { |c| c.merge!(value) } }
 
     def compiler_flags
-      result = {}
-      @define_for_platforms.each do |platform|
-        if @parent
-          chained = @compiler_flags[platform].dup.unshift @parent.compiler_flags[platform]
-        else
-          chained = @compiler_flags[platform].dup
-          chained.unshift '-fobjc-arc' if @requires_arc
-          chained.unshift ''
-        end
-        result[platform] = chained.join(' ')
+      if @parent
+        chained = @compiler_flags[active_platform].dup.unshift @parent.compiler_flags[active_platform]
+      else
+        chained = @compiler_flags[active_platform].dup
+        chained.unshift '-fobjc-arc' if @requires_arc
+        chained.unshift ''
       end
-      result
+      chained.join(' ')
     end
 
     platform_attr_writer :compiler_flags, lambda {|value, current| current << value }
@@ -259,12 +265,8 @@ module Pod
     end
 
     def dependencies
-      result = {}
-      @define_for_platforms.each do |platform|
-        inherited_subspecs = subspecs.map {|s| Dependency.new(s.name, version) }
-        result[platform] = @dependencies[platform] + inherited_subspecs
-      end
-      result
+      raise Informative, "#{self.inspect}#dependencies not activated for a platform before consumption." unless active_platform
+      @dependencies[active_platform] + subspecs.map { |s| Dependency.new(s.name, version) }
     end
 
     # TODO: make top level?
@@ -329,11 +331,16 @@ module Pod
       available_platforms.any? { |p| platform.supports? p }
     end
 
-    # Defines the active platform for comsumption of the specification.
-    def activate_for_platform(platform)
-      raise "[!] #{name} does not support platform".red unless supports_platform?(plaform)
-      @active_platform = platform
+    # Defines the active platform for comsumption of the specification and returns self
+    def activate_platform(platform)
+      platform = Platform.new(platform) if platform.is_a? Hash
+      raise "[!] #{name} does not support platform".red unless supports_platform?(platform)
+      top_level_parent.active_platform = platform.to_sym
+      self
     end
+
+    # The active platform needs to be the same accross the chain
+    top_attr_accessor :active_platform
 
     def local?
       !source.nil? && !source[:local].nil?

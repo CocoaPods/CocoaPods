@@ -34,7 +34,7 @@ module Pod
       end
     end
 
-    def support?(other)
+    def supports?(other)
       return true if @symbolic_name.nil? || other.nil?
       @symbolic_name == other.name && (deployment_target.nil? || other.deployment_target.nil? || deployment_target >= other.deployment_target)
     end

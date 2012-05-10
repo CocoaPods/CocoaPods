@@ -60,8 +60,9 @@ module Pod
         spec = set.specification_by_name(dependency.name)
           @loaded_specs << spec.name
           @specs[spec.name] = spec
+          spec.activate_platform(target_definition.platform)
           # And recursively load the dependencies of the spec.
-          find_dependency_sets(spec, (spec.dependencies[target_definition.platform.to_sym]), target_definition) if spec.dependencies[target_definition.platform.to_sym]
+          find_dependency_sets(spec, spec.dependencies, target_definition) if spec.dependencies
         end
         validate_platform!(spec || @specs[dependency.name], target_definition)
       end
@@ -69,7 +70,7 @@ module Pod
     end
 
     def validate_platform!(spec, target)
-      unless spec.available_platforms.any? { |platform| target.platform.support?(platform) }
+      unless spec.available_platforms.any? { |platform| target.platform.supports?(platform) }
         raise Informative, "[!] The platform of the target `#{target.name}' (#{target.platform}) is not compatible with `#{spec}' which has a minimun requirement of #{spec.available_platforms.join(' - ')}.".red
       end
     end

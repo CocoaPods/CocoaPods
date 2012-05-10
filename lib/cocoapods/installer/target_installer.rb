@@ -63,19 +63,18 @@ module Pod
         @target = @project.add_pod_target(@target_definition.label, @target_definition.platform)
 
         pods.each do |pod|
-          # TODO add methods like xcconfig to LocalPod as well? (which returns the correct platform)
-          xcconfig.merge!(pod.specification.xcconfig[@target_definition.platform.name])
+          xcconfig.merge!(pod.specification.xcconfig)
           pod.add_to_target(@target)
-          
+
           # TODO: this doesn't need to be done here, it has nothing to do with the target
           pod.link_headers
         end
-        
+
         xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.header_search_paths).join(" "))
 
         support_files_group = @project.group("Targets Support Files").create_group(@target_definition.label)
         support_files_group.create_files(target_support_files)
-        
+
         xcconfig_file = support_files_group.files.where(:path => @target_definition.xcconfig_name)
         configure_build_configurations(xcconfig_file)
         create_files(pods, sandbox)
@@ -104,13 +103,13 @@ module Pod
         puts "* Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?
         copy_resources_script_for(pods).save_as(sandbox.root + @target_definition.copy_resources_script_name)
       end
-      
+
       private
-      
+
       def quoted(strings)
         strings.map { |s| "\"#{s}\"" }
       end
-      
+
       def default_ld_flags
         flags = %w{-ObjC}
         flags << '-fobjc-arc' if @podfile.set_arc_compatibility_flag? && self.requires_arc
