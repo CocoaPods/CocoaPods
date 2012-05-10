@@ -26,7 +26,7 @@ module Pod
       return @project if @project
       @project = Pod::Project.new
       @project.user_build_configurations = @podfile.user_build_configurations
-      activated_pods.each do |pod|
+      pods.each do |pod|
         # Add all source files to the project grouped by pod
         group = @project.add_pod_group(pod.name)
         pod.source_files.each do |path|
@@ -45,24 +45,24 @@ module Pod
     end
 
     def install_dependencies!
-      activated_pods.each do |pod|
-        marker = config.verbose ? "\n-> ".green : ''
+      pods.each do |pod|
+        unless config.silent?
+          marker = config.verbose ? "\n-> ".green : ''
+          puts pod.exists? ? "#{marker}Using #{pod}" : "#{marker}Installing #{pod}".green
+          submarker = " " * marker.length << " - "
+          puts "#{submarker}#{pod.subspecs.map{ |s| s.name.gsub(pod.specification.name+'/', '') }.join("\n" << submarker)}" unless pod.subspecs.empty?
+        end
 
-        unless should_install = !pod.exists? && !pod.specification.local?
-          puts marker + "Using #{pod}" unless config.silent?
-        else
-          puts marker + "Installing #{pod.specification}".green unless config.silent?
-
+        unless pod.exists?
           downloader = Downloader.for_pod(pod)
           downloader.download
-
           if config.clean
             downloader.clean
             pod.clean
           end
         end
 
-        if (should_install && config.generate_docs?) || config.force_doc?
+        if (!pod.exists? && config.generate_docs?) || config.force_doc?
           doc_generator = Generator::Documentation.new(pod)
           if doc_generator.already_installed?
             puts "Using Existing Documentation for #{pod.specification}".green if config.verbose?
@@ -83,14 +83,13 @@ module Pod
       print_title "Installing dependencies"
       install_dependencies!
 
-      pods = activated_pods
       print_title("Generating support files\n", false)
       target_installers.each do |target_installer|
-        pods_for_target = activated_pods_by_target[target_installer.target_definition]
+        pods_for_target = pods_by_target[target_installer.target_definition]
         target_installer.install!(pods_for_target, @sandbox)
       end
 
-      generate_lock_file!(pods)
+      generate_lock_file!(specifications)
       generate_dummy_source
 
       puts "* Running post install hooks" if config.verbose?
@@ -107,7 +106,7 @@ module Pod
       # we loop over target installers instead of pods, because we yield the target installer
       # to the spec post install hook.
       target_installers.each do |target_installer|
-        activated_specifications_for_target(target_installer.target_definition).each do |spec|
+        specs_by_target[target_installer.target_definition].each do |spec|
           spec.post_install(target_installer)
         end
       end
@@ -115,28 +114,28 @@ module Pod
       @podfile.post_install!(self)
     end
 
-    def generate_lock_file!(pods)
+    def generate_lock_file!(specs)
       lock_file.open('w') do |file|
         file.puts "PODS:"
 
         # Get list of [name, dependencies] pairs.
-        activated_pods = pods.map do |pod|
-          [pod.specification.to_s, pod.dependencies.map(&:to_s).sort]
+        pod_and_deps = specs.map do |spec|
+          [spec.to_s, spec.dependencies.map(&:to_s).sort]
         end.uniq
 
         # Merge dependencies of ios and osx version of the same pod.
         tmp = {}
-        activated_pods.each do |name, deps|
+        pod_and_deps.each do |name, deps|
           if tmp[name]
             tmp[name].concat(deps).uniq!
           else
             tmp[name] = deps
           end
         end
-        activated_pods = tmp
+        pod_and_deps = tmp
 
         # Sort by name and print
-        activated_pods.sort_by(&:first).each do |name, deps|
+        pod_and_deps.sort_by(&:first).each do |name, deps|
           if deps.empty?
             file.puts "  - #{name}"
           else
@@ -171,39 +170,35 @@ module Pod
     end
 
     # @return [Array<Specification>]  All dependencies that have been resolved.
-    def dependency_specifications
+    def specifications
       specs_by_target.values.flatten
     end
 
     # @return [Array<LocalPod>]  A list of LocalPod instances for each
     #                            dependency that is not a download-only one.
-    def activated_pods
-      activated_pods_by_target.values.flatten
+    def pods
+      pods_by_target.values.flatten
     end
 
-    def activated_pods_by_target
+    def pods_by_target
+      @pods_by_spec = {}
       result = {}
       specs_by_target.each do |target_definition, specs|
+        @pods_by_spec[target_definition.platform] = {}
         result[target_definition] = specs.map do |spec|
-          LocalPod.new(spec, @sandbox, target_definition.platform)
-        end.compact
+          pod = pod_for_spec(spec, target_definition.platform)
+          pod.add_specification(spec)
+          pod
+        end.uniq.compact
       end
       result
     end
 
-    # @return [Array<Specification>]  A list of specifications for each
-    #                                 dependency that is not a download-only
-    #                                 one.
-    def activated_specifications
-      dependency_specifications
-    end
-
-    def activated_specifications_for_target(target_definition)
-      specs_by_target[target_definition]
+    def pod_for_spec(spec, platform)
+      @pods_by_spec[platform][spec.top_level_parent.name] ||= LocalPod.new(spec.top_level_parent, @sandbox, platform)
     end
 
     private
-
 
     def print_title(title, only_verbose = true)
       if config.verbose?

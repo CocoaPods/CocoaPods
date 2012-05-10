@@ -1,11 +1,14 @@
 module Pod
   class LocalPod
-    attr_reader :specification
+    attr_reader :top_specification, :specifications
+    # TODO: fix accross the app
+    alias :specification :top_specification
     attr_reader :sandbox
 
     def initialize(specification, sandbox, platform)
-      @specification, @sandbox = specification, sandbox
-      @specification.activate_platform(platform)
+      @top_specification, @sandbox = specification, sandbox
+      @top_specification.activate_platform(platform)
+      @specifications = [] << specification
     end
 
     def self.from_podspec(podspec, sandbox, platform)
@@ -13,23 +16,32 @@ module Pod
     end
 
     def root
-      @sandbox.root + specification.name
+      @sandbox.root + top_specification.name
+    end
+
+    # Adding specifications is idempotent
+    def add_specification(spec)
+      raise Informative, "[Local Pod] Attempt to add a specification from another pod" unless spec.top_level_parent == top_specification
+      spec.activate_platform(platform)
+      @specifications << spec unless @specifications.include?(spec)
+    end
+
+    def subspecs
+      specifications.reject{|s| s.parent.nil? }
     end
 
     def to_s
-      if specification.local?
-        "#{specification} [LOCAL]"
-      else
-        specification.to_s
-      end
+      result = top_specification.to_s
+      # result << " [LOCAL]" if top_specification.local?
+      result
     end
 
     def name
-      specification.name
+      top_specification.name
     end
 
     def platform
-      specification.active_platform
+      top_specification.active_platform
     end
 
     def create
@@ -50,29 +62,31 @@ module Pod
     end
 
     def clean
-      clean_paths.each { |path| FileUtils.rm_rf(path) }
+      # TODO: nuke everything that is not used
+      # clean_paths.each { |path| FileUtils.rm_rf(path) }
     end
 
     def prefix_header_file
-      if prefix_header = specification.prefix_header_file
-        @sandbox.root + specification.name + prefix_header
+      if prefix_header = top_specification.prefix_header_file
+        @sandbox.root + top_specification.name + prefix_header
       end
     end
 
     def source_files
-      expanded_paths(specification.source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => true)
+      chained_expanded_paths(:source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => true)
     end
 
     def absolute_source_files
-      expanded_paths(specification.source_files, :glob => '*.{h,m,mm,c,cpp}')
+      chained_expanded_paths(:source_files, :glob => '*.{h,m,mm,c,cpp}')
     end
 
     def clean_paths
-      expanded_paths(specification.clean_paths)
+      # TODO: delete
+      # chained_expanded_paths(:clean_paths)
     end
 
     def resources
-      expanded_paths(specification.resources, :relative_to_sandbox => true)
+      chained_expanded_paths(:resources, :relative_to_sandbox => true)
     end
 
     def header_files
@@ -83,6 +97,15 @@ module Pod
       copy_header_mappings.each do |namespaced_path, files|
         @sandbox.add_header_files(namespaced_path, files)
       end
+    end
+
+    def readme_file
+      expanded_paths('README.*', options = {})
+    end
+
+    def license
+      #TODO: merge with the work of will and return the text
+      expanded_paths(%w[ LICENSE licence.txt ], options = {})
     end
 
     def add_to_target(target)
@@ -118,6 +141,10 @@ module Pod
         (mappings[to.dirname] ||= []) << from
         mappings
       end
+    end
+
+    def chained_expanded_paths(accessor, options = {})
+      specifications.map { |s| expanded_paths(s.send(accessor), options) }.compact.reduce(:+).uniq
     end
 
     def expanded_paths(patterns, options = {})

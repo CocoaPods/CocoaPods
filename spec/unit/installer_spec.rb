@@ -42,7 +42,7 @@ describe "Pod::Installer" do
       dependency 'ASIHTTPRequest'
     end
     installer = Pod::Installer.new(podfile)
-    pods = installer.activated_specifications.map do |spec|
+    pods = installer.specifications.map do |spec|
       Pod::LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
     end
     expected = pods.map { |pod| pod.header_files }.flatten.map { |header| config.project_pods_root + header }
