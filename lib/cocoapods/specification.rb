@@ -67,9 +67,18 @@ module Pod
 
     attr_writer :summary
 
-    #TODO: handle inheritance
+    #TODO: relocate
+
+    def platform
+      @platform || ( @parent ? @parent.platform : Platform.new(nil) )
+    end
+
+    def platform=(platform)
+      @platform = Platform.new(*platform)
+    end
+
     def available_platforms
-      @platform.nil? ?  @define_for_platforms.map { |platform| Platform.new(platform, @deployment_target[platform]) } : [ platform ]
+      platform.nil? ?  @define_for_platforms.map { |platform| Platform.new(platform, @deployment_target[platform]) } : [ platform ]
     end
 
     attr_writer :main_subspec
@@ -105,15 +114,6 @@ module Pod
       top_attr_writer attr, writer_labmda
     end
 
-
-    # TODO: First defined
-    def platform
-      @platform || ( @parent ? @parent.platform : Platform.new(nil) )
-    end
-
-    def platform=(platform)
-      @platform = Platform.new(*platform)
-    end
 
 
     top_attr_accessor :defined_in_file

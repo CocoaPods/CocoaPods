@@ -135,7 +135,8 @@ module Pod
         @specs_to_lint ||= begin
           podspecs_to_lint.map do |podspec|
             root_spec = Specification.from_file(podspec)
-            root_spec.recursive_subspecs.any? ? root_spec.recursive_subspecs : root_spec
+            # TODO if a spec has a main subspec require it's subspecs recursively
+            root_spec.main_subspec == root_spec ? root_spec : root_spec.subspecs
           end.flatten
         end
       end
@@ -312,7 +313,6 @@ module Pod
           text     = @file.read
           messages = []
           messages << "Missing license type"                                unless license[:type]
-          messages << "Missing license file or text"                        unless license[:file] || license[:text]
           messages << "The summary is not meaningful"                       if spec.summary =~ /A short description of/
           messages << "The description is not meaningful"                   if spec.description && spec.description =~ /An optional longer description of/
           messages << "The summary should end with a dot"                   if @spec.summary !~ /.*\./
@@ -358,9 +358,9 @@ module Pod
         def process_xcode_build_output(output)
           output_by_line = output.split("\n")
           selected_lines = output_by_line.select do |l|
-            l.include?('error') && (l !~ /errors? generated\./) \
-              || l.include?('warning') && (l !~ /warnings? generated\./)\
-              || l.include?('note')
+            l.include?('error:') && (l !~ /errors? generated\./) \
+              || l.include?('warning:') && (l !~ /warnings? generated\./)\
+              || l.include?('note:')
           end
           selected_lines.map do |l|
             new = l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//,'') # Remove the unnecessary tmp path
@@ -380,7 +380,8 @@ module Pod
             messages = []
             messages += check_spec_files_exists(:source_files, '*.{h,m,mm,c,cpp}')
             messages += check_spec_files_exists(:resources)
-            messages << "#{platform_name}: license[:file] = '#{spec.license[:file]}' -> did not match any file" if spec.license[:file] && pod_dir.glob(spec.license[:file]).empty?
+            messages << "license file not found = '#{spec.license[:file]}' -> did not match any file" if spec.license && spec.license[:file] && pod_dir.glob(spec.license[:file]).empty?
+            # messages << "Missing license file or text"                        unless license[:file] || license[:text]
             messages.compact
           end
         end
@@ -393,7 +394,7 @@ module Pod
             if pattern.directory? && options[:glob]
               pattern += options[:glob]
             end
-            result << "#{@platform}: [#{accessor} = '#{original_pattern}'] -> did not match any file" if pattern.glob.empty?
+            result << "[#{accessor} = '#{original_pattern}'] -> did not match any file" if pattern.glob.empty?
           end
           result
         end
