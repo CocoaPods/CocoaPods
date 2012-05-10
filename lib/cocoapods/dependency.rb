@@ -19,7 +19,7 @@ module Pod
 
       elsif !name_and_version_requirements.empty? && block.nil?
         if name_and_version_requirements.last.is_a?(Hash)
-          @external_source = ExternalSources.from_params(name_and_version_requirements[0], name_and_version_requirements.pop)
+          @external_source = ExternalSources.from_params(name_and_version_requirements[0].split('/').first, name_and_version_requirements.pop)
         end
         super(*name_and_version_requirements)
 
