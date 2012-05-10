@@ -92,7 +92,8 @@ module Pod
           FileUtils.cp(Pathname.new(spec.name+'.podspec'), output_path)
           Dir.chdir(repo_dir) do
             git("add #{spec.name}")
-            git("commit -m '#{message}'")
+            # Bypass the pre-commit hook because we already performed validation
+            git("commit --no-verify -m '#{message}'")
           end
         end
       end
