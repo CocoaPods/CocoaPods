@@ -49,7 +49,11 @@ module Pod
           # that's being used behind the scenes, but passing it anyways for
           # completeness sake.
           specification = external_source.specification_from_sandbox(@sandbox, platform)
-          Specification::Set::External.new(specification)
+          set = Specification::Set::External.new(specification)
+          if dependency.subspec_dependency?
+            @cached_sets[dependency.top_level_spec_name] ||= set
+          end
+          set
         else
           @cached_sources.search(dependency)
         end
