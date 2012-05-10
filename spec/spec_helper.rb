@@ -53,7 +53,6 @@ end
 config = Pod::Config.instance
 config.silent = true
 config.repos_dir = SpecHelper.tmp_repos_path
-config.git_cache_size = 0
 
 require 'tmpdir'
 

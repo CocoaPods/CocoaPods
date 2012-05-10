@@ -9,6 +9,8 @@ module Pod
       include Config::Mixin
       executable :git
 
+      MAX_CACHE_SIZE = 500
+
       def download
         prepare_cache
         puts '->'.green << ' Cloning git repo' if config.verbose?
@@ -23,7 +25,7 @@ module Pod
       end
 
       def prepare_cache
-        unless cache_exist? || config.git_cache_size == 0
+        unless cache_exist?
           puts '->'.green << " Creating cache git repo (#{cache_path})" if config.verbose?
           cache_path.rmtree if cache_path.exist?
           cache_path.mkpath
@@ -35,7 +37,7 @@ module Pod
         return unless caches_dir.exist?
         Dir.chdir(caches_dir) do
           repos = Pathname.new(caches_dir).children.select { |c| c.directory? }.sort_by(&:ctime)
-          while caches_size >= config.git_cache_size && !repos.empty?
+          while caches_size >= MAX_CACHE_SIZE && !repos.empty?
             dir = repos.shift
             puts '->'.yellow << " Removing git cache for `#{origin_url(dir)}'" if config.verbose?
             dir.rmtree
@@ -60,8 +62,7 @@ module Pod
       end
 
       def clone_url
-        # git_cache_size = 0 disables the cache
-        config.git_cache_size == 0 ? url : cache_path
+        cache_path
       end
 
       def caches_size
@@ -70,7 +71,6 @@ module Pod
       end
 
       def update_cache
-        return if config.git_cache_size == 0
         puts '->'.green << " Updating cache git repo (#{cache_path})" if config.verbose?
         Dir.chdir(cache_path) do
           git "reset --hard HEAD"
@@ -80,7 +80,6 @@ module Pod
       end
 
       def ensure_ref_exists(ref)
-        return if config.git_cache_size == 0
         Dir.chdir(cache_path) { git "rev-list --max-count=1 #{ref}" }
         return if $? == 0
         # Skip pull if not needed

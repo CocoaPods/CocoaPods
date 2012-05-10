@@ -28,7 +28,6 @@ module Pod
       @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
       @verbose = @silent = @force_doc = false
       @clean = @generate_docs = @doc_install = @integrate_targets = true
-      @git_cache_size = 500
     end
 
     def project_root
