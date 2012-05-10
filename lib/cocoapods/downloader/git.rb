@@ -56,7 +56,7 @@ module Pod
       end
 
       def caches_dir
-        Pathname.new "/var/tmp/CocoaPods/Git"
+        Pathname.new(File.expand_path("~/Library/Caches/CocoaPods/Git"))
       end
 
       def clone_url
