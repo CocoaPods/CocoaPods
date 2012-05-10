@@ -264,9 +264,17 @@ module Pod
       dep
     end
 
+    def external_dependencies
+      result = @dependencies[active_platform] || []
+      result += parent.external_dependencies if parent
+      result
+    end
+
     def dependencies
       raise Informative, "#{self.inspect}#dependencies not activated for a platform before consumption." unless active_platform
-      @dependencies[active_platform] + subspecs.map { |s| Dependency.new(s.name, version) }
+      result = @dependencies[active_platform] + subspecs.map { |s| Dependency.new(s.name, version) }
+      result += parent.external_dependencies if parent
+      result
     end
 
     # TODO: make top level?
@@ -403,11 +411,11 @@ module Pod
     end
 
     def dependency_by_top_level_spec_name(name)
-      @dependencies.each do |_, platform_deps|
-        platform_deps.each do |dep|
+      # dependencies.each do |_, platform_deps|
+        dependencies.each do |dep|
           return dep if dep.top_level_spec_name == name
         end
-      end
+      # end
     end
 
     def to_s
