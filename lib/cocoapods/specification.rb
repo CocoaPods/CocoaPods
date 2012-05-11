@@ -1,5 +1,4 @@
 require 'xcodeproj/config'
-require 'colored'
 
 module Pod
   extend Config::Mixin
@@ -11,6 +10,8 @@ module Pod
   class Specification
     autoload :Set,        'cocoapods/specification/set'
     autoload :Statistics, 'cocoapods/specification/statistics'
+
+    ### Initalization
 
     # The file is expected to define and return a Pods::Specification.
     # If name is equals to nil it returns the top level Specification,
@@ -24,75 +25,23 @@ module Pod
       spec.subspec_by_name(subspec_name)
     end
 
-    attr_accessor :parent
-
     def initialize(parent = nil, name = nil)
-      @parent, @name = parent, name if parent
-      post_initialize
-      yield self if block_given?
-    end
-
-    # TODO This is just to work around a MacRuby bug
-    def post_initialize
+      @parent, @name = parent, name
       @define_for_platforms = [:osx, :ios]
       @clean_paths, @subspecs = [], []
       @deployment_target = {}
+      unless parent
+        @source = {:git => ''}
+      end
       initialized_multiplatform_attributes
 
-      # deprecated attributes
-      @source = {:git => ''}
+      yield self if block_given?
     end
 
-    # Deprecated attributes
-    # TODO: remove once master repo and fixtures are updated
-    def part_of_dependency=(value)
-      puts "[!] `part_of_dependency' is deprecated in #{name}".cyan
-    end
+    ### Meta programming
 
-    def part_of=(value)
-      puts "[!] `part_of' is deprecated in #{name}".cyan
-    end
-
-    # Normal attributes
-
-    def name
-      @parent ? "#{@parent.name}/#{@name}" : @name
-    end
-
-    attr_writer :name
-
-    def summary
-      @summary || ( @parent.summary if @parent )
-    end
-
-    attr_writer :summary
-
-    #TODO: relocate
-
-    def platform
-      @platform || ( @parent ? @parent.platform : Platform.new(nil) )
-    end
-
-    def platform=(platform)
-      @platform = Platform.new(*platform)
-    end
-
-    def available_platforms
-      platform.nil? ?  @define_for_platforms.map { |platform| Platform.new(platform, @deployment_target[platform]) } : [ platform ]
-    end
-
-    attr_writer :main_subspec
-
-    def main_subspec
-      return self unless @main_subspec
-      subspecs.find { |s| s.name == "#{self.name}/#{@main_subspec}" }
-    end
-
-    ### Top level attributes. These attributes represent the unique features of pod and can't be specified by subspecs.
-
-    # Attributes **without** multiple platform support
-
-    # Creates a top level attribute reader.
+    # Creates a top level attribute reader. A lambda can
+    # be passed to process the ivar before returning it
     def self.top_attr_reader(attr, read_lambda = nil)
       define_method(attr) do
         ivar = instance_variable_get("@#{attr}")
@@ -100,57 +49,55 @@ module Pod
       end
     end
 
-    # Creates a top level attribute writer. A lambda can be passed to initialize the value.
+    # Creates a top level attribute writer. A lambda can
+    # be passed to initalize the value
     def self.top_attr_writer(attr, init_lambda = nil)
-      raise Informative "Can't set #{attr} for subspecs" if @parent
+      raise Informative "Can't set #{attr} for subspecs." if @parent
       define_method("#{attr}=") do |value|
         instance_variable_set("@#{attr}",  init_lambda ? init_lambda.call(value) : value);
       end
     end
 
-    # Creates a top level attribute accessor. A lambda can be passed to initialize the value in the attribute writer.
+    # Creates a top level attribute accessor. A lambda can
+    # be passed to initialize the value in the attribute writer.
     def self.top_attr_accessor(attr, writer_labmda = nil)
       top_attr_reader attr
       top_attr_writer attr, writer_labmda
     end
 
-
-
-    top_attr_accessor :defined_in_file
-    top_attr_accessor :homepage
-    top_attr_accessor :source
-    top_attr_accessor :documentation
-    top_attr_accessor :requires_arc
-    top_attr_accessor :license,     lambda { |l| ( l.kind_of? String ) ? { :type => l } : l }
-    top_attr_accessor :version,     lambda { |v| Version.new(v) }
-    top_attr_accessor :readme_file, lambda { |file| Pathname.new(file) }
-    top_attr_accessor :authors,     lambda { |a| parse_authors(a) }
-    alias_method      :author=, :authors=
-
-    top_attr_reader   :description, lambda { |instance, ivar| ivar || instance.summary }
-    top_attr_writer   :description
-
-    #TODO: are those top level?
-    top_attr_accessor :prefix_header_contents
-    top_attr_accessor :prefix_header_file, lambda { |file| Pathname.new(file) }
-    top_attr_reader   :header_dir,  lambda {|instance, ivar| ivar || instance.pod_destroot_name }
-    top_attr_writer   :header_dir,  lambda {|dir| Pathname.new(dir) }
-
-    #TODO: deprecate and clean all unused files
-    top_attr_accessor :clean_paths, lambda { |patterns| pattern_list(patterns) }
-    alias_method      :clean_path=, :clean_paths=
-
-    def self.parse_authors(*names_and_email_addresses)
-      list = names_and_email_addresses.flatten
-      unless list.first.is_a?(Hash)
-        authors = list.last.is_a?(Hash) ? list.pop : {}
-        list.each { |name| authors[name] = nil }
+    # Returns the value of the attribute for the active platform.
+    # In this way clients do not need to be aware of wich attributes
+    # are multiplatform.
+    def self.platform_attr_reader(attr)
+      define_method(attr) do
+        raise Informative, "#{self.inspect}##{attr} not activated for a platform before consumption." unless active_platform
+        instance_variable_get("@#{attr}")[active_platform]
       end
-      authors || list.first
     end
 
-    ### Attributes **with** multiple platform support
+    # Returns the value of the attribute for the active platform.
+    # chained with the upstream specifications. The ivar must store
+    # the platform specific values as an array.
+    def self.pltf_chained_attr_reader(attr)
+      define_method(attr) do
+        raise Informative, "#{self.inspect}##{attr} not activated for a platform before consumption." unless active_platform
+        ivar_value = instance_variable_get("@#{attr}")[active_platform]
+        @parent ? @parent.send(attr) + ivar_value : ivar_value
+      end
+    end
 
+    # Attribute writer that works in conjuction with the PlatformProxy.
+    def self.platform_attr_writer(attr, block = nil)
+      define_method("#{attr}=") do |value|
+        current = instance_variable_get("@#{attr}")
+        @define_for_platforms.each do |platform|
+          block ?  current[platform] = block.call(value, current[platform]) : current[platform] = value
+        end
+      end
+    end
+
+    # The PlatformProxy works in conjuction with Specification#_on_platform.
+    # It allows a syntax like `source_files[:ios] = file`
     class PlatformProxy
       def initialize(specification, platform)
         @specification, @platform = specification, platform
@@ -173,38 +120,87 @@ module Pod
       PlatformProxy.new(self, :osx)
     end
 
-    # It returns the value of the attribute for the current platform. In this way clients do not need to be aware of wich
-    # attributes are multiplatform
-    def self.platform_attr_reader(attr)
-      define_method(attr) do
-        raise Informative, "#{self.inspect}##{attr} not activated for a platform before consumption." unless active_platform
-        instance_variable_get("@#{attr}")[active_platform]
-      end
+    ### Deprecated attributes - TODO: remove once master repo and fixtures have been updated
+
+    attr_writer :part_of_dependency
+    attr_writer :part_of
+
+    top_attr_accessor :clean_paths, lambda { |patterns| pattern_list(patterns) }
+    alias_method :clean_path=, :clean_paths=
+
+    ### Regular attributes
+
+    attr_accessor :parent
+
+    def name
+      @parent ? "#{@parent.name}/#{@name}" : @name
     end
 
-    # It returns the value of a pod merged with upstream. The optional lambda can specify how to merge the values
-    def self.pltf_chained_attr_reader(attr, merge_lambda = nil)
-      # TODO: chain the value with the upstream
-      define_method(attr) do
-        raise Informative, "#{self.inspect}##{attr} not activated for a platform before consumption." unless active_platform
-        instance_variable_get("@#{attr}")[active_platform]
-      end
+    attr_writer :name
+
+    def main_subspec
+      return self unless @main_subspec
+      subspecs.find { |s| s.name == "#{self.name}/#{@main_subspec}" }
     end
 
-    def self.platform_attr_writer(attr, block = nil)
-      define_method("#{attr}=") do |value|
-        current = instance_variable_get("@#{attr}")
-        @define_for_platforms.each do |platform|
-            block ?  current[platform] = block.call(value, current[platform]) : current[platform] = value
-        end
-      end
+    attr_writer :main_subspec
+
+    ### Attributes that return the first value defined in the chain
+
+    def summary
+      @summary || ( @parent.summary if @parent )
     end
+
+    attr_writer :summary
+
+    def platform
+      @platform || ( @parent ? @parent.platform : Platform.new(nil) )
+    end
+
+    def platform=(platform)
+      @platform = Platform.new(*platform)
+    end
+
+    # If not platform is specified all the platforms are returned.
+    def available_platforms
+      platform.nil? ? @define_for_platforms.map { |platform| Platform.new(platform, deployment_target(platform)) } : [ platform ]
+    end
+
+    ### Top level attributes. These attributes represent the unique features of pod and can't be specified by subspecs.
+
+    top_attr_accessor :defined_in_file
+    top_attr_accessor :homepage
+    top_attr_accessor :source
+    top_attr_accessor :documentation
+    top_attr_accessor :requires_arc
+    top_attr_accessor :license, lambda { |l| ( l.kind_of? String ) ? { :type => l } : l }
+    top_attr_accessor :version, lambda { |v| Version.new(v) }
+    top_attr_accessor :authors, lambda { |a| parse_authors(a) }
+    top_attr_accessor :prefix_header_contents                                                    #TODO: is this top level?
+    top_attr_accessor :prefix_header_file, lambda { |file| Pathname.new(file) }                  #TODO: is this top level?
+
+    top_attr_reader   :description, lambda { |instance, ivar| ivar || instance.summary }
+    top_attr_writer   :description
+    top_attr_reader   :header_dir, lambda {|instance, ivar| ivar || instance.pod_destroot_name } #TODO: is this top level?
+    top_attr_writer   :header_dir, lambda {|dir| Pathname.new(dir) }                             #TODO: is this top level?
+
+    alias_method      :author=, :authors=
+
+    def self.parse_authors(*names_and_email_addresses)
+      list = names_and_email_addresses.flatten
+      unless list.first.is_a?(Hash)
+        authors = list.last.is_a?(Hash) ? list.pop : {}
+        list.each { |name| authors[name] = nil }
+      end
+      authors || list.first
+    end
+
+    ### Attributes **with** multiple platform support
 
     def initialized_multiplatform_attributes
       %w[ source_files resources frameworks libraries dependencies compiler_flags].each do |attr|
         instance_variable_set( "@#{attr}", { :ios => [], :osx => [] } )
       end
-      @dependencies = { :ios => [], :osx => [] }
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
     end
 
@@ -264,23 +260,19 @@ module Pod
       dep
     end
 
+    # External dependencies are inherited by subspecs
     def external_dependencies
       result = @dependencies[active_platform] || []
       result += parent.external_dependencies if parent
       result
     end
 
+    # A specification inherits all of its subspecs as dependencies
     def dependencies
       raise Informative, "#{self.inspect}#dependencies not activated for a platform before consumption." unless active_platform
       result = @dependencies[active_platform] + subspecs.map { |s| Dependency.new(s.name, version) }
       result += parent.external_dependencies if parent
       result
-    end
-
-    # TODO: make top level?
-    def deployment_target=(version)
-      raise Informative, "The deployment target must be defined per platform like s.ios.deployment_target = '5.0'" unless @define_for_platforms.count == 1
-      @deployment_target[@define_for_platforms.first] = version
     end
 
     ### Not attributes
@@ -334,20 +326,22 @@ module Pod
       remainder.empty? ? subspec : subspec.subspec_by_name(name)
     end
 
-    # Returns if the specification is supported in a given platform
+    # Returns whether the specification is supported in a given platform
     def supports_platform?(plaform)
       available_platforms.any? { |p| platform.supports? p }
     end
 
-    # Defines the active platform for comsumption of the specification and returns self
+    # Defines the active platform for comsumption of the specification and
+    # returns self for method chainability.
+    # The active platform must the the same accross the chain so attributes
+    # that are inherited can be correctly resolved.
     def activate_platform(platform)
       platform = Platform.new(platform) if platform.is_a? Hash
-      raise "[!] #{name} does not support platform".red unless supports_platform?(platform)
+      raise "#{to_s} is not compatible with #{platform}." unless supports_platform?(platform)
       top_level_parent.active_platform = platform.to_sym
       self
     end
 
-    # The active platform needs to be the same accross the chain
     top_attr_accessor :active_platform
 
     def local?
@@ -411,11 +405,9 @@ module Pod
     end
 
     def dependency_by_top_level_spec_name(name)
-      # dependencies.each do |_, platform_deps|
-        dependencies.each do |dep|
-          return dep if dep.top_level_spec_name == name
-        end
-      # end
+      dependencies.each do |dep|
+        return dep if dep.top_level_spec_name == name
+      end
     end
 
     def to_s
@@ -431,6 +423,17 @@ module Pod
         (self.class === other &&
          name && name == other.name &&
          version && version == other.version)
+    end
+
+    private
+
+    def deployment_target=(version)
+      raise Informative, "The deployment target must be defined per platform like `s.ios.deployment_target = '5.0'`." unless @define_for_platforms.count == 1
+      deployment_target[@define_for_platforms.first] = version
+    end
+
+    def deployment_target(platform)
+      @deployment_target[platform] || ( @parent ? @parent.deployment_target(platform) : nil )
     end
   end
   Spec = Specification
