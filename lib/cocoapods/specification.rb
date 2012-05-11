@@ -131,19 +131,13 @@ module Pod
     ### Regular attributes
 
     attr_accessor :parent
+    attr_accessor :preferred_dependency
 
     def name
       @parent ? "#{@parent.name}/#{@name}" : @name
     end
 
     attr_writer :name
-
-    def main_subspec
-      return self unless @main_subspec
-      subspecs.find { |s| s.name == "#{self.name}/#{@main_subspec}" }
-    end
-
-    attr_writer :main_subspec
 
     ### Attributes that return the first value defined in the chain
 
@@ -267,25 +261,20 @@ module Pod
       result
     end
 
-    # A specification inherits all of its subspecs as dependencies
+    # A specification inherits the preferred_dependency or
+    # all of its subspecs as dependencies
+    def subspec_dependencies
+      specs = preferred_dependency ? [subspec_by_name(preferred_dependency)] : subspecs
+      specs \
+        .reject { |s| s.supports_platform?(active_platform) } \
+        .map    { |s| Dependency.new(s.name, version) }
+    end
+
     def dependencies
       raise Informative, "#{self.inspect}#dependencies not activated for a platform before consumption." unless active_platform
-      result = @dependencies[active_platform] + subspecs.map { |s| Dependency.new(s.name, version) }
-      result += parent.external_dependencies if parent
-      result
+      external_dependencies + subspec_dependencies
     end
 
-    ### Not attributes
-
-    # @visibility private
-    #
-    # This is used by PlatformProxy to assign attributes for the scoped platform.
-    def _on_platform(platform)
-      before, @define_for_platforms = @define_for_platforms, [platform]
-      yield
-    ensure
-      @define_for_platforms = before
-    end
 
     include Config::Mixin
 
@@ -313,7 +302,7 @@ module Pod
     end
 
     def subspec_by_name(name)
-      return main_subspec if name.nil? || name == self.name
+      return self if name.nil? || name == self.name
       # Remove this spec's name from the beginning of the name we’re looking for
       # and take the first component from the remainder, which is the spec we need
       # to find now.
@@ -325,24 +314,6 @@ module Pod
       # last one and return that
       remainder.empty? ? subspec : subspec.subspec_by_name(name)
     end
-
-    # Returns whether the specification is supported in a given platform
-    def supports_platform?(plaform)
-      available_platforms.any? { |p| platform.supports? p }
-    end
-
-    # Defines the active platform for comsumption of the specification and
-    # returns self for method chainability.
-    # The active platform must the the same accross the chain so attributes
-    # that are inherited can be correctly resolved.
-    def activate_platform(platform)
-      platform = Platform.new(platform) if platform.is_a? Hash
-      raise "#{to_s} is not compatible with #{platform}." unless supports_platform?(platform)
-      top_level_parent.active_platform = platform.to_sym
-      self
-    end
-
-    top_attr_accessor :active_platform
 
     def local?
       !source.nil? && !source[:local].nil?
@@ -425,11 +396,44 @@ module Pod
          version && version == other.version)
     end
 
-    private
+    # Returns whether the specification is supported in a given platform
+    def supports_platform?(plaform)
+      available_platforms.any? { |p| platform.supports? p }
+    end
 
+    # Defines the active platform for comsumption of the specification and
+    # returns self for method chainability.
+    # The active platform must the the same accross the chain so attributes
+    # that are inherited can be correctly resolved.
+    def activate_platform(platform)
+      platform = Platform.new(platform) if platform.is_a? Hash
+      raise "#{to_s} is not compatible with #{platform}." unless supports_platform?(platform)
+      top_level_parent.active_platform = platform.to_sym
+      self
+    end
+
+    top_attr_accessor :active_platform
+
+    ### Not attributes
+
+    # @visibility private
+    #
+    # This is used by PlatformProxy to assign attributes for the scoped platform.
+    def _on_platform(platform)
+      before, @define_for_platforms = @define_for_platforms, [platform]
+      yield
+    ensure
+      @define_for_platforms = before
+    end
+
+    # @visibility private
+    #
+    # This deployment_target is multiplatform and to support
+    # subspecs with different platforms is is resolved as the
+    # first non nil value accross the chain.
     def deployment_target=(version)
       raise Informative, "The deployment target must be defined per platform like `s.ios.deployment_target = '5.0'`." unless @define_for_platforms.count == 1
-      deployment_target[@define_for_platforms.first] = version
+      @deployment_target[@define_for_platforms.first] = version
     end
 
     def deployment_target(platform)
