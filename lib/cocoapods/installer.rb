@@ -57,7 +57,7 @@ module Pod
           downloader = Downloader.for_pod(pod)
           downloader.download
           if config.clean
-            downloader.clean
+            # downloader.clean
             pod.clean
           end
         end

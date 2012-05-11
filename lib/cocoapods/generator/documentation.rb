@@ -42,7 +42,7 @@ module Pod
       end
 
       def files
-        @pod.absolute_source_files.map(&:to_s)
+        @pod.source_files(false).map(&:to_s)
       end
 
       def index_file

@@ -8,7 +8,7 @@ module Pod
     def initialize(specification, sandbox, platform)
       @top_specification, @sandbox = specification, sandbox
       @top_specification.activate_platform(platform)
-      @specifications = [] << specification
+      @specifications = []
     end
 
     def self.from_podspec(podspec, sandbox, platform)
@@ -32,7 +32,7 @@ module Pod
 
     def to_s
       result = top_specification.to_s
-      # result << " [LOCAL]" if top_specification.local?
+      result << " [LOCAL]" if top_specification.local?
       result
     end
 
@@ -62,8 +62,14 @@ module Pod
     end
 
     def clean
-      # TODO: nuke everything that is not used
-      # clean_paths.each { |path| FileUtils.rm_rf(path) }
+      clean_paths.each { |path| FileUtils.rm_rf(path) }
+
+      # remove empty diretories
+      Dir.glob("#{root}/**/{*,.*}").
+        sort_by(&:length).reverse.                                    # Clean the deepest paths first
+        reject { |d| d =~ /\/\.\.?$/ }.                               # Remove the `.` and `..` paths
+        select { |d| File.directory? d }.                             # Get only directories
+        each   { |d| Dir.rmdir d if (Dir.entries(d) == %w[ . .. ]) }  # Remove the paths only if it is empty
     end
 
     def prefix_header_file
@@ -72,22 +78,33 @@ module Pod
       end
     end
 
-    def source_files
-      chained_expanded_paths(:source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => true)
+    def source_files(relative = true)
+      chained_expanded_paths(:source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => relative)
     end
 
-    def absolute_source_files
-      chained_expanded_paths(:source_files, :glob => '*.{h,m,mm,c,cpp}')
+    def resources(relative = true)
+      chained_expanded_paths(:resources, :relative_to_sandbox => relative)
     end
 
     def clean_paths
-      # TODO: delete
-      # chained_expanded_paths(:clean_paths)
+      paths = expanded_paths('**/*').reject {|p| p.directory? }
+      # TODO: deprecate Specification#clean_paths
+      paths = @top_specification.clean_paths unless @top_specification.clean_paths.empty?
+      paths - used_files
     end
 
-    def resources
-      chained_expanded_paths(:resources, :relative_to_sandbox => true)
+    def used_files
+      source_files(false) + resources(false) + readme_file + license_file + [prefix_header_file]
     end
+
+    def readme_file
+      expanded_paths('README.*')
+    end
+
+    def license_file
+      expanded_paths(%w[ LICENSE licence.txt ])
+    end
+
 
     def header_files
       source_files.select { |f| f.extname == '.h' }
@@ -97,15 +114,6 @@ module Pod
       copy_header_mappings.each do |namespaced_path, files|
         @sandbox.add_header_files(namespaced_path, files)
       end
-    end
-
-    def readme_file
-      expanded_paths('README.*', options = {})
-    end
-
-    def license
-      #TODO: merge with the work of will and return the text
-      expanded_paths(%w[ LICENSE licence.txt ], options = {})
     end
 
     def add_to_target(target)
