@@ -90,5 +90,35 @@ describe "Pod::Resolver" do
       cocoa-oauth
     }
   end
+  
+  it "resolves subspecs with external constraints" do
+    @podfile = Pod::Podfile.new do
+      platform :ios
+      dependency 'MainSpec/FirstSubSpec', :git => 'GIT-URL'
+    end
+    spec = Pod::Spec.new do |s|
+      s.name    = 'MainSpec'
+      s.version = '1.2.3'
+      s.platform = :ios
+      s.license = 'MIT'
+      s.author = 'Joe the Plumber'
+      s.summary = 'A spec with subspecs'
+      s.source  = { :git => '/some/url' }
+      s.requires_arc = true
+
+      s.subspec 'FirstSubSpec' do |fss|
+        fss.source_files = 'some/file'
+
+        fss.subspec 'SecondSubSpec' do |sss|
+        end
+      end
+    end
+    @podfile.dependencies.first.external_source.stubs(:specification_from_sandbox).returns(spec)
+    resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
+    resolver.resolve.values.flatten.map(&:name).sort.should == %w{
+      MainSpec
+      MainSpec/FirstSubSpec
+    }
+  end
 end
 
