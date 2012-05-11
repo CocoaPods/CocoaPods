@@ -85,10 +85,10 @@ module Pod
 
     def link_headers
       copy_header_mappings.each do |namespaced_path, files|
-        @sandbox.build_header_storage.add_files(namespaced_path, files)
+        @sandbox.build_headers.add_files(namespaced_path, files)
       end
       copy_public_header_mappings.each do |namespaced_path, files|
-        @sandbox.public_header_storage.add_files(namespaced_path, files)
+        @sandbox.public_headers.add_files(namespaced_path, files)
       end
     end
 

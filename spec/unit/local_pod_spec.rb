@@ -61,7 +61,7 @@ describe Pod::LocalPod do
   
   it "can link it's headers into the sandbox" do
     @pod.link_headers
-    expected_header_path = @sandbox.build_header_storage.root + "BananaLib/Banana.h"
+    expected_header_path = @sandbox.build_headers.root + "BananaLib/Banana.h"
     expected_header_path.should.be.symlink
     File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
   end
@@ -147,7 +147,7 @@ describe "A Pod::LocalPod, with installed source," do
     def @spec.copy_header_mapping(from)
       Pathname.new('ns') + from.basename
     end
-    @spec.build_header_storage.search_paths.should == %w{
+    @spec.build_headers.search_paths.should == %w{
       "$(PODS_ROOT)/Headers/SSZipArchive"
       "$(PODS_ROOT)/Headers/SSZipArchive/ns"
     }
@@ -158,7 +158,7 @@ describe "A Pod::LocalPod, with installed source," do
     def @spec.copy_header_mapping(from)
       Pathname.new('ns') + from.basename
     end
-    @spec.build_header_storage.search_paths.should == %w{
+    @spec.build_headers.search_paths.should == %w{
       "$(PODS_ROOT)/Headers/AnotherRoot"
       "$(PODS_ROOT)/Headers/AnotherRoot/ns"
     }

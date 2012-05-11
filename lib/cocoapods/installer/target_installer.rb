@@ -73,7 +73,7 @@ module Pod
         
         # Indirect HEADER_SEARCH_PATHS, so that configure_build_configurations can override it
         xcconfig.merge!('HEADER_SEARCH_PATHS' => '${PODS_HEADER_SEARCH_PATHS}')
-        xcconfig.merge!('PODS_HEADER_SEARCH_PATHS' => quoted(sandbox.public_header_storage.search_paths).join(" "))
+        xcconfig.merge!('PODS_HEADER_SEARCH_PATHS' => quoted(sandbox.public_headers.search_paths).join(" "))
         
         support_files_group = @project.group("Targets Support Files").create_group(@target_definition.label)
         support_files_group.create_files(target_support_files)
@@ -89,7 +89,7 @@ module Pod
           config.build_settings['OTHER_LDFLAGS'] = ''
           config.build_settings['GCC_PREFIX_HEADER'] = @target_definition.prefix_header_name
           config.build_settings['PODS_ROOT'] = '${SRCROOT}'
-          config.build_settings['PODS_HEADER_SEARCH_PATHS'] = quoted(sandbox.build_header_storage.search_paths).join(" ")
+          config.build_settings['PODS_HEADER_SEARCH_PATHS'] = quoted(sandbox.build_headers.search_paths).join(" ")
         end
       end
 

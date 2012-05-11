@@ -24,7 +24,7 @@ describe Pod::Sandbox do
   end
   
   it "returns it's headers root" do
-    @sandbox.build_header_storage.root.should == Pathname.new(File.join(TMP_POD_ROOT, "Headers"))
+    @sandbox.build_headers.root.should == Pathname.new(File.join(TMP_POD_ROOT, "Headers"))
   end
   
   it "can add namespaced headers to it's header path using symlinks and return the relative path" do
@@ -32,7 +32,7 @@ describe Pod::Sandbox do
     namespace_path = Pathname.new("ExampleLib")
     relative_header_path = Pathname.new("ExampleLib/Headers/MyHeader.h")
     File.open(@sandbox.root + relative_header_path, "w") { |file| file.write('hello') }
-    symlink_path = @sandbox.build_header_storage.add_file(namespace_path, relative_header_path)
+    symlink_path = @sandbox.build_headers.add_file(namespace_path, relative_header_path)
     symlink_path.should.be.symlink
     File.read(symlink_path).should == 'hello'
   end
@@ -47,7 +47,7 @@ describe Pod::Sandbox do
     relative_header_paths.each do |path|
       File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
     end
-    symlink_paths = @sandbox.build_header_storage.add_files(namespace_path, relative_header_paths)
+    symlink_paths = @sandbox.build_headers.add_files(namespace_path, relative_header_paths)
     symlink_paths.each do |path|
       path.should.be.symlink
       File.read(path).should == "hello"
@@ -64,7 +64,7 @@ describe Pod::Sandbox do
     relative_header_paths.each do |path|
       File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
     end
-    @sandbox.build_header_storage.add_files(namespace_path, relative_header_paths)
+    @sandbox.build_headers.add_files(namespace_path, relative_header_paths)
     @sandbox.header_search_paths.should.include("${PODS_ROOT}/Headers/ExampleLib")
   end
   
@@ -74,6 +74,6 @@ describe Pod::Sandbox do
   
   it 'clears out its headers root when preparing for install' do
     @sandbox.prepare_for_install
-    @sandbox.build_header_storage.root.should.not.exist
+    @sandbox.build_headers.root.should.not.exist
   end
 end
