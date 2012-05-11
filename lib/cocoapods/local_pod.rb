@@ -139,6 +139,7 @@ module Pod
 
     def expanded_paths(platforms_with_patterns, options = {})
       patterns = platforms_with_patterns.is_a?(Hash) ? platforms_with_patterns[@platform.name] : platforms_with_patterns
+      return [] if patterns.nil?  # some patterns may be nil (specification.public_header_files, for instance)
       patterns.map do |pattern|
         pattern = root + pattern
 

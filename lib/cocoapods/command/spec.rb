@@ -302,6 +302,7 @@ module Pod
             patterns = spec.send(accessor.to_sym)
             # Some values are multiplaform
             patterns = patterns.is_a?(Hash) ? patterns.values.flatten(1) : patterns
+            patterns = patterns.compact # some patterns may be nil (public_header_files, for instance)
             patterns.each do |pattern|
               # Skip Filelist that would otherwise be resolved from the working directory resulting
               # in a potentially very expensi operation
