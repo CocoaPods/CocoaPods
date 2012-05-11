@@ -71,22 +71,25 @@ module Pod
           pod.link_headers
         end
         
-        xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.build_header_storage.search_paths).join(" "))
-
+        # Indirect HEADER_SEARCH_PATHS, so that configure_build_configurations can override it
+        xcconfig.merge!('HEADER_SEARCH_PATHS' => '${PODS_HEADER_SEARCH_PATHS}')
+        xcconfig.merge!('PODS_HEADER_SEARCH_PATHS' => quoted(sandbox.public_header_storage.search_paths).join(" "))
+        
         support_files_group = @project.group("Targets Support Files").create_group(@target_definition.label)
         support_files_group.create_files(target_support_files)
         
         xcconfig_file = support_files_group.files.where(:path => @target_definition.xcconfig_name)
-        configure_build_configurations(xcconfig_file)
+        configure_build_configurations(xcconfig_file, sandbox)
         create_files(pods, sandbox)
       end
 
-      def configure_build_configurations(xcconfig_file)
+      def configure_build_configurations(xcconfig_file, sandbox)
         @target.build_configurations.each do |config|
           config.base_configuration = xcconfig_file
           config.build_settings['OTHER_LDFLAGS'] = ''
           config.build_settings['GCC_PREFIX_HEADER'] = @target_definition.prefix_header_name
           config.build_settings['PODS_ROOT'] = '${SRCROOT}'
+          config.build_settings['PODS_HEADER_SEARCH_PATHS'] = quoted(sandbox.build_header_storage.search_paths).join(" ")
         end
       end
 
