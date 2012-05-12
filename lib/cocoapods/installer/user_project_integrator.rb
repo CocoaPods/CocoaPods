@@ -35,7 +35,11 @@ module Pod
       end
 
       def user_project_paths
-        @podfile.target_definitions.values.map { |td| td.user_project.path }
+        @podfile.target_definitions.values.map do |td|
+          next if td.empty?
+          td.user_project.path #|| raise(Informative, "Could not resolve the Xcode project in which the " \
+                               #                      "`#{td.name}' target should be integrated.")
+        end.compact
       end
 
       def create_workspace!
