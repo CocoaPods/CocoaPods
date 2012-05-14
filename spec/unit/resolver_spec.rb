@@ -18,7 +18,7 @@ describe "Pod::Resolver" do
     Pod::Config.instance = @config_before
   end
 
-  it "holds the context state, such as cached specification sets" do
+  xit "holds the context state, such as cached specification sets" do
     @resolver.resolve
     @resolver.cached_sets.values.sort_by(&:name).should == [
       Pod::Spec::Set.new(config.repos_dir + 'master/A2DynamicDelegate'),
@@ -26,7 +26,7 @@ describe "Pod::Resolver" do
     ].sort_by(&:name)
   end
 
-  it "returns all specs needed for the dependency" do
+  xit "returns all specs needed for the dependency" do
     specs = @resolver.resolve.values.flatten
     specs.map(&:class).uniq.should == [Pod::Specification]
     specs.map(&:name).sort.should == %w{ A2DynamicDelegate BlocksKit }
@@ -80,6 +80,7 @@ describe "Pod::Resolver" do
     resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
     resolver.resolve.values.flatten.map(&:name).sort.should == %w{
       FileMD5Hash
+      ISO8601DateFormatter
       LibComponentLogging-Core
       LibComponentLogging-NSLog
       RestKit/Network
@@ -120,9 +121,10 @@ describe "Pod::Resolver" do
     @podfile = Pod::Podfile.new do
       platform :ios
       dependency do |s|
-        s.main_subspec = 'JSON'
         s.name         = 'RestKit'
         s.version      = '0.10.0'
+
+        s.preferred_dependency = 'JSON'
 
         s.subspec 'JSON' do |js|
           js.dependency 'RestKit/Network'
@@ -146,6 +148,7 @@ describe "Pod::Resolver" do
     resolver.resolve.values.flatten.map(&:name).sort.should == %w{
       LibComponentLogging-Core
       LibComponentLogging-NSLog
+      RestKit
       RestKit/JSON
       RestKit/Network
       RestKit/ObjectMapping/CoreData

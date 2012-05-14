@@ -41,7 +41,7 @@ module Pod
           header.puts "#import #{@target_definition.platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}"
           header.puts "#endif"
           pods.each do |pod|
-            if prefix_header_contents = pod.specification.prefix_header_contents
+            if prefix_header_contents = pod.top_specification.prefix_header_contents
               header.puts
               header.puts prefix_header_contents
             elsif prefix_header = pod.prefix_header_file
@@ -63,7 +63,7 @@ module Pod
         @target = @project.add_pod_target(@target_definition.label, @target_definition.platform)
 
         pods.each do |pod|
-          xcconfig.merge!(pod.specification.xcconfig)
+          xcconfig.merge!(pod.xcconfig)
           pod.add_to_target(@target)
 
           # TODO: this doesn't need to be done here, it has nothing to do with the target

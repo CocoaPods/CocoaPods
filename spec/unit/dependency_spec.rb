@@ -7,15 +7,6 @@ describe "Pod::Dependency" do
     dep1.merge(dep2).should == Pod::Dependency.new('bananas', '>= 1.8', '1.9')
   end
 
-  it "is equal to another dependency if `part_of_other_pod' is the same" do
-    dep1 = Pod::Dependency.new('bananas', '>= 1')
-    dep1.only_part_of_other_pod = true
-    dep2 = Pod::Dependency.new('bananas', '>= 1')
-    dep1.should.not == dep2
-    dep2.only_part_of_other_pod = true
-    dep1.should == dep2
-  end
-
   it "returns the name of the dependency, or the name of the pod of which this is a subspec" do
     dep = Pod::Dependency.new('RestKit')
     dep.top_level_spec_name.should == 'RestKit'

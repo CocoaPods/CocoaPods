@@ -135,8 +135,8 @@ module Pod
         @specs_to_lint ||= begin
           podspecs_to_lint.map do |podspec|
             root_spec = Specification.from_file(podspec)
-            # TODO if a spec has a main subspec require it's subspecs recursively
-            root_spec.main_subspec == root_spec ? root_spec : root_spec.subspecs
+            # TODO find a way to lint subspecs
+            # root_spec.preferred_dependency ? root_spec.subspec_dependencies : root_spec
           end.flatten
         end
       end
@@ -149,6 +149,8 @@ module Pod
       #
       class Linter
         include Config::Mixin
+
+        # TODO: Add check to ensure that attributes inherited by subspecs are not duplicated ?
 
         attr_accessor :quick, :lenient
         attr_reader   :spec, :file
@@ -271,7 +273,7 @@ module Pod
 
           # attributes with multiplatform values
           return messages unless platform_valid?
-          messages << "Missing source_files" if spec.source_files.empty? && spec.subspecs.empty? && spec.dependencies.empty?
+          messages << "Missing source_files" if spec.source_files.empty? && spec.subspecs.empty? && spec.resources.empty?
           messages += paths_starting_with_a_slash_errors
           messages
         end
@@ -283,7 +285,7 @@ module Pod
         end
 
         def platform_valid?
-          [nil, :ios, :osx].include?(spec.platform.name)
+          !spec.platform || [:ios, :osx].include?(spec.platform.name)
         end
 
         def paths_starting_with_a_slash_errors
@@ -313,6 +315,7 @@ module Pod
           text     = @file.read
           messages = []
           messages << "Missing license type"                                unless license[:type]
+          messages << "Missing license file or text"                        unless license[:file] || license[:text]
           messages << "The summary is not meaningful"                       if spec.summary =~ /A short description of/
           messages << "The description is not meaningful"                   if spec.description && spec.description =~ /An optional longer description of/
           messages << "The summary should end with a dot"                   if @spec.summary !~ /.*\./
@@ -381,7 +384,6 @@ module Pod
             messages += check_spec_files_exists(:source_files, '*.{h,m,mm,c,cpp}')
             messages += check_spec_files_exists(:resources)
             messages << "license file not found = '#{spec.license[:file]}' -> did not match any file" if spec.license && spec.license[:file] && pod_dir.glob(spec.license[:file]).empty?
-            # messages << "Missing license file or text"                        unless license[:file] || license[:text]
             messages.compact
           end
         end

@@ -22,7 +22,7 @@ module Pod
       @podfile.target_definitions.values.each do |target_definition|
         puts "\nResolving dependencies for target `#{target_definition.name}' (#{target_definition.platform})".green if config.verbose?
         @loaded_specs = []
-        find_dependency_sets(@podfile, target_definition.dependencies, target_definition)
+        find_dependency_specs(@podfile, target_definition.dependencies, target_definition)
         targets_and_specs[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
       end
 
@@ -49,7 +49,7 @@ module Pod
       end
     end
 
-    def find_dependency_sets(dependent_specification, dependencies, target_definition)
+    def find_dependency_specs(dependent_specification, dependencies, target_definition)
       @log_indent += 1
       dependencies.each do |dependency|
         puts '  ' * @log_indent + "- #{dependency}" if config.verbose?
@@ -62,7 +62,7 @@ module Pod
           @specs[spec.name] = spec
           spec.activate_platform(target_definition.platform)
           # And recursively load the dependencies of the spec.
-          find_dependency_sets(spec, spec.dependencies, target_definition) if spec.dependencies
+          find_dependency_specs(spec, spec.dependencies, target_definition) if spec.dependencies
         end
         validate_platform!(spec || @specs[dependency.name], target_definition)
       end

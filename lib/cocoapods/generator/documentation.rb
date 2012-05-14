@@ -12,9 +12,9 @@ module Pod
 
       def initialize(pod)
         @pod = pod
-        @specification = pod.specification
+        @specification = pod.top_specification
         @target_path = pod.sandbox.root + 'Documentation' + pod.name
-        @options = pod.specification.documentation || {}
+        @options = @specification.documentation || {}
       end
 
       def name

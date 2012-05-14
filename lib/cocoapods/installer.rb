@@ -48,30 +48,30 @@ module Pod
       pods.each do |pod|
         unless config.silent?
           marker = config.verbose ? "\n-> ".green : ''
-          puts pod.exists? ? "#{marker}Using #{pod}" : "#{marker}Installing #{pod}".green
-          submarker = " " * marker.length << " - "
-          puts "#{submarker}#{pod.subspecs.map{ |s| s.name.gsub(pod.specification.name+'/', '') }.join("\n" << submarker)}" unless pod.subspecs.empty?
+          puts marker << ( pod.exists? ? "Using #{pod}" : "Installing #{pod}".green )
         end
 
-        unless pod.exists?
+        should_install = !pod.exists?
+        if should_install
           downloader = Downloader.for_pod(pod)
           downloader.download
-          if config.clean
-            # downloader.clean
-            pod.clean
-          end
         end
 
-        if (!pod.exists? && config.generate_docs?) || config.force_doc?
-          doc_generator = Generator::Documentation.new(pod)
-          if doc_generator.already_installed?
-            puts "Using Existing Documentation for #{pod.specification}".green if config.verbose?
-          else
-            puts "Installing Documentation for #{pod.specification}".green if config.verbose?
-            doc_generator.generate(config.doc_install?)
-          end
-        end
+        generate_docs(pod)
+        pod.clean if config.clean && should_install
       end
+    end
+
+    #TODO: move to generator ?
+    def generate_docs(pod)
+      doc_generator = Generator::Documentation.new(pod)
+      if ( config.generate_docs? && !doc_generator.already_installed? ) || config.force_doc?
+        message = "Installing documentation"
+        doc_generator.generate(config.doc_install?)
+      else
+        message = "Using existing documentation"
+      end
+      puts "-> ".green << message << " for #{pod.name} (#{pod.top_specification.version})" if config.verbose?
     end
 
     def install!
@@ -195,7 +195,7 @@ module Pod
     end
 
     def pod_for_spec(spec, platform)
-      @pods_by_spec[platform][spec.top_level_parent.name] ||= LocalPod.new(spec.top_level_parent, @sandbox, platform)
+      @pods_by_spec[platform][spec.top_level_parent.name] ||= LocalPod.new(spec, @sandbox, platform)
     end
 
     private

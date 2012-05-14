@@ -155,6 +155,7 @@ else
             end
           end
 
+          Pod::Specification.any_instance.stubs(:clean_paths).returns(['JSONKit/CHANGELOG.md'])
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
 

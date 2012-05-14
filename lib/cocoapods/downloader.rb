@@ -11,7 +11,7 @@ module Pod
     extend Executable
 
     def self.for_pod(pod)
-      spec = pod.specification
+      spec = pod.top_specification
       for_target(pod.root, spec.source.dup)
     end
 

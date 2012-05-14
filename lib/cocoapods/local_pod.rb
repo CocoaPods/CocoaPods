@@ -2,13 +2,12 @@ module Pod
   class LocalPod
     attr_reader :top_specification, :specifications
     # TODO: fix accross the app
-    alias :specification :top_specification
     attr_reader :sandbox
 
     def initialize(specification, sandbox, platform)
-      @top_specification, @sandbox = specification, sandbox
+      @top_specification, @sandbox = specification.top_level_parent, sandbox
       @top_specification.activate_platform(platform)
-      @specifications = []
+      @specifications = [] << specification
     end
 
     def self.from_podspec(podspec, sandbox, platform)
@@ -66,10 +65,12 @@ module Pod
 
       # remove empty diretories
       Dir.glob("#{root}/**/{*,.*}").
-        sort_by(&:length).reverse.                                    # Clean the deepest paths first
-        reject { |d| d =~ /\/\.\.?$/ }.                               # Remove the `.` and `..` paths
-        select { |d| File.directory? d }.                             # Get only directories
-        each   { |d| Dir.rmdir d if (Dir.entries(d) == %w[ . .. ]) }  # Remove the paths only if it is empty
+        sort_by(&:length).reverse.        # Clean the deepest paths first to determine if the containing folders are empty
+        reject { |d| d =~ /\/\.\.?$/ }.   # Remove the `.` and `..` paths
+        select { |d| File.directory?(d) }.    # Get only directories or symlinks to directories
+        each   do |d|
+          FileUtils.rm_rf(d) if File.symlink?(d) || (Dir.entries(d) == %w[ . .. ]) # Remove the dirs/symlink only if it is empty
+        end
     end
 
     def prefix_header_file
@@ -94,17 +95,20 @@ module Pod
     end
 
     def used_files
-      source_files(false) + resources(false) + readme_file + license_file + [prefix_header_file]
+      source_files(false) + resources(false) + [ readme_file, license_file, prefix_header_file ] + expanded_paths('*.podspec') + preserve_paths
     end
 
     def readme_file
-      expanded_paths('README.*')
+      expanded_paths('README.*').first
     end
 
     def license_file
-      expanded_paths(%w[ LICENSE licence.txt ])
+      expanded_paths(%w[ LICENSE licence.txt ]).first
     end
 
+    def preserve_paths
+      chained_expanded_paths(:preserve_paths)
+    end
 
     def header_files
       source_files.select { |f| f.extname == '.h' }
@@ -116,18 +120,27 @@ module Pod
       end
     end
 
+    def xcconfig
+      specifications.map { |s| s.xcconfig }.reduce(:merge)
+    end
+
+    #TODO: fix
     def add_to_target(target)
       implementation_files.each do |file|
-        target.add_source_file(file, nil, specification.compiler_flags.strip)
+        target.add_source_file(file, nil, top_specification.compiler_flags.strip)
       end
     end
 
+    def compiler_flags
+
+    end
+
     def requires_arc?
-      specification.requires_arc
+      top_specification.requires_arc
     end
 
     def dependencies
-      specification.dependencies
+      top_specification.dependencies
     end
 
     private
@@ -145,14 +158,14 @@ module Pod
     def copy_header_mappings
       header_files.inject({}) do |mappings, from|
         from_without_prefix = from.relative_path_from(relative_root)
-        to = specification.header_dir + specification.copy_header_mapping(from_without_prefix)
+        to = top_specification.header_dir + top_specification.copy_header_mapping(from_without_prefix)
         (mappings[to.dirname] ||= []) << from
         mappings
       end
     end
 
     def chained_expanded_paths(accessor, options = {})
-      specifications.map { |s| expanded_paths(s.send(accessor), options) }.compact.reduce(:+).uniq
+      specifications.map { |s| expanded_paths(s.send(accessor), options) }.compact.flatten.uniq
     end
 
     def expanded_paths(patterns, options = {})

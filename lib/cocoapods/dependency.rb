@@ -5,8 +5,6 @@ require 'open-uri'
 
 module Pod
   class Dependency < Gem::Dependency
-    attr_accessor :only_part_of_other_pod
-    alias_method :only_part_of_other_pod?, :only_part_of_other_pod
 
     attr_reader :external_source
     attr_accessor :specification
@@ -14,7 +12,7 @@ module Pod
     def initialize(*name_and_version_requirements, &block)
       if name_and_version_requirements.empty? && block
         @inline_podspec = true
-        @specification  = Specification.new(&block).main_subspec
+        @specification  = Specification.new(&block)
         super(@specification.name, @specification.version)
 
       elsif !name_and_version_requirements.empty? && block.nil?
@@ -27,23 +25,20 @@ module Pod
         raise Informative, "A dependency needs either a name and version requirements, " \
                            "a source hash, or a block which defines a podspec."
       end
-      @only_part_of_other_pod = false
     end
 
     def ==(other)
-      super &&
-        @only_part_of_other_pod == other.only_part_of_other_pod &&
-         (@specification ? @specification == other.specification : @external_source == other.external_source)
+      super && (@specification ? @specification == other.specification : @external_source == other.external_source)
     end
 
     def subspec_dependency?
       @name.include?('/')
     end
-    
+
     def inline?
       @inline_podspec
     end
-    
+
     def external?
       !@external_source.nil?
     end
@@ -75,7 +70,7 @@ module Pod
       end
       version.empty? ? @name : "#{@name} (#{version})"
     end
-    
+
     def specification_from_sandbox(sandbox, platform)
       @external_source.specification_from_sandbox(sandbox, platform)
     end
@@ -126,33 +121,33 @@ module Pod
           raise Informative, "Unknown external source parameters for #{name}: #{params}"
         end
       end
-      
+
       class AbstractExternalSource
         include Config::Mixin
 
         attr_reader :name, :params
-        
+
         def initialize(name, params)
           @name, @params = name, params
         end
-        
+
         def specification_from_sandbox(sandbox, platform)
           if local_pod = sandbox.installed_pod_named(name, platform)
-            local_pod.specification
+            local_pod.top_specification
           else
             copy_external_source_into_sandbox(sandbox)
             local_pod = sandbox.installed_pod_named(name, platform)
             local_pod.clean if config.clean?
-            local_pod.specification
+            local_pod.top_specification
           end
         end
-        
+
         def ==(other_source)
           return if other_source.nil?
           name == other_source.name && params == other_source.params
         end
       end
-      
+
       class GitSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox)
           puts "  * Pre-downloading: '#{name}'" unless config.silent?
@@ -161,7 +156,7 @@ module Pod
             downloader.clean if config.clean?
           end
         end
-        
+
         def description
           "from `#{@params[:git]}'".tap do |description|
             description << ", commit `#{@params[:commit]}'" if @params[:commit]
@@ -180,7 +175,7 @@ module Pod
             output_path.open('w') { |f| f << io.read }
           end
         end
-        
+
         def description
           "from `#{@params[:podspec]}'"
         end

@@ -36,7 +36,9 @@ module Pod
 
     def supports?(other)
       return true if @symbolic_name.nil? || other.nil?
-      @symbolic_name == other.name && (deployment_target.nil? || other.deployment_target.nil? || deployment_target >= other.deployment_target)
+      os_check      = @symbolic_name == other.name
+      version_check = (deployment_target.nil? || other.deployment_target.nil? || deployment_target >= other.deployment_target)
+      os_check && version_check
     end
 
     def to_s

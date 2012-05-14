@@ -47,7 +47,7 @@ module Pod
         end
 
         def platform
-          spec.platform.to_s
+          spec.available_platforms.sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }.join(' - ')
         end
 
         def license

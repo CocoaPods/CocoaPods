@@ -98,4 +98,10 @@ describe "Pod::Platform#supports?" do
     p1.should.supports?(p2)
     p2.should.supports?(p1)
   end
+
+  it "doesn't supports a platform with a different operating system" do
+    p1 = Pod::Platform.new(:ios)
+    p2 = Pod::Platform.new(:osx)
+    p1.should.not.supports?(p2)
+  end
 end
