@@ -123,12 +123,10 @@ module Pod
       end
 
       def download_tag
-        super unless download_only?
         download_only? ? download_and_extract_tarball(options[:tag]) : super
       end
 
       def download_commit
-        super unless download_only?
         download_only? ? download_and_extract_tarball(options[:commit]) : super
       end
 

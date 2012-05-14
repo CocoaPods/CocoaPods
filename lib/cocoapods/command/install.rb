@@ -25,7 +25,7 @@ module Pod
 
       def self.options
         [
-          ["--no-clean",     "Leave SCM dirs like `.git' and `.svn' in tact after downloading"],
+          ["--no-clean",     "Leave SCM dirs like `.git' and `.svn' intact after downloading"],
           ["--no-doc",       "Skip documentation generation with appledoc"],
           ["--force-doc",    "Force the generation of documentation"],
           ["--no-integrate", "Skip integration of the Pods libraries in the Xcode project(s)"],

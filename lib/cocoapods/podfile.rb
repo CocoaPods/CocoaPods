@@ -79,7 +79,7 @@ module Pod
       end
 
       def platform
-        @platform || @parent.platform
+        @platform || (@parent.platform if @parent)
       end
 
       def label
