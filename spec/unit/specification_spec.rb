@@ -167,7 +167,7 @@ describe "A Pod::Specification, in general," do
     @spec.documentation[:appledoc].should == ['--project-name', '#{@name}',
                                           '--project-company', '"Company Name"',
                                           '--company-id', 'com.company',
-                                          '--ignore', 'Common',
+                                        '--ignore', 'Common',
                                           '--ignore', '.m']
   end
 
@@ -182,6 +182,18 @@ describe "A Pod::Specification, in general," do
     list.glob.should == Pod::FileList[(ROOT + '*').to_s].exclude('Rakefile').map { |path| Pathname.new(path) }
   end
 
+  it "takes a list of paths to preserve" do
+    @spec.preserve_paths = 'script.sh'
+    @spec.activate_platform(:ios).preserve_paths.should == %w{ script.sh }
+  end
+
+  it "takes any object for source_files as long as it responds to #glob (we provide this for Rake::FileList)" do
+    @spec.source_files = Pod::FileList['*'].exclude('Rakefile')
+    @spec.activate_platform(:ios)
+    list = ROOT + @spec.source_files.first
+    list.glob.should == Pod::FileList[(ROOT + '*').to_s].exclude('Rakefile').map { |path| Pathname.new(path) }
+  end
+
   it "takes a prefix header path which will be appended to the Pods pch file" do
     @spec.prefix_header_file.should == nil
     @spec.prefix_header_file = 'Classes/Demo.pch'
@@ -193,27 +205,106 @@ describe "A Pod::Specification, in general," do
     @spec.prefix_header_contents = '#import "BlocksKit.h"'
     @spec.prefix_header_contents.should == '#import "BlocksKit.h"'
   end
+
+  it "can be activated for a supported platorm" do
+    @spec.platform = :ios
+    lambda {@spec.activate_platform(:ios)}.should.not.raise Pod::Informative
+  end
+
+  it "raised if attempted to be activated for an unsupported platform" do
+    @spec.platform = :osx, '10.7'
+    lambda {@spec.activate_platform(:ios)}.should.raise Pod::Informative
+    lambda {@spec.activate_platform(:ios, '10.6')}.should.raise Pod::Informative
+  end
+
+  it "raises if not activated for a platform before accessing a multiplatform value" do
+    @spec.platform = :ios
+    lambda {@spec.source_files}.should.raise Pod::Informative
+  end
+
+  it "returns self on activation for method chainablity" do
+    @spec.platform = :ios
+    @spec.activate_platform(:ios).should == @spec
+  end
+end
+
+describe "A Pod::Specification, hierarchy" do
+  before do
+    @spec = Pod::Spec.new do |s|
+      s.name      = 'MainSpec'
+      s.version   = '0.999'
+      s.dependency  'awesome_lib'
+      s.subspec 'SubSpec.0' do |fss|
+        fss.platform  = :ios
+        fss.subspec 'SubSpec.0.0' do |sss|
+        end
+      end
+      s.subspec 'SubSpec.1'
+    end
+    @subspec = @spec.subspecs.first
+    @spec.activate_platform(:ios)
+  end
+
+  it "automatically includes all the compatible subspecs as a dependencis if not preference is given" do
+    @spec.dependencies.map { |s| s.name }.should == %w[ awesome_lib MainSpec/SubSpec.0 MainSpec/SubSpec.1 ]
+    @spec.activate_platform(:osx).dependencies.map { |s| s.name }.should == %w[ awesome_lib MainSpec/SubSpec.1 ]
+  end
+
+  it "uses the spec version for the dependencies" do
+    @spec.dependencies.
+      select { |d| d.name =~ /MainSpec/ }.
+      all?   { |d| d.requirement === Pod::Version.new('0.999') }.
+      should.be.true
+  end
+
+  it "respecs the preferred dependency for subspecs, if specified" do
+    @spec.preferred_dependency = 'SubSpec.0'
+    @spec.dependencies.map { |s| s.name }.should == %w[ awesome_lib MainSpec/SubSpec.0 ]
+  end
+
+  it "raises if it has dependecy on a self or on an upstream subspec" do
+    lambda { @subspec.dependency('MainSpec/SubSpec.0') }.should.raise Pod::Informative
+    lambda { @subspec.dependency('MainSpec') }.should.raise Pod::Informative
+  end
+
+  it "inherits external dependecies from the parent" do
+    @subspec.dependencies.map { |s| s.name }.should == %w[ awesome_lib MainSpec/SubSpec.0/SubSpec.0.0 ]
+  end
+
+  it "it accepts a dependency on a subspec that is in the same level of the hierarchy" do
+    @subspec.dependency('MainSpec/SubSpec.1')
+    @subspec.dependencies.map { |s| s.name }.should == %w[ MainSpec/SubSpec.1 awesome_lib MainSpec/SubSpec.0/SubSpec.0.0 ]
+  end
 end
 
 describe "A Pod::Specification subspec" do
   before do
     @spec = Pod::Spec.new do |s|
-      s.name    = 'MainSpec'
-      s.version = '1.2.3'
-      s.platform = :ios
-      s.license = 'MIT'
-      s.author = 'Joe the Plumber'
-      s.summary = 'A spec with subspecs'
-      s.source  = { :git => '/some/url' }
+      s.name         = 'MainSpec'
+      s.version      = '1.2.3'
+      s.license      = 'MIT'
+      s.author       = 'Joe the Plumber'
+      s.source       = { :git => '/some/url' }
       s.requires_arc = true
+      s.source_files = 'spec.m'
+      s.resource     = 'resource'
+      s.platform     = :ios
+      s.library      = 'xml'
+      s.framework    = 'CoreData'
 
       s.subspec 'FirstSubSpec' do |fss|
-        fss.source_files = 'some/file'
+        fss.ios.source_files  = 'subspec_ios.m'
+        fss.osx.source_files  = 'subspec_osx.m'
+        fss.framework         = 'CoreGraphics'
+        fss.library           = 'z'
 
         fss.subspec 'SecondSubSpec' do |sss|
+          sss.source_files = 'subsubspec.m'
         end
       end
     end
+    @subspec = @spec.subspecs.first
+    @subsubspec = @subspec.subspecs.first
   end
 
   it "returns the top level parent spec" do
@@ -231,30 +322,126 @@ describe "A Pod::Specification subspec" do
     @spec.subspecs.first.parent.should == @spec
   end
 
-  it "automatically forwards undefined attributes to the top level parent" do
+  it "automatically forwards top level attributes to the top level parent" do
     @spec.activate_platform(:ios)
-    [:version, :summary, :platform, :license, :authors, :requires_arc].each do |attr|
+    [:version, :license, :authors, :requires_arc].each do |attr|
       @spec.subspecs.first.send(attr).should == @spec.send(attr)
       @spec.subspecs.first.subspecs.first.send(attr).should == @spec.send(attr)
     end
   end
 
+  it "resolves correctly chained attributes" do
+    @spec.activate_platform(:ios)
+    @spec.source_files.map { |f| f.to_s }.should == %w[ spec.m  ]
+    @subspec.source_files.map { |f| f.to_s }.should == %w[ spec.m  subspec_ios.m ]
+    @subsubspec.source_files.map { |f| f.to_s }.should == %w[ spec.m  subspec_ios.m subsubspec.m ]
+
+    @subsubspec.resources.should == %w[ resource ]
+  end
+
+  it "returns empty arrays for chained attributes with no value in the chain" do
+    @spec = Pod::Spec.new do |s|
+      s.name         = 'MainSpec'
+      s.platform     = :ios
+      s.subspec 'FirstSubSpec' do |fss|
+        fss.subspec 'SecondSubSpec' do |sss|
+          sss.source_files = 'subsubspec.m'
+        end
+      end
+    end
+
+    @spec.activate_platform(:ios).source_files.should == []
+    @spec.subspecs.first.source_files.should == []
+    @spec.subspecs.first.subspecs.first.source_files.should == %w[ subsubspec.m ]
+  end
+
+  it "does not cache platform attributes and can activate another platform" do
+    @spec.platform = nil
+    @spec.activate_platform(:ios)
+    @subsubspec.source_files.map { |f| f.to_s }.should == %w[ spec.m  subspec_ios.m subsubspec.m ]
+    @spec.activate_platform(:osx)
+    @subsubspec.source_files.map { |f| f.to_s }.should == %w[ spec.m  subspec_osx.m subsubspec.m ]
+  end
+
+  it "resolves correctly the available platforms" do
+    @spec.platform = nil
+    @subspec.platform = :ios, '4.0'
+    @spec.available_platforms.map{ |p| p.to_sym }.should == [ :osx, :ios ]
+    @subspec.available_platforms.first.to_sym.should == :ios
+    @subsubspec.available_platforms.first.to_sym.should == :ios
+
+    @subsubspec.platform = :ios, '5.0'
+    @subspec.available_platforms.first.deployment_target.to_s.should == '4.0'
+    @subsubspec.available_platforms.first.deployment_target.to_s.should == '5.0'
+  end
+
+  it "resolves reports correctly the supported platforms" do
+    @spec.platform = nil
+    @subspec.platform = :ios, '4.0'
+    @subsubspec.platform = :ios, '5.0'
+    @spec.supports_platform?(:ios).should.be.true
+    @spec.supports_platform?(:osx).should.be.true
+    @subspec.supports_platform?(:ios).should.be.true
+    @subspec.supports_platform?(:osx).should.be.false
+    @subspec.supports_platform?(:ios, '4.0').should.be.true
+    @subspec.supports_platform?(:ios, '5.0').should.be.true
+    @subsubspec.supports_platform?(:ios).should.be.true
+    @subsubspec.supports_platform?(:osx).should.be.false
+    @subsubspec.supports_platform?(:ios, '4.0').should.be.false
+    @subsubspec.supports_platform?(:ios, '5.0').should.be.true
+    @subsubspec.supports_platform?(Pod::Platform.new(:ios, '4.0')).should.be.false
+    @subsubspec.supports_platform?(Pod::Platform.new(:ios, '5.0')).should.be.true
+  end
+
+  it "raises a top level attribute is assigned to a spec with a parent" do
+    lambda { @subspec.version = '0.0.1' }.should.raise Pod::Informative
+  end
+
   it "returns subspecs by name" do
     @spec.subspec_by_name(nil).should == @spec
     @spec.subspec_by_name('MainSpec').should == @spec
-    @spec.subspec_by_name('MainSpec/FirstSubSpec').should == @spec.subspecs.first
-    @spec.subspec_by_name('MainSpec/FirstSubSpec/SecondSubSpec').should == @spec.subspecs.first.subspecs.first
+    @spec.subspec_by_name('MainSpec/FirstSubSpec').should == @subspec
+    @spec.subspec_by_name('MainSpec/FirstSubSpec/SecondSubSpec').should == @subsubspec
   end
 
-  xit "can be activated for a platorm"
-  xit "raises if not activated"
-  xit "returns self on activation for method chainablity"
-  xit "does not cache platform attributes and can activate another platform"
-  xit "resolves chained attributes"
-  xit "resolves not chained attributes"
-  xit "has the same active platform accross the chain attributes"
-  xit "raises a top level attribute is assigned to a spec with a parent"
+  it "has the same active platform accross the chain attributes" do
+    @spec.activate_platform(:ios)
+    @subspec.active_platform.should == :ios
+    @subsubspec.active_platform.should == :ios
 
+    @spec.platform = nil
+    @subsubspec.activate_platform(:osx)
+    @subspec.active_platform.should == :osx
+    @spec.active_platform.should == :osx
+  end
+
+  it "resolves the libraries correctly" do
+    @spec.activate_platform(:ios)
+    @spec.libraries.should       == %w[ xml ]
+    @subspec.libraries.should    == %w[ xml z ]
+    @subsubspec.libraries.should == %w[ xml z ]
+  end
+
+  it "resolves the frameworks correctly" do
+    @spec.activate_platform(:ios)
+    @spec.frameworks.should       == %w[ CoreData ]
+    @subspec.frameworks.should    == %w[ CoreData CoreGraphics ]
+    @subsubspec.frameworks.should == %w[ CoreData CoreGraphics ]
+  end
+
+  it "resolves the xcconfig" do
+    @spec.activate_platform(:ios)
+    @spec.xcconfig = { 'OTHER_LDFLAGS' => "-Wl,-no_compact_unwind" }
+
+    @spec.xcconfig.should       == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -framework CoreData"}
+    @subspec.xcconfig.should    == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -lz -framework CoreData -framework CoreGraphics"}
+    @subsubspec.xcconfig.should == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -lz -framework CoreData -framework CoreGraphics"}
+
+    @subsubspec.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2' }
+
+    @spec.xcconfig.should       == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -framework CoreData"}
+    @subsubspec.xcconfig.should == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -lz -framework CoreData -framework CoreGraphics", "HEADER_SEARCH_PATHS"=>"$(SDKROOT)/usr/include/libxml2"}
+  end
 end
 
 describe "A Pod::Specification with :local source" do
@@ -304,8 +491,8 @@ describe "A Pod::Specification, concerning its attributes that support different
 
     it "returns the same list of xcconfig build settings for each platform" do
       build_settings = { 'OTHER_LDFLAGS' => '-lObjC -lz -framework QuartzCore' }
-      @spec.activate_platform(:ios).xcconfig.should == build_settings 
-      @spec.activate_platform(:osx).xcconfig.should == build_settings 
+      @spec.activate_platform(:ios).xcconfig.should == build_settings
+      @spec.activate_platform(:osx).xcconfig.should == build_settings
     end
 
     it "returns the same list of compiler flags for each platform" do
