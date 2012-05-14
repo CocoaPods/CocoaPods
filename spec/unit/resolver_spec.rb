@@ -83,6 +83,7 @@ describe "Pod::Resolver" do
       ISO8601DateFormatter
       LibComponentLogging-Core
       LibComponentLogging-NSLog
+      NSData+Base64
       RestKit/Network
       RestKit/ObjectMapping/XML
       SOCKit
@@ -103,16 +104,15 @@ describe "Pod::Resolver" do
       JSONKit
       LibComponentLogging-Core
       LibComponentLogging-NSLog
+      NSData+Base64
       RestKit
+      RestKit/JSON
       RestKit/Network
-      RestKit/ObjectMapping
       RestKit/ObjectMapping/CoreData
       RestKit/ObjectMapping/JSON
-      RestKit/ObjectMapping/XML
       RestKit/UI
       SOCKit
       UDTableView
-      XMLReader
       cocoa-oauth
     }
   end
