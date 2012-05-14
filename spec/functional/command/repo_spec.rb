@@ -42,6 +42,7 @@ describe "Pod::Command::Repo" do
 
   before do
     add_repo('repo1', fixture('spec-repos/master'))
+    FileUtils.rm_rf(versions_file)
     versions_file.should.not.exist?
   end
 
