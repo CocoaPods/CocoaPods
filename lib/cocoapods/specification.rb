@@ -226,15 +226,17 @@ module Pod
       end
 
       def add_libraries(libraries)
-        flags = [ @attributes['OTHER_LDFLAGS'] ]
-        flags << "-l#{ libraries.join(' -l').strip}" if libraries && !libraries.empty?
-        @attributes['OTHER_LDFLAGS'] = flags.compact.join(' ')
+        return if libraries.nil? || libraries.empty?
+        flags = [ @attributes['OTHER_LDFLAGS'] ] || []
+        flags << "-l#{ libraries.join(' -l') }"
+        @attributes['OTHER_LDFLAGS'] = flags.compact.map(&:strip).join(' ')
       end
 
       def add_frameworks(frameworks)
-        flags = [ @attributes['OTHER_LDFLAGS'] ]
-        flags << "-framework #{ frameworks.join(' -framework ').strip }" if frameworks && !frameworks.empty?
-        @attributes['OTHER_LDFLAGS'] = flags.compact.join(' ')
+        return if frameworks.nil? || frameworks.empty?
+        flags = [ @attributes['OTHER_LDFLAGS'] ] || []
+        flags << "-framework #{ frameworks.join(' -framework ') }"
+        @attributes['OTHER_LDFLAGS'] = flags.compact.map(&:strip).join(' ')
       end
 
       def dup
@@ -293,7 +295,6 @@ module Pod
     def dependencies
       external_dependencies + subspec_dependencies
     end
-
 
     include Config::Mixin
 
@@ -449,7 +450,7 @@ module Pod
 
     # @visibility private
     #
-    # This deployment_target is multiplatform and to support
+    # This is multi-platform and to support
     # subspecs with different platforms is is resolved as the
     # first non nil value accross the chain.
     def deployment_target=(version)
