@@ -169,6 +169,7 @@ module Pod
     end
 
     def expanded_paths(patterns, options = {})
+      patterns = [ patterns ] if patterns.is_a? String
       patterns.map do |pattern|
         pattern = root + pattern
 

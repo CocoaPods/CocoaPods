@@ -10,7 +10,7 @@ module Pod
 
     attr_reader :deployment_target
 
-    def initialize(symbolic_name, deployment_target = nil)
+    def initialize(symbolic_name = nil, deployment_target = nil)
       @symbolic_name = symbolic_name
       if deployment_target
         version = deployment_target.is_a?(Hash) ? deployment_target[:deployment_target] : deployment_target # backwards compatibility from 0.6
