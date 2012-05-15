@@ -1,7 +1,6 @@
 module Pod
   class LocalPod
     attr_reader :top_specification, :specifications
-    # TODO: fix accross the app
     attr_reader :sandbox
 
     def initialize(specification, sandbox, platform)
@@ -65,11 +64,11 @@ module Pod
 
       # remove empty diretories
       Dir.glob("#{root}/**/{*,.*}").
-        sort_by(&:length).reverse.        # Clean the deepest paths first to determine if the containing folders are empty
-        reject { |d| d =~ /\/\.\.?$/ }.   # Remove the `.` and `..` paths
+        sort_by(&:length).reverse.            # Clean the deepest paths first to determine if the containing folders are empty
+        reject { |d| d =~ /\/\.\.?$/ }.       # Remove the `.` and `..` paths
         select { |d| File.directory?(d) }.    # Get only directories or symlinks to directories
-        each   do |d|
-          FileUtils.rm_rf(d) if File.symlink?(d) || (Dir.entries(d) == %w[ . .. ]) # Remove the dirs/symlink only if it is empty
+        each do |d|
+          FileUtils.rm_rf(d) if File.symlink?(d) || (Dir.entries(d) == %w[ . .. ]) # Remove the symlink and the empty dirs
         end
     end
 
@@ -88,26 +87,23 @@ module Pod
     end
 
     def clean_paths
-      paths = expanded_paths('**/*').reject {|p| p.directory? }
-      # TODO: deprecate Specification#clean_paths
-      paths = @top_specification.clean_paths unless @top_specification.clean_paths.empty?
-      paths - used_files
+      expanded_paths('**/{*,.*}').reject { |p| p.directory? } - used_files
     end
 
     def used_files
-      source_files(false) + resources(false) + [ readme_file, license_file, prefix_header_file ] + expanded_paths('*.podspec') + preserve_paths
+      source_files(false) + resources(false) + [ readme_file, license_file, prefix_header_file ] + preserve_paths
     end
 
     def readme_file
-      expanded_paths('README.*').first
+      expanded_paths(%w[README* readme*]).first
     end
 
     def license_file
-      expanded_paths(%w[ LICENSE licence.txt ]).first
+      expanded_paths(%w[ LICENSE* licence* ]).first
     end
 
     def preserve_paths
-      chained_expanded_paths(:preserve_paths)
+      chained_expanded_paths(:preserve_paths) + expanded_paths(%w[ *.podspec notice* NOTICE* ])
     end
 
     def header_files
@@ -127,13 +123,11 @@ module Pod
     #TODO: fix
     def add_to_target(target)
       implementation_files.each do |file|
+        # TODO: respect the compiler flags of each subspec
         target.add_source_file(file, nil, top_specification.compiler_flags.strip)
       end
     end
 
-    def compiler_flags
-
-    end
 
     def requires_arc?
       top_specification.requires_arc
