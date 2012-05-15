@@ -214,14 +214,17 @@ module Pod
           puts "Building with xcodebuild.\n".yellow if config.verbose?
           # treat xcodebuild warnings as notes because the spec maintainer might not be the author of the library
           xcodebuild_output.each { |msg| ( msg.include?('error') ? @platform_errors[@platform] : @platform_notes[@platform] ) << msg }
-          @platform_errors[@platform] += file_patterns_errors
+          @platform_errors[@platform]   += file_patterns_errors
+          @platform_warnings[@platform] += file_patterns_warnings
           tear_down_lint_environment
         end
 
         def install_pod
           podfile = podfile_from_spec
           config.verbose
-          Installer.new(podfile).install!
+          installer = Installer.new(podfile)
+          installer.install!
+          @pod = installer.pods.find { |pod| pod.top_specification == @spec }
           config.silent
         end
 
@@ -315,7 +318,6 @@ module Pod
           text     = @file.read
           messages = []
           messages << "Missing license type"                                unless license[:type]
-          messages << "Missing license file or text"                        unless license[:file] || license[:text]
           messages << "The summary is not meaningful"                       if spec.summary =~ /A short description of/
           messages << "The description is not meaningful"                   if spec.description && spec.description =~ /An optional longer description of/
           messages << "The summary should end with a dot"                   if @spec.summary !~ /.*\./
@@ -335,18 +337,20 @@ module Pod
         # to features that are or will be deprecated
         #
         # @return [Array<String>]
+        #
         def deprecation_warnings
           text = @file.read
           deprecations = []
-          deprecations << "`config.ios?' and `config.osx?' are deprecated and will be removed in version 0.7" if text. =~ /config\..?os.?/
-          deprecations << "The `post_install' hook is reserved for edge cases" if text. =~ /post_install/
+          deprecations << "`config.ios?' and `config.osx?' are deprecated"              if text. =~ /config\..?os.?/
+          deprecations << "clean_paths are deprecated and ignored (use preserve_paths)" if text. =~ /clean_paths/
+          deprecations << "The `post_install' hook is reserved for edge cases"          if text. =~ /post_install/
           deprecations
         end
 
         # It creates a podfile in memory and builds a library containing
         # the pod for all available platfroms with xcodebuild.
         #
-        # It returns a array of strings
+        # @return [Array<String>]
         #
         def xcodebuild_output
           return [] if `which xcodebuild`.strip.empty?
@@ -374,31 +378,23 @@ module Pod
 
         # It checks that every file pattern specified in a spec yields
         # at least one file. It requires the pods to be alredy present
-        # in the current working directory under Pods/spec.name
+        # in the current working directory under Pods/spec.name.
         #
-        # It returns a array of messages
+        # @return [Array<String>]
         #
         def file_patterns_errors
-          Dir.chdir(config.project_pods_root + spec.name ) do
-            messages = []
-            messages += check_spec_files_exists(:source_files, '*.{h,m,mm,c,cpp}')
-            messages += check_spec_files_exists(:resources)
-            messages << "license file not found = '#{spec.license[:file]}' -> did not match any file" if spec.license && spec.license[:file] && pod_dir.glob(spec.license[:file]).empty?
-            messages.compact
-          end
+          messages = []
+          messages << "The sources did not match any file"         if !@spec.source_files.empty? && @pod.source_files.empty?
+          messages << "The resources did not match any file"       if !@spec.resources.empty? && @pod.resources.empty?
+          messages << "The preserve_paths did not match any file"  if !@spec.preserve_paths.empty? && @pod.preserve_paths.empty?
+          messages << "The exclude_headers did not match any file" if !@spec.exclude_headers.empty? && @pod.exclude_headers.empty?
+          messages
         end
 
-        def check_spec_files_exists(accessor, options = {})
-          result = []
-          patterns = spec.send(accessor)
-          patterns.each do |original_pattern|
-            pattern = pod_dir + original_pattern
-            if pattern.directory? && options[:glob]
-              pattern += options[:glob]
-            end
-            result << "[#{accessor} = '#{original_pattern}'] -> did not match any file" if pattern.glob.empty?
-          end
-          result
+        def file_patterns_warnings
+          messages = []
+          messages << "Unable to find a license file" unless @pod.license_file
+          messages
         end
       end
 
