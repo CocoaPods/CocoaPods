@@ -92,15 +92,15 @@ module Pod
       def create_files(pods, sandbox)
         if @podfile.generate_bridge_support?
           bridge_support_metadata_path = sandbox.root + @target_definition.bridge_support_name
-          puts "* Generating BridgeSupport metadata file at `#{bridge_support_metadata_path}'" if config.verbose?
+          puts "- Generating BridgeSupport metadata file at `#{bridge_support_metadata_path}'" if config.verbose?
           bridge_support_generator_for(pods, sandbox).save_as(bridge_support_metadata_path)
           copy_resources_script_for(pods).resources << @target_definition.bridge_support_name
         end
-        puts "* Generating xcconfig file at `#{sandbox.root + @target_definition.xcconfig_name}'" if config.verbose?
+        puts "- Generating xcconfig file at `#{sandbox.root + @target_definition.xcconfig_name}'" if config.verbose?
         xcconfig.save_as(sandbox.root + @target_definition.xcconfig_name)
-        puts "* Generating prefix header at `#{sandbox.root + @target_definition.prefix_header_name}'" if config.verbose?
+        puts "- Generating prefix header at `#{sandbox.root + @target_definition.prefix_header_name}'" if config.verbose?
         save_prefix_header_as(sandbox.root + @target_definition.prefix_header_name, pods)
-        puts "* Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?
+        puts "- Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?
         copy_resources_script_for(pods).save_as(sandbox.root + @target_definition.copy_resources_script_name)
       end
 

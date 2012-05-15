@@ -48,18 +48,17 @@ module Pod
       pods.each do |pod|
         unless config.silent?
           marker = config.verbose ? "\n-> ".green : ''
-          name = pod.top_specification.preferred_dependency ? "#{pod.top_specification.name}/#{pod.top_specification.preferred_dependency} (#{pod.top_specification.version})" : pod.name
+          name = pod.top_specification.preferred_dependency ? "#{pod.top_specification.name}/#{pod.top_specification.preferred_dependency} (#{pod.top_specification.version})" : pod.to_s
           puts marker << ( pod.exists? ? "Using #{name}" : "Installing #{name}".green )
         end
 
-        should_install = !pod.exists?
-        if should_install
+        unless pod.exists?
           downloader = Downloader.for_pod(pod)
           downloader.download
+          # The docs need to be generated before cleaning
+          generate_docs(pod)
+          pod.clean if config.clean
         end
-
-        generate_docs(pod)
-        pod.clean if config.clean && should_install
       end
     end
 
@@ -67,12 +66,11 @@ module Pod
     def generate_docs(pod)
       doc_generator = Generator::Documentation.new(pod)
       if ( config.generate_docs? && !doc_generator.already_installed? ) || config.force_doc?
-        message = "Installing documentation"
+        puts "-> Installing documentation" if config.verbose?
         doc_generator.generate(config.doc_install?)
       else
-        message = "Using existing documentation"
+        puts "-> Using existing documentation"
       end
-      puts "-> ".green << message << " for #{pod.name} (#{pod.top_specification.version})" if config.verbose?
     end
 
     def install!
@@ -93,11 +91,11 @@ module Pod
       generate_lock_file!(specifications)
       generate_dummy_source
 
-      puts "* Running post install hooks" if config.verbose?
+      puts "- Running post install hooks" if config.verbose?
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
       run_post_install_hooks
 
-      puts "* Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
+      puts "- Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
       project.save_as(@sandbox.project_path)
 
       UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?

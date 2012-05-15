@@ -7,8 +7,14 @@ module Pod
           raise Informative, "Unable to locate the executable `#{name}'"
         end
         if Config.instance.verbose?
-          puts "-> [#{Dir.pwd}] $ #{bin} #{command}"
-          `#{bin} #{command} 1>&2`
+          print "   $ #{name} #{command.length > 20 ? command[0..20] + '...' : command}\r"
+          $stdout.flush
+
+          output = `#{bin} #{command} 2>&1`
+
+          puts "   #{$?.exitstatus.zero? ? '-' : '!'.red} #{name} #{command}"
+          output = output.gsub(/^ */,'     ')
+          puts output unless output.strip.empty?
         else
           `#{bin} #{command} 2> /dev/null`
         end
