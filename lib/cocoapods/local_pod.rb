@@ -120,14 +120,30 @@ module Pod
       specifications.map { |s| s.xcconfig }.reduce(:merge)
     end
 
-    #TODO: fix
     def add_to_target(target)
-      implementation_files.each do |file|
-        # TODO: respect the compiler flags of each subspec
-        target.add_source_file(file, nil, top_specification.compiler_flags.strip)
+      sources_files_by_specification.each do | spec, files |
+        files.each do |file|
+          target.add_source_file(file, nil, spec.compiler_flags.strip)
+        end
       end
     end
 
+    # returns an hash where the source_files are groupped by specification.
+    # If the same file is required by two specifications the one at the
+    # higher level in the inheritance chain wins.
+    def sources_files_by_specification
+      files_by_spec   = {}
+      processed_files = []
+      specifications.sort_by { |s| s.name.length }.each do |spec|
+        files = []
+        expanded_paths(spec.source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => true).each do | file |
+          files << file unless processed_files.include?(file)
+        end
+        files_by_spec[spec] = files
+        processed_files    += files
+      end
+      files_by_spec
+    end
 
     def requires_arc?
       top_specification.requires_arc
@@ -150,13 +166,17 @@ module Pod
     # TODO this is being overriden in the RestKit 0.9.4 spec, need to do
     # something with that, and this method also still exists in Specification.
     def copy_header_mappings
-      search_path_headers = header_files - chained_expanded_paths(:exclude_headers, :relative_to_sandbox => true)
+      search_path_headers = header_files - exclude_headers
       search_path_headers.inject({}) do |mappings, from|
         from_without_prefix = from.relative_path_from(relative_root)
         to = top_specification.header_dir + top_specification.copy_header_mapping(from_without_prefix)
         (mappings[to.dirname] ||= []) << from
         mappings
       end
+    end
+
+    def exclude_headers
+      chained_expanded_paths(:exclude_headers, :relative_to_sandbox => true)
     end
 
     def chained_expanded_paths(accessor, options = {})
