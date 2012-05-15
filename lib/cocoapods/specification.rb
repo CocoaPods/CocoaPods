@@ -406,7 +406,7 @@ module Pod
     end
 
     def to_s
-      preferred_dependency ? "#{name}/#{preferred_dependency} (#{version})" : "#{name} (#{version})"
+      "#{name} (#{version})"
     end
 
     def inspect

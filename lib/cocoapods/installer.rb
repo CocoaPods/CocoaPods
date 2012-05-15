@@ -48,7 +48,8 @@ module Pod
       pods.each do |pod|
         unless config.silent?
           marker = config.verbose ? "\n-> ".green : ''
-          puts marker << ( pod.exists? ? "Using #{pod}" : "Installing #{pod}".green )
+          name = pod.top_specification.preferred_dependency ? "#{pod.top_specification.name}/#{pod.top_specification.preferred_dependency} (#{pod.top_specification.version})" : pod.name
+          puts marker << ( pod.exists? ? "Using #{name}" : "Installing #{name}".green )
         end
 
         should_install = !pod.exists?
