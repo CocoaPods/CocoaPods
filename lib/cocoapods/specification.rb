@@ -35,7 +35,7 @@ module Pod
       end
 
       # multi-platform attributes
-      %w[ source_files resources preserve_paths frameworks libraries dependencies compiler_flags].each do |attr|
+      %w[ source_files resources preserve_paths exclude_headers frameworks libraries dependencies compiler_flags].each do |attr|
         instance_variable_set( "@#{attr}", { :ios => [], :osx => [] } )
       end
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
@@ -178,8 +178,10 @@ module Pod
     top_attr_accessor :license,             lambda { |l| ( l.kind_of? String ) ? { :type => l } : l }
     top_attr_accessor :version,             lambda { |v| Version.new(v) }
     top_attr_accessor :authors,             lambda { |a| parse_authors(a) }
+    top_attr_accessor :header_mappings_dir, lambda { |file| Pathname.new(file) } # If not provided the headers files are flattened
     top_attr_accessor :prefix_header_file,  lambda { |file| Pathname.new(file) }
     top_attr_accessor :prefix_header_contents
+
 
     top_attr_reader   :header_dir,          lambda {|instance, ivar| ivar || instance.pod_destroot_name }
     top_attr_writer   :header_dir,          lambda {|dir| Pathname.new(dir) }
@@ -199,7 +201,8 @@ module Pod
 
     pltf_chained_attr_accessor  :source_files,    lambda {|value, current| pattern_list(value) }
     pltf_chained_attr_accessor  :resources,       lambda {|value, current| pattern_list(value) }
-    pltf_chained_attr_accessor  :preserve_paths,  lambda {|value, current| pattern_list(value) }
+    pltf_chained_attr_accessor  :preserve_paths,  lambda {|value, current| pattern_list(value) } # Paths that should not be cleaned
+    pltf_chained_attr_accessor  :exclude_headers, lambda {|value, current| pattern_list(value) } # Headers to be excluded from being added to search paths (RestKit)
     pltf_chained_attr_accessor  :frameworks,      lambda {|value, current| current << value }
     pltf_chained_attr_accessor  :libraries,       lambda {|value, current| current << value }
 
@@ -369,10 +372,10 @@ module Pod
     # in the pod's header dir.
     #
     # By default all headers are copied to the pod's header dir without any
-    # namespacing. You can, however, override this method in the podspec, or
-    # copy_header_mappings for full control.
+    # namespacing. However if the top level attribute accessor header_mappings_dir
+    # is specified the namespacing will be preserved from that directory.
     def copy_header_mapping(from)
-      @parent ? top_level_parent.copy_header_mapping(from) : from.basename
+      header_mappings_dir ? from.relative_path_from(header_mappings_dir) : from.basename
     end
 
     # This is a convenience method which gets called after all pods have been

@@ -150,7 +150,8 @@ module Pod
     # TODO this is being overriden in the RestKit 0.9.4 spec, need to do
     # something with that, and this method also still exists in Specification.
     def copy_header_mappings
-      header_files.inject({}) do |mappings, from|
+      search_path_headers = header_files - chained_expanded_paths(:exclude_headers, :relative_to_sandbox => true)
+      search_path_headers.inject({}) do |mappings, from|
         from_without_prefix = from.relative_path_from(relative_root)
         to = top_specification.header_dir + top_specification.copy_header_mapping(from_without_prefix)
         (mappings[to.dirname] ||= []) << from
