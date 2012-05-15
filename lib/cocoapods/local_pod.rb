@@ -13,15 +13,18 @@ module Pod
       new(Specification.from_file(podspec), sandbox, platform)
     end
 
-    def root
-      @sandbox.root + top_specification.name
-    end
-
-    # Adding specifications is idempotent
+    # Method to add the specifications sharing the same top level
+    # parent. With this information the local pod can determine the
+    # paths to clean and avoid duplication in file processing.
+    # Adding specifications is idempotent.
     def add_specification(spec)
       raise Informative, "[Local Pod] Attempt to add a specification from another pod" unless spec.top_level_parent == top_specification
       spec.activate_platform(platform)
       @specifications << spec unless @specifications.include?(spec)
+    end
+
+    def root
+      @sandbox.root + top_specification.name
     end
 
     def subspecs
@@ -42,6 +45,8 @@ module Pod
       top_specification.active_platform
     end
 
+    # Installation methods
+
     def create
       root.mkpath unless exists?
     end
@@ -59,10 +64,10 @@ module Pod
       root.rmtree if exists?
     end
 
+    # It deletes all the files identified by clean_paths, then it removes
+    # all the empty folders or symlinks.
     def clean
       clean_paths.each { |path| FileUtils.rm_rf(path) }
-
-      # remove empty diretories
       Dir.glob("#{root}/**/{*,.*}").
         sort_by(&:length).reverse.            # Clean the deepest paths first to determine if the containing folders are empty
         reject { |d| d =~ /\/\.\.?$/ }.       # Remove the `.` and `..` paths
@@ -71,6 +76,8 @@ module Pod
           FileUtils.rm_rf(d) if File.symlink?(d) || (Dir.entries(d) == %w[ . .. ]) # Remove the symlink and the empty dirs
         end
     end
+
+    # File attributes
 
     def prefix_header_file
       if prefix_header = top_specification.prefix_header_file
@@ -110,14 +117,16 @@ module Pod
       source_files.select { |f| f.extname == '.h' }
     end
 
+    def xcconfig
+      specifications.map { |s| s.xcconfig }.reduce(:merge)
+    end
+
+    # Integration methods
+
     def link_headers
       copy_header_mappings.each do |namespaced_path, files|
         @sandbox.add_header_files(namespaced_path, files)
       end
-    end
-
-    def xcconfig
-      specifications.map { |s| s.xcconfig }.reduce(:merge)
     end
 
     def add_to_target(target)
@@ -125,6 +134,39 @@ module Pod
         files.each do |file|
           target.add_source_file(file, nil, spec.compiler_flags.strip)
         end
+      end
+    end
+
+    def requires_arc?
+      top_specification.requires_arc
+    end
+
+    # def dependencies
+    #   top_specification.dependencies
+    # end
+
+    private
+
+    def implementation_files
+      source_files.select { |f| f.extname != '.h' }
+    end
+
+    def relative_root
+      root.relative_path_from(@sandbox.root)
+    end
+
+    # TODO this is being overriden in the RestKit 0.9.4 spec, need to do
+    # something with that, and this method also still exists in Specification.
+    #
+    # This is not overriden anymore in specification refactor and the code
+    # Pod::Specification#copy_header_mapping can be moved here.
+    def copy_header_mappings
+      search_path_headers = header_files - exclude_headers
+      search_path_headers.inject({}) do |mappings, from|
+        from_without_prefix = from.relative_path_from(relative_root)
+        to = top_specification.header_dir + top_specification.copy_header_mapping(from_without_prefix)
+        (mappings[to.dirname] ||= []) << from
+        mappings
       end
     end
 
@@ -143,36 +185,6 @@ module Pod
         processed_files    += files
       end
       files_by_spec
-    end
-
-    def requires_arc?
-      top_specification.requires_arc
-    end
-
-    def dependencies
-      top_specification.dependencies
-    end
-
-    private
-
-    def implementation_files
-      source_files.select { |f| f.extname != '.h' }
-    end
-
-    def relative_root
-      root.relative_path_from(@sandbox.root)
-    end
-
-    # TODO this is being overriden in the RestKit 0.9.4 spec, need to do
-    # something with that, and this method also still exists in Specification.
-    def copy_header_mappings
-      search_path_headers = header_files - exclude_headers
-      search_path_headers.inject({}) do |mappings, from|
-        from_without_prefix = from.relative_path_from(relative_root)
-        to = top_specification.header_dir + top_specification.copy_header_mapping(from_without_prefix)
-        (mappings[to.dirname] ||= []) << from
-        mappings
-      end
     end
 
     def exclude_headers
