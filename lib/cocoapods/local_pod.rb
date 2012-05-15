@@ -102,15 +102,17 @@ module Pod
     end
 
     def readme_file
-      expanded_paths(%w[README* readme*]).first
+      expanded_paths(%w[ README{*,.*} readme{*,.*} ]).first
     end
 
     def license_file
-      expanded_paths(%w[ LICENSE* licence* ]).first
+      file = top_specification.license[:file] if top_specification.license
+      file || expanded_paths(%w[ LICENSE{*,.*} licence{*,.*} ]).first
     end
 
+    # TODO: implement case insensitive search
     def preserve_paths
-      chained_expanded_paths(:preserve_paths) + expanded_paths(%w[ *.podspec notice* NOTICE* ])
+      chained_expanded_paths(:preserve_paths) + expanded_paths(%w[ *.podspec notice* NOTICE* CREDITS* ])
     end
 
     def header_files
@@ -119,6 +121,16 @@ module Pod
 
     def xcconfig
       specifications.map { |s| s.xcconfig }.reduce(:merge)
+    end
+
+    # Method used by documentation generator. It return the source files
+    # of all the specs.
+    def all_specs_source_files
+      specs = top_specification.recursive_subspecs << top_specification
+      files = specs.map { |s| expanded_paths(s.source_files, :glob => '*.{h,m,mm,c,cpp}') }.compact.flatten.uniq
+
+      puts files.join("\n").reversed
+      files
     end
 
     # Integration methods
@@ -140,10 +152,6 @@ module Pod
     def requires_arc?
       top_specification.requires_arc
     end
-
-    # def dependencies
-    #   top_specification.dependencies
-    # end
 
     private
 

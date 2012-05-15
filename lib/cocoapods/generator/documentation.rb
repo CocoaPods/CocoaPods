@@ -42,13 +42,11 @@ module Pod
       end
 
       def files
-        @pod.source_files(false).map(&:to_s)
+        @pod.all_specs_source_files.map(&:to_s)
       end
 
       def index_file
-        @pod.chdir do
-          Dir.glob('README*', File::FNM_CASEFOLD).first
-        end
+        @pod.readme_file
       end
 
       def spec_appledoc_options
@@ -66,8 +64,7 @@ module Pod
           '--keep-undocumented-objects',
           '--keep-undocumented-members',
           '--keep-intermediate-files',
-          '--exit-threshold', '2'
-          # appledoc exits with 1 if a warning was logged
+          '--exit-threshold', '2' # appledoc terminates with an exits status of 1 if a warning was logged
         ]
         index = index_file
         options += ['--index-desc', index] if index

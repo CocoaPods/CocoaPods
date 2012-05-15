@@ -55,7 +55,8 @@ module Pod
         unless pod.exists?
           downloader = Downloader.for_pod(pod)
           downloader.download
-          # The docs need to be generated before cleaning
+          # The docs need to be generated before cleaning because
+          # the documentation is created for all the subspecs.
           generate_docs(pod)
           pod.clean if config.clean
         end
@@ -69,7 +70,7 @@ module Pod
         puts "-> Installing documentation" if config.verbose?
         doc_generator.generate(config.doc_install?)
       else
-        puts "-> Using existing documentation"
+        puts "-> Using existing documentation" if config.verbose?
       end
     end
 
