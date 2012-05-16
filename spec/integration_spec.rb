@@ -69,7 +69,7 @@ else
         target = target_definition
         with_xcodebuild_available do
           Dir.chdir(config.project_pods_root) do
-            puts "\n[!] Compiling #{target.label} static library..."
+            print "[!] Compiling #{target.label}...\r"
             should_successfully_perform "xcodebuild -target '#{target.label}'"
             lib_path = config.project_pods_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + target.lib_name
             `lipo -info '#{lib_path}'`.should.include "architecture: #{target.platform == :ios ? 'armv7' : 'x86_64'}"
@@ -117,7 +117,7 @@ else
           }
         end
 
-        it "install a dummy source file" do
+        it "installs a dummy source file" do
           create_config!
           podfile = Pod::Podfile.new do
             self.platform :ios

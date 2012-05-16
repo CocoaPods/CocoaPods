@@ -2,18 +2,15 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Installer" do
   before do
-    @config_before = config
-    Pod::Config.instance = nil
-    config.silent = true
     config.repos_dir = fixture('spec-repos')
     config.project_pods_root = fixture('integration')
   end
 
   after do
-    Pod::Config.instance = @config_before
+    config.repos_dir = SpecHelper.tmp_repos_path
   end
 
-  describe ", by default," do
+  describe "by default" do
     before do
       podfile = Pod::Podfile.new do
         platform :ios
