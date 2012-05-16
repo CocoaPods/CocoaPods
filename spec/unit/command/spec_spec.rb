@@ -53,7 +53,7 @@ describe "Pod::Command::Spec::Linter" do
   end
 
   it "fails validation if the specification contains warnings" do
-    spec, file = write_podspec(stub_podspec)
+    spec, file = write_podspec(stub_podspec(/.*license.*/, ""))
     linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = false, true
     linter.lint.should == false
@@ -62,7 +62,7 @@ describe "Pod::Command::Spec::Linter" do
   end
 
   it "validates in lenient mode if there are no erros but there are warnings" do
-    spec, file = write_podspec(stub_podspec)
+    spec, file = write_podspec(stub_podspec(/.*license.*/, ""))
     linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = true, true
     linter.lint.should == true
@@ -87,7 +87,7 @@ describe "Pod::Command::Spec::Linter" do
     linter.lenient, linter.quick = false, true
     linter.lint.should == false
     linter.errors.should.be.empty
-    linter.warnings.join(' | ').should =~ /`config.ios\?' and `config.osx\?' are deprecated and will be removed in version 0.7/
+    linter.warnings.join(' | ').should =~ /`config.ios\?' and `config.osx\?' are deprecated/
   end
 
  it "uses xcodebuild to generate notes and warnings" do
@@ -104,6 +104,6 @@ describe "Pod::Command::Spec::Linter" do
     linter.stubs(:xcodebuild_output).returns([])
     linter.lenient, linter.quick = false, false
     linter.lint.should == false
-    linter.errors.join(' | ').should.include "[resources = 'WRONG_FOLDER'] -> did not match any file"
+    linter.errors.join(' | ').should.include "The resources did not match any file"
   end
 end

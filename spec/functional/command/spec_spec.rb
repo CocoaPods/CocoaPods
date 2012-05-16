@@ -125,17 +125,23 @@ describe "Pod::Command::Spec#lint" do
     end
   end
 
+  before do
+    text = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
+    text.gsub!(/.*license.*/, "")
+    file = temporary_directory + 'JSONKit.podspec'
+    File.open(file, 'w') {|f| f.write(text) }
+    @spec_path = file.to_s
+  end
+
   it "lints a givent podspec" do
-    spec_file = fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec'
-    cmd = command('spec', 'lint', '--quick', spec_file.to_s)
+    cmd = command('spec', 'lint', '--quick', @spec_path)
     lambda { cmd.run }.should.raise Pod::Informative
-    cmd.output.should.include "Missing license file or text"
+    cmd.output.should.include "Missing license type"
   end
 
   it "respects the -only--errors option" do
-    spec_file = fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec'
-    cmd = command('spec', 'lint', '--quick', '--only-errors', spec_file.to_s)
+    cmd = command('spec', 'lint', '--quick', '--only-errors', @spec_path)
     lambda { cmd.run }.should.not.raise
-    cmd.output.should.include "Missing license file or text"
+    cmd.output.should.include "Missing license type"
   end
 end
