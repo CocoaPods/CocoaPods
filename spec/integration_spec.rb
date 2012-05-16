@@ -25,6 +25,7 @@ else
     describe "A full (integration spec) installation for platform `#{platform}'" do
       extend SpecHelper::TemporaryDirectory
 
+
       def create_config!
         Pod::Config.instance = nil
         if ENV['VERBOSE_SPECS']
@@ -50,22 +51,16 @@ else
         Pod::Config.instance = @config_before
       end
 
-      # This is so we can run at least the specs that don't use xcodebuild on Travis.
-      def with_xcodebuild_available
-        unless `which xcodebuild`.strip.empty?
-          yield
-        else
-          puts "\n[!] Skipping xcodebuild, because it can't be found."
-        end
-      end
-
       def should_successfully_perform(command)
         output = `#{command} 2>&1`
         puts output unless $?.success?
         $?.should.be.success
       end
 
+      puts "  ! ".red << "Skipping xcodebuild based checks, because it can't be found." if `which xcodebuild`.strip.empty?
+
       def should_xcodebuild(target_definition)
+        return if `which xcodebuilda`.strip.empty?
         target = target_definition
         with_xcodebuild_available do
           Dir.chdir(config.project_pods_root) do

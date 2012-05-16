@@ -62,9 +62,9 @@ module Bacon
   class Context
     def xit(description, *args)
       Bacon.handle_requirement(description, true) {[]}
-      title = "\e[33m-> Disabled Specificiations\e[0m"
+      title = "\e[33m> Disabled Specificiations\e[0m"
       ErrorLog.insert(0,"#{title}\n") unless ErrorLog.include?(title)
-      ErrorLog.insert(title.length, "\n - #{self.name} #{description}")
+      ErrorLog.insert(title.length, "\n  - #{self.name} #{description}")
     end
   end
 end
