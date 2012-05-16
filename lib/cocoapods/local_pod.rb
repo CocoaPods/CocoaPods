@@ -127,10 +127,7 @@ module Pod
     # of all the specs.
     def all_specs_source_files
       specs = top_specification.recursive_subspecs << top_specification
-      files = specs.map { |s| expanded_paths(s.source_files, :glob => '*.{h,m,mm,c,cpp}') }.compact.flatten.uniq
-
-      puts files.join("\n").reversed
-      files
+      specs.map { |s| expanded_paths(s.source_files, :glob => '*.{h,m,mm,c,cpp}') }.compact.flatten.uniq
     end
 
     # Integration methods
