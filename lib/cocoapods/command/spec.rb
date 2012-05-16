@@ -187,9 +187,9 @@ module Pod
           end
 
           # Get common messages
-          @errors   = @platform_errors.values.reduce(:&)
-          @warnings = @platform_warnings.values.reduce(:&)
-          @notes    = @platform_notes.values.reduce(:&)
+          @errors   = @platform_errors.values.reduce(:&)   || []
+          @warnings = @platform_warnings.values.reduce(:&) || []
+          @notes    = @platform_notes.values.reduce(:&)    || []
 
           platforms.each do |platform|
             # Mark platform specific messages
