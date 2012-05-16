@@ -2,8 +2,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "Pod::Command::Repo" do
   extend SpecHelper::Command
-  extend SpecHelper::Git
   extend SpecHelper::TemporaryDirectory
+  extend SpecHelper::TemporaryRepos
 
   it "runs with correct parameters" do
     lambda { run_command('repo', 'add', 'NAME', 'URL') }.should.not.raise

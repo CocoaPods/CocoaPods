@@ -2,8 +2,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "Pod::Command::Search" do
   extend SpecHelper::Command
-  extend SpecHelper::Git
   extend SpecHelper::TemporaryDirectory
+  extend SpecHelper::TemporaryRepos
 
   before do
     config.repos_dir = fixture('spec-repos')

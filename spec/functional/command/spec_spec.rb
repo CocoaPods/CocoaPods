@@ -18,7 +18,7 @@ describe "Pod::Command::Spec#create" do
   extend SpecHelper::Command
   extend SpecHelper::Github
   extend SpecHelper::TemporaryDirectory
-  extend SpecHelper::Git
+  extend SpecHelper::TemporaryRepos
 
   it "creates a new podspec stub file" do
     run_command('spec', 'create', 'Bananas')
@@ -94,7 +94,7 @@ end
 describe "Pod::Command::Spec#lint" do
   extend SpecHelper::Command
   extend SpecHelper::TemporaryDirectory
-  extend SpecHelper::Git
+  extend SpecHelper::TemporaryRepos
 
   before do
     config.repos_dir = fixture('spec-repos')

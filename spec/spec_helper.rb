@@ -15,9 +15,9 @@ $:.unshift((ROOT + 'spec').to_s)
 require 'spec_helper/color_output'
 require 'spec_helper/command'
 require 'spec_helper/fixture'
-require 'spec_helper/git'
 require 'spec_helper/github'
 require 'spec_helper/temporary_directory'
+require 'spec_helper/temporary_repos'
 
 module Bacon
   extend ColorOutput
