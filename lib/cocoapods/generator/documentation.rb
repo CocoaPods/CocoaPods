@@ -42,11 +42,11 @@ module Pod
       end
 
       def files
-        @pod.all_specs_source_files.map(&:to_s)
+        @pod.all_specs_source_files.map{ |f| f.relative_path_from(@pod.root).to_s }
       end
 
       def index_file
-        @pod.readme_file
+        @pod.readme_file.relative_path_from(@pod.root).to_s if @pod.readme_file
       end
 
       def spec_appledoc_options
@@ -66,8 +66,7 @@ module Pod
           '--keep-intermediate-files',
           '--exit-threshold', '2' # appledoc terminates with an exits status of 1 if a warning was logged
         ]
-        index = index_file
-        options += ['--index-desc', index] if index
+        options += ['--index-desc', index_file] if index_file
         options += spec_appledoc_options
       end
 
