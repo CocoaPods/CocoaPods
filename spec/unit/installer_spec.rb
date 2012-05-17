@@ -6,10 +6,6 @@ describe "Pod::Installer" do
     config.project_pods_root = fixture('integration')
   end
 
-  after do
-    config.repos_dir = SpecHelper.tmp_repos_path
-  end
-
   describe "by default" do
     before do
       podfile = Pod::Podfile.new do

@@ -9,11 +9,6 @@ describe "Pod::Command::Search" do
     config.repos_dir = fixture('spec-repos')
   end
 
-  after do
-    config.repos_dir = tmp_repos_path
-  end
-
-
   it "runs with correct parameters" do
     lambda { run_command('search', 'table') }.should.not.raise
     lambda { run_command('search', 'table', '--full') }.should.not.raise

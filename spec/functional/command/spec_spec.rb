@@ -100,10 +100,6 @@ describe "Pod::Command::Spec#lint" do
     config.repos_dir = fixture('spec-repos')
   end
 
-  after do
-    config.repos_dir = tmp_repos_path
-  end
-
   it "lints a repo" do
     # The fixture has an error due to a name mismatch
     cmd = command('spec', 'lint', 'master')

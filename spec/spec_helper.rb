@@ -18,6 +18,7 @@ require 'spec_helper/fixture'
 require 'spec_helper/github'
 require 'spec_helper/temporary_directory'
 require 'spec_helper/temporary_repos'
+require 'spec_helper/config'
 
 module Bacon
   class Context
@@ -31,8 +32,9 @@ module Bacon
 end
 
 config = Pod::Config.instance
-config.silent = true
-config.repos_dir = SpecHelper.tmp_repos_path
+config.silent       = true
+config.repos_dir    = SpecHelper.tmp_repos_path
+config.project_root = SpecHelper.temporary_directory
 Pod::Specification::Statistics.instance.cache_file = nil
 
 require 'tmpdir'

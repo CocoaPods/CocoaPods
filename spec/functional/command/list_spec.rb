@@ -7,10 +7,6 @@ describe "Pod::Command::List" do
     config.repos_dir = fixture('spec-repos')
   end
 
-  after do
-    config.repos_dir = tmp_repos_path
-  end
-
   def command(arguments = argv)
     command = Pod::Command::List.new(arguments)
   end

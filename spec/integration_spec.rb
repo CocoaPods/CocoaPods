@@ -25,30 +25,15 @@ else
     describe "A full (integration spec) installation for platform `#{platform}'" do
       extend SpecHelper::TemporaryDirectory
 
-
       def create_config!
-        Pod::Config.instance = nil
-        if ENV['VERBOSE_SPECS']
-          config.verbose = true
-        else
-          config.silent = true
-        end
         config.repos_dir = fixture('spec-repos')
         config.project_root = temporary_directory
-        config.doc_install = false
         config.integrate_targets = false
       end
 
       before do
         fixture('spec-repos/master') # ensure the archive is unpacked
-
-        @config_before = config
         create_config!
-        config.generate_docs = false
-      end
-
-      after do
-        Pod::Config.instance = @config_before
       end
 
       def should_successfully_perform(command)
@@ -193,7 +178,16 @@ else
 
         unless `which appledoc`.strip.empty?
           it "generates documentation of all pods by default" do
-            create_config!
+            ::Pod::Config.instance = nil
+            ::Pod::Config.instance.tap do |c|
+              ENV['VERBOSE_SPECS'] ? c.verbose = true : c.silent = true
+              c.doc_install   = false
+              c.repos_dir = fixture('spec-repos')
+              c.project_root = temporary_directory
+              c.integrate_targets = false
+            end
+
+            Pod::Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)
 
             podfile = Pod::Podfile.new do
               self.platform :ios
@@ -201,9 +195,6 @@ else
               dependency 'JSONKit', '1.4'
               dependency 'SSToolkit'
             end
-
-            Pod::Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)
-
             installer = SpecHelper::Installer.new(podfile)
             installer.install!
 
@@ -213,7 +204,7 @@ else
             doc.should.include?('<title>SSToolkit 0.1.2 Reference</title>')
           end
         else
-          puts "[!] Skipping documentation generation specs, because appledoc can't be found."
+          puts "  ! ".red << "Skipping documentation generation specs, because appledoc can't be found."
         end
       end
 

@@ -2,12 +2,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Config" do
   before do
-    @original_config = config
     Pod::Config.instance = nil
-  end
-
-  after do
-    Pod::Config.instance = @original_config
   end
 
   it "returns the singleton config instance" do
@@ -22,7 +17,9 @@ describe "Pod::Config" do
     extend SpecHelper::TemporaryDirectory
 
     it "returns the path to the project root" do
+      config.project_root = nil
       config.project_root.should == Pathname.pwd
+      config.project_root = temporary_directory
     end
 
     it "returns the path to the project Podfile if it exists" do

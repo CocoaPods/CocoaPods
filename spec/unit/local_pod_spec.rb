@@ -89,10 +89,6 @@ describe Pod::LocalPod do
     #@destroot = fixture('integration/SSZipArchive')
     #end
 
-    #after do
-    #config.project_pods_root = nil
-    #end
-
     xit "returns the list of files that the source_files pattern expand to" do
       files = @destroot.glob('**/*.{h,c,m}')
       files = files.map { |file| file.relative_path_from(config.project_pods_root) }

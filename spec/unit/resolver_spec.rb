@@ -12,10 +12,6 @@ describe "Pod::Resolver" do
     @resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
   end
 
-  after do
-    config.repos_dir = SpecHelper.tmp_repos_path
-  end
-
   xit "holds the context state, such as cached specification sets" do
     @resolver.resolve
     @resolver.cached_sets.values.sort_by(&:name).should == [
