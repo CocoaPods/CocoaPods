@@ -125,9 +125,10 @@ module Pod
 
     # Method used by documentation generator. It return the source files
     # of all the specs.
-    def all_specs_source_files
+    def all_specs_public_header_files
+      #TODO: merge with #221
       specs = top_specification.recursive_subspecs << top_specification
-      specs.map { |s| expanded_paths(s.source_files, :glob => '*.{h,m,mm,c,cpp}') }.compact.flatten.uniq
+      specs.map { |s| expanded_paths(s.source_files, :glob => '*.{h}') }.compact.flatten.select { |f| f.extname == '.h' }.uniq
     end
 
     # Integration methods
