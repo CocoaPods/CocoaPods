@@ -98,6 +98,7 @@ module Pod
         end
 
         def distance_from_now_in_words(from_time)
+          return nil unless from_time
           from_time = Time.parse(from_time)
           to_time = Time.now
           distance_in_days = (((to_time - from_time).abs)/60/60/24).round
