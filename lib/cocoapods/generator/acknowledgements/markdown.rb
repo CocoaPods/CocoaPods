@@ -13,7 +13,7 @@ module Pod
       end
 
       def title_from_string(string)
-        if string != ""
+        if !string.empty?
           "#{string}\n" + '-' * string.length + "\n"
         end
       end
