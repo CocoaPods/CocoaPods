@@ -165,6 +165,7 @@ module Pod
         def description
           "from `#{@params[:git]}'".tap do |description|
             description << ", commit `#{@params[:commit]}'" if @params[:commit]
+            description << ", branch `#{@params[:branch]}'" if @params[:branch]
             description << ", tag `#{@params[:tag]}'" if @params[:tag]
           end
         end

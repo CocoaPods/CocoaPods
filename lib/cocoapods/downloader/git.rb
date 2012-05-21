@@ -14,8 +14,11 @@ module Pod
       def download
         prepare_cache
         puts '->'.green << ' Cloning git repo' if config.verbose?
+        # if a branch is specified, it takes priority over a commit
         if options[:tag]
           download_tag
+        elsif options[:branch]
+          download_branch
         elsif options[:commit]
           download_commit
         else
@@ -88,6 +91,13 @@ module Pod
         raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless $? == 0
       end
 
+      def ensure_remote_branch_exists(branch)
+        Dir.chdir(cache_path) { git "branch -r | grep #{branch}$" } # check for remote branch and do suffix matching ($ anchor)
+        return if $? == 0
+        
+        raise Informative, "[!] Cache unable to find git reference `#{branch}' for `#{url}' (#{$?}).".red
+      end
+      
       def download_head
         update_cache
         git "clone '#{clone_url}' '#{target_path}'"
@@ -111,7 +121,17 @@ module Pod
           git "checkout -b activated-pod-commit #{options[:commit]}"
         end
       end
-
+      
+      def download_branch
+        ensure_remote_branch_exists(options[:branch])
+        git "clone '#{clone_url}' '#{target_path}'"
+        Dir.chdir(target_path) do
+          git "remote add upstream #{@url}" # we need to add the original url, not the cache url
+          git "fetch -q upstream" # refresh the branches
+          git "checkout --track -b activated-pod-commit upstream/#{options[:branch]}" # create a new tracking branch
+        end
+      end
+      
       def clean
         (target_path + '.git').rmtree
       end
@@ -129,7 +149,9 @@ module Pod
       def download_commit
         download_only? ? download_and_extract_tarball(options[:commit]) : super
       end
-
+      
+      def download_branch
+        download_only ? download_and_extract_tarball(options[:head]) : super
       def clean
         if download_only?
           FileUtils.rm_f(tmp_path)
