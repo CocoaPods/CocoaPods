@@ -152,6 +152,8 @@ module Pod
       
       def download_branch
         download_only ? download_and_extract_tarball(options[:head]) : super
+      end
+      
       def clean
         if download_only?
           FileUtils.rm_f(tmp_path)
