@@ -78,6 +78,8 @@ module Pod
         options = appledoc_options
         options += ['--output', @target_path.to_s]
         options += install ? ['--create-docset'] : ['--no-create-docset']
+        # TODO: passing the files explicitly clutters output and chokes on very long list (AWSiOSSDK Spec).
+        # It is possible to just pass the dir of the pod, however this would include other files like demo projects.
         options += files
 
         @target_path.mkpath

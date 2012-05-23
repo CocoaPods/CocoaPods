@@ -142,6 +142,8 @@ module Pod
     def add_to_target(target)
       sources_files_by_specification.each do | spec, files |
         files.each do |file|
+          # TODO: Xcodeproj::Project::Object::PBXNativeTarget#add_source_file is quite slow
+          # The issus appears to be related to the find call in line 107.
           target.add_source_file(file, nil, spec.compiler_flags.strip)
         end
       end
