@@ -2,8 +2,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "Pod::Command::Repo" do
   extend SpecHelper::Command
-  extend SpecHelper::Git
   extend SpecHelper::TemporaryDirectory
+  extend SpecHelper::TemporaryRepos
 
   it "runs with correct parameters" do
     lambda { run_command('repo', 'add', 'NAME', 'URL') }.should.not.raise
@@ -42,6 +42,7 @@ describe "Pod::Command::Repo" do
 
   before do
     add_repo('repo1', fixture('spec-repos/master'))
+    FileUtils.rm_rf(versions_file)
     versions_file.should.not.exist?
   end
 

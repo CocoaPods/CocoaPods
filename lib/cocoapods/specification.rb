@@ -1,5 +1,4 @@
 require 'xcodeproj/config'
-require 'colored'
 
 module Pod
   extend Config::Mixin
@@ -12,144 +11,97 @@ module Pod
     autoload :Set,        'cocoapods/specification/set'
     autoload :Statistics, 'cocoapods/specification/statistics'
 
+    ### Initalization
+
     # The file is expected to define and return a Pods::Specification.
-    def self.from_file(path)
+    # If name is equals to nil it returns the top level Specification,
+    # otherwise it returned the specification with the name that matches
+    def self.from_file(path, subspec_name = nil)
       unless path.exist?
         raise Informative, "No podspec exists at path `#{path}'."
       end
       spec = ::Pod._eval_podspec(path)
       spec.defined_in_file = path
-      spec
+      spec.subspec_by_name(subspec_name)
     end
 
-    attr_accessor :defined_in_file
+    def initialize(parent = nil, name = nil)
+      @parent, @name = parent, name
+      @define_for_platforms = [:osx, :ios]
+      @clean_paths, @subspecs = [], []
+      @deployment_target = {}
+      unless parent
+        @source = {:git => ''}
+      end
 
-    def initialize
-      post_initialize
+      # multi-platform attributes
+      %w[ source_files resources preserve_paths exclude_header_search_paths frameworks libraries dependencies compiler_flags].each do |attr|
+        instance_variable_set( "@#{attr}", { :ios => [], :osx => [] } )
+      end
+      @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
+
       yield self if block_given?
     end
 
-    # TODO This is just to work around a MacRuby bug
-    def post_initialize
-      @define_for_platforms = [:osx, :ios]
-      @clean_paths, @subspecs = [], []
-      @dependencies, @source_files, @resources = { :ios => [], :osx => [] }, { :ios => [], :osx => [] }, { :ios => [], :osx => [] }
-      @deployment_target = {}
-      @platform = Platform.new(nil)
-      @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
-      @compiler_flags = { :ios => '', :osx => '' }
-    end
+    ### Meta programming
 
-    # Attributes **without** multiple platform support
-
-    attr_accessor :name
-    attr_accessor :homepage
-    attr_accessor :description
-    attr_accessor :source
-    attr_accessor :documentation
-
-    attr_reader :version
-    def version=(version)
-      @version = Version.new(version)
-    end
-
-    def authors=(*names_and_email_addresses)
-      list = names_and_email_addresses.flatten
-      unless list.first.is_a?(Hash)
-        authors = list.last.is_a?(Hash) ? list.pop : {}
-        list.each { |name| authors[name] = nil }
-      end
-      @authors = authors || list.first
-    end
-    alias_method :author=, :authors=
-    attr_reader :authors
-
-    def summary=(summary)
-      @summary = summary
-    end
-    attr_reader :summary
-
-    def license=(license)
-      if license.kind_of?(Array)
-        @license = license[1].merge({:type => license[0]})
-      elsif license.kind_of?(String)
-        @license = {:type => license}
-      else
-        @license = license
+    # Creates a top level attribute reader. A lambda can
+    # be passed to process the ivar before returning it
+    def self.top_attr_reader(attr, read_lambda = nil)
+      define_method(attr) do
+        ivar = instance_variable_get("@#{attr}")
+        @parent ? top_level_parent.send(attr) : ( read_lambda ? read_lambda.call(self, ivar) : ivar )
       end
     end
-    attr_reader :license
 
-    def description
-      @description || summary
-    end
-
-    def part_of=(*name_and_version_requirements)
-      self.part_of_dependency = *name_and_version_requirements
-      @part_of.only_part_of_other_pod = true
-    end
-    attr_reader :part_of
-
-    def part_of_dependency=(*name_and_version_requirements)
-      @part_of = dependency(*name_and_version_requirements)
-    end
-
-    def prefix_header_file=(file)
-      @prefix_header_file = Pathname.new(file)
-    end
-    attr_reader :prefix_header_file
-
-    attr_accessor :prefix_header_contents
-
-    def clean_paths=(patterns)
-      @clean_paths = pattern_list(patterns)
-    end
-    attr_reader :clean_paths
-    alias_method :clean_path=, :clean_paths=
-
-    def header_dir=(dir)
-      @header_dir = Pathname.new(dir)
-    end
-    def header_dir
-      @header_dir || pod_destroot_name
-    end
-
-    def platform=(platform)
-      @platform = Platform.new(*platform)
-    end
-    attr_reader :platform
-
-    def platforms
-      @platform.nil? ?  @define_for_platforms.map { |platfrom| Platform.new(platfrom, @deployment_target[platfrom]) } : [platform]
-    end
-
-    def requires_arc=(requires_arc)
-      self.compiler_flags = '-fobjc-arc' if requires_arc
-      @requires_arc = requires_arc
-    end
-    attr_reader :requires_arc
-
-    def subspec(name, &block)
-      subspec = Subspec.new(self, name, &block)
-      @subspecs << subspec
-      subspec
-    end
-    attr_reader :subspecs
-
-    def recursive_subspecs
-      unless @recursive_subspecs
-        mapper = lambda do |spec|
-            spec.subspecs.map do |subspec|
-              [subspec, *mapper.call(subspec)]
-            end.flatten
-          end
-          @recursive_subspecs = mapper.call self
+    # Creates a top level attribute writer. A lambda can
+    # be passed to initalize the value
+    def self.top_attr_writer(attr, init_lambda = nil)
+      define_method("#{attr}=") do |value|
+        raise Informative, "Can't set `#{attr}' for subspecs." if @parent
+        instance_variable_set("@#{attr}",  init_lambda ? init_lambda.call(value) : value);
       end
-      @recursive_subspecs
     end
 
-    ### Attributes **with** multiple platform support
+    # Creates a top level attribute accessor. A lambda can
+    # be passed to initialize the value in the attribute writer.
+    def self.top_attr_accessor(attr, writer_labmda = nil)
+      top_attr_reader attr
+      top_attr_writer attr, writer_labmda
+    end
 
+    # Returns the value of the attribute for the active platform
+    # chained with the upstream specifications. The ivar must store
+    # the platform specific values as an array.
+    def self.pltf_chained_attr_reader(attr)
+      define_method(attr) do
+        active_plaform_check
+        ivar_value = instance_variable_get("@#{attr}")[active_platform]
+        @parent ? @parent.send(attr) + ivar_value : ( ivar_value )
+      end
+    end
+
+    def active_plaform_check
+      raise Informative, "#{self.inspect} not activated for a platform before consumption." unless active_platform
+    end
+
+    # Attribute writer that works in conjuction with the PlatformProxy.
+    def self.platform_attr_writer(attr, block = nil)
+      define_method("#{attr}=") do |value|
+        current = instance_variable_get("@#{attr}")
+        @define_for_platforms.each do |platform|
+          block ?  current[platform] = block.call(value, current[platform]) : current[platform] = value
+        end
+      end
+    end
+
+    def self.pltf_chained_attr_accessor(attr, block = nil)
+      pltf_chained_attr_reader(attr)
+      platform_attr_writer(attr, block)
+    end
+
+    # The PlatformProxy works in conjuction with Specification#_on_platform.
+    # It allows a syntax like `spec.ios.source_files = file`
     class PlatformProxy
       def initialize(specification, platform)
         @specification, @platform = specification, platform
@@ -172,100 +124,208 @@ module Pod
       PlatformProxy.new(self, :osx)
     end
 
-    def source_files=(patterns)
-      @define_for_platforms.each do |platform|
-        @source_files[platform] = pattern_list(patterns)
+    ### Deprecated attributes - TODO: remove once master repo and fixtures have been updated
+
+    attr_writer :part_of_dependency
+    attr_writer :part_of
+
+    top_attr_accessor :clean_paths, lambda { |patterns| pattern_list(patterns) }
+    alias_method :clean_path=, :clean_paths=
+
+    ### Regular attributes
+
+    attr_accessor :parent
+    attr_accessor :preferred_dependency
+    attr_accessor :summary
+
+    def name
+      @parent ? "#{@parent.name}/#{@name}" : @name
+    end
+
+    attr_writer :name
+
+    def description
+      @description || summary
+    end
+
+    # TODO: consider converting the following to top level attributes
+    # A subspec should have a summary instead of a description.
+    # Some subspecs contain a homepage but we never use this information.
+    attr_writer :description
+    attr_accessor :homepage
+
+    ### Attributes that return the first value defined in the chain
+
+    def platform
+      @platform || ( @parent ? @parent.platform : nil )
+    end
+
+    def platform=(platform)
+      @platform = Platform.new(*platform)
+    end
+
+    # If not platform is specified all the platforms are returned.
+    def available_platforms
+      platform.nil? ? @define_for_platforms.map { |platform| Platform.new(platform, deployment_target(platform)) } : [ platform ]
+    end
+
+    ### Top level attributes. These attributes represent the unique features of pod and can't be specified by subspecs.
+
+    top_attr_accessor :defined_in_file
+    top_attr_accessor :source
+    top_attr_accessor :documentation
+    top_attr_accessor :requires_arc
+    top_attr_accessor :license,             lambda { |l| ( l.kind_of? String ) ? { :type => l } : l }
+    top_attr_accessor :version,             lambda { |v| Version.new(v) }
+    top_attr_accessor :authors,             lambda { |a| parse_authors(a) }
+    top_attr_accessor :header_mappings_dir, lambda { |file| Pathname.new(file) } # If not provided the headers files are flattened
+    top_attr_accessor :prefix_header_file,  lambda { |file| Pathname.new(file) }
+    top_attr_accessor :prefix_header_contents
+
+
+    top_attr_reader   :header_dir,          lambda {|instance, ivar| ivar || instance.pod_destroot_name }
+    top_attr_writer   :header_dir,          lambda {|dir| Pathname.new(dir) }
+
+    alias_method      :author=, :authors=
+
+    def self.parse_authors(*names_and_email_addresses)
+      list = names_and_email_addresses.flatten
+      unless list.first.is_a?(Hash)
+        authors = list.last.is_a?(Hash) ? list.pop : {}
+        list.each { |name| authors[name] = nil }
+      end
+      authors || list.first
+    end
+
+    ### Attributes **with** multiple platform support
+
+    pltf_chained_attr_accessor  :source_files,                lambda {|value, current| pattern_list(value) }
+    pltf_chained_attr_accessor  :resources,                   lambda {|value, current| pattern_list(value) }
+    pltf_chained_attr_accessor  :preserve_paths,              lambda {|value, current| pattern_list(value) } # Paths that should not be cleaned
+    pltf_chained_attr_accessor  :exclude_header_search_paths, lambda {|value, current| pattern_list(value) } # Headers to be excluded from being added to search paths (RestKit)
+    pltf_chained_attr_accessor  :frameworks,                  lambda {|value, current| current << value }
+    pltf_chained_attr_accessor  :libraries,                   lambda {|value, current| current << value }
+
+    alias_method :resource=,    :resources=
+    alias_method :framework=,   :frameworks=
+    alias_method :library=,     :libraries=
+
+    def xcconfig
+      raw_xconfig.dup.
+        tap { |x| x.add_libraries(libraries) }.
+        tap { |x| x.add_frameworks(frameworks) }
+    end
+
+    # TODO: move to Xcodeproj
+    class ::Xcodeproj::Config
+      # BUG: old implementation would lose keys specified in self
+      # but not specified in the passed xcconfig.
+      def merge!(xcconfig)
+        @attributes.merge!(xcconfig.to_hash) { |key, v1, v2| "#{v1} #{v2}" }
+      end
+
+      def merge(config)
+        self.dup.tap { |x|x.merge!(config) }
+      end
+
+      def add_libraries(libraries)
+        return if libraries.nil? || libraries.empty?
+        flags = [ @attributes['OTHER_LDFLAGS'] ] || []
+        flags << "-l#{ libraries.join(' -l') }"
+        @attributes['OTHER_LDFLAGS'] = flags.compact.map(&:strip).join(' ')
+      end
+
+      def add_frameworks(frameworks)
+        return if frameworks.nil? || frameworks.empty?
+        flags = [ @attributes['OTHER_LDFLAGS'] ] || []
+        flags << "-framework #{ frameworks.join(' -framework ') }"
+        @attributes['OTHER_LDFLAGS'] = flags.compact.map(&:strip).join(' ')
+      end
+
+      def dup
+        Xcodeproj::Config.new(self.to_hash.dup)
       end
     end
-    attr_reader :source_files
 
-    def deployment_target=(version)
-      raise Informative, "The deployment target must be defined per platform like s.ios.deployment_target = '5.0'" unless @define_for_platforms.count == 1
-      @deployment_target[@define_for_platforms.first] = version
+    def raw_xconfig
+      @parent ? @parent.raw_xconfig.merge(@xcconfig[active_platform]) : @xcconfig[active_platform]
     end
 
-    def resources=(patterns)
-      @define_for_platforms.each do |platform|
-        @resources[platform] = pattern_list(patterns)
+    platform_attr_writer :xcconfig, lambda {|value, current| current.tap { |c| c.merge!(value) } }
+
+    def compiler_flags
+      if @parent
+        chained = @compiler_flags[active_platform].clone.unshift @parent.compiler_flags[active_platform]
+      else
+        chained = @compiler_flags[active_platform].clone
+        chained.unshift '-fobjc-arc' if @requires_arc
+        chained.unshift ''
       end
+      chained.join(' ')
     end
-    attr_reader :resources
-    alias_method :resource=, :resources=
 
-    def xcconfig=(build_settings)
-      @define_for_platforms.each do |platform|
-        @xcconfig[platform].merge!(build_settings)
-      end
-    end
-    attr_reader :xcconfig
-
-    def frameworks=(*frameworks)
-      frameworks.unshift('')
-      self.xcconfig = { 'OTHER_LDFLAGS' => frameworks.join(' -framework ').strip }
-    end
-    alias_method :framework=, :frameworks=
-
-    def libraries=(*libraries)
-      libraries.unshift('')
-      self.xcconfig = { 'OTHER_LDFLAGS' => libraries.join(' -l').strip }
-    end
-    alias_method :library=, :libraries=
-
-    attr_reader :compiler_flags
-    def compiler_flags=(flags)
-      @define_for_platforms.each do |platform|
-        @compiler_flags[platform] << ' ' << flags
-      end
-    end
+    platform_attr_writer :compiler_flags, lambda {|value, current| current << value }
 
     def dependency(*name_and_version_requirements)
       name, *version_requirements = name_and_version_requirements.flatten
+      raise Informative, "A specification can't require self as a subspec" if name == self.name
+      raise Informative, "A subspec can't require one of its parents specifications" if @parent && @parent.name.include?(name)
       dep = Dependency.new(name, *version_requirements)
       @define_for_platforms.each do |platform|
         @dependencies[platform] << dep
       end
       dep
     end
-    attr_reader :dependencies
 
-    ### Not attributes
+    # External dependencies are inherited by subspecs
+    def external_dependencies(all_platforms = false)
+      active_plaform_check unless all_platforms
+      result = all_platforms ? @dependencies.values.flatten : @dependencies[active_platform]
+      result += parent.external_dependencies if parent
+      result
+    end
 
-    # @visibility private
-    #
-    # This is used by PlatformProxy to assign attributes for the scoped platform.
-    def _on_platform(platform)
-      before, @define_for_platforms = @define_for_platforms, [platform]
-      yield
-    ensure
-      @define_for_platforms = before
+    # A specification inherits the preferred_dependency or
+    # all the compatible subspecs as dependencies
+    def subspec_dependencies
+      active_plaform_check
+      specs = preferred_dependency ? [subspec_by_name("#{name}/#{preferred_dependency}")] : subspecs
+      specs.compact \
+        .select { |s| s.supports_platform?(active_platform) } \
+        .map    { |s| Dependency.new(s.name, version) }
+    end
+
+    def dependencies
+      external_dependencies + subspec_dependencies
     end
 
     include Config::Mixin
 
-    def local?
-      !source.nil? && !source[:local].nil?
+    def top_level_parent
+      @parent ? @parent.top_level_parent : self
     end
 
-    def local_path
-      Pathname.new(File.expand_path(source[:local]))
+    def subspec(name, &block)
+      subspec = Specification.new(self, name, &block)
+      @subspecs << subspec
+      subspec
     end
+    attr_reader :subspecs
 
-    # This is assigned the other spec, of which this pod's source is a part, by
-    # a Resolver.
-    attr_accessor :part_of_specification
-    def part_of_specification
-      @part_of_specification || begin
-        set = Source.search(@part_of)
-        set.required_by(self)
-        set.specification
+    def recursive_subspecs
+      unless @recursive_subspecs
+        mapper = lambda do |spec|
+            spec.subspecs.map do |subspec|
+              [subspec, *mapper.call(subspec)]
+            end.flatten
+          end
+          @recursive_subspecs = mapper.call self
       end
-    end
-
-    def wrapper?
-      source_files.values.all?(&:empty?) && !subspecs.empty?
+      @recursive_subspecs
     end
 
     def subspec_by_name(name)
+      return self if name.nil? || name == self.name
       # Remove this spec's name from the beginning of the name we’re looking for
       # and take the first component from the remainder, which is the spec we need
       # to find now.
@@ -278,28 +338,19 @@ module Pod
       remainder.empty? ? subspec : subspec.subspec_by_name(name)
     end
 
-    def ==(other)
-      object_id == other.object_id ||
-        (self.class === other &&
-          name && name == other.name &&
-            version && version == other.version)
+    def local?
+      !source.nil? && !source[:local].nil?
     end
 
-    def dependency_by_top_level_spec_name(name)
-      @dependencies.each do |_, platform_deps|
-        platform_deps.each do |dep|
-          return dep if dep.top_level_spec_name == name
-        end
-      end
+    def local_path
+      Pathname.new(File.expand_path(source[:local]))
     end
 
     def pod_destroot
-      if part_of_other_pod?
-        part_of_specification.pod_destroot
-      elsif local?
+      if local?
         local_path
       else
-        config.project_pods_root + @name
+        config.project_pods_root + top_level_parent.name
       end
     end
 
@@ -309,15 +360,7 @@ module Pod
       end
     end
 
-    def part_of_other_pod?
-      !part_of.nil?
-    end
-
-    def podfile?
-      false
-    end
-
-    def pattern_list(patterns)
+    def self.pattern_list(patterns)
       if patterns.is_a?(Array) && (!defined?(Rake) || !patterns.is_a?(Rake::FileList))
         patterns
       else
@@ -329,18 +372,10 @@ module Pod
     # in the pod's header dir.
     #
     # By default all headers are copied to the pod's header dir without any
-    # namespacing. You can, however, override this method in the podspec, or
-    # copy_header_mappings for full control.
+    # namespacing. However if the top level attribute accessor header_mappings_dir
+    # is specified the namespacing will be preserved from that directory.
     def copy_header_mapping(from)
-      from.basename
-    end
-
-    def to_s
-      "#{name} (#{version})"
-    end
-
-    def inspect
-      "#<#{self.class.name} for #{to_s}>"
+      header_mappings_dir ? from.relative_path_from(header_mappings_dir) : from.basename
     end
 
     # This is a convenience method which gets called after all pods have been
@@ -359,53 +394,76 @@ module Pod
     def post_install(target)
     end
 
-    class Subspec < Specification
-      attr_reader :parent
+    def podfile?
+      false
+    end
 
-      def initialize(parent, name)
-        @parent, @name = parent, name
-        # TODO a MacRuby bug, the correct super impl `initialize' is not called consistently
-        #super(&block)
-        post_initialize
-
-        # A subspec is _always_ part of the source of its top level spec.
-        self.part_of = top_level_parent.name, version
-        # A subspec has a dependency on the parent if the parent is a subspec too.
-        dependency(@parent.name, version) if @parent.is_a?(Subspec)
-
-        yield self if block_given?
-      end
-
-      undef_method :name=, :version=, :source=
-
-      def top_level_parent
-        top_level_parent = @parent
-        top_level_parent = top_level_parent.parent while top_level_parent.is_a?(Subspec)
-        top_level_parent
-      end
-
-      def name
-        "#{@parent.name}/#{@name}"
-      end
-
-      # TODO manually forwarding the attributes that we have so far needed to forward,
-      # but need to think if there's a better way to do this.
-
-      def summary
-        @summary ? @summary : top_level_parent.summary
-      end
-
-      # Override the getters to always return the value of the top level parent spec.
-      [:version, :summary, :platform, :license, :authors, :requires_arc, :compiler_flags, :documentation, :homepage].each do |attr|
-        define_method(attr) { top_level_parent.send(attr) }
-      end
-
-      def copy_header_mapping(from)
-        top_level_parent.copy_header_mapping(from)
+    # This is used by the specification set
+    def dependency_by_top_level_spec_name(name)
+      external_dependencies(true).each do |dep|
+        return dep if dep.top_level_spec_name == name
       end
     end
 
-  end
+    def to_s
+      "#{name} (#{version})"
+    end
 
+    def inspect
+      "#<#{self.class.name} for #{to_s}>"
+    end
+
+    def ==(other)
+      object_id == other.object_id ||
+        (self.class === other &&
+         name && name == other.name &&
+         version && version == other.version)
+    end
+
+    # Returns whether the specification is supported in a given platform
+    def supports_platform?(*platform)
+      platform = platform[0].is_a?(Platform) ? platform[0] : Platform.new(*platform)
+      available_platforms.any? { |p| platform.supports?(p) }
+    end
+
+    # Defines the active platform for comsumption of the specification and
+    # returns self for method chainability.
+    # The active platform must the the same accross the chain so attributes
+    # that are inherited can be correctly resolved.
+    def activate_platform(*platform)
+      platform = platform[0].is_a?(Platform) ? platform[0] : Platform.new(*platform)
+      raise Informative, "#{to_s} is not compatible with #{platform}." unless supports_platform?(platform)
+      top_level_parent.active_platform = platform.to_sym
+      self
+    end
+
+    top_attr_accessor :active_platform
+
+    ### Not attributes
+
+    # @visibility private
+    #
+    # This is used by PlatformProxy to assign attributes for the scoped platform.
+    def _on_platform(platform)
+      before, @define_for_platforms = @define_for_platforms, [platform]
+      yield
+    ensure
+      @define_for_platforms = before
+    end
+
+    # @visibility private
+    #
+    # This is multi-platform and to support
+    # subspecs with different platforms is is resolved as the
+    # first non nil value accross the chain.
+    def deployment_target=(version)
+      raise Informative, "The deployment target must be defined per platform like `s.ios.deployment_target = '5.0'`." unless @define_for_platforms.count == 1
+      @deployment_target[@define_for_platforms.first] = version
+    end
+
+    def deployment_target(platform)
+      @deployment_target[platform] || ( @parent ? @parent.deployment_target(platform) : nil )
+    end
+  end
   Spec = Specification
 end

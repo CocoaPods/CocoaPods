@@ -13,7 +13,7 @@ module Pod
 
       def download
         prepare_cache
-        puts '->'.green << ' Cloning git repo' if config.verbose?
+        puts '-> Cloning git repo' if config.verbose?
         if options[:tag]
           download_tag
         elsif options[:commit]
@@ -26,7 +26,7 @@ module Pod
 
       def prepare_cache
         unless cache_exist?
-          puts '->'.green << " Creating cache git repo (#{cache_path})" if config.verbose?
+          puts "-> Creating cache git repo (#{cache_path})" if config.verbose?
           cache_path.rmtree if cache_path.exist?
           cache_path.mkpath
           git "clone '#{url}' #{cache_path}"
@@ -71,7 +71,7 @@ module Pod
       end
 
       def update_cache
-        puts '->'.green << " Updating cache git repo (#{cache_path})" if config.verbose?
+        puts "-> Updating cache git repo (#{cache_path})" if config.verbose?
         Dir.chdir(cache_path) do
           git "reset --hard HEAD"
           git "clean -d -x -f"

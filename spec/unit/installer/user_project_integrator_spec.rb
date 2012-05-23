@@ -21,10 +21,6 @@ describe Pod::Installer::UserProjectIntegrator do
     @integrator = Pod::Installer::UserProjectIntegrator.new(@podfile)
   end
 
-  after do
-    config.project_root = nil
-  end
-
   it "returns the path to the workspace from the Podfile" do
     @integrator.workspace_path.should == config.project_root + 'SampleProject.xcworkspace'
   end

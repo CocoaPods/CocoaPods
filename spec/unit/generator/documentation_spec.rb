@@ -18,11 +18,8 @@ describe Pod::Generator::Documentation do
   }
   end
 
-  it 'returns the Pod documentation documentation files' do
-    @doc_installer.files.sort.should == [
-      (@pod.root + "Classes/Banana.m").to_s,
-      (@pod.root + "Classes/Banana.h").to_s,
-    ].sort
+  it 'returns the Pod documentation header files' do
+    @doc_installer.files.sort.should == %w[ Classes/Banana.h ].sort
   end
 
   it 'returns the Pod documentation options' do

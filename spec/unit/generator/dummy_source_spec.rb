@@ -6,7 +6,7 @@ describe Pod::Generator::DummySource do
   before do
     setup_temporary_directory
   end
-  
+
   after do
     teardown_temporary_directory
   end
@@ -21,5 +21,5 @@ describe Pod::Generator::DummySource do
 @implementation PodsDummy
 @end
 EOS
-  end  
+  end
 end

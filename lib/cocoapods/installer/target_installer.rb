@@ -41,7 +41,7 @@ module Pod
           header.puts "#import #{@target_definition.platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}"
           header.puts "#endif"
           pods.each do |pod|
-            if prefix_header_contents = pod.specification.prefix_header_contents
+            if prefix_header_contents = pod.top_specification.prefix_header_contents
               header.puts
               header.puts prefix_header_contents
             elsif prefix_header = pod.prefix_header_file
@@ -63,19 +63,18 @@ module Pod
         @target = @project.add_pod_target(@target_definition.label, @target_definition.platform)
 
         pods.each do |pod|
-          # TODO add methods like xcconfig to LocalPod as well? (which returns the correct platform)
-          xcconfig.merge!(pod.specification.xcconfig[@target_definition.platform.name])
+          xcconfig.merge!(pod.xcconfig)
           pod.add_to_target(@target)
-          
+
           # TODO: this doesn't need to be done here, it has nothing to do with the target
           pod.link_headers
         end
-        
+
         xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.header_search_paths).join(" "))
 
         support_files_group = @project.group("Targets Support Files").create_group(@target_definition.label)
         support_files_group.create_files(target_support_files)
-        
+
         xcconfig_file = support_files_group.files.where(:path => @target_definition.xcconfig_name)
         configure_build_configurations(xcconfig_file)
         create_files(pods, sandbox)
@@ -93,24 +92,24 @@ module Pod
       def create_files(pods, sandbox)
         if @podfile.generate_bridge_support?
           bridge_support_metadata_path = sandbox.root + @target_definition.bridge_support_name
-          puts "* Generating BridgeSupport metadata file at `#{bridge_support_metadata_path}'" if config.verbose?
+          puts "- Generating BridgeSupport metadata file at `#{bridge_support_metadata_path}'" if config.verbose?
           bridge_support_generator_for(pods, sandbox).save_as(bridge_support_metadata_path)
           copy_resources_script_for(pods).resources << @target_definition.bridge_support_name
         end
-        puts "* Generating xcconfig file at `#{sandbox.root + @target_definition.xcconfig_name}'" if config.verbose?
+        puts "- Generating xcconfig file at `#{sandbox.root + @target_definition.xcconfig_name}'" if config.verbose?
         xcconfig.save_as(sandbox.root + @target_definition.xcconfig_name)
-        puts "* Generating prefix header at `#{sandbox.root + @target_definition.prefix_header_name}'" if config.verbose?
+        puts "- Generating prefix header at `#{sandbox.root + @target_definition.prefix_header_name}'" if config.verbose?
         save_prefix_header_as(sandbox.root + @target_definition.prefix_header_name, pods)
-        puts "* Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?
+        puts "- Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?
         copy_resources_script_for(pods).save_as(sandbox.root + @target_definition.copy_resources_script_name)
       end
-      
+
       private
-      
+
       def quoted(strings)
         strings.map { |s| "\"#{s}\"" }
       end
-      
+
       def default_ld_flags
         flags = %w{-ObjC}
         flags << '-fobjc-arc' if @podfile.set_arc_compatibility_flag? && self.requires_arc
