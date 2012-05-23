@@ -1,14 +1,10 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "Pod::Command::List" do
-  extend SpecHelper::Git
+  extend SpecHelper::TemporaryRepos
 
   before do
     config.repos_dir = fixture('spec-repos')
-  end
-
-  after do
-    config.repos_dir = tmp_repos_path
   end
 
   def command(arguments = argv)

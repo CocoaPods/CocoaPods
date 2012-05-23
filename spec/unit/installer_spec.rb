@@ -2,18 +2,11 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Installer" do
   before do
-    @config_before = config
-    Pod::Config.instance = nil
-    config.silent = true
     config.repos_dir = fixture('spec-repos')
     config.project_pods_root = fixture('integration')
   end
 
-  after do
-    Pod::Config.instance = @config_before
-  end
-
-  describe ", by default," do
+  describe "by default" do
     before do
       podfile = Pod::Podfile.new do
         platform :ios
@@ -42,7 +35,7 @@ describe "Pod::Installer" do
       dependency 'ASIHTTPRequest'
     end
     installer = Pod::Installer.new(podfile)
-    pods = installer.activated_specifications.map do |spec|
+    pods = installer.specifications.map do |spec|
       Pod::LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
     end
     expected = pods.map { |pod| pod.header_files }.flatten.map { |header| config.project_pods_root + header }

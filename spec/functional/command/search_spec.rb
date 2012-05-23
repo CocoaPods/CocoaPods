@@ -2,17 +2,12 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "Pod::Command::Search" do
   extend SpecHelper::Command
-  extend SpecHelper::Git
   extend SpecHelper::TemporaryDirectory
+  extend SpecHelper::TemporaryRepos
 
   before do
     config.repos_dir = fixture('spec-repos')
   end
-
-  after do
-    config.repos_dir = tmp_repos_path
-  end
-
 
   it "runs with correct parameters" do
     lambda { run_command('search', 'table') }.should.not.raise

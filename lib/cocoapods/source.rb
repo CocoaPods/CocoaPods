@@ -68,7 +68,7 @@ module Pod
         set.name == dependency.top_level_spec_name &&
           # Now either check if it's a dependency on the top level spec, or if it's not
           # check if the requested subspec exists in the top level spec.
-          (!dependency.subspec_dependency? || !set.specification.subspec_by_name(dependency.name).nil?)
+          set.specification.subspec_by_name(dependency.name)
       end
     end
 

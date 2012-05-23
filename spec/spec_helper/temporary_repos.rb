@@ -2,21 +2,17 @@ require 'spec_helper/temporary_directory'
 
 module SpecHelper
   def self.tmp_repos_path
-    Git.tmp_repos_path
+    TemporaryRepos.tmp_repos_path
   end
 
-  module Git
+  module TemporaryRepos
+    extend Pod::Executable
+    executable :git
+
     def tmp_repos_path
       SpecHelper.temporary_directory + 'cocoapods'
     end
     module_function :tmp_repos_path
-
-    def tmp_master_repo_path
-      tmp_repos_path + 'master'
-    end
-
-    extend Pod::Executable
-    executable :git
 
     alias_method :git_super, :git
     def git(repo, command)
@@ -42,5 +38,12 @@ module SpecHelper
       git(name, 'add README')
       git(name, 'commit -m "changed"')
     end
+
+    def self.extended(base)
+      base.before do
+        tmp_repos_path.mkpath
+      end
+    end
   end
 end
+

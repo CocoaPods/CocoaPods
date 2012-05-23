@@ -29,10 +29,6 @@ describe Pod::Installer::UserProjectIntegrator do
     @sample_project = Xcodeproj::Project.new(@sample_project_path)
   end
 
-  after do
-    config.project_root = nil
-  end
-
   it 'creates a workspace with a name matching the project' do
     workspace_path = @sample_project_path.dirname + "SampleProject.xcworkspace"
     workspace_path.should.exist
@@ -42,12 +38,12 @@ describe Pod::Installer::UserProjectIntegrator do
     workspace = Xcodeproj::Workspace.new_from_xcworkspace(@sample_project_path.dirname + "SampleProject.xcworkspace")
     workspace.projpaths.sort.should == %w{ Pods/Pods.xcodeproj SampleProject.xcodeproj }
   end
-  
+
   it 'adds the Pods project to the workspace' do
     workspace = Xcodeproj::Workspace.new_from_xcworkspace(@sample_project_path.dirname + "SampleProject.xcworkspace")
     workspace.projpaths.find { |path| path =~ /Pods.xcodeproj/ }.should.not.be.nil
   end
-  
+
   it 'sets the Pods xcconfig as the base config for each build configuration' do
     @podfile.target_definitions.each do |_, definition|
       target = @sample_project.targets.where(:name => definition.link_with.first)
@@ -70,7 +66,7 @@ describe Pod::Installer::UserProjectIntegrator do
       framework_build_phase.files.where(:name => definition.lib_name).should.not == nil
     end
   end
-  
+
   it 'adds a Copy Pods Resources build phase to each target' do
     @podfile.target_definitions.each do |_, definition|
       target = @sample_project.targets.where(:name => definition.link_with.first)

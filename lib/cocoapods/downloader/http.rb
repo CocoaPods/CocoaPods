@@ -11,7 +11,7 @@ module Pod
       executable :curl
       executable :unzip
       executable :tar
-      
+
       attr_accessor :filename, :download_path
       def download
         @filename        = filename_with_type type
@@ -41,7 +41,7 @@ module Pod
           nil
         end
       end
-      
+
       def filename_with_type(type=:zip)
         case type
         when :zip
@@ -54,7 +54,7 @@ module Pod
           raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end
       end
-      
+
       def download_file(full_filename)
         curl "-L -o '#{full_filename}' '#{url}'"
       end

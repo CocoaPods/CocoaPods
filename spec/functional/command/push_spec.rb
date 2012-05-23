@@ -2,8 +2,12 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 describe Pod::Command::Push do
   extend SpecHelper::Command
-  extend SpecHelper::Git
   extend SpecHelper::TemporaryDirectory
+  extend SpecHelper::TemporaryRepos
+
+  def master_repo
+    fixture('spec-repos/master')
+  end
 
   it "complains for wrong parameters" do
     lambda { run_command('push') }.should.raise Pod::Command::Help
@@ -12,19 +16,19 @@ describe Pod::Command::Push do
   end
 
   it "complains if it can't find the repo" do
-    repo1 = add_repo('repo1', fixture('spec-repos/master'))
+    repo1 = add_repo('repo1', master_repo)
     Dir.chdir(fixture('banana-lib')) do
       lambda { run_command('push', 'repo2') }.should.raise Pod::Informative
     end
   end
 
   it "complains if it can't find a spec" do
-    repo1 = add_repo('repo1', fixture('spec-repos/master'))
+    repo1 = add_repo('repo1', master_repo)
     lambda { run_command('push', 'repo1') }.should.raise Pod::Informative
   end
 
   it "it raises if the pod is not validated" do
-    repo1 = add_repo('repo1', fixture('spec-repos/master'))
+    repo1 = add_repo('repo1', master_repo)
     git('repo1', 'checkout master') # checkout master, because the fixture is a submodule
     repo2 = add_repo('repo2', repo1.dir)
     git_config('repo2', 'remote.origin.url').should == (tmp_repos_path + 'repo1').to_s
@@ -36,7 +40,7 @@ describe Pod::Command::Push do
 
   before do
     # prepare the repos
-    @upstream = add_repo('upstream', fixture('spec-repos/master'))
+    @upstream = add_repo('upstream', master_repo)
     git('upstream', 'checkout -b master') # checkout master, because the fixture is a submodule
     @local_repo = add_repo('local_repo', @upstream.dir)
     git_config('local_repo', 'remote.origin.url').should == (tmp_repos_path + 'upstream').to_s
