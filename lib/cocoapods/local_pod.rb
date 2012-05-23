@@ -169,7 +169,7 @@ module Pod
     # This is not overriden anymore in specification refactor and the code
     # Pod::Specification#copy_header_mapping can be moved here.
     def copy_header_mappings
-      search_path_headers = header_files - exclude_headers
+      search_path_headers = header_files - headers_excluded_from_search_paths
       search_path_headers.inject({}) do |mappings, from|
         from_without_prefix = from.relative_path_from(relative_root)
         to = top_specification.header_dir + top_specification.copy_header_mapping(from_without_prefix)
@@ -195,8 +195,8 @@ module Pod
       files_by_spec
     end
 
-    def exclude_headers
-      chained_expanded_paths(:exclude_headers, :relative_to_sandbox => true)
+    def headers_excluded_from_search_paths
+      chained_expanded_paths(:exclude_header_search_paths, :relative_to_sandbox => true)
     end
 
     def chained_expanded_paths(accessor, options = {})

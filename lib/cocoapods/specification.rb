@@ -35,7 +35,7 @@ module Pod
       end
 
       # multi-platform attributes
-      %w[ source_files resources preserve_paths exclude_headers frameworks libraries dependencies compiler_flags].each do |attr|
+      %w[ source_files resources preserve_paths exclude_header_search_paths frameworks libraries dependencies compiler_flags].each do |attr|
         instance_variable_set( "@#{attr}", { :ios => [], :osx => [] } )
       end
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
@@ -199,12 +199,12 @@ module Pod
 
     ### Attributes **with** multiple platform support
 
-    pltf_chained_attr_accessor  :source_files,    lambda {|value, current| pattern_list(value) }
-    pltf_chained_attr_accessor  :resources,       lambda {|value, current| pattern_list(value) }
-    pltf_chained_attr_accessor  :preserve_paths,  lambda {|value, current| pattern_list(value) } # Paths that should not be cleaned
-    pltf_chained_attr_accessor  :exclude_headers, lambda {|value, current| pattern_list(value) } # Headers to be excluded from being added to search paths (RestKit)
-    pltf_chained_attr_accessor  :frameworks,      lambda {|value, current| current << value }
-    pltf_chained_attr_accessor  :libraries,       lambda {|value, current| current << value }
+    pltf_chained_attr_accessor  :source_files,                lambda {|value, current| pattern_list(value) }
+    pltf_chained_attr_accessor  :resources,                   lambda {|value, current| pattern_list(value) }
+    pltf_chained_attr_accessor  :preserve_paths,              lambda {|value, current| pattern_list(value) } # Paths that should not be cleaned
+    pltf_chained_attr_accessor  :exclude_header_search_paths, lambda {|value, current| pattern_list(value) } # Headers to be excluded from being added to search paths (RestKit)
+    pltf_chained_attr_accessor  :frameworks,                  lambda {|value, current| current << value }
+    pltf_chained_attr_accessor  :libraries,                   lambda {|value, current| current << value }
 
     alias_method :resource=,    :resources=
     alias_method :framework=,   :frameworks=

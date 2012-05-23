@@ -384,10 +384,10 @@ module Pod
         #
         def file_patterns_errors
           messages = []
-          messages << "The sources did not match any file"         if !@spec.source_files.empty? && @pod.source_files.empty?
-          messages << "The resources did not match any file"       if !@spec.resources.empty? && @pod.resources.empty?
-          messages << "The preserve_paths did not match any file"  if !@spec.preserve_paths.empty? && @pod.preserve_paths.empty?
-          messages << "The exclude_headers did not match any file" if !@spec.exclude_headers.empty? && @pod.exclude_headers.empty?
+          messages << "The sources did not match any file"                     if !@spec.source_files.empty? && @pod.source_files.empty?
+          messages << "The resources did not match any file"                   if !@spec.resources.empty? && @pod.resources.empty?
+          messages << "The preserve_paths did not match any file"              if !@spec.preserve_paths.empty? && @pod.preserve_paths.empty?
+          messages << "The exclude_header_search_paths did not match any file" if !@spec.exclude_header_search_paths.empty? && @pod.headers_excluded_from_search_paths.empty?
           messages
         end
 
