@@ -12,7 +12,7 @@ describe "Pod::Resolver" do
     @resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
   end
 
-  xit "holds the context state, such as cached specification sets" do
+  it "holds the context state, such as cached specification sets" do
     @resolver.resolve
     @resolver.cached_sets.values.sort_by(&:name).should == [
       Pod::Spec::Set.new(config.repos_dir + 'master/A2DynamicDelegate'),
@@ -20,7 +20,7 @@ describe "Pod::Resolver" do
     ].sort_by(&:name)
   end
 
-  xit "returns all specs needed for the dependency" do
+  it "returns all specs needed for the dependency" do
     specs = @resolver.resolve.values.flatten
     specs.map(&:class).uniq.should == [Pod::Specification]
     specs.map(&:name).sort.should == %w{ A2DynamicDelegate BlocksKit }

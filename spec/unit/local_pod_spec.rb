@@ -50,15 +50,6 @@ describe Pod::LocalPod do
       @pod.header_files.should == [Pathname.new("BananaLib/Classes/Banana.h")]
     end
 
-    xit 'can clean up after itself' do
-      @pod.clean
-      @pod.clean_paths.tap do |paths|
-        paths.each do |path|
-          path.should.not.exist
-        end
-      end
-    end
-
     it "can link it's headers into the sandbox" do
       @pod.link_headers
       expected_header_path = @sandbox.headers_root + "BananaLib/Banana.h"
@@ -78,6 +69,10 @@ describe Pod::LocalPod do
       target = mock('target')
       target.expects(:add_source_file).twice.with(anything, anything, "-d some_flag")
       @pod.add_to_target(target)
+    end
+
+    it "returns the platform" do
+      @pod.platform.should == :ios
     end
   end
 
@@ -172,18 +167,81 @@ describe Pod::LocalPod do
     end
   end
 
-  describe "with installed source from multiple subspecs" do
-    xit "returns the source files of the activated specs"
+  describe "regarding multiple subspecs" do
 
-    xit "returns the resources of the activated specs"
+    before do
+      # specification with only some subspecs activated
+      # to check that only the needed files are being activated
+      # A fixture is needed.
+      #
+      # specification = Pod::Spec.new do |s|
+      # ...
+      # s.xcconfig = ...
+      # s.compiler_flags = ...
+      # s.subspec 's1' do |s1|
+      #   s1.xcconfig = ...
+      #   s1.compiler_flags = ...
+      #   s1.ns.source_files = 's1.{h,m}'
+      # end
+      #
+      # s.subspec 's2' do |s2|
+      #   s2.ns.source_files = 's2.{h,m}'
+      # end
+      #
+      # Add only s1 to the localPod
+      # s1 = specification.subspec_by_name(s1)
+      # @pod = Pod::LocalPod.new(s1, @sandbox, Pod::Platform.new(:ios))
+      # @pod.add_specification(specification)
+    end
 
-    xit "can provide the source files of all the subspecs" do
-      pod.all_specs_source_files.should == %w[]
+    xit "returns the subspecs" do
+      @pod.subspecs.map{ |s| name }.should == %w[ s1 ]
+    end
+
+    xit "resolve the source files" do
+      @pod.source_files.should == %w[ s1.h s1.m ]
+    end
+
+    xit "resolve the resources" do
+    end
+
+    xit "resolve the clean paths" do
+      @pod.clean_paths.should == %w[ s2.h s2.m ]
+    end
+
+    xit "resolves the used files" do
+      @pod.used_files.should == %w[ s1.h s1.m README.md ]
+    end
+
+    xit "resolved the header files" do
+      @pod.header_files.should == %w[ s1.h ]
+    end
+
+    xit "resolves the header files of every subspec" do
+      @pod.all_specs_public_header_files.should == %w[ s1.h s2.h ]
+    end
+
+    xit "merges the xcconfigs" do
+    end
+
+    xit "adds each file to a target with the compiler flags of its specification" do
+      # @pod.add_to_target(target)
     end
 
     xit "can provide the source files of all the subspecs" do
       sources = @pod.all_specs_source_files.map { |p| p.relative_path_from(@sandbox.root).to_s }
-      sources.should == %w[ BananaLib/Classes/Banana.h BananaLib/Classes/Banana.m ]
+      sources.should == %w[ s1.h s1.m s2.h s2.m ]
     end
+
+    xit 'can clean the unused files' do
+      # copy fixture to another folder
+      @pod.clean
+      @pod.clean_paths.tap do |paths|
+        paths.each do |path|
+          path.should.not.exist
+        end
+      end
+    end
+
   end
 end

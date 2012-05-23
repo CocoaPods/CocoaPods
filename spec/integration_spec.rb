@@ -234,6 +234,7 @@ else
       end
 
       # TODO add a simple source file which uses the compiled lib to check that it really really works
+      # TODO update for specification refactor
       it "activates required pods and create a working static library xcode project" do
         podfile = Pod::Podfile.new do
           self.platform platform
@@ -279,6 +280,7 @@ else
       end
 
       if platform == :ios
+        # TODO: update for Specification Refactor
         it "does not activate pods that are only part of other pods" do
           spec = Pod::Podfile.new do
             self.platform platform
