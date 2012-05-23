@@ -12,7 +12,7 @@ module Pod
 
     attr_accessor :repos_dir, :project_root, :project_pods_root
     attr_accessor :clean, :verbose, :silent
-    attr_accessor :generate_docs, :doc_install, :force_doc
+    attr_accessor :generate_docs, :doc_install
     attr_accessor :integrate_targets
     attr_accessor :git_cache_size
 
@@ -21,12 +21,11 @@ module Pod
     alias_method :silent?,            :silent
     alias_method :generate_docs?,     :generate_docs
     alias_method :doc_install?,       :doc_install
-    alias_method :force_doc?,         :force_doc
     alias_method :integrate_targets?, :integrate_targets
 
     def initialize
       @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
-      @verbose = @silent = @force_doc = false
+      @verbose = @silent = false
       @clean = @generate_docs = @doc_install = @integrate_targets = true
     end
 
