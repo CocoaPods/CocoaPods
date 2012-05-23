@@ -38,6 +38,7 @@ module Bacon
     #:nodoc:
     def handle_summary
       print ErrorLog  if Backtraces
+      puts "\e[33m#{Counter[:disabled]} disabled specifications\n\e[0m" unless Counter[:disabled].zero?
       puts "%d specifications (%d requirements), %d failures, %d errors" %
         Counter.values_at(:specifications, :requirements, :failed, :errors)
     end
@@ -61,10 +62,8 @@ module Bacon
 
   class Context
     def xit(description, *args)
+      Counter[:disabled] += 1
       Bacon.handle_requirement(description, true) {[]}
-      title = "\e[33m> Disabled Specificiations\e[0m"
-      ErrorLog.insert(0,"#{title}\n") unless ErrorLog.include?(title)
-      ErrorLog.insert(title.length, "\n  - #{self.name} #{description}")
     end
   end
 end
