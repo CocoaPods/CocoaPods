@@ -327,6 +327,8 @@ module Pod
       # If this was the last component in the name, then return the subspec,
       # otherwise we recursively keep calling subspec_by_name until we reach the
       # last one and return that
+
+      raise Informative, "Unable to find a subspec named `#{name}'." unless subspec
       remainder.empty? ? subspec : subspec.subspec_by_name(name)
     end
 
