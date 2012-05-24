@@ -100,7 +100,7 @@ describe "Pod::Downloader" do
         :git => fixture('banana-lib'), :commit => 'fd56054'
       )
       downloader = Pod::Downloader.for_pod(@pod)
-      downloader.clone_url.to_s.should.match /^\/Users\/.*\/Library\/Caches\/CocoaPods\/Git\/de23bb241237818bc96a62ce1309e36b6f774253/
+      downloader.clone_url.to_s.should.match /Library\/Caches\/CocoaPods\/Git/
     end
 
     it "updates the cache if the HEAD is requested" do
