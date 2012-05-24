@@ -36,9 +36,124 @@ describe "Pod::Downloader" do
       downloader.clean
       (@pod.root + '.git').should.not.exist
     end
+
+    it "prepares the cache if it does not exits" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib'), :commit => 'fd56054'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.cache_path.rmtree if downloader.cache_path.exist?
+      downloader.expects(:create_cache).once
+      downloader.stubs(:download_commit)
+      downloader.download
+    end
+
+    it "removes the oldest repo if the caches is too big" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib'), :commit => 'fd56054'
+      )
+      original_chace_size = Pod::Downloader::Git::MAX_CACHE_SIZE
+      Pod::Downloader::Git.__send__(:remove_const,'MAX_CACHE_SIZE')
+      Pod::Downloader::Git::MAX_CACHE_SIZE = 0
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.stubs(:cache_dir).returns(temporary_directory)
+      downloader.download
+      downloader.cache_path.should.not.exist?
+      Pod::Downloader::Git.__send__(:remove_const,'MAX_CACHE_SIZE')
+      Pod::Downloader::Git::MAX_CACHE_SIZE = original_chace_size
+    end
+
+    xit "raises if it can't find the url" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => 'find_me_if_you_can'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      lambda { downloader.download }.should.raise Pod::Informative
+    end
+
+    it "raises if it can't find a commit" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib'), :commit => 'aaaaaa'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      lambda { downloader.download }.should.raise Pod::Informative
+    end
+
+    it "raises if it can't find a tag" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib'), :tag => 'aaaaaa'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      lambda { downloader.download }.should.raise Pod::Informative
+    end
+
+    it "does not raise if it can find the reference" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib'), :commit => 'fd56054'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      lambda { downloader.download }.should.not.raise
+    end
+
+    it "returns the cache directory as the clone url" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib'), :commit => 'fd56054'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.clone_url.to_s.should.match /^\/Users\/.*\/Library\/Caches\/CocoaPods\/Git\/de23bb241237818bc96a62ce1309e36b6f774253/
+    end
+
+    it "updates the cache if the HEAD is requested" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib')
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.expects(:update_cache).once
+      downloader.download
+    end
+
+    it "updates the cache if the ref is not available" do
+      # create the origin repo and the cache
+      tmp_repo_path = temporary_directory + 'banana-lib-source'
+      `git clone #{fixture('banana-lib')} #{tmp_repo_path}`
+
+      @pod.top_specification.stubs(:source).returns(
+        :git => tmp_repo_path, :commit => 'fd56054'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.download
+
+      # make a new commit in the origin
+      commit = ''
+      Dir.chdir(tmp_repo_path) do
+        `touch test.txt`
+        `git add test.txt`
+        `git commit -m 'test'`
+        commit = `git rev-parse HEAD`.chomp
+      end
+
+      # require the new commit
+      pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), temporary_sandbox, Pod::Platform.ios)
+      pod.top_specification.stubs(:source).returns(
+        :git => tmp_repo_path, :commit => commit
+      )
+      downloader = Pod::Downloader.for_pod(pod)
+      downloader.download
+      (pod.root + 'test.txt').should.exist?
+    end
+
+    it "doesn't updates cache the if the ref is available" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib'), :commit => 'fd56054'
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+      downloader.download
+      downloader.expects(:update_cache).never
+      downloader.download
+    end
   end
 
-  describe "for Github repositories, with :download_only set to true" do
+  describe "for Gbthub repositories, with :download_only set to true" do
     extend SpecHelper::TemporaryDirectory
 
     it "downloads HEAD with no other options specified" do
@@ -176,7 +291,4 @@ describe "Pod::Downloader" do
       (@pod.root + 'file.zip').should.not.exist
     end
   end
-
-
 end
-

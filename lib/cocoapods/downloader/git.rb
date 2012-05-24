@@ -12,7 +12,7 @@ module Pod
       MAX_CACHE_SIZE = 500
 
       def download
-        prepare_cache
+        create_cache unless cache_exist?
         puts '-> Cloning git repo' if config.verbose?
         if options[:tag]
           download_tag
@@ -24,13 +24,11 @@ module Pod
         removed_cached_repos_if_needed
       end
 
-      def prepare_cache
-        unless cache_exist?
-          puts "-> Creating cache git repo (#{cache_path})" if config.verbose?
-          cache_path.rmtree if cache_path.exist?
-          cache_path.mkpath
-          git "clone '#{url}' #{cache_path}"
-        end
+      def create_cache
+        puts "-> Creating cache git repo (#{cache_path})" if config.verbose?
+        cache_path.rmtree if cache_path.exist?
+        cache_path.mkpath
+        git "clone '#{url}' #{cache_path}"
       end
 
       def removed_cached_repos_if_needed
@@ -50,7 +48,7 @@ module Pod
       end
 
       def cache_exist?
-        cache_path.exist? && origin_url(cache_path) == url
+        cache_path.exist? && origin_url(cache_path).to_s == url.to_s
       end
 
       def origin_url(dir)
@@ -79,13 +77,16 @@ module Pod
         end
       end
 
-      def ensure_ref_exists(ref)
+      def ref_exists?(ref)
         Dir.chdir(cache_path) { git "rev-list --max-count=1 #{ref}" }
-        return if $? == 0
+        $? == 0
+      end
+
+      def ensure_ref_exists(ref)
+        return if ref_exists?(ref)
         # Skip pull if not needed
         update_cache
-        Dir.chdir(cache_path) { git "rev-list --max-count=1 #{ref}" }
-        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless $? == 0
+        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists?(ref)
       end
 
       def download_head
