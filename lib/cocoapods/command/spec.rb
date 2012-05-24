@@ -19,8 +19,9 @@ module Pod
       end
 
       def self.options
-        [ ["--quick", "Lint skips checks that would require to donwload and build the spec"],
-          ["--only-errors", "Lint validates even if warnings are present"] ].concat(super)
+        [ ["--quick",       "Lint skips checks that would require to donwload and build the spec"],
+          ["--only-errors", "Lint validates even if warnings are present"],
+          ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
       end
 
       def initialize(argv)
@@ -32,6 +33,7 @@ module Pod
         elsif @action == 'lint'
           @quick           = argv.option('--quick')
           @only_errors     = argv.option('--only-errors')
+          @no_clean        = argv.option('--no-clean')
           @repo_or_podspec = argv.shift_argument unless argv.empty?
           super unless argv.size <= 1
         else
@@ -80,10 +82,11 @@ module Pod
           print " -> #{spec}\r" unless config.silent? || is_repo?
           $stdout.flush
 
-          linter         = Linter.new(spec)
-          linter.lenient = @only_errors
-          linter.quick   = @quick || is_repo?
-          invalid_count += 1 unless linter.lint
+          linter          = Linter.new(spec)
+          linter.lenient  = @only_errors
+          linter.quick    = @quick || is_repo?
+          linter.no_clean = @no_clean
+          invalid_count  += 1 unless linter.lint
 
           # This overwrites the previously printed text
           puts " -> ".send(lint_result_color(linter)) << spec.to_s unless config.silent? || should_skip?(linter)
@@ -152,7 +155,7 @@ module Pod
 
         # TODO: Add check to ensure that attributes inherited by subspecs are not duplicated ?
 
-        attr_accessor :quick, :lenient
+        attr_accessor :quick, :lenient, :no_clean
         attr_reader   :spec, :file
         attr_reader   :errors, :warnings, :notes
 
@@ -250,7 +253,7 @@ module Pod
         end
 
         def tear_down_lint_environment
-          tmp_dir.rmtree
+          tmp_dir.rmtree unless no_clean
           Config.instance = @original_config
         end
 
