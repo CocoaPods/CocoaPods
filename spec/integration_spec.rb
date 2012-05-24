@@ -201,7 +201,7 @@ else
             doc = (config.project_pods_root + 'Documentation/JSONKit/html/index.html').read
             doc.should.include?('<title>JSONKit 1.4 Reference</title>')
             doc = (config.project_pods_root + 'Documentation/SSToolkit/html/index.html').read
-            doc.should.include?('<title>SSToolkit 0.1.2 Reference</title>')
+            doc.should.include?('<title>SSToolkit 1.0.0 Reference</title>')
           end
         else
           puts "  ! ".red << "Skipping documentation generation specs, because appledoc can't be found."
@@ -254,7 +254,7 @@ else
             # { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
             'JSONKit (1.5pre)',
             'Reachability (3.0.0)',
-            'SSZipArchive (0.1.2)',
+            'SSZipArchive (0.2.1)',
           ],
           'DEPENDENCIES' => [
             # "ASIWebPageRequest (>= 1.8.1)",

@@ -101,10 +101,9 @@ describe "Pod::Command::Spec#lint" do
   end
 
   it "lints a repo" do
-    # The fixture has an error due to a name mismatch
+    # The fixture has warnings so it raises
     cmd = command('spec', 'lint', 'master')
     lambda { cmd.run }.should.raise Pod::Informative
-    cmd.output.should.include "InAppSettingKit (0.0.1)\n    - ERROR | The name of the spec should match the name of the file"
     cmd.output.should.include "WARN"
   end
 

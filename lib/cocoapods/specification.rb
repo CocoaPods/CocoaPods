@@ -136,23 +136,11 @@ module Pod
 
     attr_accessor :parent
     attr_accessor :preferred_dependency
-    attr_accessor :summary
 
     def name
       @parent ? "#{@parent.name}/#{@name}" : @name
     end
-
     attr_writer :name
-
-    def description
-      @description || summary
-    end
-
-    # TODO: consider converting the following to top level attributes
-    # A subspec should have a summary instead of a description.
-    # Some subspecs contain a homepage but we never use this information.
-    attr_writer :description
-    attr_accessor :homepage
 
     ### Attributes that return the first value defined in the chain
 
@@ -173,6 +161,8 @@ module Pod
 
     top_attr_accessor :defined_in_file
     top_attr_accessor :source
+    top_attr_accessor :homepage
+    top_attr_accessor :summary
     top_attr_accessor :documentation
     top_attr_accessor :requires_arc
     top_attr_accessor :license,             lambda { |l| ( l.kind_of? String ) ? { :type => l } : l }
@@ -182,6 +172,8 @@ module Pod
     top_attr_accessor :prefix_header_file,  lambda { |file| Pathname.new(file) }
     top_attr_accessor :prefix_header_contents
 
+    top_attr_reader   :description,         lambda {|instance, ivar| ivar || instance.summary }
+    top_attr_writer   :description
 
     top_attr_reader   :header_dir,          lambda {|instance, ivar| ivar || instance.pod_destroot_name }
     top_attr_writer   :header_dir,          lambda {|dir| Pathname.new(dir) }
