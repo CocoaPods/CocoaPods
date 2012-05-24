@@ -18,10 +18,6 @@ module Pod
       def download_revision
         hg "clone '#{url}' --rev '#{options[:revision]}' '#{target_path}'"
       end
-
-      def clean
-        (target_path + '.hg').rmtree
-      end
     end
   end
 end

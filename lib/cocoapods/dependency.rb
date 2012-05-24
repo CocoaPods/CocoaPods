@@ -153,7 +153,6 @@ module Pod
           puts "  * Pre-downloading: '#{name}'" unless config.silent?
           Downloader.for_target(sandbox.root + name, @params).tap do |downloader|
             downloader.download
-            downloader.clean if config.clean?
           end
         end
 

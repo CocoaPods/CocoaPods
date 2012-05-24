@@ -18,10 +18,6 @@ module Pod
       def download_revision
         svn "checkout '#{url}' -r '#{options[:revision]}' '#{target_path}'"
       end
-
-      def clean
-        target_path.glob('**/.svn').each(&:rmtree)
-      end
     end
   end
 end

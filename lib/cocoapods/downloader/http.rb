@@ -25,10 +25,6 @@ module Pod
         options[:type] || type_with_url(url)
       end
 
-      def clean
-        FileUtils.rm @download_path
-      end
-
       private
       def type_with_url(url)
         if url =~ /.zip$/

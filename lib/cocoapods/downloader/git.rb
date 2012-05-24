@@ -112,10 +112,6 @@ module Pod
           git "checkout -b activated-pod-commit #{options[:commit]}"
         end
       end
-
-      def clean
-        (target_path + '.git').rmtree
-      end
     end
 
     class GitHub < Git
@@ -129,14 +125,6 @@ module Pod
 
       def download_commit
         download_only? ? download_and_extract_tarball(options[:commit]) : super
-      end
-
-      def clean
-        if download_only?
-          FileUtils.rm_f(tmp_path)
-        else
-          super
-        end
       end
 
       def tarball_url_for(id)

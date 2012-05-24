@@ -27,16 +27,6 @@ describe "Pod::Downloader" do
       (@pod.root + 'README').read.strip.should == 'v1.0'
     end
 
-    it "removes the .git directory when cleaning" do
-      @pod.top_specification.stubs(:source).returns(
-        :git => fixture('banana-lib')
-      )
-      downloader = Pod::Downloader.for_pod(@pod)
-      downloader.download
-      downloader.clean
-      (@pod.root + '.git').should.not.exist
-    end
-
     it "prepares the cache if it does not exits" do
       @pod.top_specification.stubs(:source).returns(
         :git => fixture('banana-lib'), :commit => 'fd56054'
@@ -153,7 +143,7 @@ describe "Pod::Downloader" do
     end
   end
 
-  describe "for Gbthub repositories, with :download_only set to true" do
+  describe "for GitHub repositories, with :download_only set to true" do
     extend SpecHelper::TemporaryDirectory
 
     it "downloads HEAD with no other options specified" do
@@ -191,29 +181,6 @@ describe "Pod::Downloader" do
       # deliberately keep this assertion as loose as possible for now
       (@pod.root + 'README.md').readlines[0].should =~ /PusherTouch/
     end
-
-    it 'deletes the downloaded tarball after unpacking it' do
-      @pod.top_specification.stubs(:source).returns(
-        :git => "git://github.com/lukeredpath/libPusher.git", :download_only => true
-      )
-      downloader = Pod::Downloader.for_pod(@pod)
-
-      VCR.use_cassette('tarballs', :record => :new_episodes) { downloader.download }
-      downloader.clean
-
-      (@pod.root + 'tarball.tar.gz').should.not.exist
-    end
-
-    it "removes the .git directory when cleaning" do
-      @pod.top_specification.stubs(:source).returns(
-        :git => "git://github.com/lukeredpath/libPusher.git", :download_only => false
-      )
-      downloader = Pod::Downloader.for_pod(@pod)
-      downloader.download
-      downloader.clean
-      (@pod.root + '.git').should.not.exist
-    end
-
   end
 
   describe "for Mercurial" do
@@ -224,16 +191,6 @@ describe "Pod::Downloader" do
       downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
       (@pod.root + 'README').read.strip.should == 'first commit'
-    end
-
-    it "removes the .hg directory when cleaning" do
-      @pod.top_specification.stubs(:source).returns(
-        :hg => fixture('mercurial-repo')
-      )
-      downloader = Pod::Downloader.for_pod(@pod)
-      downloader.download
-      downloader.clean
-      (@pod.root + '.hg').should.not.exist
     end
   end
 
@@ -255,16 +212,6 @@ describe "Pod::Downloader" do
       downloader.download
       (@pod.root + 'README').read.strip.should == 'tag 1'
     end
-
-    it "removes the .svn directories when cleaning" do
-      @pod.top_specification.stubs(:source).returns(
-        :svn => "file://#{fixture('subversion-repo')}/trunk"
-      )
-      downloader = Pod::Downloader.for_pod(@pod)
-      downloader.download
-      downloader.clean
-      (@pod.root + '.svn').should.not.exist
-    end
   end
 
   describe "for Http" do
@@ -279,16 +226,6 @@ describe "Pod::Downloader" do
 
       (@pod.root + 'GoogleAdMobSearchAdsSDK/GADSearchRequest.h').should.exist
       (@pod.root + 'GoogleAdMobSearchAdsSDK/GADSearchRequest.h').read.strip.should =~ /Google Search Ads iOS SDK/
-    end
-
-    it "removes the .zip when cleaning" do
-      @pod.top_specification.stubs(:source).returns(
-        :http => 'http://dl.google.com/googleadmobadssdk/googleadmobsearchadssdkios.zip'
-      )
-      downloader = Pod::Downloader.for_pod(@pod)
-      downloader.download
-      downloader.clean
-      (@pod.root + 'file.zip').should.not.exist
     end
   end
 end

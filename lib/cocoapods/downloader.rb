@@ -22,10 +22,6 @@ module Pod
       @target_path.mkpath
     end
 
-    def clean
-      # implement in sub-classes
-    end
-
     private
 
     def self.for_target(target_path, options)
