@@ -74,7 +74,7 @@ module Pod
       # subdirs where empty. We need to delete the symlinks because
       # it might prevent a bundle from being deleted
       dirs = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
-      dirs = dirs.reject { |d| d.end_with? ('.', '..') || !File.directory?(d) }.sort_by(&:length).reverse
+      dirs = dirs.reject { |d| d.end_with?('.', '..') || !File.directory?(d) }.sort_by(&:length).reverse
       dirs.each    { |d| FileUtils.rm_rf(d) if File.symlink?(d) || (Dir.entries(d) == %w[ . .. ]) }
     end
 
