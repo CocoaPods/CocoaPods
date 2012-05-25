@@ -1,11 +1,54 @@
 module Pod
   class Podfile
+    class UserProject
+      include Config::Mixin
+
+      DEFAULT_BUILD_CONFIGURATIONS = { 'Debug' => :debug, 'Release' => :release }.freeze
+
+      def initialize(path = nil, build_configurations = {})
+        self.path = path if path
+        @build_configurations = build_configurations.merge(DEFAULT_BUILD_CONFIGURATIONS)
+      end
+
+      def path=(path)
+        path  = path.to_s
+        @path = Pathname.new(File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
+        @path = config.project_root + @path unless @path.absolute?
+        @path
+      end
+
+      def path
+        if @path
+          @path
+        else
+          xcodeprojs = config.project_root.glob('*.xcodeproj')
+          if xcodeprojs.size == 1
+            @path = xcodeprojs.first
+          end
+        end
+      end
+
+      def project
+        Xcodeproj::Project.new(path) if path && path.exist?
+      end
+
+      def build_configurations
+        if project
+          project.build_configurations.map(&:name).inject({}) do |hash, name|
+            hash[name] = :release; hash
+          end.merge(@build_configurations)
+        else
+          @build_configurations
+        end
+      end
+    end
+
     class TargetDefinition
       include Config::Mixin
 
       attr_reader :name, :target_dependencies
 
-      attr_accessor :xcodeproj, :link_with, :platform, :parent, :exclusive
+      attr_accessor :user_project, :link_with, :platform, :parent, :exclusive
 
       def initialize(name, options = {})
         @name, @target_dependencies = name, []
@@ -27,20 +70,8 @@ module Pod
       end
       alias_method :exclusive?, :exclusive
 
-      def xcodeproj=(path)
-        path = path.to_s
-        @xcodeproj = config.project_root + (File.extname(path) == '.xcodeproj' ? path : "#{path}.xcodeproj")
-      end
-
-      def xcodeproj
-        if @xcodeproj
-          @xcodeproj
-        elsif @parent
-          @parent.xcodeproj
-        else
-          xcodeprojs = config.project_root.glob('*.xcodeproj')
-          @xcodeproj = xcodeprojs.first if xcodeprojs.size == 1
-        end
+      def user_project
+        @user_project || @parent.user_project
       end
 
       def link_with=(targets)
@@ -48,16 +79,16 @@ module Pod
       end
 
       def platform
-        @platform || @parent.platform
+        @platform || (@parent.platform if @parent)
       end
 
       def label
         if name == :default
           "Pods"
-        elsif @parent
-          "#{@parent.label}-#{name}"
-        else
+        elsif exclusive?
           "Pods-#{name}"
+        else
+          "#{@parent.label}-#{name}"
         end
       end
 
@@ -68,8 +99,13 @@ module Pod
       # Returns a path, which is relative to the project_root, relative to the
       # `$(SRCROOT)` of the user's project.
       def relative_to_srcroot(path)
-        raise Informative, "[!] Unable to find an Xcode project to integrate".red unless xcodeproj || !config.integrate_targets
-        xcodeproj ? (config.project_root + path).relative_path_from(xcodeproj.dirname) : path
+        if user_project.path.nil?
+          # TODO this is not in the right place
+          raise Informative, "[!] Unable to find an Xcode project to integrate".red if config.integrate_targets
+          path
+        else
+          (config.project_root + path).relative_path_from(user_project.path.dirname)
+        end
       end
 
       def relative_pods_root
@@ -127,7 +163,9 @@ module Pod
     include Config::Mixin
 
     def initialize(&block)
-      @target_definitions = { :default => (@target_definition = TargetDefinition.new(:default, :exclusive => true)) }
+      @target_definition = TargetDefinition.new(:default, :exclusive => true)
+      @target_definition.user_project = UserProject.new
+      @target_definitions = { :default => @target_definition }
       instance_eval(&block)
     end
 
@@ -163,8 +201,8 @@ module Pod
       elsif @workspace
         @workspace
       else
-        projects = @target_definitions.map { |_, td| td.xcodeproj }.uniq
-        if projects.size == 1 && (xcodeproj = @target_definitions[:default].xcodeproj)
+        projects = @target_definitions.map { |_, td| td.user_project.path }.uniq
+        if projects.size == 1 && (xcodeproj = @target_definitions[:default].user_project.path)
           config.project_root + "#{xcodeproj.basename('.xcodeproj')}.xcworkspace"
         end
       end
@@ -188,8 +226,8 @@ module Pod
     #     xcodeproj 'TestProject'
     #   end
     #
-    def xcodeproj(path)
-      @target_definition.xcodeproj = path
+    def xcodeproj(path, build_configurations = {})
+      @target_definition.user_project = UserProject.new(path, build_configurations)
     end
 
     # Specifies the target(s) in the user’s project that this Pods library
@@ -405,6 +443,11 @@ module Pod
 
     def set_arc_compatibility_flag?
       @set_arc_compatibility_flag
+    end
+
+    def user_build_configurations
+      configs_array = @target_definitions.values.map { |td| td.user_project.build_configurations }
+      configs_array.inject({}) { |hash, config| hash.merge(config) }
     end
 
     def post_install!(installer)

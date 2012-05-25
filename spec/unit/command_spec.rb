@@ -15,12 +15,3 @@ describe "Pod::Command::Repo" do
   end
 end
 
-describe "Pod::Command::Install" do
-  it "tells the user that no Podfile or podspec was found in the current working dir" do
-    command = Pod::Command::Install.new(argv)
-    exception = lambda {
-      command.run
-    }.should.raise Pod::Informative
-    exception.message.should.include "No `Podfile' found in the current working directory."
-  end
-end

@@ -33,6 +33,18 @@ describe 'Pod::Project' do
     @project.targets.first.build_phases.should.include phase
   end
 
+  it "adds build configurations named after every configuration across all of the user's projects" do
+    @project.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'Test' => :debug, 'AppStore' => :release }
+    @project.build_configurations.map(&:name).sort.should == %w{ AppStore Debug Release Test }
+  end
+
+  it "adds build configurations named after every configuration across all of the user's projects to a target" do
+    @project.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'Test' => :debug, 'AppStore' => :release }
+    target = @project.add_pod_target('SomeTarget', Pod::Platform.ios)
+    target.build_settings('Test')["VALIDATE_PRODUCT"].should == nil
+    target.build_settings('AppStore')["VALIDATE_PRODUCT"].should == "YES"
+  end
+
   describe "concerning its :ios targets" do
     it "sets VALIDATE_PRODUCT to YES for the Release configuration" do
       target = Pod::Project.new.add_pod_target('Pods', Pod::Platform.ios)

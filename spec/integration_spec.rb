@@ -9,11 +9,9 @@ module SpecHelper
     def specs_by_target
       @specs_by_target ||= super.tap do |hash|
         hash.values.flatten.each do |spec|
-          unless spec.part_of_other_pod?
-            source = spec.source
-            source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
-            spec.source = source
-          end
+          source = spec.source
+          source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
+          spec.source = source
         end
       end
     end
@@ -28,37 +26,14 @@ else
       extend SpecHelper::TemporaryDirectory
 
       def create_config!
-        Pod::Config.instance = nil
-        if ENV['VERBOSE_SPECS']
-          config.verbose = true
-        else
-          config.silent = true
-        end
         config.repos_dir = fixture('spec-repos')
         config.project_root = temporary_directory
-        config.doc_install = false
         config.integrate_targets = false
       end
 
       before do
         fixture('spec-repos/master') # ensure the archive is unpacked
-
-        @config_before = config
         create_config!
-        config.generate_docs = false
-      end
-
-      after do
-        Pod::Config.instance = @config_before
-      end
-
-      # This is so we can run at least the specs that don't use xcodebuild on Travis.
-      def with_xcodebuild_available
-        unless `which xcodebuild`.strip.empty?
-          yield
-        else
-          puts "\n[!] Skipping xcodebuild, because it can't be found."
-        end
       end
 
       def should_successfully_perform(command)
@@ -67,11 +42,14 @@ else
         $?.should.be.success
       end
 
+      puts "  ! ".red << "Skipping xcodebuild based checks, because it can't be found." if `which xcodebuild`.strip.empty?
+
       def should_xcodebuild(target_definition)
+        return if `which xcodebuilda`.strip.empty?
         target = target_definition
         with_xcodebuild_available do
           Dir.chdir(config.project_pods_root) do
-            puts "\n[!] Compiling #{target.label} static library..."
+            print "[!] Compiling #{target.label}...\r"
             should_successfully_perform "xcodebuild -target '#{target.label}'"
             lib_path = config.project_pods_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + target.lib_name
             `lipo -info '#{lib_path}'`.should.include "architecture: #{target.platform == :ios ? 'armv7' : 'x86_64'}"
@@ -113,13 +91,13 @@ else
           installer.install!
 
           YAML.load(installer.lock_file.read).should == {
-            'PODS' => [{ 'Reachability (1.2.3)' => ["ASIHTTPRequest (>= 1.8)"] }],
-            'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
+            'PODS' => [ 'Reachability (1.2.3)' ],
+            # 'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
             'DEPENDENCIES' => ["Reachability (from `#{url}')"]
           }
         end
-        
-        it "install a dummy source file" do
+
+        it "installs a dummy source file" do
           create_config!
           podfile = Pod::Podfile.new do
             self.platform :ios
@@ -131,7 +109,7 @@ else
               s.source_files = 'JSONKit.*'
             end
           end
-          
+
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
 
@@ -157,6 +135,7 @@ else
             end
           end
 
+          Pod::Specification.any_instance.stubs(:preserve_paths).returns(['CHANGELOG.md'])
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
 
@@ -199,7 +178,16 @@ else
 
         unless `which appledoc`.strip.empty?
           it "generates documentation of all pods by default" do
-            create_config!
+            ::Pod::Config.instance = nil
+            ::Pod::Config.instance.tap do |c|
+              ENV['VERBOSE_SPECS'] ? c.verbose = true : c.silent = true
+              c.doc_install   = false
+              c.repos_dir = fixture('spec-repos')
+              c.project_root = temporary_directory
+              c.integrate_targets = false
+            end
+
+            Pod::Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)
 
             podfile = Pod::Podfile.new do
               self.platform :ios
@@ -207,19 +195,16 @@ else
               dependency 'JSONKit', '1.4'
               dependency 'SSToolkit'
             end
-
-            Pod::Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)
-
             installer = SpecHelper::Installer.new(podfile)
             installer.install!
 
             doc = (config.project_pods_root + 'Documentation/JSONKit/html/index.html').read
             doc.should.include?('<title>JSONKit 1.4 Reference</title>')
             doc = (config.project_pods_root + 'Documentation/SSToolkit/html/index.html').read
-            doc.should.include?('<title>SSToolkit 0.1.2 Reference</title>')
+            doc.should.include?('<title>SSToolkit 1.0.0 Reference</title>')
           end
         else
-          puts "[!] Skipping documentation generation specs, because appledoc can't be found."
+          puts "  ! ".red << "Skipping documentation generation specs, because appledoc can't be found."
         end
       end
 
@@ -249,12 +234,13 @@ else
       end
 
       # TODO add a simple source file which uses the compiled lib to check that it really really works
+      # TODO update for specification refactor
       it "activates required pods and create a working static library xcode project" do
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
           dependency 'Reachability',      '> 2.0.5' if platform == :ios
-          dependency 'ASIWebPageRequest', '>= 1.8.1'
+          # dependency 'ASIWebPageRequest', '>= 1.8.1'
           dependency 'JSONKit',           '>= 1.0'
           dependency 'SSZipArchive',      '< 2'
         end
@@ -264,14 +250,14 @@ else
 
         lock_file_contents = {
           'PODS' => [
-            { 'ASIHTTPRequest (1.8.1)'    => ["Reachability"] },
-            { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
+            # { 'ASIHTTPRequest (1.8.1)'    => ["Reachability"] },
+            # { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
             'JSONKit (1.5pre)',
             'Reachability (3.0.0)',
-            'SSZipArchive (0.1.2)',
+            'SSZipArchive (0.2.1)',
           ],
           'DEPENDENCIES' => [
-            "ASIWebPageRequest (>= 1.8.1)",
+            # "ASIWebPageRequest (>= 1.8.1)",
             "JSONKit (>= 1.0)",
             "Reachability (> 2.0.5)",
             "SSZipArchive (< 2)",
@@ -279,9 +265,9 @@ else
         }
         unless platform == :ios
           # No Reachability is required by ASIHTTPRequest on OSX
-          lock_file_contents['DEPENDENCIES'].delete_at(2)
-          lock_file_contents['PODS'].delete_at(3)
-          lock_file_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
+          lock_file_contents['DEPENDENCIES'].delete_at(1)
+          lock_file_contents['PODS'].delete_at(1)
+          # lock_file_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
         end
         YAML.load(installer.lock_file.read).should == lock_file_contents
 
@@ -294,6 +280,7 @@ else
       end
 
       if platform == :ios
+        # TODO: update for Specification Refactor
         it "does not activate pods that are only part of other pods" do
           spec = Pod::Podfile.new do
             self.platform platform
@@ -305,8 +292,9 @@ else
           installer.install!
 
           YAML.load(installer.lock_file.read).should == {
-            'PODS' => [{ 'Reachability (2.0.4)' => ["ASIHTTPRequest (>= 1.8)"] }],
-            'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
+            # 'PODS' => [{ 'Reachability (2.0.4)' => ["ASIHTTPRequest (>= 1.8)"] }],
+            'PODS' => [ 'Reachability (2.0.4)' ],
+            # 'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
             'DEPENDENCIES' => ["Reachability (= 2.0.4)"]
           }
         end
@@ -321,7 +309,7 @@ else
 
         installer = SpecHelper::Installer.new(spec)
         target_definition = installer.target_installers.first.target_definition
-        installer.activated_specifications_for_target(target_definition).first.resources = 'LICEN*', 'Readme.*'
+        installer.specs_by_target[target_definition].first.resources = 'LICEN*', 'Readme.*'
         installer.install!
 
         contents = (config.project_pods_root + 'Pods-resources.sh').read

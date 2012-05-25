@@ -19,7 +19,7 @@ link_with ['MyAppTarget', 'MyOtherAppTarget']
 dependency 'JSONKit'
 
 target :test, :exclusive => true do
-  xcodeproj 'TestProject'
+  xcodeproj 'TestProject', 'Test' => :debug
   link_with 'TestRunnerTarget'
   dependency 'Kiwi'
 end
@@ -41,6 +41,16 @@ the first target in your project. So if you only have one target you do not
 need to specify the target to link with.
 
 See [#76](https://github.com/CocoaPods/CocoaPods/issues/76) for more info.
+
+Finally, CocoaPods will add build configurations to the Pods project for all
+configurations in the other projects in the workspace. By default the
+configurations are based on the `Release` configuration, to base them on the
+`Debug` configuration you will have to explicitely specify them as can be seen
+above in the following line:
+
+```ruby
+xcodeproj 'TestProject', 'Test' => :debug
+```
 
 
 ### Documentation

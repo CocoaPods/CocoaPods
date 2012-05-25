@@ -26,6 +26,14 @@ describe "Pod::Podfile" do
     dep.external_source.params.should == { :git => 'GIT-URL', :commit => '1234' }
   end
 
+  it "adds a subspec dependency on a Pod repo outside of a spec repo (the repo is expected to contain a podspec)" do
+    podfile = Pod::Podfile.new do
+      dependency 'MainSpec/FirstSubSpec', :git => 'GIT-URL', :commit => '1234'
+    end
+    dep = podfile.dependency_by_top_level_spec_name('MainSpec')
+    dep.external_source.name.should == 'MainSpec'
+  end
+
   it "adds a dependency on a library outside of a spec repo (the repo does not need to contain a podspec)" do
     podfile = Pod::Podfile.new do
       dependency 'SomeExternalPod', :podspec => 'http://gist/SomeExternalPod.podspec'
@@ -71,8 +79,8 @@ describe "Pod::Podfile" do
     path = config.project_root + 'MyProject.xcodeproj'
     config.project_root.expects(:glob).with('*.xcodeproj').returns([path])
 
-    podfile.target_definitions[:default].xcodeproj.should == path
-    podfile.target_definitions[:another_target].xcodeproj.should == path
+    podfile.target_definitions[:default].user_project.path.should == path
+    podfile.target_definitions[:another_target].user_project.path.should == path
   end
 
   it "assumes the basename of the workspace is the same as the default target's project basename" do
@@ -117,7 +125,7 @@ describe "Pod::Podfile" do
     before do
       @podfile = Pod::Podfile.new do
         platform :ios
-        xcodeproj 'iOS Project'
+        xcodeproj 'iOS Project', 'iOS App Store' => :release, 'Test' => :debug
 
         target :debug do
           dependency 'SSZipArchive'
@@ -133,7 +141,7 @@ describe "Pod::Podfile" do
 
         target :osx_target do
           platform :osx
-          xcodeproj 'OSX Project.xcodeproj'
+          xcodeproj 'OSX Project.xcodeproj', 'Mac App Store' => :release, 'Test' => :debug
           link_with 'OSXTarget'
           dependency 'ASIHTTPRequest'
           target :nested_osx_target do
@@ -178,26 +186,24 @@ describe "Pod::Podfile" do
     it "returns the Xcode project that contains the target to link with" do
       [:default, :debug, :test, :subtarget].each do |target_name|
         target = @podfile.target_definitions[target_name]
-        target.xcodeproj.should == config.project_root + 'iOS Project.xcodeproj'
+        target.user_project.path.should == config.project_root + 'iOS Project.xcodeproj'
       end
       [:osx_target, :nested_osx_target].each do |target_name|
         target = @podfile.target_definitions[target_name]
-        target.xcodeproj.should == config.project_root + 'OSX Project.xcodeproj'
+        target.user_project.path.should == config.project_root + 'OSX Project.xcodeproj'
       end
     end
 
     it "returns a Xcode project found in the working dir when no explicit project is specified" do
       xcodeproj1 = config.project_root + '1.xcodeproj'
-      target = Pod::Podfile::TargetDefinition.new(:implicit)
       config.project_root.expects(:glob).with('*.xcodeproj').returns([xcodeproj1])
-      target.xcodeproj.should == xcodeproj1
+      Pod::Podfile::UserProject.new.path.should == xcodeproj1
     end
 
     it "returns `nil' if more than one Xcode project was found in the working when no explicit project is specified" do
       xcodeproj1, xcodeproj2 = config.project_root + '1.xcodeproj', config.project_root + '2.xcodeproj'
-      target = Pod::Podfile::TargetDefinition.new(:implicit)
       config.project_root.expects(:glob).with('*.xcodeproj').returns([xcodeproj1, xcodeproj2])
-      target.xcodeproj.should == nil
+      Pod::Podfile::UserProject.new.path.should == nil
     end
 
     it "leaves the name of the target, to link with, to be automatically resolved" do
@@ -250,10 +256,25 @@ describe "Pod::Podfile" do
       @podfile.target_definitions[:nested_osx_target].should.not.be.exclusive
     end
 
+    it "returns the specified configurations and wether it should be based on a debug or a release build" do
+      Pod::Podfile::UserProject.any_instance.stubs(:project)
+      all = { 'Release' => :release, 'Debug' => :debug, 'Test' => :debug }
+      @podfile.target_definitions[:default].user_project.build_configurations.should == all.merge('iOS App Store' => :release)
+      @podfile.target_definitions[:test].user_project.build_configurations.should == all.merge('iOS App Store' => :release)
+      @podfile.target_definitions[:osx_target].user_project.build_configurations.should == all.merge('Mac App Store' => :release)
+      @podfile.target_definitions[:nested_osx_target].user_project.build_configurations.should == all.merge('Mac App Store' => :release)
+      @podfile.user_build_configurations.should == all.merge('iOS App Store' => :release, 'Mac App Store' => :release)
+    end
+
+    it "defaults, for unspecified configurations, to a release build" do
+      project = Pod::Podfile::UserProject.new(fixture('SampleProject/SampleProject.xcodeproj'), 'Test' => :debug)
+      project.build_configurations.should == { 'Release' => :release, 'Debug' => :debug, 'Test' => :debug, 'App Store' => :release }
+    end
+
     describe "with an Xcode project that's not in the project_root" do
       before do
         @target_definition = @podfile.target_definitions[:default]
-        @target_definition.stubs(:xcodeproj).returns(config.project_root + 'subdir/iOS Project.xcodeproj')
+        @target_definition.user_project.stubs(:path).returns(config.project_root + 'subdir/iOS Project.xcodeproj')
       end
 
       it "returns the $(PODS_ROOT) relative to the project's $(SRCROOT)" do
@@ -264,7 +285,7 @@ describe "Pod::Podfile" do
         config.integrate_targets.should.equal true
         config.integrate_targets = false
         @target_definition.relative_pods_root.should == '${SRCROOT}/../Pods'
-        @target_definition.stubs(:xcodeproj).returns(nil)
+        @target_definition.user_project.stubs(:path).returns(nil)
         @target_definition.relative_pods_root.should == '${SRCROOT}/Pods'
         config.integrate_targets = true
       end
@@ -282,9 +303,9 @@ describe "Pod::Podfile" do
   describe "concerning validations" do
 
     it "raises if it should integrate and can't find an xcodeproj" do
-      config.integrate_targets.should.equal true
+      config.integrate_targets = true
       target_definition = Pod::Podfile.new {}.target_definitions[:default]
-      target_definition.stubs(:xcodeproj).returns(nil)
+      target_definition.user_project.stubs(:path).returns(nil)
       exception = lambda {
         target_definition.relative_pods_root
         }.should.raise Pod::Informative

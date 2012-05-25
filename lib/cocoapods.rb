@@ -4,6 +4,10 @@ module Pod
   VERSION = '0.6.0rc1'
 
   class Informative < StandardError
+    def message
+      #TODO: remove formatting from raise calls and remove conditional
+      super !~ /\[!\]/ ? "[!] #{super}\n".red : super
+    end
   end
 
   autoload :Command,                'cocoapods/command'

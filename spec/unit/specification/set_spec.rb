@@ -10,7 +10,7 @@ describe "Pod::Specification::Set" do
   end
 
   it "returns the versions available for this pod ordered from highest to lowest" do
-    @set.versions.should == %w[1.3.2 1.3.1 1.3 1.2.3 1.2.2 1.2.1 1.2 1.1 1.0].map { |v| Pod::Version.new(v) }
+    @set.versions.should == %w[1.3.3 1.3.2 1.3.1 1.3 1.2.3 1.2.2 1.2.1 1.2 1.1 1.0].map { |v| Pod::Version.new(v) }
   end
 
   it "checks if the dependency of the specification is compatible with existing requirements" do
@@ -29,12 +29,6 @@ describe "Pod::Specification::Set" do
     lambda { @set.required_version }.should.raise Pod::Informative
   end
 
-  it "returns that this set is only part for other pods" do
-    @set.required_by(Pod::Spec.new { |s| s.part_of = 'CocoaLumberjack' })
-    @set.required_by(Pod::Spec.new { |s| s.part_of = 'CocoaLumberjack' })
-    @set.should.be.only_part_of_other_pod
-  end
-
   before do
     @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack', '< 1.2.1' })
   end
@@ -49,11 +43,6 @@ describe "Pod::Specification::Set" do
 
   it "returns the specification for the required version" do
     @set.specification.should == Pod::Spec.new { |s| s.name = 'CocoaLumberjack'; s.version = '1.2' }
-  end
-
-  it "returns that this set is not only part for other pods" do
-    @set.required_by(Pod::Spec.new { |s| s.part_of = 'CocoaLumberjack' })
-    @set.should.not.be.only_part_of_other_pod
   end
 
   it "ignores dotfiles when getting the version directories" do

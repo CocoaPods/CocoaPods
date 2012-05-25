@@ -1,13 +1,19 @@
 require 'open-uri'
 require 'tempfile'
 require 'zlib'
+require 'digest/sha1'
 
 module Pod
   class Downloader
     class Git < Downloader
+      include Config::Mixin
       executable :git
 
+      MAX_CACHE_SIZE = 500
+
       def download
+        create_cache unless cache_exist?
+        puts '-> Cloning git repo' if config.verbose?
         if options[:tag]
           download_tag
         elsif options[:commit]
@@ -15,16 +21,84 @@ module Pod
         else
           download_head
         end
+        removed_cached_repos_if_needed
+      end
+
+      def create_cache
+        puts "-> Creating cache git repo (#{cache_path})" if config.verbose?
+        cache_path.rmtree if cache_path.exist?
+        cache_path.mkpath
+        git "clone '#{url}' #{cache_path}"
+      end
+
+      def removed_cached_repos_if_needed
+        return unless caches_dir.exist?
+        Dir.chdir(caches_dir) do
+          repos = Pathname.new(caches_dir).children.select { |c| c.directory? }.sort_by(&:ctime)
+          while caches_size >= MAX_CACHE_SIZE && !repos.empty?
+            dir = repos.shift
+            puts '->'.yellow << " Removing git cache for `#{origin_url(dir)}'" if config.verbose?
+            dir.rmtree
+          end
+        end
+      end
+
+      def cache_path
+        @cache_path ||= caches_dir + "#{Digest::SHA1.hexdigest(url.to_s)}"
+      end
+
+      def cache_exist?
+        cache_path.exist? && origin_url(cache_path).to_s == url.to_s
+      end
+
+      def origin_url(dir)
+        Dir.chdir(dir) { `git config remote.origin.url`.chomp }
+      end
+
+      def caches_dir
+        Pathname.new(File.expand_path("~/Library/Caches/CocoaPods/Git"))
+      end
+
+      def clone_url
+        cache_path
+      end
+
+      def caches_size
+        # expressed in Mb
+        `du -cm`.split("\n").last.to_i
+      end
+
+      def update_cache
+        puts "-> Updating cache git repo (#{cache_path})" if config.verbose?
+        Dir.chdir(cache_path) do
+          git "reset --hard HEAD"
+          git "clean -d -x -f"
+          git "pull"
+        end
+      end
+
+      def ref_exists?(ref)
+        Dir.chdir(cache_path) { git "rev-list --max-count=1 #{ref}" }
+        $? == 0
+      end
+
+      def ensure_ref_exists(ref)
+        return if ref_exists?(ref)
+        # Skip pull if not needed
+        update_cache
+        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists?(ref)
       end
 
       def download_head
-        git "clone '#{url}' '#{target_path}'"
+        update_cache
+        git "clone '#{clone_url}' '#{target_path}'"
       end
 
       def download_tag
+        ensure_ref_exists(options[:tag])
         Dir.chdir(target_path) do
           git "init"
-          git "remote add origin '#{url}'"
+          git "remote add origin '#{clone_url}'"
           git "fetch origin tags/#{options[:tag]}"
           git "reset --hard FETCH_HEAD"
           git "checkout -b activated-pod-commit"
@@ -32,15 +106,11 @@ module Pod
       end
 
       def download_commit
-        git "clone '#{url}' '#{target_path}'"
-
+        ensure_ref_exists(options[:commit])
+        git "clone '#{clone_url}' '#{target_path}'"
         Dir.chdir(target_path) do
           git "checkout -b activated-pod-commit #{options[:commit]}"
         end
-      end
-
-      def clean
-        (target_path + '.git').rmtree
       end
     end
 
@@ -50,28 +120,18 @@ module Pod
       end
 
       def download_tag
-        super unless download_only?
         download_only? ? download_and_extract_tarball(options[:tag]) : super
       end
 
       def download_commit
-        super unless download_only?
         download_only? ? download_and_extract_tarball(options[:commit]) : super
-      end
-
-      def clean
-        if download_only?
-          FileUtils.rm_f(tmp_path)
-        else
-          super
-        end
       end
 
       def tarball_url_for(id)
         original_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
         "https://github.com/#{username}/#{reponame}/tarball/#{id}"
       end
-      
+
       def tmp_path
         target_path + "tarball.tar.gz"
       end

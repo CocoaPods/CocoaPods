@@ -18,21 +18,22 @@ describe "Pod::Command::Spec#create" do
   extend SpecHelper::Command
   extend SpecHelper::Github
   extend SpecHelper::TemporaryDirectory
-  extend SpecHelper::Git
+  extend SpecHelper::TemporaryRepos
 
   it "creates a new podspec stub file" do
     run_command('spec', 'create', 'Bananas')
     path = temporary_directory + 'Bananas.podspec'
-    spec = Pod::Specification.from_file(path)
-    spec.name.should               == 'Bananas'
-    spec.license.should            == { :type => "MIT", :file => "LICENSE" }
-    spec.version.should            == Pod::Version.new('0.0.1')
-    spec.summary.should            == 'A short description of Bananas.'
-    spec.homepage.should           == 'http://EXAMPLE/Bananas'
-    spec.authors.should            == { `git config --get user.name`.strip => `git config --get user.email`.strip}
-    spec.source.should             == { :git => 'http://EXAMPLE/Bananas.git', :tag => '0.0.1' }
-    spec.description.should        == 'An optional longer description of Bananas.'
-    spec.source_files[:ios].should == ['Classes', 'Classes/**/*.{h,m}']
+    spec = Pod::Specification.from_file(path).activate_platform(:ios)
+
+    spec.name.should         == 'Bananas'
+    spec.license.should      == { :type => "MIT", :file => "LICENSE" }
+    spec.version.should      == Pod::Version.new('0.0.1')
+    spec.summary.should      == 'A short description of Bananas.'
+    spec.homepage.should     == 'http://EXAMPLE/Bananas'
+    spec.authors.should      == { `git config --get user.name`.strip => `git config --get user.email`.strip}
+    spec.source.should       == { :git => 'http://EXAMPLE/Bananas.git', :tag => '0.0.1' }
+    spec.description.should  == 'An optional longer description of Bananas.'
+    spec.source_files.should == ['Classes', 'Classes/**/*.{h,m}']
   end
 
   it "correctly creates a podspec from github" do
@@ -93,21 +94,16 @@ end
 describe "Pod::Command::Spec#lint" do
   extend SpecHelper::Command
   extend SpecHelper::TemporaryDirectory
-  extend SpecHelper::Git
+  extend SpecHelper::TemporaryRepos
 
   before do
     config.repos_dir = fixture('spec-repos')
   end
 
-  after do
-    config.repos_dir = tmp_repos_path
-  end
-
   it "lints a repo" do
-    # The fixture has an error due to a name mismatch
+    # The fixture has warnings so it raises
     cmd = command('spec', 'lint', 'master')
     lambda { cmd.run }.should.raise Pod::Informative
-    cmd.output.should.include "InAppSettingKit (0.0.1)\n    - ERROR | The name of the spec should match the name of the file"
     cmd.output.should.include "WARN"
   end
 
@@ -124,17 +120,23 @@ describe "Pod::Command::Spec#lint" do
     end
   end
 
+  before do
+    text = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
+    text.gsub!(/.*license.*/, "")
+    file = temporary_directory + 'JSONKit.podspec'
+    File.open(file, 'w') {|f| f.write(text) }
+    @spec_path = file.to_s
+  end
+
   it "lints a givent podspec" do
-    spec_file = fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec'
-    cmd = command('spec', 'lint', '--quick', spec_file.to_s)
+    cmd = command('spec', 'lint', '--quick', @spec_path)
     lambda { cmd.run }.should.raise Pod::Informative
-    cmd.output.should.include "Missing license[:file] or [:text]"
+    cmd.output.should.include "Missing license type"
   end
 
   it "respects the -only--errors option" do
-    spec_file = fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec'
-    cmd = command('spec', 'lint', '--quick', '--only-errors', spec_file.to_s)
+    cmd = command('spec', 'lint', '--quick', '--only-errors', @spec_path)
     lambda { cmd.run }.should.not.raise
-    cmd.output.should.include "Missing license[:file] or [:text]"
+    cmd.output.should.include "Missing license type"
   end
 end

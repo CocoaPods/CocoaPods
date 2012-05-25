@@ -2,24 +2,18 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 describe "Pod::Installer" do
   before do
-    @config_before = config
-    Pod::Config.instance = nil
-    config.silent = true
     config.repos_dir = fixture('spec-repos')
     config.project_pods_root = fixture('integration')
   end
 
-  after do
-    Pod::Config.instance = @config_before
-  end
-
-  describe ", by default," do
+  describe "by default" do
     before do
-      @xcconfig = Pod::Installer.new(Pod::Podfile.new do
+      podfile = Pod::Podfile.new do
         platform :ios
         xcodeproj 'MyProject'
         dependency 'JSONKit'
-      end).target_installers.first.xcconfig.to_hash
+      end
+      @xcconfig = Pod::Installer.new(podfile).target_installers.first.xcconfig.to_hash
     end
 
     it "sets the header search paths where installed Pod headers can be found" do
@@ -41,7 +35,7 @@ describe "Pod::Installer" do
       dependency 'ASIHTTPRequest'
     end
     installer = Pod::Installer.new(podfile)
-    pods = installer.activated_specifications.map do |spec|
+    pods = installer.specifications.map do |spec|
       Pod::LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
     end
     expected = pods.map { |pod| pod.header_files }.flatten.map { |header| config.project_pods_root + header }
@@ -58,5 +52,15 @@ describe "Pod::Installer" do
     end
     installer = Pod::Installer.new(podfile)
     installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
+  end
+
+  it "adds the user's build configurations" do
+    path = fixture('SampleProject/SampleProject.xcodeproj')
+    podfile = Pod::Podfile.new do
+      platform :ios
+      xcodeproj path, 'App Store' => :release
+    end
+    installer = Pod::Installer.new(podfile)
+    installer.project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
   end
 end

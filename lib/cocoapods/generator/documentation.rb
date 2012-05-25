@@ -12,9 +12,9 @@ module Pod
 
       def initialize(pod)
         @pod = pod
-        @specification = pod.specification
+        @specification = pod.top_specification
         @target_path = pod.sandbox.root + 'Documentation' + pod.name
-        @options = pod.specification.documentation || {}
+        @options = @specification.documentation || {}
       end
 
       def name
@@ -42,13 +42,11 @@ module Pod
       end
 
       def files
-        @pod.absolute_source_files.map(&:to_s)
+        @pod.all_specs_public_header_files.map{ |f| f.relative_path_from(@pod.root).to_s }
       end
 
       def index_file
-        @pod.chdir do
-          Dir.glob('README*', File::FNM_CASEFOLD).first
-        end
+        @pod.readme_file.relative_path_from(@pod.root).to_s if @pod.readme_file
       end
 
       def spec_appledoc_options
@@ -66,11 +64,9 @@ module Pod
           '--keep-undocumented-objects',
           '--keep-undocumented-members',
           '--keep-intermediate-files',
-          '--exit-threshold', '2'
-          # appledoc exits with 1 if a warning was logged
+          '--exit-threshold', '2' # appledoc terminates with an exits status of 1 if a warning was logged
         ]
-        index = index_file
-        options += ['--index-desc', index] if index
+        options += ['--index-desc', index_file] if index_file
         options += spec_appledoc_options
       end
 
@@ -82,6 +78,8 @@ module Pod
         options = appledoc_options
         options += ['--output', @target_path.to_s]
         options += install ? ['--create-docset'] : ['--no-create-docset']
+        # TODO: passing the files explicitly clutters output and chokes on very long list (AWSiOSSDK Spec).
+        # It is possible to just pass the dir of the pod, however this would include other files like demo projects.
         options += files
 
         @target_path.mkpath

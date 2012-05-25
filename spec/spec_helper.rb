@@ -12,47 +12,30 @@ $:.unshift((ROOT + 'lib').to_s)
 require 'cocoapods'
 
 $:.unshift((ROOT + 'spec').to_s)
-require 'spec_helper/color_output'
+require 'spec_helper/bacon'
 require 'spec_helper/command'
 require 'spec_helper/fixture'
-require 'spec_helper/git'
 require 'spec_helper/github'
 require 'spec_helper/temporary_directory'
+require 'spec_helper/temporary_repos'
+require 'spec_helper/config'
 
 module Bacon
-  extend ColorOutput
-  summary_at_exit
-
-  module FilterBacktraces
-    def handle_summary
-      ErrorLog.replace(ErrorLog.split("\n").reject do |line|
-        line =~ %r{(gems/mocha|spec_helper)}
-      end.join("\n").lstrip << "\n\n")
-      super
-    end
-  end
-  extend FilterBacktraces
-
   class Context
     include Pod::Config::Mixin
-
     include SpecHelper::Fixture
 
     def argv(*argv)
       Pod::Command::ARGV.new(argv)
     end
-
-    require 'colored'
-    def xit(description, *args)
-      puts "- #{description} [DISABLED]".yellow
-      ErrorLog << "[DISABLED] #{self.name} #{description}\n\n"
-    end
   end
 end
 
 config = Pod::Config.instance
-config.silent = true
-config.repos_dir = SpecHelper.tmp_repos_path
+config.silent       = true
+config.repos_dir    = SpecHelper.tmp_repos_path
+config.project_root = SpecHelper.temporary_directory
+Pod::Specification::Statistics.instance.cache_file = nil
 
 require 'tmpdir'
 
@@ -84,6 +67,4 @@ VCR.configure do |c|
   c.hook_into :webmock # or :fakeweb
   c.allow_http_connections_when_no_cassette = true
 end
-
-Pod::Specification::Statistics.instance.cache_file = nil
 

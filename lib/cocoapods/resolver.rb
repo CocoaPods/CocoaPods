@@ -22,26 +22,19 @@ module Pod
       @podfile.target_definitions.values.each do |target_definition|
         puts "\nResolving dependencies for target `#{target_definition.name}' (#{target_definition.platform})".green if config.verbose?
         @loaded_specs = []
-        # TODO @podfile.platform will change to target_definition.platform
-        find_dependency_sets(@podfile, target_definition.dependencies, target_definition)
+        find_dependency_specs(@podfile, target_definition.dependencies, target_definition)
         targets_and_specs[target_definition] = @specs.values_at(*@loaded_specs).sort_by(&:name)
       end
 
-      # Specification doesn't need to know more about the context, so we assign
-      # the other specification, of which this pod is a part, to the spec.
-      @specs.values.sort_by(&:name).each do |spec|
-        if spec.part_of_other_pod?
-          spec.part_of_specification = @cached_sets[spec.part_of.name].specification
-        end
-      end
-
+      @specs.values.sort_by(&:name)
       targets_and_specs
     end
 
     private
 
     def find_cached_set(dependency, platform)
-      @cached_sets[dependency.name] ||= begin
+      set_name = dependency.name.split('/').first
+      @cached_sets[set_name] ||= begin
         if dependency.specification
           Specification::Set::External.new(dependency.specification)
         elsif external_source = dependency.external_source
@@ -49,14 +42,18 @@ module Pod
           # that's being used behind the scenes, but passing it anyways for
           # completeness sake.
           specification = external_source.specification_from_sandbox(@sandbox, platform)
-          Specification::Set::External.new(specification)
+          set = Specification::Set::External.new(specification)
+          if dependency.subspec_dependency?
+            @cached_sets[dependency.top_level_spec_name] ||= set
+          end
+          set
         else
           @cached_sources.search(dependency)
         end
       end
     end
 
-    def find_dependency_sets(dependent_specification, dependencies, target_definition)
+    def find_dependency_specs(dependent_specification, dependencies, target_definition)
       @log_indent += 1
       dependencies.each do |dependency|
         puts '  ' * @log_indent + "- #{dependency}" if config.verbose?
@@ -64,19 +61,12 @@ module Pod
         set.required_by(dependent_specification)
         # Ensure we don't resolve the same spec twice for one target
         unless @loaded_specs.include?(dependency.name)
-          # Get a reference to the spec that’s actually being loaded.
-          # If it’s a subspec dependency, e.g. 'RestKit/Network', then
-          # find that subspec.
-          spec = set.specification
-          if dependency.subspec_dependency?
-            spec = spec.subspec_by_name(dependency.name)
-          end
+        spec = set.specification_by_name(dependency.name)
           @loaded_specs << spec.name
           @specs[spec.name] = spec
-
+          spec.activate_platform(target_definition.platform)
           # And recursively load the dependencies of the spec.
-          # TODO fix the need to return an empty arrayf if there are no deps for the given platform
-          find_dependency_sets(spec, (spec.dependencies[target_definition.platform.to_sym] || []), target_definition)
+          find_dependency_specs(spec, spec.dependencies, target_definition) if spec.dependencies
         end
         validate_platform!(spec || @specs[dependency.name], target_definition)
       end
@@ -84,8 +74,8 @@ module Pod
     end
 
     def validate_platform!(spec, target)
-      unless spec.platforms.any? { |platform| target.platform.support?(platform) }
-        raise Informative, "[!] The platform of the target `#{target.name}' (#{target.platform}) is not compatible with `#{spec}' which has a minimun requirement of #{spec.platforms.join(' - ')}.".red
+      unless spec.available_platforms.any? { |platform| target.platform.supports?(platform) }
+        raise Informative, "[!] The platform of the target `#{target.name}' (#{target.platform}) is not compatible with `#{spec}' which has a minimun requirement of #{spec.available_platforms.join(' - ')}.".red
       end
     end
   end

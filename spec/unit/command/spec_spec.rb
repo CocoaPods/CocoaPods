@@ -19,7 +19,7 @@ describe "Pod::Command::Spec::Linter" do
 
   it "fails a specifications that does not contain the minimum required attributes" do
     spec, file = write_podspec('Pod::Spec.new do |s| end')
-    linter = Pod::Command::Spec::Linter.new(spec, file)
+    linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = true, true
     linter.lint.should == false
     linter.errors.join(' | ') =~ /name.*version.*summary.*homepage.*authors.*(source.*part_of).*source_files/
@@ -27,7 +27,7 @@ describe "Pod::Command::Spec::Linter" do
 
   it "fails specifications if the name does not match the name of the file" do
     spec, file = write_podspec(stub_podspec(/s.name *= 'JSONKit'/, "s.name = 'JSONKitAAA'"))
-    linter = Pod::Command::Spec::Linter.new(spec, file)
+    linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = true, true
     linter.lint.should == false
     linter.errors.count.should == 1
@@ -36,16 +36,16 @@ describe "Pod::Command::Spec::Linter" do
 
   it "fails a specification if a path starts with a slash" do
     spec, file = write_podspec(stub_podspec(/s.source_files = 'JSONKit\.\*'/, "s.source_files = '/JSONKit.*'"))
-    linter = Pod::Command::Spec::Linter.new(spec, file)
+    linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = true, true
     linter.lint.should == false
     linter.errors.count.should == 1
     linter.errors[0].should =~ /Paths cannot start with a slash/
   end
 
-  it "fails a specification if the plafrom is unrecognized" do
+  it "fails a specification if the platform is unrecognized" do
     spec, file = write_podspec(stub_podspec(/s.name *= 'JSONKit'/, "s.name = 'JSONKit'\ns.platform = :iososx\n"))
-    linter = Pod::Command::Spec::Linter.new(spec, file)
+    linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = true, true
     linter.lint.should == false
     linter.errors.count.should == 1
@@ -53,8 +53,8 @@ describe "Pod::Command::Spec::Linter" do
   end
 
   it "fails validation if the specification contains warnings" do
-    spec, file = write_podspec(stub_podspec)
-    linter = Pod::Command::Spec::Linter.new(spec, file)
+    spec, file = write_podspec(stub_podspec(/.*license.*/, ""))
+    linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = false, true
     linter.lint.should == false
     linter.errors.should.be.empty
@@ -62,8 +62,8 @@ describe "Pod::Command::Spec::Linter" do
   end
 
   it "validates in lenient mode if there are no erros but there are warnings" do
-    spec, file = write_podspec(stub_podspec)
-    linter = Pod::Command::Spec::Linter.new(spec, file)
+    spec, file = write_podspec(stub_podspec(/.*license.*/, ""))
+    linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = true, true
     linter.lint.should == true
     linter.errors.should.be.empty
@@ -72,7 +72,7 @@ describe "Pod::Command::Spec::Linter" do
 
   it "respects quick mode" do
     spec, file = write_podspec(stub_podspec)
-    linter = Pod::Command::Spec::Linter.new(spec, file)
+    linter = Pod::Command::Spec::Linter.new(spec)
     linter.expects(:peform_multiplatform_analysis).never
     linter.expects(:install_pod).never
     linter.expects(:xcodebuild_output_for_platfrom).never
@@ -83,16 +83,16 @@ describe "Pod::Command::Spec::Linter" do
 
   it "produces deprecation notices" do
     spec, file = write_podspec(stub_podspec(/s\.source_files = 'JSONKit\.\*'/, "s.source_files = 'JSONKit.*'\n if config.ios?\nend"))
-    linter = Pod::Command::Spec::Linter.new(spec, file)
+    linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = false, true
     linter.lint.should == false
     linter.errors.should.be.empty
-    linter.warnings.join(' | ').should =~ /`config.ios\?' and `config.osx\?' are deprecated and will be removed in version 0.7/
+    linter.warnings.join(' | ').should =~ /`config.ios\?' and `config.osx\?' are deprecated/
   end
 
  it "uses xcodebuild to generate notes and warnings" do
     spec, file = write_podspec(stub_podspec)
-    linter = Pod::Command::Spec::Linter.new(spec, file)
+    linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = false, false
     linter.lint.should == false
     linter.notes.join(' | ').should.include "JSONKit/JSONKit.m:1640:27: warning: equality comparison with extraneous parentheses" unless `which xcodebuild`.strip.empty?
@@ -100,10 +100,10 @@ describe "Pod::Command::Spec::Linter" do
 
  it "checks for file patterns" do
     spec, file = write_podspec(stub_podspec(/s\.source_files = 'JSONKit\.\*'/, "s.source_files = 'JSONKit.*'\ns.resources = 'WRONG_FOLDER'"))
-    linter = Pod::Command::Spec::Linter.new(spec, file)
-    linter.stubs(:xcodebuild_output_for_platfrom).returns([])
+    linter = Pod::Command::Spec::Linter.new(spec)
+    linter.stubs(:xcodebuild_output).returns([])
     linter.lenient, linter.quick = false, false
     linter.lint.should == false
-    linter.errors.join(' | ').should.include "[resources = 'WRONG_FOLDER'] -> did not match any file"
+    linter.errors.join(' | ').should.include "The resources did not match any file"
   end
 end
