@@ -89,6 +89,10 @@ module Pod
       chained_expanded_paths(:source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => relative)
     end
 
+    def header_files
+      source_files.select { |f| f.extname == '.h' }
+    end
+
     def resources(relative = true)
       chained_expanded_paths(:resources, :relative_to_sandbox => relative)
     end
@@ -101,6 +105,11 @@ module Pod
       source_files(false) + resources(false) + [ readme_file, license_file, prefix_header_file ] + preserve_paths
     end
 
+    # TODO: implement case insensitive search
+    def preserve_paths
+      chained_expanded_paths(:preserve_paths) + expanded_paths(%w[ *.podspec notice* NOTICE* CREDITS* ])
+    end
+
     def readme_file
       expanded_paths(%w[ README{*,.*} readme{*,.*} ]).first
     end
@@ -110,21 +119,12 @@ module Pod
       file || expanded_paths(%w[ LICENSE{*,.*} licence{*,.*} ]).first
     end
 
-    # TODO: implement case insensitive search
-    def preserve_paths
-      chained_expanded_paths(:preserve_paths) + expanded_paths(%w[ *.podspec notice* NOTICE* CREDITS* ])
-    end
-
-    def header_files
-      source_files.select { |f| f.extname == '.h' }
-    end
-
     def license_text
-      if (license_hash = specification.license)
+      if (license_hash = top_specification.license)
         if (result = license_hash[:text])
           result
-        elsif (filename = license_hash[:file])
-          result = IO.read(root + filename)
+        elsif license_file
+          result = IO.read(root + license_file)
         end
       end
     end
