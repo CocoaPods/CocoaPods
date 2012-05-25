@@ -75,6 +75,54 @@ See [#149](https://github.com/CocoaPods/CocoaPods/issues/149) and
 [#151](https://github.com/CocoaPods/CocoaPods/issues/151) for more info.
 
 
+### Licenses & Documentation
+
+CocoaPods will now generate two 'Acknowledgements' files for each target specified
+in your Podfile which contain the License details for each Pod used in that target
+(assuming details have been specified in the Pod spec).
+
+There is a markdown file, for general consumption, as well as a property list file
+that can be added to a settings bundle for an iOS application.
+
+You don't need to do anything for this to happen, it should just work.
+
+If you're not happy with the default boilerplate text generated for the title, header
+and footnotes in the files, it's possible to customise these by overriding the methods
+that generate the text in your `Podfile` like this:
+
+```ruby
+class ::Pod::Generator::Acknowledgements
+  def header_text
+    "My custom header text"
+  end
+end
+```
+
+You can even go one step further and customise the text on a per target basis by 
+checking against the target name, like this:
+
+```ruby
+class ::Pod::Generator::Acknowledgements
+  def header_text
+    if @target_definition.label.end_with?("MyTargetName")
+      "Custom header text for MyTargetName"
+    else
+      "Custom header text for other targets"
+    end
+  end
+end
+```
+
+Finally, here's a list of the methods that are available to override:
+
+```ruby
+header_title
+header_text
+footnote_title
+footnote_text
+```
+
+
 ### Introduced two new classes: LocalPod and Sandbox.
 
 The Sandbox represents the entire contents of the `POD_ROOT` (normally

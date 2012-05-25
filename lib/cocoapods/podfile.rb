@@ -92,6 +92,10 @@ module Pod
         end
       end
 
+      def acknowledgements_path
+        config.project_pods_root + "#{label}-Acknowledgements"
+      end
+
       # Returns a path, which is relative to the project_root, relative to the
       # `$(SRCROOT)` of the user's project.
       def relative_to_srcroot(path)
