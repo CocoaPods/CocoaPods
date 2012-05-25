@@ -18,7 +18,7 @@ module Pod
           :PreferenceSpecifiers => licenses
         }
       end
- 
+
       def plist_title
         "Acknowledgements"
       end

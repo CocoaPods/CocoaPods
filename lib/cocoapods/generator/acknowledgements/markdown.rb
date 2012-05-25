@@ -17,7 +17,7 @@ module Pod
           "#{string}\n" + '-' * string.length + "\n"
         end
       end
- 
+
       def string_for_pod(pod)
         if (license_text = pod.license_text)
           title_from_string(pod.name) + license_text + "\n"

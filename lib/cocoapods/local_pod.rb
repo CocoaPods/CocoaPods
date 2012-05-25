@@ -118,7 +118,7 @@ module Pod
     def header_files
       source_files.select { |f| f.extname == '.h' }
     end
-    
+
     def license_text
       if (license_hash = specification.license)
         if (result = license_hash[:text])
