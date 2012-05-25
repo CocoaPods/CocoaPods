@@ -87,6 +87,9 @@ module Pod
       target_installers.each do |target_installer|
         pods_for_target = pods_by_target[target_installer.target_definition]
         target_installer.install!(pods_for_target, @sandbox)
+        acknowledgements_path = target_installer.target_definition.acknowledgements_path
+        Generator::Acknowledgements.new(target_installer.target_definition,
+                                        pods_for_target).save_as(acknowledgements_path)
       end
 
       generate_lock_file!(specifications)

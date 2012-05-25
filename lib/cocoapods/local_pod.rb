@@ -118,6 +118,16 @@ module Pod
     def header_files
       source_files.select { |f| f.extname == '.h' }
     end
+    
+    def license_text
+      if (license_hash = specification.license)
+        if (result = license_hash[:text])
+          result
+        elsif (filename = license_hash[:file])
+          result = IO.read(root + filename)
+        end
+      end
+    end
 
     def xcconfig
       specifications.map { |s| s.xcconfig }.reduce(:merge)

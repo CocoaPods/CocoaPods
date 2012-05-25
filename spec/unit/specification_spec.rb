@@ -136,13 +136,11 @@ describe "A Pod::Specification, in general," do
     @spec.license = {
       :type => 'MIT',
       :file => 'LICENSE',
-      :range => 1..15,
       :text => 'Permission is hereby granted ...'
     }
     @spec.license.should == {
       :type => 'MIT',
       :file => 'LICENSE',
-      :range => 1..15,
       :text => 'Permission is hereby granted ...'
     }
   end
