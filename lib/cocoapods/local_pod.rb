@@ -64,17 +64,19 @@ module Pod
       root.rmtree if exists?
     end
 
-    # It deletes all the files identified by clean_paths, then it removes
+    # It deletes all the files identified by clean_files, then it removes
     # all the empty folders or symlinks.
     def clean
-      clean_paths.each { |path| FileUtils.rm_rf(path) }
-      Dir.glob("#{root}/**/{*,.*}").
-        sort_by(&:length).reverse.            # Clean the deepest paths first to determine if the containing folders are empty
-        reject { |d| d =~ /\/\.\.?$/ }.       # Remove the `.` and `..` paths
-        select { |d| File.directory?(d) }.    # Get only directories or symlinks to directories
-        each do |d|
-          FileUtils.rm_rf(d) if File.symlink?(d) || (Dir.entries(d) == %w[ . .. ]) # Remove the symlink and the empty dirs
-        end
+      clean_files.each { |path| FileUtils.rm_rf(path) }
+
+      # Get all the directories. Then sort them from the longest
+      # to the shortest, so a directory will be empty if its
+      # subdirs where empty. We need to delete the symlinks because
+      # it might prevent a bundle from being deleted
+      dirs = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
+      dirs = dirs.reject { |d| d.end_with? ('.', '..') || !File.directory?(d) }.sort_by(&:length).reverse
+      dirs.each    { |d| puts d }
+      dirs.each    { |d| FileUtils.rm_rf(d) if File.symlink?(d) || (Dir.entries(d) == %w[ . .. ]) }
     end
 
     # File attributes
@@ -95,12 +97,13 @@ module Pod
       chained_expanded_paths(:resources, :relative_to_sandbox => relative)
     end
 
-    def clean_paths
-      expanded_paths('**/{*,.*}').reject { |p| p.directory? } - used_files
+    def clean_files
+      all_files = Dir.glob(root + "**/*", File::FNM_DOTMATCH).map { |f| root + f }.reject { |p| p.directory? }
+      all_files - used_files
     end
 
     def used_files
-      source_files(false) + resources(false) + [ readme_file, license_file, prefix_header_file ] + preserve_paths
+      source_files(false) + resources(false) + preserve_paths + [ readme_file, license_file, prefix_header_file ]
     end
 
     # TODO: implement case insensitive search
