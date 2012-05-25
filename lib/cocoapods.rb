@@ -34,6 +34,9 @@ module Pod
     autoload :BridgeSupport,        'cocoapods/generator/bridge_support'
     autoload :CopyResourcesScript,  'cocoapods/generator/copy_resources_script'
     autoload :Documentation,        'cocoapods/generator/documentation'
+    autoload :Acknowledgements,     'cocoapods/generator/acknowledgements'
+    autoload :Plist,                'cocoapods/generator/acknowledgements/plist'
+    autoload :Markdown,             'cocoapods/generator/acknowledgements/markdown'
     autoload :DummySource,          'cocoapods/generator/dummy_source'
   end
 end
