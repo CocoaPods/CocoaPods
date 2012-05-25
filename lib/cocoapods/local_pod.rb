@@ -116,8 +116,11 @@ module Pod
     end
 
     def license_file
-      file = top_specification.license[:file] if top_specification.license
-      file || expanded_paths(%w[ LICENSE{*,.*} licence{*,.*} ]).first
+      if top_specification.license && top_specification.license[:file]
+        root + top_specification.license[:file]
+      else
+        expanded_paths(%w[ LICENSE{*,.*} licence{*,.*} ]).first
+      end
     end
 
     def license_text
@@ -125,7 +128,7 @@ module Pod
         if (result = license_hash[:text])
           result
         elsif license_file
-          result = IO.read(root + license_file)
+          result = IO.read(license_file)
         end
       end
     end
