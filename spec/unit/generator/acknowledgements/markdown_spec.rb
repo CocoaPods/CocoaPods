@@ -13,11 +13,11 @@ describe Pod::Generator::Markdown do
   it "returns a correctly formatted title string" do
     @pods[0].unstub(:license_text)
     @pods[0].unstub(:name)
-    @markdown.title_from_string("A Title").should.equal "A Title\n-------\n"
+    @markdown.title_from_string("A Title", 2).should.equal "## A Title"
   end
 
   it "returns a correctly formatted license string for each pod" do
-    @markdown.string_for_pod(@pods[0]).should.equal "POD_NAME\n--------\nLICENSE_TEXT\n"
+    @markdown.string_for_pod(@pods[0]).should.equal "\n## POD_NAME\n\nLICENSE_TEXT\n"
   end
 
   it "returns a correctly formatted markdown string for the target" do
@@ -25,7 +25,7 @@ describe Pod::Generator::Markdown do
     @markdown.stubs(:header_text).returns("HEADER_TEXT")
     @markdown.stubs(:footnote_title).returns("") # Test that extra \n isn't added for empty strings
     @markdown.stubs(:footnote_text).returns("FOOTNOTE_TEXT")
-    @markdown.licenses.should.equal "HEADER_TITLE\n------------\nHEADER_TEXT\nPOD_NAME\n--------\nLICENSE_TEXT\nFOOTNOTE_TEXT\n"
+    @markdown.licenses.should.equal "# HEADER_TITLE\nHEADER_TEXT\n\n## POD_NAME\n\nLICENSE_TEXT\nFOOTNOTE_TEXT\n"
   end
 
   it "writes a markdown file to disk" do

@@ -37,9 +37,10 @@ describe Pod::LocalPod do
       ].sort
     end
 
-    it 'returns an expanded list of absolute clean paths' do
-      #TODO: there are some temporary files that prevent a complete check
-      @pod.clean_paths.map { |p| p.relative_path_from(@sandbox.root).to_s }.should.include 'BananaLib/sub-dir/sub-dir-2/somefile.txt'
+    it 'returns an expanded list the files to clean' do
+      clean_files = @pod.clean_files.map { |p| p.to_s }
+      clean_files.should.include "#{@sandbox.root}/BananaLib/.git/config"
+      clean_files.reject { |p| p.to_s.include?('/.git/') }.should == ["#{@sandbox.root}/BananaLib/sub-dir/sub-dir-2/somefile.txt"]
     end
 
     it 'returns an expanded list of resources, relative to the sandbox root' do
