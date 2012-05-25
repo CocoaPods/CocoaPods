@@ -80,9 +80,7 @@ module Pod
     # File attributes
 
     def prefix_header_file
-      if prefix_header = top_specification.prefix_header_file
-        @sandbox.root + top_specification.name + prefix_header
-      end
+      root + top_specification.prefix_header_file if top_specification.prefix_header_file
     end
 
     def source_files(relative = true)
