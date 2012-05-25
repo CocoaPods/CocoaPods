@@ -74,6 +74,11 @@ describe Pod::LocalPod do
     it "returns the platform" do
       @pod.platform.should == :ios
     end
+
+    it "raises if the files are accessed before creating the pod dir" do
+      @pod.implode
+      lambda { @pod.source_files }.should.raise Pod::Informative
+    end
   end
 
   describe "with installed source," do

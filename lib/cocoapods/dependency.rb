@@ -137,7 +137,7 @@ module Pod
           else
             copy_external_source_into_sandbox(sandbox)
             local_pod = sandbox.installed_pod_named(name, platform)
-            local_pod.clean if config.clean?
+            local_pod.clean if config.clean? && local_pod.exists?
             local_pod.top_specification
           end
         end
