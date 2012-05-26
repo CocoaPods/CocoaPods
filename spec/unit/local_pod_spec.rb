@@ -40,7 +40,8 @@ describe Pod::LocalPod do
     it 'returns an expanded list the files to clean' do
       clean_files = @pod.clean_files.map { |p| p.to_s }
       clean_files.should.include "#{@sandbox.root}/BananaLib/.git/config"
-      clean_files.reject { |p| p.to_s.include?('/.git/') }.should == ["#{@sandbox.root}/BananaLib/sub-dir/sub-dir-2/somefile.txt"]
+      clean_files_without_hidden = clean_files.reject { |p| p.to_s.include?('/.') }
+      clean_files_without_hidden.should == ["#{@sandbox.root}/BananaLib/sub-dir/sub-dir-2/somefile.txt"]
     end
 
     it 'returns an expanded list of resources, relative to the sandbox root' do
