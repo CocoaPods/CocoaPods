@@ -110,10 +110,15 @@ module Pod
         def targets
           @targets ||= begin
           if link_with = @target_definition.link_with
-            # Find explicitly named targets.
+            # Find explicitly linked targets.
             user_project.targets.select do |target|
               link_with.include? target.name
             end
+          elsif @target_definition.name != :default
+            # Find the target with the matching name.
+            target = user_project.targets.find { |target| target.name == @target_definition.name.to_s }
+            raise Informative, "Unable to find a target named `#{@target_definition.name.to_s}'" unless target
+            [target]
           else
             # Default to the first, which in a simple project is probably an app target.
             [user_project.targets.first]
