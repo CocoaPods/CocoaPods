@@ -65,13 +65,14 @@ describe Pod::Installer::UserProjectIntegrator do
   end
 
   it "it raises if it can't find a target with the same name" do
-    target_integrator = @integrator.target_integrators[1]
+    target_integrator = @integrator.target_integrators.find { |ti| ti.target_definition.name == :test_runner }
     target_integrator.target_definition.stubs(:link_with).returns(nil)
     lambda { target_integrator.targets }.should.raise Pod::Informative
   end
 
   it "uses the first target in the user's project if no explicit target is specified" do
-    @target_integrator.target_definition.stubs(:link_with).returns(nil)
-    @target_integrator.targets.should == [Xcodeproj::Project.new(@sample_project_path).targets.first]
+    target_integrator = @integrator.target_integrators.find { |ti| ti.target_definition.name == :default }
+    target_integrator.target_definition.stubs(:link_with).returns(nil)
+    target_integrator.targets.should == [Xcodeproj::Project.new(@sample_project_path).targets.first]
   end
 end
