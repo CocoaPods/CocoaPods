@@ -1,5 +1,5 @@
 PODS:
-  - JSONKit (1.4)
+  - JSONKit (1.5pre)
 
 DEPENDENCIES:
   - JSONKit

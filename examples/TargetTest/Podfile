@@ -1,5 +1,6 @@
 platform :ios
 
 target :test, :exclusive => true do
+  link_with 'TargetTest'
   dependency 'JSONKit'
 end
