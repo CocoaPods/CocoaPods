@@ -1,7 +1,0 @@
-PODS:
-  - ASIHTTPRequest (1.8.1)
-  - SBJson (3.0.4)
-
-DEPENDENCIES:
-  - ASIHTTPRequest
-  - SBJson

@@ -1,5 +1,0 @@
-This example uses MacRuby which needs Garbage Collection support. Since CocoaPods
-does not yet have a way to make a project build with GC support, you will have to
-do this manually in the generated Pods.xcodeproj project.
-
-You can find it in the build settings of the target app.
