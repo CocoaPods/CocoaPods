@@ -60,9 +60,9 @@ module Pod
         when :zip
           unzip "'#{full_filename}' -d #{target_path}"
         when :tgz
-          tar "xfz '#{full_filename}' -d #{target_path}"
+          tar "xfz '#{full_filename}' -C #{target_path}"
         when :tar
-          tar "xf '#{full_filename}' -d #{target_path}"
+          tar "xf '#{full_filename}' -C #{target_path}"
         else
           raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end
