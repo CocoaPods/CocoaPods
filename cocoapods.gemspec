@@ -28,11 +28,14 @@ Gem::Specification.new do |s|
   s.post_install_message = "[!] If this is your first time install of CocoaPods, or if " \
                            "you are upgrading, first run: $ pod setup"
 
-  s.add_runtime_dependency 'xcodeproj', '~> 0.1.0'
-  s.add_runtime_dependency 'colored', '~> 1.2'
-  s.add_runtime_dependency 'escape', '~> 0.0.4'
-  s.add_runtime_dependency 'open4', '~> 1.3.0'
-  s.add_runtime_dependency 'rake', '~> 0.9.0'
+  s.add_runtime_dependency 'colored',   '~> 1.2'
+  s.add_runtime_dependency 'escape',    '~> 0.0.4'
+  s.add_runtime_dependency 'json',      '~> 1.7.3'
+  s.add_runtime_dependency 'octokit',   '~> 1.3.0'
+  s.add_runtime_dependency 'open4',     '~> 1.3.0'
+  s.add_runtime_dependency 'rake',      '~> 0.9.0'
+  s.add_runtime_dependency 'xcodeproj', '~> 0.1.0' # TODO update to RC1 for 0.6.0.rc1
+
   s.add_development_dependency 'bacon', '~> 1.1'
 
   ## Make sure you can build the gem on older versions of RubyGems too:
