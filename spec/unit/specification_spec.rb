@@ -74,16 +74,15 @@ describe "A Pod::Specification loaded from a podspec" do
   it "has a shortcut to add frameworks to the xcconfig" do
     @spec.frameworks = 'CFNetwork', 'CoreText'
     @spec.activate_platform(:ios).xcconfig.should == {
-      'OTHER_LDFLAGS' => '-framework SystemConfiguration ' \
-                         '-framework CFNetwork ' \
-                         '-framework CoreText'
-    }
+      'OTHER_LDFLAGS' => '-framework CFNetwork ' \
+                         '-framework CoreText '   \
+                         '-framework SystemConfiguration' }
   end
 
   it "has a shortcut to add libraries to the xcconfig" do
     @spec.libraries = 'z', 'xml2'
     @spec.activate_platform(:ios).xcconfig.should == {
-      'OTHER_LDFLAGS' => '-framework SystemConfiguration -lz -lxml2'
+      'OTHER_LDFLAGS' => '-lxml2 -lz -framework SystemConfiguration'
     }
   end
 
@@ -548,7 +547,7 @@ describe "A Pod::Specification, concerning its attributes that support different
 
     it "returns a different list of xcconfig build settings for each platform" do
       @spec.activate_platform(:ios).xcconfig.should == { 'OTHER_LDFLAGS' => '-lObjC -lz -framework QuartzCore' }
-      @spec.activate_platform(:osx).xcconfig.should == { 'OTHER_LDFLAGS' => '-lObjC -all_load -lz -lxml -framework QuartzCore -framework CoreData' }
+      @spec.activate_platform(:osx).xcconfig.should == { 'OTHER_LDFLAGS' => '-all_load -lObjC -lxml -lz -framework CoreData -framework QuartzCore' }
     end
 
     it "returns the list of the supported platfroms and deployment targets" do

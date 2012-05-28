@@ -195,55 +195,25 @@ module Pod
     pltf_chained_attr_accessor  :resources,                   lambda {|value, current| pattern_list(value) }
     pltf_chained_attr_accessor  :preserve_paths,              lambda {|value, current| pattern_list(value) } # Paths that should not be cleaned
     pltf_chained_attr_accessor  :exclude_header_search_paths, lambda {|value, current| pattern_list(value) } # Headers to be excluded from being added to search paths (RestKit)
-    pltf_chained_attr_accessor  :frameworks,                  lambda {|value, current| current << value }
-    pltf_chained_attr_accessor  :libraries,                   lambda {|value, current| current << value }
+    pltf_chained_attr_accessor  :frameworks,                  lambda {|value, current| (current << value).flatten }
+    pltf_chained_attr_accessor  :libraries,                   lambda {|value, current| (current << value).flatten }
 
     alias_method :resource=,    :resources=
     alias_method :framework=,   :frameworks=
     alias_method :library=,     :libraries=
 
+    platform_attr_writer        :xcconfig,                     lambda {|value, current| current.tap { |c| c.merge!(value) } }
+
     def xcconfig
       raw_xconfig.dup.
-        tap { |x| x.add_libraries(libraries) }.
-        tap { |x| x.add_frameworks(frameworks) }
-    end
-
-    # TODO: move to Xcodeproj
-    class ::Xcodeproj::Config
-      # BUG: old implementation would lose keys specified in self
-      # but not specified in the passed xcconfig.
-      def merge!(xcconfig)
-        @attributes.merge!(xcconfig.to_hash) { |key, v1, v2| "#{v1} #{v2}" }
-      end
-
-      def merge(config)
-        self.dup.tap { |x|x.merge!(config) }
-      end
-
-      def add_libraries(libraries)
-        return if libraries.nil? || libraries.empty?
-        flags = [ @attributes['OTHER_LDFLAGS'] ] || []
-        flags << "-l#{ libraries.join(' -l') }"
-        @attributes['OTHER_LDFLAGS'] = flags.compact.map(&:strip).join(' ')
-      end
-
-      def add_frameworks(frameworks)
-        return if frameworks.nil? || frameworks.empty?
-        flags = [ @attributes['OTHER_LDFLAGS'] ] || []
-        flags << "-framework #{ frameworks.join(' -framework ') }"
-        @attributes['OTHER_LDFLAGS'] = flags.compact.map(&:strip).join(' ')
-      end
-
-      def dup
-        Xcodeproj::Config.new(self.to_hash.dup)
-      end
+        tap { |x| x.libraries.merge  libraries }.
+        tap { |x| x.frameworks.merge frameworks }
     end
 
     def raw_xconfig
       @parent ? @parent.raw_xconfig.merge(@xcconfig[active_platform]) : @xcconfig[active_platform]
     end
 
-    platform_attr_writer :xcconfig, lambda {|value, current| current.tap { |c| c.merge!(value) } }
 
     def compiler_flags
       if @parent
