@@ -21,15 +21,6 @@
 @synthesize navigationController = _navigationController;
 
 
-#pragma mark - NSObject
-
-- (void)dealloc {
-	[_navigationController release];
-    [_window release];
-    [super dealloc];
-}
-
-
 #pragma mark - UIApplicationDelegate
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {    
@@ -41,8 +32,6 @@
 
 	self.navigationController = aNavigationController;
 
-	[viewController release];
-	[aNavigationController release];
 	
 	[_window addSubview:_navigationController.view];
     [_window makeKeyAndVisible];

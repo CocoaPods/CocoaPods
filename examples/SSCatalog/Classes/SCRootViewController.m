@@ -22,14 +22,6 @@ static NSString *const kClassesKey =  @"classes";
 }
 
 
-#pragma mark - NSObject
-
-- (void)dealloc {
-	[_viewControllers release];
-	[super dealloc];
-}
-
-
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
@@ -53,8 +45,6 @@ static NSString *const kClassesKey =  @"classes";
 						[NSDictionary dictionaryWithObjectsAndKeys:
 						 [NSArray arrayWithObjects:
 						  @"SCAddressBarDemoViewController",
-						  @"SCSegmentedControlDemoViewController",
-						  @"SCSwitchDemoViewController",
 						  nil], kClassesKey,
 						 @"Controls", kTitleKey,
 						 nil],
@@ -95,7 +85,7 @@ static NSString *const kClassesKey =  @"classes";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];    }
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];    }
 	
 	Class klass = [[NSBundle mainBundle] classNamed:[[[_viewControllers objectAtIndex:indexPath.section] objectForKey:kClassesKey] objectAtIndex:indexPath.row]];
 		
@@ -119,7 +109,6 @@ static NSString *const kClassesKey =  @"classes";
 	Class klass = [[NSBundle mainBundle] classNamed:[[[_viewControllers objectAtIndex:indexPath.section] objectForKey:kClassesKey] objectAtIndex:indexPath.row]];
 	UIViewController *viewController = [[klass alloc] init];
 	[self.navigationController pushViewController:viewController animated:YES];
-	[viewController release];
 }
 
 @end

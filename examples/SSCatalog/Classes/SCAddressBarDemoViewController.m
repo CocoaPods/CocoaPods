@@ -27,11 +27,6 @@
 
 - (void)dealloc {
 	_webView.delegate = nil;
-	[_webView release];
-	[_headerView release];
-	[_titleLabel release];
-	[_addressBar release];
-	[super dealloc];
 }
 
 

@@ -8,7 +8,7 @@
 
 @interface SCImageCollectionViewItem : SSCollectionViewItem
 
-@property (nonatomic, retain) NSURL *imageURL;
+@property (nonatomic, strong) NSURL *imageURL;
 
 - (id)initWithReuseIdentifier:(NSString *)aReuseIdentifier;
 

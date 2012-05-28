@@ -16,8 +16,6 @@
 @synthesize imageURL = _imageURL;
 
 - (void)setImageURL:(NSURL *)url {
-	[url retain];
-	[_imageURL release];
 	_imageURL = url;
 	
 	if (_imageURL) {
@@ -25,14 +23,6 @@
 	} else {
 		self.imageView.image = nil;
 	}
-}
-
-
-#pragma mark - NSObject
-
-- (void)dealloc {
-	[_imageURL release];
-	[super dealloc];
 }
 
 

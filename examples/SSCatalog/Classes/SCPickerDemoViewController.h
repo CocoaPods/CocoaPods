@@ -8,7 +8,7 @@
 
 @interface SCPickerDemoViewController : UITableViewController
 
-@property (nonatomic, retain) NSString *selectedAbbreviation;
+@property (nonatomic, strong) NSString *selectedAbbreviation;
 
 + (NSString *)title;
 

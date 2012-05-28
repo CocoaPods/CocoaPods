@@ -21,14 +21,6 @@
 }
 
 
-#pragma mark - NSObject
-
-- (void)dealloc {
-	[_gradientView release];
-	[super dealloc];
-}
-
-
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
@@ -62,7 +54,6 @@
 	scaleSlider.maximumValue = 1.0f;
 	[scaleSlider addTarget:self action:@selector(updateScale:) forControlEvents:UIControlEventValueChanged];
 	[self.view addSubview:scaleSlider];
-	[scaleSlider release];
 	
 	_blue = YES;
 }

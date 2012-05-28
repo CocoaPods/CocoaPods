@@ -30,12 +30,6 @@
 }
 
 
-- (void)dealloc {
-	[_selectedAbbreviation release];
-	[super dealloc];
-}
-
-
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
@@ -76,7 +70,7 @@
 
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
 	}
 
 	cell.textLabel.text = @"Picker Value";
@@ -93,7 +87,6 @@
 	SCPickerDetailViewController *viewController = [[SCPickerDetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
 	viewController.selectedKey = self.selectedAbbreviation;
 	[self.navigationController pushViewController:viewController animated:YES];
-	[viewController release];
 }
 
 @end

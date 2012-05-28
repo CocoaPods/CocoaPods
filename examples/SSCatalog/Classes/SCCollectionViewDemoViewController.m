@@ -53,7 +53,7 @@
 	
 	SCImageCollectionViewItem *item = (SCImageCollectionViewItem *)[aCollectionView dequeueReusableItemWithIdentifier:itemIdentifier];
 	if (item == nil) {
-		item = [[[SCImageCollectionViewItem alloc] initWithReuseIdentifier:itemIdentifier] autorelease];
+		item = [[SCImageCollectionViewItem alloc] initWithReuseIdentifier:itemIdentifier];
 	}
 	
 	CGFloat size = 80.0f * [[UIScreen mainScreen] scale];
@@ -72,7 +72,7 @@
 	header.shadowColor = [UIColor whiteColor];
 	header.shadowOffset = CGSizeMake(0.0f, 1.0f);
 	header.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.8f];
-	return [header autorelease];
+	return header;
 }
 
 
@@ -89,7 +89,6 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:nil delegate:nil
 										  cancelButtonTitle:@"Oh, awesome!" otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 }
 
 

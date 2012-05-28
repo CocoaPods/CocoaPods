@@ -1,0 +1,7 @@
+.DS_Store
+*.mode1v3
+*.pbxuser
+*.perspectivev3
+*.xcworkspace
+xcuserdata
+Documentation

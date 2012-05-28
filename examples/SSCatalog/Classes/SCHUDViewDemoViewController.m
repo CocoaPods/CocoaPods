@@ -20,14 +20,6 @@
 }
 
 
-#pragma mark - NSObject
-
-- (void)dealloc {
-	[_hud release];
-	[super dealloc];
-}
-
-
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
