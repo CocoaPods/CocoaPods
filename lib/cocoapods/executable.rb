@@ -6,18 +6,16 @@ module Pod
         if bin.empty?
           raise Informative, "Unable to locate the executable `#{name}'"
         end
+        full_command = "#{bin} #{command}"
         if Config.instance.verbose?
-          print "   $ #{name}...\r"
-          $stdout.flush
-
-          output = `#{bin} #{command} 2>&1`
-
-          puts "   #{$?.exitstatus.zero? ? '-' : '!'.red} #{name} #{command}"
-          output = output.gsub(/  */,' ').gsub(/^ */,'     ')
-          puts output unless output.strip.empty?
+          puts "$ #{full_command}"
+          output = `#{full_command} 2>&1 | /usr/bin/tee /dev/tty`
         else
-          `#{bin} #{command} 2> /dev/null`
+          output = `#{full_command} 2>&1`
         end
+        # TODO not sure that we should be silent in case of a failure.
+        puts "[!] Failed: #{full_command}".red unless Config.instance.silent? || $?.exitstatus.zero?
+        output
       end
       private name
     end
