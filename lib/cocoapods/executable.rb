@@ -6,7 +6,7 @@ module Pod
       attr_accessor :indent
       attr_accessor :io
 
-      def initialize(io = nil, indent = '  ')
+      def initialize(io = nil, indent = '   ')
         @io = io
         @indent = indent
       end
@@ -26,7 +26,7 @@ module Pod
         end
         full_command = "#{bin} #{command}"
         if Config.instance.verbose?
-          puts "  $ #{full_command}"
+          puts "   $ #{full_command}"
           stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
         else
           stdout, stderr = Indenter.new, Indenter.new
