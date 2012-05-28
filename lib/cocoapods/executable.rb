@@ -1,5 +1,23 @@
+require 'open4'
+
 module Pod
   module Executable
+    class Indenter < ::Array
+      attr_accessor :indent
+      attr_accessor :io
+
+      def initialize(io = nil, indent = '  ')
+        @io = io
+        @indent = indent
+      end
+
+      def <<(value)
+        super
+      ensure
+        @io << "#{ indent }#{ value }" if @io
+      end
+    end
+
     def executable(name)
       bin = `which #{name}`.strip
       define_method(name) do |command|
@@ -8,14 +26,15 @@ module Pod
         end
         full_command = "#{bin} #{command}"
         if Config.instance.verbose?
-          puts "$ #{full_command}"
-          output = `#{full_command} 2>&1 | /usr/bin/tee /dev/tty`
+          puts "  $ #{full_command}"
+          stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
         else
-          output = `#{full_command} 2>&1`
+          stdout, stderr = Indenter.new, Indenter.new
         end
+        status = Open4.spawn(full_command, :stdout => stdout, :stderr => stderr, :status => true)
         # TODO not sure that we should be silent in case of a failure.
-        puts "[!] Failed: #{full_command}".red unless Config.instance.silent? || $?.exitstatus.zero?
-        output
+        puts "[!] Failed: #{full_command}".red unless status.success? || Config.instance.silent?
+        stdout.join("\n") + stderr.join("\n") # TODO will this suffice?
       end
       private name
     end

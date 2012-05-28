@@ -2,6 +2,9 @@ source "http://rubygems.org"
 
 gem "colored"
 gem "escape"
+gem "open4"
+
+# TODO why are these not in the gemspec yet?
 gem "json"
 gem "octokit"
 
