@@ -86,7 +86,7 @@ module Pod
       end
 
       def run_if_needed
-        run if !dir.exist?
+        run unless dir.exist? && Repo.compatible?('master')
       end
 
       def run
