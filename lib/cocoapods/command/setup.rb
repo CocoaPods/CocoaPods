@@ -70,12 +70,19 @@ module Pod
         end
       end
 
-      def add_master_repo_command
-        @command ||= Repo.new(ARGV.new(['add', 'master', url]))
+      def add_master_repo
+        @command ||= Repo.new(ARGV.new(['add', 'master', url, '0.6'])).run
       end
 
-      def update_master_repo_command
-        Repo.new(ARGV.new(['update', 'master']))
+      def update_master_repo
+        Repo.new(ARGV.new(['update', 'master'])).run
+      end
+
+      #TODO: remove after rc
+      def set_master_repo_branch
+        Dir.chdir(dir) do
+          git("checkout 0.6")
+        end
       end
 
       def run_if_needed
@@ -85,9 +92,10 @@ module Pod
       def run
         if dir.exist?
           set_master_repo_url
-          update_master_repo_command.run
+          set_master_repo_branch
+          update_master_repo
         else
-          add_master_repo_command.run
+          add_master_repo
         end
         # Mainly so the specs run with submodule repos
         if (dir + '.git/hooks').exist?
@@ -95,7 +103,7 @@ module Pod
           hook.open('w') { |f| f << "#!/bin/sh\nrake lint" }
           `chmod +x '#{hook}'`
         end
-        puts "Setup completed (#{push? ? "push" : "read-only"} access)" unless config.silent
+        puts "\nSetup completed (#{push? ? "push" : "read-only"} access)" unless config.silent
       end
     end
   end
