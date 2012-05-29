@@ -33,7 +33,7 @@ module Pod
         end
         status = Open4.spawn(full_command, :stdout => stdout, :stderr => stderr, :status => true)
         # TODO not sure that we should be silent in case of a failure.
-        puts "[!] Failed: #{full_command}".red unless status.success? || Config.instance.silent?
+        puts (Config.instance.verbose? ? '   ' : '') << "[!] Failed: #{full_command}".red unless status.success? || Config.instance.silent?
         stdout.join("\n") + stderr.join("\n") # TODO will this suffice?
       end
       private name
