@@ -69,8 +69,8 @@ module Pod
         puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions)
       end
 
-      def self.is_compatible(name)
-        dir      = Config.instance.repos_dir + name
+      def self.compatible?(name)
+        dir = Config.instance.repos_dir + name
         versions = versions(dir)
         is_compatilbe(versions)
       end

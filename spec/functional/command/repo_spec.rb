@@ -82,11 +82,11 @@ describe "Pod::Command::Repo" do
     it "has a class method that returns if a repo is supported" do
       yaml = YAML.dump({'min' => "999.0.0"})
       File.open(versions_file, 'w') {|f| f.write(yaml) }
-      Pod::Command::Repo.is_compatible('repo1').should == false
+      Pod::Command::Repo.compatible?('repo1').should == false
 
       yaml = YAML.dump({'min' => "0.0.1"})
       File.open(versions_file, 'w') {|f| f.write(yaml) }
-      Pod::Command::Repo.is_compatible('repo1').should == true
+      Pod::Command::Repo.compatible?('repo1').should == true
     end
   end
 end
