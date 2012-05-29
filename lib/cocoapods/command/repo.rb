@@ -63,16 +63,18 @@ module Pod
         yaml_file    = dir + 'CocoaPods-version.yml'
         return unless yaml_file.exist?
         data         = YAML.load_file(yaml_file)
-        min_version  = Gem::Version.new(data['min'])
-        max_version  = Gem::Version.new(data['max'])
-        last_version = Gem::Version.new(data['last'])
-        if min_version > bin_version || max_version < bin_version
+        min_version  = Gem::Version.new(data['min'])  if data['min']
+        max_version  = Gem::Version.new(data['max'])  if data['max']
+        last_version = Gem::Version.new(data['last']) if data['last']
+        supports_min = min_version ? bin_version >= min_version : true
+        supports_max = max_version ? bin_version <= max_version : true
+        unless supports_min && supports_max
           version_msg = ( min_version == max_version ) ? min_version : "#{min_version} - #{max_version}"
           raise Informative,
           "\n[!] The `#{dir.basename.to_s}' repo requires CocoaPods #{min_version}\n".red +
           "Update Cocoapods, or checkout the appropriate tag in the repo.\n\n"
         end
-        puts "Cocoapods #{last_version} is available".green if last_version > bin_version
+        puts "\nCocoapods #{last_version} is available.\n".green if last_version && last_version > bin_version
       end
     end
   end
