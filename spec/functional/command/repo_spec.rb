@@ -22,9 +22,14 @@ describe "Pod::Command::Repo" do
     end
 
     it "adds a spec-repo with on a specified branch" do
-      repo = command( 'repo' ,'add', 'new', fixture('spec-repos/master'), '0.6')
-      repo.run
-      Dir.chdir(repo.dir) { `git symbolic-ref HEAD` }.should.include? '0.6'
+      repo1 = add_repo('repo1', fixture('spec-repos/master'))
+      Dir.chdir(repo1.dir) do
+        `git checkout -b my-branch >/dev/null 2>&1`
+        `git checkout master >/dev/null 2>&1`
+      end
+      repo2 = command( 'repo' ,'add', 'repo2', repo1.dir, 'my-branch')
+      repo2.run
+      Dir.chdir(repo2.dir) { `git symbolic-ref HEAD` }.should.include? 'my-branch'
     end
 
     it "updates a spec-repo" do
