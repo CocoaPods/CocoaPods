@@ -54,7 +54,14 @@ module Pod
         dirs = @name ? [dir] : config.repos_dir.children.select {|c| c.directory?}
         dirs.each do |dir|
           print_subtitle "Updating spec repo `#{dir.basename}'"
-          Dir.chdir(dir) { git("pull") }
+          Dir.chdir(dir) do
+            `git rev-parse  >/dev/null 2>&1`
+            if $?.exitstatus.zero?
+              git("pull")
+            else
+              puts("   Not a git repository") if config.verbose?
+            end
+          end
           check_versions(dir)
         end
       end
