@@ -64,8 +64,9 @@ module Pod
     end
 
     def self.run(*argv)
+      sub_command = parse(*argv)
       Setup.new(ARGV.new).run_if_needed
-      parse(*argv).run
+      sub_command.run
 
     rescue Interrupt
       puts "[!] Cancelled".red
