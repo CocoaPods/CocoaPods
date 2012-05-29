@@ -48,7 +48,15 @@ module Pod
 
       def create
         if repo_id_match = (@url || @name_or_url).match(/github.com\/([^\/\.]*\/[^\/\.]*)\.*/)
+          # This is to make sure Faraday doesn't warn the user about the `system_timer` gem missing.
+          old_warn, $-w = $-w, nil
+          begin
+            require 'faraday'
+          ensure
+            $-w = old_warn
+          end
           require 'octokit'
+
           repo_id = repo_id_match[1]
           data = github_data_for_template(repo_id)
           data[:name] = @name_or_url if @url

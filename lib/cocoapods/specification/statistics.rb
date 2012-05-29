@@ -1,4 +1,12 @@
 require 'yaml'
+
+# This is to make sure Faraday doesn't warn the user about the `system_timer` gem missing.
+old_warn, $-w = $-w, nil
+begin
+  require 'faraday'
+ensure
+  $-w = old_warn
+end
 require 'octokit'
 
 module Pod
