@@ -209,7 +209,7 @@ module Pod
     end
 
     def headers_excluded_from_search_paths
-      chained_expanded_paths(:exclude_header_search_paths, :relative_to_sandbox => true)
+      chained_expanded_paths(:exclude_header_search_paths, :glob => '*.h', :relative_to_sandbox => true)
     end
 
     def chained_expanded_paths(accessor, options = {})
