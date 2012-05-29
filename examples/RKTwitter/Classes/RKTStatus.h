@@ -3,19 +3,19 @@
 //  RKTwitter
 //
 //  Created by Blake Watters on 9/5/10.
-//  Copyright 2010 Two Toasters. All rights reserved.
+//  Copyright (c) 2009-2012 RestKit. All rights reserved.
 //
 
 #import "RKTUser.h"
 
 @interface RKTStatus : NSObject {
-	NSNumber* _statusID;
-	NSDate* _createdAt;
-	NSString* _text;
-	NSString* _urlString;
-	NSString* _inReplyToScreenName;
-	NSNumber* _isFavorited;	
-	RKTUser* _user;
+    NSNumber* _statusID;
+    NSDate* _createdAt;
+    NSString* _text;
+    NSString* _urlString;
+    NSString* _inReplyToScreenName;
+    NSNumber* _isFavorited;
+    RKTUser* _user;
 }
 
 /**
