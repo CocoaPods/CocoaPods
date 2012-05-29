@@ -270,6 +270,10 @@ module Pod
       @parent ? @parent.top_level_parent : self
     end
 
+    def subspec?
+      !@parent.nil?
+    end
+
     def subspec(name, &block)
       subspec = Specification.new(self, name, &block)
       @subspecs << subspec
