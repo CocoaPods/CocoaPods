@@ -114,6 +114,24 @@ module Pod
     def initialize(argv)
       raise Help.new(self.class, argv)
     end
+
+    private
+
+    def print_title(title, only_verbose = true)
+      if config.verbose?
+        puts "\n" + title.yellow
+      elsif !config.silent? && !only_verbose
+        puts title
+      end
+    end
+
+    def print_subtitle(title, only_verbose = false)
+      if config.verbose?
+        puts "\n" + title.green
+      elsif !config.silent? && !only_verbose
+        puts title
+      end
+    end
   end
 end
 

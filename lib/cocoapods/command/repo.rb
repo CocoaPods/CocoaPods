@@ -43,7 +43,7 @@ module Pod
       end
 
       def add
-        puts "Cloning spec repo `#{@name}' from `#{@url}'" unless config.silent?
+        print_subtitle "Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}"
         config.repos_dir.mkpath
         Dir.chdir(config.repos_dir) { git("clone '#{@url}' #{@name}") }
         Dir.chdir(dir) { git("checkout #{@branch}") } if @branch
@@ -53,7 +53,7 @@ module Pod
       def update
         dirs = @name ? [dir] : config.repos_dir.children.select {|c| c.directory?}
         dirs.each do |dir|
-          puts "Updating spec repo `#{dir.basename}'" unless config.silent?
+          print_subtitle "Updating spec repo `#{dir.basename}'"
           Dir.chdir(dir) { git("pull") }
           check_versions(dir)
         end

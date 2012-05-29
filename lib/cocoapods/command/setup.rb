@@ -2,7 +2,7 @@ module Pod
   class Command
     class Setup < Command
       def self.banner
-%{Setup CocoaPods environment:
+        %{Setup CocoaPods environment:
 
     $ pod setup
 
@@ -55,7 +55,7 @@ module Pod
       end
 
       def push?
-       @push_option || (dir.exist? && origin_url_push?)
+        @push_option || (dir.exist? && origin_url_push?)
       end
 
       def read_master_repo_url
@@ -90,6 +90,7 @@ module Pod
       end
 
       def run
+        print_title "Setting up CocoaPods master repo"
         if dir.exist?
           set_master_repo_url
           set_master_repo_branch
@@ -103,7 +104,7 @@ module Pod
           hook.open('w') { |f| f << "#!/bin/sh\nrake lint" }
           `chmod +x '#{hook}'`
         end
-        puts "\nSetup completed (#{push? ? "push" : "read-only"} access)" unless config.silent
+        print_subtitle "Setup completed (#{push? ? "push" : "read-only"} access)"
       end
     end
   end

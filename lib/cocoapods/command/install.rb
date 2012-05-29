@@ -46,7 +46,7 @@ module Pod
         end
 
         if @update_repo
-          puts "\nUpdating Spec Repositories\n".yellow if config.verbose?
+          print_title 'Updating Spec Repositories', true
           Repo.new(ARGV.new(["update"])).run
         end
 
