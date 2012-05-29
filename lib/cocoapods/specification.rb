@@ -217,7 +217,10 @@ module Pod
 
     def compiler_flags
       if @parent
-        chained = @compiler_flags[active_platform].clone.unshift @parent.compiler_flags[active_platform]
+        chained = @compiler_flags[active_platform].clone
+        # TODO hack to get the parent's compiler flags without it being
+        # converted to a String by Specification#compiler_flags.
+        chained.unshift @parent.instance_variable_get(:@compiler_flags)[active_platform]
       else
         chained = @compiler_flags[active_platform].clone
         chained.unshift '-fobjc-arc' if @requires_arc
