@@ -23,7 +23,6 @@ describe "Pod::Command::Repo" do
 
     it "updates a spec-repo" do
       repo1 = add_repo('repo1', fixture('spec-repos/master'))
-      git('repo1', 'checkout master') # checkout master, because the fixture is a submodule
       repo2 = add_repo('repo2', repo1.dir)
       make_change(repo1, 'repo1')
       run_command('repo', 'update', 'repo2')
@@ -32,7 +31,6 @@ describe "Pod::Command::Repo" do
 
     it "updates all the spec-repos" do
       repo1 = add_repo('repo1', fixture('spec-repos/master'))
-      git('repo1', 'checkout master') # checkout master, because the fixture is a submodule
       repo2 = add_repo('repo2', repo1.dir)
       repo3 = add_repo('repo3', repo1.dir)
       make_change(repo1, 'repo1')

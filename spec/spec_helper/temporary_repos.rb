@@ -30,6 +30,7 @@ module SpecHelper
     def add_repo(name, from)
       command = command('repo', 'add', name, from)
       command.run
+      Dir.chdir(command.dir) { `git checkout -b test >/dev/null 2>&1` }
       command
     end
 
