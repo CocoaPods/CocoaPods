@@ -250,7 +250,7 @@ describe "A Pod::Specification, hierarchy" do
   it "uses the spec version for the dependencies" do
     @spec.dependencies.
       select { |d| d.name =~ /MainSpec/ }.
-      all?   { |d| d.requirement === Pod::Version.new('0.999') }.
+      all?   { |d| d.requirement.to_s == '= 0.999' }.
       should.be.true
   end
 

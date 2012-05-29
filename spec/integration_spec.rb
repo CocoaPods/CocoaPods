@@ -9,6 +9,7 @@ module SpecHelper
     def specs_by_target
       @specs_by_target ||= super.tap do |hash|
         hash.values.flatten.each do |spec|
+          next if spec.subspec?
           source = spec.source
           source[:git] = SpecHelper.fixture("integration/#{spec.name}").to_s
           spec.source = source
@@ -167,8 +168,16 @@ else
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
 
+          # TODO might be nicer looking to not show the dependencies of the top level spec for each subspec (Reachability).
           YAML.load(installer.lock_file.read).should == {
-            "PODS" => [{ "ASIHTTPRequest (1.8.1)" => ["Reachability"] }, "JSONKit (1.4)", "Reachability (3.0.0)"],
+            "PODS" => [{ "ASIHTTPRequest (1.8.1)" => ["ASIHTTPRequest/ASIWebPageRequest (= 1.8.1)",
+                                                      "ASIHTTPRequest/CloudFiles (= 1.8.1)",
+                                                      "ASIHTTPRequest/S3 (= 1.8.1)",
+                                                      "Reachability"]},
+                       { "ASIHTTPRequest/ASIWebPageRequest (1.8.1)" => ["Reachability"] },
+                       { "ASIHTTPRequest/CloudFiles (1.8.1)" => ["Reachability"] },
+                       { "ASIHTTPRequest/S3 (1.8.1)" => ["Reachability"] },
+                       "JSONKit (1.4)", "Reachability (3.0.0)"],
             "DEPENDENCIES" => ["ASIHTTPRequest", "JSONKit (= 1.4)"]
           }
 
@@ -193,7 +202,7 @@ else
               self.platform :ios
               xcodeproj 'dummy'
               dependency 'JSONKit', '1.4'
-              dependency 'SSToolkit'
+              dependency 'SSToolkit', '1.0.0'
             end
             installer = SpecHelper::Installer.new(podfile)
             installer.install!
