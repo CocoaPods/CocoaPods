@@ -58,24 +58,59 @@ module Pod
       end
 
       def check_versions(dir)
-        require 'yaml'
-        bin_version  = Gem::Version.new(VERSION)
-        yaml_file    = dir + 'CocoaPods-version.yml'
-        return unless yaml_file.exist?
-        data         = YAML.load_file(yaml_file)
-        min_version  = Gem::Version.new(data['min'])  if data['min']
-        max_version  = Gem::Version.new(data['max'])  if data['max']
-        last_version = Gem::Version.new(data['last']) if data['last']
-        supports_min = min_version ? bin_version >= min_version : true
-        supports_max = max_version ? bin_version <= max_version : true
-        unless supports_min && supports_max
-          version_msg = ( min_version == max_version ) ? min_version : "#{min_version} - #{max_version}"
+        versions = versions(dir)
+        unless is_compatilbe(versions)
+          min, max = versions['min'], versions['max']
+          version_msg = ( min == max ) ? min : "#{min} - #{max}"
           raise Informative,
-          "\n[!] The `#{dir.basename.to_s}' repo requires CocoaPods #{min_version}\n".red +
+          "\n[!] The `#{dir.basename.to_s}' repo requires CocoaPods #{version_msg}\n".red +
           "Update Cocoapods, or checkout the appropriate tag in the repo.\n\n"
         end
-        puts "\nCocoapods #{last_version} is available.\n".green if last_version && last_version > bin_version
+        puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions)
       end
+
+      def self.is_compatible(name)
+        dir      = Config.instance.repos_dir + name
+        versions = versions(dir)
+        is_compatilbe(versions)
+      end
+
+      private
+
+      def versions(dir)
+        self.class.versions(dir)
+      end
+
+      def self.versions(dir)
+        require 'yaml'
+        yaml_file  = dir + 'CocoaPods-version.yml'
+        yaml_file.exist? ? YAML.load_file(yaml_file) : {}
+      end
+
+      def is_compatilbe(versions)
+        self.class.is_compatilbe(versions)
+      end
+
+      def self.is_compatilbe(versions)
+        min, max = versions['min'], versions['max']
+        supports_min = !min || bin_version >= Gem::Version.new(min)
+        supports_max = !max || bin_version <= Gem::Version.new(max)
+        supports_min && supports_max
+      end
+
+      def has_update(versions)
+        self.class.has_update(versions)
+      end
+
+      def self.has_update(versions)
+        last = versions['last']
+        last && Gem::Version.new(last) > bin_version
+      end
+
+      def self.bin_version
+        Gem::Version.new(VERSION)
+      end
+
     end
   end
 end
