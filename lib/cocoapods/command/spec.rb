@@ -366,7 +366,7 @@ module Pod
         def xcodebuild_output
           return [] if `which xcodebuild`.strip.empty?
           messages      = []
-          output        = Dir.chdir(config.project_pods_root) { `xcodebuild 2>&1` }
+          output        = Dir.chdir(config.project_pods_root) { `xcodebuild clean build 2>&1` }
           clean_output  = process_xcode_build_output(output)
           messages     += clean_output
           puts(output) if config.verbose?
