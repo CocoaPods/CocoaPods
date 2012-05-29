@@ -63,9 +63,9 @@ module Pod
         yaml_file    = dir + 'CocoaPods-version.yml'
         return unless yaml_file.exist?
         data         = YAML.load_file(yaml_file)
-        min_version  = Gem::Version.new(data[:min])
-        max_version  = Gem::Version.new(data[:max])
-        last_version = Gem::Version.new(data[:last])
+        min_version  = Gem::Version.new(data['min'])
+        max_version  = Gem::Version.new(data['max'])
+        last_version = Gem::Version.new(data['last'])
         if min_version > bin_version || max_version < bin_version
           version_msg = ( min_version == max_version ) ? min_version : "#{min_version} - #{max_version}"
           raise Informative,
