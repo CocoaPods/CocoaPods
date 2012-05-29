@@ -193,7 +193,7 @@ else
               self.platform :ios
               xcodeproj 'dummy'
               dependency 'JSONKit', '1.4'
-              dependency 'SSToolkit'
+              dependency 'SSToolkit', '1.0.0'
             end
             installer = SpecHelper::Installer.new(podfile)
             installer.install!
