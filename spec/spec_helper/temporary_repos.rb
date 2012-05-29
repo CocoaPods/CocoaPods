@@ -30,7 +30,10 @@ module SpecHelper
     def add_repo(name, from)
       command = command('repo', 'add', name, from)
       command.run
-      Dir.chdir(command.dir) { `git checkout -b test >/dev/null 2>&1` }
+      Dir.chdir(command.dir) do
+        `git checkout -b test >/dev/null 2>&1`
+        `git branch --set-upstream test origin/test >/dev/null 2>&1`
+      end
       command
     end
 

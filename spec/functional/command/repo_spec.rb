@@ -21,6 +21,12 @@ describe "Pod::Command::Repo" do
       git_config('private', 'remote.origin.url').should == fixture('spec-repos/master').to_s
     end
 
+    it "adds a spec-repo with on a specified branch" do
+      repo = command( 'repo' ,'add', 'new', fixture('spec-repos/master'), '0.6')
+      repo.run
+      Dir.chdir(repo.dir) { `git symbolic-ref HEAD` }.should.include? '0.6'
+    end
+
     it "updates a spec-repo" do
       repo1 = add_repo('repo1', fixture('spec-repos/master'))
       repo2 = add_repo('repo2', repo1.dir)

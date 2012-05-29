@@ -6,7 +6,7 @@ module Pod
       def self.banner
 %{Managing spec-repos:
 
-    $ pod repo add NAME URL
+    $ pod repo add NAME URL [BRANCH]
 
       Clones `URL' in the local spec-repos directory at `~/.cocoapods'. The
       remote can later be referred to by `NAME'.
@@ -26,6 +26,7 @@ module Pod
           unless (@name = argv.arguments[1]) && (@url = argv.arguments[2])
             raise Informative, "#{@action == 'add' ? 'Adding' : 'Updating the remote of'} a repo needs a `name' and a `url'."
           end
+          @branch = argv.arguments[3]
         when 'update'
           @name = argv.arguments[1]
         else
@@ -45,6 +46,7 @@ module Pod
         puts "Cloning spec repo `#{@name}' from `#{@url}'" unless config.silent?
         config.repos_dir.mkpath
         Dir.chdir(config.repos_dir) { git("clone '#{@url}' #{@name}") }
+        Dir.chdir(dir) { git("checkout #{@branch}") } if @branch
         check_versions(dir)
       end
 
