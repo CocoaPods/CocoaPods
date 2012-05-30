@@ -190,9 +190,9 @@ namespace :examples do
         command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
         if (example + 'Podfile').read.include?('platform :ios')
           # Specifically build against the simulator SDK so we don't have to deal with code signing.
+          root = File.exist?("/Applications/Xcode.app") ? "/Applications/Xcode.app/Contents" : ""
           command << " -sdk "
-          command << "/Applications/Xcode.app/Contents" if File.exist?("/Applications/Xcode.app")
-          command << "/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk"
+          command << Dir.glob("#{root}/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
         end
         sh command
       end
