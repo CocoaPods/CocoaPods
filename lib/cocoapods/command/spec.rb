@@ -476,41 +476,53 @@ module Pod
 # Be sure to run `pod spec lint #{data[:name]}.podspec' to ensure this is a
 # valid spec.
 #
-# Remove all comments before submitting the spec.
+# Remove all comments before submitting the spec. Optional attributes are commented.
+#
+# For details see: https://github.com/CocoaPods/CocoaPods/wiki/The-podspec-format
 #
 Pod::Spec.new do |s|
+  s.name         = "#{data[:name]}"
+  s.version      = "#{data[:version]}"
+  s.summary      = "#{data[:summary]}"
+  # s.description  = 'An optional longer description of #{data[:name]}.'
+  s.homepage     = "#{data[:homepage]}"
 
-  # ――― REQUIRED VALUES ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-
-  s.name      = "#{data[:name]}"
-  s.version   = "#{data[:version]}"
-  s.summary   = "#{data[:summary]}"
-  s.homepage  = "#{data[:homepage]}"
+  # Specify the license type. CocoaPods detects automatically the license file if it is named
+  # `LICENSE*', however if the name is different, specify it.
+  # Only if no dedicated file is available include the full text of the license.
+  #
+  s.license      = 'MIT (example)'
+  # s.license      = { :type => 'MIT', :file => 'LICENSE', :text => 'Permission is hereby granted ...' }
 
   # Specify the authors of the library, with email addresses. You can often find
   # the email addresses of the authors by using the SCM log. E.g. $ git log
   #
-  s.author    = { "#{data[:author_name]}" => "#{data[:author_email]}" }
-  # s.authors = { "#{data[:author_name]}" => "#{data[:author_email]}", "other author" => "and email address" }
+  s.author       = { "#{data[:author_name]}" => "#{data[:author_email]}" }
+  # s.authors      = { "#{data[:author_name]}" => "#{data[:author_email]}", "other author" => "and email address" }
   #
   # If absolutely no email addresses are available, then you can use this form instead.
   #
-  # s.author   = '#{data[:author_name]}', 'other author'
+  # s.author       = '#{data[:author_name]}', 'other author'
 
   # Specify the location from where the source should be retreived.
   #
-  s.source    = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
-  # s.source   = { :svn => 'http://EXAMPLE/#{data[:name]}/tags/1.0.0' }
-  # s.source   = { :hg  => 'http://EXAMPLE/#{data[:name]}', :revision => '1.0.0' }
+  s.source       = { :git => "#{data[:source_url]}", "#{data[:ref_type]}" => "#{data[:ref]}" }
+  # s.source       = { :svn => 'http://EXAMPLE/#{data[:name]}/tags/1.0.0' }
+  # s.source       = { :hg  => 'http://EXAMPLE/#{data[:name]}', :revision => '1.0.0' }
 
-  # Specify the license details. Only if no dedicated file is available include
-  # the full text of the license.
+  # If this Pod runs only on iOS or OS X, then specify the platform and
+  # the deployment target.
   #
-  s.license  = {
-    :type => 'MIT',
-    :file => 'LICENSE',
-  #  :text => 'Permission is hereby granted ...'
-  }
+  # s.platform     = :ios, '5.0'
+  # s.platform     = :ios
+
+  # ――― MULTI-PLATFORM VALUES ――――――――――――――――――――――――――――――――――――――――――――――――― #
+
+  # If this Pod runs on both platforms, then specify the deployment
+  # targets.
+  #
+  # s.ios.deployment_target = '5.0'
+  # s.osx.deployment_target = '10.7'
 
   # A list of file patterns which select the source files that should be
   # added to the Pods project. If the pattern is a directory then the
@@ -522,22 +534,6 @@ Pod::Spec.new do |s|
   #
   s.source_files = 'Classes', 'Classes/**/*.{h,m}'
 
-  # ――― OPTIONAL VALUES ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-
-  s.description = 'An optional longer description of #{data[:name]}.'
-
-  # If this Pod runs only on iOS or OS X, then specify the platform and
-  # the deployment target.
-  #
-  # s.platform = :ios, '5.0'
-  # s.platform = :ios
-
-  # If this Pod runs on boths platforms, then specify the deployment
-  # targets.
-  #
-  # s.ios.deployment_target = '5.0'
-  # s.osx.deployment_target = '10.7'
-
   # A list of resources included with the Pod. These are copied into the
   # target bundle with a build phase script.
   #
@@ -546,16 +542,11 @@ Pod::Spec.new do |s|
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
 
-  # A list of paths to remove after installing the Pod without the
-  # `--no-clean' option. These can be examples, docs, and any other type
-  # of files that are not needed to build the Pod.
-  #
-  # *NOTE*: Never remove license and README files.
-  #
+  # A list of paths to preserve after installing the Pod.
+  # CocoaPods cleans by default any file that is not used.
   # Also allows the use of the FileList class like `source_files does.
   #
-  # s.clean_path  = "examples"
-  # s.clean_paths = "examples", "doc"
+  # s.preserve_paths = "examples", "doc"
 
   # Specify a list of frameworks that the application needs to link
   # against for this Pod to work.
@@ -573,19 +564,15 @@ Pod::Spec.new do |s|
   #
   # s.requires_arc = true
 
-  # Finally, specify any Pods that this Pod depends on.
-  #
-  # s.dependency 'JSONKit', '~> 1.4'
-
-  # ――― EXTRA VALUES ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-
   # If you need to specify any other build settings, add them to the
   # xcconfig hash.
   #
   # s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2' }
 
-  # ――― INFO ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-      end
+  # Finally, specify any Pods that this Pod depends on.
+  #
+  # s.dependency 'JSONKit', '~> 1.4'
+end
       SPEC
     end
 
