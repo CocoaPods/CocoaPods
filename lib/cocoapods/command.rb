@@ -73,7 +73,7 @@ module Pod
       Config.instance.verbose? ? raise : exit(1)
 
     rescue Exception => e
-      if e.is_a?(Informative)
+      if e.is_a?(PlainInformative) # also catches Informative
         puts e.message
         puts *e.backtrace if Config.instance.verbose?
       else
@@ -84,7 +84,7 @@ module Pod
 
     def self.parse(*argv)
       argv = ARGV.new(argv)
-      raise Informative, VERSION if argv.option('--version')
+      raise PlainInformative, VERSION if argv.option('--version')
 
       show_help = argv.option('--help')
       Config.instance.silent = argv.option('--silent')

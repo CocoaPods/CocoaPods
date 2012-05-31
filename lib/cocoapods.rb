@@ -3,7 +3,10 @@ Encoding.default_external = Encoding::UTF_8 if RUBY_VERSION > '1.8.7'
 module Pod
   VERSION = '0.6.0.rc1'
 
-  class Informative < StandardError
+  class PlainInformative < StandardError
+  end
+
+  class Informative < PlainInformative
     def message
       #TODO: remove formatting from raise calls and remove conditional
       super !~ /\[!\]/ ? "[!] #{super}\n".red : super
