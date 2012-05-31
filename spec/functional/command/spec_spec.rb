@@ -26,13 +26,13 @@ describe "Pod::Command::Spec#create" do
     spec = Pod::Specification.from_file(path).activate_platform(:ios)
 
     spec.name.should         == 'Bananas'
-    spec.license.should      == { :type => "MIT", :file => "LICENSE" }
+    spec.license.should      == { :type => "MIT (example)" }
     spec.version.should      == Pod::Version.new('0.0.1')
     spec.summary.should      == 'A short description of Bananas.'
     spec.homepage.should     == 'http://EXAMPLE/Bananas'
     spec.authors.should      == { `git config --get user.name`.strip => `git config --get user.email`.strip}
     spec.source.should       == { :git => 'http://EXAMPLE/Bananas.git', :tag => '0.0.1' }
-    spec.description.should  == 'An optional longer description of Bananas.'
+    spec.description.should  == 'A short description of Bananas.'
     spec.source_files.should == ['Classes', 'Classes/**/*.{h,m}']
   end
 
@@ -44,7 +44,7 @@ describe "Pod::Command::Spec#create" do
     path = temporary_directory + 'libPusher.podspec'
     spec = Pod::Specification.from_file(path)
     spec.name.should     == 'libPusher'
-    spec.license.should  == { :type => "MIT", :file => "LICENSE" }
+    spec.license.should  == { :type => "MIT (example)" }
     spec.version.should  == Pod::Version.new('1.3')
     spec.summary.should  == 'An Objective-C interface to Pusher (pusherapp.com)'
     spec.homepage.should == 'https://github.com/lukeredpath/libPusher'
@@ -60,7 +60,7 @@ describe "Pod::Command::Spec#create" do
     path = temporary_directory + 'other_name.podspec'
     spec = Pod::Specification.from_file(path)
     spec.name.should     == 'other_name'
-    spec.license.should  == { :type => "MIT", :file => "LICENSE" }
+    spec.license.should  == { :type => "MIT (example)" }
     spec.version.should  == Pod::Version.new('1.3')
     spec.summary.should  == 'An Objective-C interface to Pusher (pusherapp.com)'
     spec.homepage.should == 'https://github.com/lukeredpath/libPusher'

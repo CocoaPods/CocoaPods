@@ -330,6 +330,7 @@ module Pod
           text     = @file.read
           messages = []
           messages << "Missing license type"                                unless license[:type]
+          messages << "Sample license type"                                 if license[:type] && license[:type] =~ /\(example\)/
           messages << "The summary is not meaningful"                       if spec.summary =~ /A short description of/
           messages << "The description is not meaningful"                   if spec.description && spec.description =~ /An optional longer description of/
           messages << "The summary should end with a dot"                   if @spec.summary !~ /.*\./
@@ -440,7 +441,7 @@ module Pod
 
         data[:name]          = repo['name']
         data[:summary]       = repo['description'].gsub(/["]/, '\"')
-        data[:homepage]      = repo['homepage'] || repo['html_url']
+        data[:homepage]      = (repo['homepage'] && !repo['homepage'].empty? ) ? repo['homepage'] : repo['html_url']
         data[:author_name]   = user['name']  || user['login']
         data[:author_email]  = user['email'] || 'email@address.com'
         data[:source_url]    = repo['clone_url']
@@ -506,7 +507,7 @@ Pod::Spec.new do |s|
 
   # Specify the location from where the source should be retreived.
   #
-  s.source       = { :git => "#{data[:source_url]}", "#{data[:ref_type]}" => "#{data[:ref]}" }
+  s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
   # s.source       = { :svn => 'http://EXAMPLE/#{data[:name]}/tags/1.0.0' }
   # s.source       = { :hg  => 'http://EXAMPLE/#{data[:name]}', :revision => '1.0.0' }
 
