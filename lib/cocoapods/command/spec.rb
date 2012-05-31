@@ -440,7 +440,7 @@ module Pod
 
         data[:name]          = repo['name']
         data[:summary]       = repo['description'].gsub(/["]/, '\"')
-        data[:homepage]      = repo['homepage'] != "" ? repo['homepage'] : repo['html_url']
+        data[:homepage]      = repo['homepage'] || repo['html_url']
         data[:author_name]   = user['name']  || user['login']
         data[:author_email]  = user['email'] || 'email@address.com'
         data[:source_url]    = repo['clone_url']
