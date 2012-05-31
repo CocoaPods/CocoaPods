@@ -181,6 +181,7 @@ namespace :examples do
 
   desc "Build all examples"
   task :build do
+    sh "rm -rf ~/Library/Developer/Shared/Documentation/DocSets/org.cocoapods.*"
     examples.entries.each do |example|
       puts "Building example: #{example}"
       puts

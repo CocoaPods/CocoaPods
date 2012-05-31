@@ -1,6 +1,6 @@
 PODS:
   - AFNetworking (1.0RC1)
-  - SSToolkit (1.0.0)
+  - SSToolkit (1.0.1)
 
 DEPENDENCIES:
   - AFNetworking
