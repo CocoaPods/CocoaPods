@@ -22,7 +22,7 @@ Downloading and installing CocoaPods only takes a few minutes.
 CocoaPods runs on [Ruby](http://www.ruby-lang.org/en/). To install it run the following commands:
 
 ```
-$ sudo gem install cocoapods
+$ [sudo] gem install cocoapods --pre
 $ pod setup
 ```
 
