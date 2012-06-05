@@ -1,6 +1,7 @@
 # CocoaPods – an Objective-C library manager
 
-[![Build Status](https://secure.travis-ci.org/CocoaPods/CocoaPods.png?branch=master)](https://secure.travis-ci.org/CocoaPods/CocoaPods)
+[![Master Build Status](https://secure.travis-ci.org/CocoaPods/CocoaPods.png?branch=master)](https://secure.travis-ci.org/CocoaPods/CocoaPods)
+[![Develop Build Status](https://secure.travis-ci.org/CocoaPods/CocoaPods.png?branch=develop)](https://secure.travis-ci.org/CocoaPods/CocoaPods)
 
 CocoaPods manages library dependencies for your Xcode project.
 
@@ -22,7 +23,7 @@ Downloading and installing CocoaPods only takes a few minutes.
 CocoaPods runs on [Ruby](http://www.ruby-lang.org/en/). To install it run the following commands:
 
 ```
-$ sudo gem install cocoapods
+$ [sudo] gem install cocoapods --pre
 $ pod setup
 ```
 
