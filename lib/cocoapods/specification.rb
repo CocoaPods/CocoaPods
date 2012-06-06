@@ -107,7 +107,19 @@ module Pod
         @specification, @platform = specification, platform
       end
 
-      %w{ source_files= resource= resources= xcconfig= framework= frameworks= library= libraries= compiler_flags= deployment_target= dependency }.each do |method|
+      %w{ source_files=
+          resource=
+          resources=
+          preserve_paths=
+          preserve_path=
+          xcconfig=
+          framework=
+          frameworks=
+          library=
+          libraries=
+          compiler_flags=
+          deployment_target=
+          dependency }.each do |method|
         define_method(method) do |args|
           @specification._on_platform(@platform) do
             @specification.send(method, args)
@@ -198,9 +210,10 @@ module Pod
     pltf_chained_attr_accessor  :frameworks,                  lambda {|value, current| (current << value).flatten }
     pltf_chained_attr_accessor  :libraries,                   lambda {|value, current| (current << value).flatten }
 
-    alias_method :resource=,    :resources=
-    alias_method :framework=,   :frameworks=
-    alias_method :library=,     :libraries=
+    alias_method :resource=,      :resources=
+    alias_method :preserve_path=, :preserve_paths=
+    alias_method :framework=,     :frameworks=
+    alias_method :library=,       :libraries=
 
     platform_attr_writer        :xcconfig,                     lambda {|value, current| current.tap { |c| c.merge!(value) } }
 
