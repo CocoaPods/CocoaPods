@@ -38,10 +38,11 @@ describe Pod::LocalPod do
     end
 
     it 'returns an expanded list the files to clean' do
-      clean_files = @pod.clean_files.map { |p| p.to_s }
-      clean_files.should.include "#{@sandbox.root}/BananaLib/.git/config"
-      clean_files_without_hidden = clean_files.reject { |p| p.to_s.include?('/.') }
-      clean_files_without_hidden.should == ["#{@sandbox.root}/BananaLib/sub-dir/sub-dir-2/somefile.txt"]
+      clean_paths = @pod.clean_paths.map { |p| p.to_s.gsub(/.*Pods\/BananaLib/,'') }
+      clean_paths.should.include "/.git/config"
+      # There are some hidden files on Travis
+      clean_files_without_hidden = clean_paths.reject { |p| p.to_s.include?('/.') }
+      clean_files_without_hidden.should == %W[ /sub-dir /sub-dir/sub-dir-2 /sub-dir/sub-dir-2/somefile.txt ]
     end
 
     it 'returns an expanded list of resources, relative to the sandbox root' do

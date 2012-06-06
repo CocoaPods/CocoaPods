@@ -64,21 +64,36 @@ module Pod
       root.rmtree if exists?
     end
 
-    # It deletes all the files identified by clean_files, then it removes
-    # all the empty folders or symlinks.
-    def clean
-      clean_files.each { |path| FileUtils.rm_rf(path) }
+    ### Cleaning
 
-      # Get all the directories. Then sort them from the longest
-      # to the shortest, so a directory will be empty if its
-      # subdirs where empty. We need to delete the symlinks because
-      # it might prevent a bundle from being deleted
-      dirs = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
-      dirs = dirs.reject { |d| d.end_with?('.', '..') || !File.directory?(d) }.sort_by(&:length).reverse
-      dirs.each    { |d| FileUtils.rm_rf(d) if File.symlink?(d) || (Dir.entries(d) == %w[ . .. ]) }
+    # Public: Deletes any path that is not used by the pod.
+    def clean
+      clean_paths.each { |path| FileUtils.rm_rf(path) }
     end
 
-    # File attributes
+    # Public: Finds the absolute paths, including hidden ones, of the files
+    # that are not used by the pod and can be safely deleted.
+    #
+    # Returns an Array of Strings containing the absolute paths.
+    def clean_paths
+      cached_used_paths = used_paths.map{ |path| path.to_s }
+      files = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
+      files.reject! do |candidate|
+        candidate.end_with?('.', '..') ||
+          cached_used_paths.any? { |path| path.include?(candidate) || candidate.include?(path) }
+      end
+      files
+    end
+
+    # Public: Finds all the absolute paths used by pod.
+    #
+    # Returns an Array of Pathnames containing the absolute paths.
+    def used_paths
+      files = source_files(false) + resources(false) + preserve_paths + [ readme_file, license_file, prefix_header_file ]
+      files.compact
+    end
+
+    ### File attributes
 
     def prefix_header_file
       root + top_specification.prefix_header_file if top_specification.prefix_header_file
@@ -94,15 +109,6 @@ module Pod
 
     def resources(relative = true)
       chained_expanded_paths(:resources, :relative_to_sandbox => relative)
-    end
-
-    def clean_files
-      all_files = Dir.glob(root + "**/*", File::FNM_DOTMATCH).map { |f| root + f }.reject { |p| p.directory? }
-      all_files - used_files
-    end
-
-    def used_files
-      source_files(false) + resources(false) + preserve_paths + [ readme_file, license_file, prefix_header_file ]
     end
 
     # TODO: implement case insensitive search

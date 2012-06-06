@@ -9,7 +9,7 @@ gem "faraday", ">= 0.8.1"
 gem "octokit"
 
 group :development do
-  gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git"
+  gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git", :branch => "develop"
 
   gem "bacon"
   gem "kicker"
