@@ -63,39 +63,76 @@ namespace :gem do
 
   desc "Install a gem version of the current code"
   task :install => :build do
-    sh "sudo gem install #{gem_filename}"
+    sh "gem install #{gem_filename}"
+  end
+
+  def silent_sh(command)
+    #output = `/bin/sh -c '#{command}' 2>&1`
+    output = `#{command} 2>&1`
+    unless $?.success?
+      puts output
+      exit 1
+    end
+    output
   end
 
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
   task :release do
-    if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
-      $stderr.puts "You need to be on the `master' branch in order to be able to do a release."
+    unless ENV['SKIP_CHECKS']
+      if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
+        $stderr.puts "[!] You need to be on the `master' branch in order to be able to do a release."
+        exit 1
+      end
+
+      if `git tag`.strip.split("\n").include?(gem_version)
+        $stderr.puts "[!] A tag for version `#{gem_version}' already exists. Change the version in lib/cocoapods.rb"
+        exit 1
+      end
+
+      puts "You are about to release `#{gem_version}', is that correct? [y/n]"
+      exit if $stdin.gets.strip.downcase != 'y'
+
+      diff_lines = `git diff --numstat`.strip.split("\n")
+
+      if diff_lines.size == 0 || !diff_lines.first.include?('lib/cocoapods.rb')
+        $stderr.puts "[!] Change the version number yourself in lib/cocoapods.rb"
+        exit 1
+      end
+
+      if diff_lines.size > 1 || !diff_lines.first.include?('lib/cocoapods.rb')
+        $stderr.puts "[!] Only change the version number in a release commit!"
+        exit 1
+      end
+    end
+
+    # First check if the required Xcodeproj gem has ben pushed
+    gem_spec = eval(File.read(File.expand_path('../cocoapods.gemspec', __FILE__)))
+    xcodeproj = gem_spec.dependencies.find { |d| d.name == 'xcodeproj' }
+    xcodeproj_version = xcodeproj.requirement.requirements.first.last.to_s
+
+    puts "* Checking if xcodeproj #{xcodeproj_version} exists on the gem host"
+    unless silent_sh("gem search --remote xcodeproj --version #{xcodeproj_version}").include?(xcodeproj_version)
+      $stderr.puts "[!] The Xcodeproj version `#{xcodeproj_version}' required by " \
+                   "this version of CocoaPods does not exist on the gem host. " \
+                   "Either push that first, or fix the version requirement."
       exit 1
     end
 
-    if `git tag`.strip.split("\n").include?(gem_version)
-      $stderr.puts "A tag for version `#{gem_version}' already exists. Change the version in lib/cocoapods.rb"
-      exit 1
-    end
+    puts "* Running specs"
+    silent_sh('rake spec:all')
 
-    puts "You are about to release `#{gem_version}', is that correct? [y/n]"
-    exit if $stdin.gets.strip.downcase != 'y'
+    tmp = File.expand_path('../tmp', __FILE__)
+    tmp_gems = File.join(tmp, 'gems')
 
-    diff_lines = `git diff --numstat`.strip.split("\n")
+    puts "* Testing gem installation (tmp/gems)"
+    silent_sh "rm -rf '#{tmp}'"
+    silent_sh "gem install --install-dir='#{tmp_gems}' #{gem_filename}"
 
-    if diff_lines.size == 0 || !diff_lines.first.include?('lib/cocoapods.rb')
-      $stderr.puts "Change the version number yourself in lib/cocoapods.rb"
-      exit 1
-    end
-
-    if diff_lines.size > 1 || !diff_lines.first.include?('lib/cocoapods.rb')
-      $stderr.puts "Only change the version number in a release commit!"
-      exit 1
-    end
-
-    # First see if the specs pass and gem builds and installs
-    Rake::Task['spec:all'].invoke
-    Rake::Task['gem:install'].invoke
+    puts "* Building examples from gem (tmp/gems)"
+    ENV['GEM_HOME'] = ENV['GEM_PATH'] = tmp_gems
+    ENV['PATH']     = "#{tmp_gems}/bin:#{ENV['PATH']}"
+    ENV['FROM_GEM'] = '1'
+    silent_sh "rake examples:build"
 
     # Then release
     sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
