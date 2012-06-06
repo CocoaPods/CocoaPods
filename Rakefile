@@ -68,24 +68,41 @@ namespace :gem do
 
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
   task :release do
-    puts "You are about to release `#{gem_version}', is that correct? [y/n]"
-    exit if STDIN.gets.strip.downcase != 'y'
-    lines = `git diff --numstat`.strip.split("\n")
-    if lines.size == 0
-      puts "Change the version number yourself in lib/cocoapods.rb"
-    elsif lines.size == 1 && lines.first.include?('lib/cocoapods.rb')
-      # First see if the specs pass and gem builds and installs
-      Rake::Task['spec:all'].invoke
-      Rake::Task['gem:install'].invoke
-      # Then release
-      sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
-      sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
-      sh "git push origin master"
-      sh "git push --tags"
-      sh "gem push #{gem_filename}"
-    else
-      puts "Only change the version number in a release commit!"
+    if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
+      $stderr.puts "You need to be on the `master' branch in order to be able to do a release."
+      exit 1
     end
+
+    if `git tag`.strip.split("\n").include?(gem_version)
+      $stderr.puts "A tag for version `#{gem_version}' already exists. Change the version in lib/cocoapods.rb"
+      exit 1
+    end
+
+    puts "You are about to release `#{gem_version}', is that correct? [y/n]"
+    exit if $stdin.gets.strip.downcase != 'y'
+
+    diff_lines = `git diff --numstat`.strip.split("\n")
+
+    if diff_lines.size == 0 || !diff_lines.first.include?('lib/cocoapods.rb')
+      $stderr.puts "Change the version number yourself in lib/cocoapods.rb"
+      exit 1
+    end
+
+    if diff_lines.size > 1 || !diff_lines.first.include?('lib/cocoapods.rb')
+      $stderr.puts "Only change the version number in a release commit!"
+      exit 1
+    end
+
+    # First see if the specs pass and gem builds and installs
+    Rake::Task['spec:all'].invoke
+    Rake::Task['gem:install'].invoke
+
+    # Then release
+    sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
+    sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
+    sh "git push origin master"
+    sh "git push origin --tags"
+    sh "gem push #{gem_filename}"
   end
 end
 
