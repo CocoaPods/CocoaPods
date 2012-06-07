@@ -106,4 +106,15 @@ describe "Pod::Command::Spec::Linter" do
     linter.lint.should == false
     linter.errors.join(' | ').should.include "The resources did not match any file"
   end
+
+ it "Uses the deployment target of the specification" do
+    spec, file = write_podspec(stub_podspec)
+    spec.stubs(:available_platforms).returns([Pod::Platform.new(:ios, "5.0")])
+    linter = Pod::Command::Spec::Linter.new(spec)
+    linter.quick = true
+    linter.lint
+    podfile = linter.podfile_from_spec
+    deployment_target = podfile.target_definitions[:default].platform.deployment_target
+    deployment_target.to_s.should == "5.0"
+ end
 end

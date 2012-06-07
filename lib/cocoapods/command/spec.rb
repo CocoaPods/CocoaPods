@@ -241,13 +241,14 @@ module Pod
         end
 
         def podfile_from_spec
-          name         = spec.name
-          podspec      = file.realpath.to_s
-          platform_sym = @platform.to_sym
-          podfile = Pod::Podfile.new do
-            platform(platform_sym)
+          name     = spec.name
+          podspec  = file.realpath.to_s
+          platform = @platform
+          podfile  = Pod::Podfile.new do
+            platform(platform)
             dependency name, :podspec => podspec
           end
+          podfile
         end
 
         def set_up_lint_environment
