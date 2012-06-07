@@ -4,7 +4,7 @@ module Pod
   extend Config::Mixin
 
   def self._eval_podspec(path)
-    eval(path.read, nil, path.to_s)
+    eval(File.open(path, 'r:utf-8') { |f| f.read }, nil, path.to_s)
   end
 
   class Specification

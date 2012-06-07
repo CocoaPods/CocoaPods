@@ -6,4 +6,4 @@ rvm:
   #- rbx-18mode
   - rbx-19mode
 install: NOEXEC=skip rake travis:setup
-script: RUBYOPT=-Ku bundle exec rake spec
+script: bundle exec rake spec

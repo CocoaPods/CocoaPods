@@ -153,7 +153,7 @@ module Pod
 
     def self.from_file(path)
       podfile = Podfile.new do
-        eval(path.read, nil, path.to_s)
+        eval(File.open(path, 'r:utf-8') { |f| f.read }, nil, path.to_s)
       end
       podfile.defined_in_file = path
       podfile.validate!
