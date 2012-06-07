@@ -10,11 +10,32 @@ module Pod
 
     attr_reader :deployment_target
 
-    def initialize(symbolic_name = nil, deployment_target = nil)
-      @symbolic_name = symbolic_name
-      if deployment_target
-        version = deployment_target.is_a?(Hash) ? deployment_target[:deployment_target] : deployment_target # backwards compatibility from 0.6
-        @deployment_target = Pod::Version.create(version)
+    ##
+    # Public: Constructs a platform from either another platform or by
+    # specifying the symbolic name and optionally the deployment target.
+    #
+    # input             - Another platform or the symbolic name of the platform.
+    # deployment_target - The optional deployment target if initalized by
+    #                     symbolic name
+    #
+    # Examples
+    #
+    #   Platform.new(:ios)
+    #   Platform.new(:ios, '4.3')
+    #   Platform.new(Platform.new(:ios))
+    #
+    # Returns nothing.
+
+    def initialize(input = nil, deployment_target = nil)
+      if input.is_a? Platform
+        @symbolic_name = input.name
+        @deployment_target = input.deployment_target
+      else
+        @symbolic_name = input
+        if deployment_target
+          version = deployment_target.is_a?(Hash) ? deployment_target[:deployment_target] : deployment_target # backwards compatibility from 0.6
+          @deployment_target = Pod::Version.create(version)
+        end
       end
     end
 

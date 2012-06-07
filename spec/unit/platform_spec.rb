@@ -7,6 +7,12 @@ describe Pod::Platform do
       Pod::Platform.osx.should == Pod::Platform.new(:osx)
     end
 
+    it "can be initialized from another platform" do
+      platform = Pod::Platform.new(:ios)
+      new = Pod::Platform.new(platform)
+      new.should == platform
+    end
+
     before do
       @platform = Pod::Platform.ios
     end
