@@ -19,6 +19,7 @@ GEM
       multipart-post (~> 1.1)
     faraday_middleware (0.8.7)
       faraday (>= 0.7.4, < 0.9)
+    github-markup (0.7.2)
     hashie (1.2.0)
     json (1.7.3)
     kicker (2.5.0)
@@ -44,11 +45,13 @@ GEM
       slop (>= 2.4.4, < 3)
     rake (0.9.2.2)
     rb-fsevent (0.9.1)
+    redcarpet (2.1.1)
     slop (2.4.4)
     vcr (2.2.0)
     webmock (1.8.7)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
+    yard (0.8.2)
 
 PLATFORMS
   ruby
@@ -59,6 +62,7 @@ DEPENDENCIES
   colored
   escape
   faraday (>= 0.8.1)
+  github-markup
   json
   kicker
   mocha-on-bacon
@@ -67,6 +71,8 @@ DEPENDENCIES
   pry
   rake
   rb-fsevent
+  redcarpet
   vcr
   webmock
   xcodeproj!
+  yard

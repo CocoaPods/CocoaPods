@@ -332,12 +332,14 @@ module Pod
     # Pod::Specification is yielded to the block. This is the same class which
     # is normally used to specify a Pod.
     #
+    # ```
     #   dependency do |spec|
     #     spec.name         = 'JSONKit'
     #     spec.version      = '1.4'
     #     spec.source       = { :git => 'https://github.com/johnezang/JSONKit.git', :tag => 'v1.4' }
     #     spec.source_files = 'JSONKit.*'
     #   end
+    # ```
     #
     #
     # For more info on the definition of a Pod::Specification see:

@@ -1,0 +1,4 @@
+--markup markdown
+--exclude examples
+--exclude spec
+--exclude tmp
