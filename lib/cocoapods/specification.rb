@@ -58,7 +58,7 @@ module Pod
     # be passed to initalize the value
     def self.top_attr_writer(attr, init_lambda = nil)
       define_method("#{attr}=") do |value|
-        raise Informative, "Can't set `#{attr}' for subspecs." if @parent
+        raise Informative, "#{self.inspect} Can't set `#{attr}' for subspecs." if @parent
         instance_variable_set("@#{attr}",  init_lambda ? init_lambda.call(value) : value);
       end
     end
