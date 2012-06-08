@@ -1,16 +1,19 @@
 module Pod
 
-  # Describes an build envronment. It caputures information about the SDK and a deployment target.
+  # A platform describes a build environment.
+  # It captures information about the SDK and a deployment target.
+  #
+  # A platform represents all the known build environments if its name is nil.
   #
   class Platform
 
-    # @return [Platform] Convenience method to initialize an iOS platform
+    # @return [Platform] Convenience method to initialize an iOS platform.
     #
     def self.ios
       new :ios
     end
 
-    # @return [Platform] Convenience method to initialize an OS X platform
+    # @return [Platform] Convenience method to initialize an OS X platform.
     #
     def self.osx
       new :osx
@@ -19,16 +22,22 @@ module Pod
     # Constructs a platform from either another platform or by
     # specifying the symbolic name and optionally the deployment target.
     #
-    # @param [Platform, Symbol] input Another platform or a symbolic name for the platform.
-    # @param [Version, {Symbol=>Object}] deployment_target The optional deployment target if initalized by symbolic name
+    # @overload initialize(platform)
+    #   @param [Platform] platform Another platform or a symbolic name for the platform.
     #
-    # Examples:
+    #   @example
     #
-    # ```
-    # Platform.new(:ios)
-    # Platform.new(:ios, '4.3')
-    # Platform.new(Platform.new(:ios))
-    # ```
+    #       p = Platform.new :ios
+    #       Platform.new p
+    #
+    # @overload initialize(name, deployment_target)
+    #   @param [Symbol] input Another platform or a symbolic name for the platform.
+    #   @param [Version] deployment_target The optional deployment target if initialized by symbolic name.
+    #
+    #   @example
+    #
+    #       Platform.new(:ios)
+    #       Platform.new(:ios, '4.3')
     #
     def initialize(input = nil, deployment_target = nil)
       if input.is_a? Platform
@@ -43,29 +52,26 @@ module Pod
       end
     end
 
-    # @return [Symbol] The name of the SDK reppresented by the platform.
+    # @return [Symbol] The name of the SDK represented by the platform.
     #
     def name
       @symbolic_name
     end
 
-    # The optional deployment target of the platform.
-    # A deployment target can be specified as a string.
+    # A deployment target can be initialized by any value that initializes a {Version}.
     #
-    # @return [Version]
+    # @return [Version] The optional deployment target of the platform.
+    #
     attr_reader :deployment_target
 
     def deployment_target= (version)
       @deployment_target = Pod::Version.create(version)
     end
 
-    # Checks if two platforms are the equivalent.
-    #
     # @param [Platform, Symbol] other The other platform to check. If a symbol is
-    #                                 passed the comparison does not take into
-    #                                 account the deployment target.
+    #   passed the comparison does not take into account the deployment target.
     #
-    # @return [Boolean]
+    # @return [Boolean] Whether two platforms are the equivalent.
     #
     def ==(other)
       if other.is_a?(Symbol)
@@ -75,12 +81,14 @@ module Pod
       end
     end
 
-    # A platfrom supports (from the point of view of a pod) another platform if they reppresent the same SDK and if the
+    # A platform supports (from the point of view of a pod) another platform if they represent the same SDK and if the
     # deployment target of the other is lower. If one of the platforms does not specify the deployment target, it is not taken into account.
     #
     # This method always returns true if one of platforms is nil.
+    # @return Whether the platform supports being used in the environment described by another platform.
     #
-    # **TODO**: rename to supported_on?
+    # @todo rename to supported_on?
+    #
     def supports?(other)
       return true if @symbolic_name.nil? || other.nil?
       os_check      = @symbolic_name == other.name
@@ -88,9 +96,7 @@ module Pod
       os_check && version_check
     end
 
-    # A string reppresentation of the Platform including the deployment target if specified.
-    #
-    # @return [String] A string reppresentation.
+    # @return [String] A string representation of the Platform including the deployment target if specified.
     #
     def to_s
       case @symbolic_name
@@ -103,14 +109,15 @@ module Pod
       end
     end
 
-    # @return [Symbol] A Symbol reppresentation of the SDK.
+    # @return [Symbol] A Symbol representation of the SDK.
     #
     def to_sym
       name
     end
 
-    # A platform behaves as nil if doesn't specify an SDK.
-    # A nil platform reppresents all the available platforms.
+    # @return Whether the platform does not represents any SDK.
+    #
+    # A platform behaves as nil if doesn't specify an SDK and implicitly represents all the available platforms.
     #
     def nil?
       name.nil?
