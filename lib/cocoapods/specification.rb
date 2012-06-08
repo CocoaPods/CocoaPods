@@ -4,9 +4,9 @@ module Pod
   extend Config::Mixin
 
   def self._eval_podspec(path)
+    string = File.open(path, 'r:utf-8')  { |f| f.read }
     # TODO: work around for Rubinius incomplete encoding in 1.9 mode
-    string = File.open(path, 'r')  { |f| f.read }
-    string.encode!('UTF-8') if string.respond_to?(:encode!)
+    string.encode!('UTF-8') if string.respond_to?(:encoding) && string.encoding.name != "UTF-8"
     eval(string, nil, path.to_s)
   end
 
