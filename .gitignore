@@ -20,3 +20,4 @@ spec/fixtures/mercurial-repo/.hg/*cache
 spec/fixtures/vcr
 .yardoc
 /doc
+.rbx/
