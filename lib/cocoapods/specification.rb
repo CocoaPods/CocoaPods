@@ -4,7 +4,10 @@ module Pod
   extend Config::Mixin
 
   def self._eval_podspec(path)
-    eval(path.read, nil, path.to_s)
+    string = File.open(path, 'r:utf-8')  { |f| f.read }
+    # TODO: work around for Rubinius incomplete encoding in 1.9 mode
+    string.encode!('UTF-8') if string.respond_to?(:encoding) && string.encoding.name != "UTF-8"
+    eval(string, nil, path.to_s)
   end
 
   class Specification
@@ -58,7 +61,7 @@ module Pod
     # be passed to initalize the value
     def self.top_attr_writer(attr, init_lambda = nil)
       define_method("#{attr}=") do |value|
-        raise Informative, "Can't set `#{attr}' for subspecs." if @parent
+        raise Informative, "#{self.inspect} Can't set `#{attr}' for subspecs." if @parent
         instance_variable_set("@#{attr}",  init_lambda ? init_lambda.call(value) : value);
       end
     end

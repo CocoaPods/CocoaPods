@@ -20,4 +20,8 @@ group :development do
   gem "webmock"
   gem "awesome_print"
   gem "pry"
+
+  gem 'yard'
+  gem 'redcarpet'
+  gem 'github-markup'
 end
