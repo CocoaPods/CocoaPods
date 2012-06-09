@@ -78,14 +78,6 @@ module Pod
       @sandbox.root + top_specification.name
     end
 
-    # @return [Array<Specification>] The subspecs activated for the pod.
-    #
-    # @todo It this still being used?
-    #
-    def subspecs
-      specifications.reject{|s| s.parent.nil? }
-    end
-
     # @return [String] A string representation of the pod which indicates if
     # the pods comes from a local source.
     #
