@@ -103,22 +103,18 @@ module Pod
       end
     end
 
-    # A platform supports (from the point of view of a pod) another platform
-    # if they represent the same SDK and if the deployment target of the other
-    # is lower. If one of the platforms does not specify the deployment target,
-    # it is not taken into account.
+    # In the context of operating system SDKs, a platform supports another
+    # one if they have the same name and the other platform has a minor or
+    # equal deployment target.
     #
     # @note This method returns true if one of the platforms is nil.
     #
-    # @return Whether the platform supports being used in the environment
-    #   described by another platform.
-    #
-    # @todo rename to supported_on?
+    # @return Whether the platform supports another platform.
     #
     def supports?(other)
       return true if @symbolic_name.nil? || other.nil?
       other = Platform.new(other)
-      (name == other.name) && (deployment_target >= other.deployment_target)
+      (other.name == name) && (other.deployment_target <= deployment_target)
     end
 
     # @return [String] A string representation including the deployment target.
