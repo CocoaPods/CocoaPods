@@ -37,7 +37,6 @@ describe Pod::Platform do
     it "presents an accurate string representation" do
       @platform.to_s.should == "iOS"
       Pod::Platform.new(:osx).to_s.should == 'OS X'
-      Pod::Platform.new(nil).to_s.should  == "iOS - OS X"
       Pod::Platform.new(:ios, '5.0.0').to_s.should == 'iOS 5.0.0'
       Pod::Platform.new(:osx, '10.7').to_s.should  == 'OS X 10.7'
     end
@@ -62,16 +61,6 @@ describe Pod::Platform do
     end
   end
 
-  describe "with a nil value" do
-    before do
-      @platform = Pod::Platform.new(nil)
-    end
-
-    it "behaves like a nil object" do
-      @platform.should.be.nil
-    end
-  end
-
   describe "regarding supporting platforms" do
     it "supports platforms with the same operating system" do
       p1 = Pod::Platform.new(:ios)
@@ -81,11 +70,6 @@ describe Pod::Platform do
       p1 = Pod::Platform.new(:osx)
       p2 = Pod::Platform.new(:osx)
       p1.should.supports?(p2)
-    end
-
-    it "supports a nil platform" do
-      p1 = Pod::Platform.new(:ios)
-      p1.should.supports?(nil)
     end
 
     it "supports a platform with a lower or equal deployment_target" do
