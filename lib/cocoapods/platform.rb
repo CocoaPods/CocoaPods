@@ -88,12 +88,6 @@ module Pod
     #
     attr_reader :declared_deployment_target
 
-    # @todo Deprecate
-    #
-    def deployment_target= (version)
-      @deployment_target = Pod::Version.create(version)
-    end
-
     # @param [Platform, Symbol] other The other platform to check.
     #
     # @note If a symbol is passed the comparison does not take into account
