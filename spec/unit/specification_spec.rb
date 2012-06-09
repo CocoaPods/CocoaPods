@@ -353,7 +353,7 @@ describe "A Pod::Specification subspec" do
   end
 
   it "does not cache platform attributes and can activate another platform" do
-    @spec.platform = nil
+    @spec.stubs(:platform).returns nil
     @spec.activate_platform(:ios)
     @subsubspec.source_files.map { |f| f.to_s }.should == %w[ spec.m  subspec_ios.m subsubspec.m ]
     @spec.activate_platform(:osx)
@@ -361,7 +361,7 @@ describe "A Pod::Specification subspec" do
   end
 
   it "resolves correctly the available platforms" do
-    @spec.platform = nil
+    @spec.stubs(:platform).returns nil
     @subspec.platform = :ios, '4.0'
     @spec.available_platforms.map{ |p| p.to_sym }.should == [ :osx, :ios ]
     @subspec.available_platforms.first.to_sym.should == :ios
@@ -373,7 +373,7 @@ describe "A Pod::Specification subspec" do
   end
 
   it "resolves reports correctly the supported platforms" do
-    @spec.platform = nil
+    @spec.stubs(:platform).returns nil
     @subspec.platform = :ios, '4.0'
     @subsubspec.platform = :ios, '5.0'
     @spec.supports_platform?(:ios).should.be.true
@@ -406,7 +406,7 @@ describe "A Pod::Specification subspec" do
     @subspec.active_platform.should == :ios
     @subsubspec.active_platform.should == :ios
 
-    @spec.platform = nil
+    @spec.stubs(:platform).returns nil
     @subsubspec.activate_platform(:osx)
     @subspec.active_platform.should == :osx
     @spec.active_platform.should == :osx
