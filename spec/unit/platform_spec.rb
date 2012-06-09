@@ -63,6 +63,11 @@ describe Pod::Platform do
       p.deployment_target = Pod::Version.new('4.0.0')
       p.deployment_target.should == Pod::Version.new('4.0.0')
     end
+
+    it "provides a default deployment target on initialization" do
+      p = Pod::Platform.new(:ios)
+      p.deployment_target.should == Pod::Version.new('4.3')
+    end
   end
 
   describe "with a nil value" do
@@ -97,13 +102,6 @@ describe Pod::Platform do
       p1.should.supports?(p1)
       p1.should.supports?(p2)
       p2.should.not.supports?(p1)
-    end
-
-    it "supports a platform regardless of the deployment_target if one of the two does not specify it" do
-      p1 = Pod::Platform.new(:ios)
-      p2 = Pod::Platform.new(:ios, '4.0')
-      p1.should.supports?(p2)
-      p2.should.supports?(p1)
     end
 
     it "doesn't supports a platform with a different operating system" do
