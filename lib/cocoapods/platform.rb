@@ -1,9 +1,8 @@
 module Pod
 
-  # A platform describes a build environment.
-  # It captures information about the SDK and a deployment target.
-  #
-  # A platform represents all the known build environments if its name is nil.
+  # A platform describes an SDK name and deployment target. If no name
+  # is provided an instance of this class behaves like nil and represents
+  # all the known platforms
   #
   class Platform
 
@@ -89,6 +88,8 @@ module Pod
     #
     attr_reader :declared_deployment_target
 
+    # @todo Deprecate
+    #
     def deployment_target= (version)
       @deployment_target = Pod::Version.create(version)
     end
@@ -141,7 +142,7 @@ module Pod
       s
     end
 
-    # @return [Symbol] A Symbol representation of the SDK.
+    # @return [Symbol] A Symbol representation of the name.
     #
     def to_sym
       name
@@ -149,7 +150,8 @@ module Pod
 
     # @return Whether the platform does not represents any SDK.
     #
-    # A platform behaves as nil if doesn't specify an SDK and implicitly represents all the available platforms.
+    # @note A platform behaves as nil if doesn't specify an name and
+    # represents all the known platforms.
     #
     def nil?
       name.nil?
