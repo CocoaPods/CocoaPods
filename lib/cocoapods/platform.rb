@@ -1,8 +1,6 @@
 module Pod
 
-  # A platform describes an SDK name and deployment target. If no name
-  # is provided an instance of this class behaves like nil and represents
-  # all the known platforms
+  # A platform describes an SDK name and deployment target.
   #
   class Platform
 
@@ -49,7 +47,7 @@ module Pod
     #       platform = Platform.new(:ios)
     #       Platform.new(platform)
     #
-    def initialize(input = nil, target = nil)
+    def initialize(input, target = nil)
       if input.is_a? Platform
         @symbolic_name = input.name
         @deployment_target = input.deployment_target
@@ -107,12 +105,9 @@ module Pod
     # one if they have the same name and the other platform has a minor or
     # equal deployment target.
     #
-    # @note This method returns true if one of the platforms is nil.
-    #
     # @return Whether the platform supports another platform.
     #
     def supports?(other)
-      return true if @symbolic_name.nil? || other.nil?
       other = Platform.new(other)
       (other.name == name) && (other.deployment_target <= deployment_target)
     end
@@ -125,8 +120,6 @@ module Pod
         s = 'iOS'
       when :osx
         s = 'OS X'
-      else
-        s = 'iOS - OS X'
       end
       s << " #{declared_deployment_target}" if declared_deployment_target
       s
@@ -136,15 +129,6 @@ module Pod
     #
     def to_sym
       name
-    end
-
-    # @return Whether the platform does not represents any SDK.
-    #
-    # @note A platform behaves as nil if doesn't specify an name and
-    # represents all the known platforms.
-    #
-    def nil?
-      name.nil?
     end
 
     # @return Whether the platform requires legacy architectures for iOS.
