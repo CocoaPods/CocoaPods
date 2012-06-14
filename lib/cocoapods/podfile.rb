@@ -153,7 +153,10 @@ module Pod
 
     def self.from_file(path)
       podfile = Podfile.new do
-        eval(path.read, nil, path.to_s)
+        string = File.open(path, 'r:utf-8')  { |f| f.read }
+        # TODO: work around for Rubinius incomplete encoding in 1.9 mode
+        string.encode!('UTF-8') if string.respond_to?(:encoding) && string.encoding.name != "UTF-8"
+        eval(string, nil, path.to_s)
       end
       podfile.defined_in_file = path
       podfile.validate!
@@ -332,12 +335,14 @@ module Pod
     # Pod::Specification is yielded to the block. This is the same class which
     # is normally used to specify a Pod.
     #
+    # ```
     #   dependency do |spec|
     #     spec.name         = 'JSONKit'
     #     spec.version      = '1.4'
     #     spec.source       = { :git => 'https://github.com/johnezang/JSONKit.git', :tag => 'v1.4' }
     #     spec.source_files = 'JSONKit.*'
     #   end
+    # ```
     #
     #
     # For more info on the definition of a Pod::Specification see:
@@ -345,6 +350,7 @@ module Pod
     def dependency(*name_and_version_requirements, &block)
       @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
     end
+    alias_method :dep, :dependency
 
     # Specifies that a BridgeSupport metadata document should be generated from
     # the headers of all installed Pods.

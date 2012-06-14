@@ -78,6 +78,7 @@ namespace :gem do
 
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
   task :release do
+
     unless ENV['SKIP_CHECKS']
       if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
         $stderr.puts "[!] You need to be on the `master' branch in order to be able to do a release."
@@ -140,6 +141,29 @@ namespace :gem do
     sh "git push origin master"
     sh "git push origin --tags"
     sh "gem push #{gem_filename}"
+
+    # Update the last version in CocoaPods-version.yml
+    specs_branch = '0.6'
+
+    Dir.chdir ('../Specs') do
+      puts Dir.pwd
+      sh "git checkout #{specs_branch}"
+      sh "git pull"
+
+      yaml_file  = 'CocoaPods-version.yml'
+      unless File.exist?(yaml_file)
+        $stderr.puts "[!] Unable to find #{yaml_file}!"
+        exit 1
+      end
+      cocoapods_version = YAML.load_file(yaml_file)
+      cocoapods_version['last'] = gem_version
+      File.open(yaml_file, "w") do |f|
+        f.write(cocoapods_version.to_yaml)
+      end
+
+      sh "git commit #{yaml_file} -m 'CocoaPods release #{gem_version}'"
+      sh "git push"
+    end
   end
 end
 
@@ -186,7 +210,7 @@ namespace :spec do
       sh "cd #{File.dirname(tarball)} && rm #{basename} && tar -zcf #{basename} #{basename[0..-8]}"
     end
   end
-  
+
   desc "Unpacks all the fixture tarballs"
   task :unpack_fixture_tarballs do
     tarballs = FileList['spec/fixtures/**/*.tar.gz']

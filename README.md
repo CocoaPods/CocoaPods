@@ -50,13 +50,17 @@ Now that you've got CocoaPods installed you can easily add it to your project.
 Search for Pods by name or description.
 
 ```
-$ pod search asi
-==> ASIHTTPRequest (1.8.1)
-    Easy to use CFNetwork wrapper for HTTP requests, Objective-C, Mac OS X and iPhone
+$ pod search json
 
-==> ASIWebPageRequest (1.8.1)
-    The ASIWebPageRequest class included with ASIHTTPRequest lets you download
-    complete webpages, including external resources like images and stylesheets.
+--> JSONKit (1.4, 1.5pre)
+    A Very High Performance Objective-C JSON Library.
+    - Homepage: https://github.com/johnezang/JSONKit
+    - Source:   https://github.com/johnezang/JSONKit.git
+
+--> SBJson (2.2.3, 3.0.4, 3.1)
+    This library implements strict JSON parsing and generation in Objective-C.
+    - Homepage: http://stig.github.com/json-framework/
+    - Source:   https://github.com/stig/json-framework.git
 ```
 
 After you've found your favorite dependencies you add them to your [Podfile](https://github.com/CocoaPods/CocoaPods/wiki/A-Podfile).

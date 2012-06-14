@@ -7,12 +7,7 @@ describe "Pod::Command::Setup" do
   extend SpecHelper::TemporaryRepos
 
   it "runs with correct parameters" do
-    begin
-      before, config.repos_dir = config.repos_dir, fixture('spec-repos')
-      lambda { run_command('setup') }.should.not.raise
-    ensure
-      config.repos_dir = before
-    end
+    lambda { run_command('setup') }.should.not.raise
   end
 
   it "complains for wrong parameters" do

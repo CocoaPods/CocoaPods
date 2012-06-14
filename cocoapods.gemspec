@@ -25,9 +25,6 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
 
-  s.post_install_message = "[!] If this is your first time install of CocoaPods, or if " \
-                           "you are upgrading, first run: $ pod setup"
-
   s.add_runtime_dependency 'faraday',   '~> 0.8.1'
   s.add_runtime_dependency 'octokit',   '~> 1.3.0'
 

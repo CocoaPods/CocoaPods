@@ -382,7 +382,7 @@ describe "A Pod::Specification subspec" do
     @subspec.supports_platform?(:osx).should.be.false
     @subspec.supports_platform?(:ios, '4.0').should.be.true
     @subspec.supports_platform?(:ios, '5.0').should.be.true
-    @subsubspec.supports_platform?(:ios).should.be.true
+    @subsubspec.supports_platform?(:ios).should.be.false
     @subsubspec.supports_platform?(:osx).should.be.false
     @subsubspec.supports_platform?(:ios, '4.0').should.be.false
     @subsubspec.supports_platform?(:ios, '5.0').should.be.true
