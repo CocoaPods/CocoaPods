@@ -9,10 +9,12 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.8)
+    archive-tar-minitar (0.5.2)
     awesome_print (1.0.2)
     bacon (1.1.0)
     coderay (1.0.6)
     colored (1.2)
+    columnize (0.3.6)
     crack (0.3.1)
     escape (0.0.4)
     faraday (0.8.1)
@@ -24,6 +26,8 @@ GEM
     json (1.7.3)
     kicker (2.5.0)
       rb-fsevent
+    linecache19 (0.5.12)
+      ruby_core_source (>= 0.1.4)
     metaclass (0.0.1)
     method_source (0.7.1)
     mocha (0.11.4)
@@ -46,6 +50,16 @@ GEM
     rake (0.9.2.2)
     rb-fsevent (0.9.1)
     redcarpet (2.1.1)
+    ruby-debug-base19 (0.11.25)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.5)
+      archive-tar-minitar (>= 0.5.2)
     slop (2.4.4)
     vcr (2.2.0)
     webmock (1.8.7)
@@ -72,6 +86,7 @@ DEPENDENCIES
   rake
   rb-fsevent
   redcarpet
+  ruby-debug19
   vcr
   webmock
   xcodeproj!

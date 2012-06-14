@@ -20,7 +20,7 @@ group :development do
   gem "webmock"
   gem "awesome_print"
   gem "pry"
-
+  gem "ruby-debug19", :require => "ruby-debug"
   gem 'yard'
   gem 'redcarpet'
   gem 'github-markup'
