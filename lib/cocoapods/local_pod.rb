@@ -304,11 +304,7 @@ module Pod
         raise Informative, "The pod is cleaned and cannot compute the all the "\
           "header files as they might be deleted."
       end
-      all_specs = top_specification.recursive_subspecs << top_specification
-      files = all_specs.map { |s| expanded_paths(s.source_files, :glob => '*.{h}') }
-      files.flatten!
-      files.select { |f| f && f.extname == '.h' }.uniq!
-      files
+      header_files
     end
 
     # @!group Target integration
