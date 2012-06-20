@@ -216,9 +216,12 @@ module Pod
     #   files grouped by {Specification}.
     #
     def header_files_by_spec
-      source_files_by_spec.dup.each do |spec, paths|
-        paths.select! { |f| f.extname == '.h' }
+      result = {}
+      source_files_by_spec.each do |spec, paths|
+        headers = paths.select { |f| f.extname == '.h' }
+        result[spec] = headers unless headers.empty?
       end
+      result
     end
 
     # @return [Array<Pathname>] The paths of the resources.
@@ -304,8 +307,7 @@ module Pod
       all_specs = top_specification.recursive_subspecs << top_specification
       files = all_specs.map { |s| expanded_paths(s.source_files, :glob => '*.{h}') }
       files.flatten!
-      files.select! { |f| f && f.extname == '.h' }
-      files.uniq!
+      files.select { |f| f && f.extname == '.h' }.uniq!
       files
     end
 
