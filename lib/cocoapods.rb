@@ -51,5 +51,4 @@ end
 if ENV['COCOA_PODS_ENV'] == 'development'
   require 'pry'
   require 'awesome_print'
-  require 'ruby-prof'
 end
