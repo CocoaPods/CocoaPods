@@ -1,7 +1,7 @@
 module Pod
 
-  # A {LocalPod} interfaces one or more specifications belonging to one pod (a
-  # library) and their concrete instance in the file system.
+  # A {LocalPod} interfaces one or more specifications belonging to one pod
+  # (a library) and their concrete instance in the file system.
   #
   # The {LocalPod} is responsible for orchestrating the activated
   # specifications of a single pod. Specifically, it keeps track of the
@@ -19,24 +19,24 @@ module Pod
   #
   class LocalPod
 
-    # @return {Specification} The specification that describes the pod.
+    # @return [Specification] The specification that describes the pod.
     #
     attr_reader :top_specification
 
-    # @return {Specification} The activated specifications of the pod.
+    # @return [Specification] The activated specifications of the pod.
     #
     attr_reader :specifications
 
-    # @return {Sandbox} The sandbox where the pod is installed.
+    # @return [Sandbox] The sandbox where the pod is installed.
     #
     attr_reader :sandbox
 
-    # @param [Specification] specification the first activated specification
-    #   of the pod.
-    # @param [Sandbox] sandbox The sandbox where the files of the pod will be
-    #   located.
-    # @param [Platform] platform The platform that will be used to build the
-    #   pod.
+    # @param [Specification] specification
+    #   The first activated specification of the pod.
+    # @param [Sandbox] sandbox
+    #   The sandbox where the files of the pod will be located.
+    # @param [Platform] platform
+    #   The platform that will be used to build the pod.
     #
     # @todo The local pod should be initialized with all the activated
     #   specifications passed as an array, in order to be able to cache the
@@ -159,7 +159,7 @@ module Pod
       files
     end
 
-    # @return [Array<Pathname>] The paths of the files used by the pod.
+    # @return [Array<Pathname>] The relative path of the files used by the pod.
     #
     def used_paths
       files = [ source_files(false),
@@ -175,8 +175,7 @@ module Pod
 
     # @!group Files
 
-    # @param [Boolean] relative Whether the paths should be returned relative
-    #  to the sandbox.
+    # @param (see #source_files_by_spec)
     #
     # @return [Array<Pathname>] The paths of the source files.
     #
@@ -184,7 +183,13 @@ module Pod
       chained_expanded_paths(:source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => relative)
     end
 
-    # @param (see #source_files)
+    # Finds the source files that every activated {Specification} requires.
+    #
+    # @param [Boolean] relative Whether the paths should be returned relative
+    #  to the sandbox.
+    #
+    # @note If the same file is required by two specifications the one at the
+    #   higher level in the inheritance chain wins.
     #
     # @return [Array<Pathname>] The paths of the header files.
     #
@@ -192,7 +197,8 @@ module Pod
       source_files.select { |f| f.extname == '.h' }
     end
 
-    # @param (see #source_files)
+    # @return [Hash{Specification => Array<Pathname>}] The paths of the header
+    #   files grouped by {Specification}.
     #
     # @return [Array<Pathname>] The paths of the resources.
     #
@@ -232,7 +238,7 @@ module Pod
     end
 
     # @return [String] The text of the license of the pod from the
-    #   specification or from the license file.
+    #  specification or from the license file.
     #
     def license_text
       if (license_hash = top_specification.license)
@@ -248,8 +254,17 @@ module Pod
       specifications.map { |s| s.xcconfig }.reduce(:merge)
     end
 
-    # Method used by documentation generator. It return the source files
-    # of all the specs.
+    # Computes the paths of all the public headers of the pod including every
+    # subspec. For this reason the pod must not be cleaned before calling it.
+    #
+    # This method is used by {Generator::Documentation}.
+    #
+    # @raise [Informative] If the pod was cleaned.
+    #
+    # @todo Merge with #221
+    #
+    # @return [Array<Pathname>] The path of all the public headers of the pod.
+    #
     def all_specs_public_header_files
       #TODO: merge with #221
       specs = top_specification.recursive_subspecs << top_specification
@@ -258,32 +273,44 @@ module Pod
 
     # @!group Target integration
 
+    # @return [void] Copies the pods headers to the sandbox.
+    #
     def link_headers
       copy_header_mappings.each do |namespaced_path, files|
         @sandbox.add_header_files(namespaced_path, files)
       end
     end
 
+    # @param [Xcodeproj::Project::Object::PBXNativeTarget] target
+    #   The target to integrate.
+    #
+    # @return [void] Adds the pods source files to a given target.
+    #
     def add_to_target(target)
       sources_files_by_specification.each do | spec, files |
         files.each do |file|
-          # TODO: Xcodeproj::Project::Object::PBXNativeTarget#add_source_file is quite slow
-          # The issus appears to be related to the find call in line 107.
           target.add_source_file(file, nil, spec.compiler_flags.strip)
         end
       end
     end
 
+    # @return Whether the pod requires ARC.
+    #
     def requires_arc?
       top_specification.requires_arc
     end
 
     private
 
+    # @return [Array<Pathname>] The implementation files
+    # (the files the need to compiled) of the pod.
+    #
     def implementation_files
       source_files.select { |f| f.extname != '.h' }
     end
 
+    # @return [Pathname] The path of the pod relative from the sandbox.
+    #
     def relative_root
       root.relative_path_from(@sandbox.root)
     end
@@ -291,8 +318,8 @@ module Pod
     # @todo this is being overridden in the RestKit 0.9.4 spec, need to do
     # something with that, and this method also still exists in Specification.
     #
-    # @todo This is not overridden anymore in specification refactor and the code
-    # Pod::Specification#copy_header_mapping can be moved here.
+    # @todo This is not overridden anymore in specification refactor and the
+    #   code Pod::Specification#copy_header_mapping can be moved here.
     def copy_header_mappings
       search_path_headers = header_files - headers_excluded_from_search_paths
       search_path_headers.inject({}) do |mappings, from|
@@ -330,29 +357,34 @@ module Pod
       chained_expanded_paths(:exclude_header_search_paths, :glob => '*.h', :relative_to_sandbox => true)
     end
 
+    # @!group Paths Patterns
 
-    # @!group File Patterns
-
-    # Find all the paths patterns of a each activated specifications and converts them to the actual paths present in the pod.
+    # Finds all the paths patterns of a each activated specifications and
+    # converts them to the actual paths present in the pod.
     #
-    # @return Array<Pathname> A list of the paths.
+    # @return [Array<Pathname>] A list of the paths.
     #
     def chained_expanded_paths(accessor, options = {})
       specifications.map { |s| expanded_paths(s.send(accessor), options) }.compact.flatten.uniq
     end
 
-    # Converts patterns of paths to the {Pathname} of the files present in the pod.
+    # The paths obtained by interpolating the patterns of a given attribute
+    # collected by spec.
     #
     # @todo implement case insensitive search
     #
-    # @param [String, FileList, Array<String, Pathname>] patterns The patterns
-    #   to expand.
-    # @param [Hash] options the options to used for expanding the paths patterns.
-    # @option options [String]  :glob The pattern to use for globing directories.
-    # @option options [Boolean] :relative_to_sandbox Whether the paths should
-    #   be returned relative to the sandbox.
+    # @param [String, FileList, Array<String, Pathname>] patterns
+    #   The patterns to expand.
+    # @param [Hash] options
+    #   The options to used for expanding the paths patterns.
+    # @option options [String] :glob
+    #   The pattern to use for globing directories.
+    # @option options [Boolean] :relative_to_sandbox
+    #   Whether the paths should be returned relative to the sandbox.
     #
     # @raise [Informative] If the pod does not exists.
+    #
+    # @todo implement case insensitive search
     #
     # @return [Array<Pathname>] A list of the paths.
     #
