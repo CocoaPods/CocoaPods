@@ -357,7 +357,12 @@ module Pod
     # @return [Array<Pathname>] A list of the paths.
     #
     def expanded_paths(patterns, options = {})
-      raise Informative, "[Local Pod] Attempt to resolve paths for non existent pod." unless exists?
+      unless exists?
+        raise Informative, "[Local Pod] Attempt to resolve paths for nonexistent pod.\n" \
+                           "\tSpecifications: #{@specifications.inspect}\n" \
+                           "\t      Patterns: #{patterns.inspect}\n" \
+                           "\t       Options: #{options.inspect}"
+      end
 
       patterns = [ patterns ] if patterns.is_a? String
       patterns.map do |pattern|
