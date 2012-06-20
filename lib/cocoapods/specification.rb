@@ -38,10 +38,18 @@ module Pod
       end
 
       # multi-platform attributes
-      %w[ source_files resources preserve_paths exclude_header_search_paths frameworks libraries dependencies compiler_flags].each do |attr|
+      %w[ source_files
+          resources
+          preserve_paths
+          exclude_header_search_paths
+          frameworks
+          libraries
+          dependencies
+          compiler_flags ].each do |attr|
         instance_variable_set( "@#{attr}", { :ios => [], :osx => [] } )
       end
       @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
+      @header_dir = { :ios => nil, :osx => nil }
 
       yield self if block_given?
     end
@@ -122,6 +130,7 @@ module Pod
           libraries=
           compiler_flags=
           deployment_target=
+          header_dir=
           dependency }.each do |method|
         define_method(method) do |args|
           @specification._on_platform(@platform) do
@@ -190,9 +199,6 @@ module Pod
     top_attr_reader   :description,         lambda {|instance, ivar| ivar || instance.summary }
     top_attr_writer   :description
 
-    top_attr_reader   :header_dir,          lambda {|instance, ivar| ivar || instance.pod_destroot_name }
-    top_attr_writer   :header_dir,          lambda {|dir| Pathname.new(dir) }
-
     alias_method      :author=, :authors=
 
     def self.parse_authors(*names_and_email_addresses)
@@ -217,6 +223,16 @@ module Pod
     alias_method :preserve_path=, :preserve_paths=
     alias_method :framework=,     :frameworks=
     alias_method :library=,       :libraries=
+
+    # @return The directory to namespace the headers.
+    #
+    # It defaults to the name of the top level specification.
+    #
+    platform_attr_writer :header_dir, lambda { |dir,_| Pathname.new(dir) }
+
+    def header_dir
+      @header_dir[active_platform] || pod_destroot_name
+    end
 
     platform_attr_writer        :xcconfig,                     lambda {|value, current| current.tap { |c| c.merge!(value) } }
 

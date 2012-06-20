@@ -31,10 +31,27 @@ describe Pod::LocalPod do
     end
 
     it 'returns an expanded list of source files, relative to the sandbox root' do
-      @pod.source_files.sort.should == [
+      @pod.relative_source_files.sort.should == [
         Pathname.new("BananaLib/Classes/Banana.m"),
         Pathname.new("BananaLib/Classes/Banana.h")
       ].sort
+    end
+
+    it 'returns the source files groupped by specification' do
+      files = @pod.source_files_by_spec[@pod.specifications.first].sort
+      files.should == [
+        @pod.root + "Classes/Banana.m",
+        @pod.root + "Classes/Banana.h"
+      ].sort
+    end
+
+    it 'returns a list of header files' do
+      @pod.relative_header_files.should == [Pathname.new("BananaLib/Classes/Banana.h")]
+    end
+
+    it 'returns a list of header files by specification' do
+      files = @pod.header_files_by_spec[@pod.specifications.first].sort
+      files.should == [ @pod.root + "Classes/Banana.h" ]
     end
 
     it 'returns an expanded list the files to clean' do
@@ -46,11 +63,7 @@ describe Pod::LocalPod do
     end
 
     it 'returns an expanded list of resources, relative to the sandbox root' do
-      @pod.resources.should == [Pathname.new("BananaLib/Resources/logo-sidebar.png")]
-    end
-
-    it 'returns a list of header files' do
-      @pod.header_files.should == [Pathname.new("BananaLib/Classes/Banana.h")]
+      @pod.relative_resource_files.should == [Pathname.new("BananaLib/Resources/logo-sidebar.png")]
     end
 
     it "can link it's headers into the sandbox" do

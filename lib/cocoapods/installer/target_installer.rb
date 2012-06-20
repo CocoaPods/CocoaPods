@@ -20,12 +20,12 @@ module Pod
       end
 
       def copy_resources_script_for(pods)
-        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.resources }.flatten)
+        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.relative_resource_files }.flatten)
       end
 
       def bridge_support_generator_for(pods, sandbox)
         Generator::BridgeSupport.new(pods.map do |pod|
-          pod.header_files.map { |header| sandbox.root + header }
+          pod.relative_header_files.map { |header| sandbox.root + header }
         end.flatten)
       end
 

@@ -13,9 +13,12 @@ module Pod
   # safely cleaned by the pod.
   #
   # @example
-  #
   #     pod = LocalPod.new 'RestKit/Networking'
   #     pod.add_specification 'RestKit/UI'
+  #
+  # @note
+  #   Unless otherwise specified in the name of the method the {LocalPod}
+  #   returns absolute paths.
   #
   class LocalPod
 
@@ -140,6 +143,7 @@ module Pod
     #
     def clean
       clean_paths.each { |path| FileUtils.rm_rf(path) }
+      @cleaned = true
     end
 
     # Finds the absolute paths, including hidden ones, of the files
@@ -148,7 +152,7 @@ module Pod
     # @return [Array<Strings>] The paths that can be deleted.
     #
     def clean_paths
-      cached_used_paths = used_paths.map{ |path| path.to_s }
+      cached_used_paths = used_files
       files = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
 
       files.reject! do |candidate|
@@ -159,51 +163,74 @@ module Pod
       files
     end
 
-    # @return [Array<Pathname>] The relative path of the files used by the pod.
+    # @return [Array<String>] The absolute path of the files used by the pod.
     #
-    def used_paths
-      files = [ source_files(false),
-                resources(false),
-                preserve_paths,
-                readme_file,
-                license_file,
-                prefix_header_file ]
+    def used_files
+      files = [ source_files, resource_files, preserve_files, readme_file, license_file, prefix_header_file ]
       files.compact!
       files.flatten!
+      files.map!{ |path| path.to_s }
       files
     end
 
     # @!group Files
 
-    # @param (see #source_files_by_spec)
-    #
     # @return [Array<Pathname>] The paths of the source files.
     #
-    def source_files(relative = true)
-      chained_expanded_paths(:source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => relative)
+    def source_files
+      source_files_by_spec.values.flatten
+    end
+
+    # @return [Array<Pathname>] The *relative* paths of the source files.
+    #
+    def relative_source_files
+      source_files.map{ |p| p.relative_path_from(@sandbox.root) }
     end
 
     # Finds the source files that every activated {Specification} requires.
     #
-    # @param [Boolean] relative Whether the paths should be returned relative
-    #  to the sandbox.
-    #
     # @note If the same file is required by two specifications the one at the
     #   higher level in the inheritance chain wins.
     #
+    # @return [Hash{Specification => Array<Pathname>}] The files grouped by
+    #   {Specification}.
+    #
+    def source_files_by_spec
+      options = {:glob => '*.{h,m,mm,c,cpp}'}
+      paths_by_spec(:source_files, options)
+    end
+
     # @return [Array<Pathname>] The paths of the header files.
     #
     def header_files
-      source_files.select { |f| f.extname == '.h' }
+      header_files_by_spec.values.flatten
+    end
+
+    # @return [Array<Pathname>] The *relative* paths of the source files.
+    #
+    def relative_header_files
+      header_files.map{ |p| p.relative_path_from(@sandbox.root) }
     end
 
     # @return [Hash{Specification => Array<Pathname>}] The paths of the header
     #   files grouped by {Specification}.
     #
+    def header_files_by_spec
+      source_files_by_spec.dup.each do |spec, paths|
+        paths.select! { |f| f.extname == '.h' }
+      end
+    end
+
     # @return [Array<Pathname>] The paths of the resources.
     #
-    def resources(relative = true)
-      chained_expanded_paths(:resources, :relative_to_sandbox => relative)
+    def resource_files
+      paths_by_spec(:resources).values.flatten
+    end
+
+    # @return [Array<Pathname>] The *relative* paths of the resources.
+    #
+    def relative_resource_files
+      resource_files.map{ |p| p.relative_path_from(@sandbox.root) }
     end
 
     # @return [Pathname] The absolute path of the prefix header file
@@ -215,11 +242,15 @@ module Pod
     # @return [Array<Pathname>] The absolute paths of the files of the pod
     #   that should be preserved.
     #
-    def preserve_paths
-      chained_expanded_paths(:preserve_paths) + expanded_paths(%w[ *.podspec notice* NOTICE* CREDITS* ])
+    def preserve_files
+      paths  = paths_by_spec(:preserve_paths).values
+      paths += expanded_paths(%w[ *.podspec notice* NOTICE* CREDITS* ])
+      paths.compact!
+      paths.uniq!
+      paths
     end
 
-    # @return [Pathname] The automatically detected path of the README
+    # @return [Pathname] The automatically detected absolute path of the README
     #  file.
     #
     def readme_file
@@ -266,9 +297,16 @@ module Pod
     # @return [Array<Pathname>] The path of all the public headers of the pod.
     #
     def all_specs_public_header_files
-      #TODO: merge with #221
-      specs = top_specification.recursive_subspecs << top_specification
-      specs.map { |s| expanded_paths(s.source_files, :glob => '*.{h}') }.compact.flatten.select { |f| f.extname == '.h' }.uniq
+      if @cleaned
+        raise Informative, "The pod is cleaned and cannot compute the all the "\
+          "header files as they might be deleted."
+      end
+      all_specs = top_specification.recursive_subspecs << top_specification
+      files = all_specs.map { |s| expanded_paths(s.source_files, :glob => '*.{h}') }
+      files.flatten!
+      files.select! { |f| f && f.extname == '.h' }
+      files.uniq!
+      files
     end
 
     # @!group Target integration
@@ -276,7 +314,7 @@ module Pod
     # @return [void] Copies the pods headers to the sandbox.
     #
     def link_headers
-      copy_header_mappings.each do |namespaced_path, files|
+      header_mappings.each do |namespaced_path, files|
         @sandbox.add_header_files(namespaced_path, files)
       end
     end
@@ -287,8 +325,9 @@ module Pod
     # @return [void] Adds the pods source files to a given target.
     #
     def add_to_target(target)
-      sources_files_by_specification.each do | spec, files |
+      source_files_by_spec.each do | spec, files |
         files.each do |file|
+          file = file.relative_path_from(@sandbox.root)
           target.add_source_file(file, nil, spec.compiler_flags.strip)
         end
       end
@@ -306,7 +345,7 @@ module Pod
     # (the files the need to compiled) of the pod.
     #
     def implementation_files
-      source_files.select { |f| f.extname != '.h' }
+      relative_source_files.select { |f| f.extname != '.h' }
     end
 
     # @return [Pathname] The path of the pod relative from the sandbox.
@@ -315,63 +354,62 @@ module Pod
       root.relative_path_from(@sandbox.root)
     end
 
+    # @return Hash{Pathname => [Array<Pathname>]} A hash containing the headers
+    #   folders as the keys and the the absolute paths of the header files
+    #   as the values.
+    #
     # @todo this is being overridden in the RestKit 0.9.4 spec, need to do
     # something with that, and this method also still exists in Specification.
     #
     # @todo This is not overridden anymore in specification refactor and the
     #   code Pod::Specification#copy_header_mapping can be moved here.
-    def copy_header_mappings
-      search_path_headers = header_files - headers_excluded_from_search_paths
-      search_path_headers.inject({}) do |mappings, from|
-        from_without_prefix = from.relative_path_from(relative_root)
-        to = top_specification.header_dir + top_specification.copy_header_mapping(from_without_prefix)
-        (mappings[to.dirname] ||= []) << from
-        mappings
-      end
-    end
-
-    # Finds the source files that every activate {Specification} requires.
-    #
-    # @note The paths of the files are relative to the sandbox.
-    # @note If the same file is required by two specifications the one at the higher level in the inheritance chain wins.
-    #
-    # @return [Hash{Specification => Array<Pathname>}] The files grouped by {Specification}.
-    #
-    def sources_files_by_specification
-      files_by_spec   = {}
-      processed_files = []
-      specifications.sort_by { |s| s.name.length }.each do |spec|
-        files = []
-        expanded_paths(spec.source_files, :glob => '*.{h,m,mm,c,cpp}', :relative_to_sandbox => true).each do | file |
-          files << file unless processed_files.include?(file)
+    def header_mappings
+      mappings = {}
+      header_files_by_spec.each do |spec, paths|
+        paths = paths - headers_excluded_from_search_paths
+        paths.each do |from|
+          from_relative = from.relative_path_from(root)
+          to = spec.header_dir + spec.copy_header_mapping(from_relative)
+          (mappings[to.dirname] ||= []) << from
         end
-        files_by_spec[spec] = files
-        processed_files    += files
       end
-      files_by_spec
+      mappings
     end
 
-    # @todo merge with #221
+    # @return [<Pathname>] The relative path of the headers that should not be
+    # included in the linker search paths.
     #
     def headers_excluded_from_search_paths
-      chained_expanded_paths(:exclude_header_search_paths, :glob => '*.h', :relative_to_sandbox => true)
+      options = { :glob => '*.h' }
+      paths = paths_by_spec(:exclude_header_search_paths, options)
+      paths.values.compact.uniq
     end
 
     # @!group Paths Patterns
 
-    # Finds all the paths patterns of a each activated specifications and
-    # converts them to the actual paths present in the pod.
+    # The paths obtained by resolving the patterns of an attribute
+    # groupped by spec.
     #
-    # @return [Array<Pathname>] A list of the paths.
+    # @param [Symbol] accessor The accessor to use to obtain the paths patterns.
+    # @param [Hash] options (see #expanded_paths)
     #
-    def chained_expanded_paths(accessor, options = {})
-      specifications.map { |s| expanded_paths(s.send(accessor), options) }.compact.flatten.uniq
+    def paths_by_spec(accessor, options = {})
+      paths_by_spec   = {}
+      processed_paths = []
+
+      specs = specifications.sort_by { |s| s.name.length }
+      specs.each do |spec|
+        paths = expanded_paths(spec.send(accessor), options)
+        unless paths.empty?
+          paths_by_spec[spec] = paths - processed_paths
+          processed_paths += paths
+        end
+      end
+      paths_by_spec
     end
 
-    # The paths obtained by interpolating the patterns of a given attribute
-    # collected by spec.
-    #
-    # @todo implement case insensitive search
+    # Converts patterns of paths to the {Pathname} of the files present in the
+    #   pod.
     #
     # @param [String, FileList, Array<String, Pathname>] patterns
     #   The patterns to expand.
@@ -379,8 +417,6 @@ module Pod
     #   The options to used for expanding the paths patterns.
     # @option options [String] :glob
     #   The pattern to use for globing directories.
-    # @option options [Boolean] :relative_to_sandbox
-    #   Whether the paths should be returned relative to the sandbox.
     #
     # @raise [Informative] If the pod does not exists.
     #
@@ -405,11 +441,7 @@ module Pod
         end
 
         pattern.glob.map do |file|
-          if options[:relative_to_sandbox]
-            file.relative_path_from(@sandbox.root)
-          else
-            file
-          end
+          file
         end
       end.flatten
     end
