@@ -29,7 +29,7 @@ module Pod
       pods.each do |pod|
         # Add all source files to the project grouped by pod
         group = @project.add_pod_group(pod.name)
-        pod.source_files.each do |path|
+        pod.relative_source_files.each do |path|
           group.files.new('path' => path.to_s)
         end
       end

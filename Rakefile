@@ -145,7 +145,7 @@ namespace :gem do
     # Update the last version in CocoaPods-version.yml
     specs_branch = '0.6'
 
-    Dir.chdir ('../Specs') do
+    Dir.chdir('../Specs') do
       puts Dir.pwd
       sh "git checkout #{specs_branch}"
       sh "git pull"

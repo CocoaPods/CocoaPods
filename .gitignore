@@ -13,6 +13,7 @@ examples/Pods
 examples/**/Pods
 examples/RelativePathProject/RelativePathProject/RelativePathProject.xcodeproj
 spec/fixtures/banana-lib
+spec/fixtures/chameleon
 spec/fixtures/integration/Headers/
 /concatenated.*
 spec/fixtures/mercurial-repo/.hg/*cache
