@@ -312,6 +312,7 @@ module Pod
     # @return [void] Copies the pods headers to the sandbox.
     #
     def link_headers
+      @sandbox.add_header_search_path(headers_sandbox)
       header_mappings.each do |namespaced_path, files|
         @sandbox.add_header_files(namespaced_path, files)
       end
@@ -367,11 +368,15 @@ module Pod
         paths = paths - headers_excluded_from_search_paths
         paths.each do |from|
           from_relative = from.relative_path_from(root)
-          to = spec.header_dir + spec.copy_header_mapping(from_relative)
+          to = headers_sandbox + (spec.header_dir) + spec.copy_header_mapping(from_relative)
           (mappings[to.dirname] ||= []) << from
         end
       end
       mappings
+    end
+
+    def headers_sandbox
+      @headers_sandbox ||= Pathname.new(top_specification.name)
     end
 
     # @return [<Pathname>] The relative path of the headers that should not be
