@@ -139,7 +139,7 @@ describe Pod::LocalPod do
     end
 
     it "resolve the resources" do
-      @pod.relative_resource_files.map(&:to_s).should == [
+      @pod.relative_resource_files.map(&:to_s).sort.should == [
         "Chameleon/UIKit/Resources/<UITabBar> background.png",
         "Chameleon/UIKit/Resources/<UITabBar> background@2x.png" ]
     end
@@ -272,7 +272,7 @@ describe Pod::LocalPod do
     it "returns a hash of mappings with a custom header dir prefix" do
       mappings = @pod.send(:header_mappings)
       mappings = mappings.map do |folder, headers|
-        "#{folder} > #{headers.map{ |p| p.relative_path_from(@pod.root).to_s }.join(' ')}"
+        "#{folder} > #{headers.sort.map{ |p| p.relative_path_from(@pod.root).to_s }.join(' ')}"
       end
       mappings.sort.should == [
         "Chameleon/StoreKit > StoreKit/Classes/SKPayment.h StoreKit/Classes/StoreKit.h",
@@ -283,7 +283,7 @@ describe Pod::LocalPod do
       @pod.stubs(:headers_excluded_from_search_paths).returns([@pod.root + 'UIKit/Classes/UIKit.h'])
       mappings = @pod.send(:header_mappings)
       mappings = mappings.map do |folder, headers|
-        "#{folder} > #{headers.map{ |p| p.relative_path_from(@pod.root).to_s }.join(' ')}"
+        "#{folder} > #{headers.sort.map{ |p| p.relative_path_from(@pod.root).to_s }.join(' ')}"
       end
       mappings.sort.should == [
         "Chameleon/StoreKit > StoreKit/Classes/SKPayment.h StoreKit/Classes/StoreKit.h",
