@@ -40,7 +40,7 @@ describe Pod::Installer::TargetInstaller do
   end
 
   it 'adds each pod to the static library target' do
-    @pods[0].expects(:add_to_target).with(instance_of(Xcodeproj::Project::Object::PBXNativeTarget))
+    @pods[0].expects(:source_files_description).returns([])
     do_install!
   end
 
