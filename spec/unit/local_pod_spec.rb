@@ -6,7 +6,8 @@ describe Pod::LocalPod do
   describe "in general" do
     before do
       @sandbox = temporary_sandbox
-      @pod = Pod::LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), @sandbox, Pod::Platform.new(:ios))
+      @spec    = fixture_spec('banana-lib/BananaLib.podspec')
+      @pod     = Pod::LocalPod.new(@spec, @sandbox, Pod::Platform.new(:ios))
       copy_fixture_to_pod('banana-lib', @pod)
     end
 
@@ -97,172 +98,201 @@ describe Pod::LocalPod do
     end
   end
 
-  describe "with installed source," do
-    #before do
-    #config.project_pods_root = fixture('integration')
-    #podspec   = fixture('spec-repos/master/SSZipArchive/0.1.0/SSZipArchive.podspec')
-    #@spec     = Pod::Specification.from_file(podspec)
-    #@destroot = fixture('integration/SSZipArchive')
-    #end
+  describe "with installed source and multiple subspecs" do
 
-    xit "returns the list of files that the source_files pattern expand to" do
-      files = @destroot.glob('**/*.{h,c,m}')
-      files = files.map { |file| file.relative_path_from(config.project_pods_root) }
-      @spec.expanded_source_files[:ios].sort.should == files.sort
+    def assert_array_equals(expected, computed)
+      delta1 = computed - expected
+      delta1.should == []
+      delta2 = expected - computed
+      delta2.should == []
     end
-
-    xit "returns the list of headers" do
-      files = @destroot.glob('**/*.h')
-      files = files.map { |file| file.relative_path_from(config.project_pods_root) }
-      @spec.header_files[:ios].sort.should == files.sort
-    end
-
-    xit "returns a hash of mappings from the pod's destroot to its header dirs, which by default is just the pod's header dir" do
-      @spec.copy_header_mappings[:ios].size.should == 1
-      @spec.copy_header_mappings[:ios][Pathname.new('SSZipArchive')].sort.should == %w{
-      SSZipArchive.h
-      minizip/crypt.h
-      minizip/ioapi.h
-      minizip/mztools.h
-      minizip/unzip.h
-      minizip/zip.h
-      }.map { |f| Pathname.new("SSZipArchive/#{f}") }.sort
-    end
-
-    xit "allows for customization of header mappings by overriding copy_header_mapping" do
-      def @spec.copy_header_mapping(from)
-        Pathname.new('ns') + from.basename
-      end
-      @spec.copy_header_mappings[:ios].size.should == 1
-      @spec.copy_header_mappings[:ios][Pathname.new('SSZipArchive/ns')].sort.should == %w{
-      SSZipArchive.h
-      minizip/crypt.h
-      minizip/ioapi.h
-      minizip/mztools.h
-      minizip/unzip.h
-      minizip/zip.h
-      }.map { |f| Pathname.new("SSZipArchive/#{f}") }.sort
-    end
-
-    xit "returns a hash of mappings with a custom header dir prefix" do
-      @spec.header_dir = 'AnotherRoot'
-      @spec.copy_header_mappings[:ios][Pathname.new('AnotherRoot')].sort.should == %w{
-      SSZipArchive.h
-      minizip/crypt.h
-      minizip/ioapi.h
-      minizip/mztools.h
-      minizip/unzip.h
-      minizip/zip.h
-      }.map { |f| Pathname.new("SSZipArchive/#{f}") }.sort
-    end
-
-    xit "returns the user header search paths" do
-      def @spec.copy_header_mapping(from)
-        Pathname.new('ns') + from.basename
-      end
-      @spec.header_search_paths.should == %w{
-      "$(PODS_ROOT)/Headers/SSZipArchive"
-      "$(PODS_ROOT)/Headers/SSZipArchive/ns"
-      }
-    end
-
-    xit "returns the user header search paths with a custom header dir prefix" do
-      @spec.header_dir = 'AnotherRoot'
-      def @spec.copy_header_mapping(from)
-        Pathname.new('ns') + from.basename
-      end
-      @spec.header_search_paths.should == %w{
-      "$(PODS_ROOT)/Headers/AnotherRoot"
-      "$(PODS_ROOT)/Headers/AnotherRoot/ns"
-      }
-    end
-
-    xit "returns the list of files that the resources pattern expand to" do
-      @spec.expanded_resources.should == {}
-      @spec.resource = 'LICEN*'
-      @spec.expanded_resources[:ios].map(&:to_s).should == %w{ SSZipArchive/LICENSE }
-      @spec.expanded_resources[:osx].map(&:to_s).should == %w{ SSZipArchive/LICENSE }
-      @spec.resources = 'LICEN*', 'Readme.*'
-      @spec.expanded_resources[:ios].map(&:to_s).should == %w{ SSZipArchive/LICENSE SSZipArchive/Readme.markdown }
-      @spec.expanded_resources[:osx].map(&:to_s).should == %w{ SSZipArchive/LICENSE SSZipArchive/Readme.markdown }
-    end
-  end
-
-  describe "regarding multiple subspecs" do
 
     before do
-      # specification with only some subspecs activated
-      # to check that only the needed files are being activated
-      # A fixture is needed.
-      #
-      # specification = Pod::Spec.new do |s|
-      # ...
-      # s.xcconfig = ...
-      # s.compiler_flags = ...
-      # s.subspec 's1' do |s1|
-      #   s1.xcconfig = ...
-      #   s1.compiler_flags = ...
-      #   s1.ns.source_files = 's1.{h,m}'
-      # end
-      #
-      # s.subspec 's2' do |s2|
-      #   s2.ns.source_files = 's2.{h,m}'
-      # end
-      #
-      # Add only s1 to the localPod
-      # s1 = specification.subspec_by_name(s1)
-      # @pod = Pod::LocalPod.new(s1, @sandbox, Pod::Platform.new(:ios))
-      # @pod.add_specification(specification)
+      @sandbox = temporary_sandbox
+      subspecs = fixture_spec('chameleon/Chameleon.podspec').subspecs
+      @pod = Pod::LocalPod.new(subspecs[0], @sandbox, Pod::Platform.new(:osx))
+      @pod.add_specification(subspecs[1])
+      copy_fixture_to_pod('Chameleon', @pod)
     end
 
-    xit "returns the subspecs" do
-      @pod.subspecs.map{ |s| name }.should == %w[ s1 ]
+    it "identifies the top level specification" do
+      @pod.top_specification.name.should == 'Chameleon'
     end
 
-    xit "resolve the source files" do
-      @pod.source_files.should == %w[ s1.h s1.m ]
+    it "returns the subspecs" do
+      @pod.specifications.map(&:name).should == %w[ Chameleon/UIKit Chameleon/StoreKit ]
     end
 
-    xit "resolve the resources" do
+    it "resolve the source files" do
+      computed = @pod.relative_source_files.map(&:to_s)
+      expected = %w[
+        Chameleon/UIKit/Classes/UIKit.h
+        Chameleon/UIKit/Classes/UIView.h
+        Chameleon/UIKit/Classes/UIWindow.h
+        Chameleon/UIKit/Classes/UIView.m
+        Chameleon/UIKit/Classes/UIWindow.m
+        Chameleon/StoreKit/Classes/SKPayment.h
+        Chameleon/StoreKit/Classes/StoreKit.h
+        Chameleon/StoreKit/Classes/SKPayment.m ]
+
+     assert_array_equals(expected, computed)
     end
 
-    xit "resolve the clean paths" do
-      @pod.clean_paths.should == %w[ s2.h s2.m ]
+    it "resolve the resources" do
+      @pod.relative_resource_files.map(&:to_s).should == [
+        "Chameleon/UIKit/Resources/<UITabBar> background.png",
+        "Chameleon/UIKit/Resources/<UITabBar> background@2x.png" ]
     end
 
-    xit "resolves the used files" do
-      @pod.used_files.should == %w[ s1.h s1.m README.md ]
+   it "resolve the clean paths" do
+     # fake_git serves to check that source control files are deleted
+     expected = %w[
+       /.fake_git
+       /.fake_git/branches
+       /.fake_git/HEAD
+       /.fake_git/index
+       /AddressBookUI
+       /AddressBookUI/AddressBookUI_Prefix.pch
+       /AddressBookUI/Classes
+       /AddressBookUI/Classes/ABUnknownPersonViewController.h
+       /AddressBookUI/Classes/ABUnknownPersonViewController.m
+       /AddressBookUI/Classes/AddressBookUI.h
+       /AssetsLibrary
+       /AssetsLibrary/AssetsLibrary_Prefix.pch
+       /AssetsLibrary/Classes
+       /AssetsLibrary/Classes/ALAsset.h
+       /AssetsLibrary/Classes/ALAsset.m
+       /AssetsLibrary/Classes/ALAssetRepresentation.h
+       /AssetsLibrary/Classes/ALAssetRepresentation.m
+       /AssetsLibrary/Classes/ALAssetsFilter.h
+       /AssetsLibrary/Classes/ALAssetsFilter.m
+       /AssetsLibrary/Classes/ALAssetsGroup.h
+       /AssetsLibrary/Classes/ALAssetsGroup.m
+       /AssetsLibrary/Classes/ALAssetsLibrary.h
+       /AssetsLibrary/Classes/ALAssetsLibrary.m
+       /AssetsLibrary/Classes/AssetsLibrary.h
+       /AVFoundation
+       /AVFoundation/AVFoundation_Prefix.pch
+       /AVFoundation/Classes
+       /AVFoundation/Classes/AVAudioPlayer.h
+       /AVFoundation/Classes/AVAudioPlayer.m
+       /AVFoundation/Classes/AVAudioSession.h
+       /AVFoundation/Classes/AVAudioSession.m
+       /AVFoundation/Classes/AVFoundation.h
+       /MediaPlayer
+       /MediaPlayer/Classes
+       /MediaPlayer/Classes/MediaPlayer.h
+       /MediaPlayer/Classes/MPMediaPlayback.h
+       /MediaPlayer/Classes/MPMoviePlayerController.h
+       /MediaPlayer/Classes/MPMoviePlayerController.m
+       /MediaPlayer/Classes/MPMusicPlayerController.h
+       /MediaPlayer/Classes/MPMusicPlayerController.m
+       /MediaPlayer/Classes/UIInternalMovieView.h
+       /MediaPlayer/Classes/UIInternalMovieView.m
+       /MediaPlayer/MediaPlayer_Prefix.pch
+       /MessageUI
+       /MessageUI/Classes
+       /MessageUI/Classes/MessageUI.h
+       /MessageUI/Classes/MFMailComposeViewController.h
+       /MessageUI/Classes/MFMailComposeViewController.m
+       /MessageUI/MessageUI_Prefix.pch
+       /StoreKit/StoreKit_Prefix.pch
+       /UIKit/UIKit_Prefix.pch
+     ]
+     computed = @pod.clean_paths.each{ |p| p.gsub!(@pod.root.to_s, '') }
+     assert_array_equals(expected, computed)
     end
 
-    xit "resolved the header files" do
-      @pod.header_files.should == %w[ s1.h ]
+    it "resolves the used files" do
+      expected = %w[
+        /UIKit/Classes/UIKit.h
+        /UIKit/Classes/UIView.h
+        /UIKit/Classes/UIWindow.h
+        /UIKit/Classes/UIView.m
+        /UIKit/Classes/UIWindow.m
+        /StoreKit/Classes/SKPayment.h
+        /StoreKit/Classes/StoreKit.h
+        /StoreKit/Classes/SKPayment.m
+        /Chameleon.podspec
+        /README.md
+        /LICENSE
+      ] + [
+        "/UIKit/Resources/<UITabBar> background.png",
+        "/UIKit/Resources/<UITabBar> background@2x.png"
+      ]
+      computed = @pod.used_files.map{ |p| p.gsub!(@pod.root.to_s, '').to_s }
+      assert_array_equals(expected, computed)
     end
 
-    xit "resolves the header files of every subspec" do
-      @pod.all_specs_public_header_files.should == %w[ s1.h s2.h ]
+
+    it "resolved the header files" do
+      expected = %w[
+        Chameleon/UIKit/Classes/UIKit.h
+        Chameleon/UIKit/Classes/UIView.h
+        Chameleon/UIKit/Classes/UIWindow.h
+        Chameleon/StoreKit/Classes/SKPayment.h
+        Chameleon/StoreKit/Classes/StoreKit.h ]
+      computed = @pod.relative_header_files.map(&:to_s)
+      assert_array_equals(expected, computed)
     end
 
-    xit "merges the xcconfigs" do
+    it "resolves the header files of **every** subspec" do
+      computed = @pod.all_specs_public_header_files.map { |p| p.relative_path_from(@pod.root).to_s }
+      expected = %w[
+        UIKit/Classes/UIKit.h
+        UIKit/Classes/UIView.h
+        UIKit/Classes/UIWindow.h
+        StoreKit/Classes/SKPayment.h
+        StoreKit/Classes/StoreKit.h
+        MessageUI/Classes/MessageUI.h
+        MessageUI/Classes/MFMailComposeViewController.h
+        MediaPlayer/Classes/MediaPlayer.h
+        MediaPlayer/Classes/MPMediaPlayback.h
+        MediaPlayer/Classes/MPMoviePlayerController.h
+        MediaPlayer/Classes/MPMusicPlayerController.h
+        MediaPlayer/Classes/UIInternalMovieView.h
+        AVFoundation/Classes/AVAudioPlayer.h
+        AVFoundation/Classes/AVAudioSession.h
+        AVFoundation/Classes/AVFoundation.h
+        AssetsLibrary/Classes/ALAsset.h
+        AssetsLibrary/Classes/ALAssetRepresentation.h
+        AssetsLibrary/Classes/ALAssetsFilter.h
+        AssetsLibrary/Classes/ALAssetsGroup.h
+        AssetsLibrary/Classes/ALAssetsLibrary.h
+        AssetsLibrary/Classes/AssetsLibrary.h
+      ]
+      assert_array_equals(expected, computed)
     end
 
-    xit "adds each file to a target with the compiler flags of its specification" do
-      # @pod.add_to_target(target)
+    it "merges the xcconfigs without duplicates" do
+      @pod.xcconfig.should == {
+        "OTHER_LDFLAGS"=>"-framework AppKit -framework Foundation -framework IOKit -framework QTKit -framework QuartzCore -framework SystemConfiguration -framework WebKit" }
     end
 
-    xit "can provide the source files of all the subspecs" do
-      sources = @pod.all_specs_source_files.map { |p| p.relative_path_from(@sandbox.root).to_s }
-      sources.should == %w[ s1.h s1.m s2.h s2.m ]
-    end
-
-    xit 'can clean the unused files' do
-      # copy fixture to another folder
-      @pod.clean
-      @pod.clean_paths.tap do |paths|
-        paths.each do |path|
-          path.should.not.exist
-        end
+    it "returns a hash of mappings with a custom header dir prefix" do
+      mappings = @pod.send(:header_mappings)
+      mappings = mappings.map do |folder, headers|
+        "#{folder} > #{headers.map{ |p| p.relative_path_from(@pod.root).to_s }.join(' ')}"
       end
+      mappings.sort.should == [
+        "Chameleon/StoreKit > StoreKit/Classes/SKPayment.h StoreKit/Classes/StoreKit.h",
+        "Chameleon/UIKit > UIKit/Classes/UIKit.h UIKit/Classes/UIView.h UIKit/Classes/UIWindow.h" ]
     end
 
+    it "respects the headers excluded from the search paths" do
+      @pod.stubs(:headers_excluded_from_search_paths).returns([@pod.root + 'UIKit/Classes/UIKit.h'])
+      mappings = @pod.send(:header_mappings)
+      mappings = mappings.map do |folder, headers|
+        "#{folder} > #{headers.map{ |p| p.relative_path_from(@pod.root).to_s }.join(' ')}"
+      end
+      mappings.sort.should == [
+        "Chameleon/StoreKit > StoreKit/Classes/SKPayment.h StoreKit/Classes/StoreKit.h",
+        "Chameleon/UIKit > UIKit/Classes/UIView.h UIKit/Classes/UIWindow.h" ]
+    end
+
+    it "includes the sandbox of the pod's headers while linking" do
+      @sandbox.expects(:add_header_search_path).with(Pathname.new('Chameleon'))
+      @pod.link_headers
+    end
   end
 end

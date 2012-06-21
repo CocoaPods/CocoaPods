@@ -304,7 +304,12 @@ module Pod
         raise Informative, "The pod is cleaned and cannot compute the all the "\
           "header files as they might be deleted."
       end
-      header_files
+
+      all_specs = [ top_specification ] + top_specification.subspecs
+      options   = {:glob => '*.{h}'}
+      files     = paths_by_spec(:source_files, options, all_specs).values.flatten!
+      headers   = files.select { |f| f.extname == '.h' }
+      headers
     end
 
     # @!group Target integration
@@ -396,11 +401,12 @@ module Pod
     # @param [Symbol] accessor The accessor to use to obtain the paths patterns.
     # @param [Hash] options (see #expanded_paths)
     #
-    def paths_by_spec(accessor, options = {})
+    def paths_by_spec(accessor, options = {}, specs = nil)
+      specs ||= specifications
       paths_by_spec   = {}
       processed_paths = []
 
-      specs = specifications.sort_by { |s| s.name.length }
+      specs = specs.sort_by { |s| s.name.length }
       specs.each do |spec|
         paths = expanded_paths(spec.send(accessor), options)
         unless paths.empty?
