@@ -112,7 +112,7 @@ describe Pod::LocalPod do
       subspecs = fixture_spec('chameleon/Chameleon.podspec').subspecs
       @pod = Pod::LocalPod.new(subspecs[0], @sandbox, Pod::Platform.new(:osx))
       @pod.add_specification(subspecs[1])
-      copy_fixture_to_pod('Chameleon', @pod)
+      copy_fixture_to_pod('chameleon', @pod)
     end
 
     it "identifies the top level specification" do
