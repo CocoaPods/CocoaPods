@@ -5,6 +5,19 @@ GIT
   specs:
     xcodeproj (0.2.0.rc2)
 
+PATH
+  remote: .
+  specs:
+    cocoapods (0.6.0.rc2)
+      colored (~> 1.2)
+      escape (~> 0.0.4)
+      faraday (~> 0.8.1)
+      json (~> 1.7.3)
+      octokit (~> 1.7.0)
+      open4 (~> 1.3.0)
+      rake (~> 0.9.0)
+      xcodeproj (~> 0.2.0.rc1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -59,15 +72,10 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   bacon
-  colored
-  escape
-  faraday (>= 0.8.1)
+  cocoapods!
   github-markup
-  json
   kicker
   mocha-on-bacon
-  octokit
-  open4
   pry
   rake
   rb-fsevent
