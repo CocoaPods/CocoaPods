@@ -116,8 +116,11 @@ module Pod
       end
       
       def download_branch
+        git "clone '#{clone_url}' '#{target_path}'"
         Dir.chdir(target_path) do
-          git "clone '#{clone_url}' -b '#{options[:branch]}' '#{target_path}'" 
+          git "remote add beta '#{url}'"
+          git "fetch beta #{options[:branch]}"
+          git "reset --hard FETCH_HEAD"
           git "checkout -b activated-pod-commit"
         end
       end
