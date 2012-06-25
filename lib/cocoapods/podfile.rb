@@ -460,10 +460,6 @@ module Pod
     end
 
     def validate!
-      #lines = []
-      #lines << "* the `platform` attribute should be either `:osx` or `:ios`" unless @platform && [:osx, :ios].include?(@platform.name)
-      #lines << "* no dependencies were specified, which is, well, kinda pointless" if dependencies.empty?
-      #raise(Informative, (["The Podfile at `#{@defined_in_file}' is invalid:"] + lines).join("\n")) unless lines.empty?
     end
   end
 end
