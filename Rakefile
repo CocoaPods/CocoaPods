@@ -77,7 +77,7 @@ namespace :gem do
   end
 
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
-  task :release do
+  task :release => :build do
 
     unless ENV['SKIP_CHECKS']
       if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
