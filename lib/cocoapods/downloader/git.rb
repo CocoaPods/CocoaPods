@@ -18,6 +18,8 @@ module Pod
           download_tag
         elsif options[:commit]
           download_commit
+        elsif options[:branch]
+          download_branch
         else
           download_head
         end
@@ -110,6 +112,13 @@ module Pod
         git "clone '#{clone_url}' '#{target_path}'"
         Dir.chdir(target_path) do
           git "checkout -b activated-pod-commit #{options[:commit]}"
+        end
+      end
+      
+      def download_branch
+        Dir.chdir(target_path) do
+          git "clone '#{clone_url}' -b '#{options[:branch]}' '#{target_path}'" 
+          git "checkout -b activated-pod-commit"
         end
       end
     end
