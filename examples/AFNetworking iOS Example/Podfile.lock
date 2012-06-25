@@ -1,7 +1,19 @@
 PODS:
   - AFNetworking (0.7.0):
     - JSONKit
-  - FormatterKit (0.7.0)
+  - FormatterKit (1.0.0):
+    - FormatterKit/ArrayFormatter (= 1.0.0)
+    - FormatterKit/LocationFormatter (= 1.0.0)
+    - FormatterKit/OrdinalNumberFormatter (= 1.0.0)
+    - FormatterKit/TimeIntervalFormatter (= 1.0.0)
+    - FormatterKit/URLRequestFormatter (= 1.0.0)
+    - FormatterKit/UnitOfInformationFormatter (= 1.0.0)
+  - FormatterKit/ArrayFormatter (1.0.0)
+  - FormatterKit/LocationFormatter (1.0.0)
+  - FormatterKit/OrdinalNumberFormatter (1.0.0)
+  - FormatterKit/TimeIntervalFormatter (1.0.0)
+  - FormatterKit/URLRequestFormatter (1.0.0)
+  - FormatterKit/UnitOfInformationFormatter (1.0.0)
   - JSONKit (1.5pre)
 
 DEPENDENCIES:
