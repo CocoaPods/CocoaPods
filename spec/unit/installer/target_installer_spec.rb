@@ -40,7 +40,7 @@ describe Pod::Installer::TargetInstaller do
   end
 
   it 'adds each pod to the static library target' do
-    @pods[0].expects(:source_files_description).returns([])
+    @pods[0].expects(:source_file_descriptions).returns([])
     do_install!
   end
 

@@ -328,16 +328,14 @@ module Pod
     #
     # @return [void] Adds the pods source files to a given target.
     #
-    def source_files_description
+    def source_file_descriptions
       result = []
       source_files_by_spec.each do | spec, files |
         compiler_flags = spec.compiler_flags.strip
         files.each do |file|
           file = file.relative_path_from(@sandbox.root)
-          description = {}
-          description[:path] = file
-          description[:compiler_flags] = compiler_flags unless compiler_flags.empty?
-          result << description
+          desc = Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(file, compiler_flags, nil)
+          result << desc
         end
       end
       result
