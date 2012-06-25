@@ -34,6 +34,10 @@ module Pod
     #
     attr_reader :sandbox
 
+    # @return [Platform] The platform that will be used to build the pod.
+    #
+    attr_reader :platform
+
     # @param [Specification] specification
     #   The first activated specification of the pod.
     # @param [Sandbox] sandbox
@@ -46,7 +50,7 @@ module Pod
     #   computed values. In other words, it should be immutable.
     #
     def initialize(specification, sandbox, platform)
-      @top_specification, @sandbox = specification.top_level_parent, sandbox
+      @top_specification, @sandbox, @platform = specification.top_level_parent, sandbox, platform
       @top_specification.activate_platform(platform)
       @specifications = [] << specification
     end
@@ -94,12 +98,6 @@ module Pod
     #
     def name
       top_specification.name
-    end
-
-    # @return [Platform] The platform that will be used to build the pod.
-    #
-    def platform
-      top_specification.active_platform
     end
 
     # @!group Installation
