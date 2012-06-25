@@ -42,6 +42,16 @@ module Pod
       @header_search_paths.uniq.map { |path| "${PODS_ROOT}/#{path}" }
     end
 
+    # Adds an header search path to the sandbox.
+    #
+    # @param path [Pathname] The path tho add.
+    #
+    # @return [void]
+    #
+    def add_header_search_path(path)
+      @header_search_paths << Pathname.new(HEADERS_DIR) + path
+    end
+
     def prepare_for_install
       headers_root.rmtree if headers_root.exist?
     end
