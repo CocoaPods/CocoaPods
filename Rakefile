@@ -129,11 +129,11 @@ namespace :gem do
     silent_sh "rm -rf '#{tmp}'"
     silent_sh "gem install --install-dir='#{tmp_gems}' #{gem_filename}"
 
-    puts "* Building examples from gem (tmp/gems)"
-    ENV['GEM_HOME'] = ENV['GEM_PATH'] = tmp_gems
-    ENV['PATH']     = "#{tmp_gems}/bin:#{ENV['PATH']}"
-    ENV['FROM_GEM'] = '1'
-    silent_sh "rake examples:build"
+    # puts "* Building examples from gem (tmp/gems)"
+    # ENV['GEM_HOME'] = ENV['GEM_PATH'] = tmp_gems
+    # ENV['PATH']     = "#{tmp_gems}/bin:#{ENV['PATH']}"
+    # ENV['FROM_GEM'] = '1'
+    # silent_sh "rake examples:build"
 
     # Then release
     sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
