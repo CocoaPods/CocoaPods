@@ -62,13 +62,15 @@ module Pod
 
         @target = @project.add_pod_target(@target_definition.label, @target_definition.platform)
 
+        source_file_descriptions = []
         pods.each do |pod|
           xcconfig.merge!(pod.xcconfig)
-          pod.add_to_target(@target)
+          source_file_descriptions += pod.source_file_descriptions
 
           # TODO: this doesn't need to be done here, it has nothing to do with the target
           pod.link_headers
         end
+        @target.add_source_files(source_file_descriptions)
 
         xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.header_search_paths).join(" "))
 

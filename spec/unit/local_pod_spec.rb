@@ -75,17 +75,18 @@ describe Pod::LocalPod do
     end
 
     it "can add it's source files to an Xcode project target" do
-      target = mock('target')
-      target.expects(:add_source_file).with(Pathname.new("BananaLib/Classes/Banana.h"), anything, anything)
-      target.expects(:add_source_file).with(Pathname.new("BananaLib/Classes/Banana.m"), anything, anything)
-      @pod.add_to_target(target)
+      @pod.source_file_descriptions.should == [
+        Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(Pathname.new("BananaLib/Classes/Banana.h"), "", nil),
+        Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(Pathname.new("BananaLib/Classes/Banana.m"), "", nil)
+      ]
     end
 
     it "can add it's source files to a target with any specially configured compiler flags" do
       @pod.top_specification.compiler_flags = '-d some_flag'
-      target = mock('target')
-      target.expects(:add_source_file).twice.with(anything, anything, "-d some_flag")
-      @pod.add_to_target(target)
+      @pod.source_file_descriptions.should == [
+        Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(Pathname.new("BananaLib/Classes/Banana.h"), '-d some_flag', nil),
+        Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(Pathname.new("BananaLib/Classes/Banana.m"), '-d some_flag', nil)
+      ]
     end
 
     it "returns the platform" do

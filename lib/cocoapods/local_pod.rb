@@ -328,13 +328,17 @@ module Pod
     #
     # @return [void] Adds the pods source files to a given target.
     #
-    def add_to_target(target)
+    def source_file_descriptions
+      result = []
       source_files_by_spec.each do | spec, files |
+        compiler_flags = spec.compiler_flags.strip
         files.each do |file|
           file = file.relative_path_from(@sandbox.root)
-          target.add_source_file(file, nil, spec.compiler_flags.strip)
+          desc = Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(file, compiler_flags, nil)
+          result << desc
         end
       end
+      result
     end
 
     # @return Whether the pod requires ARC.
