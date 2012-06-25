@@ -143,8 +143,8 @@ namespace :gem do
     sh "gem push #{gem_filename}"
 
     # Update the last version in CocoaPods-version.yml
+    puts "* Updating last known version in Specs repo"
     specs_branch = '0.6'
-
     Dir.chdir('../Specs') do
       puts Dir.pwd
       sh "git checkout #{specs_branch}"
