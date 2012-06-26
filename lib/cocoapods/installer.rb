@@ -93,7 +93,6 @@ module Pod
       end
 
       generate_lock_file!(specifications)
-      generate_dummy_source
 
       puts "- Running post install hooks" if config.verbose?
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
