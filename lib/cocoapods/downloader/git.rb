@@ -129,6 +129,7 @@ module Pod
           git "remote add upstream #{@url}" # we need to add the original url, not the cache url
           git "fetch -q upstream" # refresh the branches
           git "checkout --track -b activated-pod-commit upstream/#{options[:branch]}" # create a new tracking branch
+          puts "Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}"
         end
       end
       
@@ -151,7 +152,7 @@ module Pod
       end
       
       def download_branch
-        download_only ? download_and_extract_tarball(options[:head]) : super
+        download_only? ? download_and_extract_tarball(options[:branch]) : super
       end
       
       def clean

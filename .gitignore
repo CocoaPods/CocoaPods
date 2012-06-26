@@ -18,3 +18,4 @@ spec/fixtures/integration/Headers/
 spec/fixtures/mercurial-repo/.hg/*cache
 .hg
 spec/fixtures/vcr
+bin/RKTwitter
