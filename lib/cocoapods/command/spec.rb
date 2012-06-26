@@ -338,7 +338,7 @@ module Pod
           messages << "The description should end with a dot"               if @spec.description !~ /.*\./ && @spec.description != @spec.summary
           messages << "Git sources should specify either a tag or a commit" if source[:git] && !source[:commit] && !source[:tag]
           messages << "Github repositories should end in `.git'"            if github_source? && source[:git] !~ /.*\.git/
-          messages << "Github repositories should use `https' link"         if github_source? && source[:git] !~ /https:\/\/github.com/
+          # messages << "Github repositories should use `https' link"         if github_source? && source[:git] !~ /https:\/\/github.com/
           messages << "Comments must be deleted"                            if text =~ /^\w*#\n\w*#/ # allow a single line comment as it is generally used in subspecs
           messages
         end
@@ -406,7 +406,7 @@ module Pod
         def file_patterns_errors
           messages = []
           messages << "The sources did not match any file"                     if !@spec.source_files.empty? && @pod.source_files.empty?
-          messages << "The resources did not match any file"                   if !@spec.resources.empty? && @pod.resources.empty?
+          messages << "The resources did not match any file"                   if !@spec.resources.empty? && @pod.resource_files.empty?
           messages << "The preserve_paths did not match any file"              if !@spec.preserve_paths.empty? && @pod.preserve_paths.empty?
           messages << "The exclude_header_search_paths did not match any file" if !@spec.exclude_header_search_paths.empty? && @pod.headers_excluded_from_search_paths.empty?
           messages

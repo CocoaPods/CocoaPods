@@ -1,12 +1,6 @@
 source "http://rubygems.org"
 
-gem "colored"
-gem "escape"
-gem "json"
-gem "open4"
-
-gem "faraday", ">= 0.8.1"
-gem "octokit"
+gemspec
 
 group :development do
   gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git", :branch => "develop"

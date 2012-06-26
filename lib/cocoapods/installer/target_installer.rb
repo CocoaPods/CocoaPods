@@ -20,12 +20,12 @@ module Pod
       end
 
       def copy_resources_script_for(pods)
-        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.resources }.flatten)
+        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.relative_resource_files }.flatten)
       end
 
       def bridge_support_generator_for(pods, sandbox)
         Generator::BridgeSupport.new(pods.map do |pod|
-          pod.header_files.map { |header| sandbox.root + header }
+          pod.relative_header_files.map { |header| sandbox.root + header }
         end.flatten)
       end
 
@@ -62,13 +62,15 @@ module Pod
 
         @target = @project.add_pod_target(@target_definition.label, @target_definition.platform)
 
+        source_file_descriptions = []
         pods.each do |pod|
           xcconfig.merge!(pod.xcconfig)
-          pod.add_to_target(@target)
+          source_file_descriptions += pod.source_file_descriptions
 
           # TODO: this doesn't need to be done here, it has nothing to do with the target
           pod.link_headers
         end
+        @target.add_source_files(source_file_descriptions)
 
         xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.header_search_paths).join(" "))
 

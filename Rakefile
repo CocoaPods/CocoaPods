@@ -77,7 +77,7 @@ namespace :gem do
   end
 
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
-  task :release do
+  task :release => :build do
 
     unless ENV['SKIP_CHECKS']
       if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
@@ -129,11 +129,11 @@ namespace :gem do
     silent_sh "rm -rf '#{tmp}'"
     silent_sh "gem install --install-dir='#{tmp_gems}' #{gem_filename}"
 
-    puts "* Building examples from gem (tmp/gems)"
-    ENV['GEM_HOME'] = ENV['GEM_PATH'] = tmp_gems
-    ENV['PATH']     = "#{tmp_gems}/bin:#{ENV['PATH']}"
-    ENV['FROM_GEM'] = '1'
-    silent_sh "rake examples:build"
+    # puts "* Building examples from gem (tmp/gems)"
+    # ENV['GEM_HOME'] = ENV['GEM_PATH'] = tmp_gems
+    # ENV['PATH']     = "#{tmp_gems}/bin:#{ENV['PATH']}"
+    # ENV['FROM_GEM'] = '1'
+    # silent_sh "rake examples:build"
 
     # Then release
     sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
@@ -143,9 +143,9 @@ namespace :gem do
     sh "gem push #{gem_filename}"
 
     # Update the last version in CocoaPods-version.yml
+    puts "* Updating last known version in Specs repo"
     specs_branch = '0.6'
-
-    Dir.chdir ('../Specs') do
+    Dir.chdir('../Specs') do
       puts Dir.pwd
       sh "git checkout #{specs_branch}"
       sh "git pull"

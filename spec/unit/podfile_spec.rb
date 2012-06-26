@@ -317,26 +317,5 @@ describe "Pod::Podfile" do
         }.should.raise Pod::Informative
       exception.message.should.include "Xcode project"
     end
-
-    xit "raises if no platform is specified" do
-      exception = lambda {
-        Pod::Podfile.new {}.validate!
-      }.should.raise Pod::Informative
-      exception.message.should.include "platform"
-    end
-
-    xit "raises if an invalid platform is specified" do
-      exception = lambda {
-        Pod::Podfile.new { platform :windows }.validate!
-      }.should.raise Pod::Informative
-      exception.message.should.include "platform"
-    end
-
-    xit "raises if no dependencies were specified" do
-      exception = lambda {
-        Pod::Podfile.new {}.validate!
-      }.should.raise Pod::Informative
-      exception.message.should.include "dependencies"
-    end
   end
 end
