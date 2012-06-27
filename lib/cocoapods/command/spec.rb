@@ -135,7 +135,7 @@ module Pod
             files = [Pathname.new(@repo_or_podspec)]
             raise Informative, "Unable to find a spec named #{@repo_or_podspec}" unless files[0].exist? && @repo_or_podspec.include?('.podspec')
           else
-            files = Pathname.pwd.glob('*.podspec')
+            files = Pathname.pwd.glob('**/*.podspec')
             raise Informative, "No specs found in the current directory" if files.empty?
           end
           files
@@ -153,7 +153,7 @@ module Pod
       end
 
       def is_repo?
-        @is_repo ||= @repo_or_podspec && (config.repos_dir + @repo_or_podspec).exist? && !@repo_or_podspec.include?('/')
+        @is_repo ||= @repo_or_podspec && @repo_or_podspec != '.' && (config.repos_dir + @repo_or_podspec).exist? && !@repo_or_podspec.include?('/')
       end
 
       # Linter class

@@ -51,13 +51,9 @@ module Pod
       if input.is_a? Platform
         @symbolic_name = input.name
         @deployment_target = input.deployment_target
-        @declared_deployment_target = input.declared_deployment_target
       else
         @symbolic_name = input
-
         target = target[:deployment_target] if target.is_a?(Hash)
-        @declared_deployment_target = target
-
         unless target
           case @symbolic_name
           when :ios
@@ -81,10 +77,6 @@ module Pod
     # @return [Version] The deployment target of the platform.
     #
     attr_reader :deployment_target
-
-    # @return [Version] The deployment target declared on initialization.
-    #
-    attr_reader :declared_deployment_target
 
     # @param [Platform, Symbol] other The other platform to check.
     #
@@ -121,7 +113,7 @@ module Pod
       when :osx
         s = 'OS X'
       end
-      s << " #{declared_deployment_target}" if declared_deployment_target
+      s << " #{deployment_target}"
       s
     end
 
