@@ -11,15 +11,16 @@ module Pod
       Creates a PodSpec, in the current working dir, called `NAME.podspec'.
       If a GitHub url is passed the spec is prepopulated.
 
-    $ pod spec lint [ NAME.podspec | REPO ]
+    $ pod spec lint [ NAME.podspec | DIRECTORY ]
 
-      Validates `NAME.podspec'. In case `NAME.podspec' is omitted, it defaults
-      to `*.podspec' in the current working dir. If the name of a repo is
-      provided it validates all its specs.}
+      Validates `NAME.podspec'. If a directory is provided it performs a quick
+      validation on all the podspec files found, including subfolders. In case
+      the argument is omitted, it defaults to the current working dir.
+      }
       end
 
       def self.options
-        [ ["--quick",       "Lint skips checks that would require to donwload and build the spec"],
+        [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
           ["--only-errors", "Lint validates even if warnings are present"],
           ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
       end
@@ -74,10 +75,10 @@ module Pod
         invalid_count = lint_podspecs
         count = specs_to_lint.count
         if invalid_count == 0
-          lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation" : "All the #{count} specs passed validation"
+          lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
           puts lint_passed_message.green << "\n\n" unless config.silent?
         else
-          raise Informative, count == 1 ? "The spec did not pass validation" : "#{invalid_count} out of #{count} specs failed validation"
+          raise Informative, count == 1 ? "The spec did not pass validation." : "#{invalid_count} out of #{count} specs failed validation."
         end
       end
 
@@ -87,12 +88,12 @@ module Pod
         invalid_count = 0
         specs_to_lint.each do |spec|
           # Show immediatly which pod is being processed.
-          print " -> #{spec}\r" unless config.silent? || is_repo?
+          print " -> #{spec}\r" unless config.silent? || @multiple_files
           $stdout.flush
 
           linter          = Linter.new(spec)
           linter.lenient  = @only_errors
-          linter.quick    = @quick || is_repo?
+          linter.quick    = @quick || @multiple_files
           linter.no_clean = @no_clean
           invalid_count  += 1 unless linter.lint
 
@@ -104,7 +105,7 @@ module Pod
 
           puts unless config.silent? || should_skip?(linter)
         end
-        puts "Analyzed #{specs_to_lint.count} specs in #{podspecs_to_lint.count} podspecs files.\n\n" if is_repo? && !config.silent?
+        puts "Analyzed #{specs_to_lint.count} specs in #{podspecs_to_lint.count} podspecs files.\n\n" if @multiple_files && !config.silent?
         invalid_count
       end
 
@@ -119,7 +120,7 @@ module Pod
       end
 
       def should_skip?(linter)
-        is_repo? && linter.errors.empty? && linter.warnings.empty? && linter.notes.empty?
+        @multiple_files && linter.errors.empty? && linter.warnings.empty? && linter.notes.empty?
       end
 
       def print_messages(spec, type, messages)
@@ -129,14 +130,14 @@ module Pod
 
       def podspecs_to_lint
         @podspecs_to_lint ||= begin
-          if (is_repo?)
-            files = (config.repos_dir + @repo_or_podspec).glob('**/*.podspec')
-          elsif @repo_or_podspec
-            files = [Pathname.new(@repo_or_podspec)]
-            raise Informative, "Unable to find a spec named #{@repo_or_podspec}" unless files[0].exist? && @repo_or_podspec.include?('.podspec')
+          path = Pathname.new(@repo_or_podspec || '.')
+          if path.directory?
+            files = path.glob('**/*.podspec')
+            raise Informative, "No specs found in the current directory." if files.empty?
+            @multiple_files = true
           else
-            files = Pathname.pwd.glob('**/*.podspec')
-            raise Informative, "No specs found in the current directory" if files.empty?
+            files = [path]
+            raise Informative, "Unable to find a spec named `#{@repo_or_podspec}'." unless files[0].exist? && @repo_or_podspec.include?('.podspec')
           end
           files
         end
@@ -150,10 +151,6 @@ module Pod
             # root_spec.preferred_dependency ? root_spec.subspec_dependencies : root_spec
           end.flatten
         end
-      end
-
-      def is_repo?
-        @is_repo ||= @repo_or_podspec && @repo_or_podspec != '.' && (config.repos_dir + @repo_or_podspec).exist? && !@repo_or_podspec.include?('/')
       end
 
       # Linter class
@@ -311,7 +308,7 @@ module Pod
             # Some values are multiplaform
             patterns = patterns.is_a?(Hash) ? patterns.values.flatten(1) : patterns
             patterns.each do |pattern|
-              # Skip Filelist that would otherwise be resolved from the working directory resulting
+              # Skip FileList that would otherwise be resolved from the working directory resulting
               # in a potentially very expensi operation
               next if pattern.is_a?(FileList)
               invalid = pattern.is_a?(Array) ? pattern.any? { |path| path.start_with?('/') } : pattern.start_with?('/')

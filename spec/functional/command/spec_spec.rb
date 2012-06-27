@@ -102,13 +102,13 @@ describe "Pod::Command::Spec#lint" do
 
   it "lints a repo" do
     # The fixture has warnings so it raises
-    cmd = command('spec', 'lint', 'master')
+    cmd = command('spec', 'lint', "#{config.repos_dir}/master")
     lambda { cmd.run }.should.raise Pod::Informative
     cmd.output.should.include "WARN"
   end
 
-  it "complains if no repo name or url are provided and there a no specs in the current working directory" do
-    Dir.chdir(fixture('spec-repos') + 'master/JSONKit/') do
+  it "complains if it can't find any spec to lint" do
+    Dir.chdir(temporary_directory) do
       lambda { command('spec', 'lint').run }.should.raise Pod::Informative
     end
   end
