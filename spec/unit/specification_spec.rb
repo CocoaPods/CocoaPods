@@ -552,7 +552,7 @@ describe "A Pod::Specification, concerning its attributes that support different
 
     it "returns the list of the supported platfroms and deployment targets" do
      @spec.available_platforms.count.should == 2
-     @spec.available_platforms.should.include? Pod::Platform.new(:osx)
+     @spec.available_platforms.should.include? Pod::Platform.new(:osx, '10.4')
      @spec.available_platforms.should.include? Pod::Platform.new(:ios, '4.0')
     end
 
