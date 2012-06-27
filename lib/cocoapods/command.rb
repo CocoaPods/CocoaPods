@@ -65,7 +65,9 @@ module Pod
 
     def self.run(*argv)
       sub_command = parse(*argv)
-      Setup.new(ARGV.new).run_if_needed
+      unless ENV['SKIP_SETUP']
+        Setup.new(ARGV.new).run_if_needed
+      end
       sub_command.run
 
     rescue Interrupt
