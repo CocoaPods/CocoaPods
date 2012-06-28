@@ -11,6 +11,11 @@ describe "Pod::Podfile" do
     podfile.target_definitions[:default].platform.should == :ios
   end
 
+  it "provides a default deployment target if not specified" do
+    podfile = Pod::Podfile.new { platform :ios }
+    podfile.target_definitions[:default].platform.deployment_target.should == Pod::Version.new('4.3')
+  end
+
   it "adds dependencies" do
     podfile = Pod::Podfile.new { dependency 'ASIHTTPRequest'; dependency 'SSZipArchive', '>= 0.1' }
     podfile.dependencies.size.should == 2
