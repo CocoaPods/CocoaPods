@@ -474,27 +474,7 @@ module Pod
     end
 
     def deployment_target(platform)
-      @deployment_target[platform] || ( @parent ? @parent.deployment_target(platform) : lowest_supported_deployment_target(platform) )
-    end
-
-    # Returns the lowest supported deployment target for a given platform.
-    #   The value should be pegged to the lowest deployment target supported
-    #   by a default xcode installation.
-    #
-    # @param platform [Symbol] The platform for witch the deployment target
-    #   shoud be returned.
-    #
-    # @return [String] The deployment target.
-    #
-    def lowest_supported_deployment_target(platform)
-      case platform
-      when :ios
-        '3.0'
-      when :osx
-        '10.4'
-      else
-        nil
-      end
+      @deployment_target[platform] || ( @parent ? @parent.deployment_target(platform) : nil )
     end
   end
   Spec = Specification
