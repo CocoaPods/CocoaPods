@@ -28,7 +28,7 @@ describe Pod::Command::Presenter do
     output = presenter.describe(@set)
     output.should.include? 'Author:   Robbie Hanson'
     output.should.include? 'License:  BSD'
-    output.should.include? 'Platform: iOS 3.0 - OS X 10.4'
+    output.should.include? 'Platform: iOS - OS X'
     output.should.include? 'Watchers: 318'
     output.should.include? 'Forks:    42'
     output.should.include? 'Pushed:   more than a year ago'

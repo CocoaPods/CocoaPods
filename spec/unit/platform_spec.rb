@@ -35,8 +35,8 @@ describe Pod::Platform do
     end
 
     it "presents an accurate string representation" do
-      @platform.to_s.should == "iOS 4.3"
-      Pod::Platform.new(:osx).to_s.should == 'OS X 10.6'
+      @platform.to_s.should == "iOS"
+      Pod::Platform.new(:osx).to_s.should == 'OS X'
       Pod::Platform.new(:ios, '5.0.0').to_s.should == 'iOS 5.0.0'
       Pod::Platform.new(:osx, '10.7').to_s.should  == 'OS X 10.7'
     end
