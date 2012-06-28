@@ -93,7 +93,6 @@ module Pod
       end
 
       generate_lock_file!(specifications)
-      generate_dummy_source
 
       puts "- Running post install hooks" if config.verbose?
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
@@ -155,18 +154,6 @@ module Pod
       end
     end
 
-    def generate_dummy_source
-      filename = "PodsDummy.m"
-      pathname = Pathname.new(sandbox.root + filename)
-      Generator::DummySource.new.save_as(pathname)
-
-      project_file = project.files.new('path' => filename)
-      project.group("Targets Support Files") << project_file
-
-      target_installers.each do |target_installer|
-        target_installer.target.source_build_phases.first << project_file
-      end
-    end
 
     def specs_by_target
       @specs_by_target ||= @resolver.resolve
