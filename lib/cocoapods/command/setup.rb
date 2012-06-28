@@ -31,7 +31,7 @@ module Pod
       end
 
       def read_only_url
-        'git://github.com/CocoaPods/Specs.git'
+        'https://github.com/CocoaPods/Specs.git'
       end
 
       def read_write_url
