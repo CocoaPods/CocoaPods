@@ -17,7 +17,7 @@ describe "Pod::Command::Setup" do
 
   it "returns the read only URL of the `master' spec-repo" do
     cmd = Pod::Command::Setup.new(argv)
-    cmd.url.should == 'git://github.com/CocoaPods/Specs.git'
+    cmd.url.should == 'https://github.com/CocoaPods/Specs.git'
   end
 
   it "returns the push URL of the `master' spec-repo" do
