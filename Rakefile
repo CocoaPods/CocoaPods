@@ -77,7 +77,7 @@ namespace :gem do
   end
 
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
-  task :release => :build do
+  task :release do
 
     unless ENV['SKIP_CHECKS']
       if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
@@ -93,14 +93,14 @@ namespace :gem do
       puts "You are about to release `#{gem_version}', is that correct? [y/n]"
       exit if $stdin.gets.strip.downcase != 'y'
 
-      diff_lines = `git diff --numstat`.strip.split("\n")
+      diff_lines = `git diff --name-only`.strip.split("\n")
 
-      if diff_lines.size == 0 || !diff_lines.first.include?('lib/cocoapods.rb')
+      if diff_lines.size == 0
         $stderr.puts "[!] Change the version number yourself in lib/cocoapods.rb"
         exit 1
       end
 
-      if diff_lines.size > 1 || !diff_lines.first.include?('lib/cocoapods.rb')
+      if diff_lines != ['Gemfile.lock', 'lib/cocoapods.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
         exit 1
       end
@@ -124,6 +124,8 @@ namespace :gem do
 
     tmp = File.expand_path('../tmp', __FILE__)
     tmp_gems = File.join(tmp, 'gems')
+
+    Rake::Task['gem:build'].invoke
 
     puts "* Testing gem installation (tmp/gems)"
     silent_sh "rm -rf '#{tmp}'"
