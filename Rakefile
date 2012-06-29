@@ -138,7 +138,7 @@ namespace :gem do
     # silent_sh "rake examples:build"
 
     # Then release
-    sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
+    sh "git commit Gemfile.lock lib/cocoapods.rb -m 'Release #{gem_version}'"
     sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
     sh "git push origin master"
     sh "git push origin --tags"
