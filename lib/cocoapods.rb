@@ -1,5 +1,5 @@
 module Pod
-  VERSION = '0.6.0.rc3'
+  VERSION = '0.6.0.rc4'
 
   class PlainInformative < StandardError
   end
