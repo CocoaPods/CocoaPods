@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.6.0.rc4)
+    cocoapods (0.6.0.rc5)
       colored (~> 1.2)
       escape (~> 0.0.4)
       faraday (~> 0.8.1)
