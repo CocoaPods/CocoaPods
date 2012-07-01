@@ -106,6 +106,8 @@ namespace :gem do
       end
     end
 
+    require 'date'
+
     # First check if the required Xcodeproj gem has ben pushed
     gem_spec = eval(File.read(File.expand_path('../cocoapods.gemspec', __FILE__)))
     xcodeproj = gem_spec.dependencies.find { |d| d.name == 'xcodeproj' }
