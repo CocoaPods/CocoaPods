@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: 8588320c17db695f3ee87f11ab0953cc2e3a0f0d
+  revision: 4c49ed5c0fb4f021b73afd69515ac4aec1765f81
   branch: develop
   specs:
-    xcodeproj (0.2.0.rc3)
+    xcodeproj (0.2.0)
 
 PATH
   remote: .
@@ -16,7 +16,7 @@ PATH
       octokit (~> 1.7.0)
       open4 (~> 1.3.0)
       rake (~> 0.9.0)
-      xcodeproj (~> 0.2.0.rc3)
+      xcodeproj (~> 0.2.0)
 
 GEM
   remote: http://rubygems.org/

@@ -6,7 +6,7 @@ module Pod
 
   class Informative < PlainInformative
     def message
-      #TODO: remove formatting from raise calls and remove conditional
+      # TODO: remove formatting from raise calls and remove conditional
       super !~ /\[!\]/ ? "[!] #{super}\n".red : super
     end
   end
