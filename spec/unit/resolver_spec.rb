@@ -17,13 +17,14 @@ describe "Pod::Resolver" do
     @resolver.cached_sets.values.sort_by(&:name).should == [
       Pod::Spec::Set.new(config.repos_dir + 'master/A2DynamicDelegate'),
       Pod::Spec::Set.new(config.repos_dir + 'master/BlocksKit'),
+      Pod::Spec::Set.new(config.repos_dir + 'master/libffi'),
     ].sort_by(&:name)
   end
 
   it "returns all specs needed for the dependency" do
     specs = @resolver.resolve.values.flatten
     specs.map(&:class).uniq.should == [Pod::Specification]
-    specs.map(&:name).sort.should == %w{ A2DynamicDelegate BlocksKit }
+    specs.map(&:name).sort.should == %w{ A2DynamicDelegate BlocksKit libffi }
   end
 
   it "does not raise if all dependencies match the platform of the root spec (Podfile)" do
@@ -106,7 +107,6 @@ describe "Pod::Resolver" do
       RestKit/ObjectMapping/JSON
       RestKit/UI
       SOCKit
-      UDTableView
       cocoa-oauth
     }
   end
