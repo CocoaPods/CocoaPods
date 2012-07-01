@@ -159,6 +159,7 @@ namespace :gem do
         $stderr.puts "[!] Unable to find #{yaml_file}!"
         exit 1
       end
+      require 'yaml'
       cocoapods_version = YAML.load_file(yaml_file)
       cocoapods_version['last'] = gem_version
       File.open(yaml_file, "w") do |f|
