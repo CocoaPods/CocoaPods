@@ -93,14 +93,14 @@ namespace :gem do
       puts "You are about to release `#{gem_version}', is that correct? [y/n]"
       exit if $stdin.gets.strip.downcase != 'y'
 
-      diff_lines = `git diff --numstat`.strip.split("\n")
+      diff_lines = `git diff --name-only`.strip.split("\n")
 
-      if diff_lines.size == 0 || !diff_lines.first.include?('lib/cocoapods.rb')
+      if diff_lines.size == 0
         $stderr.puts "[!] Change the version number yourself in lib/cocoapods.rb"
         exit 1
       end
 
-      if diff_lines.size > 1 || !diff_lines.first.include?('lib/cocoapods.rb')
+      if diff_lines != ['Gemfile.lock', 'lib/cocoapods.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
         exit 1
       end
@@ -125,26 +125,28 @@ namespace :gem do
     tmp = File.expand_path('../tmp', __FILE__)
     tmp_gems = File.join(tmp, 'gems')
 
+    Rake::Task['gem:build'].invoke
+
     puts "* Testing gem installation (tmp/gems)"
     silent_sh "rm -rf '#{tmp}'"
     silent_sh "gem install --install-dir='#{tmp_gems}' #{gem_filename}"
 
-    puts "* Building examples from gem (tmp/gems)"
-    ENV['GEM_HOME'] = ENV['GEM_PATH'] = tmp_gems
-    ENV['PATH']     = "#{tmp_gems}/bin:#{ENV['PATH']}"
-    ENV['FROM_GEM'] = '1'
-    silent_sh "rake examples:build"
+    # puts "* Building examples from gem (tmp/gems)"
+    # ENV['GEM_HOME'] = ENV['GEM_PATH'] = tmp_gems
+    # ENV['PATH']     = "#{tmp_gems}/bin:#{ENV['PATH']}"
+    # ENV['FROM_GEM'] = '1'
+    # silent_sh "rake examples:build"
 
     # Then release
-    sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
+    sh "git commit Gemfile.lock lib/cocoapods.rb -m 'Release #{gem_version}'"
     sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
     sh "git push origin master"
     sh "git push origin --tags"
     sh "gem push #{gem_filename}"
 
     # Update the last version in CocoaPods-version.yml
+    puts "* Updating last known version in Specs repo"
     specs_branch = '0.6'
-
     Dir.chdir('../Specs') do
       puts Dir.pwd
       sh "git checkout #{specs_branch}"
@@ -265,13 +267,12 @@ namespace :examples do
       puts
       Dir.chdir(example.to_s) do
         sh "rm -rf Pods DerivedData"
-        sh "#{'../../bin/' unless ENV['FROM_GEM']}pod install --verbose"
+        sh "#{'../../bin/' unless ENV['FROM_GEM']}pod install --verbose --no-update"
         command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
         if (example + 'Podfile').read.include?('platform :ios')
           # Specifically build against the simulator SDK so we don't have to deal with code signing.
-          root = File.exist?("/Applications/Xcode.app") ? "/Applications/Xcode.app/Contents" : ""
           command << " -sdk "
-          command << Dir.glob("#{root}/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
+          command << Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
         end
         sh command
       end

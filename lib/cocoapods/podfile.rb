@@ -173,19 +173,35 @@ module Pod
     end
 
     # Specifies the platform for which a static library should be build.
-    #
     # This can be either `:osx` for Mac OS X applications, or `:ios` for iOS
     # applications.
     #
-    # For iOS applications, you can set the deployment target by passing a :deployment_target
-    # option, e.g:
+    #   @param [Symbol] name The name of platform.
+    #   @param [String, Version] target The optional deployment.
+    #     If not provided a default value according to the platform name will
+    #     be assigned.
     #
-    #   platform :ios, :deployment_target => "4.0"
+    #   @example
     #
-    # If the deployment target requires it (< 4.3), armv6 will be added to ARCHS.
+    #       platform :ios, "4.0"
+    #       platform :ios
     #
-    def platform(platform, options={})
-      @target_definition.platform = Platform.new(platform, options)
+    # @note If the deployment target requires it (< 4.3), armv6 will be added
+    #   to ARCHS.
+    #
+    def platform(name, target = nil)
+      # Support for deprecated options parameter
+      target = target[:deployment_target] if target.is_a?(Hash)
+
+      unless target
+        case name
+        when :ios
+          target = '4.3'
+        when :osx
+          target = '10.6'
+        end
+      end
+      @target_definition.platform = Platform.new(name, target)
     end
 
     # Specifies the Xcode workspace that should contain all the projects.

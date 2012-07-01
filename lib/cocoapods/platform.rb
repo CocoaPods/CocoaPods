@@ -33,12 +33,6 @@ module Pod
     #       Platform.new(:ios)
     #       Platform.new(:ios, '4.3')
     #
-    # @overload initialize(name, opts)
-    #   @deprecated Remove after adding a warning to {Podfile} class.
-    #   @param [Symbol] name The name of platform.
-    #   @param [Hash] opts The options to create a platform with.
-    #   @option opts [String, Version] :deployment_target The deployment target.
-    #
     # @overload initialize(platform)
     #   @param [Platform] platform Another {Platform}.
     #
@@ -51,23 +45,9 @@ module Pod
       if input.is_a? Platform
         @symbolic_name = input.name
         @deployment_target = input.deployment_target
-        @declared_deployment_target = input.declared_deployment_target
       else
         @symbolic_name = input
-
         target = target[:deployment_target] if target.is_a?(Hash)
-        @declared_deployment_target = target
-
-        unless target
-          case @symbolic_name
-          when :ios
-            target = '4.3'
-          when :osx
-            target = '10.6'
-          else
-            target = ''
-          end
-        end
         @deployment_target = Version.create(target)
       end
     end
@@ -81,10 +61,6 @@ module Pod
     # @return [Version] The deployment target of the platform.
     #
     attr_reader :deployment_target
-
-    # @return [Version] The deployment target declared on initialization.
-    #
-    attr_reader :declared_deployment_target
 
     # @param [Platform, Symbol] other The other platform to check.
     #
@@ -109,7 +85,11 @@ module Pod
     #
     def supports?(other)
       other = Platform.new(other)
+      if other.deployment_target && deployment_target
       (other.name == name) && (other.deployment_target <= deployment_target)
+      else
+        other.name == name
+      end
     end
 
     # @return [String] A string representation including the deployment target.
@@ -121,7 +101,7 @@ module Pod
       when :osx
         s = 'OS X'
       end
-      s << " #{declared_deployment_target}" if declared_deployment_target
+      s << " #{deployment_target}" if deployment_target
       s
     end
 
@@ -134,7 +114,7 @@ module Pod
     # @return Whether the platform requires legacy architectures for iOS.
     #
     def requires_legacy_ios_archs?
-      (name == :ios) && (deployment_target < Version.new("4.3"))
+      (name == :ios) && deployment_target && (deployment_target < Version.new("4.3"))
     end
   end
 end

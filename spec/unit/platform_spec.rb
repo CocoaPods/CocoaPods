@@ -55,10 +55,6 @@ describe Pod::Platform do
       p.deployment_target.should == Pod::Version.new('4.0.0')
     end
 
-    it "provides a default deployment target on initialization" do
-      p = Pod::Platform.new(:ios)
-      p.deployment_target.should == Pod::Version.new('4.3')
-    end
   end
 
   describe "regarding supporting platforms" do

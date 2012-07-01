@@ -450,10 +450,7 @@ module Pod
         if pattern.directory? && options[:glob]
           pattern += options[:glob]
         end
-
-        pattern.glob.map do |file|
-          file
-        end
+        pattern.glob
       end.flatten
     end
   end

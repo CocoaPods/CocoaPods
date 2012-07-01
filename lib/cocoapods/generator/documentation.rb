@@ -71,7 +71,9 @@ module Pod
       end
 
       def already_installed?
-        Pathname.new(File.expand_path("~/Library/Developer/Shared/Documentation/DocSets/org.cocoapods.#{name.gsub(/ /,'-')}.docset")).exist?
+        index = spec_appledoc_options.index('--company-id')
+        company_id = index ? spec_appledoc_options[index + 1] : docs_id
+        Pathname.new(File.expand_path("~/Library/Developer/Shared/Documentation/DocSets/#{company_id}.#{name.gsub(/ /,'-')}.docset")).exist?
       end
 
       def generate(install = false)
