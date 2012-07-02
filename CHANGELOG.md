@@ -352,5 +352,5 @@ allowing you to automate Xcode related tasks.
 [3]: https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/podfile.rb#L185
 [4]: https://github.com/CocoaPods/Xcodeproj
 [5]: https://github.com/tomaz/appledoc
-[6]: https://github.com/CocoaPods/CocoaPods/compare/0.5.1...HEAD
+[6]: https://github.com/CocoaPods/CocoaPods/compare/0.5.1...0.6.0
 [7]: https://github.com/CocoaPods/CocoaPods/compare/0.3.10...0.5.0
