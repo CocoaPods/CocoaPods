@@ -265,7 +265,7 @@ module Pod
       if top_specification.license && top_specification.license[:file]
         root + top_specification.license[:file]
       else
-        expanded_paths(%w[ LICENSE{*,.*} licence{*,.*} ]).first
+        expanded_paths(%w[ LICEN{C,S}E{*,.*} licen{c,s}e{*,.*} ]).first
       end
     end
 
