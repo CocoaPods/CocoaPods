@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'json',      '~> 1.7.3'
   s.add_runtime_dependency 'open4',     '~> 1.3.0'
   s.add_runtime_dependency 'rake',      '~> 0.9.0'
-  s.add_runtime_dependency 'xcodeproj', '~> 0.2.0'
+  s.add_runtime_dependency 'xcodeproj', '~> 0.2.1'
 
   s.add_development_dependency 'bacon', '~> 1.1'
 
