@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: 4c49ed5c0fb4f021b73afd69515ac4aec1765f81
+  revision: ae2d4b95cc5ee6c370ecec305e4040e2f3c6cec6
   branch: develop
   specs:
     xcodeproj (0.2.0)
@@ -32,11 +32,16 @@ GEM
       multipart-post (~> 1.1)
     faraday_middleware (0.8.8)
       faraday (>= 0.7.4, < 0.9)
+    ffi (1.0.11)
     github-markup (0.7.2)
     hashie (1.2.0)
     json (1.7.3)
-    kicker (2.5.0)
-      rb-fsevent
+    kicker (2.6.0)
+      listen
+    listen (0.4.7)
+      rb-fchange (~> 0.0.5)
+      rb-fsevent (~> 0.9.1)
+      rb-inotify (~> 0.8.8)
     metaclass (0.0.1)
     method_source (0.7.1)
     mocha (0.11.4)
@@ -57,7 +62,11 @@ GEM
       method_source (~> 0.7.1)
       slop (>= 2.4.4, < 3)
     rake (0.9.2.2)
+    rb-fchange (0.0.5)
+      ffi
     rb-fsevent (0.9.1)
+    rb-inotify (0.8.8)
+      ffi (>= 0.5.0)
     redcarpet (2.1.1)
     slop (2.4.4)
     vcr (2.2.2)
