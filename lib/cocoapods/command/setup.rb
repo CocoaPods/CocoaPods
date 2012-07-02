@@ -71,17 +71,16 @@ module Pod
       end
 
       def add_master_repo
-        @command ||= Repo.new(ARGV.new(['add', 'master', url, '0.6'])).run
+        @command ||= Repo.new(ARGV.new(['add', 'master', url, 'master'])).run
       end
 
       def update_master_repo
         Repo.new(ARGV.new(['update', 'master'])).run
       end
 
-      #TODO: remove after rc
       def set_master_repo_branch
         Dir.chdir(dir) do
-          git("checkout 0.6")
+          git("checkout master")
         end
       end
 
