@@ -1,3 +1,4 @@
+require 'ruby-debug'
 require 'fileutils'
 
 module Pod
@@ -56,11 +57,31 @@ module Pod
       headers_root.rmtree if headers_root.exist?
     end
 
+    def path_for_podspec_in_project(pod_name)
+      Dir[root + "#{pod_name}/*.podspec"].first
+    end
+
+    def podspec_exists_in_project?(pod_name)
+      !path_for_podspec_in_project(pod_name).nil?
+    end
+
+    def path_for_local_podspec(pod_name)
+      Dir[root + "Local Podspecs/#{pod_name}.podspec"].first
+    end
+
+    def podspec_exists_in_local_dir?(pod_name)
+      !path_for_local_podspec(pod_name).nil?
+    end
+
     def podspec_for_name(name)
-      if spec_path = Dir[root + "#{name}/*.podspec"].first
-        Pathname.new(spec_path)
-      elsif spec_path = Dir[root + "Local Podspecs/#{name}.podspec"].first
-        Pathname.new(spec_path)
+      # debugger
+      if podspec_exists_in_project?(name)
+        Pathname.new(path_for_podspec_in_project(name))
+      elsif podspec_exists_in_local_dir?(name)
+        Pathname.new(path_for_local_podspec(name))
+      else
+        return nil
+        # raise "No podspec found for #{name}. Please specify the :podspec option instead to point to a podspec for the #{name} Pod"
       end
     end
 
