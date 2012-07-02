@@ -48,7 +48,7 @@ end
 
 namespace :gem do
   def gem_version
-    require File.join(File.dirname(__FILE__), *%w[lib cocoapods])
+    require File.expand_path('../lib/cocoapods', __FILE__)
     Pod::VERSION
   end
 
@@ -67,7 +67,6 @@ namespace :gem do
   end
 
   def silent_sh(command)
-    #output = `/bin/sh -c '#{command}' 2>&1`
     output = `#{command} 2>&1`
     unless $?.success?
       puts output
