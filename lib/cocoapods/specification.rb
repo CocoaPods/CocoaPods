@@ -270,7 +270,7 @@ module Pod
         chained.unshift @parent.instance_variable_get(:@compiler_flags)[active_platform]
       else
         chained = @compiler_flags[active_platform].clone
-        chained.unshift '-fobjc-arc' if @requires_arc
+        chained.unshift '-fobjc-arc' if requires_arc
         chained.unshift ''
       end
       chained.join(' ')
