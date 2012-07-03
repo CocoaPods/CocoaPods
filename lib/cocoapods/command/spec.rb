@@ -80,6 +80,7 @@ module Pod
         else
           raise Informative, count == 1 ? "The spec did not pass validation." : "#{invalid_count} out of #{count} specs failed validation."
         end
+        podspecs_tmp_dir.rmtree if tmp_dir.exist?
       end
 
       private
@@ -130,6 +131,16 @@ module Pod
 
       def podspecs_to_lint
         @podspecs_to_lint ||= begin
+          if @repo_or_podspec =~ /https?:\/\//
+            require 'open-uri'
+            output_path = podspecs_tmp_dir + File.basename(@repo_or_podspec)
+            output_path.dirname.mkpath
+            open(@repo_or_podspec) do |io|
+              output_path.open('w') { |f| f << io.read }
+            end
+            return [output_path]
+          end
+
           path = Pathname.new(@repo_or_podspec || '.')
           if path.directory?
             files = path.glob('**/*.podspec')
@@ -141,6 +152,10 @@ module Pod
           end
           files
         end
+      end
+
+      def podspecs_tmp_dir
+         Pathname.new('/tmp/CocoaPods/Lint_podspec')
       end
 
       def specs_to_lint
