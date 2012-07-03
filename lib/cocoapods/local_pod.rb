@@ -255,7 +255,7 @@ module Pod
     #  file.
     #
     def readme_file
-      expanded_paths(%w[ README{*,.*} readme{*,.*} ]).first
+      expanded_paths(%w[ readme{*,.*} ]).first
     end
 
     # @return [Pathname] The absolute path of the license file from the
@@ -265,7 +265,7 @@ module Pod
       if top_specification.license && top_specification.license[:file]
         root + top_specification.license[:file]
       else
-        expanded_paths(%w[ LICEN{C,S}E{*,.*} licen{c,s}e{*,.*} ]).first
+        expanded_paths(%w[ licen{c,s}e{*,.*} ]).first
       end
     end
 
@@ -450,7 +450,7 @@ module Pod
         if pattern.directory? && options[:glob]
           pattern += options[:glob]
         end
-        pattern.glob
+        Pathname.glob(pattern, File::FNM_CASEFOLD)
       end.flatten
     end
   end
