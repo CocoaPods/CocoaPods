@@ -558,9 +558,10 @@ Pod::Spec.new do |s|
 
   # A list of paths to preserve after installing the Pod.
   # CocoaPods cleans by default any file that is not used.
+  # Please don't include documentation, example, and test files.
   # Also allows the use of the FileList class like `source_files does.
   #
-  # s.preserve_paths = "examples", "doc"
+  # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
   # Specify a list of frameworks that the application needs to link
   # against for this Pod to work.
