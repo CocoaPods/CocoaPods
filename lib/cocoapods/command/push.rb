@@ -6,11 +6,11 @@ module Pod
       def self.banner
         %{Pushing new specifications to a spec-repo:
 
-  $ pod push [REPO]
+  $ pod push REPO [NAME.podspec]
 
-    Validates `*.podspec' in the current working dir, updates
-    the local copy of the repository named REPO, adds specifications
-    to REPO, and finally it pushes REPO to its remote.}
+    Validates NAME.podspec or `*.podspec' in the current working dir, updates
+    the local copy of the repository named REPO, adds the specifications
+    to the REPO, and finally it pushes REPO to its remote.}
       end
 
       def self.options
@@ -23,6 +23,7 @@ module Pod
       def initialize(argv)
         @allow_warnings = argv.option('--allow-warnings')
         @repo = argv.shift_argument
+        @podspec = argv.shift_argument
         super unless argv.empty? && @repo
       end
 
@@ -61,7 +62,7 @@ module Pod
       end
 
       def podspec_files
-        files = Pathname.glob("*.podspec")
+        files = Pathname.glob(@podspec || "*.podspec")
         raise Informative, "[!] Couldn't find .podspec file in current directory".red if files.empty?
         files
       end
@@ -71,8 +72,10 @@ module Pod
         lint_argv = ["lint"]
         lint_argv << "--only-errors" if @allow_warnings
         lint_argv << "--silent" if config.silent
-        lint_argv += podspec_files.map(&:to_s)
-        all_valid = Spec.new(ARGV.new(lint_argv)).run
+        all_valid = true
+        podspec_files.each do |podspec|
+          Spec.new(ARGV.new(lint_argv + [podspec.to_s])).run
+        end
       end
 
       def add_specs_to_repo
