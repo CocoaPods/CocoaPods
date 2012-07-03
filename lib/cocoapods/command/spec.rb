@@ -11,7 +11,7 @@ module Pod
       Creates a PodSpec, in the current working dir, called `NAME.podspec'.
       If a GitHub url is passed the spec is prepopulated.
 
-    $ pod spec lint [ NAME.podspec | DIRECTORY ]
+    $ pod spec lint [ NAME.podspec | DIRECTORY | http://PATH/NAME.podspec ]
 
       Validates `NAME.podspec'. If a directory is provided it performs a quick
       validation on all the podspec files found, including subfolders. In case
