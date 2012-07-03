@@ -115,8 +115,16 @@ describe "Pod::Command::Spec#lint" do
 
   it "lints the current working directory" do
     Dir.chdir(fixture('spec-repos') + 'master/JSONKit/1.4/') do
-      output = command('spec', 'lint', '--quick', '--only-errors').run
-      output.should.include "passed validation"
+      cmd = command('spec', 'lint', '--quick', '--only-errors')
+      cmd.run
+      cmd.output.should.include "passed validation"
+    end
+  end
+
+  it "lints a remote podspec" do
+    Dir.chdir(fixture('spec-repos') + 'master/JSONKit/1.4/') do
+      cmd = command('spec', 'lint', '--quick', '--only-errors', '--silent', 'https://github.com/CocoaPods/Specs/raw/master/A2DynamicDelegate/2.0.1/A2DynamicDelegate.podspec')
+      VCR.use_cassette('linter', :record => :new_episodes) { lambda { cmd.run }.should.not.raise }
     end
   end
 
