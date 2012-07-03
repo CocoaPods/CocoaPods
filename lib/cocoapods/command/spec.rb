@@ -400,7 +400,7 @@ module Pod
           selected_lines = output_by_line.select do |l|
             l.include?('error:') && (l !~ /errors? generated\./) \
               || l.include?('warning:') && (l !~ /warnings? generated\./)\
-              || l.include?('note:')
+              || l.include?('note:') && (l !~ /expanded from macro/)
           end
           selected_lines.map do |l|
             new = l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//,'') # Remove the unnecessary tmp path
