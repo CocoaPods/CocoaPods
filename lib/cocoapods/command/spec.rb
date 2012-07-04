@@ -237,7 +237,7 @@ module Pod
           install_pod
           puts "Building with xcodebuild.\n".yellow if config.verbose?
           # treat xcodebuild warnings as notes because the spec maintainer might not be the author of the library
-          xcodebuild_output.each { |msg| ( msg.include?('error') ? @platform_errors[@platform] : @platform_notes[@platform] ) << msg }
+          xcodebuild_output.each { |msg| ( msg.include?('error: ') ? @platform_errors[@platform] : @platform_notes[@platform] ) << msg }
           @platform_errors[@platform]   += file_patterns_errors
           @platform_warnings[@platform] += file_patterns_warnings
           tear_down_lint_environment
@@ -399,9 +399,9 @@ module Pod
         def process_xcode_build_output(output)
           output_by_line = output.split("\n")
           selected_lines = output_by_line.select do |l|
-            l.include?('error:') && (l !~ /errors? generated\./) \
-              || l.include?('warning:') && (l !~ /warnings? generated\./)\
-              || l.include?('note:') && (l !~ /expanded from macro/)
+            l.include?('error: ') && (l !~ /errors? generated\./) \
+              || l.include?('warning: ') && (l !~ /warnings? generated\./)\
+              || l.include?('note: ') && (l !~ /expanded from macro/)
           end
           selected_lines.map do |l|
             new = l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//,'') # Remove the unnecessary tmp path
