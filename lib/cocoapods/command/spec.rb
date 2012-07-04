@@ -427,7 +427,9 @@ module Pod
 
         def file_patterns_warnings
           messages = []
-          messages << "Unable to find a license file" unless @pod.license_file || @spec.license && @spec.license[:type] == 'Public Domain'
+          unless @pod.license_file || @spec.license && ( @spec.license[:type] == 'Public Domain' || @spec.license[:text] )
+            messages << "Unable to find a license file"
+          end
           messages
         end
       end
