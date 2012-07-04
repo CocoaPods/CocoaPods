@@ -189,14 +189,30 @@ module Pod
     top_attr_accessor :summary
     top_attr_accessor :documentation
     top_attr_accessor :requires_arc
-    top_attr_accessor :license,             lambda { |l| ( l.kind_of? String ) ? { :type => l } : l }
     top_attr_accessor :version,             lambda { |v| Version.new(v) }
+    top_attr_accessor :license,             lambda { |l| parse_license(l) }
     top_attr_accessor :authors,             lambda { |a| parse_authors(a) }
 
-    top_attr_reader   :description,         lambda {|instance, ivar| ivar || instance.summary }
-    top_attr_writer   :description
+    top_attr_reader   :description,         lambda { |instance, ivar| ivar || instance.summary }
+    top_attr_writer   :description,         lambda { |d| strip_heredoc(d) }
 
     alias_method      :author=, :authors=
+
+    # Strips indentation in heredocs.
+    #
+    # @note Adapted from Ruby on Rails.
+    #
+    def self.strip_heredoc(string)
+      min_indent = string.scan(/^[ \t]*(?=\S)/).min
+      indent = min_indent ? min_indent.size : 0
+      string.gsub(/^[ \t]{#{indent}}/, '')
+    end
+
+    def self.parse_license(license)
+      license = ( license.kind_of? String ) ? { :type => license } : license
+      license[:text] = strip_heredoc(license[:text]) if license[:text]
+      license
+    end
 
     def self.parse_authors(*names_and_email_addresses)
       list = names_and_email_addresses.flatten
