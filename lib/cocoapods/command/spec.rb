@@ -344,6 +344,7 @@ module Pod
           messages = []
           messages << "Missing license type"                                unless license[:type]
           messages << "Sample license type"                                 if license[:type] && license[:type] =~ /\(example\)/
+          messages << "Invalid license type"                                if license[:type] && license[:type] =~ /\n/
           messages << "The summary is not meaningful"                       if spec.summary =~ /A short description of/
           messages << "The description is not meaningful"                   if spec.description && spec.description =~ /An optional longer description of/
           messages << "The summary should end with a dot"                   if @spec.summary !~ /.*\./
