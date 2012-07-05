@@ -366,6 +366,7 @@ module Pod
     def dependency(*name_and_version_requirements, &block)
       @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
     end
+    alias_method :dep, :dependency
 
     # Specifies that a BridgeSupport metadata document should be generated from
     # the headers of all installed Pods.
