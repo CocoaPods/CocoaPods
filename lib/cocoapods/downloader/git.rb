@@ -16,6 +16,8 @@ module Pod
         puts '-> Cloning git repo' if config.verbose?
         if options[:tag]
           download_tag
+        elsif options[:branch]
+          download_branch
         elsif options[:commit]
           download_commit
         else
@@ -89,6 +91,13 @@ module Pod
         raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists?(ref)
       end
 
+      def ensure_remote_branch_exists(branch)
+        Dir.chdir(cache_path) { git "branch -r | grep #{branch}$" } # check for remote branch and do suffix matching ($ anchor)
+        return if $? == 0
+
+        raise Informative, "[!] Cache unable to find git reference `#{branch}' for `#{url}' (#{$?}).".red
+      end
+
       def download_head
         update_cache
         git "clone '#{clone_url}' '#{target_path}'"
@@ -112,6 +121,17 @@ module Pod
           git "checkout -b activated-pod-commit #{options[:commit]}"
         end
       end
+
+      def download_branch
+        ensure_remote_branch_exists(options[:branch])
+        git "clone '#{clone_url}' '#{target_path}'"
+        Dir.chdir(target_path) do
+          git "remote add upstream #{@url}" # we need to add the original url, not the cache url
+          git "fetch -q upstream" # refresh the branches
+          git "checkout --track -b activated-pod-commit upstream/#{options[:branch]}" # create a new tracking branch
+          puts "Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}" if config.verbose?
+        end
+      end
     end
 
     class GitHub < Git
@@ -127,8 +147,12 @@ module Pod
         download_only? ? download_and_extract_tarball(options[:commit]) : super
       end
 
+      def download_branch
+        download_only? ? download_and_extract_tarball(options[:branch]) : super
+      end
+
       def tarball_url_for(id)
-        original_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/).to_a)
+        original_url, username, reponame = *(url.match(/[:\/]([\w\-]+)\/([\w\-]+)\.git/))
         "https://github.com/#{username}/#{reponame}/tarball/#{id}"
       end
 

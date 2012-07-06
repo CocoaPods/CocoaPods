@@ -18,12 +18,23 @@ describe "Pod::Downloader" do
       (@pod.root + 'README').read.strip.should == 'first commit'
     end
 
+    it "check's out a specific branch" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib'), :branch => 'topicbranch'
+        )
+        downloader = Pod::Downloader.for_pod(@pod)
+        downloader.download
+
+        (@pod.root + 'README').read.strip.should == 'topicbranch'
+    end
+
     it "check's out a specific tag" do
       @pod.top_specification.stubs(:source).returns(
         :git => fixture('banana-lib'), :tag => 'v1.0'
       )
       downloader = Pod::Downloader.for_pod(@pod)
       downloader.download
+
       (@pod.root + 'README').read.strip.should == 'v1.0'
     end
 
@@ -168,6 +179,19 @@ describe "Pod::Downloader" do
 
       # deliberately keep this assertion as loose as possible for now
       (@pod.root + 'libPusher.podspec').readlines.grep(/1.1/).should.not.be.empty
+    end
+
+    it "downloads a specific branch when specified" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => "git://github.com/lukeredpath/libPusher.git", :branch => 'gh-pages', :download_only => true
+      )
+      downloader = Pod::Downloader.for_pod(@pod)
+
+      VCR.use_cassette('tarballs', :record => :new_episodes) { downloader.download }
+
+
+      # deliberately keep this assertion as loose as possible for now
+      (@pod.root + 'index.html').readlines.grep(/libPusher Documentation/).should.not.be.empty
     end
 
     it "downloads a specific commit when specified" do
