@@ -99,7 +99,7 @@ namespace :gem do
         exit 1
       end
 
-      if diff_lines != ['Gemfile.lock', 'lib/cocoapods.rb']
+      if diff_lines != ['lib/cocoapods.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
         exit 1
       end
@@ -139,7 +139,7 @@ namespace :gem do
     # silent_sh "rake examples:build"
 
     # Then release
-    sh "git commit Gemfile.lock lib/cocoapods.rb -m 'Release #{gem_version}'"
+    sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
     sh "git push origin develop"
     sh "git checkout master"
     sh "git merge develop -m 'Release #{gem_version}'"
