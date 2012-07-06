@@ -138,6 +138,12 @@ namespace :gem do
     # ENV['FROM_GEM'] = '1'
     # silent_sh "rake examples:build"
 
+    # Ensure that the branches are up to date with the remote
+    sh "git pull"
+    sh "git checkout master"
+    sh "git pull"
+    sh "git checkout develop"
+
     # Then release
     sh "git commit lib/cocoapods.rb -m 'Release #{gem_version}'"
     sh "git push origin develop"
