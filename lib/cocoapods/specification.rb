@@ -191,12 +191,9 @@ module Pod
     top_attr_accessor :documentation
     top_attr_accessor :requires_arc
     top_attr_accessor :version,             lambda { |v| Version.new(v) }
-    top_attr_accessor :authors,             lambda { |a| parse_authors(a) }
 
     top_attr_reader   :description,         lambda { |instance, ivar| ivar || instance.summary }
     top_attr_writer   :description,         lambda { |d| d.strip_heredoc }
-
-    alias_method      :author=, :authors=
 
     # @!method license
     #
@@ -213,14 +210,21 @@ module Pod
       license
     }
 
-    def self.parse_authors(*names_and_email_addresses)
+    # @!method authors
+    #
+    # @abstract
+    #   The list of the authors (with email) of the pod.
+    #
+    top_attr_accessor :authors, lambda { |*names_and_email_addresses|
       list = names_and_email_addresses.flatten
       unless list.first.is_a?(Hash)
         authors = list.last.is_a?(Hash) ? list.pop : {}
         list.each { |name| authors[name] = nil }
       end
       authors || list.first
-    end
+    }
+
+    alias_method :author=, :authors=
 
     ### Attributes **with** multiple platform support
 
