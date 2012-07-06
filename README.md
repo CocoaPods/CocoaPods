@@ -26,7 +26,6 @@ CocoaPods runs on [Ruby](http://www.ruby-lang.org/en/). To install it run the fo
 
 ```
 $ [sudo] gem install cocoapods
-$ pod setup
 ```
 
 If you want to have CocoaPods generate documentation for each library, then install the [appledoc](http://gentlebytes.com/appledoc/) tool:
