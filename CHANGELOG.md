@@ -1,4 +1,4 @@
-## 0.7.0 (unreleased)
+## 0.7.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.6.1...develop) | [XcodeProj](https://github.com/CocoaPods/XcodeProj/compare/0.2.1...develop)
 
