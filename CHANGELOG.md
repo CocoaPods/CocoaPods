@@ -1,3 +1,34 @@
+## 0.7.0 (unreleased)
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.6.1...develop) | [XcodeProj](https://github.com/CocoaPods/XcodeProj/compare/0.2.1...develop)
+
+###### Features
+
+- Added support for branches in git repos.
+- Added support for linting remote files, i.e. `pod spec lint http://raw/file.podspec`.
+- Improved `Spec create template`
+- The indentation is automatically stripped for podspecs strings.
+
+###### Bug fixes
+
+- The default warnings of Xcode are not overriden anymore.
+- Improvements to the detection of the license files.
+- Improvements to `pod spec lint`.
+- CocoaPods is now case insensitive.
+
+
+## 0.6.1
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.6.0...0.6.1) | [XcodeProj](https://github.com/CocoaPods/XcodeProj/compare/0.2.0...0.2.1)
+
+###### Bug fixes
+
+- Switched to master branch for specs repo.
+- Fixed a crash with `pod spec lint` related to `preserve_paths`.
+- Fixed a bug that caused subspecs to not inherit the compiler flags of the top level specification.
+- Fixed a bug that caused duplication of system framworks.
+
+
 ## 0.6.0
 
 A full list of all the changes since 0.5.1 can be found [here][6].
