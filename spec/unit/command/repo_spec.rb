@@ -13,8 +13,8 @@ describe "Pod::Command::Repo" do
     @command.class.send(:is_compatilbe, versions).should == true
   end
 
-  it "doesn't supports a repo with a compatible minimum version" do
-    versions = { 'min' => '0.7' }
+  it "doesn't supports a repo with a non compatible minimum version" do
+    versions = { 'min' => '0.999' }
     @command.class.send(:is_compatilbe, versions).should == false
   end
 
@@ -28,13 +28,13 @@ describe "Pod::Command::Repo" do
     @command.class.send(:is_compatilbe, versions).should == false
   end
 
-  it "detects if an update is available" do
+  it "detects if no update is available" do
     versions = { 'last' => '0.5' }
     @command.class.send(:has_update, versions).should == false
   end
 
-  it "detects if no update is available" do
-    versions = { 'last' => '0.7' }
+  it "detects if an update is available" do
+    versions = { 'last' => '0.999' }
     @command.class.send(:has_update, versions).should == true
   end
 end
