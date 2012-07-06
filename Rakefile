@@ -79,8 +79,8 @@ namespace :gem do
   task :release do
 
     unless ENV['SKIP_CHECKS']
-      if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
-        $stderr.puts "[!] You need to be on the `master' branch in order to be able to do a release."
+      if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'develop'
+        $stderr.puts "[!] You need to be on the `develop' branch in order to be able to do a release."
         exit 1
       end
 
@@ -140,6 +140,9 @@ namespace :gem do
 
     # Then release
     sh "git commit Gemfile.lock lib/cocoapods.rb -m 'Release #{gem_version}'"
+    sh "git push origin develop"
+    sh "git checkout master"
+    sh "git merge develop"
     sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
     sh "git push origin master"
     sh "git push origin --tags"
