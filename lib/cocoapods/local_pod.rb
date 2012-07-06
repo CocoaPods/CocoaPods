@@ -305,7 +305,7 @@ module Pod
 
       all_specs = [ top_specification ] + top_specification.subspecs
       options   = {:glob => '*.{h}'}
-      files     = paths_by_spec(:source_files, options, all_specs).values.flatten!
+      files     = paths_by_spec(:source_files, options, all_specs).values.flatten
       headers   = files.select { |f| f.extname == '.h' }
       headers
     end
