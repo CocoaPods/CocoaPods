@@ -1,4 +1,5 @@
 require 'xcodeproj/config'
+require 'active_support/core_ext/string/strip.rb'
 
 module Pod
   extend Config::Mixin
@@ -190,29 +191,27 @@ module Pod
     top_attr_accessor :documentation
     top_attr_accessor :requires_arc
     top_attr_accessor :version,             lambda { |v| Version.new(v) }
-    top_attr_accessor :license,             lambda { |l| parse_license(l) }
     top_attr_accessor :authors,             lambda { |a| parse_authors(a) }
 
     top_attr_reader   :description,         lambda { |instance, ivar| ivar || instance.summary }
-    top_attr_writer   :description,         lambda { |d| strip_heredoc(d) }
+    top_attr_writer   :description,         lambda { |d| d.strip_heredoc }
 
     alias_method      :author=, :authors=
 
-    # Strips indentation in heredocs.
+    # @!method license
     #
-    # @note Adapted from Ruby on Rails.
+    # @abstract
+    #   The license of the pod.
     #
-    def self.strip_heredoc(string)
-      min_indent = string.scan(/^[ \t]*(?=\S)/).min
-      indent = min_indent ? min_indent.size : 0
-      string.gsub(/^[ \t]{#{indent}}/, '')
-    end
-
-    def self.parse_license(license)
+    # @example
+    #   s.license = 'MIT'
+    #   s.license = { :type => 'MIT', :file => 'license.txt', :text => 'Permission is granted to...' }
+    #
+    top_attr_accessor :license, lambda { |license|
       license = ( license.kind_of? String ) ? { :type => license } : license
-      license[:text] = strip_heredoc(license[:text]) if license[:text]
+      license[:text] = license[:text].strip_heredoc if license[:text]
       license
-    end
+    }
 
     def self.parse_authors(*names_and_email_addresses)
       list = names_and_email_addresses.flatten
