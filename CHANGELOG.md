@@ -1,6 +1,6 @@
 ## 0.7.0
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.6.1...develop) | [XcodeProj](https://github.com/CocoaPods/XcodeProj/compare/0.2.1...develop)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.6.1...0.7.0) | [XcodeProj](https://github.com/CocoaPods/XcodeProj/compare/0.2.1...0.2.2)
 
 ###### Features
 
