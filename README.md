@@ -25,7 +25,7 @@ Downloading and installing CocoaPods only takes a few minutes.
 CocoaPods runs on [Ruby](http://www.ruby-lang.org/en/). To install it run the following commands:
 
 ```
-$ [sudo] gem install cocoapods --pre
+$ [sudo] gem install cocoapods
 $ pod setup
 ```
 
@@ -76,14 +76,6 @@ dependency 'Reachability',      '~> 2.0.4'
 ```
 
 And then you [install the dependencies](https://github.com/CocoaPods/CocoaPods/wiki/Creating-a-project-that-uses-CocoaPods) in your project.
-
-```
-$ pod install App.xcodeproj
-```
-
-_Where ‘App.xcodeproj’ is the name of your actual application project._
-
-The next time you change your Podfile, you can update your project by simply running:
 
 ```
 $ pod install
