@@ -150,6 +150,7 @@ namespace :gem do
     sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
     sh "git push origin master"
     sh "git push origin --tags"
+    sh "git checkout develop"
     sh "gem push #{gem_filename}"
 
     # Update the last version in CocoaPods-version.yml
