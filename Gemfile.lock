@@ -49,7 +49,7 @@ GEM
       rb-inotify (~> 0.8.8)
     metaclass (0.0.1)
     method_source (0.7.1)
-    mocha (0.12.0)
+    mocha (0.11.4)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.0)
       mocha (>= 0.9.8)
@@ -89,6 +89,7 @@ DEPENDENCIES
   cocoapods!
   github-markup
   kicker
+  mocha (~> 0.11.4)
   mocha-on-bacon
   pry
   rake

@@ -5,6 +5,7 @@ gemspec
 group :development do
   gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git", :branch => "develop"
 
+  gem "mocha", "~> 0.11.4"
   gem "bacon"
   gem "kicker"
   gem "mocha-on-bacon"
