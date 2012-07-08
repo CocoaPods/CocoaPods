@@ -66,7 +66,7 @@ else
           podfile = Pod::Podfile.new do
             self.platform :ios
             xcodeproj 'dummy'
-            dependency 'SSToolkit', :git => url, :commit => commit
+            pod 'SSToolkit', :git => url, :commit => commit
           end
 
           # Note that we are *not* using the stubbed SpecHelper::Installer subclass.
@@ -85,7 +85,7 @@ else
             self.platform :ios
             xcodeproj 'dummy'
             # TODO use a local file instead of http?
-            dependency 'Reachability', :podspec => url
+            pod 'Reachability', :podspec => url
           end
 
           installer = SpecHelper::Installer.new(podfile)
@@ -103,7 +103,7 @@ else
           podfile = Pod::Podfile.new do
             self.platform :ios
             xcodeproj 'dummy'
-            dependency do |s|
+            pod do |s|
               s.name         = 'JSONKit'
               s.version      = '1.2'
               s.source       = { :git => SpecHelper.fixture('integration/JSONKit').to_s, :tag => 'v1.2' }
@@ -122,13 +122,13 @@ else
           podfile = Pod::Podfile.new do
             self.platform :ios
             xcodeproj 'dummy'
-            dependency do |s|
+            pod do |s|
               s.name         = 'JSONKit'
               s.version      = '1.2'
               s.source       = { :git => SpecHelper.fixture('integration/JSONKit').to_s, :tag => 'v1.2' }
               s.source_files = 'JSONKit.*'
             end
-            dependency do |s|
+            pod do |s|
               s.name         = 'SSZipArchive'
               s.version      = '0.1.0'
               s.source       = { :git => SpecHelper.fixture('integration/SSZipArchive').to_s, :tag => '0.1.0' }
@@ -154,14 +154,14 @@ else
           podfile = Pod::Podfile.new do
             self.platform :ios
             xcodeproj 'dummy'
-            dependency 'JSONKit', '1.4'
+            pod 'JSONKit', '1.4'
             target :ios_target do
               # This brings in Reachability on iOS
-              dependency 'ASIHTTPRequest'
+              pod 'ASIHTTPRequest'
             end
             target :osx_target do
               self.platform :osx
-              dependency 'ASIHTTPRequest'
+              pod 'ASIHTTPRequest'
             end
           end
 
@@ -201,8 +201,8 @@ else
             podfile = Pod::Podfile.new do
               self.platform :ios
               xcodeproj 'dummy'
-              dependency 'JSONKit', '1.4'
-              dependency 'SSToolkit', '1.0.0'
+              pod 'JSONKit', '1.4'
+              pod 'SSToolkit', '1.0.0'
             end
             installer = SpecHelper::Installer.new(podfile)
             installer.install!
@@ -225,7 +225,7 @@ else
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          dependency 'SSZipArchive'
+          pod 'SSZipArchive'
 
           post_install do |installer|
             target = installer.project.targets.first
@@ -248,10 +248,10 @@ else
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          dependency 'Reachability',      '> 2.0.5' if platform == :ios
-          # dependency 'ASIWebPageRequest', '>= 1.8.1'
-          dependency 'JSONKit',           '>= 1.0'
-          dependency 'SSZipArchive',      '< 2'
+          pod 'Reachability',      '> 2.0.5' if platform == :ios
+          # pod 'ASIWebPageRequest', '>= 1.8.1'
+          pod 'JSONKit',           '>= 1.0'
+          pod 'SSZipArchive',      '< 2'
         end
 
         installer = SpecHelper::Installer.new(podfile)
@@ -294,7 +294,7 @@ else
           spec = Pod::Podfile.new do
             self.platform platform
             xcodeproj 'dummy'
-            dependency 'Reachability', '2.0.4' # only 2.0.4 is part of ASIHTTPRequest’s source.
+            pod 'Reachability', '2.0.4' # only 2.0.4 is part of ASIHTTPRequest’s source.
           end
 
           installer = SpecHelper::Installer.new(spec)
@@ -313,7 +313,7 @@ else
         spec = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          dependency 'SSZipArchive'
+          pod 'SSZipArchive'
         end
 
         installer = SpecHelper::Installer.new(spec)
@@ -331,7 +331,7 @@ else
         spec = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          dependency 'JSONKit'
+          pod 'JSONKit'
         end
         installer = SpecHelper::Installer.new(spec)
         installer.install!
@@ -339,7 +339,7 @@ else
         spec = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          dependency 'SSZipArchive'
+          pod 'SSZipArchive'
         end
         installer = SpecHelper::Installer.new(spec)
         installer.install!
@@ -352,9 +352,9 @@ else
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          target(:debug) { dependency 'SSZipArchive' }
-          target(:test, :exclusive => true) { dependency 'JSONKit' }
-          dependency 'ASIHTTPRequest'
+          target(:debug) { pod 'SSZipArchive' }
+          target(:test, :exclusive => true) { pod 'JSONKit' }
+          pod 'ASIHTTPRequest'
         end
 
         installer = Pod::Installer.new(podfile)
@@ -405,7 +405,7 @@ else
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj projpath
-          dependency 'SSZipArchive'
+          pod 'SSZipArchive'
         end
 
         installer = SpecHelper::Installer.new(podfile)
@@ -430,9 +430,9 @@ else
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          target(:debug) { dependency 'SSZipArchive' }
-          target(:test, :exclusive => true) { dependency 'JSONKit' }
-          dependency 'ASIHTTPRequest'
+          target(:debug) { pod 'SSZipArchive' }
+          target(:test, :exclusive => true) { pod 'JSONKit' }
+          pod 'ASIHTTPRequest'
         end
 
         installer = Pod::Installer.new(podfile)
