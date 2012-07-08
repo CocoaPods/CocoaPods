@@ -17,7 +17,7 @@ describe "Pod::Podfile" do
   end
 
   it "adds dependencies" do
-    podfile = Pod::Podfile.new { dependency 'ASIHTTPRequest'; dependency 'SSZipArchive', '>= 0.1' }
+    podfile = Pod::Podfile.new { pod 'ASIHTTPRequest'; pod 'SSZipArchive', '>= 0.1' }
     podfile.dependencies.size.should == 2
     podfile.dependency_by_top_level_spec_name('ASIHTTPRequest').should == Pod::Dependency.new('ASIHTTPRequest')
     podfile.dependency_by_top_level_spec_name('SSZipArchive').should == Pod::Dependency.new('SSZipArchive', '>= 0.1')
@@ -25,7 +25,7 @@ describe "Pod::Podfile" do
 
   it "adds a dependency on a Pod repo outside of a spec repo (the repo is expected to contain a podspec)" do
     podfile = Pod::Podfile.new do
-      dependency 'SomeExternalPod', :git => 'GIT-URL', :commit => '1234'
+      pod 'SomeExternalPod', :git => 'GIT-URL', :commit => '1234'
     end
     dep = podfile.dependency_by_top_level_spec_name('SomeExternalPod')
     dep.external_source.params.should == { :git => 'GIT-URL', :commit => '1234' }
@@ -33,7 +33,7 @@ describe "Pod::Podfile" do
 
   it "adds a subspec dependency on a Pod repo outside of a spec repo (the repo is expected to contain a podspec)" do
     podfile = Pod::Podfile.new do
-      dependency 'MainSpec/FirstSubSpec', :git => 'GIT-URL', :commit => '1234'
+      pod 'MainSpec/FirstSubSpec', :git => 'GIT-URL', :commit => '1234'
     end
     dep = podfile.dependency_by_top_level_spec_name('MainSpec')
     dep.external_source.name.should == 'MainSpec'
@@ -41,7 +41,7 @@ describe "Pod::Podfile" do
 
   it "adds a dependency on a library outside of a spec repo (the repo does not need to contain a podspec)" do
     podfile = Pod::Podfile.new do
-      dependency 'SomeExternalPod', :podspec => 'http://gist/SomeExternalPod.podspec'
+      pod 'SomeExternalPod', :podspec => 'http://gist/SomeExternalPod.podspec'
     end
     dep = podfile.dependency_by_top_level_spec_name('SomeExternalPod')
     dep.external_source.params.should == { :podspec => 'http://gist/SomeExternalPod.podspec' }
@@ -49,7 +49,7 @@ describe "Pod::Podfile" do
 
   it "adds a dependency on a library by specifying the podspec inline" do
     podfile = Pod::Podfile.new do
-      dependency do |s|
+      pod do |s|
         s.name = 'SomeExternalPod'
       end
     end
@@ -123,7 +123,7 @@ describe "Pod::Podfile" do
       Pod::Podfile.new do
       end.target_definitions[:default].should.be.empty
       Pod::Podfile.new do
-        dependency 'JSONKit'
+        pod 'JSONKit'
       end.target_definitions[:default].should.not.be.empty
     end
 
@@ -133,14 +133,14 @@ describe "Pod::Podfile" do
         xcodeproj 'iOS Project', 'iOS App Store' => :release, 'Test' => :debug
 
         target :debug do
-          dependency 'SSZipArchive'
+          pod 'SSZipArchive'
         end
 
         target :test, :exclusive => true do
           link_with 'TestRunner'
-          dependency 'JSONKit'
+          pod 'JSONKit'
           target :subtarget do
-            dependency 'Reachability'
+            pod 'Reachability'
           end
         end
 
@@ -148,12 +148,12 @@ describe "Pod::Podfile" do
           platform :osx
           xcodeproj 'OSX Project.xcodeproj', 'Mac App Store' => :release, 'Test' => :debug
           link_with 'OSXTarget'
-          dependency 'ASIHTTPRequest'
+          pod 'ASIHTTPRequest'
           target :nested_osx_target do
           end
         end
 
-        dependency 'ASIHTTPRequest'
+        pod 'ASIHTTPRequest'
       end
     end
 

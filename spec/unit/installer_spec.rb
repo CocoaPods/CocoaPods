@@ -11,7 +11,7 @@ describe "Pod::Installer" do
       podfile = Pod::Podfile.new do
         platform :ios
         xcodeproj 'MyProject'
-        dependency 'JSONKit'
+        pod 'JSONKit'
       end
       @xcconfig = Pod::Installer.new(podfile).target_installers.first.xcconfig.to_hash
     end
@@ -32,7 +32,7 @@ describe "Pod::Installer" do
   it "generates a BridgeSupport metadata file from all the pod headers" do
     podfile = Pod::Podfile.new do
       platform :osx
-      dependency 'ASIHTTPRequest'
+      pod 'ASIHTTPRequest'
     end
     installer = Pod::Installer.new(podfile)
     pods = installer.specifications.map do |spec|
@@ -47,7 +47,7 @@ describe "Pod::Installer" do
     podfile = Pod::Podfile.new do
       platform :ios
       target :not_empty do
-        dependency 'JSONKit'
+        pod 'JSONKit'
       end
     end
     installer = Pod::Installer.new(podfile)

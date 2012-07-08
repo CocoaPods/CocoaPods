@@ -6,8 +6,8 @@ describe "Pod::Resolver" do
 
     @podfile = Pod::Podfile.new do
       platform :ios
-      dependency 'BlocksKit'
-      # dependency 'ASIWebPageRequest'
+      pod 'BlocksKit'
+      # pod 'ASIWebPageRequest'
     end
     @resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
   end
@@ -69,8 +69,8 @@ describe "Pod::Resolver" do
   it "resolves subspecs" do
     @podfile = Pod::Podfile.new do
       platform :ios
-      dependency 'RestKit/Network'
-      dependency 'RestKit/ObjectMapping/XML'
+      pod 'RestKit/Network'
+      pod 'RestKit/ObjectMapping/XML'
     end
     resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
     resolver.resolve.values.flatten.map(&:name).sort.should == %w{
@@ -90,7 +90,7 @@ describe "Pod::Resolver" do
   it "includes all the subspecs of a specification node" do
     @podfile = Pod::Podfile.new do
       platform :ios
-      dependency 'RestKit'
+      pod 'RestKit'
     end
     resolver = Pod::Resolver.new(@podfile, stub('sandbox'))
     resolver.resolve.values.flatten.map(&:name).sort.should == %w{
@@ -114,7 +114,7 @@ describe "Pod::Resolver" do
   it "if defined it includes only the main subspec of of a specification node" do
     @podfile = Pod::Podfile.new do
       platform :ios
-      dependency do |s|
+      pod do |s|
         s.name         = 'RestKit'
         s.version      = '0.10.0'
 
@@ -153,7 +153,7 @@ describe "Pod::Resolver" do
     it "resolves subspecs with external constraints" do
       @podfile = Pod::Podfile.new do
         platform :ios
-        dependency 'MainSpec/FirstSubSpec', :git => 'GIT-URL'
+        pod 'MainSpec/FirstSubSpec', :git => 'GIT-URL'
       end
       spec = Pod::Spec.new do |s|
         s.name         = 'MainSpec'

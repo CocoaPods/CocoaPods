@@ -1,4 +1,4 @@
 platform :ios
 
-dependency 'AFNetworking'
-dependency 'SSToolkit'
+pod 'AFNetworking'
+pod 'SSToolkit'
