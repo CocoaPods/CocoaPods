@@ -110,11 +110,13 @@ namespace :gem do
     # First check if the required Xcodeproj gem has ben pushed
     gem_spec = eval(File.read(File.expand_path('../cocoapods.gemspec', __FILE__)))
     xcodeproj = gem_spec.dependencies.find { |d| d.name == 'xcodeproj' }
-    xcodeproj_version = xcodeproj.requirement.requirements.first.last.to_s
+    required_xcodeproj_version = xcodeproj.requirement.requirements.first.last.to_s
 
-    puts "* Checking if xcodeproj #{xcodeproj_version} exists on the gem host"
-    unless silent_sh("gem search --remote xcodeproj --version #{xcodeproj_version}").include?(xcodeproj_version)
-      $stderr.puts "[!] The Xcodeproj version `#{xcodeproj_version}' required by " \
+    puts "* Checking if xcodeproj #{required_xcodeproj_version} exists on the gem host"
+    search_result = silent_sh("gem search --remote xcodeproj")
+    remote_xcodeproj_version = search_result.match(/xcodeproj \(([\d\.]+)\)/m)[1]
+    unless Gem::Version.new(required_xcodeproj_version) <= Gem::Version.new(remote_xcodeproj_version)
+      $stderr.puts "[!] The Xcodeproj version `#{required_xcodeproj_version}' required by " \
                    "this version of CocoaPods does not exist on the gem host. " \
                    "Either push that first, or fix the version requirement."
       exit 1
