@@ -1,10 +1,8 @@
-## 0.8.0 (unreleased)
+## 0.8.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.7.0...0.8.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.2.2...0.2.3)
 
 ###### Breaking change
-
-_[TODO] Update documentation._
 
 Syntax change in Podfile: `dependency` has been replaced by `pod`.
 
@@ -14,6 +12,9 @@ pod 'JSONKit',      '~> 1.4'
 pod 'Reachability', '~> 2.0.4'
 ```
 
+###### Bug fixes
+
+- Properly quote all paths given to Git.
 
 
 ## 0.7.0
