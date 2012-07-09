@@ -19,11 +19,11 @@ describe "Pod::Command::Repo" do
   end
 
   it "supports a repo with a compatible maximum version" do
-    versions = { 'max' => '0.7' }
+    versions = { 'max' => '0.999' }
     @command.class.send(:is_compatilbe, versions).should == true
   end
 
-  it "doesn't supports a repo with a compatible maximum version" do
+  it "doesn't support a repo with an incompatible maximum version" do
     versions = { 'max' => '0.5' }
     @command.class.send(:is_compatilbe, versions).should == false
   end
