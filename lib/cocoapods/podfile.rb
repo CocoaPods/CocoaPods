@@ -278,13 +278,13 @@ module Pod
     # latest version of a Pod. If this is the case, simply omit the version
     # requirements.
     #
-    #   dependency 'SSZipArchive'
+    #   pod 'SSZipArchive'
     #
     #
     # Later on in the project you may want to freeze to a specific version of a
     # Pod, in which case you can specify that version number.
     #
-    #   dependency 'Objection', '0.9'
+    #   pod 'Objection', '0.9'
     #
     #
     # Besides no version, or a specific one, it is also possible to use operators:
@@ -311,17 +311,17 @@ module Pod
     #
     # Sometimes you may want to use the bleeding edge version of a Pod. Or a
     # specific revision. If this is the case, you can specify that with your
-    # dependency declaration.
+    # pod declaration.
     #
     #
     # To use the `master` branch of the repo:
     #
-    #   dependency 'TTTFormatterKit', :git => 'https://github.com/gowalla/AFNetworking.git'
+    #   pod 'TTTFormatterKit', :git => 'https://github.com/gowalla/AFNetworking.git'
     #
     #
     # Or specify a commit:
     #
-    #   dependency 'TTTFormatterKit', :git => 'https://github.com/gowalla/AFNetworking.git', :commit => '082f8319af'
+    #   pod 'TTTFormatterKit', :git => 'https://github.com/gowalla/AFNetworking.git', :commit => '082f8319af'
     #
     #
     # It is important to note, though, that this means that the version will
@@ -338,7 +338,7 @@ module Pod
     # If a podspec is available from another source outside of the library’s
     # repo. Consider, for instance, a podpsec available via HTTP:
     #
-    #   dependency 'JSONKit', :podspec => 'https://raw.github.com/gist/1346394/1d26570f68ca27377a27430c65841a0880395d72/JSONKit.podspec'
+    #   pod 'JSONKit', :podspec => 'https://raw.github.com/gist/1346394/1d26570f68ca27377a27430c65841a0880395d72/JSONKit.podspec'
     #
     #
     # ### For a library without any available podspec
@@ -347,12 +347,12 @@ module Pod
     # to use, yet, you will have to specify the library yourself.
     #
     #
-    # When you omit arguments and pass a block to `dependency`, an instance of
+    # When you omit arguments and pass a block to `pod`, an instance of
     # Pod::Specification is yielded to the block. This is the same class which
     # is normally used to specify a Pod.
     #
     # ```
-    #   dependency do |spec|
+    #   pod do |spec|
     #     spec.name         = 'JSONKit'
     #     spec.version      = '1.4'
     #     spec.source       = { :git => 'https://github.com/johnezang/JSONKit.git', :tag => 'v1.4' }
@@ -363,8 +363,13 @@ module Pod
     #
     # For more info on the definition of a Pod::Specification see:
     # https://github.com/CocoaPods/CocoaPods/wiki/A-pod-specification
-    def dependency(*name_and_version_requirements, &block)
+    def pod(*name_and_version_requirements, &block)
       @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
+    end
+
+    def dependency(*name_and_version_requirements, &block)
+      warn "[DEPRECATED] `dependency' is deprecated (use `pod')"
+      pod(*name_and_version_requirements, &block)
     end
 
     # Specifies that a BridgeSupport metadata document should be generated from
@@ -383,14 +388,14 @@ module Pod
     #
     # Consider the following Podfile:
     #
-    #   dependency 'ASIHTTPRequest'
+    #   pod 'ASIHTTPRequest'
     #
     #   target :debug do
-    #     dependency 'SSZipArchive'
+    #     pod 'SSZipArchive'
     #   end
     #
     #   target :test, :exclusive => true do
-    #     dependency 'JSONKit'
+    #     pod 'JSONKit'
     #   end
     #
     # This Podfile defines three targets. The first one is the `:default` target,

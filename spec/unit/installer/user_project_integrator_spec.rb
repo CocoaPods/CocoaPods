@@ -11,10 +11,10 @@ describe Pod::Installer::UserProjectIntegrator do
     @podfile = Pod::Podfile.new do
       platform :ios
       xcodeproj sample_project_path
-      dependency 'JSONKit'
+      pod 'JSONKit'
       target :test_runner, :exclusive => true do
         link_with 'TestRunner'
-        dependency 'Kiwi'
+        pod 'Kiwi'
       end
     end
 

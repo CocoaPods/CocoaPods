@@ -1,4 +1,4 @@
 platform :ios
 
-dependency 'FormatterKit'
-dependency 'AFNetworking', '~> 0.7.0'
+pod 'FormatterKit'
+pod 'AFNetworking', '~> 0.7.0'

@@ -258,7 +258,7 @@ module Pod
           platform = @platform
           podfile  = Pod::Podfile.new do
             platform(platform)
-            dependency name, :podspec => podspec
+            pod name, :podspec => podspec
           end
           podfile
         end

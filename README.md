@@ -70,8 +70,8 @@ $ edit Podfile
 
 ```ruby
 platform :ios
-dependency 'JSONKit',           '~> 1.4'
-dependency 'Reachability',      '~> 2.0.4'
+pod 'JSONKit',           '~> 1.4'
+pod 'Reachability',      '~> 2.0.4'
 ```
 
 And then you [install the dependencies](https://github.com/CocoaPods/CocoaPods/wiki/Creating-a-project-that-uses-CocoaPods) in your project.
