@@ -1,12 +1,30 @@
+## 0.8.0 (unreleased)
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.7.0...develop)
+
+###### Breaking change
+
+_[TODO] Update documentation._
+
+Syntax change in Podfile: `dependency` has been replaced by `pod`.
+
+```ruby
+platform :ios
+pod 'JSONKit',      '~> 1.4'
+pod 'Reachability', '~> 2.0.4'
+```
+
+
+
 ## 0.7.0
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.6.1...0.7.0) | [XcodeProj](https://github.com/CocoaPods/XcodeProj/compare/0.2.1...0.2.2)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.6.1...0.7.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.2.1...0.2.2)
 
 ###### Features
 
 - Added support for branches in git repos.
 - Added support for linting remote files, i.e. `pod spec lint http://raw/file.podspec`.
-- Improved `Spec create template`
+- Improved `Spec create template`.
 - The indentation is automatically stripped for podspecs strings.
 
 ###### Bug fixes
@@ -19,7 +37,7 @@
 
 ## 0.6.1
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.6.0...0.6.1) | [XcodeProj](https://github.com/CocoaPods/XcodeProj/compare/0.2.0...0.2.1)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.6.0...0.6.1) • [Xcodeproj](https://github.com/CocoaPods/XcodeProj/compare/0.2.0...0.2.1)
 
 ###### Bug fixes
 
