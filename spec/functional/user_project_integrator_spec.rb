@@ -15,11 +15,11 @@ describe Pod::Installer::UserProjectIntegrator do
       xcodeproj sample_project_path, 'Test' => :debug
       link_with 'SampleProject' # this is an app target!
 
-      dependency 'JSONKit'
+      pod 'JSONKit'
 
       target :test_runner, :exclusive => true do
         link_with 'TestRunner'
-        dependency 'Kiwi'
+        pod 'Kiwi'
       end
     end
 

@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: afbbabf609322db2069c9b0a5f603c9c31cf66fc
-  branch: develop
+  revision: 2da2c3688dfd240b376f671e8e6525ba28729f38
   specs:
-    xcodeproj (0.2.2)
+    xcodeproj (0.2.3)
+      activesupport (~> 3.2.6)
 
 PATH
   remote: .

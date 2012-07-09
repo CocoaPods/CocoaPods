@@ -1,5 +1,5 @@
 platform :ios
-dependency 'SSZipArchive',      '>= 1'
-dependency 'ASIHTTPRequest',    '~> 1.8.0'
-dependency 'Reachability'                  # part of ASIHTTPRequest
-dependency 'ASIWebPageRequest', '< 1.8.2'  # part of ASIHTTPRequest
+pod 'SSZipArchive',      '>= 1'
+pod 'ASIHTTPRequest',    '~> 1.8.0'
+pod 'Reachability'                  # part of ASIHTTPRequest
+pod 'ASIWebPageRequest',        '< 1.8.2'  # part of ASIHTTPRequest

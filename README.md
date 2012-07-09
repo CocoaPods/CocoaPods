@@ -17,6 +17,8 @@ Ultimately, the goal is to improve discoverability of, and engagement in, third 
 
 See the [NSScreencast episode about CocoaPods](http://nsscreencast.com/episodes/5-cocoapods) for a quick overview on how to get started, or [the wiki](https://github.com/CocoaPods/CocoaPods/wiki) for more in depth information on several topics.
 
+Or, if you’re already using CocoaPods, you can find the changelog [here](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md), which contains an overview of the changes in recent versions.
+
 
 ## Installation
 
@@ -70,8 +72,8 @@ $ edit Podfile
 
 ```ruby
 platform :ios
-dependency 'JSONKit',           '~> 1.4'
-dependency 'Reachability',      '~> 2.0.4'
+pod 'JSONKit',           '~> 1.4'
+pod 'Reachability',      '~> 2.0.4'
 ```
 
 And then you [install the dependencies](https://github.com/CocoaPods/CocoaPods/wiki/Creating-a-project-that-uses-CocoaPods) in your project.
@@ -104,8 +106,6 @@ There are several other ways to start using **any** library without a Pod specif
 All CocoaPods development happens on GitHub, there is a repository for [CocoaPods](https://github.com/CocoaPods/CocoaPods) and one for the [CocoaPods specs](https://github.com/CocoaPods/Specs). Contributing patches or Pods is really easy and gratifying. You even get push access when one of your specs or patches is accepted.
 
 Follow [@CocoaPodsOrg](http://twitter.com/CocoaPodsOrg) to get up to date information about what's going on in the CocoaPods world.
-
-If you're really oldschool and you want to discuss CocoaPods development you can join #cocoapods on irc.freenode.net.
 
 
 # Donations
