@@ -30,7 +30,7 @@ module Pod
         puts "-> Creating cache git repo (#{cache_path})" if config.verbose?
         cache_path.rmtree if cache_path.exist?
         cache_path.mkpath
-        git "clone '#{url}' #{cache_path}"
+        clone(url, cache_path)
       end
 
       def removed_cached_repos_if_needed
@@ -100,7 +100,7 @@ module Pod
 
       def download_head
         update_cache
-        git "clone '#{clone_url}' '#{target_path}'"
+        clone(clone_url, target_path)
       end
 
       def download_tag
@@ -116,7 +116,7 @@ module Pod
 
       def download_commit
         ensure_ref_exists(options[:commit])
-        git "clone '#{clone_url}' '#{target_path}'"
+        clone(clone_url, target_path)
         Dir.chdir(target_path) do
           git "checkout -b activated-pod-commit #{options[:commit]}"
         end
@@ -124,13 +124,17 @@ module Pod
 
       def download_branch
         ensure_remote_branch_exists(options[:branch])
-        git "clone '#{clone_url}' '#{target_path}'"
+        clone(clone_url, target_path)
         Dir.chdir(target_path) do
-          git "remote add upstream #{@url}" # we need to add the original url, not the cache url
+          git "remote add upstream '#{@url}'" # we need to add the original url, not the cache url
           git "fetch -q upstream" # refresh the branches
           git "checkout --track -b activated-pod-commit upstream/#{options[:branch]}" # create a new tracking branch
           puts "Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}" if config.verbose?
         end
+      end
+
+      def clone(from, to)
+        git "clone '#{from}' '#{to}'"
       end
     end
 
