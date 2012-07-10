@@ -343,7 +343,7 @@ module Pod
     #
     # ### For a library without any available podspec
     #
-    # Finally, if no man alive has created a podspec, for the library you want
+    # Finally, if no living soul has created a podspec, for the library you want
     # to use, yet, you will have to specify the library yourself.
     #
     #
