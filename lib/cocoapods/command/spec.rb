@@ -301,7 +301,7 @@ module Pod
 
           # attributes with multiplatform values
           return messages unless platform_valid?
-          messages << "Missing source_files" if spec.source_files.empty? && spec.subspecs.empty? && spec.resources.empty?
+          messages << "The spec appears to be empty (no source files, resources, or preserve paths)" if spec.source_files.empty? && spec.subspecs.empty? && spec.resources.empty? && spec.preserve_paths.empty?
           messages += paths_starting_with_a_slash_errors
           messages
         end
