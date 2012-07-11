@@ -1,3 +1,11 @@
+## 0.8.1
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.8.0...master)
+
+###### Bug fixes
+
+- Relaxed linter to accepts pod that only specify paths to preserve (like TuneupJS).
+
 ## 0.8.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.7.0...0.8.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.2.2...0.2.3)
