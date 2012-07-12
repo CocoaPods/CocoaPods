@@ -1,10 +1,15 @@
-## 0.8.1
+## 0.8.1 (unreleased)
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.8.0...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.8.0...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.2.3...master)
+
+###### Enhancements
+
+- Support for weak frameworks.
 
 ###### Bug fixes
 
 - Relaxed linter to accepts pod that only specify paths to preserve (like TuneupJS).
+- Gender neutralization of podfile documentation.
 
 ## 0.8.0
 
