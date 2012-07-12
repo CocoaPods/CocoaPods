@@ -463,7 +463,7 @@ module Pod
 
     def to_s
       result = "#{name} (#{version})"
-      result << " [BLEEDING]" if bleeding?
+      result << " [BLEEDING]" if top_level_parent.bleeding?
       result
     end
 
