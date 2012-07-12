@@ -6,7 +6,8 @@ require 'open-uri'
 module Pod
   class Dependency < Gem::Dependency
 
-    attr_reader :external_source
+    attr_reader :external_source, :bleeding
+    alias :bleeding? :bleeding
     attr_accessor :specification
 
     def initialize(*name_and_version_requirements, &block)
@@ -18,6 +19,13 @@ module Pod
       elsif !name_and_version_requirements.empty? && block.nil?
         if name_and_version_requirements.last.is_a?(Hash)
           @external_source = ExternalSources.from_params(name_and_version_requirements[0].split('/').first, name_and_version_requirements.pop)
+        elsif name_and_version_requirements.last.is_a?(Symbol)
+          symbol = name_and_version_requirements.pop
+          if symbol == :bleeding
+            @bleeding = true
+          else
+            raise Informative, "Unrecognized symbol `#{symbol}' for dependency `#{name_and_version_requirements[0]}'"
+          end
         end
         super(*name_and_version_requirements)
 
@@ -68,7 +76,10 @@ module Pod
       elsif @version_requirements != Gem::Requirement.default
         version << @version_requirements.to_s
       end
-      version.empty? ? @name : "#{@name} (#{version})"
+      result = @name
+      result = result + " (#{version})" unless version.empty?
+      result = result + " [BLEEDING]" if bleeding?
+      result
     end
 
     def specification_from_sandbox(sandbox, platform)
