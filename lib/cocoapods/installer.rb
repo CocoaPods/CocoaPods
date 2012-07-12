@@ -48,7 +48,12 @@ module Pod
       pods.each do |pod|
         unless config.silent?
           marker = config.verbose ? "\n-> ".green : ''
-          name = pod.top_specification.preferred_dependency ? "#{pod.top_specification.name}/#{pod.top_specification.preferred_dependency} (#{pod.top_specification.version})" : pod.to_s
+          if pod.top_specification.preferred_dependency
+            name = "#{pod.top_specification.name}/#{pod.top_specification.preferred_dependency} (#{pod.top_specification.version})"
+            name << "[BLEEDING]" if pod.top_specification.bleeding?
+          else
+            name = pod.to_s
+          end
           puts marker << ( pod.exists? ? "Using #{name}" : "Installing #{name}".green )
         end
 

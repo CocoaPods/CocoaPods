@@ -180,19 +180,20 @@ module Pod
       @platform = Platform.new(*platform)
     end
 
+
+    # @!method bleeding
+    #
+    # @return [BOOL] returns wheter the specification is in bleeding mode.
+    #
+    attr_accessor :bleeding
+    alias_method :bleeding?, :bleeding
+
     # If not platform is specified all the platforms are returned.
     def available_platforms
       platform.nil? ? @define_for_platforms.map { |platform| Platform.new(platform, deployment_target(platform)) } : [ platform ]
     end
 
     ### Top level attributes. These attributes represent the unique features of pod and can't be specified by subspecs.
-
-    # @!method bleeding
-    #
-    # @return [BOOL] returns wheter the specification is in bleeding mode.
-    #
-    top_attr_accessor :bleeding
-    alias_method :bleeding?, :bleeding
 
     top_attr_accessor :defined_in_file
     top_attr_accessor :homepage
@@ -463,7 +464,7 @@ module Pod
 
     def to_s
       result = "#{name} (#{version})"
-      result << " [BLEEDING]" if top_level_parent.bleeding?
+      result << " [BLEEDING]" if bleeding?
       result
     end
 

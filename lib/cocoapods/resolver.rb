@@ -61,11 +61,11 @@ module Pod
         set.required_by(dependent_specification)
         # Ensure we don't resolve the same spec twice for one target
         unless @loaded_specs.include?(dependency.name)
-        spec = set.specification_by_name(dependency.name)
+          spec = set.specification_by_name(dependency.name)
           @loaded_specs << spec.name
           @specs[spec.name] = spec
           spec.activate_platform(target_definition.platform)
-          spec.top_level_parent.bleeding = dependency.bleeding?
+          spec.bleeding = dependency.bleeding?
           # And recursively load the dependencies of the spec.
           find_dependency_specs(spec, spec.dependencies, target_definition) if spec.dependencies
         end
