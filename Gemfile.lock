@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: 2da2c3688dfd240b376f671e8e6525ba28729f38
+  revision: 88c230a58fc7a0a9f850bc2cb929625345804aef
   specs:
     xcodeproj (0.2.3)
       activesupport (~> 3.2.6)
@@ -74,7 +74,7 @@ GEM
       ffi (>= 0.5.0)
     redcarpet (2.1.1)
     slop (2.4.4)
-    vcr (2.2.2)
+    vcr (2.2.3)
     webmock (1.8.7)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)

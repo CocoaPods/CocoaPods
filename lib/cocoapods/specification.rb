@@ -44,6 +44,7 @@ module Pod
           preserve_paths
           exclude_header_search_paths
           frameworks
+          weak_frameworks
           libraries
           dependencies
           compiler_flags ].each do |attr|
@@ -127,6 +128,8 @@ module Pod
           xcconfig=
           framework=
           frameworks=
+          weak_framework=
+          weak_frameworks=
           library=
           libraries=
           compiler_flags=
@@ -240,12 +243,14 @@ module Pod
     pltf_chained_attr_accessor  :preserve_paths,              lambda {|value, current| pattern_list(value) } # Paths that should not be cleaned
     pltf_chained_attr_accessor  :exclude_header_search_paths, lambda {|value, current| pattern_list(value) } # Headers to be excluded from being added to search paths (RestKit)
     pltf_chained_attr_accessor  :frameworks,                  lambda {|value, current| (current << value).flatten }
+    pltf_chained_attr_accessor  :weak_frameworks,             lambda {|value, current| (current << value).flatten }
     pltf_chained_attr_accessor  :libraries,                   lambda {|value, current| (current << value).flatten }
 
-    alias_method :resource=,      :resources=
-    alias_method :preserve_path=, :preserve_paths=
-    alias_method :framework=,     :frameworks=
-    alias_method :library=,       :libraries=
+    alias_method :resource=,        :resources=
+    alias_method :preserve_path=,   :preserve_paths=
+    alias_method :framework=,       :frameworks=
+    alias_method :weak_framework=,  :weak_frameworks=
+    alias_method :library=,         :libraries=
 
     # @!method header_dir=
     #
@@ -271,9 +276,11 @@ module Pod
     platform_attr_writer :xcconfig, lambda {|value, current| current.tap { |c| c.merge!(value) } }
 
     def xcconfig
-      raw_xconfig.dup.
-        tap { |x| x.libraries.merge  libraries }.
-        tap { |x| x.frameworks.merge frameworks }
+      result = raw_xconfig.dup
+      result.libraries.merge(libraries)
+      result.frameworks.merge(frameworks)
+      result.weak_frameworks.merge(weak_frameworks)
+      result
     end
 
     def raw_xconfig
