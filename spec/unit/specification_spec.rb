@@ -82,7 +82,7 @@ describe "A Pod::Specification loaded from a podspec" do
   it "has a shortcut to add weak frameworks to the xcconfig" do
     @spec.weak_frameworks = 'Twitter'
     @spec.activate_platform(:ios).xcconfig.should == {
-      "OTHER_LDFLAGS"=>"-framework SystemConfiguration -weak_frameworks Twitter"
+      "OTHER_LDFLAGS"=>"-framework SystemConfiguration -weak_framework Twitter"
     }
   end
 
@@ -447,13 +447,13 @@ describe "A Pod::Specification subspec" do
     @spec.xcconfig = { 'OTHER_LDFLAGS' => "-Wl,-no_compact_unwind" }
 
     @spec.xcconfig.should       == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -framework CoreData"}
-    @subspec.xcconfig.should    == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -lz -framework CoreData -framework CoreGraphics -weak_frameworks Twitter"}
-    @subsubspec.xcconfig.should == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -lz -framework CoreData -framework CoreGraphics -weak_frameworks Twitter"}
+    @subspec.xcconfig.should    == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -lz -framework CoreData -framework CoreGraphics -weak_framework Twitter"}
+    @subsubspec.xcconfig.should == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -lz -framework CoreData -framework CoreGraphics -weak_framework Twitter"}
 
     @subsubspec.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2' }
 
     @spec.xcconfig.should       == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -framework CoreData"}
-    @subsubspec.xcconfig.should == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -lz -framework CoreData -framework CoreGraphics -weak_frameworks Twitter", "HEADER_SEARCH_PATHS"=>"$(SDKROOT)/usr/include/libxml2"}
+    @subsubspec.xcconfig.should == {"OTHER_LDFLAGS"=>"-Wl,-no_compact_unwind -lxml -lz -framework CoreData -framework CoreGraphics -weak_framework Twitter", "HEADER_SEARCH_PATHS"=>"$(SDKROOT)/usr/include/libxml2"}
   end
 end
 
