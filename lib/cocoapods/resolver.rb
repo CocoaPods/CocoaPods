@@ -65,6 +65,7 @@ module Pod
           @loaded_specs << spec.name
           @specs[spec.name] = spec
           spec.activate_platform(target_definition.platform)
+          spec.bleeding = dependency.bleeding?
           # And recursively load the dependencies of the spec.
           find_dependency_specs(spec, spec.dependencies, target_definition) if spec.dependencies
         end

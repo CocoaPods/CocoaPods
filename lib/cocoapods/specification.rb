@@ -187,8 +187,14 @@ module Pod
 
     ### Top level attributes. These attributes represent the unique features of pod and can't be specified by subspecs.
 
+    # @!method bleeding
+    #
+    # @return [BOOL] returns wheter the specification is in bleeding mode.
+    #
+    top_attr_accessor :bleeding
+    alias_method :bleeding?, :bleeding
+
     top_attr_accessor :defined_in_file
-    top_attr_accessor :source
     top_attr_accessor :homepage
     top_attr_accessor :summary
     top_attr_accessor :documentation
@@ -197,6 +203,23 @@ module Pod
 
     top_attr_reader   :description,         lambda { |instance, ivar| ivar || instance.summary }
     top_attr_writer   :description,         lambda { |d| d.strip_heredoc }
+
+
+    # @!method source
+    #
+    # @abstract
+    #   Returns the source of the pod. If the specification is set in bleeding mode
+    #   and the source is a git repository the head of master will be returned.
+    #
+    top_attr_writer :source
+    top_attr_reader :source, lambda { |instance, ivar|
+      if instance.bleeding?
+        raise Informative, 'Bleeding is supported only for git repos' unless ivar[:git]
+        { :git => ivar[:git] }
+      else
+        ivar
+      end
+    }
 
     # @!method license
     #
@@ -439,7 +462,9 @@ module Pod
     end
 
     def to_s
-      "#{name} (#{version})"
+      result = "#{name} (#{version})"
+      result << " [BLEEDING]" if bleeding?
+      result
     end
 
     def inspect
