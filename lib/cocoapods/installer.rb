@@ -48,23 +48,35 @@ module Pod
       pods.each do |pod|
         unless config.silent?
           marker = config.verbose ? "\n-> ".green : ''
-          if pod.top_specification.preferred_dependency
-            name = "#{pod.top_specification.name}/#{pod.top_specification.preferred_dependency} (#{pod.top_specification.version})"
-            name << "[BLEEDING]" if pod.top_specification.bleeding?
+          if subspec_name = pod.top_specification.preferred_dependency
+            name = "#{pod.top_specification.name}/#{subspec_name} (#{pod.top_specification.version})"
           else
             name = pod.to_s
           end
+          name << " [HEAD]" if pod.top_specification.version.head?
           puts marker << ( pod.exists? ? "Using #{name}" : "Installing #{name}".green )
         end
 
         unless pod.exists?
-          downloader = Downloader.for_pod(pod)
-          downloader.download
+          download_pod(pod)
           # The docs need to be generated before cleaning because
           # the documentation is created for all the subspecs.
           generate_docs(pod)
           pod.clean if config.clean
         end
+      end
+    end
+
+    def download_pod(pod)
+      downloader = Downloader.for_pod(pod)
+      # Force the `bleeding edge' version if necessary.
+      if pod.top_specification.version.head?
+        if downloader.respond_to?(:download_head)
+          downloader.download_head
+        else
+        end
+      else
+        downloader.download
       end
     end
 

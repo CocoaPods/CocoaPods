@@ -6,8 +6,8 @@ require 'open-uri'
 module Pod
   class Dependency < Gem::Dependency
 
-    attr_reader :external_source, :bleeding
-    alias :bleeding? :bleeding
+    attr_reader :external_source, :head
+    alias :head? :head
     attr_accessor :specification
 
     def initialize(*name_and_version_requirements, &block)
@@ -19,20 +19,26 @@ module Pod
       elsif !name_and_version_requirements.empty? && block.nil?
         if name_and_version_requirements.last.is_a?(Hash)
           @external_source = ExternalSources.from_params(name_and_version_requirements[0].split('/').first, name_and_version_requirements.pop)
-        elsif name_and_version_requirements.last.is_a?(Symbol)
-          symbol = name_and_version_requirements.pop
-          if symbol == :bleeding
-            @bleeding = true
-          else
-            raise Informative, "Unrecognized symbol `#{symbol}' for dependency `#{name_and_version_requirements[0]}'"
-          end
+
+        elsif (symbol = name_and_version_requirements.last).is_a?(Symbol) && symbol == :head
+          name_and_version_requirements.pop
+          @head = true
         end
         super(*name_and_version_requirements)
+
+        if head? && !latest_version?
+          raise Informative, "A `:head' dependency may not specify version requirements."
+        end
 
       else
         raise Informative, "A dependency needs either a name and version requirements, " \
                            "a source hash, or a block which defines a podspec."
       end
+    end
+
+    def latest_version?
+      versions = @version_requirements.requirements.map(&:last)
+      versions == [Gem::Version.new('0')]
     end
 
     def ==(other)
@@ -76,9 +82,9 @@ module Pod
       elsif @version_requirements != Gem::Requirement.default
         version << @version_requirements.to_s
       end
-      result = @name
-      result = result + " (#{version})" unless version.empty?
-      result = result + " [BLEEDING]" if bleeding?
+      result = @name.dup
+      result += " (#{version})" unless version.empty?
+      result += " [HEAD]" if head?
       result
     end
 

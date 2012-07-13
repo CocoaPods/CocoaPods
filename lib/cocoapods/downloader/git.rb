@@ -23,7 +23,7 @@ module Pod
         else
           download_head
         end
-        removed_cached_repos_if_needed
+        prune_cache
       end
 
       def create_cache
@@ -33,7 +33,7 @@ module Pod
         clone(url, cache_path)
       end
 
-      def removed_cached_repos_if_needed
+      def prune_cache
         return unless caches_dir.exist?
         Dir.chdir(caches_dir) do
           repos = Pathname.new(caches_dir).children.select { |c| c.directory? }.sort_by(&:ctime)

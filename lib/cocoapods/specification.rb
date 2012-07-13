@@ -180,14 +180,6 @@ module Pod
       @platform = Platform.new(*platform)
     end
 
-
-    # @!method bleeding
-    #
-    # @return [BOOL] returns wheter the specification is in bleeding mode.
-    #
-    attr_accessor :bleeding
-    alias_method :bleeding?, :bleeding
-
     # If not platform is specified all the platforms are returned.
     def available_platforms
       platform.nil? ? @define_for_platforms.map { |platform| Platform.new(platform, deployment_target(platform)) } : [ platform ]
@@ -196,6 +188,7 @@ module Pod
     ### Top level attributes. These attributes represent the unique features of pod and can't be specified by subspecs.
 
     top_attr_accessor :defined_in_file
+    top_attr_accessor :source
     top_attr_accessor :homepage
     top_attr_accessor :summary
     top_attr_accessor :documentation
@@ -204,23 +197,6 @@ module Pod
 
     top_attr_reader   :description,         lambda { |instance, ivar| ivar || instance.summary }
     top_attr_writer   :description,         lambda { |d| d.strip_heredoc }
-
-
-    # @!method source
-    #
-    # @abstract
-    #   Returns the source of the pod. If the specification is set in bleeding mode
-    #   and the source is a git repository the head of master will be returned.
-    #
-    top_attr_writer :source
-    top_attr_reader :source, lambda { |instance, ivar|
-      if instance.bleeding?
-        raise Informative, 'Bleeding is supported only for git repos' unless ivar[:git]
-        { :git => ivar[:git] }
-      else
-        ivar
-      end
-    }
 
     # @!method license
     #
@@ -374,15 +350,14 @@ module Pod
     attr_reader :subspecs
 
     def recursive_subspecs
-      unless @recursive_subspecs
+      @recursive_subspecs ||= begin
         mapper = lambda do |spec|
-            spec.subspecs.map do |subspec|
-              [subspec, *mapper.call(subspec)]
-            end.flatten
-          end
-          @recursive_subspecs = mapper.call self
+          spec.subspecs.map do |subspec|
+            [subspec, *mapper.call(subspec)]
+          end.flatten
+        end
+        mapper.call(self)
       end
-      @recursive_subspecs
     end
 
     def subspec_by_name(name)
@@ -463,9 +438,7 @@ module Pod
     end
 
     def to_s
-      result = "#{name} (#{version})"
-      result << " [BLEEDING]" if bleeding?
-      result
+      "#{name} (#{version})"
     end
 
     def inspect
