@@ -295,14 +295,20 @@ module Pod
     # * `<= 0.1`   Version 0.1 and any lower version
     # * `~> 0.1.2` Version 0.1.2 and the versions upto 0.2, not including 0.2
     #
-    #
-    # Finally, a list of version requirements can be specified for even more fine
+    # A list of version requirements can be specified for even more fine
     # grained control.
+    #
     #
     # For more information, regarding versioning policy, see:
     #
     # * http://semver.org
     # * http://docs.rubygems.org/read/chapter/7
+    #
+    #
+    # Finally, instead of a version, you can specify the `:head` flag. This will
+    # use the pod’s latest version spec version, but force the download of the
+    # ‘bleeding edge’ version. Use this with caution, as the spec might not be
+    # compatible anymore.
     #
     #
     # ## Dependency on a library, outside those available in a spec repo.

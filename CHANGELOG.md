@@ -1,9 +1,10 @@
-## 0.8.1 (unreleased)
+## 0.9.0 (unreleased)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.8.0...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.2.3...master)
 
 ###### Enhancements
 
+- Force downloading the ‘bleeding edge’ version of a pod.
 - Support for weak frameworks.
 
 ###### Bug fixes
