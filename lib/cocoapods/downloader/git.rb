@@ -134,7 +134,7 @@ module Pod
       end
 
       def clone(from, to)
-        git "clone '#{from}' '#{to}'"
+        git "clone \"#{from}\" \"#{to}\""
       end
     end
 

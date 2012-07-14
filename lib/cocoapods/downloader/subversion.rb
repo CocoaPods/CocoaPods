@@ -12,11 +12,11 @@ module Pod
       end
 
       def download_head
-        svn "checkout '#{url}' '#{target_path}'"
+        svn "checkout \"#{url}\" \"#{target_path}\""
       end
 
       def download_revision
-        svn "checkout '#{url}' -r '#{options[:revision]}' '#{target_path}'"
+        svn "checkout \"#{url}\" -r '#{options[:revision]}' \"#{target_path}\""
       end
     end
   end
