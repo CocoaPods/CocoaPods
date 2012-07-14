@@ -2,7 +2,6 @@
 
 require 'rbconfig'
 require 'cgi'
-require 'rubygems'
 
 module Pod
   class Command

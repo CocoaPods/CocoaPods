@@ -1,6 +1,3 @@
-module Gem
-end
-require 'rubygems/dependency'
 require 'open-uri'
 
 module Pod
