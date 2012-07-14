@@ -1,6 +1,6 @@
-## 0.9.0 (unreleased)
+## 0.9.0
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.8.0...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.2.3...master)
+[CocoaPods](http://git.io/kucJQw) • [Xcodeproj](http://git.io/5eLL8g)
 
 ###### Enhancements
 
