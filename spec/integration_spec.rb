@@ -114,8 +114,31 @@ else
           installer = SpecHelper::Installer.new(podfile)
           installer.install!
 
-          dummy = (config.project_pods_root + 'PodsDummy.m').read
-          dummy.should.include?('@implementation PodsDummy')
+          dummy = (config.project_pods_root + 'PodsDummy_Pods.m').read
+          dummy.should.include?('@implementation PodsDummy_Pods')
+        end
+
+        it "installs a dummy source file unique to the target" do
+          create_config!
+          podfile = Pod::Podfile.new do
+            self.platform :ios
+            xcodeproj 'dummy'
+            pod do |s|
+              s.name         = 'JSONKit'
+              s.version      = '1.2'
+              s.source       = { :git => SpecHelper.fixture('integration/JSONKit').to_s, :tag => 'v1.2' }
+              s.source_files = 'JSONKit.*'
+            end
+            target :AnotherTarget do
+              pod 'ASIHTTPRequest'
+            end
+          end
+
+          installer = SpecHelper::Installer.new(podfile)
+          installer.install!
+
+          dummy = (config.project_pods_root + 'PodsDummy_Pods_AnotherTarget.m').read
+          dummy.should.include?('@implementation PodsDummy_Pods_AnotherTarget')
         end
 
         it "installs a library with a podspec defined inline" do
