@@ -4,13 +4,15 @@
 
 ###### Enhancements
 
-- Force downloading the ‘bleeding edge’ version of a pod.
-- Support for weak frameworks.
+- Force downloading the ‘bleeding edge’ version of a pod with the `:head` flag. [#392]
+- Support for weak frameworks. [#263]
+- Use double quotes when shelling out. This makes a url like `$HOME/local/lib` work. [#396]
 
 ###### Bug fixes
 
 - Relaxed linter to accepts pod that only specify paths to preserve (like TuneupJS).
-- Gender neutralization of podfile documentation.
+- Gender neutralization of podfile documentation. [#384]
+
 
 ## 0.8.0
 
