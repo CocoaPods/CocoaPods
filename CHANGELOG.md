@@ -13,7 +13,7 @@
 - Relaxed linter to accepts pod that only specify paths to preserve (like TuneupJS).
 - Gender neutralization of podfile documentation. [#384](http://git.io/MAsHXg)
 - Exit early when using an old RubyGems version (< 1.4.0). These versions contain subtle bugs
-  related to prelrease version comparisons. Unfortunately, OS X >= 10.7 ships with 1.3.6. [#398](http://git.io/Lr7DoA)
+  related to prerelease version comparisons. Unfortunately, OS X >= 10.7 ships with 1.3.6. [#398](http://git.io/Lr7DoA)
 
 
 ## 0.8.0
