@@ -16,6 +16,12 @@ describe "Pod::Podfile" do
     podfile.target_definitions[:default].platform.deployment_target.should == Pod::Version.new('4.3')
   end
 
+  it "raise error if unsupported platform is supplied" do
+    lambda {
+      Pod::Podfile.new { platform :iOS }
+    }.should.raise(StandardError, "Unsupported platform")
+  end
+
   it "adds dependencies" do
     podfile = Pod::Podfile.new { pod 'ASIHTTPRequest'; pod 'SSZipArchive', '>= 0.1' }
     podfile.dependencies.size.should == 2
