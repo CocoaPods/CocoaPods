@@ -107,10 +107,10 @@ module Pod
         acknowledgements_path = target_installer.target_definition.acknowledgements_path
         Generator::Acknowledgements.new(target_installer.target_definition,
                                         pods_for_target).save_as(acknowledgements_path)
+        generate_dummy_source(target_installer)
       end
 
       generate_lock_file!(specifications)
-      generate_dummy_source
 
       puts "- Running post install hooks" if config.verbose?
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
@@ -172,17 +172,17 @@ module Pod
       end
     end
 
-    def generate_dummy_source
-      filename = "PodsDummy.m"
+    def generate_dummy_source(target_installer)
+      class_name_identifier = target_installer.target_definition.label
+      dummy_source = Generator::DummySource.new(class_name_identifier)
+      filename = "#{dummy_source.class_name}.m"
       pathname = Pathname.new(sandbox.root + filename)
-      Generator::DummySource.new.save_as(pathname)
+      dummy_source.save_as(pathname)
 
       project_file = project.files.new('path' => filename)
       project.group("Targets Support Files") << project_file
 
-      target_installers.each do |target_installer|
-        target_installer.target.source_build_phases.first << project_file
-      end
+      target_installer.target.source_build_phases.first << project_file
     end
 
     def specs_by_target
