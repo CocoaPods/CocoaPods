@@ -199,6 +199,8 @@ module Pod
           target = '4.3'
         when :osx
           target = '10.6'
+        else
+          raise Informative, "Unsupported platform: platform must be one of [:ios, :osx]"
         end
       end
       @target_definition.platform = Platform.new(name, target)
