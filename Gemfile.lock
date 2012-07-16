@@ -1,14 +1,14 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: d7806ab0513b90d7f285a4af78e7bf19e4fb1481
+  revision: e5e7bdf8acb0363042adc78feca8d6136950f7d7
   specs:
-    xcodeproj (0.3.0)
+    xcodeproj (0.3.1)
       activesupport (~> 3.2.6)
 
 PATH
   remote: .
   specs:
-    cocoapods (0.9.0)
+    cocoapods (0.9.1)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
       escape (~> 0.0.4)
