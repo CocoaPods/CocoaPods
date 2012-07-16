@@ -257,7 +257,7 @@ module Pod
           podspec  = file.realpath.to_s
           platform = @platform
           podfile  = Pod::Podfile.new do
-            platform(platform)
+            platform(platform.to_sym, platform.deployment_target)
             pod name, :podspec => podspec
           end
           podfile
