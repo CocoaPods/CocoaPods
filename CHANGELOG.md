@@ -1,3 +1,22 @@
+## 0.9.2
+
+[CocoaPods](http://git.io/AVlRKg) • [Xcodeproj](http://git.io/xHbc0w)
+
+###### Bug fixes
+
+- When generating the PodsDummy class, make that class unique to each target. [#402](http://git.io/NntYiQ)
+- Raise an informative error message when the platform in the `Podfile` is omitted or incorrect. [#403](http://git.io/k5EcUQ)
+
+
+## 0.9.1
+
+[CocoaPods](http://git.io/_kqAbw)
+
+###### Bug fixes
+
+- CocoaPods 0.9.x needs Xcodeproj 0.3.0.
+
+
 ## 0.9.0
 
 [CocoaPods](http://git.io/kucJQw) • [Xcodeproj](http://git.io/5eLL8g)
