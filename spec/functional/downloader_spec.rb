@@ -39,6 +39,28 @@ module Pod
         (@pod.root + 'README').read.strip.should == 'v1.0'
       end
 
+      it "initializes submodules when checking out a specific commit" do
+        @pod.top_specification.stubs(:source).returns(
+          :git => fixture('banana-lib'), :commit => '6cc9afc'
+        )
+        downloader = Downloader.for_pod(@pod)
+        downloader.download
+
+        (@pod.root + 'README').read.strip.should == 'post v1.0'
+        (@pod.root + 'libPusher/README.md').read.strip.should.match /^libPusher/
+      end
+
+      it "initializes submodules when checking out a specific tag" do
+        @pod.top_specification.stubs(:source).returns(
+          :git => fixture('banana-lib'), :tag => 'v1.1'
+        )
+        downloader = Downloader.for_pod(@pod)
+        downloader.download
+
+        (@pod.root + 'README').read.strip.should == 'post v1.0'
+        (@pod.root + 'libPusher/README.md').read.strip.should.match /^libPusher/
+      end
+
       it "prepares the cache if it does not exits" do
         @pod.top_specification.stubs(:source).returns(
           :git => fixture('banana-lib'), :commit => 'fd56054'

@@ -76,6 +76,7 @@ module Pod
           git "reset --hard HEAD"
           git "clean -d -x -f"
           git "pull"
+          git "submodule update"
         end
       end
 
@@ -111,6 +112,7 @@ module Pod
           git "fetch origin tags/#{options[:tag]}"
           git "reset --hard FETCH_HEAD"
           git "checkout -b activated-pod-commit"
+          git "submodule update --init"
         end
       end
 
@@ -135,6 +137,9 @@ module Pod
 
       def clone(from, to)
         git "clone \"#{from}\" \"#{to}\""
+        Dir.chdir(to) do
+          git "submodule update --init"
+        end
       end
     end
 
