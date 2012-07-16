@@ -61,7 +61,7 @@ describe "Pod::Command::Spec::Linter" do
     linter.warnings.should.not.be.empty
   end
 
-  it "validates in lenient mode if there are no erros but there are warnings" do
+  it "validates in lenient mode if there are no errors but there are warnings" do
     spec, file = write_podspec(stub_podspec(/.*license.*/, ""))
     linter = Pod::Command::Spec::Linter.new(spec)
     linter.lenient, linter.quick = true, true
@@ -107,7 +107,7 @@ describe "Pod::Command::Spec::Linter" do
     linter.errors.join(' | ').should.include "The resources did not match any file"
   end
 
- it "Uses the deployment target of the specification" do
+ it "uses the deployment target of the specification" do
     spec, file = write_podspec(stub_podspec)
     spec.stubs(:available_platforms).returns([Pod::Platform.new(:ios, "5.0")])
     linter = Pod::Command::Spec::Linter.new(spec)
