@@ -19,7 +19,14 @@ describe "Pod::Podfile" do
   it "raise error if unsupported platform is supplied" do
     lambda {
       Pod::Podfile.new { platform :iOS }
-    }.should.raise(StandardError, "Unsupported platform")
+    }.should.raise Pod::Podfile::Informative
+
+    begin
+      Pod::Podfile.new { platform :iOS }
+    rescue Pod::Podfile::Informative => e
+      e.stubs(:podfile_line).returns("./podfile_spec.rb:1")
+      e.message.should.be =~ /podfile_spec\.rb:1/
+    end
   end
 
   it "adds dependencies" do
