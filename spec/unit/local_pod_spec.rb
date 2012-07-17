@@ -58,8 +58,9 @@ describe Pod::LocalPod do
     it 'returns an expanded list the files to clean' do
       clean_paths = @pod.clean_paths.map { |p| p.to_s.gsub(/.*Pods\/BananaLib/,'') }
       clean_paths.should.include "/.git/config"
-      # There are some hidden files on Travis
-      clean_files_without_hidden = clean_paths.reject { |p| p.to_s.include?('/.') }
+      # * There are some hidden files on Travis
+      # * The submodule of the repo (libPusher) can be ignore, to reduce noise of this test
+      clean_files_without_hidden = clean_paths.reject { |p| p.to_s.include?('/.') || p.to_s.include?('libPusher') }
       clean_files_without_hidden.should == %W[ /sub-dir /sub-dir/sub-dir-2 /sub-dir/sub-dir-2/somefile.txt ]
     end
 
