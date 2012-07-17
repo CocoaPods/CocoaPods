@@ -1,5 +1,19 @@
 module Pod
   class Podfile
+    class Informative < ::Pod::Informative
+      def podfile_line
+        @podfile_line ||= self.backtrace.find {|t| t =~ /Podfile/}
+      end
+
+      def message
+        if podfile_line
+          super + " (#{podfile_line})\n".red
+        else
+          super
+        end
+      end
+    end
+
     class UserProject
       include Config::Mixin
 
@@ -200,7 +214,7 @@ module Pod
         when :osx
           target = '10.6'
         else
-          raise Informative, "Unsupported platform: platform must be one of [:ios, :osx]"
+          raise ::Pod::Podfile::Informative, "Unsupported platform: platform must be one of [:ios, :osx]"
         end
       end
       @target_definition.platform = Platform.new(name, target)
