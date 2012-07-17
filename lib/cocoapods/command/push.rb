@@ -14,7 +14,8 @@ module Pod
       end
 
       def self.options
-        [["--allow-warnings", "Allows to push if warnings are not evitable"]].concat(super)
+        [ ["--allow-warnings", "Allows to push if warnings are not evitable"],
+          ["--local-only", "Does not perform the step of pushing REPO to its remote"] ].concat(super)
       end
 
       extend Executable
@@ -22,6 +23,7 @@ module Pod
 
       def initialize(argv)
         @allow_warnings = argv.option('--allow-warnings')
+        @local_only = argv.option('--local-only')
         @repo = argv.shift_argument
         @podspec = argv.shift_argument
         super unless argv.empty? && @repo
@@ -32,7 +34,7 @@ module Pod
         check_repo_status
         update_repo
         add_specs_to_repo
-        push_repo
+        push_repo unless @local_only
         puts
       end
 
