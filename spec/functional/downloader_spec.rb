@@ -261,7 +261,7 @@ module Pod
       end
     end
 
-    describe "for Http" do
+    describe "for HTTP" do
       extend SpecHelper::TemporaryDirectory
 
       it "download file and unzip it" do
