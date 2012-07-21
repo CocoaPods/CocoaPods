@@ -57,12 +57,17 @@ module Pod
           puts marker << ( pod.exists? ? "Using #{name}" : "Installing #{name}".green )
         end
 
-        unless pod.exists?
-          download_pod(pod)
-          # The docs need to be generated before cleaning because
-          # the documentation is created for all the subspecs.
+        download_pod(pod) unless pod.exists?
+
+        # This will not happen if the pod existed before we started the install
+        # process.
+        if pod.downloaded?
+          # The docs need to be generated before cleaning because the
+          # documentation is created for all the subspecs.
           generate_docs(pod)
-          pod.clean if config.clean
+          # Here we clean pod's that just have been downloaded or have been
+          # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
+          pod.clean! if config.clean?
         end
       end
     end
@@ -79,6 +84,7 @@ module Pod
       else
         downloader.download
       end
+      pod.downloaded = true
     end
 
     #TODO: move to generator ?
@@ -207,16 +213,10 @@ module Pod
       specs_by_target.each do |target_definition, specs|
         @pods_by_spec[target_definition.platform] = {}
         result[target_definition] = specs.map do |spec|
-          pod = pod_for_spec(spec, target_definition.platform)
-          pod.add_specification(spec)
-          pod
+          @sandbox.local_pod_for_spec(spec, target_definition.platform)
         end.uniq.compact
       end
       result
-    end
-
-    def pod_for_spec(spec, platform)
-      @pods_by_spec[platform][spec.top_level_parent.name] ||= LocalPod.new(spec, @sandbox, platform)
     end
 
     private

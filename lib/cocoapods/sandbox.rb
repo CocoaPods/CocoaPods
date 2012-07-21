@@ -9,6 +9,7 @@ module Pod
     def initialize(path)
       @root = Pathname.new(path)
       @header_search_paths = [HEADERS_DIR]
+      @cached_local_pods = {}
 
       FileUtils.mkdir_p(@root)
     end
@@ -56,17 +57,25 @@ module Pod
       headers_root.rmtree if headers_root.exist?
     end
 
-    def podspec_for_name(name)
-      if spec_path = Dir[root + "#{name}/*.podspec"].first
-        Pathname.new(spec_path)
-      elsif spec_path = Dir[root + "Local Podspecs/#{name}.podspec"].first
-        Pathname.new(spec_path)
+    def local_pod_for_spec(spec, platform)
+      key = [spec.top_level_parent.name, platform.to_sym]
+      (@cached_local_pods[key] ||= LocalPod.new(spec.top_level_parent, self, platform)).tap do |pod|
+        pod.add_specification(spec)
       end
     end
 
     def installed_pod_named(name, platform)
       if spec_path = podspec_for_name(name)
-        LocalPod.from_podspec(spec_path, self, platform)
+        key = [name, platform.to_sym]
+        @cached_local_pods[key] ||= LocalPod.from_podspec(spec_path, self, platform)
+      end
+    end
+
+    def podspec_for_name(name)
+      if spec_path = Dir[root + "#{name}/*.podspec"].first
+        Pathname.new(spec_path)
+      elsif spec_path = Dir[root + "Local Podspecs/#{name}.podspec"].first
+        Pathname.new(spec_path)
       end
     end
   end

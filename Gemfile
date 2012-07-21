@@ -7,7 +7,7 @@ group :development do
 
   gem "mocha", "~> 0.11.4"
   gem "bacon"
-  gem "kicker"
+  gem "kicker", "~> 3.0.0pre1"
   gem "mocha-on-bacon"
   gem "rake"
   gem "rb-fsevent"

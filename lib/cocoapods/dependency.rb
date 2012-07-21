@@ -146,14 +146,18 @@ module Pod
         end
 
         def specification_from_sandbox(sandbox, platform)
+          specification_from_local(sandbox, platform) || specification_from_external(sandbox, platform)
+        end
+
+        def specification_from_local(sandbox, platform)
           if local_pod = sandbox.installed_pod_named(name, platform)
             local_pod.top_specification
-          else
-            copy_external_source_into_sandbox(sandbox)
-            local_pod = sandbox.installed_pod_named(name, platform)
-            local_pod.clean if config.clean? && local_pod.exists?
-            local_pod.top_specification
           end
+        end
+
+        def specification_from_external(sandbox, platform)
+          copy_external_source_into_sandbox(sandbox, platform)
+          specification_from_local(sandbox, platform)
         end
 
         def ==(other_source)
@@ -163,10 +167,12 @@ module Pod
       end
 
       class GitSource < AbstractExternalSource
-        def copy_external_source_into_sandbox(sandbox)
+        def copy_external_source_into_sandbox(sandbox, platform)
           puts "  * Pre-downloading: '#{name}'" unless config.silent?
-          Downloader.for_target(sandbox.root + name, @params).tap do |downloader|
-            downloader.download
+          downloader = Downloader.for_target(sandbox.root + name, @params)
+          downloader.download
+          if local_pod = sandbox.installed_pod_named(name, platform)
+            local_pod.downloaded = true
           end
         end
 
@@ -181,7 +187,7 @@ module Pod
 
       # can be http, file, etc
       class PodspecSource < AbstractExternalSource
-        def copy_external_source_into_sandbox(sandbox)
+        def copy_external_source_into_sandbox(sandbox, _)
           output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
           output_path.dirname.mkpath
           puts "  * Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?

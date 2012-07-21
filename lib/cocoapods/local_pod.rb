@@ -38,6 +38,13 @@ module Pod
     #
     attr_reader :platform
 
+    # @return [Boolean] Wether or not the pod has been downloaded in the
+    #                   current install process and still needs its docs
+    #                   generated and be cleaned.
+    #
+    attr_accessor :downloaded
+    alias_method :downloaded?, :downloaded
+
     # @param [Specification] specification
     #   The first activated specification of the pod.
     # @param [Sandbox] sandbox
@@ -139,7 +146,7 @@ module Pod
     #
     # @return [void]
     #
-    def clean
+    def clean!
       clean_paths.each { |path| FileUtils.rm_rf(path) }
       @cleaned = true
     end
@@ -299,8 +306,8 @@ module Pod
     #
     def all_specs_public_header_files
       if @cleaned
-        raise Informative, "The pod is cleaned and cannot compute the all the "\
-          "header files as they might be deleted."
+        raise Informative, "The pod is cleaned and cannot compute the " \
+                           "header files, as some might have been deleted."
       end
 
       all_specs = [ top_specification ] + top_specification.subspecs

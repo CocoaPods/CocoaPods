@@ -41,7 +41,7 @@ GEM
     hashie (1.2.0)
     i18n (0.6.0)
     json (1.7.3)
-    kicker (2.6.1)
+    kicker (3.0.0pre1)
       listen
     listen (0.4.7)
       rb-fchange (~> 0.0.5)
@@ -88,7 +88,7 @@ DEPENDENCIES
   bacon
   cocoapods!
   github-markup
-  kicker
+  kicker (~> 3.0.0pre1)
   mocha (~> 0.11.4)
   mocha-on-bacon
   pry

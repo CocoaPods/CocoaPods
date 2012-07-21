@@ -88,5 +88,19 @@ module Pod
         end
       end
     end
+
+    describe Dependency::ExternalSources::GitSource do
+      before do
+        @dependency = Dependency.new("cocoapods", :git => "git://github.com/cocoapods/cocoapods")
+      end
+
+      it "marks a LocalPod as downloaded if it's downloaded" do
+        Downloader.stubs(:for_target).returns(stub_everything)
+
+        pod = mock('LocaPod', :downloaded= => true)
+        sandbox = stub('Sandbox', :root => '', :installed_pod_named => pod)
+        @dependency.external_source.copy_external_source_into_sandbox(sandbox, Platform.ios)
+      end
+    end
   end
 end
