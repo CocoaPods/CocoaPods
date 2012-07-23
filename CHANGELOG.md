@@ -1,3 +1,14 @@
+## 0.10.0 (Unreleased)
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.9.2...master)
+
+###### Enhancements
+
+- Added a `--local-only` option to `pod push` so that developers can push locally and test before pushing to a remote.
+- Added line number information for errors generated in the Podfile.
+- Removed note about the post install hook form the linter.
+
+
 ## 0.9.2
 
 [CocoaPods](http://git.io/AVlRKg) • [Xcodeproj](http://git.io/xHbc0w)
