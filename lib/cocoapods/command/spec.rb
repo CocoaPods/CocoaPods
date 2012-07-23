@@ -205,7 +205,6 @@ module Pod
               @platform_notes[platform]    << "#{platform.name} [!] Fatal errors found skipping the rest of the validation"
             else
               @platform_warnings[platform] += podspec_warnings + deprecation_warnings
-              @platform_notes[platform]    += podspec_notes
               peform_extensive_analysis unless quick
             end
           end
@@ -358,14 +357,6 @@ module Pod
 
         def github_source?
           @spec.source && @spec.source[:git] =~ /github.com/
-        end
-
-        # @return [Array<String>] List of the comments detected in the podspec
-        def podspec_notes
-          text = @file.read
-          deprecations = []
-          deprecations << "The `post_install' hook is reserved for edge cases"          if text. =~ /post_install/
-          deprecations
         end
 
         # It reads a podspec file and checks for strings corresponding
