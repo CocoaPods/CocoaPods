@@ -152,9 +152,9 @@ configurations are based on the `Release` configuration, to base them on the
 `Debug` configuration you will have to explicitely specify them as can be seen
 above in the following line:
 
-``ruby
+```ruby
 xcodeproj 'TestProject', 'Test' => :debug
-``
+```
 
 
 ### Documentation
@@ -164,16 +164,16 @@ CocoaPods will now generate documentation for every library with the
 
 You can customize the settings used like so:
 
-``ruby
+```ruby
 s.documentation = { :appledoc => ['--product-name', 'My awesome project!'] }
-``
+```
 
 Alternatively, you can specify a URL where an HTML version of the documentation
 can be found:
 
-``ruby
+```ruby
 s.documentation = { :html => 'http://example.com/docs/index.html' }
-``
+```
 
 See [#149](https://github.com/CocoaPods/CocoaPods/issues/149) and
 [#151](https://github.com/CocoaPods/CocoaPods/issues/151) for more info.
@@ -194,18 +194,18 @@ If you're not happy with the default boilerplate text generated for the title, h
 and footnotes in the files, it's possible to customise these by overriding the methods
 that generate the text in your `Podfile` like this:
 
-``ruby
+```ruby
 class ::Pod::Generator::Acknowledgements
   def header_text
     "My custom header text"
   end
 end
-``
+```
 
 You can even go one step further and customise the text on a per target basis by 
 checking against the target name, like this:
 
-``ruby
+```ruby
 class ::Pod::Generator::Acknowledgements
   def header_text
     if @target_definition.label.end_with?("MyTargetName")
@@ -215,16 +215,16 @@ class ::Pod::Generator::Acknowledgements
     end
   end
 end
-``
+```
 
 Finally, here's a list of the methods that are available to override:
 
-``ruby
+```ruby
 header_title
 header_text
 footnote_title
 footnote_text
-``
+```
 
 
 ### Introduced two new classes: LocalPod and Sandbox.
@@ -335,7 +335,7 @@ different sets of depedencies. This means that you can create a separate
 library which contains all dependencies, including extra ones that you only use
 in, for instance, a debug or test build. [[docs][1]]
 
-``ruby
+```ruby
 # This Podfile will build three static libraries:
 # * libPods.a
 # * libPods-debug.a
@@ -356,7 +356,7 @@ target :test, :exclusive => true do
   # the `libPods-test.a` library.
   dependency 'Kiwi'
 end
-``
+```
 
 ### Install libraries from anywhere
 
@@ -364,7 +364,7 @@ A dependency can take a git url if the repo contains a podspec file in its
 root, or a podspec can be loaded from a file or HTTP location. If no podspec is
 available, a specification can be defined inline in the Podfile. [[docs][2]]
 
-``ruby
+```ruby
 # From a spec repo.
 dependency 'SSToolkit'
 
@@ -395,14 +395,14 @@ dependency do |s|
     end
   end
 end
-``
+```
 
 ### Add a `post_install` hook to the Podfile class
 
 This allows the user to customize, for instance, the generated Xcode project
 _before_ it’s written to disk. [[docs][3]]
 
-``ruby
+```ruby
 # Enable garbage collection support for MacRuby applications.
 post_install do |installer|
   installer.project.targets.each do |target|
@@ -411,14 +411,14 @@ post_install do |installer|
     end
   end
 end
-``
+```
 
 ### Manifest
 
 Generate a Podfile.lock file next to the Podfile, which contains a manifest of
 your application’s dependencies and their dependencies.
 
-``
+```
 PODS:
   - JSONKit (1.4)
   - LibComponentLogging-Core (1.1.4)
@@ -440,7 +440,7 @@ DOWNLOAD_ONLY:
 DEPENDENCIES:
   - RestKit-JSON-JSONKit
   - RestKit-ObjectMapping
-``
+```
 
 ### Generate Xcode projects from scratch
 
