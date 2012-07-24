@@ -6,7 +6,13 @@
 
 - Added a `--local-only` option to `pod push` so that developers can push locally and test before pushing to a remote.
 - Added line number information for errors generated in the Podfile.
+- Pods stored in git repositories now initialize submodules.
+
+
+###### Bug fixes
+
 - Removed note about the post install hook form the linter.
+
 
 
 ## 0.9.2
