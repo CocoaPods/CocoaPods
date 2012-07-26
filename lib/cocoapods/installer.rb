@@ -77,7 +77,7 @@ module Pod
       # Force the `bleeding edge' version if necessary.
       if pod.top_specification.version.head?
         if downloader.respond_to?(:download_head)
-          downloader.download_head
+          downloader.download
         else
           raise Informative, "The downloader of class `#{downloader.class.name}' does not support the `:head' option."
         end
