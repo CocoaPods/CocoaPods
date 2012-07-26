@@ -14,7 +14,9 @@ module Pod
       def download
         create_cache unless cache_exist?
         puts '-> Cloning git repo' if config.verbose?
-        if options[:tag]
+        if options[:head]
+          download_head
+        elsif options[:tag]
           download_tag
         elsif options[:branch]
           download_branch

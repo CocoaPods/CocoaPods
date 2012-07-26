@@ -4,7 +4,9 @@ module Pod
       executable :hg
 
       def download
-        if options[:revision]
+        if options[:head]
+          download_head
+        elsif options[:revision]
           download_revision
         else
           download_head
