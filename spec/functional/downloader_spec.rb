@@ -61,7 +61,7 @@ module Pod
         (@pod.root + 'libPusher/README.md').read.strip.should.match /^libPusher/
       end
 
-      it "prepares the cache if it does not exits" do
+      it "prepares the cache if it does not exist" do
         @pod.top_specification.stubs(:source).returns(
           :git => fixture('banana-lib'), :commit => 'fd56054'
         )
