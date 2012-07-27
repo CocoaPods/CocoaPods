@@ -72,6 +72,17 @@ module Pod
         downloader.download
       end
 
+      it "prepares the cache if it does not exist when the HEAD is requested explicitly" do
+        @pod.top_specification.stubs(:source).returns(
+          :git => fixture('banana-lib')
+        )
+        downloader = Downloader.for_pod(@pod)
+        downloader.cache_path.rmtree if downloader.cache_path.exist?
+        downloader.expects(:create_cache).once
+        downloader.stubs(:clone)
+        downloader.download_head
+      end
+
       it "removes the oldest repo if the caches is too big" do
         @pod.top_specification.stubs(:source).returns(
           :git => fixture('banana-lib'), :commit => 'fd56054'
