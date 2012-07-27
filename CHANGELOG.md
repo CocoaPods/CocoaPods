@@ -12,6 +12,7 @@
 ###### Bug fixes
 
 - Removed note about the post install hook form the linter.
+- Improved xcodebuild error detection in the linter.
 - Ensure the git cache exists, before updating it, when trying to install the ‘bleeding edge’ of a pod.
 
 
