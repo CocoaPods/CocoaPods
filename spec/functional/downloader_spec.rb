@@ -61,7 +61,7 @@ module Pod
         (@pod.root + 'libPusher/README.md').read.strip.should.match /^libPusher/
       end
 
-      it "prepares the cache if it does not exits" do
+      it "prepares the cache if it does not exist" do
         @pod.top_specification.stubs(:source).returns(
           :git => fixture('banana-lib'), :commit => 'fd56054'
         )
@@ -70,6 +70,17 @@ module Pod
         downloader.expects(:create_cache).once
         downloader.stubs(:download_commit)
         downloader.download
+      end
+
+      it "prepares the cache if it does not exist when the HEAD is requested explicitly" do
+        @pod.top_specification.stubs(:source).returns(
+          :git => fixture('banana-lib')
+        )
+        downloader = Downloader.for_pod(@pod)
+        downloader.cache_path.rmtree if downloader.cache_path.exist?
+        downloader.expects(:create_cache).once
+        downloader.stubs(:clone)
+        downloader.download_head
       end
 
       it "removes the oldest repo if the caches is too big" do
