@@ -390,7 +390,7 @@ module Pod
         def process_xcode_build_output(output)
           output_by_line = output.split("\n")
           selected_lines = output_by_line.select do |l|
-            l.include?('error: ') && (l !~ /errors? generated\./) \
+            l.include?('error: ') && (l !~ /errors? generated\./) && (l !~ /error: \(null\)/)\
               || l.include?('warning: ') && (l !~ /warnings? generated\./)\
               || l.include?('note: ') && (l !~ /expanded from macro/)
           end
