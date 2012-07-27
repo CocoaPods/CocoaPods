@@ -100,6 +100,7 @@ module Pod
       end
 
       def download_head
+        create_cache unless cache_exist?
         update_cache
         clone(clone_url, target_path)
       end
