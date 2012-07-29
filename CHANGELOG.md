@@ -1,20 +1,21 @@
 ## 0.10.0 (Unreleased)
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.9.2...master)
+[CocoaPods](http://git.io/4i75YA)
 
 ###### Enhancements
 
-- Added a `--local-only` option to `pod push` so that developers can push locally and test before pushing to a remote.
-- Added line number information for errors generated in the Podfile.
-- Pods stored in git repositories now initialize submodules.
+- Added a `--local-only` option to `pod push` so that developers can push locally and test before pushing to a remote. [#405](http://git.io/0ILJEw)
+- Added line number information for errors generated in the Podfile. [#408](http://git.io/fWQvMg)
+- Pods stored in git repositories now initialize submodules. [#406](http://git.io/L9ssSw)
 
 
 ###### Bug fixes
 
 - Removed note about the post install hook form the linter.
 - Improved xcodebuild error detection in the linter.
-- Ensure the git cache exists, before updating it, when trying to install the ‘bleeding edge’ of a pod.
-
+- Ensure the git cache exists, before updating it, when trying to install the ‘bleeding edge’ of a pod. [#426](http://git.io/d4eqRA)
+- Clean downloaded external pods **after** resolving and activating (sub)specs. [#414](http://git.io/i77q_w)
+- Support `tar.gz` as filename in a HTTP source. [#428](http://git.io/qhwKkA)
 
 
 ## 0.9.2
