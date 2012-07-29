@@ -29,7 +29,7 @@ module Pod
       def type_with_url(url)
         if url =~ /.zip$/
           :zip
-        elsif url =~ /.tgz$/
+        elsif url =~ /.(tgz|tar\.gz)$/
           :tgz
         elsif url =~ /.tar$/
           :tar
