@@ -1,3 +1,12 @@
+## 0.10.1
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.10.0...master)
+
+###### Bug fixes
+
+- Version message terminates with 0 exit status.
+- Don't output git error messages in the error report if there are no repos or if a repo is not under git source control.
+
 ## 0.10.0
 
 [CocoaPods](http://git.io/4i75YA)
