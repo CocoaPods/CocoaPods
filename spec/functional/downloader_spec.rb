@@ -264,7 +264,7 @@ module Pod
 
       it "check's out a specific tag" do
         @pod.top_specification.stubs(:source).returns(
-          :svn => "file://#{fixture('subversion-repo')}/tags/tag-1"
+          :svn => "file://#{fixture('subversion-repo')}", :tag => 'tag-1'
         )
         downloader = Downloader.for_pod(@pod)
         downloader.download
