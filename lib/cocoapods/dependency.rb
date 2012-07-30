@@ -14,13 +14,14 @@ module Pod
         super(@specification.name, @specification.version)
 
       elsif !name_and_version_requirements.empty? && block.nil?
+        version = name_and_version_requirements.last
         if name_and_version_requirements.last.is_a?(Hash)
           @external_source = ExternalSources.from_params(name_and_version_requirements[0].split('/').first, name_and_version_requirements.pop)
-
-        elsif (symbol = name_and_version_requirements.last).is_a?(Symbol) && symbol == :head
+        elsif version.is_a?(Symbol) && version == :head || version.is_a?(Version) && version.head?
           name_and_version_requirements.pop
           @head = true
         end
+
         super(*name_and_version_requirements)
 
         if head? && !latest_version?
