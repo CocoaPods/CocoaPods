@@ -10,7 +10,7 @@ module Pod
         def report(error)
           return <<-EOS
 
-#{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
+          #{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
 ### Report
 
@@ -59,14 +59,14 @@ EOS
 
         def markdown_podfile
           return '' unless Config.instance.project_podfile && Config.instance.project_podfile.exist?
-<<-EOS
+          <<-EOS
 
 ### Podfile
 
 ```ruby
-#{Config.instance.project_podfile.read.strip}
+          #{Config.instance.project_podfile.read.strip}
 ```
-EOS
+          EOS
         end
 
         def error_from_podfile(error)
@@ -89,8 +89,8 @@ EOS
           Pod::Source.all.map do |source|
             repo = source.repo
             Dir.chdir(repo) do
-              url = `git config --get remote.origin.url`.strip
-              sha = `git rev-parse HEAD`.strip
+              url = `git config --get remote.origin.url 2>&1`.strip
+              sha = `git rev-parse HEAD 2>&1`.strip
               "#{repo.basename} - #{url} @ #{sha}"
             end
           end
