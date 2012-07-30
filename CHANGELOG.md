@@ -1,4 +1,4 @@
-## 0.10.0 (Unreleased)
+## 0.10.0
 
 [CocoaPods](http://git.io/4i75YA)
 
