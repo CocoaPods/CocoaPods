@@ -78,6 +78,7 @@ module Pod
       if e.is_a?(PlainInformative) # also catches Informative
         puts e.message
         puts *e.backtrace if Config.instance.verbose?
+        exit 0
       else
         puts ErrorReport.report(e)
       end
