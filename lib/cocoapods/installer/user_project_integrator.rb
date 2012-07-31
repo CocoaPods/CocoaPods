@@ -141,7 +141,10 @@ module Pod
         end
 
         def add_pods_library
-          pods_library = user_project.group("Frameworks").files.new_static_library(@target_definition.label)
+          framework_group = user_project.group("Frameworks")
+          raise Informative, "Cannot add pod library to project. Please check if the project have a 'Frameworks' group in the root of the project." unless framework_group
+
+          pods_library = framework_group.files.new_static_library(@target_definition.label)
           targets.each do |target|
             target.frameworks_build_phases.each { |build_phase| build_phase << pods_library }
           end
