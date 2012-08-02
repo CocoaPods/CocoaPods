@@ -316,7 +316,7 @@ module Pod
         end
 
         def source_valid?
-          spec.source && !spec.source =~ /http:\/\/EXAMPLE/
+          spec.source && !(spec.source =~ /http:\/\/EXAMPLE/)
         end
 
         def paths_starting_with_a_slash_errors
