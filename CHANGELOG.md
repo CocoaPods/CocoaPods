@@ -2,6 +2,10 @@
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.10.0...master)
 
+###### Enhancements
+
+- When integrating Pods with a project without "Frameworks" group in root of the project, raise an informative message. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
+
 ###### Bug fixes
 
 - Version message terminates with 0 exit status.
