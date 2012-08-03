@@ -296,7 +296,7 @@ module Pod
           messages << "Missing summary"       unless spec.summary
           messages << "Missing homepage"      unless spec.homepage
           messages << "Missing author(s)"     unless spec.authors
-          messages << "Missing source"        unless spec.source
+          messages << "Missing or invalid source: #{spec.source}" unless source_valid?
 
           # attributes with multiplatform values
           return messages unless platform_valid?
@@ -313,6 +313,10 @@ module Pod
 
         def platform_valid?
           !spec.platform || [:ios, :osx].include?(spec.platform.name)
+        end
+
+        def source_valid?
+          spec.source && !(spec.source =~ /http:\/\/EXAMPLE/)
         end
 
         def paths_starting_with_a_slash_errors
