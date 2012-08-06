@@ -4,7 +4,10 @@
 
 ###### Enhancements
 
+- Added `pod repo lint`. [#423]
+- Improved support for `:head` option and svn repositories.
 - When integrating Pods with a project without "Frameworks" group in root of the project, raise an informative message. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
+- Dropped support for legacy `config.ios?` and `config.osx?`
 
 ###### Bug fixes
 
