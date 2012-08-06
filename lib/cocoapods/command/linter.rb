@@ -5,7 +5,7 @@ module Pod
 
       # TODO: Add check to ensure that attributes inherited by subspecs are not duplicated ?
 
-      attr_accessor :quick, :lenient, :no_clean
+      attr_accessor :quick, :lenient, :no_clean, :check_paths
       attr_reader   :spec, :file
       attr_reader   :errors, :warnings, :notes
 
@@ -14,7 +14,9 @@ module Pod
       end
 
       def spec_name
-        file.basename('.*').to_s
+        name = file.basename('.*').to_s
+        name << ( @spec ? " (#{spec.version})" : " (#{file.dirname.basename})")
+        name
       end
 
       # Takes an array of podspec files and lints them all
@@ -27,9 +29,16 @@ module Pod
 
         if !deprecation_errors.empty?
           @errors = deprecation_errors
+          @errors << "#{platform.name} [!] Fatal errors found skipping the rest of the validation"
         else
           @spec = Specification.from_file(file)
           platforms = spec.available_platforms
+
+          if @check_paths
+            expected_path = "#{@spec.version}/#{@spec.name}.podspec"
+            @errors << "Incorrect path, the path is `#{file}` and should be `#{expected_path}`" unless file.to_s.end_with?(expected_path)
+          end
+
           platforms.each do |platform|
             @platform_errors[platform], @platform_warnings[platform], @platform_notes[platform] = [], [], []
 
@@ -48,9 +57,9 @@ module Pod
           end
 
           # Get common messages
-          @errors   = @platform_errors.values.reduce(:&)
-          @warnings = @platform_warnings.values.reduce(:&)
-          @notes    = @platform_notes.values.reduce(:&)
+          @errors   += @platform_errors.values.reduce(:&)
+          @warnings += @platform_warnings.values.reduce(:&)
+          @notes    += @platform_notes.values.reduce(:&)
 
           platforms.each do |platform|
             # Mark platform specific messages

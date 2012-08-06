@@ -88,6 +88,7 @@ module Pod
             linter = Linter.new(podspec)
             linter.lenient     = true
             linter.quick       = true
+            linter.check_paths = true
 
             linter.lint
 
