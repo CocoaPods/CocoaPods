@@ -51,7 +51,7 @@ describe Pod::Installer::TargetInstaller do
 
   it 'adds the sandbox header search paths to the xcconfig, with quotes' do
     do_install!
-    @installer.xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include("\"#{@sandbox.build_headers.search_paths.join('" "')}\"")
+    @installer.xcconfig.to_hash['PODS_BUILD_HEADERS_SEARCH_PATHS'].should.include("\"#{@sandbox.build_headers.search_paths.join('" "')}\"")
   end
 
   it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do
