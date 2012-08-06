@@ -9,6 +9,7 @@ describe "Pod::Command::Repo" do
     it "runs with correct parameters" do
       lambda { run_command('repo', 'add', 'NAME', 'URL') }.should.not.raise
       lambda { run_command('repo', 'update') }.should.not.raise
+      lambda { run_command('repo', 'lint',  temporary_directory.to_s) }.should.not.raise
     end
 
     it "complains for wrong parameters" do
@@ -48,6 +49,16 @@ describe "Pod::Command::Repo" do
       run_command('repo', 'update')
       (repo2.dir + 'README').read.should.include 'Added!'
       (repo3.dir + 'README').read.should.include 'Added!'
+    end
+
+    before do
+      config.repos_dir = fixture('spec-repos')
+    end
+
+    it "lints a repo" do
+      cmd = command('repo', 'lint', 'master')
+      lambda { cmd.run }.should.not.raise Pod::Informative
+      cmd.output.should.include "Missing license type"
     end
   end
 

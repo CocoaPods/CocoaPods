@@ -5,6 +5,7 @@ module Pod
     autoload :ErrorReport, 'cocoapods/command/error_report'
     autoload :Install,     'cocoapods/command/install'
     autoload :List,        'cocoapods/command/list'
+    autoload :Linter,      'cocoapods/command/linter'
     autoload :Presenter,   'cocoapods/command/presenter'
     autoload :Push,        'cocoapods/command/push'
     autoload :Repo,        'cocoapods/command/repo'

@@ -97,17 +97,6 @@ describe "Pod::Command::Spec#lint" do
   extend SpecHelper::TemporaryDirectory
   extend SpecHelper::TemporaryRepos
 
-  before do
-    config.repos_dir = fixture('spec-repos')
-  end
-
-  it "lints a repo" do
-    # The fixture has warnings so it raises
-    cmd = command('spec', 'lint', "#{config.repos_dir}/master")
-    lambda { cmd.run }.should.raise Pod::Informative
-    cmd.output.should.include "WARN"
-  end
-
   it "complains if it can't find any spec to lint" do
     Dir.chdir(temporary_directory) do
       lambda { command('spec', 'lint').run }.should.raise Pod::Informative
