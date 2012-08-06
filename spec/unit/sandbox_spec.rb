@@ -24,30 +24,34 @@ describe Pod::Sandbox do
   end
 
   it "returns it's headers root" do
-    @sandbox.headers_root.should == Pathname.new(File.join(TMP_POD_ROOT, "Headers"))
+    @sandbox.build_headers.root.should == Pathname.new(File.join(TMP_POD_ROOT, "BuildHeaders"))
+  end
+
+  it "returns it's public headers root" do
+    @sandbox.public_headers.root.should == Pathname.new(File.join(TMP_POD_ROOT, "Headers"))
   end
 
   it "can add namespaced headers to it's header path using symlinks and return the relative path" do
-    FileUtils.mkdir_p(@sandbox.root + "ExampleLib/Headers")
+    FileUtils.mkdir_p(@sandbox.root + "ExampleLib/BuildHeaders")
     namespace_path = Pathname.new("ExampleLib")
-    relative_header_path = Pathname.new("ExampleLib/Headers/MyHeader.h")
+    relative_header_path = Pathname.new("ExampleLib/BuildHeaders/MyHeader.h")
     File.open(@sandbox.root + relative_header_path, "w") { |file| file.write('hello') }
-    symlink_path = @sandbox.add_header_file(namespace_path, relative_header_path)
+    symlink_path = @sandbox.build_headers.add_file(namespace_path, relative_header_path)
     symlink_path.should.be.symlink
     File.read(symlink_path).should == 'hello'
   end
 
   it 'can add multiple headers at once and return the relative symlink paths' do
-    FileUtils.mkdir_p(@sandbox.root + "ExampleLib/Headers")
+    FileUtils.mkdir_p(@sandbox.root + "ExampleLib/BuildHeaders")
     namespace_path = Pathname.new("ExampleLib")
     relative_header_paths = [
-      Pathname.new("ExampleLib/Headers/MyHeader.h"),
-      Pathname.new("ExampleLib/Headers/MyOtherHeader.h")
+      Pathname.new("ExampleLib/BuildHeaders/MyHeader.h"),
+      Pathname.new("ExampleLib/BuildHeaders/MyOtherHeader.h")
     ]
     relative_header_paths.each do |path|
       File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
     end
-    symlink_paths = @sandbox.add_header_files(namespace_path, relative_header_paths)
+    symlink_paths = @sandbox.build_headers.add_files(namespace_path, relative_header_paths)
     symlink_paths.each do |path|
       path.should.be.symlink
       File.read(path).should == "hello"
@@ -55,26 +59,26 @@ describe Pod::Sandbox do
   end
 
   it 'keeps a list of unique header search paths when headers are added' do
-    FileUtils.mkdir_p(@sandbox.root + "ExampleLib/Headers")
+    FileUtils.mkdir_p(@sandbox.root + "ExampleLib/BuildHeaders")
     namespace_path = Pathname.new("ExampleLib")
     relative_header_paths = [
-      Pathname.new("ExampleLib/Headers/MyHeader.h"),
-      Pathname.new("ExampleLib/Headers/MyOtherHeader.h")
+      Pathname.new("ExampleLib/BuildHeaders/MyHeader.h"),
+      Pathname.new("ExampleLib/BuildHeaders/MyOtherHeader.h")
     ]
     relative_header_paths.each do |path|
       File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
     end
-    @sandbox.add_header_files(namespace_path, relative_header_paths)
-    @sandbox.header_search_paths.should.include("${PODS_ROOT}/Headers/ExampleLib")
+    @sandbox.build_headers.add_files(namespace_path, relative_header_paths)
+    @sandbox.build_headers.search_paths.should.include("${PODS_ROOT}/BuildHeaders/ExampleLib")
   end
 
   it 'always adds the Headers root to the header search paths' do
-    @sandbox.header_search_paths.should.include("${PODS_ROOT}/Headers")
+    @sandbox.build_headers.search_paths.should.include("${PODS_ROOT}/BuildHeaders")
   end
 
   it 'clears out its headers root when preparing for install' do
     @sandbox.prepare_for_install
-    @sandbox.headers_root.should.not.exist
+    @sandbox.build_headers.root.should.not.exist
   end
 
   it "returns the path to a spec file in the root of the pod's dir" do

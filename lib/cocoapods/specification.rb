@@ -40,6 +40,7 @@ module Pod
 
       # multi-platform attributes
       %w[ source_files
+          public_header_files
           resources
           preserve_paths
           exclude_header_search_paths
@@ -121,6 +122,7 @@ module Pod
       end
 
       %w{ source_files=
+          public_header_files=
           resource=
           resources=
           preserve_paths=
@@ -239,6 +241,7 @@ module Pod
 
 
     pltf_chained_attr_accessor  :source_files,                lambda {|value, current| pattern_list(value) }
+    pltf_chained_attr_accessor  :public_header_files,         lambda {|value, current| pattern_list(value) }
     pltf_chained_attr_accessor  :resources,                   lambda {|value, current| pattern_list(value) }
     pltf_chained_attr_accessor  :preserve_paths,              lambda {|value, current| pattern_list(value) } # Paths that should not be cleaned
     pltf_chained_attr_accessor  :exclude_header_search_paths, lambda {|value, current| pattern_list(value) } # Headers to be excluded from being added to search paths (RestKit)

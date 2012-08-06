@@ -70,7 +70,14 @@ describe Pod::LocalPod do
 
     it "can link it's headers into the sandbox" do
       @pod.link_headers
-      expected_header_path = @sandbox.headers_root + "BananaLib/Banana.h"
+      expected_header_path = @sandbox.build_headers.root + "BananaLib/Banana.h"
+      expected_header_path.should.be.symlink
+      File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
+    end
+
+    it "can link it's public headers into the sandbox" do
+      @pod.link_headers
+      expected_header_path = @sandbox.public_headers.root + "BananaLib/Banana.h"
       expected_header_path.should.be.symlink
       File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
     end
@@ -226,7 +233,6 @@ describe Pod::LocalPod do
       assert_array_equals(expected, computed)
     end
 
-
     it "resolved the header files" do
       expected = %w[
         Chameleon/UIKit/Classes/UIKit.h
@@ -292,8 +298,10 @@ describe Pod::LocalPod do
         "Chameleon/UIKit > UIKit/Classes/UIView.h UIKit/Classes/UIWindow.h" ]
     end
 
+    # This is done by the sandbox and this test should be moved
     it "includes the sandbox of the pod's headers while linking" do
-      @sandbox.expects(:add_header_search_path).with(Pathname.new('Chameleon'))
+      @sandbox.build_headers.expects(:add_search_path).with(Pathname.new('Chameleon'))
+      @sandbox.public_headers.expects(:add_search_path).with(Pathname.new('Chameleon'))
       @pod.link_headers
     end
   end

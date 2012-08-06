@@ -229,6 +229,24 @@ module Pod
       result
     end
 
+    # @return [Hash{Specification => Array<Pathname>}] The paths of the public
+    #   header files grouped by {Specification}.
+    #
+    # @TODO: complete, fix and comment
+    # @TODO: decide a policy for subspecs
+    #
+    def public_header_files_by_specs
+      cached_header_files_by_spec = header_files_by_spec
+      public_header_files = paths_by_spec(:source_files, :glob => '*.h')
+
+      result = {}
+      public_header_files.map do |spec, paths|
+        result[spec] = paths.empty? ? cached_header_files_by_spec[spec] : paths
+      end
+
+      result
+    end
+
     # @return [Array<Pathname>] The paths of the resources.
     #
     def resource_files
@@ -322,9 +340,14 @@ module Pod
     # @return [void] Copies the pods headers to the sandbox.
     #
     def link_headers
-      @sandbox.add_header_search_path(headers_sandbox)
+      @sandbox.build_headers.add_search_path(headers_sandbox)
       header_mappings.each do |namespaced_path, files|
-        @sandbox.add_header_files(namespaced_path, files)
+        @sandbox.build_headers.add_files(namespaced_path, files)
+      end
+
+      @sandbox.public_headers.add_search_path(headers_sandbox)
+      public_header_mappings.each do |namespaced_path, files|
+        @sandbox.public_headers.add_files(namespaced_path, files)
       end
     end
 
@@ -389,6 +412,23 @@ module Pod
       mappings
     end
 
+    # TODO: complete, fix and comment
+    def public_header_mappings
+      mappings = {}
+      public_header_files_by_specs.each do |spec, paths|
+        paths = paths - headers_excluded_from_search_paths
+        paths.each do |from|
+          from_relative = from.relative_path_from(root)
+          to = headers_sandbox + (spec.header_dir) + spec.copy_header_mapping(from_relative)
+          (mappings[to.dirname] ||= []) << from
+        end
+      end
+      mappings
+    end
+
+    # @return <Pathname> The name of the folder where the headers of this pod
+    #   will be namespaced.
+    #
     def headers_sandbox
       @headers_sandbox ||= Pathname.new(top_specification.name)
     end
