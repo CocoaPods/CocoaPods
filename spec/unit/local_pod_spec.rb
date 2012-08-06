@@ -11,26 +11,6 @@ describe Pod::LocalPod do
       copy_fixture_to_pod('banana-lib', @pod)
     end
 
-    it "can link it's headers into the sandbox" do
-      @pod.link_headers
-      expected_header_path = @sandbox.build_headers.root + "BananaLib/Banana.h"
-      expected_header_path.should.be.symlink
-      File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
-    end
-
-    it "can add it's source files to an Xcode project target" do
-      target = mock('target')
-      target.expects(:add_source_file).with(Pathname.new("BananaLib/Classes/Banana.m"), anything, anything)
-      @pod.add_to_target(target)
-    end
-
-    it "can add it's source files to a target with any specially configured compiler flags" do
-      @pod.specification.compiler_flags = '-d some_flag'
-      target = mock('target')
-      target.expects(:add_source_file).with(anything, anything, "-d some_flag")
-      @pod.add_to_target(target)
-    end
-
     it 'returns the Pod root directory path' do
       @pod.root.should == @sandbox.root + 'BananaLib'
     end
@@ -70,16 +50,6 @@ describe Pod::LocalPod do
       @pod.relative_header_files.should == [Pathname.new("BananaLib/Classes/Banana.h")]
     end
 
-    xit "returns the user header search paths" do
-      def @spec.copy_header_mapping(from)
-        Pathname.new('ns') + from.basename
-      end
-      @spec.build_headers.search_paths.should == %w{
-      "$(PODS_ROOT)/Headers/SSZipArchive"
-      "$(PODS_ROOT)/Headers/SSZipArchive/ns"
-      }
-    end
-
     it 'returns a list of header files by specification' do
       files = @pod.header_files_by_spec[@pod.specifications.first].sort
       files.should == [ @pod.root + "Classes/Banana.h" ]
@@ -100,7 +70,14 @@ describe Pod::LocalPod do
 
     it "can link it's headers into the sandbox" do
       @pod.link_headers
-      expected_header_path = @sandbox.headers_root + "BananaLib/Banana.h"
+      expected_header_path = @sandbox.build_headers.root + "BananaLib/Banana.h"
+      expected_header_path.should.be.symlink
+      File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
+    end
+
+    it "can link it's public headers into the sandbox" do
+      @pod.link_headers
+      expected_header_path = @sandbox.public_headers.root + "BananaLib/Banana.h"
       expected_header_path.should.be.symlink
       File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
     end
@@ -321,8 +298,10 @@ describe Pod::LocalPod do
         "Chameleon/UIKit > UIKit/Classes/UIView.h UIKit/Classes/UIWindow.h" ]
     end
 
+    # This is done by the sandbox and this test should be moved
     it "includes the sandbox of the pod's headers while linking" do
-      @sandbox.expects(:add_header_search_path).with(Pathname.new('Chameleon'))
+      @sandbox.build_headers.expects(:add_search_path).with(Pathname.new('Chameleon'))
+      @sandbox.public_headers.expects(:add_search_path).with(Pathname.new('Chameleon'))
       @pod.link_headers
     end
   end

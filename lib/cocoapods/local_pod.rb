@@ -229,14 +229,22 @@ module Pod
       result
     end
 
-    # TODO: complete, fix and comment
+    # @return [Hash{Specification => Array<Pathname>}] The paths of the public
+    #   header files grouped by {Specification}.
+    #
+    # @TODO: complete, fix and comment
+    # @TODO: decide a policy for subspecs
+    #
     def public_header_files_by_specs
-      if specification.public_header_files.empty?
-        header_files_by_spec
-      else
-        options = {:glob => '*.h'}
-        paths_by_spec(:source_files, options)
+      cached_header_files_by_spec = header_files_by_spec
+      public_header_files = paths_by_spec(:source_files, :glob => '*.h')
+
+      result = {}
+      public_header_files.map do |spec, paths|
+        result[spec] = paths.empty? ? cached_header_files_by_spec[spec] : paths
       end
+
+      result
     end
 
     # @return [Array<Pathname>] The paths of the resources.
@@ -332,14 +340,14 @@ module Pod
     # @return [void] Copies the pods headers to the sandbox.
     #
     def link_headers
-      @sandbox.add_header_search_path(headers_sandbox)
-
+      @sandbox.build_headers.add_search_path(headers_sandbox)
       header_mappings.each do |namespaced_path, files|
-        @sandbox.build_header_storage.add_files(namespaced_path, files)
+        @sandbox.build_headers.add_files(namespaced_path, files)
       end
 
+      @sandbox.public_headers.add_search_path(headers_sandbox)
       public_header_mappings.each do |namespaced_path, files|
-        @sandbox.public_header_storage.add_files(namespaced_path, files)
+        @sandbox.public_headers.add_files(namespaced_path, files)
       end
     end
 

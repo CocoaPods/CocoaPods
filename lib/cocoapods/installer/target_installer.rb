@@ -72,7 +72,7 @@ module Pod
         end
         @target.add_source_files(source_file_descriptions)
 
-        xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.header_search_paths).join(" "))
+        xcconfig.merge!('HEADER_SEARCH_PATHS' => quoted(sandbox.build_headers.search_paths).join(" "))
         # Indirect HEADER_SEARCH_PATHS, so that configure_build_configurations can override it
         xcconfig.merge!('PODS_HEADER_SEARCH_PATHS' => quoted(sandbox.public_headers.search_paths).join(" "))
 

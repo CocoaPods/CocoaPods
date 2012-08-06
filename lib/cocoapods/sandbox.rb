@@ -87,8 +87,8 @@ module Pod
     #
     # @return [void]
     #
-    def add_header_search_path(path)
-      @header_search_paths << Pathname.new(HEADERS_DIR) + path
+    def add_search_path(path)
+      @search_paths << path
     end
 
     def prepare_for_install

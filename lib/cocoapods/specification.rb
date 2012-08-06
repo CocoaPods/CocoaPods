@@ -40,6 +40,7 @@ module Pod
 
       # multi-platform attributes
       %w[ source_files
+          public_header_files
           resources
           preserve_paths
           exclude_header_search_paths
