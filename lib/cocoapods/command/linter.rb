@@ -29,7 +29,7 @@ module Pod
 
         if !deprecation_errors.empty?
           @errors = deprecation_errors
-          @errors << "#{platform.name} [!] Fatal errors found skipping the rest of the validation"
+          @errors << "#{spec_name} [!] Fatal errors found skipping the rest of the validation"
         else
           @spec = Specification.from_file(file)
           platforms = spec.available_platforms
