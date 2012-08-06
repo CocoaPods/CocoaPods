@@ -36,7 +36,7 @@ GEM
       multipart-post (~> 1.1)
     faraday_middleware (0.8.8)
       faraday (>= 0.7.4, < 0.9)
-    ffi (1.1.2)
+    ffi (1.1.4)
     github-markup (0.7.4)
     hashie (1.2.0)
     i18n (0.6.0)
