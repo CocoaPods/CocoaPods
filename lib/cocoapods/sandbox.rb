@@ -88,7 +88,7 @@ module Pod
     # @return [void]
     #
     def add_search_path(path)
-      @search_paths << path
+      @search_paths << Pathname.new(@base_dir) + path
     end
 
     def prepare_for_install
