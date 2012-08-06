@@ -5,7 +5,7 @@ module Pod
 
       # TODO: Add check to ensure that attributes inherited by subspecs are not duplicated ?
 
-      attr_accessor :quick, :lenient, :no_clean, :check_paths
+      attr_accessor :quick, :lenient, :no_clean, :repo_path
       attr_reader   :spec, :file
       attr_reader   :errors, :warnings, :notes
 
@@ -34,9 +34,10 @@ module Pod
           @spec = Specification.from_file(file)
           platforms = spec.available_platforms
 
-          if @check_paths
-            expected_path = "#{@spec.version}/#{@spec.name}.podspec"
-            @errors << "Incorrect path, the path is `#{file}` and should be `#{expected_path}`" unless file.to_s.end_with?(expected_path)
+          if @repo_path
+            expected_path = "#{@spec.name}/#{@spec.version}/#{@spec.name}.podspec"
+            path = file.relative_path_from(@repo_path).to_s
+            @errors << "Incorrect path, the path is `#{file}` and should be `#{expected_path}`" unless path.end_with?(expected_path)
           end
 
           platforms.each do |platform|

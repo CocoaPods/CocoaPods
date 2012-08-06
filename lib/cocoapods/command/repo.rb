@@ -86,16 +86,16 @@ module Pod
 
           podspecs.each do |podspec|
             linter = Linter.new(podspec)
-            linter.lenient     = true
-            linter.quick       = true
-            linter.check_paths = true
+            linter.lenient   = true
+            linter.quick     = true
+            linter.repo_path = dir
 
             linter.lint
 
             unless linter.result_type == :success
-              invalid_count += 1
               case linter.result_type
               when :error
+                invalid_count += 1
                 color = :red
               when :warning
                 color = :yellow
@@ -108,7 +108,12 @@ module Pod
             end
           end
           puts "Analyzed #{podspecs.count} podspecs files.\n\n" unless config.silent?
-          invalid_count
+
+          if invalid_count == 0
+            puts "All the specs passed validation.".green << "\n\n" unless config.silent?
+          else
+            raise Informative, "#{invalid_count} podspecs failed validation."
+          end
         end
       end
 
