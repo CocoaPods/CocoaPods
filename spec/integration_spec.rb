@@ -286,7 +286,7 @@ else
             # { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
             'JSONKit (1.5pre)',
             'Reachability (3.0.0)',
-            'SSZipArchive (0.2.1)',
+            'SSZipArchive (0.2.2)',
           ],
           'DEPENDENCIES' => [
             # "ASIWebPageRequest (>= 1.8.1)",
