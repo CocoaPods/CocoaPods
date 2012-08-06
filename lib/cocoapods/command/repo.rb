@@ -23,6 +23,10 @@ module Pod
       lint all the spec-repos known to CocoaPods.}
       end
 
+      def self.options
+        [["--only-errors", "Lint presents only the errors"]].concat(super)
+      end
+
       extend Executable
       executable :git
 
@@ -33,8 +37,11 @@ module Pod
             raise Informative, "#{@action == 'add' ? 'Adding' : 'Updating the remote of'} a repo needs a `name' and a `url'."
           end
           @branch = argv.arguments[3]
-        when 'update', 'lint'
+        when 'update'
           @name = argv.arguments[1]
+        when 'lint'
+          @name = argv.arguments[1]
+          @only_errors = argv.option('--only-errors')
         else
           super
         end
@@ -92,7 +99,7 @@ module Pod
 
             linter.lint
 
-            unless linter.result_type == :success
+            if (!@only_errors && linter.result_type != :success) || linter.result_type == :error
               case linter.result_type
               when :error
                 invalid_count += 1
@@ -102,8 +109,10 @@ module Pod
               end
               puts " -> ".send(color) << linter.spec_name
               print_messages('ERROR', linter.errors)
-              print_messages('WARN',  linter.warnings)
-              print_messages('NOTE',  linter.notes)
+              unless @only_errors
+                print_messages('WARN',  linter.warnings)
+                print_messages('NOTE',  linter.notes)
+              end
               puts unless config.silent?
             end
           end
