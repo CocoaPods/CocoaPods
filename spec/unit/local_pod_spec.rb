@@ -10,6 +10,28 @@ describe Pod::LocalPod do
       @pod     = Pod::LocalPod.new(@spec, @sandbox, Pod::Platform.new(:ios))
       copy_fixture_to_pod('banana-lib', @pod)
     end
+  end
+
+  it "can link it's headers into the sandbox" do
+    @pod.link_headers
+    expected_header_path = @sandbox.build_headers.root + "BananaLib/Banana.h"
+    expected_header_path.should.be.symlink
+    File.read(expected_header_path).should == (@sandbox.root + @pod.header_files[0]).read
+  end
+
+  it "can add it's source files to an Xcode project target" do
+    target = mock('target')
+    target.expects(:add_source_file).with(Pathname.new("BananaLib/Classes/Banana.m"), anything, anything)
+    @pod.add_to_target(target)
+  end
+
+  it "can add it's source files to a target with any specially configured compiler flags" do
+    @pod.specification.compiler_flags = '-d some_flag'
+    target = mock('target')
+    target.expects(:add_source_file).with(anything, anything, "-d some_flag")
+    @pod.add_to_target(target)
+  end
+end
 
     it 'returns the Pod root directory path' do
       @pod.root.should == @sandbox.root + 'BananaLib'
@@ -94,10 +116,21 @@ describe Pod::LocalPod do
       @pod.platform.should == :ios
     end
 
+    @spec.build_headers.search_paths.should == %w{
+      "$(PODS_ROOT)/Headers/SSZipArchive"
+      "$(PODS_ROOT)/Headers/SSZipArchive/ns"
+    }
+  end
+
     it "raises if the files are accessed before creating the pod dir" do
       @pod.implode
       lambda { @pod.source_files }.should.raise Pod::Informative
     end
+
+    @spec.build_headers.search_paths.should == %w{
+      "$(PODS_ROOT)/Headers/AnotherRoot"
+      "$(PODS_ROOT)/Headers/AnotherRoot/ns"
+    }
   end
 
   describe "with installed source and multiple subspecs" do

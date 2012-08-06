@@ -5,7 +5,7 @@ else
 end
 
 # This makes Rake::FileList usable with the Specification attributes
-# source_files, clean_paths, and resources.
+# source_files, public_header_files, clean_paths, and resources.
 
 module Rake
   class FileList

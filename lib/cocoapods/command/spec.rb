@@ -321,10 +321,11 @@ module Pod
 
         def paths_starting_with_a_slash_errors
           messages = []
-          %w[source_files resources clean_paths].each do |accessor|
+          %w[source_files public_header_files resources clean_paths].each do |accessor|
             patterns = spec.send(accessor.to_sym)
             # Some values are multiplaform
             patterns = patterns.is_a?(Hash) ? patterns.values.flatten(1) : patterns
+            patterns = patterns.compact # some patterns may be nil (public_header_files, for instance)
             patterns.each do |pattern|
               # Skip FileList that would otherwise be resolved from the working directory resulting
               # in a potentially very expensi operation
@@ -562,6 +563,17 @@ Pod::Spec.new do |s|
   # (See http://rake.rubyforge.org/classes/Rake/FileList.html.)
   #
   s.source_files = 'Classes', 'Classes/**/*.{h,m}'
+
+  # A list of file patterns which select the header files that should be
+  # made available to the application. If the pattern is a directory then the
+  # path will automatically have '*.h' appended.
+  #
+  # Also allows the use of the FileList class like `source_files does.
+  #
+  # If you do not explicitely set the list of public header files,
+  # all headers of source_files will be made public.
+  #
+  # s.public_header_files = 'Classes/**/*.h'
 
   # A list of resources included with the Pod. These are copied into the
   # target bundle with a build phase script.

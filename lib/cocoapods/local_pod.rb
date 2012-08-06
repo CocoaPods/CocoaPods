@@ -229,6 +229,16 @@ module Pod
       result
     end
 
+    # TODO: complete, fix and comment
+    def public_header_files_by_specs
+      if specification.public_header_files.empty?
+        header_files_by_spec
+      else
+        options = {:glob => '*.h'}
+        paths_by_spec(:source_files, options)
+      end
+    end
+
     # @return [Array<Pathname>] The paths of the resources.
     #
     def resource_files
@@ -323,8 +333,13 @@ module Pod
     #
     def link_headers
       @sandbox.add_header_search_path(headers_sandbox)
+
       header_mappings.each do |namespaced_path, files|
-        @sandbox.add_header_files(namespaced_path, files)
+        @sandbox.build_header_storage.add_files(namespaced_path, files)
+      end
+
+      public_header_mappings.each do |namespaced_path, files|
+        @sandbox.public_header_storage.add_files(namespaced_path, files)
       end
     end
 
@@ -379,6 +394,20 @@ module Pod
     def header_mappings
       mappings = {}
       header_files_by_spec.each do |spec, paths|
+        paths = paths - headers_excluded_from_search_paths
+        paths.each do |from|
+          from_relative = from.relative_path_from(root)
+          to = headers_sandbox + (spec.header_dir) + spec.copy_header_mapping(from_relative)
+          (mappings[to.dirname] ||= []) << from
+        end
+      end
+      mappings
+    end
+
+    # TODO: complete, fix and comment
+    def public_header_mappings
+      mappings = {}
+      public_header_files_by_specs.each do |spec, paths|
         paths = paths - headers_excluded_from_search_paths
         paths.each do |from|
           from_relative = from.relative_path_from(root)
