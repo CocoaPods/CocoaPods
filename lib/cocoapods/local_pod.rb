@@ -426,6 +426,9 @@ module Pod
       mappings
     end
 
+    # @return <Pathname> The name of the folder where the headers of this pod
+    #   will be namespaced.
+    #
     def headers_sandbox
       @headers_sandbox ||= Pathname.new(top_specification.name)
     end
