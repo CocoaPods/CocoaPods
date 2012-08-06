@@ -53,16 +53,6 @@ module Pod
     end
     attr_writer :podfile
 
-    def ios?
-      # TODO: deprecate in 0.7
-      podfile.target_definitions[:default].platform == :ios if podfile
-    end
-
-    def osx?
-      # TODO: deprecate in 0.7
-      podfile.target_definitions[:default].platform == :osx if podfile
-    end
-
     module Mixin
       def config
         Config.instance
