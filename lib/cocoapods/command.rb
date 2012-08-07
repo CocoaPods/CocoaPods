@@ -76,9 +76,9 @@ module Pod
       Config.instance.verbose? ? raise : exit(1)
 
     rescue Exception => e
-      if e.is_a?(PlainInformative) # also catches Informative
+      if e.is_a?(PlainInformative) || ENV['COCOA_PODS_ENV'] == 'development' # also catches Informative
         puts e.message
-        puts *e.backtrace if Config.instance.verbose?
+        puts *e.backtrace if Config.instance.verbose? || ENV['COCOA_PODS_ENV'] == 'development'
       else
         puts ErrorReport.report(e)
       end
