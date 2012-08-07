@@ -8,9 +8,10 @@ module Pod
 
   $ pod push REPO [NAME.podspec]
 
-    Validates NAME.podspec or `*.podspec' in the current working dir, updates
-    the local copy of the repository named REPO, adds the specifications
-    to the REPO, and finally it pushes REPO to its remote.}
+    Validates NAME.podspec or `*.podspec' in the current working dir, creates
+    a directory and version folder for the pod in the local copy of 
+    REPO (./cocoapods/[REPO]), copies the podspec file into the version directory,
+    and finally it pushes REPO to its remote.}
       end
 
       def self.options
