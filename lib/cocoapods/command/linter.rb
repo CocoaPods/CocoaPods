@@ -5,7 +5,7 @@ module Pod
 
       # TODO: Add check to ensure that attributes inherited by subspecs are not duplicated ?
 
-      attr_accessor :quick, :lenient, :no_clean, :repo_path
+      attr_accessor :quick, :no_clean, :repo_path
       attr_reader   :spec, :file
       attr_reader   :errors, :warnings, :notes
 
@@ -15,7 +15,11 @@ module Pod
 
       def spec_name
         name = file.basename('.*').to_s
-        name << ( @spec ? " (#{spec.version})" : " (#{file.dirname.basename})")
+        if @spec
+          name << " (#{spec.version})"
+        elsif @repo_path
+          name << " (#{file.dirname.basename})"
+        end
         name
       end
 
@@ -69,12 +73,6 @@ module Pod
             @notes    += (@platform_notes[platform] - @notes).map {|m| "[#{platform}] #{m}"}
           end
         end
-
-        valid?
-      end
-
-      def valid?
-        lenient ? errors.empty? : ( errors.empty? && warnings.empty? )
       end
 
       def result_type
@@ -90,9 +88,13 @@ module Pod
       def peform_extensive_analysis
         set_up_lint_environment
         install_pod
-        puts "Building with xcodebuild.\n".yellow if config.verbose?
-        # treat xcodebuild warnings as notes because the spec maintainer might not be the author of the library
-        xcodebuild_output.each { |msg| ( msg.include?('error: ') ? @platform_errors[@platform] : @platform_notes[@platform] ) << msg }
+        if `which xcodebuild`.strip.empty?
+          puts "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow if config.verbose?
+        else
+          puts "Building with xcodebuild.\n".yellow if config.verbose?
+          # treat xcodebuild warnings as notes because the spec maintainer might not be the author of the library
+          xcodebuild_output.each { |msg| ( msg.include?('error: ') ? @platform_errors[@platform] : @platform_notes[@platform] ) << msg }
+        end
         @platform_errors[@platform]   += file_patterns_errors
         @platform_warnings[@platform] += file_patterns_warnings
         tear_down_lint_environment

@@ -93,20 +93,22 @@ module Pod
 
           podspecs.each do |podspec|
             linter = Linter.new(podspec)
-            linter.lenient   = true
             linter.quick     = true
             linter.repo_path = dir
 
             linter.lint
 
-            if (!@only_errors && linter.result_type != :success) || linter.result_type == :error
-              case linter.result_type
-              when :error
-                invalid_count += 1
-                color = :red
-              when :warning
-                color = :yellow
-              end
+            case linter.result_type
+            when :error
+              invalid_count += 1
+              color = :red
+              should_display = true
+            when :warning
+              color = :yellow
+              should_display = !@only_errors
+            end
+
+            if should_display
               puts " -> ".send(color) << linter.spec_name
               print_messages('ERROR', linter.errors)
               unless @only_errors
