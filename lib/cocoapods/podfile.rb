@@ -504,5 +504,9 @@ module Pod
 
     def validate!
     end
+
+    def to_s
+      "Podfile"
+    end
   end
 end
