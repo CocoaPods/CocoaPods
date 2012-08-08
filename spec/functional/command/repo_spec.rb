@@ -95,10 +95,10 @@ describe "Pod::Command::Repo" do
       lambda { run_command('repo', 'update') }.should.raise Pod::Informative
     end
 
-    it "informs about a higher known CocoaPods version" do
+    it "does not inform about a higher known CocoaPods version since this is intrusive and obnoxious" do
       yaml = YAML.dump({'last' => "999.0.0"})
       File.open(versions_file, 'w') {|f| f.write(yaml) }
-      run_command('repo', 'update').should.include "Cocoapods 999.0.0 is available"
+      run_command('repo', 'update').should.not.include "Cocoapods 999.0.0 is available"
     end
 
     it "has a class method that returns if a repo is supported" do

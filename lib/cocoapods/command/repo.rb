@@ -142,7 +142,6 @@ module Pod
           "\n[!] The `#{dir.basename.to_s}' repo requires CocoaPods #{version_msg}\n".red +
           "Update Cocoapods, or checkout the appropriate tag in the repo.\n\n"
         end
-        puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions)
       end
 
       def self.compatible?(name)
@@ -172,15 +171,6 @@ module Pod
         supports_min = !min || bin_version >= Gem::Version.new(min)
         supports_max = !max || bin_version <= Gem::Version.new(max)
         supports_min && supports_max
-      end
-
-      def has_update(versions)
-        self.class.has_update(versions)
-      end
-
-      def self.has_update(versions)
-        last = versions['last']
-        last && Gem::Version.new(last) > bin_version
       end
 
       def self.bin_version

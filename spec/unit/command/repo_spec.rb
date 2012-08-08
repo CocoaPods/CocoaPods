@@ -27,15 +27,5 @@ describe "Pod::Command::Repo" do
     versions = { 'max' => '0.5' }
     @command.class.send(:is_compatilbe, versions).should == false
   end
-
-  it "detects if no update is available" do
-    versions = { 'last' => '0.5' }
-    @command.class.send(:has_update, versions).should == false
-  end
-
-  it "detects if an update is available" do
-    versions = { 'last' => '0.999' }
-    @command.class.send(:has_update, versions).should == true
-  end
 end
 
