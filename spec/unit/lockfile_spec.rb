@@ -42,7 +42,7 @@ describe "Pod::Lockfile" do
     File.open(tmp_path, 'w') {|f| f.write(sample) }
     lockfile = Pod::Lockfile.from_file(tmp_path)
     lockfile.defined_in_file.should == tmp_path
-    lockfile.to_yaml.should == sample
+    lockfile.to_dict.should == YAML.load(sample)
   end
 
   before do
@@ -50,7 +50,7 @@ describe "Pod::Lockfile" do
   end
 
   it "generates a valid YAML representation" do
-    @lockfile.to_yaml.should == sample
+    YAML.load(@lockfile.to_yaml).should == YAML.load(sample)
   end
 
   it "generates a valid Dictionary representation" do
