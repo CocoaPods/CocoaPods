@@ -6,12 +6,14 @@ module Pod
     autoload :Install,     'cocoapods/command/install'
     autoload :List,        'cocoapods/command/list'
     autoload :Linter,      'cocoapods/command/linter'
+    autoload :Outdated,    'cocoapods/command/outdated'
     autoload :Presenter,   'cocoapods/command/presenter'
     autoload :Push,        'cocoapods/command/push'
     autoload :Repo,        'cocoapods/command/repo'
     autoload :Search,      'cocoapods/command/search'
     autoload :Setup,       'cocoapods/command/setup'
     autoload :Spec,        'cocoapods/command/spec'
+    autoload :Update,      'cocoapods/command/update'
 
     class Help < Informative
       def initialize(command_class, argv)
@@ -99,13 +101,15 @@ module Pod
       String.send(:define_method, :colorize) { |string , _| string } if argv.option( '--no-color' )
 
       command_class = case argv.shift_argument
-      when 'install' then Install
-      when 'repo'    then Repo
-      when 'search'  then Search
-      when 'list'    then List
-      when 'setup'   then Setup
-      when 'spec'    then Spec
-      when 'push'    then Push
+      when 'install'  then Install
+      when 'list'     then List
+      when 'outdated' then Outdated
+      when 'push'     then Push
+      when 'repo'     then Repo
+      when 'search'   then Search
+      when 'setup'    then Setup
+      when 'spec'     then Spec
+      when 'update'   then Update
       end
 
       if show_help || command_class.nil?

@@ -1,26 +1,13 @@
 module Pod
   class Command
-    class Install < Command
+    class Update < Command
       def self.banner
-%{Installing dependencies of a project:
+%{Updates dependencies of a project:
 
-    $ pod install
+    $ pod update
 
-      Downloads all dependencies updated in `Podfile' and creates an Xcode
-      Pods library project in `./Pods'.
-
-      The Xcode project file should be specified in your `Podfile` like this:
-
-        xcodeproj 'path/to/XcodeProject'
-
-      If no xcodeproj is specified, then a search for an Xcode project will
-      be made.  If more than one Xcode project is found, the command will
-      raise an error.
-
-      This will configure the project to reference the Pods static library,
-      add a build configuration file, and add a post build script to copy
-      Pod resources.
-}
+      Updates all dependencies installed by `pod install`. It doesn't
+      install new dependencies. }
       end
 
       def self.options
@@ -44,16 +31,21 @@ module Pod
         unless podfile = config.podfile
           raise Informative, "No `Podfile' found in the current working directory."
         end
-
-        if @update_repo
-          print_title 'Updating Spec Repositories', true
-          Repo.new(ARGV.new(["update"])).run
+        unless lockfile = config.lockfile
+          raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."
         end
 
+        # if @update_repo
+        #   print_title 'Updating Spec Repositories', true
+        #   Repo.new(ARGV.new(["update"])).run
+        # end
+
         sandbox = Sandbox.new(config.project_pods_root)
-        resolver = Resolver.new(podfile, config.lockfile, sandbox)
+        resolver = Resolver.new(podfile, lockfile, sandbox)
+        resolver.update_mode = true
         Installer.new(resolver).install!
       end
     end
   end
 end
+

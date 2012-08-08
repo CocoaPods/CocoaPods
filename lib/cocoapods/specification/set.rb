@@ -6,22 +6,18 @@ module Pod
       def initialize(pod_dir)
         @pod_dir = pod_dir
         @required_by = []
+        @dependencies = []
       end
 
-      def required_by(specification)
-        # Skip subspecs because the can't require a different version of the top level parent
-        return if !specification.podfile? && specification.top_level_parent.name == name
-
-        dependency = specification.dependency_by_top_level_spec_name(name)
-        # TODO we don’t actually do anything in our Version subclass. Maybe we should just remove that.
+      def required_by(dependency, dependent_name)
         unless @required_by.empty? || dependency.requirement.satisfied_by?(Gem::Version.new(required_version.to_s))
-          # TODO add graph that shows which dependencies led to this.
-          raise Informative, "#{specification} tries to activate `#{dependency}', " \
+          raise Informative, "#{dependent_name} tries to activate `#{dependency}', " \
                              "but already activated version `#{required_version}' " \
                              "by #{@required_by.join(', ')}."
         end
         @specification = nil
-        @required_by << specification
+        @required_by << dependent_name
+        @dependencies << dependency
       end
 
       def specification_by_name(name)
@@ -29,8 +25,8 @@ module Pod
       end
 
       def dependency
-        @required_by.inject(Dependency.new(name)) do |previous, spec|
-          previous.merge(spec.dependency_by_top_level_spec_name(name).to_top_level_spec_dependency)
+        @dependencies.inject(Dependency.new(name)) do |previous, dependency|
+          previous.merge(dependency.to_top_level_spec_dependency)
         end
       end
 
@@ -74,6 +70,7 @@ module Pod
         def initialize(specification)
           @specification = specification
           @required_by = []
+          @dependencies = []
         end
 
         def name
@@ -84,9 +81,9 @@ module Pod
           self.class === other && name == other.name
         end
 
-        def required_by(specification)
+        def required_by(dependency, dependent_name)
           before = @specification
-          super(specification)
+          super(dependency, dependent_name)
         ensure
           @specification = before
         end

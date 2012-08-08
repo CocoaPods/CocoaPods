@@ -14,23 +14,23 @@ describe "Pod::Specification::Set" do
   end
 
   it "checks if the dependency of the specification is compatible with existing requirements" do
-    @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack', '1.2' })
-    @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack', '< 1.2.1' })
-    @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack', '> 1.1' })
-    @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack', '~> 1.2.0' })
-    @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack' })
+    @set.required_by(Pod::Dependency.new('CocoaLumberjack', '1.2'), 'Spec')
+    @set.required_by(Pod::Dependency.new('CocoaLumberjack', '< 1.2.1'), 'Spec')
+    @set.required_by(Pod::Dependency.new('CocoaLumberjack', '> 1.1'), 'Spec')
+    @set.required_by(Pod::Dependency.new('CocoaLumberjack', '~> 1.2.0'), 'Spec')
+    @set.required_by(Pod::Dependency.new('CocoaLumberjack'), 'Spec')
     lambda {
-      @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack', '< 1.0' })
+      @set.required_by(Pod::Dependency.new('CocoaLumberjack', '< 1.0' ), 'Spec')
     }.should.raise Pod::Informative
   end
 
   it "raises if the required version doesn't exist" do
-    @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack', '< 1.0' })
+    @set.required_by(Pod::Dependency.new('CocoaLumberjack', '< 1.0'), 'Spec')
     lambda { @set.required_version }.should.raise Pod::Informative
   end
 
   before do
-    @set.required_by(Pod::Spec.new { |s| s.dependency 'CocoaLumberjack', '< 1.2.1' })
+    @set.required_by(Pod::Dependency.new('CocoaLumberjack', '< 1.2.1'), 'Spec')
   end
 
   it "returns the version required for the dependency" do
@@ -48,5 +48,10 @@ describe "Pod::Specification::Set" do
   it "ignores dotfiles when getting the version directories" do
     `touch #{fixture('spec-repos/master/CocoaLumberjack/.DS_Store')}`
     lambda { @set.versions }.should.not.raise
+  end
+
+  it "raises if a version is incompatible with the activated version" do
+    spec = Pod::Dependency.new('CocoaLumberjack', '1.2.1')
+    lambda { @set.required_by(spec, 'Spec') }.should.raise Pod::Informative
   end
 end

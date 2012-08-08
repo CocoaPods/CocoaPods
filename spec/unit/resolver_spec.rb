@@ -10,7 +10,7 @@ module Pod
         pod 'BlocksKit'
         # pod 'ASIWebPageRequest'
       end
-      @resolver = Resolver.new(@podfile, stub('sandbox'))
+      @resolver = Resolver.new(@podfile, nil, stub('sandbox'))
     end
 
     it "holds the context state, such as cached specification sets" do
@@ -73,7 +73,7 @@ module Pod
         pod 'RestKit/Network'
         pod 'RestKit/ObjectMapping/XML'
       end
-      resolver = Resolver.new(@podfile, stub('sandbox'))
+      resolver = Resolver.new(@podfile, nil, stub('sandbox'))
       resolver.resolve.values.flatten.map(&:name).sort.should == %w{
         FileMD5Hash
         ISO8601DateFormatter
@@ -93,7 +93,7 @@ module Pod
         platform :ios
         pod 'RestKit'
       end
-      resolver = Resolver.new(@podfile, stub('sandbox'))
+      resolver = Resolver.new(@podfile, nil, stub('sandbox'))
       resolver.resolve.values.flatten.map(&:name).sort.should == %w{
         FileMD5Hash
         ISO8601DateFormatter
@@ -139,7 +139,7 @@ module Pod
           end
         end
       end
-      resolver = Resolver.new(@podfile, stub('sandbox'))
+      resolver = Resolver.new(@podfile, nil, stub('sandbox'))
       specs = resolver.resolve.values.flatten.map(&:name).sort
       specs.should.not.include 'RestKit/ObjectMapping/XML'
       specs.should == %w{
@@ -175,7 +175,7 @@ module Pod
         end
       end
       @podfile.dependencies.first.external_source.stubs(:specification_from_sandbox).returns(spec)
-      resolver = Resolver.new(@podfile, stub('sandbox'))
+      resolver = Resolver.new(@podfile, nil, stub('sandbox'))
       resolver.resolve.values.flatten.map(&:name).sort.should == %w{ MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec }
     end
 
@@ -185,10 +185,48 @@ module Pod
         pod 'FileMD5Hash'
         pod 'JSONKit', :head
       end
-      resolver = Resolver.new(podfile, stub('sandbox'))
+      resolver = Resolver.new(podfile, nil, stub('sandbox'))
       filemd5hash, jsonkit = resolver.resolve.values.first.sort_by(&:name)
       filemd5hash.version.should.not.be.head
       jsonkit.version.should.be.head
+    end
+
+    xit "raises if it finds two conflicting dependencies" do
+
+    end
+
+    describe "Concerning the Lockfile" do
+      xit "accepts a nil lockfile" do
+        lambda { Resolver.new(@podfile, nil, stub('sandbox'))}.should.not.raise
+      end
+
+      xit "detects the pods that need to be installed" do
+
+      end
+
+      xit "detects the pods that don't need to be installed" do
+
+      end
+
+      xit "detects the pods that can be updated" do
+
+      end
+
+      xit "doesn't install new pods in `update_mode'" do
+
+      end
+
+      xit "handles correctly pods with external source" do
+
+      end
+
+      xit "it always suggest to update pods in head mode" do
+
+      end
+
+      xit "it prevents a pod from upgrading during an install" do
+
+      end
     end
   end
 end

@@ -7,19 +7,12 @@ module Pod
 
     include Config::Mixin
 
-    attr_reader :sandbox
+    attr_reader :resolver, :sandbox, :lockfile
 
-    def initialize(podfile)
-      @podfile = podfile
-      # FIXME: pass this into the installer as a parameter
-      @sandbox = Sandbox.new(config.project_pods_root)
-      @resolver = Resolver.new(@podfile, @sandbox)
-      # TODO: remove in 0.7 (legacy support for config.ios? and config.osx?)
-      config.podfile = podfile
-    end
-
-    def lock_file
-      config.project_root + 'Podfile.lock'
+    def initialize(resolver)
+      @resolver = resolver
+      @podfile = resolver.podfile
+      @sandbox = resolver.sandbox
     end
 
     def project
@@ -46,6 +39,9 @@ module Pod
 
     def install_dependencies!
       pods.each do |pod|
+        name = pod.top_specification.name
+        should_install = @resolver.should_install?(name)  || !pod.exists?
+
         unless config.silent?
           marker = config.verbose ? "\n-> ".green : ''
           if subspec_name = pod.top_specification.preferred_dependency
@@ -54,20 +50,22 @@ module Pod
             name = pod.to_s
           end
           name << " [HEAD]" if pod.top_specification.version.head?
-          puts marker << ( pod.exists? ? "Using #{name}" : "Installing #{name}".green )
+          puts marker << ( should_install ?  "Installing #{name}".green : "Using #{name}" )
         end
 
-        download_pod(pod) unless pod.exists?
-
-        # This will not happen if the pod existed before we started the install
-        # process.
-        if pod.downloaded?
-          # The docs need to be generated before cleaning because the
-          # documentation is created for all the subspecs.
-          generate_docs(pod)
-          # Here we clean pod's that just have been downloaded or have been
-          # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
-          pod.clean! if config.clean?
+        if should_install
+          pod.implode
+          download_pod(pod)
+          # This will not happen if the pod existed before we started the install
+          # process.
+          if pod.downloaded?
+            # The docs need to be generated before cleaning because the
+            # documentation is created for all the subspecs.
+            generate_docs(pod)
+            # Here we clean pod's that just have been downloaded or have been
+            # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
+            pod.clean! if config.clean?
+          end
         end
       end
     end
@@ -117,14 +115,16 @@ module Pod
         generate_dummy_source(target_installer)
       end
 
-      generate_lock_file!(specifications)
-
       puts "- Running post install hooks" if config.verbose?
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
       run_post_install_hooks
 
       puts "- Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
       project.save_as(@sandbox.project_path)
+
+      puts "- Writing lockfile in `#{lockfile.defined_in_file}'\n\n" if config.verbose?
+      @lockfile = Lockfile.create(config.project_lockfile, @podfile, specs_by_target.values.flatten)
+      @lockfile.write_to_disk
 
       UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
     end
@@ -133,50 +133,12 @@ module Pod
       # we loop over target installers instead of pods, because we yield the target installer
       # to the spec post install hook.
       target_installers.each do |target_installer|
-        specs_by_target[target_installer.target_definition].each do |spec|
+        @specs_by_target[target_installer.target_definition].each do |spec|
           spec.post_install(target_installer)
         end
       end
 
       @podfile.post_install!(self)
-    end
-
-    def generate_lock_file!(specs)
-      lock_file.open('w') do |file|
-        file.puts "PODS:"
-
-        # Get list of [name, dependencies] pairs.
-        pod_and_deps = specs.map do |spec|
-          [spec.to_s, spec.dependencies.map(&:to_s).sort]
-        end.uniq
-
-        # Merge dependencies of ios and osx version of the same pod.
-        tmp = {}
-        pod_and_deps.each do |name, deps|
-          if tmp[name]
-            tmp[name].concat(deps).uniq!
-          else
-            tmp[name] = deps
-          end
-        end
-        pod_and_deps = tmp
-
-        # Sort by name and print
-        pod_and_deps.sort_by(&:first).each do |name, deps|
-          if deps.empty?
-            file.puts "  - #{name}"
-          else
-            file.puts "  - #{name}:"
-            deps.each { |dep| file.puts "    - #{dep}" }
-          end
-        end
-
-        file.puts
-        file.puts "DEPENDENCIES:"
-        @podfile.dependencies.map(&:to_s).sort.each do |dep|
-          file.puts "  - #{dep}"
-        end
-      end
     end
 
     def generate_dummy_source(target_installer)
@@ -190,15 +152,6 @@ module Pod
       project.group("Targets Support Files") << project_file
 
       target_installer.target.source_build_phases.first << project_file
-    end
-
-    def specs_by_target
-      @specs_by_target ||= @resolver.resolve
-    end
-
-    # @return [Array<Specification>]  All dependencies that have been resolved.
-    def specifications
-      specs_by_target.values.flatten
     end
 
     # @return [Array<LocalPod>]  A list of LocalPod instances for each
@@ -217,6 +170,14 @@ module Pod
         end.uniq.compact
       end
       result
+    end
+
+    def specifications
+      specs_by_target.values.flatten
+    end
+
+    def specs_by_target
+      @specs_by_target ||= @resolver.resolve
     end
 
     private
