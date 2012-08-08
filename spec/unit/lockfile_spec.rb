@@ -5,7 +5,6 @@ describe "Pod::Lockfile" do
 
   def sample
     text = <<-LOCKFILE.strip_heredoc
-      ---
       PODS:
       - BananaLib (1.0):
         - monkey (< 1.0.9, ~> 1.0.1)
@@ -13,7 +12,7 @@ describe "Pod::Lockfile" do
       DEPENDENCIES:
       - BananaLib (~> 1.0)
       COCOAPODS: #{Pod::VERSION}
-      LOCKFILE
+    LOCKFILE
   end
 
   def podfile

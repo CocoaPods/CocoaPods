@@ -74,7 +74,7 @@ module Pod
     #   serialization.
     #
     def to_yaml
-      to_dict.to_yaml
+      to_dict.to_yaml.gsub(/^--- ?\n/,"")
     end
 
     # @return [Dictionary] The Dictionary representation of the Lockfile.
