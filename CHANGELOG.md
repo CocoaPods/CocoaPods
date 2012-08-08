@@ -1,9 +1,10 @@
-## 0.10.1
+## 0.11.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.10.0...master)
 
 ###### Enhancements
 
+- Added support for public headers. [#440]
 - Added `pod repo lint`. [#423]
 - Improved support for `:head` option and svn repositories.
 - When integrating Pods with a project without "Frameworks" group in root of the project, raise an informative message. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
@@ -11,8 +12,8 @@
 
 ###### Bug fixes
 
-- Version message terminates with 0 exit status.
-- Don't output git error messages in the error report if there are no repos or if a repo is not under git source control.
+- Version message now correctly terminates with a 0 exit status.
+- Resolved an issue that lead to git error messages in the error report.
 
 ## 0.10.0
 
