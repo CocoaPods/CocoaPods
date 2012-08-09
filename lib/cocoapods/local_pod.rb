@@ -229,21 +229,21 @@ module Pod
       result
     end
 
-    # @return [Hash{Specification => Array<Pathname>}] The paths of the public
-    #   header files grouped by {Specification}.
+    # @return [Hash{Specification => Array<Pathname>}] The paths of the header
+    #   files grouped by {Specification} that should be copied in the public
+    #   folder.
     #
-    # @TODO: decide a policy for subspecs
+    #   If a spec does not match any public header it means that all the
+    #   header files (i.e. the build ones) are intended to be public.
     #
     def public_header_files_by_spec
-      build_headers  = header_files_by_spec
       public_headers = paths_by_spec(:public_header_files, :glob => '*.h')
+      build_headers  = header_files_by_spec
 
       result = {}
-      # If no public header files are provided we use the build
-      # ones for the every spec/subspec.
-      public_headers.each do |spec, paths|
-        if !paths.empty?
-          result[spec] = paths
+      specifications.each do |spec|
+        if (public_h = public_headers[spec]) && !public_h.empty?
+          result[spec] = public_h
         elsif (build_h = build_headers[spec]) && !build_h.empty?
           result[spec] = build_h
         end
@@ -345,11 +345,12 @@ module Pod
     #
     def link_headers
       @sandbox.build_headers.add_search_path(headers_sandbox)
+      @sandbox.public_headers.add_search_path(headers_sandbox)
+
       header_mappings(header_files_by_spec).each do |namespaced_path, files|
         @sandbox.build_headers.add_files(namespaced_path, files)
       end
 
-      @sandbox.public_headers.add_search_path(headers_sandbox)
       header_mappings(public_header_files_by_spec).each do |namespaced_path, files|
         @sandbox.public_headers.add_files(namespaced_path, files)
       end
