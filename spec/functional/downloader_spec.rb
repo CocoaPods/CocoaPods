@@ -253,6 +253,7 @@ module Pod
     end
 
     describe "for Subversion" do
+
       it "check's out a specific revision" do
         @pod.top_specification.stubs(:source).returns(
           :svn => "file://#{fixture('subversion-repo')}", :revision => '1'
@@ -270,7 +271,17 @@ module Pod
         downloader.download
         (@pod.root + 'README').read.strip.should == 'tag 1'
       end
+
+      it "check's out the head version" do
+        @pod.top_specification.stubs(:source).returns(
+          :svn => "file://#{fixture('subversion-repo')}", :revision => '1'
+        )
+        downloader = Downloader.for_pod(@pod)
+        downloader.download_head
+        (@pod.root + 'README').read.strip.should == 'unintersting'
+      end
     end
+
 
     describe "for HTTP" do
       extend SpecHelper::TemporaryDirectory

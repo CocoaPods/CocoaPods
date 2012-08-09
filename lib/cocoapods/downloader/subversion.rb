@@ -4,25 +4,26 @@ module Pod
       executable :svn
 
       def download
-        if options[:revision]
-          download_revision
-        elsif options[:tag]
-          download_tag
-        else
-          download_head
-        end
+        svn %|checkout "#{reference_url}" "#{target_path}"|
       end
 
       def download_head
-        svn %|checkout "#{url}/#{options[:folder]}" "#{target_path}"|
+        svn %|checkout "#{trunk_url}" "#{target_path}"|
       end
 
-      def download_revision
-        svn %|checkout "#{url}/#{options[:folder]}" -r "#{options[:revision]}" "#{target_path}"|
+      def reference_url
+        result = url.dup
+        result << '/'       << options[:folder] if options[:folder]
+        result << '/tags/'  << options[:tag] if options[:tag]
+        result << '" -r "'  << options[:revision] if options[:revision]
+        result
       end
 
-      def download_tag
-        svn %|checkout "#{url}/tags/#{options[:tag]}/#{options[:folder]}" "#{target_path}"|
+      def trunk_url
+        result = url.dup
+        result << '/' << options[:folder] if options[:folder]
+        result << '/trunk'
+        result
       end
     end
   end
