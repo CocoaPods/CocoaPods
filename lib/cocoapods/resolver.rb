@@ -68,10 +68,13 @@ module Pod
         end
       end
 
-      lock_dependencies_version unless update_mode
       @cached_specs = {}
       @targets_and_specs = {}
       @external_pods = []
+      @dependencies_podfile_incompatible = []
+      @removed_pods = []
+
+      lock_dependencies_version unless update_mode
 
       @podfile.target_definitions.values.each do |target_definition|
         puts "\nResolving dependencies for target `#{target_definition.name}' (#{target_definition.platform}):".green if config.verbose?
@@ -161,8 +164,6 @@ module Pod
     #
     def lock_dependencies_version
       return unless lockfile
-      @dependencies_podfile_incompatible = []
-      @removed_pods = []
 
       puts "\nFinding updated or removed pods:".green if config.verbose?
       podfile_deps_names = podfile_dependencies.map(&:name)

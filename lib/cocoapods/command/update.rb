@@ -35,10 +35,10 @@ module Pod
           raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."
         end
 
-        # if @update_repo
-        #   print_title 'Updating Spec Repositories', true
-        #   Repo.new(ARGV.new(["update"])).run
-        # end
+        if @update_repo
+          print_title 'Updating Spec Repositories', true
+          Repo.new(ARGV.new(["update"])).run
+        end
 
         sandbox = Sandbox.new(config.project_pods_root)
         resolver = Resolver.new(podfile, lockfile, sandbox)
