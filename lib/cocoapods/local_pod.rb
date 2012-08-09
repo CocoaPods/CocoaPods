@@ -45,16 +45,18 @@ module Pod
     attr_accessor :downloaded
     alias_method :downloaded?, :downloaded
 
-    # @param [Specification] specification
-    #   The first activated specification of the pod.
-    # @param [Sandbox] sandbox
-    #   The sandbox where the files of the pod will be located.
-    # @param [Platform] platform
-    #   The platform that will be used to build the pod.
+    # @param [Specification] specification  The first activated specification
+    #                                       of the pod.
+    #
+    # @param [Sandbox] sandbox              The sandbox where the files of the
+    #                                       pod will be located.
+    #
+    # @param [Platform] platform            The platform that will be used to
+    #                                       build the pod.
     #
     # @todo The local pod should be initialized with all the activated
-    #   specifications passed as an array, in order to be able to cache the
-    #   computed values. In other words, it should be immutable.
+    #       specifications passed as an array, in order to be able to cache the
+    #       computed values. In other words, it should be immutable.
     #
     def initialize(specification, sandbox, platform)
       @top_specification, @sandbox, @platform = specification.top_level_parent, sandbox, platform
@@ -93,7 +95,7 @@ module Pod
     end
 
     # @return [String] A string representation of the pod which indicates if
-    # the pods comes from a local source.
+    #                  the pods comes from a local source.
     #
     def to_s
       result = top_specification.to_s

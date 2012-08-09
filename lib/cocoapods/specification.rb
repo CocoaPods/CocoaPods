@@ -172,6 +172,12 @@ module Pod
     end
     attr_writer :name
 
+    # @return [String] The name of the pod.
+    #
+    def pod_name
+      top_level_parent.name
+    end
+
     ### Attributes that return the first value defined in the chain
 
     def platform
@@ -441,7 +447,13 @@ module Pod
     end
 
     def to_s
-      "#{name} (#{version})"
+      if !version
+        name
+      elsif version.head?
+        "#{name} (HEAD from #{version})"
+      else
+        "#{name} (#{version})"
+      end
     end
 
     def inspect

@@ -40,7 +40,7 @@ module Pod
     end
 
     def ==(other)
-      super && (@specification ? @specification == other.specification : @external_source == other.external_source)
+      super && (head? == other.head?) && (@specification ? @specification == other.specification : @external_source == other.external_source)
     end
 
     def subspec_dependency?
@@ -53,6 +53,16 @@ module Pod
 
     def external?
       !@external_source.nil?
+    end
+
+    def =~(other)
+      if head?
+        name === other.name && other.head?
+      elsif external?
+        name === other.name && external_source == other.external_source
+      else
+        super && !other.head? && !other.external?
+      end
     end
 
     # In case this is a dependency for a subspec, e.g. 'RestKit/Networking',
@@ -76,13 +86,14 @@ module Pod
       if external?
         version << @external_source.description
       elsif inline?
-        version << "defined in Podfile"
+        version << 'defined in Podfile'
+      elsif head?
+        version << 'HEAD'
       elsif @version_requirements != Gem::Requirement.default
         version << @version_requirements.to_s
       end
       result = @name.dup
-      result += " (#{version})" unless version.empty?
-      result += " [HEAD]" if head?
+      result << " (#{version})" unless version.empty?
       result
     end
 
@@ -169,7 +180,9 @@ module Pod
 
       class GitSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox, platform)
-          puts "  * Pre-downloading: '#{name}'" unless config.silent?
+          puts "-> Pre-downloading: '#{name}'" unless config.silent?
+          target = sandbox.root + name
+          target.rmtree if target.exist?
           downloader = Downloader.for_target(sandbox.root + name, @params)
           downloader.download
           if local_pod = sandbox.installed_pod_named(name, platform)
@@ -191,7 +204,7 @@ module Pod
         def copy_external_source_into_sandbox(sandbox, _)
           output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
           output_path.dirname.mkpath
-          puts "  * Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
+          puts "-> Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
           open(@params[:podspec]) do |io|
             output_path.open('w') { |f| f << io.read }
           end

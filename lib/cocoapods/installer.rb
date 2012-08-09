@@ -37,6 +37,11 @@ module Pod
       end.compact
     end
 
+    # Install the pods. If the resolver wants the installation of pod it is done
+    #   even if it exits. In any case if the pod doesn't exits it is installed.
+    #
+    # @return [void]
+    #
     def install_dependencies!
       pods.each do |pod|
         name = pod.top_specification.name
@@ -49,7 +54,6 @@ module Pod
           else
             name = pod.to_s
           end
-          name << " [HEAD]" if pod.top_specification.version.head?
           puts marker << ( should_install ?  "Installing #{name}".green : "Using #{name}" )
         end
 
@@ -122,7 +126,7 @@ module Pod
       puts "- Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
       project.save_as(@sandbox.project_path)
 
-      puts "- Writing lockfile in `#{lockfile.defined_in_file}'\n\n" if config.verbose?
+      puts "- Writing lockfile in `#{config.project_lockfile}'\n\n" if config.verbose?
       @lockfile = Lockfile.create(config.project_lockfile, @podfile, specs_by_target.values.flatten)
       @lockfile.write_to_disk
 

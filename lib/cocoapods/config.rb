@@ -49,7 +49,8 @@ module Pod
       @headers_symlink_root ||= "#{project_pods_root}/Headers"
     end
 
-    # Returns the spec at the pat returned from `project_podfile`.
+    # @return [Podfile] The Podfile to use for the current execution.
+    #
     def podfile
       @podfile ||= begin
         Podfile.from_file(project_podfile) if project_podfile.exist?
@@ -57,6 +58,8 @@ module Pod
     end
     attr_writer :podfile
 
+    # @return [Lockfile] The Lockfile to use for the current execution.
+    #
     def lockfile
       @lockfile ||= begin
         Lockfile.from_file(project_lockfile) if project_lockfile.exist?

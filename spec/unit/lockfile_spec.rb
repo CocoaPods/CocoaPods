@@ -42,7 +42,7 @@ describe "Pod::Lockfile" do
     File.open(tmp_path, 'w') {|f| f.write(sample) }
     lockfile = Pod::Lockfile.from_file(tmp_path)
     lockfile.defined_in_file.should == tmp_path
-    lockfile.to_dict.should == YAML.load(sample)
+    lockfile.to_hash.should == YAML.load(sample)
   end
 
   before do
@@ -54,7 +54,7 @@ describe "Pod::Lockfile" do
   end
 
   it "generates a valid Dictionary representation" do
-    @lockfile.to_dict.should == YAML.load(sample)
+    @lockfile.to_hash.should == YAML.load(sample)
   end
 
   it "returns the Podfile dependencies" do
@@ -64,7 +64,7 @@ describe "Pod::Lockfile" do
   end
 
   it "returns the dependencies for the installed pods" do
-    @lockfile.installed_dependencies.should == [
+    @lockfile.dependencies_for_pods.should == [
       Pod::Dependency.new("BananaLib", "= 1.0"),
       Pod::Dependency.new("monkey", "= 1.0.8")
     ]
@@ -73,7 +73,7 @@ describe "Pod::Lockfile" do
   it "can check if it is compatible with a file" do
     File.open(tmp_path, 'w') {|f| f.write(sample.gsub("COCOAPODS: #{Pod::VERSION}", "")) }
     lockfile = Pod::Lockfile.from_file(tmp_path)
-    lockfile.to_dict.should == nil
+    lockfile.should == nil
   end
 
   it "serializes correctly `:head' dependencies" do
@@ -93,13 +93,13 @@ describe "Pod::Lockfile" do
     ]
     specs.each { |s| s.activate_platform(:ios) }
     lockfile = Pod::Lockfile.create(tmp_path, podfile, specs)
-    lockfile.to_dict["DEPENDENCIES"][0].should == "BananaLib [HEAD]"
+    lockfile.to_hash["DEPENDENCIES"][0].should == "BananaLib (HEAD)"
   end
 
   it "serializes correctly external dependencies" do
     podfile = Pod::Podfile.new do
       platform :ios
-      pod 'BananaLib', :git => "www.example.com"
+      pod 'BananaLib', { :git => "www.example.com", :tag => '1.0' }
     end
     specs = [
       Pod::Specification.new do |s|
@@ -113,12 +113,36 @@ describe "Pod::Lockfile" do
     ]
     specs.each { |s| s.activate_platform(:ios) }
     lockfile = Pod::Lockfile.create(tmp_path, podfile, specs)
-    lockfile.to_dict["DEPENDENCIES"][0].should == "BananaLib (from `www.example.com')"
+    lockfile.to_hash["DEPENDENCIES"][0].should == "BananaLib (from `www.example.com', tag `1.0')"
+    lockfile.to_hash["EXTERNAL SOURCES"][0]["BananaLib"].should == { :git => "www.example.com", :tag => '1.0' }
   end
 
-  xit "reads `:heads' dependencies correctly" do
+  it "creates a dependency from a string" do
+    d = @lockfile.dependency_from_string("BananaLib (1.0)")
+    d.name.should == "BananaLib"
+    d.requirement.should =~ Pod::Version.new("1.0")
+    d.head.should.be.nil
+    d.external_source.should.be.nil
   end
 
-  xit "reads external dependencies dependencies correctly" do
+  it "creates a head dependency from a string" do
+    d = @lockfile.dependency_from_string("BananaLib (HEAD)")
+    d.name.should == "BananaLib"
+    d.requirement.should.be.none?
+    d.head.should.be.true
+    d.external_source.should.be.nil
+  end
+
+  it "creates an external dependency from a string" do
+    podfile = Pod::Podfile.new do
+      platform :ios
+      pod 'BananaLib', { :git => "www.example.com", :tag => '1.0' }
+    end
+    lockfile = Pod::Lockfile.create(tmp_path, podfile, [])
+    d = lockfile.dependency_from_string("BananaLib (from `www.example.com', tag `1.0')")
+    d.name.should == "BananaLib"
+    d.requirement.should.be.none?
+    d.external?.should.be.true
+    d.external_source.description.should == "from `www.example.com', tag `1.0'"
   end
 end

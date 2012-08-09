@@ -191,42 +191,175 @@ module Pod
       jsonkit.version.should.be.head
     end
 
-    xit "raises if it finds two conflicting dependencies" do
-
+    it "accepts a nil lockfile" do
+      lambda { Resolver.new(@podfile, nil, stub('sandbox'))}.should.not.raise
     end
 
-    describe "Concerning the Lockfile" do
-      xit "accepts a nil lockfile" do
-        lambda { Resolver.new(@podfile, nil, stub('sandbox'))}.should.not.raise
+    it "raises if it finds two conflicting dependencies" do
+      podfile = Podfile.new do
+        platform :ios
+        pod 'JSONKit', "1.4"
+        pod 'JSONKit', "1.5pre"
+      end
+      resolver = Resolver.new(podfile, nil, stub('sandbox'))
+      lambda {resolver.resolve}.should.raise Pod::Informative
+    end
+
+    describe "Concerning Installation mode" do
+      before do
+        config.repos_dir = fixture('spec-repos')
+        @podfile = Podfile.new do
+          platform :ios
+          pod 'BlocksKit'
+          pod 'JSONKit'
+        end
+        @specs = [
+          Pod::Specification.new do |s|
+            s.name = "BlocksKit"
+            s.version = "1.0.0"
+          end,
+          Pod::Specification.new do |s|
+            s.name = "JSONKit"
+            s.version = "1.4"
+          end ]
+        @specs.each { |s| s.activate_platform(:ios) }
+        @lockfile = Lockfile.create(nil, @podfile, @specs)
+        @resolver = Resolver.new(@podfile, @lockfile, stub('sandbox'))
       end
 
-      xit "detects the pods that need to be installed" do
-
+      it "doesn't install pods still compatible with the Podfile" do
+        @resolver.resolve
+        @resolver.should_install?("BlocksKit").should.be.false
+        @resolver.should_install?("JSONKit").should.be.false
       end
 
-      xit "detects the pods that don't need to be installed" do
-
+      it "doesn't updates pods still compatible with the Podfile" do
+        installed = @resolver.resolve.values.flatten.map(&:to_s)
+        installed.should.include? "JSONKit (1.4)"
       end
 
-      xit "detects the pods that can be updated" do
-
+      it "doesn't include pods removed from the Podfile" do
+        podfile = Podfile.new { platform :ios; pod 'JSONKit' }
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.resolve.values.flatten.map(&:name).should == %w{ JSONKit }
       end
 
-      xit "doesn't install new pods in `update_mode'" do
-
+      it "reinstalls pods updated in the Podfile" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', '1.5pre'
+          pod 'BlocksKit'
+        end
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        installed = @resolver.resolve.values.flatten.map(&:to_s)
+        installed.should.include? "BlocksKit (1.0.0)"
+        installed.should.include? "JSONKit (1.5pre)"
       end
 
-      xit "handles correctly pods with external source" do
-
+      it "installs pods added to the Podfile" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit'
+          pod 'BlocksKit'
+          pod 'libPusher'
+        end
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        installed = @resolver.resolve.values.flatten.map(&:to_s)
+        installed.should.include? "libPusher (1.3)"
       end
 
-      xit "it always suggest to update pods in head mode" do
-
+      it "handles head pods" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', :head   # Existing pod switched to head mode
+          pod 'libPusher', :head # New pod
+        end
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.resolve
+        @resolver.should_install?("JSONKit").should.be.true
+        @resolver.should_install?("libPusher").should.be.true
       end
 
-      xit "it prevents a pod from upgrading during an install" do
+      it "handles pods from external dependencies" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'libPusher', :git => 'GIT-URL'
+        end
+        spec = Spec.new do |s|
+          s.name         = 'libPusher'
+          s.version      = '1.3'
+        end
+        podfile.dependencies.first.external_source.stubs(:specification_from_sandbox).returns(spec)
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.resolve
+        @resolver.should_install?("JSONKit").should.be.false
+      end
+    end
+
+    describe "Concerning Update mode" do
+      before do
+        config.repos_dir = fixture('spec-repos')
+        @podfile = Podfile.new do
+          platform :ios
+          pod 'BlocksKit'
+          pod 'JSONKit'
+          pod 'libPusher'
+        end
+        @specs = [
+          Pod::Specification.new do |s|
+            s.name = "libPusher"
+            s.version = "1.3"
+          end,
+          Pod::Specification.new do |s|
+            s.name = "JSONKit"
+            s.version = "1.4"
+          end ]
+        @specs.each { |s| s.activate_platform(:ios) }
+        @lockfile = Lockfile.create(nil, @podfile, @specs)
+        @resolver = Resolver.new(@podfile, @lockfile, stub('sandbox'))
+        @resolver.update_mode = true
+      end
+
+      it "identifies the pods that can be updated" do
+        installed = @resolver.resolve.values.flatten.map(&:to_s)
+        installed.should.include? "JSONKit (1.5pre)"
+        @resolver.should_install?("JSONKit").should.be.true
+      end
+
+      it "respecs the constraints of the pofile" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'BlocksKit'
+          pod 'JSONKit', '1.4'
+        end
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.update_mode = true
+        installed = @resolver.resolve.values.flatten.map(&:to_s)
+        installed.should.include? "JSONKit (1.4)"
+        @resolver.should_install?("JSONKit").should.be.false
+      end
+
+      it "doesn't install new pods in `update_mode'" do
+        installed = @resolver.resolve.values.flatten.map(&:to_s)
+        installed.join(' ').should.not.include?('BlocksKit')
+        @resolver.should_install?("BlocksKit").should.be.false
+      end
+
+      it "it always suggests to update pods in head mode" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'libPusher', :head
+        end
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.update_mode = true
+        @resolver.resolve
+        @resolver.should_install?("libPusher").should.be.true
+      end
+
+      xit "it suggests to update pods from external sources" do
 
       end
     end
+
   end
 end

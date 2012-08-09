@@ -37,7 +37,7 @@ module Pod
       dep2 = Dependency.new { |s| s.name = 'bananas'; s.version = '1' }
       dep1.should == dep2
     end
-    
+
     it 'raises if created without either valid name/version/external requirements or a block' do
       lambda { Dependency.new }.should.raise Informative
     end
@@ -49,11 +49,11 @@ module Pod
           spec.version = "1.0.3"
         end
       end
-      
+
       it 'it identifies itself as an inline dependency' do
         @dependency.should.be.inline
       end
-      
+
       it 'attaches a custom spec to the dependency, configured by the block' do
         @dependency.specification.name.should == "my-custom-spec"
       end
@@ -73,7 +73,7 @@ module Pod
       it "identifies itself as a `bleeding edge' dependency" do
         dependency = Dependency.new("cocoapods", :head)
         dependency.should.be.head
-        dependency.to_s.should == "cocoapods [HEAD]"
+        dependency.to_s.should == "cocoapods (HEAD)"
       end
 
       it "only supports the `:head' option on the last version of a pod" do
@@ -98,7 +98,7 @@ module Pod
         Downloader.stubs(:for_target).returns(stub_everything)
 
         pod = mock('LocaPod', :downloaded= => true)
-        sandbox = stub('Sandbox', :root => '', :installed_pod_named => pod)
+        sandbox = stub('Sandbox', :root => temporary_sandbox.root, :installed_pod_named => pod)
         @dependency.external_source.copy_external_source_into_sandbox(sandbox, Platform.ios)
       end
     end

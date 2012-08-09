@@ -6,7 +6,7 @@ module Pod
 
     $ pod outdated
 
-      Shows the dependencies that would be installed by `pod update'. }
+      Show all of the outdated pods in the current Podfile.lock. }
       end
 
       def self.options
@@ -28,21 +28,51 @@ module Pod
           raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."
         end
 
-        # if @update_repo
-        #   print_title 'Updating Spec Repositories', true
-        #   Re"o.new(ARGV.new(["update"])).run
-        # end
+        if @update_repo
+          print_title 'Updating Spec Repositories', true
+          Repo.new(ARGV.new(["update"])).run
+        end
 
         sandbox = Sandbox.new(config.project_pods_root)
         resolver = Resolver.new(podfile, lockfile, sandbox)
         resolver.update_mode = true
+        resolver.updated_external_specs = false
         resolver.resolve
         specs_to_install = resolver.specs_to_install
+        external_pods = resolver.external_pods
+
+        known_update_specs = []
+        head_mode_specs = []
+        resolver.specs.each do |s|
+          next if external_pods.include?(s.name)
+          next unless specs_to_install.include?(s.name)
+
+          if s.version.head?
+            head_mode_specs << s.name
+          else
+            known_update_specs << s.to_s
+          end
+        end
+
         if specs_to_install.empty?
           puts "\nNo updates are available.\n".yellow
         else
-          puts "\nThe following updates are available:".green
-          puts "  - " << specs_to_install.join("\n  - ") << "\n\n"
+
+          unless known_update_specs.empty?
+            puts "\nThe following updates are available:".green
+            puts "  - " << known_update_specs.join("\n  - ") << "\n"
+          end
+
+          unless head_mode_specs.empty?
+            puts "\nThe following pods might present updates as they are in head mode:".green
+            puts "  - " << head_mode_specs.join("\n  - ") << "\n"
+          end
+
+          unless (external_pods).empty?
+            puts "\nThe following pods might present updates as they loaded from an external source:".green
+            puts "  - " << external_pods.join("\n  - ") << "\n"
+          end
+          puts
         end
       end
     end
