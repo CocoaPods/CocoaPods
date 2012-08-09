@@ -14,6 +14,7 @@ module Pod
       def download
         create_cache unless cache_exist?
         puts '-> Cloning git repo' if config.verbose?
+
         if options[:tag]
           download_tag
         elsif options[:branch]
@@ -23,6 +24,8 @@ module Pod
         else
           download_head
         end
+
+        Dir.chdir(target_path) { git "submodule update --init"  } if options[:submodules]
         prune_cache
       end
 
@@ -76,7 +79,6 @@ module Pod
           git "reset --hard HEAD"
           git "clean -d -x -f"
           git "pull"
-          git "submodule update"
         end
       end
 
@@ -105,7 +107,6 @@ module Pod
           create_cache
         end
         git %Q|clone "#{clone_url}" "#{target_path}"|
-        Dir.chdir(target_path) { git "submodule update --init" }
       end
 
       def download_tag
@@ -116,7 +117,6 @@ module Pod
           git "fetch origin tags/#{options[:tag]}"
           git "reset --hard FETCH_HEAD"
           git "checkout -b activated-pod-commit"
-          git "submodule update --init"
         end
       end
 
@@ -125,7 +125,6 @@ module Pod
         git %Q|clone "#{clone_url}" "#{target_path}"|
         Dir.chdir(target_path) do
           git "checkout -b activated-pod-commit #{options[:commit]}"
-          git "submodule update --init"
         end
       end
 
@@ -136,7 +135,6 @@ module Pod
           git "remote add upstream '#{@url}'" # we need to add the original url, not the cache url
           git "fetch -q upstream" # refresh the branches
           git "checkout --track -b activated-pod-commit upstream/#{options[:branch]}" # create a new tracking branch
-          git "submodule update --init"
           puts "Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}" if config.verbose?
         end
       end
