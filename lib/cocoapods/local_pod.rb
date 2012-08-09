@@ -232,18 +232,22 @@ module Pod
     # @return [Hash{Specification => Array<Pathname>}] The paths of the public
     #   header files grouped by {Specification}.
     #
-    # @TODO: complete, fix and comment
     # @TODO: decide a policy for subspecs
     #
-    def public_header_files_by_specs
-      cached_header_files_by_spec = header_files_by_spec
-      public_header_files = paths_by_spec(:source_files, :glob => '*.h')
+    def public_header_files_by_spec
+      build_headers  = header_files_by_spec
+      public_headers = paths_by_spec(:public_header_files, :glob => '*.h')
 
       result = {}
-      public_header_files.map do |spec, paths|
-        result[spec] = paths.empty? ? cached_header_files_by_spec[spec] : paths
+      # If no public header files are provided we use the build
+      # ones for the every spec/subspec.
+      public_headers.each do |spec, paths|
+        if !paths.empty?
+          result[spec] = paths
+        elsif (build_h = build_headers[spec]) && !build_h.empty?
+          result[spec] = build_h
+        end
       end
-
       result
     end
 
@@ -341,12 +345,12 @@ module Pod
     #
     def link_headers
       @sandbox.build_headers.add_search_path(headers_sandbox)
-      header_mappings.each do |namespaced_path, files|
+      header_mappings(header_files_by_spec).each do |namespaced_path, files|
         @sandbox.build_headers.add_files(namespaced_path, files)
       end
 
       @sandbox.public_headers.add_search_path(headers_sandbox)
-      public_header_mappings.each do |namespaced_path, files|
+      header_mappings(public_header_files_by_spec).each do |namespaced_path, files|
         @sandbox.public_headers.add_files(namespaced_path, files)
       end
     end
@@ -399,23 +403,9 @@ module Pod
     #
     # @todo This is not overridden anymore in specification refactor and the
     #   code Pod::Specification#copy_header_mapping can be moved here.
-    def header_mappings
+    def header_mappings(files_by_spec)
       mappings = {}
-      header_files_by_spec.each do |spec, paths|
-        paths = paths - headers_excluded_from_search_paths
-        paths.each do |from|
-          from_relative = from.relative_path_from(root)
-          to = headers_sandbox + (spec.header_dir) + spec.copy_header_mapping(from_relative)
-          (mappings[to.dirname] ||= []) << from
-        end
-      end
-      mappings
-    end
-
-    # TODO: complete, fix and comment
-    def public_header_mappings
-      mappings = {}
-      public_header_files_by_specs.each do |spec, paths|
+      files_by_spec.each do |spec, paths|
         paths = paths - headers_excluded_from_search_paths
         paths.each do |from|
           from_relative = from.relative_path_from(root)
