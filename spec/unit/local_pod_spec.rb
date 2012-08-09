@@ -278,7 +278,7 @@ describe Pod::LocalPod do
     end
 
     it "returns a hash of mappings with a custom header dir prefix" do
-      mappings = @pod.send(:header_mappings)
+      mappings = @pod.send(:header_mappings, @pod.header_files_by_spec)
       mappings = mappings.map do |folder, headers|
         "#{folder} > #{headers.sort.map{ |p| p.relative_path_from(@pod.root).to_s }.join(' ')}"
       end
@@ -289,7 +289,7 @@ describe Pod::LocalPod do
 
     it "respects the headers excluded from the search paths" do
       @pod.stubs(:headers_excluded_from_search_paths).returns([@pod.root + 'UIKit/Classes/UIKit.h'])
-      mappings = @pod.send(:header_mappings)
+      mappings = @pod.send(:header_mappings, @pod.header_files_by_spec)
       mappings = mappings.map do |folder, headers|
         "#{folder} > #{headers.sort.map{ |p| p.relative_path_from(@pod.root).to_s }.join(' ')}"
       end
@@ -298,11 +298,22 @@ describe Pod::LocalPod do
         "Chameleon/UIKit > UIKit/Classes/UIView.h UIKit/Classes/UIWindow.h" ]
     end
 
-    # This is done by the sandbox and this test should be moved
+    # @TODO: This is done by the sandbox and this test should be moved
     it "includes the sandbox of the pod's headers while linking" do
       @sandbox.build_headers.expects(:add_search_path).with(Pathname.new('Chameleon'))
       @sandbox.public_headers.expects(:add_search_path).with(Pathname.new('Chameleon'))
       @pod.link_headers
+    end
+
+    it "differentiates among public and build headers" do
+      subspecs = fixture_spec('chameleon/Chameleon.podspec').subspecs
+      spec = subspecs[0]
+      spec.stubs(:public_header_files).returns("UIKit/Classes/*Kit.h")
+      @pod = Pod::LocalPod.new(spec, @sandbox, Pod::Platform.new(:osx))
+      build_headers = @pod.header_files_by_spec.values.flatten.map{ |p| p.basename.to_s }
+      public_headers = @pod.public_header_files_by_spec.values.flatten.map{ |p| p.basename.to_s }
+      build_headers.sort.should == %w{ UIKit.h UIView.h UIWindow.h }
+      public_headers.should == %w{ UIKit.h }
     end
   end
 end
