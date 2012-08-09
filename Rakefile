@@ -99,6 +99,7 @@ namespace :gem do
         exit 1
       end
 
+      diff_lines.delete('Gemfile.lock')
       if diff_lines != ['lib/cocoapods.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
         exit 1
