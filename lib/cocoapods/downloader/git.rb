@@ -30,7 +30,7 @@ module Pod
         puts "-> Creating cache git repo (#{cache_path})" if config.verbose?
         cache_path.rmtree if cache_path.exist?
         cache_path.mkpath
-        clone(url, cache_path)
+        git %Q|clone "#{url}" "#{cache_path}"|
       end
 
       def prune_cache
@@ -95,7 +95,6 @@ module Pod
       def ensure_remote_branch_exists(branch)
         Dir.chdir(cache_path) { git "branch -r | grep #{branch}$" } # check for remote branch and do suffix matching ($ anchor)
         return if $? == 0
-
         raise Informative, "[!] Cache unable to find git reference `#{branch}' for `#{url}' (#{$?}).".red
       end
 
@@ -105,7 +104,8 @@ module Pod
         else
           create_cache
         end
-        clone(clone_url, target_path)
+        git %Q|clone "#{clone_url}" "#{target_path}"|
+        Dir.chdir(target_path) { git "submodule update --init" }
       end
 
       def download_tag
@@ -122,27 +122,22 @@ module Pod
 
       def download_commit
         ensure_ref_exists(options[:commit])
-        clone(clone_url, target_path)
+        git %Q|clone "#{clone_url}" "#{target_path}"|
         Dir.chdir(target_path) do
           git "checkout -b activated-pod-commit #{options[:commit]}"
+          git "submodule update --init"
         end
       end
 
       def download_branch
         ensure_remote_branch_exists(options[:branch])
-        clone(clone_url, target_path)
+        git %Q|clone "#{clone_url}" "#{target_path}"|
         Dir.chdir(target_path) do
           git "remote add upstream '#{@url}'" # we need to add the original url, not the cache url
           git "fetch -q upstream" # refresh the branches
           git "checkout --track -b activated-pod-commit upstream/#{options[:branch]}" # create a new tracking branch
-          puts "Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}" if config.verbose?
-        end
-      end
-
-      def clone(from, to)
-        git "clone \"#{from}\" \"#{to}\""
-        Dir.chdir(to) do
           git "submodule update --init"
+          puts "Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}" if config.verbose?
         end
       end
     end

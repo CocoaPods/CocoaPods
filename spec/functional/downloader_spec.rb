@@ -177,7 +177,7 @@ module Pod
         (pod.root + 'test.txt').should.exist?
       end
 
-      it "doesn't updates cache the if the ref is available" do
+      it "doesn't update the cache if the ref is available" do
         @pod.top_specification.stubs(:source).returns(
           :git => fixture('banana-lib'), :commit => 'fd56054'
         )
