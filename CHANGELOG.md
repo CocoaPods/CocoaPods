@@ -1,6 +1,16 @@
+## 0.11.1 (Unreleased)
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.0...master)
+
+###### Bug fixes
+
+- Fixed a crash related to subspecs without header files. [#449]
+- Git submodules are loaded after the appropriate referenced is checked out and will be not loaded anymore in the cache. [#451]
+- Fixed SVN support for the head version. [#432]
+
 ## 0.11.0
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.10.0...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.10.0...0.11.0)
 
 ###### Enhancements
 
