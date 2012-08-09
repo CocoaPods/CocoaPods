@@ -1,6 +1,6 @@
-## 0.11.1 (Unreleased)
+## 0.11.1
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.0...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.0...0.11.1)
 
 ###### Bug fixes
 
