@@ -35,8 +35,6 @@ describe Pod::Generator::Documentation do
       '--keep-intermediate-files',
       '--exit-threshold', '2',
       '--index-desc', 'README',
-      # TODO We need to either make this a hash so that options can be merged
-      # or not use any defaults in case an options are specified.
       '--project-company', 'Banana Corp',
       '--company-id', 'com.banana'
     ]

@@ -12,11 +12,11 @@ module Pod
       end
 
       def download_head
-        hg "clone \"#{url}\" \"#{target_path}\""
+        hg! "clone \"#{url}\" \"#{target_path}\""
       end
 
       def download_revision
-        hg "clone \"#{url}\" --rev '#{options[:revision]}' \"#{target_path}\""
+        hg! "clone \"#{url}\" --rev '#{options[:revision]}' \"#{target_path}\""
       end
     end
   end

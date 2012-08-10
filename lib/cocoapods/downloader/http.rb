@@ -52,17 +52,17 @@ module Pod
       end
 
       def download_file(full_filename)
-        curl "-L -o '#{full_filename}' '#{url}'"
+        curl! "-L -o '#{full_filename}' '#{url}'"
       end
 
       def extract_with_type(full_filename, type=:zip)
         case type
         when :zip
-          unzip "'#{full_filename}' -d '#{target_path}'"
+          unzip! "'#{full_filename}' -d '#{target_path}'"
         when :tgz
-          tar "xfz '#{full_filename}' -C '#{target_path}'"
+          tar! "xfz '#{full_filename}' -C '#{target_path}'"
         when :tar
-          tar "xf '#{full_filename}' -C '#{target_path}'"
+          tar! "xf '#{full_filename}' -C '#{target_path}'"
         else
           raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end

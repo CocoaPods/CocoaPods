@@ -1,12 +1,36 @@
+## Master
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.1...master)
+
+###### Enhancements
+
+- The documentation is generated using the public headers if they are specified.
+- In case of download failure, now the installation is aborted
+  the error message of the external command that failed is presented.
+- Git submodules are initialized only if requested.
+- Don’t impose a certain structure of the user’s project by raising if no ‘Frameworks’ group exists. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
+
+
+## 0.11.1
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.0...0.11.1)
+
+###### Bug fixes
+
+- Fixed a crash related to subspecs without header files. [#449]
+- Git submodules are loaded after the appropriate referenced is checked out and will be not loaded anymore in the cache. [#451]
+- Fixed SVN support for the head version. [#432]
+
+
 ## 0.11.0
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.10.0...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.10.0...0.11.0)
 
 ###### Enhancements
 
 - Added support for public headers. [#440]
 - Added `pod repo lint`. [#423]
-- Improved support for `:head` option and svn repositories.
+- Improved support for `:head` option and SVN repositories.
 - When integrating Pods with a project without "Frameworks" group in root of the project, raise an informative message. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
 - Dropped support for legacy `config.ios?` and `config.osx?`
 
@@ -14,6 +38,7 @@
 
 - Version message now correctly terminates with a 0 exit status.
 - Resolved an issue that lead to git error messages in the error report.
+
 
 ## 0.10.0
 
@@ -24,7 +49,6 @@
 - Added a `--local-only` option to `pod push` so that developers can push locally and test before pushing to a remote. [#405](http://git.io/0ILJEw)
 - Added line number information for errors generated in the Podfile. [#408](http://git.io/fWQvMg)
 - Pods stored in git repositories now initialize submodules. [#406](http://git.io/L9ssSw)
-
 
 ###### Bug fixes
 
@@ -222,7 +246,7 @@ class ::Pod::Generator::Acknowledgements
 end
 ```
 
-You can even go one step further and customise the text on a per target basis by 
+You can even go one step further and customise the text on a per target basis by
 checking against the target name, like this:
 
 ```ruby
@@ -328,8 +352,6 @@ podspec, then update these method calls.
 * Added weak quoting to `ibtool` input paths.
 
 
----------------------------------------
-
 ## 0.5.0
 
 No longer requires MacRuby. Runs on MRI 1.8.7 (OS X system version) and 1.9.3.
@@ -337,14 +359,10 @@ No longer requires MacRuby. Runs on MRI 1.8.7 (OS X system version) and 1.9.3.
 A full list of all the changes since 0.3.0 can be found [here][7].
 
 
----------------------------------------
-
 ## 0.4.0
 
 Oops, accidentally skipped this version.
 
-
----------------------------------------
 
 ## 0.3.0
 

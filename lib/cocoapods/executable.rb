@@ -20,7 +20,8 @@ module Pod
 
     def executable(name)
       bin = `which #{name}`.strip
-      define_method(name) do |command|
+      base_method = "base_" << name.to_s
+      define_method(base_method) do |command, should_raise|
         if bin.empty?
           raise Informative, "Unable to locate the executable `#{name}'"
         end
@@ -33,9 +34,27 @@ module Pod
         end
         status = Open4.spawn(full_command, :stdout => stdout, :stderr => stderr, :status => true)
         # TODO not sure that we should be silent in case of a failure.
-        puts (Config.instance.verbose? ? '   ' : '') << "[!] Failed: #{full_command}".red unless status.success? || Config.instance.silent?
-        stdout.join("\n") + stderr.join("\n") # TODO will this suffice?
+
+        output = stdout.join("\n") + stderr.join("\n") # TODO will this suffice?
+        unless status.success?
+          if should_raise
+            raise Informative, "#{name} #{command}\n\n#{output}"
+          else
+            puts (Config.instance.verbose? ? '   ' : '') << "[!] Failed: #{full_command}".red unless Config.instance.silent?
+          end
+        end
+        output
       end
+
+      define_method(name) do |command|
+        send(base_method, command, false)
+      end
+
+      define_method(name.to_s + "!") do |command|
+        send(base_method, command, true)
+      end
+
+
       private name
     end
   end

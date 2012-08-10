@@ -11,7 +11,7 @@ describe Pod::LocalPod do
       copy_fixture_to_pod('banana-lib', @pod)
     end
 
-    it 'returns the Pod root directory path' do
+    it "returns the Pod root directory path" do
       @pod.root.should == @sandbox.root + 'BananaLib'
     end
 
@@ -25,20 +25,20 @@ describe Pod::LocalPod do
       Pathname(@pod.root + "foo").should.exist
     end
 
-    it 'can delete itself' do
+    it "can delete itself" do
       @pod.create
       @pod.implode
       @pod.root.should.not.exist
     end
 
-    it 'returns an expanded list of source files, relative to the sandbox root' do
+    it "returns an expanded list of source files, relative to the sandbox root" do
       @pod.relative_source_files.sort.should == [
         Pathname.new("BananaLib/Classes/Banana.m"),
         Pathname.new("BananaLib/Classes/Banana.h")
       ].sort
     end
 
-    it 'returns the source files groupped by specification' do
+    it "returns the source files groupped by specification" do
       files = @pod.source_files_by_spec[@pod.specifications.first].sort
       files.should == [
         @pod.root + "Classes/Banana.m",
@@ -46,16 +46,16 @@ describe Pod::LocalPod do
       ].sort
     end
 
-    it 'returns a list of header files' do
+    it "returns a list of header files" do
       @pod.relative_header_files.should == [Pathname.new("BananaLib/Classes/Banana.h")]
     end
 
-    it 'returns a list of header files by specification' do
+    it "returns a list of header files by specification" do
       files = @pod.header_files_by_spec[@pod.specifications.first].sort
       files.should == [ @pod.root + "Classes/Banana.h" ]
     end
 
-    it 'returns an expanded list the files to clean' do
+    it "returns an expanded list the files to clean" do
       clean_paths = @pod.clean_paths.map { |p| p.to_s.gsub(/.*Pods\/BananaLib/,'') }
       clean_paths.should.include "/.git/config"
       # * There are some hidden files on Travis
@@ -64,7 +64,7 @@ describe Pod::LocalPod do
       clean_files_without_hidden.should == %W[ /sub-dir /sub-dir/sub-dir-2 /sub-dir/sub-dir-2/somefile.txt ]
     end
 
-    it 'returns an expanded list of resources, relative to the sandbox root' do
+    it "returns an expanded list of resources, relative to the sandbox root" do
       @pod.relative_resource_files.should == [Pathname.new("BananaLib/Resources/logo-sidebar.png")]
     end
 
@@ -244,12 +244,19 @@ describe Pod::LocalPod do
       assert_array_equals(expected, computed)
     end
 
-    it "resolves the header files of **every** subspec" do
-      computed = @pod.all_specs_public_header_files.map { |p| p.relative_path_from(@pod.root).to_s }
+    it "resolves the documentation header files including not activated subspecs" do
+      subspecs = fixture_spec('chameleon/Chameleon.podspec').subspecs
+      spec = subspecs[0]
+      spec.stubs(:public_header_files).returns("UIKit/Classes/*Kit.h")
+      @pod = Pod::LocalPod.new(spec, @sandbox, Pod::Platform.new(:osx))
+      # Note we only activated UIKit but all the specs need to be resolved
+      computed = @pod.documentation_headers.map { |p| p.relative_path_from(@pod.root).to_s }
+
+      # The Following headers are private:
+      # UIKit/Classes/UIView.h
+      # UIKit/Classes/UIWindow.h
       expected = %w[
         UIKit/Classes/UIKit.h
-        UIKit/Classes/UIView.h
-        UIKit/Classes/UIWindow.h
         StoreKit/Classes/SKPayment.h
         StoreKit/Classes/StoreKit.h
         MessageUI/Classes/MessageUI.h

@@ -42,7 +42,7 @@ module Pod
       end
 
       def files
-        @pod.all_specs_public_header_files.map{ |f| f.relative_path_from(@pod.root).to_s }
+        @pod.documentation_headers.map{ |f| f.relative_path_from(@pod.root).to_s }
       end
 
       def index_file

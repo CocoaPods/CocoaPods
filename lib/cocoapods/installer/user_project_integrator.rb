@@ -1,6 +1,9 @@
 require 'xcodeproj/workspace'
 require 'xcodeproj/project'
 
+require 'active_support/core_ext/string/inflections'
+require 'active_support/core_ext/array/conversions'
+
 module Pod
   class Installer
 
@@ -69,10 +72,8 @@ module Pod
           return if targets.empty?
 
           unless Config.instance.silent?
-            # TODO let's just use ActiveSupport.
-            plural = targets.size > 1
-            puts "-> Integrating `#{@target_definition.lib_name}' into target#{'s' if plural} " \
-                 "`#{targets.map(&:name).join(', ')}' of Xcode project `#{user_project_path.basename}'.".green
+            puts "-> Integrating `#{@target_definition.lib_name}' into #{'target'.pluralize(targets.size)} " \
+                 "`#{targets.map(&:name).to_sentence}' of Xcode project `#{user_project_path.basename}'.".green
           end
 
           add_xcconfig_base_configuration
@@ -141,10 +142,8 @@ module Pod
         end
 
         def add_pods_library
-          framework_group = user_project.group("Frameworks")
-          raise Informative, "Cannot add pod library to project. Please check if the project have a 'Frameworks' group in the root of the project." unless framework_group
-
-          pods_library = framework_group.files.new_static_library(@target_definition.label)
+          group = user_project.group("Frameworks") || user_project.main_group
+          pods_library = group.files.new_static_library(@target_definition.label)
           targets.each do |target|
             target.frameworks_build_phases.each { |build_phase| build_phase << pods_library }
           end

@@ -3,6 +3,12 @@ require File.expand_path('../../spec_helper', __FILE__)
 describe Pod::Installer::UserProjectIntegrator do
   extend SpecHelper::TemporaryDirectory
 
+  def integrate!
+    @integrator = Pod::Installer::UserProjectIntegrator.new(@podfile)
+    @integrator.integrate!
+    @sample_project = Xcodeproj::Project.new(@sample_project_path)
+  end
+
   before do
     config.silent = true
     @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
@@ -23,10 +29,24 @@ describe Pod::Installer::UserProjectIntegrator do
       end
     end
 
-    @integrator = Pod::Installer::UserProjectIntegrator.new(@podfile)
-    @integrator.integrate!
-
     @sample_project = Xcodeproj::Project.new(@sample_project_path)
+  end
+
+  it 'adds references to the Pods static libraries to the root of the project if the Frameworks group does not exist' do
+    @sample_project.group('Frameworks').destroy
+    @sample_project.save_as(@sample_project_path)
+    integrate!
+    @sample_project.main_group.files.where(:name => "libPods.a").should.not == nil
+    @sample_project.main_group.files.where(:name => "libPods-test_runner.a").should.not == nil
+  end
+
+  before do
+    integrate!
+  end
+
+  it 'adds references to the Pods static libraries to the Frameworks group' do
+    @sample_project.group('Frameworks').files.where(:name => "libPods.a").should.not == nil
+    @sample_project.group('Frameworks').files.where(:name => "libPods-test_runner.a").should.not == nil
   end
 
   it 'creates a workspace with a name matching the project' do
@@ -52,11 +72,6 @@ describe Pod::Installer::UserProjectIntegrator do
         config.base_configuration.should == xcconfig_file
       end
     end
-  end
-
-  it 'adds references to the Pods static libraries' do
-    @sample_project.files.where(:name => "libPods.a").should.not == nil
-    @sample_project.files.where(:name => "libPods-test_runner.a").should.not == nil
   end
 
   it 'adds the libPods static library to the "Link binary with libraries" build phase of each target' do
