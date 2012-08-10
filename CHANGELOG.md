@@ -1,3 +1,14 @@
+## Master
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.1...master)
+
+###### Enhancements
+
+- The documentation is generated using the public headers if they are specified.
+- In case of download failure, now the installation is aborted
+  the error message of the external command that failed is presented.
+- Git submodules are initialized only if requested.
+
 ## 0.11.1
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.0...0.11.1)
@@ -16,7 +27,7 @@
 
 - Added support for public headers. [#440]
 - Added `pod repo lint`. [#423]
-- Improved support for `:head` option and svn repositories.
+- Improved support for `:head` option and SVN repositories.
 - When integrating Pods with a project without "Frameworks" group in root of the project, raise an informative message. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
 - Dropped support for legacy `config.ios?` and `config.osx?`
 
@@ -232,7 +243,7 @@ class ::Pod::Generator::Acknowledgements
 end
 ```
 
-You can even go one step further and customise the text on a per target basis by 
+You can even go one step further and customise the text on a per target basis by
 checking against the target name, like this:
 
 ```ruby
