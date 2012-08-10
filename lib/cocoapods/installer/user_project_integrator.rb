@@ -1,6 +1,9 @@
 require 'xcodeproj/workspace'
 require 'xcodeproj/project'
 
+require 'active_support/core_ext/string/inflections'
+require 'active_support/core_ext/array/conversions'
+
 module Pod
   class Installer
 
@@ -69,10 +72,8 @@ module Pod
           return if targets.empty?
 
           unless Config.instance.silent?
-            # TODO let's just use ActiveSupport.
-            plural = targets.size > 1
-            puts "-> Integrating `#{@target_definition.lib_name}' into target#{'s' if plural} " \
-                 "`#{targets.map(&:name).join(', ')}' of Xcode project `#{user_project_path.basename}'.".green
+            puts "-> Integrating `#{@target_definition.lib_name}' into #{'target'.pluralize(targets.size)} " \
+                 "`#{targets.map(&:name).to_sentence}' of Xcode project `#{user_project_path.basename}'.".green
           end
 
           add_xcconfig_base_configuration
