@@ -316,27 +316,35 @@ module Pod
     end
 
     # Computes the paths of all the public headers of the pod including every
-    # subspec. For this reason the pod must not be cleaned before calling it.
+    # subspec (activated or not).
+    # For this reason the pod must not be cleaned when calling this command.
     #
     # This method is used by {Generator::Documentation}.
     #
     # @raise [Informative] If the pod was cleaned.
     #
-    # @todo Merge with #221
-    #
     # @return [Array<Pathname>] The path of all the public headers of the pod.
     #
-    def all_specs_public_header_files
+    def documentation_headers
       if @cleaned
         raise Informative, "The pod is cleaned and cannot compute the " \
                            "header files, as some might have been deleted."
       end
 
-      all_specs = [ top_specification ] + top_specification.subspecs
-      options   = {:glob => '*.{h}'}
-      files     = paths_by_spec(:source_files, options, all_specs).values.flatten
-      headers   = files.select { |f| f.extname == '.h' }
-      headers
+      specs = [top_specification] + top_specification.recursive_subspecs
+      source_files   = paths_by_spec(:source_files, { :glob => '*.{h}'}, specs)
+      public_headers = paths_by_spec(:public_header_files,{ :glob => '*.{h}'}, specs)
+
+      result = []
+      specs.each do |spec|
+        if (public_h = public_headers[spec]) && !public_h.empty?
+          result += public_h
+        elsif (source_f = source_files[spec]) && !source_f.empty?
+          build_h = source_f.select { |f| f.extname == '.h' }
+          result += build_h unless build_h.empty?
+        end
+      end
+      result
     end
 
     # @!group Target integration
