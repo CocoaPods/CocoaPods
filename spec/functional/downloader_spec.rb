@@ -15,6 +15,14 @@ module Pod
         downloader.download
         (@pod.root + 'README').read.strip.should == 'first commit'
       end
+
+      it "raises if it fails to download" do
+        @pod.top_specification.stubs(:source).returns(
+          :hg => "find me if you can", :revision => '46198bb3af96'
+        )
+        downloader = Downloader.for_pod(@pod)
+        lambda { downloader.download }.should.raise Informative
+      end
     end
 
     describe "for Subversion" do
@@ -45,6 +53,14 @@ module Pod
         downloader.download_head
         (@pod.root + 'README').read.strip.should == 'unintersting'
       end
+
+      it "raises if it fails to download" do
+        @pod.top_specification.stubs(:source).returns(
+          :svn => "find me if you can", :revision => '1'
+        )
+        downloader = Downloader.for_pod(@pod)
+        lambda { downloader.download }.should.raise Informative
+      end
     end
 
 
@@ -60,6 +76,14 @@ module Pod
 
         (@pod.root + 'GoogleAdMobSearchAdsSDK/GADSearchRequest.h').should.exist
         (@pod.root + 'GoogleAdMobSearchAdsSDK/GADSearchRequest.h').read.strip.should =~ /Google Search Ads iOS SDK/
+      end
+
+      it "raises if it fails to download" do
+        @pod.top_specification.stubs(:source).returns(
+          :http => 'find me if you can.zip'
+        )
+        downloader = Downloader.for_pod(@pod)
+        lambda { downloader.download }.should.raise Informative
       end
     end
   end

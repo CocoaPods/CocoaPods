@@ -108,7 +108,7 @@ module Pod
       Downloader::Git::MAX_CACHE_SIZE = original_chace_size
     end
 
-    xit "raises if it can't find the url" do
+    it "raises if it can't find the url" do
       @pod.top_specification.stubs(:source).returns(
         :git => 'find_me_if_you_can'
       )
@@ -193,6 +193,7 @@ module Pod
       )
       downloader = Downloader.for_pod(@pod)
       downloader.download
+      @pod.root.rmtree
       downloader.expects(:update_cache).never
       downloader.download
     end

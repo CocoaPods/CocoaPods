@@ -4,11 +4,11 @@ module Pod
       executable :svn
 
       def download
-        svn %|checkout "#{reference_url}" "#{target_path}"|
+        svn! %|checkout "#{reference_url}" "#{target_path}"|
       end
 
       def download_head
-        svn %|checkout "#{trunk_url}" "#{target_path}"|
+        svn! %|checkout "#{trunk_url}" "#{target_path}"|
       end
 
       def reference_url
