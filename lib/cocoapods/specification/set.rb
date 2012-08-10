@@ -1,3 +1,5 @@
+require 'active_support/core_ext/array/conversions'
+
 module Pod
   class Specification
     class Set
@@ -18,7 +20,7 @@ module Pod
           # TODO add graph that shows which dependencies led to this.
           raise Informative, "#{specification} tries to activate `#{dependency}', " \
                              "but already activated version `#{required_version}' " \
-                             "by #{@required_by.join(', ')}."
+                             "by #{@required_by.to_sentence}."
         end
         @specification = nil
         @required_by << specification
