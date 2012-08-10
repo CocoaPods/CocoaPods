@@ -8,6 +8,9 @@
 - In case of download failure, now the installation is aborted
   the error message of the external command that failed is presented.
 - Git submodules are initialized only if requested.
+- Don’t impose a certain structure of the user’s project by raising if no ‘Frameworks’ group exists. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
+
+-------------------------------------------------------------------------------
 
 ## 0.11.1
 
@@ -18,6 +21,8 @@
 - Fixed a crash related to subspecs without header files. [#449]
 - Git submodules are loaded after the appropriate referenced is checked out and will be not loaded anymore in the cache. [#451]
 - Fixed SVN support for the head version. [#432]
+
+-------------------------------------------------------------------------------
 
 ## 0.11.0
 
@@ -36,6 +41,8 @@
 - Version message now correctly terminates with a 0 exit status.
 - Resolved an issue that lead to git error messages in the error report.
 
+-------------------------------------------------------------------------------
+
 ## 0.10.0
 
 [CocoaPods](http://git.io/4i75YA)
@@ -46,7 +53,6 @@
 - Added line number information for errors generated in the Podfile. [#408](http://git.io/fWQvMg)
 - Pods stored in git repositories now initialize submodules. [#406](http://git.io/L9ssSw)
 
-
 ###### Bug fixes
 
 - Removed note about the post install hook form the linter.
@@ -55,6 +61,7 @@
 - Clean downloaded external pods **after** resolving and activating (sub)specs. [#414](http://git.io/i77q_w)
 - Support `tar.gz` as filename in a HTTP source. [#428](http://git.io/qhwKkA)
 
+-------------------------------------------------------------------------------
 
 ## 0.9.2
 
@@ -65,6 +72,7 @@
 - When generating the PodsDummy class, make that class unique to each target. [#402](http://git.io/NntYiQ)
 - Raise an informative error message when the platform in the `Podfile` is omitted or incorrect. [#403](http://git.io/k5EcUQ)
 
+-------------------------------------------------------------------------------
 
 ## 0.9.1
 
@@ -74,6 +82,7 @@
 
 - CocoaPods 0.9.x needs Xcodeproj 0.3.0.
 
+-------------------------------------------------------------------------------
 
 ## 0.9.0
 
@@ -92,6 +101,7 @@
 - Exit early when using an old RubyGems version (< 1.4.0). These versions contain subtle bugs
   related to prerelease version comparisons. Unfortunately, OS X >= 10.7 ships with 1.3.6. [#398](http://git.io/Lr7DoA)
 
+-------------------------------------------------------------------------------
 
 ## 0.8.0
 
@@ -111,6 +121,7 @@ pod 'Reachability', '~> 2.0.4'
 
 - Properly quote all paths given to Git.
 
+-------------------------------------------------------------------------------
 
 ## 0.7.0
 
@@ -130,6 +141,7 @@ pod 'Reachability', '~> 2.0.4'
 - Improvements to `pod spec lint`.
 - CocoaPods is now case insensitive.
 
+-------------------------------------------------------------------------------
 
 ## 0.6.1
 
@@ -142,6 +154,7 @@ pod 'Reachability', '~> 2.0.4'
 - Fixed a bug that caused subspecs to not inherit the compiler flags of the top level specification.
 - Fixed a bug that caused duplication of system framworks.
 
+-------------------------------------------------------------------------------
 
 ## 0.6.0
 
@@ -348,8 +361,7 @@ podspec, then update these method calls.
 
 * Added weak quoting to `ibtool` input paths.
 
-
----------------------------------------
+-------------------------------------------------------------------------------
 
 ## 0.5.0
 
@@ -357,15 +369,13 @@ No longer requires MacRuby. Runs on MRI 1.8.7 (OS X system version) and 1.9.3.
 
 A full list of all the changes since 0.3.0 can be found [here][7].
 
-
----------------------------------------
+-------------------------------------------------------------------------------
 
 ## 0.4.0
 
 Oops, accidentally skipped this version.
 
-
----------------------------------------
+-------------------------------------------------------------------------------
 
 ## 0.3.0
 
