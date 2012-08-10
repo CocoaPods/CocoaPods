@@ -20,7 +20,8 @@ module Pod
 
     def executable(name)
       bin = `which #{name}`.strip
-      define_method(name) do |command, should_raise = false|
+      base_method = "base_" << name.to_s
+      define_method(base_method) do |command, should_raise|
         if bin.empty?
           raise Informative, "Unable to locate the executable `#{name}'"
         end
@@ -45,9 +46,14 @@ module Pod
         output
       end
 
-      define_method(name.to_s + "!") do |command|
-        send(name, command, true)
+      define_method(name) do |command|
+        send(base_method, command, false)
       end
+
+      define_method(name.to_s + "!") do |command|
+        send(base_method, command, true)
+      end
+
 
       private name
     end
