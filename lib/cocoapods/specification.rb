@@ -195,10 +195,20 @@ module Pod
     top_attr_accessor :summary
     top_attr_accessor :documentation
     top_attr_accessor :requires_arc
-    top_attr_accessor :version,             lambda { |v| Version.new(v) }
-
+    top_attr_accessor :wants_head
     top_attr_reader   :description,         lambda { |instance, ivar| ivar || instance.summary }
     top_attr_writer   :description,         lambda { |d| d.strip_heredoc }
+
+    # @!method version
+    #
+    top_attr_reader :version, lambda { |instance, ivar|
+      ivar.head = true if instance.wants_head
+      ivar
+    }
+
+    # @!method version=
+    #
+    top_attr_writer :version, lambda { |v| Version.new(v) }
 
     # @!method license
     #
