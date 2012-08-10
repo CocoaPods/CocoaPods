@@ -447,13 +447,7 @@ module Pod
     end
 
     def to_s
-      if !version
-        name
-      elsif version.head?
-        "#{name} (HEAD from #{version})"
-      else
-        "#{name} (#{version})"
-      end
+      version ? "#{name} (#{version})" : name
     end
 
     def inspect
