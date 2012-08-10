@@ -75,9 +75,10 @@ module Pod
       case version
       when nil
         Dependency.new(name)
+      when /defined in Podfile/
+        # @TODO: store the whole spec?, the version?
+        Dependency.new(name)
       when /from `(.*)'/
-        # @TODO: find a way to serialize the external specs and support
-        #  all the options
         external_source_info = external_sources.find {|hash| hash.keys[0] == name} || {}
         Dependency.new(name, external_source_info[name])
       when /HEAD/
