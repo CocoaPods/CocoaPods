@@ -1,3 +1,5 @@
+require 'active_support/core_ext/array/conversions'
+
 module Pod
   class Specification
     class Set
@@ -13,7 +15,7 @@ module Pod
         unless @required_by.empty? || dependency.requirement.satisfied_by?(Gem::Version.new(required_version.to_s))
           raise Informative, "#{dependent_name} tries to activate `#{dependency}', " \
                              "but already activated version `#{required_version}' " \
-                             "by #{@required_by.join(', ')}."
+                             "by #{@required_by.to_sentence}."
         end
         @specification = nil
         @required_by << dependent_name

@@ -78,7 +78,7 @@ module Pod
         Dir.chdir(cache_path) do
           git! "reset --hard HEAD"
           git! "clean -d -x -f"
-          git! "pull"
+          git! "pull origin master"
         end
       end
 

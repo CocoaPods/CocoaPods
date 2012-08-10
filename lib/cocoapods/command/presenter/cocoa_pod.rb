@@ -1,3 +1,5 @@
+require 'active_support/core_ext/array/conversions'
+
 module Pod
   class Command
     class Presenter
@@ -27,7 +29,7 @@ module Pod
         end
 
         def authors
-          oxfordify spec.authors.keys
+          spec.authors.keys.to_sentence
         end
 
         def homepage
@@ -89,13 +91,6 @@ module Pod
         end
 
         private
-        def oxfordify words
-          if words.size < 3
-            words.join ' and '
-          else
-            "#{words[0..-2].join(', ')}, and #{words.last}"
-          end
-        end
 
         def distance_from_now_in_words(from_time)
           return nil unless from_time

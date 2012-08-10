@@ -15,7 +15,7 @@ You specify the dependencies for your project in one easy text file. CocoaPods r
 
 Ultimately, the goal is to improve discoverability of, and engagement in, third party open-source libraries, by creating a more centralized ecosystem.
 
-See the [NSScreencast episode about CocoaPods](http://nsscreencast.com/episodes/5-cocoapods) for a quick overview on how to get started, or [the wiki](https://github.com/CocoaPods/CocoaPods/wiki) for more in depth information on several topics.
+See the [NSScreencast](https://twitter.com/NSScreencast) episode about [using CocoaPods](http://nsscreencast.com/episodes/5-cocoapods) for a quick overview on how to get started or [create a Pod specification](http://nsscreencast.com/episodes/28-creating-a-cocoapod), or [the wiki](https://github.com/CocoaPods/CocoaPods/wiki) for more in depth information on several topics.
 
 Or, if you’re already using CocoaPods, you can find the changelog [here](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md), which contains an overview of the changes in recent versions.
 

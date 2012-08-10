@@ -1,4 +1,5 @@
 require 'escape'
+require 'active_support/core_ext/array/conversions'
 
 module Pod
   module Generator
@@ -23,7 +24,7 @@ module Pod
 
       def company
         if @specification.authors
-          @specification.authors.keys.sort.join(', ')
+          @specification.authors.keys.sort.to_sentence
         else
           'no-company'
         end
