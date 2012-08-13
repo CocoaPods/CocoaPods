@@ -2,11 +2,11 @@ module Pod
   class Command
     class Outdated < Command
       def self.banner
-%{Updates dependencies of a project:
+%{Show outdated pods:
 
     $ pod outdated
 
-      Show all of the outdated pods in the current Podfile.lock. }
+      Shows the outdated pods in the current Podfile.lock. }
       end
 
       def self.options

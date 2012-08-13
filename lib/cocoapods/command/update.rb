@@ -2,12 +2,11 @@ module Pod
   class Command
     class Update < Command
       def self.banner
-%{Updates dependencies of a project:
+%{Updating dependencies of a project:
 
     $ pod update
 
-      Updates all dependencies installed by `pod install`. It doesn't
-      install new dependencies. }
+      Updates all dependencies.}
       end
 
       def self.options
