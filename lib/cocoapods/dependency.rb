@@ -55,16 +55,6 @@ module Pod
       !@external_source.nil?
     end
 
-    def =~(other)
-      if head?
-        name === other.name && other.head?
-      elsif external?
-        name === other.name && external_source == other.external_source
-      else
-        super && !other.head? && !other.external?
-      end
-    end
-
     # In case this is a dependency for a subspec, e.g. 'RestKit/Networking',
     # this returns 'RestKit', which is what the Pod::Source needs to know to
     # retrieve the correct Set from disk.
@@ -174,7 +164,9 @@ module Pod
 
         def specification_from_external(sandbox, platform)
           copy_external_source_into_sandbox(sandbox, platform)
-          specification_from_local(sandbox, platform)
+          spec = specification_from_local(sandbox, platform)
+          raise Informative, "No podspec found for `#{name}` in #{description}" unless spec
+          spec
         end
 
         def ==(other)
