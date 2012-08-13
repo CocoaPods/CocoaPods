@@ -101,6 +101,10 @@ module Pod
       @external_source.specification_from_sandbox(sandbox, platform)
     end
 
+    def match_version?(version)
+      match?(name, version) && (version.head? == head?)
+    end
+
     # Taken from RubyGems 1.3.7
     unless public_method_defined?(:match?)
       def match?(spec_name, spec_version)
@@ -139,6 +143,7 @@ module Pod
 
     module ExternalSources
       def self.from_params(name, params)
+        return unless name && params
         if params.key?(:git)
           GitSource.new(name, params)
         elsif params.key?(:podspec)
@@ -172,9 +177,9 @@ module Pod
           specification_from_local(sandbox, platform)
         end
 
-        def ==(other_source)
-          return if other_source.nil?
-          name == other_source.name && params == other_source.params
+        def ==(other)
+          return if other.nil?
+          name == other.name && params == other.params
         end
       end
 

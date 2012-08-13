@@ -73,14 +73,10 @@ else
           resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
           installer = Pod::Installer.new(resolver)
           installer.install!
-          installer.lockfile.to_hash.should == {
-            'PODS' => ['SSToolkit (0.1.3)'],
-            'DEPENDENCIES' => ["SSToolkit (from `#{url}', commit `#{commit}')"],
-            'EXTERNAL SOURCES' => [ {"SSToolkit" => {
-              :git=>"/Users/fabio/Documents/GitHub/CP/CocoaPods/spec/fixtures/integration/sstoolkit", :commit=>"2adcd0f81740d6b0cd4589af98790eee3bd1ae7b"
-            }}],
-            'COCOAPODS' => Pod::VERSION
-          }
+          result = installer.lockfile.to_hash
+          result['PODS'].should  == ['SSToolkit (0.1.3)']
+          result['DEPENDENCIES'].should == ["SSToolkit (from `#{url}', commit `#{commit}')"]
+          result['EXTERNAL SOURCES'].should == {"SSToolkit" => { :git=>url, :commit=>commit}}
         end
 
         it "installs a library with a podspec outside of the repo" do
@@ -92,18 +88,13 @@ else
             pod 'Reachability', :podspec => url
           end
 
-
           resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
           installer = SpecHelper::Installer.new(resolver)
           installer.install!
-
-          installer.lockfile.to_hash.should == {
-            'PODS' => [ 'Reachability (1.2.3)' ],
-            'DEPENDENCIES' => ["Reachability (from `#{url}')"],
-            "EXTERNAL SOURCES"=>[{"Reachability"=>{
-              :podspec=>"https://raw.github.com/gist/1349824/3ec6aa60c19113573fc48eac19d0fafd6a69e033/Reachability.podspec"}}],
-            'COCOAPODS' => Pod::VERSION
-          }
+          result = installer.lockfile.to_hash
+          result['PODS'].should  == ['Reachability (1.2.3)']
+          result['DEPENDENCIES'].should == ["Reachability (from `#{url}')"]
+          result['EXTERNAL SOURCES'].should == {"Reachability"=>{ :podspec=>"https://raw.github.com/gist/1349824/3ec6aa60c19113573fc48eac19d0fafd6a69e033/Reachability.podspec"}}
         end
 
         it "installs a dummy source file" do
@@ -203,19 +194,19 @@ else
           installer = SpecHelper::Installer.new(resolver)
           installer.install!
 
+          result = installer.lockfile.to_hash
+          result['PODS'].should  == [
+            { "ASIHTTPRequest (1.8.1)" =>                   ["ASIHTTPRequest/ASIWebPageRequest (= 1.8.1)",
+                                                             "ASIHTTPRequest/CloudFiles (= 1.8.1)",
+                                                             "ASIHTTPRequest/S3 (= 1.8.1)",
+                                                             "Reachability"]},
+           { "ASIHTTPRequest/ASIWebPageRequest (1.8.1)" =>  ["Reachability"] },
+           { "ASIHTTPRequest/CloudFiles (1.8.1)" =>         ["Reachability"] },
+           { "ASIHTTPRequest/S3 (1.8.1)" =>                 ["Reachability"] },
+           "JSONKit (1.4)",
+           "Reachability (3.0.0)"]
+          result['DEPENDENCIES'].should == ["ASIHTTPRequest", "JSONKit (= 1.4)"]
           # TODO might be nicer looking to not show the dependencies of the top level spec for each subspec (Reachability).
-          installer.lockfile.to_hash.should == {
-            "PODS" => [{ "ASIHTTPRequest (1.8.1)" => ["ASIHTTPRequest/ASIWebPageRequest (= 1.8.1)",
-                                                      "ASIHTTPRequest/CloudFiles (= 1.8.1)",
-                                                      "ASIHTTPRequest/S3 (= 1.8.1)",
-                                                      "Reachability"]},
-                       { "ASIHTTPRequest/ASIWebPageRequest (1.8.1)" => ["Reachability"] },
-                       { "ASIHTTPRequest/CloudFiles (1.8.1)" => ["Reachability"] },
-                       { "ASIHTTPRequest/S3 (1.8.1)" => ["Reachability"] },
-                       "JSONKit (1.4)", "Reachability (3.0.0)"],
-            "DEPENDENCIES" => ["ASIHTTPRequest", "JSONKit (= 1.4)"],
-            "COCOAPODS" => Pod::VERSION
-          }
 
           should_xcodebuild(podfile.target_definitions[:ios_target])
           should_xcodebuild(podfile.target_definitions[:osx_target])
@@ -313,7 +304,9 @@ else
           lockfile_contents['PODS'].delete_at(1)
           # lockfile_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
         end
-        installer.lockfile.to_hash.should == lockfile_contents
+        result = installer.lockfile.to_hash
+        result.delete("SPECS CHECKSUM")
+        result.should == lockfile_contents
 
         root = config.project_pods_root
         (root + 'Pods.xcconfig').read.should == installer.target_installers.first.xcconfig.to_s
@@ -335,12 +328,9 @@ else
           installer = SpecHelper::Installer.new(resolver)
           installer.install!
 
-          installer.lockfile.to_hash.tap {|d| d.delete("COCOAPODS") }.should == {
-            # 'PODS' => [{ 'Reachability (2.0.4)' => ["ASIHTTPRequest (>= 1.8)"] }],
-            'PODS' => [ 'Reachability (2.0.4)' ],
-            # 'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
-            'DEPENDENCIES' => ["Reachability (= 2.0.4)"]
-          }
+          result = installer.lockfile.to_hash
+          result['PODS'].should == [ 'Reachability (2.0.4)' ]
+          result['DEPENDENCIES'].should == ["Reachability (= 2.0.4)"]
         end
       end
 

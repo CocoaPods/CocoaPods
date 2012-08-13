@@ -4,6 +4,16 @@ module Pod
   class Resolver
     include Config::Mixin
 
+    # @return [Bool] Whether the resolver should find the pods to install or
+    #   the pods to update.
+    #
+    attr_accessor :update_mode
+
+    # @return [Bool] Whether the resolver should update the external specs
+    #   in the resolution process.
+    #
+    attr_accessor :update_external_specs
+
     # @return [Podfile] The Podfile used by the resolver.
     #
     attr_reader :podfile
@@ -17,117 +27,79 @@ module Pod
     #
     attr_reader :sandbox
 
-    # @return [Bool] Whether the resolver should find the pods to install or
-    #   the pods to update.
-    #
-    attr_accessor :update_mode
-
-    # @return [Bool] Whether the resolver should update the external specs
-    #   in the resolution process.
-    #
-    attr_accessor :updated_external_specs
-
     # @return [Array<Strings>] The name of the pods coming from an
     #   external sources
     #
-    attr_reader :external_pods
+    attr_reader :pods_from_external_sources
 
     # @return [Array<Set>] The set used to resolve the dependencies.
     #
-    attr_accessor :cached_sets
+    attr_reader :cached_sets
 
     # @return [Source::Aggregate] A cache of the sources needed to find the
     #   podspecs.
     #
-    attr_accessor :cached_sources
+    attr_reader :cached_sources
+
+    # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
+    #   Returns the resolved specifications grouped by target.
+    #
+    attr_reader :specs_by_target
 
     def initialize(podfile, lockfile, sandbox)
       @podfile  = podfile
       @lockfile = lockfile
       @sandbox  = sandbox
+
+      @update_external_specs = true
       @cached_sets = {}
       @cached_sources = Source::Aggregate.new
+      @cached_specs = {}
+      @specs_by_target = {}
+      @pods_from_external_sources = []
+      @dependencies_podfile_incompatible = []
       @log_indent = 0;
-      @updated_external_specs = true
     end
 
     # Identifies the specifications that should be installed according whether
     #   the resolver is in update mode or not.
     #
-    # @return [void]
+    # @return [Hash{Podfile::TargetDefinition => Array<Specification>}] specs_by_target
     #
     def resolve
-      if config.verbose?
-        unless podfile_dependencies.empty?
-          puts "\nAlready installed Podfile dependencies detected (Podfile.lock):".green
-          podfile_dependencies.each {|dependency| puts "  - #{dependency}" }
+      if @lockfile
+        puts "\nFinding added, modified or removed dependencies:".green if config.verbose?
+        @pods_by_state = @lockfile.detect_changes_with_podfile(podfile)
+        if config.verbose?
+          @pods_by_state.each do |symbol, pod_names|
+            case symbol
+            when :added
+              mark = "A".green
+            when :changed
+              mark = "M".yellow
+            when :removed
+              mark = "R".red
+            when :unchanged
+              mark = "-"
+            end
+            pod_names.each do |pod_name|
+              puts "  #{mark} " << pod_name
+            end
+          end
         end
-        unless dependencies_for_pods.empty?
-          puts "\nInstalled Pods detected (Podfile.lock):".green
-          dependencies_for_pods.each {|dependency| puts "  - #{dependency}" }
-        end
+        pods_not_to_lock = @pods_by_state[:added] + @pods_by_state[:changed] + @pods_by_state[:removed]
+        lock_versions(lockfile.pods_names - pods_not_to_lock) unless update_mode
       end
-
-      @cached_specs = {}
-      @targets_and_specs = {}
-      @external_pods = []
-      @dependencies_podfile_incompatible = []
-      @removed_pods = []
-
-      lock_dependencies_version unless update_mode
 
       @podfile.target_definitions.values.each do |target_definition|
         puts "\nResolving dependencies for target `#{target_definition.name}' (#{target_definition.platform}):".green if config.verbose?
         @loaded_specs = []
         find_dependency_specs(@podfile, target_definition.dependencies, target_definition)
-        @targets_and_specs[target_definition] = @cached_specs.values_at(*@loaded_specs).sort_by(&:name)
+        @specs_by_target[target_definition] = @cached_specs.values_at(*@loaded_specs).sort_by(&:name)
       end
 
       @cached_specs.values.sort_by(&:name)
-      @targets_and_specs
-    end
-
-    # @return [Bool] Whether a pod should be installed/reinstalled.
-    #
-    def should_install?(name)
-      specs_to_install.include?(name)
-    end
-
-    # @return [Array<String>] The list of the names of the pods that need
-    #   to be installed.
-    #
-    #   - Install mode: a specification will be installed only if its
-    #     dependency in Podfile changed since the last installation.
-    #     New Pods will always be installed and Pods already installed will be
-    #     reinstalled only if they are not compatible anymore with the Podfile.
-    #   - Update mode: a Pod will be installed only if there is a new
-    #     version and it was already installed. In no case new Pods will be
-    #     installed.
-    #
-    def specs_to_install
-      @specs_to_install ||= begin
-        specs = @targets_and_specs.values.flatten
-        to_install = []
-        specs.each do |spec|
-          if update_mode
-            # Installation mode
-            installed_dependency = dependencies_for_pods.find{|d| d.name == spec.name }
-            outdated = installed_dependency && !installed_dependency.matches_spec?(spec)
-            head = spec.version.head?
-            if outdated || head || @external_pods.include?(spec.pod_name)
-              to_install << spec
-            end
-          else
-            # Installation mode
-            spec_incompatible_with_podfile = @dependencies_podfile_incompatible.any?{ |d| d.name == spec.name }
-            spec_installed = dependencies_for_pods.any?{ |d| d.name == spec.name }
-            if !spec_installed || spec_incompatible_with_podfile
-              to_install << spec unless @external_pods.include?(spec.pod_name)
-            end
-          end
-        end
-        to_install.map{ |s| s.top_level_parent.name }.uniq
-      end
+      @specs_by_target
     end
 
     # @return [Array<Specification>] The specifications loaded by the resolver.
@@ -136,23 +108,46 @@ module Pod
       @cached_specs.values.uniq
     end
 
-
-    # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
-    #   Returns the resolved specifications grouped by target.
+    # @return [Bool] Whether a pod should be installed/reinstalled.
     #
-    def specs_by_target
-      @targets_and_specs
+    def should_install?(name)
+      pods_to_install.include? name
+    end
+
+    # @return [Array<Strings>] The name of the pods that should be
+    #   installed/reinstalled.
+    #
+    def pods_to_install
+      unless @pods_to_install
+        if lockfile
+          @pods_to_install = specs.select { |spec|
+            spec.version != lockfile.pods_versions[spec.pod_name]
+          }.map(&:name)
+          if update_mode
+            @pods_to_install += specs.select { |spec|
+              spec.version.head? || pods_from_external_sources.include?(spec.pod_name)
+            }.map(&:name)
+          end
+          @pods_to_install += @pods_by_state[:added] + @pods_by_state[:changed]
+        else
+          @pods_to_install = specs.map(&:name)
+        end
+      end
+      @pods_to_install
     end
 
     # @return [Array<Strings>] The name of the pods that were installed
-    #   but don't have any dependency anymore.
+    #   but don't have any dependency anymore. It returns the name
+    #   of the Pod stripped from subspecs.
     #
     def removed_pods
-      if update_mode
-        [] # It should never remove any pod in update mode
-      else
-        [] # @TODO: Implement
+      return [] unless lockfile
+      unless @removed_pods
+        previusly_installed = lockfile.pods_names.map { |pod_name| pod_name.split('/').first }
+        installed = specs.map { |spec| spec.name.split('/').first }
+        @removed_pods = previusly_installed - installed
       end
+      @removed_pods
     end
 
     private
@@ -162,52 +157,17 @@ module Pod
     #
     # @return [void]
     #
-    def lock_dependencies_version
+    def lock_versions(pods)
       return unless lockfile
-
-      puts "\nFinding updated or removed pods:".green if config.verbose?
-      podfile_deps_names = podfile_dependencies.map(&:name)
-
-      dependencies_for_pods.each do |dependency|
-        # Skip the dependency if it was not requested in the Podfile in the
-        # previous installation.
-        next unless podfile_deps_names.include?(dependency.name)
-        podfile_dependency = podfile.dependencies.find { |d| d.name == dependency.name }
-        # Don't lock the dependency if it can't be found in the Podfile as it
-        # it means that it was removed.
-        unless podfile_dependency
-          puts "  R ".red << dependency.to_s if config.verbose?
-          @removed_pods << dependency.name #TODO: use the pod name?
-          next
-        end
-        # Check if the dependency necessary to load the pod is still compatible with
-        # the podfile.
-        # @TODO: pattern match might not be the most appropriate method.
-        if podfile_dependency =~ dependency
-          puts "  - " << dependency.to_s if config.verbose?
-          set = find_cached_set(dependency, nil)
-          set.required_by(dependency, lockfile.to_s)
-        else
-          puts "  U ".yellow << "#{dependency} -> #{podfile_dependency}" if config.verbose?
-          @dependencies_podfile_incompatible << dependency
-        end
+      # Add a specific Dependency to lock the version in the resolution process
+      pods.each do |pod_name|
+        version = lockfile.pods_versions[pod_name]
+        raise Informative, "Attempt to lock a Pod without an known version." unless version
+        dependency = Dependency.new(pod_name, version)
+        set = find_cached_set(dependency, nil)
+        set.required_by(dependency, lockfile.to_s)
       end
     end
-
-    # @return [Array<Dependency>] Cached copy of the dependencies that require
-    #   the installed pods with their exact version.
-    #
-    def dependencies_for_pods
-      @dependencies_for_pods ||= lockfile ? lockfile.dependencies_for_pods : []
-    end
-
-    # @return [Array<Dependency>] Cached copy of the Podfile dependencies used
-    #   during the last install.
-    #
-    def podfile_dependencies
-      @podfile_dependencies ||= lockfile ? lockfile.podfile_dependencies : []
-    end
-
 
     # @return [Set] The cached set for a given dependency.
     #
@@ -217,12 +177,11 @@ module Pod
         if dependency.specification
           Specification::Set::External.new(dependency.specification)
         elsif external_source = dependency.external_source
-          # The platform isn't actually being used by the LocalPod instance
-          # that's being used behind the scenes, but passing it anyways for
-          # completeness sake.
-          if update_mode && updated_external_specs
+          if update_mode && update_external_specs
+            # Always update external sources in update mode.
             specification = external_source.specification_from_external(@sandbox, platform)
           else
+            # Don't update external sources in install mode if not needed.
             specification = external_source.specification_from_sandbox(@sandbox, platform)
           end
           set = Specification::Set::External.new(specification)
@@ -238,6 +197,10 @@ module Pod
 
     # Resolves the dependencies of a specification and stores them in @cached_specs
     #
+    # @param [Specification] dependent_specification
+    # @param [Array<Dependency>] dependencies
+    # @param [TargetDefinition] target_definition
+    #
     # @return [void]
     #
     def find_dependency_specs(dependent_specification, dependencies, target_definition)
@@ -247,18 +210,10 @@ module Pod
         set = find_cached_set(dependency, target_definition.platform)
         set.required_by(dependency, dependent_specification.to_s)
 
-        # Ensure that we don't load new pods in update mode
-        # @TODO: filter the dependencies of the target before calling #find_dependency_specs
-        if update_mode
-        mode_wants_spec = dependencies_for_pods.any?{ |d| d.name == dependency.name }
-        else
-          mode_wants_spec = true
-        end
-
         # Ensure we don't resolve the same spec twice for one target
-        if mode_wants_spec && !@loaded_specs.include?(dependency.name)
+        unless @loaded_specs.include?(dependency.name)
           spec = set.specification_by_name(dependency.name)
-          @external_pods << spec.pod_name if dependency.external?
+          @pods_from_external_sources << spec.pod_name if dependency.external?
           @loaded_specs << spec.name
           @cached_specs[spec.name] = spec
           # Configure the specification

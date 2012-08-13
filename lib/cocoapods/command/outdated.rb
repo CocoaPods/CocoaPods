@@ -36,16 +36,16 @@ module Pod
         sandbox = Sandbox.new(config.project_pods_root)
         resolver = Resolver.new(podfile, lockfile, sandbox)
         resolver.update_mode = true
-        resolver.updated_external_specs = false
+        resolver.update_external_specs = false
         resolver.resolve
-        specs_to_install = resolver.specs_to_install
-        external_pods = resolver.external_pods
+        pods_to_install = resolver.pods_to_install
+        external_pods   = resolver.pods_from_external_sources
 
         known_update_specs = []
         head_mode_specs = []
         resolver.specs.each do |s|
           next if external_pods.include?(s.name)
-          next unless specs_to_install.include?(s.name)
+          next unless pods_to_install.include?(s.name)
 
           if s.version.head?
             head_mode_specs << s.name
@@ -54,7 +54,7 @@ module Pod
           end
         end
 
-        if specs_to_install.empty?
+        if pods_to_install.empty?
           puts "\nNo updates are available.\n".yellow
         else
 

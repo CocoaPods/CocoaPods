@@ -58,18 +58,16 @@ module Pod
         end
 
         if should_install
-          pod.implode
-          download_pod(pod)
-          # This will not happen if the pod existed before we started the install
-          # process.
-          if pod.downloaded?
-            # The docs need to be generated before cleaning because the
-            # documentation is created for all the subspecs.
-            generate_docs(pod)
-            # Here we clean pod's that just have been downloaded or have been
-            # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
-            pod.clean! if config.clean?
+          unless pod.downloaded?
+            pod.implode
+            download_pod(pod)
           end
+          # The docs need to be generated before cleaning because the
+          # documentation is created for all the subspecs.
+          generate_docs(pod)
+          # Here we clean pod's that just have been downloaded or have been
+          # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
+          pod.clean! if config.clean?
         end
       end
     end
@@ -100,11 +98,25 @@ module Pod
       end
     end
 
+    # @TODO: use the local pod implode
+    #
+    def remove_deleted_dependencies!
+      resolver.removed_pods.each do |pod_name|
+        marker = config.verbose ? "\n-> ".red : ''
+        path = sandbox.root + pod_name
+        puts marker << "Removing #{pod_name}".red
+        path.rmtree if path.exist?
+      end
+    end
+
     def install!
       @sandbox.prepare_for_install
 
       print_title "Resolving dependencies of: #{@podfile.defined_in_file}"
       specs_by_target
+
+      print_title "Removing deleted dependencies" unless resolver.removed_pods.empty?
+      remove_deleted_dependencies!
 
       print_title "Installing dependencies"
       install_dependencies!
@@ -123,12 +135,12 @@ module Pod
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
       run_post_install_hooks
 
-      puts "- Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
+      puts "- Writing Xcode project file to `#{@sandbox.project_path}'" if config.verbose?
       project.save_as(@sandbox.project_path)
 
       puts "- Writing lockfile in `#{config.project_lockfile}'\n\n" if config.verbose?
-      @lockfile = Lockfile.create(config.project_lockfile, @podfile, specs_by_target.values.flatten)
-      @lockfile.write_to_disk
+      @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
+      @lockfile.write_to_disk(config.project_lockfile)
 
       UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
     end
