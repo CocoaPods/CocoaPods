@@ -37,8 +37,9 @@ module Pod
       end.compact
     end
 
-    # Install the pods. If the resolver wants the installation of pod it is done
-    #   even if it exits. In any case if the pod doesn't exits it is installed.
+    # Install the Pods. If the resolver indicated that a Pod should be installed
+    #   and it exits, it is removed an then reinstalled. In any case if the Pod
+    #   doesn't exits it is installed.
     #
     # @return [void]
     #
@@ -149,7 +150,7 @@ module Pod
       # we loop over target installers instead of pods, because we yield the target installer
       # to the spec post install hook.
       target_installers.each do |target_installer|
-        @specs_by_target[target_installer.target_definition].each do |spec|
+        specs_by_target[target_installer.target_definition].each do |spec|
           spec.post_install(target_installer)
         end
       end
@@ -170,6 +171,15 @@ module Pod
       target_installer.target.source_build_phases.first << project_file
     end
 
+    def specs_by_target
+      @specs_by_target ||= @resolver.resolve
+    end
+
+    # @return [Array<Specification>]  All dependencies that have been resolved.
+    def specifications
+      specs_by_target.values.flatten
+    end
+
     # @return [Array<LocalPod>]  A list of LocalPod instances for each
     #                            dependency that is not a download-only one.
     def pods
@@ -186,14 +196,6 @@ module Pod
         end.uniq.compact
       end
       result
-    end
-
-    def specifications
-      specs_by_target.values.flatten
-    end
-
-    def specs_by_target
-      @specs_by_target ||= @resolver.resolve
     end
 
     private

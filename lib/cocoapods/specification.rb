@@ -447,7 +447,7 @@ module Pod
     end
 
     def to_s
-      version ? "#{name} (#{version})" : name
+      "#{name} (#{version})"
     end
 
     def inspect

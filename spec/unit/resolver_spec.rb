@@ -356,6 +356,7 @@ module Pod
         @resolver.should_install?("libPusher").should.be.true
       end
 
+      # TODO: stub the specification resolution for the sandbox
       xit "it always suggests to update pods from external sources" do
         podfile = Podfile.new do
           platform :ios

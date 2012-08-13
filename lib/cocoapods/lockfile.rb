@@ -27,19 +27,9 @@ module Pod
     #
     attr_reader :to_hash
 
-    # @param [Pathname] the path of the Lockfile.
-    #   If no other value is provided the Lockfile is read from this path.
-    # @param [Podfile] the Podfile to use for generating the Lockfile.
-    # @param [specs] the specs installed.
+    # @param [Hash] hash A Hash representation of a Lockfile.
     #
     def initialize(hash)
-      if Version.new(hash["COCOAPODS"]) <= Version.new("0.11")
-        # Convert old format to be compatible
-        # - Pods:
-        #   - libPusher (1.0) [HEAD] -> libPusher (HEAD from 1.0)
-        # - Dependencies:
-        #   - libPusher [HEAD] -> libPusher (HEAD)
-      end
       @to_hash = hash
     end
 
@@ -217,7 +207,8 @@ module Pod
       to_hash.to_yaml.gsub(/^--- ?\n/,"").gsub(/^([A-Z])/,"\n\\1")
     end
 
-    # @return [Dictionary] The Dictionary representation of the Lockfile.
+    # @return [Hash] The Hash representation of the Lockfile generated from
+    #   a given Podfile and the list of resolved Specifications.
     #
     def self.generate_hash_from_podfile(podfile, specs)
       hash = {}

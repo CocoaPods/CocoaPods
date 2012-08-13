@@ -22,17 +22,17 @@ module Pod
     #
     attr_reader :lockfile
 
-    # @return [Lockfile] The Sandbox used by the resolver to find external
+    # @return [Sandbox] The Sandbox used by the resolver to find external
     #   dependencies.
     #
     attr_reader :sandbox
 
-    # @return [Array<Strings>] The name of the pods coming from an
-    #   external sources
+    # @return [Array<Strings>] The name of the pods that have an
+    #   external source.
     #
     attr_reader :pods_from_external_sources
 
-    # @return [Array<Set>] The set used to resolve the dependencies.
+    # @return [Array<Set>] A cache of the sets used to resolve the dependencies.
     #
     attr_reader :cached_sets
 
@@ -50,15 +50,10 @@ module Pod
       @podfile  = podfile
       @lockfile = lockfile
       @sandbox  = sandbox
-
       @update_external_specs = true
+
       @cached_sets = {}
       @cached_sources = Source::Aggregate.new
-      @cached_specs = {}
-      @specs_by_target = {}
-      @pods_from_external_sources = []
-      @dependencies_podfile_incompatible = []
-      @log_indent = 0;
     end
 
     # Identifies the specifications that should be installed according whether
@@ -67,6 +62,11 @@ module Pod
     # @return [Hash{Podfile::TargetDefinition => Array<Specification>}] specs_by_target
     #
     def resolve
+      @cached_specs = {}
+      @specs_by_target = {}
+      @pods_from_external_sources = []
+      @log_indent = 0;
+
       if @lockfile
         puts "\nFinding added, modified or removed dependencies:".green if config.verbose?
         @pods_by_state = @lockfile.detect_changes_with_podfile(podfile)
@@ -137,8 +137,8 @@ module Pod
     end
 
     # @return [Array<Strings>] The name of the pods that were installed
-    #   but don't have any dependency anymore. It returns the name
-    #   of the Pod stripped from subspecs.
+    #   but don't have any dependency anymore. The name of the Pods are
+    #   stripped from subspecs.
     #
     def removed_pods
       return [] unless lockfile
@@ -152,8 +152,7 @@ module Pod
 
     private
 
-    # Locks the version of the previously installed pods if they are still
-    #   compatible and were required by the Podfile.
+    # Locks the given Pods to the version stored in the Lockfile.
     #
     # @return [void]
     #
@@ -221,8 +220,8 @@ module Pod
           spec.version.head = dependency.head?
           # And recursively load the dependencies of the spec.
           find_dependency_specs(spec, spec.dependencies, target_definition) if spec.dependencies
-          validate_platform(spec || @cached_specs[dependency.name], target_definition)
         end
+        validate_platform(spec || @cached_specs[dependency.name], target_definition)
       end
       @log_indent -= 1
     end
