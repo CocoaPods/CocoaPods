@@ -80,6 +80,19 @@ module Pod
       @pods_versions
     end
 
+    # @return [Dependency] A dependency that describes the exact installed version
+    #   of a Pod.
+    #
+    def dependency_for_installed_pod_named(name)
+      version = pods_versions[name]
+      raise Informative, "Attempt to lock a Pod without an known version." unless version
+      dependency = Dependency.new(name, version)
+      if external_source = external_sources[name]
+        dependency.external_source = Dependency::ExternalSources.from_params(dependency.name, external_source)
+      end
+      dependency
+    end
+
     # @param [String] The string that describes a {Specification} generated
     #   from {Specification#to_s}.
     #

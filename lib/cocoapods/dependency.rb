@@ -3,9 +3,9 @@ require 'open-uri'
 module Pod
   class Dependency < Gem::Dependency
 
-    attr_reader :external_source, :head
+    attr_reader :head
     alias :head? :head
-    attr_accessor :specification
+    attr_accessor :specification, :external_source
 
     def initialize(*name_and_version_requirements, &block)
       if name_and_version_requirements.empty? && block
