@@ -65,7 +65,8 @@ module Pod
       @cached_specs = {}
       @specs_by_target = {}
       @pods_from_external_sources = []
-      @log_indent = 0;
+      @pods_to_lock = []
+      @log_indent = 0
 
       if @lockfile
         puts "\nFinding added, modified or removed dependencies:".green if config.verbose?
@@ -87,8 +88,7 @@ module Pod
             end
           end
         end
-        pods_not_to_lock = @pods_by_state[:added] + @pods_by_state[:changed] + @pods_by_state[:removed]
-        lock_versions(lockfile.pods_names - pods_not_to_lock) unless update_mode
+        @pods_to_lock = (lockfile.pods_names - @pods_by_state[:added] - @pods_by_state[:changed] - @pods_by_state[:removed]).uniq
       end
 
       @podfile.target_definitions.values.each do |target_definition|
@@ -152,22 +152,6 @@ module Pod
 
     private
 
-    # Locks the given Pods to the version stored in the Lockfile.
-    #
-    # @return [void]
-    #
-    def lock_versions(pods)
-      return unless lockfile
-      # Add a specific Dependency to lock the version in the resolution process
-      pods.each do |pod_name|
-        version = lockfile.pods_versions[pod_name]
-        raise Informative, "Attempt to lock a Pod without an known version." unless version
-        dependency = Dependency.new(pod_name, version)
-        set = find_cached_set(dependency, nil)
-        set.required_by(dependency, lockfile.to_s)
-      end
-    end
-
     # @return [Set] The cached set for a given dependency.
     #
     def find_cached_set(dependency, platform)
@@ -205,6 +189,11 @@ module Pod
     def find_dependency_specs(dependent_specification, dependencies, target_definition)
       @log_indent += 1
       dependencies.each do |dependency|
+        # Replace the dependency with a more specific one if the pod is already installed.
+        if !update_mode && @pods_to_lock.include?(dependency.name)
+          dependency = lockfile.dependency_for_installed_pod_named(dependency.name)
+        end
+
         puts '  ' * @log_indent + "- #{dependency}" if config.verbose?
         set = find_cached_set(dependency, target_definition.platform)
         set.required_by(dependency, dependent_specification.to_s)
