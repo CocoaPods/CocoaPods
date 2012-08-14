@@ -389,10 +389,6 @@ module Pod
       !source.nil? && !source[:local].nil?
     end
 
-    def local_path
-      Pathname.new(File.expand_path(source[:local]))
-    end
-
     def pod_destroot
       if local?
         local_path

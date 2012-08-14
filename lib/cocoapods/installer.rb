@@ -21,7 +21,11 @@ module Pod
       @project.user_build_configurations = @podfile.user_build_configurations
       pods.each do |pod|
         # Add all source files to the project grouped by pod
-        group = @project.add_pod_group(pod.name)
+        if pod.local?
+          group = @project.add_local_pod_group(pod.name)
+        else
+          group = @project.add_pod_group(pod.name)
+        end
         pod.relative_source_files.each do |path|
           group.files.new('path' => path.to_s)
         end
@@ -192,7 +196,11 @@ module Pod
       specs_by_target.each do |target_definition, specs|
         @pods_by_spec[target_definition.platform] = {}
         result[target_definition] = specs.map do |spec|
-          @sandbox.local_pod_for_spec(spec, target_definition.platform)
+          if spec.local?
+            LocalPod::LocalSourcedPod.new(spec, sandbox, target_definition.platform)
+          else
+            @sandbox.local_pod_for_spec(spec, target_definition.platform)
+          end
         end.uniq.compact
       end
       result

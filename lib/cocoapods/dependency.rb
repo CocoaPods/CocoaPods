@@ -138,6 +138,8 @@ module Pod
           GitSource.new(name, params)
         elsif params.key?(:podspec)
           PodspecSource.new(name, params)
+        elsif params.key?(:local)
+          LocalSource.new(name, params)
         else
           raise Informative, "Unknown external source parameters for #{name}: #{params}"
         end
@@ -209,6 +211,35 @@ module Pod
 
         def description
           "from `#{@params[:podspec]}'"
+        end
+      end
+
+      class LocalSource < AbstractExternalSource
+        def pod_spec_path
+          root = Pathname.new(@params[:local])
+          path = spec_path = Dir[root + "*.podspec"].first
+          Pathname.new(path)
+        end
+
+        def copy_external_source_into_sandbox(sandbox, _)
+          output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
+          output_path.dirname.mkpath
+          FileUtils.copy(pod_spec_path, output_path)
+        end
+
+        def specification_from_local(sandbox, platform)
+          specification_from_external(sandbox, platform)
+        end
+
+        def specification_from_external(sandbox, platform)
+          copy_external_source_into_sandbox(sandbox, platform)
+          spec = Specification.from_file(pod_spec_path)
+          spec.source = @params
+          spec
+        end
+
+        def description
+          "from `#{@params[:local]}'"
         end
       end
     end

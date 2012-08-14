@@ -98,9 +98,7 @@ module Pod
     #                  the pods comes from a local source.
     #
     def to_s
-      result = top_specification.to_s
-      result << " [LOCAL]" if top_specification.local?
-      result
+      top_specification.to_s
     end
 
     # @return [String] The name of the Pod.
@@ -140,6 +138,10 @@ module Pod
     #
     def implode
       root.rmtree if exists?
+    end
+
+    def local?
+      false
     end
 
     # @!group Cleaning
@@ -500,6 +502,40 @@ module Pod
         end
         Pathname.glob(pattern, File::FNM_CASEFOLD)
       end.flatten
+    end
+
+    # A {LocalSourcedPod} is a {LocalPod} that interacts with the files of
+    # a folder controlled by the users. As such this class does not alter
+    # in any way the contents of the folder.
+    #
+    class LocalSourcedPod < LocalPod
+      def downloaded?
+        true
+      end
+
+      def create
+        # No ops
+      end
+
+      def root
+        Pathname.new(@top_specification.defined_in_file).dirname
+      end
+
+      def implode
+        # No ops
+      end
+
+      def clean!
+        # No ops
+      end
+
+      def to_s
+        super + " [LOCAL]"
+      end
+
+      def local?
+        true
+      end
     end
   end
 end
