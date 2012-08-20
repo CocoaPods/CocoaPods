@@ -289,6 +289,9 @@ module Pod
       @target_definition.link_with = targets
     end
 
+    # Inhibits **all** warnings from the Pods library.
+    #
+    # When used, this is applied to all targets inheriting from the current one.
     def inhibit_all_warnings!
       @target_definition.inhibit_all_warnings = true
     end

@@ -11,6 +11,7 @@
 - Don’t impose a certain structure of the user’s project by raising if no ‘Frameworks’ group exists. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
 - Support for GitHub Gists in the linter.
 - Allow to specify ARC settings in subspecs.
+- Add Podfile#inhibit_all_warnings! which will inhibit all warnings from the Pods library. [#209](https://github.com/CocoaPods/CocoaPods/issues/209)
 
 
 ## 0.11.1
