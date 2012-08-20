@@ -254,7 +254,7 @@ module Pod
 
       checksums = {}
       specs.select {|spec| !spec.defined_in_file.nil? }.each do |spec|
-        checksums[spec.name] = Digest::SHA1.hexdigest(File.read(spec.defined_in_file)).to_s
+        checksums[spec.name] = Digest::SHA1.hexdigest(File.read(spec.defined_in_file)).encode('UTF-8')
       end
       hash["SPECS CHECKSUM"] = checksums unless checksums.empty?
       hash["COCOAPODS"] = VERSION
