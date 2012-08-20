@@ -305,7 +305,7 @@ else
           # lockfile_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
         end
         result = installer.lockfile.to_hash
-        result.delete("SPECS CHECKSUM")
+        result.delete("SPEC CHECKSUMS")
         result.should == lockfile_contents
 
         root = config.project_pods_root
