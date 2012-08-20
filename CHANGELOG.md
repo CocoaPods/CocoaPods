@@ -9,6 +9,8 @@
   the error message of the external command that failed is presented.
 - Git submodules are initialized only if requested.
 - Don’t impose a certain structure of the user’s project by raising if no ‘Frameworks’ group exists. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
+- Support for GitHub Gists in the linter.
+- Allow to specify ARC settings in subspecs.
 
 
 ## 0.11.1
