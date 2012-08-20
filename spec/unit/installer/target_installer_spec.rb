@@ -66,6 +66,15 @@ describe Pod::Installer::TargetInstaller do
     @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
   end
 
+  it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
+    @installer.xcconfig.to_hash['GCC_WARN_INHIBIT_ALL_WARNINGS'].should == 'NO'
+  end
+
+  it "enables the GCC_WARN_INHIBIT_ALL_WARNINGS flag" do
+    @podfile.inhibit_all_warnings!
+    @installer.xcconfig.to_hash['GCC_WARN_INHIBIT_ALL_WARNINGS'].should == 'YES'
+  end
+
   it "creates a prefix header, including the contents of the specification's prefix header file" do
     do_install!
     prefix_header = @sandbox.root + 'Pods.pch'

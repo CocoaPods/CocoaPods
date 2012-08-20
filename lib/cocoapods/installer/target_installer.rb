@@ -13,10 +13,11 @@ module Pod
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'PODS_ROOT'                 => @target_definition.relative_pods_root,
-          'PODS_HEADERS_SEARCH_PATHS' => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
-          'ALWAYS_SEARCH_USER_PATHS'  => 'YES', # needed to make EmbedReader build
-          'OTHER_LDFLAGS'             => default_ld_flags,
+          'PODS_ROOT'                     => @target_definition.relative_pods_root,
+          'PODS_HEADERS_SEARCH_PATHS'     => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
+          'ALWAYS_SEARCH_USER_PATHS'      => 'YES', # needed to make EmbedReader build
+          'OTHER_LDFLAGS'                 => default_ld_flags,
+          'GCC_WARN_INHIBIT_ALL_WARNINGS' => @target_definition.inhibit_all_warnings? ? 'YES' : 'NO',
         })
       end
 

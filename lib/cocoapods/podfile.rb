@@ -62,7 +62,7 @@ module Pod
 
       attr_reader :name, :target_dependencies
 
-      attr_accessor :user_project, :link_with, :platform, :parent, :exclusive
+      attr_accessor :user_project, :link_with, :platform, :parent, :exclusive, :inhibit_all_warnings
 
       def initialize(name, options = {})
         @name, @target_dependencies = name, []
@@ -95,6 +95,11 @@ module Pod
       def platform
         @platform || (@parent.platform if @parent)
       end
+
+      def inhibit_all_warnings
+        @inhibit_all_warnings.nil? ? (@parent.inhibit_all_warnings? if @parent) : @inhibit_all_warnings
+      end
+      alias_method :inhibit_all_warnings?, :inhibit_all_warnings
 
       def label
         if name == :default
@@ -282,6 +287,10 @@ module Pod
     #
     def link_with(targets)
       @target_definition.link_with = targets
+    end
+
+    def inhibit_all_warnings!
+      @target_definition.inhibit_all_warnings = true
     end
 
     # Specifies a dependency of the project.

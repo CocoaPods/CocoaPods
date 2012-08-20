@@ -151,6 +151,7 @@ describe "Pod::Podfile" do
 
         target :test, :exclusive => true do
           link_with 'TestRunner'
+          inhibit_all_warnings!
           pod 'JSONKit'
           target :subtarget do
             pod 'Reachability'
@@ -293,6 +294,12 @@ describe "Pod::Podfile" do
     it "defaults, for unspecified configurations, to a release build" do
       project = Pod::Podfile::UserProject.new(fixture('SampleProject/SampleProject.xcodeproj'), 'Test' => :debug)
       project.build_configurations.should == { 'Release' => :release, 'Debug' => :debug, 'Test' => :debug, 'App Store' => :release }
+    end
+
+    it "specifies that the inhibit all warnings flag should be added to the target's build settings" do
+      @podfile.target_definitions[:default].should.not.inhibit_all_warnings
+      @podfile.target_definitions[:test].should.inhibit_all_warnings
+      @podfile.target_definitions[:subtarget].should.inhibit_all_warnings
     end
 
     describe "with an Xcode project that's not in the project_root" do
