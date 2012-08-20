@@ -204,7 +204,7 @@ module Pod
           output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
           output_path.dirname.mkpath
           puts "-> Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
-          open(@params[:podspec]) do |io|
+          open(Pathname.new(@params[:podspec]).expand_path) do |io|
             output_path.open('w') { |f| f << io.read }
           end
         end
@@ -216,9 +216,9 @@ module Pod
 
       class LocalSource < AbstractExternalSource
         def pod_spec_path
-          root = Pathname.new(@params[:local])
-          path = spec_path = Dir[root + "*.podspec"].first
-          Pathname.new(path)
+          path = Pathname.new(@params[:local]).expand_path + "#{name}.podspec"
+          raise Informative, "No podspec found for `#{name}` in #{description}" unless path.exist?
+          path
         end
 
         def copy_external_source_into_sandbox(sandbox, _)
