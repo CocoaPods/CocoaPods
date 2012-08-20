@@ -204,7 +204,9 @@ module Pod
           output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
           output_path.dirname.mkpath
           puts "-> Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
-          open(Pathname.new(@params[:podspec]).expand_path) do |io|
+          path = @params[:podspec]
+          path = Pathname.new(path).expand_path if path.start_with?("~")
+          open(path) do |io|
             output_path.open('w') { |f| f << io.read }
           end
         end

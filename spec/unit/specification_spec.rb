@@ -471,7 +471,7 @@ describe "A Pod::Specification with :local source" do
   end
 
   it "it returns the expanded local path" do
-    @spec.local_path.should == fixture("integration/JSONKit")
+    @spec.source.should == {:local => fixture("integration/JSONKit")}
   end
 end
 
