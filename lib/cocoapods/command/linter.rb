@@ -225,15 +225,17 @@ module Pod
         messages << "The description is not meaningful"                   if spec.description && spec.description =~ /An optional longer description of/
         messages << "The summary should end with a dot"                   if spec.summary !~ /.*\./
         messages << "The description should end with a dot"               if spec.description !~ /.*\./ && spec.description != spec.summary
-        messages << "Git sources should specify either a tag or a commit" if source[:git] && !source[:commit] && !source[:tag]
-        messages << "Github repositories should end in `.git'"            if github_source? && source[:git] !~ /.*\.git/
-        messages << "Github repositories should use `https' link"         if github_source? && source[:git] !~ /https:\/\/github.com/
         messages << "Comments must be deleted"                            if text.scan(/^\s*#/).length > 24
-        messages
-      end
 
-      def github_source?
-        spec.source && spec.source[:git] =~ /github.com/
+        if (git_source = source[:git])
+          messages << "Git sources should specify either a tag or a commit" unless source[:commit] || source[:tag]
+          if git_source.include?('github.com')
+            messages << "Github repositories should end in `.git'"          unless git_source.end_with?('.git')
+            messages << "Github repositories should use `https' link"       unless git_source.start_with?('https://github.com') || git_source.start_with?('git://gist.github.com')
+          end
+        end
+
+        messages
       end
 
       # It creates a podfile in memory and builds a library containing
