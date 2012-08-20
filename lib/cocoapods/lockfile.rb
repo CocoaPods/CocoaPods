@@ -258,7 +258,7 @@ module Pod
         checksum = checksum.encode('UTF-8') if checksum.respond_to?(:encode)
         checksums[spec.name] = checksum
       end
-      hash["SPECS CHECKSUM"] = checksums unless checksums.empty?
+      hash["SPEC CHECKSUMS"] = checksums unless checksums.empty?
       hash["COCOAPODS"] = VERSION
       hash
     end
