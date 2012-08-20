@@ -518,7 +518,7 @@ module Pod
       end
 
       def root
-        Pathname.new(@top_specification.defined_in_file).dirname
+        @root ||= Pathname.new(@top_specification.source[:local]).expand_path
       end
 
       def implode

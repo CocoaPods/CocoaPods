@@ -390,11 +390,7 @@ module Pod
     end
 
     def pod_destroot
-      if local?
-        local_path
-      else
-        config.project_pods_root + top_level_parent.name
-      end
+      config.project_pods_root + top_level_parent.name
     end
 
     def self.pattern_list(patterns)
