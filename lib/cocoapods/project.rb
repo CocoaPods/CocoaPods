@@ -39,6 +39,12 @@ module Pod
       pods.groups.new('name' => name)
     end
 
+    # Adds a group as child to the `Local Pods' group.
+    def add_local_pod_group(name)
+      local_pods = groups.find { |g| g.name == 'Local Pods' } || groups.new({ 'name' => 'Local Pods' })
+      local_pods.groups.new('name' => name)
+    end
+
     def add_pod_target(name, platform)
       target = targets.new_static_library(platform.name, name)
 

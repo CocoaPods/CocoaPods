@@ -41,17 +41,30 @@ module Pod
       @project_podfile ||= project_root + 'Podfile'
     end
 
+    def project_lockfile
+      @project_lockfile ||= project_root + 'Podfile.lock'
+    end
+
     def headers_symlink_root
       @headers_symlink_root ||= "#{project_pods_root}/Headers"
     end
 
-    # Returns the spec at the pat returned from `project_podfile`.
+    # @return [Podfile] The Podfile to use for the current execution.
+    #
     def podfile
       @podfile ||= begin
         Podfile.from_file(project_podfile) if project_podfile.exist?
       end
     end
     attr_writer :podfile
+
+    # @return [Lockfile] The Lockfile to use for the current execution.
+    #
+    def lockfile
+      @lockfile ||= begin
+        Lockfile.from_file(project_lockfile) if project_lockfile.exist?
+      end
+    end
 
     module Mixin
       def config

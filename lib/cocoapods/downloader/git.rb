@@ -79,6 +79,7 @@ module Pod
           git! "reset --hard HEAD"
           git! "clean -d -x -f"
           git! "pull origin master"
+          git! "fetch --tags"
         end
       end
 
