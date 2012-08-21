@@ -34,9 +34,15 @@ module Pod
       groups.find { |g| g.name == 'Pods' } || groups.new({ 'name' => 'Pods' })
     end
 
-    # Adds a group as child to the `Pods' group.
-    def add_pod_group(name)
-      pods.groups.new('name' => name)
+    # Adds a group as child to the `Pods' group namespacing subspecs.
+    def add_spec_group(name)
+      groups = pods.groups
+      group = nil
+      name.split('/').each do |name|
+        group = groups.find { |g| g.name == name } || groups.new({ 'name' => name })
+        groups = group.groups
+      end
+      group
     end
 
     def add_pod_target(name, platform)
