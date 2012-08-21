@@ -28,9 +28,11 @@ module Pod
       @project.user_build_configurations = @podfile.user_build_configurations
       pods.each do |pod|
         # Add all source files to the project grouped by pod
-        group = @project.add_pod_group(pod.name)
-        pod.relative_source_files.each do |path|
-          group.files.new('path' => path.to_s)
+        pod.relative_source_files_by_spec.each do |spec, paths|
+          group = @project.add_spec_group(spec.name)
+          paths.each do |path|
+            group.files.new('path' => path.to_s)
+          end
         end
       end
       # Add a group to hold all the target support files
