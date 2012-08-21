@@ -22,7 +22,7 @@ describe 'Pod::Project' do
     }).should.not == nil
   end
 
-    it "namespaces subspecs in groups" do
+  it "namespaces subspecs in groups" do
     group = @project.add_spec_group('JSONKit/Subspec')
     @project.pods.groups.find { |g| g.name == 'JSONKit' }.child_references.should.include group.uuid
     find_object({

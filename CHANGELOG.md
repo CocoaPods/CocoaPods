@@ -11,6 +11,7 @@
 - Support for GitHub Gists in the linter.
 - Allow specifying ARC settings in subspecs.
 - Add Podfile#inhibit_all_warnings! which will inhibit all warnings from the Pods library. [#209](https://github.com/CocoaPods/CocoaPods/issues/209)
+- Make the Pods Xcode project prettier by namespacing subspecs in nested groups. [#466](https://github.com/CocoaPods/CocoaPods/pull/466)
 
 
 ## 0.11.1
