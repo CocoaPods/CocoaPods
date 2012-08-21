@@ -1,16 +1,15 @@
-## Master
+## 0.12.0
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.1...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.1...0.12.0)
 
 ###### Enhancements
 
 - The documentation is generated using the public headers if they are specified.
-- In case of download failure, now the installation is aborted
-  the error message of the external command that failed is presented.
+- In case of a download failure the installation is aborted and the error message is shown.
 - Git submodules are initialized only if requested.
 - Don’t impose a certain structure of the user’s project by raising if no ‘Frameworks’ group exists. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
 - Support for GitHub Gists in the linter.
-- Allow to specify ARC settings in subspecs.
+- Allow specifying ARC settings in subspecs.
 - Add Podfile#inhibit_all_warnings! which will inhibit all warnings from the Pods library. [#209](https://github.com/CocoaPods/CocoaPods/issues/209)
 
 
