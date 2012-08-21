@@ -2,30 +2,30 @@ PODS:
   - FileMD5Hash (0.0.1)
   - ISO8601DateFormatter (0.6)
   - JSONKit (1.5pre)
-  - LibComponentLogging-Core (1.1.6)
+  - LibComponentLogging-Core (1.2.2)
   - LibComponentLogging-NSLog (1.0.4):
     - LibComponentLogging-Core (>= 1.1.6)
   - NSData+Base64 (1.0.0)
-  - RestKit (0.10.1):
-    - RestKit/JSON (= 0.10.1)
-  - RestKit/JSON (0.10.1):
+  - RestKit (0.10.2):
+    - RestKit/JSON (= 0.10.2)
+  - RestKit/JSON (0.10.2):
     - RestKit/Network
     - RestKit/ObjectMapping/CoreData
     - RestKit/ObjectMapping/JSON
     - RestKit/UI
-  - RestKit/Network (0.10.1):
+  - RestKit/Network (0.10.2):
     - FileMD5Hash
     - LibComponentLogging-NSLog (>= 1.0.4)
     - SOCKit
     - cocoa-oauth
-  - RestKit/ObjectMapping/CoreData (0.10.1):
+  - RestKit/ObjectMapping/CoreData (0.10.2):
     - ISO8601DateFormatter (>= 0.6)
     - RestKit/Network
-  - RestKit/ObjectMapping/JSON (0.10.1):
+  - RestKit/ObjectMapping/JSON (0.10.2):
     - ISO8601DateFormatter (>= 0.6)
     - JSONKit (>= 1.5pre)
     - RestKit/Network
-  - RestKit/UI (0.10.1)
+  - RestKit/UI (0.10.2)
   - SOCKit (1.0)
   - cocoa-oauth (0.0.1):
     - NSData+Base64 (~> 1.0)
