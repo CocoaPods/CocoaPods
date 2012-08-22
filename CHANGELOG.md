@@ -8,10 +8,11 @@
 - Added `pod update`
 - Added `pod outdated`
 - An error is presented if a podspec can’t be found in the root of an external source.
+- Meaningful error for unrecognized commands/arguments.
 
 ###### Bug fixes
 
-- The git cache now fetches the tags from the remote if it  can’t find the reference.
+- The git cache now fetches the tags from the remote if it can’t find the reference.
 
 ## 0.13.0
 
