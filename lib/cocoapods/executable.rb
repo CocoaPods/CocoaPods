@@ -40,7 +40,7 @@ module Pod
           if should_raise
             raise Informative, "#{name} #{command}\n\n#{output}"
           else
-            puts (Config.instance.verbose? ? '   ' : '') << "[!] Failed: #{full_command}".red unless Config.instance.silent?
+            puts((Config.instance.verbose? ? '   ' : '') << "[!] Failed: #{full_command}".red) unless Config.instance.silent?
           end
         end
         output

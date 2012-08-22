@@ -194,6 +194,15 @@ module Pod
       source_files.map{ |p| p.relative_path_from(@sandbox.root) }
     end
 
+    def relative_source_files_by_spec
+      result = {}
+      source_files_by_spec.each do |spec, paths|
+        result[spec] = paths.map{ |p| p.relative_path_from(@sandbox.root) }
+      end
+      result
+    end
+
+
     # Finds the source files that every activated {Specification} requires.
     #
     # @note If the same file is required by two specifications the one at the

@@ -62,7 +62,7 @@ module Pod
 
       attr_reader :name, :target_dependencies
 
-      attr_accessor :user_project, :link_with, :platform, :parent, :exclusive
+      attr_accessor :user_project, :link_with, :platform, :parent, :exclusive, :inhibit_all_warnings
 
       def initialize(name, options = {})
         @name, @target_dependencies = name, []
@@ -95,6 +95,11 @@ module Pod
       def platform
         @platform || (@parent.platform if @parent)
       end
+
+      def inhibit_all_warnings
+        @inhibit_all_warnings.nil? ? (@parent.inhibit_all_warnings? if @parent) : @inhibit_all_warnings
+      end
+      alias_method :inhibit_all_warnings?, :inhibit_all_warnings
 
       def label
         if name == :default
@@ -137,6 +142,8 @@ module Pod
       def xcconfig_relative_path
         relative_to_srcroot("Pods/#{xcconfig_name}").to_s
       end
+
+      attr_accessor :xcconfig
 
       def copy_resources_script_name
         "#{label}-resources.sh"
@@ -284,6 +291,13 @@ module Pod
       @target_definition.link_with = targets
     end
 
+    # Inhibits **all** warnings from the Pods library.
+    #
+    # When used, this is applied to all targets inheriting from the current one.
+    def inhibit_all_warnings!
+      @target_definition.inhibit_all_warnings = true
+    end
+
     # Specifies a dependency of the project.
     #
     # A dependency requirement is defined by the name of the Pod and _optionally_
@@ -387,6 +401,26 @@ module Pod
     # https://github.com/CocoaPods/CocoaPods/wiki/A-pod-specification
     def pod(*name_and_version_requirements, &block)
       @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
+    end
+
+    # Use the dependencies of a podspec file.
+    #
+    def podspec(options = nil)
+      if options && path = options[:path]
+        path = File.extname(path) == '.podspec' ? path : "#{path}.podspec"
+        file = Pathname.new(File.expand_path(path))
+      elsif options && name = options[:name]
+        name = File.extname(name) == '.podspec' ? name : "#{name}.podspec"
+        file = config.project_root + name
+      else
+        file = config.project_root.glob('*.podspec').first
+      end
+
+      spec = Specification.from_file(file)
+      spec.activate_platform(@target_definition.platform)
+      deps = spec.recursive_subspecs.push(spec).map {|specification| specification.external_dependencies }
+      deps = deps.flatten.uniq
+      @target_definition.target_dependencies.concat(deps)
     end
 
     def dependency(*name_and_version_requirements, &block)

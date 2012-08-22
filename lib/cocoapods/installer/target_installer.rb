@@ -13,10 +13,10 @@ module Pod
       def xcconfig
         @xcconfig ||= Xcodeproj::Config.new({
           # In a workspace this is where the static library headers should be found.
-          'PODS_ROOT'                 => @target_definition.relative_pods_root,
-          'PODS_HEADERS_SEARCH_PATHS' => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
-          'ALWAYS_SEARCH_USER_PATHS'  => 'YES', # needed to make EmbedReader build
-          'OTHER_LDFLAGS'             => default_ld_flags,
+          'PODS_ROOT'                     => @target_definition.relative_pods_root,
+          'PODS_HEADERS_SEARCH_PATHS'     => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
+          'ALWAYS_SEARCH_USER_PATHS'      => 'YES', # needed to make EmbedReader build
+          'OTHER_LDFLAGS'                 => default_ld_flags
         })
       end
 
@@ -92,6 +92,7 @@ module Pod
           config.build_settings['GCC_PREFIX_HEADER'] = @target_definition.prefix_header_name
           config.build_settings['PODS_ROOT'] = '${SRCROOT}'
           config.build_settings['PODS_HEADERS_SEARCH_PATHS'] = '${PODS_BUILD_HEADERS_SEARCH_PATHS}'
+          config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = @target_definition.inhibit_all_warnings? ? 'YES' : 'NO'
         end
       end
 
@@ -104,6 +105,8 @@ module Pod
         end
         puts "- Generating xcconfig file at `#{sandbox.root + @target_definition.xcconfig_name}'" if config.verbose?
         xcconfig.save_as(sandbox.root + @target_definition.xcconfig_name)
+        @target_definition.xcconfig = xcconfig
+
         puts "- Generating prefix header at `#{sandbox.root + @target_definition.prefix_header_name}'" if config.verbose?
         save_prefix_header_as(sandbox.root + @target_definition.prefix_header_name, pods)
         puts "- Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?

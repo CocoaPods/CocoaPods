@@ -51,8 +51,9 @@ module Pod
           compiler_flags ].each do |attr|
         instance_variable_set( "@#{attr}", { :ios => [], :osx => [] } )
       end
-      @xcconfig = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
-      @header_dir = { :ios => nil, :osx => nil }
+      @xcconfig     = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
+      @header_dir   = { :ios => nil, :osx => nil }
+      @requires_arc = { :ios => nil, :osx => nil }
 
       yield self if block_given?
     end
@@ -137,6 +138,7 @@ module Pod
           compiler_flags=
           deployment_target=
           header_dir=
+          requires_arc
           dependency }.each do |method|
         define_method(method) do |args|
           @specification._on_platform(@platform) do
@@ -200,7 +202,6 @@ module Pod
     top_attr_accessor :homepage
     top_attr_accessor :summary
     top_attr_accessor :documentation
-    top_attr_accessor :requires_arc
     top_attr_accessor :version,             lambda { |v| Version.new(v) }
 
     top_attr_reader   :description,         lambda { |instance, ivar| ivar || instance.summary }
@@ -260,6 +261,24 @@ module Pod
     alias_method :framework=,       :frameworks=
     alias_method :weak_framework=,  :weak_frameworks=
     alias_method :library=,         :libraries=
+
+
+    # @!method requires_arc=
+    #
+    # @abstract Wether the `-fobjc-arc' flag should be added to the compiler
+    #   flags.
+    #
+    # @param [Bool] Wether the source files require ARC.
+    #
+    platform_attr_writer :requires_arc
+
+    def requires_arc
+      requires_arc = @requires_arc[active_platform]
+      if requires_arc.nil?
+        requires_arc = @parent ? @parent.requires_arc : false
+      end
+      requires_arc
+    end
 
     # @!method header_dir=
     #

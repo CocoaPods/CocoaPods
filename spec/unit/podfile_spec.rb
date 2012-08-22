@@ -151,6 +151,7 @@ describe "Pod::Podfile" do
 
         target :test, :exclusive => true do
           link_with 'TestRunner'
+          inhibit_all_warnings!
           pod 'JSONKit'
           target :subtarget do
             pod 'Reachability'
@@ -295,6 +296,12 @@ describe "Pod::Podfile" do
       project.build_configurations.should == { 'Release' => :release, 'Debug' => :debug, 'Test' => :debug, 'App Store' => :release }
     end
 
+    it "specifies that the inhibit all warnings flag should be added to the target's build settings" do
+      @podfile.target_definitions[:default].should.not.inhibit_all_warnings
+      @podfile.target_definitions[:test].should.inhibit_all_warnings
+      @podfile.target_definitions[:subtarget].should.inhibit_all_warnings
+    end
+
     describe "with an Xcode project that's not in the project_root" do
       before do
         @target_definition = @podfile.target_definitions[:default]
@@ -321,6 +328,19 @@ describe "Pod::Podfile" do
       it "returns the 'copy resources script' path relative to the project's $(SRCROOT)" do
         @target_definition.copy_resources_script_relative_path.should == '${SRCROOT}/../Pods/Pods-resources.sh'
       end
+    end
+  end
+  describe "concerning the podspec method" do
+    xit "it can use use the dependencies of a podspec" do
+
+    end
+
+    xit "it allows to specify the name of a podspec" do
+
+    end
+
+    xit "it allows to specify the path of a podspec" do
+
     end
   end
 

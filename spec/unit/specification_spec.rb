@@ -305,6 +305,7 @@ describe "A Pod::Specification subspec" do
 
         fss.subspec 'SecondSubSpec' do |sss|
           sss.source_files = 'subsubspec.m'
+          sss.requires_arc = false
         end
       end
     end
@@ -329,7 +330,7 @@ describe "A Pod::Specification subspec" do
 
   it "automatically forwards top level attributes to the top level parent" do
     @spec.activate_platform(:ios)
-    [:version, :license, :authors, :requires_arc, :compiler_flags].each do |attr|
+    [:version, :license, :authors, :compiler_flags].each do |attr|
       @spec.subspecs.first.send(attr).should == @spec.send(attr)
       @spec.subspecs.first.subspecs.first.send(attr).should == @spec.send(attr)
     end
@@ -344,6 +345,13 @@ describe "A Pod::Specification subspec" do
 
     @subsubspec.compiler_flags = '-Wdeprecated-implementations'
     @subsubspec.compiler_flags.should == ' -fobjc-arc -Wdeprecated-implementations'
+  end
+
+  it "allows to specify arc settings for subspecs" do
+    @spec.activate_platform(:ios)
+    @spec.requires_arc.should == true
+    @subspec.requires_arc.should == true
+    @subsubspec.requires_arc.should == false
   end
 
   it "returns empty arrays for chained attributes with no value in the chain" do
