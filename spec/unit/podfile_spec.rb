@@ -330,6 +330,19 @@ describe "Pod::Podfile" do
       end
     end
   end
+  describe "concerning the podspec method" do
+    xit "it can use use the dependencies of a podspec" do
+
+    end
+
+    xit "it allows to specify the name of a podspec" do
+
+    end
+
+    xit "it allows to specify the path of a podspec" do
+
+    end
+  end
 
   describe "concerning validations" do
 
