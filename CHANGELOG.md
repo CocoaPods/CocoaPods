@@ -4,6 +4,7 @@
 ###### Enhancements
 
 - Check if any of the build settings defined in the xcconfig files is overridden. [#92](https://github.com/CocoaPods/CocoaPods/issues/92)
+- The Linter now checks that there are no compiler flags that disable warnings.
 
 ###### Bug fixes
 
