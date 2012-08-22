@@ -1,5 +1,6 @@
-## Master
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.12.0...master)
+## 0.13.0
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.12.0...0.13.0)
 
 ###### Enhancements
 
