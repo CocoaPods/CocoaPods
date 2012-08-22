@@ -6,7 +6,6 @@ require 'active_support/core_ext/array/conversions'
 
 module Pod
   class Installer
-
     class UserProjectIntegrator
       include Pod::Config::Mixin
 
@@ -58,6 +57,8 @@ module Pod
       end
 
       class TargetIntegrator
+        include Pod::Config::Mixin
+
         attr_reader :target_definition
 
         def initialize(target_definition)
@@ -151,11 +152,13 @@ module Pod
               config.base_configuration = xcconfig
             end
 
-            config_build_names_by_overriden_key.each do |key, config_build_names|
-              name = "#{target.attributes["name"]} [#{config_build_names.join(' - ')}]"
-              puts "\n[!] The target `#{name}' overrides the `#{key}' build setting defined in `#{@target_definition.xcconfig_relative_path}'.".yellow
-              puts "    - Use the `$(inherited)' flag, or"
-              puts "    - Remove the build settings from the target."
+            unless config.silent?
+              config_build_names_by_overriden_key.each do |key, config_build_names|
+                name = "#{target.attributes["name"]} [#{config_build_names.join(' - ')}]"
+                puts "\n[!] The target `#{name}' overrides the `#{key}' build setting defined in `#{@target_definition.xcconfig_relative_path}'.".yellow
+                puts "    - Use the `$(inherited)' flag, or"
+                puts "    - Remove the build settings from the target."
+              end
             end
           end
         end
