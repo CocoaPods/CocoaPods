@@ -4,6 +4,7 @@
 ###### Enhancements
 
 - Check if any of the build settings defined in the xcconfig files is overridden. [#92](https://github.com/CocoaPods/CocoaPods/issues/92)
+- Add Podfile `podspec!` which allows to use the dependencies of a podspec file. [#162](https://github.com/CocoaPods/CocoaPods/issues/162)
 
 ###### Bug fixes
 
