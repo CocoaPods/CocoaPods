@@ -1,4 +1,4 @@
-require 'open-uri'
+require 'cocoapods/open_uri'
 
 module Pod
   class Dependency < Gem::Dependency

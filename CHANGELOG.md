@@ -10,6 +10,7 @@
 ###### Bug fixes
 
 - The final project isn’t affected anymore by the `inhibit_all_warnings!` option.
+- Support for redirects while using podspec from an url. [#462](https://github.com/CocoaPods/CocoaPods/issues/462)
 
 ## 0.12.0
 
