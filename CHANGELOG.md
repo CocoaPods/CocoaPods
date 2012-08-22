@@ -1,3 +1,18 @@
+## Master
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...master)
+
+###### Enhancements
+- `pod install` now installs the version recorded in `Podfile.lock` of a previously installed pod.
+- `pod install` detects changes in the dependencies and reinstalls pods that changed.
+- Added `pod update`
+- Added `pod outdated`
+- An error is presented if a podspec can’t be found in the root of an external source.
+
+###### Bug fixes
+
+- The git cache now fetches the tags from the remote if it  can’t find the reference.
+
 ## 0.13.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.12.0...0.13.0)
