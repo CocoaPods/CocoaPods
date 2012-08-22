@@ -1,6 +1,10 @@
 ## Master
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.12.0...master)
 
+###### Enhancements
+
+- Check if any of the build settings defined in the xcconfig files is overridden. [#92](https://github.com/CocoaPods/CocoaPods/issues/92)
+
 ###### Bug fixes
 
 - The final project isn’t affected anymore by the `inhibit_all_warnings!` option.

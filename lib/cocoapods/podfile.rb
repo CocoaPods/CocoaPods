@@ -143,6 +143,8 @@ module Pod
         relative_to_srcroot("Pods/#{xcconfig_name}").to_s
       end
 
+      attr_accessor :xcconfig
+
       def copy_resources_script_name
         "#{label}-resources.sh"
       end

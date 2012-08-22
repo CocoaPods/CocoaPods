@@ -135,8 +135,27 @@ module Pod
         def add_xcconfig_base_configuration
           xcconfig = user_project.files.new('path' => @target_definition.xcconfig_relative_path)
           targets.each do |target|
+            config_build_names_by_overriden_key = {}
             target.build_configurations.each do |config|
+              config_name = config.attributes["name"]
+              if @target_definition.xcconfig
+                @target_definition.xcconfig.attributes.each do |key, value|
+                  target_value = config.build_settings[key]
+                  if target_value && !target_value.include?('$(inherited)')
+                    config_build_names_by_overriden_key[key] ||= []
+                    config_build_names_by_overriden_key[key] << config_name
+                  end
+                end
+              end
+
               config.base_configuration = xcconfig
+            end
+
+            config_build_names_by_overriden_key.each do |key, config_build_names|
+              name = "#{target.attributes["name"]} [#{config_build_names.join(' - ')}]"
+              puts "\n[!] The target `#{name}' overrides the `#{key}' build setting defined in `#{@target_definition.xcconfig_relative_path}'.".yellow
+              puts "    - Use the `$(inherited)' flag, or"
+              puts "    - Remove the build settings from the target."
             end
           end
         end

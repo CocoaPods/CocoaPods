@@ -105,6 +105,8 @@ module Pod
         end
         puts "- Generating xcconfig file at `#{sandbox.root + @target_definition.xcconfig_name}'" if config.verbose?
         xcconfig.save_as(sandbox.root + @target_definition.xcconfig_name)
+        @target_definition.xcconfig = xcconfig
+
         puts "- Generating prefix header at `#{sandbox.root + @target_definition.prefix_header_name}'" if config.verbose?
         save_prefix_header_as(sandbox.root + @target_definition.prefix_header_name, pods)
         puts "- Generating copy resources script at `#{sandbox.root + @target_definition.copy_resources_script_name}'" if config.verbose?
