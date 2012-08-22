@@ -1,4 +1,4 @@
-require 'open-uri'
+require 'cocoapods/open_uri'
 
 module Pod
   class Dependency < Gem::Dependency
@@ -192,7 +192,7 @@ module Pod
           output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
           output_path.dirname.mkpath
           puts "  * Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
-          open(@params[:podspec]) do |io|
+          open(@params[:podspec], {:allow_unsafe_redirects => true}) do |io|
             output_path.open('w') { |f| f << io.read }
           end
         end
