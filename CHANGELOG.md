@@ -1,3 +1,10 @@
+## Master
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.12.0...master)
+
+###### Bug fixes
+
+- The final project isn’t affected anymore by the `inhibit_all_warnings!` option.
+
 ## 0.12.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.1...0.12.0)
@@ -10,7 +17,7 @@
 - Don’t impose a certain structure of the user’s project by raising if no ‘Frameworks’ group exists. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
 - Support for GitHub Gists in the linter.
 - Allow specifying ARC settings in subspecs.
-- Add Podfile#inhibit_all_warnings! which will inhibit all warnings from the Pods library. [#209](https://github.com/CocoaPods/CocoaPods/issues/209)
+- Add Podfile `inhibit_all_warnings!` which will inhibit all warnings from the Pods library. [#209](https://github.com/CocoaPods/CocoaPods/issues/209)
 - Make the Pods Xcode project prettier by namespacing subspecs in nested groups. [#466](https://github.com/CocoaPods/CocoaPods/pull/466)
 
 

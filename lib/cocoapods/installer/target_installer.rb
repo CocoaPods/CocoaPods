@@ -16,8 +16,7 @@ module Pod
           'PODS_ROOT'                     => @target_definition.relative_pods_root,
           'PODS_HEADERS_SEARCH_PATHS'     => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
           'ALWAYS_SEARCH_USER_PATHS'      => 'YES', # needed to make EmbedReader build
-          'OTHER_LDFLAGS'                 => default_ld_flags,
-          'GCC_WARN_INHIBIT_ALL_WARNINGS' => @target_definition.inhibit_all_warnings? ? 'YES' : 'NO',
+          'OTHER_LDFLAGS'                 => default_ld_flags
         })
       end
 
@@ -93,6 +92,7 @@ module Pod
           config.build_settings['GCC_PREFIX_HEADER'] = @target_definition.prefix_header_name
           config.build_settings['PODS_ROOT'] = '${SRCROOT}'
           config.build_settings['PODS_HEADERS_SEARCH_PATHS'] = '${PODS_BUILD_HEADERS_SEARCH_PATHS}'
+          config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = @target_definition.inhibit_all_warnings? ? 'YES' : 'NO'
         end
       end
 

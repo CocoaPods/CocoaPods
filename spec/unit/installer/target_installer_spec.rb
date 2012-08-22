@@ -67,12 +67,18 @@ describe Pod::Installer::TargetInstaller do
   end
 
   it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
-    @installer.xcconfig.to_hash['GCC_WARN_INHIBIT_ALL_WARNINGS'].should == 'NO'
+    do_install!
+    @installer.target.build_configurations.each do |config|
+      config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should == 'NO'
+    end
   end
 
   it "enables the GCC_WARN_INHIBIT_ALL_WARNINGS flag" do
     @podfile.inhibit_all_warnings!
-    @installer.xcconfig.to_hash['GCC_WARN_INHIBIT_ALL_WARNINGS'].should == 'YES'
+    do_install!
+    @installer.target.build_configurations.each do |config|
+      config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should == 'YES'
+    end
   end
 
   it "creates a prefix header, including the contents of the specification's prefix header file" do
