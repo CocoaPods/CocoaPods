@@ -218,14 +218,15 @@ module Pod
         source   = spec.source  || {}
         text     = @file.read
         messages = []
-        messages << "Missing license type"                                unless license[:type]
-        messages << "Sample license type"                                 if license[:type] && license[:type] =~ /\(example\)/
-        messages << "Invalid license type"                                if license[:type] && license[:type] =~ /\n/
-        messages << "The summary is not meaningful"                       if spec.summary =~ /A short description of/
-        messages << "The description is not meaningful"                   if spec.description && spec.description =~ /An optional longer description of/
-        messages << "The summary should end with a dot"                   if spec.summary !~ /.*\./
-        messages << "The description should end with a dot"               if spec.description !~ /.*\./ && spec.description != spec.summary
-        messages << "Comments must be deleted"                            if text.scan(/^\s*#/).length > 24
+        messages << "Missing license type"                                  unless license[:type]
+        messages << "Sample license type"                                   if license[:type] && license[:type] =~ /\(example\)/
+        messages << "Invalid license type"                                  if license[:type] && license[:type] =~ /\n/
+        messages << "The summary is not meaningful"                         if spec.summary =~ /A short description of/
+        messages << "The description is not meaningful"                     if spec.description && spec.description =~ /An optional longer description of/
+        messages << "The summary should end with a dot"                     if spec.summary !~ /.*\./
+        messages << "The description should end with a dot"                 if spec.description !~ /.*\./ && spec.description != spec.summary
+        messages << "Comments must be deleted"                              if text.scan(/^\s*#/).length > 24
+        messages << "Warnings must not be disabled (`-Wno' compiler flags)" if spec.compiler_flags.split(' ').any? {|flag| flag.start_with?('-Wno') }
 
         if (git_source = source[:git])
           messages << "Git sources should specify either a tag or a commit" unless source[:commit] || source[:tag]
