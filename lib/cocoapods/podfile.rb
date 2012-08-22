@@ -403,6 +403,26 @@ module Pod
       @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
     end
 
+    # Use the dependencies of a podspec file.
+    #
+    def podspec(options = nil)
+      if options && path = options[:path]
+        path = File.extname(path) == '.podspec' ? path : "#{path}.podspec"
+        file = Pathname.new(File.expand_path(path))
+      elsif options && name = options[:name]
+        name = File.extname(name) == '.podspec' ? name : "#{name}.podspec"
+        file = config.project_root + name
+      else
+        file = config.project_root.glob('*.podspec').first
+      end
+
+      spec = Specification.from_file(file)
+      spec.activate_platform(@target_definition.platform)
+      deps = spec.recursive_subspecs.push(spec).map {|specification| specification.external_dependencies }
+      deps = deps.flatten.uniq
+      @target_definition.target_dependencies.concat(deps)
+    end
+
     def dependency(*name_and_version_requirements, &block)
       warn "[DEPRECATED] `dependency' is deprecated (use `pod')"
       pod(*name_and_version_requirements, &block)
