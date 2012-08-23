@@ -230,6 +230,12 @@ describe "A Pod::Specification, in general," do
     @spec.platform = :ios
     @spec.activate_platform(:ios).should == @spec
   end
+
+  it "it handles local sources" do
+    @spec.activate_platform(:ios)
+    @spec.source = {:local => '/tmp/local/path'}
+    @spec.local?.should.be.true
+  end
 end
 
 describe "A Pod::Specification, hierarchy" do
@@ -479,7 +485,7 @@ describe "A Pod::Specification with :local source" do
   end
 
   it "it returns the expanded local path" do
-    @spec.local_path.should == fixture("integration/JSONKit")
+    @spec.source.should == {:local => fixture("integration/JSONKit")}
   end
 end
 

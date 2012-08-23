@@ -22,7 +22,8 @@ module Pod
       pods.each do |pod|
         # Add all source files to the project grouped by pod
         pod.relative_source_files_by_spec.each do |spec, paths|
-          group = @project.add_spec_group(spec.name)
+          parent_group = pod.local? ? @project.local_pods : @project.pods
+          group = @project.add_spec_to_group(pod.name, parent_group)
           paths.each do |path|
             group.files.new('path' => path.to_s)
           end
@@ -194,7 +195,11 @@ module Pod
       specs_by_target.each do |target_definition, specs|
         @pods_by_spec[target_definition.platform] = {}
         result[target_definition] = specs.map do |spec|
-          @sandbox.local_pod_for_spec(spec, target_definition.platform)
+          if spec.local?
+            LocalPod::LocalSourcedPod.new(spec, sandbox, target_definition.platform)
+          else
+            @sandbox.local_pod_for_spec(spec, target_definition.platform)
+          end
         end.uniq.compact
       end
       result

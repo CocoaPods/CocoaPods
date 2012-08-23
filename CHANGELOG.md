@@ -9,6 +9,7 @@
 - Added `pod outdated`
 - An error is presented if a podspec can’t be found in the root of an external source.
 - Meaningful error for unrecognized commands/arguments.
+- Added `:local` option for dependencies. [#458](https://github.com/CocoaPods/CocoaPods/issues/458),[#415](https://github.com/CocoaPods/CocoaPods/issues/415),[#156](https://github.com/CocoaPods/CocoaPods/issues/156)
 
 ###### Bug fixes
 
