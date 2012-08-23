@@ -115,10 +115,10 @@ module Pod
       when 'update'   then Update
       end
 
-      if show_help
-        raise Help.new(command_class, argv)
-      elsif command_class.nil?
+      if command_class.nil?
         raise Help.new(self, argv, command_argument)
+      elsif show_help
+        raise Help.new(command_class, argv)
       else
         command_class.new(argv)
       end
