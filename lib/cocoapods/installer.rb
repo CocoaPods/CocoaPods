@@ -47,9 +47,9 @@ module Pod
     # @return [void]
     #
     def install_dependencies!
-      pods.each do |pod|
+      pods.sort_by { |pod| pod.top_specification.name.downcase }.each do |pod|
         name = pod.top_specification.name
-        should_install = @resolver.should_install?(name)  || !pod.exists?
+        should_install = @resolver.should_install?(name) || !pod.exists?
 
         unless config.silent?
           marker = config.verbose ? "\n-> ".green : ''
@@ -58,7 +58,7 @@ module Pod
           else
             name = pod.to_s
           end
-          puts marker << ( should_install ?  "Installing #{name}".green : "Using #{name}" )
+          puts marker << ( should_install ? "Installing #{name}".green : "Using #{name}" )
         end
 
         if should_install
