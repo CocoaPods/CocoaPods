@@ -3,19 +3,23 @@ module Pod
 
     # @returns A Version described by its #to_s method.
     #
-    def self.from_s(string)
-      match = string.match(/HEAD from (.*)/)
-      string = match[1] if match
-      vers = Version.new(string)
-      vers.head = true if match
-      vers
+    # @TODO The `from' part of the regexp should be remove before 1.0.0.
+    #
+    def self.from_string(string)
+      if string =~ /HEAD (based on|from) (.*)/
+        v = Version.new($2)
+        v.head = true
+        v
+      else
+        Version.new(string)
+      end
     end
 
     attr_accessor :head
     alias_method :head?, :head
 
     def to_s
-      head? ? "HEAD from #{super}" : super
+      head? ? "HEAD based on #{super}" : super
     end
   end
 end

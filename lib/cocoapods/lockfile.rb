@@ -99,17 +99,17 @@ module Pod
     #   @example Strings examples
     #       "libPusher"
     #       "libPusher (1.0)"
-    #       "libPusher (HEAD from 1.0)"
+    #       "libPusher (HEAD based on 1.0)"
     #       "RestKit/JSON"
     #
     # @return [String, Version] The name and the version of a
     # pod.
     #
     def name_and_version_for_pod(string)
-        match_data = string.match(/(\S*) \((.*)\)/)
-        name = match_data[1]
-        vers = Version.from_s(match_data[2])
-        return [name, vers]
+      match_data = string.match(/(\S*) \((.*)\)/)
+      name = match_data[1]
+      vers = Version.from_string(match_data[2])
+      [name, vers]
     end
 
     # @param [String] The string that describes a {Dependency} generated
@@ -241,7 +241,7 @@ module Pod
         end
       end
       pod_and_deps = tmp.sort_by(&:first).map do |name, deps|
-        deps.empty? ? name : {name => deps}
+        deps.empty? ? name : { name => deps }
       end
       hash["PODS"] = pod_and_deps
 
@@ -253,7 +253,7 @@ module Pod
       hash["EXTERNAL SOURCES"] = external_sources unless external_sources.empty?
 
       checksums = {}
-      specs.select {|spec| !spec.defined_in_file.nil? }.each do |spec|
+      specs.select { |spec| !spec.defined_in_file.nil? }.each do |spec|
         checksum = Digest::SHA1.hexdigest(File.read(spec.defined_in_file))
         checksum = checksum.encode('UTF-8') if checksum.respond_to?(:encode)
         checksums[spec.name] = checksum
