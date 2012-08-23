@@ -326,7 +326,7 @@ module Pod
         @resolver.should_install?("JSONKit").should.be.true
       end
 
-      it "respects the constraints of the pofile" do
+      it "respects the constraints of the podfile" do
         podfile = Podfile.new do
           platform :ios
           pod 'BlocksKit'

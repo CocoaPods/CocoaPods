@@ -6,7 +6,8 @@ module Pod
 
     $ pod outdated
 
-      Shows the outdated pods in the current Podfile.lock.}
+      Shows the outdated pods in the current Podfile.lock, but only those from
+      spec repos, not those from local/external sources or `:head' versions.}
       end
 
       def self.options
@@ -30,41 +31,17 @@ module Pod
         resolver.update_mode = true
         resolver.update_external_specs = false
         resolver.resolve
-        pods_to_install = resolver.pods_to_install
-        external_pods   = resolver.pods_from_external_sources
 
-        known_update_specs = []
-        head_mode_specs = []
-        resolver.specs.each do |s|
-          next if external_pods.include?(s.name)
-          next unless pods_to_install.include?(s.name)
-
-          if s.version.head?
-            head_mode_specs << s.name
-          else
-            known_update_specs << s.to_s
-          end
+        names = resolver.pods_to_install - resolver.pods_from_external_sources
+        specs = resolver.specs.select do |spec|
+          names.include?(spec.name) && !spec.version.head?
         end
 
-        if pods_to_install.empty?
-          puts "\nNo updates are available.\n".yellow
+        if specs.empty?
+          puts "No updates are available.".yellow
         else
-
-          unless known_update_specs.empty?
-            puts "\nThe following updates are available:".green
-            puts "  - " << known_update_specs.join("\n  - ") << "\n"
-          end
-
-          unless head_mode_specs.empty?
-            puts "\nThe following pods might present updates as they are in head mode:".green
-            puts "  - " << head_mode_specs.join("\n  - ") << "\n"
-          end
-
-          unless (external_pods).empty?
-            puts "\nThe following pods might present updates as they loaded from an external source:".green
-            puts "  - " << external_pods.join("\n  - ") << "\n"
-          end
-          puts
+          puts "The following updates are available:".green
+          puts "  - " << specs.join("\n  - ") << "\n"
         end
       end
     end

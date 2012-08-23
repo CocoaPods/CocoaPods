@@ -120,13 +120,13 @@ module Pod
     def pods_to_install
       unless @pods_to_install
         if lockfile
-          @pods_to_install = specs.select { |spec|
+          @pods_to_install = specs.select do |spec|
             spec.version != lockfile.pods_versions[spec.pod_name]
-          }.map(&:name)
+          end.map(&:name)
           if update_mode
-            @pods_to_install += specs.select { |spec|
+            @pods_to_install += specs.select do |spec|
               spec.version.head? || pods_from_external_sources.include?(spec.pod_name)
-            }.map(&:name)
+            end.map(&:name)
           end
           @pods_to_install += @pods_by_state[:added] + @pods_by_state[:changed]
         else
