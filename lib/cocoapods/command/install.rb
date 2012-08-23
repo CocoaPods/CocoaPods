@@ -19,8 +19,7 @@ module Pod
 
       This will configure the project to reference the Pods static library,
       add a build configuration file, and add a post build script to copy
-      Pod resources.
-}
+      Pod resources.}
       end
 
       def self.options
@@ -40,19 +39,17 @@ module Pod
         super unless argv.empty?
       end
 
-      def run
-        unless podfile = config.podfile
-          raise Informative, "No `Podfile' found in the current working directory."
-        end
-
-        if @update_repo
-          print_title 'Updating Spec Repositories', true
-          Repo.new(ARGV.new(["update"])).run
-        end
-
+      def run_install_with_update(update)
         sandbox = Sandbox.new(config.project_pods_root)
-        resolver = Resolver.new(podfile, config.lockfile, sandbox)
+        resolver = Resolver.new(config.podfile, config.lockfile, sandbox)
+        resolver.update_mode = update
         Installer.new(resolver).install!
+      end
+
+      def run
+        verify_podfile_exists!
+        update_spec_repos_if_necessary!
+        run_install_with_update(false)
       end
     end
   end

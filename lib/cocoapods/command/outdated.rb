@@ -6,32 +6,24 @@ module Pod
 
     $ pod outdated
 
-      Shows the outdated pods in the current Podfile.lock. }
+      Shows the outdated pods in the current Podfile.lock.}
       end
 
       def self.options
         [
-          ["--no-update",    "Skip running `pod repo update` before install"],
+          ["--no-update", "Skip running `pod repo update` before install"],
         ].concat(super)
       end
 
       def initialize(argv)
-        @update_repo             = !argv.option('--no-update')
+        @update_repo = !argv.option('--no-update')
         super unless argv.empty?
       end
 
       def run
-        unless podfile = config.podfile
-          raise Informative, "No `Podfile' found in the current working directory."
-        end
-        unless lockfile = config.lockfile
-          raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."
-        end
-
-        if @update_repo
-          print_title 'Updating Spec Repositories', true
-          Repo.new(ARGV.new(["update"])).run
-        end
+        verify_podfile_exists!
+        verify_lockfile_exists!
+        update_spec_repos_if_necessary!
 
         sandbox = Sandbox.new(config.project_pods_root)
         resolver = Resolver.new(podfile, lockfile, sandbox)

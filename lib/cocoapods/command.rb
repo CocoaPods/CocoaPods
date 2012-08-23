@@ -54,9 +54,8 @@ module Pod
 
     def self.banner
       commands = ['install', 'update', 'outdated', 'list', 'push', 'repo', 'search', 'setup', 'spec'].sort
-      banner   = "\nTo see help for the available commands run:\n\n"
-      commands.each {|cmd| banner << "  * $ pod #{cmd.green} --help\n"}
-      banner
+      banner   = "To see help for the available commands run:\n\n"
+      banner + commands.map { |cmd| "  * $ pod #{cmd.green} --help" }.join("\n")
     end
 
     def self.options
@@ -131,6 +130,25 @@ module Pod
     end
 
     private
+
+    def verify_podfile_exists!
+      unless config.podfile
+        raise Informative, "No `Podfile' found in the current working directory."
+      end
+    end
+
+    def verify_lockfile_exists!
+      unless config.lockfile
+        raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."
+      end
+    end
+
+    def update_spec_repos_if_necessary!
+      if @update_repo
+        print_title 'Updating Spec Repositories', true
+        Repo.new(ARGV.new(["update"])).run
+      end
+    end
 
     def print_title(title, only_verbose = true)
       if config.verbose?
