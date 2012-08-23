@@ -167,7 +167,7 @@ module Pod
         def specification_from_external(sandbox, platform)
           copy_external_source_into_sandbox(sandbox, platform)
           spec = specification_from_local(sandbox, platform)
-          raise Informative, "No podspec found for `#{name}` in #{description}" unless spec
+          raise Informative, "No podspec found for `#{name}' in #{description}" unless spec
           spec
         end
 
@@ -219,7 +219,7 @@ module Pod
       class LocalSource < AbstractExternalSource
         def pod_spec_path
           path = Pathname.new(@params[:local]).expand_path + "#{name}.podspec"
-          raise Informative, "No podspec found for `#{name}` in #{description}" unless path.exist?
+          raise Informative, "No podspec found for `#{name}' in `#{@params[:local]}'" unless path.exist?
           path
         end
 
