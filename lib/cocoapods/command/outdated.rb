@@ -26,7 +26,7 @@ module Pod
         update_spec_repos_if_necessary!
 
         sandbox = Sandbox.new(config.project_pods_root)
-        resolver = Resolver.new(podfile, lockfile, sandbox)
+        resolver = Resolver.new(config.podfile, config.lockfile, sandbox)
         resolver.update_mode = true
         resolver.update_external_specs = false
         resolver.resolve
