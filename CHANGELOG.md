@@ -3,13 +3,16 @@
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...master)
 
 ###### Enhancements
-- `pod install` now installs the version recorded in `Podfile.lock` of a previously installed pod.
-- `pod install` detects changes in the dependencies and reinstalls pods that changed.
-- Added `pod update`
-- Added `pod outdated`
-- An error is presented if a podspec can’t be found in the root of an external source.
-- Meaningful error for unrecognized commands/arguments.
-- Added `:local` option for dependencies. [#458](https://github.com/CocoaPods/CocoaPods/issues/458),[#415](https://github.com/CocoaPods/CocoaPods/issues/415),[#156](https://github.com/CocoaPods/CocoaPods/issues/156)
+- Improved installation process
+  - The folders of the pods whose dependency is deleted in the Podfile are removed. [#298](https://github.com/CocoaPods/CocoaPods/issues/298)
+  - Pods are reinstalled if the version requirements of their dependencies are changed and are not compatible anymore with current installed one. [#191](https://github.com/CocoaPods/CocoaPods/issues/191)
+  - Pods are reinstalled if their external source changes.
+  - The version of the pods (recorded in ) that are still compatible with the Podfile is preserved across installations and machines.
+- Added `pod update` that installs the dependencies of the Podfile ignoring the contents of the `Podfile.lock`. [#131](https://github.com/CocoaPods/CocoaPods/issues/131)
+- Added `pod outdated` that show the pods that would be installed by `pod update`.
+- Added `:local` option for dependencies. [#458](https://github.com/CocoaPods/CocoaPods/issues/458) [#415](https://github.com/CocoaPods/CocoaPods/issues/415) [#156](https://github.com/CocoaPods/CocoaPods/issues/156)
+- Added a meaningful error message if a podspec can’t be found in the root of an external source. [#385](https://github.com/CocoaPods/CocoaPods/issues/385)  [#338](https://github.com/CocoaPods/CocoaPods/issues/338)  [#337](https://github.com/CocoaPods/CocoaPods/issues/337)
+- Added a meaningful error message for unrecognized commands/arguments.
 
 ###### Bug fixes
 
