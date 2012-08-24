@@ -12,7 +12,7 @@ describe 'Pod::Project' do
   end
 
   it "adds a group to the `Pods' group" do
-    group = @project.add_spec_group('JSONKit')
+    group = @project.add_spec_to_group('JSONKit', @project.pods)
     @project.pods.child_references.should.include group.uuid
     find_object({
       'isa' => 'PBXGroup',
@@ -23,7 +23,7 @@ describe 'Pod::Project' do
   end
 
   it "namespaces subspecs in groups" do
-    group = @project.add_spec_group('JSONKit/Subspec')
+    group = @project.add_spec_to_group('JSONKit/Subspec', @project.pods)
     @project.pods.groups.find { |g| g.name == 'JSONKit' }.child_references.should.include group.uuid
     find_object({
       'isa' => 'PBXGroup',

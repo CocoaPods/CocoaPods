@@ -14,7 +14,10 @@ module Pod
           xcodeproj 'MyProject'
           pod 'JSONKit'
         end
-        @xcconfig = Installer.new(podfile).target_installers.first.xcconfig.to_hash
+
+        sandbox = Sandbox.new(fixture('integration'))
+        resolver = Resolver.new(podfile, nil, sandbox)
+        @xcconfig = Installer.new(resolver).target_installers.first.xcconfig.to_hash
       end
 
       it "sets the header search paths where installed Pod headers can be found" do
@@ -35,7 +38,10 @@ module Pod
         platform :osx
         pod 'ASIHTTPRequest'
       end
-      installer = Installer.new(podfile)
+
+      sandbox = Sandbox.new(fixture('integration'))
+      resolver = Resolver.new(podfile, nil, sandbox)
+      installer = Installer.new(resolver)
       pods = installer.specifications.map do |spec|
         LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
       end
@@ -51,7 +57,8 @@ module Pod
           pod 'JSONKit'
         end
       end
-      installer = Installer.new(podfile)
+      resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
+      installer = Installer.new(resolver)
       installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
     end
 
@@ -61,7 +68,8 @@ module Pod
         platform :ios
         xcodeproj path, 'App Store' => :release
       end
-      installer = Installer.new(podfile)
+      resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
+      installer = Installer.new(resolver)
       installer.project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
     end
 
@@ -70,7 +78,8 @@ module Pod
         platform :ios
         pod 'JSONKit', :head
       end
-      installer = Installer.new(podfile)
+      resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
+      installer = Installer.new(resolver)
       pod = installer.pods.first
 
       downloader = stub('Downloader')

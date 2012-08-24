@@ -3,9 +3,9 @@ require 'cocoapods/open_uri'
 module Pod
   class Dependency < Gem::Dependency
 
-    attr_reader :external_source, :head
+    attr_reader :head
     alias :head? :head
-    attr_accessor :specification
+    attr_accessor :specification, :external_source
 
     def initialize(*name_and_version_requirements, &block)
       if name_and_version_requirements.empty? && block
@@ -40,7 +40,7 @@ module Pod
     end
 
     def ==(other)
-      super && (@specification ? @specification == other.specification : @external_source == other.external_source)
+      super && (head? == other.head?) && (@specification ? @specification == other.specification : @external_source == other.external_source)
     end
 
     def subspec_dependency?
@@ -76,18 +76,23 @@ module Pod
       if external?
         version << @external_source.description
       elsif inline?
-        version << "defined in Podfile"
+        version << 'defined in Podfile'
+      elsif head?
+        version << 'HEAD'
       elsif @version_requirements != Gem::Requirement.default
         version << @version_requirements.to_s
       end
       result = @name.dup
-      result += " (#{version})" unless version.empty?
-      result += " [HEAD]" if head?
+      result << " (#{version})" unless version.empty?
       result
     end
 
     def specification_from_sandbox(sandbox, platform)
       @external_source.specification_from_sandbox(sandbox, platform)
+    end
+
+    def match_version?(version)
+      match?(name, version) && (version.head? == head?)
     end
 
     # Taken from RubyGems 1.3.7
@@ -128,10 +133,13 @@ module Pod
 
     module ExternalSources
       def self.from_params(name, params)
+        return unless name && params
         if params.key?(:git)
           GitSource.new(name, params)
         elsif params.key?(:podspec)
           PodspecSource.new(name, params)
+        elsif params.key?(:local)
+          LocalSource.new(name, params)
         else
           raise Informative, "Unknown external source parameters for #{name}: #{params}"
         end
@@ -158,18 +166,22 @@ module Pod
 
         def specification_from_external(sandbox, platform)
           copy_external_source_into_sandbox(sandbox, platform)
-          specification_from_local(sandbox, platform)
+          spec = specification_from_local(sandbox, platform)
+          raise Informative, "No podspec found for `#{name}' in #{description}" unless spec
+          spec
         end
 
-        def ==(other_source)
-          return if other_source.nil?
-          name == other_source.name && params == other_source.params
+        def ==(other)
+          return if other.nil?
+          name == other.name && params == other.params
         end
       end
 
       class GitSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox, platform)
-          puts "  * Pre-downloading: '#{name}'" unless config.silent?
+          puts "-> Pre-downloading: '#{name}'" unless config.silent?
+          target = sandbox.root + name
+          target.rmtree if target.exist?
           downloader = Downloader.for_target(sandbox.root + name, @params)
           downloader.download
           if local_pod = sandbox.installed_pod_named(name, platform)
@@ -191,14 +203,45 @@ module Pod
         def copy_external_source_into_sandbox(sandbox, _)
           output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
           output_path.dirname.mkpath
-          puts "  * Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
-          open(@params[:podspec]) do |io|
+          puts "-> Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
+          path = @params[:podspec]
+          path = Pathname.new(path).expand_path if path.start_with?("~")
+          open(path) do |io|
             output_path.open('w') { |f| f << io.read }
           end
         end
 
         def description
           "from `#{@params[:podspec]}'"
+        end
+      end
+
+      class LocalSource < AbstractExternalSource
+        def pod_spec_path
+          path = Pathname.new(@params[:local]).expand_path + "#{name}.podspec"
+          raise Informative, "No podspec found for `#{name}' in `#{@params[:local]}'" unless path.exist?
+          path
+        end
+
+        def copy_external_source_into_sandbox(sandbox, _)
+          output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
+          output_path.dirname.mkpath
+          FileUtils.copy(pod_spec_path, output_path)
+        end
+
+        def specification_from_local(sandbox, platform)
+          specification_from_external(sandbox, platform)
+        end
+
+        def specification_from_external(sandbox, platform)
+          copy_external_source_into_sandbox(sandbox, platform)
+          spec = Specification.from_file(pod_spec_path)
+          spec.source = @params
+          spec
+        end
+
+        def description
+          "from `#{@params[:local]}'"
         end
       end
     end

@@ -7,19 +7,12 @@ module Pod
 
     include Config::Mixin
 
-    attr_reader :sandbox
+    attr_reader :resolver, :sandbox, :lockfile
 
-    def initialize(podfile)
-      @podfile = podfile
-      # FIXME: pass this into the installer as a parameter
-      @sandbox = Sandbox.new(config.project_pods_root)
-      @resolver = Resolver.new(@podfile, @sandbox)
-      # TODO: remove in 0.7 (legacy support for config.ios? and config.osx?)
-      config.podfile = podfile
-    end
-
-    def lock_file
-      config.project_root + 'Podfile.lock'
+    def initialize(resolver)
+      @resolver = resolver
+      @podfile = resolver.podfile
+      @sandbox = resolver.sandbox
     end
 
     def project
@@ -29,7 +22,8 @@ module Pod
       pods.each do |pod|
         # Add all source files to the project grouped by pod
         pod.relative_source_files_by_spec.each do |spec, paths|
-          group = @project.add_spec_group(spec.name)
+          parent_group = pod.local? ? @project.local_pods : @project.pods
+          group = @project.add_spec_to_group(pod.name, parent_group)
           paths.each do |path|
             group.files.new('path' => path.to_s)
           end
@@ -46,8 +40,17 @@ module Pod
       end.compact
     end
 
+    # Install the Pods. If the resolver indicated that a Pod should be installed
+    #   and it exits, it is removed an then reinstalled. In any case if the Pod
+    #   doesn't exits it is installed.
+    #
+    # @return [void]
+    #
     def install_dependencies!
-      pods.each do |pod|
+      pods.sort_by { |pod| pod.top_specification.name.downcase }.each do |pod|
+        name = pod.top_specification.name
+        should_install = @resolver.should_install?(name) || !pod.exists?
+
         unless config.silent?
           marker = config.verbose ? "\n-> ".green : ''
           if subspec_name = pod.top_specification.preferred_dependency
@@ -55,15 +58,14 @@ module Pod
           else
             name = pod.to_s
           end
-          name << " [HEAD]" if pod.top_specification.version.head?
-          puts marker << ( pod.exists? ? "Using #{name}" : "Installing #{name}".green )
+          puts marker << ( should_install ? "Installing #{name}".green : "Using #{name}" )
         end
 
-        download_pod(pod) unless pod.exists?
-
-        # This will not happen if the pod existed before we started the install
-        # process.
-        if pod.downloaded?
+        if should_install
+          unless pod.downloaded?
+            pod.implode
+            download_pod(pod)
+          end
           # The docs need to be generated before cleaning because the
           # documentation is created for all the subspecs.
           generate_docs(pod)
@@ -100,11 +102,25 @@ module Pod
       end
     end
 
+    # @TODO: use the local pod implode
+    #
+    def remove_deleted_dependencies!
+      resolver.removed_pods.each do |pod_name|
+        marker = config.verbose ? "\n-> ".red : ''
+        path = sandbox.root + pod_name
+        puts marker << "Removing #{pod_name}".red
+        path.rmtree if path.exist?
+      end
+    end
+
     def install!
       @sandbox.prepare_for_install
 
       print_title "Resolving dependencies of: #{@podfile.defined_in_file}"
       specs_by_target
+
+      print_title "Removing deleted dependencies" unless resolver.removed_pods.empty?
+      remove_deleted_dependencies!
 
       print_title "Installing dependencies"
       install_dependencies!
@@ -119,14 +135,16 @@ module Pod
         generate_dummy_source(target_installer)
       end
 
-      generate_lock_file!(specifications)
-
       puts "- Running post install hooks" if config.verbose?
       # Post install hooks run _before_ saving of project, so that they can alter it before saving.
       run_post_install_hooks
 
-      puts "- Writing Xcode project file to `#{@sandbox.project_path}'\n\n" if config.verbose?
+      puts "- Writing Xcode project file to `#{@sandbox.project_path}'" if config.verbose?
       project.save_as(@sandbox.project_path)
+
+      puts "- Writing lockfile in `#{config.project_lockfile}'\n\n" if config.verbose?
+      @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
+      @lockfile.write_to_disk(config.project_lockfile)
 
       UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
     end
@@ -141,44 +159,6 @@ module Pod
       end
 
       @podfile.post_install!(self)
-    end
-
-    def generate_lock_file!(specs)
-      lock_file.open('w') do |file|
-        file.puts "PODS:"
-
-        # Get list of [name, dependencies] pairs.
-        pod_and_deps = specs.map do |spec|
-          [spec.to_s, spec.dependencies.map(&:to_s).sort]
-        end.uniq
-
-        # Merge dependencies of ios and osx version of the same pod.
-        tmp = {}
-        pod_and_deps.each do |name, deps|
-          if tmp[name]
-            tmp[name].concat(deps).uniq!
-          else
-            tmp[name] = deps
-          end
-        end
-        pod_and_deps = tmp
-
-        # Sort by name and print
-        pod_and_deps.sort_by(&:first).each do |name, deps|
-          if deps.empty?
-            file.puts "  - #{name}"
-          else
-            file.puts "  - #{name}:"
-            deps.each { |dep| file.puts "    - #{dep}" }
-          end
-        end
-
-        file.puts
-        file.puts "DEPENDENCIES:"
-        @podfile.dependencies.map(&:to_s).sort.each do |dep|
-          file.puts "  - #{dep}"
-        end
-      end
     end
 
     def generate_dummy_source(target_installer)
@@ -215,7 +195,11 @@ module Pod
       specs_by_target.each do |target_definition, specs|
         @pods_by_spec[target_definition.platform] = {}
         result[target_definition] = specs.map do |spec|
-          @sandbox.local_pod_for_spec(spec, target_definition.platform)
+          if spec.local?
+            LocalPod::LocalSourcedPod.new(spec, sandbox, target_definition.platform)
+          else
+            @sandbox.local_pod_for_spec(spec, target_definition.platform)
+          end
         end.uniq.compact
       end
       result

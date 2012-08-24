@@ -34,9 +34,14 @@ module Pod
       groups.find { |g| g.name == 'Pods' } || groups.new({ 'name' => 'Pods' })
     end
 
+    # Shortcut access to the `Local Pods' PBXGroup.
+    def local_pods
+      groups.find { |g| g.name == 'Local Pods' } || groups.new({ 'name' => 'Local Pods' })
+    end
+
     # Adds a group as child to the `Pods' group namespacing subspecs.
-    def add_spec_group(name)
-      groups = pods.groups
+    def add_spec_to_group(name, parent_group)
+      groups = parent_group.groups
       group = nil
       name.split('/').each do |name|
         group = groups.find { |g| g.name == name } || groups.new({ 'name' => name })

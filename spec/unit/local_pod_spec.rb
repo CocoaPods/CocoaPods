@@ -323,4 +323,57 @@ describe Pod::LocalPod do
       public_headers.should == %w{ UIKit.h }
     end
   end
+
+  describe "concerning a Pod with a local source" do
+    extend SpecHelper::TemporaryDirectory
+
+    before do
+      @local_path = temporary_directory + 'localBanana'
+      @sandbox = temporary_sandbox
+      @spec = fixture_spec('banana-lib/BananaLib.podspec')
+      @spec.source = {:local => @local_path}
+      @pod = Pod::LocalPod::LocalSourcedPod.new(@spec, @sandbox, Pod::Platform.new(:ios))
+    end
+
+    it "is marked as local" do
+      @pod.to_s.should.include? '[LOCAL]'
+    end
+
+    it "is marked as downloaded" do
+      @pod.downloaded?.should.be.true
+    end
+
+    it "correctly repports the root of the pod" do
+      @pod.root.should == @local_path
+    end
+
+    it "doesn't create the root" do
+      @pod.create
+      @local_path.exist?.should.be.false
+    end
+
+    before do
+      FileUtils.cp_r(fixture('banana-lib'), @local_path)
+    end
+
+    it "doesn't cleans the user files" do
+      useless_file = @local_path + 'useless.txt'
+      FileUtils.touch (useless_file)
+      @pod.root.should == @local_path
+      @pod.clean!
+      useless_file.exist?.should.be.true
+    end
+
+    it "doesn't implode" do
+      @pod.implode
+      @local_path.exist?.should.be.true
+    end
+
+    it "detects the files of the pod" do
+      @pod.source_files.map {|path| path.to_s.gsub(/.*tmp\//,'') }.sort.should == [
+        "localBanana/Classes/Banana.m",
+        "localBanana/Classes/Banana.h"
+      ].sort
+    end
+  end
 end

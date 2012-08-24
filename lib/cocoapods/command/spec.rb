@@ -4,7 +4,7 @@ module Pod
   class Command
     class Spec < Command
       def self.banner
-        %{Managing PodSpec files:
+%{Managing PodSpec files:
 
     $ pod spec create [ NAME | https://github.com/USER/REPO ]
 
