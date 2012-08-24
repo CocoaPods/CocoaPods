@@ -1,3 +1,14 @@
+## Master
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...HEAD)
+
+###### Enhancements
+
+- The subversion downloader now does an export instead of a checkout, which
+  makes it play nicer with SCMs that store metadata in each directory.
+  [#245](https://github.com/CocoaPods/CocoaPods/issues/245)
+
+
 ## 0.13.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.12.0...0.13.0)
@@ -12,6 +23,7 @@
 
 - The final project isn’t affected anymore by the `inhibit_all_warnings!` option.
 - Support for redirects while using podspec from an url. [#462](https://github.com/CocoaPods/CocoaPods/issues/462)
+
 
 ## 0.12.0
 
