@@ -393,14 +393,14 @@ module Pod
       # Remove this spec's name from the beginning of the name we’re looking for
       # and take the first component from the remainder, which is the spec we need
       # to find now.
-      remainder = name[self.name.size+1..-1].split('/')
-      subspec_name = remainder.shift
+      remainder = name[self.name.size+1..-1]
+      raise Informative, "Unable to find a specification named `#{name}' in `#{pod_name}'." unless remainder
+      subspec_name = remainder.split('/').shift
       subspec = subspecs.find { |s| s.name == "#{self.name}/#{subspec_name}" }
+      raise Informative, "Unable to find a specification named `#{name}' in `#{pod_name}'." unless subspec
       # If this was the last component in the name, then return the subspec,
       # otherwise we recursively keep calling subspec_by_name until we reach the
       # last one and return that
-
-      raise Informative, "Unable to find a subspec named `#{name}'." unless subspec
       remainder.empty? ? subspec : subspec.subspec_by_name(name)
     end
 
