@@ -3,12 +3,16 @@ module Pod
     class Subversion < Downloader
       executable :svn
 
+      def initialize(target_path, url, options)
+        @target_path, @url, @options = target_path, url, options
+      end
+
       def download
-        svn! "export #{reference_url}" "#{target_path}"|
+        svn! %|export "#{reference_url}" "#{target_path}"|
       end
 
       def download_head
-        svn! "export #{trunk_url}" "#{target_path}"|
+        svn! %|export "#{trunk_url}" "#{target_path}"|
       end
 
       def reference_url
