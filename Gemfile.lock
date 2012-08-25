@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: e5e7bdf8acb0363042adc78feca8d6136950f7d7
+  revision: 96cec1eed003f3477211fc02167a223857a0d6bc
   specs:
-    xcodeproj (0.3.1)
+    xcodeproj (0.3.2)
       activesupport (~> 3.2.6)
 
 PATH
@@ -22,7 +22,7 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.2.7)
+    activesupport (3.2.8)
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.3.2)
@@ -32,15 +32,15 @@ GEM
     colored (1.2)
     crack (0.3.1)
     escape (0.0.4)
-    faraday (0.8.1)
+    faraday (0.8.4)
       multipart-post (~> 1.1)
     faraday_middleware (0.8.8)
       faraday (>= 0.7.4, < 0.9)
-    ffi (1.1.4)
+    ffi (1.1.5)
     github-markup (0.7.4)
     hashie (1.2.0)
     i18n (0.6.0)
-    json (1.7.4)
+    json (1.7.5)
     kicker (3.0.0pre1)
       listen
     listen (0.4.7)
@@ -75,7 +75,7 @@ GEM
     redcarpet (2.1.1)
     slop (3.3.2)
     vcr (2.2.4)
-    webmock (1.8.7)
+    webmock (1.8.9)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
     yard (0.8.2.1)
