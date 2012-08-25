@@ -46,6 +46,7 @@
 - The git cache now fetches the tags from the remote if it can’t find the
   reference.
 - Xcodeproj now builds on 10.6.8 and Travis CI without symlinking headers.
+- Only try to install, add source files to the project, and clean a Pod once.
 
 ###### Known Limitations
 
