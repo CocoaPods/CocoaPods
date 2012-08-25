@@ -358,7 +358,7 @@ describe Pod::LocalPod do
 
     it "doesn't cleans the user files" do
       useless_file = @local_path + 'useless.txt'
-      FileUtils.touch (useless_file)
+      FileUtils.touch(useless_file)
       @pod.root.should == @local_path
       @pod.clean!
       useless_file.exist?.should.be.true

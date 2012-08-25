@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/cocoapods', __FILE__)
+$:.unshift File.expand_path('../lib', __FILE__)
+require 'cocoapods'
 
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
