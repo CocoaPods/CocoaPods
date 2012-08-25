@@ -75,8 +75,8 @@ module Pod
         group.files.map(&:name).should == ["Reachability.h", "Reachability.m"]
       end
 
-      it "it list a pod only once" do
-        reachability_pods = @installer.pods.map(&:to_s).select{|s| s.include?('Reachability')}
+      it "lists a pod only once" do
+        reachability_pods = @installer.pods.map(&:to_s).select{|s| s.include?('Reachability') }
         reachability_pods.count.should == 1
       end
 

@@ -23,7 +23,7 @@ module Pod
         # Add all source files to the project grouped by pod
         pod.relative_source_files_by_spec.each do |spec, paths|
           parent_group = pod.local? ? @project.local_pods : @project.pods
-          group = @project.add_spec_to_group(pod.name, parent_group)
+          group = @project.add_spec_group(pod.name, parent_group)
           paths.each do |path|
             group.files.new('path' => path.to_s)
           end
@@ -186,7 +186,7 @@ module Pod
     # @return [Array<LocalPod>]  A list of LocalPod instances for each
     #                            dependency that is not a download-only one.
     def pods
-      pods_by_target.values.flatten
+      pods_by_target.values.flatten.uniq
     end
 
     def pods_by_target
