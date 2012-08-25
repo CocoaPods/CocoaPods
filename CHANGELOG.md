@@ -1,12 +1,16 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...HEAD)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...HEAD) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.1...0.3.2)
 
 ###### Enhancements
 
 - The subversion downloader now does an export instead of a checkout, which
   makes it play nicer with SCMs that store metadata in each directory.
   [#245](https://github.com/CocoaPods/CocoaPods/issues/245)
+
+###### Bug fixes
+
+- Xcodeproj now builds on 10.6.8 and Travis CI without symlinking headers.
 
 
 ## 0.13.0
