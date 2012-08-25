@@ -1,5 +1,11 @@
+
 PODS:
-  - MGSplitViewController (1.0.0)
+- MGSplitViewController (1.0.0)
 
 DEPENDENCIES:
-  - MGSplitViewController (= 1.0.0)
+- MGSplitViewController (= 1.0.0)
+
+SPEC CHECKSUMS:
+  MGSplitViewController: e0b0bc01aa81e1559765c39e7a764c890dac373a
+
+COCOAPODS: 0.13.0

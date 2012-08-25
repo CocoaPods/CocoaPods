@@ -70,13 +70,13 @@ else
           end
 
           # Note that we are *not* using the stubbed SpecHelper::Installer subclass.
-          installer = Pod::Installer.new(podfile)
+          resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+          installer = Pod::Installer.new(resolver)
           installer.install!
-
-          YAML.load(installer.lock_file.read).should == {
-            'PODS' => ['SSToolkit (0.1.3)'],
-            'DEPENDENCIES' => ["SSToolkit (from `#{url}', commit `#{commit}')"]
-          }
+          result = installer.lockfile.to_hash
+          result['PODS'].should  == ['SSToolkit (0.1.3)']
+          result['DEPENDENCIES'].should == ["SSToolkit (from `#{url}', commit `#{commit}')"]
+          result['EXTERNAL SOURCES'].should == {"SSToolkit" => { :git=>url, :commit=>commit}}
         end
 
         it "installs a library with a podspec outside of the repo" do
@@ -88,14 +88,13 @@ else
             pod 'Reachability', :podspec => url
           end
 
-          installer = SpecHelper::Installer.new(podfile)
+          resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+          installer = SpecHelper::Installer.new(resolver)
           installer.install!
-
-          YAML.load(installer.lock_file.read).should == {
-            'PODS' => [ 'Reachability (1.2.3)' ],
-            # 'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
-            'DEPENDENCIES' => ["Reachability (from `#{url}')"]
-          }
+          result = installer.lockfile.to_hash
+          result['PODS'].should  == ['Reachability (1.2.3)']
+          result['DEPENDENCIES'].should == ["Reachability (from `#{url}')"]
+          result['EXTERNAL SOURCES'].should == {"Reachability"=>{ :podspec=>"https://raw.github.com/gist/1349824/3ec6aa60c19113573fc48eac19d0fafd6a69e033/Reachability.podspec"}}
         end
 
         it "installs a dummy source file" do
@@ -111,7 +110,8 @@ else
             end
           end
 
-          installer = SpecHelper::Installer.new(podfile)
+          resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+          installer = SpecHelper::Installer.new(resolver)
           installer.install!
 
           dummy = (config.project_pods_root + 'PodsDummy_Pods.m').read
@@ -134,7 +134,8 @@ else
             end
           end
 
-          installer = SpecHelper::Installer.new(podfile)
+          resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+          installer = SpecHelper::Installer.new(resolver)
           installer.install!
 
           dummy = (config.project_pods_root + 'PodsDummy_Pods_AnotherTarget.m').read
@@ -160,10 +161,11 @@ else
           end
 
           Pod::Specification.any_instance.stubs(:preserve_paths).returns(['CHANGELOG.md'])
-          installer = SpecHelper::Installer.new(podfile)
+          resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+          installer = SpecHelper::Installer.new(resolver)
           installer.install!
 
-          YAML.load(installer.lock_file.read).should == {
+          installer.lockfile.to_hash.tap {|d| d.delete("COCOAPODS") }.should == {
             'PODS' => ['JSONKit (1.2)', 'SSZipArchive (0.1.0)'],
             'DEPENDENCIES' => ["JSONKit (defined in Podfile)", "SSZipArchive (defined in Podfile)"]
           }
@@ -188,21 +190,23 @@ else
             end
           end
 
-          installer = SpecHelper::Installer.new(podfile)
+          resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+          installer = SpecHelper::Installer.new(resolver)
           installer.install!
 
+          result = installer.lockfile.to_hash
+          result['PODS'].should  == [
+            { "ASIHTTPRequest (1.8.1)" =>                   ["ASIHTTPRequest/ASIWebPageRequest (= 1.8.1)",
+                                                             "ASIHTTPRequest/CloudFiles (= 1.8.1)",
+                                                             "ASIHTTPRequest/S3 (= 1.8.1)",
+                                                             "Reachability"]},
+           { "ASIHTTPRequest/ASIWebPageRequest (1.8.1)" =>  ["Reachability"] },
+           { "ASIHTTPRequest/CloudFiles (1.8.1)" =>         ["Reachability"] },
+           { "ASIHTTPRequest/S3 (1.8.1)" =>                 ["Reachability"] },
+           "JSONKit (1.4)",
+           "Reachability (3.0.0)"]
+          result['DEPENDENCIES'].should == ["ASIHTTPRequest", "JSONKit (= 1.4)"]
           # TODO might be nicer looking to not show the dependencies of the top level spec for each subspec (Reachability).
-          YAML.load(installer.lock_file.read).should == {
-            "PODS" => [{ "ASIHTTPRequest (1.8.1)" => ["ASIHTTPRequest/ASIWebPageRequest (= 1.8.1)",
-                                                      "ASIHTTPRequest/CloudFiles (= 1.8.1)",
-                                                      "ASIHTTPRequest/S3 (= 1.8.1)",
-                                                      "Reachability"]},
-                       { "ASIHTTPRequest/ASIWebPageRequest (1.8.1)" => ["Reachability"] },
-                       { "ASIHTTPRequest/CloudFiles (1.8.1)" => ["Reachability"] },
-                       { "ASIHTTPRequest/S3 (1.8.1)" => ["Reachability"] },
-                       "JSONKit (1.4)", "Reachability (3.0.0)"],
-            "DEPENDENCIES" => ["ASIHTTPRequest", "JSONKit (= 1.4)"]
-          }
 
           should_xcodebuild(podfile.target_definitions[:ios_target])
           should_xcodebuild(podfile.target_definitions[:osx_target])
@@ -227,7 +231,8 @@ else
               pod 'JSONKit', '1.4'
               pod 'SSToolkit', '1.0.0'
             end
-            installer = SpecHelper::Installer.new(podfile)
+            resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+            installer = SpecHelper::Installer.new(resolver)
             installer.install!
 
             doc = (config.project_pods_root + 'Documentation/JSONKit/html/index.html').read
@@ -248,7 +253,7 @@ else
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          pod 'SSZipArchive'
+          pod 'SSZipArchive', '0.1.0'
 
           post_install do |installer|
             target = installer.project.targets.first
@@ -258,7 +263,8 @@ else
           end
         end
 
-        SpecHelper::Installer.new(podfile).install!
+        resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+        SpecHelper::Installer.new(resolver).install!
         project = Pod::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.targets.first.build_configurations.map do |config|
           config.build_settings['GCC_ENABLE_OBJC_GC']
@@ -266,42 +272,41 @@ else
       end
 
       # TODO add a simple source file which uses the compiled lib to check that it really really works
-      # TODO update for specification refactor
       it "activates required pods and create a working static library xcode project" do
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
           pod 'Reachability',      '> 2.0.5' if platform == :ios
-          # pod 'ASIWebPageRequest', '>= 1.8.1'
           pod 'JSONKit',           '>= 1.0'
-          pod 'SSZipArchive',      '< 2'
+          pod 'SSZipArchive',      '< 0.1.2'
         end
 
-        installer = SpecHelper::Installer.new(podfile)
+        resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+        installer = SpecHelper::Installer.new(resolver)
         installer.install!
 
-        lock_file_contents = {
+        lockfile_contents = {
           'PODS' => [
-            # { 'ASIHTTPRequest (1.8.1)'    => ["Reachability"] },
-            # { 'ASIWebPageRequest (1.8.1)' => ["ASIHTTPRequest (= 1.8.1)"] },
             'JSONKit (1.5pre)',
             'Reachability (3.0.0)',
-            'SSZipArchive (0.2.2)',
+            'SSZipArchive (0.1.1)',
           ],
           'DEPENDENCIES' => [
-            # "ASIWebPageRequest (>= 1.8.1)",
             "JSONKit (>= 1.0)",
             "Reachability (> 2.0.5)",
-            "SSZipArchive (< 2)",
-          ]
+            "SSZipArchive (< 0.1.2)",
+          ],
+          "COCOAPODS" => Pod::VERSION
         }
         unless platform == :ios
           # No Reachability is required by ASIHTTPRequest on OSX
-          lock_file_contents['DEPENDENCIES'].delete_at(1)
-          lock_file_contents['PODS'].delete_at(1)
-          # lock_file_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
+          lockfile_contents['DEPENDENCIES'].delete_at(1)
+          lockfile_contents['PODS'].delete_at(1)
+          # lockfile_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
         end
-        YAML.load(installer.lock_file.read).should == lock_file_contents
+        result = installer.lockfile.to_hash
+        result.delete("SPEC CHECKSUMS")
+        result.should == lockfile_contents
 
         root = config.project_pods_root
         (root + 'Pods.xcconfig').read.should == installer.target_installers.first.xcconfig.to_s
@@ -312,7 +317,6 @@ else
       end
 
       if platform == :ios
-        # TODO: update for Specification Refactor
         it "does not activate pods that are only part of other pods" do
           spec = Pod::Podfile.new do
             self.platform platform
@@ -320,15 +324,13 @@ else
             pod 'Reachability', '2.0.4' # only 2.0.4 is part of ASIHTTPRequest’s source.
           end
 
-          installer = SpecHelper::Installer.new(spec)
+          resolver = Pod::Resolver.new(spec, nil, Pod::Sandbox.new(config.project_pods_root))
+          installer = SpecHelper::Installer.new(resolver)
           installer.install!
 
-          YAML.load(installer.lock_file.read).should == {
-            # 'PODS' => [{ 'Reachability (2.0.4)' => ["ASIHTTPRequest (>= 1.8)"] }],
-            'PODS' => [ 'Reachability (2.0.4)' ],
-            # 'DOWNLOAD_ONLY' => ["ASIHTTPRequest (1.8.1)"],
-            'DEPENDENCIES' => ["Reachability (= 2.0.4)"]
-          }
+          result = installer.lockfile.to_hash
+          result['PODS'].should == [ 'Reachability (2.0.4)' ]
+          result['DEPENDENCIES'].should == ["Reachability (= 2.0.4)"]
         end
       end
 
@@ -336,10 +338,11 @@ else
         spec = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          pod 'SSZipArchive'
+          pod 'SSZipArchive', '0.1.0'
         end
 
-        installer = SpecHelper::Installer.new(spec)
+        resolver = Pod::Resolver.new(spec, nil, Pod::Sandbox.new(config.project_pods_root))
+        installer = SpecHelper::Installer.new(resolver)
         target_definition = installer.target_installers.first.target_definition
         installer.specs_by_target[target_definition].first.resources = 'LICEN*', 'Readme.*'
         installer.install!
@@ -356,15 +359,17 @@ else
           xcodeproj 'dummy'
           pod 'JSONKit'
         end
-        installer = SpecHelper::Installer.new(spec)
+        resolver = Pod::Resolver.new(spec, nil, Pod::Sandbox.new(config.project_pods_root))
+        installer = SpecHelper::Installer.new(resolver)
         installer.install!
 
         spec = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          pod 'SSZipArchive'
+          pod 'SSZipArchive', '0.1.0'
         end
-        installer = SpecHelper::Installer.new(spec)
+        resolver = Pod::Resolver.new(spec, nil, Pod::Sandbox.new(config.project_pods_root))
+        installer = SpecHelper::Installer.new(resolver)
         installer.install!
 
         project = Pod::Project.new(config.project_pods_root + 'Pods.xcodeproj')
@@ -375,12 +380,14 @@ else
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          target(:debug) { pod 'SSZipArchive' }
+          target(:debug) { pod 'SSZipArchive', '0.1.0' }
           target(:test, :exclusive => true) { pod 'JSONKit' }
           pod 'ASIHTTPRequest'
         end
 
-        installer = Pod::Installer.new(podfile)
+        resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(fixture('integration')))
+        resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+        installer = Pod::Installer.new(resolver)
         installer.install!
 
         project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
@@ -428,10 +435,11 @@ else
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj projpath
-          pod 'SSZipArchive'
+          pod 'SSZipArchive', '0.1.0'
         end
 
-        installer = SpecHelper::Installer.new(podfile)
+        resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+        installer = SpecHelper::Installer.new(resolver)
         installer.install!
 
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(temporary_directory + 'ASIHTTPRequest.xcworkspace')
@@ -453,12 +461,13 @@ else
         podfile = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
-          target(:debug) { pod 'SSZipArchive' }
+          target(:debug) { pod 'SSZipArchive', '0.1.0' }
           target(:test, :exclusive => true) { pod 'JSONKit' }
           pod 'ASIHTTPRequest'
         end
 
-        installer = Pod::Installer.new(podfile)
+        resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+        installer = Pod::Installer.new(resolver)
         installer.install!
 
         root = config.project_pods_root

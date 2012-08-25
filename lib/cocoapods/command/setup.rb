@@ -2,7 +2,7 @@ module Pod
   class Command
     class Setup < Command
       def self.banner
-        %{Setup CocoaPods environment:
+%{Setup CocoaPods environment:
 
     $ pod setup
 

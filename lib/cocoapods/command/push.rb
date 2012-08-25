@@ -4,14 +4,14 @@ module Pod
   class Command
     class Push < Command
       def self.banner
-        %{Pushing new specifications to a spec-repo:
+%{Pushing new specifications to a spec-repo:
 
-  $ pod push REPO [NAME.podspec]
+    $ pod push REPO [NAME.podspec]
 
-    Validates NAME.podspec or `*.podspec' in the current working dir, creates
-    a directory and version folder for the pod in the local copy of 
-    REPO (~/.cocoapods/[REPO]), copies the podspec file into the version directory,
-    and finally it pushes REPO to its remote.}
+      Validates NAME.podspec or `*.podspec' in the current working dir, creates
+      a directory and version folder for the pod in the local copy of 
+      REPO (~/.cocoapods/[REPO]), copies the podspec file into the version directory,
+      and finally it pushes REPO to its remote.}
       end
 
       def self.options

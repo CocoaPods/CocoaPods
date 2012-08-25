@@ -4,14 +4,46 @@
 
 ###### Enhancements
 
+- Improved installation process:
+  - The installed version of a Pod (recorded in `Podfile.lock`) is preserved
+    across installations and machines.
+  - Pods are reinstalled if the version required changes and is not compatible
+    with current installed one.
+    [#191](https://github.com/CocoaPods/CocoaPods/issues/191)
+  - Pods are reinstalled when their external source changes.
+  - The folders of the Pods not required anymore are removed.
+    [#298](https://github.com/CocoaPods/CocoaPods/issues/298)
+- Introducing `pod update` that installs the dependencies of the Podfile
+  regardless of the contents of `Podfile.lock`.
+  [#131](https://github.com/CocoaPods/CocoaPods/issues/131)
+- Introducing `pod outdated` that show the pods with known updates.
+- Added `:local` option for dependencies.
+  [#458,](https://github.com/CocoaPods/CocoaPods/issues/458)
+  [#415,](https://github.com/CocoaPods/CocoaPods/issues/415)
+  [#156](https://github.com/CocoaPods/CocoaPods/issues/156)
+- Added a meaningful error messages:
+  - in case a podspec couldn’t be found in the root of an external source.
+    [#385,](https://github.com/CocoaPods/CocoaPods/issues/385)
+    [#338,](https://github.com/CocoaPods/CocoaPods/issues/338)
+    [#337](https://github.com/CocoaPods/CocoaPods/issues/337)
+  - in case a subspec name is misspelled.
+    [#327](https://github.com/CocoaPods/CocoaPods/issues/327)
+  - in case a unrecognized commands/argument is provided.
 - The subversion downloader now does an export instead of a checkout, which
   makes it play nicer with SCMs that store metadata in each directory.
   [#245](https://github.com/CocoaPods/CocoaPods/issues/245)
 
 ###### Bug fixes
 
+- The git cache now fetches the tags from the remote if it can’t find the
+  reference.
 - Xcodeproj now builds on 10.6.8 and Travis CI without symlinking headers.
 
+###### Known Limitations
+
+- The SCM reference of head Pods is not preserved across machines.
+- Pods whose inline specification changed are not detected as modified. As a
+  workaround, remove their folder stored in `Pods`.
 
 ## 0.13.0
 
@@ -19,14 +51,18 @@
 
 ###### Enhancements
 
-- Add Podfile `podspec` which allows to use the dependencies of a podspec file. [#162](https://github.com/CocoaPods/CocoaPods/issues/162)
-- Check if any of the build settings defined in the xcconfig files is overridden. [#92](https://github.com/CocoaPods/CocoaPods/issues/92)
+- Add Podfile `podspec` which allows to use the dependencies of a podspec file.
+  [#162](https://github.com/CocoaPods/CocoaPods/issues/162)
+- Check if any of the build settings defined in the xcconfig files is
+  overridden. [#92](https://github.com/CocoaPods/CocoaPods/issues/92)
 - The Linter now checks that there are no compiler flags that disable warnings.
 
 ###### Bug fixes
 
-- The final project isn’t affected anymore by the `inhibit_all_warnings!` option.
-- Support for redirects while using podspec from an url. [#462](https://github.com/CocoaPods/CocoaPods/issues/462)
+- The final project isn’t affected anymore by the `inhibit_all_warnings!`
+  option.
+- Support for redirects while using podspec from an url.
+  [#462](https://github.com/CocoaPods/CocoaPods/issues/462)
 
 
 ## 0.12.0
@@ -35,14 +71,20 @@
 
 ###### Enhancements
 
-- The documentation is generated using the public headers if they are specified.
-- In case of a download failure the installation is aborted and the error message is shown.
+- The documentation is generated using the public headers if they are
+  specified.
+- In case of a download failure the installation is aborted and the error
+  message is shown.
 - Git submodules are initialized only if requested.
-- Don’t impose a certain structure of the user’s project by raising if no ‘Frameworks’ group exists. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
+- Don’t impose a certain structure of the user’s project by raising if no
+  ‘Frameworks’ group exists.
+  [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
 - Support for GitHub Gists in the linter.
 - Allow specifying ARC settings in subspecs.
-- Add Podfile `inhibit_all_warnings!` which will inhibit all warnings from the Pods library. [#209](https://github.com/CocoaPods/CocoaPods/issues/209)
-- Make the Pods Xcode project prettier by namespacing subspecs in nested groups. [#466](https://github.com/CocoaPods/CocoaPods/pull/466)
+- Add Podfile `inhibit_all_warnings!` which will inhibit all warnings from the
+  Pods library. [#209](https://github.com/CocoaPods/CocoaPods/issues/209)
+- Make the Pods Xcode project prettier by namespacing subspecs in nested
+  groups. [#466](https://github.com/CocoaPods/CocoaPods/pull/466)
 
 
 ## 0.11.1
@@ -52,7 +94,8 @@
 ###### Bug fixes
 
 - Fixed a crash related to subspecs without header files. [#449]
-- Git submodules are loaded after the appropriate referenced is checked out and will be not loaded anymore in the cache. [#451]
+- Git submodules are loaded after the appropriate referenced is checked out and
+  will be not loaded anymore in the cache. [#451]
 - Fixed SVN support for the head version. [#432]
 
 
@@ -65,7 +108,9 @@
 - Added support for public headers. [#440]
 - Added `pod repo lint`. [#423]
 - Improved support for `:head` option and SVN repositories.
-- When integrating Pods with a project without "Frameworks" group in root of the project, raise an informative message. [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
+- When integrating Pods with a project without "Frameworks" group in root of
+  the project, raise an informative message.
+  [#431](https://github.com/CocoaPods/CocoaPods/pull/431)
 - Dropped support for legacy `config.ios?` and `config.osx?`
 
 ###### Bug fixes
@@ -80,16 +125,21 @@
 
 ###### Enhancements
 
-- Added a `--local-only` option to `pod push` so that developers can push locally and test before pushing to a remote. [#405](http://git.io/0ILJEw)
-- Added line number information for errors generated in the Podfile. [#408](http://git.io/fWQvMg)
-- Pods stored in git repositories now initialize submodules. [#406](http://git.io/L9ssSw)
+- Added a `--local-only` option to `pod push` so that developers can push
+  locally and test before pushing to a remote. [#405](http://git.io/0ILJEw)
+- Added line number information for errors generated in the Podfile.
+  [#408](http://git.io/fWQvMg)
+- Pods stored in git repositories now initialize submodules.
+  [#406](http://git.io/L9ssSw)
 
 ###### Bug fixes
 
 - Removed note about the post install hook form the linter.
 - Improved xcodebuild error detection in the linter.
-- Ensure the git cache exists, before updating it, when trying to install the ‘bleeding edge’ of a pod. [#426](http://git.io/d4eqRA)
-- Clean downloaded external pods **after** resolving and activating (sub)specs. [#414](http://git.io/i77q_w)
+- Ensure the git cache exists, before updating it, when trying to install the
+  ‘bleeding edge’ of a pod. [#426](http://git.io/d4eqRA)
+- Clean downloaded external pods **after** resolving and activating (sub)specs.
+  [#414](http://git.io/i77q_w)
 - Support `tar.gz` as filename in a HTTP source. [#428](http://git.io/qhwKkA)
 
 

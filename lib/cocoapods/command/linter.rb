@@ -103,7 +103,9 @@ module Pod
       def install_pod
         podfile = podfile_from_spec
         config.verbose
-        installer = Installer.new(podfile)
+        sandbox = Sandbox.new(config.project_pods_root)
+        resolver = Resolver.new(podfile, nil, sandbox)
+        installer = Installer.new(resolver)
         installer.install!
         @pod = installer.pods.find { |pod| pod.top_specification == spec }
         config.silent

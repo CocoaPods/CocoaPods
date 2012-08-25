@@ -45,16 +45,18 @@ module Pod
     attr_accessor :downloaded
     alias_method :downloaded?, :downloaded
 
-    # @param [Specification] specification
-    #   The first activated specification of the pod.
-    # @param [Sandbox] sandbox
-    #   The sandbox where the files of the pod will be located.
-    # @param [Platform] platform
-    #   The platform that will be used to build the pod.
+    # @param [Specification] specification  The first activated specification
+    #                                       of the pod.
+    #
+    # @param [Sandbox] sandbox              The sandbox where the files of the
+    #                                       pod will be located.
+    #
+    # @param [Platform] platform            The platform that will be used to
+    #                                       build the pod.
     #
     # @todo The local pod should be initialized with all the activated
-    #   specifications passed as an array, in order to be able to cache the
-    #   computed values. In other words, it should be immutable.
+    #       specifications passed as an array, in order to be able to cache the
+    #       computed values. In other words, it should be immutable.
     #
     def initialize(specification, sandbox, platform)
       @top_specification, @sandbox, @platform = specification.top_level_parent, sandbox, platform
@@ -93,12 +95,10 @@ module Pod
     end
 
     # @return [String] A string representation of the pod which indicates if
-    # the pods comes from a local source.
+    #                  the pods comes from a local source.
     #
     def to_s
-      result = top_specification.to_s
-      result << " [LOCAL]" if top_specification.local?
-      result
+      top_specification.to_s
     end
 
     # @return [String] The name of the Pod.
@@ -138,6 +138,10 @@ module Pod
     #
     def implode
       root.rmtree if exists?
+    end
+
+    def local?
+      false
     end
 
     # @!group Cleaning
@@ -507,6 +511,40 @@ module Pod
         end
         Pathname.glob(pattern, File::FNM_CASEFOLD)
       end.flatten
+    end
+
+    # A {LocalSourcedPod} is a {LocalPod} that interacts with the files of
+    # a folder controlled by the users. As such this class does not alter
+    # in any way the contents of the folder.
+    #
+    class LocalSourcedPod < LocalPod
+      def downloaded?
+        true
+      end
+
+      def create
+        # No ops
+      end
+
+      def root
+        @root ||= Pathname.new(@top_specification.source[:local]).expand_path
+      end
+
+      def implode
+        # No ops
+      end
+
+      def clean!
+        # No ops
+      end
+
+      def to_s
+        super + " [LOCAL]"
+      end
+
+      def local?
+        true
+      end
     end
   end
 end

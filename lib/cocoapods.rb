@@ -32,6 +32,7 @@ module Pod
   autoload :Executable,             'cocoapods/executable'
   autoload :Installer,              'cocoapods/installer'
   autoload :LocalPod,               'cocoapods/local_pod'
+  autoload :Lockfile,               'cocoapods/lockfile'
   autoload :Platform,               'cocoapods/platform'
   autoload :Podfile,                'cocoapods/podfile'
   autoload :Project,                'cocoapods/project'
