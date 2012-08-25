@@ -29,21 +29,13 @@ namespace :travis do
     end
   end
 
-  task :fix_rvm_include_dir do
-    unless File.exist?(File.join(rvm_ruby_dir, 'include'))
-      # Make Ruby headers available, RVM seems to do not create a include dir on 1.8.7, but it does on 1.9.3.
-      sh "mkdir '#{rvm_ruby_dir}/include'"
-      sh "ln -s '#{rvm_ruby_dir}/lib/ruby/1.8/i686-linux' '#{rvm_ruby_dir}/include/ruby'"
-    end
-  end
-
   task :install do
     sh "git submodule update --init"
     sh "sudo apt-get install subversion"
     sh "env CFLAGS='-I#{rvm_ruby_dir}/include' bundle install"
   end
 
-  task :setup => [:install_opencflite_debs, :fix_rvm_include_dir, :install]
+  task :setup => [:install_opencflite_debs, :install]
 end
 
 namespace :gem do
