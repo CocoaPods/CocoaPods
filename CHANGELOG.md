@@ -4,15 +4,14 @@
 
 ###### Enhancements
 
-- Improved installation process:
-  - The installed version of a Pod (recorded in `Podfile.lock`) is preserved
-    across installations and machines.
-  - Pods are reinstalled if the version required changes and is not compatible
-    with current installed one.
+- Improved installation process that preserves the installed version of a Pod
+  across installations and machines. The Pod is detected as modified and
+  reinstalled if:
+  - the version required in the Podfile changes and becomes incompatible with
+    installed one.
     [#191](https://github.com/CocoaPods/CocoaPods/issues/191)
-  - Pods are reinstalled when their external source changes.
-  - The folders of the Pods not required anymore are removed.
-    [#298](https://github.com/CocoaPods/CocoaPods/issues/298)
+  - Their external source changes.
+  - Their head status changes.
 - Introducing `pod update` that installs the dependencies of the Podfile
   regardless of the contents of `Podfile.lock`.
   [#131](https://github.com/CocoaPods/CocoaPods/issues/131)
@@ -21,6 +20,8 @@
   [#458,](https://github.com/CocoaPods/CocoaPods/issues/458)
   [#415,](https://github.com/CocoaPods/CocoaPods/issues/415)
   [#156](https://github.com/CocoaPods/CocoaPods/issues/156)
+- The folders of the Pods not required anymore are removed.
+  [#298](https://github.com/CocoaPods/CocoaPods/issues/298)
 - Added a meaningful error messages:
   - in case a podspec couldn’t be found in the root of an external source.
     [#385,](https://github.com/CocoaPods/CocoaPods/issues/385)
@@ -43,6 +44,8 @@
 
 - The SCM reference of head Pods is not preserved across machines.
 - Pods whose inline specification changed are not detected as modified. As a
+  workaround, remove their folder stored in `Pods`.
+- Pods whose specification changed are not detected as modified. As a
   workaround, remove their folder stored in `Pods`.
 
 ## 0.13.0
