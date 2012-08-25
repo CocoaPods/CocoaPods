@@ -31,12 +31,12 @@ module Pod
 
     # Shortcut access to the `Pods' PBXGroup.
     def pods
-      groups.find { |g| g.name == 'Pods' } || groups.new({ 'name' => 'Pods' })
+      @pods ||= groups.where(:name => 'Pods') || groups.new('name' => 'Pods')
     end
 
     # Shortcut access to the `Local Pods' PBXGroup.
     def local_pods
-      groups.find { |g| g.name == 'Local Pods' } || groups.new({ 'name' => 'Local Pods' })
+      @local_pods ||= groups.where(:name => 'Local Pods') || groups.new('name' => 'Local Pods')
     end
 
     # Adds a group as child to the `Pods' group namespacing subspecs.
@@ -44,7 +44,7 @@ module Pod
       groups = parent_group.groups
       group = nil
       name.split('/').each do |name|
-        group = groups.find { |g| g.name == name } || groups.new('name' => name)
+        group = groups.where(:name => name) || groups.new('name' => name)
         groups = group.groups
       end
       group

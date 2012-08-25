@@ -71,12 +71,12 @@ module Pod
 
       it "adds the files of the pod to the Pods project only once" do
         @installer.install!
-        group = @installer.project.pods.groups.find{|g| g.name == 'Reachability'}
+        group = @installer.project.pods.groups.where(:name => 'Reachability')
         group.files.map(&:name).should == ["Reachability.h", "Reachability.m"]
       end
 
       it "lists a pod only once" do
-        reachability_pods = @installer.pods.map(&:to_s).select{|s| s.include?('Reachability') }
+        reachability_pods = @installer.pods.map(&:to_s).select { |s| s.include?('Reachability') }
         reachability_pods.count.should == 1
       end
 
