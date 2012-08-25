@@ -12,8 +12,11 @@ end
 
 module Pod
   class Project < Xcodeproj::Project
+    include Config::Mixin
+
     def initialize(*)
       super
+      main_group << files.new('path' => config.project_podfile.to_s, 'xcLanguageSpecificationIdentifier' => 'xcode.lang.ruby')
       main_group << groups.new('name' => 'Pods')
       @user_build_configurations = []
     end

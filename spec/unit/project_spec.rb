@@ -11,6 +11,15 @@ describe 'Pod::Project' do
     end.first
   end
 
+  it "adds the Podfile configured as a Ruby file" do
+    find_object({
+      'isa' => 'PBXFileReference',
+      'name' => 'Podfile',
+      'sourceTree' => 'SOURCE_ROOT',
+      'xcLanguageSpecificationIdentifier' => 'xcode.lang.ruby'
+    }).should.not == nil
+  end
+
   it "adds a group to the `Pods' group" do
     group = @project.add_spec_to_group('JSONKit', @project.pods)
     @project.pods.child_references.should.include group.uuid
