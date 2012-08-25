@@ -16,7 +16,8 @@ module Pod
 
     def initialize(*)
       super
-      main_group << files.new('path' => config.project_podfile.to_s, 'xcLanguageSpecificationIdentifier' => 'xcode.lang.ruby')
+      podfile_path = config.project_podfile.relative_path_from(config.project_pods_root).to_s
+      main_group << files.new('path' => podfile_path, 'xcLanguageSpecificationIdentifier' => 'xcode.lang.ruby')
       main_group << groups.new('name' => 'Pods')
       @user_build_configurations = []
     end

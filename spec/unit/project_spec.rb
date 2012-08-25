@@ -16,7 +16,8 @@ describe 'Pod::Project' do
       'isa' => 'PBXFileReference',
       'name' => 'Podfile',
       'sourceTree' => 'SOURCE_ROOT',
-      'xcLanguageSpecificationIdentifier' => 'xcode.lang.ruby'
+      'xcLanguageSpecificationIdentifier' => 'xcode.lang.ruby',
+      'path' => '../Podfile'
     }).should.not == nil
   end
 
