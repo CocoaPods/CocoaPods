@@ -33,6 +33,55 @@ module Pod
       end
     end
 
+    describe "concerning multiple pods originating form the same spec" do
+    extend SpecHelper::Fixture
+
+      before do
+        sandbox = temporary_sandbox
+        Pod::Config.instance.project_pods_root = sandbox.root
+        Pod::Config.instance.integrate_targets = false
+        podspec_path = fixture('integration/Reachability/Reachability.podspec')
+        podfile = Podfile.new do
+          platform :osx
+          pod 'Reachability', :podspec => podspec_path.to_s
+          target :debug do
+            pod 'Reachability'
+          end
+        end
+        resolver = Resolver.new(podfile, nil, sandbox)
+        @installer = Installer.new(resolver)
+      end
+
+      # The double installation leads to a bug when different subspecs are
+      # activated for the same pod. We need a way to install a pod only
+      # once while keeping all the files of the actived subspecs.
+      #
+      # LocalPodSet?
+      #
+      it "installs the pods only once" do
+        LocalPod.any_instance.stubs(:downloaded?).returns(false)
+        Downloader::GitHub.any_instance.expects(:download).once
+        @installer.install!
+      end
+
+      it "cleans a pod only once" do
+        LocalPod.any_instance.expects(:clean!).once
+        @installer.install!
+      end
+
+      it "adds the files of the pod to the Pods project only once" do
+        @installer.install!
+        group = @installer.project.pods.groups.find{|g| g.name == 'Reachability'}
+        group.files.map(&:name).should == ["Reachability.h", "Reachability.m"]
+      end
+
+      it "lists a pod only once" do
+        reachability_pods = @installer.pods.map(&:to_s).select{|s| s.include?('Reachability') }
+        reachability_pods.count.should == 1
+      end
+
+    end
+
     it "generates a BridgeSupport metadata file from all the pod headers" do
       podfile = Podfile.new do
         platform :osx

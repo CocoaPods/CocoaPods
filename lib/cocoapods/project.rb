@@ -40,11 +40,11 @@ module Pod
     end
 
     # Adds a group as child to the `Pods' group namespacing subspecs.
-    def add_spec_to_group(name, parent_group)
+    def add_spec_group(name, parent_group)
       groups = parent_group.groups
       group = nil
       name.split('/').each do |name|
-        group = groups.find { |g| g.name == name } || groups.new({ 'name' => name })
+        group = groups.find { |g| g.name == name } || groups.new('name' => name)
         groups = group.groups
       end
       group
