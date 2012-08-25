@@ -47,6 +47,7 @@
   reference.
 - Xcodeproj now builds on 10.6.8 and Travis CI without symlinking headers.
 - Only try to install, add source files to the project, and clean a Pod once.
+  [#376](https://github.com/CocoaPods/CocoaPods/issues/376)
 
 ###### Known Limitations
 
