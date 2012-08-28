@@ -1,6 +1,6 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...HEAD) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.1...0.3.2)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...0.14.0.rc1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.1...0.3.2)
 
 ###### Enhancements
 
@@ -49,8 +49,10 @@
 - Only try to install, add source files to the project, and clean a Pod once.
   [#376](https://github.com/CocoaPods/CocoaPods/issues/376)
 
-###### Known Limitations
+###### Notes
 
+- External Pods might be reinstalled due to the migration to the new
+  `Podfile.lock`.
 - The SCM reference of head Pods is not preserved across machines.
 - Pods whose inline specification changed are not detected as modified. As a
   workaround, remove their folder stored in `Pods`.
