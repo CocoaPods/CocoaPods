@@ -13,7 +13,7 @@ unless Gem::Version::Requirement.new('>= 1.4.0').satisfied_by?(Gem::Version.new(
 end
 
 module Pod
-  VERSION = '0.13.0'
+  VERSION = '0.14.0.rc1'
 
   class PlainInformative < StandardError
   end
