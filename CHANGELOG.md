@@ -1,4 +1,4 @@
-## Master
+## 0.14.0.rc1
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...0.14.0.rc1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.1...0.3.2)
 
