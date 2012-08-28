@@ -1,3 +1,5 @@
+require 'digest'
+
 module Pod
   class Lockfile
 
