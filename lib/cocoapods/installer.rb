@@ -48,17 +48,11 @@ module Pod
     #
     def install_dependencies!
       pods.sort_by { |pod| pod.top_specification.name.downcase }.each do |pod|
-        name = pod.top_specification.name
-        should_install = @resolver.should_install?(name) || !pod.exists?
+        should_install = @resolver.should_install?(pod.top_specification.name) || !pod.exists?
 
         unless config.silent?
           marker = config.verbose ? "\n-> ".green : ''
-          if subspec_name = pod.top_specification.preferred_dependency
-            name = "#{pod.top_specification.name}/#{subspec_name} (#{pod.top_specification.version})"
-          else
-            name = pod.to_s
-          end
-          puts marker << ( should_install ? "Installing #{name}".green : "Using #{name}" )
+          puts marker << ( should_install ? "Installing #{pod}".green : "Using #{pod}" )
         end
 
         if should_install

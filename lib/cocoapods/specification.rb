@@ -458,7 +458,8 @@ module Pod
     end
 
     def to_s
-      "#{name} (#{version})"
+      display_name = preferred_dependency.nil? ? name : "#{name}/#{preferred_dependency}"
+      "#{display_name} (#{version})"
     end
 
     def inspect
