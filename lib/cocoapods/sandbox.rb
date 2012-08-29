@@ -14,6 +14,7 @@ module Pod
       @build_headers = HeadersDirectory.new(self, BUILD_HEADERS_DIR)
       @public_headers = HeadersDirectory.new(self, PUBLIC_HEADERS_DIR)
       @cached_local_pods = {}
+      @cached_locally_sourced_pods = {}
       FileUtils.mkdir_p(@root)
     end
 
@@ -33,6 +34,15 @@ module Pod
     def local_pod_for_spec(spec, platform)
       key = [spec.top_level_parent.name, platform.to_sym]
       (@cached_local_pods[key] ||= LocalPod.new(spec.top_level_parent, self, platform)).tap do |pod|
+        pod.add_specification(spec)
+      end
+    end
+
+    # TODO: refactor the pods from a local source should not be chached by the sandbox
+    #
+    def locally_sourced_pod_for_spec(spec, platform)
+      key = [spec.top_level_parent.name, platform.to_sym]
+      (@cached_locally_sourced_pods[key] ||= LocalPod::LocalSourcedPod.new(spec.top_level_parent, self, platform)).tap do |pod|
         pod.add_specification(spec)
       end
     end

@@ -190,7 +190,7 @@ module Pod
         @pods_by_spec[target_definition.platform] = {}
         result[target_definition] = specs.map do |spec|
           if spec.local?
-            LocalPod::LocalSourcedPod.new(spec, sandbox, target_definition.platform)
+            @sandbox.locally_sourced_pod_for_spec(spec, target_definition.platform)
           else
             @sandbox.local_pod_for_spec(spec, target_definition.platform)
           end
