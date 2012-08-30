@@ -1,3 +1,13 @@
+## Master
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc1...master)
+
+###### Bug fixes
+
+- Fix incorrect name for Pods from external sources with preferred subspecs.
+- Prevent duplication of Pod with a local source and mutliple activated specs.
+- Fixed the `uninitialized constant Pod::Lockfile::Digest` error.
+
 ## 0.14.0.rc1
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...0.14.0.rc1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.1...0.3.2)
