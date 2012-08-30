@@ -54,6 +54,7 @@ module Pod
       @xcconfig     = { :ios => Xcodeproj::Config.new, :osx => Xcodeproj::Config.new }
       @header_dir   = { :ios => nil, :osx => nil }
       @requires_arc = { :ios => nil, :osx => nil }
+      @header_mappings_dir = { :ios => nil, :osx => nil }
 
       yield self if block_given?
     end
@@ -88,11 +89,23 @@ module Pod
     # Returns the value of the attribute for the active platform
     # chained with the upstream specifications. The ivar must store
     # the platform specific values as an array.
+    #
     def self.pltf_chained_attr_reader(attr)
       define_method(attr) do
         active_plaform_check
         ivar_value = instance_variable_get("@#{attr}")[active_platform]
         @parent ? @parent.send(attr) + ivar_value : ( ivar_value )
+      end
+    end
+
+    # Returns the first value defined of the attribute traversing the chain
+    # upwards.
+    #
+    def self.pltf_first_defined_attr_reader(attr)
+      define_method(attr) do
+        active_plaform_check
+        ivar_value = instance_variable_get("@#{attr}")[active_platform]
+        ivar_value || (@parent.send(attr) if @parent)
       end
     end
 
@@ -240,12 +253,10 @@ module Pod
 
     ### Attributes **with** multiple platform support
 
-    # @todo allow for subspecs
+    # @todo allow for subspecs?
     #
-    top_attr_accessor :header_mappings_dir, lambda { |file| Pathname.new(file) } # If not provided the headers files are flattened
     top_attr_accessor :prefix_header_file,  lambda { |file| Pathname.new(file) }
     top_attr_accessor :prefix_header_contents
-
 
     pltf_chained_attr_accessor  :source_files,                lambda {|value, current| pattern_list(value) }
     pltf_chained_attr_accessor  :public_header_files,         lambda {|value, current| pattern_list(value) }
@@ -262,7 +273,6 @@ module Pod
     alias_method :weak_framework=,  :weak_frameworks=
     alias_method :library=,         :libraries=
 
-
     # @!method requires_arc=
     #
     # @abstract Wether the `-fobjc-arc' flag should be added to the compiler
@@ -271,14 +281,7 @@ module Pod
     # @param [Bool] Wether the source files require ARC.
     #
     platform_attr_writer :requires_arc
-
-    def requires_arc
-      requires_arc = @requires_arc[active_platform]
-      if requires_arc.nil?
-        requires_arc = @parent ? @parent.requires_arc : false
-      end
-      requires_arc
-    end
+    pltf_first_defined_attr_reader :requires_arc
 
     # @!method header_dir=
     #
@@ -287,17 +290,13 @@ module Pod
     #
     # @param [String] The headers directory.
     #
-    platform_attr_writer :header_dir, lambda { |dir, _| Pathname.new(dir) }
+    platform_attr_writer           :header_dir, lambda { |dir, _| Pathname.new(dir) }
+    pltf_first_defined_attr_reader :header_dir
 
-    # @abstract (see #header_dir=)
+    # If not provided the headers files are flattened
     #
-    # @return [Pathname] The headers directory.
-    #
-    # @note If no value is provided it returns an empty {Pathname}.
-    #
-    def header_dir
-      @header_dir[active_platform] || (@parent.header_dir if @parent) || Pathname.new('')
-    end
+    platform_attr_writer           :header_mappings_dir, lambda { |file, _| Pathname.new(file) }
+    pltf_first_defined_attr_reader :header_mappings_dir
 
     # @!method xcconfig=
     #
