@@ -81,11 +81,6 @@ describe Pod::Sandbox do
     @sandbox.build_headers.root.should.not.exist
   end
 
-  it "returns the path to a spec file in the root of the pod's dir" do
-    FileUtils.cp_r(fixture('banana-lib'), @sandbox.root + 'BananaLib')
-    @sandbox.podspec_for_name('BananaLib').should == @sandbox.root + 'BananaLib/BananaLib.podspec'
-  end
-
   it "returns the path to a spec file in the 'Local Podspecs' dir" do
     (@sandbox.root + 'Local Podspecs').mkdir
     FileUtils.cp(fixture('banana-lib') + 'BananaLib.podspec', @sandbox.root + 'Local Podspecs')
@@ -93,13 +88,16 @@ describe Pod::Sandbox do
   end
 
   it "returns a LocalPod for a spec file in the sandbox" do
-    FileUtils.cp_r(fixture('banana-lib'), @sandbox.root + 'BananaLib')
+    (@sandbox.root + 'Local Podspecs').mkdir
+    FileUtils.cp(fixture('banana-lib') + 'BananaLib.podspec', @sandbox.root + 'Local Podspecs')
     pod = @sandbox.installed_pod_named('BananaLib', Pod::Platform.ios)
     pod.should.be.instance_of Pod::LocalPod
     pod.top_specification.name.should == 'BananaLib'
   end
 
   it "returns a LocalPod for a spec instance which source is expected to be in the sandbox" do
+    (@sandbox.root + 'Local Podspecs').mkdir
+    FileUtils.cp(fixture('banana-lib') + 'BananaLib.podspec', @sandbox.root + 'Local Podspecs')
     spec = Pod::Specification.from_file(fixture('banana-lib') + 'BananaLib.podspec')
     pod = @sandbox.local_pod_for_spec(spec, Pod::Platform.ios)
     pod.should.be.instance_of Pod::LocalPod
@@ -107,8 +105,9 @@ describe Pod::Sandbox do
   end
 
   it "always returns the same cached LocalPod instance for the same spec and platform" do
-    FileUtils.cp_r(fixture('banana-lib'), @sandbox.root + 'BananaLib')
-    spec = Pod::Specification.from_file(@sandbox.root + 'BananaLib/BananaLib.podspec')
+    (@sandbox.root + 'Local Podspecs').mkdir
+    FileUtils.cp(fixture('banana-lib') + 'BananaLib.podspec', @sandbox.root + 'Local Podspecs')
+    spec = Pod::Specification.from_file(@sandbox.root + 'Local Podspecs/BananaLib.podspec')
 
     pod = @sandbox.installed_pod_named('BananaLib', Pod::Platform.ios)
     @sandbox.installed_pod_named('BananaLib', Pod::Platform.ios).should.eql pod
