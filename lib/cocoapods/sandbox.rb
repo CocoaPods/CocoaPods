@@ -55,11 +55,8 @@ module Pod
     end
 
     def podspec_for_name(name)
-      if spec_path = Dir[root + "#{name}/*.podspec"].first
-        Pathname.new(spec_path)
-      elsif spec_path = Dir[root + "Local Podspecs/#{name}.podspec"].first
-        Pathname.new(spec_path)
-      end
+      path = root + "Local Podspecs/#{name}.podspec"
+      path.exist? ? path : nil
     end
   end
 

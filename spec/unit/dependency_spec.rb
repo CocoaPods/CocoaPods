@@ -89,17 +89,35 @@ module Pod
       end
     end
 
-    describe Dependency::ExternalSources::GitSource do
+    describe Dependency::ExternalSources do
       before do
-        @dependency = Dependency.new("cocoapods", :git => "git://github.com/cocoapods/cocoapods")
+        @sandbox = temporary_sandbox
+      end
+      it "marks a LocalPod as downloaded if it's from GitSource" do
+        dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
+        dependency.external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
+        @sandbox.installed_pod_named('Reachability', Platform.ios).downloaded.should.be.true
       end
 
-      it "marks a LocalPod as downloaded if it's downloaded" do
-        Downloader.stubs(:for_target).returns(stub_everything)
+      it "creates a copy of the podspec (GitSource)" do
+        dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
+        dependency.external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
+        path = @sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path.should.exist?
+      end
 
-        pod = mock('LocaPod', :downloaded= => true)
-        sandbox = stub('Sandbox', :root => temporary_sandbox.root, :installed_pod_named => pod)
-        @dependency.external_source.copy_external_source_into_sandbox(sandbox, Platform.ios)
+      it "creates a copy of the podspec (PodspecSource)" do
+        dependency = Dependency.new("Reachability", :podspec => fixture('integration/Reachability/Reachability.podspec').to_s)
+        dependency.external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
+        path = @sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path.should.exist?
+      end
+
+      it "creates a copy of the podspec (LocalSource)" do
+        dependency = Dependency.new("Reachability", :local => fixture('integration/Reachability'))
+        dependency.external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
+        path = @sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path.should.exist?
       end
     end
   end

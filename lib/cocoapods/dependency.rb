@@ -165,10 +165,24 @@ module Pod
         end
 
         def specification_from_external(sandbox, platform)
-          copy_external_source_into_sandbox(sandbox, platform)
+          podspec = copy_external_source_into_sandbox(sandbox, platform)
           spec = specification_from_local(sandbox, platform)
           raise Informative, "No podspec found for `#{name}' in #{description}" unless spec
           spec
+        end
+
+        # Can store from a pathname or a string
+        #
+        def store_podspec(sandbox, podspec)
+          output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
+          output_path.dirname.mkpath
+          if podspec.is_a?(String)
+            raise Informative, "No podspec found for `#{name}' in `#{description}'" unless podspec.include?('Spec.new')
+            output_path.open('w') { |f| f.puts(podspec) }
+          else
+            raise Informative, "No podspec found for `#{name}' in `#{description}'" unless podspec.exist?
+            FileUtils.copy(podspec, output_path)
+          end
         end
 
         def ==(other)
@@ -184,6 +198,7 @@ module Pod
           target.rmtree if target.exist?
           downloader = Downloader.for_target(sandbox.root + name, @params)
           downloader.download
+          store_podspec(sandbox, target + "#{name}.podspec")
           if local_pod = sandbox.installed_pod_named(name, platform)
             local_pod.downloaded = true
           end
@@ -201,14 +216,10 @@ module Pod
       # can be http, file, etc
       class PodspecSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox, _)
-          output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
-          output_path.dirname.mkpath
           puts "-> Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
           path = @params[:podspec]
           path = Pathname.new(path).expand_path if path.start_with?("~")
-          open(path) do |io|
-            output_path.open('w') { |f| f << io.read }
-          end
+          open(path) { |io| store_podspec(sandbox, io.read) }
         end
 
         def description
@@ -224,9 +235,7 @@ module Pod
         end
 
         def copy_external_source_into_sandbox(sandbox, _)
-          output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
-          output_path.dirname.mkpath
-          FileUtils.copy(pod_spec_path, output_path)
+          store_podspec(sandbox, pod_spec_path)
         end
 
         def specification_from_local(sandbox, platform)

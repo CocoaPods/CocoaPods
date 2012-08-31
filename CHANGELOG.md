@@ -7,6 +7,18 @@
 - Support for `header_mappings_dir` attribute in subspecs.
 - Refactored UI.
 
+## Master
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc2...master)
+
+###### Bug fixes
+
+- In certain conditions the spec of an external would have been overridden
+  by the spec in the root of a Pod.
+  [#489](https://github.com/CocoaPods/CocoaPods/issues/489)
+- CocoaPods now uses a recent version of Octokit.
+  [#490](https://github.com/CocoaPods/CocoaPods/issues/490)
+
 ## 0.14.0.rc2
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc1...0.14.0.rc2)
@@ -14,8 +26,11 @@
 ###### Bug fixes
 
 - Fix incorrect name for Pods from external sources with preferred subspecs.
+  [#485](https://github.com/CocoaPods/CocoaPods/issues/485)
 - Prevent duplication of Pod with a local source and mutliple activated specs.
+  [#485](https://github.com/CocoaPods/CocoaPods/issues/485)
 - Fixed the `uninitialized constant Pod::Lockfile::Digest` error.
+  [#484](https://github.com/CocoaPods/CocoaPods/issues/484)
 
 ## 0.14.0.rc1
 

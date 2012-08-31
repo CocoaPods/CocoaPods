@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.require_paths = %w{ lib }
 
   s.add_runtime_dependency 'faraday',       '~> 0.8.1'
-  s.add_runtime_dependency 'octokit',       '~> 1.7.0'
+  s.add_runtime_dependency 'octokit',       '~> 1.7'
 
   s.add_runtime_dependency 'colored',       '~> 1.2'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
