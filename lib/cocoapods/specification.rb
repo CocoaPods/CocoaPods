@@ -105,7 +105,7 @@ module Pod
       define_method(attr) do
         active_plaform_check
         ivar_value = instance_variable_get("@#{attr}")[active_platform]
-        ivar_value || (@parent.send(attr) if @parent)
+        ivar_value.nil? ? (@parent.send(attr) if @parent) : ivar_value
       end
     end
 
