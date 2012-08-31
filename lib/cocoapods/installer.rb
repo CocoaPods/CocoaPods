@@ -121,6 +121,9 @@ module Pod
       end
 
       ui_title("Generating support files", '', 2) do
+        ui_message "- Running pre install hooks" do
+          run_pre_install_hooks
+        end
 
         ui_message("- Installing targets", '', 2) do
           generate_target_support_files
@@ -142,6 +145,15 @@ module Pod
 
         UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
       end
+    end
+
+    def run_pre_install_hooks
+      pods_by_target.each do |target_definition, pods|
+        pods.each do |pod|
+          pod.top_specification.pre_install(pod, target_definition)
+        end
+      end
+      @podfile.pre_install!(self)
     end
 
     def run_post_install_hooks

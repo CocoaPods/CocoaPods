@@ -430,19 +430,35 @@ module Pod
     end
 
     # This is a convenience method which gets called after all pods have been
-    # downloaded, installed, and the Xcode project and related files have been
-    # generated. (It receives the Pod::Installer::Target instance for the current
-    # target.) Override this to, for instance, add to the prefix header:
+    # downloaded but before they have been installed, and the Xcode project and
+    # related files have been generated. (It receives the Pod::LocalPod
+    # instance generated form the specification and the #
+    # Pod::Podfile::TargetDefinition instance for the current target.) Override
+    # this to, for instance, to run any build script:
     #
     #   Pod::Spec.new do |s|
-    #     def s.post_install(target)
-    #       prefix_header = config.project_pods_root + target.prefix_header_filename
+    #     def pre_install(pod, target_definition)
+    #       Dir.chdir(pod.root){ `sh make.sh` }
+    #     end
+    #   end
+    def pre_install(pod, target_definition)
+    end
+
+    # This is a convenience method which gets called after all pods have been
+    # downloaded, installed, and the Xcode project and related files have been
+    # generated. (It receives the Pod::Installer::TargetInstaller instance for
+    # the current target.) Override this to, for instance, add to the prefix
+    # header:
+    #
+    #   Pod::Spec.new do |s|
+    #     def s.post_install(target_installer)
+    #       prefix_header = config.project_pods_root + target_installer.prefix_header_filename
     #       prefix_header.open('a') do |file|
     #         file.puts(%{#ifdef __OBJC__\n#import "SSToolkitDefines.h"\n#endif})
     #       end
     #     end
     #   end
-    def post_install(target)
+    def post_install(target_installer)
     end
 
     def podfile?

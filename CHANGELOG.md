@@ -4,6 +4,8 @@
 
 ###### Enhancements
 
+- Added a pre install hook to the Podfile and to root specifications.
+  [#486](https://github.com/CocoaPods/CocoaPods/issues/486)
 - Support for `header_mappings_dir` attribute in subspecs.
 - Refactored UI.
 
