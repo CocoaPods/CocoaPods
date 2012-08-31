@@ -204,6 +204,7 @@ module Pod
     # @return [void] Writes the Lockfile to {#path}.
     #
     def write_to_disk(path)
+      path.dirname.mkpath unless path.dirname.exist?
       File.open(path, 'w') {|f| f.write(to_yaml) }
       defined_in_file = path
     end
