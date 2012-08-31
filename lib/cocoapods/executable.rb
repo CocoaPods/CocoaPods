@@ -2,13 +2,17 @@ require 'open4'
 
 module Pod
   module Executable
+
     class Indenter < ::Array
+      include UserInterface::Mixin
+      include Config::Mixin
+
       attr_accessor :indent
       attr_accessor :io
 
-      def initialize(io = nil, indent = '   ')
+      def initialize(io = nil)
         @io = io
-        @indent = indent
+        @indent = ' ' * UserInterface.instance.indentation_level
       end
 
       def <<(value)
@@ -19,6 +23,7 @@ module Pod
     end
 
     def executable(name)
+      include UserInterface::Mixin
       bin = `which #{name}`.strip
       base_method = "base_" << name.to_s
       define_method(base_method) do |command, should_raise|
@@ -27,20 +32,19 @@ module Pod
         end
         full_command = "#{bin} #{command}"
         if Config.instance.verbose?
-          puts "   $ #{full_command}"
+          ui_message("$ #{full_command}")
           stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
         else
           stdout, stderr = Indenter.new, Indenter.new
         end
         status = Open4.spawn(full_command, :stdout => stdout, :stderr => stderr, :status => true)
-        # TODO not sure that we should be silent in case of a failure.
 
         output = stdout.join("\n") + stderr.join("\n") # TODO will this suffice?
         unless status.success?
           if should_raise
             raise Informative, "#{name} #{command}\n\n#{output}"
           else
-            puts((Config.instance.verbose? ? '   ' : '') << "[!] Failed: #{full_command}".red) unless Config.instance.silent?
+            ui_message("[!] Failed: #{full_command}".red)
           end
         end
         output

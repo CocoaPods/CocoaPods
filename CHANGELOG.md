@@ -1,3 +1,12 @@
+## 0.15.0 (unreleased)
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...b0.15.0)
+
+###### Enhancements
+
+- Support for `header_mappings_dir` attribute in subspecs.
+- Refactored UI.
+
 ## 0.14.0.rc2
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc1...0.14.0.rc2)
