@@ -108,7 +108,7 @@ module Pod
 
     def install!
       @sandbox.prepare_for_install
-      ui_title "Resolving dependencies of `#{@podfile.defined_in_file}'" do
+      ui_title "Resolving dependencies of #{ui_path @podfile.defined_in_file}" do
         specs_by_target
       end
 
@@ -116,23 +116,26 @@ module Pod
         remove_deleted_dependencies!
       end unless resolver.removed_pods.empty?
 
-      ui_title "Installing dependencies" do
+      ui_title "Downloading dependencies" do
         install_dependencies!
       end
 
       ui_title("Generating support files", '', 2) do
-        generate_target_support_files
+
+        ui_message("- Installing targets", '', 2) do
+          generate_target_support_files
+        end
 
         ui_message "- Running post install hooks" do
           # Post install hooks run _before_ saving of project, so that they can alter it before saving.
           run_post_install_hooks
         end
 
-        ui_message "- Writing Xcode project file to `#{@sandbox.project_path}'" do
+        ui_message "- Writing Xcode project file to #{ui_path @sandbox.project_path}" do
           project.save_as(@sandbox.project_path)
         end
 
-        ui_message "- Writing lockfile in `#{config.project_lockfile}'" do
+        ui_message "- Writing lockfile in #{ui_path config.project_lockfile}" do
           @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
           @lockfile.write_to_disk(config.project_lockfile)
         end
@@ -149,7 +152,6 @@ module Pod
           spec.post_install(target_installer)
         end
       end
-
       @podfile.post_install!(self)
     end
 

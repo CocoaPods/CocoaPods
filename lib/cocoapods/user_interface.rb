@@ -41,6 +41,14 @@ module Pod
       puts(indented)
     end
 
+    def ui_path(pathname)
+      if pathname
+      "`./#{pathname.relative_path_from(config.project_podfile.dirname || Pathname.pwd)}'"
+      else
+        ''
+      end
+    end
+
     # adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
     def wrap_string(txt, indent)
       width = `stty size`.split(' ')[1].to_i - indent.length
@@ -58,8 +66,8 @@ module Pod
       end
 
       def ui_message(message,  verbose_prefix = '', relative_indentation = 0)
-        UserInterface.instance.indentation_level += relative_indentation
         UserInterface.instance.message(message)
+        UserInterface.instance.indentation_level += relative_indentation
         yield if block_given?
         UserInterface.instance.indentation_level -= relative_indentation
       end
@@ -67,6 +75,13 @@ module Pod
       def ui_verbose(message)
         UserInterface.instance.puts(message)
       end
+
+      def ui_path(pathname)
+        UserInterface.instance.ui_path(pathname)
+      end
+
+      # def ui_spec(spec)
+      # end
 
       # def ui_progress_start(count)
       # end
