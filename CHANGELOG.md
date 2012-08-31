@@ -7,6 +7,8 @@
 - In certain conditions the spec of an external would have been overridden
   by the spec in the root of a Pod.
   [#489](https://github.com/CocoaPods/CocoaPods/issues/489)
+- CocoaPods now uses a recent version of Octokit.
+  [#490](https://github.com/CocoaPods/CocoaPods/issues/490)
 
 ## 0.14.0.rc2
 
