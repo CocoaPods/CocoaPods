@@ -95,10 +95,13 @@ module Pod
     end
 
     # @return [String] A string representation of the pod which indicates if
-    #                  the pods comes from a local source.
+    #                  the pods comes from a local source or has a preferred
+    #                  dependency.
     #
     def to_s
-      top_specification.to_s
+      s =  top_specification.to_s
+      s << " defaulting to #{top_specification.preferred_dependency} subspec" if top_specification.preferred_dependency
+      s
     end
 
     # @return [String] The name of the Pod.

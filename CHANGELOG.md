@@ -9,6 +9,9 @@
   [#489](https://github.com/CocoaPods/CocoaPods/issues/489)
 - CocoaPods now uses a recent version of Octokit.
   [#490](https://github.com/CocoaPods/CocoaPods/issues/490)
+- Fixed a bug that caused Pods with preferred dependencies to be always
+  installed.
+  [Specs#464](https://github.com/CocoaPods/CocoaPods/issues/464)
 
 ## 0.14.0.rc2
 
