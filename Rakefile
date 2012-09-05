@@ -12,7 +12,7 @@ namespace :travis do
   #
   # Known to work with opencflite rev 248.
   task :prepare_deb do
-    sh "sudo apt-get install subversion libicu-dev"
+    sh "sudo apt-get install subversion libicu-dev libicu44"
     sh "svn co https://opencflite.svn.sourceforge.net/svnroot/opencflite/trunk opencflite"
     sh "cd opencflite && ./configure --target=linux --with-uuid=/usr --with-tz-includes=./include --prefix=/usr/local && make && sudo make install"
     sh "sudo /sbin/ldconfig"
@@ -20,7 +20,6 @@ namespace :travis do
 
   task :install_opencflite_debs do
     sh "mkdir -p debs"
-    sh "wget http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu44_4.4.2-2ubuntu0.11.04.1_i386.deb" unless File.exist?("libicu44_4.4.2-2ubuntu0.11.04.1_i386.deb")
     Dir.chdir("debs") do
       base_url = "https://github.com/downloads/CocoaPods/OpenCFLite"
       %w{ opencflite1_248-1_i386.deb opencflite-dev_248-1_i386.deb }.each do |deb|
