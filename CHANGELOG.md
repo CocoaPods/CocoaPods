@@ -12,6 +12,8 @@
 - Fixed a bug that caused Pods with preferred dependencies to be always
   installed.
   [Specs#464](https://github.com/CocoaPods/CocoaPods/issues/464)
+- Fixed Xcode 4.4+ artwork warning.
+  [Specs#508](https://github.com/CocoaPods/CocoaPods/issues/508)
 
 ## 0.14.0.rc2
 
