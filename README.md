@@ -33,8 +33,7 @@ $ [sudo] gem install cocoapods
 If you want to have CocoaPods generate documentation for each library, then install the [appledoc](http://gentlebytes.com/appledoc/) tool:
 
 ```
-$ brew install appledoc --HEAD
-$ ln -sf "`brew --prefix`/Cellar/appledoc/HEAD/Templates" ~/Library/Application\ Support/appledoc
+$ brew install appledoc
 ```
 
 Now that you've got CocoaPods installed you can easily add it to your project.

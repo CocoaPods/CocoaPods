@@ -11,7 +11,11 @@
 
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc2...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...master)
+
+## 0.14.0
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc2...0.14.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.2...0.3.3)
 
 ###### Bug fixes
 
@@ -20,6 +24,11 @@
   [#489](https://github.com/CocoaPods/CocoaPods/issues/489)
 - CocoaPods now uses a recent version of Octokit.
   [#490](https://github.com/CocoaPods/CocoaPods/issues/490)
+- Fixed a bug that caused Pods with preferred dependencies to be always
+  installed.
+  [Specs#464](https://github.com/CocoaPods/CocoaPods/issues/464)
+- Fixed Xcode 4.4+ artwork warning.
+  [Specs#508](https://github.com/CocoaPods/CocoaPods/issues/508)
 
 ## 0.14.0.rc2
 
