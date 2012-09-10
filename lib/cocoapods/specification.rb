@@ -315,13 +315,14 @@ module Pod
     end
 
 
+    def recursive_compiler_flags
+      @parent ? @parent.recursive_compiler_flags | @compiler_flags[active_platform] : @compiler_flags[active_platform]
+    end
+
     def compiler_flags
-      if @parent
-        flags = [@parent.compiler_flags]
-      else
-        flags = [requires_arc ? ' -fobjc-arc' : '']
-      end
-      (flags + @compiler_flags[active_platform].clone).join(' ')
+      flags = recursive_compiler_flags.dup
+      flags << ' -fobjc-arc' if requires_arc
+      flags.join(' ')
     end
 
     platform_attr_writer :compiler_flags, lambda {|value, current| current << value }
