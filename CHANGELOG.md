@@ -1,6 +1,10 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc2...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...master)
+
+## 0.14.0
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc2...0.14.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.2...0.3.3)
 
 ###### Bug fixes
 
