@@ -93,6 +93,7 @@ namespace :gem do
       end
 
       diff_lines.delete('Gemfile.lock')
+      diff_lines.delete('CHANGELOG.md')
       if diff_lines != ['lib/cocoapods.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
         exit 1
@@ -138,7 +139,7 @@ namespace :gem do
     # silent_sh "rake examples:build"
 
     # Then release
-    sh "git commit lib/cocoapods.rb Gemfile.lock -m 'Release #{gem_version}'"
+    sh "git commit lib/cocoapods.rb Gemfile.lock CHANGELOG.md -m 'Release #{gem_version}'"
     sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
     sh "git push origin master"
     sh "git push origin --tags"
