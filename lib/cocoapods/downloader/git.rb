@@ -79,6 +79,7 @@ module Pod
           git! "reset --hard HEAD"
           git! "clean -d -x -f"
           git! "pull origin master"
+          git! "fetch"
           git! "fetch --tags"
         end
       end
@@ -95,10 +96,15 @@ module Pod
         raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists?(ref)
       end
 
-      def ensure_remote_branch_exists(branch)
+      def branch_exists?(branch)
         Dir.chdir(cache_path) { git "branch -r | grep #{branch}$" } # check for remote branch and do suffix matching ($ anchor)
-        return if $? == 0
-        raise Informative, "[!] Cache unable to find git reference `#{branch}' for `#{url}' (#{$?}).".red
+        $? == 0
+      end
+
+      def ensure_remote_branch_exists(branch)
+        return if branch_exists?(branch)
+        update_cache
+        raise Informative, "[!] Cache unable to find git reference `#{branch}' for `#{url}' (#{$?}).".red unless branch_exists?(branch)
       end
 
       def download_head
