@@ -9,6 +9,11 @@
 - Support for `header_mappings_dir` attribute in subspecs.
 - Refactored UI.
 
+###### Bug fixes
+
+- Improvements to the git cache that should be more robust.
+  [#517](https://github.com/CocoaPods/CocoaPods/issues/517)
+
 ## Master
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...master)

@@ -34,7 +34,7 @@ module Pod
         ui_title " > Creating cache git repo (#{cache_path})"
         cache_path.rmtree if cache_path.exist?
         cache_path.mkpath
-        clone(url, cache_path)
+        git! %Q|clone  --mirror "#{url}" "#{cache_path}"|
       end
 
       def prune_cache
@@ -77,10 +77,14 @@ module Pod
       def update_cache
         ui_title " > Updating cache git repo (#{cache_path})"
         Dir.chdir(cache_path) do
-          git! "reset --hard HEAD"
-          git! "clean -d -x -f"
-          git! "pull origin master"
-          git! "fetch --tags"
+          if git("config core.bare").chomp == "true"
+            git! "remote update"
+          else
+            git! "reset --hard HEAD"
+            git! "clean -d -x -f"
+            git! "pull origin master"
+            git! "fetch --tags"
+          end
         end
       end
 
