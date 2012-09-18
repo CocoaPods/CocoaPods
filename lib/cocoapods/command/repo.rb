@@ -16,7 +16,7 @@ module Pod
       Updates the local clone of the spec-repo `NAME'. If `NAME' is omitted
       this will update all spec-repos in `~/.cocoapods'.
 
-    $ pod repo update [NAME | DIRECTORY]
+    $ pod repo lint [NAME | DIRECTORY]
 
       Lints the spec-repo `NAME'. If a directory is provided it is assumed
       to be the root of a repo. Finally, if NAME is not provided this will
