@@ -16,7 +16,7 @@ module Pod
       Updates the local clone of the spec-repo `NAME'. If `NAME' is omitted
       this will update all spec-repos in `~/.cocoapods'.
 
-    $ pod repo update [NAME | DIRECTORY]
+    $ pod repo lint [NAME | DIRECTORY]
 
       Lints the spec-repo `NAME'. If a directory is provided it is assumed
       to be the root of a repo. Finally, if NAME is not provided this will
@@ -58,8 +58,8 @@ module Pod
       def add
         print_subtitle "Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}"
         config.repos_dir.mkpath
-        Dir.chdir(config.repos_dir) { git("clone '#{@url}' #{@name}") }
-        Dir.chdir(dir) { git("checkout #{@branch}") } if @branch
+        Dir.chdir(config.repos_dir) { git!("clone '#{@url}' #{@name}") }
+        Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
         check_versions(dir)
       end
 
@@ -70,7 +70,7 @@ module Pod
           Dir.chdir(dir) do
             `git rev-parse  >/dev/null 2>&1`
             if $?.exitstatus.zero?
-              git("pull")
+              git!("pull")
             else
               puts("   Not a git repository") if config.verbose?
             end
@@ -142,7 +142,7 @@ module Pod
           "\n[!] The `#{dir.basename.to_s}' repo requires CocoaPods #{version_msg}\n".red +
           "Update Cocoapods, or checkout the appropriate tag in the repo.\n\n"
         end
-        puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions)
+        puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions) && config.new_version_message?
       end
 
       def self.compatible?(name)

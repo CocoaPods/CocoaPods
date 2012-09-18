@@ -36,4 +36,8 @@ describe "Pod::Source" do
       Pod::Source.search(Pod::Dependency.new('RestKit/DoesNotExist'))
     }.should.raise Pod::Informative
   end
+
+  it "return the names of the repos" do
+    Pod::Source.names.should == %w| repo1 repo2 |
+  end
 end

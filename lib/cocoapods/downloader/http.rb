@@ -34,6 +34,8 @@ module Pod
           :tgz
         elsif url =~ /.tar$/
           :tar
+        elsif url =~ /.(tbz|tar\.bz2)$/
+          :tbz
         else
           nil
         end
@@ -47,6 +49,8 @@ module Pod
           "file.tgz"
         when :tar
           "file.tar"
+        when :tbz
+          "file.tbz"
         else
           raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end
@@ -64,6 +68,8 @@ module Pod
           tar! "xfz '#{full_filename}' -C '#{target_path}'"
         when :tar
           tar! "xf '#{full_filename}' -C '#{target_path}'"
+        when :tbz
+          tar! "xfj '#{full_filename}' -C '#{target_path}'"
         else
           raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end

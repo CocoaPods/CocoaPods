@@ -2,14 +2,24 @@ module Pod
   class Source
     class Aggregate
       def all
-        @sources ||= begin
+        @sources ||= dirs.map { |repo| Source.new(repo) }
+      end
+
+      def dirs
+        if ENV['CP_MASTER_REPO_DIR']
+          [Pathname.new(ENV['CP_MASTER_REPO_DIR'])]
+        else
           repos_dir = Config.instance.repos_dir
           unless repos_dir.exist?
             raise Informative, "No spec repos found in `#{repos_dir}'. " \
-                               "To fetch the `master' repo run: $ pod setup"
+              "To fetch the `master' repo run: $ pod setup"
           end
-          repos_dir.children.select(&:directory?).map { |repo| Source.new(repo) }
+          repos_dir.children.select(&:directory?)
         end
+      end
+
+      def names
+        dirs.map { |repo| repo.basename.to_s }.sort
       end
 
       def all_sets
@@ -46,6 +56,10 @@ module Pod
 
     def self.search_by_name(name, full_text_search)
       Aggregate.new.search_by_name(name, full_text_search)
+    end
+
+    def self.names
+      Aggregate.new.names
     end
 
     attr_reader :repo

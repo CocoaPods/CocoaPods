@@ -33,6 +33,12 @@ describe Pod::Downloader::Http do
     downloader.type.should == :tgz
 
     downloader = Pod::Downloader.for_pod(stub_pod_with_source(
+      :http => 'http://www.kernel.org/pub/linux/kernel/v1.0/linux-1.0.tar.bz2'
+    ))
+    downloader.should.be.instance_of Pod::Downloader::Http
+    downloader.type.should == :tbz
+
+    downloader = Pod::Downloader.for_pod(stub_pod_with_source(
       :http => 'https://testflightapp.com/media/sdk-downloads/TestFlightSDK1.0',
       :type => :zip
     ))
@@ -53,6 +59,13 @@ describe Pod::Downloader::Http do
     ))
     downloader.expects(:download_file).with(anything())
     downloader.expects(:extract_with_type).with(anything(), :tgz).at_least_once
+    downloader.download
+
+    downloader = Pod::Downloader.for_pod(stub_pod_with_source(
+      :http => 'http://www.kernel.org/pub/linux/kernel/v1.0/linux-1.0.tar.bz2'
+    ))
+    downloader.expects(:download_file).with(anything())
+    downloader.expects(:extract_with_type).with(anything(), :tbz).at_least_once
     downloader.download
   end
 
