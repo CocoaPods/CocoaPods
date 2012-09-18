@@ -23,6 +23,8 @@
   [#448](https://github.com/CocoaPods/CocoaPods/issues/448)
 - Added support for extracting `.tar.bz2` files
   [#522](https://github.com/CocoaPods/CocoaPods/issues/522)
+- Improved feedback for errors of repo subcommand.
+  [#505](https://github.com/CocoaPods/CocoaPods/issues/505)
 
 ###### Bug fixes
 - In certain conditions pod setup would execute twice.
