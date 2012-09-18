@@ -197,6 +197,47 @@ module Pod
       downloader.expects(:update_cache).never
       downloader.download
     end
+
+    it "updates the cache if the branch is not available" do
+      # create the origin repo and the cache
+      tmp_repo_path = temporary_directory + 'banana-lib-source'
+      `git clone #{fixture('banana-lib')} #{tmp_repo_path}`
+
+      @pod.top_specification.stubs(:source).returns(
+        :git => tmp_repo_path, :branch => 'master'
+      )
+      downloader = Downloader.for_pod(@pod)
+      downloader.download
+
+      # make a new branch in the origin
+      branch = 'test'
+      Dir.chdir(tmp_repo_path) do
+        `touch test.txt`
+        `git checkout -b #{branch} >/dev/null 2>&1`
+        `git add test.txt`
+        `git commit -m 'test'`
+      end
+
+      # require the new branch
+      pod = LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), temporary_sandbox, Platform.ios)
+      pod.top_specification.stubs(:source).returns(
+        :git => tmp_repo_path, :branch => branch
+      )
+      downloader = Downloader.for_pod(pod)
+      downloader.download
+      (pod.root + 'test.txt').should.exist?
+    end
+
+    it "doesn't update the cache if the branch is available" do
+      @pod.top_specification.stubs(:source).returns(
+        :git => fixture('banana-lib'), :branch => 'master'
+      )
+      downloader = Downloader.for_pod(@pod)
+      downloader.download
+      @pod.root.rmtree
+      downloader.expects(:update_cache).never
+      downloader.download
+    end
   end
 
 
