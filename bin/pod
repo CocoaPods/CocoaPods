@@ -7,6 +7,10 @@ if $0 == __FILE__
   $:.unshift File.expand_path('../../lib', __FILE__)
 end
 
+if (ENV['CP_STDOUT_SYNC'] == 'TRUE')
+  STDOUT.sync = true
+end
+
 require 'cocoapods'
 
 Pod::Command.run(*ARGV)
