@@ -142,7 +142,7 @@ module Pod
           "\n[!] The `#{dir.basename.to_s}' repo requires CocoaPods #{version_msg}\n".red +
           "Update Cocoapods, or checkout the appropriate tag in the repo.\n\n"
         end
-        puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions)
+        puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions) && config.new_version_message?
       end
 
       def self.compatible?(name)

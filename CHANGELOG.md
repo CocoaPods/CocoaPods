@@ -2,6 +2,10 @@
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...master)
 
+###### Enhancements
+- Added config option to disable the new version available message.
+  [#448](https://github.com/CocoaPods/CocoaPods/issues/448)
+
 ###### Bug fixes
 - In certain conditions pod setup would execute twice.
 - The git cache now is updated if a branch is not found
