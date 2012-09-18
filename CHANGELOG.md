@@ -2,6 +2,11 @@
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...master)
 
+###### Bug fixes
+- In certain conditions pod setup would execute twice.
+- The git cache now is updated if a branch is not found
+  [#514](https://github.com/CocoaPods/CocoaPods/issues/514)
+
 ## 0.14.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc2...0.14.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.2...0.3.3)

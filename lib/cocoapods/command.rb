@@ -70,7 +70,7 @@ module Pod
 
     def self.run(*argv)
       sub_command = parse(*argv)
-      unless ENV['SKIP_SETUP']
+      unless sub_command.is_a?(Setup) || ENV['SKIP_SETUP']
         Setup.new(ARGV.new).run_if_needed
       end
       sub_command.run
