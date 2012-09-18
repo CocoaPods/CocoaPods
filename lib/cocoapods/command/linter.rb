@@ -223,15 +223,22 @@ module Pod
         messages << "Missing license type"                                  unless license[:type]
         messages << "Sample license type"                                   if license[:type] && license[:type] =~ /\(example\)/
         messages << "Invalid license type"                                  if license[:type] && license[:type] =~ /\n/
+        messages << "The summary is required"                               if spec.summary.empty?
         messages << "The summary is not meaningful"                         if spec.summary =~ /A short description of/
         messages << "The description is not meaningful"                     if spec.description && spec.description =~ /An optional longer description of/
         messages << "The summary should end with a dot"                     if spec.summary !~ /.*\./
         messages << "The description should end with a dot"                 if spec.description !~ /.*\./ && spec.description != spec.summary
+        messages << "The summary should end with a dot"                     if spec.summary !~ /.*\./
+        messages << "The summary should be short use `description` (max 140 characters)."   if spec.summary.length > 140
         messages << "Comments must be deleted"                              if text.scan(/^\s*#/).length > 24
         messages << "Warnings must not be disabled (`-Wno' compiler flags)" if spec.compiler_flags.split(' ').any? {|flag| flag.start_with?('-Wno') }
 
         if (git_source = source[:git])
           messages << "Git sources should specify either a tag or a commit" unless source[:commit] || source[:tag]
+          if spec.version.to_s != '0.0.1'
+          messages << "The version of the spec should be part of the git tag (not always applicable)" if source[:tag] && !source[:tag].include?(spec.version.to_s)
+          messages << "Git sources without tag should be marked as 0.0.1 (not always applicable)" if !source[:tag]
+          end
           if git_source.include?('github.com')
             messages << "Github repositories should end in `.git'"          unless git_source.end_with?('.git')
             messages << "Github repositories should use `https' link"       unless git_source.start_with?('https://github.com') || git_source.start_with?('git://gist.github.com')
