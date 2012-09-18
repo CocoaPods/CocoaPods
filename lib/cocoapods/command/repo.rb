@@ -58,8 +58,8 @@ module Pod
       def add
         print_subtitle "Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}"
         config.repos_dir.mkpath
-        Dir.chdir(config.repos_dir) { git("clone '#{@url}' #{@name}") }
-        Dir.chdir(dir) { git("checkout #{@branch}") } if @branch
+        Dir.chdir(config.repos_dir) { git!("clone '#{@url}' #{@name}") }
+        Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
         check_versions(dir)
       end
 
@@ -70,7 +70,7 @@ module Pod
           Dir.chdir(dir) do
             `git rev-parse  >/dev/null 2>&1`
             if $?.exitstatus.zero?
-              git("pull")
+              git!("pull")
             else
               puts("   Not a git repository") if config.verbose?
             end
