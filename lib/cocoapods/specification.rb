@@ -321,7 +321,7 @@ module Pod
 
     def compiler_flags
       flags = recursive_compiler_flags.dup
-      flags << ' -fobjc-arc' if requires_arc
+      flags << '-fobjc-arc' if requires_arc
       flags.join(' ')
     end
 
