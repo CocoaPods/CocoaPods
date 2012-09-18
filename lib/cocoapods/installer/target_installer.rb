@@ -2,7 +2,6 @@ module Pod
   class Installer
     class TargetInstaller
       include Config::Mixin
-      include UserInterface::Mixin
 
       attr_reader :podfile, :project, :target_definition, :target
       attr_accessor :requires_arc
@@ -99,21 +98,21 @@ module Pod
 
       def create_files(pods, sandbox)
         bridge_support_metadata_path = sandbox.root + @target_definition.bridge_support_name
-        ui_message "- Generating BridgeSupport metadata file at #{ui_path bridge_support_metadata_path}" do
+        UI.message "- Generating BridgeSupport metadata file at #{UI.path bridge_support_metadata_path}" do
           bridge_support_generator_for(pods, sandbox).save_as(bridge_support_metadata_path)
           copy_resources_script_for(pods).resources << @target_definition.bridge_support_name
         end if @podfile.generate_bridge_support?
 
-        ui_message "- Generating xcconfig file at #{ui_path(sandbox.root + @target_definition.xcconfig_name)}" do
+        UI.message "- Generating xcconfig file at #{UI.path(sandbox.root + @target_definition.xcconfig_name)}" do
           xcconfig.save_as(sandbox.root + @target_definition.xcconfig_name)
           @target_definition.xcconfig = xcconfig
         end
 
-        ui_message "- Generating prefix header at #{ui_path(sandbox.root + @target_definition.prefix_header_name)}" do
+        UI.message "- Generating prefix header at #{UI.path(sandbox.root + @target_definition.prefix_header_name)}" do
           save_prefix_header_as(sandbox.root + @target_definition.prefix_header_name, pods)
         end
 
-        ui_message "- Generating copy resources script at #{ui_path(sandbox.root + @target_definition.copy_resources_script_name)}" do
+        UI.message "- Generating copy resources script at #{UI.path(sandbox.root + @target_definition.copy_resources_script_name)}" do
           copy_resources_script_for(pods).save_as(sandbox.root + @target_definition.copy_resources_script_name)
         end
       end

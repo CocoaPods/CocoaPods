@@ -6,7 +6,6 @@ module Pod
     autoload :UserProjectIntegrator, 'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
-    include UserInterface::Mixin
 
     attr_reader :resolver, :sandbox, :lockfile
 
@@ -51,7 +50,7 @@ module Pod
       pods.sort_by { |pod| pod.top_specification.name.downcase }.each do |pod|
         should_install = @resolver.should_install?(pod.top_specification.name) || !pod.exists?
         if should_install
-          ui_title("Installing #{pod}".green, "-> ".green) do
+          UI.title("Installing #{pod}".green, "-> ".green) do
             unless pod.downloaded?
               pod.implode
               download_pod(pod)
@@ -64,7 +63,7 @@ module Pod
             pod.clean! if config.clean?
           end
         else
-          ui_title("Using #{pod}", "-> ".green)
+          UI.title("Using #{pod}", "-> ".green)
         end
       end
     end
@@ -88,10 +87,10 @@ module Pod
     def generate_docs(pod)
       doc_generator = Generator::Documentation.new(pod)
       if ( config.generate_docs? && !doc_generator.already_installed? )
-        ui_title " > Installing documentation"
+        UI.title " > Installing documentation"
         doc_generator.generate(config.doc_install?)
       else
-        ui_title " > Using existing documentation"
+        UI.title " > Using existing documentation"
       end
     end
 
@@ -99,7 +98,7 @@ module Pod
     #
     def remove_deleted_dependencies!
       resolver.removed_pods.each do |pod_name|
-        ui_title("Removing #{pod_name}", "-> ".red) do
+        UI.title("Removing #{pod_name}", "-> ".red) do
           path = sandbox.root + pod_name
           path.rmtree if path.exist?
         end
@@ -108,37 +107,37 @@ module Pod
 
     def install!
       @sandbox.prepare_for_install
-      ui_title "Resolving dependencies of #{ui_path @podfile.defined_in_file}" do
+      UI.title "Resolving dependencies of #{UI.path @podfile.defined_in_file}" do
         specs_by_target
       end
 
-      ui_title "Removing deleted dependencies" do
+      UI.title "Removing deleted dependencies" do
         remove_deleted_dependencies!
       end unless resolver.removed_pods.empty?
 
-      ui_title "Downloading dependencies" do
+      UI.title "Downloading dependencies" do
         install_dependencies!
       end
 
-      ui_title("Generating support files", '', 2) do
-        ui_message "- Running pre install hooks" do
+      UI.title("Generating support files", '', 2) do
+        UI.message "- Running pre install hooks" do
           run_pre_install_hooks
         end
 
-        ui_message("- Installing targets", '', 2) do
+        UI.message("- Installing targets", '', 2) do
           generate_target_support_files
         end
 
-        ui_message "- Running post install hooks" do
+        UI.message "- Running post install hooks" do
           # Post install hooks run _before_ saving of project, so that they can alter it before saving.
           run_post_install_hooks
         end
 
-        ui_message "- Writing Xcode project file to #{ui_path @sandbox.project_path}" do
+        UI.message "- Writing Xcode project file to #{UI.path @sandbox.project_path}" do
           project.save_as(@sandbox.project_path)
         end
 
-        ui_message "- Writing lockfile in #{ui_path config.project_lockfile}" do
+        UI.message "- Writing lockfile in #{UI.path config.project_lockfile}" do
           @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
           @lockfile.write_to_disk(config.project_lockfile)
         end

@@ -41,7 +41,7 @@ module Pod
   autoload :Source,                 'cocoapods/source'
   autoload :Spec,                   'cocoapods/specification'
   autoload :Specification,          'cocoapods/specification'
-  autoload :UserInterface,          'cocoapods/user_interface'
+  autoload :UI,                     'cocoapods/user_interface'
   autoload :Version,                'cocoapods/version'
 
   autoload :Pathname,               'pathname'

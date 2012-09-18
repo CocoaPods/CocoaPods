@@ -1,97 +1,65 @@
 module Pod
   class UserInterface
-    include Config::Mixin
+    @indentation_level =  0
+    @title_level       =  0
+    @title_colors      =  %w|yellow green|
 
-    def self.instance
-      @instance ||= new
-    end
+    class << self
+      include Config::Mixin
 
-    def initialize
-      @indentation_level = 0
-      @title_level = 0
-      @title_colors = %w|yellow green|
-    end
+      attr_accessor :indentation_level, :title_level
 
-    attr_accessor :indentation_level, :title_level
-
-    def title(title, verbose_prefix = '')
-      if config.verbose?
-        title = "\n#{title}" if @title_level < 2
-        title = verbose_prefix + title if config.verbose?
-        if (color = @title_colors[@title_level])
-        title = title.send(color)
+      def title(title, verbose_prefix = '', relative_indentation = 0)
+        if config.verbose?
+          title = verbose_prefix + title if config.verbose?
+          title = "\n#{title}" if @title_level < 2
+          if (color = @title_colors[@title_level])
+            title = title.send(color)
+          end
+          puts "#{title}"
+        elsif title_level < 2
+          puts title
         end
-        puts "#{title}"
-      elsif title_level < 2
-        puts title
-      end
-    end
 
-    def message(message,  verbose_prefix = '')
-      message = verbose_prefix + message if config.verbose?
-      puts_indented message if config.verbose?
-    end
-
-    def puts(message)
-      super(message) unless config.silent?
-    end
-
-    def puts_indented(message)
-      indented = wrap_string(message, " " * indentation_level)
-      puts(indented)
-    end
-
-    def ui_path(pathname)
-      if pathname
-      "`./#{pathname.relative_path_from(config.project_podfile.dirname || Pathname.pwd)}'"
-      else
-        ''
-      end
-    end
-
-    # adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
-    def wrap_string(txt, indent)
-      width = `stty size`.split(' ')[1].to_i - indent.length
-      txt.strip.gsub(/(.{1,#{width}})( +|$)\n?|(.{#{width}})/, indent + "\\1\\3\n")
-    end
-
-    module Mixin
-      def ui_title(title, verbose_prefix = '', relative_indentation = 0)
-        UserInterface.instance.title(title)
-        UserInterface.instance.indentation_level += relative_indentation
-        UserInterface.instance.title_level += 1
+        self.indentation_level += relative_indentation
+        self.title_level += 1
         yield if block_given?
-        UserInterface.instance.indentation_level -= relative_indentation
-        UserInterface.instance.title_level -= 1
+        self.indentation_level -= relative_indentation
+        self.title_level -= 1
       end
 
-      def ui_message(message,  verbose_prefix = '', relative_indentation = 0)
-        UserInterface.instance.message(message)
-        UserInterface.instance.indentation_level += relative_indentation
+      def message(message,  verbose_prefix = '', relative_indentation = 0)
+        message = verbose_prefix + message if config.verbose?
+        puts_indented message if config.verbose?
+
+        self.indentation_level += relative_indentation
         yield if block_given?
-        UserInterface.instance.indentation_level -= relative_indentation
+        self.indentation_level -= relative_indentation
       end
 
-      def ui_verbose(message)
-        UserInterface.instance.puts(message)
+      def puts(message)
+        super(message) unless config.silent?
       end
 
-      def ui_path(pathname)
-        UserInterface.instance.ui_path(pathname)
+      def puts_indented(message)
+        indented = wrap_string(message, " " * indentation_level)
+        puts(indented)
       end
 
-      # def ui_spec(spec)
-      # end
+      def path(pathname)
+        if pathname
+          "`./#{pathname.relative_path_from(config.project_podfile.dirname || Pathname.pwd)}'"
+        else
+          ''
+        end
+      end
 
-      # def ui_progress_start(count)
-      # end
-
-      # def ui_progress_increase(message = nil, ammount = 1)
-      # end
-
-      # def ui_progress_complete()
-      # end
-
+      # adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
+      def wrap_string(txt, indent)
+        width = `stty size`.split(' ')[1].to_i - indent.length
+        txt.strip.gsub(/(.{1,#{width}})( +|$)\n?|(.{#{width}})/, indent + "\\1\\3\n")
+      end
     end
   end
+  UI = UserInterface
 end

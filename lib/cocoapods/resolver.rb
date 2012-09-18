@@ -3,7 +3,6 @@ require 'colored'
 module Pod
   class Resolver
     include Config::Mixin
-    include UserInterface::Mixin
 
     # @return [Bool] Whether the resolver should find the pods to install or
     #   the pods to update.
@@ -70,11 +69,11 @@ module Pod
 
       if @lockfile
         @pods_by_state = @lockfile.detect_changes_with_podfile(podfile)
-        ui_title("Finding added, modified or removed dependencies:", '', 2) do
+        UI.title("Finding added, modified or removed dependencies:", '', 2) do
           marks = {:added => "A".green, :changed => "M".yellow, :removed => "R".red, :unchanged => "-" }
           @pods_by_state.each do |symbol, pod_names|
             pod_names.each do |pod_name|
-              ui_message("#{marks[symbol]} #{pod_name}", '',2)
+              UI.message("#{marks[symbol]} #{pod_name}", '',2)
             end
           end
         end if config.verbose?
@@ -82,7 +81,7 @@ module Pod
       end
 
       @podfile.target_definitions.values.each do |target_definition|
-        ui_title("Resolving dependencies for target `#{target_definition.name}' (#{target_definition.platform}):", '', 2) do
+        UI.title("Resolving dependencies for target `#{target_definition.name}' (#{target_definition.platform}):", '', 2) do
           @loaded_specs = []
           find_dependency_specs(@podfile, target_definition.dependencies, target_definition)
           @specs_by_target[target_definition] = @cached_specs.values_at(*@loaded_specs).sort_by(&:name)
@@ -183,7 +182,7 @@ module Pod
         if !update_mode && @pods_to_lock.include?(dependency.name)
           dependency = lockfile.dependency_for_installed_pod_named(dependency.name)
         end
-        ui_message("- #{dependency}", '', 2) do
+        UI.message("- #{dependency}", '', 2) do
           set = find_cached_set(dependency, target_definition.platform)
           set.required_by(dependency, dependent_specification.to_s)
 

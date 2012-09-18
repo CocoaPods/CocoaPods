@@ -2,9 +2,7 @@ require 'open4'
 
 module Pod
   module Executable
-
     class Indenter < ::Array
-      include UserInterface::Mixin
       include Config::Mixin
 
       attr_accessor :indent
@@ -12,7 +10,7 @@ module Pod
 
       def initialize(io = nil)
         @io = io
-        @indent = ' ' * UserInterface.instance.indentation_level
+        @indent = ' ' * UI.indentation_level
       end
 
       def <<(value)
@@ -23,7 +21,6 @@ module Pod
     end
 
     def executable(name)
-      include UserInterface::Mixin
       bin = `which #{name}`.strip
       base_method = "base_" << name.to_s
       define_method(base_method) do |command, should_raise|
@@ -32,7 +29,7 @@ module Pod
         end
         full_command = "#{bin} #{command}"
         if Config.instance.verbose?
-          ui_message("$ #{full_command}")
+          UI.message("$ #{full_command}")
           stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
         else
           stdout, stderr = Indenter.new, Indenter.new
@@ -44,7 +41,7 @@ module Pod
           if should_raise
             raise Informative, "#{name} #{command}\n\n#{output}"
           else
-            ui_message("[!] Failed: #{full_command}".red)
+            UI.message("[!] Failed: #{full_command}".red)
           end
         end
         output
@@ -57,7 +54,6 @@ module Pod
       define_method(name.to_s + "!") do |command|
         send(base_method, command, true)
       end
-
 
       private name
     end

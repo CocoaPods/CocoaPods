@@ -7,7 +7,6 @@ module Pod
   class Downloader
     class Git < Downloader
       include Config::Mixin
-      include UserInterface::Mixin
 
       executable :git
 
@@ -15,7 +14,7 @@ module Pod
 
       def download
         create_cache unless cache_exist?
-        ui_title(' > Cloning git repo', '', 3) do
+        UI.title(' > Cloning git repo', '', 3) do
           if options[:tag]
             download_tag
           elsif options[:branch]
@@ -31,7 +30,7 @@ module Pod
       end
 
       def create_cache
-        ui_title " > Creating cache git repo (#{cache_path})"
+        UI.title " > Creating cache git repo (#{cache_path})"
         cache_path.rmtree if cache_path.exist?
         cache_path.mkpath
         git! %Q|clone  --mirror "#{url}" "#{cache_path}"|
@@ -43,7 +42,7 @@ module Pod
           repos = Pathname.new(caches_dir).children.select { |c| c.directory? }.sort_by(&:ctime)
           while caches_size >= MAX_CACHE_SIZE && !repos.empty?
             dir = repos.shift
-            ui_message "#{'->'.yellow} Removing git cache for `#{origin_url(dir)}'"
+            UI.message "#{'->'.yellow} Removing git cache for `#{origin_url(dir)}'"
             dir.rmtree
           end
         end
@@ -75,7 +74,7 @@ module Pod
       end
 
       def update_cache
-        ui_title " > Updating cache git repo (#{cache_path})"
+        UI.title " > Updating cache git repo (#{cache_path})"
         Dir.chdir(cache_path) do
           if git("config core.bare").chomp == "true"
             git! "remote update"
@@ -148,7 +147,7 @@ module Pod
           git! "remote add upstream '#{@url}'" # we need to add the original url, not the cache url
           git! "fetch -q upstream" # refresh the branches
           git! "checkout --track -b activated-pod-commit upstream/#{options[:branch]}" # create a new tracking branch
-          ui_message("Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}")
+          UI.message("Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}")
         end
       end
 
