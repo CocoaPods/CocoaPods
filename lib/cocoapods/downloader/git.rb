@@ -100,7 +100,7 @@ module Pod
       end
 
       def branch_exists?(branch)
-        Dir.chdir(cache_path) { git "branch -r | grep #{branch}$" } # check for remote branch and do suffix matching ($ anchor)
+        Dir.chdir(cache_path) { git "branch --all | grep #{branch}$" } # check for remote branch and do suffix matching ($ anchor)
         $? == 0
       end
 
