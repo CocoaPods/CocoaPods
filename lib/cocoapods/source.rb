@@ -6,12 +6,16 @@ module Pod
       end
 
       def dirs
-        repos_dir = Config.instance.repos_dir
-        unless repos_dir.exist?
-          raise Informative, "No spec repos found in `#{repos_dir}'. " \
-            "To fetch the `master' repo run: $ pod setup"
+        if ENV['CP_MASTER_REPO_DIR']
+          [Pathname.new(ENV['CP_MASTER_REPO_DIR'])]
+        else
+          repos_dir = Config.instance.repos_dir
+          unless repos_dir.exist?
+            raise Informative, "No spec repos found in `#{repos_dir}'. " \
+              "To fetch the `master' repo run: $ pod setup"
+          end
+          repos_dir.children.select(&:directory?)
         end
-        repos_dir.children.select(&:directory?)
       end
 
       def names
