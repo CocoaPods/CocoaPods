@@ -166,10 +166,11 @@ module Pod
         messages << "Unrecognized platfrom" unless platform_valid?
         messages << "Missing name"          unless spec.name
         messages << "Missing version"       unless spec.version
-        messages << "Missing summary"       unless spec.summary
+        messages << "Missing summary"       if !spec.summary || spec.summary.empty?
         messages << "Missing homepage"      unless spec.homepage
         messages << "Missing author(s)"     unless spec.authors
         messages << "Missing or invalid source: #{spec.source}" unless source_valid?
+        messages << "The summary should be short use `description` (max 140 characters)." if spec.summary && spec.summary.length > 140
 
         # attributes with multiplatform values
         return messages unless platform_valid?
@@ -223,13 +224,11 @@ module Pod
         messages << "Missing license type"                                  unless license[:type]
         messages << "Sample license type"                                   if license[:type] && license[:type] =~ /\(example\)/
         messages << "Invalid license type"                                  if license[:type] && license[:type] =~ /\n/
-        messages << "The summary is required"                               if spec.summary.empty?
         messages << "The summary is not meaningful"                         if spec.summary =~ /A short description of/
         messages << "The description is not meaningful"                     if spec.description && spec.description =~ /An optional longer description of/
         messages << "The summary should end with a dot"                     if spec.summary !~ /.*\./
         messages << "The description should end with a dot"                 if spec.description !~ /.*\./ && spec.description != spec.summary
         messages << "The summary should end with a dot"                     if spec.summary !~ /.*\./
-        messages << "The summary should be short use `description` (max 140 characters)."   if spec.summary.length > 140
         messages << "Comments must be deleted"                              if text.scan(/^\s*#/).length > 24
         messages << "Warnings must not be disabled (`-Wno' compiler flags)" if spec.compiler_flags.split(' ').any? {|flag| flag.start_with?('-Wno') }
 

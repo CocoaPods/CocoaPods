@@ -18,10 +18,6 @@ module Pod
         end
       end
 
-      def names
-        dirs.map { |repo| repo.basename.to_s }.sort
-      end
-
       def all_sets
         all.map(&:pod_sets).flatten
       end
@@ -58,14 +54,14 @@ module Pod
       Aggregate.new.search_by_name(name, full_text_search)
     end
 
-    def self.names
-      Aggregate.new.names
-    end
-
     attr_reader :repo
 
     def initialize(repo)
       @repo = repo
+    end
+
+    def name
+      @repo.basename.to_s
     end
 
     def pod_sets

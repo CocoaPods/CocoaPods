@@ -43,6 +43,7 @@ module Pod
       def update_repo
         UI.puts "Updating the `#{@repo}' repo\n".yellow unless config.silent
         # show the output of git even if not verbose
+        # TODO: use the `git!' and find a way to show the output in realtime.
         Dir.chdir(repo_dir) { UI.puts `git pull 2>&1` }
       end
 
@@ -97,9 +98,9 @@ module Pod
           FileUtils.mkdir_p(output_path)
           FileUtils.cp(Pathname.new(spec.name+'.podspec'), output_path)
           Dir.chdir(repo_dir) do
-            git("add #{spec.name}")
+            git!("add #{spec.name}")
             # Bypass the pre-commit hook because we already performed validation
-            git("commit --no-verify -m '#{message}'")
+            git!("commit --no-verify -m '#{message}'")
           end
         end
       end
