@@ -145,24 +145,9 @@ module Pod
 
     def update_spec_repos_if_necessary!
       if @update_repo
-        print_title 'Updating Spec Repositories', true
-        Repo.new(ARGV.new(["update"])).run
-      end
-    end
-
-    def print_title(title, only_verbose = true)
-      if config.verbose?
-        puts "\n" + title.yellow
-      elsif !config.silent? && !only_verbose
-        puts title
-      end
-    end
-
-    def print_subtitle(title, only_verbose = false)
-      if config.verbose?
-        puts "\n" + title.green
-      elsif !config.silent? && !only_verbose
-        puts title
+        UI.title 'Updating Spec Repositories' do
+          Repo.new(ARGV.new(["update"])).run
+        end
       end
     end
   end

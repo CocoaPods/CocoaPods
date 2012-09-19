@@ -119,12 +119,12 @@ module Pod
         install_dependencies!
       end
 
-      UI.title("Generating support files", '', 2) do
+      UI.title "Generating support files" do
         UI.message "- Running pre install hooks" do
           run_pre_install_hooks
         end
 
-        UI.message("- Installing targets", '', 2) do
+        UI.message"- Installing targets" do
           generate_target_support_files
         end
 

@@ -56,23 +56,25 @@ module Pod
       end
 
       def add
-        print_subtitle "Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}"
-        config.repos_dir.mkpath
-        Dir.chdir(config.repos_dir) { git!("clone '#{@url}' #{@name}") }
-        Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
-        check_versions(dir)
+        UI.title ("Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}") do
+          config.repos_dir.mkpath
+          Dir.chdir(config.repos_dir) { git!("clone '#{@url}' #{@name}") }
+          Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
+          check_versions(dir)
+        end
       end
 
       def update
         dirs = @name ? [dir] : config.repos_dir.children.select {|c| c.directory?}
         dirs.each do |dir|
-          print_subtitle "Updating spec repo `#{dir.basename}'"
-          Dir.chdir(dir) do
-            `git rev-parse  >/dev/null 2>&1`
-            if $?.exitstatus.zero?
-              git!("pull")
-            else
-              puts("   Not a git repository") if config.verbose?
+          UI.title "Updating spec repo `#{dir.basename}'" do
+            Dir.chdir(dir) do
+              `git rev-parse  >/dev/null 2>&1`
+              if $?.exitstatus.zero?
+                git!("pull")
+              else
+                UI.message "Not a git repository"
+              end
             end
           end
           check_versions(dir)
