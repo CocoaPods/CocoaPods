@@ -32,7 +32,7 @@ module SpecHelper
       command.run
       Dir.chdir(command.dir) do
         `git checkout -b test >/dev/null 2>&1`
-        `git branch --set-upstream test origin/test >/dev/null 2>&1`
+        `git branch --set-upstream test origin/master >/dev/null 2>&1`
       end
       command
     end

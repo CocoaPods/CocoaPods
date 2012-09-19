@@ -7,7 +7,6 @@ describe "Pod::Command::Repo" do
   extend SpecHelper::TemporaryRepos
 
     it "runs with correct parameters" do
-      lambda { run_command('repo', 'add', 'NAME', 'URL') }.should.not.raise
       lambda { run_command('repo', 'update') }.should.not.raise
       lambda { run_command('repo', 'lint',  temporary_directory.to_s) }.should.not.raise
     end
@@ -18,7 +17,7 @@ describe "Pod::Command::Repo" do
     end
 
     it "adds a spec-repo" do
-      add_repo('private', fixture('spec-repos/master'))
+      run_command('repo', 'add', 'private', fixture('spec-repos/master'))
       git_config('private', 'remote.origin.url').should == fixture('spec-repos/master').to_s
     end
 
