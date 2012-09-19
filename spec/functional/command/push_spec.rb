@@ -44,9 +44,9 @@ describe Pod::Command::Push do
     git_config('local_repo', 'remote.origin.url').should == (tmp_repos_path + 'upstream').to_s
 
     # prepare the spec
-    spec_fix = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
-    spec_add = spec_fix.gsub(/https:\/\/github\.com\/johnezang\/JSONKit\.git/, fixture('integration/JSONKit').to_s)
-    spec_add.gsub!(/'JSONKit'/, "'PushTest'")
+    spec = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
+    spec_fix = spec.gsub(/https:\/\/github\.com\/johnezang\/JSONKit\.git/, fixture('integration/JSONKit').to_s)
+    spec_add = spec.gsub(/'JSONKit'/, "'PushTest'")
     File.open(temporary_directory + 'JSONKit.podspec', 'w') {|f| f.write(spec_fix) }
     File.open(temporary_directory + 'PushTest.podspec', 'w') {|f| f.write(spec_add) }
   end
