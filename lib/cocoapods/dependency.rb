@@ -177,10 +177,10 @@ module Pod
           output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
           output_path.dirname.mkpath
           if podspec.is_a?(String)
-            raise Informative, "No podspec found for `#{name}' in `#{description}'" unless podspec.include?('Spec.new')
+            raise Informative, "No podspec found for `#{name}' in #{description}" unless podspec.include?('Spec.new')
             output_path.open('w') { |f| f.puts(podspec) }
           else
-            raise Informative, "No podspec found for `#{name}' in `#{description}'" unless podspec.exist?
+            raise Informative, "No podspec found for `#{name}' in #{description}" unless podspec.exist?
             FileUtils.copy(podspec, output_path)
           end
         end
