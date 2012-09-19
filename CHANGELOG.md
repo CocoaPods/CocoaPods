@@ -14,6 +14,8 @@
 - In certain conditions pod setup would execute twice.
 - The git cache now is updated if a branch is not found
   [#514](https://github.com/CocoaPods/CocoaPods/issues/514)
+- Forcing UTF-8 encoding on licenses generation in Ruby 1.9. 
+  [#530](https://github.com/CocoaPods/CocoaPods/issues/530)
 
 ## 0.14.0
 
