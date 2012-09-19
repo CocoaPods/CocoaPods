@@ -38,6 +38,6 @@ describe "Pod::Source" do
   end
 
   it "return the names of the repos" do
-    Pod::Source.names.should == %w| repo1 repo2 |
+    Pod::Source.all.map(&:name).should == %w| repo1 repo2 |
   end
 end
