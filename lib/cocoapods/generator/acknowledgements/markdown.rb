@@ -28,6 +28,7 @@ module Pod
         licenses_string = "#{title_from_string(header_title, 1)}\n#{header_text}\n"
         @pods.each do |pod|
           if (license = string_for_pod(pod))
+            license = license.force_encoding("UTF-8") if license.respond_to?(:force_encoding) 
             licenses_string += license
           end
         end
