@@ -4,9 +4,10 @@ module Pod
 
     autoload :UIPod, 'cocoapods/user_interface/ui_pod'
 
-    @indentation_level =  0
-    @title_level       =  0
     @title_colors      =  %w|yellow green|
+    @title_level       =  0
+    @indentation_level =  0
+    @treat_titles_as_messages = false
 
     class << self
       include Config::Mixin
@@ -41,12 +42,16 @@ module Pod
       # A title oposed to a section is always visible
       #
       def title(title, verbose_prefix = '', relative_indentation = 2)
-        title = verbose_prefix + title if config.verbose?
-        title = "\n#{title}" if @title_level < 2
-        if (color = @title_colors[@title_level])
-          title = title.send(color)
+        if(@treat_titles_as_messages)
+          message(title, verbose_prefix)
+        else
+          title = verbose_prefix + title if config.verbose?
+          title = "\n#{title}" if @title_level < 2
+          if (color = @title_colors[@title_level])
+            title = title.send(color)
+          end
+          puts "#{title}"
         end
-        puts "#{title}"
 
         self.indentation_level += relative_indentation
         self.title_level += 1
@@ -64,7 +69,7 @@ module Pod
       #
       # TODO: clean interface.
       #
-      def message(message,  verbose_prefix = '', relative_indentation = 2)
+      def message(message, verbose_prefix = '', relative_indentation = 2)
         message = verbose_prefix + message if config.verbose?
         puts_indented message if config.verbose?
 
@@ -73,18 +78,22 @@ module Pod
         self.indentation_level -= relative_indentation
       end
 
-      # Prints a message unless config is silent.
+      # Prints an info to the user. The info is always displayed.
+      # It respects the current indentation level only in verbose
+      # mode.
       #
-      def puts(message = '')
-        super(message) unless config.silent?
-      end
-
-      # Prints a message respecting the current indentation level and
-      # wrapping it to the termina width if necessary.
+      # Any title printed in the optional block is treated as a message.
       #
-      def puts_indented(message = '')
-        indented = wrap_string(message, " " * self.indentation_level)
+      def info(message)
+        indentation = config.verbose? ? self.indentation_level : 0
+        indented = wrap_string(message, " " * indentation)
         puts(indented)
+
+        self.indentation_level += 2
+        @treat_titles_as_messages = true
+        yield if block_given?
+        @treat_titles_as_messages = false
+        self.indentation_level -= 2
       end
 
       # Returns a string containing relative location of a path from the Podfile.
@@ -105,23 +114,23 @@ module Pod
         if mode == :name
           puts_indented set.name
         else
-        pod = UIPod.new(set)
-        title("\n-> #{pod.name} (#{pod.version})".green, '', 3) do
-          puts_indented pod.summary
-          labeled('Homepage', pod.homepage)
-          labeled('Source',   pod.source_url)
-          labeled('Versions', pod.versions) unless set.versions.count == 1
-          if mode == :stats
-            labeled('Pushed',   pod.github_last_activity)
-            labeled('Authors',  pod.authors) if pod.authors =~ /,/
-            labeled('Author',   pod.authors) if pod.authors !~ /,/
-            labeled('License',  pod.license)
-            labeled('Platform', pod.platform)
-            labeled('Watchers', pod.github_watchers)
-            labeled('Forks',    pod.github_forks)
+          pod = UIPod.new(set)
+          title("\n-> #{pod.name} (#{pod.version})".green, '', 3) do
+            puts_indented pod.summary
+            labeled('Homepage', pod.homepage)
+            labeled('Source',   pod.source_url)
+            labeled('Versions', pod.versions) unless set.versions.count == 1
+            if mode == :stats
+              labeled('Pushed',   pod.github_last_activity)
+              labeled('Authors',  pod.authors) if pod.authors =~ /,/
+              labeled('Author',   pod.authors) if pod.authors !~ /,/
+              labeled('License',  pod.license)
+              labeled('Platform', pod.platform)
+              labeled('Watchers', pod.github_watchers)
+              labeled('Forks',    pod.github_forks)
+            end
+            labeled('Sub specs', pod.subspecs)
           end
-          labeled('Sub specs', pod.subspecs)
-        end
         end
       end
 
@@ -141,8 +150,34 @@ module Pod
         end
       end
 
-      # Wraps a string with a given indent to the width of the terminal.
-      # adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
+      # @!group Basic printing
+
+      # Prints a message unless config is silent.
+      #
+      def puts(message = '')
+        super(message) unless config.silent?
+      end
+
+      # Prints a message respecting the current indentation level and
+      # wrapping it to the terminal width if necessary.
+      #
+      def puts_indented(message = '')
+        indented = wrap_string(message, " " * self.indentation_level)
+        puts(indented)
+      end
+
+      private
+
+      # @!group Helpers
+
+      # Wraps a string taking into account the width of the terminal and an
+      # option indent. Adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
+      #
+      # @param [String] txt     The string to wrap
+      #
+      # @param [String] indent  The string to use to indent the result.
+      #
+      # @return [String]        The formatted string.
       #
       def wrap_string(txt, indent = '')
         width = `stty size`.split(' ')[1].to_i - indent.length

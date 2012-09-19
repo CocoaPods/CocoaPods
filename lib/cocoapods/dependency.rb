@@ -193,14 +193,15 @@ module Pod
 
       class GitSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox, platform)
-          puts "-> Pre-downloading: '#{name}'" unless config.silent?
-          target = sandbox.root + name
-          target.rmtree if target.exist?
-          downloader = Downloader.for_target(sandbox.root + name, @params)
-          downloader.download
-          store_podspec(sandbox, target + "#{name}.podspec")
-          if local_pod = sandbox.installed_pod_named(name, platform)
-            local_pod.downloaded = true
+          UI.info("->".green + " Pre-downloading: '#{name}'") do
+            target = sandbox.root + name
+            target.rmtree if target.exist?
+            downloader = Downloader.for_target(sandbox.root + name, @params)
+            downloader.download
+            store_podspec(sandbox, target + "#{name}.podspec")
+            if local_pod = sandbox.installed_pod_named(name, platform)
+              local_pod.downloaded = true
+            end
           end
         end
 
@@ -216,10 +217,11 @@ module Pod
       # can be http, file, etc
       class PodspecSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox, _)
-          puts "-> Fetching podspec for `#{name}' from: #{@params[:podspec]}" unless config.silent?
-          path = @params[:podspec]
-          path = Pathname.new(path).expand_path if path.start_with?("~")
-          open(path) { |io| store_podspec(sandbox, io.read) }
+          UI.info("->".green + " Fetching podspec for `#{name}' from: #{@params[:podspec]}") do
+            path = @params[:podspec]
+            path = Pathname.new(path).expand_path if path.start_with?("~")
+            open(path) { |io| store_podspec(sandbox, io.read) }
+          end
         end
 
         def description
