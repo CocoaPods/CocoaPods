@@ -78,35 +78,38 @@ describe "Pod::Command::Repo" do
       tmp_repos_path + "repo1/CocoaPods-version.yml"
     end
 
+    def write_version_file(hash)
+      yaml = YAML.dump(hash)
+      File.open(versions_file, 'w') {|f| f.write(yaml) }
+      Dir.chdir(versions_file.dirname) do
+        `git commit . -m "updated version file"`
+      end
+    end
+
     it "it doesn't requires CocoaPods-version.yml" do
       lambda { run_command('repo', 'update') }.should.not.raise
     end
 
     it "runs with a compatible repo" do
-      yaml = YAML.dump({'min' => "0.0.1"})
-      File.open(versions_file, 'w') {|f| f.write(yaml) }
+      write_version_file({'min' => "0.0.1"})
       lambda { run_command('repo', 'update') }.should.not.raise
     end
 
     it "raises if a repo is not compatible" do
-      yaml = YAML.dump({'min' => "999.0.0"})
-      File.open(versions_file, 'w') {|f| f.write(yaml) }
+      write_version_file({'min' => "999.0.0"})
       lambda { run_command('repo', 'update') }.should.raise Pod::Informative
     end
 
     it "informs about a higher known CocoaPods version" do
-      yaml = YAML.dump({'last' => "999.0.0"})
-      File.open(versions_file, 'w') {|f| f.write(yaml) }
+      write_version_file({'last' => "999.0.0"})
       run_command('repo', 'update').should.include "Cocoapods 999.0.0 is available"
     end
 
     it "has a class method that returns if a repo is supported" do
-      yaml = YAML.dump({'min' => "999.0.0"})
-      File.open(versions_file, 'w') {|f| f.write(yaml) }
+      write_version_file({'min' => "999.0.0"})
       Pod::Command::Repo.compatible?('repo1').should == false
 
-      yaml = YAML.dump({'min' => "0.0.1"})
-      File.open(versions_file, 'w') {|f| f.write(yaml) }
+      write_version_file({'min' => "0.0.1"})
       Pod::Command::Repo.compatible?('repo1').should == true
     end
   end
