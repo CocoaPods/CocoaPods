@@ -29,6 +29,13 @@ describe "Pod::Config" do
       end
     end
 
+    it "returns the path to the project Podfile if specified with the extension" do
+      (temporary_directory + 'Podfile.cocoapods').open('w') { |f| f << '# Yo' }
+      Dir.chdir(temporary_directory) do
+        config.project_podfile.should == Pathname.pwd + 'Podfile.cocoapods'
+      end
+    end
+
     it "returns the path to the Pods directory that holds the dependencies" do
       config.project_pods_root.should == Pathname.pwd + 'Pods'
     end
