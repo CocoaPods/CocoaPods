@@ -166,7 +166,7 @@ module Pod
         messages << "Unrecognized platfrom" unless platform_valid?
         messages << "Missing name"          unless spec.name
         messages << "Missing version"       unless spec.version
-        messages << "Missing summary"       unless spec.summary || spec.summary.empty?
+        messages << "Missing summary"       if !spec.summary || spec.summary.empty?
         messages << "Missing homepage"      unless spec.homepage
         messages << "Missing author(s)"     unless spec.authors
         messages << "Missing or invalid source: #{spec.source}" unless source_valid?
