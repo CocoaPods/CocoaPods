@@ -12,8 +12,12 @@ end
 
 module Pod
   class Project < Xcodeproj::Project
+    include Config::Mixin
+
     def initialize(*)
       super
+      podfile_path = config.project_podfile.relative_path_from(config.project_pods_root).to_s
+      main_group << files.new('path' => podfile_path, 'xcLanguageSpecificationIdentifier' => 'xcode.lang.ruby')
       main_group << groups.new('name' => 'Pods')
       @user_build_configurations = []
     end
