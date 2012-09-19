@@ -14,7 +14,7 @@ module Pod
 
       def download
         create_cache unless cache_exist?
-        UI.title(' > Cloning git repo', '', 3) do
+        UI.section(' > Cloning git repo', '', 3) do
           if options[:tag]
             download_tag
           elsif options[:branch]
@@ -30,7 +30,7 @@ module Pod
       end
 
       def create_cache
-        UI.title " > Creating cache git repo (#{cache_path})"
+        UI.section " > Creating cache git repo (#{cache_path})"
         cache_path.rmtree if cache_path.exist?
         cache_path.mkpath
         git! %Q|clone  --mirror "#{url}" "#{cache_path}"|
@@ -74,7 +74,7 @@ module Pod
       end
 
       def update_cache
-        UI.title " > Updating cache git repo (#{cache_path})"
+        UI.section " > Updating cache git repo (#{cache_path})"
         Dir.chdir(cache_path) do
           if git("config core.bare").chomp == "true"
             git! "remote update"

@@ -16,7 +16,7 @@ module Pod
       def download
         @filename        = filename_with_type type
         @download_path   = target_path + @filename
-        UI.title(' > Downloading from HTTP', '', 3) do
+        UI.section(' > Downloading from HTTP', '', 3) do
           download_file @download_path
           extract_with_type @download_path, type
         end

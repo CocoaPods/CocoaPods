@@ -8,13 +8,13 @@ module Pod
       end
 
       def download
-        UI.title(' > Exporting subversion repo', '', 3) do
+        UI.section(' > Exporting subversion repo', '', 3) do
           svn! %|export "#{reference_url}" "#{target_path}"|
         end
       end
 
       def download_head
-        UI.title(' > Exporting subversion repo', '', 3) do
+        UI.section(' > Exporting subversion repo', '', 3) do
           svn! %|export "#{trunk_url}" "#{target_path}"|
         end
       end

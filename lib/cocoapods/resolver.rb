@@ -69,7 +69,7 @@ module Pod
 
       if @lockfile
         @pods_by_state = @lockfile.detect_changes_with_podfile(podfile)
-        UI.title "Finding added, modified or removed dependencies:" do
+        UI.section "Finding added, modified or removed dependencies:" do
           marks = {:added => "A".green, :changed => "M".yellow, :removed => "R".red, :unchanged => "-" }
           @pods_by_state.each do |symbol, pod_names|
             pod_names.each do |pod_name|
@@ -81,7 +81,7 @@ module Pod
       end
 
       @podfile.target_definitions.values.each do |target_definition|
-        UI.title "Resolving dependencies for target `#{target_definition.name}' (#{target_definition.platform}):" do
+        UI.section "Resolving dependencies for target `#{target_definition.name}' (#{target_definition.platform}):" do
           @loaded_specs = []
           find_dependency_specs(@podfile, target_definition.dependencies, target_definition)
           @specs_by_target[target_definition] = @cached_specs.values_at(*@loaded_specs).sort_by(&:name)

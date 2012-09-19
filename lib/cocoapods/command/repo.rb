@@ -56,7 +56,7 @@ module Pod
       end
 
       def add
-        UI.title ("Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}") do
+        UI.section ("Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}") do
           config.repos_dir.mkpath
           Dir.chdir(config.repos_dir) { git!("clone '#{@url}' #{@name}") }
           Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
@@ -67,7 +67,7 @@ module Pod
       def update
         dirs = @name ? [dir] : config.repos_dir.children.select {|c| c.directory?}
         dirs.each do |dir|
-          UI.title "Updating spec repo `#{dir.basename}'" do
+          UI.section "Updating spec repo `#{dir.basename}'" do
             Dir.chdir(dir) do
               `git rev-parse  >/dev/null 2>&1`
               if $?.exitstatus.zero?
@@ -89,7 +89,7 @@ module Pod
         end
         dirs.each do |dir|
           check_versions(dir)
-          puts "\nLinting spec repo `#{dir.realpath.basename}'\n".yellow
+          UI.puts "\nLinting spec repo `#{dir.realpath.basename}'\n".yellow
           podspecs = dir.glob('**/*.podspec')
           invalid_count = 0
 
@@ -111,19 +111,19 @@ module Pod
             end
 
             if should_display
-              puts " -> ".send(color) << linter.spec_name
+              UI.puts " -> ".send(color) << linter.spec_name
               print_messages('ERROR', linter.errors)
               unless @only_errors
                 print_messages('WARN',  linter.warnings)
                 print_messages('NOTE',  linter.notes)
               end
-              puts unless config.silent?
+              UI.puts unless config.silent?
             end
           end
-          puts "Analyzed #{podspecs.count} podspecs files.\n\n" unless config.silent?
+          UI.puts "Analyzed #{podspecs.count} podspecs files.\n\n" unless config.silent?
 
           if invalid_count == 0
-            puts "All the specs passed validation.".green << "\n\n" unless config.silent?
+            UI.puts "All the specs passed validation.".green << "\n\n" unless config.silent?
           else
             raise Informative, "#{invalid_count} podspecs failed validation."
           end
@@ -132,7 +132,7 @@ module Pod
 
       def print_messages(type, messages)
         return if config.silent?
-        messages.each {|msg| puts "    - #{type.ljust(5)} | #{msg}"}
+        messages.each {|msg| UI.puts "    - #{type.ljust(5)} | #{msg}"}
       end
 
       def check_versions(dir)
@@ -144,7 +144,7 @@ module Pod
           "\n[!] The `#{dir.basename.to_s}' repo requires CocoaPods #{version_msg}\n".red +
           "Update Cocoapods, or checkout the appropriate tag in the repo.\n\n"
         end
-        puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions) && config.new_version_message?
+        UI.puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions) && config.new_version_message?
       end
 
       def self.compatible?(name)

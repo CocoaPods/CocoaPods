@@ -14,23 +14,26 @@ module Pod
       end
 
       def self.options
-        [["--update", "Run `pod repo update` before listing"]].concat(Presenter.options).concat(super)
+        [[
+          "--update", "Run `pod repo update` before listing",
+          "--stats",  "Show additional stats (like GitHub watchers and forks)"
+        ]].concat(super)
       end
 
       extend Executable
       executable :git
 
       def initialize(argv)
-        @update    = argv.option('--update')
-        @new       = argv.option('new')
-        @presenter = Presenter.new(argv)
+        @update = argv.option('--update')
+        @stats  = argv.option('--stats')
+        @new    = argv.option('new')
         super unless argv.empty?
       end
 
       def list_all
         sets = Source.all_sets
-        sets.each {|s| puts @presenter.describe(s)}
-        puts "\n#{sets.count} pods were found"
+        sets.each { |set| UI.pod(set, :name) }
+        UI.puts "\n#{sets.count} pods were found"
       end
 
       def list_new
@@ -53,16 +56,18 @@ module Pod
         days.reverse.each do |d|
           sets = groups[d]
           next unless sets
-          puts "\nPods added in the last #{d == 1 ? 'day' : "#{d} days"}".yellow
-          sets.sort_by {|s| creation_dates[s.name]}.each {|s| puts @presenter.describe(s)}
+          UI.section("\nPods added in the last #{d == 1 ? 'day' : "#{d} days"}".yellow) do
+            sorted = sets.sort_by {|s| creation_dates[s.name]}
+            sorted.each { |set| UI.pod(set, (@stats ? :stats : :name)) }
+          end
         end
       end
 
       def run
-        puts "\nUpdating Spec Repositories\n".yellow if @update && config.verbose?
-        Repo.new(ARGV.new(["update"])).run           if @update
+        UI.section("\nUpdating Spec Repositories\n".yellow) do
+          Repo.new(ARGV.new(["update"])).run
+        end if @update && config.verbose?
         @new ? list_new : list_all
-        puts
       end
     end
   end

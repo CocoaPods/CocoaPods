@@ -31,7 +31,7 @@ describe "Pod::Command::List" do
       /MagicalRecord/,
       /A2DynamicDelegate/,
       /\d+ pods were found/
-    ].each { |regex| list.output.should =~ regex }
+    ].each { |regex| Pod::UI.output.should =~ regex }
   end
 
   it "returns the new pods" do
@@ -46,7 +46,7 @@ describe "Pod::Command::List" do
       'FileMD5Hash',
       'cocoa-oauth',
       'iRate'
-    ].each {|s| list.output.should.include s }
+    ].each {|s| Pod::UI.output.should.include s }
   end
 end
 

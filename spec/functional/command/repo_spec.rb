@@ -57,7 +57,7 @@ describe "Pod::Command::Repo" do
     it "lints a repo" do
       cmd = command('repo', 'lint', 'master')
       lambda { cmd.run }.should.raise Pod::Informative
-      cmd.output.should.include "Missing license type"
+      Pod::UI.output.should.include "Missing license type"
     end
   end
 

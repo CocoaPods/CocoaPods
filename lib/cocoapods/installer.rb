@@ -50,7 +50,7 @@ module Pod
       pods.sort_by { |pod| pod.top_specification.name.downcase }.each do |pod|
         should_install = @resolver.should_install?(pod.top_specification.name) || !pod.exists?
         if should_install
-          UI.title("Installing #{pod}".green, "-> ".green) do
+          UI.section("Installing #{pod}".green, "-> ".green) do
             unless pod.downloaded?
               pod.implode
               download_pod(pod)
@@ -63,7 +63,7 @@ module Pod
             pod.clean! if config.clean?
           end
         else
-          UI.title("Using #{pod}", "-> ".green)
+          UI.section("Using #{pod}", "-> ".green)
         end
       end
     end
@@ -87,10 +87,10 @@ module Pod
     def generate_docs(pod)
       doc_generator = Generator::Documentation.new(pod)
       if ( config.generate_docs? && !doc_generator.already_installed? )
-        UI.title " > Installing documentation"
+        UI.section " > Installing documentation"
         doc_generator.generate(config.doc_install?)
       else
-        UI.title " > Using existing documentation"
+        UI.section " > Using existing documentation"
       end
     end
 
@@ -98,7 +98,7 @@ module Pod
     #
     def remove_deleted_dependencies!
       resolver.removed_pods.each do |pod_name|
-        UI.title("Removing #{pod_name}", "-> ".red) do
+        UI.section("Removing #{pod_name}", "-> ".red) do
           path = sandbox.root + pod_name
           path.rmtree if path.exist?
         end
@@ -107,19 +107,19 @@ module Pod
 
     def install!
       @sandbox.prepare_for_install
-      UI.title "Resolving dependencies of #{UI.path @podfile.defined_in_file}" do
+      UI.section "Resolving dependencies of #{UI.path @podfile.defined_in_file}" do
         specs_by_target
       end
 
-      UI.title "Removing deleted dependencies" do
+      UI.section "Removing deleted dependencies" do
         remove_deleted_dependencies!
       end unless resolver.removed_pods.empty?
 
-      UI.title "Downloading dependencies" do
+      UI.section "Downloading dependencies" do
         install_dependencies!
       end
 
-      UI.title "Generating support files" do
+      UI.section "Generating support files" do
         UI.message "- Running pre install hooks" do
           run_pre_install_hooks
         end

@@ -89,7 +89,7 @@ module Pod
       end
 
       def run
-        UI.title "Setting up CocoaPods master repo" do
+        UI.section "Setting up CocoaPods master repo" do
           if dir.exist?
             set_master_repo_url
             set_master_repo_branch
@@ -104,7 +104,7 @@ module Pod
             `chmod +x '#{hook}'`
           end
         end
-        UI.title "Setup completed (#{push? ? "push" : "read-only"} access)"
+        UI.puts "Setup completed (#{push? ? "push" : "read-only"} access)".green
       end
     end
   end

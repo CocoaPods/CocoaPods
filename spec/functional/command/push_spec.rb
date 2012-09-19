@@ -67,8 +67,8 @@ describe Pod::Command::Push do
     cmd.expects(:validate_podspec_files).returns(true)
     Dir.chdir(temporary_directory) { cmd.run }
 
-    cmd.output.should.include('[Add] PushTest (1.4)')
-    cmd.output.should.include('[Fix] JSONKit (1.4)')
+    Pod::UI.output.should.include('[Add] PushTest (1.4)')
+    Pod::UI.output.should.include('[Fix] JSONKit (1.4)')
 
     git('upstream', 'checkout test') # checkout because test because is it the branch used in the specs.
     (@upstream.dir + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
