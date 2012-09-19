@@ -28,7 +28,7 @@ module Pod
         licenses_string = "#{title_from_string(header_title, 1)}\n#{header_text}\n"
         @pods.each do |pod|
           if (license = string_for_pod(pod))
-            licenses_string += license
+            licenses_string += license.force_encoding("utf-8")
           end
         end
         licenses_string += "#{title_from_string(footnote_title, 2)}#{footnote_text}\n"
