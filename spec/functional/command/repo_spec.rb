@@ -104,7 +104,7 @@ describe "Pod::Command::Repo" do
       write_version_file({'last' => "999.0.0"})
       cmd = command('repo', 'update')
       cmd.check_versions(versions_file.dirname)
-      cmd.output.should.include "Cocoapods 999.0.0 is available"
+      Pod::UI.output.should.include "Cocoapods 999.0.0 is available"
     end
 
     it "has a class method that returns if a repo is supported" do
