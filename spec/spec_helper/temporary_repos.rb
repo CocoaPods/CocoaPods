@@ -30,9 +30,10 @@ module SpecHelper
     def add_repo(name, from)
       command = command('repo', 'add', name, from)
       command.run
+      # The test branch is used by the push specs
       Dir.chdir(command.dir) do
-        `git checkout -b master >/dev/null 2>&1`
-        `git branch --set-upstream master origin/master >/dev/null 2>&1`
+        `git checkout -b test >/dev/null 2>&1`
+        `git branch --set-upstream test origin/master >/dev/null 2>&1`
       end
       command
     end
