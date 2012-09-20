@@ -136,6 +136,8 @@ module Pod
         return unless name && params
         if params.key?(:git)
           GitSource.new(name, params)
+        elsif params.key?(:svn)
+          SvnSource.new(name, params)
         elsif params.key?(:podspec)
           PodspecSource.new(name, params)
         elsif params.key?(:local)
@@ -209,6 +211,32 @@ module Pod
             description << ", commit `#{@params[:commit]}'" if @params[:commit]
             description << ", branch `#{@params[:branch]}'" if @params[:branch]
             description << ", tag `#{@params[:tag]}'" if @params[:tag]
+          end
+        end
+      end
+      
+      class SvnSource < AbstractExternalSource
+        # FIXME svn may complain that it cannot validate the certificate.
+        # In that case, do a first svn export by yourself,
+        # and accept the certificate permanently
+        def copy_external_source_into_sandbox(sandbox, platform)
+          puts "-> Pre-downloading: '#{name}'" unless config.silent?
+          target = sandbox.root + name
+          target.rmtree if target.exist?
+          downloader = Downloader.for_target(sandbox.root + name, @params)
+          downloader.download
+          store_podspec(sandbox, target + "#{name}.podspec")
+          if local_pod = sandbox.installed_pod_named(name, platform)
+            local_pod.downloaded = true
+          end
+        end
+
+        def description
+          "from `#{@params[:svn]}'".tap do |description|
+            # TODO is the :folder param meaningful here ?
+            description << ", folder `#{@params[:folder]}'" if @params[:revision]
+            description << ", tag `#{@params[:tag]}'" if @params[:tag]
+            description << ", revision `#{@params[:revision]}'" if @params[:revision]
           end
         end
       end
