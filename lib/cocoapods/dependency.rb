@@ -234,7 +234,7 @@ module Pod
         def description
           "from `#{@params[:svn]}'".tap do |description|
             # TODO is the :folder param meaningful here ?
-            description << ", folder `#{@params[:folder]}'" if @params[:revision]
+            description << ", folder `#{@params[:folder]}'" if @params[:folder]
             description << ", tag `#{@params[:tag]}'" if @params[:tag]
             description << ", revision `#{@params[:revision]}'" if @params[:revision]
           end
