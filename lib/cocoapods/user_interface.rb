@@ -6,7 +6,7 @@ module Pod
 
     @title_colors      =  %w|yellow green|
     @title_level       =  0
-    @indentation_level =  0
+    @indentation_level =  2
     @treat_titles_as_messages = false
 
     class << self
@@ -25,7 +25,7 @@ module Pod
       # TODO: refactor to title (for always visible titles like search)
       # and sections (titles that reppresent collapsible sections).
       #
-      def section(title, verbose_prefix = '', relative_indentation = 2)
+      def section(title, verbose_prefix = '', relative_indentation = 0)
         if config.verbose?
           title(title, verbose_prefix, relative_indentation)
         elsif title_level < 2
@@ -94,6 +94,32 @@ module Pod
         yield if block_given?
         @treat_titles_as_messages = false
         self.indentation_level -= 2
+      end
+
+      # Prints an important message to the user.
+      #
+      # @param [String] message The message to print.
+      #
+      # return [void]
+      #
+      def notice(message)
+        puts("\n[!] #{message}".green)
+      end
+
+      # Prints an important warning to the user optionally followed by actions
+      # that the user should take.
+      #
+      # @param [String]  message The message to print.
+      # @param [Actions] actions The actions that the user should take.
+      #
+      # return [void]
+      #
+      def warn(message, actions)
+        puts("\n[!] #{message}".yellow)
+        actions.each do |action|
+          indented = wrap_string(action, "    - ")
+          puts(indented)
+        end
       end
 
       # Returns a string containing relative location of a path from the Podfile.

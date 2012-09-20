@@ -141,9 +141,9 @@ module Pod
           @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
           @lockfile.write_to_disk(config.project_lockfile)
         end
+      end
 
         UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
-      end
     end
 
     def run_pre_install_hooks
