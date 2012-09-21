@@ -1,24 +1,14 @@
-## 0.15.0 (unreleased)
-
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...b0.15.0)
-
-###### Enhancements
-
-- Added a pre install hook to the Podfile and to root specifications.
-  [#486](https://github.com/CocoaPods/CocoaPods/issues/486)
-- Support for `header_mappings_dir` attribute in subspecs.
-- Refactored UI.
-
-###### Bug fixes
-
-- Improvements to the git cache that should be more robust.
-  [#517](https://github.com/CocoaPods/CocoaPods/issues/517)
-
 ## Master
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...master)
 
 ###### Enhancements
+- Pod `install` will update the specs repo only if needed.
+  [#533](https://github.com/CocoaPods/CocoaPods/issues/533)
+- Added a pre install hook to the Podfile and to root specifications.
+  [#486](https://github.com/CocoaPods/CocoaPods/issues/486)
+- Support for `header_mappings_dir` attribute in subspecs.
+- Refactored UI.
 - Added support for Podfiles named `Podfile.cocoapods` which allows to associate an editor application in Mac OS X.
   [#528](https://github.com/CocoaPods/CocoaPods/issues/528)
 - Added config option to disable the new version available message.
@@ -30,10 +20,12 @@
 
 
 ###### Bug fixes
-- In certain conditions pod setup would execute twice.
+- Improvements to the git cache that should be more robust.
+  [#517](https://github.com/CocoaPods/CocoaPods/issues/517)
+  - In certain conditions pod setup would execute twice.
 - The git cache now is updated if a branch is not found
   [#514](https://github.com/CocoaPods/CocoaPods/issues/514)
-- Forcing UTF-8 encoding on licenses generation in Ruby 1.9. 
+- Forcing UTF-8 encoding on licenses generation in Ruby 1.9.
   [#530](https://github.com/CocoaPods/CocoaPods/issues/530)
 
 ## 0.14.0
