@@ -59,17 +59,17 @@ module Pod
           repo_id = repo_id_match[1]
           data = github_data_for_template(repo_id)
           data[:name] = @name_or_url if @url
-          puts semantic_versioning_notice(repo_id, data[:name]) if data[:version] == '0.0.1'
+          UI.puts semantic_versioning_notice(repo_id, data[:name]) if data[:version] == '0.0.1'
         else
           data = default_data_for_template(@name_or_url)
         end
         spec = spec_template(data)
         (Pathname.pwd + "#{data[:name]}.podspec").open('w') { |f| f << spec }
-        puts "\nSpecification created at #{data[:name]}.podspec".green
+        UI.puts "\nSpecification created at #{data[:name]}.podspec".green
       end
 
       def lint
-        puts
+        UI.puts
         invalid_count = 0
         podspecs_to_lint.each do |podspec|
           linter          = Linter.new(podspec)
@@ -93,19 +93,19 @@ module Pod
           end
 
           # This overwrites the previously printed text
-          puts " -> ".send(color) << linter.spec_name unless config.silent?
+          UI.puts " -> ".send(color) << linter.spec_name unless config.silent?
           print_messages('ERROR', linter.errors)
           print_messages('WARN',  linter.warnings)
           print_messages('NOTE',  linter.notes)
 
-          puts unless config.silent?
+          UI.puts unless config.silent?
         end
 
-        puts "Analyzed #{podspecs_to_lint.count} podspecs files.\n\n" unless config.silent?
+        UI.puts "Analyzed #{podspecs_to_lint.count} podspecs files.\n\n" unless config.silent?
         count = podspecs_to_lint.count
         if invalid_count == 0
           lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
-          puts lint_passed_message.green << "\n\n" unless config.silent?
+          UI.puts lint_passed_message.green << "\n\n" unless config.silent?
         else
           raise Informative, count == 1 ? "The spec did not pass validation." : "#{invalid_count} out of #{count} specs failed validation."
         end
@@ -116,7 +116,7 @@ module Pod
 
       def print_messages(type, messages)
         return if config.silent?
-        messages.each {|msg| puts "    - #{type.ljust(5)} | #{msg}"}
+        messages.each {|msg| UI.puts "    - #{type.ljust(5)} | #{msg}"}
       end
 
       def podspecs_to_lint

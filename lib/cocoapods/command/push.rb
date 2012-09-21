@@ -36,21 +36,20 @@ module Pod
         update_repo
         add_specs_to_repo
         push_repo unless @local_only
-        puts
       end
 
       private
 
       def update_repo
-        puts "Updating the `#{@repo}' repo\n".yellow unless config.silent
+        UI.puts "Updating the `#{@repo}' repo\n".yellow unless config.silent
         # show the output of git even if not verbose
         # TODO: use the `git!' and find a way to show the output in realtime.
-        Dir.chdir(repo_dir) { puts `git pull 2>&1` }
+        Dir.chdir(repo_dir) { UI.puts `git pull 2>&1` }
       end
 
       def push_repo
-        puts "\nPushing the `#{@repo}' repo\n".yellow unless config.silent
-        Dir.chdir(repo_dir) { puts `git push 2>&1` }
+        UI.puts "\nPushing the `#{@repo}' repo\n".yellow unless config.silent
+        Dir.chdir(repo_dir) { UI.puts `git push 2>&1` }
       end
 
       def repo_dir
@@ -72,7 +71,7 @@ module Pod
       end
 
       def validate_podspec_files
-        puts "\nValidating specs".yellow unless config.silent
+        UI.puts "\nValidating specs".yellow unless config.silent
         lint_argv = ["lint"]
         lint_argv << "--only-errors" if @allow_warnings
         lint_argv << "--silent" if config.silent
@@ -83,7 +82,7 @@ module Pod
       end
 
       def add_specs_to_repo
-        puts "\nAdding the specs to the #{@repo} repo\n".yellow unless config.silent
+        UI.puts "\nAdding the specs to the #{@repo} repo\n".yellow unless config.silent
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
           output_path = File.join(repo_dir, spec.name, spec.version.to_s)
@@ -94,7 +93,7 @@ module Pod
           else
             message = "[Add] #{spec}"
           end
-          puts " - #{message}" unless config.silent
+          UI.puts " - #{message}" unless config.silent
 
           FileUtils.mkdir_p(output_path)
           FileUtils.cp(Pathname.new(spec.name+'.podspec'), output_path)

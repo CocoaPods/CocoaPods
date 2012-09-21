@@ -32,9 +32,9 @@ describe "Pod::Command::Setup" do
 
   it "creates the local spec-repos directory and creates a clone of the `master' repo" do
     output = run_command('setup')
-    git_config('master', 'remote.origin.url').should == fixture('spec-repos/master').to_s
     output.should.include "Setup completed"
     output.should.not.include "push"
+    git_config('master', 'remote.origin.url').should == fixture('spec-repos/master').to_s
   end
 
   it "preserves push access for the `master' repo" do
@@ -47,9 +47,8 @@ describe "Pod::Command::Setup" do
   it "can run if needed" do
     output = run_command('setup')
     output.should.include "Setup completed"
-    command = command('setup')
-    command.run_if_needed
-    command.output.should == nil
+    Pod::UI.output = ''
+    command('setup').run_if_needed
+    Pod::UI.output.should == ''
   end
-
 end

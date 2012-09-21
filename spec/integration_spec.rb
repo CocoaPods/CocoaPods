@@ -249,6 +249,22 @@ else
         FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
       end
 
+      it "runs the optional pre_install callback defined in the Podfile _before_ the targets are integrated but _after_ the pods have been downloaded" do
+        podfile = Pod::Podfile.new do
+          self.platform platform
+          xcodeproj 'dummy'
+          pod 'SSZipArchive', '0.1.0'
+
+          pre_install do |installer|
+            memo = "PODS:#{installer.pods * ', '} TARGETS:#{installer.project.targets.to_a * ', '}"
+            File.open(config.project_pods_root + 'memo.txt', 'w') {|f| f.puts memo}
+          end
+        end
+        resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
+        SpecHelper::Installer.new(resolver).install!
+        File.open(config.project_pods_root + 'memo.txt','rb').read.should == "PODS:SSZipArchive (0.1.0) TARGETS:\n"
+      end
+
       it "runs the optional post_install callback defined in the Podfile _before_ the project is saved to disk" do
         podfile = Pod::Podfile.new do
           self.platform platform

@@ -107,11 +107,11 @@ describe "A Pod::Specification loaded from a podspec" do
   it "adds compiler flags if ARC is required" do
     @spec.parent.should == nil
     @spec.requires_arc = true
-    @spec.activate_platform(:ios).compiler_flags.should == " -fobjc-arc"
-    @spec.activate_platform(:osx).compiler_flags.should == " -fobjc-arc"
+    @spec.activate_platform(:ios).compiler_flags.should == "-fobjc-arc"
+    @spec.activate_platform(:osx).compiler_flags.should == "-fobjc-arc"
     @spec.compiler_flags = "-Wunused-value"
-    @spec.activate_platform(:ios).compiler_flags.should == " -fobjc-arc -Wunused-value"
-    @spec.activate_platform(:osx).compiler_flags.should == " -fobjc-arc -Wunused-value"
+    @spec.activate_platform(:ios).compiler_flags.should == "-Wunused-value -fobjc-arc"
+    @spec.activate_platform(:osx).compiler_flags.should == "-Wunused-value -fobjc-arc"
   end
 end
 
@@ -334,9 +334,9 @@ describe "A Pod::Specification subspec" do
     @spec.subspecs.first.parent.should == @spec
   end
 
-  it "automatically forwards top level attributes to the top level parent" do
+  it "automatically forwards top level attributes to the subspecs" do
     @spec.activate_platform(:ios)
-    [:version, :license, :authors, :compiler_flags].each do |attr|
+    [:version, :license, :authors].each do |attr|
       @spec.subspecs.first.send(attr).should == @spec.send(attr)
       @spec.subspecs.first.subspecs.first.send(attr).should == @spec.send(attr)
     end
@@ -350,7 +350,7 @@ describe "A Pod::Specification subspec" do
     @subsubspec.resources.should == %w[ resource ]
 
     @subsubspec.compiler_flags = '-Wdeprecated-implementations'
-    @subsubspec.compiler_flags.should == ' -fobjc-arc -Wdeprecated-implementations'
+    @subsubspec.compiler_flags.should == '-Wdeprecated-implementations'
   end
 
   it "allows to specify arc settings for subspecs" do
@@ -523,7 +523,7 @@ describe "A Pod::Specification, concerning its attributes that support different
     end
 
     it "returns the same list of compiler flags for each platform" do
-      compiler_flags = ' -fobjc-arc -Wdeprecated-implementations'
+      compiler_flags = '-Wdeprecated-implementations -fobjc-arc'
       @spec.activate_platform(:ios).compiler_flags.should == compiler_flags
       @spec.activate_platform(:osx).compiler_flags.should == compiler_flags
     end
@@ -587,8 +587,8 @@ describe "A Pod::Specification, concerning its attributes that support different
     end
 
     it "returns the same list of compiler flags for each platform" do
-      @spec.activate_platform(:ios).compiler_flags.should == ' -fobjc-arc -Wdeprecated-implementations'
-      @spec.activate_platform(:osx).compiler_flags.should == ' -fobjc-arc -Wfloat-equal'
+      @spec.activate_platform(:ios).compiler_flags.should == '-Wdeprecated-implementations -fobjc-arc'
+      @spec.activate_platform(:osx).compiler_flags.should == '-Wfloat-equal -fobjc-arc'
     end
 
     it "returns the same list of dependencies for each platform" do

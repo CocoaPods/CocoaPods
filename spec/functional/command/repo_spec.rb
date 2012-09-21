@@ -57,7 +57,7 @@ describe "Pod::Command::Repo" do
     it "lints a repo" do
       cmd = command('repo', 'lint', 'master')
       lambda { cmd.run }.should.raise Pod::Informative
-      cmd.output.should.include "Missing license type"
+      Pod::UI.output.should.include "Missing license type"
     end
   end
 
@@ -104,7 +104,7 @@ describe "Pod::Command::Repo" do
       write_version_file({'last' => "999.0.0"})
       cmd = command('repo', 'update')
       cmd.check_versions(versions_file.dirname)
-      cmd.output.should.include "Cocoapods 999.0.0 is available"
+      Pod::UI.output.should.include "Cocoapods 999.0.0 is available"
     end
 
     it "has a class method that returns if a repo is supported" do

@@ -472,6 +472,17 @@ module Pod
       @target_definition = parent
     end
 
+    # This hook allows you to make any changes to the downloaded Pods and to
+    # their targets before they are installed.
+    #
+    #   pre_install do |installer|
+    #     # Do something fancy!
+    #   end
+    #
+    def pre_install(&block)
+      @pre_install_callback = block
+    end
+
     # This hook allows you to make any last changes to the generated Xcode project
     # before it is written to disk, or any other tasks you might want to perform.
     #
@@ -530,6 +541,10 @@ module Pod
     def user_build_configurations
       configs_array = @target_definitions.values.map { |td| td.user_project.build_configurations }
       configs_array.inject({}) { |hash, config| hash.merge(config) }
+    end
+
+    def pre_install!(installer)
+      @pre_install_callback.call(installer) if @pre_install_callback
     end
 
     def post_install!(installer)

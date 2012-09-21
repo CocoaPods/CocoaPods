@@ -51,7 +51,7 @@ module Pod
           workspace << project_path unless workspace.include?(project_path)
         end
         unless workspace_path.exist? || config.silent?
-          puts "[!] From now on use `#{workspace_path.basename}'."
+          UI.notice "From now on use `#{workspace_path.basename}'."
         end
         workspace.save_as(workspace_path)
       end
@@ -69,20 +69,30 @@ module Pod
           "#<#{self.class} for target `#{@target_definition.label}'>"
         end
 
+        # Integrates the user project targets. Only the targets that do **not**
+        # already have the Pods library in their frameworks build phase are
+        # processed.
+        #
+        # @return [void]
+        #
         def integrate!
           return if targets.empty?
 
-          unless Config.instance.silent?
-            puts "-> Integrating `#{@target_definition.lib_name}' into #{'target'.pluralize(targets.size)} " \
-                 "`#{targets.map(&:name).to_sentence}' of Xcode project `#{user_project_path.basename}'.".green
+          UI.section ("Integrating `#{@target_definition.lib_name}' into #{'target'.pluralize(targets.size)} " \
+                      "`#{targets.map(&:name).to_sentence}' of Xcode project #{UI.path user_project_path}.") do
+            add_xcconfig_base_configuration
+            add_pods_library
+            add_copy_resources_script_phase
+            user_project.save_as(@target_definition.user_project.path)
           end
-
-          add_xcconfig_base_configuration
-          add_pods_library
-          add_copy_resources_script_phase
-          user_project.save_as(@target_definition.user_project.path)
         end
 
+        # @return [Pathname] the path of the user project.
+        #
+        # @raises If the path doesn't exits.
+        #
+        # @raises If the project is implicit and there are multiple projects.
+        #
         def user_project_path
           if path = @target_definition.user_project.path
             unless path.exist?
@@ -96,6 +106,8 @@ module Pod
           end
         end
 
+        # @return [Xcodeproj::Project] Returns the project of the user.
+        #
         def user_project
           @user_project ||= Xcodeproj::Project.new(user_project_path)
         end
@@ -152,13 +164,10 @@ module Pod
               config.base_configuration = xcconfig
             end
 
-            unless config.silent?
-              config_build_names_by_overriden_key.each do |key, config_build_names|
-                name = "#{target.attributes["name"]} [#{config_build_names.join(' - ')}]"
-                puts "\n[!] The target `#{name}' overrides the `#{key}' build setting defined in `#{@target_definition.xcconfig_relative_path}'.".yellow
-                puts "    - Use the `$(inherited)' flag, or"
-                puts "    - Remove the build settings from the target."
-              end
+            config_build_names_by_overriden_key.each do |key, config_build_names|
+              name    = "#{target.attributes["name"]} [#{config_build_names.join(' - ')}]"
+              actions = [ "Use the `$(inherited)' flag, or", "Remove the build settings from the target." ]
+              UI.warn("The target `#{name}' overrides the `#{key}' build setting defined in `#{@target_definition.xcconfig_relative_path}'.", actions)
             end
           end
         end

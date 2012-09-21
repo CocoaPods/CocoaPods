@@ -49,23 +49,21 @@ module Pod
     def install_dependencies!
       pods.sort_by { |pod| pod.top_specification.name.downcase }.each do |pod|
         should_install = @resolver.should_install?(pod.top_specification.name) || !pod.exists?
-
-        unless config.silent?
-          marker = config.verbose ? "\n-> ".green : ''
-          puts marker << ( should_install ? "Installing #{pod}".green : "Using #{pod}" )
-        end
-
         if should_install
-          unless pod.downloaded?
-            pod.implode
-            download_pod(pod)
+          UI.section("Installing #{pod}".green, "-> ".green) do
+            unless pod.downloaded?
+              pod.implode
+              download_pod(pod)
+            end
+            # The docs need to be generated before cleaning because the
+            # documentation is created for all the subspecs.
+            generate_docs(pod)
+            # Here we clean pod's that just have been downloaded or have been
+            # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
+            pod.clean! if config.clean?
           end
-          # The docs need to be generated before cleaning because the
-          # documentation is created for all the subspecs.
-          generate_docs(pod)
-          # Here we clean pod's that just have been downloaded or have been
-          # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
-          pod.clean! if config.clean?
+        else
+          UI.section("Using #{pod}", "-> ".green)
         end
       end
     end
@@ -89,10 +87,10 @@ module Pod
     def generate_docs(pod)
       doc_generator = Generator::Documentation.new(pod)
       if ( config.generate_docs? && !doc_generator.already_installed? )
-        puts "-> Installing documentation" if config.verbose?
+        UI.section " > Installing documentation"
         doc_generator.generate(config.doc_install?)
       else
-        puts "-> Using existing documentation" if config.verbose?
+        UI.section " > Using existing documentation"
       end
     end
 
@@ -100,47 +98,61 @@ module Pod
     #
     def remove_deleted_dependencies!
       resolver.removed_pods.each do |pod_name|
-        marker = config.verbose ? "\n-> ".red : ''
-        path = sandbox.root + pod_name
-        puts marker << "Removing #{pod_name}".red
-        path.rmtree if path.exist?
+        UI.section("Removing #{pod_name}", "-> ".red) do
+          path = sandbox.root + pod_name
+          path.rmtree if path.exist?
+        end
       end
     end
 
     def install!
       @sandbox.prepare_for_install
-
-      print_title "Resolving dependencies of: #{@podfile.defined_in_file}"
-      specs_by_target
-
-      print_title "Removing deleted dependencies" unless resolver.removed_pods.empty?
-      remove_deleted_dependencies!
-
-      print_title "Installing dependencies"
-      install_dependencies!
-
-      print_title("Generating support files\n", false)
-      target_installers.each do |target_installer|
-        pods_for_target = pods_by_target[target_installer.target_definition]
-        target_installer.install!(pods_for_target, @sandbox)
-        acknowledgements_path = target_installer.target_definition.acknowledgements_path
-        Generator::Acknowledgements.new(target_installer.target_definition,
-                                        pods_for_target).save_as(acknowledgements_path)
-        generate_dummy_source(target_installer)
+      UI.section "Resolving dependencies of #{UI.path @podfile.defined_in_file}" do
+        specs_by_target
       end
 
-      puts "- Running post install hooks" if config.verbose?
-      # Post install hooks run _before_ saving of project, so that they can alter it before saving.
-      run_post_install_hooks
+      UI.section "Removing deleted dependencies" do
+        remove_deleted_dependencies!
+      end unless resolver.removed_pods.empty?
 
-      puts "- Writing Xcode project file to `#{@sandbox.project_path}'" if config.verbose?
-      project.save_as(@sandbox.project_path)
+      UI.section "Downloading dependencies" do
+        install_dependencies!
+      end
 
-      puts "- Writing lockfile in `#{config.project_lockfile}'\n\n" if config.verbose?
-      @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
-      @lockfile.write_to_disk(config.project_lockfile)
+      UI.section "Generating support files" do
+        UI.message "- Running pre install hooks" do
+          run_pre_install_hooks
+        end
 
-      UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
+        UI.message"- Installing targets" do
+          generate_target_support_files
+        end
+
+        UI.message "- Running post install hooks" do
+          # Post install hooks run _before_ saving of project, so that they can alter it before saving.
+          run_post_install_hooks
+        end
+
+        UI.message "- Writing Xcode project file to #{UI.path @sandbox.project_path}" do
+          project.save_as(@sandbox.project_path)
+        end
+
+        UI.message "- Writing lockfile in #{UI.path config.project_lockfile}" do
+          @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
+          @lockfile.write_to_disk(config.project_lockfile)
+        end
+      end
+
+        UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
+    end
+
+    def run_pre_install_hooks
+      pods_by_target.each do |target_definition, pods|
+        pods.each do |pod|
+          pod.top_specification.pre_install(pod, target_definition)
+        end
+      end
+      @podfile.pre_install!(self)
     end
 
     def run_post_install_hooks
@@ -151,8 +163,18 @@ module Pod
           spec.post_install(target_installer)
         end
       end
-
       @podfile.post_install!(self)
+    end
+
+    def generate_target_support_files
+      target_installers.each do |target_installer|
+        pods_for_target = pods_by_target[target_installer.target_definition]
+        target_installer.install!(pods_for_target, @sandbox)
+        acknowledgements_path = target_installer.target_definition.acknowledgements_path
+        Generator::Acknowledgements.new(target_installer.target_definition,
+                                        pods_for_target).save_as(acknowledgements_path)
+        generate_dummy_source(target_installer)
+      end
     end
 
     def generate_dummy_source(target_installer)
@@ -197,16 +219,6 @@ module Pod
         end.uniq.compact
       end
       result
-    end
-
-    private
-
-    def print_title(title, only_verbose = true)
-      if config.verbose?
-        puts "\n" + title.yellow
-      elsif !config.silent? && !only_verbose
-        puts title
-      end
     end
   end
 end

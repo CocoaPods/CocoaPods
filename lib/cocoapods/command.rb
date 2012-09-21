@@ -7,7 +7,6 @@ module Pod
     autoload :List,        'cocoapods/command/list'
     autoload :Linter,      'cocoapods/command/linter'
     autoload :Outdated,    'cocoapods/command/outdated'
-    autoload :Presenter,   'cocoapods/command/presenter'
     autoload :Push,        'cocoapods/command/push'
     autoload :Repo,        'cocoapods/command/repo'
     autoload :Search,      'cocoapods/command/search'
@@ -74,6 +73,7 @@ module Pod
         Setup.new(ARGV.new).run_if_needed
       end
       sub_command.run
+      UI.puts
 
     rescue Interrupt
       puts "[!] Cancelled".red
@@ -145,24 +145,9 @@ module Pod
 
     def update_spec_repos_if_necessary!
       if @update_repo
-        print_title 'Updating Spec Repositories', true
-        Repo.new(ARGV.new(["update"])).run
-      end
-    end
-
-    def print_title(title, only_verbose = true)
-      if config.verbose?
-        puts "\n" + title.yellow
-      elsif !config.silent? && !only_verbose
-        puts title
-      end
-    end
-
-    def print_subtitle(title, only_verbose = false)
-      if config.verbose?
-        puts "\n" + title.green
-      elsif !config.silent? && !only_verbose
-        puts title
+        UI.section 'Updating Spec Repositories' do
+          Repo.new(ARGV.new(["update"])).run
+        end
       end
     end
   end

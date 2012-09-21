@@ -19,6 +19,7 @@ require 'spec_helper/github'
 require 'spec_helper/temporary_directory'
 require 'spec_helper/temporary_repos'
 require 'spec_helper/config'
+require 'spec_helper/user_interface'
 
 module Bacon
   class Context
