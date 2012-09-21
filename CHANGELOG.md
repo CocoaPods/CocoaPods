@@ -20,6 +20,8 @@
 
 
 ###### Bug fixes
+- Subspecs namespacing has been restored.
+  [#541](https://github.com/CocoaPods/CocoaPods/issues/541)
 - Improvements to the git cache that should be more robust.
   [#517](https://github.com/CocoaPods/CocoaPods/issues/517)
   - In certain conditions pod setup would execute twice.
