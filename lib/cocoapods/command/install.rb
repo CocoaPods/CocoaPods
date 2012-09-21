@@ -35,7 +35,7 @@ module Pod
         config.clean             = !argv.option('--no-clean')
         config.generate_docs     = !argv.option('--no-doc')
         config.integrate_targets = !argv.option('--no-integrate')
-        @update_repo             = !argv.option('--no-update')
+        config.skip_repo_update  = !argv.option('--no-update')
         super unless argv.empty?
       end
 
@@ -48,7 +48,6 @@ module Pod
 
       def run
         verify_podfile_exists!
-        update_spec_repos_if_necessary!
         run_install_with_update(false)
       end
     end

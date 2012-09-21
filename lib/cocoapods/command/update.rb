@@ -9,10 +9,18 @@ module Pod
       Updates all dependencies.}
       end
 
+      def self.options
+        [["--no-update", "Skip running `pod repo update` before install"]].concat(super)
+      end
+
+      def initialize(argv)
+        config.skip_repo_update = argv.option('--no-update')
+        super unless argv.empty?
+      end
+
       def run
         verify_podfile_exists!
         verify_lockfile_exists!
-        update_spec_repos_if_necessary!
         run_install_with_update(true)
       end
     end

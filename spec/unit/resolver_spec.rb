@@ -4,7 +4,6 @@ module Pod
   describe Resolver do
     before do
       config.repos_dir = fixture('spec-repos')
-
       @podfile = Podfile.new do
         platform :ios
         pod 'BlocksKit'
@@ -261,7 +260,7 @@ module Pod
           platform :ios
           pod 'JSONKit'
           pod 'BlocksKit'
-          pod 'libPusher'
+          pod 'libPusher' # New pod
         end
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         installed = @resolver.resolve.values.flatten.map(&:to_s)
@@ -293,6 +292,56 @@ module Pod
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         @resolver.resolve
         @resolver.should_install?("JSONKit").should.be.false
+      end
+
+      it "doesn't updates the repos if there no change in the pods" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'BlocksKit'
+          pod 'JSONKit'
+        end
+        config.skip_repo_update = false
+        Pod::Command::Repo.any_instance.expects(:run).never
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.resolve
+      end
+
+      it "updates the repos if there is a new pod" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'BlocksKit'
+          pod 'JSONKit'
+          pod 'libPusher' # New pod
+        end
+        config.skip_repo_update = false
+        Pod::Command::Repo.any_instance.expects(:run).once
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.resolve
+      end
+
+      it "doesn't update the repos if config indicate to skip it in any case" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'BlocksKit'
+          pod 'JSONKit', :head #changed to head
+          pod 'libPusher'      # New pod
+        end
+        config.skip_repo_update = true
+        Pod::Command::Repo.any_instance.expects(:run).never
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.resolve
+      end
+
+      it "updates the repos if there is a new pod" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'BlocksKit'
+          pod 'JSONKit', :head #changed to head
+        end
+        config.skip_repo_update = false
+        Pod::Command::Repo.any_instance.expects(:run).once
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.resolve
       end
     end
 
@@ -354,6 +403,19 @@ module Pod
         @resolver.update_mode = true
         @resolver.resolve
         @resolver.should_install?("libPusher").should.be.true
+      end
+
+      it "always updates the repos even if there is change in the pods" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit'
+          pod 'libPusher'
+        end
+        config.skip_repo_update = false
+        Pod::Command::Repo.any_instance.expects(:run).once
+        @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
+        @resolver.update_mode = true
+        @resolver.resolve
       end
 
       # TODO: stub the specification resolution for the sandbox

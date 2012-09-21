@@ -8,10 +8,11 @@ module Bacon
       ::Pod::Config.instance = nil
       ::Pod::Config.instance.tap do |c|
         ENV['VERBOSE_SPECS'] ? c.verbose = true : c.silent = true
-        c.repos_dir     = SpecHelper.tmp_repos_path
-        c.project_root  = SpecHelper.temporary_directory
-        c.doc_install   = false
-        c.generate_docs = false
+        c.repos_dir        =  SpecHelper.tmp_repos_path
+        c.project_root     =  SpecHelper.temporary_directory
+        c.doc_install      =  false
+        c.generate_docs    =  false
+        c.skip_repo_update =  true
       end
       old_run_requirement.bind(self).call(description, spec)
     end

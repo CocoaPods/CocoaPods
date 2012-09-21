@@ -27,9 +27,9 @@ else
       extend SpecHelper::TemporaryDirectory
 
       def create_config!
-        config.repos_dir = fixture('spec-repos')
-        config.project_root = temporary_directory
-        config.integrate_targets = false
+        config.repos_dir         =  fixture('spec-repos')
+        config.project_root      =  temporary_directory
+        config.integrate_targets =  false
       end
 
       before do
@@ -208,7 +208,6 @@ else
           result['DEPENDENCIES'].should == ["ASIHTTPRequest", "JSONKit (= 1.4)"]
           # TODO might be nicer looking to not show the dependencies of the top level spec for each subspec (Reachability).
 
-          should_xcodebuild(podfile.target_definitions[:ios_target])
           should_xcodebuild(podfile.target_definitions[:osx_target])
         end
 
@@ -217,10 +216,11 @@ else
             ::Pod::Config.instance = nil
             ::Pod::Config.instance.tap do |c|
               ENV['VERBOSE_SPECS'] ? c.verbose = true : c.silent = true
-              c.doc_install   = false
-              c.repos_dir = fixture('spec-repos')
-              c.project_root = temporary_directory
-              c.integrate_targets = false
+              c.doc_install       =  false
+              c.repos_dir         =  fixture('spec-repos')
+              c.project_root      =  temporary_directory
+              c.integrate_targets =  false
+              c.skip_repo_update  =  true
             end
 
             Pod::Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)

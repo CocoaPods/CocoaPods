@@ -142,14 +142,6 @@ module Pod
         raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."
       end
     end
-
-    def update_spec_repos_if_necessary!
-      if @update_repo
-        UI.section 'Updating Spec Repositories' do
-          Repo.new(ARGV.new(["update"])).run
-        end
-      end
-    end
   end
 end
 
