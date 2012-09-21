@@ -10,21 +10,13 @@ module Pod
       spec repos, not those from local/external sources or `:head' versions.}
       end
 
-      def self.options
-        [
-          ["--no-update", "Skip running `pod repo update` before install"],
-        ].concat(super)
-      end
-
       def initialize(argv)
-        @update_repo = !argv.option('--no-update')
         super unless argv.empty?
       end
 
       def run
         verify_podfile_exists!
         verify_lockfile_exists!
-        update_spec_repos_if_necessary!
 
         sandbox = Sandbox.new(config.project_pods_root)
         resolver = Resolver.new(config.podfile, config.lockfile, sandbox)

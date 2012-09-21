@@ -77,6 +77,11 @@ module Pod
             end
           end
         end if config.verbose?
+
+        UI.section 'Updating Spec Repositories' do
+          Command::Repo.new(Command::ARGV.new(["update"])).run
+        end if !(@pods_by_state[:added] + @pods_by_state[:changed]).empty? || update_mode
+
         @pods_to_lock = (lockfile.pods_names - @pods_by_state[:added] - @pods_by_state[:changed] - @pods_by_state[:removed]).uniq
       end
 

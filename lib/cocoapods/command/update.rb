@@ -12,7 +12,6 @@ module Pod
       def run
         verify_podfile_exists!
         verify_lockfile_exists!
-        update_spec_repos_if_necessary!
         run_install_with_update(true)
       end
     end
