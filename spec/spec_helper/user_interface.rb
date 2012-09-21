@@ -1,5 +1,5 @@
 module Pod
-  class UI
+  module UI
     @output = ''
 
     class << self

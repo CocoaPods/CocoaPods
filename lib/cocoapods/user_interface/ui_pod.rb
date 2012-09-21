@@ -1,7 +1,7 @@
 require 'active_support/core_ext/array/conversions'
 
 module Pod
-  class UserInterface
+  module UserInterface
     class UIPod
       attr_accessor :set
 

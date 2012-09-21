@@ -1,6 +1,6 @@
 module Pod
   require 'colored'
-  class UserInterface
+  module UserInterface
 
     autoload :UIPod, 'cocoapods/user_interface/ui_pod'
 
