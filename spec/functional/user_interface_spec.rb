@@ -11,7 +11,7 @@ describe Pod::UI do
 
   it "presents the name, version, description, homepage and source of a specification set" do
     Pod::UI.pod(@set)
-    puts output = Pod::UI.output.gsub(/\n */,'')
+    output = Pod::UI.output.gsub(/\n */,'')
     output.should.include? 'CocoaLumberjack'
     output.should.include? '1.0'
     output.should.include? '1.1'
