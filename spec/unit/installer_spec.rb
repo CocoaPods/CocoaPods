@@ -31,10 +31,66 @@ module Pod
       it "sets the PODS_ROOT build variable" do
         @xcconfig['PODS_ROOT'].should.not == nil
       end
+
+      it "generates a BridgeSupport metadata file from all the pod headers" do
+        podfile = Podfile.new do
+          platform :osx
+          pod 'ASIHTTPRequest'
+        end
+
+        sandbox = Sandbox.new(fixture('integration'))
+        resolver = Resolver.new(podfile, nil, sandbox)
+        installer = Installer.new(resolver)
+        pods = installer.specifications.map do |spec|
+          LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
+        end
+        expected = pods.map { |pod| pod.header_files }.flatten.map { |header| config.project_pods_root + header }
+        expected.size.should > 0
+        installer.target_installers.first.bridge_support_generator_for(pods, installer.sandbox).headers.should == expected
+      end
+
+      it "omits empty target definitions" do
+        podfile = Podfile.new do
+          platform :ios
+          target :not_empty do
+            pod 'JSONKit'
+          end
+        end
+        resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
+        installer = Installer.new(resolver)
+        installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
+      end
+
+      it "adds the user's build configurations" do
+        path = fixture('SampleProject/SampleProject.xcodeproj')
+        podfile = Podfile.new do
+          platform :ios
+          xcodeproj path, 'App Store' => :release
+        end
+        resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
+        installer = Installer.new(resolver)
+        installer.project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
+      end
+
+      it "forces downloading of the `bleeding edge' version of a pod" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', :head
+        end
+        resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
+        installer = Installer.new(resolver)
+        pod = installer.pods.first
+
+        downloader = stub('Downloader')
+        Downloader.stubs(:for_pod).returns(downloader)
+
+        downloader.expects(:download_head)
+        installer.download_pod(pod)
+      end
     end
 
     describe "concerning multiple pods originating form the same spec" do
-    extend SpecHelper::Fixture
+      extend SpecHelper::Fixture
 
       before do
         sandbox = temporary_sandbox
@@ -79,63 +135,35 @@ module Pod
         reachability_pods = @installer.pods.map(&:to_s).select { |s| s.include?('Reachability') }
         reachability_pods.count.should == 1
       end
-
     end
 
-    it "generates a BridgeSupport metadata file from all the pod headers" do
-      podfile = Podfile.new do
-        platform :osx
-        pod 'ASIHTTPRequest'
-      end
+    describe "concerning namespacing" do
+      extend SpecHelper::Fixture
 
-      sandbox = Sandbox.new(fixture('integration'))
-      resolver = Resolver.new(podfile, nil, sandbox)
-      installer = Installer.new(resolver)
-      pods = installer.specifications.map do |spec|
-        LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
-      end
-      expected = pods.map { |pod| pod.header_files }.flatten.map { |header| config.project_pods_root + header }
-      expected.size.should > 0
-      installer.target_installers.first.bridge_support_generator_for(pods, installer.sandbox).headers.should == expected
-    end
-
-    it "omits empty target definitions" do
-      podfile = Podfile.new do
-        platform :ios
-        target :not_empty do
-          pod 'JSONKit'
+      before do
+        sandbox = temporary_sandbox
+        Pod::Config.instance.project_pods_root = sandbox.root
+        Pod::Config.instance.integrate_targets = false
+        podspec_path = fixture('chameleon')
+        podfile = Podfile.new do
+          platform :osx
+          pod 'Chameleon', :local => podspec_path
         end
+        resolver   = Resolver.new(podfile, nil, sandbox)
+        @installer = Installer.new(resolver)
       end
-      resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
-      installer = Installer.new(resolver)
-      installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
-    end
 
-    it "adds the user's build configurations" do
-      path = fixture('SampleProject/SampleProject.xcodeproj')
-      podfile = Podfile.new do
-        platform :ios
-        xcodeproj path, 'App Store' => :release
+      it "namespaces local pods" do
+        @installer.install!
+        group = @installer.project.groups.where(:name => 'Local Pods')
+        group.groups.map(&:name).sort.should == %w| Chameleon |
       end
-      resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
-      installer = Installer.new(resolver)
-      installer.project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
-    end
 
-    it "forces downloading of the `bleeding edge' version of a pod" do
-      podfile = Podfile.new do
-        platform :ios
-        pod 'JSONKit', :head
+      it "namespaces subspecs" do
+        @installer.install!
+        group = @installer.project.groups.where(:name => 'Chameleon')
+        group.groups.map(&:name).sort.should == %w| AVFoundation AssetsLibrary MediaPlayer MessageUI StoreKit UIKit |
       end
-      resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
-      installer = Installer.new(resolver)
-      pod = installer.pods.first
-
-      downloader = stub('Downloader')
-      Downloader.stubs(:for_pod).returns(downloader)
-
-      downloader.expects(:download_head)
-      installer.download_pod(pod)
     end
   end
 end
