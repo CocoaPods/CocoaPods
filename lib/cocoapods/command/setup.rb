@@ -89,21 +89,22 @@ module Pod
       end
 
       def run
-        print_title "Setting up CocoaPods master repo"
-        if dir.exist?
-          set_master_repo_url
-          set_master_repo_branch
-          update_master_repo
-        else
-          add_master_repo
+        UI.section "Setting up CocoaPods master repo" do
+          if dir.exist?
+            set_master_repo_url
+            set_master_repo_branch
+            update_master_repo
+          else
+            add_master_repo
+          end
+          # Mainly so the specs run with submodule repos
+          if (dir + '.git/hooks').exist?
+            hook = dir + '.git/hooks/pre-commit'
+            hook.open('w') { |f| f << "#!/bin/sh\nrake lint" }
+            `chmod +x '#{hook}'`
+          end
         end
-        # Mainly so the specs run with submodule repos
-        if (dir + '.git/hooks').exist?
-          hook = dir + '.git/hooks/pre-commit'
-          hook.open('w') { |f| f << "#!/bin/sh\nrake lint" }
-          `chmod +x '#{hook}'`
-        end
-        print_subtitle "Setup completed (#{push? ? "push" : "read-only"} access)"
+        UI.puts "Setup completed (#{push? ? "push" : "read-only"} access)".green
       end
     end
   end

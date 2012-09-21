@@ -66,36 +66,26 @@ module Pod
       @specs_by_target = {}
       @pods_from_external_sources = []
       @pods_to_lock = []
-      @log_indent = 0
 
       if @lockfile
-        puts "\nFinding added, modified or removed dependencies:".green if config.verbose?
         @pods_by_state = @lockfile.detect_changes_with_podfile(podfile)
-        if config.verbose?
+        UI.section "Finding added, modified or removed dependencies:" do
+          marks = {:added => "A".green, :changed => "M".yellow, :removed => "R".red, :unchanged => "-" }
           @pods_by_state.each do |symbol, pod_names|
-            case symbol
-            when :added
-              mark = "A".green
-            when :changed
-              mark = "M".yellow
-            when :removed
-              mark = "R".red
-            when :unchanged
-              mark = "-"
-            end
             pod_names.each do |pod_name|
-              puts "  #{mark} " << pod_name
+              UI.message("#{marks[symbol]} #{pod_name}", '',2)
             end
           end
-        end
+        end if config.verbose?
         @pods_to_lock = (lockfile.pods_names - @pods_by_state[:added] - @pods_by_state[:changed] - @pods_by_state[:removed]).uniq
       end
 
       @podfile.target_definitions.values.each do |target_definition|
-        puts "\nResolving dependencies for target `#{target_definition.name}' (#{target_definition.platform}):".green if config.verbose?
-        @loaded_specs = []
-        find_dependency_specs(@podfile, target_definition.dependencies, target_definition)
-        @specs_by_target[target_definition] = @cached_specs.values_at(*@loaded_specs).sort_by(&:name)
+        UI.section "Resolving dependencies for target `#{target_definition.name}' (#{target_definition.platform}):" do
+          @loaded_specs = []
+          find_dependency_specs(@podfile, target_definition.dependencies, target_definition)
+          @specs_by_target[target_definition] = @cached_specs.values_at(*@loaded_specs).sort_by(&:name)
+        end
       end
 
       @cached_specs.values.sort_by(&:name)
@@ -187,32 +177,30 @@ module Pod
     # @return [void]
     #
     def find_dependency_specs(dependent_specification, dependencies, target_definition)
-      @log_indent += 1
       dependencies.each do |dependency|
         # Replace the dependency with a more specific one if the pod is already installed.
         if !update_mode && @pods_to_lock.include?(dependency.name)
           dependency = lockfile.dependency_for_installed_pod_named(dependency.name)
         end
+        UI.message("- #{dependency}", '', 2) do
+          set = find_cached_set(dependency, target_definition.platform)
+          set.required_by(dependency, dependent_specification.to_s)
 
-        puts '  ' * @log_indent + "- #{dependency}" if config.verbose?
-        set = find_cached_set(dependency, target_definition.platform)
-        set.required_by(dependency, dependent_specification.to_s)
-
-        # Ensure we don't resolve the same spec twice for one target
-        unless @loaded_specs.include?(dependency.name)
-          spec = set.specification_by_name(dependency.name)
-          @pods_from_external_sources << spec.pod_name if dependency.external?
-          @loaded_specs << spec.name
-          @cached_specs[spec.name] = spec
-          # Configure the specification
-          spec.activate_platform(target_definition.platform)
-          spec.version.head = dependency.head?
-          # And recursively load the dependencies of the spec.
-          find_dependency_specs(spec, spec.dependencies, target_definition) if spec.dependencies
+          # Ensure we don't resolve the same spec twice for one target
+          unless @loaded_specs.include?(dependency.name)
+            spec = set.specification_by_name(dependency.name)
+            @pods_from_external_sources << spec.pod_name if dependency.external?
+            @loaded_specs << spec.name
+            @cached_specs[spec.name] = spec
+            # Configure the specification
+            spec.activate_platform(target_definition.platform)
+            spec.version.head = dependency.head?
+            # And recursively load the dependencies of the spec.
+            find_dependency_specs(spec, spec.dependencies, target_definition) if spec.dependencies
+          end
+          validate_platform(spec || @cached_specs[dependency.name], target_definition)
         end
-        validate_platform(spec || @cached_specs[dependency.name], target_definition)
       end
-      @log_indent -= 1
     end
 
     # Ensures that a spec is compatible with platform of a target.

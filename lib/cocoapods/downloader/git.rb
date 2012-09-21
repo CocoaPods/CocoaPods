@@ -7,33 +7,33 @@ module Pod
   class Downloader
     class Git < Downloader
       include Config::Mixin
+
       executable :git
 
       MAX_CACHE_SIZE = 500
 
       def download
         create_cache unless cache_exist?
-        puts '-> Cloning git repo' if config.verbose?
-
-        if options[:tag]
-          download_tag
-        elsif options[:branch]
-          download_branch
-        elsif options[:commit]
-          download_commit
-        else
-          download_head
+        UI.section(' > Cloning git repo', '', 1) do
+          if options[:tag]
+            download_tag
+          elsif options[:branch]
+            download_branch
+          elsif options[:commit]
+            download_commit
+          else
+            download_head
+          end
+          Dir.chdir(target_path) { git! "submodule update --init"  } if options[:submodules]
         end
-
-        Dir.chdir(target_path) { git! "submodule update --init"  } if options[:submodules]
         prune_cache
       end
 
       def create_cache
-        puts "-> Creating cache git repo (#{cache_path})" if config.verbose?
+        UI.section(" > Creating cache git repo (#{cache_path})",'',1)
         cache_path.rmtree if cache_path.exist?
         cache_path.mkpath
-        clone(url, cache_path)
+        git! %Q|clone  --mirror "#{url}" "#{cache_path}"|
       end
 
       def prune_cache
@@ -42,7 +42,7 @@ module Pod
           repos = Pathname.new(caches_dir).children.select { |c| c.directory? }.sort_by(&:ctime)
           while caches_size >= MAX_CACHE_SIZE && !repos.empty?
             dir = repos.shift
-            puts '->'.yellow << " Removing git cache for `#{origin_url(dir)}'" if config.verbose?
+            UI.message "#{'->'.yellow} Removing git cache for `#{origin_url(dir)}'"
             dir.rmtree
           end
         end
@@ -74,13 +74,17 @@ module Pod
       end
 
       def update_cache
-        puts "-> Updating cache git repo (#{cache_path})" if config.verbose?
-        Dir.chdir(cache_path) do
-          git! "reset --hard HEAD"
-          git! "clean -d -x -f"
-          git! "pull origin master"
-          git! "fetch"
-          git! "fetch --tags"
+        UI.section(" > Updating cache git repo (#{cache_path})",'',1) do
+          Dir.chdir(cache_path) do
+            if git("config core.bare").chomp == "true"
+              git! "remote update"
+            else
+              git! "reset --hard HEAD"
+              git! "clean -d -x -f"
+              git! "pull origin master"
+              git! "fetch --tags"
+            end
+          end
         end
       end
 
@@ -97,7 +101,7 @@ module Pod
       end
 
       def branch_exists?(branch)
-        Dir.chdir(cache_path) { git "branch -r | grep #{branch}$" } # check for remote branch and do suffix matching ($ anchor)
+        Dir.chdir(cache_path) { git "branch --all | grep #{branch}$" } # check for remote branch and do suffix matching ($ anchor)
         $? == 0
       end
 
@@ -144,12 +148,14 @@ module Pod
           git! "remote add upstream '#{@url}'" # we need to add the original url, not the cache url
           git! "fetch -q upstream" # refresh the branches
           git! "checkout --track -b activated-pod-commit upstream/#{options[:branch]}" # create a new tracking branch
-          puts "Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}" if config.verbose?
+          UI.message("Just downloaded and checked out branch: #{options[:branch]} from upstream #{clone_url}")
         end
       end
 
       def clone(from, to)
-        git! %Q|clone "#{from}" "#{to}"|
+        UI.section(" > Cloning to Pods folder",'',1) do
+          git! %Q|clone "#{from}" "#{to}"|
+        end
       end
     end
 

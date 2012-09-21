@@ -1,9 +1,8 @@
-require File.expand_path('../../../spec_helper', __FILE__)
+require File.expand_path('../../spec_helper', __FILE__)
 require 'net/http'
 
-describe Pod::Command::Presenter do
-
-  Presenter = Pod::Command::Presenter
+describe Pod::UI do
+  extend SpecHelper::Command
 
   before do
     @set = Pod::Spec::Set.new(fixture('spec-repos/master/CocoaLumberjack'))
@@ -11,8 +10,8 @@ describe Pod::Command::Presenter do
   end
 
   it "presents the name, version, description, homepage and source of a specification set" do
-    presenter = Presenter.new(argv())
-    output    = presenter.describe(@set)
+    Pod::UI.pod(@set)
+    puts output = Pod::UI.output.gsub(/\n */,'')
     output.should.include? 'CocoaLumberjack'
     output.should.include? '1.0'
     output.should.include? '1.1'
@@ -24,8 +23,8 @@ describe Pod::Command::Presenter do
   it "presents the stats of a specification set" do
     repo = { "forks"=>42, "watchers"=>318, "pushed_at"=>"2011-01-26T19:06:43Z" }
     Octokit.expects(:repo).with("robbiehanson/CocoaLumberjack").returns(repo)
-    presenter = Presenter.new(argv('--stats', '--no-color'))
-    output = presenter.describe(@set)
+    Pod::UI.pod(@set, :stats)
+    output = Pod::UI.output
     output.should.include? 'Author:   Robbie Hanson'
     output.should.include? 'License:  BSD'
     output.should.include? 'Platform: iOS - OS X'
@@ -35,8 +34,9 @@ describe Pod::Command::Presenter do
   end
 
   it "should print at least one subspec" do
-    presenter = Presenter.new(argv())
-    output = presenter.describe(Pod::Spec::Set.new(fixture('spec-repos/master/RestKit')))
+    @set = Pod::Spec::Set.new(fixture('spec-repos/master/RestKit'))
+    Pod::UI.pod(@set)
+    output = Pod::UI.output
     output.should.include? "RestKit/Network"
   end
 end

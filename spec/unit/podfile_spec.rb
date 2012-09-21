@@ -79,6 +79,16 @@ describe "Pod::Podfile" do
     Pod::Podfile.new { set_arc_compatibility_flag! }.should.set_arc_compatibility_flag
   end
 
+  it "stores a block that will be called with the Installer before the target integration" do
+    yielded = nil
+    Pod::Podfile.new do
+      pre_install do |installer|
+        yielded = installer
+      end
+    end.pre_install!(:an_installer)
+    yielded.should == :an_installer
+  end
+
   it "stores a block that will be called with the Installer instance once installation is finished (but the project is not written to disk yet)" do
     yielded = nil
     Pod::Podfile.new do

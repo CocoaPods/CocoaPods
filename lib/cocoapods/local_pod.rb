@@ -432,9 +432,10 @@ module Pod
       mappings = {}
       files_by_spec.each do |spec, paths|
         paths = paths - headers_excluded_from_search_paths
+        dir = spec.header_dir ? (headers_sandbox + spec.header_dir) : headers_sandbox
         paths.each do |from|
           from_relative = from.relative_path_from(root)
-          to = headers_sandbox + (spec.header_dir) + spec.copy_header_mapping(from_relative)
+          to = dir + spec.copy_header_mapping(from_relative)
           (mappings[to.dirname] ||= []) << from
         end
       end

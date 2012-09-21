@@ -4,10 +4,12 @@ module Pod
       executable :hg
 
       def download
-        if options[:revision]
-          download_revision
-        else
-          download_head
+        UI.section(' > Cloning mercurial repo', '', 3) do
+          if options[:revision]
+            download_revision
+          else
+            download_head
+          end
         end
       end
 

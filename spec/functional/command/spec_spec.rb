@@ -107,7 +107,7 @@ describe "Pod::Command::Spec#lint" do
     Dir.chdir(fixture('spec-repos') + 'master/JSONKit/1.4/') do
       cmd = command('spec', 'lint', '--quick', '--only-errors')
       cmd.run
-      cmd.output.should.include "passed validation"
+      Pod::UI.output.should.include "passed validation"
     end
   end
 
@@ -129,12 +129,12 @@ describe "Pod::Command::Spec#lint" do
   it "lints a givent podspec" do
     cmd = command('spec', 'lint', '--quick', @spec_path)
     lambda { cmd.run }.should.raise Pod::Informative
-    cmd.output.should.include "Missing license type"
+    Pod::UI.output.should.include "Missing license type"
   end
 
   it "respects the -only--errors option" do
     cmd = command('spec', 'lint', '--quick', '--only-errors', @spec_path)
     lambda { cmd.run }.should.not.raise
-    cmd.output.should.include "Missing license type"
+    Pod::UI.output.should.include "Missing license type"
   end
 end

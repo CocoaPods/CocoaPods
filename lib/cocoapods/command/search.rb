@@ -12,20 +12,22 @@ module Pod
       end
 
       def self.options
-        [["--full", "Search by name, summary, and description"]].concat(Presenter.options).concat(super)
+        [[
+          "--full",  "Search by name, summary, and description",
+          "--stats", "Show additional stats (like GitHub watchers and forks)"
+        ]].concat(super)
       end
 
       def initialize(argv)
         @full_text_search = argv.option('--full')
-        @presenter = Presenter.new(argv)
+        @stats = argv.option('--stats')
         @query = argv.shift_argument
         super unless argv.empty? && @query
       end
 
       def run
         sets = Source.search_by_name(@query.strip, @full_text_search)
-        sets.each {|s| puts @presenter.describe(s)}
-        puts
+        sets.each { |set| UI.pod(set, (@stats ? :stats : :normal)) }
       end
     end
   end
