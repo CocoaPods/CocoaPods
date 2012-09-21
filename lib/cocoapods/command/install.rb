@@ -35,7 +35,7 @@ module Pod
         config.clean             = !argv.option('--no-clean')
         config.generate_docs     = !argv.option('--no-doc')
         config.integrate_targets = !argv.option('--no-integrate')
-        config.skip_repo_update  = !argv.option('--no-update')
+        config.skip_repo_update  = argv.option('--no-update')
         super unless argv.empty?
       end
 

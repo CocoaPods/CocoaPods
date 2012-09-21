@@ -81,13 +81,13 @@ module Pod
       end
 
       unless config.skip_repo_update?
-        UI.section 'Updating Spec Repositories' do
+        UI.section 'Updating spec repositories' do
           Command::Repo.new(Command::ARGV.new(["update"])).run
-        end if !@pods_by_state || !(@pods_by_state[:added] + @pods_by_state[:changed]).empty? || update_mode
+        end if !@lockfile || !(@pods_by_state[:added] + @pods_by_state[:changed]).empty? || update_mode
       end
 
       @podfile.target_definitions.values.each do |target_definition|
-        UI.section "Resolving dependencies for target `#{target_definition.name}' (#{target_definition.platform}):" do
+        UI.section "Resolving dependencies for target `#{target_definition.name}' (#{target_definition.platform})" do
           @loaded_specs = []
           find_dependency_specs(@podfile, target_definition.dependencies, target_definition)
           @specs_by_target[target_definition] = @cached_specs.values_at(*@loaded_specs).sort_by(&:name)
