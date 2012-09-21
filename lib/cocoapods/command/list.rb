@@ -56,7 +56,7 @@ module Pod
         days.reverse.each do |d|
           sets = groups[d]
           next unless sets
-          UI.section("\nPods added in the last #{d == 1 ? 'day' : "#{d} days"}".yellow) do
+          UI.section("\nPods added in the last #{"day".pluralize(d)}".yellow) do
             sorted = sets.sort_by {|s| creation_dates[s.name]}
             sorted.each { |set| UI.pod(set, (@stats ? :stats : :name)) }
           end
