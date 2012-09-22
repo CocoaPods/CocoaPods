@@ -209,7 +209,7 @@ module Pod
       end
     end
 
-    # Ensures that a spec is compatible with platform of a target.
+    # Ensures that a spec is compatible with the platform of a target.
     #
     # @raises If the spec is not supported by the target.
     #

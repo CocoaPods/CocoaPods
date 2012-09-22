@@ -7,7 +7,6 @@ module Pod
       @podfile = Podfile.new do
         platform :ios
         pod 'BlocksKit'
-        # pod 'ASIWebPageRequest'
       end
       @resolver = Resolver.new(@podfile, nil, stub('sandbox'))
     end
@@ -15,9 +14,9 @@ module Pod
     it "holds the context state, such as cached specification sets" do
       @resolver.resolve
       @resolver.cached_sets.values.sort_by(&:name).should == [
-        Spec::Set.new(config.repos_dir + 'master/A2DynamicDelegate'),
-        Spec::Set.new(config.repos_dir + 'master/BlocksKit'),
-        Spec::Set.new(config.repos_dir + 'master/libffi'),
+        Pod::Source.search_by_name('A2DynamicDelegate').first,
+        Pod::Source.search_by_name('BlocksKit').first,
+        Pod::Source.search_by_name('libffi').first
       ].sort_by(&:name)
     end
 
@@ -35,7 +34,7 @@ module Pod
     end
 
     it "raises once any of the dependencies does not match the platform of its podfile target" do
-      set = Spec::Set.new(config.repos_dir + 'master/BlocksKit')
+      set = Pod::Source.search_by_name('BlocksKit').first
       @resolver.cached_sets['BlocksKit'] = set
 
       def set.stub_platform=(platform); @stubbed_platform = platform; end
@@ -55,7 +54,7 @@ module Pod
     end
 
     it "raises once any of the dependencies does not have a deployment_target compatible with its podfile target" do
-      set = Spec::Set.new(config.repos_dir + 'master/BlocksKit')
+      set = Pod::Source.search_by_name('BlocksKit').first
       @resolver.cached_sets['BlocksKit'] = set
       @podfile.platform :ios, "4.0"
 
@@ -371,7 +370,7 @@ module Pod
 
       it "identifies the pods that can be updated" do
         installed = @resolver.resolve.values.flatten.map(&:to_s)
-        installed.should.include? "JSONKit (1.5pre)"
+        installed.should.include? "JSONKit (999.999.999)"
         @resolver.should_install?("JSONKit").should.be.true
       end
 

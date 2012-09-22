@@ -5,6 +5,10 @@ describe Pod::Command::Push do
   extend SpecHelper::TemporaryDirectory
   extend SpecHelper::TemporaryRepos
 
+  before do
+    config.repos_dir = SpecHelper.tmp_repos_path
+  end
+
   def master_repo
     fixture('spec-repos/master')
   end

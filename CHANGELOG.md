@@ -5,17 +5,21 @@
 ###### Enhancements
 - Pod `install` will update the specs repo only if needed.
   [#533](https://github.com/CocoaPods/CocoaPods/issues/533)
+- CocoaPods now searches for the highest version of a Pod on
+  all the repos.
+  [#85](https://github.com/CocoaPods/CocoaPods/issues/85)
 - Added a pre install hook to the Podfile and to root specifications.
   [#486](https://github.com/CocoaPods/CocoaPods/issues/486)
 - Support for `header_mappings_dir` attribute in subspecs.
 - Refactored UI.
-- Added support for Podfiles named `Podfile.cocoapods` which allows to associate an editor application in Mac OS X.
+- Added support for Podfiles named `Podfile.cocoapods` which allows to
+  associate an editor application in Mac OS X.
   [#528](https://github.com/CocoaPods/CocoaPods/issues/528)
 - Added config option to disable the new version available message.
   [#448](https://github.com/CocoaPods/CocoaPods/issues/448)
 - Added support for extracting `.tar.bz2` files
   [#522](https://github.com/CocoaPods/CocoaPods/issues/522)
-- Improved feedback for errors of repo subcommand.
+- Improved feedback for errors of repo subcommands.
   [#505](https://github.com/CocoaPods/CocoaPods/issues/505)
 
 

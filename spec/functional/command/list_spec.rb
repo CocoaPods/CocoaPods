@@ -3,17 +3,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 describe "Pod::Command::List" do
   extend SpecHelper::TemporaryRepos
 
-  before do
-    config.repos_dir = fixture('spec-repos')
-  end
-
   def command(arguments = argv)
     command = Pod::Command::List.new(arguments)
-  end
-
-  it "runs with correct parameters" do
-    lambda { command.run }.should.not.raise
-    lambda { command(argv('new')).run }.should.not.raise
   end
 
   it "complains for wrong parameters" do
@@ -24,8 +15,7 @@ describe "Pod::Command::List" do
   it "presents the known pods" do
     list = command()
     list.run
-    [
-      /ZBarSDK/,
+    [ /ZBarSDK/,
       /TouchJSON/,
       /SDURLCache/,
       /MagicalRecord/,

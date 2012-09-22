@@ -6,6 +6,10 @@ describe "Pod::Command::Setup" do
   extend SpecHelper::TemporaryDirectory
   extend SpecHelper::TemporaryRepos
 
+  before do
+    config.repos_dir = SpecHelper.tmp_repos_path
+  end
+
   it "runs with correct parameters" do
     lambda { run_command('setup') }.should.not.raise
   end

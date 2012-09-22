@@ -5,7 +5,7 @@ describe Pod::UI do
   extend SpecHelper::Command
 
   before do
-    @set = Pod::Spec::Set.new(fixture('spec-repos/master/CocoaLumberjack'))
+    @set = Pod::Source.search_by_name('CocoaLumberjack').first
     Pod::Specification::Statistics.instance.cache_file = nil
   end
 
@@ -34,7 +34,7 @@ describe Pod::UI do
   end
 
   it "should print at least one subspec" do
-    @set = Pod::Spec::Set.new(fixture('spec-repos/master/RestKit'))
+    @set = Pod::Source.search_by_name('RestKit').first
     Pod::UI.pod(@set)
     output = Pod::UI.output
     output.should.include? "RestKit/Network"

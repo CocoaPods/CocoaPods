@@ -303,7 +303,7 @@ else
 
         lockfile_contents = {
           'PODS' => [
-            'JSONKit (1.5pre)',
+            'JSONKit (999.999.999)',
             'Reachability (3.0.0)',
             'SSZipArchive (0.1.1)',
           ],

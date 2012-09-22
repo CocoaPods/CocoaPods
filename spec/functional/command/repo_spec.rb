@@ -1,6 +1,11 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "Pod::Command::Repo" do
+
+  before do
+    config.repos_dir = SpecHelper.tmp_repos_path
+  end
+
   describe "In general" do
   extend SpecHelper::Command
   extend SpecHelper::TemporaryDirectory
