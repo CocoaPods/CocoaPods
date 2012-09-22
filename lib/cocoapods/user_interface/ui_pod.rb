@@ -15,11 +15,25 @@ module Pod
       end
 
       def version
-        @set.versions.last
+        @set.versions.first
       end
 
       def versions
-        @set.versions.reverse.join(", ")
+        @set.versions.sort.reverse
+      end
+
+      def verions_by_source
+        result = []
+        @set.versions_by_source.each do |source, versions|
+          result << "#{versions.map(&:to_s) * ', '} [#{source.name} repo]"
+        end
+        result * ' - '
+      end
+
+      # @return [Array<String>]
+      #
+      def sources
+        @set.sources.map(&:name).sort
       end
 
       # specification information

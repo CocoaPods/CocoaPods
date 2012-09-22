@@ -20,6 +20,13 @@ describe Pod::UI do
     output.should.include? 'https://github.com/robbiehanson/CocoaLumberjack.git'
   end
 
+
+  it "presents the name, version, description, homepage and source of a specification set" do
+    Pod::UI.pod(@set)
+    output = Pod::UI.output.gsub(/\n */,'')
+    output.should.include? 'Versions: 1.6, 1.3.3, 1.3.2, 1.3.1, 1.3, 1.2.3, 1.2.2, 1.2.1, 1.2, 1.1, 1.0 [master repo]'
+  end
+
   it "presents the stats of a specification set" do
     repo = { "forks"=>42, "watchers"=>318, "pushed_at"=>"2011-01-26T19:06:43Z" }
     Octokit.expects(:repo).with("robbiehanson/CocoaLumberjack").returns(repo)

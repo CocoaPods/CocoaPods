@@ -141,11 +141,11 @@ module Pod
           puts_indented set.name
         else
           pod = UIPod.new(set)
-          title("\n-> #{pod.name} (#{pod.version})".green, '', 3) do
+          title("\n-> #{pod.name} (#{pod.version})".green, '', 1) do
             puts_indented pod.summary
             labeled('Homepage', pod.homepage)
             labeled('Source',   pod.source_url)
-            labeled('Versions', pod.versions) unless set.versions.count == 1
+            labeled('Versions', pod.verions_by_source)
             if mode == :stats
               labeled('Pushed',   pod.github_last_activity)
               labeled('Authors',  pod.authors) if pod.authors =~ /,/
