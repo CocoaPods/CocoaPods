@@ -160,7 +160,8 @@ module Pod
         all.each { |s| pods_by_source[s] = s.search_by_name(query, full_text_search).map(&:name) }
         pod_names = pods_by_source.values.flatten.uniq
         pod_names.each do |pod|
-          sources = pods_by_source.select{ |source, pods| pods.include?(pod) }.keys
+          sources = []
+          pods_by_source.each{ |source, pods| sources << source if pods.include?(pod) }
           result << Specification::Set.new(pod, sources)
         end
         if result.empty?

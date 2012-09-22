@@ -14,6 +14,7 @@ module Bacon
         c.generate_docs    =  false
         c.skip_repo_update =  true
       end
+      ::Pod::UI.output = ''
       old_run_requirement.bind(self).call(description, spec)
     end
   end

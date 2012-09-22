@@ -18,8 +18,8 @@ require 'spec_helper/fixture'
 require 'spec_helper/github'
 require 'spec_helper/temporary_directory'
 require 'spec_helper/temporary_repos'
-require 'spec_helper/config'
 require 'spec_helper/user_interface'
+require 'spec_helper/pre_flight'
 
 module Bacon
   class Context
