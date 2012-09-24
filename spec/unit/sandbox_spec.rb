@@ -113,4 +113,19 @@ describe Pod::Sandbox do
     @sandbox.installed_pod_named('BananaLib', Pod::Platform.ios).should.eql pod
     @sandbox.local_pod_for_spec(spec, Pod::Platform.ios).should.eql pod
   end
+
+  it "returns a LocalPod for a subspec which source is expected to be in the sandbox" do
+    (@sandbox.root + 'Local Podspecs').mkdir
+    FileUtils.cp(fixture('chameleon') + 'Chameleon.podspec', @sandbox.root + 'Local Podspecs')
+    spec1 = Pod::Specification.from_file(@sandbox.root + 'Local Podspecs/Chameleon.podspec', 'Chameleon/UIKit')
+    spec2 = Pod::Specification.from_file(@sandbox.root + 'Local Podspecs/Chameleon.podspec', 'Chameleon/StoreKit')
+
+    pod1 = @sandbox.local_pod_for_spec(spec1, Pod::Platform.osx)
+    pod1.name.should.eql 'Chameleon/UIKit'
+    pod1.specifications.should.eql [spec1]
+
+    pod2 = @sandbox.local_pod_for_spec(spec2, Pod::Platform.osx)
+    pod2.name.should.eql 'Chameleon/StoreKit'
+    pod2.specifications.should.eql [spec2]
+  end
 end
