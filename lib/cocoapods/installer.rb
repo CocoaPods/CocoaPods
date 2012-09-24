@@ -1,19 +1,195 @@
-require 'colored'
-
 module Pod
+
+  # The installer is the core of CocoaPods. This class is responsible of taking
+  # a Podfile and transform it in the Pods libraries. This class also
+  # integrates the user project so the Pods libraries can be used out of the
+  # box.
+  #
   class Installer
     autoload :TargetInstaller,       'cocoapods/installer/target_installer'
     autoload :UserProjectIntegrator, 'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
 
-    attr_reader :resolver, :sandbox, :lockfile
+    # @return [Resolver] The resolver used by the installer.
+    #
+    attr_reader :resolver
 
+    # @return [Sandbox]  The sandbox where to install the Pods.
+    #
+    attr_reader :sandbox
+
+    # @return [Podfile]  The Podfile specification that contains the
+    #                    information of the Pods that should be installed.
+    #
+    attr_reader :podfile
+
+    # @return [Lockfile] The Lockfile that stores the information about the
+    #                    installed Pods.
+    #
+    attr_reader :lockfile
+
+    # TODO: The installer should receive the Podfile, the Lockfile, and the
+    # sandbox. It shouldn't get those values from the resolver, but it should
+    # create the resolver itself.
+    #
     def initialize(resolver)
       @resolver = resolver
       @podfile = resolver.podfile
       @sandbox = resolver.sandbox
     end
+
+    # @return [void] The installation process of CocoaPods is mostly linear
+    # with very few minor exceptions:
+    #
+    # - Pods from external sources might be already downloaded if it is
+    #   necessary to retrieve their podspec.
+    #
+    def install!
+      detect_podfile_changes
+      perform_global_cleaning
+      perform_pod_specific_cleaning
+      resolve_dependencies
+
+      # TODO: move to perform_pod_specific_cleaning
+      UI.section "Removing deleted dependencies" do
+        remove_deleted_dependencies!
+      end unless resolver.removed_pods.empty?
+
+      prepare_pods_project
+      install_dependencies!
+      generate_support_files
+      integrate_user_project
+    end
+
+    # @!group Detect Podfile changes step
+
+    # @return [Hash{Symbol => Array<Spec>}] The pods grouped by a symbol
+    #   indicating the state (added, changed, removed, unchanged) as identified
+    #   by the {Lockfile}.
+    #
+    attr_reader :pods_by_state
+
+    # @return [void] Computes the pods that need to be installed.
+    #
+    def detect_podfile_changes
+      if lockfile
+        UI.section "Finding added, modified or removed dependencies:" do
+          @pods_by_state = @lockfile.detect_changes_with_podfile(podfile)
+          print_pods_states_list
+          @unchanged_pods = (lockfile.pods_names - pods_by_state[:added] - pods_by_state[:changed] - pods_by_state[:removed]).uniq
+        end
+      else
+        @pods_by_state  = {}
+        @unchanged_pods = []
+      end
+    end
+
+    # @return [void] Outputs a lists of the pods by state.
+    #
+    def print_pods_states_list
+      return if config.verbose?
+      marks = {:added => "A".green, :changed => "M".yellow, :removed => "R".red, :unchanged => "-" }
+      pods_by_state.each do |symbol, pod_names|
+        pod_names.each do |pod_name|
+          UI.message("#{marks[symbol]} #{pod_name}", '',2)
+        end
+      end
+    end
+
+    # @!group Cleaning steps
+
+    def perform_global_cleaning
+      @sandbox.prepare_for_install
+    end
+
+    def perform_pod_specific_cleaning
+      # TODO: clean the headers of only the pods to install
+    end
+
+    # Resolves the dependencies with the resolver
+    #
+    def resolve_dependencies
+      #TODO: prepare the resolver
+      #TODO: lock the dependencies
+      UI.section "Resolving dependencies of #{UI.path @podfile.defined_in_file}" do
+        @specs_by_target = @resolver.resolve
+      end
+    end
+
+    # @return [Hash{Podfile::TargetDefinition => Array<Spec>}]
+    #                     The specifications grouped by target as identified in
+    #                     the resolve_dependencies step.
+    #
+    attr_reader :specs_by_target
+
+
+    def prepare_pods_project
+
+    end
+
+    # Install the Pods. If the resolver indicated that a Pod should be installed
+    #   and it exits, it is removed an then reinstalled. In any case if the Pod
+    #   doesn't exits it is installed.
+    #
+    # @return [void]
+    #
+    def install_dependencies!
+      UI.section "Downloading dependencies" do
+        pods.sort_by { |pod| pod.top_specification.name.downcase }.each do |pod|
+          should_install = @resolver.should_install?(pod.top_specification.name) || !pod.exists?
+          if should_install
+            UI.section("Installing #{pod}".green, "-> ".green) do
+              unless pod.downloaded?
+                pod.implode
+                download_pod(pod)
+              end
+              # The docs need to be generated before cleaning because the
+              # documentation is created for all the subspecs.
+              generate_docs(pod)
+              # Here we clean pod's that just have been downloaded or have been
+              # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
+              pod.clean! if config.clean?
+            end
+          else
+            UI.section("Using #{pod}", "-> ".green)
+          end
+        end
+      end
+    end
+
+    def generate_support_files
+      UI.section "Generating support files" do
+        UI.message "- Running pre install hooks" do
+          run_pre_install_hooks
+        end
+
+        UI.message"- Installing targets" do
+          generate_target_support_files
+        end
+
+        UI.message "- Running post install hooks" do
+          # Post install hooks run _before_ saving of project, so that they can alter it before saving.
+          run_post_install_hooks
+        end
+
+        UI.message "- Writing Xcode project file to #{UI.path @sandbox.project_path}" do
+          project.save_as(@sandbox.project_path)
+        end
+
+        UI.message "- Writing lockfile in #{UI.path config.project_lockfile}" do
+          @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
+          @lockfile.write_to_disk(config.project_lockfile)
+        end
+      end
+
+    end
+
+    def integrate_user_project
+        UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
+    end
+
+    # @!group Supporting operations
 
     def project
       return @project if @project
@@ -40,33 +216,7 @@ module Pod
       end.compact
     end
 
-    # Install the Pods. If the resolver indicated that a Pod should be installed
-    #   and it exits, it is removed an then reinstalled. In any case if the Pod
-    #   doesn't exits it is installed.
-    #
-    # @return [void]
-    #
-    def install_dependencies!
-      pods.sort_by { |pod| pod.top_specification.name.downcase }.each do |pod|
-        should_install = @resolver.should_install?(pod.top_specification.name) || !pod.exists?
-        if should_install
-          UI.section("Installing #{pod}".green, "-> ".green) do
-            unless pod.downloaded?
-              pod.implode
-              download_pod(pod)
-            end
-            # The docs need to be generated before cleaning because the
-            # documentation is created for all the subspecs.
-            generate_docs(pod)
-            # Here we clean pod's that just have been downloaded or have been
-            # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
-            pod.clean! if config.clean?
-          end
-        else
-          UI.section("Using #{pod}", "-> ".green)
-        end
-      end
-    end
+
 
     def download_pod(pod)
       downloader = Downloader.for_pod(pod)
@@ -105,46 +255,7 @@ module Pod
       end
     end
 
-    def install!
-      @sandbox.prepare_for_install
-      UI.section "Resolving dependencies of #{UI.path @podfile.defined_in_file}" do
-        specs_by_target
-      end
 
-      UI.section "Removing deleted dependencies" do
-        remove_deleted_dependencies!
-      end unless resolver.removed_pods.empty?
-
-      UI.section "Downloading dependencies" do
-        install_dependencies!
-      end
-
-      UI.section "Generating support files" do
-        UI.message "- Running pre install hooks" do
-          run_pre_install_hooks
-        end
-
-        UI.message"- Installing targets" do
-          generate_target_support_files
-        end
-
-        UI.message "- Running post install hooks" do
-          # Post install hooks run _before_ saving of project, so that they can alter it before saving.
-          run_post_install_hooks
-        end
-
-        UI.message "- Writing Xcode project file to #{UI.path @sandbox.project_path}" do
-          project.save_as(@sandbox.project_path)
-        end
-
-        UI.message "- Writing lockfile in #{UI.path config.project_lockfile}" do
-          @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
-          @lockfile.write_to_disk(config.project_lockfile)
-        end
-      end
-
-        UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
-    end
 
     def run_pre_install_hooks
       pods_by_target.each do |target_definition, pods|
@@ -188,10 +299,6 @@ module Pod
       project.group("Targets Support Files") << project_file
 
       target_installer.target.source_build_phases.first << project_file
-    end
-
-    def specs_by_target
-      @specs_by_target ||= @resolver.resolve
     end
 
     # @return [Array<Specification>]  All dependencies that have been resolved.
