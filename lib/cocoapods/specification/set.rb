@@ -88,8 +88,9 @@ module Pod
       #
       def specification
         unless @specification
-          sources = versions_by_source.select { |_, versions| versions.include?(required_version) }.keys
-          source  = sources.sort_by(&:name).first
+          sources = []
+          versions_by_source.each{ |source, versions| sources << source if versions.include?(required_version) }
+          source = sources.sort_by(&:name).first
           @specification = source.specification(name, required_version)
         end
         @specification
