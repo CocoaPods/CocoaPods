@@ -14,10 +14,11 @@ module Bacon
         c.generate_docs    =  false
         c.skip_repo_update =  true
       end
+
       ::Pod::UI.output = ''
-      # Very nasty behaviour where the relative increments are
-      # not reverted and lead to sections being collapsed and
-      # not being printed to the output.
+      # The following prevents a nasty behaviour where the increments are not
+      # balanced when testing informatives which might lead to sections not
+      # being printed to the output as they are too neested.
       ::Pod::UI.indentation_level = 0
       ::Pod::UI.title_level = 0
 

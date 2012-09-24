@@ -78,7 +78,7 @@ module Pod
         def integrate!
           return if targets.empty?
 
-          UI.section ("Integrating `#{@target_definition.lib_name}' into #{'target'.pluralize(targets.size)} " \
+          UI.section("Integrating `#{@target_definition.lib_name}' into #{'target'.pluralize(targets.size)} " \
                       "`#{targets.map(&:name).to_sentence}' of Xcode project #{UI.path user_project_path}.") do
             add_xcconfig_base_configuration
             add_pods_library

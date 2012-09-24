@@ -5,13 +5,13 @@ describe Pod::UI do
   extend SpecHelper::Command
 
   before do
-    @set = Pod::Source.search_by_name('CocoaLumberjack').first
+    @set = Pod::Source.search(Pod::Dependency.new('CocoaLumberjack'))
     Pod::Specification::Statistics.instance.cache_file = nil
   end
 
   it "presents the name, version, description, homepage and source of a specification set" do
     Pod::UI.pod(@set)
-    output = Pod::UI.output.gsub(/\n */,'')
+    output = Pod::UI.output
     output.should.include? 'CocoaLumberjack'
     output.should.include? '1.0'
     output.should.include? '1.1'
@@ -20,10 +20,9 @@ describe Pod::UI do
     output.should.include? 'https://github.com/robbiehanson/CocoaLumberjack.git'
   end
 
-
   it "presents the name, version, description, homepage and source of a specification set" do
     Pod::UI.pod(@set)
-    output = Pod::UI.output.gsub(/\n */,'')
+    output = Pod::UI.output
     output.should.include? 'Versions: 1.6, 1.3.3, 1.3.2, 1.3.1, 1.3, 1.2.3, 1.2.2, 1.2.1, 1.2, 1.1, 1.0 [master repo]'
   end
 

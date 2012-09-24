@@ -6,7 +6,8 @@ module Pod
       attr_accessor :output
 
       def puts(message = '')
-        @output << "#{message}"
+        # Wrapping can bite in tests.
+        @output << "#{message}".gsub(/\n/,'')
       end
     end
   end

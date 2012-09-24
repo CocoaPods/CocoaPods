@@ -91,7 +91,7 @@ module Pod
         if `which xcodebuild`.strip.empty?
           puts "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow if config.verbose?
         else
-          puts "Building with xcodebuild.\n".yellow if config.verbose?
+          puts "\nBuilding with xcodebuild.\n".yellow if config.verbose?
           # treat xcodebuild warnings as notes because the spec maintainer might not be the author of the library
           xcodebuild_output.each { |msg| ( msg.include?('error: ') ? @platform_errors[@platform] : @platform_notes[@platform] ) << msg }
         end
@@ -103,6 +103,7 @@ module Pod
       def install_pod
         podfile = podfile_from_spec
         config.verbose
+        config.skip_repo_update = true
         sandbox = Sandbox.new(config.project_pods_root)
         resolver = Resolver.new(podfile, nil, sandbox)
         installer = Installer.new(resolver)

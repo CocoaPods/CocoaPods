@@ -56,7 +56,7 @@ module Pod
       end
 
       def add
-        UI.section ("Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}") do
+        UI.section("Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}") do
           config.repos_dir.mkpath
           Dir.chdir(config.repos_dir) { git!("clone '#{@url}' #{@name}") }
           Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch

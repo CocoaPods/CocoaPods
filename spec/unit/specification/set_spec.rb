@@ -32,9 +32,9 @@ describe "Pod::Specification::Set" do
       lambda { @set.required_version }.should.raise Pod::Informative
     end
 
-    it "can returns test if it is equal to another set" do
+    it "can test if it is equal to another set" do
       @set.should == Pod::Spec::Set.new('CocoaLumberjack', @source)
-      @set.should != Pod::Spec::Set.new('RestKit', @source)
+      @set.should.not == Pod::Spec::Set.new('RestKit', @source)
     end
 
     before do
@@ -76,7 +76,7 @@ describe "Pod::Specification::Set" do
       @set.versions_by_source.each { |source, versions| hash[source.name] = versions.map(&:to_s) }
       hash['master'].should == %w| 1.5pre 1.4 |
       hash['test_repo'].should == %w| 999.999.999 1.4 |
-      hash.keys.should == %w| master test_repo |
+      hash.keys.sort.should == %w| master test_repo |
     end
 
     it "returns the specification from the `master` source for the required version" do
