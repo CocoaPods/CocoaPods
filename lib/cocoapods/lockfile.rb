@@ -50,8 +50,8 @@ module Pod
     end
 
     # @return [Hash{String => Hash}] A hash where the name of the pods are
-    #   the keys and the values are the parameters of an {AbstractExternalSource}
-    #   of the dependency that required the pod.
+    #   the keys and the values are the parameters of an
+    #   {AbstractExternalSource} of the dependency that required the pod.
     #
     def external_sources
       @external_sources ||= to_hash["EXTERNAL SOURCES"] || {}
@@ -67,8 +67,8 @@ module Pod
     end
 
     # @return [Hash{String => Version}] A Hash containing the name
-    #   of the installed Pods as the keys and their corresponding {Version}
-    #   as the values.
+    #   of the installed Pods (top spec name) as the keys and their
+    #   corresponding {Version} as the values.
     #
     def pods_versions
       unless @pods_versions
@@ -77,6 +77,7 @@ module Pod
           pod = pod.keys.first unless pod.is_a?(String)
           name, version = name_and_version_for_pod(pod)
           @pods_versions[name] = version
+          @pods_versions[name.split('/').first] = version
         end
       end
       @pods_versions

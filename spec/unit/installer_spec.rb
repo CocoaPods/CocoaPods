@@ -8,30 +8,6 @@ module Pod
     end
 
     describe "by default" do
-      before do
-        podfile = Podfile.new do
-          platform :ios
-          xcodeproj 'MyProject'
-          pod 'JSONKit'
-        end
-
-        sandbox = Sandbox.new(fixture('integration'))
-        resolver = Resolver.new(podfile, nil, sandbox)
-        @xcconfig = Installer.new(resolver).target_installers.first.xcconfig.to_hash
-      end
-
-      it "sets the header search paths where installed Pod headers can be found" do
-        @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
-      end
-
-      it "configures the project to load all members that implement Objective-c classes or categories from the static library" do
-        @xcconfig['OTHER_LDFLAGS'].should == '-ObjC'
-      end
-
-      it "sets the PODS_ROOT build variable" do
-        @xcconfig['PODS_ROOT'].should.not == nil
-      end
-
       it "generates a BridgeSupport metadata file from all the pod headers" do
         podfile = Podfile.new do
           platform :osx
@@ -39,8 +15,7 @@ module Pod
         end
 
         sandbox = Sandbox.new(fixture('integration'))
-        resolver = Resolver.new(podfile, nil, sandbox)
-        installer = Installer.new(resolver)
+        installer = Installer.new(sandbox, podfile)
         pods = installer.specifications.map do |spec|
           LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
         end
@@ -88,6 +63,34 @@ module Pod
         installer.download_pod(pod)
       end
     end
+
+
+    describe "concerning xcconfig files generation" do
+      before do
+        podfile = Podfile.new do
+          platform :ios
+          xcodeproj 'MyProject'
+          pod 'JSONKit'
+        end
+
+        sandbox = Sandbox.new(fixture('integration'))
+        installer = Installer.new(sandbox, podfile)
+        @xcconfig = installer.target_installers.first.xcconfig.to_hash
+      end
+
+      it "sets the header search paths where installed Pod headers can be found" do
+        @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
+      end
+
+      it "configures the project to load all members that implement Objective-c classes or categories from the static library" do
+        @xcconfig['OTHER_LDFLAGS'].should == '-ObjC'
+      end
+
+      it "sets the PODS_ROOT build variable" do
+        @xcconfig['PODS_ROOT'].should.not == nil
+      end
+    end
+
 
     describe "concerning multiple pods originating form the same spec" do
       extend SpecHelper::Fixture
