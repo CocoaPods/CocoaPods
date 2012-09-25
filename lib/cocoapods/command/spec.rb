@@ -171,7 +171,7 @@ module Pod
         data = {}
 
         data[:name]          = repo['name']
-        data[:summary]       = repo['description'].gsub(/["]/, '\"')
+        data[:summary]       = (repo['description'] || '').gsub(/["]/, '\"')
         data[:homepage]      = (repo['homepage'] && !repo['homepage'].empty? ) ? repo['homepage'] : repo['html_url']
         data[:author_name]   = user['name']  || user['login']
         data[:author_email]  = user['email'] || 'email@address.com'
