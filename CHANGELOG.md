@@ -78,32 +78,26 @@
     [#191](https://github.com/CocoaPods/CocoaPods/issues/191)
   - the external source changes.
   - the head status changes (from disabled to enabled or vice-versa).
-
 - Introduce `pod update` command that installs the dependencies of the Podfile
   **ignoring** the lockfile `Podfile.lock`.
   [#131](https://github.com/CocoaPods/CocoaPods/issues/131)
-
 - Introduce `pod outdated` command that shows the pods with known updates.
-
 - Add `:local` option for dependencies which will use the source files directly
   from a local directory. This is usually used for libraries that are being
   developed in parallel to the end product (application/library).
   [#458](https://github.com/CocoaPods/CocoaPods/issues/458),
   [#415](https://github.com/CocoaPods/CocoaPods/issues/415),
   [#156](https://github.com/CocoaPods/CocoaPods/issues/156).
-
 - Folders of Pods which are no longer required are removed during installation.
   [#298](https://github.com/CocoaPods/CocoaPods/issues/298)
-
-- Add meaningful error messages for when:
-  - a podspec can’t be found in the root of an external source.
+- Add meaningful error messages
+  - ia podspec can’t be found in the root of an external source.
     [#385](https://github.com/CocoaPods/CocoaPods/issues/385),
     [#338](https://github.com/CocoaPods/CocoaPods/issues/338),
     [#337](https://github.com/CocoaPods/CocoaPods/issues/337).
   - a subspec name is misspelled.
     [#327](https://github.com/CocoaPods/CocoaPods/issues/327)
   - an unrecognized command and/or argument is provided.
-
 - The subversion downloader now does an export instead of a checkout, which
   makes it play nicer with SCMs that store metadata in each directory.
   [#245](https://github.com/CocoaPods/CocoaPods/issues/245)
