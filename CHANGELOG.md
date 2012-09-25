@@ -5,12 +5,13 @@
 ###### Enhancements
 - Pod `install` will update the specs repo only if needed.
   [#533](https://github.com/CocoaPods/CocoaPods/issues/533)
-- CocoaPods now searches for the highest version of a Pod on
-  all the repos.
+- CocoaPods now searches for the highest version of a Pod on all the repos.
   [#85](https://github.com/CocoaPods/CocoaPods/issues/85)
 - Added a pre install hook to the Podfile and to root specifications.
   [#486](https://github.com/CocoaPods/CocoaPods/issues/486)
 - Support for `header_mappings_dir` attribute in subspecs.
+- Added support for linting a Podspec using the files from its folder `pod spec
+  lint --local`
 - Refactored UI.
 - Added support for Podfiles named `Podfile.cocoapods` which allows to
   associate an editor application in Mac OS X.

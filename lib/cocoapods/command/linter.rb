@@ -6,6 +6,14 @@ module Pod
       # TODO: Add check to ensure that attributes inherited by subspecs are not duplicated ?
 
       attr_accessor :quick, :no_clean, :repo_path
+
+      # @return [Bool] Wether the lint should be performed against the root of
+      #   the podspec instead to its original source. Uses the `:local` option
+      #   of the Podfile.
+      #
+      attr_accessor :local
+      alias :local? :local
+
       attr_reader   :spec, :file
       attr_reader   :errors, :warnings, :notes
 
@@ -116,9 +124,14 @@ module Pod
         name     = spec.name
         podspec  = file.realpath.to_s
         platform = @platform
+        local    = local?
         podfile  = Pod::Podfile.new do
           platform(platform.to_sym, platform.deployment_target)
-          pod name, :podspec => podspec
+          if (local)
+            pod name, :local => '/Users/fabio/Desktop/RegexHighlightView'
+          else
+            pod name, :podspec => podspec
+          end
         end
         podfile
       end

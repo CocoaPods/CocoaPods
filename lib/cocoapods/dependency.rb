@@ -231,7 +231,8 @@ module Pod
 
       class LocalSource < AbstractExternalSource
         def pod_spec_path
-          path = Pathname.new(@params[:local]).expand_path + "#{name}.podspec"
+          path = Pathname.new(@params[:local]).expand_path
+          path += "#{name}.podspec"# unless path.to_s.include?("#{name}.podspec")
           raise Informative, "No podspec found for `#{name}' in `#{@params[:local]}'" unless path.exist?
           path
         end

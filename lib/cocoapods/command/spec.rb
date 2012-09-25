@@ -20,6 +20,7 @@ module Pod
 
       def self.options
         [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
+          ["--local",       "Lint a podspec against the local files contained in its directory"],
           ["--only-errors", "Lint validates even if warnings are present"],
           ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
       end
@@ -32,9 +33,10 @@ module Pod
           super if @name_or_url.nil?
           super unless argv.empty?
         elsif @action == 'lint'
-          @quick          = argv.option('--quick')
-          @only_errors    = argv.option('--only-errors')
-          @no_clean       = argv.option('--no-clean')
+          @quick       =  argv.option('--quick')
+          @local       =  argv.option('--local')
+          @only_errors =  argv.option('--only-errors')
+          @no_clean    =  argv.option('--no-clean')
           @podspecs_paths = argv
         else
           super
@@ -72,8 +74,9 @@ module Pod
         UI.puts
         invalid_count = 0
         podspecs_to_lint.each do |podspec|
-          linter          = Linter.new(podspec)
-          linter.quick    = @quick
+          linter       = Linter.new(podspec)
+          linter.quick = @quick
+          linter.local = @local
           linter.no_clean = @no_clean
 
           # Show immediatly which pod is being processed.

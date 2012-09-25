@@ -187,6 +187,27 @@ module Pod
 
     # @!group Files
 
+    # @return [Pathname] Returns the relative path from the sandbox.
+    #
+    # @note If the two abosule paths don't share the same root directory an
+    # extra `../` is added to the result of {Pathname#relative_path_from}
+    #
+    #     path = Pathname.new('/Users/dir')
+    #     @sandbox
+    #     #=> Pathname('/tmp/CocoaPods/Lint/Pods')
+    #
+    #     p.relative_path_from(@sandbox
+    #     #=> '../../../../Users/dir'
+    #
+    #     relativize_from_sandbox(path)
+    #     #=> '../../../../../Users/dir'
+    #
+    def relativize_from_sandbox(path)
+      result = path.relative_path_from(@sandbox.root)
+      result = Pathname.new('../') + result unless @sandbox.root.to_s.split('/')[1] == path.to_s.split('/')[1]
+      result
+    end
+
     # @return [Array<Pathname>] The paths of the source files.
     #
     def source_files
@@ -196,13 +217,13 @@ module Pod
     # @return [Array<Pathname>] The *relative* paths of the source files.
     #
     def relative_source_files
-      source_files.map{ |p| p.relative_path_from(@sandbox.root) }
+      source_files.map{ |p| relativize_from_sandbox(p) }
     end
 
     def relative_source_files_by_spec
       result = {}
       source_files_by_spec.each do |spec, paths|
-        result[spec] = paths.map{ |p| p.relative_path_from(@sandbox.root) }
+        result[spec] = paths.map{ |p| relativize_from_sandbox(p) }
       end
       result
     end
@@ -230,7 +251,7 @@ module Pod
     # @return [Array<Pathname>] The *relative* paths of the source files.
     #
     def relative_header_files
-      header_files.map{ |p| p.relative_path_from(@sandbox.root) }
+      header_files.map{ |p| relativize_from_sandbox(p) }
     end
 
     # @return [Hash{Specification => Array<Pathname>}] The paths of the header
@@ -276,7 +297,7 @@ module Pod
     # @return [Array<Pathname>] The *relative* paths of the resources.
     #
     def relative_resource_files
-      resource_files.map{ |p| p.relative_path_from(@sandbox.root) }
+      resource_files.map{ |p| relativize_from_sandbox(p) }
     end
 
     # @return [Pathname] The absolute path of the prefix header file
@@ -390,7 +411,7 @@ module Pod
       source_files_by_spec.each do | spec, files |
         compiler_flags = spec.compiler_flags.strip
         files.each do |file|
-          file = file.relative_path_from(@sandbox.root)
+          file = relativize_from_sandbox(file)
           desc = Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(file, compiler_flags, nil)
           result << desc
         end
