@@ -41,9 +41,8 @@ module Pod
 
       def run_install_with_update(update)
         sandbox = Sandbox.new(config.project_pods_root)
-        resolver = Resolver.new(config.podfile, config.lockfile, sandbox)
-        resolver.update_mode = update
-        Installer.new(resolver).install!
+        installer = Installer.new(sandbox, config.podfile, config.lockfile)
+        installer.install!
       end
 
       def run
