@@ -119,7 +119,7 @@ module Pod
         install_dependencies!
       end
 
-      UI.section "Generating support files" do
+      UI.section "Generating support files (may take minutes for large libraries)" do
         UI.message "- Running pre install hooks" do
           run_pre_install_hooks
         end
