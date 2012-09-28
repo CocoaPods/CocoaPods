@@ -1,6 +1,6 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.3...master)
 
 ###### Enhancements
 - Pod `install` will update the specs repo only if needed.
@@ -34,6 +34,8 @@
   [#514](https://github.com/CocoaPods/CocoaPods/issues/514)
 - Forcing UTF-8 encoding on licenses generation in Ruby 1.9.
   [#530](https://github.com/CocoaPods/CocoaPods/issues/530)
+- Added support for `.hpp` headers.
+  [#244](https://github.com/CocoaPods/CocoaPods/issues/244)
 
 ## 0.14.0
 

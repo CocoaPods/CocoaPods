@@ -238,7 +238,7 @@ module Pod
     #   {Specification}.
     #
     def source_files_by_spec
-      options = {:glob => '*.{h,m,mm,c,cpp}'}
+      options = {:glob => '*.{h,hpp,m,mm,c,cpp}'}
       paths_by_spec(:source_files, options)
     end
 
@@ -260,7 +260,7 @@ module Pod
     def header_files_by_spec
       result = {}
       source_files_by_spec.each do |spec, paths|
-        headers = paths.select { |f| f.extname == '.h' }
+        headers = paths.select { |f| f.extname == '.h' || f.extname == '.hpp' }
         result[spec] = headers unless headers.empty?
       end
       result
@@ -274,7 +274,7 @@ module Pod
     #   header files (i.e. the build ones) are intended to be public.
     #
     def public_header_files_by_spec
-      public_headers = paths_by_spec(:public_header_files, :glob => '*.h')
+      public_headers = paths_by_spec(:public_header_files, :glob => '*.{h,hpp}')
       build_headers  = header_files_by_spec
 
       result = {}
@@ -377,7 +377,7 @@ module Pod
         if (public_h = public_headers[spec]) && !public_h.empty?
           result += public_h
         elsif (source_f = source_files[spec]) && !source_f.empty?
-          build_h = source_f.select { |f| f.extname == '.h' }
+          build_h = source_f.select { |f| f.extname == '.h' || f.extname == '.hpp' }
           result += build_h unless build_h.empty?
         end
       end
@@ -431,7 +431,7 @@ module Pod
     # (the files the need to compiled) of the pod.
     #
     def implementation_files
-      relative_source_files.select { |f| f.extname != '.h' }
+      relative_source_files.reject { |f| f.extname == '.h' ||  f.extname == '.hpp' }
     end
 
     # @return [Pathname] The path of the pod relative from the sandbox.
@@ -474,7 +474,7 @@ module Pod
     # included in the linker search paths.
     #
     def headers_excluded_from_search_paths
-      options = { :glob => '*.h' }
+      options = { :glob => '*.{h,hpp}' }
       paths = paths_by_spec(:exclude_header_search_paths, options)
       paths.values.compact.uniq
     end
