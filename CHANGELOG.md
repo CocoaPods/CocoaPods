@@ -13,7 +13,7 @@
 - Added support for linting a Podspec using the files from its folder `pod spec
   lint --local`
 - Refactored UI.
-- Added support for Podfiles named `Podfile.cocoapods` which allows to
+- Added support for Podfiles named `CocoaPods.podfile` which allows to
   associate an editor application in Mac OS X.
   [#528](https://github.com/CocoaPods/CocoaPods/issues/528)
 - Added config option to disable the new version available message.
