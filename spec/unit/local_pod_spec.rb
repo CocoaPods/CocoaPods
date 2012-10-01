@@ -1,8 +1,6 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
 describe Pod::LocalPod do
-
-  # a LocalPod represents a local copy of the dependency, inside the pod root, built from a spec
   describe "in general" do
     before do
       @sandbox = temporary_sandbox

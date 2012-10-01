@@ -21,6 +21,7 @@ module Pod
   #   returns absolute paths.
   #
   class LocalPod
+    autoload :DirList, 'cocoapods/local_pod/dir_list'
 
     # @return [Specification] The specification that describes the pod.
     #
@@ -94,6 +95,10 @@ module Pod
       @sandbox.root + top_specification.name
     end
 
+    def dir_list
+      @dir_list ||= DirList.new(root)
+    end
+
     # @return [String] A string representation of the pod which indicates if
     #                  the pods comes from a local source or has a preferred
     #                  dependency.
@@ -156,6 +161,7 @@ module Pod
     def clean!
       clean_paths.each { |path| FileUtils.rm_rf(path) }
       @cleaned = true
+      dir_list.read_file_system
     end
 
     # Finds the absolute paths, including hidden ones, of the files
@@ -238,8 +244,7 @@ module Pod
     #   {Specification}.
     #
     def source_files_by_spec
-      options = {:glob => '*.{h,hpp,m,mm,c,cpp}'}
-      paths_by_spec(:source_files, options)
+      @source_files_by_spec ||= paths_by_spec(:source_files, '*.{h,hpp,m,mm,c,cpp}')
     end
 
     # @return [Array<Pathname>] The paths of the header files.
@@ -274,7 +279,7 @@ module Pod
     #   header files (i.e. the build ones) are intended to be public.
     #
     def public_header_files_by_spec
-      public_headers = paths_by_spec(:public_header_files, :glob => '*.{h,hpp}')
+      public_headers = paths_by_spec(:public_header_files, '*.{h,hpp}')
       build_headers  = header_files_by_spec
 
       result = {}
@@ -328,11 +333,14 @@ module Pod
     #   specification or automatically detected.
     #
     def license_file
-      if top_specification.license && top_specification.license[:file]
-        root + top_specification.license[:file]
-      else
-        expanded_paths(%w[ licen{c,s}e{*,.*} ]).first
+      unless @license_file
+        if top_specification.license && top_specification.license[:file]
+          @license_file = root + top_specification.license[:file]
+        else
+          @license_file = expanded_paths(%w[ licen{c,s}e{*,.*} ]).first
+        end
       end
+      @license_file
     end
 
     # @return [String] The text of the license of the pod from the
@@ -369,8 +377,8 @@ module Pod
       end
 
       specs = [top_specification] + top_specification.recursive_subspecs
-      source_files   = paths_by_spec(:source_files, { :glob => '*.{h}'}, specs)
-      public_headers = paths_by_spec(:public_header_files,{ :glob => '*.{h}'}, specs)
+      source_files   = paths_by_spec(:source_files, '*.{h}', specs)
+      public_headers = paths_by_spec(:public_header_files, '*.{h}', specs)
 
       result = []
       specs.each do |spec|
@@ -441,7 +449,7 @@ module Pod
     end
 
     # @return Hash{Pathname => [Array<Pathname>]} A hash containing the headers
-    #   folders as the keys and the the absolute paths of the header files
+    #   folders as the keys and the absolute paths of the header files
     #   as the values.
     #
     # @todo this is being overridden in the RestKit 0.9.4 spec, need to do
@@ -474,27 +482,27 @@ module Pod
     # included in the linker search paths.
     #
     def headers_excluded_from_search_paths
-      options = { :glob => '*.{h,hpp}' }
-      paths = paths_by_spec(:exclude_header_search_paths, options)
+      paths = paths_by_spec(:exclude_header_search_paths, '*.{h,hpp}')
       paths.values.compact.uniq
     end
 
     # @!group Paths Patterns
 
     # The paths obtained by resolving the patterns of an attribute
-    # groupped by spec.
+    # grouped by spec.
     #
     # @param [Symbol] accessor The accessor to use to obtain the paths patterns.
+    #
     # @param [Hash] options (see #expanded_paths)
     #
-    def paths_by_spec(accessor, options = {}, specs = nil)
+    def paths_by_spec(accessor, dir_pattern = nil, specs = nil)
       specs ||= specifications
       paths_by_spec   = {}
       processed_paths = []
 
       specs = specs.sort_by { |s| s.name.length }
       specs.each do |spec|
-        paths = expanded_paths(spec.send(accessor), options)
+        paths = expanded_paths(spec.send(accessor), dir_pattern)
         unless paths.empty?
           paths_by_spec[spec] = paths - processed_paths
           processed_paths += paths
@@ -519,23 +527,28 @@ module Pod
     #
     # @return [Array<Pathname>] A list of the paths.
     #
-    def expanded_paths(patterns, options = {})
+    def expanded_paths(patterns, dir_pattern = nil)
       unless exists?
         raise Informative, "[Local Pod] Attempt to resolve paths for nonexistent pod.\n" \
                            "\tSpecifications: #{@specifications.inspect}\n" \
-                           "\t      Patterns: #{patterns.inspect}\n" \
-                           "\t       Options: #{options.inspect}"
+                           "\t      Patterns: #{patterns.inspect}"
       end
 
-      patterns = [ patterns ] if patterns.is_a? String
-      patterns.map do |pattern|
-        pattern = root + pattern
+      # Noticeable impact on performance
+      return [] if patterns.empty?
 
-        if pattern.directory? && options[:glob]
-          pattern += options[:glob]
-        end
-        Pathname.glob(pattern, File::FNM_CASEFOLD)
-      end.flatten
+      patterns = [ patterns ] if patterns.is_a?(String)
+      file_lists = patterns.select { |p| p.is_a?(FileList) }
+      glob_patterns = patterns - file_lists
+
+      result = []
+
+      result << file_lists.map do |file_list|
+        file_list.prepend_patterns(root)
+        file_list.glob
+      end
+      result << dir_list.glob(glob_patterns, dir_pattern)
+      result.flatten.compact.uniq
     end
 
     # A {LocalSourcedPod} is a {LocalPod} that interacts with the files of
@@ -571,5 +584,5 @@ module Pod
         true
       end
     end
-  end
-end
+  end # LocalPod
+end # Pod
