@@ -502,7 +502,7 @@ module Pod
 
       specs = specs.sort_by { |s| s.name.length }
       specs.each do |spec|
-        paths = expanded_paths(spec.send(accessor), dir_pattern)
+        paths = expanded_paths(spec.send(accessor), dir_pattern, spec.excluded_patterns)
         unless paths.empty?
           paths_by_spec[spec] = paths - processed_paths
           processed_paths += paths
@@ -527,7 +527,7 @@ module Pod
     #
     # @return [Array<Pathname>] A list of the paths.
     #
-    def expanded_paths(patterns, dir_pattern = nil)
+    def expanded_paths(patterns, dir_pattern = nil, exclude_patterns = nil)
       unless exists?
         raise Informative, "[Local Pod] Attempt to resolve paths for nonexistent pod.\n" \
                            "\tSpecifications: #{@specifications.inspect}\n" \
@@ -547,7 +547,7 @@ module Pod
         file_list.prepend_patterns(root)
         file_list.glob
       end
-      result << dir_list.glob(glob_patterns, dir_pattern)
+      result << dir_list.glob(glob_patterns, dir_pattern, exclude_patterns)
       result.flatten.compact.uniq
     end
 

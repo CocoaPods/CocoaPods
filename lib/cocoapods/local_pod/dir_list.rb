@@ -57,8 +57,8 @@ module Pod
       # @return [Array<Pathname>] Similar to {glob} but returns the absolute
       #   paths.
       #
-      def glob(patterns, dir_pattern = nil)
-        relative_glob(patterns, dir_pattern).map {|p| root + p }
+      def glob(patterns, dir_pattern = nil, exclude_patterns = nil)
+        relative_glob(patterns, dir_pattern, exclude_patterns).map {|p| root + p }
       end
 
       # @return [Array<Pathname>] The list of the relative paths that are
@@ -71,17 +71,27 @@ module Pod
       #                                   pattern, if this one is the path of a
       #                                   directory.
       #
-      def relative_glob(patterns, dir_pattern = nil)
+      def relative_glob(patterns, dir_pattern = nil, exclude_patterns = nil)
+        return [] if patterns.empty?
         patterns = [ patterns ] if patterns.is_a? String
         list = patterns.map do |pattern|
-          pattern += '/' + dir_pattern if directory?(pattern) && dir_pattern
-          expanded_patterns = dir_glob_equivalent_patterns(pattern)
-          files.select do |path|
-            expanded_patterns.any? do |p|
-              File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
+          if pattern.is_a?(String)
+            pattern += '/' + dir_pattern if directory?(pattern) && dir_pattern
+            expanded_patterns = dir_glob_equivalent_patterns(pattern)
+            files.select do |path|
+              expanded_patterns.any? do |p|
+                File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
+              end
             end
+          else
+            pattern.to_s.cyan
+            files.select { |path| path.match(pattern) }
           end
         end.flatten
+        if exclude_patterns
+          excluded = relative_glob(exclude_patterns)
+          list = exclude_patterns ? list - excluded : list
+        end
         list.map { |path| Pathname.new(path) }
       end
 
