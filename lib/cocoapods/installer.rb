@@ -124,6 +124,10 @@ module Pod
           run_pre_install_hooks
         end
 
+        UI.message"- Generating project" do
+          project
+        end
+
         UI.message"- Installing targets" do
           generate_target_support_files
         end
