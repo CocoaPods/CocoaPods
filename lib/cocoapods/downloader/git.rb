@@ -30,10 +30,11 @@ module Pod
       end
 
       def create_cache
-        UI.section(" > Creating cache git repo (#{cache_path})",'',1)
-        cache_path.rmtree if cache_path.exist?
-        cache_path.mkpath
-        git! %Q|clone  --mirror "#{url}" "#{cache_path}"|
+        UI.section(" > Creating cache git repo (#{cache_path})",'',1) do
+          cache_path.rmtree if cache_path.exist?
+          cache_path.mkpath
+          git! %Q|clone  --mirror "#{url}" "#{cache_path}"|
+        end
       end
 
       def prune_cache
