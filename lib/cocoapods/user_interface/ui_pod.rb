@@ -42,7 +42,7 @@ module Pod
       end
 
       def authors
-        spec.authors.keys.to_sentence
+        spec.authors ? spec.authors.keys.to_sentence : ''
       end
 
       def homepage

@@ -122,15 +122,15 @@ module Pod
 
       def podfile_from_spec
         name     = spec.name
-        podspec  = file.realpath.to_s
+        podspec  = file.realpath
         platform = @platform
         local    = local?
         podfile  = Pod::Podfile.new do
           platform(platform.to_sym, platform.deployment_target)
           if (local)
-            pod name, :local => '/Users/fabio/Desktop/RegexHighlightView'
+            pod name, :local => podspec.dirname.to_s
           else
-            pod name, :podspec => podspec
+            pod name, :podspec => podspec.to_s
           end
         end
         podfile
