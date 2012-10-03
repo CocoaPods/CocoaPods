@@ -7,7 +7,7 @@ require 'rubygems'
 #
 # E.g. https://github.com/CocoaPods/CocoaPods/issues/398
 unless Gem::Version::Requirement.new('>= 1.4.0').satisfied_by?(Gem::Version.new(Gem::VERSION))
-  STDERR.puts "Your RubyGems version (#{Gem::VERSION}) is too old, please update with: `gem update --system`".red
+  STDERR.puts "\e[1;31m" + "Your RubyGems version (1.8.24) is too old, please update with: `gem update --system`" + "\e[0m"
   exit 1
 end
 

@@ -2,6 +2,10 @@
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.0...master)
 
+###### Bug fixes
+- Fixed a crash related to the RubyGems version informative.
+  [#570](https://github.com/CocoaPods/CocoaPods/issues/570)
+
 ## 0.15.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...0.15.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.3...0.3.4)
