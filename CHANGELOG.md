@@ -2,6 +2,10 @@
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.0...master)
 
+###### Enhancements
+
+- Show error if syntax error in Podfile or Podfile.lock.
+
 ###### Bug fixes
 
 - Fixed an issue that lead to empty directories for Pods.
