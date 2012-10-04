@@ -64,6 +64,6 @@ class Pathname
 end
 
 if ENV['COCOA_PODS_ENV'] == 'development'
-  require 'pry'
+  require 'letters'
   require 'awesome_print'
 end

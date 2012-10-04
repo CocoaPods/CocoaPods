@@ -13,10 +13,15 @@ group :development do
   gem "rb-fsevent"
   gem "vcr"
   gem "webmock"
-  gem "awesome_print"
-  gem "pry"
 
   gem 'yard'
   gem 'redcarpet'
   gem 'github-markup'
 end
+
+group :debugging do
+  gem "awesome_print"
+  gem "pry"
+  gem "letters"
+end
+
