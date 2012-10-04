@@ -15,6 +15,7 @@
   [#570](https://github.com/CocoaPods/CocoaPods/issues/570)
 - Fixed a crash for `pod outdated`.
   [#567](https://github.com/CocoaPods/CocoaPods/issues/567)
+- Fixed an issue that lead to excessively slow sets computation.
 
 ## 0.15.0
 
