@@ -166,11 +166,10 @@ module Pod
     # @note The Paths are downcased to prevent issues. See #568.
     #
     def clean_paths
-      used = used_files.map(&:downcase)
-      files = Dir.glob(root + "**/*", File::FNM_DOTMATCH).map(&:downcase)
+      files = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
 
       files.reject! do |candidate|
-        candidate.end_with?('.', '..') || used.any? do |path|
+        candidate.end_with?('.', '..') || used_files.any? do |path|
           path.include?(candidate) || candidate.include?(path)
         end
       end
@@ -536,7 +535,7 @@ module Pod
         if pattern.directory? && options[:glob]
           pattern += options[:glob]
         end
-        Pathname.glob(pattern, File::FNM_CASEFOLD)
+        Pathname.glob(pattern)
       end.flatten
     end
 
