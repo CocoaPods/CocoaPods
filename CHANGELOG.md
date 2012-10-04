@@ -9,6 +9,8 @@
   [#568](https://github.com/CocoaPods/CocoaPods/issues/568)
 - Fixed a crash related to the RubyGems version informative.
   [#570](https://github.com/CocoaPods/CocoaPods/issues/570)
+- Fixed a crash for `pod outdated`.
+  [#567](https://github.com/CocoaPods/CocoaPods/issues/567)
 
 ## 0.15.0
 

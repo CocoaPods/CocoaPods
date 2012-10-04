@@ -22,13 +22,15 @@ module Pod
       def run
         verify_podfile_exists!
         verify_lockfile_exists!
-        update_spec_repos_if_necessary!
 
         sandbox = Sandbox.new(config.project_pods_root)
         resolver = Resolver.new(config.podfile, config.lockfile, sandbox)
         resolver.update_mode = true
         resolver.update_external_specs = false
         resolver.resolve
+
+        #TODO: the command report new dependencies (added to by updated ones)
+        # as updates.
 
         names = resolver.pods_to_install - resolver.pods_from_external_sources
         specs = resolver.specs.select do |spec|
