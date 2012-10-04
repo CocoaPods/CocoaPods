@@ -1,6 +1,10 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.0...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...master)
+
+## 0.15.1
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.0...0.15.1)
 
 ###### Enhancements
 
@@ -22,6 +26,7 @@
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...0.15.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.3...0.3.4)
 
 ###### Enhancements
+
 - Pod `install` will update the specs repo only if needed.
   [#533](https://github.com/CocoaPods/CocoaPods/issues/533)
 - CocoaPods now searches for the highest version of a Pod on all the repos.
@@ -44,6 +49,7 @@
 
 
 ###### Bug fixes
+
 - Subspecs namespacing has been restored.
   [#541](https://github.com/CocoaPods/CocoaPods/issues/541)
 - Improvements to the git cache that should be more robust.
