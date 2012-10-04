@@ -90,7 +90,7 @@ module Pod
       def github_stats_if_needed(set)
         return if get_value(set, :gh_date) && get_value(set, :gh_date) > Time.now - cache_expiration
         spec    = set.specification
-        url     = spec.source.reject {|k,_| k == :commit || k == :tag }.values.first
+        url     = spec.source[:git] || ''
         repo_id = url[/github.com\/([^\/\.]*\/[^\/\.]*)\.*/, 1]
         return unless repo_id
 
