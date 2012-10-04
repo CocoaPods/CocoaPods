@@ -3,6 +3,10 @@
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.0...master)
 
 ###### Bug fixes
+
+- Fixed an issue that lead to empty directories for Pods.
+  [#519](https://github.com/CocoaPods/CocoaPods/issues/519)
+  [#568](https://github.com/CocoaPods/CocoaPods/issues/568)
 - Fixed a crash related to the RubyGems version informative.
   [#570](https://github.com/CocoaPods/CocoaPods/issues/570)
 

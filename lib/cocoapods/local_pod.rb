@@ -163,12 +163,14 @@ module Pod
     #
     # @return [Array<Strings>] The paths that can be deleted.
     #
+    # @note The Paths are downcased to prevent issues. See #568.
+    #
     def clean_paths
-      cached_used_paths = used_files
-      files = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
+      used = used_files.map(&:downcase)
+      files = Dir.glob(root + "**/*", File::FNM_DOTMATCH).map(&:downcase)
 
       files.reject! do |candidate|
-        candidate.end_with?('.', '..') || cached_used_paths.any? do |path|
+        candidate.end_with?('.', '..') || used.any? do |path|
           path.include?(candidate) || candidate.include?(path)
         end
       end
