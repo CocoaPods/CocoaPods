@@ -2,6 +2,11 @@
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...master)
 
+###### Bug fixes
+
+- Added support for `.hh` headers.
+  [#576](https://github.com/CocoaPods/CocoaPods/pull/576)
+
 ## 0.15.1
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.0...0.15.1)
