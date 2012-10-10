@@ -1,9 +1,11 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.4...master)
 
-###### Bug fixes
+###### Enhancements
 
+- The git cache now always uses a barebone repo.
+  [#581](https://github.com/CocoaPods/CocoaPods/pull/581)
 - Added support for `.hh` headers.
   [#576](https://github.com/CocoaPods/CocoaPods/pull/576)
 

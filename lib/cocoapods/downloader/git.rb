@@ -105,7 +105,7 @@ module Pod
 
       # @!group Checking references
 
-      # @return [Bool] Wether a reference (SHA of tag)
+      # @return [Bool] Wether a reference (commit SHA or tag)
       #
       def ref_exists?(ref)
         Dir.chdir(cache_path) { git "rev-list --max-count=1 #{ref}" }
@@ -172,8 +172,15 @@ module Pod
 
       # @return [Bool] Wether the cache exits.
       #
+      # @note The previous implementation of the cache didn't use a barebone
+      #       git repo. This method takes into account this fact and checks
+      #       that the cache is actually a barebone repo. If the cache was not
+      #       barebone it will be deleted and recreated.
+      #
       def cache_exist?
-        cache_path.exist? && cache_origin_url(cache_path).to_s == url.to_s
+        cache_path.exist? &&
+          cache_origin_url(cache_path).to_s == url.to_s &&
+          Dir.chdir(cache_path) { git("config core.bare").chomp == "true" }
       end
 
       # @return [String] The origin URL of the cache with the given directory.
@@ -200,16 +207,7 @@ module Pod
       #
       def update_cache
         UI.section(" > Updating cache git repo (#{cache_path})",'',1) do
-          Dir.chdir(cache_path) do
-            if git("config core.bare").chomp == "true"
-              git! "remote update"
-            else
-              git! "reset --hard HEAD"
-              git! "clean -d -x -f"
-              git! "pull origin master"
-              git! "fetch --tags"
-            end
-          end
+          Dir.chdir(cache_path) { git! "remote update" }
         end
       end
 
