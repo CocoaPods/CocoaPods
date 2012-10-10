@@ -4,10 +4,17 @@
 
 ###### Enhancements
 
-- The git cache now always uses a barebone repo.
-  [#581](https://github.com/CocoaPods/CocoaPods/pull/581)
 - Added support for `.hh` headers.
   [#576](https://github.com/CocoaPods/CocoaPods/pull/576)
+
+###### Bug fixes
+
+- Restored support for not running CocoaPods in a terminal.
+  [#575](https://github.com/CocoaPods/CocoaPods/pull/575)
+  [#577](https://github.com/CocoaPods/CocoaPods/pull/577)
+- The git cache now always uses a barebone repo preventing a number of related issues.
+  [#581](https://github.com/CocoaPods/CocoaPods/pull/581)
+  [#569](https://github.com/CocoaPods/CocoaPods/pull/569)
 
 ## 0.15.1
 

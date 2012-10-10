@@ -196,8 +196,9 @@ module Pod
 
       # @!group Helpers
 
-      # Wraps a string taking into account the width of the terminal and an
-      # option indent. Adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
+      # @return [String] Wraps a string taking into account the width of the
+      # terminal and an option indent. Adapted from
+      # http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
       #
       # @param [String] txt     The string to wrap
       #
@@ -205,8 +206,12 @@ module Pod
       #
       # @return [String]        The formatted string.
       #
+      # @note If CocoaPods is not being run in a terminal or the width of the
+      # terminal is too small a width of 80 is assumed.
+      #
       def wrap_string(txt, indent = '')
         width = `stty size`.split(' ')[1].to_i - indent.length
+        width = 80 unless width >= 10
         txt.strip.gsub(/(.{1,#{width}})( +|$)\n?|(.{#{width}})/, indent + "\\1\\3\n")
       end
     end
