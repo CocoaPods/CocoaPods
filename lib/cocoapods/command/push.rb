@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'active_support/core_ext/string/inflections'
 
 module Pod
   class Command
@@ -66,12 +67,18 @@ module Pod
 
       def podspec_files
         files = Pathname.glob(@podspec || "*.podspec")
-        raise Informative, "[!] Couldn't find .podspec file in current directory".red if files.empty?
+        raise Informative, "[!] Couldn't find any .podspec file in current directory".red if files.empty?
         files
       end
 
+      # @return [Integer] The number of the podspec files to push.
+      #
+      def count
+        podspec_files.count
+      end
+
       def validate_podspec_files
-        UI.puts "\nValidating specs".yellow unless config.silent
+        UI.puts "\nValidating #{'spec'.pluralize(count)}".yellow unless config.silent
         lint_argv = ["lint"]
         lint_argv << "--only-errors" if @allow_warnings
         lint_argv << "--silent" if config.silent
@@ -82,7 +89,7 @@ module Pod
       end
 
       def add_specs_to_repo
-        UI.puts "\nAdding the specs to the #{@repo} repo\n".yellow unless config.silent
+        UI.puts "\nAdding the #{'spec'.pluralize(count)} to the `#{@repo}' repo\n".yellow unless config.silent
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
           output_path = File.join(repo_dir, spec.name, spec.version.to_s)
