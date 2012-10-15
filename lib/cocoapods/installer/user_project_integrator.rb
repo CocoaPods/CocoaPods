@@ -137,20 +137,18 @@ module Pod
             # Default to the first, which in a simple project is probably an app target.
             [user_project.targets.first]
           end.reject do |target|
-              # Reject any target that already has this Pods library in one of its frameworks build phases
-              target.frameworks_build_phases.any? do |phase|
-                phase.files.any? { |file| file.name == @target_definition.lib_name }
-              end
-            end
+            # Reject any target that already has this Pods library in one of its frameworks build phases
+            target.frameworks_build_phase.files.any? { |build_file| build_file.file_ref.name == @target_definition.lib_name }
           end
+         end
         end
 
         def add_xcconfig_base_configuration
-          xcconfig = user_project.files.new('path' => @target_definition.xcconfig_relative_path)
+          xcconfig = user_project.new_file(@target_definition.xcconfig_relative_path)
           targets.each do |target|
             config_build_names_by_overriden_key = {}
             target.build_configurations.each do |config|
-              config_name = config.attributes["name"]
+              config_name = config.name
               if @target_definition.xcconfig
                 @target_definition.xcconfig.attributes.each do |key, value|
                   target_value = config.build_settings[key]
@@ -161,11 +159,11 @@ module Pod
                 end
               end
 
-              config.base_configuration = xcconfig
+              config.base_configuration_reference = xcconfig
             end
 
             config_build_names_by_overriden_key.each do |key, config_build_names|
-              name    = "#{target.attributes["name"]} [#{config_build_names.join(' - ')}]"
+              name    = "#{target.name} [#{config_build_names.join(' - ')}]"
               actions = [ "Use the `$(inherited)' flag, or", "Remove the build settings from the target." ]
               UI.warn("The target `#{name}' overrides the `#{key}' build setting defined in `#{@target_definition.xcconfig_relative_path}'.", actions)
             end
@@ -173,23 +171,20 @@ module Pod
         end
 
         def add_pods_library
-          group = user_project.group("Frameworks") || user_project.main_group
-          pods_library = group.files.new_static_library(@target_definition.label)
+          frameworks = user_project.frameworks_group
+          pods_library = frameworks.new_static_library(@target_definition.label)
           targets.each do |target|
-            target.frameworks_build_phases.each { |build_phase| build_phase << pods_library }
+            target.frameworks_build_phase.add_file_reference(pods_library)
           end
         end
 
         def add_copy_resources_script_phase
           targets.each do |target|
-            phase = target.shell_script_build_phases.new
-            phase.name = 'Copy Pods Resources'
+            phase = target.new_shell_script_build_phase('Copy Pods Resources')
             phase.shell_script = %{"#{@target_definition.copy_resources_script_relative_path}"\n}
           end
         end
       end
-
     end
-
   end
 end

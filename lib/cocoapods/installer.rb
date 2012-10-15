@@ -19,18 +19,8 @@ module Pod
       return @project if @project
       @project = Pod::Project.new
       @project.user_build_configurations = @podfile.user_build_configurations
-      pods.each do |pod|
-        # Add all source files to the project grouped by pod
-        pod.relative_source_files_by_spec.each do |spec, paths|
-          parent_group = pod.local? ? @project.local_pods : @project.pods
-          group = @project.add_spec_group(spec.name, parent_group)
-          paths.each do |path|
-            group.files.new('path' => path.to_s)
-          end
-        end
-      end
-      # Add a group to hold all the target support files
-      @project.main_group.groups.new('name' => 'Targets Support Files')
+      pods.each { |p| p.add_file_references_to_project(@project) }
+      pods.each { |p| p.link_headers }
       @project
     end
 
@@ -188,10 +178,8 @@ module Pod
       pathname = Pathname.new(sandbox.root + filename)
       dummy_source.save_as(pathname)
 
-      project_file = project.files.new('path' => filename)
-      project.group("Targets Support Files") << project_file
-
-      target_installer.target.source_build_phases.first << project_file
+      file = project.new_file(filename, "Targets Support Files")
+      target_installer.target.source_build_phase.add_file_reference(file)
     end
 
     def specs_by_target

@@ -166,11 +166,11 @@ module Pod
     # @note The Paths are downcased to prevent issues. See #568.
     #
     def clean_paths
-      used = used_files.map(&:downcase)
-      files = Dir.glob(root + "**/*", File::FNM_DOTMATCH).map(&:downcase)
+      cached_used_paths = used_files
+      files = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
 
       files.reject! do |candidate|
-        candidate.end_with?('.', '..') || used.any? do |path|
+        candidate.end_with?('.', '..') || cached_used_paths.any? do |path|
           path.include?(candidate) || candidate.include?(path)
         end
       end
@@ -386,7 +386,36 @@ module Pod
       result
     end
 
-    # @!group Target integration
+    # @!group Project integration
+
+    #
+    # @return [void]
+    #
+    def add_file_references_to_project(project)
+      @file_references_by_spec = {}
+      parent_group = local? ? project.local_pods : project.pods
+
+      relative_source_files_by_spec.each do |spec, paths|
+        group = project.add_spec_group(spec.name, parent_group)
+        file_references = []
+        paths.each do |path|
+          file_references << group.new_file(path)
+        end
+        @file_references_by_spec[spec] = file_references
+      end
+    end
+
+    #
+    #
+    attr_reader :file_references_by_spec
+
+    #
+    #
+    def add_build_files_to_target(target)
+      file_references_by_spec.each do |spec, file_reference|
+        target.add_file_references(file_reference, spec.compiler_flags.strip)
+      end
+    end
 
     # @return [void] Copies the pods headers to the sandbox.
     #
@@ -403,25 +432,9 @@ module Pod
       end
     end
 
-    # @param [Xcodeproj::Project::Object::PBXNativeTarget] target
-    #   The target to integrate.
-    #
-    # @return [void] Adds the pods source files to a given target.
-    #
-    def source_file_descriptions
-      result = []
-      source_files_by_spec.each do | spec, files |
-        compiler_flags = spec.compiler_flags.strip
-        files.each do |file|
-          file = relativize_from_sandbox(file)
-          desc = Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(file, compiler_flags, nil)
-          result << desc
-        end
-      end
-      result
-    end
-
     # @return Whether the pod requires ARC.
+    #
+    # TODO: this should be not used anymore.
     #
     def requires_arc?
       top_specification.requires_arc
