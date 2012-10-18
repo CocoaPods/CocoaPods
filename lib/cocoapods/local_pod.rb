@@ -167,7 +167,7 @@ module Pod
     #
     def clean_paths
       used = used_files
-      files = Dir.glob(root + "**/*", [File::FNM_DOTMATCH, File::FNM_CASEFOLD])
+      files = Dir.glob(root + "**/*", File::FNM_DOTMATCH | File::FNM_CASEFOLD)
 
       files.reject! do |candidate|
         candidate.end_with?('.', '..') || used.any? do |path|
