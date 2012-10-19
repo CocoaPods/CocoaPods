@@ -58,6 +58,5 @@ module Pod
 end
 
 if ENV['COCOA_PODS_ENV'] == 'development'
-  require 'letters'
   require 'awesome_print'
 end
