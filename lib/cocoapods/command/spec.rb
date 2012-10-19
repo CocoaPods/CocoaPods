@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'active_support/core_ext/string/inflections'
+
 module Pod
   class Command
     class Spec < Command
@@ -104,8 +106,8 @@ module Pod
           UI.puts unless config.silent?
         end
 
-        UI.puts "Analyzed #{podspecs_to_lint.count} podspecs files.\n\n" unless config.silent?
         count = podspecs_to_lint.count
+        UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n" unless config.silent?
         if invalid_count == 0
           lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
           UI.puts lint_passed_message.green << "\n\n" unless config.silent?
@@ -136,7 +138,7 @@ module Pod
               end
               files << output_path
             else if (pathname = Pathname.new(path)).directory?
-              files += pathname.glob('**/*.podspec')
+              files += Pathname.glob(pathname + '**/*.podspec')
               raise Informative, "No specs found in the current directory." if files.empty?
             else
               files << (pathname = Pathname.new(path))

@@ -105,7 +105,7 @@ describe "Pod::Podfile" do
     end
 
     path = config.project_root + 'MyProject.xcodeproj'
-    config.project_root.expects(:glob).with('*.xcodeproj').returns([path])
+    Pathname.expects(:glob).with(config.project_root + '*.xcodeproj').returns([path])
 
     podfile.target_definitions[:default].user_project.path.should == path
     podfile.target_definitions[:another_target].user_project.path.should == path
@@ -113,7 +113,7 @@ describe "Pod::Podfile" do
 
   it "assumes the basename of the workspace is the same as the default target's project basename" do
     path = config.project_root + 'MyProject.xcodeproj'
-    config.project_root.expects(:glob).with('*.xcodeproj').returns([path])
+    Pathname.expects(:glob).with(config.project_root + '*.xcodeproj').returns([path])
     Pod::Podfile.new {}.workspace.should == config.project_root + 'MyProject.xcworkspace'
 
     Pod::Podfile.new do
@@ -225,13 +225,13 @@ describe "Pod::Podfile" do
 
     it "returns a Xcode project found in the working dir when no explicit project is specified" do
       xcodeproj1 = config.project_root + '1.xcodeproj'
-      config.project_root.expects(:glob).with('*.xcodeproj').returns([xcodeproj1])
+      Pathname.expects(:glob).with(config.project_root + '*.xcodeproj').returns([xcodeproj1])
       Pod::Podfile::UserProject.new.path.should == xcodeproj1
     end
 
     it "returns `nil' if more than one Xcode project was found in the working when no explicit project is specified" do
       xcodeproj1, xcodeproj2 = config.project_root + '1.xcodeproj', config.project_root + '2.xcodeproj'
-      config.project_root.expects(:glob).with('*.xcodeproj').returns([xcodeproj1, xcodeproj2])
+      Pathname.expects(:glob).with(config.project_root + '*.xcodeproj').returns([xcodeproj1, xcodeproj2])
       Pod::Podfile::UserProject.new.path.should == nil
     end
 

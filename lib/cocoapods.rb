@@ -12,7 +12,7 @@ unless Gem::Version::Requirement.new('>= 1.4.0').satisfied_by?(Gem::Version.new(
 end
 
 module Pod
-  VERSION = '0.15.1'
+  VERSION = '0.15.2'
 
   class PlainInformative < StandardError
   end
@@ -57,13 +57,6 @@ module Pod
   end
 end
 
-class Pathname
-  def glob(pattern = '')
-    Dir.glob((self + pattern).to_s).map { |f| Pathname.new(f) }
-  end
-end
-
 if ENV['COCOA_PODS_ENV'] == 'development'
-  require 'letters'
   require 'awesome_print'
 end

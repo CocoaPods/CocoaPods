@@ -1,11 +1,29 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.4...master)
 
-###### Bug fixes
+## 0.15.2
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...0.15.2)
+
+###### Enhancements
 
 - Added support for `.hh` headers.
   [#576](https://github.com/CocoaPods/CocoaPods/pull/576)
+
+###### Bug fixes
+
+- Restored support for running CocoaPods without a terminal.
+  [#575](https://github.com/CocoaPods/CocoaPods/issues/575)
+  [#577](https://github.com/CocoaPods/CocoaPods/issues/577)
+- The git cache now always uses a barebones repo preventing a number of related issues.
+  [#581](https://github.com/CocoaPods/CocoaPods/issues/581)
+  [#569](https://github.com/CocoaPods/CocoaPods/issues/569)
+- Improved fix for the issue that lead to empty directories for Pods.
+  [#572](https://github.com/CocoaPods/CocoaPods/issues/572)
+  [#602](https://github.com/CocoaPods/CocoaPods/issues/602)
+- Xcodeproj robustness against invalid values, such as malformed UTF8.
+  [#592](https://github.com/CocoaPods/CocoaPods/issues/592)
 
 ## 0.15.1
 
