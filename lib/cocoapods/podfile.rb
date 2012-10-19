@@ -35,7 +35,6 @@ module Pod
         if @path
           @path
         else
-          puts config.project_root + '*.xcodeproj'
           xcodeprojs = Pathname.glob(config.project_root + '*.xcodeproj')
           if xcodeprojs.size == 1
             @path = xcodeprojs.first
