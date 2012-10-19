@@ -57,12 +57,6 @@ module Pod
   end
 end
 
-class Pathname
-  def glob(pattern = '')
-    Dir.glob((self + pattern).to_s).map { |f| Pathname.new(f) }
-  end
-end
-
 if ENV['COCOA_PODS_ENV'] == 'development'
   require 'letters'
   require 'awesome_print'

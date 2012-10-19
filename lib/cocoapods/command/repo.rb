@@ -90,7 +90,7 @@ module Pod
         dirs.each do |dir|
           check_versions(dir)
           UI.puts "\nLinting spec repo `#{dir.realpath.basename}'\n".yellow
-          podspecs = dir.glob('**/*.podspec')
+          podspecs = Pathname.glob( dir + '**/*.podspec')
           invalid_count = 0
 
           podspecs.each do |podspec|

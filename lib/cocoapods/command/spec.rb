@@ -138,7 +138,7 @@ module Pod
               end
               files << output_path
             else if (pathname = Pathname.new(path)).directory?
-              files += pathname.glob('**/*.podspec')
+              files += Pathname.glob(pathname + '**/*.podspec')
               raise Informative, "No specs found in the current directory." if files.empty?
             else
               files << (pathname = Pathname.new(path))
