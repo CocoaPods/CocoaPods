@@ -1,14 +1,13 @@
 require 'xcodeproj/project'
-require 'xcodeproj/project/object/build_phase'
 
-Xcodeproj::Project::Object::PBXCopyFilesBuildPhase.instance_eval do
-  def self.new_pod_dir(project, pod_name, path)
-    new(project, nil, {
-      "dstPath" => "Pods/#{path}",
-      "name"    => "Copy #{pod_name} Public Headers",
-    })
-  end
-end
+# Xcodeproj::Project::Object::PBXCopyFilesBuildPhase.instance_eval do
+#   def self.new_pod_dir(project, pod_name, path)
+#     new(project, nil, {
+#       "dstPath" => "Pods/#{path}",
+#       "name"    => "Copy #{pod_name} Public Headers",
+#     })
+#   end
+# end
 
 module Pod
   class Project < Xcodeproj::Project
@@ -65,6 +64,7 @@ module Pod
       end
 
       if platform == :ios && platform.deployment_target
+        # TODO: add for osx as well
         settings['IPHONEOS_DEPLOYMENT_TARGET'] = platform.deployment_target.to_s
       end
 

@@ -72,14 +72,16 @@ module Pod
       #
       def generate_xcconfig(pods, sandbox)
         xcconfig = Xcodeproj::Config.new({
-          'PODS_ROOT'                     => @target_definition.relative_pods_root,
-          'PODS_HEADERS_SEARCH_PATHS'     => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
-          'ALWAYS_SEARCH_USER_PATHS'      => 'YES', # needed to make EmbedReader build
-          'OTHER_LDFLAGS'                 => default_ld_flags
+          'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
+          'OTHER_LDFLAGS'            => default_ld_flags,
+          'HEADER_SEARCH_PATHS'      => '${PODS_HEADERS_SEARCH_PATHS}',
+          # CocoaPods global keys
+          'PODS_ROOT'                         => @target_definition.relative_pods_root,
+          'PODS_BUILD_HEADERS_SEARCH_PATHS'   => quoted(sandbox.build_headers.search_paths).join(" "),
+          'PODS_PUBLIC_HEADERS_SEARCH_PATHS'  => quoted(sandbox.public_headers.search_paths).join(" "),
+          # Pods project specific keys
+          'PODS_HEADERS_SEARCH_PATHS' => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}'
         })
-        xcconfig.merge!('HEADER_SEARCH_PATHS' => '${PODS_HEADERS_SEARCH_PATHS}')
-        xcconfig.merge!('PODS_BUILD_HEADERS_SEARCH_PATHS' => quoted(sandbox.build_headers.search_paths).join(" "))
-        xcconfig.merge!('PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quoted(sandbox.public_headers.search_paths).join(" "))
         pods.each { |pod| xcconfig.merge!(pod.xcconfig) }
         @xcconfig = xcconfig
       end

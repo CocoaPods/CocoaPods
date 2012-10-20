@@ -17,7 +17,9 @@ module Pod
 
         sandbox = Sandbox.new(fixture('integration'))
         resolver = Resolver.new(podfile, nil, sandbox)
-        @xcconfig = Installer.new(resolver).target_installers.first.xcconfig.to_hash
+        target_installer = Installer.new(resolver).target_installers.first
+        target_installer.generate_xcconfig([], sandbox)
+        @xcconfig = target_installer.xcconfig.to_hash
       end
 
       it "sets the header search paths where installed Pod headers can be found" do
@@ -127,7 +129,7 @@ module Pod
 
       it "adds the files of the pod to the Pods project only once" do
         @installer.install!
-        group = @installer.project.pods.groups.where(:name => 'Reachability')
+        group = @installer.project.pods.groups.find { |g| g.name == 'Reachability' }
         group.files.map(&:name).should == ["Reachability.h", "Reachability.m"]
       end
 
@@ -155,13 +157,13 @@ module Pod
 
       it "namespaces local pods" do
         @installer.install!
-        group = @installer.project.groups.where(:name => 'Local Pods')
+        group = @installer.project['Local Pods']
         group.groups.map(&:name).sort.should == %w| Chameleon |
       end
 
       it "namespaces subspecs" do
         @installer.install!
-        group = @installer.project.groups.where(:name => 'Chameleon')
+        group = @installer.project['Local Pods/Chameleon']
         group.groups.map(&:name).sort.should == %w| AVFoundation AssetsLibrary MediaPlayer MessageUI StoreKit UIKit |
       end
     end

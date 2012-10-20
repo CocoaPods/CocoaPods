@@ -38,7 +38,7 @@ describe Pod::LocalPod do
       ].sort
     end
 
-    it "returns the source files groupped by specification" do
+    it "returns the source files grouped by specification" do
       files = @pod.source_files_by_spec[@pod.specifications.first].sort
       files.should == [
         @pod.root + "Classes/Banana.m",
@@ -83,18 +83,26 @@ describe Pod::LocalPod do
     end
 
     it "can add it's source files to an Xcode project target" do
-      @pod.source_file_descriptions.should == [
-        Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(Pathname.new("BananaLib/Classes/Banana.h"), "", nil),
-        Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(Pathname.new("BananaLib/Classes/Banana.m"), "", nil)
-      ]
+      project = Pod::Project.new
+      @pod.add_file_references_to_project(project)
+      project['Pods/BananaLib/Banana.h'].path.should == "BananaLib/Classes/Banana.h"
+      project['Pods/BananaLib/Banana.m'].path.should == "BananaLib/Classes/Banana.m"
     end
 
     it "can add it's source files to a target with any specially configured compiler flags" do
+      project = Pod::Project.new
+      target  = project.new_target(:static, 'Pods', :ios)
       @pod.top_specification.compiler_flags = '-d some_flag'
-      @pod.source_file_descriptions.should == [
-        Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(Pathname.new("BananaLib/Classes/Banana.h"), '-d some_flag', nil),
-        Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(Pathname.new("BananaLib/Classes/Banana.m"), '-d some_flag', nil)
-      ]
+      @pod.add_file_references_to_project(project)
+      @pod.add_build_files_to_target(target)
+
+      h_build_file = target.headers_build_phase.files.first
+      h_build_file.file_ref.path.should == "BananaLib/Classes/Banana.h"
+      h_build_file.settings.should == {"ATTRIBUTES"=>["Public"]}
+
+      m_build_file = target.source_build_phase.files.first
+      m_build_file.file_ref.path.should == "BananaLib/Classes/Banana.m"
+      m_build_file.settings.should == {"COMPILER_FLAGS"=>"-d some_flag"}
     end
 
     it "returns the platform" do

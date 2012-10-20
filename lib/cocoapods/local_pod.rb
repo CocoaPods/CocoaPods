@@ -387,8 +387,14 @@ module Pod
       result
     end
 
-    # @!group Project integration
+    # @!group Xcodeproj integration
 
+    # Adds the file references, to the given `Pods.xcodeproj` project, for the
+    # source files of the pod. The file references are grouped by specification
+    # and stored in {#file_references_by_spec}.
+    #
+    # @note If the pod is locally sourced the file references are stored in the
+    #       `Local Pods` group otherwise they are stored in the `Pods` group.
     #
     # @return [void]
     #
@@ -406,13 +412,24 @@ module Pod
       end
     end
 
-    #
+    # @return [Hash{Specification => Array<PBXFileReference>}] The file
+    #   references of the pod in the `Pods.xcodeproj` project.
     #
     attr_reader :file_references_by_spec
 
+    # Adds a build file for each file reference to a given target taking into
+    # account the compiler flags of the corresponding specification.
     #
+    # @raise If the {#add_file_references_to_project} was not called before of
+    #        calling this method.
+    #
+    # @return [void]
     #
     def add_build_files_to_target(target)
+      unless file_references_by_spec
+        raise Informative, "Local Pod needs to add the file references to the " \
+                           "project before adding the build files to the target."
+      end
       file_references_by_spec.each do |spec, file_reference|
         target.add_file_references(file_reference, spec.compiler_flags.strip)
       end
@@ -543,15 +560,27 @@ module Pod
                            "\t       Options: #{options.inspect}"
       end
 
-      patterns = [ patterns ] if patterns.is_a? String
-      patterns.map do |pattern|
-        pattern = root + pattern
+      return [] if patterns.empty?
+      patterns = [ patterns ] if patterns.is_a?(String)
+      file_lists = patterns.select { |p| p.is_a?(FileList) }
+      glob_patterns = patterns - file_lists
 
+      result = []
+
+      result << file_lists.map do |file_list|
+        file_list.prepend_patterns(root)
+        file_list.glob
+      end
+
+      result << glob_patterns.map do |pattern|
+        pattern = root + pattern
         if pattern.directory? && options[:glob]
           pattern += options[:glob]
         end
         Pathname.glob(pattern, File::FNM_CASEFOLD)
       end.flatten
+
+      result.flatten.compact.uniq
     end
 
     # A {LocalSourcedPod} is a {LocalPod} that interacts with the files of
