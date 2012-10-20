@@ -4,7 +4,6 @@ module Pod
   describe Installer do
     before do
       config.repos_dir = fixture('spec-repos')
-      config.project_pods_root = fixture('integration')
     end
 
     describe "by default" do
@@ -15,10 +14,14 @@ module Pod
           pod 'JSONKit'
         end
 
-        sandbox = Sandbox.new(fixture('integration'))
-        resolver = Resolver.new(podfile, nil, sandbox)
-        target_installer = Installer.new(resolver).target_installers.first
-        target_installer.generate_xcconfig([], sandbox)
+        @sandbox = temporary_sandbox
+        config.project_pods_root = temporary_sandbox.root
+        FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
+
+        resolver = Resolver.new(podfile, nil, @sandbox)
+        @installer = Installer.new(resolver)
+        target_installer = @installer.target_installers.first
+        target_installer.generate_xcconfig([], @sandbox)
         @xcconfig = target_installer.xcconfig.to_hash
       end
 
@@ -40,8 +43,8 @@ module Pod
           pod 'ASIHTTPRequest'
         end
 
-        sandbox = Sandbox.new(fixture('integration'))
-        resolver = Resolver.new(podfile, nil, sandbox)
+        FileUtils.cp_r(fixture('integration/ASIHTTPRequest'), @sandbox.root + 'ASIHTTPRequest')
+        resolver = Resolver.new(podfile, nil, @sandbox)
         installer = Installer.new(resolver)
         pods = installer.specifications.map do |spec|
           LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
@@ -58,7 +61,7 @@ module Pod
             pod 'JSONKit'
           end
         end
-        resolver = Resolver.new(podfile, nil, Sandbox.new(fixture('integration')))
+        resolver = Resolver.new(podfile, nil, @sandbox)
         installer = Installer.new(resolver)
         installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
       end
