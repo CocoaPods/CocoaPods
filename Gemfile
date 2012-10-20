@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gemspec
 
 group :development do
-  gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git"
+  gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git", :branch => "refactor"
   gem "mocha", "~> 0.11.4"
   gem "bacon"
   gem "mocha-on-bacon"

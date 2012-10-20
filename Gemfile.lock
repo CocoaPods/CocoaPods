@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: da9a356535ec7e97c11f2d5648e2f154165c1a19
+  revision: 280a500ed5ee5a5f6bb4e3c5edcfef0240fa427b
+  branch: refactor
   specs:
     xcodeproj (0.3.5)
       activesupport (~> 3.2.6)
