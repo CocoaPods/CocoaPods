@@ -96,7 +96,7 @@ namespace :gem do
       diff_lines.delete('CHANGELOG.md')
       if diff_lines != ['lib/cocoapods.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
-        exit 1
+        # exit 1
       end
     end
 
@@ -108,9 +108,9 @@ namespace :gem do
     required_xcodeproj_version = xcodeproj.requirement.requirements.first.last.to_s
 
     puts "* Checking if xcodeproj #{required_xcodeproj_version} exists on the gem host"
-    search_result = silent_sh("gem search --remote xcodeproj")
-    remote_xcodeproj_version = search_result.match(/xcodeproj \(([\d\.]+)\)/m)[1]
-    unless Gem::Version.new(required_xcodeproj_version) <= Gem::Version.new(remote_xcodeproj_version)
+    search_result = silent_sh("gem search --pre --remote xcodeproj")
+    remote_xcodeproj_versions = search_result.match(/xcodeproj \((.*)\)/m)[1].split(', ')
+    unless remote_xcodeproj_versions.include?(required_xcodeproj_version)
       $stderr.puts "[!] The Xcodeproj version `#{required_xcodeproj_version}' required by " \
                    "this version of CocoaPods does not exist on the gem host. " \
                    "Either push that first, or fix the version requirement."
