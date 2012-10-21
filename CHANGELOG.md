@@ -1,13 +1,18 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc1...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...master)
+
+## 0.16.0.rc2
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc1...0.16.0.rc2)
+- Fix for uninitialized constant Xcodeproj::Constants error.
 
 ## 0.16.0.rc1
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.2...0.16.0.rc1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.5...0.4.0.rc1)
 
 - Xcodeproj partial rewrite.
-  [#565](https://github.com/CocoaPods/CocoaPods/pull/565)
+  [#565](https://github.com/CocoaPods/CocoaPods/issues/565)
   [#561](https://github.com/CocoaPods/CocoaPods/pull/561)
   - Performance improvements in the `Generating support files` phase.
   - Better support for editing existing projects and sorting groups.

@@ -18,7 +18,7 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.16.0.rc1)
+    cocoapods (0.16.0.rc2)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
       escape (~> 0.0.4)
