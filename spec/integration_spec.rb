@@ -70,8 +70,7 @@ else
           end
 
           # Note that we are *not* using the stubbed SpecHelper::Installer subclass.
-          resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
-          installer = Pod::Installer.new(resolver)
+          installer = Pod::Installer.new(Pod::Sandbox.new(config.project_pods_root), podfile)
           installer.install!
           result = installer.lockfile.to_hash
           result['PODS'].should  == ['SSToolkit (0.1.3)']
@@ -88,8 +87,7 @@ else
             pod 'Reachability', :podspec => url
           end
 
-          resolver = Pod::Resolver.new(podfile, nil, Pod::Sandbox.new(config.project_pods_root))
-          installer = SpecHelper::Installer.new(resolver)
+          installer = SpecHelper::Installer.new(Pod::Sandbox.new(config.project_pods_root), podfile)
           installer.install!
           result = installer.lockfile.to_hash
           result['PODS'].should  == ['Reachability (1.2.3)']

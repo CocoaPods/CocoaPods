@@ -113,10 +113,9 @@ module Pod
         config.verbose
         config.skip_repo_update = true
         sandbox = Sandbox.new(config.project_pods_root)
-        resolver = Resolver.new(podfile, nil, sandbox)
-        installer = Installer.new(resolver)
+        installer = Installer.new(sandbox, podfile)
         installer.install!
-        @pod = installer.pods.find { |pod| pod.top_specification == spec }
+        @pod = installer.local_pods.find { |pod| pod.top_specification == spec }
         config.silent
       end
 
