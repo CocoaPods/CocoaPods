@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
 
-  s.add_runtime_dependency 'xcodeproj',     '~> 0.3.5'
+  s.add_runtime_dependency 'xcodeproj',     '~> 0.4.0.rc1'
 
   s.add_runtime_dependency 'faraday',       '~> 0.8.1'
   s.add_runtime_dependency 'octokit',       '~> 1.7'

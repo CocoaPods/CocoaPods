@@ -1,10 +1,10 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: 280a500ed5ee5a5f6bb4e3c5edcfef0240fa427b
-  branch: refactor
+  revision: cc71c669a05934886c56169bbe209014a7a1af8e
   specs:
-    xcodeproj (0.3.5)
+    xcodeproj (0.4.0.rc1)
       activesupport (~> 3.2.6)
+      colored (~> 1.2)
 
 GIT
   remote: https://github.com/alloy/kicker.git
@@ -18,7 +18,7 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.15.2)
+    cocoapods (0.16.0.rc1)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -27,7 +27,7 @@ PATH
       octokit (~> 1.7)
       open4 (~> 1.3.0)
       rake (~> 0.9.0)
-      xcodeproj (~> 0.3.5)
+      xcodeproj (~> 0.4.0.rc1)
 
 GEM
   remote: http://rubygems.org/
