@@ -1,6 +1,11 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.4...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.2...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.5...master)
+
+- Xcodeproj partial rewrite.
+  [#576](https://github.com/CocoaPods/CocoaPods/pull/576)
+  - Performance improvements in the `Generating supporting files` phase.
+  - Better support for editing existing projects and sorting groups.
 
 ## 0.15.2
 
