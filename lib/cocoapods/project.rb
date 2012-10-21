@@ -1,4 +1,4 @@
-require 'xcodeproj/project'
+require 'xcodeproj'
 
 # Xcodeproj::Project::Object::PBXCopyFilesBuildPhase.instance_eval do
 #   def self.new_pod_dir(project, pod_name, path)
