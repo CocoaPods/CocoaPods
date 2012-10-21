@@ -389,7 +389,9 @@ else
         installer.install!
 
         project = Pod::Project.new(config.project_pods_root + 'Pods.xcodeproj')
-        project.source_files.should == installer.project.source_files
+        disk_source_files = project.files.sort.reject { |f| f.build_files.empty? }
+        installer_source_files = installer.project.files.sort.reject { |f| f.build_files.empty? }
+        disk_source_files.should == installer_source_files
       end
 
       it "creates a project with multiple targets" do
@@ -409,7 +411,7 @@ else
         project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
         project.targets.each do |target|
           phase = target.build_phases.find { |phase| phase.is_a?(Xcodeproj::Project::Object::PBXSourcesBuildPhase) }
-          files = phase.files.map(&:name)
+          files = phase.files.map { |bf| bf.file_ref.name }
           case target.product_name
           when 'Pods'
             files.should.include "ASIHTTPRequest.m"
@@ -466,9 +468,9 @@ else
 
         target = project.targets.first
         target.build_configurations.each do |config|
-          config.base_configuration.path.should == 'Pods/Pods.xcconfig'
+          config.base_configuration_reference.path.should == 'Pods/Pods.xcconfig'
         end
-        target.frameworks_build_phases.first.files.should.include libPods
+        target.frameworks_build_phase.files.should.include libPods.build_files.first
         # should be the last phase
         target.build_phases.last.shell_script.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
       end

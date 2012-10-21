@@ -8,7 +8,11 @@ module Pod
     #
     def self.from_file(path)
       return nil unless path.exist?
-      hash = YAML.load(File.open(path))
+      begin
+        hash = YAML.load(File.open(path))
+      rescue Exception => e
+        raise Informative, "Podfile.lock syntax error:  #{e.inspect}"
+      end
       lockfile = Lockfile.new(hash)
       lockfile.defined_in_file = path
       lockfile

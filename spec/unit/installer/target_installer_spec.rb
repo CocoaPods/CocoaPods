@@ -13,7 +13,7 @@ describe Pod::Installer::TargetInstaller do
     @target_definition = @podfile.target_definitions[:default]
 
     @project = Pod::Project.new
-    @project.main_group.groups.new('name' => 'Targets Support Files')
+    @project.new_group('Targets Support Files')
 
     @installer = Pod::Installer::TargetInstaller.new(@podfile, @project, @target_definition)
 
@@ -24,6 +24,7 @@ describe Pod::Installer::TargetInstaller do
   end
 
   def do_install!
+    @pods.each { |pod| pod.add_file_references_to_project(@project) }
     @installer.install!(@pods, @sandbox)
   end
 
@@ -40,14 +41,15 @@ describe Pod::Installer::TargetInstaller do
   end
 
   it 'adds each pod to the static library target' do
-    @pods[0].expects(:source_file_descriptions).returns([])
+    @pods[0].expects(:add_build_files_to_target)
     do_install!
   end
 
-  it 'tells each pod to link its headers' do
-    @pods[0].expects(:link_headers)
-    do_install!
-  end
+  # TODO: move to project
+  # it 'tells each pod to link its headers' do
+  #   @pods[0].expects(:link_headers)
+  #   do_install!
+  # end
 
   it 'adds the sandbox header search paths to the xcconfig, with quotes' do
     do_install!
@@ -62,7 +64,7 @@ describe Pod::Installer::TargetInstaller do
   it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
     @podfile.stubs(:set_arc_compatibility_flag? => true)
     @specification.stubs(:requires_arc).returns(true)
-    @installer.install!(@pods, @sandbox)
+    do_install!
     @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
   end
 

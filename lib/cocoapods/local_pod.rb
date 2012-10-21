@@ -163,12 +163,15 @@ module Pod
     #
     # @return [Array<Strings>] The paths that can be deleted.
     #
+    # @note Implementation detail: Don't use Dir#glob as there is an
+    #       unexplained issue (#568, #572 and #602).
+    #
     def clean_paths
-      cached_used_paths = used_files
-      files = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
+      cached_used = used_files
+      files = Pathname.glob(root + "**/*", File::FNM_DOTMATCH | File::FNM_CASEFOLD).map(&:to_s)
 
       files.reject! do |candidate|
-        candidate.end_with?('.', '..') || cached_used_paths.any? do |path|
+        candidate.end_with?('.', '..') || cached_used.any? do |path|
           path.include?(candidate) || candidate.include?(path)
         end
       end
@@ -187,6 +190,27 @@ module Pod
 
     # @!group Files
 
+    # @return [Pathname] Returns the relative path from the sandbox.
+    #
+    # @note If the two abosule paths don't share the same root directory an
+    # extra `../` is added to the result of {Pathname#relative_path_from}
+    #
+    #     path = Pathname.new('/Users/dir')
+    #     @sandbox
+    #     #=> Pathname('/tmp/CocoaPods/Lint/Pods')
+    #
+    #     p.relative_path_from(@sandbox
+    #     #=> '../../../../Users/dir'
+    #
+    #     relativize_from_sandbox(path)
+    #     #=> '../../../../../Users/dir'
+    #
+    def relativize_from_sandbox(path)
+      result = path.relative_path_from(@sandbox.root)
+      result = Pathname.new('../') + result unless @sandbox.root.to_s.split('/')[1] == path.to_s.split('/')[1]
+      result
+    end
+
     # @return [Array<Pathname>] The paths of the source files.
     #
     def source_files
@@ -196,13 +220,13 @@ module Pod
     # @return [Array<Pathname>] The *relative* paths of the source files.
     #
     def relative_source_files
-      source_files.map{ |p| p.relative_path_from(@sandbox.root) }
+      source_files.map{ |p| relativize_from_sandbox(p) }
     end
 
     def relative_source_files_by_spec
       result = {}
       source_files_by_spec.each do |spec, paths|
-        result[spec] = paths.map{ |p| p.relative_path_from(@sandbox.root) }
+        result[spec] = paths.map{ |p| relativize_from_sandbox(p) }
       end
       result
     end
@@ -217,7 +241,7 @@ module Pod
     #   {Specification}.
     #
     def source_files_by_spec
-      options = {:glob => '*.{h,m,mm,c,cpp}'}
+      options = {:glob => '*.{h,hpp,hh,m,mm,c,cpp}'}
       paths_by_spec(:source_files, options)
     end
 
@@ -230,7 +254,7 @@ module Pod
     # @return [Array<Pathname>] The *relative* paths of the source files.
     #
     def relative_header_files
-      header_files.map{ |p| p.relative_path_from(@sandbox.root) }
+      header_files.map{ |p| relativize_from_sandbox(p) }
     end
 
     # @return [Hash{Specification => Array<Pathname>}] The paths of the header
@@ -239,7 +263,7 @@ module Pod
     def header_files_by_spec
       result = {}
       source_files_by_spec.each do |spec, paths|
-        headers = paths.select { |f| f.extname == '.h' }
+        headers = paths.select { |f| f.extname == '.h' || f.extname == '.hpp' || f.extname == '.hh' }
         result[spec] = headers unless headers.empty?
       end
       result
@@ -253,7 +277,7 @@ module Pod
     #   header files (i.e. the build ones) are intended to be public.
     #
     def public_header_files_by_spec
-      public_headers = paths_by_spec(:public_header_files, :glob => '*.h')
+      public_headers = paths_by_spec(:public_header_files, :glob => '*.{h,hpp,hh}')
       build_headers  = header_files_by_spec
 
       result = {}
@@ -276,7 +300,7 @@ module Pod
     # @return [Array<Pathname>] The *relative* paths of the resources.
     #
     def relative_resource_files
-      resource_files.map{ |p| p.relative_path_from(@sandbox.root) }
+      resource_files.map{ |p| relativize_from_sandbox(p) }
     end
 
     # @return [Pathname] The absolute path of the prefix header file
@@ -356,14 +380,60 @@ module Pod
         if (public_h = public_headers[spec]) && !public_h.empty?
           result += public_h
         elsif (source_f = source_files[spec]) && !source_f.empty?
-          build_h = source_f.select { |f| f.extname == '.h' }
+          build_h = source_f.select { |f| f.extname == '.h' || f.extname == '.hpp' || f.extname == '.hh' }
           result += build_h unless build_h.empty?
         end
       end
       result
     end
 
-    # @!group Target integration
+    # @!group Xcodeproj integration
+
+    # Adds the file references, to the given `Pods.xcodeproj` project, for the
+    # source files of the pod. The file references are grouped by specification
+    # and stored in {#file_references_by_spec}.
+    #
+    # @note If the pod is locally sourced the file references are stored in the
+    #       `Local Pods` group otherwise they are stored in the `Pods` group.
+    #
+    # @return [void]
+    #
+    def add_file_references_to_project(project)
+      @file_references_by_spec = {}
+      parent_group = local? ? project.local_pods : project.pods
+
+      relative_source_files_by_spec.each do |spec, paths|
+        group = project.add_spec_group(spec.name, parent_group)
+        file_references = []
+        paths.each do |path|
+          file_references << group.new_file(path)
+        end
+        @file_references_by_spec[spec] = file_references
+      end
+    end
+
+    # @return [Hash{Specification => Array<PBXFileReference>}] The file
+    #   references of the pod in the `Pods.xcodeproj` project.
+    #
+    attr_reader :file_references_by_spec
+
+    # Adds a build file for each file reference to a given target taking into
+    # account the compiler flags of the corresponding specification.
+    #
+    # @raise If the {#add_file_references_to_project} was not called before of
+    #        calling this method.
+    #
+    # @return [void]
+    #
+    def add_build_files_to_target(target)
+      unless file_references_by_spec
+        raise Informative, "Local Pod needs to add the file references to the " \
+                           "project before adding the build files to the target."
+      end
+      file_references_by_spec.each do |spec, file_reference|
+        target.add_file_references(file_reference, spec.compiler_flags.strip)
+      end
+    end
 
     # @return [void] Copies the pods headers to the sandbox.
     #
@@ -380,25 +450,9 @@ module Pod
       end
     end
 
-    # @param [Xcodeproj::Project::Object::PBXNativeTarget] target
-    #   The target to integrate.
-    #
-    # @return [void] Adds the pods source files to a given target.
-    #
-    def source_file_descriptions
-      result = []
-      source_files_by_spec.each do | spec, files |
-        compiler_flags = spec.compiler_flags.strip
-        files.each do |file|
-          file = file.relative_path_from(@sandbox.root)
-          desc = Xcodeproj::Project::PBXNativeTarget::SourceFileDescription.new(file, compiler_flags, nil)
-          result << desc
-        end
-      end
-      result
-    end
-
     # @return Whether the pod requires ARC.
+    #
+    # TODO: this should be not used anymore.
     #
     def requires_arc?
       top_specification.requires_arc
@@ -410,7 +464,7 @@ module Pod
     # (the files the need to compiled) of the pod.
     #
     def implementation_files
-      relative_source_files.select { |f| f.extname != '.h' }
+      relative_source_files.reject { |f| f.extname == '.h' ||  f.extname == '.hpp' || f.extname == '.hh' }
     end
 
     # @return [Pathname] The path of the pod relative from the sandbox.
@@ -453,7 +507,7 @@ module Pod
     # included in the linker search paths.
     #
     def headers_excluded_from_search_paths
-      options = { :glob => '*.h' }
+      options = { :glob => '*.{h,hpp,hh}' }
       paths = paths_by_spec(:exclude_header_search_paths, options)
       paths.values.compact.uniq
     end
@@ -506,15 +560,27 @@ module Pod
                            "\t       Options: #{options.inspect}"
       end
 
-      patterns = [ patterns ] if patterns.is_a? String
-      patterns.map do |pattern|
-        pattern = root + pattern
+      return [] if patterns.empty?
+      patterns = [ patterns ] if patterns.is_a?(String)
+      file_lists = patterns.select { |p| p.is_a?(FileList) }
+      glob_patterns = patterns - file_lists
 
+      result = []
+
+      result << file_lists.map do |file_list|
+        file_list.prepend_patterns(root)
+        file_list.glob
+      end
+
+      result << glob_patterns.map do |pattern|
+        pattern = root + pattern
         if pattern.directory? && options[:glob]
           pattern += options[:glob]
         end
         Pathname.glob(pattern, File::FNM_CASEFOLD)
       end.flatten
+
+      result.flatten.compact.uniq
     end
 
     # A {LocalSourcedPod} is a {LocalPod} that interacts with the files of

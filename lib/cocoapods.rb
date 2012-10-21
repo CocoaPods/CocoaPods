@@ -7,12 +7,12 @@ require 'rubygems'
 #
 # E.g. https://github.com/CocoaPods/CocoaPods/issues/398
 unless Gem::Version::Requirement.new('>= 1.4.0').satisfied_by?(Gem::Version.new(Gem::VERSION))
-  STDERR.puts "Your RubyGems version (#{Gem::VERSION}) is too old, please update with: `gem update --system`".red
+  STDERR.puts "\e[1;31m" + "Your RubyGems version (1.8.24) is too old, please update with: `gem update --system`" + "\e[0m"
   exit 1
 end
 
 module Pod
-  VERSION = '0.14.0'
+  VERSION = '0.15.2'
 
   class PlainInformative < StandardError
   end
@@ -57,13 +57,6 @@ module Pod
   end
 end
 
-class Pathname
-  def glob(pattern = '')
-    Dir.glob((self + pattern).to_s).map { |f| Pathname.new(f) }
-  end
-end
-
 if ENV['COCOA_PODS_ENV'] == 'development'
-  require 'pry'
   require 'awesome_print'
 end

@@ -128,10 +128,22 @@ module Pod
 
       # @return [Array<Set>] The sets for all the pods available.
       #
+      # @note Implementation detail: The sources don't cache their values
+      #       because they might change in response to an update. Therefore
+      #       this method to prevent slowness caches the values before
+      #       processing them.
+      #
       def all_sets
-        all_pods.map do |pod|
-          sources = all.select{ |s| s.pods.include?(pod) }.compact
-          Specification::Set.new(pod, sources)
+        pods_by_source = {}
+        all.each do |source|
+          pods_by_source[source] = source.pods
+        end
+        sources = pods_by_source.keys
+        pods = pods_by_source.values.flatten.uniq
+
+        pods.map do |pod|
+          pod_sources = sources.select{ |s| pods_by_source[s].include?(pod) }.compact
+          Specification::Set.new(pod, pod_sources)
         end
       end
 

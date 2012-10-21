@@ -35,7 +35,7 @@ module Pod
         if @path
           @path
         else
-          xcodeprojs = config.project_root.glob('*.xcodeproj')
+          xcodeprojs = Pathname.glob(config.project_root + '*.xcodeproj')
           if xcodeprojs.size == 1
             @path = xcodeprojs.first
           end
@@ -177,7 +177,11 @@ module Pod
         string = File.open(path, 'r:utf-8')  { |f| f.read }
         # TODO: work around for Rubinius incomplete encoding in 1.9 mode
         string.encode!('UTF-8') if string.respond_to?(:encoding) && string.encoding.name != "UTF-8"
-        eval(string, nil, path.to_s)
+        begin
+          eval(string, nil, path.to_s)
+        rescue Exception => e
+          raise Informative, "Podfile syntax error:  #{e.inspect}"
+        end
       end
       podfile.defined_in_file = path
       podfile.validate!

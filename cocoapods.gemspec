@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version  = Pod::VERSION
   s.date     = Date.today
   s.license  = "MIT"
-  s.email    = "eloy.de.enige@gmail.com"
+  s.email    = ["eloy.de.enige@gmail.com", "fabiopelosin@gmail.com"]
   s.homepage = "https://github.com/CocoaPods/CocoaPods"
-  s.authors  = ["Eloy Duran"]
+  s.authors  = ["Eloy Duran", "Fabio Pelosin"]
 
   s.summary     = "An Objective-C library package manager."
   s.description = "CocoaPods manages library dependencies for your Xcode project.\n\n"     \
@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
 
-  s.add_runtime_dependency 'xcodeproj',     '>= 0.3.3'
+  s.add_runtime_dependency 'xcodeproj',     '~> 0.3.5'
 
   s.add_runtime_dependency 'faraday',       '~> 0.8.1'
   s.add_runtime_dependency 'octokit',       '~> 1.7'

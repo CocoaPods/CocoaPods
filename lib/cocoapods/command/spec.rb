@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'active_support/core_ext/string/inflections'
+
 module Pod
   class Command
     class Spec < Command
@@ -20,6 +22,7 @@ module Pod
 
       def self.options
         [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
+          ["--local",       "Lint a podspec against the local files contained in its directory"],
           ["--only-errors", "Lint validates even if warnings are present"],
           ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
       end
@@ -32,9 +35,10 @@ module Pod
           super if @name_or_url.nil?
           super unless argv.empty?
         elsif @action == 'lint'
-          @quick          = argv.option('--quick')
-          @only_errors    = argv.option('--only-errors')
-          @no_clean       = argv.option('--no-clean')
+          @quick       =  argv.option('--quick')
+          @local       =  argv.option('--local')
+          @only_errors =  argv.option('--only-errors')
+          @no_clean    =  argv.option('--no-clean')
           @podspecs_paths = argv
         else
           super
@@ -72,8 +76,9 @@ module Pod
         UI.puts
         invalid_count = 0
         podspecs_to_lint.each do |podspec|
-          linter          = Linter.new(podspec)
-          linter.quick    = @quick
+          linter       = Linter.new(podspec)
+          linter.quick = @quick
+          linter.local = @local
           linter.no_clean = @no_clean
 
           # Show immediatly which pod is being processed.
@@ -101,8 +106,8 @@ module Pod
           UI.puts unless config.silent?
         end
 
-        UI.puts "Analyzed #{podspecs_to_lint.count} podspecs files.\n\n" unless config.silent?
         count = podspecs_to_lint.count
+        UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n" unless config.silent?
         if invalid_count == 0
           lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
           UI.puts lint_passed_message.green << "\n\n" unless config.silent?
@@ -133,7 +138,7 @@ module Pod
               end
               files << output_path
             else if (pathname = Pathname.new(path)).directory?
-              files += pathname.glob('**/*.podspec')
+              files += Pathname.glob(pathname + '**/*.podspec')
               raise Informative, "No specs found in the current directory." if files.empty?
             else
               files << (pathname = Pathname.new(path))
@@ -171,7 +176,7 @@ module Pod
         data = {}
 
         data[:name]          = repo['name']
-        data[:summary]       = repo['description'].gsub(/["]/, '\"')
+        data[:summary]       = (repo['description'] || '').gsub(/["]/, '\"')
         data[:homepage]      = (repo['homepage'] && !repo['homepage'].empty? ) ? repo['homepage'] : repo['html_url']
         data[:author_name]   = user['name']  || user['login']
         data[:author_email]  = user['email'] || 'email@address.com'

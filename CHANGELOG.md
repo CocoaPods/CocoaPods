@@ -1,18 +1,71 @@
 ## Master
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.2...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.5...master)
+
+- Xcodeproj partial rewrite.
+  [#576](https://github.com/CocoaPods/CocoaPods/pull/576)
+  - Performance improvements in the `Generating supporting files` phase.
+  - Better support for editing existing projects and sorting groups.
+
+## 0.15.2
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...0.15.2)
 
 ###### Enhancements
+
+- Added support for `.hh` headers.
+  [#576](https://github.com/CocoaPods/CocoaPods/pull/576)
+
+###### Bug fixes
+
+- Restored support for running CocoaPods without a terminal.
+  [#575](https://github.com/CocoaPods/CocoaPods/issues/575)
+  [#577](https://github.com/CocoaPods/CocoaPods/issues/577)
+- The git cache now always uses a barebones repo preventing a number of related issues.
+  [#581](https://github.com/CocoaPods/CocoaPods/issues/581)
+  [#569](https://github.com/CocoaPods/CocoaPods/issues/569)
+- Improved fix for the issue that lead to empty directories for Pods.
+  [#572](https://github.com/CocoaPods/CocoaPods/issues/572)
+  [#602](https://github.com/CocoaPods/CocoaPods/issues/602)
+- Xcodeproj robustness against invalid values, such as malformed UTF8.
+  [#592](https://github.com/CocoaPods/CocoaPods/issues/592)
+
+## 0.15.1
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.0...0.15.1)
+
+###### Enhancements
+
+- Show error if syntax error in Podfile or Podfile.lock.
+
+###### Bug fixes
+
+- Fixed an issue that lead to empty directories for Pods.
+  [#519](https://github.com/CocoaPods/CocoaPods/issues/519)
+  [#568](https://github.com/CocoaPods/CocoaPods/issues/568)
+- Fixed a crash related to the RubyGems version informative.
+  [#570](https://github.com/CocoaPods/CocoaPods/issues/570)
+- Fixed a crash for `pod outdated`.
+  [#567](https://github.com/CocoaPods/CocoaPods/issues/567)
+- Fixed an issue that lead to excessively slow sets computation.
+
+## 0.15.0
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...0.15.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.3...0.3.4)
+
+###### Enhancements
+
 - Pod `install` will update the specs repo only if needed.
   [#533](https://github.com/CocoaPods/CocoaPods/issues/533)
-- CocoaPods now searches for the highest version of a Pod on
-  all the repos.
+- CocoaPods now searches for the highest version of a Pod on all the repos.
   [#85](https://github.com/CocoaPods/CocoaPods/issues/85)
 - Added a pre install hook to the Podfile and to root specifications.
   [#486](https://github.com/CocoaPods/CocoaPods/issues/486)
 - Support for `header_mappings_dir` attribute in subspecs.
+- Added support for linting a Podspec using the files from its folder `pod spec
+  lint --local`
 - Refactored UI.
-- Added support for Podfiles named `Podfile.cocoapods` which allows to
+- Added support for Podfiles named `CocoaPods.podfile` which allows to
   associate an editor application in Mac OS X.
   [#528](https://github.com/CocoaPods/CocoaPods/issues/528)
 - Added config option to disable the new version available message.
@@ -24,6 +77,7 @@
 
 
 ###### Bug fixes
+
 - Subspecs namespacing has been restored.
   [#541](https://github.com/CocoaPods/CocoaPods/issues/541)
 - Improvements to the git cache that should be more robust.
@@ -33,6 +87,8 @@
   [#514](https://github.com/CocoaPods/CocoaPods/issues/514)
 - Forcing UTF-8 encoding on licenses generation in Ruby 1.9.
   [#530](https://github.com/CocoaPods/CocoaPods/issues/530)
+- Added support for `.hpp` headers.
+  [#244](https://github.com/CocoaPods/CocoaPods/issues/244)
 
 ## 0.14.0
 
@@ -77,32 +133,26 @@
     [#191](https://github.com/CocoaPods/CocoaPods/issues/191)
   - the external source changes.
   - the head status changes (from disabled to enabled or vice-versa).
-
 - Introduce `pod update` command that installs the dependencies of the Podfile
   **ignoring** the lockfile `Podfile.lock`.
   [#131](https://github.com/CocoaPods/CocoaPods/issues/131)
-
 - Introduce `pod outdated` command that shows the pods with known updates.
-
 - Add `:local` option for dependencies which will use the source files directly
   from a local directory. This is usually used for libraries that are being
   developed in parallel to the end product (application/library).
   [#458](https://github.com/CocoaPods/CocoaPods/issues/458),
   [#415](https://github.com/CocoaPods/CocoaPods/issues/415),
   [#156](https://github.com/CocoaPods/CocoaPods/issues/156).
-
 - Folders of Pods which are no longer required are removed during installation.
   [#298](https://github.com/CocoaPods/CocoaPods/issues/298)
-
-- Add meaningful error messages for when:
-  - a podspec can’t be found in the root of an external source.
+- Add meaningful error messages
+  - ia podspec can’t be found in the root of an external source.
     [#385](https://github.com/CocoaPods/CocoaPods/issues/385),
     [#338](https://github.com/CocoaPods/CocoaPods/issues/338),
     [#337](https://github.com/CocoaPods/CocoaPods/issues/337).
   - a subspec name is misspelled.
     [#327](https://github.com/CocoaPods/CocoaPods/issues/327)
   - an unrecognized command and/or argument is provided.
-
 - The subversion downloader now does an export instead of a checkout, which
   makes it play nicer with SCMs that store metadata in each directory.
   [#245](https://github.com/CocoaPods/CocoaPods/issues/245)

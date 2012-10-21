@@ -438,11 +438,12 @@ module Pod
     # this to, for instance, to run any build script:
     #
     #   Pod::Spec.new do |s|
-    #     def pre_install(pod, target_definition)
+    #     def s.pre_install(pod, target_definition)
     #       Dir.chdir(pod.root){ `sh make.sh` }
     #     end
     #   end
     def pre_install(pod, target_definition)
+      FALSE
     end
 
     # This is a convenience method which gets called after all pods have been
@@ -460,6 +461,7 @@ module Pod
     #     end
     #   end
     def post_install(target_installer)
+      FALSE
     end
 
     def podfile?

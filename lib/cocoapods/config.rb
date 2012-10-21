@@ -41,7 +41,7 @@ module Pod
 
     def project_podfile
       unless @project_podfile
-        @project_podfile = project_root + 'Podfile.cocoapods'
+        @project_podfile = project_root + 'CocoaPods.podfile'
         unless @project_podfile.exist?
           @project_podfile = project_root + 'Podfile'
         end
