@@ -2,6 +2,9 @@ source "http://rubygems.org"
 
 gemspec
 
+# TODO
+gem "cli_aide", :git => "git://github.com/alloy/CLAide.git"
+
 group :development do
   gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git"
   gem "mocha", "~> 0.11.4"

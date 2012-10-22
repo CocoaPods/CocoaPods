@@ -11,10 +11,11 @@ unless Gem::Version::Requirement.new('>= 1.4.0').satisfied_by?(Gem::Version.new(
   exit 1
 end
 
-module Pod
-  VERSION = '0.16.0.rc2'
+require 'cocoapods/version'
+require 'cli_aide'
 
-  class PlainInformative < StandardError
+module Pod
+  class PlainInformative < CLIAide::Command::Informative
   end
 
   class Informative < PlainInformative
@@ -41,7 +42,7 @@ module Pod
   autoload :Spec,                   'cocoapods/specification'
   autoload :Specification,          'cocoapods/specification'
   autoload :UI,                     'cocoapods/user_interface'
-  autoload :Version,                'cocoapods/version'
+  autoload :Version,                'cocoapods/version_class'
 
   autoload :Pathname,               'pathname'
   autoload :FileList,               'cocoapods/file_list'

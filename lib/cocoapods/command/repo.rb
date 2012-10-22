@@ -3,131 +3,156 @@ require 'fileutils'
 module Pod
   class Command
     class Repo < Command
-      def self.banner
-%{Managing spec-repos:
+      self.abstract_command = true
 
-    $ pod repo add NAME URL [BRANCH]
+      # TODO should not show a usage banner!
+      self.summary = 'Managed spec repos.'
 
-      Clones `URL' in the local spec-repos directory at `~/.cocoapods'. The
-      remote can later be referred to by `NAME'.
+      class Add < Repo
+        self.summary = 'Add a spec repo.'
 
-    $ pod repo update [NAME]
+        self.description = <<-DESC
+          Clones `URL' in the local spec-repos directory at `~/.cocoapods'. The
+          remote can later be referred to by `NAME'.
+        DESC
 
-      Updates the local clone of the spec-repo `NAME'. If `NAME' is omitted
-      this will update all spec-repos in `~/.cocoapods'.
+        self.arguments = 'NAME URL [BRANCH]'
 
-    $ pod repo lint [NAME | DIRECTORY]
+        def initialize(argv)
+          @name, @url, @branch = argv.shift_argument, argv.shift_argument, argv.shift_argument
+          super
+        end
 
-      Lints the spec-repo `NAME'. If a directory is provided it is assumed
-      to be the root of a repo. Finally, if NAME is not provided this will
-      lint all the spec-repos known to CocoaPods.}
+        def validate_argv!
+          super
+          unless @name && @url
+            help! "Adding a repo needs a `NAME' and a `URL."
+          end
+        end
+
+        def run
+          UI.section("Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}") do
+            config.repos_dir.mkpath
+            Dir.chdir(config.repos_dir) { git!("clone '#{@url}' #{@name}") }
+            Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
+            check_versions(dir)
+          end
+        end
       end
 
-      def self.options
-        [["--only-errors", "Lint presents only the errors"]].concat(super)
+      class Update < Repo
+        self.summary = 'Update a spec repo.'
+
+        self.description = <<-DESC
+          Updates the local clone of the spec-repo `NAME'. If `NAME' is omitted
+          this will update all spec-repos in `~/.cocoapods'.
+        DESC
+
+        self.arguments = '[NAME]'
+
+        def initialize(argv)
+          @name = argv.shift_argument
+          super
+        end
+
+        def run
+          dirs = @name ? [dir] : config.repos_dir.children.select {|c| c.directory?}
+          dirs.each do |dir|
+            UI.section "Updating spec repo `#{dir.basename}'" do
+              Dir.chdir(dir) do
+                `git rev-parse  >/dev/null 2>&1`
+                if $?.exitstatus.zero?
+                  git!("pull")
+                else
+                  UI.message "Not a git repository"
+                end
+              end
+            end
+            check_versions(dir)
+          end
+        end
+      end
+
+      class Lint < Repo
+        self.summary = 'Validates all specs in a repo.'
+
+        self.description = <<-DESC
+          Lints the spec-repo `NAME'. If a directory is provided it is assumed
+          to be the root of a repo. Finally, if `NAME' is not provided this
+          will lint all the spec-repos known to CocoaPods.
+        DESC
+
+        self.arguments = '[ NAME | DIRECTORY ]'
+
+        def self.options
+          [["--only-errors", "Lint presents only the errors"]].concat(super)
+        end
+
+        def initialize(argv)
+          @name = argv.shift_argument
+          @only_errors = argv.flag?('only-errors')
+          super
+        end
+
+        def run
+          if @name
+            dirs = File.exists?(@name) ? [ Pathname.new(@name) ] : [ dir ]
+          else
+            dirs = config.repos_dir.children.select {|c| c.directory?}
+          end
+          dirs.each do |dir|
+            check_versions(dir)
+            UI.puts "\nLinting spec repo `#{dir.realpath.basename}'\n".yellow
+            podspecs = Pathname.glob( dir + '**/*.podspec')
+            invalid_count = 0
+
+            podspecs.each do |podspec|
+              linter = Linter.new(podspec)
+              linter.quick     = true
+              linter.repo_path = dir
+
+              linter.lint
+
+              case linter.result_type
+              when :error
+                invalid_count += 1
+                color = :red
+                should_display = true
+              when :warning
+                color = :yellow
+                should_display = !@only_errors
+              end
+
+              if should_display
+                UI.puts " -> ".send(color) << linter.spec_name
+                print_messages('ERROR', linter.errors)
+                unless @only_errors
+                  print_messages('WARN',  linter.warnings)
+                  print_messages('NOTE',  linter.notes)
+                end
+                UI.puts unless config.silent?
+              end
+            end
+            UI.puts "Analyzed #{podspecs.count} podspecs files.\n\n" unless config.silent?
+
+            if invalid_count == 0
+              UI.puts "All the specs passed validation.".green << "\n\n" unless config.silent?
+            else
+              raise Informative, "#{invalid_count} podspecs failed validation."
+            end
+          end
+        end
       end
 
       extend Executable
       executable :git
 
-      def initialize(argv)
-        case @action = argv.arguments[0]
-        when 'add'
-          unless (@name = argv.arguments[1]) && (@url = argv.arguments[2])
-            raise Informative, "#{@action == 'add' ? 'Adding' : 'Updating the remote of'} a repo needs a `name' and a `url'."
-          end
-          @branch = argv.arguments[3]
-        when 'update'
-          @name = argv.arguments[1]
-        when 'lint'
-          @name = argv.arguments[1]
-          @only_errors = argv.option('--only-errors')
-        else
-          super
-        end
-      end
+      # TODO some of the following methods can probably move to one of the subclasses.
+
+      protected
 
       def dir
         config.repos_dir + @name
-      end
-
-      def run
-        send @action.gsub('-', '_')
-      end
-
-      def add
-        UI.section("Cloning spec repo `#{@name}' from `#{@url}'#{" (branch `#{@branch}')" if @branch}") do
-          config.repos_dir.mkpath
-          Dir.chdir(config.repos_dir) { git!("clone '#{@url}' #{@name}") }
-          Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
-          check_versions(dir)
-        end
-      end
-
-      def update
-        dirs = @name ? [dir] : config.repos_dir.children.select {|c| c.directory?}
-        dirs.each do |dir|
-          UI.section "Updating spec repo `#{dir.basename}'" do
-            Dir.chdir(dir) do
-              `git rev-parse  >/dev/null 2>&1`
-              if $?.exitstatus.zero?
-                git!("pull")
-              else
-                UI.message "Not a git repository"
-              end
-            end
-          end
-          check_versions(dir)
-        end
-      end
-
-      def lint
-        if @name
-          dirs = File.exists?(@name) ? [ Pathname.new(@name) ] : [ dir ]
-        else
-          dirs = config.repos_dir.children.select {|c| c.directory?}
-        end
-        dirs.each do |dir|
-          check_versions(dir)
-          UI.puts "\nLinting spec repo `#{dir.realpath.basename}'\n".yellow
-          podspecs = Pathname.glob( dir + '**/*.podspec')
-          invalid_count = 0
-
-          podspecs.each do |podspec|
-            linter = Linter.new(podspec)
-            linter.quick     = true
-            linter.repo_path = dir
-
-            linter.lint
-
-            case linter.result_type
-            when :error
-              invalid_count += 1
-              color = :red
-              should_display = true
-            when :warning
-              color = :yellow
-              should_display = !@only_errors
-            end
-
-            if should_display
-              UI.puts " -> ".send(color) << linter.spec_name
-              print_messages('ERROR', linter.errors)
-              unless @only_errors
-                print_messages('WARN',  linter.warnings)
-                print_messages('NOTE',  linter.notes)
-              end
-              UI.puts unless config.silent?
-            end
-          end
-          UI.puts "Analyzed #{podspecs.count} podspecs files.\n\n" unless config.silent?
-
-          if invalid_count == 0
-            UI.puts "All the specs passed validation.".green << "\n\n" unless config.silent?
-          else
-            raise Informative, "#{invalid_count} podspecs failed validation."
-          end
-        end
       end
 
       def print_messages(type, messages)

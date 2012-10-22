@@ -7,6 +7,12 @@ GIT
       colored (~> 1.2)
 
 GIT
+  remote: git://github.com/alloy/CLAide.git
+  revision: 914c38cabeae22c946e96952b32708edf5e5030a
+  specs:
+    cli_aide (0.0.1)
+
+GIT
   remote: https://github.com/alloy/kicker.git
   revision: 6430787ebf8b9305acc2d2f89ae5cf01d2cd5488
   branch: 3.0.0
@@ -87,6 +93,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   bacon
+  cli_aide!
   cocoapods!
   github-markup
   kicker!

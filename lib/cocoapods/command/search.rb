@@ -1,15 +1,15 @@
 module Pod
   class Command
     class Search < Command
-      def self.banner
-%{Search pods:
+      self.summary = 'Search available pods.'
 
-    $ pod search [QUERY]
+      self.description = <<-DESC
+        Searches for pods, ignoring case, whose name matches `QUERY'. If the
+        `--full' option is specified, this will also search in the summary and
+        description of the pods.
+      DESC
 
-      Searches for pods, ignoring case, whose name matches `QUERY'. If the
-      `--full' option is specified, this will also search in the summary and
-      description of the pods.}
-      end
+      self.arguments = '[QUERY]'
 
       def self.options
         [[
@@ -19,10 +19,10 @@ module Pod
       end
 
       def initialize(argv)
-        @full_text_search = argv.option('--full')
-        @stats = argv.option('--stats')
+        @full_text_search = argv.flag?('full')
+        @stats = argv.flag?('stats')
         @query = argv.shift_argument
-        super unless argv.empty? && @query
+        super
       end
 
       def run

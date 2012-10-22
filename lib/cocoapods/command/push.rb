@@ -4,16 +4,16 @@ require 'active_support/core_ext/string/inflections'
 module Pod
   class Command
     class Push < Command
-      def self.banner
-%{Pushing new specifications to a spec-repo:
+      self.summary = 'Push new specifications to a spec-repo.'
 
-    $ pod push REPO [NAME.podspec]
+      self.description = <<-DESC
+        Validates NAME.podspec or `*.podspec' in the current working dir, creates
+        a directory and version folder for the pod in the local copy of 
+        REPO (~/.cocoapods/[REPO]), copies the podspec file into the version directory,
+        and finally it pushes REPO to its remote.
+      DESC
 
-      Validates NAME.podspec or `*.podspec' in the current working dir, creates
-      a directory and version folder for the pod in the local copy of 
-      REPO (~/.cocoapods/[REPO]), copies the podspec file into the version directory,
-      and finally it pushes REPO to its remote.}
-      end
+      self.arguments = 'REPO [NAME.podspec]'
 
       def self.options
         [ ["--allow-warnings", "Allows to push if warnings are not evitable"],
@@ -24,11 +24,16 @@ module Pod
       executable :git
 
       def initialize(argv)
-        @allow_warnings = argv.option('--allow-warnings')
-        @local_only = argv.option('--local-only')
+        @allow_warnings = argv.flag?('allow-warnings')
+        @local_only = argv.flag?('local-only')
         @repo = argv.shift_argument
         @podspec = argv.shift_argument
-        super unless argv.empty? && @repo
+        super
+      end
+
+      def validate_argv!
+        super
+        help! "A spec-repo name is required." unless @repo
       end
 
       def run

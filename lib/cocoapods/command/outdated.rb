@@ -1,22 +1,20 @@
 module Pod
   class Command
     class Outdated < Command
-      def self.banner
-%{Show outdated pods:
+      self.summary = 'Show outdated project dependencies.'
 
-    $ pod outdated
-
-      Shows the outdated pods in the current Podfile.lock, but only those from
-      spec repos, not those from local/external sources or `:head' versions.}
-      end
+      self.description = <<-DESC
+        Shows the outdated pods in the current Podfile.lock, but only those from
+        spec repos, not those from local/external sources or `:head' versions.
+      DESC
 
       def self.options
         [["--no-update", "Skip running `pod repo update` before install"]].concat(super)
       end
 
       def initialize(argv)
-        config.skip_repo_update = argv.option('--no-update')
-        super unless argv.empty?
+        config.skip_repo_update = argv.flag?('update', true)
+        super
       end
 
       def run
