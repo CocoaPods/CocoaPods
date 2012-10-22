@@ -25,6 +25,11 @@ module Pod
         super
       end
 
+      def validate_argv!
+        super
+        help! "A search query is required." unless @query
+      end
+
       def run
         sets = Source.search_by_name(@query.strip, @full_text_search)
         sets.each { |set| UI.pod(set, (@stats ? :stats : :normal)) }
