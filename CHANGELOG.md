@@ -1,15 +1,24 @@
 ## Master
-
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...master)
 
-## 0.16.0.rc2
+###### Bug fixes
 
+- Added support for PBXAggregateTarget and PBXLegacyTarget.
+  [#615](https://github.com/CocoaPods/CocoaPods/issues/615)
+- Added support for PBXReferenceProxy.
+  [#612](https://github.com/CocoaPods/CocoaPods/issues/612)
+
+## 0.16.0.rc2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc1...0.16.0.rc2)
+
+###### Bug fixes
+
 - Fix for uninitialized constant Xcodeproj::Constants error.
 
 ## 0.16.0.rc1
-
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.2...0.16.0.rc1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.5...0.4.0.rc1)
+
+###### Enhancements
 
 - Xcodeproj partial rewrite.
   [#565](https://github.com/CocoaPods/CocoaPods/issues/565)
