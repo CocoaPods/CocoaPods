@@ -1,23 +1,23 @@
 module Pod
   class LocalPod
 
-    # The {DirList} class is designed to perform multiple glob matches against
+    # The {PathList} class is designed to perform multiple glob matches against
     #   a given directory. Basically, it generates a list of all the children
     #   paths and matches the globs patterns against them, resulting in just
     #   one access to the file system.
     #
-    # @note A {DirList} once it has generated the list of the paths this is
+    # @note A {PathList} once it has generated the list of the paths this is
     # updated only if explicitly requested by calling
-    # {DirList#read_file_system}
+    # {PathList#read_file_system}
     #
-    class DirList
+    class PathList
 
       # @return [Pathname] The root of the list whose files and directories
       #   are used to perform the matching operations.
       #
       attr_accessor :root
 
-      # @param [Pathname] root The root of the DirList.
+      # @param [Pathname] root The root of the PathList.
       #
       def initialize(root)
         @root = root
@@ -150,6 +150,6 @@ module Pod
           patterns
         end
       end
-    end # DirList
+    end # PathList
   end # LocalPod
 end # Pod

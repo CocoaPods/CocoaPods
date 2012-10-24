@@ -1,3 +1,16 @@
+## Branch 0.17
+
+###### TODO
+
+- Add `s.exclude_source_files` and related attributes to the specification class.
+
+###### Enhancements
+
+- Added PathList class.
+
+- Added Podfile to the Pods project.
+  [#476](https://github.com/CocoaPods/CocoaPods/issues/476)
+
 ## Master
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...master)
 

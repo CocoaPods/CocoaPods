@@ -21,7 +21,7 @@ module Pod
   #   returns absolute paths.
   #
   class LocalPod
-    autoload :DirList, 'cocoapods/local_pod/dir_list'
+    autoload :PathList, 'cocoapods/local_pod/path_list'
 
     # @return [Specification] The specification that describes the pod.
     #
@@ -95,8 +95,8 @@ module Pod
       @sandbox.root + top_specification.name
     end
 
-    def dir_list
-      @dir_list ||= DirList.new(root)
+    def path_list
+      @path_list ||= PathList.new(root)
     end
 
     # @return [String] A string representation of the pod which indicates if
@@ -161,7 +161,7 @@ module Pod
     def clean!
       clean_paths.each { |path| FileUtils.rm_rf(path) }
       @cleaned = true
-      dir_list.read_file_system
+      path_list.read_file_system
     end
 
     # Finds the absolute paths, including hidden ones, of the files
@@ -577,7 +577,7 @@ module Pod
 
       result = []
 
-      result << dir_list.glob(glob_patterns, dir_pattern, exclude_patterns)
+      result << path_list.glob(glob_patterns, dir_pattern, exclude_patterns)
 
       result << file_lists.map do |file_list|
         file_list.prepend_patterns(root)

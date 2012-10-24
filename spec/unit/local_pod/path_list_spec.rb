@@ -1,13 +1,13 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
-describe Pod::LocalPod::DirList do
+describe Pod::LocalPod::PathList do
 
   before do
-    @dir_list = Pod::LocalPod::DirList.new(fixture('banana-lib'))
+    @path_list = Pod::LocalPod::PathList.new(fixture('banana-lib'))
   end
 
   it "creates the list of all the files" do
-    files = @dir_list.files
+    files = @path_list.files
     files.reject! do |f|
       f.include?('libPusher') || f.include?('.git') || f.include?('DS_Store')
     end
@@ -20,7 +20,7 @@ describe Pod::LocalPod::DirList do
   end
 
   it "creates theh list of the directories" do
-    dirs = @dir_list.dirs
+    dirs = @path_list.dirs
     dirs.reject! do |f|
       f.include?('libPusher') || f.include?('.git')
     end
@@ -28,55 +28,55 @@ describe Pod::LocalPod::DirList do
   end
 
   it "detects a directory" do
-    @dir_list.directory?('classes').should == true
+    @path_list.directory?('classes').should == true
   end
 
   it "doesn't reports as a directory a file" do
-    @dir_list.directory?('Classes/Banana.m').should == false
+    @path_list.directory?('Classes/Banana.m').should == false
   end
 
   it "can glob the root for a given pattern" do
-    paths = @dir_list.relative_glob('Classes/*.{h,m}').map(&:to_s)
+    paths = @path_list.relative_glob('Classes/*.{h,m}').map(&:to_s)
     paths.should == %w| Classes/Banana.h Classes/Banana.m |
   end
 
   it "supports the `**` glob pattern" do
-    paths = @dir_list.relative_glob('Classes/**/*.{h,m}').map(&:to_s)
+    paths = @path_list.relative_glob('Classes/**/*.{h,m}').map(&:to_s)
     paths.should == %w| Classes/Banana.h Classes/Banana.m |
   end
 
   it "supports an optional pattern for globbing directories" do
-    paths = @dir_list.relative_glob('Classes', '*.{h,m}').map(&:to_s)
+    paths = @path_list.relative_glob('Classes', '*.{h,m}').map(&:to_s)
     paths.should == %w| Classes/Banana.h Classes/Banana.m |
   end
 
   it "can return the absolute paths from glob" do
-    paths = @dir_list.glob('Classes/*.{h,m}')
+    paths = @path_list.glob('Classes/*.{h,m}')
     paths.all? { |p| p.absolute? }.should == true
   end
 
   it "can return the relative paths from glob" do
-    paths = @dir_list.relative_glob('Classes/*.{h,m}')
+    paths = @path_list.relative_glob('Classes/*.{h,m}')
     paths.any? { |p| p.absolute? }.should == false
   end
 
   it "expands a pattern into all the combinations of Dir#glob literals" do
-    patterns = @dir_list.dir_glob_equivalent_patterns('{file1,file2}.{h,m}')
+    patterns = @path_list.dir_glob_equivalent_patterns('{file1,file2}.{h,m}')
     patterns.sort.should == %w| file1.h file1.m file2.h file2.m |
   end
 
   it "returns the original patter if there are no Dir#glob expansions" do
-    patterns = @dir_list.dir_glob_equivalent_patterns('file*.*')
+    patterns = @path_list.dir_glob_equivalent_patterns('file*.*')
     patterns.sort.should == %w| file*.* |
   end
 
   it "expands `**`" do
-    patterns = @dir_list.dir_glob_equivalent_patterns('Classes/**/file.m')
+    patterns = @path_list.dir_glob_equivalent_patterns('Classes/**/file.m')
     patterns.sort.should == %w| Classes/**/file.m Classes/file.m |
   end
 
   it "supports a combination of `**` and literals" do
-    patterns = @dir_list.dir_glob_equivalent_patterns('Classes/**/file.{h,m}')
+    patterns = @path_list.dir_glob_equivalent_patterns('Classes/**/file.{h,m}')
     patterns.sort.should == %w| Classes/**/file.h Classes/**/file.m Classes/file.h Classes/file.m |
   end
 end
