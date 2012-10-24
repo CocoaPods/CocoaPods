@@ -11,11 +11,15 @@ require 'xcodeproj'
 
 module Pod
   class Project < Xcodeproj::Project
+    include Config::Mixin
 
     attr_reader :support_files_group
 
     def initialize(*)
       super
+      podfile_path = config.project_podfile.relative_path_from(config.project_pods_root).to_s
+      podfile_ref  = new_file(podfile_path)
+      podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
       new_group('Pods')
       @support_files_group = new_group('Targets Support Files')
       @user_build_configurations = []

@@ -5,6 +5,14 @@ describe 'Pod::Project' do
     @project = Pod::Project.new
   end
 
+  it "adds the Podfile configured as a Ruby file" do
+    f = @project['Podfile']
+    f.name.should == 'Podfile'
+    f.source_tree.should == 'SOURCE_ROOT'
+    f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
+    f.path.should == '../Podfile'
+  end
+
   it "adds a group to the `Pods' group" do
     group = @project.add_spec_group('JSONKit', @project.pods)
     @project.pods.children.should.include?(group)

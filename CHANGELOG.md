@@ -175,6 +175,7 @@
 - The subversion downloader now does an export instead of a checkout, which
   makes it play nicer with SCMs that store metadata in each directory.
   [#245](https://github.com/CocoaPods/CocoaPods/issues/245)
+- Now the Podfile is added to the Pods project for convenient editing.
 
 ###### Bug fixes
 
