@@ -1,7 +1,8 @@
 module Pod
   class Command
     class List < Command
-      self.summary = 'Lists all available pods.'
+      self.summary = 'List pods'
+      self.description = 'Lists all available pods.'
 
       def self.options
         [[
@@ -36,7 +37,7 @@ module Pod
       end
 
       class New < List
-        self.summary = 'Lists the pods introduced in the master repository since the last check.'
+        self.summary = 'Lists pods introduced in the master spec-repo since the last check'
 
         def run
           update_if_necessary!

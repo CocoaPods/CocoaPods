@@ -1,16 +1,16 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: cc71c669a05934886c56169bbe209014a7a1af8e
+  revision: eaab002f308e2641232630b1b5d4ab3c2f10a10a
   specs:
-    xcodeproj (0.4.0.rc1)
+    xcodeproj (0.4.0.rc3)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
 
 GIT
   remote: git://github.com/alloy/CLAide.git
-  revision: 914c38cabeae22c946e96952b32708edf5e5030a
+  revision: fdcc73837ff0c67b440fa9a20dc6366c78f06f09
   specs:
-    cli_aide (0.0.1)
+    claide (0.0.1)
 
 GIT
   remote: https://github.com/alloy/kicker.git
@@ -93,7 +93,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   bacon
-  cli_aide!
+  claide!
   cocoapods!
   github-markup
   kicker!

@@ -1,9 +1,17 @@
 require 'colored'
+require 'claide'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/string/strip.rb'
 
+# TODO why does this not automatically occur even though colored is required first?
+CLAide::Command.colorize_output = true
+
 module Pod
-  class Command < CLIAide::Command
+  class PlainInformative
+    include CLAide::Command::InformativeError
+  end
+
+  class Command < CLAide::Command
     autoload :ErrorReport, 'cocoapods/command/error_report'
     autoload :Linter,      'cocoapods/command/linter'
 
@@ -12,76 +20,35 @@ module Pod
 
     def self.options
       [
-        ['--silent',   'Print nothing'],
-        ['--no-color', 'Print output without color'],
-        ['--version',  'Prints the version of CocoaPods'],
+        ['--silent',   'Show nothing'],
+        ['--version',  'Show the version of CocoaPods'],
       ].concat(super)
     end
 
-    #def self.run(argv)
-      #super
-      #p Config.instance.verbose?
-    #end
+    def self.parse(argv)
+      command = super
+      unless command.is_a?(Setup) || ENV['SKIP_SETUP']
+        Setup.new(CLAide::ARGV.new([])).run_if_needed
+      end
+      command
+    end
 
-    #def self.run(*argv)
-      #sub_command = parse(*argv)
-      #unless sub_command.is_a?(Setup) || ENV['SKIP_SETUP']
-        #Setup.new(ARGV.new).run_if_needed
-      #end
-      #sub_command.run
-      #UI.puts
-
-    #rescue Interrupt
-      #puts "[!] Cancelled".red
-      #Config.instance.verbose? ? raise : exit(1)
-
-    #rescue Exception => e
-      #if e.is_a?(PlainInformative) || ENV['COCOA_PODS_ENV'] == 'development' # also catches Informative
-        #puts e.message
-        #puts *e.backtrace if Config.instance.verbose? || ENV['COCOA_PODS_ENV'] == 'development'
-      #else
-        #puts ErrorReport.report(e)
-      #end
-      #exit 1
-    #end
-
-    #def self.parse(*argv)
-      #argv = ARGV.new(argv)
-      #if argv.option('--version')
-        #puts VERSION
-        #exit!(0)
-      #end
-
-      #show_help = argv.option('--help')
-      #Config.instance.silent = argv.option('--silent')
-      #Config.instance.verbose = argv.option('--verbose')
-
-      #String.send(:define_method, :colorize) { |string , _| string } if argv.option( '--no-color' )
-
-      #command_class = case command_argument = argv.shift_argument
-      #when 'install'  then Install
-      #when 'list'     then List
-      #when 'outdated' then Outdated
-      #when 'push'     then Push
-      #when 'repo'     then Repo
-      #when 'search'   then Search
-      #when 'setup'    then Setup
-      #when 'spec'     then Spec
-      #when 'update'   then Update
-      #end
-
-      #if command_class.nil?
-        #raise Help.new(self, argv, command_argument)
-      #elsif show_help
-        #raise Help.new(command_class, argv)
-      #else
-        #command_class.new(argv)
-      #end
-    #end
+    def self.report_error(error)
+      if error.is_a?(Interrupt)
+        puts "[!] Cancelled".red
+        Config.instance.verbose? ? raise : exit(1)
+      else
+        puts ErrorReport.report(error)
+        exit 1
+      end
+    end
 
     def initialize(argv)
+      config.silent = argv.flag?('silent')
       super
-      config.verbose = verbose?
+      config.verbose = self.verbose?
+      # TODO we should probably not even load colored unless needed
+      String.send(:define_method, :colorize) { |string , _| string } unless self.colorize_output?
     end
 
     include Config::Mixin

@@ -1,7 +1,7 @@
 module Pod
   class Command
     class Search < Command
-      self.summary = 'Search available pods.'
+      self.summary = 'Search pods'
 
       self.description = <<-DESC
         Searches for pods, ignoring case, whose name matches `QUERY'. If the
@@ -25,7 +25,7 @@ module Pod
         super
       end
 
-      def validate_argv!
+      def validate!
         super
         help! "A search query is required." unless @query
       end

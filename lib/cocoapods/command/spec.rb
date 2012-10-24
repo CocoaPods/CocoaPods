@@ -5,8 +5,7 @@ require 'active_support/core_ext/string/inflections'
 module Pod
   class Command
     class Spec < Command
-      # TODO should not show a usage banner!
-      self.summary = 'Managing PodSpec files'
+      self.summary = 'Manage pod specs'
 
       class Create < Spec
         self.summary = 'Create spec file stub.'
@@ -23,7 +22,7 @@ module Pod
           super
         end
 
-        def validate_argv!
+        def validate!
           super
           help! "A pod name or repo URL is required." unless @name_or_url
         end

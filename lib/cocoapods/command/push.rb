@@ -4,7 +4,7 @@ require 'active_support/core_ext/string/inflections'
 module Pod
   class Command
     class Push < Command
-      self.summary = 'Push new specifications to a spec-repo.'
+      self.summary = 'Push new specifications to a spec-repo'
 
       self.description = <<-DESC
         Validates NAME.podspec or `*.podspec' in the current working dir, creates
@@ -31,7 +31,7 @@ module Pod
         super
       end
 
-      def validate_argv!
+      def validate!
         super
         help! "A spec-repo name is required." unless @repo
       end

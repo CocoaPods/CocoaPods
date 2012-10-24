@@ -1,7 +1,7 @@
 module Pod
   class Command
     class Outdated < Command
-      self.summary = 'Show outdated project dependencies.'
+      self.summary = 'Show outdated project dependencies'
 
       self.description = <<-DESC
         Shows the outdated pods in the current Podfile.lock, but only those from

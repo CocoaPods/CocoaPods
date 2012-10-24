@@ -6,7 +6,7 @@ module Pod
       self.abstract_command = true
 
       # TODO should not show a usage banner!
-      self.summary = 'Managed spec repos.'
+      self.summary = 'Manage spec-repositories'
 
       class Add < Repo
         self.summary = 'Add a spec repo.'
@@ -23,7 +23,7 @@ module Pod
           super
         end
 
-        def validate_argv!
+        def validate!
           super
           unless @name && @url
             help! "Adding a repo needs a `NAME' and a `URL."

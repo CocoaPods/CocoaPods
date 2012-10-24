@@ -1,7 +1,7 @@
 module Pod
   class Command
     class Setup < Command
-      self.summary = 'Setup the CocoaPods environment.'
+      self.summary = 'Setup the CocoaPods environment'
 
       self.description = <<-DESC
         Creates a directory at `~/.cocoapods' which will hold your spec-repos.

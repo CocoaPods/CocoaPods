@@ -29,7 +29,7 @@ module Pod
     class Install < Command
       include Project
 
-      self.summary = 'Installs dependencies of a project.'
+      self.summary = 'Install project dependencies'
 
       self.description = <<-DESC
         Downloads all dependencies defined in `Podfile' and creates an Xcode
@@ -57,7 +57,7 @@ module Pod
     class Update < Command
       include Project
 
-      self.summary = 'Update outdated project dependencies.'
+      self.summary = 'Update outdated project dependencies'
 
       def run
         verify_podfile_exists!
