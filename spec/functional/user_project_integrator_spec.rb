@@ -3,24 +3,13 @@ require File.expand_path('../../spec_helper', __FILE__)
 describe Pod::Installer::UserProjectIntegrator do
   extend SpecHelper::TemporaryDirectory
 
-  def integrate!
-    @integrator = Pod::Installer::UserProjectIntegrator.new(@podfile)
-    @integrator.integrate!
-    @sample_project = Xcodeproj::Project.new(@sample_project_path)
-  end
-
   before do
-    config.silent = true
-    @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-    config.project_root = @sample_project_path.dirname
-
-    sample_project_path = @sample_project_path
+    sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+    config.project_root = sample_project_path.dirname
     @podfile = Pod::Podfile.new do
       platform :ios
-
       xcodeproj sample_project_path, 'Test' => :debug
       link_with 'SampleProject' # this is an app target!
-
       pod 'JSONKit'
 
       target :test_runner, :exclusive => true do
@@ -28,12 +17,10 @@ describe Pod::Installer::UserProjectIntegrator do
         pod 'Kiwi'
       end
     end
-
-    @sample_project = Xcodeproj::Project.new(@sample_project_path)
-  end
-
-  before do
-    integrate!
+    @sample_project_path = sample_project_path
+    @integrator = Pod::Installer::UserProjectIntegrator.new(@podfile)
+    @integrator.integrate!
+    @sample_project = Xcodeproj::Project.new(sample_project_path)
   end
 
   it 'adds references to the Pods static libraries to the Frameworks group' do
