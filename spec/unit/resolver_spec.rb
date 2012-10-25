@@ -14,9 +14,9 @@ module Pod
     it "holds the context state, such as cached specification sets" do
       @resolver.resolve
       @resolver.cached_sets.values.sort_by(&:name).should == [
-        Pod::Source.search_by_name('A2DynamicDelegate').first,
-        Pod::Source.search_by_name('BlocksKit').first,
-        Pod::Source.search_by_name('libffi').first
+        Source.search_by_name('A2DynamicDelegate').first,
+        Source.search_by_name('BlocksKit').first,
+        Source.search_by_name('libffi').first
       ].sort_by(&:name)
     end
 
@@ -34,7 +34,7 @@ module Pod
     end
 
     it "raises once any of the dependencies does not match the platform of its podfile target" do
-      set = Pod::Source.search_by_name('BlocksKit').first
+      set = Source.search_by_name('BlocksKit').first
       @resolver.cached_sets['BlocksKit'] = set
 
       def set.stub_platform=(platform); @stubbed_platform = platform; end
@@ -54,7 +54,7 @@ module Pod
     end
 
     it "raises once any of the dependencies does not have a deployment_target compatible with its podfile target" do
-      set = Pod::Source.search_by_name('BlocksKit').first
+      set = Source.search_by_name('BlocksKit').first
       @resolver.cached_sets['BlocksKit'] = set
       @podfile.platform :ios, "4.0"
 
@@ -200,7 +200,7 @@ module Pod
         pod 'JSONKit', "1.5pre"
       end
       resolver = Resolver.new(podfile, nil, stub('sandbox'))
-      lambda {resolver.resolve}.should.raise Pod::Informative
+      lambda {resolver.resolve}.should.raise Informative
     end
 
     describe "Concerning Installation mode" do
@@ -212,11 +212,11 @@ module Pod
           pod 'JSONKit'
         end
         @specs = [
-          Pod::Specification.new do |s|
+          Specification.new do |s|
             s.name = "BlocksKit"
             s.version = "1.0.0"
           end,
-          Pod::Specification.new do |s|
+          Specification.new do |s|
             s.name = "JSONKit"
             s.version = "1.4"
           end ]
@@ -300,7 +300,7 @@ module Pod
           pod 'JSONKit'
         end
         config.skip_repo_update = false
-        Pod::Command::Repo.any_instance.expects(:run).never
+        Command::Repo.any_instance.expects(:run).never
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         @resolver.resolve
       end
@@ -313,7 +313,7 @@ module Pod
           pod 'libPusher' # New pod
         end
         config.skip_repo_update = false
-        Pod::Command::Repo.any_instance.expects(:run).once
+        Command::Repo::Update.any_instance.expects(:run).once
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         @resolver.resolve
       end
@@ -326,7 +326,7 @@ module Pod
           pod 'libPusher'      # New pod
         end
         config.skip_repo_update = true
-        Pod::Command::Repo.any_instance.expects(:run).never
+        Command::Repo::Update.any_instance.expects(:run).never
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         @resolver.resolve
       end
@@ -338,7 +338,7 @@ module Pod
           pod 'JSONKit', :head #changed to head
         end
         config.skip_repo_update = false
-        Pod::Command::Repo.any_instance.expects(:run).once
+        Command::Repo::Update.any_instance.expects(:run).once
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         @resolver.resolve
       end
@@ -354,11 +354,11 @@ module Pod
           pod 'libPusher'
         end
         @specs = [
-          Pod::Specification.new do |s|
+          Specification.new do |s|
             s.name = "libPusher"
             s.version = "1.3"
           end,
-          Pod::Specification.new do |s|
+          Specification.new do |s|
             s.name = "JSONKit"
             s.version = "1.4"
           end ]
@@ -411,7 +411,7 @@ module Pod
           pod 'libPusher'
         end
         config.skip_repo_update = false
-        Pod::Command::Repo.any_instance.expects(:run).once
+        Command::Repo::Update.any_instance.expects(:run).once
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         @resolver.update_mode = true
         @resolver.resolve

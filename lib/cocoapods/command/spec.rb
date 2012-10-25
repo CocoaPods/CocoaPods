@@ -5,6 +5,8 @@ require 'active_support/core_ext/string/inflections'
 module Pod
   class Command
     class Spec < Command
+      self.abstract_command = true
+
       self.summary = 'Manage pod specs'
 
       class Create < Spec
@@ -18,7 +20,7 @@ module Pod
         self.arguments = '[ NAME | https://github.com/USER/REPO ]'
 
         def initialize(argv)
-          @url, @name_or_url = argv.shift_argument, argv.shift_argument
+          @name_or_url, @url = argv.shift_argument, argv.shift_argument
           super
         end
 

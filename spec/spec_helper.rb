@@ -21,13 +21,18 @@ require 'spec_helper/temporary_repos'
 require 'spec_helper/user_interface'
 require 'spec_helper/pre_flight'
 
+ENV['SKIP_SETUP'] = 'true'
+
+require 'claide'
+
 module Bacon
   class Context
     include Pod::Config::Mixin
     include SpecHelper::Fixture
+    include SpecHelper::Command
 
     def argv(*argv)
-      Pod::Command::ARGV.new(argv)
+      CLAide::ARGV.new(argv)
     end
   end
 end

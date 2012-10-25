@@ -89,7 +89,7 @@ module Pod
         lint_argv << "--silent" if config.silent
         all_valid = true
         podspec_files.each do |podspec|
-          Spec.new(ARGV.new(lint_argv + [podspec.to_s])).run
+          Spec.parse(lint_argv + [podspec.to_s]).run
         end
       end
 

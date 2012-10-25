@@ -149,15 +149,8 @@ module Pod
 
       # TODO some of the following methods can probably move to one of the subclasses.
 
-      protected
-
       def dir
         config.repos_dir + @name
-      end
-
-      def print_messages(type, messages)
-        return if config.silent?
-        messages.each {|msg| UI.puts "    - #{type.ljust(5)} | #{msg}"}
       end
 
       def check_versions(dir)
@@ -170,6 +163,13 @@ module Pod
           "Update Cocoapods, or checkout the appropriate tag in the repo.\n\n"
         end
         UI.puts "\nCocoapods #{versions['last']} is available.\n".green if has_update(versions) && config.new_version_message?
+      end
+
+      protected
+
+      def print_messages(type, messages)
+        return if config.silent?
+        messages.each {|msg| UI.puts "    - #{type.ljust(5)} | #{msg}"}
       end
 
       def self.compatible?(name)

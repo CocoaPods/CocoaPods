@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/alloy/CLAide.git
-  revision: fdcc73837ff0c67b440fa9a20dc6366c78f06f09
+  revision: 324ceaf81365eb6e5936c010037887a2c8d44f3e
   specs:
     claide (0.0.1)
 

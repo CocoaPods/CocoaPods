@@ -69,7 +69,7 @@ module Pod
       end
 
       def add_master_repo
-        @command ||= Repo.new(ARGV.new(['add', 'master', url, 'master'])).run
+        @command ||= Repo::Add.parse(['master', url, 'master']).run
       end
 
       def update_master_repo
