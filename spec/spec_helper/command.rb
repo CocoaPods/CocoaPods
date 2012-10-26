@@ -2,6 +2,10 @@ require 'spec_helper/temporary_directory'
 
 module SpecHelper
   module Command
+    def argv(*argv)
+      CLAide::ARGV.new(argv)
+    end
+
     def command(*argv)
       argv << '--no-color'
       Pod::Command.parse(argv)
