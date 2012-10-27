@@ -15,10 +15,10 @@ module Pod
     end
 
     it "complains for wrong parameters" do
-      lambda { run_command('search') }.should.raise Command::Help
-      lambda { run_command('search', 'too', 'many') }.should.raise Command::Help
-      lambda { run_command('search', 'too', '--wrong') }.should.raise Command::Help
-      lambda { run_command('search', '--wrong') }.should.raise Command::Help
+      lambda { run_command('search') }.should.raise CLAide::Help
+      lambda { run_command('search', 'too', 'many') }.should.raise CLAide::Help
+      lambda { run_command('search', 'too', '--wrong') }.should.raise CLAide::Help
+      lambda { run_command('search', '--wrong') }.should.raise CLAide::Help
     end
 
     it "presents the search results" do

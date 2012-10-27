@@ -5,12 +5,12 @@ module Pod
     extend SpecHelper::TemporaryDirectory
 
     it "complains for wrong parameters" do
-      lambda { run_command('spec') }.should.raise Command::Help
-      lambda { run_command('spec', 'create') }.should.raise Command::Help
-      lambda { run_command('spec', '--create') }.should.raise Command::Help
-      lambda { run_command('spec', 'NAME') }.should.raise Command::Help
-      lambda { run_command('spec', 'createa') }.should.raise Command::Help
-      lambda { run_command('lint', 'agument1', '2') }.should.raise Command::Help
+      lambda { run_command('spec') }.should.raise CLAide::Help
+      lambda { run_command('spec', 'create') }.should.raise CLAide::Help
+      lambda { run_command('spec', '--create') }.should.raise CLAide::Help
+      lambda { run_command('spec', 'NAME') }.should.raise CLAide::Help
+      lambda { run_command('spec', 'createa') }.should.raise CLAide::Help
+      lambda { run_command('lint', 'agument1', '2') }.should.raise CLAide::Help
     end
   end
 

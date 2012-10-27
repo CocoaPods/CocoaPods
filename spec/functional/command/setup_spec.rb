@@ -14,8 +14,8 @@ module Pod
     end
 
     it "complains for wrong parameters" do
-      lambda { run_command('setup', 'wrong') }.should.raise Command::Help
-      lambda { run_command('setup', '--wrong') }.should.raise Command::Help
+      lambda { run_command('setup', 'wrong') }.should.raise CLAide::Help
+      lambda { run_command('setup', '--wrong') }.should.raise CLAide::Help
     end
 
     it "returns the read only URL of the `master' spec-repo" do

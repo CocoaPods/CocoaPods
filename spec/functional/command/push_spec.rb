@@ -15,7 +15,7 @@ module Pod
     end
 
     it "requires a spec-repo name" do
-      lambda { command('push').validate! }.should.raise Command::Help
+      lambda { command('push').validate! }.should.raise CLAide::Help
     end
 
     it "complains if it can't find the repo" do
