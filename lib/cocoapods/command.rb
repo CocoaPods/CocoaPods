@@ -1,14 +1,9 @@
 require 'colored'
 require 'claide'
-require 'active_support/core_ext/string/inflections'
-require 'active_support/core_ext/string/strip.rb'
-
-# TODO why does this not automatically occur even though colored is required first?
-CLAide::Command.colorize_output = true
 
 module Pod
   class PlainInformative
-    include CLAide::Command::InformativeError
+    include CLAide::InformativeError
   end
 
   class Command < CLAide::Command

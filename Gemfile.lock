@@ -8,9 +8,9 @@ GIT
 
 GIT
   remote: git://github.com/alloy/CLAide.git
-  revision: 324ceaf81365eb6e5936c010037887a2c8d44f3e
+  revision: a14ea1f793034d9618bebe3d063230df8b6b3f96
   specs:
-    claide (0.0.1)
+    claide (0.1.0)
 
 GIT
   remote: https://github.com/alloy/kicker.git
