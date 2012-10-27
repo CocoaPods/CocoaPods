@@ -29,6 +29,15 @@ module Pod
       command
     end
 
+    def self.run(argv)
+      argv = CLAide::ARGV.new(argv)
+      if argv.flag?('version')
+        puts VERSION
+        exit!(0)
+      end
+      super(argv)
+    end
+
     def self.report_error(error)
       if error.is_a?(Interrupt)
         puts "[!] Cancelled".red
