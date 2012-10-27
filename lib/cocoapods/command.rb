@@ -11,6 +11,7 @@ module Pod
     autoload :Linter,      'cocoapods/command/linter'
 
     self.abstract_command = true
+    self.command = 'pod'
     self.description = 'CocoaPods, the Objective-C library package manager.'
 
     def self.options
