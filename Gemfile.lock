@@ -7,12 +7,6 @@ GIT
       colored (~> 1.2)
 
 GIT
-  remote: git://github.com/alloy/CLAide.git
-  revision: a14ea1f793034d9618bebe3d063230df8b6b3f96
-  specs:
-    claide (0.1.0)
-
-GIT
   remote: https://github.com/alloy/kicker.git
   revision: 6430787ebf8b9305acc2d2f89ae5cf01d2cd5488
   branch: 3.0.0
@@ -26,6 +20,7 @@ PATH
   specs:
     cocoapods (0.16.0.rc2)
       activesupport (~> 3.2.6)
+      claide (~> 0.1)
       colored (~> 1.2)
       escape (~> 0.0.4)
       faraday (~> 0.8.1)
@@ -44,13 +39,14 @@ GEM
     addressable (2.3.2)
     awesome_print (1.1.0)
     bacon (1.1.0)
+    claide (0.1.0)
     coderay (1.0.8)
     colored (1.2)
     crack (0.3.1)
     escape (0.0.4)
     faraday (0.8.4)
       multipart-post (~> 1.1)
-    faraday_middleware (0.8.8)
+    faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
     github-markup (0.7.4)
     hashie (1.2.0)
@@ -93,7 +89,6 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   bacon
-  claide!
   cocoapods!
   github-markup
   kicker!
