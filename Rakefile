@@ -211,7 +211,7 @@ namespace :spec do
     tarballs = FileList['spec/fixtures/**/*.tar.gz']
     tarballs.each do |tarball|
       basename = File.basename(tarball)
-      sh "cd #{File.dirname(tarball)} && rm #{basename} && tar -zcf #{basename} #{basename[0..-8]}"
+      sh "cd #{File.dirname(tarball)} && rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{basename[0..-8]}"
     end
   end
 
