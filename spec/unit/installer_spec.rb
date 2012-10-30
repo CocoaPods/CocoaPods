@@ -133,7 +133,7 @@ module Pod
       it "adds the files of the pod to the Pods project only once" do
         @installer.install!
         group = @installer.project.pods.groups.find { |g| g.name == 'Reachability' }
-        group.files.map(&:name).should == ["Reachability.h", "Reachability.m"]
+        group.files.map(&:name).sort.should == ["Reachability.h", "Reachability.m"]
       end
 
       it "lists a pod only once" do
