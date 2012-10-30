@@ -13,4 +13,4 @@ end
 
 require 'cocoapods'
 
-Pod::Command.run(*ARGV)
+Pod::Command.run(ARGV)

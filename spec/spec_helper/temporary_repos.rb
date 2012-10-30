@@ -28,7 +28,7 @@ module SpecHelper
     end
 
     def add_repo(name, from)
-      command = command('repo', 'add', name, from)
+      command = Pod::Command.parse(['repo', 'add', name, from])
       command.run
       # The test branch is used by the push specs
       Dir.chdir(command.dir) do

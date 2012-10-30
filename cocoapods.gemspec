@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.unshift File.expand_path('../lib', __FILE__)
-require 'cocoapods'
+require 'cocoapods/version'
 
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
 
+  s.add_runtime_dependency 'claide',        '~> 0.1'
   s.add_runtime_dependency 'xcodeproj',     '~> 0.4.0.rc1'
 
   s.add_runtime_dependency 'faraday',       '~> 0.8.1'

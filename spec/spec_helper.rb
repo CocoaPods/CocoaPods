@@ -21,13 +21,21 @@ require 'spec_helper/temporary_repos'
 require 'spec_helper/user_interface'
 require 'spec_helper/pre_flight'
 
+ENV['SKIP_SETUP'] = 'true'
+if ENV['SKIP_XCODEBUILD'].nil? && `which xcodebuild`.strip.empty?
+  ENV['SKIP_XCODEBUILD'] = 'true'
+end
+
+require 'claide'
+
 module Bacon
   class Context
     include Pod::Config::Mixin
     include SpecHelper::Fixture
+    include SpecHelper::Command
 
-    def argv(*argv)
-      Pod::Command::ARGV.new(argv)
+    def skip_xcodebuild?
+      ENV['SKIP_XCODEBUILD']
     end
   end
 end

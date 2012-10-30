@@ -82,7 +82,7 @@ module Pod
 
       unless config.skip_repo_update?
         UI.section 'Updating spec repositories' do
-          Command::Repo.new(Command::ARGV.new(["update"])).run
+          Command::Repo::Update.parse([]).run
         end if !@lockfile || !(@pods_by_state[:added] + @pods_by_state[:changed]).empty? || update_mode
       end
 

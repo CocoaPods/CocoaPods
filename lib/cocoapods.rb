@@ -11,16 +11,16 @@ unless Gem::Version::Requirement.new('>= 1.4.0').satisfied_by?(Gem::Version.new(
   exit 1
 end
 
-module Pod
-  VERSION = '0.16.0.rc2'
+require 'cocoapods/version'
 
+module Pod
   class PlainInformative < StandardError
   end
 
   class Informative < PlainInformative
     def message
       # TODO: remove formatting from raise calls and remove conditional
-      super !~ /\[!\]/ ? "[!] #{super}\n".red : super
+      super !~ /\[!\]/ ? "[!] #{super}".red : super
     end
   end
 
@@ -41,7 +41,7 @@ module Pod
   autoload :Spec,                   'cocoapods/specification'
   autoload :Specification,          'cocoapods/specification'
   autoload :UI,                     'cocoapods/user_interface'
-  autoload :Version,                'cocoapods/version'
+  autoload :Version,                'cocoapods/version_class'
 
   autoload :Pathname,               'pathname'
   autoload :FileList,               'cocoapods/file_list'

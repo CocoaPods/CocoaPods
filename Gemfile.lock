@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: cc71c669a05934886c56169bbe209014a7a1af8e
+  revision: eaab002f308e2641232630b1b5d4ab3c2f10a10a
   specs:
-    xcodeproj (0.4.0.rc1)
+    xcodeproj (0.4.0.rc3)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
 
@@ -20,6 +20,7 @@ PATH
   specs:
     cocoapods (0.16.0.rc2)
       activesupport (~> 3.2.6)
+      claide (~> 0.1)
       colored (~> 1.2)
       escape (~> 0.0.4)
       faraday (~> 0.8.1)
@@ -38,13 +39,14 @@ GEM
     addressable (2.3.2)
     awesome_print (1.1.0)
     bacon (1.1.0)
+    claide (0.2.0)
     coderay (1.0.8)
     colored (1.2)
     crack (0.3.1)
     escape (0.0.4)
     faraday (0.8.4)
       multipart-post (~> 1.1)
-    faraday_middleware (0.8.8)
+    faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
     github-markup (0.7.4)
     hashie (1.2.0)

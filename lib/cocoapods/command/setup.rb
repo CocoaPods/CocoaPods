@@ -1,18 +1,16 @@
 module Pod
   class Command
     class Setup < Command
-      def self.banner
-%{Setup CocoaPods environment:
+      self.summary = 'Setup the CocoaPods environment'
 
-    $ pod setup
+      self.description = <<-DESC
+        Creates a directory at `~/.cocoapods' which will hold your spec-repos.
+        This is where it will create a clone of the public `master' spec-repo from:
 
-      Creates a directory at `~/.cocoapods' which will hold your spec-repos.
-      This is where it will create a clone of the public `master' spec-repo from:
+            https://github.com/CocoaPods/Specs
 
-          https://github.com/CocoaPods/Specs
-
-      If the clone already exists, it will ensure that it is up-to-date.}
-      end
+        If the clone already exists, it will ensure that it is up-to-date.
+      DESC
 
       def self.options
         [["--push", "Use this option to enable push access once granted"]].concat(super)
@@ -22,8 +20,8 @@ module Pod
       executable :git
 
       def initialize(argv)
-        @push_option  = argv.option('--push')
-        super unless argv.empty?
+        @push_option  = argv.flag?('push')
+        super
       end
 
       def dir
@@ -71,11 +69,11 @@ module Pod
       end
 
       def add_master_repo
-        @command ||= Repo.new(ARGV.new(['add', 'master', url, 'master'])).run
+        @command ||= Repo::Add.parse(['master', url, 'master']).run
       end
 
       def update_master_repo
-        Repo.new(ARGV.new(['update', 'master'])).run
+        Repo::Update.run(['master'])
       end
 
       def set_master_repo_branch

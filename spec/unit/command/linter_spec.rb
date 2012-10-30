@@ -94,12 +94,14 @@ describe "Pod::Command::Linter" do
     linter.errors.join(' | ').should =~ /`config.ios\?' and `config.osx\?' are deprecated/
   end
 
-  it "uses xcodebuild to generate notes and warnings" do
-    file = write_podspec(stub_podspec)
-    linter = Pod::Command::Spec::Linter.new(file)
-    linter.lint
-    linter.result_type.should == :warning
-    linter.notes.join(' | ').should.include "JSONKit/JSONKit.m:1640:27: warning: equality comparison with extraneous parentheses" unless `which xcodebuild`.strip.empty?
+  unless skip_xcodebuild?
+    it "uses xcodebuild to generate notes and warnings" do
+      file = write_podspec(stub_podspec)
+      linter = Pod::Command::Spec::Linter.new(file)
+      linter.lint
+      linter.result_type.should == :warning
+      linter.notes.join(' | ').should.include "JSONKit/JSONKit.m:1640:27: warning: equality comparison with extraneous parentheses"
+    end
   end
 
   it "checks for file patterns" do

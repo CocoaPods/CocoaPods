@@ -43,18 +43,16 @@ else
         $?.should.be.success
       end
 
-      puts "  ! ".red << "Skipping xcodebuild based checks, because it can't be found." if `which xcodebuild`.strip.empty?
+      puts "  ! ".red << "Skipping xcodebuild based checks, because it can't be found." if skip_xcodebuild?
 
       def should_xcodebuild(target_definition)
-        return if `which xcodebuilda`.strip.empty?
+        return if skip_xcodebuild?
         target = target_definition
-        with_xcodebuild_available do
-          Dir.chdir(config.project_pods_root) do
-            print "[!] Compiling #{target.label}...\r"
-            should_successfully_perform "xcodebuild -target '#{target.label}'"
-            lib_path = config.project_pods_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + target.lib_name
-            `lipo -info '#{lib_path}'`.should.include "architecture: #{target.platform == :ios ? 'armv7' : 'x86_64'}"
-          end
+        Dir.chdir(config.project_pods_root) do
+          print "[!] Compiling #{target.label}...\r"
+          should_successfully_perform "xcodebuild -target '#{target.label}'"
+          lib_path = config.project_pods_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + target.lib_name
+          `lipo -info '#{lib_path}'`.should.include "#{target.platform == :ios ? 'armv7' : 'x86_64'}"
         end
       end
 
