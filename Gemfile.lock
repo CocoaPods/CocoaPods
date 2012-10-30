@@ -39,7 +39,7 @@ GEM
     addressable (2.3.2)
     awesome_print (1.1.0)
     bacon (1.1.0)
-    claide (0.1.0)
+    claide (0.2.0)
     coderay (1.0.8)
     colored (1.2)
     crack (0.3.1)
