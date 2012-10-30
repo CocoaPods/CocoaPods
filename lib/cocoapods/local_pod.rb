@@ -536,7 +536,7 @@ module Pod
 
       specs = specs.sort_by { |s| s.name.length }
       specs.each do |spec|
-        paths = expanded_paths(spec.send(accessor), dir_pattern, spec.excluded_patterns)
+        paths = expanded_paths(spec.send(accessor), dir_pattern, spec.exclude_patterns)
         unless paths.empty?
           paths_by_spec[spec] = paths - processed_paths
           processed_paths += paths
