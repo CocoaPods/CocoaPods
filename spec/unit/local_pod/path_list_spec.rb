@@ -65,7 +65,7 @@ describe Pod::LocalPod::PathList do
     patterns.sort.should == %w| file1.h file1.m file2.h file2.m |
   end
 
-  it "returns the original patter if there are no Dir#glob expansions" do
+  it "returns the original pattern if there are no Dir#glob expansions" do
     patterns = @path_list.dir_glob_equivalent_patterns('file*.*')
     patterns.sort.should == %w| file*.* |
   end

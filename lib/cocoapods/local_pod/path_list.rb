@@ -44,12 +44,10 @@ module Pod
       #
       def read_file_system
         root_length = root.to_s.length+1
-        paths  = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
-        paths  = paths.map { |p| p[root_length..-1] }
-        paths  = paths.reject do |p|
-          p == '.' || p == '..'
-        end
-        dirs_entries  = paths.select { |path| path.end_with?('/.', '/..') }
+        paths = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
+        paths = paths.map { |p| p[root_length..-1] }
+        paths = paths.reject { |p| p == '.' || p == '..' }
+        dirs_entries = paths.select { |path| path.end_with?('/.', '/..') }
         @files = paths - dirs_entries
         @dirs  = dirs_entries.map { |d| d.gsub(/\/\.\.?$/,'') }.uniq
       end
@@ -61,19 +59,21 @@ module Pod
         relative_glob(patterns, dir_pattern, exclude_patterns).map {|p| root + p }
       end
 
-      # @return [Array<Pathname>] The list of the relative paths that are
-      #   case insensitively matched by a given pattern. This method emulates
+      # @return [Array<Pathname>] The list of relative paths that are case
+      #   insensitively matched by a given pattern. This method emulates
       #   {Dir#glob} with the {File::FNM_CASEFOLD} option.
       #
-      # @param [Array<String>] patterns   A {Dir#glob} like pattern.
+      # @param [String,Array<String>] patterns  A signle {Dir#glob} like
+      #                                         pattern, or a list of patterns.
       #
-      # @param [String] dir_pattern       An optional pattern to append to
-      #                                   pattern, if this one is the path of a
+      # @param [String] dir_pattern       An optional pattern to append to a
+      #                                   pattern, if it is the path to a
       #                                   directory.
       #
       def relative_glob(patterns, dir_pattern = nil, exclude_patterns = nil)
         return [] if patterns.empty?
         patterns = [ patterns ] if patterns.is_a? String
+
         list = patterns.map do |pattern|
           if pattern.is_a?(String)
             pattern += '/' + dir_pattern if directory?(pattern) && dir_pattern
@@ -84,14 +84,12 @@ module Pod
               end
             end
           else
-            pattern.to_s.cyan
             files.select { |path| path.match(pattern) }
           end
         end.flatten
-        if exclude_patterns
-          excluded = relative_glob(exclude_patterns)
-          list = exclude_patterns ? list - excluded : list
-        end
+
+        list -= relative_glob(exclude_patterns) if exclude_patterns
+
         list.map { |path| Pathname.new(path) }
       end
 
@@ -101,29 +99,24 @@ module Pod
       # @param [String, Pathname] sub_path The path that could be a directory.
       #
       def directory?(sub_path)
-        sub_path = sub_path.to_s.downcase.gsub(/\/$/, '')
-        dirs.any? { |dir|  dir.downcase == sub_path }
+        sub_path = sub_path.to_s.downcase.sub(/\/$/, '')
+        dirs.any? { |dir| dir.downcase == sub_path }
       end
 
-      # @return [Array<String>] An array containing the list of patterns for
-      #   necessary to emulate {Dir#glob} with #{File.fnmatch}. If
-      #   #{File.fnmatch} invoked with the File::FNM_PATHNAME matches any of
-      #   the returned patterns {Dir#glob} would have matched the original
-      #   pattern.
+      # @return [Array<String>] An array of patterns converted from a
+      #   {Dir.glob} pattern to patterns that {File.fnmatch} can handle. This
+      #   is used by the {#relative_glob} method to emulate {Dir.glob}.
       #
       #   The expansion provides support for:
       #
       #   - Literals
       #
-      #       expand_pattern_literals('{file1,file2}.{h,m}')
+      #       dir_glob_equivalent_patterns('{file1,file2}.{h,m}')
       #       => ["file1.h", "file1.m", "file2.h", "file2.m"]
-      #
-      #       expand_pattern_literals('file*.*')
-      #       => ["file*.*"]
       #
       #   - Matching the direct children of a directory with `**`
       #
-      #       expand_pattern_literals('Classes/**/file.m')
+      #       dir_glob_equivalent_patterns('Classes/**/file.m')
       #       => ["Classes/**/file.m", "Classes/file.m"]
       #
       # @param [String] pattern   A {Dir#glob} like pattern.
