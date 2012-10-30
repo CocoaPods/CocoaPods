@@ -6,6 +6,8 @@
 
 ###### Enhancements
 
+- Extracted command-line command & option handling into
+  [CLAide](https://github.com/CocoaPods/CLAide).
 - Added PathList class.
 
 - Added Podfile to the Pods project.
