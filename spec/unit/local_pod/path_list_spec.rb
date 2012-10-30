@@ -37,17 +37,17 @@ describe Pod::LocalPod::PathList do
 
   it "can glob the root for a given pattern" do
     paths = @path_list.relative_glob('Classes/*.{h,m}').map(&:to_s)
-    paths.should == %w| Classes/Banana.h Classes/Banana.m |
+    paths.sort.should == %w| Classes/Banana.h Classes/Banana.m |
   end
 
   it "supports the `**` glob pattern" do
     paths = @path_list.relative_glob('Classes/**/*.{h,m}').map(&:to_s)
-    paths.should == %w| Classes/Banana.h Classes/Banana.m |
+    paths.sort.should == %w| Classes/Banana.h Classes/Banana.m |
   end
 
   it "supports an optional pattern for globbing directories" do
     paths = @path_list.relative_glob('Classes', '*.{h,m}').map(&:to_s)
-    paths.should == %w| Classes/Banana.h Classes/Banana.m |
+    paths.sort.should == %w| Classes/Banana.h Classes/Banana.m |
   end
 
   it "can return the absolute paths from glob" do
