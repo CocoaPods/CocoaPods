@@ -1,8 +1,15 @@
-## Master
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...master)
+## 0.16.0.rc3
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...0.16.0.rc3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...0.4.0.rc6)
+
+###### Enhancements
+
+- Added support for copying frameworks to the app bundle.
+  [#597](https://github.com/CocoaPods/CocoaPods/pull/597)
 
 ###### Bug fixes
 
+- Ignore PBXReferenceProxy while integrating into user project.
+  [#626](https://github.com/CocoaPods/CocoaPods/issues/626)
 - Added support for PBXAggregateTarget and PBXLegacyTarget.
   [#615](https://github.com/CocoaPods/CocoaPods/issues/615)
 - Added support for PBXReferenceProxy.
