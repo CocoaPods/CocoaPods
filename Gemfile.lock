@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: cc71c669a05934886c56169bbe209014a7a1af8e
+  revision: 568f47d9c78c79a66278846aa60954b46d0f3cec
   specs:
-    xcodeproj (0.4.0.rc1)
+    xcodeproj (0.4.0.rc5)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
 
@@ -44,7 +44,7 @@ GEM
     escape (0.0.4)
     faraday (0.8.4)
       multipart-post (~> 1.1)
-    faraday_middleware (0.8.8)
+    faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
     github-markup (0.7.4)
     hashie (1.2.0)
@@ -57,7 +57,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.1)
       mocha (>= 0.9.8)
-    multi_json (1.3.6)
+    multi_json (1.3.7)
     multipart-post (1.1.5)
     octokit (1.18.0)
       addressable (~> 2.2)
@@ -75,7 +75,7 @@ GEM
     redcarpet (2.2.2)
     slop (3.3.3)
     terminal-notifier (1.4.2)
-    vcr (2.2.5)
+    vcr (2.3.0)
     webmock (1.8.11)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
