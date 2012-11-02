@@ -13,6 +13,7 @@
 		51075D541521D0C100E39B41 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51075D521521D0C100E39B41 /* InfoPlist.strings */; };
 		51075D561521D0C100E39B41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 51075D551521D0C100E39B41 /* main.m */; };
 		51075D5A1521D0C100E39B41 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 51075D591521D0C100E39B41 /* AppDelegate.m */; };
+		51E94E2A1644722C0035348C /* libSample Lib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E94E28164472200035348C /* libSample Lib.a */; };
 		A346497214F9BE9A0080D870 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A346497114F9BE9A0080D870 /* UIKit.framework */; };
 		A346497414F9BE9A0080D870 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A346497314F9BE9A0080D870 /* Foundation.framework */; };
 		A346497614F9BE9A0080D870 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A346497514F9BE9A0080D870 /* CoreGraphics.framework */; };
@@ -20,6 +21,16 @@
 		A346497E14F9BE9A0080D870 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A346497D14F9BE9A0080D870 /* main.m */; };
 		A346498214F9BE9A0080D870 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A346498114F9BE9A0080D870 /* AppDelegate.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		51E94E27164472200035348C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 51E94E201644721F0035348C /* Sample Lib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 51E94E0F164472080035348C;
+			remoteInfo = "Sample Lib";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		51075D4A1521D0C100E39B41 /* TestRunner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestRunner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -29,6 +40,7 @@
 		51075D571521D0C100E39B41 /* TestRunner-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestRunner-Prefix.pch"; sourceTree = "<group>"; };
 		51075D581521D0C100E39B41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		51075D591521D0C100E39B41 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		51E94E201644721F0035348C /* Sample Lib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Sample Lib.xcodeproj"; path = "Sample Lib/Sample Lib.xcodeproj"; sourceTree = "<group>"; };
 		A346496D14F9BE9A0080D870 /* SampleProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A346497114F9BE9A0080D870 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A346497314F9BE9A0080D870 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -56,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51E94E2A1644722C0035348C /* libSample Lib.a in Frameworks */,
 				A346497214F9BE9A0080D870 /* UIKit.framework in Frameworks */,
 				A346497414F9BE9A0080D870 /* Foundation.framework in Frameworks */,
 				A346497614F9BE9A0080D870 /* CoreGraphics.framework in Frameworks */,
@@ -86,9 +99,18 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		51E94E211644721F0035348C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				51E94E28164472200035348C /* libSample Lib.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A346496214F9BE990080D870 = {
 			isa = PBXGroup;
 			children = (
+				51E94E201644721F0035348C /* Sample Lib.xcodeproj */,
 				A346497714F9BE9A0080D870 /* SampleProject */,
 				51075D4F1521D0C100E39B41 /* TestRunner */,
 				A346497014F9BE9A0080D870 /* Frameworks */,
@@ -192,6 +214,12 @@
 			mainGroup = A346496214F9BE990080D870;
 			productRefGroup = A346496E14F9BE9A0080D870 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 51E94E211644721F0035348C /* Products */;
+					ProjectRef = 51E94E201644721F0035348C /* Sample Lib.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A346496C14F9BE9A0080D870 /* SampleProject */,
@@ -199,6 +227,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		51E94E28164472200035348C /* libSample Lib.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libSample Lib.a";
+			remoteRef = 51E94E27164472200035348C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		51075D481521D0C100E39B41 /* Resources */ = {

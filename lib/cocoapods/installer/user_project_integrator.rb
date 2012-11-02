@@ -138,7 +138,10 @@ module Pod
             [user_project.targets.first]
           end.reject do |target|
             # Reject any target that already has this Pods library in one of its frameworks build phases
-            target.frameworks_build_phase.files.any? { |build_file| build_file.file_ref.name == @target_definition.lib_name }
+            target.frameworks_build_phase.files.any? do |build_file|
+              file_ref = build_file.file_ref
+              !file_ref.proxy? && file_ref.name == @target_definition.lib_name
+            end
           end
          end
         end
