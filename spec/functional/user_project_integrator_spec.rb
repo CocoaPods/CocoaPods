@@ -69,7 +69,9 @@ describe Pod::Installer::UserProjectIntegrator do
   it 'adds the libPods static library to the "Link binary with libraries" build phase of each target' do
     @podfile.target_definitions.each do |_, definition|
       target = @sample_project.targets.find { |t| t.name == definition.link_with.first }
-      target.frameworks_build_phase.files.find { |f| f.file_ref.name == definition.lib_name}.should.not == nil
+      target.frameworks_build_phase.files.find do |bf|
+        !bf.file_ref.proxy? && bf.file_ref.name == definition.lib_name
+      end.should.not == nil
     end
   end
 
