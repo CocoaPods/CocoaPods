@@ -7,3 +7,10 @@ rvm:
   - rbx-19mode
 install: NOEXEC=skip rake travis:setup
 script: bundle exec rake spec
+notifications:
+  # email: false
+  campfire:
+    on_success: change
+    on_failure: always
+    rooms:
+      - secure: "b0aSEUXcoc4DkQF35ayV1wrEYdCLrMpVZraHDx/ILUi6HBGpcpIbw5dsogXf\nkPT/RgRbXeia4dRNifQbCO3x5Z2OBtoC0RLx9t6jDq/nMiHXlgMzZzrqHf00\nyQPqlStY46cW9CvxNNBj1feycxw9dFRVo90f6vNt4UYXoB0hXgo="
