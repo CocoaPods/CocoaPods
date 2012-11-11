@@ -224,7 +224,7 @@ Pod::Spec.new do |s|
   # s.description  = <<-DESC
   #                   An optional longer description of #{data[:name]}
   #
-  #                   * Markdonw format.
+  #                   * Markdown format.
   #                   * Don't worry about the indent, we strip it!
   #                  DESC
   s.homepage     = "#{data[:homepage]}"
