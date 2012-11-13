@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/CocoaPods/Core.git
+  revision: 0b028885b07cd7681a889523748f12dbdcf3a6c3
+  specs:
+    cocoapods-core (0.16.0.rc2)
+      activesupport (~> 3.2.6)
+      faraday (~> 0.8.1)
+      octokit (~> 1.7)
+
+GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
   revision: 97a5a444ecfadf52e42afdbbf054f078f7c2cc5d
   specs:
@@ -21,6 +30,7 @@ PATH
     cocoapods (0.16.0.rc2)
       activesupport (~> 3.2.6)
       claide (~> 0.1)
+      cocoapods-core
       colored (~> 1.2)
       escape (~> 0.0.4)
       faraday (~> 0.8.1)
@@ -90,6 +100,7 @@ DEPENDENCIES
   awesome_print
   bacon
   cocoapods!
+  cocoapods-core!
   github-markup
   kicker!
   mocha (~> 0.11.4)
