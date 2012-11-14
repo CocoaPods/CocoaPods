@@ -26,7 +26,7 @@ EOS
       attr_reader :resources
 
       # A list of files relative to the project pods root.
-      def initialize(resources)
+      def initialize(resources = [])
         @resources = resources
       end
 

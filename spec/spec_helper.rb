@@ -44,7 +44,7 @@ config = Pod::Config.instance
 config.silent       = true
 config.repos_dir    = SpecHelper.tmp_repos_path
 config.project_root = SpecHelper.temporary_directory
-Pod::Specification::Statistics.instance.cache_file = nil
+Pod::Specification::Set::Statistics.instance.cache_file = nil
 
 require 'tmpdir'
 
@@ -77,3 +77,4 @@ VCR.configure do |c|
   c.allow_http_connections_when_no_cassette = true
 end
 
+require "active_support/core_ext/string/strip"
