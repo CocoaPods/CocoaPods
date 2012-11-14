@@ -1,5 +1,5 @@
-## master
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc4...master)
+## 0.16.0.rc5
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc4...0.16.0.rc5)
 
 ###### Deprecated
 
