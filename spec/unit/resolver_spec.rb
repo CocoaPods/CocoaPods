@@ -6,7 +6,7 @@ module Pod
       config.repos_dir = fixture('spec-repos')
       @podfile = Podfile.new do
         platform :ios
-        pod 'BlocksKit'
+        pod 'BlocksKit', '1.5.2'
       end
       @resolver = Resolver.new(@podfile, nil, stub('sandbox'))
     end
@@ -208,13 +208,13 @@ module Pod
         config.repos_dir = fixture('spec-repos')
         @podfile = Podfile.new do
           platform :ios
-          pod 'BlocksKit'
+          pod 'BlocksKit', '1.5.2'
           pod 'JSONKit'
         end
         @specs = [
           Specification.new do |s|
             s.name = "BlocksKit"
-            s.version = "1.0.0"
+            s.version = "1.5.2"
           end,
           Specification.new do |s|
             s.name = "JSONKit"
@@ -246,11 +246,11 @@ module Pod
         podfile = Podfile.new do
           platform :ios
           pod 'JSONKit', '1.5pre'
-          pod 'BlocksKit'
+          pod 'BlocksKit', '1.5.2'
         end
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         installed = @resolver.resolve.values.flatten.map(&:to_s)
-        installed.should.include? "BlocksKit (1.0.0)"
+        installed.should.include? "BlocksKit (1.5.2)"
         installed.should.include? "JSONKit (1.5pre)"
       end
 
@@ -259,7 +259,7 @@ module Pod
           platform :ios
           pod 'JSONKit'
           pod 'BlocksKit'
-          pod 'libPusher' # New pod
+          pod 'libPusher', '1.3' # New pod
         end
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         installed = @resolver.resolve.values.flatten.map(&:to_s)
@@ -349,7 +349,7 @@ module Pod
         config.repos_dir = fixture('spec-repos')
         @podfile = Podfile.new do
           platform :ios
-          pod 'BlocksKit'
+          pod 'BlocksKit', '1.5.2'
           pod 'JSONKit'
           pod 'libPusher'
         end
@@ -377,7 +377,7 @@ module Pod
       it "respects the constraints of the podfile" do
         podfile = Podfile.new do
           platform :ios
-          pod 'BlocksKit'
+          pod 'BlocksKit', '1.5.2'
           pod 'JSONKit', '1.4'
         end
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))

@@ -194,7 +194,7 @@ module Pod
 
           # Ensure we don't resolve the same spec twice for one target
           unless @loaded_specs.include?(dependency.name)
-            spec = set.specification_by_name(dependency.name)
+            spec = set.specification.subspec_by_name(dependency.name)
             @pods_from_external_sources << spec.root_spec_name if dependency.external?
             @loaded_specs << spec.name
             @cached_specs[spec.name] = spec
