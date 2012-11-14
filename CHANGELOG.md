@@ -1,3 +1,22 @@
+## master
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc4...master)
+
+###### Deprecated
+
+- The usage of specifications defined in a Podfile is deprecated. Use the
+  `:podspec` option with a file path instead. Complete removal will most
+  probably happen in 0.17.0.
+  [#549](https://github.com/CocoaPods/CocoaPods/issues/549)
+  [#616](https://github.com/CocoaPods/CocoaPods/issues/616)
+  [#525](https://github.com/CocoaPods/CocoaPods/issues/525)
+
+## 0.16.0.rc4
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc3...0.16.0.rc4)
+
+###### Bug fixes
+
+- Fix for Rake 0.9.3
+
 ## 0.16.0.rc3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...0.16.0.rc3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...0.4.0.rc6)
 
