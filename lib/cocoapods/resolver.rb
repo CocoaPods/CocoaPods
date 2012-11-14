@@ -53,7 +53,7 @@ module Pod
       @update_external_specs = true
 
       @cached_sets = {}
-      @cached_sources = Source::Aggregate.new
+      @cached_sources = Source::Aggregate.new(config.repos_dir)
     end
 
     # Identifies the specifications that should be installed according whether
@@ -117,11 +117,11 @@ module Pod
       unless @pods_to_install
         if lockfile
           @pods_to_install = specs.select do |spec|
-            spec.version != lockfile.pods_versions[spec.pod_name]
+            spec.version != lockfile.pods_versions[spec.root_spec_name]
           end.map(&:name)
           if update_mode
             @pods_to_install += specs.select do |spec|
-              spec.version.head? || pods_from_external_sources.include?(spec.pod_name)
+              spec.version.head? || pods_from_external_sources.include?(spec.root_spec_name)
             end.map(&:name)
           end
           @pods_to_install += @pods_by_state[:added] + @pods_by_state[:changed]
@@ -165,7 +165,7 @@ module Pod
           end
           set = Specification::Set::External.new(specification)
           if dependency.subspec_dependency?
-            @cached_sets[dependency.top_level_spec_name] ||= set
+            @cached_sets[dependency.root_spec_name] ||= set
           end
           set
         else
@@ -186,7 +186,7 @@ module Pod
       dependencies.each do |dependency|
         # Replace the dependency with a more specific one if the pod is already installed.
         if !update_mode && @pods_to_lock.include?(dependency.name)
-          dependency = lockfile.dependency_for_installed_pod_named(dependency.name)
+          dependency = lockfile.dependency_for_installed_pod_with_root_named(dependency.name)
         end
         UI.message("- #{dependency}", '', 2) do
           set = find_cached_set(dependency, target_definition.platform)
@@ -195,7 +195,7 @@ module Pod
           # Ensure we don't resolve the same spec twice for one target
           unless @loaded_specs.include?(dependency.name)
             spec = set.specification_by_name(dependency.name)
-            @pods_from_external_sources << spec.pod_name if dependency.external?
+            @pods_from_external_sources << spec.root_spec_name if dependency.external?
             @loaded_specs << spec.name
             @cached_specs[spec.name] = spec
             # Configure the specification

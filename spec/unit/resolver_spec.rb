@@ -44,13 +44,13 @@ module Pod
       set.stub_platform = :ios
       lambda { @resolver.resolve }.should.not.raise
       set.stub_platform = :osx
-      lambda { @resolver.resolve }.should.raise Informative
+      lambda { @resolver.resolve }.should.raise Pod::StandardError
 
       @podfile.platform :osx
       set.stub_platform = :osx
       lambda { @resolver.resolve }.should.not.raise
       set.stub_platform = :ios
-      lambda { @resolver.resolve }.should.raise Informative
+      lambda { @resolver.resolve }.should.raise Pod::StandardError
     end
 
     it "raises once any of the dependencies does not have a deployment_target compatible with its podfile target" do
@@ -62,7 +62,7 @@ module Pod
       lambda { @resolver.resolve }.should.not.raise
 
       Specification.any_instance.stubs(:available_platforms).returns([ Platform.new(:ios, '5.0'), Platform.new(:osx, '10.7') ])
-      lambda { @resolver.resolve }.should.raise Informative
+      lambda { @resolver.resolve }.should.raise Pod::StandardError
     end
 
     it "resolves subspecs" do
@@ -110,7 +110,7 @@ module Pod
       }
     end
 
-    it "it includes only the main subspec of a specification node" do
+    xit "it includes only the main subspec of a specification node" do
       @podfile = Podfile.new do
         platform :ios
         pod do |s|
@@ -200,7 +200,7 @@ module Pod
         pod 'JSONKit', "1.5pre"
       end
       resolver = Resolver.new(podfile, nil, stub('sandbox'))
-      lambda {resolver.resolve}.should.raise Informative
+      lambda {resolver.resolve}.should.raise Pod::StandardError
     end
 
     describe "Concerning Installation mode" do
