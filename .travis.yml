@@ -5,9 +5,11 @@ rvm:
   # Rubinius in 1.8 mode on Travis does not work. It complains about st_data_t etc in Xcodeproj.
   #- rbx-18mode
   - rbx-19mode
+  - ruby-2.0.0-preview1
 matrix:
   allow_failures:
     - rvm: rbx-19mode
+    - rvm: ruby-2.0.0-preview1
 install: NOEXEC=skip rake travis:setup
 script: bundle exec rake spec
 notifications:
