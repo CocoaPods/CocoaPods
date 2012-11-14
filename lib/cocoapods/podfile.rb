@@ -404,6 +404,7 @@ module Pod
     # For more info on the definition of a Pod::Specification see:
     # https://github.com/CocoaPods/CocoaPods/wiki/A-pod-specification
     def pod(*name_and_version_requirements, &block)
+      warn "[DEPRECATED] Inline specs are deprecated, use the `:podspec` option." if block_given?
       @target_definition.target_dependencies << Dependency.new(*name_and_version_requirements, &block)
     end
 
