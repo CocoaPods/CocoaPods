@@ -6,7 +6,7 @@ describe Pod::UI do
 
   before do
     @set = Pod::Source.search(Pod::Dependency.new('CocoaLumberjack'))
-    Pod::Specification::Statistics.instance.cache_file = nil
+    Pod::Specification::Set::Statistics.instance.cache_file = nil
   end
 
   it "presents the name, version, description, homepage and source of a specification set" do
