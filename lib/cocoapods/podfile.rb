@@ -380,25 +380,10 @@ module Pod
     #
     #   pod 'JSONKit', :podspec => 'https://raw.github.com/gist/1346394/1d26570f68ca27377a27430c65841a0880395d72/JSONKit.podspec'
     #
+    # Or, if no living soul has created a podspec for the library that you want
+    # to use yet, you will have to specify the library yourself. In which case
+    # you can specify a file path with the `:podspec` option as well.
     #
-    # ### For a library without any available podspec
-    #
-    # Finally, if no living soul has created a podspec, for the library you want
-    # to use, yet, you will have to specify the library yourself.
-    #
-    #
-    # When you omit arguments and pass a block to `pod`, an instance of
-    # Pod::Specification is yielded to the block. This is the same class which
-    # is normally used to specify a Pod.
-    #
-    # ```
-    #   pod do |spec|
-    #     spec.name         = 'JSONKit'
-    #     spec.version      = '1.4'
-    #     spec.source       = { :git => 'https://github.com/johnezang/JSONKit.git', :tag => 'v1.4' }
-    #     spec.source_files = 'JSONKit.*'
-    #   end
-    # ```
     #
     #
     # For more info on the definition of a Pod::Specification see:
