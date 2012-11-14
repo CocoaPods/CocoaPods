@@ -258,7 +258,7 @@ Pod::Spec.new do |s|
   #
   # s.author       = '#{data[:author_name]}', 'other author'
 
-  # Specify the location from where the source should be retreived.
+  # Specify the location from where the source should be retrieved.
   #
   s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
   # s.source       = { :svn => 'http://EXAMPLE/#{data[:name]}/tags/1.0.0' }
@@ -292,9 +292,9 @@ Pod::Spec.new do |s|
   # made available to the application. If the pattern is a directory then the
   # path will automatically have '*.h' appended.
   #
-  # Also allows the use of the FileList class like `source_files does.
+  # Also allows the use of the FileList class like `source_files' does.
   #
-  # If you do not explicitely set the list of public header files,
+  # If you do not explicitly set the list of public header files,
   # all headers of source_files will be made public.
   #
   # s.public_header_files = 'Classes/**/*.h'
@@ -302,7 +302,7 @@ Pod::Spec.new do |s|
   # A list of resources included with the Pod. These are copied into the
   # target bundle with a build phase script.
   #
-  # Also allows the use of the FileList class like `source_files does.
+  # Also allows the use of the FileList class like `source_files' does.
   #
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
@@ -310,7 +310,7 @@ Pod::Spec.new do |s|
   # A list of paths to preserve after installing the Pod.
   # CocoaPods cleans by default any file that is not used.
   # Please don't include documentation, example, and test files.
-  # Also allows the use of the FileList class like `source_files does.
+  # Also allows the use of the FileList class like `source_files' does.
   #
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
