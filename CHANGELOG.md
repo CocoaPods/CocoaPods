@@ -13,6 +13,10 @@
 ###### Bug fixes
 
 - Always consider inline podspecs as needing installation.
+- Fix detection when the lib has already been integrated with the user’s target.
+  [#643](https://github.com/CocoaPods/CocoaPods/issues/643)
+  [#614](https://github.com/CocoaPods/CocoaPods/issues/614)
+  [#613](https://github.com/CocoaPods/CocoaPods/issues/613)
 
 ## 0.16.0.rc4
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc3...0.16.0.rc4)

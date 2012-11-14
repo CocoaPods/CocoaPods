@@ -59,4 +59,5 @@ end
 
 if ENV['COCOA_PODS_ENV'] == 'development'
   require 'awesome_print'
+  require 'pry'
 end
