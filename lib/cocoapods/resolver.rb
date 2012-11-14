@@ -139,9 +139,9 @@ module Pod
     def removed_pods
       return [] unless lockfile
       unless @removed_pods
-        previusly_installed = lockfile.pods_names.map { |pod_name| pod_name.split('/').first }
+        previously_installed = lockfile.pods_names.map { |pod_name| pod_name.split('/').first }
         installed = specs.map { |spec| spec.name.split('/').first }
-        @removed_pods = previusly_installed - installed
+        @removed_pods = previously_installed - installed
       end
       @removed_pods
     end

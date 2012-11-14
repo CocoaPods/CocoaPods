@@ -192,7 +192,7 @@ module Pod
 
         if dependency.nil?
           result[:removed] << pod_name
-        elsif !dependency.match_version?(version) || dependency.external_source != external_source
+        elsif dependency.inline? || !dependency.match_version?(version) || dependency.external_source != external_source
           result[:changed] << pod_name
         else
           result[:unchanged] << pod_name

@@ -10,6 +10,10 @@
   [#616](https://github.com/CocoaPods/CocoaPods/issues/616)
   [#525](https://github.com/CocoaPods/CocoaPods/issues/525)
 
+###### Bug fixes
+
+- Always consider inline podspecs as needing installation.
+
 ## 0.16.0.rc4
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc3...0.16.0.rc4)
 
