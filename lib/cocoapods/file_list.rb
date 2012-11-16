@@ -1,6 +1,5 @@
 if RUBY_VERSION >= "1.9"
   require 'rake/file_list'
-  require 'rake/rake_module'
 else
   require 'rake'
 end
