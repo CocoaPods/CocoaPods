@@ -81,14 +81,14 @@ describe Pod::LocalPod do
     end
 
     it "can add it's source files to an Xcode project target" do
-      project = Pod::Project.new
+      project = Pod::Project.new(@sandbox)
       @pod.add_file_references_to_project(project)
       project['Pods/BananaLib/Banana.h'].path.should == "BananaLib/Classes/Banana.h"
       project['Pods/BananaLib/Banana.m'].path.should == "BananaLib/Classes/Banana.m"
     end
 
     it "can add it's source files to a target with any specially configured compiler flags" do
-      project = Pod::Project.new
+      project = Pod::Project.new(@sandbox)
       target  = project.new_target(:static, 'Pods', :ios)
       @pod.top_specification.compiler_flags = '-d some_flag'
       @pod.add_file_references_to_project(project)
@@ -112,6 +112,8 @@ describe Pod::LocalPod do
       lambda { @pod.source_files }.should.raise Pod::Informative
     end
   end
+
+  #---------------------------------------------------------------------------#
 
   describe "with installed source and multiple subspecs" do
 

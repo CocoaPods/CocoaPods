@@ -60,7 +60,7 @@ module Pod
     #       computed values. In other words, it should be immutable.
     #
     def initialize(specification, sandbox, platform)
-      @top_specification, @sandbox, @platform = specification.top_level_parent, sandbox, platform
+      @top_specification, @sandbox, @platform = specification.root, sandbox, platform
       @top_specification.activate_platform(platform)
       @specifications = [] << specification
     end
@@ -81,7 +81,7 @@ module Pod
     # @raise {Informative} If the specification is not part of the same pod.
     #
     def add_specification(spec)
-      unless spec.top_level_parent == top_specification
+      unless spec.root == top_specification
         raise Informative,
           "[Local Pod] Attempt to add a specification from another pod"
       end
@@ -105,7 +105,7 @@ module Pod
     #
     def to_s
       s =  top_specification.to_s
-      s << " defaulting to #{top_specification.preferred_dependency} subspec" if top_specification.preferred_dependency
+      s << " defaulting to #{top_specification.default_subspec} subspec" if top_specification.default_subspec
       s
     end
 
@@ -300,7 +300,20 @@ module Pod
     # @return [Array<Pathname>] The paths of the resources.
     #
     def resource_files
-      paths_by_spec(:resources).values.flatten
+      specs ||= specifications
+      paths_by_spec   = {}
+      processed_paths = []
+
+      specs = specs.sort_by { |s| s.name.length }
+      specs.each do |spec|
+        spec_paths = spec.resources[:resources]
+        paths = expanded_paths(spec_paths, '**/*', spec.exclude_files)
+        unless paths.empty?
+          paths_by_spec[spec] = paths - processed_paths
+          processed_paths += paths
+        end
+      end
+      paths_by_spec.values.flatten
     end
 
     # @return [Array<Pathname>] The *relative* paths of the resources.
@@ -361,7 +374,14 @@ module Pod
     end
 
     def xcconfig
-      specifications.map { |s| s.xcconfig }.reduce(:merge)
+      config = Xcodeproj::Config.new
+      specifications.each do |s|
+        config.merge(s.xcconfig)
+        config.libraries.merge(s.libraries)
+        config.frameworks.merge(s.frameworks)
+        config.weak_frameworks.merge(s.weak_frameworks)
+      end
+      config
     end
 
     # Computes the paths of all the public headers of the pod including every
@@ -440,7 +460,7 @@ module Pod
                            "project before adding the build files to the target."
       end
       file_references_by_spec.each do |spec, file_reference|
-        target.add_file_references(file_reference, spec.compiler_flags.strip)
+        target.add_file_references(file_reference, (spec.compiler_flags * " ").strip)
       end
     end
 
@@ -498,7 +518,7 @@ module Pod
         dir = spec.header_dir ? (headers_sandbox + spec.header_dir) : headers_sandbox
         paths.each do |from|
           from_relative = from.relative_path_from(root)
-          to = dir + spec.copy_header_mapping(from_relative)
+          to = dir + (spec.header_mappings_dir ? from.relative_path_from(spec.header_mappings_dir) : from.basename)
           (mappings[to.dirname] ||= []) << from
         end
       end
@@ -516,8 +536,10 @@ module Pod
     # included in the linker search paths.
     #
     def headers_excluded_from_search_paths
-      paths = paths_by_spec(:exclude_header_search_paths, '*.{h,hpp,hh}')
-      paths.values.compact.uniq
+      #TODO
+      # paths = paths_by_spec(:exclude_header_search_paths, '*.{h,hpp,hh}')
+      # paths.values.compact.uniq
+      []
     end
 
     # @!group Paths Patterns
@@ -536,7 +558,7 @@ module Pod
 
       specs = specs.sort_by { |s| s.name.length }
       specs.each do |spec|
-        paths = expanded_paths(spec.send(accessor), dir_pattern, spec.exclude_patterns)
+        paths = expanded_paths(spec.send(accessor), dir_pattern, spec.exclude_files)
         unless paths.empty?
           paths_by_spec[spec] = paths - processed_paths
           processed_paths += paths
