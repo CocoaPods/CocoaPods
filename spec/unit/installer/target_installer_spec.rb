@@ -117,7 +117,7 @@ describe TargetInstaller = Pod::Installer::TargetInstaller do
       xcconfig = config.sandbox.root + 'Pods.xcconfig'
       xcconfig.read.should == <<-EOS.strip_heredoc.gsub(/\n$/, '')
         ALWAYS_SEARCH_USER_PATHS = YES
-        OTHER_LDFLAGS = -ObjC -framework SystemConfiguration
+        OTHER_LDFLAGS = -ObjC
         HEADER_SEARCH_PATHS = ${PODS_HEADERS_SEARCH_PATHS}
         PODS_ROOT = ${SRCROOT}/Pods
         PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders"
