@@ -36,8 +36,8 @@ module Pod
     end
 
     def local_pod_for_spec(spec, platform)
-      key = [spec.root_spec.name, platform.to_sym]
-      (@cached_local_pods[key] ||= LocalPod.new(spec.root_spec, self, platform)).tap do |pod|
+      key = [spec.root.name, platform.to_sym]
+      (@cached_local_pods[key] ||= LocalPod.new(spec.root, self, platform)).tap do |pod|
         pod.add_specification(spec)
       end
     end
@@ -45,8 +45,8 @@ module Pod
     # TODO: refactor the pods from a local source should not be chached by the sandbox
     #
     def locally_sourced_pod_for_spec(spec, platform)
-      key = [spec.root_spec.name, platform.to_sym]
-      (@cached_locally_sourced_pods[key] ||= LocalPod::LocalSourcedPod.new(spec.root_spec, self, platform)).tap do |pod|
+      key = [spec.root.name, platform.to_sym]
+      (@cached_locally_sourced_pods[key] ||= LocalPod::LocalSourcedPod.new(spec.root, self, platform)).tap do |pod|
         pod.add_specification(spec)
       end
     end
