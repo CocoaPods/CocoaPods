@@ -77,7 +77,7 @@ module Pod
             end
           end
         end if config.verbose?
-        @pods_to_lock = (lockfile.pods_names - @pods_by_state[:added] - @pods_by_state[:changed] - @pods_by_state[:removed]).uniq
+        @pods_to_lock = (lockfile.pod_names - @pods_by_state[:added] - @pods_by_state[:changed] - @pods_by_state[:removed]).uniq
       end
 
       unless config.skip_repo_update?
@@ -117,11 +117,11 @@ module Pod
       unless @pods_to_install
         if lockfile
           @pods_to_install = specs.select do |spec|
-            spec.version != lockfile.pods_versions[spec.root_spec_name]
+            spec.version != lockfile.pod_versions[spec.root.name]
           end.map(&:name)
           if update_mode
             @pods_to_install += specs.select do |spec|
-              spec.version.head? || pods_from_external_sources.include?(spec.root_spec_name)
+              spec.version.head? || pods_from_external_sources.include?(spec.root.name)
             end.map(&:name)
           end
           @pods_to_install += @pods_by_state[:added] + @pods_by_state[:changed]
@@ -139,7 +139,7 @@ module Pod
     def removed_pods
       return [] unless lockfile
       unless @removed_pods
-        previusly_installed = lockfile.pods_names.map { |pod_name| pod_name.split('/').first }
+        previusly_installed = lockfile.pod_names.map { |pod_name| pod_name.split('/').first }
         installed = specs.map { |spec| spec.name.split('/').first }
         @removed_pods = previusly_installed - installed
       end
@@ -155,17 +155,19 @@ module Pod
       @cached_sets[set_name] ||= begin
         if dependency.specification
           Specification::Set::External.new(dependency.specification)
-        elsif external_source = dependency.external_source
+        elsif dependency.external_source
           if update_mode && update_external_specs
             # Always update external sources in update mode.
+            external_source = ExternalSources.from_dependency(dependency)
             specification = external_source.specification_from_external(@sandbox, platform)
           else
             # Don't update external sources in install mode if not needed.
+            external_source = ExternalSources.from_dependency(dependency)
             specification = external_source.specification_from_sandbox(@sandbox, platform)
           end
           set = Specification::Set::External.new(specification)
           if dependency.subspec_dependency?
-            @cached_sets[dependency.root_spec_name] ||= set
+            @cached_sets[dependency.root_name] ||= set
           end
           set
         else
@@ -186,7 +188,7 @@ module Pod
       dependencies.each do |dependency|
         # Replace the dependency with a more specific one if the pod is already installed.
         if !update_mode && @pods_to_lock.include?(dependency.name)
-          dependency = lockfile.dependency_for_installed_pod_with_root_named(dependency.name)
+          dependency = lockfile.dependency_to_lock_pod_named(dependency.name)
         end
         UI.message("- #{dependency}", '', 2) do
           set = find_cached_set(dependency, target_definition.platform)
@@ -195,7 +197,7 @@ module Pod
           # Ensure we don't resolve the same spec twice for one target
           unless @loaded_specs.include?(dependency.name)
             spec = set.specification.subspec_by_name(dependency.name)
-            @pods_from_external_sources << spec.root_spec_name if dependency.external?
+            @pods_from_external_sources << spec.root.name if dependency.external?
             @loaded_specs << spec.name
             @cached_specs[spec.name] = spec
             # Configure the specification

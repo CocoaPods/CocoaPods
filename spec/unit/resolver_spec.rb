@@ -110,36 +110,46 @@ module Pod
       }
     end
 
+    # TODO inline podspecs are deprecated
     xit "it includes only the main subspec of a specification node" do
-      @podfile = Podfile.new do
-        platform :ios
-        pod do |s|
-          s.name         = 'RestKit'
-          s.version      = '0.10.0'
+      spec  = Spec.new do |s|
+        s.name         = 'RestKit'
+        s.version      = '9999990.10.0'
 
-          s.preferred_dependency = 'JSON'
+        s.preferred_dependency = 'JSON'
 
-          s.subspec 'JSON' do |js|
-            js.dependency 'RestKit/Network'
-            js.dependency 'RestKit/UI'
-            js.dependency 'RestKit/ObjectMapping/JSON'
-            js.dependency 'RestKit/ObjectMapping/CoreData'
-          end
+        s.subspec 'JSON' do |js|
+          js.dependency 'RestKit/Network'
+          js.dependency 'RestKit/UI'
+          js.dependency 'RestKit/ObjectMapping/JSON'
+          js.dependency 'RestKit/ObjectMapping/CoreData'
+        end
 
-          s.subspec 'Network' do |ns|
-            ns.dependency 'LibComponentLogging-NSLog', '>= 1.0.4'
-          end
-          s.subspec 'UI'
-          s.subspec 'ObjectMapping' do |os|
-            os.subspec 'JSON'
-            os.subspec 'XML'
-            os.subspec 'CoreData'
-          end
+        s.subspec 'Network' do |ns|
+          ns.dependency 'LibComponentLogging-NSLog', '>= 1.0.4'
+        end
+        s.subspec 'UI'
+        s.subspec 'ObjectMapping' do |os|
+          os.subspec 'JSON'
+          os.subspec 'XML'
+          os.subspec 'CoreData'
         end
       end
+
+      @podfile = Podfile.new do
+        platform :ios
+        pod 'RestKit'
+      end
+
+      Set.any_instance.stubs(:specification).returns(spec)
+
       resolver = Resolver.new(@podfile, nil, stub('sandbox'))
+      resolver.find_cached_set()
       specs = resolver.resolve.values.flatten.map(&:name).sort
       specs.should.not.include 'RestKit/ObjectMapping/XML'
+      spec = resolver.specs_by_target.values.first.first
+      spec.name.should == 'test'
+      spec.version.should == '9999990.10.0'
       specs.should == %w{
         LibComponentLogging-Core
         LibComponentLogging-NSLog
@@ -172,7 +182,7 @@ module Pod
           fss.subspec 'SecondSubSpec'
         end
       end
-      @podfile.dependencies.first.external_source.stubs(:specification_from_sandbox).returns(spec)
+      ExternalSources::GitSource.any_instance.stubs(:specification_from_sandbox).returns(spec)
       resolver = Resolver.new(@podfile, nil, stub('sandbox'))
       resolver.resolve.values.flatten.map(&:name).sort.should == %w{ MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec }
     end
@@ -287,7 +297,7 @@ module Pod
           s.name         = 'libPusher'
           s.version      = '1.3'
         end
-        podfile.dependencies.first.external_source.stubs(:specification_from_sandbox).returns(spec)
+        ExternalSources::GitSource.any_instance.stubs(:specification_from_sandbox).returns(spec)
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         @resolver.resolve
         @resolver.should_install?("JSONKit").should.be.false
@@ -347,9 +357,8 @@ module Pod
     describe "Concerning Update mode" do
       before do
         config.repos_dir = fixture('spec-repos')
-        @podfile = Podfile.new do
+        previous_podfile = Podfile.new do
           platform :ios
-          pod 'BlocksKit', '1.5.2'
           pod 'JSONKit'
           pod 'libPusher'
         end
@@ -363,7 +372,13 @@ module Pod
             s.version = "1.4"
           end ]
         @specs.each { |s| s.activate_platform(:ios) }
-        @lockfile = Lockfile.generate(@podfile, @specs)
+        @lockfile = Lockfile.generate(previous_podfile, @specs)
+        @podfile = Podfile.new do
+          platform :ios
+          pod 'BlocksKit', '1.5.2'
+          pod 'JSONKit'
+          pod 'libPusher'
+        end
         @resolver = Resolver.new(@podfile, @lockfile, stub('sandbox'))
         @resolver.update_mode = true
       end
