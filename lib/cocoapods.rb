@@ -27,6 +27,7 @@ module Pod
   autoload :Command,                'cocoapods/command'
   autoload :Downloader,             'cocoapods/downloader'
   autoload :Executable,             'cocoapods/executable'
+  autoload :ExternalSources,        'cocoapods/external_sources'
   autoload :Installer,              'cocoapods/installer'
   autoload :LocalPod,               'cocoapods/local_pod'
   autoload :Project,                'cocoapods/project'
@@ -46,12 +47,12 @@ module Pod
     autoload :DummySource,          'cocoapods/generator/dummy_source'
     autoload :PrefixHeader,         'cocoapods/generator/prefix_header'
   end
-end
 
-require 'cocoapods/file_list'
-require 'cocoapods-core'
-require 'cocoapods/config'
-require 'cocoapods/source'
+  require 'cocoapods/file_list'
+  require 'cocoapods-core'
+  require 'cocoapods/config'
+  require 'cocoapods/source'
+end
 
 if ENV['COCOA_PODS_ENV'] == 'development'
   require 'awesome_print'
