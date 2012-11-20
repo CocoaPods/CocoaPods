@@ -1,6 +1,7 @@
 module Pod
 
-  #
+  # Provides support for UI output. It provides support for nexted sections of
+  # information and for a verbose mode.
   #
   module UserInterface
 
