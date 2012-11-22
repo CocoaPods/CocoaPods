@@ -1,8 +1,15 @@
 ## Branch 0.17
 
-###### TODO
+###### DSL Changes
 
-- Add `s.exclude_source_files` and related attributes to the specification class.
+- Deprecated header_mappings hook for specifications.
+- `preferred_dependency` has been renamed to `default_subspec`.
+- Added `s.exclude_source_files` and related attributes to the specification class.
+- Added support for prefix_header_file in subspecs
+- Added support for prefix_header_contents in subspecs
+- Removed exclude_header_search_paths
+- Added screenshot attribute
+- Renamed preferred_dependency
 
 ###### Enhancements
 
