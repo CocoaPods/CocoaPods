@@ -75,6 +75,11 @@ module Bacon
   # Overrides the TestUnitOutput to provide colored result output.
   #
   module TestUnitOutput
+    def handle_specification(name)
+      print ':'
+      yield
+    end
+
     def handle_requirement(description, disabled = false)
       error = yield
       if !error.empty?
@@ -93,7 +98,7 @@ module Bacon
       first_error = ''
       error_count = 0
       ErrorLog.lines.each do |s|
-        error_count += 1 if s.include?('Error:')
+        error_count += 1 if s.include?('Error:') || s.include?('Informative')
         first_error << s if error_count <= 1
       end
       puts "\n#{first_error}" if Backtraces
