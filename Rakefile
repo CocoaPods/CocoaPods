@@ -108,9 +108,9 @@ namespace :gem do
     required_xcodeproj_version = xcodeproj.requirement.requirements.first.last.to_s
 
     puts "* Checking if xcodeproj #{required_xcodeproj_version} exists on the gem host"
-    search_result = silent_sh("gem search --remote xcodeproj")
-    remote_xcodeproj_version = search_result.match(/xcodeproj \(([\d\.]+)\)/m)[1]
-    unless Gem::Version.new(required_xcodeproj_version) <= Gem::Version.new(remote_xcodeproj_version)
+    search_result = silent_sh("gem search --all --remote xcodeproj")
+    remote_xcodeproj_versions = search_result.match(/xcodeproj \((.*)\)/m)[1].split(', ')
+    unless remote_xcodeproj_versions.include?(required_xcodeproj_version)
       $stderr.puts "[!] The Xcodeproj version `#{required_xcodeproj_version}' required by " \
                    "this version of CocoaPods does not exist on the gem host. " \
                    "Either push that first, or fix the version requirement."
@@ -211,7 +211,7 @@ namespace :spec do
     tarballs = FileList['spec/fixtures/**/*.tar.gz']
     tarballs.each do |tarball|
       basename = File.basename(tarball)
-      sh "cd #{File.dirname(tarball)} && rm #{basename} && tar -zcf #{basename} #{basename[0..-8]}"
+      sh "cd #{File.dirname(tarball)} && rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{basename[0..-8]}"
     end
   end
 

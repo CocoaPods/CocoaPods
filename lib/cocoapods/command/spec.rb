@@ -5,118 +5,128 @@ require 'active_support/core_ext/string/inflections'
 module Pod
   class Command
     class Spec < Command
-      def self.banner
-%{Managing PodSpec files:
+      self.abstract_command = true
 
-    $ pod spec create [ NAME | https://github.com/USER/REPO ]
+      self.summary = 'Manage pod specs'
 
-      Creates a PodSpec, in the current working dir, called `NAME.podspec'.
-      If a GitHub url is passed the spec is prepopulated.
+      class Create < Spec
+        self.summary = 'Create spec file stub.'
 
-    $ pod spec lint [ NAME.podspec | DIRECTORY | http://PATH/NAME.podspec, ... ]
+        self.description = <<-DESC
+          Creates a PodSpec, in the current working dir, called `NAME.podspec'.
+          If a GitHub url is passed the spec is prepopulated.
+        DESC
 
-      Validates `NAME.podspec'. If a directory is provided it validates
-      the podspec files found, including subfolders. In case
-      the argument is omitted, it defaults to the current working dir.}
-      end
+        self.arguments = '[ NAME | https://github.com/USER/REPO ]'
 
-      def self.options
-        [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
-          ["--local",       "Lint a podspec against the local files contained in its directory"],
-          ["--only-errors", "Lint validates even if warnings are present"],
-          ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
-      end
-
-      def initialize(argv)
-        @action = argv.shift_argument
-        if @action == 'create'
-          @name_or_url     = argv.shift_argument
-          @url             = argv.shift_argument
-          super if @name_or_url.nil?
-          super unless argv.empty?
-        elsif @action == 'lint'
-          @quick       =  argv.option('--quick')
-          @local       =  argv.option('--local')
-          @only_errors =  argv.option('--only-errors')
-          @no_clean    =  argv.option('--no-clean')
-          @podspecs_paths = argv
-        else
+        def initialize(argv)
+          @name_or_url, @url = argv.shift_argument, argv.shift_argument
           super
         end
-      end
 
-      def run
-        send @action
-      end
-
-      def create
-        if repo_id_match = (@url || @name_or_url).match(/github.com\/([^\/\.]*\/[^\/\.]*)\.*/)
-          # This is to make sure Faraday doesn't warn the user about the `system_timer` gem missing.
-          old_warn, $-w = $-w, nil
-          begin
-            require 'faraday'
-          ensure
-            $-w = old_warn
-          end
-          require 'octokit'
-
-          repo_id = repo_id_match[1]
-          data = github_data_for_template(repo_id)
-          data[:name] = @name_or_url if @url
-          UI.puts semantic_versioning_notice(repo_id, data[:name]) if data[:version] == '0.0.1'
-        else
-          data = default_data_for_template(@name_or_url)
+        def validate!
+          super
+          help! "A pod name or repo URL is required." unless @name_or_url
         end
-        spec = spec_template(data)
-        (Pathname.pwd + "#{data[:name]}.podspec").open('w') { |f| f << spec }
-        UI.puts "\nSpecification created at #{data[:name]}.podspec".green
-      end
 
-      def lint
-        UI.puts
-        invalid_count = 0
-        podspecs_to_lint.each do |podspec|
-          linter       = Linter.new(podspec)
-          linter.quick = @quick
-          linter.local = @local
-          linter.no_clean = @no_clean
+        def run
+          if repo_id_match = (@url || @name_or_url).match(/github.com\/([^\/\.]*\/[^\/\.]*)\.*/)
+            # This is to make sure Faraday doesn't warn the user about the `system_timer` gem missing.
+            old_warn, $-w = $-w, nil
+            begin
+              require 'faraday'
+            ensure
+              $-w = old_warn
+            end
+            require 'octokit'
 
-          # Show immediatly which pod is being processed.
-          print " -> #{linter.spec_name}\r" unless config.silent?
-          $stdout.flush
-          linter.lint
-
-          case linter.result_type
-          when :error
-            invalid_count += 1
-            color = :red
-          when :warning
-            invalid_count  += 1 unless @only_errors
-            color = :yellow
+            repo_id = repo_id_match[1]
+            data = github_data_for_template(repo_id)
+            data[:name] = @name_or_url if @url
+            UI.puts semantic_versioning_notice(repo_id, data[:name]) if data[:version] == '0.0.1'
           else
-            color = :green
+            data = default_data_for_template(@name_or_url)
           end
-
-          # This overwrites the previously printed text
-          UI.puts " -> ".send(color) << linter.spec_name unless config.silent?
-          print_messages('ERROR', linter.errors)
-          print_messages('WARN',  linter.warnings)
-          print_messages('NOTE',  linter.notes)
-
-          UI.puts unless config.silent?
+          spec = spec_template(data)
+          (Pathname.pwd + "#{data[:name]}.podspec").open('w') { |f| f << spec }
+          UI.puts "\nSpecification created at #{data[:name]}.podspec".green
         end
-
-        count = podspecs_to_lint.count
-        UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n" unless config.silent?
-        if invalid_count == 0
-          lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
-          UI.puts lint_passed_message.green << "\n\n" unless config.silent?
-        else
-          raise Informative, count == 1 ? "The spec did not pass validation." : "#{invalid_count} out of #{count} specs failed validation."
-        end
-        podspecs_tmp_dir.rmtree if podspecs_tmp_dir.exist?
       end
 
+      class Lint < Spec
+        self.summary = 'Validates a spec file.'
+
+        self.description = <<-DESC
+          Validates `NAME.podspec'. If a directory is provided it validates
+          the podspec files found, including subfolders. In case
+          the argument is omitted, it defaults to the current working dir.
+        DESC
+
+        self.arguments = '[ NAME.podspec | DIRECTORY | http://PATH/NAME.podspec, ... ]'
+
+        def self.options
+          [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
+            ["--local",       "Lint a podspec against the local files contained in its directory"],
+            ["--only-errors", "Lint validates even if warnings are present"],
+            ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
+        end
+
+        def initialize(argv)
+          @quick       =  argv.flag?('quick')
+          @local       =  argv.flag?('local')
+          @only_errors =  argv.flag?('only-errors')
+          @no_clean    =  argv.flag?('clean', false)
+          @podspecs_paths = argv.arguments!
+          super
+        end
+
+        def run
+          UI.puts
+          invalid_count = 0
+          podspecs_to_lint.each do |podspec|
+            linter       = Linter.new(podspec)
+            linter.quick = @quick
+            linter.local = @local
+            linter.no_clean = @no_clean
+
+            # Show immediatly which pod is being processed.
+            print " -> #{linter.spec_name}\r" unless config.silent?
+            $stdout.flush
+            linter.lint
+
+            case linter.result_type
+            when :error
+              invalid_count += 1
+              color = :red
+            when :warning
+              invalid_count  += 1 unless @only_errors
+              color = :yellow
+            else
+              color = :green
+            end
+
+            # This overwrites the previously printed text
+            UI.puts " -> ".send(color) << linter.spec_name unless config.silent?
+            print_messages('ERROR', linter.errors)
+            print_messages('WARN',  linter.warnings)
+            print_messages('NOTE',  linter.notes)
+
+            UI.puts unless config.silent?
+          end
+
+          count = podspecs_to_lint.count
+          UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n" unless config.silent?
+          if invalid_count == 0
+            lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
+            UI.puts lint_passed_message.green << "\n\n" unless config.silent?
+          else
+            raise Informative, count == 1 ? "The spec did not pass validation." : "#{invalid_count} out of #{count} specs failed validation."
+          end
+          podspecs_tmp_dir.rmtree if podspecs_tmp_dir.exist?
+        end
+      end
+
+      # TODO some of the following methods can probably move to one of the subclasses.
       private
 
       def print_messages(type, messages)
@@ -224,7 +234,7 @@ Pod::Spec.new do |s|
   # s.description  = <<-DESC
   #                   An optional longer description of #{data[:name]}
   #
-  #                   * Markdonw format.
+  #                   * Markdown format.
   #                   * Don't worry about the indent, we strip it!
   #                  DESC
   s.homepage     = "#{data[:homepage]}"
@@ -258,7 +268,7 @@ Pod::Spec.new do |s|
   #
   # s.author       = '#{data[:author_name]}', 'other author'
 
-  # Specify the location from where the source should be retreived.
+  # Specify the location from where the source should be retrieved.
   #
   s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
   # s.source       = { :svn => 'http://EXAMPLE/#{data[:name]}/tags/1.0.0' }
@@ -292,9 +302,9 @@ Pod::Spec.new do |s|
   # made available to the application. If the pattern is a directory then the
   # path will automatically have '*.h' appended.
   #
-  # Also allows the use of the FileList class like `source_files does.
+  # Also allows the use of the FileList class like `source_files' does.
   #
-  # If you do not explicitely set the list of public header files,
+  # If you do not explicitly set the list of public header files,
   # all headers of source_files will be made public.
   #
   # s.public_header_files = 'Classes/**/*.h'
@@ -302,7 +312,7 @@ Pod::Spec.new do |s|
   # A list of resources included with the Pod. These are copied into the
   # target bundle with a build phase script.
   #
-  # Also allows the use of the FileList class like `source_files does.
+  # Also allows the use of the FileList class like `source_files' does.
   #
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
@@ -310,7 +320,7 @@ Pod::Spec.new do |s|
   # A list of paths to preserve after installing the Pod.
   # CocoaPods cleans by default any file that is not used.
   # Please don't include documentation, example, and test files.
-  # Also allows the use of the FileList class like `source_files does.
+  # Also allows the use of the FileList class like `source_files' does.
   #
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 

@@ -21,6 +21,7 @@ module Pod
   #   returns absolute paths.
   #
   class LocalPod
+    autoload :PathList, 'cocoapods/local_pod/path_list'
 
     # @return [Specification] The specification that describes the pod.
     #
@@ -59,7 +60,7 @@ module Pod
     #       computed values. In other words, it should be immutable.
     #
     def initialize(specification, sandbox, platform)
-      @top_specification, @sandbox, @platform = specification.top_level_parent, sandbox, platform
+      @top_specification, @sandbox, @platform = specification.root, sandbox, platform
       @top_specification.activate_platform(platform)
       @specifications = [] << specification
     end
@@ -80,7 +81,7 @@ module Pod
     # @raise {Informative} If the specification is not part of the same pod.
     #
     def add_specification(spec)
-      unless spec.top_level_parent == top_specification
+      unless spec.root == top_specification
         raise Informative,
           "[Local Pod] Attempt to add a specification from another pod"
       end
@@ -94,13 +95,17 @@ module Pod
       @sandbox.root + top_specification.name
     end
 
+    def path_list
+      @path_list ||= PathList.new(root)
+    end
+
     # @return [String] A string representation of the pod which indicates if
     #                  the pods comes from a local source or has a preferred
     #                  dependency.
     #
     def to_s
       s =  top_specification.to_s
-      s << " defaulting to #{top_specification.preferred_dependency} subspec" if top_specification.preferred_dependency
+      s << " defaulting to #{top_specification.default_subspec} subspec" if top_specification.default_subspec
       s
     end
 
@@ -156,6 +161,7 @@ module Pod
     def clean!
       clean_paths.each { |path| FileUtils.rm_rf(path) }
       @cleaned = true
+      path_list.read_file_system
     end
 
     # Finds the absolute paths, including hidden ones, of the files
@@ -242,7 +248,7 @@ module Pod
     #
     def source_files_by_spec
       options = {:glob => '*.{h,hpp,hh,m,mm,c,cpp}'}
-      paths_by_spec(:source_files, options)
+      @source_files_by_spec ||= paths_by_spec(:source_files, '*.{h,hpp,hh,m,mm,c,cpp}')
     end
 
     # @return [Array<Pathname>] The paths of the header files.
@@ -277,7 +283,7 @@ module Pod
     #   header files (i.e. the build ones) are intended to be public.
     #
     def public_header_files_by_spec
-      public_headers = paths_by_spec(:public_header_files, :glob => '*.{h,hpp,hh}')
+      public_headers = paths_by_spec(:public_header_files, '*.{h,hpp,hh}')
       build_headers  = header_files_by_spec
 
       result = {}
@@ -294,7 +300,20 @@ module Pod
     # @return [Array<Pathname>] The paths of the resources.
     #
     def resource_files
-      paths_by_spec(:resources).values.flatten
+      specs ||= specifications
+      paths_by_spec   = {}
+      processed_paths = []
+
+      specs = specs.sort_by { |s| s.name.length }
+      specs.each do |spec|
+        spec_paths = spec.resources[:resources]
+        paths = expanded_paths(spec_paths, '**/*', spec.exclude_files)
+        unless paths.empty?
+          paths_by_spec[spec] = paths - processed_paths
+          processed_paths += paths
+        end
+      end
+      paths_by_spec.values.flatten
     end
 
     # @return [Array<Pathname>] The *relative* paths of the resources.
@@ -331,11 +350,14 @@ module Pod
     #   specification or automatically detected.
     #
     def license_file
-      if top_specification.license && top_specification.license[:file]
-        root + top_specification.license[:file]
-      else
-        expanded_paths(%w[ licen{c,s}e{*,.*} ]).first
+      unless @license_file
+        if top_specification.license && top_specification.license[:file]
+          @license_file = root + top_specification.license[:file]
+        else
+          @license_file = expanded_paths(%w[ licen{c,s}e{*,.*} ]).first
+        end
       end
+      @license_file
     end
 
     # @return [String] The text of the license of the pod from the
@@ -352,7 +374,14 @@ module Pod
     end
 
     def xcconfig
-      specifications.map { |s| s.xcconfig }.reduce(:merge)
+      config = Xcodeproj::Config.new
+      specifications.each do |s|
+        config.merge(s.xcconfig)
+        config.libraries.merge(s.libraries)
+        config.frameworks.merge(s.frameworks)
+        config.weak_frameworks.merge(s.weak_frameworks)
+      end
+      config
     end
 
     # Computes the paths of all the public headers of the pod including every
@@ -372,8 +401,8 @@ module Pod
       end
 
       specs = [top_specification] + top_specification.recursive_subspecs
-      source_files   = paths_by_spec(:source_files, { :glob => '*.{h}'}, specs)
-      public_headers = paths_by_spec(:public_header_files,{ :glob => '*.{h}'}, specs)
+      source_files   = paths_by_spec(:source_files, '*.{h}', specs)
+      public_headers = paths_by_spec(:public_header_files, '*.{h}', specs)
 
       result = []
       specs.each do |spec|
@@ -431,7 +460,7 @@ module Pod
                            "project before adding the build files to the target."
       end
       file_references_by_spec.each do |spec, file_reference|
-        target.add_file_references(file_reference, spec.compiler_flags.strip)
+        target.add_file_references(file_reference, (spec.compiler_flags * " ").strip)
       end
     end
 
@@ -474,7 +503,7 @@ module Pod
     end
 
     # @return Hash{Pathname => [Array<Pathname>]} A hash containing the headers
-    #   folders as the keys and the the absolute paths of the header files
+    #   folders as the keys and the absolute paths of the header files
     #   as the values.
     #
     # @todo this is being overridden in the RestKit 0.9.4 spec, need to do
@@ -489,7 +518,7 @@ module Pod
         dir = spec.header_dir ? (headers_sandbox + spec.header_dir) : headers_sandbox
         paths.each do |from|
           from_relative = from.relative_path_from(root)
-          to = dir + spec.copy_header_mapping(from_relative)
+          to = dir + (spec.header_mappings_dir ? from.relative_path_from(spec.header_mappings_dir) : from.basename)
           (mappings[to.dirname] ||= []) << from
         end
       end
@@ -507,27 +536,29 @@ module Pod
     # included in the linker search paths.
     #
     def headers_excluded_from_search_paths
-      options = { :glob => '*.{h,hpp,hh}' }
-      paths = paths_by_spec(:exclude_header_search_paths, options)
-      paths.values.compact.uniq
+      #TODO
+      # paths = paths_by_spec(:exclude_header_search_paths, '*.{h,hpp,hh}')
+      # paths.values.compact.uniq
+      []
     end
 
     # @!group Paths Patterns
 
     # The paths obtained by resolving the patterns of an attribute
-    # groupped by spec.
+    # grouped by spec.
     #
     # @param [Symbol] accessor The accessor to use to obtain the paths patterns.
+    #
     # @param [Hash] options (see #expanded_paths)
     #
-    def paths_by_spec(accessor, options = {}, specs = nil)
+    def paths_by_spec(accessor, dir_pattern = nil, specs = nil)
       specs ||= specifications
       paths_by_spec   = {}
       processed_paths = []
 
       specs = specs.sort_by { |s| s.name.length }
       specs.each do |spec|
-        paths = expanded_paths(spec.send(accessor), options)
+        paths = expanded_paths(spec.send(accessor), dir_pattern, spec.exclude_files)
         unless paths.empty?
           paths_by_spec[spec] = paths - processed_paths
           processed_paths += paths
@@ -552,33 +583,28 @@ module Pod
     #
     # @return [Array<Pathname>] A list of the paths.
     #
-    def expanded_paths(patterns, options = {})
+    def expanded_paths(patterns, dir_pattern = nil, exclude_patterns = nil)
       unless exists?
         raise Informative, "[Local Pod] Attempt to resolve paths for nonexistent pod.\n" \
                            "\tSpecifications: #{@specifications.inspect}\n" \
-                           "\t      Patterns: #{patterns.inspect}\n" \
-                           "\t       Options: #{options.inspect}"
+                           "\t      Patterns: #{patterns.inspect}"
       end
 
+      # Noticeable impact on performance
       return [] if patterns.empty?
+
       patterns = [ patterns ] if patterns.is_a?(String)
       file_lists = patterns.select { |p| p.is_a?(FileList) }
       glob_patterns = patterns - file_lists
 
       result = []
 
+      result << path_list.glob(glob_patterns, dir_pattern, exclude_patterns)
+
       result << file_lists.map do |file_list|
         file_list.prepend_patterns(root)
         file_list.glob
       end
-
-      result << glob_patterns.map do |pattern|
-        pattern = root + pattern
-        if pattern.directory? && options[:glob]
-          pattern += options[:glob]
-        end
-        Pathname.glob(pattern, File::FNM_CASEFOLD)
-      end.flatten
 
       result.flatten.compact.uniq
     end
@@ -616,5 +642,5 @@ module Pod
         true
       end
     end
-  end
-end
+  end # LocalPod
+end # Pod

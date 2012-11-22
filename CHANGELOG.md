@@ -1,10 +1,95 @@
-## Master
+## Branch 0.17
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.2...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.5...master)
+###### DSL Changes
+
+- Deprecated header_mappings hook for specifications.
+- `preferred_dependency` has been renamed to `default_subspec`.
+- Added `s.exclude_source_files` and related attributes to the specification class.
+- Added support for prefix_header_file in subspecs
+- Added support for prefix_header_contents in subspecs
+- Removed exclude_header_search_paths
+- Added screenshot attribute
+- Renamed preferred_dependency
+
+###### Enhancements
+
+- Extracted command-line command & option handling into
+  [CLAide](https://github.com/CocoaPods/CLAide).
+- Added PathList class.
+
+- Added Podfile to the Pods project.
+  [#476](https://github.com/CocoaPods/CocoaPods/issues/476)
+
+## 0.16.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc5...master)
+
+###### Enhancements
+
+- Use Rake 0.9.4
+  [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
+
+
+## 0.16.0.rc5
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc4...0.16.0.rc5)
+
+###### Deprecated
+
+- The usage of specifications defined in a Podfile is deprecated. Use the
+  `:podspec` option with a file path instead. Complete removal will most
+  probably happen in 0.17.0.
+  [#549](https://github.com/CocoaPods/CocoaPods/issues/549)
+  [#616](https://github.com/CocoaPods/CocoaPods/issues/616)
+  [#525](https://github.com/CocoaPods/CocoaPods/issues/525)
+
+###### Bug fixes
+
+- Always consider inline podspecs as needing installation.
+- Fix detection when the lib has already been integrated with the user’s target.
+  [#643](https://github.com/CocoaPods/CocoaPods/issues/643)
+  [#614](https://github.com/CocoaPods/CocoaPods/issues/614)
+  [#613](https://github.com/CocoaPods/CocoaPods/issues/613)
+
+## 0.16.0.rc4
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc3...0.16.0.rc4)
+
+###### Bug fixes
+
+- Fix for Rake 0.9.3
+  [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
+
+## 0.16.0.rc3
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...0.16.0.rc3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...0.4.0.rc6)
+
+###### Enhancements
+
+- Added support for copying frameworks to the app bundle.
+  [#597](https://github.com/CocoaPods/CocoaPods/pull/597)
+
+###### Bug fixes
+
+- Ignore PBXReferenceProxy while integrating into user project.
+  [#626](https://github.com/CocoaPods/CocoaPods/issues/626)
+- Added support for PBXAggregateTarget and PBXLegacyTarget.
+  [#615](https://github.com/CocoaPods/CocoaPods/issues/615)
+- Added support for PBXReferenceProxy.
+  [#612](https://github.com/CocoaPods/CocoaPods/issues/612)
+
+## 0.16.0.rc2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc1...0.16.0.rc2)
+
+###### Bug fixes
+
+- Fix for uninitialized constant Xcodeproj::Constants error.
+
+## 0.16.0.rc1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.2...0.16.0.rc1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.5...0.4.0.rc1)
+
+###### Enhancements
 
 - Xcodeproj partial rewrite.
-  [#576](https://github.com/CocoaPods/CocoaPods/pull/576)
-  - Performance improvements in the `Generating supporting files` phase.
+  [#565](https://github.com/CocoaPods/CocoaPods/issues/565)
+  [#561](https://github.com/CocoaPods/CocoaPods/pull/561)
+  - Performance improvements in the `Generating support files` phase.
   - Better support for editing existing projects and sorting groups.
 
 ## 0.15.2
@@ -156,6 +241,7 @@
 - The subversion downloader now does an export instead of a checkout, which
   makes it play nicer with SCMs that store metadata in each directory.
   [#245](https://github.com/CocoaPods/CocoaPods/issues/245)
+- Now the Podfile is added to the Pods project for convenient editing.
 
 ###### Bug fixes
 

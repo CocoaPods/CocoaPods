@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.unshift File.expand_path('../lib', __FILE__)
-require 'cocoapods'
+require 'cocoapods/version'
 
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
@@ -26,7 +26,9 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
 
-  s.add_runtime_dependency 'xcodeproj',     '~> 0.3.5'
+  s.add_runtime_dependency 'cocoapods-core'
+  s.add_runtime_dependency 'claide',        '~> 0.1'
+  s.add_runtime_dependency 'xcodeproj',     '~> 0.4.0'
 
   s.add_runtime_dependency 'faraday',       '~> 0.8.1'
   s.add_runtime_dependency 'octokit',       '~> 1.7'
@@ -34,7 +36,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
   s.add_runtime_dependency 'json',          '~> 1.7.3'
   s.add_runtime_dependency 'open4',         '~> 1.3.0'
-  s.add_runtime_dependency 'rake',          '~> 0.9.0'
+  s.add_runtime_dependency 'rake',          '~> 0.9.4'
   s.add_runtime_dependency 'activesupport', '~> 3.2.6'
 
   s.add_development_dependency 'bacon', '~> 1.1'

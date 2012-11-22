@@ -7,19 +7,8 @@ describe "Pod::Command::Repo" do
   end
 
   describe "In general" do
-  extend SpecHelper::Command
   extend SpecHelper::TemporaryDirectory
   extend SpecHelper::TemporaryRepos
-
-    it "runs with correct parameters" do
-      lambda { run_command('repo', 'update') }.should.not.raise
-      lambda { run_command('repo', 'lint',  temporary_directory.to_s) }.should.not.raise
-    end
-
-    it "complains for wrong parameters" do
-      lambda { run_command('repo', 'add') }.should.raise Pod::Informative
-      lambda { run_command('repo', 'add', 'NAME') }.should.raise Pod::Informative
-    end
 
     it "adds a spec-repo" do
       run_command('repo', 'add', 'private', fixture('spec-repos/master'))
@@ -67,7 +56,6 @@ describe "Pod::Command::Repo" do
   end
 
   describe "Concerning a repo support" do
-  extend SpecHelper::Command
   extend SpecHelper::TemporaryDirectory
   extend SpecHelper::TemporaryRepos
 

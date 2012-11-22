@@ -3,10 +3,29 @@ module Bacon
 
   @needs_first_put = true
 
-  module ColorOutput
-    # Graciously yanked from https://github.com/zen-cms/Zen-Core and subsequently modified
-    # MIT License
-    # Thanks, YorickPeterse!    #:nodoc:
+  def self.color(color, string)
+    case color
+    when :red
+      "\e[31m#{string}\e[0m"
+    when :green
+      "\e[32m#{string}\e[0m"
+    when :yellow
+      "\e[33m#{string}\e[0m"
+    else
+      # Support for Conque
+      "\e[0m#{string}\e[0m"
+    end
+  end
+
+  #---------------------------------------------------------------------------#
+
+  # Overrides the SpecDoxzRtput to provide colored output by default
+  #
+  # Based on https://github.com/zen-cms/Zen-Core and subsequently modified
+  # which is available under the MIT License. Thanks YorickPeterse!
+  #
+  module SpecDoxOutput
+
     def handle_specification(name)
       if @needs_first_put
         @needs_first_put = false
@@ -27,18 +46,20 @@ module Bacon
       error = yield
 
       if !error.empty?
-        puts "#{spaces}\e[31m- #{description} [FAILED]\e[0m"
+        puts Bacon.color(:red, "#{spaces}- #{description} [FAILED]")
       elsif disabled
-        puts "#{spaces}\e[33m- #{description} [DISABLED]\e[0m"
+        puts Bacon.color(:yellow, "#{spaces}- #{description} [DISABLED]")
       else
-        puts "#{spaces}\e[32m- #{description}\e[0m"
+        puts Bacon.color(:green, "#{spaces}- #{description}")
       end
     end
 
     #:nodoc:
     def handle_summary
       print ErrorLog  if Backtraces
-      puts "\e[33m#{Counter[:disabled]} disabled specifications\n\e[0m" unless Counter[:disabled].zero?
+      unless Counter[:disabled].zero?
+        puts Bacon.color(:yellow, "#{Counter[:disabled]} disabled specifications\n")
+      end
       puts "%d specifications (%d requirements), %d failures, %d errors" %
         Counter.values_at(:specifications, :requirements, :failed, :errors)
     end
@@ -48,7 +69,53 @@ module Bacon
       return '  ' * @specs_depth
     end
   end
-  extend ColorOutput
+
+  #---------------------------------------------------------------------------#
+
+  # Overrides the TestUnitOutput to provide colored result output.
+  #
+  module TestUnitOutput
+    def handle_specification(name)
+      print Bacon.color(nil, ':')
+      yield
+    end
+
+    def handle_requirement(description, disabled = false)
+      error = yield
+      if !error.empty?
+        m = error[0..0]
+        c = (m == "E" ? :red : :yellow) unless @first_error
+        print Bacon.color(c, m)
+        @first_error = true
+      elsif disabled
+        print "D"
+      else
+        print Bacon.color(nil, '.')
+      end
+    end
+
+    def handle_summary
+      first_error = ''
+      error_count = 0
+      ErrorLog.lines.each do |s|
+        error_count += 1 if s.include?('Error:') || s.include?('Informative')
+        first_error << s if error_count <= 1
+      end
+      puts "\n#{first_error}" if Backtraces
+      unless Counter[:disabled].zero?
+        puts Bacon.color(:yellow, "#{Counter[:disabled]} disabled specifications")
+      end
+      result = "%d specifications (%d requirements), %d failures, %d errors" %
+        Counter.values_at(:specifications, :requirements, :failed, :errors)
+      if Counter[:failed].zero?
+        puts Bacon.color(:green, result)
+      else
+        puts Bacon.color(:red, result)
+      end
+    end
+  end
+
+  #---------------------------------------------------------------------------#
 
   module FilterBacktraces
     def handle_summary
@@ -58,6 +125,9 @@ module Bacon
       super
     end
   end
+
+  #---------------------------------------------------------------------------#
+
   extend FilterBacktraces
 
   class Context
@@ -67,3 +137,6 @@ module Bacon
     end
   end
 end
+
+
+

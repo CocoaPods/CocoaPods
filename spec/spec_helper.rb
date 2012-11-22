@@ -21,13 +21,21 @@ require 'spec_helper/temporary_repos'
 require 'spec_helper/user_interface'
 require 'spec_helper/pre_flight'
 
+ENV['SKIP_SETUP'] = 'true'
+if ENV['SKIP_XCODEBUILD'].nil? && `which xcodebuild`.strip.empty?
+  ENV['SKIP_XCODEBUILD'] = 'true'
+end
+
+require 'claide'
+
 module Bacon
   class Context
     include Pod::Config::Mixin
     include SpecHelper::Fixture
+    include SpecHelper::Command
 
-    def argv(*argv)
-      Pod::Command::ARGV.new(argv)
+    def skip_xcodebuild?
+      ENV['SKIP_XCODEBUILD']
     end
   end
 end
@@ -36,7 +44,7 @@ config = Pod::Config.instance
 config.silent       = true
 config.repos_dir    = SpecHelper.tmp_repos_path
 config.project_root = SpecHelper.temporary_directory
-Pod::Specification::Statistics.instance.cache_file = nil
+Pod::Specification::Set::Statistics.instance.cache_file = nil
 
 require 'tmpdir'
 
@@ -69,3 +77,4 @@ VCR.configure do |c|
   c.allow_http_connections_when_no_cassette = true
 end
 
+require "active_support/core_ext/string/strip"

@@ -38,7 +38,7 @@ module Pod
     #
     attr_accessor :update_external_specs
 
-    def initialize(sandbox, podfile, locked_dependencies)
+    def initialize(sandbox, podfile, locked_dependencies = [])
       @sandbox = sandbox
       @podfile = podfile
       @locked_dependencies = locked_dependencies
@@ -68,7 +68,7 @@ module Pod
     #   whether the resolver is in update mode or not.
     #
     def resolve
-      @cached_sources  = Source::Aggregate.new
+      @cached_sources  = Source::Aggregate.new(config.repos_dir)
       @cached_sets     = {}
       @cached_specs    = {}
       @specs_by_target = {}
@@ -86,11 +86,14 @@ module Pod
       @specs_by_target
     end
 
+      #-----------------------------------------------------------------------#
+
     private
 
     # @return [Array<Set>] A cache of the sets used to resolve the dependencies.
     #
     attr_reader :cached_sets
+
 
     # @return [Source::Aggregate] A cache of the sources needed to find the
     #   podspecs.
@@ -125,7 +128,7 @@ module Pod
           if @loaded_specs.include?(dependency.name)
             validate_platform(@cached_specs[dependency.name], target_definition)
           else
-            spec = set.specification_by_name(dependency.name)
+            spec = set.specification.subspec_by_name(dependency.name)
             @pods_from_external_sources << spec.pod_name if dependency.external?
             @loaded_specs << spec.name
             @cached_specs[spec.name] = spec
@@ -145,7 +148,7 @@ module Pod
     #
     #   If the update_external_specs flag is activated the dependencies with
     #   external sources are always resolved against the remote. Otherwise the
-    #   specification is retrieved from the sanbox that fetches the external
+    #   specification is retrieved from the sandbox that fetches the external
     #   source only if needed.
     #
     def find_cached_set(dependency, platform)
@@ -155,13 +158,15 @@ module Pod
           Specification::Set::External.new(dependency.specification)
         elsif external_source = dependency.external_source
           if update_external_specs
-            spec = external_source.specification_from_external(sandbox, platform)
+            external_source = ExternalSources.from_dependency(dependency)
+            spec = external_source.specification_from_external(@sandbox, platform)
           else
-            spec = external_source.specification_from_sandbox(sandbox, platform)
+            external_source = ExternalSources.from_dependency(dependency)
+            spec = external_source.specification_from_sandbox(@sandbox, platform)
           end
           set = Specification::Set::External.new(spec)
           if dependency.subspec_dependency?
-            @cached_sets[dependency.top_level_spec_name] ||= set
+            @cached_sets[dependency.root_name] ||= set
           end
           set
         else

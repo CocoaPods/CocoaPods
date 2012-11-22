@@ -120,6 +120,7 @@ module Pod
       integrate_user_project
     end
 
+# <<<<<<< HEAD
     # Performs only the computation parts of an installation.
     #
     # It is used by the `outdated` subcommand.
@@ -384,6 +385,24 @@ module Pod
       end
 
       @local_pods = local_pods_by_target.values.flatten.uniq.sort_by { |pod| pod.name.downcase }
+# =======
+#     def project
+#       return @project if @project
+#       @project = Pod::Project.new(sandbox)
+#       # TODO
+#       # @project.user_build_configurations = @podfile.user_build_configurations
+#       pods.each { |p| p.add_file_references_to_project(@project) }
+#       pods.each { |p| p.link_headers }
+#       @project.add_podfile(config.project_podfile)
+#       @project
+#     end
+# 
+#     def target_installers
+#       @target_installers ||= @podfile.target_definitions.values.map do |definition|
+#         pods_for_target = pods_by_target[definition]
+#         TargetInstaller.new(project, definition, pods_for_target) unless definition.empty?
+#       end.compact
+# >>>>>>> core-extraction
     end
 
     #---------------------------------------------------------------------------#
@@ -575,6 +594,11 @@ module Pod
         local_pods.each { |p| p.add_file_references_to_project(pods_project) }
         local_pods.each { |p| p.link_headers }
       end
+# <<<<<<< HEAD
+# =======
+# 
+#       UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
+# >>>>>>> core-extraction
     end
 
     def run_pre_install_hooks

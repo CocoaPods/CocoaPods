@@ -1,5 +1,11 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
+
+    # it 'tells each pod to link its headers' do
+    #   @pods[0].expects(:link_headers)
+    #   do_install!
+    # end
+
 module Pod
   describe Installer do
 
@@ -17,6 +23,28 @@ module Pod
           xcodeproj 'MyProject'
           pods.each { |name| pod name }
         end
+
+        # @sandbox = temporary_sandbox
+        # config.project_pods_root = temporary_sandbox.root
+        # FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
+
+        # resolver = Resolver.new(podfile, nil, @sandbox)
+        # @installer = Installer.new(resolver)
+        # target_installer = @installer.target_installers.first
+        # target_installer.install
+        # @xcconfig = target_installer.xcconfig.to_hash
+      end
+
+      it "sets the header search paths where installed Pod headers can be found" do
+        @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
+      end
+
+      it "configures the project to load all members that implement Objective-c classes or categories from the static library" do
+        @xcconfig['OTHER_LDFLAGS'].should == '-ObjC'
+      end
+
+      it "sets the PODS_ROOT build variable" do
+        @xcconfig['PODS_ROOT'].should.not == nil
       end
 
       def generate_lockfile
@@ -40,8 +68,15 @@ module Pod
       #   end
       # end
 
+# <<<<<<< HEAD
       it "marks all pods as added if there is no lockfile" do
         @installer.pods_added_from_the_lockfile.should == ['JSONKit']
+# =======
+#       it "adds the files of the pod to the Pods project only once" do
+#         @installer.install!
+#         group = @installer.project.pods.groups.find { |g| g.name == 'Reachability' }
+#         group.files.map(&:name).sort.should == ["Reachability.h", "Reachability.m"]
+# >>>>>>> core-extraction
       end
 
     end
