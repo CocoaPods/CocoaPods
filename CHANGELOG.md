@@ -1,3 +1,12 @@
+## 0.16.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc5...master)
+
+###### Enhancements
+
+- Use Rake 0.9.4
+  [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
+
+
 ## 0.16.0.rc5
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc4...0.16.0.rc5)
 
@@ -24,6 +33,7 @@
 ###### Bug fixes
 
 - Fix for Rake 0.9.3
+  [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
 
 ## 0.16.0.rc3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...0.16.0.rc3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...0.4.0.rc6)
