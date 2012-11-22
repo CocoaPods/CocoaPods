@@ -96,7 +96,7 @@ namespace :gem do
       diff_lines.delete('CHANGELOG.md')
       if diff_lines != ['lib/cocoapods.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
-        # exit 1
+        exit 1
       end
     end
 
