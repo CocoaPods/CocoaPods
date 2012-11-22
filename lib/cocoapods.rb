@@ -46,6 +46,7 @@ module Pod
     autoload :Markdown,             'cocoapods/generator/acknowledgements/markdown'
     autoload :DummySource,          'cocoapods/generator/dummy_source'
     autoload :PrefixHeader,         'cocoapods/generator/prefix_header'
+    autoload :XCConfig,             'cocoapods/generator/xcconfig'
   end
 
   require 'cocoapods/file_list'

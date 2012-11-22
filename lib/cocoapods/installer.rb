@@ -17,16 +17,19 @@ module Pod
 
     def project
       return @project if @project
-      @project = Pod::Project.new
-      @project.user_build_configurations = @podfile.user_build_configurations
+      @project = Pod::Project.new(sandbox)
+      # TODO
+      # @project.user_build_configurations = @podfile.user_build_configurations
       pods.each { |p| p.add_file_references_to_project(@project) }
       pods.each { |p| p.link_headers }
+      @project.add_podfile(config.project_podfile)
       @project
     end
 
     def target_installers
       @target_installers ||= @podfile.target_definitions.values.map do |definition|
-        TargetInstaller.new(@podfile, project, definition) unless definition.empty?
+        pods_for_target = pods_by_target[definition]
+        TargetInstaller.new(project, definition, pods_for_target) unless definition.empty?
       end.compact
     end
 
@@ -137,7 +140,7 @@ module Pod
         end
       end
 
-        UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
+      UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
     end
 
     def run_pre_install_hooks

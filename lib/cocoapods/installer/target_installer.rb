@@ -47,8 +47,8 @@ module Pod
         create_copy_resources_script
       end
 
-      # TODO This has to be removed, but this means the specs have to be
-      # updated if they need a reference to the prefix header.
+      # TODO: This has to be removed, but this means the specs have to be
+      #       updated if they need a reference to the prefix header.
       #
       def prefix_header_filename
         library.prefix_header_name
@@ -97,13 +97,16 @@ module Pod
       # @return [void]
       #
       def configure_target
-        set = {}
-        set['OTHER_LDFLAGS']                 = ''
-        set['GCC_PREFIX_HEADER']             = library.prefix_header_name
-        set['PODS_ROOT']                     = '${SRCROOT}'
-        set['PODS_HEADERS_SEARCH_PATHS']     = '${PODS_BUILD_HEADERS_SEARCH_PATHS}'
-        set['GCC_WARN_INHIBIT_ALL_WARNINGS'] =
-          @target_definition.inhibit_all_warnings? ? 'YES' : 'NO'
+        set = {
+          'GCC_PREFIX_HEADER' => library.prefix_header_name
+        }
+        if @target_definition.inhibit_all_warnings?
+         set['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
+        end
+
+        Generator::XCConfig.pods_project_settings.each do |key, value|
+          set[key] = value
+        end
 
         @target.build_configurations.each do |c|
           c.base_configuration_reference = xcconfig_file_ref
@@ -120,18 +123,10 @@ module Pod
       #
       def create_xcconfig_file
         UI.message "- Generating xcconfig file at #{UI.path(library.xcconfig_path)}" do
-          xcconfig = Xcodeproj::Config.new({
-            'ALWAYS_SEARCH_USER_PATHS'         => 'YES',
-            'OTHER_LDFLAGS'                    => default_ld_flags,
-            'HEADER_SEARCH_PATHS'              => '${PODS_HEADERS_SEARCH_PATHS}',
-            'PODS_ROOT'                        => library.relative_pods_root,
-            'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(sandbox.build_headers.search_paths),
-            'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
-            'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}'
-          })
-          pods.each { |pod| xcconfig.merge!(pod.xcconfig) }
-          xcconfig.save_as(library.xcconfig_path)
-          library.xcconfig = xcconfig
+          gen = Generator::XCConfig.new(sandbox, pods, library.relative_pods_root)
+          gen.set_arc_compatibility_flag = target_definition.podfile.set_arc_compatibility_flag?
+          gen.save_as(library.xcconfig_path)
+          library.xcconfig = gen.xcconfig
         end
       end
 
@@ -150,9 +145,11 @@ module Pod
 
       # Generates the bridge support metadata if requested by the {Podfile}.
       #
-      # @return [void]
+      # @note   the bridge support metadata is added to the resources of the
+      #         library because it is needed for environments interpreted at
+      #         runtime.
       #
-      # TODO: Why is this added to the copy resources script?
+      # @return [void]
       #
       def create_bridge_support_file
         if target_definition.podfile.generate_bridge_support?
@@ -223,36 +220,8 @@ module Pod
       #
       # @return [CopyResourcesScript]
       #
-      # TODO:   This should be replaced by an Xcode copy resources build phase.
-      #
       def copy_resources_script
         @copy_resources_script ||= Generator::CopyResourcesScript.new
-      end
-
-      # Converts an array of strings to a single string where the each string
-      # is surrounded by double quotes and separated by a space. Used to
-      # represent strings in a xcconfig file.
-      #
-      # @param  [Array<String>] strings
-      #         a list of strings.
-      #
-      # @return [String] the resulting string.
-      #
-      def quote(strings)
-        strings.map { |s| %W|"#{s}"| }.join(" ")
-      end
-
-      # @return [String] the default linker flags. `-ObjC` is always included
-      #         while `-fobjc-arc` is included only if requested in the
-      #         Podfile.
-      #
-      def default_ld_flags
-        flags = %w[ -ObjC ]
-        requires_arc = pods.any? { |pod| pod.requires_arc? }
-        if  requires_arc && target_definition.podfile.set_arc_compatibility_flag?
-          flags << '-fobjc-arc'
-        end
-        flags.join(" ")
       end
     end
   end

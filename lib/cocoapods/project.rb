@@ -91,7 +91,7 @@ module Pod
     # @return [PBXFileReference]
     #
     def add_podfile(podfile_path)
-      podfile_path = Pathname.new(podfile_path.to_s)
+      podfile_path = Pathname.new(podfile_path)
       podfile_ref  = new_file(podfile_path.relative_path_from(path.dirname))
       podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
       podfile_ref

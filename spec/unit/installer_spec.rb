@@ -1,5 +1,11 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
+
+    # it 'tells each pod to link its headers' do
+    #   @pods[0].expects(:link_headers)
+    #   do_install!
+    # end
+
 module Pod
   describe Installer do
     before do
@@ -21,7 +27,7 @@ module Pod
         resolver = Resolver.new(podfile, nil, @sandbox)
         @installer = Installer.new(resolver)
         target_installer = @installer.target_installers.first
-        target_installer.generate_xcconfig([], @sandbox)
+        target_installer.install
         @xcconfig = target_installer.xcconfig.to_hash
       end
 

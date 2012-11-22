@@ -74,33 +74,25 @@ describe TargetInstaller = Pod::Installer::TargetInstaller do
 
     #--------------------------------------#
 
+    it "adds the settings of the xcconfig that need to be overridden to the target" do
+      do_install!
+      build_configuration = @project.targets.first.build_configurations
+      build_settings      = build_configuration.first.build_settings
+      Pod::Generator::XCConfig.pods_project_settings.each do |key, value|
+        build_settings[key].should == value
+      end
+    end
+
     it "adds the user's build configurations to the target" do
       @project.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
       do_install!
       @project.targets.first.build_configurations.map(&:name).sort.should == %w{ AppStore Debug Release Test }
     end
 
-    it 'adds the sandbox header search paths to the xcconfig, with quotes' do
-      do_install!
-      @installer.library.xcconfig.to_hash['PODS_BUILD_HEADERS_SEARCH_PATHS'].should.include("\"#{config.sandbox.build_headers.search_paths.join('" "')}\"")
-    end
-
-    it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do
-      do_install!
-      @installer.library.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.not.include("-fobjc-arc")
-    end
-
-    it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
-      Pod::Podfile.any_instance.stubs(:set_arc_compatibility_flag? => true)
-      @pod.top_specification.stubs(:requires_arc).returns(true)
-      do_install!
-      @installer.library.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
-    end
-
     it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
       do_install!
       @installer.target.build_configurations.each do |config|
-        config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should == 'NO'
+        config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should.be.nil
       end
     end
 
