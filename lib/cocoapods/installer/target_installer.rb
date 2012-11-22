@@ -35,7 +35,7 @@ module Pod
       #
       # @return [void]
       #
-      def install
+      def install!
         add_target
         add_build_files_to_target
         add_file_reference_for_support_files

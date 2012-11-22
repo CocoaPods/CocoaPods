@@ -49,7 +49,7 @@ describe TargetInstaller = Pod::Installer::TargetInstaller do
       # Prevent raise for missing dummy project.
       Pathname.any_instance.stubs(:exist?).returns(true)
       @pod.add_file_references_to_project(@project)
-      @installer.install
+      @installer.install!
     end
 
     it 'adds a new static library target to the project' do
