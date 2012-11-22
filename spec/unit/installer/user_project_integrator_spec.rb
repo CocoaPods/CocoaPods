@@ -187,6 +187,12 @@ describe TargetIntegrator = Pod::Installer::UserProjectIntegrator::TargetIntegra
   #     app_target = app_integrator.user_project.targets.find { |t| t.name == 'SampleProject' }
   #     app_target.frameworks_build_phase.files.last.remove_from_project
   #
+    # # Set the name of the libPods.a PBXFileReference to `nil` to ensure the file’s basename
+    # # is used instead. Not sure yet what makes it so that the name is nil in the first place.
+    # test_target = test_runner_integrator.user_project.targets.find { |t| t.name == 'TestRunner' }
+    # build_file = test_target.frameworks_build_phase.files.last
+    # build_file.file_ref.name = nil
+  #
   #     app_integrator.expects(:add_pods_library)
   #     test_runner_integrator.expects(:add_pods_library).never
   #

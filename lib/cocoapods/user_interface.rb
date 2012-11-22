@@ -114,7 +114,7 @@ module Pod
       # that the user should take.
       #
       # @param [String]  message The message to print.
-      # @param [Actions] actions The actions that the user should take.
+      # @param [Array]   actions The actions that the user should take.
       #
       # return [void]
       #

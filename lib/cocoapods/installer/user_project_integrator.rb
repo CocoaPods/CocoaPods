@@ -184,6 +184,12 @@ module Pod
             t.frameworks_build_phase.files.any? do |bf|
               bf.file_ref.name == library.name
             end
+          end.reject do |target|
+          # TODO: check merge for commit 6311a9b5e044a9d403838f1c65894c15d806f3f0
+            target.frameworks_build_phase.files.any? do |build_file|
+              file_ref = build_file.file_ref
+              !file_ref.proxy? && file_ref.display_name == @target_definition.lib_name
+            end
           end
         end
 
