@@ -108,7 +108,7 @@ namespace :gem do
     required_xcodeproj_version = xcodeproj.requirement.requirements.first.last.to_s
 
     puts "* Checking if xcodeproj #{required_xcodeproj_version} exists on the gem host"
-    search_result = silent_sh("gem search --pre --remote xcodeproj")
+    search_result = silent_sh("gem search --all --remote xcodeproj")
     remote_xcodeproj_versions = search_result.match(/xcodeproj \((.*)\)/m)[1].split(', ')
     unless remote_xcodeproj_versions.include?(required_xcodeproj_version)
       $stderr.puts "[!] The Xcodeproj version `#{required_xcodeproj_version}' required by " \
