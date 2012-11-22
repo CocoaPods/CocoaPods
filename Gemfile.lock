@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: 1b84fd58f124e951591eb8f082b82f33387bcda1
+  revision: d599d4ed17763aa5eb03382a17a6243e11beda2e
   specs:
-    xcodeproj (0.4.0.rc9)
+    xcodeproj (0.4.0)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
 
@@ -18,7 +18,7 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.16.0.rc5)
+    cocoapods (0.16.0)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -27,7 +27,7 @@ PATH
       octokit (~> 1.7)
       open4 (~> 1.3.0)
       rake (~> 0.9.4)
-      xcodeproj (~> 0.4.0.rc6)
+      xcodeproj (~> 0.4.0)
 
 GEM
   remote: http://rubygems.org/
@@ -50,7 +50,7 @@ GEM
     hashie (1.2.0)
     i18n (0.6.1)
     json (1.7.5)
-    listen (0.5.3)
+    listen (0.6.0)
     metaclass (0.0.1)
     method_source (0.8.1)
     mocha (0.11.4)
@@ -70,7 +70,7 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
-    rake (0.9.4)
+    rake (0.9.5)
     rb-fsevent (0.9.2)
     redcarpet (2.2.2)
     slop (3.3.3)
