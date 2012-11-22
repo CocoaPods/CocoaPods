@@ -88,7 +88,7 @@ GEM
     slop (3.3.3)
     terminal-notifier (1.4.2)
     vcr (2.3.0)
-    webmock (1.9.0)
+    webmock (1.8.11)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
     yard (0.8.3)
@@ -110,6 +110,6 @@ DEPENDENCIES
   rb-fsevent
   redcarpet
   vcr
-  webmock
+  webmock (>= 1.8.0, < 1.9)
   xcodeproj!
   yard

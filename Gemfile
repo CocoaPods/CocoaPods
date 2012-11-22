@@ -10,7 +10,7 @@ group :development do
   gem "mocha-on-bacon"
   gem "rake"
   gem "vcr"
-  gem "webmock"
+  gem "webmock", '>= 1.8.0', '< 1.9'
 end
 
 group :debugging do
