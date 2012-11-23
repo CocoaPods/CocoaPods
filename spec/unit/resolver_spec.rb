@@ -5,8 +5,8 @@ module Pod
     before do
       config.repos_dir = fixture('spec-repos')
       @podfile = Podfile.new do
-        platform :ios
-        pod 'BlocksKit'
+        platform :ios, '6.0'
+        pod 'BlocksKit', '1.8.0'
       end
       @resolver = Resolver.new(@podfile, nil, stub('sandbox'))
     end
@@ -14,7 +14,6 @@ module Pod
     it "holds the context state, such as cached specification sets" do
       @resolver.resolve
       @resolver.cached_sets.values.sort_by(&:name).should == [
-        Pod::Source.search_by_name('A2DynamicDelegate').first,
         Pod::Source.search_by_name('BlocksKit').first,
         Pod::Source.search_by_name('libffi').first
       ].sort_by(&:name)
@@ -23,13 +22,13 @@ module Pod
     it "returns all specs needed for the dependency" do
       specs = @resolver.resolve.values.flatten
       specs.map(&:class).uniq.should == [Specification]
-      specs.map(&:name).sort.should == %w{ A2DynamicDelegate BlocksKit libffi }
+      specs.map(&:name).sort.should == %w{ BlocksKit libffi }
     end
 
     it "does not raise if all dependencies match the platform of the root spec (Podfile)" do
-      @podfile.platform :ios
+      @podfile.platform :ios, '6.0'
       lambda { @resolver.resolve }.should.not.raise
-      @podfile.platform :osx
+      @podfile.platform :osx, '10.7'
       lambda { @resolver.resolve }.should.not.raise
     end
 
@@ -259,7 +258,7 @@ module Pod
           platform :ios
           pod 'JSONKit'
           pod 'BlocksKit'
-          pod 'libPusher' # New pod
+          pod 'libPusher', '1.3' # New pod
         end
         @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
         installed = @resolver.resolve.values.flatten.map(&:to_s)
@@ -348,7 +347,7 @@ module Pod
       before do
         config.repos_dir = fixture('spec-repos')
         @podfile = Podfile.new do
-          platform :ios
+          platform :ios, '6.0'
           pod 'BlocksKit'
           pod 'JSONKit'
           pod 'libPusher'
@@ -376,7 +375,7 @@ module Pod
 
       it "respects the constraints of the podfile" do
         podfile = Podfile.new do
-          platform :ios
+          platform :ios, '6.0'
           pod 'BlocksKit'
           pod 'JSONKit', '1.4'
         end

@@ -1,5 +1,8 @@
 require 'spec_helper/temporary_directory'
 
+# Important
+# Include with temporary directory
+
 module SpecHelper
   def self.tmp_repos_path
     TemporaryRepos.tmp_repos_path
@@ -9,40 +12,63 @@ module SpecHelper
     extend Pod::Executable
     executable :git
 
+    # @return [Pathname] The path for the repo with the given name.
+    #
+    def repo_path(name)
+      tmp_repos_path + name
+    end
+
+    # Makes a repo with the given name.
+    #
+    def repo_make(name)
+      path = repo_path(name)
+      path.mkpath
+      Dir.chdir(path) do
+        `git init`
+        repo_make_readme_change(name, 'Added')
+        `git add .`
+        `git commit -m "Initialized."`
+      end
+      path
+    end
+
+    # Clones a repo to the given name.
+    #
+    def repo_clone(from_name, to_name)
+      Dir.chdir(tmp_repos_path) { `git clone #{from_name} #{to_name}` }
+      repo_path(to_name)
+    end
+
+    def repo_make_readme_change(name, string)
+      file = repo_path(name) + 'README'
+      file.open('w') { |f| f << "#{string}" }
+    end
+
+    #--------------------------------------#
+
+    def test_repo_path
+      repo_path('master')
+    end
+
+    # Sets up a lighweight master repo in `tmp/cocoapods/master` with the
+    # contents of `spec/fixtures/spec-repos/test_repo`.
+    #
+    def set_up_test_repo
+      require 'fileutils'
+      test_repo_path.mkpath
+      origin = ROOT + 'spec/fixtures/spec-repos/test_repo/.'
+      destination = tmp_repos_path + 'master'
+      FileUtils.cp_r(origin, destination)
+      repo_make('master')
+    end
+
+    #--------------------------------------#
+
     def tmp_repos_path
       SpecHelper.temporary_directory + 'cocoapods'
     end
+
     module_function :tmp_repos_path
-
-    alias_method :git_super, :git
-    def git(repo, command)
-      Dir.chdir(tmp_repos_path + repo) do
-        if output = git_super(command)
-          output.strip
-        end
-      end
-    end
-
-    def git_config(repo, attr)
-      git repo, "config --get #{attr}"
-    end
-
-    def add_repo(name, from)
-      command = command('repo', 'add', name, from)
-      command.run
-      # The test branch is used by the push specs
-      Dir.chdir(command.dir) do
-        `git checkout -b test >/dev/null 2>&1`
-        `git branch --set-upstream test origin/master >/dev/null 2>&1`
-      end
-      command
-    end
-
-    def make_change(repo, name)
-      (repo.dir + 'README').open('w') { |f| f << 'Added!' }
-      git(name, 'add README')
-      git(name, 'commit -m "changed"')
-    end
 
     def self.extended(base)
       base.before do

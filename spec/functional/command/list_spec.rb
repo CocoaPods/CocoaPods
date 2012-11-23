@@ -2,41 +2,36 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "Pod::Command::List" do
   extend SpecHelper::TemporaryRepos
+  extend SpecHelper::TemporaryDirectory
 
   def command(arguments = argv)
     command = Pod::Command::List.new(arguments)
   end
 
-  it "complains for wrong parameters" do
-    lambda { command(argv('wrong')).run }.should.raise Pod::Command::Help
-    lambda { command(argv('--wrong')).run }.should.raise Pod::Command::Help
+  before do
+    set_up_test_repo
+    config.repos_dir = SpecHelper.tmp_repos_path
   end
 
   it "presents the known pods" do
-    list = command()
-    list.run
-    [ /ZBarSDK/,
-      /TouchJSON/,
-      /SDURLCache/,
-      /MagicalRecord/,
-      /A2DynamicDelegate/,
+    command.run
+    Pod::UI.output
+    [ /BananaLib/,
+      /JSONKit/,
       /\d+ pods were found/
     ].each { |regex| Pod::UI.output.should =~ regex }
   end
 
   it "returns the new pods" do
-    Time.stubs(:now).returns(Time.mktime(2012,2,3))
-    list = command(argv('new'))
-    list.run
-    [ 'iCarousel',
-      'libPusher',
-      'SSCheckBoxView',
-      'KKPasscodeLock',
-      'SOCKit',
-      'FileMD5Hash',
-      'cocoa-oauth',
-      'iRate'
-    ].each {|s| Pod::UI.output.should.include s }
+    sets = Pod::Source.all_sets
+    jsonkit_set = sets.find { |s| s.name == 'JSONKit' }
+    dates = {
+      'BananaLib' => Time.now,
+      'JSONKit'   => Time.parse('01/01/1970') }
+    Pod::Specification::Statistics.any_instance.stubs(:creation_dates).returns(dates)
+    command(argv('new')).run
+    Pod::UI.output.should.include('BananaLib')
+    Pod::UI.output.should.not.include('JSONKit')
   end
 end
 

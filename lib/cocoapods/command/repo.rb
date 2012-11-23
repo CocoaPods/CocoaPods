@@ -153,6 +153,8 @@ module Pod
         is_compatilbe(versions)
       end
 
+      #--------------------------------------#
+
       private
 
       def versions(dir)
