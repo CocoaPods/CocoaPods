@@ -81,16 +81,20 @@ module Bacon
     end
 
     def handle_requirement(description, disabled = false)
-      error = yield
-      if !error.empty?
-        m = error[0..0]
-        c = (m == "E" ? :red : :yellow) unless @first_error
-        print Bacon.color(c, m)
-        @first_error = true
-      elsif disabled
-        print "D"
+      if @first_error
+        print Bacon.color(nil, '_')
       else
-        print Bacon.color(nil, '.')
+        error = yield
+        if !error.empty?
+          m = error[0..0]
+          c = (m == "E" ? :red : :yellow) unless @first_error
+          print Bacon.color(c, m)
+          @first_error = true
+        elsif disabled
+          print "D"
+        else
+          print Bacon.color(nil, '.')
+        end
       end
     end
 
