@@ -27,6 +27,12 @@ module Pod
         errors.empty? && warnings.empty? && deprecations.empty?
       end
 
+      # TODO
+      def result_type
+        :note
+      end
+
+
       # @return [Bool] whether the lint should skip the checks that requires
       # the download or the build of the library.
       #

@@ -15,6 +15,7 @@ describe Pod::UI do
     output.should.include? 'CocoaLumberjack'
     output.should.include? '1.0'
     output.should.include? '1.1'
+    output.should.include? '[master repo]'
     output.should.include? 'A fast & simple, yet powerful & flexible logging framework for Mac and iOS.'
     output.should.include? 'https://github.com/robbiehanson/CocoaLumberjack'
     output.should.include? 'https://github.com/robbiehanson/CocoaLumberjack.git'

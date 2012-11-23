@@ -39,14 +39,14 @@ module Pod
       class New < List
         self.summary = 'Lists pods introduced in the master spec-repo since the last check'
 
-        def run
+        def run_a
           update_if_necessary!
 
           days = [1,2,3,5,8]
           dates, groups = {}, {}
           days.each {|d| dates[d] = Time.now - 60 * 60 * 24 * d}
           sets = Source.all_sets
-          creation_dates = Pod::Specification::Set::Statistics.instance.creation_dates(sets)
+          creation_dates = Specification::Set::Statistics.instance.creation_dates(sets)
 
           sets.each do |set|
             set_date = creation_dates[set.name]

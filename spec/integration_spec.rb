@@ -192,15 +192,19 @@ else
 
           result = installer.lockfile.to_hash
           result['PODS'].should  == [
-            { "ASIHTTPRequest (1.8.1)" =>                   ["ASIHTTPRequest/ASIWebPageRequest (= 1.8.1)",
-                                                             "ASIHTTPRequest/CloudFiles (= 1.8.1)",
-                                                             "ASIHTTPRequest/S3 (= 1.8.1)",
-                                                             "Reachability"]},
-           { "ASIHTTPRequest/ASIWebPageRequest (1.8.1)" =>  ["Reachability"] },
-           { "ASIHTTPRequest/CloudFiles (1.8.1)" =>         ["Reachability"] },
-           { "ASIHTTPRequest/S3 (1.8.1)" =>                 ["Reachability"] },
-           "JSONKit (1.4)",
-           "Reachability (3.0.0)"]
+            { "ASIHTTPRequest (1.8.1)" =>
+              [ "ASIHTTPRequest/ASIWebPageRequest (= 1.8.1)",
+                "ASIHTTPRequest/CloudFiles (= 1.8.1)",
+                "ASIHTTPRequest/S3 (= 1.8.1)",
+                "Reachability"
+              ]
+          },
+          { "ASIHTTPRequest/ASIWebPageRequest (1.8.1)" =>  ["Reachability"] },
+          { "ASIHTTPRequest/CloudFiles (1.8.1)" =>         ["Reachability"] },
+          { "ASIHTTPRequest/S3 (1.8.1)" =>                 ["Reachability"] },
+          "JSONKit (1.4)",
+          "Reachability (3.1.0)"
+          ]
           result['DEPENDENCIES'].should == ["ASIHTTPRequest", "JSONKit (= 1.4)"]
           # TODO might be nicer looking to not show the dependencies of the top level spec for each subspec (Reachability).
 
@@ -300,7 +304,7 @@ else
         lockfile_contents = {
           'PODS' => [
             'JSONKit (999.999.999)',
-            'Reachability (3.0.0)',
+            'Reachability (3.1.0)',
             'SSZipArchive (0.1.1)',
           ],
           'DEPENDENCIES' => [

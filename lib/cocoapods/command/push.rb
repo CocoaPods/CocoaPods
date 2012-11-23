@@ -87,7 +87,7 @@ module Pod
         lint_argv = ["lint"]
         lint_argv << "--only-errors" if @allow_warnings
         lint_argv << "--silent" if config.silent
-        all_valid = true
+        # all_valid = true
         podspec_files.each do |podspec|
           Spec.parse(lint_argv + [podspec.to_s]).run
         end

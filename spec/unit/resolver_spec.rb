@@ -28,9 +28,9 @@ module Pod
     end
 
     it "does not raise if all dependencies match the platform of the root spec (Podfile)" do
-      @podfile.platform :ios
+      @podfile.platform :ios, '6.0'
       lambda { @resolver.resolve }.should.not.raise
-      @podfile.platform :osx
+      @podfile.platform :osx, '10.7'
       lambda { @resolver.resolve }.should.not.raise
     end
 
