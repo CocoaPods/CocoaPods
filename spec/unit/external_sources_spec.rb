@@ -2,39 +2,66 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
   describe ExternalSources do
-    before do
-      @sandbox = temporary_sandbox
-    end
+    it "returns the instance of appropriate concrete class according to the parameters" do
+      git = Dependency.new("Reachability", :git => nil)
+      podspec = Dependency.new("Reachability", :podspec => nil)
+      local = Dependency.new("Reachability", :local => nil)
 
-    it "marks a LocalPod as downloaded if it's from GitSource" do
+      ExternalSources.from_dependency(git).class.should == ExternalSources::GitSource
+      ExternalSources.from_dependency(podspec).class.should == ExternalSources::PodspecSource
+      ExternalSources.from_dependency(local).class.should == ExternalSources::LocalSource
+    end
+  end
+
+  describe ExternalSources::AbstractExternalSource do
+    xit "returns the name" do end
+    xit "returns the params" do end
+    xit "returns the compares to another" do end
+    xit "returns the specification" do end
+    xit "returns the specification from the sandbox if available" do end
+    xit "returns the specification fetching it from the external source" do end
+  end
+
+  describe ExternalSources::GitSource do
+    it "creates a copy of the podspec" do
       dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
       external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
-      @sandbox.installed_pod_named('Reachability', Platform.ios).downloaded.should.be.true
-    end
-
-    it "creates a copy of the podspec (GitSource)" do
-      dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
-      external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
-      path = @sandbox.root + 'Local Podspecs/Reachability.podspec'
+      external_source.copy_external_source_into_sandbox(config.sandbox, Platform.ios)
+      path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
 
-    it "creates a copy of the podspec (PodspecSource)" do
+    it "marks a LocalPod as downloaded" do
+      dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
+      external_source = ExternalSources.from_dependency(dependency)
+      external_source.copy_external_source_into_sandbox(config.sandbox, Platform.ios)
+      config.sandbox.installed_pod_named('Reachability', Platform.ios).downloaded.should.be.true
+    end
+
+    xit "returns the description" do end
+  end
+
+  describe ExternalSources::PodspecSource do
+    it "creates a copy of the podspec" do
       dependency = Dependency.new("Reachability", :podspec => fixture('integration/Reachability/Reachability.podspec').to_s)
       external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
-      path = @sandbox.root + 'Local Podspecs/Reachability.podspec'
+      external_source.copy_external_source_into_sandbox(config.sandbox, Platform.ios)
+      path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
 
-    it "creates a copy of the podspec (LocalSource)" do
+    xit "returns the description" do end
+  end
+
+  describe ExternalSources::LocalSource do
+    it "creates a copy of the podspec" do
       dependency = Dependency.new("Reachability", :local => fixture('integration/Reachability'))
       external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
-      path = @sandbox.root + 'Local Podspecs/Reachability.podspec'
+      external_source.copy_external_source_into_sandbox(config.sandbox, Platform.ios)
+      path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
+
+    xit "returns the description" do end
   end
 end
