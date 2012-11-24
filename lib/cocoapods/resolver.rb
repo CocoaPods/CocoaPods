@@ -235,7 +235,7 @@ module Pod
       if update_external_specs
         spec = source.specification_from_external(sandbox)
       else
-        spec = source.specification_from_sandbox(sandbox)
+        spec = source.specification(sandbox)
       end
       set = Specification::Set::External.new(spec)
       set

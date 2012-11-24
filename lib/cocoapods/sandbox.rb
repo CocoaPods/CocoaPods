@@ -131,7 +131,7 @@ module Pod
     # @param  [String] name
     #         the name of the Pod for which the specification is requested.
     #
-    # @return [Specification] the specification.
+    # @return [Specification] the specification if the file is found.
     #
     def specification(name)
       if file = podspec_for_name(name)

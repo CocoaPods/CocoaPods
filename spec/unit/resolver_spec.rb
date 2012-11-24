@@ -64,8 +64,15 @@ module Pod
         ]
       end
 
-      xit "returns the specifications that originated from external sources" do
-
+      it "it resolves specifications from external sources" do
+        podspec = fixture('integration/Reachability/Reachability.podspec')
+        podfile = Podfile.new do
+          platform :ios
+          pod "Reachability", :podspec => podspec
+        end
+        resolver = Resolver.new(config.sandbox, podfile)
+        resolver.resolve
+        resolver.specs.map(&:to_s).should == ['Reachability (3.0.0)']
       end
     end
 
@@ -146,7 +153,7 @@ module Pod
             fss.subspec 'SecondSubSpec'
           end
         end
-        ExternalSources::GitSource.any_instance.stubs(:specification_from_sandbox).returns(spec)
+        ExternalSources::GitSource.any_instance.stubs(:specification).returns(spec)
         resolver = Resolver.new(config.sandbox, @podfile)
         resolver.resolve.values.flatten.map(&:name).sort.should == %w{ MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec }
       end

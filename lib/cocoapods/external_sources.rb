@@ -66,11 +66,8 @@ module Pod
       #         sandbox or by fetching the remote source, associated with the
       #         external source.
       #
-      # TODO: rename to specification.
-      #
-      def specification_from_sandbox(sandbox)
-        specification_from_local(sandbox) ||
-          specification_from_external(sandbox)
+      def specification(sandbox)
+        specification_from_local(sandbox) || specification_from_external(sandbox)
       end
 
       # @return [Specification] returns the specification associated with the
@@ -267,7 +264,7 @@ module Pod
         path = Pathname.new(@params[:local]).expand_path
         path += "#{name}.podspec"# unless path.to_s.include?("#{name}.podspec")
         unless path.exist?
-          raise Informative, "No podspec found for `#{name}` in `#{@params[:local]}`" 
+          raise Informative, "No podspec found for `#{name}` in `#{@params[:local]}`"
         end
         path
       end
