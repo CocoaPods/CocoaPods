@@ -68,18 +68,16 @@ module Pod
       #
       # TODO: rename to specification.
       #
-      def specification_from_sandbox(sandbox, platform)
-        specification_from_local(sandbox, platform) ||
-          specification_from_external(sandbox, platform)
+      def specification_from_sandbox(sandbox)
+        specification_from_local(sandbox) ||
+          specification_from_external(sandbox)
       end
 
       # @return [Specification] returns the specification associated with the
       #         external source if available in the sandbox.
       #
-      def specification_from_local(sandbox, platform)
-        if local_pod = sandbox.installed_pod_named(name, platform)
-          local_pod.top_specification
-        end
+      def specification_from_local(sandbox)
+        sandbox.specification(name)
       end
 
       # @return [Specification] returns the specification associated with the
@@ -88,9 +86,9 @@ module Pod
       #
       # @raise  If not specification could be found.
       #
-      def specification_from_external(sandbox, platform)
-        copy_external_source_into_sandbox(sandbox, platform)
-        spec = specification_from_local(sandbox, platform)
+      def specification_from_external(sandbox)
+        copy_external_source_into_sandbox(sandbox)
+        spec = specification_from_local(sandbox)
         unless spec
           raise Informative, "No podspec found for `#{name}' in #{description}"
         end
@@ -106,12 +104,9 @@ module Pod
       # @param  [Sandbox] sandbox
       #         the sandbox where the specification should be stored.
       #
-      # @param  [Platform] platform
-      #         TODO this is not needed.
-      #
       # @return [void]
       #
-      def copy_external_source_into_sandbox(sandbox, platform)
+      def copy_external_source_into_sandbox(sandbox)
         raise "Abstract method"
       end
 
@@ -170,16 +165,14 @@ module Pod
       #       as pre-downloaded indicating to the installer that only clean
       #       operations are needed.
       #
-      def copy_external_source_into_sandbox(sandbox, platform)
+      def copy_external_source_into_sandbox(sandbox)
         UI.info("->".green + " Pre-downloading: '#{name}'") do
           target = sandbox.root + name
           target.rmtree if target.exist?
           downloader = Downloader.for_target(sandbox.root + name, @params)
           downloader.download
           store_podspec(sandbox, target + "#{name}.podspec")
-          if local_pod = sandbox.installed_pod_named(name, platform)
-            local_pod.downloaded = true
-          end
+          sandbox.predownloaded_pods << name
         end
       end
 
@@ -203,7 +196,7 @@ module Pod
 
       # @see AbstractExternalSource#copy_external_source_into_sandbox
       #
-      def copy_external_source_into_sandbox(sandbox, _)
+      def copy_external_source_into_sandbox(sandbox)
         UI.info("->".green + " Fetching podspec for `#{name}' from: #{@params[:podspec]}") do
           path = @params[:podspec]
           path = Pathname.new(path).expand_path if path.start_with?("~")
@@ -229,7 +222,7 @@ module Pod
 
       # @see AbstractExternalSource#copy_external_source_into_sandbox
       #
-      def copy_external_source_into_sandbox(sandbox, _)
+      def copy_external_source_into_sandbox(sandbox)
         store_podspec(sandbox, pod_spec_path)
       end
 
@@ -246,8 +239,8 @@ module Pod
       #       once installed, the podspec would be updated only by `pod
       #       update`.
       #
-      def specification_from_local(sandbox, platform)
-        specification_from_external(sandbox, platform)
+      def specification_from_local(sandbox)
+        specification_from_external(sandbox)
       end
 
       # @see AbstractExternalSource#specification_from_local
@@ -255,8 +248,8 @@ module Pod
       # @note The LocalSource overrides the source of the specification to
       #       point to the local path.
       #
-      def specification_from_external(sandbox, platform)
-        copy_external_source_into_sandbox(sandbox, platform)
+      def specification_from_external(sandbox)
+        copy_external_source_into_sandbox(sandbox)
         spec = Specification.from_file(pod_spec_path)
         spec.source = @params
         spec

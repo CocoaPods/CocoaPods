@@ -174,7 +174,7 @@ module Pod
         dependency = locked_dep if locked_dep
 
         UI.message("- #{dependency}", '', 2) do
-          set = find_cached_set(dependency, target_definition.platform)
+          set = find_cached_set(dependency)
           set.required_by(dependency, dependent_spec.to_s)
 
           unless @loaded_specs.include?(dependency.name)
@@ -213,13 +213,13 @@ module Pod
     #
     # @return [Set] the cached set for a given dependency.
     #
-    def find_cached_set(dependency, platform)
+    def find_cached_set(dependency)
       name = dependency.root_name
       unless cached_sets[name]
         if dependency.specification
           set = Specification::Set::External.new(dependency.specification)
         elsif dependency.external_source
-          set = set_from_external_source(dependency, platform)
+          set = set_from_external_source(dependency)
         else
           set = cached_sources.search(dependency)
         end
@@ -230,12 +230,12 @@ module Pod
 
     # Returns a new set created from an external source
     #
-    def set_from_external_source(dependency, platform)
+    def set_from_external_source(dependency)
       source = ExternalSources.from_dependency(dependency)
-      spec = if update_external_specs
-        source.specification_from_external(@sandbox, platform)
+      if update_external_specs
+        spec = source.specification_from_external(sandbox)
       else
-        source.specification_from_sandbox(@sandbox, platform)
+        spec = source.specification_from_sandbox(sandbox)
       end
       set = Specification::Set::External.new(spec)
       set

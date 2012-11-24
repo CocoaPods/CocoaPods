@@ -40,6 +40,7 @@ module Pod
       @public_headers = HeadersDirectory.new(self, PUBLIC_HEADERS_DIR)
       @cached_local_pods = {}
       @cached_locally_sourced_pods = {}
+      @predownloaded_pods = []
       FileUtils.mkdir_p(@root)
     end
 
@@ -112,16 +113,6 @@ module Pod
       end
     end
 
-    #--------------------------------------#
-
-    # @!group Private methods
-
-    attr_accessor :cached_local_pods
-
-    attr_accessor :cached_locally_sourced_pods
-
-    private
-
     # Returns the path of the specification for the Pod with the
     # given name.
     #
@@ -134,6 +125,36 @@ module Pod
       path = root + "Local Podspecs/#{name}.podspec"
       path.exist? ? path : nil
     end
+
+    # Returns the specification for the Pod with the given name.
+    #
+    # @param  [String] name
+    #         the name of the Pod for which the specification is requested.
+    #
+    # @return [Specification] the specification.
+    #
+    def specification(name)
+      if file = podspec_for_name(name)
+        Specification.from_file(file)
+      end
+    end
+
+    # @return [Array<String>] the names of the pods that have been
+    #         pre-downloaded from an external source.
+    #
+    # TODO: the installer needs to be aware of it.
+    #
+    attr_reader :predownloaded_pods
+
+    #--------------------------------------#
+
+    # @!group Private methods
+
+    private
+
+    attr_accessor :cached_local_pods
+
+    attr_accessor :cached_locally_sourced_pods
   end
 
   #---------------------------------------------------------------------------#

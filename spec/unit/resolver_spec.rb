@@ -174,6 +174,30 @@ module Pod
         e.message.should.match(/already activated version/)
       end
 
+      xit "is robust against infinite loops" do
+
+      end
+
+      xit "takes into account locked dependencies" do
+
+      end
+
+      xit "transfers the head state of a dependency to a specification" do
+
+      end
+
+      xit "" do
+
+      end
+
+      xit "" do
+
+      end
+
+      xit "" do
+
+      end
+
       # describe "Concerning Installation mode" do
       #   before do
       #     config.repos_dir = fixture('spec-repos')

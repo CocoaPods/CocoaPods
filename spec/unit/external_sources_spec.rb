@@ -26,7 +26,7 @@ module Pod
     it "creates a copy of the podspec" do
       dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
       external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox, Platform.ios)
+      external_source.copy_external_source_into_sandbox(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
@@ -34,8 +34,8 @@ module Pod
     it "marks a LocalPod as downloaded" do
       dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
       external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox, Platform.ios)
-      config.sandbox.installed_pod_named('Reachability', Platform.ios).downloaded.should.be.true
+      external_source.copy_external_source_into_sandbox(config.sandbox)
+      config.sandbox.predownloaded_pods.should == ["Reachability"]
     end
 
     xit "returns the description" do end
@@ -45,7 +45,7 @@ module Pod
     it "creates a copy of the podspec" do
       dependency = Dependency.new("Reachability", :podspec => fixture('integration/Reachability/Reachability.podspec').to_s)
       external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox, Platform.ios)
+      external_source.copy_external_source_into_sandbox(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
@@ -57,7 +57,7 @@ module Pod
     it "creates a copy of the podspec" do
       dependency = Dependency.new("Reachability", :local => fixture('integration/Reachability'))
       external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox, Platform.ios)
+      external_source.copy_external_source_into_sandbox(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
