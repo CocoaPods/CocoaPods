@@ -106,16 +106,9 @@ describe TargetInstaller = Pod::Installer::TargetInstaller do
 
     it "creates and xcconfig file" do
       do_install!
-      xcconfig = config.sandbox.root + 'Pods.xcconfig'
-      xcconfig.read.should == <<-EOS.strip_heredoc.gsub(/\n$/, '')
-        ALWAYS_SEARCH_USER_PATHS = YES
-        OTHER_LDFLAGS = -ObjC
-        HEADER_SEARCH_PATHS = ${PODS_HEADERS_SEARCH_PATHS}
-        PODS_ROOT = ${SRCROOT}/Pods
-        PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders"
-        PODS_PUBLIC_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/Headers"
-        PODS_HEADERS_SEARCH_PATHS = ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}
-      EOS
+      file = config.sandbox.root + 'Pods.xcconfig'
+      xcconfig = Xcodeproj::Config.new(file)
+      xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
     end
 
     it "creates a prefix header, including the contents of the specification's prefix header" do

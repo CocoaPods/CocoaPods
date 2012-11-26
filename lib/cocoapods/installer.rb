@@ -341,7 +341,7 @@ module Pod
       changed_pods_names = []
       if lockfile
         changed_pods = local_pods.select do |pod|
-          pod.top_specification.version != lockfile.pods_versions[pod.name]
+          pod.top_specification.version != lockfile.pod_versions[pod.name]
         end
         if update_mode
           changed_pods_names += pods.select do |pods|
@@ -560,8 +560,9 @@ module Pod
     #
     def prepare_pods_project
       UI.message "- Creating Pods project" do
-        @pods_project = Pod::Project.new
-        pods_project.user_build_configurations = podfile.user_build_configurations
+        @pods_project = Pod::Project.new(config.sandbox)
+        # TODO
+        # pods_project.user_build_configurations = podfile.user_build_configurations
       end
     end
 
@@ -571,7 +572,9 @@ module Pod
     #
     def generate_target_installers
       @target_installers = podfile.target_definitions.values.map do |definition|
-        TargetInstaller.new(podfile, pods_project, definition) unless definition.empty?
+        pods_for_target = local_pods_by_target[definition]
+        TargetInstaller.new(pods_project, definition, pods_for_target) unless definition.empty?
+        # TargetInstaller.new(podfile, pods_project, definition) unless definition.empty?
       end.compact
     end
 
@@ -629,8 +632,9 @@ module Pod
       UI.message"- Installing targets" do
         target_installers.each do |target_installer|
           pods_for_target = local_pods_by_target[target_installer.target_definition]
-          target_installer.install!(pods_for_target, sandbox)
-          acknowledgements_path = target_installer.target_definition.acknowledgements_path
+          target_installer.install!
+          # TODO
+          acknowledgements_path = target_installer.library.acknowledgements_path
           Generator::Acknowledgements.new(target_installer.target_definition,
                                           pods_for_target).save_as(acknowledgements_path)
           generate_dummy_source(target_installer)
@@ -691,7 +695,7 @@ module Pod
     #       of using a script.
     #
     def integrate_user_project
-      UserProjectIntegrator.new(podfile).integrate! if config.integrate_targets?
+      UserProjectIntegrator.new(podfile, pods_project, config.project_root).integrate! if config.integrate_targets?
     end
   end
 end

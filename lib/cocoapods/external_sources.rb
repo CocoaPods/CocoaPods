@@ -196,7 +196,7 @@ module Pod
       def copy_external_source_into_sandbox(sandbox)
         UI.info("->".green + " Fetching podspec for `#{name}' from: #{@params[:podspec]}") do
           path = @params[:podspec]
-          path = Pathname.new(path).expand_path if path.start_with?("~")
+          path = Pathname.new(path).expand_path if path.to_s.start_with?("~")
           open(path) { |io| store_podspec(sandbox, io.read) }
         end
       end

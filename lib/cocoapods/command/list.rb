@@ -39,7 +39,8 @@ module Pod
       class New < List
         self.summary = 'Lists pods introduced in the master spec-repo since the last check'
 
-        def run_a
+        def run
+          puts "running"
           update_if_necessary!
 
           days = [1,2,3,5,8]

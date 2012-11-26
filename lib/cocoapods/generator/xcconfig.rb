@@ -40,6 +40,11 @@ module Pod
       #
       # @return [Xcodeproj::Config]
       #
+      # TODO    What is the need of having a custom PODS_HEADERS_SEARCH_PATHS
+      #         instead of using PODS_HEADERS_SEARCH_PATHS?
+      #
+      # TODO    Add Xcodeproj::Config#[]
+      #
       def generate
         ld_flags = '-ObjC'
         if  set_arc_compatibility_flag && pods.any? { |pod| pod.requires_arc? }
@@ -51,9 +56,9 @@ module Pod
           'OTHER_LDFLAGS'                    => ld_flags,
           'HEADER_SEARCH_PATHS'              => '${PODS_HEADERS_SEARCH_PATHS}',
           'PODS_ROOT'                        => relative_pods_root,
+          'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
           'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(sandbox.build_headers.search_paths),
           'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
-          'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}'
         })
         pods.each { |pod| @xcconfig.merge!(pod.xcconfig) }
         @xcconfig

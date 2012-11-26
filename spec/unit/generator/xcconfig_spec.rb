@@ -31,12 +31,16 @@ module Pod
       @xcconfig.class.should == Xcodeproj::Config
     end
 
-    it 'adds the sandbox header search paths to the xcconfig, with quotes' do
-      @xcconfig.to_hash['PODS_BUILD_HEADERS_SEARCH_PATHS'].should.include("\"#{config.sandbox.build_headers.search_paths.join('" "')}\"")
+    it "sets to always search the user paths" do
+      @xcconfig.to_hash['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
+    end
+
+    it "configures the project to load all members that implement Objective-c classes or categories from the static library" do
+      @xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC'
     end
 
     it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.not.include("-fobjc-arc")
+      @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include("-fobjc-arc")
     end
 
     it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
@@ -44,6 +48,27 @@ module Pod
       @pod.top_specification.stubs(:requires_arc).returns(true)
       @xcconfig = @generator.generate
       @xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
+    end
+
+    it "sets the PODS_ROOT build variable" do
+      @xcconfig.to_hash['PODS_ROOT'].should.not == nil
+    end
+
+    it "redirects the HEADERS_SEARCH_PATHS to the pod variable" do
+      @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should =='${PODS_HEADERS_SEARCH_PATHS}'
+    end
+
+    it "sets the PODS_HEADERS_SEARCH_PATHS to look for the public headers as it is overridden in the Pods project" do
+      @xcconfig.to_hash['PODS_HEADERS_SEARCH_PATHS'].should =='${PODS_PUBLIC_HEADERS_SEARCH_PATHS}'
+    end
+    it 'adds the sandbox build headers search paths to the xcconfig, with quotes' do
+      expected = "\"#{config.sandbox.build_headers.search_paths.join('" "')}\""
+      @xcconfig.to_hash['PODS_BUILD_HEADERS_SEARCH_PATHS'].should == expected
+    end
+
+    it 'adds the sandbox public headers search paths to the xcconfig, with quotes' do
+      expected = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
+      @xcconfig.to_hash['PODS_PUBLIC_HEADERS_SEARCH_PATHS'].should == expected
     end
 
     #-----------------------------------------------------------------------#

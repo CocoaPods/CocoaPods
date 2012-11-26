@@ -84,7 +84,7 @@ module Pod
           UI.puts
           invalid_count = 0
           podspecs_to_lint.each do |podspec|
-            linter       = Linter.new(podspec)
+            linter       = DeepLinter.new(podspec)
             linter.quick = @quick
             linter.local = @local
             linter.no_clean = @no_clean

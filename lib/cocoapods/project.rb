@@ -409,6 +409,12 @@ module Pod
         support_files_root + bridge_support_name
       end
 
+      # TODO
+      #
+      def acknowledgements_path
+        support_files_root + "#{label}-Acknowledgements"
+      end
+
     end
   end
 end

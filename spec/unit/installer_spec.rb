@@ -32,20 +32,8 @@ module Pod
         # @installer = Installer.new(resolver)
         # target_installer = @installer.target_installers.first
         # target_installer.install
-        # @xcconfig = target_installer.xcconfig.to_hash
       end
 
-      it "sets the header search paths where installed Pod headers can be found" do
-        @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
-      end
-
-      it "configures the project to load all members that implement Objective-c classes or categories from the static library" do
-        @xcconfig['OTHER_LDFLAGS'].should == '-ObjC'
-      end
-
-      it "sets the PODS_ROOT build variable" do
-        @xcconfig['PODS_ROOT'].should.not == nil
-      end
 
       def generate_lockfile
         hash = {}
@@ -60,6 +48,9 @@ module Pod
         podfile = generate_podfile
         lockfile = generate_lockfile
         @installer = Installer.new(@sandbox, podfile, lockfile)
+        Project::Library.any_instance.stubs(:user_project_path).returns(config.project_root + 'test.xcodeproj')
+        # TODO
+        config.integrate_targets = false
         @installer.install!
       end
 
@@ -97,19 +88,6 @@ module Pod
     #     target_installer.generate_xcconfig([], @sandbox)
     #     @xcconfig = target_installer.xcconfig.to_hash
     #   end
-
-    #   it "sets the header search paths where installed Pod headers can be found" do
-    #     @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
-    #   end
-
-    #   it "configures the project to load all members that implement Objective-c classes or categories from the static library" do
-    #     @xcconfig['OTHER_LDFLAGS'].should == '-ObjC'
-    #   end
-
-    #   it "sets the PODS_ROOT build variable" do
-    #     @xcconfig['PODS_ROOT'].should.not == nil
-    #   end
-
     #   it "generates a BridgeSupport metadata file from all the pod headers" do
     #     podfile = Podfile.new do
     #       platform :osx
@@ -161,32 +139,6 @@ module Pod
     #   end
     # end
 
-
-    # describe "concerning xcconfig files generation" do
-    #   before do
-    #     podfile = Podfile.new do
-    #       platform :ios
-    #       xcodeproj 'MyProject'
-    #       pod 'JSONKit'
-    #     end
-
-    #     sandbox = Sandbox.new(fixture('integration'))
-    #     installer = Installer.new(sandbox, podfile)
-    #     @xcconfig = installer.target_installers.first.xcconfig.to_hash
-    #   end
-
-    #   it "sets the header search paths where installed Pod headers can be found" do
-    #     @xcconfig['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
-    #   end
-
-    #   it "configures the project to load all members that implement Objective-c classes or categories from the static library" do
-    #     @xcconfig['OTHER_LDFLAGS'].should == '-ObjC'
-    #   end
-
-    #   it "sets the PODS_ROOT build variable" do
-    #     @xcconfig['PODS_ROOT'].should.not == nil
-    #   end
-    # end
 
 
     # describe "concerning multiple pods originating form the same spec" do
