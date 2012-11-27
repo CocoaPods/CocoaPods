@@ -230,7 +230,7 @@ Pod::Spec.new do |s|
   s.homepage     = "#{data[:homepage]}"
 
   # Specify the license type. CocoaPods detects automatically the license file if it is named
-  # `LICENSE*.*', however if the name is different, specify it.
+  # `LICEN{C,S}E*.*', however if the name is different, specify it.
   s.license      = 'MIT (example)'
   # s.license      = { :type => 'MIT (example)', :file => 'FILE_LICENSE' }
   #
