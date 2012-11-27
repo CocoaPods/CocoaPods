@@ -13,13 +13,13 @@ Pod::Spec.new do |s|
   # s.description  = <<-DESC
   #                   An optional longer description of Example.podspec
   #
-  #                   * Markdonw format.
+  #                   * Markdown format.
   #                   * Don't worry about the indent, we strip it!
   #                  DESC
   s.homepage     = "http://EXAMPLE/Example.podspec"
 
   # Specify the license type. CocoaPods detects automatically the license file if it is named
-  # `LICENSE*.*', however if the name is different, specify it.
+  # `LICEN{C,S}E*.*', however if the name is different, specify it.
   s.license      = 'MIT (example)'
   # s.license      = { :type => 'MIT (example)', :file => 'FILE_LICENSE' }
   #
