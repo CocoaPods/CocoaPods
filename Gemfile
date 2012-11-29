@@ -24,5 +24,5 @@ group :documentation do
   gem 'yard'
   gem 'redcarpet'
   gem 'github-markup'
+  gem 'pygments.rb'
 end
-
