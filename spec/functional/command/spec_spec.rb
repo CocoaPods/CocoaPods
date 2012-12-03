@@ -136,4 +136,28 @@ module Pod
       UI.output.should.include "Missing license type"
     end
   end
+  
+  describe "Command::Spec#cat" do
+    
+    extend SpecHelper::TemporaryDirectory
+    extend SpecHelper::TemporaryRepos
+    
+    it "complains it cant't find a spec to read" do
+      lambda { command('spec', 'cat', 'not-exissting-spec').run }.should.raise Informative
+    end
+    
+    it "complains provided spec name is ambigious" do
+      e = lambda { command('spec', 'cat', 'AF').run }.should.raise Informative
+      e.message.should.match /More that one/
+    end
+    
+    it "prints the spec on standard output" do
+      lambda { command('spec', 'cat', 'JRSwizzle').run }.should.not.raise
+      
+      text = (fixture('spec-repos') + 'master/JRSwizzle/1.0/JRSwizzle.podspec').read
+      #output.gsub(/\n/,'').should.equsal text.gsub(/\n/,'')
+      UI.output.should.include text.gsub(/\n/,'')
+    end
+    
+  end
 end
