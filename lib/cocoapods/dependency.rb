@@ -136,6 +136,8 @@ module Pod
         return unless name && params
         if params.key?(:git)
           GitSource.new(name, params)
+        elsif params.key?(:svn)
+          SvnSource.new(name, params)
         elsif params.key?(:podspec)
           PodspecSource.new(name, params)
         elsif params.key?(:local)
@@ -210,6 +212,29 @@ module Pod
             description << ", commit `#{@params[:commit]}'" if @params[:commit]
             description << ", branch `#{@params[:branch]}'" if @params[:branch]
             description << ", tag `#{@params[:tag]}'" if @params[:tag]
+          end
+        end
+      end
+
+      class SvnSource < AbstractExternalSource
+        def copy_external_source_into_sandbox(sandbox, platform)
+          UI.info("->".green + " Pre-downloading: '#{name}'") do
+            target = sandbox.root + name
+            target.rmtree if target.exist?
+            downloader = Downloader.for_target(sandbox.root + name, @params)
+            downloader.download
+            store_podspec(sandbox, target + "#{name}.podspec")
+            if local_pod = sandbox.installed_pod_named(name, platform)
+                local_pod.downloaded = true
+            end
+          end
+        end
+
+        def description
+          "from `#{@params[:svn]}'".tap do |description|
+            description << ", folder `#{@params[:folder]}'" if @params[:folder]
+            description << ", tag `#{@params[:tag]}'" if @params[:tag]
+            description << ", revision `#{@params[:revision]}'" if @params[:revision]
           end
         end
       end

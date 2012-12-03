@@ -9,14 +9,18 @@ module Pod
 
       def download
         UI.section(' > Exporting subversion repo', '', 3) do
-          svn! %|export "#{reference_url}" "#{target_path}"|
+          svn! %|#{export_subcommand} "#{reference_url}" "#{target_path}"|
         end
       end
 
       def download_head
         UI.section(' > Exporting subversion repo', '', 3) do
-          svn! %|export "#{trunk_url}" "#{target_path}"|
+          svn! %|#{export_subcommand} "#{trunk_url}" "#{target_path}"|
         end
+      end
+
+      def export_subcommand
+        result = 'export --non-interactive --trust-server-cert'
       end
 
       def reference_url
