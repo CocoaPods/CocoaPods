@@ -18,8 +18,8 @@ module Pod
     ### Initalization
 
     # The file is expected to define and return a Pods::Specification.
-    # If name is equals to nil it returns the top level Specification,
-    # otherwise it returned the specification with the name that matches
+    # If name is equal to nil it returns the top level Specification,
+    # otherwise it returns the specification with matching name
     def self.from_file(path, subspec_name = nil)
       unless path.exist?
         raise Informative, "No podspec exists at path `#{path}'."
