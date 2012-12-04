@@ -126,6 +126,56 @@ module Pod
         end
       end
 
+      class Cat < Spec
+        self.summary = 'Prints a spec file'
+        
+        self.description = <<-DESC
+          Prints `NAME.podspec` to standard output.
+        DESC
+        
+        self.arguments = '[ NAME.podspec ]'
+        
+        def initialize(argv)
+          @name = argv.shift_argument
+          super
+        end
+        
+        def validate!
+          super
+          help! "A pod name is required." unless @name
+        end
+        
+        def run
+          found_sets = Source.search_by_name(@name)
+          raise Informative, "Unable to find a spec named `#{@name}'." if found_sets.count == 0
+          unless found_sets.count == 1
+            names = found_sets.map(&:name) * ', '
+            raise Informative, "More that one fitting spec found:\n #{names}"
+          end
+
+          set = found_sets.first
+          best_spec = best_spec_from_set(set)
+          file_name = best_spec.defined_in_file
+          UI.puts File.open(file_name).read
+        end
+        
+        def best_spec_from_set(set)
+          sources = set.sources
+          
+          best_source = sources.first
+          best_version = best_source.versions(set.name).first
+          sources.each do |source|
+            if source.versions(set.name).first > best_version
+                best_source = source 
+                best_version = version
+            end
+          end
+          
+          best_spec = best_source.specification(set.name, best_version)
+        end
+        
+      end
+
       # TODO some of the following methods can probably move to one of the subclasses.
       private
 

@@ -13,6 +13,8 @@
 - Added Podfile to the Pods project.
   [#476](https://github.com/CocoaPods/CocoaPods/issues/476)
 
+- Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
+
 ## Master
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...master)
 
