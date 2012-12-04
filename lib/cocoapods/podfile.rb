@@ -223,7 +223,13 @@ module Pod
         when :ios
           target = '4.3'
         when :osx
-          target = '10.6'
+          # Get the current version of OS X if we can, otherwise default to 10.6
+          begin
+            os_version = `sw_vers -productVersion`.chomp
+            target = os_version.split('.')[0, 2].join('.')
+          rescue
+            target = '10.6'
+          end
         else
           raise ::Pod::Podfile::Informative, "Unsupported platform: platform must be one of [:ios, :osx]"
         end
