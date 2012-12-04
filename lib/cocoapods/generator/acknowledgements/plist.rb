@@ -8,7 +8,7 @@ module Pod
         if (path.extname != ".plist")
           path = Pathname.new(path.dirname + "#{path.basename.to_s}.plist")
         end
-        Xcodeproj.write_plist(plist, path)
+        Xcodeproj.write_plist(plist, path) rescue nil
       end
 
       def plist
