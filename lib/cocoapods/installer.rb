@@ -72,24 +72,24 @@ module Pod
     #
     attr_reader :lockfile
 
-    # @return [Bool]
-    #   whether the installer is in update mode. In update mode the contents of
-    #   the Lockfile are not taken into account for deciding what Pods to
-    #   install.
-    #
-    attr_reader :update_mode
 
     # @param [Sandbox]  sandbox     @see sandbox
     # @param [Podfile]  podfile     @see podfile
     # @param [Lockfile] lockfile    @see lockfile
     # @param [Bool]     update_mode @see update_mode
     #
-    def initialize(sandbox, podfile, lockfile = nil, update_mode = false)
+    def initialize(sandbox, podfile, lockfile = nil)
       @sandbox     =  sandbox
       @podfile     =  podfile
       @lockfile    =  lockfile
-      @update_mode =  update_mode
     end
+
+    # @return [Bool]
+    #   whether the installer is in update mode. In update mode the contents of
+    #   the Lockfile are not taken into account for deciding what Pods to
+    #   install.
+    #
+    attr_accessor :update_mode
 
     # Installs the Pods.
     #
@@ -294,7 +294,7 @@ module Pod
     #
     def generate_locked_dependencies
       @locked_dependencies = pods_unchanged_from_the_lockfile.map do |pod|
-        lockfile.dependency_for_installed_pod_named(pod)
+        lockfile.dependency_to_lock_pod_named(pod)
       end
     end
 
@@ -608,7 +608,7 @@ module Pod
       UI.message "- Running pre install hooks" do
         local_pods_by_target.each do |target_definition, pods|
           pods.each do |pod|
-            pod.top_specification.pre_install(pod, target_definition)
+            pod.top_specification.pre_install!(pod, target_definition)
           end
         end
         @podfile.pre_install!(self)
@@ -621,7 +621,7 @@ module Pod
         # target installer to the spec post install hook.
         target_installers.each do |target_installer|
           specs_by_target[target_installer.target_definition].each do |spec|
-            spec.post_install(target_installer)
+            spec.post_install!(target_installer)
           end
         end
         @podfile.post_install!(self)

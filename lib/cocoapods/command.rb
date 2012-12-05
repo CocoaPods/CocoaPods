@@ -7,8 +7,8 @@ module Pod
   end
 
   class Command < CLAide::Command
-    autoload :ErrorReport, 'cocoapods/command/error_report'
-    autoload :DeepLinter,  'cocoapods/command/deep_linter'
+    autoload :ErrorReport,    'cocoapods/command/error_report'
+    autoload :AdvancedLinter, 'cocoapods/command/advanced_linter'
 
     self.abstract_command = true
     self.command = 'pod'

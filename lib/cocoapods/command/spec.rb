@@ -84,15 +84,10 @@ module Pod
           UI.puts
           invalid_count = 0
           podspecs_to_lint.each do |podspec|
-            linter       = DeepLinter.new(podspec)
-            linter.quick = @quick
-            linter.local = @local
+            linter          = AdvancedLinter.new(podspec)
+            linter.quick    = @quick
+            linter.local    = @local
             linter.no_clean = @no_clean
-
-            # Show immediatly which pod is being processed.
-            print " -> #{linter.spec_name}\r" unless config.silent?
-            $stdout.flush
-            linter.lint
 
             case linter.result_type
             when :error
@@ -104,14 +99,6 @@ module Pod
             else
               color = :green
             end
-
-            # This overwrites the previously printed text
-            UI.puts " -> ".send(color) << linter.spec_name unless config.silent?
-            print_messages('ERROR', linter.errors)
-            print_messages('WARN',  linter.warnings)
-            print_messages('NOTE',  linter.notes)
-
-            UI.puts unless config.silent?
           end
 
           count = podspecs_to_lint.count
@@ -128,11 +115,6 @@ module Pod
 
       # TODO some of the following methods can probably move to one of the subclasses.
       private
-
-      def print_messages(type, messages)
-        return if config.silent?
-        messages.each {|msg| UI.puts "    - #{type.ljust(5)} | #{msg}"}
-      end
 
       def podspecs_to_lint
         @podspecs_to_lint ||= begin

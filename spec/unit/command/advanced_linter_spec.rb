@@ -1,7 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
-  describe Command::DeepLinter do
+  describe Command::AdvancedLinter do
     extend SpecHelper::TemporaryDirectory
 
     def write_podspec(text, name = 'JSONKit.podspec')
@@ -19,7 +19,7 @@ module Pod
 
     it "respects quick mode" do
       file = write_podspec(stub_podspec)
-      linter = Command::DeepLinter.new(file)
+      linter = Command::AdvancedLinter.new(file)
       linter.expects(:peform_multiplatform_analysis).never
       linter.expects(:install_pod).never
       linter.expects(:xcodebuild_output_for_platfrom).never
@@ -31,7 +31,7 @@ module Pod
     unless skip_xcodebuild?
       it "uses xcodebuild to generate notes and warnings" do
         file = write_podspec(stub_podspec)
-        linter = Command::DeepLinter.new(file)
+        linter = Command::AdvancedLinter.new(file)
         linter.lint
         linter.result_type.should == :warning
         linter.notes.join(' | ').should.include "JSONKit/JSONKit.m:1640:27: warning: equality comparison with extraneous parentheses"
@@ -40,7 +40,7 @@ module Pod
 
     it "checks for file patterns" do
       file = write_podspec(stub_podspec(/s\.source_files = 'JSONKit\.\*'/, "s.source_files = 'JSONKit.*'\ns.resources = 'WRONG_FOLDER'"))
-      linter = Command::DeepLinter.new(file)
+      linter = Command::AdvancedLinter.new(file)
       linter.stubs(:xcodebuild_output).returns([])
       linter.quick = false
       linter.lint
@@ -50,7 +50,7 @@ module Pod
 
     it "uses the deployment target of the specification" do
       file = write_podspec(stub_podspec(/s.name *= 'JSONKit'/, "s.name = 'JSONKit'; s.platform = :ios, '5.0'"))
-      linter = Command::DeepLinter.new(file)
+      linter = Command::AdvancedLinter.new(file)
       linter.quick = true
       linter.lint
       podfile = linter.podfile_from_spec

@@ -1,15 +1,6 @@
 GIT
-  remote: git://github.com/CocoaPods/Core.git
-  revision: e41f3c851003589aaddde533dd6e90a81d095621
-  specs:
-    cocoapods-core (0.16.0.rc2)
-      activesupport (~> 3.2.6)
-      faraday (~> 0.8.1)
-      octokit (~> 1.7)
-
-GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: d599d4ed17763aa5eb03382a17a6243e11beda2e
+  revision: fbb5c11844b99bd954b2945098502dde0641c311
   specs:
     xcodeproj (0.4.0)
       activesupport (~> 3.2.6)
@@ -40,6 +31,14 @@ PATH
       rake (~> 0.9.4)
       xcodeproj (~> 0.4.0)
 
+PATH
+  remote: ../Core
+  specs:
+    cocoapods-core (0.16.0.rc2)
+      activesupport (~> 3.2.6)
+      faraday (~> 0.8.1)
+      octokit (~> 1.7)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -69,12 +68,12 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.1)
       mocha (>= 0.9.8)
-    multi_json (1.3.7)
+    multi_json (1.4.0)
     multipart-post (1.1.5)
-    octokit (1.18.0)
+    octokit (1.19.0)
       addressable (~> 2.2)
       faraday (~> 0.8)
-      faraday_middleware (~> 0.8)
+      faraday_middleware (~> 0.9)
       hashie (~> 1.2)
       multi_json (~> 1.3)
     open4 (1.3.0)

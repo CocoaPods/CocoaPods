@@ -3,7 +3,8 @@ source "http://rubygems.org"
 gemspec
 
 group :development do
-  gem "cocoapods-core", :git => "git://github.com/CocoaPods/Core.git"
+  # gem "cocoapods-core", :git => "git://github.com/CocoaPods/Core.git"
+  gem "cocoapods-core", :path => "../Core"
   gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git"
   gem "mocha", "~> 0.11.4"
   gem "bacon"

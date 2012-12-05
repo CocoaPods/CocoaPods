@@ -107,7 +107,7 @@ module Pod
             invalid_count = 0
 
             podspecs.each do |podspec|
-              linter = DeepLinter.new(podspec)
+              linter = AdvancedLinter.new(podspec)
               linter.quick     = true
               linter.repo_path = dir
 
