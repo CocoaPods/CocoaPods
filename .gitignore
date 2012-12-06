@@ -22,4 +22,3 @@ spec/fixtures/vcr
 .yardoc
 /doc
 .rbx/
-rakelib/doc
