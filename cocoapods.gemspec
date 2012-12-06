@@ -1,10 +1,17 @@
 # -*- encoding: utf-8 -*-
 $:.unshift File.expand_path('../lib', __FILE__)
-require 'cocoapods/version'
 
 Gem::Specification.new do |s|
+
+  # Use the version of CocoaPods-Core
+  if BUNDLER_LOAD = true
+    s.version = '0.0.0'
+  else
+    require 'cocoapods-core'
+    s.version  = Pod::VERSION
+  end
+
   s.name     = "cocoapods"
-  s.version  = Pod::VERSION
   s.date     = Date.today
   s.license  = "MIT"
   s.email    = ["eloy.de.enige@gmail.com", "fabiopelosin@gmail.com"]
