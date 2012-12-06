@@ -216,7 +216,8 @@ module Pod
     top_attr_accessor :summary
     top_attr_accessor :documentation
     top_attr_accessor :version,             lambda { |v| Version.new(v) }
-
+    top_attr_accessor :post_install_message
+    
     top_attr_reader   :description,         lambda { |instance, ivar| ivar || instance.summary }
     top_attr_writer   :description,         lambda { |d| d.strip_heredoc }
 
