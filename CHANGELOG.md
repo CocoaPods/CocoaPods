@@ -2,17 +2,19 @@
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.17)
 
 - TODO: Dropped script for resources.
+- Added support for `prefix_header_file` in subspecs
+- Added support for `prefix_header_contents` in subspecs
 
-###### DSL Changes
+###### Specification DSL Changes
 
-- Deprecated header_mappings hook for specifications.
+- Deprecated `header_mappings` hook.
 - `preferred_dependency` has been renamed to `default_subspec`.
-- Added `s.exclude_source_files` and related attributes to the specification class.
-- Added support for prefix_header_file in subspecs
-- Added support for prefix_header_contents in subspecs
-- Removed exclude_header_search_paths
-- Added screenshot attribute
-- Renamed preferred_dependency
+- Added `exclude_files` attribute.
+- Removed `exclude_header_search_paths`
+- Added `screenshots` attribute
+- Added default values for attributes like `source_files`.
+- `requires_arc` is transioning from `false` to `true`.
+- The support for Rake File list is being deprecated.
 
 ###### Enhancements
 
@@ -35,7 +37,6 @@
 
 - Use Rake 0.9.4
   [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
-
 
 ## 0.16.0.rc5
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc4...0.16.0.rc5)
