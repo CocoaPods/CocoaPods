@@ -197,20 +197,15 @@ module Pod
     #
     # @param  [Dependency] dependency
     #         the dependency for which the set is needed.
-    #         TODO: check dependency.specification
-    #
-    # @param [Platform] platform
-    #         the platform on which the dependency is needed this is used by
-    #         the sandbox to locate external sources.
-    #         TODO why?
     #
     # @note   If the {#update_external_specs} flag is activated the
     #         dependencies with external sources are always resolved against
     #         the remote. Otherwise the specification is retrieved from the
     #         sandbox that fetches the external source only if needed.
     #
-    # TODO    If the set is loaded from a normal source and then from an
+    # @todo   If the set is loaded from a normal source and then from an
     #         external one that information is lost.
+    # @todo   Check dependency.specification
     #
     # @return [Set] the cached set for a given dependency.
     #
@@ -244,7 +239,7 @@ module Pod
 
     # Ensures that a spec is compatible with the platform of a target.
     #
-    # @raises If the spec is not supported by the target.
+    # @raise If the spec is not supported by the target.
     #
     # @return [void]
     #

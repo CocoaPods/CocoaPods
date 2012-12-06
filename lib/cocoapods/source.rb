@@ -45,7 +45,7 @@ module Pod
       #         should include also the author, the summary, and the
       #         description.
       #
-      # @raises If no source including the set can be found.
+      # @raise  If no source including the set can be found.
       #
       # @note   Full text search requires to load the specification for each
       #         pod, hence is considerably slower.
@@ -54,8 +54,8 @@ module Pod
       #
       # @return [Array<Set>]  The sets that contain the search term.
       #
-      def search_by_name(name, full_text_search = false)
-        result = Aggregate.new(config.repos_dir).search_by_name(name, full_text_search)
+      def search_by_name(query, full_text_search = false)
+        result = Aggregate.new(config.repos_dir).search_by_name(query, full_text_search)
         if result.empty?
           extra = ", author, summary, or description" if full_text_search
           raise Informative "Unable to find a pod with name#{extra} matching `#{query}'"

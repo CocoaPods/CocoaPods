@@ -502,15 +502,17 @@ module Pod
       root.relative_path_from(@sandbox.root)
     end
 
-    # @return Hash{Pathname => [Array<Pathname>]} A hash containing the headers
-    #   folders as the keys and the absolute paths of the header files
-    #   as the values.
+    # @return [Hash{Pathname => Array<Pathname>}] A hash containing the headers
+    #         folders as the keys and the absolute paths of the header files as
+    #         the values.
     #
-    # @todo this is being overridden in the RestKit 0.9.4 spec, need to do
-    # something with that, and this method also still exists in Specification.
+    # @todo   This is being overridden in the RestKit 0.9.4 spec, need to do
+    #         something with that, and this method also still exists in
+    #         Specification.
     #
-    # @todo This is not overridden anymore in specification refactor and the
-    #   code Pod::Specification#copy_header_mapping can be moved here.
+    # @todo   This is not overridden anymore in specification refactor and the
+    #         code Pod::Specification#copy_header_mapping can be moved here.
+    #
     def header_mappings(files_by_spec)
       mappings = {}
       files_by_spec.each do |spec, paths|
@@ -525,7 +527,7 @@ module Pod
       mappings
     end
 
-    # @return <Pathname> The name of the folder where the headers of this pod
+    # @return [<Pathname>] The name of the folder where the headers of this pod
     #   will be namespaced.
     #
     def headers_sandbox
@@ -549,7 +551,12 @@ module Pod
     #
     # @param [Symbol] accessor The accessor to use to obtain the paths patterns.
     #
-    # @param [Hash] options (see #expanded_paths)
+    # @param  [String] dir_pattern
+    #         The pattern to add to directories.
+    #
+    # @param  [Array<Specification>] specs
+    #         The specification of which the patterns are needed.
+    #         If not specifies it defaults {#specifications}.
     #
     def paths_by_spec(accessor, dir_pattern = nil, specs = nil)
       specs ||= specifications
@@ -568,18 +575,20 @@ module Pod
     end
 
     # Converts patterns of paths to the {Pathname} of the files present in the
-    #   pod.
+    # pod.
     #
     # @param [String, FileList, Array<String, Pathname>] patterns
-    #   The patterns to expand.
-    # @param [Hash] options
-    #   The options to used for expanding the paths patterns.
-    # @option options [String] :glob
-    #   The pattern to use for globing directories.
+    #         The patterns to expand.
     #
-    # @raise [Informative] If the pod does not exists.
+    # @param  [String] dir_pattern
+    #         The pattern to add to directories.
     #
-    # @todo implement case insensitive search
+    # @param  [String] exclude_patterns
+    #         The exclude patterns to pass to the PathList.
+    #
+    # @raise  [Informative] If the pod does not exists.
+    #
+    # @todo   Implement case insensitive search
     #
     # @return [Array<Pathname>] A list of the paths.
     #

@@ -72,7 +72,6 @@ module Pod
     # @param [Sandbox]  sandbox     @see sandbox
     # @param [Podfile]  podfile     @see podfile
     # @param [Lockfile] lockfile    @see lockfile
-    # @param [Bool]     update_mode @see update_mode
     #
     def initialize(sandbox, podfile, lockfile = nil)
       @sandbox     =  sandbox

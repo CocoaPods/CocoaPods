@@ -85,7 +85,7 @@ module Pod
 
     # Adds a file reference to the podfile.
     #
-    # @param  [#to_s] path
+    # @param  [#to_s] podfile_path
     #         the path of the podfile
     #
     # @return [PBXFileReference]
@@ -202,7 +202,6 @@ module Pod
 
       # @param  [TargetDefinition]  target_definition @see target_definition
       # @param  [PBXNativeTarget]   target            @see target
-      # @param  [Project]           project           @see project
       #
       def initialize(target_definition, target)
         @target_definition = target_definition
@@ -227,9 +226,9 @@ module Pod
       # Returns the path of the user project that the {TargetDefinition}
       # should integrate.
       #
-      # @raises If the project is implicit and there are multiple projects.
+      # @raise If the project is implicit and there are multiple projects.
       #
-      # @raises If the path doesn't exits.
+      # @raise If the path doesn't exits.
       #
       # @return [Pathname] the path of the user project.
       #

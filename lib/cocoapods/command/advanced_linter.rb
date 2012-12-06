@@ -201,7 +201,7 @@ module Pod
         end
       end
 
-      # @errors   += (@platform_errors[platform] - @errors).map {|m| "[#{platform}] #{m}"}
+      # @ errors   += (@platform_errors[platform] - @errors).map {|m| "[#{platform}] #{m}"}
 
       #-----------------------------------------------------------------------#
 

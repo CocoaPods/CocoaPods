@@ -115,7 +115,7 @@ module Pod
       # @return [void] Checks if a reference exists in the cache and updates
       # only if necessary.
       #
-      # @raises if after the update the reference can't be found.
+      # @raise If after the update the reference can't be found.
       #
       def ensure_ref_exists(ref)
         return if ref_exists?(ref)
@@ -133,7 +133,7 @@ module Pod
       # @return [void] Checks if a branch exists in the cache and updates
       # only if necessary.
       #
-      # @raises if after the update the branch can't be found.
+      # @raise If after the update the branch can't be found.
       #
       def ensure_remote_branch_exists(branch)
         return if branch_exists?(branch)

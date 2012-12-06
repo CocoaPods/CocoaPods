@@ -19,9 +19,9 @@ module Pod
       #
       attr_reader :relative_pods_root
 
-      # @param  [Platform] platform @see platform
-      #
-      # @param  [Array<LocalPod>]   @see pods
+      # @param  [Sandbox] sandbox @see sandbox
+      # @param  [Array<LocalPod>] pods @see pods
+      # @param  [String] relative_pods_root @see relative_pods_root
       #
       def initialize(sandbox, pods, relative_pods_root)
         @sandbox = sandbox

@@ -19,9 +19,8 @@ module Pod
       #
       attr_reader :pods
 
-      # @param  [Platform] platform @see platform
-      #
-      # @param  [Array<LocalPod>]   @see pods
+      # @param  [Platform] platform     @see platform
+      # @param  [Array<LocalPod>] pods  @see pods
       #
       def initialize(platform, pods)
         @platform = platform
