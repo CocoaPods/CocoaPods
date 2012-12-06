@@ -18,8 +18,8 @@ module Pod
     ### Initalization
 
     # The file is expected to define and return a Pods::Specification.
-    # If name is equals to nil it returns the top level Specification,
-    # otherwise it returned the specification with the name that matches
+    # If name is equal to nil it returns the top level Specification,
+    # otherwise it returns the specification with matching name
     def self.from_file(path, subspec_name = nil)
       unless path.exist?
         raise Informative, "No podspec exists at path `#{path}'."
@@ -216,7 +216,8 @@ module Pod
     top_attr_accessor :summary
     top_attr_accessor :documentation
     top_attr_accessor :version,             lambda { |v| Version.new(v) }
-
+    top_attr_accessor :post_install_message
+    
     top_attr_reader   :description,         lambda { |instance, ivar| ivar || instance.summary }
     top_attr_writer   :description,         lambda { |d| d.strip_heredoc }
 

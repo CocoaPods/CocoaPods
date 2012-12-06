@@ -49,6 +49,10 @@ describe "A Pod::Specification loaded from a podspec" do
     @spec.description.should == 'Full of chunky bananas.'
   end
 
+  it "returns the pod's post install message" do
+    @spec.post_install_message.should == "Funky chunky monkey message. Post install one!"
+  end
+
   it "returns the pod's source" do
     @spec.source.should == {
       :git => 'http://banana-corp.local/banana-lib.git',

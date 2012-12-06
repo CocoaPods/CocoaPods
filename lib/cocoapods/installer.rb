@@ -51,6 +51,8 @@ module Pod
             # Here we clean pod's that just have been downloaded or have been
             # pre-downloaded in AbstractExternalSource#specification_from_sandbox.
             pod.clean! if config.clean?
+            # Like RubyGems, print post install message only for installed pods
+            add_post_install_message(pod)
           end
         else
           UI.section("Using #{pod}", "-> ".green)
@@ -135,9 +137,16 @@ module Pod
           @lockfile = Lockfile.generate(@podfile, specs_by_target.values.flatten)
           @lockfile.write_to_disk(config.project_lockfile)
         end
+
+        UI.section "" do
+          post_install_messages.each do |pod_name, message|
+            UI.info "Post-install message from #{pod_name}:\n#{message}".green
+          end
+        end
+
       end
 
-        UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
+      UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
     end
 
     def run_pre_install_hooks
@@ -195,6 +204,15 @@ module Pod
     #                            dependency that is not a download-only one.
     def pods
       pods_by_target.values.flatten.uniq
+    end
+
+    def add_post_install_message(pod)
+      message = pod.top_specification.post_install_message
+      post_install_messages[pod.top_specification.name] = message unless message.blank?
+    end
+
+    def post_install_messages
+      @post_install_messages ||= {}
     end
 
     def pods_by_target
