@@ -4,7 +4,6 @@ module Pod
 
       include Config::Mixin
 
-      # TODO: Move exceptions to clients?
 
       # @return [Array<Source>] the list of all the sources known to this
       #         installation of CocoaPods.
@@ -26,6 +25,8 @@ module Pod
       #         {Source} that contain the Pod. If no sources containing the
       #         Pod where found it returns nil.
       #
+      # @todo   Move exceptions to clients?
+      #
       # @raise  If no source including the set can be found.
       #
       def search(dependency)
@@ -46,8 +47,10 @@ module Pod
       #
       # @raises If no source including the set can be found.
       #
-      # @note Full text search requires to load the specification for each pod,
-      #       hence is considerably slower.
+      # @note   Full text search requires to load the specification for each
+      #         pod, hence is considerably slower.
+      #
+      # @todo   Move exceptions to clients?
       #
       # @return [Array<Set>]  The sets that contain the search term.
       #

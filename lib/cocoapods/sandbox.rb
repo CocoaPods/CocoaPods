@@ -10,8 +10,6 @@ module Pod
   #
   class Sandbox
 
-    # TODO the headers should be stored in a `Headers` folder.
-
     # The path of the build headers directory relative to the root.
     #
     BUILD_HEADERS_DIR  = "BuildHeaders"
@@ -33,6 +31,8 @@ module Pod
     attr_reader :public_headers
 
     # @param [String, Pathname] root @see root
+    #
+    # @todo the headers should be stored in a `Headers` folder.
     #
     def initialize(root)
       @root = Pathname.new(root)
@@ -85,7 +85,7 @@ module Pod
 
     public
 
-    # @TODO   refactor the pods from a local source should not be cached by the
+    # @todo   refactor the pods from a local source should not be cached by the
     #         sandbox
     #
     # @return [LocalPod]
@@ -142,7 +142,7 @@ module Pod
     # @return [Array<String>] the names of the pods that have been
     #         pre-downloaded from an external source.
     #
-    # TODO: the installer needs to be aware of it.
+    # @todo the installer needs to be aware of it.
     #
     attr_reader :predownloaded_pods
 
@@ -201,7 +201,6 @@ module Pod
     # @!group Adding headers
 
     public
-
 
     #
     #

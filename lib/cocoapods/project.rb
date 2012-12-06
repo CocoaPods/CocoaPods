@@ -322,7 +322,7 @@ module Pod
       # @return [Pathname] the folder where to store the support files of this
       #         library.
       #
-      # TODO: each library should have a folder for its support files
+      # @todo each library should have a group for its support files
       #
       def support_files_root
         project.sandbox.root
@@ -409,7 +409,7 @@ module Pod
         support_files_root + bridge_support_name
       end
 
-      # TODO
+      # @todo
       #
       def acknowledgements_path
         support_files_root + "#{label}-Acknowledgements"

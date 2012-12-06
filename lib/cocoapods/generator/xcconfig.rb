@@ -40,10 +40,10 @@ module Pod
       #
       # @return [Xcodeproj::Config]
       #
-      # TODO    What is the need of having a custom PODS_HEADERS_SEARCH_PATHS
-      #         instead of using PODS_HEADERS_SEARCH_PATHS?
+      # @note   The value `PODS_HEADERS_SEARCH_PATHS` is used to store the headers
+      #         so xcconfig can reference the variable.
       #
-      # TODO    Add Xcodeproj::Config#[]
+      # @todo   Add Xcodeproj::Config#[]
       #
       def generate
         ld_flags = '-ObjC'

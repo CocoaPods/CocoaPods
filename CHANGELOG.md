@@ -1,4 +1,7 @@
 ## Branch 0.17
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.17)
+
+- TODO: Dropped script for resources.
 
 ###### DSL Changes
 
@@ -13,12 +16,15 @@
 
 ###### Enhancements
 
+- Released [documentation](docs.cocoapods.org).
+- Extrace models to [CocoaPods-Core](https://github.com/CocoaPods/Core) gem.
+- Major clean up and refactor to the code base.
 - Extracted command-line command & option handling into
   [CLAide](https://github.com/CocoaPods/CLAide).
 - Added PathList class.
-
 - Added Podfile to the Pods project.
   [#476](https://github.com/CocoaPods/CocoaPods/issues/476)
+- Extracted XCConfig generator.
 
 ## 0.16.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc5...master)

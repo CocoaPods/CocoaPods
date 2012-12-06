@@ -25,7 +25,7 @@ module Pod
 
       # @return [Pathname] the path of the installation.
       #
-      # TODO: This is only used to compute the workspace path in case that it
+      # @todo This is only used to compute the workspace path in case that it
       #       should be inferred by the project. If the workspace should be in
       #       the same dir of the project, this could be removed.
       #
@@ -212,7 +212,7 @@ module Pod
         #         configurations overrides the `xcconfig` file and warns the
         #         user.
         #
-        # TODO:   If the xcconfig is already set don't override it and inform
+        # @todo   If the xcconfig is already set don't override it and inform
         #         the user.
         #
         # @return [void]

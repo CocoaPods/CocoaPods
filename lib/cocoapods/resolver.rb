@@ -35,7 +35,7 @@ module Pod
     #
     # @note   This option is used by `pod outdated`.
     #
-    # @TODO:  This implementation is not clean, because if the spec doesn't
+    # @todo:  This implementation is not clean, because if the spec doesn't
     #         exists the sandbox will actually download and modify the
     #         installation.
     #
@@ -112,7 +112,7 @@ module Pod
     # @return [Source::Aggregate] A cache of the sources needed to find the
     #         podspecs.
     #
-    # TODO:   Cache the sources globally?
+    # @todo   Cache the sources globally?
     #
     attr_accessor :cached_sources
 
@@ -155,8 +155,9 @@ module Pod
     #         dependency of the specification. In this way it is possible to
     #         not updated the installed pods without without introducing
     #         dependencies in other target definitions.
-    #         TODO: Just add the requirement to the set?
-    #         TODO: Use root name?
+    #
+    # @todo   Just add the requirement to the set?
+    # @todo   Use root name?
     #
     # @note   The recursive process checks if a dependency has already been
     #         loaded to prevent an infinite loop. For this reason the

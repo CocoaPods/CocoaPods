@@ -55,23 +55,19 @@ module Pod
 
     include Config::Mixin
 
-    # @return [Sandbox]
-    #   the sandbox where the Pods should be installed.
+    # @return [Sandbox] The sandbox where the Pods should be installed.
     #
     attr_reader :sandbox
 
-    # @return [Podfile]
-    #   the Podfile specification that contains the information of the Pods
-    #   that should be installed.
+    # @return [Podfile] The Podfile specification that contains the information
+    #         of the Pods that should be installed.
     #
     attr_reader :podfile
 
-    # @return [Lockfile]
-    #   the Lockfile that stores the information about the Pods previously
-    #   installed on any machine.
+    # @return [Lockfile] The Lockfile that stores the information about the
+    #         Pods previously installed on any machine.
     #
     attr_reader :lockfile
-
 
     # @param [Sandbox]  sandbox     @see sandbox
     # @param [Podfile]  podfile     @see podfile
@@ -84,10 +80,9 @@ module Pod
       @lockfile    =  lockfile
     end
 
-    # @return [Bool]
-    #   whether the installer is in update mode. In update mode the contents of
-    #   the Lockfile are not taken into account for deciding what Pods to
-    #   install.
+    # @return [Bool] Whether the installer is in update mode. In update mode
+    #         the contents of the Lockfile are not taken into account for
+    #         deciding what Pods to install.
     #
     attr_accessor :update_mode
 
@@ -96,15 +91,15 @@ module Pod
     # The installation process of is mostly linear with few minor complications
     # to keep in mind:
     #
-    #   - The stored podspecs need to be cleaned before the resolution step
-    #     otherwise the sandbox might return an old podspec and not download
-    #     the new one from an external source.
-    #   - The resolver might trigger the download of Pods from external sources
-    #     necessary to retrieve their podspec (unless it is instructed not to
-    #     do it).
+    # - The stored podspecs need to be cleaned before the resolution step
+    #   otherwise the sandbox might return an old podspec and not download
+    #   the new one from an external source.
+    # - The resolver might trigger the download of Pods from external sources
+    #   necessary to retrieve their podspec (unless it is instructed not to
+    #   do it).
     #
-    # @note The order of the steps is very important and should be changed
-    #       carefully.
+    # @note   The order of the steps is very important and should be changed
+    #         carefully.
     #
     # @return [void]
     #
@@ -120,7 +115,6 @@ module Pod
       integrate_user_project
     end
 
-# <<<<<<< HEAD
     # Performs only the computation parts of an installation.
     #
     # It is used by the `outdated` subcommand.
@@ -225,9 +219,9 @@ module Pod
     #
     # @return [void]
     #
-    # TODO: If there is not Lockfile all the Pods should be marked as added.
+    # @todo If there is not Lockfile all the Pods should be marked as added.
     #
-    # TODO: Once the manifest.lock is implemented only the unchanged pods
+    # @todo Once the manifest.lock is implemented only the unchanged pods
     #       should be tracked.
     #
     def generate_pods_by_podfile_state
@@ -260,17 +254,19 @@ module Pod
       pods_unchanged_from_the_lockfile  .each { |pod| UI.message("-"        + "#{pod}", '', 2) }
     end
 
-    # @return [void] Lazily updates the source repositories. The update is
-    #   triggered if:
-    #   - There are pods that changed in the Podfile.
-    #   - The lockfile is missing.
-    #   - The installer is in update_mode.
+    # Lazily updates the source repositories. The update is triggered if:
     #
-    # TODO: Remove the lockfile condition once compare_podfile_and_lockfile
+    # - There are pods that changed in the Podfile.
+    # - The lockfile is missing.
+    # - The installer is in update_mode.
+    #
+    # @todo Remove the lockfile condition once compare_podfile_and_lockfile
     #       is updated.
     #
-    # TODO: Lazy resolution can't be done if we want to fully support detection
+    # @todo Lazy resolution can't be done if we want to fully support detection
     #       of changes in specifications checksum.
+    #
+    # @return [void]
     #
     def update_repositories_if_needed
       return if config.skip_repo_update?
@@ -300,14 +296,14 @@ module Pod
 
     # Converts the Podfile in a list of specifications grouped by target.
     #
-    # @note As some dependencies might have external sources the resolver is
-    #       aware of the {Sandbox} and interacts with it to download the
-    #       podspecs of the external sources. This is necessary because the
-    #       resolver needs the specifications to analyze their dependencies
-    #       (which might be from external sources).
+    # @note   As some dependencies might have external sources the resolver is
+    #         aware of the {Sandbox} and interacts with it to download the
+    #         podspecs of the external sources. This is necessary because the
+    #         resolver needs the specifications to analyze their dependencies
+    #         (which might be from external sources).
     #
-    # @note In update mode the resolver is set to always update the specs from
-    #       external sources.
+    # @note   In update mode the resolver is set to always update the specs
+    #         from external sources.
     #
     # @return [void]
     #
@@ -333,9 +329,9 @@ module Pod
     #
     # @return [void]
     #
-    # TODO: Use {Sandbox} manifest.
+    # @todo Use {Sandbox} manifest.
     #
-    # TODO: [#534] Detect if the folder of a Pod is empty.
+    # @todo [#534] Detect if the folder of a Pod is empty.
     #
     def generate_pods_that_should_be_installed
       changed_pods_names = []
@@ -366,7 +362,7 @@ module Pod
     #
     # @return [void]
     #
-    # TODO: [#535] Pods should be accumulated per Target, also in the Local
+    # @todo [#535] Pods should be accumulated per Target, also in the Local
     #       Pod class. The Local Pod class should have a method to add itself
     #       to a given project so it can use the sources of all the activated
     #       podspecs across all targets. Also cleaning should take into account
@@ -385,24 +381,6 @@ module Pod
       end
 
       @local_pods = local_pods_by_target.values.flatten.uniq.sort_by { |pod| pod.name.downcase }
-# =======
-#     def project
-#       return @project if @project
-#       @project = Pod::Project.new(sandbox)
-#       # TODO
-#       # @project.user_build_configurations = @podfile.user_build_configurations
-#       pods.each { |p| p.add_file_references_to_project(@project) }
-#       pods.each { |p| p.link_headers }
-#       @project.add_podfile(config.project_podfile)
-#       @project
-#     end
-# 
-#     def target_installers
-#       @target_installers ||= @podfile.target_definitions.values.map do |definition|
-#         pods_for_target = pods_by_target[definition]
-#         TargetInstaller.new(project, definition, pods_for_target) unless definition.empty?
-#       end.compact
-# >>>>>>> core-extraction
     end
 
     #---------------------------------------------------------------------------#
@@ -426,7 +404,7 @@ module Pod
     # @return [void] In this step we clean all the folders that will be
     #   regenerated from scratch and any file which might not be overwritten.
     #
-    # @TODO: Clean the podspecs of all the pods that aren't unchanged so the
+    # @todo Clean the podspecs of all the pods that aren't unchanged so the
     #        resolution process doesn't get confused by them.
     #
     def clean_global_support_files
@@ -436,8 +414,8 @@ module Pod
     # @return [void] In this step we clean all the files related to the removed
     #   Pods.
     #
-    # @TODO: Use the local pod implode.
-    # @TODO: [#534] Clean all the Pods folder that are not unchanged?
+    # @todo Use the local pod implode.
+    # @todo [#534] Clean all the Pods folder that are not unchanged?
     #
     def clean_removed_pods
       UI.section "Removing deleted dependencies" do
@@ -454,7 +432,7 @@ module Pod
     #   installed. We clean the files that might affect the resolution process
     #   and the files that might not be overwritten.
     #
-    # @TODO: [#247] Clean the headers of only the pods to install.
+    # @todo [#247] Clean the headers of only the pods to install.
     #
     def clean_pods_to_install
 
@@ -486,7 +464,7 @@ module Pod
     # @note In this step we clean also the Pods that have been pre-downloaded
     #       in AbstractExternalSource#specification_from_sandbox.
     #
-    # TODO: [#529] Podspecs should not be preserved anymore to prevent user
+    # @todo [#529] Podspecs should not be preserved anymore to prevent user
     #       confusion. Currently we are copying the ones form external sources
     #       in `Local Podspecs` and this feature is not needed anymore.
     #       I think that copying all the used podspecs would be helpful for
@@ -501,8 +479,9 @@ module Pod
       pod.clean! if config.clean?
     end
 
-    # @return [void] Downloads a Pod forcing the `bleeding edge' version if
-    #   requested.
+    # Downloads a Pod forcing the `bleeding edge' version if requested.
+    #
+    # @return [void]
     #
     def download_pod(pod)
       downloader = Downloader.for_pod(pod)
@@ -520,8 +499,10 @@ module Pod
       pod.downloaded = true
     end
 
-    # @return [void] Generates the documentation of a Pod unless it exists
-    #   for a given version.
+    # Generates the documentation of a Pod unless it exists for a given
+    # version.
+    #
+    # @return [void]
     #
     def generate_docs_if_needed(pod)
       doc_generator = Generator::Documentation.new(pod)
@@ -535,8 +516,8 @@ module Pod
 
     # Creates and populates the targets of the pods project.
     #
-    # @note Post install hooks run _before_ saving of project, so that they can
-    #       alter it before saving.
+    # @note   Post install hooks run _before_ saving of project, so that they
+    #         can alter it before it is writtent to the disk.
     #
     # @return [void]
     #
@@ -554,14 +535,15 @@ module Pod
 
     # Creates the Pods project from scratch if it doesn't exists.
     #
-    # TODO clean and modify the project if it exists.
+    # @todo Restore the build configuration support.
+    # @todo Clean and modify the project if it exists.
     #
     # @return [void]
     #
     def prepare_pods_project
       UI.message "- Creating Pods project" do
         @pods_project = Pod::Project.new(config.sandbox)
-        # TODO
+        @pods_project.add_podfile(config.project_podfile)
         # pods_project.user_build_configurations = podfile.user_build_configurations
       end
     end
@@ -574,7 +556,6 @@ module Pod
       @target_installers = podfile.target_definitions.values.map do |definition|
         pods_for_target = local_pods_by_target[definition]
         TargetInstaller.new(pods_project, definition, pods_for_target) unless definition.empty?
-        # TargetInstaller.new(podfile, pods_project, definition) unless definition.empty?
       end.compact
     end
 
@@ -586,24 +567,25 @@ module Pod
     #
     # @return [void]
     #
-    # TODO Clean the groups of the deleted Pods and add only the Pods that
-    #      should be installed.
-    #
-    # TODO [#588] Add file references for the resources of the Pods as well so
-    #      they are visible for the user.
+    # @todo   Clean the groups of the deleted Pods and add only the Pods that
+    #         should be installed.
+    # @todo   [#588] Add file references for the resources of the Pods as well
+    #         so they are visible for the user.
     #
     def add_source_files_to_pods_project
       UI.message "- Adding source files to Pods project" do
         local_pods.each { |p| p.add_file_references_to_project(pods_project) }
         local_pods.each { |p| p.link_headers }
       end
-# <<<<<<< HEAD
-# =======
-# 
-#       UserProjectIntegrator.new(@podfile).integrate! if config.integrate_targets?
-# >>>>>>> core-extraction
     end
 
+    # Runs the pre install hooks of the installed specs and of the Podfile.
+    #
+    # @todo   Run the hooks only for the installed pods.
+    # @todo   Print a messsage with the names of the specs.
+    #
+    # @return [void]
+    #
     def run_pre_install_hooks
       UI.message "- Running pre install hooks" do
         local_pods_by_target.each do |target_definition, pods|
@@ -615,10 +597,15 @@ module Pod
       end
     end
 
+    # Runs the post install hooks of the installed specs and of the Podfile.
+    #
+    # @todo   Run the hooks only for the installed pods.
+    # @todo   Print a messsage with the names of the specs.
+    #
+    # @return [void]
+    #
     def run_post_install_hooks
       UI.message "- Running post install hooks" do
-        # we loop over target installers instead of pods, because we yield the
-        # target installer to the spec post install hook.
         target_installers.each do |target_installer|
           specs_by_target[target_installer.target_definition].each do |spec|
             spec.post_install!(target_installer)
@@ -628,12 +615,16 @@ module Pod
       end
     end
 
+    # Installs the targets of the Pods projects and generates their support
+    # files.
+    #
+    # @todo Move the acknowledgements to the target installer?
+    #
     def generate_target_support_files
       UI.message"- Installing targets" do
         target_installers.each do |target_installer|
           pods_for_target = local_pods_by_target[target_installer.target_definition]
           target_installer.install!
-          # TODO
           acknowledgements_path = target_installer.library.acknowledgements_path
           Generator::Acknowledgements.new(target_installer.target_definition,
                                           pods_for_target).save_as(acknowledgements_path)
@@ -642,6 +633,11 @@ module Pod
       end
     end
 
+    # Generates a dummy source file for each target so libraries that contain
+    # only cathegories build.
+    #
+    # @todo Move to the target installer?
+    #
     def generate_dummy_source(target_installer)
       class_name_identifier = target_installer.target_definition.label
       dummy_source = Generator::DummySource.new(class_name_identifier)
@@ -666,7 +662,7 @@ module Pod
     #
     # @return [void]
     #
-    # TODO: [#552] Implement
+    # @todo [#552] Implement manifest.
     #
     def write_lockfiles
       @lockfile = Lockfile.generate(podfile, specs_by_target.values.flatten)
@@ -688,10 +684,10 @@ module Pod
     #
     # @return [void]
     #
-    # TODO: [#397] The libraries should be cleaned and the re-added on every
+    # @todo [#397] The libraries should be cleaned and the re-added on every
     #       installation. Maybe a clean_user_project phase should be added.
     #
-    # TODO: [#588] The resources should be added through a build phase instead
+    # @todo [#588] The resources should be added through a build phase instead
     #       of using a script.
     #
     def integrate_user_project

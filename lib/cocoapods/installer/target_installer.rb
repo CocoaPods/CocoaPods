@@ -47,7 +47,7 @@ module Pod
         create_copy_resources_script
       end
 
-      # TODO: This has to be removed, but this means the specs have to be
+      # @todo This has to be removed, but this means the specs have to be
       #       updated if they need a reference to the prefix header.
       #
       def prefix_header_filename
@@ -166,7 +166,7 @@ module Pod
       # Creates a script that copies the resources to the bundle of the client
       # target.
       #
-      # TODO:   This should be replaced by an Xcode copy resources build phase.
+      # @todo   This should be replaced by an Xcode copy resources build phase.
       #
       # @return [void]
       #

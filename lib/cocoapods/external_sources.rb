@@ -124,15 +124,17 @@ module Pod
       #         The contents of the specification (String) or the path to a
       #         podspec file (Pathname).
       #
-      # TODO    This could be done by the sandbox.
-      # TODO    The check for the podspec string is a bit primitive.
+      # @todo   This could be done by the sandbox.
+      # @todo   Store all the specifications (including those not originating
+      #         from external sources) so users can check them.
+      # @todo   The check for the podspec string is a bit primitive.
       #
       def store_podspec(sandbox, podspec)
         output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
         output_path.dirname.mkpath
         if podspec.is_a?(String)
           unless podspec.include?('Spec.new')
-            raise Informative, "No podspec found for `#{name}` in #{description}"
+            raise Informative, "The `#{name}.podspec` from `#{description}` appears to be invalid."
           end
           output_path.open('w') { |f| f.puts(podspec) }
         else
@@ -217,19 +219,19 @@ module Pod
     #
     class LocalSource < AbstractExternalSource
 
-      # @see AbstractExternalSource#copy_external_source_into_sandbox
+      # @see  AbstractExternalSource#copy_external_source_into_sandbox
       #
       def copy_external_source_into_sandbox(sandbox)
         store_podspec(sandbox, pod_spec_path)
       end
 
-      # @see AbstractExternalSource#description
+      # @see  AbstractExternalSource#description
       #
       def description
         "from `#{@params[:local]}`"
       end
 
-      # @see AbstractExternalSource#specification_from_local
+      # @see  AbstractExternalSource#specification_from_local
       #
       # @note The LocalSource class always fetches podspecs from the external
       #       source to provide always the freshest specification. Otherwise,
@@ -240,7 +242,7 @@ module Pod
         specification_from_external(sandbox)
       end
 
-      # @see AbstractExternalSource#specification_from_local
+      # @see  AbstractExternalSource#specification_from_local
       #
       # @note The LocalSource overrides the source of the specification to
       #       point to the local path.

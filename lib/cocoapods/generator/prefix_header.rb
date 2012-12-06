@@ -39,7 +39,7 @@ module Pod
       #
       # @return [String]
       #
-      # TODO:   Subspecs can specify prefix header information too.
+      # @todo   Subspecs can specify prefix header information too.
       #
       def generate
         result =  "#ifdef __OBJC__\n"
