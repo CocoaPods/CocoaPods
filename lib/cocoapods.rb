@@ -11,8 +11,6 @@ unless Gem::Version::Requirement.new('>= 1.4.0').satisfied_by?(Gem::Version.new(
   exit 1
 end
 
-require 'cocoapods/version'
-
 module Pod
   class PlainInformative < StandardError
   end

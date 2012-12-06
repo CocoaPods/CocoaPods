@@ -4,7 +4,7 @@ $:.unshift File.expand_path('../lib', __FILE__)
 Gem::Specification.new do |s|
 
   # Use the version of CocoaPods-Core
-  if BUNDLER_LOAD = true
+  if !defined?(Pod::VERSION) && defined?(::BUNDLER_GEMSPEC)
     s.version = '0.0.0'
   else
     require 'cocoapods-core'

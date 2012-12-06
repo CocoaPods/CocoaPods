@@ -1,6 +1,8 @@
 source "http://rubygems.org"
 
-BUNDLER_LOAD = true
+unless defined?(Pod::VERSION)
+  ::BUNDLER_GEMSPEC = true unless defined?(::BUNDLER_GEMSPEC)
+end
 gemspec
 
 group :development do
