@@ -74,6 +74,12 @@ module Pod
       end
     end
 
+    # @return [Sandbox]
+    #
+    def sandbox
+      @sandbox ||= Sandbox.new(project_pods_root)
+    end
+
     module Mixin
       def config
         Config.instance

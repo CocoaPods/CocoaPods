@@ -32,7 +32,13 @@ module Pod
 
       def run
         sets = Source.search_by_name(@query.strip, @full_text_search)
-        sets.each { |set| UI.pod(set, (@stats ? :stats : :normal)) }
+        sets.each do |set|
+          begin
+            UI.pod(set, (@stats ? :stats : :normal))
+          rescue DSLError => e
+            UI.warn "Skipping `#{set.name}` because the podspec contains errors."
+          end
+        end
       end
     end
   end

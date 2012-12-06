@@ -1,8 +1,11 @@
 module Pod
-  require 'colored'
+
+  # Provides support for UI output. It provides support for nexted sections of
+  # information and for a verbose mode.
+  #
   module UserInterface
 
-    autoload :UIPod, 'cocoapods/user_interface/ui_pod'
+    require 'colored'
 
     @title_colors      =  %w|yellow green|
     @title_level       =  0
@@ -10,6 +13,7 @@ module Pod
     @treat_titles_as_messages = false
 
     class << self
+
       include Config::Mixin
 
       attr_accessor :indentation_level, :title_level
@@ -22,8 +26,8 @@ module Pod
       # to their level. In normal mode titles are printed only if
       # they have nesting level smaller than 2.
       #
-      # TODO: refactor to title (for always visible titles like search)
-      # and sections (titles that reppresent collapsible sections).
+      # TODO: Refactor to title (for always visible titles like search)
+      # and sections (titles that represent collapsible sections).
       #
       def section(title, verbose_prefix = '', relative_indentation = 0)
         if config.verbose?
@@ -110,11 +114,11 @@ module Pod
       # that the user should take.
       #
       # @param [String]  message The message to print.
-      # @param [Actions] actions The actions that the user should take.
+      # @param [Array]   actions The actions that the user should take.
       #
       # return [void]
       #
-      def warn(message, actions)
+      def warn(message, actions = [])
         puts("\n[!] #{message}".yellow)
         actions.each do |action|
           indented = wrap_string(action, "    - ")
@@ -140,7 +144,7 @@ module Pod
         if mode == :name
           puts_indented set.name
         else
-          pod = UIPod.new(set)
+          pod = Specification::Set::Presenter.new(set)
           title("\n-> #{pod.name} (#{pod.version})".green, '', 1) do
             puts_indented pod.summary
             labeled('Homepage', pod.homepage)

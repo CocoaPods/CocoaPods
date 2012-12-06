@@ -107,7 +107,7 @@ module Pod
             invalid_count = 0
 
             podspecs.each do |podspec|
-              linter = Linter.new(podspec)
+              linter = AdvancedLinter.new(podspec)
               linter.quick     = true
               linter.repo_path = dir
 
@@ -177,6 +177,8 @@ module Pod
         versions = versions(dir)
         is_compatilbe(versions)
       end
+
+      #--------------------------------------#
 
       private
 

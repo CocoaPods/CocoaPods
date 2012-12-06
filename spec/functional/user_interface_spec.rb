@@ -6,7 +6,7 @@ describe Pod::UI do
 
   before do
     @set = Pod::Source.search(Pod::Dependency.new('CocoaLumberjack'))
-    Pod::Specification::Statistics.instance.cache_file = nil
+    Pod::Specification::Set::Statistics.instance.cache_file = nil
   end
 
   it "presents the name, version, description, homepage and source of a specification set" do
@@ -15,15 +15,10 @@ describe Pod::UI do
     output.should.include? 'CocoaLumberjack'
     output.should.include? '1.0'
     output.should.include? '1.1'
+    output.should.include? '[master repo]'
     output.should.include? 'A fast & simple, yet powerful & flexible logging framework for Mac and iOS.'
     output.should.include? 'https://github.com/robbiehanson/CocoaLumberjack'
     output.should.include? 'https://github.com/robbiehanson/CocoaLumberjack.git'
-  end
-
-  it "presents the name, version, description, homepage and source of a specification set" do
-    Pod::UI.pod(@set)
-    output = Pod::UI.output
-    output.should.include? 'Versions: 1.6, 1.3.3, 1.3.2, 1.3.1, 1.3, 1.2.3, 1.2.2, 1.2.1, 1.2, 1.1, 1.0 [master repo]'
   end
 
   it "presents the stats of a specification set" do

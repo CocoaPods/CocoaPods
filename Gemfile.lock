@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: 97a5a444ecfadf52e42afdbbf054f078f7c2cc5d
+  revision: fbb5c11844b99bd954b2945098502dde0641c311
   specs:
-    xcodeproj (0.4.0.rc5)
+    xcodeproj (0.4.0)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
 
@@ -18,22 +18,31 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.16.0.rc2)
+    cocoapods (0.17.0.alpha)
       activesupport (~> 3.2.6)
       claide (~> 0.1)
+      cocoapods-core
       colored (~> 1.2)
       escape (~> 0.0.4)
       faraday (~> 0.8.1)
       json (~> 1.7.3)
       octokit (~> 1.7)
       open4 (~> 1.3.0)
-      rake (~> 0.9.0)
-      xcodeproj (~> 0.4.0.rc1)
+      rake (~> 0.9.4)
+      xcodeproj (~> 0.4.0)
+
+PATH
+  remote: ../Core
+  specs:
+    cocoapods-core (0.16.0.rc2)
+      activesupport (~> 3.2.6)
+      faraday (~> 0.8.1)
+      octokit (~> 1.7)
 
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.2.8)
+    activesupport (3.2.9)
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.3.2)
@@ -52,27 +61,31 @@ GEM
     hashie (1.2.0)
     i18n (0.6.1)
     json (1.7.5)
-    listen (0.5.3)
+    listen (0.6.0)
     metaclass (0.0.1)
     method_source (0.8.1)
     mocha (0.11.4)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.1)
       mocha (>= 0.9.8)
-    multi_json (1.3.6)
+    multi_json (1.4.0)
     multipart-post (1.1.5)
-    octokit (1.18.0)
+    octokit (1.19.0)
       addressable (~> 2.2)
       faraday (~> 0.8)
-      faraday_middleware (~> 0.8)
+      faraday_middleware (~> 0.9)
       hashie (~> 1.2)
       multi_json (~> 1.3)
     open4 (1.3.0)
+    posix-spawn (0.3.6)
     pry (0.9.10)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
-    rake (0.9.2.2)
+    pygments.rb (0.3.2)
+      posix-spawn (~> 0.3.6)
+      yajl-ruby (~> 1.1.0)
+    rake (0.9.5)
     rb-fsevent (0.9.2)
     redcarpet (2.2.2)
     slop (3.3.3)
@@ -81,6 +94,7 @@ GEM
     webmock (1.8.11)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
+    yajl-ruby (1.1.0)
     yard (0.8.3)
 
 PLATFORMS
@@ -90,15 +104,17 @@ DEPENDENCIES
   awesome_print
   bacon
   cocoapods!
+  cocoapods-core!
   github-markup
   kicker!
   mocha (~> 0.11.4)
   mocha-on-bacon
   pry
+  pygments.rb
   rake
   rb-fsevent
   redcarpet
   vcr
-  webmock
+  webmock (>= 1.8.0, < 1.9)
   xcodeproj!
   yard

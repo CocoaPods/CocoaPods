@@ -1,25 +1,82 @@
 ## Branch 0.17
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.17)
 
-###### TODO
+- TODO: Dropped script for resources.
 
-- Add `s.exclude_source_files` and related attributes to the specification class.
+###### DSL Changes
+
+- Deprecated header_mappings hook for specifications.
+- `preferred_dependency` has been renamed to `default_subspec`.
+- Added `s.exclude_source_files` and related attributes to the specification class.
+- Added support for prefix_header_file in subspecs
+- Added support for prefix_header_contents in subspecs
+- Removed exclude_header_search_paths
+- Added screenshot attribute
+- Renamed preferred_dependency
 
 ###### Enhancements
 
+- Released [documentation](docs.cocoapods.org).
+- Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
+- Added Podfile to the Pods project.
+
+- Major clean up and refactor to the code base.
+- Extrace models to [CocoaPods-Core](https://github.com/CocoaPods/Core) gem.
 - Extracted command-line command & option handling into
   [CLAide](https://github.com/CocoaPods/CLAide).
 - Added PathList class.
-
-- Added Podfile to the Pods project.
   [#476](https://github.com/CocoaPods/CocoaPods/issues/476)
+- Extracted XCConfig generator.
 
-- Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
+## 0.16.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc5...master)
 
-## Master
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...master) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...master)
+###### Enhancements
+
+- Use Rake 0.9.4
+  [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
+
+
+## 0.16.0.rc5
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc4...0.16.0.rc5)
+
+###### Deprecated
+
+- The usage of specifications defined in a Podfile is deprecated. Use the
+  `:podspec` option with a file path instead. Complete removal will most
+  probably happen in 0.17.0.
+  [#549](https://github.com/CocoaPods/CocoaPods/issues/549)
+  [#616](https://github.com/CocoaPods/CocoaPods/issues/616)
+  [#525](https://github.com/CocoaPods/CocoaPods/issues/525)
 
 ###### Bug fixes
 
+- Always consider inline podspecs as needing installation.
+- Fix detection when the lib has already been integrated with the user’s target.
+  [#643](https://github.com/CocoaPods/CocoaPods/issues/643)
+  [#614](https://github.com/CocoaPods/CocoaPods/issues/614)
+  [#613](https://github.com/CocoaPods/CocoaPods/issues/613)
+
+## 0.16.0.rc4
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc3...0.16.0.rc4)
+
+###### Bug fixes
+
+- Fix for Rake 0.9.3
+  [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
+
+## 0.16.0.rc3
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...0.16.0.rc3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...0.4.0.rc6)
+
+###### Enhancements
+
+- Added support for copying frameworks to the app bundle.
+  [#597](https://github.com/CocoaPods/CocoaPods/pull/597)
+
+###### Bug fixes
+
+- Ignore PBXReferenceProxy while integrating into user project.
+  [#626](https://github.com/CocoaPods/CocoaPods/issues/626)
 - Added support for PBXAggregateTarget and PBXLegacyTarget.
   [#615](https://github.com/CocoaPods/CocoaPods/issues/615)
 - Added support for PBXReferenceProxy.

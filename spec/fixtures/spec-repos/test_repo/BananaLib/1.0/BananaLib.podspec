@@ -8,7 +8,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'http://banana-corp.local/banana-lib.git', :tag => 'v1.0' }
   s.source_files = 'Classes/*.{h,m}', 'Vendor'
   s.xcconfig     = { 'OTHER_LDFLAGS' => '-framework SystemConfiguration' }
-  s.clean_paths  = "sub-dir"
   s.prefix_header_file = 'Classes/BananaLib.pch'
   s.resources    = "Resources/*.png"
   s.dependency   'monkey', '~> 1.0.1', '< 1.0.9'

@@ -1,32 +1,33 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
-  describe Command::List do
+  describe "Command::List" do
     extend SpecHelper::TemporaryRepos
+    extend SpecHelper::TemporaryDirectory
 
-    it "lists the known pods" do
+    before do
+      set_up_test_repo
+      config.repos_dir = SpecHelper.tmp_repos_path
+    end
+
+    it "presents the known pods" do
       out = run_command('list')
-      [ /ZBarSDK/,
-        /TouchJSON/,
-        /SDURLCache/,
-        /MagicalRecord/,
-        /A2DynamicDelegate/,
+      [ /BananaLib/,
+        /JSONKit/,
         /\d+ pods were found/
       ].each { |regex| out.should =~ regex }
     end
 
-    it "lists the new pods" do
-      Time.stubs(:now).returns(Time.mktime(2012,2,3))
+    it "returns the new pods" do
+      sets = Source.all_sets
+      jsonkit_set = sets.find { |s| s.name == 'JSONKit' }
+      dates = {
+        'BananaLib' => Time.now,
+        'JSONKit'   => Time.parse('01/01/1970') }
+      Specification::Set::Statistics.any_instance.stubs(:creation_dates).returns(dates)
       out = run_command('list', 'new')
-      [ 'iCarousel',
-        'libPusher',
-        'SSCheckBoxView',
-        'KKPasscodeLock',
-        'SOCKit',
-        'FileMD5Hash',
-        'cocoa-oauth',
-        'iRate'
-      ].each {|s| out.should.include s }
+      out.should.include('BananaLib')
+      out.should.not.include('JSONKit')
     end
   end
 end
