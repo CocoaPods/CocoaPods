@@ -14,6 +14,7 @@ module Pod
       params = dependency.external_source
 
       klass  = if params.key?(:git) then GitSource
+      elsif params.key?(:svn)       then SvnSource
       elsif params.key?(:podspec)   then PodspecSource
       elsif params.key?(:local)     then LocalSource
       end
@@ -150,6 +151,7 @@ module Pod
     #-------------------------------------------------------------------------#
 
     # Provides support for fetching a specification file from a Git remote.
+    #
     # Supports all the options of the downloader (is similar to the git key of
     # `source` attribute of a specification).
     #
@@ -182,6 +184,47 @@ module Pod
           description << ", commit `#{@params[:commit]}`" if @params[:commit]
           description << ", branch `#{@params[:branch]}`" if @params[:branch]
           description << ", tag `#{@params[:tag]}`" if @params[:tag]
+        end
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    # Provides support for fetching a specification file from a SvnSource
+    # remote.
+    #
+    # Supports all the options of the downloader (is similar to the git key of
+    # `source` attribute of a specification).
+    #
+    # @note The podspec must be in the root of the repository and should have a
+    #       name matching the one of the dependency.
+    #
+    class SvnSource < AbstractExternalSource
+
+      # @see AbstractExternalSource#copy_external_source_into_sandbox
+      #
+      # @note To prevent a double download of the repository the pod is marked
+      #       as pre-downloaded indicating to the installer that only clean
+      #       operations are needed.
+      #
+      def copy_external_source_into_sandbox(sandbox)
+        UI.info("->".green + " Pre-downloading: '#{name}'") do
+          target = sandbox.root + name
+          target.rmtree if target.exist?
+          downloader = Downloader.for_target(sandbox.root + name, @params)
+          downloader.download
+          store_podspec(sandbox, target + "#{name}.podspec")
+          sandbox.predownloaded_pods << name
+        end
+      end
+
+      # @see AbstractExternalSource#description
+      #
+      def description
+        "from `#{@params[:svn]}'".tap do |description|
+          description << ", folder `#{@params[:folder]}'" if @params[:folder]
+          description << ", tag `#{@params[:tag]}'" if @params[:tag]
+          description << ", revision `#{@params[:revision]}'" if @params[:revision]
         end
       end
     end

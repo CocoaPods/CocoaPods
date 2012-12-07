@@ -41,6 +41,27 @@ module Pod
     xit "returns the description" do end
   end
 
+
+  describe ExternalSources::SvnSource do
+
+    it "creates a copy of the podspec" do
+      dependency = Dependency.new("SvnSource", :svn => "file://#{fixture('subversion-repo/trunk')}")
+      external_source = ExternalSources.from_dependency(dependency)
+      external_source.copy_external_source_into_sandbox(config.sandbox)
+      path = config.sandbox.root + 'Local Podspecs/SvnSource.podspec'
+      path.should.exist?
+    end
+
+    it "marks a LocalPod as downloaded" do
+      dependency = Dependency.new("SvnSource", :svn => "file://#{fixture('subversion-repo/trunk')}")
+      external_source = ExternalSources.from_dependency(dependency)
+      external_source.copy_external_source_into_sandbox(config.sandbox)
+      config.sandbox.predownloaded_pods.should == ["SvnSource"]
+    end
+
+    xit "returns the description" do end
+  end
+
   describe ExternalSources::PodspecSource do
     it "creates a copy of the podspec" do
       dependency = Dependency.new("Reachability", :podspec => fixture('integration/Reachability/Reachability.podspec').to_s)
