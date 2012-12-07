@@ -24,8 +24,12 @@ module Pod
         super
       end
 
+      def self.dir
+        Config.instance.repos_dir + 'master'
+      end
+
       def dir
-        config.repos_dir + 'master'
+        self.class.dir
       end
 
       def read_only_url
@@ -82,8 +86,9 @@ module Pod
         end
       end
 
-      def run_if_needed
-        run unless dir.exist? && Repo.compatible?('master')
+      def self.run_if_needed
+        self.new(CLAide::ARGV.new([])).run unless
+        dir.exist? && Repo.compatible?('master')
       end
 
       def run

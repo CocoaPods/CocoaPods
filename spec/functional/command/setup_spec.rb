@@ -49,7 +49,7 @@ describe Pod::Command::Setup do
     output = run_command('setup')
     output.should.include "Setup completed"
     Pod::UI.output = ''
-    command('setup').run_if_needed
+    Pod::Command::Setup.run_if_needed
     Pod::UI.output.should == ''
   end
 end

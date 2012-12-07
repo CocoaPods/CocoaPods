@@ -24,7 +24,7 @@ module Pod
     def self.parse(argv)
       command = super
       unless command.is_a?(Setup) || ENV['SKIP_SETUP']
-        Setup.new(CLAide::ARGV.new([])).run_if_needed
+        Setup.run_if_needed
       end
       command
     end
@@ -48,10 +48,13 @@ module Pod
       end
     end
 
+    # @todo If a command is run inside another one some settings which where
+    #       true might return false.
+    #
     def initialize(argv)
-      config.silent = argv.flag?('silent')
+      config.silent ||= argv.flag?('silent')
       super
-      config.verbose = self.verbose?
+      config.verbose ||= self.verbose?
       # TODO we should probably not even load colored unless needed
       String.send(:define_method, :colorize) { |string , _| string } unless self.colorize_output?
     end
