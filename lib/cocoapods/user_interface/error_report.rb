@@ -4,7 +4,7 @@ require 'rbconfig'
 require 'cgi'
 
 module Pod
-  class Command
+  module UserInterface
     module ErrorReport
       class << self
         def report(error)

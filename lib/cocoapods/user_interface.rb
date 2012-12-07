@@ -1,3 +1,5 @@
+require 'cocoapods/user_interface/error_report'
+
 module Pod
 
   # Provides support for UI output. It provides support for nexted sections of

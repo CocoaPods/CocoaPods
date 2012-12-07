@@ -7,7 +7,6 @@ module Pod
   end
 
   class Command < CLAide::Command
-    autoload :ErrorReport,    'cocoapods/command/error_report'
     autoload :AdvancedLinter, 'cocoapods/command/advanced_linter'
 
     self.abstract_command = true
@@ -43,7 +42,7 @@ module Pod
         puts "[!] Cancelled".red
         Config.instance.verbose? ? raise : exit(1)
       else
-        puts ErrorReport.report(error)
+        puts UI::ErrorReport.report(error)
         exit 1
       end
     end
