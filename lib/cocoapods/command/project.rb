@@ -1,13 +1,19 @@
 module Pod
   class Command
     module Project
-      def self.options
-        [
-          ["--no-clean",     "Leave SCM dirs like `.git' and `.svn' intact after downloading"],
-          ["--no-doc",       "Skip documentation generation with appledoc"],
-          ["--no-integrate", "Skip integration of the Pods libraries in the Xcode project(s)"],
-          ["--no-update",    "Skip running `pod repo update` before install"],
-        ].concat(super)
+      module Options
+        def options
+          [
+            ["--no-clean",     "Leave SCM dirs like `.git' and `.svn' intact after downloading"],
+            ["--no-doc",       "Skip documentation generation with appledoc"],
+            ["--no-integrate", "Skip integration of the Pods libraries in the Xcode project(s)"],
+            ["--no-update",    "Skip running `pod repo update` before install"],
+          ].concat(super)
+        end
+      end
+
+      def self.included(base)
+        base.extend Options
       end
 
       def initialize(argv)
