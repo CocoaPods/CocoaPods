@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/CocoaPods/Core.git
-  revision: c9baef99f8526a3d8f81a5b312e7b5a81b04a1f6
+  revision: 55f2db7c1bd2a7311c47c6bd8de3132e9e8853d1
   specs:
     cocoapods-core (0.17.0.alpha)
       activesupport (~> 3.2.6)
@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: fbb5c11844b99bd954b2945098502dde0641c311
+  revision: df3755dd51a7dce5151b8862d834bf047b5bc60d
   specs:
     xcodeproj (0.4.0)
       activesupport (~> 3.2.6)
