@@ -29,24 +29,33 @@ module Pod
       e.message.should.match(/Couldn't find any .podspec/)
     end
 
-    # TODO: the validation should not use the pod spec command
-    xit "it raises if the specification doesn't validates" do
+    it "it raises if the specification doesn't validate" do
       repo_make('test_repo')
       Dir.chdir(temporary_directory) do
-        spec = "Spec.new do |s|; s.name = 'Broken'; end"
+        spec = "Spec.new do |s|; s.name = 'Broken'; s.version = '1.0' end"
         File.open('Broken.podspec',  'w') {|f| f.write(spec) }
         cmd = command('push', 'test_repo')
-        cmd.expects(:validate_podspec_files).returns(true)
+        Validator.any_instance.stubs(:validated?).returns(false)
+
         e = lambda { cmd.run }.should.raise Pod::Informative
-        e.message.should.match(/repo not clean/)
+        e.message.should.match(/Broken.podspec.*does not validate/)
       end
     end
 
     #--------------------------------------#
 
     before do
-      repo_make('upstream')
-      repo_clone('upstream', 'local_repo')
+      set_up_test_repo
+      config.repos_dir = SpecHelper.tmp_repos_path
+
+      @upstream = SpecHelper.temporary_directory + 'upstream'
+      FileUtils.cp_r(test_repo_path, @upstream)
+      Dir.chdir(test_repo_path) do
+        `git remote add origin #{@upstream}`
+        `git remote -v`
+        `git fetch -q`
+        `git branch --set-upstream master origin/master`
+      end
 
       # prepare the spec
       spec = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
@@ -57,29 +66,26 @@ module Pod
     end
 
     it "refuses to push if the repo is not clean" do
-      repo_make_readme_change('local_repo', 'dirty')
-      Dir.chdir(temporary_directory) do
-        cmd = command('push', 'local_repo')
-        cmd.expects(:validate_podspec_files).returns(true)
-        e = lambda { cmd.run }.should.raise Pod::Informative
-        e.message.should.match(/repo not clean/)
+      Dir.chdir(test_repo_path) do
+        `touch DIRTY_FILE`
       end
-      (repo_path('upstream') + 'PushTest/1.4/PushTest.podspec').should.not.exist?
+      cmd = command('push', 'master')
+      cmd.expects(:validate_podspec_files).returns(true)
+      e = lambda { cmd.run }.should.raise Pod::Informative
+      e.message.should.match(/repo.*not clean/)
+      (@upstream + 'PushTest/1.4/PushTest.podspec').should.not.exist?
     end
 
-    it "sucessfully pushes a spec" do
-      cmd = command('push', 'local_repo')
-      Dir.chdir(repo_path 'upstream') { `git checkout -b tmp_for_push -q` }
+    it "successfully pushes a spec" do
+
+      cmd = command('push', 'master')
+      Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
       cmd.expects(:validate_podspec_files).returns(true)
       Dir.chdir(temporary_directory) { cmd.run }
-
       Pod::UI.output.should.include('[Add] PushTest (1.4)')
-      Pod::UI.output.should.include('[Add] JSONKit (1.4)')
-      # TODO check the commit messages
-      # Pod::UI.output.should.include('[Fix] JSONKit (1.4)')
-
-      Dir.chdir(repo_path 'upstream') { `git checkout master -q` }
-      (repo_path('upstream') + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
+      Pod::UI.output.should.include('[Fix] JSONKit (1.4)')
+      Dir.chdir(@upstream) { `git checkout master -q` }
+      (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
     end
   end
 end

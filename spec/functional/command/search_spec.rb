@@ -6,12 +6,13 @@ module Pod
     extend SpecHelper::TemporaryRepos
 
     before do
-      config.repos_dir = fixture('spec-repos')
+      set_up_test_repo
+      config.repos_dir = SpecHelper.tmp_repos_path
     end
 
     it "runs with correct parameters" do
-      lambda { run_command('search', 'table') }.should.not.raise
-      lambda { run_command('search', 'table', '--full') }.should.not.raise
+      lambda { run_command('search', 'JSON') }.should.not.raise
+      lambda { run_command('search', 'JSON', '--full') }.should.not.raise
     end
 
     it "complains for wrong parameters" do
@@ -21,30 +22,14 @@ module Pod
       lambda { run_command('search', '--wrong') }.should.raise CLAide::Help
     end
 
-    it "presents the search results" do
-      output = run_command('search', 'table')
-      output.should.include 'EGOTableViewPullRefresh'
-    end
-
     it "searches for a pod with name matching the given query ignoring case" do
-      [
-        [' s ', %w{ ASIHTTPRequest ASIWebPageRequest JSONKit SSZipArchive }],
-        ['json', %w{ JSONKit SBJson }],
-      ].each do |query, results|
-        output = run_command('search', query)
-        results.each { |pod| output.should.include? pod }
-      end
+      output = run_command('search', 'json')
+      output.should.include? 'JSONKit'
     end
 
     it "searches for a pod with name, summary, or description matching the given query ignoring case" do
-      [
-        ['dROP', %w{ Reachability }],
-        ['is', %w{ ASIHTTPRequest SSZipArchive }],
-        ['luke redpath', %w{ Kiwi libPusher LRMocky LRResty LRTableModel}],
-      ].each do |query, results|
-        output = run_command('search', query, '--full')
-        results.each { |pod| output.should.include? pod }
-      end
+      output = run_command('search', 'Engelhart', '--full')
+      output.should.include? 'JSONKit'
     end
   end
 end

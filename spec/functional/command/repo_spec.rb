@@ -25,7 +25,8 @@ module Pod
       end
 
       it "lints a repository" do
-        lambda { run_command('repo', 'lint',  temporary_directory.to_s) }.should.not.raise
+        repo = fixture('spec-repos/test_repo').to_s
+        lambda { run_command('repo', 'lint', repo) }.should.not.raise
       end
 
       it "adds a spec-repo" do

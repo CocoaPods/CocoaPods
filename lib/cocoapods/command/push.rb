@@ -47,14 +47,14 @@ module Pod
       private
 
       def update_repo
-        UI.puts "Updating the `#{@repo}' repo\n".yellow unless config.silent
+        UI.puts "Updating the `#{@repo}' repo\n".yellow
         # show the output of git even if not verbose
         # TODO: use the `git!' and find a way to show the output in realtime.
         Dir.chdir(repo_dir) { UI.puts `git pull 2>&1` }
       end
 
       def push_repo
-        UI.puts "\nPushing the `#{@repo}' repo\n".yellow unless config.silent
+        UI.puts "\nPushing the `#{@repo}' repo\n".yellow
         Dir.chdir(repo_dir) { UI.puts `git push 2>&1` }
       end
 
@@ -64,15 +64,16 @@ module Pod
         dir
       end
 
+      # @todo: add specs for staged and unstaged files
+      #
       def check_repo_status
-        # TODO: add specs for staged and unstaged files (tested manually)
         clean = Dir.chdir(repo_dir) { `git status --porcelain  2>&1` } == ''
-        raise Informative, "[!] `#{@repo}' repo not clean".red unless clean
+        raise Informative, "The repo `#{@repo}` is not clean" unless clean
       end
 
       def podspec_files
         files = Pathname.glob(@podspec || "*.podspec")
-        raise Informative, "[!] Couldn't find any .podspec file in current directory".red if files.empty?
+        raise Informative, "Couldn't find any .podspec file in current directory" if files.empty?
         files
       end
 
@@ -83,18 +84,16 @@ module Pod
       end
 
       def validate_podspec_files
-        UI.puts "\nValidating #{'spec'.pluralize(count)}".yellow unless config.silent
-        lint_argv = ["lint"]
-        lint_argv << "--only-errors" if @allow_warnings
-        lint_argv << "--silent" if config.silent
-        # all_valid = true
+        UI.puts "\nValidating #{'spec'.pluralize(count)}".yellow
         podspec_files.each do |podspec|
-          Spec.parse(lint_argv + [podspec.to_s]).run
+          validator = Validator.new(podspec)
+          validator.validate
+          raise Informative, "The `#{podspec}` specification does not validate." unless validator.validated?
         end
       end
 
       def add_specs_to_repo
-        UI.puts "\nAdding the #{'spec'.pluralize(count)} to the `#{@repo}' repo\n".yellow unless config.silent
+        UI.puts "\nAdding the #{'spec'.pluralize(count)} to the `#{@repo}' repo\n".yellow
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
           output_path = File.join(repo_dir, spec.name, spec.version.to_s)
@@ -105,7 +104,7 @@ module Pod
           else
             message = "[Add] #{spec}"
           end
-          UI.puts " - #{message}" unless config.silent
+          UI.puts " - #{message}"
 
           FileUtils.mkdir_p(output_path)
           FileUtils.cp(Pathname.new(spec.name+'.podspec'), output_path)

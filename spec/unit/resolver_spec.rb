@@ -112,7 +112,7 @@ module Pod
       it "includes all the subspecs of a specification node" do
         @podfile = Podfile.new do
           platform :ios
-          pod 'RestKit'
+          pod 'RestKit', '0.10.3'
         end
         resolver = Resolver.new(config.sandbox, @podfile)
         resolver.resolve.values.flatten.map(&:name).sort.should == %w{

@@ -40,6 +40,8 @@ module Pod
         end
       end
 
+      #-----------------------------------------------------------------------#
+
       class Update < Repo
         self.summary = 'Update a spec repo.'
 
@@ -72,6 +74,8 @@ module Pod
           end
         end
       end
+
+      #-----------------------------------------------------------------------#
 
       class Lint < Repo
         self.summary = 'Validates all specs in a repo.'
@@ -106,33 +110,44 @@ module Pod
             podspecs = Pathname.glob( dir + '**/*.podspec')
             invalid_count = 0
 
+            messages_by_type = {}
             podspecs.each do |podspec|
-              linter = Validator.new(podspec)
-              linter.quick     = true
-              linter.repo_path = dir
+              print "\033[K -> #{podspec.relative_path_from(dir)}\r"
+              validator = Validator.new(podspec)
+              validator.quick       = true
+              validator.repo_path   = dir
+              validator.only_errors = @only_errors
+              validator.disable_ui_output = true
 
-              linter.lint
-
-              case linter.result_type
-              when :error
-                invalid_count += 1
-                color = :red
-                should_display = true
-              when :warning
-                color = :yellow
-                should_display = !@only_errors
-              end
-
-              if should_display
-                UI.puts " -> ".send(color) << linter.spec_name
-                print_messages('ERROR', linter.errors)
-                unless @only_errors
-                  print_messages('WARN',  linter.warnings)
-                  print_messages('NOTE',  linter.notes)
+              validator.validate
+              invalid_count += 1 if validator.result_type == :error
+              unless validator.validated?
+                if @only_errors
+                  results = validator.results.select { |r| r.type.to_s == "error" }
+                else
+                  results = validator.results
                 end
-                UI.puts unless config.silent?
+                results.each do |result|
+                  messages_by_type[result.type] ||= {}
+                  messages_by_type[result.type][result.message] ||= []
+                  name = validator.spec ? validator.spec.to_s : podspec.relative_path_from(dir)
+                  messages_by_type[result.type][result.message] << name
+                end
               end
             end
+
+            print "\033[K"
+            messages_by_type.each do |type, messages_by_type|
+              messages_by_type.each do |message, names|
+                color = type == :error ? :red : :yellow
+                UI.puts "[#{type}] #{message}".send(color)
+                names.each { |name| UI.puts "  - #{name}" }
+                UI.puts
+              end
+            end
+
+
+
             UI.puts "Analyzed #{podspecs.count} podspecs files.\n\n" unless config.silent?
 
             if invalid_count == 0

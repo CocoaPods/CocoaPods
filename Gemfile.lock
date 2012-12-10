@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/CocoaPods/Core.git
-  revision: 55f2db7c1bd2a7311c47c6bd8de3132e9e8853d1
+  revision: 163c8f3d20aadb91b1987acb57e266ed839040ba
   specs:
     cocoapods-core (0.17.0.alpha)
       activesupport (~> 3.2.6)
@@ -69,7 +69,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.1)
       mocha (>= 0.9.8)
-    multi_json (1.4.0)
+    multi_json (1.5.0)
     multipart-post (1.1.5)
     octokit (1.19.0)
       addressable (~> 2.2)

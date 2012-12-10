@@ -86,20 +86,20 @@ module Pod
           UI.puts
           invalid_count = 0
           podspecs_to_lint.each do |podspec|
-            validator          = Validator.new(podspec)
-            validator.quick    = @quick
-            validator.local    = @local
-            validator.no_clean = @no_clean
-
+            validator             = Validator.new(podspec)
+            validator.quick       = @quick
+            validator.local       = @local
+            validator.no_clean    = @no_clean
+            validator.only_errors = @only_errors
             validator.validate
             invalid_count += 1 unless validator.validated?
           end
 
           count = podspecs_to_lint.count
-          UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n" unless config.silent?
+          UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n"
           if invalid_count == 0
             lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
-            UI.puts lint_passed_message.green << "\n\n" unless config.silent?
+            UI.puts lint_passed_message.green << "\n\n"
           else
             raise Informative, count == 1 ? "The spec did not pass validation." : "#{invalid_count} out of #{count} specs failed validation."
           end

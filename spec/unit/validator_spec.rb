@@ -63,7 +63,7 @@ module Pod
         validator.stubs(:check_file_patterns)
         validator.validate
         first = validator.results.map(&:to_s).first
-        first.should.include "[NOTE] XCODEBUILD"
+        first.should.include "xcodebuild"
         first.should.include "JSONKit/JSONKit.m:1640:27: warning: equality comparison"
         first.should.include "[OS X - iOS]"
         validator.result_type.should == :note
