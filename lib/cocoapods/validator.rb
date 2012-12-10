@@ -80,16 +80,10 @@ module Pod
         end
 
       case result.type
-        when :error, :deprecation
-          type = "ERROR"
-        when :warning
-          type = "WARN"
-        when :note
-          type = "NOTE"
-        else
-          raise "#{result.type}"
-        end
-
+        when :error   then type = "ERROR"
+        when :warning then type = "WARN"
+        when :note    then type = "NOTE"
+        else raise "#{result.type}" end
         UI.puts "    - #{type.ljust(5)} | #{platform_message}#{result.message}"
       end
       UI.puts
@@ -99,6 +93,8 @@ module Pod
 
     # @!group Configuration
 
+    # @return [Boolean] TODO
+    #
     attr_accessor :disable_ui_output
 
     # @return [Pathname] whether the validation should be performed against a repo.
@@ -106,7 +102,7 @@ module Pod
     attr_accessor :repo_path
 
     # @return [Bool] whether the validation should skip the checks that
-    #         requires the download or the build of the library.
+    #         requires the download of the library.
     #
     attr_accessor :quick
 
@@ -116,13 +112,14 @@ module Pod
     attr_accessor :no_clean
 
     # @return [Bool] whether the validation should be performed against the root of
-    #   the podspec instead to its original source. Uses the `:local` option
-    #   of the Podfile.
+    #         the podspec instead to its original source.
+    #
+    # @note   Uses the `:local` option of the Podfile.
     #
     attr_writer :local
     def local?; @local; end
 
-    #
+    # @return [Boolean] TODO
     #
     attr_accessor :only_errors
 
@@ -137,32 +134,25 @@ module Pod
     # @return [Boolean]
     #
     def validated?
-      return false if result_type == :error
-      return false if result_type == :warning && !only_errors
-      return true
+      result_type != :error && (result_type != :warning || only_errors)
     end
 
     # @return [Symbol]
     #
     def result_type
       types = results.map(&:type).uniq
-      if types.include?(:error)      then :error
+      if    types.include?(:error)   then :error
       elsif types.include?(:warning) then :warning
-      else :note
-      end
+      else  :note end
     end
 
     # @return [Symbol]
     #
     def result_color
       case result_type
-      when :error
-        color = :red
-      when :warning
-        color = :yellow
-      else
-        color = :green
-      end
+      when :error   then :red
+      when :warning then :yellow
+      else :green end
     end
 
     # @return [Pathname] the temporary directory used by the linter.
@@ -229,8 +219,8 @@ module Pod
       Config.instance = @original_config
     end
 
-    # It creates a podfile in memory and builds a library containing
-    # the pod for all available platforms with xcodebuild.
+    # It creates a podfile in memory and builds a library containing the pod
+    # for all available platforms with xcodebuild.
     #
     def install_pod
       podfile = podfile_from_spec(current_platform)
@@ -241,11 +231,13 @@ module Pod
       config.silent
     end
 
-    # Performs platform specific analysis.
-    # It requires to download the source at each iteration
+    # Performs platform specific analysis. It requires to download the source
+    # at each iteration
     #
-    # @note Treat xcodebuild warnings as notes because the spec maintainer
-    #       might not be the author of the library
+    # @note   Xcode warnings are treaded as notes because the spec maintainer
+    #         might not be the author of the library
+    #
+    # @return [void]
     #
     def build_pod
       if `which xcodebuild`.strip.empty?
