@@ -690,7 +690,8 @@ module Pod
     #       of using a script.
     #
     def integrate_user_project
-      UserProjectIntegrator.new(podfile, pods_project, config.project_root).integrate! if config.integrate_targets?
+      return unless config.integrate_targets?
+      UserProjectIntegrator.new(podfile, pods_project, config.project_root).integrate! 
     end
   end
 end

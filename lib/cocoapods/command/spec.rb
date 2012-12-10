@@ -53,6 +53,8 @@ module Pod
         end
       end
 
+      #-----------------------------------------------------------------------#
+
       class Lint < Spec
         self.summary = 'Validates a spec file.'
 
@@ -84,21 +86,13 @@ module Pod
           UI.puts
           invalid_count = 0
           podspecs_to_lint.each do |podspec|
-            linter          = AdvancedLinter.new(podspec)
-            linter.quick    = @quick
-            linter.local    = @local
-            linter.no_clean = @no_clean
+            validator          = Validator.new(podspec)
+            validator.quick    = @quick
+            validator.local    = @local
+            validator.no_clean = @no_clean
 
-            case linter.result_type
-            when :error
-              invalid_count += 1
-              color = :red
-            when :warning
-              invalid_count  += 1 unless @only_errors
-              color = :yellow
-            else
-              color = :green
-            end
+            validator.validate
+            invalid_count += 1 unless validator.validated?
           end
 
           count = podspecs_to_lint.count
@@ -113,25 +107,27 @@ module Pod
         end
       end
 
+      #-----------------------------------------------------------------------#
+
       class Cat < Spec
         self.summary = 'Prints a spec file'
-        
+
         self.description = <<-DESC
           Prints `NAME.podspec` to standard output.
         DESC
-        
+
         self.arguments = '[ NAME.podspec ]'
-        
+
         def initialize(argv)
           @name = argv.shift_argument
           super
         end
-        
+
         def validate!
           super
           help! "A pod name is required." unless @name
         end
-        
+
         def run
           found_sets = Source.search_by_name(@name)
           raise Informative, "Unable to find a spec named `#{@name}'." if found_sets.count == 0
@@ -145,22 +141,22 @@ module Pod
           file_name = best_spec.defined_in_file
           UI.puts File.open(file_name).read
         end
-        
+
         def best_spec_from_set(set)
           sources = set.sources
-          
+
           best_source = sources.first
           best_version = best_source.versions(set.name).first
           sources.each do |source|
             if source.versions(set.name).first > best_version
-                best_source = source 
+                best_source = source
                 best_version = version
             end
           end
-          
+
           best_spec = best_source.specification(set.name, best_version)
         end
-        
+
       end
 
       # TODO some of the following methods can probably move to one of the subclasses.

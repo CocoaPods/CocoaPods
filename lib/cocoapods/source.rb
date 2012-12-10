@@ -4,7 +4,6 @@ module Pod
 
       include Config::Mixin
 
-
       # @return [Array<Source>] the list of all the sources known to this
       #         installation of CocoaPods.
       #

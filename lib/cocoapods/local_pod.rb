@@ -316,6 +316,8 @@ module Pod
       paths_by_spec.values.flatten
     end
 
+    alias :resources :resource_files
+
     # @return [Array<Pathname>] The *relative* paths of the resources.
     #
     def relative_resource_files
@@ -338,6 +340,8 @@ module Pod
       paths.uniq!
       paths
     end
+
+    alias :preserve_paths :preserve_files
 
     # @return [Pathname] The automatically detected absolute path of the README
     #  file.

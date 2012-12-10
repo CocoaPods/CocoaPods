@@ -7,7 +7,6 @@ module Pod
   end
 
   class Command < CLAide::Command
-    autoload :AdvancedLinter, 'cocoapods/command/advanced_linter'
 
     self.abstract_command = true
     self.command = 'pod'

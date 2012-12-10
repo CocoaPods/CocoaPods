@@ -309,9 +309,15 @@ module Pod
       #
       # @return [String] the computed path.
       #
+      # @todo: Check integrate_targets conditional.
+      #
       def relative_to_srcroot(path = nil)
         base_path = path ? config.project_pods_root + path : config.project_pods_root
-        (base_path).relative_path_from(user_project_path.dirname).to_s
+        if config.integrate_targets?
+          (base_path).relative_path_from(user_project_path.dirname).to_s
+        else
+          (base_path).relative_path_from(config.project_root).to_s
+        end
       end
 
       def relative_pods_root

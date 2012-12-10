@@ -32,6 +32,7 @@ module Pod
   autoload :Resolver,               'cocoapods/resolver'
   autoload :Sandbox,                'cocoapods/sandbox'
   autoload :UI,                     'cocoapods/user_interface'
+  autoload :Validator,              'cocoapods/validator'
 
   autoload :Pathname,               'pathname'
 
