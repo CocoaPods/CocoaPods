@@ -77,7 +77,7 @@ module Pod
           @quick       =  argv.flag?('quick')
           @local       =  argv.flag?('local')
           @only_errors =  argv.flag?('only-errors')
-          @no_clean    =  argv.flag?('clean', false)
+          @clean    =  argv.flag?('clean', true)
           @podspecs_paths = argv.arguments!
           super
         end
@@ -89,10 +89,15 @@ module Pod
             validator             = Validator.new(podspec)
             validator.quick       = @quick
             validator.local       = @local
-            validator.no_clean    = @no_clean
+            validator.no_clean    = !@clean
             validator.only_errors = @only_errors
             validator.validate
             invalid_count += 1 unless validator.validated?
+
+            unless @clean
+              UI.puts "Pods project available at `#{validator.validation_dir}/Pods/Pods.xcodeproj` for inspection."
+              UI.puts
+            end
           end
 
           count = podspecs_to_lint.count
@@ -156,8 +161,9 @@ module Pod
 
           best_spec = best_source.specification(set.name, best_version)
         end
-
       end
+
+      #-----------------------------------------------------------------------#
 
       # TODO some of the following methods can probably move to one of the subclasses.
       private
