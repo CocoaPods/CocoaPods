@@ -456,15 +456,20 @@ module Pod
     # @raise If the {#add_file_references_to_project} was not called before of
     #        calling this method.
     #
+    # @todo Check compiler flags implementation and xcconfig implementation.
+    #
     # @return [void]
     #
     def add_build_files_to_target(target)
       unless file_references_by_spec
         raise Informative, "Local Pod needs to add the file references to the " \
-                           "project before adding the build files to the target."
+          "project before adding the build files to the target."
       end
       file_references_by_spec.each do |spec, file_reference|
-        target.add_file_references(file_reference, (spec.compiler_flags * " ").strip)
+        flags = spec.compiler_flags.dup
+        flags << '-fobjc-arc' if spec.requires_arc
+        flags = flags * " "
+        target.add_file_references(file_reference, flags)
       end
     end
 
