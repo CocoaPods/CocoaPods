@@ -121,6 +121,7 @@ module Pod
     # @return [void]
     #
     def analyze
+      create_libraries
       generate_pods_by_podfile_state
       update_repositories_if_needed
       generate_locked_dependencies
@@ -207,11 +208,140 @@ module Pod
     #
     attr_reader :target_installers
 
-    #---------------------------------------------------------------------------#
+    #-------------------------------------------------------------------------#
 
     # @!group Pre-installation computations
 
+    attr_reader :libraries
+
     private
+
+    def create_libraries
+      @libraries = []
+      podfile.target_definitions.values.each do |target_definition|
+        lib                           = Library.new(target_definition)
+        lib.support_files_root        = config.sandbox.root
+        if config.integrate_targets?
+        lib.user_project_path         = compute_user_project_path(target_definition)
+        lib.user_project              = Xcodeproj::Project.new(lib.user_project_path)
+        lib.user_targets              = compute_user_project_targets(target_definition, lib.user_project)
+        lib.user_build_configurations = compute_user_build_configurations(target_definition, lib.user_targets)
+        lib.platform                  = compute_platform_for_taget_definition(target_definition, lib.user_targets)
+        else
+
+        lib.user_project_path         = config.project_root
+        lib.user_targets              = []
+        lib.user_build_configurations = {}
+        lib.platform                  = target_definition.platform
+        end
+        @libraries << lib
+      end
+    end
+
+    ####################################################################################################
+
+    # Returns the path of the user project that the {TargetDefinition}
+    # should integrate.
+    #
+    # @raise  If the project is implicit and there are multiple projects.
+    #
+    # @raise  If the path doesn't exits.
+    #
+    # @return [Pathname] the path of the user project.
+    #
+    def compute_user_project_path(target_definition)
+      if target_definition.user_project_path
+        user_project_path = Pathname.new(config.project_root + target_definition.user_project_path)
+        unless user_project_path.exist?
+          raise Informative, "Unable to find the Xcode project `#{user_project_path}` for the target `#{target_definition.label}`."
+        end
+      else
+        xcodeprojs = Pathname.glob(config.project_root + '*.xcodeproj')
+        if xcodeprojs.size == 1
+          user_project_path = xcodeprojs.first
+        else
+          raise Informative, "Could not automatically select an Xcode project. " \
+            "Specify one in your Podfile like so:\n\n" \
+            "    xcodeproj 'path/to/Project.xcodeproj'\n"
+        end
+      end
+      user_project_path
+    end
+
+    # Returns a list of the targets from the project of {TargetDefinition}
+    # that needs to be integrated.
+    #
+    # @note   The method first looks if there is a target specified with
+    #         the `link_with` option of the {TargetDefinition}. Otherwise
+    #         it looks for the target that has the same name of the target
+    #         definition.  Finally if no target was found the first
+    #         encountered target is returned (it is assumed to be the one
+    #         to integrate in simple projects).
+    #
+    # @note   This will only return targets that do **not** already have
+    #         the Pods library in their frameworks build phase.
+    #
+    #
+    def compute_user_project_targets(target_definition, user_project)
+      return [] unless user_project
+      if link_with = target_definition.link_with
+        targets = user_project.targets.select { |t| link_with.include? t.name }
+        raise Informative, "Unable to find a target named `#{link_with.to_sentence}` to link with target definition `#{target_definition.name}`" if targets.empty?
+      elsif target_definition.name != :default
+        target = user_project.targets.find { |t| t.name == target_definition.name.to_s }
+        targets = [ target ].compact
+        raise Informative, "Unable to find a target named `#{target_definition.name.to_s}`" if targets.empty?
+      else
+        targets = [ user_project.targets.first ].compact
+        raise Informative, "Unable to find a target" if targets.empty?
+      end
+      targets
+    end
+
+    # @todo Robustness for installations without integration.
+    #
+    def compute_user_build_configurations(target_definition, user_targets)
+      if user_targets
+        user_targets.map { |t| t.build_configurations.map(&:name) }.flatten.inject({}) do |hash, name|
+          unless name == 'Debug' || name == 'Release'
+            hash[name] = :release
+          end
+          hash
+        end.merge(target_definition.build_configurations || {})
+      else
+        target_definition.build_configurations || {}
+      end
+    end
+
+    # Returns the platform for the library.
+    #
+    # @note This resolves to the lowest deployment target across the user targets.
+    #
+    # @todo Finish implementation
+    #
+    def compute_platform_for_taget_definition(target_definition, user_targets)
+      return target_definition.platform if target_definition.platform
+      if user_targets
+        name = nil
+        deployment_target = nil
+        user_targets.each do |target|
+          name ||= target.platform_name
+          raise "Targets with different platforms" unless name == target.platform_name
+          if !deployment_target || deployment_target > Version.new(target.deployment_target)
+            deployment_target = Version.new(target.deployment_target)
+          end
+        end
+        platform = Platform.new(name, deployment_target)
+        # TODO
+        target_definition.platform = platform
+      else
+        raise Informative, "Missing platform for #{target_definition}."\
+          "If no integrating it is necessary to specify a platform."
+      end
+      platform
+    end
+
+    ####################################################################################################
 
     # Compares the {Podfile} with the {Lockfile} in order to detect which
     # dependencies should be locked.
@@ -542,8 +672,9 @@ module Pod
     def prepare_pods_project
       UI.message "- Creating Pods project" do
         @pods_project = Pod::Project.new(config.sandbox)
-        @pods_project.add_podfile(config.project_podfile)
-        # pods_project.user_build_configurations = podfile.user_build_configurations
+        if config.project_podfile.exist?
+          @pods_project.add_podfile(config.project_podfile)
+        end
       end
     end
 
@@ -554,7 +685,8 @@ module Pod
     def generate_target_installers
       @target_installers = podfile.target_definitions.values.map do |definition|
         pods_for_target = local_pods_by_target[definition]
-        TargetInstaller.new(pods_project, definition, pods_for_target) unless definition.empty?
+        libray = libraries.find {|l| l.target_definition == definition }
+        TargetInstaller.new(pods_project, libray, pods_for_target) unless definition.empty?
       end.compact
     end
 
@@ -599,14 +731,14 @@ module Pod
     # Runs the post install hooks of the installed specs and of the Podfile.
     #
     # @todo   Run the hooks only for the installed pods.
-    # @todo   Print a messsage with the names of the specs.
+    # @todo   Print a message with the names of the specs.
     #
     # @return [void]
     #
     def run_post_install_hooks
       UI.message "- Running post install hooks" do
         target_installers.each do |target_installer|
-          specs_by_target[target_installer.target_definition].each do |spec|
+          specs_by_target[target_installer.library.target_definition].each do |spec|
             spec.post_install!(target_installer)
           end
         end
@@ -622,10 +754,10 @@ module Pod
     def generate_target_support_files
       UI.message"- Installing targets" do
         target_installers.each do |target_installer|
-          pods_for_target = local_pods_by_target[target_installer.target_definition]
+          pods_for_target = local_pods_by_target[target_installer.library.target_definition]
           target_installer.install!
           acknowledgements_path = target_installer.library.acknowledgements_path
-          Generator::Acknowledgements.new(target_installer.target_definition,
+          Generator::Acknowledgements.new(target_installer.library.target_definition,
                                           pods_for_target).save_as(acknowledgements_path)
           generate_dummy_source(target_installer)
         end
@@ -633,12 +765,12 @@ module Pod
     end
 
     # Generates a dummy source file for each target so libraries that contain
-    # only cathegories build.
+    # only categories build.
     #
     # @todo Move to the target installer?
     #
     def generate_dummy_source(target_installer)
-      class_name_identifier = target_installer.target_definition.label
+      class_name_identifier = target_installer.library.label
       dummy_source = Generator::DummySource.new(class_name_identifier)
       filename = "#{dummy_source.class_name}.m"
       pathname = Pathname.new(sandbox.root + filename)
@@ -691,7 +823,7 @@ module Pod
     #
     def integrate_user_project
       return unless config.integrate_targets?
-      UserProjectIntegrator.new(podfile, pods_project, config.project_root).integrate! 
+      UserProjectIntegrator.new(podfile, pods_project, config.project_root, libraries).integrate!
     end
   end
 end

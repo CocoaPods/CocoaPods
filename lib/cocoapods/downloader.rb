@@ -39,7 +39,7 @@ module Pod
       elsif url = options.delete(:http)
         Http.new(target_path, url, options)
       else
-        raise "Unsupported download strategy `#{options.inspect}'."
+        raise "Unsupported download strategy `#{options.inspect}`."
       end
     end
   end

@@ -1,29 +1,44 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
+# @return [Lockfile]
+#
+def generate_lockfile
+  hash = {}
+  hash['PODS'] = []
+  hash['DEPENDENCIES'] = []
+  hash['SPEC CHECKSUMS'] = []
+  hash['COCOAPODS'] = Pod::VERSION
+  Pod::Lockfile.new(hash)
+end
 
-    # it 'tells each pod to link its headers' do
-    #   @pods[0].expects(:link_headers)
-    #   do_install!
-    # end
+# @return [Podfile]
+#
+def generate_podfile(pods = ['JSONKit'])
+  podfile = Pod::Podfile.new do
+    platform :ios
+    xcodeproj 'SampleProject/SampleProject'
+    pods.each { |name| pod name }
+  end
+end
+
+# it 'tells each pod to link its headers' do
+#   @pods[0].expects(:link_headers)
+#   do_install!
+# end
 
 module Pod
   describe Installer do
 
-    before do
-      @sandbox = temporary_sandbox
-      config.repos_dir = fixture('spec-repos')
-      config.project_pods_root = @sandbox.root
-      FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
-    end
+
+
+    # before do
+    #   @sandbox = temporary_sandbox
+    #   config.repos_dir = fixture('spec-repos')
+    #   config.project_pods_root = @sandbox.root
+    #   FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
+    # end
 
     describe "Concerning pre-installation computations" do
-      def generate_podfile(pods = ['JSONKit'])
-        podfile = Podfile.new do
-          platform :ios
-          xcodeproj 'MyProject'
-          pods.each { |name| pod name }
-        end
-
         # @sandbox = temporary_sandbox
         # config.project_pods_root = temporary_sandbox.root
         # FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
@@ -32,25 +47,14 @@ module Pod
         # @installer = Installer.new(resolver)
         # target_installer = @installer.target_installers.first
         # target_installer.install
-      end
 
 
-      def generate_lockfile
-        hash = {}
-        hash['PODS'] = []
-        hash['DEPENDENCIES'] = []
-        hash['SPEC CHECKSUMS'] = []
-        hash['COCOAPODS'] = Pod::VERSION
-        Pod::Lockfile.new(hash)
-      end
 
       before do
-        podfile = generate_podfile
-        lockfile = generate_lockfile
-        @installer = Installer.new(@sandbox, podfile, lockfile)
-        Project::Library.any_instance.stubs(:user_project_path).returns(config.project_root + 'test.xcodeproj')
-        # TODO
-        config.integrate_targets = false
+        podfile    = generate_podfile
+        lockfile   = generate_lockfile
+        @installer = Installer.new(config.sandbox, podfile, lockfile)
+        SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
         @installer.install!
       end
 
@@ -146,8 +150,8 @@ module Pod
 
     #   before do
     #     sandbox = temporary_sandbox
-    #     Pod::Config.instance.project_pods_root = sandbox.root
-    #     Pod::Config.instance.integrate_targets = false
+    #     Config.instance.project_pods_root = sandbox.root
+    #     Config.instance.integrate_targets = false
     #     podspec_path = fixture('integration/Reachability/Reachability.podspec')
     #     podfile = Podfile.new do
     #       platform :osx
@@ -194,8 +198,8 @@ module Pod
 
     #   before do
     #     sandbox = temporary_sandbox
-    #     Pod::Config.instance.project_pods_root = sandbox.root
-    #     Pod::Config.instance.integrate_targets = false
+    #     Config.instance.project_pods_root = sandbox.root
+    #     Config.instance.integrate_targets = false
     #     podspec_path = fixture('chameleon')
     #     podfile = Podfile.new do
     #       platform :osx

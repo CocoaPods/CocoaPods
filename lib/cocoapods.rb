@@ -27,6 +27,7 @@ module Pod
   autoload :Executable,             'cocoapods/executable'
   autoload :ExternalSources,        'cocoapods/external_sources'
   autoload :Installer,              'cocoapods/installer'
+  autoload :Library,                'cocoapods/library'
   autoload :LocalPod,               'cocoapods/local_pod'
   autoload :Project,                'cocoapods/project'
   autoload :Resolver,               'cocoapods/resolver'

@@ -22,6 +22,7 @@
 - Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
 - Added Podfile to the Pods project.
 - The `--no-clean` option of the `pod spec lint` command now displays the Pods project for inspection.
+- CocoaPods now can infer the platform from the integrated targets.
 
 - Major clean up and refactor to the code base.
 - Extrace models to [CocoaPods-Core](https://github.com/CocoaPods/Core) gem.

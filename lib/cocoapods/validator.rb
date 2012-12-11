@@ -55,14 +55,14 @@ module Pod
 
       perform_linting
 
-      begin
+      # begin
       if spec
         check_repo_path if repo_path
         perform_extensive_analysis unless quick
       end
-      rescue Exception => e
-        error "The specification is malformed and crashed the linter."
-      end
+      # rescue Exception => e
+      #   error "The specification is malformed and crashed the linter."
+      # end
 
       unless disable_ui_output
         UI.puts " -> ".send(result_color) << (spec ? spec.name : file.basename.to_s)
