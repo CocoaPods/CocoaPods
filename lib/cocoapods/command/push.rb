@@ -87,7 +87,11 @@ module Pod
         UI.puts "\nValidating #{'spec'.pluralize(count)}".yellow
         podspec_files.each do |podspec|
           validator = Validator.new(podspec)
-          validator.validate
+          begin
+            validator.validate
+          rescue Exception => e
+            raise Informative, "The `#{podspec}` specification does not validate."
+          end
           raise Informative, "The `#{podspec}` specification does not validate." unless validator.validated?
         end
       end

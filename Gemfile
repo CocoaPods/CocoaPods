@@ -8,12 +8,12 @@ gemspec
 group :development do
   gem "cocoapods-core", :git => "git://github.com/CocoaPods/Core.git"
   gem "xcodeproj", :git => "git://github.com/CocoaPods/Xcodeproj.git"
+  gem "cocoapods-downloader", :path => '../cocoapods-downloader'
+
   gem "mocha", "~> 0.11.4"
   gem "bacon"
   gem "mocha-on-bacon"
   gem "rake"
-  gem "vcr"
-  gem "webmock", '>= 1.8.0', '< 1.9'
 end
 
 group :debugging do

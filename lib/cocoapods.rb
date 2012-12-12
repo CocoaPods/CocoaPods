@@ -23,7 +23,6 @@ module Pod
   end
 
   autoload :Command,                'cocoapods/command'
-  autoload :Downloader,             'cocoapods/downloader'
   autoload :Executable,             'cocoapods/executable'
   autoload :ExternalSources,        'cocoapods/external_sources'
   autoload :Installer,              'cocoapods/installer'
@@ -49,8 +48,10 @@ module Pod
     autoload :XCConfig,             'cocoapods/generator/xcconfig'
   end
 
-  require 'cocoapods/file_list'
   require 'cocoapods-core'
+  require 'cocoapods/downloader'
+
+  require 'cocoapods/file_list'
   require 'cocoapods/config'
   require 'cocoapods/source'
 end

@@ -40,6 +40,11 @@ PATH
       rake (~> 0.9.4)
       xcodeproj (~> 0.4.0)
 
+PATH
+  remote: ../cocoapods-downloader
+  specs:
+    cocoapods-downloader (0.1.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -52,7 +57,6 @@ GEM
     claide (0.2.0)
     coderay (1.0.8)
     colored (1.2)
-    crack (0.3.1)
     escape (0.0.4)
     faraday (0.8.4)
       multipart-post (~> 1.1)
@@ -91,10 +95,6 @@ GEM
     redcarpet (2.2.2)
     slop (3.3.3)
     terminal-notifier (1.4.2)
-    vcr (2.3.0)
-    webmock (1.8.11)
-      addressable (>= 2.2.7)
-      crack (>= 0.1.7)
     yajl-ruby (1.1.0)
     yard (0.8.3)
 
@@ -106,6 +106,7 @@ DEPENDENCIES
   bacon
   cocoapods!
   cocoapods-core!
+  cocoapods-downloader!
   github-markup
   kicker!
   mocha (~> 0.11.4)
@@ -115,7 +116,5 @@ DEPENDENCIES
   rake
   rb-fsevent
   redcarpet
-  vcr
-  webmock (>= 1.8.0, < 1.9)
   xcodeproj!
   yard

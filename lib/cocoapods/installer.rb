@@ -613,15 +613,11 @@ module Pod
     # @return [void]
     #
     def download_pod(pod)
-      downloader = Downloader.for_pod(pod)
+      downloader = Downloader.for_target(pod.root, pod.top_specification.source.dup)
+      downloader.cache_root = "~/Library/Caches/CocoaPods"
+      downloader.max_cache_size = 500
       if pod.top_specification.version.head?
-        if downloader.respond_to?(:download_head)
-          downloader.download_head
-        else
-          raise Informative,
-            "The downloader of class `#{downloader.class.name}' does not" \
-            "support the `:head' option."
-        end
+        downloader.download_head
       else
         downloader.download
       end
