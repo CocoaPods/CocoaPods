@@ -60,7 +60,7 @@ module Pod
 
       def repo_dir
         dir = config.repos_dir + @repo
-        raise Informative, "[!] `#{@repo}' repo not found".red unless dir.exist?
+        raise Informative, "`#{@repo}` repo not found" unless dir.exist?
         dir
       end
 
