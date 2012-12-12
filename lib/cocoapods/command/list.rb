@@ -23,7 +23,7 @@ module Pod
       def run
         update_if_necessary!
 
-        sets = Source.all_sets
+        sets = SourcesManager.all_sets
         sets.each { |set| UI.pod(set, :name) }
         UI.puts "\n#{sets.count} pods were found"
       end
@@ -40,13 +40,12 @@ module Pod
         self.summary = 'Lists pods introduced in the master spec-repo since the last check'
 
         def run
-          puts "running"
           update_if_necessary!
 
           days = [1,2,3,5,8]
           dates, groups = {}, {}
           days.each {|d| dates[d] = Time.now - 60 * 60 * 24 * d}
-          sets = Source.all_sets
+          sets = SourcesManager.all_sets
           creation_dates = Specification::Set::Statistics.instance.creation_dates(sets)
 
           sets.each do |set|

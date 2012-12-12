@@ -21,8 +21,8 @@ module Pod
 
     def self.parse(argv)
       command = super
-      unless command.is_a?(Setup) || ENV['SKIP_SETUP']
-        Setup.run_if_needed
+      unless SourcesManager.master_repo_functional? || command.is_a?(Setup) || ENV['SKIP_SETUP']
+        Setup.new(CLAide::ARGV.new([])).run
       end
       command
     end
@@ -56,6 +56,8 @@ module Pod
       # TODO we should probably not even load colored unless needed
       String.send(:define_method, :colorize) { |string , _| string } unless self.colorize_output?
     end
+
+    #-------------------------------------------------------------------------#
 
     include Config::Mixin
 

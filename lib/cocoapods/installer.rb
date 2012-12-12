@@ -403,7 +403,7 @@ module Pod
       should_update = !lockfile || !changed_pods.empty? || update_mode
       if should_update
         UI.section 'Updating spec repositories' do
-          Command::Repo.new(Command::ARGV.new(["update"])).run
+        SourcesManager.update
         end
       end
     end

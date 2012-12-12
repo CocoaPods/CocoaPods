@@ -88,14 +88,13 @@ module Pod
         @resolver = Resolver.new(config.sandbox, @podfile)
       end
 
-
       it "holds the context state, such as cached specification sets" do
         @resolver.resolve
         cached_sets = @resolver.send(:cached_sets)
         cached_sets.values.sort_by(&:name).should == [
-          Source.search_by_name('A2DynamicDelegate').first,
-          Source.search_by_name('BlocksKit').first,
-          Source.search_by_name('libffi').first
+          SourcesManager.search_by_name('A2DynamicDelegate').first,
+          SourcesManager.search_by_name('BlocksKit').first,
+          SourcesManager.search_by_name('libffi').first
         ].sort_by(&:name)
       end
 

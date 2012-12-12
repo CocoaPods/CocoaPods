@@ -19,7 +19,7 @@ module Pod
     end
 
     it "returns the new pods" do
-      sets = Source.all_sets
+      sets = SourcesManager.all_sets
       jsonkit_set = sets.find { |s| s.name == 'JSONKit' }
       dates = {
         'BananaLib' => Time.now,

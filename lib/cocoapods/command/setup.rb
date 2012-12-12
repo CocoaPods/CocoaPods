@@ -4,8 +4,8 @@ module Pod
       self.summary = 'Setup the CocoaPods environment'
 
       self.description = <<-DESC
-        Creates a directory at `~/.cocoapods' which will hold your spec-repos.
-        This is where it will create a clone of the public `master' spec-repo from:
+        Creates a directory at `~/.cocoapods` which will hold your spec-repos.
+        This is where it will create a clone of the public `master` spec-repo from:
 
             https://github.com/CocoaPods/Specs
 
@@ -24,12 +24,86 @@ module Pod
         super
       end
 
-      def self.dir
-        Config.instance.repos_dir + 'master'
+      def run
+        UI.section "Setting up CocoaPods master repo" do
+          if master_repo_dir.exist?
+            set_master_repo_url
+            set_master_repo_branch
+            update_master_repo
+          else
+            add_master_repo
+          end
+          enable_pre_commit_hooks
+        end
+
+        access_type = push? ? "push" : "read-only"
+        UI.puts "Setup completed (#{access_type} access)".green
       end
 
-      def dir
-        self.class.dir
+      #--------------------------------------#
+
+      # Sets the url of the master repo according to whether it is push.
+      #
+      # @return [void]
+      #
+      def set_master_repo_url
+        Dir.chdir(master_repo_dir) do
+          git("remote set-url origin '#{url}'")
+        end
+      end
+
+      # Adds the master repo from the remote.
+      #
+      # @return [void]
+      #
+      def add_master_repo
+        @command ||= Repo::Add.parse(['master', url, 'master']).run
+      end
+
+      # Updates the master repo against the remote.
+      #
+      # @return [void]
+      #
+      def update_master_repo
+        SourcesManager.update('master', true)
+      end
+
+      # Sets the repo to the master branch.
+      #
+      # @note   This is not needed anymore as it was used for CocoaPods 0.6
+      #         release candidates.
+      #
+      # @return [void]
+      #
+      def set_master_repo_branch
+        Dir.chdir(master_repo_dir) do
+          git("checkout master")
+        end
+      end
+
+      # Enables the pre-commit hook of the master repo.
+      #
+      # @note   The hook is enabled in this way because the specs run with the
+      #         master repo as a submodule.
+      #
+      # @return [void]
+      #
+      def enable_pre_commit_hooks
+        if (master_repo_dir + '.git/hooks').exist?
+          hook = master_repo_dir + '.git/hooks/pre-commit'
+          hook.open('w') { |f| f << "#!/bin/sh\nrake lint" }
+          `chmod +x '#{hook}'`
+        end
+      end
+
+      #--------------------------------------#
+
+      def url
+        url = (push?) ? read_write_url : read_only_url
+      end
+
+      def master_repo_dir
+        SourcesManager.master_repo_dir
       end
 
       def read_only_url
@@ -40,74 +114,17 @@ module Pod
         'git@github.com:CocoaPods/Specs.git'
       end
 
-      def url
-        if push?
-          read_write_url
-        else
-          read_only_url
-        end
-      end
-
-      def origin_url_read_only?
-        read_master_repo_url.chomp == read_only_url
-      end
-
-      def origin_url_push?
-        read_master_repo_url.chomp == read_write_url
-      end
-
       def push?
-        @push_option || (dir.exist? && origin_url_push?)
+        @push ||= (@push_option || master_repo_is_push?)
       end
 
-      def read_master_repo_url
-        Dir.chdir(dir) do
-          origin_url = git('config --get remote.origin.url')
+      def master_repo_is_push?
+        return false unless master_repo_dir.exist?
+
+        Dir.chdir(master_repo_dir) do
+          url = git('config --get remote.origin.url')
+          url.chomp == read_write_url
         end
-      end
-
-      def set_master_repo_url
-        Dir.chdir(dir) do
-          git("remote set-url origin '#{url}'")
-        end
-      end
-
-      def add_master_repo
-        @command ||= Repo::Add.parse(['master', url, 'master']).run
-      end
-
-      def update_master_repo
-        Repo::Update.run(['master'])
-      end
-
-      def set_master_repo_branch
-        Dir.chdir(dir) do
-          git("checkout master")
-        end
-      end
-
-      def self.run_if_needed
-        self.new(CLAide::ARGV.new([])).run unless
-        dir.exist? && Repo.compatible?('master')
-      end
-
-      def run
-        UI.section "Setting up CocoaPods master repo" do
-          if dir.exist?
-            set_master_repo_url
-            set_master_repo_branch
-            update_master_repo
-          else
-            add_master_repo
-          end
-          # Mainly so the specs run with submodule repos
-          if (dir + '.git/hooks').exist?
-            hook = dir + '.git/hooks/pre-commit'
-            hook.open('w') { |f| f << "#!/bin/sh\nrake lint" }
-            `chmod +x '#{hook}'`
-          end
-        end
-        UI.puts "Setup completed (#{push? ? "push" : "read-only"} access)".green
       end
     end
   end

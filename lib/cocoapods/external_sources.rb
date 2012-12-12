@@ -242,6 +242,7 @@ module Pod
         UI.info("->".green + " Fetching podspec for `#{name}' from: #{@params[:podspec]}") do
           path = @params[:podspec]
           path = Pathname.new(path).expand_path if path.to_s.start_with?("~")
+          require 'open-uri'
           open(path) { |io| store_podspec(sandbox, io.read) }
         end
       end

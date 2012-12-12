@@ -31,7 +31,7 @@ module Pod
       end
 
       def run
-        sets = Source.search_by_name(@query.strip, @full_text_search)
+        sets = SourcesManager.search_by_name(@query.strip, @full_text_search)
         sets.each do |set|
           begin
             UI.pod(set, (@stats ? :stats : :normal))

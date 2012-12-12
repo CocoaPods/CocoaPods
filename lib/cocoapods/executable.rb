@@ -77,11 +77,11 @@ module Pod
       end
 
       define_method(name) do |command|
-        send(base_method, command, false)
+        Executable.execute_command(name, command, false)
       end
 
       define_method(name.to_s + "!") do |command|
-        send(base_method, command, true)
+        Executable.execute_command(name, command, true)
       end
 
       private name

@@ -10,7 +10,7 @@ module Pod
         def report(error)
           return <<-EOS
 
-          #{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
+#{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
 ### Report
 
@@ -86,7 +86,7 @@ EOS
         end
 
         def repo_information
-          Pod::Source.all.map do |source|
+          SourcesManager.all.map do |source|
             repo = source.repo
             Dir.chdir(repo) do
               url = `git config --get remote.origin.url 2>&1`.strip

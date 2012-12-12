@@ -134,7 +134,7 @@ module Pod
         end
 
         def run
-          found_sets = Source.search_by_name(@name)
+          found_sets = SourcesManager.search_by_name(@name)
           raise Informative, "Unable to find a spec named `#{@name}'." if found_sets.count == 0
           unless found_sets.count == 1
             names = found_sets.map(&:name) * ', '

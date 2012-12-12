@@ -26,6 +26,7 @@ module Pod
   autoload :Executable,             'cocoapods/executable'
   autoload :ExternalSources,        'cocoapods/external_sources'
   autoload :Installer,              'cocoapods/installer'
+  autoload :SourcesManager,         'cocoapods/sources_manager'
   autoload :Library,                'cocoapods/library'
   autoload :LocalPod,               'cocoapods/local_pod'
   autoload :Project,                'cocoapods/project'
@@ -53,7 +54,6 @@ module Pod
 
   require 'cocoapods/file_list'
   require 'cocoapods/config'
-  require 'cocoapods/source'
 end
 
 if ENV['COCOA_PODS_ENV'] == 'development'
