@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/CocoaPods/Core.git
+  revision: 08e92506fc6600821f066f8cb494f6dcfef348eb
+  specs:
+    cocoapods-core (0.17.0.alpha)
+      activesupport (~> 3.2.6)
+      faraday (~> 0.8.1)
+      octokit (~> 1.7)
+
+GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
   revision: e3dc945c7fdbbd9f977f6bc14b3e6023b99dc5e1
   specs:
@@ -36,14 +45,6 @@ PATH
       open4 (~> 1.3.0)
       rake (~> 0.9.4)
       xcodeproj (~> 0.4.0)
-
-PATH
-  remote: ../Core
-  specs:
-    cocoapods-core (0.17.0.alpha)
-      activesupport (~> 3.2.6)
-      faraday (~> 0.8.1)
-      octokit (~> 1.7)
 
 GEM
   remote: http://rubygems.org/
