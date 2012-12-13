@@ -68,7 +68,7 @@ module Pod
       it "warns if the podfile does not contain any dependency" do
         Podfile::TargetDefinition.any_instance.stubs(:empty?).returns(true)
         @integrator.integrate!
-        UI.output.should.include?('The Podfile does not contain any dependency')
+        UI.warnings.should.include?('The Podfile does not contain any dependency')
       end
     end
   end

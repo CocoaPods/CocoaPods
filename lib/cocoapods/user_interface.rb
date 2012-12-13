@@ -121,7 +121,7 @@ module Pod
       # return [void]
       #
       def warn(message, actions = [])
-        puts("\n[!] #{message}".yellow)
+        STDERR.puts("\n[!] #{message}".yellow)
         actions.each do |action|
           indented = wrap_string(action, "    - ")
           puts(indented)
@@ -223,4 +223,19 @@ module Pod
     end
   end
   UI = UserInterface
+
+  # Redirect copods-core UI.
+  #
+  module CoreUI
+
+    class << self
+      def puts(message)
+        UI.puts message
+      end
+
+      def warn(message)
+        UI.warn message
+      end
+    end
+  end
 end

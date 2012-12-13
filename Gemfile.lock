@@ -1,19 +1,16 @@
 GIT
-  remote: git://github.com/CocoaPods/Core.git
-  revision: 163c8f3d20aadb91b1987acb57e266ed839040ba
-  specs:
-    cocoapods-core (0.17.0.alpha)
-      activesupport (~> 3.2.6)
-      faraday (~> 0.8.1)
-      octokit (~> 1.7)
-
-GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
   revision: e3dc945c7fdbbd9f977f6bc14b3e6023b99dc5e1
   specs:
     xcodeproj (0.4.0)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
+
+GIT
+  remote: git://github.com/CocoaPods/cocoapods-downloader
+  revision: 21f5a7b118d4071f21f810694d026c3a4e00df50
+  specs:
+    cocoapods-downloader (0.1.0)
 
 GIT
   remote: https://github.com/alloy/kicker.git
@@ -41,9 +38,12 @@ PATH
       xcodeproj (~> 0.4.0)
 
 PATH
-  remote: ../cocoapods-downloader
+  remote: ../Core
   specs:
-    cocoapods-downloader (0.1.0)
+    cocoapods-core (0.17.0.alpha)
+      activesupport (~> 3.2.6)
+      faraday (~> 0.8.1)
+      octokit (~> 1.7)
 
 GEM
   remote: http://rubygems.org/
