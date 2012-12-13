@@ -6,8 +6,13 @@ module Pod
   require 'cocoapods/file_list'
   require 'cocoapods/config'
 
+  # Indicates a runtime error **not** caused by a bug.
+  #
   class PlainInformative < StandardError; end
 
+  # Indicates a runtime error **not** caused by a bug which should be
+  # highlighted to the user.
+  #
   class Informative < PlainInformative
     def message
       "[!] #{super}".red

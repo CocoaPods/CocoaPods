@@ -2,7 +2,7 @@ require 'cocoapods/user_interface/error_report'
 
 module Pod
 
-  # Provides support for UI output. It provides support for nexted sections of
+  # Provides support for UI output. It provides support for nested sections of
   # information and for a verbose mode.
   #
   module UserInterface
@@ -28,8 +28,8 @@ module Pod
       # to their level. In normal mode titles are printed only if
       # they have nesting level smaller than 2.
       #
-      # TODO: Refactor to title (for always visible titles like search)
-      # and sections (titles that represent collapsible sections).
+      # @todo Refactor to title (for always visible titles like search)
+      #       and sections (titles that represent collapsible sections).
       #
       def section(title, verbose_prefix = '', relative_indentation = 0)
         if config.verbose?
@@ -45,7 +45,7 @@ module Pod
         self.title_level -= 1
       end
 
-      # A title oposed to a section is always visible
+      # A title opposed to a section is always visible
       #
       def title(title, verbose_prefix = '', relative_indentation = 2)
         if(@treat_titles_as_messages)
@@ -73,7 +73,7 @@ module Pod
       # a relative indentation valid for the UI action in the passed
       # block.
       #
-      # TODO: clean interface.
+      # @todo Clean interface.
       #
       def message(message, verbose_prefix = '', relative_indentation = 2)
         message = verbose_prefix + message if config.verbose?
@@ -140,7 +140,7 @@ module Pod
         end
       end
 
-      # Prints the textual repprensentation of a given set.
+      # Prints the textual representation of a given set.
       #
       def pod(set, mode = :normal)
         if mode == :name
@@ -224,7 +224,7 @@ module Pod
   end
   UI = UserInterface
 
-  # Redirect copods-core UI.
+  # Redirects cocoapods-core UI.
   #
   module CoreUI
 

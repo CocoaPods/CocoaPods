@@ -5,7 +5,7 @@ module Pod
 
       self.description = <<-DESC
         Shows the outdated pods in the current Podfile.lock, but only those from
-        spec repos, not those from local/external sources or `:head' versions.
+        spec repos, not those from local/external sources or `:head` versions.
       DESC
 
       def self.options
@@ -17,6 +17,8 @@ module Pod
         super
       end
 
+      # @todo the command report new dependencies added to the Podfile as
+      #       updates.
       def run
         verify_podfile_exists!
         verify_lockfile_exists!
@@ -26,9 +28,6 @@ module Pod
         resolver.update_mode = true
         resolver.update_external_specs = false
         resolver.resolve
-
-        #TODO: the command report new dependencies (added to by updated ones)
-        # as updates.
 
         names = resolver.pods_to_install - resolver.pods_from_external_sources
         specs = resolver.specs.select do |spec|

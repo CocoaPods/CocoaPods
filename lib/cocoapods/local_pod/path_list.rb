@@ -42,6 +42,9 @@ module Pod
       # @return [void] Reads the file system and populates the files and paths
       #         lists.
       #
+      # @todo   Ruby 2.0 developer preview 1 does not returns directories
+      #         ending with '/.' and '/..'.
+      #
       def read_file_system
         root_length = root.to_s.length+1
         paths = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
@@ -64,7 +67,7 @@ module Pod
       #         {Dir#glob} with the {File::FNM_CASEFOLD} option.
       #
       # @param  [String,Array<String>] patterns
-      #         A signle {Dir#glob} like pattern, or a list of patterns.
+      #         A single {Dir#glob} like pattern, or a list of patterns.
       #
       # @param  [String] dir_pattern
       #         An optional pattern to append to a pattern, if it is the path

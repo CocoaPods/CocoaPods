@@ -6,8 +6,9 @@ module Pod
   class Command
     class Spec < Command
       self.abstract_command = true
-
       self.summary = 'Manage pod specs'
+
+      #-----------------------------------------------------------------------#
 
       class Create < Spec
         self.summary = 'Create spec file stub.'
@@ -142,11 +143,16 @@ module Pod
           end
 
           set = found_sets.first
-          best_spec = best_spec_from_set(set)
-          file_name = best_spec.defined_in_file
+          spec = best_spec_from_set(set)
+          file_name = spec.defined_in_file
           UI.puts File.open(file_name).read
         end
 
+        #--------------------------------------#
+
+        # @return [Specification] the highest know specification of the given
+        #         set.
+        #
         def best_spec_from_set(set)
           sources = set.sources
 
@@ -166,6 +172,7 @@ module Pod
       #-----------------------------------------------------------------------#
 
       # TODO some of the following methods can probably move to one of the subclasses.
+
       private
 
       def podspecs_to_lint
@@ -198,7 +205,14 @@ module Pod
          Pathname.new('/tmp/CocoaPods/Lint_podspec')
       end
 
-      # Templates and github information retrival for spec create
+      #--------------------------------------#
+
+      # Templates and github information retrieval for spec create
+
+      # TODO  it would be nice to have a template class that accepts options and
+      #       uses the default ones if not provided.
+
+      # TODO  The template is outdated.
 
       def default_data_for_template(name)
         data = {}

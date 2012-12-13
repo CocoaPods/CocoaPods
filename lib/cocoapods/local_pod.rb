@@ -377,6 +377,8 @@ module Pod
       end
     end
 
+    # @todo check implementation
+    #
     def xcconfig
       config = Xcodeproj::Config.new
       specifications.each do |s|

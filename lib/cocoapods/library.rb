@@ -78,7 +78,7 @@ module Pod
     #
     attr_accessor :xcconfig
 
-    # @todo
+    # @todo This is currently unused.
     #
     attr_accessor :specifications
 

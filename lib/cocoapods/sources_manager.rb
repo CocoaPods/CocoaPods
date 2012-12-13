@@ -39,7 +39,9 @@ module Pod
       #
       def search(dependency)
         set = aggregate.search(dependency)
-        raise Informative, "Unable to find a pod named `#{dependency.name}`" unless set
+        unless set
+          raise Informative, "Unable to find a pod named `#{dependency.name}`"
+        end
         set
       end
 
@@ -132,7 +134,8 @@ module Pod
         unless repo_compatible?(dir)
           min, max = versions['min'], versions['max']
           version_msg = ( min == max ) ? min : "#{min} - #{max}"
-          raise Informative, "The `#{dir.basename.to_s}` repo requires CocoaPods #{version_msg}\n".red +
+          raise Informative, "The `#{dir.basename}` repo requires " \
+          "CocoaPods #{version_msg}\n".red +
           "Update Cocoapods, or checkout the appropriate tag in the repo."
         end
 

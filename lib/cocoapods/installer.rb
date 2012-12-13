@@ -317,7 +317,8 @@ module Pod
     #
     # @note This resolves to the lowest deployment target across the user targets.
     #
-    # @todo Finish implementation
+    # @todo Is assigning the platform to the target definition the best way to
+    #       go?
     #
     def compute_platform_for_taget_definition(target_definition, user_targets)
       return target_definition.platform if target_definition.platform
@@ -332,7 +333,6 @@ module Pod
           end
         end
         platform = Platform.new(name, deployment_target)
-        # TODO
         target_definition.platform = platform
       else
         raise Informative, "Missing platform for #{target_definition}."\
@@ -642,7 +642,7 @@ module Pod
     # Creates and populates the targets of the pods project.
     #
     # @note   Post install hooks run _before_ saving of project, so that they
-    #         can alter it before it is writtent to the disk.
+    #         can alter it before it is written to the disk.
     #
     # @return [void]
     #
@@ -709,7 +709,7 @@ module Pod
     # Runs the pre install hooks of the installed specs and of the Podfile.
     #
     # @todo   Run the hooks only for the installed pods.
-    # @todo   Print a messsage with the names of the specs.
+    # @todo   Print a message with the names of the specs.
     #
     # @return [void]
     #
@@ -812,7 +812,9 @@ module Pod
     # @return [void]
     #
     # @todo [#397] The libraries should be cleaned and the re-added on every
-    #       installation. Maybe a clean_user_project phase should be added.
+    #       installation. Maybe a clean_user_project phase should be added. In
+    #       any case it appears to be a good idea store target definition
+    #       information in the lockfile.
     #
     # @todo [#588] The resources should be added through a build phase instead
     #       of using a script.

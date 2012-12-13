@@ -42,6 +42,8 @@ module Pod
 
       #--------------------------------------#
 
+      # @!group Setup steps
+
       # Sets the url of the master repo according to whether it is push.
       #
       # @return [void]
@@ -98,26 +100,38 @@ module Pod
 
       #--------------------------------------#
 
+      # @!group Private helpers
+
+      # @return [String] the url to use according to whether push mode should
+      #         be enabled.
+      #
       def url
         url = (push?) ? read_write_url : read_only_url
       end
 
-      def master_repo_dir
-        SourcesManager.master_repo_dir
-      end
-
+      # @return [String] the read only url of the master repo.
+      #
       def read_only_url
         'https://github.com/CocoaPods/Specs.git'
       end
 
+      # @return [String] the read-write url of the master repo.
+      #
       def read_write_url
         'git@github.com:CocoaPods/Specs.git'
       end
 
+      # Checks if the user asked to setup the master repo in push mode or if
+      # the repo was already in push mode.
+      #
+      # @return [String] whether the master repo should be set up in push mode.
+      #
       def push?
         @push ||= (@push_option || master_repo_is_push?)
       end
 
+      # @return [Bool] if the master repo is already configured in push mode.
+      #
       def master_repo_is_push?
         return false unless master_repo_dir.exist?
 
@@ -125,6 +139,12 @@ module Pod
           url = git('config --get remote.origin.url')
           url.chomp == read_write_url
         end
+      end
+
+      # @return [Pathname] the directory of the master repo.
+      #
+      def master_repo_dir
+        SourcesManager.master_repo_dir
       end
     end
   end

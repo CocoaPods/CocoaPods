@@ -54,6 +54,9 @@ module Pod
         @options[:appledoc] || []
       end
 
+      # @note The appledoc tool terminates with an exits status of 1 if a
+      #       warning was logged
+      #
       def appledoc_options
         options = [
           '--project-name', name,
@@ -65,7 +68,7 @@ module Pod
           '--keep-undocumented-objects',
           '--keep-undocumented-members',
           '--keep-intermediate-files',
-          '--exit-threshold', '2' # appledoc terminates with an exits status of 1 if a warning was logged
+          '--exit-threshold', '2'
         ]
         options += ['--index-desc', index_file] if index_file
         options += spec_appledoc_options
@@ -77,12 +80,15 @@ module Pod
         Pathname.new(File.expand_path("~/Library/Developer/Shared/Documentation/DocSets/#{company_id}.#{name.gsub(/ /,'-')}.docset")).exist?
       end
 
+      # @todo passing the files explicitly clutters output and chokes on very
+      #       long list (AWSiOSSDK).  It is possible to just pass the dir of
+      #       the pod, however this would include other files like demo
+      #       projects.
+      #
       def generate(install = false)
         options = appledoc_options
         options += ['--output', @target_path.to_s]
         options += install ? ['--create-docset'] : ['--no-create-docset']
-        # TODO: passing the files explicitly clutters output and chokes on very long list (AWSiOSSDK Spec).
-        # It is possible to just pass the dir of the pod, however this would include other files like demo projects.
         options += files
 
         @target_path.mkpath

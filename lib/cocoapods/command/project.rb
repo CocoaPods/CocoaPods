@@ -24,6 +24,12 @@ module Pod
         super
       end
 
+      # Runs the installer.
+      #
+      # @param  [update] whether the installer should be run in update mode.
+      #
+      # @return [void]
+      #
       def run_install_with_update(update)
         sandbox   = Sandbox.new(config.project_pods_root)
         installer = Installer.new(sandbox, config.podfile, config.lockfile)
@@ -31,6 +37,8 @@ module Pod
         installer.install!
       end
     end
+
+    #-------------------------------------------------------------------------#
 
     class Install < Command
       include Project
@@ -59,6 +67,8 @@ module Pod
         run_install_with_update(false)
       end
     end
+
+    #-------------------------------------------------------------------------#
 
     class Update < Command
       include Project

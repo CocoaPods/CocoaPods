@@ -20,9 +20,6 @@ module Pod
           ["--local-only", "Does not perform the step of pushing REPO to its remote"] ].concat(super)
       end
 
-      extend Executable
-      executable :git
-
       def initialize(argv)
         @allow_warnings = argv.flag?('allow-warnings')
         @local_only = argv.flag?('local-only')
@@ -44,12 +41,15 @@ module Pod
         push_repo unless @local_only
       end
 
+      #--------------------------------------#
+
       private
+
+      extend Executable
+      executable :git
 
       def update_repo
         UI.puts "Updating the `#{@repo}' repo\n".yellow
-        # show the output of git even if not verbose
-        # TODO: use the `git!' and find a way to show the output in realtime.
         Dir.chdir(repo_dir) { UI.puts `git pull 2>&1` }
       end
 
@@ -64,7 +64,7 @@ module Pod
         dir
       end
 
-      # @todo: add specs for staged and unstaged files
+      # @todo: Add specs for staged and unstaged files.
       #
       def check_repo_status
         clean = Dir.chdir(repo_dir) { `git status --porcelain  2>&1` } == ''
@@ -96,6 +96,15 @@ module Pod
         end
       end
 
+      # Commits the podspecs to the source, which should be a git repo.
+      #
+      # @note   The pre commit hook of the repo is skipped as the podspecs have
+      #         already been linted.
+      #
+      # @todo   Raise if the source is not under git source control.
+      #
+      # @return [void]
+      #
       def add_specs_to_repo
         UI.puts "\nAdding the #{'spec'.pluralize(count)} to the `#{@repo}' repo\n".yellow
         podspec_files.each do |spec_file|
@@ -114,7 +123,6 @@ module Pod
           FileUtils.cp(Pathname.new(spec.name+'.podspec'), output_path)
           Dir.chdir(repo_dir) do
             git!("add #{spec.name}")
-            # Bypass the pre-commit hook because we already performed validation
             git!("commit --no-verify -m '#{message}'")
           end
         end

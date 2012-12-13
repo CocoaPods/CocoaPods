@@ -49,11 +49,12 @@ module Pod
     # @todo If a command is run inside another one some settings which where
     #       true might return false.
     #
+    # @todo We should probably not even load colored unless needed.
+    #
     def initialize(argv)
       config.silent ||= argv.flag?('silent')
       super
       config.verbose ||= self.verbose?
-      # TODO we should probably not even load colored unless needed
       String.send(:define_method, :colorize) { |string , _| string } unless self.colorize_output?
     end
 

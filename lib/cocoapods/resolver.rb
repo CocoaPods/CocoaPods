@@ -35,7 +35,7 @@ module Pod
     #
     # @note   This option is used by `pod outdated`.
     #
-    # @todo:  This implementation is not clean, because if the spec doesn't
+    # @todo   This implementation is not clean, because if the spec doesn't
     #         exists the sandbox will actually download and modify the
     #         installation.
     #
@@ -165,7 +165,7 @@ module Pod
     #         definition.
     #
     #
-    # TODO:   The set class should be aware whether it is in head mode.
+    # @todo   The set class should be aware whether it is in head mode.
     #
     # @return [void]
     #

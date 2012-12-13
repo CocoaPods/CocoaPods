@@ -85,8 +85,8 @@ module Pod
 
     public
 
-    # @todo   refactor the pods from a local source should not be cached by the
-    #         sandbox
+    # @todo   Refactor the pods from a local source should not be cached by the
+    #         sandbox.
     #
     # @return [LocalPod]
     #
@@ -142,7 +142,7 @@ module Pod
     # @return [Array<String>] the names of the pods that have been
     #         pre-downloaded from an external source.
     #
-    # @todo the installer needs to be aware of it.
+    # @todo   The installer needs to be aware of it.
     #
     attr_reader :predownloaded_pods
 
@@ -192,6 +192,8 @@ module Pod
     # Removes the directory as it is regenerated from scratch during each
     # installation.
     #
+    # @return [void]
+    #
     def prepare_for_install
       root.rmtree if root.exist?
     end
@@ -202,7 +204,18 @@ module Pod
 
     public
 
+    # Adds a header to the directory.
     #
+    # @param  [Pathname] namespace_path
+    #         the path where the header file should be stored relative to the
+    #         headers directory.
+    #
+    # @param  [Pathname] relative_header_path
+    #         the path of the header file relative to the sandbox.
+    #
+    # @note   This method adds the files are added to the search paths.
+    #
+    # @return [void]
     #
     def add_file(namespace_path, relative_header_path)
       namespaced_header_path = root + namespace_path
@@ -213,13 +226,15 @@ module Pod
       namespaced_header_path + relative_header_path.basename
     end
 
-    #
+    # @todo Why this variant exits?
     #
     def add_files(namespace_path, relative_header_paths)
       relative_header_paths.map { |path| add_file(namespace_path, path) }
     end
 
-    #
+    # @return [Array<String>] All the search paths of the header directory in
+    #         xcconfig format. The paths are specified relative to the pods
+    #         root with the `${PODS_ROOT}` variable.
     #
     def search_paths
       @search_paths.uniq.map { |path| "${PODS_ROOT}/#{path}" }
@@ -231,6 +246,8 @@ module Pod
     #         the path tho add.
     #
     # @return [void]
+    #
+    # @todo Why this variant exits?
     #
     def add_search_path(path)
       @search_paths << Pathname.new(@relative_path) + path

@@ -2,28 +2,97 @@ require 'pathname'
 
 module Pod
   class Config
-    def self.instance
-      @instance ||= new
-    end
 
-    def self.instance=(instance)
-      @instance = instance
-    end
+    # @!group Paths
 
-    attr_accessor :repos_dir, :project_root, :project_pods_root
-    attr_accessor :clean, :verbose, :silent
-    attr_accessor :generate_docs, :doc_install
+    # @return [Pathname] the directory where the CocoaPods sources are stored.
+    #
+    attr_accessor :repos_dir
+
+    # @return [Pathname] the root of the CocoaPods installation where the
+    #         Podfile is located.
+    #
+    attr_accessor :project_root
+
+    # @return [Pathname] The root of the sandbox.
+    #
+    # @todo   Why is this needed? Can't clients use config.sandbox.root?
+    #
+    attr_accessor :project_pods_root
+
+    #--------------------------------------#
+
+    # @!group UI
+
+    # @return [Bool] Whether CocoaPods should provide detailed output about the
+    #         performed actions.
+    #
+    attr_accessor :verbose
+    alias_method  :verbose?, :verbose
+
+    # @return [Bool] Whether CocoaPods should produce not output.
+    #
+    attr_accessor :silent
+    alias_method  :silent?, :silent
+
+    # @return [Bool] Whether the generated documentation should be installed to
+    #         Xcode.
+    #
+    # @note   This is stored by the Config class so a global value value can be
+    #         set.
+    #
+    attr_accessor :new_version_message
+    alias_method  :new_version_message?, :new_version_message
+
+    #--------------------------------------#
+
+    # @!group Installation
+
+    # @return [Bool] Whether the installer should clean after the installation.
+    #
+    # @note   This is stored by the Config class so a global value value can be
+    #         set.
+    #
+    attr_accessor :clean
+    alias_method  :clean?, :clean
+
+    # @return [Bool] Whether the documentation should be generated for the
+    #         installed Pods.
+    #
+    # @note   This is stored by the Config class so a global value value can be
+    #         set.
+    #
+    attr_accessor :generate_docs
+    alias_method  :generate_docs?, :generate_docs
+
+    # @return [Bool] Whether the generated documentation should be installed to
+    #         Xcode.
+    #
+    # @note   This is stored by the Config class so a global value value can be
+    #         set.
+    #
+    attr_accessor :doc_install
+    alias_method  :doc_install?, :doc_install
+
+    # @return [Bool] Whether CocoaPods should integrate a user target and build
+    #         the workspace or just create the Pods project.
+    #
+    # @note   This is stored by the Config class so a global value value can be
+    #         set.
+    #
     attr_accessor :integrate_targets
-    attr_accessor :new_version_message, :skip_repo_update
+    alias_method  :integrate_targets?, :integrate_targets
 
-    alias_method :clean?,             :clean
-    alias_method :verbose?,           :verbose
-    alias_method :silent?,            :silent
-    alias_method :generate_docs?,     :generate_docs
-    alias_method :doc_install?,       :doc_install
-    alias_method :integrate_targets?, :integrate_targets
-    alias_method :skip_repo_update?,  :skip_repo_update
-    alias_method :new_version_message?, :new_version_message
+
+    # @return [Bool] Whether the installer should skip the repos update.
+    #
+    # @note   This is stored by the Config class so a global value value can be
+    #         set.
+    #
+    attr_accessor :skip_repo_update
+    alias_method  :skip_repo_update?, :skip_repo_update
+
+    #--------------------------------------#
 
     def initialize
       @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
@@ -31,30 +100,21 @@ module Pod
       @clean = @generate_docs = @doc_install = @integrate_targets = @new_version_message = true
     end
 
+    # @return [Pathname] the root of the CocoaPods instance where the Podfile
+    #         is located.
+    #
+    # @todo   Move to initialization.
+    #
     def project_root
       @project_root ||= Pathname.pwd
     end
 
+    # @return [Pathname] The root of the sandbox.
+    #
+    # @todo   Why is this needed? Can't clients use config.sandbox.root?
+    #
     def project_pods_root
       @project_pods_root ||= project_root + 'Pods'
-    end
-
-    def project_podfile
-      unless @project_podfile
-        @project_podfile = project_root + 'CocoaPods.podfile'
-        unless @project_podfile.exist?
-          @project_podfile = project_root + 'Podfile'
-        end
-      end
-      @project_podfile
-    end
-
-    def project_lockfile
-      @project_lockfile ||= project_root + 'Podfile.lock'
-    end
-
-    def headers_symlink_root
-      @headers_symlink_root ||= "#{project_pods_root}/Headers"
     end
 
     # @return [Podfile] The Podfile to use for the current execution.
@@ -74,12 +134,63 @@ module Pod
       end
     end
 
-    # @return [Sandbox]
+    # @return [Sandbox] The sandbox of the current project.
     #
     def sandbox
       @sandbox ||= Sandbox.new(project_pods_root)
     end
 
+    #--------------------------------------#
+
+    # @!group Helpers
+
+    # Returns the path of the Podfile.
+    #
+    # @note The Podfile can be named either `CocoaPods.podfile` or `Podfile`.
+    #       The first is preferred as it allows to specify an OS X UTI.
+    #
+    # @todo Rename to podfile_path.
+    #
+    def project_podfile
+      unless @project_podfile
+        @project_podfile = project_root + 'CocoaPods.podfile'
+        unless @project_podfile.exist?
+          @project_podfile = project_root + 'Podfile'
+        end
+      end
+      @project_podfile
+    end
+
+    # Returns the path of the Lockfile.
+    #
+    # @note The Lockfile is named `Podfile.lock`.
+    #
+    # @todo Rename to lockfile_path.
+    #
+    def project_lockfile
+      @project_lockfile ||= project_root + 'Podfile.lock'
+    end
+
+    # @todo this should be controlled by the sandbox
+    #
+    def headers_symlink_root
+      @headers_symlink_root ||= "#{project_pods_root}/Headers"
+    end
+
+    #--------------------------------------#
+
+    def self.instance
+      @instance ||= new
+    end
+
+    def self.instance=(instance)
+      @instance = instance
+    end
+
+    #-------------------------------------------------------------------------#
+
+    # Provides support for using the configuration instance in other scopes.
+    #
     module Mixin
       def config
         Config.instance

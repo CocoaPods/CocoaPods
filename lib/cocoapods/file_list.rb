@@ -6,7 +6,9 @@ end
 
 # This makes Rake::FileList usable with the Specification attributes
 # source_files, public_header_files, preserve_paths, and resources.
-
+#
+# @todo This needs to be deprecated as we no have the PathList List
+#
 module Rake
   class FileList
     def prepend_patterns(pathname)

@@ -5,7 +5,8 @@ module Pod
     class Repo < Command
       self.abstract_command = true
 
-      # TODO should not show a usage banner!
+      # @todo should not show a usage banner!
+      #
       self.summary = 'Manage spec-repositories'
 
       class Add < Repo
@@ -85,6 +86,11 @@ module Pod
           super
         end
 
+        # @todo Part of this logic needs to be ported to cocoapods-core so web
+        #       services can validate the repo.
+        #
+        # @todo add UI.print and enable print statements again.
+        #
         def run
           if @name
             dirs = File.exists?(@name) ? [ Pathname.new(@name) ] : [ dir ]
@@ -123,7 +129,6 @@ module Pod
               end
             end
 
-            # TODO add UI.print
             # print "\033[K" unless config.silent?
             messages_by_type.each do |type, messages_by_type|
               messages_by_type.each do |message, names|
