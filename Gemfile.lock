@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: git://github.com/CocoaPods/cocoapods-downloader
-  revision: d07096a3ab8c74ac34853fccfa968d55097fcbf2
+  revision: b349db398d5e9205a67974f70906fec2c7a0e588
   specs:
     cocoapods-downloader (0.1.0)
 

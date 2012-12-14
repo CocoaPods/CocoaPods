@@ -86,27 +86,45 @@ module Pod
     #--------------------------------------#
 
     def initialize
-      @repos_dir = Pathname.new(File.expand_path("~/.cocoapods"))
-      @verbose = @silent = @skip_repo_update = false
-      @clean = @generate_docs = @doc_install = @integrate_targets = @new_version_message = true
+      configure_with(defaults)
+
+      config_file = Pathname.new(ENV['HOME'] + "/.cocoapods/config.yaml")
+      if config_file.exist?
+        require 'yaml'
+        user_config = YAML.load_file(config_file)
+        configure_with(user_config)
+      end
+
+      @repos_dir         = Pathname.new(ENV['HOME'] + "/.cocoapods")
+      @project_root      = Pathname.pwd
+      @project_pods_root = Pathname.pwd + 'Pods'
     end
 
-    # @return [Pathname] the root of the CocoaPods instance where the Podfile
-    #         is located.
     #
-    # @todo   Move to initialization.
     #
-    def project_root
-      @project_root ||= Pathname.pwd
+    def defaults
+      {
+
+
+        :verbose             => false,
+        :silent              => false,
+        :skip_repo_update    => false,
+
+        :clean               => true,
+        :generate_docs       => true,
+        :doc_install         => true,
+        :integrate_targets   => true,
+        :skip_repo_update    => true,
+        :new_version_message => true,
+      }
     end
 
-    # @return [Pathname] The root of the sandbox.
-    #
-    # @todo   Why is this needed? Can't clients use config.sandbox.root?
-    #
-    def project_pods_root
-      @project_pods_root ||= project_root + 'Pods'
+    def configure_with(values)
+      values.each do |key, value|
+        self.instance_variable_set("@#{key}", value)
+      end
     end
+
 
     # @return [Podfile] The Podfile to use for the current execution.
     #
