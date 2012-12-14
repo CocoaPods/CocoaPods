@@ -58,13 +58,13 @@ EOS
         private
 
         def markdown_podfile
-          return '' unless Config.instance.project_podfile && Config.instance.project_podfile.exist?
+          return '' unless Config.instance.podfile_path && Config.instance.podfile_path.exist?
           <<-EOS
 
 ### Podfile
 
 ```ruby
-          #{Config.instance.project_podfile.read.strip}
+          #{Config.instance.podfile_path.read.strip}
 ```
           EOS
         end

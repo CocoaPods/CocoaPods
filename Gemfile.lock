@@ -16,12 +16,6 @@ GIT
       colored (~> 1.2)
 
 GIT
-  remote: git://github.com/CocoaPods/cocoapods-downloader
-  revision: b349db398d5e9205a67974f70906fec2c7a0e588
-  specs:
-    cocoapods-downloader (0.1.0)
-
-GIT
   remote: https://github.com/alloy/kicker.git
   revision: 6430787ebf8b9305acc2d2f89ae5cf01d2cd5488
   branch: 3.0.0
@@ -45,6 +39,11 @@ PATH
       open4 (~> 1.3.0)
       rake (~> 0.9.4)
       xcodeproj (~> 0.4.0)
+
+PATH
+  remote: ../cocoapods-downloader
+  specs:
+    cocoapods-downloader (0.1.0)
 
 GEM
   remote: http://rubygems.org/

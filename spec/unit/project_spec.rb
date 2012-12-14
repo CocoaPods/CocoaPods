@@ -43,7 +43,7 @@ describe Pod::Project do
     end
 
     it "adds the Podfile configured as a Ruby file" do
-      @project.add_podfile(config.project_podfile)
+      @project.add_podfile(config.podfile_path)
       f = @project['Podfile']
       f.name.should == 'Podfile'
       f.source_tree.should == 'SOURCE_ROOT'

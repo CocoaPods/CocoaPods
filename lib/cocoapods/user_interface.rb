@@ -134,7 +134,7 @@ module Pod
       #
       def path(pathname)
         if pathname
-          "`./#{pathname.relative_path_from(config.project_podfile.dirname || Pathname.pwd)}'"
+          "`./#{pathname.relative_path_from(config.podfile_path.dirname || Pathname.pwd)}'"
         else
           ''
         end

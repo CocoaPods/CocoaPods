@@ -677,8 +677,8 @@ module Pod
     def prepare_pods_project
       UI.message "- Creating Pods project" do
         @pods_project = Pod::Project.new(config.sandbox)
-        if config.project_podfile.exist?
-          @pods_project.add_podfile(config.project_podfile)
+        if config.podfile_path.exist?
+          @pods_project.add_podfile(config.podfile_path)
         end
       end
     end
@@ -802,8 +802,8 @@ module Pod
     #
     def write_lockfiles
       @lockfile = Lockfile.generate(podfile, specs_by_target.values.flatten)
-      UI.message "- Writing Lockfile in #{UI.path config.project_lockfile}" do
-        @lockfile.write_to_disk(config.project_lockfile)
+      UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
+        @lockfile.write_to_disk(config.lockfile_path)
       end
 
       # UI.message "- Writing Manifest in #{UI.path sandbox.manifest_path}" do

@@ -23,6 +23,7 @@
 - Added Podfile to the Pods project.
 - The `--no-clean` option of the `pod spec lint` command now displays the Pods project for inspection.
 - CocoaPods now can infer the platform from the integrated targets.
+- It is now possible to specify default values for the configuration in `~/.cocoapods/config.yaml`.
 
 - Major clean up and refactor to the code base.
 - Extrace models to [CocoaPods-Core](https://github.com/CocoaPods/Core) gem.

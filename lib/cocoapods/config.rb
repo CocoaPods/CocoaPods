@@ -6,22 +6,28 @@ module Pod
   #
   class Config
 
-    # @!group Paths
+    # The default settings for the configuration.
+    #
+    # Users can specify custom settings in `~/.cocoapods/config.yaml`.
+    # An example of the contents of this file might look like:
+    #
+    #     ---
+    #     skip_repo_update: true
+    #     generate_docs: false
+    #     doc_install: false
+    #
+    DEFAULTS = {
+      :verbose             => false,
+      :silent              => false,
+      :skip_repo_update    => false,
 
-    # @return [Pathname] the directory where the CocoaPods sources are stored.
-    #
-    attr_accessor :repos_dir
-
-    # @return [Pathname] the root of the CocoaPods installation where the
-    #         Podfile is located.
-    #
-    attr_accessor :project_root
-
-    # @return [Pathname] The root of the sandbox.
-    #
-    # @todo   Why is this needed? Can't clients use config.sandbox.root?
-    #
-    attr_accessor :project_pods_root
+      :clean               => true,
+      :generate_docs       => true,
+      :doc_install         => true,
+      :integrate_targets   => true,
+      :skip_repo_update    => true,
+      :new_version_message => true,
+    }
 
     #--------------------------------------#
 
@@ -77,7 +83,7 @@ module Pod
     attr_accessor :skip_repo_update
     alias_method  :skip_repo_update?, :skip_repo_update
 
-    # @return [Bool] Whether the donwloader should use more agressive caching
+    # @return [Bool] Whether the downloader should use more aggressive caching
     #         options.
     #
     attr_accessor :agressive_cache
@@ -85,52 +91,62 @@ module Pod
 
     #--------------------------------------#
 
-    def initialize
-      configure_with(defaults)
+    # @!group Initialization
 
-      config_file = Pathname.new(ENV['HOME'] + "/.cocoapods/config.yaml")
-      if config_file.exist?
+    def initialize
+      configure_with(DEFAULTS)
+
+      if user_settings_file.exist?
         require 'yaml'
-        user_config = YAML.load_file(config_file)
+        user_config = YAML.load_file(user_settings_file)
         configure_with(user_config)
       end
-
-      @repos_dir         = Pathname.new(ENV['HOME'] + "/.cocoapods")
-      @project_root      = Pathname.pwd
-      @project_pods_root = Pathname.pwd + 'Pods'
     end
 
+    def verbose
+      @verbose && !silent
+    end
+
+    #--------------------------------------#
+
+    # @!group Paths
+
+    # @return [Pathname] the directory where the CocoaPods sources are stored.
     #
+    def repos_dir
+      @repos_dir ||= Pathname.new(ENV['HOME'] + "/.cocoapods")
+    end
+
+    attr_writer :repos_dir
+
+    # @return [Pathname] the root of the CocoaPods installation where the
+    #         Podfile is located.
     #
-    def defaults
-      {
-
-
-        :verbose             => false,
-        :silent              => false,
-        :skip_repo_update    => false,
-
-        :clean               => true,
-        :generate_docs       => true,
-        :doc_install         => true,
-        :integrate_targets   => true,
-        :skip_repo_update    => true,
-        :new_version_message => true,
-      }
+    def project_root
+      @project_root ||= Pathname.pwd
     end
 
-    def configure_with(values)
-      values.each do |key, value|
-        self.instance_variable_set("@#{key}", value)
-      end
+    attr_writer :project_root
+
+    # @return [Pathname] The root of the sandbox.
+    #
+    def project_pods_root
+      @project_pods_root ||= @project_root + 'Pods'
     end
 
+    attr_writer :project_pods_root
+
+    # @return [Sandbox] The sandbox of the current project.
+    #
+    def sandbox
+      @sandbox ||= Sandbox.new(project_pods_root)
+    end
 
     # @return [Podfile] The Podfile to use for the current execution.
     #
     def podfile
       @podfile ||= begin
-        Podfile.from_file(project_podfile) if project_podfile.exist?
+        Podfile.from_file(podfile_path) if podfile_path.exist?
       end
     end
     attr_writer :podfile
@@ -139,19 +155,34 @@ module Pod
     #
     def lockfile
       @lockfile ||= begin
-        Lockfile.from_file(project_lockfile) if project_lockfile.exist?
+        Lockfile.from_file(lockfile_path) if lockfile_path.exist?
       end
-    end
-
-    # @return [Sandbox] The sandbox of the current project.
-    #
-    def sandbox
-      @sandbox ||= Sandbox.new(project_pods_root)
     end
 
     #--------------------------------------#
 
     # @!group Helpers
+
+    # private
+
+    # @return [Pathname] The path of the file which contains the user settings.
+    #
+    def user_settings_file
+      Pathname.new(ENV['HOME'] + "/.cocoapods/config.yaml")
+    end
+
+    # Sets the values of the attributes with the given hash.
+    #
+    # @param  [Hash{String,Symbol => Object}] values_by_key
+    #         The values of the attributes grouped by key.
+    #
+    # @return [void]
+    #
+    def configure_with(values_by_key)
+      values_by_key.each do |key, value|
+        self.instance_variable_set("@#{key}", value)
+      end
+    end
 
     # Returns the path of the Podfile.
     #
@@ -160,45 +191,47 @@ module Pod
     #
     # @todo Rename to podfile_path.
     #
-    def project_podfile
-      unless @project_podfile
-        @project_podfile = project_root + 'CocoaPods.podfile'
-        unless @project_podfile.exist?
-          @project_podfile = project_root + 'Podfile'
+    def podfile_path
+      unless @podfile_path
+        @podfile_path = project_root + 'CocoaPods.podfile'
+        unless @podfile_path.exist?
+          @podfile_path = project_root + 'Podfile'
         end
       end
-      @project_podfile
+      @podfile_path
     end
 
     # Returns the path of the Lockfile.
     #
     # @note The Lockfile is named `Podfile.lock`.
     #
-    # @todo Rename to lockfile_path.
-    #
-    def project_lockfile
-      @project_lockfile ||= project_root + 'Podfile.lock'
-    end
-
-    # @todo this should be controlled by the sandbox
-    #
-    def headers_symlink_root
-      @headers_symlink_root ||= "#{project_pods_root}/Headers"
+    def lockfile_path
+      @lockfile_path ||= project_root + 'Podfile.lock'
     end
 
     #--------------------------------------#
 
+    # @return [Config] the current config instance creating one if needed.
+    #
     def self.instance
       @instance ||= new
     end
 
+    # Sets the current config instance. If set to nil the config will be
+    # recreated when needed.
+    #
+    # @param  [Config, Nil] the instance.
+    #
+    # @return [void]
+    #
     def self.instance=(instance)
       @instance = instance
     end
 
     #-------------------------------------------------------------------------#
 
-    # Provides support for using the configuration instance in other scopes.
+    # Provides support for accessing the configuration instance in other
+    # scopes.
     #
     module Mixin
       def config
