@@ -88,7 +88,7 @@ module Pod
         copy_external_source_into_sandbox(sandbox)
         spec = specification_from_local(sandbox)
         unless spec
-          raise Informative, "No podspec found for `#{name}' in #{description}"
+          raise Informative, "No podspec found for `#{name}` in #{description}"
         end
         spec
       end
@@ -167,7 +167,7 @@ module Pod
       #       operations are needed.
       #
       def copy_external_source_into_sandbox(sandbox)
-        UI.info("->".green + " Pre-downloading: '#{name}'") do
+        UI.info("->".green + " Pre-downloading: `#{name}`") do
           target = sandbox.root + name
           target.rmtree if target.exist?
           downloader = Downloader.for_target(sandbox.root + name, @params)
@@ -180,7 +180,7 @@ module Pod
       # @see AbstractExternalSource#description
       #
       def description
-        "from `#{@params[:git]}'".tap do |description|
+        "from `#{@params[:git]}`".tap do |description|
           description << ", commit `#{@params[:commit]}`" if @params[:commit]
           description << ", branch `#{@params[:branch]}`" if @params[:branch]
           description << ", tag `#{@params[:tag]}`" if @params[:tag]
@@ -208,7 +208,7 @@ module Pod
       #       operations are needed.
       #
       def copy_external_source_into_sandbox(sandbox)
-        UI.info("->".green + " Pre-downloading: '#{name}'") do
+        UI.info("->".green + " Pre-downloading: `#{name}`") do
           target = sandbox.root + name
           target.rmtree if target.exist?
           downloader = Downloader.for_target(sandbox.root + name, @params)
@@ -221,10 +221,10 @@ module Pod
       # @see AbstractExternalSource#description
       #
       def description
-        "from `#{@params[:svn]}'".tap do |description|
-          description << ", folder `#{@params[:folder]}'" if @params[:folder]
-          description << ", tag `#{@params[:tag]}'" if @params[:tag]
-          description << ", revision `#{@params[:revision]}'" if @params[:revision]
+        "from `#{@params[:svn]}`".tap do |description|
+          description << ", folder `#{@params[:folder]}`" if @params[:folder]
+          description << ", tag `#{@params[:tag]}`" if @params[:tag]
+          description << ", revision `#{@params[:revision]}`" if @params[:revision]
         end
       end
     end
@@ -239,7 +239,7 @@ module Pod
       # @see AbstractExternalSource#copy_external_source_into_sandbox
       #
       def copy_external_source_into_sandbox(sandbox)
-        UI.info("->".green + " Fetching podspec for `#{name}' from: #{@params[:podspec]}") do
+        UI.info("->".green + " Fetching podspec for `#{name}` from: #{@params[:podspec]}") do
           path = @params[:podspec]
           path = Pathname.new(path).expand_path if path.to_s.start_with?("~")
           require 'open-uri'

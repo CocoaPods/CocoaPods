@@ -1,88 +1,153 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
+
   describe ExternalSources do
     it "returns the instance of appropriate concrete class according to the parameters" do
-      git = Dependency.new("Reachability", :git => nil)
+      git     = Dependency.new("Reachability", :git     => nil)
+      svn     = Dependency.new("Reachability", :svn     => nil)
       podspec = Dependency.new("Reachability", :podspec => nil)
-      local = Dependency.new("Reachability", :local => nil)
+      local   = Dependency.new("Reachability", :local   => nil)
 
-      ExternalSources.from_dependency(git).class.should == ExternalSources::GitSource
+      ExternalSources.from_dependency(git).class.should     == ExternalSources::GitSource
+      ExternalSources.from_dependency(svn).class.should     == ExternalSources::SvnSource
       ExternalSources.from_dependency(podspec).class.should == ExternalSources::PodspecSource
-      ExternalSources.from_dependency(local).class.should == ExternalSources::LocalSource
+      ExternalSources.from_dependency(local).class.should   == ExternalSources::LocalSource
     end
   end
 
+  #---------------------------------------------------------------------------#
+
   describe ExternalSources::AbstractExternalSource do
-    xit "returns the name" do end
-    xit "returns the params" do end
-    xit "returns the compares to another" do end
-    xit "returns the specification" do end
-    xit "returns the specification from the sandbox if available" do end
-    xit "returns the specification fetching it from the external source" do end
+
+    it "compares to another" do
+      dependency_1 = Dependency.new("Reachability", :git => 'url')
+      dependency_2 = Dependency.new("Another_name", :git => 'url')
+      dependency_3 = Dependency.new("Reachability", :git => 'another_url')
+
+      dependency_1.should.be == dependency_1
+      dependency_1.should.not.be == dependency_2
+      dependency_1.should.not.be == dependency_3
+    end
+
+    before do
+      dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
+      @external_source = ExternalSources.from_dependency(dependency)
+    end
+
+    it "returns the specification from the sandbox if available" do
+      @external_source.specification_from_external(config.sandbox)
+      @external_source.expects(:specification_from_external).never
+      @external_source.specification(config.sandbox).name.should == 'Reachability'
+    end
+
+    it "returns the specification from the remote if needed" do
+      @external_source.specification(config.sandbox).name.should == 'Reachability'
+    end
+
+    it "returns the specification from the sandbox if available" do
+      @external_source.specification_from_external(config.sandbox)
+      @external_source.specification_from_local(config.sandbox).name.should == 'Reachability'
+    end
+
+    it "returns nil if the specification from the sandbox is not available" do
+      @external_source.specification_from_local(config.sandbox).should.be.nil
+    end
+
+    it "returns the specification fetching it from the external source in any case" do
+      @external_source.specification_from_external(config.sandbox).name.should == 'Reachability'
+    end
   end
 
+  #---------------------------------------------------------------------------#
+
   describe ExternalSources::GitSource do
-    it "creates a copy of the podspec" do
+
+    before do
       dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
-      external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source = ExternalSources.from_dependency(dependency)
+    end
+
+    it "creates a copy of the podspec" do
+      @external_source.copy_external_source_into_sandbox(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
 
     it "marks a LocalPod as downloaded" do
-      dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
-      external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.copy_external_source_into_sandbox(config.sandbox)
       config.sandbox.predownloaded_pods.should == ["Reachability"]
     end
 
-    xit "returns the description" do end
+    it "returns the description" do
+      @external_source.description.should.match %r|from `.*Reachability`|
+    end
   end
 
+  #---------------------------------------------------------------------------#
 
   describe ExternalSources::SvnSource do
 
-    it "creates a copy of the podspec" do
+    before do
       dependency = Dependency.new("SvnSource", :svn => "file://#{fixture('subversion-repo/trunk')}")
-      external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source = ExternalSources.from_dependency(dependency)
+    end
+
+    it "creates a copy of the podspec" do
+      @external_source.copy_external_source_into_sandbox(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/SvnSource.podspec'
       path.should.exist?
     end
 
     it "marks a LocalPod as downloaded" do
-      dependency = Dependency.new("SvnSource", :svn => "file://#{fixture('subversion-repo/trunk')}")
-      external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.copy_external_source_into_sandbox(config.sandbox)
       config.sandbox.predownloaded_pods.should == ["SvnSource"]
     end
 
-    xit "returns the description" do end
+    it "returns the description" do
+      @external_source.description.should.match %r|from `.*subversion-repo/trunk`|
+    end
   end
+
+  #---------------------------------------------------------------------------#
 
   describe ExternalSources::PodspecSource do
+
+    before do
+      podspec_path = fixture('integration/Reachability/Reachability.podspec')
+      dependency = Dependency.new("Reachability", :podspec => podspec_path.to_s)
+      @external_source = ExternalSources.from_dependency(dependency)
+    end
+
     it "creates a copy of the podspec" do
-      dependency = Dependency.new("Reachability", :podspec => fixture('integration/Reachability/Reachability.podspec').to_s)
-      external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.copy_external_source_into_sandbox(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
 
-    xit "returns the description" do end
+    it "returns the description" do
+      @external_source.description.should.match %r|from `.*Reachability/Reachability.podspec`|
+    end
   end
 
+  #---------------------------------------------------------------------------#
+
   describe ExternalSources::LocalSource do
-    it "creates a copy of the podspec" do
+
+    before do
+      podspec_path = fixture('integration/Reachability/Reachability.podspec')
       dependency = Dependency.new("Reachability", :local => fixture('integration/Reachability'))
-      external_source = ExternalSources.from_dependency(dependency)
-      external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source = ExternalSources.from_dependency(dependency)
+    end
+
+    it "creates a copy of the podspec" do
+      @external_source.copy_external_source_into_sandbox(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
 
-    xit "returns the description" do end
+    it "returns the description" do
+      @external_source.description.should.match %r|from `.*integration/Reachability`|
+    end
   end
 end

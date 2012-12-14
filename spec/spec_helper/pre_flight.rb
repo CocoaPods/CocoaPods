@@ -25,6 +25,11 @@ module Bacon
       ::Pod::UI.indentation_level = 0
       ::Pod::UI.title_level = 0
 
+      if SpecHelper.temporary_directory.exist?
+        SpecHelper.temporary_directory.rmtree
+        SpecHelper.temporary_directory.mkpath
+      end
+
       old_run_requirement.bind(self).call(description, spec)
     end
   end
