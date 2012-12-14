@@ -9,13 +9,50 @@ module Pod
           Executable.execute_command(executable, command, raise_on_failure = false)
         end
 
-        def download_action(ui_message)
-          UI.section(" > #{ui_message}", '', 1) do
+        # Indicates that an action will be perfomed. The action is passed as a
+        # block.
+        #
+        # @param  [String] message
+        #         The message associated with the action.
+        #
+        # @yield  The action, this block is always exectued.
+        #
+        # @retur [void]
+        #
+        def ui_action(message)
+          UI.section(" > #{message}", '', 1) do
             yield
           end
         end
-      end
 
+        # Indicates that a minor action will be perfomed. The action is passed as
+        # a block.
+        #
+        # @param  [String] message
+        #         The message associated with the action.
+        #
+        # @yield  The action, this block is always exectued.
+        #
+        # @retur [void]
+        #
+        def ui_sub_action(message)
+          UI.section(" > #{message}", '', 2) do
+            yield
+          end
+        end
+
+        # Prints an UI message.
+        #
+        # @param  [String] message
+        #         The message associated with the action.
+        #
+        # @retur [void]
+        #
+        def ui_message(message)
+          UI.puts message
+        end
+
+      end
     end
   end
 end
