@@ -610,18 +610,27 @@ module Pod
 
     # Downloads a Pod forcing the `bleeding edge' version if requested.
     #
+    # @todo store the source of non specific downloads in the lockfile.
+    #
     # @return [void]
     #
     def download_pod(pod)
       downloader = Downloader.for_target(pod.root, pod.top_specification.source.dup)
       downloader.cache_root = "~/Library/Caches/CocoaPods"
       downloader.max_cache_size = 500
+      downloader.agressive_cache = config.agressive_cache?
+
       if pod.top_specification.version.head?
         downloader.download_head
+        specific_source = downloader.checkout_options
       else
         downloader.download
+        specific_source = downloader.checkout_options if downloader.specific_options?
       end
       pod.downloaded = true
+      if specific_source
+        # store the specific source
+      end
     end
 
     # Generates the documentation of a Pod unless it exists for a given

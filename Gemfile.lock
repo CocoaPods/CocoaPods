@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: git://github.com/CocoaPods/cocoapods-downloader
-  revision: 21f5a7b118d4071f21f810694d026c3a4e00df50
+  revision: 4ec997acca892f238aa8ced4edf37e95e69b5127
   specs:
     cocoapods-downloader (0.1.0)
 
@@ -91,7 +91,7 @@ GEM
     pygments.rb (0.3.2)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
-    rake (0.9.5)
+    rake (0.9.6)
     rb-fsevent (0.9.2)
     redcarpet (2.2.2)
     slop (3.3.3)

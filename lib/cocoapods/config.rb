@@ -1,6 +1,9 @@
 require 'pathname'
 
 module Pod
+
+  # Stores the global configuration of CocoaPods.
+  #
   class Config
 
     # @!group Paths
@@ -38,9 +41,6 @@ module Pod
     # @return [Bool] Whether the generated documentation should be installed to
     #         Xcode.
     #
-    # @note   This is stored by the Config class so a global value value can be
-    #         set.
-    #
     attr_accessor :new_version_message
     alias_method  :new_version_message?, :new_version_message
 
@@ -50,17 +50,11 @@ module Pod
 
     # @return [Bool] Whether the installer should clean after the installation.
     #
-    # @note   This is stored by the Config class so a global value value can be
-    #         set.
-    #
     attr_accessor :clean
     alias_method  :clean?, :clean
 
     # @return [Bool] Whether the documentation should be generated for the
     #         installed Pods.
-    #
-    # @note   This is stored by the Config class so a global value value can be
-    #         set.
     #
     attr_accessor :generate_docs
     alias_method  :generate_docs?, :generate_docs
@@ -68,17 +62,11 @@ module Pod
     # @return [Bool] Whether the generated documentation should be installed to
     #         Xcode.
     #
-    # @note   This is stored by the Config class so a global value value can be
-    #         set.
-    #
     attr_accessor :doc_install
     alias_method  :doc_install?, :doc_install
 
     # @return [Bool] Whether CocoaPods should integrate a user target and build
     #         the workspace or just create the Pods project.
-    #
-    # @note   This is stored by the Config class so a global value value can be
-    #         set.
     #
     attr_accessor :integrate_targets
     alias_method  :integrate_targets?, :integrate_targets
@@ -86,11 +74,14 @@ module Pod
 
     # @return [Bool] Whether the installer should skip the repos update.
     #
-    # @note   This is stored by the Config class so a global value value can be
-    #         set.
-    #
     attr_accessor :skip_repo_update
     alias_method  :skip_repo_update?, :skip_repo_update
+
+    # @return [Bool] Whether the donwloader should use more agressive caching
+    #         options.
+    #
+    attr_accessor :agressive_cache
+    alias_method  :agressive_cache?, :agressive_cache
 
     #--------------------------------------#
 
