@@ -134,7 +134,6 @@ module Pod
       #
       def master_repo_is_push?
         return false unless master_repo_dir.exist?
-
         Dir.chdir(master_repo_dir) do
           url = git('config --get remote.origin.url')
           url.chomp == read_write_url

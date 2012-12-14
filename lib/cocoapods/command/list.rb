@@ -36,6 +36,8 @@ module Pod
         end
       end
 
+      #-----------------------------------------------------------------------#
+
       class New < List
         self.summary = 'Lists pods introduced in the master spec-repo since the last check'
 

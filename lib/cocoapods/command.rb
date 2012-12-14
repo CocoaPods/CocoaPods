@@ -64,12 +64,24 @@ module Pod
 
     private
 
+    # Checks that the podfile exists.
+    #
+    # @raise  If the podfile does not exists.
+    #
+    # @return [void]
+    #
     def verify_podfile_exists!
       unless config.podfile
         raise Informative, "No `Podfile' found in the current working directory."
       end
     end
 
+    # Checks that the lockfile exists.
+    #
+    # @raise  If the lockfile does not exists.
+    #
+    # @return [void]
+    #
     def verify_lockfile_exists!
       unless config.lockfile
         raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."

@@ -190,7 +190,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    # Provides support for fetching a specification file from a SvnSource
+    # Provides support for fetching a specification file from a Svn source
     # remote.
     #
     # Supports all the options of the downloader (is similar to the git key of
