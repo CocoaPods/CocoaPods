@@ -16,11 +16,17 @@ module Pod
         base.extend Options
       end
 
+      # @todo find a better way to not override the config if the flag was not
+      #       specified. A solution could be a method called only if the flag
+      #       is not nil:
+      #
+      #           argv.set_flag('clean') { |value| config.clean = value }
+      #
       def initialize(argv)
-        config.clean             = argv.flag?('clean', true)
-        config.generate_docs     = argv.flag?('doc', true)
-        config.integrate_targets = argv.flag?('integrate', true)
-        config.skip_repo_update  = !argv.flag?('update', true)
+        config.clean             = value if value = argv.flag?('clean')
+        config.generate_docs     = value if value = argv.flag?('doc')
+        config.integrate_targets = value if value = argv.flag?('integrate')
+        config.skip_repo_update  = value if value = !argv.flag?('update')
         super
       end
 

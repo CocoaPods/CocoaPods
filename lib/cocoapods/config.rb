@@ -1,5 +1,3 @@
-require 'pathname'
-
 module Pod
 
   # Stores the global configuration of CocoaPods.
@@ -98,8 +96,8 @@ module Pod
 
       if user_settings_file.exist?
         require 'yaml'
-        user_config = YAML.load_file(user_settings_file)
-        configure_with(user_config)
+        user_settings = YAML.load_file(user_settings_file)
+        configure_with(user_settings)
       end
     end
 
@@ -188,8 +186,6 @@ module Pod
     #
     # @note The Podfile can be named either `CocoaPods.podfile` or `Podfile`.
     #       The first is preferred as it allows to specify an OS X UTI.
-    #
-    # @todo Rename to podfile_path.
     #
     def podfile_path
       unless @podfile_path
