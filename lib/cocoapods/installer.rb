@@ -1,9 +1,8 @@
 module Pod
 
-  # The {Installer} is the core of CocoaPods. This class is responsible of
-  # taking a Podfile and transform it in the Pods libraries. This class also
-  # integrates the user project so the Pods libraries can be used out of the
-  # box.
+  # The Installer is responsible of taking a Podfile and transform it in the
+  # Pods libraries. It also integrates the user project so the Pods
+  # libraries can be used out of the box.
   #
   # The Installer is capable of doing incremental updates to an existing Pod
   # installation.
@@ -22,32 +21,10 @@ module Pod
   #     is already installed. This file is not intended to be kept under source
   #     control and is a copy of the Podfile.lock.
   #
-  # Once completed the installer should produce the following file structure:
-  #
-  #     Pods
-  #     |
-  #     +-- Headers
-  #     |   +-- Build
-  #     |   |   +-- [Pod Name]
-  #     |   +-- Public
-  #     |       +-- [Pod Name]
-  #     |
-  #     +-- Sources
-  #     |   +-- [Pod Name]
-  #     |
-  #     +-- Specifications
-  #     |
-  #     +-- Target Support Files
-  #     |   +-- [Target Name]
-  #     |       +-- Acknowledgements.markdown
-  #     |       +-- Acknowledgements.plist
-  #     |       +-- Pods.xcconfig
-  #     |       +-- Pods-prefix.pch
-  #     |       +-- PodsDummy_Pods.m
-  #     |
-  #     +-- Manifest.lock
-  #     |
-  #     +-- Pods.xcodeproj
+  # The Installer is designed to work in environments where the Podfile folder
+  # is under source control and environments where it is not. The rest of the
+  # files, like the user project and the workspace are assumed to be under
+  # source control.
   #
   class Installer
     autoload :TargetInstaller,       'cocoapods/installer/target_installer'
@@ -69,9 +46,9 @@ module Pod
     #
     attr_reader :lockfile
 
-    # @param [Sandbox]  sandbox     @see sandbox
-    # @param [Podfile]  podfile     @see podfile
-    # @param [Lockfile] lockfile    @see lockfile
+    # @param  [Sandbox]  sandbox     @see sandbox
+    # @param  [Podfile]  podfile     @see podfile
+    # @param  [Lockfile] lockfile    @see lockfile
     #
     def initialize(sandbox, podfile, lockfile = nil)
       @sandbox     =  sandbox
@@ -104,6 +81,9 @@ module Pod
     #
     def install!
       analyze
+      generate_local_pods
+      generate_names_of_pods_to_install
+
       prepare_for_legacy_compatibility
       clean_global_support_files
       clean_removed_pods
@@ -114,93 +94,18 @@ module Pod
       integrate_user_project
     end
 
-    # Performs only the computation parts of an installation.
-    #
-    # It is used by the `outdated` subcommand.
-    #
-    # @return [void]
-    #
-    def analyze
-      create_libraries
-      generate_pods_by_podfile_state
-      update_repositories_if_needed
-      generate_locked_dependencies
-      resolve_dependencies
-      generate_local_pods
-      generate_pods_that_should_be_installed
-    end
-
-    #---------------------------------------------------------------------------#
-
-    # @!group Analysis products
-
-    public
-
-    # @return [Array<String>]
-    #   the names of the pods that were added to Podfile since the last
-    #   installation on any machine.
-    #
-    attr_reader :pods_added_from_the_lockfile
-
-    # @return [Array<String>]
-    #   the names of the pods whose version requirements in the Podfile are
-    #   incompatible with the version stored in the lockfile.
-    #
-    attr_reader :pods_changed_from_the_lockfile
-
-    # @return [Array<String>]
-    #   the names of the pods that were deleted from Podfile since the last
-    #   installation on any machine.
-    #
-    attr_reader :pods_deleted_from_the_lockfile
-
-    # @return [Array<String>]
-    #   the names of the pods that didn't change since the last installation on
-    #   any machine.
-    #
-    attr_reader :pods_unchanged_from_the_lockfile
-
-    # @return [Array<Dependency>]
-    #   the dependencies generate by the lockfile that prevent the resolver to
-    #   update a Pod.
-    #
-    attr_reader :locked_dependencies
-
-    # @return [Hash{TargetDefinition => Array<Spec>}]
-    #   the specifications grouped by target as identified in the
-    #   resolve_dependencies step.
-    #
-    attr_reader :specs_by_target
-
-    # @return [Array<Specification>]
-    #   the specifications of the resolved version of Pods that should be
-    #   installed.
-    #
-    attr_reader :specifications
-
-    # @return [Hash{TargetDefinition => Array<LocalPod>}]
-    #   the local pod instances grouped by target.
-    #
-    attr_reader :local_pods_by_target
-
-    # @return [Array<LocalPod>]
-    #   the list of LocalPod instances for each dependency sorted by name.
-    #
-    attr_reader :local_pods
-
-    # @return [Array<String>]
-    #   the Pods that should be installed.
-    #
-    attr_reader :pods_to_install
-
-    #---------------------------------------------------------------------------#
+    #-------------------------------------------------------------------------#
 
     # @!group Installation products
 
     public
 
-    # @return [Pod::Project]
-    #   the `Pods/Pods.xcodeproj` project.
+    # @return [Analyzer] the analyzer which provides the information about what
+    #         needs to be installed.
+    #
+    attr_reader :analyzer
+
+    # @return [Pod::Project] the `Pods/Pods.xcodeproj` project.
     #
     attr_reader :pods_project
 
@@ -208,281 +113,31 @@ module Pod
     #
     attr_reader :target_installers
 
+    # @return [Hash{TargetDefinition => Array<LocalPod>}] The local pod
+    #         instances grouped by target.
+    #
+    attr_reader :local_pods_by_target
+
+    # @return [Array<LocalPod>] The list of LocalPod instances for each
+    #         dependency sorted by name.
+    #
+    attr_reader :local_pods
+
+    # @return [Array<String>] The Pods that should be installed.
+    #
+    attr_reader :names_of_pods_to_install
+
     #-------------------------------------------------------------------------#
 
-    # @!group Pre-installation computations
-
-    attr_reader :libraries
+    # @!group Installation steps
 
     private
 
-    def create_libraries
-      @libraries = []
-      podfile.target_definitions.values.each do |target_definition|
-        lib                           = Library.new(target_definition)
-        lib.support_files_root        = config.sandbox.root
-        if config.integrate_targets?
-        lib.user_project_path         = compute_user_project_path(target_definition)
-        lib.user_project              = Xcodeproj::Project.new(lib.user_project_path)
-        lib.user_targets              = compute_user_project_targets(target_definition, lib.user_project)
-        lib.user_build_configurations = compute_user_build_configurations(target_definition, lib.user_targets)
-        lib.platform                  = compute_platform_for_taget_definition(target_definition, lib.user_targets)
-        else
-
-        lib.user_project_path         = config.project_root
-        lib.user_targets              = []
-        lib.user_build_configurations = {}
-        lib.platform                  = target_definition.platform
-        end
-        @libraries << lib
-      end
+    def analyze
+      @analyzer = Analyzer.new(sandbox, podfile, lockfile)
+      @analyzer.update_mode = update_mode
+      @analyzer.analyze
     end
-
-    ####################################################################################################
-
-    # Returns the path of the user project that the {TargetDefinition}
-    # should integrate.
-    #
-    # @raise  If the project is implicit and there are multiple projects.
-    #
-    # @raise  If the path doesn't exits.
-    #
-    # @return [Pathname] the path of the user project.
-    #
-    def compute_user_project_path(target_definition)
-      if target_definition.user_project_path
-        user_project_path = Pathname.new(config.project_root + target_definition.user_project_path)
-        unless user_project_path.exist?
-          raise Informative, "Unable to find the Xcode project `#{user_project_path}` for the target `#{target_definition.label}`."
-        end
-      else
-        xcodeprojs = Pathname.glob(config.project_root + '*.xcodeproj')
-        if xcodeprojs.size == 1
-          user_project_path = xcodeprojs.first
-        else
-          raise Informative, "Could not automatically select an Xcode project. " \
-            "Specify one in your Podfile like so:\n\n" \
-            "    xcodeproj 'path/to/Project.xcodeproj'\n"
-        end
-      end
-      user_project_path
-    end
-
-    # Returns a list of the targets from the project of {TargetDefinition}
-    # that needs to be integrated.
-    #
-    # @note   The method first looks if there is a target specified with
-    #         the `link_with` option of the {TargetDefinition}. Otherwise
-    #         it looks for the target that has the same name of the target
-    #         definition.  Finally if no target was found the first
-    #         encountered target is returned (it is assumed to be the one
-    #         to integrate in simple projects).
-    #
-    # @note   This will only return targets that do **not** already have
-    #         the Pods library in their frameworks build phase.
-    #
-    #
-    def compute_user_project_targets(target_definition, user_project)
-      return [] unless user_project
-      if link_with = target_definition.link_with
-        targets = user_project.targets.select { |t| link_with.include? t.name }
-        raise Informative, "Unable to find a target named `#{link_with.to_sentence}` to link with target definition `#{target_definition.name}`" if targets.empty?
-      elsif target_definition.name != :default
-        target = user_project.targets.find { |t| t.name == target_definition.name.to_s }
-        targets = [ target ].compact
-        raise Informative, "Unable to find a target named `#{target_definition.name.to_s}`" if targets.empty?
-      else
-        targets = [ user_project.targets.first ].compact
-        raise Informative, "Unable to find a target" if targets.empty?
-      end
-      targets
-    end
-
-    # @todo Robustness for installations without integration.
-    #
-    def compute_user_build_configurations(target_definition, user_targets)
-      if user_targets
-        user_targets.map { |t| t.build_configurations.map(&:name) }.flatten.inject({}) do |hash, name|
-          unless name == 'Debug' || name == 'Release'
-            hash[name] = :release
-          end
-          hash
-        end.merge(target_definition.build_configurations || {})
-      else
-        target_definition.build_configurations || {}
-      end
-    end
-
-    # Returns the platform for the library.
-    #
-    # @note This resolves to the lowest deployment target across the user targets.
-    #
-    # @todo Is assigning the platform to the target definition the best way to
-    #       go?
-    #
-    def compute_platform_for_taget_definition(target_definition, user_targets)
-      return target_definition.platform if target_definition.platform
-      if user_targets
-        name = nil
-        deployment_target = nil
-        user_targets.each do |target|
-          name ||= target.platform_name
-          raise "Targets with different platforms" unless name == target.platform_name
-          if !deployment_target || deployment_target > Version.new(target.deployment_target)
-            deployment_target = Version.new(target.deployment_target)
-          end
-        end
-        platform = Platform.new(name, deployment_target)
-        target_definition.platform = platform
-      else
-        raise Informative, "Missing platform for #{target_definition}."\
-          "If no integrating it is necessary to specify a platform."
-      end
-      platform
-    end
-
-    ####################################################################################################
-
-    # Compares the {Podfile} with the {Lockfile} in order to detect which
-    # dependencies should be locked.
-    #
-    # @return [void]
-    #
-    # @todo If there is not Lockfile all the Pods should be marked as added.
-    #
-    # @todo Once the manifest.lock is implemented only the unchanged pods
-    #       should be tracked.
-    #
-    def generate_pods_by_podfile_state
-      if lockfile
-        UI.section "Finding added, modified or removed dependencies:" do
-          pods_by_state = lockfile.detect_changes_with_podfile(podfile)
-          @pods_added_from_the_lockfile     = pods_by_state[:added]     || []
-          @pods_deleted_from_the_lockfile   = pods_by_state[:removed]   || []
-          @pods_changed_from_the_lockfile   = pods_by_state[:changed]   || []
-          @pods_unchanged_from_the_lockfile = pods_by_state[:unchanged] || []
-          display_pods_by_lockfile_state
-        end
-      else
-        @pods_added_from_the_lockfile     = []
-        @pods_deleted_from_the_lockfile   = []
-        @pods_changed_from_the_lockfile   = []
-        @pods_unchanged_from_the_lockfile = []
-      end
-    end
-
-    # Displays the state of each dependency.
-    #
-    # @return [void]
-    #
-    def display_pods_by_lockfile_state
-      return unless config.verbose?
-      pods_added_from_the_lockfile      .each { |pod| UI.message("A".green  + "#{pod}", '', 2) }
-      pods_deleted_from_the_lockfile    .each { |pod| UI.message("R".red    + "#{pod}", '', 2) }
-      pods_changed_from_the_lockfile    .each { |pod| UI.message("M".yellow + "#{pod}", '', 2) }
-      pods_unchanged_from_the_lockfile  .each { |pod| UI.message("-"        + "#{pod}", '', 2) }
-    end
-
-    # Lazily updates the source repositories. The update is triggered if:
-    #
-    # - There are pods that changed in the Podfile.
-    # - The lockfile is missing.
-    # - The installer is in update_mode.
-    #
-    # @todo Remove the lockfile condition once compare_podfile_and_lockfile
-    #       is updated.
-    #
-    # @todo Lazy resolution can't be done if we want to fully support detection
-    #       of changes in specifications checksum.
-    #
-    # @return [void]
-    #
-    def update_repositories_if_needed
-      return if config.skip_repo_update?
-      changed_pods = (pods_changed_from_the_lockfile + pods_deleted_from_the_lockfile)
-      should_update = !lockfile || !changed_pods.empty? || update_mode
-      if should_update
-        UI.section 'Updating spec repositories' do
-        SourcesManager.update
-        end
-      end
-    end
-
-    # Generates dependencies that require the specific version of the Pods that
-    # haven't changed in the {Lockfile}.
-    #
-    # These dependencies are passed to the {Resolver}, unless the installer is
-    # in update mode, to prevent it from upgrading the Pods that weren't
-    # changed in the {Podfile}.
-    #
-    # @return [void]
-    #
-    def generate_locked_dependencies
-      @locked_dependencies = pods_unchanged_from_the_lockfile.map do |pod|
-        lockfile.dependency_to_lock_pod_named(pod)
-      end
-    end
-
-    # Converts the Podfile in a list of specifications grouped by target.
-    #
-    # @note   As some dependencies might have external sources the resolver is
-    #         aware of the {Sandbox} and interacts with it to download the
-    #         podspecs of the external sources. This is necessary because the
-    #         resolver needs the specifications to analyze their dependencies
-    #         (which might be from external sources).
-    #
-    # @note   In update mode the resolver is set to always update the specs
-    #         from external sources.
-    #
-    # @return [void]
-    #
-    def resolve_dependencies
-      UI.section "Resolving dependencies of #{UI.path podfile.defined_in_file}" do
-        locked_deps = update_mode ? [] : locked_dependencies
-        resolver = Resolver.new(sandbox, podfile, locked_deps)
-        resolver.update_external_specs = update_mode
-        @specs_by_target = resolver.resolve
-        @specifications  = specs_by_target.values.flatten
-      end
-    end
-
-
-    # Computes the list of the Pods that should be installed or reinstalled in
-    # the {Sandbox}.
-    #
-    # The pods to install are identified as the Pods that don't exist in the
-    # sandbox or the Pods whose version differs from the one of the lockfile.
-    #
-    # In update mode specs originating from external dependencies and or from
-    # head sources are always reinstalled.
-    #
-    # @return [void]
-    #
-    # @todo Use {Sandbox} manifest.
-    #
-    # @todo [#534] Detect if the folder of a Pod is empty.
-    #
-    def generate_pods_that_should_be_installed
-      changed_pods_names = []
-      if lockfile
-        changed_pods = local_pods.select do |pod|
-          pod.top_specification.version != lockfile.pod_versions[pod.name]
-        end
-        if update_mode
-          changed_pods_names += pods.select do |pods|
-            pod.top_specification.version.head? ||
-              resolver.pods_from_external_sources.include?(pod.name)
-          end
-        end
-        changed_pods_names += pods_added_from_the_lockfile + pods_changed_from_the_lockfile
-      else
-        changed_pods = local_pods
-      end
-
-      not_existing_pods = local_pods.reject { |pod| pod.exists? }
-      @pods_to_install = (changed_pods + not_existing_pods).uniq
-    end
-
 
     # Converts the specifications produced by the Resolver in local pods.
     #
@@ -491,15 +146,16 @@ module Pod
     #
     # @return [void]
     #
-    # @todo [#535] Pods should be accumulated per Target, also in the Local
-    #       Pod class. The Local Pod class should have a method to add itself
-    #       to a given project so it can use the sources of all the activated
-    #       podspecs across all targets. Also cleaning should take into account
-    #       that.
+    # @todo [#535] LocalPods should resolve the specification passing the
+    #       library.
+    #
+    # @todo Why the local pods are generated by the sandbox? I guess because
+    #       some where pre-downloaded? However the sandbox should just store
+    #       the name of those Pods.
     #
     def generate_local_pods
       @local_pods_by_target = {}
-      specs_by_target.each do |target_definition, specs|
+      analyzer.specs_by_target.each do |target_definition, specs|
         @local_pods_by_target[target_definition] = specs.map do |spec|
           if spec.local?
             sandbox.locally_sourced_pod_for_spec(spec, target_definition.platform)
@@ -512,11 +168,34 @@ module Pod
       @local_pods = local_pods_by_target.values.flatten.uniq.sort_by { |pod| pod.name.downcase }
     end
 
-    #---------------------------------------------------------------------------#
-
-    # @!group Installation
-
-    private
+    # Computes the list of the Pods that should be installed or reinstalled in
+    # the {Sandbox}.
+    #
+    # The pods to install are identified as the Pods that don't exist in the
+    # sandbox or the Pods whose version differs from the one of the lockfile.
+    #
+    # @note   In update mode specs originating from external dependencies and
+    #         or from head sources are always reinstalled.
+    #
+    # @return [void]
+    #
+    # @todo [#534] Detect if the folder of a Pod is empty (even if it exits).
+    #
+    # @todo There could be issues with the current implementation regarding
+    #       external specs.
+    #
+    def generate_names_of_pods_to_install
+      changed_pods_names = []
+      if update_mode
+        changed_pods_names += pods.select do |pods|
+          pod.top_specification.version.head? ||
+            resolver.pods_from_external_sources.include?(pod.name)
+        end
+      end
+      changed_pods_names += analyzer.sandbox_state.added + analyzer.sandbox_state.changed
+      not_existing_pods = local_pods.reject { |pod| pod.exists? }
+      @names_of_pods_to_install = (changed_pods_names + not_existing_pods.map(&:name)).uniq
+    end
 
     # Prepares the Pods folder in order to be compatible with the most recent
     # version of CocoaPods.
@@ -525,25 +204,26 @@ module Pod
     #
     def prepare_for_legacy_compatibility
       # move_target_support_files_if_needed
-      # copy_lock_file_to_Pods_lock_if_needed
       # move_Local_Podspecs_to_Podspecs_if_needed
       # move_pods_to_sources_folder_if_needed
     end
 
     # @return [void] In this step we clean all the folders that will be
-    #   regenerated from scratch and any file which might not be overwritten.
+    #         regenerated from scratch and any file which might not be
+    #         overwritten.
     #
     # @todo Clean the podspecs of all the pods that aren't unchanged so the
-    #        resolution process doesn't get confused by them.
+    #       resolution process doesn't get confused by them.
     #
     def clean_global_support_files
       sandbox.prepare_for_install
     end
 
     # @return [void] In this step we clean all the files related to the removed
-    #   Pods.
+    #         Pods.
     #
     # @todo Use the local pod implode.
+    #
     # @todo [#534] Clean all the Pods folder that are not unchanged?
     #
     def clean_removed_pods
@@ -554,12 +234,12 @@ module Pod
             path.rmtree if path.exist?
           end
         end
-      end unless pods_deleted_from_the_lockfile.empty?
+      end unless analyzer.sandbox_state.deleted.empty?
     end
 
     # @return [void] In this step we clean the files of the Pods that will be
-    #   installed. We clean the files that might affect the resolution process
-    #   and the files that might not be overwritten.
+    #         installed. We clean the files that might affect the resolution
+    #         process and the files that might not be overwritten.
     #
     # @todo [#247] Clean the headers of only the pods to install.
     #
@@ -568,13 +248,14 @@ module Pod
     end
 
     # @return [void] Install the Pods. If the resolver indicated that a Pod
-    #   should be installed and it exits, it is removed an then reinstalled. In
-    #   any case if the Pod doesn't exits it is installed.
+    #         should be installed and it exits, it is removed an then
+    #         reinstalled. In any case if the Pod doesn't exits it is
+    #         installed.
     #
     def install_dependencies
       UI.section "Downloading dependencies" do
         local_pods.each do |pod|
-          if pods_to_install.include?(pod)
+          if names_of_pods_to_install.include?(pod.name)
             UI.section("Installing #{pod}".green, "-> ".green) do
               install_local_pod(pod)
             end
@@ -587,17 +268,17 @@ module Pod
 
     # @return [void] Downloads, clean and generates the documentation of a pod.
     #
-    # @note The docs need to be generated before cleaning because the
-    #       documentation is created for all the subspecs.
+    # @note  The docs need to be generated before cleaning because the
+    #        documentation is created for all the subspecs.
     #
-    # @note In this step we clean also the Pods that have been pre-downloaded
-    #       in AbstractExternalSource#specification_from_sandbox.
+    # @note  In this step we clean also the Pods that have been pre-downloaded
+    #        in AbstractExternalSource#specification_from_sandbox.
     #
-    # @todo [#529] Podspecs should not be preserved anymore to prevent user
-    #       confusion. Currently we are copying the ones form external sources
-    #       in `Local Podspecs` and this feature is not needed anymore.
-    #       I think that copying all the used podspecs would be helpful for
-    #       debugging.
+    # @todo  [#529] Podspecs should not be preserved anymore to prevent user
+    #        confusion. Currently we are copying the ones form external sources
+    #        in `Local Podspecs` and this feature is not needed anymore.
+    #        I think that copying all the used podspecs would be helpful for
+    #        debugging.
     #
     def install_local_pod(pod)
       unless pod.downloaded?
@@ -669,8 +350,7 @@ module Pod
 
     # Creates the Pods project from scratch if it doesn't exists.
     #
-    # @todo Restore the build configuration support.
-    # @todo Clean and modify the project if it exists.
+    # @todo   Clean and modify the project if it exists.
     #
     # @return [void]
     #
@@ -690,7 +370,7 @@ module Pod
     def generate_target_installers
       @target_installers = podfile.target_definitions.values.map do |definition|
         pods_for_target = local_pods_by_target[definition]
-        libray = libraries.find {|l| l.target_definition == definition }
+        libray = analyzer.libraries.find {|l| l.target_definition == definition }
         TargetInstaller.new(pods_project, libray, pods_for_target) unless definition.empty?
       end.compact
     end
@@ -709,7 +389,7 @@ module Pod
     #         so they are visible for the user.
     #
     def add_source_files_to_pods_project
-      UI.message "- Adding source files to Pods project" do
+      UI.message "- Adding Pods files to Pods project" do
         local_pods.each { |p| p.add_file_references_to_project(pods_project) }
         local_pods.each { |p| p.link_headers }
       end
@@ -718,6 +398,7 @@ module Pod
     # Runs the pre install hooks of the installed specs and of the Podfile.
     #
     # @todo   Run the hooks only for the installed pods.
+    #
     # @todo   Print a message with the names of the specs.
     #
     # @return [void]
@@ -736,6 +417,7 @@ module Pod
     # Runs the post install hooks of the installed specs and of the Podfile.
     #
     # @todo   Run the hooks only for the installed pods.
+    #
     # @todo   Print a message with the names of the specs.
     #
     # @return [void]
@@ -743,7 +425,7 @@ module Pod
     def run_post_install_hooks
       UI.message "- Running post install hooks" do
         target_installers.each do |target_installer|
-          specs_by_target[target_installer.library.target_definition].each do |spec|
+          target_installer.library.specs.each do |spec|
             spec.post_install!(target_installer)
           end
         end
@@ -798,17 +480,16 @@ module Pod
     #
     # @return [void]
     #
-    # @todo [#552] Implement manifest.
-    #
     def write_lockfiles
-      @lockfile = Lockfile.generate(podfile, specs_by_target.values.flatten)
+      @lockfile = Lockfile.generate(podfile, analyzer.specifications)
+
       UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
         @lockfile.write_to_disk(config.lockfile_path)
       end
 
-      # UI.message "- Writing Manifest in #{UI.path sandbox.manifest_path}" do
-      #   @lockfile.write_to_disk(sandbox.manifest_path)
-      # end
+      UI.message "- Writing Manifest in #{UI.path sandbox.manifest_path}" do
+        @lockfile.write_to_disk(sandbox.manifest_path)
+      end
     end
 
     # Integrates the user project.
@@ -820,17 +501,17 @@ module Pod
     #
     # @return [void]
     #
-    # @todo [#397] The libraries should be cleaned and the re-added on every
-    #       installation. Maybe a clean_user_project phase should be added. In
-    #       any case it appears to be a good idea store target definition
-    #       information in the lockfile.
+    # @todo   [#397] The libraries should be cleaned and the re-added on every
+    #         installation. Maybe a clean_user_project phase should be added.
+    #         In any case it appears to be a good idea store target definition
+    #         information in the lockfile.
     #
-    # @todo [#588] The resources should be added through a build phase instead
-    #       of using a script.
+    # @todo   [#588] The resources should be added through a build phase
+    #         instead of using a script.
     #
     def integrate_user_project
       return unless config.integrate_targets?
-      UserProjectIntegrator.new(podfile, pods_project, config.project_root, libraries).integrate!
+      UserProjectIntegrator.new(podfile, pods_project, config.project_root, analyzer.libraries).integrate!
     end
   end
 end

@@ -8,11 +8,11 @@ gemspec
 group :development do
   gem "cocoapods-core",       :git => "git://github.com/CocoaPods/Core.git"
   gem "xcodeproj",            :git => "git://github.com/CocoaPods/Xcodeproj.git"
-  # gem "cocoapods-downloader", :git => "git://github.com/CocoaPods/cocoapods-downloader"
+  gem "cocoapods-downloader", :git => "git://github.com/CocoaPods/cocoapods-downloader"
 
   # gem "cocoapods-core",       :path => "../Core"
   # gem "xcodeproj",            :path => "../Xcodeproj"
-  gem "cocoapods-downloader", :path => "../cocoapods-downloader"
+  # gem "cocoapods-downloader", :path => "../cocoapods-downloader"
 
   gem "mocha", "~> 0.11.4"
   gem "bacon"

@@ -7,9 +7,6 @@ module Pod
   # automatic resolves like Bundler:
   # [how-does-bundler-bundle](http://patshaughnessy.net/2011/9/24/how-does-bundler-bundle)
   #
-  # Another important aspect to keep in mind of the current implementation
-  # is that the order of the dependencies matters.
-  #
   class Resolver
 
     include Config::Mixin
@@ -28,19 +25,6 @@ module Pod
     #
     attr_reader :locked_dependencies
 
-    # @return [Bool] whether the resolver should update the external specs
-    #         in the resolution process. This option is used for detecting
-    #         changes in with the Podfile without affecting the existing Pods
-    #         installation
-    #
-    # @note   This option is used by `pod outdated`.
-    #
-    # @todo   This implementation is not clean, because if the spec doesn't
-    #         exists the sandbox will actually download and modify the
-    #         installation.
-    #
-    attr_accessor :update_external_specs
-
     # @param [Sandbox] sandbox @see sandbox
     # @param [Podfile] podfile @see podfile
     # @param [Array<Dependency>] locked_dependencies @see locked_dependencies
@@ -50,6 +34,19 @@ module Pod
       @podfile = podfile
       @locked_dependencies = locked_dependencies
     end
+
+    # @return [Bool] whether the resolver should update the external specs
+    #         in the resolution process. This option is used for detecting
+    #         changes in with the Podfile without affecting the existing Pods
+    #         installation
+    #
+    # @note   This option is used by `pod outdated`.
+    #
+    attr_accessor :update_external_specs
+
+    # @todo   Implement non destructive resolution.
+    #
+    attr_accessor :allow_pre_downloads
 
     #-------------------------------------------------------------------------#
 
@@ -111,8 +108,6 @@ module Pod
 
     # @return [Source::Aggregate] A cache of the sources needed to find the
     #         podspecs.
-    #
-    # @todo   Cache the sources globally?
     #
     attr_accessor :cached_sources
 

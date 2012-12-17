@@ -1,6 +1,6 @@
 require 'open-uri'
 
-# Allow open-uri to follow http to https redirects.
+# Allow OpenURI to follow http to https redirects.
 #
 module OpenURI
 

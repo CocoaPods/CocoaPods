@@ -78,9 +78,9 @@ module Pod
     #
     attr_accessor :xcconfig
 
-    # @todo This is currently unused.
+    # @return [Array<Specification>] the specifications of this library.
     #
-    attr_accessor :specifications
+    attr_accessor :specs
 
     #-------------------------------------------------------------------------#
 

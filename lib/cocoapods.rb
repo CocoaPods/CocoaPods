@@ -19,6 +19,7 @@ module Pod
     end
   end
 
+  autoload :Analyzer,               'cocoapods/analyzer'
   autoload :Command,                'cocoapods/command'
   autoload :Executable,             'cocoapods/executable'
   autoload :ExternalSources,        'cocoapods/external_sources'

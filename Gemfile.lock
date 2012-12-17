@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/CocoaPods/Core.git
-  revision: 08e92506fc6600821f066f8cb494f6dcfef348eb
+  revision: 2acbcad47f48373f515b5c0c5d383d96fed21152
   specs:
     cocoapods-core (0.17.0.alpha)
       activesupport (~> 3.2.6)
@@ -14,6 +14,12 @@ GIT
     xcodeproj (0.4.0)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
+
+GIT
+  remote: git://github.com/CocoaPods/cocoapods-downloader
+  revision: b349db398d5e9205a67974f70906fec2c7a0e588
+  specs:
+    cocoapods-downloader (0.1.0)
 
 GIT
   remote: https://github.com/alloy/kicker.git
@@ -39,11 +45,6 @@ PATH
       open4 (~> 1.3.0)
       rake (~> 0.9.4)
       xcodeproj (~> 0.4.0)
-
-PATH
-  remote: ../cocoapods-downloader
-  specs:
-    cocoapods-downloader (0.1.0)
 
 GEM
   remote: http://rubygems.org/
@@ -87,7 +88,7 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
-    pygments.rb (0.3.2)
+    pygments.rb (0.3.3)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
     rake (0.9.6)

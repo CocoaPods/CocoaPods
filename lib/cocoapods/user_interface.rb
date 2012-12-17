@@ -233,8 +233,10 @@ module Pod
         UI.puts message
       end
 
+      # @todo enable in CocoaPods 0.17.0 release
+      #
       def warn(message)
-        UI.warn message
+        # UI.warn message
       end
     end
   end

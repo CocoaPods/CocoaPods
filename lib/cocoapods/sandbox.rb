@@ -8,6 +8,36 @@ module Pod
   #
   # CocoaPods assumes to have control of the sandbox.
   #
+  # Once completed the sandbox will have the following file structure:
+  #
+  #     Pods
+  #     |
+  #     +-- Headers
+  #     |   +-- Build
+  #     |   |   +-- [Pod Name]
+  #     |   +-- Public
+  #     |       +-- [Pod Name]
+  #     |
+  #     +-- Sources
+  #     |   +-- [Pod Name]
+  #     |
+  #     +-- Specifications
+  #     |
+  #     +-- Target Support Files
+  #     |   +-- [Target Name]
+  #     |       +-- Acknowledgements.markdown
+  #     |       +-- Acknowledgements.plist
+  #     |       +-- Pods.xcconfig
+  #     |       +-- Pods-prefix.pch
+  #     |       +-- PodsDummy_Pods.m
+  #     |
+  #     +-- Manifest.lock
+  #     |
+  #     +-- Pods.xcodeproj
+  #
+  # @todo outdated pods triggers the resolution process which might pre-download
+  #       some pods.
+  #
   class Sandbox
 
     # The path of the build headers directory relative to the root.
@@ -77,6 +107,20 @@ module Pod
     #
     def implode
       root.rmtree
+    end
+
+    #--------------------------------------#
+
+    # @!group Manifest
+
+    public
+
+    def manifest_path
+      root + "Manifest.lock"
+    end
+
+    def manifest
+      Lockfile.from_file(manifest_path) if manifest_path.exist?
     end
 
     #--------------------------------------#

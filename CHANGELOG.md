@@ -1,37 +1,58 @@
 ## Branch 0.17
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.17)
+• [Core](https://github.com/CocoaPods/Core/master)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0...master)
 
-- TODO: Dropped script for resources.
+###### TODO
+
+- Add Rake FileList warning.
+- Enable CocoaPods Core-warnings
+- Dropped script for resources.
 - Added support for `prefix_header_file` in subspecs
 - Added support for `prefix_header_contents` in subspecs
+- LocalPod needs to be updated for some changes done to the DSL
 
-###### Specification DSL Changes
+###### Specification DSL
 
-- Deprecated `header_mappings` hook.
+- [__Breaking__] Deprecated `header_mappings` hook.
+- [__Breaking__] Deprecated `exclude_header_search_paths`
+- [__Breaking__] `requires_arc` is transitioning from `false` to `true`.
+- [__Breaking__] The support for Rake File list is being deprecated.
 - `preferred_dependency` has been renamed to `default_subspec`.
 - Added `exclude_files` attribute.
-- Removed `exclude_header_search_paths`
 - Added `screenshots` attribute
 - Added default values for attributes like `source_files`.
-- `requires_arc` is transioning from `false` to `true`.
-- The support for Rake File list is being deprecated.
+
+###### Podfile DSL
+
+- It is not needed to specify the platform anymore (unless not integrating)
 
 ###### Enhancements
 
+- CocoaPods now has support for working in teams and not committing the Pods folder.
 - Released [documentation](docs.cocoapods.org).
 - Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
 - Added Podfile to the Pods project.
 - The `--no-clean` option of the `pod spec lint` command now displays the Pods project for inspection.
 - CocoaPods now can infer the platform from the integrated targets.
 - It is now possible to specify default values for the configuration in `~/.cocoapods/config.yaml`.
+- CocoaPods now keeps track of the checksum of the specifications of the installed Pods and reinstalls them if needed.
 
-- Major clean up and refactor to the code base.
-- Extrace models to [CocoaPods-Core](https://github.com/CocoaPods/Core) gem.
+###### Codebase
+
+- Major clean up and refactor of the whole code base, with great reduction of
+  the technical debt.
+- Extracted the models of into
+  [CocoaPods-Core](https://github.com/CocoaPods/Core) gem.
 - Extracted command-line command & option handling into
   [CLAide](https://github.com/CocoaPods/CLAide).
+- Extracted downloader into
+  [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader).
 - Added PathList class.
   [#476](https://github.com/CocoaPods/CocoaPods/issues/476)
-- Extracted XCConfig generator.
+- Added Analyzer class.
+- Added Library class.
+- Added XCConfig generator.
 
 ## 0.16.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc5...master)

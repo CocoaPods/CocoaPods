@@ -1,5 +1,3 @@
-require 'open4'
-
 module Pod
 
   # Module which provides support for running executables.
@@ -25,6 +23,7 @@ module Pod
     # @return [void]
     #
     def executable(name)
+
       bin = `which #{name}`.strip
       raise Informative, "Unable to locate the executable `#{name}`" if bin.empty?
 
@@ -55,6 +54,8 @@ module Pod
     # @todo   Find a way to display the live output of the commands.
     #
     def self.execute_command(bin, command, raise_on_failure = false)
+      require 'open4'
+
       full_command = "#{bin} #{command}"
 
       if Config.instance.verbose?
