@@ -43,11 +43,9 @@ module Pod
       # @note   The value `PODS_HEADERS_SEARCH_PATHS` is used to store the headers
       #         so xcconfig can reference the variable.
       #
-      # @todo   Add Xcodeproj::Config#[]
-      #
       def generate
         ld_flags = '-ObjC'
-        if  set_arc_compatibility_flag && pods.any? { |pod| pod.requires_arc? }
+        if  set_arc_compatibility_flag && pods.map(&:specifications).flatten.any? { |pod| pod.requires_arc }
           ld_flags << ' -fobjc-arc'
         end
 

@@ -115,6 +115,10 @@ module Pod
       top_specification.name
     end
 
+    #--------------------------------------#
+
+    public
+
     # @!group Installation
 
     # Creates the root path of the pod.
@@ -194,6 +198,10 @@ module Pod
       files
     end
 
+    #--------------------------------------#
+
+    public
+
     # @!group Files
 
     # @return [Pathname] Returns the relative path from the sandbox.
@@ -236,7 +244,6 @@ module Pod
       end
       result
     end
-
 
     # Finds the source files that every activated {Specification} requires.
     #
@@ -377,15 +384,19 @@ module Pod
       end
     end
 
-    # @todo check implementation
+    #--------------------------------------#
+
+    public
+
+    # @return [Xcodeproj::Config] the configuration for the Pod.
     #
     def xcconfig
       config = Xcodeproj::Config.new
-      specifications.each do |s|
-        config.merge(s.xcconfig)
-        config.libraries.merge(s.libraries)
-        config.frameworks.merge(s.frameworks)
-        config.weak_frameworks.merge(s.weak_frameworks)
+      specifications.each do |spec|
+        config.merge!(spec.xcconfig)
+        config.libraries.merge(spec.libraries)
+        config.frameworks.merge(spec.frameworks)
+        config.weak_frameworks.merge(spec.weak_frameworks)
       end
       config
     end
@@ -421,6 +432,10 @@ module Pod
       end
       result
     end
+
+    #--------------------------------------#
+
+    public
 
     # @!group Xcodeproj integration
 
@@ -458,8 +473,6 @@ module Pod
     # @raise If the {#add_file_references_to_project} was not called before of
     #        calling this method.
     #
-    # @todo Check compiler flags implementation and xcconfig implementation.
-    #
     # @return [void]
     #
     def add_build_files_to_target(target)
@@ -490,18 +503,14 @@ module Pod
       end
     end
 
-    # @return Whether the pod requires ARC.
-    #
-    # TODO: this should be not used anymore.
-    #
-    def requires_arc?
-      top_specification.requires_arc
-    end
+    #--------------------------------------#
 
     private
 
+    # @!group Private helpers
+
     # @return [Array<Pathname>] The implementation files
-    # (the files the need to compiled) of the pod.
+    #         (the files the need to compiled) of the pod.
     #
     def implementation_files
       relative_source_files.reject { |f| f.extname == '.h' ||  f.extname == '.hpp' || f.extname == '.hh' }
@@ -517,17 +526,13 @@ module Pod
     #         folders as the keys and the absolute paths of the header files as
     #         the values.
     #
-    # @todo   This is being overridden in the RestKit 0.9.4 spec, need to do
-    #         something with that, and this method also still exists in
-    #         Specification.
-    #
-    # @todo   This is not overridden anymore in specification refactor and the
-    #         code Pod::Specification#copy_header_mapping can be moved here.
+    # @todo   This is being overridden in the RestKit 0.9.4 spec and that
+    #         override should be fixed.
     #
     def header_mappings(files_by_spec)
       mappings = {}
       files_by_spec.each do |spec, paths|
-        paths = paths - headers_excluded_from_search_paths
+        paths = paths
         dir = spec.header_dir ? (headers_sandbox + spec.header_dir) : headers_sandbox
         paths.each do |from|
           from_relative = from.relative_path_from(root)
@@ -539,20 +544,10 @@ module Pod
     end
 
     # @return [<Pathname>] The name of the folder where the headers of this pod
-    #   will be namespaced.
+    #         will be namespaced.
     #
     def headers_sandbox
       @headers_sandbox ||= Pathname.new(top_specification.name)
-    end
-
-    # @return [<Pathname>] The relative path of the headers that should not be
-    # included in the linker search paths.
-    #
-    def headers_excluded_from_search_paths
-      #TODO
-      # paths = paths_by_spec(:exclude_header_search_paths, '*.{h,hpp,hh}')
-      # paths.values.compact.uniq
-      []
     end
 
     # @!group Paths Patterns
@@ -588,13 +583,13 @@ module Pod
     # Converts patterns of paths to the {Pathname} of the files present in the
     # pod.
     #
-    # @param [String, FileList, Array<String, Pathname>] patterns
+    # @param [String, FileList, Array<String>] patterns
     #         The patterns to expand.
     #
     # @param  [String] dir_pattern
     #         The pattern to add to directories.
     #
-    # @param  [String] exclude_patterns
+    # @param  [Array<String>] exclude_patterns
     #         The exclude patterns to pass to the PathList.
     #
     # @raise  [Informative] If the pod does not exists.
@@ -615,6 +610,10 @@ module Pod
 
       patterns = [ patterns ] if patterns.is_a?(String)
       file_lists = patterns.select { |p| p.is_a?(FileList) }
+      unless file_lists.empty?
+        UI.warn "[#{name}] The usage of Rake FileList is deprecated. Use `exclude_files`."
+      end
+
       glob_patterns = patterns - file_lists
 
       result = []
@@ -628,6 +627,8 @@ module Pod
 
       result.flatten.compact.uniq
     end
+
+    #-------------------------------------------------------------------------#
 
     # A {LocalSourcedPod} is a {LocalPod} that interacts with the files of
     # a folder controlled by the users. As such this class does not alter
