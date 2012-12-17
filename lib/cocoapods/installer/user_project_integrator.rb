@@ -21,7 +21,9 @@ module Pod
       # @return [Project] the pods project which contains the libraries to
       #         integrate.
       #
-      attr_reader :pods_project
+      # attr_reader :pods_project
+
+      attr_reader :sandbox
 
       # @return [Pathname] the path of the installation.
       #
@@ -35,16 +37,16 @@ module Pod
       #
       attr_reader :libraries
 
-      # @param  [Podfile]  podfile @see #podfile.
-      # @param  [Project]  pods_project @see #pods_project.
-      # @param  [Pathname] project_root @see #project_root.
-      # @param  [Library]  libraries @see #libraries.
+      # @param  [Podfile]  podfile @see #podfile
+      # @param  [Sandbox]  sandbox @see #sandbox
+      # @param  [Pathname] project_root @see #project_root
+      # @param  [Library]  libraries @see #libraries
       #
       # @todo   Too many initialization arguments
       #
-      def initialize(podfile, pods_project, project_root, libraries)
+      def initialize(podfile, sandbox, project_root, libraries)
         @podfile      = podfile
-        @pods_project = pods_project
+        @sandbox = sandbox
         @project_root = project_root
         @libraries    = libraries
       end
@@ -73,7 +75,7 @@ module Pod
       #
       def create_workspace
         workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-        [pods_project.path, *user_project_paths].each do |project_path|
+        [sandbox.project_path, *user_project_paths].each do |project_path|
           path = project_path.relative_path_from(workspace_path.dirname).to_s
           workspace << path unless workspace.include?(path)
         end
@@ -191,7 +193,7 @@ module Pod
           @targets ||= library.user_targets.reject do |target|
             target.frameworks_build_phase.files.any? do |build_file|
               file_ref = build_file.file_ref
-              !file_ref.proxy? && file_ref.display_name == library.name
+              !file_ref.proxy? && file_ref.display_name == library.product_name
             end
           end
         end
@@ -311,7 +313,7 @@ module Pod
         #         integration.
         #
         def integration_message
-          "Integrating `#{library.name}' into " \
+          "Integrating `#{library.product_name}` into " \
             "#{'target'.pluralize(targets.size)} "  \
             "`#{targets.map(&:name).to_sentence}` " \
             "of project #{UI.path library.user_project_path}."

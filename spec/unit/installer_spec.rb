@@ -222,3 +222,9 @@ module Pod
     # end
   end
 end
+
+
+  # it 'clears out its headers root when preparing for install' do
+  #   @sandbox.prepare_for_install
+  #   @sandbox.build_headers.root.should.not.exist
+  # end

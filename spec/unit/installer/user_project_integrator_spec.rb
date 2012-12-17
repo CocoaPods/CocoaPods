@@ -21,7 +21,8 @@ module Pod
         end
 
         @project_root = @sample_project_path.dirname
-        @pods_project = Project.new(config.sandbox)
+        @pods_project = Project.new()
+        config.sandbox.project = @pods_project
         @libraries = @podfile.target_definitions.values.map do |target_definition|
           lib = Library.new(target_definition)
           lib.user_project_path = sample_project_path
@@ -31,7 +32,7 @@ module Pod
           lib.user_project = sample_project
           lib
         end
-        @integrator = Installer::UserProjectIntegrator.new(@podfile, @pods_project, @project_root, @libraries)
+        @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, @project_root, @libraries)
       end
 
       it "uses the path of the workspace defined in the podfile" do
@@ -82,11 +83,11 @@ module Pod
         sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
         @sample_project = Xcodeproj::Project.new sample_project_path
         @target = @sample_project.targets.first
-        @pods_project = Project.new(config.sandbox)
         target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
         @lib = Library.new(target_definition)
         @lib.user_project_path = sample_project_path
-        @lib.target = @pods_project.new_target(:static_library, target_definition.label, :ios)
+        pods_project = Project.new()
+        @lib.target = pods_project.new_target(:static_library, target_definition.label, :ios)
         @lib.user_targets = [@target]
         @lib.support_files_root = config.sandbox.root
         @lib.user_project = @sample_project

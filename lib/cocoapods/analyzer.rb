@@ -84,8 +84,10 @@ module Pod
     attr_accessor :update_mode
     alias_method  :update_mode?, :update_mode
 
-    # @return [Bool] Whether the analysis allows predownloads and thus
+    # @return [Bool] Whether the analysis allows pre-downloads and thus
     #         modifications to the sandbox.
+    #
+    # @note   This flag should not be used in installations.
     #
     # @note   This is used by the `pod outdated` command to prevent
     #         modification of the sandbox in the resolution process.
@@ -186,7 +188,7 @@ module Pod
       libraries = []
       podfile.target_definitions.values.each do |target_definition|
         lib                           = Library.new(target_definition)
-        lib.support_files_root        = config.sandbox.root
+        lib.support_files_root        = config.sandbox.library_support_files_dir(lib.name)
 
         if config.integrate_targets?
           lib.user_project_path         = compute_user_project_path(target_definition)
@@ -231,8 +233,13 @@ module Pod
     # @note   As some dependencies might have external sources the resolver is
     #         aware of the {Sandbox} and interacts with it to download the
     #         podspecs of the external sources. This is necessary because the
-    #         resolver needs the specifications to analyze their dependencies
-    #         (which might be from external sources).
+    #         resolver needs their specifications to analyze their
+    #         dependencies.
+    #
+    # @note   The specifications of the external sources which are added,
+    #         modified or removed need to deleted from the sandbox before the
+    #         resolution process. Otherwise the resolver might use an incorrect
+    #         specification instead of pre-downloading it.
     #
     # @note   In update mode the resolver is set to always update the specs
     #         from external sources.
@@ -242,6 +249,14 @@ module Pod
     #
     def resolve_dependencies
       specs_by_target = nil
+
+      if allow_pre_downloads?
+        changed_pods = podfile_state.added + podfile_state.changed + podfile_state.deleted
+        changed_pods.each do |pod_name|
+          podspec = sandbox.specification_path(pod_name)
+          podspec.delete if podspec
+        end
+      end
 
       UI.section "Resolving dependencies of #{UI.path podfile.defined_in_file}" do
         resolver = Resolver.new(sandbox, podfile, locked_dependencies)

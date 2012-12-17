@@ -29,6 +29,12 @@ module Pod
     # @return [String] the name of the library.
     #
     def name
+      target_definition.label.to_s
+    end
+
+    # @return [String] the name of the library.
+    #
+    def product_name
       "lib#{target_definition.label}.a"
     end
 
@@ -81,6 +87,10 @@ module Pod
     # @return [Array<Specification>] the specifications of this library.
     #
     attr_accessor :specs
+
+    # @return [Array<LocalPod>] the pods of the library.
+    #
+    attr_accessor :local_pods
 
     #-------------------------------------------------------------------------#
 

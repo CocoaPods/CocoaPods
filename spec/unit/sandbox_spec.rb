@@ -1,116 +1,131 @@
 require File.expand_path('../../spec_helper', __FILE__)
-require 'tmpdir'
 
-TMP_POD_ROOT = ROOT + "tmp" + "podroot" unless defined? TMP_POD_ROOT
+module Pod
 
-describe Pod::Sandbox do
+  describe Sandbox do
+    extend SpecHelper::TemporaryDirectory
 
-  before do
-    @sandbox = Pod::Sandbox.new(TMP_POD_ROOT)
-  end
-
-  after do
-    @sandbox.implode
-  end
-
-  it "automatically creates the TMP_POD_ROOT if it doesn't exist" do
-    File.directory?(TMP_POD_ROOT).should.be.true
-  end
-
-  it "deletes the entire root directory on implode" do
-    @sandbox.implode
-    File.directory?(TMP_POD_ROOT).should.be.false
-    FileUtils.mkdir(TMP_POD_ROOT) # put it back again
-  end
-
-  it "returns it's headers root" do
-    @sandbox.build_headers.root.should == Pathname.new(File.join(TMP_POD_ROOT, "BuildHeaders"))
-  end
-
-  it "returns it's public headers root" do
-    @sandbox.public_headers.root.should == Pathname.new(File.join(TMP_POD_ROOT, "Headers"))
-  end
-
-  it "can add namespaced headers to it's header path using symlinks and return the relative path" do
-    FileUtils.mkdir_p(@sandbox.root + "ExampleLib/BuildHeaders")
-    namespace_path = Pathname.new("ExampleLib")
-    relative_header_path = Pathname.new("ExampleLib/BuildHeaders/MyHeader.h")
-    File.open(@sandbox.root + relative_header_path, "w") { |file| file.write('hello') }
-    symlink_path = @sandbox.build_headers.add_file(namespace_path, relative_header_path)
-    symlink_path.should.be.symlink
-    File.read(symlink_path).should == 'hello'
-  end
-
-  it 'can add multiple headers at once and return the relative symlink paths' do
-    FileUtils.mkdir_p(@sandbox.root + "ExampleLib/BuildHeaders")
-    namespace_path = Pathname.new("ExampleLib")
-    relative_header_paths = [
-      Pathname.new("ExampleLib/BuildHeaders/MyHeader.h"),
-      Pathname.new("ExampleLib/BuildHeaders/MyOtherHeader.h")
-    ]
-    relative_header_paths.each do |path|
-      File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
+    before do
+      @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')
     end
-    symlink_paths = @sandbox.build_headers.add_files(namespace_path, relative_header_paths)
-    symlink_paths.each do |path|
-      path.should.be.symlink
-      File.read(path).should == "hello"
+
+    it "automatically creates its root if it doesn't exist" do
+      File.directory?(temporary_directory + 'Sandbox').should.be.true
+    end
+
+    it "returns the manifest" do
+      @sandbox.manifest.should == nil
+    end
+
+    it "returns the project" do
+      @sandbox.project.should == nil
+    end
+
+    it "returns the public headers store" do
+      @sandbox.public_headers.root.should == temporary_directory + 'Sandbox/Headers'
+    end
+
+    it "returns the build headers store" do
+      @sandbox.build_headers.root.should == temporary_directory + 'Sandbox/BuildHeaders'
+    end
+
+    it "deletes the entire root directory on implode" do
+      @sandbox.implode
+      File.directory?(temporary_directory + 'Sandbox').should.be.false
+    end
+
+    #--------------------------------------#
+
+    it "returns the path of the manifest" do
+      @sandbox.manifest_path.should == temporary_directory + 'Sandbox/Manifest.lock'
+    end
+
+    it "returns the path of the Pods project" do
+      @sandbox.project_path.should == temporary_directory + 'Sandbox/Pods.xcodeproj'
+    end
+
+    it "returns the path for a Pod" do
+      @sandbox.pod_dir('JSONKit').should == temporary_directory + 'Sandbox/JSONKit'
+    end
+
+    it "returns the directory for the support files of a library" do
+      @sandbox.library_support_files_dir('Pods').should == temporary_directory + 'Sandbox'
+    end
+
+    it "returns the directory where to store the specifications" do
+      @sandbox.specifications_dir.should == temporary_directory + 'Sandbox/Local Podspecs'
+    end
+
+    it "returns the path to a spec file in the 'Local Podspecs' dir" do
+      (@sandbox.root + 'Local Podspecs').mkdir
+      FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.root + 'Local Podspecs')
+      @sandbox.specification_path('BananaLib').should == @sandbox.root + 'Local Podspecs/BananaLib.podspec'
+    end
+
+    #--------------------------------------#
+
+    it "loads the stored specification with the given name" do
+      (@sandbox.root + 'Local Podspecs').mkdir
+      FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.root + 'Local Podspecs')
+      @sandbox.specification('BananaLib').name.should == 'BananaLib'
+    end
+
+    it "stores the list of the names of the pre-downloaded pods" do
+      @sandbox.predownloaded_pods << 'JSONKit'
+      @sandbox.predownloaded_pods.should == ['JSONKit']
     end
   end
 
-  it 'keeps a list of unique header search paths when headers are added' do
-    FileUtils.mkdir_p(@sandbox.root + "ExampleLib/BuildHeaders")
-    namespace_path = Pathname.new("ExampleLib")
-    relative_header_paths = [
-      Pathname.new("ExampleLib/BuildHeaders/MyHeader.h"),
-      Pathname.new("ExampleLib/BuildHeaders/MyOtherHeader.h")
-    ]
-    relative_header_paths.each do |path|
-      File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
+  #---------------------------------------------------------------------------#
+
+  describe Sandbox::HeadersStore do
+    extend SpecHelper::TemporaryDirectory
+
+    before do
+      @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')
+      @header_dir = Sandbox::HeadersStore.new(@sandbox, 'Headers')
     end
-    @sandbox.build_headers.add_files(namespace_path, relative_header_paths)
-    @sandbox.build_headers.search_paths.should.include("${PODS_ROOT}/BuildHeaders/ExampleLib")
+
+    it "returns it's headers root" do
+      @header_dir.root.should == temporary_directory + 'Sandbox/Headers'
+    end
+
+    it "can add namespaced headers to it's header path using symlinks and return the relative path" do
+      FileUtils.mkdir_p(@sandbox.root + "ExampleLib/")
+      namespace_path = Pathname.new("ExampleLib")
+      relative_header_paths = [
+        Pathname.new("ExampleLib/MyHeader.h"),
+        Pathname.new("ExampleLib/MyOtherHeader.h")
+      ]
+      relative_header_paths.each do |path|
+        File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
+      end
+      symlink_paths = @header_dir.add_files(namespace_path, relative_header_paths)
+      symlink_paths.each do |path|
+        path.should.be.symlink
+        File.read(path).should == "hello"
+      end
+    end
+
+    it 'keeps a list of unique header search paths when headers are added' do
+      FileUtils.mkdir_p(@sandbox.root + "ExampleLib/Dir")
+      namespace_path = Pathname.new("ExampleLib")
+      relative_header_paths = [
+        Pathname.new("ExampleLib/Dir/MyHeader.h"),
+        Pathname.new("ExampleLib/Dir/MyOtherHeader.h")
+      ]
+      relative_header_paths.each do |path|
+        File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
+      end
+      @header_dir.add_files(namespace_path, relative_header_paths)
+      @header_dir.search_paths.should.include("${PODS_ROOT}/Headers/ExampleLib")
+    end
+
+    it 'always adds the Headers root to the header search paths' do
+      @header_dir.search_paths.should.include("${PODS_ROOT}/Headers")
+    end
   end
 
-  it 'always adds the Headers root to the header search paths' do
-    @sandbox.build_headers.search_paths.should.include("${PODS_ROOT}/BuildHeaders")
-  end
+  #--------------------------------------#
 
-  it 'clears out its headers root when preparing for install' do
-    @sandbox.prepare_for_install
-    @sandbox.build_headers.root.should.not.exist
-  end
-
-  it "returns the path to a spec file in the 'Local Podspecs' dir" do
-    (@sandbox.root + 'Local Podspecs').mkdir
-    FileUtils.cp(fixture('banana-lib') + 'BananaLib.podspec', @sandbox.root + 'Local Podspecs')
-    @sandbox.podspec_for_name('BananaLib').should == @sandbox.root + 'Local Podspecs/BananaLib.podspec'
-  end
-
-  it "returns a LocalPod for a spec file in the sandbox" do
-    (@sandbox.root + 'Local Podspecs').mkdir
-    FileUtils.cp(fixture('banana-lib') + 'BananaLib.podspec', @sandbox.root + 'Local Podspecs')
-    pod = @sandbox.installed_pod_named('BananaLib', Pod::Platform.ios)
-    pod.should.be.instance_of Pod::LocalPod
-    pod.top_specification.name.should == 'BananaLib'
-  end
-
-  it "returns a LocalPod for a spec instance which source is expected to be in the sandbox" do
-    (@sandbox.root + 'Local Podspecs').mkdir
-    FileUtils.cp(fixture('banana-lib') + 'BananaLib.podspec', @sandbox.root + 'Local Podspecs')
-    spec = Pod::Specification.from_file(fixture('banana-lib') + 'BananaLib.podspec')
-    pod = @sandbox.local_pod_for_spec(spec, Pod::Platform.ios)
-    pod.should.be.instance_of Pod::LocalPod
-    pod.top_specification.name.should == 'BananaLib'
-  end
-
-  it "always returns the same cached LocalPod instance for the same spec and platform" do
-    (@sandbox.root + 'Local Podspecs').mkdir
-    FileUtils.cp(fixture('banana-lib') + 'BananaLib.podspec', @sandbox.root + 'Local Podspecs')
-    spec = Pod::Specification.from_file(@sandbox.root + 'Local Podspecs/BananaLib.podspec')
-
-    pod = @sandbox.installed_pod_named('BananaLib', Pod::Platform.ios)
-    @sandbox.installed_pod_named('BananaLib', Pod::Platform.ios).should.eql pod
-    @sandbox.local_pod_for_spec(spec, Pod::Platform.ios).should.eql pod
-  end
 end

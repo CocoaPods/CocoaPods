@@ -160,6 +160,12 @@ module Pod
 
     # Deletes any path that is not used by the pod.
     #
+    # @todo  [#529] Podspecs should not be preserved anymore to prevent user
+    #        confusion. Currently we are copying the ones form external sources
+    #        in `Local Podspecs` and this feature is not needed anymore.
+    #        I think that copying all the used podspecs would be helpful for
+    #        debugging.
+    #
     # @return [void]
     #
     def clean!
@@ -491,15 +497,14 @@ module Pod
     # @return [void] Copies the pods headers to the sandbox.
     #
     def link_headers
-      @sandbox.build_headers.add_search_path(headers_sandbox)
-      @sandbox.public_headers.add_search_path(headers_sandbox)
-
+      sandbox.build_headers.add_search_path(headers_sandbox)
       header_mappings(header_files_by_spec).each do |namespaced_path, files|
-        @sandbox.build_headers.add_files(namespaced_path, files)
+        sandbox.build_headers.add_files(namespaced_path, files)
       end
 
+      sandbox.public_headers.add_search_path(headers_sandbox)
       header_mappings(public_header_files_by_spec).each do |namespaced_path, files|
-        @sandbox.public_headers.add_files(namespaced_path, files)
+        sandbox.public_headers.add_files(namespaced_path, files)
       end
     end
 

@@ -76,7 +76,7 @@ module Pod
       it "generates the libraries which represent the target definitions" do
         @analyzer.analyze
         libs = @analyzer.libraries
-        libs.map(&:name).should == ['libPods.a']
+        libs.map(&:name).should == ['Pods']
         lib = libs.first
         lib.support_files_root.should == config.sandbox.root
 
@@ -122,6 +122,15 @@ module Pod
           "SVPullToRefresh (0.4)",
           "libextobjc/EXTKeyPathCoding (0.2.3)"
         ]
+      end
+
+      it "removes the specifications of the changed pods to prevent confusion in the resolution process" do
+        @analyzer.allow_pre_downloads = true
+        podspec = @analyzer.sandbox.root + 'Local Podspecs/JSONKit.podspec'
+        podspec.dirname.mkpath
+        File.open(podspec, "w") { |f| f.puts('test') }
+        @analyzer.analyze
+        podspec.should.not.exist?
       end
 
       it "adds the specifications to the correspondent libraries in after the resolution" do

@@ -7,27 +7,21 @@ module Pod
     #
     class TargetInstaller
 
-      # @return [Project] The Pods project.
+      # @return [Sandbox] sandbox the sandbox where the support files should
+      #         be generated.
       #
-      attr_reader :project
+      attr_reader :sandbox
 
       # @return [Library] The library whose target needs to be generated.
       #
       attr_reader :library
 
-      # @return [Array<LocalPod>] The pods are required by the target
-      #         definition of this installer.
-      #
-      attr_reader :pods
-
       # @param  [Project]           project @see project
       # @param  [TargetDefinition]  target_definition @see target_definition
-      # @param  [Array<LocalPod>]   pods @see pods
       #
-      def initialize(project, library, pods)
-        @project = project
+      def initialize(sandbox, library)
+        @sandbox = sandbox
         @library = library
-        @pods    = pods
       end
 
       # Creates the target in the Pods project and its support files.
@@ -211,11 +205,14 @@ module Pod
       attr_reader :xcconfig_file_ref
 
 
-      # @return [Sandbox] sandbox the sandbox where the support files should
-      #         be generated.
+      # @return [Project] the Pods project of the sandbox.
       #
-      def sandbox
-        project.sandbox
+      def project
+        sandbox.project
+      end
+
+      def pods
+        library.local_pods
       end
 
       # @return [TargetDefinition] the target definition of the library.

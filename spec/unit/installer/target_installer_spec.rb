@@ -12,18 +12,19 @@ module Pod
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions[:default]
-        @project = Project.new(config.sandbox)
+        @project = Project.new
+        config.sandbox.project = @project
 
         @library = Library.new(@target_definition)
         @library.platform = Platform.new(:ios, '6.0')
         @library.support_files_root = config.sandbox.root
         @library.user_project_path  = config.sandbox.root + '../user_project.xcodeproj'
         @library.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
-
         specification = fixture_spec('banana-lib/BananaLib.podspec')
         @pod = LocalPod.new(specification, config.sandbox, @library.platform)
+        @library.local_pods = [@pod]
 
-        @installer = TargetInstaller.new(@project, @library, [@pod])
+        @installer = TargetInstaller.new(config.sandbox, @library)
 
         specification.prefix_header_contents = '#import "BlocksKit.h"'
         @pod.stubs(:root).returns(Pathname.new(fixture('banana-lib')))

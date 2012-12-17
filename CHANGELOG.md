@@ -38,6 +38,11 @@
 - It is now possible to specify default values for the configuration in `~/.cocoapods/config.yaml`.
 - CocoaPods now keeps track of the checksum of the specifications of the installed Pods and reinstalls them if needed.
 
+###### Bug fixes
+
+- CocoaPods is not confused anymore by to dependencies from external sources.
+  [#548](https://github.com/CocoaPods/CocoaPods/issues/548)
+
 ###### Codebase
 
 - Major clean up and refactor of the whole code base, with great reduction of

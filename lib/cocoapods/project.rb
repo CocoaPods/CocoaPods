@@ -11,21 +11,15 @@ module Pod
 
     # @return [Sandbox] the sandbox that contains the project.
     #
-    attr_reader :sandbox
+    # attr_reader :sandbox
 
     # @param  [Sandbox] sandbox @see #sandbox
     #
-    def initialize(sandbox)
-      super(nil)
-      @sandbox = sandbox
+    def initialize(xcodeproj = nil)
+      super
+      # @sandbox = sandbox
       @support_files_group = new_group('Targets Support Files')
       @libraries = []
-    end
-
-    # @return [Pathname] the path of the Pods project.
-    #
-    def path
-      sandbox.project_path
     end
 
     # @return [String] a string representation suited for debugging.
@@ -90,7 +84,7 @@ module Pod
     #
     def add_podfile(podfile_path)
       podfile_path = Pathname.new(podfile_path)
-      podfile_ref  = new_file(podfile_path.relative_path_from(path.dirname))
+      podfile_ref  = new_file(podfile_path)
       podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
       podfile_ref
     end

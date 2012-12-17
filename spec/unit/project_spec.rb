@@ -3,19 +3,11 @@ require File.expand_path('../../spec_helper', __FILE__)
 describe Pod::Project do
   describe "In general" do
     before do
-      @project = Pod::Project.new(config.sandbox)
-    end
-
-    it "returns the sandbox used for the project" do
-      @project.sandbox.should == config.sandbox
+      @project = Pod::Project.new(nil)
     end
 
     it "creates the support file group on initialization" do
       @project.support_files_group.name.should == 'Targets Support Files'
-    end
-
-    it "returns its path" do
-      @project.path.should == config.sandbox.project_path
     end
 
     it "returns the `Pods` group" do
@@ -43,7 +35,7 @@ describe Pod::Project do
     end
 
     it "adds the Podfile configured as a Ruby file" do
-      @project.add_podfile(config.podfile_path)
+      @project.add_podfile('../Podfile')
       f = @project['Podfile']
       f.name.should == 'Podfile'
       f.source_tree.should == 'SOURCE_ROOT'

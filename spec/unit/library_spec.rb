@@ -17,8 +17,12 @@ module Pod
         @lib.label.should == 'Pods'
       end
 
+      it "returns its name" do
+        @lib.name.should == 'Pods'
+      end
+
       it "returns the name of its product" do
-        @lib.name.should == 'libPods.a'
+        @lib.product_name.should == 'libPods.a'
       end
     end
 
