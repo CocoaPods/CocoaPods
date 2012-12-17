@@ -20,13 +20,13 @@ def create_analyzer
   lockfile = Pod::Lockfile.new(hash)
 
   SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-  analyzer = Pod::Analyzer.new(config.sandbox, podfile, lockfile)
+  analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, lockfile)
 end
 
 #-----------------------------------------------------------------------------#
 
 module Pod
-  describe Analyzer do
+  describe Installer::Analyzer do
 
     before do
       @analyzer = create_analyzer

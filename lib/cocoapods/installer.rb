@@ -28,6 +28,7 @@ module Pod
   #
   class Installer
 
+    autoload :Analyzer,              'cocoapods/installer/analyzer'
     autoload :TargetInstaller,       'cocoapods/installer/target_installer'
     autoload :UserProjectIntegrator, 'cocoapods/installer/user_project_integrator'
 
