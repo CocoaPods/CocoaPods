@@ -310,7 +310,7 @@ module Pod
           is_changed = lambda do |name|
             spec = root_specs.find { |spec| spec.name == name }
             spec.version != sandbox_lockfile.version(name) \
-            || spec.checksum != sandbox_lockfile.version(name) \
+            || spec.checksum != sandbox_lockfile.checksum(name) \
             || resolved_subspecs_names[name] =! sandbox_subspecs_names[name] \
           end
 
