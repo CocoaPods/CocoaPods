@@ -37,8 +37,7 @@ module Pod
       # @return [void]
       #
       def run_install_with_update(update)
-        sandbox   = Sandbox.new(config.project_pods_root)
-        installer = Installer.new(sandbox, config.podfile, config.lockfile)
+        installer = Installer.new(config.sandbox, config.podfile, config.lockfile)
         installer.update_mode = update
         installer.install!
       end
