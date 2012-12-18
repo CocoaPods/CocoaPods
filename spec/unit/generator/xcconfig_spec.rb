@@ -88,7 +88,7 @@ module Pod
 
     #-----------------------------------------------------------------------#
 
-    extend SpecHelper::TemporaryDirectory
+    
 
     it "saves the xcconfig" do
       path = temporary_directory + 'sample.xcconfig'

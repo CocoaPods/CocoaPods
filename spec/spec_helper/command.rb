@@ -1,5 +1,3 @@
-require 'spec_helper/temporary_directory'
-
 module SpecHelper
   module Command
     def argv(*argv)

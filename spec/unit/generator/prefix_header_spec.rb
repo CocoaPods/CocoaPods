@@ -57,7 +57,7 @@ describe PrefixHeader = Pod::Generator::PrefixHeader do
     @gen.generate.should.include?('#import <Cocoa/Cocoa.h>')
   end
 
-  extend SpecHelper::TemporaryDirectory
+  
 
   it "writes the prefix header file to the disk" do
     path = temporary_directory + 'Test.pch'

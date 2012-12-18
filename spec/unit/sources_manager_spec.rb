@@ -34,7 +34,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe "Updating Sources" do
-      extend SpecHelper::TemporaryDirectory
       extend SpecHelper::TemporaryRepos
 
       it "update source backed by a git repository" do
@@ -101,7 +100,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe "Master repo" do
-      extend SpecHelper::TemporaryDirectory
 
       it "returns the master repo dir" do
         SourcesManager.master_repo_dir.to_s.should.match /fixtures\/spec-repos\/master/

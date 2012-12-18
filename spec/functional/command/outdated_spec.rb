@@ -2,7 +2,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Command::Outdated do
-    extend SpecHelper::TemporaryDirectory
+    
     extend SpecHelper::TemporaryRepos
 
     it "tells the user that no Podfile was found in the current working dir" do

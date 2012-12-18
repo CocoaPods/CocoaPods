@@ -1,15 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe Pod::Generator::DummySource do
-  extend SpecHelper::TemporaryDirectory
-
-  before do
-    setup_temporary_directory
-  end
-
-  after do
-    teardown_temporary_directory
-  end
+  
 
   it "generates a dummy sourcefile with the appropriate class for the class name identifier" do
     generator = Pod::Generator::DummySource.new('SomeIdentification')

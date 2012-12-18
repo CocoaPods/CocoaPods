@@ -4,7 +4,6 @@ module Pod
   describe TargetInstaller = Installer::TargetInstaller do
 
     describe "In General" do
-      extend SpecHelper::TemporaryDirectory
 
       before do
         @podfile = Podfile.new do

@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Command::Push do
     extend SpecHelper::Command
-    extend SpecHelper::TemporaryDirectory
+    
     extend SpecHelper::TemporaryRepos
 
     before do

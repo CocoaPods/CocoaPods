@@ -20,12 +20,6 @@ def generate_podfile(pods = ['JSONKit'])
     pods.each { |name| pod name }
   end
 end
-
-# it 'tells each pod to link its headers' do
-#   @pods[0].expects(:link_headers)
-#   do_install!
-# end
-
 module Pod
   describe Installer do
 
@@ -35,18 +29,22 @@ module Pod
     #   config.project_pods_root = @sandbox.root
     #   FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
     # end
+    #
+
+    # it 'tells each pod to link its headers' do
+    #   @pods[0].expects(:link_headers)
+    #   do_install!
+    # end
 
     describe "Concerning pre-installation computations" do
-        # @sandbox = temporary_sandbox
-        # config.project_pods_root = temporary_sandbox.root
-        # FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
+      # @sandbox = temporary_sandbox
+      # config.project_pods_root = temporary_sandbox.root
+      # FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
 
-        # resolver = Resolver.new(podfile, nil, @sandbox)
-        # @installer = Installer.new(resolver)
-        # target_installer = @installer.target_installers.first
-        # target_installer.install
-
-
+      # resolver = Resolver.new(podfile, nil, @sandbox)
+      # @installer = Installer.new(resolver)
+      # target_installer = @installer.target_installers.first
+      # target_installer.install
 
       before do
         podfile    = generate_podfile
@@ -56,23 +54,21 @@ module Pod
         @installer.install!
       end
 
-      # describe "#analyze" do
-      #   it "doesn't affects creates changes in the file system" do
-      #   end
-      # end
-
-# <<<<<<< HEAD
       it "marks all pods as added if there is no lockfile" do
         true.should.be.true
         # @installer.pods_added_from_the_lockfile.should == ['JSONKit']
-# =======
-#       it "adds the files of the pod to the Pods project only once" do
-#         @installer.install!
-#         group = @installer.project.pods.groups.find { |g| g.name == 'Reachability' }
-#         group.files.map(&:name).sort.should == ["Reachability.h", "Reachability.m"]
-# >>>>>>> core-extraction
       end
 
+      #       it "adds the files of the pod to the Pods project only once" do
+      #         @installer.install!
+      #         group = @installer.project.pods.groups.find { |g| g.name == 'Reachability' }
+      #         group.files.map(&:name).sort.should == ["Reachability.h", "Reachability.m"]
+      #         end
+
+      # it 'clears out its headers root when preparing for install' do
+      #   @sandbox.prepare_for_install
+      #   @sandbox.build_headers.root.should.not.exist
+      # end
     end
 
     # describe "by default" do
@@ -91,22 +87,7 @@ module Pod
     #     target_installer.generate_xcconfig([], @sandbox)
     #     @xcconfig = target_installer.xcconfig.to_hash
     #   end
-    #   it "generates a BridgeSupport metadata file from all the pod headers" do
-    #     podfile = Podfile.new do
-    #       platform :osx
-    #       pod 'ASIHTTPRequest'
-    #     end
-
-    #     FileUtils.cp_r(fixture('integration/ASIHTTPRequest'), @sandbox.root + 'ASIHTTPRequest')
-    #     installer = Installer.new(@sandbox, podfile)
-    #     pods = installer.specifications.map do |spec|
-    #       LocalPod.new(spec, installer.sandbox, podfile.target_definitions[:default].platform)
-    #     end
-    #     expected = pods.map { |pod| pod.header_files }.flatten.map { |header| config.project_pods_root + header }
-    #     expected.size.should > 0
-    #     installer.target_installers.first.bridge_support_generator_for(pods, installer.sandbox).headers.should == expected
-    #   end
-
+    #
     #   it "omits empty target definitions" do
     #     podfile = Podfile.new do
     #       platform :ios
@@ -116,16 +97,6 @@ module Pod
     #     end
     #     installer = Installer.new(@sandbox, podfile)
     #     installer.target_installers.map(&:target_definition).map(&:name).should == [:not_empty]
-    #   end
-
-    #   it "adds the user's build configurations" do
-    #     path = fixture('SampleProject/SampleProject.xcodeproj')
-    #     podfile = Podfile.new do
-    #       platform :ios
-    #       xcodeproj path, 'App Store' => :release
-    #     end
-    #     installer = Installer.new(@sandbox, podfile)
-    #     installer.project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
     #   end
 
     #   it "forces downloading of the `bleeding edge' version of a pod" do
@@ -141,8 +112,6 @@ module Pod
     #     installer.download_pod(pod)
     #   end
     # end
-
-
 
     # describe "concerning multiple pods originating form the same spec" do
     #   extend SpecHelper::Fixture
@@ -223,8 +192,3 @@ module Pod
   end
 end
 
-
-  # it 'clears out its headers root when preparing for install' do
-  #   @sandbox.prepare_for_install
-  #   @sandbox.build_headers.root.should.not.exist
-  # end

@@ -3,7 +3,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 module Pod
 
   describe Sandbox do
-    extend SpecHelper::TemporaryDirectory
+    
 
     before do
       @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')
@@ -79,7 +79,7 @@ module Pod
   #---------------------------------------------------------------------------#
 
   describe Sandbox::HeadersStore do
-    extend SpecHelper::TemporaryDirectory
+    
 
     before do
       @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')

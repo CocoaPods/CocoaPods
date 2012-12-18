@@ -4,7 +4,7 @@ module Pod
   describe Installer::UserProjectIntegrator do
 
     describe "In general" do
-      extend SpecHelper::TemporaryDirectory
+
       before do
         @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
         sample_project_path = @sample_project_path

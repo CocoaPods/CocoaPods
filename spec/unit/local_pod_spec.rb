@@ -334,7 +334,7 @@ describe Pod::LocalPod do
   end
 
   describe "concerning a Pod with a local source" do
-    extend SpecHelper::TemporaryDirectory
+    
 
     before do
       @local_path = temporary_directory + 'localBanana'

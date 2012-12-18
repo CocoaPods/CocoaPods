@@ -45,7 +45,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe "Single platform" do
-      extend SpecHelper::TemporaryDirectory
 
       # it "includes automatically inherited subspecs" do
       # end
@@ -199,7 +198,6 @@ module Pod
     [:ios, :osx].each do |test_platform|
 
       describe "Multi-platform (#{test_platform})" do
-        extend SpecHelper::TemporaryDirectory
 
         before do
           FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)

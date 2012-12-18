@@ -1,3 +1,5 @@
+require 'octokit'
+
 module SpecHelper
   module Github
     def expect_github_repo_request(data = nil)

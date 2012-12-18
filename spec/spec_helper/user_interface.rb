@@ -1,4 +1,7 @@
 module Pod
+
+  # @note as some outputs wraps strings
+  #
   module UI
     @output = ''
     @warnings = ''

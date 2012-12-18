@@ -4,7 +4,6 @@ module Pod
   describe Command::Repo do
     describe "In general" do
       extend SpecHelper::Command
-      extend SpecHelper::TemporaryDirectory
       extend SpecHelper::TemporaryRepos
 
       before do

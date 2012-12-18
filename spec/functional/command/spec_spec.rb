@@ -4,7 +4,6 @@ module Pod
   describe Command::Spec do
 
     describe "In general" do
-      extend SpecHelper::TemporaryDirectory
 
       it "complains for wrong parameters" do
         lambda { run_command('spec') }.should.raise CLAide::Help
@@ -20,7 +19,6 @@ module Pod
 
     describe "create subcommand" do
       extend SpecHelper::Github
-      extend SpecHelper::TemporaryDirectory
       extend SpecHelper::TemporaryRepos
 
       it "creates a new podspec stub file" do
@@ -98,7 +96,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe "lint subcommand" do
-      extend SpecHelper::TemporaryDirectory
       extend SpecHelper::TemporaryRepos
 
       it "complains if it can't find any spec to lint" do
@@ -149,8 +146,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe "cat subcommand" do
-
-      extend SpecHelper::TemporaryDirectory
       extend SpecHelper::TemporaryRepos
 
       it "complains it cant't find a spec to read" do

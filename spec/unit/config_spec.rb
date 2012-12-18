@@ -18,7 +18,6 @@ module Pod
     end
 
     describe "Concerning a user's project, which is expected in the current working directory" do
-      extend SpecHelper::TemporaryDirectory
 
       before do
         config.project_root = temporary_directory
