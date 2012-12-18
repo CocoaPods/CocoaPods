@@ -189,7 +189,7 @@ module Pod
         libraries = []
         podfile.target_definitions.values.each do |target_definition|
           lib                           = Library.new(target_definition)
-          lib.support_files_root        = config.sandbox.library_support_files_dir(lib.name)
+          lib.support_files_root        = sandbox.library_support_files_dir(lib.name)
 
           if config.integrate_targets?
             lib.user_project_path         = compute_user_project_path(target_definition)

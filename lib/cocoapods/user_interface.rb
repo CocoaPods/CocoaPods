@@ -120,7 +120,8 @@ module Pod
       #
       # return [void]
       #
-      def warn(message, actions = [])
+      def warn(message, actions = [], verbose_only = false)
+        return if config.silent? && verbose_only
         STDERR.puts("\n[!] #{message}".yellow)
         actions.each do |action|
           indented = wrap_string(action, "    - ")

@@ -84,7 +84,6 @@ module Pod
     # the UI indentation lever.
     #
     class Indenter < ::Array
-      include Config::Mixin
 
       # @return [Fixnum] The indentation level of the UI.
       #

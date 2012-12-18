@@ -16,8 +16,6 @@ module Pod
   #
   class Resolver
 
-    include Config::Mixin
-
     # @return [Sandbox] the Sandbox used by the resolver to find external
     #         dependencies.
     #
@@ -76,7 +74,7 @@ module Pod
     #         definition.
     #
     def resolve
-      @cached_sources  = Source::Aggregate.new(config.repos_dir)
+      @cached_sources  = SourcesManager.aggregate
       @cached_sets     = {}
       @cached_specs    = {}
       @specs_by_target = {}

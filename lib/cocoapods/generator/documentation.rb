@@ -5,7 +5,6 @@ module Pod
   module Generator
 
     class Documentation
-      include Config::Mixin
       extend Executable
 
       executable :appledoc
@@ -86,6 +85,12 @@ module Pod
       #       projects.
       #
       def generate(install = false)
+        if `which appledoc`.strip.empty?
+          UI.warn "[!] Skipping documentation generation because appledoc can't be found.",
+            actions = [], verbose_only = true
+          return
+        end
+
         options = appledoc_options
         options += ['--output', @target_path.to_s]
         options += install ? ['--create-docset'] : ['--no-create-docset']
@@ -97,11 +102,9 @@ module Pod
         end
 
         if $?.exitstatus != 0
-          puts "[!] Appledoc encountered an error (exitstatus: #{$?.exitstatus}), an update might be available to solve the issue." unless config.silent?
+          UI.warn "[!] Appledoc encountered an error (exitstatus: #{$?.exitstatus}), an update might be available to solve the issue."
         end
 
-      rescue Informative
-        puts "[!] Skipping documentation generation because appledoc can't be found." if config.verbose?
       end
     end
   end
