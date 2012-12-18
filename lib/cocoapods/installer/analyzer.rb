@@ -373,27 +373,26 @@ module Pod
       # @return [Pathname] the path of the user project.
       #
       def compute_user_project_path(target_definition)
-
         if target_definition.user_project_path
-          user_project_path = Pathname.new(config.project_root + target_definition.user_project_path)
-          user_project_path = user_project_path.sub_ext '.xcodeproj'
-          unless user_project_path.exist?
+          path = config.project_root + target_definition.user_project_path
+          path = "#{path}.xcodeproj" unless File.extname(path) == '.xcodeproj'
+          path = Pathname.new(path)
+          unless path.exist?
             raise Informative, "Unable to find the Xcode project " \
-              "`#{user_project_path}` for the target `#{target_definition.label}`."
+              "`#{path}` for the target `#{target_definition.label}`."
           end
 
         else
           xcodeprojs = Pathname.glob(config.project_root + '*.xcodeproj')
           if xcodeprojs.size == 1
-            user_project_path = xcodeprojs.first
+            path = xcodeprojs.first
           else
             raise Informative, "Could not automatically select an Xcode project. " \
               "Specify one in your Podfile like so:\n\n" \
               "    xcodeproj 'path/to/Project.xcodeproj'\n"
           end
         end
-
-        user_project_path
+        path
       end
 
       # Returns a list of the targets from the project of {TargetDefinition}
