@@ -18,18 +18,16 @@ module Pod
     # @param  [Symbol] name
     #         the name of the executable.
     #
-    # @raise  If the executable could not be located.
-    #
     # @return [void]
     #
     def executable(name)
 
       define_method(name) do |command|
-        Executable.execute_command(bin, command, false)
+        Executable.execute_command(name, command, false)
       end
 
       define_method(name.to_s + "!") do |command|
-        Executable.execute_command(bin, command, true)
+        Executable.execute_command(name, command, true)
       end
     end
 
@@ -44,16 +42,18 @@ module Pod
     # @param  [Bool] raise_on_failure
     #         Whether it should raise if the command fails.
     #
+    # @raise  If the executable could not be located.
+    #
     # @raise  If the command fails and the `raise_on_failure` is set to true.
     #
     # @return [String] the output of the command (STDOUT and STDERR).
     #
     # @todo   Find a way to display the live output of the commands.
     #
-    def self.execute_command(bin, command, raise_on_failure = false)
+    def self.execute_command(executable, command, raise_on_failure)
 
-      bin = `which #{name}`.strip
-      raise Informative, "Unable to locate the executable `#{name}`" if bin.empty?
+      bin = `which #{executable}`.strip
+      raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
 
       require 'open4'
 
