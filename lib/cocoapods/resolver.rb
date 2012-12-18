@@ -3,9 +3,16 @@ module Pod
   # The resolver is responsible of generating a list of specifications grouped
   # by target for a given Podfile.
   #
-  # Its current implementation is naive, in the sense that it can't do full
-  # automatic resolves like Bundler:
-  # [how-does-bundler-bundle](http://patshaughnessy.net/2011/9/24/how-does-bundler-bundle)
+  # @todo Its current implementation is naive, in the sense that it can't do full
+  #   automatic resolves like Bundler:
+  #   [how-does-bundler-bundle](http://patshaughnessy.net/2011/9/24/how-does-bundler-bundle)
+  #
+  # @todo Another limitation is that the order of the dependencies matter. The
+  #   current implementation could create issues, for example, if a
+  #   specification is loaded for a target definition and later for another
+  #   target is set in head mode. The first specification will not be in head
+  #   mode.
+  #
   #
   class Resolver
 
@@ -25,17 +32,18 @@ module Pod
     #
     attr_reader :locked_dependencies
 
-    # @param [Sandbox] sandbox @see sandbox
-    # @param [Podfile] podfile @see podfile
-    # @param [Array<Dependency>] locked_dependencies @see locked_dependencies
+    # @param  [Sandbox] sandbox @see sandbox
+    # @param  [Podfile] podfile @see podfile
+    # @param  [Array<Dependency>] locked_dependencies @see locked_dependencies
     #
     def initialize(sandbox, podfile, locked_dependencies = [])
       @sandbox = sandbox
       @podfile = podfile
       @locked_dependencies = locked_dependencies
+      @allow_pre_downloads = true
     end
 
-    # @return [Bool] whether the resolver should update the external specs
+    # @return [Bool] Whether the resolver should update the external specs
     #         in the resolution process. This option is used for detecting
     #         changes in with the Podfile without affecting the existing Pods
     #         installation
@@ -43,16 +51,23 @@ module Pod
     # @note   This option is used by `pod outdated`.
     #
     attr_accessor :update_external_specs
+    alias_method  :update_external_specs?, :update_external_specs
 
-    # @todo   Implement non destructive resolution.
+    # @return [Bool] Whether pre-downloads should be allowed. Pre-downloads
+    #         change the state of the sandbox and should be allowed only during
+    #         installations. Defaults to true.
+    #
+    # @note   Enabling this if the Podfile and the sandbox are not in sync
+    #         might result in an exception.
     #
     attr_accessor :allow_pre_downloads
+    alias_method  :allow_pre_downloads?, :allow_pre_downloads
 
     #-------------------------------------------------------------------------#
 
-    # @!group Resolution
-
     public
+
+    # @!group Resolution
 
     # Identifies the specifications that should be installed.
     #
@@ -65,7 +80,6 @@ module Pod
       @cached_sets     = {}
       @cached_specs    = {}
       @specs_by_target = {}
-      # @pods_from_external_sources = []
 
       podfile.target_definitions.values.each do |target|
         UI.section "Resolving dependencies for target `#{target.name}' (#{target.platform})" do
@@ -87,57 +101,48 @@ module Pod
     #
     attr_reader :specs_by_target
 
-    # @return [Array<Specification>] All the specifications resolved.
-    #
-    def specs
-      specs_by_target.values.flatten.uniq
-    end
-
-    # @return [Array<Strings>] The name of the pods that have an
-    #         external source.
-    #
-    # TODO:   Not sure if needed.
-    #
-    # attr_reader :pods_from_external_sources
-
     #-------------------------------------------------------------------------#
-
-    # !@ Resolution context
 
     private
 
+    # !@ Resolution context
+
     # @return [Source::Aggregate] A cache of the sources needed to find the
     #         podspecs.
+    #
+    # @note   The sources are cached because frequently accessed by the
+    #         resolver and loading them requires disk activity.
     #
     attr_accessor :cached_sources
 
     # @return [Hash<String => Set>] A cache that keeps tracks of the sets
     #         loaded by the resolution process.
     #
-    # @note   Sets keep track of the TODO:
+    # @note   Sets store the resolved dependencies and return the highest
+    #         available specification found in the sources. This is done
+    #         globally and not per target definition because there can be just
+    #         one Pod installation, so different version of the same Pods for
+    #         target definitions are not allowed.
     #
     attr_accessor :cached_sets
 
-    #
+    # @return [Hash<String => Specification>] The loaded specifications grouped
+    #         by name.
     #
     attr_accessor :cached_specs
 
-    #
-    #
-    attr_writer :specs_by_target
-
-
     #-------------------------------------------------------------------------#
 
-    # !@ Resolution helpers
-
     private
+
+    # !@ Helpers
 
     # Resolves recursively the dependencies of a specification and stores them
     # in the @cached_specs ivar.
     #
-    # @param  [Podfile, Specification] dependent_spec
-    #         the specification whose dependencies are being resolved.
+    # @param  [Podfile, Specification, #to_s] dependent_spec
+    #         the specification whose dependencies are being resolved. Used
+    #         only for UI purposes.
     #
     # @param  [Array<Dependency>] dependencies
     #         the dependencies of the specification.
@@ -148,19 +153,16 @@ module Pod
     # @note   If there is a locked dependency with the same name of a
     #         given dependency the locked one is used in place of the
     #         dependency of the specification. In this way it is possible to
-    #         not updated the installed pods without without introducing
-    #         dependencies in other target definitions.
-    #
-    # @todo   Just add the requirement to the set?
-    # @todo   Use root name?
+    #         prevent the update of the version of installed pods not changed
+    #         in the Podfile.
     #
     # @note   The recursive process checks if a dependency has already been
-    #         loaded to prevent an infinite loop. For this reason the
-    #         @loaded_specs ivar must be cleaned when changing target
-    #         definition.
+    #         loaded to prevent an infinite loop.
     #
-    #
-    # @todo   The set class should be aware whether it is in head mode.
+    # @note   The set class merges all (of all the target definitions) the
+    #         dependencies and thus it keeps track of whether it is in head
+    #         mode or from an external source because {Dependency#merge}
+    #         preserves this information.
     #
     # @return [void]
     #
@@ -177,7 +179,6 @@ module Pod
             spec = set.specification.subspec_by_name(dependency.name)
             @loaded_specs << spec.name
             cached_specs[spec.name] = spec
-            # @pods_from_external_sources << spec.root_name if dependency.external?
             validate_platform(spec, target_definition)
             spec.activate_platform(target_definition.platform)
             spec.version.head = dependency.head?
@@ -198,18 +199,12 @@ module Pod
     #         the remote. Otherwise the specification is retrieved from the
     #         sandbox that fetches the external source only if needed.
     #
-    # @todo   If the set is loaded from a normal source and then from an
-    #         external one that information is lost.
-    # @todo   Check dependency.specification
-    #
     # @return [Set] the cached set for a given dependency.
     #
     def find_cached_set(dependency)
       name = dependency.root_name
       unless cached_sets[name]
-        if dependency.specification
-          set = Specification::Set::External.new(dependency.specification)
-        elsif dependency.external_source
+        if dependency.external_source
           set = set_from_external_source(dependency)
         else
           set = cached_sources.search(dependency)
@@ -221,20 +216,34 @@ module Pod
 
     # Returns a new set created from an external source
     #
+    # @param  [Dependency] dependency
+    #         The dependency with the external source for which the set is
+    #         needed.
+    #
+    # @return [Set] the set for the dependency.
+    #
     def set_from_external_source(dependency)
       source = ExternalSources.from_dependency(dependency)
-      if update_external_specs
-        spec = source.specification_from_external(sandbox)
+      if allow_pre_downloads?
+        if update_external_specs?
+          spec = source.specification_from_external(sandbox)
+        else
+          spec = source.specification(sandbox)
+        end
       else
-        spec = source.specification(sandbox)
+        spec = sandbox.specification(dependency.name)
+        unless spec
+          raise Informative, "Unable to find the specification for " \
+            "`#{dependency}`. Running `pod install` should fix the issue."
+        end
       end
+
       set = Specification::Set::External.new(spec)
-      set
     end
 
-    # Ensures that a spec is compatible with the platform of a target.
+    # Ensures that a specification is compatible with the platform of a target.
     #
-    # @raise If the spec is not supported by the target.
+    # @raise  If the specification is not supported by the target.
     #
     # @return [void]
     #

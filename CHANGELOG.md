@@ -6,11 +6,12 @@
 ###### TODO
 
 - Add Rake FileList warning.
+- Rake FileList is not working.
 - Enable CocoaPods Core-warnings
+- Bad bug with Specification default values being corroded exponentially in subsequent calls.
 - Dropped script for resources.
 - Added support for `prefix_header_file` in subspecs
 - Added support for `prefix_header_contents` in subspecs
-- LocalPod needs to be updated for some changes done to the DSL
 
 ###### Specification DSL
 
@@ -29,14 +30,14 @@
 
 ###### Enhancements
 
+- Released preview [documentation](docs.cocoapods.org).
 - CocoaPods now has support for working in teams and not committing the Pods folder.
-- Released [documentation](docs.cocoapods.org).
+- CocoaPods now can infer the platform from the integrated targets.
 - Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
 - Added Podfile to the Pods project.
 - The `--no-clean` option of the `pod spec lint` command now displays the Pods project for inspection.
-- CocoaPods now can infer the platform from the integrated targets.
-- It is now possible to specify default values for the configuration in `~/.cocoapods/config.yaml`.
-- CocoaPods now keeps track of the checksum of the specifications of the installed Pods and reinstalls them if needed.
+- It is now possible to specify default values for the configuration in `~/.cocoapods/config.yaml` ([example]()).
+- CocoaPods now checks the checksums of the installed specifications and reinstalls them if needed.
 
 ###### Bug fixes
 

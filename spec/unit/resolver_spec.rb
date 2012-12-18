@@ -4,7 +4,6 @@ module Pod
   describe Resolver do
     describe "In general" do
       before do
-        config.repos_dir = fixture('spec-repos')
         @podfile = Podfile.new do
           platform :ios
           pod 'BlocksKit', '1.5.2'
@@ -26,9 +25,17 @@ module Pod
       end
 
       it "allows to specify whether the external sources should be updated against the remote" do
-        # TODO
         @resolver.update_external_specs = true
         @resolver.update_external_specs.should.be.true
+      end
+
+      it "allows to specify whether the sandbox can be modified and pre-downloads are allowed" do
+        @resolver.allow_pre_downloads = false
+        @resolver.allow_pre_downloads.should.be.false
+      end
+
+      it "allows pre-downloads by default" do
+        @resolver.allow_pre_downloads.should.be.true
       end
 
       #--------------------------------------#
@@ -54,16 +61,6 @@ module Pod
         ]
       end
 
-      it "returns all the resolved specifications" do
-        @resolver.resolve
-        @resolver.specs.map(&:class).uniq.should == [Specification]
-        @resolver.specs.map(&:to_s).should == [
-          "A2DynamicDelegate (2.0.2)",
-          "BlocksKit (1.5.2)",
-          "libffi (3.0.11)"
-        ]
-      end
-
       it "it resolves specifications from external sources" do
         podspec = fixture('integration/Reachability/Reachability.podspec')
         podfile = Podfile.new do
@@ -72,7 +69,8 @@ module Pod
         end
         resolver = Resolver.new(config.sandbox, podfile)
         resolver.resolve
-        resolver.specs.map(&:to_s).should == ['Reachability (3.0.0)']
+        specs = resolver.specs_by_target.values.flatten
+        specs.map(&:to_s).should == ['Reachability (3.0.0)']
       end
     end
 
@@ -80,12 +78,49 @@ module Pod
 
     describe "Resolution" do
       before do
-        config.repos_dir = fixture('spec-repos')
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'BlocksKit', '1.5.2'
         end
         @resolver = Resolver.new(config.sandbox, @podfile)
+      end
+
+      it "cross resolves dependencies" do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'BlocksKit', '=  1.0'
+          pod 'libffi',  '<  3.0'
+        end
+
+        dependant_1_0 = Spec.new do |s|
+          s.name         = 'BlocksKit'
+          s.version      = '1.0'
+          s.platform     = :ios
+          s.dependency   'libffi', '1.0'
+        end
+
+        depended_1_0 = Spec.new do |s|
+          s.name         = 'libffi'
+          s.version      = '1.0'
+          s.platform     = :ios
+        end
+
+        depended_2_0 = Spec.new do |s|
+          s.name         = 'libffi'
+          s.version      = '2.0'
+          s.platform     = :ios
+        end
+
+        Source.any_instance.stubs(:versions).with('BlocksKit').returns([Version.new(1.0)])
+        Source.any_instance.stubs(:specification).with('BlocksKit', Version.new('1.0')).returns(dependant_1_0)
+
+        Source.any_instance.stubs(:versions).with('libffi').returns([Version.new(1.0), Version.new(2.0)])
+        Source.any_instance.stubs(:specification).with('libffi', Version.new('1.0')).returns(depended_1_0)
+        Source.any_instance.stubs(:specification).with('libffi', Version.new('2.0')).returns(depended_2_0)
+
+        resolver = Resolver.new(config.sandbox, @podfile)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should == ["BlocksKit (1.0)", "libffi (1.0)"]
       end
 
       it "holds the context state, such as cached specification sets" do
@@ -132,7 +167,7 @@ module Pod
         }
       end
 
-      it "resolves subspecs with external constraints" do
+      it "handles correctly subspecs from external sources" do
         @podfile = Podfile.new do
           platform :ios
           pod 'MainSpec/FirstSubSpec', :git => 'GIT-URL'
@@ -141,11 +176,6 @@ module Pod
           s.name         = 'MainSpec'
           s.version      = '1.2.3'
           s.platform     = :ios
-          s.license      = 'MIT'
-          s.author       = 'Joe the Plumber'
-          s.summary      = 'A spec with subspecs'
-          s.source       = { :git => '/some/url' }
-          s.requires_arc = true
 
           s.subspec 'FirstSubSpec' do |fss|
             fss.source_files = 'some/file'
@@ -154,10 +184,11 @@ module Pod
         end
         ExternalSources::GitSource.any_instance.stubs(:specification).returns(spec)
         resolver = Resolver.new(config.sandbox, @podfile)
-        resolver.resolve.values.flatten.map(&:name).sort.should == %w{ MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec }
+        specs = resolver.resolve.values.flatten.map(&:name).sort
+        specs.should == %w{ MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec }
       end
 
-      it "marks a specification's version to be a `bleeding edge' version" do
+      it "marks a specification's version to be a HEAD version" do
         podfile = Podfile.new do
           platform :ios
           pod 'FileMD5Hash'
@@ -180,260 +211,52 @@ module Pod
         e.message.should.match(/already activated version/)
       end
 
-      xit "is robust against infinite loops" do
+      it "takes into account locked dependencies" do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', "<= 1.5pre"
+        end
+        resolver = Resolver.new(config.sandbox, podfile)
+        version = resolver.resolve.values.flatten.first.version
+        version.to_s.should == '1.5pre'
 
+        locked_deps = [Dependency.new('JSONKit', "= 1.4")]
+        resolver = Resolver.new(config.sandbox, podfile, locked_deps)
+        version = resolver.resolve.values.flatten.first.version
+        version.to_s.should == '1.4'
       end
-
-      xit "takes into account locked dependencies" do
-
-      end
-
-      xit "transfers the head state of a dependency to a specification" do
-
-      end
-
-      xit "" do
-
-      end
-
-      xit "" do
-
-      end
-
-      xit "" do
-
-      end
-
-      # describe "Concerning Installation mode" do
-      #   before do
-      #     config.repos_dir = fixture('spec-repos')
-      #     @podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'BlocksKit', '1.5.2'
-      #       pod 'JSONKit'
-      #     end
-      #     @specs = [
-      #       Specification.new do |s|
-      #         s.name = "BlocksKit"
-      #         s.version = "1.5.2"
-      #       end,
-      #       Specification.new do |s|
-      #         s.name = "JSONKit"
-      #         s.version = "1.4"
-      #       end ]
-      #     @specs.each { |s| s.activate_platform(:ios) }
-      #     @resolver = Resolver.new(@podfile, @lockfile, stub('sandbox'))
-      #   end
-
-      #   it "doesn't install pods still compatible with the Podfile" do
-      #     @resolver.resolve
-      #     @resolver.should_install?("BlocksKit").should.be.false
-      #     @resolver.should_install?("JSONKit").should.be.false
-      #   end
-
-      #   it "doesn't update the version of pods still compatible with the Podfile" do
-      #     installed = @resolver.resolve.values.flatten.map(&:to_s)
-      #     installed.should.include? "JSONKit (1.4)"
-      #   end
-
-      #   it "doesn't include pods removed from the Podfile" do
-      #     podfile = Podfile.new { platform :ios; pod 'JSONKit' }
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.resolve.values.flatten.map(&:name).should == %w{ JSONKit }
-      #   end
-
-      #   it "reinstalls pods updated in the Podfile" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'JSONKit', '1.5pre'
-      #       pod 'BlocksKit', '1.5.2'
-      #     end
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     installed = @resolver.resolve.values.flatten.map(&:to_s)
-      #     installed.should.include? "BlocksKit (1.5.2)"
-      #     installed.should.include? "JSONKit (1.5pre)"
-      #   end
-
-      #   it "installs pods added to the Podfile" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'JSONKit'
-      #       pod 'BlocksKit'
-      #       pod 'libPusher', '1.3' # New pod
-      #     end
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     installed = @resolver.resolve.values.flatten.map(&:to_s)
-      #     installed.should.include? "libPusher (1.3)"
-      #   end
-
-      #   it "handles head pods" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'JSONKit', :head   # Existing pod switched to head mode
-      #       pod 'libPusher', :head # New pod
-      #     end
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.resolve
-      #     @resolver.should_install?("JSONKit").should.be.true
-      #     @resolver.should_install?("libPusher").should.be.true
-      #   end
-
-      #   it "handles pods from external dependencies" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'libPusher', :git => 'GIT-URL'
-      #     end
-      #     spec = Spec.new do |s|
-      #       s.name         = 'libPusher'
-      #       s.version      = '1.3'
-      #     end
-      #     ExternalSources::GitSource.any_instance.stubs(:specification_from_sandbox).returns(spec)
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.resolve
-      #     @resolver.should_install?("JSONKit").should.be.false
-      #   end
-
-      #   it "doesn't updates the repos if there no change in the pods" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'BlocksKit'
-      #       pod 'JSONKit'
-      #     end
-      #     config.skip_repo_update = false
-      #     Command::Repo.any_instance.expects(:run).never
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.resolve
-      #   end
-
-      #   it "updates the repos if there is a new pod" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'BlocksKit'
-      #       pod 'JSONKit'
-      #       pod 'libPusher' # New pod
-      #     end
-      #     config.skip_repo_update = false
-      #     Command::Repo::Update.any_instance.expects(:run).once
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.resolve
-      #   end
-
-      #   it "doesn't update the repos if config indicate to skip it in any case" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'BlocksKit'
-      #       pod 'JSONKit', :head #changed to head
-      #       pod 'libPusher'      # New pod
-      #     end
-      #     config.skip_repo_update = true
-      #     Command::Repo::Update.any_instance.expects(:run).never
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.resolve
-      #   end
-
-      #   it "updates the repos if there is a new pod" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'BlocksKit'
-      #       pod 'JSONKit', :head #changed to head
-      #     end
-      #     config.skip_repo_update = false
-      #     Command::Repo::Update.any_instance.expects(:run).once
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.resolve
-      #   end
-      # end
-
-      # describe "Concerning Update mode" do
-      #   before do
-      #     config.repos_dir = fixture('spec-repos')
-      #     previous_podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'JSONKit'
-      #       pod 'libPusher'
-      #     end
-      #     @specs = [
-      #       Specification.new do |s|
-      #         s.name = "libPusher"
-      #         s.version = "1.3"
-      #       end,
-      #       Specification.new do |s|
-      #         s.name = "JSONKit"
-      #         s.version = "1.4"
-      #       end ]
-      #     @specs.each { |s| s.activate_platform(:ios) }
-      #     @lockfile = Lockfile.generate(previous_podfile, @specs)
-      #     @podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'BlocksKit', '1.5.2'
-      #       pod 'JSONKit'
-      #       pod 'libPusher'
-      #     end
-      #     @resolver = Resolver.new(@podfile, @lockfile, stub('sandbox'))
-      #     @resolver.update_mode = true
-      #   end
-
-      #   it "identifies the pods that can be updated" do
-      #     installed = @resolver.resolve.values.flatten.map(&:to_s)
-      #     installed.should.include? "JSONKit (999.999.999)"
-      #     @resolver.should_install?("JSONKit").should.be.true
-      #   end
-
-      #   it "respects the constraints of the podfile" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'BlocksKit', '1.5.2'
-      #       pod 'JSONKit', '1.4'
-      #     end
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.update_mode = true
-      #     installed = @resolver.resolve.values.flatten.map(&:to_s)
-      #     installed.should.include? "JSONKit (1.4)"
-      #     @resolver.should_install?("JSONKit").should.be.false
-      #   end
-
-      #   it "installs new pods" do
-      #     installed = @resolver.resolve.values.flatten.map(&:to_s)
-      #     installed.join(' ').should.include?('BlocksKit')
-      #     @resolver.should_install?("BlocksKit").should.be.true
-      #   end
-
-      #   it "it always suggests to update pods in head mode" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'libPusher', :head
-      #     end
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.update_mode = true
-      #     @resolver.resolve
-      #     @resolver.should_install?("libPusher").should.be.true
-      #   end
-
-      #   it "always updates the repos even if there is change in the pods" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'JSONKit'
-      #       pod 'libPusher'
-      #     end
-      #     config.skip_repo_update = false
-      #     Command::Repo::Update.any_instance.expects(:run).once
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.update_mode = true
-      #     @resolver.resolve
-      #   end
-
-      #   # TODO: stub the specification resolution for the sandbox
-      #   xit "it always suggests to update pods from external sources" do
-      #     podfile = Podfile.new do
-      #       platform :ios
-      #       pod 'libPusher', :git => "example.com"
-      #     end
-      #     @resolver = Resolver.new(podfile, @lockfile, stub('sandbox'))
-      #     @resolver.update_mode = true
-      #     @resolver.resolve
-      #     @resolver.should_install?("libPusher").should.be.true
-      #   end
-      # end
     end
+
+    #-------------------------------------------------------------------------#
+
+
+    describe "#set_from_external_source" do
+      before do
+        @resolver = Resolver.new(config.sandbox, nil)
+      end
+
+      it "it fetches the specification from either the sandbox or from the remote be default" do
+        dependency = Dependency.new('Name', :git => 'www.example.com')
+        ExternalSources::GitSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
+        @resolver.send(:set_from_external_source, dependency)
+      end
+
+      it "it fetches the specification from the remote if in update mode" do
+        dependency = Dependency.new('Name', :git => 'www.example.com')
+        ExternalSources::GitSource.any_instance.expects(:specification).returns(Specification.new).once
+        @resolver.update_external_specs = false
+        @resolver.send(:set_from_external_source, dependency)
+      end
+
+      it "it fetches the specification only from the sandbox if pre-downloads are disabled" do
+        dependency = Dependency.new('Name', :git => 'www.example.com')
+        Sandbox.any_instance.expects(:specification).returns(Specification.new).once
+        @resolver.allow_pre_downloads = true
+        @resolver.send(:set_from_external_source, dependency)
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
   end
 end
