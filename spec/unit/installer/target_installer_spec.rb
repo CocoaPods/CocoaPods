@@ -171,10 +171,10 @@ module Pod
       it "creates a dummy source to ensure the compilation of libraries with only categories" do
         @installer.install!
         build_files = @installer.target.source_build_phase.files
-        build_file = build_files.find { |bf| bf.file_ref.name == 'PodsDummy_Pods.m' }
+        build_file = build_files.find { |bf| bf.file_ref.name == 'Pods-Dummy.m' }
         build_file.should.be.not.nil
-        build_file.file_ref.path.should == 'PodsDummy_Pods.m'
-        dummy = config.sandbox.root + 'PodsDummy_Pods.m'
+        build_file.file_ref.path.should == 'Pods-Dummy.m'
+        dummy = config.sandbox.root + 'Pods-Dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
     end

@@ -100,7 +100,7 @@ module Pod
         installer = Installer.new(config.sandbox, podfile)
         installer.install!
 
-        dummy = (config.project_pods_root + 'PodsDummy_Pods.m').read
+        dummy = (config.project_pods_root + 'Pods-Dummy.m').read
         dummy.should.include?('@implementation PodsDummy_Pods')
       end
 
@@ -119,7 +119,7 @@ module Pod
         installer = Installer.new(config.sandbox, podfile)
         installer.install!
 
-        dummy = (config.project_pods_root + 'PodsDummy_Pods_AnotherTarget.m').read
+        dummy = (config.project_pods_root + 'Pods-AnotherTarget-Dummy.m').read
         dummy.should.include?('@implementation PodsDummy_Pods_AnotherTarget')
       end
 
