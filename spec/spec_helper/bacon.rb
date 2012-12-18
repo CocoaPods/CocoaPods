@@ -81,7 +81,7 @@ module Bacon
     end
 
     def handle_requirement(description, disabled = false)
-      if false && @first_error
+      if @first_error
         print Bacon.color(nil, '_')
       else
         error = yield

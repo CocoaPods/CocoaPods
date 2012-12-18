@@ -44,7 +44,7 @@ module Pod
     #                   generated and be cleaned.
     #
     attr_accessor :downloaded
-    alias_method :downloaded?, :downloaded
+    alias_method  :downloaded?, :downloaded
 
     # @param [Specification] specification  The first activated specification
     #                                       of the pod.

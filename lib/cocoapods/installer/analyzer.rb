@@ -203,7 +203,7 @@ module Pod
             lib.user_targets              = []
             lib.user_build_configurations = {}
             lib.platform                  = target_definition.platform
-            raise Informative "It is necessary to specify the platform in the Podfile if not integrating." unless target_definition.platform
+            raise Informative, "It is necessary to specify the platform in the Podfile if not integrating." unless target_definition.platform
           end
           libraries << lib
         end

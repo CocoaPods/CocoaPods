@@ -128,6 +128,13 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
+    # @!group Hooks compatiblity
+
+    alias :project :pods_project
+    alias :pods    :local_pods
+
+    #-------------------------------------------------------------------------#
+
     # @!group Installation steps
 
     private
@@ -238,7 +245,7 @@ module Pod
 
       unless analyzer.sandbox_state.deleted.empty?
         UI.section "Removing deleted dependencies" do
-          pods_deleted_from_the_lockfile.each do |pod_name|
+          analyzer.sandbox_state.deleted.each do |pod_name|
             UI.section("Removing #{pod_name}", "-> ".red) do
               path = sandbox.root + pod_name
               path.rmtree if path.exist?

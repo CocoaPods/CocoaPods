@@ -33,7 +33,6 @@ module Bacon
     include Pod::Config::Mixin
     include SpecHelper::Fixture
     include SpecHelper::Command
-
     def skip_xcodebuild?
       ENV['SKIP_XCODEBUILD']
     end
@@ -62,6 +61,28 @@ end
 def copy_fixture_to_pod(name, pod)
   path = SpecHelper::Fixture.fixture(name)
   FileUtils.cp_r(path, pod.root)
+end
+
+#-----------------------------------------------------------------------------#
+
+# Override {Specification#source} to return sources from fixtures and limit
+# network connections.
+#
+module Pod
+  class Specification
+    alias :original_source :source
+    def source
+      fixture = SpecHelper.fixture("integration/#{name}")
+      result = super
+      if fixture.exist?
+        # puts "Using fixture [#{name}]"
+        result[:git] = fixture.to_s
+      else
+        # puts "MISSING fixture [#{name}]"
+      end
+      result
+    end
+  end
 end
 
 SpecHelper::Fixture.fixture('banana-lib') # ensure it exists
