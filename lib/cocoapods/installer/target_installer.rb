@@ -28,6 +28,8 @@ module Pod
         create_prefix_header
         create_bridge_support_file
         create_copy_resources_script
+        create_acknowledgements
+        create_dummy_source
       end
 
       #-----------------------------------------------------------------------#
@@ -196,6 +198,28 @@ module Pod
           copy_resources_script.resources << pods.map { |p| p.relative_resource_files }.flatten
           copy_resources_script.save_as(library.copy_resources_script_path)
         end
+      end
+
+      # Generates the acknowledgement files (markdown and plist) for the target.
+      #
+      # @return [void]
+      #
+      def create_acknowledgements
+        path = library.acknowledgements_path
+        Generator::Acknowledgements.new(target_definition, pods).save_as(path)
+      end
+
+      # Generates a dummy source file for each target so libraries that contain
+      # only categories build.
+      #
+      # @return [void]
+      #
+      def create_dummy_source
+        path = library.dummy_source_path
+        Generator::DummySource.new(library.label).save_as(path)
+        relative_path = path.relative_path_from(sandbox.root)
+        file_reference = project.new_file(relative_path, "Targets Support Files")
+        target.source_build_phase.add_file_reference(file_reference)
       end
 
       #-----------------------------------------------------------------------#

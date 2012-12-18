@@ -123,7 +123,7 @@ module Pod
       it 'adds the source files of each pod to the target of the Pod library' do
         @installer.install!
         names = @installer.target.source_build_phase.files.map { |bf| bf.file_ref.name }
-        names.should == [ "Banana.m" ]
+        names.should.include("Banana.m")
       end
 
       #--------------------------------------#
@@ -158,6 +158,24 @@ module Pod
         @installer.install!
         script = config.sandbox.root + 'Pods-resources.sh'
         script.read.should.include?('logo-sidebar.png')
+      end
+
+      it "creates the acknowledgements files " do
+        @installer.install!
+        markdown = config.sandbox.root + 'Pods-Acknowledgements.markdown'
+        markdown.read.should.include?('Permission is hereby granted')
+        plist = config.sandbox.root + 'Pods-Acknowledgements.plist'
+        plist.read.should.include?('Permission is hereby granted')
+      end
+
+      it "creates a dummy source to ensure the compilation of libraries with only categories" do
+        @installer.install!
+        build_files = @installer.target.source_build_phase.files
+        build_file = build_files.find { |bf| bf.file_ref.name == 'PodsDummy_Pods.m' }
+        build_file.should.be.not.nil
+        build_file.file_ref.path.should == 'PodsDummy_Pods.m'
+        dummy = config.sandbox.root + 'PodsDummy_Pods.m'
+        dummy.read.should.include?('@interface PodsDummy_Pods')
       end
     end
   end

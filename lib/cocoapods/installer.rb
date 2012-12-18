@@ -445,33 +445,12 @@ module Pod
     # Installs the targets of the Pods projects and generates their support
     # files.
     #
-    # @todo Move the acknowledgements to the target installer?
-    #
     def generate_target_support_files
       UI.message"- Installing targets" do
         target_installers.each do |target_installer|
           target_installer.install!
-          acknowledgements_path = target_installer.library.acknowledgements_path
-          Generator::Acknowledgements.new(target_installer.library.target_definition,
-                                          target_installer.library.local_pods).save_as(acknowledgements_path)
-          generate_dummy_source(target_installer)
         end
       end
-    end
-
-    # Generates a dummy source file for each target so libraries that contain
-    # only categories build.
-    #
-    # @todo Move to the target installer?
-    #
-    def generate_dummy_source(target_installer)
-      class_name_identifier = target_installer.library.label
-      dummy_source = Generator::DummySource.new(class_name_identifier)
-      filename = "#{dummy_source.class_name}.m"
-      pathname = Pathname.new(sandbox.root + filename)
-      dummy_source.save_as(pathname)
-      file = pods_project.new_file(filename, "Targets Support Files")
-      target_installer.target.source_build_phase.add_file_reference(file)
     end
 
     # Writes the Pods project to the disk.
@@ -479,8 +458,8 @@ module Pod
     # @return [void]
     #
     def write_pod_project
-      UI.message "- Writing Xcode project file to #{UI.path @sandbox.project_path}" do
-        pods_project.save_as(@sandbox.project_path)
+      UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
+        pods_project.save_as(sandbox.project_path)
       end
     end
 
