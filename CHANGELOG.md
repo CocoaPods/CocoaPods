@@ -34,7 +34,9 @@
 - CocoaPods now has support for working in teams and not committing the Pods folder.
 - CocoaPods now can infer the platform from the integrated targets.
 - Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
-- Added Podfile to the Pods project.
+- Added Podfile, Frameworks, and Resources to the Pods project.
+  [#647](https://github.com/CocoaPods/CocoaPods/issues/647)
+  [#588](https://github.com/CocoaPods/CocoaPods/issues/588)
 - The `--no-clean` option of the `pod spec lint` command now displays the Pods project for inspection.
 - It is now possible to specify default values for the configuration in `~/.cocoapods/config.yaml` ([example]()).
 - CocoaPods now checks the checksums of the installed specifications and reinstalls them if needed.

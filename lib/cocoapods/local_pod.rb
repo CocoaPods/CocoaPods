@@ -407,6 +407,10 @@ module Pod
       config
     end
 
+    def frameworks
+      specifications.map { |spec| spec.frameworks }.flatten.uniq
+    end
+
     # Computes the paths of all the public headers of the pod including every
     # subspec (activated or not).
     # For this reason the pod must not be cleaned when calling this command.
