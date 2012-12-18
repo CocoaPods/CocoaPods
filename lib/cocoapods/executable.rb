@@ -24,9 +24,6 @@ module Pod
     #
     def executable(name)
 
-      bin = `which #{name}`.strip
-      raise Informative, "Unable to locate the executable `#{name}`" if bin.empty?
-
       define_method(name) do |command|
         Executable.execute_command(bin, command, false)
       end
@@ -54,6 +51,10 @@ module Pod
     # @todo   Find a way to display the live output of the commands.
     #
     def self.execute_command(bin, command, raise_on_failure = false)
+
+      bin = `which #{name}`.strip
+      raise Informative, "Unable to locate the executable `#{name}`" if bin.empty?
+
       require 'open4'
 
       full_command = "#{bin} #{command}"
