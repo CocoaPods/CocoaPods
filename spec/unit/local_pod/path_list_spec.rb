@@ -11,12 +11,17 @@ describe Pod::LocalPod::PathList do
     files.reject! do |f|
       f.include?('libPusher') || f.include?('.git') || f.include?('DS_Store')
     end
-    files.sort.should == %w|
+    expected = %w[
         BananaLib.podspec
-        Classes Classes/Banana.h Classes/Banana.m Classes/BananaLib.pch
+        Classes/Banana.h
+        Classes/Banana.m
+        Classes/BananaLib.pch
         README
-        Resources Resources/logo-sidebar.png
-        sub-dir sub-dir/sub-dir-2 sub-dir/sub-dir-2/somefile.txt |
+        Resources/logo-sidebar.png
+        sub-dir/sub-dir-2/somefile.txt
+      ]
+
+    files.sort.should == expected
   end
 
   it "creates theh list of the directories" do
