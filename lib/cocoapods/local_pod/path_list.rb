@@ -45,10 +45,10 @@ module Pod
       def read_file_system
         root_length  = root.to_s.length+1
         paths  = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
+        paths  = paths.reject { |p| p == root + '/.' || p == root + '/..' }
         dirs   = paths.select { |path| File.directory?(path) }
         dirs   = dirs.map { |p| p[root_length..-1] }
         paths  = paths.map { |p| p[root_length..-1] }
-        paths  = paths.reject { |p| p == '.' || p == '..' }
         @files = paths - dirs
         @dirs  = dirs.map { |d| d.gsub(/\/\.\.?$/,'') }.uniq
       end
