@@ -171,7 +171,7 @@ module Pod
         @analyzer.stubs(:lockfile).returns(nil)
         @analyzer.analyze
         state = @analyzer.sandbox_state
-        state.added.should     == ["AFNetworking", "JSONKit", "SVPullToRefresh", "libextobjc"]
+        state.added.sort.should == ["AFNetworking", "JSONKit", "SVPullToRefresh", "libextobjc"]
       end
 
     end
