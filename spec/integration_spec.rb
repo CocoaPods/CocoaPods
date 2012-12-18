@@ -168,7 +168,7 @@ module Pod
       #--------------------------------------#
 
       if `which appledoc`.strip.empty?
-        puts "    ! ".red << "Skipping documentation generation specs, because appledoc can't be found."
+        puts "    ! ".red << "Skipping because the `appledoc` executable can't be found."
       else
         it "generates documentation of all pods by default" do
 
