@@ -30,6 +30,7 @@
 
 ###### Enhancements
 
+- Simplified installation: no specific version of ruby gems is required anymore.
 - Released preview [documentation](docs.cocoapods.org).
 - CocoaPods now has support for working in teams and not committing the Pods folder.
 - CocoaPods now can infer the platform from the integrated targets.
