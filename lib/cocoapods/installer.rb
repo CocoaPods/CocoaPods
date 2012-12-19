@@ -220,7 +220,7 @@ module Pod
     def generate_names_of_pods_to_install
       changed_pods_names = []
       if update_mode
-        changed_pods_names += pods.select do |pods|
+        changed_pods_names += pods.select do |pod|
           pod.top_specification.version.head? ||
             resolver.pods_from_external_sources.include?(pod.name)
         end
@@ -334,9 +334,6 @@ module Pod
         local_pods.each do |pod|
           pod.add_file_references_to_project(pods_project)
           pod.link_headers
-          pod.frameworks.each do |framework|
-            file_ref= pods_project.add_system_framework(framework, pod.platform.name)
-          end
 
           unless pod.resources.empty?
             resources_group = pods_project.new_group(pod.name, "Resources")
@@ -406,6 +403,7 @@ module Pod
     #
     def write_pod_project
       UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
+        pods_project['Frameworks'].sort_by_type!
         pods_project.main_group.sort_by_type!
         pods_project.save_as(sandbox.project_path)
       end

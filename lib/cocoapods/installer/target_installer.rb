@@ -22,7 +22,7 @@ module Pod
       def install!
         add_file_reference_for_support_files
         add_target
-        add_build_files_to_target
+        add_pod_references
 
         create_xcconfig_file
         create_prefix_header
@@ -126,15 +126,25 @@ module Pod
           c.base_configuration_reference = xcconfig_file_ref
         end
 
-        library.target = @target
+      library.target = @target
       end
 
-      # Adds the build files of the pods to the target.
+      # Adds the build files of the pods to the target and adds a refence to
+      # the frameworks of the Pods.
+      #
+      # @note   The Frameworks are used only for presentation purporses as the
+      #         xcconfig is the authoritative source about their information.
       #
       # @return [void]
       #
-      def add_build_files_to_target
-        pods.each { |p| p.add_build_files_to_target(target) }
+      def add_pod_references
+        pods.each do |pod|
+          pod.add_build_files_to_target(target)
+
+          pod.frameworks.each do |framework|
+            framework_ref = project.add_system_framework(framework, target)
+          end
+        end
       end
 
       # Generates the contents of the xcconfig file and saves it to disk.
