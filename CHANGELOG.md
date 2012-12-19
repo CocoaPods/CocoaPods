@@ -5,13 +5,14 @@
 
 ###### TODO
 
-- Add Rake FileList warning.
-- Rake FileList is not working.
-- Enable CocoaPods Core-warnings
+- LocalPod should return a has for the resources.
+- FileList is not working.
 - Bad bug with Specification default values being corroded exponentially in subsequent calls.
-- Dropped script for resources.
-- Added support for `prefix_header_file` in subspecs
-- Added support for `prefix_header_contents` in subspecs
+- Drop script for resources.?
+- Add support for `prefix_header_file` in subspecs
+- Add support for `prefix_header_contents` in subspecs
+- Add Rake FileList warning.
+- Release: Enable CocoaPods Core-warnings
 
 ###### Specification DSL
 

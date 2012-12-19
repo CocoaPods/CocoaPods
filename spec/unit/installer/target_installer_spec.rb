@@ -20,6 +20,7 @@ module Pod
         @library.user_project_path  = config.sandbox.root + '../user_project.xcodeproj'
         @library.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
         specification = fixture_spec('banana-lib/BananaLib.podspec')
+        @library.specs = [specification]
         @pod = LocalPod.new(specification, config.sandbox, @library.platform)
         @library.local_pods = [@pod]
 
@@ -34,9 +35,10 @@ module Pod
         @installer.install!
         group = @project.support_files_group['Pods']
         group.children.map(&:display_name).sort.should == [
-          "Pods-Acknowledgements.markdown",
-          "Pods-Acknowledgements.plist",
-          "Pods-Dummy.m",
+          "Pods-acknowledgements.markdown",
+          "Pods-acknowledgements.plist",
+          "Pods-dummy.m",
+          "Pods-header.h",
           "Pods-prefix.pch",
           "Pods-resources.sh",
           "Pods.xcconfig"
@@ -147,6 +149,14 @@ module Pod
         xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
       end
 
+      it "creates a header for the target which contains the information about the installed Pods" do
+        @installer.install!
+        file = config.sandbox.root + 'Pods-header.h'
+        contents = file.read
+        contents.should.include?('#define __COCOA_PODS')
+        contents.should.include?('#define __POD_BananaLib')
+      end
+
       it "creates a prefix header, including the contents of the specification's prefix header" do
         @pod.top_specification.prefix_header_contents = '#import "BlocksKit.h"'
         @installer.install!
@@ -156,6 +166,7 @@ module Pod
           #import <UIKit/UIKit.h>
           #endif
 
+          #import "Pods-header.h"
           #import "BlocksKit.h"
         EOS
       end
@@ -183,10 +194,10 @@ module Pod
       it "creates a dummy source to ensure the compilation of libraries with only categories" do
         @installer.install!
         build_files = @installer.target.source_build_phase.files
-        build_file = build_files.find { |bf| bf.file_ref.name == 'Pods-Dummy.m' }
+        build_file = build_files.find { |bf| bf.file_ref.name == 'Pods-dummy.m' }
         build_file.should.be.not.nil
-        build_file.file_ref.path.should == 'Pods-Dummy.m'
-        dummy = config.sandbox.root + 'Pods-Dummy.m'
+        build_file.file_ref.path.should == 'Pods-dummy.m'
+        dummy = config.sandbox.root + 'Pods-dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
     end

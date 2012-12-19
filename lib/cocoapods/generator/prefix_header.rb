@@ -10,24 +10,27 @@ module Pod
     class PrefixHeader
 
       # @return [Platform] the platform for which the prefix header will be
-      # generated.
+      #         generated.
       #
       attr_reader :platform
 
       # @return [Array<LocalPod>] the LocalPod for the target for which the
-      # prefix header needs to be generated.
+      #         prefix header needs to be generated.
       #
       attr_reader :pods
+
+      # @return [Array<String>] any header to import (with quotes).
+      #
+      attr_reader :imports
 
       # @param  [Platform] platform     @see platform
       # @param  [Array<LocalPod>] pods  @see pods
       #
       def initialize(platform, pods)
         @platform = platform
-        @pods = pods
+        @pods     = pods
+        @imports  = []
       end
-
-      #--------------------------------------#
 
       # Generates the contents of the prefix header according to the platform
       # and the pods.
@@ -44,6 +47,10 @@ module Pod
         result =  "#ifdef __OBJC__\n"
         result << "#import #{platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}\n"
         result << "#endif\n"
+
+        imports.each do |import|
+          result << %|\n#import "#{import}"|
+        end
 
         pods.each do |pod|
           result << "\n"

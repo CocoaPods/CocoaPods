@@ -11,12 +11,6 @@ module Pod
         @target_definition, @pods = target_definition, pods
       end
 
-      def save_as(path)
-        Acknowledgements.generators.each do |generator|
-          generator.new(@target_definition, @pods).save_as(path)
-        end
-      end
-
       def header_title
         "Acknowledgements"
       end

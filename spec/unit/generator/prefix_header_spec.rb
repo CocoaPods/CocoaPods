@@ -34,6 +34,18 @@ describe PrefixHeader = Pod::Generator::PrefixHeader do
     EOS
   end
 
+  it "includes the imports" do
+    @gen.imports << "header.h"
+    @gen.generate.should == <<-EOS.strip_heredoc
+      #ifdef __OBJC__
+      #import <UIKit/UIKit.h>
+      #endif
+
+      #import "header.h"
+      #import <BananaTree/BananaTree.h>
+    EOS
+  end
+
   it "prefers the inline specification of the prefix header contents" do
     spec = @pod.top_specification
     spec.prefix_header_contents = '#import "BlocksKit.h"'

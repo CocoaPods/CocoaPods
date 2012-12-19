@@ -25,6 +25,7 @@ module Pod
         create_suport_files_group
 
         create_xcconfig_file
+        create_target_header
         create_prefix_header
         create_bridge_support_file
         create_copy_resources_script
@@ -188,6 +189,18 @@ module Pod
         end
       end
 
+      # Generates a header which allows to inspect at compile time the installed
+      # pods and the installed specifications of a pod.
+      #
+      def create_target_header
+        path = library.target_header_path
+        UI.message "- Creating target header at #{UI.path(path)}" do
+          generator = Generator::TargetHeader.new(library.specs)
+          generator.save_as(path)
+          add_file_to_support_group(path)
+        end
+      end
+
       # Creates a prefix header file which imports `UIKit` or `Cocoa` according
       # to the platform of the target. This file also include any prefix header
       # content reported by the specification of the pods.
@@ -197,8 +210,9 @@ module Pod
       def create_prefix_header
         path = library.prefix_header_path
         UI.message "- Generating prefix header at #{UI.path(path)}" do
-          gen = Generator::PrefixHeader.new(target_definition.platform, pods)
-          gen.save_as(path)
+          generator = Generator::PrefixHeader.new(target_definition.platform, pods)
+          generator.imports << library.target_header_path.basename
+          generator.save_as(path)
           add_file_to_support_group(path)
 
           target.build_configurations.each do |c|

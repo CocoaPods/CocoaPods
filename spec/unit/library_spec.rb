@@ -34,28 +34,16 @@ module Pod
         @lib.user_project_path  = config.sandbox.root + '../user_project.xcodeproj'
       end
 
-      it "returns the xcconfig name" do
-        @lib.xcconfig_name.should == 'Pods.xcconfig'
-      end
-
       it "returns the absolute path of the xcconfig file" do
         @lib.xcconfig_path.to_s.should.include?('Pods/Pods.xcconfig')
-      end
-
-      it "returns the path of the xcconfig file relative to the user project" do
-        @lib.xcconfig_relative_path.should == 'Pods/Pods.xcconfig'
-      end
-
-      it "returns the resources script name" do
-        @lib.copy_resources_script_name.should == 'Pods-resources.sh'
       end
 
       it "returns the absolute path of the resources script" do
         @lib.copy_resources_script_path.to_s.should.include?('Pods/Pods-resources.sh')
       end
 
-      it "returns the path of the resources script relative to the user project" do
-        @lib.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Pods-resources.sh'
+      it "returns the absolute path of the target header file" do
+        @lib.target_header_path.to_s.should.include?('Pods/Pods-header.h')
       end
 
       it "returns the absolute path of the prefix header file" do
@@ -67,8 +55,19 @@ module Pod
       end
 
       it "returns the absolute path of the acknowledgements files without extension" do
-        @lib.acknowledgements_basepath.to_s.should.include?('Pods/Pods-Acknowledgements')
+        @lib.acknowledgements_basepath.to_s.should.include?('Pods/Pods-acknowledgements')
       end
+
+      #--------------------------------------#
+
+      it "returns the path of the resources script relative to the user project" do
+        @lib.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Pods-resources.sh'
+      end
+
+      it "returns the path of the xcconfig file relative to the user project" do
+        @lib.xcconfig_relative_path.should == 'Pods/Pods.xcconfig'
+      end
+
     end
   end
 end

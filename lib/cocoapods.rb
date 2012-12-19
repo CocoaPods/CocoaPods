@@ -35,14 +35,15 @@ module Pod
   autoload :Pathname,               'pathname'
 
   module Generator
+    autoload :Acknowledgements,     'cocoapods/generator/acknowledgements'
     autoload :BridgeSupport,        'cocoapods/generator/bridge_support'
     autoload :CopyResourcesScript,  'cocoapods/generator/copy_resources_script'
     autoload :Documentation,        'cocoapods/generator/documentation'
-    autoload :Acknowledgements,     'cocoapods/generator/acknowledgements'
-    autoload :Plist,                'cocoapods/generator/acknowledgements/plist'
-    autoload :Markdown,             'cocoapods/generator/acknowledgements/markdown'
     autoload :DummySource,          'cocoapods/generator/dummy_source'
+    autoload :Markdown,             'cocoapods/generator/acknowledgements/markdown'
+    autoload :Plist,                'cocoapods/generator/acknowledgements/plist'
     autoload :PrefixHeader,         'cocoapods/generator/prefix_header'
+    autoload :TargetHeader,         'cocoapods/generator/target_header'
     autoload :XCConfig,             'cocoapods/generator/xcconfig'
   end
 
