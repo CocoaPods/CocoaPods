@@ -52,10 +52,10 @@ module Pod
     # @todo We should probably not even load colored unless needed.
     #
     def initialize(argv)
-      config.silent ||= argv.flag?('silent')
-      super
-      config.verbose ||= self.verbose?
+      config.silent = argv.flag?('silent', config.silent)
+      config.verbose = argv.flag?('verbose', config.verbose?)
       String.send(:define_method, :colorize) { |string , _| string } unless self.colorize_output?
+      super
     end
 
     #-------------------------------------------------------------------------#
