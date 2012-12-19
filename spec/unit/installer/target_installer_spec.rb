@@ -185,9 +185,9 @@ module Pod
 
       it "creates the acknowledgements files " do
         @installer.install!
-        markdown = config.sandbox.root + 'Pods-Acknowledgements.markdown'
+        markdown = config.sandbox.root + 'Pods-acknowledgements.markdown'
         markdown.read.should.include?('Permission is hereby granted')
-        plist = config.sandbox.root + 'Pods-Acknowledgements.plist'
+        plist = config.sandbox.root + 'Pods-acknowledgements.plist'
         plist.read.should.include?('Permission is hereby granted')
       end
 

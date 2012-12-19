@@ -29,9 +29,9 @@ describe Pod::Generator::Markdown do
   end
 
   it "writes a markdown file to disk" do
-    basepath = @sandbox.root + "Pods-Acknowledgements"
+    basepath = @sandbox.root + "Pods-acknowledgements"
     given_path = @markdown.class.path_from_basepath(basepath)
-    expected_path = @sandbox.root + "Pods-Acknowledgements.markdown"
+    expected_path = @sandbox.root + "Pods-acknowledgements.markdown"
     mockFile = mock
     mockFile.expects(:write).with(equals(@markdown.licenses))
     mockFile.expects(:close)

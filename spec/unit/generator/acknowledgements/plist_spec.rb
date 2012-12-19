@@ -44,9 +44,9 @@ describe Pod::Generator::Plist do
   end
 
   it "writes a plist to disk at the given path" do
-    basepath = @sandbox.root + "Pods-Acknowledgements"
+    basepath = @sandbox.root + "Pods-acknowledgements"
     given_path = @plist.class.path_from_basepath(basepath)
-    expected_path = @sandbox.root + "Pods-Acknowledgements.plist"
+    expected_path = @sandbox.root + "Pods-acknowledgements.plist"
     Xcodeproj.expects(:write_plist).with(equals(@plist.plist), equals(expected_path))
     @plist.save_as(given_path)
   end
