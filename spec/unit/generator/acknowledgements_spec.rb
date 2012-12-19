@@ -8,11 +8,9 @@ describe Pod::Generator::Acknowledgements do
     @acknowledgements = Pod::Generator::Acknowledgements.new(@target_definition, @pods)
   end
 
-  it "calls save_as on both a Plist and a Markdown generator" do
-    path = @sandbox.root + "Pods-Acknowledgements.plist"
-    Pod::Generator::Plist.any_instance.expects(:save_as).with(equals(path))
-    Pod::Generator::Markdown.any_instance.expects(:save_as).with(equals(path))
-    @acknowledgements.save_as(path)
+  it "the the generators" do
+    generators = Pod::Generator::Acknowledgements.generators
+    generators.map { |g| g.name.split('::').last }.should == ['Plist', 'Markdown']
   end
 
   it "returns a string for each header and footnote text method" do

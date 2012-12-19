@@ -142,30 +142,16 @@ module Pod
       "${SRCROOT}/#{relative_to_srcroot("#{copy_resources_script_name}")}"
     end
 
-    # @return [String] the name of the prefix header file relative to this
-    #         target.
-    #
-    def prefix_header_name
-      "#{label}-prefix.pch"
-    end
-
     # @return [Pathname] the absolute path of the prefix header file.
     #
     def prefix_header_path
-      support_files_root + prefix_header_name
-    end
-
-    # @return [String] the name of the bridge support file relative to this
-    #         target.
-    #
-    def bridge_support_name
-      "#{label}.bridgesupport"
+      support_files_root + "#{label}-prefix.pch"
     end
 
     # @return [Pathname] the absolute path of the bridge support file.
     #
     def bridge_support_path
-      support_files_root + bridge_support_name
+      support_files_root + "#{label}.bridgesupport"
     end
 
     # @return [Pathname] the absolute path of acknowledgements file.
@@ -173,7 +159,7 @@ module Pod
     # @note   The acknowledgements generators add the extension according to
     #         the file type.
     #
-    def acknowledgements_path
+    def acknowledgements_basepath
       support_files_root + "#{label}-Acknowledgements"
     end
 

@@ -403,8 +403,8 @@ module Pod
     #
     def write_pod_project
       UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
-        pods_project['Frameworks'].sort_by_type!
         pods_project.main_group.sort_by_type!
+        pods_project['Frameworks'].sort_by_type!
         pods_project.save_as(sandbox.project_path)
       end
     end

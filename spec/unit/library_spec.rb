@@ -58,24 +58,16 @@ module Pod
         @lib.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Pods-resources.sh'
       end
 
-      it "returns the prefix header file name" do
-        @lib.prefix_header_name.should == 'Pods-prefix.pch'
-      end
-
       it "returns the absolute path of the prefix header file" do
         @lib.prefix_header_path.to_s.should.include?('Pods/Pods-prefix.pch')
-      end
-
-      it "returns the bridge support file name" do
-        @lib.bridge_support_name.should == 'Pods.bridgesupport'
       end
 
       it "returns the absolute path of the bridge support file" do
         @lib.bridge_support_path.to_s.should.include?('Pods/Pods.bridgesupport')
       end
 
-      it "returns the absolute path of the acknowledgements file" do
-        @lib.acknowledgements_path.to_s.should.include?('Pods/Pods-Acknowledgements')
+      it "returns the absolute path of the acknowledgements files without extension" do
+        @lib.acknowledgements_basepath.to_s.should.include?('Pods/Pods-Acknowledgements')
       end
     end
   end

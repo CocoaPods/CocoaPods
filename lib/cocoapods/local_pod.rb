@@ -407,8 +407,12 @@ module Pod
       config
     end
 
+    # Returns also weak frameworks.
+    #
     def frameworks
-      specifications.map { |spec| spec.frameworks }.flatten.uniq
+      frameworks = specifications.map { |spec| spec.frameworks }
+      weak_frameworks = specifications.map { |spec| spec.weak_frameworks }
+      (frameworks + weak_frameworks).flatten.uniq
     end
 
     # Computes the paths of all the public headers of the pod including every

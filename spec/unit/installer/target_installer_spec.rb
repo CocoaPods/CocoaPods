@@ -34,7 +34,12 @@ module Pod
         @installer.install!
         group = @project.support_files_group['Pods']
         group.children.map(&:display_name).sort.should == [
-          "Pods-prefix.pch", "Pods-resources.sh", "Pods.xcconfig"
+          "Pods-Acknowledgements.markdown",
+          "Pods-Acknowledgements.plist",
+          "Pods-Dummy.m",
+          "Pods-prefix.pch",
+          "Pods-resources.sh",
+          "Pods.xcconfig"
         ]
       end
 
@@ -124,6 +129,13 @@ module Pod
         @installer.install!
         names = @installer.target.source_build_phase.files.map { |bf| bf.file_ref.name }
         names.should.include("Banana.m")
+      end
+
+      it 'adds the frameworks required by to the pod to the project for informative purposes' do
+        Specification.any_instance.stubs(:frameworks).returns(['QuartzCore'])
+        @installer.install!
+        names = @installer.project['Frameworks'].children.map(&:name)
+        names.sort.should == ["Foundation.framework", "QuartzCore.framework"]
       end
 
       #--------------------------------------#
