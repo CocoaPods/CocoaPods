@@ -27,7 +27,12 @@ module Pod
         @allow_warnings = argv.option('--allow-warnings')
         @local_only = argv.option('--local-only')
         @repo = argv.shift_argument
-        @podspec = argv.shift_argument
+        if @repo.end_with? ".podspec"
+          @podspec = @repo
+          @repo = "master"
+        else
+          @podspec = argv.shift_argument
+        end
         super unless argv.empty? && @repo
       end
 
