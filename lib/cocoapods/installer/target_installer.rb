@@ -39,6 +39,8 @@ module Pod
       #                                 should be generated.
       #
       def install!(pods, sandbox)
+        pods.each { |p| p.top_specification.activate_platform(@target_definition.platform) }
+      
         self.requires_arc = pods.any? { |pod| pod.requires_arc? }
 
         @target = @project.add_pod_target(@target_definition.label, @target_definition.platform)
