@@ -84,7 +84,7 @@ describe Pod::Downloader::Http do
     downloader.download rescue nil
 
   end
-  
+
   it 'should move unpacked contents to parent dir when archive contains only a folder (#727)' do
     downloader = Pod::Downloader.for_pod(stub_pod_with_source(
       :http => 'http://www.openssl.org/source/openssl-1.0.0a.tar.gz'
@@ -92,15 +92,13 @@ describe Pod::Downloader::Http do
     downloader.download
     # Archive contains one folder, which contains 49 items. The archive is 1, and the
     # parent folder that we moved stuff out of is 1.
-    Dir[downloader.target_path.to_s+"/*"].count.should == 49 + 1 + 1
-    
+    Dir.glob(downloader.target_path + '*').count.should == 49 + 1 + 1
+
     downloader = Pod::Downloader.for_pod(stub_pod_with_source(
       :http => 'https://testflightapp.com/media/sdk-downloads/TestFlightSDK1.0.zip'
     ))
     downloader.download
-    
     # Archive contains 4 files, and the archive is 1
-    Dir[downloader.target_path.to_s+"/*"].count.should == 4 + 1
-    
+    Dir.glob(downloader.target_path + '*').count.should == 4 + 1
   end
 end

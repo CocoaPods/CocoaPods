@@ -73,14 +73,13 @@ module Pod
         else
           raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end
-        
+
         # If the archive only contained a folder, move its contents to the target (#727)
-        contents = Dir[target_path.to_s+"/*"]
-        contents.delete(full_filename.to_s)
-        if contents.count == 1 && File.directory?(contents[0]) then
-          Dir[contents[0]+"/*"].each do |thing|
-            FileUtils.move thing, target_path
-          end
+        contents = target_path.children
+        contents.delete(full_filename)
+        entry = contents.first
+        if contents.count == 1 && entry.directory?
+          FileUtils.move(entry.children, target_path)
         end
       end
 
