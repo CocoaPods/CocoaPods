@@ -74,8 +74,8 @@ module Pod
         downloader = Downloader.for_pod(@pod)
         VCR.use_cassette('tarballs', :record => :new_episodes) { downloader.download }
 
-        (@pod.root + 'GoogleAdMobSearchAdsSDK/GADSearchRequest.h').should.exist
-        (@pod.root + 'GoogleAdMobSearchAdsSDK/GADSearchRequest.h').read.strip.should =~ /Google Search Ads iOS SDK/
+        (@pod.root + 'GADSearchRequest.h').should.exist
+        (@pod.root + 'GADSearchRequest.h').read.strip.should =~ /Google Search Ads iOS SDK/
       end
 
       it "raises if it fails to download" do
