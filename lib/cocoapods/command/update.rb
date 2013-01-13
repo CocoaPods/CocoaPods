@@ -9,10 +9,6 @@ module Pod
       Updates all dependencies.}
       end
 
-      def self.options
-        [["--no-update", "Skip running `pod repo update` before install"]].concat(super)
-      end
-
       def initialize(argv)
         config.skip_repo_update = argv.option('--no-update')
         super unless argv.empty?
