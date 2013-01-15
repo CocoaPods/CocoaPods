@@ -64,6 +64,30 @@
 - Added Library class.
 - Added XCConfig generator.
 
+## 0.16.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0...0.16.1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0...0.4.1)
+
+###### Bug fixes
+
+- After unpacking source from a HTTP location, move the source into the parent
+  dir if the archive contained only one child. This is done to make it
+  consistent with how source from other types of locations are described in a
+  podspec.
+  **NOTE** This might break some podspecs that assumed the incorrect layout.
+  [#727](https://github.com/CocoaPods/CocoaPods/issues/727)
+  [#728](https://github.com/CocoaPods/CocoaPods/pull/728)
+- Remove duplicate option in `pod update` command.
+  [#725](https://github.com/CocoaPods/CocoaPods/issues/725)
+- Memory fixes in Xcodeproj.
+  [#43](https://github.com/CocoaPods/Xcodeproj/pull/43)
+
+###### Xcodeproj Enhancements
+
+- Sort contents of xcconfig files by setting name.
+  [#591](https://github.com/CocoaPods/CocoaPods/issues/591)
+- Add helpers to get platform name, deployment target, and frameworks build phases
+- Take SDKROOT into account when adding frameworks.
+
 ## 0.16.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc5...master)
 

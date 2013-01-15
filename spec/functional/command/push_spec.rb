@@ -3,15 +3,10 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Command::Push do
     extend SpecHelper::Command
-    
     extend SpecHelper::TemporaryRepos
 
     before do
       config.repos_dir = SpecHelper.tmp_repos_path
-    end
-
-    it "requires a spec-repo name" do
-      lambda { command('push').validate! }.should.raise CLAide::Help
     end
 
     it "complains if it can't find the repo" do
