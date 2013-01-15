@@ -134,7 +134,7 @@ module Pod
       end
 
       it 'adds the frameworks required by to the pod to the project for informative purposes' do
-        Specification.any_instance.stubs(:frameworks).returns(['QuartzCore'])
+        Specification::Consumer.any_instance.stubs(:frameworks).returns(['QuartzCore'])
         @installer.install!
         names = @installer.project['Frameworks'].children.map(&:name)
         names.sort.should == ["Foundation.framework", "QuartzCore.framework"]

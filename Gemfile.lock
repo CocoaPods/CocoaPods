@@ -1,11 +1,12 @@
 GIT
   remote: git://github.com/CocoaPods/Core.git
-  revision: cccab9046f9c94f9eeba6dff6a3783589315c7f9
+  revision: ac1b97b199964ae2b35f48a19b866415642b599a
   specs:
     cocoapods-core (0.17.0.alpha)
       activesupport (~> 3.2.6)
       faraday (~> 0.8.1)
       octokit (~> 1.7)
+      rake (~> 0.9.4)
 
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git

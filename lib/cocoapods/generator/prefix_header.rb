@@ -54,7 +54,7 @@ module Pod
 
         pods.each do |pod|
           result << "\n"
-          if prefix_header_contents = pod.top_specification.prefix_header_contents
+          if prefix_header_contents = pod.top_specification.consumer(platform).prefix_header_contents
             result << prefix_header_contents
             result << "\n"
           elsif prefix_header = pod.prefix_header_file

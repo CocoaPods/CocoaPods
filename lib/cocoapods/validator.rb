@@ -189,8 +189,7 @@ module Pod
     def perform_extensive_analysis
       spec.available_platforms.each do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
-        @current_platform = platform
-        spec.activate_platform(platform)
+        @consumer = spec.consumer(platform)
         setup_validation_environment
         install_pod
         build_pod
@@ -199,7 +198,7 @@ module Pod
       end
     end
 
-    attr_accessor :current_platform
+    attr_accessor :consumer
 
     def setup_validation_environment
       validation_dir.rmtree if validation_dir.exist?
@@ -223,7 +222,7 @@ module Pod
     # for all available platforms with xcodebuild.
     #
     def install_pod
-      podfile = podfile_from_spec(current_platform)
+      podfile = podfile_from_spec(consumer.platform, spec.deployment_target(consumer.platform))
       sandbox = Sandbox.new(config.project_pods_root)
       installer = Installer.new(sandbox, podfile)
       installer.install!
@@ -267,10 +266,10 @@ module Pod
     #
     def check_file_patterns
       [:source_files, :resources, :preserve_paths].each do |attr_name|
-        attr = Specification::DSL.attributes.find{|attr| attr.name == attr_name }
-        if !attr.empty?(spec) && @pod.send(attr_name).empty?
-          error "The `#{attr_name}` pattern did not match any file."
-        end
+        attr = Specification::DSL.attributes.values.find{|attr| attr.name == attr_name }
+        # if !attr.empty?(spec) && @pod.send(attr_name).empty?
+        #   error "The `#{attr_name}` pattern did not match any file."
+        # end
       end
 
       unless @pod.license_file || spec.license && ( spec.license[:type] == 'Public Domain' || spec.license[:text] )
@@ -302,7 +301,7 @@ module Pod
         result = Specification::Linter::Result.new(type, message)
         results << result
       end
-      result.platforms << current_platform.name if current_platform
+      result.platforms << consumer.platform if consumer
     end
 
     #-------------------------------------------------------------------------#
@@ -317,12 +316,12 @@ module Pod
     # @note   The generated podfile takes into account whether the linter is
     #         in local mode.
     #
-    def podfile_from_spec(platform)
+    def podfile_from_spec(platform_name, deployment_target)
       name     = spec.name
       podspec  = file.realpath
       local    = local?
       podfile  = Pod::Podfile.new do
-        platform(platform.to_sym, platform.deployment_target)
+        platform(platform_name, deployment_target)
         if (local)
           pod name, :local => podspec.dirname.to_s
         else

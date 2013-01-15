@@ -25,7 +25,6 @@ module Pod
         run_command('spec', 'create', 'Bananas')
         path = temporary_directory + 'Bananas.podspec'
         spec = Specification.from_file(path)
-        spec.activate_platform(:ios)
 
         spec.name.should         == 'Bananas'
         spec.license.should      == { :type => "MIT (example)" }
@@ -34,8 +33,8 @@ module Pod
         spec.homepage.should     == 'http://EXAMPLE/Bananas'
         spec.authors.should      == { `git config --get user.name`.strip => `git config --get user.email`.strip}
         spec.source.should       == { :git => 'http://EXAMPLE/Bananas.git', :tag => '0.0.1' }
-        spec.source_files.should == ['Classes', 'Classes/**/*.{h,m}']
-        spec.public_header_files.should == []
+        spec.consumer(:ios).source_files.should == ['Classes', 'Classes/**/*.{h,m}']
+        spec.consumer(:ios).public_header_files.should == []
       end
 
       it "correctly creates a podspec from github" do

@@ -61,7 +61,6 @@ module Pod
     #
     def initialize(specification, sandbox, platform)
       @top_specification, @sandbox, @platform = specification.root, sandbox, platform
-      @top_specification.activate_platform(platform)
       @specifications = [] << specification
     end
 
@@ -85,7 +84,6 @@ module Pod
         raise Informative,
           "[Local Pod] Attempt to add a specification from another pod"
       end
-      spec.activate_platform(platform)
       @specifications << spec unless @specifications.include?(spec)
     end
 
@@ -319,8 +317,9 @@ module Pod
 
       specs = specs.sort_by { |s| s.name.length }
       specs.each do |spec|
-        spec_paths = spec.resources[:resources]
-        paths = expanded_paths(spec_paths, '**/*', spec.exclude_files)
+        consumer = spec.consumer(platform)
+        spec_paths = consumer.resources[:resources]
+        paths = expanded_paths(spec_paths, '**/*', consumer.exclude_files)
         unless paths.empty?
           paths_by_spec[spec] = paths - processed_paths
           processed_paths += paths
@@ -340,7 +339,8 @@ module Pod
     # @return [Pathname] The absolute path of the prefix header file
     #
     def prefix_header_file
-      root + top_specification.prefix_header_file if top_specification.prefix_header_file
+      value = top_specification.consumer(platform).prefix_header_file
+      root + value if value
     end
 
     # @return [Array<Pathname>] The absolute paths of the files of the pod
@@ -399,10 +399,11 @@ module Pod
     def xcconfig
       config = Xcodeproj::Config.new
       specifications.each do |spec|
-        config.merge!(spec.xcconfig)
-        config.libraries.merge(spec.libraries)
-        config.frameworks.merge(spec.frameworks)
-        config.weak_frameworks.merge(spec.weak_frameworks)
+        consumer = spec.consumer(platform)
+        config.merge!(consumer.xcconfig)
+        config.libraries.merge(consumer.libraries)
+        config.frameworks.merge(consumer.frameworks)
+        config.weak_frameworks.merge(consumer.weak_frameworks)
       end
       config
     end
@@ -410,9 +411,13 @@ module Pod
     # Returns also weak frameworks.
     #
     def frameworks
-      frameworks = specifications.map { |spec| spec.frameworks }
-      weak_frameworks = specifications.map { |spec| spec.weak_frameworks }
-      (frameworks + weak_frameworks).flatten.uniq
+      result = []
+      specifications.each do |spec|
+        consumer = spec.consumer(platform)
+        result.concat(consumer.frameworks)
+        result.concat(consumer.weak_frameworks)
+      end
+      result.uniq
     end
 
     # Computes the paths of all the public headers of the pod including every
@@ -495,8 +500,9 @@ module Pod
           "project before adding the build files to the target."
       end
       file_references_by_spec.each do |spec, file_reference|
-        flags = spec.compiler_flags.dup
-        flags << '-fobjc-arc' if spec.requires_arc
+        consumer = spec.consumer(platform)
+        flags = consumer.compiler_flags.dup
+        flags << '-fobjc-arc' if consumer.requires_arc
         flags = flags * " "
         target.add_file_references(file_reference, flags)
       end
@@ -546,10 +552,11 @@ module Pod
       mappings = {}
       files_by_spec.each do |spec, paths|
         paths = paths
-        dir = spec.header_dir ? (headers_sandbox + spec.header_dir) : headers_sandbox
+        consumer = spec.consumer(platform)
+        dir = consumer.header_dir ? (headers_sandbox + consumer.header_dir) : headers_sandbox
         paths.each do |from|
           from_relative = from.relative_path_from(root)
-          to = dir + (spec.header_mappings_dir ? from.relative_path_from(spec.header_mappings_dir) : from.basename)
+          to = dir + (consumer.header_mappings_dir ? from.relative_path_from(consumer.header_mappings_dir) : from.basename)
           (mappings[to.dirname] ||= []) << from
         end
       end
@@ -584,7 +591,8 @@ module Pod
 
       specs = specs.sort_by { |s| s.name.length }
       specs.each do |spec|
-        paths = expanded_paths(spec.send(accessor), dir_pattern, spec.exclude_files)
+        consumer = spec.consumer(platform)
+        paths = expanded_paths(consumer.send(accessor), dir_pattern, consumer.exclude_files)
         unless paths.empty?
           paths_by_spec[spec] = paths - processed_paths
           processed_paths += paths

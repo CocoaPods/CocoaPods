@@ -178,10 +178,10 @@ module Pod
             @loaded_specs << spec.name
             cached_specs[spec.name] = spec
             validate_platform(spec, target_definition)
-            spec.activate_platform(target_definition.platform)
             spec.version.head = dependency.head?
 
-            find_dependency_specs(spec, spec.dependencies, target_definition)
+            spec_dependencies = spec.all_dependencies(target_definition.platform)
+            find_dependency_specs(spec, spec_dependencies, target_definition)
           end
         end
       end
