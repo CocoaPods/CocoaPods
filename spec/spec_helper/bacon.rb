@@ -75,27 +75,45 @@ module Bacon
   # Overrides the TestUnitOutput to provide colored result output.
   #
   module TestUnitOutput
+
+    # Represents the specifications as `:`.
+    #
     def handle_specification(name)
-      print Bacon.color(nil, ':')
+      indicator = Bacon.color(nil, ':')
+      print indicator
+      @indicators||=''
+      @indicators << indicator
       yield
     end
 
+    # Represents the requirements as:
+    #
+    # - [.] successful
+    # - [E] error
+    # - [F] failure
+    # - [_] skipped
+    #
+    # After the first failure or error all the other requirements are skipped.
+    #
     def handle_requirement(description, disabled = false)
       if @first_error
-        print Bacon.color(nil, '_')
+        indicator = Bacon.color(nil, '_')
       else
         error = yield
         if !error.empty?
+          @first_error = true
           m = error[0..0]
           c = (m == "E" ? :red : :yellow)
-          print Bacon.color(c, m)
-          @first_error = true
+          indicator = Bacon.color(c, m)
         elsif disabled
-          print "D"
+          indicator =  "D"
         else
-          print Bacon.color(nil, '.')
+          indicator = Bacon.color(nil, '.')
         end
       end
+      print indicator
+      @indicators||=''
+      @indicators << indicator
     end
 
     def handle_summary
@@ -105,6 +123,9 @@ module Bacon
         error_count += 1 if s.include?('Error:') || s.include?('Informative')
         first_error << s if error_count <= 1
       end
+      first_error = first_error.gsub(Dir.pwd + '/', '')
+      first_error = first_error.gsub(/lib\//, Bacon.color(:yellow, 'lib') + '/')
+      first_error = first_error.gsub(/:([0-9]+):/, ':' + Bacon.color(:yellow, '\1') + ':')
       puts "\n#{first_error}" if Backtraces
       unless Counter[:disabled].zero?
         puts Bacon.color(:yellow, "#{Counter[:disabled]} disabled specifications")
@@ -117,6 +138,7 @@ module Bacon
         puts Bacon.color(:red, result)
       end
     end
+
   end
 
   #---------------------------------------------------------------------------#
@@ -124,7 +146,7 @@ module Bacon
   module FilterBacktraces
     def handle_summary
       ErrorLog.replace(ErrorLog.split("\n").reject do |line|
-        line =~ %r{(gems/mocha|spec_helper)}
+        line =~ %r{(gems/mocha|spec_helper|ruby_noexec_wrapper)}
       end.join("\n").lstrip << "\n\n")
       super
     end
@@ -141,6 +163,3 @@ module Bacon
     end
   end
 end
-
-
-
