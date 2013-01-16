@@ -53,6 +53,12 @@ module Pod
         @dirs  = dirs.map { |d| d.gsub(/\/\.\.?$/,'') }.uniq
       end
 
+      #-----------------------------------------------------------------------#
+
+      public
+
+      # @!group Globbing
+
       # @return [Array<Pathname>] Similar to {glob} but returns the absolute
       #         paths.
       #
@@ -89,10 +95,16 @@ module Pod
           end
         end.flatten
 
+        list = list.map { |path| Pathname.new(path) }
         list -= relative_glob(exclude_patterns) if exclude_patterns
-
-        list.map { |path| Pathname.new(path) }
+        list
       end
+
+      #-----------------------------------------------------------------------#
+
+      private
+
+      # @!group Private helpers
 
       # @return [Bool] Wether a path is a directory. The result of this method
       #         computed without accessing the file system and is case
@@ -125,7 +137,7 @@ module Pod
       # @param [String] pattern   A {Dir#glob} like pattern.
       #
       def dir_glob_equivalent_patterns(pattern)
-        pattern.gsub('/**/', '{/**/,/}')
+        pattern = pattern.gsub('/**/', '{/**/,/}')
         values_by_set = {}
         pattern.scan(/\{[^}]*\}/) do |set|
           values = set.gsub(/[{}]/, '').split(',')
