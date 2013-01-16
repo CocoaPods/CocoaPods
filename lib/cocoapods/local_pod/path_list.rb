@@ -125,7 +125,7 @@ module Pod
       # @param [String] pattern   A {Dir#glob} like pattern.
       #
       def dir_glob_equivalent_patterns(pattern)
-        pattern.gsub!('/**/', '{/**/,/}')
+        pattern.gsub('/**/', '{/**/,/}')
         values_by_set = {}
         pattern.scan(/\{[^}]*\}/) do |set|
           values = set.gsub(/[{}]/, '').split(',')
