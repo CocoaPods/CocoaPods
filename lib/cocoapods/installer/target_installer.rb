@@ -234,7 +234,7 @@ module Pod
         if target_definition.podfile.generate_bridge_support?
           path = library.bridge_support_path
           UI.message "- Generating BridgeSupport metadata at #{UI.path(path)}" do
-            relative_headers = pods.map { |pod| pod.relative_header_files }.flatten
+            relative_headers = pods.map { |pod| pod.header_files.map {|head| sandbox.relativize(head)} }.flatten
             headers = relative_headers.map { |header| sandbox.root + header }
             generator = Generator::BridgeSupport.new(headers)
             generator.save_as(path)
@@ -255,7 +255,7 @@ module Pod
       def create_copy_resources_script
         path = library.copy_resources_script_path
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
-          resources = pods.map { |p| p.relative_resource_files }.flatten
+          resources = pods.map { |p| p.resource_files.map {|res| sandbox.relativize(res)} }.flatten
           resources << bridge_support_file if bridge_support_file
           generator = Generator::CopyResourcesScript.new(resources)
           generator.save_as(path)

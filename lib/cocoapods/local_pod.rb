@@ -21,6 +21,7 @@ module Pod
   #   returns absolute paths.
   #
   class LocalPod
+
     autoload :PathList, 'cocoapods/local_pod/path_list'
 
     # @return [Specification] The specification that describes the pod.
@@ -208,26 +209,6 @@ module Pod
 
     # @!group Files
 
-    # @return [Pathname] Returns the relative path from the sandbox.
-    #
-    # @note If the two abosule paths don't share the same root directory an
-    # extra `../` is added to the result of {Pathname#relative_path_from}
-    #
-    #     path = Pathname.new('/Users/dir')
-    #     @sandbox
-    #     #=> Pathname('/tmp/CocoaPods/Lint/Pods')
-    #
-    #     p.relative_path_from(@sandbox
-    #     #=> '../../../../Users/dir'
-    #
-    #     relativize_from_sandbox(path)
-    #     #=> '../../../../../Users/dir'
-    #
-    def relativize_from_sandbox(path)
-      result = path.relative_path_from(@sandbox.root)
-      result = Pathname.new('../') + result unless @sandbox.root.to_s.split('/')[1] == path.to_s.split('/')[1]
-      result
-    end
 
     # @return [Array<Pathname>] The paths of the source files.
     #
@@ -235,19 +216,7 @@ module Pod
       source_files_by_spec.values.flatten
     end
 
-    # @return [Array<Pathname>] The *relative* paths of the source files.
-    #
-    def relative_source_files
-      source_files.map{ |p| relativize_from_sandbox(p) }
-    end
 
-    def relative_source_files_by_spec
-      result = {}
-      source_files_by_spec.each do |spec, paths|
-        result[spec] = paths.map{ |p| relativize_from_sandbox(p) }
-      end
-      result
-    end
 
     # Finds the source files that every activated {Specification} requires.
     #
@@ -266,12 +235,6 @@ module Pod
     #
     def header_files
       header_files_by_spec.values.flatten
-    end
-
-    # @return [Array<Pathname>] The *relative* paths of the source files.
-    #
-    def relative_header_files
-      header_files.map{ |p| relativize_from_sandbox(p) }
     end
 
     # @return [Hash{Specification => Array<Pathname>}] The paths of the header
@@ -329,12 +292,6 @@ module Pod
     end
 
     alias :resources :resource_files
-
-    # @return [Array<Pathname>] The *relative* paths of the resources.
-    #
-    def relative_resource_files
-      resource_files.map{ |p| relativize_from_sandbox(p) }
-    end
 
     # @return [Pathname] The absolute path of the prefix header file
     #
@@ -471,11 +428,12 @@ module Pod
       @file_references_by_spec = {}
       parent_group = local? ? project.local_pods : project.pods
 
-      relative_source_files_by_spec.each do |spec, paths|
+      source_files_by_spec.each do |spec, paths|
         group = project.add_spec_group(spec.name, parent_group)
         file_references = []
         paths.each do |path|
-          file_references << group.new_file(path)
+          relative = sandbox.relativize(path)
+          file_references << group.new_file(relative)
         end
         @file_references_by_spec[spec] = file_references
       end

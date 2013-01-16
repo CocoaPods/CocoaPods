@@ -3,7 +3,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 module Pod
 
   describe Sandbox do
-    
+
 
     before do
       @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')
@@ -32,6 +32,23 @@ module Pod
     it "deletes the entire root directory on implode" do
       @sandbox.implode
       File.directory?(temporary_directory + 'Sandbox').should.be.false
+    end
+
+    it "can return the relative path of a given absolute path" do
+      path = temporary_directory + 'Sandbox/file'
+      @sandbox.relativize(path).should == Pathname.new('file')
+    end
+
+    it "can return the relative path of a given absolute path outside the sandbox root" do
+      path = temporary_directory + 'file'
+      @sandbox.relativize(path).should == Pathname.new('../file')
+    end
+
+    it "can return the relative path of a given absolute path with another root directory" do
+      path = Pathname('/tmp/Lint')
+      expected = Pathname.new('../../../tmp/Lint')
+      @sandbox.instance_variable_set(:@root, Pathname.new('/Users/sandbox'))
+      @sandbox.relativize(path).should == expected
     end
 
     #--------------------------------------#
@@ -79,7 +96,7 @@ module Pod
   #---------------------------------------------------------------------------#
 
   describe Sandbox::HeadersStore do
-    
+
 
     before do
       @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')

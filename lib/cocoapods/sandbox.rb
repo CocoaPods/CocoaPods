@@ -78,6 +78,28 @@ module Pod
       root.rmtree
     end
 
+    # @return [Pathname] Returns the relative path from the sandbox.
+    #
+    # @note If the two absolute paths don't share the same root directory an
+    #       extra `../` is added to the result of {Pathname#relative_path_from}
+    #
+    #
+    # @example
+    #
+    #   path = Pathname.new('/Users/dir')
+    #   @sandbox.root #=> Pathname('/tmp/CocoaPods/Lint/Pods')
+    #
+    #   @sandbox.relativize(path) #=> '../../../../Users/dir'
+    #   @sandbox.relativize(path) #=> '../../../../../Users/dir'
+    #
+    def relativize(path)
+      result = path.relative_path_from(root)
+      unless root.to_s.split('/')[1] == path.to_s.split('/')[1]
+        result = Pathname.new('../') + result
+      end
+      result
+    end
+
     # @return [String] a string representation suitable for debugging.
     #
     def inspect
