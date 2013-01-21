@@ -106,6 +106,19 @@ module Pod
         path.should.exist?
       end
 
+      it "marks a LocalPod as downloaded if it's from MercurialSource" do
+        dependency = Dependency.new("MercurialSource", :hg => fixture('mercurial-repo'))
+        dependency.external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
+        @sandbox.installed_pod_named('MercurialSource', Platform.ios).downloaded.should.be.true
+      end
+
+      it "creates a copy of the podspec (MercurialSource)" do
+        dependency = Dependency.new("MercurialSource", :hg => fixture('mercurial-repo'))
+        dependency.external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)
+        path = @sandbox.root + 'Local Podspecs/MercurialSource.podspec'
+        path.should.exist?
+      end
+
       it "marks a LocalPod as downloaded if it's from SvnSource" do
         dependency = Dependency.new("SvnSource", :svn => "file://#{fixture('subversion-repo/trunk')}")
         dependency.external_source.copy_external_source_into_sandbox(@sandbox, Platform.ios)

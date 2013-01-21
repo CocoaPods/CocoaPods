@@ -1,1 +1,1 @@
-Second commit
+Podspec for testing direct Mercurial support within Podfiles.
