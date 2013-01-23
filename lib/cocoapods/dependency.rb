@@ -136,6 +136,8 @@ module Pod
         return unless name && params
         if params.key?(:git)
           GitSource.new(name, params)
+        elsif params.key?(:hg)
+          MercurialSource.new(name, params)
         elsif params.key?(:svn)
           SvnSource.new(name, params)
         elsif params.key?(:podspec)
@@ -193,7 +195,7 @@ module Pod
         end
       end
 
-      class GitSource < AbstractExternalSource
+      class DownloaderSource < AbstractExternalSource
         def copy_external_source_into_sandbox(sandbox, platform)
           UI.info("->".green + " Pre-downloading: '#{name}'") do
             target = sandbox.root + name
@@ -206,7 +208,9 @@ module Pod
             end
           end
         end
+      end
 
+      class GitSource < DownloaderSource
         def description
           "from `#{@params[:git]}'".tap do |description|
             description << ", commit `#{@params[:commit]}'" if @params[:commit]
@@ -216,20 +220,15 @@ module Pod
         end
       end
 
-      class SvnSource < AbstractExternalSource
-        def copy_external_source_into_sandbox(sandbox, platform)
-          UI.info("->".green + " Pre-downloading: '#{name}'") do
-            target = sandbox.root + name
-            target.rmtree if target.exist?
-            downloader = Downloader.for_target(sandbox.root + name, @params)
-            downloader.download
-            store_podspec(sandbox, target + "#{name}.podspec")
-            if local_pod = sandbox.installed_pod_named(name, platform)
-                local_pod.downloaded = true
-            end
+      class MercurialSource < DownloaderSource
+        def description
+          "from `#{@params[:hg]}'".tap do |description|
+            description << ", revision `#{@params[:revision]}'" if @params[:revision]
           end
         end
+      end
 
+      class SvnSource < DownloaderSource
         def description
           "from `#{@params[:svn]}'".tap do |description|
             description << ", folder `#{@params[:folder]}'" if @params[:folder]
