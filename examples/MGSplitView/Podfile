@@ -1,3 +1,0 @@
-platform :ios
-
-pod 'MGSplitViewController', '1.0.0'

@@ -1,4 +1,0 @@
-platform :ios
-
-pod 'AFNetworking'
-pod 'SSToolkit'
