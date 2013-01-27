@@ -222,6 +222,7 @@ module Pod
           end
           
           exec_editor(filepath.to_s) if File.exists? filepath
+          raise Informative, "#{ filepath } doesn't exist."
         end
         
   			# Thank you homebrew
@@ -235,16 +236,16 @@ module Pod
   			  # If an editor wasn't set, try to pick a sane default
   			  return editor unless editor.nil?
 
+  			  # Find Sublime Text 2
+  			  return 'subl' if which 'subl'
   			  # Find Textmate
   			  return 'mate' if which 'mate'
   			  # Find # BBEdit / TextWrangler
   			  return 'edit' if which 'edit'
-  			  # Find Sublime Text 2
-  			  return 'subl' if which 'subl'
   			  # Default to vim
   			  return 'vim' if which 'vim'
 
-  			  raise Informative, "[!] Failed to open editor. Set your EDITOR environment variable.".red
+  			  raise Informative, "Failed to open editor. Set your 'EDITOR' environment variable."
   			end
 
   			def exec_editor *args
