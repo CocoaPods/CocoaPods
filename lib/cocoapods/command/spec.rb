@@ -131,7 +131,7 @@ module Pod
         def initialize(argv)
           @show_all = argv.flag?('show-all')
           @spec = argv.shift_argument
-          @spec = @spec.gsub('.podspec', '')
+          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
           super
         end
 
@@ -163,7 +163,7 @@ module Pod
         def initialize(argv)
           @show_all = argv.flag?('show-all')
           @spec = argv.shift_argument
-          @spec = @spec.gsub('.podspec', '')
+          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
           super
         end
 
@@ -203,7 +203,7 @@ module Pod
         def initialize(argv)
           @show_all = argv.flag?('show-all')
           @spec = argv.shift_argument
-          @spec = @spec.gsub('.podspec', '')
+          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
           super
         end
 
