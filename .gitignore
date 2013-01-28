@@ -22,3 +22,5 @@ spec/fixtures/vcr
 .yardoc
 /doc
 .rbx/
+Gemfile.lock
+
