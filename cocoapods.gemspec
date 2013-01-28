@@ -1,17 +1,10 @@
 # -*- encoding: utf-8 -*-
-$:.unshift File.expand_path('../lib', __FILE__)
+require File.expand_path('../lib/cocoapods/gem_version', __FILE__)
+
 
 Gem::Specification.new do |s|
-
-  # Use the version of CocoaPods-Core
-  if !defined?(Pod::VERSION) && defined?(::BUNDLER_GEMSPEC)
-    s.version = '0.0.0'
-  else
-    require 'cocoapods-core'
-    s.version  = Pod::VERSION
-  end
-
   s.name     = "cocoapods"
+  s.version  = Pod::VERSION
   s.date     = Date.today
   s.license  = "MIT"
   s.email    = ["eloy.de.enige@gmail.com", "fabiopelosin@gmail.com"]
@@ -33,9 +26,11 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
 
-  s.add_runtime_dependency 'cocoapods-core'
-  s.add_runtime_dependency 'claide',        '~> 0.1'
-  s.add_runtime_dependency 'xcodeproj',     '~> 0.4.1'
+  # Link with the version of CocoaPods-Core
+  s.add_runtime_dependency 'cocoapods-core', "= #{Pod::VERSION}"
+
+  s.add_runtime_dependency 'claide',         '~> 0.1'
+  s.add_runtime_dependency 'xcodeproj',      '~> 0.4.1'
 
   s.add_runtime_dependency 'faraday',       '~> 0.8.1'
   s.add_runtime_dependency 'octokit',       '~> 1.7'
