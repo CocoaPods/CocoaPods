@@ -37,6 +37,9 @@ module Pod
   #
   class Sandbox
 
+
+    autoload :PathList, 'cocoapods/sandbox/path_list'
+
     # @return [Pathname] the root of the sandbox.
     #
     attr_reader :root

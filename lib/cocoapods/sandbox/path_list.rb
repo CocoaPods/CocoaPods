@@ -1,5 +1,5 @@
 module Pod
-  class LocalPod
+  class Sandbox
 
     # The PathList class is designed to perform multiple glob matches against
     # a given directory. Basically, it generates a list of all the children
