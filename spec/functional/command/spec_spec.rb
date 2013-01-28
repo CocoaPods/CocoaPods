@@ -144,20 +144,16 @@ module Pod
 
     #-------------------------------------------------------------------------#
     
-    describe "which subcommand" do
-      extend SpecHelper::TemporaryRepos
-      
+    describe "which subcommand" do      
       it "errors if a given podspec doesn't exist" do
         e = lambda { command('spec', 'which', 'some_pod_that_doesnt_exist').run }.should.raise Informative
         e.message.should.match /Unable to find a pod with/
       end
       
       it "prints the path of a given podspec" do
-        lambda { command('spec', 'which', 'kslabel').run }
-        # text = "AFNetworking.podspec"
-        # UI.output.should.include text
-        # output = UI.output
-        # puts UI.output
+        lambda { command('spec', 'which', 'AFNetworking').run }.should.not.raise
+        text = "AFNetworking.podspec"
+        UI.output.should.include text.gsub(/\n/, '')
       end
 
       it "complains provided spec name is ambigious" do
@@ -188,7 +184,6 @@ module Pod
         #output.gsub(/\n/,'').should.equsal text.gsub(/\n/,'')
         UI.output.should.include text.gsub(/\n/,'')
       end
-
     end
   end
 end
