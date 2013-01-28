@@ -403,7 +403,7 @@ module Pod
         name = File.extname(name) == '.podspec' ? name : "#{name}.podspec"
         file = config.project_root + name
       else
-        file = config.project_root.glob('*.podspec').first
+        file = Pathname.glob(config.project_root + '*.podspec').first
       end
 
       spec = Specification.from_file(file)
