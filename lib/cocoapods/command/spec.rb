@@ -78,7 +78,7 @@ module Pod
           @quick       =  argv.flag?('quick')
           @local       =  argv.flag?('local')
           @only_errors =  argv.flag?('only-errors')
-          @clean    =  argv.flag?('clean', true)
+          @clean       =  argv.flag?('clean', true)
           @podspecs_paths = argv.arguments!
           super
         end
@@ -115,65 +115,237 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
-      class Cat < Spec
-        self.summary = 'Prints a spec file'
+      class Which < Spec
+        self.summary = 'Prints the path of the given spec.'
 
         self.description = <<-DESC
-          Prints `NAME.podspec` to standard output.
+          Prints the path of 'NAME.podspec'
         DESC
 
-        self.arguments = '[ NAME.podspec ]'
+        self.arguments = '[ NAME ]'
+
+        def self.options
+          [["--show-all", "Print all versions of the given podspec"]].concat(super)
+        end
 
         def initialize(argv)
-          @name = argv.shift_argument
+          @show_all = argv.flag?('show-all')
+          @spec = argv.shift_argument
+          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
           super
         end
 
         def validate!
           super
-          help! "A pod name is required." unless @name
+          help! "A podspec name is required." unless @spec
         end
 
         def run
-          found_sets = SourcesManager.search_by_name(@name)
-          raise Informative, "Unable to find a spec named `#{@name}'." if found_sets.count == 0
-          unless found_sets.count == 1
-            names = found_sets.map(&:name) * ', '
-            raise Informative, "More that one fitting spec found:\n #{names}"
-          end
-
-          set = found_sets.first
-          spec = best_spec_from_set(set)
-          file_name = spec.defined_in_file
-          UI.puts File.open(file_name).read
-        end
-
-        #--------------------------------------#
-
-        # @return [Specification] the highest know specification of the given
-        #         set.
-        #
-        def best_spec_from_set(set)
-          sources = set.sources
-
-          best_source = sources.first
-          best_version = best_source.versions(set.name).first
-          sources.each do |source|
-            if source.versions(set.name).first > best_version
-                best_source = source
-                best_version = version
-            end
-          end
-
-          best_spec = best_source.specification(set.name, best_version)
+          UI.puts get_path_of_spec(@spec, @show_all)
         end
       end
 
       #-----------------------------------------------------------------------#
 
+      class Cat < Spec
+        self.summary = 'Prints a spec file.'
+
+        self.description = <<-DESC
+          Prints 'NAME.podspec' to standard output.
+        DESC
+
+        self.arguments = '[ NAME ]'
+        
+        def self.options
+          [["--show-all", "Pick from all versions of the given podspec"]].concat(super)
+        end
+
+        def initialize(argv)
+          @show_all = argv.flag?('show-all')
+          @spec = argv.shift_argument
+          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
+          super
+        end
+
+        def validate!
+          super
+          help! "A podspec name is required." unless @spec
+        end
+
+        def run
+          filepath = if @show_all
+            specs = get_path_of_spec(@spec, @show_all).split(/\n/)
+            index = choose_from_array(specs, "Which spec would you like to print [1-#{ specs.count }]? ")
+            specs[index]
+          else
+            get_path_of_spec(@spec)
+          end
+
+          UI.puts File.open(filepath).read
+        end
+      end
+
+      #-----------------------------------------------------------------------#
+      
+      class Edit < Spec
+        self.summary = 'Edit a spec file.'
+        
+        self.description = <<-DESC
+          Opens 'NAME.podspec' to be edited.
+        DESC
+        
+        self.arguments = '[ NAME ]'
+        
+        def self.options
+          [["--show-all", "Pick which spec to edit from all avaliable versions of the given podspec"]].concat(super)
+        end
+        
+        def initialize(argv)
+          @show_all = argv.flag?('show-all')
+          @spec = argv.shift_argument
+          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
+          super
+        end
+
+        def validate!
+          super
+          help! "A podspec name is required." unless @spec
+        end
+        
+        def run
+          filepath = if @show_all
+            specs = get_path_of_spec(@spec, @show_all).split(/\n/)
+            index = choose_from_array(specs, "Which spec would you like to edit [1-#{ specs.count }]? ")
+            specs[index]
+          else
+            get_path_of_spec(@spec)
+          end
+          
+          exec_editor(filepath.to_s) if File.exists? filepath
+          raise Informative, "#{ filepath } doesn't exist."
+        end
+        
+  			# Thank you homebrew
+  			def which(cmd)
+  			  dir = ENV['PATH'].split(':').find { |p| File.executable? File.join(p, cmd) }
+  			  Pathname.new(File.join(dir, cmd)) unless dir.nil?
+  			end
+
+  			def which_editor
+  			  editor = ENV['EDITOR']
+  			  # If an editor wasn't set, try to pick a sane default
+  			  return editor unless editor.nil?
+
+  			  # Find Sublime Text 2
+  			  return 'subl' if which 'subl'
+  			  # Find Textmate
+  			  return 'mate' if which 'mate'
+  			  # Find # BBEdit / TextWrangler
+  			  return 'edit' if which 'edit'
+  			  # Default to vim
+  			  return 'vim' if which 'vim'
+
+  			  raise Informative, "Failed to open editor. Set your 'EDITOR' environment variable."
+  			end
+
+  			def exec_editor *args
+  			  return if args.to_s.empty?
+  			  safe_exec(which_editor, *args)
+  			end
+
+  			def safe_exec(cmd, *args)
+  			  # This buys us proper argument quoting and evaluation
+  			  # of environment variables in the cmd parameter.
+  			  exec "/bin/sh", "-i", "-c", cmd + ' "$@"', "--", *args
+  			end
+      end
+      
+      #-----------------------------------------------------------------------#
+
       # TODO some of the following methods can probably move to one of the subclasses.
 
       private
+      
+      # @return [Fixnum] the index of the chosen array item
+      #
+      def choose_from_array(array, message)
+        array.each_with_index do |item, index|
+          UI.puts "#{ index + 1 }: #{ item }"
+        end
+        
+        print message
+        
+        index = STDIN.gets.chomp.to_i - 1
+        if index < 0 || index > array.count
+          raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
+        else
+          index
+        end
+      end
+
+      # @return [Pathname] the absolute path or paths of the given podspec
+      #
+      def get_path_of_spec(spec, show_all = false)
+        pods = SourcesManager.search_by_name(spec)
+
+        unless pods.count == 1
+          names = pods.collect(&:name) * ', '
+          raise Informative, "More than one spec found for '#{ spec }':\n#{ names }"
+        end
+
+        unless show_all
+          best_spec, spec_source = spec_and_source_from_set(pods.first)
+          return pathname_from_spec(best_spec, spec_source)
+        end
+
+        return all_paths_from_set(pods.first)
+      end
+
+      # @return [Pathname] the absolute path of the given spec and source
+      #
+      def pathname_from_spec(spec, source)
+        Pathname.new("~/.cocoapods/#{ source }/#{ spec.name }/#{ spec.version }/#{ spec.name }.podspec").expand_path
+      end
+        
+      # @return [String] of spec paths one on each line
+      #
+      def all_paths_from_set(set)
+        paths = ""
+          
+        sources = set.sources
+          
+        sources.each do |source|
+          versions = source.versions(set.name)
+
+          versions.each do |version|
+            spec = source.specification(set.name, version)
+            paths += "#{ pathname_from_spec(spec, source) }\n"
+          end
+        end
+          
+        paths
+      end
+
+      # @return [Specification, Source] the highest known specification with it's source of the given
+      #         set.
+      #
+      def spec_and_source_from_set(set)
+        sources = set.sources
+
+        best_source = sources.first
+        best_version = best_source.versions(set.name).first
+        sources.each do |source|
+          version = source.versions(set.name).first
+          if version > best_version
+              best_source = source
+              best_version = version
+          end
+        end
+
+        return best_source.specification(set.name, best_version), best_source
+      end
+      
+
 
       def podspecs_to_lint
         @podspecs_to_lint ||= begin
@@ -288,7 +460,7 @@ Pod::Spec.new do |s|
   s.homepage     = "#{data[:homepage]}"
 
   # Specify the license type. CocoaPods detects automatically the license file if it is named
-  # `LICEN{C,S}E*.*', however if the name is different, specify it.
+  # 'LICENCE*.*' or 'LICENSE*.*', however if the name is different, specify it.
   s.license      = 'MIT (example)'
   # s.license      = { :type => 'MIT (example)', :file => 'FILE_LICENSE' }
   #

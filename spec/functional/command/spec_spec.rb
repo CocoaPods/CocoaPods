@@ -12,6 +12,9 @@ module Pod
         lambda { run_command('spec', 'NAME') }.should.raise CLAide::Help
         lambda { run_command('spec', 'createa') }.should.raise CLAide::Help
         lambda { run_command('lint', 'agument1', '2') }.should.raise CLAide::Help
+        lambda { run_command('spec', 'which') }.should.raise CLAide::Help
+        lambda { run_command('spec', 'cat') }.should.raise CLAide::Help
+        lambda { run_command('spec', 'edit') }.should.raise CLAide::Help
       end
     end
 
@@ -103,6 +106,12 @@ module Pod
         end
       end
 
+      it "complains if it can't find a spec with the given name" do
+        Dir.chdir(temporary_directory) do
+          lambda { run_command('spec', 'lint', 'some_pod_that_doesnt_exist') }.should.raise Informative
+        end
+      end
+
       it "lints the current working directory" do
         Dir.chdir(fixture('spec-repos') + 'master/JSONKit/1.4/') do
           cmd = command('spec', 'lint', '--quick', '--only-errors')
@@ -143,27 +152,24 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
-
-    describe "cat subcommand" do
-      extend SpecHelper::TemporaryRepos
-
-      it "complains it cant't find a spec to read" do
-        lambda { command('spec', 'cat', 'not-exissting-spec').run }.should.raise Informative
+    
+    describe "which subcommand" do
+      it "errors if a given podspec doesn't exist" do
+        e = lambda { command('spec', 'which', 'some_pod_that_doesnt_exist').run }.should.raise Informative
+        e.message.should.match /Unable to find a pod with/
+      end
+      
+      it "prints the path of a given podspec" do
+        lambda { command('spec', 'which', 'AFNetworking').run }.should.not.raise
+        text = "AFNetworking.podspec"
+        UI.output.should.include text.gsub(/\n/, '')
       end
 
       it "complains provided spec name is ambigious" do
         e = lambda { command('spec', 'cat', 'AF').run }.should.raise Informative
-        e.message.should.match /More that one/
+        e.message.should.match /More than one/
       end
-
-      it "prints the spec on standard output" do
-        lambda { command('spec', 'cat', 'JRSwizzle').run }.should.not.raise
-
-        text = (fixture('spec-repos') + 'master/JRSwizzle/1.0/JRSwizzle.podspec').read
-        #output.gsub(/\n/,'').should.equsal text.gsub(/\n/,'')
-        UI.output.should.include text.gsub(/\n/,'')
-      end
-
     end
   end
 end
+
