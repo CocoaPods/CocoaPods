@@ -341,16 +341,59 @@ describe "Pod::Podfile" do
     end
   end
   describe "concerning the podspec method" do
-    xit "it can use use the dependencies of a podspec" do
-
+    before do
+      FileUtils.cp(fixture('podspecs/1st.podspec'), config.project_root)
+      FileUtils.cp(fixture('podspecs/2nd.podspec'), config.project_root)
     end
 
-    xit "it allows to specify the name of a podspec" do
+    it "it uses the first podspec in the project root by default" do
+      podfile = Pod::Podfile.new do
+        platform :ios
+        podspec
+      end
 
+      podfile.dependencies.size.should == 1
+      podfile.dependency_by_top_level_spec_name('FirstDep').should == Pod::Dependency.new('FirstDep')
     end
 
-    xit "it allows to specify the path of a podspec" do
+    it "it allows to specify the name of a podspec" do
+      podfile = Pod::Podfile.new do
+        platform :ios
+        podspec :name => '2nd.podspec'
+      end
 
+      podfile.dependencies.size.should == 1
+      podfile.dependency_by_top_level_spec_name('SecondDep').should == Pod::Dependency.new('SecondDep')
+    end
+
+    it "it allows to specify the name of a podspec without extension" do
+      podfile = Pod::Podfile.new do
+        platform :ios
+        podspec :name => '2nd'
+      end
+
+      podfile.dependencies.size.should == 1
+      podfile.dependency_by_top_level_spec_name('SecondDep').should == Pod::Dependency.new('SecondDep')
+    end
+
+    it "it allows to specify the path of a podspec" do
+      podfile = Pod::Podfile.new do
+        platform :ios
+        podspec :path => (config.project_root + '2nd.podspec').to_s
+      end
+
+      podfile.dependencies.size.should == 1
+      podfile.dependency_by_top_level_spec_name('SecondDep').should == Pod::Dependency.new('SecondDep')
+    end
+
+    it "it allows to specify the path of a podspec without extension" do
+      podfile = Pod::Podfile.new do
+        platform :ios
+        podspec :path => (config.project_root + '2nd').to_s
+      end
+
+      podfile.dependencies.size.should == 1
+      podfile.dependency_by_top_level_spec_name('SecondDep').should == Pod::Dependency.new('SecondDep')
     end
   end
 
