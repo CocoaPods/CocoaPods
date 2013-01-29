@@ -116,5 +116,12 @@ module Pod
     def requires_legacy_ios_archs?
       (name == :ios) && deployment_target && (deployment_target < Version.new("4.3"))
     end
+
+    def deployment_target_setting_name
+      case @symbolic_name
+      when :ios then 'IPHONEOS_DEPLOYMENT_TARGET'
+      when :osx then 'MACOSX_DEPLOYMENT_TARGET'
+      end
+    end
   end
 end

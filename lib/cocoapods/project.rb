@@ -63,9 +63,8 @@ module Pod
         settings['ARCHS'] = "armv6 armv7"
       end
 
-      if platform == :ios && platform.deployment_target
-        # TODO: add for osx as well
-        settings['IPHONEOS_DEPLOYMENT_TARGET'] = platform.deployment_target.to_s
+      if platform.deployment_target
+        settings[platform.deployment_target_setting_name] = platform.deployment_target.to_s
       end
 
       target.build_settings('Debug').merge!(settings)

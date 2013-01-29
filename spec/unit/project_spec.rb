@@ -90,4 +90,20 @@ describe 'Pod::Project' do
       target.build_settings('Release')["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.0"
     end
   end
+
+  describe "concerning its :osx targets with a deployment target" do
+    before do
+      @project = Pod::Project.new
+    end
+
+    it "sets MACOSX_DEPLOYMENT_TARGET for both configurations" do
+      target = @project.add_pod_target('Pods', Pod::Platform.new(:osx))
+      target.build_settings('Debug')["MACOSX_DEPLOYMENT_TARGET"].should == "10.7"
+      target.build_settings('Release')["MACOSX_DEPLOYMENT_TARGET"].should == "10.7"
+
+      target = @project.add_pod_target('Pods', Pod::Platform.new(:osx, :deployment_target => "10.6"))
+      target.build_settings('Debug')["MACOSX_DEPLOYMENT_TARGET"].should == "10.6"
+      target.build_settings('Release')["MACOSX_DEPLOYMENT_TARGET"].should == "10.6"
+    end
+  end
 end
