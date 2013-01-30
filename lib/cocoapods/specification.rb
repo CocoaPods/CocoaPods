@@ -319,9 +319,49 @@ module Pod
       @parent ? @parent.recursive_compiler_flags | @compiler_flags[active_platform] : @compiler_flags[active_platform]
     end
 
+    ENABLE_OBJECT_USE_OBJC_FROM = {
+      :ios => Version.new('6'),
+      :osx => Version.new('10.8')
+    }
+
+    # The following behavior is regarding the `OS_OBJECT_USE_OBJC` flag. When
+    # set to `0`, it will allow code to use `dispatch_release()` on >= iOS 6.0
+    # and OS X 10.8.
+    #
+    # * New libraries that do *not* require ARC don’t need to care about this
+    #   issue at all.
+    #
+    # * New libraries that *do* require ARC _and_ have a deployment target of
+    #   >= iOS 6.0 or OS X 10.8:
+    #
+    #   These no longer use `dispatch_release()` and should *not* have the
+    #   `OS_OBJECT_USE_OBJC` flag set to `0`.
+    #
+    #   **Note:** this means that these libraries *have* to specify the
+    #             deployment target in order to function well.
+    #
+    # * New libraries that *do* require ARC, but have a deployment target of
+    #   < iOS 6.0 or OS X 10.8:
+    #
+    #   These contain `dispatch_release()` calls and as such need the
+    #   `OS_OBJECT_USE_OBJC` flag set to `1`.
+    #
+    #   **Note:** libraries that do *not* specify a platform version are
+    #             assumed to have a deployment target of < iOS 6.0 or OS X 10.8.
+    #
+    # For more information, see: http://opensource.apple.com/source/libdispatch/libdispatch-228.18/os/object.h
+    #
     def compiler_flags
       flags = recursive_compiler_flags.dup
-      flags << '-fobjc-arc' if requires_arc
+      if requires_arc
+        flags << '-fobjc-arc'
+        ios_target, osx_target = deployment_target(:ios), deployment_target(:osx)
+        if (ios_target.nil? && osx_target.nil?) ||
+            (ios_target && Version.new(ios_target) < ENABLE_OBJECT_USE_OBJC_FROM[:ios]) ||
+             (osx_target && Version.new(osx_target) < ENABLE_OBJECT_USE_OBJC_FROM[:osx])
+          flags << '-DOS_OBJECT_USE_OBJC=0'
+        end
+      end
       flags.join(' ')
     end
 

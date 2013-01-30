@@ -107,11 +107,11 @@ describe "A Pod::Specification loaded from a podspec" do
   it "adds compiler flags if ARC is required" do
     @spec.parent.should == nil
     @spec.requires_arc = true
-    @spec.activate_platform(:ios).compiler_flags.should == "-fobjc-arc"
-    @spec.activate_platform(:osx).compiler_flags.should == "-fobjc-arc"
+    @spec.activate_platform(:ios).compiler_flags.should == "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"
+    @spec.activate_platform(:osx).compiler_flags.should == "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"
     @spec.compiler_flags = "-Wunused-value"
-    @spec.activate_platform(:ios).compiler_flags.should == "-Wunused-value -fobjc-arc"
-    @spec.activate_platform(:osx).compiler_flags.should == "-Wunused-value -fobjc-arc"
+    @spec.activate_platform(:ios).compiler_flags.should == "-Wunused-value -fobjc-arc -DOS_OBJECT_USE_OBJC=0"
+    @spec.activate_platform(:osx).compiler_flags.should == "-Wunused-value -fobjc-arc -DOS_OBJECT_USE_OBJC=0"
   end
 end
 
@@ -523,7 +523,7 @@ describe "A Pod::Specification, concerning its attributes that support different
     end
 
     it "returns the same list of compiler flags for each platform" do
-      compiler_flags = '-Wdeprecated-implementations -fobjc-arc'
+      compiler_flags = '-Wdeprecated-implementations -fobjc-arc -DOS_OBJECT_USE_OBJC=0'
       @spec.activate_platform(:ios).compiler_flags.should == compiler_flags
       @spec.activate_platform(:osx).compiler_flags.should == compiler_flags
     end
@@ -587,13 +587,51 @@ describe "A Pod::Specification, concerning its attributes that support different
     end
 
     it "returns the same list of compiler flags for each platform" do
-      @spec.activate_platform(:ios).compiler_flags.should == '-Wdeprecated-implementations -fobjc-arc'
-      @spec.activate_platform(:osx).compiler_flags.should == '-Wfloat-equal -fobjc-arc'
+      @spec.activate_platform(:ios).compiler_flags.should == '-Wdeprecated-implementations -fobjc-arc -DOS_OBJECT_USE_OBJC=0'
+      @spec.activate_platform(:osx).compiler_flags.should == '-Wfloat-equal -fobjc-arc -DOS_OBJECT_USE_OBJC=0'
     end
 
     it "returns the same list of dependencies for each platform" do
       @spec.activate_platform(:ios).dependencies.should == [Pod::Dependency.new('JSONKit')]
       @spec.activate_platform(:osx).dependencies.should == [Pod::Dependency.new('SSZipArchive')]
+    end
+  end
+
+  describe "concerning ARC before and after iOS 6.0 and OS X 10.8" do
+    before do
+      @spec = Pod::Spec.new
+    end
+
+    it "does not do anything if ARC is *not* required" do
+      @spec.ios.deployment_target = '5'
+      @spec.osx.deployment_target = '10.6'
+      [:ios, :osx, [:ios, '6'], [:ios, '6.1'], [:osx, '10.8'], [:osx, '10.8.2']].each do |target|
+        @spec.activate_platform(*target).compiler_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+      end
+    end
+
+    it "does *not* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required and has a deployment target of >= iOS 6.0 or OS X 10.8" do
+      @spec.ios.deployment_target = '6'
+      @spec.osx.deployment_target = '10.8'
+      [[:ios, '6'], [:ios, '6.1'], [:osx, '10.8'], [:osx, '10.8.2']].each do |target|
+        @spec.activate_platform(*target).compiler_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+      end
+    end
+
+    it "*does* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required but has a deployment target < iOS 6.0 or OS X 10.8" do
+      @spec.requires_arc = true
+      @spec.ios.deployment_target = '5.1'
+      @spec.osx.deployment_target = '10.7.2'
+      [[:ios, '6'], [:ios, '6.1'], [:osx, '10.8'], [:osx, '10.8.2']].each do |target|
+        @spec.activate_platform(*target).compiler_flags.should.include '-DOS_OBJECT_USE_OBJC=0'
+      end
+    end
+
+    it "*does* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required and *no* deployment target is specified" do
+      @spec.requires_arc = true
+      [:ios, :osx, [:ios, '6'], [:ios, '6.1'], [:osx, '10.8'], [:osx, '10.8.2']].each do |target|
+        @spec.activate_platform(*target).compiler_flags.should.include '-DOS_OBJECT_USE_OBJC=0'
+      end
     end
   end
 end
