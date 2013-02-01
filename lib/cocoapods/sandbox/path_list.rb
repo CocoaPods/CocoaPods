@@ -43,6 +43,9 @@ module Pod
       #         lists.
       #
       def read_file_system
+        unless root.exist?
+          raise Informative, "Attempt to read non existent folder `#{root}`."
+        end
         root_length  = root.to_s.length+1
         paths  = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
         paths  = paths.reject { |p| p == "#{root}/." || p == "#{root}/.." }
