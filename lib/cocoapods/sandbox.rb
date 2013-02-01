@@ -37,8 +37,8 @@ module Pod
   #
   class Sandbox
 
-
-    autoload :PathList, 'cocoapods/sandbox/path_list'
+    autoload :PathList,     'cocoapods/sandbox/path_list'
+    autoload :FileAccessor, 'cocoapods/sandbox/file_accessor'
 
     # @return [Pathname] the root of the sandbox.
     #
