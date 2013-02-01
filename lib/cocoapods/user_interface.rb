@@ -231,8 +231,11 @@ module Pod
   module CoreUI
 
     class << self
+
+      # @todo enable in CocoaPods 0.17.0 release
+      #
       def puts(message)
-        UI.puts message
+        # UI.puts message
       end
 
       # @todo enable in CocoaPods 0.17.0 release
