@@ -1,10 +1,10 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
-  describe LocalPod::PathList do
+  describe Sandbox::PathList do
 
     before do
-      @path_list = LocalPod::PathList.new(fixture('banana-lib'))
+      @path_list = Sandbox::PathList.new(fixture('banana-lib'))
     end
 
     describe "In general" do
