@@ -144,7 +144,7 @@ module Pod
       #         their value as defined in the specification.
       #
       def spec_appledoc_options
-        return unless specification.documentation
+        return [] unless specification.documentation
         specification.documentation[:appledoc]
       end
 
