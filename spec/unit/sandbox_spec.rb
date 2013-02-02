@@ -51,6 +51,11 @@ module Pod
       @sandbox.relativize(path).should == expected
     end
 
+    it "converts a list of paths to the relative paths respec to the sandbox" do
+      paths = [temporary_directory + 'Sandbox/file_1', temporary_directory + 'Sandbox/file_2' ]
+      @sandbox.relativize_paths(paths).should == [Pathname.new('file_1'), Pathname.new('file_2')]
+    end
+
     #--------------------------------------#
 
     it "returns the path of the manifest" do

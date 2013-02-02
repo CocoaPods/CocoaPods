@@ -103,6 +103,14 @@ module Pod
       result
     end
 
+    # Converts a list of paths to their relative variant.
+    #
+    # @return [Array<Pathname>] the relative paths.
+    #
+    def relativize_paths(paths)
+      paths.map { |path| relativize(path) }
+    end
+
     # @return [String] a string representation suitable for debugging.
     #
     def inspect
