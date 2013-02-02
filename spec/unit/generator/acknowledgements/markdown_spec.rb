@@ -2,40 +2,38 @@ require File.expand_path("../../../../spec_helper", __FILE__)
 
 describe Pod::Generator::Markdown do
   before do
-    @sandbox = temporary_sandbox
-    @target_definition = mock
-    @pods = [mock]
-    @pods[0].expects(:license_text).returns("LICENSE_TEXT").at_least_once
-    @pods[0].expects(:name).returns("POD_NAME").at_least_once
-    @markdown = Pod::Generator::Markdown.new(@target_definition, @pods)
+    @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
+    @spec = @file_accessor.spec
+    @generator = Pod::Generator::Markdown.new([@file_accessor])
+    @spec.stubs(:name).returns("POD_NAME")
+    @generator.stubs(:license_text).returns("LICENSE_TEXT")
   end
 
   it "returns a correctly formatted title string" do
-    @pods[0].unstub(:license_text)
-    @pods[0].unstub(:name)
-    @markdown.title_from_string("A Title", 2).should.equal "## A Title"
+    @generator.title_from_string("A Title", 2).should.equal "## A Title"
   end
 
   it "returns a correctly formatted license string for each pod" do
-    @markdown.string_for_pod(@pods[0]).should.equal "\n## POD_NAME\n\nLICENSE_TEXT\n"
+    @generator.string_for_spec(@spec).should.equal "\n## POD_NAME\n\nLICENSE_TEXT\n"
   end
 
   it "returns a correctly formatted markdown string for the target" do
-    @markdown.stubs(:header_title).returns("HEADER_TITLE")
-    @markdown.stubs(:header_text).returns("HEADER_TEXT")
-    @markdown.stubs(:footnote_title).returns("") # Test that extra \n isn't added for empty strings
-    @markdown.stubs(:footnote_text).returns("FOOTNOTE_TEXT")
-    @markdown.licenses.should.equal "# HEADER_TITLE\nHEADER_TEXT\n\n## POD_NAME\n\nLICENSE_TEXT\nFOOTNOTE_TEXT\n"
+    @generator.stubs(:header_title).returns("HEADER_TITLE")
+    @generator.stubs(:header_text).returns("HEADER_TEXT")
+    @generator.stubs(:footnote_title).returns("") # Test that extra \n isn't added for empty strings
+    @generator.stubs(:footnote_text).returns("FOOTNOTE_TEXT")
+    @generator.licenses.should.equal "# HEADER_TITLE\nHEADER_TEXT\n\n## POD_NAME\n\nLICENSE_TEXT\nFOOTNOTE_TEXT\n"
   end
 
   it "writes a markdown file to disk" do
-    basepath = @sandbox.root + "Pods-acknowledgements"
-    given_path = @markdown.class.path_from_basepath(basepath)
-    expected_path = @sandbox.root + "Pods-acknowledgements.markdown"
+    basepath = config.sandbox.root + "Pods-acknowledgements"
+    given_path = @generator.class.path_from_basepath(basepath)
+    expected_path = config.sandbox.root + "Pods-acknowledgements.markdown"
+
     mockFile = mock
-    mockFile.expects(:write).with(equals(@markdown.licenses))
+    mockFile.expects(:write).with(equals(@generator.licenses))
     mockFile.expects(:close)
     File.expects(:new).with(equals(expected_path), equals("w")).returns(mockFile)
-    @markdown.save_as(given_path)
+    @generator.save_as(given_path)
   end
 end

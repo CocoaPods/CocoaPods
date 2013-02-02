@@ -2,12 +2,11 @@ require File.expand_path("../../../../spec_helper", __FILE__)
 
 describe Pod::Generator::Plist do
   before do
-    @sandbox = temporary_sandbox
-    @target_definition = mock
-    @pods = [mock]
-    @pods[0].expects(:license_text).returns("LICENSE_TEXT").at_least_once
-    @pods[0].expects(:name).returns("POD_NAME").at_least_once
-    @plist = Pod::Generator::Plist.new(@target_definition, @pods)
+    @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
+    @spec = @file_accessor.spec
+    @plist = Pod::Generator::Plist.new([@file_accessor])
+    @spec.stubs(:name).returns("POD_NAME")
+    @plist.stubs(:license_text).returns("LICENSE_TEXT")
   end
 
   it "returns the correct number of licenses (including header and footnote)" do
@@ -15,13 +14,11 @@ describe Pod::Generator::Plist do
   end
 
   it "returns a string for the plist title" do
-    @pods[0].unstub(:license_text)
-    @pods[0].unstub(:name)
     @plist.plist_title.should.be.kind_of(String)
   end
 
   it "returns a correctly formed license hash for each pod" do
-    @plist.hash_for_pod(@pods[0]).should == {
+    @plist.hash_for_spec(@spec).should == {
       :Type => "PSGroupSpecifier",
       :Title => "POD_NAME",
       :FooterText => "LICENSE_TEXT"
@@ -29,10 +26,8 @@ describe Pod::Generator::Plist do
   end
 
   it "returns nil for a pod with no license text" do
-    @pods[0].unstub(:license_text)
-    @pods[0].unstub(:name)
-    @pods[0].expects(:license_text).returns(nil)
-    @plist.hash_for_pod(@pods[0]).should.be.nil
+    @plist.expects(:license_text).returns(nil)
+    @plist.hash_for_spec(@spec).should.be.nil
   end
 
   it "returns a plist containg the licenses" do
@@ -44,9 +39,9 @@ describe Pod::Generator::Plist do
   end
 
   it "writes a plist to disk at the given path" do
-    basepath = @sandbox.root + "Pods-acknowledgements"
+    basepath = config.sandbox.root + "Pods-acknowledgements"
     given_path = @plist.class.path_from_basepath(basepath)
-    expected_path = @sandbox.root + "Pods-acknowledgements.plist"
+    expected_path = config.sandbox.root + "Pods-acknowledgements.plist"
     Xcodeproj.expects(:write_plist).with(equals(@plist.plist), equals(expected_path))
     @plist.save_as(given_path)
   end
