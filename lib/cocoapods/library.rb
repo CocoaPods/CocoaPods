@@ -38,6 +38,12 @@ module Pod
       "lib#{target_definition.label}.a"
     end
 
+      # @return [String] A string suitable for debugging.
+      #
+      def inspect
+        "<#{self.class} name=#{name} platform=#{platform}>"
+      end
+
     #-------------------------------------------------------------------------#
 
     # @!group Information storage
@@ -88,9 +94,10 @@ module Pod
     #
     attr_accessor :specs
 
-    # @return [Array<LocalPod>] the pods of the library.
+    # @return [Array<Sandbox::FileAccessor>] the file accessors for the
+    #         specifications of this library.
     #
-    attr_accessor :local_pods
+    attr_accessor :file_accessors
 
     #-------------------------------------------------------------------------#
 
