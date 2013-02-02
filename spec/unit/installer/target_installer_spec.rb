@@ -12,23 +12,25 @@ module Pod
         end
         @target_definition = @podfile.target_definitions[:default]
         @project = Project.new
+
         config.sandbox.project = @project
+        path_list = Sandbox::PathList.new(fixture('banana-lib'))
+        @spec = fixture_spec('banana-lib/BananaLib.podspec')
+        file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
+        source_files = config.sandbox.relativize_paths(file_accessor.source_files)
+        @project.add_source_files(source_files, 'BananaLib', @project.pods)
 
         @library = Library.new(@target_definition)
         @library.platform = Platform.new(:ios, '6.0')
         @library.support_files_root = config.sandbox.root
         @library.user_project_path  = config.sandbox.root + '../user_project.xcodeproj'
         @library.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
-        specification = fixture_spec('banana-lib/BananaLib.podspec')
-        @library.specs = [specification]
-        @pod = LocalPod.new(specification, config.sandbox, @library.platform)
-        @library.local_pods = [@pod]
+        @library.specs = [@spec]
+        @library.file_accessors = [file_accessor]
 
         @installer = TargetInstaller.new(config.sandbox, @library)
 
-        specification.prefix_header_contents = '#import "BlocksKit.h"'
-        @pod.stubs(:root).returns(Pathname.new(fixture('banana-lib')))
-        @pod.add_file_references_to_project(@project)
+        @spec.prefix_header_contents = '#import "BlocksKit.h"'
       end
 
       it "adds file references for the support files of the target" do
@@ -112,7 +114,7 @@ module Pod
 
       it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
         @installer.install!
-        @installer.target.build_configurations.each do |config|
+        @installer.library.target.build_configurations.each do |config|
           config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should.be.nil
         end
       end
@@ -120,7 +122,7 @@ module Pod
       it "enables the GCC_WARN_INHIBIT_ALL_WARNINGS flag" do
         @podfile.inhibit_all_warnings!
         @installer.install!
-        @installer.target.build_configurations.each do |config|
+        @installer.library.target.build_configurations.each do |config|
           config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should == 'YES'
         end
       end
@@ -129,14 +131,14 @@ module Pod
 
       it 'adds the source files of each pod to the target of the Pod library' do
         @installer.install!
-        names = @installer.target.source_build_phase.files.map { |bf| bf.file_ref.name }
+        names = @installer.library.target.source_build_phase.files.map { |bf| bf.file_ref.name }
         names.should.include("Banana.m")
       end
 
       it 'adds the frameworks required by to the pod to the project for informative purposes' do
         Specification::Consumer.any_instance.stubs(:frameworks).returns(['QuartzCore'])
         @installer.install!
-        names = @installer.project['Frameworks'].children.map(&:name)
+        names = @installer.sandbox.project['Frameworks'].children.map(&:name)
         names.sort.should == ["Foundation.framework", "QuartzCore.framework"]
       end
 
@@ -158,17 +160,20 @@ module Pod
       end
 
       it "creates a prefix header, including the contents of the specification's prefix header" do
-        @pod.top_specification.prefix_header_contents = '#import "BlocksKit.h"'
+        @spec.prefix_header_contents = '#import "BlocksKit.h"'
         @installer.install!
         prefix_header = config.sandbox.root + 'Pods-prefix.pch'
-        prefix_header.read.should == <<-EOS.strip_heredoc
+        generated = prefix_header.read
+        expected = <<-EOS.strip_heredoc
           #ifdef __OBJC__
           #import <UIKit/UIKit.h>
           #endif
 
           #import "Pods-header.h"
           #import "BlocksKit.h"
+          #import <BananaTree/BananaTree.h>
         EOS
+        generated.should == expected
       end
 
       it "creates a bridge support file" do
@@ -193,7 +198,7 @@ module Pod
 
       it "creates a dummy source to ensure the compilation of libraries with only categories" do
         @installer.install!
-        build_files = @installer.target.source_build_phase.files
+        build_files = @installer.library.target.source_build_phase.files
         build_file = build_files.find { |bf| bf.file_ref.name == 'Pods-dummy.m' }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-dummy.m'
