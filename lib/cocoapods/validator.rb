@@ -13,12 +13,19 @@ module Pod
 
     include Config::Mixin
 
+    # @return [Specification::Linter] the linter instance from CocoaPods
+    #         Core.
+    #
+    attr_reader :linter
+
     # @param  [Specification, Pathname, String] spec_or_path
     #         the Specification or the path of the `podspec` file to lint.
     #
     def initialize(spec_or_path)
       @linter = Specification::Linter.new(spec_or_path)
     end
+
+    #-------------------------------------------------------------------------#
 
     # @return [Specification] the specification to lint.
     #
@@ -33,10 +40,11 @@ module Pod
       @linter.file
     end
 
-    # @return [Specification::Linter] the linter instance from CocoaPods
-    #         Core.
+    # @return [Sandbox::FileAccessor] the file accessor for the spec.
     #
-    attr_reader :linter
+    attr_accessor :file_accessor
+
+    #-------------------------------------------------------------------------#
 
     # Lints the specification adding a {Specification::Linter::Result} for any
     # failed check to the {#results} list.
@@ -226,7 +234,9 @@ module Pod
       sandbox = Sandbox.new(config.project_pods_root)
       installer = Installer.new(sandbox, podfile)
       installer.install!
-      @pod = installer.local_pods.find { |pod| pod.top_specification == spec }
+
+      file_accessors = installer.libraries.first.file_accessors
+      @file_accessor = file_accessors.find { |accessor| accessor.spec == spec }
       config.silent
     end
 
@@ -267,12 +277,12 @@ module Pod
     def check_file_patterns
       [:source_files, :resources, :preserve_paths].each do |attr_name|
         attr = Specification::DSL.attributes.values.find{|attr| attr.name == attr_name }
-        # if !attr.empty?(spec) && @pod.send(attr_name).empty?
+        # if !attr.empty?(spec) && file_accessor.send(attr_name).empty?
         #   error "The `#{attr_name}` pattern did not match any file."
         # end
       end
 
-      unless @pod.license_file || spec.license && ( spec.license[:type] == 'Public Domain' || spec.license[:text] )
+      unless file_accessor.license || spec.license && ( spec.license[:type] == 'Public Domain' || spec.license[:text] )
         warning "Unable to find a license file"
       end
     end
