@@ -11,6 +11,7 @@ describe Pod::Generator::TargetHeader do
     file = temporary_directory + 'PodsDummy.m'
     @gen.save_as(file)
     file.read.should == <<-EOS.strip_heredoc
+    // WARNING: This feature of CocoaPods is present for discussion purposes and might be discontinued or changed in future
     #define __COCOA_PODS
 
     #define __POD_BananaLib

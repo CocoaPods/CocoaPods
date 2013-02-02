@@ -45,6 +45,7 @@ module Pod
       #
       def save_as(pathname)
         pathname.open('w') do |source|
+          source.puts "// WARNING: This feature of CocoaPods is present for discussion purposes and might be discontinued or changed in future"
           source.puts "#define __COCOA_PODS"
           source.puts
           specs.each do |specs|
