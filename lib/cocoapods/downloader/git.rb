@@ -127,13 +127,13 @@ module Pod
       def ensure_ref_exists_tag(ref)
         return if ref_exists_tag?(ref)
         update_cache
-        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists?(ref)
+        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists_tag?(ref)
       end
 
       def ensure_ref_exists_commit(ref)
         return if ref_exists_commit?(ref)
         update_cache
-        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists?(ref)
+        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists_commit?(ref)
       end
 
       # @return [Bool] Wether a branch exists in the cache.
