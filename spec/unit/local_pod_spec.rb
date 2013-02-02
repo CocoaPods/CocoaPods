@@ -98,11 +98,11 @@ describe Pod::LocalPod do
 
       h_build_file = target.headers_build_phase.files.first
       h_build_file.file_ref.path.should == "BananaLib/Classes/Banana.h"
-      h_build_file.settings.should == {"ATTRIBUTES"=>["Public"]}
+      h_build_file.settings.should == {}
 
       m_build_file = target.source_build_phase.files.first
       m_build_file.file_ref.path.should == "BananaLib/Classes/Banana.m"
-      m_build_file.settings.should == {"COMPILER_FLAGS"=>"-d some_flag"}
+      m_build_file.settings.should == { "COMPILER_FLAGS" => "-d some_flag" }
     end
 
     it "returns the platform" do
