@@ -99,7 +99,9 @@ module Pod
       # @return [Pathname] The of the prefix header file of the specification.
       #
       def prefix_header
-        path_list.root + spec_consumer.prefix_header_file
+        if spec_consumer.prefix_header_file
+          path_list.root + spec_consumer.prefix_header_file
+        end
       end
 
       # @return [Pathname] The path of the auto-detected README file.
@@ -112,8 +114,11 @@ module Pod
       #         specification or auto-detected.
       #
       def license
-        specified = path_list.root + spec_consumer.spec.root.license[:file]
-        specified || path_list.glob(%w[ licen{c,s}e{*,.*} ]).first
+        if spec_consumer.spec.root.license[:file]
+          path_list.root + spec_consumer.spec.root.license[:file]
+        else
+          path_list.glob(%w[ licen{c,s}e{*,.*} ]).first
+        end
       end
 
       #-----------------------------------------------------------------------#
