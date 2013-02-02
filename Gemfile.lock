@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: 39b060359900d5d319f8e42e50d641ef58bf7825
+  revision: c166168316648b7576e39fcb66db941cc0badb76
   specs:
-    xcodeproj (0.4.1)
+    xcodeproj (0.4.3)
       activesupport (~> 3.2.6)
       colored (~> 1.2)
 
@@ -60,7 +60,7 @@ GEM
     multi_json (1.5.0)
     multipart-post (1.1.5)
     netrc (0.7.7)
-    octokit (1.21.0)
+    octokit (1.22.0)
       addressable (~> 2.2)
       faraday (~> 0.8)
       faraday_middleware (~> 0.9)
@@ -68,14 +68,14 @@ GEM
       multi_json (~> 1.3)
       netrc (~> 0.7.7)
     open4 (1.3.0)
-    pry (0.9.10)
+    pry (0.9.11.4)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
-      slop (~> 3.3.1)
+      slop (~> 3.4)
     rake (0.9.6)
     rb-fsevent (0.9.3)
     redcarpet (2.2.2)
-    slop (3.3.3)
+    slop (3.4.3)
     terminal-notifier (1.4.2)
     vcr (2.4.0)
     webmock (1.9.0)
