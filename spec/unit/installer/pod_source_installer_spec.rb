@@ -1,7 +1,5 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
-# module BaconFocusedMode; end
-
 module Pod
   describe Installer::PodSourceInstaller do
 

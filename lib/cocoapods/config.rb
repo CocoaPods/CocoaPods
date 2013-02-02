@@ -12,16 +12,17 @@ module Pod
     #     ---
     #     skip_repo_update: true
     #     generate_docs: false
-    #     doc_install: false
+    #     install_docs: false
     #
     DEFAULTS = {
       :verbose             => false,
       :silent              => false,
       :skip_repo_update    => false,
+      :agressive_cache     => false,
 
       :clean               => true,
       :generate_docs       => true,
-      :doc_install         => true,
+      :install_docs        => true,
       :integrate_targets   => true,
       :skip_repo_update    => true,
       :new_version_message => true,
@@ -66,8 +67,8 @@ module Pod
     # @return [Bool] Whether the generated documentation should be installed to
     #         Xcode.
     #
-    attr_accessor :doc_install
-    alias_method  :doc_install?, :doc_install
+    attr_accessor :install_docs
+    alias_method  :install_docs?, :install_docs
 
     # @return [Bool] Whether CocoaPods should integrate a user target and build
     #         the workspace or just create the Pods project.
