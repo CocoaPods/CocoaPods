@@ -3,9 +3,9 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Generator::XCConfig do
     before do
-      specification = fixture_spec('banana-lib/BananaLib.podspec')
-      @pod          = Pod::LocalPod.new(specification, config.sandbox, :ios)
-      @generator    = Generator::XCConfig.new(config.sandbox, [@pod], './Pods')
+      @spec = fixture_spec('banana-lib/BananaLib.podspec')
+      @consumer = @spec.consumer(:ios)
+      @generator = Generator::XCConfig.new(config.sandbox, [@consumer], './Pods')
 
     end
 
@@ -14,7 +14,7 @@ module Pod
     end
 
     it "returns the pods" do
-      @generator.pods.should == [@pod]
+      names = @generator.spec_consumers.should == [@consumer]
     end
 
     it "returns the path of the pods root relative to the user project" do
@@ -45,7 +45,7 @@ module Pod
 
     it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
       @generator.set_arc_compatibility_flag = true
-      @pod.top_specification.stubs(:requires_arc).returns(true)
+      @consumer.stubs(:requires_arc).returns(true)
       @xcconfig = @generator.generate
       @xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
     end
@@ -87,8 +87,6 @@ module Pod
     end
 
     #-----------------------------------------------------------------------#
-
-    
 
     it "saves the xcconfig" do
       path = temporary_directory + 'sample.xcconfig'

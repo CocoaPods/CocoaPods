@@ -10,9 +10,10 @@ module Pod
       #
       attr_reader :sandbox
 
-      # @return [Array<LocalPod>] the list of LocalPods for the library.
+      # @return [Array<Specification::Consumer>] the consumers for the
+      #         specifications of the library which needs the xcconfig.
       #
-      attr_reader :pods
+      attr_reader :spec_consumers
 
       # @return [String] the relative path of the Pods root respect the user
       #         project that should be integrated by this library.
@@ -23,9 +24,9 @@ module Pod
       # @param  [Array<LocalPod>] pods @see pods
       # @param  [String] relative_pods_root @see relative_pods_root
       #
-      def initialize(sandbox, pods, relative_pods_root)
+      def initialize(sandbox, spec_consumers, relative_pods_root)
         @sandbox = sandbox
-        @pods    = pods
+        @spec_consumers = spec_consumers
         @relative_pods_root = relative_pods_root
       end
 
@@ -45,7 +46,7 @@ module Pod
       #
       def generate
         ld_flags = '-ObjC'
-        if  set_arc_compatibility_flag && pods.map(&:specifications).flatten.any? { |pod| pod.requires_arc }
+        if  set_arc_compatibility_flag && spec_consumers.any? { |consumer| consumer.requires_arc }
           ld_flags << ' -fobjc-arc'
         end
 
@@ -58,7 +59,7 @@ module Pod
           'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(sandbox.build_headers.search_paths),
           'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
         })
-        pods.each { |pod| @xcconfig.merge!(pod.xcconfig) }
+        spec_consumers.each { |consumers| @xcconfig.merge!(consumers.xcconfig) }
         @xcconfig
       end
 

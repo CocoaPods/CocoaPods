@@ -12,24 +12,25 @@ module Pod
       # @return [Platform] the platform for which the prefix header will be
       #         generated.
       #
+      attr_reader :file_accessors
       attr_reader :platform
 
       # @return [Array<LocalPod>] the LocalPod for the target for which the
       #         prefix header needs to be generated.
       #
-      attr_reader :pods
+      # attr_reader :consumers
 
       # @return [Array<String>] any header to import (with quotes).
       #
       attr_reader :imports
 
       # @param  [Platform] platform     @see platform
-      # @param  [Array<LocalPod>] pods  @see pods
+      # @param  [Array<LocalPod>] consumers  @see consumers
       #
-      def initialize(platform, pods)
+      def initialize(file_accessors, platform)
+        @file_accessors = file_accessors
         @platform = platform
-        @pods     = pods
-        @imports  = []
+        @imports = []
       end
 
       # Generates the contents of the prefix header according to the platform
@@ -52,13 +53,14 @@ module Pod
           result << %|\n#import "#{import}"|
         end
 
-        pods.each do |pod|
+        file_accessors.each do |file_accessor|
           result << "\n"
-          if prefix_header_contents = pod.top_specification.consumer(platform).prefix_header_contents
+          if prefix_header_contents = file_accessor.spec_consumer.prefix_header_contents
             result << prefix_header_contents
             result << "\n"
-          elsif prefix_header = pod.prefix_header_file
-            result << prefix_header.read
+          end
+          if prefix_header = file_accessor.prefix_header
+            result << Pathname(prefix_header).read
           end
         end
         result
@@ -74,6 +76,7 @@ module Pod
       def save_as(path)
         path.open('w') { |header| header.write(generate) }
       end
+
     end
   end
 end
