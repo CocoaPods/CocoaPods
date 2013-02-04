@@ -5,6 +5,9 @@ module Pod
   require 'cocoapods/downloader'
   require 'cocoapods/file_list'
   require 'cocoapods/config'
+  require 'cocoapods/dependency_injection'
+
+  require 'cocoapods/gem_version'
 
   # Indicates a runtime error **not** caused by a bug.
   #
@@ -25,7 +28,6 @@ module Pod
   autoload :Installer,              'cocoapods/installer'
   autoload :SourcesManager,         'cocoapods/sources_manager'
   autoload :Library,                'cocoapods/library'
-  autoload :LocalPod,               'cocoapods/local_pod'
   autoload :Project,                'cocoapods/project'
   autoload :Resolver,               'cocoapods/resolver'
   autoload :Sandbox,                'cocoapods/sandbox'
@@ -45,6 +47,13 @@ module Pod
     autoload :PrefixHeader,         'cocoapods/generator/prefix_header'
     autoload :TargetHeader,         'cocoapods/generator/target_header'
     autoload :XCConfig,             'cocoapods/generator/xcconfig'
+  end
+
+  module Hooks
+    autoload :InstallerData,        'cocoapods/hooks/installer_data'
+    autoload :LibraryData,          'cocoapods/hooks/library_data'
+    autoload :PodData,              'cocoapods/hooks/pod_data'
+    autoload :TargetInstallerData,  'cocoapods/hooks/target_installer_data'
   end
 
 end
