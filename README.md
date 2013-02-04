@@ -45,6 +45,8 @@ Or from `Xcode > Settings > Downloads > Components > Command Line Tools`
 
 2. CocoaPods re-uses some of the RubyGems classes. If you have a version older than 1.4.0, you will have to update RubyGems: `$ gem update --system`.
 
+3. If you use [RVM](https://rvm.io), you might need to create a symbolic link to the LLVM GCC compiler: `$ [sudo] ln -s /usr/bin/llvm-gcc-4.2 /usr/bin/gcc-4.2`
+
 
 ## Adding it to your project
 

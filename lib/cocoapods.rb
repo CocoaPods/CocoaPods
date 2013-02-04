@@ -1,12 +1,6 @@
 require 'rubygems'
 
 module Pod
-  require 'cocoapods-core'
-  require 'cocoapods/downloader'
-  require 'cocoapods/file_list'
-  require 'cocoapods/config'
-  require 'cocoapods/dependency_injection'
-
   require 'cocoapods/gem_version'
 
   # Indicates a runtime error **not** caused by a bug.
@@ -21,6 +15,12 @@ module Pod
       "[!] #{super}".red
     end
   end
+
+  require 'cocoapods-core'
+  require 'cocoapods/downloader'
+  require 'cocoapods/file_list'
+  require 'cocoapods/config'
+  require 'cocoapods/dependency_injection'
 
   autoload :Command,                'cocoapods/command'
   autoload :Executable,             'cocoapods/executable'

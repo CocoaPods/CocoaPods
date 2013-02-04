@@ -111,6 +111,31 @@ module Pod
 
   #---------------------------------------------------------------------------#
 
+  describe ExternalSources::MercurialSource do
+
+    before do
+      dependency = Dependency.new("MercurialSource", :hg => fixture('mercurial-repo'))
+      @external_source = ExternalSources.from_dependency(dependency)
+    end
+
+    it "creates a copy of the podspec" do
+      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      path = config.sandbox.root + 'Local Podspecs/MercurialSource.podspec'
+      path.should.exist?
+    end
+
+    it "marks a LocalPod as downloaded" do
+      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      config.sandbox.predownloaded_pods.should == ["MercurialSource"]
+    end
+
+    it "returns the description" do
+      @external_source.description.should.match %r|from `.*/mercurial-repo`|
+    end
+  end
+
+  #---------------------------------------------------------------------------#
+
   describe ExternalSources::PodspecSource do
 
     before do

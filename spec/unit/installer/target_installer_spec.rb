@@ -48,6 +48,11 @@ module Pod
 
       #--------------------------------------#
 
+      xit "sets the deployment target of the native target" do
+        # Test iOS and OS X
+        # @see https://github.com/CocoaPods/CocoaPods/commit/76b5b7f9c02a4d36425bde745ecd6d7ff289a00d
+      end
+
       it 'adds the target for the static library to the project' do
         @installer.install!
         @project.targets.count.should == 1
@@ -203,6 +208,52 @@ module Pod
         build_file.file_ref.path.should == 'Pods-dummy.m'
         dummy = config.sandbox.root + 'Pods-dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
+      end
+
+      #--------------------------------------------------------------------------------#
+
+      describe "concerning ARC before and after iOS 6.0 and OS X 10.8" do
+        before do
+          @spec = Pod::Spec.new
+        end
+
+        it "does not do anything if ARC is *not* required" do
+          @spec.requires_arc = false
+          @spec.ios.deployment_target = '5'
+          @spec.osx.deployment_target = '10.6'
+          ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+          osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
+          ios_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+          osx_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+        end
+
+        it "does *not* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required and has a deployment target of >= iOS 6.0 or OS X 10.8" do
+          @spec.requires_arc = false
+          @spec.ios.deployment_target = '6'
+          @spec.osx.deployment_target = '10.8'
+          ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+          osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
+          ios_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+          osx_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+        end
+
+        it "*does* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required but has a deployment target < iOS 6.0 or OS X 10.8" do
+          @spec.requires_arc = true
+          @spec.ios.deployment_target = '5.1'
+          @spec.osx.deployment_target = '10.7.2'
+          ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+          osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
+          ios_flags.should.include '-DOS_OBJECT_USE_OBJC'
+          osx_flags.should.include '-DOS_OBJECT_USE_OBJC'
+        end
+
+        it "*does* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required and *no* deployment target is specified" do
+          @spec.requires_arc = true
+          ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+          osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
+          ios_flags.should.include '-DOS_OBJECT_USE_OBJC'
+          osx_flags.should.include '-DOS_OBJECT_USE_OBJC'
+        end
       end
     end
   end

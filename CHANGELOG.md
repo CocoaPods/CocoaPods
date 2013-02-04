@@ -68,6 +68,34 @@
 - Added Library class.
 - Added XCConfig generator.
 
+## 0.16.2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.1...0.16.2) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.1...0.4.3)
+
+###### Bug fixes
+
+- Quote storyboard and xib paths in ‘copy resource’ script.
+  [#740](https://github.com/CocoaPods/CocoaPods/pull/740)
+- Fix use of `podspec` directive in Podfile with no options specified.
+  [#768](https://github.com/CocoaPods/CocoaPods/pull/768)
+- Generate Mac OS X Pods target with the specified deployment target.
+  [#757](https://github.com/CocoaPods/CocoaPods/issues/757)
+- Disable libSystem objects for ARC libs that target older platforms.
+  This applies when the deployment target is set to < iOS 6.0 or OS X 10.8,
+  or not specified at all.
+  [#352](https://github.com/CocoaPods/Specs/issues/352)
+  [#1161](https://github.com/CocoaPods/Specs/pull/1161)
+- Mark header source files as ‘Project’ not ‘Public’.
+  [#747](https://github.com/CocoaPods/CocoaPods/issues/747)
+- Add `PBXGroup` as acceptable `PBXFileReference` value.
+  [#49](https://github.com/CocoaPods/Xcodeproj/pull/49)
+- Make `xcodeproj show` without further arguments actually work.
+  [#45](https://github.com/CocoaPods/Xcodeproj/issues/45)
+
+###### Enhancements
+
+- Added support for pre-download over Mercurial.
+  [#750](https://github.com/CocoaPods/CocoaPods/pull/750)
+
 ## 0.16.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0...0.16.1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0...0.4.1)
 

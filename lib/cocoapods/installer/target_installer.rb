@@ -91,6 +91,11 @@ module Pod
         library.target = @target
       end
 
+      ENABLE_OBJECT_USE_OBJC_FROM = {
+        :ios => Version.new('6'),
+        :osx => Version.new('10.8')
+      }
+
       # Adds the build files of the pods to the target and adds a reference to
       # the frameworks of the Pods.
       #
@@ -103,9 +108,7 @@ module Pod
         UI.message "- Adding Build files" do
           library.file_accessors.each do |file_accessor|
             consumer = file_accessor.spec_consumer
-            flags = consumer.compiler_flags.dup
-            flags << '-fobjc-arc' if consumer.requires_arc
-            flags = flags * " "
+            flags = compiler_flags_for_consumer(consumer)
             source_files = file_accessor.source_files
             file_refs = source_files.map { |sf| project.file_reference(sf) }
             target.add_file_references(file_refs, flags)
@@ -312,6 +315,57 @@ module Pod
         relative_path = path.relative_path_from(sandbox.root)
         support_files_group.new_file(relative_path)
       end
+
+      # Returns the compiler flags for the source files of the given specification.
+      #
+      # The following behavior is regarding the `OS_OBJECT_USE_OBJC` flag. When
+      # set to `0`, it will allow code to use `dispatch_release()` on >= iOS 6.0
+      # and OS X 10.8.
+      #
+      # * New libraries that do *not* require ARC don’t need to care about this
+      #   issue at all.
+      #
+      # * New libraries that *do* require ARC _and_ have a deployment target of
+      #   >= iOS 6.0 or OS X 10.8:
+      #
+      #   These no longer use `dispatch_release()` and should *not* have the
+      #   `OS_OBJECT_USE_OBJC` flag set to `0`.
+      #
+      #   **Note:** this means that these libraries *have* to specify the
+      #             deployment target in order to function well.
+      #
+      # * New libraries that *do* require ARC, but have a deployment target of
+      #   < iOS 6.0 or OS X 10.8:
+      #
+      #   These contain `dispatch_release()` calls and as such need the
+      #   `OS_OBJECT_USE_OBJC` flag set to `1`.
+      #
+      #   **Note:** libraries that do *not* specify a platform version are
+      #             assumed to have a deployment target of < iOS 6.0 or OS X 10.8.
+      #
+      #  For more information, see: http://opensource.apple.com/source/libdispatch/libdispatch-228.18/os/object.h
+      #
+      # @param  [Specification::Consumer] consumer
+      #         The consumer for the specification for wich the compiler flags
+      #         are needed.
+      #
+      # @return [String] The compiler flags.
+      #
+      def compiler_flags_for_consumer(consumer)
+        flags = consumer.compiler_flags.dup
+        if consumer.requires_arc
+          flags << '-fobjc-arc'
+          platform_name = consumer.platform.symbolic_name unless consumer.platform.is_a?(Symbol) #TODO
+          spec_deployment_target = consumer.spec.deployment_target(platform_name)
+          if spec_deployment_target.nil? || Version.new(spec_deployment_target) < ENABLE_OBJECT_USE_OBJC_FROM[platform_name]
+            flags << '-DOS_OBJECT_USE_OBJC=0'
+          end
+        end
+        flags = flags * " "
+      end
+
+      #-----------------------------------------------------------------------#
+
     end
   end
 end

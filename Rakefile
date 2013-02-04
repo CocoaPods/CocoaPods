@@ -1,42 +1,10 @@
-# Travis support
-def on_rvm?
-  `which ruby`.strip.include?('.rvm')
-end
-
-def rvm_ruby_dir
-  @rvm_ruby_dir ||= File.expand_path('../..', `which ruby`.strip)
-end
-
-namespace :travis do
-  # Used to create the deb package.
-  #
-  # Known to work with opencflite rev 248.
-  task :prepare_deb do
-    sh "sudo apt-get install subversion libicu-dev"
-    sh "svn co https://opencflite.svn.sourceforge.net/svnroot/opencflite/trunk opencflite"
-    sh "cd opencflite && ./configure --target=linux --with-uuid=/usr --with-tz-includes=./include --prefix=/usr/local && make && sudo make install"
-    sh "sudo /sbin/ldconfig"
+def execute_command(command)
+  if ENV['VERBOSE']
+    sh(command)
+  else
+    output = `#{command} 2>&1`
+    raise output unless $?.success?
   end
-
-  task :install_opencflite_debs do
-    sh "mkdir -p debs"
-    Dir.chdir("debs") do
-      sh "wget http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu44_4.4.2-2ubuntu0.11.04.1_i386.deb" unless File.exist?("libicu44_4.4.2-2ubuntu0.11.04.1_i386.deb")
-      base_url = "https://github.com/downloads/CocoaPods/OpenCFLite"
-      %w{ opencflite1_248-1_i386.deb opencflite-dev_248-1_i386.deb }.each do |deb|
-        sh "wget #{File.join(base_url, deb)}" unless File.exist?(deb)
-      end
-      sh "sudo dpkg -i *.deb"
-    end
-  end
-
-  task :install do
-    sh "git submodule update --init"
-    sh "sudo apt-get install subversion"
-    sh "env CFLAGS='-I#{rvm_ruby_dir}/include' bundle install --without debugging documentation"
-  end
-
-  task :setup => [:install_opencflite_debs, :install]
 end
 
 namespace :gem do
@@ -263,33 +231,35 @@ namespace :examples do
 
   desc "Build all examples"
   task :build do
-    sh "rm -rf ~/Library/Developer/Shared/Documentation/DocSets/org.cocoapods.*"
+    execute_command "rm -rf ~/Library/Developer/Shared/Documentation/DocSets/org.cocoapods.*"
     examples.entries.each do |example|
       puts "Building example: #{example}"
-      puts
       Dir.chdir(example.to_s) do
-        sh "rm -rf Pods DerivedData"
-        sh "#{'../../bin/' unless ENV['FROM_GEM']}pod install --verbose --no-update"
+        execute_command "rm -rf Pods DerivedData"
+        execute_command "#{'../../bin/' unless ENV['FROM_GEM']}pod install --verbose --no-update"
         command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
         if (example + 'Podfile').read.include?('platform :ios')
           # Specifically build against the simulator SDK so we don't have to deal with code signing.
           command << " -sdk "
           command << Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
         end
-        sh command
+        execute_command(command)
       end
-      puts
     end
   end
 end
 
 desc "Initializes your working copy to run the specs"
 task :bootstrap do
-  puts "Updating submodules..."
-  `git submodule update --init --recursive`
+  puts "Updating submodules"
+  execute_command "git submodule update --init --recursive"
 
   puts "Installing gems"
-  `bundle install`
+  execute_command "bundle install"
+
+  puts "Installing tools (Homebrew)"
+  execute_command "brew install appledoc" if `which appledoc`.strip.empty?
+  execute_command "brew install mercurial" if `which hg`.strip.empty?
 end
 
 desc "Run all specs"
