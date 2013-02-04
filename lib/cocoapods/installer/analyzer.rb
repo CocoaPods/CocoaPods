@@ -198,7 +198,7 @@ module Pod
             lib.user_build_configurations = compute_user_build_configurations(target_definition, lib.user_targets)
             lib.platform                  = compute_platform_for_target_definition(target_definition, lib.user_targets)
           else
-            lib.user_project_path         = config.project_root
+            lib.user_project_path         = config.installation_root
             lib.user_project              = nil
             lib.user_targets              = []
             lib.user_build_configurations = {}
@@ -374,7 +374,7 @@ module Pod
       #
       def compute_user_project_path(target_definition)
         if target_definition.user_project_path
-          path = config.project_root + target_definition.user_project_path
+          path = config.installation_root + target_definition.user_project_path
           path = "#{path}.xcodeproj" unless File.extname(path) == '.xcodeproj'
           path = Pathname.new(path)
           unless path.exist?
@@ -383,7 +383,7 @@ module Pod
           end
 
         else
-          xcodeprojs = Pathname.glob(config.project_root + '*.xcodeproj')
+          xcodeprojs = Pathname.glob(config.installation_root + '*.xcodeproj')
           if xcodeprojs.size == 1
             path = xcodeprojs.first
           else

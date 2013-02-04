@@ -20,7 +20,7 @@ module Pod
           end
         end
 
-        @project_root = @sample_project_path.dirname
+        @installation_root = @sample_project_path.dirname
         @pods_project = Project.new()
         config.sandbox.project = @pods_project
         @libraries = @podfile.target_definitions.values.map do |target_definition|
@@ -32,7 +32,7 @@ module Pod
           lib.user_project = sample_project
           lib
         end
-        @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, @project_root, @libraries)
+        @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, @installation_root, @libraries)
       end
 
       it "uses the path of the workspace defined in the podfile" do

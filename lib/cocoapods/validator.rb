@@ -212,8 +212,8 @@ module Pod
       validation_dir.rmtree if validation_dir.exist?
       validation_dir.mkpath
       @original_config = Config.instance.clone
-      config.project_root      = validation_dir
-      config.project_pods_root = validation_dir + 'Pods'
+      config.installation_root = validation_dir
+      config.sandbox_root      = validation_dir + 'Pods'
       config.silent            = !config.verbose
       config.integrate_targets = false
       config.generate_docs     = false
@@ -231,7 +231,7 @@ module Pod
     #
     def install_pod
       podfile = podfile_from_spec(consumer.platform, spec.deployment_target(consumer.platform))
-      sandbox = Sandbox.new(config.project_pods_root)
+      sandbox = Sandbox.new(config.sandbox_root)
       installer = Installer.new(sandbox, podfile)
       installer.install!
 
@@ -254,7 +254,7 @@ module Pod
       else
         UI.message "\nBuilding with xcodebuild.\n".yellow do
           messages      = []
-          output        = Dir.chdir(config.project_pods_root) { `xcodebuild clean build 2>&1` }
+          output        = Dir.chdir(config.sandbox_root) { `xcodebuild clean build 2>&1` }
           UI.puts output
           parsed_output  = parse_xcodebuild_output(output)
           parsed_output.each do |message|

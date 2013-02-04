@@ -7,15 +7,13 @@ module Bacon
     define_method(:run_requirement) do |description, spec|
       ::Pod::Config.instance = nil
       ::Pod::Config.instance.tap do |c|
-        # c.verbose        =  ENV['VERBOSE_SPECS']
-        # c.silent         =  !ENV['VERBOSE_SPECS']
-        c.verbose          =  false
-        c.silent           =  true
-        c.repos_dir        =  fixture('spec-repos')
-        c.project_root     =  SpecHelper.temporary_directory
-        c.install_docs     =  false
-        c.generate_docs    =  false
-        c.skip_repo_update =  true
+        c.verbose           =  false
+        c.silent            =  true
+        c.repos_dir         =  fixture('spec-repos')
+        c.installation_root =  SpecHelper.temporary_directory
+        c.install_docs      =  false
+        c.generate_docs     =  false
+        c.skip_repo_update  =  true
       end
 
       ::Pod::UI.output = ''

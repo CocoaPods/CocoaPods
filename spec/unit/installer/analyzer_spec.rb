@@ -92,7 +92,7 @@ module Pod
         @analyzer.analyze
         lib = @analyzer.libraries.first
 
-        lib.user_project_path.should == config.project_root
+        lib.user_project_path.should == config.installation_root
         lib.user_project.should.be.nil
         lib.user_targets.map(&:name).should == []
         lib.user_build_configurations.should == {}
@@ -199,7 +199,7 @@ module Pod
 
         it "if not specified in the target definition if looks if there is only one project" do
           target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
-          config.project_root = config.project_root + 'SampleProject'
+          config.installation_root = config.installation_root + 'SampleProject'
 
           path = @analyzer.send(:compute_user_project_path, target_definition)
           path.to_s.should.include 'SampleProject/SampleProject.xcodeproj'

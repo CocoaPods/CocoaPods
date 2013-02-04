@@ -20,11 +20,11 @@ module Pod
     describe "Concerning a user's project, which is expected in the current working directory" do
 
       before do
-        config.project_root = temporary_directory
+        config.installation_root = temporary_directory
       end
 
       it "returns the path to the project root" do
-        config.project_root.should == temporary_directory
+        config.installation_root.should == temporary_directory
       end
 
       it "returns the path to the project Podfile if it exists" do
@@ -38,7 +38,7 @@ module Pod
       end
 
       it "returns the path to the Pods directory that holds the dependencies" do
-        config.project_pods_root.should == temporary_directory + 'Pods'
+        config.sandbox_root.should == temporary_directory + 'Pods'
       end
     end
 

@@ -121,24 +121,26 @@ module Pod
     # @return [Pathname] the root of the CocoaPods installation where the
     #         Podfile is located.
     #
-    def project_root
-      @project_root ||= Pathname.pwd
+    def installation_root
+      @installation_root ||= Pathname.pwd
     end
 
-    attr_writer :project_root
+    attr_writer :installation_root
+    alias :project_root :installation_root
 
     # @return [Pathname] The root of the sandbox.
     #
-    def project_pods_root
-      @project_pods_root ||= @project_root + 'Pods'
+    def sandbox_root
+      @sandbox_root ||= installation_root + 'Pods'
     end
 
-    attr_writer :project_pods_root
+    attr_writer :sandbox_root
+    alias :project_pods_root :sandbox_root
 
     # @return [Sandbox] The sandbox of the current project.
     #
     def sandbox
-      @sandbox ||= Sandbox.new(project_pods_root)
+      @sandbox ||= Sandbox.new(sandbox_root)
     end
 
     # @return [Podfile] The Podfile to use for the current execution.
@@ -190,9 +192,9 @@ module Pod
     #
     def podfile_path
       unless @podfile_path
-        @podfile_path = project_root + 'CocoaPods.podfile'
+        @podfile_path = installation_root + 'CocoaPods.podfile'
         unless @podfile_path.exist?
-          @podfile_path = project_root + 'Podfile'
+          @podfile_path = installation_root + 'Podfile'
         end
       end
       @podfile_path
@@ -203,7 +205,7 @@ module Pod
     # @note The Lockfile is named `Podfile.lock`.
     #
     def lockfile_path
-      @lockfile_path ||= project_root + 'Podfile.lock'
+      @lockfile_path ||= installation_root + 'Podfile.lock'
     end
 
     #--------------------------------------#

@@ -14,11 +14,11 @@ puts " [!] ".red << "Skipping xcodebuild based checks, because it can't be found
 def should_xcodebuild(target_definition)
   return if skip_xcodebuild?
   target = target_definition
-  Dir.chdir(config.project_pods_root) do
+  Dir.chdir(config.sandbox_root) do
     print "[!] Compiling #{target.label}...\r"
     should_successfully_perform "xcodebuild -target '#{target.label}'"
     product_name = "lib#{target_definition.label}.a"
-    lib_path = config.project_pods_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + product_name
+    lib_path = config.sandbox_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + product_name
     `lipo -info '#{lib_path}'`.should.include "#{target.platform == :ios ? 'armv7' : 'x86_64'}"
   end
 end
@@ -94,7 +94,7 @@ module Pod
         installer = Installer.new(config.sandbox, podfile)
         installer.install!
 
-        dummy = (config.project_pods_root + 'Pods-dummy.m').read
+        dummy = (config.sandbox_root + 'Pods-dummy.m').read
         dummy.should.include?('@implementation PodsDummy_Pods')
       end
 
@@ -113,7 +113,7 @@ module Pod
         installer = Installer.new(config.sandbox, podfile)
         installer.install!
 
-        dummy = (config.project_pods_root + 'Pods-AnotherTarget-dummy.m').read
+        dummy = (config.sandbox_root + 'Pods-AnotherTarget-dummy.m').read
         dummy.should.include?('@implementation PodsDummy_Pods_AnotherTarget')
       end
 
@@ -180,9 +180,9 @@ module Pod
           installer = Installer.new(config.sandbox, podfile)
           installer.install!
 
-          doc = (config.project_pods_root + 'Documentation/JSONKit/html/index.html').read
+          doc = (config.sandbox_root + 'Documentation/JSONKit/html/index.html').read
           doc.should.include?('<title>JSONKit 1.4 Reference</title>')
-          doc = (config.project_pods_root + 'Documentation/SSToolkit/html/index.html').read
+          doc = (config.sandbox_root + 'Documentation/SSToolkit/html/index.html').read
           doc.should.include?('<title>SSToolkit 1.0.0 Reference</title>')
         end
       end
@@ -195,7 +195,7 @@ module Pod
       describe "Multi-platform (#{test_platform})" do
 
         before do
-          FileUtils.cp_r(fixture('integration/.'), config.project_pods_root)
+          FileUtils.cp_r(fixture('integration/.'), config.sandbox_root)
         end
 
         #--------------------------------------#
@@ -208,12 +208,12 @@ module Pod
 
             pre_install do |installer|
               memo = "PODS:#{installer.pods * ', '} TARGETS:#{installer.project.targets.to_a * ', '}"
-              File.open(installer.config.project_pods_root + 'memo.txt', 'w') {|f| f.puts memo}
+              File.open(installer.config.sandbox_root + 'memo.txt', 'w') {|f| f.puts memo}
             end
           end
 
           Installer.new(config.sandbox, podfile).install!
-          File.open(config.project_pods_root + 'memo.txt','rb').read.should == "PODS:SSZipArchive (0.1.0) TARGETS:\n"
+          File.open(config.sandbox_root + 'memo.txt','rb').read.should == "PODS:SSZipArchive (0.1.0) TARGETS:\n"
         end
 
         #--------------------------------------#
@@ -280,7 +280,7 @@ module Pod
           lockfile.delete("SPEC CHECKSUMS")
           lockfile.should == lockfile_contents
 
-          root = config.project_pods_root
+          root = config.sandbox_root
           (root + 'Pods.xcconfig').read.should == installer.libraries.first.xcconfig.to_s
           project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
           saved_project = Xcodeproj.read_plist(project_file)
@@ -303,7 +303,7 @@ module Pod
 
           installer = Installer.new(config.sandbox, podfile)
           installer.install!
-          contents = (config.project_pods_root + 'Pods-resources.sh').read
+          contents = (config.sandbox_root + 'Pods-resources.sh').read
           contents.should.include "install_resource 'SSZipArchive/LICENSE'\n" \
             "install_resource 'SSZipArchive/Readme.markdown'"
         end
@@ -327,7 +327,7 @@ module Pod
           installer = Installer.new(config.sandbox, podfile)
           installer.install!
 
-          project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
+          project = Xcodeproj::Project.new(config.sandbox_root + 'Pods.xcodeproj')
           disk_source_files = project.files.sort.reject { |f| f.build_files.empty? }
           installer_source_files = installer.pods_project.files.sort.reject { |f| f.build_files.empty? }
           disk_source_files.should == installer_source_files
@@ -352,7 +352,7 @@ module Pod
           installer = Installer.new(config.sandbox, podfile)
           installer.install!
 
-          project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
+          project = Xcodeproj::Project.new(config.sandbox_root + 'Pods.xcodeproj')
           project.targets.count.should == 3
           project.targets.each do |target|
             phase = target.build_phases.find { |phase| phase.isa == 'PBXSourcesBuildPhase' }
@@ -383,7 +383,7 @@ module Pod
           ]
 
           expected_files.each do |file|
-            (config.project_pods_root + file).should.exist
+            (config.sandbox_root + file).should.exist
           end
 
           should_xcodebuild(podfile.target_definitions[:default])
@@ -439,7 +439,7 @@ module Pod
           installer = Installer.new(config.sandbox, podfile)
           installer.install!
 
-          root = config.project_pods_root
+          root = config.sandbox_root
           (root + 'Pods.xcconfig').should.exist
           (root + 'Headers').should.exist
           (root + 'Headers/SSZipArchive').should.exist
