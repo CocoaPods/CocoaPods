@@ -18,7 +18,7 @@ module Pod
       :verbose             => false,
       :silent              => false,
       :skip_repo_update    => false,
-      :agressive_cache     => false,
+      :aggressive_cache    => false,
 
       :clean               => true,
       :generate_docs       => true,
@@ -85,8 +85,8 @@ module Pod
     # @return [Bool] Whether the downloader should use more aggressive caching
     #         options.
     #
-    attr_accessor :agressive_cache
-    alias_method  :agressive_cache?, :agressive_cache
+    attr_accessor :aggressive_cache
+    alias_method  :aggressive_cache?, :aggressive_cache
 
     #--------------------------------------#
 
