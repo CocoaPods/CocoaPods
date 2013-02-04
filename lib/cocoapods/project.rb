@@ -9,17 +9,30 @@ module Pod
   #
   class Project < Xcodeproj::Project
 
-    # @return [Sandbox] the sandbox that contains the project.
+    # @return [Pathname] the path of the xcodeproj file which stores the
+    #         project.
     #
-    # attr_reader :sandbox
+    attr_reader :path
 
     # @param  [Sandbox] sandbox @see #sandbox
     #
-    def initialize(xcodeproj = nil)
-      super
-      # @sandbox = sandbox
+    def initialize(path = nil)
+      super(nil) # Recreate the project from scratch for now.
+      @path = path
       @support_files_group = new_group('Targets Support Files')
-      @libraries = []
+
+      @refs_by_absolute_path = {}
+    end
+
+    # @return [Pathname] the path of the xcodeproj file which stores the
+    #         project.
+    #
+    attr_reader :path
+
+    # @return [Pathname] the directory where the project is stored.
+    #
+    def root
+      @root ||= path.dirname
     end
 
     # @return [String] a string representation suited for debugging.
@@ -30,7 +43,9 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    # @!group Helpers
+    public
+
+    # @!group Groups
 
     # @return [PBXGroup] the group where the support files for the Pod
     #         libraries should be added.
@@ -75,18 +90,103 @@ module Pod
       group
     end
 
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group File references
+
+    # Adds a file reference for each one of the given files in the specified
+    # group, namespaced by specification.
+    #
+    # @param  [Array<Pathname,String>] paths
+    #         The files for which the file reference is needed.
+    #
+    # @param  [String] spec_name
+    #         The full name of the specification.
+    #
+    # @param  [PBXGroup] parent_group
+    #         The group where the file references should be added.
+    #
+    # @return [void]
+    #
+    def add_file_references(paths, spec_name, parent_group)
+      group = add_spec_group(spec_name, parent_group)
+      paths.each do |file|
+        file = Pathname.new(file)
+        ref = group.new_file(relativize(file))
+        @refs_by_absolute_path[file] = ref
+      end
+    end
+
+    # Returns the file reference for the given absolute file path.
+    #
+    # @param  [Pathname,String] absolute_path
+    #         The absolute path of the file whose reference is needed.
+    #
+    # @return [PBXFileReference] The file reference.
+    # @return [Nil] If no file reference could be found.
+    #
+    def file_reference(absolute_path)
+      source_file = Pathname.new(absolute_path)
+      refs_by_absolute_path[absolute_path]
+    end
+
+    # @return [Pathname] Returns the relative path from the project root.
+    #
+    # @param  [Pathname] path
+    #         The path that needs to be converted to the relative format.
+    #
+    # @note   If the two absolute paths don't share the same root directory an
+    #         extra `../` is added to the result of
+    #         {Pathname#relative_path_from}.
+    #
+    # @example
+    #
+    #   path = Pathname.new('/Users/dir')
+    #   @sandbox.root #=> Pathname('/tmp/CocoaPods/Lint/Pods')
+    #
+    #   @sandbox.relativize(path) #=> '../../../../Users/dir'
+    #   @sandbox.relativize(path) #=> '../../../../../Users/dir'
+    #
+    def relativize(path)
+      unless path.absolute?
+        raise Informative, "Attempt to add relative path to the Pods project"
+      end
+
+      result = path.relative_path_from(root)
+      unless root.to_s.split('/')[1] == path.to_s.split('/')[1]
+        result = Pathname.new('../') + result
+      end
+      result
+    end
+
     # Adds a file reference to the podfile.
     #
-    # @param  [#to_s] podfile_path
+    # @param  [Pathname,String] podfile_path
     #         the path of the podfile
     #
     # @return [PBXFileReference] the file reference.
     #
     def add_podfile(podfile_path)
       podfile_path = Pathname.new(podfile_path)
-      podfile_ref  = new_file(podfile_path)
+      podfile_ref  = new_file(relativize(podfile_path))
       podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
       podfile_ref
     end
+
+    #-------------------------------------------------------------------------#
+
+    private
+
+    # @!group Private helpers
+
+    # @return [Hash{Pathname => PBXFileReference}] The file references grouped
+    #         by absolute path.
+    #
+    attr_reader :refs_by_absolute_path
+
+    #-------------------------------------------------------------------------#
+
   end
 end
