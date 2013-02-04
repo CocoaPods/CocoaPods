@@ -71,6 +71,10 @@ module Pod
         @integrator.integrate!
         UI.warnings.should.include?('The Podfile does not contain any dependency')
       end
+
+      xit "It writes the workspace only if needed" do
+
+      end
     end
   end
 

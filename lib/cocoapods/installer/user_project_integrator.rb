@@ -69,20 +69,31 @@ module Pod
       private
 
       # Creates and saved the workspace containing the Pods project and the
-      # user projects.
+      # user projects, if needed.
+      #
+      # @note If the workspace alreayd containts the projects it is not saved
+      #       to avoid Xcode from diplatying the revert dialog: `Do you want to
+      #       keep the Xcode version or revert to the version on disk?`
       #
       # @return [void]
       #
       def create_workspace
-        workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-        [sandbox.project_path, *user_project_paths].each do |project_path|
-          path = project_path.relative_path_from(workspace_path.dirname).to_s
-          workspace << path unless workspace.include?(path)
-        end
-        unless workspace_path.exist?
+        projpaths = [sandbox.project_path, *user_project_paths].map do |path|
+          path.relative_path_from(workspace_path.dirname).to_s
+        end.uniq
+
+        if workspace_path.exist?
+          current_workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
+          if current_workspace.projpaths != projpaths
+            workspace = Xcodeproj::Workspace.new(*projpaths)
+            workspace.save_as(workspace_path)
+          end
+
+        else
           UI.notice "From now on use `#{workspace_path.basename}'."
+          workspace = Xcodeproj::Workspace.new(*projpaths)
+          workspace.save_as(workspace_path)
         end
-        workspace.save_as(workspace_path)
       end
 
       # Integrates the targets of the user projects with the libraries
