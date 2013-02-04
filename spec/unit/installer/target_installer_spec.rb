@@ -11,14 +11,13 @@ module Pod
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions[:default]
-        @project = Project.new
+        @project = Project.new(config.sandbox.project_path)
 
         config.sandbox.project = @project
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
-        source_files = config.sandbox.relativize_paths(file_accessor.source_files)
-        @project.add_source_files(source_files, 'BananaLib', @project.pods)
+        @project.add_file_references(file_accessor.source_files, 'BananaLib', @project.pods)
 
         @library = Library.new(@target_definition)
         @library.platform = Platform.new(:ios, '6.0')

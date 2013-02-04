@@ -91,10 +91,10 @@ module Pod
         library.target = @target
       end
 
-      # Adds the build files of the pods to the target and adds a refence to
+      # Adds the build files of the pods to the target and adds a reference to
       # the frameworks of the Pods.
       #
-      # @note   The Frameworks are used only for presentation purporses as the
+      # @note   The Frameworks are used only for presentation purposes as the
       #         xcconfig is the authoritative source about their information.
       #
       # @return [void]
@@ -102,15 +102,14 @@ module Pod
       def add_files_to_build_phases
         UI.message "- Adding Build files" do
           library.file_accessors.each do |file_accessor|
-            UI.message "- #{file_accessor.spec}"
-            file_accessor.source_files.each do |source_file|
-              file_reference = project.file_reference(source_file, file_accessor.spec_consumer.spec.name)
-              consumer = file_accessor.spec_consumer
-              flags = consumer.compiler_flags.dup
-              flags << '-fobjc-arc' if consumer.requires_arc
-              flags = flags * " "
-              target.add_file_references([file_reference], flags)
-            end
+            consumer = file_accessor.spec_consumer
+            flags = consumer.compiler_flags.dup
+            flags << '-fobjc-arc' if consumer.requires_arc
+            flags = flags * " "
+            source_files = file_accessor.source_files
+            file_refs = source_files.map { |sf| project.file_reference(sf) }
+            target.add_file_references(file_refs, flags)
+
             file_accessor.spec_consumer.frameworks.each do |framework|
               framework_ref = project.add_system_framework(framework, target)
             end
