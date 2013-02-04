@@ -18,6 +18,10 @@ describe Pod::Project do
       @project.local_pods.name.should == 'Local Pods'
     end
 
+    it "returns the `Resources` group" do
+      @project.resources.name.should == 'Resources'
+    end
+
     it "adds a group for a specification" do
       group = @project.add_spec_group('JSONKit', @project.pods)
       @project.pods.children.should.include?(group)

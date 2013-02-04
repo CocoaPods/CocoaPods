@@ -69,6 +69,15 @@ module Pod
       @local_pods ||= new_group('Local Pods')
     end
 
+    # Returns the `Local Pods` group, creating it if needed. This group is used
+    # to contain locally sourced pods.
+    #
+    # @return [PBXGroup] the group.
+    #
+    def resources
+      @resources ||= new_group('Resources')
+    end
+
     # Adds a group as child to the `Pods` group namespacing subspecs.
     #
     # @param  [String] spec_name
