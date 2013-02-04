@@ -8,9 +8,6 @@ module Pod
     #
     class PodSourceInstaller
 
-      # TODO: local option specs.
-      # TODO: add tests for multi platform / subspecs issues.
-
       # @return [Sandbox]
       #
       attr_reader :sandbox
@@ -27,10 +24,16 @@ module Pod
         @sandbox = sandbox
         @specs_by_platform = specs_by_platform
 
-        @clean           = true
-        @generate_docs   = false
-        @install_docs    = false
-        @agressive_cache = false
+        @clean            = true
+        @generate_docs    = false
+        @install_docs     = false
+        @aggressive_cache = false
+      end
+
+      # @return [String] A string suitable for debugging.
+      #
+      def inspect
+        "<#{self.class} sandbox=#{sandbox.root} pod=#{root_spec.name}"
       end
 
       #-----------------------------------------------------------------------#
@@ -57,15 +60,6 @@ module Pod
       attr_accessor :clean
       alias_method  :clean?, :clean
 
-      # @return [Bool] whether the downloader should always check against the
-      #         remote if issues might be generated (mostly useful to speed up
-      #         testing).
-      #
-      # @note   This might be removed in future.
-      #
-      attr_accessor :agressive_cache
-      alias_method  :agressive_cache?, :agressive_cache
-
       # @return [Bool] whether the documentation should be generated for the
       #         Pod.
       #
@@ -77,6 +71,15 @@ module Pod
       #
       attr_accessor :install_docs
       alias_method  :install_docs?, :install_docs
+
+      # @return [Bool] whether the downloader should always check against the
+      #         remote if issues might be generated (mostly useful to speed up
+      #         testing).
+      #
+      # @note   This might be removed in future.
+      #
+      attr_accessor :aggressive_cache
+      alias_method  :aggressive_cache?, :aggressive_cache
 
       #-----------------------------------------------------------------------#
 
@@ -195,7 +198,7 @@ module Pod
         @downloader = self.class.downloader_class.for_target(root, root_spec.source.dup)
         @downloader.cache_root = CACHE_ROOT
         @downloader.max_cache_size = MAX_CACHE_SIZE
-        @downloader.agressive_cache = agressive_cache?
+        @downloader.aggressive_cache = aggressive_cache?
         @downloader
       end
 
@@ -324,7 +327,7 @@ module Pod
       #
       def header_mappings(headers_sandbox, consumer, headers)
         dir = headers_sandbox
-        dir = base_dir + consumer.header_dir if consumer.header_dir
+        dir = dir + consumer.header_dir if consumer.header_dir
 
         mappings = {}
         headers.each do |header|

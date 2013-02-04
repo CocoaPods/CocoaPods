@@ -3,22 +3,38 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Installer::PodSourceInstaller do
 
+    before do
+      @spec = fixture_spec('banana-lib/BananaLib.podspec')
+      @spec.source = { :git => SpecHelper.fixture('banana-lib') }
+      specs_by_platform = { :ios => [@spec] }
+      @installer = Installer::PodSourceInstaller.new(config.sandbox, specs_by_platform)
+    end
+
+    #-------------------------------------------------------------------------#
+
     describe "In General" do
 
-      # TODO: describe defaults
+      it "cleans by default" do
+        @installer.should.clean?
+      end
+
+      it "doesn't generate docs by default" do
+        @installer.should.not.generate_docs?
+      end
+
+      it "doesn't installs the docs by default" do
+        @installer.should.not.install_docs?
+      end
+
+      it "doesn't use an aggressive cache by default" do
+        @installer.should.not.aggressive_cache?
+      end
 
     end
 
     #-------------------------------------------------------------------------#
 
     describe "Installation" do
-
-      before do
-        @spec = fixture_spec('banana-lib/BananaLib.podspec')
-        @spec.source = { :git => SpecHelper.fixture('banana-lib') }
-        specs_by_platform = { :ios => [@spec] }
-        @installer = Installer::PodSourceInstaller.new(config.sandbox, specs_by_platform)
-      end
 
       describe "Download" do
         it "downloads the source" do
@@ -40,7 +56,7 @@ module Pod
 
         it "returns the checkout options of the downloader if any" do
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :branch => 'topicbranch' }
-        @installer.install!
+          @installer.install!
           @installer.specific_source[:commit].should == "446b22414597f1bb4062a62c4eed7af9627a3f1b"
           pod_folder = config.sandbox.root + 'BananaLib'
           pod_folder.should.exist
@@ -124,35 +140,72 @@ module Pod
 
       end
 
+      #--------------------------------------#
+
+      describe "Options" do
+
+        it "doesn't downloads the source if the pod was already downloaded" do
+          @installer.stubs(:predownloaded?).returns(true)
+          @installer.expects(:download_source).never
+          @installer.stubs(:clean_installation)
+          @installer.stubs(:link_headers)
+          @installer.install!
+        end
+
+        it "doesn't downloads the source if the pod has a local source" do
+          @installer.local_path = 'Some Path'
+          @installer.expects(:download_source).never
+          @installer.stubs(:clean_installation)
+          @installer.stubs(:link_headers)
+          @installer.install!
+        end
+
+        it "doesn't clean the installation if the pod has a local source" do
+          @installer.local_path = 'Some Path'
+          @installer.expects(:clean_installation).never
+          @installer.stubs(:link_headers)
+          @installer.install!
+        end
+
+      end
+
+      #--------------------------------------#
+
+      describe "Specifications details" do
+
+        xit "handles Pods which return different file patterns per platform" do
+
+        end
+
+        xit "handles Pods with multiple subspecs activated" do
+
+        end
+
+      end
+
     end
 
     #-------------------------------------------------------------------------#
 
     describe "Private Helpers" do
 
-      #--------------------------------------#
+      xit "returns the clean paths" do
+        @installer.send(:download_source)
+        @installer.send(:clean_paths).should == []
+      end
 
-      describe "#clean_paths" do
+      xit "returns the used files" do
+        @installer.send(:download_source)
+        @installer.send(:used_files).should == []
+      end
+
+      xit "returns the header mappings" do
 
       end
 
-      #--------------------------------------#
-
-      describe "#used_files" do
+      xit "returns the header mappings including subspecs" do
 
       end
-
-      #--------------------------------------#
-
-      describe "#header_mappings" do
-
-        xit "can handle the mappings headers of subspecs" do
-
-        end
-
-      end
-
-      #--------------------------------------#
 
     end
 
