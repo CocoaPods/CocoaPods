@@ -5,6 +5,8 @@ module Pod
     #
     class InstallerData
 
+      include Config::Mixin
+
       # @return [Sandbox] sandbox the sandbox where the support files should
       #         be generated.
       #
@@ -23,19 +25,14 @@ module Pod
       #
       # attr_accessor :local_pods_by_target
 
-      # @return [Array<LocalPod>] The list of LocalPod instances for each
+      # @return [Array<PodData>] The list of LocalPod instances for each
       #         dependency sorted by name.
       #
-      # attr_accessor :local_pods
+      attr_accessor :pods
 
       # @return [Pod::Project] the `Pods/Pods.xcodeproj` project.
       #
       attr_accessor :project
-
-      def pods
-      #   UI.warn "InstallerData#pods is deprecated"
-      #   [] # TODO
-      end
 
     end
   end

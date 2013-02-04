@@ -1,8 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 require 'yaml'
 
-# TODO Make specs faster by limiting remote network connections
-
 #-----------------------------------------------------------------------------#
 
 # @!group Helpers
@@ -38,7 +36,6 @@ module Pod
   describe "Full integration" do
 
     before do
-      # fixture('spec-repos/master') # ensure the archive is unpacked
       config.integrate_targets = false
     end
 
@@ -46,14 +43,10 @@ module Pod
 
     describe "Single platform" do
 
-      # it "includes automatically inherited subspecs" do
-      # end
+      # xit "includes automatically inherited subspecs" do; end
+      # xit "handles different subspecs for the same Pod in different target definitions" do; end
 
-      # it "handles different subspecs for the same Pod in different target definitions" do
-      # end
-
-      # @todo fix the config of the hook
-      xit "installs a Pod directly from its repo" do
+      it "installs a Pod directly from its repo" do
         url = fixture('integration/sstoolkit').to_s
         commit = '2adcd0f81740d6b0cd4589af98790eee3bd1ae7b'
         podfile = Podfile.new do
@@ -128,7 +121,7 @@ module Pod
 
       # @note ASIHTTPRequest depends on Reachability in iOS.
       #
-      xit "creates targets for different platforms" do
+      it "creates targets for different platforms" do
         podfile = Podfile.new do
           platform :ios
           xcodeproj 'dummy'
@@ -172,7 +165,7 @@ module Pod
         puts "    ! ".red << "Skipping because the `appledoc` executable can't be found."
       else
         # @todo fix the config of the hook
-        xit "generates documentation of all pods by default" do
+        it "generates documentation of all pods by default" do
 
           podfile = Podfile.new do
             platform :ios
@@ -182,7 +175,7 @@ module Pod
           end
 
           config.generate_docs = true
-          config.doc_install   = false
+          config.install_docs  = false
           Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)
           installer = Installer.new(config.sandbox, podfile)
           installer.install!
@@ -239,9 +232,8 @@ module Pod
             end
           end
 
-
           Installer.new(config.sandbox, podfile).install!
-          project = Project.new(config.project_pods_root + 'Pods.xcodeproj')
+          project = Xcodeproj::Project.new(config.sandbox.project_path)
           project.targets.first.build_configurations.map do |config|
             config.build_settings['GCC_ENABLE_OBJC_GC']
           end.should == %w{ supported supported }
@@ -260,7 +252,6 @@ module Pod
             pod 'JSONKit',           '>= 1.0'
             pod 'SSZipArchive',      '< 0.1.2'
           end
-
 
           installer = Installer.new(config.sandbox, podfile)
           installer.install!
@@ -293,8 +284,8 @@ module Pod
           (root + 'Pods.xcconfig').read.should == installer.libraries.first.xcconfig.to_s
           project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
           saved_project = Xcodeproj.read_plist(project_file)
-          saved_project.to_hash.recursive_diff(installer.project.to_hash).should.be.nil
-          saved_project.should == installer.project.to_hash
+          saved_project.to_hash.recursive_diff(installer.pods_project.to_hash).should.be.nil
+          saved_project.should == installer.pods_project.to_hash
 
           should_xcodebuild(podfile.target_definitions[:default])
         end
@@ -336,15 +327,15 @@ module Pod
           installer = Installer.new(config.sandbox, podfile)
           installer.install!
 
-          project = Project.new(config.project_pods_root + 'Pods.xcodeproj')
+          project = Xcodeproj::Project.new(config.project_pods_root + 'Pods.xcodeproj')
           disk_source_files = project.files.sort.reject { |f| f.build_files.empty? }
-          installer_source_files = installer.project.files.sort.reject { |f| f.build_files.empty? }
+          installer_source_files = installer.pods_project.files.sort.reject { |f| f.build_files.empty? }
           disk_source_files.should == installer_source_files
         end
 
         #--------------------------------------#
 
-        xit "creates a project with multiple targets" do
+        it "creates a project with multiple targets" do
           podfile = Podfile.new do
             platform test_platform
             pod 'ASIHTTPRequest'
@@ -423,7 +414,7 @@ module Pod
           workspace = Xcodeproj::Workspace.new_from_xcworkspace(temporary_directory + 'ASIHTTPRequest.xcworkspace')
           workspace.projpaths.sort.should == ['ASIHTTPRequest.xcodeproj', 'Pods/Pods.xcodeproj']
 
-          project = Project.new(projpath)
+          project = Xcodeproj::Project.new(projpath)
           libPods = project.files.find { |f| f.name == 'libPods.a' }
 
           target = project.targets.first
@@ -436,7 +427,7 @@ module Pod
 
         #--------------------------------------#
 
-        xit "should prevent duplication cleaning headers symlinks with multiple targets" do
+        it "should prevent duplication cleaning headers symlinks with multiple targets" do
           podfile = Podfile.new do
             platform test_platform
             xcodeproj 'dummy'
