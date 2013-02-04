@@ -27,10 +27,10 @@ Gem::Specification.new do |s|
   s.require_paths = %w{ lib }
 
   # Link with the version of CocoaPods-Core
-  s.add_runtime_dependency 'cocoapods-core', "= #{Pod::VERSION}"
-
-  s.add_runtime_dependency 'claide',         '~> 0.1'
-  s.add_runtime_dependency 'xcodeproj',      '~> 0.4.1'
+  s.add_runtime_dependency 'cocoapods-core',       "= #{Pod::VERSION}"
+  s.add_runtime_dependency 'claide',               '~> 0.1'
+  s.add_runtime_dependency 'cocoapods-downloader', '~> 0.1'
+  s.add_runtime_dependency 'xcodeproj',            '~> 0.4.1'
 
   s.add_runtime_dependency 'faraday',       '~> 0.8.1'
   s.add_runtime_dependency 'octokit',       '~> 1.7'
