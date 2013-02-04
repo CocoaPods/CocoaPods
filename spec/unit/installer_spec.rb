@@ -1,5 +1,7 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
+# TODO add tests for multiple targets!
+
 # @return [Lockfile]
 #
 def generate_lockfile
@@ -26,7 +28,7 @@ module Pod
     # before do
     #   @sandbox = temporary_sandbox
     #   config.repos_dir = fixture('spec-repos')
-    #   config.project_pods_root = @sandbox.root
+    #   config.sandbox_root = @sandbox.root
     #   FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
     # end
     #
@@ -38,7 +40,7 @@ module Pod
 
     describe "Concerning pre-installation computations" do
       # @sandbox = temporary_sandbox
-      # config.project_pods_root = temporary_sandbox.root
+      # config.sandbox_root = temporary_sandbox.root
       # FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
 
       # resolver = Resolver.new(podfile, nil, @sandbox)
@@ -80,7 +82,7 @@ module Pod
     #     end
 
     #     @sandbox = temporary_sandbox
-    #     config.project_pods_root = temporary_sandbox.root
+    #     config.sandbox_root = temporary_sandbox.root
     #     FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
     #     @installer = Installer.new(@sandbox, podfile)
     #     target_installer = @installer.target_installers.first
@@ -118,7 +120,7 @@ module Pod
 
     #   before do
     #     sandbox = temporary_sandbox
-    #     Config.instance.project_pods_root = sandbox.root
+    #     Config.instance.sandbox_root = sandbox.root
     #     Config.instance.integrate_targets = false
     #     podspec_path = fixture('integration/Reachability/Reachability.podspec')
     #     podfile = Podfile.new do
@@ -166,7 +168,7 @@ module Pod
 
     #   before do
     #     sandbox = temporary_sandbox
-    #     Config.instance.project_pods_root = sandbox.root
+    #     Config.instance.sandbox_root = sandbox.root
     #     Config.instance.integrate_targets = false
     #     podspec_path = fixture('chameleon')
     #     podfile = Podfile.new do

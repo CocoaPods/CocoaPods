@@ -16,6 +16,7 @@
 - Subspecs now do not inherit the files patterns from the parent spec.
 - The workspace is written only if needed greatly reducing the occasions in
   which Xcode asks to revert.
+- Specification hooks are only called when the specification is installed.
 
 ###### Specification DSL
 
