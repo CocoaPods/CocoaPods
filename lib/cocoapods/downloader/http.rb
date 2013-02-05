@@ -74,12 +74,14 @@ module Pod
           raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end
 
-        # If the archive only contained a folder, move its contents to the target (#727)
-        contents = target_path.children
-        contents.delete(full_filename)
-        entry = contents.first
-        if contents.count == 1 && entry.directory?
-          FileUtils.move(entry.children, target_path)
+        # If the archive is a tarball and it only contained a folder, move its contents to the target (#727)
+        if [:tgz, :tar, :tbz].include? type
+          contents = target_path.children
+          contents.delete(full_filename)
+          entry = contents.first
+          if contents.count == 1 && entry.directory?
+            FileUtils.move(entry.children, target_path)
+          end
         end
       end
 
