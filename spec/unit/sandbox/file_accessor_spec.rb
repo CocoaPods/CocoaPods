@@ -41,29 +41,29 @@ module Pod
     describe "Returning files" do
 
       it "returns the source files" do
-        @accessor.source_files.should == [
-          @root + "Classes/Banana.m",
+        @accessor.source_files.sort.should == [
           @root + "Classes/Banana.h",
+          @root + "Classes/Banana.m",
           @root + "Classes/BananaPrivate.h"
-        ].sort
+        ]
       end
 
       it "returns the header files" do
-        @accessor.headers.should == [
+        @accessor.headers.sort.should == [
           @root + "Classes/Banana.h",
           @root + "Classes/BananaPrivate.h"
         ]
       end
 
       it "returns the public headers" do
-        @accessor.public_headers.should == [
+        @accessor.public_headers.sort.should == [
           @root + "Classes/Banana.h"
         ]
       end
 
       it "returns all the headers if no public headers are defined" do
         @spec_consumer.stubs(:public_header_files).returns([])
-        @accessor.public_headers.should == [
+        @accessor.public_headers.sort.should == [
           @root + "Classes/Banana.h",
           @root + "Classes/BananaPrivate.h"
         ]
@@ -76,7 +76,7 @@ module Pod
       end
 
       it "returns the preserve path" do
-        @accessor.preserve_paths.should == [
+        @accessor.preserve_paths.sort.should == [
           @root + "preserve_me.txt"
         ]
       end
@@ -97,10 +97,10 @@ module Pod
 
       it "respects the exclude files" do
         @spec_consumer.stubs(:exclude_files).returns(["Classes/BananaPrivate.h"])
-        @accessor.source_files.should == [
-          @root + "Classes/Banana.m",
+        @accessor.source_files.sort.should == [
           @root + "Classes/Banana.h",
-        ].sort
+          @root + "Classes/Banana.m",
+        ]
       end
 
     end
@@ -126,10 +126,10 @@ module Pod
 
         it "can handle Rake FileLists" do
           @spec_consumer.stubs(:source_files).returns([FileList['Classes/Banana.*']])
-          @accessor.source_files.should == [
-            @root + "Classes/Banana.m",
+          @accessor.source_files.sort.should == [
             @root + "Classes/Banana.h",
-          ].sort
+            @root + "Classes/Banana.m",
+          ]
         end
 
       end
