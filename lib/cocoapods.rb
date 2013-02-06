@@ -20,7 +20,6 @@ module Pod
   require 'cocoapods/downloader'
   require 'cocoapods/file_list'
   require 'cocoapods/config'
-  require 'cocoapods/dependency_injection'
 
   autoload :Command,                'cocoapods/command'
   autoload :Executable,             'cocoapods/executable'
