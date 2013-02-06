@@ -59,7 +59,14 @@ module Pod
           'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(sandbox.build_headers.search_paths),
           'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
         })
-        spec_consumers.each { |consumers| @xcconfig.merge!(consumers.xcconfig) }
+
+        spec_consumers.each do |consumer|
+          @xcconfig.merge!(consumer.xcconfig);
+          @xcconfig.libraries.merge(consumer.libraries);
+          @xcconfig.frameworks.merge(consumer.frameworks);
+          @xcconfig.weak_frameworks.merge(consumer.weak_frameworks);
+        end
+
         @xcconfig
       end
 

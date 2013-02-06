@@ -24,6 +24,10 @@ module Pod
     #-----------------------------------------------------------------------#
 
     before do
+      @spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
+      @spec.frameworks = ['QuartzCore']
+      @spec.weak_frameworks = ['iAd']
+      @spec.libraries = ['xml2']
       @xcconfig = @generator.generate
     end
 
@@ -69,6 +73,22 @@ module Pod
     it 'adds the sandbox public headers search paths to the xcconfig, with quotes' do
       expected = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
       @xcconfig.to_hash['PODS_PUBLIC_HEADERS_SEARCH_PATHS'].should == expected
+    end
+
+    it "includes the xcconfig of the specifications" do
+      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
+    end
+
+    it "includes the libraries for the specifications" do
+      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-lxml2')
+    end
+
+    it "includes the frameworks of the specifications" do
+      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework QuartzCore')
+    end
+
+    it "includes the weak-frameworks of the specifications" do
+      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-weak_framework iAd')
     end
 
     #-----------------------------------------------------------------------#
