@@ -78,13 +78,13 @@ module Pod
       # @return [void]
       #
       def create_workspace
-        projpaths = [*user_project_paths, sandbox.project_path].map do |path|
+        projpaths = (user_project_paths.dup.push(sandbox.project_path)).map do |path|
           path.relative_path_from(workspace_path.dirname).to_s
         end.uniq
 
         if workspace_path.exist?
           current_workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          if current_workspace.projpaths.sort != projpaths.sort
+          if current_workspace.projpaths != projpaths
             workspace = Xcodeproj::Workspace.new(*projpaths)
             workspace.save_as(workspace_path)
           end
