@@ -38,13 +38,6 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
-      extend DependencyInjection
-
-      dependency :downloader_class, Downloader
-      dependency :docs_generator_class, Generator::Documentation
-
-      #-----------------------------------------------------------------------#
-
       public
 
       # @!group Configuration
@@ -95,7 +88,6 @@ module Pod
         download_source     unless predownloaded? || local?
         generate_docs       if generate_docs?
         clean_installation  if clean? && !local?
-        link_headers
       end
 
       # @return [Hash]
@@ -155,27 +147,6 @@ module Pod
         @cleaned = true
       end
 
-      # Creates the link to the headers of the Pod in the sandbox.
-      #
-      # @return [void]
-      #
-      def link_headers
-        headers_sandbox = Pathname.new(root_spec.name)
-        sandbox.build_headers.add_search_path(headers_sandbox)
-        sandbox.public_headers.add_search_path(headers_sandbox)
-
-        file_accessors.each do |file_accessor|
-          consumer = file_accessor.spec_consumer
-          header_mappings(headers_sandbox, consumer, file_accessor.headers).each do |namespaced_path, files|
-            sandbox.build_headers.add_files(namespaced_path, files)
-          end
-
-          header_mappings(headers_sandbox, consumer, file_accessor.public_headers).each do |namespaced_path, files|
-            sandbox.public_headers.add_files(namespaced_path, files)
-          end
-        end
-      end
-
       #-----------------------------------------------------------------------#
 
       public
@@ -195,7 +166,7 @@ module Pod
       #
       def downloader
         return @downloader if @downloader
-        @downloader = self.class.downloader_class.for_target(root, root_spec.source.dup)
+        @downloader = Downloader.for_target(root, root_spec.source.dup)
         @downloader.cache_root = CACHE_ROOT
         @downloader.max_cache_size = MAX_CACHE_SIZE
         @downloader.aggressive_cache = aggressive_cache?
@@ -206,7 +177,7 @@ module Pod
       #         for generating the documentation.
       #
       def documentation_generator
-        @documentation_generator ||= self.class.docs_generator_class.new(sandbox, root_spec, path_list)
+        @documentation_generator ||= Generator::Documentation.new(sandbox, root_spec, path_list)
       end
 
       #-----------------------------------------------------------------------#
@@ -311,35 +282,6 @@ module Pod
         files.flatten!
         files.map!{ |path| path.to_s }
         files
-      end
-
-
-      # Computes the destination sub-directory in the sandbox
-      #
-      # @param  []
-      #
-      # @return [Hash{Pathname => Array<Pathname>}] A hash containing the
-      #         headers folders as the keys and the absolute paths of the
-      #         header files as the values.
-      #
-      # TODO    This is being overridden in the RestKit 0.9.4 spec and that
-      #         override should be fixed.
-      #
-      def header_mappings(headers_sandbox, consumer, headers)
-        dir = headers_sandbox
-        dir = dir + consumer.header_dir if consumer.header_dir
-
-        mappings = {}
-        headers.each do |header|
-          relative_path = header.relative_path_from(root)
-          sub_dir = dir
-          if consumer.header_mappings_dir
-            sub_dir = sub_dir + header.relative_path_from(consumer.header_mappings_dir).dirname
-          end
-          mappings[sub_dir] ||= []
-          mappings[sub_dir] << header
-        end
-        mappings
       end
 
       #-----------------------------------------------------------------------#
