@@ -57,6 +57,11 @@ describe Pod::Installer::UserProjectIntegrator do
     lambda { @target_integrator.user_project_path }.should.raise Pod::Informative
   end
 
+  it "does not take aggregate targets into consideration" do
+    aggregate = Xcodeproj::Project::Object::PBXAggregateTarget
+    @target_integrator.native_targets.map(&:class).should.not.include aggregate
+  end
+
   it "uses the target with the same name if the name is different from `:default'" do
     target_integrator = @integrator.target_integrators[1]
     target_integrator.target_definition.stubs(:name).returns('TestRunner')
