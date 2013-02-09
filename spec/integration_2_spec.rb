@@ -1,7 +1,7 @@
 
-# ---------------------------------- #
-# CocoaPods Integration tests take 2 #
-# ---------------------------------- #
+# ------------------------------------ #
+#  CocoaPods Integration tests take 2  #
+# ------------------------------------ #
 
 #-----------------------------------------------------------------------------#
 
@@ -10,10 +10,10 @@
 # 1.  For each test there is a folder with a `before` and `after` subfolders.
 # 2.  The contents of the before folder are copied to the `TMP_DIR` folder and
 #     then the given arguments are passed to the `POD_BINARY`.
-# 3.  After the pod command completes the execution the each file in the `after`
-#     subfolder is compared to be to the contents of the temporary directory.
-#     If the contents of the file do not match an error is registered. Xcode
-#     projects are compared in an UUID agnostic way.
+# 3.  After the pod command completes the execution the each file in the
+#     `after` subfolder is compared to be to the contents of the temporary
+#     directory.  If the contents of the file do not match an error is
+#     registered. Xcode projects are compared in an UUID agnostic way.
 #
 # Notes:
 #
@@ -43,8 +43,8 @@
 # requirement (`it` call).
 
 require 'pathname'
-ROOT       = Pathname.new(File.expand_path('../../', __FILE__))
-TMP_DIR    = ROOT + 'tmp'
+ROOT = Pathname.new(File.expand_path('../../', __FILE__))
+TMP_DIR = ROOT + 'tmp'
 POD_BINARY = "ruby " + ROOT.to_s + '/bin/pod' unless defined? POD_BINARY
 
 $:.unshift((ROOT + 'spec').to_s)
@@ -54,6 +54,7 @@ require 'diffy'
 require 'Xcodeproj'
 
 #-----------------------------------------------------------------------------#
+
 
 # @!group Description implementation
 
@@ -122,7 +123,7 @@ def check_with_folder(folder)
     case expected
     when %r[/xcuserdata/]
       # skip
-    when %r[\Podfile\.lock$]
+    when %r[Podfile\.lock$]
       compare_lockfile(expected, produced, relative_path)
     when %r[\.pbxproj$]
       compare_xcodeproj(expected, produced, relative_path)
