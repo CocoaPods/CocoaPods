@@ -18,7 +18,7 @@
 # Notes:
 #
 # - The output of the pod command is saved in the `execution_output.txt` file
-#   which should be added to the Pods folders to test the CocoaPods UI.
+#   which should be added to the `after` folder to test the CocoaPods UI.
 # - To create a new test, just create a before folder with the environment to
 #   test, copy it to the after folder and run the tested pod command inside.
 #   Then just add the tests below this files with the name of the folder and
@@ -58,10 +58,10 @@ require 'Xcodeproj'
 
 # @!group Description implementation
 
-def pod_check(command, folder)
-  copy_files("installation")
-  pod "install"
-  check_with_folder("installation")
+def check(arguments, folder)
+  copy_files(folder)
+  launch_binary(arguments)
+  check_with_folder(folder)
 end
 
 #--------------------------------------#
@@ -93,14 +93,20 @@ end
 #         bundler ensuring that the execution is performed in the correct
 #         environment.
 #
-def pod(arguments)
+def launch_binary(arguments)
+  # TODO CP 0.16 doesn't offer the possibility to skip just the installation
+  # of the docs.
+  command = "#{POD_BINARY} #{arguments} --verbose --no-color"
   Dir.chdir(TMP_DIR) do
-    # TODO CP 0.16 doesn't offer the possibility to skip just the installation
-    # of the docs.
-    command = "#{POD_BINARY} #{arguments} --no-update --no-doc --verbose --no-color"
     output = `#{command}`
+    it "$ pod #{arguments}" do
+      $?.should.satisfy("Pod binary failed\n\n#{output}") do
+        $?.success?
+      end
+    end
+
     File.open('execution_output.txt', 'w') do |file|
-      file.write(command.gsub(ROOT.to_s, 'ROOT'))
+      file.write(command.gsub(POD_BINARY, '$ pod'))
       file.write(output.gsub(ROOT.to_s, 'ROOT').gsub(%r[/Users/.*/Library/Caches/CocoaPods/],"CACHES_DIR/"))
     end
   end
@@ -182,7 +188,7 @@ def compare_generic(expected, produced, relative_path)
     description << expected
     description << ""
     description << ("--- DIFF " << "-" * 70)
-    Diffy::Diff.new(produced.to_s, expected.to_s, :source => 'files', :context => 3).each do |line|
+    Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
       case line
       when /^\+/ then description << line.gsub("\n",'').green
       when /^-/ then description << line.gsub("\n",'').red
@@ -200,23 +206,78 @@ end
 #-----------------------------------------------------------------------------#
 
 
-describe "Integration with examples" do
+describe "Integration take 2" do
 
-  describe "Integrates a project with CocoaPods" do
-    pod_check "install", "installation"
+  describe "Pod install" do
+
+    describe "Integrates a project with CocoaPods" do
+      check "install --no-update --no-doc", "install_new"
+    end
+
+    describe "Adds a Pod to an existing installation" do
+      check "install --no-update --no-doc", "install_add_pod"
+    end
+
+    describe "Removes a Pod from an existing installation" do
+      check "install --no-update --no-doc", "install_add_pod"
+    end
+
+    # describe "Creates an installation with multiple target definitions" do
+      # check "install", "multiple_targets"
+    # end
+
+    # describe "Runs the Podfile callbacks" do
+    # check "update", "podfile_callbacks"
+    # end
+
+    # describe "Runs the specification callbacks" do
+    # check "update", "specification_callbacks"
+    # end
+
+    # describe "Generates the documentation of Pod during installation" do
+    # # TODO: requires CocoaPods 0.17
+    # check "update", "installation_update"
+    # end
+
+    # describe "Installs a Pod with different subspecs activated across different targets" do
+    # check "update", "subspecs"
+    # end
+
+    # describe "Installs a Pod with a local source" do
+    # check "update", "podfile_local_pod"
+    # end
+
+    # describe "Installs a Pod with an external source" do
+    # check "update", "podfile_external_source"
+    # end
+
+    # describe "Installs a Pod given the podspec" do
+    # check "update", "podfile_podspec"
+    # end
+
   end
 
-  describe "Adds a Pod to an existing installation" do
-    # pod_check "install", "add_pod"
+  #--------------------------------------#
+
+  describe "Pod update" do
+
+    describe "Updates an existing installation" do
+      check "update --no-update", "update"
+    end
+
   end
 
-  describe "Removes a Pod from an existing installation" do
-    # pod_check "install", "remove_pod"
+  #--------------------------------------#
+
+  describe "Pod lint" do
+
+    describe "Lints a Pod" do
+      check "spec lint --quick", "spec_lint"
+    end
+
   end
 
-  describe "Creates an installation with multiple target definitions" do
-    # pod_check "install", "multiple_targets"
-  end
+  #--------------------------------------#
 
 end
 

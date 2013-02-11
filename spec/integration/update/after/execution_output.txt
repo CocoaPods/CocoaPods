@@ -1,8 +1,11 @@
-ruby ROOT/bin/pod install --no-update --no-doc --verbose --no-color
+$ pod update --no-update --verbose --no-color
 Resolving dependencies of `./Podfile'
 
+Finding added, modified or removed dependencies:
+  - Reachability
+
 Resolving dependencies for target `default' (iOS 6.0)
-  - Reachability (= 3.1.0)
+  - Reachability (<= 3.1.0)
 
 Downloading dependencies
 
@@ -31,8 +34,4 @@ Generating support files
   - Running post install hooks
   - Writing Xcode project file to `./Pods/Pods.xcodeproj'
   - Writing lockfile in `./Podfile.lock'
-
-[!] From now on use `SampleApp.xcworkspace'.
-
-Integrating `libPods.a' into target `SampleApp' of Xcode project `./SampleApp.xcodeproj'.
 
