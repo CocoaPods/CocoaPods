@@ -67,7 +67,7 @@ module Pod
     it "resolves subspecs" do
       @podfile = Podfile.new do
         platform :ios
-        pod 'RestKit/Network'
+        pod 'RestKit/Network', '0.10.3'
         pod 'RestKit/ObjectMapping/XML'
       end
       resolver = Resolver.new(@podfile, nil, stub('sandbox'))
@@ -88,7 +88,7 @@ module Pod
     it "includes all the subspecs of a specification node" do
       @podfile = Podfile.new do
         platform :ios
-        pod 'RestKit'
+        pod 'RestKit', '0.10.3'
       end
       resolver = Resolver.new(@podfile, nil, stub('sandbox'))
       resolver.resolve.values.flatten.map(&:name).sort.should == %w{

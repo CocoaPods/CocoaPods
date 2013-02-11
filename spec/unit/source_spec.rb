@@ -69,9 +69,9 @@ describe "Pod::Source" do
     end
 
     it "searches the sets specifing a dependency on a subspec" do
-      dep = Pod::Dependency.new('RestKit/JSON')
+      dep = Pod::Dependency.new('ShareKit/Evernote')
       set = Pod::Source.search(dep)
-      set.name.should == 'RestKit'
+      set.name.should == 'ShareKit'
       set.sources.map(&:name).should == %w| master |
     end
 
