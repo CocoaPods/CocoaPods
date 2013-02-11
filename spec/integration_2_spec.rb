@@ -130,23 +130,33 @@ end
 #
 def check_with_folder(folder)
   source = File.expand_path("../integration/#{folder}", __FILE__)
-  Dir.glob("#{source}/after/**/*") do |expected|
-    next unless File.file?(expected)
-    relative_path = expected.gsub("#{source}/after/", '')
+  Dir.glob("#{source}/after/**/*") do |expected_path|
+    next unless File.file?(expected_path)
+    relative_path = expected_path.gsub("#{source}/after/", '')
+    expected = Pathname.new(expected_path)
     produced = TMP_DIR + relative_path
 
-    case expected
-    when %r[/xcuserdata/]
-      # skip
-    when %r[execution_output\.txt$]
-      # skip for now as the Pod might or might not be in the cache TODO
-    when %r[Podfile\.lock$]
-      compare_lockfile(expected, produced, relative_path)
-    when %r[\.pbxproj$]
-      compare_xcodeproj(expected, produced, relative_path)
-    else
-      compare_generic(expected, produced, relative_path)
-    end
+      case expected_path
+      when %r[/xcuserdata/]
+        next
+      when %r[execution_output\.txt$]
+        # skip for now as the Pod might or might not be in the cache TODO
+        next
+      end
+
+      it relative_path do
+        case expected_path
+        when %r[Podfile\.lock$]
+          file_should_exist(produced)
+          lockfile_should_match(expected, produced)
+        when %r[\.pbxproj$]
+          file_should_exist(produced)
+          xcodeproj_should_match(expected, produced)
+        else
+          file_should_exist(produced)
+          file_should_match(expected, produced)
+        end
+      end
   end
 end
 
@@ -154,64 +164,78 @@ end
 
 # @!group File Comparisons
 
+# Checks that the file exits.
+#
+# @param [Pathname] file
+#        The file to check.
+#
+def file_should_exist(file)
+  file.should.exist?
+end
+
 # Compares two lockfiles because CocoaPods 0.16 doesn't oder them in 1.8.7.
 #
-def compare_lockfile(expected, produced, relative_path)
+# @param [Pathname] expected
+#        The reference in the `after` folder.
+#
+# @param [Pathname] produced
+#        The file in the temporary directory after running the pod command.
+#
+def lockfile_should_match(expected, produced)
   expected_yaml = YAML::load(File.open(expected))
   produced_yaml = YAML::load(File.open(produced))
-  desc = "Lockfile comparison error `#{relative_path}`"
+  desc = "Lockfile comparison error `#{expected}`"
   desc << "\n EXPECTED:\n#{expected_yaml}\n"
   desc << "\n PRODUCED:\n#{produced_yaml}\n"
-  it relative_path do
-    expected_yaml.should.satisfy(desc) do |expected_yaml|
-      expected_yaml == produced_yaml
-    end
+  expected_yaml.should.satisfy(desc) do |expected_yaml|
+    expected_yaml == produced_yaml
   end
 end
 
 # Compares two Xcode projects in an UUID insensitive fashion and producing a
 # clear diff to highlight the differences.
 #
-def compare_xcodeproj(expected, produced, relative_path)
-  expected_proj = Xcodeproj::Project.new(expected.gsub('project.pbxproj',''))
-  produced_proj = Xcodeproj::Project.new(produced.to_s.gsub('project.pbxproj',''))
+# @param [Pathname] expected @see #lockfile_should_match
+# @param [Pathname] produced @see #lockfile_should_match
+#
+def xcodeproj_should_match(expected, produced)
+  expected_proj = Xcodeproj::Project.new(expected + '..')
+  produced_proj = Xcodeproj::Project.new(produced + '..')
   diff = produced_proj.to_tree_hash.recursive_diff(expected_proj.to_tree_hash, "#produced#", "#reference#")
-  desc = "Project comparison error `#{relative_path}`"
+  desc = "Project comparison error `#{expected}`"
   if diff
     desc << "\n#{diff.to_yaml.gsub('"#produced#"','produced'.red).gsub('"#reference#"','reference'.yellow)}"
   end
-  it relative_path do
-    diff.should.satisfy(desc) do |diff|
-      diff.nil?
-    end
+  diff.should.satisfy(desc) do |diff|
+    diff.nil?
   end
 end
 
 # Compares two files to check if they are identical and produces a clear diff
 # to highlight the differences.
 #
-def compare_generic(expected, produced, relative_path)
-  it relative_path do
-    File.exists?(expected).should.be.true
-    is_equal = FileUtils.compare_file(expected, produced)
-    description = []
-    description << "File comparison error `#{expected}`"
-    description << ""
-    description << ("--- DIFF " << "-" * 70)
-    Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
-      case line
-      when /^\+/ then description << line.gsub("\n",'').green
-      when /^-/ then description << line.gsub("\n",'').red
-      else description << line.gsub("\n",'')
-      end
+# @param [Pathname] expected @see #lockfile_should_match
+# @param [Pathname] produced @see #lockfile_should_match
+#
+def file_should_match(expected, produced)
+  is_equal = FileUtils.compare_file(expected, produced)
+  description = []
+  description << "File comparison error `#{expected}`"
+  description << ""
+  description << ("--- DIFF " << "-" * 70)
+  Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
+    case line
+    when /^\+/ then description << line.gsub("\n",'').green
+    when /^-/ then description << line.gsub("\n",'').red
+    else description << line.gsub("\n",'')
     end
-    description << "" << ("--- PRODUCED " << "-" * 66) << ""
-    description << File.read(produced)
-    description << ("--- END " << "-" * 70)
-    description << ""
-    is_equal.should.satisfy(description * "\n") do |is_equal|
-      is_equal == true
-    end
+  end
+  description << "" << ("--- PRODUCED " << "-" * 66) << ""
+  description << File.read(produced)
+  description << ("--- END " << "-" * 70)
+  description << ""
+  is_equal.should.satisfy(description * "\n") do |is_equal|
+    is_equal == true
   end
 end
 
