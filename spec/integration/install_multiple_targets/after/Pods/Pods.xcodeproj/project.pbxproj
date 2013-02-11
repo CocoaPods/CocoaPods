@@ -492,7 +492,7 @@
 			<key>name</key>
 			<string>Foundation.framework</string>
 			<key>path</key>
-			<string>Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/Foundation.framework</string>
+			<string>Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/Foundation.framework</string>
 			<key>sourceTree</key>
 			<string>DEVELOPER_DIR</string>
 		</dict>
