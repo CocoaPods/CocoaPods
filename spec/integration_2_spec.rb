@@ -67,10 +67,27 @@ POD_BINARY = "ruby " + ROOT.to_s + '/bin/pod' unless defined? POD_BINARY
 
 # @!group Description implementation
 
+# Performs the checks for the test with the given folder using the given
+# arguments.
+#
+# @parma [String] arguments
+#        The arguments to pass to the Pod executable.
+#
+# @parma [String] folder
+#        The name of the folder which contains the `before` and `after`
+#        subfolders.
+#
 def check(arguments, folder)
+  focused_check(arguments, folder)
+end
+
+# Shortcut to focus on a test. Just comment the implmentation of #check and
+# call this from the relevant test.
+#
+def focused_check(arguments, folder)
   copy_files(folder)
-  launch_binary(arguments)
-  check_with_folder(folder)
+  executed = launch_binary(arguments)
+  check_with_folder(folder) if executed
 end
 
 #--------------------------------------#
@@ -84,10 +101,8 @@ end
 #         the name of the folder of the tests.
 #
 def copy_files(folder)
-  if TMP_DIR.exist?
-    TMP_DIR.rmtree
-    TMP_DIR.mkpath
-  end
+  TMP_DIR.rmtree if TMP_DIR.exist?
+  TMP_DIR.mkpath
 
   source = File.expand_path("../integration/#{folder}/before", __FILE__)
   FileUtils.cp_r(Dir.glob("#{source}/*"), TMP_DIR)
@@ -119,6 +134,7 @@ def launch_binary(arguments)
       file.write(output.gsub(ROOT.to_s, 'ROOT').gsub(%r[/Users/.*/Library/Caches/CocoaPods/],"CACHES_DIR/"))
     end
   end
+  $?.success?
 end
 
 # Creates a requirement which compares every file in the after folder with the
@@ -239,9 +255,14 @@ def file_should_match(expected, produced)
   end
 end
 
+def create_caches_for_the_pods
+
+end
+
 #-----------------------------------------------------------------------------#
 
 
+create_caches_for_the_pods
 describe "Integration take 2" do
 
   describe "Pod install" do
@@ -258,37 +279,43 @@ describe "Integration take 2" do
       check "install --no-update --no-doc", "install_remove_pod"
     end
 
-    # describe "Creates an installation with multiple target definitions" do
-      # check "install", "multiple_targets"
-    # end
+    describe "Creates an installation with multiple target definitions" do
+      check "install --no-update --no-doc", "install_multiple_targets"
+    end
 
-    # describe "Runs the Podfile callbacks" do
-    # check "update", "podfile_callbacks"
-    # end
+    # TODO This test should reflect a bug of CP 0.16: the clean phase
+    # considers only the subspecs of only one target. However there is another
+    # issue and Pod from external sources are not cleaned.
+    #
+    describe "Installs a Pod with different subspecs activated across different targets" do
+      check "install --no-update --no-doc", "install_subspecs"
+    end
 
-    # describe "Runs the specification callbacks" do
-    # check "update", "specification_callbacks"
-    # end
+    describe "Installs a Pod with a local source" do
+      check "install --no-update --no-doc", "install_local_source"
+    end
 
+    describe "Installs a Pod with an external source" do
+      check "install --no-update --no-doc", "install_external_source"
+    end
+
+    describe "Installs a Pod given the podspec" do
+      check "install --no-update --no-doc", "install_podspec"
+    end
+
+    describe "Runs the Podfile callbacks" do
+      check "install --no-update --no-doc", "install_podfile_callbacks"
+    end
+
+    describe "Runs the specification callbacks" do
+      check "install --no-update --no-doc", "install_spec_callbacks"
+    end
+
+
+    # TODO: requires CocoaPods 0.17
+    #
     # describe "Generates the documentation of Pod during installation" do
-    # # TODO: requires CocoaPods 0.17
-    # check "update", "installation_update"
-    # end
-
-    # describe "Installs a Pod with different subspecs activated across different targets" do
-    # check "update", "subspecs"
-    # end
-
-    # describe "Installs a Pod with a local source" do
-    # check "update", "podfile_local_pod"
-    # end
-
-    # describe "Installs a Pod with an external source" do
-    # check "update", "podfile_external_source"
-    # end
-
-    # describe "Installs a Pod given the podspec" do
-    # check "update", "podfile_podspec"
+    #   check "install --no-update --no-doc", "install_docs"
     # end
 
   end
@@ -298,6 +325,7 @@ describe "Integration take 2" do
   describe "Pod update" do
 
     # TODO: --no-doc --no-update don't work properly in 0.16
+    #
     # describe "Updates an existing installation" do
     #   check "update --no-update --no-doc", "update"
     # end

@@ -1,0 +1,25 @@
+$ pod install --no-update --no-doc --verbose --no-color
+Resolving dependencies of `./Podfile'
+
+Resolving dependencies for target `default' (iOS 4.3)
+  - Reachability (from `Reachability')
+
+Downloading dependencies
+
+-> Installing Reachability (3.1.0) [LOCAL]
+
+Generating support files
+  - Running pre install hooks
+  - Generating project
+  - Installing targets
+    - Generating xcconfig file at `./Pods/Pods.xcconfig'
+    - Generating prefix header at `./Pods/Pods-prefix.pch'
+    - Generating copy resources script at `./Pods/Pods-resources.sh'
+  - Running post install hooks
+  - Writing Xcode project file to `./Pods/Pods.xcodeproj'
+  - Writing lockfile in `./Podfile.lock'
+
+[!] From now on use `SampleApp.xcworkspace'.
+
+Integrating `libPods.a' into target `iOS App' of Xcode project `./SampleApp.xcodeproj'.
+

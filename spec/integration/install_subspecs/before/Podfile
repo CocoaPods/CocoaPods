@@ -1,0 +1,9 @@
+target 'iOS App' do
+  platform :ios
+  pod "PodTest/subspec_1", :hg => "PodTest-hg-source"
+end
+
+target 'OS X App' do
+  platform :osx
+  pod "PodTest/subspec_2", :podspec => "PodTest.podspec"
+end
