@@ -19,7 +19,6 @@ Downloading dependencies
    $ /usr/bin/git reset --hard FETCH_HEAD
    HEAD is now at f7176f4 updated podspec
    $ /usr/bin/git checkout -b activated-pod-commit
- > Using existing documentation
 
 Generating support files
   - Running pre install hooks

@@ -23,7 +23,6 @@ Downloading dependencies
     Cloning into 'ROOT/tmp/Pods/JSONKit'...
     done.
    $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
- > Using existing documentation
 
 -> Using Reachability (3.1.0)
 
