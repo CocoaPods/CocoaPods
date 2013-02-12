@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/Reachability.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/Reachability</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>
+			
+			<NodeRef refid="1"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/setKey:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>@property (copy) NSString *key</Declaration>
+			
+			
+			<Anchor>//api/name/key</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/Reachability/key</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>@property (copy) NSString *key</Declaration>
+			
+			
+			<Anchor>//api/name/key</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/initWithReachabilityRef:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (Reachability *)initWithReachabilityRef:(SCNetworkReachabilityRef)ref</Declaration>
+			
+			
+			<Anchor>//api/name/initWithReachabilityRef:</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/Reachability/reachabilityWithHostName:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>+ (Reachability *)reachabilityWithHostName:(NSString *)hostName</Declaration>
+			
+			
+			<Anchor>//api/name/reachabilityWithHostName:</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/Reachability/reachabilityWithAddress:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>+ (Reachability *)reachabilityWithAddress:(const struct sockaddr_in *)hostAddress</Declaration>
+			
+			
+			<Anchor>//api/name/reachabilityWithAddress:</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/Reachability/reachabilityForInternetConnection</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>+ (Reachability *)reachabilityForInternetConnection</Declaration>
+			
+			
+			<Anchor>//api/name/reachabilityForInternetConnection</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/Reachability/reachabilityForLocalWiFi</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>+ (Reachability *)reachabilityForLocalWiFi</Declaration>
+			
+			
+			<Anchor>//api/name/reachabilityForLocalWiFi</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/startNotifier</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (BOOL)startNotifier</Declaration>
+			
+			
+			<Anchor>//api/name/startNotifier</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/stopNotifier</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (void)stopNotifier</Declaration>
+			
+			
+			<Anchor>//api/name/stopNotifier</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/isEqual:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (BOOL)isEqual:(Reachability *)r</Declaration>
+			
+			
+			<Anchor>//api/name/isEqual:</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/currentReachabilityStatus</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (NetworkStatus)currentReachabilityStatus</Declaration>
+			
+			
+			<Anchor>//api/name/currentReachabilityStatus</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/isReachable</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (BOOL)isReachable</Declaration>
+			
+			
+			<Anchor>//api/name/isReachable</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/isConnectionRequired</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (BOOL)isConnectionRequired</Declaration>
+			
+			
+			<Anchor>//api/name/isConnectionRequired</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/connectionRequired</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (BOOL)connectionRequired</Declaration>
+			
+			
+			<Anchor>//api/name/connectionRequired</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/isConnectionOnDemand</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (BOOL)isConnectionOnDemand</Declaration>
+			
+			
+			<Anchor>//api/name/isConnectionOnDemand</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/isInterventionRequired</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (BOOL)isInterventionRequired</Declaration>
+			
+			
+			<Anchor>//api/name/isInterventionRequired</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/isReachableViaWWAN</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (BOOL)isReachableViaWWAN</Declaration>
+			
+			
+			<Anchor>//api/name/isReachableViaWWAN</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/isReachableViaWiFi</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (BOOL)isReachableViaWiFi</Declaration>
+			
+			
+			<Anchor>//api/name/isReachableViaWiFi</Anchor>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/Reachability/reachabilityFlags</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>Reachability.h</DeclaredIn>			
+			
+			<Declaration>- (SCNetworkReachabilityFlags)reachabilityFlags</Declaration>
+			
+			
+			<Anchor>//api/name/reachabilityFlags</Anchor>
+		</Token>
+		
+	</File>
+</Tokens>

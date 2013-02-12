@@ -1,0 +1,29 @@
+$ pod install --no-update --no-doc --verbose --no-color
+Resolving dependencies of `./Podfile'
+
+Finding added, modified or removed dependencies:
+  R JSONKit
+  - Reachability
+
+Resolving dependencies for target `default' (iOS 6.0)
+  - Reachability (= 3.1.0)
+
+Removing deleted dependencies
+
+-> Removing JSONKit
+
+Downloading dependencies
+
+-> Using Reachability (3.1.0)
+
+Generating support files
+  - Running pre install hooks
+  - Generating project
+  - Installing targets
+    - Generating xcconfig file at `./Pods/Pods.xcconfig'
+    - Generating prefix header at `./Pods/Pods-prefix.pch'
+    - Generating copy resources script at `./Pods/Pods-resources.sh'
+  - Running post install hooks
+  - Writing Xcode project file to `./Pods/Pods.xcodeproj'
+  - Writing lockfile in `./Podfile.lock'
+
