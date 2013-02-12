@@ -1,25 +1,24 @@
-
 PODS:
-- AFNetworking (0.7.0):
-  - JSONKit
-- FormatterKit (1.0.0):
-  - FormatterKit/ArrayFormatter (= 1.0.0)
-  - FormatterKit/LocationFormatter (= 1.0.0)
-  - FormatterKit/OrdinalNumberFormatter (= 1.0.0)
-  - FormatterKit/TimeIntervalFormatter (= 1.0.0)
-  - FormatterKit/URLRequestFormatter (= 1.0.0)
-  - FormatterKit/UnitOfInformationFormatter (= 1.0.0)
-- FormatterKit/ArrayFormatter (1.0.0)
-- FormatterKit/LocationFormatter (1.0.0)
-- FormatterKit/OrdinalNumberFormatter (1.0.0)
-- FormatterKit/TimeIntervalFormatter (1.0.0)
-- FormatterKit/URLRequestFormatter (1.0.0)
-- FormatterKit/UnitOfInformationFormatter (1.0.0)
-- JSONKit (1.5pre)
+  - AFNetworking (0.7.0):
+    - JSONKit
+  - FormatterKit (1.0.0):
+    - FormatterKit/ArrayFormatter (= 1.0.0)
+    - FormatterKit/LocationFormatter (= 1.0.0)
+    - FormatterKit/OrdinalNumberFormatter (= 1.0.0)
+    - FormatterKit/TimeIntervalFormatter (= 1.0.0)
+    - FormatterKit/UnitOfInformationFormatter (= 1.0.0)
+    - FormatterKit/URLRequestFormatter (= 1.0.0)
+  - FormatterKit/ArrayFormatter (1.0.0)
+  - FormatterKit/LocationFormatter (1.0.0)
+  - FormatterKit/OrdinalNumberFormatter (1.0.0)
+  - FormatterKit/TimeIntervalFormatter (1.0.0)
+  - FormatterKit/UnitOfInformationFormatter (1.0.0)
+  - FormatterKit/URLRequestFormatter (1.0.0)
+  - JSONKit (1.5pre)
 
 DEPENDENCIES:
-- AFNetworking (~> 0.7.0)
-- FormatterKit
+  - AFNetworking (~> 0.7.0)
+  - FormatterKit
 
 SPEC CHECKSUMS:
   AFNetworking: 7bf22b0ed1d9068909cd67206db78204eb63dd2c
