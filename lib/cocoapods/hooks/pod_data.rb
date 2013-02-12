@@ -19,6 +19,12 @@ module Pod
         root_spec.to_s
       end
 
+      def source_files
+        []
+      end
+
+      #--------------------------------------------------------------------------------#
+
     end
   end
 end

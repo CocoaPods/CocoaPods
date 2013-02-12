@@ -7,6 +7,10 @@ module Pod
     #
     class LibraryData
 
+      def dependencies
+        []
+      end
+
 
     end
   end
