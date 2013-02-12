@@ -199,6 +199,9 @@ end
 def lockfile_should_match(expected, produced)
   expected_yaml = YAML::load(File.open(expected))
   produced_yaml = YAML::load(File.open(produced))
+  # Remove CocoaPods version
+  expected_yaml.delete('COCOAPODS')
+  produced_yaml.delete('COCOAPODS')
   desc = "Lockfile comparison error `#{expected}`"
   desc << "\n EXPECTED:\n#{expected_yaml}\n"
   desc << "\n PRODUCED:\n#{produced_yaml}\n"
