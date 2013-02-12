@@ -1,0 +1,14 @@
+platform :ios, '6.0'
+pod "Reachability", "3.1.0"
+
+pre_install do |installer|
+  memo = "PODS:#{installer.pods * ', '} TARGETS:#{installer.specs_by_target.keys.map(&:name) * ', '}"
+  File.open(config.project_pods_root + '../pre_install.txt', 'w') {|f| f.puts memo}
+end
+
+post_install do |installer|
+  target = installer.project.targets.first
+  target.build_configurations.each do |config|
+    config.build_settings['GCC_ENABLE_OBJC_GC'] = 'supported'
+  end
+end
