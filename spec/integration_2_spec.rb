@@ -86,7 +86,7 @@ end
 #
 def focused_check(arguments, folder)
   copy_files(folder)
-  executed = launch_binary(arguments)
+  executed = launch_binary(arguments, folder)
   check_with_folder(folder) if executed
 end
 
@@ -101,11 +101,10 @@ end
 #         the name of the folder of the tests.
 #
 def copy_files(folder)
-  TMP_DIR.rmtree if TMP_DIR.exist?
-  TMP_DIR.mkpath
-
   source = File.expand_path("../integration/#{folder}/before", __FILE__)
-  FileUtils.cp_r(Dir.glob("#{source}/*"), TMP_DIR)
+  destination = TMP_DIR + folder
+  destination.mkpath
+  FileUtils.cp_r(Dir.glob("#{source}/*"), destination)
 end
 
 # Runs the Pod executable with the given arguments in the temporary directory.
@@ -117,11 +116,11 @@ end
 #         bundler ensuring that the execution is performed in the correct
 #         environment.
 #
-def launch_binary(arguments)
+def launch_binary(arguments, folder)
   # TODO CP 0.16 doesn't offer the possibility to skip just the installation
   # of the docs.
   command = "#{POD_BINARY} #{arguments} --verbose --no-color"
-  Dir.chdir(TMP_DIR) do
+  Dir.chdir(TMP_DIR + folder) do
     output = `#{command}`
     it "$ pod #{arguments}" do
       $?.should.satisfy("Pod binary failed\n\n#{output}") do
@@ -150,7 +149,7 @@ def check_with_folder(folder)
     next unless File.file?(expected_path)
     relative_path = expected_path.gsub("#{source}/after/", '')
     expected = Pathname.new(expected_path)
-    produced = TMP_DIR + relative_path
+    produced = TMP_DIR + folder + relative_path
 
       case expected_path
       when %r[/xcuserdata/]
@@ -260,6 +259,8 @@ end
 
 
 describe "Integration take 2" do
+  TMP_DIR.rmtree if TMP_DIR.exist?
+  TMP_DIR.mkpath
 
   describe "Pod install" do
 
