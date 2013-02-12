@@ -12,3 +12,4 @@ notifications:
     on_failure: always
     rooms:
       - secure: "qOE5zmgaHe/qQu3W9rmj7wygA5Ivl+cx50fqWGag2bdRl8ly5yj1NVoOKk/O\nZmQc4Lze+301uvTXi+r5v8A/tF6W1kUZw7yBiKuXoYFUGmDiVR9o2I/FPwkL\ngSzPJttrXTQfkQ4PbnrkX+JO+5bLWrKaO0hKXT4B2yUu4UXLVk0="
+

@@ -6,6 +6,19 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		51D6A8AB16C445B800E174E1 /* AggregateTarget */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 51D6A8B116C445B800E174E1 /* Build configuration list for PBXAggregateTarget "AggregateTarget" */;
+			buildPhases = (
+			);
+			dependencies = (
+			);
+			name = AggregateTarget;
+			productName = AggregateTarget;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		51075D4C1521D0C100E39B41 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A346497114F9BE9A0080D870 /* UIKit.framework */; };
 		51075D4D1521D0C100E39B41 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A346497314F9BE9A0080D870 /* Foundation.framework */; };
@@ -224,6 +237,7 @@
 			targets = (
 				A346496C14F9BE9A0080D870 /* SampleProject */,
 				51075D491521D0C100E39B41 /* TestRunner */,
+				51D6A8AB16C445B800E174E1 /* AggregateTarget */,
 			);
 		};
 /* End PBXProject section */
@@ -421,6 +435,34 @@
 			};
 			name = "App Store";
 		};
+		51D6A8AC16C445B800E174E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		51D6A8AD16C445B800E174E1 /* Test */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Test;
+		};
+		51D6A8AE16C445B800E174E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		51D6A8AF16C445B800E174E1 /* App Store */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "App Store";
+		};
 		A346498314F9BE9A0080D870 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -501,6 +543,16 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		51D6A8B116C445B800E174E1 /* Build configuration list for PBXAggregateTarget "AggregateTarget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51D6A8AC16C445B800E174E1 /* Debug */,
+				51D6A8AD16C445B800E174E1 /* Test */,
+				51D6A8AE16C445B800E174E1 /* Release */,
+				51D6A8AF16C445B800E174E1 /* App Store */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		A346496714F9BE990080D870 /* Build configuration list for PBXProject "SampleProject" */ = {
 			isa = XCConfigurationList;
