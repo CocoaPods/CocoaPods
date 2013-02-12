@@ -191,7 +191,8 @@ module Pod
         end
 
         unless file_lists.empty?
-          UI.warn "[#{spec_consumer.spec.name}] The usage of Rake FileList is deprecated. Use `exclude_files`."
+          # TODO Restore warning in 0.17 proper
+          # UI.warn "[#{spec_consumer.spec.name}] The usage of Rake FileList is deprecated. Use `exclude_files`."
         end
 
         result.flatten.compact.uniq

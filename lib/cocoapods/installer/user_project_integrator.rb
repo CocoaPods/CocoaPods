@@ -300,9 +300,10 @@ module Pod
           configs_by_overridden_key = {}
           target.build_configurations.each do |config|
             xcconfig.attributes.keys.each do |key|
-              configs_by_overridden_key[key] ||= []
               target_value = config.build_settings[key]
+
               if target_value && !target_value.include?('$(inherited)')
+                configs_by_overridden_key[key] ||= []
                 configs_by_overridden_key[key] << config.name
               end
             end
@@ -310,10 +311,10 @@ module Pod
             configs_by_overridden_key.each do |key, config_names|
               name    = "#{target.name} [#{config_names.join(' - ')}]"
               actions = [
-                "Use the `$(inherited)' flag, or",
+                "Use the `$(inherited)` flag, or",
                 "Remove the build settings from the target."
               ]
-              UI.warn("The target `#{name}' overrides the `#{key}' build " \
+              UI.warn("The target `#{name}` overrides the `#{key}` build " \
                       "setting defined in `#{library.xcconfig_relative_path}'.",
                       actions)
             end

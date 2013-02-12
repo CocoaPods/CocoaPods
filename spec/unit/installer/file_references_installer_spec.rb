@@ -47,6 +47,10 @@ module Pod
         installer.send(:file_accessors).count.should == 1
       end
 
+      xit "handles libraries without pods and hence without file accessors" do
+
+      end
+
     end
 
     #-------------------------------------------------------------------------#

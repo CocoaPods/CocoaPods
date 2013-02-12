@@ -103,7 +103,7 @@ module Pod
       #         platform in a single installation.
       #
       def file_accessors
-        @file_accessors ||= libraries.map(&:file_accessors).flatten
+        @file_accessors ||= libraries.map(&:file_accessors).flatten.compact
       end
 
       #-----------------------------------------------------------------------#

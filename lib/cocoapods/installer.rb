@@ -173,19 +173,19 @@ module Pod
     def detect_pods_to_install
       names = []
 
-      # TODO
-      # specs_by_root_name.each do |root_name, specs|
-      #   if update_mode
-      #     if specs.any? { |spec| spec.version.head? } #|| resolver.pods_from_external_sources.include?(root_name)
-      #       @names_of_pods_to_install << root_name
-      #     end
-      #   end
+      analyzer.specifications.each do |spec|
+        root_name = spec.root.name
 
-      #   unless pod_installation_exists?(root_name)
-      #     @names_of_pods_to_install << root_name
-      #   end
-      # end
-      # TODO user root name.
+        if update_mode
+          if spec.version.head? #|| TODO resolver.pods_from_external_sources.include?(root_name)
+            names << root_name
+          end
+        end
+
+        unless sandbox.pod_dir(root_name).exist?
+          names << root_name
+        end
+      end
 
       names += analyzer.sandbox_state.added + analyzer.sandbox_state.changed
       names = names.map { |name| Specification.root_name(name) }
@@ -275,16 +275,16 @@ module Pod
     #
     def install_pod_sources
       @installed_specs = []
-        root_specs = analyzer.specifications.map { |spec| spec.root }
-        root_specs.each do |spec|
-          if names_of_pods_to_install.include?(spec.name)
-            UI.section("Installing #{spec}".green, "-> ".green) do
-              install_source_of_pod(spec.name)
-            end
-          else
-            UI.section("Using #{spec}", "-> ".green)
+      root_specs = analyzer.specifications.map { |spec| spec.root }.uniq
+      root_specs.each do |spec|
+        if names_of_pods_to_install.include?(spec.name)
+          UI.section("Installing #{spec}".green, "-> ".green) do
+            install_source_of_pod(spec.name)
           end
+        else
+          UI.section("Using #{spec}", "-> ".green)
         end
+      end
     end
 
     # Install the Pods. If the resolver indicated that a Pod should be

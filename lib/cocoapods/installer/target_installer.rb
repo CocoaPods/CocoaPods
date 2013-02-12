@@ -123,6 +123,8 @@ module Pod
 
       # Creates the link to the headers of the Pod in the sandbox.
       #
+      # TODO: clean up
+      #
       # @return [void]
       #
       def link_headers
@@ -133,14 +135,14 @@ module Pod
             sandbox.build_headers.add_search_path(headers_sandbox)
             sandbox.public_headers.add_search_path(headers_sandbox)
 
-              consumer = file_accessor.spec_consumer
-              header_mappings(headers_sandbox, consumer, file_accessor.headers, file_accessor.path_list.root).each do |namespaced_path, files|
-                sandbox.build_headers.add_files(namespaced_path, files)
-              end
+            consumer = file_accessor.spec_consumer
+            header_mappings(headers_sandbox, consumer, file_accessor.headers, file_accessor.path_list.root).each do |namespaced_path, files|
+              sandbox.build_headers.add_files(namespaced_path, files)
+            end
 
-              header_mappings(headers_sandbox, consumer, file_accessor.public_headers, file_accessor.path_list.root).each do |namespaced_path, files|
-                sandbox.public_headers.add_files(namespaced_path, files)
-              end
+            header_mappings(headers_sandbox, consumer, file_accessor.public_headers, file_accessor.path_list.root).each do |namespaced_path, files|
+              sandbox.public_headers.add_files(namespaced_path, files)
+            end
           end
         end
       end
