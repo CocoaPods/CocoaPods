@@ -220,7 +220,7 @@ def xcodeproj_should_match(expected, produced)
   diff = produced_proj.to_tree_hash.recursive_diff(expected_proj.to_tree_hash, "#produced#", "#reference#")
   desc = "Project comparison error `#{expected}`"
   if diff
-    desc << "\n#{diff.to_yaml.gsub('"#produced#"','produced'.red).gsub('"#reference#"','reference'.yellow)}"
+    desc << "\n\n#{diff.inspect.cyan}\n\n#{diff.to_yaml.gsub('"#produced#"','produced'.cyan).gsub('"#reference#"','reference'.magenta)}"
   end
   diff.should.satisfy(desc) do |diff|
     diff.nil?
@@ -255,14 +255,10 @@ def file_should_match(expected, produced)
   end
 end
 
-def create_caches_for_the_pods
-
-end
 
 #-----------------------------------------------------------------------------#
 
 
-create_caches_for_the_pods
 describe "Integration take 2" do
 
   describe "Pod install" do
