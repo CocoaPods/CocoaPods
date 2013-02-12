@@ -86,7 +86,7 @@ namespace :gem do
     end
 
     # Ensure that the branches are up to date with the remote
-    sh "git pull"
+    sh "git pull -s recursive -X theirs"
 
     puts "* Running specs"
     silent_sh('rake spec:all')
