@@ -52,8 +52,8 @@ EOS
                 break
               end
             end
-
-            script.puts "install_resource '#{resource}' '#{relative_path}'"
+    
+            script.puts "install_resource '#{resource}'" + (relative_path ? " '#{relative_path}'" : "")
           end
         end
         # TODO use File api
