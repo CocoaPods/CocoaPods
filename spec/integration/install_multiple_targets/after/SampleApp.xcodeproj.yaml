@@ -53,16 +53,12 @@ File References:
     - AppKit.framework
     - CoreData.framework
     - Foundation.framework
-  - libPods.a
-  - libPods-test.a
   - libPods-SampleApp_2.a
 - Products:
   - SampleApp.app
   - SampleAppTests.octest
   - SampleApp_2.app
   - NonIntegrated.app
-- Pods.xcconfig
-- Pods-test.xcconfig
 - Pods-SampleApp_2.xcconfig
 
 
@@ -75,12 +71,10 @@ Targets:
       - CPAppDelegate.m
     - FrameworksBuildPhase:
       - Cocoa.framework
-      - libPods.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
-    - Copy Pods Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -90,7 +84,6 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
-        Base Configuration: Pods.xcconfig
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: app
@@ -99,7 +92,6 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
-        Base Configuration: Pods.xcconfig
 - SampleAppTests:
     Build Phases:
     - SourcesBuildPhase:
@@ -107,12 +99,10 @@ Targets:
     - FrameworksBuildPhase:
       - SenTestingKit.framework
       - Cocoa.framework
-      - libPods-test.a
       - libPods-SampleApp_2.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
     - ShellScriptBuildPhase: []
-    - Copy Pods Resources: []
     - Copy Pods Resources: []
     Build Configurations:
     - Debug:

@@ -56,6 +56,7 @@ module Pod
           'HEADER_SEARCH_PATHS'              => '${PODS_HEADERS_SEARCH_PATHS}',
           'PODS_ROOT'                        => relative_pods_root,
           'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
+          # TODO With this setup every targets gets the headers of the previus targets.
           'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(sandbox.build_headers.search_paths),
           'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
         })
@@ -122,7 +123,7 @@ module Pod
       # @return [String] the resulting string.
       #
       def quote(strings)
-        strings.map { |s| %W|"#{s}"| }.join(" ")
+        strings.sort.map { |s| %W|"#{s}"| }.join(" ")
       end
     end
   end

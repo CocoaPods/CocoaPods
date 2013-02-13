@@ -1,5 +1,5 @@
 $ pod install --no-update --no-doc --verbose --no-color
-Resolving dependencies of `./Podfile'
+Resolving dependencies of `Podfile`
 
 Resolving dependencies for target `default' (iOS 6.0)
   - Reachability (= 3.1.0)
@@ -11,56 +11,94 @@ Resolving dependencies for target `SampleApp_2' (iOS 6.0)
   - JSONKit
   - Reachability (= 3.1.0)
 
+Comparing resolved specification to the sandbox manifest:
+  A Reachability
+  A JSONKit
+
 Downloading dependencies
 
+-> Installing Reachability (3.1.0)
+ > GitHub download
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git config core.bare
+   true
+ > Updating cache git repo (CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6)
+     $ /usr/bin/git remote update
+     Fetching origin
+   $ /usr/bin/git init
+   Initialized empty Git repository in ROOT/tmp/install_multiple_targets/Pods/Reachability/.git/
+   $ /usr/bin/git remote add origin 'CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6'
+   $ /usr/bin/git fetch origin tags/v3.1.0 2>&1
+   From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+    * tag               v3.1.0     -> FETCH_HEAD
+   $ /usr/bin/git reset --hard FETCH_HEAD
+   HEAD is now at f7176f4 updated podspec
+   $ /usr/bin/git checkout -b activated-pod-commit 2>&1
+   Switched to a new branch 'activated-pod-commit'
+
 -> Installing JSONKit (1.5pre)
-  $ /usr/bin/git config core.bare
-  true
- > Cloning git repo
+ > GitHub download
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git config core.bare
+   true
    $ /usr/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
    0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
  > Cloning to Pods folder
-    $ /usr/bin/git clone "CACHES_DIR/Git/de3e1c97c03ac13b29e7533beea2d2131589900f" "ROOT/tmp/install_multiple_targets/Pods/JSONKit"
-    Cloning into 'ROOT/tmp/install_multiple_targets/Pods/JSONKit'...
-    done.
-   $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+     $ /usr/bin/git clone "CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f" "ROOT/tmp/install_multiple_targets/Pods/JSONKit"
+     Cloning into 'ROOT/tmp/install_multiple_targets/Pods/JSONKit'...
+     done.
+   $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
+   Switched to a new branch 'activated-pod-commit'
 
--> Installing Reachability (3.1.0)
-  $ /usr/bin/git config core.bare
-  true
- > Cloning git repo
-   $ /usr/bin/git rev-list --max-count=1 v3.1.0
-   f7176f4798d068d233dca5223ae4bd9c8059e830
-   $ /usr/bin/git init
-   Initialized empty Git repository in ROOT/tmp/install_multiple_targets/Pods/Reachability/.git/
-   $ /usr/bin/git remote add origin 'CACHES_DIR/Git/48f11286750afa2e2eb80564e288f42eed7cbab6'
-   $ /usr/bin/git fetch origin tags/v3.1.0
-   $ /usr/bin/git reset --hard FETCH_HEAD
-   HEAD is now at f7176f4 updated podspec
-   $ /usr/bin/git checkout -b activated-pod-commit
-
-Generating support files
+Generating Pods Project
+  - Creating Pods project
   - Running pre install hooks
-  - Generating project
+  - Adding source files to Pods project
+  - Adding resources to Pods project
   - Installing targets
-    - Generating xcconfig file at `./Pods/Pods.xcconfig'
-    - Generating prefix header at `./Pods/Pods-prefix.pch'
-    - Generating copy resources script at `./Pods/Pods-resources.sh'
-    - Generating xcconfig file at `./Pods/Pods-test.xcconfig'
-    - Generating prefix header at `./Pods/Pods-test-prefix.pch'
-    - Generating copy resources script at `./Pods/Pods-test-resources.sh'
-    - Generating xcconfig file at `./Pods/Pods-SampleApp_2.xcconfig'
-    - Generating prefix header at `./Pods/Pods-SampleApp_2-prefix.pch'
-    - Generating copy resources script at `./Pods/Pods-SampleApp_2-resources.sh'
+    - Installing target `Pods` iOS 6.0
+      - Adding Build files
+      - Linking headers
+      - Generating xcconfig file at `Pods/Pods.xcconfig`
+      - Generating target header at `Pods/Pods-header.h`
+      - Generating prefix header at `Pods/Pods-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-dummy.m`
+    - Installing target `Pods-test` iOS 6.0
+      - Adding Build files
+      - Linking headers
+      - Generating xcconfig file at `Pods/Pods-test.xcconfig`
+      - Generating target header at `Pods/Pods-test-header.h`
+      - Generating prefix header at `Pods/Pods-test-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-test-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-test-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-test-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-test-dummy.m`
+    - Installing target `Pods-SampleApp_2` iOS 6.0
+      - Adding Build files
+      - Linking headers
+      - Generating xcconfig file at `Pods/Pods-SampleApp_2.xcconfig`
+      - Generating target header at `Pods/Pods-SampleApp_2-header.h`
+      - Generating prefix header at `Pods/Pods-SampleApp_2-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-SampleApp_2-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-SampleApp_2-dummy.m`
   - Running post install hooks
-  - Writing Xcode project file to `./Pods/Pods.xcodeproj'
-  - Writing lockfile in `./Podfile.lock'
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client projects
 
 [!] From now on use `SampleApp.xcworkspace'.
 
-Integrating `libPods.a' into target `SampleApp' of Xcode project `./SampleApp.xcodeproj'.
+Integrating `libPods.a` into target `SampleApp` of project `SampleApp.xcodeproj`.
 
-Integrating `libPods-test.a' into target `SampleAppTests' of Xcode project `./SampleApp.xcodeproj'.
+Integrating `libPods-test.a` into target `SampleAppTests` of project `SampleApp.xcodeproj`.
 
-Integrating `libPods-SampleApp_2.a' into target `SampleAppTests' of Xcode project `./SampleApp.xcodeproj'.
-
+Integrating `libPods-SampleApp_2.a` into target `SampleAppTests` of project `SampleApp.xcodeproj`.
