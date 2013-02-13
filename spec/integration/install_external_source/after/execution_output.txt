@@ -5,7 +5,7 @@ Resolving dependencies for target `default' (iOS 4.3)
   - PodTest (from `PodTest-hg-source')
     -> Pre-downloading: 'PodTest'
       > Cloning mercurial repo
-         $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/Pods/PodTest"
+         $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_external_source/Pods/PodTest"
          updating to branch default
          5 files updated, 0 files merged, 0 files removed, 0 files unresolved
     - PodTest/subspec_1 (= 1.0)
@@ -14,7 +14,6 @@ Resolving dependencies for target `default' (iOS 4.3)
 Downloading dependencies
 
 -> Installing PodTest (1.0)
-CLEANING: [#<Pod::Specification for PodTest (1.0)>, #<Pod::Specification for PodTest/subspec_1 (1.0)>, #<Pod::Specification for PodTest/subspec_2 (1.0)>]
 
 Generating support files
   - Running pre install hooks

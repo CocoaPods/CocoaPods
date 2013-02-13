@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/CocoaPods/Xcodeproj.git
-  revision: 750e41ac2659fb18744d5fb927077cd109f6cdcd
+  revision: 272de99750a78b46591fb0f58ac132bd354c39f8
   specs:
     xcodeproj (0.4.3)
       activesupport (~> 3.2.6)
@@ -58,7 +58,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.1)
       mocha (>= 0.9.8)
-    multi_json (1.5.1)
+    multi_json (1.6.0)
     multipart-post (1.1.5)
     netrc (0.7.7)
     octokit (1.23.0)
@@ -69,7 +69,7 @@ GEM
       multi_json (~> 1.3)
       netrc (~> 0.7.7)
     open4 (1.3.0)
-    pry (0.9.11.4)
+    pry (0.9.12)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)

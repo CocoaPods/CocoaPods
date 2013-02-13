@@ -18,9 +18,8 @@ Downloading dependencies
    $ /usr/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
    0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
  > Cloning to Pods folder
-    $ /usr/bin/git clone "CACHES_DIR/Git/de3e1c97c03ac13b29e7533beea2d2131589900f"
-    "ROOT/tmp/Pods/JSONKit"
-    Cloning into 'ROOT/tmp/Pods/JSONKit'...
+    $ /usr/bin/git clone "CACHES_DIR/Git/de3e1c97c03ac13b29e7533beea2d2131589900f" "ROOT/tmp/install_add_pod/Pods/JSONKit"
+    Cloning into 'ROOT/tmp/install_add_pod/Pods/JSONKit'...
     done.
    $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
 

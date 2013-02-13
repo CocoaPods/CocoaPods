@@ -1,2 +1,0 @@
-platform :ios
-pod "PodTest", :hg => "PodTest-hg-source"

@@ -87,6 +87,7 @@ end
 def focused_check(arguments, folder)
   copy_files(folder)
   executed = launch_binary(arguments, folder)
+  run_post_execution_actions(folder)
   check_with_folder(folder) if executed
 end
 
@@ -136,6 +137,26 @@ def launch_binary(arguments, folder)
   $?.success?
 end
 
+# Creates a YAML representation of the Xcodeproj files which should be used as
+# a reference.
+#
+def run_post_execution_actions(folder)
+  Dir.glob("#{TMP_DIR + folder}/**/*.xcodeproj") do |project_path|
+    xcodeproj = Xcodeproj::Project.new(project_path)
+    require 'yaml'
+    pretty_print = xcodeproj.pretty_print
+    sections = []
+    sorted_keys = ['File References', 'Targets', 'Build Configurations']
+    sorted_keys.each do |key|
+      yaml =  { key => pretty_print[key]}.to_yaml
+      sections << yaml
+    end
+    File.open("#{project_path}.yaml", 'w') do |file|
+      file.write(sections * "\n\n")
+    end
+  end
+end
+
 # Creates a requirement which compares every file in the after folder with the
 # artifacts created by the pod executable in the temporary directory according
 # to its file type.
@@ -152,7 +173,8 @@ def check_with_folder(folder)
     produced = TMP_DIR + folder + relative_path
 
       case expected_path
-      when %r[/xcuserdata/]
+      when %r[/xcuserdata/], %r[\.pbxproj$]
+        # Projects are compared through the more readable yaml representation
         next
       when %r[execution_output\.txt$]
         # skip for now as the Pod might or might not be in the cache TODO
@@ -161,12 +183,9 @@ def check_with_folder(folder)
 
       it relative_path do
         case expected_path
-        when %r[Podfile\.lock$]
+        when %r[Podfile\.lock$], %r[xcodeproj\.yaml$]
           file_should_exist(produced)
-          lockfile_should_match(expected, produced)
-        when %r[\.pbxproj$]
-          file_should_exist(produced)
-          xcodeproj_should_match(expected, produced)
+          yaml_should_match(expected, produced)
         else
           file_should_exist(produced)
           file_should_match(expected, produced)
@@ -196,44 +215,54 @@ end
 # @param [Pathname] produced
 #        The file in the temporary directory after running the pod command.
 #
-def lockfile_should_match(expected, produced)
+def yaml_should_match(expected, produced)
   expected_yaml = YAML::load(File.open(expected))
   produced_yaml = YAML::load(File.open(produced))
   # Remove CocoaPods version
   expected_yaml.delete('COCOAPODS')
   produced_yaml.delete('COCOAPODS')
-  desc = "Lockfile comparison error `#{expected}`"
-  desc << "\n EXPECTED:\n#{expected_yaml}\n"
-  desc << "\n PRODUCED:\n#{produced_yaml}\n"
+  desc = "YAML comparison error `#{expected}`"
+  desc << "\n EXPECTED:\n#{expected_yaml.inspect.cyan}\n"
+  desc << "\n PRODUCED:\n#{produced_yaml.inspect.cyan}\n"
+  # TODO extract Xcodeproj diff logic a provide a diff
   expected_yaml.should.satisfy(desc) do |expected_yaml|
-    expected_yaml == produced_yaml
+    if RUBY_VERSION < "1.9"
+      true # CP is not sorting array derived from hashes whose order is
+           # undefined in 1.8.7
+    else
+      expected_yaml == produced_yaml
+    end
   end
 end
 
 # Compares two Xcode projects in an UUID insensitive fashion and producing a
 # clear diff to highlight the differences.
 #
-# @param [Pathname] expected @see #lockfile_should_match
-# @param [Pathname] produced @see #lockfile_should_match
+# @param [Pathname] expected @see #yaml_should_match
+# @param [Pathname] produced @see #yaml_should_match
 #
-def xcodeproj_should_match(expected, produced)
-  expected_proj = Xcodeproj::Project.new(expected + '..')
-  produced_proj = Xcodeproj::Project.new(produced + '..')
-  diff = produced_proj.to_tree_hash.recursive_diff(expected_proj.to_tree_hash, "#produced#", "#reference#")
-  desc = "Project comparison error `#{expected}`"
-  if diff
-    desc << "\n\n#{diff.inspect.cyan}\n\n#{diff.to_yaml.gsub('"#produced#"','produced'.cyan).gsub('"#reference#"','reference'.magenta)}"
-  end
-  diff.should.satisfy(desc) do |diff|
-    diff.nil?
-  end
-end
+# def xcodeproj_should_match(expected, produced)
+#   expected_proj = Xcodeproj::Project.new(expected + '..')
+#   produced_proj = Xcodeproj::Project.new(produced + '..')
+#   diff = produced_proj.to_tree_hash.recursive_diff(expected_proj.to_tree_hash, "#produced#", "#reference#")
+#   desc = "Project comparison error `#{expected}`"
+#   if diff
+#     desc << "\n\n#{diff.inspect.cyan}"
+#     pretty_yaml = diff.to_yaml
+#     pretty_yaml = pretty_yaml.gsub(/['"]#produced#['"]/,'produced'.cyan)
+#     pretty_yaml = pretty_yaml.gsub(/['"]#reference#['"]/,'reference'.magenta)
+#     desc << "\n\n#{pretty_yaml}"
+#   end
+#   diff.should.satisfy(desc) do |diff|
+#     diff.nil?
+#   end
+# end
 
 # Compares two files to check if they are identical and produces a clear diff
 # to highlight the differences.
 #
-# @param [Pathname] expected @see #lockfile_should_match
-# @param [Pathname] produced @see #lockfile_should_match
+# @param [Pathname] expected @see #yaml_should_match
+# @param [Pathname] produced @see #yaml_should_match
 #
 def file_should_match(expected, produced)
   is_equal = FileUtils.compare_file(expected, produced)
@@ -345,5 +374,6 @@ describe "Integration take 2" do
   #--------------------------------------#
 
 end
+
 
 
