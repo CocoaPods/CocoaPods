@@ -91,7 +91,7 @@ module Pod
       def copy_resources_script_for(pods)
         directories = { }
         pods.each do |pod|
-          directories = directories.merge(pod.relative_resource_directories)
+          directories = directories.merge(pod.resource_directories)
         end
 
         @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.relative_resource_files }.flatten, directories)
