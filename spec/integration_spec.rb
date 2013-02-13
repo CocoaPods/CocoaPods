@@ -370,7 +370,7 @@ else
                                 "install_resource 'SSZipArchive/Readme.markdown'"
       end
 
-      it "adds resources to the xcode copy script using resource_mappings_dir" do
+      it "adds resources to the xcode copy script using preserved_resource_directories" do
         spec = Pod::Podfile.new do
           self.platform platform
           xcodeproj 'dummy'
@@ -381,7 +381,7 @@ else
         installer = SpecHelper::Installer.new(resolver)
         target_definition = installer.target_installers.first.target_definition
         installer.specs_by_target[target_definition].first.resources = 'LICEN*', 'Readme.*', 'minizip/crypt.h'
-        installer.specs_by_target[target_definition].first.resource_mappings_dir = 'minizip'
+        installer.specs_by_target[target_definition].first.preserved_resource_directories = 'minizip'
         
         installer.install!
 
