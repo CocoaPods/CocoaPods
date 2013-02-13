@@ -89,6 +89,7 @@ module Pod
       #
       #
       def copy_resources_script_for(pods)
+        # Grab all preserved resource directories
         directories = { }
         pods.each do |pod|
           directories = directories.merge(pod.resource_directories)

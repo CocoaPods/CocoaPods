@@ -299,7 +299,8 @@ module Pod
     platform_attr_writer           :header_mappings_dir, lambda { |file, _| Pathname.new(file) }
     pltf_first_defined_attr_reader :header_mappings_dir
 
-    # If not provided all resource files are flattened
+    # Maps an absolute path in the file structure to a relative directory in the pod
+    # maintains those directory structures in the pod
     #
     platform_attr_writer           :resource_mappings_dir, lambda { |dir, _| 
       if dir.kind_of?(String)

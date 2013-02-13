@@ -303,7 +303,8 @@ module Pod
       resource_files.map{ |p| relativize_from_sandbox(p) }
     end
 
-    # @return [Hash<Pathname>] The *relative* paths of the resource preservations.
+    # @return [Hash<Pathname>] The paths of the resource preservations based on the 
+    # current pod's file structure
     #
     def resource_directories
       directories = { }
