@@ -14,13 +14,12 @@ Downloading dependencies
    $ /usr/bin/git rev-list --max-count=1 v3.1.0
    f7176f4798d068d233dca5223ae4bd9c8059e830
    $ /usr/bin/git init
-   Initialized empty Git repository in ROOT/tmp/Pods/Reachability/.git/
+   Initialized empty Git repository in ROOT/tmp/install_podspec/Pods/Reachability/.git/
    $ /usr/bin/git remote add origin 'CACHES_DIR/Git/48f11286750afa2e2eb80564e288f42eed7cbab6'
    $ /usr/bin/git fetch origin tags/v3.1.0
    $ /usr/bin/git reset --hard FETCH_HEAD
    HEAD is now at f7176f4 updated podspec
    $ /usr/bin/git checkout -b activated-pod-commit
-CLEANING: [#<Pod::Specification for Reachability (3.1.0)>]
 
 Generating support files
   - Running pre install hooks

@@ -199,6 +199,28 @@ namespace :spec do
     sh "rm -f spec/fixtures/vcr/tarballs.yml"
   end
 
+  desc "Rebuild integration take 2 after folders"
+  task :rebuild_integration_after_folders do
+    # TODO Run the tests manually before calling this for now
+    # sh 'bacon spec/integration_2_spec.rb'
+
+    # Copy the files to the files produced by the specs to the after folders
+    FileList['tmp/*'].each do |source|
+      destination = "spec/integration/#{source.gsub('tmp/','')}/after"
+      if File.exists?(destination)
+        sh "rm -rf #{destination}"
+        sh "mv #{source} #{destination}"
+      end
+    end
+
+    # Remove files not used for the comparison
+    # To keep the git diff clean
+    FileList['spec/integration/*/after/{Podfile,**/*.xcodeproj}'].each do |to_delete|
+      sh "rm -rf #{to_delete}"
+    end
+
+  end
+
   task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
 end
 
