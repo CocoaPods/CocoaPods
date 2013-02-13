@@ -55,6 +55,7 @@ module Pod
       @header_dir   = { :ios => nil, :osx => nil }
       @requires_arc = { :ios => nil, :osx => nil }
       @header_mappings_dir = { :ios => nil, :osx => nil }
+      @resource_mappings_dir = { :ios => nil, :osx => nil }
 
       yield self if block_given?
     end
@@ -297,6 +298,29 @@ module Pod
     #
     platform_attr_writer           :header_mappings_dir, lambda { |file, _| Pathname.new(file) }
     pltf_first_defined_attr_reader :header_mappings_dir
+
+    # If not provided all resource files are flattened
+    #
+    platform_attr_writer           :resource_mappings_dir, lambda { |dir, _| 
+      if dir.kind_of?(String)
+        directories = { Pathname.new(dir) => Pathname.new(dir) }
+      elsif dir.kind_of?(Array)
+        directories = { }
+        
+        dir.each do |d|
+          directories[Pathname.new(dir)] = Pathname.new(dir)
+        end
+      elsif dir.kind_of?(Hash)
+        directories = { }
+        
+        dir.each do |key, value|
+          directories[Pathname.new(key)] = Pathname.new(value)
+        end
+      end
+
+      directories
+    }
+    pltf_first_defined_attr_reader :resource_mappings_dir
 
     # @!method xcconfig=
     #

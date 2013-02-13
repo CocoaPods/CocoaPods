@@ -20,8 +20,14 @@ install_resource()
       rsync -rp "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
       ;;
     *)
-      echo "cp -R ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-      cp -R "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+      echo "cp -R ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/$2"
+
+      if [ "$2" == "" ]; then
+        mkdir -p "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/$2"
+        cp -R "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/$2"
+      else
+        cp -R "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+      fi
       ;;
   esac
 }
@@ -30,15 +36,24 @@ EOS
       attr_reader :resources
 
       # A list of files relative to the project pods root.
-      def initialize(resources)
+      def initialize(resources, resource_paths)
         @resources = resources
+        @resource_paths = resource_paths
       end
 
       def save_as(pathname)
         pathname.open('w') do |script|
           script.puts CONTENT
           @resources.each do |resource|
-            script.puts "install_resource '#{resource}'"
+            relative_path = ""
+            @resource_paths.each do |key, value|
+              if resource.to_s.start_with?(key.to_s)
+                relative_path = value.to_s + resource.to_s.sub(key.to_s, "")
+                break
+              end
+            end
+
+            script.puts "install_resource '#{resource}' '#{relative_path}'"
           end
         end
         # TODO use File api

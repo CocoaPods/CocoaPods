@@ -303,6 +303,31 @@ module Pod
       resource_files.map{ |p| relativize_from_sandbox(p) }
     end
 
+    # @return [Hash<Pathname>] The hash of resource preservations.
+    
+    def resource_directories
+      directories = { }
+
+      specs = specifications.sort_by { |s| s.name.length }
+      specs.each do |spec|
+        directories = directories.merge(spec.resource_mappings_dir) if spec.resource_mappings_dir
+      end
+
+      directories
+    end
+
+    # @return [Hash<Pathname>] The *relative* paths of the resource preservations.
+    #
+    def relative_resource_directories
+      directories = { }
+
+      resource_directories.each do |key, value|
+        directories[relativize_from_sandbox(expanded_paths(key.to_s)[0])] = value
+      end
+
+      directories
+    end
+
     # @return [Pathname] The absolute path of the prefix header file
     #
     def prefix_header_file
