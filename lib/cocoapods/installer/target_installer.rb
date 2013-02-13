@@ -89,7 +89,11 @@ module Pod
       #
       #
       def copy_resources_script_for(pods)
-        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.relative_resource_files }.flatten)
+        # Grab all preserved resource directories
+        preserved_directories = { }
+        pods.each { |pod| preserved_directories = preserved_directories.merge(pod.relative_resource_directories) }
+
+        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.relative_resource_files }.flatten, preserved_directories)
       end
 
       def bridge_support_generator_for(pods, sandbox)

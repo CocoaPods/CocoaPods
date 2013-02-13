@@ -55,6 +55,7 @@ module Pod
       @header_dir   = { :ios => nil, :osx => nil }
       @requires_arc = { :ios => nil, :osx => nil }
       @header_mappings_dir = { :ios => nil, :osx => nil }
+      @preserved_resource_directories = { :ios => nil, :osx => nil }
 
       yield self if block_given?
     end
@@ -297,6 +298,24 @@ module Pod
     #
     platform_attr_writer           :header_mappings_dir, lambda { |file, _| Pathname.new(file) }
     pltf_first_defined_attr_reader :header_mappings_dir
+
+    # Maps an absolute path in the file structure to a relative directory in the pod
+    # maintains those directory structures in the pod
+    #
+    platform_attr_writer           :preserved_resource_directories, lambda { |dir, _| 
+      directories = { }
+
+      if dir.kind_of?(String)
+        directories[Pathname.new(dir)] = Pathname.new(dir)
+      elsif dir.kind_of?(Array)
+        dir.each { |dir| directories[Pathname.new(dir)] = Pathname.new(dir) }
+      elsif dir.kind_of?(Hash)
+        dir.each { |key, value| directories[Pathname.new(key)] = Pathname.new(value) }
+      end
+
+      directories
+    }
+    pltf_first_defined_attr_reader :preserved_resource_directories
 
     # @!method xcconfig=
     #

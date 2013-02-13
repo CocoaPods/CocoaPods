@@ -370,6 +370,50 @@ else
                                 "install_resource 'SSZipArchive/Readme.markdown'"
       end
 
+      it "adds resources to the xcode copy script using preserved_resource_directories" do
+        spec = Pod::Podfile.new do
+          self.platform platform
+          xcodeproj 'dummy'
+          pod 'SSZipArchive', '0.1.0'
+        end
+
+        resolver = Pod::Resolver.new(spec, nil, Pod::Sandbox.new(config.project_pods_root))
+        installer = SpecHelper::Installer.new(resolver)
+        target_definition = installer.target_installers.first.target_definition
+        installer.specs_by_target[target_definition].first.resources = 'LICEN*', 'Readme.*', 'minizip/crypt.h'
+        installer.specs_by_target[target_definition].first.preserved_resource_directories = 'minizip'
+        
+        installer.install!
+
+        contents = (config.project_pods_root + 'Pods-resources.sh').read
+        p contents
+        contents.should.include "install_resource 'SSZipArchive/LICENSE'\n" \
+                                "install_resource 'SSZipArchive/Readme.markdown'\n" \
+                                "install_resource 'SSZipArchive/minizip/crypt.h' 'minizip/crypt.h'\n"
+      end
+
+      it "maps resources to the correct directory using preserved_resource_directories as a hash" do
+        spec = Pod::Podfile.new do
+          self.platform platform
+          xcodeproj 'dummy'
+          pod 'SSZipArchive', '0.1.0'
+        end
+
+        resolver = Pod::Resolver.new(spec, nil, Pod::Sandbox.new(config.project_pods_root))
+        installer = SpecHelper::Installer.new(resolver)
+        target_definition = installer.target_installers.first.target_definition
+        installer.specs_by_target[target_definition].first.resources = 'LICEN*', 'Readme.*', 'minizip/crypt.h'
+        installer.specs_by_target[target_definition].first.preserved_resource_directories = { 'minizip' => 'sample' }
+        
+        installer.install!
+
+        contents = (config.project_pods_root + 'Pods-resources.sh').read
+        p contents
+        contents.should.include "install_resource 'SSZipArchive/LICENSE'\n" \
+                                "install_resource 'SSZipArchive/Readme.markdown'\n" \
+                                "install_resource 'SSZipArchive/minizip/crypt.h' 'sample/crypt.h'\n"
+      end
+
       # TODO we need to do more cleaning and/or add a --prune task
       it "overwrites an existing project.pbxproj file" do
         spec = Pod::Podfile.new do
