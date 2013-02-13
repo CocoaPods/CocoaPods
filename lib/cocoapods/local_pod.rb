@@ -306,18 +306,13 @@ module Pod
     # @return [Hash<Pathname>] The paths of the resource preservations based on the 
     # current pod's file structure
     #
-    def resource_directories
+    def relative_resource_directories
       directories = { }
 
-      specs = specifications.sort_by { |s| s.name.length }
-      specs.each do |spec|
-        if spec.resource_mappings_dir
-          spec.resource_mappings_dir.each do |key, value|
-            directories[relativize_from_sandbox(expanded_paths(key.to_s)[0])] = value
-          end
-        end
+      specifications.each do |spec|
+        spec.preserved_resource_directories.each { |key, value| directories[relativize_from_sandbox(expanded_paths(key.to_s)[0])] = value } if spec.preserved_resource_directories
       end
-      
+
       directories
     end
 

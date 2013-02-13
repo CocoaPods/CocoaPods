@@ -47,6 +47,7 @@ EOS
         pathname.open('w') do |script|
           script.puts CONTENT
           @resources.each do |resource|
+            
             relative_path = ""
             @resource_paths.each do |key, value|
               if resource.to_s.start_with?(key.to_s)
@@ -55,7 +56,7 @@ EOS
               end
             end
     
-            script.puts "install_resource '#{resource}'" + (relative_path ? " '#{relative_path}'" : "")
+            script.puts "install_resource '#{resource}'#{(relative_path == "" ? "" : " '#{relative_path}'")}"
           end
         end
         # TODO use File api
