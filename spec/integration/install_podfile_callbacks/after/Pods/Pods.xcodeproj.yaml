@@ -1,19 +1,24 @@
 ---
 File References:
-- Products:
-  - libPods.a
 - Frameworks:
   - Foundation.framework
+  - SystemConfiguration.framework
 - Pods:
   - Reachability:
     - Reachability.h
     - Reachability.m
+- Products:
+  - libPods.a
 - Targets Support Files:
   - Pods:
-    - Pods-resources.sh
-    - Pods-prefix.pch
     - Pods.xcconfig
-  - PodsDummy_Pods.m
+    - Pods-header.h
+    - Pods-prefix.pch
+    - Pods-resources.sh
+    - Pods-acknowledgements.plist
+    - Pods-acknowledgements.markdown
+    - Pods-dummy.m
+- Podfile
 
 
 ---
@@ -23,7 +28,7 @@ Targets:
     - SourcesBuildPhase:
       - Reachability.m:
           COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
-      - PodsDummy_Pods.m
+      - Pods-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
@@ -31,26 +36,25 @@ Targets:
     Build Configurations:
     - Release:
         Build Settings:
-          VALIDATE_PRODUCT: 'YES'
-          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
-          DSTROOT: /tmp/xcodeproj.dst
           GCC_ENABLE_OBJC_GC: supported
-          GCC_PREFIX_HEADER: Pods-prefix.pch
           PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
-          GCC_C_LANGUAGE_STANDARD: gnu99
-          OTHER_LDFLAGS: ''
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
-          SDKROOT: iphoneos
-          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          COPY_PHASE_STRIP: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
-          SKIP_INSTALL: 'YES'
           PODS_ROOT: ${SRCROOT}
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           ARCHS: $(ARCHS_STANDARD_32_BIT)
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-prefix.pch
         Base Configuration: Pods.xcconfig
     - Debug:
         Build Settings:
@@ -78,7 +82,6 @@ Targets:
           PODS_ROOT: ${SRCROOT}
           ARCHS: $(ARCHS_STANDARD_32_BIT)
           SKIP_INSTALL: 'YES'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
         Base Configuration: Pods.xcconfig
 
 
