@@ -5,13 +5,13 @@ PODS:
 
 DEPENDENCIES:
 - PodTest/subspec_1 (from `PodTest-hg-source')
-- PodTest/subspec_2 (from `PodTest.podspec')
+- PodTest/subspec_2 (from `PodTest-hg-source')
 
 EXTERNAL SOURCES:
   PodTest/subspec_1:
     :hg: PodTest-hg-source
   PodTest/subspec_2:
-    :podspec: PodTest.podspec
+    :hg: PodTest-hg-source
 
 SPEC CHECKSUMS:
   PodTest/subspec_1: 5049980a26c8960af5a42d1c7f086483c5b29d8f
