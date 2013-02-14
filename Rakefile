@@ -7,7 +7,10 @@ def execute_command(command)
   end
 end
 
+#-----------------------------------------------------------------------------#
+
 namespace :gem do
+
   def gem_version
     require File.expand_path('../lib/cocoapods', __FILE__)
     Pod::VERSION
@@ -17,15 +20,21 @@ namespace :gem do
     "cocoapods-#{gem_version}.gem"
   end
 
+  #--------------------------------------#
+
   desc "Build a gem for the current version"
   task :build do
     sh "gem build cocoapods.gemspec"
   end
 
+  #--------------------------------------#
+
   desc "Install a gem version of the current code"
   task :install => :build do
     sh "gem install #{gem_filename}"
   end
+
+  #--------------------------------------#
 
   def silent_sh(command)
     output = `#{command} 2>&1`
@@ -139,40 +148,90 @@ namespace :gem do
   end
 end
 
+#-----------------------------------------------------------------------------#
+
 namespace :spec do
+
   def specs(dir)
     FileList["spec/#{dir}/*_spec.rb"].shuffle.join(' ')
   end
+
+  def title(title)
+    cyan_title = "\033[0;36m#{title}\033[0m"
+    puts
+    puts "-" * 80
+    puts "| #{cyan_title.ljust(87)} |"
+    puts "-" * 80
+    puts
+  end
+
+  #--------------------------------------#
 
   desc "Automatically run specs for updated files"
   task :kick do
     exec "bundle exec kicker -c"
   end
 
+  #--------------------------------------#
+
   desc "Run the unit specs"
   task :unit => :unpack_fixture_tarballs do
     sh "bundle exec bacon #{specs('unit/**')} -q"
   end
+
+  #--------------------------------------#
 
   desc "Run the functional specs"
   task :functional => :unpack_fixture_tarballs do
     sh "bundle exec bacon #{specs('functional/**')}"
   end
 
+  #--------------------------------------#
+
   desc "Run the integration spec"
   task :integration => :unpack_fixture_tarballs do
     sh "bundle exec bacon spec/integration_spec.rb"
+    sh "bundle exec bacon spec/integration_2.rb"
   end
 
+  # Default task
+  #--------------------------------------#
+  #
+  # The specs helper interfere with the integration 2 specs and thus they need
+  # to be run separately.
+  #
   task :all => :unpack_fixture_tarballs do
-    sh "bundle exec bacon #{specs('**')}"
-  end
+    title 'Running the specs'
+    sh    "bundle exec bacon #{specs('**')}"
 
-  desc "Run all specs and build all examples"
-  task :ci => :all do
-    sh "./bin/pod setup" # ensure the spec repo is up-to-date
+    title 'Running Integration 2 tests'
+    sh    "bundle exec bacon spec/integration_2.rb"
+
+    title 'Running examples'
     Rake::Task['examples:build'].invoke
   end
+
+  # Travis
+  #--------------------------------------#
+  #
+  # The integration 2 tests and the examples use the normal CocoaPods setup.
+  #
+  desc "Run all specs and build all examples"
+  task :ci => :unpack_fixture_tarballs do
+    title 'Running the specs'
+    sh    "bundle exec bacon #{specs('**')}"
+
+    title 'Ensuring specs repo is up to date'
+    sh    "./bin/pod setup"
+
+    title 'Running Integration 2 tests'
+    sh    "bundle exec bacon spec/integration_2.rb"
+
+    title 'Running examples'
+    Rake::Task['examples:build'].invoke
+  end
+
+  #--------------------------------------#
 
   desc "Rebuild all the fixture tarballs"
   task :rebuild_fixture_tarballs do
@@ -182,6 +241,8 @@ namespace :spec do
       sh "cd #{File.dirname(tarball)} && rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{basename[0..-8]}"
     end
   end
+
+  #--------------------------------------#
 
   desc "Unpacks all the fixture tarballs"
   task :unpack_fixture_tarballs do
@@ -194,10 +255,14 @@ namespace :spec do
     end
   end
 
+  #--------------------------------------#
+
   desc "Removes the stored VCR fixture"
   task :clean_vcr do
     sh "rm -f spec/fixtures/vcr/tarballs.yml"
   end
+
+  #--------------------------------------#
 
   desc "Rebuild integration take 2 after folders"
   task :rebuild_integration_after_folders do
@@ -218,13 +283,17 @@ namespace :spec do
     FileList['spec/integration/*/after/{Podfile,**/*.xcodeproj}'].each do |to_delete|
       sh "rm -rf #{to_delete}"
     end
-
   end
+
+  #--------------------------------------#
 
   task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
 end
 
+#-----------------------------------------------------------------------------#
+
 namespace :examples do
+
   def examples
     require 'pathname'
     result = []
@@ -239,7 +308,9 @@ namespace :examples do
     result
   end
 
-  desc "Open all example workspaced in Xcode, which recreates the schemes."
+  #--------------------------------------#
+
+  desc "Open all example workspaces in Xcode, which recreates the schemes."
   task :recreate_workspace_schemes do
     examples.each do |example|
       Dir.chdir(example.to_s) do
@@ -250,6 +321,8 @@ namespace :examples do
       end
     end
   end
+
+  #--------------------------------------#
 
   desc "Build all examples"
   task :build do
@@ -269,7 +342,12 @@ namespace :examples do
       end
     end
   end
+
+  #--------------------------------------#
+
 end
+
+#-----------------------------------------------------------------------------#
 
 desc "Initializes your working copy to run the specs"
 task :bootstrap do
@@ -280,9 +358,11 @@ task :bootstrap do
   execute_command "bundle install"
 
   puts "Installing tools (Homebrew)"
-  execute_command "brew install appledoc" if `which appledoc`.strip.empty?
+  execute_command "brew install appledoc"  if `which appledoc`.strip.empty?
   execute_command "brew install mercurial" if `which hg`.strip.empty?
 end
+
+#-----------------------------------------------------------------------------#
 
 desc "Run all specs"
 task :spec => 'spec:all'
