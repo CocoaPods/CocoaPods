@@ -34,7 +34,19 @@ module Pod
       #
       attr_accessor :project
 
+      def specs_by_target
+        # TODO
+        {}
+      end
+
     end
+  end
+end
+
+# TODO
+module Pod
+  class Podfile
+    include Config::Mixin
   end
 end
 
