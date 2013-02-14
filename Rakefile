@@ -280,7 +280,7 @@ namespace :spec do
 
     # Remove files not used for the comparison
     # To keep the git diff clean
-    FileList['spec/integration/*/after/{Podfile,**/*.xcodeproj}'].each do |to_delete|
+    FileList['spec/integration/*/after/{Podfile,**/*.xcodeproj,PodTest-hg-source}'].each do |to_delete|
       sh "rm -rf #{to_delete}"
     end
   end
