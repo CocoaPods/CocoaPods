@@ -211,6 +211,16 @@ module Pod
           e = lambda { @analyzer.send(:compute_user_project_path, target_definition) }.should.raise Informative
           e.message.should.match /Could not.*select.*project/
         end
+
+        it "does not take aggregate targets into consideration" do
+          aggregate_class = Xcodeproj::Project::Object::PBXAggregateTarget
+          sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+          sample_project = Xcodeproj::Project.new(sample_project_path)
+          sample_project.targets.map(&:class).should.include(aggregate_class)
+
+          native_targets = @analyzer.send(:native_targets, sample_project).map(&:class)
+          native_targets.should.not.include(aggregate_class)
+        end
       end
 
       #--------------------------------------#

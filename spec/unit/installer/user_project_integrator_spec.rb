@@ -27,7 +27,10 @@ module Pod
           lib = Library.new(target_definition)
           lib.user_project_path = sample_project_path
           lib.target = @pods_project.new_target(:static_library, target_definition.label, target_definition.platform.name)
-          lib.user_targets = sample_project.targets
+          lib.user_targets = sample_project.targets.reject do |target|
+            target.is_a? Xcodeproj::Project::Object::PBXAggregateTarget
+          end
+
           lib.support_files_root = config.sandbox.root
           lib.user_project = sample_project
           lib

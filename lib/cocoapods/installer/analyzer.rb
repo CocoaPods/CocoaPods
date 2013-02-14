@@ -72,7 +72,7 @@ module Pod
       # @return [Bool] Whether the sandbox is in synch with the lockfile.
       #
       def sandbox_needs_install?
-        lockfile =! sandbox.manifest
+        lockfile != sandbox.manifest
       end
 
       #-------------------------------------------------------------------------#
@@ -324,7 +324,7 @@ module Pod
             root_specs    = specifications.map(&:root).uniq
 
             is_changed = lambda do |name|
-              spec = root_specs.find { |spec| spec.name == name }
+              spec = root_specs.find { |r_spec| r_spec.name == name }
               spec.version != sandbox_lockfile.version(name) \
                 || spec.checksum != sandbox_lockfile.checksum(name) \
                 || resolved_subspecs_names[name] =! sandbox_subspecs_names[name] \
@@ -411,17 +411,25 @@ module Pod
       #
       def compute_user_project_targets(target_definition, user_project)
         if link_with = target_definition.link_with
-          targets = user_project.targets.select { |t| link_with.include? t.name }
+          targets = native_targets(user_project).select { |t| link_with.include? t.name }
           raise Informative, "Unable to find the targets named `#{link_with.to_sentence}` to link with target definition `#{target_definition.name}`" if targets.empty?
         elsif target_definition.name != :default
-          target = user_project.targets.find { |t| t.name == target_definition.name.to_s }
+          target = native_targets(user_project).find { |t| t.name == target_definition.name.to_s }
           targets = [ target ].compact
           raise Informative, "Unable to find a target named `#{target_definition.name.to_s}`" if targets.empty?
         else
-          targets = [ user_project.targets.first ].compact
+          targets = [ native_targets(user_project).first ].compact
           raise Informative, "Unable to find a target" if targets.empty?
         end
         targets
+      end
+
+      # @return [Array<PBXNativeTarget>] Returns the user’s targets, excluding
+      #         aggregate targets.
+      def native_targets(user_project)
+        user_project.targets.reject do |target|
+          target.is_a? Xcodeproj::Project::Object::PBXAggregateTarget
+        end
       end
 
       # @return [Hash{String=>Symbol}] A hash representing the user build
