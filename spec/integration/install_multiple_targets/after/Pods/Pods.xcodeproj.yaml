@@ -1,11 +1,8 @@
 ---
 File References:
-- Products:
-  - libPods.a
-  - libPods-test.a
-  - libPods-SampleApp_2.a
 - Frameworks:
   - Foundation.framework
+  - SystemConfiguration.framework
 - Pods:
   - Reachability:
     - Reachability.h
@@ -13,22 +10,36 @@ File References:
   - JSONKit:
     - JSONKit.h
     - JSONKit.m
+- Products:
+  - libPods.a
+  - libPods-test.a
+  - libPods-SampleApp_2.a
 - Targets Support Files:
   - Pods:
-    - Pods-resources.sh
-    - Pods-prefix.pch
     - Pods.xcconfig
-  - PodsDummy_Pods.m
+    - Pods-header.h
+    - Pods-prefix.pch
+    - Pods-resources.sh
+    - Pods-acknowledgements.plist
+    - Pods-acknowledgements.markdown
+    - Pods-dummy.m
   - Pods-test:
-    - Pods-test-resources.sh
-    - Pods-test-prefix.pch
     - Pods-test.xcconfig
-  - PodsDummy_Pods_test.m
+    - Pods-test-header.h
+    - Pods-test-prefix.pch
+    - Pods-test-resources.sh
+    - Pods-test-acknowledgements.plist
+    - Pods-test-acknowledgements.markdown
+    - Pods-test-dummy.m
   - Pods-SampleApp_2:
-    - Pods-SampleApp_2-resources.sh
-    - Pods-SampleApp_2-prefix.pch
     - Pods-SampleApp_2.xcconfig
-  - PodsDummy_Pods_SampleApp_2.m
+    - Pods-SampleApp_2-header.h
+    - Pods-SampleApp_2-prefix.pch
+    - Pods-SampleApp_2-resources.sh
+    - Pods-SampleApp_2-acknowledgements.plist
+    - Pods-SampleApp_2-acknowledgements.markdown
+    - Pods-SampleApp_2-dummy.m
+- Podfile
 
 
 ---
@@ -38,7 +49,7 @@ Targets:
     - SourcesBuildPhase:
       - Reachability.m:
           COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
-      - PodsDummy_Pods.m
+      - Pods-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
@@ -46,10 +57,9 @@ Targets:
     Build Configurations:
     - Release:
         Build Settings:
-          COPY_PHASE_STRIP: 'YES'
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
           PODS_ROOT: ${SRCROOT}
-          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           GCC_C_LANGUAGE_STANDARD: gnu99
@@ -63,7 +73,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
+          COPY_PHASE_STRIP: 'YES'
           GCC_PREFIX_HEADER: Pods-prefix.pch
         Base Configuration: Pods.xcconfig
     - Debug:
@@ -91,14 +101,13 @@ Targets:
           PODS_ROOT: ${SRCROOT}
           ARCHS: $(ARCHS_STANDARD_32_BIT)
           SKIP_INSTALL: 'YES'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
         Base Configuration: Pods.xcconfig
 - Pods-test:
     Build Phases:
     - SourcesBuildPhase:
       - JSONKit.m:
           COMPILER_FLAGS: -Wno-deprecated-objc-isa-usage -Wno-format
-      - PodsDummy_Pods_test.m
+      - Pods-test-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
@@ -106,10 +115,9 @@ Targets:
     Build Configurations:
     - Release:
         Build Settings:
-          COPY_PHASE_STRIP: 'YES'
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
           PODS_ROOT: ${SRCROOT}
-          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           GCC_C_LANGUAGE_STANDARD: gnu99
@@ -123,7 +131,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
+          COPY_PHASE_STRIP: 'YES'
           GCC_PREFIX_HEADER: Pods-test-prefix.pch
         Base Configuration: Pods-test.xcconfig
     - Debug:
@@ -151,7 +159,6 @@ Targets:
           PODS_ROOT: ${SRCROOT}
           ARCHS: $(ARCHS_STANDARD_32_BIT)
           SKIP_INSTALL: 'YES'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
         Base Configuration: Pods-test.xcconfig
 - Pods-SampleApp_2:
     Build Phases:
@@ -160,7 +167,7 @@ Targets:
           COMPILER_FLAGS: -Wno-deprecated-objc-isa-usage -Wno-format
       - Reachability.m:
           COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
-      - PodsDummy_Pods_SampleApp_2.m
+      - Pods-SampleApp_2-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
@@ -169,10 +176,9 @@ Targets:
     Build Configurations:
     - Release:
         Build Settings:
-          COPY_PHASE_STRIP: 'YES'
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
           PODS_ROOT: ${SRCROOT}
-          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           GCC_C_LANGUAGE_STANDARD: gnu99
@@ -186,7 +192,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
+          COPY_PHASE_STRIP: 'YES'
           GCC_PREFIX_HEADER: Pods-SampleApp_2-prefix.pch
         Base Configuration: Pods-SampleApp_2.xcconfig
     - Debug:
@@ -214,7 +220,6 @@ Targets:
           PODS_ROOT: ${SRCROOT}
           ARCHS: $(ARCHS_STANDARD_32_BIT)
           SKIP_INSTALL: 'YES'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
         Base Configuration: Pods-SampleApp_2.xcconfig
 
 
