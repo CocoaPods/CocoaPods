@@ -1,11 +1,8 @@
 ---
 File References:
-- Products:
-  - libPods-iOS App.a
-  - libPods-OS X App.a
 - Frameworks:
-  - Foundation.framework
   - Cocoa.framework
+  - Foundation.framework
 - Pods:
   - PodTest:
     - subspec_1:
@@ -14,17 +11,27 @@ File References:
     - subspec_2:
       - subspec_2.h
       - subspec_2.m
+- Products:
+  - libPods-iOS App.a
+  - libPods-OS X App.a
 - Targets Support Files:
   - Pods-iOS App:
-    - Pods-iOS App-resources.sh
-    - Pods-iOS App-prefix.pch
     - Pods-iOS App.xcconfig
-  - PodsDummy_Pods_iOS_App.m
+    - Pods-iOS App-header.h
+    - Pods-iOS App-prefix.pch
+    - Pods-iOS App-resources.sh
+    - Pods-iOS App-acknowledgements.plist
+    - Pods-iOS App-acknowledgements.markdown
+    - Pods-iOS App-dummy.m
   - Pods-OS X App:
-    - Pods-OS X App-resources.sh
-    - Pods-OS X App-prefix.pch
     - Pods-OS X App.xcconfig
-  - PodsDummy_Pods_OS_X_App.m
+    - Pods-OS X App-header.h
+    - Pods-OS X App-prefix.pch
+    - Pods-OS X App-resources.sh
+    - Pods-OS X App-acknowledgements.plist
+    - Pods-OS X App-acknowledgements.markdown
+    - Pods-OS X App-dummy.m
+- Podfile
 
 
 ---
@@ -33,7 +40,7 @@ Targets:
     Build Phases:
     - SourcesBuildPhase:
       - subspec_1.m
-      - PodsDummy_Pods_iOS_App.m
+      - Pods-iOS App-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
@@ -41,10 +48,9 @@ Targets:
     Build Configurations:
     - Release:
         Build Settings:
-          COPY_PHASE_STRIP: 'YES'
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
           PODS_ROOT: ${SRCROOT}
-          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           GCC_C_LANGUAGE_STANDARD: gnu99
@@ -58,7 +64,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
+          COPY_PHASE_STRIP: 'YES'
           GCC_PREFIX_HEADER: Pods-iOS App-prefix.pch
         Base Configuration: Pods-iOS App.xcconfig
     - Debug:
@@ -86,13 +92,12 @@ Targets:
           PODS_ROOT: ${SRCROOT}
           ARCHS: $(ARCHS_STANDARD_32_BIT)
           SKIP_INSTALL: 'YES'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
         Base Configuration: Pods-iOS App.xcconfig
 - Pods-OS X App:
     Build Phases:
     - SourcesBuildPhase:
       - subspec_2.m
-      - PodsDummy_Pods_OS_X_App.m
+      - Pods-OS X App-dummy.m
     - FrameworksBuildPhase:
       - Cocoa.framework
     - HeadersBuildPhase:
@@ -100,30 +105,28 @@ Targets:
     Build Configurations:
     - Release:
         Build Settings:
-          COMBINE_HIDPI_IMAGES: 'YES'
-          DSTROOT: /tmp/xcodeproj.dst
-          MACOSX_DEPLOYMENT_TARGET: '10.6'
-          GCC_PREFIX_HEADER: Pods-OS X App-prefix.pch
-          PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
-          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
-          GCC_C_LANGUAGE_STANDARD: gnu99
-          OTHER_LDFLAGS: ''
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
           COPY_PHASE_STRIP: 'YES'
-          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          SDKROOT: macosx
-          PRODUCT_NAME: $(TARGET_NAME)
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
-          SKIP_INSTALL: 'YES'
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
           PODS_ROOT: ${SRCROOT}
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          GCC_C_LANGUAGE_STANDARD: gnu99
           GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          MACOSX_DEPLOYMENT_TARGET: '10.6'
+          SKIP_INSTALL: 'YES'
+          DSTROOT: /tmp/xcodeproj.dst
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          SDKROOT: macosx
+          COMBINE_HIDPI_IMAGES: 'YES'
+          GCC_PREFIX_HEADER: Pods-OS X App-prefix.pch
         Base Configuration: Pods-OS X App.xcconfig
     - Debug:
         Build Settings:
-          COMBINE_HIDPI_IMAGES: 'YES'
           DSTROOT: /tmp/xcodeproj.dst
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
@@ -148,7 +151,7 @@ Targets:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           PODS_ROOT: ${SRCROOT}
           GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
+          COMBINE_HIDPI_IMAGES: 'YES'
         Base Configuration: Pods-OS X App.xcconfig
 
 
