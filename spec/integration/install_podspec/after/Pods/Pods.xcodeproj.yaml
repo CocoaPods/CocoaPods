@@ -1,19 +1,24 @@
 ---
 File References:
-- Products:
-  - libPods.a
 - Frameworks:
   - Foundation.framework
+  - SystemConfiguration.framework
 - Pods:
   - Reachability:
     - Reachability.h
     - Reachability.m
+- Products:
+  - libPods.a
 - Targets Support Files:
   - Pods:
-    - Pods-resources.sh
-    - Pods-prefix.pch
     - Pods.xcconfig
-  - PodsDummy_Pods.m
+    - Pods-header.h
+    - Pods-prefix.pch
+    - Pods-resources.sh
+    - Pods-acknowledgements.plist
+    - Pods-acknowledgements.markdown
+    - Pods-dummy.m
+- Podfile
 
 
 ---
@@ -22,7 +27,7 @@ Targets:
     Build Phases:
     - SourcesBuildPhase:
       - Reachability.m
-      - PodsDummy_Pods.m
+      - Pods-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
@@ -30,10 +35,9 @@ Targets:
     Build Configurations:
     - Release:
         Build Settings:
-          COPY_PHASE_STRIP: 'YES'
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
           PODS_ROOT: ${SRCROOT}
-          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           GCC_C_LANGUAGE_STANDARD: gnu99
@@ -47,7 +51,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
+          COPY_PHASE_STRIP: 'YES'
           GCC_PREFIX_HEADER: Pods-prefix.pch
         Base Configuration: Pods.xcconfig
     - Debug:
@@ -75,7 +79,6 @@ Targets:
           PODS_ROOT: ${SRCROOT}
           ARCHS: $(ARCHS_STANDARD_32_BIT)
           SKIP_INSTALL: 'YES'
-          GCC_WARN_INHIBIT_ALL_WARNINGS: 'NO'
         Base Configuration: Pods.xcconfig
 
 
