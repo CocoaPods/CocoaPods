@@ -57,6 +57,15 @@ describe Pod::Project do
       group.children.map(&:path).should == [ "A_POD/some_file.m" ]
     end
 
+    it "adds the only one file reference for a given absolute path" do
+      source_files = [ config.sandbox.root + "A_POD/some_file.m" ]
+      @project.add_file_references(source_files, 'BananaLib', @project.pods)
+      @project.add_file_references(source_files, 'BananaLib', @project.pods)
+      group = @project['Pods/BananaLib']
+      group.children.count.should == 1
+      group.children.first.path.should == "A_POD/some_file.m"
+    end
+
     it "returns the file reference for a given source file" do
       file = config.sandbox.root + "A_POD/some_file.m"
       @project.add_file_references([file], 'BananaLib', @project.pods)

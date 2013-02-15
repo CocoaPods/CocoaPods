@@ -52,7 +52,7 @@ $:.unshift((ROOT + 'spec').to_s)
 require 'spec_helper/bacon'
 require 'colored'
 require 'diffy'
-require 'Xcodeproj'
+require 'Xcodeproj' # For Differ
 
 # @return [Pathname The folder where the CocoaPods binary should operate.
 #
@@ -221,11 +221,16 @@ def yaml_should_match(expected, produced)
   # Remove CocoaPods version
   expected_yaml.delete('COCOAPODS')
   produced_yaml.delete('COCOAPODS')
-  desc = "YAML comparison error `#{expected}`"
-  desc << "\n EXPECTED:\n#{expected_yaml.inspect.cyan}\n"
-  desc << "\n PRODUCED:\n#{produced_yaml.inspect.cyan}\n"
-  # TODO extract Xcodeproj diff logic a provide a diff
-  expected_yaml.should.satisfy(desc) do |expected_yaml|
+  desc = []
+  desc << "YAML comparison error `#{expected}`"
+  diff_options = {:key_1 => "$produced", :key_2 => "$expected"}
+  diff = Xcodeproj::Differ.diff(produced_yaml, expected_yaml, diff_options).to_yaml
+  diff.gsub!("$produced", "produced".green)
+  diff.gsub!("$expected", "expected".red)
+  desc << ("--- DIFF " << "-" * 70)
+  desc << diff
+  desc << ("--- END " << "-" * 70)
+  expected_yaml.should.satisfy(desc * "\n\n") do
     if RUBY_VERSION < "1.9"
       true # CP is not sorting array derived from hashes whose order is
            # undefined in 1.8.7
@@ -277,11 +282,9 @@ def file_should_match(expected, produced)
     else description << line.gsub("\n",'')
     end
   end
-  description << "" << ("--- PRODUCED " << "-" * 66) << ""
-  description << File.read(produced)
   description << ("--- END " << "-" * 70)
   description << ""
-  is_equal.should.satisfy(description * "\n") do |is_equal|
+  is_equal.should.satisfy(description * "\n") do
     is_equal == true
   end
 end

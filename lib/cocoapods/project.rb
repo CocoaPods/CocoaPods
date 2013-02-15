@@ -92,8 +92,8 @@ module Pod
     def add_spec_group(spec_name, root_group)
       current_group = root_group
       group = nil
-      spec_name.split('/').each do |spec_name|
-        group = current_group[spec_name] || current_group.new_group(spec_name)
+      spec_name.split('/').each do |name|
+        group = current_group[name] || current_group.new_group(name)
         current_group = group
       end
       group
@@ -106,7 +106,12 @@ module Pod
     # @!group File references
 
     # Adds a file reference for each one of the given files in the specified
-    # group, namespaced by specification.
+    # group, namespaced by specification unless a file reference for the given
+    # path alrady exits.
+    #
+    # @note   With this set-up different subspecs might not reference the same
+    #         file (i.e. the first will win). Not sure thought if this is a
+    #         limitation or a feature.
     #
     # @param  [Array<Pathname,String>] paths
     #         The files for which the file reference is needed.
@@ -119,12 +124,15 @@ module Pod
     #
     # @return [void]
     #
-    def add_file_references(paths, spec_name, parent_group)
+    def add_file_references(absolute_path, spec_name, parent_group)
       group = add_spec_group(spec_name, parent_group)
-      paths.each do |file|
-        file = Pathname.new(file)
-        ref = group.new_file(relativize(file))
-        @refs_by_absolute_path[file] = ref
+      absolute_path.each do |file|
+        existing = file_reference(file)
+        unless existing
+          file = Pathname.new(file)
+          ref = group.new_file(relativize(file))
+          @refs_by_absolute_path[file] = ref
+        end
       end
     end
 
@@ -137,7 +145,7 @@ module Pod
     # @return [Nil] If no file reference could be found.
     #
     def file_reference(absolute_path)
-      source_file = Pathname.new(absolute_path)
+      absolute_path = Pathname.new(absolute_path)
       refs_by_absolute_path[absolute_path]
     end
 

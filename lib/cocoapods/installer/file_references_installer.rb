@@ -99,9 +99,6 @@ module Pod
       # @return [Array<Sandbox::FileAccessor>] The file accessors for all the
       #         specs platform combinations.
       #
-      # TODO    Ideally the file accessors should be created one per spec per
-      #         platform in a single installation.
-      #
       def file_accessors
         @file_accessors ||= libraries.map(&:file_accessors).flatten.compact
       end
