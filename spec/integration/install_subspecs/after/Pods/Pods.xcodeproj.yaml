@@ -1,4 +1,4 @@
----
+
 File References:
 - Frameworks:
   - Cocoa.framework
@@ -34,7 +34,7 @@ File References:
 - Podfile
 
 
----
+
 Targets:
 - Pods-iOS App:
     Build Phases:
@@ -155,7 +155,7 @@ Targets:
         Base Configuration: Pods-OS X App.xcconfig
 
 
----
+
 Build Configurations:
 - Release:
     Build Settings: {}

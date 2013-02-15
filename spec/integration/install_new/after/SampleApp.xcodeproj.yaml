@@ -1,4 +1,4 @@
----
+
 File References:
 - SampleApp:
   - CPAppDelegate.h
@@ -25,7 +25,7 @@ File References:
 - Pods.xcconfig
 
 
----
+
 Targets:
 - SampleApp:
     Build Phases:
@@ -61,7 +61,7 @@ Targets:
         Base Configuration: Pods.xcconfig
 
 
----
+
 Build Configurations:
 - Debug:
     Build Settings:

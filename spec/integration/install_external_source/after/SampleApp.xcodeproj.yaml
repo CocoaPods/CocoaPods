@@ -1,4 +1,4 @@
----
+
 File References:
 - iOS App:
   - CPAppDelegate.h
@@ -41,7 +41,7 @@ File References:
 - Pods.xcconfig
 
 
----
+
 Targets:
 - iOS App:
     Build Phases:
@@ -92,7 +92,7 @@ Targets:
         Base Configuration: Pods.xcconfig
 
 
----
+
 Build Configurations:
 - Debug:
     Build Settings:

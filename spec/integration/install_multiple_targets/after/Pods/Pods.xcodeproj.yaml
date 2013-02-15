@@ -1,4 +1,4 @@
----
+
 File References:
 - Frameworks:
   - Foundation.framework
@@ -42,7 +42,7 @@ File References:
 - Podfile
 
 
----
+
 Targets:
 - Pods:
     Build Phases:
@@ -223,7 +223,7 @@ Targets:
         Base Configuration: Pods-SampleApp_2.xcconfig
 
 
----
+
 Build Configurations:
 - Release:
     Build Settings: {}
