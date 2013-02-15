@@ -201,16 +201,26 @@ module Pod
         # @note   A target is considered integrated if it already references
         #
         def targets
-          @targets ||= library.user_targets.reject do |target|
-            target.frameworks_build_phase.files.any? do |build_file|
-              file_ref = build_file.file_ref
-              !file_ref.proxy? && file_ref.display_name == library.product_name
+          unless @targets
+            target_uuids = library.user_target_uuids
+            targets = target_uuids.map { |uuid| user_project.targets.find { |target| target.uuid == uuid } }
+            non_integrated = targets.reject do |target|
+              target.frameworks_build_phase.files.any? do |build_file|
+                file_ref = build_file.file_ref
+                !file_ref.proxy? && file_ref.display_name == library.product_name
+              end
             end
+            @targets = non_integrated
           end
+          @targets
         end
 
+
+        # Read the project from the disk to ensure that it is up to date as
+        # other TargetIntegrator might have modified it.
+        #
         def user_project
-          library.user_project
+          @user_project ||= Xcodeproj::Project.new(library.user_project_path)
         end
 
         # @return [String] a string representation suitable for debugging.

@@ -27,12 +27,12 @@ module Pod
           lib = Library.new(target_definition)
           lib.user_project_path = sample_project_path
           lib.target = @pods_project.new_target(:static_library, target_definition.label, target_definition.platform.name)
-          lib.user_targets = sample_project.targets.reject do |target|
+          lib.user_target_uuids = sample_project.targets.reject do |target|
             target.is_a? Xcodeproj::Project::Object::PBXAggregateTarget
-          end
+          end.map(&:uuid)
 
           lib.support_files_root = config.sandbox.root
-          lib.user_project = sample_project
+          lib.user_project_path = sample_project_path
           lib
         end
         @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, @installation_root, @libraries)
@@ -95,9 +95,9 @@ module Pod
         @lib.user_project_path = sample_project_path
         pods_project = Project.new()
         @lib.target = pods_project.new_target(:static_library, target_definition.label, :ios)
-        @lib.user_targets = [@target]
+        @lib.user_target_uuids  = [@target.uuid]
         @lib.support_files_root = config.sandbox.root
-        @lib.user_project = @sample_project
+        @lib.user_project_path  = sample_project_path
         @target_integrator = TargetIntegrator.new(@lib)
       end
 
@@ -108,6 +108,7 @@ module Pod
       it 'returns the targets that need to be integrated' do
         pods_library = @sample_project.frameworks_group.new_static_library('Pods')
         @target.frameworks_build_phase.add_file_reference(pods_library)
+        Xcodeproj::Project.any_instance.stubs(:targets).returns([@target])
         @target_integrator.targets.map(&:name).should.be.empty?
       end
 
@@ -132,15 +133,17 @@ module Pod
       end
 
       it 'adds references to the Pods static libraries to the Frameworks group' do
-        @sample_project["Frameworks/libPods.a"].should.not == nil
+        @target_integrator.user_project["Frameworks/libPods.a"].should.not == nil
       end
 
       it 'adds the libPods static library to the "Link binary with libraries" build phase of each target' do
-        @target.frameworks_build_phase.files.find { |f| f.file_ref.path == 'libPods.a'}.should.not == nil
+        target = @target_integrator.targets.first
+        target.frameworks_build_phase.files.find { |f| f.file_ref.path == 'libPods.a'}.should.not == nil
       end
 
       it 'adds a Copy Pods Resources build phase to each target' do
-        phase = @target.shell_script_build_phases.find { |bp| bp.name == "Copy Pods Resources" }
+        target = @target_integrator.targets.first
+        phase = target.shell_script_build_phases.find { |bp| bp.name == "Copy Pods Resources" }
         phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Pods-resources.sh\""
       end
     end

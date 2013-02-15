@@ -38,11 +38,11 @@ module Pod
       "lib#{target_definition.label}.a"
     end
 
-      # @return [String] A string suitable for debugging.
-      #
-      def inspect
-        "<#{self.class} name=#{name} platform=#{platform}>"
-      end
+    # @return [String] A string suitable for debugging.
+    #
+    def inspect
+      "<#{self.class} name=#{name} platform=#{platform}>"
+    end
 
     #-------------------------------------------------------------------------#
 
@@ -54,18 +54,20 @@ module Pod
     attr_accessor :support_files_root
 
     # @return [Pathname] the path of the user project that this library will
-    #         integrate.
+    #         integrate as identified by the analyzer.
+    #
+    # @note   The project instance is not stored to prevent editing different
+    #         instances.
     #
     attr_accessor :user_project_path
 
-    # @return [Xcodeproj::Project] The project that will be integrated.
+    # @return [String] the list of the UUIDs of the user targets that will be
+    #         integrated by this library as identified by the analizer.
     #
-    attr_accessor :user_project
-
-    # @return [Array<PBXNativeTarget>] the list of the user targets that will
-    #         be integrated by this library.
+    # @note   The target instances are not stored to prevent editing different
+    #         instances.
     #
-    attr_accessor :user_targets
+    attr_accessor :user_target_uuids
 
     # @return [Hash{String=>Symbol}] A hash representing the user build
     #         configurations where each key corresponds to the name of a

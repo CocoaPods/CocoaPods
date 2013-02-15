@@ -81,8 +81,9 @@ module Pod
         lib.support_files_root.should == config.sandbox.root
 
         lib.user_project_path.to_s.should.include 'SampleProject/SampleProject'
-        lib.user_project.class.should == Xcodeproj::Project
-        lib.user_targets.map(&:name).should == ["SampleProject"]
+        lib.user_target_uuids.should == ["A346496C14F9BE9A0080D870"]
+        user_proj = Xcodeproj::Project.new(lib.user_project_path)
+        user_proj.objects_by_uuid[lib.user_target_uuids.first].name.should == 'SampleProject'
         lib.user_build_configurations.should == {"Test"=>:release, "App Store"=>:release}
         lib.platform.to_s.should == 'iOS 6.0'
       end
@@ -93,8 +94,7 @@ module Pod
         lib = @analyzer.libraries.first
 
         lib.user_project_path.should == config.installation_root
-        lib.user_project.should.be.nil
-        lib.user_targets.map(&:name).should == []
+        lib.user_target_uuids.should == []
         lib.user_build_configurations.should == {}
         lib.platform.to_s.should == 'iOS 6.0'
       end

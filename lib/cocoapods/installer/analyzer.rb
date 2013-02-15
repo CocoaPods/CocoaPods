@@ -192,18 +192,22 @@ module Pod
           lib.support_files_root        = sandbox.library_support_files_dir(lib.name)
 
           if config.integrate_targets?
-            lib.user_project_path         = compute_user_project_path(target_definition)
-            lib.user_project              = Xcodeproj::Project.new(lib.user_project_path)
-            lib.user_targets              = compute_user_project_targets(target_definition, lib.user_project)
-            lib.user_build_configurations = compute_user_build_configurations(target_definition, lib.user_targets)
-            lib.platform                  = compute_platform_for_target_definition(target_definition, lib.user_targets)
+            project_path = compute_user_project_path(target_definition)
+            user_project = Xcodeproj::Project.new(project_path)
+            targets = compute_user_project_targets(target_definition, user_project)
+
+            lib.user_project_path         = project_path
+            lib.user_target_uuids         = targets.map(&:uuid)
+            lib.user_build_configurations = compute_user_build_configurations(target_definition, targets)
+            lib.platform                  = compute_platform_for_target_definition(target_definition, targets)
           else
+            unless target_definition.platform
+              raise Informative, "It is necessary to specify the platform in the Podfile if not integrating."
+            end
             lib.user_project_path         = config.installation_root
-            lib.user_project              = nil
-            lib.user_targets              = []
+            lib.user_target_uuids         = []
             lib.user_build_configurations = {}
             lib.platform                  = target_definition.platform
-            raise Informative, "It is necessary to specify the platform in the Podfile if not integrating." unless target_definition.platform
           end
           libraries << lib
         end
@@ -411,15 +415,15 @@ module Pod
       #
       def compute_user_project_targets(target_definition, user_project)
         if link_with = target_definition.link_with
-          targets = native_targets(user_project).select { |t| link_with.include? t.name }
+          targets = native_targets(user_project).select { |t| link_with.include?(t.name) }
           raise Informative, "Unable to find the targets named `#{link_with.to_sentence}` to link with target definition `#{target_definition.name}`" if targets.empty?
-        elsif target_definition.name != :default
+        elsif target_definition.name == :default
+          targets = [ native_targets(user_project).first ].compact
+          raise Informative, "Unable to find a target" if targets.empty?
+        else
           target = native_targets(user_project).find { |t| t.name == target_definition.name.to_s }
           targets = [ target ].compact
           raise Informative, "Unable to find a target named `#{target_definition.name.to_s}`" if targets.empty?
-        else
-          targets = [ native_targets(user_project).first ].compact
-          raise Informative, "Unable to find a target" if targets.empty?
         end
         targets
       end
