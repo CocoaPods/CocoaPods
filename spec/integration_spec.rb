@@ -44,78 +44,6 @@ module Pod
     describe "Single platform" do
 
       # xit "includes automatically inherited subspecs" do; end
-      # xit "handles different subspecs for the same Pod in different target definitions" do; end
-
-      it "installs a Pod directly from its repo" do
-        url = fixture('integration/sstoolkit').to_s
-        commit = '2adcd0f81740d6b0cd4589af98790eee3bd1ae7b'
-        podfile = Podfile.new do
-          platform :ios
-          xcodeproj 'dummy'
-          pod 'SSToolkit', :git => url, :commit => commit
-        end
-
-        installer = Installer.new(config.sandbox, podfile)
-        installer.install!
-        lockfile = installer.lockfile.to_hash
-        lockfile['PODS'].should  == ['SSToolkit (0.1.3)']
-        lockfile['DEPENDENCIES'].should == ["SSToolkit (from `#{url}`, commit `#{commit}`)"]
-        lockfile['EXTERNAL SOURCES'].should == {"SSToolkit" => { :git=>url, :commit=>commit}}
-      end
-
-      #--------------------------------------#
-
-      # @todo Using the podspec from the repo might invalidate the test.
-      #
-      it "installs a library with a podspec outside of the repo" do
-        url = fixture('integration/Reachability/Reachability.podspec').to_s
-        podfile = Podfile.new do
-          platform :ios
-          xcodeproj 'dummy'
-          pod 'Reachability', :podspec => url
-        end
-
-        installer = Installer.new(config.sandbox, podfile)
-        installer.install!
-        lockfile = installer.lockfile.to_hash
-        lockfile['PODS'].should  == ['Reachability (3.0.0)']
-        lockfile['DEPENDENCIES'].should == ["Reachability (from `#{url}`)"]
-        lockfile['EXTERNAL SOURCES'].should == {"Reachability"=>{ :podspec=> url}}
-      end
-
-      #--------------------------------------#
-
-      it "installs a dummy source file" do
-        podfile = Podfile.new do
-          platform :ios
-          pod 'JSONKit'
-        end
-
-        installer = Installer.new(config.sandbox, podfile)
-        installer.install!
-
-        dummy = (config.sandbox_root + 'Pods-dummy.m').read
-        dummy.should.include?('@implementation PodsDummy_Pods')
-      end
-
-      #--------------------------------------#
-
-      it "installs a dummy source file unique to the target" do
-        podfile = Podfile.new do
-          platform  :ios
-          xcodeproj 'dummy'
-          pod 'JSONKit'
-          target :AnotherTarget do
-            pod 'ASIHTTPRequest'
-          end
-        end
-
-        installer = Installer.new(config.sandbox, podfile)
-        installer.install!
-
-        dummy = (config.sandbox_root + 'Pods-AnotherTarget-dummy.m').read
-        dummy.should.include?('@implementation PodsDummy_Pods_AnotherTarget')
-      end
 
       #--------------------------------------#
 
@@ -284,28 +212,9 @@ module Pod
           (root + 'Pods.xcconfig').read.should == installer.libraries.first.xcconfig.to_s
           project_file = (root + 'Pods.xcodeproj/project.pbxproj').to_s
           saved_project = Xcodeproj.read_plist(project_file)
-          saved_project.to_hash.recursive_diff(installer.pods_project.to_hash).should.be.nil
           saved_project.should == installer.pods_project.to_hash
 
           should_xcodebuild(podfile.target_definitions[:default])
-        end
-
-        #--------------------------------------#
-
-        it "adds resources to the xcode copy script" do
-          podfile = Podfile.new do
-            platform test_platform
-            xcodeproj 'dummy'
-            pod 'SSZipArchive', '0.1.0'
-          end
-          resources = { :resources => ['LICEN*', 'Readme.*'] }
-          Specification::Consumer.any_instance.stubs(:resources).returns(resources)
-
-          installer = Installer.new(config.sandbox, podfile)
-          installer.install!
-          contents = (config.sandbox_root + 'Pods-resources.sh').read
-          contents.should.include "install_resource 'SSZipArchive/LICENSE'\n" \
-            "install_resource 'SSZipArchive/Readme.markdown'"
         end
 
         #--------------------------------------#
