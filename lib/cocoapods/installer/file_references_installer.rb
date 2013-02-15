@@ -93,8 +93,6 @@ module Pod
 
       # Creates the link to the headers of the Pod in the sandbox.
       #
-      # TODO: clean up
-      #
       # @return [void]
       #
       def link_headers

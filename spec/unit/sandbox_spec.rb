@@ -1,9 +1,7 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
-
   describe Sandbox do
-
 
     before do
       @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')
@@ -51,12 +49,12 @@ module Pod
       @sandbox.relativize(path).should == expected
     end
 
-    it "converts a list of paths to the relative paths respec to the sandbox" do
+    it "converts a list of paths to the relative paths respect to the sandbox" do
       paths = [temporary_directory + 'Sandbox/file_1', temporary_directory + 'Sandbox/file_2' ]
       @sandbox.relativize_paths(paths).should == [Pathname.new('file_1'), Pathname.new('file_2')]
     end
 
-    #--------------------------------------#
+    #-------------------------------------------------------------------------#
 
     it "returns the path of the manifest" do
       @sandbox.manifest_path.should == temporary_directory + 'Sandbox/Manifest.lock'
@@ -84,7 +82,7 @@ module Pod
       @sandbox.specification_path('BananaLib').should == @sandbox.root + 'Local Podspecs/BananaLib.podspec'
     end
 
-    #--------------------------------------#
+    #-------------------------------------------------------------------------#
 
     it "loads the stored specification with the given name" do
       (@sandbox.root + 'Local Podspecs').mkdir
@@ -96,58 +94,8 @@ module Pod
       @sandbox.predownloaded_pods << 'JSONKit'
       @sandbox.predownloaded_pods.should == ['JSONKit']
     end
+
+    #-------------------------------------------------------------------------#
+
   end
-
-  #---------------------------------------------------------------------------#
-
-  describe Sandbox::HeadersStore do
-
-
-    before do
-      @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')
-      @header_dir = Sandbox::HeadersStore.new(@sandbox, 'Headers')
-    end
-
-    it "returns it's headers root" do
-      @header_dir.root.should == temporary_directory + 'Sandbox/Headers'
-    end
-
-    it "can add namespaced headers to it's header path using symlinks and return the relative path" do
-      FileUtils.mkdir_p(@sandbox.root + "ExampleLib/")
-      namespace_path = Pathname.new("ExampleLib")
-      relative_header_paths = [
-        Pathname.new("ExampleLib/MyHeader.h"),
-        Pathname.new("ExampleLib/MyOtherHeader.h")
-      ]
-      relative_header_paths.each do |path|
-        File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
-      end
-      symlink_paths = @header_dir.add_files(namespace_path, relative_header_paths)
-      symlink_paths.each do |path|
-        path.should.be.symlink
-        File.read(path).should == "hello"
-      end
-    end
-
-    it 'keeps a list of unique header search paths when headers are added' do
-      FileUtils.mkdir_p(@sandbox.root + "ExampleLib/Dir")
-      namespace_path = Pathname.new("ExampleLib")
-      relative_header_paths = [
-        Pathname.new("ExampleLib/Dir/MyHeader.h"),
-        Pathname.new("ExampleLib/Dir/MyOtherHeader.h")
-      ]
-      relative_header_paths.each do |path|
-        File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
-      end
-      @header_dir.add_files(namespace_path, relative_header_paths)
-      @header_dir.search_paths.should.include("${PODS_ROOT}/Headers/ExampleLib")
-    end
-
-    it 'always adds the Headers root to the header search paths' do
-      @header_dir.search_paths.should.include("${PODS_ROOT}/Headers")
-    end
-  end
-
-  #--------------------------------------#
-
 end

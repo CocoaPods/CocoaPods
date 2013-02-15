@@ -348,7 +348,7 @@ module Pod
       #
       def pod_spec_path
         path = Pathname.new(@params[:local]).expand_path
-        path += "#{name}.podspec"# unless path.to_s.include?("#{name}.podspec")
+        path += "#{name}.podspec" unless path.to_s.match(/#{name}\.podspec$/)
         unless path.exist?
           raise Informative, "No podspec found for `#{name}` in `#{@params[:local]}`"
         end

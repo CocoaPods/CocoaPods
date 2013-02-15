@@ -275,7 +275,7 @@ end
 #        subfolders.
 #
 def check(arguments, folder)
-  focused_check(arguments, folder)
+  # focused_check(arguments, folder)
 end
 
 # Shortcut to focus on a test: Comment the implmentation of #check and
@@ -324,7 +324,7 @@ describe "Integration take 2" do
     end
 
     describe "Installs a Pod with a local source" do
-      check "install --no-update --no-doc", "install_local_source"
+      focused_check "install --no-update --no-doc", "install_local_source"
     end
 
     describe "Installs a Pod with an external source" do
