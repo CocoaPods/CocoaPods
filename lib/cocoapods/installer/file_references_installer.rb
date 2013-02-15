@@ -35,6 +35,7 @@ module Pod
       def install!
         add_source_files_references
         add_resources_references
+        link_headers
       end
 
       #-----------------------------------------------------------------------#
@@ -90,6 +91,32 @@ module Pod
         end
       end
 
+      # Creates the link to the headers of the Pod in the sandbox.
+      #
+      # TODO: clean up
+      #
+      # @return [void]
+      #
+      def link_headers
+        UI.message "- Linking headers" do
+
+          file_accessors.each do |file_accessor|
+            headers_sandbox = Pathname.new(file_accessor.spec.root.name)
+            sandbox.build_headers.add_search_path(headers_sandbox)
+            sandbox.public_headers.add_search_path(headers_sandbox)
+
+            consumer = file_accessor.spec_consumer
+            header_mappings(headers_sandbox, consumer, file_accessor.headers, file_accessor.path_list.root).each do |namespaced_path, files|
+              sandbox.build_headers.add_files(namespaced_path, files)
+            end
+
+            header_mappings(headers_sandbox, consumer, file_accessor.public_headers, file_accessor.path_list.root).each do |namespaced_path, files|
+              sandbox.public_headers.add_files(namespaced_path, files)
+            end
+          end
+        end
+      end
+
       #-----------------------------------------------------------------------#
 
       private
@@ -101,6 +128,33 @@ module Pod
       #
       def file_accessors
         @file_accessors ||= libraries.map(&:file_accessors).flatten.compact
+      end
+
+      # Computes the destination sub-directory in the sandbox
+      #
+      # @param  []
+      #
+      # @return [Hash{Pathname => Array<Pathname>}] A hash containing the
+      #         headers folders as the keys and the absolute paths of the
+      #         header files as the values.
+      #
+      # TODO    This is being overridden in the RestKit 0.9.4 spec and that
+      #         override should be fixed.
+      #
+      def header_mappings(headers_sandbox, consumer, headers, root)
+        dir = headers_sandbox
+        dir = dir + consumer.header_dir if consumer.header_dir
+
+        mappings = {}
+        headers.each do |header|
+          sub_dir = dir
+          if consumer.header_mappings_dir
+            sub_dir = sub_dir + header.relative_path_from(consumer.header_mappings_dir).dirname
+          end
+          mappings[sub_dir] ||= []
+          mappings[sub_dir] << header
+        end
+        mappings
       end
 
       #-----------------------------------------------------------------------#

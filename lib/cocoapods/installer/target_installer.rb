@@ -32,7 +32,6 @@ module Pod
         UI.message "- Installing target `#{library.name}` #{library.platform}" do
           add_target
           add_files_to_build_phases
-          link_headers
           create_suport_files_group
 
           create_xcconfig_file
@@ -78,10 +77,10 @@ module Pod
         @target.build_settings('Debug').merge!(settings)
         @target.build_settings('Release').merge!(settings)
 
-        library.user_build_configurations.each do |name, type|
-          unless @target.build_configurations.map(&:name).include?(name)
+        library.user_build_configurations.each do |lib_name, type|
+          unless @target.build_configurations.map(&:name).include?(lib_name)
             build_config = project.new(Xcodeproj::Project::XCBuildConfiguration)
-            build_config.name = name
+            build_config.name = lib_name
             settings = @target.build_settings(type.to_s.capitalize)
             build_config.build_settings = settings
             target.build_configurations << build_config
@@ -115,33 +114,7 @@ module Pod
             target.add_file_references(file_refs, flags)
 
             file_accessor.spec_consumer.frameworks.each do |framework|
-              framework_ref = project.add_system_framework(framework, target)
-            end
-          end
-        end
-      end
-
-      # Creates the link to the headers of the Pod in the sandbox.
-      #
-      # TODO: clean up
-      #
-      # @return [void]
-      #
-      def link_headers
-        UI.message "- Linking headers" do
-
-          library.file_accessors.each do |file_accessor|
-            headers_sandbox = Pathname.new(file_accessor.spec.root.name)
-            sandbox.build_headers.add_search_path(headers_sandbox)
-            sandbox.public_headers.add_search_path(headers_sandbox)
-
-            consumer = file_accessor.spec_consumer
-            header_mappings(headers_sandbox, consumer, file_accessor.headers, file_accessor.path_list.root).each do |namespaced_path, files|
-              sandbox.build_headers.add_files(namespaced_path, files)
-            end
-
-            header_mappings(headers_sandbox, consumer, file_accessor.public_headers, file_accessor.path_list.root).each do |namespaced_path, files|
-              sandbox.public_headers.add_files(namespaced_path, files)
+              project.add_system_framework(framework, target)
             end
           end
         end
@@ -389,34 +362,6 @@ module Pod
           end
         end
         flags = flags * " "
-      end
-
-      # Computes the destination sub-directory in the sandbox
-      #
-      # @param  []
-      #
-      # @return [Hash{Pathname => Array<Pathname>}] A hash containing the
-      #         headers folders as the keys and the absolute paths of the
-      #         header files as the values.
-      #
-      # TODO    This is being overridden in the RestKit 0.9.4 spec and that
-      #         override should be fixed.
-      #
-      def header_mappings(headers_sandbox, consumer, headers, root)
-        dir = headers_sandbox
-        dir = dir + consumer.header_dir if consumer.header_dir
-
-        mappings = {}
-        headers.each do |header|
-          relative_path = header.relative_path_from(root)
-          sub_dir = dir
-          if consumer.header_mappings_dir
-            sub_dir = sub_dir + header.relative_path_from(consumer.header_mappings_dir).dirname
-          end
-          mappings[sub_dir] ||= []
-          mappings[sub_dir] << header
-        end
-        mappings
       end
 
       #-----------------------------------------------------------------------#

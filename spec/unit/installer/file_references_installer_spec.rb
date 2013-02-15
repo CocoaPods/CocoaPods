@@ -32,6 +32,25 @@ module Pod
         file_ref.should.be.not.nil
         file_ref.path.should == "../../spec/fixtures/banana-lib/Resources/logo-sidebar.png"
       end
+
+      it "links the build headers" do
+        @installer.install!
+        headers_root = config.sandbox.build_headers.root
+        public_header =  headers_root+ 'BananaLib/Banana.h'
+        private_header = headers_root + 'BananaLib/BananaPrivate.h'
+        public_header.should.exist
+        private_header.should.exist
+      end
+
+      it "links the public headers" do
+        @installer.install!
+        headers_root = config.sandbox.public_headers.root
+        public_header =  headers_root+ 'BananaLib/Banana.h'
+        private_header = headers_root + 'BananaLib/BananaPrivate.h'
+        public_header.should.exist
+        private_header.should.not.exist
+      end
+
     end
 
     #-------------------------------------------------------------------------#
