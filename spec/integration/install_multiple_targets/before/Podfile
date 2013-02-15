@@ -8,6 +8,5 @@ target :test, :exclusive => true do
 end
 
 target 'SampleApp_2' do
-  link_with 'SampleAppTests'
   pod 'JSONKit'
 end

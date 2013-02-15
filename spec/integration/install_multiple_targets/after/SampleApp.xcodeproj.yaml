@@ -53,12 +53,16 @@ File References:
     - AppKit.framework
     - CoreData.framework
     - Foundation.framework
+  - libPods.a
+  - libPods-test.a
   - libPods-SampleApp_2.a
 - Products:
   - SampleApp.app
   - SampleAppTests.octest
   - SampleApp_2.app
   - NonIntegrated.app
+- Pods.xcconfig
+- Pods-test.xcconfig
 - Pods-SampleApp_2.xcconfig
 
 
@@ -71,10 +75,12 @@ Targets:
       - CPAppDelegate.m
     - FrameworksBuildPhase:
       - Cocoa.framework
+      - libPods.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
+    - Copy Pods Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -84,6 +90,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods.xcconfig
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: app
@@ -92,6 +99,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods.xcconfig
 - SampleAppTests:
     Build Phases:
     - SourcesBuildPhase:
@@ -99,7 +107,7 @@ Targets:
     - FrameworksBuildPhase:
       - SenTestingKit.framework
       - Cocoa.framework
-      - libPods-SampleApp_2.a
+      - libPods-test.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
     - ShellScriptBuildPhase: []
@@ -116,7 +124,7 @@ Targets:
           BUNDLE_LOADER: $(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
-        Base Configuration: Pods-SampleApp_2.xcconfig
+        Base Configuration: Pods-test.xcconfig
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: octest
@@ -128,7 +136,7 @@ Targets:
           BUNDLE_LOADER: $(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
-        Base Configuration: Pods-SampleApp_2.xcconfig
+        Base Configuration: Pods-test.xcconfig
 - SampleApp_2:
     Build Phases:
     - SourcesBuildPhase:
@@ -136,10 +144,12 @@ Targets:
       - CPAppDelegate.m
     - FrameworksBuildPhase:
       - Cocoa.framework
+      - libPods-SampleApp_2.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
+    - Copy Pods Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -149,6 +159,7 @@ Targets:
           INFOPLIST_FILE: SampleApp_2/SampleApp_2-Info.plist
           GCC_PREFIX_HEADER: SampleApp_2/SampleApp_2-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods-SampleApp_2.xcconfig
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: app
@@ -157,6 +168,7 @@ Targets:
           INFOPLIST_FILE: SampleApp_2/SampleApp_2-Info.plist
           GCC_PREFIX_HEADER: SampleApp_2/SampleApp_2-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods-SampleApp_2.xcconfig
 - NonIntegrated:
     Build Phases:
     - SourcesBuildPhase:
