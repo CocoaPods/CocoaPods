@@ -151,8 +151,9 @@ def run_post_execution_actions(folder)
       yaml =  { key => pretty_print[key]}.to_yaml
       sections << yaml
     end
+    file_contents = (sections * "\n\n").gsub!("---",'')
     File.open("#{project_path}.yaml", 'w') do |file|
-      file.write(sections * "\n\n")
+      file.write(file_contents)
     end
   end
 end

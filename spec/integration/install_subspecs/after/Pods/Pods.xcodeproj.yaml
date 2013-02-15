@@ -1,4 +1,4 @@
----
+
 File References:
 - Products:
   - libPods-iOS App.a
@@ -27,7 +27,7 @@ File References:
   - PodsDummy_Pods_OS_X_App.m
 
 
----
+
 Targets:
 - Pods-iOS App:
     Build Phases:
@@ -152,7 +152,7 @@ Targets:
         Base Configuration: Pods-OS X App.xcconfig
 
 
----
+
 Build Configurations:
 - Release:
     Build Settings: {}

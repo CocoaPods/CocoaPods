@@ -1,4 +1,4 @@
----
+
 File References:
 - Products:
   - libPods.a
@@ -17,7 +17,7 @@ File References:
     - Reachability.m
 
 
----
+
 Targets:
 - Pods:
     Build Phases:
@@ -80,7 +80,7 @@ Targets:
         Base Configuration: Pods.xcconfig
 
 
----
+
 Build Configurations:
 - Release:
     Build Settings: {}

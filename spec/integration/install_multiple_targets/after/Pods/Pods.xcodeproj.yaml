@@ -1,4 +1,4 @@
----
+
 File References:
 - Products:
   - libPods.a
@@ -31,7 +31,7 @@ File References:
   - PodsDummy_Pods_SampleApp_2.m
 
 
----
+
 Targets:
 - Pods:
     Build Phases:
@@ -218,7 +218,7 @@ Targets:
         Base Configuration: Pods-SampleApp_2.xcconfig
 
 
----
+
 Build Configurations:
 - Release:
     Build Settings: {}
