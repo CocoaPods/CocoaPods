@@ -37,7 +37,6 @@
 
 #-----------------------------------------------------------------------------#
 
-
 # The spec helper is not required on purpose to keep those tests segregated.
 # It would also create issues because it clears the temp folder before every
 # requirement (`it` call).
@@ -63,35 +62,6 @@ TMP_DIR = ROOT + 'tmp' unless defined? TMP_DIR
 POD_BINARY = "ruby " + ROOT.to_s + '/bin/pod' unless defined? POD_BINARY
 
 #-----------------------------------------------------------------------------#
-
-
-# @!group Description implementation
-
-# Performs the checks for the test with the given folder using the given
-# arguments.
-#
-# @parma [String] arguments
-#        The arguments to pass to the Pod executable.
-#
-# @parma [String] folder
-#        The name of the folder which contains the `before` and `after`
-#        subfolders.
-#
-def check(arguments, folder)
-  focused_check(arguments, folder)
-end
-
-# Shortcut to focus on a test. Just comment the implmentation of #check and
-# call this from the relevant test.
-#
-def focused_check(arguments, folder)
-  copy_files(folder)
-  executed = launch_binary(arguments, folder)
-  run_post_execution_actions(folder)
-  check_with_folder(folder) if executed
-end
-
-#--------------------------------------#
 
 # @!group Helpers
 
@@ -290,15 +260,44 @@ def file_should_match(expected, produced)
   end
 end
 
-
 #-----------------------------------------------------------------------------#
 
+# @!group Description implementation
+
+# Performs the checks for the test with the given folder using the given
+# arguments.
+#
+# @parma [String] arguments
+#        The arguments to pass to the Pod executable.
+#
+# @parma [String] folder
+#        The name of the folder which contains the `before` and `after`
+#        subfolders.
+#
+def check(arguments, folder)
+  focused_check(arguments, folder)
+end
+
+# Shortcut to focus on a test: Comment the implmentation of #check and
+# call this from the relevant test.
+#
+def focused_check(arguments, folder)
+  copy_files(folder)
+  executed = launch_binary(arguments, folder)
+  run_post_execution_actions(folder)
+  check_with_folder(folder) if executed
+end
+
+#-----------------------------------------------------------------------------#
 
 describe "Integration take 2" do
   TMP_DIR.rmtree if TMP_DIR.exist?
   TMP_DIR.mkpath
 
   describe "Pod install" do
+
+    # Test installation with no integration
+    # Test subspecs inheritance
 
     describe "Integrates a project with CocoaPods" do
       check "install --no-update --no-doc", "install_new"
