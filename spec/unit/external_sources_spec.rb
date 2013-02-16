@@ -20,57 +20,63 @@ module Pod
 
   describe ExternalSources::AbstractExternalSource do
 
-    it "compares to another" do
-      dependency_1 = Dependency.new("Reachability", :git => 'url')
-      dependency_2 = Dependency.new("Another_name", :git => 'url')
-      dependency_3 = Dependency.new("Reachability", :git => 'another_url')
-
-      dependency_1.should.be == dependency_1
-      dependency_1.should.not.be == dependency_2
-      dependency_1.should.not.be == dependency_3
-    end
-
     before do
       dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
       @external_source = ExternalSources.from_dependency(dependency)
     end
 
-    it "returns the specification from the sandbox if available" do
-      @external_source.specification_from_external(config.sandbox)
-      @external_source.expects(:specification_from_external).never
-      @external_source.specification(config.sandbox).name.should == 'Reachability'
-    end
+    #--------------------------------------#
 
-    it "returns the specification from the remote if needed" do
-      @external_source.specification(config.sandbox).name.should == 'Reachability'
-    end
+    describe "In general" do
 
-    it "returns the specification from the sandbox if available" do
-      @external_source.specification_from_external(config.sandbox)
-      @external_source.specification_from_local(config.sandbox).name.should == 'Reachability'
-    end
+      it "compares to another" do
+        dependency_1 = Dependency.new("Reachability", :git => 'url')
+        dependency_2 = Dependency.new("Another_name", :git => 'url')
+        dependency_3 = Dependency.new("Reachability", :git => 'another_url')
 
-    it "returns nil if the specification from the sandbox is not available" do
-      @external_source.specification_from_local(config.sandbox).should.be.nil
-    end
+        dependency_1.should.be == dependency_1
+        dependency_1.should.not.be == dependency_2
+        dependency_1.should.not.be == dependency_3
+      end
 
-    it "returns the specification fetching it from the external source in any case" do
-      @external_source.specification_from_external(config.sandbox).name.should == 'Reachability'
+      it "returns the specification from the sandbox if available" do
+        config.sandbox.store_podspec('Reachability', fixture('integration/Reachability/Reachability.podspec'))
+        @external_source.expects(:specification_from_external).never
+        @external_source.specification(config.sandbox).name.should == 'Reachability'
+      end
+
+      it "fetches the remote if needed to return the specification" do
+        @external_source.specification(config.sandbox).name.should == 'Reachability'
+      end
+
+      it "returns the specification as stored in the sandbox if available" do
+        @external_source.specification_from_external(config.sandbox)
+        @external_source.specification_from_local(config.sandbox).name.should == 'Reachability'
+      end
+
+      it "returns nil if the specification requested from local is not available in the sandbox" do
+        @external_source.specification_from_local(config.sandbox).should.be.nil
+      end
+
+      it "returns the specification fetching it from the external source in any case" do
+        @external_source.specification_from_external(config.sandbox).name.should == 'Reachability'
+      end
+
+      it "stores the specification in the sandbox after fetching it from the remote" do
+        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path.should.not.exist?
+        @external_source.specification_from_external(config.sandbox).name.should == 'Reachability'
+        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path.should.exist?
+      end
+
     end
 
     #--------------------------------------#
 
     describe "Subclasses helpers" do
 
-      it "stores the podspec in the sandbox" do
-        sandbox = config.sandbox
-        podspec_path = fixture('integration/Reachability/Reachability.podspec')
-        @external_source.send(:store_podspec, sandbox, podspec_path)
-        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
-        path.should.exist?
-      end
-
-      it "pre-downloads the Pod and store the relevant information in the sandbox" do
+      it "pre-downloads the Pod and stores the relevant information in the sandbox" do
         sandbox = config.sandbox
         @external_source.send(:pre_download, sandbox)
         path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'

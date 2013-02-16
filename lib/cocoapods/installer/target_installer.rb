@@ -222,7 +222,7 @@ module Pod
       def create_copy_resources_script
         path = library.copy_resources_script_path
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
-          resources = library.file_accessors.map { |accessor| accessor.resources.values.flatten.map {|res| sandbox.relativize(res)} }.flatten
+          resources = library.file_accessors.map { |accessor| accessor.resources.values.flatten.map {|res| project.relativize(res)} }.flatten
           resources << bridge_support_file if bridge_support_file
           generator = Generator::CopyResourcesScript.new(resources)
           generator.save_as(path)

@@ -35,6 +35,35 @@ module Pod
       @root ||= path.dirname
     end
 
+    # @return [Pathname] Returns the relative path from the project root.
+    #
+    # @param  [Pathname] path
+    #         The path that needs to be converted to the relative format.
+    #
+    # @note   If the two absolute paths don't share the same root directory an
+    #         extra `../` is added to the result of
+    #         {Pathname#relative_path_from}.
+    #
+    # @example
+    #
+    #   path = Pathname.new('/Users/dir')
+    #   @sandbox.root #=> Pathname('/tmp/CocoaPods/Lint/Pods')
+    #
+    #   @sandbox.relativize(path) #=> '../../../../Users/dir'
+    #   @sandbox.relativize(path) #=> '../../../../../Users/dir'
+    #
+    def relativize(path)
+      unless path.absolute?
+        raise Informative, "Attempt to add relative path to the Pods project"
+      end
+
+      result = path.relative_path_from(root)
+      unless root.to_s.split('/')[1] == path.to_s.split('/')[1]
+        result = Pathname.new('../') + result
+      end
+      result
+    end
+
     # @return [String] a string representation suited for debugging.
     #
     def inspect
@@ -107,7 +136,7 @@ module Pod
 
     # Adds a file reference for each one of the given files in the specified
     # group, namespaced by specification unless a file reference for the given
-    # path alrady exits.
+    # path already exits.
     #
     # @note   With this set-up different subspecs might not reference the same
     #         file (i.e. the first will win). Not sure thought if this is a
@@ -147,35 +176,6 @@ module Pod
     def file_reference(absolute_path)
       absolute_path = Pathname.new(absolute_path)
       refs_by_absolute_path[absolute_path]
-    end
-
-    # @return [Pathname] Returns the relative path from the project root.
-    #
-    # @param  [Pathname] path
-    #         The path that needs to be converted to the relative format.
-    #
-    # @note   If the two absolute paths don't share the same root directory an
-    #         extra `../` is added to the result of
-    #         {Pathname#relative_path_from}.
-    #
-    # @example
-    #
-    #   path = Pathname.new('/Users/dir')
-    #   @sandbox.root #=> Pathname('/tmp/CocoaPods/Lint/Pods')
-    #
-    #   @sandbox.relativize(path) #=> '../../../../Users/dir'
-    #   @sandbox.relativize(path) #=> '../../../../../Users/dir'
-    #
-    def relativize(path)
-      unless path.absolute?
-        raise Informative, "Attempt to add relative path to the Pods project"
-      end
-
-      result = path.relative_path_from(root)
-      unless root.to_s.split('/')[1] == path.to_s.split('/')[1]
-        result = Pathname.new('../') + result
-      end
-      result
     end
 
     # Adds a file reference to the podfile.

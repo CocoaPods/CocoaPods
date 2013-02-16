@@ -60,9 +60,9 @@ module Pod
 
       #--------------------------------------#
 
-      # @!group Specifications
-
       public
+
+      # @!group Specifications
 
       # @return [Specification] returns the specification, either from the
       #         sandbox or by fetching the remote source, associated with the
@@ -96,6 +96,8 @@ module Pod
 
       #--------------------------------------#
 
+      public
+
       # @!group Subclasses hooks
 
       # Fetches the external source from the remote according to the params.
@@ -117,39 +119,10 @@ module Pod
 
       #--------------------------------------#
 
-      # @! Subclasses helpers
-
       private
 
-      # Stores a specification in the `Local Podspecs` folder.
-      #
-      # @param  [Sandbox] sandbox
-      #         the sandbox where the podspec should be stored.
-      #
-      # @param  [String, Pathname] podspec
-      #         The contents of the specification (String) or the path to a
-      #         podspec file (Pathname).
-      #
-      # @todo   This could be done by the sandbox.
-      # @todo   Store all the specifications (including those not originating
-      #         from external sources) so users can check them.
-      # @todo   The check for the podspec string is a bit primitive.
-      #
-      def store_podspec(sandbox, podspec)
-        output_path = sandbox.root + "Local Podspecs/#{name}.podspec"
-        output_path.dirname.mkpath
-        if podspec.is_a?(String)
-          unless podspec.include?('Spec.new')
-            raise Informative, "The `#{name}.podspec` from `#{description}` appears to be invalid."
-          end
-          output_path.open('w') { |f| f.puts(podspec) }
-        else
-          unless podspec.exist?
-            raise Informative, "No podspec found for `#{name}` in #{description}"
-          end
-          FileUtils.copy(podspec, output_path)
-        end
-      end
+      # @! Subclasses helpers
+
 
       # Pre-downloads a Pod passing the options to the downloader and informing
       # the sandbox.
@@ -165,8 +138,8 @@ module Pod
           target.rmtree if target.exist?
           downloader = Downloader.for_target(target, @params)
           downloader.download
-          store_podspec(sandbox, target + "#{name}.podspec")
-          sandbox.predownloaded_pods << name
+          sandbox.store_podspec(name, target + "#{name}.podspec", true)
+          sandbox.store_pre_downloaded_pod(name)
           if downloader.options_specific?
             source = @params
           else
@@ -291,7 +264,7 @@ module Pod
           path = @params[:podspec]
           path = Pathname.new(path).expand_path if path.to_s.start_with?("~")
           require 'open-uri'
-          open(path) { |io| store_podspec(sandbox, io.read) }
+          open(path) { |io| sandbox.store_podspec(name, io.read, true) }
         end
       end
 
@@ -314,7 +287,7 @@ module Pod
       # @see  AbstractExternalSource#copy_external_source_into_sandbox
       #
       def copy_external_source_into_sandbox(sandbox)
-        store_podspec(sandbox, pod_spec_path)
+        sandbox.store_podspec(name, pod_spec_path, true)
         sandbox.store_local_path(name, @params[:local])
       end
 
@@ -349,9 +322,9 @@ module Pod
 
       #--------------------------------------#
 
-      # @!group Helpers
-
       private
+
+      # @!group Helpers
 
       # @return [Pathname] the path of the podspec.
       #

@@ -13,7 +13,7 @@ module Pod
   #     Pods
   #     |
   #     +-- Headers
-  #     |   +-- Build
+  #     |   +-- Private
   #     |   |   +-- [Pod Name]
   #     |   +-- Public
   #     |       +-- [Pod Name]
@@ -22,6 +22,8 @@ module Pod
   #     |   +-- [Pod Name]
   #     |
   #     +-- Specifications
+  #     |   +-- External Sources
+  #     |   +-- Normal Sources
   #     |
   #     +-- Target Support Files
   #     |   +-- [Target Name]
@@ -84,36 +86,6 @@ module Pod
       root.rmtree
     end
 
-    # @return [Pathname] Returns the relative path from the sandbox.
-    #
-    # @note If the two absolute paths don't share the same root directory an
-    #       extra `../` is added to the result of {Pathname#relative_path_from}
-    #
-    #
-    # @example
-    #
-    #   path = Pathname.new('/Users/dir')
-    #   @sandbox.root #=> Pathname('/tmp/CocoaPods/Lint/Pods')
-    #
-    #   @sandbox.relativize(path) #=> '../../../../Users/dir'
-    #   @sandbox.relativize(path) #=> '../../../../../Users/dir'
-    #
-    def relativize(path)
-      result = path.relative_path_from(root)
-      unless root.to_s.split('/')[1] == path.to_s.split('/')[1]
-        result = Pathname.new('../') + result
-      end
-      result
-    end
-
-    # Converts a list of paths to their relative variant.
-    #
-    # @return [Array<Pathname>] the relative paths.
-    #
-    def relativize_paths(paths)
-      paths.map { |path| relativize(path) }
-    end
-
     # @return [String] a string representation suitable for debugging.
     #
     def inspect
@@ -121,6 +93,8 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
+
+    public
 
     # @!group Paths
 
@@ -149,44 +123,6 @@ module Pod
       root
     end
 
-    # @return [Pathname] the path for the directory where to store the
-    #         specifications.
-    #
-    def specifications_dir
-      # root + "Specifications"
-      root + "Local Podspecs"
-    end
-
-    # Returns the path of the specification for the Pod with the
-    # given name.
-    #
-    # @param  [String] name
-    #         the name of the Pod for which the podspec file is requested.
-    #
-    # @return [Pathname] the path or nil.
-    #
-    def specification_path(name)
-      path = specifications_dir + "#{name}.podspec"
-      path.exist? ? path : nil
-    end
-
-    #-------------------------------------------------------------------------#
-
-    # @!group Pods storage & source
-
-    # Returns the specification for the Pod with the given name.
-    #
-    # @param  [String] name
-    #         the name of the Pod for which the specification is requested.
-    #
-    # @return [Specification] the specification if the file is found.
-    #
-    def specification(name)
-      if file = specification_path(name)
-        Specification.from_file(file)
-      end
-    end
-
     # Returns the path where the Pod with the given name is stored, taking into
     # account whether the Pod is locally sourced.
     #
@@ -205,7 +141,96 @@ module Pod
       end
     end
 
-    #--------------------------------------#
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Specification store
+
+    # Returns the specification for the Pod with the given name.
+    #
+    # @param  [String] name
+    #         the name of the Pod for which the specification is requested.
+    #
+    # @return [Specification] the specification if the file is found.
+    #
+    def specification(name)
+      if file = specification_path(name)
+        Specification.from_file(file)
+      end
+    end
+
+    # @return [Pathname] the path for the directory where to store the
+    #         specifications.
+    #
+    # @todo   Migrate old installations and store the for all the pods.
+    #         Two folders should be created `External Sources` and `Podspecs`.
+    #
+    def specifications_dir(external_source = false)
+      # root + "Specifications"
+      root + "Local Podspecs"
+    end
+
+    # Returns the path of the specification for the Pod with the
+    # given name, if one is stored.
+    #
+    # @param  [String] name
+    #         the name of the Pod for which the podspec file is requested.
+    #
+    # @return [Pathname] the path or nil.
+    # @return [Nil] if the podspec is not stored.
+    #
+    def specification_path(name)
+      path = specifications_dir + "#{name}.podspec"
+      path.exist? ? path : nil
+    end
+
+    # Stores a specification in the `Local Podspecs` folder.
+    #
+    # @param  [Sandbox] sandbox
+    #         the sandbox where the podspec should be stored.
+    #
+    # @param  [String, Pathname] podspec
+    #         The contents of the specification (String) or the path to a
+    #         podspec file (Pathname).
+    #
+    # @todo   Store all the specifications (including those not originating
+    #         from external sources) so users can check them.
+    #
+    def store_podspec(name, podspec, external_source = false)
+      output_path = specifications_dir(external_source) + "#{name}.podspec"
+      output_path.dirname.mkpath
+      if podspec.is_a?(String)
+        output_path.open('w') { |f| f.puts(podspec) }
+      else
+        unless podspec.exist?
+          raise Informative, "No podspec found for `#{name}` in #{podspec}"
+        end
+        FileUtils.copy(podspec, output_path)
+      end
+      spec = Specification.from_file(output_path)
+      unless spec.name == name
+        raise Informative, "The name of the given podspec `#{spec.name}` doesn't match the expected one `#{name}`"
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Pods information
+
+    # Marks a Pod as pre-downloaded
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [void]
+    #
+    def store_pre_downloaded_pod(name)
+      root_name = Specification.root_name(name)
+      predownloaded_pods << root_name
+    end
 
     # @return [Array<String>] The names of the pods that have been
     #         pre-downloaded from an external source.
