@@ -115,6 +115,10 @@ module Pod
         raise "Abstract method"
       end
 
+      #--------------------------------------#
+
+      # @! Subclasses helpers
+
       private
 
       # Stores a specification in the `Local Podspecs` folder.
@@ -147,6 +151,31 @@ module Pod
         end
       end
 
+      # Pre-downloads a Pod passing the options to the downloader and informing
+      # the sandbox.
+      #
+      # @param  [Sandbox] sandbox
+      #         the sandbox where the Pod should be downloaded.
+      #
+      # @return [void]
+      #
+      def pre_download(sandbox)
+        UI.info("->".green + " Pre-downloading: `#{name}`") do
+          target = sandbox.root + name
+          target.rmtree if target.exist?
+          downloader = Downloader.for_target(target, @params)
+          downloader.download
+          store_podspec(sandbox, target + "#{name}.podspec")
+          sandbox.predownloaded_pods << name
+          if downloader.options_specific?
+            source = @params
+          else
+            source = downloader.checkout_options
+          end
+          sandbox.store_checkout_source(name, source)
+        end
+      end
+
     end
 
     #-------------------------------------------------------------------------#
@@ -168,14 +197,7 @@ module Pod
       #       operations are needed.
       #
       def copy_external_source_into_sandbox(sandbox)
-        UI.info("->".green + " Pre-downloading: `#{name}`") do
-          target = sandbox.root + name
-          target.rmtree if target.exist?
-          downloader = Downloader.for_target(sandbox.root + name, @params)
-          downloader.download
-          store_podspec(sandbox, target + "#{name}.podspec")
-          sandbox.predownloaded_pods << name
-        end
+        pre_download(sandbox)
       end
 
       # @see AbstractExternalSource#description
@@ -191,7 +213,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    # Provides support for fetching a specification file from a Svn source
+    # Provides support for fetching a specification file from a SVN source
     # remote.
     #
     # Supports all the options of the downloader (is similar to the git key of
@@ -209,14 +231,7 @@ module Pod
       #       operations are needed.
       #
       def copy_external_source_into_sandbox(sandbox)
-        UI.info("->".green + " Pre-downloading: `#{name}`") do
-          target = sandbox.root + name
-          target.rmtree if target.exist?
-          downloader = Downloader.for_target(target, @params)
-          downloader.download
-          store_podspec(sandbox, target + "#{name}.podspec")
-          sandbox.predownloaded_pods << name
-        end
+        pre_download(sandbox)
       end
 
       # @see AbstractExternalSource#description
@@ -232,8 +247,8 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    # Provides support for fetching a specification file from a Svn source
-    # remote.
+    # Provides support for fetching a specification file from a Mercurial
+    # source remote.
     #
     # Supports all the options of the downloader (is similar to the git key of
     # `source` attribute of a specification).
@@ -250,14 +265,7 @@ module Pod
       #       operations are needed.
       #
       def copy_external_source_into_sandbox(sandbox)
-        UI.info("->".green + " Pre-downloading: `#{name}`") do
-          target = sandbox.root + name
-          target.rmtree if target.exist?
-          downloader = Downloader.for_target(target, @params)
-          downloader.download
-          store_podspec(sandbox, target + "#{name}.podspec")
-          sandbox.predownloaded_pods << name
-        end
+        pre_download(sandbox)
       end
 
       # @see AbstractExternalSource#description
@@ -307,6 +315,7 @@ module Pod
       #
       def copy_external_source_into_sandbox(sandbox)
         store_podspec(sandbox, pod_spec_path)
+        sandbox.store_local_path(name, @params[:local])
       end
 
       # @see  AbstractExternalSource#description

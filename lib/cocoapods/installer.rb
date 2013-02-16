@@ -303,11 +303,8 @@ module Pod
           specs_by_platform[library.platform].concat(specs)
         end
       end
-      pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
 
-      root_spec = specs_by_platform.values.flatten.first.root
-      local_path = root_spec.source[:local]
-      pod_installer.local_path = Pathname.new(local_path).expand_path if local_path# TODO
+      pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
       pod_installer.clean = config.clean?
       pod_installer.aggressive_cache = config.aggressive_cache?
       pod_installer.generate_docs = config.generate_docs?
@@ -416,6 +413,8 @@ module Pod
     # @return [void]
     #
     def write_lockfiles
+      # checkout_options = sandbox.checkout_options
+      # TODO pass the options to the Lockfile
       @lockfile = Lockfile.generate(podfile, analyzer.specifications)
 
       UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
@@ -429,7 +428,7 @@ module Pod
 
     # Integrates the user projects adding the dependencies on the CocoaPods
     # libraries, setting them up to use the xcconfigs and performing other
-    # actions. This step is also reponsible of creating the workspace if
+    # actions. This step is also responsible of creating the workspace if
     # needed.
     #
     # @return [void]

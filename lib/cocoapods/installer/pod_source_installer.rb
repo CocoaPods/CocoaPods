@@ -42,11 +42,6 @@ module Pod
 
       # @!group Configuration
 
-      # @return [Pathname] the path of the source of the Pod if using the
-      #         `:local` option.
-      #
-      attr_accessor :local_path
-
       # @return [Bool] whether the file not used by CocoaPods should be
       #         removed.
       #
@@ -116,6 +111,10 @@ module Pod
           unless downloader.options_specific?
             @specific_source = downloader.checkout_options
           end
+        end
+
+        if specific_source
+        sandbox.store_checkout_source(root_spec.name, specific_source)
         end
       end
 
@@ -202,7 +201,7 @@ module Pod
       # @return [Pathname] the folder where the source of the Pod is located.
       #
       def root
-        local? ? local_path : sandbox.pod_dir(root_spec.name)
+        sandbox.pod_dir(root_spec.name)
       end
 
       # @return [Boolean] whether the source has been pre downloaded in the
@@ -216,7 +215,7 @@ module Pod
       #         CocoaPods should not interfere with the files of the user.
       #
       def local?
-        !local_path.nil?
+        sandbox.local?(root_spec.name)
       end
 
       #-----------------------------------------------------------------------#

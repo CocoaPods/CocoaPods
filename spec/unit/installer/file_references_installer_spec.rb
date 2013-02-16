@@ -24,6 +24,15 @@ module Pod
         file_ref.path.should == "../../spec/fixtures/banana-lib/Classes/Banana.m"
       end
 
+      it "adds the files references of the local Pods in a dedicated group" do
+        config.sandbox.store_local_path('BananaLib', 'Some Path')
+        @installer.install!
+        group_ref = @installer.pods_project['Local Pods/BananaLib']
+        group_ref.should.be.not.nil
+        file_ref = @installer.pods_project['Local Pods/BananaLib/Banana.m']
+        file_ref.should.be.not.nil
+      end
+
       it "adds the files references of the resources the Pods project" do
         @installer.install!
         group_ref = @installer.pods_project['Resources/BananaLib']

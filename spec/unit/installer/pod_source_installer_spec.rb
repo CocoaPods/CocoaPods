@@ -62,6 +62,17 @@ module Pod
           pod_folder.should.exist
         end
 
+        it "stores the checkout options in the sandbox" do
+          @spec.version.head = true
+          @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
+          @installer.install!
+          sources = @installer.sandbox.checkout_sources
+          sources.should == { "BananaLib" => {
+            :git => SpecHelper.fixture('banana-lib'),
+            :commit=>"0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc" }
+          }
+        end
+
       end
 
       #--------------------------------------#
@@ -124,22 +135,18 @@ module Pod
           @installer.stubs(:predownloaded?).returns(true)
           @installer.expects(:download_source).never
           @installer.stubs(:clean_installation)
-          @installer.stubs(:link_headers)
           @installer.install!
         end
 
         it "doesn't downloads the source if the pod has a local source" do
-          @installer.local_path = 'Some Path'
+          config.sandbox.store_local_path('BananaLib', 'Some Path')
           @installer.expects(:download_source).never
-          @installer.stubs(:clean_installation)
-          @installer.stubs(:link_headers)
           @installer.install!
         end
 
         it "doesn't clean the installation if the pod has a local source" do
-          @installer.local_path = 'Some Path'
+          config.sandbox.store_local_path('BananaLib', 'Some Path')
           @installer.expects(:clean_installation).never
-          @installer.stubs(:link_headers)
           @installer.install!
         end
 

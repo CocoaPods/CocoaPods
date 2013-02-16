@@ -60,6 +60,8 @@ module Pod
       @build_headers  = HeadersStore.new(self, "BuildHeaders")
       @public_headers = HeadersStore.new(self, "Headers")
       @predownloaded_pods = []
+      @checkout_sources = {}
+      @local_pods = {}
       FileUtils.mkdir_p(@root)
     end
 
@@ -134,18 +136,6 @@ module Pod
       root + "Pods.xcodeproj"
     end
 
-    # Returns the path for the Pod with the given name.
-    #
-    # @param  [String] name
-    #         The name of the Pod.
-    #
-    # @return [Pathname] the path of the Pod.
-    #
-    def pod_dir(name)
-      # root + "Sources/#{name}"
-      root + name
-    end
-
     # Returns the path for the directory where to store the support files of
     # a target.
     #
@@ -180,9 +170,9 @@ module Pod
       path.exist? ? path : nil
     end
 
-    #--------------------------------------#
+    #-------------------------------------------------------------------------#
 
-    # @!group Pods Installation
+    # @!group Pods storage & source
 
     # Returns the specification for the Pod with the given name.
     #
@@ -197,14 +187,100 @@ module Pod
       end
     end
 
-    # @return [Array<String>] the names of the pods that have been
+    # Returns the path where the Pod with the given name is stored, taking into
+    # account whether the Pod is locally sourced.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [Pathname] the path of the Pod.
+    #
+    def pod_dir(name)
+      root_name = Specification.root_name(name)
+      if local?(root_name)
+        Pathname.new(local_pods[root_name])
+      else
+        # root + "Sources/#{name}"
+        root + root_name
+      end
+    end
+
+    #--------------------------------------#
+
+    # @return [Array<String>] The names of the pods that have been
     #         pre-downloaded from an external source.
     #
     attr_reader :predownloaded_pods
 
-    #-------------------------------------------------------------------------#
+    # Checks if a Pod has been pre-downloaded by the resolver in order to fetch
+    # the podspec.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [Bool] Whether the Pod has been pre-downloaded.
+    #
+    def predownloaded?(name)
+      root_name = Specification.root_name(name)
+      predownloaded_pods.include?(root_name)
+    end
 
+    #--------------------------------------#
 
+    # Stores the local path of a Pod.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @param  [Hash] source
+    #         The hash which contains the options as returned by the
+    #         downloader.
+    #
+    # @return [void]
+    #
+    def store_checkout_source(name, source)
+      root_name = Specification.root_name(name)
+      checkout_sources[root_name] = source
+    end
+
+    # @return [Hash{String=>Hash}] The options necessary to recreate the exact
+    #         checkout of a given Pod grouped by its name.
+    #
+    attr_reader :checkout_sources
+
+    #--------------------------------------#
+
+    # Stores the local path of a Pod.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @param  [#to_s] path
+    #         The local path where the Pod is stored.
+    #
+    # @return [void]
+    #
+    def store_local_path(name, path)
+      root_name = Specification.root_name(name)
+      local_pods[root_name] = path.to_s
+    end
+
+    # @return [Hash{String=>String}] The path of the Pods with a local source
+    #         grouped by their name.
+    #
+    attr_reader :local_pods
+
+    # Checks if a Pod is locally sourced?
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [Bool] Whether the Pod is locally sourced.
+    #
+    def local?(name)
+      root_name = Specification.root_name(name)
+      !local_pods[root_name].nil?
+    end
 
     #-------------------------------------------------------------------------#
 

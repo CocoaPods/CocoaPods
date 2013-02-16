@@ -60,10 +60,8 @@ module Pod
           file_accessors.each do |file_accessor|
             files = file_accessor.source_files
             spec_name = file_accessor.spec.name
-            local = file_accessor.spec.local?
+            local = sandbox.local?(file_accessor.spec.root.name)
             parent_group = local ? pods_project.local_pods : pods_project.pods
-            parent_group = pods_project.pods
-
             pods_project.add_file_references(files, spec_name, parent_group)
           end
         end

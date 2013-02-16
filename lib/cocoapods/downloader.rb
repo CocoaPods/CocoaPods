@@ -10,15 +10,15 @@ module Pod
           Executable.execute_command(executable, command, raise_on_failure)
         end
 
-        # Indicates that an action will be perfomed. The action is passed as a
+        # Indicates that an action will be performed. The action is passed as a
         # block.
         #
         # @param  [String] message
         #         The message associated with the action.
         #
-        # @yield  The action, this block is always exectued.
+        # @yield  The action, this block is always executed.
         #
-        # @retur [void]
+        # @return [void]
         #
         def ui_action(message)
           UI.section(" > #{message}", '', 1) do
@@ -26,15 +26,15 @@ module Pod
           end
         end
 
-        # Indicates that a minor action will be perfomed. The action is passed as
-        # a block.
+        # Indicates that a minor action will be performed. The action is passed
+        # as a block.
         #
         # @param  [String] message
         #         The message associated with the action.
         #
-        # @yield  The action, this block is always exectued.
+        # @yield  The action, this block is always executed.
         #
-        # @retur [void]
+        # @return [void]
         #
         def ui_sub_action(message)
           UI.section(" > #{message}", '', 2) do
@@ -47,7 +47,7 @@ module Pod
         # @param  [String] message
         #         The message associated with the action.
         #
-        # @retur [void]
+        # @return [void]
         #
         def ui_message(message)
           UI.puts message

@@ -57,6 +57,35 @@ module Pod
     it "returns the specification fetching it from the external source in any case" do
       @external_source.specification_from_external(config.sandbox).name.should == 'Reachability'
     end
+
+    #--------------------------------------#
+
+    describe "Subclasses helpers" do
+
+      it "stores the podspec in the sandbox" do
+        sandbox = config.sandbox
+        podspec_path = fixture('integration/Reachability/Reachability.podspec')
+        @external_source.send(:store_podspec, sandbox, podspec_path)
+        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path.should.exist?
+      end
+
+      it "pre-downloads the Pod and store the relevant information in the sandbox" do
+        sandbox = config.sandbox
+        @external_source.send(:pre_download, sandbox)
+        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path.should.exist?
+        sandbox.predownloaded_pods.should == ["Reachability"]
+        sandbox.checkout_sources.should == {
+          "Reachability" => {
+            :git => fixture('integration/Reachability'),
+            :commit => "4ec575e4b074dcc87c44018cce656672a979b34a"
+          }
+        }
+      end
+
+    end
+
   end
 
   #---------------------------------------------------------------------------#
@@ -174,5 +203,16 @@ module Pod
     it "returns the description" do
       @external_source.description.should.match %r|from `.*integration/Reachability`|
     end
+
+    it "marks the Pod as local in the sandbox" do
+      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      config.sandbox.local_pods.should == {
+        "Reachability" => fixture('integration/Reachability').to_s
+      }
+    end
+
   end
+
+  #---------------------------------------------------------------------------#
+
 end

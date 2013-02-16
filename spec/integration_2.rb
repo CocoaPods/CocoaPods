@@ -267,18 +267,18 @@ end
 # Performs the checks for the test with the given folder using the given
 # arguments.
 #
-# @parma [String] arguments
+# @param [String] arguments
 #        The arguments to pass to the Pod executable.
 #
-# @parma [String] folder
+# @param [String] folder
 #        The name of the folder which contains the `before` and `after`
 #        subfolders.
 #
 def check(arguments, folder)
-  # focused_check(arguments, folder)
+  focused_check(arguments, folder)
 end
 
-# Shortcut to focus on a test: Comment the implmentation of #check and
+# Shortcut to focus on a test: Comment the implementation of #check and
 # call this from the relevant test.
 #
 def focused_check(arguments, folder)
@@ -324,7 +324,7 @@ describe "Integration take 2" do
     end
 
     describe "Installs a Pod with a local source" do
-      focused_check "install --no-update --no-doc", "install_local_source"
+      check "install --no-update --no-doc", "install_local_source"
     end
 
     describe "Installs a Pod with an external source" do
