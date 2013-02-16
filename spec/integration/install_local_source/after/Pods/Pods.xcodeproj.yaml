@@ -3,7 +3,6 @@ File References:
 - Frameworks:
   - Foundation.framework
   - SystemConfiguration.framework
-- Pods: []
 - Local Pods:
   - Reachability:
     - Reachability.h
