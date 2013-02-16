@@ -313,41 +313,6 @@ module Pod
       @installed_specs.concat(specs_by_platform.values.flatten)
     end
 
-    # Runs the pre install hooks of the installed specs and of the Podfile.
-    #
-    # @return [void]
-    #
-    def run_pre_install_hooks
-      UI.message "- Running pre install hooks" do
-        installed_specs.each do |spec|
-          executed = spec.pre_install!(pod_data(spec), library_data(nil))
-          UI.message "- #{spec.name}" if executed
-        end
-
-        executed = @podfile.pre_install!(installer_data)
-        UI.message "- Podfile" if executed
-      end
-    end
-
-    # Runs the post install hooks of the installed specs and of the Podfile.
-    #
-    # @note   Post install hooks run _before_ saving of project, so that they
-    #         can alter it before it is written to the disk.
-    #
-    # @return [void]
-    #
-    def run_post_install_hooks
-      UI.message "- Running post install hooks" do
-
-        installed_specs.each do |spec|
-          target_installer_data = target_installers_data.first #TODO
-          executed = spec.post_install!(target_installer_data)
-          UI.message "- #{spec.name}" if executed
-        end
-        executed = @podfile.post_install!(installer_data)
-        UI.message "- Podfile" if executed
-      end
-    end
 
     # Installs the file references in the Pods project. This is done once per
     # Pod as the same file reference might be shared by multiple targets.
@@ -428,6 +393,46 @@ module Pod
 
     # @!group Hooks
 
+    # Runs the pre install hooks of the installed specs and of the Podfile.
+    #
+    # @return [void]
+    #
+    def run_pre_install_hooks
+      UI.message "- Running pre install hooks" do
+        installed_specs.each do |spec|
+          executed = spec.pre_install!(pod_data(spec), library_data(libraries.first)) #todo
+          UI.message "- #{spec.name}" if executed
+        end
+
+        executed = @podfile.pre_install!(installer_data)
+        UI.message "- Podfile" if executed
+      end
+    end
+
+    # Runs the post install hooks of the installed specs and of the Podfile.
+    #
+    # @note   Post install hooks run _before_ saving of project, so that they
+    #         can alter it before it is written to the disk.
+    #
+    # @return [void]
+    #
+    def run_post_install_hooks
+      UI.message "- Running post install hooks" do
+
+        installed_specs.each do |spec|
+          target_installer_data = target_installers_data.first #TODO
+          executed = spec.post_install!(target_installer_data)
+          UI.message "- #{spec.name}" if executed
+        end
+        executed = @podfile.post_install!(installer_data)
+        UI.message "- Podfile" if executed
+      end
+    end
+
+    public
+
+    # @!group Hooks Data
+
     def installer_data
       Hooks::InstallerData.new(self)
     end
@@ -456,7 +461,7 @@ module Pod
     end
 
     def library_data(library)
-      Hooks::LibraryData.new
+      Hooks::LibraryData.new(library)
     end
 
     #-------------------------------------------------------------------------#

@@ -199,6 +199,14 @@ def yaml_should_match(expected, produced)
   diff.gsub!("$produced", "produced".green)
   diff.gsub!("$expected", "expected".red)
   desc << ("--- DIFF " << "-" * 70)
+  Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
+    case line
+    when /^\+/ then desc << line.gsub("\n",'').green
+    when /^-/ then desc << line.gsub("\n",'').red
+    else desc << line.gsub("\n",'')
+    end
+  end
+  desc << ("--- DIFF " << "-" * 70)
   desc << diff
   desc << ("--- END " << "-" * 70)
   expected_yaml.should.satisfy(desc * "\n\n") do

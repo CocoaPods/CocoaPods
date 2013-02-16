@@ -33,6 +33,9 @@ module Pod
       # @return [void]
       #
       def install!
+        file_accessors.each do |fa|
+          fa.path_list.read_file_system
+        end
         add_source_files_references
         add_resources_references
         link_headers

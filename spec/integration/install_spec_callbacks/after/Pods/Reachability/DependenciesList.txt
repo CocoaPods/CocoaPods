@@ -1,1 +1,1 @@
-Reachability (from `Reachability.podspec')
+Reachability (from `Reachability.podspec`)
