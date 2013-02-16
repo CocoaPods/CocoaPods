@@ -335,10 +335,14 @@ describe "Integration take 2" do
       check "install --no-update --no-doc", "install_podspec"
     end
 
+    # TODO add tests for all the hooks API
+    #
     describe "Runs the Podfile callbacks" do
       check "install --no-update --no-doc", "install_podfile_callbacks"
     end
 
+    # TODO add tests for all the hooks API
+    #
     describe "Runs the specification callbacks" do
       check "install --no-update --no-doc", "install_spec_callbacks"
     end

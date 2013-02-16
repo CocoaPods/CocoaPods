@@ -13,7 +13,7 @@ module Pod
       #
       attr_accessor :library
 
-      #--------------------------------------------------------------------------------#
+      #-----------------------------------------------------------------------#
 
       # @todo This has to be removed, but this means the specs have to be
       #       updated if they need a reference to the prefix header.

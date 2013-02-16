@@ -320,25 +320,10 @@ module Pod
     def run_pre_install_hooks
       UI.message "- Running pre install hooks" do
         installed_specs.each do |spec|
-          pod_data = Hooks::PodData.new
-          pod_data.root = sandbox.pod_dir(spec.root.name)
-          library_data = Hooks::LibraryData.new
-          executed = spec.pre_install!(pod_data, library_data)
+          executed = spec.pre_install!(pod_data(spec), library_data(nil))
           UI.message "- #{spec.name}" if executed
         end
 
-        installer_data = Hooks::InstallerData.new
-        installer_data.project = pods_project
-        installer_data.sandbox = sandbox
-        installer_data.libraries = libraries
-        installer_data.pods = []
-        root_specs = analyzer.specifications.map { |spec| spec.root }.uniq
-        root_specs.each do |spec|
-          pod_data = Hooks::PodData.new
-          pod_data.root_spec = spec
-          pod_data.root = nil #TODO
-          installer_data.pods = [] << pod_data
-        end
         executed = @podfile.pre_install!(installer_data)
         UI.message "- Podfile" if executed
       end
@@ -351,21 +336,14 @@ module Pod
     #
     # @return [void]
     #
-    # @todo   Run the hooks only for the installed pods.
-    #
-    # @todo   Print a message with the names of the specs.
-    #
     def run_post_install_hooks
       UI.message "- Running post install hooks" do
+
         installed_specs.each do |spec|
-          target_installer_data = Hooks::TargetInstallerData.new
-          target_installer_data.sandbox = sandbox
-          target_installer_data.library = libraries.first #TODO
+          target_installer_data = target_installers_data.first #TODO
           executed = spec.post_install!(target_installer_data)
           UI.message "- #{spec.name}" if executed
         end
-        installer_data = Hooks::InstallerData.new
-        installer_data.project = pods_project
         executed = @podfile.post_install!(installer_data)
         UI.message "- Podfile" if executed
       end
@@ -442,6 +420,43 @@ module Pod
       installation_root = config.installation_root
       libraries = analyzer.libraries
       UserProjectIntegrator.new(podfile, sandbox, installation_root, libraries).integrate!
+    end
+
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Hooks
+
+    def installer_data
+      Hooks::InstallerData.new(self)
+    end
+
+    def target_installers_data
+      @target_installers_data ||= libraries.map do |lib|
+        data = Hooks::TargetInstallerData.new
+        data.sandbox = sandbox
+        data.library = lib
+        data
+      end
+    end
+
+    def pods_data
+      specs = libraries.map(&:specs).flatten
+      root_specs = specs.map { |spec| spec.root }.uniq
+      root_specs.map do |spec|
+        pod_data(spec)
+      end
+    end
+
+    def pod_data(spec)
+      all_file_accessors = libraries.map(&:file_accessors).flatten.compact
+      file_accessors = all_file_accessors.select { |fa| fa.spec.root == spec.root }
+      Hooks::PodData.new(file_accessors)
+    end
+
+    def library_data(library)
+      Hooks::LibraryData.new
     end
 
     #-------------------------------------------------------------------------#
