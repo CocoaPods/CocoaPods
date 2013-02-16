@@ -1,11 +1,14 @@
 module Pod
-  module Hooks
 
-    class Specification
+  class Specification
+    def config
       UI.warn "Specification#config is deprecated. The config is accessible from " \
         "the parameter passed to the hooks"
-      include Config::Mixin
+      Config.instance
     end
+  end
+
+  module Hooks
 
     # Stores the information of the Installer for the hooks
     #
