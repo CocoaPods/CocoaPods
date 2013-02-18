@@ -121,20 +121,22 @@ module Pod
                   results = validator.results
                 end
                 results.each do |result|
+                  name = validator.spec ? validator.spec.name : podspec.relative_path_from(dir)
+                  version = validator.spec ? validator.spec.version : 'unknown'
                   messages_by_type[result.type] ||= {}
-                  messages_by_type[result.type][result.message] ||= []
-                  name = validator.spec ? validator.spec.to_s : podspec.relative_path_from(dir)
-                  messages_by_type[result.type][result.message] << name
+                  messages_by_type[result.type][result.message] ||= {}
+                  messages_by_type[result.type][result.message][name] ||= []
+                  messages_by_type[result.type][result.message][name] << version
                 end
               end
             end
 
             # print "\033[K" unless config.silent?
-            messages_by_type.each do |type, messages_by_type|
-              messages_by_type.each do |message, names|
+            messages_by_type.each do |type, names_by_message|
+              names_by_message.each do |message, versions_by_names|
                 color = type == :error ? :red : :yellow
                 UI.puts "[#{type}] #{message}".send(color)
-                names.each { |name| UI.puts "  - #{name}" }
+                versions_by_names.each { |name, versions| UI.puts "  - #{name} (#{versions * ', '})" }
                 UI.puts
               end
             end
