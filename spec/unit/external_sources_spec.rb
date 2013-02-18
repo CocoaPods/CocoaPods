@@ -9,10 +9,10 @@ module Pod
       podspec = Dependency.new("Reachability", :podspec => nil)
       local   = Dependency.new("Reachability", :local   => nil)
 
-      ExternalSources.from_dependency(git).class.should     == ExternalSources::GitSource
-      ExternalSources.from_dependency(svn).class.should     == ExternalSources::SvnSource
-      ExternalSources.from_dependency(podspec).class.should == ExternalSources::PodspecSource
-      ExternalSources.from_dependency(local).class.should   == ExternalSources::LocalSource
+      ExternalSources.from_dependency(git, nil).class.should     == ExternalSources::GitSource
+      ExternalSources.from_dependency(svn, nil).class.should     == ExternalSources::SvnSource
+      ExternalSources.from_dependency(podspec, nil).class.should == ExternalSources::PodspecSource
+      ExternalSources.from_dependency(local, nil).class.should   == ExternalSources::LocalSource
     end
   end
 
@@ -22,7 +22,7 @@ module Pod
 
     before do
       dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
-      @external_source = ExternalSources.from_dependency(dependency)
+      @external_source = ExternalSources.from_dependency(dependency, nil)
     end
 
     #--------------------------------------#
@@ -100,7 +100,7 @@ module Pod
 
     before do
       dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'))
-      @external_source = ExternalSources.from_dependency(dependency)
+      @external_source = ExternalSources.from_dependency(dependency, nil)
     end
 
     it "creates a copy of the podspec" do
@@ -125,7 +125,7 @@ module Pod
 
     before do
       dependency = Dependency.new("SvnSource", :svn => "file://#{fixture('subversion-repo/trunk')}")
-      @external_source = ExternalSources.from_dependency(dependency)
+      @external_source = ExternalSources.from_dependency(dependency, nil)
     end
 
     it "creates a copy of the podspec" do
@@ -150,7 +150,7 @@ module Pod
 
     before do
       dependency = Dependency.new("MercurialSource", :hg => fixture('mercurial-repo'))
-      @external_source = ExternalSources.from_dependency(dependency)
+      @external_source = ExternalSources.from_dependency(dependency, nil)
     end
 
     it "creates a copy of the podspec" do
@@ -176,7 +176,7 @@ module Pod
     before do
       podspec_path = fixture('integration/Reachability/Reachability.podspec')
       dependency = Dependency.new("Reachability", :podspec => podspec_path.to_s)
-      @external_source = ExternalSources.from_dependency(dependency)
+      @external_source = ExternalSources.from_dependency(dependency, nil)
     end
 
     it "creates a copy of the podspec" do
@@ -197,7 +197,8 @@ module Pod
     before do
       podspec_path = fixture('integration/Reachability/Reachability.podspec')
       dependency = Dependency.new("Reachability", :local => fixture('integration/Reachability'))
-      @external_source = ExternalSources.from_dependency(dependency)
+      podfile_path = fixture('integration/Podfile')
+      @external_source = ExternalSources.from_dependency(dependency, podfile_path)
     end
 
     it "creates a copy of the podspec" do
@@ -215,6 +216,35 @@ module Pod
       config.sandbox.local_pods.should == {
         "Reachability" => fixture('integration/Reachability').to_s
       }
+    end
+
+    describe "Helpers" do
+
+      it "handles absolute paths" do
+        @external_source.stubs(:params).returns(:local => fixture('integration/Reachability'))
+        path = @external_source.send(:pod_spec_path)
+        path.should == fixture('integration/Reachability/Reachability.podspec')
+      end
+
+      it "handles relative paths" do
+        @external_source.stubs(:params).returns(:local => 'Reachability')
+        path = @external_source.send(:pod_spec_path)
+        path.should == fixture('integration/Reachability/Reachability.podspec')
+      end
+
+      it "expands the tilde" do
+        @external_source.stubs(:params).returns(:local => '~/Reachability')
+        Pathname.any_instance.stubs(:exist?).returns(true)
+        path = @external_source.send(:pod_spec_path)
+        path.should == Pathname(ENV['HOME']) + 'Reachability/Reachability.podspec'
+      end
+
+      it "raises if the podspec cannot be found" do
+        @external_source.stubs(:params).returns(:local => temporary_directory)
+        e = lambda { @external_source.send(:pod_spec_path) }.should.raise Informative
+        e.message.should.match /No podspec found/
+      end
+
     end
 
   end

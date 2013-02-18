@@ -9,7 +9,7 @@ module Pod
     #         external source class associated with the option specified in the
     #         hash.
     #
-    def self.from_dependency(dependency)
+    def self.from_dependency(dependency, podfile_path)
       name   = dependency.root_name
       params = dependency.external_source
 
@@ -21,7 +21,7 @@ module Pod
       end
 
       if klass
-        klass.new(name, params)
+        klass.new(name, params, podfile_path)
       else
         msg = "Unknown external source parameters for `#{name}`: `#{params}`"
         raise Informative, msg
@@ -43,11 +43,19 @@ module Pod
       #
       attr_reader :params
 
-      # @param [String] name    @see name
-      # @param [Hash]   params  @see params
+      # @return [String] the path where the podfile is defined to resolve
+      #         relative paths.
       #
-      def initialize(name, params)
-        @name, @params = name, params
+      attr_reader :podfile_path
+
+      # @param [String] name @see name
+      # @param [Hash] params @see params
+      # @param [String] podfile_path @see podfile_path
+      #
+      def initialize(name, params, podfile_path)
+        @name = name
+        @params = params
+        @podfile_path = podfile_path
       end
 
       # @return [Bool] whether an external source source is equal to another
@@ -136,12 +144,12 @@ module Pod
         UI.info("->".green + " Pre-downloading: `#{name}`") do
           target = sandbox.root + name
           target.rmtree if target.exist?
-          downloader = Downloader.for_target(target, @params)
+          downloader = Downloader.for_target(target, params)
           downloader.download
           sandbox.store_podspec(name, target + "#{name}.podspec", true)
           sandbox.store_pre_downloaded_pod(name)
           if downloader.options_specific?
-            source = @params
+            source = params
           else
             source = downloader.checkout_options
           end
@@ -176,10 +184,10 @@ module Pod
       # @see AbstractExternalSource#description
       #
       def description
-        "from `#{@params[:git]}`".tap do |description|
-          description << ", commit `#{@params[:commit]}`" if @params[:commit]
-          description << ", branch `#{@params[:branch]}`" if @params[:branch]
-          description << ", tag `#{@params[:tag]}`" if @params[:tag]
+        "from `#{params[:git]}`".tap do |description|
+          description << ", commit `#{params[:commit]}`" if params[:commit]
+          description << ", branch `#{params[:branch]}`" if params[:branch]
+          description << ", tag `#{params[:tag]}`" if params[:tag]
         end
       end
     end
@@ -210,10 +218,10 @@ module Pod
       # @see AbstractExternalSource#description
       #
       def description
-        "from `#{@params[:svn]}`".tap do |description|
-          description << ", folder `#{@params[:folder]}`" if @params[:folder]
-          description << ", tag `#{@params[:tag]}`" if @params[:tag]
-          description << ", revision `#{@params[:revision]}`" if @params[:revision]
+        "from `#{params[:svn]}`".tap do |description|
+          description << ", folder `#{params[:folder]}`" if params[:folder]
+          description << ", tag `#{params[:tag]}`" if params[:tag]
+          description << ", revision `#{params[:revision]}`" if params[:revision]
         end
       end
     end
@@ -244,8 +252,8 @@ module Pod
       # @see AbstractExternalSource#description
       #
       def description
-        "from `#{@params[:hg]}`".tap do |description|
-          description << ", revision `#{@params[:revision]}`" if @params[:revision]
+        "from `#{params[:hg]}`".tap do |description|
+          description << ", revision `#{params[:revision]}`" if params[:revision]
         end
       end
     end
@@ -260,8 +268,8 @@ module Pod
       # @see AbstractExternalSource#copy_external_source_into_sandbox
       #
       def copy_external_source_into_sandbox(sandbox)
-        UI.info("->".green + " Fetching podspec for `#{name}` from: #{@params[:podspec]}") do
-          path = @params[:podspec]
+        UI.info("->".green + " Fetching podspec for `#{name}` from: #{params[:podspec]}") do
+          path = params[:podspec]
           path = Pathname.new(path).expand_path if path.to_s.start_with?("~")
           require 'open-uri'
           open(path) { |io| sandbox.store_podspec(name, io.read, true) }
@@ -271,7 +279,7 @@ module Pod
       # @see AbstractExternalSource#description
       #
       def description
-        "from `#{@params[:podspec]}`"
+        "from `#{params[:podspec]}`"
       end
     end
 
@@ -288,13 +296,13 @@ module Pod
       #
       def copy_external_source_into_sandbox(sandbox)
         sandbox.store_podspec(name, pod_spec_path, true)
-        sandbox.store_local_path(name, @params[:local])
+        sandbox.store_local_path(name, params[:local])
       end
 
       # @see  AbstractExternalSource#description
       #
       def description
-        "from `#{@params[:local]}`"
+        "from `#{params[:local]}`"
       end
 
       # @see  AbstractExternalSource#specification_from_local
@@ -316,7 +324,7 @@ module Pod
       def specification_from_external(sandbox)
         copy_external_source_into_sandbox(sandbox)
         spec = Specification.from_file(pod_spec_path)
-        spec.source = @params
+        spec.source = params
         spec
       end
 
@@ -329,12 +337,15 @@ module Pod
       # @return [Pathname] the path of the podspec.
       #
       def pod_spec_path
-        path = Pathname.new(@params[:local]).expand_path
-        path += "#{name}.podspec" unless path.to_s.match(/#{name}\.podspec$/)
-        unless path.exist?
-          raise Informative, "No podspec found for `#{name}` in `#{@params[:local]}`"
+        declared_path = params[:local].to_s
+        path_with_ext = File.extname(declared_path) == '.podspec' ? declared_path : "#{declared_path}/#{name}.podspec"
+        path_without_tilde = path_with_ext.gsub('~', ENV['HOME'])
+        absolute_path = Pathname(podfile_path).dirname + path_without_tilde
+
+        unless absolute_path.exist?
+          raise Informative, "No podspec found for `#{name}` in `#{params[:local]}`"
         end
-        path
+        absolute_path
       end
     end
   end

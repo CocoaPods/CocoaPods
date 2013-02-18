@@ -221,7 +221,7 @@ module Pod
     # @return [Set] the set for the dependency.
     #
     def set_from_external_source(dependency)
-      source = ExternalSources.from_dependency(dependency)
+      source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
       if allow_pre_downloads?
         if update_external_specs?
           spec = source.specification_from_external(sandbox)
@@ -236,7 +236,7 @@ module Pod
         end
       end
 
-      set = Specification::Set::External.new(spec)
+      Specification::Set::External.new(spec)
     end
 
     # Ensures that a specification is compatible with the platform of a target.

@@ -232,7 +232,8 @@ module Pod
 
     describe "#set_from_external_source" do
       before do
-        @resolver = Resolver.new(config.sandbox, nil)
+        podfile   = Podfile.new("#{temporary_directory}/Podfile") { }
+        @resolver = Resolver.new(config.sandbox, podfile)
       end
 
       it "it fetches the specification from either the sandbox or from the remote be default" do
