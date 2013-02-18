@@ -1,12 +1,12 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
-  describe Installer::PodSourceInstaller do
+  describe Installer::FileReferencesInstaller do
 
     before do
-      file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
+      @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
       @library = Library.new(nil)
-      @library.file_accessors = [file_accessor]
+      @library.file_accessors = [@file_accessor]
       @project = Project.new(config.sandbox.project_path)
       @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@library], @project)
     end
@@ -54,7 +54,7 @@ module Pod
       it "links the public headers" do
         @installer.install!
         headers_root = config.sandbox.public_headers.root
-        public_header =  headers_root+ 'BananaLib/Banana.h'
+        public_header =  headers_root + 'BananaLib/Banana.h'
         private_header = headers_root + 'BananaLib/BananaPrivate.h'
         public_header.should.exist
         private_header.should.not.exist
@@ -66,17 +66,57 @@ module Pod
 
     describe "Private Helpers" do
 
-      xit "returns the unique file accessors" do
+      it "returns the file accessors" do
         library_1 = Library.new(nil)
         library_1.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
         library_2 = Library.new(nil)
         library_2.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
         installer = Installer::FileReferencesInstaller.new(config.sandbox, [library_1, library_2], @project)
-        installer.send(:file_accessors).count.should == 1
+        roots = installer.send(:file_accessors).map { |fa| fa.path_list.root }
+        roots.should == [fixture('banana-lib'), fixture('banana-lib')]
       end
 
-      xit "handles libraries without pods and hence without file accessors" do
+      it "handles libraries empty libraries without file accessors" do
+        library_1 = Library.new(nil)
+        library_1.file_accessors = []
+        installer = Installer::FileReferencesInstaller.new(config.sandbox, [library_1], @project)
+        roots = installer.send(:file_accessors).should == []
+      end
 
+      it "returns the header mappings" do
+        headers_sandbox = Pathname.new('BananaLib')
+        consumer = @file_accessor.spec_consumer
+        headers = [Pathname.new('BananaLib/Banana.h')]
+        mappings = @installer.send(:header_mappings, headers_sandbox, consumer, headers)
+        mappings.should == {
+          headers_sandbox => [Pathname.new('BananaLib/Banana.h')]
+        }
+      end
+
+      it "takes into account the header dir specified in the spec" do
+        headers_sandbox = Pathname.new('BananaLib')
+        consumer = @file_accessor.spec_consumer
+        headers = [Pathname.new('BananaLib/Banana.h')]
+        consumer.stubs(:header_dir).returns('Sub_dir')
+        mappings = @installer.send(:header_mappings, headers_sandbox, consumer, headers)
+        mappings.should == {
+          (headers_sandbox + 'Sub_dir') => [Pathname.new('BananaLib/Banana.h')]
+        }
+      end
+
+     it "takes into account the header mappings dir specified in the spec" do
+        headers_sandbox = Pathname.new('BananaLib')
+        consumer = @file_accessor.spec_consumer
+        headers = [
+          Pathname.new('BananaLib/sub_dir/dir_1/banana_1.h'),
+          Pathname.new('BananaLib/sub_dir/dir_2/banana_2.h'),
+        ]
+        consumer.stubs(:header_mappings_dir).returns('BananaLib/sub_dir')
+        mappings = @installer.send(:header_mappings, headers_sandbox, consumer, headers)
+        mappings.should == {
+          (headers_sandbox + 'dir_1') => [Pathname.new('BananaLib/sub_dir/dir_1/banana_1.h')],
+          (headers_sandbox + 'dir_2') => [Pathname.new('BananaLib/sub_dir/dir_2/banana_2.h')],
+        }
       end
 
     end

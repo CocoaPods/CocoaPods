@@ -105,11 +105,11 @@ module Pod
             sandbox.public_headers.add_search_path(headers_sandbox)
 
             consumer = file_accessor.spec_consumer
-            header_mappings(headers_sandbox, consumer, file_accessor.headers, file_accessor.path_list.root).each do |namespaced_path, files|
+            header_mappings(headers_sandbox, consumer, file_accessor.headers).each do |namespaced_path, files|
               sandbox.build_headers.add_files(namespaced_path, files)
             end
 
-            header_mappings(headers_sandbox, consumer, file_accessor.public_headers, file_accessor.path_list.root).each do |namespaced_path, files|
+            header_mappings(headers_sandbox, consumer, file_accessor.public_headers).each do |namespaced_path, files|
               sandbox.public_headers.add_files(namespaced_path, files)
             end
           end
@@ -131,7 +131,15 @@ module Pod
 
       # Computes the destination sub-directory in the sandbox
       #
-      # @param  []
+      # @param  [Pathname] headers_sandbox
+      #         The sandbox where the headers links should be stored for this
+      #         Pod.
+      #
+      # @param  [Specification::Consumer] consumer
+      #         The consumer for which the headers need to be linked.
+      #
+      # @param  [Array<Pathname>] headers
+      #         The absolute paths of the headers which need to be mapped.
       #
       # @return [Hash{Pathname => Array<Pathname>}] A hash containing the
       #         headers folders as the keys and the absolute paths of the
@@ -140,7 +148,7 @@ module Pod
       # TODO    This is being overridden in the RestKit 0.9.4 spec and that
       #         override should be fixed.
       #
-      def header_mappings(headers_sandbox, consumer, headers, root)
+      def header_mappings(headers_sandbox, consumer, headers)
         dir = headers_sandbox
         dir = dir + consumer.header_dir if consumer.header_dir
 
@@ -148,7 +156,9 @@ module Pod
         headers.each do |header|
           sub_dir = dir
           if consumer.header_mappings_dir
-            sub_dir = sub_dir + header.relative_path_from(consumer.header_mappings_dir).dirname
+            header_mappings_dir = Pathname.new(consumer.header_mappings_dir)
+            relative_path = header.relative_path_from(header_mappings_dir)
+            sub_dir = sub_dir + relative_path.dirname
           end
           mappings[sub_dir] ||= []
           mappings[sub_dir] << header

@@ -154,40 +154,63 @@ module Pod
 
       #--------------------------------------#
 
-      describe "Specifications details" do
-
-        xit "handles Pods which return different file patterns per platform" do
-
-        end
-
-        xit "handles Pods with multiple subspecs activated" do
-
-        end
-
-      end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe "Private Helpers" do
 
-      xit "returns the clean paths" do
+      it "returns the clean paths" do
         @installer.send(:download_source)
-        @installer.send(:clean_paths).should == []
+        paths = @installer.send(:clean_paths)
+        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '')}
+        paths_without_git = relative_paths.reject { |p| p.include? 'Pods/BananaLib/.git' }
+        paths_without_git.sort.should == [
+          "Pods/BananaLib/BananaLib.podspec",
+          "Pods/BananaLib/libPusher",
+          "Pods/BananaLib/sub-dir",
+          "Pods/BananaLib/sub-dir/sub-dir-2",
+          "Pods/BananaLib/sub-dir/sub-dir-2/somefile.txt"
+        ]
       end
 
-      xit "returns the used files" do
+      it "returns the used files" do
         @installer.send(:download_source)
-        @installer.send(:used_files).should == []
+        paths = @installer.send(:used_files)
+        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '')}
+        relative_paths.sort.should == [
+          "Pods/BananaLib/Classes/Banana.h",
+          "Pods/BananaLib/Classes/Banana.m",
+          "Pods/BananaLib/Classes/BananaLib.pch",
+          "Pods/BananaLib/Classes/BananaPrivate.h",
+          "Pods/BananaLib/LICENSE",
+          "Pods/BananaLib/README",
+          "Pods/BananaLib/Resources/logo-sidebar.png"
+        ]
       end
 
-      xit "returns the header mappings" do
-
-      end
-
-      xit "returns the header mappings including subspecs" do
-
+      it "handles Pods with multiple file accessors" do
+        spec = fixture_spec('banana-lib/BananaLib.podspec')
+        spec.source = { :git => SpecHelper.fixture('banana-lib') }
+        spec.source_files = []
+        spec.ios.source_files = 'Classes/*.h'
+        spec.osx.source_files = 'Classes/*.m'
+        ios_spec = spec.dup
+        osx_spec = spec.dup
+        specs_by_platform = { :ios => [ios_spec], :osx => [osx_spec] }
+        @installer = Installer::PodSourceInstaller.new(config.sandbox, specs_by_platform)
+        @installer.send(:download_source)
+        paths = @installer.send(:used_files)
+        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '')}
+        relative_paths.sort.should == [
+          "Pods/BananaLib/Classes/Banana.h",
+          "Pods/BananaLib/Classes/Banana.m",
+          "Pods/BananaLib/Classes/BananaLib.pch",
+          "Pods/BananaLib/Classes/BananaPrivate.h",
+          "Pods/BananaLib/LICENSE",
+          "Pods/BananaLib/README",
+          "Pods/BananaLib/Resources/logo-sidebar.png"
+        ]
       end
 
     end

@@ -253,8 +253,7 @@ module Pod
         UI.warn "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow
       else
         UI.message "\nBuilding with xcodebuild.\n".yellow do
-          messages      = []
-          output        = Dir.chdir(config.sandbox_root) { `xcodebuild clean build 2>&1` }
+          output = Dir.chdir(config.sandbox_root) { xcodebuild }
           UI.puts output
           parsed_output  = parse_xcodebuild_output(output)
           parsed_output.each do |message|
@@ -276,10 +275,10 @@ module Pod
     #
     def check_file_patterns
       [:source_files, :resources, :preserve_paths].each do |attr_name|
-        attr = Specification::DSL.attributes.values.find{|attr| attr.name == attr_name }
-        # if !attr.empty?(spec) && file_accessor.send(attr_name).empty?
-        #   error "The `#{attr_name}` pattern did not match any file."
-        # end
+        # file_attr = Specification::DSL.attributes.values.find{|attr| attr.name == attr_name }
+        if !file_accessor.spec_consumer.send(attr_name).empty? && file_accessor.send(attr_name).empty?
+          error "The `#{attr_name}` pattern did not match any file."
+        end
       end
 
       unless file_accessor.license || spec.license && ( spec.license[:type] == 'Public Domain' || spec.license[:text] )
@@ -364,5 +363,15 @@ module Pod
         new.gsub!(/^ */,' ')
       end
     end
+
+    # @return [String] Executes xcodebuild in the current working directory and
+    #         returns its output (bot STDOUT and STDERR).
+    #
+    def xcodebuild
+      `xcodebuild clean build 2>&1`
+    end
+
+    #-------------------------------------------------------------------------#
+
   end
 end

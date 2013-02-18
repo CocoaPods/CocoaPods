@@ -279,6 +279,7 @@ module Pod
         ]
         files.compact!
         files.flatten!
+        files.uniq!
         files.map!{ |path| path.to_s }
         files.reject! { |path| path == "" } #TODO
         files

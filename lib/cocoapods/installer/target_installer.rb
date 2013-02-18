@@ -346,7 +346,7 @@ module Pod
       #  For more information, see: http://opensource.apple.com/source/libdispatch/libdispatch-228.18/os/object.h
       #
       # @param  [Specification::Consumer] consumer
-      #         The consumer for the specification for wich the compiler flags
+      #         The consumer for the specification for which the compiler flags
       #         are needed.
       #
       # @return [String] The compiler flags.

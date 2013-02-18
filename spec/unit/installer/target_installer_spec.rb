@@ -48,11 +48,6 @@ module Pod
 
       #--------------------------------------#
 
-      xit "sets the deployment target of the native target" do
-        # Test iOS and OS X
-        # @see https://github.com/CocoaPods/CocoaPods/commit/76b5b7f9c02a4d36425bde745ecd6d7ff289a00d
-      end
-
       it 'adds the target for the static library to the project' do
         @installer.install!
         @project.targets.count.should == 1
@@ -87,17 +82,21 @@ module Pod
         target.build_settings('Release')["VALIDATE_PRODUCT"].should == "YES"
       end
 
-      it "sets IPHONEOS_DEPLOYMENT_TARGET for iOS targets" do
+      it "sets the platform and the deployment target for iOS targets" do
         @installer.install!
         target = @project.targets.first
+        target.platform_name.should == :ios
+        target.deployment_target.should == "6.0"
         target.build_settings('Debug')["IPHONEOS_DEPLOYMENT_TARGET"].should == "6.0"
         target.build_settings('AppStore')["IPHONEOS_DEPLOYMENT_TARGET"].should == "6.0"
       end
 
-      it "sets MACOSX_DEPLOYMENT_TARGET for OS X targets" do
+      it "sets the platform and the deployment target for OS X targets" do
         @library.platform = Platform.new(:osx, '10.8')
         @installer.install!
         target = @project.targets.first
+        target.platform_name.should == :osx
+        target.deployment_target.should == "10.8"
         target.build_settings('Debug')["MACOSX_DEPLOYMENT_TARGET"].should == "10.8"
         target.build_settings('AppStore')["MACOSX_DEPLOYMENT_TARGET"].should == "10.8"
       end

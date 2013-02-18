@@ -60,7 +60,7 @@ module Pod
       # @param  [Pathname] relative_header_path
       #         the path of the header file relative to the sandbox.
       #
-      # @note   This method adds the files are added to the search paths.
+      # @note   This method adds the files to the search paths.
       #
       # @return [Pathname]
       #

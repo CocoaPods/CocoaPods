@@ -160,7 +160,8 @@ module Pod
         globs[attrbute]
       end
 
-      # Matches the given patterns to the file present in the root of the path list.
+      # Matches the given patterns to the file present in the root of the path
+      # list.
       #
       # @param [Array<String, FileList>] patterns
       #         The patterns to expand.

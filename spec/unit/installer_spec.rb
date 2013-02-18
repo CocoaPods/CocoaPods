@@ -56,7 +56,7 @@ module Pod
         @installer.install!
       end
 
-      it "marks all pods as added if there is no lockfile" do
+      xit "marks all pods as added if there is no lockfile" do
         true.should.be.true
         # @installer.pods_added_from_the_lockfile.should == ['JSONKit']
       end

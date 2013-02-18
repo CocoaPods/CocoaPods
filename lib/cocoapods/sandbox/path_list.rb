@@ -48,12 +48,12 @@ module Pod
         end
         root_length  = root.to_s.length+1
         paths  = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
-        paths  = paths.reject { |p| p == "#{root}/." || p == "#{root}/.." }
-        dirs   = paths.select { |path| File.directory?(path) }
-        dirs   = dirs.map { |p| p[root_length..-1] }
-        paths  = paths.map { |p| p[root_length..-1] }
-        @files = paths - dirs
-        @dirs  = dirs.map { |d| d.gsub(/\/\.\.?$/,'') }.uniq
+        absolute_dirs  = paths.select { |path| File.directory?(path) }
+        relative_dirs  = absolute_dirs.map  { |p| p[root_length..-1] }
+        absolute_paths = paths.reject { |p| p == "#{root}/." || p == "#{root}/.." }
+        relative_paths = absolute_paths.map { |p| p[root_length..-1] }
+        @files = relative_paths - relative_dirs
+        @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/,'') }.uniq
       end
 
       #-----------------------------------------------------------------------#
@@ -82,9 +82,8 @@ module Pod
       #
       def relative_glob(patterns, dir_pattern = nil, exclude_patterns = nil)
         return [] if patterns.empty?
-        patterns = [ patterns ] if patterns.is_a? String
 
-        list = patterns.map do |pattern|
+        list = Array(patterns).map do |pattern|
           if pattern.is_a?(String)
             pattern += '/' + dir_pattern if directory?(pattern) && dir_pattern
             expanded_patterns = dir_glob_equivalent_patterns(pattern)
@@ -152,15 +151,18 @@ module Pod
         else
           patterns = [ pattern ]
           values_by_set.each do |set, values|
-            patterns = patterns.map do |pattern|
+            patterns = patterns.map do |old_pattern|
               values.map do |value|
-                pattern.gsub(set, value)
+                old_pattern.gsub(set, value)
               end
             end.flatten
           end
           patterns
         end
       end
-    end # PathList
-  end # LocalPod
-end # Pod
+
+      #-----------------------------------------------------------------------#
+
+    end
+  end
+end

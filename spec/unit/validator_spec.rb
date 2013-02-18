@@ -56,19 +56,17 @@ module Pod
       validator.validated?.should.be.false
     end
 
-    unless skip_xcodebuild?
-      it "uses xcodebuild to generate notes and warnings" do
-        validator = Validator.new(podspec_path)
-        validator.stubs(:check_file_patterns)
-        validator.validate
-        first = validator.results.map(&:to_s).first
-        first.should.include "[xcodebuild]"
-        first.should.include "[OS X - iOS]"
-        validator.result_type.should == :note
-      end
+    it "uses xcodebuild to generate notes and warnings" do
+      validator = Validator.new(podspec_path)
+      validator.stubs(:check_file_patterns)
+      validator.stubs(:xcodebuild).returns("file.m:1:1: warning: direct access to objective-c's isa is deprecated")
+      validator.validate
+      first = validator.results.map(&:to_s).first
+      first.should.include "[xcodebuild]"
+      validator.result_type.should == :note
     end
 
-    xit "checks for file patterns" do
+    it "checks for file patterns" do
       file = write_podspec(stub_podspec(/s\.source_files = 'JSONKit\.\*'/, "s.source_files = 'wrong_paht.*'"))
       validator = Validator.new(file)
       validator.stubs(:build_pod)
