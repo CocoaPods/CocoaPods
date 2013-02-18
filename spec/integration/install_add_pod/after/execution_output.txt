@@ -37,10 +37,10 @@ Generating Pods Project
   - Running pre install hooks
   - Adding source files to Pods project
   - Adding resources to Pods project
+  - Linking headers
   - Installing targets
     - Installing target `Pods` iOS 6.0
       - Adding Build files
-      - Linking headers
       - Generating xcconfig file at `Pods/Pods.xcconfig`
       - Generating target header at `Pods/Pods-header.h`
       - Generating prefix header at `Pods/Pods-prefix.pch`

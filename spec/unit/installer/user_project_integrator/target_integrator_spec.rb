@@ -27,7 +27,7 @@ module Pod
       it 'returns the targets that need to be integrated' do
         pods_library = @sample_project.frameworks_group.new_static_library('Pods')
         @target.frameworks_build_phase.add_file_reference(pods_library)
-        Xcodeproj::Project.any_instance.stubs(:targets).returns([@target])
+        Xcodeproj::Project.any_instance.stubs(:objects_by_uuid).returns(@target.uuid => @target)
         @target_integrator.targets.map(&:name).should.be.empty?
       end
 

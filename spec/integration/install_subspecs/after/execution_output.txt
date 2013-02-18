@@ -26,10 +26,10 @@ Generating Pods Project
   - Running pre install hooks
   - Adding source files to Pods project
   - Adding resources to Pods project
+  - Linking headers
   - Installing targets
     - Installing target `Pods-iOS App` iOS 4.3
       - Adding Build files
-      - Linking headers
       - Generating xcconfig file at `Pods/Pods-iOS App.xcconfig`
       - Generating target header at `Pods/Pods-iOS App-header.h`
       - Generating prefix header at `Pods/Pods-iOS App-prefix.pch`
@@ -39,7 +39,6 @@ Generating Pods Project
       - Generating dummy source file at `Pods/Pods-iOS App-dummy.m`
     - Installing target `Pods-OS X App` OS X 10.6
       - Adding Build files
-      - Linking headers
       - Generating xcconfig file at `Pods/Pods-OS X App.xcconfig`
       - Generating target header at `Pods/Pods-OS X App-header.h`
       - Generating prefix header at `Pods/Pods-OS X App-prefix.pch`
@@ -54,7 +53,7 @@ Generating Pods Project
 
 Integrating client projects
 
-[!] From now on use `SampleApp.xcworkspace'.
+[!] From now on use `SampleApp.xcworkspace`.
 
 Integrating `libPods-iOS App.a` into target `iOS App` of project `SampleApp.xcodeproj`.
 

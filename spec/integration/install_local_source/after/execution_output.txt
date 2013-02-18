@@ -34,6 +34,6 @@ Generating Pods Project
 
 Integrating client projects
 
-[!] From now on use `SampleApp.xcworkspace'.
+[!] From now on use `SampleApp.xcworkspace`.
 
 Integrating `libPods.a` into target `iOS App` of project `SampleApp.xcodeproj`.

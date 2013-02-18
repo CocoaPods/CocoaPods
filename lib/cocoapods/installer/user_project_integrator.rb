@@ -66,9 +66,9 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
-      # @!group Integration steps
-
       private
+
+      # @!group Integration steps
 
       # Creates and saved the workspace containing the Pods project and the
       # user projects, if needed.
@@ -80,19 +80,21 @@ module Pod
       # @return [void]
       #
       def create_workspace
-        projpaths = (user_project_paths.dup.push(sandbox.project_path)).map do |path|
+        all_projects = user_project_paths.sort.push(sandbox.project_path).uniq
+        projpaths = all_projects.map do |path|
           path.relative_path_from(workspace_path.dirname).to_s
-        end.uniq
+        end
 
         if workspace_path.exist?
-          current_workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          if current_workspace.projpaths != projpaths
-            workspace = Xcodeproj::Workspace.new(*projpaths)
+          workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
+          new_projpaths = projpaths - workspace.projpaths
+          unless new_projpaths.empty?
+            workspace.projpaths.concat(new_projpaths)
             workspace.save_as(workspace_path)
           end
 
         else
-          UI.notice "From now on use `#{workspace_path.basename}'."
+          UI.notice "From now on use `#{workspace_path.basename}`."
           workspace = Xcodeproj::Workspace.new(*projpaths)
           workspace.save_as(workspace_path)
         end
@@ -108,8 +110,7 @@ module Pod
       # @return [void]
       #
       def integrate_user_targets
-        libraries.each do |lib|
-          next if lib.target_definition.empty?
+        libraries_to_integrate.each do |lib|
           TargetIntegrator.new(lib).integrate!
         end
       end
@@ -133,9 +134,9 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
-      # @!group Helpers.
+      private
 
-      public
+      # @!group Helpers.
 
       # @return [Pathname] the path where the workspace containing the Pods
       #         project and the user projects should be saved.
@@ -162,6 +163,11 @@ module Pod
         libraries.map do |lib|
           lib.user_project_path
         end.compact.uniq
+      end
+
+
+      def libraries_to_integrate
+        libraries.reject { |lib| lib.target_definition.empty? }
       end
 
       #-----------------------------------------------------------------------#

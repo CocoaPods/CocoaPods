@@ -41,7 +41,14 @@ module Pod
         def targets
           unless @targets
             target_uuids = library.user_target_uuids
-            targets = target_uuids.map { |uuid| user_project.targets.find { |target| target.uuid == uuid } }
+            targets = target_uuids.map do |uuid|
+              target = user_project.objects_by_uuid[uuid]
+              unless target
+                raise Informative, "[Bug] Unable to find the target with " \
+                  "the `#{uuid}` UUID for the `#{library}` library"
+              end
+              target
+            end
             non_integrated = targets.reject do |target|
               target.frameworks_build_phase.files.any? do |build_file|
                 file_ref = build_file.file_ref

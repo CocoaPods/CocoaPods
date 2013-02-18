@@ -35,10 +35,10 @@ Generating Pods Project
     - Podfile
   - Adding source files to Pods project
   - Adding resources to Pods project
+  - Linking headers
   - Installing targets
     - Installing target `Pods` iOS 6.0
       - Adding Build files
-      - Linking headers
       - Generating xcconfig file at `Pods/Pods.xcconfig`
       - Generating target header at `Pods/Pods-header.h`
       - Generating prefix header at `Pods/Pods-prefix.pch`
@@ -54,6 +54,6 @@ Generating Pods Project
 
 Integrating client projects
 
-[!] From now on use `SampleApp.xcworkspace'.
+[!] From now on use `SampleApp.xcworkspace`.
 
 Integrating `libPods.a` into target `SampleApp` of project `SampleApp.xcodeproj`.
