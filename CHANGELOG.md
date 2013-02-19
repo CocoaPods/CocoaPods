@@ -1,3 +1,9 @@
+### Fixes
+
+* [#802](https://github.com/CocoaPods/CocoaPods/issues/802): Ability to add
+`-DNS_BLOCK_ASSERTIONS=1` to `OTHER_CFLAGS` and `OTHER_CPLUSPLUSFLAGS` with
+  `set_dns_block_assertions_flag!` to your Podfile.
+
 ## 0.16.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.1...0.16.2) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.1...0.4.3)
 

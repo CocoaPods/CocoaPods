@@ -79,6 +79,10 @@ describe "Pod::Podfile" do
     Pod::Podfile.new { set_arc_compatibility_flag! }.should.set_arc_compatibility_flag
   end
 
+  it "specifies that DNS_BLOCK_ASSERTIONS flag should be generated" do
+    Pod::Podfile.new { set_dns_block_assertions_flag! }.should.set_dns_block_assertions_flag
+  end
+
   it "stores a block that will be called with the Installer before the target integration" do
     yielded = nil
     Pod::Podfile.new do

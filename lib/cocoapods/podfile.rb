@@ -503,6 +503,10 @@ module Pod
       @set_arc_compatibility_flag = true
     end
 
+    def set_dns_block_assertions_flag!
+      @set_dns_block_assertions_flag = true
+    end
+
     # Not attributes
 
     def podfile?
@@ -526,6 +530,10 @@ module Pod
 
     def set_arc_compatibility_flag?
       @set_arc_compatibility_flag
+    end
+
+    def set_dns_block_assertions_flag?
+      @set_dns_block_assertions_flag
     end
 
     def user_build_configurations
