@@ -74,6 +74,8 @@ module Pod
         xcconfig = Xcodeproj::Config.new({
           'ALWAYS_SEARCH_USER_PATHS' => 'YES', # needed to make EmbedReader build
           'OTHER_LDFLAGS'            => default_ld_flags,
+          'OTHER_CFLAGS'             => default_c_flags,
+          'OTHER_CPLUSPLUSFLAGS'     => default_cplusplus_flags,
           'HEADER_SEARCH_PATHS'      => '${PODS_HEADERS_SEARCH_PATHS}',
           # CocoaPods global keys
           'PODS_ROOT'                         => @target_definition.relative_pods_root,
@@ -129,6 +131,8 @@ module Pod
         @target.build_configurations.each do |config|
           config.base_configuration_reference = xcconfig_file
           config.build_settings['OTHER_LDFLAGS'] = ''
+          config.build_settings['OTHER_CFLAGS'] = ''
+          config.build_settings['OTHER_CPLUSPLUSFLAGS'] = ''
           config.build_settings['GCC_PREFIX_HEADER'] = @target_definition.prefix_header_name
           config.build_settings['PODS_ROOT'] = '${SRCROOT}'
           config.build_settings['PODS_HEADERS_SEARCH_PATHS'] = '${PODS_BUILD_HEADERS_SEARCH_PATHS}'
@@ -171,6 +175,19 @@ module Pod
         flags << '-fobjc-arc' if @podfile.set_arc_compatibility_flag? && self.requires_arc
         flags.join(" ")
       end
+
+      def default_c_flags
+        flags = []
+        flags << '-DNS_BLOCK_ASSERTIONS=1' if @podfile.set_dns_block_assertions_flag?
+        flags.join(" ")
+      end
+
+      def default_cplusplus_flags
+        flags = []
+        flags << '-DNS_BLOCK_ASSERTIONS=1' if @podfile.set_dns_block_assertions_flag?
+        flags.join(" ")
+      end
+
     end
   end
 end

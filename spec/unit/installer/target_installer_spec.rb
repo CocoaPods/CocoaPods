@@ -68,6 +68,13 @@ describe Pod::Installer::TargetInstaller do
     @installer.xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
   end
 
+  it "adds the -DNS_BLOCK_ASSERTIONS=1 to OTHER_CFLAGS if set_dns_block_assertions_flag is set" do
+    @podfile.stubs(:set_dns_block_assertions_flag? => true)
+    do_install!
+    @installer.xcconfig.to_hash['OTHER_CFLAGS'].split(" ").should.include("-DNS_BLOCK_ASSERTIONS=1")
+    @installer.xcconfig.to_hash['OTHER_CPLUSPLUSFLAGS'].split(" ").should.include("-DNS_BLOCK_ASSERTIONS=1")
+  end
+
   it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
     do_install!
     @installer.target.build_configurations.each do |config|
