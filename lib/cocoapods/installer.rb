@@ -84,7 +84,6 @@ module Pod
       resolve_dependencies
       download_dependencies
       generate_pods_project
-
       integrate_user_project if config.integrate_targets?
     end
 

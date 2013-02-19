@@ -32,8 +32,6 @@ Downloading dependencies
 
 Generating Pods project
   - Creating Pods project
-
-[!] Podfile#config is deprecated. The config is accessible from the parameter passed to the hooks
   - Running pre install hooks
     - Podfile
   - Adding source files to Pods project
@@ -60,3 +58,5 @@ Integrating client projects
 [!] From now on use `SampleApp.xcworkspace`.
 
 Integrating `libPods.a` into target `SampleApp` of project `SampleApp.xcodeproj`.
+
+[!] Podfile#config is deprecated. The config is accessible from the parameter passed to the hooks

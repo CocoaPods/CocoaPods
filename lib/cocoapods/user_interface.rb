@@ -13,12 +13,15 @@ module Pod
     @title_level       =  0
     @indentation_level =  2
     @treat_titles_as_messages = false
+    @warnings = []
 
     class << self
 
       include Config::Mixin
 
-      attr_accessor :indentation_level, :title_level
+      attr_accessor :indentation_level
+      attr_accessor :title_level
+      attr_accessor :warnings
 
       # Prints a title taking an optional verbose prefix and
       # a relative indentation valid for the UI action in the passed
@@ -133,8 +136,8 @@ module Pod
         puts("\n[!] #{message}".green)
       end
 
-      # Prints an important warning to the user optionally followed by actions
-      # that the user should take.
+      # Stores important warning to the user optionally followed by actions
+      # that the user should take. To print them use #{print_warnings}
       #
       # @param [String]  message The message to print.
       # @param [Array]   actions The actions that the user should take.
@@ -142,11 +145,23 @@ module Pod
       # return [void]
       #
       def warn(message, actions = [], verbose_only = false)
+        warnings << { :message => message, :actions => actions }
+      end
+
+      # Prints the stored warnings. This method is intended to be called at the
+      # end of the execution of the binary.
+      #
+      # @return [void]
+      #
+      def print_warnings
         return if config.silent? && verbose_only
-        STDERR.puts("\n[!] #{message}".yellow)
-        actions.each do |action|
-          indented = wrap_string(action, "    - ")
-          puts(indented)
+        STDOUT.flush
+        warnings.each do |warning|
+          STDERR.puts("\n[!] #{warning[:message]}".yellow)
+          warning[:actions].each do |action|
+            indented = wrap_string(action, "    - ")
+            puts(indented)
+          end
         end
       end
 

@@ -34,6 +34,7 @@ module Pod
         exit!(0)
       end
       super(argv)
+      UI.print_warnings
     end
 
     def self.report_error(error)
