@@ -188,7 +188,7 @@ module Pod
 
       #--------------------------------------#
 
-      describe "#prepare_sandbox" do
+      describe "#clean_sandbox" do
 
         before do
           @analysis_result = Installer::Analyzer::AnalysisResult.new
@@ -200,13 +200,13 @@ module Pod
         it "cleans the header stores" do
           config.sandbox.build_headers.expects(:implode!)
           config.sandbox.public_headers.expects(:implode!)
-          @installer.send(:prepare_sandbox)
+          @installer.send(:clean_sandbox)
         end
 
         it "deletes the sources of the removed Pods" do
           @analysis_result.sandbox_state.add_name('Deleted-Pod', :deleted)
           config.sandbox.expects(:clean_pod).with('Deleted-Pod')
-          @installer.send(:prepare_sandbox)
+          @installer.send(:clean_sandbox)
         end
 
       end

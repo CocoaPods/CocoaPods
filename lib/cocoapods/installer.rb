@@ -85,11 +85,7 @@ module Pod
       download_dependencies
       generate_pods_project
 
-      if config.integrate_targets?
-        UI.section "Integrating client projects" do
-          integrate_user_project
-        end
-      end
+      integrate_user_project if config.integrate_targets?
     end
 
     def resolve_dependencies
@@ -97,7 +93,7 @@ module Pod
         analyze
         detect_pods_to_install
         prepare_for_legacy_compatibility
-        prepare_sandbox
+        clean_sandbox
       end
     end
 
@@ -109,7 +105,7 @@ module Pod
     end
 
     def generate_pods_project
-      UI.section "Generating pods project" do
+      UI.section "Generating Pods project" do
         prepare_pods_project
         run_pre_install_hooks
         install_file_references
@@ -222,16 +218,15 @@ module Pod
     # @todo   Clean the podspecs of all the pods that aren't unchanged so the
     #         resolution process doesn't get confused by them.
     #
-    def prepare_sandbox
+    def clean_sandbox
       sandbox.build_headers.implode!
       sandbox.public_headers.implode!
 
       unless analysis_result.sandbox_state.deleted.empty?
-        UI.section "Removing deleted dependencies" do
-          analysis_result.sandbox_state.deleted.each do |pod_name|
-            UI.section("Removing #{pod_name}", "-> ".red) do
-              sandbox.clean_pod(pod_name)
-            end
+        title_options = { :verbose_prefix => "-> ".red }
+        analysis_result.sandbox_state.deleted.each do |pod_name|
+          UI.titled_section("Removing #{pod_name}".red, title_options) do
+            sandbox.clean_pod(pod_name)
           end
         end
       end
@@ -263,13 +258,14 @@ module Pod
     #
     def install_pod_sources
       @installed_specs = []
+      title_options = { :verbose_prefix => "-> ".green }
       root_specs.each do |spec|
         if names_of_pods_to_install.include?(spec.name)
-          UI.section("Installing #{spec}".green, "-> ".green) do
+          UI.titled_section("Installing #{spec}".green, title_options) do
             install_source_of_pod(spec.name)
           end
         else
-          UI.section("Using #{spec}", "-> ".green)
+          UI.titled_section("Using #{spec}", title_options)
         end
       end
     end
@@ -386,9 +382,11 @@ module Pod
     #         information in the lockfile.
     #
     def integrate_user_project
-      installation_root = config.installation_root
-      integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, libraries)
-      integrator.integrate!
+      UI.section "Integrating client projects" do
+        installation_root = config.installation_root
+        integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, libraries)
+        integrator.integrate!
+      end
     end
 
     #-------------------------------------------------------------------------#

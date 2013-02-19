@@ -1,6 +1,7 @@
 $ pod install --no-update --no-doc --verbose --no-color
-Resolving dependencies of `Podfile`
+Resolving dependencies
 
+Resolving dependencies of `Podfile`
 Resolving dependencies for target `default' (iOS 4.3)
   - PodTest (from `PodTest-hg-source`)
     -> Pre-downloading: `PodTest`
@@ -11,14 +12,14 @@ Resolving dependencies for target `default' (iOS 4.3)
     - PodTest/subspec_1 (= 1.0)
     - PodTest/subspec_2 (= 1.0)
 
-Comparing resolved specification to the sandbox manifest:
+Comparing resolved specification to the sandbox manifest
   A PodTest
 
 Downloading dependencies
 
 -> Installing PodTest (1.0)
 
-Generating Pods Project
+Generating Pods project
   - Creating Pods project
   - Running pre install hooks
   - Adding source files to Pods project

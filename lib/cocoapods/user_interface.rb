@@ -45,6 +45,27 @@ module Pod
         self.title_level -= 1
       end
 
+      # In verbose mode it shows the sections and the contents.
+      # In normal mode it just prints the title.
+      #
+      # @return [void]
+      #
+      def titled_section(title, options = {})
+        relative_indentation = options[:relative_indentation] || 0
+        verbose_prefix = options[:verbose_prefix] || ''
+        if config.verbose?
+          title(title, verbose_prefix, relative_indentation)
+        else
+          puts title
+        end
+
+        self.indentation_level += relative_indentation
+        self.title_level += 1
+        yield if block_given?
+        self.indentation_level -= relative_indentation
+        self.title_level -= 1
+      end
+
       # A title opposed to a section is always visible
       #
       def title(title, verbose_prefix = '', relative_indentation = 2)

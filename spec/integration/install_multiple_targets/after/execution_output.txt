@@ -1,17 +1,16 @@
 $ pod install --no-update --no-doc --verbose --no-color
-Resolving dependencies of `Podfile`
+Resolving dependencies
 
+Resolving dependencies of `Podfile`
 Resolving dependencies for target `default' (iOS 6.0)
   - Reachability (= 3.1.0)
-
 Resolving dependencies for target `test' (iOS 6.0)
   - JSONKit
-
 Resolving dependencies for target `SampleApp_2' (iOS 6.0)
   - JSONKit
   - Reachability (= 3.1.0)
 
-Comparing resolved specification to the sandbox manifest:
+Comparing resolved specification to the sandbox manifest
   A Reachability
   A JSONKit
 
@@ -52,7 +51,7 @@ Downloading dependencies
    $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
    Switched to a new branch 'activated-pod-commit'
 
-Generating Pods Project
+Generating Pods project
   - Creating Pods project
   - Running pre install hooks
   - Adding source files to Pods project

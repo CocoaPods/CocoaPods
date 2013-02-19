@@ -1,18 +1,17 @@
 $ pod install --no-update --no-doc --verbose --no-color
-Finding Podfile changes:
+Resolving dependencies
+
+Finding Podfile changes
   R JSONKit
   - Reachability
 
 Resolving dependencies of `Podfile`
-
 Resolving dependencies for target `default' (iOS 6.0)
   - Reachability (= 3.1.0)
 
-Comparing resolved specification to the sandbox manifest:
+Comparing resolved specification to the sandbox manifest
   R JSONKit
   - Reachability
-
-Removing deleted dependencies
 
 -> Removing JSONKit
 
@@ -20,7 +19,7 @@ Downloading dependencies
 
 -> Using Reachability (3.1.0)
 
-Generating Pods Project
+Generating Pods project
   - Creating Pods project
   - Running pre install hooks
   - Adding source files to Pods project
