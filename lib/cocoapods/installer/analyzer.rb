@@ -47,12 +47,12 @@ module Pod
         update_repositories_if_needed
         @result = AnalysisResult.new
         @result.podfile_state = generate_podfile_state
+        @locked_dependencies  = generate_version_locking_dependencies
 
-        @result.libraries             = generated_libraries
-        @locked_dependencies = generate_version_locking_dependencies
-        @result.specs_by_target       = resolve_dependencies
-        @result.specifications        = generate_specifications
-        @result.sandbox_state         = generate_sandbox_state
+        @result.libraries       = generated_libraries
+        @result.specs_by_target = resolve_dependencies
+        @result.specifications  = generate_specifications
+        @result.sandbox_state   = generate_sandbox_state
         @result
       end
 
@@ -301,7 +301,7 @@ module Pod
           if sandbox_lockfile
             sandbox_subspecs_names = sandbox_lockfile.pod_names.group_by { |name| Specification.root_name(name) }
             sandbox_names = sandbox_subspecs_names.keys
-            all_names     = (resolved_names + sandbox_names).uniq
+            all_names     = (resolved_names + sandbox_names).uniq.sort
             root_specs    = result.specifications.map(&:root).uniq
 
             is_changed = lambda do |name|
@@ -534,10 +534,10 @@ module Pod
         # @return [void]
         #
         def print
-          added    .each { |pod| UI.message("A".green  + " #{pod}", '', 2) }
-          deleted  .each { |pod| UI.message("R".red    + " #{pod}", '', 2) }
-          changed  .each { |pod| UI.message("M".yellow + " #{pod}", '', 2) }
-          unchanged.each { |pod| UI.message("-"        + " #{pod}", '', 2) }
+          added    .sort.each { |pod| UI.message("A".green  + " #{pod}", '', 2) }
+          deleted  .sort.each { |pod| UI.message("R".red    + " #{pod}", '', 2) }
+          changed  .sort.each { |pod| UI.message("M".yellow + " #{pod}", '', 2) }
+          unchanged.sort.each { |pod| UI.message("-"        + " #{pod}", '', 2) }
         end
 
         # Adds the name of a Pod to the give state.

@@ -1,4 +1,4 @@
-$ pod install --no-update --no-doc --verbose --no-color
+$ pod install --no-update --no-doc --verbose --no-color 2>&1
 Resolving dependencies
 
 Resolving dependencies of `Podfile`

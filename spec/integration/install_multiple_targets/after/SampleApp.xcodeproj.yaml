@@ -54,16 +54,16 @@ File References:
     - CoreData.framework
     - Foundation.framework
   - libPods.a
-  - libPods-test.a
   - libPods-SampleApp_2.a
+  - libPods-test.a
 - Products:
   - SampleApp.app
   - SampleAppTests.octest
   - SampleApp_2.app
   - NonIntegrated.app
 - Pods.xcconfig
-- Pods-test.xcconfig
 - Pods-SampleApp_2.xcconfig
+- Pods-test.xcconfig
 
 
 

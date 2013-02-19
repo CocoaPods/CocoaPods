@@ -1,17 +1,17 @@
-$ pod install --no-update --no-doc --verbose --no-color
+$ pod install --no-update --no-doc --verbose --no-color 2>&1
 Resolving dependencies
 
 Resolving dependencies of `Podfile`
-Resolving dependencies for target `default' (iOS 6.1)
-Resolving dependencies for target `iOS App' (iOS 4.3)
-  - PodTest/subspec_1 (from `PodTest-hg-source`)
+Resolving dependencies for target `OS X App' (OS X 10.6)
+  - PodTest/subspec_2 (from `PodTest-hg-source`)
     -> Pre-downloading: `PodTest`
       > Mercurial download
        $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_subspecs/Pods/PodTest"
        updating to branch default
        5 files updated, 0 files merged, 0 files removed, 0 files unresolved
-Resolving dependencies for target `OS X App' (OS X 10.6)
-  - PodTest/subspec_2 (from `PodTest-hg-source`)
+Resolving dependencies for target `default' (iOS 6.1)
+Resolving dependencies for target `iOS App' (iOS 4.3)
+  - PodTest/subspec_1 (from `PodTest-hg-source`)
 
 Comparing resolved specification to the sandbox manifest
   A PodTest
@@ -27,15 +27,6 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `Pods-iOS App` iOS 4.3
-      - Adding Build files
-      - Generating xcconfig file at `Pods/Pods-iOS App.xcconfig`
-      - Generating target header at `Pods/Pods-iOS App-header.h`
-      - Generating prefix header at `Pods/Pods-iOS App-prefix.pch`
-      - Generating copy resources script at `Pods/Pods-iOS App-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-iOS App-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-iOS App-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-iOS App-dummy.m`
     - Installing target `Pods-OS X App` OS X 10.6
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods-OS X App.xcconfig`
@@ -45,6 +36,15 @@ Generating Pods project
       - Generating acknowledgements at `Pods/Pods-OS X App-acknowledgements.plist`
       - Generating acknowledgements at `Pods/Pods-OS X App-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Pods-OS X App-dummy.m`
+    - Installing target `Pods-iOS App` iOS 4.3
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-iOS App.xcconfig`
+      - Generating target header at `Pods/Pods-iOS App-header.h`
+      - Generating prefix header at `Pods/Pods-iOS App-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-iOS App-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-iOS App-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-iOS App-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-iOS App-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
@@ -54,6 +54,6 @@ Integrating client projects
 
 [!] From now on use `SampleApp.xcworkspace`.
 
-Integrating `libPods-iOS App.a` into target `iOS App` of project `SampleApp.xcodeproj`.
-
 Integrating `libPods-OS X App.a` into target `OS X App` of project `SampleApp.xcodeproj`.
+
+Integrating `libPods-iOS App.a` into target `iOS App` of project `SampleApp.xcodeproj`.

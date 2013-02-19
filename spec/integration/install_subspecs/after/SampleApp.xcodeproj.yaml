@@ -35,13 +35,13 @@ File References:
     - AppKit.framework
     - CoreData.framework
     - Foundation.framework
-  - libPods-iOS App.a
   - libPods-OS X App.a
+  - libPods-iOS App.a
 - Products:
   - iOS App.app
   - OS X App.app
-- Pods-iOS App.xcconfig
 - Pods-OS X App.xcconfig
+- Pods-iOS App.xcconfig
 
 
 

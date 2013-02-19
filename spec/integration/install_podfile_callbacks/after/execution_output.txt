@@ -1,4 +1,4 @@
-$ pod install --no-update --no-doc --verbose --no-color
+$ pod install --no-update --no-doc --verbose --no-color 2>&1
 Resolving dependencies
 
 Resolving dependencies of `Podfile`
@@ -32,6 +32,8 @@ Downloading dependencies
 
 Generating Pods project
   - Creating Pods project
+
+[!] Podfile#config is deprecated. The config is accessible from the parameter passed to the hooks
   - Running pre install hooks
     - Podfile
   - Adding source files to Pods project

@@ -110,7 +110,7 @@ module Pod
       # @return [void]
       #
       def integrate_user_targets
-        libraries_to_integrate.each do |lib|
+        libraries_to_integrate.sort_by(&:name).each do |lib|
           TargetIntegrator.new(lib).integrate!
         end
       end

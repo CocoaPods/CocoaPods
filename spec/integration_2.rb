@@ -90,7 +90,7 @@ end
 def launch_binary(arguments, folder)
   # TODO CP 0.16 doesn't offer the possibility to skip just the installation
   # of the docs.
-  command = "#{POD_BINARY} #{arguments} --verbose --no-color"
+  command = "#{POD_BINARY} #{arguments} --verbose --no-color 2>&1"
   Dir.chdir(TMP_DIR + folder) do
     output = `#{command}`
     it "$ pod #{arguments}" do
@@ -146,9 +146,6 @@ def check_with_folder(folder)
       case expected_path
       when %r[/xcuserdata/], %r[\.pbxproj$]
         # Projects are compared through the more readable yaml representation
-        next
-      when %r[execution_output\.txt$]
-        # skip for now as the Pod might or might not be in the cache TODO
         next
       end
 

@@ -259,7 +259,7 @@ module Pod
     def install_pod_sources
       @installed_specs = []
       title_options = { :verbose_prefix => "-> ".green }
-      root_specs.each do |spec|
+      root_specs.sort_by(&:name).each do |spec|
         if names_of_pods_to_install.include?(spec.name)
           UI.titled_section("Installing #{spec}".green, title_options) do
             install_source_of_pod(spec.name)
@@ -330,7 +330,7 @@ module Pod
     #
     def install_targets
       UI.message"- Installing targets" do
-        libraries.each do |library|
+        libraries.sort_by(&:name).each do |library|
           next if library.target_definition.empty?
           target_installer = TargetInstaller.new(sandbox, library)
           target_installer.install!

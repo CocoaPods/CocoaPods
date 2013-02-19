@@ -1,4 +1,4 @@
-$ pod spec lint --quick --verbose --no-color
+$ pod spec lint --quick --verbose --no-color 2>&1
  -> Reachability -> Reachability
 
 Analyzed 1 podspec.
