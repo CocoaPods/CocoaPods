@@ -169,7 +169,6 @@ module Pod
 
         #--------------------------------------#
 
-        # TODO add a simple source file which uses the compiled lib to check that it really really works
         it "activates required pods and create a working static library xcode project" do
           podfile = Podfile.new do
             platform test_platform
@@ -202,7 +201,6 @@ module Pod
             # No Reachability is required by ASIHTTPRequest on OSX
             lockfile_contents['DEPENDENCIES'].delete_at(1)
             lockfile_contents['PODS'].delete_at(1)
-            # lockfile_contents['PODS'][0] = 'ASIHTTPRequest (1.8.1)'
           end
           lockfile = installer.lockfile.to_hash
           lockfile.delete("SPEC CHECKSUMS")

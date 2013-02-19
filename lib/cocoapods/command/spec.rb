@@ -155,7 +155,7 @@ module Pod
         DESC
 
         self.arguments = '[ NAME ]'
-        
+
         def self.options
           [["--show-all", "Pick from all versions of the given podspec"]].concat(super)
         end
@@ -186,20 +186,20 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
-      
+
       class Edit < Spec
         self.summary = 'Edit a spec file.'
-        
+
         self.description = <<-DESC
           Opens 'NAME.podspec' to be edited.
         DESC
-        
+
         self.arguments = '[ NAME ]'
-        
+
         def self.options
           [["--show-all", "Pick which spec to edit from all avaliable versions of the given podspec"]].concat(super)
         end
-        
+
         def initialize(argv)
           @show_all = argv.flag?('show-all')
           @spec = argv.shift_argument
@@ -211,7 +211,7 @@ module Pod
           super
           help! "A podspec name is required." unless @spec
         end
-        
+
         def run
           filepath = if @show_all
             specs = get_path_of_spec(@spec, @show_all).split(/\n/)
@@ -220,61 +220,62 @@ module Pod
           else
             get_path_of_spec(@spec)
           end
-          
+
           exec_editor(filepath.to_s) if File.exists? filepath
           raise Informative, "#{ filepath } doesn't exist."
         end
-        
-  			# Thank you homebrew
-  			def which(cmd)
-  			  dir = ENV['PATH'].split(':').find { |p| File.executable? File.join(p, cmd) }
-  			  Pathname.new(File.join(dir, cmd)) unless dir.nil?
-  			end
 
-  			def which_editor
-  			  editor = ENV['EDITOR']
-  			  # If an editor wasn't set, try to pick a sane default
-  			  return editor unless editor.nil?
+        # Thank you homebrew
+        def which(cmd)
+          dir = ENV['PATH'].split(':').find { |p| File.executable? File.join(p, cmd) }
+          Pathname.new(File.join(dir, cmd)) unless dir.nil?
+        end
 
-  			  # Find Sublime Text 2
-  			  return 'subl' if which 'subl'
-  			  # Find Textmate
-  			  return 'mate' if which 'mate'
-  			  # Find # BBEdit / TextWrangler
-  			  return 'edit' if which 'edit'
-  			  # Default to vim
-  			  return 'vim' if which 'vim'
+        def which_editor
+          editor = ENV['EDITOR']
+          # If an editor wasn't set, try to pick a sane default
+          return editor unless editor.nil?
 
-  			  raise Informative, "Failed to open editor. Set your 'EDITOR' environment variable."
-  			end
+          # Find Sublime Text 2
+          return 'subl' if which 'subl'
+          # Find Textmate
+          return 'mate' if which 'mate'
+          # Find # BBEdit / TextWrangler
+          return 'edit' if which 'edit'
+          # Default to vim
+          return 'vim' if which 'vim'
 
-  			def exec_editor *args
-  			  return if args.to_s.empty?
-  			  safe_exec(which_editor, *args)
-  			end
+          raise Informative, "Failed to open editor. Set your 'EDITOR' environment variable."
+        end
 
-  			def safe_exec(cmd, *args)
-  			  # This buys us proper argument quoting and evaluation
-  			  # of environment variables in the cmd parameter.
-  			  exec "/bin/sh", "-i", "-c", cmd + ' "$@"', "--", *args
-  			end
+        def exec_editor *args
+          return if args.to_s.empty?
+          safe_exec(which_editor, *args)
+        end
+
+        def safe_exec(cmd, *args)
+          # This buys us proper argument quoting and evaluation
+          # of environment variables in the cmd parameter.
+          exec "/bin/sh", "-i", "-c", cmd + ' "$@"', "--", *args
+        end
       end
-      
+
       #-----------------------------------------------------------------------#
 
-      # TODO some of the following methods can probably move to one of the subclasses.
+      # @todo some of the following methods can probably move to one of the
+      #       subclasses.
 
       private
-      
+
       # @return [Fixnum] the index of the chosen array item
       #
       def choose_from_array(array, message)
         array.each_with_index do |item, index|
           UI.puts "#{ index + 1 }: #{ item }"
         end
-        
+
         print message
-        
+
         index = STDIN.gets.chomp.to_i - 1
         if index < 0 || index > array.count
           raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
@@ -306,14 +307,14 @@ module Pod
       def pathname_from_spec(spec, source)
         Pathname.new("~/.cocoapods/#{ source }/#{ spec.name }/#{ spec.version }/#{ spec.name }.podspec").expand_path
       end
-        
+
       # @return [String] of spec paths one on each line
       #
       def all_paths_from_set(set)
         paths = ""
-          
+
         sources = set.sources
-          
+
         sources.each do |source|
           versions = source.versions(set.name)
 
@@ -322,7 +323,7 @@ module Pod
             paths += "#{ pathname_from_spec(spec, source) }\n"
           end
         end
-          
+
         paths
       end
 
@@ -344,8 +345,6 @@ module Pod
 
         return best_source.specification(set.name, best_version), best_source
       end
-      
-
 
       def podspecs_to_lint
         @podspecs_to_lint ||= begin
@@ -380,11 +379,10 @@ module Pod
       #--------------------------------------#
 
       # Templates and github information retrieval for spec create
-
-      # TODO  it would be nice to have a template class that accepts options and
-      #       uses the default ones if not provided.
-
-      # TODO  The template is outdated.
+      #
+      # @todo It would be nice to have a template class that accepts options
+      #       and uses the default ones if not provided.
+      # @todo The template is outdated.
 
       def default_data_for_template(name)
         data = {}

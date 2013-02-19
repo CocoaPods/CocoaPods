@@ -41,7 +41,7 @@ EOS
             script.puts "install_resource '#{resource}'"
           end
         end
-        # TODO use File api
+        # @todo use File api
         system("chmod +x '#{pathname}'")
       end
     end

@@ -145,9 +145,6 @@ module Pod
       #         headers folders as the keys and the absolute paths of the
       #         header files as the values.
       #
-      # TODO    This is being overridden in the RestKit 0.9.4 spec and that
-      #         override should be fixed.
-      #
       def header_mappings(headers_sandbox, consumer, headers)
         dir = headers_sandbox
         dir = dir + consumer.header_dir if consumer.header_dir
