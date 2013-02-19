@@ -355,7 +355,6 @@ describe "Integration take 2" do
       check "install --no-update --no-doc", "install_spec_callbacks"
     end
 
-
     # TODO: requires CocoaPods 0.17
     #
     # describe "Generates the documentation of Pod during installation" do
@@ -368,11 +367,9 @@ describe "Integration take 2" do
 
   describe "Pod update" do
 
-    # TODO: --no-doc --no-update don't work properly in 0.16
-    #
-    # describe "Updates an existing installation" do
-    #   check "update --no-update --no-doc", "update"
-    # end
+    describe "Updates an existing installation" do
+      check "update --no-update --no-doc", "update"
+    end
 
   end
 
