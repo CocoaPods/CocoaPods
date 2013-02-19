@@ -81,17 +81,35 @@ module Pod
     # @return [void]
     #
     def install!
-      analyze
-      detect_pods_to_install
-      prepare_for_legacy_compatibility
-      prepare_sandbox
+      resolve_dependencies
+      download_dependencies
+      generate_pods_project
 
+      if config.integrate_targets?
+        UI.section "Integrating client projects" do
+          integrate_user_project
+        end
+      end
+    end
+
+    def resolve_dependencies
+      UI.section "Resolving dependencies" do
+        analyze
+        detect_pods_to_install
+        prepare_for_legacy_compatibility
+        prepare_sandbox
+      end
+    end
+
+    def download_dependencies
       UI.section "Downloading dependencies" do
         create_file_accessors
         install_pod_sources
       end
+    end
 
-      UI.section "Generating Pods Project" do
+    def generate_pods_project
+      UI.section "Generating pods project" do
         prepare_pods_project
         run_pre_install_hooks
         install_file_references
@@ -99,12 +117,6 @@ module Pod
         run_post_install_hooks
         write_pod_project
         write_lockfiles
-      end
-
-      if config.integrate_targets?
-        UI.section "Integrating client projects" do
-          integrate_user_project
-        end
       end
     end
 
@@ -117,7 +129,7 @@ module Pod
     # @return [Analyzer] the analyzer which provides the information about what
     #         needs to be installed.
     #
-    attr_reader :analyzer
+    attr_reader :analysis_result
 
     # @return [Pod::Project] the `Pods/Pods.xcodeproj` project.
     #
@@ -140,18 +152,15 @@ module Pod
 
     private
 
-    # TODO: This is recreating the file accessors
-    # TODO: the file accessor should be initializable without a path list
-
     # @!group Installation steps
 
     # @return [void]
     #
     def analyze
-      @analyzer = Analyzer.new(sandbox, podfile, lockfile)
-      @analyzer.update_mode = update_mode
-      @analyzer.analyze
-      @libraries = analyzer.libraries
+      analyzer = Analyzer.new(sandbox, podfile, lockfile)
+      analyzer.update_mode = update_mode
+      @analysis_result = analyzer.analyze
+      @libraries = analyzer.result.libraries
     end
 
     # Computes the list of the Pods that should be installed or reinstalled in
@@ -173,11 +182,11 @@ module Pod
     def detect_pods_to_install
       names = []
 
-      analyzer.specifications.each do |spec|
+      analysis_result.specifications.each do |spec|
         root_name = spec.root.name
 
         if update_mode
-          if spec.version.head? #|| TODO resolver.pods_from_external_sources.include?(root_name)
+          if spec.version.head? # || resolver.pods_from_external_sources.include?(root_name) TODO
             names << root_name
           end
         end
@@ -187,7 +196,7 @@ module Pod
         end
       end
 
-      names += analyzer.sandbox_state.added + analyzer.sandbox_state.changed
+      names += analysis_result.sandbox_state.added + analysis_result.sandbox_state.changed
       names = names.map { |name| Specification.root_name(name) }
       names = names.flatten.uniq
       @names_of_pods_to_install = names
@@ -210,10 +219,6 @@ module Pod
     #
     # @todo   [#247] Clean the headers of only the pods to install.
     #
-    # @todo   [#534] Clean all the Pods folder that are not unchanged
-    #
-    # @todo   Use the local pod implode.
-    #
     # @todo   Clean the podspecs of all the pods that aren't unchanged so the
     #         resolution process doesn't get confused by them.
     #
@@ -221,36 +226,19 @@ module Pod
       sandbox.build_headers.implode!
       sandbox.public_headers.implode!
 
-      # TODO local option
-      unless analyzer.sandbox_state.deleted.empty?
+      unless analysis_result.sandbox_state.deleted.empty?
         UI.section "Removing deleted dependencies" do
-          analyzer.sandbox_state.deleted.each do |pod_name|
+          analysis_result.sandbox_state.deleted.each do |pod_name|
             UI.section("Removing #{pod_name}", "-> ".red) do
-              path = sandbox.root + pod_name
-              path.rmtree if path.exist?
+              sandbox.clean_pod(pod_name)
             end
           end
         end
       end
     end
 
-    # Creates the Pods project from scratch if it doesn't exists.
-    #
-    # @return [void]
-    #
-    # @todo   Clean and modify the project if it exists.
-    #
-    def prepare_pods_project
-      UI.message "- Creating Pods project" do
-        @pods_project = Pod::Project.new(sandbox.project_path)
-        if config.podfile_path.exist?
-          @pods_project.add_podfile(config.podfile_path)
-        end
-        sandbox.project = @pods_project
-      end
-    end
-
-    #
+    # TODO: the file accessor should be initialized by the sandbox as they
+    #       created by the Pod source installer as well.
     #
     def create_file_accessors
       libraries.each do |library|
@@ -275,7 +263,6 @@ module Pod
     #
     def install_pod_sources
       @installed_specs = []
-      root_specs = analyzer.specifications.map { |spec| spec.root }.uniq
       root_specs.each do |spec|
         if names_of_pods_to_install.include?(spec.name)
           UI.section("Installing #{spec}".green, "-> ".green) do
@@ -311,6 +298,22 @@ module Pod
       pod_installer.install_docs = config.install_docs?
       pod_installer.install!
       @installed_specs.concat(specs_by_platform.values.flatten)
+    end
+
+    # Creates the Pods project from scratch if it doesn't exists.
+    #
+    # @return [void]
+    #
+    # @todo   Clean and modify the project if it exists.
+    #
+    def prepare_pods_project
+      UI.message "- Creating Pods project" do
+        @pods_project = Pod::Project.new(sandbox.project_path)
+        if config.podfile_path.exist?
+          @pods_project.add_podfile(config.podfile_path)
+        end
+        sandbox.project = @pods_project
+      end
     end
 
 
@@ -353,12 +356,13 @@ module Pod
 
     # Writes the Podfile and the lock files.
     #
+    # @todo   Pass the checkout options to the Lockfile.
+    #
     # @return [void]
     #
     def write_lockfiles
       # checkout_options = sandbox.checkout_options
-      # TODO pass the options to the Lockfile
-      @lockfile = Lockfile.generate(podfile, analyzer.specifications)
+      @lockfile = Lockfile.generate(podfile, analysis_result.specifications)
 
       UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
         @lockfile.write_to_disk(config.lockfile_path)
@@ -383,13 +387,13 @@ module Pod
     #
     def integrate_user_project
       installation_root = config.installation_root
-      libraries = analyzer.libraries
-      UserProjectIntegrator.new(podfile, sandbox, installation_root, libraries).integrate!
+      integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, libraries)
+      integrator.integrate!
     end
 
     #-------------------------------------------------------------------------#
 
-    public
+    private
 
     # @!group Hooks
 
@@ -400,7 +404,7 @@ module Pod
     def run_pre_install_hooks
       UI.message "- Running pre install hooks" do
         installed_specs.each do |spec|
-          executed = spec.pre_install!(pod_data(spec), library_data(libraries.first)) #todo
+          executed = spec.pre_install!(pod_data(spec), library_data(libraries.first)) #TODO
           UI.message "- #{spec.name}" if executed
         end
 
@@ -429,6 +433,8 @@ module Pod
       end
     end
 
+    #-------------------------------------------------------------------------#
+
     public
 
     # @!group Hooks Data
@@ -447,8 +453,6 @@ module Pod
     end
 
     def pods_data
-      specs = libraries.map(&:specs).flatten
-      root_specs = specs.map { |spec| spec.root }.uniq
       root_specs.map do |spec|
         pod_data(spec)
       end
@@ -462,6 +466,19 @@ module Pod
 
     def library_data(library)
       Hooks::LibraryData.new(library)
+    end
+
+    #-------------------------------------------------------------------------#
+
+    private
+
+    # @!group Private helpers
+
+    # @return [Array<Specification>] All the root specifications of the
+    #         installation.
+    #
+    def root_specs
+      analysis_result.specifications.map { |spec| spec.root }.uniq
     end
 
     #-------------------------------------------------------------------------#

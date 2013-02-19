@@ -49,8 +49,7 @@ module Pod
       #--------------------------------------#
 
       it "computes the state of the Podfile respect to the Lockfile" do
-        @analyzer.analyze
-        state = @analyzer.podfile_state
+        state = @analyzer.analyze.podfile_state
         state.added.should     == ["AFNetworking", "libextobjc"]
         state.changed.should   == ["JSONKit"]
         state.unchanged.should == ["SVPullToRefresh"]
@@ -74,8 +73,7 @@ module Pod
       #--------------------------------------#
 
       it "generates the libraries which represent the target definitions" do
-        @analyzer.analyze
-        libs = @analyzer.libraries
+        libs = @analyzer.analyze.libraries
         libs.map(&:name).should == ['Pods']
         lib = libs.first
         lib.support_files_root.should == config.sandbox.root
@@ -90,8 +88,7 @@ module Pod
 
       it "generates configures the library appropriately if the installation will not integrate" do
         config.integrate_targets = false
-        @analyzer.analyze
-        lib = @analyzer.libraries.first
+        lib = @analyzer.analyze.libraries.first
 
         lib.user_project_path.should == config.installation_root
         lib.user_target_uuids.should == []
@@ -115,8 +112,7 @@ module Pod
       #--------------------------------------#
 
       it "resolves the dependencies" do
-        @analyzer.analyze
-        @analyzer.specifications.map(&:to_s).should == [
+        @analyzer.analyze.specifications.map(&:to_s).should == [
           "AFNetworking (1.0.1)",
           "JSONKit (1.5pre)",
           "SVPullToRefresh (0.4)",
@@ -134,8 +130,7 @@ module Pod
       end
 
       it "adds the specifications to the correspondent libraries in after the resolution" do
-        @analyzer.analyze
-        @analyzer.libraries.first.specs.map(&:to_s).should == [
+        @analyzer.analyze.libraries.first.specs.map(&:to_s).should == [
           "AFNetworking (1.0.1)",
           "JSONKit (1.5pre)",
           "SVPullToRefresh (0.4)",
@@ -169,8 +164,7 @@ module Pod
 
       it "computes the state of the Sandbox respect to the resolved dependencies" do
         @analyzer.stubs(:lockfile).returns(nil)
-        @analyzer.analyze
-        state = @analyzer.sandbox_state
+        state = @analyzer.analyze.sandbox_state
         state.added.sort.should == ["AFNetworking", "JSONKit", "SVPullToRefresh", "libextobjc"]
       end
 

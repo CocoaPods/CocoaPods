@@ -1,7 +1,5 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
-# TODO add tests for multiple targets!
-
 # @return [Lockfile]
 #
 def generate_lockfile
@@ -22,56 +20,409 @@ def generate_podfile(pods = ['JSONKit'])
     pods.each { |name| pod name }
   end
 end
+
+#-----------------------------------------------------------------------------#
+
 module Pod
   describe Installer do
+
+    before do
+      podfile  = generate_podfile
+      lockfile = generate_lockfile
+      config.integrate_targets = false
+      @installer = Installer.new(config.sandbox, podfile, lockfile)
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe "In general" do
+
+      before do
+        @installer.stubs(:resolve_dependencies)
+        @installer.stubs(:download_dependencies)
+        @installer.stubs(:generate_pods_project)
+        @installer.stubs(:integrate_user_project)
+      end
+
+      it "in runs the pre-install hooks before adding the file references" do
+        @installer.unstub(:generate_pods_project)
+        @installer.stubs(:prepare_pods_project)
+        @installer.stubs(:install_targets)
+        @installer.stubs(:run_post_install_hooks)
+        @installer.stubs(:write_pod_project)
+        @installer.stubs(:write_lockfiles)
+        def @installer.run_pre_install_hooks
+          @hook_called = true
+        end
+        def @installer.install_file_references
+          @hook_called.should.be.true
+        end
+        @installer.install!
+      end
+
+      it "in runs the post-install hooks before serializing the Pods project" do
+        @installer.stubs(:prepare_pods_project)
+        @installer.stubs(:run_pre_install_hooks)
+        @installer.stubs(:install_file_references)
+        @installer.stubs(:install_targets)
+        @installer.stubs(:write_lockfiles)
+        @installer.unstub(:generate_pods_project)
+        def @installer.run_post_install_hooks
+          @hook_called = true
+        end
+        def @installer.write_pod_project
+          @hook_called.should.be.true
+        end
+        @installer.install!
+      end
+
+      it "integrates the user targets if the corresponding config is set" do
+        config.integrate_targets = true
+        @installer.expects(:integrate_user_project)
+        @installer.install!
+      end
+
+      it "doesn't integrates the user targets if the corresponding config is not set" do
+        config.integrate_targets = false
+        @installer.expects(:integrate_user_project).never
+        @installer.install!
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe "Dependencies Resolution" do
+
+      describe "#analyze" do
+
+        it "analyzes the Podfile, the Lockfile and the Sandbox" do
+          @installer.send(:analyze)
+          @installer.analysis_result.sandbox_state.added.should == ["JSONKit"]
+        end
+
+        it "stores the libraries created by the analyzer" do
+          @installer.send(:analyze)
+          @installer.libraries.map(&:name).should == ['Pods']
+        end
+
+        it "configures the analizer to use update mode if appropriate" do
+          @installer.update_mode = true
+          Installer::Analyzer.any_instance.expects(:update_mode=).with(true)
+          @installer.send(:analyze)
+          @installer.libraries.map(&:name).should == ['Pods']
+        end
+
+      end
+
+      #--------------------------------------#
+
+      describe "#detect_pods_to_install" do
+
+        before do
+          @analysis_result = Installer::Analyzer::AnalysisResult.new
+          @analysis_result.specifications = []
+          @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new()
+          @installer.stubs(:analysis_result).returns(@analysis_result)
+          Pathname.any_instance.stubs(:exist?).returns(true)
+        end
+
+        it "includes the added Pods" do
+          @analysis_result.sandbox_state.add_name('Added-Pod', :added)
+          @installer.send(:detect_pods_to_install)
+          @installer.names_of_pods_to_install.should == ['Added-Pod']
+        end
+
+        it "includes the changed Pods" do
+          @analysis_result.sandbox_state.add_name('Changed-Pod', :changed)
+          @installer.send(:detect_pods_to_install)
+          @installer.names_of_pods_to_install.should == ['Changed-Pod']
+        end
+
+        it "includes head pods in update mode" do
+          spec = Spec.new do |s|
+            s.name = 'Head-Pod'
+          end
+          spec.version.head = true
+          @analysis_result.specifications = [spec]
+          @installer.update_mode = true
+          @installer.send(:detect_pods_to_install)
+          @installer.names_of_pods_to_install.should == ['Head-Pod']
+        end
+
+        it "doesn't includes head pods if not in update mode" do
+          spec = Spec.new do |s|
+            s.name = 'Head-Pod'
+          end
+          spec.version.head = true
+          @analysis_result.specifications = [spec]
+          @installer.update_mode = false
+          @installer.send(:detect_pods_to_install)
+          @installer.names_of_pods_to_install.should == []
+        end
+
+        xit "includes pods from external sources in update mode" do
+
+        end
+
+        xit "doesn't includes pods from external sources if not in update mode" do
+
+        end
+
+        it "includes pods whose root folder doesn't exists" do
+          Pathname.any_instance.stubs(:exist?).returns(false)
+          spec = Spec.new do |s|
+            s.name = 'Head-Pod'
+          end
+          @analysis_result.specifications = [spec]
+          @installer.update_mode = false
+          @installer.send(:detect_pods_to_install)
+          @installer.names_of_pods_to_install.should == ['Head-Pod']
+        end
+
+        xit "includes pods whose root folder is empty" do
+
+        end
+
+      end
+
+      #--------------------------------------#
+
+      describe "#prepare_sandbox" do
+
+        before do
+          @analysis_result = Installer::Analyzer::AnalysisResult.new
+          @analysis_result.specifications = []
+          @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new()
+          @installer.stubs(:analysis_result).returns(@analysis_result)
+        end
+
+        it "cleans the header stores" do
+          config.sandbox.build_headers.expects(:implode!)
+          config.sandbox.public_headers.expects(:implode!)
+          @installer.send(:prepare_sandbox)
+        end
+
+        it "deletes the sources of the removed Pods" do
+          @analysis_result.sandbox_state.add_name('Deleted-Pod', :deleted)
+          config.sandbox.expects(:clean_pod).with('Deleted-Pod')
+          @installer.send(:prepare_sandbox)
+        end
+
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe "Downloading dependencies" do
+
+      describe "#install_pod_sources" do
+
+        it "installs all the Pods which are marked as needing installation" do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          @installer.stubs(:root_specs).returns([spec])
+          @installer.stubs(:names_of_pods_to_install).returns(['BananaLib'])
+          @installer.expects(:install_source_of_pod).with('BananaLib')
+          @installer.send(:install_pod_sources)
+        end
+
+        it "correctly configures the Pod source installer" do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          library = Library.new(nil)
+          library.specs = [spec]
+          library.platform = :ios
+          @installer.stubs(:libraries).returns([library])
+          @installer.instance_variable_set(:@installed_specs, [])
+          Installer::PodSourceInstaller.any_instance.expects(:install!)
+          @installer.send(:install_source_of_pod, 'BananaLib')
+        end
+
+        it "maintains the list of the installed specs" do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          library = Library.new(nil)
+          library.specs = [spec]
+          @installer.stubs(:libraries).returns([library])
+          @installer.instance_variable_set(:@installed_specs, [])
+          Installer::PodSourceInstaller.any_instance.stubs(:install!)
+          @installer.send(:install_source_of_pod, 'BananaLib')
+          @installer.installed_specs.should == [spec]
+        end
+
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe "Generating pods project" do
+
+      describe "#prepare_pods_project" do
+
+        it "creates the Pods project" do
+          @installer.send(:prepare_pods_project)
+          @installer.pods_project.class.should == Pod::Project
+        end
+
+        it "adds the Podfile to the Pods project" do
+          config.podfile_path.stubs(:exist?).returns(true)
+          @installer.send(:prepare_pods_project)
+          f = @installer.pods_project['Podfile']
+          f.name.should == 'Podfile'
+        end
+      end
+
+      #--------------------------------------#
+
+      describe "#install_file_references" do
+
+        it "installs the file references" do
+          Installer::FileReferencesInstaller.any_instance.expects(:install!)
+          @installer.send(:install_file_references)
+        end
+
+      end
+
+      #--------------------------------------#
+
+      describe "#install_targets" do
+
+        it "install the targets of the Pod project" do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition.target_dependencies << Dependency.new('BananaLib')
+          library = Library.new(target_definition)
+          library.specs = [spec]
+          @installer.stubs(:libraries).returns([library])
+          Installer::TargetInstaller.any_instance.expects(:install!)
+          @installer.send(:install_targets)
+        end
+
+        it "skips empty libraries" do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          library = Library.new(target_definition)
+          library.specs = [spec]
+          @installer.stubs(:libraries).returns([library])
+          Installer::TargetInstaller.any_instance.expects(:install!).never
+          @installer.send(:install_targets)
+        end
+
+      end
+
+      #--------------------------------------#
+
+      describe "#write_pod_project" do
+
+        it "sorts the main group" do
+          @installer.send(:prepare_pods_project)
+          @installer.pods_project.main_group.expects(:sort_by_type!)
+          @installer.send(:write_pod_project)
+        end
+
+        it "sorts the frameworks group" do
+          @installer.send(:prepare_pods_project)
+          @installer.pods_project['Frameworks'].expects(:sort_by_type!)
+          @installer.send(:write_pod_project)
+        end
+
+        it "saves the project to the given path" do
+          @installer.send(:prepare_pods_project)
+          path = temporary_directory + 'Pods/Pods.xcodeproj'
+          @installer.pods_project.expects(:save_as).with(path)
+          @installer.send(:write_pod_project)
+        end
+
+      end
+
+      #--------------------------------------#
+
+      describe "#write_lockfiles" do
+
+        before do
+          @analysis_result = Installer::Analyzer::AnalysisResult.new
+          @analysis_result.specifications = [fixture_spec('banana-lib/BananaLib.podspec')]
+          @installer.stubs(:analysis_result).returns(@analysis_result)
+        end
+
+        it "generates the lockfile" do
+          @installer.send(:write_lockfiles)
+          @installer.lockfile.pod_names.should == ['BananaLib']
+        end
+
+        it "writes the lockfile" do
+          @installer.send(:write_lockfiles)
+          lockfile = Lockfile.from_file(temporary_directory + 'Podfile.lock')
+          lockfile.pod_names.should == ['BananaLib']
+        end
+
+        it "writes the sandbox manifest" do
+          @installer.send(:write_lockfiles)
+          lockfile = Lockfile.from_file(temporary_directory + 'Pods/Manifest.lock')
+          lockfile.pod_names.should == ['BananaLib']
+        end
+
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe "Integrating client projects" do
+
+      it "integrates the client projects" do
+        Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
+        @installer.send(:integrate_user_project)
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe "Hooks" do
+
+      xit "runs the pre install hooks" do
+
+      end
+
+      xit "run_post_install_hooks" do
+
+      end
+
+      xit "creates the installer data hook argument" do
+
+      end
+
+      xit "creates the target installers data hook argument" do
+
+      end
+
+      xit "creates the pods data hook argument" do
+
+      end
+
+      xit "creates the pod data hook argument" do
+
+      end
+
+      xit "creates the library data hook argument" do
+
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+
 
     # before do
     #   @sandbox = temporary_sandbox
     #   config.repos_dir = fixture('spec-repos')
     #   config.sandbox_root = @sandbox.root
     #   FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
+    #   SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
     # end
     #
-
-    # it 'tells each pod to link its headers' do
-    #   @pods[0].expects(:link_headers)
-    #   do_install!
-    # end
-
-    describe "Concerning pre-installation computations" do
-      # @sandbox = temporary_sandbox
-      # config.sandbox_root = temporary_sandbox.root
-      # FileUtils.cp_r(fixture('integration/JSONKit'), @sandbox.root + 'JSONKit')
-
-      # resolver = Resolver.new(podfile, nil, @sandbox)
-      # @installer = Installer.new(resolver)
-      # target_installer = @installer.target_installers.first
-      # target_installer.install
-
-      before do
-        podfile    = generate_podfile
-        lockfile   = generate_lockfile
-        @installer = Installer.new(config.sandbox, podfile, lockfile)
-        SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-        @installer.install!
-      end
-
-      xit "marks all pods as added if there is no lockfile" do
-        true.should.be.true
-        # @installer.pods_added_from_the_lockfile.should == ['JSONKit']
-      end
-
-      #       it "adds the files of the pod to the Pods project only once" do
-      #         @installer.install!
-      #         group = @installer.project.pods.groups.find { |g| g.name == 'Reachability' }
-      #         group.files.map(&:name).sort.should == ["Reachability.h", "Reachability.m"]
-      #         end
-
-      # it 'clears out its headers root when preparing for install' do
-      #   @sandbox.prepare_for_install
-      #   @sandbox.build_headers.root.should.not.exist
-      # end
-    end
 
     # describe "by default" do
     #   before do

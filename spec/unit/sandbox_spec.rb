@@ -36,6 +36,24 @@ module Pod
         File.directory?(temporary_directory + 'Sandbox').should.be.false
       end
 
+      it "cleans any trace of the Pod with the given name" do
+        pod_root = @sandbox.root + 'BananaLib'
+        pod_root.mkpath
+        @sandbox.store_podspec('BananaLib', fixture('banana-lib/BananaLib.podspec'))
+        specification_path = @sandbox.specification_path('BananaLib')
+        @sandbox.clean_pod('BananaLib')
+        pod_root.should.not.exist
+        specification_path.should.not.exist
+      end
+
+      it "doesn't remove the root of local Pods while cleaning" do
+        pod_root = @sandbox.root + 'BananaLib'
+        @sandbox.stubs(:local?).returns(true)
+        pod_root.mkpath
+        @sandbox.clean_pod('BananaLib')
+        pod_root.should.exist
+      end
+
     end
 
     #-------------------------------------------------------------------------#

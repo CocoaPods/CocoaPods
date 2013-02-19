@@ -86,6 +86,19 @@ module Pod
       root.rmtree
     end
 
+    #
+    #
+    #
+    def clean_pod(name)
+      root_name = Specification.root_name(name)
+      unless local?(root_name)
+        path = pod_dir(name)
+        path.rmtree if path.exist?
+      end
+      podspe_path = specification_path(name)
+      podspe_path.rmtree if podspe_path
+    end
+
     # @return [String] a string representation suitable for debugging.
     #
     def inspect
