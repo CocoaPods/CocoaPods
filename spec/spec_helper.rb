@@ -11,6 +11,7 @@ $:.unshift((ROOT + 'spec').to_s)
 
 require 'cocoapods'
 require 'claide'
+require 'awesome_print'
 
 require 'spec_helper/bacon'           # Prettifies the bacon output and adds support for `xit`.
 require 'spec_helper/command'         # Allows to run Pod commands and returns their output.
@@ -88,7 +89,7 @@ def fixture_file_accessor(name, platform = :ios)
   file = SpecHelper::Fixture.fixture(name)
   spec = Pod::Specification.from_file(file)
   path_list = Pod::Sandbox::PathList.new(file.dirname)
-  file_accessor = Pod::Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
+  Pod::Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
 end
 
 # TODO This should not be needed anymore

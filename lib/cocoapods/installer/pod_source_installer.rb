@@ -271,18 +271,13 @@ module Pod
       def used_files
         files = [
           file_accessors.map(&:source_files),
-          file_accessors.map(&:resources).first.values, #TODO
+          file_accessors.map(&:resources).map(&:values).flatten,
           file_accessors.map(&:preserve_paths),
           file_accessors.map(&:prefix_header),
           file_accessors.map(&:readme),
           file_accessors.map(&:license),
         ]
-        files.compact!
-        files.flatten!
-        files.uniq!
-        files.map!{ |path| path.to_s }
-        files.reject! { |path| path == "" } #TODO
-        files
+        files.flatten.map!{ |path| path.to_s }.uniq
       end
 
       #-----------------------------------------------------------------------#

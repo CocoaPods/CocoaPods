@@ -16,6 +16,12 @@ module Pod
     describe "Installation" do
 
       it "adds the files references of the source files the Pods project" do
+        @file_accessor.path_list.read_file_system
+        @file_accessor.path_list.expects(:read_file_system)
+        @installer.install!
+      end
+
+      it "adds the files references of the source files the Pods project" do
         @installer.install!
         group_ref = @installer.pods_project['Pods/BananaLib']
         group_ref.should.be.not.nil

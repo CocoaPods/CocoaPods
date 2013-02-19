@@ -33,9 +33,7 @@ module Pod
       # @return [void]
       #
       def install!
-        file_accessors.each do |fa|
-          fa.path_list.read_file_system
-        end
+        refresh_file_accessors
         add_source_files_references
         add_resources_references
         link_headers
@@ -46,6 +44,19 @@ module Pod
       private
 
       # @!group Installation Steps
+
+      # Reads the file accessors contents from the file system.
+      #
+      # @note   The contents of the file accessors are modified by the clean
+      #         step of the #{PodSourceInstaller} and by the pre install hooks.
+      #
+      # @return [void]
+      #
+      def refresh_file_accessors
+        file_accessors.each do |fa|
+          fa.path_list.read_file_system
+        end
+      end
 
       # Adds the source files of the Pods to the Pods project.
       #
