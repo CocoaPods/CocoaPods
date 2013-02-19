@@ -70,9 +70,10 @@ module Pod
       end
 
       it "returns the resources" do
-        @accessor.resources.should == {
-          :resources => [ @root + "Resources/logo-sidebar.png" ]
-        }
+        @accessor.resources[:resources].sort.should == [
+          @root + "Resources/logo-sidebar.png",
+          @root + "Resources/sub_dir",
+        ]
       end
 
       it "returns the preserve path" do
@@ -113,10 +114,12 @@ module Pod
 
         it "takes into account dir patterns and excluded files" do
           file_patterns = ["Classes/*.{h,m}", "Vendor"]
-          dir_pattern = "*.{h,hpp,hh,m,mm,c,cpp}"
-          exclude_files =  ["Classes/**/osx/**/*", "Resources/**/osx/**/*"]
-          @spec.exclude_files = exclude_files
-          @accessor.expects(:expanded_paths).with(file_patterns, dir_pattern, exclude_files)
+          options = {
+            :exclude_patterns => ["Classes/**/osx/**/*", "Resources/**/osx/**/*"],
+            :dir_pattern => "*.{h,hpp,hh,m,mm,c,cpp}"
+          }
+          @spec.exclude_files = options[:exclude_patterns]
+          @accessor.expects(:expanded_paths).with(file_patterns, options)
           @accessor.send(:paths_for_attribute, :source_files)
         end
 

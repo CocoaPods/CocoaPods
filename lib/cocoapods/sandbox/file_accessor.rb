@@ -85,7 +85,7 @@ module Pod
       def resources
         result = {}
         spec_consumer.resources.each do |destination, patterns|
-          result[destination] = expanded_paths(patterns)
+          result[destination] = expanded_paths(patterns, {:include_dirs => true})
         end
         result
       end
@@ -138,9 +138,11 @@ module Pod
       #
       def paths_for_attribute(attribute)
         file_patterns = spec_consumer.send(attribute)
-        dir_pattern = glob_for_attribute(attribute)
-        exclude_files = spec_consumer.exclude_files
-        expanded_paths(file_patterns, dir_pattern, exclude_files)
+        options = {
+          :exclude_patterns => spec_consumer.exclude_files,
+          :dir_pattern => glob_for_attribute(attribute)
+        }
+        expanded_paths(file_patterns, options)
       end
 
       # Returns the pattern to use to glob a directory for an attribute.
@@ -150,7 +152,7 @@ module Pod
       #
       # @return [String] the glob pattern.
       #
-      # @todo move to the cocoapods-core so it appears in the docs?
+      # @todo   Move to the cocoapods-core so it appears in the docs?
       #
       def glob_for_attribute(attrbute)
         globs = {
@@ -178,14 +180,14 @@ module Pod
       #
       # @todo   Implement case insensitive search
       #
-      def expanded_paths(patterns, dir_pattern = nil, exclude_patterns = nil)
+      def expanded_paths(patterns, options = {})
         return [] if patterns.empty?
 
         file_lists = patterns.select { |p| p.is_a?(FileList) }
         glob_patterns = patterns - file_lists
 
         result = []
-        result << path_list.glob(glob_patterns, dir_pattern, exclude_patterns)
+        result << path_list.glob(glob_patterns, options)
         result << file_lists.map do |file_list|
           file_list.prepend_patterns(path_list.root)
           file_list.glob

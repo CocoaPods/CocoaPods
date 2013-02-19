@@ -22,6 +22,7 @@ module Pod
           Classes/BananaPrivate.h
           README
           Resources/logo-sidebar.png
+          Resources/sub_dir/logo-sidebar.png
           preserve_me.txt
           sub-dir/sub-dir-2/somefile.txt
         ]
@@ -34,7 +35,7 @@ module Pod
         dirs.reject! do |f|
           f.include?('libPusher') || f.include?('.git')
         end
-        dirs.sort.should == %w| Classes Resources sub-dir sub-dir/sub-dir-2 |
+        dirs.sort.should == %w| Classes Resources Resources/sub_dir sub-dir sub-dir/sub-dir-2 |
       end
 
     end
@@ -42,41 +43,12 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe "Globbing" do
-
-
       it "can glob the root for a given pattern" do
         paths = @path_list.relative_glob('Classes/*.{h,m}').map(&:to_s)
         paths.sort.should == %w[
           Classes/Banana.h
           Classes/Banana.m
           Classes/BananaPrivate.h
-        ]
-      end
-
-      it "supports the `**` glob pattern" do
-        paths = @path_list.relative_glob('Classes/**/*.{h,m}').map(&:to_s)
-        paths.sort.should == %w[
-          Classes/Banana.h
-          Classes/Banana.m
-          Classes/BananaPrivate.h
-        ]
-      end
-
-      it "supports an optional pattern for globbing directories" do
-        paths = @path_list.relative_glob('Classes', '*.{h,m}').map(&:to_s)
-        paths.sort.should == %w[
-          Classes/Banana.h
-          Classes/Banana.m
-          Classes/BananaPrivate.h
-        ]
-      end
-
-      it "supports an optional list of patterns to exclude" do
-        exclude_patterns = ['**/*.m', '**/*Private*.*']
-        paths = @path_list.relative_glob('Classes/*', nil, exclude_patterns).map(&:to_s)
-        paths.sort.should == %w[
-          Classes/Banana.h
-          Classes/BananaLib.pch
         ]
       end
 
@@ -89,6 +61,42 @@ module Pod
         paths = @path_list.relative_glob('Classes/*.{h,m}')
         paths.any? { |p| p.absolute? }.should == false
       end
+
+      it "supports the `**` glob pattern" do
+        paths = @path_list.relative_glob('Classes/**/*.{h,m}').map(&:to_s)
+        paths.sort.should == %w[
+          Classes/Banana.h
+          Classes/Banana.m
+          Classes/BananaPrivate.h
+        ]
+      end
+
+      it "supports an optional pattern for globbing directories" do
+        paths = @path_list.relative_glob('Classes', { :dir_pattern => '*.{h,m}'} ).map(&:to_s)
+        paths.sort.should == %w[
+          Classes/Banana.h
+          Classes/Banana.m
+          Classes/BananaPrivate.h
+        ]
+      end
+
+      it "supports an optional list of patterns to exclude" do
+        exclude_patterns = ['**/*.m', '**/*Private*.*']
+        paths = @path_list.relative_glob('Classes/*', { :exclude_patterns => exclude_patterns }).map(&:to_s)
+        paths.sort.should == %w[
+          Classes/Banana.h
+          Classes/BananaLib.pch
+        ]
+      end
+
+      it "can optionally include the directories in the results" do
+        paths = @path_list.relative_glob('Resources/*', { :include_dirs => true }).map(&:to_s)
+        paths.sort.should == %w[
+          Resources/logo-sidebar.png
+          Resources/sub_dir
+        ]
+      end
+
     end
 
     #-------------------------------------------------------------------------#

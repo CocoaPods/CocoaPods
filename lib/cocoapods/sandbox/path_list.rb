@@ -65,8 +65,8 @@ module Pod
       # @return [Array<Pathname>] Similar to {glob} but returns the absolute
       #         paths.
       #
-      def glob(patterns, dir_pattern = nil, exclude_patterns = nil)
-        relative_glob(patterns, dir_pattern, exclude_patterns).map {|p| root + p }
+      def glob(patterns, options = {})
+        relative_glob(patterns, options).map {|p| root + p }
       end
 
       # @return [Array<Pathname>] The list of relative paths that are case
@@ -80,20 +80,30 @@ module Pod
       #         An optional pattern to append to a pattern, if it is the path
       #         to a directory.
       #
-      def relative_glob(patterns, dir_pattern = nil, exclude_patterns = nil)
+      def relative_glob(patterns, options = {})
         return [] if patterns.empty?
+
+        dir_pattern = options[:dir_pattern]
+        exclude_patterns = options[:exclude_patterns]
+        include_dirs = options[:include_dirs]
+
+        if include_dirs
+          full_list = files + dirs
+        else
+          full_list = files
+        end
 
         list = Array(patterns).map do |pattern|
           if pattern.is_a?(String)
             pattern += '/' + dir_pattern if directory?(pattern) && dir_pattern
             expanded_patterns = dir_glob_equivalent_patterns(pattern)
-            files.select do |path|
+            full_list.select do |path|
               expanded_patterns.any? do |p|
                 File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
               end
             end
           else
-            files.select { |path| path.match(pattern) }
+            full_list.select { |path| path.match(pattern) }
           end
         end.flatten
 
