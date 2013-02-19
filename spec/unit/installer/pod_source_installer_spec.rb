@@ -213,6 +213,17 @@ module Pod
         ]
       end
 
+      it "compacts the used files as nil would be converted to the empty string" do
+        Sandbox::FileAccessor.any_instance.stubs(:source_files)
+        Sandbox::FileAccessor.any_instance.stubs(:resources).returns({})
+        Sandbox::FileAccessor.any_instance.stubs(:preserve_paths)
+        Sandbox::FileAccessor.any_instance.stubs(:prefix_header)
+        Sandbox::FileAccessor.any_instance.stubs(:readme)
+        Sandbox::FileAccessor.any_instance.stubs(:license)
+        paths = @installer.send(:used_files)
+        paths.should == []
+      end
+
     end
 
     #-------------------------------------------------------------------------#

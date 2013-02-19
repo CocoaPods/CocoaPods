@@ -269,6 +269,7 @@ module Pod
       #         specifications (according to their platform) of this Pod.
       #
       def used_files
+
         files = [
           file_accessors.map(&:source_files),
           file_accessors.map(&:resources).map(&:values).flatten,
@@ -277,7 +278,8 @@ module Pod
           file_accessors.map(&:readme),
           file_accessors.map(&:license),
         ]
-        files.flatten.map!{ |path| path.to_s }.uniq
+
+        files.flatten.compact.map{ |path| path.to_s }.uniq
       end
 
       #-----------------------------------------------------------------------#
