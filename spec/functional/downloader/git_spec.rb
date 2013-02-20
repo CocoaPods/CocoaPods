@@ -8,7 +8,7 @@ module Pod
       @pod = LocalPod.new(fixture_spec('banana-lib/BananaLib.podspec'), temporary_sandbox, Platform.ios)
     end
 
-    it "check's out a specific commit" do
+    it "checks out a specific commit" do
       @pod.top_specification.stubs(:source).returns(
         :git => fixture('banana-lib'), :commit => 'fd56054'
       )
@@ -18,7 +18,7 @@ module Pod
       (@pod.root + 'README').read.strip.should == 'first commit'
     end
 
-    it "check's out a specific branch" do
+    it "checks out a specific branch" do
       @pod.top_specification.stubs(:source).returns(
         :git => fixture('banana-lib'), :branch => 'topicbranch'
       )
@@ -28,7 +28,7 @@ module Pod
       (@pod.root + 'README').read.strip.should == 'topicbranch'
     end
 
-    it "check's out a specific tag" do
+    it "checks out a specific tag" do
       @pod.top_specification.stubs(:source).returns(
         :git => fixture('banana-lib'), :tag => 'v1.0'
       )
