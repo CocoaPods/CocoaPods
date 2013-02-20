@@ -1,3 +1,35 @@
+## 0.16.3
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.2...0.16.3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
+
+###### Bug fixes
+
+- Only flatten tarballs, **not** zipballs, from HTTP sources. A zipball can
+  contain single directories in the root that should be preserved, for instance
+  a framework bundle. This reverts part of the change in 0.16.1.
+  **NOTE** This will break some podspecs that were changed after 0.16.1.
+  [#783](https://github.com/CocoaPods/CocoaPods/pull/783)
+  [#727](https://github.com/CocoaPods/CocoaPods/issues/727)
+- Never consider aggregate targets in the user’s project for integration.
+  [#729](https://github.com/CocoaPods/CocoaPods/issues/729)
+  [#784](https://github.com/CocoaPods/CocoaPods/issues/784)
+- Support comments on all build phases, groups and targets in Xcode projects.
+  [#51](https://github.com/CocoaPods/Xcodeproj/pull/51)
+- Ensure default Xcode project values are copied before being used.
+  [b43087c](https://github.com/CocoaPods/Xcodeproj/commit/b43087cb342d8d44b491e702faddf54a222b23c3)
+- Block assertions in Release builds.
+  [#53](https://github.com/CocoaPods/Xcodeproj/pull/53)
+  [#803](https://github.com/CocoaPods/CocoaPods/pull/803)
+  [#802](https://github.com/CocoaPods/CocoaPods/issues/802)
+
+
+###### Enhancements
+
+- Compile Core Data model files.
+  [#795](https://github.com/CocoaPods/CocoaPods/pull/795)
+- Add `Xcodeproj::Differ`, which shows differences between Xcode projects.
+  [308941e](https://github.com/CocoaPods/Xcodeproj/commit/308941eeaa3bca817742c774fd584cc5ab1c8f84)
+
+
 ## 0.16.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.1...0.16.2) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.1...0.4.3)
 
