@@ -7,7 +7,7 @@ module Pod
     end
 
     describe "for Mercurial" do
-      it "check's out a specific revision" do
+      it "checks out a specific revision" do
         @pod.top_specification.stubs(:source).returns(
           :hg => fixture('mercurial-repo'), :revision => '46198bb3af96'
         )
@@ -27,7 +27,7 @@ module Pod
 
     describe "for Subversion" do
 
-      it "check's out a specific revision" do
+      it "checks out a specific revision" do
         @pod.top_specification.stubs(:source).returns(
           :svn => "file://#{fixture('subversion-repo')}", :revision => '1'
         )
@@ -36,7 +36,7 @@ module Pod
         (@pod.root + 'README').read.strip.should == 'first commit'
       end
 
-      it "check's out a specific tag" do
+      it "checks out a specific tag" do
         @pod.top_specification.stubs(:source).returns(
           :svn => "file://#{fixture('subversion-repo')}", :tag => 'tag-1'
         )
@@ -45,7 +45,7 @@ module Pod
         (@pod.root + 'README').read.strip.should == 'tag 1'
       end
 
-      it "check's out the head version" do
+      it "checks out the head version" do
         @pod.top_specification.stubs(:source).returns(
           :svn => "file://#{fixture('subversion-repo')}", :revision => '1'
         )
