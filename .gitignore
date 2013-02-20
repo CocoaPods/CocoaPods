@@ -1,24 +1,29 @@
+# General
 *.swp
 *.swo
 *.rbo
 *.gem
 .DS_Store
 .rbenv-version
+.rbx/
 xcuserdata
 project.xcworkspace
 DerivedData
+/concatenated.*
+
+# Yardoc
+.yardoc
+/doc
+
+# Specs
 tmp
+spec/fixtures/banana-lib
+spec/fixtures/chameleon
+spec/fixtures/integration/Headers/
+spec/fixtures/vcr
+
+# Examples
 examples/Podfile
 examples/Pods
 examples/**/Pods
 examples/RelativePathProject/RelativePathProject/RelativePathProject.xcodeproj
-spec/fixtures/banana-lib
-spec/fixtures/chameleon
-spec/fixtures/integration/Headers/
-/concatenated.*
-spec/fixtures/mercurial-repo/.hg/*cache
-.hg
-spec/fixtures/vcr
-.yardoc
-/doc
-.rbx/

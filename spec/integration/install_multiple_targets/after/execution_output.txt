@@ -1,0 +1,66 @@
+$ pod install --no-update --no-doc --verbose --no-color
+Resolving dependencies of `./Podfile'
+
+Resolving dependencies for target `default' (iOS 6.0)
+  - Reachability (= 3.1.0)
+
+Resolving dependencies for target `test' (iOS 6.0)
+  - JSONKit
+
+Resolving dependencies for target `SampleApp_2' (iOS 6.0)
+  - JSONKit
+  - Reachability (= 3.1.0)
+
+Downloading dependencies
+
+-> Installing JSONKit (1.5pre)
+  $ /usr/bin/git config core.bare
+  true
+ > Cloning git repo
+   $ /usr/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+   0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+ > Cloning to Pods folder
+    $ /usr/bin/git clone "CACHES_DIR/Git/de3e1c97c03ac13b29e7533beea2d2131589900f" "ROOT/tmp/install_multiple_targets/Pods/JSONKit"
+    Cloning into 'ROOT/tmp/install_multiple_targets/Pods/JSONKit'...
+    done.
+   $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+
+-> Installing Reachability (3.1.0)
+  $ /usr/bin/git config core.bare
+  true
+ > Cloning git repo
+   $ /usr/bin/git rev-list --max-count=1 v3.1.0
+   f7176f4798d068d233dca5223ae4bd9c8059e830
+   $ /usr/bin/git init
+   Initialized empty Git repository in ROOT/tmp/install_multiple_targets/Pods/Reachability/.git/
+   $ /usr/bin/git remote add origin 'CACHES_DIR/Git/48f11286750afa2e2eb80564e288f42eed7cbab6'
+   $ /usr/bin/git fetch origin tags/v3.1.0
+   $ /usr/bin/git reset --hard FETCH_HEAD
+   HEAD is now at f7176f4 updated podspec
+   $ /usr/bin/git checkout -b activated-pod-commit
+
+Generating support files
+  - Running pre install hooks
+  - Generating project
+  - Installing targets
+    - Generating xcconfig file at `./Pods/Pods.xcconfig'
+    - Generating prefix header at `./Pods/Pods-prefix.pch'
+    - Generating copy resources script at `./Pods/Pods-resources.sh'
+    - Generating xcconfig file at `./Pods/Pods-test.xcconfig'
+    - Generating prefix header at `./Pods/Pods-test-prefix.pch'
+    - Generating copy resources script at `./Pods/Pods-test-resources.sh'
+    - Generating xcconfig file at `./Pods/Pods-SampleApp_2.xcconfig'
+    - Generating prefix header at `./Pods/Pods-SampleApp_2-prefix.pch'
+    - Generating copy resources script at `./Pods/Pods-SampleApp_2-resources.sh'
+  - Running post install hooks
+  - Writing Xcode project file to `./Pods/Pods.xcodeproj'
+  - Writing lockfile in `./Podfile.lock'
+
+[!] From now on use `SampleApp.xcworkspace'.
+
+Integrating `libPods.a' into target `SampleApp' of Xcode project `./SampleApp.xcodeproj'.
+
+Integrating `libPods-test.a' into target `SampleAppTests' of Xcode project `./SampleApp.xcodeproj'.
+
+Integrating `libPods-SampleApp_2.a' into target `SampleAppTests' of Xcode project `./SampleApp.xcodeproj'.
+

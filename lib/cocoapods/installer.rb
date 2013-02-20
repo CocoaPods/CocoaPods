@@ -75,12 +75,13 @@ module Pod
 
     #TODO: move to generator ?
     def generate_docs(pod)
-      doc_generator = Generator::Documentation.new(pod)
-      if ( config.generate_docs? && !doc_generator.already_installed? )
+      return unless config.generate_docs?
+        doc_generator = Generator::Documentation.new(pod)
+      if doc_generator.already_installed?
+        UI.section " > Using existing documentation"
+      else
         UI.section " > Installing documentation"
         doc_generator.generate(config.doc_install?)
-      else
-        UI.section " > Using existing documentation"
       end
     end
 

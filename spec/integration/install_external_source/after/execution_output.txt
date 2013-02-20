@@ -1,0 +1,32 @@
+$ pod install --no-update --no-doc --verbose --no-color
+Resolving dependencies of `./Podfile'
+
+Resolving dependencies for target `default' (iOS 4.3)
+  - PodTest (from `PodTest-hg-source')
+    -> Pre-downloading: 'PodTest'
+      > Cloning mercurial repo
+         $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_external_source/Pods/PodTest"
+         updating to branch default
+         5 files updated, 0 files merged, 0 files removed, 0 files unresolved
+    - PodTest/subspec_1 (= 1.0)
+    - PodTest/subspec_2 (= 1.0)
+
+Downloading dependencies
+
+-> Installing PodTest (1.0)
+
+Generating support files
+  - Running pre install hooks
+  - Generating project
+  - Installing targets
+    - Generating xcconfig file at `./Pods/Pods.xcconfig'
+    - Generating prefix header at `./Pods/Pods-prefix.pch'
+    - Generating copy resources script at `./Pods/Pods-resources.sh'
+  - Running post install hooks
+  - Writing Xcode project file to `./Pods/Pods.xcodeproj'
+  - Writing lockfile in `./Podfile.lock'
+
+[!] From now on use `SampleApp.xcworkspace'.
+
+Integrating `libPods.a' into target `iOS App' of Xcode project `./SampleApp.xcodeproj'.
+

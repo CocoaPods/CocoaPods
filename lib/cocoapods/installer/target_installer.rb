@@ -163,7 +163,7 @@ module Pod
       private
 
       def quoted(strings)
-        strings.map { |s| "\"#{s}\"" }
+        strings.sort.map { |s| "\"#{s}\"" }
       end
 
       def default_ld_flags

@@ -1,0 +1,38 @@
+$ pod install --no-update --no-doc --verbose --no-color
+Resolving dependencies of `./Podfile'
+
+Finding added, modified or removed dependencies:
+  A JSONKit
+  - Reachability
+
+Resolving dependencies for target `default' (iOS 6.0)
+  - Reachability (= 3.1.0)
+  - JSONKit (= 1.5pre)
+
+Downloading dependencies
+
+-> Installing JSONKit (1.5pre)
+  $ /usr/bin/git config core.bare
+  true
+ > Cloning git repo
+   $ /usr/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+   0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+ > Cloning to Pods folder
+    $ /usr/bin/git clone "CACHES_DIR/Git/de3e1c97c03ac13b29e7533beea2d2131589900f" "ROOT/tmp/install_add_pod/Pods/JSONKit"
+    Cloning into 'ROOT/tmp/install_add_pod/Pods/JSONKit'...
+    done.
+   $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+
+-> Using Reachability (3.1.0)
+
+Generating support files
+  - Running pre install hooks
+  - Generating project
+  - Installing targets
+    - Generating xcconfig file at `./Pods/Pods.xcconfig'
+    - Generating prefix header at `./Pods/Pods-prefix.pch'
+    - Generating copy resources script at `./Pods/Pods-resources.sh'
+  - Running post install hooks
+  - Writing Xcode project file to `./Pods/Pods.xcodeproj'
+  - Writing lockfile in `./Podfile.lock'
+
