@@ -284,22 +284,33 @@ module Pod
         end
       end
 
+      # @param  [String] spec
+      #         The name of the specification.
+      #
+      # @param  [Bool] show_all
+      #         Whether the paths for all the versions should be returned or
+      #         only the one for the last version.
+      #
       # @return [Pathname] the absolute path or paths of the given podspec
       #
       def get_path_of_spec(spec, show_all = false)
-        pods = SourcesManager.search_by_name(spec)
+        sets = SourcesManager.search_by_name(spec)
 
-        unless pods.count == 1
-          names = pods.collect(&:name) * ', '
+        if sets.count == 1
+          set = sets.first
+        elsif sets.map(&:name).include?(spec)
+          set = sets.find { |s| s.name == spec }
+        else
+          names = sets.collect(&:name) * ', '
           raise Informative, "More than one spec found for '#{ spec }':\n#{ names }"
         end
 
         unless show_all
-          best_spec, spec_source = spec_and_source_from_set(pods.first)
+          best_spec, spec_source = spec_and_source_from_set(set)
           return pathname_from_spec(best_spec, spec_source)
         end
 
-        return all_paths_from_set(pods.first)
+        return all_paths_from_set(set)
       end
 
       # @return [Pathname] the absolute path of the given spec and source
