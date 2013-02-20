@@ -89,7 +89,15 @@ module Pod
       #
       #
       def copy_resources_script_for(pods)
-        @copy_resources_script ||= Generator::CopyResourcesScript.new(pods.map { |p| p.relative_resource_files }.flatten)
+        resources_and_preserved_paths = []
+        pods.each do |pod|
+          resources_and_preserved_paths << {
+            :resources       => pod.relative_resource_files, 
+            :preserved_paths => pod.relative_resource_directories
+          }
+        end
+
+        @copy_resources_script ||= Generator::CopyResourcesScript.new(resources_and_preserved_paths)
       end
 
       def bridge_support_generator_for(pods, sandbox)
