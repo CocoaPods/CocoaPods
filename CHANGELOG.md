@@ -3,22 +3,6 @@
 • [Core](https://github.com/CocoaPods/Core/master)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0...master)
 
-###### TODO
-
-- LocalPod should return a has for the resources.
-- FileList is not working.
-- Bad bug with Specification default values being corroded exponentially in subsequent calls.
-- Drop script for resources.?
-- Add support for `prefix_header_file` in subspecs
-- Add support for `prefix_header_contents` in subspecs
-- Add Rake FileList warning.
-- Release: Enable CocoaPods Core-warnings
-- Subspecs now do not inherit the files patterns from the parent spec.
-- The workspace is written only if needed greatly reducing the occasions in
-  which Xcode asks to revert.
-- Specification hooks are only called when the specification is installed.
-- The Lockfile is sorted reducing the SCM noise.
-
 ###### Specification DSL
 
 - [__Breaking__] Deprecated `header_mappings` hook.
@@ -36,6 +20,11 @@
 
 ###### Enhancements
 
+- Subspecs now do not inherit the files patterns from the parent spec.
+- The workspace is written only if needed greatly reducing the occasions in
+  which Xcode asks to revert.
+- Specification hooks are only called when the specification is installed.
+- The Lockfile is sorted reducing the SCM noise.
 - Simplified installation: no specific version of ruby gems is required anymore.
 - Released preview [documentation](docs.cocoapods.org).
 - CocoaPods now has support for working in teams and not committing the Pods folder.
@@ -47,6 +36,7 @@
 - The `--no-clean` option of the `pod spec lint` command now displays the Pods project for inspection.
 - It is now possible to specify default values for the configuration in `~/.cocoapods/config.yaml` ([example]()).
 - CocoaPods now checks the checksums of the installed specifications and reinstalls them if needed.
+- Added new command `pod ipc` to provide support for inter process communication.
 
 ###### Bug fixes
 
