@@ -231,6 +231,24 @@ module Pod
       result
     end
 
+    # @return [Hash<Pathname>] The paths of the resource preservations based on the 
+    # current pod's file structure
+    #
+    def relative_resource_directories
+      directories = { }
+
+      specifications.each do |spec|
+        if spec.preserved_resource_directories
+          spec.preserved_resource_directories.each do |key, value| 
+            relative_path = expanded_paths(key).first
+
+            directories[relativize_from_sandbox(relative_path)] = value if relative_path
+          end
+        end
+      end
+
+      directories
+    end
 
     # Finds the source files that every activated {Specification} requires.
     #

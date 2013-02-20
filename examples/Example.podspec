@@ -85,6 +85,14 @@ Pod::Spec.new do |s|
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
 
+  # A list of resource directories to preserve in the Pod.
+  # This can be a single string directory, an array of string directories,
+  # or a hash of absolute file location keys pointing to relative location
+  # in the pod values 
+  #
+  # s.preserved_resource_directories = "assets", "images"
+  # s.preserved_resource_directories = { "application/ios/html/images" => "images" }
+
   # A list of paths to preserve after installing the Pod.
   # CocoaPods cleans by default any file that is not used.
   # Please don't include documentation, example, and test files.
