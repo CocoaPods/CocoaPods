@@ -142,7 +142,7 @@ describe "Pod::Podfile" do
   end
 
   describe "concerning targets (dependency groups)" do
-    it "returns wether or not a target has any dependencies" do
+    it "returns whether or not a target has any dependencies" do
       Pod::Podfile.new do
       end.target_definitions[:default].should.be.empty
       Pod::Podfile.new do
@@ -291,7 +291,7 @@ describe "Pod::Podfile" do
       @podfile.target_definitions[:nested_osx_target].should.not.be.exclusive
     end
 
-    it "returns the specified configurations and wether it should be based on a debug or a release build" do
+    it "returns the specified configurations and whether it should be based on a debug or a release build" do
       Pod::Podfile::UserProject.any_instance.stubs(:project)
       all = { 'Release' => :release, 'Debug' => :debug, 'Test' => :debug }
       @podfile.target_definitions[:default].user_project.build_configurations.should == all.merge('iOS App Store' => :release)
