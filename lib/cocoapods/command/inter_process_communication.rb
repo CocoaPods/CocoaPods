@@ -3,7 +3,7 @@ module Pod
     class IPC < Command
 
       self.abstract_command = true
-      self.summary = 'Inter process communication'
+      self.summary = 'Inter-process communication'
 
       #-----------------------------------------------------------------------#
 
@@ -18,13 +18,12 @@ module Pod
           super
         end
 
-        def run
-          if @path.nil?
-            raise Informative, "Path not given."
-          elsif !File.exists?(@path)
-            raise Informative, "The given path doesn't exists `#{@path}` not given."
-          end
+        def validate!
+          super
+          help! "A specification path is required." unless @path
+        end
 
+        def run
           spec = Specification.from_file(@path)
           UI.puts spec.to_yaml
         end
