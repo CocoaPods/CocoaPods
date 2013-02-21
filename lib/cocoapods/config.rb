@@ -146,18 +146,14 @@ module Pod
     # @return [Podfile] The Podfile to use for the current execution.
     #
     def podfile
-      @podfile ||= begin
-        Podfile.from_file(podfile_path) if podfile_path.exist?
-      end
+      @podfile ||= Podfile.from_file(podfile_path) if podfile_path.exist?
     end
     attr_writer :podfile
 
     # @return [Lockfile] The Lockfile to use for the current execution.
     #
     def lockfile
-      @lockfile ||= begin
-        Lockfile.from_file(lockfile_path) if lockfile_path.exist?
-      end
+      @lockfile ||= Lockfile.from_file(lockfile_path) if lockfile_path.exist?
     end
 
     #--------------------------------------#
@@ -192,10 +188,9 @@ module Pod
     #
     def podfile_path
       unless @podfile_path
-        @podfile_path = installation_root + 'CocoaPods.podfile'
-        unless @podfile_path.exist?
-          @podfile_path = installation_root + 'Podfile'
-        end
+        path = installation_root + 'Podfile.yaml'
+        path = installation_root + 'Podfile' unless path.exist?
+        @podfile_path = path
       end
       @podfile_path
     end

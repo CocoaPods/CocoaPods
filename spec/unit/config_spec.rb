@@ -8,6 +8,7 @@ module Pod
     end
 
     describe "In general" do
+
       it "returns the singleton config instance" do
         config.should.be.instance_of Config
       end
@@ -32,9 +33,9 @@ module Pod
         config.podfile_path.should == temporary_directory + 'Podfile'
       end
 
-      it "returns the path to the project Podfile if specified with the extension" do
-        (temporary_directory + 'CocoaPods.podfile').open('w') { |f| f << '# Yo' }
-        config.podfile_path.should == temporary_directory + 'CocoaPods.podfile'
+      it "can detect yaml Podfiles" do
+        (temporary_directory + 'Podfile.yaml').open('w') { |f| f << '# Yo' }
+        config.podfile_path.should == temporary_directory + 'Podfile.yaml'
       end
 
       it "returns the path to the Pods directory that holds the dependencies" do
