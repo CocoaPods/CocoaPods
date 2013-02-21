@@ -451,8 +451,8 @@ module Pod
           end
         end
 
+        target_definition.set_platform(name, deployment_target)
         platform = Platform.new(name, deployment_target)
-        target_definition.platform = platform
         platform
       end
 

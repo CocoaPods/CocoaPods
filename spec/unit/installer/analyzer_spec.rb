@@ -176,7 +176,7 @@ module Pod
 
       describe "#compute_user_project_targets" do
         it "uses the path specified in the target definition while computing the path of the user project" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.user_project_path = 'SampleProject/SampleProject'
 
           path = @analyzer.send(:compute_user_project_path, target_definition)
@@ -184,7 +184,7 @@ module Pod
         end
 
         it "raises if the user project of the target definition does not exists while computing the path of the user project" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.user_project_path = 'Test'
 
           e = lambda { @analyzer.send(:compute_user_project_path, target_definition) }.should.raise Informative
@@ -192,7 +192,7 @@ module Pod
         end
 
         it "if not specified in the target definition if looks if there is only one project" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           config.installation_root = config.installation_root + 'SampleProject'
 
           path = @analyzer.send(:compute_user_project_path, target_definition)
@@ -200,7 +200,7 @@ module Pod
         end
 
         it "if not specified in the target definition if looks if there is only one project" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
 
           e = lambda { @analyzer.send(:compute_user_project_path, target_definition) }.should.raise Informative
           e.message.should.match /Could not.*select.*project/
@@ -222,7 +222,7 @@ module Pod
       describe "#compute_user_project_targets" do
 
         it "returns the targets specified in the target definition" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.link_with = ['UserTarget']
           user_project = Xcodeproj::Project.new
           user_project.new_target(:application, 'FirstTarget', :ios)
@@ -233,7 +233,7 @@ module Pod
         end
 
         it "raises if it is unable to find the targets specified by the target definition" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.link_with = ['UserTarget']
           user_project = Xcodeproj::Project.new
 
@@ -242,7 +242,7 @@ module Pod
         end
 
         it "returns the target with the same name of the target definition" do
-          target_definition = Podfile::TargetDefinition.new('UserTarget', nil, nil)
+          target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
           user_project = Xcodeproj::Project.new
           user_project.new_target(:application, 'FirstTarget', :ios)
           user_project.new_target(:application, 'UserTarget', :ios)
@@ -252,7 +252,7 @@ module Pod
         end
 
         it "raises if the name of the target definition does not match any file" do
-          target_definition = Podfile::TargetDefinition.new('UserTarget', nil, nil)
+          target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
           user_project = Xcodeproj::Project.new
 
           e = lambda { @analyzer.send(:compute_user_project_targets, target_definition, user_project) }.should.raise Informative
@@ -260,7 +260,7 @@ module Pod
         end
 
         it "returns the first target of the project if the target definition is named default" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_project = Xcodeproj::Project.new
           user_project.new_target(:application, 'FirstTarget', :ios)
           user_project.new_target(:application, 'UserTarget', :ios)
@@ -270,7 +270,7 @@ module Pod
         end
 
         it "raises if the default target definition cannot be linked because there are no user targets" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_project = Xcodeproj::Project.new
 
           e = lambda { @analyzer.send(:compute_user_project_targets, target_definition, user_project) }.should.raise Informative
@@ -290,7 +290,7 @@ module Pod
           configuration.name = 'AppStore'
           target.build_configuration_list.build_configurations << configuration
 
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_targets = [target]
 
           configurations = @analyzer.send(:compute_user_build_configurations, target_definition, user_targets)
@@ -299,7 +299,7 @@ module Pod
 
 
         it "returns the user build configurations specified in the target definition" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.build_configurations = { 'AppStore' => :release }
           user_targets = []
 
@@ -314,8 +314,8 @@ module Pod
       describe "#compute_platform_for_target_definition" do
 
         it "returns the platform specified in the target definition" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
-          target_definition.platform = Platform.new(:ios, '4.0')
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
+          target_definition.set_platform(:ios, '4.0')
           user_targets = []
 
           configurations = @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets)
@@ -331,7 +331,7 @@ module Pod
             'IPHONEOS_DEPLOYMENT_TARGET' => '4.0'
           }
 
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_targets = [target]
 
           configurations = @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets)
@@ -353,7 +353,7 @@ module Pod
             'IPHONEOS_DEPLOYMENT_TARGET' => '6.0'
           }
 
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_targets = [target1, target2]
 
           configurations = @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets)
@@ -375,7 +375,7 @@ module Pod
             'IPHONEOS_DEPLOYMENT_TARGET' => '10.6'
           }
 
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_targets = [target1, target2]
           e = lambda { @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets) }.should.raise Informative
           e.message.should.match /Targets with different platforms/

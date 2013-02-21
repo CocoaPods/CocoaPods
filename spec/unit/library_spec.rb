@@ -5,7 +5,7 @@ module Pod
 
     describe "In general" do
       before do
-        @target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+        @target_definition = Podfile::TargetDefinition.new(:default, nil)
         @lib = Library.new(@target_definition)
       end
 
@@ -28,7 +28,7 @@ module Pod
 
     describe "Support files" do
       before do
-        @target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+        @target_definition = Podfile::TargetDefinition.new(:default, nil)
         @lib = Library.new(@target_definition)
         @lib.support_files_root = config.sandbox.root
         @lib.user_project_path  = config.sandbox.root + '../user_project.xcodeproj'

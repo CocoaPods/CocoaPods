@@ -289,8 +289,8 @@ module Pod
 
         it "install the targets of the Pod project" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
-          target_definition.target_dependencies << Dependency.new('BananaLib')
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
+          target_definition.store_pod('BananaLib')
           library = Library.new(target_definition)
           library.specs = [spec]
           @installer.stubs(:libraries).returns([library])
@@ -300,7 +300,7 @@ module Pod
 
         it "skips empty libraries" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
           library = Library.new(target_definition)
           library.specs = [spec]
           @installer.stubs(:libraries).returns([library])

@@ -9,7 +9,7 @@ module Pod
         sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
         @sample_project = Xcodeproj::Project.new sample_project_path
         @target = @sample_project.targets.first
-        target_definition = Podfile::TargetDefinition.new(:default, nil, nil)
+        target_definition = Podfile::TargetDefinition.new(:default, nil)
         @lib = Library.new(target_definition)
         @lib.user_project_path = sample_project_path
         pods_project = Project.new()
