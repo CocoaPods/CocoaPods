@@ -17,6 +17,20 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
+    describe Command::IPC::Podfile do
+
+      it "converts a Podfile to yaml and prints it to STDOUT" do
+        out = run_command('ipc', 'podfile', fixture('Podfile'))
+        out.should.include('---')
+        out.should.match /target_definitions:/
+        out.should.match /platform: :ios/
+        out.should.match /- SSZipArchive:/
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
     describe Command::IPC::List do
 
       it "converts a podspec to yaml and prints it to STDOUT" do
