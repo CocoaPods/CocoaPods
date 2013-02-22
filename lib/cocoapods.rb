@@ -49,10 +49,9 @@ module Pod
   end
 
   module Hooks
-    autoload :InstallerData,        'cocoapods/hooks/installer_data'
-    autoload :LibraryData,          'cocoapods/hooks/library_data'
-    autoload :PodData,              'cocoapods/hooks/pod_data'
-    autoload :TargetInstallerData,  'cocoapods/hooks/target_installer_data'
+    autoload :InstallerRepresentation, 'cocoapods/hooks/installer_representation'
+    autoload :LibraryRepresentation,   'cocoapods/hooks/library_representation'
+    autoload :PodRepresentation,       'cocoapods/hooks/pod_representation'
   end
 
 end

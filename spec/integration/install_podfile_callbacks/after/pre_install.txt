@@ -1,1 +1,1 @@
-PODS:Reachability (3.1.0) TARGETS:default
+PODS:Reachability (3.1.0) TARGETS:Pods

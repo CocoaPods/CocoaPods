@@ -377,11 +377,14 @@ module Pod
     def run_pre_install_hooks
       UI.message "- Running pre install hooks" do
         installed_specs.each do |spec|
-          executed = spec.pre_install!(pod_data(spec), library_data(libraries.first)) #TODO
+          executed = false
+          libraries_using_spec(spec).each do |lib|
+            executed ||= spec.pre_install!(pod_rep(spec.root.name), library_rep(lib))
+          end
           UI.message "- #{spec.name}" if executed
         end
 
-        executed = @podfile.pre_install!(installer_data)
+        executed = @podfile.pre_install!(installer_rep)
         UI.message "- Podfile" if executed
       end
     end
@@ -395,13 +398,14 @@ module Pod
     #
     def run_post_install_hooks
       UI.message "- Running post install hooks" do
-
         installed_specs.each do |spec|
-          target_installer_data = target_installers_data.first #TODO
-          executed = spec.post_install!(target_installer_data)
+          executed = false
+          libraries_using_spec(spec).each do |lib|
+            executed ||= spec.post_install!(library_rep(lib))
+          end
           UI.message "- #{spec.name}" if executed
         end
-        executed = @podfile.post_install!(installer_data)
+        executed = @podfile.post_install!(installer_rep)
         UI.message "- Podfile" if executed
       end
     end
@@ -412,33 +416,52 @@ module Pod
 
     # @!group Hooks Data
 
-    def installer_data
-      Hooks::InstallerData.new(self)
+    # @return [InstallerRepresentation]
+    #
+    def installer_rep
+      Hooks::InstallerRepresentation.new(self)
     end
 
-    def target_installers_data
-      @target_installers_data ||= libraries.map do |lib|
-        data = Hooks::TargetInstallerData.new
-        data.sandbox = sandbox
-        data.library = lib
-        data
-      end
-    end
-
-    def pods_data
-      root_specs.map do |spec|
-        pod_data(spec)
-      end
-    end
-
-    def pod_data(spec)
+    # @return [PodRepresentation] The hook representation of a Pod.
+    #
+    # @param  [String] pod
+    #         The name of the pod.
+    #
+    # @return [PodRepresentation] The pod representation.
+    #
+    def pod_rep(pod)
       all_file_accessors = libraries.map(&:file_accessors).flatten.compact
-      file_accessors = all_file_accessors.select { |fa| fa.spec.root == spec.root }
-      Hooks::PodData.new(file_accessors)
+      file_accessors = all_file_accessors.select { |fa| fa.spec.root.name == pod }
+      Hooks::PodRepresentation.new(pod, file_accessors)
     end
 
-    def library_data(library)
-      Hooks::LibraryData.new(library)
+    # @return [LibraryRepresentation]
+    #
+    def library_rep(library)
+      Hooks::LibraryRepresentation.new(sandbox, library)
+    end
+
+    # @return [Array<LibraryRepresentation>]
+    #
+    def library_reps
+      @library_reps ||= libraries.map { |lib| library_rep(lib) }
+    end
+
+    # @return [Array<PodRepresentation>]
+    #
+    def pod_reps
+      root_specs.sort_by { |spec| spec.name }.map { |spec| pod_rep(spec.name) }
+    end
+
+    # Returns the libraries which use the given specification.
+    #
+    # @param  [Specification] spec
+    #         The specification for which the client libraries are needed.
+    #
+    # @return [Array<Library>] The library.
+    #
+    def libraries_using_spec(spec)
+      libraries.select { |lib| lib.specs.include?(spec) }
     end
 
     #-------------------------------------------------------------------------#

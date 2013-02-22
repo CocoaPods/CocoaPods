@@ -135,7 +135,7 @@ module Pod
             pod 'SSZipArchive', '0.1.0'
 
             pre_install do |installer|
-              memo = "PODS:#{installer.pods * ', '} TARGETS:#{installer.project.targets.to_a * ', '}"
+              memo = "PODS:#{installer.pods * ', '} TARGETS:#{installer.project.targets * ', '}"
               File.open(installer.config.sandbox_root + 'memo.txt', 'w') {|f| f.puts memo}
             end
           end

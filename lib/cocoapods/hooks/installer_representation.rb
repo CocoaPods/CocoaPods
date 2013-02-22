@@ -8,14 +8,11 @@ module Pod
     end
   end
 
-  # The public API should return dumb data types so it is easier to satisfy its
-  # implicit contract.
-  #
   module Hooks
 
-    # Stores the information of the Installer for the hooks
+    # The installer representation to pass to the hooks.
     #
-    class InstallerData
+    class InstallerRepresentation
 
       public
 
@@ -33,56 +30,53 @@ module Pod
         installer.pods_project
       end
 
-      # @return [Array<PodData>] The list of LocalPod instances for each
-      #         dependency sorted by name.
+      # @return [Array<PodRepresentation>] The representation of the Pods.
       #
       def pods
-        installer.pods_data
+        installer.pod_reps
       end
 
-      # @return [Array<TargetInstallerData>]
+      # @return [Array<LibraryRepresentation>] The representation of the
+      #         libraries.
       #
-      def target_installers
-        installer.target_installers_data
+      def libraries
+        installer.library_reps
       end
 
-      # @return [Hash{TargetDefinition => Array<Specification>}] The
+      # @return [Hash{LibraryRepresentation => Array<Specification>}] The
       #         specifications grouped by target definition.
       #
-      # @todo   Consider grouping by TargetInstallerData.
-      #
-      def specs_by_target
+      def specs_by_lib
         result = {}
-        libraries.each do |lib|
-          result[lib.target_definition] = lib.specs
+        installer.libraries.each do |lib|
+          result[installer.library_rep(lib)] = lib.specs
         end
         result
       end
 
-      # @return [Hash{TargetDefinition => Array<LocalPod>}] The local pod
-      #         instances grouped by target.
+      # @return [Hash{LibraryRepresentation => Array<PodRepresentation>}] The
+      #         local pod instances grouped by target.
       #
-      def pods_by_target
+      def pods_by_lib
         result = {}
-        libraries.each do |lib|
-          root_specs = lib.specs.map { |spec| spec.root }.uniq
-          pods_data = pods.select { |pod_data| root_specs.include?(pod_data.root_spec) }
-          result[lib.target_definition] = pods_data
+        installer.libraries.each do |lib|
+          pod_names = lib.specs.map { |spec| spec.root.name }.uniq
+          pod_reps = pods.select { |rep| pod_names.include?(rep.name) }
+          result[lib.target_definition] = pod_reps
         end
         result
       end
 
-      # @see   pods_by_target
-      #
-      # @todo Fix the warning.
-      #
-      def local_pods_by_target
-        # UI.warn "Podfile#config is deprecated. The config is accessible from " \
-        #   "the parameter passed to the hooks".
-        pods_by_target
-      end
+      #-----------------------------------------------------------------------#
+      public
 
+      # @!group Compatibility
+      #
+      # The following aliases provides compatibility with CP < 0.17
 
+      alias :target_installers :libraries
+      alias :specs_by_target :specs_by_lib
+      alias :local_pods_by_target :pods_by_lib
 
       #-----------------------------------------------------------------------#
 
@@ -106,6 +100,10 @@ module Pod
         Config.instance
       end
 
+      # @return [Installer] The installer described by this instance.
+      #
+      attr_reader :installer
+
       #-----------------------------------------------------------------------#
 
       # @!group Private implementation
@@ -114,18 +112,6 @@ module Pod
       #
       def initialize(installer)
         @installer = installer
-      end
-
-      private
-
-      # @return [Installer] The installer described by this instance.
-      #
-      attr_reader :installer
-
-      # @return [Library] The library whose target needs to be generated.
-      #
-      def libraries
-        installer.libraries
       end
 
       #-----------------------------------------------------------------------#

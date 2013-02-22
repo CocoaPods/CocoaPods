@@ -12,18 +12,16 @@ module Pod
 
     # Stores the information of the Installer for the hooks
     #
-    class PodData
+    class PodRepresentation
 
       # @return [String]
       #
-      def name
-        root_spec.name
-      end
+      attr_accessor :name
 
       # @return [Version]
       #
       def version
-        root_spec.name
+        root_spec.version
       end
 
       # @return [Specification]
@@ -35,7 +33,7 @@ module Pod
       # @return [Array<Specification>]
       #
       def specs
-        file_accessors.map(&:spec)
+        file_accessors.map(&:spec).uniq
       end
 
       # @return [Pathname]
@@ -56,7 +54,8 @@ module Pod
 
       # @param [Installer] installer @see installer
       #
-      def initialize(file_accessors)
+      def initialize(name, file_accessors)
+        @name = name
         @file_accessors = file_accessors
       end
 
