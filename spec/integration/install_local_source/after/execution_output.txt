@@ -1,5 +1,8 @@
 $ pod install --no-update --no-doc --verbose --no-color 2>&1
-Resolving dependencies
+Analyzing dependencies
+
+Fetching external sources
+-> Fetching podspec for `Reachability` from `Reachability`
 
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `default' (iOS 4.3)

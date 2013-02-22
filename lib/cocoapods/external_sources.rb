@@ -70,36 +70,17 @@ module Pod
 
       public
 
-      # @!group Specifications
+      # @!group Fetching
 
-      # @return [Specification] returns the specification, either from the
-      #         sandbox or by fetching the remote source, associated with the
-      #         external source.
+      # Fetches the external source from the remote according to the params.
       #
-      def specification(sandbox)
-        specification_from_local(sandbox) || specification_from_external(sandbox)
-      end
-
-      # @return [Specification] returns the specification associated with the
-      #         external source if available in the sandbox.
+      # @param  [Sandbox] sandbox
+      #         the sandbox where the specification should be stored.
       #
-      def specification_from_local(sandbox)
-        sandbox.specification(name)
-      end
-
-      # @return [Specification] returns the specification associated with the
-      #         external source after fetching it from the remote source, even
-      #         if is already present in the sandbox.
+      # @return [void]
       #
-      # @raise  If not specification could be found.
-      #
-      def specification_from_external(sandbox)
-        copy_external_source_into_sandbox(sandbox)
-        spec = specification_from_local(sandbox)
-        unless spec
-          raise Informative, "No podspec found for `#{name}` in #{description}"
-        end
-        spec
+      def fetch(sandbox)
+        raise "Abstract method"
       end
 
       #--------------------------------------#
@@ -115,7 +96,7 @@ module Pod
       #
       # @return [void]
       #
-      def copy_external_source_into_sandbox(sandbox)
+      def fetch(sandbox)
         raise "Abstract method"
       end
 
@@ -131,22 +112,25 @@ module Pod
 
       # @! Subclasses helpers
 
-
       # Pre-downloads a Pod passing the options to the downloader and informing
       # the sandbox.
       #
       # @param  [Sandbox] sandbox
-      #         the sandbox where the Pod should be downloaded.
+      #         The sandbox where the Pod should be downloaded.
+      #
+      # @note   To prevent a double download of the repository the pod is
+      #         marked as pre-downloaded indicating to the installer that only
+      #         clean operations are needed.
       #
       # @return [void]
       #
       def pre_download(sandbox)
-        UI.info("->".green + " Pre-downloading: `#{name}`") do
+        UI.titled_section("Pre-downloading: `#{name}` #{description}", { :verbose_prefix => "-> " }) do
           target = sandbox.root + name
           target.rmtree if target.exist?
           downloader = Downloader.for_target(target, params)
           downloader.download
-          sandbox.store_podspec(name, target + "#{name}.podspec", true)
+          store_podspec(sandbox, target + "#{name}.podspec")
           sandbox.store_pre_downloaded_pod(name)
           if downloader.options_specific?
             source = params
@@ -155,6 +139,27 @@ module Pod
           end
           sandbox.store_checkout_source(name, source)
         end
+      end
+
+      # Stores the podspec in the sandbox and marks it as from an external
+      # source.
+      #
+      # @param  [Sandbox] sandbox
+      #         The sandbox where the specification should be stored.
+      #
+      # @param  [Pathname, String] spec
+      #         The path of the specification or its contents.
+      #
+      # @note   All the concrete implementations of #{fetch} should invoke this
+      #         method.
+      #
+      # @note   The sandbox ensures that the podspec exists and that the names
+      #         match.
+      #
+      # @return [void]
+      #
+      def store_podspec(sandbox, spec)
+        sandbox.store_podspec(name, spec, true)
       end
 
     end
@@ -171,13 +176,9 @@ module Pod
     #
     class GitSource < AbstractExternalSource
 
-      # @see AbstractExternalSource#copy_external_source_into_sandbox
+      # @see AbstractExternalSource#fetch
       #
-      # @note To prevent a double download of the repository the pod is marked
-      #       as pre-downloaded indicating to the installer that only clean
-      #       operations are needed.
-      #
-      def copy_external_source_into_sandbox(sandbox)
+      def fetch(sandbox)
         pre_download(sandbox)
       end
 
@@ -205,13 +206,9 @@ module Pod
     #
     class SvnSource < AbstractExternalSource
 
-      # @see AbstractExternalSource#copy_external_source_into_sandbox
+      # @see AbstractExternalSource#fetch
       #
-      # @note To prevent a double download of the repository the pod is marked
-      #       as pre-downloaded indicating to the installer that only clean
-      #       operations are needed.
-      #
-      def copy_external_source_into_sandbox(sandbox)
+      def fetch(sandbox)
         pre_download(sandbox)
       end
 
@@ -239,13 +236,9 @@ module Pod
     #
     class MercurialSource < AbstractExternalSource
 
-      # @see AbstractExternalSource#copy_external_source_into_sandbox
+      # @see AbstractExternalSource#fetch
       #
-      # @note To prevent a double download of the repository the pod is marked
-      #       as pre-downloaded indicating to the installer that only clean
-      #       operations are needed.
-      #
-      def copy_external_source_into_sandbox(sandbox)
+      def fetch(sandbox)
         pre_download(sandbox)
       end
 
@@ -265,14 +258,14 @@ module Pod
     #
     class PodspecSource < AbstractExternalSource
 
-      # @see AbstractExternalSource#copy_external_source_into_sandbox
+      # @see AbstractExternalSource#fetch
       #
-      def copy_external_source_into_sandbox(sandbox)
-        UI.info("->".green + " Fetching podspec for `#{name}` from: #{params[:podspec]}") do
+      def fetch(sandbox)
+        UI.titled_section("Fetching podspec for `#{name}` #{description}", { :verbose_prefix => "-> " }) do
           path = params[:podspec]
           path = Pathname.new(path).expand_path if path.to_s.start_with?("~")
           require 'open-uri'
-          open(path) { |io| sandbox.store_podspec(name, io.read, true) }
+          open(path) { |io| store_podspec(sandbox, io.read) }
         end
       end
 
@@ -292,40 +285,20 @@ module Pod
     #
     class LocalSource < AbstractExternalSource
 
-      # @see  AbstractExternalSource#copy_external_source_into_sandbox
+      # @see  AbstractExternalSource#fetch
       #
-      def copy_external_source_into_sandbox(sandbox)
-        sandbox.store_podspec(name, pod_spec_path, true)
-        sandbox.store_local_path(name, params[:local])
+      def fetch(sandbox)
+        UI.titled_section("Fetching podspec for `#{name}` #{description}", { :verbose_prefix => "-> " }) do
+          podspec = pod_spec_path
+          store_podspec(sandbox, podspec)
+          sandbox.store_local_path(name, podspec.dirname)
+        end
       end
 
       # @see  AbstractExternalSource#description
       #
       def description
         "from `#{params[:local]}`"
-      end
-
-      # @see  AbstractExternalSource#specification_from_local
-      #
-      # @note The LocalSource class always fetches podspecs from the external
-      #       source to provide always the freshest specification. Otherwise,
-      #       once installed, the podspec would be updated only by `pod
-      #       update`.
-      #
-      def specification_from_local(sandbox)
-        specification_from_external(sandbox)
-      end
-
-      # @see  AbstractExternalSource#specification_from_local
-      #
-      # @note The LocalSource overrides the source of the specification to
-      #       point to the local path.
-      #
-      def specification_from_external(sandbox)
-        copy_external_source_into_sandbox(sandbox)
-        spec = Specification.from_file(pod_spec_path)
-        spec.source = params
-        spec
       end
 
       #--------------------------------------#

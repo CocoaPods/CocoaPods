@@ -54,7 +54,7 @@ module Pod
     #
     def relativize(path)
       unless path.absolute?
-        raise Informative, "Attempt to add relative path to the Pods project"
+        raise StandardError, "[Bug] Attempt to add relative path `#{path}` to the Pods project"
       end
 
       result = path.relative_path_from(root)

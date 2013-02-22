@@ -38,28 +38,7 @@ module Pod
       @sandbox = sandbox
       @podfile = podfile
       @locked_dependencies = locked_dependencies
-      @allow_pre_downloads = true
     end
-
-    # @return [Bool] Whether the resolver should update the external specs
-    #         in the resolution process. This option is used for detecting
-    #         changes in with the Podfile without affecting the existing Pods
-    #         installation
-    #
-    # @note   This option is used by `pod outdated`.
-    #
-    attr_accessor :update_external_specs
-    alias_method  :update_external_specs?, :update_external_specs
-
-    # @return [Bool] Whether pre-downloads should be allowed. Pre-downloads
-    #         change the state of the sandbox and should be allowed only during
-    #         installations. Defaults to true.
-    #
-    # @note   Enabling this if the Podfile and the sandbox are not in sync
-    #         might result in an exception.
-    #
-    attr_accessor :allow_pre_downloads
-    alias_method  :allow_pre_downloads?, :allow_pre_downloads
 
     #-------------------------------------------------------------------------#
 
@@ -134,7 +113,7 @@ module Pod
 
     private
 
-    # !@ Helpers
+    # @!group Private helpers
 
     # Resolves recursively the dependencies of a specification and stores them
     # in the @cached_specs ivar.
@@ -188,15 +167,11 @@ module Pod
       end
     end
 
-    # Loads or returns a previously initialized {Set} for the given dependency.
+    # Loads or returns a previously initialized for the Pod of the given
+    # dependency.
     #
     # @param  [Dependency] dependency
     #         the dependency for which the set is needed.
-    #
-    # @note   If the {#update_external_specs} flag is activated the
-    #         dependencies with external sources are always resolved against
-    #         the remote. Otherwise the specification is retrieved from the
-    #         sandbox that fetches the external source only if needed.
     #
     # @return [Set] the cached set for a given dependency.
     #
@@ -204,40 +179,17 @@ module Pod
       name = dependency.root_name
       unless cached_sets[name]
         if dependency.external_source
-          set = set_from_external_source(dependency)
+          spec = sandbox.specification(dependency.root_name)
+          unless spec
+            raise StandardError, "[Bug] Unable to find the specification for `#{dependency}`."
+          end
+          set = Specification::Set::External.new(spec)
         else
           set = cached_sources.search(dependency)
         end
         cached_sets[name] = set
       end
       cached_sets[name]
-    end
-
-    # Returns a new set created from an external source
-    #
-    # @param  [Dependency] dependency
-    #         The dependency with the external source for which the set is
-    #         needed.
-    #
-    # @return [Set] the set for the dependency.
-    #
-    def set_from_external_source(dependency)
-      source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
-      if allow_pre_downloads?
-        if update_external_specs?
-          spec = source.specification_from_external(sandbox)
-        else
-          spec = source.specification(sandbox)
-        end
-      else
-        spec = sandbox.specification(dependency.name)
-        unless spec
-          raise Informative, "Unable to find the specification for " \
-            "`#{dependency}`. Running `pod install` should fix the issue."
-        end
-      end
-
-      Specification::Set::External.new(spec)
     end
 
     # Ensures that a specification is compatible with the platform of a target.

@@ -24,20 +24,6 @@ module Pod
         @resolver.locked_dependencies.should == [Dependency.new('BlocksKit', '1.5.2')]
       end
 
-      it "allows to specify whether the external sources should be updated against the remote" do
-        @resolver.update_external_specs = true
-        @resolver.update_external_specs.should.be.true
-      end
-
-      it "allows to specify whether the sandbox can be modified and pre-downloads are allowed" do
-        @resolver.allow_pre_downloads = false
-        @resolver.allow_pre_downloads.should.be.false
-      end
-
-      it "allows pre-downloads by default" do
-        @resolver.allow_pre_downloads.should.be.true
-      end
-
       #--------------------------------------#
 
       it "resolves the specification of the podfile" do
@@ -63,6 +49,8 @@ module Pod
 
       it "it resolves specifications from external sources" do
         podspec = fixture('integration/Reachability/Reachability.podspec')
+        spec = Specification.from_file(podspec)
+        config.sandbox.expects(:specification).with('Reachability').returns(spec)
         podfile = Podfile.new do
           platform :ios
           pod "Reachability", :podspec => podspec
@@ -182,7 +170,7 @@ module Pod
             fss.subspec 'SecondSubSpec'
           end
         end
-        ExternalSources::GitSource.any_instance.stubs(:specification).returns(spec)
+        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:name).sort
         specs.should == %w{ MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec }
@@ -227,35 +215,6 @@ module Pod
       end
     end
 
-    #-------------------------------------------------------------------------#
-
-
-    describe "#set_from_external_source" do
-      before do
-        podfile   = Podfile.new("#{temporary_directory}/Podfile") { }
-        @resolver = Resolver.new(config.sandbox, podfile)
-      end
-
-      it "it fetches the specification from either the sandbox or from the remote be default" do
-        dependency = Dependency.new('Name', :git => 'www.example.com')
-        ExternalSources::GitSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
-        @resolver.send(:set_from_external_source, dependency)
-      end
-
-      it "it fetches the specification from the remote if in update mode" do
-        dependency = Dependency.new('Name', :git => 'www.example.com')
-        ExternalSources::GitSource.any_instance.expects(:specification).returns(Specification.new).once
-        @resolver.update_external_specs = false
-        @resolver.send(:set_from_external_source, dependency)
-      end
-
-      it "it fetches the specification only from the sandbox if pre-downloads are disabled" do
-        dependency = Dependency.new('Name', :git => 'www.example.com')
-        Sandbox.any_instance.expects(:specification).returns(Specification.new).once
-        @resolver.allow_pre_downloads = true
-        @resolver.send(:set_from_external_source, dependency)
-      end
-    end
 
     #-------------------------------------------------------------------------#
 

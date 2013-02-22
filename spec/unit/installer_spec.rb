@@ -128,60 +128,22 @@ module Pod
         end
 
         it "includes the added Pods" do
-          @analysis_result.sandbox_state.add_name('Added-Pod', :added)
+          @analysis_result.sandbox_state.add_name('added-pod', :added)
           @installer.send(:detect_pods_to_install)
-          @installer.names_of_pods_to_install.should == ['Added-Pod']
+          @installer.names_of_pods_to_install.should == ['added-pod']
         end
 
         it "includes the changed Pods" do
-          @analysis_result.sandbox_state.add_name('Changed-Pod', :changed)
+          @analysis_result.sandbox_state.add_name('changed-pod', :changed)
           @installer.send(:detect_pods_to_install)
-          @installer.names_of_pods_to_install.should == ['Changed-Pod']
+          @installer.names_of_pods_to_install.should == ['changed-pod']
         end
 
-        it "includes head pods in update mode" do
-          spec = Spec.new do |s|
-            s.name = 'Head-Pod'
-          end
-          spec.version.head = true
-          @analysis_result.specifications = [spec]
-          @installer.update_mode = true
+        it "includes the pre-downloaded Pods" do
+          @analysis_result.sandbox_state.add_name('unchanged-pods', :unchanged)
+          config.sandbox.stubs(:predownloaded_pods).returns(['pre-downloaded-pod'])
           @installer.send(:detect_pods_to_install)
-          @installer.names_of_pods_to_install.should == ['Head-Pod']
-        end
-
-        it "doesn't includes head pods if not in update mode" do
-          spec = Spec.new do |s|
-            s.name = 'Head-Pod'
-          end
-          spec.version.head = true
-          @analysis_result.specifications = [spec]
-          @installer.update_mode = false
-          @installer.send(:detect_pods_to_install)
-          @installer.names_of_pods_to_install.should == []
-        end
-
-        xit "includes pods from external sources in update mode" do
-
-        end
-
-        xit "doesn't includes pods from external sources if not in update mode" do
-
-        end
-
-        it "includes pods whose root folder doesn't exists" do
-          Pathname.any_instance.stubs(:exist?).returns(false)
-          spec = Spec.new do |s|
-            s.name = 'Head-Pod'
-          end
-          @analysis_result.specifications = [spec]
-          @installer.update_mode = false
-          @installer.send(:detect_pods_to_install)
-          @installer.names_of_pods_to_install.should == ['Head-Pod']
-        end
-
-        xit "includes pods whose root folder is empty" do
-
+          @installer.names_of_pods_to_install.should == ['pre-downloaded-pod']
         end
 
       end

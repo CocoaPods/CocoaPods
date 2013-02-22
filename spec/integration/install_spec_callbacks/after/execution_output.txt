@@ -1,10 +1,12 @@
 $ pod install --no-update --no-doc --verbose --no-color 2>&1
-Resolving dependencies
+Analyzing dependencies
+
+Fetching external sources
+-> Fetching podspec for `Reachability` from `Reachability.podspec`
 
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `default' (iOS 6.0)
   - Reachability (from `Reachability.podspec`)
-    -> Fetching podspec for `Reachability` from: Reachability.podspec
 
 Comparing resolved specification to the sandbox manifest
   A Reachability

@@ -1,5 +1,5 @@
 $ pod update --no-update --no-doc --verbose --no-color 2>&1
-Resolving dependencies
+Analyzing dependencies
 
 Finding Podfile changes
   - Reachability

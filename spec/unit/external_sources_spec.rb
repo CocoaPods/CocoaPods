@@ -39,35 +39,10 @@ module Pod
         dependency_1.should.not.be == dependency_3
       end
 
-      it "returns the specification from the sandbox if available" do
-        config.sandbox.store_podspec('Reachability', fixture('integration/Reachability/Reachability.podspec'))
-        @external_source.expects(:specification_from_external).never
-        @external_source.specification(config.sandbox).name.should == 'Reachability'
-      end
-
-      it "fetches the remote if needed to return the specification" do
-        @external_source.specification(config.sandbox).name.should == 'Reachability'
-      end
-
-      it "returns the specification as stored in the sandbox if available" do
-        @external_source.specification_from_external(config.sandbox)
-        @external_source.specification_from_local(config.sandbox).name.should == 'Reachability'
-      end
-
-      it "returns nil if the specification requested from local is not available in the sandbox" do
-        @external_source.specification_from_local(config.sandbox).should.be.nil
-      end
-
-      it "returns the specification fetching it from the external source in any case" do
-        @external_source.specification_from_external(config.sandbox).name.should == 'Reachability'
-      end
-
-      it "stores the specification in the sandbox after fetching it from the remote" do
-        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
-        path.should.not.exist?
-        @external_source.specification_from_external(config.sandbox).name.should == 'Reachability'
-        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
-        path.should.exist?
+      it "fetches the specification from the remote stores it in the sandbox" do
+        config.sandbox.specification('Reachability').should == nil
+        @external_source.fetch(config.sandbox)
+        config.sandbox.specification('Reachability').name.should == 'Reachability'
       end
 
     end
@@ -104,13 +79,13 @@ module Pod
     end
 
     it "creates a copy of the podspec" do
-      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.fetch(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
 
     it "marks a LocalPod as downloaded" do
-      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.fetch(config.sandbox)
       config.sandbox.predownloaded_pods.should == ["Reachability"]
     end
 
@@ -129,13 +104,13 @@ module Pod
     end
 
     it "creates a copy of the podspec" do
-      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.fetch(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/SvnSource.podspec'
       path.should.exist?
     end
 
     it "marks a LocalPod as downloaded" do
-      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.fetch(config.sandbox)
       config.sandbox.predownloaded_pods.should == ["SvnSource"]
     end
 
@@ -154,13 +129,13 @@ module Pod
     end
 
     it "creates a copy of the podspec" do
-      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.fetch(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/MercurialSource.podspec'
       path.should.exist?
     end
 
     it "marks a LocalPod as downloaded" do
-      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.fetch(config.sandbox)
       config.sandbox.predownloaded_pods.should == ["MercurialSource"]
     end
 
@@ -180,7 +155,7 @@ module Pod
     end
 
     it "creates a copy of the podspec" do
-      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.fetch(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
@@ -202,7 +177,7 @@ module Pod
     end
 
     it "creates a copy of the podspec" do
-      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.fetch(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
@@ -212,7 +187,7 @@ module Pod
     end
 
     it "marks the Pod as local in the sandbox" do
-      @external_source.copy_external_source_into_sandbox(config.sandbox)
+      @external_source.fetch(config.sandbox)
       config.sandbox.local_pods.should == {
         "Reachability" => fixture('integration/Reachability').to_s
       }

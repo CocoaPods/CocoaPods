@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 # @return [Analyzer] the sample analyzer.
 #
 def create_analyzer
-  podfile = Pod::Podfile.new do
+  @podfile = Pod::Podfile.new do
     platform :ios, '6.0'
     xcodeproj 'SampleProject/SampleProject'
     pod 'JSONKit',                     '1.5pre'
@@ -20,7 +20,7 @@ def create_analyzer
   lockfile = Pod::Lockfile.new(hash)
 
   SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-  analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, lockfile)
+  analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, lockfile)
 end
 
 #-----------------------------------------------------------------------------#
@@ -111,6 +111,37 @@ module Pod
 
       #--------------------------------------#
 
+      it "fetches the dependencies with external sources" do
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.added << "BananaLib"
+        @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
+        @podfile.stubs(:dependencies).returns([Dependency.new('BananaLib', :git => "example.com")])
+        ExternalSources::GitSource.any_instance.expects(:fetch)
+        @analyzer.send(:fetch_external_sources)
+      end
+
+      xit "it fetches the specification from either the sandbox or from the remote be default" do
+        dependency = Dependency.new('Name', :git => 'www.example.com')
+        ExternalSources::GitSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
+        @resolver.send(:set_from_external_source, dependency)
+      end
+
+      xit "it fetches the specification from the remote if in update mode" do
+        dependency = Dependency.new('Name', :git => 'www.example.com')
+        ExternalSources::GitSource.any_instance.expects(:specification).returns(Specification.new).once
+        @resolver.update_external_specs = false
+        @resolver.send(:set_from_external_source, dependency)
+      end
+
+      xit "it fetches the specification only from the sandbox if pre-downloads are disabled" do
+        dependency = Dependency.new('Name', :git => 'www.example.com')
+        Sandbox.any_instance.expects(:specification).returns(Specification.new).once
+        @resolver.allow_pre_downloads = true
+        @resolver.send(:set_from_external_source, dependency)
+      end
+
+      #--------------------------------------#
+
       it "resolves the dependencies" do
         @analyzer.analyze.specifications.map(&:to_s).should == [
           "AFNetworking (1.0.1)",
@@ -120,7 +151,7 @@ module Pod
         ]
       end
 
-      it "removes the specifications of the changed pods to prevent confusion in the resolution process" do
+      xit "removes the specifications of the changed pods to prevent confusion in the resolution process" do
         @analyzer.allow_pre_downloads = true
         podspec = @analyzer.sandbox.root + 'Local Podspecs/JSONKit.podspec'
         podspec.dirname.mkpath
@@ -136,28 +167,6 @@ module Pod
           "SVPullToRefresh (0.4)",
           "libextobjc/EXTKeyPathCoding (0.2.3)"
         ]
-      end
-
-      it "instructs the resolver to not update external sources by default" do
-        Resolver.any_instance.expects(:update_external_specs=).with(false)
-        @analyzer.analyze
-      end
-
-      it "instructs the resolver to update external sources if in update mode" do
-        Resolver.any_instance.expects(:update_external_specs=).with(true)
-        @analyzer.update_mode = true
-        @analyzer.analyze
-      end
-
-      it "allow pre downloads in the resolver by default" do
-        Resolver.any_instance.expects(:allow_pre_downloads=).with(true)
-        @analyzer.analyze
-      end
-
-      it "allow pre downloads in the resolver by default" do
-        Resolver.any_instance.expects(:allow_pre_downloads=).with(false)
-        @analyzer.allow_pre_downloads = false
-        @analyzer.analyze
       end
 
       #--------------------------------------#

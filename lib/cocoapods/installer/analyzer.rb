@@ -52,6 +52,7 @@ module Pod
         @locked_dependencies  = generate_version_locking_dependencies
 
         @result.libraries       = generated_libraries
+        fetch_external_sources
         @result.specs_by_target = resolve_dependencies
         @result.specifications  = generate_specifications
         @result.sandbox_state   = generate_sandbox_state
@@ -134,7 +135,9 @@ module Pod
           end
           pods_state
         else
-          SpecsState.new({})
+          state = SpecsState.new
+          state.added.concat(podfile.dependencies.map(&:root_name).uniq)
+          state
         end
       end
 
@@ -211,6 +214,36 @@ module Pod
         end
       end
 
+      # If modifications to the sandbox are allowed external sources are
+      # fetched. In update mode all the external sources are refreshed while in
+      # normal mode they refreshed only if added or changed in the Podfile.
+      #
+      # TODO Specs, comments, and fix UI
+      #
+      def fetch_external_sources
+        return unless allow_pre_downloads?
+        deps_to_fetch = []
+        deps_to_fetch_if_needed = []
+        deps_with_external_source = podfile.dependencies.select { |dep| dep.external_source }
+        if update_mode?
+          deps_to_fetch = deps_with_external_source
+        else
+          pods_to_fetch = result.podfile_state.added + result.podfile_state.changed
+          deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.root_name) }
+          deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.root_name) }
+          deps_to_fetch += deps_to_fetch_if_needed.select { |dep| sandbox.specification(dep.root_name).nil? || !dep.external_source[:local].nil? }
+        end
+
+        unless deps_to_fetch.empty?
+          UI.section "Fetching external sources" do
+            deps_to_fetch.uniq.sort.each do |dependency|
+              source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
+              source.fetch(sandbox)
+            end
+          end
+        end
+      end
+
       # Converts the Podfile in a list of specifications grouped by target.
       #
       # @note   In this step the specs are added to the libraries.
@@ -235,19 +268,8 @@ module Pod
       def resolve_dependencies
         specs_by_target = nil
 
-        podfile_state = result.podfile_state
-        if allow_pre_downloads?
-          changed_pods = podfile_state.added + podfile_state.changed + podfile_state.deleted
-          changed_pods.each do |pod_name|
-            podspec = sandbox.specification_path(pod_name)
-            podspec.delete if podspec
-          end
-        end
-
         UI.section "Resolving dependencies of #{UI.path podfile.defined_in_file}" do
           resolver = Resolver.new(sandbox, podfile, locked_dependencies)
-          resolver.update_external_specs = update_mode?
-          resolver.allow_pre_downloads   = allow_pre_downloads?
           specs_by_target = resolver.resolve
         end
 
@@ -269,28 +291,6 @@ module Pod
 
       # Computes the state of the sandbox respect to the resolved
       # specifications.
-      #
-      # The logic is the following:
-      #
-      # Added
-      # - If not present in the sandbox lockfile.
-      #
-      # Changed
-      # - The version of the Pod changed.
-      # - The specific installed (sub)specs of the same Pod changed.
-      # - The SHA of the specification file changed.
-      #
-      # Removed
-      # - If a specification is present in the lockfile but not in the resolved
-      #   specs.
-      #
-      # Unchanged
-      # - If none of the above conditions match.
-      #
-      # @todo   [CocoaPods > 0.18] Version 0.17 falls back to the lockfile of
-      #         the Podfile for the sandbox manifest to prevent the full
-      #         re-installation for upgrading users (this was the old behaviour
-      #         pre sandbox manifest) of all the pods. Drop in 0.18.
       #
       # @return [SpecsState] the representation of the state of the manifest
       #         specifications.
@@ -383,6 +383,7 @@ module Pod
 
       # @return [Array<PBXNativeTarget>] Returns the user’s targets, excluding
       #         aggregate targets.
+      #
       def native_targets(user_project)
         user_project.targets.reject do |target|
           target.is_a? Xcodeproj::Project::Object::PBXAggregateTarget

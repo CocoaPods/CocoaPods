@@ -88,7 +88,7 @@ module Pod
     end
 
     def resolve_dependencies
-      UI.section "Resolving dependencies" do
+      UI.section "Analyzing dependencies" do
         analyze
         detect_pods_to_install
         prepare_for_legacy_compatibility
@@ -173,22 +173,8 @@ module Pod
     #
     def detect_pods_to_install
       names = []
-
-      analysis_result.specifications.each do |spec|
-        root_name = spec.root.name
-
-        if update_mode
-          if spec.version.head? # || resolver.pods_from_external_sources.include?(root_name) TODO
-            names << root_name
-          end
-        end
-
-        unless sandbox.pod_dir(root_name).exist?
-          names << root_name
-        end
-      end
-
       names += analysis_result.sandbox_state.added + analysis_result.sandbox_state.changed
+      names += sandbox.predownloaded_pods
       names = names.map { |name| Specification.root_name(name) }
       names = names.flatten.uniq
       @names_of_pods_to_install = names
@@ -231,11 +217,7 @@ module Pod
     def create_file_accessors
       libraries.each do |library|
         library.specs.each do |spec|
-          if spec.local?
-            pod_root = Pathname.new(spec.source[:local]).expand_path
-          else
-            pod_root = sandbox.pod_dir(spec.root.name)
-          end
+          pod_root = sandbox.pod_dir(spec.root.name)
           path_list = Sandbox::PathList.new(pod_root)
           file_accessor = Sandbox::FileAccessor.new(path_list, spec.consumer(library.platform))
           library.file_accessors ||= []

@@ -3,39 +3,46 @@
 • [Core](https://github.com/CocoaPods/Core/master)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0...master)
 
-###### Specification DSL
+###### __Breaking__
 
-- [__Breaking__] Deprecated `header_mappings` hook.
-- [__Breaking__] Deprecated `exclude_header_search_paths`
-- [__Breaking__] `requires_arc` is transitioning from `false` to `true`.
-- [__Breaking__] The support for Rake File list is being deprecated.
-- `preferred_dependency` has been renamed to `default_subspec`.
-- Added `exclude_files` attribute.
-- Added `screenshots` attribute
-- Added default values for attributes like `source_files`.
+- `requires_arc` is transitioning from `false` to `true`.
+- Deprecated `header_mappings` hook.
+- Deprecated `exclude_header_search_paths`
+- The support for Rake File list is being deprecated.
+- Support for inline podspecs has been removed.
+- Subspecs do **not** inherit the files patterns from the parent spec anymore.
+- External sources are not supported in specifications anymore.
 
-###### Podfile DSL
+###### DSLs
 
-- It is not needed to specify the platform anymore (unless not integrating)
+- Podfile:
+  - It is not needed to specify the platform anymore (unless not integrating)
+    as CocoaPods now can infer the platform from the integrated targets.
+- Specification:
+  - `preferred_dependency` has been renamed to `default_subspec`.
+  - Added `exclude_files` attribute.
+  - Added `screenshots` attribute
+  - Added default values for attributes like `source_files`.
 
 ###### Enhancements
 
-- Subspecs now do not inherit the files patterns from the parent spec.
-- The workspace is written only if needed greatly reducing the occasions in
-  which Xcode asks to revert.
-- Specification hooks are only called when the specification is installed.
-- The Lockfile is sorted reducing the SCM noise.
-- Simplified installation: no specific version of ruby gems is required anymore.
 - Released preview [documentation](docs.cocoapods.org).
 - CocoaPods now has support for working in teams and not committing the Pods folder.
-- CocoaPods now can infer the platform from the integrated targets.
-- Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
+- Simplified installation: no specific version of ruby gems is required anymore.
+- The workspace is written only if needed greatly reducing the occasions in
+  which Xcode asks to revert.
+- The Lockfile is sorted reducing the SCM noise.
 - Added Podfile, Frameworks, and Resources to the Pods project.
   [#647](https://github.com/CocoaPods/CocoaPods/issues/647)
   [#588](https://github.com/CocoaPods/CocoaPods/issues/588)
-- The `--no-clean` option of the `pod spec lint` command now displays the Pods project for inspection.
-- It is now possible to specify default values for the configuration in `~/.cocoapods/config.yaml` ([example]()).
-- CocoaPods now checks the checksums of the installed specifications and reinstalls them if needed.
+- Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
+- Specification hooks are only called when the specification is installed.
+- The `--no-clean` option of the `pod spec lint` command now displays the Pods
+  project for inspection.
+- It is now possible to specify default values for the configuration in
+  `~/.cocoapods/config.yaml` ([see](https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/config.rb#L17)).
+- CocoaPods now checks the checksums of the installed specifications and
+  reinstalls them if needed.
 - Added new command `pod ipc` to provide support for inter process communication.
 
 ###### Bug fixes
@@ -45,9 +52,8 @@
 
 ###### Codebase
 
-- Major clean up and refactor of the whole code base, with great reduction of
-  the technical debt.
-- Extracted the models of into
+- Major clean up and refactor of the whole code base.
+- Extracted the core classes into
   [CocoaPods-Core](https://github.com/CocoaPods/Core) gem.
 - Extracted command-line command & option handling into
   [CLAide](https://github.com/CocoaPods/CLAide).

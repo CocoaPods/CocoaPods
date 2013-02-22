@@ -89,8 +89,10 @@ module Pod
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
 
-      xit "considers changed a Pod fetched from an external source if in update mode" do
-
+      it "doesn't consider changed a Pod whose specification is in head mode if not in update mode" do
+        @spec.version.head = true
+        @analyzer.stubs(:update_mode).returns(false)
+        @analyzer.send(:pod_changed?, 'BananaLib').should == false
       end
 
     end

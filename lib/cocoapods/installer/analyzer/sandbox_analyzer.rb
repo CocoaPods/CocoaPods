@@ -5,6 +5,27 @@ module Pod
       # Analyze the sandbox to detect which Pods should be removed, and which
       # ones should be reinstalled.
       #
+      # The logic is the following:
+      #
+      # Added
+      # - If not present in the sandbox lockfile.
+      # - The directory of the Pod doesn't exits.
+      #
+      # Changed
+      # - The version of the Pod changed.
+      # - The SHA of the specification file changed.
+      # - The specific installed (sub)specs of the same Pod changed.
+      # - The specification is in head mode or from an external source and the
+      #   installation process is in update mode.
+      # - The directory of the Pod is empty.
+      #
+      # Removed
+      # - If a specification is present in the lockfile but not in the resolved
+      #   specs.
+      #
+      # Unchanged
+      # - If none of the above conditions match.
+      #
       class SandboxAnalyzer
 
         # @return [Sandbox] The sandbox to analyze.
@@ -129,7 +150,6 @@ module Pod
           return true if folder_empty?(pod)
           if update_mode
             return true if spec.version.head?
-            # return true if sandbox.external_source?(pod) TODO
           end
           return false
         end
@@ -171,7 +191,7 @@ module Pod
           specs.select { |s| s.root.name == pod }.map(&:name).uniq
         end
 
-        # @return [Array<String>] The name of the specifications stored in the 
+        # @return [Array<String>] The name of the specifications stored in the
         #         sandbox manifest (includes subspecs).
         #
         # @param  [String] pod

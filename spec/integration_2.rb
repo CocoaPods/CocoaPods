@@ -320,10 +320,6 @@ describe "Integration take 2" do
       check "install --no-update --no-doc", "install_multiple_targets"
     end
 
-    # TODO This test should reflect a bug of CP 0.16: the clean phase
-    # considers only the subspecs of only one target. However there is another
-    # issue and Pod from external sources are not cleaned.
-    #
     describe "Installs a Pod with different subspecs activated across different targets" do
       check "install --no-update --no-doc", "install_subspecs"
     end
