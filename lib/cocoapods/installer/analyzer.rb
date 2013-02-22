@@ -8,6 +8,8 @@ module Pod
 
       include Config::Mixin
 
+      autoload :SandboxAnalyzer, 'cocoapods/installer/analyzer/sandbox_analyzer'
+
       # @return [Sandbox] The sandbox where the Pods should be installed.
       #
       attr_reader :sandbox
@@ -200,9 +202,12 @@ module Pod
       #         that prevent the resolver to update a Pod.
       #
       def generate_version_locking_dependencies
-        return [] if update_mode?
-        result.podfile_state.unchanged.map do |pod|
-          lockfile.dependency_to_lock_pod_named(pod)
+        if update_mode?
+          []
+        else
+          result.podfile_state.unchanged.map do |pod|
+            lockfile.dependency_to_lock_pod_named(pod)
+          end
         end
       end
 
@@ -291,39 +296,10 @@ module Pod
       #         specifications.
       #
       def generate_sandbox_state
-        sandbox_lockfile = sandbox.manifest  || lockfile
-        sandbox_state = SpecsState.new
-
+        sandbox_state = nil
         UI.section "Comparing resolved specification to the sandbox manifest" do
-          resolved_subspecs_names = result.specifications.group_by { |s| s.root.name }
-          resolved_names          = resolved_subspecs_names.keys
-
-          if sandbox_lockfile
-            sandbox_subspecs_names = sandbox_lockfile.pod_names.group_by { |name| Specification.root_name(name) }
-            sandbox_names = sandbox_subspecs_names.keys
-            all_names     = (resolved_names + sandbox_names).uniq.sort
-            root_specs    = result.specifications.map(&:root).uniq
-
-            is_changed = lambda do |name|
-              spec = root_specs.find { |r_spec| r_spec.name == name }
-              spec.version != sandbox_lockfile.version(name) \
-                || spec.checksum != sandbox_lockfile.checksum(name) \
-                || resolved_subspecs_names[name] =! sandbox_subspecs_names[name] \
-            end
-
-            all_names.each do |name|
-              state = case
-                      when resolved_names.include?(name) && !sandbox_names.include?(name) then :added
-                      when !resolved_names.include?(name) && sandbox_names.include?(name) then :deleted
-                      when is_changed.call(name) then :changed
-                      else :unchanged
-                      end
-              sandbox_state.add_name(name, state)
-            end
-
-          else
-            sandbox_state.added.concat(resolved_names)
-          end
+          sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode, lockfile)
+          sandbox_state = sandbox_analyzer.analyze
           sandbox_state.print
         end
         sandbox_state
@@ -492,6 +468,9 @@ module Pod
       #
       # @note The names of the pods stored by this class are always the **root**
       #       name of the specification.
+      #
+      # @note The motivation for this class is to ensure that the names of the
+      #       subspecs are added instead of the name of the Pods.
       #
       class SpecsState
 

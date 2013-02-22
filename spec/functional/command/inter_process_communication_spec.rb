@@ -23,7 +23,7 @@ module Pod
         out = run_command('ipc', 'podfile', fixture('Podfile'))
         out.should.include('---')
         out.should.match /target_definitions:/
-        out.should.match /platform: :ios/
+        out.should.match /platform: ios/
         out.should.match /- SSZipArchive:/
       end
 

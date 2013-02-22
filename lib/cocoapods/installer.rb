@@ -171,9 +171,6 @@ module Pod
     #
     # @todo   [#534] Detect if the folder of a Pod is empty (even if it exits).
     #
-    # @todo   There could be issues with the current implementation regarding
-    #         external specs.
-    #
     def detect_pods_to_install
       names = []
 
@@ -213,9 +210,6 @@ module Pod
     #         overwritten.
     #
     # @todo   [#247] Clean the headers of only the pods to install.
-    #
-    # @todo   Clean the podspecs of all the pods that aren't unchanged so the
-    #         resolution process doesn't get confused by them.
     #
     def clean_sandbox
       sandbox.build_headers.implode!
