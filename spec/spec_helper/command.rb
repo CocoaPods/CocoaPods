@@ -12,7 +12,7 @@ module SpecHelper
     def run_command(*args)
       Dir.chdir(SpecHelper.temporary_directory) do
         Pod::UI.output = ''
-        # TODO: remove this once all cocoapods has
+        # @todo Remove this once all cocoapods has
         # been converted to use the UI.puts
         config_silent = config.silent?
         config.silent = false

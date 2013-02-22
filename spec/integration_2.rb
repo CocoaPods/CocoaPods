@@ -88,8 +88,6 @@ end
 #         environment.
 #
 def launch_binary(arguments, folder)
-  # TODO CP 0.16 doesn't offer the possibility to skip just the installation
-  # of the docs.
   command = "#{POD_BINARY} #{arguments} --verbose --no-color 2>&1"
   Dir.chdir(TMP_DIR + folder) do
     output = `#{command}`
@@ -336,19 +334,19 @@ describe "Integration take 2" do
       check "install --no-update --no-doc", "install_podspec"
     end
 
-    # TODO add tests for all the hooks API
+    # @todo add tests for all the hooks API
     #
     describe "Runs the Podfile callbacks" do
       check "install --no-update --no-doc", "install_podfile_callbacks"
     end
 
-    # TODO add tests for all the hooks API
+    # @todo add tests for all the hooks API
     #
     describe "Runs the specification callbacks" do
       check "install --no-update --no-doc", "install_spec_callbacks"
     end
 
-    # TODO: requires CocoaPods 0.17
+    # @todo requires CocoaPods 0.17
     #
     # describe "Generates the documentation of Pod during installation" do
     #   check "install --no-update --no-doc", "install_docs"

@@ -92,12 +92,6 @@ def fixture_file_accessor(name, platform = :ios)
   Pod::Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
 end
 
-# TODO This should not be needed anymore
-def copy_fixture_to_pod(name, pod)
-  path = SpecHelper::Fixture.fixture(name)
-  FileUtils.cp_r(path, pod.root)
-end
-
 #-----------------------------------------------------------------------------#
 
 SpecHelper::Fixture.fixture('banana-lib') # ensure it exists

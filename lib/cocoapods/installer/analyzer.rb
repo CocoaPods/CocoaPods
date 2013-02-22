@@ -214,11 +214,24 @@ module Pod
         end
       end
 
-      # If modifications to the sandbox are allowed external sources are
-      # fetched. In update mode all the external sources are refreshed while in
-      # normal mode they refreshed only if added or changed in the Podfile.
+      # Fetches the podspecs of external sources if modifications to the
+      # sandbox are allowed.
       #
-      # TODO Specs, comments, and fix UI
+      # @note   In update mode all the external sources are refreshed while in
+      #         normal mode they are refreshed only if added or changed in the
+      #         Podfile. Moreover, in normal specifications for unchanged Pods
+      #         which are missing or are generated from an local source are
+      #         fetched as well.
+      #
+      # @note   It is possible to perform this step before the resolution
+      #         process because external sources identify a single specific
+      #         version (checkout). If the other dependencies are not
+      #         compatible with the version reported by the podspec of the
+      #         external source the resolver will raise.
+      #
+      # @return [void]
+      #
+      # TODO    Specs
       #
       def fetch_external_sources
         return unless allow_pre_downloads?

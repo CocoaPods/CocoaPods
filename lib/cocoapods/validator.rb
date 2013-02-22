@@ -101,7 +101,9 @@ module Pod
 
     # @!group Configuration
 
-    # @return [Boolean] TODO
+    # @return [Bool] Whether the validator should print the results of the
+    #         validation. This is useful for clients which want to customize
+    #         output.
     #
     attr_accessor :disable_ui_output
 
@@ -127,7 +129,8 @@ module Pod
     attr_writer :local
     def local?; @local; end
 
-    # @return [Boolean] TODO
+    # @return [Bool] Whether the validator should fail only on errors or also
+    #         on warnings.
     #
     attr_accessor :only_errors
 
@@ -221,7 +224,6 @@ module Pod
     end
 
     def tear_down_validation_environment
-      # TODO
       validation_dir.rmtree unless no_clean
       Config.instance = @original_config
     end

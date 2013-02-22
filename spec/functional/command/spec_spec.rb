@@ -120,7 +120,7 @@ module Pod
         end
       end
 
-      # TODO VCR is required in CocoaPods only for this test.
+      # @todo VCR is required in CocoaPods only for this test.
       #
       # it "lints a remote podspec" do
       #   Dir.chdir(fixture('spec-repos') + 'master/JSONKit/1.4/') do
