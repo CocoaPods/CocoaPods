@@ -37,7 +37,7 @@ module Pod
       def section(title, verbose_prefix = '', relative_indentation = 0)
         if config.verbose?
           title(title, verbose_prefix, relative_indentation)
-        elsif title_level < 2
+        elsif title_level < 1
           puts title
         end
 

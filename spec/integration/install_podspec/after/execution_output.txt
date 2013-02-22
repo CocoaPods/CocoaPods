@@ -54,7 +54,7 @@ Generating Pods project
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
 
-Integrating client projects
+Integrating client project
 
 [!] From now on use `SampleApp.xcworkspace`.
 

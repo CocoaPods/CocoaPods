@@ -357,7 +357,7 @@ module Pod
     #         information in the lockfile.
     #
     def integrate_user_project
-      UI.section "Integrating client projects" do
+      UI.section "Integrating client #{'project'.pluralize(libraries.map(&:user_project_path).uniq.count) }" do
         installation_root = config.installation_root
         integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, libraries)
         integrator.integrate!

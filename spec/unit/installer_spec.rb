@@ -333,6 +333,7 @@ module Pod
     describe "Integrating client projects" do
 
       it "integrates the client projects" do
+        @installer.stubs(:libraries).returns([Library.new(nil)])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)
       end
