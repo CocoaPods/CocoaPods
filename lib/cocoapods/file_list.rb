@@ -22,6 +22,11 @@ module Rake
     def glob
       to_a.map { |path| Pathname.new(path) }
     end
+
+    def inspect
+      "<##{self.class} pending_add=#{@pending_add}>"
+    end
+    alias :to_s :inspect
   end
 end
 
