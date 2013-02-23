@@ -43,11 +43,14 @@ other DSL attributes or any other kind of support.
 ###### Enhancements
 
 - Released preview [documentation](docs.cocoapods.org).
-- CocoaPods now has support for working in teams and not committing the Pods folder.
+- CocoaPods now has support for working in teams and not committing the Pods
+  folder, as it will keep track of the status of the Pods folder.
+  [#552](https://github.com/CocoaPods/CocoaPods/issues/552)
 - Simplified installation: no specific version of ruby gems is required anymore.
 - The workspace is written only if needed greatly reducing the occasions in
   which Xcode asks to revert.
 - The Lockfile is sorted reducing the SCM noise.
+  [#591](https://github.com/CocoaPods/CocoaPods/issues/591)
 - Added Podfile, Frameworks, and Resources to the Pods project.
   [#647](https://github.com/CocoaPods/CocoaPods/issues/647)
   [#588](https://github.com/CocoaPods/CocoaPods/issues/588)
@@ -62,11 +65,22 @@ other DSL attributes or any other kind of support.
 - Support for YAML formats of the Podfile and the Specification.
 - Added new command `pod ipc` to provide support for inter process
   communication through YAML formats.
+- CocoaPods now detects if the folder of a Pod is empty and reinstalls it.
+  [#534](https://github.com/CocoaPods/CocoaPods/issues/534)
+- Install hooks and the `prefix_header_contents` attribute are supported in subspecs.
+  [#617](https://github.com/CocoaPods/CocoaPods/issues/617)
 
 ###### Bug fixes
 
+- CocoaPods is not confused anymore by target definitions with different activated subspec.
+- [#535](https://github.com/CocoaPods/CocoaPods/issues/535)
 - CocoaPods is not confused anymore by to dependencies from external sources.
   [#548](https://github.com/CocoaPods/CocoaPods/issues/548)
+- The git cache will always update against the remote if a tag is requested,
+  resolving issues where library maintainers where updating the tag after a
+  lint and would be confused by CocoaPods using the cached commit for the tag.
+  [#407](https://github.com/CocoaPods/CocoaPods/issues/407)
+  [#596](https://github.com/CocoaPods/CocoaPods/issues/596)
 
 ###### Codebase
 
