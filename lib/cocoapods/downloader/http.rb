@@ -26,6 +26,16 @@ module Pod
         options[:type] || type_with_url(url)
       end
 
+      def should_flatten?
+        if options.has_key? :flatten
+          options[:flatten] # spec file can always override
+        elsif [:tgz, :tar, :tbz].include? type
+          true # those archives flatten by default
+        else
+          false # all others (actually only .zip) default not to flatten
+        end
+      end
+
       private
       def type_with_url(url)
         if url =~ /.zip$/
@@ -74,8 +84,7 @@ module Pod
           raise UnsupportedFileTypeError.new "Unsupported file type: #{type}"
         end
 
-        # If the archive is a tarball and it only contained a folder, move its contents to the target (#727)
-        if [:tgz, :tar, :tbz].include? type
+        if should_flatten?
           contents = target_path.children
           contents.delete(full_filename)
           entry = contents.first
