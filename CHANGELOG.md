@@ -10,12 +10,13 @@ specifications. This means that specifications with hooks (or any other kind of
 dynamic logic) will not be accepted. Please let us know if there is need for
 other DSL attributes or any other kind of support.
 
-- Currently the following specifications fail to load as they depended on the
-  CocoaPods internals and need to be updated:
-  - LibComponentLogging-pods/0.0.1/LibComponentLogging-pods.podspec
-  - Lockbox/1.2.0/Lockbox.podspec
-  - RestKit/0.9.3/RestKit.podspec
-  - Three20/1.0.11/Three20.podspec
+Currently the following specifications fail to load as they depended on the
+CocoaPods internals and need to be updated:
+
+- LibComponentLogging-pods/0.0.1/LibComponentLogging-pods.podspec
+- Lockbox/1.2.0/Lockbox.podspec
+- RestKit/0.9.3/RestKit.podspec
+- Three20/1.0.11/Three20.podspec
 
 ###### __Breaking__
 
@@ -37,7 +38,7 @@ other DSL attributes or any other kind of support.
 - Specification:
   - `preferred_dependency` has been renamed to `default_subspec`.
   - Added `exclude_files` attribute.
-  - Added `screenshots` attribute
+  - Added `screenshots` attribute.
   - Added default values for attributes like `source_files`.
 
 ###### Enhancements
@@ -73,7 +74,7 @@ other DSL attributes or any other kind of support.
 ###### Bug fixes
 
 - CocoaPods is not confused anymore by target definitions with different activated subspec.
-- [#535](https://github.com/CocoaPods/CocoaPods/issues/535)
+  [#535](https://github.com/CocoaPods/CocoaPods/issues/535)
 - CocoaPods is not confused anymore by to dependencies from external sources.
   [#548](https://github.com/CocoaPods/CocoaPods/issues/548)
 - The git cache will always update against the remote if a tag is requested,
