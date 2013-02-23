@@ -18,6 +18,7 @@ module Pod
       # - The specification is in head mode or from an external source and the
       #   installation process is in update mode.
       # - The directory of the Pod is empty.
+      # - The Pod has been pre-downloaded.
       #
       # Removed
       # - If a specification is present in the lockfile but not in the resolved
@@ -147,6 +148,7 @@ module Pod
           return true if spec.version != sandbox_version(pod)
           return true if spec.checksum != sandbox_checksum(pod)
           return true if resolved_spec_names(pod) != sandbox_spec_names(pod)
+          return true if sandbox.predownloaded?(pod)
           return true if folder_empty?(pod)
           if update_mode
             return true if spec.version.head?

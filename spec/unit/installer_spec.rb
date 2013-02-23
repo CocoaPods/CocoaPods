@@ -117,39 +117,6 @@ module Pod
 
       #--------------------------------------#
 
-      describe "#detect_pods_to_install" do
-
-        before do
-          @analysis_result = Installer::Analyzer::AnalysisResult.new
-          @analysis_result.specifications = []
-          @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new()
-          @installer.stubs(:analysis_result).returns(@analysis_result)
-          Pathname.any_instance.stubs(:exist?).returns(true)
-        end
-
-        it "includes the added Pods" do
-          @analysis_result.sandbox_state.add_name('added-pod', :added)
-          @installer.send(:detect_pods_to_install)
-          @installer.names_of_pods_to_install.should == ['added-pod']
-        end
-
-        it "includes the changed Pods" do
-          @analysis_result.sandbox_state.add_name('changed-pod', :changed)
-          @installer.send(:detect_pods_to_install)
-          @installer.names_of_pods_to_install.should == ['changed-pod']
-        end
-
-        it "includes the pre-downloaded Pods" do
-          @analysis_result.sandbox_state.add_name('unchanged-pods', :unchanged)
-          config.sandbox.stubs(:predownloaded_pods).returns(['pre-downloaded-pod'])
-          @installer.send(:detect_pods_to_install)
-          @installer.names_of_pods_to_install.should == ['pre-downloaded-pod']
-        end
-
-      end
-
-      #--------------------------------------#
-
       describe "#clean_sandbox" do
 
         before do
@@ -183,9 +150,15 @@ module Pod
 
         it "installs all the Pods which are marked as needing installation" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          @installer.stubs(:root_specs).returns([spec])
-          @installer.stubs(:names_of_pods_to_install).returns(['BananaLib'])
+          spec_2 = Spec.new
+          spec_2.name = 'RestKit'
+          @installer.stubs(:root_specs).returns([spec, spec_2])
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.added << 'BananaLib'
+          sandbox_state.changed << 'RestKit'
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
           @installer.expects(:install_source_of_pod).with('BananaLib')
+          @installer.expects(:install_source_of_pod).with('RestKit')
           @installer.send(:install_pod_sources)
         end
 

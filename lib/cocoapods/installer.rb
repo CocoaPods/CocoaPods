@@ -90,7 +90,6 @@ module Pod
     def resolve_dependencies
       UI.section "Analyzing dependencies" do
         analyze
-        detect_pods_to_install
         prepare_for_legacy_compatibility
         clean_sandbox
       end
@@ -158,28 +157,6 @@ module Pod
       @libraries = analyzer.result.libraries
     end
 
-    # Computes the list of the Pods that should be installed or reinstalled in
-    # the {Sandbox}.
-    #
-    # The pods to install are identified as the Pods that don't exist in the
-    # sandbox or the Pods whose version differs from the one of the lockfile.
-    #
-    # @note   In update mode specs originating from external dependencies and
-    #         or from head sources are always reinstalled.
-    #
-    # @return [void]
-    #
-    # @todo   [#534] Detect if the folder of a Pod is empty (even if it exits).
-    #
-    def detect_pods_to_install
-      names = []
-      names += analysis_result.sandbox_state.added + analysis_result.sandbox_state.changed
-      names += sandbox.predownloaded_pods
-      names = names.map { |name| Specification.root_name(name) }
-      names = names.flatten.uniq
-      @names_of_pods_to_install = names
-    end
-
     # Prepares the Pods folder in order to be compatible with the most recent
     # version of CocoaPods.
     #
@@ -201,9 +178,9 @@ module Pod
       sandbox.build_headers.implode!
       sandbox.public_headers.implode!
 
-      unless analysis_result.sandbox_state.deleted.empty?
+      unless sandbox_state.deleted.empty?
         title_options = { :verbose_prefix => "-> ".red }
-        analysis_result.sandbox_state.deleted.each do |pod_name|
+        sandbox_state.deleted.each do |pod_name|
           UI.titled_section("Removing #{pod_name}".red, title_options) do
             sandbox.clean_pod(pod_name)
           end
@@ -233,9 +210,10 @@ module Pod
     #
     def install_pod_sources
       @installed_specs = []
+      pods_to_install = sandbox_state.added | sandbox_state.changed
       title_options = { :verbose_prefix => "-> ".green }
       root_specs.sort_by(&:name).each do |spec|
-        if names_of_pods_to_install.include?(spec.name)
+        if pods_to_install.include?(spec.name)
           UI.titled_section("Installing #{spec}".green, title_options) do
             install_source_of_pod(spec.name)
           end
@@ -475,6 +453,12 @@ module Pod
     #
     def root_specs
       analysis_result.specifications.map { |spec| spec.root }.uniq
+    end
+
+    # @return [SpecsState] The state of the sandbox returned by the analyzer.
+    #
+    def sandbox_state
+      analysis_result.sandbox_state
     end
 
     #-------------------------------------------------------------------------#

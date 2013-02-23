@@ -83,6 +83,11 @@ module Pod
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
 
+      it "considers changed a Pod which has been pre-downloaded" do
+        @sandbox.stubs(:predownloaded?).returns(true)
+        @analyzer.send(:pod_changed?, 'BananaLib').should == true
+      end
+
       it "considers changed a Pod whose specification is in head mode if in update mode" do
         @spec.version.head = true
         @analyzer.stubs(:update_mode).returns(true)

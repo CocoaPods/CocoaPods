@@ -53,7 +53,7 @@ module Pod
         absolute_paths = paths.reject { |p| p == "#{root}/." || p == "#{root}/.." }
         relative_paths = absolute_paths.map { |p| p[root_length..-1] }
         @files = relative_paths - relative_dirs
-        @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/,'') }.uniq
+        @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/,'') }.reject { |d| d == '.' || d == '..' } .uniq
       end
 
       #-----------------------------------------------------------------------#
