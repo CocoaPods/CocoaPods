@@ -120,7 +120,8 @@ module Pod
                 else
                   results = validator.results
                 end
-                results.each do |result|
+                sorted_results = results.sort_by { |r| [r.type, r.message] }
+                sorted_results.each do |result|
                   name = validator.spec ? validator.spec.name : podspec.relative_path_from(dir)
                   version = validator.spec ? validator.spec.version : 'unknown'
                   messages_by_type[result.type] ||= {}

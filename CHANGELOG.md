@@ -3,6 +3,20 @@
 • [Core](https://github.com/CocoaPods/Core/master)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...master)
 
+###### __Notice__
+
+At some point in future the master repo will be switched to the YAML format of
+specifications. This means that specifications with hooks (or any other kind of
+dynamic logic) will not be accepted. Please let us know if there is need for
+other DSL attributes or any other kind of support.
+
+- Currently the following specifications fail to load as they depended on the
+  CocoaPods internals and need to be updated:
+  - LibComponentLogging-pods/0.0.1/LibComponentLogging-pods.podspec
+  - Lockbox/1.2.0/Lockbox.podspec
+  - RestKit/0.9.3/RestKit.podspec
+  - Three20/1.0.11/Three20.podspec
+
 ###### __Breaking__
 
 - Support for inline podspecs has been removed.
@@ -58,11 +72,11 @@
 
 - Major clean up and refactor of the whole code base.
 - Extracted the core classes into
-  [CocoaPods-Core](https://github.com/CocoaPods/Core) gem.
-- Extracted command-line command & option handling into
-  [CLAide](https://github.com/CocoaPods/CLAide).
+  [cocoapods-core](https://github.com/CocoaPods/Core) gem.
 - Extracted downloader into
   [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader).
+- Extracted command-line command & option handling into
+  [CLAide](https://github.com/CocoaPods/CLAide).
 
 ## 0.16.3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.2...0.16.3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
