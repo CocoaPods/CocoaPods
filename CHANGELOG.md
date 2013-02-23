@@ -1,19 +1,21 @@
 ## Branch 0.17
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.17)
 • [Core](https://github.com/CocoaPods/Core/master)
-• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0...master)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...master)
 
 ###### __Breaking__
 
+- Support for inline podspecs has been removed.
+- Subspecs do **not** inherit the files patterns from the parent spec anymore.
+- External sources are not supported in the dependencies of specifications anymore.
+- The support for Rake File list is being deprecated.
+- The hooks architecture has been factored and might present incompatibilities
+  (please open an issue if appropriate).
 - `requires_arc` is transitioning from `false` to `true`.
 - Deprecated `header_mappings` hook.
 - Deprecated `exclude_header_search_paths`
-- The support for Rake File list is being deprecated.
-- Support for inline podspecs has been removed.
-- Subspecs do **not** inherit the files patterns from the parent spec anymore.
-- External sources are not supported in specifications anymore.
 
-###### DSLs
+###### DSL
 
 - Podfile:
   - It is not needed to specify the platform anymore (unless not integrating)
@@ -40,10 +42,12 @@
 - The `--no-clean` option of the `pod spec lint` command now displays the Pods
   project for inspection.
 - It is now possible to specify default values for the configuration in
-  `~/.cocoapods/config.yaml` ([see](https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/config.rb#L17)).
+  `~/.cocoapods/config.yaml` ([default values](https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/config.rb#L17)).
 - CocoaPods now checks the checksums of the installed specifications and
   reinstalls them if needed.
-- Added new command `pod ipc` to provide support for inter process communication.
+- Support for YAML formats of the Podfile and the Specification.
+- Added new command `pod ipc` to provide support for inter process
+  communication through YAML formats.
 
 ###### Bug fixes
 
@@ -59,11 +63,6 @@
   [CLAide](https://github.com/CocoaPods/CLAide).
 - Extracted downloader into
   [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader).
-- Added PathList class.
-  [#476](https://github.com/CocoaPods/CocoaPods/issues/476)
-- Added Analyzer class.
-- Added Library class.
-- Added XCConfig generator.
 
 ## 0.16.3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.2...0.16.3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
