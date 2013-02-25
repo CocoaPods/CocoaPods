@@ -66,7 +66,7 @@ module Pod
       # destination path.
       #
       def download_tag
-        ensure_ref_exists(options[:tag])
+        ensure_ref_exists_tag(options[:tag])
         Dir.chdir(target_path) do
           git! "init"
           git! "remote add origin '#{clone_url}'"
@@ -80,7 +80,7 @@ module Pod
       # destination path.
       #
       def download_commit
-        ensure_ref_exists(options[:commit])
+        ensure_ref_exists_commit(options[:commit])
         clone(clone_url, target_path)
         Dir.chdir(target_path) do
           git! "checkout -b activated-pod-commit #{options[:commit]}"
@@ -105,10 +105,17 @@ module Pod
 
       # @!group Checking references
 
-      # @return [Bool] Wether a reference (commit SHA or tag)
+      # @return [Bool] Wether a reference (commit SHA)
       #
-      def ref_exists?(ref)
+      def ref_exists_commit?(ref)
         Dir.chdir(cache_path) { git "rev-list --max-count=1 #{ref}" }
+        $? == 0
+      end
+
+      # @return [Bool] Wether a reference (tag)
+      #
+      def ref_exists_tag?(ref)
+        Dir.chdir(cache_path) { git "rev-list --max-count=1 --tags #{ref}" }
         $? == 0
       end
 
@@ -117,10 +124,16 @@ module Pod
       #
       # @raises if after the update the reference can't be found.
       #
-      def ensure_ref_exists(ref)
-        return if ref_exists?(ref)
+      def ensure_ref_exists_tag(ref)
+        return if ref_exists_tag?(ref)
         update_cache
-        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists?(ref)
+        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists_tag?(ref)
+      end
+
+      def ensure_ref_exists_commit(ref)
+        return if ref_exists_commit?(ref)
+        update_cache
+        raise Informative, "[!] Cache unable to find git reference `#{ref}' for `#{url}'.".red unless ref_exists_commit?(ref)
       end
 
       # @return [Bool] Wether a branch exists in the cache.
