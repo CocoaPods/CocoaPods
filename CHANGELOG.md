@@ -1,3 +1,18 @@
+## 0.16.4
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.3...0.16.4)
+
+###### Enhancements
+
+- Add explicit flattening option to `Downloader:Http`: `:flatten => true`.
+  [#814](https://github.com/CocoaPods/CocoaPods/pull/814)
+  [#812](https://github.com/CocoaPods/CocoaPods/issues/812)
+  [#1314](https://github.com/CocoaPods/Specs/pull/1314)
+
+###### Bug fixes
+
+- Explicitely require `date` in the gemspec for Ruby 2.0.0.
+  [34da3f7](https://github.com/CocoaPods/CocoaPods/commit/34da3f792b2a36fafacd4122e29025c9cf2ff38d)
+
 ## 0.16.3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.2...0.16.3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
 
