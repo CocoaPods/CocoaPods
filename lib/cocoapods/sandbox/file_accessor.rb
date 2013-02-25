@@ -83,11 +83,11 @@ module Pod
       #         specification grouped by destination.
       #
       def resources
-        result = {}
-        spec_consumer.resources.each do |destination, patterns|
-          result[destination] = expanded_paths(patterns, {:include_dirs => true})
-        end
-        result
+        options = {
+          :exclude_patterns => spec_consumer.exclude_files,
+          :include_dirs => true,
+        }
+        expanded_paths(spec_consumer.resources, options)
       end
 
       # @return [Array<Pathname>] the files of the specification to preserve.

@@ -272,7 +272,7 @@ module Pod
 
         files = [
           file_accessors.map(&:source_files),
-          file_accessors.map(&:resources).map(&:values).flatten,
+          file_accessors.map(&:resources),
           file_accessors.map(&:preserve_paths),
           file_accessors.map(&:prefix_header),
           file_accessors.map(&:readme),

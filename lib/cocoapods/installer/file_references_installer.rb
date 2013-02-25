@@ -91,12 +91,10 @@ module Pod
       def add_resources_references
         UI.message "- Adding resources to Pods project" do
           file_accessors.each do |file_accessor|
-            file_accessor.resources.each do |destination, resources|
-              next if resources.empty?
-              files = file_accessor.resources.values.flatten
+            file_accessor.resources.each do |resources|
+              files = file_accessor.resources
               spec_name = file_accessor.spec.name
               parent_group = pods_project.resources
-
               pods_project.add_file_references(files, spec_name, parent_group)
             end
           end

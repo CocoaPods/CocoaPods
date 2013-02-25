@@ -70,7 +70,7 @@ module Pod
       end
 
       it "returns the resources" do
-        @accessor.resources[:resources].sort.should == [
+        @accessor.resources.sort.should == [
           @root + "Resources/logo-sidebar.png",
           @root + "Resources/sub_dir",
         ]

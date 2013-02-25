@@ -215,7 +215,7 @@ module Pod
 
       it "compacts the used files as nil would be converted to the empty string" do
         Sandbox::FileAccessor.any_instance.stubs(:source_files)
-        Sandbox::FileAccessor.any_instance.stubs(:resources).returns({})
+        Sandbox::FileAccessor.any_instance.stubs(:resources).returns(nil)
         Sandbox::FileAccessor.any_instance.stubs(:preserve_paths)
         Sandbox::FileAccessor.any_instance.stubs(:prefix_header)
         Sandbox::FileAccessor.any_instance.stubs(:readme)
