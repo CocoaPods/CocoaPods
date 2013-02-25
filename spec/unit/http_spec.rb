@@ -19,7 +19,6 @@ describe Pod::Downloader::Http do
     downloader.should.be.instance_of Pod::Downloader::Http
     downloader.type.should == :zip
 
-
     downloader = Pod::Downloader.for_pod(stub_pod_with_source(
       :http => 'https://testflightapp.com/media/sdk-downloads/TestFlightSDK1.0.tar'
     ))
@@ -69,20 +68,21 @@ describe Pod::Downloader::Http do
     downloader.download
   end
 
-  it 'should raise error when unsupported filetype is pass' do
-    downloader = Pod::Downloader.for_pod(stub_pod_with_source(
-      :http => 'https://testflightapp.com/media/sdk-downloads/TestFlightSDK1.0.rar'
-    ))
-    downloader.expects(:download).raises(Pod::Downloader::Http::UnsupportedFileTypeError)
-    downloader.download rescue nil
+  it 'should raise error when unsupported filetype is passed' do
+    should.raise Pod::Downloader::Http::UnsupportedFileTypeError do
+      downloader = Pod::Downloader.for_pod(stub_pod_with_source(
+        :http => 'https://testflightapp.com/media/sdk-downloads/TestFlightSDK1.0.rar'
+      ))
+      downloader.download
+    end
 
-    downloader = Pod::Downloader.for_pod(stub_pod_with_source(
-      :http => 'https://testflightapp.com/media/sdk-downloads/TestFlightSDK1.0',
-      :type => :rar
-    ))
-    downloader.expects(:download).raises(Pod::Downloader::Http::UnsupportedFileTypeError)
-    downloader.download rescue nil
-
+    should.raise Pod::Downloader::Http::UnsupportedFileTypeError do
+      downloader = Pod::Downloader.for_pod(stub_pod_with_source(
+        :http => 'https://testflightapp.com/media/sdk-downloads/TestFlightSDK1.0',
+        :type => :rar
+      ))
+      downloader.download
+    end
   end
 
   it 'should move unpacked contents to parent dir when archive contains only a folder (#727)' do
