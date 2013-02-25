@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 require File.expand_path('../lib/cocoapods/gem_version', __FILE__)
-
+require 'date'
 
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
