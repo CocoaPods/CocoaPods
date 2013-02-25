@@ -1,7 +1,8 @@
 ## 0.17.0.rc1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.17)
-• [Core](https://github.com/CocoaPods/Core/master)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...master)
+• [cocoapods-core](https://github.com/CocoaPods/Core)
+• [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader)
 
 ###### __Notice__
 
