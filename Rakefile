@@ -12,7 +12,7 @@ end
 namespace :gem do
 
   def gem_version
-    require File.expand_path('../lib/cocoapods', __FILE__)
+    require File.expand_path('../lib/cocoapods/gem_version.rb', __FILE__)
     Pod::VERSION
   end
 
@@ -55,7 +55,7 @@ namespace :gem do
       end
 
       if `git tag`.strip.split("\n").include?(gem_version)
-        $stderr.puts "[!] A tag for version `#{gem_version}' already exists. Change the version in lib/cocoapods.rb"
+        $stderr.puts "[!] A tag for version `#{gem_version}' already exists. Change the version in lib/cocoapods/gem_version.rb"
         exit 1
       end
 
@@ -65,13 +65,13 @@ namespace :gem do
       diff_lines = `git diff --name-only`.strip.split("\n")
 
       if diff_lines.size == 0
-        $stderr.puts "[!] Change the version number yourself in lib/cocoapods.rb"
+        $stderr.puts "[!] Change the version number yourself in lib/cocoapods/gem_version.rb"
         exit 1
       end
 
       diff_lines.delete('Gemfile.lock')
       diff_lines.delete('CHANGELOG.md')
-      if diff_lines != ['lib/cocoapods.rb']
+      if diff_lines != ['lib/cocoapods/gem_version.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
         exit 1
       end
@@ -79,19 +79,22 @@ namespace :gem do
 
     require 'date'
 
-    # First check if the required Xcodeproj gem has ben pushed
+    # First check if the required Xcodeproj gem has been pushed
     gem_spec = eval(File.read(File.expand_path('../cocoapods.gemspec', __FILE__)))
-    xcodeproj = gem_spec.dependencies.find { |d| d.name == 'xcodeproj' }
-    required_xcodeproj_version = xcodeproj.requirement.requirements.first.last.to_s
+    gem_names = ['xcodeproj', 'cocoapods-core', 'cocoapods-downloader']
+    gem_names.each do |gem_name|
+      gem = gem_spec.dependencies.find { |d| d.name == gem_name }
+      required_xcodeproj_version = gem.requirement.requirements.first.last.to_s
 
-    puts "* Checking if xcodeproj #{required_xcodeproj_version} exists on the gem host"
-    search_result = silent_sh("gem search --all --remote xcodeproj")
-    remote_xcodeproj_versions = search_result.match(/xcodeproj \((.*)\)/m)[1].split(', ')
-    unless remote_xcodeproj_versions.include?(required_xcodeproj_version)
-      $stderr.puts "[!] The Xcodeproj version `#{required_xcodeproj_version}' required by " \
-                   "this version of CocoaPods does not exist on the gem host. " \
-                   "Either push that first, or fix the version requirement."
-      exit 1
+      puts "* Checking if #{gem_name} #{required_xcodeproj_version} exists on the gem host"
+      search_result = silent_sh("gem search --all --remote #{gem_name}")
+      remote_xcodeproj_versions = search_result.match(/#{gem_name} \((.*)\)/m)[1].split(', ')
+      unless remote_xcodeproj_versions.include?(required_xcodeproj_version)
+        $stderr.puts "[!] The #{gem_name} version `#{required_xcodeproj_version}' required by " \
+          "this version of CocoaPods does not exist on the gem host. " \
+          "Either push that first, or fix the version requirement."
+        exit 1
+      end
     end
 
     # Ensure that the branches are up to date with the remote
@@ -108,12 +111,6 @@ namespace :gem do
     puts "* Testing gem installation (tmp/gems)"
     silent_sh "rm -rf '#{tmp}'"
     silent_sh "gem install --install-dir='#{tmp_gems}' #{gem_filename}"
-
-    # puts "* Building examples from gem (tmp/gems)"
-    # ENV['GEM_HOME'] = ENV['GEM_PATH'] = tmp_gems
-    # ENV['PATH']     = "#{tmp_gems}/bin:#{ENV['PATH']}"
-    # ENV['FROM_GEM'] = '1'
-    # silent_sh "rake examples:build"
 
     # Then release
     sh "git commit lib/cocoapods.rb Gemfile.lock CHANGELOG.md -m 'Release #{gem_version}'"
