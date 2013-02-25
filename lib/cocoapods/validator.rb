@@ -232,7 +232,7 @@ module Pod
     # for all available platforms with xcodebuild.
     #
     def install_pod
-      podfile = podfile_from_spec(consumer.platform, spec.deployment_target(consumer.platform))
+      podfile = podfile_from_spec(consumer.platform_name, spec.deployment_target(consumer.platform_name))
       sandbox = Sandbox.new(config.sandbox_root)
       installer = Installer.new(sandbox, podfile)
       installer.install!
@@ -312,7 +312,7 @@ module Pod
         result = Specification::Linter::Result.new(type, message)
         results << result
       end
-      result.platforms << consumer.platform if consumer
+      result.platforms << consumer.platform_name if consumer
     end
 
     #-------------------------------------------------------------------------#

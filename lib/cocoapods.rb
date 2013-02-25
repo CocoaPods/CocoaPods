@@ -17,6 +17,7 @@ module Pod
   end
 
   require 'cocoapods-core'
+  require 'xcodeproj'
   require 'cocoapods/downloader'
   require 'cocoapods/file_list'
   require 'cocoapods/config'

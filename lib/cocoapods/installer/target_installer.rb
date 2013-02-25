@@ -355,7 +355,7 @@ module Pod
         flags = consumer.compiler_flags.dup
         if consumer.requires_arc
           flags << '-fobjc-arc'
-          platform_name = consumer.platform.symbolic_name unless consumer.platform.is_a?(Symbol) #TODO
+          platform_name = consumer.platform_name
           spec_deployment_target = consumer.spec.deployment_target(platform_name)
           if spec_deployment_target.nil? || Version.new(spec_deployment_target) < ENABLE_OBJECT_USE_OBJC_FROM[platform_name]
             flags << '-DOS_OBJECT_USE_OBJC=0'
