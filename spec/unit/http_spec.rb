@@ -101,4 +101,15 @@ describe Pod::Downloader::Http do
     # Archive contains 4 files, and the archive is 1
     Dir.glob(downloader.target_path + '*').count.should == 4 + 1
   end
+
+  it 'should flatten zip archives, when the spec explicitly demands it' do
+    downloader = Pod::Downloader.for_pod(stub_pod_with_source(
+      :http => 'https://github.com/kevinoneill/Useful-Bits/archive/1.0.zip',
+      :flatten => true
+    ))
+    downloader.download
+    # Archive contains one folder, which contains 8 items. The archive is 1, and the
+    # parent folder that we moved stuff out of is 1.
+    Dir.glob(downloader.target_path + '*').count.should == 8 + 1 + 1
+  end
 end
