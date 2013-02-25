@@ -72,6 +72,7 @@ CocoaPods internals and need to be updated:
   [#617](https://github.com/CocoaPods/CocoaPods/issues/617)
 - Dashes are now supported in the versions of the Pods. 
   [#293](https://github.com/CocoaPods/CocoaPods/issues/293)
+
 ###### Bug fixes
 
 - CocoaPods is not confused anymore by target definitions with different activated subspec.
