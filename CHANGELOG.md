@@ -14,21 +14,30 @@ Currently the following specifications fail to load as they depended on the
 CocoaPods internals and need to be updated:
 
 - LibComponentLogging-pods/0.0.1/LibComponentLogging-pods.podspec
-- Lockbox/1.2.0/Lockbox.podspec
 - RestKit/0.9.3/RestKit.podspec
 - Three20/1.0.11/Three20.podspec
 
+Other specifications, might present compatibility issues for the reasons
+presented below.
+
 ###### __Breaking__
 
-- Support for inline podspecs has been removed.
 - Subspecs do **not** inherit the files patterns from the parent spec anymore.
-- External sources are not supported in the dependencies of specifications anymore.
-- The support for Rake File list is being deprecated.
-- The hooks architecture has been factored and might present incompatibilities
-  (please open an issue if appropriate).
-- `requires_arc` is transitioning from `false` to `true`.
-- Deprecated `header_mappings` hook.
-- Deprecated `exclude_header_search_paths`
+  This feature made the implementation more complicated and was not easy to
+  explain to podspecs maintainers. Compatibility can be easily fixed by adding
+  a 'Core' subspec.
+- Support for inline podspecs has been removed.
+- The support for Rake::FileList is being deprecated, in favor of a more
+  consistent DSL. Rake::FileList also presented issues because it would access
+  the file system as soon as it was converted to an array.
+- The hooks architecture has been re-factored and might present
+  incompatibilities (please open an issue if appropriate).
+- The `requires_arc` attribute default value is transitioning from `false` to
+  `true`. In the meanwhile a value is needed to pass the lint.
+- Deprecated `copy_header_mapping` hook.
+- Deprecated `exclude_header_search_paths` attribute.
+- External sources are not supported in the dependencies of specifications
+  anymore. Actually they never have been supported, they just happened to work.
 
 ###### DSL
 
