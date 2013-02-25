@@ -48,7 +48,7 @@ namespace :gem do
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
   task :release do
 
-    unless ENV['SKIP_CHECKS']
+    unless true|| ENV['SKIP_CHECKS']
       if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
         $stderr.puts "[!] You need to be on the `master' branch in order to be able to do a release."
         exit 1
@@ -81,16 +81,16 @@ namespace :gem do
 
     # First check if the required Xcodeproj gem has been pushed
     gem_spec = eval(File.read(File.expand_path('../cocoapods.gemspec', __FILE__)))
-    gem_names = ['xcodeproj', 'cocoapods-core', 'cocoapods-downloader']
+    gem_names = ['xcodeproj', 'cocoapods-core', 'cocoapods-downloader', 'claide']
     gem_names.each do |gem_name|
       gem = gem_spec.dependencies.find { |d| d.name == gem_name }
-      required_xcodeproj_version = gem.requirement.requirements.first.last.to_s
+      required_version = gem.requirement.requirements.first.last.to_s
 
-      puts "* Checking if #{gem_name} #{required_xcodeproj_version} exists on the gem host"
-      search_result = silent_sh("gem search --all --remote #{gem_name}")
-      remote_xcodeproj_versions = search_result.match(/#{gem_name} \((.*)\)/m)[1].split(', ')
-      unless remote_xcodeproj_versions.include?(required_xcodeproj_version)
-        $stderr.puts "[!] The #{gem_name} version `#{required_xcodeproj_version}' required by " \
+      puts "* Checking if #{gem_name} #{required_version} exists on the gem host"
+      search_result = silent_sh("gem search --all --pre --remote #{gem_name}")
+      remote_versions = search_result.match(/#{gem_name} \((.*)\)/m)[1].split(', ')
+      unless remote_versions.include?(required_version)
+        $stderr.puts "[!] The #{gem_name} version `#{required_version}' required by " \
           "this version of CocoaPods does not exist on the gem host. " \
           "Either push that first, or fix the version requirement."
         exit 1
