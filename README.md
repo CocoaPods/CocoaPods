@@ -1,8 +1,8 @@
 # CocoaPods – an Objective-C library manager
 
-| CocoaPods | Xcodeproj | Specs |
-| :---: | :---: | :---: |
-[![Master Build Status](https://secure.travis-ci.org/CocoaPods/CocoaPods.png?branch=master)](https://secure.travis-ci.org/CocoaPods/CocoaPods)|[![Build Status](https://secure.travis-ci.org/CocoaPods/Xcodeproj.png?branch=master)](http://travis-ci.org/CocoaPods/Xcodeproj)|[![Build Status](https://secure.travis-ci.org/CocoaPods/Specs.png?branch=master)](http://travis-ci.org/CocoaPods/Specs)
+| CocoaPods | Xcodeproj | Specs | Dependencies |
+| :---: | :---: | :---: | :---: |
+[![Build Status](https://travis-ci.org/CocoaPods/CocoaPods.png)](https://travis-ci.org/CocoaPods/CocoaPods)|[![Build Status](https://secure.travis-ci.org/CocoaPods/Xcodeproj.png?branch=master)](http://travis-ci.org/CocoaPods/Xcodeproj)|[![Build Status](https://secure.travis-ci.org/CocoaPods/Specs.png?branch=master)](http://travis-ci.org/CocoaPods/Specs)|[![Dependency Status](https://gemnasium.com/CocoaPods/CocoaPods.png)](https://gemnasium.com/CocoaPods/CocoaPods)
 
 
 CocoaPods manages library dependencies for your Xcode project.
