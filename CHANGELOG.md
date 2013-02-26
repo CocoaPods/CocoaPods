@@ -53,7 +53,7 @@ presented below.
 
 ###### Enhancements
 
-- Released preview [documentation](docs.cocoapods.org).
+- Released preview [documentation](http://docs.cocoapods.org).
 - CocoaPods now has support for working in teams and not committing the Pods
   folder, as it will keep track of the status of the Pods folder.
   [#552](https://github.com/CocoaPods/CocoaPods/issues/552)
