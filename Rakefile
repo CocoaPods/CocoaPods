@@ -113,7 +113,7 @@ namespace :gem do
     silent_sh "gem install --install-dir='#{tmp_gems}' #{gem_filename}"
 
     # Then release
-    sh "git commit lib/cocoapods.rb Gemfile.lock CHANGELOG.md -m 'Release #{gem_version}'"
+    sh "git commit lib/cocoapods/gem_version.rb CHANGELOG.md -m 'Release #{gem_version}'"
     sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
     sh "git push origin master"
     sh "git push origin --tags"
