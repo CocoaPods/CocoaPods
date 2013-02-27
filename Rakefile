@@ -48,7 +48,7 @@ namespace :gem do
   desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
   task :release do
 
-    unless true|| ENV['SKIP_CHECKS']
+    unless ENV['SKIP_CHECKS']
       if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
         $stderr.puts "[!] You need to be on the `master' branch in order to be able to do a release."
         exit 1
@@ -280,6 +280,7 @@ end
 
 #-----------------------------------------------------------------------------#
 
+task :examples => "examples:build"
 namespace :examples do
 
   def examples
