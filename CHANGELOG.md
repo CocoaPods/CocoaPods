@@ -17,6 +17,7 @@ CocoaPods internals and need to be updated:
 - LibComponentLogging-pods/0.0.1/LibComponentLogging-pods.podspec
 - RestKit/0.9.3/RestKit.podspec
 - Three20/1.0.11/Three20.podspec
+- ARAnalytics/1.1/ARAnalytics.podspec
 
 Other specifications, might present compatibility issues for the reasons
 presented below.
