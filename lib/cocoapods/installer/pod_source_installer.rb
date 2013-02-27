@@ -152,14 +152,6 @@ module Pod
 
       # @!group Dependencies
 
-      # @return [String] The directory where CocoaPods caches the downloads.
-      #
-      CACHE_ROOT = "~/Library/Caches/CocoaPods"
-
-      # @return [Fixnum] The maximum size for the cache expressed in Mb.
-      #
-      MAX_CACHE_SIZE = 500
-
       # @return [Downloader] The downloader to use for the retrieving the
       #         source.
       #

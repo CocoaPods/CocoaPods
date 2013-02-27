@@ -16,6 +16,20 @@ module Pod
     end
   end
 
+  # @return [String] The directory where CocoaPods caches the downloads.
+  #
+  # @todo   The {Installer::PodSourceInstaller} and the #{ExternalSources}
+  #         classes build and configure the downloader from scratch.
+  #
+  CACHE_ROOT = "~/Library/Caches/CocoaPods"
+
+  # @return [Fixnum] The maximum size for the cache expressed in Mb.
+  #
+  # @todo   The {Installer::PodSourceInstaller} and the #{ExternalSources}
+  #         classes build and configure the downloader from scratch.
+  #
+  MAX_CACHE_SIZE = 500
+
   require 'cocoapods-core'
   require 'xcodeproj'
   require 'cocoapods/downloader'

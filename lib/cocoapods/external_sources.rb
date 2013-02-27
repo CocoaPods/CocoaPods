@@ -122,6 +122,9 @@ module Pod
       #         marked as pre-downloaded indicating to the installer that only
       #         clean operations are needed.
       #
+      # @todo  The downloader configuration is the same of the
+      #        #{PodSourceInstaller} and it needs to be kept in sync.
+      #
       # @return [void]
       #
       def pre_download(sandbox)
@@ -129,6 +132,9 @@ module Pod
           target = sandbox.root + name
           target.rmtree if target.exist?
           downloader = Downloader.for_target(target, params)
+          downloader.cache_root = CACHE_ROOT
+          downloader.max_cache_size = MAX_CACHE_SIZE
+          downloader.aggressive_cache = false
           downloader.download
           store_podspec(sandbox, target + "#{name}.podspec")
           sandbox.store_pre_downloaded_pod(name)
