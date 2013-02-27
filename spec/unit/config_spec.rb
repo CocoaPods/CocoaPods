@@ -16,6 +16,16 @@ module Pod
       it "returns the path to the spec-repos dir" do
         config.repos_dir.should == Pathname.new("~/.cocoapods").expand_path
       end
+
+      it "returns the path to the spec-repos dir" do
+        config.repos_dir.should == Pathname.new("~/.cocoapods").expand_path
+      end
+
+      it "allows to specify the repos dir with an environment variable" do
+        ENV['CP_REPOS_DIR'] = '~/custom_repos_dir'
+        config.repos_dir.should == Pathname.new("~/custom_repos_dir").expand_path
+        ENV.delete('CP_REPOS_DIR')
+      end
     end
 
     describe "Concerning a user's project, which is expected in the current working directory" do

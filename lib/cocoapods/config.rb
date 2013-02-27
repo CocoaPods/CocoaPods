@@ -113,7 +113,7 @@ module Pod
     # @return [Pathname] the directory where the CocoaPods sources are stored.
     #
     def repos_dir
-      @repos_dir ||= Pathname.new(ENV['HOME'] + "/.cocoapods")
+      @repos_dir ||= Pathname.new(ENV['CP_REPOS_DIR'] || "~/.cocoapods").expand_path
     end
 
     attr_writer :repos_dir
@@ -165,7 +165,7 @@ module Pod
     # @return [Pathname] The path of the file which contains the user settings.
     #
     def user_settings_file
-      Pathname.new(ENV['HOME'] + "/.cocoapods/config.yaml")
+      repos_dir + "config.yaml"
     end
 
     # Sets the values of the attributes with the given hash.
