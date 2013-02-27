@@ -21,7 +21,7 @@ module Pod
 
     def self.parse(argv)
       command = super
-      unless SourcesManager.master_repo_functional? || command.is_a?(Setup) || ENV['SKIP_SETUP']
+      unless SourcesManager.master_repo_functional? || command.is_a?(Setup) || command.is_a?(Repo::Add) || ENV['SKIP_SETUP']
         Setup.new(CLAide::ARGV.new([])).run
       end
       command
