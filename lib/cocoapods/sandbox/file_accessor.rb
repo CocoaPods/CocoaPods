@@ -54,7 +54,7 @@ module Pod
       # @return [String] A string suitable for debugging.
       #
       def inspect
-        "<#{self.class} spec=#{spec.name} platform=#{spec_consumer.platform} root=#{path_list.root}>"
+        "<#{self.class} spec=#{spec.name} platform=#{platform_name} root=#{path_list.root}>"
       end
 
       #-----------------------------------------------------------------------#
@@ -91,17 +91,13 @@ module Pod
       #         specification grouped by destination.
       #
       def resources
-        options = {
-          :exclude_patterns => spec_consumer.exclude_files,
-          :include_dirs => true,
-        }
-        expanded_paths(spec_consumer.resources, options)
+        paths_for_attribute(:resources, true)
       end
 
       # @return [Array<Pathname>] the files of the specification to preserve.
       #
       def preserve_paths
-        paths_for_attribute(:preserve_paths)
+        paths_for_attribute(:preserve_paths, true)
       end
 
       # @return [Pathname] The of the prefix header file of the specification.
@@ -144,11 +140,12 @@ module Pod
       #
       # @return [Array<Pathname>] the paths.
       #
-      def paths_for_attribute(attribute)
+      def paths_for_attribute(attribute, include_dirs = false)
         file_patterns = spec_consumer.send(attribute)
         options = {
           :exclude_patterns => spec_consumer.exclude_files,
-          :dir_pattern => glob_for_attribute(attribute)
+          :dir_pattern => glob_for_attribute(attribute),
+          :include_dirs => include_dirs,
         }
         expanded_paths(file_patterns, options)
       end

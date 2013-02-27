@@ -80,10 +80,19 @@ module Pod
         ]
       end
 
-      it "returns the preserve path" do
+      it "includes folders in the resources" do
+        @accessor.resources.should.include?(@root + "Resources/sub_dir")
+      end
+
+      it "returns the preserve paths" do
         @accessor.preserve_paths.sort.should == [
           @root + "preserve_me.txt"
         ]
+      end
+
+      it "includes folders in the preserve paths" do
+        @spec_consumer.stubs(:preserve_paths).returns(["Resources"])
+        @accessor.preserve_paths.should.include?(@root + "Resources")
       end
 
       it "returns the prefix header of the specification" do
@@ -120,7 +129,8 @@ module Pod
           file_patterns = ["Classes/*.{h,m}", "Vendor"]
           options = {
             :exclude_patterns => ["Classes/**/osx/**/*", "Resources/**/osx/**/*"],
-            :dir_pattern => "*.{h,hpp,hh,m,mm,c,cpp}"
+            :dir_pattern => "*.{h,hpp,hh,m,mm,c,cpp}",
+            :include_dirs => false,
           }
           @spec.exclude_files = options[:exclude_patterns]
           @accessor.expects(:expanded_paths).with(file_patterns, options)
