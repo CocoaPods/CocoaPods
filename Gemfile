@@ -14,7 +14,7 @@ group :development do
   # gem "xcodeproj",            :path => "../Xcodeproj"
   # gem "cocoapods-downloader", :path => "../cocoapods-downloader"
 
-  gem "mocha", "~> 0.11.4"
+  gem "mocha"
   gem "bacon"
   gem "mocha-on-bacon"
   gem "rake"
