@@ -145,6 +145,9 @@ def check_with_folder(folder)
       when %r[/xcuserdata/], %r[\.pbxproj$]
         # Projects are compared through the more readable yaml representation
         next
+      when %r[execution_output.txt$]
+        # TODO The output from the caches changes on Travis
+        next
       end
 
       it relative_path do
