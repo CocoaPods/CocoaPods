@@ -1,6 +1,21 @@
+## 0.17.0.rc2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc1...0.17.0.rc2)
+
+###### Bug fixes
+
+- Restored output coloring.
+- Fixed a crash related to subspecs
+  [#819](https://github.com/CocoaPods/CocoaPods/issues/819)
+- Git repos were not cached for dependencies with external sources.
+  [#820](https://github.com/CocoaPods/CocoaPods/issues/820)
+- Restored support for directories for the preserve_patterns specification
+  attribute.
+  [#823](https://github.com/CocoaPods/CocoaPods/issues/823)
+
 ## 0.17.0.rc1
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.17)
-• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...master)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.4...0.17.0.rc1)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core)
 • [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader)
 
