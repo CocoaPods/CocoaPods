@@ -13,14 +13,6 @@ module Pod
 
     describe "In general" do
 
-      it "returns the root" do
-        @accessor.path_list.should == @path_list
-      end
-
-      it "returns the specification" do
-        @accessor.spec_consumer.should == @spec_consumer
-      end
-
       it "raises if the consumer is nil" do
         e = lambda { FileAccessor.new(@path_list, nil) }.should.raise Informative
         e.message.should.match /without a specification consumer/
@@ -32,6 +24,18 @@ module Pod
         file_accessor = FileAccessor.new(path_list, @spec_consumer)
         e = lambda { file_accessor.source_files }.should.raise Informative
         e.message.should.match /non existent folder/
+      end
+
+      it "returns the root" do
+        @accessor.root.should == @path_list.root
+      end
+
+      it "returns the specification" do
+        @accessor.spec.should == @spec
+      end
+
+      it "returns the platform for which the spec is being consumed" do
+        @accessor.platform_name.should == :ios
       end
 
     end

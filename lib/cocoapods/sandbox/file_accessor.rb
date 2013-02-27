@@ -5,6 +5,8 @@ module Pod
     # taking into account any exclude pattern and the default extensions to use
     # for directories.
     #
+    # @note The FileAccessor always returns absolute paths.
+    #
     class FileAccessor
 
       HEADER_EXTENSIONS = Xcodeproj::Constants::HEADER_FILES_EXTENSIONS
@@ -31,6 +33,12 @@ module Pod
         end
       end
 
+      # @return [Pathname] the directory which contains the files of the Pod.
+      #
+      def root
+        path_list.root
+      end
+
       # @return [Specification] the specification.
       #
       def spec
@@ -39,8 +47,8 @@ module Pod
 
       # @return [Specification] the platform used to consume the specification.
       #
-      def platform
-        spec_consumer.platform
+      def platform_name
+        spec_consumer.platform_name
       end
 
       # @return [String] A string suitable for debugging.
