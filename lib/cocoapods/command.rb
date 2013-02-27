@@ -52,11 +52,18 @@ module Pod
     #
     # @todo We should probably not even load colored unless needed.
     #
+    # @todo Move silent flag to CLAide.
+    #
+    # @note It is importat that the commadnds don't overide the default
+    #       settings if their flag is missing (i.e. their value is nil)
+    #
     def initialize(argv)
-      config.silent = argv.flag?('silent', config.silent)
-      config.verbose = argv.flag?('verbose', config.verbose?)
-      String.send(:define_method, :colorize) { |string , _| string } unless self.colorize_output?
       super
+      config.silent = argv.flag?('silent', config.silent)
+      config.verbose = self.verbose? unless self.verbose.nil?
+      unless self.colorize_output?
+        String.send(:define_method, :colorize) { |string , _| string }
+      end
     end
 
     #-------------------------------------------------------------------------#

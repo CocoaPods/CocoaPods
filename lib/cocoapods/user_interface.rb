@@ -145,7 +145,7 @@ module Pod
       # return [void]
       #
       def warn(message, actions = [], verbose_only = false)
-        warnings << { :message => message, :actions => actions }
+        warnings << { :message => message, :actions => actions, :verbose_only => verbose_only }
       end
 
       # Prints the stored warnings. This method is intended to be called at the
@@ -154,9 +154,9 @@ module Pod
       # @return [void]
       #
       def print_warnings
-        return if config.silent? && verbose_only
         STDOUT.flush
         warnings.each do |warning|
+          next if warning[:verbose_only] && !config.verbose?
           STDERR.puts("\n[!] #{warning[:message]}".yellow)
           warning[:actions].each do |action|
             indented = wrap_string(action, "    - ")
