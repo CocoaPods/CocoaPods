@@ -91,9 +91,8 @@ module Pod
 
       it "returns the header mappings" do
         headers_sandbox = Pathname.new('BananaLib')
-        consumer = @file_accessor.spec_consumer
         headers = [Pathname.new('BananaLib/Banana.h')]
-        mappings = @installer.send(:header_mappings, headers_sandbox, consumer, headers)
+        mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
         mappings.should == {
           headers_sandbox => [Pathname.new('BananaLib/Banana.h')]
         }
@@ -101,10 +100,9 @@ module Pod
 
       it "takes into account the header dir specified in the spec" do
         headers_sandbox = Pathname.new('BananaLib')
-        consumer = @file_accessor.spec_consumer
         headers = [Pathname.new('BananaLib/Banana.h')]
-        consumer.stubs(:header_dir).returns('Sub_dir')
-        mappings = @installer.send(:header_mappings, headers_sandbox, consumer, headers)
+        @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
+        mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
         mappings.should == {
           (headers_sandbox + 'Sub_dir') => [Pathname.new('BananaLib/Banana.h')]
         }
@@ -112,16 +110,14 @@ module Pod
 
      it "takes into account the header mappings dir specified in the spec" do
         headers_sandbox = Pathname.new('BananaLib')
-        consumer = @file_accessor.spec_consumer
-        headers = [
-          Pathname.new('BananaLib/sub_dir/dir_1/banana_1.h'),
-          Pathname.new('BananaLib/sub_dir/dir_2/banana_2.h'),
-        ]
-        consumer.stubs(:header_mappings_dir).returns('BananaLib/sub_dir')
-        mappings = @installer.send(:header_mappings, headers_sandbox, consumer, headers)
+        header_1 = @file_accessor.root + 'BananaLib/sub_dir/dir_1/banana_1.h'
+        header_2 = @file_accessor.root + 'BananaLib/sub_dir/dir_2/banana_2.h'
+        headers = [ header_1, header_2 ]
+        @file_accessor.spec_consumer.stubs(:header_mappings_dir).returns('BananaLib/sub_dir')
+        mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
         mappings.should == {
-          (headers_sandbox + 'dir_1') => [Pathname.new('BananaLib/sub_dir/dir_1/banana_1.h')],
-          (headers_sandbox + 'dir_2') => [Pathname.new('BananaLib/sub_dir/dir_2/banana_2.h')],
+          (headers_sandbox + 'dir_1') => [header_1],
+          (headers_sandbox + 'dir_2') => [header_2],
         }
       end
 
