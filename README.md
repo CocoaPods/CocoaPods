@@ -48,11 +48,8 @@ CocoaPods is composed by the following projects:
 
 ## Collaborate
 
-All CocoaPods development happens on GitHub, there is a repository for
-[CocoaPods](https://github.com/CocoaPods/CocoaPods) and one for the [CocoaPods
-specs](https://github.com/CocoaPods/Specs). Contributing patches or Pods is
-really easy and gratifying. You even get push access when one of your specs or
-patches is accepted.
+All CocoaPods development happens on GitHub,  Contributions make good karma and
+we welcome new contributors.
 
 # Donations
 
