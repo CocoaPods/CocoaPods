@@ -153,15 +153,6 @@ namespace :spec do
     FileList["spec/#{dir}/*_spec.rb"].shuffle.join(' ')
   end
 
-  def title(title)
-    cyan_title = "\033[0;36m#{title}\033[0m"
-    puts
-    puts "-" * 80
-    puts "| #{cyan_title.ljust(87)} |"
-    puts "-" * 80
-    puts
-  end
-
   #--------------------------------------#
 
   desc "Automatically run specs for updated files"
@@ -347,12 +338,18 @@ end
 #-----------------------------------------------------------------------------#
 
 desc "Initializes your working copy to run the specs"
-task :bootstrap do
+task :bootstrap, :use_bundle_dir? do |t, args|
+  title "Environment bootstrap"
+
   puts "Updating submodules"
   execute_command "git submodule update --init --recursive"
 
   puts "Installing gems"
-  execute_command "bundle install"
+  if args[:use_bundle_dir?]
+    execute_command "bundle install --path ./travis_bundle_dir"
+  else
+    execute_command "bundle install"
+  end
 
   puts "Installing tools (Homebrew)"
   execute_command "brew install appledoc"  if `which appledoc`.strip.empty?
@@ -365,3 +362,16 @@ desc "Run all specs"
 task :spec => 'spec:all'
 
 task :default => :spec
+
+#-----------------------------------------------------------------------------#
+
+# group helpers
+
+def title(title)
+  cyan_title = "\033[0;36m#{title}\033[0m"
+  puts
+  puts "-" * 80
+  puts cyan_title
+  puts "-" * 80
+  puts
+end
