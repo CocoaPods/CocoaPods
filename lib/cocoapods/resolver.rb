@@ -188,6 +188,9 @@ module Pod
           set = cached_sources.search(dependency)
         end
         cached_sets[name] = set
+        unless set
+          raise Informative, "Unable to find a specification for `#{dependency}`."
+        end
       end
       cached_sets[name]
     end
