@@ -1,3 +1,12 @@
+## 0.17.0.rc3
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...0.5.1))
+
+###### Bug fixes
+
+- Fixed and issue which prevent the inclusion of OTHER_CFLAGS and
+  OTHER_CPLUSPLUSFLAGS  in the release builds of the Pods project.
+
 ## 0.17.0.rc2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc1...0.17.0.rc2)
