@@ -18,15 +18,13 @@ module Bacon
 
       ::Pod::UI.output = ''
       # The following prevents a nasty behaviour where the increments are not
-      # balanced when testing informatives which might lead to sections not
+      # balanced when testing informative which might lead to sections not
       # being printed to the output as they are too nested.
       ::Pod::UI.indentation_level = 0
       ::Pod::UI.title_level = 0
 
-      if SpecHelper.temporary_directory.exist?
-        SpecHelper.temporary_directory.rmtree
-        SpecHelper.temporary_directory.mkpath
-      end
+      SpecHelper.temporary_directory.rmtree if SpecHelper.temporary_directory.exist?
+      SpecHelper.temporary_directory.mkpath
 
       old_run_requirement.bind(self).call(description, spec)
     end
