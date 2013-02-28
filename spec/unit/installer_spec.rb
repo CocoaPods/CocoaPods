@@ -44,17 +44,14 @@ module Pod
         @installer.stubs(:integrate_user_project)
       end
 
-      it "in runs the pre-install hooks before adding the file references" do
-        @installer.unstub(:generate_pods_project)
-        @installer.stubs(:prepare_pods_project)
-        @installer.stubs(:install_targets)
-        @installer.stubs(:run_post_install_hooks)
-        @installer.stubs(:write_pod_project)
-        @installer.stubs(:write_lockfiles)
+      it "in runs the pre-install hooks before cleaning the Pod sources" do
+        @installer.unstub(:download_dependencies)
+        @installer.stubs(:create_file_accessors)
+        @installer.stubs(:install_pod_sources)
         def @installer.run_pre_install_hooks
           @hook_called = true
         end
-        def @installer.install_file_references
+        def @installer.clean_pod_sources
           @hook_called.should.be.true
         end
         @installer.install!

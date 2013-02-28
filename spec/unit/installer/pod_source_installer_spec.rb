@@ -107,6 +107,7 @@ module Pod
         it "cleans the paths non used by the installation" do
           @installer.clean = true
           @installer.install!
+          @installer.clean!
           unused_file = config.sandbox.root + 'BananaLib/sub-dir/sub-dir-2/somefile.txt'
           unused_file.should.not.exist
         end
@@ -114,6 +115,7 @@ module Pod
         it "preserves important files like the LICENSE and the README" do
           @installer.clean = true
           @installer.install!
+          @installer.clean!
           readme_file = config.sandbox.root + 'BananaLib/README'
           readme_file.should.exist
         end
@@ -121,6 +123,7 @@ module Pod
         it "doesn't performs any cleaning if instructed to do so" do
           @installer.clean = false
           @installer.install!
+          @installer.clean!
           unused_file = config.sandbox.root + 'BananaLib/sub-dir/sub-dir-2/somefile.txt'
           unused_file.should.exist
         end

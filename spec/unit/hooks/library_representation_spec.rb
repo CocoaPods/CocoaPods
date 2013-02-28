@@ -22,6 +22,10 @@ module Pod
         @rep.dependencies.should == [Dependency.new('AFNetworking')]
       end
 
+      it "returns the sandbox dir" do
+        @rep.sandbox_dir.should == temporary_directory + 'Pods'
+      end
+
       it "returns the path of the prefix header" do
         @lib.support_files_root = temporary_directory
         @rep.prefix_header_filename.should == temporary_directory + 'Pods-MyApp-prefix.pch'

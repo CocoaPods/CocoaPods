@@ -18,6 +18,12 @@ module Pod
         target_definition.dependencies
       end
 
+      # @return [Pathname] The path of the Pods dir.
+      #
+      def sandbox_dir
+        sandbox.root
+      end
+
       # @return [Pathname] The path of the prefix_header
       #
       def prefix_header_filename

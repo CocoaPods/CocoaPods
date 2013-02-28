@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :podspec: Reachability.podspec
 
 SPEC CHECKSUMS:
-  Reachability: fc385e96bfc6d73ff55de863145498352d1c12ea
+  Reachability: c1e48cc25f8e7cba878c83ad1981d334ef325522
 
 COCOAPODS: 0.17.0.rc2

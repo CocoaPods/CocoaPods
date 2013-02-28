@@ -99,13 +99,14 @@ module Pod
       UI.section "Downloading dependencies" do
         create_file_accessors
         install_pod_sources
+        run_pre_install_hooks
+        clean_pod_sources
       end
     end
 
     def generate_pods_project
       UI.section "Generating Pods project" do
         prepare_pods_project
-        run_pre_install_hooks
         install_file_references
         install_targets
         run_post_install_hooks
@@ -240,13 +241,22 @@ module Pod
         end
       end
 
+      @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
       pod_installer.clean = config.clean?
       pod_installer.aggressive_cache = config.aggressive_cache?
       pod_installer.generate_docs = config.generate_docs?
       pod_installer.install_docs = config.install_docs?
       pod_installer.install!
+      @pod_installers << pod_installer
       @installed_specs.concat(specs_by_platform.values.flatten)
+    end
+
+    def clean_pod_sources
+      return unless @pod_installers
+      @pod_installers.each do |pod_installer|
+        pod_installer.clean!
+      end
     end
 
     # Creates the Pods project from scratch if it doesn't exists.

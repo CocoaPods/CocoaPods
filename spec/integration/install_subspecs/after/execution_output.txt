@@ -26,10 +26,10 @@ Comparing resolved specification to the sandbox manifest
 Downloading dependencies
 
 -> Installing PodTest (1.0)
+  - Running pre install hooks
 
 Generating Pods project
   - Creating Pods project
-  - Running pre install hooks
   - Adding source files to Pods project
   - Adding resources to Pods project
   - Linking headers

@@ -4,6 +4,7 @@
 
 ###### Bug fixes
 
+- Pre install hooks are called before the Pods are cleaned.
 - Fixed and issue which prevent the inclusion of OTHER_CFLAGS and
   OTHER_CPLUSPLUSFLAGS  in the release builds of the Pods project.
 

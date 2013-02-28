@@ -26,6 +26,8 @@ module Pod
 
       # @return [Pod::Project] the `Pods/Pods.xcodeproj` project.
       #
+      # @note   This value is not yet set in the pre install callbacks.
+      #
       def project
         installer.pods_project
       end

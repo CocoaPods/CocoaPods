@@ -82,6 +82,16 @@ module Pod
       def install!
         download_source     unless predownloaded? || local?
         generate_docs       if generate_docs?
+      end
+
+      # Cleans the installations if appropriate.
+      #
+      # @todo   As the pre install hooks need to run before cleaning this
+      #         method should be refactored.
+      #
+      # @return [void]
+      #
+      def clean!
         clean_installation  if clean? && !local?
       end
 

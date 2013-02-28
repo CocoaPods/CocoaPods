@@ -135,13 +135,13 @@ module Pod
             pod 'SSZipArchive', '0.1.0'
 
             pre_install do |installer|
-              memo = "PODS:#{installer.pods * ', '} TARGETS:#{installer.project.targets * ', '}"
+              memo = "PODS:#{installer.pods * ', '} LIBRARIES:#{installer.libraries.map(&:name) * ', '}"
               File.open(installer.config.sandbox_root + 'memo.txt', 'w') {|f| f.puts memo}
             end
           end
 
           Installer.new(config.sandbox, podfile).install!
-          File.open(config.sandbox_root + 'memo.txt','rb').read.should == "PODS:SSZipArchive (0.1.0) TARGETS:\n"
+          File.open(config.sandbox_root + 'memo.txt','rb').read.should == "PODS:SSZipArchive (0.1.0) LIBRARIES:Pods\n"
         end
 
         #--------------------------------------#

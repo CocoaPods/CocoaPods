@@ -32,11 +32,11 @@ Downloading dependencies
    HEAD is now at f7176f4 updated podspec
    $ /usr/bin/git checkout -b activated-pod-commit 2>&1
    Switched to a new branch 'activated-pod-commit'
+  - Running pre install hooks
+    - Reachability
 
 Generating Pods project
   - Creating Pods project
-  - Running pre install hooks
-    - Reachability
   - Adding source files to Pods project
   - Adding resources to Pods project
   - Linking headers

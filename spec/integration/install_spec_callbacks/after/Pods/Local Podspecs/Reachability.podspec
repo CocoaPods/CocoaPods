@@ -11,7 +11,6 @@ Pod::Spec.new do |s|
   s.requires_arc = false
 
   def s.pre_install(pod, target_definition)
-
     # Replace strings in existing files
     pod.source_files.each do |file|
       replaced = file.read.gsub("kReachabilityChangedNotification", "kTEST")
@@ -21,13 +20,10 @@ Pod::Spec.new do |s|
     # Add new files
     File.open(pod.root + "TestClass.h", 'w') { |file| file.write("// TEST") }
     File.open(pod.root + "TestClass.m", 'w') { |file| file.write("// TEST") }
-
-    dependencies = target_definition.dependencies.map(&:to_s) * ", "
-    File.open(pod.root + "DependenciesList.txt", 'w') { |file| file.write(dependencies) }
-
   end
 
-  def s.post_install(target)
-
+  def s.post_install(library)
+    dependencies = library.dependencies.map(&:to_s) * ", "
+    File.open(library.sandbox_dir + "DependenciesList.txt", 'w') { |file| file.write(dependencies) }
   end
 end

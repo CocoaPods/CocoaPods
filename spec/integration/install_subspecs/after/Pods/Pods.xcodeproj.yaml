@@ -55,7 +55,9 @@ Targets:
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           GCC_C_LANGUAGE_STANDARD: gnu99
           OTHER_LDFLAGS: ''
-          OTHER_CFLAGS: -DNS_BLOCK_ASSERTIONS=1
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           COPY_PHASE_STRIP: 'YES'
@@ -63,7 +65,9 @@ Targets:
           SDKROOT: macosx
           PRODUCT_NAME: $(TARGET_NAME)
           INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
-          OTHER_CPLUSPLUSFLAGS: -DNS_BLOCK_ASSERTIONS=1
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
           PODS_ROOT: ${SRCROOT}
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
@@ -117,7 +121,9 @@ Targets:
           PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
           GCC_C_LANGUAGE_STANDARD: gnu99
           OTHER_LDFLAGS: ''
-          OTHER_CFLAGS: -DNS_BLOCK_ASSERTIONS=1
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           SDKROOT: iphoneos
@@ -128,7 +134,9 @@ Targets:
           INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
           SKIP_INSTALL: 'YES'
           PODS_ROOT: ${SRCROOT}
-          OTHER_CPLUSPLUSFLAGS: -DNS_BLOCK_ASSERTIONS=1
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
           ARCHS: $(ARCHS_STANDARD_32_BIT)
         Base Configuration: Pods-iOS App.xcconfig
     - Debug:
