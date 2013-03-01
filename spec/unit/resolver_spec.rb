@@ -76,39 +76,13 @@ module Pod
       it "cross resolves dependencies" do
         @podfile = Podfile.new do
           platform :ios, '6.0'
-          pod 'BlocksKit', '=  1.0'
-          pod 'libffi',  '<  3.0'
+          pod 'AFNetworking',    '<  0.9.2' # 0.9.1 exits
+          pod 'AFQuickLookView', '=  0.1.0' # requires  'AFNetworking', '>= 0.9.0'
         end
-
-        dependant_1_0 = Spec.new do |s|
-          s.name         = 'BlocksKit'
-          s.version      = '1.0'
-          s.platform     = :ios
-          s.dependency   'libffi', '1.0'
-        end
-
-        depended_1_0 = Spec.new do |s|
-          s.name         = 'libffi'
-          s.version      = '1.0'
-          s.platform     = :ios
-        end
-
-        depended_2_0 = Spec.new do |s|
-          s.name         = 'libffi'
-          s.version      = '2.0'
-          s.platform     = :ios
-        end
-
-        Source.any_instance.stubs(:versions).with('BlocksKit').returns([Version.new(1.0)])
-        Source.any_instance.stubs(:specification).with('BlocksKit', Version.new('1.0')).returns(dependant_1_0)
-
-        Source.any_instance.stubs(:versions).with('libffi').returns([Version.new(1.0), Version.new(2.0)])
-        Source.any_instance.stubs(:specification).with('libffi', Version.new('1.0')).returns(depended_1_0)
-        Source.any_instance.stubs(:specification).with('libffi', Version.new('2.0')).returns(depended_2_0)
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should == ["BlocksKit (1.0)", "libffi (1.0)"]
+        specs.should == ["AFNetworking (0.9.1)", "AFQuickLookView (0.1.0)"]
       end
 
       it "holds the context state, such as cached specification sets" do
