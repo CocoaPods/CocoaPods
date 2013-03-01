@@ -10,7 +10,7 @@ module Pod
           platform :ios
           xcodeproj 'dummy'
         end
-        @target_definition = @podfile.target_definitions[:default]
+        @target_definition = @podfile.target_definitions['Pods']
         @project = Project.new(config.sandbox.project_path)
 
         config.sandbox.project = @project

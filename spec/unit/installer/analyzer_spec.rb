@@ -269,7 +269,8 @@ module Pod
         end
 
         it "returns the first target of the project if the target definition is named default" do
-          target_definition = Podfile::TargetDefinition.new(:default, nil)
+          target_definition = Podfile::TargetDefinition.new('Pods', nil)
+          target_definition.link_with_first_target = true
           user_project = Xcodeproj::Project.new
           user_project.new_target(:application, 'FirstTarget', :ios)
           user_project.new_target(:application, 'UserTarget', :ios)

@@ -17,7 +17,7 @@ module Pod
           end
         end
         config.sandbox.project = Project.new()
-        @library = Library.new(@podfile.target_definitions[:default])
+        @library = Library.new(@podfile.target_definitions['Pods'])
         @library.user_project_path  = sample_project_path
         @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
         @library.support_files_root = config.sandbox.root

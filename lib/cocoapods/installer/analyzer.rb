@@ -383,7 +383,7 @@ module Pod
         if link_with = target_definition.link_with
           targets = native_targets(user_project).select { |t| link_with.include?(t.name) }
           raise Informative, "Unable to find the targets named `#{link_with.to_sentence}` to link with target definition `#{target_definition.name}`" if targets.empty?
-        elsif target_definition.name == :default
+        elsif target_definition.link_with_first_target?
           targets = [ native_targets(user_project).first ].compact
           raise Informative, "Unable to find a target" if targets.empty?
         else

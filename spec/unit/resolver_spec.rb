@@ -27,7 +27,7 @@ module Pod
       #--------------------------------------#
 
       it "resolves the specification of the podfile" do
-        target_definition = @podfile.target_definitions[:default]
+        target_definition = @podfile.target_definitions['Pods']
         specs = @resolver.resolve[target_definition]
         specs.map(&:to_s).should == [
           "A2DynamicDelegate (2.0.2)",
@@ -38,7 +38,7 @@ module Pod
 
       it "returns the resolved specifications grouped by target definition" do
         @resolver.resolve
-        target_definition = @podfile.target_definitions[:default]
+        target_definition = @podfile.target_definitions['Pods']
         specs = @resolver.specs_by_target[target_definition]
         specs.map(&:to_s).should == [
           "A2DynamicDelegate (2.0.2)",

@@ -2,6 +2,8 @@ require File.expand_path('../spec_helper', __FILE__)
 require 'yaml'
 
 #-----------------------------------------------------------------------------#
+# TODO These checks need to be migrated to spec/integration_2.rb
+#-----------------------------------------------------------------------------#
 
 # @!group Helpers
 
@@ -212,7 +214,7 @@ module Pod
           saved_project = Xcodeproj.read_plist(project_file)
           saved_project.should == installer.pods_project.to_hash
 
-          should_xcodebuild(podfile.target_definitions[:default])
+          should_xcodebuild(podfile.target_definitions['Pods'])
         end
 
         #--------------------------------------#
@@ -293,7 +295,7 @@ module Pod
             (config.sandbox_root + file).should.exist
           end
 
-          should_xcodebuild(podfile.target_definitions[:default])
+          should_xcodebuild(podfile.target_definitions['Pods'])
           should_xcodebuild(podfile.target_definitions[:debug])
           should_xcodebuild(podfile.target_definitions[:test])
         end
