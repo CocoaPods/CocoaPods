@@ -72,13 +72,19 @@ module Pod
       # @return [Nil] If not license text could be found.
       #
       def license_text(spec)
-        if spec.license
-          if text = spec.license[:text]
-            text
-          elsif license_file = file_accessor(spec).license
-            text = IO.read(license_file)
+        return nil unless spec.license
+        text = spec.license[:text]
+        unless text
+          if license_file = file_accessor(spec).license
+            if license_file.exist?
+              text = IO.read(license_file)
+            else
+              UI.warn "Unable to read the license file `#{license_file }` " \
+              "for the spec `#{spec}`"
+            end
           end
         end
+        text
       end
 
       protected
