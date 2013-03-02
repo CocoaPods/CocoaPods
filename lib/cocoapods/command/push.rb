@@ -16,7 +16,7 @@ module Pod
       self.arguments = 'REPO [NAME.podspec]'
 
       def self.options
-        [ ["--allow-warnings", "Allows to push if warnings are not evitable"],
+        [ ["--allow-warnings", "Allows pushing even if there are warnings"],
           ["--local-only", "Does not perform the step of pushing REPO to its remote"] ].concat(super)
       end
 
