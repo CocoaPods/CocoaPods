@@ -2,13 +2,13 @@ require 'rubygems'
 
 module Pod
   require 'cocoapods/gem_version'
+  require 'cocoapods-core'
+  require 'xcodeproj'
+  require 'cocoapods/downloader'
+  require 'cocoapods/file_list'
+  require 'cocoapods/config'
 
-  # Indicates a runtime error **not** caused by a bug.
-  #
-  class PlainInformative < StandardError; end
-
-  # Indicates a runtime error **not** caused by a bug which should be
-  # highlighted to the user.
+  # Indicates an user error. This is defined in cocoapods-core.
   #
   class Informative < PlainInformative
     def message
@@ -29,12 +29,6 @@ module Pod
   #         classes build and configure the downloader from scratch.
   #
   MAX_CACHE_SIZE = 500
-
-  require 'cocoapods-core'
-  require 'xcodeproj'
-  require 'cocoapods/downloader'
-  require 'cocoapods/file_list'
-  require 'cocoapods/config'
 
   autoload :Command,                'cocoapods/command'
   autoload :Executable,             'cocoapods/executable'
