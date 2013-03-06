@@ -318,17 +318,14 @@ module Pod
       def pod_spec_path
         declared_path = params[:local].to_s
         path_with_ext = File.extname(declared_path) == '.podspec' ? declared_path : "#{declared_path}/#{name}.podspec"
-        path_without_tilde = path_with_ext.gsub('~', ENV['HOME'])
-        if podfile_path
-          absolute_path = Pathname(podfile_path).dirname + path_without_tilde
-        else
-          absolute_path = Pathname.new(path_without_tilde)
-        end
+        podfile_dir   = File.dirname(podfile_path || '')
+        absolute_path = File.expand_path(path_with_ext, podfile_dir)
+        pathname      = Pathname.new(absolute_path)
 
-        unless absolute_path.exist?
+        unless pathname.exist?
           raise Informative, "No podspec found for `#{name}` in `#{params[:local]}`"
         end
-        absolute_path
+        pathname
       end
     end
   end

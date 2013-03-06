@@ -201,6 +201,13 @@ module Pod
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
+      it "handles paths when there is no podfile path" do
+        @external_source.stubs(:podfile_path).returns(nil)
+        @external_source.stubs(:params).returns(:local => fixture('integration/Reachability'))
+        path = @external_source.send(:pod_spec_path)
+        path.should == fixture('integration/Reachability/Reachability.podspec')
+      end
+
       it "handles relative paths" do
         @external_source.stubs(:params).returns(:local => 'Reachability')
         path = @external_source.send(:pod_spec_path)
