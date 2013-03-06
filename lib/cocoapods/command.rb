@@ -37,13 +37,17 @@ module Pod
       UI.print_warnings
     end
 
-    def self.report_error(error)
-      if error.is_a?(Interrupt)
+    def self.report_error(exception)
+      if exception.is_a?(Interrupt)
         puts "[!] Cancelled".red
         Config.instance.verbose? ? raise : exit(1)
       else
-        puts UI::ErrorReport.report(error)
-        exit 1
+        if ENV['COCOA_PODS_ENV'] != 'development'
+          puts UI::ErrorReport.report(exception)
+          exit 1
+        else
+          raise exception
+        end
       end
     end
 
@@ -54,7 +58,7 @@ module Pod
     #
     # @todo Move silent flag to CLAide.
     #
-    # @note It is importat that the commadnds don't overide the default
+    # @note It is important that the commands don't override the default
     #       settings if their flag is missing (i.e. their value is nil)
     #
     def initialize(argv)
