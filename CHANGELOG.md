@@ -11,6 +11,10 @@
   OTHER_CPLUSPLUSFLAGS  in the release builds of the Pods project.
 - Fixed `pod lint --local`
 
+###### Ancillary enhancements
+
+- Added `pod ipc repl` subcommand.
+
 ## 0.17.0.rc2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc1...0.17.0.rc2)

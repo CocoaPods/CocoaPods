@@ -80,9 +80,7 @@ module Pod
             begin
               spec = set.specification
               result[spec.name] = {
-                'defined_in_file' => spec.defined_in_file.to_s,
-                'version' => spec.version,
-                'authors' => spec.authors,
+                'authors' => spec.authors.keys,
                 'summary' => spec.summary,
                 'description' => spec.description,
                 'platforms' => spec.available_platforms.map { |p| p.name.to_s },
@@ -92,6 +90,56 @@ module Pod
             end
           end
           UI.puts result.to_yaml
+        end
+
+      end
+
+      #-----------------------------------------------------------------------#
+
+      class Repl < IPC
+
+        LISTENING_STRING = '>>> @LISTENING <<<'
+
+        self.summary = 'The repl listens to commands on standard input.'
+        self.description = <<-DESC
+         The repl listens to commands on standard input and prints their
+         result to standard output.
+
+         It accepts all the other ipc subcommands. The repl will signal when
+         it is ready to receive a new command with the `#{LISTENING_STRING}`
+         string.
+        DESC
+
+        def run
+          salute
+          listen
+        end
+
+        def salute
+          UI.puts "version: #{Pod::VERSION}"
+        end
+
+        def listen
+          signal_ready
+          while repl_command = STDIN.gets
+            execute_repl_command(repl_command)
+          end
+        end
+
+        def signal_ready
+          UI.puts LISTENING_STRING
+        end
+
+        def execute_repl_command(repl_command)
+          if (repl_command != "\n")
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Kernel.const_get("Pod::Command::IPC::#{subcommand}")
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_ready
+            STDOUT.flush
+          end
         end
 
       end

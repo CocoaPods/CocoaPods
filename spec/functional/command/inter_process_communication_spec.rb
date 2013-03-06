@@ -42,8 +42,34 @@ module Pod
         out = run_command('ipc', 'list')
         out.should.include('---')
         out.should.match /BananaLib:/
-        out.should.match /version: .1\.0./
         out.should.match /description: Full of chunky bananas./
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe Command::IPC::Repl do
+
+      it "prints the version of CocoaPods as its first message" do
+        command = Command::IPC::Repl.new(CLAide::ARGV.new([]))
+        command.stubs(:listen)
+        command.run
+
+        out = UI.output
+        out.should.match /version: #{Pod::VERSION}/
+      end
+
+      it "converts forwards the commands to the other ipc subcommands prints the result to STDOUT" do
+        command = Command::IPC::Repl.new(CLAide::ARGV.new([]))
+        command.execute_repl_command("podfile #{fixture('Podfile')}")
+
+        out = UI.output
+        out.should.include('---')
+        out.should.match /target_definitions:/
+        out.should.match /platform: ios/
+        out.should.match /- SSZipArchive:/
+        out.should.match />>> @LISTENING <<<$/
       end
 
     end
