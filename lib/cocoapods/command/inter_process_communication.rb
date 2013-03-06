@@ -120,6 +120,7 @@ module Pod
         end
 
         def listen
+          p Command::IPC::Podfile
           signal_ready
           while repl_command = STDIN.gets
             execute_repl_command(repl_command)
@@ -135,7 +136,7 @@ module Pod
             repl_commands = repl_command.split
             subcommand = repl_commands.shift.capitalize
             arguments = repl_commands
-            subcommand_class = Kernel.const_get("Pod::Command::IPC::#{subcommand}")
+            subcommand_class = eval("Pod::Command::IPC::#{subcommand}")
             subcommand_class.new(CLAide::ARGV.new(arguments)).run
             signal_ready
             STDOUT.flush
