@@ -9,6 +9,7 @@
 - Pre install hooks are called before the Pods are cleaned.
 - Fixed and issue which prevent the inclusion of OTHER_CFLAGS and
   OTHER_CPLUSPLUSFLAGS  in the release builds of the Pods project.
+- Fixed `pod lint --local`
 
 ## 0.17.0.rc2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2)
