@@ -57,7 +57,7 @@ module Pod
         command.run
 
         out = UI.output
-        out.should.match /version: #{Pod::VERSION}/
+        out.should.match /version: '#{Pod::VERSION}'/
       end
 
       it "converts forwards the commands to the other ipc subcommands prints the result to STDOUT" do
