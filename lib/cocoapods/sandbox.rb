@@ -12,30 +12,38 @@ module Pod
   #
   #     Pods
   #     |
-  #     +-- Headers
-  #     |   +-- Private
-  #     |   |   +-- [Pod Name]
-  #     |   +-- Public
-  #     |       +-- [Pod Name]
+  #     +-- User
+  #     | +-- [Target Name]-configuration.h
+  #     | +-- Specs
+  #     | +-- Scripts
   #     |
-  #     +-- Sources
-  #     |   +-- [Pod Name]
-  #     |
-  #     +-- Specifications
-  #     |   +-- External Sources
-  #     |   +-- Normal Sources
-  #     |
-  #     +-- Target Support Files
-  #     |   +-- [Target Name]
-  #     |       +-- Acknowledgements.markdown
-  #     |       +-- Acknowledgements.plist
-  #     |       +-- Pods.xcconfig
-  #     |       +-- Pods-prefix.pch
-  #     |       +-- Pods-dummy_Pods.m
-  #     |
-  #     +-- Manifest.lock
-  #     |
-  #     +-- Pods.xcodeproj
+  #     +-- Generated
+  #       +-- Headers
+  #       |   +-- Private
+  #       |   |   +-- [Pod Name]
+  #       |   +-- Public
+  #       |       +-- [Pod Name]
+  #       |
+  #       +-- Sources
+  #       |   +-- [Pod Name]
+  #       |
+  #       +-- Specs
+  #       |   +-- External Sources
+  #       |   +-- Normal Sources
+  #       |
+  #       +-- Target Support Files
+  #       |   +-- [Target Name]
+  #       |       +-- Pods-acknowledgements.markdown
+  #       |       +-- Pods-acknowledgements.plist
+  #       |       +-- Pods-dummy.m
+  #       |       +-- Pods-prefix.pch
+  #       |       +-- Pods.xcconfig
+  #       |
+  #       +-- Manifest.lock
+  #       |
+  #       +-- Pods.xcodeproj
+  #
+  # See #833
   #
   class Sandbox
 
