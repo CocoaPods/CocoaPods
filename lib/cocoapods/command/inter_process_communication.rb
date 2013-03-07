@@ -116,11 +116,10 @@ module Pod
         end
 
         def salute
-          UI.puts "version: #{Pod::VERSION}"
+          UI.puts "version: '#{Pod::VERSION}'"
         end
 
         def listen
-          p Command::IPC::Podfile
           signal_ready
           while repl_command = STDIN.gets
             execute_repl_command(repl_command)
@@ -129,6 +128,7 @@ module Pod
 
         def signal_ready
           UI.puts LISTENING_STRING
+          STDOUT.flush
         end
 
         def execute_repl_command(repl_command)
@@ -139,7 +139,6 @@ module Pod
             subcommand_class = eval("Pod::Command::IPC::#{subcommand}")
             subcommand_class.new(CLAide::ARGV.new(arguments)).run
             signal_ready
-            STDOUT.flush
           end
         end
 
