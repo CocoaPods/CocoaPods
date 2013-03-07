@@ -76,6 +76,9 @@ module Pod
         @sandbox.pod_dir('JSONKit').should == temporary_directory + 'Sandbox/JSONKit'
       end
 
+      it "returns the directory where to store the documentation" do
+        @sandbox.documentation_dir.should == temporary_directory + 'Sandbox/Documentation'
+      end
     end
 
     #-------------------------------------------------------------------------#

@@ -192,7 +192,7 @@ module Pod
       # !@group Private Helpers
 
       def target_path
-        sandbox.root + 'Documentation' + specification.name
+        sandbox.documentation_dir + specification.name
       end
 
       def pod_root

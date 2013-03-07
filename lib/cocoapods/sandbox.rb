@@ -162,6 +162,12 @@ module Pod
       end
     end
 
+    # @return [Pathname] the directory where to store the documentation.
+    #
+    def documentation_dir
+      root + 'Documentation'
+    end
+
     #-------------------------------------------------------------------------#
 
     public
