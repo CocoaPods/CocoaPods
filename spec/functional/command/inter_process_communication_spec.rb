@@ -3,6 +3,13 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Command::IPC do
 
+    before do
+      Command::IPC::Spec.any_instance.stubs(:output_pipe).returns(UI)
+      Command::IPC::Podfile.any_instance.stubs(:output_pipe).returns(UI)
+      Command::IPC::List.any_instance.stubs(:output_pipe).returns(UI)
+      Command::IPC::Repl.any_instance.stubs(:output_pipe).returns(UI)
+    end
+
     describe Command::IPC::Spec do
 
       it "converts a podspec to yaml and prints it to STDOUT" do
@@ -69,7 +76,7 @@ module Pod
         out.should.match /target_definitions:/
         out.should.match /platform: ios/
         out.should.match /- SSZipArchive:/
-        out.should.match />>> @LISTENING <<<$/
+        out.should.end_with?("\n\r")
       end
 
     end
