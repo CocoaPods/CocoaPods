@@ -23,6 +23,12 @@ module Pod
       attr_accessor :title_level
       attr_accessor :warnings
 
+      # @return [Bool] Whether the wrapping of the strings to the width of the
+      #         terminal should be disabled.
+      #
+      attr_accessor :disable_wrap
+      alias_method  :disable_wrap?, :disable_wrap
+
       # Prints a title taking an optional verbose prefix and
       # a relative indentation valid for the UI action in the passed
       # block.
@@ -254,9 +260,13 @@ module Pod
       # terminal is too small a width of 80 is assumed.
       #
       def wrap_string(txt, indent = '')
-        width = `stty size`.split(' ')[1].to_i - indent.length
-        width = 80 unless width >= 10
-        txt.strip.gsub(/(.{1,#{width}})( +|$)\n?|(.{#{width}})/, indent + "\\1\\3\n")
+        if disable_wrap
+          txt
+        else
+          width = `stty size`.split(' ')[1].to_i - indent.length
+          width = 80 unless width >= 10
+          txt.strip.gsub(/(.{1,#{width}})( +|$)\n?|(.{#{width}})/, indent + "\\1\\3\n")
+        end
       end
     end
   end

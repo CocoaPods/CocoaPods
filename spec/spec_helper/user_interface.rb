@@ -1,6 +1,10 @@
 module Pod
 
-  # @note as some outputs wraps strings
+  # Disable the wrapping so the output is deterministic in the tests.
+  #
+  UI.disable_wrap = true
+
+  # Redirects the messages to an internal store.
   #
   module UI
     @output = ''
@@ -10,17 +14,12 @@ module Pod
       attr_accessor :output
       attr_accessor :warnings
 
-      # @todo Allow to specify whether the text should be wrapped with an
-      #       environment variable and remove the new feed replacement.
-
       def puts(message = '')
-        # Wrapping can bite in tests.
-        @output << "#{message}".gsub(/\n/,'')
+        @output << "#{message}"
       end
 
       def warn(message = '', actions = [])
-        # Wrapping can bite in tests.
-        @warnings << "#{message}".gsub(/\n/,'')
+        @warnings << "#{message}"
       end
     end
   end
