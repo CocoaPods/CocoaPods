@@ -63,6 +63,7 @@ module Pod
         UI.puts "\nValidating #{'spec'.pluralize(count)}".yellow
         podspec_files.each do |podspec|
           validator = Validator.new(podspec)
+          validator.only_errors = @allow_warnings
           begin
             validator.validate
           rescue Exception

@@ -10,6 +10,8 @@
 - Fixed and issue which prevent the inclusion of OTHER_CFLAGS and
   OTHER_CPLUSPLUSFLAGS  in the release builds of the Pods project.
 - Fixed `pod lint --local`
+- Fixed the `--allow-warnings` of `pod push`
+  [#835](https://github.com/CocoaPods/CocoaPods/issues/835)
 
 ###### Ancillary enhancements
 
