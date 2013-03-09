@@ -12,9 +12,13 @@
 - Fixed `pod lint --local`
 - Fixed the `--allow-warnings` of `pod push`
   [#835](https://github.com/CocoaPods/CocoaPods/issues/835)
+- Added `copy_resources_script_name` to the library representation used in the
+  hooks.
+  [#837](https://github.com/CocoaPods/CocoaPods/issues/837)
 
 ###### Ancillary enhancements
 
+- General improvements to `pod ipc`.
 - Added `pod ipc repl` subcommand.
 
 ## 0.17.0.rc2
@@ -115,7 +119,7 @@ presented below.
   [#534](https://github.com/CocoaPods/CocoaPods/issues/534)
 - Install hooks and the `prefix_header_contents` attribute are supported in subspecs.
   [#617](https://github.com/CocoaPods/CocoaPods/issues/617)
-- Dashes are now supported in the versions of the Pods. 
+- Dashes are now supported in the versions of the Pods.
   [#293](https://github.com/CocoaPods/CocoaPods/issues/293)
 
 ###### Bug fixes
