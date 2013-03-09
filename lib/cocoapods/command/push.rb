@@ -48,67 +48,59 @@ module Pod
         push_repo unless @local_only
       end
 
-      #--------------------------------------#
+      #-----------------------------------------------------------------------#
 
       private
+
+      # @!group Push sub-steps
 
       extend Executable
       executable :git
 
-      def update_repo
-        UI.puts "Updating the `#{@repo}' repo\n".yellow
-        Dir.chdir(repo_dir) { UI.puts `git pull 2>&1` }
-      end
-
-      def push_repo
-        UI.puts "\nPushing the `#{@repo}' repo\n".yellow
-        Dir.chdir(repo_dir) { UI.puts `git push 2>&1` }
-      end
-
-      def repo_dir
-        dir = config.repos_dir + @repo
-        raise Informative, "`#{@repo}` repo not found" unless dir.exist?
-        dir
-      end
-
-      # @todo: Add specs for staged and unstaged files.
+      # Performs a full lint against the podspecs.
       #
-      def check_repo_status
-        clean = Dir.chdir(repo_dir) { `git status --porcelain  2>&1` } == ''
-        raise Informative, "The repo `#{@repo}` is not clean" unless clean
-      end
-
-      def podspec_files
-        files = Pathname.glob(@podspec || "*.podspec")
-        raise Informative, "Couldn't find any .podspec file in current directory" if files.empty?
-        files
-      end
-
-      # @return [Integer] The number of the podspec files to push.
-      #
-      def count
-        podspec_files.count
-      end
-
       def validate_podspec_files
         UI.puts "\nValidating #{'spec'.pluralize(count)}".yellow
         podspec_files.each do |podspec|
           validator = Validator.new(podspec)
           begin
             validator.validate
-          rescue Exception => e
+          rescue Exception
             raise Informative, "The `#{podspec}` specification does not validate."
           end
           raise Informative, "The `#{podspec}` specification does not validate." unless validator.validated?
         end
       end
 
+      # Checks that the repo is clean.
+      #
+      # @raise  If the repo is not clean.
+      #
+      # @todo   Add specs for staged and unstaged files.
+      #
+      # @todo   Gracefully handle the case where source is not under git 
+      #         source control.
+      #
+      # @return [void]
+      #
+      def check_repo_status
+        clean = Dir.chdir(repo_dir) { `git status --porcelain  2>&1` } == ''
+        raise Informative, "The repo `#{@repo}` is not clean" unless clean
+      end
+
+      # Updates the git repo against the remote.
+      #
+      # @return [void]
+      #
+      def update_repo
+        UI.puts "Updating the `#{@repo}' repo\n".yellow
+        Dir.chdir(repo_dir) { UI.puts `git pull 2>&1` }
+      end
+
       # Commits the podspecs to the source, which should be a git repo.
       #
       # @note   The pre commit hook of the repo is skipped as the podspecs have
       #         already been linted.
-      #
-      # @todo   Raise if the source is not under git source control.
       #
       # @return [void]
       #
@@ -134,6 +126,46 @@ module Pod
           end
         end
       end
+
+      # Pushes the git repo against the remote.
+      #
+      # @return [void]
+      #
+      def push_repo
+        UI.puts "\nPushing the `#{@repo}' repo\n".yellow
+        Dir.chdir(repo_dir) { UI.puts `git push 2>&1` }
+      end
+
+      #-----------------------------------------------------------------------#
+
+      private
+
+      # @!group Private helpers
+
+      # @return [Pathname] The directory of the repository.
+      #
+      def repo_dir
+        dir = config.repos_dir + @repo
+        raise Informative, "`#{@repo}` repo not found" unless dir.exist?
+        dir
+      end
+
+      # @return [Array<Pathname>] The path of the specifications to push.
+      #
+      def podspec_files
+        files = Pathname.glob(@podspec || "*.podspec")
+        raise Informative, "Couldn't find any .podspec file in current directory" if files.empty?
+        files
+      end
+
+      # @return [Integer] The number of the podspec files to push.
+      #
+      def count
+        podspec_files.count
+      end
+
+      #-----------------------------------------------------------------------#
+
     end
   end
 end
