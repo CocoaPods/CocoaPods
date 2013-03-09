@@ -31,6 +31,11 @@ module Pod
         @rep.prefix_header_filename.should == temporary_directory + 'Pods-MyApp-prefix.pch'
       end
 
+      it "returns the path of the copy resources script" do
+        @lib.support_files_root = temporary_directory
+        @rep.copy_resources_script_name.should == temporary_directory + 'Pods-MyApp-resources.sh'
+      end
+
       it "returns the pods project" do
         project = stub()
         config.sandbox.project = project

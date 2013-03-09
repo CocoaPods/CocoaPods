@@ -30,6 +30,12 @@ module Pod
         library.prefix_header_path
       end
 
+      # @return [Pathname] The path of the script used to copy the resources.
+      #
+      def copy_resources_script_name
+        library.copy_resources_script_path
+      end
+
       # @return [Project] The Pods project of the sandbox.
       #
       def project
