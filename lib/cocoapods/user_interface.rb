@@ -260,7 +260,7 @@ module Pod
       # terminal is too small a width of 80 is assumed.
       #
       def wrap_string(txt, indent = '')
-        if disable_wrap
+        if disable_wrap || !STDIN.tty?
           txt
         else
           width = `stty size`.split(' ')[1].to_i - indent.length
