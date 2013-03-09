@@ -126,7 +126,7 @@ module Pod
         absolute_paths.map { |f| f.relative_path_from(pod_root).to_s }
       end
 
-      # @return [String] the path of the file to use ad index of the
+      # @return [String] the path of the file to use as the index of
       #         documentation relative to the root of the Pod.
       #
       def index_file
@@ -141,7 +141,7 @@ module Pod
       # !@group Appledoc options.
 
       # @return [Array<String>] The list of the appledoc options followed by
-      #         their value as defined in the specification.
+      #         their values as defined in the specification.
       #
       def spec_appledoc_options
         return [] unless specification.documentation
@@ -149,7 +149,7 @@ module Pod
       end
 
       # @return [Array<String>] The list of the appledoc options followed by
-      #         their value.
+      #         their values.
       #
       # @note The appledoc tool terminates with an exits status of 1 if a
       #       warning was logged (see `--exit-threshold` option).
