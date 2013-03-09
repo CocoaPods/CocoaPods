@@ -2,10 +2,10 @@ $ pod install --no-update --no-doc --verbose --no-color 2>&1
 Analyzing dependencies
 
 Resolving dependencies of `Podfile`
+Resolving dependencies for target `Pods' (iOS 6.0)
+  - Reachability (= 3.1.0)
 Resolving dependencies for target `SampleApp_2' (iOS 6.0)
   - JSONKit
-  - Reachability (= 3.1.0)
-Resolving dependencies for target `default' (iOS 6.0)
   - Reachability (= 3.1.0)
 Resolving dependencies for target `test' (iOS 6.0)
   - JSONKit

@@ -16,7 +16,7 @@ Fetching external sources
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `OS X App' (OS X 10.6)
   - PodTest/subspec_2 (from `PodTest-hg-source`)
-Resolving dependencies for target `default' (iOS 6.1)
+Resolving dependencies for target `Pods' (iOS 6.1)
 Resolving dependencies for target `iOS App' (iOS 4.3)
   - PodTest/subspec_1 (from `PodTest-hg-source`)
 
