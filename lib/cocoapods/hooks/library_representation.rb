@@ -32,7 +32,7 @@ module Pod
 
       # @return [Pathname] The path of the script used to copy the resources.
       #
-      def copy_resources_script_name
+      def copy_resources_script_path
         library.copy_resources_script_path
       end
 
