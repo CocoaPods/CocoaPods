@@ -475,6 +475,7 @@ Pod::Spec.new do |s|
   # Specify the authors of the library, with email addresses. You can often find
   # the email addresses of the authors by using the SCM log. E.g. $ git log
   #
+  s.author       = { "#{data[:author_name]}" => "#{data[:author_email]}" }
   # s.authors      = { "#{data[:author_name]}" => "#{data[:author_email]}", "other author" => "and email address" }
   #
   # If absolutely no email addresses are available, then you can use this form instead.
