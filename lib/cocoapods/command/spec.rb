@@ -197,7 +197,7 @@ module Pod
         self.arguments = '[ NAME ]'
 
         def self.options
-          [["--show-all", "Pick which spec to edit from all avaliable versions of the given podspec"]].concat(super)
+          [["--show-all", "Pick which spec to edit from all available versions of the given podspec"]].concat(super)
         end
 
         def initialize(argv)
@@ -450,11 +450,9 @@ module Pod
         return <<-SPEC
 #
 # Be sure to run `pod spec lint #{data[:name]}.podspec' to ensure this is a
-# valid spec.
+# valid spec and remove all comments before submitting the spec.
 #
-# Remove all comments before submitting the spec. Optional attributes are commented.
-#
-# For details see: https://github.com/CocoaPods/CocoaPods/wiki/The-podspec-format
+# To learn more about the attributes see http://docs.cocoapods.org/specification.html
 #
 Pod::Spec.new do |s|
   s.name         = "#{data[:name]}"
@@ -467,30 +465,16 @@ Pod::Spec.new do |s|
   #                   * Don't worry about the indent, we strip it!
   #                  DESC
   s.homepage     = "#{data[:homepage]}"
+  # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
 
   # Specify the license type. CocoaPods detects automatically the license file if it is named
   # 'LICENCE*.*' or 'LICENSE*.*', however if the name is different, specify it.
   s.license      = 'MIT (example)'
   # s.license      = { :type => 'MIT (example)', :file => 'FILE_LICENSE' }
-  #
-  # Only if no dedicated file is available include the full text of the license.
-  #
-  # s.license      = {
-  #   :type => 'MIT (example)',
-  #   :text => <<-LICENSE
-  #             Copyright (C) <year> <copyright holders>
-
-  #             All rights reserved.
-
-  #             Redistribution and use in source and binary forms, with or without
-  #             ...
-  #   LICENSE
-  # }
 
   # Specify the authors of the library, with email addresses. You can often find
   # the email addresses of the authors by using the SCM log. E.g. $ git log
   #
-  s.author       = { "#{data[:author_name]}" => "#{data[:author_email]}" }
   # s.authors      = { "#{data[:author_name]}" => "#{data[:author_email]}", "other author" => "and email address" }
   #
   # If absolutely no email addresses are available, then you can use this form instead.
@@ -500,14 +484,12 @@ Pod::Spec.new do |s|
   # Specify the location from where the source should be retrieved.
   #
   s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
-  # s.source       = { :svn => 'http://EXAMPLE/#{data[:name]}/tags/1.0.0' }
-  # s.source       = { :hg  => 'http://EXAMPLE/#{data[:name]}', :revision => '1.0.0' }
+
 
   # If this Pod runs only on iOS or OS X, then specify the platform and
   # the deployment target.
   #
   # s.platform     = :ios, '5.0'
-  # s.platform     = :ios
 
   # ――― MULTI-PLATFORM VALUES ――――――――――――――――――――――――――――――――――――――――――――――――― #
 
@@ -520,10 +502,6 @@ Pod::Spec.new do |s|
   # A list of file patterns which select the source files that should be
   # added to the Pods project. If the pattern is a directory then the
   # path will automatically have '*.{h,m,mm,c,cpp}' appended.
-  #
-  # Alternatively, you can use the FileList class for even more control
-  # over the selected files.
-  # (See http://rake.rubyforge.org/classes/Rake/FileList.html.)
   #
   s.source_files = 'Classes', 'Classes/**/*.{h,m}'
 
@@ -567,7 +545,7 @@ Pod::Spec.new do |s|
 
   # If this Pod uses ARC, specify it like so.
   #
-  # s.requires_arc = true
+  s.requires_arc = true
 
   # If you need to specify any other build settings, add them to the
   # xcconfig hash.
