@@ -26,9 +26,10 @@ module Pod
 
       # @return [Pathname] The path of the prefix_header
       #
-      def prefix_header_filename
+      def prefix_header_path
         library.prefix_header_path
       end
+      alias :prefix_header_filename :prefix_header_path
 
       # @return [Pathname] The path of the script used to copy the resources.
       #

@@ -28,7 +28,7 @@ module Pod
 
       it "returns the path of the prefix header" do
         @lib.support_files_root = temporary_directory
-        @rep.prefix_header_filename.should == temporary_directory + 'Pods-MyApp-prefix.pch'
+        @rep.prefix_header_path.should == temporary_directory + 'Pods-MyApp-prefix.pch'
       end
 
       it "returns the path of the copy resources script" do
