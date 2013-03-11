@@ -367,14 +367,51 @@ module Pod
         installed_specs.each do |spec|
           executed = false
           libraries_using_spec(spec).each do |lib|
-            executed ||= spec.pre_install!(pod_rep(spec.root.name), library_rep(lib))
+            lib_representation = library_rep(lib)
+            executed ||= run_spec_pre_install_hook(spec, lib_representation)
           end
           UI.message "- #{spec.name}" if executed
         end
 
-        executed = @podfile.pre_install!(installer_rep)
+        executed = run_podfile_pre_install_hook
         UI.message "- Podfile" if executed
       end
+    end
+
+    # Runs the pre install hook of the given specification with the given
+    # library representation.
+    #
+    # @param  [Specification] spec
+    #         The spec for which the pre install hook should be run.
+    #
+    # @param  [Hooks::LibraryRepresentation] lib_representation
+    #         The library representation to be passed as an argument to the
+    #         hook.
+    #
+    # @raise  Raises an informative if the hooks raises.
+    #
+    # @return [Bool] Whether the hook was run.
+    #
+    def run_spec_pre_install_hook(spec, lib_representation)
+      spec.pre_install!(pod_rep(spec.root.name), lib_representation)
+    rescue => e
+      raise Informative, "The pre install hook of #{spec} is not " \
+        "compatible with this version of CocoaPods." \
+        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
+    end
+
+    # Runs the pre install hook of the Podfile
+    #
+    # @raise  Raises an informative if the hooks raises.
+    #
+    # @return [Bool] Whether the hook was run.
+    #
+    def run_podfile_pre_install_hook
+      podfile.pre_install!(installer_rep)
+    rescue => e
+      raise Informative, "The pre install hook of the Podfile is not " \
+        "compatible with this version of CocoaPods." \
+        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
     # Runs the post install hooks of the installed specs and of the Podfile.
@@ -389,13 +426,51 @@ module Pod
         installed_specs.each do |spec|
           executed = false
           libraries_using_spec(spec).each do |lib|
-            executed ||= spec.post_install!(library_rep(lib))
+            lib_representation = library_rep(lib)
+            executed ||= run_spec_post_install_hook(spec, lib_representation)
           end
           UI.message "- #{spec.name}" if executed
         end
-        executed = @podfile.post_install!(installer_rep)
+        executed = run_podfile_post_install_hook
         UI.message "- Podfile" if executed
       end
+    end
+
+
+    # Runs the post install hook of the given specification with the given
+    # library representation.
+    #
+    # @param  [Specification] spec
+    #         The spec for which the post install hook should be run.
+    #
+    # @param  [Hooks::LibraryRepresentation] lib_representation
+    #         The library representation to be passed as an argument to the
+    #         hook.
+    #
+    # @raise  Raises an informative if the hooks raises.
+    #
+    # @return [Bool] Whether the hook was run.
+    #
+    def run_spec_post_install_hook(spec, lib_representation)
+      spec.post_install!(lib_representation)
+    rescue => e
+      raise Informative, "The post install hook of #{spec} is not " \
+        "compatible with this version of CocoaPods." \
+        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
+    end
+
+    # Runs the post install hook of the Podfile
+    #
+    # @raise  Raises an informative if the hooks raises.
+    #
+    # @return [Bool] Whether the hook was run.
+    #
+    def run_podfile_post_install_hook
+      podfile.post_install!(installer_rep)
+    rescue => e
+      raise Informative, "The post install hook of the Podfile is not " \
+        "compatible with this version of CocoaPods." \
+        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
     #-------------------------------------------------------------------------#
