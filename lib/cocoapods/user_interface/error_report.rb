@@ -64,9 +64,9 @@ EOS
 ### Podfile
 
 ```ruby
-          #{Config.instance.podfile_path.read.strip}
+#{Config.instance.podfile_path.read.strip}
 ```
-          EOS
+EOS
         end
 
         def error_from_podfile(error)
