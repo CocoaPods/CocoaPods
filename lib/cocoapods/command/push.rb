@@ -120,7 +120,7 @@ module Pod
           UI.puts " - #{message}"
 
           FileUtils.mkdir_p(output_path)
-          FileUtils.cp(Pathname.new(spec.name+'.podspec'), output_path)
+          FileUtils.cp(spec_file, output_path)
           Dir.chdir(repo_dir) do
             git!("add #{spec.name}")
             git!("commit --no-verify -m '#{message}'")
