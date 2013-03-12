@@ -268,10 +268,9 @@ module Pod
       #
       def fetch(sandbox)
         UI.titled_section("Fetching podspec for `#{name}` #{description}", { :verbose_prefix => "-> " }) do
-          path = params[:podspec]
-          path = Pathname.new(path).expand_path if path.to_s.start_with?("~")
+
           require 'open-uri'
-          open(path) { |io| store_podspec(sandbox, io.read) }
+          open(podspec_uri) { |io| store_podspec(sandbox, io.read) }
         end
       end
 
@@ -279,6 +278,30 @@ module Pod
       #
       def description
         "from `#{params[:podspec]}`"
+      end
+
+      #--------------------------------------#
+
+      private
+
+      # @!group Helpers
+
+      # @return [String] The uri of the podspec appending the name of the file 
+      #         and expanding it if necessary.
+      #
+      # @note   If the declared path is expanded only if the represents a path
+      #         relative to the file system.
+      #
+      def podspec_uri
+        declared_path = params[:podspec].to_s
+        if declared_path.match(%r{^.+://})
+          declared_path
+        else
+          path_with_ext = File.extname(declared_path) == '.podspec' ? declared_path : "#{declared_path}/#{name}.podspec"
+          podfile_dir   = File.dirname(podfile_path || '')
+          absolute_path = File.expand_path(path_with_ext, podfile_dir)
+          absolute_path
+        end
       end
     end
 
@@ -295,7 +318,7 @@ module Pod
       #
       def fetch(sandbox)
         UI.titled_section("Fetching podspec for `#{name}` #{description}", { :verbose_prefix => "-> " }) do
-          podspec = pod_spec_path
+          podspec = podspec_path
           store_podspec(sandbox, podspec)
           sandbox.store_local_path(name, podspec.dirname)
         end
@@ -315,7 +338,7 @@ module Pod
 
       # @return [Pathname] the path of the podspec.
       #
-      def pod_spec_path
+      def podspec_path
         declared_path = params[:local].to_s
         path_with_ext = File.extname(declared_path) == '.podspec' ? declared_path : "#{declared_path}/#{name}.podspec"
         podfile_dir   = File.dirname(podfile_path || '')
@@ -328,5 +351,8 @@ module Pod
         pathname
       end
     end
+
+    #-------------------------------------------------------------------------#
+
   end
 end

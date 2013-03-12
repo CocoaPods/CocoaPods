@@ -151,7 +151,8 @@ module Pod
     before do
       podspec_path = fixture('integration/Reachability/Reachability.podspec')
       dependency = Dependency.new("Reachability", :podspec => podspec_path.to_s)
-      @external_source = ExternalSources.from_dependency(dependency, nil)
+      podfile_path = fixture('integration/Podfile')
+      @external_source = ExternalSources.from_dependency(dependency, podfile_path)
     end
 
     it "creates a copy of the podspec" do
@@ -162,6 +163,40 @@ module Pod
 
     it "returns the description" do
       @external_source.description.should.match %r|from `.*Reachability/Reachability.podspec`|
+    end
+
+    describe "Helpers" do
+
+      it "handles absolute paths" do
+        @external_source.stubs(:params).returns(:podspec => fixture('integration/Reachability'))
+        path = @external_source.send(:podspec_uri)
+        path.should == fixture('integration/Reachability/Reachability.podspec').to_s
+      end
+
+      it "handles paths when there is no podfile path" do
+        @external_source.stubs(:podfile_path).returns(nil)
+        @external_source.stubs(:params).returns(:podspec => fixture('integration/Reachability'))
+        path = @external_source.send(:podspec_uri)
+        path.should == fixture('integration/Reachability/Reachability.podspec').to_s
+      end
+
+      it "handles relative paths" do
+        @external_source.stubs(:params).returns(:podspec => 'Reachability')
+        path = @external_source.send(:podspec_uri)
+        path.should == fixture('integration/Reachability/Reachability.podspec').to_s
+      end
+
+      it "expands the tilde" do
+        @external_source.stubs(:params).returns(:podspec => '~/Reachability')
+        path = @external_source.send(:podspec_uri)
+        path.should == ENV['HOME'] + '/Reachability/Reachability.podspec'
+      end
+
+      it "handles urls" do
+        @external_source.stubs(:params).returns(:podspec => "http://www.example.com/Reachability.podspec")
+        path = @external_source.send(:podspec_uri)
+        path.should == "http://www.example.com/Reachability.podspec"
+      end
     end
   end
 
@@ -197,38 +232,36 @@ module Pod
 
       it "handles absolute paths" do
         @external_source.stubs(:params).returns(:local => fixture('integration/Reachability'))
-        path = @external_source.send(:pod_spec_path)
+        path = @external_source.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
       it "handles paths when there is no podfile path" do
         @external_source.stubs(:podfile_path).returns(nil)
         @external_source.stubs(:params).returns(:local => fixture('integration/Reachability'))
-        path = @external_source.send(:pod_spec_path)
+        path = @external_source.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
       it "handles relative paths" do
         @external_source.stubs(:params).returns(:local => 'Reachability')
-        path = @external_source.send(:pod_spec_path)
+        path = @external_source.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
       it "expands the tilde" do
         @external_source.stubs(:params).returns(:local => '~/Reachability')
         Pathname.any_instance.stubs(:exist?).returns(true)
-        path = @external_source.send(:pod_spec_path)
+        path = @external_source.send(:podspec_path)
         path.should == Pathname(ENV['HOME']) + 'Reachability/Reachability.podspec'
       end
 
       it "raises if the podspec cannot be found" do
         @external_source.stubs(:params).returns(:local => temporary_directory)
-        e = lambda { @external_source.send(:pod_spec_path) }.should.raise Informative
+        e = lambda { @external_source.send(:podspec_path) }.should.raise Informative
         e.message.should.match /No podspec found/
       end
-
     end
-
   end
 
   #---------------------------------------------------------------------------#
