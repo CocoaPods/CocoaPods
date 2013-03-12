@@ -62,23 +62,20 @@ module Pod
       end
 
       perform_linting
-
-      # begin
-      if spec
-        check_repo_path if repo_path
-        perform_extensive_analysis unless quick
-      end
-      # rescue Exception => e
-      #   error "The specification is malformed and crashed the linter."
-      # end
+      check_repo_path if spec && repo_path
+      perform_extensive_analysis if spec && !quick
 
       unless disable_ui_output
-        UI.puts " -> ".send(result_color) << (spec ? spec.name : file.basename.to_s)
+        UI.puts " -> ".send(result_color) << (spec ? spec.to_s : file.basename.to_s)
         print_results
       end
       validated?
     end
 
+    # Prints the result of the validation to the user.
+    #
+    # @return [void]
+    #
     def print_results
       results.each do |result|
         if result.platforms == [:ios]
@@ -87,7 +84,7 @@ module Pod
           platform_message = "[OSX] "
         end
 
-      case result.type
+        case result.type
         when :error   then type = "ERROR"
         when :warning then type = "WARN"
         when :note    then type = "NOTE"
