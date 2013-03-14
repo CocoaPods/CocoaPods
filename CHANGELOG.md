@@ -1,3 +1,26 @@
+## 0.17.0.rc4
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...0.5.1))
+
+###### Bug fixes
+
+- Restored compatibility with `Podfile::TargetDefinition#copy_resources_script_name`
+  in the Podfile hooks.
+- Updated copy resources script so that it will use base internationalization
+  [#846](https://github.com/CocoaPods/CocoaPods/issues/846)
+- Robustness against an empty configuration file.
+- Fixed a crash with `pod push`
+  [#848](https://github.com/CocoaPods/CocoaPods/issues/848)
+- Fixed an issue which lead to the creation of a Pods project which would
+  crash Xcode.
+  [#854](https://github.com/CocoaPods/CocoaPods/issues/854)
+
+
+###### Ancillary enhancements
+
+- The `podspec` option of the `pod` directive of the Podfile DSL now accepts
+  folders.
+
 ## 0.17.0.rc3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...0.5.1))
