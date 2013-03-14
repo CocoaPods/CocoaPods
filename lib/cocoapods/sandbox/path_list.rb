@@ -95,7 +95,10 @@ module Pod
 
         list = Array(patterns).map do |pattern|
           if pattern.is_a?(String)
-            pattern += '/' + dir_pattern if directory?(pattern) && dir_pattern
+            if directory?(pattern) && dir_pattern
+              pattern += '/' unless pattern.end_with?('/')
+              pattern +=  dir_pattern
+            end
             expanded_patterns = dir_glob_equivalent_patterns(pattern)
             full_list.select do |path|
               expanded_patterns.any? do |p|

@@ -80,6 +80,15 @@ module Pod
         ]
       end
 
+      it "handles directories specified with a trailing slash" do
+        paths = @path_list.relative_glob('Classes/', { :dir_pattern => '*.{h,m}'} ).map(&:to_s)
+        paths.sort.should == %w[
+          Classes/Banana.h
+          Classes/Banana.m
+          Classes/BananaPrivate.h
+        ]
+      end
+
       it "supports an optional list of patterns to exclude" do
         exclude_patterns = ['**/*.m', '**/*Private*.*']
         paths = @path_list.relative_glob('Classes/*', { :exclude_patterns => exclude_patterns }).map(&:to_s)
