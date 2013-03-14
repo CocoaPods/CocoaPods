@@ -253,10 +253,11 @@ namespace :spec do
   #--------------------------------------#
 
   desc "Rebuild integration take 2 after folders"
-  task :rebuild_integration_after_folders do
-    # TODO Run the tests manually before calling this for now
-    # sh 'bacon spec/integration_2_spec.rb'
+  task :rebuild_integration_fixtures do
+    title 'Running Integration 2 tests'
+    `bundle exec bacon spec/integration_2.rb`
 
+    title 'Storing fixtures'
     # Copy the files to the files produced by the specs to the after folders
     FileList['tmp/*'].each do |source|
       destination = "spec/integration/#{source.gsub('tmp/','')}/after"
