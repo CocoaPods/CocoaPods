@@ -243,7 +243,6 @@ module Pod
 
       @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
-      pod_installer.clean = config.clean?
       pod_installer.aggressive_cache = config.aggressive_cache?
       pod_installer.generate_docs = config.generate_docs?
       pod_installer.install_docs = config.install_docs?
@@ -252,7 +251,12 @@ module Pod
       @installed_specs.concat(specs_by_platform.values.flatten)
     end
 
+    # Cleans the sources of the Pods if the config instructs to do so.
+    #
+    # @todo Why the @pod_installers might be empty?
+    #
     def clean_pod_sources
+      return unless config.clean?
       return unless @pod_installers
       @pod_installers.each do |pod_installer|
         pod_installer.clean!

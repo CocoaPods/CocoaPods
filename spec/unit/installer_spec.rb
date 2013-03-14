@@ -181,8 +181,21 @@ module Pod
           @installer.installed_specs.should == [spec]
         end
 
-      end
+        #--------------------------------------#
 
+        describe "#clean" do
+
+          it "it cleans only if the config instructs to do it" do
+            config.clean = false
+            @installer.send(:clean_pod_sources)
+            Installer::PodSourceInstaller.any_instance.expects(:install!).never
+          end
+
+        end
+
+        #--------------------------------------#
+
+      end
     end
 
     #-------------------------------------------------------------------------#

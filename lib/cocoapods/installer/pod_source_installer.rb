@@ -24,7 +24,6 @@ module Pod
         @sandbox = sandbox
         @specs_by_platform = specs_by_platform
 
-        @clean            = true
         @generate_docs    = false
         @install_docs     = false
         @aggressive_cache = false
@@ -41,12 +40,6 @@ module Pod
       public
 
       # @!group Configuration
-
-      # @return [Bool] whether the file not used by CocoaPods should be
-      #         removed.
-      #
-      attr_accessor :clean
-      alias_method  :clean?, :clean
 
       # @return [Bool] whether the documentation should be generated for the
       #         Pod.
@@ -92,7 +85,7 @@ module Pod
       # @return [void]
       #
       def clean!
-        clean_installation  if clean? && !local?
+        clean_installation  if !local?
       end
 
       # @return [Hash]
@@ -133,10 +126,6 @@ module Pod
       # @return [void]
       #
       def generate_docs
-        if @cleaned
-          raise Informative, "Attempt to generate the documentation from a cleaned Pod."
-        end
-
         if documentation_generator.already_installed?
           UI.section " > Using existing documentation"
         else
@@ -153,7 +142,6 @@ module Pod
       #
       def clean_installation
         clean_paths.each { |path| FileUtils.rm_rf(path) }
-        @cleaned = true
       end
 
       #-----------------------------------------------------------------------#
