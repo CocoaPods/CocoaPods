@@ -5,6 +5,11 @@ module Pod
   describe TargetIntegrator = Installer::UserProjectIntegrator::TargetIntegrator do
 
     describe "In general" do
+
+      # The project contains a `PBXReferenceProxy` in the build files of the
+      # frameworks build phase which implicitly checks for the robustness of
+      # the detection of the target.
+      #
       before do
         sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
         @sample_project = Xcodeproj::Project.new sample_project_path
@@ -28,8 +33,16 @@ module Pod
       it 'returns the targets that need to be integrated' do
         pods_library = @sample_project.frameworks_group.new_static_library('Pods')
         @target.frameworks_build_phase.add_file_reference(pods_library)
-        Xcodeproj::Project.any_instance.stubs(:objects_by_uuid).returns(@target.uuid => @target)
+        @target_integrator.stubs(:user_project).returns(@sample_project)
         @target_integrator.targets.map(&:name).should.be.empty?
+      end
+
+      it 'is robust against other types of references in the build files of the frameworks build phase' do
+        build_file = @sample_project.new(Xcodeproj::Project::PBXBuildFile)
+        build_file.file_ref = @sample_project.new(Xcodeproj::Project::PBXVariantGroup)
+        @target_integrator.stubs(:user_project).returns(@sample_project)
+        @target.frameworks_build_phase.files << build_file
+        @target_integrator.targets.map(&:name).should == %w[ SampleProject ]
       end
 
       it 'does not perform the integration if there are no targets to integrate' do
