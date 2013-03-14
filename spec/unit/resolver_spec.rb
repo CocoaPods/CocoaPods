@@ -169,7 +169,7 @@ module Pod
           pod 'JSONKit', "1.5pre"
         end
         resolver = Resolver.new(config.sandbox, podfile)
-        e = lambda {resolver.resolve}.should.raise Pod::StandardError
+        e = lambda {resolver.resolve}.should.raise Pod::Informative
         e.message.should.match(/already activated version/)
       end
 
