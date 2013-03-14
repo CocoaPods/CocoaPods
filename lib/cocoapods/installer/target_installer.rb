@@ -55,8 +55,10 @@ module Pod
       #
       # @note   The `PODS_HEADERS_SEARCH_PATHS` overrides the xcconfig.
       #
-      # @todo   Add integration test for build configurations and don't add the
-      #         build configurations to the project if they are not needed.
+      # @todo   CocoaPods 0.16 used to add the build configurations to the build
+      #         configuration list of the project (`root object`) as well with
+      #         an empty build settings. This behaviour was changed in 0.17.
+      #         Restore if needed.
       #
       # @return [void]
       #
@@ -77,14 +79,13 @@ module Pod
         @target.build_settings('Debug').merge!(settings)
         @target.build_settings('Release').merge!(settings)
 
-        library.user_build_configurations.each do |lib_name, type|
-          unless @target.build_configurations.map(&:name).include?(lib_name)
+        library.user_build_configurations.each do |bc_name, type|
+          unless @target.build_configurations.map(&:name).include?(bc_name)
             build_config = project.new(Xcodeproj::Project::XCBuildConfiguration)
-            build_config.name = lib_name
+            build_config.name = bc_name
             settings = @target.build_settings(type.to_s.capitalize)
             build_config.build_settings = settings
             target.build_configurations << build_config
-            project.build_configurations << build_config
           end
         end
 
