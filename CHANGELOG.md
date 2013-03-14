@@ -1,6 +1,5 @@
 ## 0.17.0.rc4
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2
-• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...0.5.1))
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc3...0.17.0.rc4
 
 ###### Bug fixes
 
@@ -14,6 +13,9 @@
 - Fixed an issue which lead to the creation of a Pods project which would
   crash Xcode.
   [#854](https://github.com/CocoaPods/CocoaPods/issues/854)
+- Fixed a crash related to a `PBXVariantGroup` present in the frameworks build 
+  phase of client targets.
+  [#859](https://github.com/CocoaPods/CocoaPods/issues/859)
 
 
 ###### Ancillary enhancements
@@ -22,7 +24,7 @@
   folders.
 
 ## 0.17.0.rc3
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc2...0.17.0.rc3
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...0.5.1))
 
 ###### Bug fixes

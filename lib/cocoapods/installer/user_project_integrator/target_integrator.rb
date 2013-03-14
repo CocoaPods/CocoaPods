@@ -52,7 +52,7 @@ module Pod
             non_integrated = targets.reject do |target|
               target.frameworks_build_phase.files.any? do |build_file|
                 file_ref = build_file.file_ref
-                !file_ref.proxy? && file_ref.display_name == library.product_name
+                file_ref.isa == 'PBXFileReference' && file_ref.display_name == library.product_name
               end
             end
             @targets = non_integrated
