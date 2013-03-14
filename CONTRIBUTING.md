@@ -1,4 +1,4 @@
-# CONTRIBUTING
+# Contributing
 
 ## Issues
 
@@ -13,7 +13,7 @@ resources are:
 Properly written and formatted issues are more likely to receive the
 appropriate attention.  If you don't care... we don't care.
 
-##### Bug reports
+#### Bug reports
 
 Please post all the relevant information including the version of CocoaPods and
 any template printed by the tool.
@@ -28,11 +28,11 @@ $ xcodeproj project-diff
 
 If you are familiar with Ruby, making a pull request with a failing test case
 can speed up the resolution of the bug. If the issue is more complex you can
-add an [integration test](https://github.com/CocoaPods/CocoaPods/tree/master/spec/integration).
+add an [integration test](https://github.com/CocoaPods/CocoaPods/tree/master/spec/integration)
 which doesn't require any ruby knowledge.
 
 
-##### Feature requests
+#### Feature requests
 
 Please try to be precise about the proposed outcome of the feature and how it
 would related with the existing ones.
