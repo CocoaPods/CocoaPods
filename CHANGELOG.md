@@ -1,5 +1,5 @@
 ## 0.17.0.rc4
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc3...0.17.0.rc4
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc3...0.17.0.rc4)
 
 ###### Bug fixes
 
