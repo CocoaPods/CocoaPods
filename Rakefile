@@ -189,6 +189,8 @@ namespace :spec do
   # to be run separately.
   #
   task :all => :unpack_fixture_tarballs do
+    ENV['GENERATE_COVERAGE'] = 'true'
+
     title 'Running the specs'
     sh    "bundle exec bacon #{specs('**')}"
 

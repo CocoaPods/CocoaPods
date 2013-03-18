@@ -18,6 +18,7 @@ group :development do
   gem "bacon"
   gem "mocha-on-bacon"
   gem "rake"
+  gem 'coveralls', :require => false
 end
 
 group :debugging do

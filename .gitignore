@@ -28,3 +28,5 @@ examples/Podfile
 examples/Pods
 examples/**/Pods
 examples/RelativePathProject/RelativePathProject/RelativePathProject.xcodeproj
+coverage/
+.coveralls.yml
