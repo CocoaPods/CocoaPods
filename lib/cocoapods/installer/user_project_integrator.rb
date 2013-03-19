@@ -132,18 +132,17 @@ module Pod
         end
       end
 
-      #-----------------------------------------------------------------------#
-
       private
 
-      # @!group Helpers.
+      # @!group Private Helpers
+      #-----------------------------------------------------------------------#
 
       # @return [Pathname] the path where the workspace containing the Pods
       #         project and the user projects should be saved.
       #
       def workspace_path
         if podfile.workspace_path
-          podfile.workspace_path
+          Pathname.new(podfile.workspace_path)
         elsif user_project_paths.count == 1
           project = user_project_paths.first.basename('.xcodeproj')
           installation_root + "#{project}.xcworkspace"

@@ -8,6 +8,8 @@
 
 - CocoaPods updates the repositories by default.
   [#872](https://github.com/CocoaPods/CocoaPods/issues/872)
+- Fixed a crash which was present when the Podfile specifies a workspace.
+  [#871](https://github.com/CocoaPods/CocoaPods/issues/871)
 
 ###### Ancillary enhancements
 
