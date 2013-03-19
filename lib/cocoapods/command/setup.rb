@@ -33,7 +33,6 @@ module Pod
           else
             add_master_repo
           end
-          enable_pre_commit_hooks
         end
 
         access_type = push? ? "push" : "read-only"
@@ -83,21 +82,6 @@ module Pod
         end
       end
 
-      # Enables the pre-commit hook of the master repo.
-      #
-      # @note   The hook is enabled in this way because the specs run with the
-      #         master repo as a submodule.
-      #
-      # @return [void]
-      #
-      def enable_pre_commit_hooks
-        if (master_repo_dir + '.git/hooks').exist?
-          hook = master_repo_dir + '.git/hooks/pre-commit'
-          hook.open('w') { |f| f << "#!/bin/sh\nrake lint" }
-          `chmod +x '#{hook}'`
-        end
-      end
-
       #--------------------------------------#
 
       # @!group Private helpers
@@ -106,7 +90,7 @@ module Pod
       #         be enabled.
       #
       def url
-        url = (push?) ? read_write_url : read_only_url
+        (push?) ? read_write_url : read_only_url
       end
 
       # @return [String] the read only url of the master repo.
