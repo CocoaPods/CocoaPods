@@ -100,6 +100,30 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
+      class UpdateSearchIndex < IPC
+
+        self.summary = 'Updates the search index.'
+        self.description = <<-DESC
+          Updates the search index and prints its path to standard output.
+          The search index is a YAML encoded dictionary where the keys
+          are the names of the Pods and the values are a dictionary containing
+          the following information:
+
+          - version
+          - summary
+          - description
+          - authors
+        DESC
+
+        def run
+          SourcesManager.updated_search_index
+          output_pipe.puts(SourcesManager.search_index_path)
+        end
+
+      end
+
+      #-----------------------------------------------------------------------#
+
       class Repl < IPC
 
         END_OF_OUTPUT_SIGNAL = "\n\r"

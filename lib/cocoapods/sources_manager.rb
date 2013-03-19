@@ -63,17 +63,58 @@ module Pod
       # @return [Array<Set>]  The sets that contain the search term.
       #
       def search_by_name(query, full_text_search = false)
-        result = aggregate.search_by_name(query, full_text_search)
-        if result.empty?
-          extra = ", author, summary, or description" if full_text_search
-          raise Informative "Unable to find a pod with name#{extra} matching `#{query}`"
+        set_names = []
+        updated_search_index.each do |name, set_data|
+          text = name.dup
+          if full_text_search
+            text << set_data['authors'].to_s if set_data['authors']
+            text << set_data['summary']      if set_data['summary']
+            text << set_data['description']  if set_data['description']
+          end
+          set_names << name if text.downcase.include?(query.downcase)
         end
-        result
+
+        sets = set_names.map { |name| aggregate.represenative_set(name) }
+        if sets.empty?
+          extra = ", author, summary, or description" if full_text_search
+          raise Informative, "Unable to find a pod with name#{extra} matching `#{query}`"
+        end
+        sets
       end
 
-      #-----------------------------------------------------------------------#
+      # Creates or updates the search data and returns it. The search data
+      # groups by name the following information for each set:
+      #
+      #   - version
+      #   - summary
+      #   - description
+      #   - authors
+      #
+      # @return [Hash{String => String}] The up to date search data.
+      #
+      def updated_search_index
+        if search_index_path.exist?
+          stored_index = YAML.load(search_index_path.read)
+          search_index = aggregate.update_search_index(stored_index)
+        else
+          search_index = aggregate.generate_search_index
+        end
+
+        File.open(search_index_path, 'w') {|f| f.write(search_index.to_yaml) }
+        search_index
+      end
+
+      # @return [Pathname] The path where the search index should be stored.
+      #
+      def search_index_path
+        caches_path = Pathname.new(File.expand_path(CACHE_ROOT))
+        caches_path + 'search_index.yaml'
+      end
+
+      public
 
       # @!group Updating Sources
+      #-----------------------------------------------------------------------#
 
       extend Executable
       executable :git
@@ -87,10 +128,10 @@ module Pod
       #
       def update(source_name = nil, show_output = false)
         if source_name
-          source = aggregate.all.find { |s| s.name == source_name }
-          raise Informative, "Unable to find the `#{source_name}` repo."    unless source
-          raise Informative, "The `#{source_name}` repo is not a git repo." unless git_repo?(source.repo)
-          sources = [source]
+          specified_source = aggregate.all.find { |s| s.name == source_name }
+          raise Informative, "Unable to find the `#{source_name}` repo."    unless specified_source
+          raise Informative, "The `#{source_name}` repo is not a git repo." unless git_repo?(specified_source.repo)
+          sources = [specified_source]
         else
           sources = aggregate.all.select { |source| git_repo?(source.repo) }
         end
@@ -195,9 +236,10 @@ module Pod
         yaml_file.exist? ? YAML.load_file(yaml_file) : {}
       end
 
-      #-----------------------------------------------------------------------#
+      public
 
       # @!group Master repo
+      #-----------------------------------------------------------------------#
 
       # @return [Pathname] The path of the master repo.
       #
@@ -213,6 +255,10 @@ module Pod
       def master_repo_functional?
         master_repo_dir.exist? && repo_compatible?(master_repo_dir)
       end
+
+      #-----------------------------------------------------------------------#
+
     end
   end
 end
+

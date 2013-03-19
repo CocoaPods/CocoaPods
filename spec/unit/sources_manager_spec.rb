@@ -3,31 +3,74 @@ require File.expand_path('../../spec_helper', __FILE__)
 module Pod
   describe SourcesManager do
 
+    before do
+      @test_source = Source.new(fixture('spec-repos/test_repo'))
+      SourcesManager.stubs(:search_index_path).returns(temporary_directory + 'search_index.yaml')
+    end
+
+    #-------------------------------------------------------------------------#
+
     describe "In general" do
+
+      before do
+        Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+      end
+
+      #--------------------------------------#
+
       it "returns all the sources" do
+        Source::Aggregate.any_instance.unstub(:all)
         SourcesManager.all.map(&:name).should == %w[master test_repo]
       end
 
       it "returns all the sets" do
-        SourcesManager.all_sets.map(&:name).should.include?('Chameleon')
+        SourcesManager.all_sets.map(&:name).should.include?('BananaLib')
       end
 
       it "searches for the set of a dependency" do
-        set = SourcesManager.search(Dependency.new('Chameleon'))
+        set = SourcesManager.search(Dependency.new('BananaLib'))
         set.class.should == Specification::Set
-        set.name.should == 'Chameleon'
+        set.name.should == 'BananaLib'
+      end
+
+      it "raises if it not able to find a pod for the given dependency" do
+        should.raise Informative do
+          set = SourcesManager.search(Dependency.new('Windows-Lib'))
+        end.message.should.match /Unable to find.*Windows-Lib/
       end
 
       it "searches sets by name" do
-        sets = SourcesManager.search_by_name('Chameleon')
+        sets = SourcesManager.search_by_name('BananaLib')
         sets.all?{ |s| s.class == Specification::Set}.should.be.true
-        sets.any?{ |s| s.name  == 'Chameleon'}.should.be.true
+        sets.any?{ |s| s.name  == 'BananaLib'}.should.be.true
       end
 
       it "can perform a full text search of the sets" do
-        sets = SourcesManager.search_by_name('Drop in sharing', true)
+        Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+        sets = SourcesManager.search_by_name('Chunky', true)
         sets.all?{ |s| s.class == Specification::Set}.should.be.true
-        sets.any?{ |s| s.name  == 'ShareKit'}.should.be.true
+        sets.any?{ |s| s.name  == 'BananaLib'}.should.be.true
+      end
+
+      it "generates the search index before performing a search if it doesn't exits" do
+        Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+        Source::Aggregate.any_instance.expects(:generate_search_index).returns({'BananaLib' => {}})
+        Source::Aggregate.any_instance.expects(:update_search_index).never
+        sets = SourcesManager.search_by_name('BananaLib')
+      end
+
+      it "updates the search index before performing a search if it exits" do
+        FileUtils.touch(SourcesManager.search_index_path)
+        Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+        Source::Aggregate.any_instance.expects(:generate_search_index).never
+        Source::Aggregate.any_instance.expects(:update_search_index).returns({'BananaLib' => {}})
+        sets = SourcesManager.search_by_name('BananaLib')
+      end
+
+      it "returns the path of the search index" do
+        SourcesManager.unstub(:search_index_path)
+        path = SourcesManager.search_index_path.to_s
+        path.should.match %r[Library/Caches/CocoaPods/search_index.yaml]
       end
     end
 

@@ -7,6 +7,7 @@ module Pod
       Command::IPC::Spec.any_instance.stubs(:output_pipe).returns(UI)
       Command::IPC::Podfile.any_instance.stubs(:output_pipe).returns(UI)
       Command::IPC::List.any_instance.stubs(:output_pipe).returns(UI)
+      Command::IPC::UpdateSearchIndex.any_instance.stubs(:output_pipe).returns(UI)
       Command::IPC::Repl.any_instance.stubs(:output_pipe).returns(UI)
     end
 
@@ -50,6 +51,18 @@ module Pod
         out.should.include('---')
         out.should.match /BananaLib:/
         out.should.match /description: Full of chunky bananas./
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe Command::IPC::UpdateSearchIndex do
+
+      it "updates the search index and prints its path to STDOUT" do
+        SourcesManager.expects(:updated_search_index)
+        out = run_command('ipc', 'update-search-index')
+        out.should.include(SourcesManager.search_index_path.to_s)
       end
 
     end
