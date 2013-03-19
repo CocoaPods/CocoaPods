@@ -125,9 +125,9 @@ module Pod
       describe "Private Helpers" do
 
         it "uses the path of the workspace defined in the podfile" do
-          path = Pathname.new("a_path")
-          @podfile.workspace(path.to_s)
-          @integrator.send(:workspace_path).should == path.sub_ext(".xcworkspace")
+          path = "a_path"
+          @podfile.workspace(path)
+          @integrator.send(:workspace_path).should == Pathname.new(path + ".xcworkspace")
         end
 
         it "names the workspace after the user project if needed" do

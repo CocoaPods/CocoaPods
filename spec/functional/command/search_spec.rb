@@ -7,7 +7,6 @@ module Pod
 
     before do
       @test_source = Source.new(fixture('spec-repos/test_repo'))
-      SourcesManager.stubs(:search_index_path).returns(temporary_directory + 'search_index.yaml')
       Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
     end
 
