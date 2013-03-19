@@ -142,35 +142,6 @@ module Pod
         puts("\n[!] #{message}".green)
       end
 
-      # Stores important warning to the user optionally followed by actions
-      # that the user should take. To print them use #{print_warnings}
-      #
-      # @param [String]  message The message to print.
-      # @param [Array]   actions The actions that the user should take.
-      #
-      # return [void]
-      #
-      def warn(message, actions = [], verbose_only = false)
-        warnings << { :message => message, :actions => actions, :verbose_only => verbose_only }
-      end
-
-      # Prints the stored warnings. This method is intended to be called at the
-      # end of the execution of the binary.
-      #
-      # @return [void]
-      #
-      def print_warnings
-        STDOUT.flush
-        warnings.each do |warning|
-          next if warning[:verbose_only] && !config.verbose?
-          STDERR.puts("\n[!] #{warning[:message]}".yellow)
-          warning[:actions].each do |action|
-            indented = wrap_string(action, "    - ")
-            puts(indented)
-          end
-        end
-      end
-
       # Returns a string containing relative location of a path from the Podfile.
       # The returned path is quoted. If the argument is nit it returns the
       # empty string.
@@ -226,14 +197,6 @@ module Pod
         end
       end
 
-      # @!group Basic printing
-
-      # Prints a message unless config is silent.
-      #
-      def puts(message = '')
-        super(message) unless config.silent?
-      end
-
       # Prints a message respecting the current indentation level and
       # wrapping it to the terminal width if necessary.
       #
@@ -242,9 +205,56 @@ module Pod
         puts(indented)
       end
 
+      # Prints the stored warnings. This method is intended to be called at the
+      # end of the execution of the binary.
+      #
+      # @return [void]
+      #
+      def print_warnings
+        STDOUT.flush
+        warnings.each do |warning|
+          next if warning[:verbose_only] && !config.verbose?
+          STDERR.puts("\n[!] #{warning[:message]}".yellow)
+          warning[:actions].each do |action|
+            indented = wrap_string(action, "    - ")
+            puts(indented)
+          end
+        end
+      end
+
+      public
+
+      # @!group Basic methods
+      #-----------------------------------------------------------------------#
+
+      # prints a message followed by a new line unless config is silent.
+      #
+      def puts(message = '')
+        STDOUT.puts(message) unless config.silent?
+      end
+
+      # prints a message followed by a new line unless config is silent.
+      #
+      def print(message)
+        STDOUT.print(message) unless config.silent?
+      end
+
+      # Stores important warning to the user optionally followed by actions
+      # that the user should take. To print them use {#print_warnings}.
+      #
+      # @param [String]  message The message to print.
+      # @param [Array]   actions The actions that the user should take.
+      #
+      # return [void]
+      #
+      def warn(message, actions = [], verbose_only = false)
+        warnings << { :message => message, :actions => actions, :verbose_only => verbose_only }
+      end
+
       private
 
       # @!group Helpers
+      #-----------------------------------------------------------------------#
 
       # @return [String] Wraps a string taking into account the width of the
       # terminal and an option indent. Adapted from

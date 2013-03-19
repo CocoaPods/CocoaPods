@@ -100,54 +100,32 @@ module Pod
           dirs.each do |dir|
             SourcesManager.check_version_information(dir)
             UI.puts "\nLinting spec repo `#{dir.realpath.basename}`\n".yellow
-            podspecs = Pathname.glob( dir + '**/*.podspec')
-            invalid_count = 0
 
-            messages_by_type = {}
-            podspecs.each do |podspec|
-              # print "\033[K -> #{podspec.relative_path_from(dir)}\r" unless config.silent?
-              validator = Validator.new(podspec)
-              validator.quick       = true
-              validator.repo_path   = dir
-              validator.only_errors = @only_errors
-              validator.disable_ui_output = true
+            validator = Source::HealthReporter.new(dir)
+            validator.pre_check do |name, version|
+              UI.print '.'
+            end
+            report = validator.analyze
+            UI.puts
+            UI.puts
 
-              validator.validate
-              invalid_count += 1 if validator.result_type == :error
-              unless validator.validated?
-                if @only_errors
-                  results = validator.results.select { |r| r.type.to_s == "error" }
-                else
-                  results = validator.results
-                end
-                sorted_results = results.sort_by { |r| [r.type.to_s, r.message] }
-                sorted_results.each do |result|
-                  name = validator.spec ? validator.spec.name : podspec.relative_path_from(dir)
-                  version = validator.spec ? validator.spec.version : 'unknown'
-                  messages_by_type[result.type] ||= {}
-                  messages_by_type[result.type][result.message] ||= {}
-                  messages_by_type[result.type][result.message][name] ||= []
-                  messages_by_type[result.type][result.message][name] << version
-                end
-              end
+            report.pods_by_warning.each do |message, versions_by_name|
+              UI.puts "-> #{message}".yellow
+              versions_by_name.each { |name, versions| UI.puts "  - #{name} (#{versions * ', '})" }
+              UI.puts
             end
 
-            # print "\033[K" unless config.silent?
-            messages_by_type.each do |type, names_by_message|
-              names_by_message.each do |message, versions_by_names|
-                color = type == :error ? :red : :yellow
-                UI.puts "[#{type}] #{message}".send(color)
-                versions_by_names.each { |name, versions| UI.puts "  - #{name} (#{versions * ', '})" }
-                UI.puts
-              end
+            report.pods_by_error.each do |message, versions_by_name|
+              UI.puts "-> #{message}".red
+              versions_by_name.each { |name, versions| UI.puts "  - #{name} (#{versions * ', '})" }
+              UI.puts
             end
 
-            UI.puts "Analyzed #{podspecs.count} podspecs files.\n\n"
-
-            if invalid_count == 0
+            UI.puts "Analyzed #{report.analyzed_paths.count} podspecs files.\n\n"
+            if report.pods_by_error.count.zero?
               UI.puts "All the specs passed validation.".green << "\n\n"
             else
-              raise Informative, "#{invalid_count} podspecs failed validation."
+              raise Informative, "#{report.pods_by_error.count} podspecs failed validation."
             end
           end
         end

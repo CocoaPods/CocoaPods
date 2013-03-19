@@ -15,11 +15,15 @@ module Pod
       attr_accessor :warnings
 
       def puts(message = '')
-        @output << "#{message}"
+        @output << "#{message}\n"
       end
 
       def warn(message = '', actions = [])
-        @warnings << "#{message}"
+        @warnings << "#{message}\n"
+      end
+
+      def print(message)
+        @output << message
       end
     end
   end
