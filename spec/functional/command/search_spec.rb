@@ -6,8 +6,9 @@ module Pod
     extend SpecHelper::TemporaryRepos
 
     before do
-      set_up_test_repo
-      config.repos_dir = SpecHelper.tmp_repos_path
+      @test_source = Source.new(fixture('spec-repos/test_repo'))
+      SourcesManager.stubs(:search_index_path).returns(temporary_directory + 'search_index.yaml')
+      Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
     end
 
     it "runs with correct parameters" do
