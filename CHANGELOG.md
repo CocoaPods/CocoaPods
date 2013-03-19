@@ -1,10 +1,13 @@
-## 0.17
+## 0.17.0
 
-### 0.17.0.rc6
+#### rc6
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc5...0.17.0.rc6)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc5...0.17.0.rc6)
 
 ###### Bug fixes
+
+- CocoaPods updates the repositories by default.
+  [#872](https://github.com/CocoaPods/CocoaPods/issues/872)
 
 ###### Ancillary enhancements
 
@@ -17,7 +20,7 @@
   `~/.cocoapods/master/.git/hooks/pre-commit` path.
 - Improved support for linting and validating specs repo.
 
-### 0.17.0.rc5
+#### rc5
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc4...0.17.0.rc5)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc4...0.17.0.rc5)
 
@@ -27,7 +30,7 @@
 - Proper handling of file patterns ending with a slash.
 - More user errors are raised as an informative.
 
-### 0.17.0.rc4
+#### rc4
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc3...0.17.0.rc4)
 
 ###### Bug fixes
@@ -52,7 +55,7 @@
 - The `podspec` option of the `pod` directive of the Podfile DSL now accepts
   folders.
 
-### 0.17.0.rc3
+#### rc3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc2...0.17.0.rc3
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...0.5.1))
 
@@ -75,7 +78,7 @@
 - General improvements to `pod ipc`.
 - Added `pod ipc repl` subcommand.
 
-### 0.17.0.rc2
+#### rc2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc1...0.17.0.rc2)
 
@@ -90,7 +93,7 @@
   attribute.
   [#823](https://github.com/CocoaPods/CocoaPods/issues/823)
 
-### 0.17.0.rc1
+#### rc1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.4...0.17.0.rc1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core)

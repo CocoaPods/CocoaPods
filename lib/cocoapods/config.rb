@@ -24,7 +24,6 @@ module Pod
       :generate_docs       => true,
       :install_docs        => true,
       :integrate_targets   => true,
-      :skip_repo_update    => true,
       :new_version_message => true,
     }
 
