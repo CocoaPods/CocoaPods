@@ -30,7 +30,6 @@ module Pod
 
     it "validates a correct podspec" do
       validator = Validator.new(podspec_path)
-      validator.repo_path = fixture('spec-repos/master')
       validator.quick = true
       validator.validate
       validator.results.should == []
@@ -44,15 +43,6 @@ module Pod
       validator.quick = true
       validator.validate
       validator.results.map(&:to_s).first.should.match /should match the name/
-      validator.validated?.should.be.false
-    end
-
-    it "checks the path of the specification if a repo path is provided" do
-      validator = Validator.new(podspec_path)
-      validator.quick = true
-      validator.repo_path = fixture('.')
-      validator.validate
-      validator.results.map(&:to_s).first.should.match /Incorrect path/
       validator.validated?.should.be.false
     end
 

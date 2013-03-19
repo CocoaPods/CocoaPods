@@ -6,11 +6,11 @@ end
 gemspec
 
 group :development do
-  # gem "cocoapods-core",       :git => "git://github.com/CocoaPods/Core.git"
+  gem "cocoapods-core",       :git => "git://github.com/CocoaPods/Core.git"
   gem "xcodeproj",            :git => "git://github.com/CocoaPods/Xcodeproj.git"
   gem "cocoapods-downloader", :git => "git://github.com/CocoaPods/cocoapods-downloader"
 
-  gem "cocoapods-core",       :path => "../Core"
+  # gem "cocoapods-core",       :path => "../Core"
   # gem "xcodeproj",            :path => "../Xcodeproj"
   # gem "cocoapods-downloader", :path => "../cocoapods-downloader"
 

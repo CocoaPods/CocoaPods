@@ -56,19 +56,14 @@ module Pod
     #
     def validate
       @results  = []
-      unless disable_ui_output
-        print " -> #{spec ? spec.name : file.basename}\r" unless config.silent?
-        $stdout.flush
-      end
+      UI.print " -> #{spec ? spec.name : file.basename}\r" unless config.silent?
+      $stdout.flush
 
       perform_linting
-      check_repo_path if spec && repo_path
       perform_extensive_analysis if spec && !quick
 
-      unless disable_ui_output
-        UI.puts " -> ".send(result_color) << (spec ? spec.to_s : file.basename.to_s)
-        print_results
-      end
+      UI.puts " -> ".send(result_color) << (spec ? spec.to_s : file.basename.to_s)
+      print_results
       validated?
     end
 
@@ -97,16 +92,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     # @!group Configuration
-
-    # @return [Bool] Whether the validator should print the results of the
-    #         validation. This is useful for clients which want to customize
-    #         output.
-    #
-    attr_accessor :disable_ui_output
-
-    # @return [Pathname] whether the validation should be performed against a repo.
-    #
-    attr_accessor :repo_path
 
     # @return [Bool] whether the validation should skip the checks that
     #         requires the download of the library.
@@ -180,16 +165,6 @@ module Pod
     def perform_linting
       linter.lint
       @results.concat(linter.results)
-    end
-
-    #
-    #
-    def check_repo_path
-      expected_path = "#{spec.name}/#{spec.version}/#{spec.name}.podspec"
-      path = file.relative_path_from(repo_path).to_s
-      unless path == expected_path
-        error "Incorrect path, the path is `#{file}` and should be `#{expected_path}`"
-      end
     end
 
     #
