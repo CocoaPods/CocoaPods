@@ -240,6 +240,10 @@ module Pod
       # @note   Implementation detail: Don't use `Dir#glob` as there is an
       #         unexplained issue (#568, #572 and #602).
       #
+      # @todo   The paths are down-cased for the comparison as issues similar
+      #         to #602 lead the files not being matched and so cleaning all
+      #         the files. This solution might create side effects.
+      #
       # @return [Array<Strings>] The paths that can be deleted.
       #
       def clean_paths
@@ -248,7 +252,9 @@ module Pod
         files = Pathname.glob(root + "**/*", glob_options).map(&:to_s)
 
         files.reject! do |candidate|
+          candidate = candidate.downcase
           candidate.end_with?('.', '..') || cached_used.any? do |path|
+            path = path.downcase
             path.include?(candidate) || candidate.include?(path)
           end
         end
@@ -259,7 +265,6 @@ module Pod
       #         specifications (according to their platform) of this Pod.
       #
       def used_files
-
         files = [
           file_accessors.map(&:source_files),
           file_accessors.map(&:resources),
