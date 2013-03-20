@@ -10,6 +10,12 @@
   [#872](https://github.com/CocoaPods/CocoaPods/issues/872)
 - Fixed a crash which was present when the Podfile specifies a workspace.
   [#871](https://github.com/CocoaPods/CocoaPods/issues/871)
+- Fix for a bug which lead to a broken installation in paths containing
+  brackets and other glob metacharacters.
+  [#862](https://github.com/CocoaPods/CocoaPods/issues/862)
+- Fix for a bug related to the case of the paths which lead to clean all files
+  in the directories of the Pods.
+
 
 ###### Ancillary enhancements
 
