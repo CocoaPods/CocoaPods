@@ -47,7 +47,8 @@ module Pod
           raise Informative, "Attempt to read non existent folder `#{root}`."
         end
         root_length  = root.to_s.length+1
-        paths  = Dir.glob(root + "**/*", File::FNM_DOTMATCH)
+        escaped_root = escape_path_for_glob(root)
+        paths  = Dir.glob(escaped_root + "**/*", File::FNM_DOTMATCH)
         absolute_dirs  = paths.select { |path| File.directory?(path) }
         relative_dirs  = absolute_dirs.map  { |p| p[root_length..-1] }
         absolute_paths = paths.reject { |p| p == "#{root}/." || p == "#{root}/.." }
@@ -172,6 +173,25 @@ module Pod
           end
           patterns
         end
+      end
+
+      # Escapes the glob metacharacters from a given path so it can used in
+      # Dir#glob and similar methods.
+      #
+      # @note   See CocoaPods/CocoaPods#862.
+      #
+      # @param  [String, Pathname] path
+      #         The path to escape.
+      #
+      # @return [Pathname] The escaped path.
+      #
+      def escape_path_for_glob(path)
+        result = path.to_s
+        characters_to_escape = ['[', ']', '{', '}', '?', '*']
+        characters_to_escape.each do |character|
+          result.gsub!(character, "\\#{character}" )
+        end
+        Pathname.new(result)
       end
 
       #-----------------------------------------------------------------------#

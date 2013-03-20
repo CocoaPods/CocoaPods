@@ -38,6 +38,14 @@ module Pod
         dirs.sort.should == %w| Classes Resources Resources/sub_dir sub-dir sub-dir/sub-dir-2 |
       end
 
+      it "handles directories with glob metacharacters" do
+        root = temporary_directory + '[CP] Test'
+        root.mkpath
+        FileUtils.touch(root + 'Class.h')
+        @path_list = Sandbox::PathList.new(root)
+        @path_list.files.should == ["Class.h"]
+      end
+
     end
 
     #-------------------------------------------------------------------------#
@@ -122,6 +130,7 @@ module Pod
         end
       end
 
+      #--------------------------------------#
 
       describe "#directory?" do
         it "expands a pattern into all the combinations of Dir#glob literals" do
@@ -148,7 +157,22 @@ module Pod
             Classes/file.m
           ]
         end
+
       end
+
+      #--------------------------------------#
+
+      describe "#escape_path_for_glob" do
+
+        it "escapes metacharacters" do
+          escaped = @path_list.send(:escape_path_for_glob, '[]{}?**')
+          escaped.to_s.should == '\[\]\{\}\?\*\*'
+        end
+
+      end
+
+      #--------------------------------------#
+
     end
 
     #-------------------------------------------------------------------------#
