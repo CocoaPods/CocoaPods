@@ -111,8 +111,7 @@ Targets:
 - Pods-SampleApp_2:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m:
-          COMPILER_FLAGS: -Wno-deprecated-objc-isa-usage -Wno-format
+      - JSONKit.m
       - Reachability.m:
           COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
       - Pods-SampleApp_2-dummy.m
@@ -178,8 +177,7 @@ Targets:
 - Pods-test:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m:
-          COMPILER_FLAGS: -Wno-deprecated-objc-isa-usage -Wno-format
+      - JSONKit.m
       - Pods-test-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework

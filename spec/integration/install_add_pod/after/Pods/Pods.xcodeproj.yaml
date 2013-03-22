@@ -29,8 +29,7 @@ Targets:
 - Pods:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m:
-          COMPILER_FLAGS: -Wno-deprecated-objc-isa-usage -Wno-format
+      - JSONKit.m
       - Reachability.m:
           COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
       - Pods-dummy.m
