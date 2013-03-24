@@ -58,17 +58,17 @@ module Pod
       @cached_specs    = {}
       @specs_by_target = {}
 
-      target_definitions = podfile.target_definitions.values.sort_by{ |td| td.name.to_s }
+      target_definitions = podfile.target_definitions.values#.sort_by{ |td| td.name.to_s }
       target_definitions.each do |target|
         UI.section "Resolving dependencies for target `#{target.name}' (#{target.platform})" do
           @loaded_specs = []
           find_dependency_specs(podfile, target.dependencies, target)
-          specs = cached_specs.values_at(*@loaded_specs).sort_by(&:name)
+          specs = cached_specs.values_at(*@loaded_specs)#.sort_by(&:name)
           specs_by_target[target] = specs
         end
       end
 
-      cached_specs.values.sort_by(&:name)
+      # cached_specs.values.sort_by(&:name)
       specs_by_target
     end
 

@@ -103,6 +103,10 @@ module Pod
             expanded_patterns = dir_glob_equivalent_patterns(pattern)
             full_list.select do |path|
               expanded_patterns.any? do |p|
+                if p.respond_to? 'force_encoding'
+                  p.force_encoding('UTF-8')
+                  path.force_encoding('UTF-8')
+                end
                 File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
               end
             end
