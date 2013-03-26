@@ -1,5 +1,23 @@
 ## 0.17.0
 
+#### rc7
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc6...0.17.0.rc7)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc6...0.17.0.rc7)
+
+###### Bug fixes
+- Fixed an issue which lead to the missing declaration of the plural directives
+  of the Specification DSL.
+  [#816](https://github.com/CocoaPods/CocoaPods/issues/816)
+- The resolver now respects the order of specification of the target
+  definitions.
+- Restore usage of cache file to store a cache for expensive stats.
+- Moved declaration of `Pod::FileList` to CocoaPods-core.
+
+###### Ancillary enhancements
+
+- Fine tuned the Specification linter and the health reporter of repositories.
+- Search results are sorted.
+
 #### rc6
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc5...0.17.0.rc6)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc5...0.17.0.rc6)
