@@ -74,7 +74,7 @@ module Pod
           set_names << name if text.downcase.include?(query.downcase)
         end
 
-        sets = set_names.map { |name| aggregate.represenative_set(name) }
+        sets = set_names.sort.map { |name| aggregate.represenative_set(name) }
         if sets.empty?
           extra = ", author, summary, or description" if full_text_search
           raise Informative, "Unable to find a pod with name#{extra} matching `#{query}`"
