@@ -30,8 +30,7 @@ Targets:
     Build Phases:
     - SourcesBuildPhase:
       - JSONKit.m
-      - Reachability.m:
-          COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
+      - Reachability.m
       - Pods-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
