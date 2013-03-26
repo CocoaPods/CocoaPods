@@ -21,7 +21,7 @@ module Pod
   # @todo   The {Installer::PodSourceInstaller} and the #{ExternalSources}
   #         classes build and configure the downloader from scratch.
   #
-  CACHE_ROOT = "~/Library/Caches/CocoaPods"
+  CACHE_ROOT = "#{ENV['HOME']}/Library/Caches/CocoaPods"
 
   # @return [Fixnum] The maximum size for the cache expressed in Mb.
   #
@@ -29,6 +29,8 @@ module Pod
   #         classes build and configure the downloader from scratch.
   #
   MAX_CACHE_SIZE = 500
+
+  Pod::Specification::Set::Statistics.instance.cache_file = Pathname.new(CACHE_ROOT) + 'statistics.yml'
 
   autoload :Command,                'cocoapods/command'
   autoload :Executable,             'cocoapods/executable'
