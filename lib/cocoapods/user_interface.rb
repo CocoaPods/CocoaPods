@@ -188,7 +188,7 @@ module Pod
           ''.tap do |t|
             t << "    - #{label}:".ljust(16)
             if value.is_a?(Array)
-              separator = "\n      - "
+              separator = "\n  - "
               puts_indented t << separator << value.join(separator)
             else
               puts_indented t << value.to_s << "\n"
