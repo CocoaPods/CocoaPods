@@ -30,18 +30,7 @@ module Rake
   end
 end
 
-module Pod
-  FileList = Rake::FileList
-end
-
-class Pathname
-  alias_method :_original_sum, :+
-  def +(other)
-    if other.is_a?(Rake::FileList)
-      other.prepend_patterns(self)
-      other
-    else
-      _original_sum(other)
-    end
-  end
-end
+# TODO Defined in CocoaPods Core
+# module Pod
+#   FileList = Rake::FileList
+# end
