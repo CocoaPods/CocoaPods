@@ -190,7 +190,7 @@ module Pod
         #         the name of the Pod.
         #
         def resolved_spec_names(pod)
-          specs.select { |s| s.root.name == pod }.map(&:name).uniq
+          specs.select { |s| s.root.name == pod }.map(&:name).uniq.sort
         end
 
         # @return [Array<String>] The name of the specifications stored in the
@@ -200,7 +200,7 @@ module Pod
         #         the name of the Pod.
         #
         def sandbox_spec_names(pod)
-          sandbox_manifest.pod_names.select { |name| Specification.root_name(name) == pod }.uniq
+          sandbox_manifest.pod_names.select { |name| Specification.root_name(name) == pod }.uniq.sort
         end
 
         # @return [Specification] The root specification for the Pod with the

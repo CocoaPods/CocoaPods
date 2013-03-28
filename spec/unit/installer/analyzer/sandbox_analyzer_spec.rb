@@ -130,9 +130,9 @@ module Pod
         @analyzer.send(:sandbox_pods).should == ['BananaLib']
       end
 
-      it "returns the name of the resolved specifications" do
+      it "returns the name of the resolved specifications sorted by name" do
         subspec = Spec.new(@spec, 'Subspec')
-        @analyzer.stubs(:specs).returns([@spec, subspec])
+        @analyzer.stubs(:specs).returns([subspec, @spec])
         @analyzer.send(:resolved_spec_names, 'BananaLib').should == ['BananaLib', 'BananaLib/Subspec']
       end
 
