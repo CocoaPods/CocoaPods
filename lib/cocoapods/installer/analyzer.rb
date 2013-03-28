@@ -65,21 +65,22 @@ module Pod
       #         CocoaPods project is already up to date.
       #
       def needs_install?
-        podfile_needs_install? || sandbox_needs_install?
+        analysis_result = analyze(false)
+        podfile_needs_install?(analysis_result) || sandbox_needs_install?(analysis_result)
       end
 
       # @return [Bool] Whether the podfile has changes respect to the lockfile.
       #
-      def podfile_needs_install?
-        state = generate_podfile_state
+      def podfile_needs_install?(analysis_result)
+        state = analysis_result.podfile_state
         needing_install = state.added + state.changed + state.deleted
         !needing_install.empty?
       end
 
       # @return [Bool] Whether the sandbox is in synch with the lockfile.
       #
-      def sandbox_needs_install?
-        state = generate_sandbox_state
+      def sandbox_needs_install?(analysis_result)
+        state = analysis_result.sandbox_state
         needing_install = state.added + state.changed + state.deleted
         !needing_install.empty?
       end

@@ -39,11 +39,13 @@ module Pod
       end
 
       it "returns whether the Podfile has changes" do
-        @analyzer.podfile_needs_install?.should.be.true
+        analysis_result = @analyzer.analyze(false)
+        @analyzer.podfile_needs_install?(analysis_result).should.be.true
       end
 
       it "returns whether the sandbox is not in sync with the lockfile" do
-        @analyzer.sandbox_needs_install?.should.be.true
+        analysis_result = @analyzer.analyze(false)
+        @analyzer.sandbox_needs_install?(analysis_result).should.be.true
       end
 
       #--------------------------------------#
