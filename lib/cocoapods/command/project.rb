@@ -11,7 +11,7 @@ module Pod
             ["--no-clean",     "Leave SCM dirs like `.git' and `.svn' intact after downloading"],
             ["--no-doc",       "Skip documentation generation with appledoc"],
             ["--no-integrate", "Skip integration of the Pods libraries in the Xcode project(s)"],
-            ["--no-update",    "Skip running `pod repo update` before install"],
+            ["--no-repo-update",    "Skip running `pod repo update` before install"],
           ].concat(super)
         end
       end
