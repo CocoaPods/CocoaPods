@@ -45,14 +45,14 @@ module Pod
       #
       # @return [AnalysisResult]
       #
-      def analyze
-        update_repositories_if_needed
+      def analyze(allow_fetches = true)
+        update_repositories_if_needed if allow_fetches
         @result = AnalysisResult.new
         @result.podfile_state = generate_podfile_state
         @locked_dependencies  = generate_version_locking_dependencies
 
         @result.libraries       = generated_libraries
-        fetch_external_sources
+        fetch_external_sources if allow_fetches
         @result.specs_by_target = resolve_dependencies
         @result.specifications  = generate_specifications
         @result.sandbox_state   = generate_sandbox_state
@@ -79,7 +79,9 @@ module Pod
       # @return [Bool] Whether the sandbox is in synch with the lockfile.
       #
       def sandbox_needs_install?
-        lockfile != sandbox.manifest
+        state = generate_sandbox_state
+        needing_install = state.added + state.changed + state.deleted
+        !needing_install.empty?
       end
 
       #-----------------------------------------------------------------------#
