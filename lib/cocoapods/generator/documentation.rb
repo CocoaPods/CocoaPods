@@ -145,7 +145,7 @@ module Pod
       #
       def spec_appledoc_options
         return [] unless specification.documentation
-        specification.documentation[:appledoc]
+        specification.documentation[:appledoc] || []
       end
 
       # @return [Array<String>] The list of the appledoc options followed by

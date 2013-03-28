@@ -14,6 +14,11 @@ module Pod
       @doc_installer.public_headers.sort.should == %w[ Classes/Banana.h ].sort
     end
 
+    it 'returns an empty array in case there are no appledoc options specified' do
+      @doc_installer.specification.stubs(:documentation).returns({})
+      @doc_installer.spec_appledoc_options.should == []
+    end
+
     it 'returns the Pod documentation options' do
       expected = [
         '--project-name', 'BananaLib 1.0',
