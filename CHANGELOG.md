@@ -1,10 +1,29 @@
 ## 0.17.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc7...0.17.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc7...0.17.0)
+
+#### GM
+
+###### Bug fixes
+
+* Don’t break when specifying doc options, but not appledoc ones.
+  [#906](https://github.com/CocoaPods/CocoaPods/issues/906)
+* Sort resolved specifications.
+  [#907](https://github.com/CocoaPods/CocoaPods/issues/907)
+* Subspecs do not need to include HEAD information.
+  [#905](https://github.com/CocoaPods/CocoaPods/issues/905)
+
+###### Ancillary enhancements
+
+* Allow the analyzer to do its work without updating sources.
+  [motion-cocoapods#50](https://github.com/HipByte/motion-cocoapods/pull/50)
 
 #### rc7
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc6...0.17.0.rc7)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc6...0.17.0.rc7)
 
 ###### Bug fixes
+
 - Fixed an issue which lead to the missing declaration of the plural directives
   of the Specification DSL.
   [#816](https://github.com/CocoaPods/CocoaPods/issues/816)
