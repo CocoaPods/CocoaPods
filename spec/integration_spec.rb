@@ -71,9 +71,9 @@ module Pod
         lockfile = installer.lockfile.to_hash
         lockfile['PODS'].should  == [
           { "ASIHTTPRequest (1.8.1)" =>
-            [ "ASIHTTPRequest/ASIWebPageRequest (= 1.8.1)",
-              "ASIHTTPRequest/CloudFiles (= 1.8.1)",
-              "ASIHTTPRequest/S3 (= 1.8.1)",
+            [ "ASIHTTPRequest/ASIWebPageRequest",
+              "ASIHTTPRequest/CloudFiles",
+              "ASIHTTPRequest/S3",
               "Reachability"
             ]
           },

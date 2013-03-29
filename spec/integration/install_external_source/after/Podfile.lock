@@ -1,7 +1,7 @@
 PODS:
   - PodTest (1.0):
-    - PodTest/subspec_1 (= 1.0)
-    - PodTest/subspec_2 (= 1.0)
+    - PodTest/subspec_1
+    - PodTest/subspec_2
   - PodTest/subspec_1 (1.0)
   - PodTest/subspec_2 (1.0)
 
