@@ -24,6 +24,7 @@ module Pod
   #         classes build and configure the downloader from scratch.
   #
   CACHE_ROOT = Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
+  CACHE_ROOT.mkpath unless CACHE_ROOT.exist?
 
   # @return [Fixnum] The maximum size for the cache expressed in Mb.
   #
