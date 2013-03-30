@@ -79,7 +79,7 @@ namespace :gem do
 
     require 'date'
 
-    # First check if the required Xcodeproj gem has been pushed
+    # First check if the required gems have been pushed
     gem_spec = eval(File.read(File.expand_path('../cocoapods.gemspec', __FILE__)))
     gem_names = ['xcodeproj', 'cocoapods-core', 'cocoapods-downloader', 'claide']
     gem_names.each do |gem_name|

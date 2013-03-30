@@ -1,3 +1,12 @@
+## 0.17.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0...0.17.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0...0.17.1)
+
+###### Bug fixes
+
+* Always create the CACHE_ROOT directory when performing a search.
+  [#917](https://github.com/CocoaPods/CocoaPods/issues/917)
+
 ## 0.17.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc7...0.17.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc7...0.17.0)
