@@ -132,7 +132,7 @@ module Pod
           target = sandbox.root + name
           target.rmtree if target.exist?
           downloader = Downloader.for_target(target, params)
-          downloader.cache_root = CACHE_ROOT
+          downloader.cache_root = CACHE_ROOT.to_s
           downloader.max_cache_size = MAX_CACHE_SIZE
           downloader.aggressive_cache = false
           downloader.download

@@ -107,8 +107,7 @@ module Pod
       # @return [Pathname] The path where the search index should be stored.
       #
       def search_index_path
-        caches_path = Pathname.new(File.expand_path(CACHE_ROOT))
-        caches_path + 'search_index.yaml'
+        CACHE_ROOT + 'search_index.yaml'
       end
 
       public

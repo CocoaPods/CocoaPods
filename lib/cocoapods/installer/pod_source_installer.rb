@@ -156,7 +156,7 @@ module Pod
       def downloader
         return @downloader if @downloader
         @downloader = Downloader.for_target(root, root_spec.source.dup)
-        @downloader.cache_root = CACHE_ROOT
+        @downloader.cache_root = CACHE_ROOT.to_s
         @downloader.max_cache_size = MAX_CACHE_SIZE
         @downloader.aggressive_cache = aggressive_cache?
         @downloader
