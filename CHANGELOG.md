@@ -1,3 +1,20 @@
+## 0.17.2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.1...0.17.2)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.1...0.17.2)
+
+###### Bug fixes
+
+* Fix crash related to the specification of the workspace as a relative path.
+  [#917](https://github.com/CocoaPods/CocoaPods/issues/920)
+
+###### Ancillary enhancements
+
+* Enabled the FileList deprecation warning in the Linter.
+* CocoaPods will raise if versions requirements are specified for dependencies
+  with external sources.
+* The exclude patterns now handle folders automatically.
+
+
 ## 0.17.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0...0.17.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0...0.17.1)
