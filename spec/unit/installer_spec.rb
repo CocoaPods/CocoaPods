@@ -174,7 +174,7 @@ module Pod
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           library = Library.new(nil)
           library.specs = [spec]
-          @installer.stubs(:libraries).returns([library])
+          @installer.stubs(:libraries).returns([library, library])
           @installer.instance_variable_set(:@installed_specs, [])
           Installer::PodSourceInstaller.any_instance.stubs(:install!)
           @installer.send(:install_source_of_pod, 'BananaLib')
