@@ -127,7 +127,10 @@ module Pod
         it "uses the path of the workspace defined in the podfile" do
           path = "a_path"
           @podfile.workspace(path)
-          @integrator.send(:workspace_path).should == Pathname.new(path + ".xcworkspace")
+          workspace_path = @integrator.send(:workspace_path)
+          workspace_path.to_s.should.end_with(path + ".xcworkspace")
+          workspace_path.should.be.absolute
+          workspace_path.class.should == Pathname
         end
 
         it "names the workspace after the user project if needed" do

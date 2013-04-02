@@ -142,7 +142,11 @@ module Pod
       #
       def workspace_path
         if podfile.workspace_path
-          Pathname.new(podfile.workspace_path)
+          declared_path = podfile.workspace_path
+          path_with_ext = File.extname(declared_path) == '.xcworkspace' ? declared_path : "#{declared_path}.xcworkspace"
+          podfile_dir   = File.dirname(podfile.defined_in_file || '')
+          absolute_path = File.expand_path(path_with_ext, podfile_dir)
+          Pathname.new(absolute_path)
         elsif user_project_paths.count == 1
           project = user_project_paths.first.basename('.xcodeproj')
           installation_root + "#{project}.xcworkspace"
