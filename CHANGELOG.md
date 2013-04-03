@@ -6,6 +6,9 @@
 
 * Fix crash related to the specification of the workspace as a relative path.
   [#920](https://github.com/CocoaPods/CocoaPods/issues/920)
+* Fix an issue related to the `podspec` dsl directive of the Podfile for
+  specifications with internal dependencies.
+  [#928](https://github.com/CocoaPods/CocoaPods/issues/928)
 * Fix crash related to search from the command line.
   [#929](https://github.com/CocoaPods/CocoaPods/issues/929)
 
@@ -89,7 +92,7 @@
   manually with the `pod ipc update-search-index` command.
 - Enhancements to the `pod repo lint` command.
 - CocoaPods will not create anymore the pre commit hook in the master repo
-  during setup. If already created it is possible remove it deleting the 
+  during setup. If already created it is possible remove it deleting the
   `~/.cocoapods/master/.git/hooks/pre-commit` path.
 - Improved support for linting and validating specs repo.
 
@@ -118,7 +121,7 @@
 - Fixed an issue which lead to the creation of a Pods project which would
   crash Xcode.
   [#854](https://github.com/CocoaPods/CocoaPods/issues/854)
-- Fixed a crash related to a `PBXVariantGroup` present in the frameworks build 
+- Fixed a crash related to a `PBXVariantGroup` present in the frameworks build
   phase of client targets.
   [#859](https://github.com/CocoaPods/CocoaPods/issues/859)
 
