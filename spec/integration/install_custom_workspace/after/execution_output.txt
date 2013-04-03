@@ -1,0 +1,68 @@
+$ pod install --no-update --no-doc --verbose --no-color 2>&1
+Analyzing dependencies
+
+Resolving dependencies of `Podfile`
+Resolving dependencies for target `Pods' (iOS 6.0)
+Resolving dependencies for target `SampleApp_1' (iOS 6.0)
+  - Reachability (= 3.1.0)
+Resolving dependencies for target `SampleApp_2' (iOS 6.0)
+  - Reachability
+
+Comparing resolved specification to the sandbox manifest
+  A Reachability
+
+Downloading dependencies
+
+-> Installing Reachability (3.1.0)
+ > GitHub download
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git config core.bare
+   true
+ > Updating cache git repo (CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6)
+     $ /usr/bin/git remote update
+     Fetching origin
+   $ /usr/bin/git init
+   Initialized empty Git repository in ROOT/tmp/install_custom_workspace/Pods/Reachability/.git/
+   $ /usr/bin/git remote add origin 'CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6'
+   $ /usr/bin/git fetch origin tags/v3.1.0 2>&1
+   From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+    * tag               v3.1.0     -> FETCH_HEAD
+   $ /usr/bin/git reset --hard FETCH_HEAD
+   HEAD is now at f7176f4 updated podspec
+   $ /usr/bin/git checkout -b activated-pod-commit 2>&1
+   Switched to a new branch 'activated-pod-commit'
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding resources to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `Pods-SampleApp_1` iOS 6.0
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-SampleApp_1.xcconfig`
+      - Generating target header at `Pods/Pods-SampleApp_1-header.h`
+      - Generating prefix header at `Pods/Pods-SampleApp_1-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-SampleApp_1-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_1-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_1-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-SampleApp_1-dummy.m`
+    - Installing target `Pods-SampleApp_2` iOS 6.0
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-SampleApp_2.xcconfig`
+      - Generating target header at `Pods/Pods-SampleApp_2-header.h`
+      - Generating prefix header at `Pods/Pods-SampleApp_2-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-SampleApp_2-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-SampleApp_2-dummy.m`
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client projects
+
+[!] From now on use `Workspace.xcworkspace`.
