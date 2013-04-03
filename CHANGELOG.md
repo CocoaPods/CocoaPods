@@ -5,7 +5,9 @@
 ###### Bug fixes
 
 * Fix crash related to the specification of the workspace as a relative path.
-  [#917](https://github.com/CocoaPods/CocoaPods/issues/920)
+  [#920](https://github.com/CocoaPods/CocoaPods/issues/920)
+* Fix crash related to search from the command line.
+  [#929](https://github.com/CocoaPods/CocoaPods/issues/929)
 
 ###### Ancillary enhancements
 

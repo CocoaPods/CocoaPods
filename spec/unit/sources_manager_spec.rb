@@ -59,7 +59,7 @@ module Pod
       end
 
       it "updates the search index before performing a search if it exits" do
-        FileUtils.touch(SourcesManager.search_index_path)
+        File.open(SourcesManager.search_index_path, 'w') { |file| file.write("---\nBananaLib:\n  version: 0.0.1") }
         Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
         Source::Aggregate.any_instance.expects(:generate_search_index).never
         Source::Aggregate.any_instance.expects(:update_search_index).returns({'BananaLib' => {}})

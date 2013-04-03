@@ -95,7 +95,11 @@ module Pod
       def updated_search_index
         if search_index_path.exist?
           stored_index = YAML.load(search_index_path.read)
-          search_index = aggregate.update_search_index(stored_index)
+          if stored_index && stored_index.is_a?(Hash)
+            search_index = aggregate.update_search_index(stored_index)
+          else
+            search_index = aggregate.generate_search_index
+          end
         else
           search_index = aggregate.generate_search_index
         end
