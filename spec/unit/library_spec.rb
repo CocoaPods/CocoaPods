@@ -33,7 +33,7 @@ module Pod
         @target_definition.link_with_first_target = true
         @lib = Library.new(@target_definition)
         @lib.support_files_root = config.sandbox.root
-        @lib.user_project_path  = config.sandbox.root + '../user_project.xcodeproj'
+        @lib.client_root = config.sandbox.root.dirname
       end
 
       it "returns the absolute path of the xcconfig file" do
