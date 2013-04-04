@@ -3,6 +3,13 @@
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.17.3)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.3)
 
+###### Enhancements
+
+* Added the ability to inhibit warnings per pod. 
+  Just pass `:inhibit_warnings => true` inline.
+  [#10](https://github.com/CocoaPods/Core/pull/10)
+  [#934](https://github.com/CocoaPods/CocoaPods/pull/934)
+
 ###### Bug fixes
 
 * Improved handling for Xcode projects containing non ASCII characters.
