@@ -254,6 +254,13 @@ module Pod
           ios_flags.should.include '-DOS_OBJECT_USE_OBJC'
           osx_flags.should.include '-DOS_OBJECT_USE_OBJC'
         end
+
+        it "adds -w per pod if target definition inhibits warnings for that pod" do
+          @installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+
+          flags.should.include?('-w')
+        end
       end
     end
   end
