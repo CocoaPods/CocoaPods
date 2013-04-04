@@ -13,6 +13,12 @@
   non-integrating installations.
   [#918](https://github.com/CocoaPods/CocoaPods/issues/918)
 
+###### Ancillary enhancements
+
+* The `pod search` commands now accepts the `--ios` and the `--osx` arguments
+  to filter the results by platform.
+  [#625](https://github.com/CocoaPods/CocoaPods/issues/625)
+
 
 ## 0.17.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.1...0.17.2)

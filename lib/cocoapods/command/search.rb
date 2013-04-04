@@ -14,13 +14,17 @@ module Pod
       def self.options
         [[
           "--full",  "Search by name, summary, and description",
-          "--stats", "Show additional stats (like GitHub watchers and forks)"
+          "--stats", "Show additional stats (like GitHub watchers and forks)",
+          "--ios",   "Restricts the search to Pods supported on iOS",
+          "--osx",   "Restricts the search to Pods supported on OS X",
         ]].concat(super)
       end
 
       def initialize(argv)
         @full_text_search = argv.flag?('full')
         @stats = argv.flag?('stats')
+        @supported_on_ios = argv.flag?('ios')
+        @supported_on_osx = argv.flag?('osx')
         @query = argv.shift_argument
         super
       end
@@ -32,10 +36,16 @@ module Pod
 
       def run
         sets = SourcesManager.search_by_name(@query.strip, @full_text_search)
+        if @supported_on_ios
+          sets.reject!{ |set| !set.specification.available_platforms.map(&:name).include?(:ios) }
+        end
+        if @supported_on_osx
+          sets.reject!{ |set| !set.specification.available_platforms.map(&:name).include?(:osx) }
+        end
         sets.each do |set|
           begin
             UI.pod(set, (@stats ? :stats : :normal))
-          rescue DSLError => e
+          rescue DSLError
             UI.warn "Skipping `#{set.name}` because the podspec contains errors."
           end
         end
