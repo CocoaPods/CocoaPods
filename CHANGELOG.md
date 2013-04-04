@@ -1,13 +1,13 @@
 ## 0.17.3 (unreleased)
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.17.3)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.17.3)
-• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.3)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.4)
 
 ###### Bug fixes
 
 * Improved handling for Xcode projects containing non ASCII characters.
-  Special thanks to Cédric Luthi (@0xced) and to Vincent Isambart
-  (@vincentisambart) for helping to develop the workaround.
+  Special thanks to Cédric Luthi (@0xced), Vincent Isambart (@vincentisambart),
+  and Manfred Stienstra (@Manfred) for helping to develop the workaround.
   [#926](https://github.com/CocoaPods/CocoaPods/issues/926)
 * Corrected improper configuration of the PODS_ROOT xcconfig variable in
   non-integrating installations.
