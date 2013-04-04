@@ -261,6 +261,11 @@ module Pod
 
           flags.should.include?('-w')
         end
+
+        it "doesn't inhibit warnings by default" do
+          flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+          flags.should.not.include?('-w')
+        end
       end
     end
   end
