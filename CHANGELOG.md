@@ -12,6 +12,9 @@
 * Corrected improper configuration of the PODS_ROOT xcconfig variable in
   non-integrating installations.
   [#918](https://github.com/CocoaPods/CocoaPods/issues/918)
+* Improved support for pre-release versions using dashes.
+  [#935](https://github.com/CocoaPods/CocoaPods/issues/935)
+
 
 ###### Ancillary enhancements
 
