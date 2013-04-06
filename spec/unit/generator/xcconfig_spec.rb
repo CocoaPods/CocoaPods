@@ -91,6 +91,26 @@ module Pod
       @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-weak_framework iAd')
     end
 
+    it "includes the developer frameworks search paths when SenTestingKit is detected" do
+      spec = fixture_spec('banana-lib/BananaLib.podspec')
+      consumer = spec.consumer(:ios)
+      generator = Generator::XCConfig.new(config.sandbox, [consumer], './Pods')
+      spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
+      spec.frameworks = ['SenTestingKit']
+      xcconfig = generator.generate
+      xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+    end
+
+    it "doesn't include the developer frameworks if already present" do
+      spec = fixture_spec('banana-lib/BananaLib.podspec')
+      consumer_1 = spec.consumer(:ios)
+      consumer_2 = spec.consumer(:ios)
+      generator = Generator::XCConfig.new(config.sandbox, [consumer_1, consumer_2], './Pods')
+      spec.frameworks = ['SenTestingKit']
+      xcconfig = generator.generate
+      xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+    end
+
     #-----------------------------------------------------------------------#
 
     it 'returns the settings that the pods project needs to override' do

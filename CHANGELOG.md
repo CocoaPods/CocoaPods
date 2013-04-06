@@ -3,6 +3,15 @@
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.17.3)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.4)
 
+###### Enhancements
+
+* The `pod search` commands now accepts the `--ios` and the `--osx` arguments
+  to filter the results by platform.
+  [#625](https://github.com/CocoaPods/CocoaPods/issues/625)
+* The developer frameworks are automatically added if `SenTestingKit` is
+  detected. There is no need to specify them in specifications anymore.
+  [#771](https://github.com/CocoaPods/CocoaPods/issues/771)
+
 ###### Bug fixes
 
 * Improved handling for Xcode projects containing non ASCII characters.
@@ -15,12 +24,6 @@
 * Improved support for pre-release versions using dashes.
   [#935](https://github.com/CocoaPods/CocoaPods/issues/935)
 
-
-###### Ancillary enhancements
-
-* The `pod search` commands now accepts the `--ios` and the `--osx` arguments
-  to filter the results by platform.
-  [#625](https://github.com/CocoaPods/CocoaPods/issues/625)
 
 
 ## 0.17.2
