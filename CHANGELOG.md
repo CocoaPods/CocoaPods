@@ -23,7 +23,8 @@
   [#918](https://github.com/CocoaPods/CocoaPods/issues/918)
 * Improved support for pre-release versions using dashes.
   [#935](https://github.com/CocoaPods/CocoaPods/issues/935)
-
+* Documentation sets are now namespaced by pod solving improper attribution.
+  [#659](https://github.com/CocoaPods/CocoaPods/issues/659)
 
 
 ## 0.17.2
