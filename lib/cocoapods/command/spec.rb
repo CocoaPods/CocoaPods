@@ -505,12 +505,11 @@ Pod::Spec.new do |s|
   # path will automatically have '*.{h,m,mm,c,cpp}' appended.
   #
   s.source_files = 'Classes', 'Classes/**/*.{h,m}'
+  s.exclude_files = 'Classes/Exclude'
 
   # A list of file patterns which select the header files that should be
   # made available to the application. If the pattern is a directory then the
   # path will automatically have '*.h' appended.
-  #
-  # Also allows the use of the FileList class like `source_files' does.
   #
   # If you do not explicitly set the list of public header files,
   # all headers of source_files will be made public.
@@ -520,15 +519,12 @@ Pod::Spec.new do |s|
   # A list of resources included with the Pod. These are copied into the
   # target bundle with a build phase script.
   #
-  # Also allows the use of the FileList class like `source_files' does.
-  #
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
 
   # A list of paths to preserve after installing the Pod.
   # CocoaPods cleans by default any file that is not used.
   # Please don't include documentation, example, and test files.
-  # Also allows the use of the FileList class like `source_files' does.
   #
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 

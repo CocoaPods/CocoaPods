@@ -22,7 +22,8 @@ module Pod
         @library = Library.new(@target_definition)
         @library.platform = Platform.new(:ios, '6.0')
         @library.support_files_root = config.sandbox.root
-        @library.user_project_path  = config.sandbox.root + '../user_project.xcodeproj'
+        @library.client_root = config.sandbox.root.dirname
+        @library.user_project_path = config.sandbox.root + '../user_project.xcodeproj'
         @library.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
         @library.specs = [@spec]
         @library.file_accessors = [file_accessor]

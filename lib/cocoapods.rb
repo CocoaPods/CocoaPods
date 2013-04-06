@@ -1,6 +1,8 @@
 require 'rubygems'
 
 module Pod
+  require 'pathname'
+
   require 'cocoapods/gem_version'
   require 'cocoapods-core'
   require 'xcodeproj'
@@ -16,12 +18,13 @@ module Pod
     end
   end
 
-  # @return [String] The directory where CocoaPods caches the downloads.
+  # @return [Pathname] The directory where CocoaPods caches the downloads.
   #
   # @todo   The {Installer::PodSourceInstaller} and the #{ExternalSources}
   #         classes build and configure the downloader from scratch.
   #
-  CACHE_ROOT = "#{ENV['HOME']}/Library/Caches/CocoaPods"
+  CACHE_ROOT = Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
+  CACHE_ROOT.mkpath unless CACHE_ROOT.exist?
 
   # @return [Fixnum] The maximum size for the cache expressed in Mb.
   #
@@ -30,7 +33,7 @@ module Pod
   #
   MAX_CACHE_SIZE = 500
 
-  Pod::Specification::Set::Statistics.instance.cache_file = Pathname.new(CACHE_ROOT) + 'statistics.yml'
+  Pod::Specification::Set::Statistics.instance.cache_file = CACHE_ROOT + 'statistics.yml'
 
   autoload :Command,                'cocoapods/command'
   autoload :Executable,             'cocoapods/executable'
@@ -43,8 +46,6 @@ module Pod
   autoload :Sandbox,                'cocoapods/sandbox'
   autoload :UI,                     'cocoapods/user_interface'
   autoload :Validator,              'cocoapods/validator'
-
-  autoload :Pathname,               'pathname'
 
   module Generator
     autoload :Acknowledgements,     'cocoapods/generator/acknowledgements'

@@ -1,10 +1,89 @@
+## 0.17.3 (unreleased)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.17.3)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.17.3)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.4)
+
+###### Enhancements
+
+* The `pod search` commands now accepts the `--ios` and the `--osx` arguments
+  to filter the results by platform.
+  [#625](https://github.com/CocoaPods/CocoaPods/issues/625)
+* The developer frameworks are automatically added if `SenTestingKit` is
+  detected. There is no need to specify them in specifications anymore.
+  [#771](https://github.com/CocoaPods/CocoaPods/issues/771)
+
+###### Bug fixes
+
+* Improved handling for Xcode projects containing non ASCII characters.
+  Special thanks to Cédric Luthi (@0xced), Vincent Isambart (@vincentisambart),
+  and Manfred Stienstra (@Manfred) for helping to develop the workaround.
+  [#926](https://github.com/CocoaPods/CocoaPods/issues/926)
+* Corrected improper configuration of the PODS_ROOT xcconfig variable in
+  non-integrating installations.
+  [#918](https://github.com/CocoaPods/CocoaPods/issues/918)
+* Improved support for pre-release versions using dashes.
+  [#935](https://github.com/CocoaPods/CocoaPods/issues/935)
+* Documentation sets are now namespaced by pod solving improper attribution.
+  [#659](https://github.com/CocoaPods/CocoaPods/issues/659)
+
+
+## 0.17.2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.1...0.17.2)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.1...0.17.2)
+
+###### Bug fixes
+
+* Fix crash related to the specification of the workspace as a relative path.
+  [#920](https://github.com/CocoaPods/CocoaPods/issues/920)
+* Fix an issue related to the `podspec` dsl directive of the Podfile for
+  specifications with internal dependencies.
+  [#928](https://github.com/CocoaPods/CocoaPods/issues/928)
+* Fix crash related to search from the command line.
+  [#929](https://github.com/CocoaPods/CocoaPods/issues/929)
+
+###### Ancillary enhancements
+
+* Enabled the FileList deprecation warning in the Linter.
+* CocoaPods will raise if versions requirements are specified for dependencies
+  with external sources.
+* The exclude patterns now handle folders automatically.
+
+
+## 0.17.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0...0.17.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0...0.17.1)
+
+###### Bug fixes
+
+* Always create the CACHE_ROOT directory when performing a search.
+  [#917](https://github.com/CocoaPods/CocoaPods/issues/917)
+
 ## 0.17.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc7...0.17.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc7...0.17.0)
+
+#### GM
+
+###### Bug fixes
+
+* Don’t break when specifying doc options, but not appledoc ones.
+  [#906](https://github.com/CocoaPods/CocoaPods/issues/906)
+* Sort resolved specifications.
+  [#907](https://github.com/CocoaPods/CocoaPods/issues/907)
+* Subspecs do not need to include HEAD information.
+  [#905](https://github.com/CocoaPods/CocoaPods/issues/905)
+
+###### Ancillary enhancements
+
+* Allow the analyzer to do its work without updating sources.
+  [motion-cocoapods#50](https://github.com/HipByte/motion-cocoapods/pull/50)
 
 #### rc7
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc6...0.17.0.rc7)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc6...0.17.0.rc7)
 
 ###### Bug fixes
+
 - Fixed an issue which lead to the missing declaration of the plural directives
   of the Specification DSL.
   [#816](https://github.com/CocoaPods/CocoaPods/issues/816)
@@ -42,7 +121,7 @@
   manually with the `pod ipc update-search-index` command.
 - Enhancements to the `pod repo lint` command.
 - CocoaPods will not create anymore the pre commit hook in the master repo
-  during setup. If already created it is possible remove it deleting the 
+  during setup. If already created it is possible remove it deleting the
   `~/.cocoapods/master/.git/hooks/pre-commit` path.
 - Improved support for linting and validating specs repo.
 
@@ -71,7 +150,7 @@
 - Fixed an issue which lead to the creation of a Pods project which would
   crash Xcode.
   [#854](https://github.com/CocoaPods/CocoaPods/issues/854)
-- Fixed a crash related to a `PBXVariantGroup` present in the frameworks build 
+- Fixed a crash related to a `PBXVariantGroup` present in the frameworks build
   phase of client targets.
   [#859](https://github.com/CocoaPods/CocoaPods/issues/859)
 

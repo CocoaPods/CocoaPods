@@ -31,5 +31,18 @@ module Pod
       output = run_command('search', 'Engelhart', '--full')
       output.should.include? 'JSONKit'
     end
+
+    it "restricts the search to Pods supported on iOS" do
+      output = run_command('search', 'BananaLib', '--ios')
+      output.should.include? 'BananaLib'
+      Specification.any_instance.stubs(:available_platforms).returns([Platform.osx])
+      output = run_command('search', 'BananaLib', '--ios')
+      output.should.not.include? 'BananaLib'
+    end
+
+    it "restricts the search to Pods supported on iOS" do
+      output = run_command('search', 'BananaLib', '--osx')
+      output.should.not.include? 'BananaLib'
+    end
   end
 end

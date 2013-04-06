@@ -112,7 +112,10 @@ module Pod
         end.flatten
 
         list = list.map { |path| Pathname.new(path) }
-        list -= relative_glob(exclude_patterns) if exclude_patterns
+        if exclude_patterns
+          exclude_options = { :dir_pattern => '**/*', :include_dirs => include_dirs }
+          list -= relative_glob(exclude_patterns, exclude_options)
+        end
         list
       end
 

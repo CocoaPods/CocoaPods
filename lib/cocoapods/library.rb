@@ -53,6 +53,13 @@ module Pod
     #
     attr_accessor :support_files_root
 
+    # @return [Pathname] the folder where the client is stored used for
+    #         computing the relative paths. If integrating it should be the
+    #         folder where the user project is stored, otherwise it should
+    #         be the installation root.
+    #
+    attr_accessor :client_root
+
     # @return [Pathname] the path of the user project that this library will
     #         integrate as identified by the analyzer.
     #
@@ -157,7 +164,7 @@ module Pod
     #         variable of the user's project.
     #
     def relative_pods_root
-      "${SRCROOT}/#{support_files_root.relative_path_from(user_project_path.dirname)}"
+      "${SRCROOT}/#{support_files_root.relative_path_from(client_root)}"
     end
 
     # @return [String] the path of the xcconfig file relative to the root of
@@ -189,7 +196,7 @@ module Pod
     # @return [String] the computed path.
     #
     def relative_to_srcroot(path)
-      path.relative_path_from(user_project_path.dirname).to_s
+      path.relative_path_from(client_root).to_s
     end
   end
 end

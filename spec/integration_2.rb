@@ -337,6 +337,10 @@ describe "Integration take 2" do
       check "install --no-update --no-doc", "install_podspec"
     end
 
+    describe "Performs an installation using a custom workspace" do
+      check "install --no-update --no-doc", "install_custom_workspace"
+    end
+
     # @todo add tests for all the hooks API
     #
     describe "Runs the Podfile callbacks" do

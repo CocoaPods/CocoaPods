@@ -17,12 +17,12 @@ module Pod
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
         target_definition.link_with_first_target = true
         @lib = Library.new(target_definition)
-        @lib.user_project_path = sample_project_path
+        @lib.user_project_path  = sample_project_path
+        @lib.client_root = sample_project_path.dirname
         pods_project = Project.new()
         @lib.target = pods_project.new_target(:static_library, target_definition.label, :ios)
         @lib.user_target_uuids  = [@target.uuid]
         @lib.support_files_root = config.sandbox.root
-        @lib.user_project_path  = sample_project_path
         @target_integrator = TargetIntegrator.new(@lib)
       end
 

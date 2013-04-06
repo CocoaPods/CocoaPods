@@ -81,6 +81,7 @@ module Pod
         lib.support_files_root.should == config.sandbox.root
 
         lib.user_project_path.to_s.should.include 'SampleProject/SampleProject'
+        lib.client_root.to_s.should.include 'SampleProject'
         lib.user_target_uuids.should == ["A346496C14F9BE9A0080D870"]
         user_proj = Xcodeproj::Project.new(lib.user_project_path)
         user_proj.objects_by_uuid[lib.user_target_uuids.first].name.should == 'SampleProject'
@@ -92,7 +93,7 @@ module Pod
         config.integrate_targets = false
         lib = @analyzer.analyze.libraries.first
 
-        lib.user_project_path.should == config.installation_root
+        lib.client_root.should == config.installation_root
         lib.user_target_uuids.should == []
         lib.user_build_configurations.should == {}
         lib.platform.to_s.should == 'iOS 6.0'
@@ -102,7 +103,7 @@ module Pod
 
       it "locks the version of the dependencies which did not change in the Podfile" do
         @analyzer.analyze
-        @analyzer.send(:locked_dependencies).map(&:to_s).should == ["SVPullToRefresh"]
+        @analyzer.send(:locked_dependencies).map(&:to_s).should == ["SVPullToRefresh (= 0.4)"]
       end
 
       it "does not lock the dependencies in update mode" do

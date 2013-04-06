@@ -106,6 +106,11 @@ module Pod
         ]
       end
 
+      it "allows to specify folders in the exclude patterns" do
+        paths = @path_list.relative_glob('Classes/*', { :exclude_patterns => 'Classes' }).map(&:to_s)
+        paths.sort.should.be.empty
+      end
+
       it "can optionally include the directories in the results" do
         paths = @path_list.relative_glob('Resources/*', { :include_dirs => true }).map(&:to_s)
         paths.sort.should == %w[

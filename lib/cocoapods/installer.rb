@@ -248,7 +248,7 @@ module Pod
       pod_installer.install_docs = config.install_docs?
       pod_installer.install!
       @pod_installers << pod_installer
-      @installed_specs.concat(specs_by_platform.values.flatten)
+      @installed_specs.concat(specs_by_platform.values.flatten.uniq)
     end
 
     # Cleans the sources of the Pods if the config instructs to do so.

@@ -24,7 +24,7 @@ spec/fixtures/integration/Headers/
 spec/fixtures/vcr
 
 # Examples
-examples/Podfile
+examples/**/Podfile.lock
 examples/Pods
 examples/**/Pods
 examples/RelativePathProject/RelativePathProject/RelativePathProject.xcodeproj

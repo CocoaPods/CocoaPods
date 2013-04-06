@@ -27,6 +27,8 @@ module Pod
       # @return [Pathname] The path of the prefix_header
       #
       def prefix_header_path
+        UI.warn "LibraryRepresentation#prefix_header_path is deprecated. " \
+          "Use the specification `prefix_header_contents` attribute."
         library.prefix_header_path
       end
       alias :prefix_header_filename :prefix_header_path

@@ -179,18 +179,19 @@ module Pod
             user_project = Xcodeproj::Project.new(project_path)
             targets = compute_user_project_targets(target_definition, user_project)
 
-            lib.user_project_path         = project_path
-            lib.user_target_uuids         = targets.map(&:uuid)
+            lib.user_project_path = project_path
+            lib.client_root = project_path.dirname
+            lib.user_target_uuids = targets.map(&:uuid)
             lib.user_build_configurations = compute_user_build_configurations(target_definition, targets)
-            lib.platform                  = compute_platform_for_target_definition(target_definition, targets)
+            lib.platform = compute_platform_for_target_definition(target_definition, targets)
           else
             unless target_definition.platform
               raise Informative, "It is necessary to specify the platform in the Podfile if not integrating."
             end
-            lib.user_project_path         = config.installation_root
-            lib.user_target_uuids         = []
+            lib.client_root = config.installation_root
+            lib.user_target_uuids = []
             lib.user_build_configurations = {}
-            lib.platform                  = target_definition.platform
+            lib.platform = target_definition.platform
           end
           libraries << lib
         end

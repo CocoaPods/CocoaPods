@@ -18,6 +18,7 @@ module Pod
         end
         config.sandbox.project = Project.new()
         @library = Library.new(@podfile.target_definitions['Pods'])
+        @library.client_root = sample_project_path.dirname
         @library.user_project_path  = sample_project_path
         @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
         @library.support_files_root = config.sandbox.root
@@ -127,7 +128,10 @@ module Pod
         it "uses the path of the workspace defined in the podfile" do
           path = "a_path"
           @podfile.workspace(path)
-          @integrator.send(:workspace_path).should == Pathname.new(path + ".xcworkspace")
+          workspace_path = @integrator.send(:workspace_path)
+          workspace_path.to_s.should.end_with(path + ".xcworkspace")
+          workspace_path.should.be.absolute
+          workspace_path.class.should == Pathname
         end
 
         it "names the workspace after the user project if needed" do
