@@ -11,10 +11,16 @@ require 'cocoapods/config'
 
 
 pod_bin = File.expand_path('../pod', __FILE__)
-pod_root = File.expand_path('../..', pod_bin)
+pod_prefix = File.expand_path('../..', pod_bin)
 
 ruby_bin = `rbenv which ruby`.strip
-ruby_root = File.expand_path('../..', ruby_bin)
+ruby_prefix = File.expand_path('../..', ruby_bin)
+
+# TODO how are we going to handle the required tools in the PATH? e.g. git, svn, hg
+homebrew_prefix = `brew --prefix`.strip
+
+developer_prefix = `xcode-select --print-path`.strip
+xcode_app_path = File.expand_path('../..', developer_prefix)
 
 
 require 'erb'
@@ -38,11 +44,25 @@ __END__
 (allow mach-lookup)
 (allow ipc-posix-shm)
 (allow process-fork)
+(allow system-socket)
+
+; TODO this doesn’t actually work atm, because appledoc needs to be code signed for apple events to be allowed.
+; Needed for appldoc to install a docset
+; (allow appleevent-send)
+
+; TODO see if we can restrict this too
+;(allow network-outbound (literal "/private/var/run/mDNSResponder"))
+(allow network-outbound)
 
 (allow process-exec
   (regex 
     #"^<%= pod_bin %>"
     #"^<%= ruby_bin %>"
+    #"^<%= homebrew_prefix %>"
+    #"^<%= File.join(developer_prefix, 'usr/bin/xcrun') %>"
+    #"^<%= File.join(developer_prefix, 'usr/bin/xcodebuild') %>"
+    #"^<%= File.join(developer_prefix, 'usr/bin/docsetutil') %>" ; Needed for appledoc
+    #"^/bin/*"
     #"^/usr/bin/*"
   )
 )
@@ -50,16 +70,22 @@ __END__
 ;; Allow these reads:
 (allow file-read*
   (regex
-    #"^/Users/[^.]+/.gemrc"
-    #"^/Users/[^.]+/.gem/*"
+    ; TODO see if we can restrict this more, but it's going to be hard
+    #"^/Users/[^.]+/*"
+    ;#"^/Users/[^.]+/.netrc"
+    ;#"^/Users/[^.]+/.gemrc"
+    ;#"^/Users/[^.]+/.gem/*"
+    ;#"^/Users/[^.]+/Library/.*"
     #"^/Library/*"
     #"^/System/Library/*"
     #"^/usr/lib/*"
     #"^/usr/share/*"
     #"^/private/*"
     #"^/dev/*"
-    #"^<%= File.join(ruby_root, '*') %>"
-    #"^<%= File.join(pod_root, '*') %>"
+    #"^<%= homebrew_prefix %>"
+    #"^<%= ruby_prefix %>"
+    #"^<%= pod_prefix %>"
+    #"^<%= xcode_app_path %>"
     #"^<%= Pod::Config.instance.repos_dir %>"
   )
 )
@@ -67,10 +93,13 @@ __END__
 ;; Allow these writes:
 (allow file-write*
   (regex
-    #"^<%= File.join(Pod::Config.instance.project_root, '*') %>"
-    ;#"^/Users/[^.]+/Library/.*"
-    ;#"^/private/var/*"
+    #"^<%= Pod::Config.instance.project_root %>"
+    #"^/Users/[^.]+/Library/Caches/CocoaPods/*"
+    #"^/Users/[^.]+/Library/Developer/Shared/Documentation/DocSets"
     #"^/dev/dtracehelper"
+    #"^/dev/tty"
+    #"^/dev/null"
+    #"^/private/var"
   )
 )
 
