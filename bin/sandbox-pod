@@ -7,6 +7,11 @@
 # given command through `/usr/bin/sandbox-exec`. This profile format is an
 # undocumented format, which uses TinyScheme to implement its DSL.
 #
+# Even though it uses a undocumented format, it’s actually very self-explanatory.
+# Because we use a whitelist approach, `(deny default)`, any action that is
+# denied is logged to `/var/log/system.log`. So tailing that should provide
+# enough information on steps that need to be take to get something to work.
+#
 # For more information see:
 #
 # * https://github.com/CocoaPods/CocoaPods/issues/939
