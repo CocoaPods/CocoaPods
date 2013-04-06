@@ -1,9 +1,22 @@
 #!/usr/bin/env ruby
 
+# TODO:
+#
+# * How are we going to handle allowing processes like `git`, `svn`, and `hg`
+#   to work when they might be somewhere in a non-standard prefix?
+#
+# * Can we scope rules like file-read/file-write to specific processes? E.g.
+#   limit `git` to only those directories where any git operations should be
+#   performed, while allowing `xcodebuild` access to more directories.
+#
+# * Limit the scope of the rules where possible. E.g. `network-outbound` and
+#   access to the user home directory.
+#
+# * Installing docs with `appledoc` requires Apple Events and iirc, from a
+#   CoreInt episode, this is damn hard to do in a sandbox environment.
+#
+
 if $0 == __FILE__
-  #ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
-  #require "rubygems"
-  #require "bundler/setup"
   $:.unshift File.expand_path('../../lib', __FILE__)
 end
 require 'pathname'
@@ -17,7 +30,6 @@ require 'rbconfig'
 ruby_bin = File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'])
 ruby_prefix = RbConfig::CONFIG['prefix']
 
-# TODO how are we going to handle the required tools in the PATH? e.g. git, svn, hg
 homebrew_prefix = `brew --prefix`.strip
 
 developer_prefix = `xcode-select --print-path`.strip
@@ -47,8 +59,7 @@ __END__
 (allow process-fork)
 (allow system-socket)
 
-; TODO this doesn’t actually work atm, because appledoc needs to be code signed for apple events to be allowed.
-; Needed for appldoc to install a docset
+; TODO: Needed for appldoc to install a docset
 ; (allow appleevent-send)
 
 ; TODO see if we can restrict this too
