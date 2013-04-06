@@ -362,7 +362,10 @@ module Pod
             flags << '-DOS_OBJECT_USE_OBJC=0'
           end
         end
-        flags = flags * " "
+        if target_definition.inhibits_warnings_for_pod?(consumer.spec.root.name)
+          flags << '-w'
+        end
+        flags * " "
       end
 
       #-----------------------------------------------------------------------#
