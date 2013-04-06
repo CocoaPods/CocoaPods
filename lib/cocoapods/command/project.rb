@@ -8,10 +8,10 @@ module Pod
       module Options
         def options
           [
-            ["--no-clean",     "Leave SCM dirs like `.git' and `.svn' intact after downloading"],
-            ["--no-doc",       "Skip documentation generation with appledoc"],
-            ["--no-integrate", "Skip integration of the Pods libraries in the Xcode project(s)"],
-            ["--no-repo-update",    "Skip running `pod repo update` before install"],
+            ["--no-clean",       "Leave SCM dirs like `.git' and `.svn' intact after downloading"],
+            ["--no-doc",         "Skip documentation generation with appledoc"],
+            ["--no-integrate",   "Skip integration of the Pods libraries in the Xcode project(s)"],
+            ["--no-repo-update", "Skip running `pod repo update` before install"],
           ].concat(super)
         end
       end
@@ -24,7 +24,7 @@ module Pod
         config.clean = argv.flag?('clean', config.clean)
         config.generate_docs = argv.flag?('doc', config.generate_docs)
         config.integrate_targets = argv.flag?('integrate', config.integrate_targets)
-        config.skip_repo_update = !argv.flag?('update', !config.skip_repo_update)
+        config.skip_repo_update = !argv.flag?('repo-update', !config.skip_repo_update)
         super
       end
 

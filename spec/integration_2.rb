@@ -306,57 +306,57 @@ describe "Integration take 2" do
     # Test subspecs inheritance
 
     describe "Integrates a project with CocoaPods" do
-      check "install --no-update --no-doc", "install_new"
+      check "install --no-repo-update --no-doc", "install_new"
     end
 
     describe "Adds a Pod to an existing installation" do
-      check "install --no-update --no-doc", "install_add_pod"
+      check "install --no-repo-update --no-doc", "install_add_pod"
     end
 
     describe "Removes a Pod from an existing installation" do
-      check "install --no-update --no-doc", "install_remove_pod"
+      check "install --no-repo-update --no-doc", "install_remove_pod"
     end
 
     describe "Creates an installation with multiple target definitions" do
-      check "install --no-update --no-doc", "install_multiple_targets"
+      check "install --no-repo-update --no-doc", "install_multiple_targets"
     end
 
     describe "Installs a Pod with different subspecs activated across different targets" do
-      check "install --no-update --no-doc", "install_subspecs"
+      check "install --no-repo-update --no-doc", "install_subspecs"
     end
 
     describe "Installs a Pod with a local source" do
-      check "install --no-update --no-doc", "install_local_source"
+      check "install --no-repo-update --no-doc", "install_local_source"
     end
 
     describe "Installs a Pod with an external source" do
-      check "install --no-update --no-doc", "install_external_source"
+      check "install --no-repo-update --no-doc", "install_external_source"
     end
 
     describe "Installs a Pod given the podspec" do
-      check "install --no-update --no-doc", "install_podspec"
+      check "install --no-repo-update --no-doc", "install_podspec"
     end
 
     describe "Performs an installation using a custom workspace" do
-      check "install --no-update --no-doc", "install_custom_workspace"
+      check "install --no-repo-update --no-doc", "install_custom_workspace"
     end
 
     # @todo add tests for all the hooks API
     #
     describe "Runs the Podfile callbacks" do
-      check "install --no-update --no-doc", "install_podfile_callbacks"
+      check "install --no-repo-update --no-doc", "install_podfile_callbacks"
     end
 
     # @todo add tests for all the hooks API
     #
     describe "Runs the specification callbacks" do
-      check "install --no-update --no-doc", "install_spec_callbacks"
+      check "install --no-repo-update --no-doc", "install_spec_callbacks"
     end
 
     # @todo requires CocoaPods 0.17
     #
     # describe "Generates the documentation of Pod during installation" do
-    #   check "install --no-update --no-doc", "install_docs"
+    #   check "install --no-repo-update --no-doc", "install_docs"
     # end
 
   end
@@ -366,7 +366,7 @@ describe "Integration take 2" do
   describe "Pod update" do
 
     describe "Updates an existing installation" do
-      check "update --no-update --no-doc", "update"
+      check "update --no-repo-update --no-doc", "update"
     end
 
   end

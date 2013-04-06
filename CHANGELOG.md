@@ -11,6 +11,9 @@
 * The developer frameworks are automatically added if `SenTestingKit` is
   detected. There is no need to specify them in specifications anymore.
   [#771](https://github.com/CocoaPods/CocoaPods/issues/771)
+* The `--no-update` argument of the `install`, `update`, `outdated` subcommands
+  has been renamed to `--no-repo-update`.
+  [#913](https://github.com/CocoaPods/CocoaPods/issues/913)
 
 ###### Bug fixes
 
