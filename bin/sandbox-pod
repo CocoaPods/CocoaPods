@@ -13,8 +13,9 @@ require 'cocoapods/config'
 pod_bin = File.expand_path('../pod', __FILE__)
 pod_prefix = File.expand_path('../..', pod_bin)
 
-ruby_bin = `rbenv which ruby`.strip
-ruby_prefix = File.expand_path('../..', ruby_bin)
+require 'rbconfig'
+ruby_bin = File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'])
+ruby_prefix = RbConfig::CONFIG['prefix']
 
 # TODO how are we going to handle the required tools in the PATH? e.g. git, svn, hg
 homebrew_prefix = `brew --prefix`.strip
