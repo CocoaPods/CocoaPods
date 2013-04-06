@@ -95,6 +95,7 @@ __END__
 (allow file-write*
   (regex
     #"^<%= Pod::Config.instance.project_root %>"
+    #"^<%= Pod::Config.instance.repos_dir %>"
     #"^/Users/[^.]+/Library/Caches/CocoaPods/*"
     #"^/Users/[^.]+/Library/Developer/Shared/Documentation/DocSets"
     #"^/dev/dtracehelper"
