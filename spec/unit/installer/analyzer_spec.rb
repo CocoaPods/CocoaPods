@@ -103,7 +103,7 @@ module Pod
 
       it "locks the version of the dependencies which did not change in the Podfile" do
         @analyzer.analyze
-        @analyzer.send(:locked_dependencies).map(&:to_s).should == ["SVPullToRefresh"]
+        @analyzer.send(:locked_dependencies).map(&:to_s).should == ["SVPullToRefresh (= 0.4)"]
       end
 
       it "does not lock the dependencies in update mode" do

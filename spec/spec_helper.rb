@@ -3,7 +3,7 @@
 
 if ENV['CI'] || ENV['GENERATE_COVERAGE']
   require 'simplecov'
-  require 'coveralls'
+  # require 'coveralls'
 
   if ENV['CI']
     SimpleCov.formatter = Coveralls::SimpleCov::Formatter

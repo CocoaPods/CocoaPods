@@ -61,10 +61,7 @@ module Pod
         })
 
         spec_consumers.each do |consumer|
-          @xcconfig.merge!(consumer.xcconfig);
-          @xcconfig.libraries.merge(consumer.libraries);
-          @xcconfig.frameworks.merge(consumer.frameworks);
-          @xcconfig.weak_frameworks.merge(consumer.weak_frameworks);
+          add_spec_build_settings_to_xcconfig(consumer, @xcconfig)
         end
 
         @xcconfig
@@ -124,6 +121,63 @@ module Pod
       def quote(strings)
         strings.sort.map { |s| %W|"#{s}"| }.join(" ")
       end
+
+      # Configures the given Xcconfig according to the build settings of the
+      # given Specification.
+      #
+      # @param  [Specification::Consumer] consumer
+      #         The consumer of the specification.
+      #
+      # @param  [Xcodeproj::Config] xcconfig
+      #         The xcconfig to edit.
+      #
+      # @return [void]
+      #
+      def add_spec_build_settings_to_xcconfig(consumer, xcconfig)
+        xcconfig.merge!(consumer.xcconfig)
+        xcconfig.libraries.merge(consumer.libraries)
+        xcconfig.frameworks.merge(consumer.frameworks)
+        xcconfig.weak_frameworks.merge(consumer.weak_frameworks)
+        add_developers_frameworks_if_needed(consumer, xcconfig)
+      end
+
+      # @return [Array<String>] The search paths for the developer frameworks.
+      #
+      # @todo   Inheritance should be properly handled in Xcconfigs.
+      #
+      DEVELOPER_FRAMEWORKS_SEARCH_PATHS = [
+        '$(inherited)',
+        '"$(SDKROOT)/Developer/Library/Frameworks"',
+        '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+      ]
+
+      # Adds the search paths of the developer frameworks to the specification
+      # if needed. This is done because the `SenTestingKit` requires them and 
+      # adding them to each specification which requires it is repetitive and
+      # error prone.
+      #
+      # @param  [Specification::Consumer] consumer
+      #         The consumer of the specification.
+      #
+      # @param  [Xcodeproj::Config] xcconfig
+      #         The xcconfig to edit.
+      #
+      # @return [void]
+      #
+      def add_developers_frameworks_if_needed(consumer, xcconfig)
+        if xcconfig.frameworks.include?('SenTestingKit')
+          search_paths = xcconfig.attributes['FRAMEWORK_SEARCH_PATHS'] ||= ''
+          DEVELOPER_FRAMEWORKS_SEARCH_PATHS.each do |search_path|
+            unless search_paths.include?(search_path)
+              search_paths << ' ' unless search_paths.empty?
+              search_paths << search_path
+            end
+          end
+        end
+      end
+
+      #-----------------------------------------------------------------------#
+
     end
   end
 end

@@ -1,7 +1,19 @@
 ## 0.17.3 (unreleased)
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.17.3)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.17.3)
-• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.3)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.4)
+
+###### Enhancements
+
+* The `pod search` commands now accepts the `--ios` and the `--osx` arguments
+  to filter the results by platform.
+  [#625](https://github.com/CocoaPods/CocoaPods/issues/625)
+* The developer frameworks are automatically added if `SenTestingKit` is
+  detected. There is no need to specify them in specifications anymore.
+  [#771](https://github.com/CocoaPods/CocoaPods/issues/771)
+* The `--no-update` argument of the `install`, `update`, `outdated` subcommands
+  has been renamed to `--no-repo-update`.
+  [#913](https://github.com/CocoaPods/CocoaPods/issues/913)
 
 ###### Enhancements
 
@@ -13,12 +25,16 @@
 ###### Bug fixes
 
 * Improved handling for Xcode projects containing non ASCII characters.
-  Special thanks to Cédric Luthi (@0xced) and to Vincent Isambart
-  (@vincentisambart) for helping to develop the workaround.
+  Special thanks to Cédric Luthi (@0xced), Vincent Isambart (@vincentisambart),
+  and Manfred Stienstra (@Manfred) for helping to develop the workaround.
   [#926](https://github.com/CocoaPods/CocoaPods/issues/926)
 * Corrected improper configuration of the PODS_ROOT xcconfig variable in
   non-integrating installations.
   [#918](https://github.com/CocoaPods/CocoaPods/issues/918)
+* Improved support for pre-release versions using dashes.
+  [#935](https://github.com/CocoaPods/CocoaPods/issues/935)
+* Documentation sets are now namespaced by pod solving improper attribution.
+  [#659](https://github.com/CocoaPods/CocoaPods/issues/659)
 
 
 ## 0.17.2

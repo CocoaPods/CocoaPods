@@ -25,7 +25,7 @@ module Pod
         '--docset-desc', 'Chunky bananas!',
         '--project-company', 'Banana Corp and Monkey Boy',
         '--docset-copyright', 'Banana Corp and Monkey Boy',
-        '--company-id', 'org.cocoapods',
+        '--company-id', 'org.cocoapods.bananalib',
         '--ignore', '.m',
         '--keep-undocumented-objects',
         '--keep-undocumented-members',
@@ -47,7 +47,7 @@ module Pod
       arguments.should.include?(" --docset-desc 'Chunky bananas!' ")
       arguments.should.include?(" --project-company 'Banana Corp and Monkey Boy' ")
       arguments.should.include?(" --docset-copyright 'Banana Corp and Monkey Boy' ")
-      arguments.should.include?(" --company-id org.cocoapods ")
+      arguments.should.include?(" --company-id org.cocoapods.bananalib ")
       arguments.should.include?(" --ignore .m ")
       arguments.should.include?(" --keep-undocumented-objects ")
       arguments.should.include?(" --keep-undocumented-members ")
