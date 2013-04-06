@@ -2,6 +2,10 @@
 
 # TODO:
 #
+# * Check if we should be importing any other default profiles. E.g. `bsd.sb`.
+#
+# * Use `literal` paths where possible, instead of `regex`.
+#
 # * How are we going to handle allowing processes like `git`, `svn`, and `hg`
 #   to work when they might be somewhere in a non-standard prefix?
 #
@@ -38,12 +42,9 @@ xcode_app_path = File.expand_path('../..', developer_prefix)
 
 require 'erb'
 profile = ERB.new(DATA.read).result(TOPLEVEL_BINDING)
-filename = '/tmp/sandbox-pod.sb'
-File.open(filename, 'w') { |f| f.write(profile) }
-
 puts profile
 
-command = ['/usr/bin/sandbox-exec', '-f', filename, pod_bin, *ARGV]
+command = ['/usr/bin/sandbox-exec', '-p', profile, pod_bin, *ARGV]
 exec *command
 
 
@@ -51,9 +52,10 @@ __END__
 (version 1)
 (debug allow)
 
+(import "mDNSResponder.sb")
+
 (allow file-ioctl)
 (allow sysctl-read)
-(allow file-read-metadata)
 (allow mach-lookup)
 (allow ipc-posix-shm)
 (allow process-fork)
@@ -61,10 +63,6 @@ __END__
 
 ; TODO: Needed for appldoc to install a docset
 ; (allow appleevent-send)
-
-; TODO see if we can restrict this too
-;(allow network-outbound (literal "/private/var/run/mDNSResponder"))
-(allow network-outbound)
 
 (allow process-exec
   (regex 
@@ -79,7 +77,7 @@ __END__
   )
 )
 
-;; Allow these reads:
+(allow file-read-metadata)
 (allow file-read*
   (regex
     ; TODO see if we can restrict this more, but it's going to be hard
@@ -102,7 +100,6 @@ __END__
   )
 )
 
-;; Allow these writes:
 (allow file-write*
   (regex
     #"^<%= Pod::Config.instance.project_root %>"
