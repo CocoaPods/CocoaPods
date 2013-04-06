@@ -62,6 +62,9 @@ __END__
 (allow process-fork)
 (allow system-socket)
 
+; TODO make this stricter if possible
+(allow network-outbound)
+
 ; TODO: Needed for appldoc to install a docset
 ; (allow appleevent-send)
 
