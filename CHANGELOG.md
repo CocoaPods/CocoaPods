@@ -1,10 +1,22 @@
-## 0.17.3 (unreleased)
+## 0.18.0 (unreleased)
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.17.3)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.17.3)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.4)
 
 ###### Enhancements
 
+* Added the ability to inhibit warnings per pod.
+  Just pass `:inhibit_warnings => true` inline.
+  This feature has been implemented by Marin Usalj (@mneorr).
+  [#10](https://github.com/CocoaPods/Core/pull/10)
+  [#934](https://github.com/CocoaPods/CocoaPods/pull/934)
+* A new build phase has been added to check that your
+  installation is in sync with the `Podfile.lock` and fail the build otherwise.
+  The new build phase will not be added automatically to targets already
+  integrated with CocoaPods, for integrating targets manually see [this
+  comment](https://github.com/CocoaPods/CocoaPods/pull/946#issuecomment-16042419)
+  This feature has been implemented by Ullrich Schäfer (@stigi).
+  [#946](https://github.com/CocoaPods/CocoaPods/pull/946)
 * The `pod search` commands now accepts the `--ios` and the `--osx` arguments
   to filter the results by platform.
   [#625](https://github.com/CocoaPods/CocoaPods/issues/625)
@@ -14,13 +26,6 @@
 * The `--no-update` argument of the `install`, `update`, `outdated` subcommands
   has been renamed to `--no-repo-update`.
   [#913](https://github.com/CocoaPods/CocoaPods/issues/913)
-
-###### Enhancements
-
-* Added the ability to inhibit warnings per pod. 
-  Just pass `:inhibit_warnings => true` inline.
-  [#10](https://github.com/CocoaPods/Core/pull/10)
-  [#934](https://github.com/CocoaPods/CocoaPods/pull/934)
 
 ###### Bug fixes
 
