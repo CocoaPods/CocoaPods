@@ -45,6 +45,7 @@ File References:
 Targets:
 - iOS App:
     Build Phases:
+    - Check Pods Manifest.lock: []
     - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m

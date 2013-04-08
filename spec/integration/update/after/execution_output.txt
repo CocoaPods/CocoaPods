@@ -1,4 +1,4 @@
-$ pod update --no-update --no-doc --verbose --no-color 2>&1
+$ pod update --no-repo-update --no-doc --verbose --no-color 2>&1
 Analyzing dependencies
 
 Finding Podfile changes

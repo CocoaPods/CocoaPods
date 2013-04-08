@@ -70,6 +70,7 @@ File References:
 Targets:
 - SampleApp:
     Build Phases:
+    - Check Pods Manifest.lock: []
     - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m
@@ -102,6 +103,7 @@ Targets:
         Base Configuration: Pods.xcconfig
 - SampleAppTests:
     Build Phases:
+    - Check Pods Manifest.lock: []
     - SourcesBuildPhase:
       - SampleAppTests.m
     - FrameworksBuildPhase:
@@ -139,6 +141,7 @@ Targets:
         Base Configuration: Pods-test.xcconfig
 - SampleApp_2:
     Build Phases:
+    - Check Pods Manifest.lock: []
     - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m
