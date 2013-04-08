@@ -10,11 +10,12 @@
   This feature has been implemented by Marin Usalj (@mneorr).
   [#10](https://github.com/CocoaPods/Core/pull/10)
   [#934](https://github.com/CocoaPods/CocoaPods/pull/934)
+* Inhibiting warnings will also suppress the warnings of the static analyzer.
 * A new build phase has been added to check that your
   installation is in sync with the `Podfile.lock` and fail the build otherwise.
   The new build phase will not be added automatically to targets already
   integrated with CocoaPods, for integrating targets manually see [this
-  comment](https://github.com/CocoaPods/CocoaPods/pull/946#issuecomment-16042419)
+  comment](https://github.com/CocoaPods/CocoaPods/pull/946#issuecomment-16042419).
   This feature has been implemented by Ullrich Schäfer (@stigi).
   [#946](https://github.com/CocoaPods/CocoaPods/pull/946)
 * The `pod search` commands now accepts the `--ios` and the `--osx` arguments
