@@ -29,6 +29,7 @@ module Pod
             add_xcconfig_base_configuration
             add_pods_library
             add_copy_resources_script_phase
+            add_check_manifest_lock_script_phase
             save_user_project
           end
         end
@@ -126,6 +127,29 @@ module Pod
             phase = target.new_shell_script_build_phase('Copy Pods Resources')
             path  = library.copy_resources_script_relative_path
             phase.shell_script = %{"#{path}"\n}
+          end
+        end
+
+        # Adds a shell script build phase responsible for checking if the Pods
+        # locked in the Pods/Manifest.lock file are in sync with the Pods defined
+        # in the Podfile.lock.
+        #
+        # @return [void]
+        #
+        def add_check_manifest_lock_script_phase
+          targets.each do |target|
+            phase = target.new_shell_script_build_phase('Check Pods Manifest.lock')
+            phase.shell_script = <<-EOS
+diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+if [[ $? != 0 ]] ; then
+    cat << EOM
+Podfile.lock and Manifest.lock are not in sync.
+You might need to run a \`pod install\`.
+EOM
+    exit 1
+fi
+            EOS
+            target.build_phases.rotate!(-1) # if we fail, let's fail early
           end
         end
 
