@@ -1,3 +1,5 @@
+require 'active_support'
+
 module Pod
   class Installer
     class UserProjectIntegrator
@@ -134,22 +136,26 @@ module Pod
         # locked in the Pods/Manifest.lock file are in sync with the Pods defined
         # in the Podfile.lock.
         #
+        # @note   The build phase is appended to the front because to fail
+        #         fast.
+        #
         # @return [void]
         #
         def add_check_manifest_lock_script_phase
           targets.each do |target|
-            phase = target.new_shell_script_build_phase('Check Pods Manifest.lock')
-            phase.shell_script = <<-EOS
-diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-if [[ $? != 0 ]] ; then
-    cat << EOM
-Podfile.lock and Manifest.lock are not in sync.
-You might need to run a \`pod install\`.
-EOM
-    exit 1
-fi
+            phase = target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
+            target.build_phases.unshift(phase)
+            phase.name = 'Check Pods Manifest.lock'
+            phase.shell_script = <<-EOS.strip_heredoc
+              diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+              if [[ $? != 0 ]] ; then
+                  cat << EOM
+              Podfile.lock and Manifest.lock are not in sync.
+              You might need to run a \`pod install\`.
+              EOM
+                  exit 1
+              fi
             EOS
-            target.build_phases.rotate!(-1) # if we fail, let's fail early
           end
         end
 

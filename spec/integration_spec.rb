@@ -302,8 +302,6 @@ module Pod
 
         #--------------------------------------#
 
-        # @note The shell script should be the last phase.
-        #
         it "sets up an existing project with pods" do
           config.integrate_targets = true
 
@@ -331,17 +329,6 @@ module Pod
             config.base_configuration_reference.path.should == 'Pods/Pods.xcconfig'
           end
           target.frameworks_build_phase.files.should.include libPods.build_files.first
-          target.build_phases.last.shell_script.should == %{"${SRCROOT}/Pods/Pods-resources.sh"\n}
-          target.build_phases.first.shell_script.should == <<-EOS
-diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-if [[ $? != 0 ]] ; then
-    cat << EOM
-Podfile.lock and Manifest.lock are not in sync.
-You might need to run a \`pod install\`.
-EOM
-    exit 1
-fi
-            EOS
         end
 
         #--------------------------------------#

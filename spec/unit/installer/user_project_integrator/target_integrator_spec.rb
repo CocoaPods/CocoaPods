@@ -83,16 +83,16 @@ module Pod
       it 'adds a Check Manifest.lock build phase to each target' do
         target = @target_integrator.targets.first
         phase = target.shell_script_build_phases.find { |bp| bp.name == "Check Pods Manifest.lock" }
-        phase.shell_script.should == <<-EOS
-diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-if [[ $? != 0 ]] ; then
-    cat << EOM
-Podfile.lock and Manifest.lock are not in sync.
-You might need to run a \`pod install\`.
-EOM
-    exit 1
-fi
-            EOS
+        phase.shell_script.should == <<-EOS.strip_heredoc
+          diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          if [[ $? != 0 ]] ; then
+              cat << EOM
+          Podfile.lock and Manifest.lock are not in sync.
+          You might need to run a \`pod install\`.
+          EOM
+              exit 1
+          fi
+        EOS
       end
 
       it 'adds the Check Manifest.lock build phase as the first build phase' do
