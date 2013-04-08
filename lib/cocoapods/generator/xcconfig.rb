@@ -58,6 +58,7 @@ module Pod
           'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
           'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(sandbox.build_headers.search_paths),
           'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
+          'GCC_PREPROCESSOR_DEFINITIONS'     => 'COCOAPODS=1'
         })
 
         spec_consumers.each do |consumer|

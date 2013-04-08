@@ -75,6 +75,10 @@ module Pod
       @xcconfig.to_hash['PODS_PUBLIC_HEADERS_SEARCH_PATHS'].should == expected
     end
 
+    it 'adds the COCOAPODS macro definition' do
+      @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == 'COCOAPODS=1'
+    end
+
     it "includes the xcconfig of the specifications" do
       @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
     end

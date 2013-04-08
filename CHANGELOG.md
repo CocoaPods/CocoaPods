@@ -1,3 +1,11 @@
+## Master
+
+###### Enhancements
+
+* CocoaPods now defines the `COCOAPODS=1` macro in the Pod and the Client
+  targets. This is useful for libraries which conditionally expose interfaces.
+  [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
+
 ## 0.18.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.18.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.18.0)
