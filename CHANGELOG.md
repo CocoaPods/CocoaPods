@@ -1,7 +1,7 @@
-## 0.18.0 (unreleased)
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.17.3)
-• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.17.3)
-• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.4)
+## 0.18.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.18.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.18.0)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.5)
 
 ###### Enhancements
 
