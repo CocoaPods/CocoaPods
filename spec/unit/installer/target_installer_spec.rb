@@ -123,14 +123,6 @@ module Pod
         end
       end
 
-      it "enables the GCC_WARN_INHIBIT_ALL_WARNINGS flag" do
-        @podfile.inhibit_all_warnings!
-        @installer.install!
-        @installer.library.target.build_configurations.each do |config|
-          config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should == 'YES'
-        end
-      end
-
       #--------------------------------------#
 
       it 'adds the source files of each pod to the target of the Pod library' do
@@ -266,6 +258,19 @@ module Pod
           flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
           flags.should.not.include?('-w')
         end
+
+        it "adds -Xanalyzer -analyzer-disable-checker per pod" do
+          @installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+
+          flags.should.include?('-Xanalyzer -analyzer-disable-checker')
+        end
+
+        it "doesn't inhibit analyzer warnings by default" do
+          flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+          flags.should.not.include?('-Xanalyzer -analyzer-disable-checker')
+        end
+
       end
     end
   end

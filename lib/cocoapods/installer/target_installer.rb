@@ -72,9 +72,6 @@ module Pod
         if library.platform.requires_legacy_ios_archs?
           settings['ARCHS'] = "armv6 armv7"
         end
-        if target_definition.inhibit_all_warnings?
-          settings['GCC_WARN_INHIBIT_ALL_WARNINGS'] = 'YES'
-        end
 
         @target.build_settings('Debug').merge!(settings)
         @target.build_settings('Release').merge!(settings)
@@ -363,7 +360,7 @@ module Pod
           end
         end
         if target_definition.inhibits_warnings_for_pod?(consumer.spec.root.name)
-          flags << '-w'
+          flags << '-w -Xanalyzer -analyzer-disable-checker'
         end
         flags * " "
       end
