@@ -87,8 +87,7 @@ module Pod
           diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
           if [[ $? != 0 ]] ; then
               cat << EOM
-          Podfile.lock and Manifest.lock are not in sync.
-          You might need to run a \`pod install\`.
+          error: The sanbox is not in sync with the Podfile.lock. Run 'pod install'.
           EOM
               exit 1
           fi
