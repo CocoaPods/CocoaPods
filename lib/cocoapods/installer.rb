@@ -368,7 +368,7 @@ module Pod
     #
     def run_pre_install_hooks
       UI.message "- Running pre install hooks" do
-        installed_specs.each do |spec|
+        analysis_result.specifications.each do |spec|
           executed = false
           libraries_using_spec(spec).each do |lib|
             lib_representation = library_rep(lib)
@@ -427,7 +427,7 @@ module Pod
     #
     def run_post_install_hooks
       UI.message "- Running post install hooks" do
-        installed_specs.each do |spec|
+        analysis_result.specifications.each do |spec|
           executed = false
           libraries_using_spec(spec).each do |lib|
             lib_representation = library_rep(lib)
