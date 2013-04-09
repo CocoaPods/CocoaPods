@@ -98,7 +98,7 @@ module Pod
       spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
       spec.frameworks = ['SenTestingKit']
       xcconfig = generator.generate
-      xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"$(inherited)" "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+      xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
     end
 
     it "doesn't include the developer frameworks if already present" do
@@ -108,7 +108,7 @@ module Pod
       generator = Generator::XCConfig.new(config.sandbox, [consumer_1, consumer_2], './Pods')
       spec.frameworks = ['SenTestingKit']
       xcconfig = generator.generate
-      xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"$(inherited)" "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+      xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
     end
 
     #-----------------------------------------------------------------------#
