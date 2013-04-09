@@ -170,9 +170,9 @@ module Pod
       #
       def generated_libraries
         libraries = []
-        podfile.target_definitions.values.each do |target_definition|
-          lib                           = Library.new(target_definition)
-          lib.support_files_root        = sandbox.library_support_files_dir(lib.name)
+        podfile.target_definition_list.each do |target_definition|
+          lib = Library.new(target_definition)
+          lib.support_files_root = sandbox.library_support_files_dir(lib.name)
 
           if config.integrate_targets?
             project_path = compute_user_project_path(target_definition)
@@ -446,8 +446,7 @@ module Pod
         end
 
         target_definition.set_platform(name, deployment_target)
-        platform = Platform.new(name, deployment_target)
-        platform
+        Platform.new(name, deployment_target)
       end
 
       #-----------------------------------------------------------------------#
