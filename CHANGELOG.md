@@ -5,6 +5,8 @@
 * CocoaPods now defines the `COCOAPODS=1` macro in the Pod and the Client
   targets. This is useful for libraries which conditionally expose interfaces.
   [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
+* CocoaPods now defines the deployment target of the project.
+  [#556](https://github.com/CocoaPods/CocoaPods/issues/556)
 
 ###### Bug fixes
 

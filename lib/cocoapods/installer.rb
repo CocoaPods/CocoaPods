@@ -55,9 +55,9 @@ module Pod
     # @param  [Lockfile] lockfile    @see lockfile
     #
     def initialize(sandbox, podfile, lockfile = nil)
-      @sandbox  =  sandbox
-      @podfile  =  podfile
-      @lockfile =  lockfile
+      @sandbox  = sandbox
+      @podfile  = podfile
+      @lockfile = lockfile
     end
 
     # @return [Bool] Whether the installer is in update mode. In update mode
@@ -276,6 +276,13 @@ module Pod
           @pods_project.add_podfile(config.podfile_path)
         end
         sandbox.project = @pods_project
+        platforms = libraries.map(&:platform)
+        osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
+        ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
+        @pods_project.build_configurations.each do |build_configuration|
+          build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
+          build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
+        end
       end
     end
 

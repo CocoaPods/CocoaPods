@@ -205,15 +205,31 @@ module Pod
       describe "#prepare_pods_project" do
 
         it "creates the Pods project" do
+          @installer.stubs(:libraries).returns([])
           @installer.send(:prepare_pods_project)
           @installer.pods_project.class.should == Pod::Project
         end
 
         it "adds the Podfile to the Pods project" do
+          @installer.stubs(:libraries).returns([])
           config.podfile_path.stubs(:exist?).returns(true)
           @installer.send(:prepare_pods_project)
           f = @installer.pods_project['Podfile']
           f.name.should == 'Podfile'
+        end
+
+        it "sets the deployment target for the whole project" do
+          library_ios = Library.new(nil)
+          library_osx = Library.new(nil)
+          library_ios.platform = Platform.new(:ios, '6.0')
+          library_osx.platform = Platform.new(:osx, '10.8')
+          @installer.stubs(:libraries).returns([library_ios, library_osx])
+          @installer.send(:prepare_pods_project)
+          build_settings = @installer.pods_project.build_configurations.map(&:build_settings)
+          build_settings.should == [
+            {"MACOSX_DEPLOYMENT_TARGET"=>"10.8", "IPHONEOS_DEPLOYMENT_TARGET"=>"6.0"},
+            {"MACOSX_DEPLOYMENT_TARGET"=>"10.8", "IPHONEOS_DEPLOYMENT_TARGET"=>"6.0"},
+          ]
         end
       end
 
@@ -259,20 +275,22 @@ module Pod
 
       describe "#write_pod_project" do
 
-        it "sorts the main group" do
+        before do
+          @installer.stubs(:libraries).returns([])
           @installer.send(:prepare_pods_project)
+        end
+
+        it "sorts the main group" do
           @installer.pods_project.main_group.expects(:sort_by_type!)
           @installer.send(:write_pod_project)
         end
 
         it "sorts the frameworks group" do
-          @installer.send(:prepare_pods_project)
           @installer.pods_project['Frameworks'].expects(:sort_by_type!)
           @installer.send(:write_pod_project)
         end
 
         it "saves the project to the given path" do
-          @installer.send(:prepare_pods_project)
           path = temporary_directory + 'Pods/Pods.xcodeproj'
           @installer.pods_project.expects(:save_as).with(path)
           @installer.send(:write_pod_project)

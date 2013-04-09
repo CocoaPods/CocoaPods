@@ -96,6 +96,8 @@ Targets:
 
 Build Configurations:
 - Release:
-    Build Settings: {}
+    Build Settings:
+      IPHONEOS_DEPLOYMENT_TARGET: '4.3'
 - Debug:
-    Build Settings: {}
+    Build Settings:
+      IPHONEOS_DEPLOYMENT_TARGET: '4.3'
