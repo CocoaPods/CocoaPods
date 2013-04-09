@@ -48,7 +48,8 @@ module Pod
           dates, groups = {}, {}
           days.each {|d| dates[d] = Time.now - 60 * 60 * 24 * d}
           sets = SourcesManager.all_sets
-          creation_dates = Specification::Set::Statistics.instance.creation_dates(sets)
+          statistics_provider = Specification::Set::Statistics.new(STATISTICS_CACHE_FILE)
+          creation_dates = statistics_provider.creation_dates(sets)
 
           sets.each do |set|
             set_date = creation_dates[set.name]
@@ -65,7 +66,8 @@ module Pod
             next unless sets
             UI.section("\nPods added in the last #{"day".pluralize(d)}".yellow) do
               sorted = sets.sort_by {|s| creation_dates[s.name]}
-              sorted.each { |set| UI.pod(set, (@stats ? :stats : :name)) }
+              mode = @stats ? :stats : :name
+              sorted.each { |set| UI.pod(set, mode, statistics_provider) }
             end
           end
         end

@@ -42,9 +42,15 @@ module Pod
         if @supported_on_osx
           sets.reject!{ |set| !set.specification.available_platforms.map(&:name).include?(:osx) }
         end
+
+        statistics_provider = Specification::Set::Statistics.new(STATISTICS_CACHE_FILE)
         sets.each do |set|
           begin
-            UI.pod(set, (@stats ? :stats : :normal))
+            if @stats
+              UI.pod(set, :stats, statistics_provider)
+            else
+              UI.pod(set, :normal)
+            end
           rescue DSLError
             UI.warn "Skipping `#{set.name}` because the podspec contains errors."
           end

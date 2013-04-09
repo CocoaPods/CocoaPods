@@ -8,6 +8,16 @@ module Pod
 
   class Command < CLAide::Command
 
+    require 'cocoapods/command/list'
+    require 'cocoapods/command/outdated'
+    require 'cocoapods/command/project'
+    require 'cocoapods/command/push'
+    require 'cocoapods/command/repo'
+    require 'cocoapods/command/search'
+    require 'cocoapods/command/setup'
+    require 'cocoapods/command/spec'
+    require 'cocoapods/command/inter_process_communication'
+
     self.abstract_command = true
     self.command = 'pod'
     self.description = 'CocoaPods, the Objective-C library package manager.'
@@ -102,12 +112,3 @@ module Pod
   end
 end
 
-require 'cocoapods/command/list'
-require 'cocoapods/command/outdated'
-require 'cocoapods/command/project'
-require 'cocoapods/command/push'
-require 'cocoapods/command/repo'
-require 'cocoapods/command/search'
-require 'cocoapods/command/setup'
-require 'cocoapods/command/spec'
-require 'cocoapods/command/inter_process_communication'
