@@ -38,11 +38,7 @@ module Pod
       # @raise  If no source including the set can be found.
       #
       def search(dependency)
-        set = aggregate.search(dependency)
-        unless set
-          raise Informative, "Unable to find a pod named `#{dependency.name}`"
-        end
-        set
+        aggregate.search(dependency)
       end
 
       # Search all the sources with the given search term.

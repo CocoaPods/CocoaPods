@@ -6,6 +6,11 @@
   targets. This is useful for libraries which conditionally expose interfaces.
   [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
 
+###### Bug fixes
+
+* Fix issue related to `pod outdated` external sources.
+  [#954](https://github.com/CocoaPods/CocoaPods/issues/954)
+
 ## 0.18.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.18.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.18.0)

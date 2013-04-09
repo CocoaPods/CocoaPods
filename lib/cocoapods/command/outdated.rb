@@ -19,6 +19,7 @@ module Pod
 
       # @todo the command report new dependencies added to the Podfile as
       #       updates.
+      #
       # @todo fix.
       #
       def run
@@ -30,6 +31,7 @@ module Pod
         updates = []
         pods.each do |pod_name|
           set = SourcesManager.search(Dependency.new(pod_name))
+          next unless set
           source_version = set.versions.first
           lockfile_version = lockfile.version(pod_name)
           if source_version > lockfile_version
@@ -42,7 +44,7 @@ module Pod
         else
           UI.section "The following updates are available:" do
             updates.each do |(name, from_version, to_version)|
-              UI.message "- #{name} #{from_version} -> #{to_version}"
+              UI.puts "- #{name} #{from_version} -> #{to_version}"
             end
           end
         end

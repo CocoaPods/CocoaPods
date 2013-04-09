@@ -32,10 +32,9 @@ module Pod
         set.name.should == 'BananaLib'
       end
 
-      it "raises if it not able to find a pod for the given dependency" do
-        should.raise Informative do
-          set = SourcesManager.search(Dependency.new('Windows-Lib'))
-        end.message.should.match /Unable to find.*Windows-Lib/
+      it "returns nil if it is not able to find a pod for the given dependency" do
+        set = SourcesManager.search(Dependency.new('Windows-Lib'))
+        set.should.be.nil
       end
 
       it "searches sets by name" do
