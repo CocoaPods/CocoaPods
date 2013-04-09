@@ -157,11 +157,11 @@ module Pod
 
       # Prints the textual representation of a given set.
       #
-      def pod(set, mode = :normal)
+      def pod(set, mode = :normal, statistics_provider = nil)
         if mode == :name
           puts_indented set.name
         else
-          pod = Specification::Set::Presenter.new(set)
+          pod = Specification::Set::Presenter.new(set, statistics_provider)
           title("\n-> #{pod.name} (#{pod.version})".green, '', 1) do
             puts_indented pod.summary
             labeled('Homepage', pod.homepage)

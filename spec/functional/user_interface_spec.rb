@@ -7,7 +7,6 @@ module Pod
 
     before do
       @set = SourcesManager.search(Dependency.new('CocoaLumberjack'))
-      Specification::Set::Statistics.instance.cache_file = nil
     end
 
     it "presents the name, version, description, homepage and source of a specification set" do

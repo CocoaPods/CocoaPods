@@ -33,7 +33,9 @@ module Pod
   #
   MAX_CACHE_SIZE = 500
 
-  Pod::Specification::Set::Statistics.instance.cache_file = CACHE_ROOT + 'statistics.yml'
+  # @return [Pathname] The file to use a cache of the statistics provider.
+  #
+  STATISTICS_CACHE_FILE = CACHE_ROOT + 'statistics.yml'
 
   autoload :Command,                'cocoapods/command'
   autoload :Executable,             'cocoapods/executable'
