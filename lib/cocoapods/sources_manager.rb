@@ -180,11 +180,11 @@ module Pod
           version_msg = ( min == max ) ? min : "#{min} - #{max}"
           raise Informative, "The `#{dir.basename}` repo requires " \
           "CocoaPods #{version_msg}\n".red +
-          "Update Cocoapods, or checkout the appropriate tag in the repo."
+          "Update CocoaPods, or checkout the appropriate tag in the repo."
         end
 
         if config.new_version_message? && cocoapods_update?(versions)
-          UI.puts "\nCocoapods #{versions['last']} is available.\n".green
+          UI.puts "\nCocoaPods #{versions['last']} is available.\n".green
         end
       end
 
