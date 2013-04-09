@@ -1,5 +1,7 @@
 require 'rubygems'
 
+autoload :Xcodeproj, 'xcodeproj'
+
 module Pod
   require 'pathname'
 
@@ -8,7 +10,6 @@ module Pod
   require 'cocoapods/file_list'
   require 'cocoapods/config'
 
-  autoload :Xcodeproj, 'xcodeproj'
   autoload :Downloader, 'cocoapods/downloader'
 
   # Indicates an user error. This is defined in cocoapods-core.
