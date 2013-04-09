@@ -21,7 +21,7 @@ module Pod
     #       // Non CocoaPods code
     #     #endif
     #
-    class TargetHeader
+    class TargetEnvironmentHeader
 
       # @return [Array<LocalPod>] the specifications installed for the target.
       #
@@ -51,9 +51,9 @@ module Pod
           source.puts
           source.puts
           specs.each do |spec|
-            spec_name = spec.name.gsub(/[^\w]/,'_')
+            spec_name = safe_spec_name(spec.name)
             source.puts "// #{spec.name}"
-            source.puts "#define COCOAPODS_POD_AVAILABLE_#{spec_name} TRUE"
+            source.puts "#define COCOAPODS_POD_AVAILABLE_#{spec_name}"
             if spec.version.semantic?
               source.puts "#define COCOAPODS_VERSION_MAJOR_#{spec_name} #{spec.version.major}"
               source.puts "#define COCOAPODS_VERSION_MINOR_#{spec_name} #{spec.version.minor}"
@@ -67,6 +67,16 @@ module Pod
             source.puts
           end
         end
+      end
+
+      #-----------------------------------------------------------------------#
+
+      private
+
+      # !@group Private Helpers
+
+      def safe_spec_name(spec_name)
+        spec_name.gsub(/[^\w]/,'_')
       end
 
       #-----------------------------------------------------------------------#

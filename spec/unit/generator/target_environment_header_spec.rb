@@ -1,10 +1,10 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
-describe Pod::Generator::TargetHeader do
+describe Pod::Generator::TargetEnvironmentHeader do
 
   before do
     specification = fixture_spec('banana-lib/BananaLib.podspec')
-    @gen = Pod::Generator::TargetHeader.new([specification])
+    @gen = Pod::Generator::TargetEnvironmentHeader.new([specification])
   end
 
   it "generates a header files which include macro definitions for installed Pods" do
@@ -20,12 +20,17 @@ describe Pod::Generator::TargetHeader do
 
 
       // BananaLib
-      #define COCOAPODS_POD_AVAILABLE_BananaLib TRUE
+      #define COCOAPODS_POD_AVAILABLE_BananaLib
       #define COCOAPODS_VERSION_MAJOR_BananaLib 1
       #define COCOAPODS_VERSION_MINOR_BananaLib 0
       #define COCOAPODS_VERSION_PATCH_BananaLib 0
 
     EOS
+  end
+
+  it "handles specifications with special characters" do
+    name = @gen.send(:safe_spec_name, 'AppleCoreAudioUtilityClasses@thehtb')
+    name.should == 'AppleCoreAudioUtilityClasses_thehtb'
   end
 end
 

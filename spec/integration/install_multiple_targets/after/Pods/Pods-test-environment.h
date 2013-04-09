@@ -7,7 +7,7 @@
 
 
 // JSONKit
-#define COCOAPODS_POD_AVAILABLE_JSONKit TRUE
+#define COCOAPODS_POD_AVAILABLE_JSONKit
 // This library does not follow semantic-versioning,
 // so we were not able to define version macros.
 // Please contact the author.

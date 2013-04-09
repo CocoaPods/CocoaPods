@@ -151,7 +151,7 @@ module Pod
         @installer.install!
         file = config.sandbox.root + 'Pods-environment.h'
         contents = file.read
-        contents.should.include?('#define COCOAPODS_POD_AVAILABLE_BananaLib TRUE')
+        contents.should.include?('#define COCOAPODS_POD_AVAILABLE_BananaLib')
         contents.should.include?('#define COCOAPODS_VERSION_MAJOR_BananaLib 1')
         contents.should.include?('#define COCOAPODS_VERSION_MINOR_BananaLib 0')
         contents.should.include?('#define COCOAPODS_VERSION_PATCH_BananaLib 0')

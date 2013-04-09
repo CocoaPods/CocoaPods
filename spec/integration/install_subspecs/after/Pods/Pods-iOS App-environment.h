@@ -7,7 +7,7 @@
 
 
 // PodTest/subspec_1
-#define COCOAPODS_POD_AVAILABLE_PodTest_subspec_1 TRUE
+#define COCOAPODS_POD_AVAILABLE_PodTest_subspec_1
 #define COCOAPODS_VERSION_MAJOR_PodTest_subspec_1 1
 #define COCOAPODS_VERSION_MINOR_PodTest_subspec_1 0
 #define COCOAPODS_VERSION_PATCH_PodTest_subspec_1 0

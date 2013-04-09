@@ -35,7 +35,7 @@ module Pod
           create_suport_files_group
 
           create_xcconfig_file
-          create_target_environement_header
+          create_target_environment_header
           create_prefix_header
           create_bridge_support_file
           create_copy_resources_script
@@ -158,10 +158,10 @@ module Pod
       # Generates a header which allows to inspect at compile time the installed
       # pods and the installed specifications of a pod.
       #
-      def create_target_environement_header
+      def create_target_environment_header
         path = library.target_environment_header_path
         UI.message "- Generating target environment header at #{UI.path(path)}" do
-          generator = Generator::TargetHeader.new(library.specs)
+          generator = Generator::TargetEnvironmentHeader.new(library.specs)
           generator.save_as(path)
           add_file_to_support_group(path)
         end
