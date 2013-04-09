@@ -101,16 +101,16 @@ module Pod
       it "informs the user if there is an update for CocoaPods" do
         SourcesManager.stubs(:version_information).returns({ 'last' => '999.0' })
         SourcesManager.check_version_information(temporary_directory)
-        UI.output.should.match /Cocoapods 999.0 is available/
+        UI.output.should.match /CocoaPods 999.0 is available/
       end
 
       it "raises while asked to version information of a source if it is not compatible" do
         SourcesManager.stubs(:version_information).returns({ 'min' => '999.0' })
         e = lambda { SourcesManager.check_version_information(temporary_directory) }.should.raise Informative
-        e.message.should.match /Update Cocoapods/
+        e.message.should.match /Update CocoaPods/
         SourcesManager.stubs(:version_information).returns({ 'max' => '0.0.1' })
         e = lambda { SourcesManager.check_version_information(temporary_directory) }.should.raise Informative
-        e.message.should.match /Update Cocoapods/
+        e.message.should.match /Update CocoaPods/
       end
 
       it "returns whether a repository is compatible" do
