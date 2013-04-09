@@ -208,6 +208,9 @@ namespace :spec do
   #
   desc "Run all specs and build all examples"
   task :ci => :unpack_fixture_tarballs do
+    sh 'git config --global user.email "cocoapods@example.com"' unless `git config user.email`
+    sh 'git config --global user.name "CocoaPods"' unless `git config user.name`
+
     title 'Running the specs'
     sh    "bundle exec bacon #{specs('**')}"
 
