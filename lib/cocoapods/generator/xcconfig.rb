@@ -147,7 +147,7 @@ module Pod
       # @todo   Inheritance should be properly handled in Xcconfigs.
       #
       DEVELOPER_FRAMEWORKS_SEARCH_PATHS = [
-        '"$(inherited)"',
+        '$(inherited)',
         '"$(SDKROOT)/Developer/Library/Frameworks"',
         '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
       ]
