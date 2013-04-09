@@ -93,6 +93,12 @@ module Pod
 
       describe "#analyze" do
 
+        it "prints a warning if the version of the Lockfile is higher than the one of the executable" do
+          Lockfile.any_instance.stubs(:cocoapods_version).returns(Version.new('999'))
+          STDERR.expects(:puts)
+          @installer.send(:analyze)
+        end
+
         it "analyzes the Podfile, the Lockfile and the Sandbox" do
           @installer.send(:analyze)
           @installer.analysis_result.sandbox_state.added.should == ["JSONKit"]

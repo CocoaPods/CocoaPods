@@ -151,7 +151,17 @@ module Pod
 
     # @return [void]
     #
+    # @note   The warning about the version of the Lockfile doesn't uses the
+    #         `UI.warn` method because it prints the output only at the end
+    #         of the installation. At that time CocoaPods could have crashed.
+    #
     def analyze
+      if lockfile && lockfile.cocoapods_version > Version.new(VERSION)
+        STDERR.puts '[!] The version of CocoaPods used to generate the lockfile is '\
+          'higher that the one of the current executable. Incompatibility' \
+          'issues might arise.'.yellow
+      end
+
       analyzer = Analyzer.new(sandbox, podfile, lockfile)
       analyzer.update_mode = update_mode
       @analysis_result = analyzer.analyze
