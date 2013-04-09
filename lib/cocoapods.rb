@@ -5,10 +5,11 @@ module Pod
 
   require 'cocoapods/gem_version'
   require 'cocoapods-core'
-  require 'xcodeproj'
-  require 'cocoapods/downloader'
   require 'cocoapods/file_list'
   require 'cocoapods/config'
+
+  autoload :Xcodeproj, 'xcodeproj'
+  autoload :Downloader, 'cocoapods/downloader'
 
   # Indicates an user error. This is defined in cocoapods-core.
   #
@@ -71,6 +72,6 @@ module Pod
 end
 
 if ENV['COCOA_PODS_ENV'] == 'development'
-  require 'awesome_print'
-  require 'pry'
+  # require 'awesome_print'
+  # require 'pry'
 end
