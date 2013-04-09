@@ -6,19 +6,16 @@ module Pod
     #
     # Example output:
     #
-    #     #define __COCOA_PODS
-    #
-    #     #define __POD_AFIncrementaStore
-    #     #define __POD_AFNetworking
-    #     #define __POD_libextobjc_EXTConcreteProtocol
-    #     #define __POD_libextobjc_EXTKeyPathCoding
-    #     #define __POD_libextobjc_EXTScope
+    #     #define COCOAPODS_POD_AVAILABLE_ObjectiveSugar 1
+    #     #define COCOAPODS_VERSION_MAJOR_ObjectiveSugar 0
+    #     #define COCOAPODS_VERSION_MINOR_ObjectiveSugar 6
+    #     #define COCOAPODS_VERSION_PATCH_ObjectiveSugar 2
     #
     # Example usage:
     #
-    #     #ifdef __COCOA_PODS
-    #       #ifdef __POD__AFNetworking
-    #         #import "MYLib+AFNetworking.h"
+    #     #ifdef COCOAPODS
+    #       #ifdef COCOAPODS_POD_AVAILABLE_ObjectiveSugar
+    #         #import "ObjectiveSugar.h"
     #       #endif
     #     #else
     #       // Non CocoaPods code
@@ -45,14 +42,35 @@ module Pod
       #
       def save_as(pathname)
         pathname.open('w') do |source|
-          source.puts "// WARNING: This feature of CocoaPods is present for discussion purposes and might be discontinued or changed in future"
-          source.puts "#define __COCOA_PODS"
           source.puts
-          specs.each do |specs|
-            source.puts "#define __POD_#{specs.name.gsub(/[^\w]/,'_')}"
+          source.puts "// To check if a library is compiled with CocoaPods you"
+          source.puts "// can use the `COCOAPODS` macro definition which is"
+          source.puts "// defined in the xcconfigs so it is available in"
+          source.puts "// headers also when they are imported in the client"
+          source.puts "// project."
+          source.puts
+          source.puts
+          specs.each do |spec|
+            spec_name = spec.name.gsub(/[^\w]/,'_')
+            source.puts "// #{spec.name}"
+            source.puts "#define COCOAPODS_POD_AVAILABLE_#{spec_name} TRUE"
+            if spec.version.semantic?
+              source.puts "#define COCOAPODS_VERSION_MAJOR_#{spec_name} #{spec.version.major}"
+              source.puts "#define COCOAPODS_VERSION_MINOR_#{spec_name} #{spec.version.minor}"
+              source.puts "#define COCOAPODS_VERSION_PATCH_#{spec_name} #{spec.version.patch}"
+            else
+              source.puts "// This library does not follow semantic-versioning,"
+              source.puts "// so we were not able to define version macros."
+              source.puts "// Please contact the author."
+              source.puts "// Version: #{spec.version}."
+            end
+            source.puts
           end
         end
       end
+
+      #-----------------------------------------------------------------------#
+
     end
   end
 end

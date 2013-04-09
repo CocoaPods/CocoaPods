@@ -127,8 +127,8 @@ module Pod
     # @return [Pathname] the absolute path of the header file which contains
     #         the information about the installed pods.
     #
-    def target_header_path
-      support_files_root + "#{label}-header.h"
+    def target_environment_header_path
+      support_files_root + "#{label}-environment.h"
     end
 
     # @return [Pathname] the absolute path of the prefix header file.

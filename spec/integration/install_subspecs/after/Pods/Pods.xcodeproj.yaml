@@ -17,7 +17,7 @@ File References:
 - Targets Support Files:
   - Pods-OS X App:
     - Pods-OS X App.xcconfig
-    - Pods-OS X App-header.h
+    - Pods-OS X App-environment.h
     - Pods-OS X App-prefix.pch
     - Pods-OS X App-resources.sh
     - Pods-OS X App-acknowledgements.plist
@@ -25,7 +25,7 @@ File References:
     - Pods-OS X App-dummy.m
   - Pods-iOS App:
     - Pods-iOS App.xcconfig
-    - Pods-iOS App-header.h
+    - Pods-iOS App-environment.h
     - Pods-iOS App-prefix.pch
     - Pods-iOS App-resources.sh
     - Pods-iOS App-acknowledgements.plist

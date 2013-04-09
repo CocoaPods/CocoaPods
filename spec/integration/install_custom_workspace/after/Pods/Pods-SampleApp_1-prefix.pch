@@ -2,4 +2,4 @@
 #import <UIKit/UIKit.h>
 #endif
 
-#import "Pods-SampleApp_1-header.h"
+#import "Pods-SampleApp_1-environment.h"

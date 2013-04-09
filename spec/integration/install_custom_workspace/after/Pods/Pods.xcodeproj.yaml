@@ -13,7 +13,7 @@ File References:
 - Targets Support Files:
   - Pods-SampleApp_1:
     - Pods-SampleApp_1.xcconfig
-    - Pods-SampleApp_1-header.h
+    - Pods-SampleApp_1-environment.h
     - Pods-SampleApp_1-prefix.pch
     - Pods-SampleApp_1-resources.sh
     - Pods-SampleApp_1-acknowledgements.plist
@@ -21,7 +21,7 @@ File References:
     - Pods-SampleApp_1-dummy.m
   - Pods-SampleApp_2:
     - Pods-SampleApp_2.xcconfig
-    - Pods-SampleApp_2-header.h
+    - Pods-SampleApp_2-environment.h
     - Pods-SampleApp_2-prefix.pch
     - Pods-SampleApp_2-resources.sh
     - Pods-SampleApp_2-acknowledgements.plist

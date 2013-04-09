@@ -40,7 +40,7 @@ module Pod
           "Pods-acknowledgements.markdown",
           "Pods-acknowledgements.plist",
           "Pods-dummy.m",
-          "Pods-header.h",
+          "Pods-environment.h",
           "Pods-prefix.pch",
           "Pods-resources.sh",
           "Pods.xcconfig"
@@ -149,10 +149,12 @@ module Pod
 
       it "creates a header for the target which contains the information about the installed Pods" do
         @installer.install!
-        file = config.sandbox.root + 'Pods-header.h'
+        file = config.sandbox.root + 'Pods-environment.h'
         contents = file.read
-        contents.should.include?('#define __COCOA_PODS')
-        contents.should.include?('#define __POD_BananaLib')
+        contents.should.include?('#define COCOAPODS_POD_AVAILABLE_BananaLib TRUE')
+        contents.should.include?('#define COCOAPODS_VERSION_MAJOR_BananaLib 1')
+        contents.should.include?('#define COCOAPODS_VERSION_MINOR_BananaLib 0')
+        contents.should.include?('#define COCOAPODS_VERSION_PATCH_BananaLib 0')
       end
 
       it "creates a prefix header, including the contents of the specification's prefix header" do
@@ -165,7 +167,7 @@ module Pod
           #import <UIKit/UIKit.h>
           #endif
 
-          #import "Pods-header.h"
+          #import "Pods-environment.h"
           #import "BlocksKit.h"
           #import <BananaTree/BananaTree.h>
         EOS

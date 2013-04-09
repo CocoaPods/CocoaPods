@@ -12,7 +12,7 @@ File References:
 - Targets Support Files:
   - Pods:
     - Pods.xcconfig
-    - Pods-header.h
+    - Pods-environment.h
     - Pods-prefix.pch
     - Pods-resources.sh
     - Pods-acknowledgements.plist

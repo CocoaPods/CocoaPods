@@ -43,7 +43,7 @@ Generating Pods project
     - Installing target `Pods-SampleApp_1` iOS 6.0
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods-SampleApp_1.xcconfig`
-      - Generating target header at `Pods/Pods-SampleApp_1-header.h`
+      - Generating target environment header at `Pods/Pods-SampleApp_1-environment.h`
       - Generating prefix header at `Pods/Pods-SampleApp_1-prefix.pch`
       - Generating copy resources script at `Pods/Pods-SampleApp_1-resources.sh`
       - Generating acknowledgements at `Pods/Pods-SampleApp_1-acknowledgements.plist`
@@ -52,7 +52,7 @@ Generating Pods project
     - Installing target `Pods-SampleApp_2` iOS 6.0
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods-SampleApp_2.xcconfig`
-      - Generating target header at `Pods/Pods-SampleApp_2-header.h`
+      - Generating target environment header at `Pods/Pods-SampleApp_2-environment.h`
       - Generating prefix header at `Pods/Pods-SampleApp_2-prefix.pch`
       - Generating copy resources script at `Pods/Pods-SampleApp_2-resources.sh`
       - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.plist`

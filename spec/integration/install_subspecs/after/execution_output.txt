@@ -37,7 +37,7 @@ Generating Pods project
     - Installing target `Pods-OS X App` OS X 10.6
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods-OS X App.xcconfig`
-      - Generating target header at `Pods/Pods-OS X App-header.h`
+      - Generating target environment header at `Pods/Pods-OS X App-environment.h`
       - Generating prefix header at `Pods/Pods-OS X App-prefix.pch`
       - Generating copy resources script at `Pods/Pods-OS X App-resources.sh`
       - Generating acknowledgements at `Pods/Pods-OS X App-acknowledgements.plist`
@@ -46,7 +46,7 @@ Generating Pods project
     - Installing target `Pods-iOS App` iOS 4.3
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods-iOS App.xcconfig`
-      - Generating target header at `Pods/Pods-iOS App-header.h`
+      - Generating target environment header at `Pods/Pods-iOS App-environment.h`
       - Generating prefix header at `Pods/Pods-iOS App-prefix.pch`
       - Generating copy resources script at `Pods/Pods-iOS App-resources.sh`
       - Generating acknowledgements at `Pods/Pods-iOS App-acknowledgements.plist`
