@@ -45,6 +45,14 @@ module Pod
         @target_integrator.targets.map(&:name).should == %w[ SampleProject ]
       end
 
+      it 'is robust against build files with missing file references' do
+        build_file = @sample_project.new(Xcodeproj::Project::PBXBuildFile)
+        build_file.file_ref = nil
+        @target_integrator.stubs(:user_project).returns(@sample_project)
+        @target.frameworks_build_phase.files << build_file
+        @target_integrator.targets.map(&:name).should == %w[ SampleProject ]
+      end
+
       it 'does not perform the integration if there are no targets to integrate' do
         @target_integrator.stubs(:targets).returns([])
         @target_integrator.expects(:add_xcconfig_base_configuration).never
