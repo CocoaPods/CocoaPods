@@ -16,6 +16,7 @@ module Pod
     require 'cocoapods/command/search'
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
+    require 'cocoapods/command/help'
     require 'cocoapods/command/inter_process_communication'
 
     self.abstract_command = true

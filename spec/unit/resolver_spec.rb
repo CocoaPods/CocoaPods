@@ -121,6 +121,7 @@ module Pod
         RestKit
         RestKit/JSON
         RestKit/Network
+        RestKit/ObjectMapping/Core
         RestKit/ObjectMapping/CoreData
         RestKit/ObjectMapping/JSON
         RestKit/UI
