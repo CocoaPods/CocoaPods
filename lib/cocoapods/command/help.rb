@@ -1,16 +1,22 @@
 module Pod
   class Command
     class Help < Command
-      self.summary = 'Show help for the given command'
+      self.summary = 'Show help for the given command.'
       self.arguments = '[COMMAND]'
 
-      def self.parse(argv)
-        command_needs_help = [argv.shift_argument, '--help']
-        argv.empty? ? super : Pod::Command.parse(command_needs_help)
+      def initialize(argv)
+        @help_command = Pod::Command.parse(argv) unless argv.empty?
+        super
       end
 
       def run
-        help!
+        help_command.help!
+      end
+
+      private
+
+      def help_command
+        @help_command || self
       end
     end
   end
