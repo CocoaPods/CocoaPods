@@ -12,6 +12,9 @@
 * CocoaPods now defines the deployment target of the Pods project computed as
   the minimum deployment target of the Pods libraries.
   [#556](https://github.com/CocoaPods/CocoaPods/issues/556)
+* Added `pod help` command. You can still use the old format
+  with --help flag.
+  [#957](https://github.com/CocoaPods/CocoaPods/pull/957)
 
 ###### Bug fixes
 
