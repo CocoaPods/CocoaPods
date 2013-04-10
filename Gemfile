@@ -29,6 +29,7 @@ group :debugging do
   gem "awesome_print"
   gem "pry"
   gem "diffy"
+  gem "ruby-prof"
 end
 
 group :documentation do
