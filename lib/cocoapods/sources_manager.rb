@@ -59,18 +59,21 @@ module Pod
       # @return [Array<Set>]  The sets that contain the search term.
       #
       def search_by_name(query, full_text_search = false)
-        set_names = []
-        updated_search_index.each do |name, set_data|
-          text = name.dup
-          if full_text_search
-            text << set_data['authors'].to_s if set_data['authors']
-            text << set_data['summary']      if set_data['summary']
-            text << set_data['description']  if set_data['description']
+        if full_text_search
+          set_names = []
+          updated_search_index.each do |name, set_data|
+            text = name.dup
+            if full_text_search
+              text << set_data['authors'].to_s if set_data['authors']
+              text << set_data['summary']      if set_data['summary']
+              text << set_data['description']  if set_data['description']
+            end
+            set_names << name if text.downcase.include?(query.downcase)
           end
-          set_names << name if text.downcase.include?(query.downcase)
+          sets = set_names.sort.map { |name| aggregate.represenative_set(name) }
+        else
+          sets = aggregate.search_by_name(query, false)
         end
-
-        sets = set_names.sort.map { |name| aggregate.represenative_set(name) }
         if sets.empty?
           extra = ", author, summary, or description" if full_text_search
           raise Informative, "Unable to find a pod with name#{extra} matching `#{query}`"
@@ -86,22 +89,28 @@ module Pod
       #   - description
       #   - authors
       #
+      # @note   This operation is fairly expensive, because of the YAML
+      #         conversion.
+      #
       # @return [Hash{String => String}] The up to date search data.
       #
       def updated_search_index
-        if search_index_path.exist?
-          stored_index = YAML.load(search_index_path.read)
-          if stored_index && stored_index.is_a?(Hash)
-            search_index = aggregate.update_search_index(stored_index)
+        unless @updated_search_index
+          if search_index_path.exist?
+            stored_index = YAML.load(search_index_path.read)
+            if stored_index && stored_index.is_a?(Hash)
+              search_index = aggregate.update_search_index(stored_index)
+            else
+              search_index = aggregate.generate_search_index
+            end
           else
             search_index = aggregate.generate_search_index
           end
-        else
-          search_index = aggregate.generate_search_index
-        end
 
-        File.open(search_index_path, 'w') {|f| f.write(search_index.to_yaml) }
-        search_index
+          File.open(search_index_path, 'w') {|f| f.write(search_index.to_yaml) }
+          @updated_search_index = search_index
+        end
+        @updated_search_index
       end
 
       # @return [Pathname] The path where the search index should be stored.
