@@ -7,7 +7,7 @@ gemspec
 
 group :development do
   if ENV['COCOA_PODS_DEPENDENCIES'] == 'local'
-    gem 'cocoapods-core',       :path => '../Core'
+    gem 'cocoapods-core',       :path => '../Core', :brach => '0.18.1'
     gem 'xcodeproj',            :path => '../Xcodeproj'
     gem 'cocoapods-downloader', :path => '../cocoapods-downloader'
   else
