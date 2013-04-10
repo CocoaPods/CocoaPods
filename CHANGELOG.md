@@ -18,8 +18,24 @@
 
 ###### Bug fixes
 
-* Fix issue related to `pod outdated` external sources.
+* Fix issue related to `pod outdated` and external sources.
   [#954](https://github.com/CocoaPods/CocoaPods/issues/954)
+
+## 0.18.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.18.0...0.18.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.18.0...0.18.)
+
+###### Bug fixes
+
+* Fixed a bug introduced in 0.18 which cause compilation issue due to the
+  quoting of the inherited value in the xcconfigs.
+  [#956](https://github.com/CocoaPods/CocoaPods/issues/956)
+* Robustness against user targets including build files with missing file
+  references.
+  [#938](https://github.com/CocoaPods/CocoaPods/issues/938)
+* Partially fixed slow performance from the command line
+  [#919](https://github.com/CocoaPods/CocoaPods/issues/919)
+
 
 ## 0.18.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.18.0)
