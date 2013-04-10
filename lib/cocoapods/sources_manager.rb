@@ -113,6 +113,10 @@ module Pod
         @updated_search_index
       end
 
+      # Allows to clear the search index.
+      #
+      attr_writer :updated_search_index
+
       # @return [Pathname] The path where the search index should be stored.
       #
       def search_index_path

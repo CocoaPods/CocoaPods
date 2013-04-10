@@ -54,7 +54,7 @@ module Pod
         Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
         Source::Aggregate.any_instance.expects(:generate_search_index).returns({'BananaLib' => {}})
         Source::Aggregate.any_instance.expects(:update_search_index).never
-        SourcesManager.instance_variable_set("@updated_search_index", nil)
+        SourcesManager.updated_search_index = nil
         sets = SourcesManager.search_by_name('BananaLib', true)
       end
 
@@ -63,7 +63,7 @@ module Pod
         Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
         Source::Aggregate.any_instance.expects(:generate_search_index).never
         Source::Aggregate.any_instance.expects(:update_search_index).returns({'BananaLib' => {}})
-        SourcesManager.instance_variable_set("@updated_search_index", nil)
+        SourcesManager.updated_search_index = nil
         sets = SourcesManager.search_by_name('BananaLib', true)
       end
 

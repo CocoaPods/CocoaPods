@@ -8,6 +8,7 @@ module Pod
     before do
       @test_source = Source.new(fixture('spec-repos/test_repo'))
       Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+      SourcesManager.updated_search_index = nil
     end
 
     it "runs with correct parameters" do
