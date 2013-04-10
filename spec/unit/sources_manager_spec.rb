@@ -54,7 +54,8 @@ module Pod
         Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
         Source::Aggregate.any_instance.expects(:generate_search_index).returns({'BananaLib' => {}})
         Source::Aggregate.any_instance.expects(:update_search_index).never
-        sets = SourcesManager.search_by_name('BananaLib')
+        SourcesManager.instance_variable_set("@updated_search_index", nil)
+        sets = SourcesManager.search_by_name('BananaLib', true)
       end
 
       it "updates the search index before performing a search if it exits" do
@@ -62,7 +63,8 @@ module Pod
         Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
         Source::Aggregate.any_instance.expects(:generate_search_index).never
         Source::Aggregate.any_instance.expects(:update_search_index).returns({'BananaLib' => {}})
-        sets = SourcesManager.search_by_name('BananaLib')
+        SourcesManager.instance_variable_set("@updated_search_index", nil)
+        sets = SourcesManager.search_by_name('BananaLib', true)
       end
 
       it "returns the path of the search index" do
