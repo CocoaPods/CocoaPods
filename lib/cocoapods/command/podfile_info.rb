@@ -13,7 +13,7 @@ module Pod
 
       def self.options
         [
-          # ["--all", "Show information about all Pods with dependencies that are used in a project"],
+          ["--all", "Show information about all Pods with dependencies that are used in a project"],
           ["--md", "Output information in Markdown format"]
         ].concat(super)
       end
@@ -32,8 +32,11 @@ module Pod
           UI.puts "Using lockfile" if config.verbose?
           verify_lockfile_exists!
           lockfile = config.lockfile
-          # pods = (@info_all) ? lockfile.dependencies : lockfile.pod_names
           pods = lockfile.pod_names
+          if @info_all
+            deps = lockfile.dependencies.map{|d| d.name}
+            pods = (deps + pods).uniq
+          end
         elsif @podfile_path
           podfile = Pod::Podfile.from_file(@podfile_path)
           pods = pods_from_podfile(podfile)
@@ -43,7 +46,7 @@ module Pod
           pods = pods_from_podfile(podfile)
         end
 
-        UI.puts "\nPods used:\n".yellow unless (config.silent || @info_in_md)
+        UI.puts "\nPods used:\n".yellow unless @info_in_md
         pods_info(pods, @info_in_md)
       end
 
