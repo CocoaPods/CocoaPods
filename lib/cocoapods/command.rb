@@ -18,6 +18,7 @@ module Pod
     require 'cocoapods/command/spec'
     require 'cocoapods/command/help'
     require 'cocoapods/command/inter_process_communication'
+    require 'cocoapods/command/podfile_info'
 
     self.abstract_command = true
     self.command = 'pod'
