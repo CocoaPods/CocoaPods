@@ -2,6 +2,10 @@
 
 ###### Enhancements
 
+* Added `pod podfile-info` command. Shows list of used Pods and their info
+  in a project or supplied Podfile.
+  Options: `--all` - with dependancies. `--md` - in Markdown.
+  [#855](https://github.com/CocoaPods/CocoaPods/issues/855)
 * CocoaPods now defines the `COCOAPODS=1` macro in the Pod and the Client
   targets. This is useful for libraries which conditionally expose interfaces.
   [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
