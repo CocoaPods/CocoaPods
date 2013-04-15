@@ -2,7 +2,7 @@ module Pod
 
   class Specification
     def config
-      UI.warn "Specification#config is deprecated. The config is accessible from " \
+      UI.warn "[#{name}] Specification#config is deprecated. The config is accessible from " \
         "the parameter passed to the hooks"
       Config.instance
     end
