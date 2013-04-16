@@ -20,6 +20,11 @@
   with --help flag.
   [#957](https://github.com/CocoaPods/CocoaPods/pull/957)
 
+###### Deprications
+
+* `:local` flag in Podfile is deprecated. Please use `:path` when
+  specitying a pod source.
+  [#971](https://github.com/CocoaPods/CocoaPods/issues/971)
 ###### Bug fixes
 
 * Fix issue related to `pod outdated` and external sources.
