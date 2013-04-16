@@ -24,6 +24,8 @@
 
 * Fix issue related to `pod outdated` and external sources.
   [#954](https://github.com/CocoaPods/CocoaPods/issues/954)
+* Fix issue with .svn folders in copy resources script.
+  [#972](https://github.com/CocoaPods/CocoaPods/issues/972)
 
 ## 0.18.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.18.0...0.18.1)
