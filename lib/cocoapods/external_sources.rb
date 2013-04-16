@@ -13,11 +13,13 @@ module Pod
       name   = dependency.root_name
       params = dependency.external_source
 
-      klass  = if params.key?(:git) then GitSource
-      elsif params.key?(:svn)       then SvnSource
-      elsif params.key?(:hg)        then MercurialSource
-      elsif params.key?(:podspec)   then PodspecSource
-      elsif params.key?(:local)     then LocalSource
+      klass  =  if params.key?(:git)          then GitSource
+                elsif params.key?(:svn)       then SvnSource
+                elsif params.key?(:hg)        then MercurialSource
+                elsif params.key?(:podspec)   then PodspecSource
+                elsif params.key?(:local) || 
+                      params.key?(:path)      then LocalSource
+                  
       end
 
       if klass
