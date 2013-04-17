@@ -19,8 +19,8 @@ module Pod
                 elsif params.key?(:podspec)   then PodspecSource
                 elsif params.key?(:local) || 
                       params.key?(:path)      then LocalSource
-                  
       end
+      UI.warn "Using :local in a Podfile is depricated. Please use :path instead." if params.key?(:local)
 
       if klass
         klass.new(name, params, podfile_path)
