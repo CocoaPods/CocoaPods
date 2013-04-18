@@ -389,7 +389,7 @@ module Pod
           executed = false
           libraries_using_spec(spec).each do |lib|
             lib_representation = library_rep(lib)
-            executed ||= run_spec_pre_install_hook(spec, lib_representation)
+            executed |= run_spec_pre_install_hook(spec, lib_representation)
           end
           UI.message "- #{spec.name}" if executed
         end
@@ -448,7 +448,7 @@ module Pod
           executed = false
           libraries_using_spec(spec).each do |lib|
             lib_representation = library_rep(lib)
-            executed ||= run_spec_post_install_hook(spec, lib_representation)
+            executed |= run_spec_post_install_hook(spec, lib_representation)
           end
           UI.message "- #{spec.name}" if executed
         end
