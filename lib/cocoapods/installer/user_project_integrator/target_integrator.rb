@@ -128,7 +128,7 @@ module Pod
         #
         def add_copy_resources_script_phase
           targets.each do |target|
-            phase = target.new_shell_script_build_phase('Copy Pods Resources')
+            phase = target.new_shell_script_build_phase("Copy Pods Resources (#{library.name})")
             path  = library.copy_resources_script_relative_path
             phase.shell_script = %{"#{path}"\n}
           end
