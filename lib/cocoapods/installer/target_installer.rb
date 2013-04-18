@@ -140,7 +140,7 @@ module Pod
       def create_xcconfig_file
         path = library.xcconfig_path
         UI.message "- Generating xcconfig file at #{UI.path(path)}" do
-          gen = Generator::XCConfig.new(sandbox, spec_consumers, library.relative_pods_root)
+          gen = Generator::XCConfig.new(library, sandbox, spec_consumers, library.relative_pods_root)
           gen.set_arc_compatibility_flag = target_definition.podfile.set_arc_compatibility_flag?
           gen.save_as(path)
           library.xcconfig = gen.xcconfig

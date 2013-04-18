@@ -13,11 +13,16 @@ module Pod
     #
     attr_reader :target_definition
 
+    # @return [HeadersStore] the header directory for the Pods libraries.
+    #
+    attr_reader :build_headers
+
     # @param  [TargetDefinition] target_definition @see target_definition
     # @param  [PBXNativeTarget]  target @see target
     #
-    def initialize(target_definition)
+    def initialize(target_definition, sandbox)
       @target_definition = target_definition
+      @build_headers  = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
     end
 
     # @return [String] the label for the library.

@@ -121,6 +121,17 @@ module Pod
               sandbox.public_headers.add_files(namespaced_path, files)
             end
           end
+
+          libraries.each do |library|
+            library.file_accessors.each do |file_accessor|
+              headers_sandbox = Pathname.new(file_accessor.spec.root.name)
+              library.build_headers.add_search_path(headers_sandbox)
+
+              header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
+                sandbox.build_headers.add_files(namespaced_path, files)
+              end
+            end
+          end
         end
       end
 
