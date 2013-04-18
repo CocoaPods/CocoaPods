@@ -144,10 +144,12 @@ module Pod
         # @return [void]
         #
         def add_check_manifest_lock_script_phase
+          phase_name = 'Check Pods Manifest.lock'
           targets.each do |target|
+            next if target.shell_script_build_phases.any? { |phase| phase.name == phase_name }
             phase = target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
             target.build_phases.unshift(phase)
-            phase.name = 'Check Pods Manifest.lock'
+            phase.name = phase_name
             phase.shell_script = <<-EOS.strip_heredoc
               diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
               if [[ $? != 0 ]] ; then
