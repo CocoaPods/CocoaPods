@@ -8,11 +8,13 @@ module Pod
       svn     = Dependency.new("Reachability", :svn     => nil)
       podspec = Dependency.new("Reachability", :podspec => nil)
       local   = Dependency.new("Reachability", :local   => nil)
+      path    = Dependency.new("Reachability", :path   => nil)
 
       ExternalSources.from_dependency(git, nil).class.should     == ExternalSources::GitSource
       ExternalSources.from_dependency(svn, nil).class.should     == ExternalSources::SvnSource
       ExternalSources.from_dependency(podspec, nil).class.should == ExternalSources::PodspecSource
-      ExternalSources.from_dependency(local, nil).class.should   == ExternalSources::LocalSource
+      ExternalSources.from_dependency(local, nil).class.should   == ExternalSources::PathSource
+      ExternalSources.from_dependency(path, nil).class.should    == ExternalSources::PathSource
     end
   end
 
@@ -202,17 +204,26 @@ module Pod
 
   #---------------------------------------------------------------------------#
 
-  describe ExternalSources::LocalSource do
+  describe ExternalSources::PathSource do
 
     before do
       podspec_path = fixture('integration/Reachability/Reachability.podspec')
-      dependency = Dependency.new("Reachability", :local => fixture('integration/Reachability'))
+      dependency = Dependency.new("Reachability", :path => fixture('integration/Reachability'))
       podfile_path = fixture('integration/Podfile')
       @external_source = ExternalSources.from_dependency(dependency, podfile_path)
     end
 
     it "creates a copy of the podspec" do
       @external_source.fetch(config.sandbox)
+      path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+      path.should.exist?
+    end
+
+    it "creates a copy of the podspec [Deprecated local option]" do
+      dependency = Dependency.new("Reachability", :local => fixture('integration/Reachability'))
+      podfile_path = fixture('integration/Podfile')
+      external_source = ExternalSources.from_dependency(dependency, podfile_path)
+      external_source.fetch(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
@@ -231,33 +242,33 @@ module Pod
     describe "Helpers" do
 
       it "handles absolute paths" do
-        @external_source.stubs(:params).returns(:local => fixture('integration/Reachability'))
+        @external_source.stubs(:params).returns(:path => fixture('integration/Reachability'))
         path = @external_source.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
       it "handles paths when there is no podfile path" do
         @external_source.stubs(:podfile_path).returns(nil)
-        @external_source.stubs(:params).returns(:local => fixture('integration/Reachability'))
+        @external_source.stubs(:params).returns(:path => fixture('integration/Reachability'))
         path = @external_source.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
       it "handles relative paths" do
-        @external_source.stubs(:params).returns(:local => 'Reachability')
+        @external_source.stubs(:params).returns(:path => 'Reachability')
         path = @external_source.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
       it "expands the tilde" do
-        @external_source.stubs(:params).returns(:local => '~/Reachability')
+        @external_source.stubs(:params).returns(:path => '~/Reachability')
         Pathname.any_instance.stubs(:exist?).returns(true)
         path = @external_source.send(:podspec_path)
         path.should == Pathname(ENV['HOME']) + 'Reachability/Reachability.podspec'
       end
 
       it "raises if the podspec cannot be found" do
-        @external_source.stubs(:params).returns(:local => temporary_directory)
+        @external_source.stubs(:params).returns(:path => temporary_directory)
         e = lambda { @external_source.send(:podspec_path) }.should.raise Informative
         e.message.should.match /No podspec found/
       end

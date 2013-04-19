@@ -17,10 +17,13 @@ module Pod
                 elsif params.key?(:svn)       then SvnSource
                 elsif params.key?(:hg)        then MercurialSource
                 elsif params.key?(:podspec)   then PodspecSource
-                elsif params.key?(:local) || 
-                      params.key?(:path)      then LocalSource
+                elsif params.key?(:path)      then PathSource
+                end
+
+      if params.key?(:local)
+        klass = PathSource
+        UI.warn "The `:local` option of the Podfile has been renamed to `:path` and is deprecated." \
       end
-      UI.warn "Using :local in a Podfile is depricated. Please use :path instead." if params.key?(:local)
 
       if klass
         klass.new(name, params, podfile_path)
@@ -288,7 +291,7 @@ module Pod
 
       # @!group Helpers
 
-      # @return [String] The uri of the podspec appending the name of the file 
+      # @return [String] The uri of the podspec appending the name of the file
       #         and expanding it if necessary.
       #
       # @note   If the declared path is expanded only if the represents a path
@@ -314,7 +317,7 @@ module Pod
     #
     # Works with the {LocalPod::LocalSourcedPod} class.
     #
-    class LocalSource < AbstractExternalSource
+    class PathSource < AbstractExternalSource
 
       # @see  AbstractExternalSource#fetch
       #
@@ -329,7 +332,7 @@ module Pod
       # @see  AbstractExternalSource#description
       #
       def description
-        "from `#{params[:local]}`"
+        "from `#{params[:path] || params[:local]}`"
       end
 
       #--------------------------------------#
@@ -341,7 +344,7 @@ module Pod
       # @return [Pathname] the path of the podspec.
       #
       def podspec_path
-        declared_path = params[:local].to_s
+        declared_path = (params[:path] || params[:local]).to_s
         path_with_ext = File.extname(declared_path) == '.podspec' ? declared_path : "#{declared_path}/#{name}.podspec"
         podfile_dir   = File.dirname(podfile_path || '')
         absolute_path = File.expand_path(path_with_ext, podfile_dir)
