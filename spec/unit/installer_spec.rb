@@ -372,27 +372,6 @@ module Pod
         @installer.send(:run_pre_install_hooks)
       end
 
-      it "calls the hooks in the specs for each target" do
-          library_ios = Library.new(nil)
-          library_osx = Library.new(nil)
-          library_ios.platform = Platform.new(:ios, '6.0')
-          library_osx.platform = Platform.new(:osx, '10.8')
-          library_ios.specs = [@spec]
-          library_osx.specs = [@spec]
-          library_ios.stubs(:name).returns('label')
-          library_osx.stubs(:name).returns('label')
-
-          @installer.stubs(:libraries).returns([library_ios, library_osx])
-
-          @installer.stubs(:installer_rep).returns(stub())
-          @installer.stubs(:library_rep).returns(stub())
-
-          @spec.expects(:pre_install!).twice
-          @spec.expects(:post_install!).twice
-          @installer.send(:run_pre_install_hooks)
-          @installer.send(:run_post_install_hooks)
-      end
-
       it "run_post_install_hooks" do
         installer_rep = stub()
         target_installer_data = stub()
@@ -401,6 +380,29 @@ module Pod
         @installer.expects(:library_rep).with(@lib).returns(target_installer_data)
         @spec.expects(:post_install!)
         @installer.podfile.expects(:post_install!).with(installer_rep)
+        @installer.send(:run_post_install_hooks)
+      end
+
+      it "calls the hooks in the specs for each target" do
+        library_ios = Library.new(nil)
+        library_osx = Library.new(nil)
+        library_ios.specs = [@spec]
+        library_osx.specs = [@spec]
+        library_ios.stubs(:name).returns('label')
+        library_osx.stubs(:name).returns('label')
+        library_ios_rep = stub()
+        library_osx_rep = stub()
+
+        @installer.stubs(:libraries).returns([library_ios, library_osx])
+        @installer.stubs(:installer_rep).returns(stub())
+        @installer.stubs(:library_rep).with(library_ios).returns(library_ios_rep)
+        @installer.stubs(:library_rep).with(library_osx).returns(library_osx_rep)
+
+        @installer.podfile.expects(:pre_install!)
+        @spec.expects(:post_install!).with(library_ios_rep)
+        @spec.expects(:post_install!).with(library_osx_rep)
+
+        @installer.send(:run_pre_install_hooks)
         @installer.send(:run_post_install_hooks)
       end
 
