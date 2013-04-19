@@ -6,6 +6,7 @@ env:
 before_install: 
   - source ~/.rvm/scripts/rvm && rvm use $RVM_RUBY_VERSION
   - brew install mercurial
+  - brew link mercurial
 install: eval $RUBY_VERSION_SPECIFIC && rake bootstrap[use_bundle_dir]
 script: bundle exec rake spec:ci
 notifications:
