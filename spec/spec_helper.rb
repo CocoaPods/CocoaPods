@@ -1,9 +1,10 @@
 # Set up coverage analysis
 #-----------------------------------------------------------------------------#
 
+
 if ENV['CI'] || ENV['GENERATE_COVERAGE']
   require 'simplecov'
-  # require 'coveralls'
+  require 'coveralls'
 
   if ENV['CI']
     SimpleCov.formatter = Coveralls::SimpleCov::Formatter
@@ -14,6 +15,13 @@ if ENV['CI'] || ENV['GENERATE_COVERAGE']
     add_filter "/spec_helper/"
   end
 end
+
+# TODO: Coverall loads colorize which interferes with colored making certain
+# specs fail. This should be removed once Coverall is fixed.
+#
+# https://github.com/lemurheavy/coveralls-ruby/issues/14
+#
+require 'colored'
 
 # Set up
 #-----------------------------------------------------------------------------#

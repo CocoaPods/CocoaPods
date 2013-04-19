@@ -106,7 +106,7 @@ module Pod
     # @return [Bool] whether the validation should be performed against the root of
     #         the podspec instead to its original source.
     #
-    # @note   Uses the `:local` option of the Podfile.
+    # @note   Uses the `:path` option of the Podfile.
     #
     attr_writer :local
     def local?; @local; end
