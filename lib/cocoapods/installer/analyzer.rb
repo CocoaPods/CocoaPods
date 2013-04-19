@@ -174,6 +174,8 @@ module Pod
 
             lib = Library.new(lib_target, sandbox)
             lib.support_files_root = sandbox.library_support_files_dir(lib.name)
+            lib.platform = lib_target.platform
+            lib.specs = [spec]
 
             if config.integrate_targets?
               project_path = compute_user_project_path(target_definition)
@@ -184,13 +186,10 @@ module Pod
               lib.client_root = project_path.dirname
               lib.user_target_uuids = targets.map(&:uuid)
               lib.user_build_configurations = compute_user_build_configurations(lib_target, targets)
-              lib.platform = lib_target.platform
-              lib.specs = [spec]
             else
               lib.client_root = config.installation_root
               lib.user_target_uuids = []
               lib.user_build_configurations = {}
-              lib.platform = lib_target.platform
             end
             libraries << lib
           end
