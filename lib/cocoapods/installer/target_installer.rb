@@ -140,7 +140,7 @@ module Pod
       def create_xcconfig_file
         path = library.xcconfig_path
         UI.message "- Generating xcconfig file at #{UI.path(path)}" do
-          gen = Generator::XCConfig.new(library, sandbox, spec_consumers, library.relative_pods_root)
+          gen = Generator::XCConfig.new(library, spec_consumers, library.relative_pods_root)
           gen.set_arc_compatibility_flag = target_definition.podfile.set_arc_compatibility_flag?
           gen.save_as(path)
           library.xcconfig = gen.xcconfig
@@ -161,7 +161,7 @@ module Pod
       def create_target_environment_header
         path = library.target_environment_header_path
         UI.message "- Generating target environment header at #{UI.path(path)}" do
-          generator = Generator::TargetEnvironmentHeader.new(library.specs)
+          generator = Generator::TargetEnvironmentHeader.new([library.spec])
           generator.save_as(path)
           add_file_to_support_group(path)
         end

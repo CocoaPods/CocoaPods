@@ -9,14 +9,14 @@ module Pod
       #
       class TargetIntegrator
 
-        # @return [Library] the library that should be integrated.
+        # @return [Target] the target that should be integrated.
         #
-        attr_reader :library
+        attr_reader :target
 
-        # @param  [Library] library @see #target_definition
+        # @param  [Target] target @see #target_definition
         #
-        def initialize(library)
-          @library = library
+        def initialize(target)
+          @target = target
         end
 
         # Integrates the user project targets. Only the targets that do **not**
@@ -26,8 +26,8 @@ module Pod
         # @return [void]
         #
         def integrate!
-          return if targets.empty?
           UI.section(integration_message) do
+            create_xcconfig_file
             add_xcconfig_base_configuration
             add_pods_library
             add_copy_resources_script_phase
@@ -36,40 +36,17 @@ module Pod
           end
         end
 
-        # @return [Array<PBXNativeTarget>] the list of targets that the Pods
-        #         lib that need to be integrated.
+        # @return [Array<PBXNativeTarget>] the user targets for integration.
         #
-        # @note   A target is considered integrated if it already references
-        #
-        def targets
-          unless @targets
-            target_uuids = library.user_target_uuids
-            targets = target_uuids.map do |uuid|
-              target = user_project.objects_by_uuid[uuid]
-              unless target
-                raise Informative, "[Bug] Unable to find the target with " \
-                  "the `#{uuid}` UUID for the `#{library}` library"
-              end
-              target
-            end
-            non_integrated = targets.reject do |target|
-              target.frameworks_build_phase.files.any? do |build_file|
-                file_ref = build_file.file_ref
-                file_ref &&
-                  file_ref.isa == 'PBXFileReference' &&
-                  file_ref.display_name == library.product_name
-              end
-            end
-            @targets = non_integrated
-          end
-          @targets
+        def native_targets
+          @native_targets ||= target.user_target_uuids.map { |uuid| user_project.objects_by_uuid[uuid] }
         end
 
         # Read the project from the disk to ensure that it is up to date as
         # other TargetIntegrators might have modified it.
         #
         def user_project
-          @user_project ||= Xcodeproj::Project.new(library.user_project_path)
+          @user_project ||= Xcodeproj::Project.new(target.user_project_path)
         end
 
         # @return [String] a string representation suitable for debugging.
@@ -83,6 +60,29 @@ module Pod
         # @!group Integration steps
 
         private
+
+        # @return [Specification::Consumer] the consumer for the specifications.
+        #
+        def spec_consumers
+          @spec_consumers ||= target.libraries.map(&:file_accessors).flatten.map(&:spec_consumer)
+        end
+
+        # Generates the contents of the xcconfig file and saves it to disk.
+        #
+        # @note   The `ALWAYS_SEARCH_USER_PATHS` flag is enabled to support
+        #         libraries like `EmbedReader`.
+        #
+        # @return [void]
+        #
+        def create_xcconfig_file
+          path = target.xcconfig_path
+          UI.message "- Generating xcconfig file at #{UI.path(path)}" do
+            gen = Generator::XCConfig.new(target, spec_consumers, target.relative_pods_root)
+            gen.set_arc_compatibility_flag = target.target_definition.podfile.set_arc_compatibility_flag?
+            gen.save_as(path)
+            target.xcconfig = gen.xcconfig
+          end
+        end
 
         # Adds the `xcconfig` configurations files generated for the current
         # {TargetDefinition} to the build configurations of the targets that
@@ -98,10 +98,11 @@ module Pod
         # @return [void]
         #
         def add_xcconfig_base_configuration
-          xcconfig = user_project.new_file(library.xcconfig_relative_path)
-          targets.each do |target|
-            check_overridden_build_settings(library.xcconfig, target)
-            target.build_configurations.each do |config|
+          xcconfig = user_project.files.select { |f| f.path == target.xcconfig_relative_path }.first ||
+                     user_project.new_file(target.xcconfig_relative_path)
+          native_targets.each do |native_target|
+            check_overridden_build_settings(target.xcconfig, native_target)
+            native_target.build_configurations.each do |config|
               config.base_configuration_reference = xcconfig
             end
           end
@@ -114,9 +115,14 @@ module Pod
         #
         def add_pods_library
           frameworks = user_project.frameworks_group
-          pods_library = frameworks.new_static_library(library.label)
-          targets.each do |target|
-            target.frameworks_build_phase.add_file_reference(pods_library)
+          native_targets.each do |native_target|
+            target.libraries.each do |library|
+              lib = frameworks.files.select { |f| f.path == library.product_name }.first ||
+                    frameworks.new_static_library(library.name)
+              unless native_target.frameworks_build_phase.files_references.include?(lib)
+                native_target.frameworks_build_phase.add_file_reference(lib)
+              end
+            end
           end
         end
 
@@ -127,10 +133,14 @@ module Pod
         # @return [void]
         #
         def add_copy_resources_script_phase
-          targets.each do |target|
-            phase = target.new_shell_script_build_phase("Copy Pods Resources (#{library.name})")
-            path  = library.copy_resources_script_relative_path
-            phase.shell_script = %{"#{path}"\n}
+          native_targets.each do |native_target|
+            target.libraries.each do |library|
+              phase_name = "Copy Pods Resources (#{library.name})"
+              next if native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first
+              phase = native_target.new_shell_script_build_phase(phase_name)
+              path  = library.copy_resources_script_relative_path
+              phase.shell_script = %{"#{path}"\n}
+            end
           end
         end
 
@@ -145,10 +155,10 @@ module Pod
         #
         def add_check_manifest_lock_script_phase
           phase_name = 'Check Pods Manifest.lock'
-          targets.each do |target|
-            next if target.shell_script_build_phases.any? { |phase| phase.name == phase_name }
-            phase = target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
-            target.build_phases.unshift(phase)
+          native_targets.each do |native_target|
+            next if native_target.shell_script_build_phases.any? { |phase| phase.name == phase_name }
+            phase = native_target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
+            native_target.build_phases.unshift(phase)
             phase.name = phase_name
             phase.shell_script = <<-EOS.strip_heredoc
               diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
@@ -167,7 +177,7 @@ module Pod
         # @return [void]
         #
         def save_user_project
-          user_project.save_as(library.user_project_path)
+          user_project.save_as(target.user_project_path)
         end
 
         #---------------------------------------------------------------------#
@@ -181,11 +191,11 @@ module Pod
         #
         # @return [void]
         #
-        def check_overridden_build_settings(xcconfig, target)
+        def check_overridden_build_settings(xcconfig, native_target)
           return unless xcconfig
 
           configs_by_overridden_key = {}
-          target.build_configurations.each do |config|
+          native_target.build_configurations.each do |config|
             xcconfig.attributes.keys.each do |key|
               target_value = config.build_settings[key]
 
@@ -196,13 +206,13 @@ module Pod
             end
 
             configs_by_overridden_key.each do |key, config_names|
-              name    = "#{target.name} [#{config_names.join(' - ')}]"
+              name    = "#{native_target.name} [#{config_names.join(' - ')}]"
               actions = [
                 "Use the `$(inherited)` flag, or",
                 "Remove the build settings from the target."
               ]
               UI.warn("The target `#{name}` overrides the `#{key}` build " \
-                      "setting defined in `#{library.xcconfig_relative_path}'.",
+                      "setting defined in `#{target.xcconfig_relative_path}'.",
                       actions)
             end
           end
@@ -212,10 +222,10 @@ module Pod
         #         integration.
         #
         def integration_message
-          "Integrating `#{library.product_name}` into " \
-            "#{'target'.pluralize(targets.size)} "  \
-            "`#{targets.map(&:name).to_sentence}` " \
-            "of project #{UI.path library.user_project_path}."
+          "Integrating #{'library'.pluralize(target.libraries.size)} " \
+            "`#{target.libraries.map(&:name).to_sentence}` " \
+            "into target #{target.name} " \
+            "of project #{UI.path target.user_project_path}."
         end
 
         #---------------------------------------------------------------------#

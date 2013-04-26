@@ -1,28 +1,39 @@
 module Pod
 
-  # Model class which describes a Pods library.
+  # Model class which describes a Pods target.
   #
-  # The Library class stores and provides the information necessary for
-  # working with a library in the Pods project and in the user projects
-  # through the installation process.
+  # The Target class stores and provides the information necessary for
+  # working with a target in the Podfile and it's dependent libraries.
+  # This class is used to represent both the targets and their libraries.
   #
-  class Library
+  class Target
 
     # @return [PBXNativeTarget] the target definition of the Podfile that
-    #         generated this library.
+    #         generated this target.
     #
     attr_reader :target_definition
 
-    # @return [HeadersStore] the header directory for the Pods libraries.
+    # @return [Sandbox] The sandbox where the Pods should be installed.
+    #
+    attr_reader :sandbox
+
+    # @return [HeadersStore] the header directory for the library.
     #
     attr_reader :build_headers
 
-    # @param  [TargetDefinition] target_definition @see target_definition
-    # @param  [PBXNativeTarget]  target @see target
+    # @return [HeadersStore] the public header directory for the library.
+    #
+    attr_reader :public_headers
+
+    # @param [TargetDefinition] target_definition @see target_definition
+    # @param [Sandbox] sandbox @see sandbox
     #
     def initialize(target_definition, sandbox)
       @target_definition = target_definition
-      @build_headers  = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
+      @sandbox = sandbox
+      @build_headers  = Sandbox::HeadersStore.new(sandbox, "BuildHeaders/#{target_definition.name}")
+      @public_headers = Sandbox::HeadersStore.new(sandbox, "Headers/#{target_definition.name}")
+      @libraries = []
     end
 
     # @return [String] the label for the library.
@@ -34,13 +45,13 @@ module Pod
     # @return [String] the name of the library.
     #
     def name
-      target_definition.label.to_s
+      label
     end
 
     # @return [String] the name of the library.
     #
     def product_name
-      "lib#{target_definition.label}.a"
+      "lib#{label}.a"
     end
 
     # @return [String] A string suitable for debugging.
@@ -104,14 +115,18 @@ module Pod
     #
     attr_accessor :xcconfig
 
-    # @return [Array<Specification>] the specifications of this library.
+    # @return [Specification] the specification for this library.
     #
-    attr_accessor :specs
+    attr_accessor :spec
 
     # @return [Array<Sandbox::FileAccessor>] the file accessors for the
     #         specifications of this library.
     #
     attr_accessor :file_accessors
+
+    # @return [Array<Target>] the dependencies for this target (or library).
+    #
+    attr_accessor :libraries
 
     #-------------------------------------------------------------------------#
 

@@ -6,7 +6,7 @@ module Pod
     #
     class XCConfig
 
-      # @return [Library] the library represented by this xcconfig.
+      # @return [Target] the library or target represented by this xcconfig.
       #
       attr_reader :library
 
@@ -24,13 +24,13 @@ module Pod
       #
       attr_reader :relative_pods_root
 
-      # @param  [Sandbox] sandbox @see sandbox
-      # @param  [Array<LocalPod>] pods @see pods
+      # @param  [Target] library @see library
+      # @param  [Array<Specification::Consumer>] spec_consumers @see spec_consumers
       # @param  [String] relative_pods_root @see relative_pods_root
       #
-      def initialize(library, sandbox, spec_consumers, relative_pods_root)
+      def initialize(library, spec_consumers, relative_pods_root)
         @library = library
-        @sandbox = sandbox
+        @sandbox = library.sandbox
         @spec_consumers = spec_consumers
         @relative_pods_root = relative_pods_root
       end
@@ -55,6 +55,9 @@ module Pod
           ld_flags << ' -fobjc-arc'
         end
 
+        public_headers = [library.public_headers.search_paths,
+                          library.libraries.map { |lib| lib.public_headers.search_paths }].flatten
+
         @xcconfig = Xcodeproj::Config.new({
           'ALWAYS_SEARCH_USER_PATHS'         => 'YES',
           'OTHER_LDFLAGS'                    => ld_flags,
@@ -62,7 +65,7 @@ module Pod
           'PODS_ROOT'                        => relative_pods_root,
           'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
           'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(library.build_headers.search_paths),
-          'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
+          'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(public_headers),
           'GCC_PREPROCESSOR_DEFINITIONS'     => 'COCOAPODS=1'
         })
 
