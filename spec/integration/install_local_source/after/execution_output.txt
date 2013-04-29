@@ -41,3 +41,5 @@ Integrating client project
 [!] From now on use `SampleApp.xcworkspace`.
 
 Integrating `libPods.a` into target `iOS App` of project `SampleApp.xcodeproj`.
+
+[!] The `:local` option of the Podfile has been renamed to `:path` and is deprecated.
