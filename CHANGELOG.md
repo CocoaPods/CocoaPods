@@ -4,20 +4,20 @@
 
 ###### Enhancements
 
-* Added `pod podfile-info` command. Shows list of used Pods and their info
-  in a project or supplied Podfile.
-  Options: `--all` - with dependancies. `--md` - in Markdown.
-  [#855](https://github.com/CocoaPods/CocoaPods/issues/855)
-* CocoaPods now defines the `COCOAPODS=1` macro in the Pod and the Client
-  targets. This is useful for libraries which conditionally expose interfaces.
-  [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
 * Compile time introspection. Macro definitions which allow to inspect the
   installed Pods and their version have been introduced in the build
   environment of the Pod libraries
   ([example](https://gist.github.com/irrationalfab/5348551)).
+* CocoaPods now defines the `COCOAPODS=1` macro in the Pod and the Client
+  targets. This is useful for libraries which conditionally expose interfaces.
+  [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
 * CocoaPods now defines the deployment target of the Pods project computed as
   the minimum deployment target of the Pods libraries.
   [#556](https://github.com/CocoaPods/CocoaPods/issues/556)
+* Added `pod podfile-info` command. Shows list of used Pods and their info
+  in a project or supplied Podfile.
+  Options: `--all` - with dependancies. `--md` - in Markdown.
+  [#855](https://github.com/CocoaPods/CocoaPods/issues/855)
 * Added `pod help` command. You can still use the old format
   with --help flag.
   [#957](https://github.com/CocoaPods/CocoaPods/pull/957)
@@ -28,14 +28,15 @@
 
 ###### Deprecations
 
-* `:local` flag in Podfile is deprecated. Please use `:path` when
-  specifying a pod source.
+* The `:local` flag in Podfile has been renamed to `:path` and has been 
+  deprecated.
   [#971](https://github.com/CocoaPods/CocoaPods/issues/971)
+
 ###### Bug fixes
 
-* Fix issue related to `pod outdated` and external sources.
+* Fixed issue related to `pod outdated` and external sources.
   [#954](https://github.com/CocoaPods/CocoaPods/issues/954)
-* Fix issue with .svn folders in copy resources script.
+* Fixed issue with .svn folders in copy resources script.
   [#972](https://github.com/CocoaPods/CocoaPods/issues/972)
 
 ## 0.18.1
