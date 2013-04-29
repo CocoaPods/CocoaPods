@@ -44,7 +44,7 @@ module Pod
   autoload :ExternalSources,           'cocoapods/external_sources'
   autoload :Installer,                 'cocoapods/installer'
   autoload :SourcesManager,            'cocoapods/sources_manager'
-  autoload :Library,                   'cocoapods/library'
+  autoload :Target,                    'cocoapods/target'
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'
   autoload :Sandbox,                   'cocoapods/sandbox'

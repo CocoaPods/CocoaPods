@@ -6,6 +6,10 @@ module Pod
     #
     class XCConfig
 
+      # @return [Target] the library or target represented by this xcconfig.
+      #
+      attr_reader :library
+
       # @return [Sandbox] the sandbox where the Pods project is installed.
       #
       attr_reader :sandbox
@@ -20,12 +24,13 @@ module Pod
       #
       attr_reader :relative_pods_root
 
-      # @param  [Sandbox] sandbox @see sandbox
-      # @param  [Array<LocalPod>] pods @see pods
+      # @param  [Target] library @see library
+      # @param  [Array<Specification::Consumer>] spec_consumers @see spec_consumers
       # @param  [String] relative_pods_root @see relative_pods_root
       #
-      def initialize(sandbox, spec_consumers, relative_pods_root)
-        @sandbox = sandbox
+      def initialize(library, spec_consumers, relative_pods_root)
+        @library = library
+        @sandbox = library.sandbox
         @spec_consumers = spec_consumers
         @relative_pods_root = relative_pods_root
       end
@@ -50,14 +55,17 @@ module Pod
           ld_flags << ' -fobjc-arc'
         end
 
+        public_headers = [library.public_headers.search_paths,
+                          library.libraries.map { |lib| lib.public_headers.search_paths }].flatten
+
         @xcconfig = Xcodeproj::Config.new({
           'ALWAYS_SEARCH_USER_PATHS'         => 'YES',
           'OTHER_LDFLAGS'                    => ld_flags,
           'HEADER_SEARCH_PATHS'              => '${PODS_HEADERS_SEARCH_PATHS}',
           'PODS_ROOT'                        => relative_pods_root,
           'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
-          'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(sandbox.build_headers.search_paths),
-          'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
+          'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(library.build_headers.search_paths),
+          'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(public_headers),
           'GCC_PREPROCESSOR_DEFINITIONS'     => 'COCOAPODS=1'
         })
 
@@ -77,7 +85,8 @@ module Pod
       #
       def self.pods_project_settings
         { 'PODS_ROOT' => '${SRCROOT}',
-          'PODS_HEADERS_SEARCH_PATHS' => '${PODS_BUILD_HEADERS_SEARCH_PATHS}' }
+          'PODS_HEADERS_SEARCH_PATHS' => '${PODS_BUILD_HEADERS_SEARCH_PATHS} ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
+          'USE_HEADERMAP' => 'NO' }
       end
 
       # Generates and saves the xcconfig to the given path.
