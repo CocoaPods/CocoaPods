@@ -73,6 +73,14 @@ module Pod
         ]
       end
 
+      it "filters the private headers form the public headers" do
+        @spec_consumer.stubs(:public_header_files).returns([])
+        @spec_consumer.stubs(:private_header_files).returns(['**/*Private*'])
+        @accessor.public_headers.sort.should == [
+          @root + "Classes/Banana.h",
+        ]
+      end
+
       it "returns the resources" do
         @accessor.resources.sort.should == [
           @root + "Resources/logo-sidebar.png",
