@@ -44,8 +44,13 @@ module Pod
       end
 
       it "can detect yaml Podfiles" do
-        (temporary_directory + 'Podfile.yaml').open('w') { |f| f << '# Yo' }
-        config.podfile_path.should == temporary_directory + 'Podfile.yaml'
+        (temporary_directory + 'CocoaPods.podfile.yaml').open('w') { |f| f << '# Yo' }
+        config.podfile_path.should == temporary_directory + 'CocoaPods.podfile.yaml'
+      end
+
+      it "can detect files named `CocoaPods.podfile`" do
+        (temporary_directory + 'CocoaPods.podfile').open('w') { |f| f << '# Yo' }
+        config.podfile_path.should == temporary_directory + 'CocoaPods.podfile'
       end
 
       it "returns the path to the Pods directory that holds the dependencies" do

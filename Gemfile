@@ -11,7 +11,7 @@ group :development do
     gem 'xcodeproj',            :path => '../Xcodeproj'
     gem 'cocoapods-downloader', :path => '../cocoapods-downloader'
   else
-    gem 'cocoapods-core',       :git => "https://github.com/CocoaPods/Core.git"
+    gem 'cocoapods-core',       :git => "https://github.com/CocoaPods/Core.git", :branch => 'master'
     gem 'xcodeproj',            :git => "https://github.com/CocoaPods/Xcodeproj.git"
     gem 'cocoapods-downloader', :git => "https://github.com/CocoaPods/cocoapods-downloader.git"
   end

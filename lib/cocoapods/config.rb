@@ -188,7 +188,8 @@ module Pod
     #
     def podfile_path
       unless @podfile_path
-        path = installation_root + 'Podfile.yaml'
+        path = installation_root + 'CocoaPods.podfile.yaml'
+        path = installation_root + 'CocoaPods.podfile' unless path.exist?
         path = installation_root + 'Podfile' unless path.exist?
         @podfile_path = path
       end

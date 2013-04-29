@@ -19,11 +19,15 @@
 * Added `pod help` command. You can still use the old format
   with --help flag.
   [#957](https://github.com/CocoaPods/CocoaPods/pull/957)
+* Restored support for Podfiles named `CocoaPods.podfile`. Moreover, the
+  experimental YAML format of the Podfile now is associated with files named
+  `CocoaPods.podfile.yaml`.
+  [#1004](https://github.com/CocoaPods/CocoaPods/pull/1004)
 
-###### Deprications
+###### Deprecations
 
 * `:local` flag in Podfile is deprecated. Please use `:path` when
-  specitying a pod source.
+  specifying a pod source.
   [#971](https://github.com/CocoaPods/CocoaPods/issues/971)
 ###### Bug fixes
 
