@@ -76,7 +76,7 @@ module Pod
     end
 
     it 'adds the COCOAPODS macro definition' do
-      @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == 'COCOAPODS=1'
+      @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1'
     end
 
     it "includes the xcconfig of the specifications" do
