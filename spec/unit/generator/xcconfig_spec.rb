@@ -6,7 +6,6 @@ module Pod
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       @consumer = @spec.consumer(:ios)
       @generator = Generator::XCConfig.new(config.sandbox, [@consumer], './Pods')
-
     end
 
     it "returns the sandbox" do
@@ -38,20 +37,24 @@ module Pod
     it "sets to always search the user paths" do
       @xcconfig.to_hash['ALWAYS_SEARCH_USER_PATHS'].should == 'YES'
     end
+    
+    it "redirects the OTHER_LDFLAGS to the pod variable PODS_LDFLAGS" do
+      @xcconfig.to_hash['OTHER_LDFLAGS'].should == '${PODS_LDFLAGS}'
+    end
 
     it "configures the project to load all members that implement Objective-c classes or categories from the static library" do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-ObjC'
+      @xcconfig.to_hash['PODS_LDFLAGS'].should.include '-ObjC'
     end
 
-    it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include("-fobjc-arc")
+    it 'does not add the -fobjc-arc to PODS_LDFLAGS by default as Xcode 4.3.2 does not support it' do
+      @xcconfig.to_hash['PODS_LDFLAGS'].should.not.include("-fobjc-arc")
     end
 
-    it 'adds the -fobjc-arc to OTHER_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
+    it 'adds the -fobjc-arc to PODS_LDFLAGS if any pods require arc (to support non-ARC projects on iOS 4.0)' do
       @generator.set_arc_compatibility_flag = true
       @consumer.stubs(:requires_arc).returns(true)
-      @xcconfig = @generator.generate
-      @xcconfig.to_hash['OTHER_LDFLAGS'].split(" ").should.include("-fobjc-arc")
+      xcconfig = @generator.generate
+      xcconfig.to_hash['PODS_LDFLAGS'].split(" ").should.include("-fobjc-arc")
     end
 
     it "sets the PODS_ROOT build variable" do
@@ -80,19 +83,19 @@ module Pod
     end
 
     it "includes the xcconfig of the specifications" do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
+      @xcconfig.to_hash['PODS_LDFLAGS'].should.include('-no_compact_unwind')
     end
 
     it "includes the libraries for the specifications" do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-lxml2')
+      @xcconfig.to_hash['PODS_LDFLAGS'].should.include('-lxml2')
     end
 
     it "includes the frameworks of the specifications" do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework QuartzCore')
+      @xcconfig.to_hash['PODS_LDFLAGS'].should.include('-framework QuartzCore')
     end
 
     it "includes the weak-frameworks of the specifications" do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-weak_framework iAd')
+      @xcconfig.to_hash['PODS_LDFLAGS'].should.include('-weak_framework iAd')
     end
 
     it "includes the developer frameworks search paths when SenTestingKit is detected" do
