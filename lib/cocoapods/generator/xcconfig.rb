@@ -66,7 +66,7 @@ module Pod
           'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
           'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(library.build_headers.search_paths),
           'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(public_headers),
-          'GCC_PREPROCESSOR_DEFINITIONS'     => 'COCOAPODS=1'
+          'GCC_PREPROCESSOR_DEFINITIONS'     => '$(inherited) COCOAPODS=1'
         })
 
         spec_consumers.each do |consumer|
