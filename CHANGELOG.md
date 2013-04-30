@@ -2,6 +2,20 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+## 0.19.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.19.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.0...0.19.1)
+
+###### Bug fixes
+
+* Project-level preprocessor macros are not overwritten anymore.
+  [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
+* A Unique hash instances for the build settings of the Pods target is now
+  created resolving interferences in the hooks.
+  [#1014](https://github.com/CocoaPods/CocoaPods/issues/1014)
+
 ## 0.19.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.18.1...0.19.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.18.1...0.19.0)
@@ -20,7 +34,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#556](https://github.com/CocoaPods/CocoaPods/issues/556)
 * Added `pod podfile-info` command. Shows list of used Pods and their info
   in a project or supplied Podfile.
-  Options: `--all` - with dependancies. `--md` - in Markdown.
+  Options: `--all` - with dependencies. `--md` - in Markdown.
   [#855](https://github.com/CocoaPods/CocoaPods/issues/855)
 * Added `pod help` command. You can still use the old format
   with --help flag.
