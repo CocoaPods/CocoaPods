@@ -80,7 +80,7 @@ module Pod
           unless @target.build_configurations.map(&:name).include?(bc_name)
             build_config = project.new(Xcodeproj::Project::XCBuildConfiguration)
             build_config.name = bc_name
-            settings = @target.build_settings(type.to_s.capitalize)
+            settings = @target.build_settings(type.to_s.capitalize).dup
             build_config.build_settings = settings
             target.build_configurations << build_config
           end

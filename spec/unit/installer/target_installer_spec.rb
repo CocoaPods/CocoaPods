@@ -105,7 +105,7 @@ module Pod
       it "adds the settings of the xcconfig that need to be overridden to the target" do
         @installer.install!
         build_configuration = @project.targets.first.build_configurations
-        build_settings      = build_configuration.first.build_settings
+        build_settings = build_configuration.first.build_settings
         Generator::XCConfig.pods_project_settings.each do |key, value|
           build_settings[key].should == value
         end
@@ -114,6 +114,12 @@ module Pod
       it "adds the user's build configurations to the target" do
         @installer.install!
         @project.targets.first.build_configurations.map(&:name).sort.should == %w{ AppStore Debug Release Test }
+      end
+
+      it "it creates different hash instances for the build settings of various build configurations" do
+        @installer.install!
+        build_settings = @project.targets.first.build_configurations.map(&:build_settings)
+        build_settings.map(&:object_id).uniq.count.should == 4
       end
 
       it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
