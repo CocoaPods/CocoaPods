@@ -1,142 +1,111 @@
 require 'colored'
+require 'claide'
 
 module Pod
-  class Command
-    autoload :ErrorReport, 'cocoapods/command/error_report'
-    autoload :Install,     'cocoapods/command/install'
-    autoload :List,        'cocoapods/command/list'
-    autoload :Linter,      'cocoapods/command/linter'
-    autoload :Outdated,    'cocoapods/command/outdated'
-    autoload :Push,        'cocoapods/command/push'
-    autoload :Repo,        'cocoapods/command/repo'
-    autoload :Search,      'cocoapods/command/search'
-    autoload :Setup,       'cocoapods/command/setup'
-    autoload :Spec,        'cocoapods/command/spec'
-    autoload :Update,      'cocoapods/command/update'
+  class PlainInformative
+    include CLAide::InformativeError
+  end
 
-    class Help < Informative
-      def initialize(command_class, argv, unrecognized_command = nil)
-        @command_class, @argv, @unrecognized_command = command_class, argv, unrecognized_command
-      end
+  class Command < CLAide::Command
 
-      def message
-        message = [
-          '',
-          @command_class.banner.gsub(/\$ pod (.*)/, '$ pod \1'.green),
-          '',
-          'Options:',
-          '',
-          options,
-          "\n",
-        ].join("\n")
-        message << "[!] Unrecognized command: `#{@unrecognized_command}'\n".red if @unrecognized_command
-        message << "[!] Unrecognized argument#{@argv.count > 1 ? 's' : ''}: `#{@argv.join(' - ')}'\n".red unless @argv.empty?
-        message
-      end
+    require 'cocoapods/command/list'
+    require 'cocoapods/command/outdated'
+    require 'cocoapods/command/project'
+    require 'cocoapods/command/push'
+    require 'cocoapods/command/repo'
+    require 'cocoapods/command/search'
+    require 'cocoapods/command/setup'
+    require 'cocoapods/command/spec'
+    require 'cocoapods/command/help'
+    require 'cocoapods/command/inter_process_communication'
+    require 'cocoapods/command/podfile_info'
 
-      private
-
-      def options
-        options  = @command_class.options
-        keys     = options.map(&:first)
-        key_size = keys.inject(0) { |size, key| key.size > size ? key.size : size }
-        options.map { |key, desc| "    #{key.ljust(key_size)}   #{desc}" }.join("\n")
-      end
-    end
-
-    class ARGV < Array
-      def options;        select { |x| x.to_s[0,1] == '-' };   end
-      def arguments;      self - options;                      end
-      def option(name);   !!delete(name);                      end
-      def shift_argument; (arg = arguments[0]) && delete(arg); end
-    end
-
-    def self.banner
-      commands = ['install', 'update', 'outdated', 'list', 'push', 'repo', 'search', 'setup', 'spec'].sort
-      banner   = "To see help for the available commands run:\n\n"
-      banner + commands.map { |cmd| "  * $ pod #{cmd.green} --help" }.join("\n")
-    end
+    self.abstract_command = true
+    self.command = 'pod'
+    self.description = 'CocoaPods, the Objective-C library package manager.'
 
     def self.options
       [
-        ['--help',     'Show help information'],
-        ['--silent',   'Print nothing'],
-        ['--no-color', 'Print output without color'],
-        ['--verbose',  'Print more information while working'],
-        ['--version',  'Prints the version of CocoaPods'],
-      ]
+        ['--silent',   'Show nothing'],
+        ['--version',  'Show the version of CocoaPods'],
+      ].concat(super)
     end
 
-    def self.run(*argv)
-      sub_command = parse(*argv)
-      unless sub_command.is_a?(Setup) || ENV['SKIP_SETUP']
-        Setup.new(ARGV.new).run_if_needed
+    def self.parse(argv)
+      command = super
+      unless SourcesManager.master_repo_functional? || command.is_a?(Setup) || command.is_a?(Repo::Add) || ENV['SKIP_SETUP']
+        Setup.new(CLAide::ARGV.new([])).run
       end
-      sub_command.run
-      UI.puts
-
-    rescue Interrupt
-      puts "[!] Cancelled".red
-      Config.instance.verbose? ? raise : exit(1)
-
-    rescue Exception => e
-      if e.is_a?(PlainInformative) || ENV['COCOA_PODS_ENV'] == 'development' # also catches Informative
-        puts e.message
-        puts *e.backtrace if Config.instance.verbose? || ENV['COCOA_PODS_ENV'] == 'development'
-      else
-        puts ErrorReport.report(e)
-      end
-      exit 1
+      command
     end
 
-    def self.parse(*argv)
-      argv = ARGV.new(argv)
-      if argv.option('--version')
+    def self.run(argv)
+      argv = CLAide::ARGV.new(argv)
+      if argv.flag?('version')
         puts VERSION
         exit!(0)
       end
+      super(argv)
+      UI.print_warnings
+    end
 
-      show_help = argv.option('--help')
-      Config.instance.silent = argv.option('--silent')
-      Config.instance.verbose = argv.option('--verbose')
-
-      String.send(:define_method, :colorize) { |string , _| string } if argv.option( '--no-color' )
-
-      command_class = case command_argument = argv.shift_argument
-      when 'install'  then Install
-      when 'list'     then List
-      when 'outdated' then Outdated
-      when 'push'     then Push
-      when 'repo'     then Repo
-      when 'search'   then Search
-      when 'setup'    then Setup
-      when 'spec'     then Spec
-      when 'update'   then Update
-      end
-
-      if command_class.nil?
-        raise Help.new(self, argv, command_argument)
-      elsif show_help
-        raise Help.new(command_class, argv)
+    def self.report_error(exception)
+      if exception.is_a?(Interrupt)
+        puts "[!] Cancelled".red
+        Config.instance.verbose? ? raise : exit(1)
       else
-        command_class.new(argv)
+        if ENV['COCOA_PODS_ENV'] != 'development'
+          puts UI::ErrorReport.report(exception)
+          exit 1
+        else
+          raise exception
+        end
       end
     end
+
+    # @todo If a command is run inside another one some settings which where
+    #       true might return false.
+    #
+    # @todo We should probably not even load colored unless needed.
+    #
+    # @todo Move silent flag to CLAide.
+    #
+    # @note It is important that the commands don't override the default
+    #       settings if their flag is missing (i.e. their value is nil)
+    #
+    def initialize(argv)
+      super
+      config.silent = argv.flag?('silent', config.silent)
+      config.verbose = self.verbose? unless self.verbose.nil?
+      unless self.colorize_output?
+        String.send(:define_method, :colorize) { |string , _| string }
+      end
+    end
+
+    #-------------------------------------------------------------------------#
 
     include Config::Mixin
 
-    def initialize(argv)
-      raise Help.new(self.class, argv)
-    end
-
     private
 
+    # Checks that the podfile exists.
+    #
+    # @raise  If the podfile does not exists.
+    #
+    # @return [void]
+    #
     def verify_podfile_exists!
       unless config.podfile
         raise Informative, "No `Podfile' found in the current working directory."
       end
     end
 
+    # Checks that the lockfile exists.
+    #
+    # @raise  If the lockfile does not exists.
+    #
+    # @return [void]
+    #
     def verify_lockfile_exists!
       unless config.lockfile
         raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."

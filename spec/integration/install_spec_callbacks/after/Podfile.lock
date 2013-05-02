@@ -1,0 +1,14 @@
+PODS:
+  - Reachability (3.1.0)
+
+DEPENDENCIES:
+  - Reachability (from `Reachability.podspec`)
+
+EXTERNAL SOURCES:
+  Reachability:
+    :podspec: Reachability.podspec
+
+SPEC CHECKSUMS:
+  Reachability: c1e48cc25f8e7cba878c83ad1981d334ef325522
+
+COCOAPODS: 0.19.1

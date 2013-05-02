@@ -4,10 +4,11 @@ module Pod
     class Plist < Acknowledgements
       require "xcodeproj/xcodeproj_ext"
 
+      def self.path_from_basepath(path)
+        Pathname.new(path.dirname + "#{path.basename.to_s}.plist")
+      end
+
       def save_as(path)
-        if (path.extname != ".plist")
-          path = Pathname.new(path.dirname + "#{path.basename.to_s}.plist")
-        end
         Xcodeproj.write_plist(plist, path)
       end
 
@@ -25,19 +26,19 @@ module Pod
 
       def licenses
         licences_array = [header_hash]
-        @pods.each do |pod|
-          if (hash = hash_for_pod(pod))
+        specs.each do |spec|
+          if (hash = hash_for_spec(spec))
             licences_array << hash
           end
         end
         licences_array << footnote_hash
       end
 
-      def hash_for_pod(pod)
-        if (license = pod.license_text)
+      def hash_for_spec(spec)
+        if (license = license_text(spec))
           {
             :Type => "PSGroupSpecifier",
-            :Title => pod.name,
+            :Title => spec.name,
             :FooterText => license
           }
         end

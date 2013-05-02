@@ -4,7 +4,6 @@ module Pod
   describe Command::Repo do
     describe "In general" do
       extend SpecHelper::Command
-      extend SpecHelper::TemporaryDirectory
       extend SpecHelper::TemporaryRepos
 
       before do
@@ -25,12 +24,8 @@ module Pod
       end
 
       it "lints a repository" do
-        lambda { run_command('repo', 'lint',  temporary_directory.to_s) }.should.not.raise
-      end
-
-      it "complains for wrong parameters" do
-        lambda { run_command('repo', 'add') }.should.raise Informative
-        lambda { run_command('repo', 'add', 'NAME') }.should.raise Informative
+        repo = fixture('spec-repos/test_repo').to_s
+        lambda { run_command('repo', 'lint', repo) }.should.not.raise
       end
 
       it "adds a spec-repo" do
@@ -58,57 +53,6 @@ module Pod
         Dir.chdir(repo1) {`git commit -a -m "Update"`}
         run_command('repo', 'update', 'repo2')
         (repo2 + 'README').read.should.include 'Updated'
-      end
-    end
-
-    describe "CocoaPods version" do
-      extend SpecHelper::Command
-      extend SpecHelper::TemporaryDirectory
-      extend SpecHelper::TemporaryRepos
-
-      require 'yaml'
-
-      before do
-        config.repos_dir = SpecHelper.tmp_repos_path
-        @repo = repo_make('repo1')
-      end
-
-      def write_version_file(hash)
-        yaml = YAML.dump(hash)
-        @versions_file = tmp_repos_path + "repo1/CocoaPods-version.yml"
-        File.open(@versions_file, 'w') {|f| f.write(yaml) }
-      end
-
-      it "it doesn't requires CocoaPods-version.yml" do
-        cmd = command('repo', 'update')
-        lambda { cmd.check_versions(@repo) }.should.not.raise
-      end
-
-      it "runs with a compatible repo" do
-        write_version_file({'min' => "0.0.1"})
-        cmd = command('repo', 'update')
-        lambda { cmd.check_versions(@repo) }.should.not.raise
-      end
-
-      it "raises if a repo is not compatible" do
-        write_version_file({'min' => "999.0.0"})
-        cmd = command('repo', 'update')
-        lambda { cmd.check_versions(@repo) }.should.raise Informative
-      end
-
-      it "informs about a higher known CocoaPods version" do
-        write_version_file({'last' => "999.0.0"})
-        cmd = command('repo', 'update')
-        cmd.check_versions(@repo)
-        UI.output.should.include "Cocoapods 999.0.0 is available"
-      end
-
-      it "has a class method that returns if a repo is supported" do
-        write_version_file({'min' => "999.0.0"})
-        Command::Repo.compatible?('repo1').should == false
-
-        write_version_file({'min' => "0.0.1"})
-        Command::Repo.compatible?('repo1').should == true
       end
     end
   end

@@ -1,109 +1,131 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
-describe 'Pod::Project' do
-  before do
-    @project = Pod::Project.new
-  end
+module Pod
+  describe Project do
 
-  it "adds a group to the `Pods' group" do
-    group = @project.add_spec_group('JSONKit', @project.pods)
-    @project.pods.children.should.include?(group)
-    g = @project['Pods/JSONKit']
-    g.name.should == 'JSONKit'
-    g.children.should.be.empty?
-  end
-
-  it "namespaces subspecs in groups" do
-    group = @project.add_spec_group('JSONKit/Subspec', @project.pods)
-    @project.pods.groups.find { |g| g.name == 'JSONKit' }.children.should.include?(group)
-    g = @project['Pods/JSONKit/Subspec']
-    g.name.should == 'Subspec'
-    g.children.should.be.empty?
-  end
-
-  # it "creates a copy build header phase which will copy headers to a specified path" do
-  #   @project.targets.new
-  #   phase = @project.targets.first.copy_files_build_phases.new_pod_dir("SomePod", "Path/To/Source")
-  #   find_object({
-  #     'isa' => 'PBXCopyFilesBuildPhase',
-  #     'dstPath' => 'Pods/Path/To/Source',
-  #     'name' => 'Copy SomePod Public Headers'
-  #   }).should.not == nil
-  #   @project.targets.first.build_phases.should.include phase
-  # end
-
-  it "adds build configurations named after every configuration across all of the user's projects" do
-    @project.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'Test' => :debug, 'AppStore' => :release }
-    @project.build_configurations.map(&:name).sort.should == %w{ AppStore Debug Release Test }
-  end
-
-  it "adds build configurations named after every configuration across all of the user's projects to a target" do
-    @project.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'Test' => :debug, 'AppStore' => :release }
-    target = @project.add_pod_target('SomeTarget', Pod::Platform.ios)
-    target.build_settings('Test')["VALIDATE_PRODUCT"].should == nil
-    target.build_settings('AppStore')["VALIDATE_PRODUCT"].should == "YES"
-  end
-
-  describe "concerning its :ios targets" do
-    it "sets VALIDATE_PRODUCT to YES for the Release configuration" do
-      target = Pod::Project.new.add_pod_target('Pods', Pod::Platform.ios)
-      target.build_settings('Release')["VALIDATE_PRODUCT"].should == "YES"
-    end
-  end
-
-  describe "concerning its :ios targets with a deployment target" do
     before do
-      @project = Pod::Project.new
+      @project = Project.new(config.sandbox.project_path)
     end
 
-    it "sets ARCHS to 'armv6 armv7' for both configurations if the deployment target is less than 4.3" do
-      target = @project.add_pod_target('Pods', Pod::Platform.new(:ios, :deployment_target => "4.0"))
-      target.build_settings('Debug')["ARCHS"].should == "armv6 armv7"
-      target.build_settings('Release')["ARCHS"].should == "armv6 armv7"
+    #-------------------------------------------------------------------------#
 
-      target = @project.add_pod_target('Pods', Pod::Platform.new(:ios, :deployment_target => "4.1"))
-      target.build_settings('Debug')["ARCHS"].should == "armv6 armv7"
-      target.build_settings('Release')["ARCHS"].should == "armv6 armv7"
+    describe "In general" do
 
-      target = @project.add_pod_target('Pods', Pod::Platform.new(:ios, :deployment_target => "4.2"))
-      target.build_settings('Debug')["ARCHS"].should == "armv6 armv7"
-      target.build_settings('Release')["ARCHS"].should == "armv6 armv7"
+      it "creates the support file group on initialization" do
+        @project.support_files_group.name.should == 'Targets Support Files'
+      end
+
+      it "can return the relative path of a given absolute path" do
+        path = temporary_directory + 'Pods/BananaLib/file'
+        @project.relativize(path).should == Pathname.new('BananaLib/file')
+      end
+
+      it "can return the relative path of a given absolute path outside its root" do
+        path = temporary_directory + 'file'
+        @project.relativize(path).should == Pathname.new('../file')
+      end
+
+      it "can return the relative path of a given absolute path with another root directory" do
+        path = Pathname('/tmp/Lint')
+        expected = Pathname.new('../../../tmp/Lint')
+        @project.instance_variable_set(:@root, Pathname.new('/Users/sandbox'))
+        @project.relativize(path).should == expected
+      end
+
     end
 
-    it "uses standard ARCHs if deployment target is 4.3 or above" do
-      target = @project.add_pod_target('Pods', Pod::Platform.new(:ios, :deployment_target => "4.3"))
-      target.build_settings('Debug')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-      target.build_settings('Release')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+    #-------------------------------------------------------------------------#
 
-      target = @project.add_pod_target('Pods', Pod::Platform.new(:ios, :deployment_target => "4.4"))
-      target.build_settings('Debug')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-      target.build_settings('Release')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
+    describe "Groups" do
+
+      it "returns the `Pods` group" do
+        @project.pods.name.should == 'Pods'
+      end
+
+      it "returns the `Local Pods` group" do
+        @project.local_pods.name.should == 'Local Pods'
+      end
+
+      it "returns the `Resources` group" do
+        @project.resources.name.should == 'Resources'
+      end
+
+      it "adds a group for a specification" do
+        group = @project.add_spec_group('JSONKit', @project.pods)
+        @project.pods.children.should.include?(group)
+        g = @project['Pods/JSONKit']
+        g.name.should == 'JSONKit'
+        g.children.should.be.empty?
+      end
+
+      it "namespaces subspecs in groups" do
+        group = @project.add_spec_group('JSONKit/Subspec', @project.pods)
+        @project.pods.groups.find { |g| g.name == 'JSONKit' }.children.should.include?(group)
+        g = @project['Pods/JSONKit/Subspec']
+        g.name.should == 'Subspec'
+        g.children.should.be.empty?
+      end
+
     end
 
-    it "sets IPHONEOS_DEPLOYMENT_TARGET for both configurations" do
-      target = @project.add_pod_target('Pods', Pod::Platform.new(:ios))
-      target.build_settings('Debug')["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.3"
-      target.build_settings('Release')["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.3"
+    #-------------------------------------------------------------------------#
 
-      target = @project.add_pod_target('Pods', Pod::Platform.new(:ios, :deployment_target => "4.0"))
-      target.build_settings('Debug')["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.0"
-      target.build_settings('Release')["IPHONEOS_DEPLOYMENT_TARGET"].should == "4.0"
+    describe "File references" do
+
+      it "adds the file references for the given source files" do
+        source_files = [ config.sandbox.root + "A_POD/some_file.m" ]
+        @project.add_file_references(source_files, 'BananaLib', @project.pods)
+        group = @project['Pods/BananaLib']
+        group.should.not.be.nil
+        group.children.map(&:path).should == [ "A_POD/some_file.m" ]
+      end
+
+      it "adds the only one file reference for a given absolute path" do
+        source_files = [ config.sandbox.root + "A_POD/some_file.m" ]
+        @project.add_file_references(source_files, 'BananaLib', @project.pods)
+        @project.add_file_references(source_files, 'BananaLib', @project.pods)
+        group = @project['Pods/BananaLib']
+        group.children.count.should == 1
+        group.children.first.path.should == "A_POD/some_file.m"
+      end
+
+      it "returns the file reference for a given source file" do
+        file = config.sandbox.root + "A_POD/some_file.m"
+        @project.add_file_references([file], 'BananaLib', @project.pods)
+        file_reference = @project.file_reference(file)
+        file_reference.path.should == "A_POD/some_file.m"
+      end
+
+      it "adds the Podfile configured as a Ruby file" do
+        @project.add_podfile(config.sandbox.root + '../Podfile')
+        f = @project['Podfile']
+        f.name.should == 'Podfile'
+        f.source_tree.should == 'SOURCE_ROOT'
+        f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
+        f.path.should == '../Podfile'
+      end
+
     end
-  end
 
-  describe "concerning its :osx targets with a deployment target" do
-    before do
-      @project = Pod::Project.new
+    #-------------------------------------------------------------------------#
+
+    describe "File references" do
+
+      it "stores the references by absolute path" do
+        file = config.sandbox.root + "A_POD/some_file.m"
+        @project.add_file_references([file], 'BananaLib', @project.pods)
+        refs_by_absolute_path = @project.send(:refs_by_absolute_path)
+        refs_by_absolute_path.should == {
+          file => @project.file_reference(file)
+        }
+      end
+
     end
 
-    it "sets MACOSX_DEPLOYMENT_TARGET for both configurations" do
-      target = @project.add_pod_target('Pods', Pod::Platform.new(:osx))
-      target.build_settings('Debug')["MACOSX_DEPLOYMENT_TARGET"].should == "10.7"
-      target.build_settings('Release')["MACOSX_DEPLOYMENT_TARGET"].should == "10.7"
+    #-------------------------------------------------------------------------#
 
-      target = @project.add_pod_target('Pods', Pod::Platform.new(:osx, :deployment_target => "10.6"))
-      target.build_settings('Debug')["MACOSX_DEPLOYMENT_TARGET"].should == "10.6"
-      target.build_settings('Release')["MACOSX_DEPLOYMENT_TARGET"].should == "10.6"
-    end
   end
 end
+
+
+

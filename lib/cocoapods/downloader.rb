@@ -1,45 +1,58 @@
-require 'uri'
+require 'cocoapods-downloader'
 
 module Pod
-  class Downloader
-    autoload :Git,        'cocoapods/downloader/git'
-    autoload :GitHub,     'cocoapods/downloader/git'
-    autoload :Mercurial,  'cocoapods/downloader/mercurial'
-    autoload :Subversion, 'cocoapods/downloader/subversion'
-    autoload :Http,       'cocoapods/downloader/http'
+  module Downloader
+    class Base
 
-    extend Executable
+      override_api do
 
-    def self.for_pod(pod)
-      spec = pod.top_specification
-      for_target(pod.root, spec.source.dup)
-    end
-
-    attr_reader :target_path, :url, :options
-
-    def initialize(target_path, url, options)
-      @target_path, @url, @options = target_path, url, options
-      @target_path.mkpath
-    end
-
-    private
-
-    def self.for_target(target_path, options)
-      options = options.dup
-      if url = options.delete(:git)
-        if url.to_s =~ /github.com/
-          GitHub.new(target_path, url, options)
-        else
-          Git.new(target_path, url, options)
+        def execute_command(executable, command, raise_on_failure = false)
+          Executable.execute_command(executable, command, raise_on_failure)
         end
-      elsif url = options.delete(:hg)
-        Mercurial.new(target_path, url, options)
-      elsif url = options.delete(:svn)
-        Subversion.new(target_path, url, options)
-      elsif url = options.delete(:http)
-        Http.new(target_path, url, options)
-      else
-        raise "Unsupported download strategy `#{options.inspect}'."
+
+        # Indicates that an action will be performed. The action is passed as a
+        # block.
+        #
+        # @param  [String] message
+        #         The message associated with the action.
+        #
+        # @yield  The action, this block is always executed.
+        #
+        # @return [void]
+        #
+        def ui_action(message)
+          UI.section(" > #{message}", '', 1) do
+            yield
+          end
+        end
+
+        # Indicates that a minor action will be performed. The action is passed
+        # as a block.
+        #
+        # @param  [String] message
+        #         The message associated with the action.
+        #
+        # @yield  The action, this block is always executed.
+        #
+        # @return [void]
+        #
+        def ui_sub_action(message)
+          UI.section(" > #{message}", '', 2) do
+            yield
+          end
+        end
+
+        # Prints an UI message.
+        #
+        # @param  [String] message
+        #         The message associated with the action.
+        #
+        # @return [void]
+        #
+        def ui_message(message)
+          UI.puts message
+        end
+
       end
     end
   end

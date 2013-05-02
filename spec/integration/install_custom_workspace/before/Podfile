@@ -1,0 +1,15 @@
+platform :ios, '6.0'
+workspace 'Workspace.xcworkspace'
+
+# TODO: remove
+xcodeproj 'SampleApp_1.xcodeproj'
+
+target 'SampleApp_1' do
+  xcodeproj 'SampleApp_1.xcodeproj'
+  pod "Reachability", "3.1.0"
+end
+
+target :'SampleApp_2' do
+  xcodeproj 'SampleApp_2.xcodeproj'
+  pod "Reachability"
+end

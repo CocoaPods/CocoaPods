@@ -1,83 +1,161 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
-describe Pod::Installer::UserProjectIntegrator do
-  extend SpecHelper::TemporaryDirectory
+module Pod
+  describe Installer::UserProjectIntegrator do
 
-  before do
-    @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-    config.project_root = @sample_project_path.dirname
+    describe "In general" do
 
-    sample_project_path = @sample_project_path
-    @podfile = Pod::Podfile.new do
-      platform :ios
-      xcodeproj sample_project_path
-      pod 'JSONKit'
-      target :test_runner, :exclusive => true do
-        link_with 'TestRunner'
-        pod 'Kiwi'
+      before do
+        @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+        sample_project_path = @sample_project_path
+        @podfile = Podfile.new do
+          platform :ios
+          xcodeproj sample_project_path
+          pod 'JSONKit'
+          target :empty do
+
+          end
+        end
+        config.sandbox.project = Project.new()
+        @library = Library.new(@podfile.target_definitions['Pods'])
+        @library.client_root = sample_project_path.dirname
+        @library.user_project_path  = sample_project_path
+        @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
+        @library.support_files_root = config.sandbox.root
+        empty_library = Library.new(@podfile.target_definitions[:empty])
+        @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library, empty_library])
       end
+
+      #-----------------------------------------------------------------------#
+
+      describe "In general" do
+
+        it "adds the Pods project to the workspace" do
+          @integrator.integrate!
+          workspace_path = @integrator.send(:workspace_path)
+          workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
+          workspace.projpaths.find { |path| path =~ /Pods.xcodeproj/ }.should.not.be.nil
+        end
+
+        it "integrates the user targets" do
+          @integrator.integrate!
+          user_project = Xcodeproj::Project.new(@sample_project_path)
+          target = user_project.objects_by_uuid[@library.user_target_uuids.first]
+          target.frameworks_build_phase.files.map(&:display_name).should.include('libPods.a')
+        end
+
+        it "warns if the podfile does not contain any dependency" do
+          Podfile::TargetDefinition.any_instance.stubs(:empty?).returns(true)
+          @integrator.integrate!
+          UI.warnings.should.include?('The Podfile does not contain any dependency')
+        end
+
+      end
+
+      #-----------------------------------------------------------------------#
+
+      describe "Workspace creation" do
+
+        it "creates a new workspace if needed" do
+          @integrator.send(:create_workspace)
+          workspace_path = @integrator.send(:workspace_path)
+          saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
+          saved.projpaths.should == [
+            "SampleProject/SampleProject.xcodeproj",
+            "Pods/Pods.xcodeproj"
+          ]
+        end
+
+        it "updates an existing workspace if needed" do
+          workspace_path = @integrator.send(:workspace_path)
+          workspace = Xcodeproj::Workspace.new('SampleProject/SampleProject.xcodeproj')
+          workspace.save_as(workspace_path)
+          @integrator.send(:create_workspace)
+          saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
+          saved.projpaths.should == [
+            "SampleProject/SampleProject.xcodeproj",
+            "Pods/Pods.xcodeproj"
+          ]
+        end
+
+        it "doesn't write the workspace if not needed" do
+          projpaths = [
+            "SampleProject/SampleProject.xcodeproj",
+            "Pods/Pods.xcodeproj"
+          ]
+          workspace = Xcodeproj::Workspace.new(projpaths)
+          workspace_path = @integrator.send(:workspace_path)
+          workspace.save_as(workspace_path)
+          Xcodeproj::Workspace.expects(:save_as).never
+          @integrator.send(:create_workspace)
+        end
+
+        it "only appends projects to the workspace and never deletes one" do
+          workspace = Xcodeproj::Workspace.new('user_added_project.xcodeproj')
+          workspace_path = @integrator.send(:workspace_path)
+          workspace.save_as(workspace_path)
+          @integrator.send(:create_workspace)
+          saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
+          saved.projpaths.should == [
+            'user_added_project.xcodeproj',
+            "SampleProject/SampleProject.xcodeproj",
+            "Pods/Pods.xcodeproj"
+          ]
+        end
+
+        it "preserves the order of the projects in the workspace" do
+          projpaths = [
+            "Pods/Pods.xcodeproj",
+            "SampleProject/SampleProject.xcodeproj",
+          ]
+          workspace = Xcodeproj::Workspace.new(projpaths)
+          workspace_path = @integrator.send(:workspace_path)
+          workspace.save_as(workspace_path)
+          @integrator.send(:create_workspace)
+          saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
+          saved.projpaths.should == [
+            "Pods/Pods.xcodeproj",
+            "SampleProject/SampleProject.xcodeproj",
+          ]
+        end
+
+      end
+
+      #-----------------------------------------------------------------------#
+
+      describe "Private Helpers" do
+
+        it "uses the path of the workspace defined in the podfile" do
+          path = "a_path"
+          @podfile.workspace(path)
+          workspace_path = @integrator.send(:workspace_path)
+          workspace_path.to_s.should.end_with(path + ".xcworkspace")
+          workspace_path.should.be.absolute
+          workspace_path.class.should == Pathname
+        end
+
+        it "names the workspace after the user project if needed" do
+          @integrator.send(:workspace_path).should == temporary_directory + 'SampleProject.xcworkspace'
+        end
+
+        it "raises if no workspace could be selected" do
+          @integrator.expects(:user_project_paths).returns(%w[ project1 project2 ])
+          e = lambda { @integrator.send(:workspace_path) }.should.raise Informative
+        end
+
+        it "returns the paths of the user projects" do
+          @integrator.send(:user_project_paths).should == [ @sample_project_path ]
+        end
+
+        it "skips libraries with empty target definitions" do
+          @integrator.libraries.map(&:name).should == ["Pods", "Pods-empty"]
+          @integrator.send(:libraries_to_integrate).map(&:name).should == ['Pods']
+        end
+
+      end
+
+      #-----------------------------------------------------------------------#
+
     end
-
-    @integrator = Pod::Installer::UserProjectIntegrator.new(@podfile)
-  end
-
-  it "returns the path to the workspace from the Podfile" do
-    @integrator.workspace_path.should == config.project_root + 'SampleProject.xcworkspace'
-  end
-
-  it "raises if no workspace could be selected" do
-    @podfile.stubs(:workspace)
-    lambda { @integrator.workspace_path }.should.raise Pod::Informative
-  end
-
-  it "returns the path to the Pods.xcodeproj document" do
-    @integrator.pods_project_path.should == config.project_root + 'Pods/Pods.xcodeproj'
-  end
-
-  it "returns a Pod::Installer::UserProjectIntegrator::Target for each target definition in the Podfile" do
-    @integrator.target_integrators.map(&:target_definition).should == @podfile.target_definitions.values
-  end
-
-  before do
-    @target_integrator = @integrator.target_integrators.first
-  end
-
-  it "returns the the user's project, that contains the target, from the Podfile" do
-    @target_integrator.user_project_path.should == @sample_project_path
-    @target_integrator.user_project.should == Xcodeproj::Project.new(@sample_project_path)
-  end
-
-  it "raises if no project could be selected" do
-    @target_integrator.target_definition.user_project.stubs(:path).returns(nil)
-    lambda { @target_integrator.user_project_path }.should.raise Pod::Informative
-  end
-
-  it "raises if the project path doesn't exist" do
-    @target_integrator.target_definition.user_project.path.stubs(:exist?).returns(false)
-    lambda { @target_integrator.user_project_path }.should.raise Pod::Informative
-  end
-
-  it "does not take aggregate targets into consideration" do
-    aggregate = Xcodeproj::Project::Object::PBXAggregateTarget
-    @target_integrator.native_targets.map(&:class).should.not.include aggregate
-  end
-
-  it "uses the target with the same name if the name is different from `:default'" do
-    target_integrator = @integrator.target_integrators[1]
-    target_integrator.target_definition.stubs(:name).returns('TestRunner')
-    target_integrator.target_definition.stubs(:link_with).returns(nil)
-    target_integrator.targets.first.name.should == 'TestRunner'
-  end
-
-  it "it raises if it can't find a target with the same name" do
-    target_integrator = @integrator.target_integrators.find { |ti| ti.target_definition.name == :test_runner }
-    target_integrator.target_definition.stubs(:link_with).returns(nil)
-    lambda { target_integrator.targets }.should.raise Pod::Informative
-  end
-
-  it "uses the first target in the user's project if no explicit target is specified" do
-    target_integrator = @integrator.target_integrators.find { |ti| ti.target_definition.name == :default }
-    target_integrator.target_definition.stubs(:link_with).returns(nil)
-    target_integrator.targets.should == [Xcodeproj::Project.new(@sample_project_path).targets.first]
   end
 end

@@ -1,63 +1,78 @@
 require 'rubygems'
 
-# Better to fail early and clear then during installation of pods.
-#
-# RubyGems 1.3.6 (which ships with OS X >= 10.7) up to 1.4.0 have a couple of
-# bugs related to comparing prerelease versions.
-#
-# E.g. https://github.com/CocoaPods/CocoaPods/issues/398
-unless Gem::Version::Requirement.new('>= 1.4.0').satisfied_by?(Gem::Version.new(Gem::VERSION))
-  STDERR.puts "\e[1;31m" + "Your RubyGems version (#{Gem::VERSION}) is too old, please update with: `gem update --system`" + "\e[0m"
-  exit 1
-end
+autoload :Xcodeproj, 'xcodeproj'
 
 module Pod
-  VERSION = '0.16.3'
+  require 'pathname'
 
-  class PlainInformative < StandardError
-  end
+  require 'cocoapods/gem_version'
+  require 'cocoapods-core'
+  require 'cocoapods/file_list'
+  require 'cocoapods/config'
 
+  autoload :Downloader, 'cocoapods/downloader'
+
+  # Indicates an user error. This is defined in cocoapods-core.
+  #
   class Informative < PlainInformative
     def message
-      # TODO: remove formatting from raise calls and remove conditional
-      super !~ /\[!\]/ ? "[!] #{super}\n".red : super
+      "[!] #{super}".red
     end
   end
 
-  autoload :Command,                'cocoapods/command'
-  autoload :Config,                 'cocoapods/config'
-  autoload :Dependency,             'cocoapods/dependency'
-  autoload :Downloader,             'cocoapods/downloader'
-  autoload :Executable,             'cocoapods/executable'
-  autoload :Installer,              'cocoapods/installer'
-  autoload :LocalPod,               'cocoapods/local_pod'
-  autoload :Lockfile,               'cocoapods/lockfile'
-  autoload :Platform,               'cocoapods/platform'
-  autoload :Podfile,                'cocoapods/podfile'
-  autoload :Project,                'cocoapods/project'
-  autoload :Resolver,               'cocoapods/resolver'
-  autoload :Sandbox,                'cocoapods/sandbox'
-  autoload :Source,                 'cocoapods/source'
-  autoload :Spec,                   'cocoapods/specification'
-  autoload :Specification,          'cocoapods/specification'
-  autoload :UI,                     'cocoapods/user_interface'
-  autoload :Version,                'cocoapods/version'
+  # @return [Pathname] The directory where CocoaPods caches the downloads.
+  #
+  # @todo   The {Installer::PodSourceInstaller} and the #{ExternalSources}
+  #         classes build and configure the downloader from scratch.
+  #
+  CACHE_ROOT = Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
+  CACHE_ROOT.mkpath unless CACHE_ROOT.exist?
 
-  autoload :Pathname,               'pathname'
-  autoload :FileList,               'cocoapods/file_list'
+  # @return [Fixnum] The maximum size for the cache expressed in Mb.
+  #
+  # @todo   The {Installer::PodSourceInstaller} and the #{ExternalSources}
+  #         classes build and configure the downloader from scratch.
+  #
+  MAX_CACHE_SIZE = 500
+
+  # @return [Pathname] The file to use a cache of the statistics provider.
+  #
+  STATISTICS_CACHE_FILE = CACHE_ROOT + 'statistics.yml'
+
+  autoload :Command,                   'cocoapods/command'
+  autoload :Executable,                'cocoapods/executable'
+  autoload :ExternalSources,           'cocoapods/external_sources'
+  autoload :Installer,                 'cocoapods/installer'
+  autoload :SourcesManager,            'cocoapods/sources_manager'
+  autoload :Library,                   'cocoapods/library'
+  autoload :Project,                   'cocoapods/project'
+  autoload :Resolver,                  'cocoapods/resolver'
+  autoload :Sandbox,                   'cocoapods/sandbox'
+  autoload :UI,                        'cocoapods/user_interface'
+  autoload :Validator,                 'cocoapods/validator'
 
   module Generator
-    autoload :BridgeSupport,        'cocoapods/generator/bridge_support'
-    autoload :CopyResourcesScript,  'cocoapods/generator/copy_resources_script'
-    autoload :Documentation,        'cocoapods/generator/documentation'
-    autoload :Acknowledgements,     'cocoapods/generator/acknowledgements'
-    autoload :Plist,                'cocoapods/generator/acknowledgements/plist'
-    autoload :Markdown,             'cocoapods/generator/acknowledgements/markdown'
-    autoload :DummySource,          'cocoapods/generator/dummy_source'
+    autoload :Acknowledgements,        'cocoapods/generator/acknowledgements'
+    autoload :BridgeSupport,           'cocoapods/generator/bridge_support'
+    autoload :CopyResourcesScript,     'cocoapods/generator/copy_resources_script'
+    autoload :Documentation,           'cocoapods/generator/documentation'
+    autoload :DummySource,             'cocoapods/generator/dummy_source'
+    autoload :Markdown,                'cocoapods/generator/acknowledgements/markdown'
+    autoload :Plist,                   'cocoapods/generator/acknowledgements/plist'
+    autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
+    autoload :TargetEnvironmentHeader, 'cocoapods/generator/target_environment_header'
+    autoload :XCConfig,                'cocoapods/generator/xcconfig'
   end
+
+  module Hooks
+    autoload :InstallerRepresentation, 'cocoapods/hooks/installer_representation'
+    autoload :LibraryRepresentation,   'cocoapods/hooks/library_representation'
+    autoload :PodRepresentation,       'cocoapods/hooks/pod_representation'
+  end
+
 end
 
 if ENV['COCOA_PODS_ENV'] == 'development'
-  require 'awesome_print'
-  require 'pry'
+  # require 'awesome_print'
+  # require 'pry'
 end

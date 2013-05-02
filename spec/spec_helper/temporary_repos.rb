@@ -1,8 +1,3 @@
-require 'spec_helper/temporary_directory'
-
-# Important
-# Include with temporary directory
-
 module SpecHelper
   def self.tmp_repos_path
     TemporaryRepos.tmp_repos_path

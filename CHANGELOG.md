@@ -1,3 +1,417 @@
+## Installation & Update
+
+To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
+
+## Master
+
+## 0.19.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.19.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.0...0.19.1)
+
+###### Bug fixes
+
+* Project-level preprocessor macros are not overwritten anymore.
+  [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
+* A Unique hash instances for the build settings of the Pods target is now
+  created resolving interferences in the hooks.
+  [#1014](https://github.com/CocoaPods/CocoaPods/issues/1014)
+
+## 0.19.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.18.1...0.19.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.18.1...0.19.0)
+
+###### Enhancements
+
+* Compile time introspection. Macro definitions which allow to inspect the
+  installed Pods and their version have been introduced in the build
+  environment of the Pod libraries
+  ([example](https://gist.github.com/irrationalfab/5348551)).
+* CocoaPods now defines the `COCOAPODS=1` macro in the Pod and the Client
+  targets. This is useful for libraries which conditionally expose interfaces.
+  [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
+* CocoaPods now defines the deployment target of the Pods project computed as
+  the minimum deployment target of the Pods libraries.
+  [#556](https://github.com/CocoaPods/CocoaPods/issues/556)
+* Added `pod podfile-info` command. Shows list of used Pods and their info
+  in a project or supplied Podfile.
+  Options: `--all` - with dependencies. `--md` - in Markdown.
+  [#855](https://github.com/CocoaPods/CocoaPods/issues/855)
+* Added `pod help` command. You can still use the old format
+  with --help flag.
+  [#957](https://github.com/CocoaPods/CocoaPods/pull/957)
+* Restored support for Podfiles named `CocoaPods.podfile`. Moreover, the
+  experimental YAML format of the Podfile now is associated with files named
+  `CocoaPods.podfile.yaml`.
+  [#1004](https://github.com/CocoaPods/CocoaPods/pull/1004)
+
+###### Deprecations
+
+* The `:local` flag in Podfile has been renamed to `:path` and has been 
+  deprecated.
+  [#971](https://github.com/CocoaPods/CocoaPods/issues/971)
+
+###### Bug fixes
+
+* Fixed issue related to `pod outdated` and external sources.
+  [#954](https://github.com/CocoaPods/CocoaPods/issues/954)
+* Fixed issue with .svn folders in copy resources script.
+  [#972](https://github.com/CocoaPods/CocoaPods/issues/972)
+
+## 0.18.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.18.0...0.18.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.18.0...0.18.)
+
+###### Bug fixes
+
+* Fixed a bug introduced in 0.18 which cause compilation issue due to the
+  quoting of the inherited value in the xcconfigs.
+  [#956](https://github.com/CocoaPods/CocoaPods/issues/956)
+* Robustness against user targets including build files with missing file
+  references.
+  [#938](https://github.com/CocoaPods/CocoaPods/issues/938)
+* Partially fixed slow performance from the command line
+  [#919](https://github.com/CocoaPods/CocoaPods/issues/919)
+
+
+## 0.18.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.18.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.18.0)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.5)
+
+###### Enhancements
+
+* Added the ability to inhibit warnings per pod.
+  Just pass `:inhibit_warnings => true` inline.
+  This feature has been implemented by Marin Usalj (@mneorr).
+  [#10](https://github.com/CocoaPods/Core/pull/10)
+  [#934](https://github.com/CocoaPods/CocoaPods/pull/934)
+* Inhibiting warnings will also suppress the warnings of the static analyzer.
+* A new build phase has been added to check that your
+  installation is in sync with the `Podfile.lock` and fail the build otherwise.
+  The new build phase will not be added automatically to targets already
+  integrated with CocoaPods, for integrating targets manually see [this
+  comment](https://github.com/CocoaPods/CocoaPods/pull/946#issuecomment-16042419).
+  This feature has been implemented by Ullrich Schäfer (@stigi).
+  [#946](https://github.com/CocoaPods/CocoaPods/pull/946)
+* The `pod search` commands now accepts the `--ios` and the `--osx` arguments
+  to filter the results by platform.
+  [#625](https://github.com/CocoaPods/CocoaPods/issues/625)
+* The developer frameworks are automatically added if `SenTestingKit` is
+  detected. There is no need to specify them in specifications anymore.
+  [#771](https://github.com/CocoaPods/CocoaPods/issues/771)
+* The `--no-update` argument of the `install`, `update`, `outdated` subcommands
+  has been renamed to `--no-repo-update`.
+  [#913](https://github.com/CocoaPods/CocoaPods/issues/913)
+
+###### Bug fixes
+
+* Improved handling for Xcode projects containing non ASCII characters.
+  Special thanks to Cédric Luthi (@0xced), Vincent Isambart (@vincentisambart),
+  and Manfred Stienstra (@Manfred) for helping to develop the workaround.
+  [#926](https://github.com/CocoaPods/CocoaPods/issues/926)
+* Corrected improper configuration of the PODS_ROOT xcconfig variable in
+  non-integrating installations.
+  [#918](https://github.com/CocoaPods/CocoaPods/issues/918)
+* Improved support for pre-release versions using dashes.
+  [#935](https://github.com/CocoaPods/CocoaPods/issues/935)
+* Documentation sets are now namespaced by pod solving improper attribution.
+  [#659](https://github.com/CocoaPods/CocoaPods/issues/659)
+
+
+## 0.17.2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.1...0.17.2)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.1...0.17.2)
+
+###### Bug fixes
+
+* Fix crash related to the specification of the workspace as a relative path.
+  [#920](https://github.com/CocoaPods/CocoaPods/issues/920)
+* Fix an issue related to the `podspec` dsl directive of the Podfile for
+  specifications with internal dependencies.
+  [#928](https://github.com/CocoaPods/CocoaPods/issues/928)
+* Fix crash related to search from the command line.
+  [#929](https://github.com/CocoaPods/CocoaPods/issues/929)
+
+###### Ancillary enhancements
+
+* Enabled the FileList deprecation warning in the Linter.
+* CocoaPods will raise if versions requirements are specified for dependencies
+  with external sources.
+* The exclude patterns now handle folders automatically.
+
+
+## 0.17.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0...0.17.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0...0.17.1)
+
+###### Bug fixes
+
+* Always create the CACHE_ROOT directory when performing a search.
+  [#917](https://github.com/CocoaPods/CocoaPods/issues/917)
+
+## 0.17.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc7...0.17.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc7...0.17.0)
+
+#### GM
+
+###### Bug fixes
+
+* Don’t break when specifying doc options, but not appledoc ones.
+  [#906](https://github.com/CocoaPods/CocoaPods/issues/906)
+* Sort resolved specifications.
+  [#907](https://github.com/CocoaPods/CocoaPods/issues/907)
+* Subspecs do not need to include HEAD information.
+  [#905](https://github.com/CocoaPods/CocoaPods/issues/905)
+
+###### Ancillary enhancements
+
+* Allow the analyzer to do its work without updating sources.
+  [motion-cocoapods#50](https://github.com/HipByte/motion-cocoapods/pull/50)
+
+#### rc7
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc6...0.17.0.rc7)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc6...0.17.0.rc7)
+
+###### Bug fixes
+
+- Fixed an issue which lead to the missing declaration of the plural directives
+  of the Specification DSL.
+  [#816](https://github.com/CocoaPods/CocoaPods/issues/816)
+- The resolver now respects the order of specification of the target
+  definitions.
+- Restore usage of cache file to store a cache for expensive stats.
+- Moved declaration of `Pod::FileList` to CocoaPods-core.
+
+###### Ancillary enhancements
+
+- Fine tuned the Specification linter and the health reporter of repositories.
+- Search results are sorted.
+
+#### rc6
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc5...0.17.0.rc6)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc5...0.17.0.rc6)
+
+###### Bug fixes
+
+- CocoaPods updates the repositories by default.
+  [#872](https://github.com/CocoaPods/CocoaPods/issues/872)
+- Fixed a crash which was present when the Podfile specifies a workspace.
+  [#871](https://github.com/CocoaPods/CocoaPods/issues/871)
+- Fix for a bug which lead to a broken installation in paths containing
+  brackets and other glob metacharacters.
+  [#862](https://github.com/CocoaPods/CocoaPods/issues/862)
+- Fix for a bug related to the case of the paths which lead to clean all files
+  in the directories of the Pods.
+
+
+###### Ancillary enhancements
+
+- CocoaPods now maintains a search index which is updated incrementally instead
+  of analyzing all the specs every time. The search index can be updated
+  manually with the `pod ipc update-search-index` command.
+- Enhancements to the `pod repo lint` command.
+- CocoaPods will not create anymore the pre commit hook in the master repo
+  during setup. If already created it is possible remove it deleting the
+  `~/.cocoapods/master/.git/hooks/pre-commit` path.
+- Improved support for linting and validating specs repo.
+
+#### rc5
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc4...0.17.0.rc5)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc4...0.17.0.rc5)
+
+###### Bug fixes
+
+- The `--no-clean` argument is not ignored anymore by the installer.
+- Proper handling of file patterns ending with a slash.
+- More user errors are raised as an informative.
+
+#### rc4
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc3...0.17.0.rc4)
+
+###### Bug fixes
+
+- Restored compatibility with `Podfile::TargetDefinition#copy_resources_script_name`
+  in the Podfile hooks.
+- Updated copy resources script so that it will use base internationalization
+  [#846](https://github.com/CocoaPods/CocoaPods/issues/846)
+- Robustness against an empty configuration file.
+- Fixed a crash with `pod push`
+  [#848](https://github.com/CocoaPods/CocoaPods/issues/848)
+- Fixed an issue which lead to the creation of a Pods project which would
+  crash Xcode.
+  [#854](https://github.com/CocoaPods/CocoaPods/issues/854)
+- Fixed a crash related to a `PBXVariantGroup` present in the frameworks build
+  phase of client targets.
+  [#859](https://github.com/CocoaPods/CocoaPods/issues/859)
+
+
+###### Ancillary enhancements
+
+- The `podspec` option of the `pod` directive of the Podfile DSL now accepts
+  folders.
+
+#### rc3
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc2...0.17.0.rc3
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...0.5.1))
+
+###### Bug fixes
+
+- CocoaPods will not crash anymore if the license file indicated on the spec
+  doesn't exits.
+- Pre install hooks are called before the Pods are cleaned.
+- Fixed and issue which prevent the inclusion of OTHER_CFLAGS and
+  OTHER_CPLUSPLUSFLAGS  in the release builds of the Pods project.
+- Fixed `pod lint --local`
+- Fixed the `--allow-warnings` of `pod push`
+  [#835](https://github.com/CocoaPods/CocoaPods/issues/835)
+- Added `copy_resources_script_name` to the library representation used in the
+  hooks.
+  [#837](https://github.com/CocoaPods/CocoaPods/issues/837)
+
+###### Ancillary enhancements
+
+- General improvements to `pod ipc`.
+- Added `pod ipc repl` subcommand.
+
+#### rc2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc1...0.17.0.rc2)
+
+###### Bug fixes
+
+- Restored output coloring.
+- Fixed a crash related to subspecs
+  [#819](https://github.com/CocoaPods/CocoaPods/issues/819)
+- Git repos were not cached for dependencies with external sources.
+  [#820](https://github.com/CocoaPods/CocoaPods/issues/820)
+- Restored support for directories for the preserve_patterns specification
+  attribute.
+  [#823](https://github.com/CocoaPods/CocoaPods/issues/823)
+
+#### rc1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.4...0.17.0.rc1)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core)
+• [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader)
+
+###### __Notice__
+
+At some point in future the master repo will be switched to the YAML format of
+specifications. This means that specifications with hooks (or any other kind of
+dynamic logic) will not be accepted. Please let us know if there is need for
+other DSL attributes or any other kind of support.
+
+Currently the following specifications fail to load as they depended on the
+CocoaPods internals and need to be updated:
+
+- LibComponentLogging-pods/0.0.1/LibComponentLogging-pods.podspec
+- RestKit/0.9.3/RestKit.podspec
+- Three20/1.0.11/Three20.podspec
+- ARAnalytics/1.1/ARAnalytics.podspec
+
+Other specifications, might present compatibility issues for the reasons
+presented below.
+
+###### __Breaking__
+
+- Subspecs do **not** inherit the files patterns from the parent spec anymore.
+  This feature made the implementation more complicated and was not easy to
+  explain to podspecs maintainers. Compatibility can be easily fixed by adding
+  a 'Core' subspec.
+- Support for inline podspecs has been removed.
+- The support for Rake::FileList is being deprecated, in favor of a more
+  consistent DSL. Rake::FileList also presented issues because it would access
+  the file system as soon as it was converted to an array.
+- The hooks architecture has been re-factored and might present
+  incompatibilities (please open an issue if appropriate).
+- The `requires_arc` attribute default value is transitioning from `false` to
+  `true`. In the meanwhile a value is needed to pass the lint.
+- Deprecated `copy_header_mapping` hook.
+- Deprecated `exclude_header_search_paths` attribute.
+- External sources are not supported in the dependencies of specifications
+  anymore. Actually they never have been supported, they just happened to work.
+
+###### DSL
+
+- Podfile:
+  - It is not needed to specify the platform anymore (unless not integrating)
+    as CocoaPods now can infer the platform from the integrated targets.
+- Specification:
+  - `preferred_dependency` has been renamed to `default_subspec`.
+  - Added `exclude_files` attribute.
+  - Added `screenshots` attribute.
+  - Added default values for attributes like `source_files`.
+
+###### Enhancements
+
+- Released preview [documentation](http://docs.cocoapods.org).
+- CocoaPods now has support for working in teams and not committing the Pods
+  folder, as it will keep track of the status of the Pods folder.
+  [#552](https://github.com/CocoaPods/CocoaPods/issues/552)
+- Simplified installation: no specific version of ruby gems is required anymore.
+- The workspace is written only if needed greatly reducing the occasions in
+  which Xcode asks to revert.
+- The Lockfile is sorted reducing the SCM noise.
+  [#591](https://github.com/CocoaPods/CocoaPods/issues/591)
+- Added Podfile, Frameworks, and Resources to the Pods project.
+  [#647](https://github.com/CocoaPods/CocoaPods/issues/647)
+  [#588](https://github.com/CocoaPods/CocoaPods/issues/588)
+- Adds new subcommand `pod spec cat NAME` to print a spec file to standard output.
+- Specification hooks are only called when the specification is installed.
+- The `--no-clean` option of the `pod spec lint` command now displays the Pods
+  project for inspection.
+- It is now possible to specify default values for the configuration in
+  `~/.cocoapods/config.yaml` ([default values](https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/config.rb#L17)).
+- CocoaPods now checks the checksums of the installed specifications and
+  reinstalls them if needed.
+- Support for YAML formats of the Podfile and the Specification.
+- Added new command `pod ipc` to provide support for inter process
+  communication through YAML formats.
+- CocoaPods now detects if the folder of a Pod is empty and reinstalls it.
+  [#534](https://github.com/CocoaPods/CocoaPods/issues/534)
+- Install hooks and the `prefix_header_contents` attribute are supported in subspecs.
+  [#617](https://github.com/CocoaPods/CocoaPods/issues/617)
+- Dashes are now supported in the versions of the Pods.
+  [#293](https://github.com/CocoaPods/CocoaPods/issues/293)
+
+###### Bug fixes
+
+- CocoaPods is not confused anymore by target definitions with different activated subspec.
+  [#535](https://github.com/CocoaPods/CocoaPods/issues/535)
+- CocoaPods is not confused anymore by to dependencies from external sources.
+  [#548](https://github.com/CocoaPods/CocoaPods/issues/548)
+- The git cache will always update against the remote if a tag is requested,
+  resolving issues where library maintainers where updating the tag after a
+  lint and would be confused by CocoaPods using the cached commit for the tag.
+  [#407](https://github.com/CocoaPods/CocoaPods/issues/407)
+  [#596](https://github.com/CocoaPods/CocoaPods/issues/596)
+
+###### Codebase
+
+- Major clean up and refactor of the whole code base.
+- Extracted the core classes into
+  [cocoapods-core](https://github.com/CocoaPods/Core) gem.
+- Extracted downloader into
+  [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader).
+- Extracted command-line command & option handling into
+  [CLAide](https://github.com/CocoaPods/CLAide).
+
+## 0.16.4
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.3...0.16.4)
+
+###### Enhancements
+
+- Add explicit flattening option to `Downloader:Http`: `:flatten => true`.
+  [#814](https://github.com/CocoaPods/CocoaPods/pull/814)
+  [#812](https://github.com/CocoaPods/CocoaPods/issues/812)
+  [#1314](https://github.com/CocoaPods/Specs/pull/1314)
+
+###### Bug fixes
+
+- Explicitely require `date` in the gemspec for Ruby 2.0.0.
+  [34da3f7](https://github.com/CocoaPods/CocoaPods/commit/34da3f792b2a36fafacd4122e29025c9cf2ff38d)
+
 ## 0.16.3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.2...0.16.3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
 
@@ -302,6 +716,7 @@
 - The subversion downloader now does an export instead of a checkout, which
   makes it play nicer with SCMs that store metadata in each directory.
   [#245](https://github.com/CocoaPods/CocoaPods/issues/245)
+- Now the Podfile is added to the Pods project for convenient editing.
 
 ###### Bug fixes
 

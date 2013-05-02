@@ -1,221 +1,211 @@
-require 'colored'
-
 module Pod
+
+  # The resolver is responsible of generating a list of specifications grouped
+  # by target for a given Podfile.
+  #
+  # @todo Its current implementation is naive, in the sense that it can't do full
+  #   automatic resolves like Bundler:
+  #   [how-does-bundler-bundle](http://patshaughnessy.net/2011/9/24/how-does-bundler-bundle)
+  #
+  # @todo Another limitation is that the order of the dependencies matter. The
+  #   current implementation could create issues, for example, if a
+  #   specification is loaded for a target definition and later for another
+  #   target is set in head mode. The first specification will not be in head
+  #   mode.
+  #
+  #
   class Resolver
-    include Config::Mixin
 
-    # @return [Bool] Whether the resolver should find the pods to install or
-    #   the pods to update.
-    #
-    attr_accessor :update_mode
-
-    # @return [Bool] Whether the resolver should update the external specs
-    #   in the resolution process.
-    #
-    attr_accessor :update_external_specs
-
-    # @return [Podfile] The Podfile used by the resolver.
-    #
-    attr_reader :podfile
-
-    # @return [Lockfile] The Lockfile used by the resolver.
-    #
-    attr_reader :lockfile
-
-    # @return [Sandbox] The Sandbox used by the resolver to find external
-    #   dependencies.
+    # @return [Sandbox] the Sandbox used by the resolver to find external
+    #         dependencies.
     #
     attr_reader :sandbox
 
-    # @return [Array<Strings>] The name of the pods that have an
-    #   external source.
+    # @return [Podfile] the Podfile used by the resolver.
     #
-    attr_reader :pods_from_external_sources
+    attr_reader :podfile
 
-    # @return [Array<Set>] A cache of the sets used to resolve the dependencies.
+    # @return [Array<Dependency>] the list of dependencies locked to a specific
+    #         version.
     #
-    attr_reader :cached_sets
+    attr_reader :locked_dependencies
 
-    # @return [Source::Aggregate] A cache of the sources needed to find the
-    #   podspecs.
+    # @param  [Sandbox] sandbox @see sandbox
+    # @param  [Podfile] podfile @see podfile
+    # @param  [Array<Dependency>] locked_dependencies @see locked_dependencies
     #
-    attr_reader :cached_sources
+    def initialize(sandbox, podfile, locked_dependencies = [])
+      @sandbox = sandbox
+      @podfile = podfile
+      @locked_dependencies = locked_dependencies
+    end
+
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Resolution
+
+    # Identifies the specifications that should be installed.
+    #
+    # @return [Hash{TargetDefinition => Array<Specification>}] specs_by_target
+    #         the specifications that need to be installed grouped by target
+    #         definition.
+    #
+    def resolve
+      @cached_sources  = SourcesManager.aggregate
+      @cached_sets     = {}
+      @cached_specs    = {}
+      @specs_by_target = {}
+
+      target_definitions = podfile.target_definition_list
+      target_definitions.each do |target|
+        UI.section "Resolving dependencies for target `#{target.name}' (#{target.platform})" do
+          @loaded_specs = []
+          find_dependency_specs(podfile, target.dependencies, target)
+          specs = cached_specs.values_at(*@loaded_specs).sort_by(&:name)
+          specs_by_target[target] = specs
+        end
+      end
+
+      cached_specs.values.sort_by(&:name)
+      specs_by_target
+    end
 
     # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
-    #   Returns the resolved specifications grouped by target.
+    #         returns the resolved specifications grouped by target.
+    #
+    # @note   The returned specifications can be subspecs.
     #
     attr_reader :specs_by_target
 
-    def initialize(podfile, lockfile, sandbox)
-      @podfile  = podfile
-      @lockfile = lockfile
-      @sandbox  = sandbox
-      @update_external_specs = true
-
-      @cached_sets = {}
-      @cached_sources = Source::Aggregate.new
-    end
-
-    # Identifies the specifications that should be installed according whether
-    #   the resolver is in update mode or not.
-    #
-    # @return [Hash{Podfile::TargetDefinition => Array<Specification>}] specs_by_target
-    #
-    def resolve
-      @cached_specs = {}
-      @specs_by_target = {}
-      @pods_from_external_sources = []
-      @pods_to_lock = []
-
-      if @lockfile
-        @pods_by_state = @lockfile.detect_changes_with_podfile(podfile)
-        UI.section "Finding added, modified or removed dependencies:" do
-          marks = {:added => "A".green, :changed => "M".yellow, :removed => "R".red, :unchanged => "-" }
-          @pods_by_state.each do |symbol, pod_names|
-            pod_names.each do |pod_name|
-              UI.message("#{marks[symbol]} #{pod_name}", '',2)
-            end
-          end
-        end if config.verbose?
-        @pods_to_lock = (lockfile.pods_names - @pods_by_state[:added] - @pods_by_state[:changed] - @pods_by_state[:removed]).uniq
-      end
-
-      unless config.skip_repo_update?
-        UI.section 'Updating spec repositories' do
-          Command::Repo.new(Command::ARGV.new(["update"])).run
-        end if !@lockfile || !(@pods_by_state[:added] + @pods_by_state[:changed]).empty? || update_mode
-      end
-
-      @podfile.target_definitions.values.each do |target_definition|
-        UI.section "Resolving dependencies for target `#{target_definition.name}' (#{target_definition.platform})" do
-          @loaded_specs = []
-          find_dependency_specs(@podfile, target_definition.dependencies, target_definition)
-          @specs_by_target[target_definition] = @cached_specs.values_at(*@loaded_specs).sort_by(&:name)
-        end
-      end
-
-      @cached_specs.values.sort_by(&:name)
-      @specs_by_target
-    end
-
-    # @return [Array<Specification>] The specifications loaded by the resolver.
-    #
-    def specs
-      @cached_specs.values.uniq
-    end
-
-    # @return [Bool] Whether a pod should be installed/reinstalled.
-    #
-    def should_install?(name)
-      pods_to_install.include? name
-    end
-
-    # @return [Array<Strings>] The name of the pods that should be
-    #   installed/reinstalled.
-    #
-    def pods_to_install
-      unless @pods_to_install
-        if lockfile
-          @pods_to_install = specs.select do |spec|
-            spec.version != lockfile.pods_versions[spec.pod_name]
-          end.map(&:name)
-          if update_mode
-            @pods_to_install += specs.select do |spec|
-              spec.version.head? || pods_from_external_sources.include?(spec.pod_name)
-            end.map(&:name)
-          end
-          @pods_to_install += @pods_by_state[:added] + @pods_by_state[:changed]
-        else
-          @pods_to_install = specs.map(&:name)
-        end
-      end
-      @pods_to_install
-    end
-
-    # @return [Array<Strings>] The name of the pods that were installed
-    #   but don't have any dependency anymore. The name of the Pods are
-    #   stripped from subspecs.
-    #
-    def removed_pods
-      return [] unless lockfile
-      unless @removed_pods
-        previously_installed = lockfile.pods_names.map { |pod_name| pod_name.split('/').first }
-        installed = specs.map { |spec| spec.name.split('/').first }
-        @removed_pods = previously_installed - installed
-      end
-      @removed_pods
-    end
+    #-------------------------------------------------------------------------#
 
     private
 
-    # @return [Set] The cached set for a given dependency.
-    #
-    def find_cached_set(dependency, platform)
-      set_name = dependency.name.split('/').first
-      @cached_sets[set_name] ||= begin
-        if dependency.specification
-          Specification::Set::External.new(dependency.specification)
-        elsif external_source = dependency.external_source
-          if update_mode && update_external_specs
-            # Always update external sources in update mode.
-            specification = external_source.specification_from_external(@sandbox, platform)
-          else
-            # Don't update external sources in install mode if not needed.
-            specification = external_source.specification_from_sandbox(@sandbox, platform)
-          end
-          set = Specification::Set::External.new(specification)
-          if dependency.subspec_dependency?
-            @cached_sets[dependency.top_level_spec_name] ||= set
-          end
-          set
-        else
-          @cached_sources.search(dependency)
-        end
-      end
-    end
+    # !@ Resolution context
 
-    # Resolves the dependencies of a specification and stores them in @cached_specs
+    # @return [Source::Aggregate] A cache of the sources needed to find the
+    #         podspecs.
     #
-    # @param [Specification] dependent_specification
-    # @param [Array<Dependency>] dependencies
-    # @param [TargetDefinition] target_definition
+    # @note   The sources are cached because frequently accessed by the
+    #         resolver and loading them requires disk activity.
+    #
+    attr_accessor :cached_sources
+
+    # @return [Hash<String => Set>] A cache that keeps tracks of the sets
+    #         loaded by the resolution process.
+    #
+    # @note   Sets store the resolved dependencies and return the highest
+    #         available specification found in the sources. This is done
+    #         globally and not per target definition because there can be just
+    #         one Pod installation, so different version of the same Pods for
+    #         target definitions are not allowed.
+    #
+    attr_accessor :cached_sets
+
+    # @return [Hash<String => Specification>] The loaded specifications grouped
+    #         by name.
+    #
+    attr_accessor :cached_specs
+
+    #-------------------------------------------------------------------------#
+
+    private
+
+    # @!group Private helpers
+
+    # Resolves recursively the dependencies of a specification and stores them
+    # in the @cached_specs ivar.
+    #
+    # @param  [Podfile, Specification, #to_s] dependent_spec
+    #         the specification whose dependencies are being resolved. Used
+    #         only for UI purposes.
+    #
+    # @param  [Array<Dependency>] dependencies
+    #         the dependencies of the specification.
+    #
+    # @param  [TargetDefinition] target_definition
+    #         the target definition that owns the specification.
+    #
+    # @note   If there is a locked dependency with the same name of a
+    #         given dependency the locked one is used in place of the
+    #         dependency of the specification. In this way it is possible to
+    #         prevent the update of the version of installed pods not changed
+    #         in the Podfile.
+    #
+    # @note   The recursive process checks if a dependency has already been
+    #         loaded to prevent an infinite loop.
+    #
+    # @note   The set class merges all (of all the target definitions) the
+    #         dependencies and thus it keeps track of whether it is in head
+    #         mode or from an external source because {Dependency#merge}
+    #         preserves this information.
     #
     # @return [void]
     #
-    def find_dependency_specs(dependent_specification, dependencies, target_definition)
+    def find_dependency_specs(dependent_spec, dependencies, target_definition)
       dependencies.each do |dependency|
-        # Replace the dependency with a more specific one if the pod is already installed.
-        if !update_mode && @pods_to_lock.include?(dependency.name)
-          dependency = lockfile.dependency_for_installed_pod_named(dependency.name)
-        end
-        UI.message("- #{dependency}", '', 2) do
-          set = find_cached_set(dependency, target_definition.platform)
-          set.required_by(dependency, dependent_specification.to_s)
+        locked_dep = locked_dependencies.find { |ld| ld.name == dependency.name }
+        dependency = locked_dep if locked_dep
 
-          # Ensure we don't resolve the same spec twice for one target
+        UI.message("- #{dependency}", '', 2) do
+          set = find_cached_set(dependency)
+          set.required_by(dependency, dependent_spec.to_s)
+
           unless @loaded_specs.include?(dependency.name)
-            spec = set.specification_by_name(dependency.name)
-            @pods_from_external_sources << spec.pod_name if dependency.external?
+            spec = set.specification.subspec_by_name(dependency.name)
             @loaded_specs << spec.name
-            @cached_specs[spec.name] = spec
-            # Configure the specification
-            spec.activate_platform(target_definition.platform)
+            cached_specs[spec.name] = spec
+            validate_platform(spec, target_definition)
             spec.version.head = dependency.head?
-            # And recursively load the dependencies of the spec.
-            find_dependency_specs(spec, spec.dependencies, target_definition) if spec.dependencies
+
+            spec_dependencies = spec.all_dependencies(target_definition.platform)
+            find_dependency_specs(spec, spec_dependencies, target_definition)
           end
-          validate_platform(spec || @cached_specs[dependency.name], target_definition)
         end
       end
     end
 
-    # Ensures that a spec is compatible with the platform of a target.
+    # Loads or returns a previously initialized for the Pod of the given
+    # dependency.
     #
-    # @raises If the spec is not supported by the target.
+    # @param  [Dependency] dependency
+    #         the dependency for which the set is needed.
+    #
+    # @return [Set] the cached set for a given dependency.
+    #
+    def find_cached_set(dependency)
+      name = dependency.root_name
+      unless cached_sets[name]
+        if dependency.external_source
+          spec = sandbox.specification(dependency.root_name)
+          unless spec
+            raise StandardError, "[Bug] Unable to find the specification for `#{dependency}`."
+          end
+          set = Specification::Set::External.new(spec)
+        else
+          set = cached_sources.search(dependency)
+        end
+        cached_sets[name] = set
+        unless set
+          raise Informative, "Unable to find a specification for `#{dependency}`."
+        end
+      end
+      cached_sets[name]
+    end
+
+    # Ensures that a specification is compatible with the platform of a target.
+    #
+    # @raise  If the specification is not supported by the target.
+    #
+    # @return [void]
     #
     def validate_platform(spec, target)
-      unless spec.available_platforms.any? { |platform| target.platform.supports?(platform) }
-        raise Informative, "[!] The platform of the target `#{target.name}' (#{target.platform}) is not compatible with `#{spec}' which has a minimun requirement of #{spec.available_platforms.join(' - ')}.".red
+      unless spec.available_platforms.any? { |p| target.platform.supports?(p) }
+        raise Informative, "The platform of the target `#{target.name}` "     \
+          "(#{target.platform}) is not compatible with `#{spec}` which has "  \
+          "a minimum requirement of #{spec.available_platforms.join(' - ')}."
       end
     end
   end

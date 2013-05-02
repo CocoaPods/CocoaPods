@@ -1,18 +1,33 @@
+require 'cocoapods/user_interface/error_report'
+
 module Pod
-  require 'colored'
+
+  # Provides support for UI output. It provides support for nested sections of
+  # information and for a verbose mode.
+  #
   module UserInterface
 
-    autoload :UIPod, 'cocoapods/user_interface/ui_pod'
+    require 'colored'
 
     @title_colors      =  %w|yellow green|
     @title_level       =  0
     @indentation_level =  2
     @treat_titles_as_messages = false
+    @warnings = []
 
     class << self
+
       include Config::Mixin
 
-      attr_accessor :indentation_level, :title_level
+      attr_accessor :indentation_level
+      attr_accessor :title_level
+      attr_accessor :warnings
+
+      # @return [Bool] Whether the wrapping of the strings to the width of the
+      #         terminal should be disabled.
+      #
+      attr_accessor :disable_wrap
+      alias_method  :disable_wrap?, :disable_wrap
 
       # Prints a title taking an optional verbose prefix and
       # a relative indentation valid for the UI action in the passed
@@ -22,13 +37,13 @@ module Pod
       # to their level. In normal mode titles are printed only if
       # they have nesting level smaller than 2.
       #
-      # TODO: refactor to title (for always visible titles like search)
-      # and sections (titles that reppresent collapsible sections).
+      # @todo Refactor to title (for always visible titles like search)
+      #       and sections (titles that represent collapsible sections).
       #
       def section(title, verbose_prefix = '', relative_indentation = 0)
         if config.verbose?
           title(title, verbose_prefix, relative_indentation)
-        elsif title_level < 2
+        elsif title_level < 1
           puts title
         end
 
@@ -39,7 +54,28 @@ module Pod
         self.title_level -= 1
       end
 
-      # A title oposed to a section is always visible
+      # In verbose mode it shows the sections and the contents.
+      # In normal mode it just prints the title.
+      #
+      # @return [void]
+      #
+      def titled_section(title, options = {})
+        relative_indentation = options[:relative_indentation] || 0
+        verbose_prefix = options[:verbose_prefix] || ''
+        if config.verbose?
+          title(title, verbose_prefix, relative_indentation)
+        else
+          puts title
+        end
+
+        self.indentation_level += relative_indentation
+        self.title_level += 1
+        yield if block_given?
+        self.indentation_level -= relative_indentation
+        self.title_level -= 1
+      end
+
+      # A title opposed to a section is always visible
       #
       def title(title, verbose_prefix = '', relative_indentation = 2)
         if(@treat_titles_as_messages)
@@ -67,7 +103,7 @@ module Pod
       # a relative indentation valid for the UI action in the passed
       # block.
       #
-      # TODO: clean interface.
+      # @todo Clean interface.
       #
       def message(message, verbose_prefix = '', relative_indentation = 2)
         message = verbose_prefix + message if config.verbose?
@@ -106,41 +142,26 @@ module Pod
         puts("\n[!] #{message}".green)
       end
 
-      # Prints an important warning to the user optionally followed by actions
-      # that the user should take.
-      #
-      # @param [String]  message The message to print.
-      # @param [Array]   actions The actions that the user should take.
-      #
-      # return [void]
-      #
-      def warn(message, actions)
-        puts("\n[!] #{message}".yellow)
-        actions.each do |action|
-          indented = wrap_string(action, "    - ")
-          puts(indented)
-        end
-      end
-
       # Returns a string containing relative location of a path from the Podfile.
       # The returned path is quoted. If the argument is nit it returns the
       # empty string.
       #
       def path(pathname)
         if pathname
-          "`./#{pathname.relative_path_from(config.project_podfile.dirname || Pathname.pwd)}'"
+          path = pathname.relative_path_from(config.podfile_path.dirname || Pathname.pwd)
+          "`#{path}`"
         else
           ''
         end
       end
 
-      # Prints the textual repprensentation of a given set.
+      # Prints the textual representation of a given set.
       #
-      def pod(set, mode = :normal)
+      def pod(set, mode = :normal, statistics_provider = nil)
         if mode == :name
           puts_indented set.name
         else
-          pod = UIPod.new(set)
+          pod = Specification::Set::Presenter.new(set, statistics_provider)
           title("\n-> #{pod.name} (#{pod.version})".green, '', 1) do
             puts_indented pod.summary
             labeled('Homepage', pod.homepage)
@@ -167,21 +188,13 @@ module Pod
           ''.tap do |t|
             t << "    - #{label}:".ljust(16)
             if value.is_a?(Array)
-              separator = "\n      - "
+              separator = "\n  - "
               puts_indented t << separator << value.join(separator)
             else
               puts_indented t << value.to_s << "\n"
             end
           end
         end
-      end
-
-      # @!group Basic printing
-
-      # Prints a message unless config is silent.
-      #
-      def puts(message = '')
-        super(message) unless config.silent?
       end
 
       # Prints a message respecting the current indentation level and
@@ -192,9 +205,56 @@ module Pod
         puts(indented)
       end
 
+      # Prints the stored warnings. This method is intended to be called at the
+      # end of the execution of the binary.
+      #
+      # @return [void]
+      #
+      def print_warnings
+        STDOUT.flush
+        warnings.each do |warning|
+          next if warning[:verbose_only] && !config.verbose?
+          STDERR.puts("\n[!] #{warning[:message]}".yellow)
+          warning[:actions].each do |action|
+            indented = wrap_string(action, "    - ")
+            puts(indented)
+          end
+        end
+      end
+
+      public
+
+      # @!group Basic methods
+      #-----------------------------------------------------------------------#
+
+      # prints a message followed by a new line unless config is silent.
+      #
+      def puts(message = '')
+        STDOUT.puts(message) unless config.silent?
+      end
+
+      # prints a message followed by a new line unless config is silent.
+      #
+      def print(message)
+        STDOUT.print(message) unless config.silent?
+      end
+
+      # Stores important warning to the user optionally followed by actions
+      # that the user should take. To print them use {#print_warnings}.
+      #
+      # @param [String]  message The message to print.
+      # @param [Array]   actions The actions that the user should take.
+      #
+      # return [void]
+      #
+      def warn(message, actions = [], verbose_only = false)
+        warnings << { :message => message, :actions => actions, :verbose_only => verbose_only }
+      end
+
       private
 
       # @!group Helpers
+      #-----------------------------------------------------------------------#
 
       # @return [String] Wraps a string taking into account the width of the
       # terminal and an option indent. Adapted from
@@ -210,11 +270,35 @@ module Pod
       # terminal is too small a width of 80 is assumed.
       #
       def wrap_string(txt, indent = '')
-        width = `stty size`.split(' ')[1].to_i - indent.length
-        width = 80 unless width >= 10
-        txt.strip.gsub(/(.{1,#{width}})( +|$)\n?|(.{#{width}})/, indent + "\\1\\3\n")
+        if disable_wrap || !STDIN.tty?
+          txt
+        else
+          width = `stty size`.split(' ')[1].to_i - indent.length
+          width = 80 unless width >= 10
+          txt.strip.gsub(/(.{1,#{width}})( +|$)\n?|(.{#{width}})/, indent + "\\1\\3\n")
+        end
       end
     end
   end
   UI = UserInterface
+
+  # Redirects cocoapods-core UI.
+  #
+  module CoreUI
+
+    class << self
+
+      # @todo enable in CocoaPods 0.17.0 release
+      #
+      def puts(message)
+        # UI.puts message
+      end
+
+      # @todo enable in CocoaPods 0.17.0 release
+      #
+      def warn(message)
+        # UI.warn message
+      end
+    end
+  end
 end

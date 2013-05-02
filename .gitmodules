@@ -10,6 +10,7 @@
 [submodule "spec/fixtures/integration/sstoolkit"]
 	path = spec/fixtures/integration/sstoolkit
 	url = https://github.com/samsoffes/sstoolkit.git
+  ignore = dirty
 [submodule "spec/fixtures/spec-repos/master"]
 	path = spec/fixtures/spec-repos/master
 	url = https://github.com/CocoaPods/Specs.git

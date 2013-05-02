@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
-$:.unshift File.expand_path('../lib', __FILE__)
-require 'cocoapods'
+require File.expand_path('../lib/cocoapods/gem_version', __FILE__)
+require 'date'
 
 Gem::Specification.new do |s|
   s.name     = "cocoapods"
@@ -26,7 +26,11 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }
 
-  s.add_runtime_dependency 'xcodeproj',     '~> 0.5.0'
+  # Link with the version of CocoaPods-Core
+  s.add_runtime_dependency 'cocoapods-core',       "= #{Pod::VERSION}"
+  s.add_runtime_dependency 'claide',               '~> 0.2.0'
+  s.add_runtime_dependency 'cocoapods-downloader', '~> 0.1.0'
+  s.add_runtime_dependency 'xcodeproj',            '~> 0.5.5'
 
   s.add_runtime_dependency 'faraday',       '~> 0.8.1'
   s.add_runtime_dependency 'octokit',       '~> 1.7'
@@ -35,12 +39,13 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'json',          '~> 1.7.3'
   s.add_runtime_dependency 'open4',         '~> 1.3.0'
   s.add_runtime_dependency 'rake',          '~> 10.0.0'
-  s.add_runtime_dependency 'activesupport', '~> 3.2.6'
+  s.add_runtime_dependency 'activesupport', '~> 3.2.13'
 
   s.add_development_dependency 'bacon', '~> 1.1'
 
   ## Make sure you can build the gem on older versions of RubyGems too:
   s.rubygems_version = "1.6.2"
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.required_ruby_version = '>= 1.8.7'
   s.specification_version = 3 if s.respond_to? :specification_version
 end

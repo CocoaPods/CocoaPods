@@ -5,123 +5,356 @@ require 'active_support/core_ext/string/inflections'
 module Pod
   class Command
     class Spec < Command
-      def self.banner
-%{Managing PodSpec files:
+      self.abstract_command = true
+      self.summary = 'Manage pod specs'
 
-    $ pod spec create [ NAME | https://github.com/USER/REPO ]
+      #-----------------------------------------------------------------------#
 
-      Creates a PodSpec, in the current working dir, called `NAME.podspec'.
-      If a GitHub url is passed the spec is prepopulated.
+      class Create < Spec
+        self.summary = 'Create spec file stub.'
 
-    $ pod spec lint [ NAME.podspec | DIRECTORY | http://PATH/NAME.podspec, ... ]
+        self.description = <<-DESC
+          Creates a PodSpec, in the current working dir, called `NAME.podspec'.
+          If a GitHub url is passed the spec is prepopulated.
+        DESC
 
-      Validates `NAME.podspec'. If a directory is provided it validates
-      the podspec files found, including subfolders. In case
-      the argument is omitted, it defaults to the current working dir.}
-      end
+        self.arguments = '[ NAME | https://github.com/USER/REPO ]'
 
-      def self.options
-        [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
-          ["--local",       "Lint a podspec against the local files contained in its directory"],
-          ["--only-errors", "Lint validates even if warnings are present"],
-          ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
-      end
-
-      def initialize(argv)
-        @action = argv.shift_argument
-        if @action == 'create'
-          @name_or_url     = argv.shift_argument
-          @url             = argv.shift_argument
-          super if @name_or_url.nil?
-          super unless argv.empty?
-        elsif @action == 'lint'
-          @quick       =  argv.option('--quick')
-          @local       =  argv.option('--local')
-          @only_errors =  argv.option('--only-errors')
-          @no_clean    =  argv.option('--no-clean')
-          @podspecs_paths = argv
-        else
+        def initialize(argv)
+          @name_or_url, @url = argv.shift_argument, argv.shift_argument
           super
         end
-      end
 
-      def run
-        send @action
-      end
-
-      def create
-        if repo_id_match = (@url || @name_or_url).match(/github.com\/([^\/\.]*\/[^\/\.]*)\.*/)
-          # This is to make sure Faraday doesn't warn the user about the `system_timer` gem missing.
-          old_warn, $-w = $-w, nil
-          begin
-            require 'faraday'
-          ensure
-            $-w = old_warn
-          end
-          require 'octokit'
-
-          repo_id = repo_id_match[1]
-          data = github_data_for_template(repo_id)
-          data[:name] = @name_or_url if @url
-          UI.puts semantic_versioning_notice(repo_id, data[:name]) if data[:version] == '0.0.1'
-        else
-          data = default_data_for_template(@name_or_url)
+        def validate!
+          super
+          help! "A pod name or repo URL is required." unless @name_or_url
         end
-        spec = spec_template(data)
-        (Pathname.pwd + "#{data[:name]}.podspec").open('w') { |f| f << spec }
-        UI.puts "\nSpecification created at #{data[:name]}.podspec".green
-      end
 
-      def lint
-        UI.puts
-        invalid_count = 0
-        podspecs_to_lint.each do |podspec|
-          linter       = Linter.new(podspec)
-          linter.quick = @quick
-          linter.local = @local
-          linter.no_clean = @no_clean
+        def run
+          if repo_id_match = (@url || @name_or_url).match(/github.com\/([^\/\.]*\/[^\/\.]*)\.*/)
+            # This is to make sure Faraday doesn't warn the user about the `system_timer` gem missing.
+            old_warn, $-w = $-w, nil
+            begin
+              require 'faraday'
+            ensure
+              $-w = old_warn
+            end
+            require 'octokit'
 
-          # Show immediatly which pod is being processed.
-          print " -> #{linter.spec_name}\r" unless config.silent?
-          $stdout.flush
-          linter.lint
-
-          case linter.result_type
-          when :error
-            invalid_count += 1
-            color = :red
-          when :warning
-            invalid_count  += 1 unless @only_errors
-            color = :yellow
+            repo_id = repo_id_match[1]
+            data = github_data_for_template(repo_id)
+            data[:name] = @name_or_url if @url
+            UI.puts semantic_versioning_notice(repo_id, data[:name]) if data[:version] == '0.0.1'
           else
-            color = :green
+            data = default_data_for_template(@name_or_url)
+          end
+          spec = spec_template(data)
+          (Pathname.pwd + "#{data[:name]}.podspec").open('w') { |f| f << spec }
+          UI.puts "\nSpecification created at #{data[:name]}.podspec".green
+        end
+      end
+
+      #-----------------------------------------------------------------------#
+
+      class Lint < Spec
+        self.summary = 'Validates a spec file.'
+
+        self.description = <<-DESC
+          Validates `NAME.podspec'. If a directory is provided it validates
+          the podspec files found, including subfolders. In case
+          the argument is omitted, it defaults to the current working dir.
+        DESC
+
+        self.arguments = '[ NAME.podspec | DIRECTORY | http://PATH/NAME.podspec, ... ]'
+
+        def self.options
+          [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
+            ["--local",       "Lint a podspec against the local files contained in its directory"],
+            ["--only-errors", "Lint validates even if warnings are present"],
+            ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
+        end
+
+        def initialize(argv)
+          @quick       =  argv.flag?('quick')
+          @local       =  argv.flag?('local')
+          @only_errors =  argv.flag?('only-errors')
+          @clean       =  argv.flag?('clean', true)
+          @podspecs_paths = argv.arguments!
+          super
+        end
+
+        def run
+          UI.puts
+          invalid_count = 0
+          podspecs_to_lint.each do |podspec|
+            validator             = Validator.new(podspec)
+            validator.quick       = @quick
+            validator.local       = @local
+            validator.no_clean    = !@clean
+            validator.only_errors = @only_errors
+            validator.validate
+            invalid_count += 1 unless validator.validated?
+
+            unless @clean
+              UI.puts "Pods project available at `#{validator.validation_dir}/Pods/Pods.xcodeproj` for inspection."
+              UI.puts
+            end
           end
 
-          # This overwrites the previously printed text
-          UI.puts " -> ".send(color) << linter.spec_name unless config.silent?
-          print_messages('ERROR', linter.errors)
-          print_messages('WARN',  linter.warnings)
-          print_messages('NOTE',  linter.notes)
-
-          UI.puts unless config.silent?
+          count = podspecs_to_lint.count
+          UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n"
+          if invalid_count == 0
+            lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
+            UI.puts lint_passed_message.green << "\n\n"
+          else
+            raise Informative, count == 1 ? "The spec did not pass validation." : "#{invalid_count} out of #{count} specs failed validation."
+          end
+          podspecs_tmp_dir.rmtree if podspecs_tmp_dir.exist?
         end
-
-        count = podspecs_to_lint.count
-        UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n" unless config.silent?
-        if invalid_count == 0
-          lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
-          UI.puts lint_passed_message.green << "\n\n" unless config.silent?
-        else
-          raise Informative, count == 1 ? "The spec did not pass validation." : "#{invalid_count} out of #{count} specs failed validation."
-        end
-        podspecs_tmp_dir.rmtree if podspecs_tmp_dir.exist?
       end
+
+      #-----------------------------------------------------------------------#
+
+      class Which < Spec
+        self.summary = 'Prints the path of the given spec.'
+
+        self.description = <<-DESC
+          Prints the path of 'NAME.podspec'
+        DESC
+
+        self.arguments = '[ NAME ]'
+
+        def self.options
+          [["--show-all", "Print all versions of the given podspec"]].concat(super)
+        end
+
+        def initialize(argv)
+          @show_all = argv.flag?('show-all')
+          @spec = argv.shift_argument
+          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
+          super
+        end
+
+        def validate!
+          super
+          help! "A podspec name is required." unless @spec
+        end
+
+        def run
+          UI.puts get_path_of_spec(@spec, @show_all)
+        end
+      end
+
+      #-----------------------------------------------------------------------#
+
+      class Cat < Spec
+        self.summary = 'Prints a spec file.'
+
+        self.description = <<-DESC
+          Prints 'NAME.podspec' to standard output.
+        DESC
+
+        self.arguments = '[ NAME ]'
+
+        def self.options
+          [["--show-all", "Pick from all versions of the given podspec"]].concat(super)
+        end
+
+        def initialize(argv)
+          @show_all = argv.flag?('show-all')
+          @spec = argv.shift_argument
+          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
+          super
+        end
+
+        def validate!
+          super
+          help! "A podspec name is required." unless @spec
+        end
+
+        def run
+          filepath = if @show_all
+            specs = get_path_of_spec(@spec, @show_all).split(/\n/)
+            index = choose_from_array(specs, "Which spec would you like to print [1-#{ specs.count }]? ")
+            specs[index]
+          else
+            get_path_of_spec(@spec)
+          end
+
+          UI.puts File.open(filepath).read
+        end
+      end
+
+      #-----------------------------------------------------------------------#
+
+      class Edit < Spec
+        self.summary = 'Edit a spec file.'
+
+        self.description = <<-DESC
+          Opens 'NAME.podspec' to be edited.
+        DESC
+
+        self.arguments = '[ NAME ]'
+
+        def self.options
+          [["--show-all", "Pick which spec to edit from all available versions of the given podspec"]].concat(super)
+        end
+
+        def initialize(argv)
+          @show_all = argv.flag?('show-all')
+          @spec = argv.shift_argument
+          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
+          super
+        end
+
+        def validate!
+          super
+          help! "A podspec name is required." unless @spec
+        end
+
+        def run
+          filepath = if @show_all
+            specs = get_path_of_spec(@spec, @show_all).split(/\n/)
+            index = choose_from_array(specs, "Which spec would you like to edit [1-#{ specs.count }]? ")
+            specs[index]
+          else
+            get_path_of_spec(@spec)
+          end
+
+          exec_editor(filepath.to_s) if File.exists? filepath
+          raise Informative, "#{ filepath } doesn't exist."
+        end
+
+        # Thank you homebrew
+        def which(cmd)
+          dir = ENV['PATH'].split(':').find { |p| File.executable? File.join(p, cmd) }
+          Pathname.new(File.join(dir, cmd)) unless dir.nil?
+        end
+
+        def which_editor
+          editor = ENV['EDITOR']
+          # If an editor wasn't set, try to pick a sane default
+          return editor unless editor.nil?
+
+          # Find Sublime Text 2
+          return 'subl' if which 'subl'
+          # Find Textmate
+          return 'mate' if which 'mate'
+          # Find # BBEdit / TextWrangler
+          return 'edit' if which 'edit'
+          # Default to vim
+          return 'vim' if which 'vim'
+
+          raise Informative, "Failed to open editor. Set your 'EDITOR' environment variable."
+        end
+
+        def exec_editor *args
+          return if args.to_s.empty?
+          safe_exec(which_editor, *args)
+        end
+
+        def safe_exec(cmd, *args)
+          # This buys us proper argument quoting and evaluation
+          # of environment variables in the cmd parameter.
+          exec "/bin/sh", "-i", "-c", cmd + ' "$@"', "--", *args
+        end
+      end
+
+      #-----------------------------------------------------------------------#
+
+      # @todo some of the following methods can probably move to one of the
+      #       subclasses.
 
       private
 
-      def print_messages(type, messages)
-        return if config.silent?
-        messages.each {|msg| UI.puts "    - #{type.ljust(5)} | #{msg}"}
+      # @return [Fixnum] the index of the chosen array item
+      #
+      def choose_from_array(array, message)
+        array.each_with_index do |item, index|
+          UI.puts "#{ index + 1 }: #{ item }"
+        end
+
+        print message
+
+        index = STDIN.gets.chomp.to_i - 1
+        if index < 0 || index > array.count
+          raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
+        else
+          index
+        end
+      end
+
+      # @param  [String] spec
+      #         The name of the specification.
+      #
+      # @param  [Bool] show_all
+      #         Whether the paths for all the versions should be returned or
+      #         only the one for the last version.
+      #
+      # @return [Pathname] the absolute path or paths of the given podspec
+      #
+      def get_path_of_spec(spec, show_all = false)
+        sets = SourcesManager.search_by_name(spec)
+
+        if sets.count == 1
+          set = sets.first
+        elsif sets.map(&:name).include?(spec)
+          set = sets.find { |s| s.name == spec }
+        else
+          names = sets.collect(&:name) * ', '
+          raise Informative, "More than one spec found for '#{ spec }':\n#{ names }"
+        end
+
+        unless show_all
+          best_spec, spec_source = spec_and_source_from_set(set)
+          return pathname_from_spec(best_spec, spec_source)
+        end
+
+        return all_paths_from_set(set)
+      end
+
+      # @return [Pathname] the absolute path of the given spec and source
+      #
+      def pathname_from_spec(spec, source)
+        Pathname.new("~/.cocoapods/#{ source }/#{ spec.name }/#{ spec.version }/#{ spec.name }.podspec").expand_path
+      end
+
+      # @return [String] of spec paths one on each line
+      #
+      def all_paths_from_set(set)
+        paths = ""
+
+        sources = set.sources
+
+        sources.each do |source|
+          versions = source.versions(set.name)
+
+          versions.each do |version|
+            spec = source.specification(set.name, version)
+            paths += "#{ pathname_from_spec(spec, source) }\n"
+          end
+        end
+
+        paths
+      end
+
+      # @return [Specification, Source] the highest known specification with it's source of the given
+      #         set.
+      #
+      def spec_and_source_from_set(set)
+        sources = set.sources
+
+        best_source = sources.first
+        best_version = best_source.versions(set.name).first
+        sources.each do |source|
+          version = source.versions(set.name).first
+          if version > best_version
+              best_source = source
+              best_version = version
+          end
+        end
+
+        return best_source.specification(set.name, best_version), best_source
       end
 
       def podspecs_to_lint
@@ -154,7 +387,13 @@ module Pod
          Pathname.new('/tmp/CocoaPods/Lint_podspec')
       end
 
-      # Templates and github information retrival for spec create
+      #--------------------------------------#
+
+      # Templates and github information retrieval for spec create
+      #
+      # @todo It would be nice to have a template class that accepts options
+      #       and uses the default ones if not provided.
+      # @todo The template is outdated.
 
       def default_data_for_template(name)
         data = {}
@@ -211,11 +450,9 @@ module Pod
         return <<-SPEC
 #
 # Be sure to run `pod spec lint #{data[:name]}.podspec' to ensure this is a
-# valid spec.
+# valid spec and remove all comments before submitting the spec.
 #
-# Remove all comments before submitting the spec. Optional attributes are commented.
-#
-# For details see: https://github.com/CocoaPods/CocoaPods/wiki/The-podspec-format
+# To learn more about the attributes see http://docs.cocoapods.org/specification.html
 #
 Pod::Spec.new do |s|
   s.name         = "#{data[:name]}"
@@ -228,25 +465,12 @@ Pod::Spec.new do |s|
   #                   * Don't worry about the indent, we strip it!
   #                  DESC
   s.homepage     = "#{data[:homepage]}"
+  # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
 
   # Specify the license type. CocoaPods detects automatically the license file if it is named
-  # `LICEN{C,S}E*.*', however if the name is different, specify it.
+  # 'LICENCE*.*' or 'LICENSE*.*', however if the name is different, specify it.
   s.license      = 'MIT (example)'
   # s.license      = { :type => 'MIT (example)', :file => 'FILE_LICENSE' }
-  #
-  # Only if no dedicated file is available include the full text of the license.
-  #
-  # s.license      = {
-  #   :type => 'MIT (example)',
-  #   :text => <<-LICENSE
-  #             Copyright (C) <year> <copyright holders>
-
-  #             All rights reserved.
-
-  #             Redistribution and use in source and binary forms, with or without
-  #             ...
-  #   LICENSE
-  # }
 
   # Specify the authors of the library, with email addresses. You can often find
   # the email addresses of the authors by using the SCM log. E.g. $ git log
@@ -261,14 +485,12 @@ Pod::Spec.new do |s|
   # Specify the location from where the source should be retrieved.
   #
   s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
-  # s.source       = { :svn => 'http://EXAMPLE/#{data[:name]}/tags/1.0.0' }
-  # s.source       = { :hg  => 'http://EXAMPLE/#{data[:name]}', :revision => '1.0.0' }
+
 
   # If this Pod runs only on iOS or OS X, then specify the platform and
   # the deployment target.
   #
   # s.platform     = :ios, '5.0'
-  # s.platform     = :ios
 
   # ――― MULTI-PLATFORM VALUES ――――――――――――――――――――――――――――――――――――――――――――――――― #
 
@@ -282,17 +504,12 @@ Pod::Spec.new do |s|
   # added to the Pods project. If the pattern is a directory then the
   # path will automatically have '*.{h,m,mm,c,cpp}' appended.
   #
-  # Alternatively, you can use the FileList class for even more control
-  # over the selected files.
-  # (See http://rake.rubyforge.org/classes/Rake/FileList.html.)
-  #
   s.source_files = 'Classes', 'Classes/**/*.{h,m}'
+  s.exclude_files = 'Classes/Exclude'
 
   # A list of file patterns which select the header files that should be
   # made available to the application. If the pattern is a directory then the
   # path will automatically have '*.h' appended.
-  #
-  # Also allows the use of the FileList class like `source_files' does.
   #
   # If you do not explicitly set the list of public header files,
   # all headers of source_files will be made public.
@@ -302,15 +519,12 @@ Pod::Spec.new do |s|
   # A list of resources included with the Pod. These are copied into the
   # target bundle with a build phase script.
   #
-  # Also allows the use of the FileList class like `source_files' does.
-  #
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
 
   # A list of paths to preserve after installing the Pod.
   # CocoaPods cleans by default any file that is not used.
   # Please don't include documentation, example, and test files.
-  # Also allows the use of the FileList class like `source_files' does.
   #
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
@@ -328,7 +542,7 @@ Pod::Spec.new do |s|
 
   # If this Pod uses ARC, specify it like so.
   #
-  # s.requires_arc = true
+  s.requires_arc = true
 
   # If you need to specify any other build settings, add them to the
   # xcconfig hash.
