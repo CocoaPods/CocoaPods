@@ -24,18 +24,27 @@ install_resource()
       xcrun momc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename $1 .xcdatamodeld`.momd"
       ;;
     *)
-      echo "rsync -av --exclude '*/.svn/*' ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-      rsync -av --exclude '*/.svn/*' "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+      if [ $2 == ""]; then
+        echo "rsync -av --exclude '*/.svn/*' ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+        rsync -av --exclude '*/.svn/*' "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+      else
+        echo "rsync -av --exclude '*/.svn/*' ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/$2"
+
+        mkdir -p "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/$(dirname ${2})"
+        rsync -av --exclude '*/.svn/*' "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/$2"
+      fi
       ;;
   esac
 }
 EOS
 
       attr_reader :resources
+      attr_reader :preserved_resources
 
       # A list of files relative to the project pods root.
-      def initialize(resources = [])
+      def initialize(resources = [], preserved_resources = [])
         @resources = resources
+        @preserved_resources = preserved_resources
       end
 
       def save_as(pathname)
@@ -44,6 +53,13 @@ EOS
           @resources.each do |resource|
             script.puts "install_resource '#{resource}'"
           end
+
+          @preserved_resources.each do |preserved_resource|
+            preserved_resource[:source_files].each do |resource|
+              new_location = "#{preserved_resource[:destination]}#{resource.sub(preserved_resource[:root_path].to_s, "")}"
+              script.puts "install_resource '#{resource}' '#{new_location}'"
+            end
+          end          
         end
         # @todo use File api
         system("chmod +x '#{pathname}'")

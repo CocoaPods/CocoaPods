@@ -222,7 +222,17 @@ module Pod
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
           resources = library.file_accessors.map { |accessor| accessor.resources.flatten.map {|res| project.relativize(res)} }.flatten
           resources << bridge_support_file if bridge_support_file
-          generator = Generator::CopyResourcesScript.new(resources)
+
+          preserved_resources = []
+          library.file_accessors.each do |accessor|
+            accessor.preserved_resources.each do |preserved_resource|
+              preserved_resources << { :source_files  => preserved_resource[:source_files].map { |res| project.relativize(res) }.flatten,
+                                       :root_path     => project.relativize(preserved_resource[:root_path]),
+                                       :destination   => preserved_resource[:destination] }
+            end
+          end
+
+          generator = Generator::CopyResourcesScript.new(resources, preserved_resources)
           generator.save_as(path)
           add_file_to_support_group(path)
         end
