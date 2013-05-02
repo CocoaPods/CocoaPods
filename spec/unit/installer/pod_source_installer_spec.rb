@@ -174,7 +174,8 @@ module Pod
           "Pods/BananaLib/Classes/BananaPrivate.h",
           "Pods/BananaLib/LICENSE",
           "Pods/BananaLib/README",
-          "Pods/BananaLib/Resources/logo-sidebar.png"
+          "Pods/BananaLib/Resources/logo-sidebar.png",
+          "Pods/BananaLib/Resources/sub_dir/logo-sidebar.png",
         ]
       end
 
@@ -198,7 +199,8 @@ module Pod
           "Pods/BananaLib/Classes/BananaPrivate.h",
           "Pods/BananaLib/LICENSE",
           "Pods/BananaLib/README",
-          "Pods/BananaLib/Resources/logo-sidebar.png"
+          "Pods/BananaLib/Resources/logo-sidebar.png",
+          "Pods/BananaLib/Resources/sub_dir/logo-sidebar.png",
         ]
       end
 
