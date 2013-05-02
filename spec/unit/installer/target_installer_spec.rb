@@ -192,6 +192,13 @@ module Pod
         script.read.should.include?('logo-sidebar.png')
       end
 
+      it "preserves resource directory structure if resources as included as a source and destination" do
+        @installer.install!
+        script = config.sandbox.root + 'Pods-resources.sh'
+        script.read.should.include?('assets/logo-sidebar.png')
+        script.read.should.include?('assets/sub_dir/logo-sidebar.png')
+      end
+
       it "creates the acknowledgements files " do
         @installer.install!
         markdown = config.sandbox.root + 'Pods-acknowledgements.markdown'
