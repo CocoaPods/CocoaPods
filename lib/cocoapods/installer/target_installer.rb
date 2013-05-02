@@ -148,9 +148,6 @@ module Pod
 
           target.build_configurations.each do |c|
             c.base_configuration_reference = xcconfig_file_ref
-            Generator::XCConfig.pods_project_settings.each do |key, value|
-              c.build_settings[key] = value
-            end
           end
         end
       end
@@ -161,7 +158,7 @@ module Pod
       def create_target_environment_header
         path = library.target_environment_header_path
         UI.message "- Generating target environment header at #{UI.path(path)}" do
-          generator = Generator::TargetEnvironmentHeader.new([library.spec])
+          generator = Generator::TargetEnvironmentHeader.new(library.libraries.map { |l| l.spec })
           generator.save_as(path)
           add_file_to_support_group(path)
         end

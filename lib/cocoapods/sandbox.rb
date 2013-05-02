@@ -55,10 +55,6 @@ module Pod
     #
     attr_reader :root
 
-    # @return [HeadersStore] the header directory for the Pods libraries.
-    #
-    attr_reader :build_headers
-
     # @return [HeadersStore] the header directory for the user targets.
     #
     attr_reader :public_headers
@@ -67,7 +63,6 @@ module Pod
     #
     def initialize(root)
       @root = Pathname.new(root)
-      @build_headers  = HeadersStore.new(self, "BuildHeaders")
       @public_headers = HeadersStore.new(self, "Headers")
       @predownloaded_pods = []
       @checkout_sources = {}

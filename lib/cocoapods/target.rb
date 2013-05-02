@@ -21,19 +21,15 @@ module Pod
     #
     attr_reader :build_headers
 
-    # @return [HeadersStore] the public header directory for the library.
-    #
-    attr_reader :public_headers
-
     # @param [TargetDefinition] target_definition @see target_definition
     # @param [Sandbox] sandbox @see sandbox
     #
     def initialize(target_definition, sandbox)
       @target_definition = target_definition
       @sandbox = sandbox
-      @build_headers  = Sandbox::HeadersStore.new(sandbox, "BuildHeaders/#{target_definition.name}")
-      @public_headers = Sandbox::HeadersStore.new(sandbox, "Headers/#{target_definition.name}")
+      @build_headers  = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
       @libraries = []
+      @file_accessors = []
     end
 
     # @return [String] the label for the library.
@@ -52,6 +48,12 @@ module Pod
     #
     def product_name
       "lib#{label}.a"
+    end
+
+    # @return [String] the XCConfig namespaced prefix.
+    #
+    def xcconfig_prefix
+      label.upcase.gsub(/[^A-Z]/, '_') + '_'
     end
 
     # @return [String] A string suitable for debugging.
@@ -201,6 +203,12 @@ module Pod
       "${SRCROOT}/#{relative_to_srcroot(copy_resources_script_path)}"
     end
 
+    # @return [Specification::Consumer] the specification consumer for the
+    #         library.
+    #
+    def consumer
+      spec.consumer(platform)
+    end
     #-------------------------------------------------------------------------#
 
     # @!group Private Helpers

@@ -27,12 +27,11 @@ module Pod
         #
         def integrate!
           UI.section(integration_message) do
-            create_xcconfig_file
             add_xcconfig_base_configuration
             add_pods_library
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
-            save_user_project
+            save_projects
           end
         end
 
@@ -47,6 +46,13 @@ module Pod
         #
         def user_project
           @user_project ||= Xcodeproj::Project.new(target.user_project_path)
+        end
+
+        # Read the pods project from the disk to ensure that it is up to date as
+        # other TargetIntegrators might have modified it.
+        #
+        def pods_project
+          @pods_project ||= Xcodeproj::Project.new(target.sandbox.project_path)
         end
 
         # @return [String] a string representation suitable for debugging.
@@ -65,23 +71,6 @@ module Pod
         #
         def spec_consumers
           @spec_consumers ||= target.libraries.map(&:file_accessors).flatten.map(&:spec_consumer)
-        end
-
-        # Generates the contents of the xcconfig file and saves it to disk.
-        #
-        # @note   The `ALWAYS_SEARCH_USER_PATHS` flag is enabled to support
-        #         libraries like `EmbedReader`.
-        #
-        # @return [void]
-        #
-        def create_xcconfig_file
-          path = target.xcconfig_path
-          UI.message "- Generating xcconfig file at #{UI.path(path)}" do
-            gen = Generator::XCConfig.new(target, spec_consumers, target.relative_pods_root)
-            gen.set_arc_compatibility_flag = target.target_definition.podfile.set_arc_compatibility_flag?
-            gen.save_as(path)
-            target.xcconfig = gen.xcconfig
-          end
         end
 
         # Adds the `xcconfig` configurations files generated for the current
@@ -108,20 +97,27 @@ module Pod
           end
         end
 
-        # Adds a file reference to the library of the {TargetDefinition} and
-        # adds it to the frameworks build phase of the targets.
+        # Adds spec libraries to the frameworks build phase of the
+        # {TargetDefinition} integration libraries. Adds a file reference to
+        # the library of the {TargetDefinition} and adds it to the frameworks
+        # build phase of the targets.
         #
         # @return [void]
         #
         def add_pods_library
+          native_target = pods_project.targets.select { |t| t.name == target.name }.first
+          products = pods_project.products_group
+          target.libraries.each do |library|
+            product = products.files.select { |f| f.path == library.product_name }.first
+            native_target.frameworks_build_phase.add_file_reference(product)
+          end
+
           frameworks = user_project.frameworks_group
           native_targets.each do |native_target|
-            target.libraries.each do |library|
-              lib = frameworks.files.select { |f| f.path == library.product_name }.first ||
-                    frameworks.new_static_library(library.name)
-              unless native_target.frameworks_build_phase.files_references.include?(lib)
-                native_target.frameworks_build_phase.add_file_reference(lib)
-              end
+            library = frameworks.files.select { |f| f.path == target.product_name }.first ||
+                      frameworks.new_static_library(target.name)
+            unless native_target.frameworks_build_phase.files_references.include?(library)
+                   native_target.frameworks_build_phase.add_file_reference(library)
             end
           end
         end
@@ -133,14 +129,13 @@ module Pod
         # @return [void]
         #
         def add_copy_resources_script_phase
+          phase_name = "Copy Pods Resources"
           native_targets.each do |native_target|
-            target.libraries.each do |library|
-              phase_name = "Copy Pods Resources (#{library.name})"
-              next if native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first
-              phase = native_target.new_shell_script_build_phase(phase_name)
-              path  = library.copy_resources_script_relative_path
-              phase.shell_script = %{"#{path}"\n}
-            end
+            phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first ||
+                    native_target.new_shell_script_build_phase(phase_name)
+            phase.shell_script = target.libraries.map do |lib|
+              "#{lib.copy_resources_script_relative_path}"
+            end.join("\n")
           end
         end
 
@@ -176,8 +171,9 @@ module Pod
         #
         # @return [void]
         #
-        def save_user_project
+        def save_projects
           user_project.save_as(target.user_project_path)
+          pods_project.save_as(target.sandbox.project_path)
         end
 
         #---------------------------------------------------------------------#

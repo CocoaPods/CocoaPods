@@ -203,6 +203,9 @@ module Pod
               lib.client_root = config.installation_root
               lib.user_target_uuids = []
               lib.user_build_configurations = {}
+              target.client_root = config.installation_root
+              target.user_target_uuids = []
+              target.user_build_configurations = {}
             end
             target.libraries << lib
           end

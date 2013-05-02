@@ -55,39 +55,58 @@ module Pod
           ld_flags << ' -fobjc-arc'
         end
 
-        public_headers = [library.public_headers.search_paths,
-                          library.libraries.map { |lib| lib.public_headers.search_paths }].flatten
+        # The xcconfig file for a spec derived target includes namespaced
+        # configuration values, the private build headers and headermap
+        # disabled.
+        # The xcconfig file for the Pods integration target then includes the
+        # spec xcconfig and incorporates the namespaced configuration values
+        # like preprocessor overrides or frameworks to link with.
+        if library.spec
+          prefix = library.xcconfig_prefix
+          config = {
+            'ALWAYS_SEARCH_USER_PATHS'              => 'YES',
+            'OTHER_LDFLAGS'                         => ld_flags,
+            'HEADER_SEARCH_PATHS'                   => '${PODS_HEADERS_SEARCH_PATHS}',
+            'PODS_ROOT'                             => '${SRCROOT}',
+            'PODS_HEADERS_SEARCH_PATHS'             => '${PODS_BUILD_HEADERS_SEARCH_PATHS} ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
+            'PODS_BUILD_HEADERS_SEARCH_PATHS'       => quote(library.build_headers.search_paths),
+            'PODS_PUBLIC_HEADERS_SEARCH_PATHS'      => quote(sandbox.public_headers.search_paths),
+            'GCC_PREPROCESSOR_DEFINITIONS'          => 'COCOAPODS=1',
+            'USE_HEADERMAP'                         => 'NO'
+          }
 
-        @xcconfig = Xcodeproj::Config.new({
-          'ALWAYS_SEARCH_USER_PATHS'         => 'YES',
-          'OTHER_LDFLAGS'                    => ld_flags,
-          'HEADER_SEARCH_PATHS'              => '${PODS_HEADERS_SEARCH_PATHS}',
-          'PODS_ROOT'                        => relative_pods_root,
-          'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
-          'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(library.build_headers.search_paths),
-          'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(public_headers),
-          'GCC_PREPROCESSOR_DEFINITIONS'     => '$(inherited) COCOAPODS=1'
-        })
+          consumer_xcconfig(library.consumer).to_hash.each do |k, v|
+            config[k] = "#{config[k]} ${#{library.xcconfig_prefix}#{k}}"
+            config["#{library.xcconfig_prefix}#{k}"] = v
+          end
+        else
+          config = {
+            'ALWAYS_SEARCH_USER_PATHS'              => 'YES',
+            'OTHER_LDFLAGS'                         => ld_flags,
+            'HEADER_SEARCH_PATHS'                   => '${PODS_HEADERS_SEARCH_PATHS}',
+            'PODS_ROOT'                             => relative_pods_root,
+            'PODS_HEADERS_SEARCH_PATHS'             => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
+            'PODS_BUILD_HEADERS_SEARCH_PATHS'       => '',
+            'PODS_PUBLIC_HEADERS_SEARCH_PATHS'      => quote(sandbox.public_headers.search_paths),
+            'GCC_PREPROCESSOR_DEFINITIONS'          => '$(inherited) COCOAPODS=1',
+            'USE_HEADERMAP'                         => '$(inherited)'
+          }
 
-        spec_consumers.each do |consumer|
-          add_spec_build_settings_to_xcconfig(consumer, @xcconfig)
+          library.libraries.each do |lib|
+            consumer_xcconfig(lib.consumer).to_hash.each do |k, v|
+              config[k] = "#{config[k]} ${#{lib.xcconfig_prefix}#{k}}"
+            end
+          end
         end
 
+        @xcconfig = Xcodeproj::Config.new(config)
+        @xcconfig.includes = library.libraries.map(&:name) unless library.spec
         @xcconfig
       end
 
       # @return [Xcodeproj::Config] The generated xcconfig.
       #
       attr_reader :xcconfig
-
-      # @return [Hash] The settings of the xcconfig that the Pods project
-      #         needs to override.
-      #
-      def self.pods_project_settings
-        { 'PODS_ROOT' => '${SRCROOT}',
-          'PODS_HEADERS_SEARCH_PATHS' => '${PODS_BUILD_HEADERS_SEARCH_PATHS} ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
-          'USE_HEADERMAP' => 'NO' }
-      end
 
       # Generates and saves the xcconfig to the given path.
       #
@@ -143,12 +162,14 @@ module Pod
       #
       # @return [void]
       #
-      def add_spec_build_settings_to_xcconfig(consumer, xcconfig)
+      def consumer_xcconfig(consumer)
+        xcconfig = Xcodeproj::Config.new()
         xcconfig.merge!(consumer.xcconfig)
         xcconfig.libraries.merge(consumer.libraries)
         xcconfig.frameworks.merge(consumer.frameworks)
         xcconfig.weak_frameworks.merge(consumer.weak_frameworks)
         add_developers_frameworks_if_needed(consumer, xcconfig)
+        xcconfig
       end
 
       # @return [Array<String>] The search paths for the developer frameworks.

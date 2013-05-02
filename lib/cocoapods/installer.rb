@@ -186,10 +186,10 @@ module Pod
     # @todo   [#247] Clean the headers of only the pods to install.
     #
     def clean_sandbox
+      sandbox.public_headers.implode!
       targets.each do |target|
         target.libraries.each do |library|
           library.build_headers.implode!
-          library.public_headers.implode!
         end
       end
 
@@ -247,7 +247,7 @@ module Pod
     def install_source_of_pod(pod_name)
       specs_by_platform = {}
       libraries.each do |library|
-        if library.spec.root.name == pod_name
+        if library.spec && library.spec.root.name == pod_name
           specs_by_platform[library.platform] ||= []
           specs_by_platform[library.platform] << library.spec
         end
@@ -553,7 +553,7 @@ module Pod
     #         process.
     #
     def libraries
-      targets.map(&:libraries).flatten
+      targets + targets.map(&:libraries).flatten
     end
 
     #-------------------------------------------------------------------------#
