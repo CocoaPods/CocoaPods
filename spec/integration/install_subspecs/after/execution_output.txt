@@ -30,37 +30,74 @@ Downloading dependencies
 
 Generating Pods project
   - Creating Pods project
-  - Adding source files to Pods project
-  - Adding resources to Pods project
-  - Linking headers
-  - Installing targets
-    - Installing target `Pods-OS X App` OS X 10.6
-      - Adding Build files
-      - Generating xcconfig file at `Pods/Pods-OS X App.xcconfig`
-      - Generating target environment header at `Pods/Pods-OS X App-environment.h`
-      - Generating prefix header at `Pods/Pods-OS X App-prefix.pch`
-      - Generating copy resources script at `Pods/Pods-OS X App-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-OS X App-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-OS X App-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-OS X App-dummy.m`
-    - Installing target `Pods-iOS App` iOS 4.3
-      - Adding Build files
-      - Generating xcconfig file at `Pods/Pods-iOS App.xcconfig`
-      - Generating target environment header at `Pods/Pods-iOS App-environment.h`
-      - Generating prefix header at `Pods/Pods-iOS App-prefix.pch`
-      - Generating copy resources script at `Pods/Pods-iOS App-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-iOS App-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-iOS App-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-iOS App-dummy.m`
-  - Running post install hooks
-  - Writing Xcode project file to `Pods/Pods.xcodeproj`
-  - Writing Lockfile in `Podfile.lock`
-  - Writing Manifest in `Pods/Manifest.lock`
 
-Integrating client project
+――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
-[!] From now on use `SampleApp.xcworkspace`.
+### Report
 
-Integrating `libPods-OS X App.a` into target `OS X App` of project `SampleApp.xcodeproj`.
+* What did you do?
 
-Integrating `libPods-iOS App.a` into target `iOS App` of project `SampleApp.xcodeproj`.
+* What did you expect to happen?
+
+* What happened instead?
+
+
+### Stack
+
+```
+   CocoaPods : 0.19.1
+        Ruby : ruby 2.0.0p0 (2013-02-24 revision 39474) [x86_64-darwin12.2.0]
+    RubyGems : 2.0.3
+        Host : Mac OS X 10.8.3 (12D78)
+       Xcode : 4.6.2 (4H1003)
+Ruby lib dir : /Users/fabio/.rbenv/versions/2.0.0-p0/lib
+Repositories : master - git@github.com:CocoaPods/Specs.git @ d42c2e09cf5754edcba639da4d6c3f320535d501
+               test -  @ fatal: Not a git repository (or any of the parent directories): .git
+```
+
+### Podfile
+
+```ruby
+target 'iOS App' do
+  platform :ios
+  pod "PodTest/subspec_1", :hg => "PodTest-hg-source"
+end
+
+target 'OS X App' do
+  platform :osx
+  pod "PodTest/subspec_2", :hg => "PodTest-hg-source"
+end
+```
+
+### Error
+
+```
+NoMethodError - undefined method `name' for nil:NilClass
+ROOT/lib/cocoapods/installer.rb:290:in `block (2 levels) in prepare_pods_project'
+ROOT/lib/cocoapods/installer.rb:290:in `select'
+ROOT/lib/cocoapods/installer.rb:290:in `block in prepare_pods_project'
+ROOT/lib/cocoapods/user_interface.rb:113:in `message'
+ROOT/lib/cocoapods/installer.rb:283:in `prepare_pods_project'
+ROOT/lib/cocoapods/installer.rb:109:in `block in generate_pods_project'
+ROOT/lib/cocoapods/user_interface.rb:52:in `section'
+ROOT/lib/cocoapods/installer.rb:108:in `generate_pods_project'
+ROOT/lib/cocoapods/installer.rb:86:in `install!'
+ROOT/lib/cocoapods/command/project.rb:40:in `run_install_with_update'
+ROOT/lib/cocoapods/command/project.rb:70:in `run'
+/Users/fabio/.rbenv/versions/2.0.0-p0/lib/ruby/gems/2.0.0/gems/claide-0.2.0/lib/claide.rb:535:in `run'
+ROOT/lib/cocoapods/command.rb:48:in `run'
+ROOT/bin/pod:16:in `<main>'
+```
+
+――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+
+[!] Oh no, an error occurred.
+
+Search for existing github issues similar to yours:
+https://github.com/CocoaPods/CocoaPods/issues/search?q=undefined+method+%60name%27+for+nil%3ANilClass
+
+If none exists, create a ticket, with the template displayed above, on:
+https://github.com/CocoaPods/CocoaPods/issues/new
+
+Don't forget to anonymize any private data!
+

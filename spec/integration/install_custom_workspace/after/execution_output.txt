@@ -36,33 +36,80 @@ Downloading dependencies
 
 Generating Pods project
   - Creating Pods project
-  - Adding source files to Pods project
-  - Adding resources to Pods project
-  - Linking headers
-  - Installing targets
-    - Installing target `Pods-SampleApp_1` iOS 6.0
-      - Adding Build files
-      - Generating xcconfig file at `Pods/Pods-SampleApp_1.xcconfig`
-      - Generating target environment header at `Pods/Pods-SampleApp_1-environment.h`
-      - Generating prefix header at `Pods/Pods-SampleApp_1-prefix.pch`
-      - Generating copy resources script at `Pods/Pods-SampleApp_1-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-SampleApp_1-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-SampleApp_1-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-SampleApp_1-dummy.m`
-    - Installing target `Pods-SampleApp_2` iOS 6.0
-      - Adding Build files
-      - Generating xcconfig file at `Pods/Pods-SampleApp_2.xcconfig`
-      - Generating target environment header at `Pods/Pods-SampleApp_2-environment.h`
-      - Generating prefix header at `Pods/Pods-SampleApp_2-prefix.pch`
-      - Generating copy resources script at `Pods/Pods-SampleApp_2-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-SampleApp_2-dummy.m`
-  - Running post install hooks
-  - Writing Xcode project file to `Pods/Pods.xcodeproj`
-  - Writing Lockfile in `Podfile.lock`
-  - Writing Manifest in `Pods/Manifest.lock`
 
-Integrating client projects
+――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
-[!] From now on use `Workspace.xcworkspace`.
+### Report
+
+* What did you do?
+
+* What did you expect to happen?
+
+* What happened instead?
+
+
+### Stack
+
+```
+   CocoaPods : 0.19.1
+        Ruby : ruby 2.0.0p0 (2013-02-24 revision 39474) [x86_64-darwin12.2.0]
+    RubyGems : 2.0.3
+        Host : Mac OS X 10.8.3 (12D78)
+       Xcode : 4.6.2 (4H1003)
+Ruby lib dir : /Users/fabio/.rbenv/versions/2.0.0-p0/lib
+Repositories : master - git@github.com:CocoaPods/Specs.git @ d42c2e09cf5754edcba639da4d6c3f320535d501
+               test -  @ fatal: Not a git repository (or any of the parent directories): .git
+```
+
+### Podfile
+
+```ruby
+platform :ios, '6.0'
+workspace 'Workspace.xcworkspace'
+
+# TODO: remove
+xcodeproj 'SampleApp_1.xcodeproj'
+
+target 'SampleApp_1' do
+  xcodeproj 'SampleApp_1.xcodeproj'
+  pod "Reachability", "3.1.0"
+end
+
+target :'SampleApp_2' do
+  xcodeproj 'SampleApp_2.xcodeproj'
+  pod "Reachability"
+end
+```
+
+### Error
+
+```
+NoMethodError - undefined method `name' for nil:NilClass
+ROOT/lib/cocoapods/installer.rb:290:in `block (2 levels) in prepare_pods_project'
+ROOT/lib/cocoapods/installer.rb:290:in `select'
+ROOT/lib/cocoapods/installer.rb:290:in `block in prepare_pods_project'
+ROOT/lib/cocoapods/user_interface.rb:113:in `message'
+ROOT/lib/cocoapods/installer.rb:283:in `prepare_pods_project'
+ROOT/lib/cocoapods/installer.rb:109:in `block in generate_pods_project'
+ROOT/lib/cocoapods/user_interface.rb:52:in `section'
+ROOT/lib/cocoapods/installer.rb:108:in `generate_pods_project'
+ROOT/lib/cocoapods/installer.rb:86:in `install!'
+ROOT/lib/cocoapods/command/project.rb:40:in `run_install_with_update'
+ROOT/lib/cocoapods/command/project.rb:70:in `run'
+/Users/fabio/.rbenv/versions/2.0.0-p0/lib/ruby/gems/2.0.0/gems/claide-0.2.0/lib/claide.rb:535:in `run'
+ROOT/lib/cocoapods/command.rb:48:in `run'
+ROOT/bin/pod:16:in `<main>'
+```
+
+――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+
+[!] Oh no, an error occurred.
+
+Search for existing github issues similar to yours:
+https://github.com/CocoaPods/CocoaPods/issues/search?q=undefined+method+%60name%27+for+nil%3ANilClass
+
+If none exists, create a ticket, with the template displayed above, on:
+https://github.com/CocoaPods/CocoaPods/issues/new
+
+Don't forget to anonymize any private data!
+

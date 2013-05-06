@@ -12,33 +12,66 @@ File References:
     - JSONKit.m
 - Products:
   - libPods.a
+  - libPods-Reachability.a
   - libPods-SampleApp_2.a
+  - libPods-SampleApp_2-JSONKit.a
+  - libPods-SampleApp_2-Reachability.a
   - libPods-test.a
+  - libPods-test-JSONKit.a
 - Targets Support Files:
   - Pods:
     - Pods.xcconfig
     - Pods-environment.h
     - Pods-prefix.pch
-    - Pods-resources.sh
     - Pods-acknowledgements.plist
     - Pods-acknowledgements.markdown
     - Pods-dummy.m
+  - Pods-Reachability:
+    - Pods-Reachability.xcconfig
+    - Pods-Reachability-environment.h
+    - Pods-Reachability-prefix.pch
+    - Pods-Reachability-resources.sh
+    - Pods-Reachability-acknowledgements.plist
+    - Pods-Reachability-acknowledgements.markdown
+    - Pods-Reachability-dummy.m
   - Pods-SampleApp_2:
     - Pods-SampleApp_2.xcconfig
     - Pods-SampleApp_2-environment.h
     - Pods-SampleApp_2-prefix.pch
-    - Pods-SampleApp_2-resources.sh
     - Pods-SampleApp_2-acknowledgements.plist
     - Pods-SampleApp_2-acknowledgements.markdown
     - Pods-SampleApp_2-dummy.m
+  - Pods-SampleApp_2-JSONKit:
+    - Pods-SampleApp_2-JSONKit.xcconfig
+    - Pods-SampleApp_2-JSONKit-environment.h
+    - Pods-SampleApp_2-JSONKit-prefix.pch
+    - Pods-SampleApp_2-JSONKit-resources.sh
+    - Pods-SampleApp_2-JSONKit-acknowledgements.plist
+    - Pods-SampleApp_2-JSONKit-acknowledgements.markdown
+    - Pods-SampleApp_2-JSONKit-dummy.m
+  - Pods-SampleApp_2-Reachability:
+    - Pods-SampleApp_2-Reachability.xcconfig
+    - Pods-SampleApp_2-Reachability-environment.h
+    - Pods-SampleApp_2-Reachability-prefix.pch
+    - Pods-SampleApp_2-Reachability-resources.sh
+    - Pods-SampleApp_2-Reachability-acknowledgements.plist
+    - Pods-SampleApp_2-Reachability-acknowledgements.markdown
+    - Pods-SampleApp_2-Reachability-dummy.m
   - Pods-test:
     - Pods-test.xcconfig
     - Pods-test-environment.h
     - Pods-test-prefix.pch
-    - Pods-test-resources.sh
     - Pods-test-acknowledgements.plist
     - Pods-test-acknowledgements.markdown
     - Pods-test-dummy.m
+  - Pods-test-JSONKit:
+    - Pods-test-JSONKit.xcconfig
+    - Pods-test-JSONKit-environment.h
+    - Pods-test-JSONKit-prefix.pch
+    - Pods-test-JSONKit-resources.sh
+    - Pods-test-JSONKit-acknowledgements.plist
+    - Pods-test-JSONKit-acknowledgements.markdown
+    - Pods-test-JSONKit-dummy.m
 - Podfile
 
 
@@ -47,136 +80,357 @@ Targets:
 - Pods:
     Build Phases:
     - SourcesBuildPhase:
-      - Reachability.m
       - Pods-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
+      - libPods-Reachability.a
+    Build Configurations:
+    - Release:
+        Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-prefix.pch
+        Base Configuration: Pods.xcconfig
+    - Debug:
+        Build Settings:
+          OTHER_LDFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - $(inherited)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Pods-prefix.pch
+        Base Configuration: Pods.xcconfig
+- Pods-Reachability:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Reachability.m
+      - Pods-Reachability-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
     - HeadersBuildPhase:
       - Reachability.h
     Build Configurations:
     - Release:
         Build Settings:
-          VALIDATE_PRODUCT: 'YES'
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
-          DSTROOT: /tmp/xcodeproj.dst
-          GCC_PREFIX_HEADER: Pods-prefix.pch
-          PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
-          GCC_C_LANGUAGE_STANDARD: gnu99
-          OTHER_LDFLAGS: ''
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
           - -DNS_BLOCK_ASSERTIONS=1
           - $(inherited)
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
-          SDKROOT: iphoneos
-          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          COPY_PHASE_STRIP: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          GCC_C_LANGUAGE_STANDARD: gnu99
           SKIP_INSTALL: 'YES'
-          PODS_ROOT: ${SRCROOT}
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
           OTHER_CPLUSPLUSFLAGS:
           - -DNS_BLOCK_ASSERTIONS=1
           - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           ARCHS: $(ARCHS_STANDARD_32_BIT)
-        Base Configuration: Pods.xcconfig
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+        Base Configuration: Pods-Reachability.xcconfig
     - Debug:
         Build Settings:
+          OTHER_LDFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
           DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - $(inherited)
-          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
-          GCC_PREFIX_HEADER: Pods-prefix.pch
-          GCC_OPTIMIZATION_LEVEL: '0'
-          PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
-          GCC_C_LANGUAGE_STANDARD: gnu99
-          OTHER_LDFLAGS: ''
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          COPY_PHASE_STRIP: 'NO'
-          SDKROOT: iphoneos
-          PRODUCT_NAME: $(TARGET_NAME)
-          GCC_DYNAMIC_NO_PIC: 'NO'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          PODS_ROOT: ${SRCROOT}
-          ARCHS: $(ARCHS_STANDARD_32_BIT)
-          SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.xcconfig
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+        Base Configuration: Pods-Reachability.xcconfig
 - Pods-SampleApp_2:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m
-      - Reachability.m
       - Pods-SampleApp_2-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+      - libPods-SampleApp_2-JSONKit.a
+      - libPods-SampleApp_2-Reachability.a
+    Build Configurations:
+    - Release:
+        Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-SampleApp_2-prefix.pch
+        Base Configuration: Pods-SampleApp_2.xcconfig
+    - Debug:
+        Build Settings:
+          OTHER_LDFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - $(inherited)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Pods-SampleApp_2-prefix.pch
+        Base Configuration: Pods-SampleApp_2.xcconfig
+- Pods-SampleApp_2-JSONKit:
+    Build Phases:
+    - SourcesBuildPhase:
+      - JSONKit.m
+      - Pods-SampleApp_2-JSONKit-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
       - JSONKit.h
+    Build Configurations:
+    - Release:
+        Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-SampleApp_2-JSONKit-prefix.pch
+        Base Configuration: Pods-SampleApp_2-JSONKit.xcconfig
+    - Debug:
+        Build Settings:
+          OTHER_LDFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - $(inherited)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Pods-SampleApp_2-JSONKit-prefix.pch
+        Base Configuration: Pods-SampleApp_2-JSONKit.xcconfig
+- Pods-SampleApp_2-Reachability:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Reachability.m
+      - Pods-SampleApp_2-Reachability-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
       - Reachability.h
     Build Configurations:
     - Release:
         Build Settings:
-          VALIDATE_PRODUCT: 'YES'
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
-          DSTROOT: /tmp/xcodeproj.dst
-          GCC_PREFIX_HEADER: Pods-SampleApp_2-prefix.pch
-          PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
-          GCC_C_LANGUAGE_STANDARD: gnu99
-          OTHER_LDFLAGS: ''
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
           - -DNS_BLOCK_ASSERTIONS=1
           - $(inherited)
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
-          SDKROOT: iphoneos
-          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          COPY_PHASE_STRIP: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          GCC_C_LANGUAGE_STANDARD: gnu99
           SKIP_INSTALL: 'YES'
-          PODS_ROOT: ${SRCROOT}
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
           OTHER_CPLUSPLUSFLAGS:
           - -DNS_BLOCK_ASSERTIONS=1
           - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           ARCHS: $(ARCHS_STANDARD_32_BIT)
-        Base Configuration: Pods-SampleApp_2.xcconfig
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-SampleApp_2-Reachability-prefix.pch
+        Base Configuration: Pods-SampleApp_2-Reachability.xcconfig
     - Debug:
         Build Settings:
+          OTHER_LDFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
           DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - $(inherited)
-          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
-          GCC_PREFIX_HEADER: Pods-SampleApp_2-prefix.pch
-          GCC_OPTIMIZATION_LEVEL: '0'
-          PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
-          GCC_C_LANGUAGE_STANDARD: gnu99
-          OTHER_LDFLAGS: ''
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          COPY_PHASE_STRIP: 'NO'
-          SDKROOT: iphoneos
-          PRODUCT_NAME: $(TARGET_NAME)
-          GCC_DYNAMIC_NO_PIC: 'NO'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          PODS_ROOT: ${SRCROOT}
-          ARCHS: $(ARCHS_STANDARD_32_BIT)
-          SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-SampleApp_2.xcconfig
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Pods-SampleApp_2-Reachability-prefix.pch
+        Base Configuration: Pods-SampleApp_2-Reachability.xcconfig
 - Pods-test:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m
       - Pods-test-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+      - libPods-test-JSONKit.a
+    Build Configurations:
+    - Release:
+        Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-test-prefix.pch
+        Base Configuration: Pods-test.xcconfig
+    - Debug:
+        Build Settings:
+          OTHER_LDFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - $(inherited)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Pods-test-prefix.pch
+        Base Configuration: Pods-test.xcconfig
+- Pods-test-JSONKit:
+    Build Phases:
+    - SourcesBuildPhase:
+      - JSONKit.m
+      - Pods-test-JSONKit-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
@@ -184,57 +438,53 @@ Targets:
     Build Configurations:
     - Release:
         Build Settings:
-          VALIDATE_PRODUCT: 'YES'
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
-          DSTROOT: /tmp/xcodeproj.dst
-          GCC_PREFIX_HEADER: Pods-test-prefix.pch
-          PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
-          GCC_C_LANGUAGE_STANDARD: gnu99
-          OTHER_LDFLAGS: ''
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
           - -DNS_BLOCK_ASSERTIONS=1
           - $(inherited)
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
-          SDKROOT: iphoneos
-          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          COPY_PHASE_STRIP: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          GCC_C_LANGUAGE_STANDARD: gnu99
           SKIP_INSTALL: 'YES'
-          PODS_ROOT: ${SRCROOT}
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
           OTHER_CPLUSPLUSFLAGS:
           - -DNS_BLOCK_ASSERTIONS=1
           - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           ARCHS: $(ARCHS_STANDARD_32_BIT)
-        Base Configuration: Pods-test.xcconfig
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-test-JSONKit-prefix.pch
+        Base Configuration: Pods-test-JSONKit.xcconfig
     - Debug:
         Build Settings:
+          OTHER_LDFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
           DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: $(ARCHS_STANDARD_32_BIT)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - $(inherited)
-          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
-          GCC_PREFIX_HEADER: Pods-test-prefix.pch
-          GCC_OPTIMIZATION_LEVEL: '0'
-          PODS_HEADERS_SEARCH_PATHS: ${PODS_BUILD_HEADERS_SEARCH_PATHS}
-          GCC_C_LANGUAGE_STANDARD: gnu99
-          OTHER_LDFLAGS: ''
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          COPY_PHASE_STRIP: 'NO'
-          SDKROOT: iphoneos
-          PRODUCT_NAME: $(TARGET_NAME)
-          GCC_DYNAMIC_NO_PIC: 'NO'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          PODS_ROOT: ${SRCROOT}
-          ARCHS: $(ARCHS_STANDARD_32_BIT)
-          SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-test.xcconfig
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Pods-test-JSONKit-prefix.pch
+        Base Configuration: Pods-test-JSONKit.xcconfig
 
 
 

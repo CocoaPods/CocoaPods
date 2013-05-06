@@ -39,7 +39,7 @@ Generating Pods project
   - Adding source files to Pods project
   - Adding resources to Pods project
   - Linking headers
-  - Installing targets
+  - Installing libraries
     - Installing target `Pods` iOS 6.0
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods.xcconfig`
@@ -49,6 +49,24 @@ Generating Pods project
       - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
       - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Pods-dummy.m`
+    - Installing target `Pods-JSONKit` iOS 6.0
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-JSONKit.xcconfig`
+      - Generating target environment header at `Pods/Pods-JSONKit-environment.h`
+      - Generating prefix header at `Pods/Pods-JSONKit-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-JSONKit-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-JSONKit-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-JSONKit-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-JSONKit-dummy.m`
+    - Installing target `Pods-Reachability` iOS 6.0
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-Reachability.xcconfig`
+      - Generating target environment header at `Pods/Pods-Reachability-environment.h`
+      - Generating prefix header at `Pods/Pods-Reachability-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-Reachability-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-Reachability-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-Reachability-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-Reachability-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`

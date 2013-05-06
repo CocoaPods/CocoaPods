@@ -57,7 +57,7 @@ Generating Pods project
   - Adding source files to Pods project
   - Adding resources to Pods project
   - Linking headers
-  - Installing targets
+  - Installing libraries
     - Installing target `Pods` iOS 6.0
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods.xcconfig`
@@ -67,6 +67,15 @@ Generating Pods project
       - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
       - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Pods-dummy.m`
+    - Installing target `Pods-Reachability` iOS 6.0
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-Reachability.xcconfig`
+      - Generating target environment header at `Pods/Pods-Reachability-environment.h`
+      - Generating prefix header at `Pods/Pods-Reachability-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-Reachability-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-Reachability-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-Reachability-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-Reachability-dummy.m`
     - Installing target `Pods-SampleApp_2` iOS 6.0
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods-SampleApp_2.xcconfig`
@@ -76,6 +85,24 @@ Generating Pods project
       - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.plist`
       - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Pods-SampleApp_2-dummy.m`
+    - Installing target `Pods-SampleApp_2-JSONKit` iOS 6.0
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-SampleApp_2-JSONKit.xcconfig`
+      - Generating target environment header at `Pods/Pods-SampleApp_2-JSONKit-environment.h`
+      - Generating prefix header at `Pods/Pods-SampleApp_2-JSONKit-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-SampleApp_2-JSONKit-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_2-JSONKit-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_2-JSONKit-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-SampleApp_2-JSONKit-dummy.m`
+    - Installing target `Pods-SampleApp_2-Reachability` iOS 6.0
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-SampleApp_2-Reachability.xcconfig`
+      - Generating target environment header at `Pods/Pods-SampleApp_2-Reachability-environment.h`
+      - Generating prefix header at `Pods/Pods-SampleApp_2-Reachability-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-SampleApp_2-Reachability-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_2-Reachability-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-SampleApp_2-Reachability-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-SampleApp_2-Reachability-dummy.m`
     - Installing target `Pods-test` iOS 6.0
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods-test.xcconfig`
@@ -85,6 +112,15 @@ Generating Pods project
       - Generating acknowledgements at `Pods/Pods-test-acknowledgements.plist`
       - Generating acknowledgements at `Pods/Pods-test-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Pods-test-dummy.m`
+    - Installing target `Pods-test-JSONKit` iOS 6.0
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-test-JSONKit.xcconfig`
+      - Generating target environment header at `Pods/Pods-test-JSONKit-environment.h`
+      - Generating prefix header at `Pods/Pods-test-JSONKit-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-test-JSONKit-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-test-JSONKit-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-test-JSONKit-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-test-JSONKit-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
@@ -94,8 +130,8 @@ Integrating client project
 
 [!] From now on use `SampleApp.xcworkspace`.
 
-Integrating `libPods.a` into target `SampleApp` of project `SampleApp.xcodeproj`.
+Integrating library `Pods-Reachability` into target Pods of project `SampleApp.xcodeproj`.
 
-Integrating `libPods-SampleApp_2.a` into target `SampleApp_2` of project `SampleApp.xcodeproj`.
+Integrating libraries `Pods-SampleApp_2-JSONKit and Pods-SampleApp_2-Reachability` into target Pods-SampleApp_2 of project `SampleApp.xcodeproj`.
 
-Integrating `libPods-test.a` into target `SampleAppTests` of project `SampleApp.xcodeproj`.
+Integrating library `Pods-test-JSONKit` into target Pods-test of project `SampleApp.xcodeproj`.

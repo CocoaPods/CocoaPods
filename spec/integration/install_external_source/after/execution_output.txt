@@ -27,7 +27,7 @@ Generating Pods project
   - Adding source files to Pods project
   - Adding resources to Pods project
   - Linking headers
-  - Installing targets
+  - Installing libraries
     - Installing target `Pods` iOS 4.3
       - Adding Build files
       - Generating xcconfig file at `Pods/Pods.xcconfig`
@@ -37,6 +37,33 @@ Generating Pods project
       - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
       - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Pods-dummy.m`
+    - Installing target `Pods-PodTest` iOS 4.3
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-PodTest.xcconfig`
+      - Generating target environment header at `Pods/Pods-PodTest-environment.h`
+      - Generating prefix header at `Pods/Pods-PodTest-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-PodTest-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-PodTest-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-PodTest-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-PodTest-dummy.m`
+    - Installing target `Pods-PodTest-subspec_1` iOS 4.3
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-PodTest-subspec_1.xcconfig`
+      - Generating target environment header at `Pods/Pods-PodTest-subspec_1-environment.h`
+      - Generating prefix header at `Pods/Pods-PodTest-subspec_1-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-PodTest-subspec_1-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-PodTest-subspec_1-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-PodTest-subspec_1-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-PodTest-subspec_1-dummy.m`
+    - Installing target `Pods-PodTest-subspec_2` iOS 4.3
+      - Adding Build files
+      - Generating xcconfig file at `Pods/Pods-PodTest-subspec_2.xcconfig`
+      - Generating target environment header at `Pods/Pods-PodTest-subspec_2-environment.h`
+      - Generating prefix header at `Pods/Pods-PodTest-subspec_2-prefix.pch`
+      - Generating copy resources script at `Pods/Pods-PodTest-subspec_2-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-PodTest-subspec_2-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-PodTest-subspec_2-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-PodTest-subspec_2-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
@@ -46,4 +73,4 @@ Integrating client project
 
 [!] From now on use `SampleApp.xcworkspace`.
 
-Integrating `libPods.a` into target `iOS App` of project `SampleApp.xcodeproj`.
+Integrating libraries `Pods-PodTest, Pods-PodTest-subspec_1, and Pods-PodTest-subspec_2` into target Pods of project `SampleApp.xcodeproj`.
