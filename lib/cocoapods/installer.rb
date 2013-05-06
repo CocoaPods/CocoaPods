@@ -187,10 +187,8 @@ module Pod
     #
     def clean_sandbox
       sandbox.public_headers.implode!
-      targets.each do |target|
-        target.libraries.each do |library|
-          library.build_headers.implode!
-        end
+      libraries.each do |library|
+        library.build_headers.implode!
       end
 
       unless sandbox_state.deleted.empty?

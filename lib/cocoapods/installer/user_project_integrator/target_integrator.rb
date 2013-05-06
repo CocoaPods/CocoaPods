@@ -79,7 +79,7 @@ module Pod
         # @return [String] a string representation suitable for debugging.
         #
         def inspect
-          "#<#{self.class} for target `#{target_definition.label}'>"
+          "#<#{self.class} for target `#{target.label}'>"
         end
 
         #---------------------------------------------------------------------#
