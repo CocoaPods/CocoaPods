@@ -217,11 +217,20 @@ module Pod
       def create_copy_resources_script
         path = library.copy_resources_script_path
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
-          resources = library.file_accessors.map { |accessor| accessor.resources.flatten.map {|res| project.relativize(res)} }.flatten
-          resources << bridge_support_file if bridge_support_file
-          generator = Generator::CopyResourcesScript.new(resources)
-          generator.save_as(path)
-          add_file_to_support_group(path)
+          if library.spec
+            resources = library.file_accessors.map { |accessor| accessor.resources.flatten.map {|res| project.relativize(res)} }.flatten
+            resources << bridge_support_file if bridge_support_file
+            generator = Generator::CopyResourcesScript.new(resources)
+            generator.save_as(path)
+            add_file_to_support_group(path)
+          else
+            path.open('w') do |script|
+              library.libraries.each do |lib|
+                script.puts "#{lib.copy_resources_script_relative_path}\n"
+              end
+            end
+            system("chmod +x '#{path}'")
+          end
         end
       end
 

@@ -133,9 +133,8 @@ module Pod
           native_targets.each do |native_target|
             phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first ||
                     native_target.new_shell_script_build_phase(phase_name)
-            phase.shell_script = target.libraries.map do |lib|
-              "#{lib.copy_resources_script_relative_path}"
-            end.join("\n")
+            path  = target.copy_resources_script_relative_path
+            phase.shell_script = %{"#{path}"\n}
           end
         end
 
