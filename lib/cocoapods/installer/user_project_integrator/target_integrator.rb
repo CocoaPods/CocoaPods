@@ -26,6 +26,7 @@ module Pod
         # @return [void]
         #
         def integrate!
+          return if native_targets.empty?
           UI.section(integration_message) do
             add_xcconfig_base_configuration
             add_pods_library
@@ -38,7 +39,27 @@ module Pod
         # @return [Array<PBXNativeTarget>] the user targets for integration.
         #
         def native_targets
-          @native_targets ||= target.user_target_uuids.map { |uuid| user_project.objects_by_uuid[uuid] }
+          unless @native_targets
+            target_uuids = target.user_target_uuids
+            native_targets = target_uuids.map do |uuid|
+              native_target = user_project.objects_by_uuid[uuid]
+              unless native_target
+                raise Informative, "[Bug] Unable to find the target with " \
+                  "the `#{uuid}` UUID for the `#{target}` integration library"
+              end
+              native_target
+            end
+            non_integrated = native_targets.reject do |native_target|
+              native_target.frameworks_build_phase.files.any? do |build_file|
+                file_ref = build_file.file_ref
+                file_ref &&
+                  file_ref.isa == 'PBXFileReference' &&
+                  file_ref.display_name == target.product_name
+              end
+            end
+            @native_targets = non_integrated
+          end
+          @native_targets
         end
 
         # Read the project from the disk to ensure that it is up to date as
