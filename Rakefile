@@ -212,13 +212,15 @@ namespace :spec do
     sh 'git config --global user.name "CocoaPods"' if `git config user.name`.empty?
 
     title 'Running the specs'
-    sh    "bundle exec bacon #{specs('**')}"
+    sh "bundle exec bacon #{specs('**')}"
 
-    title 'Ensuring specs repo is up to date'
-    sh    "./bin/pod setup"
+    unless Pathname.new('~/.cocoapods/master').exist?
+      title 'Ensuring specs repo is up to date'
+      sh    "./bin/pod setup"
+    end
 
     title 'Running Integration 2 tests'
-    sh    "bundle exec bacon spec/integration_2.rb"
+    sh "bundle exec bacon spec/integration_2.rb"
 
     title 'Running examples'
     Rake::Task['examples:build'].invoke
