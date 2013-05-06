@@ -317,6 +317,7 @@ module Pod
     def install_libraries
       UI.message"- Installing libraries" do
         libraries.sort_by(&:name).each do |library|
+          next if library.target_definition.empty?
           target_installer = TargetInstaller.new(sandbox, library)
           target_installer.install!
         end
