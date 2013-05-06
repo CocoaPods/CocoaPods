@@ -60,7 +60,8 @@ module Pod
       def specs_by_lib
         result = {}
         installer.libraries.each do |lib|
-          result[installer.library_rep(lib)] = [lib.spec]
+          next if lib.spec == nil
+          result[installer.library_rep(lib)] = lib.spec
         end
         result
       end
@@ -70,7 +71,7 @@ module Pod
       #
       def pods_by_lib
         result = {}
-        installer.libraries.each do |lib|
+        installer.targets.map(&:libraries).flatten.each do |lib|
           pod_names = [lib.spec.root.name]
           pod_reps = pods.select { |rep| pod_names.include?(rep.name) }
           result[lib.target_definition] = pod_reps
