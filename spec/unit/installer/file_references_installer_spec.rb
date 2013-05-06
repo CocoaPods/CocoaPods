@@ -5,7 +5,7 @@ module Pod
 
     before do
       @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
-      @library = Library.new(nil)
+      @library = Target.new(nil, config.sandbox)
       @library.file_accessors = [@file_accessor]
       @project = Project.new(config.sandbox.project_path)
       @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@library], @project)
@@ -50,8 +50,8 @@ module Pod
 
       it "links the build headers" do
         @installer.install!
-        headers_root = config.sandbox.build_headers.root
-        public_header =  headers_root+ 'BananaLib/Banana.h'
+        headers_root = @library.build_headers.root
+        public_header =  headers_root + 'BananaLib/Banana.h'
         private_header = headers_root + 'BananaLib/BananaPrivate.h'
         public_header.should.exist
         private_header.should.exist
@@ -73,9 +73,9 @@ module Pod
     describe "Private Helpers" do
 
       it "returns the file accessors" do
-        library_1 = Library.new(nil)
+        library_1 = Target.new(nil, config.sandbox)
         library_1.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-        library_2 = Library.new(nil)
+        library_2 = Target.new(nil, config.sandbox)
         library_2.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
         installer = Installer::FileReferencesInstaller.new(config.sandbox, [library_1, library_2], @project)
         roots = installer.send(:file_accessors).map { |fa| fa.path_list.root }
@@ -83,7 +83,7 @@ module Pod
       end
 
       it "handles libraries empty libraries without file accessors" do
-        library_1 = Library.new(nil)
+        library_1 = Target.new(nil, config.sandbox)
         library_1.file_accessors = []
         installer = Installer::FileReferencesInstaller.new(config.sandbox, [library_1], @project)
         roots = installer.send(:file_accessors).should == []

@@ -5,8 +5,15 @@ module Pod
     before do
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       @consumer = @spec.consumer(:ios)
-      @generator = Generator::XCConfig.new(config.sandbox, [@consumer], './Pods')
-
+      target_definition = Podfile::TargetDefinition.new('Pods', nil)
+      @target = Target.new(target_definition, config.sandbox)
+      @target.platform = :ios
+      library_definition = Podfile::TargetDefinition.new(@spec.name, target_definition)
+      @library = Target.new(library_definition, config.sandbox)
+      @library.spec = @spec
+      @library.platform = :ios
+      @target.libraries = [@library]
+      @generator = Generator::XCConfig.new(@library, [@consumer], './Pods')
     end
 
     it "returns the sandbox" do
@@ -62,11 +69,17 @@ module Pod
       @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should =='${PODS_HEADERS_SEARCH_PATHS}'
     end
 
-    it "sets the PODS_HEADERS_SEARCH_PATHS to look for the public headers as it is overridden in the Pods project" do
-      @xcconfig.to_hash['PODS_HEADERS_SEARCH_PATHS'].should =='${PODS_PUBLIC_HEADERS_SEARCH_PATHS}'
+    it "sets the PODS_HEADERS_SEARCH_PATHS to look for public and build headers for per spec library targets" do
+      @xcconfig.to_hash['PODS_HEADERS_SEARCH_PATHS'].should =='${PODS_BUILD_HEADERS_SEARCH_PATHS} ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}'
     end
-    it 'adds the sandbox build headers search paths to the xcconfig, with quotes' do
-      expected = "\"#{config.sandbox.build_headers.search_paths.join('" "')}\""
+
+    it "sets the PODS_HEADERS_SEARCH_PATHS to look for the public headers for the integration library target" do
+      xcconfig = Generator::XCConfig.new(@target, [], './Pods').generate
+      xcconfig.to_hash['PODS_HEADERS_SEARCH_PATHS'].should =='${PODS_PUBLIC_HEADERS_SEARCH_PATHS}'
+    end
+
+    it 'adds the library build headers search paths to the xcconfig, with quotes' do
+      expected = "\"#{@library.build_headers.search_paths.join('" "')}\""
       @xcconfig.to_hash['PODS_BUILD_HEADERS_SEARCH_PATHS'].should == expected
     end
 
@@ -76,58 +89,49 @@ module Pod
     end
 
     it 'adds the COCOAPODS macro definition' do
-      @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1'
+      @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == 'COCOAPODS=1'
+    end
+
+    it 'adds the pod namespaced configuration items' do
+      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include("${#{@library.xcconfig_prefix}OTHER_LDFLAGS}")
     end
 
     it "includes the xcconfig of the specifications" do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
+      @xcconfig.to_hash["#{@library.xcconfig_prefix}OTHER_LDFLAGS"].should.include('-no_compact_unwind')
     end
 
     it "includes the libraries for the specifications" do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-lxml2')
+      @xcconfig.to_hash["#{@library.xcconfig_prefix}OTHER_LDFLAGS"].should.include('-lxml2')
     end
 
     it "includes the frameworks of the specifications" do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework QuartzCore')
+      @xcconfig.to_hash["#{@library.xcconfig_prefix}OTHER_LDFLAGS"].should.include('-framework QuartzCore')
     end
 
     it "includes the weak-frameworks of the specifications" do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-weak_framework iAd')
+      @xcconfig.to_hash["#{@library.xcconfig_prefix}OTHER_LDFLAGS"].should.include('-weak_framework iAd')
     end
 
     it "includes the developer frameworks search paths when SenTestingKit is detected" do
-      spec = fixture_spec('banana-lib/BananaLib.podspec')
-      consumer = spec.consumer(:ios)
-      generator = Generator::XCConfig.new(config.sandbox, [consumer], './Pods')
-      spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
-      spec.frameworks = ['SenTestingKit']
-      xcconfig = generator.generate
-      xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+      @spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
+      @spec.frameworks = ['SenTestingKit']
+      xcconfig = @generator.generate
+      xcconfig.to_hash["#{@library.xcconfig_prefix}FRAMEWORK_SEARCH_PATHS"].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
     end
 
     it "doesn't include the developer frameworks if already present" do
-      spec = fixture_spec('banana-lib/BananaLib.podspec')
-      consumer_1 = spec.consumer(:ios)
-      consumer_2 = spec.consumer(:ios)
-      generator = Generator::XCConfig.new(config.sandbox, [consumer_1, consumer_2], './Pods')
-      spec.frameworks = ['SenTestingKit']
+      consumer_1 = @spec.consumer(:ios)
+      consumer_2 = @spec.consumer(:ios)
+      generator = Generator::XCConfig.new(@library, [consumer_1, consumer_2], './Pods')
+      @spec.frameworks = ['SenTestingKit']
       xcconfig = generator.generate
-      xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+      xcconfig.to_hash["#{@library.xcconfig_prefix}FRAMEWORK_SEARCH_PATHS"].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
     end
 
     #-----------------------------------------------------------------------#
 
-    it 'returns the settings that the pods project needs to override' do
-      Generator::XCConfig.pods_project_settings.should.not.be.nil
-    end
-
-    it 'overrides the relative path of the pods root in the Pods project' do
-      Generator::XCConfig.pods_project_settings['PODS_ROOT'].should == '${SRCROOT}'
-    end
-
-    it 'overrides the headers search path of the pods project to the build headers folder' do
-      expected = '${PODS_BUILD_HEADERS_SEARCH_PATHS}'
-      Generator::XCConfig.pods_project_settings['PODS_HEADERS_SEARCH_PATHS'].should == expected
+    it 'sets the relative path of the pods root for spec libraries to ${SRCROOT}' do
+      @xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}'
     end
 
     #-----------------------------------------------------------------------#

@@ -19,13 +19,13 @@ module Pod
         file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
         @project.add_file_references(file_accessor.source_files, 'BananaLib', @project.pods)
 
-        @library = Library.new(@target_definition)
+        @library = Target.new(@target_definition, config.sandbox)
         @library.platform = Platform.new(:ios, '6.0')
         @library.support_files_root = config.sandbox.root
         @library.client_root = config.sandbox.root.dirname
         @library.user_project_path = config.sandbox.root + '../user_project.xcodeproj'
         @library.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
-        @library.specs = [@spec]
+        @library.spec = @spec
         @library.file_accessors = [file_accessor]
 
         @installer = TargetInstaller.new(config.sandbox, @library)
@@ -102,15 +102,6 @@ module Pod
         target.build_settings('AppStore')["MACOSX_DEPLOYMENT_TARGET"].should == "10.8"
       end
 
-      it "adds the settings of the xcconfig that need to be overridden to the target" do
-        @installer.install!
-        build_configuration = @project.targets.first.build_configurations
-        build_settings = build_configuration.first.build_settings
-        Generator::XCConfig.pods_project_settings.each do |key, value|
-          build_settings[key].should == value
-        end
-      end
-
       it "adds the user's build configurations to the target" do
         @installer.install!
         @project.targets.first.build_configurations.map(&:name).sort.should == %w{ AppStore Debug Release Test }
@@ -146,14 +137,29 @@ module Pod
 
       #--------------------------------------#
 
-      it "creates and xcconfig file" do
+      it "creates the xcconfig file" do
         @installer.install!
-        file = config.sandbox.root + 'Pods.xcconfig'
+        file = config.sandbox.root + @library.xcconfig_path
         xcconfig = Xcodeproj::Config.new(file)
-        xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
+        xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}'
       end
 
       it "creates a header for the target which contains the information about the installed Pods" do
+        target = Target.new(@target_definition, config.sandbox)
+        lib_definition = Podfile::TargetDefinition.from_hash(@target_definition.to_hash, @target_definition.parent)
+        lib_definition.name = 'BananaLib'
+        library = Target.new(@target_definition, config.sandbox)
+
+        target.platform           = library.platform           = @library.platform
+        target.support_files_root = library.support_files_root = @library.support_files_root
+        target.client_root        = library.client_root        = @library.client_root
+        target.user_project_path  = library.user_project_path  = @library.user_project_path
+        target.user_build_configurations = library.user_build_configurations = @library.user_build_configurations
+        library.spec = @library.spec
+        library.file_accessors = @library.file_accessors
+        target.libraries = [library]
+
+        @installer = TargetInstaller.new(config.sandbox, target)
         @installer.install!
         file = config.sandbox.root + 'Pods-environment.h'
         contents = file.read

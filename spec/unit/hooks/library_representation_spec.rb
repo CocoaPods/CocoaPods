@@ -5,7 +5,7 @@ module Pod
 
     before do
       @target_definition = Podfile::TargetDefinition.new('MyApp', nil)
-      @lib = Library.new(@target_definition)
+      @lib = Target.new(@target_definition, config.sandbox)
       @rep = Hooks::LibraryRepresentation.new(config.sandbox, @lib)
     end
 
