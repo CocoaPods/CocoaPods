@@ -13,15 +13,21 @@ end
 
 puts " [!] ".red << "Skipping xcodebuild based checks, because it can't be found." if skip_xcodebuild?
 
-def should_xcodebuild(target_definition)
+# Build targets in the Pods project with xcodebuild.  The xcodebuild -target
+# option does not support implicit dependency resolution, so all integration
+# library dependencies, the pod libraries for each target definition, must be
+# explicitly built first.
+#
+def should_xcodebuild(target)
   return if skip_xcodebuild?
-  target = target_definition
   Dir.chdir(config.sandbox_root) do
-    print "[!] Compiling #{target.label}...\r"
-    should_successfully_perform "xcodebuild -target '#{target.label}'"
-    product_name = "lib#{target_definition.label}.a"
-    lib_path = config.sandbox_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + product_name
-    `lipo -info '#{lib_path}'`.should.include "#{target.platform == :ios ? 'armv7' : 'x86_64'}"
+    libraries = target.libraries + [target] # Build the integration library last
+    libraries.each do |library|
+      print "[!] Compiling #{library.label}...\r"
+      should_successfully_perform "xcodebuild -target '#{library.label}'"
+      lib_path = config.sandbox_root + "build/Release#{'-iphoneos' if target.platform == :ios}" + library.product_name
+      `lipo -info '#{lib_path}'`.should.include "#{library.platform == :ios ? 'armv7' : 'x86_64'}"
+    end
   end
 end
 
@@ -81,8 +87,10 @@ module Pod
       ]
       lockfile['DEPENDENCIES'].should == ["ASIHTTPRequest (= 1.8.1)", "JSONKit (= 1.4)"]
 
-      should_xcodebuild(podfile.target_definitions[:ios_target])
-      should_xcodebuild(podfile.target_definitions[:osx_target])
+      ios_target = installer.targets.select { |t| t.target_definition == podfile.target_definitions[:ios_target] }.first
+      osx_target = installer.targets.select { |t| t.target_definition == podfile.target_definitions[:osx_target] }.first
+      should_xcodebuild(ios_target)
+      should_xcodebuild(osx_target)
     end
 
     #--------------------------------------#
