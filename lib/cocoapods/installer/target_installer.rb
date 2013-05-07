@@ -226,7 +226,7 @@ module Pod
           else
             path.open('w') do |script|
               library.libraries.each do |lib|
-                script.puts "#{lib.copy_resources_script_relative_path}\n"
+                script.puts %{"#{lib.copy_resources_script_relative_path}"\n}
               end
             end
             system("chmod +x '#{path}'")
