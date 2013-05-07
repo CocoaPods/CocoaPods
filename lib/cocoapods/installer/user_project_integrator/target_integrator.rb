@@ -32,7 +32,7 @@ module Pod
             add_pods_library
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
-            save_projects
+            save_user_project
           end
         end
 
@@ -126,13 +126,6 @@ module Pod
         # @return [void]
         #
         def add_pods_library
-          native_target = pods_project.targets.select { |t| t.name == target.name }.first
-          products = pods_project.products_group
-          target.libraries.each do |library|
-            product = products.files.select { |f| f.path == library.product_name }.first
-            native_target.frameworks_build_phase.add_file_reference(product)
-          end
-
           frameworks = user_project.frameworks_group
           native_targets.each do |native_target|
             library = frameworks.files.select { |f| f.path == target.product_name }.first ||
@@ -191,9 +184,8 @@ module Pod
         #
         # @return [void]
         #
-        def save_projects
+        def save_user_project
           user_project.save_as(target.user_project_path)
-          pods_project.save_as(target.sandbox.project_path)
         end
 
         #---------------------------------------------------------------------#

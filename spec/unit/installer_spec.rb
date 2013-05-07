@@ -62,6 +62,7 @@ module Pod
         @installer.stubs(:run_pre_install_hooks)
         @installer.stubs(:install_file_references)
         @installer.stubs(:install_libraries)
+        @installer.stubs(:link_integration_libraries)
         @installer.stubs(:write_lockfiles)
         @installer.unstub(:generate_pods_project)
         def @installer.run_post_install_hooks
@@ -343,6 +344,27 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe "Integrating client projects" do
+
+      it "links the pod libraries with the integration library target" do
+        spec = fixture_spec('banana-lib/BananaLib.podspec')
+        target_definition = Podfile::TargetDefinition.new('Pods', nil)
+        target = Target.new(target_definition, config.sandbox)
+        lib_definition = Podfile::TargetDefinition.new('BananaLib', nil)
+        lib_definition.store_pod('BananaLib')
+        library = Target.new(lib_definition, config.sandbox)
+        library.spec = spec
+        target.libraries = [library]
+
+        project = Xcodeproj::Project.new
+        pods_target = project.new_target(:static_library, target.name, :ios)
+        native_target = project.new_target(:static_library, library.name, :ios)
+        @installer.stubs(:pods_project).returns(project)
+        @installer.stubs(:targets).returns([target])
+        @installer.stubs(:libraries).returns([library])
+
+        @installer.send(:link_integration_libraries)
+        pods_target.frameworks_build_phase.files.map(&:display_name).should.include?(library.product_name)
+      end
 
       it "integrates the client projects" do
         @installer.stubs(:libraries).returns([Target.new(nil, config.sandbox)])

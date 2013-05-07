@@ -109,6 +109,7 @@ module Pod
         prepare_pods_project
         install_file_references
         install_libraries
+        link_integration_libraries
         run_post_install_hooks
         write_pod_project
         write_lockfiles
@@ -318,6 +319,22 @@ module Pod
           next if library.target_definition.empty?
           target_installer = TargetInstaller.new(sandbox, library)
           target_installer.install!
+        end
+      end
+    end
+
+    # Links the integration library targets with all the dependent libraries
+    #
+    # @note   This is run in the integration step to ensure that targets
+    #         have been created for all per spec libraries.
+    #
+    def link_integration_libraries
+      targets.each do |target|
+        native_target = pods_project.targets.select { |t| t.name == target.name }.first
+        products = pods_project.products_group
+        target.libraries.each do |library|
+          product = products.files.select { |f| f.path == library.product_name }.first
+          native_target.frameworks_build_phase.add_file_reference(product)
         end
       end
     end
