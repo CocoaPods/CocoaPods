@@ -164,9 +164,26 @@ module Pod
       def generate_targets
         targets = []
         result.specs_by_target.each do |target_definition, specs|
-          libs_by_name = {}
           target = Target.new(target_definition, sandbox)
           targets << target
+
+          target.support_files_root = sandbox.library_support_files_dir(target.name)
+          target.platform = target_definition.platform
+
+          if config.integrate_targets?
+            project_path = compute_user_project_path(target_definition)
+            user_project = Xcodeproj::Project.new(project_path)
+            native_targets = compute_user_project_targets(target_definition, user_project)
+
+            target.user_project_path = project_path
+            target.client_root = project_path.dirname
+            target.user_target_uuids = native_targets.map(&:uuid)
+            target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
+          else
+            target.client_root = config.installation_root
+            target.user_target_uuids = []
+            target.user_build_configurations = {}
+          end
 
           specs.each do |spec|
             lib_target = Podfile::TargetDefinition.from_hash(target_definition.to_hash, target_definition.parent)
@@ -177,41 +194,14 @@ module Pod
             end
 
             lib = Target.new(lib_target, sandbox)
-            libs_by_name[spec.name] = lib
-
-            lib.support_files_root = sandbox.library_support_files_dir(lib.name)
-            lib.platform = target_definition.platform
             lib.spec = spec
+            lib.support_files_root = target.support_files_root
+            lib.platform = target.platform
+            lib.user_project_path = target.user_project_path
+            lib.client_root = target.client_root
+            lib.user_build_configurations = target.user_build_configurations
 
-            target.support_files_root = sandbox.library_support_files_dir(target.name)
-            target.platform = target_definition.platform
-
-            if config.integrate_targets?
-              project_path = compute_user_project_path(target_definition)
-              user_project = Xcodeproj::Project.new(project_path)
-              native_targets = compute_user_project_targets(target_definition, user_project)
-
-              lib.user_project_path = project_path
-              lib.client_root = project_path.dirname
-              lib.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
-
-              target.user_project_path = project_path
-              target.client_root = project_path.dirname
-              target.user_target_uuids = native_targets.map(&:uuid)
-              target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
-            else
-              lib.client_root = config.installation_root
-              lib.user_target_uuids = []
-              lib.user_build_configurations = {}
-              target.client_root = config.installation_root
-              target.user_target_uuids = []
-              target.user_build_configurations = {}
-            end
             target.libraries << lib
-          end
-
-          target.libraries.each do |library|
-            library.libraries = library.spec.dependencies(library.platform).map { |dep| libs_by_name[dep.name] }
           end
         end
         targets
