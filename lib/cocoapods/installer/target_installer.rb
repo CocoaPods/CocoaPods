@@ -80,7 +80,7 @@ module Pod
           unless @target.build_configurations.map(&:name).include?(bc_name)
             build_config = project.new(Xcodeproj::Project::XCBuildConfiguration)
             build_config.name = bc_name
-            settings = @target.build_settings(type.to_s.capitalize)
+            settings = @target.build_settings(type.to_s.capitalize).dup
             build_config.build_settings = settings
             target.build_configurations << build_config
           end
@@ -88,11 +88,6 @@ module Pod
 
         library.target = @target
       end
-
-      ENABLE_OBJECT_USE_OBJC_FROM = {
-        :ios => Version.new('6'),
-        :osx => Version.new('10.8')
-      }
 
       # Adds the build files of the pods to the target and adds a reference to
       # the frameworks of the Pods.
@@ -313,6 +308,11 @@ module Pod
         relative_path = path.relative_path_from(sandbox.root)
         support_files_group.new_file(relative_path)
       end
+
+      ENABLE_OBJECT_USE_OBJC_FROM = {
+        :ios => Version.new('6'),
+        :osx => Version.new('10.8')
+      }
 
       # Returns the compiler flags for the source files of the given specification.
       #

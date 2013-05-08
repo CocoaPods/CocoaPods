@@ -80,11 +80,13 @@ module Pod
       #
       def public_headers
         public_headers = paths_for_attribute(:public_header_files)
+        private_headers = paths_for_attribute(:private_header_files)
         if public_headers.nil? || public_headers.empty?
-          headers
+          header_files = headers
         else
-          public_headers
+          header_files = public_headers
         end
+        header_files - private_headers
       end
 
       # @return [Hash{ Symbol => Array<Pathname> }] the resources of the
