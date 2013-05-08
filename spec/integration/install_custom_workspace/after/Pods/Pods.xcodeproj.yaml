@@ -35,7 +35,8 @@ Targets:
 - Pods-SampleApp_1:
     Build Phases:
     - SourcesBuildPhase:
-      - Reachability.m
+      - Reachability.m:
+          COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
       - Pods-SampleApp_1-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
@@ -98,7 +99,8 @@ Targets:
 - Pods-SampleApp_2:
     Build Phases:
     - SourcesBuildPhase:
-      - Reachability.m
+      - Reachability.m:
+          COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
       - Pods-SampleApp_2-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework

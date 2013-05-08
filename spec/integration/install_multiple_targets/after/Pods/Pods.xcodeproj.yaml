@@ -47,7 +47,8 @@ Targets:
 - Pods:
     Build Phases:
     - SourcesBuildPhase:
-      - Reachability.m
+      - Reachability.m:
+          COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
       - Pods-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
@@ -110,8 +111,10 @@ Targets:
 - Pods-SampleApp_2:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m
-      - Reachability.m
+      - JSONKit.m:
+          COMPILER_FLAGS: -Wno-deprecated-objc-isa-usage -Wno-format
+      - Reachability.m:
+          COMPILER_FLAGS: -fobjc-arc -DOS_OBJECT_USE_OBJC=0
       - Pods-SampleApp_2-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
@@ -175,7 +178,8 @@ Targets:
 - Pods-test:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m
+      - JSONKit.m:
+          COMPILER_FLAGS: -Wno-deprecated-objc-isa-usage -Wno-format
       - Pods-test-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework

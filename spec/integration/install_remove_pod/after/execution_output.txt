@@ -11,13 +11,31 @@ Resolving dependencies for target `Pods' (iOS 6.0)
 
 Comparing resolved specification to the sandbox manifest
   R JSONKit
-  - Reachability
+  M Reachability
 
 -> Removing JSONKit
 
 Downloading dependencies
 
--> Using Reachability (3.1.0)
+-> Installing Reachability (3.1.0)
+ > GitHub download
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git config core.bare
+   true
+ > Updating cache git repo (CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6)
+     $ /usr/bin/git remote update
+     Fetching origin
+   $ /usr/bin/git init
+   Initialized empty Git repository in ROOT/tmp/install_remove_pod/Pods/Reachability/.git/
+   $ /usr/bin/git remote add origin 'CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6'
+   $ /usr/bin/git fetch origin tags/v3.1.0 2>&1
+   From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+    * tag               v3.1.0     -> FETCH_HEAD
+   $ /usr/bin/git reset --hard FETCH_HEAD
+   HEAD is now at f7176f4 updated podspec
+   $ /usr/bin/git checkout -b activated-pod-commit 2>&1
+   Switched to a new branch 'activated-pod-commit'
   - Running pre install hooks
 
 Generating Pods project
