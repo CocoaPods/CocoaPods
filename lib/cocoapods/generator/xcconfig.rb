@@ -59,18 +59,13 @@ module Pod
           'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(sandbox.build_headers.search_paths),
           'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
           'GCC_PREPROCESSOR_DEFINITIONS'     => 'COCOAPODS=1'
-        })
+        }, 'PODS_LDFLAGS')
 
         spec_consumers.each do |consumer|
           add_spec_build_settings_to_xcconfig(consumer, @xcconfig)
         end
         
-        # Hack to namespace the linker flags after they've all bee aggregated.
-        hash_of_config = @xcconfig.to_hash
-        hash_of_config['PODS_LDFLAGS'] = hash_of_config['OTHER_LDFLAGS']
-        hash_of_config['OTHER_LDFLAGS'] = '${PODS_LDFLAGS}'
-
-        Xcodeproj::Config.new(hash_of_config)
+        @xcconfig
       end
 
       # @return [Xcodeproj::Config] The generated xcconfig.
