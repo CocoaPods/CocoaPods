@@ -4,6 +4,17 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
+* The documentation generation has been removed from CocoaPods as it graduated
+  in CocoaDocs. This decision was taken because CocoaDocs is a much better
+  solution which doesn't clutters the Xcode docsets while still allowing to
+  access the docsets with Xcode and with Dash. Moreover removing this feature
+  keeps the installer leaner and easier to develop. Private pods can use pre
+  install hook to generate the documentation. If there will be enough demand
+  this feature might be reintegrated as plugin (see
+  [#1037](https://github.com/CocoaPods/CocoaPods/issues/1037)).
+
 ## 0.19.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.19.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.0...0.19.1)
