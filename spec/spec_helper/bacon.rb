@@ -55,7 +55,14 @@ module Bacon
       elsif disabled
         puts Bacon.color(:yellow, "#{spaces}- #{description} [DISABLED]")
       else
-        time_color = elapsed_time > 200 ? :yellow : :none
+        time_color = case elapsed_time
+          when 0..200
+            :none
+          when 200..500
+            :yellow
+          else
+            :red
+          end
         puts Bacon.color(:green, "#{spaces}✓ ") + "#{description} " + Bacon.color(time_color, "(#{elapsed_time} ms)")
       end
     end
