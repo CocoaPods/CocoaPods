@@ -1,8 +1,9 @@
 module Pod
   module Generator
 
-    # Generates an xcconfig file for each target of the Pods project. The
-    # configuration file should be used by the user target as well.
+    # Generates Xcode configuration files. A configuration file is generated
+    # for each Pod and for each Pod target definition. The aggregates the
+    # configurations of the Pods and define target specific settings.
     #
     class XCConfig
 
@@ -44,10 +45,14 @@ module Pod
 
       # Generates the xcconfig for the library.
       #
-      # @return [Xcodeproj::Config]
+      # @note   The xcconfig file for a spec derived target includes namespaced
+      #         configuration values, the private build headers and headermap
+      #         disabled. The xcconfig file for the Pods integration target
+      #         then includes the spec xcconfig and incorporates the namespaced
+      #         configuration values like preprocessor overrides or frameworks
+      #         to link with.
       #
-      # @note   The value `PODS_HEADERS_SEARCH_PATHS` is used to store the headers
-      #         so xcconfig can reference the variable.
+      # @return [Xcodeproj::Config]
       #
       def generate
         ld_flags = '-ObjC'
@@ -55,46 +60,37 @@ module Pod
           ld_flags << ' -fobjc-arc'
         end
 
-        # The xcconfig file for a spec derived target includes namespaced
-        # configuration values, the private build headers and headermap
-        # disabled.
-        # The xcconfig file for the Pods integration target then includes the
-        # spec xcconfig and incorporates the namespaced configuration values
-        # like preprocessor overrides or frameworks to link with.
         if library.spec
-          prefix = library.xcconfig_prefix
           config = {
-            'ALWAYS_SEARCH_USER_PATHS'              => 'YES',
-            'OTHER_LDFLAGS'                         => ld_flags,
-            'HEADER_SEARCH_PATHS'                   => '${PODS_HEADERS_SEARCH_PATHS}',
-            'PODS_ROOT'                             => '${SRCROOT}',
-            'PODS_HEADERS_SEARCH_PATHS'             => '${PODS_BUILD_HEADERS_SEARCH_PATHS} ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
-            'PODS_BUILD_HEADERS_SEARCH_PATHS'       => quote(library.build_headers.search_paths),
-            'PODS_PUBLIC_HEADERS_SEARCH_PATHS'      => quote(sandbox.public_headers.search_paths),
-            'GCC_PREPROCESSOR_DEFINITIONS'          => 'COCOAPODS=1',
-            'USE_HEADERMAP'                         => 'NO'
+            'ALWAYS_SEARCH_USER_PATHS'     => 'YES',
+            'OTHER_LDFLAGS'                => ld_flags,
+            'PODS_ROOT'                    => '${SRCROOT}',
+            'HEADER_SEARCH_PATHS'          => quote(library.build_headers.search_paths) + ' ' + quote(sandbox.public_headers.search_paths),
+            'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1',
+            # 'USE_HEADERMAP'                => 'NO'
           }
 
           consumer_xcconfig(library.consumer).to_hash.each do |k, v|
-            config[k] = "#{config[k]} ${#{library.xcconfig_prefix}#{k}}"
-            config["#{library.xcconfig_prefix}#{k}"] = v
+            prefixed_key = library.xcconfig_prefix + k
+            config[k] = "#{config[k]} ${#{prefixed_key}}"
+            config[prefixed_key] = v
           end
         else
           config = {
-            'ALWAYS_SEARCH_USER_PATHS'              => 'YES',
-            'OTHER_LDFLAGS'                         => ld_flags,
-            'HEADER_SEARCH_PATHS'                   => '${PODS_HEADERS_SEARCH_PATHS}',
-            'PODS_ROOT'                             => relative_pods_root,
-            'PODS_HEADERS_SEARCH_PATHS'             => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
-            'PODS_BUILD_HEADERS_SEARCH_PATHS'       => '',
-            'PODS_PUBLIC_HEADERS_SEARCH_PATHS'      => quote(sandbox.public_headers.search_paths),
-            'GCC_PREPROCESSOR_DEFINITIONS'          => '$(inherited) COCOAPODS=1',
-            'USE_HEADERMAP'                         => '$(inherited)'
+            'ALWAYS_SEARCH_USER_PATHS'         => 'YES',
+            'OTHER_LDFLAGS'                    => ld_flags,
+            'HEADER_SEARCH_PATHS'              => '${PODS_HEADERS_SEARCH_PATHS}',
+            'PODS_ROOT'                        => relative_pods_root,
+            'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
+            'PODS_BUILD_HEADERS_SEARCH_PATHS'  => '',
+            'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
+            'GCC_PREPROCESSOR_DEFINITIONS'     => '$(inherited) COCOAPODS=1',
           }
 
           library.libraries.each do |lib|
             consumer_xcconfig(lib.consumer).to_hash.each do |k, v|
-              config[k] = "#{config[k]} ${#{lib.xcconfig_prefix}#{k}}"
+              prefixed_key = lib.xcconfig_prefix + k
+              config[k] = "#{config[k]} ${#{prefixed_key}}"
             end
           end
         end
@@ -151,8 +147,8 @@ module Pod
         strings.sort.map { |s| %W|"#{s}"| }.join(" ")
       end
 
-      # Configures the given Xcconfig according to the build settings of the
-      # given Specification.
+      # Returns the Xcconfig generated from the build settings of the give
+      # specification consumer.
       #
       # @param  [Specification::Consumer] consumer
       #         The consumer of the specification.
@@ -160,7 +156,7 @@ module Pod
       # @param  [Xcodeproj::Config] xcconfig
       #         The xcconfig to edit.
       #
-      # @return [void]
+      # @return [Xcodeproj::Config]
       #
       def consumer_xcconfig(consumer)
         xcconfig = Xcodeproj::Config.new()
@@ -183,7 +179,7 @@ module Pod
       ]
 
       # Adds the search paths of the developer frameworks to the specification
-      # if needed. This is done because the `SenTestingKit` requires them and 
+      # if needed. This is done because the `SenTestingKit` requires them and
       # adding them to each specification which requires it is repetitive and
       # error prone.
       #
