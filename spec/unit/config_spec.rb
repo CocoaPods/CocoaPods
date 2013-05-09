@@ -21,6 +21,13 @@ module Pod
         config.repos_dir.should == Pathname.new("~/.cocoapods").expand_path
       end
 
+      it "allows to specify whether the aggressive cache should be used with an environment variable" do
+        config.aggressive_cache = false
+        ENV['CP_AGGRESSIVE_CACHE'] = 'TRUE'
+        config.aggressive_cache?.should.be.true
+        ENV.delete('CP_AGGRESSIVE_CACHE')
+      end
+
       it "allows to specify the repos dir with an environment variable" do
         ENV['CP_REPOS_DIR'] = '~/custom_repos_dir'
         config.repos_dir.should == Pathname.new("~/custom_repos_dir").expand_path

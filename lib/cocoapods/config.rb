@@ -66,11 +66,20 @@ module Pod
     attr_accessor :skip_repo_update
     alias_method  :skip_repo_update?, :skip_repo_update
 
+    # Allows to set whether the downloader should use more aggressive caching
+    # options.
+    #
+    # @note The aggressive cache has lead to issues if a tag is updated to
+    #       point to another commit.
+    #
+    attr_writer :aggressive_cache
+
     # @return [Bool] Whether the downloader should use more aggressive caching
     #         options.
     #
-    attr_accessor :aggressive_cache
-    alias_method  :aggressive_cache?, :aggressive_cache
+    def aggressive_cache?
+      @aggressive_cache || (ENV['CP_AGGRESSIVE_CACHE'] != 'FALSE')
+    end
 
     #--------------------------------------#
 
