@@ -1,3 +1,5 @@
+# Encoding: utf-8
+
 module Bacon
   summary_at_exit
 
@@ -11,8 +13,9 @@ module Bacon
       "\e[32m#{string}\e[0m"
     when :yellow
       "\e[33m#{string}\e[0m"
+    when :none
+      string
     else
-      # Support for Conque
       "\e[0m#{string}\e[0m"
     end
   end
@@ -43,14 +46,17 @@ module Bacon
 
     #:nodoc:
     def handle_requirement(description, disabled = false)
+      start_time = Time.now.to_f
       error = yield
+      elapsed_time = ((Time.now.to_f - start_time) * 1000).round
 
       if !error.empty?
         puts Bacon.color(:red, "#{spaces}- #{description} [FAILED]")
       elsif disabled
         puts Bacon.color(:yellow, "#{spaces}- #{description} [DISABLED]")
       else
-        puts Bacon.color(:green, "#{spaces}- #{description}")
+        time_color = elapsed_time > 200 ? :yellow : :none
+        puts Bacon.color(:green, "#{spaces}✓ ") + "#{description} " + Bacon.color(time_color, "(#{elapsed_time} ms)")
       end
     end
 
