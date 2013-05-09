@@ -10,9 +10,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   to CocoaDocs. This decision was taken because CocoaDocs is a much better
   solution which doesn't clutter Xcode's docsets while still allowing
   access to the docsets with Xcode and with Dash. Removing this feature
-  keeps the installer leaner and easier to develop. Private pods can use pre
-  install hook to generate the documentation. If there will be enough demand
-  this feature might be reintegrated as plugin (see
+  keeps the installer leaner and easier to develop and paves the way for the
+  upcoming sandbox. Private pods can use pre install hook to generate the
+  documentation. If there will be enough demand this feature might be
+  reintegrated as plugin (see
   [#1037](https://github.com/CocoaPods/CocoaPods/issues/1037)).
 
 ## 0.19.1
