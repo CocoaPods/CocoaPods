@@ -41,6 +41,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * CocoaPods now defines the `COCOAPODS=1` macro in the Pod and the Client
   targets. This is useful for libraries which conditionally expose interfaces.
   [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
+* Added support for the `private_header_files` attribute of the Specification
+  DSL.
+  [#998](https://github.com/CocoaPods/CocoaPods/issues/998)
 * CocoaPods now defines the deployment target of the Pods project computed as
   the minimum deployment target of the Pods libraries.
   [#556](https://github.com/CocoaPods/CocoaPods/issues/556)
