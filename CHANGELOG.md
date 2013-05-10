@@ -19,6 +19,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ###### Bug fixes
 
 * Inheriting `inhibit_warnings` per pod is now working
+  [#1032](https://github.com/CocoaPods/CocoaPods/issues/1032)
 
 ## 0.19.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.19.1)
