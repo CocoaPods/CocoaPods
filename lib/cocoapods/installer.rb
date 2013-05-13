@@ -190,9 +190,9 @@ module Pod
       sandbox.public_headers.implode!
 
       unless sandbox_state.deleted.empty?
-        title_options = { :verbose_prefix => "-> ".red }
+        title_options = { :verbose_prefix => "-> ".yellow }
         sandbox_state.deleted.each do |pod_name|
-          UI.titled_section("Removing #{pod_name}".red, title_options) do
+          UI.titled_section("Removing #{pod_name}".yellow, title_options) do
             sandbox.clean_pod(pod_name)
           end
         end
