@@ -24,8 +24,6 @@ module Pod
         @sandbox = sandbox
         @specs_by_platform = specs_by_platform
 
-        @generate_docs    = false
-        @install_docs     = false
         @aggressive_cache = false
       end
 
@@ -40,18 +38,6 @@ module Pod
       public
 
       # @!group Configuration
-
-      # @return [Bool] whether the documentation should be generated for the
-      #         Pod.
-      #
-      attr_accessor :generate_docs
-      alias_method  :generate_docs?, :generate_docs
-
-      # @return [Bool] whether the generated documentation should be installed
-      #         in Xcode.
-      #
-      attr_accessor :install_docs
-      alias_method  :install_docs?, :install_docs
 
       # @return [Bool] whether the downloader should always check against the
       #         remote if issues might be generated (mostly useful to speed up
@@ -73,8 +59,7 @@ module Pod
       # @return [void]
       #
       def install!
-        download_source     unless predownloaded? || local?
-        generate_docs       if generate_docs?
+        download_source unless predownloaded? || local?
       end
 
       # Cleans the installations if appropriate.
@@ -121,20 +106,6 @@ module Pod
         end
       end
 
-      # Generates the documentation for the Pod.
-      #
-      # @return [void]
-      #
-      def generate_docs
-        if documentation_generator.already_installed?
-          UI.section " > Using existing documentation"
-        else
-          UI.section " > Installing documentation" do
-            documentation_generator.generate(install_docs?)
-          end
-        end
-      end
-
       # Removes all the files not needed for the installation according to the
       # specs by platform.
       #
@@ -160,13 +131,6 @@ module Pod
         @downloader.max_cache_size = MAX_CACHE_SIZE
         @downloader.aggressive_cache = aggressive_cache?
         @downloader
-      end
-
-      # @return [Generator::Documentation] The documentation generator to use
-      #         for generating the documentation.
-      #
-      def documentation_generator
-        @documentation_generator ||= Generator::Documentation.new(sandbox, root_spec, path_list)
       end
 
       #-----------------------------------------------------------------------#

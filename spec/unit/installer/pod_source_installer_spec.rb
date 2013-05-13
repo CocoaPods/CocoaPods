@@ -14,14 +14,6 @@ module Pod
 
     describe "In General" do
 
-      it "doesn't generate docs by default" do
-        @installer.should.not.generate_docs?
-      end
-
-      it "doesn't installs the docs by default" do
-        @installer.should.not.install_docs?
-      end
-
       it "doesn't use an aggressive cache by default" do
         @installer.should.not.aggressive_cache?
       end
@@ -67,31 +59,6 @@ module Pod
             :git => SpecHelper.fixture('banana-lib'),
             :commit=>"8047d326c0f28b63dc9aa13a08278d7cf06d486f" }
           }
-        end
-
-      end
-
-      #--------------------------------------#
-
-      describe "Documentation" do
-
-        it "generates the documentation if needed" do
-          @installer.generate_docs = true
-          @installer.documentation_generator.expects(:generate)
-          @installer.install!
-        end
-
-        it "doesn't generates the documentation if it is already installed" do
-          @installer.generate_docs = true
-          @installer.documentation_generator.stubs(:already_installed?).returns(true)
-          @installer.documentation_generator.expects(:generate).never
-          @installer.install!
-        end
-
-        it "doesn't generates the documentation if disabled in the config" do
-          @installer.generate_docs = false
-          @installer.documentation_generator.expects(:generate).never
-          @installer.install!
         end
 
       end

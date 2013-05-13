@@ -254,8 +254,6 @@ module Pod
       @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
       pod_installer.aggressive_cache = config.aggressive_cache?
-      pod_installer.generate_docs = config.generate_docs?
-      pod_installer.install_docs = config.install_docs?
       pod_installer.install!
       @pod_installers << pod_installer
       @installed_specs.concat(specs_by_platform.values.flatten.uniq)
@@ -416,8 +414,8 @@ module Pod
     def run_spec_pre_install_hook(spec, lib_representation)
       spec.pre_install!(pod_rep(spec.root.name), lib_representation)
     rescue => e
-      raise Informative, "The pre install hook of #{spec} is not " \
-        "compatible with this version of CocoaPods." \
+      raise Informative, "An error occurred while processing the pre-install " \
+        "hook of #{spec}." \
         "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
@@ -430,8 +428,8 @@ module Pod
     def run_podfile_pre_install_hook
       podfile.pre_install!(installer_rep)
     rescue => e
-      raise Informative, "The pre install hook of the Podfile is not " \
-        "compatible with this version of CocoaPods." \
+      raise Informative, "An error occurred while processing the pre-install " \
+        "hook of the Podfile." \
         "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
@@ -475,8 +473,8 @@ module Pod
     def run_spec_post_install_hook(spec, lib_representation)
       spec.post_install!(lib_representation)
     rescue => e
-      raise Informative, "The post install hook of #{spec} is not " \
-        "compatible with this version of CocoaPods." \
+      raise Informative, "An error occurred while processing the post-install " \
+        "hook of #{spec}." \
         "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
@@ -489,8 +487,8 @@ module Pod
     def run_podfile_post_install_hook
       podfile.post_install!(installer_rep)
     rescue => e
-      raise Informative, "The post install hook of the Podfile is not " \
-        "compatible with this version of CocoaPods." \
+      raise Informative, "An error occurred while processing the post-install " \
+        "hook of the Podfile." \
         "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 

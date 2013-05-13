@@ -87,31 +87,5 @@ module Pod
 
     #--------------------------------------#
 
-    if `which appledoc`.strip.empty?
-      puts "    ! ".red << "Skipping because the `appledoc` executable can't be found."
-    else
-      # @todo fix the config of the hook
-      it "generates documentation of all pods by default" do
-
-        podfile = Podfile.new do
-          platform :ios
-          xcodeproj 'dummy'
-          pod 'JSONKit', '1.4'
-          pod 'SSToolkit', '1.0.0'
-        end
-
-        config.generate_docs = true
-        config.install_docs  = false
-        Generator::Documentation.any_instance.stubs(:already_installed?).returns(false)
-        installer = Installer.new(config.sandbox, podfile)
-        installer.install!
-
-        doc = (config.sandbox_root + 'Documentation/JSONKit/html/index.html').read
-        doc.should.include?('<title>JSONKit 1.4 Reference</title>')
-        doc = (config.sandbox_root + 'Documentation/SSToolkit/html/index.html').read
-        doc.should.include?('<title>SSToolkit 1.0.0 Reference</title>')
-      end
-    end
   end
-
 end
