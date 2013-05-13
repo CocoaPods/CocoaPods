@@ -79,6 +79,13 @@ Pod::Spec.new do |s|
   # s.resource  = "icon.png"
   # s.resources = "Resources/*.png"
 
+  # If Resources are given as a hash with a source key and a destination key, they will preserve their
+  # directory structure and will start in (installation directory)/destination. 
+  # If no destination is provided, they will start in (installation directory)/source.
+  #
+  # s.resource = { :source => "assets/**/" }
+  # s.resource = ["Resources/*.png", { :source => "application/ios/html/images", :destination => "images" }]
+
   # A list of paths to preserve after installing the Pod.
   # CocoaPods cleans by default any file that is not used.
   # Please don't include documentation, example, and test files.

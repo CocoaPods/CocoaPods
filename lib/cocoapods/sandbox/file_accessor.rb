@@ -92,8 +92,61 @@ module Pod
       # @return [Hash{ Symbol => Array<Pathname> }] the resources of the
       #         specification grouped by destination.
       #
+      # If any resources are using source / destination protocol, they won't
+      # be included here, but in preserved_resources.
+      #
       def resources
-        paths_for_attribute(:resources, true)
+        resources = []
+        spec_consumer.send(:resources).each do |resource|
+          resources << resource if resource.is_a?(String)
+        end
+
+        paths_for_file_patterns(resources, glob_for_attribute(:resources), true)
+      end
+
+      # @return [Hash{ Symbol => Array[<Pathname>] }] the preserved resource 
+      #         filepaths of the specification grouped by destination.
+      #
+      def preserved_resource_files
+        resources = []
+
+        spec_consumer.send(:resources).each do |resource|
+          if resource.is_a?(Hash) && resource[:source]
+            resources.concat(paths_for_file_patterns([resource[:source]], glob_for_attribute(:resources), true))
+          end
+        end
+
+        resources
+      end
+
+      # @return [Hash{ Symbol => Array[Hash{:source_files, :root_path,  :destination}] }] 
+      #         Returns the necessary information to map a set of resource to the 
+      #         proper directory structure for a destination. We need to know
+      #
+      #         1. Source Files: The files that will be copied.
+      #         2. Destination: The destination folder to copy the files into.
+      #         3. Root Path: The original root path of the source files so we can
+      #            copy from one directory to another while maintaining the directory structure.
+      #
+      def preserved_resources
+        preserved_resources = []
+
+        spec_consumer.send(:resources).each do |resource|
+          if resource.is_a?(Hash) && resource[:source]
+            root = resource[:source].split(/\//)[0] 
+            root_path = paths_for_file_patterns([root], glob_for_attribute(:resources), true)[0]
+
+            if root_path
+              preserved_resources << { 
+                :source_files => paths_for_file_patterns([resource[:source]], glob_for_attribute(:resources), true),
+                :destination  => Pathname.new(resource[:destination] || root),
+                :root_path    => root_path
+              }
+            end
+          end
+        end
+
+        preserved_resources
       end
 
       # @return [Array<Pathname>] the files of the specification to preserve.
@@ -143,15 +196,29 @@ module Pod
       # @return [Array<Pathname>] the paths.
       #
       def paths_for_attribute(attribute, include_dirs = false)
-        file_patterns = spec_consumer.send(attribute)
-        options = {
-          :exclude_patterns => spec_consumer.exclude_files,
-          :dir_pattern => glob_for_attribute(attribute),
-          :include_dirs => include_dirs,
-        }
-        expanded_paths(file_patterns, options)
+        paths_for_file_patterns(spec_consumer.send(attribute), glob_for_attribute(attribute), include_dirs)
       end
 
+      # Returns the list of the paths founds in the file system for the
+      # file patterns. It takes into account any dir pattern and
+      # any file excluded in the specification.
+      #
+      # @param  [Array] file_patterns
+      #         the file patterns to convert.
+      #
+      # @param  [String] directory_pattern
+      #         the directory pattern to ad ot the file patterns
+      #
+      # @return [Array<Pathname>] the paths.
+      #
+      def paths_for_file_patterns(file_patterns, directory_pattern, include_dirs = false)
+          options = {
+            :exclude_patterns => spec_consumer.exclude_files,
+            :dir_pattern => directory_pattern,
+            :include_dirs => include_dirs,
+          }
+          expanded_paths(file_patterns, options)
+      end
       # Returns the pattern to use to glob a directory for an attribute.
       #
       # @param  [Symbol] attribute

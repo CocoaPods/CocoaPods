@@ -37,7 +37,7 @@ module Pod
           @spec.version.head = true
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
-          @installer.specific_source[:commit].should == "0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc"
+          @installer.specific_source[:commit].should == "8047d326c0f28b63dc9aa13a08278d7cf06d486f"
           pod_folder = config.sandbox.root + 'BananaLib'
           pod_folder.should.exist
         end
@@ -57,7 +57,7 @@ module Pod
           sources = @installer.sandbox.checkout_sources
           sources.should == { "BananaLib" => {
             :git => SpecHelper.fixture('banana-lib'),
-            :commit=>"0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc" }
+            :commit=>"8047d326c0f28b63dc9aa13a08278d7cf06d486f" }
           }
         end
 
@@ -141,7 +141,10 @@ module Pod
           "Pods/BananaLib/Classes/BananaPrivate.h",
           "Pods/BananaLib/LICENSE",
           "Pods/BananaLib/README",
-          "Pods/BananaLib/Resources/logo-sidebar.png"
+          "Pods/BananaLib/Resources/logo-sidebar.png",
+          "Pods/BananaLib/Resources/sub_dir", 
+          "Pods/BananaLib/Resources/sub_dir/logo-sidebar.png", 
+          "Pods/BananaLib/preserve_me.txt"
         ]
       end
 
@@ -165,13 +168,17 @@ module Pod
           "Pods/BananaLib/Classes/BananaPrivate.h",
           "Pods/BananaLib/LICENSE",
           "Pods/BananaLib/README",
-          "Pods/BananaLib/Resources/logo-sidebar.png"
+          "Pods/BananaLib/Resources/logo-sidebar.png",
+          "Pods/BananaLib/Resources/sub_dir", 
+          "Pods/BananaLib/Resources/sub_dir/logo-sidebar.png", 
+          "Pods/BananaLib/preserve_me.txt"
         ]
       end
 
       it "compacts the used files as nil would be converted to the empty string" do
         Sandbox::FileAccessor.any_instance.stubs(:source_files)
         Sandbox::FileAccessor.any_instance.stubs(:resources).returns(nil)
+        Sandbox::FileAccessor.any_instance.stubs(:preserved_resource_files).returns(nil)
         Sandbox::FileAccessor.any_instance.stubs(:preserve_paths)
         Sandbox::FileAccessor.any_instance.stubs(:prefix_header)
         Sandbox::FileAccessor.any_instance.stubs(:readme)
