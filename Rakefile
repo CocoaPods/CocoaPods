@@ -356,10 +356,6 @@ task :bootstrap, :use_bundle_dir? do |t, args|
   else
     execute_command "bundle install"
   end
-
-  puts "Installing tools (Homebrew)"
-  execute_command "brew install appledoc"  if `which appledoc`.strip.empty?
-  execute_command "brew install mercurial" if `which hg`.strip.empty?
 end
 
 #-----------------------------------------------------------------------------#
