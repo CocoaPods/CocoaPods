@@ -35,7 +35,7 @@ require 'rbconfig'
 ruby_bin = File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'])
 ruby_prefix = RbConfig::CONFIG['prefix']
 
-prefixes = ['/bin', '/usr/bin']
+prefixes = ['/bin', '/usr/bin', '/usr/libexec']
 prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
 # TODO add MacPorts. More?
 
