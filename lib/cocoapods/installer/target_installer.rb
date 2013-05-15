@@ -209,6 +209,10 @@ module Pod
         end
       end
 
+      ENABLE_EXTERNAL_STRINGS_FILE_FLAG = {
+        :ios => Version.new('6'),
+        :osx => Version.new('10.8')
+      }
       # Creates a script that copies the resources to the bundle of the client
       # target.
       #
@@ -222,9 +226,9 @@ module Pod
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
           resources = library.file_accessors.map { |accessor| accessor.resources.flatten.map {|res| project.relativize(res)} }.flatten
           resources << bridge_support_file if bridge_support_file
-          # @todo inspect library.platform to see if it is osx 10.8+ or 6.0+
-          greaterorquealto_osx10_8_or_ios6 = true
-          generator = Generator::CopyResourcesScript.new(resources, greaterorquealto_osx10_8_or_ios6)
+          platform_name = library.platform.name
+          reference_external_strings_file = library.platform.deployment_target >= ENABLE_EXTERNAL_STRINGS_FILE_FLAG[platform_name]
+          generator = Generator::CopyResourcesScript.new(resources, reference_external_strings_file)
           generator.save_as(path)
           add_file_to_support_group(path)
         end
