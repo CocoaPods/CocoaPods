@@ -35,17 +35,19 @@ require 'rbconfig'
 ruby_bin = File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'])
 ruby_prefix = RbConfig::CONFIG['prefix']
 
-homebrew_prefix = `brew --prefix`.strip
+prefixes = ['/bin', '/usr/bin']
+prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
 
 developer_prefix = `xcode-select --print-path`.strip
 xcode_app_path = File.expand_path('../..', developer_prefix)
 
 
 require 'erb'
-profile = ERB.new(DATA.read).result(TOPLEVEL_BINDING)
+profile = ERB.new(DATA.read, 0, '>').result(TOPLEVEL_BINDING)
 puts profile
 
 command = ['/usr/bin/sandbox-exec', '-p', profile, pod_bin, *ARGV]
+puts command
 exec *command
 
 
@@ -65,19 +67,15 @@ __END__
 ; TODO make this stricter if possible
 (allow network-outbound)
 
-; TODO: Needed for appldoc to install a docset
-; (allow appleevent-send)
-
 (allow process-exec
   (regex 
     #"^<%= pod_bin %>"
     #"^<%= ruby_bin %>"
-    #"^<%= homebrew_prefix %>"
     #"^<%= File.join(developer_prefix, 'usr/bin/xcrun') %>"
     #"^<%= File.join(developer_prefix, 'usr/bin/xcodebuild') %>"
-    #"^<%= File.join(developer_prefix, 'usr/bin/docsetutil') %>" ; Needed for appledoc
-    #"^/bin/*"
-    #"^/usr/bin/*"
+<% prefixes.each do |prefix| %>
+    #"^<%= prefix %>/*"
+<% end %>
   )
 )
 
@@ -96,7 +94,6 @@ __END__
     #"^/usr/share/*"
     #"^/private/*"
     #"^/dev/*"
-    #"^<%= homebrew_prefix %>"
     #"^<%= ruby_prefix %>"
     #"^<%= pod_prefix %>"
     #"^<%= xcode_app_path %>"
@@ -109,7 +106,6 @@ __END__
     #"^<%= Pod::Config.instance.project_root %>"
     #"^<%= Pod::Config.instance.repos_dir %>"
     #"^/Users/[^.]+/Library/Caches/CocoaPods/*"
-    #"^/Users/[^.]+/Library/Developer/Shared/Documentation/DocSets"
     #"^/dev/dtracehelper"
     #"^/dev/tty"
     #"^/dev/null"
