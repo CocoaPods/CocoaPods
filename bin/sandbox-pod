@@ -37,6 +37,7 @@ ruby_prefix = RbConfig::CONFIG['prefix']
 
 prefixes = ['/bin', '/usr/bin']
 prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
+# TODO add MacPorts. More?
 
 developer_prefix = `xcode-select --print-path`.strip
 xcode_app_path = File.expand_path('../..', developer_prefix)
@@ -47,7 +48,7 @@ profile = ERB.new(DATA.read, 0, '>').result(TOPLEVEL_BINDING)
 puts profile
 
 command = ['/usr/bin/sandbox-exec', '-p', profile, pod_bin, *ARGV]
-puts command
+#puts command
 exec *command
 
 
@@ -98,6 +99,9 @@ __END__
     #"^<%= pod_prefix %>"
     #"^<%= xcode_app_path %>"
     #"^<%= Pod::Config.instance.repos_dir %>"
+<% prefixes.each do |prefix| %>
+    #"^<%= prefix %>/*"
+<% end %>
   )
 )
 
