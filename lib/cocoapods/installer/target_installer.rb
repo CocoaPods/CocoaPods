@@ -89,11 +89,6 @@ module Pod
         library.target = @target
       end
 
-      ENABLE_OBJECT_USE_OBJC_FROM = {
-        :ios => Version.new('6'),
-        :osx => Version.new('10.8')
-      }
-
       # Adds the build files of the pods to the target and adds a reference to
       # the frameworks of the Pods.
       #
@@ -319,6 +314,11 @@ module Pod
         relative_path = path.relative_path_from(sandbox.root)
         support_files_group.new_file(relative_path)
       end
+
+      ENABLE_OBJECT_USE_OBJC_FROM = {
+        :ios => Version.new('6'),
+        :osx => Version.new('10.8')
+      }
 
       # Returns the compiler flags for the source files of the given specification.
       #

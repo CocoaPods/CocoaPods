@@ -11,8 +11,6 @@ module Bacon
         c.silent            =  true
         c.repos_dir         =  fixture('spec-repos')
         c.installation_root =  SpecHelper.temporary_directory
-        c.install_docs      =  false
-        c.generate_docs     =  false
         c.skip_repo_update  =  true
       end
 

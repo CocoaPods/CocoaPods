@@ -11,8 +11,7 @@ module Pod
     #
     #     ---
     #     skip_repo_update: true
-    #     generate_docs: false
-    #     install_docs: false
+    #     new_version_message: false
     #
     DEFAULTS = {
       :verbose             => false,
@@ -21,8 +20,6 @@ module Pod
       :aggressive_cache    => false,
 
       :clean               => true,
-      :generate_docs       => true,
-      :install_docs        => true,
       :integrate_targets   => true,
       :new_version_message => true,
     }
@@ -42,8 +39,8 @@ module Pod
     attr_accessor :silent
     alias_method  :silent?, :silent
 
-    # @return [Bool] Whether the generated documentation should be installed to
-    #         Xcode.
+    # @return [Bool] Whether a message should be printed when a new version of 
+    #         CocoaPods is available.
     #
     attr_accessor :new_version_message
     alias_method  :new_version_message?, :new_version_message
@@ -57,18 +54,6 @@ module Pod
     attr_accessor :clean
     alias_method  :clean?, :clean
 
-    # @return [Bool] Whether the documentation should be generated for the
-    #         installed Pods.
-    #
-    attr_accessor :generate_docs
-    alias_method  :generate_docs?, :generate_docs
-
-    # @return [Bool] Whether the generated documentation should be installed to
-    #         Xcode.
-    #
-    attr_accessor :install_docs
-    alias_method  :install_docs?, :install_docs
-
     # @return [Bool] Whether CocoaPods should integrate a user target and build
     #         the workspace or just create the Pods project.
     #
@@ -81,11 +66,20 @@ module Pod
     attr_accessor :skip_repo_update
     alias_method  :skip_repo_update?, :skip_repo_update
 
+    # Allows to set whether the downloader should use more aggressive caching
+    # options.
+    #
+    # @note The aggressive cache has lead to issues if a tag is updated to
+    #       point to another commit.
+    #
+    attr_writer :aggressive_cache
+
     # @return [Bool] Whether the downloader should use more aggressive caching
     #         options.
     #
-    attr_accessor :aggressive_cache
-    alias_method  :aggressive_cache?, :aggressive_cache
+    def aggressive_cache?
+      @aggressive_cache || (ENV['CP_AGGRESSIVE_CACHE'] != 'FALSE')
+    end
 
     #--------------------------------------#
 

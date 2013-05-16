@@ -325,7 +325,7 @@ namespace :examples do
       puts "Building example: #{example}"
       Dir.chdir(example.to_s) do
         execute_command "rm -rf Pods DerivedData"
-        execute_command "#{'../../bin/' unless ENV['FROM_GEM']}pod install --verbose --no-repo-update"
+        execute_command "#{'../../bin/' unless ENV['FROM_GEM']}sandbox-pod install --verbose --no-repo-update"
         command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
         if (example + 'Podfile').read.include?('platform :ios')
           # Specifically build against the simulator SDK so we don't have to deal with code signing.
@@ -356,10 +356,6 @@ task :bootstrap, :use_bundle_dir? do |t, args|
   else
     execute_command "bundle install"
   end
-
-  puts "Installing tools (Homebrew)"
-  execute_command "brew install appledoc"  if `which appledoc`.strip.empty?
-  execute_command "brew install mercurial" if `which hg`.strip.empty?
 end
 
 #-----------------------------------------------------------------------------#
