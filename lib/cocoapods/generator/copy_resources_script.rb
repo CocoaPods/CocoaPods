@@ -34,13 +34,14 @@ EOS
       attr_reader :resources
 
       # A list of files relative to the project pods root.
-      def initialize(resources = [])
+      def initialize(resources = [], reference_external_strings_file = false)
         @resources = resources
+        @reference_external_strings_file = reference_external_strings_file
       end
 
       def save_as(pathname)
         pathname.open('w') do |script|
-          script.puts CONTENT
+          script.puts @reference_external_strings_file ? CONTENT : CONTENT.gsub(' --reference-external-strings-file', '')
           @resources.each do |resource|
             script.puts "install_resource '#{resource}'"
           end
