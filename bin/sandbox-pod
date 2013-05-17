@@ -42,13 +42,11 @@ prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
 developer_prefix = `xcode-select --print-path`.strip
 xcode_app_path = File.expand_path('../..', developer_prefix)
 
-
 require 'erb'
 profile = ERB.new(DATA.read, 0, '>').result(TOPLEVEL_BINDING)
-puts profile
+#puts profile
 
 command = ['/usr/bin/sandbox-exec', '-p', profile, pod_bin, *ARGV]
-#puts command
 exec *command
 
 
