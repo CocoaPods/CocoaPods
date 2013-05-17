@@ -3,7 +3,9 @@
 
 
 if ENV['CI'] || ENV['GENERATE_COVERAGE']
-  require 'simplecov'
+  if Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new("1.9")
+    require 'simplecov'
+  end
   require 'coveralls'
 
   if ENV['CI']
