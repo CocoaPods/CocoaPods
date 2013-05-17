@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'octokit',       '~> 1.7'
   s.add_runtime_dependency 'colored',       '~> 1.2'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
-  s.add_runtime_dependency 'json',          '~> 1.7.3'
+  s.add_runtime_dependency 'json',          '~> 1.8.0'
   s.add_runtime_dependency 'open4',         '~> 1.3.0'
   s.add_runtime_dependency 'rake',          '~> 10.0.0'
   s.add_runtime_dependency 'activesupport', '~> 3.2.13'
