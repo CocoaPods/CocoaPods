@@ -69,8 +69,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Deprecations
 
-* The `:local` flag in Podfile has been renamed to `:path` and has been 
-  deprecated.
+* The `:local` flag in Podfile has been renamed to `:path` and the old syntax
+  has been deprecated.
   [#971](https://github.com/CocoaPods/CocoaPods/issues/971)
 
 ###### Bug fixes
