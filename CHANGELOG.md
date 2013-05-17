@@ -4,6 +4,26 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
+* Documentation generation has been removed from CocoaPods as it graduated
+  to CocoaDocs. This decision was taken because CocoaDocs is a much better
+  solution which doesn't clutter Xcode's docsets while still allowing
+  access to the docsets with Xcode and with Dash. Removing this feature
+  keeps the installer leaner and easier to develop and paves the way for the
+  upcoming sandbox. Private pods can use pre install hook to generate the
+  documentation. If there will be enough demand this feature might be
+  reintegrated as plugin (see
+  [#1037](https://github.com/CocoaPods/CocoaPods/issues/1037)).
+
+###### Bug fixes
+
+* Inheriting `inhibit_warnings` per pod is now working
+  [#1032](https://github.com/CocoaPods/CocoaPods/issues/1032)
+* Fix copy resources script for iOS < 6 and OS X < 10.8 by removing the
+  `--reference-external-strings-file`
+  flag. [#1030](https://github.com/CocoaPods/CocoaPods/pull/1030)
+
 ## 0.19.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.19.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.0...0.19.1)
@@ -29,6 +49,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * CocoaPods now defines the `COCOAPODS=1` macro in the Pod and the Client
   targets. This is useful for libraries which conditionally expose interfaces.
   [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
+* Added support for the `private_header_files` attribute of the Specification
+  DSL.
+  [#998](https://github.com/CocoaPods/CocoaPods/issues/998)
 * CocoaPods now defines the deployment target of the Pods project computed as
   the minimum deployment target of the Pods libraries.
   [#556](https://github.com/CocoaPods/CocoaPods/issues/556)

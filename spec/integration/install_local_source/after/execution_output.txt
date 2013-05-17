@@ -1,4 +1,4 @@
-$ pod install --no-repo-update --no-doc --verbose --no-color 2>&1
+CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-color 2>&1
 Analyzing dependencies
 
 Fetching external sources

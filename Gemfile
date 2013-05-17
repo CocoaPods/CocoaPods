@@ -20,7 +20,7 @@ group :development do
   gem "bacon"
   gem "mocha-on-bacon"
   gem "rake"
-  gem 'coveralls', :require => false
+  gem 'coveralls', :require => false, :git => 'https://github.com/lemurheavy/coveralls-ruby.git'
 end
 
 group :debugging do

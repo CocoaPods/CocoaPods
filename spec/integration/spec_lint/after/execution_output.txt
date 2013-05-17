@@ -1,4 +1,4 @@
-$ pod spec lint --quick --verbose --no-color 2>&1
+CP_AGGRESSIVE_CACHE=TRUE $ pod spec lint --quick --verbose --no-color 2>&1
  -> Reachability -> Reachability (3.1.0)
 
 Analyzed 1 podspec.

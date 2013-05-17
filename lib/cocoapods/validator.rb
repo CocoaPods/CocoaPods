@@ -191,7 +191,6 @@ module Pod
       config.sandbox_root      = validation_dir + 'Pods'
       config.silent            = !config.verbose
       config.integrate_targets = false
-      config.generate_docs     = false
       config.skip_repo_update  = true
     end
 

@@ -12,12 +12,12 @@ module Pod
       self.arguments = '[QUERY]'
 
       def self.options
-        [[
-          "--full",  "Search by name, summary, and description",
-          "--stats", "Show additional stats (like GitHub watchers and forks)",
-          "--ios",   "Restricts the search to Pods supported on iOS",
-          "--osx",   "Restricts the search to Pods supported on OS X",
-        ]].concat(super)
+        [
+          ["--full",  "Search by name, summary, and description"],
+          ["--stats", "Show additional stats (like GitHub watchers and forks)"],
+          ["--ios",   "Restricts the search to Pods supported on iOS"],
+          ["--osx",   "Restricts the search to Pods supported on OS X"]
+        ].concat(super)
       end
 
       def initialize(argv)

@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
                   "in, third party open-source libraries, by creating a more centralized " \
                   "ecosystem."
 
-  s.files = Dir["lib/**/*.rb"] + %w{ bin/pod README.md LICENSE CHANGELOG.md }
+  s.files = Dir["lib/**/*.rb"] + %w{ bin/pod bin/sandbox-pod README.md LICENSE CHANGELOG.md }
 
   s.executables   = %w{ pod }
   s.require_paths = %w{ lib }

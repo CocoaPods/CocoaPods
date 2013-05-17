@@ -255,8 +255,6 @@ module Pod
       @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
       pod_installer.aggressive_cache = config.aggressive_cache?
-      pod_installer.generate_docs = config.generate_docs?
-      pod_installer.install_docs = config.install_docs?
       pod_installer.install!
       @pod_installers << pod_installer
       @installed_specs.concat(specs_by_platform.values.flatten.uniq)

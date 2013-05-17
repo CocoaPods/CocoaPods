@@ -1,8 +1,9 @@
 # CocoaPods – an Objective-C library manager
 
-[![Gem Version](https://badge.fury.io/rb/cocoapods.png)](http://badge.fury.io/rb/cocoapods)
-[![Dependency Status](https://gemnasium.com/CocoaPods/CocoaPods.png)](https://gemnasium.com/CocoaPods/CocoaPods)
 [![Build Status](https://travis-ci.org/CocoaPods/CocoaPods.png?branch=master)](https://travis-ci.org/CocoaPods/CocoaPods)
+[![Code Climate](https://codeclimate.com/github/CocoaPods/CocoaPods.png)](https://codeclimate.com/github/CocoaPods/CocoaPods)
+[![Dependency Status](https://gemnasium.com/CocoaPods/CocoaPods.png)](https://gemnasium.com/CocoaPods/CocoaPods)
+[![Gem Version](https://badge.fury.io/rb/cocoapods.png)](http://badge.fury.io/rb/cocoapods)
 
 CocoaPods manages library dependencies for your Xcode project.
 
