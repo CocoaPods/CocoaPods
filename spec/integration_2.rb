@@ -47,8 +47,9 @@ require 'pathname'
 #
 ROOT = Pathname.new(File.expand_path('../../', __FILE__)) unless defined? ROOT
 
-$:.unshift((ROOT + 'spec').to_s)
-require 'spec_helper/bacon'
+require 'rubygems'
+require 'bundler/setup'
+require 'pretty_bacon'
 require 'colored'
 require 'diffy'
 require 'Xcodeproj' # For Differ

@@ -15,6 +15,7 @@ group :development do
   gem "mocha"
   gem "bacon"
   gem "mocha-on-bacon"
+  gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
   gem "rake"
   gem 'coveralls', :require => false, :git => 'https://github.com/lemurheavy/coveralls-ruby.git'
 end
