@@ -10,8 +10,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#939](https://github.com/CocoaPods/CocoaPods/issues/939)
 
   Let’s face it, even though we have a great community that spends an amazing
-  amount of time in curating the specifications, the internet can be a hostile
-  place and the community is growing too large to still take a naive approach.
+  amount of time on curating the specifications, the internet can be a hostile
+  place and the community is growing too large to take a naive approach any
+  longer.
 
   As such, we have started leveraging OS X’s sandbox facilities to disallow
   unsanctioned operations. This is still very experimental and therefore has to
@@ -20,16 +21,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
   To use the sandbox, simply use the `sandbox-pod` command instead. E.g.:
 
-      $ sandbox-pod install
+        $ sandbox-pod install
 
-  In case of issues, check `/var/log/system.log` for ‘deny’ messages. For
-  instance, here’s an example where the sandbox denies read access to `/`:
+  In case of issues, be sure to check `/var/log/system.log` for ‘deny’ messages.
+  For instance, here’s an example where the sandbox denies read access to `/`:
 
-      May 16 00:23:35 Khaos kernel[0]: Sandbox: ruby(98430) deny file-read-data /
+        May 16 00:23:35 Khaos kernel[0]: Sandbox: ruby(98430) deny file-read-data /
 
-  **NOTE**: The above example is actually one that we know of. We’re not sure
+  **NOTE**: _The above example is actually one that we know of. We’re not sure
   yet which process causes this, but there shouldn’t be a need for any process
-  to read data from the root path anyways.
+  to read data from the root path anyways._
 
 * Documentation generation has been removed from CocoaPods as it graduated
   to CocoaDocs. This decision was taken because CocoaDocs is a much better
