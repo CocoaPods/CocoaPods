@@ -31,7 +31,7 @@ module Pod
         pathname.open('w') do |file|
           file.puts(script)
         end
-        File.chmod(755, pathname.to_s)
+        File.chmod(0755, pathname.to_s)
       end
 
       private
