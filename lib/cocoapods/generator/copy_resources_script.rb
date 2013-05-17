@@ -2,8 +2,6 @@ module Pod
   module Generator
     class CopyResourcesScript
 
-      require 'fileutils'
-
       # @return [Array<#to_s>] A list of files relative to the project pods
       #         root.
       #
@@ -33,7 +31,7 @@ module Pod
         pathname.open('w') do |file|
           file.puts(script)
         end
-        FileUtils.chmod('+x', pathname.to_s)
+        File.chmod(755, pathname.to_s)
       end
 
       private
