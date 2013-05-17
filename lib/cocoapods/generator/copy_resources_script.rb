@@ -1,6 +1,82 @@
 module Pod
   module Generator
     class CopyResourcesScript
+
+      require 'fileutils'
+
+      # @return [Array<#to_s>] A list of files relative to the project pods
+      #         root.
+      #
+      attr_reader :resources
+
+      # @return [Platform] The platform of the library for which the copy
+      #         resources script is needed.
+      #
+      attr_reader :platform
+
+      # @param  [Array<#to_s>] resources @see resources
+      # @param  [Platform] platform @see platform
+      #
+      def initialize(resources, platform)
+        @resources = resources
+        @platform = platform
+      end
+
+      # Saves the resource script to the given pathname.
+      #
+      # @param  [Pathname] pathname
+      #         The path where the copy resources script should be saved.
+      #
+      # @return [void]
+      #
+      def save_as(pathname)
+        pathname.open('w') do |file|
+          file.puts(script)
+        end
+        FileUtils.chmod('+x', pathname.to_s)
+      end
+
+      private
+
+      # @!group Private Helpers
+
+      # @return [Hash{Symbol=>Version}] The minimum deployment target which
+      #         supports the `--reference-external-strings-file` option for
+      #         the `ibtool` command.
+      #
+      EXTERNAL_STRINGS_FILE_MIMINUM_DEPLOYMENT_TARGET = {
+        :ios => Version.new('6.0'),
+        :osx => Version.new('10.8')
+      }
+
+      # @return [Bool] Whether the external strings file is supported by the
+      #         `ibtool` according to the deployment target of the platform.
+      #
+      def use_external_strings_file?
+        minimum_deployment_target = EXTERNAL_STRINGS_FILE_MIMINUM_DEPLOYMENT_TARGET[platform.name]
+        platform.deployment_target >= minimum_deployment_target
+      end
+
+      # @return [String] The install resources shell function.
+      #
+      def install_resources_function
+          if use_external_strings_file?
+            CONTENT
+          else
+            CONTENT.gsub(' --reference-external-strings-file', '')
+          end
+      end
+
+      # @return [String] The contents of the copy resources script.
+      #
+      def script
+        script = install_resources_function
+        resources.each do |resource|
+          script += "install_resource '#{resource}'"
+        end
+        script
+      end
+
       CONTENT = <<EOS
 #!/bin/sh
 
@@ -31,24 +107,6 @@ install_resource()
 }
 EOS
 
-      attr_reader :resources
-
-      # A list of files relative to the project pods root.
-      def initialize(resources = [], reference_external_strings_file = false)
-        @resources = resources
-        @reference_external_strings_file = reference_external_strings_file
-      end
-
-      def save_as(pathname)
-        pathname.open('w') do |script|
-          script.puts @reference_external_strings_file ? CONTENT : CONTENT.gsub(' --reference-external-strings-file', '')
-          @resources.each do |resource|
-            script.puts "install_resource '#{resource}'"
-          end
-        end
-        # @todo use File api
-        system("chmod +x '#{pathname}'")
-      end
     end
   end
 end
