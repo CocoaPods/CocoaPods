@@ -16,13 +16,6 @@ if ENV['CI'] || ENV['GENERATE_COVERAGE']
   end
 end
 
-# TODO: Coverall loads colorize which interferes with colored making certain
-# specs fail. This should be removed once Coverall is fixed.
-#
-# https://github.com/lemurheavy/coveralls-ruby/issues/14
-#
-require 'colored'
-
 # Set up
 #-----------------------------------------------------------------------------#
 
