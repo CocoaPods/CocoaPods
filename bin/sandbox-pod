@@ -37,7 +37,11 @@ ruby_prefix = RbConfig::CONFIG['prefix']
 
 prefixes = ['/bin', '/usr/bin', '/usr/libexec']
 prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
-# TODO add MacPorts. More?
+# From asking people, it seems MacPorts does not have a `prefix` command, like
+# Homebrew does, so make an educated guess:
+unless (port = `which port`.strip).empty?
+  prefixes << File.dirname(File.dirname(port))
+end
 
 developer_prefix = `xcode-select --print-path`.strip
 xcode_app_path = File.expand_path('../..', developer_prefix)

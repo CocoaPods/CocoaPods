@@ -31,13 +31,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   **NOTE**: _The above example is actually one that we know of. We’re not sure
   yet which process causes this, but there shouldn’t be a need for any process
   to read data from the root path anyways._
-
-  **NOTE 2**: _If you’re using a package manager other than Homebrew, please
-  submit a pull-request that adds the prefix of that manager
-  [here](https://github.com/CocoaPods/CocoaPods/blob/master/bin/sandbox-pod#L40)._
   
-  **NOTE 3**: _At the moment the sandbox is not compatible with the `:path` option 
-  when referencing Pods which are not stored within the directory of the Podfile._
+  **NOTE 2**: _At the moment the sandbox is not compatible with the `:path` option 
+  when referencing Pods that are not stored within the directory of the Podfile._
 
 * The naked `pod` command now defaults to `pod install`.
   [#958](https://github.com/CocoaPods/CocoaPods/issues/958)
