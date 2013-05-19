@@ -174,6 +174,7 @@ module Pod
         UI.message "- Generating xcconfig file at #{UI.path(path)}" do
           gen = Generator::PodXCConfig.new(library)
           gen.save_as(path)
+          library.xcconfig = gen.xcconfig
           xcconfig_file_ref = add_file_to_support_group(path)
 
           target.build_configurations.each do |c|

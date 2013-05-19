@@ -19,6 +19,10 @@ module Pod
         @sandbox = library.sandbox
       end
 
+      # @return [Xcodeproj::Config] The generated xcconfig.
+      #
+      attr_reader :xcconfig
+
       # Generates and saves the xcconfig to the given path.
       #
       # @param  [Pathname] path
@@ -142,9 +146,9 @@ module Pod
           end
         end
 
-        xcconfig = Xcodeproj::Config.new(config)
-        xcconfig.includes = library.libraries.map(&:name)
-        xcconfig
+        @xcconfig = Xcodeproj::Config.new(config)
+        @xcconfig.includes = library.libraries.map(&:name)
+        @xcconfig
       end
 
     end
@@ -177,7 +181,8 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
-        consumer_xcconfig(library.consumer)
+        @xcconfig = consumer_xcconfig(library.consumer)
+        @xcconfig
       end
 
     end
@@ -214,9 +219,9 @@ module Pod
           config[k] = "#{config[k]} ${#{prefixed_key}}"
         end
 
-        xcconfig = Xcodeproj::Config.new(config)
-        xcconfig.includes = [library.name]
-        xcconfig
+        @xcconfig = Xcodeproj::Config.new(config)
+        @xcconfig.includes = [library.name]
+        @xcconfig
       end
 
     end
