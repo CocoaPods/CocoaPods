@@ -44,7 +44,8 @@ module Pod
   autoload :ExternalSources,           'cocoapods/external_sources'
   autoload :Installer,                 'cocoapods/installer'
   autoload :SourcesManager,            'cocoapods/sources_manager'
-  autoload :Target,                    'cocoapods/target'
+  autoload :PodTarget,                 'cocoapods/target'
+  autoload :SpecTarget,                'cocoapods/target'
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'
   autoload :Sandbox,                   'cocoapods/sandbox'
@@ -60,7 +61,9 @@ module Pod
     autoload :Plist,                   'cocoapods/generator/acknowledgements/plist'
     autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
     autoload :TargetEnvironmentHeader, 'cocoapods/generator/target_environment_header'
-    autoload :XCConfig,                'cocoapods/generator/xcconfig'
+    autoload :PodXCConfig,             'cocoapods/generator/xcconfig'
+    autoload :PublicSpecXCConfig,      'cocoapods/generator/xcconfig'
+    autoload :PrivateSpecXCConfig,     'cocoapods/generator/xcconfig'
   end
 
   module Hooks

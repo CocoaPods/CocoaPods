@@ -5,104 +5,19 @@ module Pod
     # for each Pod and for each Pod target definition. The aggregates the
     # configurations of the Pods and define target specific settings.
     #
-    class XCConfig
+    class AbstractXCConfig
 
       # @return [Target] the library or target represented by this xcconfig.
       #
       attr_reader :library
-
-      # @return [Sandbox] the sandbox where the Pods project is installed.
-      #
       attr_reader :sandbox
 
-      # @return [Array<Specification::Consumer>] the consumers for the
-      #         specifications of the library which needs the xcconfig.
-      #
-      attr_reader :spec_consumers
-
-      # @return [String] the relative path of the Pods root respect the user
-      #         project that should be integrated by this library.
-      #
-      attr_reader :relative_pods_root
-
       # @param  [Target] library @see library
-      # @param  [Array<Specification::Consumer>] spec_consumers @see spec_consumers
-      # @param  [String] relative_pods_root @see relative_pods_root
       #
-      def initialize(library, spec_consumers, relative_pods_root)
+      def initialize(library)
         @library = library
         @sandbox = library.sandbox
-        @spec_consumers = spec_consumers
-        @relative_pods_root = relative_pods_root
       end
-
-      # @return [Bool] whether the Podfile specifies to add the `-fobjc-arc`
-      #         flag for compatibility.
-      #
-      attr_accessor :set_arc_compatibility_flag
-
-      #-----------------------------------------------------------------------#
-
-      # Generates the xcconfig for the library.
-      #
-      # @note   The xcconfig file for a spec derived target includes namespaced
-      #         configuration values, the private build headers and headermap
-      #         disabled. The xcconfig file for the Pods integration target
-      #         then includes the spec xcconfig and incorporates the namespaced
-      #         configuration values like preprocessor overrides or frameworks
-      #         to link with.
-      #
-      # @return [Xcodeproj::Config]
-      #
-      def generate
-        ld_flags = '-ObjC'
-        if  set_arc_compatibility_flag && spec_consumers.any? { |consumer| consumer.requires_arc }
-          ld_flags << ' -fobjc-arc'
-        end
-
-        if library.spec
-          config = {
-            'ALWAYS_SEARCH_USER_PATHS'     => 'YES',
-            'OTHER_LDFLAGS'                => ld_flags,
-            'PODS_ROOT'                    => '${SRCROOT}',
-            'HEADER_SEARCH_PATHS'          => quote(library.build_headers.search_paths) + ' ' + quote(sandbox.public_headers.search_paths),
-            'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1',
-            # 'USE_HEADERMAP'                => 'NO'
-          }
-
-          consumer_xcconfig(library.consumer).to_hash.each do |k, v|
-            prefixed_key = library.xcconfig_prefix + k
-            config[k] = "#{config[k]} ${#{prefixed_key}}"
-            config[prefixed_key] = v
-          end
-        else
-          config = {
-            'ALWAYS_SEARCH_USER_PATHS'         => 'YES',
-            'OTHER_LDFLAGS'                    => ld_flags,
-            'HEADER_SEARCH_PATHS'              => '${PODS_HEADERS_SEARCH_PATHS}',
-            'PODS_ROOT'                        => relative_pods_root,
-            'PODS_HEADERS_SEARCH_PATHS'        => '${PODS_PUBLIC_HEADERS_SEARCH_PATHS}',
-            'PODS_BUILD_HEADERS_SEARCH_PATHS'  => '',
-            'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
-            'GCC_PREPROCESSOR_DEFINITIONS'     => '$(inherited) COCOAPODS=1',
-          }
-
-          library.libraries.each do |lib|
-            consumer_xcconfig(lib.consumer).to_hash.each do |k, v|
-              prefixed_key = lib.xcconfig_prefix + k
-              config[k] = "#{config[k]} ${#{prefixed_key}}"
-            end
-          end
-        end
-
-        @xcconfig = Xcodeproj::Config.new(config)
-        @xcconfig.includes = library.libraries.map(&:name) unless library.spec
-        @xcconfig
-      end
-
-      # @return [Xcodeproj::Config] The generated xcconfig.
-      #
-      attr_reader :xcconfig
 
       # Generates and saves the xcconfig to the given path.
       #
@@ -112,7 +27,7 @@ module Pod
       # @return [void]
       #
       def save_as(path)
-        path.open('w') { |file| file.write(generate) }
+        generate.save_as(path)
       end
 
       #-----------------------------------------------------------------------#
@@ -120,19 +35,6 @@ module Pod
       # @!group Private helpers.
 
       private
-
-      # @return [String] the default linker flags. `-ObjC` is always included
-      #         while `-fobjc-arc` is included only if requested in the
-      #         Podfile.
-      #
-      def default_ld_flags
-        flags = %w[ -ObjC ]
-        requires_arc = pods.any? { |pod| pod.requires_arc? }
-        if  requires_arc && set_arc_compatibility_flag
-          flags << '-fobjc-arc'
-        end
-        flags.join(" ")
-      end
 
       # Converts an array of strings to a single string where the each string
       # is surrounded by double quotes and separated by a space. Used to
@@ -159,8 +61,7 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def consumer_xcconfig(consumer)
-        xcconfig = Xcodeproj::Config.new()
-        xcconfig.merge!(consumer.xcconfig)
+        xcconfig = Xcodeproj::Config.new(consumer.xcconfig)
         xcconfig.libraries.merge(consumer.libraries)
         xcconfig.frameworks.merge(consumer.frameworks)
         xcconfig.weak_frameworks.merge(consumer.weak_frameworks)
@@ -206,6 +107,122 @@ module Pod
       #-----------------------------------------------------------------------#
 
     end
+
+    #-------------------------------------------------------------------------#
+
+    class PodXCConfig < AbstractXCConfig
+
+      # Generates the xcconfig for the Pod integration target.
+      #
+      # @note   The xcconfig file for a Pods integration target includes the
+      #         namespaced xcconfig files for each spec target dependency.
+      #         Each namespaced configuration value is merged into the Pod
+      #         xcconfig file.
+      #
+      # @return [Xcodeproj::Config]
+      #
+      def generate
+        ld_flags = '-ObjC'
+        if library.target_definition.podfile.set_arc_compatibility_flag?
+          ld_flags << ' -fobjc-arc'
+        end
+
+        config = {
+          'ALWAYS_SEARCH_USER_PATHS'         => 'YES',
+          'OTHER_LDFLAGS'                    => ld_flags,
+          'HEADER_SEARCH_PATHS'              => quote(sandbox.public_headers.search_paths),
+          'PODS_ROOT'                        => library.relative_pods_root,
+          'GCC_PREPROCESSOR_DEFINITIONS'     => '$(inherited) COCOAPODS=1',
+        }
+
+        library.libraries.each do |lib|
+          consumer_xcconfig(lib.consumer).to_hash.each do |k, v|
+            prefixed_key = lib.xcconfig_prefix + k
+            config[k] = "#{config[k]} ${#{prefixed_key}}"
+          end
+        end
+
+        xcconfig = Xcodeproj::Config.new(config)
+        xcconfig.includes = library.libraries.map(&:name)
+        xcconfig
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+    class PublicSpecXCConfig < AbstractXCConfig
+
+      # Generates and saves the xcconfig to the given path.
+      #
+      # @param  [Pathname] path
+      #         the path where the prefix header should be stored.
+      #
+      # @note   The public xcconfig file for a spec target is completely
+      #         namespaced to prevent configuration value collision with other
+      #         spec configurations.
+      #
+      # @return [void]
+      #
+      def save_as(path)
+        generate.save_as(path, library.xcconfig_prefix)
+      end
+
+      # Generates the xcconfig for the library.
+      #
+      # @note   The xcconfig file for a public spec target includes the
+      #         standard podspec defined values including libraries,
+      #         frameworks, weak frameworks and xcconfig overrides.
+      #
+      # @return [Xcodeproj::Config]
+      #
+      def generate
+        consumer_xcconfig(library.consumer)
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
+    class PrivateSpecXCConfig < AbstractXCConfig
+
+      # Generates the xcconfig for the library.
+      #
+      # @note   The private xcconfig file for a spec target includes the public
+      #         namespaced xcconfig file and merges the configuration values
+      #         with the default private configuration values.
+      #
+      # @return [Xcodeproj::Config]
+      #
+      def generate
+        ld_flags = '-ObjC'
+        if library.consumer.requires_arc?
+          ld_flags << ' -fobjc-arc'
+        end
+
+        config = {
+          'ALWAYS_SEARCH_USER_PATHS'     => 'YES',
+          'OTHER_LDFLAGS'                => ld_flags,
+          'PODS_ROOT'                    => '${SRCROOT}',
+          'HEADER_SEARCH_PATHS'          => quote(library.build_headers.search_paths) + ' ' + quote(sandbox.public_headers.search_paths),
+          'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1',
+          # 'USE_HEADERMAP'                => 'NO'
+        }
+
+        consumer_xcconfig(library.consumer).to_hash.each do |k, v|
+          prefixed_key = library.xcconfig_prefix + k
+          config[k] = "#{config[k]} ${#{prefixed_key}}"
+        end
+
+        xcconfig = Xcodeproj::Config.new(config)
+        xcconfig.includes = [library.name]
+        xcconfig
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
   end
 end
 

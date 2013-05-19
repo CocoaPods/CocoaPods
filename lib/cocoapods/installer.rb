@@ -31,7 +31,8 @@ module Pod
     autoload :Analyzer,                'cocoapods/installer/analyzer'
     autoload :FileReferencesInstaller, 'cocoapods/installer/file_references_installer'
     autoload :PodSourceInstaller,      'cocoapods/installer/pod_source_installer'
-    autoload :TargetInstaller,         'cocoapods/installer/target_installer'
+    autoload :PodTargetInstaller,      'cocoapods/installer/target_installer'
+    autoload :SpecTargetInstaller,     'cocoapods/installer/target_installer'
     autoload :UserProjectIntegrator,   'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
@@ -135,7 +136,7 @@ module Pod
     #
     attr_reader :names_of_pods_to_install
 
-    # @return [Array<Target>] The Podfile targets containing library
+    # @return [Array<PodTarget>] The Podfile targets containing library
     #         dependencies.
     #
     attr_reader :targets
@@ -315,7 +316,13 @@ module Pod
       UI.message"- Installing libraries" do
         libraries.sort_by(&:name).each do |library|
           next if library.target_definition.empty?
-          target_installer = TargetInstaller.new(sandbox, library)
+          target_installer = SpecTargetInstaller.new(sandbox, library)
+          target_installer.install!
+        end
+
+        targets.sort_by(&:name).each do |target|
+          next if target.target_definition.empty?
+          target_installer = PodTargetInstaller.new(sandbox, target)
           target_installer.install!
         end
       end
@@ -381,7 +388,7 @@ module Pod
     #         information in the lockfile.
     #
     def integrate_user_project
-      UI.section "Integrating client #{'project'.pluralize(libraries.map(&:user_project_path).uniq.count) }" do
+      UI.section "Integrating client #{'project'.pluralize(targets.map(&:user_project_path).uniq.count) }" do
         installation_root = config.installation_root
         integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, targets)
         integrator.integrate!
@@ -567,7 +574,7 @@ module Pod
     #         process.
     #
     def libraries
-      targets + targets.map(&:libraries).flatten
+      targets.map(&:libraries).flatten
     end
 
     #-------------------------------------------------------------------------#

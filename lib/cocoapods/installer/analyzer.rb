@@ -164,11 +164,8 @@ module Pod
       def generate_targets
         targets = []
         result.specs_by_target.each do |target_definition, specs|
-          target = Target.new(target_definition, sandbox)
+          target = PodTarget.new(target_definition, sandbox)
           targets << target
-
-          target.support_files_root = sandbox.library_support_files_dir(target.name)
-          target.platform = target_definition.platform
 
           if config.integrate_targets?
             project_path = compute_user_project_path(target_definition)
@@ -186,22 +183,9 @@ module Pod
           end
 
           specs.each do |spec|
-            lib_target = Podfile::TargetDefinition.from_hash(target_definition.to_hash, target_definition.parent)
-            if target_definition.name == 'Pods'
-              lib_target.name = spec.name.gsub('/', '-')
-            else
-              lib_target.name = "#{target_definition.name}-#{spec.name.gsub('/', '-')}"
-            end
-
-            lib = Target.new(lib_target, sandbox)
-            lib.spec = spec
-            lib.support_files_root = target.support_files_root
-            lib.platform = target.platform
-            lib.user_project_path = target.user_project_path
-            lib.client_root = target.client_root
-            lib.user_build_configurations = target.user_build_configurations
-
-            target.libraries << lib
+            spec_target = SpecTarget.new(spec, target_definition, sandbox)
+            spec_target.user_build_configurations = target.user_build_configurations
+            target.libraries << spec_target
           end
         end
         targets
