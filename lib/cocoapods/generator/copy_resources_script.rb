@@ -70,7 +70,7 @@ module Pod
       def script
         script = install_resources_function
         resources.each do |resource|
-          script += "install_resource '#{resource}'"
+          script += "install_resource '#{resource}'\n"
         end
         script
       end
