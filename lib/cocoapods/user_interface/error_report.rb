@@ -45,7 +45,7 @@ Repositories : #{repo_information.join("\n               ")}
 #{'[!] Oh no, an error occurred.'.red}
 #{error_from_podfile(exception)}
 #{'Search for existing github issues similar to yours:'.yellow}
-#{"https://github.com/CocoaPods/CocoaPods/issues/search?q=#{CGI.escape(exception.message)}"}
+#{"https://github.com/CocoaPods/CocoaPods/search?q=#{CGI.escape(exception.message)}&type=Issues"}
 
 #{'If none exists, create a ticket, with the template displayed above, on:'.yellow}
 https://github.com/CocoaPods/CocoaPods/issues/new
