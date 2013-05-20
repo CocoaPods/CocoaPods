@@ -134,7 +134,7 @@ module Pod
       #
       def pre_download(sandbox)
         UI.titled_section("Pre-downloading: `#{name}` #{description}", { :verbose_prefix => "-> " }) do
-          target = sandbox.root + name
+          target = sandbox.pod_dir(name)
           target.rmtree if target.exist?
           downloader = Downloader.for_target(target, params)
           downloader.cache_root = CACHE_ROOT.to_s

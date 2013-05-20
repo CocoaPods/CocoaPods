@@ -9,7 +9,7 @@ module Pod
       # @return [Pathname] the absolute path of this header directory.
       #
       def root
-        @sandbox.root + @relative_path
+        sandbox.headers_root + @relative_path
       end
 
       # @return [Sandbox] the sandbox where this header directory is stored.
@@ -58,7 +58,8 @@ module Pod
       #         headers directory.
       #
       # @param  [Pathname] relative_header_path
-      #         the path of the header file relative to the sandbox.
+      #         the path of the header file relative to the Pods project
+      #         (`PODS_ROOT` variable of the xcconfigs).
       #
       # @note   This method adds the files to the search paths.
       #
@@ -70,7 +71,7 @@ module Pod
         namespaced_path.mkpath unless File.exist?(namespaced_path)
 
         relative_header_paths.map do |relative_header_path|
-          source = (@sandbox.root + relative_header_path).relative_path_from(namespaced_path)
+          source = (sandbox.root + relative_header_path).relative_path_from(namespaced_path)
           Dir.chdir(namespaced_path) do
             FileUtils.ln_sf(source, relative_header_path.basename)
           end

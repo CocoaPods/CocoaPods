@@ -30,6 +30,7 @@ module Pod
 
     autoload :Analyzer,                'cocoapods/installer/analyzer'
     autoload :FileReferencesInstaller, 'cocoapods/installer/file_references_installer'
+    autoload :Migrator,                'cocoapods/installer/migrator'
     autoload :PodSourceInstaller,      'cocoapods/installer/pod_source_installer'
     autoload :TargetInstaller,         'cocoapods/installer/target_installer'
     autoload :UserProjectIntegrator,   'cocoapods/installer/user_project_integrator'
@@ -81,10 +82,18 @@ module Pod
     # @return [void]
     #
     def install!
+      migrate_installation_if_needed
       resolve_dependencies
       download_dependencies
       generate_pods_project
       integrate_user_project if config.integrate_targets?
+    end
+
+    def migrate_installation_if_needed
+      UI.section "Performing existing installation migration" do
+        migrator = Migrator.new(lockfile.cocoapods_version, sandbox)
+        migrator.migrate!
+      end
     end
 
     def resolve_dependencies
