@@ -2,17 +2,19 @@
 #-----------------------------------------------------------------------------#
 
 
-if ENV['CI'] || ENV['GENERATE_COVERAGE']
-  require 'simplecov'
-  require 'coveralls'
+if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("1.9")
+  if ENV['CI'] || ENV['GENERATE_COVERAGE']
+    require 'simplecov'
+    require 'coveralls'
 
-  if ENV['CI']
-    SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-  elsif ENV['GENERATE_COVERAGE']
-    SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
-  end
-  SimpleCov.start do
-    add_filter "/spec_helper/"
+    if ENV['CI']
+      SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+    elsif ENV['GENERATE_COVERAGE']
+      SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
+    end
+    SimpleCov.start do
+      add_filter "/spec_helper/"
+    end
   end
 end
 
@@ -23,6 +25,7 @@ require 'rubygems'
 require 'bundler/setup'
 require 'bacon'
 require 'mocha-on-bacon'
+require 'pretty_bacon'
 require 'pathname'
 require "active_support/core_ext/string/strip"
 
@@ -34,7 +37,6 @@ require 'cocoapods'
 require 'claide'
 require 'awesome_print'
 
-require 'spec_helper/bacon'           # Prettifies the bacon output and adds support for `xit`.
 require 'spec_helper/command'         # Allows to run Pod commands and returns their output.
 require 'spec_helper/fixture'         # Provides access to the fixtures and unpacks them if needed.
 require 'spec_helper/temporary_repos' # Allows to create and modify temporary spec repositories.

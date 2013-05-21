@@ -6,6 +6,38 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
+* Introduces an experimental sandbox feature.
+  [#939](https://github.com/CocoaPods/CocoaPods/issues/939)
+
+  Let’s face it, even though we have a great community that spends an amazing
+  amount of time on curating the specifications, the internet can be a hostile
+  place and the community is growing too large to take a naive approach any
+  longer.
+
+  As such, we have started leveraging OS X’s sandbox facilities to disallow
+  unsanctioned operations. This is still very experimental and therefore has to
+  be used explicitely, for now, but that does **not** mean we don’t want you to
+  start using it and **report issues**.
+
+  To use the sandbox, simply use the `sandbox-pod` command instead. E.g.:
+
+        $ sandbox-pod install
+
+  In case of issues, be sure to check `/var/log/system.log` for ‘deny’ messages.
+  For instance, here’s an example where the sandbox denies read access to `/`:
+
+        May 16 00:23:35 Khaos kernel[0]: Sandbox: ruby(98430) deny file-read-data /
+
+  **NOTE**: _The above example is actually one that we know of. We’re not sure
+  yet which process causes this, but there shouldn’t be a need for any process
+  to read data from the root path anyways._
+  
+  **NOTE 2**: _At the moment the sandbox is not compatible with the `:path` option 
+  when referencing Pods that are not stored within the directory of the Podfile._
+
+* The naked `pod` command now defaults to `pod install`.
+  [#958](https://github.com/CocoaPods/CocoaPods/issues/958)
+
 * Documentation generation has been removed from CocoaPods as it graduated
   to CocoaDocs. This decision was taken because CocoaDocs is a much better
   solution which doesn't clutter Xcode's docsets while still allowing
@@ -69,8 +101,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Deprecations
 
-* The `:local` flag in Podfile has been renamed to `:path` and has been 
-  deprecated.
+* The `:local` flag in Podfile has been renamed to `:path` and the old syntax
+  has been deprecated.
   [#971](https://github.com/CocoaPods/CocoaPods/issues/971)
 
 ###### Bug fixes

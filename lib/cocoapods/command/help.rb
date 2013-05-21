@@ -5,7 +5,7 @@ module Pod
       self.arguments = '[COMMAND]'
 
       def initialize(argv)
-        @help_command = Pod::Command.parse(argv) unless argv.empty?
+        @help_command = Pod::Command.parse(argv)
         super
       end
 
@@ -16,7 +16,7 @@ module Pod
       private
 
       def help_command
-        @help_command || self
+        @help_command
       end
     end
   end

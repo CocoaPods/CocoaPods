@@ -6,19 +6,16 @@ end
 gemspec
 
 group :development do
-  if ENV['COCOA_PODS_DEPENDENCIES'] == 'local'
-    gem 'cocoapods-core',       :path => '../Core'
-    gem 'xcodeproj',            :path => '../Xcodeproj'
-    gem 'cocoapods-downloader', :path => '../cocoapods-downloader'
-  else
-    gem 'cocoapods-core',       :git => "https://github.com/CocoaPods/Core.git", :branch => 'master'
-    gem 'xcodeproj',            :git => "https://github.com/CocoaPods/Xcodeproj.git"
-    gem 'cocoapods-downloader', :git => "https://github.com/CocoaPods/cocoapods-downloader.git"
-  end
+  # To develop the deps in tandem use the `LOCAL GIT REPOS` feature of Bundler.
+  gem 'cocoapods-core',       :git => "https://github.com/CocoaPods/Core.git", :branch => 'master'
+  gem 'xcodeproj',            :git => "https://github.com/CocoaPods/Xcodeproj.git", :branch => 'master'
+  gem 'cocoapods-downloader', :git => "https://github.com/CocoaPods/cocoapods-downloader.git", :branch => 'master'
+  gem 'claide',               :git => 'https://github.com/CocoaPods/CLAide.git', :branch => 'master'
 
   gem "mocha"
   gem "bacon"
   gem "mocha-on-bacon"
+  gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
   gem "rake"
   gem 'coveralls', :require => false, :git => 'https://github.com/lemurheavy/coveralls-ruby.git'
 end
