@@ -31,8 +31,9 @@ module Pod
     autoload :Analyzer,                 'cocoapods/installer/analyzer'
     autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
     autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
-    autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer'
-    autoload :PodTargetInstaller,       'cocoapods/installer/target_installer'
+    autoload :TargetInstaller,          'cocoapods/installer/target_installer'
+    autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
+    autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
     autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
