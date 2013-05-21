@@ -37,7 +37,7 @@ module Pod
       def create_xcconfig_file
         path = library.xcconfig_path
         UI.message "- Generating xcconfig file at #{UI.path(path)}" do
-          gen = Generator::PodXCConfig.new(library)
+          gen = Generator::AggregateXCConfig.new(library)
           gen.save_as(path)
           library.xcconfig = gen.xcconfig
           xcconfig_file_ref = add_file_to_support_group(path)

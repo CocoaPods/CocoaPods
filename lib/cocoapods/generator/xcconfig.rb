@@ -5,7 +5,7 @@ module Pod
     # for each Pod and for each Pod target definition. The aggregates the
     # configurations of the Pods and define target specific settings.
     #
-    class AbstractXCConfig
+    class XCConfig
 
       # @return [Target] the aggregate_target or target represented by this xcconfig.
       #
@@ -114,7 +114,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    class PodXCConfig < AbstractXCConfig
+    class AggregateXCConfig < XCConfig
 
       # Generates the xcconfig for the Pod integration target.
       #
@@ -155,7 +155,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    class PublicSpecXCConfig < AbstractXCConfig
+    class PublicPodXCConfig < XCConfig
 
       # Generates and saves the xcconfig to the given path.
       #
@@ -189,7 +189,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    class PrivateSpecXCConfig < AbstractXCConfig
+    class PrivatePodXCConfig < XCConfig
 
       # Generates the xcconfig for the aggregate_target.
       #

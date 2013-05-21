@@ -62,9 +62,9 @@ module Pod
     autoload :DummySource,             'cocoapods/generator/dummy_source'
     autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
     autoload :TargetEnvironmentHeader, 'cocoapods/generator/target_environment_header'
-    autoload :PodXCConfig,             'cocoapods/generator/xcconfig'
-    autoload :PublicSpecXCConfig,      'cocoapods/generator/xcconfig'
-    autoload :PrivateSpecXCConfig,     'cocoapods/generator/xcconfig'
+    autoload :AggregateXCConfig,       'cocoapods/generator/xcconfig'
+    autoload :PublicPodXCConfig,       'cocoapods/generator/xcconfig'
+    autoload :PrivatePodXCConfig,      'cocoapods/generator/xcconfig'
   end
 
   module Hooks
