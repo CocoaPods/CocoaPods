@@ -84,6 +84,10 @@ __END__
 
 (allow file-read-metadata)
 (allow file-read*
+  ; This is currenly only added because using `xcodebuild` to build a resource
+  ; bundle target starts a FSEvents stream on `/`. No idea why that would be
+  ; needed, but for now it doesn’t seem like a real problem.
+  (literal "/")
   (regex
     ; TODO see if we can restrict this more, but it's going to be hard
     #"^/Users/[^.]+/*"
