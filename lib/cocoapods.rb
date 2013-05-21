@@ -45,7 +45,7 @@ module Pod
   autoload :Installer,                 'cocoapods/installer'
   autoload :SourcesManager,            'cocoapods/sources_manager'
   autoload :Target,                    'cocoapods/target'
-  autoload :PodTarget,                 'cocoapods/target/pod_target'
+  autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
   autoload :SpecTarget,                'cocoapods/target/spec_target'
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'

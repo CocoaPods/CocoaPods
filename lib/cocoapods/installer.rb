@@ -28,12 +28,12 @@ module Pod
   #
   class Installer
 
-    autoload :Analyzer,                'cocoapods/installer/analyzer'
-    autoload :FileReferencesInstaller, 'cocoapods/installer/file_references_installer'
-    autoload :PodSourceInstaller,      'cocoapods/installer/pod_source_installer'
-    autoload :PodTargetInstaller,      'cocoapods/installer/target_installer'
-    autoload :SpecTargetInstaller,     'cocoapods/installer/target_installer'
-    autoload :UserProjectIntegrator,   'cocoapods/installer/user_project_integrator'
+    autoload :Analyzer,                 'cocoapods/installer/analyzer'
+    autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
+    autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
+    autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer'
+    autoload :SpecTargetInstaller,      'cocoapods/installer/target_installer'
+    autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
 
@@ -136,7 +136,7 @@ module Pod
     #
     attr_reader :names_of_pods_to_install
 
-    # @return [Array<PodTarget>] The Podfile targets containing library
+    # @return [Array<AggregateTarget>] The Podfile targets containing library
     #         dependencies.
     #
     attr_reader :targets
@@ -322,7 +322,7 @@ module Pod
 
         targets.sort_by(&:name).each do |target|
           next if target.target_definition.empty?
-          target_installer = PodTargetInstaller.new(sandbox, target)
+          target_installer = AggregateTargetInstaller.new(sandbox, target)
           target_installer.install!
         end
       end

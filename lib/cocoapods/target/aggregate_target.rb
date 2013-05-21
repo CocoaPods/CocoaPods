@@ -1,9 +1,11 @@
 module Pod
 
-  class PodTarget < Target
+  # The aggregate target is used to cluster the targets of the single Pods. The
+  # client targets will then depend on this one.
+  #
+  class AggregateTarget < Target
 
     # @param [TargetDefinition] target_definition @see target_definition
-    # @param [Sandbox] sandbox @see sandbox
     #
     def initialize(target_definition, sandbox)
       @target_definition = target_definition

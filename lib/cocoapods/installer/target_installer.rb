@@ -139,7 +139,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    class PodTargetInstaller < AbstractTargetInstaller
+    class AggregateTargetInstaller < AbstractTargetInstaller
 
       # Creates the target in the Pods project and the relative support files.
       #

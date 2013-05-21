@@ -164,7 +164,7 @@ module Pod
       def generate_targets
         targets = []
         result.specs_by_target.each do |target_definition, specs|
-          target = PodTarget.new(target_definition, sandbox)
+          target = AggregateTarget.new(target_definition, sandbox)
           targets << target
 
           if config.integrate_targets?
