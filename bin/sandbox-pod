@@ -71,11 +71,13 @@ __END__
 (allow network-outbound)
 
 (allow process-exec
+  (literal
+    "<%= pod_bin %>"
+    "<%= ruby_bin %>"
+    "<%= File.join(developer_prefix, 'usr/bin/xcrun') %>"
+    "<%= File.join(developer_prefix, 'usr/bin/xcodebuild') %>"
+  )
   (regex 
-    #"^<%= pod_bin %>"
-    #"^<%= ruby_bin %>"
-    #"^<%= File.join(developer_prefix, 'usr/bin/xcrun') %>"
-    #"^<%= File.join(developer_prefix, 'usr/bin/xcodebuild') %>"
 <% prefixes.each do |prefix| %>
     #"^<%= prefix %>/*"
 <% end %>
@@ -112,13 +114,15 @@ __END__
 )
 
 (allow file-write*
+  (literal
+    "/dev/dtracehelper"
+    "/dev/null"
+  )
   (regex
     #"^<%= Pod::Config.instance.project_root %>"
     #"^<%= Pod::Config.instance.repos_dir %>"
     #"^/Users/[^.]+/Library/Caches/CocoaPods/*"
-    #"^/dev/dtracehelper"
     #"^/dev/tty"
-    #"^/dev/null"
     #"^/private/var"
   )
 )
