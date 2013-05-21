@@ -1,15 +1,15 @@
 module Pod
 
-  # This target is used to compile a single Pod. A pod can have one or more
-  # activated spec/subspecs.
+  # Stores the information relative to the target used to compile a single Pod.
+  # A pod can have one or more activated spec/subspecs.
   #
   class PodTarget < Target
 
     # @return [Specification] the spec for the target.
     #
-    attr_reader :spec
+    attr_reader :specs
 
-    # @return [HeadersStore] the header directory for the library.
+    # @return [HeadersStore] the header directory for the target.
     #
     attr_reader :build_headers
 
@@ -17,36 +17,34 @@ module Pod
     # @param [TargetDefinition] target_definition @see target_definition
     # @param [Sandbox] sandbox @see sandbox
     #
-    def initialize(spec, target_definition, sandbox)
-      @spec = spec
+    def initialize(specs, target_definition, sandbox)
+      @specs = specs
       @target_definition = target_definition
       @sandbox = sandbox
       @build_headers  = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
       @file_accessors = []
     end
 
-    # @return [String] the label for the library.
+    # @return [String] the label for the target.
     #
     def label
-      "#{target_definition.label.to_s}-#{spec.name.gsub('/', '-')}"
+      "#{target_definition.label.to_s}-#{root_spec.name}"
     end
 
-    # @return [Specification] the specification for this library.
-    #
-    attr_accessor :spec
-
     # @return [Array<Sandbox::FileAccessor>] the file accessors for the
-    #         specifications of this library.
+    #         specifications of this target.
     #
     attr_accessor :file_accessors
 
-    #-------------------------------------------------------------------------#
-
     # @return [Specification::Consumer] the specification consumer for the
-    #         library.
+    #         target.
     #
     def consumer
-      spec.consumer(platform)
+      specs.first.root.consumer(platform)
+    end
+
+    def root_spec
+      specs.first.root
     end
 
     #-------------------------------------------------------------------------#

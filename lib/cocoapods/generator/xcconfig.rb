@@ -7,16 +7,16 @@ module Pod
     #
     class AbstractXCConfig
 
-      # @return [Target] the library or target represented by this xcconfig.
+      # @return [Target] the aggregate_target or target represented by this xcconfig.
       #
-      attr_reader :library
+      attr_reader :aggregate_target
       attr_reader :sandbox
 
-      # @param  [Target] library @see library
+      # @param  [Target] aggregate_target @see aggregate_target
       #
-      def initialize(library)
-        @library = library
-        @sandbox = library.sandbox
+      def initialize(aggregate_target)
+        @aggregate_target = aggregate_target
+        @sandbox = aggregate_target.sandbox
       end
 
       # @return [Xcodeproj::Config] The generated xcconfig.
@@ -79,7 +79,7 @@ module Pod
       #
       DEVELOPER_FRAMEWORKS_SEARCH_PATHS = [
         '$(inherited)',
-        '"$(SDKROOT)/Developer/Library/Frameworks"',
+        '"$(SDKROOT)/Developer/aggregate_target/Frameworks"',
         '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
       ]
 
@@ -127,7 +127,7 @@ module Pod
       #
       def generate
         ld_flags = '-ObjC'
-        if library.target_definition.podfile.set_arc_compatibility_flag?
+        if aggregate_target.target_definition.podfile.set_arc_compatibility_flag?
           ld_flags << ' -fobjc-arc'
         end
 
@@ -135,11 +135,11 @@ module Pod
           'ALWAYS_SEARCH_USER_PATHS'         => 'YES',
           'OTHER_LDFLAGS'                    => ld_flags,
           'HEADER_SEARCH_PATHS'              => quote(sandbox.public_headers.search_paths),
-          'PODS_ROOT'                        => library.relative_pods_root,
+          'PODS_ROOT'                        => aggregate_target.relative_pods_root,
           'GCC_PREPROCESSOR_DEFINITIONS'     => '$(inherited) COCOAPODS=1',
         }
 
-        library.libraries.each do |lib|
+        aggregate_target.pod_targets.each do |lib|
           consumer_xcconfig(lib.consumer).to_hash.each do |k, v|
             prefixed_key = lib.xcconfig_prefix + k
             config[k] = "#{config[k]} ${#{prefixed_key}}"
@@ -147,7 +147,7 @@ module Pod
         end
 
         @xcconfig = Xcodeproj::Config.new(config)
-        @xcconfig.includes = library.libraries.map(&:name)
+        @xcconfig.includes = aggregate_target.pod_targets.map(&:name)
         @xcconfig
       end
 
@@ -169,10 +169,10 @@ module Pod
       # @return [void]
       #
       def save_as(path)
-        generate.save_as(path, library.xcconfig_prefix)
+        generate.save_as(path, aggregate_target.xcconfig_prefix)
       end
 
-      # Generates the xcconfig for the library.
+      # Generates the xcconfig for the aggregate_target.
       #
       # @note   The xcconfig file for a public spec target includes the
       #         standard podspec defined values including libraries,
@@ -181,7 +181,7 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
-        @xcconfig = consumer_xcconfig(library.consumer)
+        @xcconfig = consumer_xcconfig(aggregate_target.consumer)
         @xcconfig
       end
 
@@ -191,7 +191,7 @@ module Pod
 
     class PrivateSpecXCConfig < AbstractXCConfig
 
-      # Generates the xcconfig for the library.
+      # Generates the xcconfig for the aggregate_target.
       #
       # @note   The private xcconfig file for a spec target includes the public
       #         namespaced xcconfig file and merges the configuration values
@@ -201,7 +201,7 @@ module Pod
       #
       def generate
         ld_flags = '-ObjC'
-        if library.consumer.requires_arc?
+        if aggregate_target.consumer.requires_arc?
           ld_flags << ' -fobjc-arc'
         end
 
@@ -209,18 +209,18 @@ module Pod
           'ALWAYS_SEARCH_USER_PATHS'     => 'YES',
           'OTHER_LDFLAGS'                => ld_flags,
           'PODS_ROOT'                    => '${SRCROOT}',
-          'HEADER_SEARCH_PATHS'          => quote(library.build_headers.search_paths) + ' ' + quote(sandbox.public_headers.search_paths),
+          'HEADER_SEARCH_PATHS'          => quote(aggregate_target.build_headers.search_paths) + ' ' + quote(sandbox.public_headers.search_paths),
           'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1',
           # 'USE_HEADERMAP'                => 'NO'
         }
 
-        consumer_xcconfig(library.consumer).to_hash.each do |k, v|
-          prefixed_key = library.xcconfig_prefix + k
+        consumer_xcconfig(aggregate_target.consumer).to_hash.each do |k, v|
+          prefixed_key = aggregate_target.xcconfig_prefix + k
           config[k] = "#{config[k]} ${#{prefixed_key}}"
         end
 
         @xcconfig = Xcodeproj::Config.new(config)
-        @xcconfig.includes = [library.name]
+        @xcconfig.includes = [aggregate_target.name]
         @xcconfig
       end
 

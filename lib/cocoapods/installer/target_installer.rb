@@ -189,7 +189,7 @@ module Pod
       def create_target_environment_header
         path = library.target_environment_header_path
         UI.message "- Generating target environment header at #{UI.path(path)}" do
-          generator = Generator::TargetEnvironmentHeader.new(library.libraries.map { |l| l.spec })
+          generator = Generator::TargetEnvironmentHeader.new(library.pod_targets.map { |l| l.specs }.flatten)
           generator.save_as(path)
           add_file_to_support_group(path)
         end
@@ -227,7 +227,7 @@ module Pod
       def create_copy_resources_script
         path = library.copy_resources_script_path
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
-          file_accessors = library.libraries.map(&:file_accessors).flatten
+          file_accessors = library.pod_targets.map(&:file_accessors).flatten
           resources = file_accessors.map { |accessor| accessor.resources.flatten.map {|res| project.relativize(res)} }.flatten
           resources << bridge_support_file if bridge_support_file
           generator = Generator::CopyResourcesScript.new(resources, library.platform)
@@ -245,7 +245,7 @@ module Pod
         Generator::Acknowledgements.generators.each do |generator_class|
           path = generator_class.path_from_basepath(basepath)
           UI.message "- Generating acknowledgements at #{UI.path(path)}" do
-            file_accessors = library.libraries.map(&:file_accessors).flatten
+            file_accessors = library.pod_targets.map(&:file_accessors).flatten
             generator = generator_class.new(file_accessors)
             generator.save_as(path)
             add_file_to_support_group(path)
