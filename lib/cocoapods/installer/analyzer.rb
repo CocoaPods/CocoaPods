@@ -183,7 +183,7 @@ module Pod
           end
 
           specs.each do |spec|
-            spec_target = SpecTarget.new(spec, target_definition, sandbox)
+            spec_target = PodTarget.new(spec, target_definition, sandbox)
             spec_target.user_build_configurations = target.user_build_configurations
             target.libraries << spec_target
           end

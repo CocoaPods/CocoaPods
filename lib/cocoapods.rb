@@ -46,7 +46,7 @@ module Pod
   autoload :SourcesManager,            'cocoapods/sources_manager'
   autoload :Target,                    'cocoapods/target'
   autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
-  autoload :SpecTarget,                'cocoapods/target/spec_target'
+  autoload :PodTarget,                 'cocoapods/target/pod_target'
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'
   autoload :Sandbox,                   'cocoapods/sandbox'

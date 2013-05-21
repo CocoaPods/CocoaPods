@@ -266,7 +266,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    class SpecTargetInstaller < AbstractTargetInstaller
+    class PodTargetInstaller < AbstractTargetInstaller
 
       # Creates the target in the Pods project and the relative support files.
       #

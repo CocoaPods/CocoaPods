@@ -1,6 +1,9 @@
 module Pod
 
-  class SpecTarget < Target
+  # This target is used to compile a single Pod. A pod can have one or more
+  # activated spec/subspecs.
+  #
+  class PodTarget < Target
 
     # @return [Specification] the spec for the target.
     #

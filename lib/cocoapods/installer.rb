@@ -32,7 +32,7 @@ module Pod
     autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
     autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
     autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer'
-    autoload :SpecTargetInstaller,      'cocoapods/installer/target_installer'
+    autoload :PodTargetInstaller,       'cocoapods/installer/target_installer'
     autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
@@ -316,7 +316,7 @@ module Pod
       UI.message"- Installing libraries" do
         libraries.sort_by(&:name).each do |library|
           next if library.target_definition.empty?
-          target_installer = SpecTargetInstaller.new(sandbox, library)
+          target_installer = PodTargetInstaller.new(sandbox, library)
           target_installer.install!
         end
 

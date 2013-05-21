@@ -6,6 +6,7 @@ module Pod
   class AggregateTarget < Target
 
     # @param [TargetDefinition] target_definition @see target_definition
+    # @param [Sandbox] sandbox @see sandbox
     #
     def initialize(target_definition, sandbox)
       @target_definition = target_definition
@@ -51,7 +52,7 @@ module Pod
     #
     attr_accessor :xcconfig
 
-    # @return [Array<SpecTarget>] the dependencies for this target (or library).
+    # @return [Array<PodTarget>] the dependencies for this target (or library).
     #
     attr_accessor :libraries
 
