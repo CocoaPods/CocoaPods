@@ -91,7 +91,7 @@ module Pod
       #
       def download_source
         root.rmtree if root.exist?
-        if root_spec.version.head?
+        if head_pod?
           downloader.download_head
           @specific_source = downloader.checkout_options
         else
@@ -170,6 +170,10 @@ module Pod
       #
       def local?
         sandbox.local?(root_spec.name)
+      end
+
+      def head_pod?
+        sandbox.head_pod?(root_spec.name)
       end
 
       #-----------------------------------------------------------------------#

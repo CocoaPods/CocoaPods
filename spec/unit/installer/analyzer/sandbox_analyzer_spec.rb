@@ -89,13 +89,13 @@ module Pod
       end
 
       it "considers changed a Pod whose specification is in head mode if in update mode" do
-        @spec.version.head = true
+        @sandbox.stubs(:head_pod?).returns(true)
         @analyzer.stubs(:update_mode).returns(true)
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
 
       it "doesn't consider changed a Pod whose specification is in head mode if not in update mode" do
-        @spec.version.head = true
+        @sandbox.stubs(:head_pod?).returns(true)
         @analyzer.stubs(:update_mode).returns(false)
         @analyzer.send(:pod_changed?, 'BananaLib').should == false
       end

@@ -68,6 +68,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Fix copy resources script for iOS < 6 and OS X < 10.8 by removing the
   `--reference-external-strings-file`
   flag. [#1030](https://github.com/CocoaPods/CocoaPods/pull/1030)
+* Fixed issues with the `:head` option of the Podfile.
+  [#1046](https://github.com/CocoaPods/CocoaPods/issues/1046)
+  [#1039](https://github.com/CocoaPods/CocoaPods/issues/1039)
 
 ## 0.19.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.19.1)

@@ -161,6 +161,8 @@ module Pod
         filemd5hash, jsonkit = resolver.resolve.values.first.sort_by(&:name)
         filemd5hash.version.should.not.be.head
         jsonkit.version.should.be.head
+        config.sandbox.head_pod?('FileMD5Hash').should.be.false
+        config.sandbox.head_pod?('JSONKit').should.be.true
       end
 
       it "raises if it finds two conflicting dependencies" do

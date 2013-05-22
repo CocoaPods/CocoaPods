@@ -34,7 +34,7 @@ module Pod
         end
 
         it "downloads the head source if specified source" do
-          @spec.version.head = true
+          config.sandbox.store_head_pod('BananaLib')
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
           @installer.specific_source[:commit].should == "0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc"
@@ -51,7 +51,7 @@ module Pod
         end
 
         it "stores the checkout options in the sandbox" do
-          @spec.version.head = true
+          config.sandbox.store_head_pod('BananaLib')
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
           sources = @installer.sandbox.checkout_sources
