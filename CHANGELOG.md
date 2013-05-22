@@ -31,8 +31,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   **NOTE**: _The above example is actually one that we know of. We’re not sure
   yet which process causes this, but there shouldn’t be a need for any process
   to read data from the root path anyways._
-  
-  **NOTE 2**: _At the moment the sandbox is not compatible with the `:path` option 
+
+  **NOTE 2**: _At the moment the sandbox is not compatible with the `:path` option
   when referencing Pods that are not stored within the directory of the Podfile._
 
 * The naked `pod` command now defaults to `pod install`.
@@ -47,6 +47,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   documentation. If there will be enough demand this feature might be
   reintegrated as plugin (see
   [#1037](https://github.com/CocoaPods/CocoaPods/issues/1037)).
+
+* Improved performance of the copy resources script and thus build time of
+  the integrated targets. Contribution by [@onato](https://github.com/onato)
+  [#1050](https://github.com/CocoaPods/CocoaPods/issues/1050).
+
+* The changelog for the current version is printed after CocoaPods is
+  installed/updated.
+  [#853](https://github.com/CocoaPods/CocoaPods/issues/853).
+
 
 ###### Bug fixes
 
