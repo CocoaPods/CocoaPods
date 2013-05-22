@@ -48,4 +48,15 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.required_ruby_version = '>= 1.8.7'
   s.specification_version = 3 if s.respond_to? :specification_version
+
+  changelog_path = File.expand_path('../CHANGELOG.md', __FILE__)
+  if File.exists?(changelog_path)
+    title_token = '## '
+    current_verison_title = title_token + Pod::VERSION.to_s
+    full_changelog = File.read('CHANGELOG.md')
+    current_version_index = full_changelog.index(/^#{current_verison_title}/)
+    previous_version_index = full_changelog.index(/^#{title_token}/, current_version_index + title_token.length)
+    relevant = full_changelog[current_version_index..previous_version_index-1]
+    s.post_install_message = "\nCHANGELOG:\n\n" + relevant + "\n"
+  end
 end
