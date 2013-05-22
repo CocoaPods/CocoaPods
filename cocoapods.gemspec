@@ -53,7 +53,7 @@ Gem::Specification.new do |s|
   if File.exists?(changelog_path)
     title_token = '## '
     current_verison_title = title_token + Pod::VERSION.to_s
-    full_changelog = File.read('CHANGELOG.md')
+    full_changelog = File.open(changelog_path, "r:UTF-8") { |f| f.read }
     current_version_index = full_changelog.index(/^#{current_verison_title}/)
     previous_version_index = full_changelog.index(/^#{title_token}/, current_version_index + title_token.length)
     relevant = full_changelog[current_version_index..previous_version_index-1]

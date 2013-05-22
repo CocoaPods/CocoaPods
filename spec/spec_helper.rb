@@ -2,7 +2,7 @@
 #-----------------------------------------------------------------------------#
 
 
-if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("1.9")
+if Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new("1.9")
   if ENV['CI'] || ENV['GENERATE_COVERAGE']
     require 'simplecov'
     require 'coveralls'
