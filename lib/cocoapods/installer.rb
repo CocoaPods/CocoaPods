@@ -280,7 +280,7 @@ module Pod
     def prepare_pods_project
       UI.message "- Creating Pods project" do
         @pods_project = Pod::Project.new(sandbox.project_path)
-        if config.podfile_path.exist?
+        if config.podfile_path
           @pods_project.add_podfile(config.podfile_path)
         end
         sandbox.project = @pods_project

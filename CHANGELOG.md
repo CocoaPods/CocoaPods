@@ -38,6 +38,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The naked `pod` command now defaults to `pod install`.
   [#958](https://github.com/CocoaPods/CocoaPods/issues/958)
 
+* CocoaPods will look for the Podfile in the ancestors paths if one is
+  not available in the working directory.
+  [#940](https://github.com/CocoaPods/CocoaPods/issues/940)
+
 * Documentation generation has been removed from CocoaPods as it graduated
   to CocoaDocs. This decision was taken because CocoaDocs is a much better
   solution which doesn't clutter Xcode's docsets while still allowing

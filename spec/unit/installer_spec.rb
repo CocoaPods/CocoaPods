@@ -27,7 +27,7 @@ module Pod
   describe Installer do
 
     before do
-      podfile  = generate_podfile
+      podfile = generate_podfile
       lockfile = generate_lockfile
       config.integrate_targets = false
       @installer = Installer.new(config.sandbox, podfile, lockfile)
@@ -218,7 +218,7 @@ module Pod
 
         it "adds the Podfile to the Pods project" do
           @installer.stubs(:libraries).returns([])
-          config.podfile_path.stubs(:exist?).returns(true)
+          config.stubs(:podfile_path).returns(Pathname.new('/Podfile'))
           @installer.send(:prepare_pods_project)
           f = @installer.pods_project['Podfile']
           f.name.should == 'Podfile'

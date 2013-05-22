@@ -24,7 +24,9 @@ module Pod
       :new_version_message => true,
     }
 
-    #--------------------------------------#
+    public
+
+    #-------------------------------------------------------------------------#
 
     # @!group UI
 
@@ -39,13 +41,13 @@ module Pod
     attr_accessor :silent
     alias_method  :silent?, :silent
 
-    # @return [Bool] Whether a message should be printed when a new version of 
+    # @return [Bool] Whether a message should be printed when a new version of
     #         CocoaPods is available.
     #
     attr_accessor :new_version_message
     alias_method  :new_version_message?, :new_version_message
 
-    #--------------------------------------#
+    #-------------------------------------------------------------------------#
 
     # @!group Installation
 
@@ -81,7 +83,9 @@ module Pod
       @aggressive_cache || (ENV['CP_AGGRESSIVE_CACHE'] != 'FALSE')
     end
 
-    #--------------------------------------#
+    public
+
+    #-------------------------------------------------------------------------#
 
     # @!group Initialization
 
@@ -99,7 +103,9 @@ module Pod
       @verbose && !silent
     end
 
-    #--------------------------------------#
+    public
+
+    #-------------------------------------------------------------------------#
 
     # @!group Paths
 
@@ -115,7 +121,21 @@ module Pod
     #         Podfile is located.
     #
     def installation_root
-      @installation_root ||= Pathname.pwd
+      current_path = Pathname.pwd
+      unless @installation_root
+        while(!current_path.root?)
+          if podfile_path_in_dir(current_path)
+            @installation_root = current_path
+            unless current_path == Pathname.pwd
+              UI.puts ("[in #{current_path}]")
+            end
+            break
+          else
+            current_path = current_path.parent
+          end
+        end
+      end
+      @installation_root
     end
 
     attr_writer :installation_root
@@ -137,23 +157,46 @@ module Pod
     end
 
     # @return [Podfile] The Podfile to use for the current execution.
+    # @return [Nil] If no Podfile is available.
     #
     def podfile
-      @podfile ||= Podfile.from_file(podfile_path) if podfile_path.exist?
+      @podfile ||= Podfile.from_file(podfile_path) if podfile_path
     end
     attr_writer :podfile
 
     # @return [Lockfile] The Lockfile to use for the current execution.
+    # @return [Nil] If no Lockfile is available.
     #
     def lockfile
-      @lockfile ||= Lockfile.from_file(lockfile_path) if lockfile_path.exist?
+      @lockfile ||= Lockfile.from_file(lockfile_path) if lockfile_path
     end
 
-    #--------------------------------------#
+    # Returns the path of the Podfile.
+    #
+    # @note The Podfile can be named either `CocoaPods.podfile.yaml`,
+    #       `CocoaPods.podfile` or `Podfile`.  The first two are preferred as
+    #       they allow to specify an OS X UTI.
+    #
+    # @return [Pathname]
+    # @return [Nil]
+    #
+    def podfile_path
+      @podfile_path ||= podfile_path_in_dir(installation_root) if installation_root
+    end
 
-    # @!group Helpers
+    # Returns the path of the Lockfile.
+    #
+    # @note The Lockfile is named `Podfile.lock`.
+    #
+    def lockfile_path
+      @lockfile_path ||= installation_root + 'Podfile.lock'
+    end
 
-    # private
+    private
+
+    #-------------------------------------------------------------------------#
+
+    # @!group Private helpers
 
     # @return [Pathname] The path of the file which contains the user settings.
     #
@@ -175,30 +218,38 @@ module Pod
       end
     end
 
-    # Returns the path of the Podfile.
+    # @return [Array<String>] The filenames that the Podfile can have ordered
+    #         by priority.
     #
-    # @note The Podfile can be named either `CocoaPods.podfile` or `Podfile`.
-    #       The first is preferred as it allows to specify an OS X UTI.
+    PODFILE_NAMES = [
+      'CocoaPods.podfile.yaml',
+      'CocoaPods.podfile',
+      'Podfile',
+    ]
+
+    # Returns the path of the Podfile in the given dir if any exists.
     #
-    def podfile_path
-      unless @podfile_path
-        path = installation_root + 'CocoaPods.podfile.yaml'
-        path = installation_root + 'CocoaPods.podfile' unless path.exist?
-        path = installation_root + 'Podfile' unless path.exist?
-        @podfile_path = path
+    # @param  [Pathname] dir
+    #         The directory where to look for the Podfile.
+    #
+    # @return [Pathname] The path of the Podfile.
+    # @return [Nil] If not Podfile was found in the given dir
+    #
+    def podfile_path_in_dir(dir)
+      PODFILE_NAMES.each do |filename|
+        candidate = dir + filename
+        if candidate.exist?
+          return candidate
+        end
       end
-      @podfile_path
+      nil
     end
 
-    # Returns the path of the Lockfile.
-    #
-    # @note The Lockfile is named `Podfile.lock`.
-    #
-    def lockfile_path
-      @lockfile_path ||= installation_root + 'Podfile.lock'
-    end
+    public
 
-    #--------------------------------------#
+    #-------------------------------------------------------------------------#
+
+    # @!group Singleton
 
     # @return [Config] the current config instance creating one if needed.
     #
@@ -216,8 +267,6 @@ module Pod
     def self.instance=(instance)
       @instance = instance
     end
-
-    #-------------------------------------------------------------------------#
 
     # Provides support for accessing the configuration instance in other
     # scopes.
