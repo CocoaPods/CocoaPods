@@ -59,9 +59,9 @@ module Pod
       #
       def install_resources_function
           if use_external_strings_file?
-            CONTENT
+            INSTALL_RESOURCES_FUCTION
           else
-            CONTENT.gsub(' --reference-external-strings-file', '')
+            INSTALL_RESOURCES_FUCTION.gsub(' --reference-external-strings-file', '')
           end
       end
 
@@ -72,17 +72,12 @@ module Pod
         resources.each do |resource|
           script += "install_resource '#{resource}'\n"
         end
-        script += COPY_RESOURCES
+        script += RSYNC_CALL
         script
       end
 
-      COPY_RESOURCES = <<EOS
 
-rsync -avr --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-rm "$RESOURCES_TO_COPY"
-EOS
-
-      CONTENT = <<EOS
+      INSTALL_RESOURCES_FUCTION = <<EOS
 #!/bin/sh
 
 RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy.txt
@@ -111,6 +106,13 @@ install_resource()
       ;;
   esac
 }
+EOS
+
+
+      RSYNC_CALL = <<EOS
+
+rsync -avr --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+rm "$RESOURCES_TO_COPY"
 EOS
 
     end
