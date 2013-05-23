@@ -127,7 +127,7 @@ module Pod
           if podfile_path_in_dir(current_path)
             @installation_root = current_path
             unless current_path == Pathname.pwd
-              UI.puts ("[in #{current_path}]")
+              UI.puts("[in #{current_path}]")
             end
             break
           else
