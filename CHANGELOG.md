@@ -29,7 +29,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#939](https://github.com/CocoaPods/CocoaPods/issues/939)
 
   Let’s face it, even though we have a great community that spends an amazing
-  amount of time on creating the specifications, the internet can be a hostile
+  amount of time on curating the specifications, the internet can be a hostile
   place and the community is growing too large to take a naive approach any
   longer.
 
