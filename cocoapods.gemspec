@@ -21,14 +21,14 @@ Gem::Specification.new do |s|
                   "in, third party open-source libraries, by creating a more centralized " \
                   "ecosystem."
 
-  s.files = Dir["lib/**/*.rb"] + %w{ bin/pod bin/sandbox-pod README.md LICENSE CHANGELOG.md }
+s.files = Dir["lib/**/*.rb"] + %w{ bin/pod bin/sandbox-pod README.md LICENSE CHANGELOG.md }
 
-  s.executables   = %w{ pod }
+  s.executables   = %w{ pod sandbox-pod }
   s.require_paths = %w{ lib }
 
   # Link with the version of CocoaPods-Core
   s.add_runtime_dependency 'cocoapods-core',       "= #{Pod::VERSION}"
-  s.add_runtime_dependency 'claide',               '~> 0.3.1'
+  s.add_runtime_dependency 'claide',               '~> 0.3.2'
   s.add_runtime_dependency 'cocoapods-downloader', '~> 0.1.1'
   s.add_runtime_dependency 'xcodeproj',            '~> 0.6.0'
 

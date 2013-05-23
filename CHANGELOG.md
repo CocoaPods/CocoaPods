@@ -4,6 +4,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Bug fixes
+
+* Made sandbox-pod executable visible as it wasn't correctly configured in the
+  gemspec.
+* Required CLAide 0.3.2 as 0.3.0 didn't include all the files in the gemspec
+  and 0.3.1 was not correctly processed by RubyGems.
+
 ## 0.20.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.20.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.0...0.20.0)
