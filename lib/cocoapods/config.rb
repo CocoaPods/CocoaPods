@@ -134,6 +134,7 @@ module Pod
             current_path = current_path.parent
           end
         end
+        @installation_root ||= Pathname.pwd
       end
       @installation_root
     end
@@ -181,7 +182,7 @@ module Pod
     # @return [Nil]
     #
     def podfile_path
-      @podfile_path ||= podfile_path_in_dir(installation_root) if installation_root
+      @podfile_path ||= podfile_path_in_dir(installation_root)
     end
 
     # Returns the path of the Lockfile.
