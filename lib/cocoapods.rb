@@ -9,8 +9,7 @@ module Pod
   require 'cocoapods-core'
   require 'cocoapods/file_list'
   require 'cocoapods/config'
-
-  autoload :Downloader, 'cocoapods/downloader'
+  require 'cocoapods/downloader'
 
   # Indicates an user error. This is defined in cocoapods-core.
   #
