@@ -51,8 +51,6 @@ PROFILE_ERB_TEMPLATE = <<-EOS
   (literal
     "<%= pod_bin %>"
     "<%= ruby_bin %>"
-    "<%= File.join(developer_prefix, 'usr/bin/xcrun') %>"
-    "<%= File.join(developer_prefix, 'usr/bin/xcodebuild') %>"
   )
   (regex 
 <% prefixes.each do |prefix| %>
@@ -127,7 +125,7 @@ class Profile
   end
 
   def prefixes
-    prefixes = ['/bin', '/usr/bin', '/usr/libexec']
+    prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
     prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
     # From asking people, it seems MacPorts does not have a `prefix` command, like
     # Homebrew does, so make an educated guess:
