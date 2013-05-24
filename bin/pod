@@ -5,6 +5,9 @@ if $0 == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
   require "rubygems"
   require "bundler/setup"
   $:.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require "rubygems"
+  gem "cocoapods"
 end
 
 if (ENV['CP_STDOUT_SYNC'] == 'TRUE')
