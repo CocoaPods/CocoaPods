@@ -170,7 +170,7 @@ module Pod
       end
     end
 
-    # Loads or returns a previously initialized for the Pod of the given
+    # Loads or returns a previously initialized Set for the Pod of the given
     # dependency.
     #
     # @param  [Dependency] dependency

@@ -14,6 +14,7 @@ module Pod
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
     require 'cocoapods/command/podfile_info'
+    require 'cocoapods/command/config'
     require 'cocoapods/command/project'
     require 'cocoapods/command/push'
     require 'cocoapods/command/repo'
@@ -87,7 +88,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    include Config::Mixin
+    include Pod::Config::Mixin
 
     private
 
