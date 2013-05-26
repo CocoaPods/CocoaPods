@@ -11,6 +11,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   Ruby (1.8.7).
   [#939](https://github.com/CocoaPods/CocoaPods/issues/939#issuecomment-18396063)
 * Allow sandbox-pod to execute any tool inside the Xcode.app bundle.
+* Allow sandbox-pod to execute any tool inside a rbenv prefix.
 
 ## 0.20.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.0...0.20.1)

@@ -124,14 +124,26 @@ class Profile
     RbConfig::CONFIG['prefix']
   end
 
+  def prefix_from_bin(bin_name)
+    unless (path = `which #{bin_name}`.strip).empty?
+      File.dirname(File.dirname(path))
+    end
+  end
+
   def prefixes
     prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
     prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
+
     # From asking people, it seems MacPorts does not have a `prefix` command, like
     # Homebrew does, so make an educated guess:
-    unless (port = `which port`.strip).empty?
-      prefixes << File.dirname(File.dirname(port))
+    if port_prefix = prefix_from_bin('port')
+      prefixes << port_prefix
     end
+
+    if rbenv_prefix = prefix_from_bin('rbenv')
+      prefixes << rbenv_prefix
+    end
+
     prefixes
   end
 
