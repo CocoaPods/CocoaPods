@@ -59,9 +59,9 @@ module Pod
         end
       end
 
-      it "it returns a nil installation root if no Podfile can be found" do
+      it "it returns the working directory as the installation root if no Podfile can be found" do
         Dir.chdir(temporary_directory) do
-          config.installation_root.should == nil
+          config.installation_root.should == temporary_directory
         end
       end
 

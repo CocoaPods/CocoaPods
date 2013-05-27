@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 
 # This bin wrapper runs the `pod` command in a OS X sandbox. The reason for this
 # is to ensure that people can’t use malicious code from pod specifications.
@@ -24,37 +25,13 @@
 if $0 == __FILE__
   $:.unshift File.expand_path('../../lib', __FILE__)
 end
+
 require 'pathname'
 require 'cocoapods/config'
-
-
-pod_bin = File.expand_path('../pod', __FILE__)
-pod_prefix = File.expand_path('../..', pod_bin)
-
 require 'rbconfig'
-ruby_bin = File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'])
-ruby_prefix = RbConfig::CONFIG['prefix']
-
-prefixes = ['/bin', '/usr/bin', '/usr/libexec']
-prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
-# From asking people, it seems MacPorts does not have a `prefix` command, like
-# Homebrew does, so make an educated guess:
-unless (port = `which port`.strip).empty?
-  prefixes << File.dirname(File.dirname(port))
-end
-
-developer_prefix = `xcode-select --print-path`.strip
-xcode_app_path = File.expand_path('../..', developer_prefix)
-
 require 'erb'
-profile = ERB.new(DATA.read, 0, '>').result(TOPLEVEL_BINDING)
-#puts profile
 
-command = ['/usr/bin/sandbox-exec', '-p', profile, pod_bin, *ARGV]
-exec *command
-
-
-__END__
+PROFILE_ERB_TEMPLATE = <<-EOS
 (version 1)
 (debug allow)
 
@@ -74,8 +51,6 @@ __END__
   (literal
     "<%= pod_bin %>"
     "<%= ruby_bin %>"
-    "<%= File.join(developer_prefix, 'usr/bin/xcrun') %>"
-    "<%= File.join(developer_prefix, 'usr/bin/xcodebuild') %>"
   )
   (regex 
 <% prefixes.each do |prefix| %>
@@ -128,3 +103,70 @@ __END__
 )
 
 (deny default)
+EOS
+
+
+class Profile
+
+  def pod_bin
+    File.expand_path('../pod', __FILE__)
+  end
+
+  def pod_prefix
+    File.expand_path('../..', pod_bin)
+  end
+
+  def ruby_bin
+    File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'])
+  end
+
+  def ruby_prefix
+    RbConfig::CONFIG['prefix']
+  end
+
+  def prefix_from_bin(bin_name)
+    unless (path = `which #{bin_name}`.strip).empty?
+      File.dirname(File.dirname(path))
+    end
+  end
+
+  def prefixes
+    prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
+    prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
+
+    # From asking people, it seems MacPorts does not have a `prefix` command, like
+    # Homebrew does, so make an educated guess:
+    if port_prefix = prefix_from_bin('port')
+      prefixes << port_prefix
+    end
+
+    if rbenv_prefix = prefix_from_bin('rbenv')
+      prefixes << rbenv_prefix
+    end
+
+    prefixes
+  end
+
+  def developer_prefix
+    `xcode-select --print-path`.strip
+  end
+
+  def xcode_app_path
+    File.expand_path('../..', developer_prefix)
+  end
+
+  # TODO raise SAFE level (0) to 4 if possible.
+  def generate
+    ERB.new(PROFILE_ERB_TEMPLATE, 0, '>').result(binding)
+  end
+
+end
+
+# Ensure the `pod` bin doesn’t think it needs to use Bundler.
+ENV['COCOAPODS_NO_BUNDLER'] = '1'
+
+profile = Profile.new
+#puts profile.generate
+command = ['/usr/bin/sandbox-exec', '-p', profile.generate, profile.pod_bin, *ARGV]
+exec(*command)
+
