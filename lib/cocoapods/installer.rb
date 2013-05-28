@@ -158,7 +158,7 @@ module Pod
     def analyze
       if lockfile && lockfile.cocoapods_version > Version.new(VERSION)
         STDERR.puts '[!] The version of CocoaPods used to generate the lockfile is '\
-          'higher that the one of the current executable. Incompatibility' \
+          'higher that the one of the current executable. Incompatibility ' \
           'issues might arise.'.yellow
       end
 
