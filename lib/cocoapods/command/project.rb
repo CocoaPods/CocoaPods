@@ -32,7 +32,7 @@ module Pod
       #
       # @return [void]
       #
-      def run_install_with_update(update)
+        def run_install_with_update(update)
         installer = Installer.new(config.sandbox, config.podfile, config.lockfile)
         installer.update_mode = update
         installer.install!

@@ -16,8 +16,8 @@ module Pod
       end
 
       it "can return the relative path of a given absolute path" do
-        path = temporary_directory + 'Pods/BananaLib/file'
-        @project.relativize(path).should == Pathname.new('BananaLib/file')
+        path = temporary_directory + 'Pods/Sources/BananaLib/file'
+        @project.relativize(path).should == Pathname.new('Sources/BananaLib/file')
       end
 
       it "can return the relative path of a given absolute path outside its root" do

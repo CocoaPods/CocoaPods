@@ -37,7 +37,7 @@ module Pod
       end
 
       it "cleans any trace of the Pod with the given name" do
-        pod_root = @sandbox.root + 'BananaLib'
+        pod_root = @sandbox.pod_dir('BananaLib')
         pod_root.mkpath
         @sandbox.store_podspec('BananaLib', fixture('banana-lib/BananaLib.podspec'))
         specification_path = @sandbox.specification_path('BananaLib')
@@ -47,7 +47,7 @@ module Pod
       end
 
       it "doesn't remove the root of local Pods while cleaning" do
-        pod_root = @sandbox.root + 'BananaLib'
+        pod_root = @sandbox.pod_dir('BananaLib')
         @sandbox.stubs(:local?).returns(true)
         pod_root.mkpath
         @sandbox.clean_pod('BananaLib')
@@ -73,7 +73,7 @@ module Pod
       end
 
       it "returns the directory where a Pod is stored" do
-        @sandbox.pod_dir('JSONKit').should == temporary_directory + 'Sandbox/JSONKit'
+        @sandbox.pod_dir('JSONKit').should == temporary_directory + 'Sandbox/Sources/JSONKit'
       end
 
       it "returns the directory where a local Pod is stored" do
