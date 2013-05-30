@@ -40,42 +40,58 @@ module Pod
       end
 
       it "correctly creates a podspec from github" do
-        expect_github_repo_request
-        expect_github_user_request
-        expect_github_tags_request
+        repo = {
+          'name' => 'libPusher',
+          'owner' => { 'login' => 'lukeredpath' },
+          'html_url' => 'https://github.com/lukeredpath/libPusher',
+          'description' => 'An Objective-C interface to Pusher (pusherapp.com)',
+          'clone_url' => 'https://github.com/lukeredpath/libPusher.git'
+        }
+        GitHub.expects(:repo).with('lukeredpath/libPusher').returns(repo)
+        GitHub.expects(:tags).with('https://github.com/lukeredpath/libPusher').returns([{"name"=>"v1.4"}])
+        GitHub.expects(:user).with('lukeredpath').returns({ "name" => "Luke Redpath", "email" => "luke@lukeredpath.co.uk" })
         run_command('spec', 'create', 'https://github.com/lukeredpath/libPusher.git')
         path = temporary_directory + 'libPusher.podspec'
         spec = Specification.from_file(path)
         spec.name.should     == 'libPusher'
         spec.license.should  == { :type => "MIT (example)" }
-        spec.version.should  == Version.new('1.3')
+        spec.version.should  == Version.new('1.4')
         spec.summary.should  == 'An Objective-C interface to Pusher (pusherapp.com)'
         spec.homepage.should == 'https://github.com/lukeredpath/libPusher'
         spec.authors.should  == {"Luke Redpath"=>"luke@lukeredpath.co.uk"}
-        spec.source.should   == { :git => 'https://github.com/lukeredpath/libPusher.git', :tag => 'v1.3' }
+        spec.source.should   == { :git => 'https://github.com/lukeredpath/libPusher.git', :tag => 'v1.4' }
       end
 
       it "accepts a name when creating a podspec form github" do
-        expect_github_repo_request
-        expect_github_user_request
-        expect_github_tags_request
+        repo = {
+          'name' => 'libPusher',
+          'owner' => { 'login' => 'lukeredpath' },
+          'html_url' => 'https://github.com/lukeredpath/libPusher',
+          'description' => 'An Objective-C interface to Pusher (pusherapp.com)',
+          'clone_url' => 'https://github.com/lukeredpath/libPusher.git'
+        }
+        GitHub.expects(:repo).with('lukeredpath/libPusher').returns(repo)
+        GitHub.expects(:tags).with('https://github.com/lukeredpath/libPusher').returns([{"name"=>"v1.4"}])
+        GitHub.expects(:user).with('lukeredpath').returns({ "name" => "Luke Redpath", "email" => "luke@lukeredpath.co.uk" })
         run_command('spec', 'create', 'other_name', 'https://github.com/lukeredpath/libPusher.git')
         path = temporary_directory + 'other_name.podspec'
         spec = Specification.from_file(path)
         spec.name.should     == 'other_name'
-        spec.license.should  == { :type => "MIT (example)" }
-        spec.version.should  == Version.new('1.3')
-        spec.summary.should  == 'An Objective-C interface to Pusher (pusherapp.com)'
         spec.homepage.should == 'https://github.com/lukeredpath/libPusher'
-        spec.authors.should  == {"Luke Redpath"=>"luke@lukeredpath.co.uk"}
-        spec.source.should   == { :git => 'https://github.com/lukeredpath/libPusher.git', :tag => 'v1.3' }
       end
 
       it "correctly suggests the head commit if a suitable tag is not available on github" do
-        expect_github_repo_request
-        expect_github_user_request
-        expect_github_tags_request([{"name" => "experiment"}])
-        expect_github_branches_request
+        repo = {
+          'name' => 'libPusher',
+          'owner' => { 'login' => 'lukeredpath' },
+          'html_url' => 'https://github.com/lukeredpath/libPusher',
+          'description' => 'An Objective-C interface to Pusher (pusherapp.com)',
+          'clone_url' => 'https://github.com/lukeredpath/libPusher.git'
+        }
+        GitHub.expects(:repo).with('lukeredpath/libPusher').returns(repo)
+        GitHub.expects(:tags).with('https://github.com/lukeredpath/libPusher').returns([{"name"=>"experiment"}])
+        GitHub.expects(:branches).with('https://github.com/lukeredpath/libPusher').returns([{"name"=>"master", "commit" => {'sha' => '5f482b0693ac2ac1ad85d1aabc27ec7547cc0bc7'}}])
+        GitHub.expects(:user).with('lukeredpath').returns({ "name" => "Luke Redpath", "email" => "luke@lukeredpath.co.uk" })
         run_command('spec', 'create', 'https://github.com/lukeredpath/libPusher.git')
         path = temporary_directory + 'libPusher.podspec'
         spec = Specification.from_file(path)
@@ -84,10 +100,17 @@ module Pod
       end
 
       it "provides a markdown template if a github repo doesn't have semantic version tags" do
-        expect_github_repo_request
-        expect_github_user_request
-        expect_github_tags_request([{"name" => "experiment"}])
-        expect_github_branches_request
+        repo = {
+          'name' => 'libPusher',
+          'owner' => { 'login' => 'lukeredpath' },
+          'html_url' => 'https://github.com/lukeredpath/libPusher',
+          'description' => 'An Objective-C interface to Pusher (pusherapp.com)',
+          'clone_url' => 'https://github.com/lukeredpath/libPusher.git'
+        }
+        GitHub.expects(:repo).with('lukeredpath/libPusher').returns(repo)
+        GitHub.expects(:tags).with('https://github.com/lukeredpath/libPusher').returns([{"name"=>"experiment"}])
+        GitHub.expects(:branches).with('https://github.com/lukeredpath/libPusher').returns([{"name"=>"master", "commit" => {'sha' => '5f482b0693ac2ac1ad85d1aabc27ec7547cc0bc7'}}])
+        GitHub.expects(:user).with('lukeredpath').returns({ "name" => "Luke Redpath", "email" => "luke@lukeredpath.co.uk" })
         output = run_command('spec', 'create', 'https://github.com/lukeredpath/libPusher.git')
         output.should.include 'MARKDOWN TEMPLATE'
         output.should.include 'Please add semantic version tags'
