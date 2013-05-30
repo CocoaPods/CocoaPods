@@ -21,7 +21,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe "create subcommand" do
-      extend SpecHelper::Github
       extend SpecHelper::TemporaryRepos
 
       it "creates a new podspec stub file" do
@@ -121,14 +120,13 @@ module Pod
       end
 
       # @todo VCR is required in CocoaPods only for this test.
-      #
-      # it "lints a remote podspec" do
-      #   Dir.chdir(fixture('spec-repos') + 'master/JSONKit/1.4/') do
-      #     cmd = command('spec', 'lint', '--quick', '--only-errors', '--silent', 'https://github.com/CocoaPods/Specs/raw/master/A2DynamicDelegate/2.0.1/A2DynamicDelegate.podspec')
-      #     # VCR.use_cassette('linter', :record => :new_episodes) {  }
-      #     lambda { cmd.run }.should.not.raise
-      #   end
-      # end
+      xit "lints a remote podspec" do
+        Dir.chdir(fixture('spec-repos') + 'master/JSONKit/1.4/') do
+          cmd = command('spec', 'lint', '--quick', '--only-errors', '--silent', 'https://github.com/CocoaPods/Specs/raw/master/A2DynamicDelegate/2.0.1/A2DynamicDelegate.podspec')
+          # VCR.use_cassette('linter', :record => :new_episodes) {  }
+          lambda { cmd.run }.should.not.raise
+        end
+      end
 
       before do
         text = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
@@ -152,13 +150,13 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
-    
+
     describe "which subcommand" do
       it "errors if a given podspec doesn't exist" do
         e = lambda { command('spec', 'which', 'some_pod_that_doesnt_exist').run }.should.raise Informative
         e.message.should.match /Unable to find a pod with/
       end
-      
+
       it "prints the path of a given podspec" do
         lambda { command('spec', 'which', 'AFNetworking').run }.should.not.raise
         text = "AFNetworking.podspec"
