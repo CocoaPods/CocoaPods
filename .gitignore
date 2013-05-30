@@ -10,7 +10,6 @@ xcuserdata
 project.xcworkspace
 DerivedData
 /concatenated.*
-Gemfile.lock
 
 # Yardoc
 .yardoc
