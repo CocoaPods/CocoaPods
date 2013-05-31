@@ -1,7 +1,7 @@
 #!/bin/sh
 
 RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy.txt
-touch "$RESOURCES_TO_COPY"
+> "$RESOURCES_TO_COPY"
 
 install_resource()
 {
