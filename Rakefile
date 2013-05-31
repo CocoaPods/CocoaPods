@@ -181,7 +181,6 @@ namespace :spec do
 
   desc "Run the integration spec"
   task :integration => :unpack_fixture_tarballs do
-    sh "bundle exec bacon spec/integration_spec.rb"
     sh "bundle exec bacon spec/integration_2.rb"
   end
 
