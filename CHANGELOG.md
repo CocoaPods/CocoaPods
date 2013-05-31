@@ -2,6 +2,14 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+
+## Master
+
+###### Enhancements
+
+* Reduced external dependencies and deprecation of Rake::FileList.
+  [#1080](https://github.com/CocoaPods/CocoaPods/issues/1080)
+
 ## 0.20.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.1...0.20.2)
 

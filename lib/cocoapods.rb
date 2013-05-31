@@ -7,7 +7,6 @@ module Pod
 
   require 'cocoapods/gem_version'
   require 'cocoapods-core'
-  require 'cocoapods/file_list'
   require 'cocoapods/config'
   require 'cocoapods/downloader'
 

@@ -147,18 +147,6 @@ module Pod
 
       end
 
-      describe "#expanded_paths" do
-
-        it "can handle Rake FileLists" do
-          @spec_consumer.stubs(:source_files).returns([FileList['Classes/Banana.*']])
-          @accessor.source_files.sort.should == [
-            @root + "Classes/Banana.h",
-            @root + "Classes/Banana.m",
-          ]
-        end
-
-      end
-
     end
 
     #-------------------------------------------------------------------------#
