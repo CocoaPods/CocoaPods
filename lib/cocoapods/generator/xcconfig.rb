@@ -7,16 +7,16 @@ module Pod
     #
     class XCConfig
 
-      # @return [Target] the aggregate_target or target represented by this xcconfig.
+      # @return [Target] the target represented by this xcconfig.
       #
-      attr_reader :aggregate_target
+      attr_reader :target
       attr_reader :sandbox
 
-      # @param  [Target] aggregate_target @see aggregate_target
+      # @param  [Target] target @see target
       #
-      def initialize(aggregate_target)
-        @aggregate_target = aggregate_target
-        @sandbox = aggregate_target.sandbox
+      def initialize(target)
+        @target = target
+        @sandbox = target.sandbox
       end
 
       # @return [Xcodeproj::Config] The generated xcconfig.
@@ -79,7 +79,7 @@ module Pod
       #
       DEVELOPER_FRAMEWORKS_SEARCH_PATHS = [
         '$(inherited)',
-        '"$(SDKROOT)/Developer/aggregate_target/Frameworks"',
+        '"$(SDKROOT)/Developer/target/Frameworks"',
         '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
       ]
 

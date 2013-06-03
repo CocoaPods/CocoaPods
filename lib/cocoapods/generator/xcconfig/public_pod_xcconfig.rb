@@ -16,10 +16,10 @@ module Pod
       # @return [void]
       #
       def save_as(path)
-        generate.save_as(path, aggregate_target.xcconfig_prefix)
+        generate.save_as(path, target.xcconfig_prefix)
       end
 
-      # Generates the xcconfig for the aggregate_target.
+      # Generates the xcconfig for the target.
       #
       # @note   The xcconfig file for a public spec target includes the
       #         standard podspec defined values including libraries,
@@ -28,7 +28,7 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
-        @xcconfig = consumer_xcconfig(aggregate_target.consumer)
+        @xcconfig = consumer_xcconfig(target.consumer)
         @xcconfig
       end
 
