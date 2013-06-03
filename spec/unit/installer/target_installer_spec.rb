@@ -205,7 +205,7 @@ module Pod
         build_files = @installer.library.target.source_build_phase.files
         build_file = build_files.find { |bf| bf.file_ref.name == 'Pods-dummy.m' }
         build_file.should.be.not.nil
-        build_file.file_ref.path.should == 'Pods-dummy.m'
+        build_file.file_ref.path.should == '../Pods-dummy.m'
         dummy = config.sandbox.root + 'Pods-dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
