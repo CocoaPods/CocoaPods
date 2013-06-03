@@ -247,10 +247,10 @@ module Pod
     #
     def install_source_of_pod(pod_name)
       specs_by_platform = {}
-      libraries.each do |pod_target|
-        if pod_target.spec && pod_target.spec.root.name == pod_name
+      pod_targets.each do |pod_target|
+        if pod_target.root_spec.name == pod_name
           specs_by_platform[pod_target.platform] ||= []
-          specs_by_platform[pod_target.platform] << pod_target.spec
+          specs_by_platform[pod_target.platform].concat(pod_target.specs)
         end
       end
 

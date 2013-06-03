@@ -91,7 +91,7 @@ module Pod
         # @return [Specification::Consumer] the consumer for the specifications.
         #
         def spec_consumers
-          @spec_consumers ||= target.libraries.map(&:file_accessors).flatten.map(&:spec_consumer)
+          @spec_consumers ||= target.pod_targets.map(&:file_accessors).flatten.map(&:spec_consumer)
         end
 
         # Adds the `xcconfig` configurations files generated for the current
@@ -230,9 +230,9 @@ module Pod
         #         integration.
         #
         def integration_message
-          "Integrating #{'library'.pluralize(target.libraries.size)} " \
-            "`#{target.libraries.map(&:name).to_sentence}` " \
-            "into target #{target.name} " \
+          "Integrating Pod #{'target'.pluralize(target.pod_targets.size)} " \
+            "`#{target.pod_targets.map(&:name).to_sentence}` " \
+            "into aggregate target #{target.name} " \
             "of project #{UI.path target.user_project_path}."
         end
 
