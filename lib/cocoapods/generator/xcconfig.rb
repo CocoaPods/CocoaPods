@@ -59,12 +59,12 @@ module Pod
           'PODS_BUILD_HEADERS_SEARCH_PATHS'  => quote(sandbox.build_headers.search_paths),
           'PODS_PUBLIC_HEADERS_SEARCH_PATHS' => quote(sandbox.public_headers.search_paths),
           'GCC_PREPROCESSOR_DEFINITIONS'     => '$(inherited) COCOAPODS=1'
-        })
+        }, 'PODS_LDFLAGS')
 
         spec_consumers.each do |consumer|
           add_spec_build_settings_to_xcconfig(consumer, @xcconfig)
         end
-
+        
         @xcconfig
       end
 
