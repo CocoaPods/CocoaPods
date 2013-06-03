@@ -76,7 +76,7 @@ module Pod
 
       it "generates the libraries which represent the target definitions" do
         libs = @analyzer.analyze.libraries
-        libs.map(&:name).should == ['Pods']
+        libs.map(&:name).should == ['Pods/Generated']
         lib = libs.first
         lib.support_files_root.should == config.sandbox.root
 

@@ -16,13 +16,13 @@ module Pod
       end
 
       it "can return the relative path of a given absolute path" do
-        path = temporary_directory + 'Pods/Sources/BananaLib/file'
-        @project.relativize(path).should == Pathname.new('Sources/BananaLib/file')
+        path = temporary_directory + 'Pods/BananaLib/file'
+        @project.relativize(path).should == Pathname.new('../BananaLib/file')
       end
 
       it "can return the relative path of a given absolute path outside its root" do
         path = temporary_directory + 'file'
-        @project.relativize(path).should == Pathname.new('../file')
+        @project.relativize(path).should == Pathname.new('../../file')
       end
 
       it "can return the relative path of a given absolute path with another root directory" do
@@ -73,7 +73,7 @@ module Pod
     describe "File references" do
 
       it "adds the file references for the given source files" do
-        source_files = [ config.sandbox.root + "A_POD/some_file.m" ]
+        source_files = [ config.sandbox.pod_dir("A_POD") + "some_file.m" ]
         @project.add_file_references(source_files, 'BananaLib', @project.pods)
         group = @project['Pods/BananaLib']
         group.should.not.be.nil

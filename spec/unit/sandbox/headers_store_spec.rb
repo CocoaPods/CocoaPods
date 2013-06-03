@@ -9,15 +9,15 @@ module Pod
     end
 
     it "returns it's headers root" do
-      @header_dir.root.should == temporary_directory + 'Sandbox/Headers'
+      @header_dir.root.should == temporary_directory + 'Sandbox/Generated/Headers/Headers'
     end
 
     it "can add namespaced headers to it's header path using symlinks and return the relative path" do
-      FileUtils.mkdir_p(@sandbox.root + "ExampleLib/")
-      namespace_path = Pathname.new("ExampleLib")
+      FileUtils.mkdir_p(@sandbox.pod_dir("ExampleLib"))
+      namespace_path = Pathname.new("Generated/Sources/ExampleLib")
       relative_header_paths = [
-        Pathname.new("ExampleLib/MyHeader.h"),
-        Pathname.new("ExampleLib/MyOtherHeader.h")
+        Pathname.new("Generated/Sources/ExampleLib/MyHeader.h"),
+        Pathname.new("Generated/Sources/ExampleLib/MyOtherHeader.h")
       ]
       relative_header_paths.each do |path|
         File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
@@ -30,11 +30,11 @@ module Pod
     end
 
     it 'keeps a list of unique header search paths when headers are added' do
-      FileUtils.mkdir_p(@sandbox.root + "ExampleLib/Dir")
+      FileUtils.mkdir_p(@sandbox.sources_root + "ExampleLib/Dir")
       namespace_path = Pathname.new("ExampleLib")
       relative_header_paths = [
-        Pathname.new("ExampleLib/Dir/MyHeader.h"),
-        Pathname.new("ExampleLib/Dir/MyOtherHeader.h")
+        Pathname.new("Generated/Sources/ExampleLib/Dir/MyHeader.h"),
+        Pathname.new("Generated/Sources/ExampleLib/Dir/MyOtherHeader.h")
       ]
       relative_header_paths.each do |path|
         File.open(@sandbox.root + path, "w") { |file| file.write('hello') }

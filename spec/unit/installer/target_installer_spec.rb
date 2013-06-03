@@ -17,7 +17,7 @@ module Pod
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
-        @project.add_file_references(file_accessor.source_files, 'BananaLib', @project.pods)
+        @project.add_file_references(file_accessor.source_files, 'Sources/BananaLib', @project.pods)
 
         @library = Library.new(@target_definition)
         @library.platform = Platform.new(:ios, '6.0')
