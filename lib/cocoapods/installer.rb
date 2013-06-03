@@ -91,7 +91,7 @@ module Pod
 
     def migrate_installation_if_needed
       UI.section "Performing existing installation migration" do
-        migrator = Migrator.new(lockfile.cocoapods_version, sandbox)
+        migrator = Migrator.new(sandbox)
         migrator.migrate!
       end
     end

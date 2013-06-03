@@ -15,15 +15,16 @@ module Pod
 
       #
       #
-      def initialize(installation_version, sandbox)
-        @installation_version = installation_version
+      def initialize(sandbox)
         @sandbox = sandbox
       end
 
       #
       #
       def migrate!
-        migrate_to_0_20 if version_minor('0.20')
+        if sandbox.manifest
+          migrate_to_0_20 if version_minor('0.20')
+        end
       end
 
       #-----------------------------------------------------------------------#
@@ -65,6 +66,10 @@ module Pod
 
       def version_minor(target_version)
         installation_version < Version.new(target_version)
+      end
+
+      def installation_version
+        sandbox.manifest.cocoapods_version
       end
 
       def mkdir(path)
