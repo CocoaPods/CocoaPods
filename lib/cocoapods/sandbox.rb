@@ -87,14 +87,6 @@ module Pod
     #
     attr_accessor :project
 
-    # Removes the sandbox.
-    #
-    # @return [void]
-    #
-    def implode
-      generated_dir_root.rmtree
-    end
-
     # Removes the files of the Pod with the given name from the sandbox.
     #
     # @return [void]

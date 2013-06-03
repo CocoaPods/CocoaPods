@@ -31,11 +31,6 @@ module Pod
         @sandbox.build_headers.root.should == temporary_directory + 'Sandbox/Generated/Headers/BuildHeaders'
       end
 
-      it "deletes the entire root directory on implode" do
-        @sandbox.implode
-        File.directory?(temporary_directory + 'Sandbox/Generated').should.be.false
-      end
-
       it "cleans any trace of the Pod with the given name" do
         pod_root = @sandbox.pod_dir('BananaLib')
         pod_root.mkpath

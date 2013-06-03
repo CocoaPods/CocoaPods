@@ -77,27 +77,27 @@ module Pod
         @project.add_file_references(source_files, 'BananaLib', @project.pods)
         group = @project['Pods/BananaLib']
         group.should.not.be.nil
-        group.children.map(&:path).should == [ "A_POD/some_file.m" ]
+        group.children.map(&:path).should == [ "Sources/A_POD/some_file.m" ]
       end
 
       it "adds the only one file reference for a given absolute path" do
-        source_files = [ config.sandbox.root + "A_POD/some_file.m" ]
+        source_files = [ config.sandbox.pod_dir("A_POD") + "some_file.m" ]
         @project.add_file_references(source_files, 'BananaLib', @project.pods)
         @project.add_file_references(source_files, 'BananaLib', @project.pods)
         group = @project['Pods/BananaLib']
         group.children.count.should == 1
-        group.children.first.path.should == "A_POD/some_file.m"
+        group.children.first.path.should == "Sources/A_POD/some_file.m"
       end
 
       it "returns the file reference for a given source file" do
-        file = config.sandbox.root + "A_POD/some_file.m"
+        file = config.sandbox.pod_dir("A_POD") + "some_file.m"
         @project.add_file_references([file], 'BananaLib', @project.pods)
         file_reference = @project.file_reference(file)
-        file_reference.path.should == "A_POD/some_file.m"
+        file_reference.path.should == "Sources/A_POD/some_file.m"
       end
 
       it "adds the Podfile configured as a Ruby file" do
-        @project.add_podfile(config.sandbox.root + '../Podfile')
+        @project.add_podfile(config.sandbox.generated_dir_root + '../Podfile')
         f = @project['Podfile']
         f.name.should == 'Podfile'
         f.source_tree.should == 'SOURCE_ROOT'
