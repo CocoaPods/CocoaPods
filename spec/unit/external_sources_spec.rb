@@ -56,7 +56,7 @@ module Pod
       it "pre-downloads the Pod and stores the relevant information in the sandbox" do
         sandbox = config.sandbox
         @external_source.send(:pre_download, sandbox)
-        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path = config.sandbox.pod_dir('Reachability') + 'Reachability.podspec'
         path.should.exist?
         sandbox.predownloaded_pods.should == ["Reachability"]
         sandbox.checkout_sources.should == {
@@ -82,7 +82,7 @@ module Pod
 
     it "creates a copy of the podspec" do
       @external_source.fetch(config.sandbox)
-      path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+      path = config.sandbox.pod_dir('Reachability') + 'Reachability.podspec'
       path.should.exist?
     end
 
@@ -107,7 +107,7 @@ module Pod
 
     it "creates a copy of the podspec" do
       @external_source.fetch(config.sandbox)
-      path = config.sandbox.root + 'Local Podspecs/SvnSource.podspec'
+      path = config.sandbox.pod_dir('SvnSource') + 'SvnSource.podspec'
       path.should.exist?
     end
 
@@ -132,7 +132,7 @@ module Pod
 
     it "creates a copy of the podspec" do
       @external_source.fetch(config.sandbox)
-      path = config.sandbox.root + 'Local Podspecs/MercurialSource.podspec'
+      path = config.sandbox.pod_dir('MercurialSource') + 'MercurialSource.podspec'
       path.should.exist?
     end
 
@@ -159,7 +159,7 @@ module Pod
 
     it "creates a copy of the podspec" do
       @external_source.fetch(config.sandbox)
-      path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+      path = config.sandbox.root + 'Generated/Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
 
@@ -215,7 +215,7 @@ module Pod
 
     it "creates a copy of the podspec" do
       @external_source.fetch(config.sandbox)
-      path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+      path = config.sandbox.pod_dir('Reachability') + 'Reachability.podspec'
       path.should.exist?
     end
 
@@ -224,7 +224,7 @@ module Pod
       podfile_path = fixture('integration/Podfile')
       external_source = ExternalSources.from_dependency(dependency, podfile_path)
       external_source.fetch(config.sandbox)
-      path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+      path = config.sandbox.root + 'Generated/Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
 

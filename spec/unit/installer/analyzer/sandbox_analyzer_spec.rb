@@ -160,9 +160,9 @@ module Pod
 
       #--------------------------------------#
 
-      it "returns whether the folder containing the Pod with the given name is empty" do
-        @analyzer.send(:folder_exist?, '\BananaLib').should.be.false
-        path = temporary_directory + 'Pods/Sources/BananaLib'
+      it "returns whether the folder containing the Pod with the given name exists" do
+        @analyzer.send(:folder_exist?, 'BananaLib').should.be.false
+        path = temporary_directory + 'Pods/Generated/Sources/BananaLib'
         path.mkpath
         @analyzer.send(:folder_exist?, 'BananaLib').should.be.true
 
@@ -170,7 +170,7 @@ module Pod
 
       it "returns whether the folder containing the Pod with the given name is empty" do
         @analyzer.send(:folder_empty?, 'BananaLib').should.be.true
-        path = temporary_directory + 'Pods/Sources/BananaLib'
+        path = temporary_directory + 'Pods/Generated/Sources/BananaLib'
         path.mkpath
         File.open(path + "file", "w") {}
         @analyzer.send(:folder_empty?, 'BananaLib').should.be.false
