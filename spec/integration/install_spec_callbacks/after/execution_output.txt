@@ -1,4 +1,6 @@
 CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-color 2>&1
+Performing existing installation migration
+
 Analyzing dependencies
 
 Fetching external sources
@@ -22,8 +24,9 @@ Downloading dependencies
    $ /usr/bin/git rev-list --max-count=1 v3.1.0
    f7176f4798d068d233dca5223ae4bd9c8059e830
    $ /usr/bin/git init
-   Initialized empty Git repository in ROOT/tmp/install_spec_callbacks/Pods/Reachability/.git/
-   $ /usr/bin/git remote add origin 'CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6'
+   Initialized empty Git repository in ROOT/tmp/install_spec_callbacks/Pods/Generated/Sources/Reachability/.git/
+   $ /usr/bin/git remote add origin
+   'CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6'
    $ /usr/bin/git fetch origin tags/v3.1.0 2>&1
    From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
     * tag               v3.1.0     -> FETCH_HEAD
@@ -42,18 +45,18 @@ Generating Pods project
   - Installing targets
     - Installing target `Pods` iOS 6.0
       - Adding Build files
-      - Generating xcconfig file at `Pods/Pods.xcconfig`
-      - Generating target environment header at `Pods/Pods-environment.h`
-      - Generating prefix header at `Pods/Pods-prefix.pch`
-      - Generating copy resources script at `Pods/Pods-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-dummy.m`
+      - Generating xcconfig file at `Pods/Generated/Pods.xcconfig`
+      - Generating target environment header at `Pods/Generated/Pods-environment.h`
+      - Generating prefix header at `Pods/Generated/Pods-prefix.pch`
+      - Generating copy resources script at `Pods/Generated/Pods-resources.sh`
+      - Generating acknowledgements at `Pods/Generated/Pods-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Generated/Pods-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Generated/Pods-dummy.m`
   - Running post install hooks
     - Reachability
-  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Xcode project file to `Pods/Generated/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
-  - Writing Manifest in `Pods/Manifest.lock`
+  - Writing Manifest in `Pods/Generated/Manifest.lock`
 
 Integrating client project
 
