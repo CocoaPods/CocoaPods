@@ -210,11 +210,13 @@ module Pod
     def create_file_accessors
       targets.each do |target|
         target.pod_targets.each do |pod_target|
-          pod_root = sandbox.pod_dir(pod_target.specs.first.root.name)
+          pod_root = sandbox.pod_dir(pod_target.root_spec.name)
           path_list = Sandbox::PathList.new(pod_root)
-          file_accessor = Sandbox::FileAccessor.new(path_list, pod_target.specs.first.consumer(pod_target.platform))
+          file_accessors = pod_target.specs.map do |spec|
+            Sandbox::FileAccessor.new(path_list, spec.consumer(pod_target.platform))
+          end
           pod_target.file_accessors ||= []
-          pod_target.file_accessors << file_accessor
+          pod_target.file_accessors.concat(file_accessors)
         end
       end
     end

@@ -182,9 +182,12 @@ module Pod
             target.user_build_configurations = {}
           end
 
-          # TODO group the specs of each Pod
-          specs.each do |spec|
-            pod_target = PodTarget.new([spec], target_definition, sandbox)
+          grouped_specs = specs.map do |spec|
+            specs.select { |s| s.root == spec.root }
+          end.uniq
+
+          grouped_specs.each do |pod_specs|
+            pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
             pod_target.user_build_configurations = target.user_build_configurations
             target.pod_targets << pod_target
           end
