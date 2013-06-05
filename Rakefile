@@ -100,6 +100,9 @@ namespace :gem do
     # Ensure that the branches are up to date with the remote
     sh "git pull"
 
+    puts "* Updating Bundle"
+    silent_sh('bundle update')
+
     puts "* Running specs"
     silent_sh('rake spec:all')
 
@@ -178,7 +181,6 @@ namespace :spec do
 
   desc "Run the integration spec"
   task :integration => :unpack_fixture_tarballs do
-    sh "bundle exec bacon spec/integration_spec.rb"
     sh "bundle exec bacon spec/integration_2.rb"
   end
 

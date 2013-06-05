@@ -7,6 +7,8 @@ module Pod
       Config.instance = nil
     end
 
+    #-------------------------------------------------------------------------#
+
     describe "In general" do
 
       it "returns the singleton config instance" do
@@ -35,7 +37,33 @@ module Pod
       end
     end
 
-    describe "Concerning a user's project, which is expected in the current working directory" do
+    #-------------------------------------------------------------------------#
+
+    describe "Paths" do
+
+      it "returns the working directory as the installation root if a Podfile can be found" do
+        Dir.chdir(temporary_directory) do
+          File.open("Podfile", "w") {}
+          config.installation_root.should == temporary_directory
+        end
+      end
+
+      it "returns the parent directory which contains the Podfile if it can be found" do
+        Dir.chdir(temporary_directory) do
+          File.open("Podfile", "w") {}
+          sub_dir = temporary_directory + 'sub_dir'
+          sub_dir.mkpath
+          Dir.chdir(sub_dir) do
+            config.installation_root.should == temporary_directory
+          end
+        end
+      end
+
+      it "it returns the working directory as the installation root if no Podfile can be found" do
+        Dir.chdir(temporary_directory) do
+          config.installation_root.should == temporary_directory
+        end
+      end
 
       before do
         config.installation_root = temporary_directory
@@ -63,9 +91,33 @@ module Pod
       it "returns the path to the Pods directory that holds the dependencies" do
         config.sandbox_root.should == temporary_directory + 'Pods'
       end
+
+      it "returns the Podfile path" do
+        Dir.chdir(temporary_directory) do
+          File.open("Podfile", "w") {}
+          config.podfile_path.should == temporary_directory + "Podfile"
+        end
+      end
+
+      it "returns nils if the Podfile if no paths exists" do
+        Dir.chdir(temporary_directory) do
+          config.podfile_path.should == nil
+        end
+      end
+
+      it "returns the Lockfile path" do
+        Dir.chdir(temporary_directory) do
+          File.open("Podfile", "w") {}
+          File.open("Podfile.lock", "w") {}
+          config.lockfile_path.should == temporary_directory + "Podfile.lock"
+        end
+      end
+
     end
 
-    describe "Concerning default settings" do
+    #-------------------------------------------------------------------------#
+
+    describe "Default settings" do
 
       before do
         Config.any_instance.stubs(:user_settings_file).returns(Pathname.new('not_found'))
@@ -87,12 +139,48 @@ module Pod
     describe "Private helpers" do
 
       it "returns the path of the user settings file" do
-        config.user_settings_file.should == Pathname.new("~/.cocoapods/config.yaml").expand_path
+        config.send(:user_settings_file).should == Pathname.new("~/.cocoapods/config.yaml").expand_path
       end
 
-      it "returns the path of the user settings file" do
-        config.user_settings_file.should == Pathname.new("~/.cocoapods/config.yaml").expand_path
+      it "can be configured with a hash" do
+        hash = { :verbose => true }
+        config.send(:configure_with, hash)
+        config.should.be.verbose
       end
+
+      #----------------------------------------#
+
+      describe "#podfile_path_in_dir" do
+
+        it "detects the CocoaPods.podfile.yaml file" do
+          expected = temporary_directory + "CocoaPods.podfile.yaml"
+          File.open(expected, "w") {}
+          path = config.send(:podfile_path_in_dir, temporary_directory)
+          path.should == expected
+        end
+
+        it "detects the CocoaPods.podfile file" do
+          expected = temporary_directory + "CocoaPods.podfile"
+          File.open(expected, "w") {}
+          path = config.send(:podfile_path_in_dir, temporary_directory)
+          path.should == expected
+        end
+
+        it "detects the Podfile file" do
+          expected = temporary_directory + "Podfile"
+          File.open(expected, "w") {}
+          path = config.send(:podfile_path_in_dir, temporary_directory)
+          path.should == expected
+        end
+
+        it "returns nils if the Podfile is not available" do
+          path = config.send(:podfile_path_in_dir, temporary_directory)
+          path.should == nil
+        end
+
+      end
+
+      #-----------------------------------------------------------------------#
 
     end
   end

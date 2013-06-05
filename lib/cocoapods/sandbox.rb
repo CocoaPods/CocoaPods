@@ -65,6 +65,7 @@ module Pod
       @root = Pathname.new(root)
       @public_headers = HeadersStore.new(self, "Headers")
       @predownloaded_pods = []
+      @head_pods = []
       @checkout_sources = {}
       @local_pods = {}
       FileUtils.mkdir_p(@root)
@@ -89,8 +90,9 @@ module Pod
       root.rmtree
     end
 
+    # Removes the files of the Pod with the given name from the sandbox.
     #
-    #
+    # @return [void]
     #
     def clean_pod(name)
       root_name = Specification.root_name(name)
@@ -270,6 +272,37 @@ module Pod
     def predownloaded?(name)
       root_name = Specification.root_name(name)
       predownloaded_pods.include?(root_name)
+    end
+
+    #--------------------------------------#
+
+    # Marks a Pod as head.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [void]
+    #
+    def store_head_pod(name)
+      root_name = Specification.root_name(name)
+      head_pods << root_name
+    end
+
+    # @return [Array<String>] The names of the pods that have been
+    #         marked as head.
+    #
+    attr_reader :head_pods
+
+    # Checks if a Pod should attempt to use the head source of the git repo.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [Bool] Whether the Pod has been marked as head.
+    #
+    def head_pod?(name)
+      root_name = Specification.root_name(name)
+      head_pods.include?(root_name)
     end
 
     #--------------------------------------#

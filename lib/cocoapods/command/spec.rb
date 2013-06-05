@@ -32,15 +32,6 @@ module Pod
 
         def run
           if repo_id_match = (@url || @name_or_url).match(/github.com\/([^\/\.]*\/[^\/\.]*)\.*/)
-            # This is to make sure Faraday doesn't warn the user about the `system_timer` gem missing.
-            old_warn, $-w = $-w, nil
-            begin
-              require 'faraday'
-            ensure
-              $-w = old_warn
-            end
-            require 'octokit'
-
             repo_id = repo_id_match[1]
             data = github_data_for_template(repo_id)
             data[:name] = @name_or_url if @url
@@ -410,8 +401,8 @@ module Pod
       end
 
       def github_data_for_template(repo_id)
-        repo = Octokit.repo(repo_id)
-        user = Octokit.user(repo['owner']['login'])
+        repo = GitHub.repo(repo_id)
+        user = GitHub.user(repo['owner']['login'])
         data = {}
 
         data[:name]          = repo['name']
@@ -425,7 +416,7 @@ module Pod
       end
 
       def suggested_ref_and_version(repo)
-        tags = Octokit.tags(:username => repo['owner']['login'], :repo => repo['name']).map {|tag| tag["name"]}
+        tags = GitHub.tags(repo['html_url']).map {|tag| tag["name"]}
         versions_tags = {}
         tags.each do |tag|
           clean_tag = tag.gsub(/^v(er)? ?/,'')
@@ -434,9 +425,9 @@ module Pod
         version = versions_tags.keys.sort.last || '0.0.1'
         data = {:version => version}
         if version == '0.0.1'
-          branches        = Octokit.branches(:username => repo['owner']['login'], :repo => repo['name'])
+          branches        = GitHub.branches(repo['html_url'])
           master_name     = repo['master_branch'] || 'master'
-          master          = branches.select {|branch| branch['name'] == master_name }.first
+          master          = branches.find {|branch| branch['name'] == master_name }
           data[:ref_type] = ':commit'
           data[:ref]      = master['commit']['sha']
         else

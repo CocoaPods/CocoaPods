@@ -158,7 +158,10 @@ module Pod
             @loaded_specs << spec.name
             cached_specs[spec.name] = spec
             validate_platform(spec, target_definition)
-            spec.version.head = dependency.head?
+            if dependency.head? || sandbox.head_pod?(spec.name)
+              spec.version.head = true
+              sandbox.store_head_pod(spec.name)
+            end
 
             spec_dependencies = spec.all_dependencies(target_definition.platform)
             find_dependency_specs(spec, spec_dependencies, target_definition)

@@ -22,7 +22,7 @@ end
 
 group :debugging do
   gem "rb-fsevent"
-  gem "kicker", :git => "https://github.com/alloy/kicker.git", :branch => "3.0.0"
+  gem "kicker", :git => "https://github.com/alloy/kicker.git", :branch => "master"
   gem "awesome_print"
   gem "pry"
   gem "diffy"

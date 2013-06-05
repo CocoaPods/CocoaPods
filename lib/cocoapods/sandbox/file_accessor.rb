@@ -172,7 +172,7 @@ module Pod
       # Matches the given patterns to the file present in the root of the path
       # list.
       #
-      # @param [Array<String, FileList>] patterns
+      # @param [Array<String>] patterns
       #         The patterns to expand.
       #
       # @param  [String] dir_pattern
@@ -189,22 +189,8 @@ module Pod
       #
       def expanded_paths(patterns, options = {})
         return [] if patterns.empty?
-
-        file_lists = patterns.select { |p| p.is_a?(FileList) }
-        glob_patterns = patterns - file_lists
-
         result = []
-        result << path_list.glob(glob_patterns, options)
-        result << file_lists.map do |file_list|
-          file_list.prepend_patterns(path_list.root)
-          file_list.glob
-        end
-
-        unless file_lists.empty?
-          # TODO Restore warning in 0.17 proper
-          # UI.warn "[#{spec_consumer.spec.name}] The usage of Rake FileList is deprecated. Use `exclude_files`."
-        end
-
+        result << path_list.glob(patterns, options)
         result.flatten.compact.uniq
       end
 

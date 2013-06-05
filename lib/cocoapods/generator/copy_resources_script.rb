@@ -59,9 +59,9 @@ module Pod
       #
       def install_resources_function
           if use_external_strings_file?
-            CONTENT
+            INSTALL_RESOURCES_FUCTION
           else
-            CONTENT.gsub(' --reference-external-strings-file', '')
+            INSTALL_RESOURCES_FUCTION.gsub(' --reference-external-strings-file', '')
           end
       end
 
@@ -72,11 +72,16 @@ module Pod
         resources.each do |resource|
           script += "install_resource '#{resource}'\n"
         end
+        script += RSYNC_CALL
         script
       end
 
-      CONTENT = <<EOS
+
+      INSTALL_RESOURCES_FUCTION = <<EOS
 #!/bin/sh
+
+RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy.txt
+> "$RESOURCES_TO_COPY"
 
 install_resource()
 {
@@ -98,11 +103,18 @@ install_resource()
       xcrun momc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename $1 .xcdatamodeld`.momd"
       ;;
     *)
-      echo "rsync -av --exclude '*/.svn/*' ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-      rsync -av --exclude '*/.svn/*' "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+      echo "${PODS_ROOT}/$1"
+      echo "${PODS_ROOT}/$1" >> "$RESOURCES_TO_COPY"
       ;;
   esac
 }
+EOS
+
+
+      RSYNC_CALL = <<EOS
+
+rsync -avr --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+rm "$RESOURCES_TO_COPY"
 EOS
 
     end

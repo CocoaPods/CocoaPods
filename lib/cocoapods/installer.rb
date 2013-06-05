@@ -161,7 +161,7 @@ module Pod
     def analyze
       if lockfile && lockfile.cocoapods_version > Version.new(VERSION)
         STDERR.puts '[!] The version of CocoaPods used to generate the lockfile is '\
-          'higher that the one of the current executable. Incompatibility' \
+          'higher that the one of the current executable. Incompatibility ' \
           'issues might arise.'.yellow
       end
 
@@ -285,7 +285,7 @@ module Pod
     def prepare_pods_project
       UI.message "- Creating Pods project" do
         @pods_project = Pod::Project.new(sandbox.project_path)
-        if config.podfile_path.exist?
+        if config.podfile_path
           @pods_project.add_podfile(config.podfile_path)
         end
         sandbox.project = @pods_project

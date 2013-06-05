@@ -22,8 +22,9 @@ module Pod
     end
 
     it "presents the stats of a specification set" do
-      repo = { "forks"=>42, "watchers"=>318, "pushed_at"=>"2011-01-26T19:06:43Z" }
-      Octokit.expects(:repo).with("robbiehanson/CocoaLumberjack").returns(repo)
+      Specification::Set::Presenter.any_instance.expects(:github_last_activity).returns('more than a year ago')
+      Specification::Set::Presenter.any_instance.expects(:github_watchers).returns('318')
+      Specification::Set::Presenter.any_instance.expects(:github_forks).returns('42')
       UI.pod(@set, :stats)
       output = UI.output
       output.should.include? 'Author:   Robbie Hanson'

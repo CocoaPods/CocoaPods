@@ -2,7 +2,50 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+
 ## Master
+
+###### Enhancements
+
+* Reduced external dependencies and deprecation of Rake::FileList.
+  [#1080](https://github.com/CocoaPods/CocoaPods/issues/1080)
+
+###### Bug fixes
+
+* Fixed crash due to Podfile.lock containing multiple version requirements for
+  a Pod. [#1076](https://github.com/CocoaPods/CocoaPods/issues/1076)
+
+## 0.20.2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.1...0.20.2)
+
+###### Bug fixes
+
+* Ensure that, in a sandbox-pod env, RubyGems loads the CocoaPods gem on system
+  Ruby (1.8.7).
+  [#939](https://github.com/CocoaPods/CocoaPods/issues/939#issuecomment-18396063)
+* Allow sandbox-pod to execute any tool inside the Xcode.app bundle.
+* Allow sandbox-pod to execute any tool inside a rbenv prefix.
+
+## 0.20.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.0...0.20.1)
+• [CLAide](https://github.com/CocoaPods/CLAide/compare/0.3.0...0.3.2)
+
+###### Bug fixes
+
+* Made sandbox-pod executable visible as it wasn't correctly configured in the
+  gemspec.
+* Made sandbox-pod executable actually work when installed as a gem. (In which
+  case every executable is wrapped in a wrapper bin script and the DATA constant
+  can no longer be used.)
+* Required CLAide 0.3.2 as 0.3.0 didn't include all the files in the gemspec
+  and 0.3.1 was not correctly processed by RubyGems.
+
+## 0.20.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.1...0.20.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.1...0.20.0)
+• [cocoapods-downloader](https://github.com/CocoaPods/CLAide/compare/0.1.0...0.1.1)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.5...0.6.0)
+• [CLAide](https://github.com/CocoaPods/CLAide/compare/0.2.0...0.3.0)
 
 ###### Enhancements
 
@@ -31,12 +74,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   **NOTE**: _The above example is actually one that we know of. We’re not sure
   yet which process causes this, but there shouldn’t be a need for any process
   to read data from the root path anyways._
-  
-  **NOTE 2**: _At the moment the sandbox is not compatible with the `:path` option 
+
+  **NOTE 2**: _At the moment the sandbox is not compatible with the `:path` option
   when referencing Pods that are not stored within the directory of the Podfile._
 
 * The naked `pod` command now defaults to `pod install`.
   [#958](https://github.com/CocoaPods/CocoaPods/issues/958)
+
+* CocoaPods will look for the Podfile in the ancestors paths if one is
+  not available in the working directory.
+  [#940](https://github.com/CocoaPods/CocoaPods/issues/940)
 
 * Documentation generation has been removed from CocoaPods as it graduated
   to CocoaDocs. This decision was taken because CocoaDocs is a much better
@@ -48,6 +95,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   reintegrated as plugin (see
   [#1037](https://github.com/CocoaPods/CocoaPods/issues/1037)).
 
+* Improved performance of the copy resources script and thus build time of
+  the integrated targets. Contribution by [@onato](https://github.com/onato)
+  [#1050](https://github.com/CocoaPods/CocoaPods/issues/1050).
+
+* The changelog for the current version is printed after CocoaPods is
+  installed/updated.
+  [#853](https://github.com/CocoaPods/CocoaPods/issues/853).
+
+
 ###### Bug fixes
 
 * Inheriting `inhibit_warnings` per pod is now working
@@ -55,6 +111,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Fix copy resources script for iOS < 6 and OS X < 10.8 by removing the
   `--reference-external-strings-file`
   flag. [#1030](https://github.com/CocoaPods/CocoaPods/pull/1030)
+* Fixed issues with the `:head` option of the Podfile.
+  [#1046](https://github.com/CocoaPods/CocoaPods/issues/1046)
+  [#1039](https://github.com/CocoaPods/CocoaPods/issues/1039)
 
 ## 0.19.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.19.1)

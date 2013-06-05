@@ -151,7 +151,7 @@ module Pod
           return true if sandbox.predownloaded?(pod)
           return true if folder_empty?(pod)
           if update_mode
-            return true if spec.version.head?
+            return true if sandbox.head_pod?(pod)
           end
           return false
         end

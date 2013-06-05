@@ -35,15 +35,20 @@ File References:
     - AppKit.framework
     - CoreData.framework
     - Foundation.framework
+  - libPods-OS X App.a
+  - libPods-iOS App.a
 - Products:
   - iOS App.app
   - OS X App.app
+- Pods-OS X App.xcconfig
+- Pods-iOS App.xcconfig
 
 
 
 Targets:
 - iOS App:
     Build Phases:
+    - Check Pods Manifest.lock: []
     - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m
@@ -51,11 +56,13 @@ Targets:
       - UIKit.framework
       - Foundation.framework
       - CoreGraphics.framework
+      - libPods-iOS App.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Default.png
       - Default@2x.png
       - Default-568h@2x.png
+    - Copy Pods Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -70,6 +77,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           GCC_PREFIX_HEADER: iOS App/iOS App-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods-iOS App.xcconfig
     - Release:
         Build Settings:
           VALIDATE_PRODUCT: 'YES'
@@ -85,34 +93,40 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           GCC_PREFIX_HEADER: iOS App/iOS App-Prefix.pch
           PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods-iOS App.xcconfig
 - OS X App:
     Build Phases:
+    - Check Pods Manifest.lock: []
     - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m
     - FrameworksBuildPhase:
       - Cocoa.framework
+      - libPods-OS X App.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
+    - Copy Pods Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
+          WRAPPER_EXTENSION: app
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: OS X App/OS X App-Info.plist
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: OS X App/OS X App-Prefix.pch
-          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods-OS X App.xcconfig
     - Release:
         Build Settings:
+          WRAPPER_EXTENSION: app
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: OS X App/OS X App-Info.plist
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: OS X App/OS X App-Prefix.pch
-          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods-OS X App.xcconfig
 
 
 
@@ -153,12 +167,12 @@ Build Configurations:
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
       MACOSX_DEPLOYMENT_TARGET: '10.8'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_WARN_INT_CONVERSION: 'YES'
-      CLANG_WARN_EMPTY_BODY: 'YES'
-      ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
       ARCHS: $(ARCHS_STANDARD_64_BIT)
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_ENUM_CONVERSION: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'

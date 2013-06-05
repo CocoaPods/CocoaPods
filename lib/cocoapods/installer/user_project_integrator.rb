@@ -128,7 +128,7 @@ module Pod
       #
       def warn_about_empty_podfile
         if podfile.target_definitions.values.all?{ |td| td.empty? }
-          UI.warn "[!] The Podfile does not contain any dependency."
+          UI.warn "[!] The Podfile does not contain any dependencies."
         end
       end
 

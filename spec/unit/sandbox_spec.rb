@@ -72,6 +72,11 @@ module Pod
         @sandbox.pod_dir('JSONKit').should == temporary_directory + 'Sandbox/JSONKit'
       end
 
+      it "returns the directory where a local Pod is stored" do
+        @sandbox.store_local_path('BananaLib', Pathname.new('Some Path'))
+        @sandbox.pod_dir('BananaLib').should.be == Pathname.new('Some Path')
+      end
+
       it "returns the directory where to store the documentation" do
         @sandbox.documentation_dir.should == temporary_directory + 'Sandbox/Documentation'
       end
@@ -118,20 +123,8 @@ module Pod
 
     describe "Pods information" do
 
-      it "returns the directory where a local Pod is stored" do
-        @sandbox.store_local_path('BananaLib', Pathname.new('Some Path'))
-        @sandbox.pod_dir('BananaLib').should.be == Pathname.new('Some Path')
-      end
-
-      #--------------------------------------#
-
       it "stores the list of the names of the pre-downloaded pods" do
         @sandbox.store_pre_downloaded_pod('BananaLib')
-        @sandbox.predownloaded_pods.should == ['BananaLib']
-      end
-
-      it "returns the checkout sources of the Pods" do
-        @sandbox.store_pre_downloaded_pod('BananaLib/Subspec')
         @sandbox.predownloaded_pods.should == ['BananaLib']
       end
 
@@ -143,6 +136,25 @@ module Pod
       end
 
       #--------------------------------------#
+
+      it "stores the list of the names of the pre-downloaded pods" do
+        @sandbox.store_head_pod('BananaLib')
+        @sandbox.head_pods.should == ['BananaLib']
+      end
+
+      it "returns whether a Pod has been pre-downloaded" do
+        @sandbox.head_pods << 'BananaLib'
+        @sandbox.head_pod?('BananaLib').should.be.true
+        @sandbox.head_pod?('BananaLib/Subspec').should.be.true
+        @sandbox.head_pod?('Monkey').should.be.false
+      end
+
+      #--------------------------------------#
+
+      it "returns the checkout sources of the Pods" do
+        @sandbox.store_pre_downloaded_pod('BananaLib/Subspec')
+        @sandbox.predownloaded_pods.should == ['BananaLib']
+      end
 
       it "stores the checkout source of a Pod" do
         source = {:git => 'example.com', :commit => 'SHA'}
