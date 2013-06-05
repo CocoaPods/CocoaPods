@@ -57,6 +57,11 @@ module Pod
     #
     attr_accessor :user_build_configurations
 
+    # @return [PBXNativeTarget] the target generated in the Pods project for
+    #         this library.
+    #
+    attr_accessor :target
+
     #-------------------------------------------------------------------------#
 
     # @!group Support files

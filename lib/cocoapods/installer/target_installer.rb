@@ -60,6 +60,8 @@ module Pod
             target.build_configurations << build_config
           end
         end
+
+        library.target = @target
       end
 
       # Creates the group that holds the references to the support files
