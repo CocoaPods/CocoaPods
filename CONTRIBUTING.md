@@ -1,9 +1,25 @@
-# Contributing
+# Do’s and Don’ts
 
-Before creating a issue or pull-request, be sure to search for existing tickets
-first and provide additional feedback on those instead.
+Do’s:
 
-## Issues
+* First **search for existing tickets** and add additional feedback if needed.
+* Only file a ticket if it’s for a bug or feature request **pertaining to the CocoaPods tool itself**.
+  (See the tools section below for more info.)
+* Take the time to **provide all context you can imagine being needed**, but stay as succint as possible.
+  Doing this means your ticket is more likely to receive the appropriate attention, or, as we say at
+  Keeping-Sanity-in-OSS-HQ™: _“If you don’t care, we won’t care.”_
+
+Don’ts:
+
+* Do not file issues with **usage questions**. These are questions like how to create a podspec for your library or
+  how to perform certain work with the command-line tools. Please submit these questions to either our
+  [mailing-list](http://groups.google.com/group/cocoapods) or [StackOverflow](http://stackoverflow.com).
+* Do not file issues **regarding a library you want added** to the CocoaPods spec repo. Instead, create a pull-request
+  with your spec on the [CocoaPods/Specs](https://github.com/CocoaPods/Specs/issues) repo.
+* Do not **just :+1: (upvote) issues** when none of the core members has asked for input from the community. If you really
+  want a feature in, consider creating a patch and pull-request instead.
+
+## Tools for which issues are allowed
 
 The issues of this repository refer **only** to the development of the CocoaPods
 tool. These resources include:
@@ -11,16 +27,6 @@ tool. These resources include:
 - [CocoaPods](https://github.com/CocoaPods/CocoaPods/issues)
 - [CocoaPods/Core](https://github.com/CocoaPods/Core/issues)
 - [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/issues)
-
-Please refer to these other resources for things unrelated to the tool itself:
-
-- [Mailing List](http://groups.google.com/group/cocoapods): Usage & general
-  questions.
-- [CocoaPods/Specs](https://github.com/CocoaPods/Specs/issues): Submit new Pods and
-  report broken ones.
-
-Properly written and formatted issues are more likely to receive the
-appropriate attention. Or, as we say at Keeping-Sanity-in-OSS-HQ™: _“If you don’t care, we won’t care.”_
 
 
 #### Bug reports
