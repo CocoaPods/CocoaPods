@@ -1,35 +1,13 @@
 # Do’s and Don’ts
 
-Do’s:
+* **Search tickets before you file a new one.** Add to tickets if you have new information about the issue.
+* **Only file tickets about the CocoaPods tool itself.** This includes [CocoaPods](https://github.com/CocoaPods/CocoaPods/issues),
+  [CocoaPods/Core](https://github.com/CocoaPods/Core/issues), and [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/issues).
+  The actual Pods have their own maintainers and repositories.
+* **Keep tickets short but sweet.** Make sure you include all the context needed to solve the issue. Don't overdo it. Great tickets allow us to focus on solving problems instead of discussing them.
+* **Take care of your ticket.** When you spend time to report a ticket with care we'll enjoy fixing it for you.
 
-* First **search for existing tickets** and add additional feedback if needed.
-* Only file a ticket if it’s for a bug or feature request **pertaining to the CocoaPods tool itself**.
-  (See the tools section below for more info.)
-* Take the time to **provide all context you can imagine being needed**, but stay as succint as possible.
-  Doing this means your ticket is more likely to receive the appropriate attention, or, as we say at
-  Keeping-Sanity-in-OSS-HQ™: _“If you don’t care, we won’t care.”_
-
-Don’ts:
-
-* Do not file issues with **usage questions**. These are questions like how to create a podspec for your library or
-  how to perform certain work with the command-line tools. Please submit these questions to either our
-  [mailing-list](http://groups.google.com/group/cocoapods) or [StackOverflow](http://stackoverflow.com).
-* Do not file issues **regarding a library you want added** to the CocoaPods spec repo. Instead, create a pull-request
-  with your spec on the [CocoaPods/Specs](https://github.com/CocoaPods/Specs/issues) repo.
-* Do not **just :+1: (upvote) issues** when none of the core members has asked for input from the community. If you really
-  want a feature in, consider creating a patch and pull-request instead.
-
-## Tools for which issues are allowed
-
-The issues of this repository refer **only** to the development of the CocoaPods
-tool. These resources include:
-
-- [CocoaPods](https://github.com/CocoaPods/CocoaPods/issues)
-- [CocoaPods/Core](https://github.com/CocoaPods/Core/issues)
-- [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/issues)
-
-
-#### Bug reports
+## Bug reports
 
 Please include _all_ relevant information, including the version of CocoaPods and
 any template printed by the tool.
@@ -51,7 +29,7 @@ add an [integration test](https://github.com/CocoaPods/CocoaPods/tree/master/spe
 which doesn't require any ruby knowledge.
 
 
-#### Feature requests
+## Feature requests
 
 Please try to be precise about the proposed outcome of the feature and how it
 would related to existing features.
