@@ -18,17 +18,17 @@ Downloading dependencies
 
 -> Installing JSONKit (1.5pre)
  > GitHub download
-   $ /usr/bin/git config core.bare
+   $ /opt/local/bin/git config core.bare
    true
-   $ /usr/bin/git config core.bare
+   $ /opt/local/bin/git config core.bare
    true
-   $ /usr/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+   $ /opt/local/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
    0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
  > Cloning to Pods folder
-     $ /usr/bin/git clone "CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f" "ROOT/tmp/install_add_pod/Pods/JSONKit"
+     $ /opt/local/bin/git clone "CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f" "ROOT/tmp/install_add_pod/Pods/JSONKit"
      Cloning into 'ROOT/tmp/install_add_pod/Pods/JSONKit'...
      done.
-   $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
+   $ /opt/local/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
    Switched to a new branch 'activated-pod-commit'
 
 -> Using Reachability (3.1.0)
