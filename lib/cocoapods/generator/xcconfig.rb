@@ -66,8 +66,8 @@ module Pod
         strings.sort.map { |s| %W|"#{s}"| }.join(" ")
       end
 
-      # Returns the Xcconfig generated from the build settings of the give
-      # specification consumer.
+      # Configures the given Xcconfig according to the build settings of the
+      # given Specification.
       #
       # @param  [Specification::Consumer] consumer
       #         The consumer of the specification.
@@ -75,15 +75,12 @@ module Pod
       # @param  [Xcodeproj::Config] xcconfig
       #         The xcconfig to edit.
       #
-      # @return [Xcodeproj::Config]
-      #
-      def consumer_xcconfig(consumer)
-        xcconfig = Xcodeproj::Config.new(consumer.xcconfig)
+      def add_spec_build_settings_to_xcconfig(consumer, xcconfig)
+        xcconfig.merge!(consumer.xcconfig)
         xcconfig.libraries.merge(consumer.libraries)
         xcconfig.frameworks.merge(consumer.frameworks)
         xcconfig.weak_frameworks.merge(consumer.weak_frameworks)
         add_developers_frameworks_if_needed(consumer, xcconfig)
-        xcconfig
       end
 
       # @return [Array<String>] The search paths for the developer frameworks.

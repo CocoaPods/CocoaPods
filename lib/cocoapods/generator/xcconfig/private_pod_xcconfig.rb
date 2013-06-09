@@ -22,7 +22,12 @@ module Pod
           # 'USE_HEADERMAP'                => 'NO'
         }
 
-        consumer_xcconfig(target.consumer).to_hash.each do |k, v|
+        xcconfig = Xcodeproj::Config.new
+        target.spec_consumers.each do |consumer|
+          add_spec_build_settings_to_xcconfig(consumer, xcconfig)
+        end
+
+        xcconfig.to_hash.each do |k, v|
           prefixed_key = target.xcconfig_prefix + k
           config[k] = "#{config[k]} ${#{prefixed_key}}"
         end

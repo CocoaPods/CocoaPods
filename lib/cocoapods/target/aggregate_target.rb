@@ -56,6 +56,11 @@ module Pod
     #
     attr_accessor :pod_targets
 
+    # @return [Array<SpecConsumer>]
+    def spec_consumers
+      pod_targets.map(&:specs).flatten.map { |spec| spec.consumer(platform) }
+    end
+
     # @return [Pathname] The absolute path of acknowledgements file.
     #
     # @note   The acknowledgements generators add the extension according to

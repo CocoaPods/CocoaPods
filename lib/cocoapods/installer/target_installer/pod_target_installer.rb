@@ -97,12 +97,6 @@ module Pod
         end
       end
 
-      # @return [Specification::Consumer] the consumer for the specifications.
-      #
-      def spec_consumers
-        @spec_consumers ||= library.file_accessors.map(&:spec_consumer)
-      end
-
       ENABLE_OBJECT_USE_OBJC_FROM = {
         :ios => Version.new('6'),
         :osx => Version.new('10.8')

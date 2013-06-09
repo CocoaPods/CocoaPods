@@ -28,7 +28,10 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
-        @xcconfig = consumer_xcconfig(target.consumer)
+        @xcconfig = Xcodeproj::Config.new
+        target.spec_consumers.each do |consumer|
+          add_spec_build_settings_to_xcconfig(consumer, @xcconfig)
+        end
         @xcconfig
       end
 

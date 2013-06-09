@@ -36,18 +36,18 @@ module Pod
     #
     attr_accessor :file_accessors
 
-    # @return [Specification::Consumer] the specification consumer for the
-    #         target.
+    # @return [Array<Specification::Consumer>] the specification consumers for
+    #         the target.
     #
-    def consumer
-      specs.first.root.consumer(platform)
+    def spec_consumers
+      specs.map { |spec| spec.consumer(platform) }
     end
 
+    # @return [Specification] the root specification for the target.
+    #
     def root_spec
       specs.first.root
     end
-
-    #-------------------------------------------------------------------------#
 
   end
 end

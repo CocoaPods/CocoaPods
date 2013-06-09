@@ -22,9 +22,14 @@ module Pod
           'GCC_PREPROCESSOR_DEFINITIONS'     => '$(inherited) COCOAPODS=1',
         }
 
-        target.pod_targets.each do |lib|
-          consumer_xcconfig(lib.consumer).to_hash.each do |k, v|
-            prefixed_key = lib.xcconfig_prefix + k
+        target.pod_targets.each do |pod_target|
+          xcconfig = Xcodeproj::Config.new
+          pod_target.spec_consumers.each do |consumer|
+            add_spec_build_settings_to_xcconfig(consumer, xcconfig)
+          end
+
+          xcconfig.to_hash.each do |k, v|
+            prefixed_key = pod_target.xcconfig_prefix + k
             config[k] = "#{config[k]} ${#{prefixed_key}}"
           end
         end
