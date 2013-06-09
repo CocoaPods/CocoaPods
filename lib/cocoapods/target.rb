@@ -45,12 +45,6 @@ module Pod
 
     # @!group Information storage
 
-    # @return [Platform] the platform for this library.
-    #
-    def platform
-      @platform ||= target_definition.platform
-    end
-
     # @return [Hash{String=>Symbol}] A hash representing the user build
     #         configurations where each key corresponds to the name of a
     #         configuration and its value to its type (`:debug` or `:release`).
@@ -61,6 +55,12 @@ module Pod
     #         this library.
     #
     attr_accessor :target
+
+    # @return [Platform] the platform for this library.
+    #
+    def platform
+      @platform ||= target_definition.platform
+    end
 
     #-------------------------------------------------------------------------#
 
