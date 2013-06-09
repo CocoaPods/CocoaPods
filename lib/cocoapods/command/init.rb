@@ -38,26 +38,28 @@ module Pod
 
       def podfile_template(project)
         platforms = project.targets.map { |t| t.platform_name }.uniq
-        if platforms.length == 1
+        has_global_platform = platforms.length == 1
+        if has_global_platform
           podfile = <<-PLATFORM
-platform #{platforms.first}
+platform :#{platforms.first}
 PLATFORM
         else
           podfile = <<-PLATFORM
-# Uncomment this line to define the platform for your project
-platform :ios, "6.0"
+# Uncomment this line to define a global platform for your project
+# platform :ios, "6.0"
 PLATFORM
         end
         for target in project.targets
-          podfile << target_module(target)
+          podfile << target_module(target, !has_global_platform)
         end
         podfile
       end
 
       def target_module(target, define_platform = true)
-        platform = "platform #{target.platform_name}" if define_platform
+        platform = "platform :#{target.platform_name}" if define_platform
         return <<-TARGET
-target :#{target.name} do
+
+target "#{target.name}" do
   #{platform}
 end
 TARGET

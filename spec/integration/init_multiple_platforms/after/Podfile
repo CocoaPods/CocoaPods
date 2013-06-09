@@ -1,0 +1,10 @@
+# Uncomment this line to define a global platform for your project
+# platform :ios, "6.0"
+
+target "SampleApp" do
+  platform :osx
+end
+
+target "SampleiOSApp" do
+  platform :ios
+end

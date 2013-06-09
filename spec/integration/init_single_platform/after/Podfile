@@ -1,0 +1,9 @@
+platform :osx
+
+target "SampleApp" do
+
+end
+
+target "SampleApp copy" do
+
+end

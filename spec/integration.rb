@@ -378,6 +378,20 @@ describe "Integration" do
 
   #--------------------------------------#
 
+  describe "Pod init" do
+
+    describe "Initializes a Podfile with a single platform" do
+      check "init", "init_single_platform"
+    end
+
+    describe "Initializes a Podfile with no uniform platform" do
+      check "init", "init_multiple_platforms"
+    end
+
+  end
+
+  #--------------------------------------#
+
 end
 
 
