@@ -17,6 +17,7 @@ module Pod
       Command.parse(%w{ spec create }).should.be.instance_of Command::Spec::Create
       Command.parse(%w{ spec lint   }).should.be.instance_of Command::Spec::Lint
       Command.parse(%w{ repo update }).should.be.instance_of Command::Repo::Update
+      Command.parse(%w{ init        }).should.be.instance_of Command::Init
     end
   end
 end
