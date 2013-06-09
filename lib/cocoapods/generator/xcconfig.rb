@@ -40,6 +40,19 @@ module Pod
 
       private
 
+      # @return [String] the default linker flags. `-ObjC` is always included
+      #         while `-fobjc-arc` is included only if requested in the
+      #         Podfile.
+      #
+      def default_ld_flags
+        ld_flags = '-ObjC'
+        if target.target_definition.podfile.set_arc_compatibility_flag? and
+           target.spec_consumers.any? { |consumer| consumer.requires_arc? }
+          ld_flags << ' -fobjc-arc'
+        end
+        ld_flags
+      end
+
       # Converts an array of strings to a single string where the each string
       # is surrounded by double quotes and separated by a space. Used to
       # represent strings in a xcconfig file.

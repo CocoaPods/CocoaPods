@@ -13,14 +13,9 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
-        ld_flags = '-ObjC'
-        if target.consumer.requires_arc?
-          ld_flags << ' -fobjc-arc'
-        end
-
         config = {
           'ALWAYS_SEARCH_USER_PATHS'     => 'YES',
-          'OTHER_LDFLAGS'                => ld_flags,
+          'OTHER_LDFLAGS'                => default_ld_flags,
           'PODS_ROOT'                    => '${SRCROOT}',
           'HEADER_SEARCH_PATHS'          => quote(target.build_headers.search_paths) + ' ' + quote(sandbox.public_headers.search_paths),
           'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1',
