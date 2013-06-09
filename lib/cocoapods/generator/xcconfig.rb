@@ -79,7 +79,7 @@ module Pod
       #
       DEVELOPER_FRAMEWORKS_SEARCH_PATHS = [
         '$(inherited)',
-        '"$(SDKROOT)/Developer/target/Frameworks"',
+        '"$(SDKROOT)/Developer/Library/Frameworks"',
         '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
       ]
 
