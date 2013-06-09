@@ -1,13 +1,13 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
-  describe Pod::Target do
+  describe Pod::AggregateTarget do
 
     describe "In general" do
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.link_with_first_target = true
-        @lib = Target.new(@target_definition, config.sandbox)
+        @lib = AggregateTarget.new(@target_definition, config.sandbox)
       end
 
       it "returns the target_definition that generated it" do
@@ -31,8 +31,7 @@ module Pod
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.link_with_first_target = true
-        @lib = Target.new(@target_definition, config.sandbox)
-        @lib.support_files_root = config.sandbox.root
+        @lib = AggregateTarget.new(@target_definition, config.sandbox)
         @lib.client_root = config.sandbox.root.dirname
       end
 

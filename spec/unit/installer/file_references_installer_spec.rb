@@ -5,10 +5,10 @@ module Pod
 
     before do
       @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
-      @library = Target.new(nil, config.sandbox)
-      @library.file_accessors = [@file_accessor]
+      @pod_target = PodTarget.new([], nil, config.sandbox)
+      @pod_target.file_accessors = [@file_accessor]
       @project = Project.new(config.sandbox.project_path)
-      @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@library], @project)
+      @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
     end
 
     #-------------------------------------------------------------------------#
@@ -50,7 +50,7 @@ module Pod
 
       it "links the build headers" do
         @installer.install!
-        headers_root = @library.build_headers.root
+        headers_root = @pod_target.build_headers.root
         public_header =  headers_root + 'BananaLib/Banana.h'
         private_header = headers_root + 'BananaLib/BananaPrivate.h'
         public_header.should.exist
@@ -73,19 +73,19 @@ module Pod
     describe "Private Helpers" do
 
       it "returns the file accessors" do
-        library_1 = Target.new(nil, config.sandbox)
-        library_1.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-        library_2 = Target.new(nil, config.sandbox)
-        library_2.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-        installer = Installer::FileReferencesInstaller.new(config.sandbox, [library_1, library_2], @project)
+        pod_target_1 = PodTarget.new([], nil, config.sandbox)
+        pod_target_1.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
+        pod_target_2 = PodTarget.new([], nil, config.sandbox)
+        pod_target_2.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
+        installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1, pod_target_2], @project)
         roots = installer.send(:file_accessors).map { |fa| fa.path_list.root }
         roots.should == [fixture('banana-lib'), fixture('banana-lib')]
       end
 
       it "handles libraries empty libraries without file accessors" do
-        library_1 = Target.new(nil, config.sandbox)
-        library_1.file_accessors = []
-        installer = Installer::FileReferencesInstaller.new(config.sandbox, [library_1], @project)
+        pod_target_1 = PodTarget.new([], nil, config.sandbox)
+        pod_target_1.file_accessors = []
+        installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)
         roots = installer.send(:file_accessors).should == []
       end
 

@@ -105,16 +105,18 @@ module Pod
           @installer.analysis_result.sandbox_state.added.should == ["JSONKit"]
         end
 
-        it "stores the libraries created by the analyzer" do
+        it "stores the targets created by the analyzer" do
           @installer.send(:analyze)
-          @installer.libraries.map(&:name).sort.should == ['Pods', 'Pods-JSONKit'].sort
+          @installer.targets.map(&:name).sort.should == ['Pods']
+          @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
         end
 
         it "configures the analizer to use update mode if appropriate" do
           @installer.update_mode = true
           Installer::Analyzer.any_instance.expects(:update_mode=).with(true)
           @installer.send(:analyze)
-          @installer.libraries.map(&:name).sort.should == ['Pods', 'Pods-JSONKit'].sort
+          @installer.targets.map(&:name).sort.should == ['Pods']
+          @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
         end
 
       end
@@ -127,15 +129,15 @@ module Pod
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = []
           @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new()
-          @libraries = [Target.new(nil, config.sandbox)]
+          @pod_targets = [PodTarget.new([], nil, config.sandbox)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
-          @installer.stubs(:libraries).returns(@libraries)
+          @installer.stubs(:pod_targets).returns(@pod_targets)
         end
 
         it "cleans the header stores" do
           config.sandbox.public_headers.expects(:implode!)
-          @installer.libraries.each do |library|
-            library.build_headers.expects(:implode!)
+          @installer.pod_targets.each do |pods_target|
+            pods_target.build_headers.expects(:implode!)
           end
           @installer.send(:clean_sandbox)
         end
@@ -172,10 +174,9 @@ module Pod
 
         it "correctly configures the Pod source installer" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          library = Target.new(nil, config.sandbox)
-          library.spec = spec
-          library.platform = :ios
-          @installer.stubs(:libraries).returns([library])
+          pod_target = PodTarget.new([spec], nil, config.sandbox)
+          pod_target.stubs(:platform).returns(:ios)
+          @installer.stubs(:pod_targets).returns([pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
           Installer::PodSourceInstaller.any_instance.expects(:install!)
           @installer.send(:install_source_of_pod, 'BananaLib')
@@ -183,9 +184,9 @@ module Pod
 
         it "maintains the list of the installed specs" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          library = Target.new(nil, config.sandbox)
-          library.spec = spec
-          @installer.stubs(:libraries).returns([library, library])
+          pod_target = PodTarget.new([spec], nil, config.sandbox)
+          pod_target.stubs(:platform).returns(:ios)
+          @installer.stubs(:pod_targets).returns([pod_target, pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
           Installer::PodSourceInstaller.any_instance.stubs(:install!)
           @installer.send(:install_source_of_pod, 'BananaLib')
@@ -230,11 +231,11 @@ module Pod
         end
 
         it "sets the deployment target for the whole project" do
-          library_ios = Target.new(nil, config.sandbox)
-          library_osx = Target.new(nil, config.sandbox)
-          library_ios.platform = Platform.new(:ios, '6.0')
-          library_osx.platform = Platform.new(:osx, '10.8')
-          @installer.stubs(:targets).returns([library_ios, library_osx])
+          pod_target_ios = PodTarget.new([], nil, config.sandbox)
+          pod_target_osx = PodTarget.new([], nil, config.sandbox)
+          pod_target_ios.stubs(:platform).returns(Platform.new(:ios, '6.0'))
+          pod_target_osx.stubs(:platform).returns(Platform.new(:osx, '10.8'))
+          @installer.stubs(:targets).returns([pod_target_ios, pod_target_osx])
           @installer.send(:prepare_pods_project)
           build_settings = @installer.pods_project.build_configurations.map(&:build_settings)
           build_settings.should == [
@@ -249,7 +250,7 @@ module Pod
       describe "#install_file_references" do
 
         it "installs the file references" do
-          @installer.stubs(:libraries).returns([])
+          @installer.stubs(:pod_targets).returns([])
           Installer::FileReferencesInstaller.any_instance.expects(:install!)
           @installer.send(:install_file_references)
         end
@@ -264,20 +265,20 @@ module Pod
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.store_pod('BananaLib')
-          library = Target.new(target_definition, config.sandbox)
-          library.spec = spec
-          @installer.stubs(:libraries).returns([library])
-          Installer::TargetInstaller.any_instance.expects(:install!)
+          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          @installer.stubs(:targets).returns([])
+          @installer.stubs(:pod_targets).returns([pod_target])
+          Installer::PodTargetInstaller.any_instance.expects(:install!)
           @installer.send(:install_libraries)
         end
 
-        it "skips empty libraries" do
+        it "skips empty pod targets" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
-          library = Target.new(target_definition, config.sandbox)
-          library.spec = spec
-          @installer.stubs(:libraries).returns([library])
-          Installer::TargetInstaller.any_instance.expects(:install!).never
+          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          @installer.stubs(:targets).returns([])
+          @installer.stubs(:pod_targets).returns([pod_target])
+          Installer::PodTargetInstaller.any_instance.expects(:install!).never
           @installer.send(:install_libraries)
         end
 
@@ -345,29 +346,28 @@ module Pod
 
     describe "Integrating client projects" do
 
-      it "links the pod libraries with the integration library target" do
+      it "links the pod targets with the aggregate integration library target" do
         spec = fixture_spec('banana-lib/BananaLib.podspec')
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        target = Target.new(target_definition, config.sandbox)
+        target = AggregateTarget.new(target_definition, config.sandbox)
         lib_definition = Podfile::TargetDefinition.new('BananaLib', nil)
         lib_definition.store_pod('BananaLib')
-        library = Target.new(lib_definition, config.sandbox)
-        library.spec = spec
-        target.libraries = [library]
+        pod_target = PodTarget.new([spec], lib_definition, config.sandbox)
+        target.pod_targets = [pod_target]
 
         project = Xcodeproj::Project.new
         pods_target = project.new_target(:static_library, target.name, :ios)
-        native_target = project.new_target(:static_library, library.name, :ios)
+        native_target = project.new_target(:static_library, pod_target.name, :ios)
         @installer.stubs(:pods_project).returns(project)
         @installer.stubs(:targets).returns([target])
-        @installer.stubs(:libraries).returns([library])
+        @installer.stubs(:pod_targets).returns([pod_target])
 
         @installer.send(:link_integration_libraries)
-        pods_target.frameworks_build_phase.files.map(&:display_name).should.include?(library.product_name)
+        pods_target.frameworks_build_phase.files.map(&:display_name).should.include?(pod_target.product_name)
       end
 
       it "integrates the client projects" do
-        @installer.stubs(:libraries).returns([Target.new(nil, config.sandbox)])
+        @installer.stubs(:targets).returns([AggregateTarget.new(nil, config.sandbox)])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)
       end
@@ -380,10 +380,10 @@ module Pod
 
       before do
         @installer.send(:analyze)
-        @specs = @installer.libraries.map(&:spec)
+        @specs = @installer.pod_targets.map(&:specs).flatten
         @spec = @specs.find { |spec| spec && spec.name == 'JSONKit' }
         @installer.stubs(:installed_specs).returns(@specs)
-        @lib = @installer.targets.first.libraries.first
+        @lib = @installer.targets.first.pod_targets.first
       end
 
       it "runs the pre install hooks" do
@@ -411,19 +411,17 @@ module Pod
       end
 
       it "calls the hooks in the specs for each target" do
-        library_ios = Target.new(nil, config.sandbox)
-        library_osx = Target.new(nil, config.sandbox)
-        library_ios.spec = @spec
-        library_osx.spec = @spec
-        library_ios.stubs(:name).returns('label')
-        library_osx.stubs(:name).returns('label')
+        pod_target_ios = PodTarget.new([@spec], nil, config.sandbox)
+        pod_target_osx = PodTarget.new([@spec], nil, config.sandbox)
+        pod_target_ios.stubs(:name).returns('label')
+        pod_target_osx.stubs(:name).returns('label')
         library_ios_rep = stub()
         library_osx_rep = stub()
 
-        @installer.stubs(:libraries).returns([library_ios, library_osx])
+        @installer.stubs(:pod_targets).returns([pod_target_ios, pod_target_osx])
         @installer.stubs(:installer_rep).returns(stub())
-        @installer.stubs(:library_rep).with(library_ios).returns(library_ios_rep)
-        @installer.stubs(:library_rep).with(library_osx).returns(library_osx_rep)
+        @installer.stubs(:library_rep).with(pod_target_ios).returns(library_ios_rep)
+        @installer.stubs(:library_rep).with(pod_target_osx).returns(library_osx_rep)
 
         @installer.podfile.expects(:pre_install!)
         @spec.expects(:post_install!).with(library_ios_rep)
@@ -458,10 +456,10 @@ module Pod
 
       it "returns the hook representation of all the target installers" do
         reps = @installer.send(:library_reps)
-        reps.map(&:name).sort.should == ['Pods', 'Pods-JSONKit'].sort
+        reps.map(&:name).sort.should == ['Pods-JSONKit'].sort
       end
 
-      it "returns the libraries which use a given Pod" do
+      it "returns the targets which use a given Pod" do
         libs = @installer.send(:libraries_using_spec, @spec)
         libs.map(&:name).should == ['Pods-JSONKit']
       end

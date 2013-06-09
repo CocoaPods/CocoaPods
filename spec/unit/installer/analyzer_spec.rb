@@ -76,11 +76,11 @@ module Pod
 
       it "generates the libraries which represent the target definitions" do
         target = @analyzer.analyze.targets.first
-        target.libraries.map(&:name).sort.should == [
+        target.pod_targets.map(&:name).sort.should == [
           'Pods-JSONKit',
           'Pods-AFNetworking',
           'Pods-SVPullToRefresh',
-          'Pods-libextobjc-EXTKeyPathCoding'
+          'Pods-libextobjc'
         ].sort
         target.support_files_root.should == config.sandbox.root
 
@@ -167,8 +167,8 @@ module Pod
         podspec.should.not.exist?
       end
 
-      xit "adds the specifications to the correspondent libraries in after the resolution" do
-        @analyzer.analyze.targets.first.libraries.first.specs.map(&:to_s).should == [
+      it "adds the specifications to the correspondent libraries" do
+        @analyzer.analyze.targets.first.pod_targets.map(&:specs).flatten.map(&:to_s).should == [
           "AFNetworking (1.0.1)",
           "JSONKit (1.5pre)",
           "SVPullToRefresh (0.4)",

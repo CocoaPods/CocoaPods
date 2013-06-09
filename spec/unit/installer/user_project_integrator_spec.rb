@@ -18,12 +18,11 @@ module Pod
         end
         config.sandbox.project = Project.new()
         Xcodeproj::Project.new.save_as(config.sandbox.project_path)
-        @library = Target.new(@podfile.target_definitions['Pods'], config.sandbox)
+        @library = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
         @library.client_root = sample_project_path.dirname
         @library.user_project_path  = sample_project_path
         @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
-        @library.support_files_root = config.sandbox.root
-        empty_library = Target.new(@podfile.target_definitions[:empty], config.sandbox)
+        empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], config.sandbox)
         @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library, empty_library])
       end
 
