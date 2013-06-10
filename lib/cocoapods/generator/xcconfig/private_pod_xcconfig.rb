@@ -1,14 +1,15 @@
 module Pod
   module Generator
 
+    # Generates the private xcconfigs for the pod targets.
+    #
+    # The private xcconfig file for a Pod target merges the configuration
+    # values of the public namespaced xcconfig with the default private
+    # configuration values required by CocoaPods.
     #
     class PrivatePodXCConfig < XCConfig
 
-      # Generates the xcconfig for the target.
-      #
-      # @note   The private xcconfig file for a spec target includes the public
-      #         namespaced xcconfig file and merges the configuration values
-      #         with the default private configuration values.
+      # Generates the xcconfig.
       #
       # @return [Xcodeproj::Config]
       #

@@ -1,6 +1,12 @@
 module Pod
   module Generator
 
+    # Generates the public xcconfigs for the pod targets.
+    #
+    # The public xcconfig file for a Pod is completely namespaced to prevent
+    # configuration value collision with the build settings of other Pods. This
+    # xcconfig includes the standard podspec defined values including
+    # libraries, frameworks, weak frameworks and xcconfig overrides.
     #
     class PublicPodXCConfig < XCConfig
 
@@ -9,10 +15,6 @@ module Pod
       # @param  [Pathname] path
       #         the path where the prefix header should be stored.
       #
-      # @note   The public xcconfig file for a spec target is completely
-      #         namespaced to prevent configuration value collision with other
-      #         spec configurations.
-      #
       # @return [void]
       #
       def save_as(path)
@@ -20,10 +22,6 @@ module Pod
       end
 
       # Generates the xcconfig for the target.
-      #
-      # @note   The xcconfig file for a public spec target includes the
-      #         standard podspec defined values including libraries,
-      #         frameworks, weak frameworks and xcconfig overrides.
       #
       # @return [Xcodeproj::Config]
       #

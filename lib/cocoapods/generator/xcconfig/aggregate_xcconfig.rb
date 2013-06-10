@@ -1,10 +1,11 @@
 module Pod
   module Generator
 
+    # Generates the xcconfigs for the aggregate targets.
     #
     class AggregateXCConfig < XCConfig
 
-      # Generates the xcconfig for the Pod integration target.
+      # Generates the xcconfig.
       #
       # @note   The xcconfig file for a Pods integration target includes the
       #         namespaced xcconfig files for each spec target dependency.
