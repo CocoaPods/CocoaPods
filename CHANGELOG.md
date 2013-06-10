@@ -14,6 +14,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Fixed crash due to Podfile.lock containing multiple version requirements for
   a Pod. [#1076](https://github.com/CocoaPods/CocoaPods/issues/1076)
+* Fixed a build error due to the copy resources script using the same temporary
+  file for multiple targets.
+  [#1099](https://github.com/CocoaPods/CocoaPods/issues/1099)
 
 ## 0.20.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.1...0.20.2)
