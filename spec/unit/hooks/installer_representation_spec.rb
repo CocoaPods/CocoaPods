@@ -16,7 +16,7 @@ module Pod
       config.integrate_targets = false
       @installer = Installer.new(config.sandbox, podfile)
       @installer.send(:analyze)
-      @specs = @installer.targets.first.pod_targets.first.specs
+      @specs = @installer.aggregate_targets.first.pod_targets.first.specs
       @installer.stubs(:installed_specs).returns(@specs)
       @rep = Hooks::InstallerRepresentation.new(@installer)
     end
@@ -52,7 +52,7 @@ module Pod
 
       it "returns the pods representation by library representation" do
         pods_by_lib = @rep.pods_by_lib
-        target_definition = @installer.targets.first.pod_targets.first.target_definition
+        target_definition = @installer.aggregate_targets.first.pod_targets.first.target_definition
         pods_by_lib[target_definition].map(&:name).should == ['JSONKit']
       end
 

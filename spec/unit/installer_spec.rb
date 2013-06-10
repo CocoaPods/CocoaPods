@@ -62,7 +62,7 @@ module Pod
         @installer.stubs(:run_pre_install_hooks)
         @installer.stubs(:install_file_references)
         @installer.stubs(:install_libraries)
-        @installer.stubs(:link_integration_libraries)
+        @installer.stubs(:link_aggregate_target)
         @installer.stubs(:write_lockfiles)
         @installer.unstub(:generate_pods_project)
         def @installer.run_post_install_hooks
@@ -107,7 +107,7 @@ module Pod
 
         it "stores the targets created by the analyzer" do
           @installer.send(:analyze)
-          @installer.targets.map(&:name).sort.should == ['Pods']
+          @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
           @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
         end
 
@@ -115,7 +115,7 @@ module Pod
           @installer.update_mode = true
           Installer::Analyzer.any_instance.expects(:update_mode=).with(true)
           @installer.send(:analyze)
-          @installer.targets.map(&:name).sort.should == ['Pods']
+          @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
           @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
         end
 
@@ -217,13 +217,13 @@ module Pod
       describe "#prepare_pods_project" do
 
         it "creates the Pods project" do
-          @installer.stubs(:targets).returns([])
+          @installer.stubs(:aggregate_targets).returns([])
           @installer.send(:prepare_pods_project)
           @installer.pods_project.class.should == Pod::Project
         end
 
         it "adds the Podfile to the Pods project" do
-          @installer.stubs(:targets).returns([])
+          @installer.stubs(:aggregate_targets).returns([])
           config.stubs(:podfile_path).returns(Pathname.new('/Podfile'))
           @installer.send(:prepare_pods_project)
           f = @installer.pods_project['Podfile']
@@ -235,7 +235,7 @@ module Pod
           pod_target_osx = PodTarget.new([], nil, config.sandbox)
           pod_target_ios.stubs(:platform).returns(Platform.new(:ios, '6.0'))
           pod_target_osx.stubs(:platform).returns(Platform.new(:osx, '10.8'))
-          @installer.stubs(:targets).returns([pod_target_ios, pod_target_osx])
+          @installer.stubs(:aggregate_targets).returns([pod_target_ios, pod_target_osx])
           @installer.send(:prepare_pods_project)
           build_settings = @installer.pods_project.build_configurations.map(&:build_settings)
           build_settings.should == [
@@ -266,7 +266,7 @@ module Pod
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.store_pod('BananaLib')
           pod_target = PodTarget.new([spec], target_definition, config.sandbox)
-          @installer.stubs(:targets).returns([])
+          @installer.stubs(:aggregate_targets).returns([])
           @installer.stubs(:pod_targets).returns([pod_target])
           Installer::PodTargetInstaller.any_instance.expects(:install!)
           @installer.send(:install_libraries)
@@ -276,7 +276,7 @@ module Pod
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           pod_target = PodTarget.new([spec], target_definition, config.sandbox)
-          @installer.stubs(:targets).returns([])
+          @installer.stubs(:aggregate_targets).returns([])
           @installer.stubs(:pod_targets).returns([pod_target])
           Installer::PodTargetInstaller.any_instance.expects(:install!).never
           @installer.send(:install_libraries)
@@ -289,7 +289,7 @@ module Pod
       describe "#write_pod_project" do
 
         before do
-          @installer.stubs(:targets).returns([])
+          @installer.stubs(:aggregate_targets).returns([])
           @installer.send(:prepare_pods_project)
         end
 
@@ -359,15 +359,15 @@ module Pod
         pods_target = project.new_target(:static_library, target.name, :ios)
         native_target = project.new_target(:static_library, pod_target.name, :ios)
         @installer.stubs(:pods_project).returns(project)
-        @installer.stubs(:targets).returns([target])
+        @installer.stubs(:aggregate_targets).returns([target])
         @installer.stubs(:pod_targets).returns([pod_target])
 
-        @installer.send(:link_integration_libraries)
+        @installer.send(:link_aggregate_target)
         pods_target.frameworks_build_phase.files.map(&:display_name).should.include?(pod_target.product_name)
       end
 
       it "integrates the client projects" do
-        @installer.stubs(:targets).returns([AggregateTarget.new(nil, config.sandbox)])
+        @installer.stubs(:aggregate_targets).returns([AggregateTarget.new(nil, config.sandbox)])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)
       end
@@ -383,7 +383,7 @@ module Pod
         @specs = @installer.pod_targets.map(&:specs).flatten
         @spec = @specs.find { |spec| spec && spec.name == 'JSONKit' }
         @installer.stubs(:installed_specs).returns(@specs)
-        @lib = @installer.targets.first.pod_targets.first
+        @lib = @installer.aggregate_targets.first.pod_targets.first
       end
 
       it "runs the pre install hooks" do

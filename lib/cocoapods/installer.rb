@@ -111,7 +111,7 @@ module Pod
         prepare_pods_project
         install_file_references
         install_libraries
-        link_integration_libraries
+        link_aggregate_target
         run_post_install_hooks
         write_pod_project
         write_lockfiles
@@ -140,7 +140,7 @@ module Pod
     # @return [Array<AggregateTarget>] The Podfile targets containing library
     #         dependencies.
     #
-    attr_reader :targets
+    attr_reader :aggregate_targets
 
     # @return [Array<Specification>] The specifications that where installed.
     #
@@ -168,7 +168,7 @@ module Pod
       analyzer = Analyzer.new(sandbox, podfile, lockfile)
       analyzer.update_mode = update_mode
       @analysis_result = analyzer.analyze
-      @targets = analyzer.result.targets
+      @aggregate_targets = analyzer.result.targets
     end
 
     # Prepares the Pods folder in order to be compatible with the most recent
@@ -208,7 +208,7 @@ module Pod
     #       created by the Pod source installer as well.
     #
     def create_file_accessors
-      targets.each do |target|
+      aggregate_targets.each do |target|
         target.pod_targets.each do |pod_target|
           pod_root = sandbox.pod_dir(pod_target.root_spec.name)
           path_list = Sandbox::PathList.new(pod_root)
@@ -289,7 +289,7 @@ module Pod
           @pods_project.add_podfile(config.podfile_path)
         end
         sandbox.project = @pods_project
-        platforms = targets.map(&:platform)
+        platforms = aggregate_targets.map(&:platform)
         osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
         ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
         @pods_project.build_configurations.each do |build_configuration|
@@ -301,7 +301,8 @@ module Pod
 
 
     # Installs the file references in the Pods project. This is done once per
-    # Pod as the same file reference might be shared by multiple targets.
+    # Pod as the same file reference might be shared by multiple aggregate
+    # targets.
     #
     # @return [void]
     #
@@ -310,7 +311,7 @@ module Pod
       installer.install!
     end
 
-    # Installs the library targets of the Pods projects and generates their
+    # Installs the aggregate targets of the Pods projects and generates their
     # support files.
     #
     # @return [void]
@@ -323,7 +324,7 @@ module Pod
           target_installer.install!
         end
 
-        targets.sort_by(&:name).each do |target|
+        aggregate_targets.sort_by(&:name).each do |target|
           next if target.target_definition.empty?
           target_installer = AggregateTargetInstaller.new(sandbox, target)
           target_installer.install!
@@ -331,16 +332,16 @@ module Pod
       end
     end
 
-    # Links the integration library targets with all the dependent libraries
+    # Links the aggregate targets with all the dependent libraries.
     #
     # @note   This is run in the integration step to ensure that targets
     #         have been created for all per spec libraries.
     #
-    def link_integration_libraries
-      targets.each do |target|
-        native_target = pods_project.targets.select { |t| t.name == target.name }.first
+    def link_aggregate_target
+      aggregate_targets.each do |aggregate_target|
+        native_target = pods_project.targets.select { |t| t.name == aggregate_target.name }.first
         products = pods_project.products_group
-        target.pod_targets.each do |pod_target|
+        aggregate_target.pod_targets.each do |pod_target|
           product = products.files.select { |f| f.path == pod_target.product_name }.first
           native_target.frameworks_build_phase.add_file_reference(product)
         end
@@ -391,9 +392,9 @@ module Pod
     #         information in the lockfile.
     #
     def integrate_user_project
-      UI.section "Integrating client #{'project'.pluralize(targets.map(&:user_project_path).uniq.count) }" do
+      UI.section "Integrating client #{'project'.pluralize(aggregate_targets.map(&:user_project_path).uniq.count) }" do
         installation_root = config.installation_root
-        integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, targets)
+        integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, aggregate_targets)
         integrator.integrate!
       end
     end
@@ -577,7 +578,7 @@ module Pod
     #         process.
     #
     def pod_targets
-      targets.map(&:pod_targets).flatten
+      aggregate_targets.map(&:pod_targets).flatten
     end
 
     #-------------------------------------------------------------------------#
