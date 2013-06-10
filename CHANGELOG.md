@@ -3,9 +3,17 @@
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
 
-## Master
+## Master (requires release candidate)
 
 ###### Enhancements
+
+* Pods are now built in dedicated targets. With this feature the build
+  environment of each Pod is isolated from the build settings of the other Pods
+  eliminating pollution issues. This patch brings an important
+  architectural change and paves the way for more upcoming enhancements.
+  Stay tuned!  This feature has been implemented by
+  [@jasl8r](https://github.com/jasl8r).
+  [#841](https://github.com/CocoaPods/CocoaPods/issues/1080)
 
 * Reduced external dependencies and deprecation of Rake::FileList.
   [#1080](https://github.com/CocoaPods/CocoaPods/issues/1080)
