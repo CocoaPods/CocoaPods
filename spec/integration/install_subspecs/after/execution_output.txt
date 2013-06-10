@@ -5,13 +5,17 @@ Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
    $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_subspecs/Pods/PodTest"
+   *** failed to import extension mercurial_keyring: No module named httprepo
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
+*** failed to import extension mercurial_keyring: No module named httprepo
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
    $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_subspecs/Pods/PodTest"
+   *** failed to import extension mercurial_keyring: No module named httprepo
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
+*** failed to import extension mercurial_keyring: No module named httprepo
 
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `Pods' (iOS 6.1)
