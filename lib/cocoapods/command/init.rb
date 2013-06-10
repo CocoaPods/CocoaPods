@@ -1,4 +1,5 @@
 require 'xcodeproj'
+require 'active_support/core_ext/string/strip'
 
 module Pod
   class Command
@@ -22,7 +23,7 @@ module Pod
 
       def validate!
         super
-        help! "Existing Podfile found in directory" if File.file? @podfile_path
+        help! "Existing Podfile found in directory" unless config.podfile.nil?
         unless @project_path
           help! "No xcode project found, please specify one" unless @project_paths.length > 0
           help! "Multiple xcode projects found, please specify one" unless @project_paths.length == 1
@@ -36,33 +37,36 @@ module Pod
         @podfile_path.open('w') { |f| f << podfile_template(@xcode_project) }
       end
 
+      private
+
+      # @param  [Xcodeproj::Project] project
+      #         The xcode project to generate a podfile for.
+      #
+      # @return [String] the text of the Podfile for the provided project
+      #
       def podfile_template(project)
-        platforms = project.targets.map { |t| t.platform_name }.uniq
-        has_global_platform = platforms.length == 1
-        if has_global_platform
-          podfile = <<-PLATFORM
-platform :#{platforms.first}
-PLATFORM
-        else
-          podfile = <<-PLATFORM
-# Uncomment this line to define a global platform for your project
-# platform :ios, "6.0"
-PLATFORM
-        end
+        podfile = <<-PLATFORM.strip_heredoc
+          # Uncomment this line to define a global platform for your project
+          # platform :ios, "6.0"
+        PLATFORM
         for target in project.targets
           podfile << target_module(target, !has_global_platform)
         end
         podfile
       end
 
-      def target_module(target, define_platform = true)
-        platform = "platform :#{target.platform_name}" if define_platform
-        return <<-TARGET
+      # @param  [Xcodeproj::PBXTarget] target
+      #         A target to generate a Podfile target module for.
+      #
+      # @return [String] the text for the target module
+      #
+      def target_module(target)
+        return <<-TARGET.strip_heredoc
 
-target "#{target.name}" do
-  #{platform}
-end
-TARGET
+          target "#{target.name}" do
+
+          end
+        TARGET
       end
     end
   end

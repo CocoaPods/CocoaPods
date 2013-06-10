@@ -26,6 +26,17 @@ module Pod
       Dir.chdir(pwd)
     end
 
+    it "complains if a Podfile already exists" do
+      pwd = Dir.pwd
+      Dir.chdir(temporary_directory)
+
+      (Pathname.pwd + 'Podfile').open('w') { |f| f << "pod 'AFNetworking'" }
+      Xcodeproj::Project.new.save_as(temporary_directory + 'test1.xcodeproj')
+      lambda { run_command('init') }.should.raise CLAide::Help
+
+      Dir.chdir(pwd)
+    end
+
     it "creates a Podfile for a project in current directory" do
       pwd = Dir.pwd
       Dir.chdir(temporary_directory)
@@ -45,6 +56,7 @@ module Pod
       Xcodeproj::Project.new.save_as(temporary_directory + 'test2.xcodeproj')
       run_command('init', 'test2.xcodeproj')
       Pathname.new(temporary_directory + 'Podfile').exist?.should == true
+      config.podfile.nil?.should == false
 
       Dir.chdir(pwd)
     end
