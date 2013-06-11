@@ -61,5 +61,25 @@ module Pod
       Dir.chdir(pwd)
     end
 
+    it "creates a Podfile with targets from the project" do
+      pwd = Dir.pwd
+      Dir.chdir(temporary_directory)
+
+      project = Xcodeproj::Project.new
+      target1 = project.new_target(:application, "AppA", :ios)
+      target2 = project.new_target(:application, "AppB", :ios)
+      project.save_as(temporary_directory + 'test.xcodeproj')
+
+      run_command('init')
+
+      config.podfile.nil?.should == false
+      puts config.podfile.target_definitions
+      config.podfile.target_definitions.length.should == project.targets.length + 1
+      config.podfile.target_definitions["AppA"].nil?.should == false
+      config.podfile.target_definitions["AppB"].nil?.should == false
+
+      Dir.chdir(pwd)
+    end
+
   end
 end

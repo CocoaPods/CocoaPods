@@ -50,7 +50,7 @@ module Pod
           # platform :ios, "6.0"
         PLATFORM
         for target in project.targets
-          podfile << target_module(target, !has_global_platform)
+          podfile << target_module(target)
         end
         podfile
       end
