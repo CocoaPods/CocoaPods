@@ -384,10 +384,6 @@ describe "Integration" do
       check "init", "init_single_platform"
     end
 
-    describe "Initializes a Podfile with no uniform platform" do
-      check "init", "init_multiple_platforms"
-    end
-
   end
 
   #--------------------------------------#
