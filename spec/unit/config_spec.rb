@@ -21,6 +21,9 @@ module Pod
 
       it "returns the path to the spec-repos dir" do
         @sut.repos_dir.should == Pathname.new("~/.cocoapods/repos").expand_path
+      it "returns the path of the default podfiles" do
+        config.default_podfile_path.should == Pathname.new("~/.cocoapods/default.podfile").expand_path
+        config.default_test_podfile_path.should == Pathname.new("~/.cocoapods/test.podfile").expand_path
       end
 
       it "allows to specify whether the aggressive cache should be used with an environment variable" do

@@ -49,10 +49,13 @@ module Pod
           # Uncomment this line to define a global platform for your project
           # platform :ios, "6.0"
         PLATFORM
+        if config.default_podfile_path.exist?
+          open(config.default_podfile_path, 'r') { |f| podfile << f.read }
+        end
         for target in project.targets
           podfile << target_module(target)
         end
-        podfile
+        podfile << "\n"
       end
 
       # @param  [Xcodeproj::PBXTarget] target
@@ -61,12 +64,15 @@ module Pod
       # @return [String] the text for the target module
       #
       def target_module(target)
-        return <<-TARGET.strip_heredoc
+        target_module = <<-TARGET.strip_heredoc
+
 
           target "#{target.name}" do
-
-          end
         TARGET
+        if config.default_test_podfile_path.exist? and target.name =~ /tests?/i
+          open(config.default_test_podfile_path, 'r') { |f| target_module << f.read }
+        end
+        target_module << "\nend"
       end
     end
   end

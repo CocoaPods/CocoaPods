@@ -223,6 +223,26 @@ module Pod
       @lockfile_path ||= installation_root + 'Podfile.lock'
     end
 
+    # Returns the path of the default Podfile pods.
+    #
+    # @note The file is expected to be named default.podfile
+    #
+    # @return [Pathname]
+    #
+    def default_podfile_path
+      @default_podfile_path ||= repos_dir + "default.podfile"
+    end
+
+    # Returns the path of the default Podfile test pods.
+    #
+    # @note The file is expected to be named test.podfile
+    #
+    # @return [Pathname]
+    #
+    def default_test_podfile_path
+      @default_test_podfile_path ||= repos_dir + "test.podfile"
+    end
+
     # @return [Pathname] The file to use a cache of the statistics provider.
     #
     def statistics_cache_file
