@@ -7,7 +7,7 @@ module Pod
   describe Command::Init do
 
     it "complains if project does not exist" do
-      lambda { run_command('init') }.should.raise CLAide::Help
+      lambda { run_command('init') }.should.raise Informative
       lambda { run_command('init', 'foo.xcodeproj') }.should.raise CLAide::Help
     end
 
@@ -19,7 +19,7 @@ module Pod
       Dir.chdir(temporary_directory) do
         Xcodeproj::Project.new.save_as(temporary_directory + 'test1.xcodeproj')
         Xcodeproj::Project.new.save_as(temporary_directory + 'test2.xcodeproj')
-        lambda { run_command('init') }.should.raise CLAide::Help
+        lambda { run_command('init') }.should.raise Informative
       end
     end
 
@@ -27,7 +27,7 @@ module Pod
       Dir.chdir(temporary_directory) do
         (Pathname.pwd + 'Podfile').open('w') { |f| f << "pod 'AFNetworking'" }
         Xcodeproj::Project.new.save_as(temporary_directory + 'test1.xcodeproj')
-        lambda { run_command('init') }.should.raise CLAide::Help
+        lambda { run_command('init') }.should.raise Informative
       end
     end
 

@@ -23,13 +23,14 @@ module Pod
 
       def validate!
         super
-        help! "Existing Podfile found in directory" unless config.podfile.nil?
-        unless @project_path
-          help! "No xcode project found, please specify one" unless @project_paths.length > 0
-          help! "Multiple xcode projects found, please specify one" unless @project_paths.length == 1
+        raise Informative, "Existing Podfile found in directory" unless config.podfile.nil?
+        if @project_path
+          help! "Xcode project at #{@project_path} does not exist" unless File.exist? @project_path
+        else
+          raise Informative, "No xcode project found, please specify one" unless @project_paths.length > 0
+          raise Informative, "Multiple xcode projects found, please specify one" unless @project_paths.length == 1
           @project_path = @project_paths.first
         end
-        help! "Xcode project at #{@project_path} does not exist" unless File.exist? @project_path
         @xcode_project = Xcodeproj::Project.new(@project_path)
       end
 
