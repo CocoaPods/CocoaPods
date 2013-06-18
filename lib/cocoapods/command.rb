@@ -8,17 +8,18 @@ module Pod
 
   class Command < CLAide::Command
 
+    require 'cocoapods/command/help'
+    require 'cocoapods/command/inter_process_communication'
+    require 'cocoapods/command/lib'
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
+    require 'cocoapods/command/podfile_info'
     require 'cocoapods/command/project'
     require 'cocoapods/command/push'
     require 'cocoapods/command/repo'
     require 'cocoapods/command/search'
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
-    require 'cocoapods/command/help'
-    require 'cocoapods/command/inter_process_communication'
-    require 'cocoapods/command/podfile_info'
 
     self.abstract_command = true
     self.default_subcommand = 'install'

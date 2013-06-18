@@ -1,7 +1,7 @@
 module Pod
   class Command
     class Search < Command
-      self.summary = 'Search pods'
+      self.summary = 'Searches for pods'
 
       self.description = <<-DESC
         Searches for pods, ignoring case, whose name matches `QUERY'. If the
