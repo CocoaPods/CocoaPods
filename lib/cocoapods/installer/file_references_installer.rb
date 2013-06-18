@@ -107,18 +107,19 @@ module Pod
       #
       def link_headers
         UI.message "- Linking headers" do
+          libraries.each do |library|
+            library.file_accessors.each do |file_accessor|
+              headers_sandbox = Pathname.new(file_accessor.spec.root.name)
+              library.build_headers.add_search_path(headers_sandbox)
+              sandbox.public_headers.add_search_path(headers_sandbox)
 
-          file_accessors.each do |file_accessor|
-            headers_sandbox = Pathname.new(file_accessor.spec.root.name)
-            sandbox.build_headers.add_search_path(headers_sandbox)
-            sandbox.public_headers.add_search_path(headers_sandbox)
+              header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
+                library.build_headers.add_files(namespaced_path, files)
+              end
 
-            header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
-              sandbox.build_headers.add_files(namespaced_path, files)
-            end
-
-            header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
-              sandbox.public_headers.add_files(namespaced_path, files)
+              header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
+                sandbox.public_headers.add_files(namespaced_path, files)
+              end
             end
           end
         end

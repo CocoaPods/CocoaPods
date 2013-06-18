@@ -1,116 +1,114 @@
- 
-File References: 
-- SampleApp: 
+
+File References:
+- SampleApp:
   - CPAppDelegate.h
   - CPAppDelegate.m
-  - MainMenu.xib: 
+  - MainMenu.xib:
     - en
-  - Supporting Files: 
+  - Supporting Files:
     - SampleApp-Info.plist
-    - InfoPlist.strings: 
+    - InfoPlist.strings:
       - en
     - main.m
     - SampleApp-Prefix.pch
-    - Credits.rtf: 
+    - Credits.rtf:
       - en
-- Frameworks: 
+- Frameworks:
   - Cocoa.framework
-  - Other Frameworks: 
+  - Other Frameworks:
     - AppKit.framework
     - CoreData.framework
     - Foundation.framework
   - libPods-SampleApp_2.a
-- Products: 
+- Products:
   - SampleApp.app
 - Pods-SampleApp_2.xcconfig
 
 
- 
-Targets: 
-- SampleApp_2: 
-    Build Configurations: 
-    - Debug: 
-        Build Settings: 
-          GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
-          COMBINE_HIDPI_IMAGES: "YES"
-          INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
-          GCC_PRECOMPILE_PREFIX_HEADER: "YES"
-          WRAPPER_EXTENSION: app
-        Base Configuration: Pods-SampleApp_2.xcconfig
-    - Release: 
-        Build Settings: 
-          GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
-          COMBINE_HIDPI_IMAGES: "YES"
-          INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
-          GCC_PRECOMPILE_PREFIX_HEADER: "YES"
-          WRAPPER_EXTENSION: app
-        Base Configuration: Pods-SampleApp_2.xcconfig
-    Build Phases: 
-    - SourcesBuildPhase: 
+
+Targets:
+- SampleApp_2:
+    Build Phases:
+    - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m
-    - FrameworksBuildPhase: 
+    - FrameworksBuildPhase:
       - Cocoa.framework
       - libPods-SampleApp_2.a
-    - ResourcesBuildPhase: 
+    - ResourcesBuildPhase:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
     - Copy Pods Resources: []
-
     - Copy Pods Resources: []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
+          COMBINE_HIDPI_IMAGES: 'YES'
+          GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
+          WRAPPER_EXTENSION: app
+          PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods-SampleApp_2.xcconfig
+    - Release:
+        Build Settings:
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
+          COMBINE_HIDPI_IMAGES: 'YES'
+          GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
+          WRAPPER_EXTENSION: app
+          PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods-SampleApp_2.xcconfig
 
 
 
- 
-Build Configurations: 
-- Debug: 
-    Build Settings: 
-      CLANG_CXX_LIBRARY: libc++
-      GCC_DYNAMIC_NO_PIC: "NO"
-      ALWAYS_SEARCH_USER_PATHS: "NO"
-      COPY_PHASE_STRIP: "NO"
-      GCC_PREPROCESSOR_DEFINITIONS: 
+Build Configurations:
+- Debug:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
       - $(inherited)
-      ARCHS: $(ARCHS_STANDARD_64_BIT)
-      CLANG_WARN_EMPTY_BODY: "YES"
-      CLANG_WARN_INT_CONVERSION: "YES"
-      GCC_WARN_UNUSED_VARIABLE: "YES"
-      GCC_OPTIMIZATION_LEVEL: "0"
-      MACOSX_DEPLOYMENT_TARGET: "10.8"
-      GCC_WARN_ABOUT_RETURN_TYPE: "YES"
-      GCC_C_LANGUAGE_STANDARD: gnu99
-      CLANG_WARN_CONSTANT_CONVERSION: "YES"
-      GCC_SYMBOLS_PRIVATE_EXTERN: "NO"
-      CLANG_WARN_ENUM_CONVERSION: "YES"
-      GCC_ENABLE_OBJC_EXCEPTIONS: "YES"
-      GCC_WARN_UNINITIALIZED_AUTOS: "YES"
-      ONLY_ACTIVE_ARCH: "YES"
-      CLANG_WARN__DUPLICATE_METHOD_MATCH: "YES"
+      ONLY_ACTIVE_ARCH: 'YES'
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
-      GCC_WARN_64_TO_32_BIT_CONVERSION: "YES"
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'NO'
       SDKROOT: macosx
-- Release: 
-    Build Settings: 
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
       CLANG_CXX_LIBRARY: libc++
-      ALWAYS_SEARCH_USER_PATHS: "NO"
-      COPY_PHASE_STRIP: "YES"
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+- Release:
+    Build Settings:
       DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
-      ARCHS: $(ARCHS_STANDARD_64_BIT)
-      CLANG_WARN_EMPTY_BODY: "YES"
-      CLANG_WARN_INT_CONVERSION: "YES"
-      GCC_WARN_ABOUT_RETURN_TYPE: "YES"
-      MACOSX_DEPLOYMENT_TARGET: "10.8"
-      GCC_WARN_UNUSED_VARIABLE: "YES"
-      CLANG_WARN_ENUM_CONVERSION: "YES"
-      CLANG_WARN_CONSTANT_CONVERSION: "YES"
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
       GCC_C_LANGUAGE_STANDARD: gnu99
-      GCC_WARN_UNINITIALIZED_AUTOS: "YES"
-      GCC_ENABLE_OBJC_EXCEPTIONS: "YES"
-      CLANG_WARN__DUPLICATE_METHOD_MATCH: "YES"
+      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
-      GCC_WARN_64_TO_32_BIT_CONVERSION: "YES"
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
       SDKROOT: macosx
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_CXX_LIBRARY: libc++

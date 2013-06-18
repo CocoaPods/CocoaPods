@@ -75,28 +75,32 @@ module Pod
       #--------------------------------------#
 
       it "generates the libraries which represent the target definitions" do
-        libs = @analyzer.analyze.libraries
-        libs.map(&:name).should == ['Pods']
-        lib = libs.first
-        lib.support_files_root.should == config.sandbox.root
+        target = @analyzer.analyze.targets.first
+        target.pod_targets.map(&:name).sort.should == [
+          'Pods-JSONKit',
+          'Pods-AFNetworking',
+          'Pods-SVPullToRefresh',
+          'Pods-libextobjc'
+        ].sort
+        target.support_files_root.should == config.sandbox.root
 
-        lib.user_project_path.to_s.should.include 'SampleProject/SampleProject'
-        lib.client_root.to_s.should.include 'SampleProject'
-        lib.user_target_uuids.should == ["A346496C14F9BE9A0080D870"]
-        user_proj = Xcodeproj::Project.new(lib.user_project_path)
-        user_proj.objects_by_uuid[lib.user_target_uuids.first].name.should == 'SampleProject'
-        lib.user_build_configurations.should == {"Test"=>:release, "App Store"=>:release}
-        lib.platform.to_s.should == 'iOS 6.0'
+        target.user_project_path.to_s.should.include 'SampleProject/SampleProject'
+        target.client_root.to_s.should.include 'SampleProject'
+        target.user_target_uuids.should == ["A346496C14F9BE9A0080D870"]
+        user_proj = Xcodeproj::Project.new(target.user_project_path)
+        user_proj.objects_by_uuid[target.user_target_uuids.first].name.should == 'SampleProject'
+        target.user_build_configurations.should == {"Test"=>:release, "App Store"=>:release}
+        target.platform.to_s.should == 'iOS 6.0'
       end
 
-      it "generates configures the library appropriately if the installation will not integrate" do
+      it "generates the integration library appropriately if the installation will not integrate" do
         config.integrate_targets = false
-        lib = @analyzer.analyze.libraries.first
+        target = @analyzer.analyze.targets.first
 
-        lib.client_root.should == config.installation_root
-        lib.user_target_uuids.should == []
-        lib.user_build_configurations.should == {}
-        lib.platform.to_s.should == 'iOS 6.0'
+        target.client_root.should == config.installation_root
+        target.user_target_uuids.should == []
+        target.user_build_configurations.should == {}
+        target.platform.to_s.should == 'iOS 6.0'
       end
 
       #--------------------------------------#
@@ -163,8 +167,8 @@ module Pod
         podspec.should.not.exist?
       end
 
-      it "adds the specifications to the correspondent libraries in after the resolution" do
-        @analyzer.analyze.libraries.first.specs.map(&:to_s).should == [
+      it "adds the specifications to the correspondent libraries" do
+        @analyzer.analyze.targets.first.pod_targets.map(&:specs).flatten.map(&:to_s).should == [
           "AFNetworking (1.0.1)",
           "JSONKit (1.5pre)",
           "SVPullToRefresh (0.4)",

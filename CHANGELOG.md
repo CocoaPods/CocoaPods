@@ -3,9 +3,21 @@
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
 
-## Master
+## 0.21.0.rc1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.2...0.21.0.rc1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.20.2...0.21.0.rc1)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.6.0...0.7.0)
 
 ###### Enhancements
+
+* Pods are now built in dedicated targets. This enhancement isolates the build
+  environment of each Pod from other ones eliminating pollution issues. It also
+  introduces an important architectural improvement which lays the foundation
+  for the upcoming CocoaPods features. Stay tuned! This feature has been
+  implemented by [Jeremy Slater](https://github.com/jasl8r).
+  [#1011](https://github.com/CocoaPods/CocoaPods/issues/1011)
+  [#983](https://github.com/CocoaPods/CocoaPods/issues/983)
+  [#841](https://github.com/CocoaPods/CocoaPods/issues/841)
 
 * Reduced external dependencies and deprecation of Rake::FileList.
   [#1080](https://github.com/CocoaPods/CocoaPods/issues/1080)

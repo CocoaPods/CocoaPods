@@ -7,20 +7,20 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 1dfeece9a5970654588719f2c8228918ab9af0c2
+  revision: 6e817dc96cdaf7b76d1ecb87e4676465b948f105
   branch: master
   specs:
-    cocoapods-core (0.20.2)
+    cocoapods-core (0.21.0.rc1)
       activesupport (~> 3.2.13)
       json (~> 1.8.0)
       nap (~> 0.5.1)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: fd27b6217686358aea5250f006b10ed73d4726e5
+  revision: af8b52abcf0849d8e7f4326615c6f2dc3846aacb
   branch: master
   specs:
-    xcodeproj (0.6.0)
+    xcodeproj (0.7.0)
       activesupport (~> 3.2.13)
       colored (~> 1.2)
 
@@ -61,16 +61,16 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.20.2)
+    cocoapods (0.21.0.rc1)
       activesupport (~> 3.2.13)
       claide (~> 0.3.2)
-      cocoapods-core (= 0.20.2)
+      cocoapods-core (= 0.21.0.rc1)
       cocoapods-downloader (~> 0.1.1)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json (~> 1.8.0)
       open4 (~> 1.3.0)
-      xcodeproj (~> 0.6.0)
+      xcodeproj (~> 0.7.0)
 
 GEM
   remote: http://rubygems.org/
@@ -84,11 +84,11 @@ GEM
     colored (1.2)
     diffy (2.1.4)
     escape (0.0.4)
-    ffi (1.8.1)
+    ffi (1.9.0)
     github-markup (0.7.5)
     i18n (0.6.1)
     json (1.8.0)
-    listen (1.1.4)
+    listen (1.1.6)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
@@ -99,7 +99,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    multi_json (1.7.4)
+    multi_json (1.7.7)
     nap (0.5.1)
     open4 (1.3.0)
     posix-spawn (0.3.6)
@@ -128,7 +128,7 @@ GEM
     term-ansicolor (1.2.2)
       tins (~> 0.8)
     thor (0.18.1)
-    tins (0.8.0)
+    tins (0.8.2)
     yajl-ruby (1.1.0)
     yard (0.8.6.1)
 

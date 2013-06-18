@@ -329,11 +329,18 @@ namespace :examples do
         execute_command "rm -rf Pods DerivedData"
         execute_command "#{'../../bin/' unless ENV['FROM_GEM']}sandbox-pod install --verbose --no-repo-update"
         command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
-        if (example + 'Podfile').read.include?('platform :ios')
-          # Specifically build against the simulator SDK so we don't have to deal with code signing.
-          command << " -sdk "
-          command << Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
-        end
+          if (example + 'Podfile').read.include?('platform :ios')
+            # Specifically build against the simulator SDK so we don't have to deal with code signing.
+            xcode_version = `xcodebuild -version`.scan(/Xcode (.*)\n/).first.first
+            major_version = xcode_version.split('.').first.to_i
+            destination_flag_supported = major_version > 4
+            if destination_flag_supported
+              command << " -destination 'platform=iOS Simulator,name=iPhone'"
+            else
+              command << " -sdk "
+              command << Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
+            end
+          end
         execute_command(command)
       end
     end
@@ -379,3 +386,4 @@ def title(title)
   puts "-" * 80
   puts
 end
+
