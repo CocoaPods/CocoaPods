@@ -42,7 +42,9 @@ module Pod
   autoload :ExternalSources,           'cocoapods/external_sources'
   autoload :Installer,                 'cocoapods/installer'
   autoload :SourcesManager,            'cocoapods/sources_manager'
-  autoload :Library,                   'cocoapods/library'
+  autoload :Target,                    'cocoapods/target'
+  autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
+  autoload :PodTarget,                 'cocoapods/target/pod_target'
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'
   autoload :Sandbox,                   'cocoapods/sandbox'
@@ -51,14 +53,17 @@ module Pod
 
   module Generator
     autoload :Acknowledgements,        'cocoapods/generator/acknowledgements'
+    autoload :Markdown,                'cocoapods/generator/acknowledgements/markdown'
+    autoload :Plist,                   'cocoapods/generator/acknowledgements/plist'
     autoload :BridgeSupport,           'cocoapods/generator/bridge_support'
     autoload :CopyResourcesScript,     'cocoapods/generator/copy_resources_script'
     autoload :DummySource,             'cocoapods/generator/dummy_source'
-    autoload :Markdown,                'cocoapods/generator/acknowledgements/markdown'
-    autoload :Plist,                   'cocoapods/generator/acknowledgements/plist'
     autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
     autoload :TargetEnvironmentHeader, 'cocoapods/generator/target_environment_header'
     autoload :XCConfig,                'cocoapods/generator/xcconfig'
+    autoload :AggregateXCConfig,       'cocoapods/generator/xcconfig/aggregate_xcconfig'
+    autoload :PublicPodXCConfig,       'cocoapods/generator/xcconfig/public_pod_xcconfig'
+    autoload :PrivatePodXCConfig,      'cocoapods/generator/xcconfig/private_pod_xcconfig'
   end
 
   module Hooks

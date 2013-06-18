@@ -27,10 +27,6 @@ module Pod
         @sandbox.public_headers.root.should == temporary_directory + 'Sandbox/Headers'
       end
 
-      it "returns the build headers store" do
-        @sandbox.build_headers.root.should == temporary_directory + 'Sandbox/BuildHeaders'
-      end
-
       it "deletes the entire root directory on implode" do
         @sandbox.implode
         File.directory?(temporary_directory + 'Sandbox').should.be.false

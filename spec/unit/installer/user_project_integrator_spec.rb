@@ -17,12 +17,12 @@ module Pod
           end
         end
         config.sandbox.project = Project.new()
-        @library = Library.new(@podfile.target_definitions['Pods'])
+        Xcodeproj::Project.new.save_as(config.sandbox.project_path)
+        @library = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
         @library.client_root = sample_project_path.dirname
         @library.user_project_path  = sample_project_path
         @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
-        @library.support_files_root = config.sandbox.root
-        empty_library = Library.new(@podfile.target_definitions[:empty])
+        empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], config.sandbox)
         @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library, empty_library])
       end
 
@@ -148,8 +148,8 @@ module Pod
         end
 
         it "skips libraries with empty target definitions" do
-          @integrator.libraries.map(&:name).should == ["Pods", "Pods-empty"]
-          @integrator.send(:libraries_to_integrate).map(&:name).should == ['Pods']
+          @integrator.targets.map(&:name).should == ["Pods", "Pods-empty"]
+          @integrator.send(:targets_to_integrate).map(&:name).should == ['Pods']
         end
 
       end

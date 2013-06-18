@@ -52,7 +52,7 @@ require 'bundler/setup'
 require 'pretty_bacon'
 require 'colored'
 require 'diffy'
-require 'Xcodeproj' # For Differ
+require 'xcodeproj' # For Differ
 
 # @return [Pathname The folder where the CocoaPods binary should operate.
 #
