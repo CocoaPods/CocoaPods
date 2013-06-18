@@ -15,7 +15,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   introduces an important architectural improvement which lays the foundation
   for the upcoming CocoaPods features. Stay tuned! This feature has been
   implemented by [Jeremy Slater](https://github.com/jasl8r).
-  [#841](https://github.com/CocoaPods/CocoaPods/issues/1080)
+  [#1011](https://github.com/CocoaPods/CocoaPods/issues/1011)
+  [#983](https://github.com/CocoaPods/CocoaPods/issues/983)
+  [#841](https://github.com/CocoaPods/CocoaPods/issues/841)
 
 * Reduced external dependencies and deprecation of Rake::FileList.
   [#1080](https://github.com/CocoaPods/CocoaPods/issues/1080)
