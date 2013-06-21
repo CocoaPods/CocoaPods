@@ -64,6 +64,18 @@ module Pod
       validator.results.map(&:to_s).first.should.match /source_files.*did not match/
       validator.result_type.should == :error
     end
+    
+    it "validates a podspec with dependencies" do
+      podspec = stub_podspec(/s.name.*$/, 's.name = "ZKit"')
+      podspec.gsub! /s.requires_arc/, "s.dependency 'SBJson', '~> 3.2'\n  s.requires_arc"
+      file = write_podspec(podspec, "ZKit.podspec")
+
+      spec = Specification.from_file(file)
+      validator = Validator.new(spec)
+      validator.validate
+      validator.results.map(&:to_s).first.should.match /should match the name/
+      validator.validated?.should.be.false
+    end
 
     #--------------------------------------#
 
