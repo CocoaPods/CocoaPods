@@ -119,7 +119,7 @@ Targets:
         Build Settings:
           WRAPPER_EXTENSION: octest
           COMBINE_HIDPI_IMAGES: 'YES'
-          FRAMEWORK_SEARCH_PATHS: ! '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+          FRAMEWORK_SEARCH_PATHS: '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
           TEST_HOST: $(BUNDLE_LOADER)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleAppTests/SampleAppTests-Info.plist
@@ -131,7 +131,7 @@ Targets:
         Build Settings:
           WRAPPER_EXTENSION: octest
           COMBINE_HIDPI_IMAGES: 'YES'
-          FRAMEWORK_SEARCH_PATHS: ! '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+          FRAMEWORK_SEARCH_PATHS: '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
           TEST_HOST: $(BUNDLE_LOADER)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleAppTests/SampleAppTests-Info.plist

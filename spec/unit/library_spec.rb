@@ -1,13 +1,13 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
-  describe Pod::Library do
+  describe Pod::AggregateTarget do
 
     describe "In general" do
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.link_with_first_target = true
-        @lib = Library.new(@target_definition)
+        @lib = AggregateTarget.new(@target_definition, config.sandbox)
       end
 
       it "returns the target_definition that generated it" do
@@ -31,43 +31,42 @@ module Pod
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.link_with_first_target = true
-        @lib = Library.new(@target_definition)
-        @lib.support_files_root = config.sandbox.root
+        @lib = AggregateTarget.new(@target_definition, config.sandbox)
         @lib.client_root = config.sandbox.root.dirname
       end
 
       it "returns the absolute path of the xcconfig file" do
-        @lib.xcconfig_path.to_s.should.include?('Pods/Pods.xcconfig')
+        @lib.xcconfig_path.to_s.should.include?('Pods/Generated/Pods.xcconfig')
       end
 
       it "returns the absolute path of the resources script" do
-        @lib.copy_resources_script_path.to_s.should.include?('Pods/Pods-resources.sh')
+        @lib.copy_resources_script_path.to_s.should.include?('Pods/Generated/Pods-resources.sh')
       end
 
       it "returns the absolute path of the target header file" do
-        @lib.target_environment_header_path.to_s.should.include?('Pods/Pods-environment.h')
+        @lib.target_environment_header_path.to_s.should.include?('Pods/Generated/Pods-environment.h')
       end
 
       it "returns the absolute path of the prefix header file" do
-        @lib.prefix_header_path.to_s.should.include?('Pods/Pods-prefix.pch')
+        @lib.prefix_header_path.to_s.should.include?('Pods/Generated/Pods-prefix.pch')
       end
 
       it "returns the absolute path of the bridge support file" do
-        @lib.bridge_support_path.to_s.should.include?('Pods/Pods.bridgesupport')
+        @lib.bridge_support_path.to_s.should.include?('Pods/Generated/Pods.bridgesupport')
       end
 
       it "returns the absolute path of the acknowledgements files without extension" do
-        @lib.acknowledgements_basepath.to_s.should.include?('Pods/Pods-acknowledgements')
+        @lib.acknowledgements_basepath.to_s.should.include?('Pods/Generated/Pods-acknowledgements')
       end
 
       #--------------------------------------#
 
       it "returns the path of the resources script relative to the user project" do
-        @lib.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Pods-resources.sh'
+        @lib.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Generated/Pods-resources.sh'
       end
 
       it "returns the path of the xcconfig file relative to the user project" do
-        @lib.xcconfig_relative_path.should == 'Pods/Pods.xcconfig'
+        @lib.xcconfig_relative_path.should == 'Pods/Generated/Pods.xcconfig'
       end
 
     end

@@ -33,6 +33,11 @@ module Pod
 
       # @!group Migration Steps
 
+      # TODO: Fix copy resources script
+      # TODO: Fix manifest check
+      # TODO: Fix xcconfig
+      # TODO: Group target support files
+      #
       def migrate_to_0_20
         title_options = { :verbose_prefix => "-> ".green }
         UI.titled_section("Migrating to CocoaPods 0.20".green, title_options) do

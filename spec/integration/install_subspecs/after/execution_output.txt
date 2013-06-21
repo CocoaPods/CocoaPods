@@ -6,14 +6,12 @@ Analyzing dependencies
 Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
-   $ /usr/local/bin/hg clone "PodTest-hg-source"
-   "ROOT/tmp/install_subspecs/Pods/Generated/Sources/PodTest"
+   $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_subspecs/Pods/Generated/Sources/PodTest"
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
-   $ /usr/local/bin/hg clone "PodTest-hg-source"
-   "ROOT/tmp/install_subspecs/Pods/Generated/Sources/PodTest"
+   $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_subspecs/Pods/Generated/Sources/PodTest"
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 
@@ -37,21 +35,29 @@ Generating Pods project
   - Adding source files to Pods project
   - Adding resources to Pods project
   - Linking headers
-  - Installing targets
-    - Installing target `Pods-OS X App` OS X 10.6
+  - Installing libraries
+    - Installing target `Pods-OS X App-PodTest` OS X 10.6
       - Adding Build files
+      - Generating public xcconfig file at `Pods/Generated/Pods-OS X App-PodTest.xcconfig`
+      - Generating private xcconfig file at `Pods/Generated/Pods-OS X App-PodTest-Private.xcconfig`
+      - Generating prefix header at `Pods/Generated/Pods-OS X App-PodTest-prefix.pch`
+      - Generating dummy source file at `Pods/Generated/Pods-OS X App-PodTest-dummy.m`
+    - Installing target `Pods-iOS App-PodTest` iOS 4.3
+      - Adding Build files
+      - Generating public xcconfig file at `Pods/Generated/Pods-iOS App-PodTest.xcconfig`
+      - Generating private xcconfig file at `Pods/Generated/Pods-iOS App-PodTest-Private.xcconfig`
+      - Generating prefix header at `Pods/Generated/Pods-iOS App-PodTest-prefix.pch`
+      - Generating dummy source file at `Pods/Generated/Pods-iOS App-PodTest-dummy.m`
+    - Installing target `Pods-OS X App` OS X 10.6
       - Generating xcconfig file at `Pods/Generated/Pods-OS X App.xcconfig`
       - Generating target environment header at `Pods/Generated/Pods-OS X App-environment.h`
-      - Generating prefix header at `Pods/Generated/Pods-OS X App-prefix.pch`
       - Generating copy resources script at `Pods/Generated/Pods-OS X App-resources.sh`
       - Generating acknowledgements at `Pods/Generated/Pods-OS X App-acknowledgements.plist`
       - Generating acknowledgements at `Pods/Generated/Pods-OS X App-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Generated/Pods-OS X App-dummy.m`
     - Installing target `Pods-iOS App` iOS 4.3
-      - Adding Build files
       - Generating xcconfig file at `Pods/Generated/Pods-iOS App.xcconfig`
       - Generating target environment header at `Pods/Generated/Pods-iOS App-environment.h`
-      - Generating prefix header at `Pods/Generated/Pods-iOS App-prefix.pch`
       - Generating copy resources script at `Pods/Generated/Pods-iOS App-resources.sh`
       - Generating acknowledgements at `Pods/Generated/Pods-iOS App-acknowledgements.plist`
       - Generating acknowledgements at `Pods/Generated/Pods-iOS App-acknowledgements.markdown`
@@ -65,6 +71,6 @@ Integrating client project
 
 [!] From now on use `SampleApp.xcworkspace`.
 
-Integrating `libPods-OS X App.a` into target `OS X App` of project `SampleApp.xcodeproj`.
+Integrating Pod target `Pods-OS X App-PodTest` into aggregate target Pods-OS X App of project `SampleApp.xcodeproj`.
 
-Integrating `libPods-iOS App.a` into target `iOS App` of project `SampleApp.xcodeproj`.
+Integrating Pod target `Pods-iOS App-PodTest` into aggregate target Pods-iOS App of project `SampleApp.xcodeproj`.

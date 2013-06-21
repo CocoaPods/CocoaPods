@@ -1,0 +1,6 @@
+#include "Pods-OS X App-PodTest"
+ALWAYS_SEARCH_USER_PATHS = YES
+GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/BuildHeaders" "${PODS_ROOT}/Headers/BuildHeaders/PodTest" "${PODS_ROOT}/Headers/Headers" "${PODS_ROOT}/Headers/Headers/PodTest"
+OTHER_LDFLAGS = -ObjC
+PODS_ROOT = ${SRCROOT}

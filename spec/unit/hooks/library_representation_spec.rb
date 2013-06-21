@@ -5,7 +5,9 @@ module Pod
 
     before do
       @target_definition = Podfile::TargetDefinition.new('MyApp', nil)
-      @lib = Library.new(@target_definition)
+      @spec = Spec.new
+      @spec.name = 'RestKit'
+      @lib = PodTarget.new([@spec], @target_definition, config.sandbox)
       @rep = Hooks::LibraryRepresentation.new(config.sandbox, @lib)
     end
 
@@ -14,7 +16,7 @@ module Pod
     describe "Public Hooks API" do
 
       it "returns the name" do
-        @rep.name.should == 'Pods-MyApp'
+        @rep.name.should == 'Pods-MyApp-RestKit'
       end
 
       it "returns the dependencies" do
@@ -27,13 +29,7 @@ module Pod
       end
 
       it "returns the path of the prefix header" do
-        @lib.support_files_root = temporary_directory
-        @rep.prefix_header_path.should == temporary_directory + 'Pods-MyApp-prefix.pch'
-      end
-
-      it "returns the path of the copy resources script" do
-        @lib.support_files_root = temporary_directory
-        @rep.copy_resources_script_path.should == temporary_directory + 'Pods-MyApp-resources.sh'
+        @rep.prefix_header_path.should == temporary_directory + 'Pods/Generated/Pods-MyApp-RestKit-prefix.pch'
       end
 
       it "returns the pods project" do

@@ -40,11 +40,11 @@ module Pod
         File.open(@sandbox.root + path, "w") { |file| file.write('hello') }
       end
       @header_dir.add_files(namespace_path, relative_header_paths)
-      @header_dir.search_paths.should.include("${PODS_ROOT}/Headers/ExampleLib")
+      @header_dir.search_paths.should.include("${PODS_ROOT}/Headers/Headers/ExampleLib")
     end
 
     it 'always adds the Headers root to the header search paths' do
-      @header_dir.search_paths.should.include("${PODS_ROOT}/Headers")
+      @header_dir.search_paths.should.include("${PODS_ROOT}/Headers/Headers")
     end
   end
 end

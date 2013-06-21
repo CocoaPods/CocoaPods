@@ -27,10 +27,6 @@ module Pod
         @sandbox.public_headers.root.should == temporary_directory + 'Sandbox/Generated/Headers/Headers'
       end
 
-      it "returns the build headers store" do
-        @sandbox.build_headers.root.should == temporary_directory + 'Sandbox/Generated/Headers/BuildHeaders'
-      end
-
       it "cleans any trace of the Pod with the given name" do
         pod_root = @sandbox.pod_dir('BananaLib')
         pod_root.mkpath
@@ -86,7 +82,6 @@ module Pod
     describe "Specification store" do
 
       it "loads the stored specification with the given name" do
-        (@sandbox.root + 'Generated').mkdir
         (@sandbox.root + 'Generated/Local Podspecs').mkdir
         FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.root + 'Generated/Local Podspecs')
         @sandbox.specification('BananaLib').name.should == 'BananaLib'
@@ -97,7 +92,6 @@ module Pod
       end
 
       it "returns the path to a spec file in the 'Local Podspecs' dir" do
-        (@sandbox.root + 'Generated').mkdir
         (@sandbox.root + 'Generated/Local Podspecs').mkdir
         FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.root + 'Generated/Local Podspecs')
         @sandbox.specification_path('BananaLib').should == @sandbox.root + 'Generated/Local Podspecs/BananaLib.podspec'

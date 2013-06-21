@@ -1,0 +1,6 @@
+#include "Pods-SampleApp_1-Reachability"
+ALWAYS_SEARCH_USER_PATHS = YES
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Headers" "${PODS_ROOT}/Headers/Headers/Reachability"
+OTHER_LDFLAGS = -ObjC ${PODS_SAMPLEAPP___REACHABILITY_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}/Pods/Generated
