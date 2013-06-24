@@ -6,7 +6,7 @@ module Pod
     # @return [void]
     #
     def write_podspec(text, name = 'JSONKit.podspec')
-      file = temporary_directory + 'JSONKit.podspec'
+      file = temporary_directory + name
       File.open(file, 'w') {|f| f.write(text) }
       file
     end
@@ -63,6 +63,19 @@ module Pod
       validator.validate
       validator.results.map(&:to_s).first.should.match /source_files.*did not match/
       validator.result_type.should == :error
+    end
+    
+    it "validates a podspec with dependencies" do
+      podspec = stub_podspec(/s.name.*$/, 's.name = "ZKit"')
+      podspec.gsub!(/s.requires_arc/, "s.dependency 'SBJson', '~> 3.2'\n  s.requires_arc")
+      podspec.gsub!(/s.license.*$/, 's.license = "Public Domain"')
+      file = write_podspec(podspec, "ZKit.podspec")
+
+      spec = Specification.from_file(file)
+      validator = Validator.new(spec)
+      validator.validate
+      validator.results.should.be.empty
+      validator.validated?.should.be.true
     end
 
     #--------------------------------------#

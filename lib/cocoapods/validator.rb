@@ -208,8 +208,11 @@ module Pod
       installer = Installer.new(sandbox, podfile)
       installer.install!
 
-      file_accessors = installer.aggregate_targets.first.pod_targets.first.file_accessors
-      @file_accessor = file_accessors.find { |accessor| accessor.spec == spec }
+      file_accessors = installer.aggregate_targets.map do |target|
+        target.pod_targets.map(&:file_accessors)
+      end.flatten
+      
+      @file_accessor = file_accessors.find { |accessor| accessor.spec.root.name == spec.root.name }
       config.silent
     end
 
