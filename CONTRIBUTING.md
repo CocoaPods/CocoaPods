@@ -3,6 +3,7 @@
 * **Search tickets before you file a new one.** Add to tickets if you have new information about the issue.
 * **Only file tickets about the CocoaPods tool itself.** This includes [CocoaPods](https://github.com/CocoaPods/CocoaPods/issues),
   [CocoaPods/Core](https://github.com/CocoaPods/Core/issues), and [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/issues).
+  If your question is regarding a library (to be) distributed through CocoaPods, refer to the [spec repo](https://github.com/CocoaPods/Specs).
   If your question is “How do I […]”, then please ask on [StackOverflow](http://stackoverflow.com/search?q=CocoaPods) or our [mailing-list](http://groups.google.com/group/cocoapods).
 * **Keep tickets short but sweet.** Make sure you include all the context needed to solve the issue. Don't overdo it. Great tickets allow us to focus on solving problems instead of discussing them.
 * **Take care of your ticket.** When you spend time to report a ticket with care we'll enjoy fixing it for you.
