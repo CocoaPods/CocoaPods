@@ -15,7 +15,6 @@ module Pod
       #
       def generate
         config = {
-          'ALWAYS_SEARCH_USER_PATHS'     => 'YES',
           'OTHER_LDFLAGS'                => default_ld_flags,
           'PODS_ROOT'                    => '${SRCROOT}',
           'HEADER_SEARCH_PATHS'          => quote(target.build_headers.search_paths) + ' ' + quote(sandbox.public_headers.search_paths),
