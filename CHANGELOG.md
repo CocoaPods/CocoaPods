@@ -2,6 +2,12 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+###### Bug fixes
+
+* Fixed a linter issue related to the dedicated targets change.
+  [#1130](https://github.com/CocoaPods/CocoaPods/issues/1130)
 
 ## 0.21.0.rc1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.2...0.21.0.rc1)
@@ -26,6 +32,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Fixed crash due to Podfile.lock containing multiple version requirements for
   a Pod. [#1076](https://github.com/CocoaPods/CocoaPods/issues/1076)
+
 * Fixed a build error due to the copy resources script using the same temporary
   file for multiple targets.
   [#1099](https://github.com/CocoaPods/CocoaPods/issues/1099)
