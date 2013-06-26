@@ -105,6 +105,22 @@ module Pod
         path = SourcesManager.search_index_path.to_s
         path.should.match %r[Library/Caches/CocoaPods/search_index.yaml]
       end
+
+      it "returns the sources from podfile" do
+        @podfile = Podfile.new do
+          platform :ios
+          source 'netbe'
+          source 'cocoapods'
+        end
+        SourcesManager.config.stubs(:podfile).returns(@podfile)
+        sources = SourcesManager.podfile_sources
+        sources.map(&:name).should == %w[netbe cocoapods]
+      end
+
+      it "returns cocoapods source if none specified" do
+        sources = SourcesManager.podfile_sources
+        sources.map(&:name).should == %w[master]
+      end
     end
 
     #-------------------------------------------------------------------------#
