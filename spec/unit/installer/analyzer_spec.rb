@@ -454,7 +454,20 @@ module Pod
       end
 
       #--------------------------------------#
+      describe "#update_repositories_if_needed" do
+        it "updates the other repositories" do
+          config.skip_repo_update = false
+          source = "http://github.com/netbe/cocoapods"
 
+          def @podfile.sources
+              ["http://github.com/netbe/cocoapods", "http://github.com/cocoapods/specs"]
+          end
+
+          SourcesManager.expects(:update).with(source).once
+          SourcesManager.expects(:update).with("http://github.com/cocoapods/specs").once
+          @analyzer.send(:update_repositories_if_needed)
+        end
+      end
     end
   end
 end
