@@ -52,15 +52,19 @@ Generating Pods project
       - Generating xcconfig file at `Pods/Generated/Pods-OS X App.xcconfig`
       - Generating target environment header at `Pods/Generated/Pods-OS X App-environment.h`
       - Generating copy resources script at `Pods/Generated/Pods-OS X App-resources.sh`
-      - Generating acknowledgements at `Pods/Generated/Pods-OS X App-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Generated/Pods-OS X App-acknowledgements.markdown`
+      - Generating acknowledgements at `Pods/Generated/Pods-OS X
+      App-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Generated/Pods-OS X
+      App-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Generated/Pods-OS X App-dummy.m`
     - Installing target `Pods-iOS App` iOS 4.3
       - Generating xcconfig file at `Pods/Generated/Pods-iOS App.xcconfig`
       - Generating target environment header at `Pods/Generated/Pods-iOS App-environment.h`
       - Generating copy resources script at `Pods/Generated/Pods-iOS App-resources.sh`
-      - Generating acknowledgements at `Pods/Generated/Pods-iOS App-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Generated/Pods-iOS App-acknowledgements.markdown`
+      - Generating acknowledgements at `Pods/Generated/Pods-iOS
+      App-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Generated/Pods-iOS
+      App-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Generated/Pods-iOS App-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Generated/Pods.xcodeproj`

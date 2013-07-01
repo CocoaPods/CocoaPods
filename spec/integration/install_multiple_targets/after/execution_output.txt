@@ -30,7 +30,8 @@ Downloading dependencies
      $ /usr/bin/git clone "CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f" "ROOT/tmp/install_multiple_targets/Pods/Generated/Sources/JSONKit"
      Cloning into 'ROOT/tmp/install_multiple_targets/Pods/Generated/Sources/JSONKit'...
      done.
-   $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
+   $ /usr/bin/git checkout -b activated-pod-commit
+   0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
    Switched to a new branch 'activated-pod-commit'
 
 -> Installing Reachability (3.1.0)
@@ -102,7 +103,8 @@ Generating Pods project
       - Generating target environment header at `Pods/Generated/Pods-test-environment.h`
       - Generating copy resources script at `Pods/Generated/Pods-test-resources.sh`
       - Generating acknowledgements at `Pods/Generated/Pods-test-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Generated/Pods-test-acknowledgements.markdown`
+      - Generating acknowledgements at
+      `Pods/Generated/Pods-test-acknowledgements.markdown`
       - Generating dummy source file at `Pods/Generated/Pods-test-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Generated/Pods.xcodeproj`
