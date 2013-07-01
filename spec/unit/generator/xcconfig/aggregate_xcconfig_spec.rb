@@ -91,7 +91,7 @@ module Pod
 
     it "includes the namespaced public pod xcconfig file" do
       generated = Xcodeproj::Config.new(@path)
-      generated.includes.should.include("#{@pod_target.label}")
+      generated.includes.should.include("#{@pod_target.label}.xcconfig")
     end
 
   end

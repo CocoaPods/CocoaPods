@@ -2,12 +2,20 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+
+## 0.21.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0.rc1...0.21.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.21.0.rc1...0.21.0)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.7.0...0.7.1)
 
 ###### Bug fixes
 
 * Fixed a linter issue related to the dedicated targets change.
   [#1130](https://github.com/CocoaPods/CocoaPods/issues/1130)
+
+* Fixed xcconfig issues related to Pods including a dot in the name.
+  [#1152](https://github.com/CocoaPods/CocoaPods/issues/1152)
+
 
 ## 0.21.0.rc1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.2...0.21.0.rc1)
