@@ -56,25 +56,26 @@ namespace :gem do
 
       if `git tag`.strip.split("\n").include?(gem_version)
         $stderr.puts "[!] A tag for version `#{gem_version}' already exists. Change the version in lib/cocoapods/gem_version.rb"
+        silent_sh "open lib/cocoapods/gem_version.rb"
         exit 1
       end
 
-      puts "You are about to release `#{gem_version}', is that correct? [y/n]"
-      exit if $stdin.gets.strip.downcase != 'y'
-
       diff_lines = `git diff --name-only`.strip.split("\n")
+      diff_lines.delete('CHANGELOG.md')
 
       if diff_lines.size == 0
         $stderr.puts "[!] Change the version number yourself in lib/cocoapods/gem_version.rb"
         exit 1
       end
 
-      diff_lines.delete('Gemfile.lock')
-      diff_lines.delete('CHANGELOG.md')
       if diff_lines != ['lib/cocoapods/gem_version.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
         exit 1
       end
+
+      puts "You are about to release `#{gem_version}', is that correct? [y/n]"
+      exit if $stdin.gets.strip.downcase != 'y'
+
     end
 
     require 'date'
