@@ -335,7 +335,7 @@ namespace :examples do
             major_version = xcode_version.split('.').first.to_i
             destination_flag_supported = major_version > 4
             if destination_flag_supported
-              command << " -destination 'platform=iOS Simulator,name=iPhone'"
+              command << " -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch)'"
             else
               command << " -sdk "
               command << Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
