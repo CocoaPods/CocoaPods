@@ -101,7 +101,7 @@ module Pod
 
       it "doesn't consider changed a Pod whose specification is in head mode if not in update mode" do
         @sandbox.stubs(:head_pod?).returns(true)
-        @analyzer.stubs(:sandbox_head_verision?).returns(true)
+        @analyzer.stubs(:sandbox_head_version?).returns(true)
         @analyzer.stubs(:update_mode).returns(false)
         @analyzer.send(:pod_changed?, 'BananaLib').should == false
       end
