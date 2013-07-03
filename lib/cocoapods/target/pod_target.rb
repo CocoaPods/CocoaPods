@@ -43,10 +43,16 @@ module Pod
       specs.map { |spec| spec.consumer(platform) }
     end
 
-    # @return [Specification] the root specification for the target.
+    # @return [Specification] The root specification for the target.
     #
     def root_spec
       specs.first.root
+    end
+
+    # @return [String] The name of the Pod that this target refers to.
+    #
+    def pod_name
+      root_spec.name
     end
 
     # @return [Array<String>] The names of the Pods on which this target
@@ -54,7 +60,7 @@ module Pod
     #
     def dependencies
       specs.map do |spec|
-        spec.consumer(platform).dependencies.map { |dep| dep.name }
+        spec.consumer(platform).dependencies.map { |dep| Specification.root_name(dep.name) }
       end.flatten
     end
 

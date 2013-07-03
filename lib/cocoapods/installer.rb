@@ -339,8 +339,14 @@ module Pod
           add_dependency(aggregate_target, pod_target)
           pod_target.dependencies.each do |dep|
 
-            pod_dependency_target = aggregate_target.pod_targets.find { |target| target.root_spec.name == dep }
-            add_dependency(pod_target, pod_dependency_target)
+            unless dep == pod_target.pod_name
+              pod_dependency_target = aggregate_target.pod_targets.find { |target| target.pod_name == dep }
+              # TODO remove me
+              unless pod_dependency_target
+                puts "[BUG] DEP: #{dep}"
+              end
+              add_dependency(pod_target, pod_dependency_target)
+            end
           end
         end
       end

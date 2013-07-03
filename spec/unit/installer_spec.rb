@@ -286,6 +286,24 @@ module Pod
 
       #--------------------------------------#
 
+      describe "#set_target_dependencies" do
+
+        xit "sets the pod targets as dependencies of the aggregate target" do
+
+        end
+
+        xit "sets the dependecies of the pod targets" do
+
+        end
+
+        xit "is robusts against subspecs" do
+
+        end
+
+      end
+
+      #--------------------------------------#
+
       describe "#write_pod_project" do
 
         before do

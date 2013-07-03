@@ -30,6 +30,10 @@ module Pod
         @pod_target.root_spec.name.should == 'BananaLib'
       end
 
+      it "returns the name of the Pod" do
+        @pod_target.pod_name.should == 'BananaLib'
+      end
+
       it "returns the name of the Pods on which this target depends" do
         @pod_target.dependencies.should == ["monkey"]
       end
