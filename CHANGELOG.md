@@ -24,6 +24,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The copy resources shell script now aborts if any error occurs.
   [#1098](https://github.com/CocoaPods/CocoaPods/issues/1098)
 
+* The output of shell script build phases don't show environment variables
+* anymore to reduce noise.
+  [#1122](https://github.com/CocoaPods/CocoaPods/issues/1122)
+
+
 * CocoaPods doesn't set anymore the deprecated `ALWAYS_SEARCH_USER_PATHS` build
   setting.
 
