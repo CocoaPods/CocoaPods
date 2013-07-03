@@ -2,6 +2,16 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## 0.22.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.0...0.22.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.0...0.22.1)
+
+###### Bug fixes
+
+* Fixed a crash related to target dependencies and subspecs.
+  [#1168](https://github.com/CocoaPods/CocoaPods/issues/1168)
+
+
 ## 0.22.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0...0.22.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.21.0...0.22.0)
