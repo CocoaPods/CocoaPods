@@ -21,6 +21,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/config.rb#L7-L25
   [#1159](https://github.com/CocoaPods/CocoaPods/issues/1159)
 
+* The copy resources shell script now aborts if any error occurs.
+  [#1098](https://github.com/CocoaPods/CocoaPods/issues/1098)
+
 * CocoaPods doesn't set anymore the deprecated `ALWAYS_SEARCH_USER_PATHS` build
   setting.
 

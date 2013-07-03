@@ -79,6 +79,7 @@ module Pod
 
       INSTALL_RESOURCES_FUCTION = <<EOS
 #!/bin/sh
+set -e
 
 RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
 > "$RESOURCES_TO_COPY"
