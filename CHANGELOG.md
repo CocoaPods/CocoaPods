@@ -20,6 +20,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   `#copy_resources_script_path` method.
   [#1157](https://github.com/CocoaPods/CocoaPods/issues/1157)
 
+* Frameworks symlinks are not properly preserved by the copy resources script.
+  Thanks to Thomas Dohmke (ashtom) for the fix.
+  [#1063](https://github.com/CocoaPods/CocoaPods/issues/1063)
+
 ## 0.21.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0.rc1...0.21.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.21.0.rc1...0.21.0)
