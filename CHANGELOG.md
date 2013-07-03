@@ -2,6 +2,16 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+###### Bug fixes
+
+* Pods whose head state changes now are correctly detected and reinstalled.
+  [#1160](https://github.com/CocoaPods/CocoaPods/issues/1160)
+
+* Fixed the library reppresentation of the hooks which caused issues with the
+  `#copy_resources_script_path` method.
+  [#1157](https://github.com/CocoaPods/CocoaPods/issues/1157)
 
 ## 0.21.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0.rc1...0.21.0)
