@@ -60,14 +60,12 @@ module Pod
 
         def self.options
           [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
-            ["--local",       "Lint a podspec against the local files contained in its directory"],
             ["--only-errors", "Lint validates even if warnings are present"],
             ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
         end
 
         def initialize(argv)
           @quick       =  argv.flag?('quick')
-          @local       =  argv.flag?('local')
           @only_errors =  argv.flag?('only-errors')
           @clean       =  argv.flag?('clean', true)
           @podspecs_paths = argv.arguments!
@@ -80,7 +78,6 @@ module Pod
           podspecs_to_lint.each do |podspec|
             validator             = Validator.new(podspec)
             validator.quick       = @quick
-            validator.local       = @local
             validator.no_clean    = !@clean
             validator.only_errors = @only_errors
             validator.validate

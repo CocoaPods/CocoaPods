@@ -308,7 +308,7 @@ module Pod
       podfile  = Pod::Podfile.new do
         platform(platform_name, deployment_target)
         if (local)
-          pod name, :local => podspec.dirname.to_s
+          pod name, :path => podspec.dirname.to_s
         else
           pod name, :podspec => podspec.to_s
         end
