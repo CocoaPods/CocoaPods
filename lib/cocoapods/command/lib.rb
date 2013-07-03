@@ -41,8 +41,8 @@ module Pod
         executable :git
         executable :ruby
 
-        TEMPLATE_REPO = "/Users/fabio/Projects/CP/pod-template"
-        TEMPLATE_INFO_URL = "/Users/fabio/Projects/CP/pod-template"
+        TEMPLATE_REPO = "https://github.com/CocoaPods/CocoaPods.git"
+        TEMPLATE_INFO_URL = "https://github.com/CocoaPods/CocoaPods"
 
         # Clones the template from the remote in the working directory using
         # the name of the Pod.

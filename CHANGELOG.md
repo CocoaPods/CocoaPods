@@ -6,6 +6,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
+* Added the `pod lib create` subcommand which allows to create a new Pod
+  adhering to the best practices. The template is still a bit primitive
+  and we encourage users to provide feedback by submitting patches and issues
+  to the https://github.com/CocoaPods/CocoaPods.
+  [#850](https://github.com/CocoaPods/CocoaPods/issues/850)
+
+* Added the `pod lib lint` subcommand which allows to lint the Pod stored
+  in the working directory (a pod spec in the root is needed).
+  [#850](https://github.com/CocoaPods/CocoaPods/issues/850)
+
 * The size of the cache used for the git repos is now configurable. For more
   detail see
   https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/config.rb#L7-L25
