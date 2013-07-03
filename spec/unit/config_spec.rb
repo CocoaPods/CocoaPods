@@ -113,6 +113,14 @@ module Pod
         end
       end
 
+      it "returns the statistics cache file" do
+        config.statistics_cache_file.to_s.should.end_with?('statistics.yml')
+      end
+
+      it "returns the search index file" do
+        config.search_index_file.to_s.should.end_with?('search_index.yaml')
+      end
+
     end
 
     #-------------------------------------------------------------------------#
@@ -134,7 +142,42 @@ module Pod
       it "cleans SCM dirs in dependency checkouts" do
         config.should.clean
       end
+
+      it "has a default cache size of 500" do
+        config.max_cache_size.should == 500
+      end
+
+      it "returns the cache root" do
+        config.cache_root.should == Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
+      end
+
+      it "doesn't use aggressive cache" do
+        config.should.not.aggressive_cache?
+      end
+
     end
+
+    #-------------------------------------------------------------------------#
+
+    describe "Dependency Injection" do
+
+      it "returns the downloader" do
+        downloader = config.downloader(Pathname.new(''), { :git => 'example.com' })
+        downloader.target_path.should == Pathname.new('')
+        downloader.url.should == 'example.com'
+        downloader.cache_root.should == config.cache_root
+        downloader.max_cache_size.should == 500
+        downloader.aggressive_cache.should.be.false
+      end
+
+      it "returns the specification statistics provider" do
+        stats_provider = config.spec_statistics_provider
+        stats_provider.cache_file.should == config.cache_root + 'statistics.yml'
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
 
     describe "Private helpers" do
 

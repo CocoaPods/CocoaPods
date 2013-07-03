@@ -18,25 +18,6 @@ module Pod
     end
   end
 
-  # @return [Pathname] The directory where CocoaPods caches the downloads.
-  #
-  # @todo   The {Installer::PodSourceInstaller} and the #{ExternalSources}
-  #         classes build and configure the downloader from scratch.
-  #
-  CACHE_ROOT = Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
-  CACHE_ROOT.mkpath unless CACHE_ROOT.exist?
-
-  # @return [Fixnum] The maximum size for the cache expressed in Mb.
-  #
-  # @todo   The {Installer::PodSourceInstaller} and the #{ExternalSources}
-  #         classes build and configure the downloader from scratch.
-  #
-  MAX_CACHE_SIZE = 500
-
-  # @return [Pathname] The file to use a cache of the statistics provider.
-  #
-  STATISTICS_CACHE_FILE = CACHE_ROOT + 'statistics.yml'
-
   autoload :Command,                   'cocoapods/command'
   autoload :Executable,                'cocoapods/executable'
   autoload :ExternalSources,           'cocoapods/external_sources'

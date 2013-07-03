@@ -4,6 +4,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
+* The size of the cache used for the git repos is now configurable. For more
+  detail see
+  https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/config.rb#L7-L25
+  [#1159](https://github.com/CocoaPods/CocoaPods/issues/1159)
+
 ###### Bug fixes
 
 * Pods whose head state changes now are correctly detected and reinstalled.

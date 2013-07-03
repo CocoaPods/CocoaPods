@@ -43,7 +43,7 @@ module Pod
           sets.reject!{ |set| !set.specification.available_platforms.map(&:name).include?(:osx) }
         end
 
-        statistics_provider = Specification::Set::Statistics.new(STATISTICS_CACHE_FILE)
+        statistics_provider = Config.instance.spec_statistics_provider
         sets.each do |set|
           begin
             if @stats
