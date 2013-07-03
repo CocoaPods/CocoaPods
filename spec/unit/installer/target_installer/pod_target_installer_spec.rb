@@ -116,7 +116,7 @@ module Pod
 
       it 'adds the source files of each pod to the target of the Pod library' do
         @installer.install!
-        names = @installer.library.target.source_build_phase.files.map { |bf| bf.file_ref.name }
+        names = @installer.library.target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
         names.should.include("Banana.m")
       end
 
@@ -156,7 +156,7 @@ module Pod
       it "creates a dummy source to ensure the compilation of libraries with only categories" do
         @installer.install!
         build_files = @installer.library.target.source_build_phase.files
-        build_file = build_files.find { |bf| bf.file_ref.name == 'Pods-BananaLib-dummy.m' }
+        build_file = build_files.find { |bf| bf.file_ref.display_name == 'Pods-BananaLib-dummy.m' }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-BananaLib-dummy.m'
         dummy = config.sandbox.root + 'Pods-BananaLib-dummy.m'

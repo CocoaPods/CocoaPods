@@ -64,6 +64,7 @@ module Pod
         @installer.stubs(:install_libraries)
         @installer.stubs(:link_aggregate_target)
         @installer.stubs(:write_lockfiles)
+        @installer.stubs(:aggregate_targets).returns([])
         @installer.unstub(:generate_pods_project)
         def @installer.run_post_install_hooks
           @hook_called = true
@@ -226,8 +227,7 @@ module Pod
           @installer.stubs(:aggregate_targets).returns([])
           config.stubs(:podfile_path).returns(Pathname.new('/Podfile'))
           @installer.send(:prepare_pods_project)
-          f = @installer.pods_project['Podfile']
-          f.name.should == 'Podfile'
+          @installer.pods_project['Podfile'].should.be.not.nil
         end
 
         it "sets the deployment target for the whole project" do

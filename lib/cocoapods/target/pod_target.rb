@@ -49,5 +49,14 @@ module Pod
       specs.first.root
     end
 
+    # @return [Array<String>] The names of the Pods on which this target
+    #         depends.
+    #
+    def dependencies
+      specs.map do |spec|
+        spec.consumer(platform).dependencies.map { |dep| dep.name }
+      end.flatten
+    end
+
   end
 end
