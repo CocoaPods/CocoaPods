@@ -9,30 +9,29 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Added the `pod lib create` subcommand which allows to create a new Pod
   adhering to the best practices. The template is still a bit primitive
   and we encourage users to provide feedback by submitting patches and issues
-  to the https://github.com/CocoaPods/CocoaPods.
+  to https://github.com/CocoaPods/CocoaPods.
   [#850](https://github.com/CocoaPods/CocoaPods/issues/850)
 
 * Added the `pod lib lint` subcommand which allows to lint the Pod stored
   in the working directory (a pod spec in the root is needed).
   [#850](https://github.com/CocoaPods/CocoaPods/issues/850)
 
-* The dependencies of the targets of the Pods project are now being explicitly
-  set up.
+* The dependencies of the targets of the Pods project are now made explicit.
   [#1165](https://github.com/CocoaPods/CocoaPods/issues/1165)
 
 * The size of the cache used for the git repos is now configurable. For more
-  detail see
+  details see
   https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/config.rb#L7-L25
   [#1159](https://github.com/CocoaPods/CocoaPods/issues/1159)
 
 * The copy resources shell script now aborts if any error occurs.
   [#1098](https://github.com/CocoaPods/CocoaPods/issues/1098)
 
-* The output of shell script build phases don't show environment variables
-  anymore to reduce noise.
+* The output of shell script build phases no longer includes environment
+  variables to reduce noise.
   [#1122](https://github.com/CocoaPods/CocoaPods/issues/1122)
 
-* CocoaPods doesn't set anymore the deprecated `ALWAYS_SEARCH_USER_PATHS` build
+* CocoaPods no longer sets the deprecated `ALWAYS_SEARCH_USER_PATHS` build
   setting.
 
 ###### Bug fixes
