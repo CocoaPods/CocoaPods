@@ -112,10 +112,10 @@ module Pod
 
     # @!group Initialization
 
-    def initialize
+    def initialize(use_user_settings = true)
       configure_with(DEFAULTS)
 
-      if user_settings_file.exist?
+      if use_user_settings && user_settings_file.exist?
         require 'yaml'
         user_settings = YAML.load_file(user_settings_file)
         configure_with(user_settings)
