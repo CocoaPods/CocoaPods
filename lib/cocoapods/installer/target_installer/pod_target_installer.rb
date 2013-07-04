@@ -55,16 +55,16 @@ module Pod
       #
       def create_xcconfig_file
         path = library.xcconfig_path
+        public_gen = Generator::PublicPodXCConfig.new(library)
         UI.message "- Generating public xcconfig file at #{UI.path(path)}" do
-          gen = Generator::PublicPodXCConfig.new(library)
-          gen.save_as(path)
+          public_gen.save_as(path)
           add_file_to_support_group(path)
         end
 
         path = library.xcconfig_private_path
+        private_gen = Generator::PrivatePodXCConfig.new(library, public_gen.xcconfig)
         UI.message "- Generating private xcconfig file at #{UI.path(path)}" do
-          gen = Generator::PrivatePodXCConfig.new(library)
-          gen.save_as(path)
+          private_gen.save_as(path)
           xcconfig_file_ref = add_file_to_support_group(path)
 
           target.build_configurations.each do |c|
