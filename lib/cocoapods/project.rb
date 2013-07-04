@@ -187,8 +187,9 @@ module Pod
     #
     def add_podfile(podfile_path)
       podfile_path = Pathname.new(podfile_path)
-      podfile_ref  = new_file(relativize(podfile_path))
+      podfile_ref = new_file(relativize(podfile_path))
       podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
+      podfile_ref.last_known_file_type = 'text'
       podfile_ref
     end
 
