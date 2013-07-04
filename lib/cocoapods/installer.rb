@@ -356,21 +356,14 @@ module Pod
     #
     def add_dependency(dependent_target, dependency_target)
       container_proxy = pods_project.new(Xcodeproj::Project::PBXContainerItemProxy)
-      # container_proxy.container_portal = '224D2C1BCDE44D8F9B674AD5'
+      container_proxy.container_portal = pods_project.root_object.uuid
       container_proxy.proxy_type = '1'
-      # container_proxy.remote_global_id_string = 'F8D3306CA0564CA3861B2D4E'
-      # container_proxy.remote_info = 'Pods-AFHTTPRequestOperationLogger'
-
-
-      # reference_proxy = pods_project.new(Xcodeproj::Project::PBXReferenceProxy)
-      # reference_proxy.path =
-      # reference_proxy.file_type =
-      # reference_proxy.remote_ref = container_proxy
-      # reference_proxy.source_tree = BUILT_PRODUCTS_DIR
+      container_proxy.remote_global_id_string = dependency_target.target.uuid
+      container_proxy.remote_info = dependency_target.target.name
 
       dependency = pods_project.new(Xcodeproj::Project::PBXTargetDependency)
       dependency.target = dependency_target.target
-      # dependency.targetProxy = container_proxy
+      dependency.targetProxy = container_proxy
 
       dependent_target.target.dependencies << dependency
     end
