@@ -26,7 +26,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#850](https://github.com/CocoaPods/CocoaPods/issues/850)
 
 * Added the `pod lib lint` subcommand which allows to lint the Pod stored
-  in the working directory (a pod spec in the root is needed).
+  in the working directory (a pod spec in the root is needed). This subcommand
+  is equivalent to the deprecated `pod spec lint --local`.
   [#850](https://github.com/CocoaPods/CocoaPods/issues/850)
 
 * The dependencies of the targets of the Pods project are now made explicit.
