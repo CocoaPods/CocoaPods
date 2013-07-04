@@ -344,7 +344,7 @@ module Pod
     #         returns its output (bot STDOUT and STDERR).
     #
     def xcodebuild
-      `xcodebuild clean build 2>&1`
+      `xcodebuild clean build -target Pods 2>&1`
     end
 
     #-------------------------------------------------------------------------#

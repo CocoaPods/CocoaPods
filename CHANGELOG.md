@@ -24,6 +24,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   regression introduced by CocoaPods 0.22.1 and matching more closely Xcode
   behaviour.
 
+* The validator now builds the Pods target instead of the first target actually
+  performing the validation.
 
 ## 0.22.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.0...0.22.1)
