@@ -2,6 +2,29 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+
+## 0.22.2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.1...0.22.2)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.1...0.22.2)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.0...0.8.1)
+
+
+###### Enhancements
+
+* The build settings of the Pods project and of its target have been updated to
+  be in line with the new defaults of the future versions of Xcode.
+
+###### Bug fixes
+
+* Specifications defining build setting with the `[*]` syntax are now properly
+  handled.
+  [#1171](https://github.com/CocoaPods/CocoaPods/issues/1171)
+
+* The name of the files references are now properly set fixing a minor
+  regression introduced by CocoaPods 0.22.1 and matching more closely Xcode
+  behaviour.
+
+
 ## 0.22.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.0...0.22.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.0...0.22.1)
