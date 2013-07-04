@@ -46,6 +46,12 @@ module Pod
         settings = {}
         if library.platform.requires_legacy_ios_archs?
           settings['ARCHS'] = "armv6 armv7"
+        else
+          if library.platform.name == :ios
+            settings['ARCHS'] = "$(ARCHS_STANDARD_32_BIT)"
+          else
+            settings['ARCHS'] = "$(ARCHS_STANDARD_64_BIT)"
+          end
         end
 
         @target.build_settings('Debug').merge!(settings)

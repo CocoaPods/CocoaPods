@@ -238,10 +238,10 @@ module Pod
           @installer.stubs(:aggregate_targets).returns([pod_target_ios, pod_target_osx])
           @installer.send(:prepare_pods_project)
           build_settings = @installer.pods_project.build_configurations.map(&:build_settings)
-          build_settings.should == [
-            {"MACOSX_DEPLOYMENT_TARGET"=>"10.8", "IPHONEOS_DEPLOYMENT_TARGET"=>"6.0"},
-            {"MACOSX_DEPLOYMENT_TARGET"=>"10.8", "IPHONEOS_DEPLOYMENT_TARGET"=>"6.0"},
-          ]
+          build_settings.each do |build_setting|
+            build_setting["MACOSX_DEPLOYMENT_TARGET"].should == '10.8'
+            build_setting["IPHONEOS_DEPLOYMENT_TARGET"].should == '6.0'
+          end
         end
       end
 

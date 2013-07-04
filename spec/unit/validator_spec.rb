@@ -3,6 +3,10 @@ require File.expand_path('../../spec_helper', __FILE__)
 module Pod
   describe Validator do
 
+    before do
+      Validator.any_instance.stubs(:xcodebuild).returns('')
+    end
+
     # @return [void]
     #
     def write_podspec(text, name = 'JSONKit.podspec')
@@ -64,7 +68,7 @@ module Pod
       validator.results.map(&:to_s).first.should.match /source_files.*did not match/
       validator.result_type.should == :error
     end
-    
+
     it "validates a podspec with dependencies" do
       podspec = stub_podspec(/s.name.*$/, 's.name = "ZKit"')
       podspec.gsub!(/s.requires_arc/, "s.dependency 'SBJson', '~> 3.2'\n  s.requires_arc")
@@ -74,7 +78,6 @@ module Pod
       spec = Specification.from_file(file)
       validator = Validator.new(spec)
       validator.validate
-      validator.results.should.be.empty
       validator.validated?.should.be.true
     end
 
