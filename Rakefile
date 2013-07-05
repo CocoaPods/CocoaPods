@@ -182,7 +182,7 @@ namespace :spec do
 
   desc "Run the integration spec"
   task :integration => :unpack_fixture_tarballs do
-    sh "bundle exec bacon spec/integration_2.rb"
+    sh "bundle exec bacon spec/integration.rb"
   end
 
   # Default task
@@ -198,7 +198,7 @@ namespace :spec do
     sh    "bundle exec bacon #{specs('**')}"
 
     title 'Running Integration tests'
-    sh    "bundle exec bacon spec/integration_2.rb"
+    sh    "bundle exec bacon spec/integration.rb"
 
     title 'Running examples'
     Rake::Task['examples:build'].invoke
@@ -220,7 +220,7 @@ namespace :spec do
     end
 
     title 'Running Integration tests'
-    sh "bundle exec bacon spec/integration_2.rb"
+    sh "bundle exec bacon spec/integration.rb"
 
     title 'Running examples'
     Rake::Task['examples:build'].invoke
@@ -262,7 +262,7 @@ namespace :spec do
   desc "Rebuilds integration fixtures"
   task :rebuild_integration_fixtures do
     title 'Running Integration tests'
-    `bundle exec bacon spec/integration_2.rb`
+    `bundle exec bacon spec/integration.rb`
 
     title 'Storing fixtures'
     # Copy the files to the files produced by the specs to the after folders
