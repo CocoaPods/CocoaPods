@@ -323,12 +323,12 @@ namespace :examples do
 
   desc "Build all examples"
   task :build do
-    execute_command "rm -rf ~/Library/Developer/Shared/Documentation/DocSets/org.cocoapods.*"
     examples.entries.each do |example|
       puts "Building example: #{example}"
       Dir.chdir(example.to_s) do
         execute_command "rm -rf Pods DerivedData"
-        execute_command "#{'../../bin/' unless ENV['FROM_GEM']}sandbox-pod install --verbose --no-repo-update"
+        # execute_command "#{'../../bin/' unless ENV['FROM_GEM']}sandbox-pod install --verbose --no-repo-update"
+        execute_command "#{'../../bin/' unless ENV['FROM_GEM']}pod install --verbose --no-repo-update"
         command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
           if (example + 'Podfile').read.include?('platform :ios')
             # Specifically build against the simulator SDK so we don't have to deal with code signing.
