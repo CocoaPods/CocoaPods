@@ -25,12 +25,12 @@ module Pod
       @installer = Installer::TargetInstaller.new(config.sandbox, @pod_target)
     end
 
-    it "doesn't sets the ARCHS and builds only for the active arch in debug" do
+    it "sets the ARCHS" do
       @installer.send(:add_target)
       target = @project.targets.first
       target.build_settings('Debug')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
       target.build_settings('AppStore')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-      target.build_settings('Debug')["ONLY_ACTIVE_ARCH"].should == "YES"
+      target.build_settings('Debug')["ONLY_ACTIVE_ARCH"].should.be.nil
       target.build_settings('AppStore')["ONLY_ACTIVE_ARCH"].should.be.nil
     end
 
