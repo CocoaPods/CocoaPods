@@ -197,7 +197,7 @@ namespace :spec do
     title 'Running the specs'
     sh    "bundle exec bacon #{specs('**')}"
 
-    title 'Running Integration 2 tests'
+    title 'Running Integration tests'
     sh    "bundle exec bacon spec/integration_2.rb"
 
     title 'Running examples'
@@ -219,7 +219,7 @@ namespace :spec do
       sh    "./bin/pod setup"
     end
 
-    title 'Running Integration 2 tests'
+    title 'Running Integration tests'
     sh "bundle exec bacon spec/integration_2.rb"
 
     title 'Running examples'
@@ -259,9 +259,9 @@ namespace :spec do
 
   #--------------------------------------#
 
-  desc "Rebuild integration take 2 after folders"
+  desc "Rebuilds integration fixtures"
   task :rebuild_integration_fixtures do
-    title 'Running Integration 2 tests'
+    title 'Running Integration tests'
     `bundle exec bacon spec/integration_2.rb`
 
     title 'Storing fixtures'

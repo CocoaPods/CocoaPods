@@ -1,6 +1,6 @@
 
 # ------------------------------------ #
-#  CocoaPods Integration tests take 2  #
+#  CocoaPods Integration tests         #
 # ------------------------------------ #
 
 #-----------------------------------------------------------------------------#
@@ -153,7 +153,7 @@ def check_with_folder(folder)
 
       it relative_path do
         case expected_path
-        when %r[Podfile\.lock$], %r[xcodeproj\.yaml$]
+        when %r[Podfile\.lock$], %r[Manifest\.lock$], %r[xcodeproj\.yaml$]
           file_should_exist(produced)
           yaml_should_match(expected, produced)
         else
