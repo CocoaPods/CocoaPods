@@ -8,7 +8,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.1...0.22.2)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.0...0.8.1)
 
-
 ###### Enhancements
 
 * The build settings of the Pods project and of its target have been updated to
@@ -26,6 +25,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * The validator now builds the Pods target instead of the first target actually
   performing the validation.
+
+* Build settings defined through the `xcconfig` attribute of a `podspec` are now
+  stripped of duplicate values when merged in an aggregate target.
+  [#1189](https://github.com/CocoaPods/CocoaPods/issues/1189)
+
 
 ## 0.22.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.0...0.22.1)
