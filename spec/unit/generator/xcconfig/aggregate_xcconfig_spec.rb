@@ -69,10 +69,6 @@ module Pod
       @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should.include '$(inherited)'
     end
 
-    it 'adds the pod namespaced configuration items' do
-      @xcconfig.to_hash['OTHER_LDFLAGS'].should.include("${#{@pod_target.xcconfig_prefix}OTHER_LDFLAGS}")
-    end
-
     #-----------------------------------------------------------------------#
 
     before do
@@ -83,11 +79,6 @@ module Pod
     it "saves the xcconfig" do
       generated = Xcodeproj::Config.new(@path)
       generated.class.should == Xcodeproj::Config
-    end
-
-    it "includes the namespaced public pod xcconfig file" do
-      generated = Xcodeproj::Config.new(@path)
-      generated.includes.should.include("#{@pod_target.label}.xcconfig")
     end
 
   end
