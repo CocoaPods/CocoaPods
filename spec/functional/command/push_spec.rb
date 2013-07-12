@@ -53,11 +53,15 @@ module Pod
       end
 
       # prepare the spec
-      spec = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
+      spec = (fixture('spec-repos') + 'test_repo/JSONKit/1.4/JSONKit.podspec').read
       spec_fix = spec.gsub(/https:\/\/github\.com\/johnezang\/JSONKit\.git/, fixture('integration/JSONKit').to_s)
       spec_add = spec.gsub(/'JSONKit'/, "'PushTest'")
+
+      spec_clean = (fixture('spec-repos') + 'test_repo/BananaLib/1.0/BananaLib.podspec').read
+
       File.open(temporary_directory + 'JSONKit.podspec',  'w') {|f| f.write(spec_fix) }
       File.open(temporary_directory + 'PushTest.podspec', 'w') {|f| f.write(spec_add) }
+      File.open(temporary_directory + 'BananaLib.podspec', 'w') {|f| f.write(spec_clean) }
     end
 
     it "refuses to push if the repo is not clean" do
@@ -79,6 +83,7 @@ module Pod
       Dir.chdir(temporary_directory) { cmd.run }
       Pod::UI.output.should.include('[Add] PushTest (1.4)')
       Pod::UI.output.should.include('[Fix] JSONKit (1.4)')
+      Pod::UI.output.should.include('[No change] BananaLib (1.0)')
       Dir.chdir(@upstream) { `git checkout master -q` }
       (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
     end
