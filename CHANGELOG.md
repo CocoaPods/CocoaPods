@@ -2,6 +2,13 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master (Unreleased)
+
+###### Bug Fixes
+
+* Fixed issue with `pod push` failing when the podspec is unchanged. It will now
+  report `[No change] ExamplePod (0.1.0)` and continue to push other podspecs if
+  they exist. [#1199](https://github.com/CocoaPods/CocoaPods/pull/1199)
 
 ## 0.22.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.1...0.22.2)
