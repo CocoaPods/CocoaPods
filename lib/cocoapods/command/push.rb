@@ -8,7 +8,7 @@ module Pod
 
       self.description = <<-DESC
         Validates NAME.podspec or `*.podspec' in the current working dir, creates
-        a directory and version folder for the pod in the local copy of 
+        a directory and version folder for the pod in the local copy of
         REPO (~/.cocoapods/[REPO]), copies the podspec file into the version directory,
         and finally it pushes REPO to its remote.
       DESC
@@ -79,7 +79,7 @@ module Pod
       #
       # @todo   Add specs for staged and unstaged files.
       #
-      # @todo   Gracefully handle the case where source is not under git 
+      # @todo   Gracefully handle the case where source is not under git
       #         source control.
       #
       # @return [void]
@@ -117,13 +117,18 @@ module Pod
           else
             message = "[Add] #{spec}"
           end
-          UI.puts " - #{message}"
 
           FileUtils.mkdir_p(output_path)
           FileUtils.cp(spec_file, output_path)
           Dir.chdir(repo_dir) do
-            git!("add #{spec.name}")
-            git!("commit --no-verify -m '#{message}'")
+            # only commit if modified
+            if git!("status --porcelain 2>&1") =~ /#{spec.name}/
+              UI.puts " - #{message}"
+              git!("add #{spec.name}")
+              git!("commit --no-verify -m '#{message}'")
+            else
+              UI.puts " - [No change] #{spec}"
+            end
           end
         end
       end
