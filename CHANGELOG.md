@@ -30,6 +30,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   stripped of duplicate values when merged in an aggregate target.
   [#1189](https://github.com/CocoaPods/CocoaPods/issues/1189)
 
+* Add support for .xcdatamodel files (in addition to .xcdatamodeld) and fix
+  handling of spaces in paths.
 
 ## 0.22.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.0...0.22.1)
