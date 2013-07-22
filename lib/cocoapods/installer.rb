@@ -296,6 +296,7 @@ module Pod
         @pods_project.build_configurations.each do |build_configuration|
           build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
           build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
+          build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
         end
       end
     end
