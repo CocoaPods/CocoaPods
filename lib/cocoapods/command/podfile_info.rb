@@ -14,13 +14,15 @@ module Pod
       def self.options
         [
           ["--all", "Show information about all Pods with dependencies that are used in a project"],
-          ["--md", "Output information in Markdown format"]
+          ["--md", "Output information in Markdown format"],
+          ["--license", "Additionally output license type"]
         ].concat(super)
       end
 
       def initialize(argv)
         @info_all = argv.flag?('all')
         @info_in_md = argv.flag?('md')
+        @info_license = argv.flag?('license')
         @podfile_path = argv.shift_argument
         super
       end
@@ -64,6 +66,9 @@ module Pod
           if spec
             info = {}
             keys.each { |k| info[k] = spec.specification.send(k) }
+            if @info_license
+              info[:license] ||= spec.specification.license[:type]
+            end
             pods_info << info
           else
             
@@ -78,9 +83,9 @@ module Pod
 
         pods.each do |pod| 
           if in_md
-            UI.puts "* [#{pod[:name]}](#{pod[:homepage]}) - #{pod[:summary]}" 
+            UI.puts ["* [#{pod[:name]}](#{pod[:homepage]}) - #{pod[:summary]}", pod[:license]].compact.join(' - ')
           else
-            UI.puts "- #{pod[:name]} - #{pod[:summary]}" 
+            UI.puts ["- #{pod[:name]} - #{pod[:summary]}", pod[:license]].compact.join(' - ')
           end
         end
       end
