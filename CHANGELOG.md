@@ -2,13 +2,30 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master (Unreleased)
+## 0.22.3
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.22.3)
+
+###### Enhancements
+
+* Add support for .xcdatamodel resource files (in addition to .xcdatamodeld).
+  [#1201](https://github.com/CocoaPods/CocoaPods/pull/1201)
 
 ###### Bug Fixes
+
+* Use correct template repo when using the `pod lib create` command.
+  [#1214](https://github.com/CocoaPods/CocoaPods/issues/1214)
 
 * Fixed issue with `pod push` failing when the podspec is unchanged. It will now
   report `[No change] ExamplePod (0.1.0)` and continue to push other podspecs if
   they exist. [#1199](https://github.com/CocoaPods/CocoaPods/pull/1199)
+
+* Ensure the resource script doesn’t fail due to the resources list file not
+  existing when trying to delete it.
+  [#1198](https://github.com/CocoaPods/CocoaPods/pull/1198)
+
+* Fix handling of spaces in paths when compiling xcdatamodel(d) files.
+  [#1201](https://github.com/CocoaPods/CocoaPods/pull/1201)
+
 
 ## 0.22.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.1...0.22.2)
@@ -37,8 +54,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   stripped of duplicate values when merged in an aggregate target.
   [#1189](https://github.com/CocoaPods/CocoaPods/issues/1189)
 
-* Add support for .xcdatamodel files (in addition to .xcdatamodeld) and fix
-  handling of spaces in paths.
 
 ## 0.22.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.0...0.22.1)
