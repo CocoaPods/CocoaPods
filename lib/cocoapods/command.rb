@@ -11,6 +11,7 @@ module Pod
     require 'cocoapods/command/help'
     require 'cocoapods/command/inter_process_communication'
     require 'cocoapods/command/lib'
+    require 'cocoapods/command/licenses'
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
     require 'cocoapods/command/podfile_info'
