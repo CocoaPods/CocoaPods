@@ -119,6 +119,10 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     ruby-prof (0.13.0)
+    simplecov (0.7.1)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
     slop (3.4.5)
     term-ansicolor (1.2.2)
       tins (~> 0.8)
@@ -150,5 +154,6 @@ DEPENDENCIES
   rb-fsevent
   redcarpet (< 3.0.0)
   ruby-prof
+  simplecov
   xcodeproj!
   yard
