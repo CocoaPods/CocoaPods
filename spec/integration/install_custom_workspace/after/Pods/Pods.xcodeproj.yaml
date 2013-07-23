@@ -276,7 +276,9 @@ Targets:
 Build Configurations:
 - Release:
     Build Settings:
+      STRIP_INSTALLED_PRODUCT: 'NO'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
 - Debug:
     Build Settings:
+      STRIP_INSTALLED_PRODUCT: 'NO'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'

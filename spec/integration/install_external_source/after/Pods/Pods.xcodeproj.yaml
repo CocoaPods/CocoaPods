@@ -153,7 +153,9 @@ Targets:
 Build Configurations:
 - Release:
     Build Settings:
+      STRIP_INSTALLED_PRODUCT: 'NO'
       IPHONEOS_DEPLOYMENT_TARGET: '4.3'
 - Debug:
     Build Settings:
+      STRIP_INSTALLED_PRODUCT: 'NO'
       IPHONEOS_DEPLOYMENT_TARGET: '4.3'

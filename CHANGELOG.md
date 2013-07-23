@@ -18,6 +18,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Fixed issue with `pod push` failing when the podspec is unchanged. It will now
   report `[No change] ExamplePod (0.1.0)` and continue to push other podspecs if
   they exist. [#1199](https://github.com/CocoaPods/CocoaPods/pull/1199)
+* Set STRIP_INSTALLED_PRODUCT = NO in the generated Pods project. This allows
+  Xcode to include symbols from CocoaPods in dSYMs during Archive builds.
 
 * Ensure the resource script doesn’t fail due to the resources list file not
   existing when trying to delete it.
