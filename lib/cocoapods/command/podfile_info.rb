@@ -14,8 +14,7 @@ module Pod
       def self.options
         [
           ["--all", "Show information about all Pods with dependencies that are used in a project"],
-          ["--md", "Output information in Markdown format"],
-          ["--license", "Additionally output license type"]
+          ["--md", "Output information in Markdown format"]
         ].concat(super)
       end
 
@@ -59,16 +58,13 @@ module Pod
         pods.collect! {|pod| (pod.is_a?(Hash)) ? pod.keys.first : pod}
       end
 
-      def pods_info_hash(pods, keys=[:name, :homepage, :summary])
+      def pods_info_hash(pods, keys=[:name, :homepage, :summary, :license])
         pods_info = []
         pods.each do |pod|
           spec = (Pod::SourcesManager.search_by_name(pod).first rescue nil)
           if spec
             info = {}
             keys.each { |k| info[k] = spec.specification.send(k) }
-            if @info_license
-              info[:license] ||= spec.specification.license[:type]
-            end
             pods_info << info
           else
             
@@ -79,13 +75,13 @@ module Pod
       end
 
       def pods_info(pods, in_md=false)
-        pods = pods_info_hash(pods, [:name, :homepage, :summary])
+        pods = pods_info_hash(pods, [:name, :homepage, :summary, :license])
 
         pods.each do |pod| 
           if in_md
-            UI.puts ["* [#{pod[:name]}](#{pod[:homepage]}) - #{pod[:summary]}", pod[:license]].compact.join(' - ')
+            UI.puts "* [#{pod[:name]}](#{pod[:homepage]}) - #{pod[:summary]} - #{pod[:license][:type]}"
           else
-            UI.puts ["- #{pod[:name]} - #{pod[:summary]}", pod[:license]].compact.join(' - ')
+            UI.puts "- #{pod[:name]} - #{pod[:summary]} - #{pod[:license][:type]}"
           end
         end
       end
