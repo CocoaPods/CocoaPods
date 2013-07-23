@@ -28,6 +28,10 @@ module Pod
           end
         end
 
+        # TODO Need to decide how we are going to ensure settings like these
+        # are always excluded from the user's project.
+        @xcconfig.attributes.delete('USE_HEADERMAP')
+
         @xcconfig
       end
 

@@ -12,6 +12,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Bug Fixes
 
+* Always exlude `USE_HEADERMAP` from the user’s project.
+  [#1216](https://github.com/CocoaPods/CocoaPods/issues/1216)
+
 * Use correct template repo when using the `pod lib create` command.
   [#1214](https://github.com/CocoaPods/CocoaPods/issues/1214)
 
