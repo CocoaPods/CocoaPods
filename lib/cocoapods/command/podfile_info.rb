@@ -21,6 +21,7 @@ module Pod
       def initialize(argv)
         @info_all = argv.flag?('all')
         @info_in_md = argv.flag?('md')
+        @info_license = argv.flag?('license')
         @podfile_path = argv.shift_argument
         super
       end
@@ -57,7 +58,7 @@ module Pod
         pods.collect! {|pod| (pod.is_a?(Hash)) ? pod.keys.first : pod}
       end
 
-      def pods_info_hash(pods, keys=[:name, :homepage, :summary])
+      def pods_info_hash(pods, keys=[:name, :homepage, :summary, :license])
         pods_info = []
         pods.each do |pod|
           spec = (Pod::SourcesManager.search_by_name(pod).first rescue nil)
@@ -74,13 +75,13 @@ module Pod
       end
 
       def pods_info(pods, in_md=false)
-        pods = pods_info_hash(pods, [:name, :homepage, :summary])
+        pods = pods_info_hash(pods, [:name, :homepage, :summary, :license])
 
         pods.each do |pod| 
           if in_md
-            UI.puts "* [#{pod[:name]}](#{pod[:homepage]}) - #{pod[:summary]}" 
+            UI.puts "* [#{pod[:name]}](#{pod[:homepage]}) - #{pod[:summary]} - #{pod[:license][:type]}"
           else
-            UI.puts "- #{pod[:name]} - #{pod[:summary]}" 
+            UI.puts "- #{pod[:name]} - #{pod[:summary]} - #{pod[:license][:type]}"
           end
         end
       end
