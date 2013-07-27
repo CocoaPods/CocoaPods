@@ -449,7 +449,8 @@ Pod::Spec.new do |s|
   # ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  These will help people to find your library, and whilst it 
-  #  can feel like a chore to fill in it's definitely to your advantage
+  #  can feel like a chore to fill in it's definitely to your advantage. The
+  #  summary should be tweet-length, and the description more in depth.
   #
 
   s.name         = "#{data[:name]}"
@@ -460,9 +461,9 @@ Pod::Spec.new do |s|
                    A longer description of #{data[:name]} in Markdown format.
            
                    * Think: Why did you write this? What is the focus? What does it do? 
-                   * We will be using this to generate tags, and improve search results. 
+                   * CocoaPods will be using this to generate tags, and improve search results. 
                    * Try to keep it short, snappy and to the point.
-                   * Finally, don't worry about the indent, we strip it!
+                   * Finally, don't worry about the indent, CocoaPods strips it!
                    DESC
 
   s.homepage     = "#{data[:homepage]}"
@@ -471,7 +472,7 @@ Pod::Spec.new do |s|
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
-  #  Licensing your code is important.
+  #  Licensing your code is important. See http://choosealicense.com for more info.
   #  CocoaPods will detect a license file if there is a named LICENSE*
   #  
 
@@ -481,8 +482,9 @@ Pod::Spec.new do |s|
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
-  #  Specify the authors of the library, with email addresses. Email addresses of the authors
-  #  by using the SCM log. E.g. $ git log. If no email can be found we accept just the names.
+  #  Specify the authors of the library, with email addresses. Email addresses 
+  #  of the authors by using the SCM log. E.g. $ git log. If no email can be 
+  #  found CocoaPods accept just the names.
   #
 
   s.author       = { "#{data[:author_name]}" => "#{data[:author_email]}" }
@@ -499,7 +501,7 @@ Pod::Spec.new do |s|
   # s.platform     = :ios
   # s.platform     = :ios, '5.0'
 
-  # For multiple platforms
+  #  When using multiple platforms
   # s.ios.deployment_target = '5.0'
   # s.osx.deployment_target = '10.7'
 
