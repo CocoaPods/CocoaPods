@@ -135,7 +135,7 @@ module Pod
     # @return [Pathname] the directory where the CocoaPods sources are stored.
     #
     def repos_dir
-      @repos_dir ||= Pathname.new(ENV['CP_REPOS_DIR'] || "~/.cocoapods").expand_path
+      @repos_dir ||= Pathname.new(ENV['CP_REPOS_DIR'] || "~/.cocoapods/repos").expand_path
     end
 
     attr_writer :repos_dir
