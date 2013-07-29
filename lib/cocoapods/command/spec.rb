@@ -448,7 +448,7 @@ Pod::Spec.new do |s|
 
   # ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
-  #  These will help people to find your library, and whilst it 
+  #  These will help people to find your library, and whilst it
   #  can feel like a chore to fill in it's definitely to your advantage. The
   #  summary should be tweet-length, and the description more in depth.
   #
@@ -459,9 +459,9 @@ Pod::Spec.new do |s|
 
   s.description  = <<-DESC
                    A longer description of #{data[:name]} in Markdown format.
-           
-                   * Think: Why did you write this? What is the focus? What does it do? 
-                   * CocoaPods will be using this to generate tags, and improve search results. 
+
+                   * Think: Why did you write this? What is the focus? What does it do?
+                   * CocoaPods will be using this to generate tags, and improve search results.
                    * Try to keep it short, snappy and to the point.
                    * Finally, don't worry about the indent, CocoaPods strips it!
                    DESC
@@ -474,17 +474,17 @@ Pod::Spec.new do |s|
   #
   #  Licensing your code is important. See http://choosealicense.com for more info.
   #  CocoaPods will detect a license file if there is a named LICENSE*
-  #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.  
+  #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  s.license      = 'MIT'
+  s.license      = 'MIT (example)'
   # s.license      = { :type => 'MIT', :file => 'FILE_LICENSE' }
 
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
-  #  Specify the authors of the library, with email addresses. Email addresses 
-  #  of the authors by using the SCM log. E.g. $ git log. If no email can be 
+  #  Specify the authors of the library, with email addresses. Email addresses
+  #  of the authors by using the SCM log. E.g. $ git log. If no email can be
   #  found CocoaPods accept just the names.
   #
 
@@ -494,7 +494,7 @@ Pod::Spec.new do |s|
 
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  # 
+  #
   #  If this Pod runs only on iOS or OS X, then specify the platform and
   #  the deployment target. You can optionally include the target after the platform.
   #
@@ -509,7 +509,7 @@ Pod::Spec.new do |s|
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
-  #  Specify the location from where the source should be retrieved. 
+  #  Specify the location from where the source should be retrieved.
   #  Supports git, hg, svn and HTTP.
   #
 
@@ -517,9 +517,9 @@ Pod::Spec.new do |s|
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #  
+  #
   #  CocoaPods is smart about how it include source code, for source files
-  #  giving a folder will include any h, m, mm, c & cpp files. For header 
+  #  giving a folder will include any h, m, mm, c & cpp files. For header
   #  files it will include any header in the folder.
   #  Not including the public_header_files will make all headers public.
   #
@@ -534,7 +534,7 @@ Pod::Spec.new do |s|
   #
   #  A list of resources included with the Pod. These are copied into the
   #  target bundle with a build phase script. Anything else will be cleaned.
-  #  You can preserve files from being cleaned, please don't preserve 
+  #  You can preserve files from being cleaned, please don't preserve
   #  non-essential files like tests, examples and documentation.
   #
 
@@ -545,10 +545,10 @@ Pod::Spec.new do |s|
 
 
   # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #  
+  #
   #  Link your library with frameworks, or libraries. Libraries do not include
   #  the lib prefix of their name.
-  #   
+  #
 
   # s.framework  = 'SomeFramework'
   # s.frameworks = 'SomeFramework', 'AnotherFramework'
@@ -558,9 +558,9 @@ Pod::Spec.new do |s|
 
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  # 
+  #
   #  If your library depends on compiler flags you can set them in the xcconfig hash
-  #  where they will only apply to your library. If you depend on other Podspecs 
+  #  where they will only apply to your library. If you depend on other Podspecs
   #  you can include multiple dependencies to ensure it works.
 
   # s.requires_arc = true
