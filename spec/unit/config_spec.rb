@@ -15,8 +15,8 @@ module Pod
         @sut.should.be.instance_of Config
       end
 
-      it "returns the path to the cocoapods dir" do
-        @sut.cocoapods_dir.should == Pathname.new("~/.cocoapods").expand_path
+      it "returns the path to the home dir" do
+        @sut.home_dir.should == Pathname.new("~/.cocoapods").expand_path
       end
 
       it "returns the path to the spec-repos dir" do
@@ -30,10 +30,10 @@ module Pod
         ENV.delete('CP_AGGRESSIVE_CACHE')
       end
 
-      it "allows to specify the cocoapods dir with an environment variable" do
-        ENV['CP_COCOAPODS_DIR'] = '~/custom_cocoapods_dir'
-        @sut.cocoapods_dir.should == Pathname.new("~/custom_cocoapods_dir").expand_path
-        ENV.delete('CP_COCOAPODS_DIR')
+      it "allows to specify the home dir with an environment variable" do
+        ENV['CP_HOME_DIR'] = '~/custom_home_dir'
+        @sut.cocoapods_dir.should == Pathname.new("~/custom_home_dir").expand_path
+        ENV.delete('CP_HOME_DIR')
       end
 
       it "allows to specify the repos dir with an environment variable" do
