@@ -474,7 +474,8 @@ Pod::Spec.new do |s|
   #
   #  Licensing your code is important. See http://choosealicense.com for more info.
   #  CocoaPods will detect a license file if there is a named LICENSE*
-  #  
+  #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.  
+  #
 
   s.license      = 'MIT'
   # s.license      = { :type => 'MIT', :file => 'FILE_LICENSE' }
@@ -509,7 +510,7 @@ Pod::Spec.new do |s|
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  Specify the location from where the source should be retrieved. 
-  #  Supports git, hg, svn and HTTP
+  #  Supports git, hg, svn and HTTP.
   #
 
   s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
