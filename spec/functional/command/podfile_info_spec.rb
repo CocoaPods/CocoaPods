@@ -23,8 +23,10 @@ module Pod
 
       Dir.chdir(temporary_directory) do
         output = run_command('podfile-info')
-        output.should.include? '- BananaLib - Chunky bananas!'
-        output.should.include? '- JSONKit - A Very High Performance Objective-C JSON Library.'
+        output.should.include? '- BananaLib'
+        output.should.include? 'Chunky bananas!'
+        output.should.include? '- JSONKit'
+        output.should.include? 'A Very High Performance Objective-C JSON Library.'
       end
     end
   end
