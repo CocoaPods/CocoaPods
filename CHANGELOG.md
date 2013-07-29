@@ -4,8 +4,17 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
 * Added license information to `podfile-info` subcommand.
   [#1219](https://github.com/CocoaPods/CocoaPods/issues/1219)
+
+###### Bug Fixes
+
+* Fix copy resource script issue related to filenames with spaces.
+  [#1231](https://github.com/CocoaPods/CocoaPods/issues/1231)
+
+<!------------------------------------------------------------------------ ->
 
 ## 0.22.3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.22.3)
@@ -38,6 +47,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Fix handling of spaces in paths when compiling xcdatamodel(d) files.
   [#1201](https://github.com/CocoaPods/CocoaPods/pull/1201)
 
+<!------------------------------------------------------------------------ ->
 
 ## 0.22.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.1...0.22.2)
