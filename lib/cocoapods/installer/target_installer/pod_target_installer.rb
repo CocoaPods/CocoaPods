@@ -21,9 +21,9 @@ module Pod
         end
       end
 
-      #-----------------------------------------------------------------------#
-
       private
+
+      #-----------------------------------------------------------------------#
 
       # Adds the build files of the pods to the target and adds a reference to
       # the frameworks of the Pods.
@@ -58,7 +58,12 @@ module Pod
         public_gen = Generator::PublicPodXCConfig.new(library)
         UI.message "- Generating public xcconfig file at #{UI.path(path)}" do
           public_gen.save_as(path)
+          #
+          # TODO
           add_file_to_support_group(path)
+          # relative_path = path.relative_path_from(sandbox.root)
+          # group = project.group_for_spec(library.root_spec.name, :support_files)
+          # group.new_file(relative_path)
         end
 
         path = library.xcconfig_private_path

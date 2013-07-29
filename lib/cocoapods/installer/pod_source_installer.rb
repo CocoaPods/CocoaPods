@@ -229,12 +229,13 @@ module Pod
       #
       def used_files
         files = [
-          file_accessors.map(&:source_files),
-          file_accessors.map(&:resources),
-          file_accessors.map(&:preserve_paths),
-          file_accessors.map(&:prefix_header),
-          file_accessors.map(&:readme),
+          file_accessors.map(&:framework_bundles),
           file_accessors.map(&:license),
+          file_accessors.map(&:prefix_header),
+          file_accessors.map(&:preserve_paths),
+          file_accessors.map(&:readme),
+          file_accessors.map(&:resources),
+          file_accessors.map(&:source_files),
         ]
 
         files.flatten.compact.map{ |path| path.to_s }.uniq

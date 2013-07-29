@@ -36,7 +36,7 @@ module Pod
       # @return [Pathname] the directory which contains the files of the Pod.
       #
       def root
-        path_list.root
+        path_list.root if path_list
       end
 
       # @return [Specification] the specification.
@@ -54,7 +54,7 @@ module Pod
       # @return [String] A string suitable for debugging.
       #
       def inspect
-        "<#{self.class} spec=#{spec.name} platform=#{platform_name} root=#{path_list.root}>"
+        "<#{self.class} spec=#{spec.name} platform=#{platform_name} root=#{root}>"
       end
 
       #-----------------------------------------------------------------------#
@@ -100,6 +100,13 @@ module Pod
       #
       def preserve_paths
         paths_for_attribute(:preserve_paths, true)
+      end
+
+      # @return [Array<Pathname>] The paths of the framework bundles that come
+      #         shipped with the Pod.
+      #
+      def framework_bundles
+        expanded_paths(spec_consumer.framework_bundles, :include_dirs => true)
       end
 
       # @return [Pathname] The of the prefix header file of the specification.
@@ -159,8 +166,6 @@ module Pod
       #
       # @return [String] the glob pattern.
       #
-      # @todo   Move to the cocoapods-core so it appears in the docs?
-      #
       def glob_for_attribute(attrbute)
         globs = {
           :source_files => '*.{h,hpp,hh,m,mm,c,cpp}'.freeze,
@@ -184,8 +189,6 @@ module Pod
       # @raise  [Informative] If the pod does not exists.
       #
       # @return [Array<Pathname>] A list of the paths.
-      #
-      # @todo   Implement case insensitive search
       #
       def expanded_paths(patterns, options = {})
         return [] if patterns.empty?

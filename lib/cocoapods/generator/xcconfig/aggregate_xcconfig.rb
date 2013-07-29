@@ -12,6 +12,9 @@ module Pod
       #         Each namespaced configuration value is merged into the Pod
       #         xcconfig file.
       #
+      # @todo   This doesn't include the specs xcconfigs anymore and now the
+      #         logic is duplicated.
+      #
       # @return [Xcodeproj::Config]
       #
       def generate
@@ -23,8 +26,11 @@ module Pod
         })
 
         target.pod_targets.each do |pod_target|
-          pod_target.spec_consumers.each do |consumer|
-            add_spec_build_settings_to_xcconfig(consumer, @xcconfig)
+          pod_target.file_accessors.each do |file_accessor|
+            add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
+            file_accessor.framework_bundles.each do |framework_bundle|
+              add_framework_build_settings(framework_bundle, @xcconfig)
+            end
           end
         end
 

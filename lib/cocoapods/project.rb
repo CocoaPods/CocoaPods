@@ -9,16 +9,20 @@ module Pod
   #
   class Project < Xcodeproj::Project
 
-    # @return [Pathname] the path of the xcodeproj file which stores the
-    #         project.
+
+    # @return [Sandbox] the sandbox which returns the information about which
+    #         Pods are local.
     #
-    attr_reader :path
+    attr_reader :sandbox
 
     # @param  [Sandbox] sandbox @see #sandbox
     #
-    def initialize(path = nil)
+    def initialize(sandbox)
       super(nil) # Recreate the project from scratch for now.
-      @path = path
+      # TODO
+      raise unless sandbox.is_a?(Sandbox)
+      @sandbox = sandbox
+      @path = sandbox.project_path
       @support_files_group = new_group('Targets Support Files')
 
       @refs_by_absolute_path = {}
@@ -107,25 +111,25 @@ module Pod
       @resources ||= new_group('Resources')
     end
 
-    # Adds a group as child to the `Pods` group namespacing subspecs.
-    #
-    # @param  [String] spec_name
-    #         The full name of the specification.
-    #
-    # @param  [PBXGroup] root_group
-    #         The group where to add the specification. Either `Pods` or `Local
-    #         Pods`.
-    #
+
     # @return [PBXGroup] the group for the spec with the given name.
     #
-    def add_spec_group(spec_name, root_group)
-      current_group = root_group
-      group = nil
-      spec_name.split('/').each do |name|
-        group = current_group[name] || current_group.new_group(name)
-        current_group = group
+    def group_for_spec(spec_name, type = nil)
+      local = sandbox.local?(spec_name)
+      parent_group = local ? local_pods : pods
+      spec_group = add_spec_group(spec_name, parent_group)
+      if type
+        case type
+        when :source_files then sub_group = 'Source Files'
+        when :resources then sub_group = 'Resources'
+        when :frameworks then sub_group = 'Frameworks'
+        when :support_files then sub_group = 'Support Files'
+        else raise "[BUG]"
+        end
+        spec_group.find_subpath(sub_group, true)
+      else
+        spec_group
       end
-      group
     end
 
     #-------------------------------------------------------------------------#
@@ -154,7 +158,7 @@ module Pod
     # @return [void]
     #
     def add_file_references(absolute_path, spec_name, parent_group)
-      group = add_spec_group(spec_name, parent_group)
+      group = group_for_spec(spec_name, :source_files)
       absolute_path.each do |file|
         existing = file_reference(file)
         unless existing
@@ -163,6 +167,13 @@ module Pod
           @refs_by_absolute_path[file] = ref
         end
       end
+    end
+
+    # TODO: missing customization for file reference
+    #
+    def add_file_reference(absolute_path, group)
+      ref = group.new_file(relativize(absolute_path))
+      @refs_by_absolute_path[absolute_path] = ref
     end
 
     # Returns the file reference for the given absolute file path.
@@ -203,6 +214,28 @@ module Pod
     #         by absolute path.
     #
     attr_reader :refs_by_absolute_path
+
+    # Returns a subgroup of the give group for the given spec creating it if
+    # needed.
+    #
+    # @param  [String] spec_name
+    #         The full name of the specification.
+    #
+    # @param  [PBXGroup] root_group
+    #         The group where to add the specification. Either `Pods` or `Local
+    #         Pods`.
+    #
+    # @return [PBXGroup] the group for the spec with the given name.
+    #
+    def add_spec_group(spec_name, root_group)
+      current_group = root_group
+      group = nil
+      spec_name.split('/').each do |name|
+        group = current_group[name] || current_group.new_group(name)
+        current_group = group
+      end
+      group
+    end
 
     #-------------------------------------------------------------------------#
 

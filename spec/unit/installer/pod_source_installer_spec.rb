@@ -176,6 +176,7 @@ module Pod
         Sandbox::FileAccessor.any_instance.stubs(:prefix_header)
         Sandbox::FileAccessor.any_instance.stubs(:readme)
         Sandbox::FileAccessor.any_instance.stubs(:license)
+        Sandbox::FileAccessor.any_instance.stubs(:framework_bundles)
         paths = @installer.send(:used_files)
         paths.should == []
       end

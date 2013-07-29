@@ -35,7 +35,7 @@ module Pod
         dirs.reject! do |f|
           f.include?('libPusher') || f.include?('.git')
         end
-        dirs.sort.should == %w| Classes Resources Resources/sub_dir sub-dir sub-dir/sub-dir-2 |
+        dirs.sort.should == %w| Bananalib.framework Classes Resources Resources/sub_dir sub-dir sub-dir/sub-dir-2 |
       end
 
       it "handles directories with glob metacharacters" do

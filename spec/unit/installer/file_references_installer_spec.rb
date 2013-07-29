@@ -7,7 +7,7 @@ module Pod
       @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
       @pod_target = PodTarget.new([], nil, config.sandbox)
       @pod_target.file_accessors = [@file_accessor]
-      @project = Project.new(config.sandbox.project_path)
+      @project = Project.new(config.sandbox)
       @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
     end
 
@@ -23,9 +23,7 @@ module Pod
 
       it "adds the files references of the source files the Pods project" do
         @installer.install!
-        group_ref = @installer.pods_project['Pods/BananaLib']
-        group_ref.should.be.not.nil
-        file_ref = @installer.pods_project['Pods/BananaLib/Banana.m']
+        file_ref = @installer.pods_project['Pods/BananaLib/Source Files/Banana.m']
         file_ref.should.be.not.nil
         file_ref.path.should == "../../spec/fixtures/banana-lib/Classes/Banana.m"
       end
@@ -33,17 +31,13 @@ module Pod
       it "adds the files references of the local Pods in a dedicated group" do
         config.sandbox.store_local_path('BananaLib', 'Some Path')
         @installer.install!
-        group_ref = @installer.pods_project['Local Pods/BananaLib']
-        group_ref.should.be.not.nil
-        file_ref = @installer.pods_project['Local Pods/BananaLib/Banana.m']
+        file_ref = @installer.pods_project['Local Pods/BananaLib/Source Files/Banana.m']
         file_ref.should.be.not.nil
       end
 
       it "adds the files references of the resources the Pods project" do
         @installer.install!
-        group_ref = @installer.pods_project['Resources/BananaLib']
-        group_ref.should.be.not.nil
-        file_ref = @installer.pods_project['Resources/BananaLib/logo-sidebar.png']
+        file_ref = @installer.pods_project['Pods/BananaLib/Resources/logo-sidebar.png']
         file_ref.should.be.not.nil
         file_ref.path.should == "../../spec/fixtures/banana-lib/Resources/logo-sidebar.png"
       end

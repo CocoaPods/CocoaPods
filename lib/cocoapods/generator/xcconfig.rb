@@ -87,6 +87,27 @@ module Pod
         add_developers_frameworks_if_needed(consumer, xcconfig)
       end
 
+      # Configures the given Xcconfig with the the build settings for the given
+      # framework path.
+      #
+      # @param  [Pathanme] framework_path
+      #         The path of the framework.
+      #
+      # @param  [Xcodeproj::Config] xcconfig
+      #         The xcconfig to edit.
+      #
+      def add_framework_build_settings(framework_path, xcconfig)
+        name = File.basename(framework_path, ".framework")
+        dirname = File.dirname(framework_path).sub(sandbox.root.to_s, '$(PODS_ROOT)')
+        build_settings = {
+          'OTHER_LDFLAGS' => "-framework #{name}",
+          'FRAMEWORK_SEARCH_PATHS' => quote([dirname])
+        }
+        xcconfig.merge!(build_settings)
+      end
+
+
+
       # @return [Array<String>] The search paths for the developer frameworks.
       #
       # @todo   Inheritance should be properly handled in Xcconfigs.

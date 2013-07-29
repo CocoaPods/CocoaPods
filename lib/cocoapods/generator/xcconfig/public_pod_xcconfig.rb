@@ -27,8 +27,11 @@ module Pod
       #
       def generate
         @xcconfig = Xcodeproj::Config.new
-        target.spec_consumers.each do |consumer|
-          add_spec_build_settings_to_xcconfig(consumer, @xcconfig)
+        target.file_accessors.each do |file_accessor|
+          add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
+          file_accessor.framework_bundles.each do |framework_bundle|
+            add_framework_build_settings(framework_bundle, @xcconfig)
+          end
         end
         @xcconfig
       end

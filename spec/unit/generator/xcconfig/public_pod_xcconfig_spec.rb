@@ -8,21 +8,19 @@ module Pod
       @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
       @pod_target.stubs(:platform).returns(:ios)
       @generator = Generator::PublicPodXCConfig.new(@pod_target)
-    end
 
-    it "returns the sandbox" do
-      @generator.sandbox.class.should == Sandbox
-    end
-
-    #-----------------------------------------------------------------------#
-
-    before do
       @podfile = Podfile.new
-      @pod_target.target_definition.stubs(:podfile).returns(@podfile)
       @spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
       @spec.frameworks = ['QuartzCore']
       @spec.weak_frameworks = ['iAd']
       @spec.libraries = ['xml2']
+      file_accessors = [Sandbox::FileAccessor.new(nil, @spec.consumer(:ios))]
+      framework_bundle_paths = [config.sandbox.root + 'BananaLib/BananaLib.framework']
+      Sandbox::FileAccessor.any_instance.stubs(:framework_bundles).returns(framework_bundle_paths)
+
+      @pod_target.target_definition.stubs(:podfile).returns(@podfile)
+      @pod_target.stubs(:file_accessors).returns(file_accessors)
+
       @xcconfig = @generator.generate
     end
 
@@ -50,7 +48,7 @@ module Pod
       @spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
       @spec.frameworks = ['SenTestingKit']
       xcconfig = @generator.generate
-      xcconfig.to_hash["FRAMEWORK_SEARCH_PATHS"].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+      xcconfig.to_hash["FRAMEWORK_SEARCH_PATHS"].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks" "$(PODS_ROOT)/BananaLib"'
     end
 
     it "doesn't include the developer frameworks if already present" do
@@ -58,10 +56,18 @@ module Pod
       pod_target = PodTarget.new([@spec, spec], @target_definition, config.sandbox)
       pod_target.stubs(:platform).returns(:ios)
       generator = Generator::PublicPodXCConfig.new(pod_target)
-      @spec.frameworks = ['SenTestingKit']
       spec.frameworks = ['SenTestingKit']
+      file_accessors = [Sandbox::FileAccessor.new(nil, spec.consumer(:ios))]
+      pod_target.stubs(:file_accessors).returns(file_accessors)
+
       xcconfig = generator.generate
-      xcconfig.to_hash["FRAMEWORK_SEARCH_PATHS"].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+      xcconfig.to_hash["FRAMEWORK_SEARCH_PATHS"].should == '$(inherited) "$(SDKROOT)/Developer/Library/Frameworks" "$(DEVELOPER_LIBRARY_DIR)/Frameworks" "$(PODS_ROOT)/BananaLib"'
+    end
+
+    it "includes the build settings of the frameworks bundles of the spec" do
+      @spec.framework_bundles = ['BananaLib.framework']
+      xcconfig = @generator.generate
+      xcconfig.to_hash["FRAMEWORK_SEARCH_PATHS"].should.include?('"$(PODS_ROOT)/BananaLib"')
     end
 
     #-----------------------------------------------------------------------#
