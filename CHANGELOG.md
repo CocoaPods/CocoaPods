@@ -2,6 +2,11 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+* Added license information to `podfile-info` subcommand.
+  [#1219](https://github.com/CocoaPods/CocoaPods/issues/1219)
+
 ## 0.22.3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.22.3)
 
