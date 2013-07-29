@@ -63,21 +63,6 @@ module Pod
         target.build_settings('AppStore')["VALIDATE_PRODUCT"].should == "YES"
       end
 
-      it "sets ARCHS to 'armv6 armv7' for both configurations if the deployment target is less than 4.3 for iOS targets" do
-        @target.stubs(:platform).returns(Platform.new(:ios, '4.0'))
-        @installer.install!
-        target = @project.targets.first
-        target.build_settings('Debug')["ARCHS"].should == "armv6 armv7"
-        target.build_settings('Release')["ARCHS"].should == "armv6 armv7"
-      end
-
-      it "uses standard ARCHs if deployment target is 4.3 or above" do
-        @installer.install!
-        target = @project.targets.first
-        target.build_settings('Debug')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-        target.build_settings('AppStore')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-      end
-
       it "sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets" do
         @installer.install!
         target = @project.targets.first
@@ -163,7 +148,7 @@ module Pod
       it "creates a dummy source to ensure the creation of a single base library" do
         @installer.install!
         build_files = @installer.library.target.source_build_phase.files
-        build_file = build_files.find { |bf| bf.file_ref.name == 'Pods-dummy.m' }
+        build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-dummy.m') }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-dummy.m'
         dummy = config.sandbox.generated_dir_root + 'Pods-dummy.m'

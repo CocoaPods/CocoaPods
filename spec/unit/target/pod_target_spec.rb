@@ -25,6 +25,18 @@ module Pod
       it "returns the spec consumers for the pod targets" do
         @pod_target.spec_consumers.should.not == nil
       end
+
+      it "returns the root spec" do
+        @pod_target.root_spec.name.should == 'BananaLib'
+      end
+
+      it "returns the name of the Pod" do
+        @pod_target.pod_name.should == 'BananaLib'
+      end
+
+      it "returns the name of the Pods on which this target depends" do
+        @pod_target.dependencies.should == ["monkey"]
+      end
     end
 
     describe "Support files" do

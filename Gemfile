@@ -18,6 +18,9 @@ group :development do
   gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
   gem "rake"
   gem 'coveralls', :require => false, :git => 'https://github.com/lemurheavy/coveralls-ruby.git'
+  # Explicitly add this, otherwise it might sometimes be missing:
+  # https://github.com/lemurheavy/coveralls-ruby/blob/master/coveralls-ruby.gemspec#L23.
+  gem 'simplecov'
 end
 
 group :debugging do
@@ -31,7 +34,7 @@ end
 
 group :documentation do
   gem 'yard'
-  gem 'redcarpet'
+  gem 'redcarpet', '< 3.0.0' # Not compatible with MRI 1.8.7
   gem 'github-markup'
   gem 'pygments.rb'
 end

@@ -54,22 +54,7 @@ module Pod
         target.build_settings('AppStore')["VALIDATE_PRODUCT"].should == "YES"
       end
 
-      it "sets ARCHS to 'armv6 armv7' for both configurations if the deployment target is less than 4.3 for iOS targets" do
-        @pod_target.stubs(:platform).returns(Platform.new(:ios, '4.0'))
-        @installer.install!
-        target = @project.targets.first
-        target.build_settings('Debug')["ARCHS"].should == "armv6 armv7"
-        target.build_settings('Release')["ARCHS"].should == "armv6 armv7"
-      end
-
-      it "uses standard ARCHs if deployment target is 4.3 or above" do
-        @installer.install!
-        target = @project.targets.first
-        target.build_settings('Debug')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-        target.build_settings('AppStore')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-      end
-
-      it "sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets" do
+     it "sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets" do
         @installer.install!
         target = @project.targets.first
         target.build_settings('Release')["VALIDATE_PRODUCT"].should == "YES"
@@ -116,7 +101,7 @@ module Pod
 
       it 'adds the source files of each pod to the target of the Pod library' do
         @installer.install!
-        names = @installer.library.target.source_build_phase.files.map { |bf| bf.file_ref.name }
+        names = @installer.library.target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
         names.should.include("Banana.m")
       end
 
@@ -156,7 +141,7 @@ module Pod
       it "creates a dummy source to ensure the compilation of libraries with only categories" do
         @installer.install!
         build_files = @installer.library.target.source_build_phase.files
-        build_file = build_files.find { |bf| bf.file_ref.name == 'Pods-BananaLib-dummy.m' }
+        build_file = build_files.find { |bf| bf.file_ref.display_name == 'Pods-BananaLib-dummy.m' }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-BananaLib-dummy.m'
         dummy = config.sandbox.generated_dir_root + 'Pods-BananaLib-dummy.m'

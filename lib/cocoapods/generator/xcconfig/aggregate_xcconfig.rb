@@ -15,28 +15,25 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
-        config = {
-          'ALWAYS_SEARCH_USER_PATHS'         => 'YES',
-          'OTHER_LDFLAGS'                    => default_ld_flags,
-          'HEADER_SEARCH_PATHS'              => quote(sandbox.public_headers.search_paths),
-          'PODS_ROOT'                        => target.relative_pods_root,
-          'GCC_PREPROCESSOR_DEFINITIONS'     => '$(inherited) COCOAPODS=1',
-        }
+        @xcconfig = Xcodeproj::Config.new({
+          'OTHER_LDFLAGS'                => default_ld_flags,
+          'HEADER_SEARCH_PATHS'          => quote(sandbox.public_headers.search_paths),
+          'PODS_ROOT'                    => target.relative_pods_root,
+          'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
+        })
 
         target.pod_targets.each do |pod_target|
-          xcconfig = Xcodeproj::Config.new
           pod_target.spec_consumers.each do |consumer|
-            add_spec_build_settings_to_xcconfig(consumer, xcconfig)
-          end
-
-          xcconfig.to_hash.each do |k, v|
-            prefixed_key = pod_target.xcconfig_prefix + k
-            config[k] = "#{config[k]} ${#{prefixed_key}}"
+            add_spec_build_settings_to_xcconfig(consumer, @xcconfig)
           end
         end
 
-        @xcconfig = Xcodeproj::Config.new(config)
-        @xcconfig.includes = target.pod_targets.map(&:name)
+        # TODO Need to decide how we are going to ensure settings like these
+        # are always excluded from the user's project.
+        #
+        # See https://github.com/CocoaPods/CocoaPods/issues/1216
+        @xcconfig.attributes.delete('USE_HEADERMAP')
+
         @xcconfig
       end
 

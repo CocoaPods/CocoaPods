@@ -59,8 +59,8 @@ module Pod
       #
       def specs_by_lib
         result = {}
-        installer.pod_targets.each do |lib|
-          result[installer.library_rep(lib)] = lib.specs
+        installer.aggregate_targets.each do |aggregate_target|
+          result[installer.library_rep(aggregate_target)] = aggregate_target.specs
         end
         result
       end

@@ -150,6 +150,7 @@ module Pod
           return true if resolved_spec_names(pod) != sandbox_spec_names(pod)
           return true if sandbox.predownloaded?(pod)
           return true if folder_empty?(pod)
+          return true if sandbox.head_pod?(pod) != sandbox_head_version?(pod)
           if update_mode
             return true if sandbox.head_pod?(pod)
           end
@@ -233,6 +234,13 @@ module Pod
         #
         def sandbox_checksum(pod)
           sandbox_manifest.checksum(pod)
+        end
+
+        # @return [Bool] Wether the Pod is installed in the sandbox is in head
+        #         mode.
+        #
+        def sandbox_head_version?(pod)
+          sandbox_version(pod).head? == true
         end
 
         #--------------------------------------#

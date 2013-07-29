@@ -40,13 +40,13 @@ module Pod
       end
 
       it "the hook representation of the libraries" do
-        @rep.libraries.map(&:name).sort.should == ['Pods-JSONKit'].sort
+        @rep.libraries.map(&:name).sort.should == ['Pods'].sort
       end
 
       it "returns the specs by library representation" do
         specs_by_lib = @rep.specs_by_lib
         lib_rep = specs_by_lib.keys.first
-        lib_rep.name.should == 'Pods-JSONKit'
+        lib_rep.name.should == 'Pods'
         specs_by_lib.should == { lib_rep => @specs }
       end
 

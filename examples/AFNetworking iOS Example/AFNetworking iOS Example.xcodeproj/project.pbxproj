@@ -25,9 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0BBDA6CDB42C48EFB1B980BC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		242C9E9348A44970B9ECDCF5 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		E54FF38417712C8100418B5B /* Pods.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = file; name = Pods.xcconfig; path = Pods/Generated/Pods.xcconfig; sourceTree = "<group>"; };
+		391552C2BD5947DF9FEB5975 /* Pods.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		F8D25D171396A9D300CF3BD6 /* placeholder-stamp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "placeholder-stamp.png"; path = "Images/placeholder-stamp.png"; sourceTree = SOURCE_ROOT; };
 		F8D25D181396A9D300CF3BD6 /* placeholder-stamp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "placeholder-stamp@2x.png"; path = "Images/placeholder-stamp@2x.png"; sourceTree = SOURCE_ROOT; };
 		F8D25D1B1396A9DE00CF3BD6 /* AFGowallaAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AFGowallaAPIClient.h; path = Classes/AFGowallaAPIClient.h; sourceTree = "<group>"; };
@@ -108,7 +107,7 @@
 				F8E469ED1395812A00DB05C8 /* Images */,
 				F8E469631395739D00DB05C8 /* Frameworks */,
 				F8E469611395739C00DB05C8 /* Products */,
-				E54FF38417712C8100418B5B /* Pods.xcconfig */,
+				391552C2BD5947DF9FEB5975 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,7 +129,6 @@
 				F8E469661395739D00DB05C8 /* Foundation.framework */,
 				F8E469681395739D00DB05C8 /* CoreGraphics.framework */,
 				242C9E9348A44970B9ECDCF5 /* libPods.a */,
-				0BBDA6CDB42C48EFB1B980BC /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -188,6 +186,7 @@
 				F8E4695C1395739C00DB05C8 /* Sources */,
 				F8E4695D1395739C00DB05C8 /* Frameworks */,
 				F8E4695E1395739C00DB05C8 /* Resources */,
+				DD5E268688D543178A339BEB /* Copy Pods Resources */,
 				8A3A8D61FF1041A3B3AA9C55 /* Copy Pods Resources */,
 			);
 			buildRules = (
@@ -250,7 +249,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Generated/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+		};
+		DD5E268688D543178A339BEB /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -273,7 +286,6 @@
 /* Begin XCBuildConfiguration section */
 		F8E4697F1395739D00DB05C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E54FF38417712C8100418B5B /* Pods.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -291,7 +303,6 @@
 		};
 		F8E469801395739D00DB05C8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E54FF38417712C8100418B5B /* Pods.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -307,6 +318,7 @@
 		};
 		F8E469821395739D00DB05C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 391552C2BD5947DF9FEB5975 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
@@ -327,6 +339,7 @@
 		};
 		F8E469831395739D00DB05C8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 391552C2BD5947DF9FEB5975 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;

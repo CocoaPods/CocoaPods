@@ -149,6 +149,7 @@ module Pod
                     native_target.new_shell_script_build_phase(phase_name)
             path  = target.copy_resources_script_relative_path
             phase.shell_script = %{"#{path}"\n}
+            phase.show_env_vars_in_log = '0'
           end
         end
 
@@ -177,6 +178,7 @@ module Pod
                   exit 1
               fi
             EOS
+            phase.show_env_vars_in_log = '0'
           end
         end
 

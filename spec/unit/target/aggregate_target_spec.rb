@@ -79,8 +79,13 @@ module Pod
         @target.pod_targets = [pod_target]
       end
 
+      it "returns the specs of the Pods used by this aggregate target" do
+        @target.specs.map(&:name).should == ["BananaLib"]
+      end
+
       it "returns the spec consumers for the pod targets" do
-        @target.spec_consumers.should.not == nil
+        consumer_reps = @target.spec_consumers.map { |consumer| [consumer.spec.name, consumer.platform_name ] }
+        consumer_reps.should == [["BananaLib", :ios]]
       end
     end
 

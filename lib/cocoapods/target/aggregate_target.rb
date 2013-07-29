@@ -56,9 +56,16 @@ module Pod
     #
     attr_accessor :pod_targets
 
-    # @return [Array<SpecConsumer>]
+    # @return [Array<Specification>] The specifications used by this aggregate target.
+    #
+    def specs
+      pod_targets.map(&:specs).flatten
+    end
+
+    # @return [Array<Specification::Consumer>] The consumers of the Pod.
+    #
     def spec_consumers
-      pod_targets.map(&:specs).flatten.map { |spec| spec.consumer(platform) }
+      specs.map { |spec| spec.consumer(platform) }
     end
 
     # @return [Pathname] The absolute path of acknowledgements file.

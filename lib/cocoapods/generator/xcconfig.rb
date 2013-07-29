@@ -10,13 +10,17 @@ module Pod
       # @return [Target] the target represented by this xcconfig.
       #
       attr_reader :target
-      attr_reader :sandbox
 
       # @param  [Target] target @see target
       #
       def initialize(target)
         @target = target
-        @sandbox = target.sandbox
+      end
+
+      # @return [Sandbox] the sandbox of this target.
+      #
+      def sandbox
+        target.sandbox
       end
 
       # @return [Xcodeproj::Config] The generated xcconfig.

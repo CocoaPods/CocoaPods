@@ -5,7 +5,7 @@ module Pod
 
       self.summary = 'Shows information on installed Pods.'
       self.description = <<-DESC
-        Shows information on installed Pods in current Project. 
+        Shows information on installed Pods in current Project.
         If optional `PODFILE_PATH` provided, the info will be shown for
         that specific Podfile
       DESC
@@ -21,13 +21,14 @@ module Pod
       def initialize(argv)
         @info_all = argv.flag?('all')
         @info_in_md = argv.flag?('md')
+        @info_license = argv.flag?('license')
         @podfile_path = argv.shift_argument
         super
       end
 
       def run
         use_podfile = (@podfile_path || !config.lockfile)
-          
+
         if !use_podfile
           UI.puts "Using lockfile" if config.verbose?
           verify_lockfile_exists!
@@ -57,7 +58,7 @@ module Pod
         pods.collect! {|pod| (pod.is_a?(Hash)) ? pod.keys.first : pod}
       end
 
-      def pods_info_hash(pods, keys=[:name, :homepage, :summary])
+      def pods_info_hash(pods, keys=[:name, :homepage, :summary, :license])
         pods_info = []
         pods.each do |pod|
           spec = (Pod::SourcesManager.search_by_name(pod).first rescue nil)
@@ -66,26 +67,27 @@ module Pod
             keys.each { |k| info[k] = spec.specification.send(k) }
             pods_info << info
           else
-            
+
           end
-          
+
         end
         pods_info
       end
 
       def pods_info(pods, in_md=false)
-        pods = pods_info_hash(pods, [:name, :homepage, :summary])
+        pods = pods_info_hash(pods, [:name, :homepage, :summary, :license])
 
-        pods.each do |pod| 
+        pods.each do |pod|
           if in_md
-            UI.puts "* [#{pod[:name]}](#{pod[:homepage]}) - #{pod[:summary]}" 
+            UI.puts "* [#{pod[:name]}](#{pod[:homepage]}) [#{pod[:license][:type]}] - #{pod[:summary]}"
           else
-            UI.puts "- #{pod[:name]} - #{pod[:summary]}" 
+            UI.puts "- #{pod[:name]} [#{pod[:license][:type]}]".green
+            UI.puts "  #{pod[:summary]}\n\n"
           end
         end
       end
 
     end
-    
+
   end
 end

@@ -120,7 +120,7 @@ module Pod
       # @return [Pathname] The path where the search index should be stored.
       #
       def search_index_path
-        CACHE_ROOT + 'search_index.yaml'
+        Config.instance.search_index_file
       end
 
       public

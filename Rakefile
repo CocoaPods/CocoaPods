@@ -56,25 +56,26 @@ namespace :gem do
 
       if `git tag`.strip.split("\n").include?(gem_version)
         $stderr.puts "[!] A tag for version `#{gem_version}' already exists. Change the version in lib/cocoapods/gem_version.rb"
+        silent_sh "open lib/cocoapods/gem_version.rb"
         exit 1
       end
 
-      puts "You are about to release `#{gem_version}', is that correct? [y/n]"
-      exit if $stdin.gets.strip.downcase != 'y'
-
       diff_lines = `git diff --name-only`.strip.split("\n")
+      diff_lines.delete('CHANGELOG.md')
 
       if diff_lines.size == 0
         $stderr.puts "[!] Change the version number yourself in lib/cocoapods/gem_version.rb"
         exit 1
       end
 
-      diff_lines.delete('Gemfile.lock')
-      diff_lines.delete('CHANGELOG.md')
       if diff_lines != ['lib/cocoapods/gem_version.rb']
         $stderr.puts "[!] Only change the version number in a release commit!"
         exit 1
       end
+
+      puts "You are about to release `#{gem_version}', is that correct? [y/n]"
+      exit if $stdin.gets.strip.downcase != 'y'
+
     end
 
     require 'date'
@@ -181,7 +182,7 @@ namespace :spec do
 
   desc "Run the integration spec"
   task :integration => :unpack_fixture_tarballs do
-    sh "bundle exec bacon spec/integration_2.rb"
+    sh "bundle exec bacon spec/integration.rb"
   end
 
   # Default task
@@ -196,8 +197,8 @@ namespace :spec do
     title 'Running the specs'
     sh    "bundle exec bacon #{specs('**')}"
 
-    title 'Running Integration 2 tests'
-    sh    "bundle exec bacon spec/integration_2.rb"
+    title 'Running Integration tests'
+    sh    "bundle exec bacon spec/integration.rb"
 
     title 'Running examples'
     Rake::Task['examples:build'].invoke
@@ -218,8 +219,8 @@ namespace :spec do
       sh    "./bin/pod setup"
     end
 
-    title 'Running Integration 2 tests'
-    sh "bundle exec bacon spec/integration_2.rb"
+    title 'Running Integration tests'
+    sh "bundle exec bacon spec/integration.rb"
 
     title 'Running examples'
     Rake::Task['examples:build'].invoke
@@ -258,10 +259,10 @@ namespace :spec do
 
   #--------------------------------------#
 
-  desc "Rebuild integration take 2 after folders"
+  desc "Rebuilds integration fixtures"
   task :rebuild_integration_fixtures do
-    title 'Running Integration 2 tests'
-    `bundle exec bacon spec/integration_2.rb`
+    title 'Running Integration tests'
+    `bundle exec bacon spec/integration.rb`
 
     title 'Storing fixtures'
     # Copy the files to the files produced by the specs to the after folders
@@ -322,11 +323,11 @@ namespace :examples do
 
   desc "Build all examples"
   task :build do
-    execute_command "rm -rf ~/Library/Developer/Shared/Documentation/DocSets/org.cocoapods.*"
     examples.entries.each do |example|
       puts "Building example: #{example}"
       Dir.chdir(example.to_s) do
         execute_command "rm -rf Pods DerivedData"
+        # WARNING: This appeart to use sytem gems instead of the bundle ones.
         execute_command "#{'../../bin/' unless ENV['FROM_GEM']}sandbox-pod install --verbose --no-repo-update"
         command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
           if (example + 'Podfile').read.include?('platform :ios')
@@ -335,7 +336,7 @@ namespace :examples do
             major_version = xcode_version.split('.').first.to_i
             destination_flag_supported = major_version > 4
             if destination_flag_supported
-              command << " -destination 'platform=iOS Simulator,name=iPhone'"
+              command << " -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch)'"
             else
               command << " -sdk "
               command << Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last

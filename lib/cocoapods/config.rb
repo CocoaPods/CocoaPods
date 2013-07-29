@@ -17,11 +17,14 @@ module Pod
       :verbose             => false,
       :silent              => false,
       :skip_repo_update    => false,
-      :aggressive_cache    => false,
 
       :clean               => true,
       :integrate_targets   => true,
       :new_version_message => true,
+
+      :cache_root          => Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods')),
+      :max_cache_size      => 500,
+      :aggressive_cache    => false,
     }
 
     public
@@ -68,6 +71,26 @@ module Pod
     attr_accessor :skip_repo_update
     alias_method  :skip_repo_update?, :skip_repo_update
 
+    public
+
+    #-------------------------------------------------------------------------#
+
+    # @!group Cache
+
+    # @return [Fixnum] The maximum size for the cache expressed in Mb.
+    #
+    attr_accessor :max_cache_size
+
+    # @return [Pathname] The directory where CocoaPods should cache remote data
+    #         and other expensive to compute information.
+    #
+    attr_accessor :cache_root
+
+    def cache_root
+      @cache_root.mkpath unless @cache_root.exist?
+      @cache_root
+    end
+
     # Allows to set whether the downloader should use more aggressive caching
     # options.
     #
@@ -80,7 +103,7 @@ module Pod
     #         options.
     #
     def aggressive_cache?
-      @aggressive_cache || (ENV['CP_AGGRESSIVE_CACHE'] != 'FALSE')
+      @aggressive_cache || (ENV['CP_AGGRESSIVE_CACHE'] == 'TRUE')
     end
 
     public
@@ -89,10 +112,10 @@ module Pod
 
     # @!group Initialization
 
-    def initialize
+    def initialize(use_user_settings = true)
       configure_with(DEFAULTS)
 
-      if user_settings_file.exist?
+      if use_user_settings && user_settings_file.exist?
         require 'yaml'
         user_settings = YAML.load_file(user_settings_file)
         configure_with(user_settings)
@@ -191,6 +214,42 @@ module Pod
     #
     def lockfile_path
       @lockfile_path ||= installation_root + 'Podfile.lock'
+    end
+
+    # @return [Pathname] The file to use a cache of the statistics provider.
+    #
+    def statistics_cache_file
+      cache_root + 'statistics.yml'
+    end
+
+   # @return [Pathname] The file to use to cache the search data.
+    #
+    def search_index_file
+      cache_root + 'search_index.yaml'
+    end
+
+    public
+
+    #-------------------------------------------------------------------------#
+
+    # @!group Dependency Injection
+
+    # @return [Downloader] The downloader to use for the retrieving remote
+    #         source.
+    #
+    def downloader(target_path, options)
+      downloader = Downloader.for_target(target_path, options)
+      downloader.cache_root = cache_root
+      downloader.max_cache_size = max_cache_size
+      downloader.aggressive_cache = aggressive_cache?
+      downloader
+    end
+
+    # @return [Specification::Set::Statistics] The statistic provider to use
+    #         for specifications.
+    #
+    def spec_statistics_provider
+      Specification::Set::Statistics.new(statistics_cache_file)
     end
 
     private

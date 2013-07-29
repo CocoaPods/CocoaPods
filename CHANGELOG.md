@@ -2,6 +2,143 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+* Added license information to `podfile-info` subcommand.
+  [#1219](https://github.com/CocoaPods/CocoaPods/issues/1219)
+
+## 0.22.3
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.22.3)
+
+###### Enhancements
+
+* Add support for .xcdatamodel resource files (in addition to .xcdatamodeld).
+  [#1201](https://github.com/CocoaPods/CocoaPods/pull/1201)
+
+###### Bug Fixes
+
+* Always exlude `USE_HEADERMAP` from the user’s project.
+  [#1216](https://github.com/CocoaPods/CocoaPods/issues/1216)
+
+* Use correct template repo when using the `pod lib create` command.
+  [#1214](https://github.com/CocoaPods/CocoaPods/issues/1214)
+
+* Fixed issue with `pod push` failing when the podspec is unchanged. It will now
+  report `[No change] ExamplePod (0.1.0)` and continue to push other podspecs if
+  they exist. [#1199](https://github.com/CocoaPods/CocoaPods/pull/1199)
+
+* Set STRIP_INSTALLED_PRODUCT = NO in the generated Pods project. This allows
+  Xcode to include symbols from CocoaPods in dSYMs during Archive builds.
+  [#1217](https://github.com/CocoaPods/CocoaPods/pull/1217)
+
+* Ensure the resource script doesn’t fail due to the resources list file not
+  existing when trying to delete it.
+  [#1198](https://github.com/CocoaPods/CocoaPods/pull/1198)
+
+* Fix handling of spaces in paths when compiling xcdatamodel(d) files.
+  [#1201](https://github.com/CocoaPods/CocoaPods/pull/1201)
+
+
+## 0.22.2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.1...0.22.2)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.1...0.22.2)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.0...0.8.1)
+
+###### Enhancements
+
+* The build settings of the Pods project and of its target have been updated to
+  be in line with the new defaults of the future versions of Xcode.
+
+###### Bug fixes
+
+* Specifications defining build setting with the `[*]` syntax are now properly
+  handled.
+  [#1171](https://github.com/CocoaPods/CocoaPods/issues/1171)
+
+* The name of the files references are now properly set fixing a minor
+  regression introduced by CocoaPods 0.22.1 and matching more closely Xcode
+  behaviour.
+
+* The validator now builds the Pods target instead of the first target actually
+  performing the validation.
+
+* Build settings defined through the `xcconfig` attribute of a `podspec` are now
+  stripped of duplicate values when merged in an aggregate target.
+  [#1189](https://github.com/CocoaPods/CocoaPods/issues/1189)
+
+
+## 0.22.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.0...0.22.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.0...0.22.1)
+
+###### Bug fixes
+
+* Fixed a crash related to target dependencies and subspecs.
+  [#1168](https://github.com/CocoaPods/CocoaPods/issues/1168)
+
+
+## 0.22.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0...0.22.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.21.0...0.22.0)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.7.1...0.8.0)
+
+###### Enhancements
+
+* Added the `pod lib create` subcommand which allows to create a new Pod
+  adhering to the best practices. The template is still a bit primitive
+  and we encourage users to provide feedback by submitting patches and issues
+  to https://github.com/CocoaPods/CocoaPods.
+  [#850](https://github.com/CocoaPods/CocoaPods/issues/850)
+
+* Added the `pod lib lint` subcommand which allows to lint the Pod stored
+  in the working directory (a pod spec in the root is needed). This subcommand
+  is equivalent to the deprecated `pod spec lint --local`.
+  [#850](https://github.com/CocoaPods/CocoaPods/issues/850)
+
+* The dependencies of the targets of the Pods project are now made explicit.
+  [#1165](https://github.com/CocoaPods/CocoaPods/issues/1165)
+
+* The size of the cache used for the git repos is now configurable. For more
+  details see
+  https://github.com/CocoaPods/CocoaPods/blob/master/lib/cocoapods/config.rb#L7-L25
+  [#1159](https://github.com/CocoaPods/CocoaPods/issues/1159)
+
+* The copy resources shell script now aborts if any error occurs.
+  [#1098](https://github.com/CocoaPods/CocoaPods/issues/1098)
+
+* The output of shell script build phases no longer includes environment
+  variables to reduce noise.
+  [#1122](https://github.com/CocoaPods/CocoaPods/issues/1122)
+
+* CocoaPods no longer sets the deprecated `ALWAYS_SEARCH_USER_PATHS` build
+  setting.
+
+###### Bug fixes
+
+* Pods whose head state changes now are correctly detected and reinstalled.
+  [#1160](https://github.com/CocoaPods/CocoaPods/issues/1160)
+
+* Fixed the library reppresentation of the hooks which caused issues with the
+  `#copy_resources_script_path` method.
+  [#1157](https://github.com/CocoaPods/CocoaPods/issues/1157)
+
+* Frameworks symlinks are not properly preserved by the copy resources script.
+  Thanks to Thomas Dohmke (ashtom) for the fix.
+  [#1063](https://github.com/CocoaPods/CocoaPods/issues/1063)
+
+## 0.21.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0.rc1...0.21.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.21.0.rc1...0.21.0)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.7.0...0.7.1)
+
+###### Bug fixes
+
+* Fixed a linter issue related to the dedicated targets change.
+  [#1130](https://github.com/CocoaPods/CocoaPods/issues/1130)
+
+* Fixed xcconfig issues related to Pods including a dot in the name.
+  [#1152](https://github.com/CocoaPods/CocoaPods/issues/1152)
+
 
 ## 0.21.0.rc1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.2...0.21.0.rc1)
@@ -26,6 +163,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Fixed crash due to Podfile.lock containing multiple version requirements for
   a Pod. [#1076](https://github.com/CocoaPods/CocoaPods/issues/1076)
+
 * Fixed a build error due to the copy resources script using the same temporary
   file for multiple targets.
   [#1099](https://github.com/CocoaPods/CocoaPods/issues/1099)

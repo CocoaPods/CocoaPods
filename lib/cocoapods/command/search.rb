@@ -1,7 +1,7 @@
 module Pod
   class Command
     class Search < Command
-      self.summary = 'Search pods'
+      self.summary = 'Searches for pods'
 
       self.description = <<-DESC
         Searches for pods, ignoring case, whose name matches `QUERY'. If the
@@ -43,7 +43,7 @@ module Pod
           sets.reject!{ |set| !set.specification.available_platforms.map(&:name).include?(:osx) }
         end
 
-        statistics_provider = Specification::Set::Statistics.new(STATISTICS_CACHE_FILE)
+        statistics_provider = Config.instance.spec_statistics_provider
         sets.each do |set|
           begin
             if @stats

@@ -29,9 +29,6 @@ module Pod
 
       # Generates the contents of the xcconfig file and saves it to disk.
       #
-      # @note   The `ALWAYS_SEARCH_USER_PATHS` flag is enabled to support
-      #         libraries like `EmbedReader`.
-      #
       # @return [void]
       #
       def create_xcconfig_file

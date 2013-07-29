@@ -38,7 +38,7 @@ module Pod
     # @return [String] A string suitable for debugging.
     #
     def inspect
-      "<#{self.class} name=#{name} platform=#{platform}>"
+      "<#{self.class} name=#{name} >"
     end
 
     #-------------------------------------------------------------------------#
