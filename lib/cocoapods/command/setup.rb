@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module Pod
   class Command
     class Setup < Command
@@ -30,6 +32,8 @@ module Pod
             set_master_repo_url
             set_master_repo_branch
             update_master_repo
+          elsif old_master_repo_dir.exist?
+            migrate_repos
           else
             add_master_repo
           end
@@ -42,6 +46,21 @@ module Pod
       #--------------------------------------#
 
       # @!group Setup steps
+
+      # Migrates any repos from the old directory structure to the new directory
+      # structure.
+      #
+      # @return [void]
+      def migrate_repos
+        config.repos_dir.mkpath
+        Dir.foreach config.old_repos_dir do |repo_dir|
+          source_repo_dir = config.old_repos_dir + repo_dir
+          target_repo_dir = config.repos_dir + repo_dir
+          if not repo_dir =~ /\.+/ and source_repo_dir != config.repos_dir
+            FileUtils.mv source_repo_dir, target_repo_dir
+          end
+        end
+      end
 
       # Sets the url of the master repo according to whether it is push.
       #
@@ -128,6 +147,12 @@ module Pod
       #
       def master_repo_dir
         SourcesManager.master_repo_dir
+      end
+
+      # @return [Pathname] the directory of the old master repo.
+      #
+      def old_master_repo_dir
+        SourcesManager.old_master_repo_dir
       end
     end
   end

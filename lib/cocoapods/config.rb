@@ -146,6 +146,10 @@ module Pod
 
     attr_writer :repos_dir
 
+    def old_repos_dir
+      @old_repos_dir ||= Pathname.new('~/.cocoapods').expand_path
+    end
+
     # @return [Pathname] the root of the CocoaPods installation where the
     #         Podfile is located.
     #

@@ -259,6 +259,11 @@ module Pod
         config.repos_dir + 'master'
       end
 
+      # @return [Pathname] The path of the old master repo.
+      def old_master_repo_dir
+        config.old_repos_dir + 'master'
+      end
+
       # @return [Bool] Checks if the master repo is usable.
       #
       # @note   Note this is used to automatically setup the master repo if
