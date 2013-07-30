@@ -24,7 +24,7 @@ module Pod
       end
 
       it "returns the path to the deprecated spec-repos dir" do
-        @sut.repos_dir.should == Pathname.new("~/.cocoapods").expand_path
+        @sut.old_repos_dir.should == Pathname.new("~/.cocoapods").expand_path
       end
 
       it "allows to specify whether the aggressive cache should be used with an environment variable" do
@@ -36,7 +36,7 @@ module Pod
 
       it "allows to specify the home dir with an environment variable" do
         ENV['CP_HOME_DIR'] = '~/custom_home_dir'
-        @sut.cocoapods_dir.should == Pathname.new("~/custom_home_dir").expand_path
+        @sut.home_dir.should == Pathname.new("~/custom_home_dir").expand_path
         ENV.delete('CP_HOME_DIR')
       end
 

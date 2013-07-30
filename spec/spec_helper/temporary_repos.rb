@@ -60,7 +60,7 @@ module SpecHelper
     #--------------------------------------#
 
     def tmp_repos_path
-      SpecHelper.temporary_directory + 'cocoapods'
+      SpecHelper.temporary_directory + 'cocoapods/master'
     end
 
     module_function :tmp_repos_path
