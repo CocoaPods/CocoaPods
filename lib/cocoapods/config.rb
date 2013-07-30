@@ -132,7 +132,8 @@ module Pod
 
     # @!group Paths
 
-    # @return [Pathname] the directory where repos, templates and configuration files are stored.
+    # @return [Pathname] the directory where repos, templates and configuration
+    #         files are stored.
     #
     def home_dir
       @home_dir ||= Pathname.new(ENV['CP_HOME_DIR'] || "~/.cocoapods").expand_path
@@ -146,6 +147,9 @@ module Pod
 
     attr_writer :repos_dir
 
+    # @return [Pathname] the deprecated directory where the CocoaPods sources
+    #         were stored.
+    #
     def old_repos_dir
       @old_repos_dir ||= Pathname.new('~/.cocoapods').expand_path
     end

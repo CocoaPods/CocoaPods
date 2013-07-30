@@ -260,6 +260,7 @@ module Pod
       end
 
       # @return [Pathname] The path of the old master repo.
+      #
       def old_master_repo_dir
         config.old_repos_dir + 'master'
       end
