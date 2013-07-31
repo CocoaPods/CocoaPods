@@ -25,6 +25,7 @@ module Pod
       set_up_test_repo
       Command::Setup.any_instance.stubs(:read_only_url).returns(test_repo_path.to_s)
       config.repos_dir = SpecHelper.temporary_directory
+      config.old_repos_dir = SpecHelper.temporary_directory + '..'
     end
 
     it "runs with correct parameters" do
@@ -45,5 +46,26 @@ module Pod
       Dir.chdir(config.repos_dir + 'master') { `git remote set-url origin git@github.com:CocoaPods/Specs.git` }
       command('setup').url.should == 'git@github.com:CocoaPods/Specs.git'
     end
+
+    before do
+      FileUtils.rm_rf(test_repo_path)
+      set_up_old_test_repo
+      config.repos_dir = SpecHelper.temporary_directory + 'cocoapods/repos'
+      config.old_repos_dir = SpecHelper.temporary_directory + 'cocoapods'
+    end
+
+    it "migrates repos from the old directory structure to the new one" do
+      source = config.old_repos_dir + 'master'
+      target = config.repos_dir + 'master'
+
+      source.should.exist?
+      target.should.not.exist?
+
+      output = run_command('setup')
+
+      source.should.not.exist?
+      target.should.exist?
+    end
+
   end
 end

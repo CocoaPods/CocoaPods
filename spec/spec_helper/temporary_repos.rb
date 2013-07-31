@@ -45,7 +45,7 @@ module SpecHelper
       repo_path('master')
     end
 
-    # Sets up a lighweight master repo in `tmp/cocoapods/master` with the
+    # Sets up a lighweight master repo in `tmp/cocoapods/repos/master` with the
     # contents of `spec/fixtures/spec-repos/test_repo`.
     #
     def set_up_test_repo
@@ -57,10 +57,26 @@ module SpecHelper
       repo_make('master')
     end
 
+    def test_old_repo_path
+      repo_path('../master')
+    end
+
+    # Sets up a lighweight master repo in `tmp/cocoapods/master` with the
+    # contents of `spec/fixtures/spec-repos/test_repo`.
+    #
+    def set_up_old_test_repo
+      require 'fileutils'
+      test_old_repo_path.mkpath
+      origin = ROOT + 'spec/fixtures/spec-repos/test_repo/.'
+      destination = tmp_repos_path + '../master'
+      FileUtils.cp_r(origin, destination)
+      repo_make('../master')
+    end
+
     #--------------------------------------#
 
     def tmp_repos_path
-      SpecHelper.temporary_directory + 'cocoapods/master'
+      SpecHelper.temporary_directory + 'cocoapods/repos'
     end
 
     module_function :tmp_repos_path
