@@ -1,9 +1,35 @@
 module Pod
   module Generator
+    module XCConfig
 
     # Generates the xcconfigs for the aggregate targets.
     #
-    class AggregateXCConfig < XCConfig
+    class AggregateXCConfig
+
+      # @return [Target] the target represented by this xcconfig.
+      #
+      attr_reader :target
+
+      # @param  [Target] target @see target
+      #
+      def initialize(target)
+        @target = target
+      end
+
+      # @return [Xcodeproj::Config] The generated xcconfig.
+      #
+      attr_reader :xcconfig
+
+      # Generates and saves the xcconfig to the given path.
+      #
+      # @param  [Pathname] path
+      #         the path where the prefix header should be stored.
+      #
+      # @return [void]
+      #
+      def save_as(path)
+        generate.save_as(path)
+      end
 
       # Generates the xcconfig.
       #
@@ -19,17 +45,17 @@ module Pod
       #
       def generate
         @xcconfig = Xcodeproj::Config.new({
-          'OTHER_LDFLAGS'                => default_ld_flags,
-          'HEADER_SEARCH_PATHS'          => quote(sandbox.public_headers.search_paths),
-          'PODS_ROOT'                    => target.relative_pods_root,
+          'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
+          'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(target.sandbox.public_headers.search_paths),
+          'PODS_ROOT' => target.relative_pods_root,
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
         })
 
         target.pod_targets.each do |pod_target|
           pod_target.file_accessors.each do |file_accessor|
-            add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
+            XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
             file_accessor.framework_bundles.each do |framework_bundle|
-              add_framework_build_settings(framework_bundle, @xcconfig)
+              XCConfigHelper.add_framework_build_settings(framework_bundle, @xcconfig, target.sandbox.root)
             end
           end
         end
@@ -47,4 +73,5 @@ module Pod
 
     end
   end
+end
 end

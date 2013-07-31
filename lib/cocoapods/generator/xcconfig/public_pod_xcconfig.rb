@@ -1,5 +1,6 @@
 module Pod
   module Generator
+    module XCConfig
 
     # Generates the public xcconfigs for the pod targets.
     #
@@ -8,7 +9,21 @@ module Pod
     # xcconfig includes the standard podspec defined values including
     # libraries, frameworks, weak frameworks and xcconfig overrides.
     #
-    class PublicPodXCConfig < XCConfig
+    class PublicPodXCConfig
+
+      # @return [Target] the target represented by this xcconfig.
+      #
+      attr_reader :target
+
+      # @param  [Target] target @see target
+      #
+      def initialize(target)
+        @target = target
+      end
+
+      # @return [Xcodeproj::Config] The generated xcconfig.
+      #
+      attr_reader :xcconfig
 
       # Generates and saves the xcconfig to the given path.
       #
@@ -28,9 +43,9 @@ module Pod
       def generate
         @xcconfig = Xcodeproj::Config.new
         target.file_accessors.each do |file_accessor|
-          add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
+          XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
           file_accessor.framework_bundles.each do |framework_bundle|
-            add_framework_build_settings(framework_bundle, @xcconfig)
+            XCConfigHelper.add_framework_build_settings(framework_bundle, @xcconfig, target.sandbox.root)
           end
         end
         @xcconfig
@@ -40,4 +55,5 @@ module Pod
 
     end
   end
+end
 end
