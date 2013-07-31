@@ -68,6 +68,25 @@ module Pod
           xcconfig.merge!(build_settings)
         end
 
+        # Configures the given Xcconfig with the the build settings for the given
+        # framework path.
+        #
+        # @param  [Pathanme] framework_path
+        #         The path of the framework.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
+          name = File.basename(library_path, ".a").sub(/\Alib/, '')
+          dirname = File.dirname(library_path).sub(sandbox_root.to_s, '$(PODS_ROOT)')
+          build_settings = {
+            'OTHER_LDFLAGS' => "-l#{name}",
+            'LIBRARY_SEARCH_PATHS' => quote([dirname])
+          }
+          xcconfig.merge!(build_settings)
+        end
+
         # @return [Array<String>] The search paths for the developer frameworks.
         #
         DEVELOPER_FRAMEWORKS_SEARCH_PATHS = [

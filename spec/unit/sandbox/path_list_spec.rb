@@ -23,6 +23,7 @@ module Pod
           README
           Resources/logo-sidebar.png
           Resources/sub_dir/logo-sidebar.png
+          libBananalib.a
           preserve_me.txt
           sub-dir/sub-dir-2/somefile.txt
         ]

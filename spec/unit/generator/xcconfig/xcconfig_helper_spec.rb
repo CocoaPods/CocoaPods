@@ -134,6 +134,19 @@ module Pod
 
         #---------------------------------------------------------------------#
 
+        describe "::add_library_build_settings" do
+          it "adds the build settings of a framework to the given xcconfig" do
+            path = config.sandbox.root + 'MapBox/Proj4/libProj4.a'
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_library_build_settings(path, xcconfig, config.sandbox.root)
+            hash_config = xcconfig.to_hash
+            hash_config['OTHER_LDFLAGS'].should == "-lProj4"
+            hash_config['LIBRARY_SEARCH_PATHS'].should == '"$(PODS_ROOT)/MapBox/Proj4"'
+          end
+        end
+
+        #---------------------------------------------------------------------#
+
         describe "::add_framework_build_settings" do
           it "adds the developer frameworks search paths to the xcconfig if SenTestingKit has been detected" do
             xcconfig = Xcodeproj::Config.new({'OTHER_LDFLAGS' => '-framework SenTestingKit'})

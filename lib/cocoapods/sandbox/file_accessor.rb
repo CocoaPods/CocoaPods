@@ -21,11 +21,15 @@ module Pod
       #
       attr_reader :spec_consumer
 
-      # @param [Sandbox::PathList] path_list @see path_list
+      # @param [Sandbox::PathList, Pathname] path_list @see path_list
       # @param [Specification::Consumer] spec_consumer @see spec_consumer
       #
       def initialize(path_list, spec_consumer)
-        @path_list = path_list
+        if path_list.is_a?(PathList)
+          @path_list = path_list
+        else
+          @path_list = PathList.new(path_list)
+        end
         @spec_consumer = spec_consumer
 
         unless @spec_consumer
@@ -106,7 +110,14 @@ module Pod
       #         shipped with the Pod.
       #
       def framework_bundles
-        expanded_paths(spec_consumer.framework_bundles, :include_dirs => true)
+        paths_for_attribute(:framework_bundles, true)
+      end
+
+      # @return [Array<Pathname>] The paths of the framework bundles that come
+      #         shipped with the Pod.
+      #
+      def library_files
+        paths_for_attribute(:library_files)
       end
 
       # @return [Pathname] The of the prefix header file of the specification.

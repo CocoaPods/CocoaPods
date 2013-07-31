@@ -83,14 +83,16 @@ module Pod
       #
       def add_frameworks_bundles
         UI.message "- Adding frameworks to Pods project" do
-          add_file_acessors_paths_to_pods_group(:framework_bundles, :frameworks)
+          add_file_acessors_paths_to_pods_group(:framework_bundles, :frameworks_and_libraries)
         end
       end
 
       # TODO
       #
       def add_library_files
-
+        UI.message "- Adding frameworks to Pods project" do
+          add_file_acessors_paths_to_pods_group(:library_files, :frameworks_and_libraries)
+        end
       end
 
       # Adds the resources of the Pods to the Pods project.

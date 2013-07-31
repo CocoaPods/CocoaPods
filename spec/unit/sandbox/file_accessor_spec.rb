@@ -107,6 +107,10 @@ module Pod
         @accessor.framework_bundles.should.include?(@root + "Bananalib.framework")
       end
 
+      it "returns the paths of the library files" do
+        @accessor.library_files.should.include?(@root + "libBananalib.a")
+      end
+
       it "returns the prefix header of the specification" do
         @accessor.prefix_header.should == @root + 'Classes/BananaLib.pch'
       end

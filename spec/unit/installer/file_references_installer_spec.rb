@@ -35,6 +35,12 @@ module Pod
         file_ref.should.be.not.nil
       end
 
+      xit "adds the file references of the frameworks of the projet" do
+
+      end
+
+      xit "adds the file references of the libraries of the project"
+
       it "adds the files references of the resources the Pods project" do
         @installer.install!
         file_ref = @installer.pods_project['Pods/BananaLib/Resources/logo-sidebar.png']

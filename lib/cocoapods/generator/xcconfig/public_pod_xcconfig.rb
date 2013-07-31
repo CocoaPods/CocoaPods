@@ -47,6 +47,9 @@ module Pod
           file_accessor.framework_bundles.each do |framework_bundle|
             XCConfigHelper.add_framework_build_settings(framework_bundle, @xcconfig, target.sandbox.root)
           end
+          file_accessor.library_files.each do |library_file|
+            XCConfigHelper.add_library_build_settings(library_file, @xcconfig, target.sandbox.root)
+          end
         end
         @xcconfig
       end

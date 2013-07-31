@@ -122,7 +122,7 @@ module Pod
         case type
         when :source_files then sub_group = 'Source Files'
         when :resources then sub_group = 'Resources'
-        when :frameworks then sub_group = 'Frameworks'
+        when :frameworks_and_libraries then sub_group = 'Frameworks & Libraries'
         when :support_files then sub_group = 'Support Files'
         else raise "[BUG]"
         end
