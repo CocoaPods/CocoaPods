@@ -37,6 +37,7 @@ Downloading dependencies
 Generating Pods project
   - Creating Pods project
   - Adding source files to Pods project
+  - Adding frameworks to Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing libraries
