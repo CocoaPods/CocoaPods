@@ -8,6 +8,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Added license information to `podfile-info` subcommand.
   [#1219](https://github.com/CocoaPods/CocoaPods/issues/1219)
+  
+* Restructured .cocoapods folder to contain repos in a subdirectory.
+  [#1150](https://github.com/CocoaPods/CocoaPods/issues/1150)
 
 ###### Bug Fixes
 
