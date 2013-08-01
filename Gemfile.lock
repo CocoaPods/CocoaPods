@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 92692426f9ed7a5daee4ee1521e47cc716dce3e9
-  branch: master
+  revision: 0bcb90602afc9fdd5772b8079ab77bd20d9ef3a4
+  branch: feature-frameworks-bundles
   specs:
     cocoapods-core (0.22.3)
       activesupport (~> 3.2.13)
@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 8400134c1299d9cdb5c233d84513a7eec0f9f37b
+  revision: 254fbb313e7219c9c99d0b31facb510c065aa906
   branch: master
   specs:
     xcodeproj (0.8.1)
@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 2cc10348d9eb35862d900d79c72cd967388962b9
+  revision: 951ebcc7f6b10874ff09796b0add04d7b3ce34d1
   branch: master
   specs:
     cocoapods-downloader (0.1.1)

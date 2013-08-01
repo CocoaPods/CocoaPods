@@ -9,7 +9,7 @@ module Pod
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions['Pods']
-        @project = Project.new(config.sandbox.project_path)
+        @project = Project.new(config.sandbox)
 
         config.sandbox.project = @project
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
@@ -110,6 +110,12 @@ module Pod
         @installer.install!
         names = @installer.sandbox.project['Frameworks'].children.map(&:name)
         names.sort.should == ["Foundation.framework", "QuartzCore.framework"]
+      end
+
+      #--------------------------------------#
+
+      xit 'adds the resource bundle targets' do
+
       end
 
       #--------------------------------------#

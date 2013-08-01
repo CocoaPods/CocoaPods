@@ -70,7 +70,7 @@ module Pod
       def script
         script = install_resources_function
         resources.each do |resource|
-          script += "install_resource '#{resource}'\n"
+          script += %Q[install_resource "#{resource}"\n]
         end
         script += RSYNC_CALL
         script
@@ -108,6 +108,10 @@ install_resource()
     *.xcdatamodeld)
       echo "xcrun momc \\"${PODS_ROOT}/$1\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodeld`.momd\\""
       xcrun momc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodeld`.momd"
+      ;;
+    /*)
+      echo "$1"
+      echo "$1" >> "$RESOURCES_TO_COPY"
       ;;
     *)
       echo "${PODS_ROOT}/$1"

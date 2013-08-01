@@ -6,11 +6,13 @@ File References:
 - Pods:
   - PodTest:
     - subspec_1:
-      - subspec_1.h
-      - subspec_1.m
+      - Source Files:
+        - subspec_1.h
+        - subspec_1.m
     - subspec_2:
-      - subspec_2.h
-      - subspec_2.m
+      - Source Files:
+        - subspec_2.h
+        - subspec_2.m
 - Products:
   - libPods-OS X App-PodTest.a
   - libPods-iOS App-PodTest.a

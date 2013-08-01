@@ -7,7 +7,7 @@ module Pod
       @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
       @pod_target = PodTarget.new([], nil, config.sandbox)
       @pod_target.file_accessors = [@file_accessor]
-      @project = Project.new(config.sandbox.project_path)
+      @project = Project.new(config.sandbox)
       @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
     end
 
@@ -23,9 +23,7 @@ module Pod
 
       it "adds the files references of the source files the Pods project" do
         @installer.install!
-        group_ref = @installer.pods_project['Pods/BananaLib']
-        group_ref.should.be.not.nil
-        file_ref = @installer.pods_project['Pods/BananaLib/Banana.m']
+        file_ref = @installer.pods_project['Pods/BananaLib/Source Files/Banana.m']
         file_ref.should.be.not.nil
         file_ref.path.should == "../../spec/fixtures/banana-lib/Classes/Banana.m"
       end
@@ -33,17 +31,21 @@ module Pod
       it "adds the files references of the local Pods in a dedicated group" do
         config.sandbox.store_local_path('BananaLib', 'Some Path')
         @installer.install!
-        group_ref = @installer.pods_project['Local Pods/BananaLib']
-        group_ref.should.be.not.nil
-        file_ref = @installer.pods_project['Local Pods/BananaLib/Banana.m']
+        file_ref = @installer.pods_project['Local Pods/BananaLib/Source Files/Banana.m']
         file_ref.should.be.not.nil
+      end
+
+      xit "adds the file references of the frameworks of the projet" do
+
+      end
+
+      xit "adds the file references of the libraries of the project" do
+
       end
 
       it "adds the files references of the resources the Pods project" do
         @installer.install!
-        group_ref = @installer.pods_project['Resources/BananaLib']
-        group_ref.should.be.not.nil
-        file_ref = @installer.pods_project['Resources/BananaLib/logo-sidebar.png']
+        file_ref = @installer.pods_project['Pods/BananaLib/Resources/logo-sidebar.png']
         file_ref.should.be.not.nil
         file_ref.path.should == "../../spec/fixtures/banana-lib/Resources/logo-sidebar.png"
       end
@@ -72,53 +74,63 @@ module Pod
 
     describe "Private Helpers" do
 
-      it "returns the file accessors" do
-        pod_target_1 = PodTarget.new([], nil, config.sandbox)
-        pod_target_1.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-        pod_target_2 = PodTarget.new([], nil, config.sandbox)
-        pod_target_2.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-        installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1, pod_target_2], @project)
-        roots = installer.send(:file_accessors).map { |fa| fa.path_list.root }
-        roots.should == [fixture('banana-lib'), fixture('banana-lib')]
+      describe "#file_accessors" do
+        it "returns the file accessors" do
+          pod_target_1 = PodTarget.new([], nil, config.sandbox)
+          pod_target_1.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
+          pod_target_2 = PodTarget.new([], nil, config.sandbox)
+          pod_target_2.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
+          installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1, pod_target_2], @project)
+          roots = installer.send(:file_accessors).map { |fa| fa.path_list.root }
+          roots.should == [fixture('banana-lib'), fixture('banana-lib')]
+        end
+
+        it "handles libraries empty libraries without file accessors" do
+          pod_target_1 = PodTarget.new([], nil, config.sandbox)
+          pod_target_1.file_accessors = []
+          installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)
+          roots = installer.send(:file_accessors).should == []
+        end
       end
 
-      it "handles libraries empty libraries without file accessors" do
-        pod_target_1 = PodTarget.new([], nil, config.sandbox)
-        pod_target_1.file_accessors = []
-        installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)
-        roots = installer.send(:file_accessors).should == []
+      describe "#add_file_acessors_paths_to_pods_group" do 
+        xit "adds the paths of the paths of the file accessor corresponding to the given key to the Pods project" do
+
+        end
       end
 
-      it "returns the header mappings" do
-        headers_sandbox = Pathname.new('BananaLib')
-        headers = [Pathname.new('BananaLib/Banana.h')]
-        mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-        mappings.should == {
-          headers_sandbox => [Pathname.new('BananaLib/Banana.h')]
-        }
-      end
+      describe "#add_file_acessors_paths_to_pods_group" do 
+        it "returns the header mappings" do
+          headers_sandbox = Pathname.new('BananaLib')
+          headers = [Pathname.new('BananaLib/Banana.h')]
+          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
+          mappings.should == {
+            headers_sandbox => [Pathname.new('BananaLib/Banana.h')]
+          }
+        end
 
-      it "takes into account the header dir specified in the spec" do
-        headers_sandbox = Pathname.new('BananaLib')
-        headers = [Pathname.new('BananaLib/Banana.h')]
-        @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
-        mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-        mappings.should == {
-          (headers_sandbox + 'Sub_dir') => [Pathname.new('BananaLib/Banana.h')]
-        }
-      end
+        it "takes into account the header dir specified in the spec" do
+          headers_sandbox = Pathname.new('BananaLib')
+          headers = [Pathname.new('BananaLib/Banana.h')]
+          @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
+          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
+          mappings.should == {
+            (headers_sandbox + 'Sub_dir') => [Pathname.new('BananaLib/Banana.h')]
+          }
+        end
 
-     it "takes into account the header mappings dir specified in the spec" do
-        headers_sandbox = Pathname.new('BananaLib')
-        header_1 = @file_accessor.root + 'BananaLib/sub_dir/dir_1/banana_1.h'
-        header_2 = @file_accessor.root + 'BananaLib/sub_dir/dir_2/banana_2.h'
-        headers = [ header_1, header_2 ]
-        @file_accessor.spec_consumer.stubs(:header_mappings_dir).returns('BananaLib/sub_dir')
-        mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-        mappings.should == {
-          (headers_sandbox + 'dir_1') => [header_1],
-          (headers_sandbox + 'dir_2') => [header_2],
-        }
+        it "takes into account the header mappings dir specified in the spec" do
+          headers_sandbox = Pathname.new('BananaLib')
+          header_1 = @file_accessor.root + 'BananaLib/sub_dir/dir_1/banana_1.h'
+          header_2 = @file_accessor.root + 'BananaLib/sub_dir/dir_2/banana_2.h'
+          headers = [ header_1, header_2 ]
+          @file_accessor.spec_consumer.stubs(:header_mappings_dir).returns('BananaLib/sub_dir')
+          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
+          mappings.should == {
+            (headers_sandbox + 'dir_1') => [header_1],
+            (headers_sandbox + 'dir_2') => [header_2],
+          }
+        end
       end
 
     end

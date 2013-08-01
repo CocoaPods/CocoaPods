@@ -1,5 +1,6 @@
 module Pod
   module Generator
+    module XCConfig
 
     # Generates the private xcconfigs for the pod targets.
     #
@@ -7,7 +8,11 @@ module Pod
     # values of the public namespaced xcconfig with the default private
     # configuration values required by CocoaPods.
     #
-    class PrivatePodXCConfig < XCConfig
+    class PrivatePodXCConfig
+
+      # @return [Target] the target represented by this xcconfig.
+      #
+      attr_reader :target
 
       # @return [Xcodeproj::Config] The public xcconfig which this one will
       #         use.
@@ -18,8 +23,23 @@ module Pod
       # @param  [Xcodeproj::Config] public_xcconfig @see public_xcconfig
       #
       def initialize(target, public_xcconfig)
-        super(target)
+        @target = target
         @public_xcconfig = public_xcconfig
+      end
+
+      # @return [Xcodeproj::Config] The generated xcconfig.
+      #
+      attr_reader :xcconfig
+
+      # Generates and saves the xcconfig to the given path.
+      #
+      # @param  [Pathname] path
+      #         the path where the prefix header should be stored.
+      #
+      # @return [void]
+      #
+      def save_as(path)
+        generate.save_as(path)
       end
 
       # Generates the xcconfig.
@@ -27,12 +47,13 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
+        search_pahts = target.build_headers.search_paths.concat(target.sandbox.public_headers.search_paths)
         config = {
-          'OTHER_LDFLAGS'                => default_ld_flags,
-          'PODS_ROOT'                    => '${SRCROOT}',
-          'HEADER_SEARCH_PATHS'          => quote(target.build_headers.search_paths) + ' ' + quote(sandbox.public_headers.search_paths),
+          'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
+          'PODS_ROOT'  => '${SRCROOT}',
+          'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_pahts),
           'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1',
-          # 'USE_HEADERMAP'                => 'NO'
+          # 'USE_HEADERMAP' => 'NO'
         }
 
         xcconfig_hash = add_xcconfig_namespaced_keys(public_xcconfig.to_hash, config, target.xcconfig_prefix)
@@ -92,4 +113,5 @@ module Pod
 
     end
   end
+end
 end
