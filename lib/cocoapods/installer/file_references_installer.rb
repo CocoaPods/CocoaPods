@@ -36,7 +36,7 @@ module Pod
         refresh_file_accessors
         add_source_files_references
         add_frameworks_bundles
-        add_library_files
+        add_vendored_libraries
         add_resources
         link_headers
       end
@@ -83,7 +83,7 @@ module Pod
       #
       def add_frameworks_bundles
         UI.message "- Adding frameworks to Pods project" do
-          add_file_acessors_paths_to_pods_group(:framework_bundles, :frameworks_and_libraries)
+          add_file_acessors_paths_to_pods_group(:vendored_frameworks, :frameworks_and_libraries)
         end
       end
 
@@ -91,9 +91,9 @@ module Pod
       #
       # @return [void]
       #
-      def add_library_files
+      def add_vendored_libraries
         UI.message "- Adding frameworks to Pods project" do
-          add_file_acessors_paths_to_pods_group(:library_files, :frameworks_and_libraries)
+          add_file_acessors_paths_to_pods_group(:vendored_libraries, :frameworks_and_libraries)
         end
       end
 

@@ -18,8 +18,8 @@ module Pod
           @spec.weak_frameworks = ['iAd']
           @spec.libraries = ['xml2']
           file_accessors = [Sandbox::FileAccessor.new(fixture('banana-lib'), @spec.consumer(:ios))]
-          # framework_bundle_paths = [config.sandbox.root + 'BananaLib/BananaLib.framework']
-          # Sandbox::FileAccessor.any_instance.stubs(:framework_bundles).returns(framework_bundle_paths)
+          # vendored_framework_paths = [config.sandbox.root + 'BananaLib/BananaLib.framework']
+          # Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks).returns(vendored_framework_paths)
 
           @pod_target.target_definition.stubs(:podfile).returns(@podfile)
           @pod_target.stubs(:file_accessors).returns(file_accessors)

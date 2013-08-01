@@ -109,15 +109,15 @@ module Pod
       # @return [Array<Pathname>] The paths of the framework bundles that come
       #         shipped with the Pod.
       #
-      def framework_bundles
-        paths_for_attribute(:framework_bundles, true)
+      def vendored_frameworks
+        paths_for_attribute(:vendored_frameworks, true)
       end
 
       # @return [Array<Pathname>] The paths of the library bundles that come
       #         shipped with the Pod.
       #
-      def library_files
-        paths_for_attribute(:library_files)
+      def vendored_libraries
+        paths_for_attribute(:vendored_libraries)
       end
 
       # @return [Hash{String => Array<Pathname>}] A hash that describes the

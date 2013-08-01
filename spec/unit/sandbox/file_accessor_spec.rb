@@ -104,11 +104,11 @@ module Pod
       end
 
       it "returns the paths of the framework bundles" do
-        @accessor.framework_bundles.should.include?(@root + "Bananalib.framework")
+        @accessor.vendored_frameworks.should.include?(@root + "Bananalib.framework")
       end
 
       it "returns the paths of the library files" do
-        @accessor.library_files.should.include?(@root + "libBananalib.a")
+        @accessor.vendored_libraries.should.include?(@root + "libBananalib.a")
       end
 
       it "returns the resource bundles of the pod" do
