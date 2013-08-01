@@ -21,11 +21,15 @@ module Pod
       #
       attr_reader :spec_consumer
 
-      # @param [Sandbox::PathList] path_list @see path_list
+      # @param [Sandbox::PathList, Pathname] path_list @see path_list
       # @param [Specification::Consumer] spec_consumer @see spec_consumer
       #
       def initialize(path_list, spec_consumer)
-        @path_list = path_list
+        if path_list.is_a?(PathList)
+          @path_list = path_list
+        else
+          @path_list = PathList.new(path_list)
+        end
         @spec_consumer = spec_consumer
 
         unless @spec_consumer
@@ -36,7 +40,7 @@ module Pod
       # @return [Pathname] the directory which contains the files of the Pod.
       #
       def root
-        path_list.root
+        path_list.root if path_list
       end
 
       # @return [Specification] the specification.
@@ -54,7 +58,7 @@ module Pod
       # @return [String] A string suitable for debugging.
       #
       def inspect
-        "<#{self.class} spec=#{spec.name} platform=#{platform_name} root=#{path_list.root}>"
+        "<#{self.class} spec=#{spec.name} platform=#{platform_name} root=#{root}>"
       end
 
       #-----------------------------------------------------------------------#
@@ -100,6 +104,40 @@ module Pod
       #
       def preserve_paths
         paths_for_attribute(:preserve_paths, true)
+      end
+
+      # @return [Array<Pathname>] The paths of the framework bundles that come
+      #         shipped with the Pod.
+      #
+      def vendored_frameworks
+        paths_for_attribute(:vendored_frameworks, true)
+      end
+
+      # @return [Array<Pathname>] The paths of the library bundles that come
+      #         shipped with the Pod.
+      #
+      def vendored_libraries
+        paths_for_attribute(:vendored_libraries)
+      end
+
+      # @return [Hash{String => Array<Pathname>}] A hash that describes the
+      #         resource bundles of the Pod. The keys reppresent the name of
+      #         the bundle while the values the path of the resources.
+      #
+      def resource_bundles
+        result = {}
+        spec_consumer.resource_bundles.each do |name, file_patterns|
+          paths = expanded_paths(file_patterns, :include_dirs => true)
+          result[name] = paths
+        end
+        result
+      end
+
+      # @return [Array<Pathname>] The paths of the files which should be
+      #         included in resources bundles by the Pod.
+      #
+      def resource_bundle_files
+        resource_bundles.values.flatten
       end
 
       # @return [Pathname] The of the prefix header file of the specification.
@@ -159,8 +197,6 @@ module Pod
       #
       # @return [String] the glob pattern.
       #
-      # @todo   Move to the cocoapods-core so it appears in the docs?
-      #
       def glob_for_attribute(attrbute)
         globs = {
           :source_files => '*.{h,hpp,hh,m,mm,c,cpp}'.freeze,
@@ -184,8 +220,6 @@ module Pod
       # @raise  [Informative] If the pod does not exists.
       #
       # @return [Array<Pathname>] A list of the paths.
-      #
-      # @todo   Implement case insensitive search
       #
       def expanded_paths(patterns, options = {})
         return [] if patterns.empty?

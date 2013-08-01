@@ -37,17 +37,21 @@ Downloading dependencies
 Generating Pods project
   - Creating Pods project
   - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding frameworks to Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing libraries
     - Installing target `Pods-JSONKit` iOS 6.0
       - Adding Build files
+      - Adding resource bundles to Pods project
       - Generating public xcconfig file at `Pods/Pods-JSONKit.xcconfig`
       - Generating private xcconfig file at `Pods/Pods-JSONKit-Private.xcconfig`
       - Generating prefix header at `Pods/Pods-JSONKit-prefix.pch`
       - Generating dummy source file at `Pods/Pods-JSONKit-dummy.m`
     - Installing target `Pods-Reachability` iOS 6.0
       - Adding Build files
+      - Adding resource bundles to Pods project
       - Generating public xcconfig file at `Pods/Pods-Reachability.xcconfig`
       - Generating private xcconfig file at `Pods/Pods-Reachability-Private.xcconfig`
       - Generating prefix header at `Pods/Pods-Reachability-prefix.pch`

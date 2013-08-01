@@ -9,7 +9,7 @@ module Pod
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions['Pods']
-        @project = Project.new(config.sandbox.project_path)
+        @project = Project.new(config.sandbox)
 
         config.sandbox.project = @project
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
@@ -135,6 +135,14 @@ module Pod
         @installer.install!
         script = config.sandbox.root + 'Pods-resources.sh'
         script.read.should.include?('logo-sidebar.png')
+      end
+
+      xit "adds the resources bundles to the copy resources script" do
+
+      end
+
+      xit "adds the bridge support file to the copy resources script, if one was created" do
+
       end
 
       it "creates the acknowledgements files " do

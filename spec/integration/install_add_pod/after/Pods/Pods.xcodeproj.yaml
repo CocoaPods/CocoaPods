@@ -5,11 +5,13 @@ File References:
   - SystemConfiguration.framework
 - Pods:
   - JSONKit:
-    - JSONKit.h
-    - JSONKit.m
+    - Source Files:
+      - JSONKit.h
+      - JSONKit.m
   - Reachability:
-    - Reachability.h
-    - Reachability.m
+    - Source Files:
+      - Reachability.h
+      - Reachability.m
 - Products:
   - libPods-JSONKit.a
   - libPods-Reachability.a

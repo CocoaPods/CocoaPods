@@ -31,17 +31,21 @@ Downloading dependencies
 Generating Pods project
   - Creating Pods project
   - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding frameworks to Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing libraries
     - Installing target `Pods-OS X App-PodTest` OS X 10.6
       - Adding Build files
+      - Adding resource bundles to Pods project
       - Generating public xcconfig file at `Pods/Pods-OS X App-PodTest.xcconfig`
       - Generating private xcconfig file at `Pods/Pods-OS X App-PodTest-Private.xcconfig`
       - Generating prefix header at `Pods/Pods-OS X App-PodTest-prefix.pch`
       - Generating dummy source file at `Pods/Pods-OS X App-PodTest-dummy.m`
     - Installing target `Pods-iOS App-PodTest` iOS 4.3
       - Adding Build files
+      - Adding resource bundles to Pods project
       - Generating public xcconfig file at `Pods/Pods-iOS App-PodTest.xcconfig`
       - Generating private xcconfig file at `Pods/Pods-iOS App-PodTest-Private.xcconfig`
       - Generating prefix header at `Pods/Pods-iOS App-PodTest-prefix.pch`

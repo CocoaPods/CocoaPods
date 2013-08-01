@@ -34,7 +34,7 @@ module Pod
       def create_xcconfig_file
         path = library.xcconfig_path
         UI.message "- Generating xcconfig file at #{UI.path(path)}" do
-          gen = Generator::AggregateXCConfig.new(library)
+          gen = Generator::XCConfig::AggregateXCConfig.new(library)
           gen.save_as(path)
           library.xcconfig = gen.xcconfig
           xcconfig_file_ref = add_file_to_support_group(path)
@@ -90,7 +90,11 @@ module Pod
         path = library.copy_resources_script_path
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
           file_accessors = library.pod_targets.map(&:file_accessors).flatten
-          resources = file_accessors.map { |accessor| accessor.resources.flatten.map {|res| project.relativize(res)} }.flatten
+          resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map {|res| project.relativize(res)} }.flatten
+          resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map {|name| "${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/#{name}.bundle" } }.flatten
+          resources = []
+          resources.concat(resource_paths)
+          resources.concat(resource_bundles)
           resources << bridge_support_file if bridge_support_file
           generator = Generator::CopyResourcesScript.new(resources, library.platform)
           generator.save_as(path)

@@ -5,8 +5,9 @@ File References:
   - SystemConfiguration.framework
 - Pods:
   - Reachability:
-    - Reachability.h
-    - Reachability.m
+    - Source Files:
+      - Reachability.h
+      - Reachability.m
 - Products:
   - libPods-Reachability.a
   - libPods.a

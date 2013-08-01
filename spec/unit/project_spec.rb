@@ -4,7 +4,7 @@ module Pod
   describe Project do
 
     before do
-      @project = Project.new(config.sandbox.project_path)
+      @project = Project.new(config.sandbox)
     end
 
     #-------------------------------------------------------------------------#
@@ -50,22 +50,6 @@ module Pod
         @project.resources.name.should == 'Resources'
       end
 
-      it "adds a group for a specification" do
-        group = @project.add_spec_group('JSONKit', @project.pods)
-        @project.pods.children.should.include?(group)
-        g = @project['Pods/JSONKit']
-        g.name.should == 'JSONKit'
-        g.children.should.be.empty?
-      end
-
-      it "namespaces subspecs in groups" do
-        group = @project.add_spec_group('JSONKit/Subspec', @project.pods)
-        @project.pods.groups.find { |g| g.name == 'JSONKit' }.children.should.include?(group)
-        g = @project['Pods/JSONKit/Subspec']
-        g.name.should == 'Subspec'
-        g.children.should.be.empty?
-      end
-
     end
 
     #-------------------------------------------------------------------------#
@@ -75,7 +59,7 @@ module Pod
       it "adds the file references for the given source files" do
         source_files = [ config.sandbox.root + "A_POD/some_file.m" ]
         @project.add_file_references(source_files, 'BananaLib', @project.pods)
-        group = @project['Pods/BananaLib']
+        group = @project['Pods/BananaLib/Source Files']
         group.should.not.be.nil
         group.children.map(&:path).should == [ "A_POD/some_file.m" ]
       end
@@ -84,7 +68,7 @@ module Pod
         source_files = [ config.sandbox.root + "A_POD/some_file.m" ]
         @project.add_file_references(source_files, 'BananaLib', @project.pods)
         @project.add_file_references(source_files, 'BananaLib', @project.pods)
-        group = @project['Pods/BananaLib']
+        group = @project['Pods/BananaLib/Source Files']
         group.children.count.should == 1
         group.children.first.path.should == "A_POD/some_file.m"
       end
@@ -108,15 +92,35 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "File references" do
+    describe "Private helpers" do
 
-      it "stores the references by absolute path" do
-        file = config.sandbox.root + "A_POD/some_file.m"
-        @project.add_file_references([file], 'BananaLib', @project.pods)
-        refs_by_absolute_path = @project.send(:refs_by_absolute_path)
-        refs_by_absolute_path.should == {
-          file => @project.file_reference(file)
-        }
+      describe "#refs_by_absolute_path" do
+        it "stores the references by absolute path" do
+          file = config.sandbox.root + "A_POD/some_file.m"
+          @project.add_file_references([file], 'BananaLib', @project.pods)
+          refs_by_absolute_path = @project.send(:refs_by_absolute_path)
+          refs_by_absolute_path.should == {
+            file => @project.file_reference(file)
+          }
+        end
+      end
+
+      describe "#add_spec_group" do
+        it "adds a group for a specification" do
+          group = @project.send(:add_spec_group, 'JSONKit', @project.pods)
+          @project.pods.children.should.include?(group)
+          g = @project['Pods/JSONKit']
+          g.name.should == 'JSONKit'
+          g.children.should.be.empty?
+        end
+
+        it "namespaces subspecs in groups" do
+          group = @project.send(:add_spec_group, 'JSONKit/Subspec', @project.pods)
+          @project.pods.groups.find { |g| g.name == 'JSONKit' }.children.should.include?(group)
+          g = @project['Pods/JSONKit/Subspec']
+          g.name.should == 'Subspec'
+          g.children.should.be.empty?
+        end
       end
 
     end

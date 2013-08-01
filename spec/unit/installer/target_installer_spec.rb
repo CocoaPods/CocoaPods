@@ -9,7 +9,7 @@ module Pod
         xcodeproj 'dummy'
       end
       @target_definition = @podfile.target_definitions['Pods']
-      @project = Project.new(config.sandbox.project_path)
+      @project = Project.new(config.sandbox)
 
       config.sandbox.project = @project
       path_list = Sandbox::PathList.new(fixture('banana-lib'))

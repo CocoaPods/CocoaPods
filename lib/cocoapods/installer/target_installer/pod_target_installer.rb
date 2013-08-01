@@ -14,6 +14,7 @@ module Pod
         UI.message "- Installing target `#{library.name}` #{library.platform}" do
           add_target
           add_files_to_build_phases
+          add_resources_bundle_targets
           create_suport_files_group
           create_xcconfig_file
           create_prefix_header
@@ -21,9 +22,9 @@ module Pod
         end
       end
 
-      #-----------------------------------------------------------------------#
-
       private
+
+      #-----------------------------------------------------------------------#
 
       # Adds the build files of the pods to the target and adds a reference to
       # the frameworks of the Pods.
@@ -49,20 +50,48 @@ module Pod
         end
       end
 
+      # Adds the resources of the Pods to the Pods project.
+      #
+      # @note   The source files are grouped by Pod and in turn by subspec
+      #         (recursively) in the resources group.
+      #
+      # @return [void]
+      #
+      def add_resources_bundle_targets
+        UI.message "- Adding resource bundles to Pods project" do
+          library.file_accessors.each do |file_accessor|
+            file_accessor.resource_bundles.each do |bundle_name, paths|
+              file_references = paths.map { |sf| project.file_reference(sf) }
+              group = project.group_for_spec(file_accessor.spec.name, :resources)
+              product_group = project.group_for_spec(file_accessor.spec.name, :resources)
+              bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name, product_group)
+              bundle_target.add_resources(file_references)
+
+              target.add_dependency(bundle_target)
+            end
+          end
+        end
+      end
+
       # Generates the contents of the xcconfig file and saves it to disk.
       #
       # @return [void]
       #
       def create_xcconfig_file
         path = library.xcconfig_path
-        public_gen = Generator::PublicPodXCConfig.new(library)
+        public_gen = Generator::XCConfig::PublicPodXCConfig.new(library)
         UI.message "- Generating public xcconfig file at #{UI.path(path)}" do
           public_gen.save_as(path)
+          #
+          # TODO
           add_file_to_support_group(path)
+          # relative_path = path.relative_path_from(sandbox.root)
+          # group = project.group_for_spec(library.root_spec.name, :support_files)
+          # group.new_file(relative_path)
         end
 
         path = library.xcconfig_private_path
-        private_gen = Generator::PrivatePodXCConfig.new(library, public_gen.xcconfig)
+        private_gen = Generator::XCConfig::PrivatePodXCConfig.new(library, public_gen.xcconfig)
         UI.message "- Generating private xcconfig file at #{UI.path(path)}" do
           private_gen.save_as(path)
           xcconfig_file_ref = add_file_to_support_group(path)
