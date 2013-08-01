@@ -6,12 +6,25 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
-* Added license information to `podfile-info` subcommand.
+* Added support for resource bundles.  
+  [#743](https://github.com/CocoaPods/CocoaPods/issues/743),
+  [#1186](https://github.com/CocoaPods/CocoaPods/issues/1186)
+  
+* Added support for bundled frameworks.  
+  [#809](https://github.com/CocoaPods/CocoaPods/issues/809),
+  [#1075](https://github.com/CocoaPods/CocoaPods/issues/1075)
+
+* Added support for bundled libraries.  
+  [#809](https://github.com/CocoaPods/CocoaPods/issues/809),
+  [#1075](https://github.com/CocoaPods/CocoaPods/issues/1075)
+  
+* Added license information to `podfile-info` subcommand.  
   [#1219](https://github.com/CocoaPods/CocoaPods/issues/1219)
+
 
 ###### Bug Fixes
 
-* Fix copy resource script issue related to filenames with spaces.
+* Fix copy resource script issue related to filenames with spaces.  
   [#1231](https://github.com/CocoaPods/CocoaPods/issues/1231)
 
 <!------------------------------------------------------------------------ ->
