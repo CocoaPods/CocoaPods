@@ -8,9 +8,23 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Added license information to `podfile-info` subcommand.
   [#1219](https://github.com/CocoaPods/CocoaPods/issues/1219)
-  
-* Restructured .cocoapods folder to contain repos in a subdirectory.
+
+* Restructured `.cocoapods` folder to contain repos in a subdirectory.
   [#1150](https://github.com/CocoaPods/CocoaPods/issues/1150)
+  [Ian Ynda-Hummel](https://github.com/ianyh)
+
+* Improved `pod spec create` template.
+
+* Added copy&paste-friendly dependency to `pod search`.
+  [#1073](https://github.com/CocoaPods/CocoaPods/issues/1073)
+
+* Improved performance of the installation of Pods with git
+  sources which specify a tag.
+  [#1077](https://github.com/CocoaPods/CocoaPods/issues/1077)
+
+* Core Data `xcdatamodeld` files are now properly referenced from the Pods
+  project.
+  [#1155](https://github.com/CocoaPods/CocoaPods/issues/1155)
 
 ###### Bug Fixes
 
