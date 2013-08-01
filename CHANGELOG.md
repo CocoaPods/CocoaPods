@@ -6,29 +6,36 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
-* Added license information to `podfile-info` subcommand.
+* Added license information to `podfile-info` subcommand.  
   [#1219](https://github.com/CocoaPods/CocoaPods/issues/1219)
 
-* Restructured `.cocoapods` folder to contain repos in a subdirectory.
+* Restructured `.cocoapods` folder to contain repos in a subdirectory.  
   [#1150](https://github.com/CocoaPods/CocoaPods/issues/1150)
   [Ian Ynda-Hummel](https://github.com/ianyh)
 
-* Improved `pod spec create` template.
+* Improved `pod spec create` template.  
+  [#1223](https://github.com/CocoaPods/CocoaPods/issues/1223)
 
-* Added copy&paste-friendly dependency to `pod search`.
+* Added copy&paste-friendly dependency to `pod search`.  
   [#1073](https://github.com/CocoaPods/CocoaPods/issues/1073)
 
 * Improved performance of the installation of Pods with git
-  sources which specify a tag.
+  sources which specify a tag.  
   [#1077](https://github.com/CocoaPods/CocoaPods/issues/1077)
 
 * Core Data `xcdatamodeld` files are now properly referenced from the Pods
-  project.
+  project.  
   [#1155](https://github.com/CocoaPods/CocoaPods/issues/1155)
+
+* Removed punctuation check from specification validations.  
+  [#1155](https://github.com/CocoaPods/CocoaPods/issues/1155)
+
+* Deprecated the `documentation` DSL attribute of the podspec format.  
+  [Core#20](https://github.com/CocoaPods/Core/issues/20)
 
 ###### Bug Fixes
 
-* Fix copy resource script issue related to filenames with spaces.
+* Fix copy resource script issue related to filenames with spaces.  
   [#1231](https://github.com/CocoaPods/CocoaPods/issues/1231)
 
 <!------------------------------------------------------------------------ ->

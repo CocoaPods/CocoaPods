@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 92692426f9ed7a5daee4ee1521e47cc716dce3e9
+  revision: b2c3f33f4c650c7cabc9e1c2c2648d015d637240
   branch: master
   specs:
     cocoapods-core (0.22.3)
@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 2cc10348d9eb35862d900d79c72cd967388962b9
+  revision: 951ebcc7f6b10874ff09796b0add04d7b3ce34d1
   branch: master
   specs:
     cocoapods-downloader (0.1.1)
