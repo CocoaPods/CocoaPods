@@ -111,6 +111,24 @@ module Pod
         @accessor.library_files.should.include?(@root + "libBananalib.a")
       end
 
+      it "returns the resource bundles of the pod" do
+        @spec_consumer.stubs(:resource_bundles).returns({"BananaLib" => "Resources/*"})
+        resource_paths = [
+          @root + "Resources/logo-sidebar.png",
+          @root + "Resources/sub_dir",
+        ]
+        @accessor.resource_bundles.should == { "BananaLib" => resource_paths }
+      end
+
+      it "returns the paths of the files of the resource bundles" do
+        @spec_consumer.stubs(:resource_bundles).returns({"BananaLib" => "Resources/*"})
+        resource_paths = [
+          @root + "Resources/logo-sidebar.png",
+          @root + "Resources/sub_dir",
+        ]
+        @accessor.resource_bundle_files.should == resource_paths
+      end
+
       it "returns the prefix header of the specification" do
         @accessor.prefix_header.should == @root + 'Classes/BananaLib.pch'
       end

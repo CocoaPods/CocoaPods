@@ -20,11 +20,13 @@ Generating Pods project
   - Creating Pods project
   - Adding source files to Pods project
   - Adding frameworks to Pods project
+  - Adding frameworks to Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing libraries
     - Installing target `Pods-Reachability` iOS 4.3
       - Adding Build files
+      - Adding resource bundles to Pods project
       - Generating public xcconfig file at `Pods/Pods-Reachability.xcconfig`
       - Generating private xcconfig file at `Pods/Pods-Reachability-Private.xcconfig`
       - Generating prefix header at `Pods/Pods-Reachability-prefix.pch`

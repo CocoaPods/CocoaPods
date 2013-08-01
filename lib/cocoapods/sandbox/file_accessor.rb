@@ -113,11 +113,31 @@ module Pod
         paths_for_attribute(:framework_bundles, true)
       end
 
-      # @return [Array<Pathname>] The paths of the framework bundles that come
+      # @return [Array<Pathname>] The paths of the library bundles that come
       #         shipped with the Pod.
       #
       def library_files
         paths_for_attribute(:library_files)
+      end
+
+      # @return [Hash{String => Array<Pathname>}] A hash that describes the
+      #         resource bundles of the Pod. The keys reppresent the name of
+      #         the bundle while the values the path of the resources.
+      #
+      def resource_bundles
+        result = {}
+        spec_consumer.resource_bundles.each do |name, file_patterns|
+          paths = expanded_paths(file_patterns, :include_dirs => true)
+          result[name] = paths
+        end
+        result
+      end
+
+      # @return [Array<Pathname>] The paths of the files which should be
+      #         included in resources bundles by the Pod.
+      #
+      def resource_bundle_files
+        resource_bundles.values.flatten
       end
 
       # @return [Pathname] The of the prefix header file of the specification.

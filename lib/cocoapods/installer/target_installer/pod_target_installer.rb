@@ -14,6 +14,7 @@ module Pod
         UI.message "- Installing target `#{library.name}` #{library.platform}" do
           add_target
           add_files_to_build_phases
+          add_resources_bundle_targets
           create_suport_files_group
           create_xcconfig_file
           create_prefix_header
@@ -44,6 +45,29 @@ module Pod
 
             file_accessor.spec_consumer.frameworks.each do |framework|
               project.add_system_framework(framework, target)
+            end
+          end
+        end
+      end
+
+      # Adds the resources of the Pods to the Pods project.
+      #
+      # @note   The source files are grouped by Pod and in turn by subspec
+      #         (recursively) in the resources group.
+      #
+      # @return [void]
+      #
+      def add_resources_bundle_targets
+        UI.message "- Adding resource bundles to Pods project" do
+          library.file_accessors.each do |file_accessor|
+            file_accessor.resource_bundles.each do |bundle_name, paths|
+              file_references = paths.map { |sf| project.file_reference(sf) }
+              group = project.group_for_spec(file_accessor.spec.name, :resources)
+              product_group = project.group_for_spec(file_accessor.spec.name, :resources)
+              bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name, product_group)
+              bundle_target.add_resources(file_references)
+
+              target.add_dependency(bundle_target)
             end
           end
         end

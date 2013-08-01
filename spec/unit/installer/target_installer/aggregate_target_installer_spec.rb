@@ -137,6 +137,14 @@ module Pod
         script.read.should.include?('logo-sidebar.png')
       end
 
+      xit "adds the resources bundles to the copy resources script" do
+
+      end
+
+      xit "adds the bridge support file to the copy resources script, if one was created" do
+
+      end
+
       it "creates the acknowledgements files " do
         @installer.install!
         markdown = config.sandbox.root + 'Pods-acknowledgements.markdown'

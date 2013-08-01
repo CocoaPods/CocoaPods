@@ -37,7 +37,7 @@ module Pod
         add_source_files_references
         add_frameworks_bundles
         add_library_files
-        add_resources_bundles
+        add_resources
         link_headers
       end
 
@@ -77,7 +77,7 @@ module Pod
         end
       end
 
-      # Adds the frameworks bundles to the Pods project
+      # Adds the bundled frameworks to the Pods project
       #
       # @return [void]
       #
@@ -87,7 +87,9 @@ module Pod
         end
       end
 
-      # TODO
+      # Adds the bundled libraries to the Pods project
+      #
+      # @return [void]
       #
       def add_library_files
         UI.message "- Adding frameworks to Pods project" do
@@ -102,9 +104,10 @@ module Pod
       #
       # @return [void]
       #
-      def add_resources_bundles
+      def add_resources
         UI.message "- Adding resources to Pods project" do
           add_file_acessors_paths_to_pods_group(:resources, :resources)
+          add_file_acessors_paths_to_pods_group(:resource_bundle_files, :resources)
         end
       end
 
@@ -145,13 +148,24 @@ module Pod
         @file_accessors ||= libraries.map(&:file_accessors).flatten.compact
       end
 
-      def add_file_acessors_paths_to_pods_group(paths_method, group_name)
+      # Adds file references to the list of the paths returned by the file
+      # accessor with the given key to the given group of the Pods project.
+      #
+      # @param  [Symbol] file_accessor_key
+      #         The method of the file accessor which would return the list of
+      #         the paths.
+      #
+      # @param  [Symbol] group_key
+      #         The key of the group of the Pods project.
+      #
+      # @return [void]
+      #
+      def add_file_acessors_paths_to_pods_group(file_accessor_key, group_key)
         file_accessors.each do |file_accessor|
-          paths = file_accessor.send(paths_method)
+          paths = file_accessor.send(file_accessor_key)
           paths.each do |path|
-            group = pods_project.group_for_spec(file_accessor.spec.name, group_name)
+            group = pods_project.group_for_spec(file_accessor.spec.name, group_key)
             pods_project.add_file_reference(path, group)
-            # group.new_file(pods_project.relativize(path))
           end
         end
       end

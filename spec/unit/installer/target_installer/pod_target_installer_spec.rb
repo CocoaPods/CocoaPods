@@ -114,6 +114,12 @@ module Pod
 
       #--------------------------------------#
 
+      xit 'adds the resource bundle targets' do
+
+      end
+
+      #--------------------------------------#
+
       it "creates the xcconfig file" do
         @installer.install!
         file = config.sandbox.root + @pod_target.xcconfig_private_path
