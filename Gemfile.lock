@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 8a8ace23f5e6ecd4a32b26192d8f1be138a39604
+  revision: 0bcb90602afc9fdd5772b8079ab77bd20d9ef3a4
   branch: feature-frameworks-bundles
   specs:
     cocoapods-core (0.22.3)
