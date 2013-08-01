@@ -337,7 +337,7 @@ module Pod
     def set_target_dependencies
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
-          add_dependency(aggregate_target, pod_target)
+          aggregate_target.target.add_dependency(pod_target.target)
           pod_target.dependencies.each do |dep|
 
             unless dep == pod_target.pod_name
