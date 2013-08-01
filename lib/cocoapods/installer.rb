@@ -346,29 +346,12 @@ module Pod
               unless pod_dependency_target
                 puts "[BUG] DEP: #{dep}"
               end
-              add_dependency(pod_target, pod_dependency_target)
+              pod_target.target.add_dependency(pod_dependency_target.target)
             end
           end
         end
       end
     end
-
-    # TODO: tmp - move
-    #
-    def add_dependency(dependent_target, dependency_target)
-      container_proxy = pods_project.new(Xcodeproj::Project::PBXContainerItemProxy)
-      container_proxy.container_portal = pods_project.root_object.uuid
-      container_proxy.proxy_type = '1'
-      container_proxy.remote_global_id_string = dependency_target.target.uuid
-      container_proxy.remote_info = dependency_target.target.name
-
-      dependency = pods_project.new(Xcodeproj::Project::PBXTargetDependency)
-      dependency.target = dependency_target.target
-      dependency.targetProxy = container_proxy
-
-      dependent_target.target.dependencies << dependency
-    end
-
 
     # Links the aggregate targets with all the dependent libraries.
     #
