@@ -147,15 +147,6 @@ module Pod
 
     attr_writer :repos_dir
 
-    # @return [Pathname] the deprecated directory where the CocoaPods sources
-    #         were stored.
-    #
-    def old_repos_dir
-      @old_repos_dir ||= Pathname.new('~/.cocoapods').expand_path
-    end
-
-    attr_writer :old_repos_dir
-
     # @return [Pathname] the root of the CocoaPods installation where the
     #         Podfile is located.
     #

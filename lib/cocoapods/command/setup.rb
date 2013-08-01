@@ -53,8 +53,8 @@ module Pod
       # @return [void]
       def migrate_repos
         config.repos_dir.mkpath
-        Dir.foreach config.old_repos_dir do |repo_dir|
-          source_repo_dir = config.old_repos_dir + repo_dir
+        Dir.foreach old_master_repo_dir.parent do |repo_dir|
+          source_repo_dir = old_master_repo_dir.parent + repo_dir
           target_repo_dir = config.repos_dir + repo_dir
           if not repo_dir =~ /\.+/ and source_repo_dir != config.repos_dir
             FileUtils.mv source_repo_dir, target_repo_dir
@@ -152,7 +152,7 @@ module Pod
       # @return [Pathname] the directory of the old master repo.
       #
       def old_master_repo_dir
-        SourcesManager.old_master_repo_dir
+        Pathname.new('~/.cocoapods/master').expand_path
       end
     end
   end
