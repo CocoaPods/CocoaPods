@@ -59,7 +59,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1155](https://github.com/CocoaPods/CocoaPods/issues/1155)
 
 * Removed punctuation check from the specification validations.  
-  [#1155](https://github.com/CocoaPods/CocoaPods/issues/1155)
+  [#1242](https://github.com/CocoaPods/CocoaPods/issues/1155)
 
 * Deprecated the `documentation` attribute of the Specification DSL.  
   [Core#20](https://github.com/CocoaPods/Core/issues/20)
