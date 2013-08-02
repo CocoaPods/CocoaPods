@@ -13,7 +13,7 @@ module Pod
         self.summary = 'Add a spec repo.'
 
         self.description = <<-DESC
-          Clones `URL` in the local spec-repos directory at `~/.cocoapods`. The
+          Clones `URL` in the local spec-repos directory at `~/.cocoapods/repos/`. The
           remote can later be referred to by `NAME`.
         DESC
 
@@ -48,7 +48,7 @@ module Pod
 
         self.description = <<-DESC
           Updates the local clone of the spec-repo `NAME`. If `NAME` is omitted
-          this will update all spec-repos in `~/.cocoapods`.
+          this will update all spec-repos in `~/.cocoapods/repos`.
         DESC
 
         self.arguments = '[NAME]'

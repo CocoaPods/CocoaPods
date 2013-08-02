@@ -294,7 +294,7 @@ module Pod
     #
     def prepare_pods_project
       UI.message "- Creating Pods project" do
-        @pods_project = Pod::Project.new(sandbox.project_path)
+        @pods_project = Pod::Project.new(sandbox)
         if config.podfile_path
           @pods_project.add_podfile(config.podfile_path)
         end
@@ -346,7 +346,7 @@ module Pod
     def set_target_dependencies
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
-          add_dependency(aggregate_target, pod_target)
+          aggregate_target.target.add_dependency(pod_target.target)
           pod_target.dependencies.each do |dep|
 
             unless dep == pod_target.pod_name
@@ -355,29 +355,12 @@ module Pod
               unless pod_dependency_target
                 puts "[BUG] DEP: #{dep}"
               end
-              add_dependency(pod_target, pod_dependency_target)
+              pod_target.target.add_dependency(pod_dependency_target.target)
             end
           end
         end
       end
     end
-
-    # TODO: tmp - move
-    #
-    def add_dependency(dependent_target, dependency_target)
-      container_proxy = pods_project.new(Xcodeproj::Project::PBXContainerItemProxy)
-      container_proxy.container_portal = pods_project.root_object.uuid
-      container_proxy.proxy_type = '1'
-      container_proxy.remote_global_id_string = dependency_target.target.uuid
-      container_proxy.remote_info = dependency_target.target.name
-
-      dependency = pods_project.new(Xcodeproj::Project::PBXTargetDependency)
-      dependency.target = dependency_target.target
-      dependency.targetProxy = container_proxy
-
-      dependent_target.target.dependencies << dependency
-    end
-
 
     # Links the aggregate targets with all the dependent libraries.
     #

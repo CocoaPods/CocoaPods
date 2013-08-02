@@ -4,7 +4,7 @@ Analyzing dependencies
 Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
-   $ /opt/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_external_source/Pods/PodTest"
+   $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_external_source/Pods/PodTest"
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 
@@ -25,11 +25,14 @@ Downloading dependencies
 Generating Pods project
   - Creating Pods project
   - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding frameworks to Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing libraries
     - Installing target `Pods-PodTest` iOS 4.3
       - Adding Build files
+      - Adding resource bundles to Pods project
       - Generating public xcconfig file at `Pods/Pods-PodTest.xcconfig`
       - Generating private xcconfig file at `Pods/Pods-PodTest-Private.xcconfig`
       - Generating prefix header at `Pods/Pods-PodTest-prefix.pch`

@@ -9,8 +9,8 @@ module Pod
       self.description = <<-DESC
         Validates NAME.podspec or `*.podspec' in the current working dir, creates
         a directory and version folder for the pod in the local copy of
-        REPO (~/.cocoapods/[REPO]), copies the podspec file into the version directory,
-        and finally it pushes REPO to its remote.
+        REPO (~/.cocoapods/repos/[REPO]), copies the podspec file into the version
+        directory, and finally it pushes REPO to its remote.
       DESC
 
       self.arguments = 'REPO [NAME.podspec]'

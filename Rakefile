@@ -62,6 +62,7 @@ namespace :gem do
 
       diff_lines = `git diff --name-only`.strip.split("\n")
       diff_lines.delete('CHANGELOG.md')
+      diff_lines.delete('Gemfile.lock')
 
       if diff_lines.size == 0
         $stderr.puts "[!] Change the version number yourself in lib/cocoapods/gem_version.rb"
@@ -117,7 +118,7 @@ namespace :gem do
     silent_sh "gem install --install-dir='#{tmp_gems}' #{gem_filename}"
 
     # Then release
-    sh "git commit lib/cocoapods/gem_version.rb CHANGELOG.md -m 'Release #{gem_version}'"
+    sh "git commit lib/cocoapods/gem_version.rb CHANGELOG.md Gemfile.lock -m 'Release #{gem_version}'"
     sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
     sh "git push origin master"
     sh "git push origin --tags"
@@ -214,7 +215,7 @@ namespace :spec do
     title 'Running the specs'
     sh "bundle exec bacon #{specs('**')}"
 
-    unless Pathname.new(ENV['HOME']+'/.cocoapods/master').exist?
+    unless Pathname.new(ENV['HOME']+'/.cocoapods/repos/master').exist?
       title 'Ensuring specs repo is up to date'
       sh    "./bin/pod setup"
     end
@@ -323,6 +324,10 @@ namespace :examples do
 
   desc "Build all examples"
   task :build do
+
+    # TODO: sometimes it uses the installed gem
+    # Rake::Task['gem:install'].invoke
+
     examples.entries.each do |example|
       puts "Building example: #{example}"
       Dir.chdir(example.to_s) do

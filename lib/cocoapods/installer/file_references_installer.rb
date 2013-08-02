@@ -35,7 +35,9 @@ module Pod
       def install!
         refresh_file_accessors
         add_source_files_references
-        add_resources_references
+        add_frameworks_bundles
+        add_vendored_libraries
+        add_resources
         link_headers
       end
 
@@ -71,13 +73,27 @@ module Pod
       #
       def add_source_files_references
         UI.message "- Adding source files to Pods project" do
-          file_accessors.each do |file_accessor|
-            files = file_accessor.source_files
-            spec_name = file_accessor.spec.name
-            local = sandbox.local?(file_accessor.spec.root.name)
-            parent_group = local ? pods_project.local_pods : pods_project.pods
-            pods_project.add_file_references(files, spec_name, parent_group)
-          end
+          add_file_acessors_paths_to_pods_group(:source_files, :source_files)
+        end
+      end
+
+      # Adds the bundled frameworks to the Pods project
+      #
+      # @return [void]
+      #
+      def add_frameworks_bundles
+        UI.message "- Adding frameworks to Pods project" do
+          add_file_acessors_paths_to_pods_group(:vendored_frameworks, :frameworks_and_libraries)
+        end
+      end
+
+      # Adds the bundled libraries to the Pods project
+      #
+      # @return [void]
+      #
+      def add_vendored_libraries
+        UI.message "- Adding frameworks to Pods project" do
+          add_file_acessors_paths_to_pods_group(:vendored_libraries, :frameworks_and_libraries)
         end
       end
 
@@ -88,16 +104,10 @@ module Pod
       #
       # @return [void]
       #
-      def add_resources_references
+      def add_resources
         UI.message "- Adding resources to Pods project" do
-          file_accessors.each do |file_accessor|
-            file_accessor.resources.each do |resources|
-              files = file_accessor.resources
-              spec_name = file_accessor.spec.name
-              parent_group = pods_project.resources
-              pods_project.add_file_references(files, spec_name, parent_group)
-            end
-          end
+          add_file_acessors_paths_to_pods_group(:resources, :resources)
+          add_file_acessors_paths_to_pods_group(:resource_bundle_files, :resources)
         end
       end
 
@@ -136,6 +146,28 @@ module Pod
       #
       def file_accessors
         @file_accessors ||= libraries.map(&:file_accessors).flatten.compact
+      end
+
+      # Adds file references to the list of the paths returned by the file
+      # accessor with the given key to the given group of the Pods project.
+      #
+      # @param  [Symbol] file_accessor_key
+      #         The method of the file accessor which would return the list of
+      #         the paths.
+      #
+      # @param  [Symbol] group_key
+      #         The key of the group of the Pods project.
+      #
+      # @return [void]
+      #
+      def add_file_acessors_paths_to_pods_group(file_accessor_key, group_key)
+        file_accessors.each do |file_accessor|
+          paths = file_accessor.send(file_accessor_key)
+          paths.each do |path|
+            group = pods_project.group_for_spec(file_accessor.spec.name, group_key)
+            pods_project.add_file_reference(path, group)
+          end
+        end
       end
 
       # Computes the destination sub-directory in the sandbox

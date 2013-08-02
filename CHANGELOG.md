@@ -4,8 +4,73 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
-* Added license information to `podfile-info` subcommand.
-  [#1219](https://github.com/CocoaPods/CocoaPods/issues/1219)
+## 0.23.0.rc1
+
+###### Enhancements
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.3...0.23.0.rc1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.3...0.23.0.rc1)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.1...0.9.0)
+• [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.1.1...0.1.2)
+
+* Added `prepare_command` attribute to Specification DSL. The prepare command
+  will replace the `pre_install` hook. The `post_install` hook has also been
+  deprecated.
+  [#1247](https://github.com/CocoaPods/CocoaPods/issues/1247)
+
+  The reason we provided Ruby hooks at first, was because we wanted to offer
+  the option to make any required configuration possible. By now, however, we
+  have a pretty good idea of the use-cases and are therefore locking down the
+  freedom that was once available. In turn, we’re adding attributes that can
+  replace the most common use-cases. _(See the enhancements directly following
+  this entry for more info)._
+
+  The second reason we need to lock this down is because this is the last
+  remaining obstacle to fully serialize specifications, which we need in order
+  to move to a ‘spec push’ web-service in the future.
+
+* Added `resource_bundles` attribute to the Specification DSL.  
+  [#743](https://github.com/CocoaPods/CocoaPods/issues/743)
+  [#1186](https://github.com/CocoaPods/CocoaPods/issues/1186)
+
+* Added `vendored_frameworks` attribute to the Specification DSL.  
+  [#809](https://github.com/CocoaPods/CocoaPods/issues/809)
+  [#1075](https://github.com/CocoaPods/CocoaPods/issues/1075)
+
+* Added `vendored_libraries` attribute to the Specification DSL.  
+  [#809](https://github.com/CocoaPods/CocoaPods/issues/809)
+  [#1075](https://github.com/CocoaPods/CocoaPods/issues/1075)
+
+* Restructured `.cocoapods` folder to contain repos in a subdirectory.  
+  [Ian Ynda-Hummel](https://github.com/ianyh)
+  [#1150](https://github.com/CocoaPods/CocoaPods/issues/1150)  
+
+* Improved `pod spec create` template.  
+  [#1223](https://github.com/CocoaPods/CocoaPods/issues/1223)
+
+* Added copy&paste-friendly dependency to `pod search`.  
+  [#1073](https://github.com/CocoaPods/CocoaPods/issues/1073)
+
+* Improved performance of the installation of Pods with git
+  sources which specify a tag.  
+  [#1077](https://github.com/CocoaPods/CocoaPods/issues/1077)
+
+* Core Data `xcdatamodeld` files are now properly referenced from the Pods
+  project.  
+  [#1155](https://github.com/CocoaPods/CocoaPods/issues/1155)
+
+* Removed punctuation check from the specification validations.  
+  [#1155](https://github.com/CocoaPods/CocoaPods/issues/1155)
+
+* Deprecated the `documentation` attribute of the Specification DSL.  
+  [Core#20](https://github.com/CocoaPods/Core/issues/20)
+
+###### Bug Fixes
+
+* Fix copy resource script issue related to filenames with spaces.  
+  [Denis Hennessy](https://github.com/dhennessy)
+  [#1231](https://github.com/CocoaPods/CocoaPods/issues/1231)  
+
+
 
 ## 0.22.3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.22.3)
@@ -37,6 +102,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Fix handling of spaces in paths when compiling xcdatamodel(d) files.
   [#1201](https://github.com/CocoaPods/CocoaPods/pull/1201)
+
 
 
 ## 0.22.2

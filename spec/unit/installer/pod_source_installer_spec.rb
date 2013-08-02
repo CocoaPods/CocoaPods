@@ -65,6 +65,28 @@ module Pod
 
       #--------------------------------------#
 
+      describe "Prepare command" do
+        it "runs the prepare command if one has been declared in the spec" do
+          @spec.prepare_command = "echo test"
+          @installer.expects(:bash!).once
+          @installer.install!
+        end
+
+        it "doesn't run the prepare command if it hasn't been declared in the spec" do
+          @installer.expects(:bash!).never
+          @installer.install!
+        end
+
+        it "raises if the prepare command fails" do
+          @spec.prepare_command = "missing_command"
+          should.raise Informative do
+            @installer.install!
+          end.message.should.match /command not found/
+        end
+      end
+
+      #--------------------------------------#
+
       describe "Cleaning" do
 
         it "cleans the paths non used by the installation" do
@@ -171,11 +193,13 @@ module Pod
 
       it "compacts the used files as nil would be converted to the empty string" do
         Sandbox::FileAccessor.any_instance.stubs(:source_files)
+        Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries)
         Sandbox::FileAccessor.any_instance.stubs(:resources).returns(nil)
         Sandbox::FileAccessor.any_instance.stubs(:preserve_paths)
         Sandbox::FileAccessor.any_instance.stubs(:prefix_header)
         Sandbox::FileAccessor.any_instance.stubs(:readme)
         Sandbox::FileAccessor.any_instance.stubs(:license)
+        Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks)
         paths = @installer.send(:used_files)
         paths.should == []
       end
