@@ -38,7 +38,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Restructured `.cocoapods` folder to contain repos in a subdirectory.  
   [#1150](https://github.com/CocoaPods/CocoaPods/issues/1150)
-  [Ian Ynda-Hummel](https://github.com/ianyh)
 
 * Improved `pod spec create` template.  
   [#1223](https://github.com/CocoaPods/CocoaPods/issues/1223)
@@ -65,7 +64,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Fix copy resource script issue related to filenames with spaces.  
   [#1231](https://github.com/CocoaPods/CocoaPods/issues/1231)
 
-<!------------------------------------------------------------------------ ->
 
 ## 0.22.3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.22.3)
