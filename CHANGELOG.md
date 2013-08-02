@@ -21,7 +21,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1075](https://github.com/CocoaPods/CocoaPods/issues/1075)
 
 * Added `prepare_command` attribute to Specification DSL. The prepare command
-  will replace the pre_install hook. The post_install hook has been deprecated.  
+  will replace the `pre_install` hook. The `post_install` hook has also been
+  deprecated.  
   [#1247](https://github.com/CocoaPods/CocoaPods/issues/1247)
 
 * Restructured `.cocoapods` folder to contain repos in a subdirectory.  
