@@ -379,6 +379,7 @@ module Pod
         @installer.stubs(:pods_project).returns(project)
         @installer.stubs(:aggregate_targets).returns([target])
         @installer.stubs(:pod_targets).returns([pod_target])
+        pod_target.target = native_target
 
         @installer.send(:link_aggregate_target)
         pods_target.frameworks_build_phase.files.map(&:display_name).should.include?(pod_target.product_name)

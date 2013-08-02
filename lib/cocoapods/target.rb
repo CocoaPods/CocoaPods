@@ -64,6 +64,8 @@ module Pod
     #
     attr_accessor :target
 
+    attr_accessor :platform
+
     # @return [Platform] the platform for this library.
     #
     def platform

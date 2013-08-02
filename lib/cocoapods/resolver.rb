@@ -30,14 +30,17 @@ module Pod
     #
     attr_reader :locked_dependencies
 
+    attr_reader :target_definition_data
+
     # @param  [Sandbox] sandbox @see sandbox
     # @param  [Podfile] podfile @see podfile
     # @param  [Array<Dependency>] locked_dependencies @see locked_dependencies
     #
-    def initialize(sandbox, podfile, locked_dependencies = [])
+    def initialize(sandbox, podfile, locked_dependencies = [], target_definition_data = {})
       @sandbox = sandbox
       @podfile = podfile
       @locked_dependencies = locked_dependencies
+      @target_definition_data = target_definition_data
     end
 
     #-------------------------------------------------------------------------#
@@ -205,7 +208,9 @@ module Pod
     # @return [void]
     #
     def validate_platform(spec, target)
-      unless spec.available_platforms.any? { |p| target.platform.supports?(p) }
+      target_data = target_definition_data[target]
+      platform = target_data ? target_data.platform : target.platform
+      unless spec.available_platforms.any? { |p| platform.supports?(p) }
         raise Informative, "The platform of the target `#{target.name}` "     \
           "(#{target.platform}) is not compatible with `#{spec}` which has "  \
           "a minimum requirement of #{spec.available_platforms.join(' - ')}."
