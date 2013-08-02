@@ -4,12 +4,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+## 0.23.0.rc1
+
 ###### Enhancements
 
 * Added `resource_bundles` attribute to Specification DSL.  
   [#743](https://github.com/CocoaPods/CocoaPods/issues/743),
   [#1186](https://github.com/CocoaPods/CocoaPods/issues/1186)
-  
+
 * Added `vendored_frameworks` attribute to Specification DSL.  
   [#809](https://github.com/CocoaPods/CocoaPods/issues/809),
   [#1075](https://github.com/CocoaPods/CocoaPods/issues/1075)

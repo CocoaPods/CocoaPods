@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 7738d01101994723deebb907f2414b78fcb6988e
-  branch: feature-prepare_command
+  revision: 63f310adb5210854b34c3d94bb9452bafd7cbc26
+  branch: master
   specs:
-    cocoapods-core (0.22.3)
+    cocoapods-core (0.23.0.rc1)
       activesupport (~> 3.2.13)
       json (~> 1.8.0)
       nap (~> 0.5.1)
@@ -61,10 +61,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.22.3)
+    cocoapods (0.23.0.rc1)
       activesupport (~> 3.2.13)
       claide (~> 0.3.2)
-      cocoapods-core (= 0.22.3)
+      cocoapods-core (= 0.23.0.rc1)
       cocoapods-downloader (~> 0.1.2)
       colored (~> 1.2)
       escape (~> 0.0.4)
