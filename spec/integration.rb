@@ -73,7 +73,7 @@ POD_BINARY = "ruby " + ROOT.to_s + '/bin/pod' unless defined? POD_BINARY
 #         the name of the folder of the tests.
 #
 def copy_files(folder)
-  source = File.expand_path("../integration/#{folder}/before", __FILE__)
+  source = File.expand_path("../cocoapods-integration-specs/#{folder}/before", __FILE__)
   destination = TMP_DIR + folder
   destination.mkpath
   FileUtils.cp_r(Dir.glob("#{source}/*"), destination)
@@ -135,7 +135,7 @@ end
 #         the name of the folder of the tests.
 #
 def check_with_folder(folder)
-  source = File.expand_path("../integration/#{folder}", __FILE__)
+  source = File.expand_path("../cocoapods-integration-specs/#{folder}", __FILE__)
   Dir.glob("#{source}/after/**/*") do |expected_path|
     next unless File.file?(expected_path)
     relative_path = expected_path.gsub("#{source}/after/", '')
@@ -297,7 +297,7 @@ end
 
 #-----------------------------------------------------------------------------#
 
-describe "Integration take 2" do
+describe "Integration" do
   TMP_DIR.rmtree if TMP_DIR.exist?
   TMP_DIR.mkpath
 
