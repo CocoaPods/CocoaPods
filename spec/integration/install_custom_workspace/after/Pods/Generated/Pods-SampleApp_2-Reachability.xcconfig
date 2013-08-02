@@ -1,1 +1,0 @@
-PODS_SAMPLEAPP___REACHABILITY_OTHER_LDFLAGS = -framework SystemConfiguration

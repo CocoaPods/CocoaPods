@@ -182,7 +182,12 @@ namespace :spec do
   #--------------------------------------#
 
   desc "Run the integration spec"
-  task :integration => :unpack_fixture_tarballs do
+  task :integration do
+    unless File.exists?('spec/cocoapods-integration-specs')
+      $stderr.puts "Integration files not checked out. Run `rake bootstrap`"
+      exit 1
+    end
+
     sh "bundle exec bacon spec/integration.rb"
   end
 
@@ -268,7 +273,7 @@ namespace :spec do
     title 'Storing fixtures'
     # Copy the files to the files produced by the specs to the after folders
     FileList['tmp/*'].each do |source|
-      destination = "spec/integration/#{source.gsub('tmp/','')}/after"
+      destination = "spec/cocoapods-integration-specs/#{source.gsub('tmp/','')}/after"
       if File.exists?(destination)
         sh "rm -rf #{destination}"
         sh "mv #{source} #{destination}"
@@ -280,6 +285,9 @@ namespace :spec do
     FileList['spec/integration/*/after/{Podfile,*.podspec,**/*.xcodeproj,PodTest-hg-source}'].each do |to_delete|
       sh "rm -rf #{to_delete}"
     end
+
+    puts
+    puts "Integration fixtures updated, commit and push in the `spec/cocoapods-integration-specs` submodule"
   end
 
   #--------------------------------------#

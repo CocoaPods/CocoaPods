@@ -17,3 +17,6 @@
 [submodule "spec/fixtures/integration/Reachability"]
 	path = spec/fixtures/integration/Reachability
 	url = https://github.com/tonymillion/Reachability.git
+[submodule "spec/cocoapods-integration-specs"]
+	path = spec/cocoapods-integration-specs
+	url = https://github.com/CocoaPods/cocoapods-integration-specs
