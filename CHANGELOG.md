@@ -7,6 +7,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ## 0.23.0.rc1
 
 ###### Enhancements
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.23.0.rc1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.2...0.23.0.rc1)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.1...0.9.0)
+• [cocoapods-downloader](https://github.com/CocoaPods/CLAide/compare/0.1.1...0.1.2)
 
 * Added `prepare_command` attribute to Specification DSL. The prepare command
   will replace the `pre_install` hook. The `post_install` hook has also been
@@ -19,7 +23,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   freedom that was once available. In turn, we’re adding attributes that can
   replace the most common use-cases. _(See the enhancements directly following
   this entry for more info)._
-  
+
   The second reason we need to lock this down is because this is the last
   remaining obstacle to fully serialize specifications, which we need in order
   to move to a ‘spec push’ web-service in the future.
@@ -37,7 +41,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1075](https://github.com/CocoaPods/CocoaPods/issues/1075)
 
 * Restructured `.cocoapods` folder to contain repos in a subdirectory.  
-  [#1150](https://github.com/CocoaPods/CocoaPods/issues/1150)
+  [#1150](https://github.com/CocoaPods/CocoaPods/issues/1150)  
+  [Ian Ynda-Hummel](https://github.com/ianyh)
 
 * Improved `pod spec create` template.  
   [#1223](https://github.com/CocoaPods/CocoaPods/issues/1223)
@@ -62,8 +67,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ###### Bug Fixes
 
 * Fix copy resource script issue related to filenames with spaces.  
-  [#1231](https://github.com/CocoaPods/CocoaPods/issues/1231)
-
+  [#1231](https://github.com/CocoaPods/CocoaPods/issues/1231)  
+  [Denis Hennessy](https://github.com/dhennessy)
 
 ## 0.22.3
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.22.3)
