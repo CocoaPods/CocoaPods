@@ -323,6 +323,10 @@ namespace :examples do
 
   desc "Build all examples"
   task :build do
+
+    # TODO: sometimes it uses the installed gem
+    # Rake::Task['gem:install'].invoke
+
     examples.entries.each do |example|
       puts "Building example: #{example}"
       Dir.chdir(example.to_s) do
