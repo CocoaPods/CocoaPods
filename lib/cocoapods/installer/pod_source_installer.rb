@@ -1,3 +1,5 @@
+require 'active_support/core_ext/string/strip'
+
 module Pod
   class Installer
 
@@ -60,6 +62,7 @@ module Pod
       #
       def install!
         download_source unless predownloaded? || local?
+        run_prepare_command
       end
 
       # Cleans the installations if appropriate.
@@ -103,6 +106,24 @@ module Pod
 
         if specific_source
         sandbox.store_checkout_source(root_spec.name, specific_source)
+        end
+      end
+
+      extend Executable
+      executable :bash
+
+      # Runs the prepare command bash script of the spec.
+      #
+      # @return [void]
+      #
+      def run_prepare_command
+        return unless root_spec.prepare_command
+        UI.section(" > Running prepare command", '', 1) do
+          Dir.chdir(root) do
+            prepare_command = root_spec.prepare_command.strip_heredoc.chomp
+            full_command = "\nset -e\n" + prepare_command
+            bash!(full_command)
+          end
         end
       end
 
