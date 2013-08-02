@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 0bcb90602afc9fdd5772b8079ab77bd20d9ef3a4
-  branch: feature-frameworks-bundles
+  revision: 2558ca127435e10a60349c503218e8a1e4eb494c
+  branch: feature-prepare_command
   specs:
     cocoapods-core (0.22.3)
       activesupport (~> 3.2.13)
@@ -17,19 +17,19 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 254fbb313e7219c9c99d0b31facb510c065aa906
+  revision: 83c3e0781cbea05c704d02523610fe43f3ea062c
   branch: master
   specs:
-    xcodeproj (0.8.1)
+    xcodeproj (0.9.0)
       activesupport (~> 3.2.13)
       colored (~> 1.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 951ebcc7f6b10874ff09796b0add04d7b3ce34d1
+  revision: 7cfddec468aa0d4da1256368b4d3fd466664bcd9
   branch: master
   specs:
-    cocoapods-downloader (0.1.1)
+    cocoapods-downloader (0.1.2)
 
 GIT
   remote: https://github.com/alloy/kicker.git
@@ -65,12 +65,12 @@ PATH
       activesupport (~> 3.2.13)
       claide (~> 0.3.2)
       cocoapods-core (= 0.22.3)
-      cocoapods-downloader (~> 0.1.1)
+      cocoapods-downloader (~> 0.1.2)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json (~> 1.8.0)
       open4 (~> 1.3.0)
-      xcodeproj (~> 0.8.1)
+      xcodeproj (~> 0.9.0)
 
 GEM
   remote: http://rubygems.org/
