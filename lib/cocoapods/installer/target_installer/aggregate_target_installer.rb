@@ -32,7 +32,7 @@ module Pod
       # @return [void]
       #
       def create_xcconfig_file
-        path = library.xcconfig_path
+        path = library.path_provider.xcconfig_path
         UI.message "- Generating xcconfig file at #{UI.path(path)}" do
           gen = Generator::XCConfig::AggregateXCConfig.new(library)
           gen.save_as(path)
@@ -49,7 +49,7 @@ module Pod
       # pods and the installed specifications of a pod.
       #
       def create_target_environment_header
-        path = library.target_environment_header_path
+        path = library.path_provider.target_environment_header_path
         UI.message "- Generating target environment header at #{UI.path(path)}" do
           generator = Generator::TargetEnvironmentHeader.new(library.pod_targets.map { |l| l.specs }.flatten)
           generator.save_as(path)
@@ -67,7 +67,7 @@ module Pod
       #
       def create_bridge_support_file
         if target_definition.podfile.generate_bridge_support?
-          path = library.bridge_support_path
+          path = library.path_provider.bridge_support_path
           UI.message "- Generating BridgeSupport metadata at #{UI.path(path)}" do
             headers = target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }
             generator = Generator::BridgeSupport.new(headers)
@@ -87,7 +87,7 @@ module Pod
       # @return [void]
       #
       def create_copy_resources_script
-        path = library.copy_resources_script_path
+        path = library.path_provider.copy_resources_script_path
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
           file_accessors = library.pod_targets.map(&:file_accessors).flatten
           resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map {|res| project.relativize(res)} }.flatten
@@ -107,7 +107,7 @@ module Pod
       # @return [void]
       #
       def create_acknowledgements
-        basepath = library.acknowledgements_basepath
+        basepath = library.path_provider.acknowledgements_basepath
         Generator::Acknowledgements.generators.each do |generator_class|
           path = generator_class.path_from_basepath(basepath)
           UI.message "- Generating acknowledgements at #{UI.path(path)}" do

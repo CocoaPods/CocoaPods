@@ -9,6 +9,8 @@ module Pod
     #
     attr_reader :specs
 
+    attr_accessor :aggregate_target
+
     # @return [HeadersStore] the header directory for the target.
     #
     attr_reader :build_headers

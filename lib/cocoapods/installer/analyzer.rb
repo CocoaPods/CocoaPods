@@ -190,6 +190,7 @@ module Pod
             pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
             pod_target.user_build_configurations = target.user_build_configurations
             target.pod_targets << pod_target
+            pod_target.aggregate_target = target
           end
         end
         targets

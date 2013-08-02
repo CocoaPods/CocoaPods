@@ -20,7 +20,7 @@ module Pod
         end
 
         it "returns the path of the pods root relative to the user project" do
-          @generator.target.relative_pods_root.should == '${SRCROOT}/Pods/Generated'
+          @generator.target.path_provider.relative_pods_root.should == '${SRCROOT}/Pods/Generated'
         end
 
         #-----------------------------------------------------------------------#

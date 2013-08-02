@@ -29,14 +29,14 @@ module Pod
       def prefix_header_path
         UI.warn "LibraryRepresentation#prefix_header_path is deprecated. " \
           "Use the specification `prefix_header_contents` attribute."
-        library.prefix_header_path
+        library.path_provider.prefix_header_path
       end
       alias :prefix_header_filename :prefix_header_path
 
       # @return [Pathname] The path of the script used to copy the resources.
       #
       def copy_resources_script_path
-        library.copy_resources_script_path
+        library.path_provider.copy_resources_script_path
       end
 
       # @return [Project] The Pods project of the sandbox.

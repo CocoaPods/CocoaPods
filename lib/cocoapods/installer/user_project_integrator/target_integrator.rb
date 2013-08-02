@@ -108,8 +108,8 @@ module Pod
         # @return [void]
         #
         def add_xcconfig_base_configuration
-          xcconfig = user_project.files.select { |f| f.path == target.xcconfig_relative_path }.first ||
-                     user_project.new_file(target.xcconfig_relative_path)
+          xcconfig = user_project.files.select { |f| f.path == target.path_provider.xcconfig_relative_path }.first ||
+                     user_project.new_file(target.path_provider.xcconfig_relative_path)
           native_targets.each do |native_target|
             check_overridden_build_settings(target.xcconfig, native_target)
             native_target.build_configurations.each do |config|
@@ -147,7 +147,7 @@ module Pod
           native_targets.each do |native_target|
             phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first ||
                     native_target.new_shell_script_build_phase(phase_name)
-            path  = target.copy_resources_script_relative_path
+            path  = target.path_provider.copy_resources_script_relative_path
             phase.shell_script = %{"#{path}"\n}
             phase.show_env_vars_in_log = '0'
           end
@@ -222,7 +222,7 @@ module Pod
                 "Remove the build settings from the target."
               ]
               UI.warn("The target `#{name}` overrides the `#{key}` build " \
-                      "setting defined in `#{target.xcconfig_relative_path}'.",
+                      "setting defined in `#{target.path_provider.xcconfig_relative_path}'.",
                       actions)
             end
           end

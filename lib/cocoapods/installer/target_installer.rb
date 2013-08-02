@@ -79,7 +79,7 @@ module Pod
       # @return [void]
       #
       def create_dummy_source
-        path = library.dummy_source_path
+        path = library.path_provider.dummy_source_path
         UI.message "- Generating dummy source file at #{UI.path(path)}" do
           generator = Generator::DummySource.new(library.label)
           generator.save_as(path)

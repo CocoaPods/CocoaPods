@@ -78,7 +78,7 @@ module Pod
       # @return [void]
       #
       def create_xcconfig_file
-        path = library.xcconfig_path
+        path = library.path_provider.xcconfig_path
         public_gen = Generator::XCConfig::PublicPodXCConfig.new(library)
         UI.message "- Generating public xcconfig file at #{UI.path(path)}" do
           public_gen.save_as(path)
@@ -90,7 +90,7 @@ module Pod
           # group.new_file(relative_path)
         end
 
-        path = library.xcconfig_private_path
+        path = library.path_provider.xcconfig_private_path
         private_gen = Generator::XCConfig::PrivatePodXCConfig.new(library, public_gen.xcconfig)
         UI.message "- Generating private xcconfig file at #{UI.path(path)}" do
           private_gen.save_as(path)
@@ -109,10 +109,10 @@ module Pod
       # @return [void]
       #
       def create_prefix_header
-        path = library.prefix_header_path
+        path = library.path_provider.prefix_header_path
         UI.message "- Generating prefix header at #{UI.path(path)}" do
           generator = Generator::PrefixHeader.new(library.file_accessors, library.platform)
-          generator.imports << library.target_environment_header_path.basename
+          generator.imports << library.aggregate_target.path_provider.target_environment_header_path.basename
           generator.save_as(path)
           add_file_to_support_group(path)
 

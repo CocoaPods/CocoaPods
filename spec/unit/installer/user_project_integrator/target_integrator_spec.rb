@@ -65,7 +65,7 @@ module Pod
       end
 
       it 'sets the Pods xcconfig as the base config for each build configuration' do
-        xcconfig_file = @sample_project.files.find { |f| f.path == @lib.xcconfig_relative_path }
+        xcconfig_file = @sample_project.files.find { |f| f.path == @lib.path_provider.xcconfig_relative_path }
         @target.build_configurations.each do |config|
           config.base_configuration_reference.should == xcconfig_file
         end

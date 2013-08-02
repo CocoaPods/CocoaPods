@@ -15,10 +15,21 @@ module Pod
       @file_accessors = []
     end
 
+    def aggregate_target
+      self
+    end
+
     # @return [String] the label for the target.
     #
     def label
       target_definition.label.to_s
+    end
+
+    def path_provider
+      root = sandbox.library_support_files_dir(name)
+      provider = Target::PathsProvider.new(label, root)
+      provider.client_root = client_root
+      provider
     end
 
     # @return [Pathname] the folder where the client is stored used for
@@ -66,60 +77,6 @@ module Pod
     #
     def spec_consumers
       specs.map { |spec| spec.consumer(platform) }
-    end
-
-    # @return [Pathname] The absolute path of acknowledgements file.
-    #
-    # @note   The acknowledgements generators add the extension according to
-    #         the file type.
-    #
-    def acknowledgements_basepath
-      support_files_root + "#{label}-acknowledgements"
-    end
-
-    # @return [Pathname] The absolute path of the copy resources script.
-    #
-    def copy_resources_script_path
-      support_files_root + "#{label}-resources.sh"
-    end
-
-    # @return [String] The xcconfig path of the root from the `$(SRCROOT)`
-    #         variable of the user's project.
-    #
-    def relative_pods_root
-      "${SRCROOT}/#{support_files_root.relative_path_from(client_root)}"
-    end
-
-    # @return [String] The path of the xcconfig file relative to the root of
-    #         the user project.
-    #
-    def xcconfig_relative_path
-      relative_to_srcroot(xcconfig_path).to_s
-    end
-
-    # @return [String] The path of the copy resources script relative to the
-    #         root of the user project.
-    #
-    def copy_resources_script_relative_path
-      "${SRCROOT}/#{relative_to_srcroot(copy_resources_script_path)}"
-    end
-
-    #-------------------------------------------------------------------------#
-
-    # @!group Private Helpers
-
-    private
-
-    # Computes the relative path of a sandboxed file from the `$(SRCROOT)`
-    # variable of the user's project.
-    #
-    # @param  [Pathname] path
-    #         A relative path from the root of the sandbox.
-    #
-    # @return [String] The computed path.
-    #
-    def relative_to_srcroot(path)
-      path.relative_path_from(client_root).to_s
     end
 
     #-------------------------------------------------------------------------#

@@ -47,7 +47,7 @@ module Pod
         @xcconfig = Xcodeproj::Config.new({
           'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
           'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(target.sandbox.public_headers.search_paths),
-          'PODS_ROOT' => target.relative_pods_root,
+          'PODS_ROOT' => target.path_provider.relative_pods_root,
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
         })
 

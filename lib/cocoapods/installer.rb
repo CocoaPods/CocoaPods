@@ -370,10 +370,8 @@ module Pod
     def link_aggregate_target
       aggregate_targets.each do |aggregate_target|
         native_target = pods_project.targets.select { |t| t.name == aggregate_target.name }.first
-        products = pods_project.products_group
         aggregate_target.pod_targets.each do |pod_target|
-          product = products.files.select { |f| f.path == pod_target.product_name }.first
-          native_target.frameworks_build_phase.add_file_reference(product)
+          native_target.frameworks_build_phase.add_file_reference(pod_target.target.product_reference)
         end
       end
     end
