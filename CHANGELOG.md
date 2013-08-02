@@ -8,6 +8,22 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
+* Added `prepare_command` attribute to Specification DSL. The prepare command
+  will replace the `pre_install` hook. The `post_install` hook has also been
+  deprecated.
+  [#1247](https://github.com/CocoaPods/CocoaPods/issues/1247)
+
+  The reason we provided Ruby hooks at first, was because we wanted to offer
+  the option to make any required configuration possible. By now, however, we
+  have a pretty good idea of the use-cases and are therefore locking down the
+  freedom that was once available. In turn, we’re adding attributes that can
+  replace the most common use-cases. _(See the enhancements directly following
+  this entry for more info)._
+  
+  The second reason we need to lock this down is because this is the last
+  remaining obstacle to fully serialize specifications, which we need in order
+  to move to a ‘spec push’ web-service in the future.
+
 * Added `resource_bundles` attribute to Specification DSL.  
   [#743](https://github.com/CocoaPods/CocoaPods/issues/743),
   [#1186](https://github.com/CocoaPods/CocoaPods/issues/1186)
@@ -19,11 +35,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Added `vendored_libraries` attribute to Specification DSL.  
   [#809](https://github.com/CocoaPods/CocoaPods/issues/809),
   [#1075](https://github.com/CocoaPods/CocoaPods/issues/1075)
-
-* Added `prepare_command` attribute to Specification DSL. The prepare command
-  will replace the `pre_install` hook. The `post_install` hook has also been
-  deprecated.  
-  [#1247](https://github.com/CocoaPods/CocoaPods/issues/1247)
 
 * Restructured `.cocoapods` folder to contain repos in a subdirectory.  
   [#1150](https://github.com/CocoaPods/CocoaPods/issues/1150)
