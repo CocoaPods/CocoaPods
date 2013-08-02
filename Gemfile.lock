@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 2558ca127435e10a60349c503218e8a1e4eb494c
+  revision: 7738d01101994723deebb907f2414b78fcb6988e
   branch: feature-prepare_command
   specs:
     cocoapods-core (0.22.3)
