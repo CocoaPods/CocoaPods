@@ -65,6 +65,28 @@ module Pod
 
       #--------------------------------------#
 
+      describe "Prepare command" do
+        it "runs the prepare command if one has been declared in the spec" do
+          @spec.prepare_command = "echo test"
+          @installer.expects(:bash!).once
+          @installer.install!
+        end
+
+        it "doesn't run the prepare command if it hasn't been declared in the spec" do
+          @installer.expects(:bash!).never
+          @installer.install!
+        end
+
+        it "raises if the prepare command fails" do
+          @spec.prepare_command = "missing_command"
+          should.raise Informative do
+            @installer.install!
+          end.message.should.match /command not found/
+        end
+      end
+
+      #--------------------------------------#
+
       describe "Cleaning" do
 
         it "cleans the paths non used by the installation" do
