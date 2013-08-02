@@ -129,7 +129,7 @@ module Pod
         before do
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = []
-          @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new()
+          @analysis_result.sandbox_state = Installer::Analyzer::PodsState.new()
           @pod_targets = [PodTarget.new([], nil, config.sandbox)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
@@ -164,7 +164,7 @@ module Pod
           spec_2 = Spec.new
           spec_2.name = 'RestKit'
           @installer.stubs(:root_specs).returns([spec, spec_2])
-          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state = Installer::Analyzer::PodsState.new
           sandbox_state.added << 'BananaLib'
           sandbox_state.changed << 'RestKit'
           @installer.stubs(:sandbox_state).returns(sandbox_state)

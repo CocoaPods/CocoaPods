@@ -47,7 +47,7 @@ module Pod
         #         solution to prevent the full re-installation from users which
         #         are upgrading from CP < 0.17.
         #
-        # @todo   Remove for CP 0.18.
+        #         TODO: remove
         #
         attr_reader :lockfile
 
@@ -66,10 +66,10 @@ module Pod
         # Performs the analysis to the detect the state of the sandbox respect
         # to the resolved specifications.
         #
-        # @return [SpecsState] the state of the sandbox.
+        # @return [PodsState] the state of the sandbox.
         #
         def analyze
-          state = SpecsState.new
+          state = PodsState.new
           if sandbox_manifest
             all_names = (resolved_pods + sandbox_pods).uniq.sort
             all_names.sort.each do |name|

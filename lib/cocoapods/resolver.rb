@@ -36,11 +36,11 @@ module Pod
     # @param  [Podfile] podfile @see podfile
     # @param  [Array<Dependency>] locked_dependencies @see locked_dependencies
     #
-    def initialize(sandbox, podfile, locked_dependencies = [], target_definition_data = {})
+    def initialize(sandbox, podfile, locked_dependencies = [], target_definition_data = nil)
       @sandbox = sandbox
       @podfile = podfile
       @locked_dependencies = locked_dependencies
-      @target_definition_data = target_definition_data
+      @target_definition_data = target_definition_data || {}
     end
 
     #-------------------------------------------------------------------------#

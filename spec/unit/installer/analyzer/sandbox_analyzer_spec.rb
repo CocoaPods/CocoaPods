@@ -21,7 +21,7 @@ module Pod
         @analyzer.stubs(:folder_empty?).returns(false)
         @analyzer.stubs(:sandbox_checksum).returns(@spec.checksum)
         state = @analyzer.analyze
-        state.class.should == Installer::Analyzer::SpecsState
+        state.class.should == Installer::Analyzer::PodsState
         state.unchanged.should == ["BananaLib"]
       end
 

@@ -2,12 +2,13 @@ module Pod
   class Installer
 
     # Analyzes the Podfile, the Lockfile, and the sandbox manifest to generate
-    # the information relative to a CocoaPods installation.
+    # the information necessary for the installation.
     #
     class Analyzer
 
       include Config::Mixin
 
+      autoload :PodsState, 'cocoapods/installer/analyzer/pods_state'
       autoload :SandboxAnalyzer, 'cocoapods/installer/analyzer/sandbox_analyzer'
       autoload :UserProjectAnalyzer, 'cocoapods/installer/analyzer/user_project_analyzer'
 
@@ -25,9 +26,9 @@ module Pod
       #
       attr_reader :lockfile
 
-      # @param  [Sandbox]  sandbox     @see sandbox
-      # @param  [Podfile]  podfile     @see podfile
-      # @param  [Lockfile] lockfile    @see lockfile
+      # @param  [Sandbox] sandbox @see sandbox
+      # @param  [Podfile] podfile @see podfile
+      # @param  [Lockfile] lockfile @see lockfile
       #
       def initialize(sandbox, podfile, lockfile = nil)
         @sandbox  = sandbox
@@ -37,6 +38,37 @@ module Pod
         @update_mode = false
         @allow_pre_downloads = true
       end
+
+
+      public
+
+      # @!group Configuration
+
+      #-----------------------------------------------------------------------#
+
+      # @return [Bool] Whether the version of the dependencies which did non
+      #         change in the Podfile should be locked.
+      #
+      attr_accessor :update_mode
+      alias_method  :update_mode?, :update_mode
+
+      # @return [Bool] Whether the analysis allows pre-downloads and thus
+      #         modifications to the sandbox.
+      #
+      # @note   This flag should not be used in installations.
+      #
+      # @note   This is used by the `pod outdated` command to prevent
+      #         modification of the sandbox in the resolution process.
+      #
+      attr_accessor :allow_pre_downloads
+      alias_method  :allow_pre_downloads?, :allow_pre_downloads
+
+
+      public
+
+      # @!group Analysis
+
+      #-----------------------------------------------------------------------#
 
       # Performs the analysis.
       #
@@ -51,7 +83,7 @@ module Pod
         @result = AnalysisResult.new
         @result.podfile_state = generate_podfile_state
         @locked_dependencies = generate_version_locking_dependencies
-        @target_definition_data = inspect_user_projects
+        @target_definitions_data = inspect_user_projects
 
         fetch_external_sources if allow_fetches
         @result.specs_by_target = resolve_dependencies
@@ -61,7 +93,46 @@ module Pod
         @result
       end
 
+      # @return [AnalysisResult] The result of the analysis.
+      #
       attr_accessor :result
+
+      #-----------------------------------------------------------------------#
+
+      class AnalysisResult
+
+        # @return [PodsState] the states of the Podfile specs.
+        #
+        attr_accessor :podfile_state
+
+        # @return [Hash{TargetDefinition => Array<Spec>}] the specifications
+        #         grouped by target.
+        #
+        attr_accessor :specs_by_target
+
+        # @return [Array<Specification>] the specifications of the resolved
+        #         version of Pods that should be installed.
+        #
+        attr_accessor :specifications
+
+        # @return [PodsState] the states of the {Sandbox} respect the resolved
+        #         specifications.
+        #
+        attr_accessor :sandbox_state
+
+        # @return [Array<Target>] The Podfile targets containing library
+        #         dependencies.
+        #
+        attr_accessor :targets
+
+      end
+
+
+      public
+
+      # @!group Other Analysis operations
+
+      #-----------------------------------------------------------------------#
 
       # @return [Bool] Whether an installation should be performed or this
       #         CocoaPods project is already up to date.
@@ -87,45 +158,17 @@ module Pod
         !needing_install.empty?
       end
 
-      #-----------------------------------------------------------------------#
-
-      # @!group Configuration
-
-      # @return [Bool] Whether the version of the dependencies which did non
-      #         change in the Podfile should be locked.
-      #
-      attr_accessor :update_mode
-      alias_method  :update_mode?, :update_mode
-
-      # @return [Bool] Whether the analysis allows pre-downloads and thus
-      #         modifications to the sandbox.
-      #
-      # @note   This flag should not be used in installations.
-      #
-      # @note   This is used by the `pod outdated` command to prevent
-      #         modification of the sandbox in the resolution process.
-      #
-      attr_accessor :allow_pre_downloads
-      alias_method  :allow_pre_downloads?, :allow_pre_downloads
-
-      #-----------------------------------------------------------------------#
 
       private
 
       # @!group Analysis steps
 
-      # Compares the {Podfile} with the {Lockfile} in order to detect which
-      # dependencies should be locked.
+      #-----------------------------------------------------------------------#
+
+      # Compares the {Podfile} to the {Lockfile} to detect which dependencies
+      # changed.
       #
-      # @return [SpecsState] the states of the Podfile specs.
-      #
-      # @note   As the target definitions share the same sandbox they should have
-      #         the same version of a Pod. For this reason this method returns
-      #         the name of the Pod (root name of the dependencies) and doesn't
-      #         group them by target definition.
-      #
-      # @todo   [CocoaPods > 0.18] If there isn't a Lockfile all the Pods should
-      #         be marked as added.
+      # @return [PodsState] the states of the Podfile specs.
       #
       def generate_podfile_state
         if lockfile
@@ -135,15 +178,16 @@ module Pod
             pods_by_state.dup.each do |state, full_names|
               pods_by_state[state] = full_names.map { |fn| Specification.root_name(fn) }
             end
-            pods_state = SpecsState.new(pods_by_state)
+            pods_state = PodsState.new(pods_by_state)
             pods_state.print
           end
           pods_state
         else
-          state = SpecsState.new
+          state = PodsState.new
           state.added.concat(podfile.dependencies.map(&:root_name).uniq)
           state
         end
+        # TODO: check for SHA of deps with :podspec & :path option
       end
 
       # Updates the source repositories unless the config indicates to skip it.
@@ -183,9 +227,9 @@ module Pod
       #
       # @note   In update mode all the external sources are refreshed while in
       #         normal mode they are refreshed only if added or changed in the
-      #         Podfile. Moreover, in normal specifications for unchanged Pods
-      #         which are missing or are generated from an local source are
-      #         fetched as well.
+      #         Podfile. Moreover, in normal mode specifications for unchanged
+      #         Pods which are missing or are generated from an local source
+      #         are fetched as well.
       #
       # @note   It is possible to perform this step before the resolution
       #         process because external sources identify a single specific
@@ -219,13 +263,10 @@ module Pod
         end
       end
 
-      # Precomputes the platforms for each target_definition in the Podfile
+      # Inspects the user projects to find target definition data.
       #
-      # @note The platforms are computed and added to each target_definition
-      #       because it might be necessary to infer the platform from the
-      #       user targets.
-      #
-      # @return [void]
+      # @return [TargetDefinitionIntrospectionData] The data of the target
+      #         definitions.
       #
       def inspect_user_projects
         if config.integrate_targets?
@@ -243,19 +284,10 @@ module Pod
 
       # Converts the Podfile in a list of specifications grouped by target.
       #
-      # @note   As some dependencies might have external sources the resolver
-      #         is aware of the {Sandbox} and interacts with it to download the
-      #         podspecs of the external sources. This is necessary because the
-      #         resolver needs their specifications to analyze their
-      #         dependencies.
-      #
-      # @note   The specifications of the external sources which are added,
-      #         modified or removed need to deleted from the sandbox before the
-      #         resolution process. Otherwise the resolver might use an
-      #         incorrect specification instead of pre-downloading it.
-      #
-      # @note   In update mode the resolver is set to always update the specs
-      #         from external sources.
+      # @note   To prevent confusion in the resolver external sources should
+      #         be downloaded before this step. It the resolver is not
+      #         able to retrieve the podspec of an external source from the
+      #         sandbox it will raise.
       #
       # @return [Hash{TargetDefinition => Array<Spec>}] the specifications
       #         grouped by target.
@@ -263,13 +295,13 @@ module Pod
       def resolve_dependencies
         specs_by_target = nil
         UI.section "Resolving dependencies of #{UI.path podfile.defined_in_file}" do
-          resolver = Resolver.new(sandbox, podfile, locked_dependencies, target_definition_data)
+          resolver = Resolver.new(sandbox, podfile, locked_dependencies, target_definitions_data)
           specs_by_target = resolver.resolve
         end
         specs_by_target
       end
 
-      # Returns the list of all the resolved the resolved specifications.
+      # Returns the list of all the resolved specifications.
       #
       # @return [Array<Specification>] the list of the specifications.
       #
@@ -279,7 +311,7 @@ module Pod
 
       # Creates the models that represent the libraries generated by CocoaPods.
       #
-      # @return [Array<Libraries>] the generated libraries.
+      # @return [Array<Target>] the target information for the libraries.
       #
       def generate_targets
         targets = []
@@ -287,7 +319,7 @@ module Pod
           target = AggregateTarget.new(target_definition, sandbox)
           targets << target
 
-          definition_data = target_definition_data[target_definition]
+          definition_data = target_definitions_data[target_definition]
           if config.integrate_targets?
             target.user_project_path = definition_data.project_path
             target.client_root = definition_data.project_path.dirname
@@ -317,11 +349,11 @@ module Pod
         targets
       end
 
-      # Computes the state of the sandbox respect to the resolved
-      # specifications.
+      # Inspects the sandbox to detect which Pods needs to be installed,
+      # removed, or updated according to the resolved specifications.
       #
-      # @return [SpecsState] the representation of the state of the manifest
-      #         specifications.
+      # @return [PodsState] The state of the resolved specifications respect to
+      #         the sandbox manifest.
       #
       def generate_sandbox_state
         sandbox_state = nil
@@ -333,123 +365,25 @@ module Pod
         sandbox_state
       end
 
-      #-----------------------------------------------------------------------#
+
+      private
 
       # @!group Analysis internal products
+
+      #-----------------------------------------------------------------------#
 
       # @return [Array<Dependency>] the dependencies generate by the lockfile
       #         that prevent the resolver to update a Pod.
       #
       attr_reader :locked_dependencies
 
-      attr_reader :target_definition_data
-
+      # @return [TargetDefinitionIntrospectionData] The data of the target
+      #         definitions.
+      #
+      attr_reader :target_definitions_data
 
       #-----------------------------------------------------------------------#
 
-      class AnalysisResult
-
-        # @return [SpecsState] the states of the Podfile specs.
-        #
-        attr_accessor :podfile_state
-
-        # @return [Hash{TargetDefinition => Array<Spec>}] the specifications
-        #         grouped by target.
-        #
-        attr_accessor :specs_by_target
-
-        # @return [Array<Specification>] the specifications of the resolved
-        #         version of Pods that should be installed.
-        #
-        attr_accessor :specifications
-
-        # @return [SpecsState] the states of the {Sandbox} respect the resolved
-        #         specifications.
-        #
-        attr_accessor :sandbox_state
-
-        # @return [Array<Target>] The Podfile targets containing library
-        #         dependencies.
-        #
-        attr_accessor :targets
-
-      end
-
-      #-----------------------------------------------------------------------#
-
-      # This class represents the state of a collection of Pods.
-      #
-      # @note The names of the pods stored by this class are always the **root**
-      #       name of the specification.
-      #
-      # @note The motivation for this class is to ensure that the names of the
-      #       subspecs are added instead of the name of the Pods.
-      #
-      class SpecsState
-
-        # @param  [Hash{Symbol=>String}] pods_by_state
-        #         The **root** name of the pods grouped by their state
-        #         (`:added`, `:removed`, `:changed` or `:unchanged`).
-        #
-        def initialize(pods_by_state = nil)
-          @added     = []
-          @deleted   = []
-          @changed   = []
-          @unchanged = []
-
-          if pods_by_state
-            @added     = pods_by_state[:added]     || []
-            @deleted   = pods_by_state[:removed]   || []
-            @changed   = pods_by_state[:changed]   || []
-            @unchanged = pods_by_state[:unchanged] || []
-          end
-        end
-
-        # @return [Array<String>] the names of the pods that were added.
-        #
-        attr_accessor :added
-
-        # @return [Array<String>] the names of the pods that were changed.
-        #
-        attr_accessor :changed
-
-        # @return [Array<String>] the names of the pods that were deleted.
-        #
-        attr_accessor :deleted
-
-        # @return [Array<String>] the names of the pods that were unchanged.
-        #
-        attr_accessor :unchanged
-
-        # Displays the state of each pod.
-        #
-        # @return [void]
-        #
-        def print
-          added    .sort.each { |pod| UI.message("A".green  + " #{pod}", '', 2) }
-          deleted  .sort.each { |pod| UI.message("R".red    + " #{pod}", '', 2) }
-          changed  .sort.each { |pod| UI.message("M".yellow + " #{pod}", '', 2) }
-          unchanged.sort.each { |pod| UI.message("-"        + " #{pod}", '', 2) }
-        end
-
-        # Adds the name of a Pod to the give state.
-        #
-        # @param  [String]
-        #         the name of the Pod.
-        #
-        # @param  [Symbol]
-        #         the state of the Pod.
-        #
-        # @raise  If there is an attempt to add the name of a subspec.
-        #
-        # @return [void]
-        #
-        def add_name(name, state)
-          raise "[Bug] Attempt to add subspec to the pods state" if name.include?('/')
-          self.send(state) << name
-        end
-
-      end
     end
   end
 end

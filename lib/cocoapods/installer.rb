@@ -310,7 +310,6 @@ module Pod
       end
     end
 
-
     # Installs the file references in the Pods project. This is done once per
     # Pod as the same file reference might be shared by multiple aggregate
     # targets.
@@ -624,7 +623,7 @@ module Pod
       analysis_result.specifications.map { |spec| spec.root }.uniq
     end
 
-    # @return [SpecsState] The state of the sandbox returned by the analyzer.
+    # @return [PodsState] The state of the sandbox returned by the analyzer.
     #
     def sandbox_state
       analysis_result.sandbox_state
