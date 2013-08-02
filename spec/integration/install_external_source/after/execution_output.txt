@@ -1,10 +1,12 @@
 CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-color 2>&1
+Performing existing installation migration
+
 Analyzing dependencies
 
 Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
-   $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_external_source/Pods/PodTest"
+   $ /usr/local/bin/hg clone "PodTest-hg-source" "ROOT/tmp/install_external_source/Pods/Generated/Sources/PodTest"
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 
@@ -33,21 +35,21 @@ Generating Pods project
     - Installing target `Pods-PodTest` iOS 4.3
       - Adding Build files
       - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-PodTest.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-PodTest-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-PodTest-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-PodTest-dummy.m`
+      - Generating public xcconfig file at `Pods/Generated/Pods-PodTest.xcconfig`
+      - Generating private xcconfig file at `Pods/Generated/Pods-PodTest-Private.xcconfig`
+      - Generating prefix header at `Pods/Generated/Pods-PodTest-prefix.pch`
+      - Generating dummy source file at `Pods/Generated/Pods-PodTest-dummy.m`
     - Installing target `Pods` iOS 4.3
-      - Generating xcconfig file at `Pods/Pods.xcconfig`
-      - Generating target environment header at `Pods/Pods-environment.h`
-      - Generating copy resources script at `Pods/Pods-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-dummy.m`
+      - Generating xcconfig file at `Pods/Generated/Pods.xcconfig`
+      - Generating target environment header at `Pods/Generated/Pods-environment.h`
+      - Generating copy resources script at `Pods/Generated/Pods-resources.sh`
+      - Generating acknowledgements at `Pods/Generated/Pods-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Generated/Pods-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Generated/Pods-dummy.m`
   - Running post install hooks
-  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Xcode project file to `Pods/Generated/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
-  - Writing Manifest in `Pods/Manifest.lock`
+  - Writing Manifest in `Pods/Generated/Manifest.lock`
 
 Integrating client project
 
