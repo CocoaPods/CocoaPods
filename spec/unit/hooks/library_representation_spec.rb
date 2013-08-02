@@ -29,7 +29,6 @@ module Pod
       end
 
       it "returns the path of the prefix header" do
-        @rep.prefix_header_path.should == temporary_directory + 'Pods/Generated/Pods-MyApp-RestKit-prefix.pch'
         @rep.prefix_header_path.should == temporary_directory + 'Pods/Generated/Pods-MyApp-prefix.pch'
       end
 
