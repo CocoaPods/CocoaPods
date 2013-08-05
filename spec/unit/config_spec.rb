@@ -21,9 +21,15 @@ module Pod
 
       it "returns the path to the spec-repos dir" do
         @sut.repos_dir.should == Pathname.new("~/.cocoapods/repos").expand_path
+      end
+
+      it "returns the path to the templates dir" do
+        @sut.templates_dir.should == Pathname.new("~/.cocoapods/templates").expand_path
+      end
+
       it "returns the path of the default podfiles" do
-        config.default_podfile_path.should == Pathname.new("~/.cocoapods/default.podfile").expand_path
-        config.default_test_podfile_path.should == Pathname.new("~/.cocoapods/test.podfile").expand_path
+        @sut.default_podfile_path.should == Pathname.new("~/.cocoapods/templates/default.podfile").expand_path
+        @sut.default_test_podfile_path.should == Pathname.new("~/.cocoapods/templates/test.podfile").expand_path
       end
 
       it "allows to specify whether the aggressive cache should be used with an environment variable" do

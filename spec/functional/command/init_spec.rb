@@ -67,9 +67,9 @@ module Pod
 
     it "includes default pods in a Podfile" do
       Dir.chdir(temporary_directory) do
-        tmp_repos_dir = Pathname.pwd + 'repos_dir'
-        tmp_repos_dir.mkpath
-        config.repos_dir = tmp_repos_dir
+        tmp_templates_dir = Pathname.pwd + 'templates_dir'
+        tmp_templates_dir.mkpath
+        config.stubs(:templates_dir).returns(tmp_templates_dir)
 
         open(config.default_podfile_path, 'w') { |f| f << "pod 'AFNetworking'" }
 
@@ -85,9 +85,9 @@ module Pod
 
     it "includes default test pods in test targets in a Podfile" do
       Dir.chdir(temporary_directory) do
-        tmp_repos_dir = Pathname.pwd + 'repo_dir'
-        tmp_repos_dir.mkpath
-        config.repos_dir = tmp_repos_dir
+        tmp_templates_dir = Pathname.pwd + 'templates_dir'
+        tmp_templates_dir.mkpath
+        config.stubs(:templates_dir).returns(tmp_templates_dir)
 
         open(config.default_test_podfile_path, 'w') { |f| f << "pod 'Kiwi'" }
 
@@ -105,9 +105,9 @@ module Pod
 
     it "does not include default test pods if there are no test targets" do
       Dir.chdir(temporary_directory) do
-        tmp_repos_dir = Pathname.pwd + 'repo_dir'
-        tmp_repos_dir.mkpath
-        config.repos_dir = tmp_repos_dir
+        tmp_templates_dir = Pathname.pwd + 'templates_dir'
+        tmp_templates_dir.mkpath
+        config.stubs(:templates_dir).returns(tmp_templates_dir)
 
         open(config.default_test_podfile_path, 'w') { |f| f << "pod 'Kiwi'" }
 
