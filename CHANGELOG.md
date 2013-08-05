@@ -4,6 +4,18 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
+* Added `pod init` command which generates a Podfile according to the
+  targets of the project stored in the working directory and to the templates
+  stored in the `~/.cocoapods/templates` folder. Tow templates are supported: 
+    - the `Podfile.default` template for regular targets.
+    - and the `Podfile.test` template for test targets.  
+  [Ian Ynda-Hummel](https://github.com/ianyh)
+  [#1106](https://github.com/CocoaPods/CocoaPods/issues/1106)  
+  [#1045](https://github.com/CocoaPods/CocoaPods/issues/1045)  
+
+
 ## 0.23.0.rc1
 
 ###### Enhancements
