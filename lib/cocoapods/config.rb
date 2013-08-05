@@ -231,22 +231,22 @@ module Pod
 
     # Returns the path of the default Podfile pods.
     #
-    # @note The file is expected to be named default.podfile
+    # @note The file is expected to be named Podfile.default
     #
     # @return [Pathname]
     #
     def default_podfile_path
-      @default_podfile_path ||= templates_dir + "default.podfile"
+      @default_podfile_path ||= templates_dir + "Podfile.default"
     end
 
     # Returns the path of the default Podfile test pods.
     #
-    # @note The file is expected to be named test.podfile
+    # @note The file is expected to be named Podfile.test
     #
     # @return [Pathname]
     #
     def default_test_podfile_path
-      @default_test_podfile_path ||= templates_dir + "test.podfile"
+      @default_test_podfile_path ||= templates_dir + "Podfile.test"
     end
 
     # @return [Pathname] The file to use a cache of the statistics provider.
