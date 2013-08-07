@@ -15,6 +15,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1106](https://github.com/CocoaPods/CocoaPods/issues/1106)  
   [#1045](https://github.com/CocoaPods/CocoaPods/issues/1045)  
 
+###### Bug Fixes
+
+* Fixed crash in `pod spec cat`.
+
 
 ## 0.23.0.rc1
 
