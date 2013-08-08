@@ -20,6 +20,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Fixed crash in `pod spec cat`.
 
 
+## 0.23.0
+
+
 ## 0.23.0.rc1
 
 ###### Enhancements
