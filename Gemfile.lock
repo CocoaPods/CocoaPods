@@ -7,17 +7,17 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 63f310adb5210854b34c3d94bb9452bafd7cbc26
+  revision: 925b48bb35d969e2f74777a883ef3a9e5659dde3
   branch: master
   specs:
-    cocoapods-core (0.23.0.rc1)
+    cocoapods-core (0.23.0)
       activesupport (~> 3.2.13)
       json (~> 1.8.0)
       nap (~> 0.5.1)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 83c3e0781cbea05c704d02523610fe43f3ea062c
+  revision: 0cb0a41a7b8070c51a03a3221e8741a6bd6afe47
   branch: master
   specs:
     xcodeproj (0.9.0)
@@ -61,10 +61,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.23.0.rc1)
+    cocoapods (0.23.0)
       activesupport (~> 3.2.13)
       claide (~> 0.3.2)
-      cocoapods-core (= 0.23.0.rc1)
+      cocoapods-core (= 0.23.0)
       cocoapods-downloader (~> 0.1.2)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -99,7 +99,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    multi_json (1.7.7)
+    multi_json (1.7.8)
     nap (0.5.1)
     open4 (1.3.0)
     posix-spawn (0.3.6)
