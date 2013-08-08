@@ -91,7 +91,7 @@ module Pod
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
           file_accessors = library.pod_targets.map(&:file_accessors).flatten
           resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map {|res| project.relativize(res)} }.flatten
-          resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map {|name| "${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/#{name}.bundle" } }.flatten
+          resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map {|name| "${TARGET_BUILD_DIR}/#{name}.bundle" } }.flatten
           resources = []
           resources.concat(resource_paths)
           resources.concat(resource_bundles)
