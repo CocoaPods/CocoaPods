@@ -17,8 +17,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * CocoaPods will now leverage the [xcproj](https://github.com/0xced/xcproj)
   command line tool if available in the path of the user to touch saved
-  projects. This will result in projects serialized in the exact format used by
-  Xcode eliminating merge conflicts and other related issues.
+  projects. This will result in projects being serialized in the exact format
+  used by Xcode eliminating merge conflicts and other related issues. To learn
+  more about how to install xcproj see its
+  [readme](https://github.com/0xced/xcproj).
   [Cédric Luthi](https://github.com/0xced)  
   [#1275](https://github.com/CocoaPods/CocoaPods/issues/1275)  
 
