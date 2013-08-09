@@ -15,9 +15,20 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1106](https://github.com/CocoaPods/CocoaPods/issues/1106)  
   [#1045](https://github.com/CocoaPods/CocoaPods/issues/1045)  
 
+* CocoaPods will now leverage the [xcproj](https://github.com/0xced/xcproj)
+  command line tool if available in the path of the user to touch saved
+  projects. This will result in projects serialized in the exact format used by
+  Xcode eliminating merge conflicts and other related issues.
+  [Cédric Luthi](https://github.com/0xced)  
+  [#1275](https://github.com/CocoaPods/CocoaPods/issues/1275)  
+
 ###### Bug Fixes
 
 * Fixed crash in `pod spec cat`.
+
+* Use the `TARGET_BUILD_DIR` environment variable for installing resource bundles.  
+  [Cédric Luthi](https://github.com/0xced)  
+  [#1268](https://github.com/CocoaPods/CocoaPods/issues/1268)  
 
 
 ## 0.23.0
