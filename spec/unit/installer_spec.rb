@@ -16,7 +16,7 @@ end
 def generate_podfile(pods = ['JSONKit'])
   podfile = Pod::Podfile.new do
     platform :ios
-    xcodeproj 'SampleProject/SampleProject'
+    xcodeproj 'SampleProject/SampleProject', 'Debug' => :debug, 'Test' => :debug, 'Release' => :release, 'App Store' => :release
     pods.each { |name| pod name }
   end
 end
@@ -242,6 +242,15 @@ module Pod
             build_setting["MACOSX_DEPLOYMENT_TARGET"].should == '10.8'
             build_setting["IPHONEOS_DEPLOYMENT_TARGET"].should == '6.0'
           end
+        end
+        
+        it "sets STRIP_INSTALLED_PRODUCT to NO for all configurations for the whole project" do
+          @installer.stubs(:aggregate_targets).returns([])
+          @installer.send(:prepare_pods_project)
+          @installer.pods_project.build_settings('Debug')["STRIP_INSTALLED_PRODUCT"].should == "NO"
+          @installer.pods_project.build_settings('Test')["STRIP_INSTALLED_PRODUCT"].should == "NO"
+          @installer.pods_project.build_settings('Release')["STRIP_INSTALLED_PRODUCT"].should == "NO"
+          @installer.pods_project.build_settings('App Store')["STRIP_INSTALLED_PRODUCT"].should == "NO"
         end
       end
 
