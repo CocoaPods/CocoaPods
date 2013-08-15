@@ -285,7 +285,7 @@ module Pod
     #
     def prepare_pods_project
       UI.message "- Creating Pods project" do
-        @pods_project = Pod::Project.new(sandbox, nil)
+        @pods_project = Pod::Project.new(sandbox, @podfile.target_definitions['Pods'].build_configurations)
         if config.podfile_path
           @pods_project.add_podfile(config.podfile_path)
         end
