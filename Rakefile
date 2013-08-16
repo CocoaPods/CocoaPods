@@ -220,6 +220,7 @@ namespace :spec do
     title 'Running the specs'
     sh "bundle exec bacon #{specs('**')}"
 
+    require 'pathname'
     unless Pathname.new(ENV['HOME']+'/.cocoapods/repos/master').exist?
       title 'Ensuring specs repo is up to date'
       sh    "./bin/pod setup"
@@ -343,7 +344,8 @@ namespace :examples do
       Dir.chdir(example.to_s) do
         execute_command "rm -rf Pods DerivedData"
         # WARNING: This appeart to use sytem gems instead of the bundle ones.
-        execute_command "#{'../../bin/' unless ENV['FROM_GEM']}sandbox-pod install --verbose --no-repo-update"
+        pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
+        execute_command "#{pod_command} install --verbose --no-repo-update"
         command = "xcodebuild -workspace '#{example.basename}.xcworkspace' -scheme '#{example.basename}'"
           if (example + 'Podfile').read.include?('platform :ios')
             # Specifically build against the simulator SDK so we don't have to deal with code signing.
