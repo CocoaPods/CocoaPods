@@ -16,7 +16,7 @@ end
 def generate_podfile(pods = ['JSONKit'])
   podfile = Pod::Podfile.new do
     platform :ios
-    xcodeproj 'SampleProject/SampleProject', 'Debug' => :debug, 'Test' => :debug, 'Release' => :release, 'App Store' => :release
+    xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     pods.each { |name| pod name }
   end
 end
@@ -112,7 +112,7 @@ module Pod
           @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
         end
 
-        it "configures the analizer to use update mode if appropriate" do
+        it "configures the analyzer to use update mode if appropriate" do
           @installer.update_mode = true
           Installer::Analyzer.any_instance.expects(:update_mode=).with(true)
           @installer.send(:analyze)
@@ -217,14 +217,37 @@ module Pod
 
       describe "#prepare_pods_project" do
 
-        it "creates the Pods project" do
+        before do
           @installer.stubs(:aggregate_targets).returns([])
+        end
+
+        it "creates build configurations for all of the user's targets" do
+          config.integrate_targets = true
+          @installer.send(:analyze)
+          @installer.send(:prepare_pods_project)
+          @installer.pods_project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
+        end
+
+        it "sets STRIP_INSTALLED_PRODUCT to NO for all configurations for the whole project" do
+          config.integrate_targets = true
+          @installer.send(:analyze)
+          @installer.send(:prepare_pods_project)
+          @installer.pods_project.build_settings('Debug')["STRIP_INSTALLED_PRODUCT"].should == "NO"
+          @installer.pods_project.build_settings('Test')["STRIP_INSTALLED_PRODUCT"].should == "NO"
+          @installer.pods_project.build_settings('Release')["STRIP_INSTALLED_PRODUCT"].should == "NO"
+          @installer.pods_project.build_settings('App Store')["STRIP_INSTALLED_PRODUCT"].should == "NO"
+        end
+
+        before do
+          @installer.stubs(:analysis_result).returns(stub(:all_user_build_configurations => {}))
+        end
+
+        it "creates the Pods project" do
           @installer.send(:prepare_pods_project)
           @installer.pods_project.class.should == Pod::Project
         end
 
         it "adds the Podfile to the Pods project" do
-          @installer.stubs(:aggregate_targets).returns([])
           config.stubs(:podfile_path).returns(Pathname.new('/Podfile'))
           @installer.send(:prepare_pods_project)
           @installer.pods_project['Podfile'].should.be.not.nil
@@ -243,15 +266,7 @@ module Pod
             build_setting["IPHONEOS_DEPLOYMENT_TARGET"].should == '6.0'
           end
         end
-        
-        it "sets STRIP_INSTALLED_PRODUCT to NO for all configurations for the whole project" do
-          @installer.stubs(:aggregate_targets).returns([])
-          @installer.send(:prepare_pods_project)
-          @installer.pods_project.build_settings('Debug')["STRIP_INSTALLED_PRODUCT"].should == "NO"
-          @installer.pods_project.build_settings('Test')["STRIP_INSTALLED_PRODUCT"].should == "NO"
-          @installer.pods_project.build_settings('Release')["STRIP_INSTALLED_PRODUCT"].should == "NO"
-          @installer.pods_project.build_settings('App Store')["STRIP_INSTALLED_PRODUCT"].should == "NO"
-        end
+
       end
 
       #--------------------------------------#
@@ -317,6 +332,7 @@ module Pod
 
         before do
           @installer.stubs(:aggregate_targets).returns([])
+          @installer.stubs(:analysis_result).returns(stub(:all_user_build_configurations => {}))
           @installer.send(:prepare_pods_project)
         end
 
