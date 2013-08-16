@@ -220,6 +220,7 @@ namespace :spec do
     title 'Running the specs'
     sh "bundle exec bacon #{specs('**')}"
 
+    require 'pathname'
     unless Pathname.new(ENV['HOME']+'/.cocoapods/repos/master').exist?
       title 'Ensuring specs repo is up to date'
       sh    "./bin/pod setup"
