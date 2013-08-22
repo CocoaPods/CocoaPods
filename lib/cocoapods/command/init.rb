@@ -55,9 +55,6 @@ module Pod
           # Uncomment this line to define a global platform for your project
           # platform :ios, "6.0"
         PLATFORM
-        if config.default_podfile_path.exist?
-          open(config.default_podfile_path, 'r') { |f| podfile << f.read }
-        end
         for target in project.targets
           podfile << target_module(target)
         end
@@ -70,15 +67,23 @@ module Pod
       # @return [String] the text for the target module
       #
       def target_module(target)
-        target_module = <<-TARGET.strip_heredoc
+        target_module = "\ntarget \"#{target.name}\" do\n"
 
-
-          target "#{target.name}" do
-        TARGET
-        if config.default_test_podfile_path.exist? and target.name =~ /tests?/i
-          open(config.default_test_podfile_path, 'r') { |f| target_module << f.read }
+        if target.name =~ /tests?/i
+          target_module << template_contents(config.default_test_podfile_path)
+        else
+          target_module << template_contents(config.default_podfile_path)
         end
-        target_module << "\nend"
+        target_module << "\nend\n"
+      end
+
+
+      def template_contents(path)
+        if path.exist?
+          path.read.chomp.lines.map{ |line| "  #{line}" }.join("\n")
+        else
+          String.new
+        end
       end
     end
   end
