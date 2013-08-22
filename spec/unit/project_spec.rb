@@ -4,7 +4,7 @@ module Pod
   describe Project do
 
     before do
-      @project = Project.new(config.sandbox)
+      @project = Project.new(config.sandbox, nil)
     end
 
     #-------------------------------------------------------------------------#

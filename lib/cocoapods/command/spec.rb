@@ -304,7 +304,7 @@ module Pod
       # @return [Pathname] the absolute path of the given spec and source
       #
       def pathname_from_spec(spec, source)
-        Pathname.new("~/.cocoapods/#{ source }/#{ spec.name }/#{ spec.version }/#{ spec.name }.podspec").expand_path
+        config.repos_dir + "#{source}/#{spec.name}/#{spec.version}/#{spec.name}.podspec"
       end
 
       # @return [String] of spec paths one on each line

@@ -378,7 +378,14 @@ describe "Integration" do
 
   #--------------------------------------#
 
+  describe "Pod init" do
+
+    describe "Initializes a Podfile with a single platform" do
+      check "init", "init_single_platform"
+    end
+
+  end
+
+  #--------------------------------------#
+
 end
-
-
-

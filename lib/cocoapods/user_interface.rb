@@ -283,23 +283,41 @@ module Pod
   end
   UI = UserInterface
 
+  #---------------------------------------------------------------------------#
+
   # Redirects cocoapods-core UI.
   #
   module CoreUI
 
     class << self
 
-      # @todo enable in CocoaPods 0.17.0 release
-      #
       def puts(message)
-        # UI.puts message
+        UI.puts message
       end
 
-      # @todo enable in CocoaPods 0.17.0 release
-      #
       def warn(message)
-        # UI.warn message
+        UI.warn message
       end
     end
   end
 end
+
+  #---------------------------------------------------------------------------#
+
+module Xcodeproj
+
+  # Redirects xcodeproj UI.
+  #
+  module UserInterface
+
+    def self.puts(message)
+      ::Pod::UI.puts message
+    end
+
+    def self.warn(message)
+      ::Pod::UI.warn message
+    end
+
+  end
+end
+

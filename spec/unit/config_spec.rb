@@ -23,6 +23,15 @@ module Pod
         @sut.repos_dir.should == Pathname.new("~/.cocoapods/repos").expand_path
       end
 
+      it "returns the path to the templates dir" do
+        @sut.templates_dir.should == Pathname.new("~/.cocoapods/templates").expand_path
+      end
+
+      it "returns the path of the default podfiles" do
+        @sut.default_podfile_path.should == Pathname.new("~/.cocoapods/templates/Podfile.default").expand_path
+        @sut.default_test_podfile_path.should == Pathname.new("~/.cocoapods/templates/Podfile.test").expand_path
+      end
+
       it "allows to specify whether the aggressive cache should be used with an environment variable" do
         @sut.aggressive_cache = false
         ENV['CP_AGGRESSIVE_CACHE'] = 'TRUE'

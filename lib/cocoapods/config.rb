@@ -147,6 +147,12 @@ module Pod
 
     attr_writer :repos_dir
 
+    # @return [Pathname] the directory where the CocoaPods templates are stored.
+    #
+    def templates_dir
+      @templates_dir ||= Pathname.new(ENV['CP_TEMPLATES_DIR'] || "~/.cocoapods/templates").expand_path
+    end
+
     # @return [Pathname] the root of the CocoaPods installation where the
     #         Podfile is located.
     #
@@ -221,6 +227,26 @@ module Pod
     #
     def lockfile_path
       @lockfile_path ||= installation_root + 'Podfile.lock'
+    end
+
+    # Returns the path of the default Podfile pods.
+    #
+    # @note The file is expected to be named Podfile.default
+    #
+    # @return [Pathname]
+    #
+    def default_podfile_path
+      @default_podfile_path ||= templates_dir + "Podfile.default"
+    end
+
+    # Returns the path of the default Podfile test pods.
+    #
+    # @note The file is expected to be named Podfile.test
+    #
+    # @return [Pathname]
+    #
+    def default_test_podfile_path
+      @default_test_podfile_path ||= templates_dir + "Podfile.test"
     end
 
     # @return [Pathname] The file to use a cache of the statistics provider.

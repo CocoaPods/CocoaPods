@@ -17,8 +17,8 @@ module Pod
 
     # @param  [Sandbox] sandbox @see #sandbox
     #
-    def initialize(sandbox)
-      super(nil) # Recreate the project from scratch for now.
+    def initialize(sandbox, build_configurations)
+      super(nil, build_configurations) # Recreate the project from scratch for now.
       # TODO
       raise unless sandbox.is_a?(Sandbox)
       @sandbox = sandbox

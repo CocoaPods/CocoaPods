@@ -10,6 +10,9 @@
 
 ## Bug reports
 
+First check if you are using the latest CocoaPods version before filing a ticket.
+You can install the latest version with `$ [sudo] gem install cocoapods`.
+
 Please include _all_ relevant information, including the version of CocoaPods and
 any template printed by the tool.
 
