@@ -83,14 +83,14 @@ module Pod
       it 'adds a Copy Pods Resources build phase to each target' do
         target = @target_integrator.native_targets.first
         phase = target.shell_script_build_phases.find { |bp| bp.name == "Copy Pods Resources" }
-        phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Pods-resources.sh\""
+        phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Generated/Pods-resources.sh\""
       end
 
       it 'adds a Check Manifest.lock build phase to each target' do
         target = @target_integrator.native_targets.first
         phase = target.shell_script_build_phases.find { |bp| bp.name == "Check Pods Manifest.lock" }
         phase.shell_script.should == <<-EOS.strip_heredoc
-          diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          diff "${PODS_ROOT}/../../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
           if [[ $? != 0 ]] ; then
               cat << EOM
           error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.

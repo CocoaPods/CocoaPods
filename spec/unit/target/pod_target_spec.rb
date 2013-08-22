@@ -41,24 +41,24 @@ module Pod
 
     describe "Support files" do
       it "returns the absolute path of the xcconfig file" do
-        @pod_target.xcconfig_path.to_s.should.include 'Pods/Pods-BananaLib.xcconfig'
+        @pod_target.xcconfig_path.to_s.should.include 'Pods/Generated/Pods-BananaLib.xcconfig'
       end
 
       it "returns the absolute path of the target header file" do
-        @pod_target.target_environment_header_path.to_s.should.include 'Pods/Pods-environment.h'
+        @pod_target.target_environment_header_path.to_s.should.include 'Pods/Generated/Pods-environment.h'
       end
 
       it "returns the absolute path of the prefix header file" do
-        @pod_target.prefix_header_path.to_s.should.include 'Pods/Pods-BananaLib-prefix.pch'
+        @pod_target.prefix_header_path.to_s.should.include 'Pods/Generated/Pods-BananaLib-prefix.pch'
       end
 
       it "returns the absolute path of the bridge support file" do
-        @pod_target.bridge_support_path.to_s.should.include 'Pods/Pods-BananaLib.bridgesupport'
+        @pod_target.bridge_support_path.to_s.should.include 'Pods/Generated/Pods-BananaLib.bridgesupport'
       end
 
       it "returns the absolute path of the public and private xcconfig files" do
-        @pod_target.xcconfig_path.to_s.should.include 'Pods/Pods-BananaLib.xcconfig'
-        @pod_target.xcconfig_private_path.to_s.should.include 'Pods/Pods-BananaLib-Private.xcconfig'
+        @pod_target.xcconfig_path.to_s.should.include 'Pods/Generated/Pods-BananaLib.xcconfig'
+        @pod_target.xcconfig_private_path.to_s.should.include 'Pods/Generated/Pods-BananaLib-Private.xcconfig'
       end
     end
 

@@ -62,7 +62,7 @@ module Pod
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           saved.projpaths.should == [
             "SampleProject/SampleProject.xcodeproj",
-            "Pods/Pods.xcodeproj"
+            "Pods/Generated/Pods.xcodeproj"
           ]
         end
 
@@ -74,14 +74,14 @@ module Pod
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           saved.projpaths.should == [
             "SampleProject/SampleProject.xcodeproj",
-            "Pods/Pods.xcodeproj"
+            "Pods/Generated/Pods.xcodeproj"
           ]
         end
 
         it "doesn't write the workspace if not needed" do
           projpaths = [
             "SampleProject/SampleProject.xcodeproj",
-            "Pods/Pods.xcodeproj"
+            "Pods/Generated/Pods.xcodeproj"
           ]
           workspace = Xcodeproj::Workspace.new(projpaths)
           workspace_path = @integrator.send(:workspace_path)
@@ -99,13 +99,13 @@ module Pod
           saved.projpaths.should == [
             'user_added_project.xcodeproj',
             "SampleProject/SampleProject.xcodeproj",
-            "Pods/Pods.xcodeproj"
+            "Pods/Generated/Pods.xcodeproj"
           ]
         end
 
         it "preserves the order of the projects in the workspace" do
           projpaths = [
-            "Pods/Pods.xcodeproj",
+            "Pods/Generated/Pods.xcodeproj",
             "SampleProject/SampleProject.xcodeproj",
           ]
           workspace = Xcodeproj::Workspace.new(projpaths)
@@ -114,7 +114,7 @@ module Pod
           @integrator.send(:create_workspace)
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           saved.projpaths.should == [
-            "Pods/Pods.xcodeproj",
+            "Pods/Generated/Pods.xcodeproj",
             "SampleProject/SampleProject.xcodeproj",
           ]
         end

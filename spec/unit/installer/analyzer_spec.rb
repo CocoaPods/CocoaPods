@@ -82,7 +82,7 @@ module Pod
           'Pods-SVPullToRefresh',
           'Pods-libextobjc'
         ].sort
-        target.support_files_root.should == config.sandbox.root
+        target.support_files_root.should == config.sandbox.generated_dir_root
 
         target.user_project_path.to_s.should.include 'SampleProject/SampleProject'
         target.client_root.to_s.should.include 'SampleProject'

@@ -25,7 +25,7 @@ module Pod
         @installer.install!
         file_ref = @installer.pods_project['Pods/BananaLib/Source Files/Banana.m']
         file_ref.should.be.not.nil
-        file_ref.path.should == "../../spec/fixtures/banana-lib/Classes/Banana.m"
+        file_ref.path.should == "../../../spec/fixtures/banana-lib/Classes/Banana.m"
       end
 
       it "adds the files references of the local Pods in a dedicated group" do
@@ -47,7 +47,7 @@ module Pod
         @installer.install!
         file_ref = @installer.pods_project['Pods/BananaLib/Resources/logo-sidebar.png']
         file_ref.should.be.not.nil
-        file_ref.path.should == "../../spec/fixtures/banana-lib/Resources/logo-sidebar.png"
+        file_ref.path.should == "../../../spec/fixtures/banana-lib/Resources/logo-sidebar.png"
       end
 
       it "links the build headers" do

@@ -69,6 +69,7 @@ module Pod
       @checkout_sources = {}
       @local_pods = {}
       FileUtils.mkdir_p(@root)
+      FileUtils.mkdir_p(generated_dir_root)
     end
 
     # @return [Lockfile] the manifest which contains the information about the
@@ -81,14 +82,6 @@ module Pod
     # @return [Project] the Pods project.
     #
     attr_accessor :project
-
-    # Removes the sandbox.
-    #
-    # @return [void]
-    #
-    def implode
-      root.rmtree
-    end
 
     # Removes the files of the Pod with the given name from the sandbox.
     #
@@ -119,13 +112,13 @@ module Pod
     # @return [Pathname] the path of the manifest.
     #
     def manifest_path
-      root + "Manifest.lock"
+      generated_dir_root + "Manifest.lock"
     end
 
     # @return [Pathname] the path of the Pods project.
     #
     def project_path
-      root + "Pods.xcodeproj"
+      generated_dir_root + "Pods.xcodeproj"
     end
 
     # Returns the path for the directory where to store the support files of
@@ -138,7 +131,7 @@ module Pod
     #
     def library_support_files_dir(name)
       # root + "Target Support Files/#{name}"
-      root
+      generated_dir_root
     end
 
     # Returns the path where the Pod with the given name is stored, taking into
@@ -154,16 +147,27 @@ module Pod
       if local?(root_name)
         Pathname.new(local_pods[root_name])
       else
-        # root + "Sources/#{name}"
-        root + root_name
+        sources_root + root_name
       end
     end
 
-    # @return [Pathname] the directory where to store the documentation.
+    # @return [Pathname]
     #
-    def documentation_dir
-      root + 'Documentation'
+    def generated_dir_root
+      root + 'Generated'
     end
+
+    # @return [Pathname]
+    #
+    def headers_root
+      generated_dir_root + 'Headers'
+    end
+
+    def sources_root
+      generated_dir_root + 'Sources'
+    end
+
+
 
     #-------------------------------------------------------------------------#
 
@@ -192,7 +196,7 @@ module Pod
     #
     def specifications_dir(external_source = false)
       # root + "Specifications"
-      root + "Local Podspecs"
+      generated_dir_root + "Local Podspecs"
     end
 
     # Returns the path of the specification for the Pod with the
