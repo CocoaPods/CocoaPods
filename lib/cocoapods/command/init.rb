@@ -11,6 +11,11 @@ module Pod
         an Xcode project file is specified or if there is only a single project
         file in the current directory, targets will be automatically generated
         based on targets defined in the project.
+
+        It is possible to specify a list of dependencies which will be used by
+        the template in the `Podfile.default` (normal targets) `Podfile.test`
+        (test targets) files which should be stored in the
+        `~/.cocoapods/templates` folder.
       DESC
       self.arguments = '[XCODEPROJ]'
 
