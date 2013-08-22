@@ -73,13 +73,14 @@ module Pod
 
         open(config.default_podfile_path, 'w') { |f| f << "pod 'AFNetworking'" }
 
-        Xcodeproj::Project.new.save_as(temporary_directory + 'test.xcodeproj')
+        project = Xcodeproj::Project.new
+        project.new_target(:application, 'AppA', :ios)
+        project.save_as(temporary_directory + 'test.xcodeproj')
 
         run_command('init')
 
-        config.podfile.nil?.should == false
-        config.podfile.dependencies.length.should == 1
-        config.podfile.dependencies.first.name.should == "AFNetworking"
+        dependencies = config.podfile.target_definitions["AppA"].dependencies
+        dependencies.map(&:name).should == ["AFNetworking"]
       end
     end
 
@@ -97,9 +98,8 @@ module Pod
 
         run_command('init')
 
-        config.podfile.nil?.should == false
-        config.podfile.dependencies.length.should == 1
-        config.podfile.dependencies.first.name.should == "Kiwi"
+        dependencies = config.podfile.target_definitions["AppTests"].dependencies
+        dependencies.map(&:name).should == ["Kiwi"]
       end
     end
 
