@@ -294,7 +294,7 @@ module Pod
     #
     def prepare_pods_project
       UI.message "- Creating Pods project" do
-        @pods_project = Pod::Project.new(sandbox)
+        @pods_project = Pod::Project.new(sandbox, analysis_result.all_user_build_configurations)
         if config.podfile_path
           @pods_project.add_podfile(config.podfile_path)
         end

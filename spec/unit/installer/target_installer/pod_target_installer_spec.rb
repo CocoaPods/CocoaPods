@@ -9,7 +9,8 @@ module Pod
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions['Pods']
-        @project = Project.new(config.sandbox)
+        user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
+        @project = Project.new(config.sandbox, user_build_configurations)
 
         config.sandbox.project = @project
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
@@ -19,7 +20,7 @@ module Pod
 
         @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
         @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-        @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
+        @pod_target.user_build_configurations = user_build_configurations
         @pod_target.file_accessors = [file_accessor]
 
         @pod_target.aggregate_target = AggregateTarget.new(@target_definition, config.sandbox)

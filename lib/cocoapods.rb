@@ -1,6 +1,5 @@
 require 'rubygems'
-
-autoload :Xcodeproj, 'xcodeproj'
+require 'xcodeproj'
 
 module Pod
   require 'pathname'

@@ -4,6 +4,45 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
+* Create all necessary build configurations for *Pods.xcodeproj* at the project level. If the user’s project has more than just *Debug* and *Release* build configurations, they may be explicitly specified in the Podfile:  
+`xcodeproj 'MyApp', 'App Store' => :release, 'Debug' => :debug, 'Release' => :release`  
+  If build configurations aren’t specified in the Podfile then they will be automatically picked from the user’s project in *Release* mode.  
+  These changes will ensure that the `libPods.a` static library is not stripped for all configurations, as explained in [#1217](https://github.com/CocoaPods/CocoaPods/pull/1217).  
+  [Cédric Luthi](https://github.com/0xced)  
+  [#1294](https://github.com/CocoaPods/CocoaPods/issues/1294)
+
+* Added `pod init` command which generates a Podfile according to the
+  targets of the project stored in the working directory and to the templates
+  stored in the `~/.cocoapods/templates` folder. Tow templates are supported: 
+    - the `Podfile.default` template for regular targets.
+    - and the `Podfile.test` template for test targets.  
+  [Ian Ynda-Hummel](https://github.com/ianyh)
+  [#1106](https://github.com/CocoaPods/CocoaPods/issues/1106)  
+  [#1045](https://github.com/CocoaPods/CocoaPods/issues/1045)  
+
+* CocoaPods will now leverage the [xcproj](https://github.com/0xced/xcproj)
+  command line tool if available in the path of the user to touch saved
+  projects. This will result in projects being serialized in the exact format
+  used by Xcode eliminating merge conflicts and other related issues. To learn
+  more about how to install xcproj see its
+  [readme](https://github.com/0xced/xcproj).  
+  [Cédric Luthi](https://github.com/0xced)  
+  [#1275](https://github.com/CocoaPods/CocoaPods/issues/1275)  
+
+###### Bug Fixes
+
+* Fixed crash in `pod spec cat`.
+
+* Use the `TARGET_BUILD_DIR` environment variable for installing resource bundles.  
+  [Cédric Luthi](https://github.com/0xced)  
+  [#1268](https://github.com/CocoaPods/CocoaPods/issues/1268)  
+
+
+## 0.23.0
+
+
 ## 0.23.0.rc1
 
 ###### Enhancements
@@ -59,7 +98,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1155](https://github.com/CocoaPods/CocoaPods/issues/1155)
 
 * Removed punctuation check from the specification validations.  
-  [#1155](https://github.com/CocoaPods/CocoaPods/issues/1155)
+  [#1242](https://github.com/CocoaPods/CocoaPods/issues/1242)
 
 * Deprecated the `documentation` attribute of the Specification DSL.  
   [Core#20](https://github.com/CocoaPods/Core/issues/20)

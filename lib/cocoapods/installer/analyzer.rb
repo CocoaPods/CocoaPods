@@ -125,6 +125,16 @@ module Pod
         #
         attr_accessor :targets
 
+        # @return [Hash{String=>Symbol}] A hash representing all the user build
+        #         configurations across all integration targets. Each key
+        #         corresponds to the name of a configuration and its value to
+        #         its type (`:debug` or `:release`).
+        #
+        def all_user_build_configurations
+          targets.inject({}) do |result, target|
+            result.merge(target.user_build_configurations)
+          end
+        end
       end
 
 
@@ -369,7 +379,6 @@ module Pod
       private
 
       # @!group Analysis internal products
-
       #-----------------------------------------------------------------------#
 
       # @return [Array<Dependency>] the dependencies generate by the lockfile

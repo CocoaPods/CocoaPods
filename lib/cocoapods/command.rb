@@ -20,6 +20,7 @@ module Pod
     require 'cocoapods/command/search'
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
+    require 'cocoapods/command/init'
 
     self.abstract_command = true
     self.default_subcommand = 'install'
