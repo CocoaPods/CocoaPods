@@ -6,6 +6,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
+* Create all necessary build configurations for *Pods.xcodeproj* at the project level. If the user’s project has more than just *Debug* and *Release* build configurations, they may be explicitly specified in the Podfile:  
+`xcodeproj 'MyApp', 'App Store' => :release, 'Debug' => :debug, 'Release' => :release`  
+  If build configurations aren’t specified in the Podfile then they will be automatically picked from the user’s project in *Release* mode.  
+  These changes will ensure that the `libPods.a` static library is not stripped for all configurations, as explained in [#1217](https://github.com/CocoaPods/CocoaPods/pull/1217).  
+  [Cédric Luthi](https://github.com/0xced)  
+  [#1294](https://github.com/CocoaPods/CocoaPods/issues/1294)
+
 * Added `pod init` command which generates a Podfile according to the
   targets of the project stored in the working directory and to the templates
   stored in the `~/.cocoapods/templates` folder. Tow templates are supported: 
@@ -20,7 +27,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   projects. This will result in projects being serialized in the exact format
   used by Xcode eliminating merge conflicts and other related issues. To learn
   more about how to install xcproj see its
-  [readme](https://github.com/0xced/xcproj).
+  [readme](https://github.com/0xced/xcproj).  
   [Cédric Luthi](https://github.com/0xced)  
   [#1275](https://github.com/CocoaPods/CocoaPods/issues/1275)  
 

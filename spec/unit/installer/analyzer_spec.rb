@@ -89,7 +89,7 @@ module Pod
         target.user_target_uuids.should == ["A346496C14F9BE9A0080D870"]
         user_proj = Xcodeproj::Project.new(target.user_project_path)
         user_proj.objects_by_uuid[target.user_target_uuids.first].name.should == 'SampleProject'
-        target.user_build_configurations.should == {"Test"=>:release, "App Store"=>:release}
+        target.user_build_configurations.should == { "Test" => :release, "App Store" => :release }
         target.platform.to_s.should == 'iOS 6.0'
       end
 
@@ -101,6 +101,12 @@ module Pod
         target.user_target_uuids.should == []
         target.user_build_configurations.should == {}
         target.platform.to_s.should == 'iOS 6.0'
+      end
+
+      it "returns all the configurations the user has in any of its projects and/or targets" do
+        target_definition = @analyzer.podfile.target_definition_list.first
+        target_definition.stubs(:build_configurations).returns("AdHoc" => :test)
+        @analyzer.analyze.all_user_build_configurations.should == { "AdHoc" => :test, "Test" => :release, "App Store" => :release }
       end
 
       #--------------------------------------#
@@ -313,7 +319,6 @@ module Pod
           configurations = @analyzer.send(:compute_user_build_configurations, target_definition, user_targets)
           configurations.should == { 'AppStore' => :release }
         end
-
 
         it "returns the user build configurations specified in the target definition" do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
