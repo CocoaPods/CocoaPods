@@ -12,8 +12,7 @@ module Pod
     project_name = 'SampleProject'
 
     before do
-      Config.instance = nil
-      def Dir.pwd; '~/code/OSS/SampleProject'; end
+      Dir.stubs(:pwd).returns('~/code/OSS/SampleProject')
 
       @config_file_path = temporary_directory + "mock_config"
       Command::Config.send(:remove_const, 'CONFIG_FILE_PATH')
@@ -47,8 +46,7 @@ module Pod
           lambda { run_command("config", "--local", 'ObjectiveSugar') },
           lambda { run_command("config", "--global", 'ObjectiveSugar') },
           lambda { run_command("config", '~/code/OSS/ObjectiveSugar') },
-        ]
-        .each { |invalid| invalid.should.raise CLAide::Help }
+        ].each { |invalid| invalid.should.raise CLAide::Help }
       end
 
       it "deletes local configuration by default" do

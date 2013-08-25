@@ -100,7 +100,7 @@ module Pod
       end
 
       def write_config_to_file
-        File.write(CONFIG_FILE_PATH, config_hash.delete_blank.to_yaml)
+        File.open(CONFIG_FILE_PATH, 'w') { |f| f.write(config_hash.delete_blank.to_yaml) }
       end
 
     end
