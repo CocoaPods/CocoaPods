@@ -48,7 +48,7 @@ module Pod
           dates, groups = {}, {}
           days.each {|d| dates[d] = Time.now - 60 * 60 * 24 * d}
           sets = SourcesManager.all_sets
-          statistics_provider = Config.instance.spec_statistics_provider
+          statistics_provider = Pod::Config.instance.spec_statistics_provider
           creation_dates = statistics_provider.creation_dates(sets)
 
           sets.each do |set|
