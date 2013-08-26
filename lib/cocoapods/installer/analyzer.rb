@@ -169,7 +169,7 @@ module Pod
 
           if config.integrate_targets?
             project_path = compute_user_project_path(target_definition)
-            user_project = Xcodeproj::Project.new(project_path)
+            user_project = Xcodeproj::Project.open(project_path)
             native_targets = compute_user_project_targets(target_definition, user_project)
 
             target.user_project_path = project_path
@@ -449,7 +449,7 @@ module Pod
         podfile.target_definition_list.each do |target_definition|
           if config.integrate_targets?
             project_path = compute_user_project_path(target_definition)
-            user_project = Xcodeproj::Project.new(project_path)
+            user_project = Xcodeproj::Project.open(project_path)
             targets = compute_user_project_targets(target_definition, user_project)
             platform = compute_platform_for_target_definition(target_definition, targets)
           else

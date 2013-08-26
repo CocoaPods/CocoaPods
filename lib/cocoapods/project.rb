@@ -18,20 +18,14 @@ module Pod
     # @param  [Sandbox] sandbox @see #sandbox
     #
     def initialize(sandbox, build_configurations)
-      super(nil, build_configurations) # Recreate the project from scratch for now.
+      super(sandbox.project_path, build_configurations) # Recreate the project from scratch for now.
       # TODO
       raise unless sandbox.is_a?(Sandbox)
       @sandbox = sandbox
-      @path = sandbox.project_path
       @support_files_group = new_group('Targets Support Files')
 
       @refs_by_absolute_path = {}
     end
-
-    # @return [Pathname] the path of the xcodeproj file which stores the
-    #         project.
-    #
-    attr_reader :path
 
     # @return [Pathname] the directory where the project is stored.
     #

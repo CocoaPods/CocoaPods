@@ -17,8 +17,8 @@ module Pod
 
     it "complains if more than one project exists and none is specified" do
       Dir.chdir(temporary_directory) do
-        Xcodeproj::Project.new.save_as(temporary_directory + 'test1.xcodeproj')
-        Xcodeproj::Project.new.save_as(temporary_directory + 'test2.xcodeproj')
+        Xcodeproj::Project.new('path').save_as(temporary_directory + 'test1.xcodeproj')
+        Xcodeproj::Project.new('path').save_as(temporary_directory + 'test2.xcodeproj')
         lambda { run_command('init') }.should.raise Informative
       end
     end
@@ -26,14 +26,14 @@ module Pod
     it "complains if a Podfile already exists" do
       Dir.chdir(temporary_directory) do
         (Pathname.pwd + 'Podfile').open('w') { |f| f << "pod 'AFNetworking'" }
-        Xcodeproj::Project.new.save_as(temporary_directory + 'test1.xcodeproj')
+        Xcodeproj::Project.new('path').save_as(temporary_directory + 'test1.xcodeproj')
         lambda { run_command('init') }.should.raise Informative
       end
     end
 
     it "creates a Podfile for a project in current directory" do
       Dir.chdir(temporary_directory) do
-        Xcodeproj::Project.new.save_as(temporary_directory + 'test1.xcodeproj')
+        Xcodeproj::Project.new('path').save_as(temporary_directory + 'test1.xcodeproj')
         run_command('init')
         Pathname.new(temporary_directory + 'Podfile').exist?.should == true
       end
@@ -41,8 +41,8 @@ module Pod
 
     it "creates a Podfile for a specified project" do
       Dir.chdir(temporary_directory) do
-        Xcodeproj::Project.new.save_as(temporary_directory + 'test1.xcodeproj')
-        Xcodeproj::Project.new.save_as(temporary_directory + 'test2.xcodeproj')
+        Xcodeproj::Project.new('path').save_as(temporary_directory + 'test1.xcodeproj')
+        Xcodeproj::Project.new('path').save_as(temporary_directory + 'test2.xcodeproj')
         run_command('init', 'test2.xcodeproj')
         Pathname.new(temporary_directory + 'Podfile').exist?.should == true
         config.podfile.nil?.should == false
@@ -51,7 +51,7 @@ module Pod
 
     it "creates a Podfile with targets from the project" do
       Dir.chdir(temporary_directory) do
-        project = Xcodeproj::Project.new
+        project = Xcodeproj::Project.new('path')
         target1 = project.new_target(:application, "AppA", :ios)
         target2 = project.new_target(:application, "AppB", :ios)
         project.save_as(temporary_directory + 'test.xcodeproj')
@@ -73,7 +73,7 @@ module Pod
 
         open(config.default_podfile_path, 'w') { |f| f << "pod 'AFNetworking'" }
 
-        project = Xcodeproj::Project.new
+        project = Xcodeproj::Project.new('path')
         project.new_target(:application, 'AppA', :ios)
         project.save_as(temporary_directory + 'test.xcodeproj')
 
@@ -92,7 +92,7 @@ module Pod
 
         open(config.default_test_podfile_path, 'w') { |f| f << "pod 'Kiwi'" }
 
-        project = Xcodeproj::Project.new
+        project = Xcodeproj::Project.new('path')
         project.new_target(:application, "AppTests", :ios)
         project.save_as(temporary_directory + 'test.xcodeproj')
 
@@ -111,7 +111,7 @@ module Pod
 
         open(config.default_test_podfile_path, 'w') { |f| f << "pod 'Kiwi'" }
 
-        project = Xcodeproj::Project.new
+        project = Xcodeproj::Project.new('path')
         project.new_target(:application, "App", :ios)
         project.save_as(temporary_directory + 'test.xcodeproj')
 

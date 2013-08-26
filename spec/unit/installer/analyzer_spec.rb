@@ -87,7 +87,7 @@ module Pod
         target.user_project_path.to_s.should.include 'SampleProject/SampleProject'
         target.client_root.to_s.should.include 'SampleProject'
         target.user_target_uuids.should == ["A346496C14F9BE9A0080D870"]
-        user_proj = Xcodeproj::Project.new(target.user_project_path)
+        user_proj = Xcodeproj::Project.open(target.user_project_path)
         user_proj.objects_by_uuid[target.user_target_uuids.first].name.should == 'SampleProject'
         target.user_build_configurations.should == { "Test" => :release, "App Store" => :release }
         target.platform.to_s.should == 'iOS 6.0'
@@ -231,7 +231,7 @@ module Pod
         it "does not take aggregate targets into consideration" do
           aggregate_class = Xcodeproj::Project::Object::PBXAggregateTarget
           sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-          sample_project = Xcodeproj::Project.new(sample_project_path)
+          sample_project = Xcodeproj::Project.open(sample_project_path)
           sample_project.targets.map(&:class).should.include(aggregate_class)
 
           native_targets = @analyzer.send(:native_targets, sample_project).map(&:class)
@@ -246,7 +246,7 @@ module Pod
         it "returns the targets specified in the target definition" do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.link_with = ['UserTarget']
-          user_project = Xcodeproj::Project.new
+          user_project = Xcodeproj::Project.new('path')
           user_project.new_target(:application, 'FirstTarget', :ios)
           user_project.new_target(:application, 'UserTarget', :ios)
 
@@ -257,7 +257,7 @@ module Pod
         it "raises if it is unable to find the targets specified by the target definition" do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.link_with = ['UserTarget']
-          user_project = Xcodeproj::Project.new
+          user_project = Xcodeproj::Project.new('path')
 
           e = lambda { @analyzer.send(:compute_user_project_targets, target_definition, user_project) }.should.raise Informative
           e.message.should.match /Unable to find the targets/
@@ -265,7 +265,7 @@ module Pod
 
         it "returns the target with the same name of the target definition" do
           target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
-          user_project = Xcodeproj::Project.new
+          user_project = Xcodeproj::Project.new('path')
           user_project.new_target(:application, 'FirstTarget', :ios)
           user_project.new_target(:application, 'UserTarget', :ios)
 
@@ -275,8 +275,7 @@ module Pod
 
         it "raises if the name of the target definition does not match any file" do
           target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
-          user_project = Xcodeproj::Project.new
-
+          user_project = Xcodeproj::Project.new('path')
           e = lambda { @analyzer.send(:compute_user_project_targets, target_definition, user_project) }.should.raise Informative
           e.message.should.match /Unable to find a target named/
         end
@@ -284,7 +283,7 @@ module Pod
         it "returns the first target of the project if the target definition is named default" do
           target_definition = Podfile::TargetDefinition.new('Pods', nil)
           target_definition.link_with_first_target = true
-          user_project = Xcodeproj::Project.new
+          user_project = Xcodeproj::Project.new('path')
           user_project.new_target(:application, 'FirstTarget', :ios)
           user_project.new_target(:application, 'UserTarget', :ios)
 
@@ -294,8 +293,7 @@ module Pod
 
         it "raises if the default target definition cannot be linked because there are no user targets" do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
-          user_project = Xcodeproj::Project.new
-
+          user_project = Xcodeproj::Project.new('path')
           e = lambda { @analyzer.send(:compute_user_project_targets, target_definition, user_project) }.should.raise Informative
           e.message.should.match /Unable to find a target/
         end
@@ -307,7 +305,7 @@ module Pod
       describe "#compute_user_build_configurations" do
 
         it "returns the user build configurations of the user targets" do
-          user_project = Xcodeproj::Project.new
+          user_project = Xcodeproj::Project.new('path')
           target = user_project.new_target(:application, 'Target', :ios)
           configuration = user_project.new(Xcodeproj::Project::Object::XCBuildConfiguration)
           configuration.name = 'AppStore'
@@ -345,7 +343,7 @@ module Pod
         end
 
         it "infers the platform from the user targets" do
-          user_project = Xcodeproj::Project.new
+          user_project = Xcodeproj::Project.new('path')
           target = user_project.new_target(:application, 'Target', :ios)
           configuration = target.build_configuration_list.build_configurations.first
           configuration.build_settings = {
@@ -361,7 +359,7 @@ module Pod
         end
 
         it "uses the lowest deployment target of the user targets if inferring the platform" do
-          user_project = Xcodeproj::Project.new
+          user_project = Xcodeproj::Project.new('path')
           target1 = user_project.new_target(:application, 'Target', :ios)
           configuration1 = target1.build_configuration_list.build_configurations.first
           configuration1.build_settings = {
@@ -383,7 +381,7 @@ module Pod
         end
 
         it "raises if the user targets have a different platform" do
-          user_project = Xcodeproj::Project.new
+          user_project = Xcodeproj::Project.new('path')
           target1 = user_project.new_target(:application, 'Target', :ios)
           configuration1 = target1.build_configuration_list.build_configurations.first
           configuration1.build_settings = {

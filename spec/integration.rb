@@ -111,7 +111,7 @@ end
 #
 def run_post_execution_actions(folder)
   Dir.glob("#{TMP_DIR + folder}/**/*.xcodeproj") do |project_path|
-    xcodeproj = Xcodeproj::Project.new(project_path)
+    xcodeproj = Xcodeproj::Project.open(project_path)
     require 'yaml'
     pretty_print = xcodeproj.pretty_print
     sections = []
@@ -225,8 +225,8 @@ end
 # @param [Pathname] produced @see #yaml_should_match
 #
 # def xcodeproj_should_match(expected, produced)
-#   expected_proj = Xcodeproj::Project.new(expected + '..')
-#   produced_proj = Xcodeproj::Project.new(produced + '..')
+#   expected_proj = Xcodeproj::Project.open(expected + '..')
+#   produced_proj = Xcodeproj::Project.open(produced + '..')
 #   diff = produced_proj.to_tree_hash.recursive_diff(expected_proj.to_tree_hash, "#produced#", "#reference#")
 #   desc = "Project comparison error `#{expected}`"
 #   if diff

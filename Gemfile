@@ -9,7 +9,7 @@ group :development do
   # To develop the deps in tandem use the `LOCAL GIT REPOS` feature of Bundler.
   # For more info see http://bundler.io/git.html#local
   gem 'cocoapods-core',       :git => "https://github.com/CocoaPods/Core.git", :branch => 'master'
-  gem 'xcodeproj',            :git => "https://github.com/CocoaPods/Xcodeproj.git", :branch => 'master'
+  gem 'xcodeproj',            :git => "https://github.com/CocoaPods/Xcodeproj.git", :branch => 'paths-refactor'
   gem 'cocoapods-downloader', :git => "https://github.com/CocoaPods/cocoapods-downloader.git", :branch => 'master'
   gem 'claide',               :git => 'https://github.com/CocoaPods/CLAide.git', :branch => 'master'
 

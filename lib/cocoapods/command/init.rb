@@ -36,7 +36,7 @@ module Pod
           raise Informative, "Multiple xcode projects found, please specify one" unless @project_paths.length == 1
           @project_path = @project_paths.first
         end
-        @xcode_project = Xcodeproj::Project.new(@project_path)
+        @xcode_project = Xcodeproj::Project.open(@project_path)
       end
 
       def run

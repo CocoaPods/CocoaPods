@@ -398,7 +398,7 @@ module Pod
         pod_target = PodTarget.new([spec], lib_definition, config.sandbox)
         target.pod_targets = [pod_target]
 
-        project = Xcodeproj::Project.new
+        project = Xcodeproj::Project.new('path')
         pods_target = project.new_target(:static_library, target.name, :ios)
         native_target = project.new_target(:static_library, pod_target.name, :ios)
         @installer.stubs(:pods_project).returns(project)

@@ -66,14 +66,14 @@ module Pod
         # other TargetIntegrators might have modified it.
         #
         def user_project
-          @user_project ||= Xcodeproj::Project.new(target.user_project_path)
+          @user_project ||= Xcodeproj::Project.open(target.user_project_path)
         end
 
         # Read the pods project from the disk to ensure that it is up to date as
         # other TargetIntegrators might have modified it.
         #
         def pods_project
-          @pods_project ||= Xcodeproj::Project.new(target.sandbox.project_path)
+          @pods_project ||= Xcodeproj::Project.open(target.sandbox.project_path)
         end
 
         # @return [String] a string representation suitable for debugging.

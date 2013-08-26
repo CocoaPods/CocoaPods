@@ -17,7 +17,7 @@ module Pod
           end
         end
         config.sandbox.project = Project.new(config.sandbox, nil)
-        Xcodeproj::Project.new.save_as(config.sandbox.project_path)
+        Xcodeproj::Project.new('path').save_as(config.sandbox.project_path)
         @library = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
         @library.client_root = sample_project_path.dirname
         @library.user_project_path  = sample_project_path
@@ -39,7 +39,7 @@ module Pod
 
         it "integrates the user targets" do
           @integrator.integrate!
-          user_project = Xcodeproj::Project.new(@sample_project_path)
+          user_project = Xcodeproj::Project.open(@sample_project_path)
           target = user_project.objects_by_uuid[@library.user_target_uuids.first]
           target.frameworks_build_phase.files.map(&:display_name).should.include('libPods.a')
         end
