@@ -348,7 +348,7 @@ module Pod
 
         it "saves the project to the given path" do
           path = temporary_directory + 'Pods/Pods.xcodeproj'
-          @installer.pods_project.expects(:save_as).with(path)
+          @installer.pods_project.expects(:save)
           @installer.send(:write_pod_project)
         end
 

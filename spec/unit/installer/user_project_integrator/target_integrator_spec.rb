@@ -13,7 +13,7 @@ module Pod
       before do
         sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
         @sample_project = Xcodeproj::Project.open(sample_project_path)
-        Xcodeproj::Project.new('path').save_as(config.sandbox.project_path)
+        Xcodeproj::Project.new(config.sandbox.project_path).save
         @target = @sample_project.targets.first
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
         target_definition.link_with_first_target = true

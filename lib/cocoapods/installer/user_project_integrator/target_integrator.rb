@@ -32,7 +32,7 @@ module Pod
             add_pods_library
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
-            save_user_project
+            user_project.save
           end
         end
 
@@ -180,14 +180,6 @@ module Pod
             EOS
             phase.show_env_vars_in_log = '0'
           end
-        end
-
-        # Saves the changes to the user project to the disk.
-        #
-        # @return [void]
-        #
-        def save_user_project
-          user_project.save_as(target.user_project_path)
         end
 
         #---------------------------------------------------------------------#
