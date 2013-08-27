@@ -126,8 +126,7 @@ module Pod
       # @return [PBXFileReference] the file reference of the added file.
       #
       def add_file_to_support_group(path)
-        relative_path = path.relative_path_from(sandbox.root)
-        support_files_group.new_file(relative_path)
+        support_files_group.new_file(path)
       end
 
       #-----------------------------------------------------------------------#

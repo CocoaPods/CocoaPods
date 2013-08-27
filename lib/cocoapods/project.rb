@@ -157,7 +157,7 @@ module Pod
         existing = file_reference(file)
         unless existing
           file = Pathname.new(file)
-          ref = group.new_file(relativize(file))
+          ref = group.new_file(file)
           @refs_by_absolute_path[file] = ref
         end
       end
@@ -166,7 +166,7 @@ module Pod
     # TODO: missing customization for file reference
     #
     def add_file_reference(absolute_path, group)
-      ref = group.new_file(relativize(absolute_path))
+      ref = group.new_file(absolute_path)
       @refs_by_absolute_path[absolute_path] = ref
     end
 
@@ -192,7 +192,7 @@ module Pod
     #
     def add_podfile(podfile_path)
       podfile_path = Pathname.new(podfile_path)
-      podfile_ref = new_file(relativize(podfile_path))
+      podfile_ref = new_file(podfile_path)
       podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
       podfile_ref.last_known_file_type = 'text'
       podfile_ref
