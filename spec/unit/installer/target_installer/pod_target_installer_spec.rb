@@ -9,8 +9,7 @@ module Pod
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions['Pods']
-        user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
-        @project = Project.new(config.sandbox, user_build_configurations)
+        @project = Project.new(config.sandbox)
 
         config.sandbox.project = @project
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
@@ -20,9 +19,8 @@ module Pod
 
         @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
         @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-        @pod_target.user_build_configurations = user_build_configurations
         @pod_target.file_accessors = [file_accessor]
-
+        @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
         @installer = Installer::PodTargetInstaller.new(config.sandbox, @pod_target)
 
         @spec.prefix_header_contents = '#import "BlocksKit.h"'
@@ -48,13 +46,6 @@ module Pod
         @project.targets.first.name.should == 'Pods-BananaLib' 
       end
 
-      it "adds the user build configurations to the target" do
-        @installer.install!
-        target = @project.targets.first
-        target.build_settings('Test')["VALIDATE_PRODUCT"].should == nil
-        target.build_settings('AppStore')["VALIDATE_PRODUCT"].should == "YES"
-      end
-
      it "sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets" do
         @installer.install!
         target = @project.targets.first
@@ -67,7 +58,6 @@ module Pod
         target.platform_name.should == :ios
         target.deployment_target.should == "6.0"
         target.build_settings('Debug')["IPHONEOS_DEPLOYMENT_TARGET"].should == "6.0"
-        target.build_settings('AppStore')["IPHONEOS_DEPLOYMENT_TARGET"].should == "6.0"
       end
 
       it "sets the platform and the deployment target for OS X targets" do
@@ -77,10 +67,10 @@ module Pod
         target.platform_name.should == :osx
         target.deployment_target.should == "10.8"
         target.build_settings('Debug')["MACOSX_DEPLOYMENT_TARGET"].should == "10.8"
-        target.build_settings('AppStore')["MACOSX_DEPLOYMENT_TARGET"].should == "10.8"
       end
 
       it "adds the user's build configurations to the target" do
+        @pod_target.user_build_configurations.merge!({ 'AppStore' => :release, 'Test' => :debug })
         @installer.install!
         @project.targets.first.build_configurations.map(&:name).sort.should == %w{ AppStore Debug Release Test }
       end
@@ -88,7 +78,7 @@ module Pod
       it "it creates different hash instances for the build settings of various build configurations" do
         @installer.install!
         build_settings = @project.targets.first.build_configurations.map(&:build_settings)
-        build_settings.map(&:object_id).uniq.count.should == 4
+        build_settings.map(&:object_id).uniq.count.should == 2
       end
 
       it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
