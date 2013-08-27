@@ -9,7 +9,6 @@ module Pod
   #
   class Project < Xcodeproj::Project
 
-
     # @return [Sandbox] the sandbox which returns the information about which
     #         Pods are local.
     #
@@ -18,12 +17,9 @@ module Pod
     # @param  [Sandbox] sandbox @see #sandbox
     #
     def initialize(sandbox)
-      super(sandbox.project_path) # Recreate the project from scratch for now.
-      # TODO
-      raise unless sandbox.is_a?(Sandbox)
+      super(sandbox.project_path)
       @sandbox = sandbox
       @support_files_group = new_group('Targets Support Files')
-
       @refs_by_absolute_path = {}
     end
 
@@ -33,46 +29,17 @@ module Pod
       @root ||= path.dirname
     end
 
-    # @return [Pathname] Returns the relative path from the project root.
-    #
-    # @param  [Pathname] path
-    #         The path that needs to be converted to the relative format.
-    #
-    # @note   If the two absolute paths don't share the same root directory an
-    #         extra `../` is added to the result of
-    #         {Pathname#relative_path_from}.
-    #
-    # @example
-    #
-    #   path = Pathname.new('/Users/dir')
-    #   @sandbox.root #=> Pathname('/tmp/CocoaPods/Lint/Pods')
-    #
-    #   @sandbox.relativize(path) #=> '../../../../Users/dir'
-    #   @sandbox.relativize(path) #=> '../../../../../Users/dir'
-    #
-    def relativize(path)
-      unless path.absolute?
-        raise StandardError, "[Bug] Attempt to add relative path `#{path}` to the Pods project"
-      end
-
-      result = path.relative_path_from(root)
-      unless root.to_s.split('/')[1] == path.to_s.split('/')[1]
-        result = Pathname.new('../') + result
-      end
-      result
-    end
-
     # @return [String] a string representation suited for debugging.
     #
     def inspect
       "#<#{self.class}> path:#{path}"
     end
 
-    #-------------------------------------------------------------------------#
 
     public
 
     # @!group Groups
+    #-------------------------------------------------------------------------#
 
     # @return [PBXGroup] the group where the support files for the Pod
     #         libraries should be added.
@@ -96,16 +63,6 @@ module Pod
       @local_pods ||= new_group('Local Pods')
     end
 
-    # Returns the `Local Pods` group, creating it if needed. This group is used
-    # to contain locally sourced pods.
-    #
-    # @return [PBXGroup] the group.
-    #
-    def resources
-      @resources ||= new_group('Resources')
-    end
-
-
     # @return [PBXGroup] the group for the spec with the given name.
     #
     def group_for_spec(spec_name, type = nil)
@@ -126,11 +83,11 @@ module Pod
       end
     end
 
-    #-------------------------------------------------------------------------#
 
     public
 
     # @!group File references
+    #-------------------------------------------------------------------------#
 
     # Adds a file reference for each one of the given files in the specified
     # group, namespaced by specification unless a file reference for the given
@@ -151,23 +108,13 @@ module Pod
     #
     # @return [void]
     #
-    def add_file_references(absolute_path, spec_name, parent_group)
-      group = group_for_spec(spec_name, :source_files)
-      absolute_path.each do |file|
-        existing = file_reference(file)
-        unless existing
-          file = Pathname.new(file)
-          ref = group.new_file(file)
-          @refs_by_absolute_path[file] = ref
-        end
-      end
-    end
-
-    # TODO: missing customization for file reference
-    #
     def add_file_reference(absolute_path, group)
+      # existing = file_reference(absolute_paths)
+      # unless existing
+      absolute_path = Pathname.new(absolute_path)
       ref = group.new_file(absolute_path)
       @refs_by_absolute_path[absolute_path] = ref
+      # end
     end
 
     # Returns the file reference for the given absolute file path.
@@ -186,9 +133,9 @@ module Pod
     # Adds a file reference to the podfile.
     #
     # @param  [Pathname,String] podfile_path
-    #         the path of the podfile
+    #         The path of the Podfile.
     #
-    # @return [PBXFileReference] the file reference.
+    # @return [PBXFileReference] The file reference.
     #
     def add_podfile(podfile_path)
       podfile_path = Pathname.new(podfile_path)
@@ -198,11 +145,11 @@ module Pod
       podfile_ref
     end
 
-    #-------------------------------------------------------------------------#
 
     private
 
     # @!group Private helpers
+    #-------------------------------------------------------------------------#
 
     # @return [Hash{Pathname => PBXFileReference}] The file references grouped
     #         by absolute path.
@@ -219,7 +166,7 @@ module Pod
     #         The group where to add the specification. Either `Pods` or `Local
     #         Pods`.
     #
-    # @return [PBXGroup] the group for the spec with the given name.
+    # @return [PBXGroup] The group for the spec with the given name.
     #
     def add_spec_group(spec_name, root_group)
       current_group = root_group

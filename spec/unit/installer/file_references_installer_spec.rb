@@ -93,13 +93,13 @@ module Pod
         end
       end
 
-      describe "#add_file_acessors_paths_to_pods_group" do 
+      describe "#add_file_accessors_paths_to_pods_group" do 
         xit "adds the paths of the paths of the file accessor corresponding to the given key to the Pods project" do
 
         end
       end
 
-      describe "#add_file_acessors_paths_to_pods_group" do 
+      describe "#add_file_accessors_paths_to_pods_group" do 
         it "returns the header mappings" do
           headers_sandbox = Pathname.new('BananaLib')
           headers = [Pathname.new('BananaLib/Banana.h')]

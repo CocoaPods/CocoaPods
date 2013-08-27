@@ -15,7 +15,10 @@ module Pod
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
-        @project.add_file_references(file_accessor.source_files, 'BananaLib', @project.pods)
+        group = @project.group_for_spec('BananaLib', :source_files)
+        file_accessor.source_files.each do |file|
+          @project.add_file_reference(file, group)
+        end
 
         @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
         @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
