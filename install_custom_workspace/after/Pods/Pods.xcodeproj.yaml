@@ -50,6 +50,7 @@ Targets:
       - Pods-SampleApp_1-Reachability-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
+      - SystemConfiguration.framework
     - HeadersBuildPhase:
       - Reachability.h
     Build Configurations:
@@ -109,6 +110,7 @@ Targets:
       - Pods-SampleApp_2-Reachability-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
+      - SystemConfiguration.framework
     - HeadersBuildPhase:
       - Reachability.h
     Build Configurations:

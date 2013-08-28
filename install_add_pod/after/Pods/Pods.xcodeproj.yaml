@@ -107,6 +107,7 @@ Targets:
       - Pods-Reachability-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
+      - SystemConfiguration.framework
     - HeadersBuildPhase:
       - Reachability.h
     Build Configurations:
