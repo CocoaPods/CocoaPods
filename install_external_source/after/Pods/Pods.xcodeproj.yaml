@@ -4,19 +4,20 @@ File References:
   - Foundation.framework
 - Pods:
   - PodTest:
+    - Subspecs:
+      - subspec_1:
+        - Source Files:
+          - subspec_1.h
+          - subspec_1.m
+      - subspec_2:
+        - Source Files:
+          - subspec_2.h
+          - subspec_2.m
     - Support Files:
       - Pods-PodTest-Private.xcconfig
       - Pods-PodTest-dummy.m
       - Pods-PodTest-prefix.pch
       - Pods-PodTest.xcconfig
-    - subspec_1:
-      - Source Files:
-        - subspec_1.h
-        - subspec_1.m
-    - subspec_2:
-      - Source Files:
-        - subspec_2.h
-        - subspec_2.m
 - Products:
   - libPods-PodTest.a
   - libPods.a
