@@ -337,13 +337,8 @@ module Pod
           @installer.send(:prepare_pods_project)
         end
 
-        it "sorts the main group" do
-          @installer.pods_project.main_group.expects(:sort_by_type!)
-          @installer.send(:write_pod_project)
-        end
-
-        it "sorts the frameworks group" do
-          @installer.pods_project['Frameworks'].expects(:sort_by_type!)
+        it "recursively sorts the project by type" do
+          @installer.pods_project.main_group.expects(:recursively_sort_by_type)
           @installer.send(:write_pod_project)
         end
 

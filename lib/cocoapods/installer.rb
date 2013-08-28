@@ -390,8 +390,7 @@ module Pod
       UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
         pods_project.pods.remove_from_project if pods_project.pods.empty?
         pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
-        pods_project.main_group.sort_by_type!
-        pods_project['Frameworks'].sort_by_type!
+        pods_project.main_group.recursively_sort_by_type
         pods_project.save
       end
     end
