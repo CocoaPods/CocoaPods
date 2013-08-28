@@ -285,13 +285,23 @@ module Pod
     #
     def prepare_pods_project
       UI.message "- Creating Pods project" do
-        @pods_project = Pod::Project.new(sandbox)
+        @pods_project = Pod::Project.new(sandbox.project_path)
+
         analysis_result.all_user_build_configurations.each do |name, type|
           @pods_project.add_build_configuration(name, type)
         end
+
+        pod_names = pod_targets.map(&:pod_name).uniq
+        pod_names.each do |pod_name|
+          path = sandbox.pod_dir(pod_name)
+          local = sandbox.local?(pod_name)
+          @pods_project.add_pod_group(pod_name, path, local)
+        end
+
         if config.podfile_path
           @pods_project.add_podfile(config.podfile_path)
         end
+
         sandbox.project = @pods_project
         platforms = aggregate_targets.map(&:platform)
         osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
@@ -378,6 +388,8 @@ module Pod
     #
     def write_pod_project
       UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
+        pods_project.pods.remove_from_project if pods_project.pods.empty?
+        pods_project.local_pods.remove_from_project if pods_project.local_pods.empty?
         pods_project.main_group.sort_by_type!
         pods_project['Frameworks'].sort_by_type!
         pods_project.save

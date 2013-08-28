@@ -16,7 +16,7 @@ module Pod
 
           end
         end
-        config.sandbox.project = Project.new(config.sandbox)
+        config.sandbox.project = Project.new(config.sandbox.project_path)
         Xcodeproj::Project.new(config.sandbox.project_path).save
         @library = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
         @library.client_root = sample_project_path.dirname

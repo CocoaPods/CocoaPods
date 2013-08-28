@@ -193,21 +193,26 @@ def yaml_should_match(expected, produced)
   produced_yaml.delete('COCOAPODS')
   desc = []
   desc << "YAML comparison error `#{expected}`"
+
+  desc << ("--- YAML DIFF " << "-" * 65)
+  diffy_diff = ''
+  Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
+    case line
+    when /^\+/ then diffy_diff << line.green
+    when /^-/ then diffy_diff << line.red
+    else diffy_diff << line
+    end
+  end
+  desc << diffy_diff
+
+  desc << ("--- XCODEPROJ DIFF " << "-" * 60)
   diff_options = {:key_1 => "$produced", :key_2 => "$expected"}
   diff = Xcodeproj::Differ.diff(produced_yaml, expected_yaml, diff_options).to_yaml
   diff.gsub!("$produced", "produced".green)
   diff.gsub!("$expected", "expected".red)
-  desc << ("--- DIFF " << "-" * 70)
-  Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
-    case line
-    when /^\+/ then desc << line.gsub("\n",'').green
-    when /^-/ then desc << line.gsub("\n",'').red
-    else desc << line.gsub("\n",'')
-    end
-  end
-  desc << ("--- DIFF " << "-" * 70)
   desc << diff
   desc << ("--- END " << "-" * 70)
+
   expected_yaml.should.satisfy(desc * "\n\n") do
     if RUBY_VERSION < "1.9"
       true # CP is not sorting array derived from hashes whose order is

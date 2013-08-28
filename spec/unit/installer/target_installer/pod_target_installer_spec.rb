@@ -9,12 +9,13 @@ module Pod
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions['Pods']
-        @project = Project.new(config.sandbox)
+        @project = Project.new(config.sandbox.project_path)
 
         config.sandbox.project = @project
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
+        @project.add_pod_group('BananaLib', fixture('banana-lib'))
         group = @project.group_for_spec('BananaLib', :source_files)
         file_accessor.source_files.each do |file|
           @project.add_file_reference(file, group)

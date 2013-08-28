@@ -259,6 +259,7 @@ module Pod
           pod_target_ios.stubs(:platform).returns(Platform.new(:ios, '6.0'))
           pod_target_osx.stubs(:platform).returns(Platform.new(:osx, '10.8'))
           @installer.stubs(:aggregate_targets).returns([pod_target_ios, pod_target_osx])
+          @installer.stubs(:pod_targets).returns([])
           @installer.send(:prepare_pods_project)
           build_settings = @installer.pods_project.build_configurations.map(&:build_settings)
           build_settings.each do |build_setting|

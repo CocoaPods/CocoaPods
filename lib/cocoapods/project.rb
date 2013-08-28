@@ -9,75 +9,105 @@ module Pod
   #
   class Project < Xcodeproj::Project
 
-    # @return [Sandbox] the sandbox which returns the information about which
-    #         Pods are local.
+    # @param  [Pathname, String] path @see path
+    # @param  [Bool] skip_initialization
+    #         Wether the project should be initialized from scratch.
     #
-    attr_reader :sandbox
-
-    # @param  [Sandbox] sandbox @see #sandbox
-    #
-    def initialize(sandbox)
-      super(sandbox.project_path)
-      @sandbox = sandbox
+    def initialize(path, skip_initialization = false)
+      super
       @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
+      @pods = new_group('Pods')
+      @local_pods = new_group('Local Pods')
     end
 
-    # @return [Pathname] the directory where the project is stored.
+    # @return [PBXGroup] The group for the support files of the aggregate
+    #         targets.
     #
-    def root
-      @root ||= path.dirname
-    end
+    attr_reader :support_files_group
 
-    # @return [String] a string representation suited for debugging.
+    # @return [PBXGroup] The group for the Pods.
     #
-    def inspect
-      "#<#{self.class}> path:#{path}"
-    end
+    attr_reader :pods
+
+    # @return [PBXGroup] The group for Local Pods.
+    #
+    attr_reader :local_pods
 
 
     public
 
-    # @!group Groups
+    # @!group Pod Groups
     #-------------------------------------------------------------------------#
 
-    # @return [PBXGroup] the group where the support files for the Pod
-    #         libraries should be added.
+    # Creates a new group for the Pod with the given name and configures its
+    # path.
     #
-    attr_reader :support_files_group
+    # @param  [String] pod_name
+    #         The name of the Pod.
+    #
+    # @param  [#to_s] path
+    #         The path to the root of the Pod.
+    #
+    # @param  [Bool] local
+    #         Wether the group should be added to the Local Pods group.
+    #
+    # @param  [Bool] absolute
+    #         Wether the path of the group should be set as absolute.
+    #
+    # @return [PBXGroup] The new group.
+    #
+    def add_pod_group(pod_name, path, local = false, absolute = false)
+      raise "[BUG]" if pod_group(pod_name)
 
-    # Returns the `Pods` group, creating it if needed.
-    #
-    # @return [PBXGroup] the group.
-    #
-    def pods
-      @pods ||= new_group('Pods')
-    end
-
-    # Returns the `Local Pods` group, creating it if needed. This group is used
-    # to contain locally sourced pods.
-    #
-    # @return [PBXGroup] the group.
-    #
-    def local_pods
-      @local_pods ||= new_group('Local Pods')
-    end
-
-    # @return [PBXGroup] the group for the spec with the given name.
-    #
-    def group_for_spec(spec_name, type = nil)
-      local = sandbox.local?(spec_name)
       parent_group = local ? local_pods : pods
-      spec_group = add_spec_group(spec_name, parent_group)
-      if type
-        case type
-        when :source_files then sub_group = 'Source Files'
-        when :resources then sub_group = 'Resources'
-        when :frameworks_and_libraries then sub_group = 'Frameworks & Libraries'
-        when :support_files then sub_group = 'Support Files'
-        else raise "[BUG]"
-        end
-        spec_group.find_subpath(sub_group, true)
+      source_tree = absolute ? :absolute : :group
+      parent_group.new_group(pod_name, path, source_tree)
+    end
+
+    # @return [Array<PBXGroup>] Returns all the group of the Pods.
+    #
+    def pod_groups
+      pods.children.objects + local_pods.children.objects
+    end
+
+    # Returns the group for the Pod with the given name.
+    #
+    # @param  [String] pod_name
+    #         The name of the Pod.
+    #
+    # @return [PBXGroup] The group.
+    #
+    def pod_group(pod_name)
+      pod_groups.find { |group| group.name == pod_name }
+    end
+
+    # @return [Hash] The names of the specification subgroups by key.
+    #
+    SPEC_SUBGROUPS = {
+      :source_files             => 'Source Files',
+      :resources                => 'Resources',
+      :frameworks_and_libraries => 'Frameworks & Libraries',
+      :support_files            => 'Support Files',
+    }
+
+    # Returns the group for the specification with the give name creating it if
+    # needed.
+    #
+    # @param [String] spec_name
+    #                 The full name of the specification.
+    #
+    # @param [Symbol] subgroup_key
+    #                 The optional key of the subgroup (@see #{SPEC_SUBGROUPS})
+    #
+    # @return [PBXGroup] The group.
+    #
+    def group_for_spec(spec_name, subgroup_key = nil)
+      spec_group = spec_group(spec_name)
+      if subgroup_key
+        subgroup = SPEC_SUBGROUPS[subgroup_key]
+        raise ArgumentError, "Unrecognized subgroup `#{subgroup_key}`" unless subgroup
+        spec_group.find_subpath(subgroup, true)
       else
         spec_group
       end
@@ -89,57 +119,54 @@ module Pod
     # @!group File references
     #-------------------------------------------------------------------------#
 
-    # Adds a file reference for each one of the given files in the specified
-    # group, namespaced by specification unless a file reference for the given
-    # path already exits.
+    # Adds a file reference to given path as a child of the given group.
     #
-    # @note   With this set-up different subspecs might not reference the same
-    #         file (i.e. the first will win). Not sure thought if this is a
-    #         limitation or a feature.
+    # @param  [Array<Pathname,String>] absolute_path
+    #         The path of the file.
     #
-    # @param  [Array<Pathname,String>] paths
-    #         The files for which the file reference is needed.
+    # @param  [PBXGroup] group
+    #         The group for the new file reference.
     #
-    # @param  [String] spec_name
-    #         The full name of the specification.
-    #
-    # @param  [PBXGroup] parent_group
-    #         The group where the file references should be added.
-    #
-    # @return [void]
+    # @return [PBXFileReference] The new file reference.
     #
     def add_file_reference(absolute_path, group)
-      # existing = file_reference(absolute_paths)
-      # unless existing
-      absolute_path = Pathname.new(absolute_path)
-      ref = group.new_file(absolute_path)
-      @refs_by_absolute_path[absolute_path] = ref
-      # end
+      unless Pathname.new(absolute_path).absolute?
+        raise ArgumentError, "Paths must be absolute #{absolute_path}"
+      end
+
+      if ref = reference_for_path(absolute_path)
+        ref
+      else
+        ref = group.new_file(absolute_path)
+        @refs_by_absolute_path[absolute_path.to_s] = ref
+      end
     end
 
-    # Returns the file reference for the given absolute file path.
+    # Returns the file reference for the given absolute path.
     #
-    # @param  [Pathname,String] absolute_path
+    # @param  [#to_s] absolute_path
     #         The absolute path of the file whose reference is needed.
     #
     # @return [PBXFileReference] The file reference.
     # @return [Nil] If no file reference could be found.
     #
-    def file_reference(absolute_path)
-      absolute_path = Pathname.new(absolute_path)
-      refs_by_absolute_path[absolute_path]
+    def reference_for_path(absolute_path)
+      unless Pathname.new(absolute_path).absolute?
+        raise ArgumentError, "Paths must be absolute #{absolute_path}"
+      end
+
+      refs_by_absolute_path[absolute_path.to_s]
     end
 
-    # Adds a file reference to the podfile.
+    # Adds a file reference to the Podfile.
     #
-    # @param  [Pathname,String] podfile_path
+    # @param  [#to_s] podfile_path
     #         The path of the Podfile.
     #
-    # @return [PBXFileReference] The file reference.
+    # @return [PBXFileReference] The new file reference.
     #
     def add_podfile(podfile_path)
-      podfile_path = Pathname.new(podfile_path)
-      podfile_ref = new_file(podfile_path)
+      podfile_ref = new_file(podfile_path, :project)
       podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
       podfile_ref.last_known_file_type = 'text'
       podfile_ref
@@ -151,29 +178,27 @@ module Pod
     # @!group Private helpers
     #-------------------------------------------------------------------------#
 
-    # @return [Hash{Pathname => PBXFileReference}] The file references grouped
+    # @return [Hash{String => PBXFileReference}] The file references grouped
     #         by absolute path.
     #
     attr_reader :refs_by_absolute_path
 
-    # Returns a subgroup of the give group for the given spec creating it if
-    # needed.
+    # Returns the group for the given specification creating it if needed.
     #
     # @param  [String] spec_name
     #         The full name of the specification.
     #
-    # @param  [PBXGroup] root_group
-    #         The group where to add the specification. Either `Pods` or `Local
-    #         Pods`.
-    #
     # @return [PBXGroup] The group for the spec with the given name.
     #
-    def add_spec_group(spec_name, root_group)
-      current_group = root_group
-      group = nil
-      spec_name.split('/').each do |name|
-        group = current_group[name] || current_group.new_group(name)
-        current_group = group
+    def spec_group(spec_name)
+      pod_name = Specification.root_name(spec_name)
+      group = pod_group(pod_name)
+      raise "[Bug] Unable to locate group for Pod named `#{pod_name}`" unless group
+      if spec_name != pod_name
+        subspecs_names = spec_name.gsub(pod_name + '/', '').split('/')
+        subspecs_names.each do |name|
+          group = group[name] || group.new_group(name)
+        end
       end
       group
     end

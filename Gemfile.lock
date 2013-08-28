@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 5f0fc07355716817b7591a859774a93f6773d559
+  revision: c7f6420dd3d0f1a5e3ab3f4983500d5076f85f28
   branch: paths-refactor
   specs:
     xcodeproj (0.9.0)

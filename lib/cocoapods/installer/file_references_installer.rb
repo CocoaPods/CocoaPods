@@ -65,10 +65,6 @@ module Pod
       # @note   The source files are grouped by Pod and in turn by subspec
       #         (recursively).
       #
-      # @note   Pods are generally added to the `Pods` group, however, if they
-      #         have a local source they are added to the
-      #         `Local Pods` group.
-      #
       # @return [void]
       #
       def add_source_files_references

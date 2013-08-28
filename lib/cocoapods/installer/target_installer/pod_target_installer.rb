@@ -40,7 +40,7 @@ module Pod
             consumer = file_accessor.spec_consumer
             flags = compiler_flags_for_consumer(consumer)
             source_files = file_accessor.source_files
-            file_refs = source_files.map { |sf| project.file_reference(sf) }
+            file_refs = source_files.map { |sf| project.reference_for_path(sf) }
             target.add_file_references(file_refs, flags)
 
             file_accessor.spec_consumer.frameworks.each do |framework|
@@ -61,7 +61,7 @@ module Pod
         UI.message "- Adding resource bundles to Pods project" do
           library.file_accessors.each do |file_accessor|
             file_accessor.resource_bundles.each do |bundle_name, paths|
-              file_references = paths.map { |sf| project.file_reference(sf) }
+              file_references = paths.map { |sf| project.reference_for_path(sf) }
               group = project.group_for_spec(file_accessor.spec.name, :resources)
               product_group = project.group_for_spec(file_accessor.spec.name, :resources)
               bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name, product_group)
