@@ -397,12 +397,14 @@ module Pod
         project = Xcodeproj::Project.new('path')
         pods_target = project.new_target(:static_library, target.name, :ios)
         native_target = project.new_target(:static_library, pod_target.name, :ios)
+        pod_target.target = pods_target
+
         @installer.stubs(:pods_project).returns(project)
         @installer.stubs(:aggregate_targets).returns([target])
         @installer.stubs(:pod_targets).returns([pod_target])
 
         @installer.send(:link_aggregate_target)
-        pods_target.frameworks_build_phase.files.map(&:display_name).should.include?(pod_target.product_name)
+        pods_target.frameworks_build_phase.files.map(&:file_ref).should.include?(pod_target.target.product_reference)
       end
 
       it "integrates the client projects" do

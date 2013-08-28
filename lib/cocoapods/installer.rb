@@ -376,7 +376,7 @@ module Pod
         native_target = pods_project.targets.select { |t| t.name == aggregate_target.name }.first
         products = pods_project.products_group
         aggregate_target.pod_targets.each do |pod_target|
-          product = products.files.select { |f| f.path == pod_target.product_name }.first
+          product = pod_target.target.product_reference
           native_target.frameworks_build_phase.add_file_reference(product)
         end
       end
