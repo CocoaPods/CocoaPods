@@ -174,7 +174,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "which subcommand" do
+    describe Command::Spec::Which do
       it "errors if a given podspec doesn't exist" do
         e = lambda { command('spec', 'which', 'some_pod_that_doesnt_exist').run }.should.raise Informative
         e.message.should.match /Unable to find a pod with/
@@ -191,6 +191,40 @@ module Pod
         e.message.should.match /More than one/
       end
     end
+
+    #-------------------------------------------------------------------------#
+
+    describe Command::Spec::Cat do
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe Command::Spec::Edit do
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe "Private helpers" do
+
+      describe "#get_path_of_spec" do
+
+        before do
+          # TODO Use class methods
+          @sut = Command::Spec.new(CLAide::ARGV.new([]))
+
+        end
+
+        it "returns the path of the specification with the given name" do
+          path = @sut.send(:get_path_of_spec, 'AFNetworking')
+          path.should == fixture('spec-repos') + 'master/AFNetworking/1.2.0/AFNetworking.podspec'
+        end
+
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
+
   end
 end
 
