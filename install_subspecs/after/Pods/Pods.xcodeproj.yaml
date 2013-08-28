@@ -5,6 +5,15 @@ File References:
   - Foundation.framework
 - Pods:
   - PodTest:
+    - Support Files:
+      - Pods-OS X App-PodTest-Private.xcconfig
+      - Pods-OS X App-PodTest-dummy.m
+      - Pods-OS X App-PodTest-prefix.pch
+      - Pods-OS X App-PodTest.xcconfig
+      - Pods-iOS App-PodTest-Private.xcconfig
+      - Pods-iOS App-PodTest-dummy.m
+      - Pods-iOS App-PodTest-prefix.pch
+      - Pods-iOS App-PodTest.xcconfig
     - subspec_1:
       - Source Files:
         - subspec_1.h
@@ -15,34 +24,24 @@ File References:
         - subspec_2.m
 - Products:
   - libPods-OS X App-PodTest.a
-  - libPods-iOS App-PodTest.a
   - libPods-OS X App.a
+  - libPods-iOS App-PodTest.a
   - libPods-iOS App.a
 - Targets Support Files:
-  - Pods-OS X App-PodTest:
-    - Pods-OS X App-PodTest.xcconfig
-    - Pods-OS X App-PodTest-Private.xcconfig
-    - Pods-OS X App-PodTest-prefix.pch
-    - Pods-OS X App-PodTest-dummy.m
-  - Pods-iOS App-PodTest:
-    - Pods-iOS App-PodTest.xcconfig
-    - Pods-iOS App-PodTest-Private.xcconfig
-    - Pods-iOS App-PodTest-prefix.pch
-    - Pods-iOS App-PodTest-dummy.m
   - Pods-OS X App:
-    - Pods-OS X App.xcconfig
+    - Pods-OS X App-acknowledgements.markdown
+    - Pods-OS X App-acknowledgements.plist
+    - Pods-OS X App-dummy.m
     - Pods-OS X App-environment.h
     - Pods-OS X App-resources.sh
-    - Pods-OS X App-acknowledgements.plist
-    - Pods-OS X App-acknowledgements.markdown
-    - Pods-OS X App-dummy.m
+    - Pods-OS X App.xcconfig
   - Pods-iOS App:
-    - Pods-iOS App.xcconfig
+    - Pods-iOS App-acknowledgements.markdown
+    - Pods-iOS App-acknowledgements.plist
+    - Pods-iOS App-dummy.m
     - Pods-iOS App-environment.h
     - Pods-iOS App-resources.sh
-    - Pods-iOS App-acknowledgements.plist
-    - Pods-iOS App-acknowledgements.markdown
-    - Pods-iOS App-dummy.m
+    - Pods-iOS App.xcconfig
 - Podfile
 
 

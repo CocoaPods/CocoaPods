@@ -4,6 +4,11 @@ File References:
   - Foundation.framework
 - Pods:
   - PodTest:
+    - Support Files:
+      - Pods-PodTest-Private.xcconfig
+      - Pods-PodTest-dummy.m
+      - Pods-PodTest-prefix.pch
+      - Pods-PodTest.xcconfig
     - subspec_1:
       - Source Files:
         - subspec_1.h
@@ -16,18 +21,13 @@ File References:
   - libPods-PodTest.a
   - libPods.a
 - Targets Support Files:
-  - Pods-PodTest:
-    - Pods-PodTest.xcconfig
-    - Pods-PodTest-Private.xcconfig
-    - Pods-PodTest-prefix.pch
-    - Pods-PodTest-dummy.m
   - Pods:
-    - Pods.xcconfig
+    - Pods-acknowledgements.markdown
+    - Pods-acknowledgements.plist
+    - Pods-dummy.m
     - Pods-environment.h
     - Pods-resources.sh
-    - Pods-acknowledgements.plist
-    - Pods-acknowledgements.markdown
-    - Pods-dummy.m
+    - Pods.xcconfig
 - Podfile
 
 

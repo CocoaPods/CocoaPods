@@ -4,64 +4,62 @@ File References:
   - Foundation.framework
   - SystemConfiguration.framework
 - Pods:
-  - Reachability:
-    - Source Files:
-      - Reachability.h
-      - Reachability.m
   - JSONKit:
     - Source Files:
       - JSONKit.h
       - JSONKit.m
+    - Support Files:
+      - Pods-SampleApp_2-JSONKit-Private.xcconfig
+      - Pods-SampleApp_2-JSONKit-dummy.m
+      - Pods-SampleApp_2-JSONKit-prefix.pch
+      - Pods-SampleApp_2-JSONKit.xcconfig
+      - Pods-test-JSONKit-Private.xcconfig
+      - Pods-test-JSONKit-dummy.m
+      - Pods-test-JSONKit-prefix.pch
+      - Pods-test-JSONKit.xcconfig
+  - Reachability:
+    - Source Files:
+      - Reachability.h
+      - Reachability.m
+    - Support Files:
+      - Pods-Reachability-Private.xcconfig
+      - Pods-Reachability-dummy.m
+      - Pods-Reachability-prefix.pch
+      - Pods-Reachability.xcconfig
+      - Pods-SampleApp_2-Reachability-Private.xcconfig
+      - Pods-SampleApp_2-Reachability-dummy.m
+      - Pods-SampleApp_2-Reachability-prefix.pch
+      - Pods-SampleApp_2-Reachability.xcconfig
 - Products:
   - libPods-Reachability.a
   - libPods-SampleApp_2-JSONKit.a
   - libPods-SampleApp_2-Reachability.a
-  - libPods-test-JSONKit.a
-  - libPods.a
   - libPods-SampleApp_2.a
+  - libPods-test-JSONKit.a
   - libPods-test.a
+  - libPods.a
 - Targets Support Files:
-  - Pods-Reachability:
-    - Pods-Reachability.xcconfig
-    - Pods-Reachability-Private.xcconfig
-    - Pods-Reachability-prefix.pch
-    - Pods-Reachability-dummy.m
-  - Pods-SampleApp_2-JSONKit:
-    - Pods-SampleApp_2-JSONKit.xcconfig
-    - Pods-SampleApp_2-JSONKit-Private.xcconfig
-    - Pods-SampleApp_2-JSONKit-prefix.pch
-    - Pods-SampleApp_2-JSONKit-dummy.m
-  - Pods-SampleApp_2-Reachability:
-    - Pods-SampleApp_2-Reachability.xcconfig
-    - Pods-SampleApp_2-Reachability-Private.xcconfig
-    - Pods-SampleApp_2-Reachability-prefix.pch
-    - Pods-SampleApp_2-Reachability-dummy.m
-  - Pods-test-JSONKit:
-    - Pods-test-JSONKit.xcconfig
-    - Pods-test-JSONKit-Private.xcconfig
-    - Pods-test-JSONKit-prefix.pch
-    - Pods-test-JSONKit-dummy.m
   - Pods:
-    - Pods.xcconfig
+    - Pods-acknowledgements.markdown
+    - Pods-acknowledgements.plist
+    - Pods-dummy.m
     - Pods-environment.h
     - Pods-resources.sh
-    - Pods-acknowledgements.plist
-    - Pods-acknowledgements.markdown
-    - Pods-dummy.m
+    - Pods.xcconfig
   - Pods-SampleApp_2:
-    - Pods-SampleApp_2.xcconfig
+    - Pods-SampleApp_2-acknowledgements.markdown
+    - Pods-SampleApp_2-acknowledgements.plist
+    - Pods-SampleApp_2-dummy.m
     - Pods-SampleApp_2-environment.h
     - Pods-SampleApp_2-resources.sh
-    - Pods-SampleApp_2-acknowledgements.plist
-    - Pods-SampleApp_2-acknowledgements.markdown
-    - Pods-SampleApp_2-dummy.m
+    - Pods-SampleApp_2.xcconfig
   - Pods-test:
-    - Pods-test.xcconfig
+    - Pods-test-acknowledgements.markdown
+    - Pods-test-acknowledgements.plist
+    - Pods-test-dummy.m
     - Pods-test-environment.h
     - Pods-test-resources.sh
-    - Pods-test-acknowledgements.plist
-    - Pods-test-acknowledgements.markdown
-    - Pods-test-dummy.m
+    - Pods-test.xcconfig
 - Podfile
 
 

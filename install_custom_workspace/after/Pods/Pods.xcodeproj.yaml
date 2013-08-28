@@ -8,36 +8,35 @@ File References:
     - Source Files:
       - Reachability.h
       - Reachability.m
+    - Support Files:
+      - Pods-SampleApp_1-Reachability-Private.xcconfig
+      - Pods-SampleApp_1-Reachability-dummy.m
+      - Pods-SampleApp_1-Reachability-prefix.pch
+      - Pods-SampleApp_1-Reachability.xcconfig
+      - Pods-SampleApp_2-Reachability-Private.xcconfig
+      - Pods-SampleApp_2-Reachability-dummy.m
+      - Pods-SampleApp_2-Reachability-prefix.pch
+      - Pods-SampleApp_2-Reachability.xcconfig
 - Products:
   - libPods-SampleApp_1-Reachability.a
-  - libPods-SampleApp_2-Reachability.a
   - libPods-SampleApp_1.a
+  - libPods-SampleApp_2-Reachability.a
   - libPods-SampleApp_2.a
 - Targets Support Files:
-  - Pods-SampleApp_1-Reachability:
-    - Pods-SampleApp_1-Reachability.xcconfig
-    - Pods-SampleApp_1-Reachability-Private.xcconfig
-    - Pods-SampleApp_1-Reachability-prefix.pch
-    - Pods-SampleApp_1-Reachability-dummy.m
-  - Pods-SampleApp_2-Reachability:
-    - Pods-SampleApp_2-Reachability.xcconfig
-    - Pods-SampleApp_2-Reachability-Private.xcconfig
-    - Pods-SampleApp_2-Reachability-prefix.pch
-    - Pods-SampleApp_2-Reachability-dummy.m
   - Pods-SampleApp_1:
-    - Pods-SampleApp_1.xcconfig
+    - Pods-SampleApp_1-acknowledgements.markdown
+    - Pods-SampleApp_1-acknowledgements.plist
+    - Pods-SampleApp_1-dummy.m
     - Pods-SampleApp_1-environment.h
     - Pods-SampleApp_1-resources.sh
-    - Pods-SampleApp_1-acknowledgements.plist
-    - Pods-SampleApp_1-acknowledgements.markdown
-    - Pods-SampleApp_1-dummy.m
+    - Pods-SampleApp_1.xcconfig
   - Pods-SampleApp_2:
-    - Pods-SampleApp_2.xcconfig
+    - Pods-SampleApp_2-acknowledgements.markdown
+    - Pods-SampleApp_2-acknowledgements.plist
+    - Pods-SampleApp_2-dummy.m
     - Pods-SampleApp_2-environment.h
     - Pods-SampleApp_2-resources.sh
-    - Pods-SampleApp_2-acknowledgements.plist
-    - Pods-SampleApp_2-acknowledgements.markdown
-    - Pods-SampleApp_2-dummy.m
+    - Pods-SampleApp_2.xcconfig
 - Podfile
 
 
