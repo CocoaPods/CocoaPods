@@ -1,9 +1,4 @@
 CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-color 2>&1
-Setting up CocoaPods master repo
-  $ /usr/bin/git config --get remote.origin.url
-  git@github.com:CocoaPods/Specs.git
-Setup completed (push access)
-
 Analyzing dependencies
 
 Resolving dependencies of `Podfile`
