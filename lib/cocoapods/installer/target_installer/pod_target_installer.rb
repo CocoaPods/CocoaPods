@@ -15,7 +15,7 @@ module Pod
           add_target
           add_files_to_build_phases
           add_resources_bundle_targets
-          create_suport_files_group
+          # create_suport_files_group
           create_xcconfig_file
           create_prefix_header
           create_dummy_source
@@ -177,6 +177,20 @@ module Pod
           flags << '-w -Xanalyzer -analyzer-disable-checker'
         end
         flags * " "
+      end
+
+      # Adds a reference to the given file in the support group of this target.
+      #
+      # @param  [Pathname] path
+      #         The path of the file to which the reference should be added.
+      #
+      # @return [PBXFileReference] the file reference of the added file.
+      #
+      def add_file_to_support_group(path)
+        pod_name = library.pod_name
+        group = project.group_for_spec(pod_name, :support_files)
+        group.hierarchy_path
+        group.new_file(path)
       end
 
       #-----------------------------------------------------------------------#

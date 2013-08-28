@@ -31,23 +31,26 @@ module Pod
 
       describe "#add_pod_group" do
 
+        before do
+          @path = config.sandbox.pod_dir('BananaLib')
+        end
+
         it "adds the group for a Pod" do
-          path = config.sandbox.pod_dir('BananaLib')
-          group = @project.add_pod_group('BananaLib', path)
+          group = @project.add_pod_group('BananaLib', @path)
           group.parent.should == @project.pods
           group.name.should == 'BananaLib'
         end
 
         it "adds the group for a development Pod" do
           path = config.sandbox.pod_dir('BananaLib')
-          group = @project.add_pod_group('BananaLib', path, true)
+          group = @project.add_pod_group('BananaLib', @path, true)
           group.parent.should == @project.development_pods
           group.name.should == 'BananaLib'
         end
 
         it "configures the path of a new Pod group" do
           path = config.sandbox.pod_dir('BananaLib')
-          group = @project.add_pod_group('BananaLib', path)
+          group = @project.add_pod_group('BananaLib', @path)
           group.source_tree.should == '<group>'
           group.path.should == 'BananaLib'
           Pathname.new(group.path).should.be.relative
@@ -55,16 +58,22 @@ module Pod
 
         it "configures the path of a new Pod group as absolute if requested" do
           path = config.sandbox.pod_dir('BananaLib')
-          group = @project.add_pod_group('BananaLib', path, false, true)
+          group = @project.add_pod_group('BananaLib', @path, false, true)
           group.source_tree.should == '<absolute>'
-          group.path.should == path.to_s
+          group.path.should == @path.to_s
           Pathname.new(group.path).should.be.absolute
+        end
+
+        it "creates a support file group relative to the project" do
+          group = @project.add_pod_group('BananaLib', @path, false, true)
+          group['Support Files'].source_tree.should == 'SOURCE_ROOT'
+          group['Support Files'].path.should.be.nil
         end
       end
 
       #----------------------------------------#
 
-      describe "#add_pod_group" do
+      describe "#pod_groups" do
 
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))

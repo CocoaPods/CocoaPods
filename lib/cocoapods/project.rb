@@ -62,7 +62,10 @@ module Pod
 
       parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
-      parent_group.new_group(pod_name, path, source_tree)
+      group = parent_group.new_group(pod_name, path, source_tree)
+      support_files_group = group.new_group(SPEC_SUBGROUPS[:support_files])
+      support_files_group.source_tree = 'SOURCE_ROOT'
+      group
     end
 
     # @return [Array<PBXGroup>] Returns all the group of the Pods.
