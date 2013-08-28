@@ -1,13 +1,13 @@
 
 File References:
-- Frameworks:
-  - Foundation.framework
-  - SystemConfiguration.framework
-- Local Pods:
+- Development Pods:
   - Reachability:
     - Source Files:
       - Reachability.h
       - Reachability.m
+- Frameworks:
+  - Foundation.framework
+  - SystemConfiguration.framework
 - Products:
   - libPods-Reachability.a
   - libPods.a
