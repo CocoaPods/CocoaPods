@@ -54,6 +54,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Nikolaj Schumacher](https://github.com/nschum)
   [#1063](https://github.com/CocoaPods/CocoaPods/issues/1063)
 
+* User defined build configurations are now added to the resource bundle
+  targets.  
+  [#1309](https://github.com/CocoaPods/CocoaPods/issues/1309),
+
+
 ## 0.23.0
 
 

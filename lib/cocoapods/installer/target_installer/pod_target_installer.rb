@@ -71,6 +71,10 @@ module Pod
               bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name, product_group)
               bundle_target.add_resources(file_references)
 
+              library.user_build_configurations.each do |bc_name, type|
+                bundle_target.add_build_configuration(bc_name, type)
+              end
+
               target.add_dependency(bundle_target)
             end
           end

@@ -52,13 +52,7 @@ module Pod
         @target.build_settings('Release').merge!(settings)
 
         library.user_build_configurations.each do |bc_name, type|
-          unless @target.build_configurations.map(&:name).include?(bc_name)
-            build_config = project.new(Xcodeproj::Project::XCBuildConfiguration)
-            build_config.name = bc_name
-            settings = @target.build_settings(type.to_s.capitalize).dup
-            build_config.build_settings = settings
-            target.build_configurations << build_config
-          end
+          @target.add_build_configuration(bc_name, type)
         end
 
         library.target = @target

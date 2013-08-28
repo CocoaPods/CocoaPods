@@ -106,6 +106,10 @@ module Pod
 
       end
 
+      xit 'adds the build configurations to the resources bundle targets' do
+
+      end
+
       #--------------------------------------#
 
       it "creates the xcconfig file" do
