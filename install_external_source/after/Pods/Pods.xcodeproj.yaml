@@ -4,6 +4,8 @@ File References:
   - Foundation.framework
 - Pods:
   - PodTest:
+    - Products:
+      - libPods-PodTest.a
     - Subspecs:
       - subspec_1:
         - Source Files:
@@ -19,7 +21,6 @@ File References:
       - Pods-PodTest-prefix.pch
       - Pods-PodTest.xcconfig
 - Products:
-  - libPods-PodTest.a
   - libPods.a
 - Targets Support Files:
   - Pods:

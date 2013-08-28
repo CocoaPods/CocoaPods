@@ -5,6 +5,8 @@ File References:
   - SystemConfiguration.framework
 - Pods:
   - Reachability:
+    - Products:
+      - libPods-Reachability.a
     - Source Files:
       - Reachability.h
       - Reachability.m
@@ -14,7 +16,6 @@ File References:
       - Pods-Reachability-prefix.pch
       - Pods-Reachability.xcconfig
 - Products:
-  - libPods-Reachability.a
   - libPods.a
 - Targets Support Files:
   - Pods:

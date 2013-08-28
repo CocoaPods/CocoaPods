@@ -2,6 +2,8 @@
 File References:
 - Development Pods:
   - Reachability:
+    - Products:
+      - libPods-Reachability.a
     - Source Files:
       - Reachability.h
       - Reachability.m
@@ -14,7 +16,6 @@ File References:
   - Foundation.framework
   - SystemConfiguration.framework
 - Products:
-  - libPods-Reachability.a
   - libPods.a
 - Targets Support Files:
   - Pods:
