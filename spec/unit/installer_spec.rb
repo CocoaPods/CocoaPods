@@ -307,6 +307,13 @@ module Pod
           @installer.send(:install_libraries)
         end
 
+        xit 'adds the frameworks required by to the pod to the project for informative purposes' do
+          Specification::Consumer.any_instance.stubs(:frameworks).returns(['QuartzCore'])
+          @installer.install!
+          names = @installer.sandbox.project['Frameworks'].children.map(&:name)
+          names.sort.should == ["Foundation.framework", "QuartzCore.framework"]
+        end
+
       end
 
       #--------------------------------------#
@@ -396,6 +403,8 @@ module Pod
 
         project = Xcodeproj::Project.new('path')
         pods_target = project.new_target(:static_library, target.name, :ios)
+        target.target = pods_target
+
         native_target = project.new_target(:static_library, pod_target.name, :ios)
         pod_target.target = pods_target
 

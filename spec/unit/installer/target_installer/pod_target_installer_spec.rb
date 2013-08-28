@@ -100,13 +100,6 @@ module Pod
         names.should.include("Banana.m")
       end
 
-      it 'adds the frameworks required by to the pod to the project for informative purposes' do
-        Specification::Consumer.any_instance.stubs(:frameworks).returns(['QuartzCore'])
-        @installer.install!
-        names = @installer.sandbox.project['Frameworks'].children.map(&:name)
-        names.sort.should == ["Foundation.framework", "QuartzCore.framework"]
-      end
-
       #--------------------------------------#
 
       xit 'adds the resource bundle targets' do

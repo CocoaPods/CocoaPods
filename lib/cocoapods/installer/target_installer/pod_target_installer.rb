@@ -44,9 +44,6 @@ module Pod
             file_refs = source_files.map { |sf| project.reference_for_path(sf) }
             target.add_file_references(file_refs, flags)
 
-            file_accessor.spec_consumer.frameworks.each do |framework|
-              project.add_system_framework(framework, target)
-            end
           end
         end
       end

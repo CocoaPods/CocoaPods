@@ -344,6 +344,16 @@ module Pod
           target_installer = AggregateTargetInstaller.new(sandbox, target)
           target_installer.install!
         end
+
+        # TODO
+        # Move and add specs
+        pod_targets.sort_by(&:name).each do |pod_target|
+          pod_target.file_accessors.each do |file_accessor|
+            file_accessor.spec_consumer.frameworks.each do |framework|
+              ref = pods_project.add_system_framework(framework, pod_target.target)
+            end
+          end
+        end
       end
     end
 
@@ -373,8 +383,7 @@ module Pod
     #
     def link_aggregate_target
       aggregate_targets.each do |aggregate_target|
-        native_target = pods_project.targets.select { |t| t.name == aggregate_target.name }.first
-        products = pods_project.products_group
+        native_target = aggregate_target.target
         aggregate_target.pod_targets.each do |pod_target|
           product = pod_target.target.product_reference
           native_target.frameworks_build_phase.add_file_reference(product)
