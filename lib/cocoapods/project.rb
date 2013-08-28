@@ -18,7 +18,7 @@ module Pod
       @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
       @pods = new_group('Pods')
-      @local_pods = new_group('Local Pods')
+      @development_pods = new_group('Development Pods')
     end
 
     # @return [PBXGroup] The group for the support files of the aggregate
@@ -30,9 +30,9 @@ module Pod
     #
     attr_reader :pods
 
-    # @return [PBXGroup] The group for Local Pods.
+    # @return [PBXGroup] The group for Development Pods.
     #
-    attr_reader :local_pods
+    attr_reader :development_pods
 
 
     public
@@ -49,18 +49,18 @@ module Pod
     # @param  [#to_s] path
     #         The path to the root of the Pod.
     #
-    # @param  [Bool] local
-    #         Wether the group should be added to the Local Pods group.
+    # @param  [Bool] development
+    #         Wether the group should be added to the Development Pods group.
     #
     # @param  [Bool] absolute
     #         Wether the path of the group should be set as absolute.
     #
     # @return [PBXGroup] The new group.
     #
-    def add_pod_group(pod_name, path, local = false, absolute = false)
+    def add_pod_group(pod_name, path, development = false, absolute = false)
       raise "[BUG]" if pod_group(pod_name)
 
-      parent_group = local ? local_pods : pods
+      parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
       parent_group.new_group(pod_name, path, source_tree)
     end
@@ -68,7 +68,7 @@ module Pod
     # @return [Array<PBXGroup>] Returns all the group of the Pods.
     #
     def pod_groups
-      pods.children.objects + local_pods.children.objects
+      pods.children.objects + development_pods.children.objects
     end
 
     # Returns the group for the Pod with the given name.

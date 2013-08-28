@@ -172,12 +172,12 @@ module Pod
 
       it "stores the local path of a Pod" do
         @sandbox.store_local_path('BananaLib/Subspec', Pathname.new('Some Path'))
-        @sandbox.local_pods['BananaLib'].should == 'Some Path'
+        @sandbox.development_pods['BananaLib'].should == 'Some Path'
       end
 
       it "returns the path of the local pods grouped by name" do
         @sandbox.store_local_path('BananaLib', 'Some Path')
-        @sandbox.local_pods.should == { 'BananaLib' => 'Some Path' }
+        @sandbox.development_pods.should == { 'BananaLib' => 'Some Path' }
       end
 
       it "returns whether a Pod is local" do

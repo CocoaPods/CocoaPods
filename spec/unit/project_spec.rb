@@ -19,8 +19,8 @@ module Pod
         @project.pods.name.should == 'Pods'
       end
 
-      it "creates the Local Pods group on initialization" do
-        @project.local_pods.name.should == 'Local Pods'
+      it "creates the development Pods group on initialization" do
+        @project.development_pods.name.should == 'Development Pods'
       end
 
     end
@@ -38,10 +38,10 @@ module Pod
           group.name.should == 'BananaLib'
         end
 
-        it "adds the group for a Local Pod" do
+        it "adds the group for a development Pod" do
           path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', path, true)
-          group.parent.should == @project.local_pods
+          group.parent.should == @project.development_pods
           group.name.should == 'BananaLib'
         end
 
@@ -77,7 +77,7 @@ module Pod
 
         it "doesn't alters the original groups" do
           @project.pods.children.map(&:name).sort.should == ["BananaLib"]
-          @project.local_pods.children.map(&:name).sort.should == ["OrangeLib"]
+          @project.development_pods.children.map(&:name).sort.should == ["OrangeLib"]
         end
 
       end

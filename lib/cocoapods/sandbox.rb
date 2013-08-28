@@ -67,7 +67,7 @@ module Pod
       @predownloaded_pods = []
       @head_pods = []
       @checkout_sources = {}
-      @local_pods = {}
+      @development_pods = {}
       FileUtils.mkdir_p(@root)
     end
 
@@ -152,7 +152,7 @@ module Pod
     def pod_dir(name)
       root_name = Specification.root_name(name)
       if local?(root_name)
-        Pathname.new(local_pods[root_name])
+        Pathname.new(development_pods[root_name])
       else
         # root + "Sources/#{name}"
         root + root_name
@@ -342,7 +342,7 @@ module Pod
     #
     def store_local_path(name, path)
       root_name = Specification.root_name(name)
-      local_pods[root_name] = path.to_s
+      development_pods[root_name] = path.to_s
     end
 
     # @return [Hash{String=>String}] The path of the Pods with a local source
@@ -350,7 +350,7 @@ module Pod
     #
     # @todo   Rename (e.g. `pods_with_local_path`)
     #
-    attr_reader :local_pods
+    attr_reader :development_pods
 
     # Checks if a Pod is locally sourced?
     #
@@ -361,7 +361,7 @@ module Pod
     #
     def local?(name)
       root_name = Specification.root_name(name)
-      !local_pods[root_name].nil?
+      !development_pods[root_name].nil?
     end
 
     #-------------------------------------------------------------------------#
