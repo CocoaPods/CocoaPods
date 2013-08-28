@@ -92,6 +92,8 @@ module Pod
       :resources                => 'Resources',
       :frameworks_and_libraries => 'Frameworks & Libraries',
       :support_files            => 'Support Files',
+      :subspecs                 => 'Subspecs',
+      :products                 => 'Products',
     }
 
     # Returns the group for the specification with the give name creating it if
@@ -200,7 +202,8 @@ module Pod
       if spec_name != pod_name
         subspecs_names = spec_name.gsub(pod_name + '/', '').split('/')
         subspecs_names.each do |name|
-          group = group[name] || group.new_group(name)
+          subspecs_group = group[SPEC_SUBGROUPS[:subspecs]] || group.new_group(SPEC_SUBGROUPS[:subspecs])
+          group = subspecs_group[name] || subspecs_group.new_group(name)
         end
       end
       group

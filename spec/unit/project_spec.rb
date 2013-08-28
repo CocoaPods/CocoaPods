@@ -107,24 +107,24 @@ module Pod
         end
 
         it "returns the group for the spec with the given name" do
-          group = @project.group_for_spec('BananaLib/Subspec')
-          group.hierarchy_path.should == '/Pods/BananaLib/Subspec'
+          group = @project.group_for_spec('BananaLib/Tree')
+          group.hierarchy_path.should == '/Pods/BananaLib/Subspecs/Tree'
         end
 
         it "returns the requested subgroup" do
-          group = @project.group_for_spec('BananaLib/Subspec', :source_files)
-          group.hierarchy_path.should == '/Pods/BananaLib/Subspec/Source Files'
+          group = @project.group_for_spec('BananaLib/Tree', :source_files)
+          group.hierarchy_path.should == '/Pods/BananaLib/Subspecs/Tree/Source Files'
         end
 
         it "raises if unable to recognize the subgroup key" do
           should.raise ArgumentError do
-            @project.group_for_spec('BananaLib/Subspec', :unknown)
+            @project.group_for_spec('BananaLib/Tree', :unknown)
           end.message.should.match /Unrecognized subgroup/
         end
 
         it "doesn't duplicate the groups" do
-          group_1 = @project.group_for_spec('BananaLib/Subspec', :source_files)
-          group_2 = @project.group_for_spec('BananaLib/Subspec', :source_files)
+          group_1 = @project.group_for_spec('BananaLib/Tree', :source_files)
+          group_2 = @project.group_for_spec('BananaLib/Tree', :source_files)
           group_1.uuid.should == group_2.uuid
         end
       end
@@ -221,7 +221,7 @@ module Pod
 
         it "returns the group for subspecs" do
           group = @project.send(:spec_group, 'JSONKit/Parsing')
-          group.hierarchy_path.should == '/Pods/JSONKit/Parsing'
+          group.hierarchy_path.should == '/Pods/JSONKit/Subspecs/Parsing'
         end
 
       end
