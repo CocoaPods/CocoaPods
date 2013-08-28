@@ -14,7 +14,7 @@ module Pod
     #         Wether the project should be initialized from scratch.
     #
     def initialize(path, skip_initialization = false)
-      super
+      super(path, skip_initialization)
       @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
       @pods = new_group('Pods')
