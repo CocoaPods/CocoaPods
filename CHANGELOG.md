@@ -49,6 +49,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Xcodeproj#83](https://github.com/CocoaPods/Xcodeproj/pull/83)  
   [Ashton-W](https://github.com/Ashton-W)
 
+* OS X frameworks are now copied to the Resources folder using rsync to
+  properly overwrite existing files.  
+  [Nikolaj Schumacher](https://github.com/nschum)
+  [#1063](https://github.com/CocoaPods/CocoaPods/issues/1063)
 
 ## 0.23.0
 
