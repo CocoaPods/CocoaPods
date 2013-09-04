@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 06addfea3229ac2a0fc75c4db991a86a2fdf1813
+  revision: df4686205a651aca5acb9cdb47b5032e717d98f5
   branch: master
   specs:
     xcodeproj (0.9.0)
@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 7cfddec468aa0d4da1256368b4d3fd466664bcd9
+  revision: 8bb9a809144d42fdffd10aa8e28562f26c784320
   branch: master
   specs:
     cocoapods-downloader (0.1.2)
@@ -94,7 +94,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.1)
     method_source (0.8.2)
-    mime-types (1.24)
+    mime-types (1.25)
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
