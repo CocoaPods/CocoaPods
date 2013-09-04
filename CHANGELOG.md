@@ -4,6 +4,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+
+## 0.24.0
+
+###### Enhancements
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.3...0.23.0.rc1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.3...0.23.0.rc1)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.1...0.9.0)
+• [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.1.1...0.1.2)
+
+
 ###### Enhancements
 
 * Added `pod init` command which generates a Podfile according to the
@@ -34,6 +44,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Cédric Luthi](https://github.com/0xced)  
   [#1294](https://github.com/CocoaPods/CocoaPods/issues/1294)
 
+* Added basic support for Bazaar repositories.  
+  [Fred McCann](https://github.com/fmccann)  
+  [cocoapods-downloader#4](https://github.com/CocoaPods/cocoapods-downloader/pull/4)
 
 ###### Bug Fixes
 
