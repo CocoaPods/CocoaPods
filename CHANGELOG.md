@@ -21,7 +21,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   stored in the `~/.cocoapods/templates` folder. Tow templates are supported: 
     - the `Podfile.default` template for regular targets.
     - and the `Podfile.test` template for test targets.  
-  
+
   [Ian Ynda-Hummel](https://github.com/ianyh)
   [#1106](https://github.com/CocoaPods/CocoaPods/issues/1106)  
   [#1045](https://github.com/CocoaPods/CocoaPods/issues/1045)  
@@ -58,18 +58,18 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * CoreData versioned models are now properly handled respecting the contents of
   the `.xccurrentversion` file.  
+  [Ashton-W](https://github.com/Ashton-W)  
   [#1288](https://github.com/CocoaPods/CocoaPods/issues/1288),
   [Xcodeproj#83](https://github.com/CocoaPods/Xcodeproj/pull/83)  
-  [Ashton-W](https://github.com/Ashton-W)
 
 * OS X frameworks are now copied to the Resources folder using rsync to
   properly overwrite existing files.  
-  [Nikolaj Schumacher](https://github.com/nschum)
+  [Nikolaj Schumacher](https://github.com/nschum)  
   [#1063](https://github.com/CocoaPods/CocoaPods/issues/1063)
 
 * User defined build configurations are now added to the resource bundle
   targets.  
-  [#1309](https://github.com/CocoaPods/CocoaPods/issues/1309),
+  [#1309](https://github.com/CocoaPods/CocoaPods/issues/1309)
 
 
 ## 0.23.0
