@@ -69,7 +69,7 @@ Targets:
           WRAPPER_EXTENSION: app
           FRAMEWORK_SEARCH_PATHS:
           - $(inherited)
-          - ! '"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks"'
+          - '"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks"'
           IPHONEOS_DEPLOYMENT_TARGET: '6.1'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: iOS App/iOS App-Info.plist
@@ -85,7 +85,7 @@ Targets:
           OTHER_CFLAGS: -DNS_BLOCK_ASSERTIONS=1
           FRAMEWORK_SEARCH_PATHS:
           - $(inherited)
-          - ! '"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks"'
+          - '"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks"'
           IPHONEOS_DEPLOYMENT_TARGET: '6.1'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: iOS App/iOS App-Info.plist
@@ -111,20 +111,20 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          WRAPPER_EXTENSION: app
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: OS X App/OS X App-Info.plist
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: OS X App/OS X App-Prefix.pch
+          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-OS X App.xcconfig
     - Release:
         Build Settings:
-          WRAPPER_EXTENSION: app
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: OS X App/OS X App-Info.plist
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: OS X App/OS X App-Prefix.pch
+          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-OS X App.xcconfig
 
@@ -167,12 +167,12 @@ Build Configurations:
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
       MACOSX_DEPLOYMENT_TARGET: '10.8'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
-      CLANG_WARN_EMPTY_BODY: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
       ARCHS: $(ARCHS_STANDARD_64_BIT)
-      ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_ENUM_CONVERSION: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'

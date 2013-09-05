@@ -289,11 +289,11 @@ Targets:
 Build Configurations:
 - Debug:
     Build Settings:
+      MACOSX_DEPLOYMENT_TARGET: '10.6'
       STRIP_INSTALLED_PRODUCT: 'NO'
       IPHONEOS_DEPLOYMENT_TARGET: '4.3'
-      MACOSX_DEPLOYMENT_TARGET: '10.6'
 - Release:
     Build Settings:
+      MACOSX_DEPLOYMENT_TARGET: '10.6'
       STRIP_INSTALLED_PRODUCT: 'NO'
       IPHONEOS_DEPLOYMENT_TARGET: '4.3'
-      MACOSX_DEPLOYMENT_TARGET: '10.6'
