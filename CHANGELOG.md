@@ -6,6 +6,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Bug Fixes
 
+* Resource bundle targets are now namespaced with the label prefix (consisting of integration target name and the source pod name).
+  This prevents the creation of multiple targets with the same name.
+  
+  [Blake Watters](https://github.com/blakewatters)
+  [#1338](https://github.com/CocoaPods/CocoaPods/issues/1338)
+
 * Solved outstanding issues with CocoaPods resource bundles and Archive builds:
   1. The rsync task copies symlinks into the App Bundle, producing an invalid app. This change add `--copy-links`
   to the rsync invocation to ensure the target files are copied rather than the symlink.
