@@ -1,7 +1,7 @@
-require File.expand_path('../../../../spec_helper', __FILE__)
+require File.expand_path('../../../../../spec_helper', __FILE__)
 
 module Pod
-  describe Installer::AggregateTargetInstaller do
+  describe Installer::PodsProjectGenerator::AggregateTargetInstaller do
     describe "In General" do
       before do
         @podfile = Podfile.new do
@@ -34,7 +34,7 @@ module Pod
 
         @target.pod_targets = [@pod_target]
 
-        @installer = Installer::AggregateTargetInstaller.new(config.sandbox, @target)
+        @installer = Installer::PodsProjectGenerator::AggregateTargetInstaller.new(config.sandbox, @target)
 
         @spec.prefix_header_contents = '#import "BlocksKit.h"'
       end

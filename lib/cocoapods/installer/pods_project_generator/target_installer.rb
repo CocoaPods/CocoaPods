@@ -1,5 +1,6 @@
 module Pod
   class Installer
+    class PodsProjectGenerator
 
     # Controller class responsible of creating and configuring the static
     # library target in Pods project. It also creates the support file needed
@@ -127,5 +128,6 @@ module Pod
 
     end
   end
+end
 end
 

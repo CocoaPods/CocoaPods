@@ -37,6 +37,18 @@ module Pod
       it "returns the name of the Pods on which this target depends" do
         @pod_target.dependencies.should == ["monkey"]
       end
+
+      it "returns the dependencies as root names" do
+        dependencies = [stub(:name => 'monkey/subspec')]
+        Specification::Consumer.any_instance.stubs(:dependencies).returns(dependencies)
+        @pod_target.dependencies.should == ["monkey"]
+      end
+
+      it "never includes itself in the dependencies" do
+        dependencies = [stub(:name => 'BananaLib/subspec')]
+        Specification::Consumer.any_instance.stubs(:dependencies).returns(dependencies)
+        @pod_target.dependencies.should == []
+      end
     end
 
     describe "Support files" do

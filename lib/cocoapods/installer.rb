@@ -28,13 +28,10 @@ module Pod
   #
   class Installer
 
-    autoload :Analyzer,                 'cocoapods/installer/analyzer'
-    autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
-    autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
-    autoload :TargetInstaller,          'cocoapods/installer/target_installer'
-    autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
-    autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
-    autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
+    autoload :Analyzer,              'cocoapods/installer/analyzer'
+    autoload :PodSourceInstaller,    'cocoapods/installer/pod_source_installer'
+    autoload :PodsProjectGenerator,  'cocoapods/installer/pods_project_generator'
+    autoload :UserProjectIntegrator, 'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
 
@@ -86,6 +83,7 @@ module Pod
       resolve_dependencies
       download_dependencies
       generate_pods_project
+      write_lockfiles
       integrate_user_project if config.integrate_targets?
     end
 
@@ -108,14 +106,12 @@ module Pod
 
     def generate_pods_project
       UI.section "Generating Pods project" do
-        prepare_pods_project
-        install_file_references
-        install_libraries
-        set_target_dependencies
-        link_aggregate_target
+        installer = PodsProjectGenerator.new(sandbox, aggregate_targets)
+        installer.user_build_configurations = analysis_result.all_user_build_configurations
+        installer.podfile_path = config.podfile_path
+        installer.install
         run_post_install_hooks
-        write_pod_project
-        write_lockfiles
+        installer.write_pod_project
       end
     end
 
@@ -130,11 +126,8 @@ module Pod
     #
     attr_reader :analysis_result
 
-    # @return [Pod::Project] the `Pods/Pods.xcodeproj` project.
-    #
-    attr_reader :pods_project
-
     # @return [Array<String>] The Pods that should be installed.
+    # TODO
     #
     attr_reader :names_of_pods_to_install
 
@@ -146,6 +139,10 @@ module Pod
     # @return [Array<Specification>] The specifications that where installed.
     #
     attr_accessor :installed_specs
+
+    def pods_project
+      sandbox.project
+    end
 
     #-------------------------------------------------------------------------#
 
@@ -277,132 +274,7 @@ module Pod
       end
     end
 
-    # Creates the Pods project from scratch if it doesn't exists.
-    #
-    # @return [void]
-    #
-    # @todo   Clean and modify the project if it exists.
-    #
-    def prepare_pods_project
-      UI.message "- Creating Pods project" do
-        @pods_project = Pod::Project.new(sandbox.project_path)
 
-        analysis_result.all_user_build_configurations.each do |name, type|
-          @pods_project.add_build_configuration(name, type)
-        end
-
-        pod_names = pod_targets.map(&:pod_name).uniq
-        pod_names.each do |pod_name|
-          path = sandbox.pod_dir(pod_name)
-          local = sandbox.local?(pod_name)
-          @pods_project.add_pod_group(pod_name, path, local)
-        end
-
-        if config.podfile_path
-          @pods_project.add_podfile(config.podfile_path)
-        end
-
-        sandbox.project = @pods_project
-        platforms = aggregate_targets.map(&:platform)
-        osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
-        ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
-        @pods_project.build_configurations.each do |build_configuration|
-          build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
-          build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
-          build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
-        end
-      end
-    end
-
-
-    # Installs the file references in the Pods project. This is done once per
-    # Pod as the same file reference might be shared by multiple aggregate
-    # targets.
-    #
-    # @return [void]
-    #
-    def install_file_references
-      installer = FileReferencesInstaller.new(sandbox, pod_targets, pods_project)
-      installer.install!
-    end
-
-    # Installs the aggregate targets of the Pods projects and generates their
-    # support files.
-    #
-    # @return [void]
-    #
-    def install_libraries
-      UI.message"- Installing libraries" do
-        pod_targets.sort_by(&:name).each do |pod_target|
-          next if pod_target.target_definition.empty?
-          target_installer = PodTargetInstaller.new(sandbox, pod_target)
-          target_installer.install!
-        end
-
-        aggregate_targets.sort_by(&:name).each do |target|
-          next if target.target_definition.empty?
-          target_installer = AggregateTargetInstaller.new(sandbox, target)
-          target_installer.install!
-        end
-
-        # TODO
-        # Move and add specs
-        pod_targets.sort_by(&:name).each do |pod_target|
-          pod_target.file_accessors.each do |file_accessor|
-            file_accessor.spec_consumer.frameworks.each do |framework|
-              ref = pods_project.add_system_framework(framework, pod_target.target)
-            end
-          end
-        end
-      end
-    end
-
-    def set_target_dependencies
-      aggregate_targets.each do |aggregate_target|
-        aggregate_target.pod_targets.each do |pod_target|
-          aggregate_target.target.add_dependency(pod_target.target)
-          pod_target.dependencies.each do |dep|
-
-            unless dep == pod_target.pod_name
-              pod_dependency_target = aggregate_target.pod_targets.find { |target| target.pod_name == dep }
-              # TODO remove me
-              unless pod_dependency_target
-                puts "[BUG] DEP: #{dep}"
-              end
-              pod_target.target.add_dependency(pod_dependency_target.target)
-            end
-          end
-        end
-      end
-    end
-
-    # Links the aggregate targets with all the dependent libraries.
-    #
-    # @note   This is run in the integration step to ensure that targets
-    #         have been created for all per spec libraries.
-    #
-    def link_aggregate_target
-      aggregate_targets.each do |aggregate_target|
-        native_target = aggregate_target.target
-        aggregate_target.pod_targets.each do |pod_target|
-          product = pod_target.target.product_reference
-          native_target.frameworks_build_phase.add_file_reference(product)
-        end
-      end
-    end
-
-    # Writes the Pods project to the disk.
-    #
-    # @return [void]
-    #
-    def write_pod_project
-      UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
-        pods_project.pods.remove_from_project if pods_project.pods.empty?
-        pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
-        pods_project.main_group.recursively_sort_by_type
-        pods_project.save
-      end
-    end
 
     # Writes the Podfile and the lock files.
     #

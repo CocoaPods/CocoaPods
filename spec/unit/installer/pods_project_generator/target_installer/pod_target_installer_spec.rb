@@ -1,7 +1,7 @@
-require File.expand_path('../../../../spec_helper', __FILE__)
+require File.expand_path('../../../../../spec_helper', __FILE__)
 
 module Pod
-  describe Installer::PodTargetInstaller do
+  describe Installer::PodsProjectGenerator::PodTargetInstaller do
     describe "In General" do
       before do
         @podfile = Podfile.new do
@@ -25,7 +25,7 @@ module Pod
         @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         @pod_target.file_accessors = [file_accessor]
         @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
-        @installer = Installer::PodTargetInstaller.new(config.sandbox, @pod_target)
+        @installer = Installer::PodsProjectGenerator::PodTargetInstaller.new(config.sandbox, @pod_target)
 
         @spec.prefix_header_contents = '#import "BlocksKit.h"'
       end

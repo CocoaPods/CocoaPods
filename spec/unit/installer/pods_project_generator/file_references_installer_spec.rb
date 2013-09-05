@@ -1,7 +1,7 @@
-require File.expand_path('../../../spec_helper', __FILE__)
+require File.expand_path('../../../../spec_helper', __FILE__)
 
 module Pod
-  describe Installer::FileReferencesInstaller do
+  describe Installer::PodsProjectGenerator::FileReferencesInstaller do
 
     before do
       @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
@@ -9,7 +9,7 @@ module Pod
       @pod_target.file_accessors = [@file_accessor]
       @project = Project.new(config.sandbox.project_path)
       @project.add_pod_group('BananaLib', fixture('banana-lib'))
-      @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+      @installer = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
     end
 
     #-------------------------------------------------------------------------#
@@ -74,7 +74,7 @@ module Pod
           pod_target_1.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
           pod_target_2 = PodTarget.new([], nil, config.sandbox)
           pod_target_2.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-          installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1, pod_target_2], @project)
+          installer = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [pod_target_1, pod_target_2], @project)
           roots = installer.send(:file_accessors).map { |fa| fa.path_list.root }
           roots.should == [fixture('banana-lib'), fixture('banana-lib')]
         end
@@ -82,7 +82,7 @@ module Pod
         it "handles libraries empty libraries without file accessors" do
           pod_target_1 = PodTarget.new([], nil, config.sandbox)
           pod_target_1.file_accessors = []
-          installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)
+          installer = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)
           roots = installer.send(:file_accessors).should == []
         end
       end

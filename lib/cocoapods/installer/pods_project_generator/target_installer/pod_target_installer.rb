@@ -1,5 +1,6 @@
 module Pod
   class Installer
+    class PodsProjectGenerator
 
     # Creates the target for the Pods libraries in the Pods project and the
     # relative support files.
@@ -204,4 +205,5 @@ module Pod
 
     end
   end
+end
 end

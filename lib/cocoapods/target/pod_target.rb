@@ -61,7 +61,7 @@ module Pod
     def dependencies
       specs.map do |spec|
         spec.consumer(platform).dependencies.map { |dep| Specification.root_name(dep.name) }
-      end.flatten
+      end.flatten.reject { |dep| dep == pod_name }
     end
 
   end

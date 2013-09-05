@@ -1,5 +1,6 @@
 module Pod
   class Installer
+    class PodsProjectGenerator
 
     # Controller class responsible of installing the file references of the
     # specifications in the Pods project.
@@ -205,4 +206,5 @@ module Pod
 
     end
   end
+end
 end

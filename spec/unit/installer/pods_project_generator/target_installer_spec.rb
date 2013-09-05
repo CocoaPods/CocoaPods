@@ -1,7 +1,7 @@
-require File.expand_path('../../../spec_helper', __FILE__)
+require File.expand_path('../../../../spec_helper', __FILE__)
 
 module Pod
-  describe Installer::TargetInstaller do
+  describe Installer::PodsProjectGenerator::TargetInstaller do
 
     before do
       @podfile = Podfile.new do
@@ -26,7 +26,7 @@ module Pod
       @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
       @pod_target.file_accessors = [file_accessor]
 
-      @installer = Installer::TargetInstaller.new(config.sandbox, @pod_target)
+      @installer = Installer::PodsProjectGenerator::TargetInstaller.new(config.sandbox, @pod_target)
     end
 
     it "sets the ARCHS" do
