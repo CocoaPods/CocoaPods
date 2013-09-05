@@ -68,7 +68,7 @@ module Pod
               file_references = paths.map { |sf| project.reference_for_path(sf) }
               group = project.group_for_spec(file_accessor.spec.name, :products)
               product_group = project.group_for_spec(file_accessor.spec.name, :resources)
-              bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name, product_group)
+              bundle_target = project.new_resources_bundle("#{library.label}-#{bundle_name}", file_accessor.spec_consumer.platform_name, product_group)
               bundle_target.add_resources(file_references)
 
               library.user_build_configurations.each do |bc_name, type|
