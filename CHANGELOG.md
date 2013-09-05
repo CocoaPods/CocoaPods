@@ -4,6 +4,17 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Bug Fixes
+
+* Solved outstanding issues with CocoaPods resource bundles and Archive builds:
+  1. The rsync task copies symlinks into the App Bundle, producing an invalid app. This change add `--copy-links`
+  to the rsync invocation to ensure the target files are copied rather than the symlink.
+  2. The Copy Resources script uses `TARGET_BUILD_DIR` which points to the App Archiving folder during an Archive action. 
+  Switching to `BUILT_PRODUCTS_DIR` instead ensures that the path is correct for all actions and configurations.
+
+  [Blake Watters](https://github.com/blakewatters)
+  [#1309](https://github.com/CocoaPods/CocoaPods/issues/1309)
+  [#1329](https://github.com/CocoaPods/CocoaPods/issues/1329)
 
 ## 0.24.0
 
