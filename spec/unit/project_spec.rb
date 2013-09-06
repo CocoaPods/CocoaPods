@@ -4,7 +4,7 @@ module Pod
   describe Project do
 
     before do
-      @project = Project.new(config.sandbox.project_path)
+      @sut = Project.new(config.sandbox.project_path)
     end
 
     #-------------------------------------------------------------------------#
@@ -12,30 +12,30 @@ module Pod
     describe "In general" do
 
       it "returns the support files group" do
-        @project.support_files_group.name.should == 'Targets Support Files'
+        @sut.support_files_group.name.should == 'Targets Support Files'
       end
 
       it "returns the pods group" do
-        @project.pods.name.should == 'Pods'
+        @sut.pods.name.should == 'Pods'
       end
 
       it "returns development Pods group" do
-        @project.development_pods.name.should == 'Development Pods'
+        @sut.development_pods.name.should == 'Development Pods'
       end
 
       describe "#prepare_for_serialization" do
 
         it "deletes the Pod and the Development Pods groups if empty" do
-          @project.prepare_for_serialization
-          @project[Project::ROOT_GROUPS[:pods]].should.be.nil
-          @project[Project::ROOT_GROUPS[:development_pods]].should.be.nil
+          @sut.prepare_for_serialization
+          @sut[Project::ROOT_GROUPS[:pods]].should.be.nil
+          @sut[Project::ROOT_GROUPS[:development_pods]].should.be.nil
         end
 
         it "sorts the groups recursively" do
-          @project.pods.new_group('group_2')
-          @project.pods.new_group('group_1')
-          @project.prepare_for_serialization
-          @project.pods.children.map(&:name).should == ["group_1", "group_2"]
+          @sut.pods.new_group('group_2')
+          @sut.pods.new_group('group_1')
+          @sut.prepare_for_serialization
+          @sut.pods.children.map(&:name).should == ["group_1", "group_2"]
         end
       end
     end
@@ -51,21 +51,21 @@ module Pod
         end
 
         it "adds the group for a Pod" do
-          group = @project.add_pod_group('BananaLib', @path)
-          group.parent.should == @project.pods
+          group = @sut.add_pod_group('BananaLib', @path)
+          group.parent.should == @sut.pods
           group.name.should == 'BananaLib'
         end
 
         it "adds the group for a development Pod" do
           path = config.sandbox.pod_dir('BananaLib')
-          group = @project.add_pod_group('BananaLib', @path, true)
-          group.parent.should == @project.development_pods
+          group = @sut.add_pod_group('BananaLib', @path, true)
+          group.parent.should == @sut.development_pods
           group.name.should == 'BananaLib'
         end
 
         it "configures the path of a new Pod group" do
           path = config.sandbox.pod_dir('BananaLib')
-          group = @project.add_pod_group('BananaLib', @path)
+          group = @sut.add_pod_group('BananaLib', @path)
           group.source_tree.should == '<group>'
           group.path.should == 'BananaLib'
           Pathname.new(group.path).should.be.relative
@@ -73,14 +73,14 @@ module Pod
 
         it "configures the path of a new Pod group as absolute if requested" do
           path = config.sandbox.pod_dir('BananaLib')
-          group = @project.add_pod_group('BananaLib', @path, false, true)
+          group = @sut.add_pod_group('BananaLib', @path, false, true)
           group.source_tree.should == '<absolute>'
           group.path.should == @path.to_s
           Pathname.new(group.path).should.be.absolute
         end
 
         it "creates a support file group relative to the project" do
-          group = @project.add_pod_group('BananaLib', @path, false, true)
+          group = @sut.add_pod_group('BananaLib', @path, false, true)
           group['Support Files'].source_tree.should == 'SOURCE_ROOT'
           group['Support Files'].path.should.be.nil
         end
@@ -91,17 +91,17 @@ module Pod
       describe "#pod_groups" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
-          @project.add_pod_group('OrangeLib', config.sandbox.pod_dir('OrangeLib'), true)
+          @sut.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
+          @sut.add_pod_group('OrangeLib', config.sandbox.pod_dir('OrangeLib'), true)
         end
 
         it "returns the pod groups" do
-          @project.pod_groups.map(&:name).sort.should == ["BananaLib", "OrangeLib"]
+          @sut.pod_groups.map(&:name).sort.should == ["BananaLib", "OrangeLib"]
         end
 
         it "doesn't alters the original groups" do
-          @project.pods.children.map(&:name).sort.should == ["BananaLib"]
-          @project.development_pods.children.map(&:name).sort.should == ["OrangeLib"]
+          @sut.pods.children.map(&:name).sort.should == ["BananaLib"]
+          @sut.development_pods.children.map(&:name).sort.should == ["OrangeLib"]
         end
 
       end
@@ -109,8 +109,8 @@ module Pod
       #----------------------------------------#
 
       it "returns the group of a Pod with a given name" do
-        @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
-        @project.pod_group('BananaLib').name.should == 'BananaLib'
+        @sut.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
+        @sut.pod_group('BananaLib').name.should == 'BananaLib'
       end
 
       #----------------------------------------#
@@ -118,28 +118,28 @@ module Pod
       describe "#group_for_spec" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
+          @sut.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
         end
 
         it "returns the group for the spec with the given name" do
-          group = @project.group_for_spec('BananaLib/Tree')
+          group = @sut.group_for_spec('BananaLib/Tree')
           group.hierarchy_path.should == '/Pods/BananaLib/Subspecs/Tree'
         end
 
         it "returns the requested subgroup" do
-          group = @project.group_for_spec('BananaLib/Tree', :source_files)
+          group = @sut.group_for_spec('BananaLib/Tree', :source_files)
           group.hierarchy_path.should == '/Pods/BananaLib/Subspecs/Tree/Source Files'
         end
 
         it "raises if unable to recognize the subgroup key" do
           should.raise ArgumentError do
-            @project.group_for_spec('BananaLib/Tree', :unknown)
+            @sut.group_for_spec('BananaLib/Tree', :unknown)
           end.message.should.match /Unrecognized subgroup/
         end
 
         it "doesn't duplicate the groups" do
-          group_1 = @project.group_for_spec('BananaLib/Tree', :source_files)
-          group_2 = @project.group_for_spec('BananaLib/Tree', :source_files)
+          group_1 = @sut.group_for_spec('BananaLib/Tree', :source_files)
+          group_2 = @sut.group_for_spec('BananaLib/Tree', :source_files)
           group_1.uuid.should == group_2.uuid
         end
       end
@@ -152,26 +152,26 @@ module Pod
       describe "#reference_for_path" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
+          @sut.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + "file.m"
-          @group = @project.group_for_spec('BananaLib', :source_files)
+          @group = @sut.group_for_spec('BananaLib', :source_files)
         end
 
         it "adds a file references to the given file" do
-          ref = @project.add_file_reference(@file, @group)
+          ref = @sut.add_file_reference(@file, @group)
           ref.hierarchy_path.should == '/Pods/BananaLib/Source Files/file.m'
         end
 
         it "it doesn't duplicate file references for a single path" do
-          ref_1 = @project.add_file_reference(@file, @group)
-          ref_2 = @project.add_file_reference(@file, @group)
+          ref_1 = @sut.add_file_reference(@file, @group)
+          ref_2 = @sut.add_file_reference(@file, @group)
           ref_1.uuid.should == ref_2.uuid
           @group.children.count.should == 1
         end
 
         it "raises if the given path is not absolute" do
           should.raise ArgumentError do
-            @project.add_file_reference('relative/path/to/file.m', @group)
+            @sut.add_file_reference('relative/path/to/file.m', @group)
           end.message.should.match /Paths must be absolute/
         end
 
@@ -182,26 +182,26 @@ module Pod
       describe "#reference_for_path" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
+          @sut.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + "file.m"
-          @group = @project.group_for_spec('BananaLib', :source_files)
-          @project.add_file_reference(@file, @group)
+          @group = @sut.group_for_spec('BananaLib', :source_files)
+          @sut.add_file_reference(@file, @group)
         end
 
         it "returns the reference for the given path" do
-          ref = @project.reference_for_path(@file)
+          ref = @sut.reference_for_path(@file)
           ref.hierarchy_path.should == '/Pods/BananaLib/Source Files/file.m'
         end
 
         it "returns nil if no reference for the given path is available" do
           another_file = config.sandbox.pod_dir('BananaLib') + "another_file.m"
-          ref = @project.reference_for_path(another_file)
+          ref = @sut.reference_for_path(another_file)
           ref.should.be.nil
         end
 
         it "raises if the given path is not absolute" do
           should.raise ArgumentError do
-            @project.reference_for_path('relative/path/to/file.m')
+            @sut.reference_for_path('relative/path/to/file.m')
           end.message.should.match /Paths must be absolute/
         end
 
@@ -210,16 +210,16 @@ module Pod
       #----------------------------------------#
 
       it "adds the Podfile configured as a Ruby file" do
-        @project.add_podfile(config.sandbox.root + '../Podfile')
-        f = @project['Podfile']
+        @sut.add_podfile(config.sandbox.root + '../Podfile')
+        f = @sut['Podfile']
         f.source_tree.should == 'SOURCE_ROOT'
         f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
         f.path.should == '../Podfile'
       end
 
       it "returns the file reference of the Podfile" do
-        ref = @project.add_podfile(config.sandbox.root + '../Podfile')
-        @project.podfile.should.equal(ref)
+        ref = @sut.add_podfile(config.sandbox.root + '../Podfile')
+        @sut.podfile.should.equal(ref)
       end
 
     end
@@ -231,18 +231,18 @@ module Pod
       describe "#create_group_if_needed" do
 
         it "creates a new group" do
-          group = @project.send(:create_group_if_needed, 'Group')
+          group = @sut.send(:create_group_if_needed, 'Group')
           group.hierarchy_path.should == '/Group'
         end
 
         it "creates a new group" do
-          group = @project.send(:create_group_if_needed, 'Group', @project.pods)
+          group = @sut.send(:create_group_if_needed, 'Group', @sut.pods)
           group.hierarchy_path.should == '/Pods/Group'
         end
 
         it "returns an already existing group" do
-          group_1 = @project.send(:create_group_if_needed, 'Group')
-          group_2 = @project.send(:create_group_if_needed, 'Group')
+          group_1 = @sut.send(:create_group_if_needed, 'Group')
+          group_2 = @sut.send(:create_group_if_needed, 'Group')
           group_1.should.be.equal(group_2)
         end
 
@@ -253,16 +253,16 @@ module Pod
       describe "#spec_group" do
 
         before do
-          @project.add_pod_group('JSONKit', config.sandbox.pod_dir('JSONKit'))
+          @sut.add_pod_group('JSONKit', config.sandbox.pod_dir('JSONKit'))
         end
 
         it "returns the Pod group for root specifications" do
-          group = @project.send(:spec_group, 'JSONKit')
+          group = @sut.send(:spec_group, 'JSONKit')
           group.hierarchy_path.should == '/Pods/JSONKit'
         end
 
         it "returns the group for subspecs" do
-          group = @project.send(:spec_group, 'JSONKit/Parsing')
+          group = @sut.send(:spec_group, 'JSONKit/Parsing')
           group.hierarchy_path.should == '/Pods/JSONKit/Subspecs/Parsing'
         end
 
