@@ -6,6 +6,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Bug Fixes
 
+* Only create a single resource bundle for all targets. Prior to this change a resource bundle included
+  into multiple targets within the project would create duplicately named targets in the Pods Xcode project,
+  causing duplicately named Schemes to be created on each invocation of `pod install`. All targets that reference
+  a given resource bundle now have dependencies on a single common target.
+
+  [Blake Watters](https://github.com/blakewatters)
+  [#1338](https://github.com/CocoaPods/CocoaPods/issues/1338)
+  
 * Solved outstanding issues with CocoaPods resource bundles and Archive builds:
   1. The rsync task copies symlinks into the App Bundle, producing an invalid app. This change add `--copy-links`
   to the rsync invocation to ensure the target files are copied rather than the symlink.
