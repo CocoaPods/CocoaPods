@@ -186,8 +186,9 @@ module Pod
 
       it "computes the state of the Sandbox respect to the resolved dependencies" do
         @analyzer.stubs(:lockfile).returns(nil)
-        state = @analyzer.analyze.sandbox_state
-        state.added.sort.should == ["AFNetworking", "JSONKit", "SVPullToRefresh", "libextobjc"]
+        @analyzer.analyze
+        added_pods = config.sandbox.state.added.sort
+        added_pods.should == ["AFNetworking", "JSONKit", "SVPullToRefresh", "libextobjc"]
       end
 
     end

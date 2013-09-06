@@ -78,6 +78,12 @@ module Pod
       Lockfile.from_file(manifest_path) if manifest_path.exist?
     end
 
+    # @return [Installer::Analyzer::SpecsState] The state of the sandbox
+    #         (added, deleted, changed and unchanged pods) as computed by the
+    #         analyzer.
+    #
+    attr_accessor :state
+
     # @return [Project] the Pods project.
     #
     attr_accessor :project

@@ -56,7 +56,7 @@ module Pod
         @result.specs_by_target = resolve_dependencies
         @result.specifications  = generate_specifications
         @result.targets         = generate_targets
-        @result.sandbox_state   = generate_sandbox_state
+        generate_sandbox_state
         @result
       end
 
@@ -81,7 +81,7 @@ module Pod
       # @return [Bool] Whether the sandbox is in synch with the lockfile.
       #
       def sandbox_needs_install?(analysis_result)
-        state = analysis_result.sandbox_state
+        state = sandbox.state
         needing_install = state.added + state.changed + state.deleted
         !needing_install.empty?
       end
@@ -123,8 +123,8 @@ module Pod
       #         the name of the Pod (root name of the dependencies) and doesn't
       #         group them by target definition.
       #
-      # @todo   [CocoaPods > 0.18] If there isn't a Lockfile all the Pods should
-      #         be marked as added.
+      # @todo   If Pod changes platform it should be marked as added. This
+      #         information currently is not stored in the Lockfile.
       #
       def generate_podfile_state
         if lockfile
@@ -307,6 +307,7 @@ module Pod
           sandbox_state = sandbox_analyzer.analyze
           sandbox_state.print
         end
+        sandbox.state = sandbox_state
         sandbox_state
       end
 
@@ -477,11 +478,6 @@ module Pod
         #         version of Pods that should be installed.
         #
         attr_accessor :specifications
-
-        # @return [SpecsState] the states of the {Sandbox} respect the resolved
-        #         specifications.
-        #
-        attr_accessor :sandbox_state
 
         # @return [Array<Target>] The Podfile targets containing library
         #         dependencies.
