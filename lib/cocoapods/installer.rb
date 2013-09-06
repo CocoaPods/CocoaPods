@@ -80,14 +80,14 @@ module Pod
     # @return [void]
     #
     def install!
-      resolve_dependencies
-      download_dependencies
+      analyze_dependencies
+      download_sources
       generate_pods_project
       write_lockfiles
       integrate_user_project if config.integrate_targets?
     end
 
-    def resolve_dependencies
+    def analyze_dependencies
       UI.section "Analyzing dependencies" do
         analyze
         prepare_for_legacy_compatibility
@@ -95,7 +95,7 @@ module Pod
       end
     end
 
-    def download_dependencies
+    def download_sources
       UI.section "Downloading dependencies" do
         create_file_accessors
         install_pod_sources
@@ -193,9 +193,9 @@ module Pod
         pod_target.build_headers.implode!
       end
 
-      unless sandbox_state.deleted.empty?
+      unless sandbox.state.deleted.empty?
         title_options = { :verbose_prefix => "-> ".red }
-        sandbox_state.deleted.each do |pod_name|
+        sandbox.state.deleted.each do |pod_name|
           UI.titled_section("Removing #{pod_name}".red, title_options) do
             sandbox.clean_pod(pod_name)
           end
@@ -227,7 +227,7 @@ module Pod
     #
     def install_pod_sources
       @installed_specs = []
-      pods_to_install = sandbox_state.added | sandbox_state.changed
+      pods_to_install = sandbox.state.added | sandbox.state.changed
       title_options = { :verbose_prefix => "-> ".green }
       root_specs.sort_by(&:name).each do |spec|
         if pods_to_install.include?(spec.name)
@@ -568,12 +568,6 @@ module Pod
     #
     def root_specs
       analysis_result.specifications.map { |spec| spec.root }.uniq
-    end
-
-    # @return [SpecsState] The state of the sandbox returned by the analyzer.
-    #
-    def sandbox_state
-      analysis_result.sandbox_state
     end
 
     #-------------------------------------------------------------------------#

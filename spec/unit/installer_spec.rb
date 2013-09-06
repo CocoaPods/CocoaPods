@@ -38,15 +38,15 @@ module Pod
     describe "In general" do
 
       before do
-        @installer.stubs(:resolve_dependencies)
-        @installer.stubs(:download_dependencies)
+        @installer.stubs(:analyze_dependencies)
+        @installer.stubs(:download_sources)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:write_lockfiles)
         @installer.stubs(:integrate_user_project)
       end
 
       it "in runs the pre-install hooks before cleaning the Pod sources" do
-        @installer.unstub(:download_dependencies)
+        @installer.unstub(:download_sources)
         @installer.stubs(:create_file_accessors)
         @installer.stubs(:install_pod_sources)
         @installer.stubs(:link_headers)
@@ -75,7 +75,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "#resolve_dependencies" do
+    describe "#analyze_dependencies" do
 
       describe "#analyze" do
 
@@ -87,7 +87,7 @@ module Pod
 
         it "analyzes the Podfile, the Lockfile and the Sandbox" do
           @installer.send(:analyze)
-          @installer.analysis_result.sandbox_state.added.should == ["JSONKit"]
+          config.sandbox.state.added.should == ["JSONKit"]
         end
 
         it "stores the targets created by the analyzer" do
@@ -113,7 +113,7 @@ module Pod
         before do
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = []
-          @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new()
+          config.sandbox.state = Installer::Analyzer::SpecsState.new()
           @pod_targets = [PodTarget.new([], nil, config.sandbox)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
@@ -128,7 +128,7 @@ module Pod
         end
 
         it "deletes the sources of the removed Pods" do
-          @analysis_result.sandbox_state.add_name('Deleted-Pod', :deleted)
+          config.sandbox.state.add_name('Deleted-Pod', :deleted)
           config.sandbox.expects(:clean_pod).with('Deleted-Pod')
           @installer.send(:clean_sandbox)
         end
@@ -139,7 +139,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "#download_dependencies" do
+    describe "#download_sources" do
 
       describe "#install_pod_sources" do
 
@@ -148,10 +148,9 @@ module Pod
           spec_2 = Spec.new
           spec_2.name = 'RestKit'
           @installer.stubs(:root_specs).returns([spec, spec_2])
-          sandbox_state = Installer::Analyzer::SpecsState.new
-          sandbox_state.added << 'BananaLib'
-          sandbox_state.changed << 'RestKit'
-          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          config.sandbox.state = Installer::Analyzer::SpecsState.new
+          config.sandbox.state.added << 'BananaLib'
+          config.sandbox.state.changed << 'RestKit'
           @installer.expects(:install_source_of_pod).with('BananaLib')
           @installer.expects(:install_source_of_pod).with('RestKit')
           @installer.send(:install_pod_sources)
