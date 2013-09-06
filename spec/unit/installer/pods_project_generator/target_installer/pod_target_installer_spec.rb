@@ -44,7 +44,7 @@ module Pod
 
       #--------------------------------------#
 
-      it 'adds the target for the static library to the project' do
+      it 'adds the target for the static target to the project' do
         @installer.install!
         @project.targets.count.should == 1
         @project.targets.first.name.should == 'Pods-BananaLib' 
@@ -87,16 +87,16 @@ module Pod
 
       it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
         @installer.install!
-        @installer.library.target.build_configurations.each do |config|
+        @installer.target.target.build_configurations.each do |config|
           config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should.be.nil
         end
       end
 
       #--------------------------------------#
 
-      it 'adds the source files of each pod to the target of the Pod library' do
+      it 'adds the source files of each pod to the target of the Pod target' do
         @installer.install!
-        names = @installer.library.target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
+        names = @installer.target.target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
         names.should.include("Banana.m")
       end
 
@@ -138,7 +138,7 @@ module Pod
 
       it "creates a dummy source to ensure the compilation of libraries with only categories" do
         @installer.install!
-        build_files = @installer.library.target.source_build_phase.files
+        build_files = @installer.target.target.source_build_phase.files
         build_file = build_files.find { |bf| bf.file_ref.display_name == 'Pods-BananaLib-dummy.m' }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-BananaLib-dummy.m'
@@ -196,7 +196,7 @@ module Pod
         end
 
         it "adds -w per pod if target definition inhibits warnings for that pod" do
-          @installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          @installer.target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
           flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
 
           flags.should.include?('-w')
@@ -208,7 +208,7 @@ module Pod
         end
 
         it "adds -Xanalyzer -analyzer-disable-checker per pod" do
-          @installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          @installer.target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
           flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
 
           flags.should.include?('-Xanalyzer -analyzer-disable-checker')

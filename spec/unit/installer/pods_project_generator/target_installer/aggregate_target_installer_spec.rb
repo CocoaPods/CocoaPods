@@ -54,7 +54,7 @@ module Pod
 
       #--------------------------------------#
 
-      it 'adds the target for the static library to the project' do
+      it 'adds the target for the static target to the project' do
         @installer.install!
         @project.targets.count.should == 1
         @project.targets.first.name.should == @target_definition.label
@@ -105,7 +105,7 @@ module Pod
 
       it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
         @installer.install!
-        @installer.library.target.build_configurations.each do |config|
+        @installer.target.target.build_configurations.each do |config|
           config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should.be.nil
         end
       end
@@ -157,9 +157,9 @@ module Pod
         plist.read.should.include?('Permission is hereby granted')
       end
 
-      it "creates a dummy source to ensure the creation of a single base library" do
+      it "creates a dummy source to ensure the creation of a single base target" do
         @installer.install!
-        build_files = @installer.library.target.source_build_phase.files
+        build_files = @installer.target.target.source_build_phase.files
         build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-dummy.m') }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-dummy.m'

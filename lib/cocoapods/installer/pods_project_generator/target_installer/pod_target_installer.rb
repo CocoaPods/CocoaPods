@@ -12,7 +12,7 @@ module Pod
       # @return [void]
       #
       def install!
-        UI.message "- Installing target `#{library.name}` #{library.platform}" do
+        UI.message "- Installing target `#{target.name}` #{target.platform}" do
           add_target
           move_target_product_file_reference
           add_files_to_build_phases
@@ -39,21 +39,21 @@ module Pod
       #
       def add_files_to_build_phases
         UI.message "- Adding Build files" do
-          library.file_accessors.each do |file_accessor|
+          target.file_accessors.each do |file_accessor|
             consumer = file_accessor.spec_consumer
             flags = compiler_flags_for_consumer(consumer)
             source_files = file_accessor.source_files
             file_refs = source_files.map { |sf| project.reference_for_path(sf) }
-            target.add_file_references(file_refs, flags)
+            target.target.add_file_references(file_refs, flags)
 
           end
         end
       end
 
       def move_target_product_file_reference
-        pod_name = library.pod_name
+        pod_name = target.pod_name
         group = project.group_for_spec(pod_name, :products)
-        target.product_reference.move(group)
+        target.target.product_reference.move(group)
       end
 
       # Adds the resources of the Pods to the Pods project.
@@ -65,7 +65,7 @@ module Pod
       #
       def add_resources_bundle_targets
         UI.message "- Adding resource bundles to Pods project" do
-          library.file_accessors.each do |file_accessor|
+          target.file_accessors.each do |file_accessor|
             file_accessor.resource_bundles.each do |bundle_name, paths|
               file_references = paths.map { |sf| project.reference_for_path(sf) }
               group = project.group_for_spec(file_accessor.spec.name, :products)
@@ -73,7 +73,7 @@ module Pod
               bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name, product_group)
               bundle_target.add_resources(file_references)
 
-              library.user_build_configurations.each do |bc_name, type|
+              target.user_build_configurations.each do |bc_name, type|
                 bundle_target.add_build_configuration(bc_name, type)
               end
 
@@ -88,25 +88,25 @@ module Pod
       # @return [void]
       #
       def create_xcconfig_file
-        path = library.xcconfig_path
-        public_gen = Generator::XCConfig::PublicPodXCConfig.new(library)
+        path = target.xcconfig_path
+        public_gen = Generator::XCConfig::PublicPodXCConfig.new(target)
         UI.message "- Generating public xcconfig file at #{UI.path(path)}" do
           public_gen.save_as(path)
           #
           # TODO
           add_file_to_support_group(path)
           # relative_path = path.relative_path_from(sandbox.root)
-          # group = project.group_for_spec(library.root_spec.name, :support_files)
+          # group = project.group_for_spec(target.root_spec.name, :support_files)
           # group.new_file(relative_path)
         end
 
-        path = library.xcconfig_private_path
-        private_gen = Generator::XCConfig::PrivatePodXCConfig.new(library, public_gen.xcconfig)
+        path = target.xcconfig_private_path
+        private_gen = Generator::XCConfig::PrivatePodXCConfig.new(target, public_gen.xcconfig)
         UI.message "- Generating private xcconfig file at #{UI.path(path)}" do
           private_gen.save_as(path)
           xcconfig_file_ref = add_file_to_support_group(path)
 
-          target.build_configurations.each do |c|
+          target.target.build_configurations.each do |c|
             c.base_configuration_reference = xcconfig_file_ref
           end
         end
@@ -119,14 +119,14 @@ module Pod
       # @return [void]
       #
       def create_prefix_header
-        path = library.prefix_header_path
+        path = target.prefix_header_path
         UI.message "- Generating prefix header at #{UI.path(path)}" do
-          generator = Generator::PrefixHeader.new(library.file_accessors, library.platform)
-          generator.imports << library.target_environment_header_path.basename
+          generator = Generator::PrefixHeader.new(target.file_accessors, target.platform)
+          generator.imports << target.target_environment_header_path.basename
           generator.save_as(path)
           add_file_to_support_group(path)
 
-          target.build_configurations.each do |c|
+          target.target.build_configurations.each do |c|
             relative_path = path.relative_path_from(sandbox.root)
             c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
           end
@@ -143,9 +143,9 @@ module Pod
       #
       def link_to_system_frameworks
         UI.message "- Linking to system frameworks" do
-          library.specs.each do |spec|
-            spec.consumer(library.platform).frameworks.each do |framework|
-              project.add_system_framework(framework, library.target)
+          target.specs.each do |spec|
+            spec.consumer(target.platform).frameworks.each do |framework|
+              project.add_system_framework(framework, target.target)
             end
           end
         end
@@ -215,7 +215,7 @@ module Pod
       # @return [PBXFileReference] the file reference of the added file.
       #
       def add_file_to_support_group(path)
-        pod_name = library.pod_name
+        pod_name = target.pod_name
         group = project.group_for_spec(pod_name, :support_files)
         group.new_file(path)
       end
