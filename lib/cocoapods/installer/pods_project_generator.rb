@@ -49,7 +49,6 @@ module Pod
         install_targets
         install_system_frameworks
         set_target_dependencies
-        link_aggregate_target
       end
 
       # @return [Project] the generated Pods project.
@@ -176,12 +175,6 @@ module Pod
       #
       # @return [void]
       #
-      def link_aggregate_target
-        aggregate_targets.each do |aggregate_target|
-          native_target = aggregate_target.target
-          aggregate_target.pod_targets.each do |pod_target|
-            product = pod_target.target.product_reference
-            native_target.frameworks_build_phase.add_file_reference(product)
           end
         end
       end

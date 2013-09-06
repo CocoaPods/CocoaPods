@@ -21,6 +21,7 @@ module Pod
           create_xcconfig_file
           create_prefix_header
           create_dummy_source
+          link_to_system_frameworks
         end
       end
 
@@ -128,6 +129,24 @@ module Pod
           target.build_configurations.each do |c|
             relative_path = path.relative_path_from(sandbox.root)
             c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
+          end
+        end
+      end
+
+      # Add a file reference to the system frameworks if needed and links the
+      # target to them.
+      #
+      # This is done only for informative purposes as the xcconfigs are the
+      # authoritative source of the build settings.
+      #
+      # @return [void]
+      #
+      def link_to_system_frameworks
+        UI.message "- Linking to system frameworks" do
+          library.specs.each do |spec|
+            spec.consumer(library.platform).frameworks.each do |framework|
+              project.add_system_framework(framework, library.target)
+            end
           end
         end
       end

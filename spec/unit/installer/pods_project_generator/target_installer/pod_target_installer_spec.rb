@@ -146,6 +146,10 @@ module Pod
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
 
+      xit 'links to system frameworks' do
+
+      end
+
       #--------------------------------------------------------------------------------#
 
       describe "concerning ARC before and after iOS 6.0 and OS X 10.8" do
