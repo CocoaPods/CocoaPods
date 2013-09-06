@@ -38,8 +38,9 @@ module Pod
     # @return [String] A string suitable for debugging.
     #
     def inspect
-      "<#{self.class} name=#{name} >"
+      "<#{self.class} name=#{name}>"
     end
+    alias :to_s :inspect
 
     #-------------------------------------------------------------------------#
 
