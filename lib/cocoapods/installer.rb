@@ -112,7 +112,7 @@ module Pod
         installer.podfile_path = config.podfile_path
         installer.install
         run_post_install_hooks
-        installer.write_pod_project
+        installer.write_project
       end
     end
 

@@ -276,14 +276,14 @@ module Pod
 
       it "generates the Pods project" do
         Installer::PodsProjectGenerator.any_instance.expects(:install)
-        Installer::PodsProjectGenerator.any_instance.expects(:write_pod_project)
+        Installer::PodsProjectGenerator.any_instance.expects(:write_project)
         @installer.send(:generate_pods_project)
       end
 
       it "in runs the post-install hooks before serializing the Pods project" do
         Installer::PodsProjectGenerator.any_instance.expects(:install)
         def @installer.run_post_install_hooks
-          Installer::PodsProjectGenerator.any_instance.expects(:write_pod_project)
+          Installer::PodsProjectGenerator.any_instance.expects(:write_project)
         end
         @installer.send(:generate_pods_project)
       end
