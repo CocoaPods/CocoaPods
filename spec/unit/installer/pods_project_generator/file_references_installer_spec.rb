@@ -7,9 +7,9 @@ module Pod
       @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
       @pod_target = PodTarget.new([], nil, config.sandbox)
       @pod_target.file_accessors = [@file_accessor]
-      @project = Project.new(config.sandbox.project_path)
-      @project.add_pod_group('BananaLib', fixture('banana-lib'))
-      @installer = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+      config.sandbox.project = Project.new(config.sandbox.project_path)
+      config.sandbox.project.add_pod_group('BananaLib', fixture('banana-lib'))
+      @installer = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [@pod_target])
     end
 
     #-------------------------------------------------------------------------#
@@ -24,22 +24,30 @@ module Pod
 
       it "adds the files references of the source files the Pods project" do
         @installer.install!
-        file_ref = @installer.pods_project['Pods/BananaLib/Source Files/Banana.m']
+        file_ref = config.sandbox.project['Pods/BananaLib/Source Files/Banana.m']
         file_ref.should.be.not.nil
         file_ref.path.should == "Classes/Banana.m"
       end
 
-      xit "adds the file references of the frameworks of the projet" do
-
+      it "adds the file references of the frameworks of the project" do
+        @installer.install!
+        group = config.sandbox.project.group_for_spec('BananaLib', :frameworks_and_libraries)
+        file_ref = group['Bananalib.framework']
+        file_ref.should.be.not.nil
+        file_ref.path.should == "Bananalib.framework"
       end
 
-      xit "adds the file references of the libraries of the project" do
-
+      it "adds the file references of the libraries of the project" do
+        @installer.install!
+        group = config.sandbox.project.group_for_spec('BananaLib', :frameworks_and_libraries)
+        file_ref = group['libBananalib.a']
+        file_ref.should.be.not.nil
+        file_ref.path.should == "libBananalib.a"
       end
 
       it "adds the files references of the resources the Pods project" do
         @installer.install!
-        file_ref = @installer.pods_project['Pods/BananaLib/Resources/logo-sidebar.png']
+        file_ref = config.sandbox.project['Pods/BananaLib/Resources/logo-sidebar.png']
         file_ref.should.be.not.nil
         file_ref.path.should == "Resources/logo-sidebar.png"
       end
@@ -56,7 +64,7 @@ module Pod
           pod_target_1.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
           pod_target_2 = PodTarget.new([], nil, config.sandbox)
           pod_target_2.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-          installer = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [pod_target_1, pod_target_2], @project)
+          installer = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [pod_target_1, pod_target_2])
           roots = installer.send(:file_accessors).map { |fa| fa.path_list.root }
           roots.should == [fixture('banana-lib'), fixture('banana-lib')]
         end
@@ -64,15 +72,19 @@ module Pod
         it "handles libraries empty libraries without file accessors" do
           pod_target_1 = PodTarget.new([], nil, config.sandbox)
           pod_target_1.file_accessors = []
-          installer = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)
+          installer = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [pod_target_1])
           roots = installer.send(:file_accessors).should == []
         end
       end
 
       describe "#add_file_accessors_paths_to_pods_group" do 
-        xit "adds the paths of the paths of the file accessor corresponding to the given key to the Pods project" do
 
+        it "adds the paths of the paths of the file accessor corresponding to the given key to the Pods project" do
+          @installer.send(:add_file_accessors_paths_to_pods_group, :source_files, :source_files)
+          group = config.sandbox.project.group_for_spec('BananaLib', :source_files)
+          group.children.map(&:name).sort.should == ["Banana.h", "Banana.m", "BananaPrivate.h"]
         end
+
       end
     end
 

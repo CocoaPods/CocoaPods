@@ -13,20 +13,15 @@ module Pod
 
       # @return [Array<Library>] The libraries of the installation.
       #
-      attr_reader :libraries
-
-      # @return [Project] The Pods project.
-      #
-      attr_reader :pods_project
+      attr_reader :pod_targets
 
       # @param [Sandbox] sandbox @see sandbox
       # @param [Array<Library>] libraries @see libraries
       # @param [Project] libraries @see libraries
       #
-      def initialize(sandbox, libraries, pods_project)
+      def initialize(sandbox, pod_targets)
         @sandbox = sandbox
-        @libraries = libraries
-        @pods_project = pods_project
+        @pod_targets = pod_targets
       end
 
       # Installs the file references.
@@ -68,7 +63,7 @@ module Pod
       # @return [void]
       #
       def add_source_files_references
-        UI.message "- Adding source files to Pods project" do
+        UI.message "- Adding source files" do
           add_file_accessors_paths_to_pods_group(:source_files, :source_files)
         end
       end
@@ -78,7 +73,7 @@ module Pod
       # @return [void]
       #
       def add_frameworks_bundles
-        UI.message "- Adding frameworks to Pods project" do
+        UI.message "- Adding frameworks" do
           add_file_accessors_paths_to_pods_group(:vendored_frameworks, :frameworks_and_libraries)
         end
       end
@@ -88,7 +83,7 @@ module Pod
       # @return [void]
       #
       def add_vendored_libraries
-        UI.message "- Adding frameworks to Pods project" do
+        UI.message "- Adding libraries" do
           add_file_accessors_paths_to_pods_group(:vendored_libraries, :frameworks_and_libraries)
         end
       end
@@ -101,7 +96,7 @@ module Pod
       # @return [void]
       #
       def add_resources
-        UI.message "- Adding resources to Pods project" do
+        UI.message "- Adding resources" do
           add_file_accessors_paths_to_pods_group(:resources, :resources)
           add_file_accessors_paths_to_pods_group(:resource_bundle_files, :resources)
         end
@@ -114,11 +109,17 @@ module Pod
 
       # @!group Private Helpers
 
+      # TODO
+      #
+      def pods_project
+        sandbox.project
+      end
+
       # @return [Array<Sandbox::FileAccessor>] The file accessors for all the
       #         specs platform combinations.
       #
       def file_accessors
-        @file_accessors ||= libraries.map(&:file_accessors).flatten.compact
+        @file_accessors ||= pod_targets.map(&:file_accessors).flatten.compact
       end
 
       # Adds file references to the list of the paths returned by the file
