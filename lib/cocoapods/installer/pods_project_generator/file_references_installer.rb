@@ -39,7 +39,6 @@ module Pod
         add_frameworks_bundles
         add_vendored_libraries
         add_resources
-        link_headers
       end
 
       #-----------------------------------------------------------------------#
@@ -108,29 +107,6 @@ module Pod
         end
       end
 
-      # Creates the link to the headers of the Pod in the sandbox.
-      #
-      # @return [void]
-      #
-      def link_headers
-        UI.message "- Linking headers" do
-          libraries.each do |library|
-            library.file_accessors.each do |file_accessor|
-              headers_sandbox = Pathname.new(file_accessor.spec.root.name)
-              library.build_headers.add_search_path(headers_sandbox)
-              sandbox.public_headers.add_search_path(headers_sandbox)
-
-              header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
-                library.build_headers.add_files(namespaced_path, files)
-              end
-
-              header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
-                sandbox.public_headers.add_files(namespaced_path, files)
-              end
-            end
-          end
-        end
-      end
 
       #-----------------------------------------------------------------------#
 
@@ -165,41 +141,6 @@ module Pod
             pods_project.add_file_reference(path, group)
           end
         end
-      end
-
-      # Computes the destination sub-directory in the sandbox
-      #
-      # @param  [Pathname] headers_sandbox
-      #         The sandbox where the headers links should be stored for this
-      #         Pod.
-      #
-      # @param  [Specification::Consumer] consumer
-      #         The consumer for which the headers need to be linked.
-      #
-      # @param  [Array<Pathname>] headers
-      #         The absolute paths of the headers which need to be mapped.
-      #
-      # @return [Hash{Pathname => Array<Pathname>}] A hash containing the
-      #         headers folders as the keys and the absolute paths of the
-      #         header files as the values.
-      #
-      def header_mappings(headers_sandbox, file_accessor, headers)
-        consumer = file_accessor.spec_consumer
-        dir = headers_sandbox
-        dir = dir + consumer.header_dir if consumer.header_dir
-
-        mappings = {}
-        headers.each do |header|
-          sub_dir = dir
-          if consumer.header_mappings_dir
-            header_mappings_dir = file_accessor.path_list.root + consumer.header_mappings_dir
-            relative_path = header.relative_path_from(header_mappings_dir)
-            sub_dir = sub_dir + relative_path.dirname
-          end
-          mappings[sub_dir] ||= []
-          mappings[sub_dir] << header
-        end
-        mappings
       end
 
       #-----------------------------------------------------------------------#

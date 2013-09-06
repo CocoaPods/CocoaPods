@@ -49,6 +49,7 @@ module Pod
         @installer.unstub(:download_dependencies)
         @installer.stubs(:create_file_accessors)
         @installer.stubs(:install_pod_sources)
+        @installer.stubs(:link_headers)
         def @installer.run_pre_install_hooks
           @hook_called = true
         end
@@ -179,14 +180,85 @@ module Pod
 
         #--------------------------------------#
 
-        describe "#clean" do
+        describe "#clean_pod_sources" do
 
           it "it cleans only if the config instructs to do it" do
             config.clean = false
+            Installer::PodSourceInstaller.any_instance.expects(:clean!).never
             @installer.send(:clean_pod_sources)
-            Installer::PodSourceInstaller.any_instance.expects(:install!).never
           end
 
+        end
+
+        #--------------------------------------#
+
+        describe "#link_headers" do
+
+          it "links the build headers" do
+            pod_target = PodTarget.new(nil, nil, config.sandbox)
+            pod_target.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
+            @installer.stubs(:pod_targets).returns([pod_target])
+            @installer.send(:link_headers)
+
+            headers_root = pod_target.build_headers.root
+            public_header =  headers_root + 'BananaLib/Banana.h'
+            private_header = headers_root + 'BananaLib/BananaPrivate.h'
+            public_header.should.exist
+            private_header.should.exist
+          end
+
+          it "links the public headers" do
+            pod_target = PodTarget.new(nil, nil, config.sandbox)
+            pod_target.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
+            @installer.stubs(:pod_targets).returns([pod_target])
+            @installer.send(:link_headers)
+
+            headers_root = config.sandbox.public_headers.root
+            public_header =  headers_root + 'BananaLib/Banana.h'
+            private_header = headers_root + 'BananaLib/BananaPrivate.h'
+            public_header.should.exist
+            private_header.should.not.exist
+          end
+
+          describe "#header_mappings" do
+
+            before do
+              @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
+            end
+
+            it "returns the header mappings" do
+              headers_sandbox = Pathname.new('BananaLib')
+              headers = [Pathname.new('BananaLib/Banana.h')]
+              mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
+              mappings.should == {
+                headers_sandbox => [Pathname.new('BananaLib/Banana.h')]
+              }
+            end
+
+            it "takes into account the header dir specified in the spec" do
+              headers_sandbox = Pathname.new('BananaLib')
+              headers = [Pathname.new('BananaLib/Banana.h')]
+              @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
+              mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
+              mappings.should == {
+                (headers_sandbox + 'Sub_dir') => [Pathname.new('BananaLib/Banana.h')]
+              }
+            end
+
+            it "takes into account the header mappings dir specified in the spec" do
+              headers_sandbox = Pathname.new('BananaLib')
+              header_1 = @file_accessor.root + 'BananaLib/sub_dir/dir_1/banana_1.h'
+              header_2 = @file_accessor.root + 'BananaLib/sub_dir/dir_2/banana_2.h'
+              headers = [ header_1, header_2 ]
+              @file_accessor.spec_consumer.stubs(:header_mappings_dir).returns('BananaLib/sub_dir')
+              mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
+              mappings.should == {
+                (headers_sandbox + 'dir_1') => [header_1],
+                (headers_sandbox + 'dir_2') => [header_2],
+              }
+            end
+
+          end
         end
       end
     end
@@ -210,6 +282,7 @@ module Pod
       end
 
       it "in runs the post-install hooks before serializing the Pods project" do
+        Installer::PodsProjectGenerator.any_instance.expects(:install)
         def @installer.run_post_install_hooks
           Installer::PodsProjectGenerator.any_instance.expects(:write_pod_project)
         end

@@ -44,24 +44,6 @@ module Pod
         file_ref.path.should == "Resources/logo-sidebar.png"
       end
 
-      it "links the build headers" do
-        @installer.install!
-        headers_root = @pod_target.build_headers.root
-        public_header =  headers_root + 'BananaLib/Banana.h'
-        private_header = headers_root + 'BananaLib/BananaPrivate.h'
-        public_header.should.exist
-        private_header.should.exist
-      end
-
-      it "links the public headers" do
-        @installer.install!
-        headers_root = config.sandbox.public_headers.root
-        public_header =  headers_root + 'BananaLib/Banana.h'
-        private_header = headers_root + 'BananaLib/BananaPrivate.h'
-        public_header.should.exist
-        private_header.should.not.exist
-      end
-
     end
 
     #-------------------------------------------------------------------------#
@@ -92,41 +74,6 @@ module Pod
 
         end
       end
-
-      describe "#add_file_accessors_paths_to_pods_group" do 
-        it "returns the header mappings" do
-          headers_sandbox = Pathname.new('BananaLib')
-          headers = [Pathname.new('BananaLib/Banana.h')]
-          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-          mappings.should == {
-            headers_sandbox => [Pathname.new('BananaLib/Banana.h')]
-          }
-        end
-
-        it "takes into account the header dir specified in the spec" do
-          headers_sandbox = Pathname.new('BananaLib')
-          headers = [Pathname.new('BananaLib/Banana.h')]
-          @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
-          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-          mappings.should == {
-            (headers_sandbox + 'Sub_dir') => [Pathname.new('BananaLib/Banana.h')]
-          }
-        end
-
-        it "takes into account the header mappings dir specified in the spec" do
-          headers_sandbox = Pathname.new('BananaLib')
-          header_1 = @file_accessor.root + 'BananaLib/sub_dir/dir_1/banana_1.h'
-          header_2 = @file_accessor.root + 'BananaLib/sub_dir/dir_2/banana_2.h'
-          headers = [ header_1, header_2 ]
-          @file_accessor.spec_consumer.stubs(:header_mappings_dir).returns('BananaLib/sub_dir')
-          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-          mappings.should == {
-            (headers_sandbox + 'dir_1') => [header_1],
-            (headers_sandbox + 'dir_2') => [header_2],
-          }
-        end
-      end
-
     end
 
     #-------------------------------------------------------------------------#
