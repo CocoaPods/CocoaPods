@@ -209,16 +209,27 @@ module Pod
 
       #----------------------------------------#
 
-      it "adds the Podfile configured as a Ruby file" do
-        @sut.add_podfile(config.sandbox.root + '../Podfile')
-        f = @sut['Podfile']
-        f.source_tree.should == 'SOURCE_ROOT'
-        f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
-        f.path.should == '../Podfile'
+      describe "#set_podfile" do
+
+        it "adds the Podfile configured as a Ruby file" do
+          @sut.set_podfile(config.sandbox.root + '../Podfile')
+          f = @sut['Podfile']
+          f.source_tree.should == 'SOURCE_ROOT'
+          f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
+          f.path.should == '../Podfile'
+        end
+
+        it "updates the Podfile if it already exists" do
+          ref = @sut.set_podfile(config.sandbox.root + '../Podfile')
+          @sut.set_podfile(config.sandbox.root + '../Dir/Podfile')
+          ref.path.should == '../Dir/Podfile'
+        end
       end
 
+      #----------------------------------------#
+
       it "returns the file reference of the Podfile" do
-        ref = @sut.add_podfile(config.sandbox.root + '../Podfile')
+        ref = @sut.set_podfile(config.sandbox.root + '../Podfile')
         @sut.podfile.should.equal(ref)
       end
 

@@ -82,7 +82,6 @@ module Pod
     #
     def add_pod_group(pod_name, path, development = false, absolute = false)
       raise "[BUG]" if pod_group(pod_name)
-
       parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
       group = parent_group.new_group(pod_name, path, source_tree)
@@ -105,7 +104,7 @@ module Pod
     # @return [PBXGroup] The group.
     #
     def pod_group(pod_name)
-      pod_groups.find { |group| group.name == pod_name }
+      pod_groups.find { |group| group.display_name == pod_name }
     end
 
     # @return [Hash] The names of the specification subgroups by key.
@@ -191,14 +190,21 @@ module Pod
     # @param  [#to_s] podfile_path
     #         The path of the Podfile.
     #
-    # @return [PBXFileReference] The new file reference.
+    # @return [void] The new file reference.
     #
-    def add_podfile(podfile_path)
-      podfile_ref = new_file(podfile_path, :project)
-      podfile_ref.name = 'Podfile'
-      podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
-      podfile_ref.last_known_file_type = 'text'
-      podfile_ref
+    def set_podfile(podfile_path)
+      if podfile_path
+        if podfile
+          podfile_ref = podfile
+          podfile_ref.set_path(podfile_path)
+        else
+          podfile_ref = new_file(podfile_path, :project)
+        end
+        podfile_ref.name = 'Podfile'
+        podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
+        podfile_ref.last_known_file_type = 'text'
+        podfile_ref
+      end
     end
 
     # @return [PBXFileReference] The file reference of the Podfile.
@@ -218,8 +224,8 @@ module Pod
     # @param  [String] name
     #         The name of the group.
     #
-    # @param  [String] parent
-    #         The parent group. If nil resolves to the maingroup.
+    # @param  [String, Nil] parent
+    #         The parent group. If nil resolves to the main group.
     #
     # @return [PBXGroup] The group.
     #
