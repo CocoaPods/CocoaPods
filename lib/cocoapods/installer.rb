@@ -341,15 +341,17 @@ module Pod
     # @return [void]
     #
     def write_lockfiles
-      # checkout_options = sandbox.checkout_options
-      @lockfile = Lockfile.generate(podfile, analysis_result.specifications)
+      UI.section "Writing Lockfiles" do
+        # checkout_options = sandbox.checkout_options
+        @lockfile = Lockfile.generate(podfile, analysis_result.specifications)
 
-      UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
-        @lockfile.write_to_disk(config.lockfile_path)
-      end
+        UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
+          @lockfile.write_to_disk(config.lockfile_path)
+        end
 
-      UI.message "- Writing Manifest in #{UI.path sandbox.manifest_path}" do
-        @lockfile.write_to_disk(sandbox.manifest_path)
+        UI.message "- Writing Manifest in #{UI.path sandbox.manifest_path}" do
+          @lockfile.write_to_disk(sandbox.manifest_path)
+        end
       end
     end
 
