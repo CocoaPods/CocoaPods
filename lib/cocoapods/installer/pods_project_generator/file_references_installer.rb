@@ -64,7 +64,7 @@ module Pod
         #
         def add_source_files_references
           UI.message "- Adding source files" do
-            add_file_accessors_paths_to_pods_group(:source_files, :source_files)
+            add_paths_to_group(:source_files, :source_files)
           end
         end
 
@@ -74,7 +74,7 @@ module Pod
         #
         def add_frameworks_bundles
           UI.message "- Adding frameworks" do
-            add_file_accessors_paths_to_pods_group(:vendored_frameworks, :frameworks_and_libraries)
+            add_paths_to_group(:vendored_frameworks, :frameworks_and_libraries)
           end
         end
 
@@ -84,7 +84,7 @@ module Pod
         #
         def add_vendored_libraries
           UI.message "- Adding libraries" do
-            add_file_accessors_paths_to_pods_group(:vendored_libraries, :frameworks_and_libraries)
+            add_paths_to_group(:vendored_libraries, :frameworks_and_libraries)
           end
         end
 
@@ -97,8 +97,8 @@ module Pod
         #
         def add_resources
           UI.message "- Adding resources" do
-            add_file_accessors_paths_to_pods_group(:resources, :resources)
-            add_file_accessors_paths_to_pods_group(:resource_bundle_files, :resources)
+            add_paths_to_group(:resources, :resources)
+            add_paths_to_group(:resource_bundle_files, :resources)
           end
         end
 
@@ -128,7 +128,7 @@ module Pod
         #
         # @return [void]
         #
-        def add_file_accessors_paths_to_pods_group(file_accessor_key, group_key)
+        def add_paths_to_group(file_accessor_key, group_key)
           file_accessors.each do |file_accessor|
             paths = file_accessor.send(file_accessor_key)
             paths.each do |path|

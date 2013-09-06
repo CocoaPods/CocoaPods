@@ -77,10 +77,10 @@ module Pod
         end
       end
 
-      describe "#add_file_accessors_paths_to_pods_group" do 
+      describe "#add_paths_to_group" do
 
         it "adds the paths of the paths of the file accessor corresponding to the given key to the Pods project" do
-          @sut.send(:add_file_accessors_paths_to_pods_group, :source_files, :source_files)
+          @sut.send(:add_paths_to_group, :source_files, :source_files)
           group = config.sandbox.project.group_for_spec('BananaLib', :source_files)
           group.children.map(&:name).sort.should == ["Banana.h", "Banana.m", "BananaPrivate.h"]
         end
