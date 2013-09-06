@@ -38,14 +38,13 @@ module Pod
       # @return [void]
       #
       def add_files_to_build_phases
-        UI.message "- Adding Build files" do
+        UI.message "- Adding build files" do
           target.file_accessors.each do |file_accessor|
             consumer = file_accessor.spec_consumer
             flags = compiler_flags_for_consumer(consumer)
             source_files = file_accessor.source_files
             file_refs = source_files.map { |sf| project.reference_for_path(sf) }
             target.target.add_file_references(file_refs, flags)
-
           end
         end
       end
@@ -64,7 +63,7 @@ module Pod
       # @return [void]
       #
       def add_resources_bundle_targets
-        UI.message "- Adding resource bundles to Pods project" do
+        UI.message "- Adding resource bundles" do
           target.file_accessors.each do |file_accessor|
             file_accessor.resource_bundles.each do |bundle_name, paths|
               file_references = paths.map { |sf| project.reference_for_path(sf) }
@@ -88,9 +87,9 @@ module Pod
       # @return [void]
       #
       def create_xcconfig_file
-        path = target.xcconfig_path
         public_gen = Generator::XCConfig::PublicPodXCConfig.new(target)
-        UI.message "- Generating public xcconfig file at #{UI.path(path)}" do
+        UI.message "- Generating public xcconfig file" do
+          path = target.xcconfig_path
           public_gen.save_as(path)
           #
           # TODO
@@ -100,9 +99,9 @@ module Pod
           # group.new_file(relative_path)
         end
 
-        path = target.xcconfig_private_path
-        private_gen = Generator::XCConfig::PrivatePodXCConfig.new(target, public_gen.xcconfig)
-        UI.message "- Generating private xcconfig file at #{UI.path(path)}" do
+        UI.message "- Generating private xcconfig file" do
+          path = target.xcconfig_private_path
+          private_gen = Generator::XCConfig::PrivatePodXCConfig.new(target, public_gen.xcconfig)
           private_gen.save_as(path)
           xcconfig_file_ref = add_file_to_support_group(path)
 
@@ -119,8 +118,8 @@ module Pod
       # @return [void]
       #
       def create_prefix_header
-        path = target.prefix_header_path
-        UI.message "- Generating prefix header at #{UI.path(path)}" do
+        UI.message "- Generating prefix header" do
+          path = target.prefix_header_path
           generator = Generator::PrefixHeader.new(target.file_accessors, target.platform)
           generator.imports << target.target_environment_header_path.basename
           generator.save_as(path)

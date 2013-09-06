@@ -33,8 +33,8 @@ module Pod
       # @return [void]
       #
       def create_xcconfig_file
-        path = target.xcconfig_path
-        UI.message "- Generating xcconfig file at #{UI.path(path)}" do
+        UI.message "- Generating xcconfig file" do
+          path = target.xcconfig_path
           gen = Generator::XCConfig::AggregateXCConfig.new(target)
           gen.save_as(path)
           target.xcconfig = gen.xcconfig
@@ -50,8 +50,8 @@ module Pod
       # pods and the installed specifications of a pod.
       #
       def create_target_environment_header
-        path = target.target_environment_header_path
-        UI.message "- Generating target environment header at #{UI.path(path)}" do
+        UI.message "- Generating target environment header" do
+          path = target.target_environment_header_path
           generator = Generator::TargetEnvironmentHeader.new(target.pod_targets.map { |l| l.specs }.flatten)
           generator.save_as(path)
           add_file_to_support_group(path)
@@ -68,8 +68,8 @@ module Pod
       #
       def create_bridge_support_file
         if target_definition.podfile.generate_bridge_support?
-          path = target.bridge_support_path
-          UI.message "- Generating BridgeSupport metadata at #{UI.path(path)}" do
+          UI.message "- Generating BridgeSupport metadata" do
+            path = target.bridge_support_path
             headers = target.target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }
             generator = Generator::BridgeSupport.new(headers)
             generator.save_as(path)
@@ -88,8 +88,8 @@ module Pod
       # @return [void]
       #
       def create_copy_resources_script
-        path = target.copy_resources_script_path
-        UI.message "- Generating copy resources script at #{UI.path(path)}" do
+        UI.message "- Generating copy resources script" do
+          path = target.copy_resources_script_path
           file_accessors = target.pod_targets.map(&:file_accessors).flatten
           resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map { |res| res.relative_path_from(project.path.dirname) }}.flatten
           resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map {|name| "${BUILT_PRODUCTS_DIR}/#{name}.bundle" } }.flatten
@@ -108,10 +108,10 @@ module Pod
       # @return [void]
       #
       def create_acknowledgements
-        basepath = target.acknowledgements_basepath
         Generator::Acknowledgements.generators.each do |generator_class|
-          path = generator_class.path_from_basepath(basepath)
-          UI.message "- Generating acknowledgements at #{UI.path(path)}" do
+          UI.message "- Generating acknowledgements" do
+            basepath = target.acknowledgements_basepath
+            path = generator_class.path_from_basepath(basepath)
             file_accessors = target.pod_targets.map(&:file_accessors).flatten
             generator = generator_class.new(file_accessors)
             generator.save_as(path)

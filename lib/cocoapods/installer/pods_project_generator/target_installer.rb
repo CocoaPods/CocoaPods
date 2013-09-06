@@ -74,8 +74,8 @@ module Pod
         # @return [void]
         #
         def create_dummy_source
-          path = target.dummy_source_path
-          UI.message "- Generating dummy source file at #{UI.path(path)}" do
+          UI.message "- Generating dummy source file" do
+            path = target.dummy_source_path
             generator = Generator::DummySource.new(target.label)
             generator.save_as(path)
             file_reference = add_file_to_support_group(path)
