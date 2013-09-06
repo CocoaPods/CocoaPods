@@ -15,24 +15,47 @@ module Pod
     #
     def initialize(path, skip_initialization = false)
       super(path, skip_initialization)
-      @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
-      @pods = new_group('Pods')
-      @development_pods = new_group('Development Pods')
     end
+
+    # @return [Hash] The names of the specification subgroups by key.
+    #
+    ROOT_GROUPS = {
+      :support_files    => 'Targets Support Files',
+      :pods             => 'Pods',
+      :development_pods => 'Development Pods',
+    }
 
     # @return [PBXGroup] The group for the support files of the aggregate
     #         targets.
     #
-    attr_reader :support_files_group
+    def support_files_group
+      create_group_if_needed(ROOT_GROUPS[:support_files])
+    end
 
     # @return [PBXGroup] The group for the Pods.
     #
-    attr_reader :pods
+    def pods
+      name = 'Pods'
+      create_group_if_needed(ROOT_GROUPS[:pods])
+    end
 
     # @return [PBXGroup] The group for Development Pods.
     #
-    attr_reader :development_pods
+    def development_pods
+      name = 'Development Pods'
+      create_group_if_needed(ROOT_GROUPS[:development_pods])
+    end
+
+    # Cleans up the project to prepare it for serialization.
+    #
+    # @return [void]
+    #
+    def prepare_for_serialization
+      pods.remove_from_project if pods.empty?
+      development_pods.remove_from_project if development_pods.empty?
+      main_group.recursively_sort_by_type
+    end
 
 
     public
@@ -172,9 +195,16 @@ module Pod
     #
     def add_podfile(podfile_path)
       podfile_ref = new_file(podfile_path, :project)
+      podfile_ref.name = 'Podfile'
       podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
       podfile_ref.last_known_file_type = 'text'
       podfile_ref
+    end
+
+    # @return [PBXFileReference] The file reference of the Podfile.
+    #
+    def podfile
+      main_group['Podfile']
     end
 
 
@@ -182,6 +212,21 @@ module Pod
 
     # @!group Private helpers
     #-------------------------------------------------------------------------#
+
+    # Returns the group with the given name, creating it if needed.
+    #
+    # @param  [String] name
+    #         The name of the group.
+    #
+    # @param  [String] parent
+    #         The parent group. If nil resolves to the maingroup.
+    #
+    # @return [PBXGroup] The group.
+    #
+    def create_group_if_needed(name, parent = nil)
+      parent ||= main_group
+      parent[name] || parent.new_group(name)
+    end
 
     # @return [Hash{String => PBXFileReference}] The file references grouped
     #         by absolute path.
@@ -202,7 +247,7 @@ module Pod
       if spec_name != pod_name
         subspecs_names = spec_name.gsub(pod_name + '/', '').split('/')
         subspecs_names.each do |name|
-          subspecs_group = group[SPEC_SUBGROUPS[:subspecs]] || group.new_group(SPEC_SUBGROUPS[:subspecs])
+          subspecs_group = create_group_if_needed(SPEC_SUBGROUPS[:subspecs], group)
           group = subspecs_group[name] || subspecs_group.new_group(name)
         end
       end

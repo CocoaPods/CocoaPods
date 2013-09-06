@@ -11,18 +11,33 @@ module Pod
 
     describe "In general" do
 
-      it "creates the support files group on initialization" do
+      it "returns the support files group" do
         @project.support_files_group.name.should == 'Targets Support Files'
       end
 
-      it "creates the Pods group on initialization" do
+      it "returns the pods group" do
         @project.pods.name.should == 'Pods'
       end
 
-      it "creates the development Pods group on initialization" do
+      it "returns development Pods group" do
         @project.development_pods.name.should == 'Development Pods'
       end
 
+      describe "#prepare_for_serialization" do
+
+        it "deletes the Pod and the Development Pods groups if empty" do
+          @project.prepare_for_serialization
+          @project[Project::ROOT_GROUPS[:pods]].should.be.nil
+          @project[Project::ROOT_GROUPS[:development_pods]].should.be.nil
+        end
+
+        it "sorts the groups recursively" do
+          @project.pods.new_group('group_2')
+          @project.pods.new_group('group_1')
+          @project.prepare_for_serialization
+          @project.pods.children.map(&:name).should == ["group_1", "group_2"]
+        end
+      end
     end
 
     #-------------------------------------------------------------------------#
@@ -202,11 +217,38 @@ module Pod
         f.path.should == '../Podfile'
       end
 
+      it "returns the file reference of the Podfile" do
+        ref = @project.add_podfile(config.sandbox.root + '../Podfile')
+        @project.podfile.should.equal(ref)
+      end
+
     end
 
     #-------------------------------------------------------------------------#
 
     describe "Private helpers" do
+
+      describe "#create_group_if_needed" do
+
+        it "creates a new group" do
+          group = @project.send(:create_group_if_needed, 'Group')
+          group.hierarchy_path.should == '/Group'
+        end
+
+        it "creates a new group" do
+          group = @project.send(:create_group_if_needed, 'Group', @project.pods)
+          group.hierarchy_path.should == '/Pods/Group'
+        end
+
+        it "returns an already existing group" do
+          group_1 = @project.send(:create_group_if_needed, 'Group')
+          group_2 = @project.send(:create_group_if_needed, 'Group')
+          group_1.should.be.equal(group_2)
+        end
+
+      end
+
+      #----------------------------------------#
 
       describe "#spec_group" do
 
