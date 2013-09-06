@@ -191,27 +191,30 @@ def yaml_should_match(expected, produced)
   # Remove CocoaPods version
   expected_yaml.delete('COCOAPODS')
   produced_yaml.delete('COCOAPODS')
+
   desc = []
-  desc << "YAML comparison error `#{expected}`"
+  unless expected_yaml == produced_yaml
+    desc << "YAML comparison error `#{expected}`"
 
-  desc << ("--- YAML DIFF " << "-" * 65)
-  diffy_diff = ''
-  Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
-    case line
-    when /^\+/ then diffy_diff << line.green
-    when /^-/ then diffy_diff << line.red
-    else diffy_diff << line
+    desc << ("--- YAML DIFF " << "-" * 65)
+    diffy_diff = ''
+    Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
+      case line
+      when /^\+/ then diffy_diff << line.green
+      when /^-/ then diffy_diff << line.red
+      else diffy_diff << line
+      end
     end
-  end
-  desc << diffy_diff
+    desc << diffy_diff
 
-  desc << ("--- XCODEPROJ DIFF " << "-" * 60)
-  diff_options = {:key_1 => "$produced", :key_2 => "$expected"}
-  diff = Xcodeproj::Differ.diff(produced_yaml, expected_yaml, diff_options).to_yaml
-  diff.gsub!("$produced", "produced".green)
-  diff.gsub!("$expected", "expected".red)
-  desc << diff
-  desc << ("--- END " << "-" * 70)
+    desc << ("--- XCODEPROJ DIFF " << "-" * 60)
+    diff_options = {:key_1 => "$produced", :key_2 => "$expected"}
+    diff = Xcodeproj::Differ.diff(produced_yaml, expected_yaml, diff_options).to_yaml
+    diff.gsub!("$produced", "produced".green)
+    diff.gsub!("$expected", "expected".red)
+    desc << diff
+    desc << ("--- END " << "-" * 70)
+  end
 
   expected_yaml.should.satisfy(desc * "\n\n") do
     if RUBY_VERSION < "1.9"
@@ -255,18 +258,20 @@ end
 def file_should_match(expected, produced)
   is_equal = FileUtils.compare_file(expected, produced)
   description = []
-  description << "File comparison error `#{expected}`"
-  description << ""
-  description << ("--- DIFF " << "-" * 70)
-  Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
-    case line
-    when /^\+/ then description << line.gsub("\n",'').green
-    when /^-/ then description << line.gsub("\n",'').red
-    else description << line.gsub("\n",'')
+  unless is_equal
+    description << "File comparison error `#{expected}`"
+    description << ""
+    description << ("--- DIFF " << "-" * 70)
+    Diffy::Diff.new(expected.to_s, produced.to_s, :source => 'files', :context => 3).each do |line|
+      case line
+      when /^\+/ then description << line.gsub("\n",'').green
+      when /^-/ then description << line.gsub("\n",'').red
+      else description << line.gsub("\n",'')
+      end
     end
+    description << ("--- END " << "-" * 70)
+    description << ""
   end
-  description << ("--- END " << "-" * 70)
-  description << ""
   is_equal.should.satisfy(description * "\n") do
     is_equal == true
   end
