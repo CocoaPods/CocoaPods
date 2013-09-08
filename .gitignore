@@ -6,14 +6,16 @@
 .DS_Store
 .rbenv-version
 .rbx/
+.idea
 xcuserdata
 project.xcworkspace
 DerivedData
 /concatenated.*
 
-# Yardoc
+# Doc
 .yardoc
 /doc
+traces
 
 # Specs
 tmp

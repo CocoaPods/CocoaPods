@@ -191,6 +191,22 @@ namespace :spec do
     sh "bundle exec bacon spec/integration.rb"
   end
 
+  #--------------------------------------#
+
+  desc "Create call trace overview"
+  task :trace => :unpack_fixture_tarballs do
+    require File.expand_path('../vendor/ruby-trace/ruby-trace', __FILE__)
+    tracer = RubyTrace::Trace.new
+    #specs = FileList["spec/**/*_spec.rb"].shuffle
+    specs = FileList["spec/unit/hooks/*_spec.rb"].shuffle
+    tracer.trace do
+      specs.each do |spec|
+        load spec
+      end
+    end
+    tracer.save_as_html('traces')
+  end
+
   # Default task
   #--------------------------------------#
   #

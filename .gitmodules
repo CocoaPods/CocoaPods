@@ -20,3 +20,6 @@
 [submodule "spec/cocoapods-integration-specs"]
 	path = spec/cocoapods-integration-specs
 	url = https://github.com/CocoaPods/cocoapods-integration-specs
+[submodule "vendor/ruby-trace"]
+	path = vendor/ruby-trace
+	url = https://github.com/alloy/ruby-trace.git
