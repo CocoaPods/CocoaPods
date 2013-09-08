@@ -9,6 +9,7 @@ module Pod
       autoload :AggregateTargetInstaller, 'cocoapods/installer/pods_project_generator/target_installer/aggregate_target_installer'
       autoload :FileReferencesInstaller,  'cocoapods/installer/pods_project_generator/file_references_installer'
       autoload :PodTargetInstaller,       'cocoapods/installer/pods_project_generator/target_installer/pod_target_installer'
+      autoload :SupportFilesGenerator,    'cocoapods/installer/pods_project_generator/support_files_generator'
       autoload :TargetInstaller,          'cocoapods/installer/pods_project_generator/target_installer'
 
       # @return [Sandbox] The sandbox of the installation.
@@ -123,7 +124,7 @@ module Pod
         end
       end
 
-      # Adds and removes aggregate targets to the 
+      # Adds and removes aggregate targets to the
       #
       # @return [void]
       #
@@ -138,12 +139,25 @@ module Pod
           remove_aggregate_target(target)
         end
 
+        aggregate_targets.each do |target|
+          # TODO: increment support files generation
+          # support_group = project.support_files_group[target.name]
+          # support_group.remove_from_project if support_group
+          unless target.target_definition.empty?
+            gen = SupportFilesGenerator.new(target, sandbox.project)
+            gen.generate!
+          end
+        end
+
         # TODO: clean up dependencies and linking
         # TODO: clean removed targets and their support files
+        # TODO: Fix sorting of targets
         # TODO: clean stray and unrecognized targets
         # TODO: skip empty aggregate targets
         # TODO: Install aggregate targets first
         # TODO: sort targets by name before serialization in the project
+        # TODO: Add integration checks (adding an aggregate target, removing
+        #       one, performing an installation without a project)
       end
 
 
@@ -183,6 +197,8 @@ module Pod
           pod_targets.each do |pod_target|
             UI.message"- Installing targets" do
               PodTargetInstaller.new(sandbox, pod_target).install!
+              gen = SupportFilesGenerator.new(pod_target, sandbox.project)
+              gen.generate!
             end
           end
         end
@@ -288,14 +304,10 @@ module Pod
       #
       def pods_to_install
         if new_project
-          puts "$$$ Installing all Pods"
           all_pod_targets.map(&:pod_name).uniq.sort
         else
           # TODO: Add missing groups
           missing_target = all_pod_targets.select { |pod_target| pod_target.target.nil? }.map(&:pod_name).uniq
-          puts "$$$ missing target: #{missing_target}"
-          puts "$$$ sandbox.state.added: #{sandbox.state.added}"
-          puts "$$$ sandbox.state.changed: #{sandbox.state.changed}"
           @pods_to_install ||= (sandbox.state.added | sandbox.state.changed | missing_target).uniq.sort
         end
       end
@@ -309,13 +321,13 @@ module Pod
       end
 
       def targets_to_install
-        aggregate_targets.select do |aggregate_target|
+        aggregate_targets.sort_by(&:name).select do |target|
+          empty = target.target_definition.empty?
           if new_project
-            true
+            !empty
           else
-            missing = aggregate_target.target.nil?
-            empty = aggregate_target.target_definition.empty?
-            missing || empty
+            missing = target.target.nil?
+            missing && !empty
           end
         end
       end

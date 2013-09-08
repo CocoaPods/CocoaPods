@@ -30,18 +30,6 @@ module Pod
         @spec.prefix_header_contents = '#import "BlocksKit.h"'
       end
 
-      it "adds file references for the support files of the target" do
-        @installer.install!
-        @project.support_files_group
-        group = @project['Pods/BananaLib/Support Files']
-        group.children.map(&:display_name).sort.should == [
-          "Pods-BananaLib-Private.xcconfig",
-          "Pods-BananaLib-dummy.m",
-          "Pods-BananaLib-prefix.pch",
-          "Pods-BananaLib.xcconfig",
-        ]
-      end
-
       #--------------------------------------#
 
       it 'adds the target for the static target to the project' do
@@ -112,40 +100,6 @@ module Pod
 
       #--------------------------------------#
 
-      it "creates the xcconfig file" do
-        @installer.install!
-        file = config.sandbox.root + @pod_target.xcconfig_private_path
-        xcconfig = Xcodeproj::Config.new(file)
-        xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}'
-      end
-
-      it "creates a prefix header, including the contents of the specification's prefix header" do
-        @spec.prefix_header_contents = '#import "BlocksKit.h"'
-        @installer.install!
-        prefix_header = config.sandbox.root + 'Pods-BananaLib-prefix.pch'
-        generated = prefix_header.read
-        expected = <<-EOS.strip_heredoc
-          #ifdef __OBJC__
-          #import <UIKit/UIKit.h>
-          #endif
-
-          #import "Pods-environment.h"
-          #import "BlocksKit.h"
-          #import <BananaTree/BananaTree.h>
-        EOS
-        generated.should == expected
-      end
-
-      it "creates a dummy source to ensure the compilation of libraries with only categories" do
-        @installer.install!
-        build_files = @installer.target.target.source_build_phase.files
-        build_file = build_files.find { |bf| bf.file_ref.display_name == 'Pods-BananaLib-dummy.m' }
-        build_file.should.be.not.nil
-        build_file.file_ref.path.should == 'Pods-BananaLib-dummy.m'
-        dummy = config.sandbox.root + 'Pods-BananaLib-dummy.m'
-        dummy.read.should.include?('@interface PodsDummy_Pods')
-      end
-
       xit 'links to system frameworks' do
 
       end
@@ -153,6 +107,7 @@ module Pod
       #--------------------------------------------------------------------------------#
 
       describe "concerning ARC before and after iOS 6.0 and OS X 10.8" do
+
         before do
           @spec = Pod::Spec.new
         end

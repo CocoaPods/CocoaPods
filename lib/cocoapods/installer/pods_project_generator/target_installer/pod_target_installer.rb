@@ -17,10 +17,6 @@ module Pod
           move_target_product_file_reference
           add_files_to_build_phases
           add_resources_bundle_targets
-          # create_suport_files_group
-          create_xcconfig_file
-          create_prefix_header
-          create_dummy_source
           link_to_system_frameworks
         end
       end
@@ -49,7 +45,10 @@ module Pod
         end
       end
 
+      # TODO
+      #
       def move_target_product_file_reference
+        # TODO: add the target to the appropriate group from the start
         pod_name = target.pod_name
         group = project.group_for_spec(pod_name, :products)
         target.target.product_reference.move(group)
@@ -82,55 +81,6 @@ module Pod
         end
       end
 
-      # Generates the contents of the xcconfig file and saves it to disk.
-      #
-      # @return [void]
-      #
-      def create_xcconfig_file
-        public_gen = Generator::XCConfig::PublicPodXCConfig.new(target)
-        UI.message "- Generating public xcconfig file" do
-          path = target.xcconfig_path
-          public_gen.save_as(path)
-          #
-          # TODO
-          add_file_to_support_group(path)
-          # relative_path = path.relative_path_from(sandbox.root)
-          # group = project.group_for_spec(target.root_spec.name, :support_files)
-          # group.new_file(relative_path)
-        end
-
-        UI.message "- Generating private xcconfig file" do
-          path = target.xcconfig_private_path
-          private_gen = Generator::XCConfig::PrivatePodXCConfig.new(target, public_gen.xcconfig)
-          private_gen.save_as(path)
-          xcconfig_file_ref = add_file_to_support_group(path)
-
-          target.target.build_configurations.each do |c|
-            c.base_configuration_reference = xcconfig_file_ref
-          end
-        end
-      end
-
-      # Creates a prefix header file which imports `UIKit` or `Cocoa` according
-      # to the platform of the target. This file also include any prefix header
-      # content reported by the specification of the pods.
-      #
-      # @return [void]
-      #
-      def create_prefix_header
-        UI.message "- Generating prefix header" do
-          path = target.prefix_header_path
-          generator = Generator::PrefixHeader.new(target.file_accessors, target.platform)
-          generator.imports << target.target_environment_header_path.basename
-          generator.save_as(path)
-          add_file_to_support_group(path)
-
-          target.target.build_configurations.each do |c|
-            relative_path = path.relative_path_from(sandbox.root)
-            c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
-          end
-        end
-      end
 
       # Add a file reference to the system frameworks if needed and links the
       # target to them.
@@ -150,6 +100,11 @@ module Pod
         end
       end
 
+
+
+
+      # TODO
+      #
       ENABLE_OBJECT_USE_OBJC_FROM = {
         :ios => Version.new('6'),
         :osx => Version.new('10.8')
@@ -200,23 +155,10 @@ module Pod
             flags << '-DOS_OBJECT_USE_OBJC=0'
           end
         end
-        if target_definition.inhibits_warnings_for_pod?(consumer.spec.root.name)
+        if target.target_definition.inhibits_warnings_for_pod?(consumer.spec.root.name)
           flags << '-w -Xanalyzer -analyzer-disable-checker'
         end
         flags * " "
-      end
-
-      # Adds a reference to the given file in the support group of this target.
-      #
-      # @param  [Pathname] path
-      #         The path of the file to which the reference should be added.
-      #
-      # @return [PBXFileReference] the file reference of the added file.
-      #
-      def add_file_to_support_group(path)
-        pod_name = target.pod_name
-        group = project.group_for_spec(pod_name, :support_files)
-        group.new_file(path)
       end
 
       #-----------------------------------------------------------------------#
