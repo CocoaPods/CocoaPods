@@ -190,7 +190,7 @@ namespace :spec do
 
     binary_path = "#{Dir.pwd}/bin/pod"
     Dir.chdir('spec/cocoapods-integration-specs') do
-      sh "CP_TEST_POD_BINARY=#{binary_path} rake run"
+      sh "CP_TEST_POD_BINARY='#{binary_path}' bundle exec rake run"
     end
   end
 
@@ -266,7 +266,7 @@ namespace :spec do
   task :rebuild_integration_fixtures do
     binary_path = "#{Dir.pwd}/bin/pod"
     Dir.chdir('spec/cocoapods-integration-specs') do
-      sh "CP_TEST_POD_BINARY=#{binary_path} rake rebuild_after_folders"
+      sh "CP_TEST_POD_BINARY='#{binary_path}' bundle exec rake rebuild_after_folders"
     end
   end
 
