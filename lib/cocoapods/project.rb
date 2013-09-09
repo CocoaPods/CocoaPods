@@ -81,7 +81,6 @@ module Pod
     # @return [PBXGroup] The new group.
     #
     def add_pod_group(pod_name, path, development = false, absolute = false)
-      raise "[BUG]" if pod_group(pod_name)
       parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
       group = parent_group.new_group(pod_name, path, source_tree)

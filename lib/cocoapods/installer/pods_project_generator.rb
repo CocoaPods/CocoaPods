@@ -85,13 +85,76 @@ module Pod
         else
           UI.message"- Opening existing project" do
             @project = Pod::Project.open(sandbox.project_path)
+            remove_groups
             detect_native_targets
+            # remove_unrecognized_targets
           end
         end
 
         project.set_podfile(podfile_path)
         setup_build_configurations
         sandbox.project = project
+      end
+
+      def remove_groups
+        pod_names = all_pod_targets.map(&:pod_name).uniq.sort
+        groups_to_remove = []
+        groups_to_remove << project.pod_groups.reject do |group|
+          pod_names.include?(group.display_name)
+        end
+
+        aggregate_names = aggregate_targets.map(&:label).uniq.sort
+        groups_to_remove << project.support_files_group.children.reject do |group|
+          aggregate_names.include?(group.display_name)
+        end
+
+        groups_to_remove.flatten.each do |group|
+          remove_group(group)
+        end
+      end
+
+      # Removes the given group taking care of removing any referenced target.
+      #
+      # @return [void]
+      #
+      def remove_group(group)
+        UI.message"- Removing `#{group}` group" do
+          group.groups.each do |child|
+            remove_group(child)
+          end
+
+          UI.message"- Removing targets" do
+            targets = project.targets.select { |target| group.children.include?(target.product_reference) }
+            targets.each do |target|
+              remove_target(target)
+            end
+          end
+
+          group.remove_from_project
+        end
+      end
+
+      # Removes the given target removing any reference to it from any other
+      # target.
+      #
+      # @return [void]
+      #
+      def remove_target(target)
+        UI.message"- Removing `#{target.display_name}` target" do
+          target.referrers.each do |ref|
+            if ref.isa == 'PBXTargetDependency'
+              ref.remove_from_project
+            end
+          end
+          target.remove_from_project
+
+          target.product_reference.referrers.each do |ref|
+            if ref.isa == 'PBXBuildFile'
+              ref.remove_from_project
+            end
+          end
+          target.product_reference.remove_from_project
+        end
       end
 
       # Matches the native targets of the Pods project with the targets
@@ -101,13 +164,19 @@ module Pod
       #
       def detect_native_targets
         UI.message"- Matching targets" do
-          p native_targets_by_name = project.targets.group_by(&:name)
-          p cp_targets = aggregate_targets + all_pod_targets
+          native_targets_by_name = project.targets.group_by(&:name)
+          native_targets_to_remove = native_targets_by_name.keys.dup
+          cp_targets = aggregate_targets + all_pod_targets
           cp_targets.each do |pod_target|
             native_targets = native_targets_by_name[pod_target.label]
             if native_targets
               pod_target.target = native_targets.first
+              native_targets_to_remove.delete(pod_target.label)
             end
+          end
+
+          native_targets_to_remove.each do |target_name|
+            remove_target(native_targets_by_name[target_name].first)
           end
         end
       end
@@ -115,12 +184,13 @@ module Pod
       # @return [void]
       #
       def sync_pod_targets
-        pods_to_remove.each do |name|
-          remove_pod(name)
-        end
-
         pods_to_install.each do |name|
           add_pod(name)
+        end
+
+        all_pod_targets.each do |target|
+            gen = SupportFilesGenerator.new(target, sandbox.project)
+            gen.generate!
         end
       end
 
@@ -143,10 +213,6 @@ module Pod
           add_aggregate_target(target)
         end
 
-        targets_to_remove.each do |target|
-          remove_aggregate_target(target)
-        end
-
         aggregate_targets.each do |target|
           unless target.target_definition.empty?
             gen = SupportFilesGenerator.new(target, sandbox.project)
@@ -154,7 +220,6 @@ module Pod
           end
         end
       end
-
 
       #
       #
@@ -166,17 +231,8 @@ module Pod
 
       #
       #
-      def remove_aggregate_target(target)
-        UI.message"- Removing `#{target.label}`" do
-          target.remove_from_project
-          target.product_reference.remove_from_project
-          project.support_files_group[target.name].remove_from_project
-        end
-      end
-
-      #
-      #
       def add_pod(name)
+        remove_group(project.pod_group(name)) if project.pod_group(name)
         UI.message"- Installing `#{name}`" do
           pod_targets = all_pod_targets.select { |target| target.pod_name == name }
 
@@ -191,37 +247,11 @@ module Pod
           pod_targets.each do |pod_target|
             UI.message"- Installing targets" do
               PodTargetInstaller.new(sandbox, pod_target).install!
-              gen = SupportFilesGenerator.new(pod_target, sandbox.project)
-              gen.generate!
             end
           end
         end
       end
 
-      #
-      #
-      def remove_pod(name)
-        UI.message"- Removing `#{name}`" do
-          products_group = project.group_for_spec(name, :products)
-
-          UI.message"- Removing targets" do
-          targets = project.targets.select { |target| products_group.children.include?(target.product_reference) }
-          targets.each do |target|
-            target.referrers.each do |ref|
-              if ref.isa == 'PBXTargetDependency'
-                ref.remove_from_project
-              end
-            end
-            target.remove_from_project
-          end
-          end
-
-          UI.message"- Removing file references" do
-            group = project.pod_group(name)
-            group.remove_from_project
-          end
-        end
-      end
 
       # Sets the dependencies of the targets.
       #
