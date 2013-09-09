@@ -12,7 +12,7 @@ module Pod
     describe "In general" do
 
       it "returns the support files group" do
-        @sut.support_files_group.name.should == 'Targets Support Files'
+        @sut.support_files_group.name.should == 'Target Files'
       end
 
       it "returns the pods group" do
@@ -79,11 +79,6 @@ module Pod
           Pathname.new(group.path).should.be.absolute
         end
 
-        it "creates a support file group relative to the project" do
-          group = @sut.add_pod_group('BananaLib', @path, false, true)
-          group['Support Files'].source_tree.should == 'SOURCE_ROOT'
-          group['Support Files'].path.should.be.nil
-        end
       end
 
       #----------------------------------------#
@@ -128,7 +123,7 @@ module Pod
 
         it "returns the requested subgroup" do
           group = @sut.group_for_spec('BananaLib/Tree', :source_files)
-          group.hierarchy_path.should == '/Pods/BananaLib/Subspecs/Tree/Source Files'
+          group.hierarchy_path.should == '/Pods/BananaLib/Subspecs/Tree'
         end
 
         it "raises if unable to recognize the subgroup key" do
@@ -142,6 +137,38 @@ module Pod
           group_2 = @sut.group_for_spec('BananaLib/Tree', :source_files)
           group_1.uuid.should == group_2.uuid
         end
+      end
+
+      it "adds the group for the given aggregate target" do
+        group = @sut.add_aggregate_group('Pods', config.sandbox.root + 'Aggregate/Pods')
+        group.parent.should == @sut.support_files_group
+        group.name.should == 'Pods'
+        group.path.should == 'Aggregate/Pods'
+      end
+
+      it "returns the group for the aggregate target with the given name" do
+        group = @sut.add_aggregate_group('Pods', config.sandbox.root + 'Aggregate/Pods')
+        @sut.aggregate_group('Pods').should == group
+      end
+
+      it "returns the list of the aggregate groups" do
+        group = @sut.add_aggregate_group('Pods', config.sandbox.root + 'Aggregate/Pods')
+        group = @sut.add_aggregate_group('Tests', config.sandbox.root + 'Aggregate/Tests')
+        @sut.aggregate_groups.map(&:name).should == ["Pods", "Tests"]
+      end
+
+      it "adds the group for the given aggregate target" do
+        parent = @sut.add_aggregate_group('Pods', config.sandbox.root + 'Aggregate/Pods')
+        group = @sut.add_aggregate_pod_group('Pods', 'BananaLib', config.sandbox.root + 'Aggregate/Pods/BananaLib')
+        group.parent.should == parent
+        group.name.should == 'BananaLib'
+        group.path.should == 'BananaLib'
+      end
+
+      it "returns the group for the aggregate target with the given name" do
+        @sut.add_aggregate_group('Pods', config.sandbox.root + 'Aggregate/Pods')
+        group = @sut.add_aggregate_pod_group('Pods', 'BananaLib', config.sandbox.root + 'Aggregate/Pods/BananaLib')
+        @sut.aggregate_pod_group('Pods', 'BananaLib').should == group
       end
     end
 
@@ -159,7 +186,7 @@ module Pod
 
         it "adds a file references to the given file" do
           ref = @sut.add_file_reference(@file, @group)
-          ref.hierarchy_path.should == '/Pods/BananaLib/Source Files/file.m'
+          ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
         end
 
         it "it doesn't duplicate file references for a single path" do
@@ -190,7 +217,7 @@ module Pod
 
         it "returns the reference for the given path" do
           ref = @sut.reference_for_path(@file)
-          ref.hierarchy_path.should == '/Pods/BananaLib/Source Files/file.m'
+          ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
         end
 
         it "returns nil if no reference for the given path is available" do

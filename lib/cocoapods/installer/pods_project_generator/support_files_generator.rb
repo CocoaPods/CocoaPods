@@ -220,14 +220,18 @@ module Pod
         #         files should be stored.
         #
         def support_files_group
-          # TODO
           unless @support_files_group
             if target.is_a?(AggregateTarget)
-              #TODO move to Pods
-              @support_files_group = project.support_files_group[target.name] || project.support_files_group.new_group(target.name)
+              aggregate_name = target.label
+              @support_files_group = project.add_aggregate_group(aggregate_name, project.path.dirname)
             else
+              aggregate_name = target.target_definition.label.to_s
               pod_name = target.pod_name
-              @support_files_group = project.group_for_spec(pod_name, :support_files)
+              unless project.aggregate_group(aggregate_name)
+                # TODO
+                project.add_aggregate_group(aggregate_name, project.path.dirname)
+              end
+              @support_files_group = project.add_aggregate_pod_group(aggregate_name, pod_name, project.path.dirname)
             end
           end
           @support_files_group

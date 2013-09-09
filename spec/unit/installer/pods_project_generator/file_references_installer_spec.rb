@@ -18,7 +18,7 @@ module Pod
 
       it "adds the files references of the source files the Pods project" do
         @sut.install!
-        file_ref = config.sandbox.project['Pods/BananaLib/Source Files/Banana.m']
+        file_ref = config.sandbox.project['Pods/BananaLib/Banana.m']
         file_ref.should.be.not.nil
         file_ref.path.should == "Classes/Banana.m"
       end
