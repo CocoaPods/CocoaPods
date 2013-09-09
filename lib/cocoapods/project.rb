@@ -189,7 +189,12 @@ module Pod
     # @return [PBXGroup] The new group.
     #
     def add_aggregate_pod_group(aggregate_name, pod_name, path)
-      group = aggregate_group(aggregate_name).new_group(pod_name, path)
+      if existing = aggregate_pod_group(aggregate_name, pod_name)
+        existing
+      else
+        aggregate_group = aggregate_group(aggregate_name)
+        aggregate_group.new_group(pod_name, path)
+      end
     end
 
     # Returns the group for the pod target with the given name and aggregate.

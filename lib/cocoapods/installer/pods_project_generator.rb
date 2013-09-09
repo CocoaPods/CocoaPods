@@ -87,7 +87,6 @@ module Pod
             @project = Pod::Project.open(sandbox.project_path)
             remove_groups
             detect_native_targets
-            # remove_unrecognized_targets
           end
         end
 
@@ -103,12 +102,17 @@ module Pod
           pod_names.include?(group.display_name)
         end
 
+        groups_to_remove << project.aggregate_groups.map(&:groups).flatten.reject do |group|
+          pod_names.include?(group.display_name)
+        end
+
         aggregate_names = aggregate_targets.map(&:label).uniq.sort
         groups_to_remove << project.support_files_group.children.reject do |group|
           aggregate_names.include?(group.display_name)
         end
 
         groups_to_remove.flatten.each do |group|
+          p group
           remove_group(group)
         end
       end
@@ -123,11 +127,9 @@ module Pod
             remove_group(child)
           end
 
-          UI.message"- Removing targets" do
-            targets = project.targets.select { |target| group.children.include?(target.product_reference) }
-            targets.each do |target|
-              remove_target(target)
-            end
+          targets = project.targets.select { |target| group.children.include?(target.product_reference) }
+          targets.each do |target|
+            remove_target(target)
           end
 
           group.remove_from_project
@@ -146,7 +148,7 @@ module Pod
               ref.remove_from_project
             end
           end
-          target.remove_from_project
+        target.remove_from_project
 
           target.product_reference.referrers.each do |ref|
             if ref.isa == 'PBXBuildFile'
@@ -163,21 +165,19 @@ module Pod
       # @return [void]
       #
       def detect_native_targets
-        UI.message"- Matching targets" do
-          native_targets_by_name = project.targets.group_by(&:name)
-          native_targets_to_remove = native_targets_by_name.keys.dup
-          cp_targets = aggregate_targets + all_pod_targets
-          cp_targets.each do |pod_target|
-            native_targets = native_targets_by_name[pod_target.label]
-            if native_targets
-              pod_target.target = native_targets.first
-              native_targets_to_remove.delete(pod_target.label)
-            end
+        native_targets_by_name = project.targets.group_by(&:name)
+        native_targets_to_remove = native_targets_by_name.keys.dup
+        cp_targets = aggregate_targets + all_pod_targets
+        cp_targets.each do |pod_target|
+          native_targets = native_targets_by_name[pod_target.label]
+          if native_targets
+            pod_target.target = native_targets.first
+            native_targets_to_remove.delete(pod_target.label)
           end
+        end
 
-          native_targets_to_remove.each do |target_name|
-            remove_target(native_targets_by_name[target_name].first)
-          end
+        native_targets_to_remove.each do |target_name|
+          remove_target(native_targets_by_name[target_name].first)
         end
       end
 
@@ -189,8 +189,10 @@ module Pod
         end
 
         all_pod_targets.each do |target|
+          UI.message"- Generating support files for target `#{target.label}`" do
             gen = SupportFilesGenerator.new(target, sandbox.project)
             gen.generate!
+          end
         end
       end
 
@@ -215,8 +217,10 @@ module Pod
 
         aggregate_targets.each do |target|
           unless target.target_definition.empty?
-            gen = SupportFilesGenerator.new(target, sandbox.project)
-            gen.generate!
+            UI.message"- Generating support files for target `#{target.label}`" do
+              gen = SupportFilesGenerator.new(target, sandbox.project)
+              gen.generate!
+            end
           end
         end
       end
@@ -232,10 +236,10 @@ module Pod
       #
       #
       def add_pod(name)
-        remove_group(project.pod_group(name)) if project.pod_group(name)
         UI.message"- Installing `#{name}`" do
           pod_targets = all_pod_targets.select { |target| target.pod_name == name }
 
+          remove_group(project.pod_group(name)) if project.pod_group(name)
           UI.message"- Installing file references" do
             path = sandbox.pod_dir(name)
             local = sandbox.local?(name)
@@ -245,7 +249,8 @@ module Pod
           end
 
           pod_targets.each do |pod_target|
-            UI.message"- Installing targets" do
+            remove_target(pod_target.target) if pod_target.target
+            UI.message "- Installing target `#{pod_target.name}` #{pod_target.platform}" do
               PodTargetInstaller.new(sandbox, pod_target).install!
             end
           end

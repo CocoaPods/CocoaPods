@@ -12,12 +12,10 @@ module Pod
       # @return [void]
       #
       def install!
-        UI.message "- Installing target `#{target.name}` #{target.platform}" do
-          add_target
-          add_files_to_build_phases
-          add_resources_bundle_targets
-          link_to_system_frameworks
-        end
+        add_target
+        add_files_to_build_phases
+        add_resources_bundle_targets
+        link_to_system_frameworks
       end
 
       private
@@ -33,14 +31,12 @@ module Pod
       # @return [void]
       #
       def add_files_to_build_phases
-        UI.message "- Adding build files" do
-          target.file_accessors.each do |file_accessor|
-            consumer = file_accessor.spec_consumer
-            flags = compiler_flags_for_consumer(consumer)
-            source_files = file_accessor.source_files
-            file_refs = source_files.map { |sf| project.reference_for_path(sf) }
-            target.target.add_file_references(file_refs, flags)
-          end
+        target.file_accessors.each do |file_accessor|
+          consumer = file_accessor.spec_consumer
+          flags = compiler_flags_for_consumer(consumer)
+          source_files = file_accessor.source_files
+          file_refs = source_files.map { |sf| project.reference_for_path(sf) }
+          target.target.add_file_references(file_refs, flags)
         end
       end
 
@@ -52,19 +48,17 @@ module Pod
       # @return [void]
       #
       def add_resources_bundle_targets
-        UI.message "- Adding resource bundles" do
-          target.file_accessors.each do |file_accessor|
-            file_accessor.resource_bundles.each do |bundle_name, paths|
-              file_references = paths.map { |sf| project.reference_for_path(sf) }
-              bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
-              bundle_target.add_resources(file_references)
+        target.file_accessors.each do |file_accessor|
+          file_accessor.resource_bundles.each do |bundle_name, paths|
+            file_references = paths.map { |sf| project.reference_for_path(sf) }
+            bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
+            bundle_target.add_resources(file_references)
 
-              target.user_build_configurations.each do |bc_name, type|
-                bundle_target.add_build_configuration(bc_name, type)
-              end
-
-              target.add_dependency(bundle_target)
+            target.user_build_configurations.each do |bc_name, type|
+              bundle_target.add_build_configuration(bc_name, type)
             end
+
+            target.add_dependency(bundle_target)
           end
         end
       end
@@ -79,11 +73,9 @@ module Pod
       # @return [void]
       #
       def link_to_system_frameworks
-        UI.message "- Linking to system frameworks" do
-          target.specs.each do |spec|
-            spec.consumer(target.platform).frameworks.each do |framework|
-              project.add_system_framework(framework, target.target)
-            end
+        target.specs.each do |spec|
+          spec.consumer(target.platform).frameworks.each do |framework|
+            project.add_system_framework(framework, target.target)
           end
         end
       end

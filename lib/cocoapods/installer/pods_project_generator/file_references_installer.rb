@@ -49,9 +49,7 @@ module Pod
         # @return [void]
         #
         def add_source_files_references
-          UI.message "- Adding source files" do
-            add_paths_to_group(:source_files, :source_files)
-          end
+          add_paths_to_group(:source_files, :source_files)
         end
 
         # Adds the bundled frameworks to the Pods project
@@ -59,9 +57,7 @@ module Pod
         # @return [void]
         #
         def add_frameworks_bundles
-          UI.message "- Adding frameworks" do
-            add_paths_to_group(:vendored_frameworks, :frameworks_and_libraries)
-          end
+          add_paths_to_group(:vendored_frameworks, :frameworks_and_libraries)
         end
 
         # Adds the bundled libraries to the Pods project
@@ -69,9 +65,7 @@ module Pod
         # @return [void]
         #
         def add_vendored_libraries
-          UI.message "- Adding libraries" do
-            add_paths_to_group(:vendored_libraries, :frameworks_and_libraries)
-          end
+          add_paths_to_group(:vendored_libraries, :frameworks_and_libraries)
         end
 
         # Adds the resources of the Pods to the Pods project.
@@ -82,10 +76,8 @@ module Pod
         # @return [void]
         #
         def add_resources
-          UI.message "- Adding resources" do
-            add_paths_to_group(:resources, :resources)
-            add_paths_to_group(:resource_bundle_files, :resources)
-          end
+          add_paths_to_group(:resources, :resources)
+          add_paths_to_group(:resource_bundle_files, :resources)
         end
 
 
