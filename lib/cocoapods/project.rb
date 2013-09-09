@@ -54,7 +54,7 @@ module Pod
     def prepare_for_serialization
       pods.remove_from_project if pods.empty?
       development_pods.remove_from_project if development_pods.empty?
-      main_group.recursively_sort_by_type
+      sort
     end
 
 
