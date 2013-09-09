@@ -65,6 +65,11 @@ module Pod
         UI.message "- Adding resource bundles to Pods project" do
           library.file_accessors.each do |file_accessor|
             file_accessor.resource_bundles.each do |bundle_name, paths|
+              # Add a dependency on an existing Resource Bundle target if possible
+              if bundle_target = project.targets.detect { |target| target.name == bundle_name }
+                target.add_dependency(bundle_target)
+                next
+              end
               file_references = paths.map { |sf| project.reference_for_path(sf) }
               group = project.group_for_spec(file_accessor.spec.name, :products)
               product_group = project.group_for_spec(file_accessor.spec.name, :resources)
