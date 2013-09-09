@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 9e592ef498539c732c2dd30bf32a40850117a4da
+  revision: d7d34813894b7b08c8e19f137a3b04cd6fcc92b0
   branch: master
   specs:
     cocoapods-core (0.24.0)
@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 84782b972ef24e7565eaf9ab96a0bb1cb4c0521f
+  revision: 41644f62741f5fb71d776b08bfb1e55c017f75e7
   branch: master
   specs:
     xcodeproj (0.10.1)
@@ -41,7 +41,7 @@ GIT
 
 GIT
   remote: https://github.com/irrationalfab/PrettyBacon.git
-  revision: 0da7e231bf597005aaa4efb4c2cd837336a6b42b
+  revision: 926c214ade1ec1cbc9544d603e36f15a780f7e68
   branch: master
   specs:
     prettybacon (0.0.1)
@@ -99,7 +99,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    multi_json (1.7.9)
+    multi_json (1.8.0)
     nap (0.5.1)
     open4 (1.3.0)
     posix-spawn (0.3.6)

@@ -13,6 +13,7 @@ module Pod
   #
   class Informative < PlainInformative
     def message
+      puts "CALL"
       "[!] #{super}".red
     end
   end
