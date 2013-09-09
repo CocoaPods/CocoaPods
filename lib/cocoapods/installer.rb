@@ -101,6 +101,7 @@ module Pod
         install_pod_sources
         run_pre_install_hooks
         clean_pod_sources
+        refresh_file_accessors
         link_headers
       end
     end
@@ -272,6 +273,20 @@ module Pod
       return unless @pod_installers
       @pod_installers.each do |pod_installer|
         pod_installer.clean!
+      end
+    end
+
+
+    # Reads the file accessors contents from the file system.
+    #
+    # @note   The contents of the file accessors are modified by the clean
+    #         step of the #{PodSourceInstaller} and by the pre install hooks.
+    #
+    # @return [void]
+    #
+    def refresh_file_accessors
+      pod_targets.map(&:file_accessors).flatten.each do |file_accessor|
+        file_accessor.refresh
       end
     end
 

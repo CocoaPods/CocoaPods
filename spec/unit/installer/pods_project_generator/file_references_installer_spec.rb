@@ -17,12 +17,6 @@ module Pod
     describe "Installation" do
 
       it "adds the files references of the source files the Pods project" do
-        @file_accessor.path_list.read_file_system
-        @file_accessor.path_list.expects(:read_file_system)
-        @sut.install!
-      end
-
-      it "adds the files references of the source files the Pods project" do
         @sut.install!
         file_ref = config.sandbox.project['Pods/BananaLib/Source Files/Banana.m']
         file_ref.should.be.not.nil

@@ -50,6 +50,7 @@ module Pod
         @installer.stubs(:create_file_accessors)
         @installer.stubs(:install_pod_sources)
         @installer.stubs(:link_headers)
+        @installer.stubs(:refresh_file_accessors)
         def @installer.run_pre_install_hooks
           @hook_called = true
         end
@@ -185,6 +186,21 @@ module Pod
             config.clean = false
             Installer::PodSourceInstaller.any_instance.expects(:clean!).never
             @installer.send(:clean_pod_sources)
+          end
+
+        end
+
+        #--------------------------------------#
+
+        describe "#refresh_file_accessors" do
+
+          it "refreshes the file accessors after cleaning and executing the specification hooks" do
+            pod_target = PodTarget.new([], nil, config.sandbox)
+            file_accessor = stub()
+            pod_target.file_accessors = [file_accessor]
+            @installer.stubs(:pod_targets).returns([pod_target])
+            file_accessor.expects(:refresh)
+            @installer.send(:refresh_file_accessors)
           end
 
         end

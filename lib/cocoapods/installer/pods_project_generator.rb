@@ -129,6 +129,14 @@ module Pod
       # @return [void]
       #
       def sync_aggregate_targets
+        # TODO: Clean up dependencies and linking
+        # TODO: Clean removed targets and their support files
+        # TODO: Fix sorting of targets
+        # TODO: Clean unrecognized targets
+        # TODO: Add integration checks (adding an aggregate target, removing
+        #       one, performing an installation without a project)
+
+        # TODO
         targets_to_remove = []
 
         targets_to_install.each do |target|
@@ -140,24 +148,11 @@ module Pod
         end
 
         aggregate_targets.each do |target|
-          # TODO: increment support files generation
-          # support_group = project.support_files_group[target.name]
-          # support_group.remove_from_project if support_group
           unless target.target_definition.empty?
             gen = SupportFilesGenerator.new(target, sandbox.project)
             gen.generate!
           end
         end
-
-        # TODO: clean up dependencies and linking
-        # TODO: clean removed targets and their support files
-        # TODO: Fix sorting of targets
-        # TODO: clean stray and unrecognized targets
-        # TODO: skip empty aggregate targets
-        # TODO: Install aggregate targets first
-        # TODO: sort targets by name before serialization in the project
-        # TODO: Add integration checks (adding an aggregate target, removing
-        #       one, performing an installation without a project)
       end
 
 
@@ -165,7 +160,6 @@ module Pod
       #
       def add_aggregate_target(target)
         UI.message"- Installing `#{target.label}`" do
-          # TODO: the support files should be created from scratch in any case
           AggregateTargetInstaller.new(sandbox, target).install!
         end
       end
@@ -316,7 +310,7 @@ module Pod
       #
       def pods_to_remove
         return [] if new_project
-        # TODO: Superfluous groups
+        # TODO: Unrecognized groups
         @pods_to_remove ||= (sandbox.state.deleted | sandbox.state.changed).sort
       end
 

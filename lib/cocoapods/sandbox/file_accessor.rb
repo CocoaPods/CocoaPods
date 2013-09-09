@@ -55,17 +55,23 @@ module Pod
         spec_consumer.platform_name
       end
 
+      # @return [void] Reads the file system to refresh the list of the paths.
+      #
+      def refresh
+        path_list.read_file_system
+      end
+
       # @return [String] A string suitable for debugging.
       #
       def inspect
         "<#{self.class} spec=#{spec.name} platform=#{platform_name} root=#{root}>"
       end
 
-      #-----------------------------------------------------------------------#
 
       public
 
       # @!group Paths
+      #-----------------------------------------------------------------------#
 
       # @return [Array<Pathname>] the source files of the specification.
       #
@@ -165,11 +171,11 @@ module Pod
         end
       end
 
-      #-----------------------------------------------------------------------#
 
       private
 
       # @!group Private helpers
+      #-----------------------------------------------------------------------#
 
       # Returns the list of the paths founds in the file system for the
       # attribute with given name. It takes into account any dir pattern and
