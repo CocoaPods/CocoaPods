@@ -345,7 +345,7 @@ module Pod
         end
 
         it "recursively sorts the project by type" do
-          @installer.pods_project.main_group.expects(:recursively_sort_by_type)
+          @installer.pods_project.main_group.expects(:sort)
           @installer.send(:write_pod_project)
         end
 

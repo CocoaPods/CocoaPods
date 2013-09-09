@@ -15,7 +15,7 @@ module Pod
     #
     def initialize(path, skip_initialization = false)
       super(path, skip_initialization)
-      @support_files_group = new_group('Targets Support Files')
+      @support_files_group = new_group('Target Files')
       @refs_by_absolute_path = {}
       @pods = new_group('Pods')
       @development_pods = new_group('Development Pods')
@@ -37,11 +37,11 @@ module Pod
 
     public
 
-    # @!group Pod Groups
+    # @!group Groups
     #-------------------------------------------------------------------------#
 
-    # Creates a new group for the Pod with the given name and configures its
-    # path.
+    # Creates a new group for the sources of the Pod with the given name and
+    # configures its path.
     #
     # @param  [String] pod_name
     #         The name of the Pod.
@@ -63,8 +63,6 @@ module Pod
       parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
       group = parent_group.new_group(pod_name, path, source_tree)
-      support_files_group = group.new_group(SPEC_SUBGROUPS[:support_files])
-      support_files_group.source_tree = 'SOURCE_ROOT'
       group
     end
 
@@ -91,9 +89,7 @@ module Pod
       :source_files             => 'Source Files',
       :resources                => 'Resources',
       :frameworks_and_libraries => 'Frameworks & Libraries',
-      :support_files            => 'Support Files',
       :subspecs                 => 'Subspecs',
-      :products                 => 'Products',
     }
 
     # Returns the group for the specification with the give name creating it if
@@ -110,12 +106,85 @@ module Pod
     def group_for_spec(spec_name, subgroup_key = nil)
       spec_group = spec_group(spec_name)
       if subgroup_key
-        subgroup = SPEC_SUBGROUPS[subgroup_key]
-        raise ArgumentError, "Unrecognized subgroup `#{subgroup_key}`" unless subgroup
-        spec_group.find_subpath(subgroup, true)
+        if subgroup_key == :source_files
+          spec_group
+        else
+          subgroup = SPEC_SUBGROUPS[subgroup_key]
+          raise ArgumentError, "Unrecognized subgroup `#{subgroup_key}`" unless subgroup
+          spec_group.find_subpath(subgroup, true)
+        end
       else
         spec_group
       end
+    end
+
+    # Creates a new group for the aggregate target with the given name and
+    # path.
+    #
+    # @param  [String] name
+    #         The name of the target.
+    #
+    # @param  [#to_s] path
+    #         The path where the files of the target are stored.
+    #
+    # @return [PBXGroup] The new group.
+    #
+    def add_aggregate_group(name, path)
+      # TODO TMP
+      if existing = support_files_group[name]
+        existing
+      else
+        support_files_group.new_group(name, path)
+      end
+    end
+
+    # Returns the group for the aggregate target with the given name.
+    #
+    # @param  [String] pod_name
+    #         The name of the Pod.
+    #
+    # @return [PBXGroup] The group.
+    #
+    def aggregate_group(name)
+      support_files_group[name]
+    end
+
+    # @return [Array<PBXGroup>] Returns the list of the aggregate groups.
+    #
+    def aggregate_groups
+      support_files_group.children
+    end
+
+    # Creates a new group for the pod target with the given name and aggregate.
+    #
+    # @param  [String] aggregate_name
+    #         The name of the target.
+    #
+    # @param  [String] path
+    #         The name of the Pod.
+    #
+    # @param  [#to_s] path
+    #         The path where the files of the target are stored.
+    #
+    # @return [PBXGroup] The new group.
+    #
+    def add_aggregate_pod_group(aggregate_name, pod_name, path)
+      group = aggregate_group(aggregate_name).new_group(pod_name, path)
+    end
+
+    # Returns the group for the pod target with the given name and aggregate.
+    # path.
+    #
+    # @param  [String] aggregate_name
+    #         The name of the target.
+    #
+    # @param  [String] path
+    #         The name of the Pod.
+    #
+    # @return [PBXGroup] The group.
+    #
+    def aggregate_pod_group(aggregate_name, pod_name)
+      aggregate_group(aggregate_name)[pod_name]
     end
 
 

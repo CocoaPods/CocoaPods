@@ -12,8 +12,11 @@ module Pod
       #
       def install!
         UI.message "- Installing target `#{library.name}` #{library.platform}" do
+          aggregate_name = library.target_definition.label.to_s
+          project.add_aggregate_group(aggregate_name, sandbox.root)
+          pod_name = library.pod_name
+          @support_files_group = project.add_aggregate_pod_group(aggregate_name, pod_name, sandbox.root)
           add_target
-          move_target_product_file_reference
           add_files_to_build_phases
           add_resources_bundle_targets
           # create_suport_files_group
@@ -48,12 +51,6 @@ module Pod
         end
       end
 
-      def move_target_product_file_reference
-        pod_name = library.pod_name
-        group = project.group_for_spec(pod_name, :products)
-        target.product_reference.move(group)
-      end
-
       # Adds the resources of the Pods to the Pods project.
       #
       # @note   The source files are grouped by Pod and in turn by subspec
@@ -66,7 +63,9 @@ module Pod
           library.file_accessors.each do |file_accessor|
             file_accessor.resource_bundles.each do |bundle_name, paths|
               file_references = paths.map { |sf| project.reference_for_path(sf) }
-              group = project.group_for_spec(file_accessor.spec.name, :products)
+              aggregate_name = library.target_definition.label.to_s
+              pod_name = library.pod_name
+              group = project.aggregate_pod_group(aggregate_name, pod_name)
               product_group = project.group_for_spec(file_accessor.spec.name, :resources)
               bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name, product_group)
               bundle_target.add_resources(file_references)
@@ -195,8 +194,9 @@ module Pod
       # @return [PBXFileReference] the file reference of the added file.
       #
       def add_file_to_support_group(path)
+        aggregate_name = library.target_definition.label.to_s
         pod_name = library.pod_name
-        group = project.group_for_spec(pod_name, :support_files)
+        group = project.aggregate_pod_group(aggregate_name, pod_name)
         group.new_file(path)
       end
 

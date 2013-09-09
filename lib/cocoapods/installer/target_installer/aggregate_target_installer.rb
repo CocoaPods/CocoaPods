@@ -12,8 +12,8 @@ module Pod
       #
       def install!
         UI.message "- Installing target `#{library.name}` #{library.platform}" do
-          add_target
           create_suport_files_group
+          add_target
           create_xcconfig_file
           create_target_environment_header
           create_bridge_support_file

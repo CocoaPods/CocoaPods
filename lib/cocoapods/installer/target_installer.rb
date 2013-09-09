@@ -64,7 +64,7 @@ module Pod
       # @return [void]
       #
       def create_suport_files_group
-        @support_files_group = project.support_files_group.new_group(library.name)
+        @support_files_group = project.add_aggregate_group(library.name, sandbox.root)
       end
 
       # Generates a dummy source file for each target so libraries that contain

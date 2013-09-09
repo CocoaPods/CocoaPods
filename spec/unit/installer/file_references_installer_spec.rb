@@ -24,7 +24,7 @@ module Pod
 
       it "adds the files references of the source files the Pods project" do
         @installer.install!
-        file_ref = @installer.pods_project['Pods/BananaLib/Source Files/Banana.m']
+        file_ref = @installer.pods_project['Pods/BananaLib/Banana.m']
         file_ref.should.be.not.nil
         file_ref.path.should == "Classes/Banana.m"
       end

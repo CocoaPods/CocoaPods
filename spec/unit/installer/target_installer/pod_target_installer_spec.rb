@@ -33,7 +33,7 @@ module Pod
       it "adds file references for the support files of the target" do
         @installer.install!
         @project.support_files_group
-        group = @project['Pods/BananaLib/Support Files']
+        group = @project['Target Files/Pods/BananaLib']
         group.children.map(&:display_name).sort.should == [
           "Pods-BananaLib-Private.xcconfig",
           "Pods-BananaLib-dummy.m",

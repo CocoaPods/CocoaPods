@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: c9c8fb4f5fc7f89ab86cde341c1bc584ace2217a
+  revision: 23d64ce79dd23e928dadac986a858a13c07ac988
   branch: master
   specs:
     xcodeproj (0.10.1)
@@ -41,7 +41,7 @@ GIT
 
 GIT
   remote: https://github.com/irrationalfab/PrettyBacon.git
-  revision: f9f711c5b95d9eee9a79a2a23e25bb3390f9cbcb
+  revision: 59cde2c52a3211c06f894e7324e5e4fac9d8476a
   branch: master
   specs:
     prettybacon (0.0.1)
