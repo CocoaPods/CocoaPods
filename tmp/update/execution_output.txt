@@ -1,0 +1,57 @@
+CP_AGGRESSIVE_CACHE=TRUE $ pod update --no-repo-update --verbose --no-color 2>&1
+Analyzing dependencies
+
+Finding Podfile changes
+  - Reachability
+
+Resolving dependencies of `Podfile`
+Resolving dependencies for target `Pods' (iOS 6.0)
+  - Reachability (<= 3.1.0)
+
+Comparing resolved specification to the sandbox manifest
+  M Reachability
+
+Downloading dependencies
+
+-> Installing Reachability (3.1.0)
+ > GitHub download
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git rev-list --max-count=1 v3.1.0
+   f7176f4798d068d233dca5223ae4bd9c8059e830
+   $ /usr/bin/git clone 'CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6'
+   'ROOT/tmp/update/Pods/Reachability'
+   Cloning into 'ROOT/tmp/update/Pods/Reachability'...
+   done.
+   $ /usr/bin/git fetch origin tags/v3.1.0 2>&1
+   From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+    * tag               v3.1.0     -> FETCH_HEAD
+   $ /usr/bin/git reset --hard FETCH_HEAD
+   HEAD is now at f7176f4 updated podspec
+   $ /usr/bin/git checkout -b activated-pod-commit 2>&1
+   Switched to a new branch 'activated-pod-commit'
+  - Running pre install hooks
+
+Linking headers
+
+Generating Pods project
+  - Opening existing project
+  - Installing `Reachability`
+    - Removing `Group` group
+    - Installing file references
+    - Removing `Pods-Reachability` target
+    - Installing target `Pods-Reachability` iOS 6.0
+  - Generating support files for target `Pods-Reachability`
+  - Generating support files for target `Pods`
+  - Setting-up dependencies
+  - Populating aggregate targets
+  - Running post install hooks
+  - Writing Xcode project file
+
+Writing Lockfiles
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project

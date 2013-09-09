@@ -11,10 +11,10 @@ File References:
       - JSONKit.h
       - JSONKit.m
     - Support Files:
-      - Pods-JSONKit-Private.xcconfig
       - Pods-JSONKit-dummy.m
       - Pods-JSONKit-prefix.pch
       - Pods-JSONKit.xcconfig
+      - Pods-JSONKit-Private.xcconfig
   - Reachability:
     - Products:
       - libPods-Reachability.a
@@ -22,18 +22,18 @@ File References:
       - Reachability.h
       - Reachability.m
     - Support Files:
-      - Pods-Reachability-Private.xcconfig
       - Pods-Reachability-dummy.m
       - Pods-Reachability-prefix.pch
       - Pods-Reachability.xcconfig
+      - Pods-Reachability-Private.xcconfig
 - Products:
   - libPods.a
 - Targets Support Files:
   - Pods:
+    - Pods-environment.h
+    - Pods-dummy.m
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
-    - Pods-dummy.m
-    - Pods-environment.h
     - Pods-resources.sh
     - Pods.xcconfig
 - Podfile

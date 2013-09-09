@@ -16,18 +16,18 @@ File References:
           - subspec_2.h
           - subspec_2.m
     - Support Files:
-      - Pods-PodTest-Private.xcconfig
       - Pods-PodTest-dummy.m
       - Pods-PodTest-prefix.pch
       - Pods-PodTest.xcconfig
+      - Pods-PodTest-Private.xcconfig
 - Products:
   - libPods.a
 - Targets Support Files:
   - Pods:
+    - Pods-environment.h
+    - Pods-dummy.m
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
-    - Pods-dummy.m
-    - Pods-environment.h
     - Pods-resources.sh
     - Pods.xcconfig
 - Podfile

@@ -1,0 +1,98 @@
+CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-color 2>&1
+Analyzing dependencies
+
+Resolving dependencies of `Podfile`
+Resolving dependencies for target `Pods' (iOS 6.0)
+  - Reachability (= 3.1.0)
+Resolving dependencies for target `test' (iOS 6.0)
+  - JSONKit
+Resolving dependencies for target `SampleApp_2' (iOS 6.0)
+  - JSONKit
+  - Reachability (= 3.1.0)
+
+Comparing resolved specification to the sandbox manifest
+  A JSONKit
+  A Reachability
+
+Downloading dependencies
+
+-> Installing JSONKit (1.5pre)
+ > GitHub download
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+   0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+ > Cloning to Pods folder
+     $ /usr/bin/git clone "CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f"
+     "ROOT/tmp/install_multiple_targets/Pods/JSONKit"
+     Cloning into 'ROOT/tmp/install_multiple_targets/Pods/JSONKit'...
+     done.
+   $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
+   Switched to a new branch 'activated-pod-commit'
+
+-> Installing Reachability (3.1.0)
+ > GitHub download
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git config core.bare
+   true
+   $ /usr/bin/git rev-list --max-count=1 v3.1.0
+   f7176f4798d068d233dca5223ae4bd9c8059e830
+   $ /usr/bin/git clone 'CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6'
+   'ROOT/tmp/install_multiple_targets/Pods/Reachability'
+   Cloning into 'ROOT/tmp/install_multiple_targets/Pods/Reachability'...
+   done.
+   $ /usr/bin/git fetch origin tags/v3.1.0 2>&1
+   From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+    * tag               v3.1.0     -> FETCH_HEAD
+   $ /usr/bin/git reset --hard FETCH_HEAD
+   HEAD is now at f7176f4 updated podspec
+   $ /usr/bin/git checkout -b activated-pod-commit 2>&1
+   Switched to a new branch 'activated-pod-commit'
+  - Running pre install hooks
+
+Linking headers
+
+Generating Pods project
+  - Initializing new project
+  - Installing `JSONKit`
+    - Installing file references
+    - Installing target `Pods-test-JSONKit` iOS 6.0
+    - Installing target `Pods-SampleApp_2-JSONKit` iOS 6.0
+  - Installing `Reachability`
+    - Installing file references
+    - Installing target `Pods-Reachability` iOS 6.0
+    - Installing target `Pods-SampleApp_2-Reachability` iOS 6.0
+  - Generating support files for target `Pods-Reachability`
+  - Generating support files for target `Pods-test-JSONKit`
+  - Generating support files for target `Pods-SampleApp_2-JSONKit`
+  - Generating support files for target `Pods-SampleApp_2-Reachability`
+  - Installing `Pods`
+    - Installing target `Pods` iOS 6.0
+  - Installing `Pods-SampleApp_2`
+    - Installing target `Pods-SampleApp_2` iOS 6.0
+  - Installing `Pods-test`
+    - Installing target `Pods-test` iOS 6.0
+  - Generating support files for target `Pods`
+  - Generating support files for target `Pods-test`
+  - Generating support files for target `Pods-SampleApp_2`
+  - Setting-up dependencies
+  - Populating aggregate targets
+  - Running post install hooks
+  - Writing Xcode project file
+
+Writing Lockfiles
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+[!] From now on use `SampleApp.xcworkspace`.
+
+Integrating Pod target `Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
+
+Integrating Pod targets `Pods-SampleApp_2-JSONKit and Pods-SampleApp_2-Reachability` into aggregate target Pods-SampleApp_2 of project `SampleApp.xcodeproj`.
+
+Integrating Pod target `Pods-test-JSONKit` into aggregate target Pods-test of project `SampleApp.xcodeproj`.
