@@ -13,6 +13,7 @@ module Pod
       @sandbox = sandbox
       @pod_targets = []
       @file_accessors = []
+      @user_build_configurations = {}
     end
 
     def skip_installation?

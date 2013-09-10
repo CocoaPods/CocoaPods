@@ -23,6 +23,7 @@ module Pod
       @sandbox = sandbox
       @build_headers  = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
       @file_accessors = []
+      @user_build_configurations = {}
     end
 
     # @return [String] the label for the target.
@@ -62,6 +63,18 @@ module Pod
       specs.map do |spec|
         spec.consumer(platform).dependencies.map { |dep| Specification.root_name(dep.name) }
       end.flatten.reject { |dep| dep == pod_name }
+    end
+
+    def inhibits_warnings?
+      @inhibits_warnings ||= target_definition.inhibits_warnings_for_pod?(pod_name)
+    end
+
+    def frameworks
+      spec_consumers.map(&:frameworks).flatten.uniq
+    end
+
+    def libraries
+      spec_consumers.map(&:libraries).flatten.uniq
     end
 
   end

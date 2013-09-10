@@ -19,6 +19,9 @@ module Pod
     # To tame the complexity of the incremental editing, the generator relies
     # on the following assumptions:
     #
+    # - Unrecognized targets and groups are removed early so the rest of the
+    #   generation can focus on adding references if missing. In this way the
+    #   same code path can be shared with the generation from scratch.
     # - The file references of the Pods are all stored in a dedicated group.
     # - The support files for a Pod are stored in a group which in turn is
     #   namespaced per aggregate target.
@@ -63,20 +66,18 @@ module Pod
     #   recompilation of the project.
     #
     #
+    # TODO: Fix the CocoaPods compatibility version.
     # TODO: Resource bundle targets are currently removed as they are not
-    #       unrecognized.
-    # TODO: Rebuild from scratch if the version of CocoaPods is not compatible.
-    # TODO: The paths of frameworks might not match in different systems.
+    #       recognized.
     # TODO: The recreation of the prefix header of the Pods targets forces a
     #       recompilation.
     # TODO: The headers search paths of the Pods xcconfigs should not include
     #       all the headers.
+    # TODO: Clean system frameworks & libraries not referenced anymore.
     #
     class PodsProjectGenerator
 
-      autoload :AggregateTargetInstaller, 'cocoapods/installer/pods_project_generator/target_installer/aggregate_target_installer'
       autoload :FileReferencesInstaller,  'cocoapods/installer/pods_project_generator/file_references_installer'
-      autoload :PodTargetInstaller,       'cocoapods/installer/pods_project_generator/target_installer/pod_target_installer'
       autoload :SupportFilesGenerator,    'cocoapods/installer/pods_project_generator/support_files_generator'
       autoload :TargetInstaller,          'cocoapods/installer/pods_project_generator/target_installer'
 
@@ -117,6 +118,7 @@ module Pod
         sync_support_files
         add_missing_aggregate_targets_libraries
         add_missing_target_dependencies
+        post_installation_cleaning
       end
 
       # Writes the Pods project to the disk.
@@ -184,7 +186,7 @@ module Pod
         end
 
         aggregate_targets_to_install.each do |target|
-          UI.message"- Installing `#{target.label}`" do
+          UI.message"- Installing `#{target}`" do
             add_aggregate_target(target)
           end
         end
@@ -199,7 +201,7 @@ module Pod
         targets = all_pod_targets + aggregate_targets
         targets.reject!(&:skip_installation?)
         targets.each do |target|
-          UI.message"- Generating support files for target `#{target.label}`" do
+          UI.message"- Generating support files for target `#{target}`" do
             gen = SupportFilesGenerator.new(target, sandbox.project)
             gen.generate!
           end
@@ -214,9 +216,9 @@ module Pod
       def add_missing_aggregate_targets_libraries
         UI.message"- Populating aggregate targets" do
           aggregate_targets.each do |aggregate_target|
-            native_target = aggregate_target.target
+            native_target = aggregate_target.native_target
             aggregate_target.pod_targets.each do |pod_target|
-              product = pod_target.target.product_reference
+              product = pod_target.native_target.product_reference
               unless native_target.frameworks_build_phase.files_references.include?(product)
                 native_target.frameworks_build_phase.add_file_reference(product)
               end
@@ -233,17 +235,30 @@ module Pod
         UI.message"- Setting-up target dependencies" do
           aggregate_targets.each do |aggregate_target|
             aggregate_target.pod_targets.each do |dep|
-              aggregate_target.target.add_dependency(dep.target)
+              aggregate_target.native_target.add_dependency(dep.target)
             end
 
             aggregate_targets.each do |aggregate_target|
               aggregate_target.pod_targets.each do |pod_target|
                 dependencies = pod_target.dependencies.map { |dep_name| aggregate_target.pod_targets.find { |target| target.pod_name == dep_name } }
                 dependencies.each do |dep|
-                  pod_target.target.add_dependency(dep.target)
+                  pod_target.native_target.add_dependency(dep.target)
                 end
               end
             end
+          end
+        end
+      end
+
+      # Removes any system framework not referenced by any target.
+      #
+      # @return [void]
+      #
+      def post_installation_cleaning
+        project.frameworks_group.files.each do |file|
+          only_refered_by_group = file.referrers.count == 1
+          if only_refered_by_group
+            file.remove_from_project
           end
         end
       end
@@ -266,7 +281,7 @@ module Pod
         cp_targets.each do |pod_target|
           native_targets = native_targets_by_name[pod_target.label]
           if native_targets
-            pod_target.target = native_targets.first
+            pod_target.native_target = native_targets.first
             @unrecognized_targets.delete(pod_target.label)
           end
         end
@@ -314,7 +329,8 @@ module Pod
       # @!group Private Helpers
       #-----------------------------------------------------------------------#
 
-      #
+      # @return [Bool] Whether a new project should be created from scratch or
+      #         the installation can be performed incrementally.
       #
       def should_create_new_project?
         # TODO version
@@ -341,7 +357,7 @@ module Pod
           all_pod_targets.map(&:pod_name).uniq.sort
         else
           # TODO: Add missing groups
-          missing_target = all_pod_targets.select { |pod_target| pod_target.target.nil? }.map(&:pod_name).uniq
+          missing_target = all_pod_targets.select { |pod_target| pod_target.native_target.nil? }.map(&:pod_name).uniq
           @pods_to_install ||= (sandbox.state.added | sandbox.state.changed | missing_target).uniq.sort
         end
       end
@@ -350,7 +366,7 @@ module Pod
       #
       def aggregate_targets_to_install
         aggregate_targets.sort_by(&:name).select do |target|
-          target.target.nil? && !target.skip_installation?
+          target.native_target.nil? && !target.skip_installation?
         end
       end
 
@@ -403,7 +419,7 @@ module Pod
       # @return [void]
       #
       def remove_target(target)
-        UI.message"- Removing `#{target.display_name}` target" do
+        UI.message"- Removing `#{target}` target" do
           target.referrers.each do |ref|
             if ref.isa == 'PBXTargetDependency'
               ref.remove_from_project
@@ -437,11 +453,9 @@ module Pod
           FileReferencesInstaller.new(sandbox, pod_targets).install!
         end
 
-        pod_targets.each do |pod_target|
-          remove_target(pod_target.target) if pod_target.target
-          UI.message "- Installing target `#{pod_target.name}` #{pod_target.platform}" do
-            PodTargetInstaller.new(sandbox, pod_target).install!
-          end
+        pod_targets.each do |target|
+          remove_target(target.native_target) if target.native_target
+          add_aggregate_target(target)
         end
       end
 
@@ -450,7 +464,9 @@ module Pod
       # @return [void]
       #
       def add_aggregate_target(target)
-        AggregateTargetInstaller.new(sandbox, target).install!
+        UI.message "- Installing target `#{target}`" do
+          TargetInstaller.new(project, target).install!
+        end
       end
 
       #-----------------------------------------------------------------------#

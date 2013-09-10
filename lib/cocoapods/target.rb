@@ -44,7 +44,10 @@ module Pod
     def inspect
       "<#{self.class} name=#{name}>"
     end
-    alias :to_s :inspect
+
+    def to_s
+      "#{name} #{platform}"
+    end
 
     #-------------------------------------------------------------------------#
 
@@ -60,6 +63,8 @@ module Pod
     #         this library.
     #
     attr_accessor :target
+    alias :native_target :target
+    alias :native_target= :target=
 
     # @return [Platform] the platform for this library.
     #
