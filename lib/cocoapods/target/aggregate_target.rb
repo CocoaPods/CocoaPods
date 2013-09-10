@@ -15,6 +15,10 @@ module Pod
       @file_accessors = []
     end
 
+    def skip_installation?
+      target_definition.empty?
+    end
+
     # @return [String] the label for the target.
     #
     def label

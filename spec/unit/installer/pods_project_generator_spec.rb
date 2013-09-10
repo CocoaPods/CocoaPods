@@ -4,6 +4,10 @@ module Pod
   class Installer
     describe PodsProjectGenerator do
 
+      before do
+        config.sandbox.stubs(:cocoapods_version).returns(Version.new(Pod::VERSION))
+      end
+
       #-----------------------------------------------------------------------#
 
       describe "In general" do
@@ -167,7 +171,30 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
-      describe "#sync_target_dependencies" do
+      describe "#add_missing_aggregate_targets_libraries" do
+
+        before do
+          project = Pod::Project.new(config.sandbox.project_path)
+          @aggregate_native_target = project.new_target(:static_library, 'Pods', :ios)
+          @pod_native_target = project.new_target(:static_library, 'Pods-BananaLib', :ios)
+          pod_target = PodTarget.new([], nil, config.sandbox)
+          pod_target.target = @pod_native_target
+          aggregate_target = AggregateTarget.new(nil, config.sandbox)
+          aggregate_target.pod_targets = [pod_target]
+          aggregate_target.target = @aggregate_native_target
+          @sut = PodsProjectGenerator.new(config.sandbox, [aggregate_target])
+        end
+
+        it "links the aggregate targets to the pod targets" do
+          @sut.send(:add_missing_aggregate_targets_libraries)
+          @aggregate_native_target.frameworks_build_phase.files.map(&:file_ref).should.include?(@pod_native_target.product_reference)
+        end
+
+      end
+
+      #-----------------------------------------------------------------------#
+
+      describe "#add_missing_target_dependencies" do
 
         before do
           project = Pod::Project.new(config.sandbox.project_path)
@@ -188,39 +215,16 @@ module Pod
 
 
         it "sets the pod targets as dependencies of the aggregate target" do
-          @sut.send(:sync_target_dependencies)
+          @sut.send(:add_missing_target_dependencies)
           dependencies = @aggregate_target.target.dependencies
           dependencies.map { |d| d.target.name}.should == ["Pods-BananaLib", "Pods-monkey"]
         end
 
         it "sets the dependencies of the pod targets" do
           @pod_target_1.stubs(:dependencies).returns(['monkey'])
-          @sut.send(:sync_target_dependencies)
+          @sut.send(:add_missing_target_dependencies)
           dependencies = @pod_target_1.target.dependencies
           dependencies.map { |d| d.target.name}.should == ["Pods-monkey"]
-        end
-
-      end
-
-      #-----------------------------------------------------------------------#
-
-      describe "#sync_aggregate_targets_libraries" do
-
-        before do
-          project = Pod::Project.new(config.sandbox.project_path)
-          @aggregate_native_target = project.new_target(:static_library, 'Pods', :ios)
-          @pod_native_target = project.new_target(:static_library, 'Pods-BananaLib', :ios)
-          pod_target = PodTarget.new([], nil, config.sandbox)
-          pod_target.target = @pod_native_target
-          aggregate_target = AggregateTarget.new(nil, config.sandbox)
-          aggregate_target.pod_targets = [pod_target]
-          aggregate_target.target = @aggregate_native_target
-          @sut = PodsProjectGenerator.new(config.sandbox, [aggregate_target])
-        end
-
-        it "links the aggregate targets to the pod targets" do
-          @sut.send(:sync_aggregate_targets_libraries)
-          @aggregate_native_target.frameworks_build_phase.files.map(&:file_ref).should.include?(@pod_native_target.product_reference)
         end
 
       end

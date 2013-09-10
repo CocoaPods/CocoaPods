@@ -35,6 +35,10 @@ module Pod
       label.upcase.gsub(/[^A-Z]/, '_') + '_'
     end
 
+    def skip_installation?
+      false
+    end
+
     # @return [String] A string suitable for debugging.
     #
     def inspect

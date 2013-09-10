@@ -4,6 +4,74 @@ module Pod
     # Generates the Pods project according to the targets identified by the
     # analyzer.
     #
+    # # Incremental editing
+    #
+    # The generator will edit exiting projects instead of recreating them from
+    # scratch. This behaviour significantly complicates the logic but leads to
+    # dramatic performance benefits for the installation times. Another feature
+    # of the incremental editing is the preservation of the UUIDs in the
+    # project which allows to easily compare projects, reduce SCM noise (if the
+    # CocoaPods artifacts are kept under source control), and finally, to
+    # improve indexing and build time in Xcode.
+    #
+    # ## Assumptions
+    #
+    # To tame the complexity of the incremental editing, the generator relies
+    # on the following assumptions:
+    #
+    # - The file references of the Pods are all stored in a dedicated group.
+    # - The support files for a Pod are stored in a group which in turn is
+    #   namespaced per aggregate target.
+    # - The support files of an aggregate target are stored in its group.
+    # - The support files generator is incremental and doesn't duplicates file
+    #   references.
+    #
+    # ## Logic overview
+    #
+    # 1. The pods project is prepared.
+    #    - The Pods project is generated from scratch if needed.
+    #    - Otherwise the project is recreated from scratch and cleaned.
+    #      - Existing native targets are matched to the targets.
+    #      - Unrecognized targets are removed with any reference to them in the
+    #        build phases of their other targets (dependencies build phases and
+    #        frameworks build phases).
+    #       - Unrecognized pod groups are removed.
+    # 2. All the targets which require it are installed.
+    # 3. The support files of the targets are generated and the file references
+    #    are created if needed.
+    # 4. Any missing Pod target is added to the framework build phases of the
+    #    dependent aggregate targets.
+    # 5. Any missing target is added to the dependencies build phase of the
+    #    dependent target.
+    #
+    # ## Caveats & Notes
+    #
+    # - Until CocoaPods 1.0 a migrator will not be provided and when the
+    #   structure of the Pods project changes it should be recreated from
+    #   scratch.
+    # - Although the incremental generation is reasonably robust, if the user
+    #   tampers with the Pods project an generation from scratch might be
+    #   necessary to bring the project to a consistent state.
+    # - Advanced users might workaround to missing features of CocoaPods
+    #   editing the project. Those customization might persist for a longer
+    #   time than in a system where the project is generated from scratch every
+    #   time.
+    # - If a Pod changes on any target it needs to be reinstalled from scratch
+    #   as the file references might change according to the platform and the
+    #   file references installer is not incremental.
+    # - The recreation of the target environment header forces the
+    #   recompilation of the project.
+    #
+    #
+    # TODO: Resource bundle targets are currently removed as they are not
+    #       unrecognized.
+    # TODO: Rebuild from scratch if the version of CocoaPods is not compatible.
+    # TODO: The paths of frameworks might not match in different systems.
+    # TODO: The recreation of the prefix header of the Pods targets forces a
+    #       recompilation.
+    # TODO: The headers search paths of the Pods xcconfigs should not include
+    #       all the headers.
+    #
     class PodsProjectGenerator
 
       autoload :AggregateTargetInstaller, 'cocoapods/installer/pods_project_generator/target_installer/aggregate_target_installer'
@@ -45,26 +113,26 @@ module Pod
       #
       def install
         prepare_project
-        sync_pod_targets
-        sync_aggregate_targets
-        sync_target_dependencies
-        sync_aggregate_targets_libraries
+        install_targets
+        sync_support_files
+        add_missing_aggregate_targets_libraries
+        add_missing_target_dependencies
       end
-
-      # @return [Project] the generated Pods project.
-      #
-      attr_reader :project
 
       # Writes the Pods project to the disk.
       #
       # @return [void]
       #
       def write_project
-        UI.message "- Writing Xcode project file" do
+        UI.message "- Writing Pods project" do
           project.prepare_for_serialization
           project.save
         end
       end
+
+      # @return [Project] the generated Pods project.
+      #
+      attr_reader :project
 
 
       private
@@ -85,8 +153,9 @@ module Pod
         else
           UI.message"- Opening existing project" do
             @project = Pod::Project.open(sandbox.project_path)
-            remove_groups
             detect_native_targets
+            clean_groups
+            clean_native_targets
           end
         end
 
@@ -95,7 +164,120 @@ module Pod
         sandbox.project = project
       end
 
-      def remove_groups
+      # Installs the targets which require an installation.
+      #
+      # The Pod targets which require an installation (missing, added, or
+      # changed) are installed from scratch for all the targets.
+      #
+      # Only the missing aggregate targets are installed as any reference to
+      # any unrecognized target has already be removed, the references in the
+      # build phases will be synchronized later and the support files will be
+      # regenerated and synchronized in any case.
+      #
+      # @return [void]
+      #
+      def install_targets
+        pods_to_install.each do |name|
+          UI.message"- Installing `#{name}`" do
+            add_pod(name)
+          end
+        end
+
+        aggregate_targets_to_install.each do |target|
+          UI.message"- Installing `#{target.label}`" do
+            add_aggregate_target(target)
+          end
+        end
+      end
+
+      # Generates the support for files for the targets and adds the file
+      # references to them if needed.
+      #
+      # @return [void]
+      #
+      def sync_support_files
+        targets = all_pod_targets + aggregate_targets
+        targets.reject!(&:skip_installation?)
+        targets.each do |target|
+          UI.message"- Generating support files for target `#{target.label}`" do
+            gen = SupportFilesGenerator.new(target, sandbox.project)
+            gen.generate!
+          end
+        end
+      end
+
+      # Links the aggregate targets with all the dependent pod targets.
+      # Aggregate targets are always created from scratch.
+      #
+      # @return [void]
+      #
+      def add_missing_aggregate_targets_libraries
+        UI.message"- Populating aggregate targets" do
+          aggregate_targets.each do |aggregate_target|
+            native_target = aggregate_target.target
+            aggregate_target.pod_targets.each do |pod_target|
+              product = pod_target.target.product_reference
+              unless native_target.frameworks_build_phase.files_references.include?(product)
+                native_target.frameworks_build_phase.add_file_reference(product)
+              end
+            end
+          end
+        end
+      end
+
+      # Synchronizes the dependencies of the targets.
+      #
+      # @return [void]
+      #
+      def add_missing_target_dependencies
+        UI.message"- Setting-up target dependencies" do
+          aggregate_targets.each do |aggregate_target|
+            aggregate_target.pod_targets.each do |dep|
+              aggregate_target.target.add_dependency(dep.target)
+            end
+
+            aggregate_targets.each do |aggregate_target|
+              aggregate_target.pod_targets.each do |pod_target|
+                dependencies = pod_target.dependencies.map { |dep_name| aggregate_target.pod_targets.find { |target| target.pod_name == dep_name } }
+                dependencies.each do |dep|
+                  pod_target.target.add_dependency(dep.target)
+                end
+              end
+            end
+          end
+        end
+      end
+
+
+      private
+
+      # @!group Incremental Editing
+      #-----------------------------------------------------------------------#
+
+      # Matches the native targets of the Pods project with the targets
+      # generated by the analyzer.
+      #
+      # @return [void]
+      #
+      def detect_native_targets
+        @native_targets_by_name = project.targets.group_by(&:name)
+        @unrecognized_targets = native_targets_by_name.keys.dup
+        cp_targets = aggregate_targets + all_pod_targets
+        cp_targets.each do |pod_target|
+          native_targets = native_targets_by_name[pod_target.label]
+          if native_targets
+            pod_target.target = native_targets.first
+            @unrecognized_targets.delete(pod_target.label)
+          end
+        end
+      end
+
+      # Cleans any unrecognized group in the Pods group and in the support
+      # files group.
+      #
+      # @return [void]
+      #
+      def clean_groups
         pod_names = all_pod_targets.map(&:pod_name).uniq.sort
         groups_to_remove = []
         groups_to_remove << project.pod_groups.reject do |group|
@@ -112,8 +294,87 @@ module Pod
         end
 
         groups_to_remove.flatten.each do |group|
-          p group
           remove_group(group)
+        end
+      end
+
+      # Cleans the unrecognized native targets.
+      #
+      # @return [void]
+      #
+      def clean_native_targets
+        unrecognized_targets.each do |target_name|
+          remove_target(native_targets_by_name[target_name].first)
+        end
+      end
+
+
+      private
+
+      # @!group Private Helpers
+      #-----------------------------------------------------------------------#
+
+      #
+      #
+      def should_create_new_project?
+        # TODO version
+        compatbile_version = '0.24.0'
+        !sandbox.version_at_least?(compatbile_version) || !sandbox.project_path.exist?
+      end
+
+      #
+      #
+      attr_accessor :new_project
+      alias_method  :new_project?, :new_project
+
+      # @return [Array<PodTarget>] The pod targets generated by the installation
+      #         process.
+      #
+      def all_pod_targets
+        aggregate_targets.map(&:pod_targets).flatten
+      end
+
+      #
+      #
+      def pods_to_install
+        if new_project
+          all_pod_targets.map(&:pod_name).uniq.sort
+        else
+          # TODO: Add missing groups
+          missing_target = all_pod_targets.select { |pod_target| pod_target.target.nil? }.map(&:pod_name).uniq
+          @pods_to_install ||= (sandbox.state.added | sandbox.state.changed | missing_target).uniq.sort
+        end
+      end
+
+      #
+      #
+      def aggregate_targets_to_install
+        aggregate_targets.sort_by(&:name).select do |target|
+          target.target.nil? && !target.skip_installation?
+        end
+      end
+
+      attr_accessor :unrecognized_targets
+      attr_accessor :native_targets_by_name
+
+      # Sets the build configuration of the Pods project according the build
+      # configurations of the user as detected by the analyzer and other
+      # default values.
+      #
+      # @return [void]
+      #
+      def setup_build_configurations
+        user_build_configurations.each do |name, type|
+          project.add_build_configuration(name, type)
+        end
+
+        platforms = aggregate_targets.map(&:platform)
+        osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
+        ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
+        project.build_configurations.each do |build_configuration|
+          build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
+          build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
+          build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
         end
       end
 
@@ -148,7 +409,7 @@ module Pod
               ref.remove_from_project
             end
           end
-        target.remove_from_project
+          target.remove_from_project
 
           target.product_reference.referrers.each do |ref|
             if ref.isa == 'PBXBuildFile'
@@ -159,227 +420,37 @@ module Pod
         end
       end
 
-      # Matches the native targets of the Pods project with the targets
-      # generated by the analyzer.
+      # Installs all the targets of the Pod with the given name. If the Pod
+      # already exists it is removed before.
       #
       # @return [void]
-      #
-      def detect_native_targets
-        native_targets_by_name = project.targets.group_by(&:name)
-        native_targets_to_remove = native_targets_by_name.keys.dup
-        cp_targets = aggregate_targets + all_pod_targets
-        cp_targets.each do |pod_target|
-          native_targets = native_targets_by_name[pod_target.label]
-          if native_targets
-            pod_target.target = native_targets.first
-            native_targets_to_remove.delete(pod_target.label)
-          end
-        end
-
-        native_targets_to_remove.each do |target_name|
-          remove_target(native_targets_by_name[target_name].first)
-        end
-      end
-
-      # @return [void]
-      #
-      def sync_pod_targets
-        pods_to_install.each do |name|
-          add_pod(name)
-        end
-
-        all_pod_targets.each do |target|
-          UI.message"- Generating support files for target `#{target.label}`" do
-            gen = SupportFilesGenerator.new(target, sandbox.project)
-            gen.generate!
-          end
-        end
-      end
-
-      # Adds and removes aggregate targets to the
-      #
-      # @return [void]
-      #
-      def sync_aggregate_targets
-        # TODO: Clean up dependencies and linking
-        # TODO: Clean removed targets and their support files
-        # TODO: Fix sorting of targets
-        # TODO: Clean unrecognized targets
-        # TODO: Add integration checks (adding an aggregate target, removing
-        #       one, performing an installation without a project)
-
-        # TODO
-        targets_to_remove = []
-
-        targets_to_install.each do |target|
-          add_aggregate_target(target)
-        end
-
-        aggregate_targets.each do |target|
-          unless target.target_definition.empty?
-            UI.message"- Generating support files for target `#{target.label}`" do
-              gen = SupportFilesGenerator.new(target, sandbox.project)
-              gen.generate!
-            end
-          end
-        end
-      end
-
-      #
-      #
-      def add_aggregate_target(target)
-        UI.message"- Installing `#{target.label}`" do
-          AggregateTargetInstaller.new(sandbox, target).install!
-        end
-      end
-
-      #
       #
       def add_pod(name)
-        UI.message"- Installing `#{name}`" do
-          pod_targets = all_pod_targets.select { |target| target.pod_name == name }
+        pod_targets = all_pod_targets.select { |target| target.pod_name == name }
 
-          remove_group(project.pod_group(name)) if project.pod_group(name)
-          UI.message"- Installing file references" do
-            path = sandbox.pod_dir(name)
-            local = sandbox.local?(name)
-            project.add_pod_group(name, path, local)
+        remove_group(project.pod_group(name)) if project.pod_group(name)
+        UI.message"- Installing file references" do
+          path = sandbox.pod_dir(name)
+          local = sandbox.local?(name)
+          project.add_pod_group(name, path, local)
 
-            FileReferencesInstaller.new(sandbox, pod_targets).install!
-          end
+          FileReferencesInstaller.new(sandbox, pod_targets).install!
+        end
 
-          pod_targets.each do |pod_target|
-            remove_target(pod_target.target) if pod_target.target
-            UI.message "- Installing target `#{pod_target.name}` #{pod_target.platform}" do
-              PodTargetInstaller.new(sandbox, pod_target).install!
-            end
+        pod_targets.each do |pod_target|
+          remove_target(pod_target.target) if pod_target.target
+          UI.message "- Installing target `#{pod_target.name}` #{pod_target.platform}" do
+            PodTargetInstaller.new(sandbox, pod_target).install!
           end
         end
       end
 
-
-      # Sets the dependencies of the targets.
+      # Installs an aggregate target.
       #
       # @return [void]
       #
-      def sync_target_dependencies
-        UI.message"- Setting-up dependencies" do
-          aggregate_targets.each do |aggregate_target|
-            aggregate_target.pod_targets.each do |dep|
-              if dep.target
-                aggregate_target.target.add_dependency(dep.target)
-              else
-                puts "[BUG] #{dep}"
-              end
-            end
-          end
-
-          aggregate_targets.each do |aggregate_target|
-            aggregate_target.pod_targets.each do |pod_target|
-              dependencies = pod_target.dependencies.map { |dep_name| aggregate_target.pod_targets.find { |target| target.pod_name == dep_name } }
-              dependencies.each do |dep|
-                pod_target.target.add_dependency(dep.target)
-              end
-            end
-          end
-        end
-      end
-
-      # Links the aggregate targets with all the dependent pod targets.
-      #
-      # @return [void]
-      #
-      def sync_aggregate_targets_libraries
-        UI.message"- Populating aggregate targets" do
-          aggregate_targets.each do |aggregate_target|
-            native_target = aggregate_target.target
-            aggregate_target.pod_targets.each do |pod_target|
-              product = pod_target.target.product_reference
-              unless native_target.frameworks_build_phase.files_references.include?(product)
-                native_target.frameworks_build_phase.add_file_reference(product)
-              end
-            end
-          end
-        end
-      end
-
-
-      private
-
-      # @!group Private Helpers
-      #-----------------------------------------------------------------------#
-
-      #
-      #
-      def should_create_new_project?
-        # TODO
-        incompatible = false
-        incompatible || !sandbox.project_path.exist?
-      end
-
-      #
-      #
-      attr_accessor :new_project
-      alias_method  :new_project?, :new_project
-
-      # @return [Array<PodTarget>] The pod targets generated by the installation
-      #         process.
-      #
-      def all_pod_targets
-        aggregate_targets.map(&:pod_targets).flatten
-      end
-
-      #
-      #
-      def pods_to_install
-        if new_project
-          all_pod_targets.map(&:pod_name).uniq.sort
-        else
-          # TODO: Add missing groups
-          missing_target = all_pod_targets.select { |pod_target| pod_target.target.nil? }.map(&:pod_name).uniq
-          @pods_to_install ||= (sandbox.state.added | sandbox.state.changed | missing_target).uniq.sort
-        end
-      end
-
-      #
-      #
-      def pods_to_remove
-        return [] if new_project
-        # TODO: Unrecognized groups
-        @pods_to_remove ||= (sandbox.state.deleted | sandbox.state.changed).sort
-      end
-
-      def targets_to_install
-        aggregate_targets.sort_by(&:name).select do |target|
-          empty = target.target_definition.empty?
-          if new_project
-            !empty
-          else
-            missing = target.target.nil?
-            missing && !empty
-          end
-        end
-      end
-
-      # Sets the build configuration of the Pods project according the build
-      # configurations of the user as detected by the analyzer and other
-      # default values.
-      #
-      # @return [void]
-      #
-      def setup_build_configurations
-        user_build_configurations.each do |name, type|
-          project.add_build_configuration(name, type)
-        end
-
-        platforms = aggregate_targets.map(&:platform)
-        osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
-        ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
-        project.build_configurations.each do |build_configuration|
-          build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
-          build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
-          build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
-        end
+      def add_aggregate_target(target)
+        AggregateTargetInstaller.new(sandbox, target).install!
       end
 
       #-----------------------------------------------------------------------#

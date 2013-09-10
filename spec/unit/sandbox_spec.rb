@@ -19,6 +19,20 @@ module Pod
         @sandbox.manifest.should == nil
       end
 
+      describe "#version_at_least?" do
+
+      it "returns whether the version of CocoaPods used to generate the sandbox is major to the given one" do
+        manifest = stub(:cocoapods_version => Version.new('1.0'))
+        @sandbox.stubs(:manifest).returns(manifest)
+        @sandbox.version_at_least?('1.0.0').should.be.true
+      end
+
+      it "returns false if the manifest is not available" do
+        @sandbox.version_at_least?('0.0.1').should.be.false
+      end
+
+      end
+
       it "returns the project" do
         @sandbox.project.should == nil
       end

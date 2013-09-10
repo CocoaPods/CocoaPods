@@ -78,6 +78,21 @@ module Pod
       Lockfile.from_file(manifest_path) if manifest_path.exist?
     end
 
+    # Returns whether the version of CocoaPods used to generate the sandbox is
+    # is major than the given version.
+    #
+    # @param  [String]
+    #
+    # @return [Bool]
+    #
+    def version_at_least?(version)
+      if manifest
+        manifest.cocoapods_version >= Version.new(version)
+      else
+        false
+      end
+    end
+
     # @return [Installer::Analyzer::SpecsState] The state of the sandbox
     #         (added, deleted, changed and unchanged pods) as computed by the
     #         analyzer.
