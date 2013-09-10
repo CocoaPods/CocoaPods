@@ -32,8 +32,6 @@ module Pod
     it "sets the ARCHS" do
       @installer.send(:add_target)
       target = @project.targets.first
-      target.build_settings('Debug')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
-      target.build_settings('AppStore')["ARCHS"].should == "$(ARCHS_STANDARD_32_BIT)"
       target.build_settings('Debug')["ONLY_ACTIVE_ARCH"].should.be.nil
       target.build_settings('AppStore')["ONLY_ACTIVE_ARCH"].should.be.nil
     end

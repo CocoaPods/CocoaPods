@@ -350,7 +350,7 @@ module Pod
         pod_targets.sort_by(&:name).each do |pod_target|
           pod_target.file_accessors.each do |file_accessor|
             file_accessor.spec_consumer.frameworks.each do |framework|
-              ref = pods_project.add_system_framework(framework, pod_target.target)
+              pod_target.target.add_system_framework(framework)
             end
           end
         end
