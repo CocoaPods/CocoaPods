@@ -17,8 +17,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 092a12526563550eb70c5c479bc2cea37b43a030
-  branch: master
+  revision: 237aca2e1a81f0d679aa401e25a944e6fdec2112
+  branch: redacted-support
   specs:
     xcodeproj (0.10.1)
       activesupport (~> 3.0)
@@ -49,7 +49,7 @@ GIT
 
 GIT
   remote: https://github.com/lemurheavy/coveralls-ruby.git
-  revision: 2576b7d37545c6f28f0ad43f56cddc09ca2740f4
+  revision: 2a7d3f86f1353a97734cc7df476b898e92d89708
   specs:
     coveralls (0.6.7)
       multi_json (~> 1.3)
