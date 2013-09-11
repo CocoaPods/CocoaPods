@@ -81,10 +81,11 @@ module Pod
         end
 
         it "sets the deployment target for the project" do
-          target_ios = AggregateTarget.new(nil, config.sandbox)
-          target_osx = AggregateTarget.new(nil, config.sandbox)
-          target_ios.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-          target_osx.stubs(:platform).returns(Platform.new(:osx, '10.8'))
+          target_ios = Target.new('Pods-ios')
+          target_ios.platform = Platform.ios
+          target_ios.platform = Platform.new(:ios, '6.0')
+          target_osx = Target.new('Pods-osx')
+          target_osx.platform = Platform.new(:osx, '10.8')
           @sut.stubs(:aggregate_targets).returns([target_ios, target_osx])
           @sut.send(:prepare_project)
           build_settings = @sut.project.build_configurations.map(&:build_settings)
@@ -119,8 +120,8 @@ module Pod
           @target_definition = Podfile::TargetDefinition.new(:default, nil)
           pod_target = PodTarget.new([], @target_definition, config.sandbox)
           pod_target.stubs(:name).returns('BananaLib')
-          aggregate_target = AggregateTarget.new(@target_definition, config.sandbox)
-          aggregate_target.pod_targets = [pod_target]
+          aggregate_target = Target.new('Pods')
+          aggregate_target.children = [pod_target]
           @sut = PodsProjectGenerator.new(config.sandbox, [aggregate_target])
         end
 
@@ -177,11 +178,10 @@ module Pod
           project = Pod::Project.new(config.sandbox.project_path)
           @aggregate_native_target = project.new_target(:static_library, 'Pods', :ios)
           @pod_native_target = project.new_target(:static_library, 'Pods-BananaLib', :ios)
-          pod_target = PodTarget.new([], nil, config.sandbox)
-          pod_target.target = @pod_native_target
-          aggregate_target = AggregateTarget.new(nil, config.sandbox)
-          aggregate_target.pod_targets = [pod_target]
+          aggregate_target = Target.new('Pods')
           aggregate_target.target = @aggregate_native_target
+          pod_target = Target.new('Pods-BananaLib', aggregate_target)
+          pod_target.target = @pod_native_target
           @sut = PodsProjectGenerator.new(config.sandbox, [aggregate_target])
         end
 
@@ -200,16 +200,15 @@ module Pod
           project = Pod::Project.new(config.sandbox.project_path)
           aggregate_native_target = project.new_target(:static_library, 'Pods', :ios)
           pod_native_target_1 = project.new_target(:static_library, 'Pods-BananaLib', :ios)
-          @pod_target_1 = PodTarget.new([], nil, config.sandbox)
-          @pod_target_1.stubs(:pod_name).returns('BananaLib')
-          @pod_target_1.target = pod_native_target_1
           pod_native_target_2 = project.new_target(:static_library, 'Pods-monkey', :ios)
-          pod_target_2 = PodTarget.new([], nil, config.sandbox)
-          pod_target_2.stubs(:pod_name).returns('monkey')
-          pod_target_2.target = pod_native_target_2
-          @aggregate_target = AggregateTarget.new(nil, config.sandbox)
-          @aggregate_target.pod_targets = [@pod_target_1, pod_target_2]
+
+          @aggregate_target = Target.new('Pods')
           @aggregate_target.target = aggregate_native_target
+          @pod_target_1 = Target.new('BananaLib', @aggregate_target)
+          @pod_target_1.target = pod_native_target_1
+          @pod_target_2 = Target.new('monkey', @aggregate_target)
+          @pod_target_2.target = pod_native_target_2
+
           @sut = PodsProjectGenerator.new(config.sandbox, [@aggregate_target])
         end
 
@@ -222,6 +221,8 @@ module Pod
 
         it "sets the dependencies of the pod targets" do
           @pod_target_1.stubs(:dependencies).returns(['monkey'])
+          @pod_target_1.stubs(:pod_name).returns('BananaLib')
+          @pod_target_2.stubs(:pod_name).returns('monkey')
           @sut.send(:add_missing_target_dependencies)
           dependencies = @pod_target_1.target.dependencies
           dependencies.map { |d| d.target.name}.should == ["Pods-monkey"]

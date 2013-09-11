@@ -86,7 +86,6 @@ module Pod
         # @!group Private Helpers
         #---------------------------------------------------------------------#
 
-
         # @return [Array<Sandbox::FileAccessor>] The file accessors for all the
         #         specs platform combinations.
         #

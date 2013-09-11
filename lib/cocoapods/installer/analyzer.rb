@@ -164,30 +164,47 @@ module Pod
       def generate_targets
         targets = []
         result.specs_by_target.each do |target_definition, specs|
-          target = AggregateTarget.new(target_definition, sandbox)
-          targets << target
+          # TODO: install named targets even if empty
+          # TODO: add spec for aggregate targets to install
+          unless target_definition.empty?
+            target = Target.new(target_definition.label)
+            targets << target
 
-          if config.integrate_targets?
-            project_path = compute_user_project_path(target_definition)
-            user_project = Xcodeproj::Project.open(project_path)
-            native_targets = compute_user_project_targets(target_definition, user_project)
+            target.target_definition = target_definition
+            target.platform = target_definition.platform
+            target.support_files_root = sandbox.library_support_files_dir(target.name)
+            target.set_arc_compatibility_flag = podfile.set_arc_compatibility_flag?
+            target.generate_bridge_support = podfile.generate_bridge_support?
+            target.public_headers_store = sandbox.public_headers
+            target.build_headers_store = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
 
-            target.user_project_path = project_path
-            target.user_target_uuids = native_targets.map(&:uuid)
-            target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
-          else
-            target.user_target_uuids = []
-            target.user_build_configurations = {}
-          end
+            if config.integrate_targets?
+              project_path = compute_user_project_path(target_definition)
+              user_project = Xcodeproj::Project.open(project_path)
+              native_targets = compute_user_project_targets(target_definition, user_project)
 
-          grouped_specs = specs.map do |spec|
-            specs.select { |s| s.root == spec.root }
-          end.uniq
+              target.user_project_path = project_path
+              target.user_target_uuids = native_targets.map(&:uuid)
+              target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
+            else
+              target.user_target_uuids = []
+              target.user_build_configurations = {}
+            end
 
-          grouped_specs.each do |pod_specs|
-            pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
-            pod_target.user_build_configurations = target.user_build_configurations
-            target.pod_targets << pod_target
+            grouped_specs = specs.map do |spec|
+              specs.select { |s| s.root == spec.root }
+            end.uniq
+
+            grouped_specs.each do |pod_specs|
+              pod_target = Target.new(pod_specs.first.root.name, target)
+              pod_target.specs = [pod_specs]
+              pod_target.support_files_root = sandbox.library_support_files_dir(target.name)
+              pod_target.user_build_configurations = target.user_build_configurations
+              pod_target.set_arc_compatibility_flag = podfile.set_arc_compatibility_flag?
+              pod_target.generate_bridge_support = podfile.generate_bridge_support?
+              pod_target.build_headers_store = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
+              pod_target.public_headers_store = sandbox.public_headers
+            end
           end
         end
         targets

@@ -110,8 +110,10 @@ module Pod
       # @return [void]
       #
       def integrate_user_targets
-        targets_to_integrate.sort_by(&:name).each do |target|
-          TargetIntegrator.new(target).integrate!
+        targets.sort_by(&:name).each do |target|
+          unless target.user_target_uuids.empty?
+            TargetIntegrator.new(target).integrate!
+          end
         end
       end
 
@@ -166,11 +168,6 @@ module Pod
         targets.map do |target|
           target.user_project_path
         end.compact.uniq
-      end
-
-
-      def targets_to_integrate
-        targets.reject { |target| target.target_definition.empty? }
       end
 
       #-----------------------------------------------------------------------#

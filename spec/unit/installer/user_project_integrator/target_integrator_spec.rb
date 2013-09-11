@@ -9,11 +9,8 @@ module Pod
       before do
         project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
         @project = Xcodeproj::Project.open(project_path)
-        Xcodeproj::Project.new(config.sandbox.project_path).save
         @native_target = @project.targets.first
-        target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        target_definition.link_with_first_target = true
-        @target = AggregateTarget.new(target_definition, config.sandbox)
+        @target = Target.new('Pods')
         @target.user_project_path  = project_path
         @target.user_target_uuids  = [@native_target.uuid]
         @target.xcconfig_path  = config.sandbox.root + 'Pods.xcconfig'

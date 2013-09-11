@@ -5,7 +5,7 @@ module Pod
 
     before do
       @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
-      @pod_target = PodTarget.new([], nil, config.sandbox)
+      @pod_target = Target.new('BananaLib')
       @pod_target.file_accessors = [@file_accessor]
       config.sandbox.project = Project.new(config.sandbox.project_path)
       config.sandbox.project.add_pod_group('BananaLib', fixture('banana-lib'))
@@ -54,9 +54,9 @@ module Pod
 
       describe "#file_accessors" do
         it "returns the file accessors" do
-          pod_target_1 = PodTarget.new([], nil, config.sandbox)
+          pod_target_1 = Target.new('BananaLib_1')
           pod_target_1.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-          pod_target_2 = PodTarget.new([], nil, config.sandbox)
+          pod_target_2 = Target.new('BananaLib_1')
           pod_target_2.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
           @sut = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [pod_target_1, pod_target_2])
           roots = @sut.send(:file_accessors).map { |fa| fa.path_list.root }
@@ -64,9 +64,9 @@ module Pod
         end
 
         it "handles libraries empty libraries without file accessors" do
-          pod_target_1 = PodTarget.new([], nil, config.sandbox)
-          pod_target_1.file_accessors = []
-          @sut = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [pod_target_1])
+          pod_target = Target.new('BananaLib_1')
+          pod_target.file_accessors = []
+          @sut = Installer::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [pod_target])
           roots = @sut.send(:file_accessors).should == []
         end
       end

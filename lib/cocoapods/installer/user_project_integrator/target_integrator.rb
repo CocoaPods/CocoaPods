@@ -40,7 +40,7 @@ module Pod
         # @return [String] a string representation suitable for debugging.
         #
         def inspect
-          "#<#{self.class} for target `#{target.label}'>"
+          "#<#{self.class} for target `#{target.name}'>"
         end
 
 
@@ -63,7 +63,7 @@ module Pod
         # @return [Specification::Consumer] the consumer for the specifications.
         #
         def spec_consumers
-          @spec_consumers ||= target.pod_targets.map(&:file_accessors).flatten.map(&:spec_consumer)
+          @spec_consumers ||= target.children.map(&:file_accessors).flatten.map(&:spec_consumer)
         end
 
         # Adds the `xcconfig` configurations files generated for the current
@@ -241,8 +241,8 @@ module Pod
         #         integration.
         #
         def integration_message
-          "Integrating Pod #{'target'.pluralize(target.pod_targets.size)} " \
-            "`#{target.pod_targets.map(&:name).to_sentence}` " \
+          "Integrating Pod #{'target'.pluralize(target.children.size)} " \
+            "`#{target.children.map(&:name).to_sentence}` " \
             "into aggregate target #{target.name} " \
             "of project #{UI.path target.user_project_path}."
         end

@@ -191,7 +191,7 @@ module Pod
     def clean_sandbox
       sandbox.public_headers.implode!
       pod_targets.each do |pod_target|
-        pod_target.build_headers.implode!
+        pod_target.build_headers_store.implode!
       end
 
       unless sandbox.state.deleted.empty?
@@ -209,7 +209,7 @@ module Pod
     #
     def create_file_accessors
       aggregate_targets.each do |target|
-        target.pod_targets.each do |pod_target|
+        target.children.each do |pod_target|
           pod_root = sandbox.pod_dir(pod_target.root_spec.name)
           path_list = Sandbox::PathList.new(pod_root)
           file_accessors = pod_target.specs.map do |spec|
@@ -299,11 +299,11 @@ module Pod
         pod_targets.each do |pod_target|
           pod_target.file_accessors.each do |file_accessor|
             headers_sandbox = Pathname.new(file_accessor.spec.root.name)
-            pod_target.build_headers.add_search_path(headers_sandbox)
+            pod_target.build_headers_store.add_search_path(headers_sandbox)
             sandbox.public_headers.add_search_path(headers_sandbox)
 
             header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
-              pod_target.build_headers.add_files(namespaced_path, files)
+              pod_target.build_headers_store.add_files(namespaced_path, files)
             end
 
             header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
@@ -563,7 +563,7 @@ module Pod
     #
     def libraries_using_spec(spec)
       aggregate_targets.select do |aggregate_target|
-        aggregate_target.pod_targets.any? { |pod_target| pod_target.specs.include?(spec) }
+        aggregate_target.children.any? { |pod_target| pod_target.specs.include?(spec) }
       end
     end
 
@@ -571,7 +571,7 @@ module Pod
     #         process.
     #
     def pod_targets
-      aggregate_targets.map(&:pod_targets).flatten
+      aggregate_targets.map(&:children).flatten
     end
 
     #-------------------------------------------------------------------------#

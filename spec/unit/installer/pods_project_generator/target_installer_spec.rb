@@ -17,9 +17,8 @@ module Pod
 
       before do
         @project = Project.new(config.sandbox.project_path)
-        target = AggregateTarget.new(nil, config.sandbox)
-        target.stubs(:label).returns('Pods')
-        target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
+        target = Target.new('Pods')
+        target.platform = Platform.new(:ios, '6.0')
         @sut = Installer::PodsProjectGenerator::TargetInstaller.new(@project, target)
       end
 
@@ -101,11 +100,10 @@ module Pod
           project.add_file_reference(file, group)
         end
 
-        target = PodTarget.new([spec], nil, config.sandbox)
-        target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
+        target = Target.new('Pods-BananaLib')
+        target.platform = Platform.new(:ios, '6.0')
         target.file_accessors = [file_accessor]
-        target.stubs(:inhibits_warnings?).returns(false)
-        target.stubs(:label).returns('Pods-BananaLib')
+        target.inhibits_warnings = false
         @sut = Installer::PodsProjectGenerator::TargetInstaller.new(project, target)
         @sut.send(:add_target)
       end
@@ -144,9 +142,9 @@ module Pod
     describe "#link_to_system_frameworks" do
       before do
         project = Project.new(config.sandbox.project_path)
-        target = PodTarget.new([], nil, config.sandbox)
-        target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-        target.stubs(:label).returns('Pods-BananaLib')
+        target = Target.new('Pods-BananaLib')
+        target.platform = Platform.new(:ios, '6.0')
+        target.inhibits_warnings = false
         @sut = Installer::PodsProjectGenerator::TargetInstaller.new(project, target)
         @sut.send(:add_target)
       end

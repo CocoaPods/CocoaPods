@@ -70,7 +70,7 @@ module Pod
       #
       def pods_by_lib
         result = {}
-        installer.aggregate_targets.map(&:pod_targets).flatten.each do |lib|
+        installer.aggregate_targets.map(&:children).flatten.each do |lib|
           pod_names = [lib.root_spec.name]
           pod_reps = pods.select { |rep| pod_names.include?(rep.name) }
           result[lib.target_definition] = pod_reps

@@ -76,7 +76,7 @@ module Pod
 
       it "generates the libraries which represent the target definitions" do
         target = @analyzer.analyze.targets.first
-        target.pod_targets.map(&:name).sort.should == [
+        target.children.map(&:name).sort.should == [
           'Pods-JSONKit',
           'Pods-AFNetworking',
           'Pods-SVPullToRefresh',
@@ -171,7 +171,7 @@ module Pod
       end
 
       it "adds the specifications to the correspondent libraries" do
-        @analyzer.analyze.targets.first.pod_targets.map(&:specs).flatten.map(&:to_s).should == [
+        @analyzer.analyze.targets.first.children.map(&:specs).flatten.map(&:to_s).should == [
           "AFNetworking (1.0.1)",
           "JSONKit (1.5pre)",
           "SVPullToRefresh (0.4)",

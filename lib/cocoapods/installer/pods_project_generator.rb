@@ -199,10 +199,9 @@ module Pod
       #
       def sync_support_files
         targets = all_pod_targets + aggregate_targets
-        targets.reject!(&:skip_installation?)
         targets.each do |target|
           UI.message"- Generating support files for target `#{target}`" do
-            gen = SupportFilesGenerator.new(target, sandbox.project)
+            gen = SupportFilesGenerator.new(target, sandbox)
             gen.generate!
           end
         end
@@ -217,7 +216,7 @@ module Pod
         UI.message"- Populating aggregate targets" do
           aggregate_targets.each do |aggregate_target|
             native_target = aggregate_target.native_target
-            aggregate_target.pod_targets.each do |pod_target|
+            aggregate_target.children.each do |pod_target|
               product = pod_target.native_target.product_reference
               unless native_target.frameworks_build_phase.files_references.include?(product)
                 native_target.frameworks_build_phase.add_file_reference(product)
@@ -234,13 +233,13 @@ module Pod
       def add_missing_target_dependencies
         UI.message"- Setting-up target dependencies" do
           aggregate_targets.each do |aggregate_target|
-            aggregate_target.pod_targets.each do |dep|
+            aggregate_target.children.each do |dep|
               aggregate_target.native_target.add_dependency(dep.target)
             end
 
             aggregate_targets.each do |aggregate_target|
-              aggregate_target.pod_targets.each do |pod_target|
-                dependencies = pod_target.dependencies.map { |dep_name| aggregate_target.pod_targets.find { |target| target.pod_name == dep_name } }
+              aggregate_target.children.each do |pod_target|
+                dependencies = pod_target.dependencies.map { |dep_name| aggregate_target.children.find { |target| target.pod_name == dep_name } }
                 dependencies.each do |dep|
                   pod_target.native_target.add_dependency(dep.target)
                 end
@@ -279,10 +278,10 @@ module Pod
         @unrecognized_targets = native_targets_by_name.keys.dup
         cp_targets = aggregate_targets + all_pod_targets
         cp_targets.each do |pod_target|
-          native_targets = native_targets_by_name[pod_target.label]
+          native_targets = native_targets_by_name[pod_target.name]
           if native_targets
             pod_target.native_target = native_targets.first
-            @unrecognized_targets.delete(pod_target.label)
+            @unrecognized_targets.delete(pod_target.name)
           end
         end
       end
@@ -303,7 +302,7 @@ module Pod
           pod_names.include?(group.display_name)
         end
 
-        aggregate_names = aggregate_targets.map(&:label).uniq.sort
+        aggregate_names = aggregate_targets.map(&:name).uniq.sort
         groups_to_remove << project.support_files_group.children.reject do |group|
           aggregate_names.include?(group.display_name)
         end
@@ -347,7 +346,7 @@ module Pod
       #         process.
       #
       def all_pod_targets
-        aggregate_targets.map(&:pod_targets).flatten
+        aggregate_targets.map(&:children).flatten
       end
 
       #
@@ -366,7 +365,7 @@ module Pod
       #
       def aggregate_targets_to_install
         aggregate_targets.sort_by(&:name).select do |target|
-          target.native_target.nil? && !target.skip_installation?
+          target.native_target.nil?
         end
       end
 

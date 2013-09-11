@@ -7,7 +7,8 @@ module Pod
       @target_definition = Podfile::TargetDefinition.new('MyApp', nil)
       @spec = Spec.new
       @spec.name = 'RestKit'
-      @lib = AggregateTarget.new(@target_definition, config.sandbox)
+      @lib = Target.new('Pods-MyApp', nil)
+      @lib.target_definition = @target_definition
       @rep = Hooks::LibraryRepresentation.new(config.sandbox, @lib)
     end
 

@@ -115,7 +115,10 @@ module Pod
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = []
           config.sandbox.state = Installer::Analyzer::SpecsState.new()
-          @pod_targets = [PodTarget.new([], nil, config.sandbox)]
+          pod_target = Target.new('BananaLib', nil)
+          pod_target.build_headers_store = Sandbox::HeadersStore.new(config.sandbox, "BuildHeaders")
+          @pod_targets = [pod_target]
+
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
         end
@@ -123,7 +126,7 @@ module Pod
         it "cleans the header stores" do
           config.sandbox.public_headers.expects(:implode!)
           @installer.pod_targets.each do |pods_target|
-            pods_target.build_headers.expects(:implode!)
+            pods_target.build_headers_store.expects(:implode!)
           end
           @installer.send(:clean_sandbox)
         end
@@ -159,7 +162,8 @@ module Pod
 
         it "correctly configures the Pod source installer" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new([spec], nil, config.sandbox)
+          pod_target = Target.new('BananaLib')
+          pod_target.specs = [spec]
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -169,7 +173,8 @@ module Pod
 
         it "maintains the list of the installed specs" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new([spec], nil, config.sandbox)
+          pod_target = Target.new('BananaLib')
+          pod_target.specs = [spec]
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target, pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -195,7 +200,7 @@ module Pod
         describe "#refresh_file_accessors" do
 
           it "refreshes the file accessors after cleaning and executing the specification hooks" do
-            pod_target = PodTarget.new([], nil, config.sandbox)
+            pod_target = Target.new('BananaLib')
             file_accessor = stub()
             pod_target.file_accessors = [file_accessor]
             @installer.stubs(:pod_targets).returns([pod_target])
@@ -209,13 +214,17 @@ module Pod
 
         describe "#link_headers" do
 
+          before do
+            @pod_target = Target.new('BananaLib')
+            @pod_target.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
+            @pod_target.build_headers_store = Sandbox::HeadersStore.new(config.sandbox, "BuildHeaders")
+            @installer.stubs(:pod_targets).returns([@pod_target])
+          end
+
           it "links the build headers" do
-            pod_target = PodTarget.new(nil, nil, config.sandbox)
-            pod_target.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-            @installer.stubs(:pod_targets).returns([pod_target])
             @installer.send(:link_headers)
 
-            headers_root = pod_target.build_headers.root
+            headers_root = @pod_target.build_headers_store.root
             public_header =  headers_root + 'BananaLib/Banana.h'
             private_header = headers_root + 'BananaLib/BananaPrivate.h'
             public_header.should.exist
@@ -223,9 +232,6 @@ module Pod
           end
 
           it "links the public headers" do
-            pod_target = PodTarget.new(nil, nil, config.sandbox)
-            pod_target.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-            @installer.stubs(:pod_targets).returns([pod_target])
             @installer.send(:link_headers)
 
             headers_root = config.sandbox.public_headers.root
@@ -340,7 +346,7 @@ module Pod
     describe "#integrate_user_project" do
 
       it "integrates the client projects" do
-        @installer.stubs(:aggregate_targets).returns([AggregateTarget.new(nil, config.sandbox)])
+        @installer.stubs(:aggregate_targets).returns([Target.new('Pods')])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)
       end
@@ -384,10 +390,9 @@ module Pod
       end
 
       it "calls the hooks in the specs for each target" do
-        pod_target_ios = PodTarget.new([@spec], nil, config.sandbox)
-        pod_target_osx = PodTarget.new([@spec], nil, config.sandbox)
-        pod_target_ios.stubs(:name).returns('label')
-        pod_target_osx.stubs(:name).returns('label')
+        pod_target_ios = Target.new('ios-BananaLib')
+        pod_target_osx = Target.new('osx-BananaLib')
+
         library_ios_rep = stub()
         library_osx_rep = stub()
         target_installer_data = stub()
@@ -410,7 +415,7 @@ module Pod
 
       it "returns the hook representation of a pod" do
         file_accessor = stub(:spec => @spec)
-        @aggregate_target.pod_targets.first.stubs(:file_accessors).returns([file_accessor])
+        @aggregate_target.children.first.stubs(:file_accessors).returns([file_accessor])
         rep = @installer.send(:pod_rep, 'JSONKit')
         rep.name.should == 'JSONKit'
         rep.root_spec.should == @spec

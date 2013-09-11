@@ -3,25 +3,99 @@ require File.expand_path('../../spec_helper', __FILE__)
 module Pod
   describe Target do
     before do
-      @target_definition = Podfile::TargetDefinition.new('Pods', nil)
-      @target_definition.link_with_first_target = true
-      @lib = AggregateTarget.new(@target_definition, config.sandbox)
+      @sut = Target.new('Pods', nil)
+      @child = Target.new('BananaLib', @sut)
     end
 
-    it "returns the target_definition that generated it" do
-      @lib.target_definition.should == @target_definition
+    #-------------------------------------------------------------------------#
+
+    describe "In general" do
+      it "adds itself to the children of the parent" do
+        @sut.children.should == [@child]
+      end
+
+      it "returns the root" do
+        @sut.root.should == @sut
+        @child.root.should == @sut
+      end
+
+      it "returns whether it is root" do
+        @sut.should.be.root
+        @child.should.not.be.root
+      end
+
+      it "returns its name" do
+        @sut.name.should == 'Pods'
+        @child.name.should == 'Pods-BananaLib'
+      end
+
+      it "returns the name of its product" do
+        @sut.product_name.should == 'libPods.a'
+      end
     end
 
-    it "returns the label of the target definition" do
-      @lib.label.should == 'Pods'
+    #-------------------------------------------------------------------------#
+
+    describe "Specs" do
+      before do
+        spec = fixture_spec('banana-lib/BananaLib.podspec')
+        @sut.specs = [spec]
+        @sut.platform = Platform.ios
+      end
+
+      it "returns the specs of the Pods used by this aggregate target" do
+        @sut.specs.map(&:name).should == ["BananaLib"]
+      end
+
+      it "returns the spec consumers for the pod targets" do
+        consumers = @sut.spec_consumers.map { |consumer| [consumer.spec.name, consumer.platform_name ] }
+        consumers.should == [["BananaLib", :ios]]
+      end
+
+        it "returns the root spec" do
+          @sut.root_spec.name.should == 'BananaLib'
+        end
+
+        it "returns the name of the Pod" do
+          @sut.pod_name.should == 'BananaLib'
+        end
+
+        #----------------------------------------#
+
+        describe "#dependencies" do
+          it "returns the name of the Pods on which this target depends" do
+            @sut.dependencies.should == ["monkey"]
+          end
+
+          it "returns the dependencies as root names" do
+            dependencies = [stub(:name => 'monkey/subspec')]
+            Specification::Consumer.any_instance.stubs(:dependencies).returns(dependencies)
+            @sut.dependencies.should == ["monkey"]
+          end
+
+          it "never includes itself in the dependencies" do
+            dependencies = [stub(:name => 'BananaLib/subspec')]
+            Specification::Consumer.any_instance.stubs(:dependencies).returns(dependencies)
+            @sut.dependencies.should == []
+          end
+        end
+
+        #----------------------------------------#
+
     end
 
-    it "returns its name" do
-      @lib.name.should == 'Pods'
+    #-------------------------------------------------------------------------#
+
+    describe "Aggregate" do
     end
 
-    it "returns the name of its product" do
-      @lib.product_name.should == 'libPods.a'
+    #-------------------------------------------------------------------------#
+
+    describe "Pod" do
     end
+
+    #-------------------------------------------------------------------------#
+
   end
 end
+

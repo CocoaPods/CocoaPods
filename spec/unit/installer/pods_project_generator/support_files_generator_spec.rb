@@ -7,29 +7,28 @@ module Pod
       before do
         @project = Project.new(config.sandbox.project_path)
         native_target = @project.new_target(:static_target, 'Pods', :ios, '6.0')
+        config.sandbox.project = @project
 
-        @podfile = Podfile.new do
-          platform :ios
-          xcodeproj 'dummy'
-        end
-        @target_definition = @podfile.target_definitions['Pods']
-        @target = AggregateTarget.new(@target_definition, config.sandbox)
-        @target.stubs(:label).returns('Pods')
-        @target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
+        @target = Target.new('Pods')
+        @target.platform = Platform.new(:ios, '6.0')
         @target.user_project_path = config.sandbox.root + '../user_project.xcodeproj'
         @target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
+        @target.support_files_root = config.sandbox.root
         @target.target = native_target
+        @target.public_headers_store = config.sandbox.public_headers
+        @target.build_headers_store = config.sandbox.public_headers
 
         file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
-        @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
-        @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
+        @pod_target = Target.new('BananaLib', @target)
+        @pod_target.specs = [@spec]
         @pod_target.user_build_configurations = @target.user_build_configurations
         @pod_target.file_accessors = [file_accessor]
+        @pod_target.support_files_root = config.sandbox.root
+        @pod_target.public_headers_store = config.sandbox.public_headers
+        @pod_target.build_headers_store = config.sandbox.public_headers
 
-        @target.pod_targets = [@pod_target]
-
-        @sut = Installer::PodsProjectGenerator::SupportFilesGenerator.new(@target, @project)
+        @sut = Installer::PodsProjectGenerator::SupportFilesGenerator.new(@target, config.sandbox)
       end
 
       it "adds file references for the support files of the target" do
@@ -64,7 +63,7 @@ module Pod
       end
 
       it "creates a bridge support file" do
-        Podfile.any_instance.stubs(:generate_bridge_support? => true)
+        @target.generate_bridge_support = true
         Generator::BridgeSupport.any_instance.expects(:save_as).once
         @sut.generate!
       end
@@ -108,24 +107,29 @@ module Pod
     describe "PodTarget" do
       before do
         @project = Project.new(config.sandbox.project_path)
-        @project.add_pod_group('BananaLib', fixture('banana-lib'))
         native_target = @project.new_target(:static_target, 'Pods-BananaLib', :ios, '6.0')
+        config.sandbox.project = @project
 
-        @podfile = Podfile.new do
-          platform :ios
-          xcodeproj 'dummy'
-        end
-        @target_definition = @podfile.target_definitions['Pods']
+        @target = Target.new('Pods')
+        @target.platform = Platform.new(:ios, '6.0')
+        @target.user_project_path = config.sandbox.root + '../user_project.xcodeproj'
+        @target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
+        @target.support_files_root = config.sandbox.root
+        @target.public_headers_store = config.sandbox.public_headers
+        @target.build_headers_store = config.sandbox.public_headers
 
         file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
-        @target = PodTarget.new([@spec], @target_definition, config.sandbox)
-        @target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-        @target.user_build_configurations = @target.user_build_configurations
-        @target.file_accessors = [file_accessor]
-        @target.target = native_target
+        @pod_target = Target.new('BananaLib', @target)
+        @pod_target.specs = [@spec]
+        @pod_target.user_build_configurations = @target.user_build_configurations
+        @pod_target.file_accessors = [file_accessor]
+        @pod_target.support_files_root = config.sandbox.root
+        @pod_target.public_headers_store = config.sandbox.public_headers
+        @pod_target.build_headers_store = config.sandbox.public_headers
+        @pod_target.target = native_target
 
-        @sut = Installer::PodsProjectGenerator::SupportFilesGenerator.new(@target, @project)
+        @sut = Installer::PodsProjectGenerator::SupportFilesGenerator.new(@pod_target, config.sandbox)
       end
 
       it "creates the xcconfig file" do

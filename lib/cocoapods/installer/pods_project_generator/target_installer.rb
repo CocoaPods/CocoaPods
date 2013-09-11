@@ -36,7 +36,7 @@ module Pod
         #
         def install!
           add_target
-          unless target.is_a?(AggregateTarget)
+          unless target.aggregate?
             add_files_to_build_phases
             add_resources_bundle_targets
             link_to_system_frameworks
@@ -57,7 +57,7 @@ module Pod
         # @return [void]
         #
         def add_target
-          name = target.label
+          name = target.name
           platform = target.platform.name
           deployment_target = target.platform.deployment_target.to_s
           @native_target = project.new_target(:static_library, name, platform, deployment_target)
