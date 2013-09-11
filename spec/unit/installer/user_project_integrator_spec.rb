@@ -19,9 +19,10 @@ module Pod
         config.sandbox.project = Project.new(config.sandbox.project_path)
         Xcodeproj::Project.new(config.sandbox.project_path).save
         @library = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
-        @library.client_root = sample_project_path.dirname
         @library.user_project_path  = sample_project_path
         @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
+        @library.xcconfig_path  = config.sandbox.root + 'Pods.xcconfig'
+        @library.copy_resources_script_path  = config.sandbox.root + 'Pods-resources.sh'
         empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], config.sandbox)
         @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library, empty_library])
       end

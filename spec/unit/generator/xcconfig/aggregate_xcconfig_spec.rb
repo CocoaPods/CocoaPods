@@ -10,7 +10,7 @@ module Pod
           @consumer = @spec.consumer(:ios)
           target_definition = Podfile::TargetDefinition.new('Pods', nil)
           @target = AggregateTarget.new(target_definition, config.sandbox)
-          @target.client_root = config.sandbox.root.dirname
+          @target.user_project_path = config.sandbox.root.dirname + 'Project.xcodeproj'
           @target.stubs(:platform).returns(:ios)
           @pod_target = PodTarget.new([@spec], target_definition, config.sandbox)
           @pod_target.stubs(:platform).returns(:ios)
@@ -19,9 +19,7 @@ module Pod
           @generator = AggregateXCConfig.new(@target)
         end
 
-        it "returns the path of the pods root relative to the user project" do
-          @generator.target.relative_pods_root.should == '${SRCROOT}/Pods'
-        end
+
 
         #-----------------------------------------------------------------------#
 
@@ -78,6 +76,12 @@ module Pod
         it "saves the xcconfig" do
           generated = Xcodeproj::Config.new(@path)
           generated.class.should == Xcodeproj::Config
+        end
+
+        #-----------------------------------------------------------------------#
+
+        it "returns the path of the pods root relative to the user project" do
+          @generator.send(:relative_pods_root).should == '${SRCROOT}/Pods'
         end
 
       end

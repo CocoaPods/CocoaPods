@@ -85,7 +85,6 @@ module Pod
         target.support_files_root.should == config.sandbox.root
 
         target.user_project_path.to_s.should.include 'SampleProject/SampleProject'
-        target.client_root.to_s.should.include 'SampleProject'
         target.user_target_uuids.should == ["A346496C14F9BE9A0080D870"]
         user_proj = Xcodeproj::Project.open(target.user_project_path)
         user_proj.objects_by_uuid[target.user_target_uuids.first].name.should == 'SampleProject'
@@ -96,8 +95,6 @@ module Pod
       it "generates the integration library appropriately if the installation will not integrate" do
         config.integrate_targets = false
         target = @analyzer.analyze.targets.first
-
-        target.client_root.should == config.installation_root
         target.user_target_uuids.should == []
         target.user_build_configurations.should == {}
         target.platform.to_s.should == 'iOS 6.0'

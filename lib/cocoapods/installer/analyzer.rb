@@ -173,11 +173,9 @@ module Pod
             native_targets = compute_user_project_targets(target_definition, user_project)
 
             target.user_project_path = project_path
-            target.client_root = project_path.dirname
             target.user_target_uuids = native_targets.map(&:uuid)
             target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
           else
-            target.client_root = config.installation_root
             target.user_target_uuids = []
             target.user_build_configurations = {}
           end

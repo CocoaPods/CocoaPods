@@ -47,7 +47,7 @@ module Pod
         @xcconfig = Xcodeproj::Config.new({
           'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
           'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(target.sandbox.public_headers.search_paths),
-          'PODS_ROOT' => target.relative_pods_root,
+          'PODS_ROOT' => relative_pods_root,
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
         })
 
@@ -70,6 +70,20 @@ module Pod
         @xcconfig.attributes.delete('USE_HEADERMAP')
 
         @xcconfig
+      end
+
+      # @return [String] The xcconfig path of the root from the `$(SRCROOT)`
+      #         variable of the user's project.
+      #
+      #         TODO: return the root of the sandbox
+      #         The pods root is used by the copy resources script
+      #
+      def relative_pods_root
+        if target.user_project_path
+          "${SRCROOT}/#{target.support_files_root.relative_path_from(target.user_project_path.dirname)}"
+        else
+          target.support_files_root.to_s
+        end
       end
 
       #-----------------------------------------------------------------------#

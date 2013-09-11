@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 2c25c6712b9ac2472f3e8fd34d0744166af8f7ff
+  revision: d7bacd932526540b6d447dcb4358cec2822a68f9
   branch: master
   specs:
     xcodeproj (0.10.1)
@@ -49,7 +49,7 @@ GIT
 
 GIT
   remote: https://github.com/lemurheavy/coveralls-ruby.git
-  revision: 2576b7d37545c6f28f0ad43f56cddc09ca2740f4
+  revision: 2a7d3f86f1353a97734cc7df476b898e92d89708
   specs:
     coveralls (0.6.7)
       multi_json (~> 1.3)
@@ -99,7 +99,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    multi_json (1.7.9)
+    multi_json (1.8.0)
     nap (0.5.1)
     open4 (1.3.0)
     posix-spawn (0.3.6)

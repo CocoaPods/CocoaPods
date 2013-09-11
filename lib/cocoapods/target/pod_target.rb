@@ -65,6 +65,8 @@ module Pod
       end.flatten.reject { |dep| dep == pod_name }
     end
 
+    #-------------------------------------------------------------------------#
+
     def inhibits_warnings?
       @inhibits_warnings ||= target_definition.inhibits_warnings_for_pod?(pod_name)
     end
