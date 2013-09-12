@@ -62,6 +62,10 @@ module Pod
       @platform ||= target_definition.platform
     end
 
+    # @return [String] The value for the ARCHS build setting.
+    #
+    attr_accessor :archs
+
     #-------------------------------------------------------------------------#
 
     # @!group Support files

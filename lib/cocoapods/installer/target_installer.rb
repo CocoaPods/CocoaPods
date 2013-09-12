@@ -44,8 +44,10 @@ module Pod
         @target = project.new_target(:static_library, name, platform, deployment_target)
 
         settings = {}
-        if library.platform.requires_legacy_ios_archs?
-          settings['ARCHS'] = "armv6 armv7"
+        if library.archs
+        settings['ARCHS'] = library.archs
+        else
+          settings.delete('ARCHS')
         end
 
         @target.build_settings('Debug').merge!(settings)
