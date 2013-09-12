@@ -176,7 +176,7 @@ module Pod
             target.set_arc_compatibility_flag = podfile.set_arc_compatibility_flag?
             target.generate_bridge_support = podfile.generate_bridge_support?
             target.public_headers_store = sandbox.public_headers
-            target.build_headers_store = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
+            target.private_headers_store = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
 
             if config.integrate_targets?
               project_path = compute_user_project_path(target_definition)
@@ -196,14 +196,16 @@ module Pod
             end.uniq
 
             grouped_specs.each do |pod_specs|
-              pod_target = Target.new(pod_specs.first.root.name, target)
+              pod_name = pod_specs.first.root.name
+              pod_target = Target.new(pod_name, target)
               pod_target.specs = [pod_specs]
               pod_target.support_files_root = sandbox.library_support_files_dir(target.name)
               pod_target.user_build_configurations = target.user_build_configurations
               pod_target.set_arc_compatibility_flag = podfile.set_arc_compatibility_flag?
               pod_target.generate_bridge_support = podfile.generate_bridge_support?
-              pod_target.build_headers_store = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
+              pod_target.private_headers_store = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
               pod_target.public_headers_store = sandbox.public_headers
+              pod_target.inhibits_warnings = target_definition.inhibits_warnings_for_pod?(pod_name)
             end
           end
         end

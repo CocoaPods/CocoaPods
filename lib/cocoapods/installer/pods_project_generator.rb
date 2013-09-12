@@ -234,14 +234,14 @@ module Pod
         UI.message"- Setting-up target dependencies" do
           aggregate_targets.each do |aggregate_target|
             aggregate_target.children.each do |dep|
-              aggregate_target.native_target.add_dependency(dep.target)
+              aggregate_target.native_target.add_dependency(dep.native_target)
             end
 
             aggregate_targets.each do |aggregate_target|
               aggregate_target.children.each do |pod_target|
                 dependencies = pod_target.dependencies.map { |dep_name| aggregate_target.children.find { |target| target.pod_name == dep_name } }
                 dependencies.each do |dep|
-                  pod_target.native_target.add_dependency(dep.target)
+                  pod_target.native_target.add_dependency(dep.native_target)
                 end
               end
             end

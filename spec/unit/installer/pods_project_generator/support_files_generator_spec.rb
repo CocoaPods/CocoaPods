@@ -14,9 +14,9 @@ module Pod
         @target.user_project_path = config.sandbox.root + '../user_project.xcodeproj'
         @target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
         @target.support_files_root = config.sandbox.root
-        @target.target = native_target
+        @target.native_target = native_target
         @target.public_headers_store = config.sandbox.public_headers
-        @target.build_headers_store = config.sandbox.public_headers
+        @target.private_headers_store = config.sandbox.public_headers
 
         file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
@@ -26,7 +26,7 @@ module Pod
         @pod_target.file_accessors = [file_accessor]
         @pod_target.support_files_root = config.sandbox.root
         @pod_target.public_headers_store = config.sandbox.public_headers
-        @pod_target.build_headers_store = config.sandbox.public_headers
+        @pod_target.private_headers_store = config.sandbox.public_headers
 
         @sut = Installer::PodsProjectGenerator::SupportFilesGenerator.new(@target, config.sandbox)
       end
@@ -92,7 +92,7 @@ module Pod
 
       it "creates a dummy source to ensure the creation of a single base target" do
         @sut.generate!
-        build_files = @sut.target.target.source_build_phase.files
+        build_files = @sut.target.native_target.source_build_phase.files
         build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-dummy.m') }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-dummy.m'
@@ -116,7 +116,7 @@ module Pod
         @target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
         @target.support_files_root = config.sandbox.root
         @target.public_headers_store = config.sandbox.public_headers
-        @target.build_headers_store = config.sandbox.public_headers
+        @target.private_headers_store = config.sandbox.public_headers
 
         file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
@@ -126,8 +126,8 @@ module Pod
         @pod_target.file_accessors = [file_accessor]
         @pod_target.support_files_root = config.sandbox.root
         @pod_target.public_headers_store = config.sandbox.public_headers
-        @pod_target.build_headers_store = config.sandbox.public_headers
-        @pod_target.target = native_target
+        @pod_target.private_headers_store = config.sandbox.public_headers
+        @pod_target.native_target = native_target
 
         @sut = Installer::PodsProjectGenerator::SupportFilesGenerator.new(@pod_target, config.sandbox)
       end
@@ -156,7 +156,7 @@ module Pod
 
       it "creates a dummy source to ensure the compilation of libraries with only categories" do
         @sut.generate!
-        build_files = @sut.target.target.source_build_phase.files
+        build_files = @sut.target.native_target.source_build_phase.files
         build_file = build_files.find { |bf| bf.file_ref.display_name == 'Pods-BananaLib-dummy.m' }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-BananaLib-dummy.m'

@@ -179,9 +179,9 @@ module Pod
           @aggregate_native_target = project.new_target(:static_library, 'Pods', :ios)
           @pod_native_target = project.new_target(:static_library, 'Pods-BananaLib', :ios)
           aggregate_target = Target.new('Pods')
-          aggregate_target.target = @aggregate_native_target
+          aggregate_target.native_target = @aggregate_native_target
           pod_target = Target.new('Pods-BananaLib', aggregate_target)
-          pod_target.target = @pod_native_target
+          pod_target.native_target = @pod_native_target
           @sut = PodsProjectGenerator.new(config.sandbox, [aggregate_target])
         end
 
@@ -203,11 +203,11 @@ module Pod
           pod_native_target_2 = project.new_target(:static_library, 'Pods-monkey', :ios)
 
           @aggregate_target = Target.new('Pods')
-          @aggregate_target.target = aggregate_native_target
+          @aggregate_target.native_target = aggregate_native_target
           @pod_target_1 = Target.new('BananaLib', @aggregate_target)
-          @pod_target_1.target = pod_native_target_1
+          @pod_target_1.native_target = pod_native_target_1
           @pod_target_2 = Target.new('monkey', @aggregate_target)
-          @pod_target_2.target = pod_native_target_2
+          @pod_target_2.native_target = pod_native_target_2
 
           @sut = PodsProjectGenerator.new(config.sandbox, [@aggregate_target])
         end
@@ -215,7 +215,7 @@ module Pod
 
         it "sets the pod targets as dependencies of the aggregate target" do
           @sut.send(:add_missing_target_dependencies)
-          dependencies = @aggregate_target.target.dependencies
+          dependencies = @aggregate_target.native_target.dependencies
           dependencies.map { |d| d.target.name}.should == ["Pods-BananaLib", "Pods-monkey"]
         end
 
@@ -224,7 +224,7 @@ module Pod
           @pod_target_1.stubs(:pod_name).returns('BananaLib')
           @pod_target_2.stubs(:pod_name).returns('monkey')
           @sut.send(:add_missing_target_dependencies)
-          dependencies = @pod_target_1.target.dependencies
+          dependencies = @pod_target_1.native_target.dependencies
           dependencies.map { |d| d.target.name}.should == ["Pods-monkey"]
         end
 

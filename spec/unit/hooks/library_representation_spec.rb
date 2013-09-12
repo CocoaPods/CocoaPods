@@ -65,7 +65,7 @@ module Pod
 
       it "returns the native target" do
         target = stub()
-        @lib.target = target
+        @lib.native_target = target
         @rep.target.should == target
       end
 

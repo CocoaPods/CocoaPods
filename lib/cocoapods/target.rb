@@ -8,8 +8,12 @@ module Pod
   #
   class Target
 
+    # @return [String]
+    #
     attr_accessor :short_name
 
+    # @return [Target]
+    #
     attr_accessor :parent
 
     def initialize(short_name, parent = nil)
@@ -86,9 +90,7 @@ module Pod
     # @return [PBXNativeTarget] The Xcode native target generated in the Pods
     #         project.
     #
-    attr_accessor :target
-    alias :native_target :target
-    alias :native_target= :target=
+    attr_accessor :native_target
 
     # @return [Pathname] The directory where the support files are stored.
     #
@@ -96,7 +98,7 @@ module Pod
 
     # @return [HeadersStore] the build header store.
     #
-    attr_accessor :build_headers_store
+    attr_accessor :private_headers_store
 
     # @return [HeadersStore] the public header store.
     #
@@ -117,6 +119,74 @@ module Pod
     # @return [Pathname] The path of the prefix header file.
     #
     attr_accessor :prefix_header_path
+
+
+    public
+
+    # @!group Aggregate
+    #-------------------------------------------------------------------------#
+
+    #
+    #
+    def aggregate?
+      root?
+    end
+
+    #----------------------------------------#
+
+    # @return [Platform] the platform for this library.
+    #
+    def platform
+      if root?
+        @platform
+      else
+        root.platform
+      end
+    end
+
+    # Sets the platform of the target
+    #
+    def platform=(platform)
+      if root?
+        @platform = platform
+      else
+        raise "The platform must be set in the root target"
+      end
+    end
+
+    #----------------------------------------#
+
+    # @return [Pathname] the path of the user project that this target will
+    #         integrate as identified by the analyzer.
+    #
+    # @note   The project instance is not stored to prevent editing different
+    #         instances.
+    #
+    attr_accessor :user_project_path
+
+    # @return [String] the list of the UUIDs of the user targets that will be
+    #         integrated by this target as identified by the analyzer.
+    #
+    # @note   The target instances are not stored to prevent editing different
+    #         instances.
+    #
+    attr_accessor :user_target_uuids
+
+    # @return [Hash{String=>Symbol}] A hash representing the user build
+    #         configurations where each key corresponds to the name of a
+    #         configuration and its value to its type (`:debug` or `:release`).
+    #
+    attr_accessor :user_build_configurations
+
+    # @return [Bool]
+    #
+    attr_accessor :set_arc_compatibility_flag
+    alias :set_arc_compatibility_flag? :set_arc_compatibility_flag
+
+    # @return [Bool]
+    #
+    attr_accessor :generate_bridge_support
+    alias :generate_bridge_support? :generate_bridge_support
 
 
     public
@@ -164,87 +234,34 @@ module Pod
       end.flatten.reject { |dep| dep == pod_name }
     end
 
-    attr_accessor :inhibits_warnings
-    alias :inhibits_warnings? :inhibits_warnings
-      # @inhibits_warnings ||= target_definition.inhibits_warnings_for_pod?(pod_name)
-
+    # @return [Array<String>]
+    #
     def frameworks
       spec_consumers.map(&:frameworks).flatten.uniq
     end
 
+    # @return [Array<String>]
+    #
     def libraries
       spec_consumers.map(&:libraries).flatten.uniq
     end
 
+    # @return [Bool]
+    #
+    attr_accessor :inhibits_warnings
+    alias :inhibits_warnings? :inhibits_warnings
 
 
     public
 
-    # @!group Aggregate
+    # @!group Deprecated
     #-------------------------------------------------------------------------#
 
+    # TODO: This has been preserved only for the LibraryRepresentation.
     #
-    #
-    def aggregate?
-      root?
-    end
-
-    #----------------------------------------#
-
-    # @return [Platform] the platform for this library.
-    #
-    def platform
-      if root?
-        @paltform
-      else
-        root.platform
-      end
-    end
-
-    #
-    #
-    def platform=(platform)
-      if root?
-        @paltform = platform
-      else
-        raise "The platform must be set in the root target"
-      end
-    end
-
-    #----------------------------------------#
-
-    # @return [Pathname] the path of the user project that this target will
-    #         integrate as identified by the analyzer.
-    #
-    # @note   The project instance is not stored to prevent editing different
-    #         instances.
-    #
-    attr_accessor :user_project_path
-
-    # @return [String] the list of the UUIDs of the user targets that will be
-    #         integrated by this target as identified by the analyzer.
-    #
-    # @note   The target instances are not stored to prevent editing different
-    #         instances.
-    #
-    attr_accessor :user_target_uuids
-
-    # @return [Hash{String=>Symbol}] A hash representing the user build
-    #         configurations where each key corresponds to the name of a
-    #         configuration and its value to its type (`:debug` or `:release`).
-    #
-    attr_accessor :user_build_configurations
-
-    #-------------------------------------------------------------------------#
-
     attr_accessor :target_definition
 
-    attr_accessor :set_arc_compatibility_flag
-    alias :set_arc_compatibility_flag? :set_arc_compatibility_flag
-
-    attr_accessor :generate_bridge_support
-    alias :generate_bridge_support? :generate_bridge_support
-
+    #-------------------------------------------------------------------------#
 
   end
 end

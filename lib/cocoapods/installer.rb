@@ -191,7 +191,7 @@ module Pod
     def clean_sandbox
       sandbox.public_headers.implode!
       pod_targets.each do |pod_target|
-        pod_target.build_headers_store.implode!
+        pod_target.private_headers_store.implode!
       end
 
       unless sandbox.state.deleted.empty?
@@ -299,11 +299,11 @@ module Pod
         pod_targets.each do |pod_target|
           pod_target.file_accessors.each do |file_accessor|
             headers_sandbox = Pathname.new(file_accessor.spec.root.name)
-            pod_target.build_headers_store.add_search_path(headers_sandbox)
+            pod_target.private_headers_store.add_search_path(headers_sandbox)
             sandbox.public_headers.add_search_path(headers_sandbox)
 
             header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
-              pod_target.build_headers_store.add_files(namespaced_path, files)
+              pod_target.private_headers_store.add_files(namespaced_path, files)
             end
 
             header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|

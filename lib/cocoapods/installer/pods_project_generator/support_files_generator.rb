@@ -47,7 +47,7 @@ module Pod
         #---------------------------------------------------------------------#
 
         def validate
-          unless target.target
+          unless target.native_target
             raise "[SupportFilesGenerator] Missing native target for `#{target}`"
           end
         end
@@ -64,7 +64,7 @@ module Pod
           xcconfig_file_ref = add_file_to_support_group(path)
           target.xcconfig_path = path
 
-          target.target.build_configurations.each do |c|
+          target.native_target.build_configurations.each do |c|
             c.base_configuration_reference = xcconfig_file_ref
           end
         end
@@ -85,7 +85,7 @@ module Pod
           private_gen.save_as(path)
           xcconfig_file_ref = add_file_to_support_group(path)
 
-          target.target.build_configurations.each do |c|
+          target.native_target.build_configurations.each do |c|
             c.base_configuration_reference = xcconfig_file_ref
           end
         end
@@ -111,7 +111,7 @@ module Pod
         def create_bridge_support_file
           if target.generate_bridge_support?
             path = file_path(:bridge_support)
-            headers = target.target.headers_build_phase.files.map { |bf| bf.file_ref.real_path }
+            headers = target.native_target.headers_build_phase.files.map { |bf| bf.file_ref.real_path }
             generator = Generator::BridgeSupport.new(headers)
             generator.save_as(path)
             add_file_to_support_group(path)
@@ -172,7 +172,7 @@ module Pod
           add_file_to_support_group(path)
           target.prefix_header_path = path
 
-          target.target.build_configurations.each do |c|
+          target.native_target.build_configurations.each do |c|
             relative_path = path.relative_path_from(project.path.dirname)
             c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
           end
@@ -189,9 +189,9 @@ module Pod
           generator = Generator::DummySource.new(target.name)
           generator.save_as(path)
           file_reference = add_file_to_support_group(path)
-          existing = target.target.source_build_phase.files_references.include?(file_reference)
+          existing = target.native_target.source_build_phase.files_references.include?(file_reference)
           unless existing
-            target.target.source_build_phase.add_file_reference(file_reference)
+            target.native_target.source_build_phase.add_file_reference(file_reference)
           end
         end
 

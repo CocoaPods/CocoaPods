@@ -116,7 +116,7 @@ module Pod
           @analysis_result.specifications = []
           config.sandbox.state = Installer::Analyzer::SpecsState.new()
           pod_target = Target.new('BananaLib', nil)
-          pod_target.build_headers_store = Sandbox::HeadersStore.new(config.sandbox, "BuildHeaders")
+          pod_target.private_headers_store = Sandbox::HeadersStore.new(config.sandbox, "BuildHeaders")
           @pod_targets = [pod_target]
 
           @installer.stubs(:analysis_result).returns(@analysis_result)
@@ -126,7 +126,7 @@ module Pod
         it "cleans the header stores" do
           config.sandbox.public_headers.expects(:implode!)
           @installer.pod_targets.each do |pods_target|
-            pods_target.build_headers_store.expects(:implode!)
+            pods_target.private_headers_store.expects(:implode!)
           end
           @installer.send(:clean_sandbox)
         end
@@ -217,14 +217,14 @@ module Pod
           before do
             @pod_target = Target.new('BananaLib')
             @pod_target.file_accessors = [fixture_file_accessor('banana-lib/BananaLib.podspec')]
-            @pod_target.build_headers_store = Sandbox::HeadersStore.new(config.sandbox, "BuildHeaders")
+            @pod_target.private_headers_store = Sandbox::HeadersStore.new(config.sandbox, "BuildHeaders")
             @installer.stubs(:pod_targets).returns([@pod_target])
           end
 
           it "links the build headers" do
             @installer.send(:link_headers)
 
-            headers_root = @pod_target.build_headers_store.root
+            headers_root = @pod_target.private_headers_store.root
             public_header =  headers_root + 'BananaLib/Banana.h'
             private_header = headers_root + 'BananaLib/BananaPrivate.h'
             public_header.should.exist

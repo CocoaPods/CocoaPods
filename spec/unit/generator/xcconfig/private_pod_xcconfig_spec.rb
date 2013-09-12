@@ -11,7 +11,7 @@ module Pod
             @consumer = @spec.consumer(:ios)
             @pod_target = Target.new('Pods-BananaLib')
             @pod_target.platform = Platform.ios
-            @pod_target.build_headers_store = Sandbox::HeadersStore.new(config.sandbox, "BuildHeaders")
+            @pod_target.private_headers_store = Sandbox::HeadersStore.new(config.sandbox, "BuildHeaders")
             @pod_target.public_headers_store = config.sandbox.public_headers
             public_xcconfig = Xcodeproj::Config.new({"OTHER_LDFLAGS"=>"-framework SystemConfiguration"})
             @generator = PrivatePodXCConfig.new(@pod_target, public_xcconfig)
@@ -31,7 +31,7 @@ module Pod
           end
 
           it 'adds the library build headers and public headers search paths to the xcconfig, with quotes' do
-            private_headers = "\"#{@pod_target.build_headers_store.search_paths.join('" "')}\""
+            private_headers = "\"#{@pod_target.private_headers_store.search_paths.join('" "')}\""
             public_headers = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include private_headers
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include public_headers
