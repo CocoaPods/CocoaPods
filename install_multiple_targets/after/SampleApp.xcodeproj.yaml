@@ -85,20 +85,20 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          WRAPPER_EXTENSION: app
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
-          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods.xcconfig
     - Release:
         Build Settings:
+          WRAPPER_EXTENSION: app
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
-          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods.xcconfig
 - SampleAppTests:
@@ -118,8 +118,8 @@ Targets:
     - Debug:
         Build Settings:
           WRAPPER_EXTENSION: octest
-          FRAMEWORK_SEARCH_PATHS: '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
           COMBINE_HIDPI_IMAGES: 'YES'
+          FRAMEWORK_SEARCH_PATHS: '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
           TEST_HOST: $(BUNDLE_LOADER)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleAppTests/SampleAppTests-Info.plist
@@ -130,8 +130,8 @@ Targets:
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: octest
-          FRAMEWORK_SEARCH_PATHS: '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
           COMBINE_HIDPI_IMAGES: 'YES'
+          FRAMEWORK_SEARCH_PATHS: '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
           TEST_HOST: $(BUNDLE_LOADER)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleAppTests/SampleAppTests-Info.plist
@@ -156,20 +156,20 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          WRAPPER_EXTENSION: app
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleApp_2/SampleApp_2-Info.plist
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: SampleApp_2/SampleApp_2-Prefix.pch
-          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-SampleApp_2.xcconfig
     - Release:
         Build Settings:
+          WRAPPER_EXTENSION: app
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleApp_2/SampleApp_2-Info.plist
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: SampleApp_2/SampleApp_2-Prefix.pch
-          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-SampleApp_2.xcconfig
 - NonIntegrated:
@@ -186,19 +186,19 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          WRAPPER_EXTENSION: app
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: NonIntegrated/NonIntegrated-Info.plist
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: NonIntegrated/NonIntegrated-Prefix.pch
-          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
     - Release:
         Build Settings:
+          WRAPPER_EXTENSION: app
+          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: NonIntegrated/NonIntegrated-Info.plist
-          COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: NonIntegrated/NonIntegrated-Prefix.pch
-          WRAPPER_EXTENSION: app
           PRODUCT_NAME: $(TARGET_NAME)
 
 
@@ -240,12 +240,12 @@ Build Configurations:
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
       MACOSX_DEPLOYMENT_TARGET: '10.8'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_WARN_INT_CONVERSION: 'YES'
-      CLANG_WARN_EMPTY_BODY: 'YES'
-      ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
       ARCHS: $(ARCHS_STANDARD_64_BIT)
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_ENUM_CONVERSION: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
