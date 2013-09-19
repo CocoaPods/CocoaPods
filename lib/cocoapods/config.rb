@@ -4,6 +4,8 @@ module Pod
   #
   class Config
 
+  autoload :ConfigManager, 'cocoapods/config/config_manager'
+
     # The default settings for the configuration.
     #
     # Users can specify custom settings in `~/.cocoapods/config.yaml`.
@@ -106,19 +108,54 @@ module Pod
       @aggressive_cache || (ENV['CP_AGGRESSIVE_CACHE'] == 'TRUE')
     end
 
+    # def aggressive_cache?
+    #   @aggressive_cache? || (parent.aggressive_cache? if parent)
+    # end
+
+    # pod config verbose true --global
+    # pod config verbose true
+    # pod config unset verbose
+    # pod config get verbose
+    #
+    # pod config  # defaults to show
+    #
+    # ~/.cocoapods/config.yaml
+    # ~/code/OSS/AwesomeApp/Pods/config.yaml
+    # 
+    # load the configuration file (path is returned by the manager)
+    # convert to hash
+    # user_config? BOOL
+    # keypath STRING
+    # value STRING
+
+
+
+    # manager = Config::ConfigManager.new
+  
+    # manager.set_local(keypath, value)
+    # manager.unset_local(keypath)
+
+    # manager.set_global(keypath, value)
+    # manager.unset_global(keypath)
+
+
     public
 
     #-------------------------------------------------------------------------#
 
     # @!group Initialization
 
-    def initialize(use_user_settings = true)
-      if use_user_settings && user_settings_file.exist?
-        require 'yaml'
-        user_settings = YAML.load_file(user_settings_file)
-        initialize_with(user_settings)
-      else
-        initialize_with(DEFAULTS)
+    # Sets the values of the attributes with the given hash.
+    #
+    # @param  [Hash{String,Symbol => Object}] values_by_key
+    #         The values of the attributes grouped by key.
+    #
+    # @return [void]
+    #
+
+    def initialize(settings = {})
+      settings.each do |key, value|
+        self.instance_variable_set("@#{key}", value)
       end
     end
 
@@ -131,13 +168,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     # @!group Paths
-
-    # @return [Pathname] the directory where repos, templates and configuration
-    #         files are stored.
-    #
-    def home_dir
-      @home_dir ||= Pathname.new(ENV['CP_HOME_DIR'] || "~/.cocoapods").expand_path
-    end
 
     # @return [Pathname] the directory where the CocoaPods sources are stored.
     #
@@ -290,26 +320,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     # @!group Private helpers
-
-    # @return [Pathname] The path of the file which contains the user settings.
-    #
-    def user_settings_file
-      home_dir + "config.yaml"
-    end
-
-    # Sets the values of the attributes with the given hash.
-    #
-    # @param  [Hash{String,Symbol => Object}] values_by_key
-    #         The values of the attributes grouped by key.
-    #
-    # @return [void]
-    #
-    def initialize_with(values_by_key)
-      return unless values_by_key
-      values_by_key.each do |key, value|
-        self.instance_variable_set("@#{key}", value)
-      end
-    end
 
     # @return [Array<String>] The filenames that the Podfile can have ordered
     #         by priority.
