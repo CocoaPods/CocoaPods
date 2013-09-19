@@ -140,34 +140,6 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "Default settings" do
-
-      it "prints out normal information" do
-        @sut.should.not.be.silent
-      end
-
-      it "does not print verbose information" do
-        @sut.should.not.be.verbose
-      end
-
-      it "cleans SCM dirs in dependency checkouts" do
-        @sut.should.clean
-      end
-
-      it "has a default cache size of 500" do
-        @sut.max_cache_size.should == 500
-      end
-
-      it "returns the cache root" do
-        @sut.cache_root.should == Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
-      end
-
-      it "doesn't use aggressive cache" do
-        @sut.should.not.aggressive_cache?
-      end
-
-    end
-
     #-------------------------------------------------------------------------#
 
     describe "Dependency Injection" do

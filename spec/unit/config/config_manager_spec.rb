@@ -5,14 +5,6 @@ module Pod
 
   describe Config::ConfigManager do
 
-    # manager = Config::ConfigManager.new
-
-    # manager.set_local(keypath, value)
-    # manager.unset_local(keypath)
-
-    # manager.set_global(keypath, value)
-    # manager.unset_global(keypath)
-
     describe "global" do
 
       @config_file_path = temporary_directory + 'config.yaml'
@@ -94,6 +86,11 @@ module Pod
         end
       end
 
+      it "can accept aggressive cache from ENV" do
+        ENV.stubs(:[]).returns('TRUE')
+        @sut.get_setting('aggressive_cache').should == true
+      end
+
       xit "it converts string boolean values"
       xit "it support keypath"
       # key.keypath = 'my value'
@@ -103,27 +100,6 @@ module Pod
       @sut.set_local('verbose', 'true')
       yaml['verbose'].should == true
     end
-
-    xit "works with ENV" do
-
-    end
-
-    xit "writes global repos without specifying project" do
-      run_command('config', "--global", pod_name, pod_path)
-      yaml = YAML.load(File.open(@config_file_path))
-
-      yaml[GLOBAL_OVERRIDES][pod_name].should.equal pod_path
-    end
-
-    xit "deletes global configuration" do
-      run_command('config', "--global", pod_name, pod_path)
-      run_command('config', "--global", "--delete", pod_name)
-      yaml = YAML.load(File.open(@config_file_path))
-
-      yaml.should.not.has_key? GLOBAL_OVERRIDES
-    end
-
-
 
   end
 

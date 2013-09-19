@@ -34,12 +34,9 @@ module Pod
 
     class NoKeyError < ArgumentError; end
 
-    def initialize()
-
-    end
 
     def get_setting(keypath)
-      value = global_config[keypath] || DEFAULTS[keypath.to_sym]
+      value = global_config[keypath] || get_environment(keypath) || DEFAULTS[keypath.to_sym]
       if value.nil?
         raise NoKeyError, "Unrecognized keypath for configuration `#{keypath}`. " \
         "\nSupported ones are:\n - #{DEFAULTS.keys.join("\n - ")}"
@@ -61,21 +58,15 @@ module Pod
 
     end
 
+    private
 
-      # def set_local(keypath, value)
-      # end
-      # def unset_local(keypath)
-      # end
-
-      private
-
-      def global_config
-        @global_config ||= load_configuration
-      end
+    def global_config
+      @global_config ||= load_configuration
+    end
 
       # @return [Hash]
       #
-      def load_configuration()
+      def load_configuration
         if global_config_filepath.exist?
           YAML.load_file(global_config_filepath)
         else
@@ -89,9 +80,7 @@ module Pod
         File.open(global_config_filepath, 'w') { |f| f.write(yaml) }
       end
 
-      def set_keypath(keypath, value, hash)
-      end
-
+      
       # @return [Pathname] The path of the file which contains the user settings.
       #
       def global_config_filepath
@@ -109,6 +98,15 @@ module Pod
         # TODO: test ENV
         # @home_dir ||= Pathname.new(ENV['CP_HOME_DIR'] || "~/.cocoapods").expand_path
         @home_dir ||= Pathname.new("~/.cocoapods").expand_path
+      end
+
+      def get_environment(keypath)
+        value = ENV["CP_#{keypath.upcase}"]
+        if value == 'TRUE'
+          true
+        else
+          false
+        end
       end
 
     end
