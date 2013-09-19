@@ -14,9 +14,8 @@ module Pod
     before do
       Dir.stubs(:pwd).returns('~/code/OSS/SampleProject')
 
-      @config_file_path = temporary_directory + "mock_config"
-      Command::Config.send(:remove_const, 'CONFIG_FILE_PATH')
-      Command::Config.const_set("CONFIG_FILE_PATH", @config_file_path)
+      @config_file_path = temporary_directory + "mock_config.yaml"
+      Pod::Config.instance.stubs(:user_settings_file).returns(@config_file_path)
     end
 
       it "writes local repos for each project" do
@@ -54,7 +53,7 @@ module Pod
         run_command('config', "--local", pod_name, pod_path)
         run_command('config', "--delete", pod_name)
         yaml = YAML.load(File.open(@config_file_path))
-
+        puts yaml
         yaml.should.not.has_key? LOCAL_OVERRIDES
         yaml[GLOBAL_OVERRIDES][pod_name].should.equal pod_path
       end

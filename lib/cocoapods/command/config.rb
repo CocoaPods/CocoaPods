@@ -16,9 +16,6 @@ module Pod
     #   pod config --delete Kiwi
     #
     class Config < Command
-      CONFIG_FILE_PATH = File.expand_path('~/.config/cocoapods')
-      LOCAL_OVERRIDES = 'PER_PROJECT_REPO_OVERRIDES'
-      GLOBAL_OVERRIDES = 'GLOBAL_REPO_OVERRIDES'
 
       self.summary = 'Something like `bundle config` ... but better.'
       self.description = <<-DESC
@@ -59,57 +56,17 @@ module Pod
 
       def update_config
         if @should_delete
-          @local ? delete_local_config : delete_global_config
+          @local ? config.delete_local(@pod_name) : config.delete_global(@pod_name)
         else
-          @local ? store_local_config : store_global_config
+          @local ? config.store_local(@pod_name, @pod_path) : config.store_global(@pod_name, @pod_path)
         end
-        write_config_to_file
+        config.write_config_to_file
       end
 
-      def store_global_config
-        config_hash[GLOBAL_OVERRIDES][@pod_name] = @pod_path
+      def config
+        Pod::Config.instance
       end
-
-      def store_local_config
-        config_hash[LOCAL_OVERRIDES][project_name] ||= {}
-        config_hash[LOCAL_OVERRIDES][project_name][@pod_name] = @pod_path
-      end
-
-      def delete_local_config
-        config_hash[LOCAL_OVERRIDES][project_name].delete(@pod_name)
-      end
-
-      def delete_global_config 
-        config_hash[GLOBAL_OVERRIDES].delete(@pod_name)
-      end
-
-      def config_hash
-        @config_hash ||= load_config
-      end
-
-      def load_config
-        FileUtils.touch(CONFIG_FILE_PATH) unless File.exists? CONFIG_FILE_PATH
-        config = YAML.load(File.open(CONFIG_FILE_PATH)) || {}
-        config[LOCAL_OVERRIDES] ||= {}
-        config[GLOBAL_OVERRIDES] ||= {}
-        config
-      end
-
-      def project_name
-        `basename #{Dir.pwd}`.chomp
-      end
-
-      def write_config_to_file
-        File.open(CONFIG_FILE_PATH, 'w') { |f| f.write(config_hash.delete_blank.to_yaml) }
-      end
-
     end
-  end
-end
-
-class Hash
-  def delete_blank
-    delete_if{|k, v| v.empty? or v.instance_of?(Hash) && v.delete_blank.empty?}
   end
 end
 

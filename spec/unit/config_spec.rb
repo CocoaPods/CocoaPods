@@ -196,9 +196,9 @@ module Pod
         @sut.send(:user_settings_file).should == Pathname.new("~/.cocoapods/config.yaml").expand_path
       end
 
-      it "can be configured with a hash" do
+      it "can be initialized with a hash" do
         hash = { :verbose => true }
-        @sut.send(:configure_with, hash)
+        @sut.send(:initialize_with, hash)
         @sut.should.be.verbose
       end
 

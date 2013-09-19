@@ -113,12 +113,12 @@ module Pod
     # @!group Initialization
 
     def initialize(use_user_settings = true)
-      configure_with(DEFAULTS)
-
       if use_user_settings && user_settings_file.exist?
         require 'yaml'
         user_settings = YAML.load_file(user_settings_file)
-        configure_with(user_settings)
+        initialize_with(user_settings)
+      else
+        initialize_with(DEFAULTS)
       end
     end
 
@@ -304,7 +304,7 @@ module Pod
     #
     # @return [void]
     #
-    def configure_with(values_by_key)
+    def initialize_with(values_by_key)
       return unless values_by_key
       values_by_key.each do |key, value|
         self.instance_variable_set("@#{key}", value)
@@ -338,6 +338,56 @@ module Pod
       nil
     end
 
+
+    public
+
+    #-------------------------------------------------------------------------#
+
+    # @!group Local repos
+    #
+    #
+
+    LOCAL_OVERRIDES = 'PER_PROJECT_REPO_OVERRIDES'
+    GLOBAL_OVERRIDES = 'GLOBAL_REPO_OVERRIDES'
+
+    def store_global(pod_name, pod_path)
+      config_hash[GLOBAL_OVERRIDES] ||= {}
+      config_hash[GLOBAL_OVERRIDES][pod_name] = pod_path
+    end
+
+    def store_local(pod_name, pod_path)
+      config_hash[LOCAL_OVERRIDES] ||= {}
+      config_hash[LOCAL_OVERRIDES][project_name] ||= {}
+      config_hash[LOCAL_OVERRIDES][project_name][pod_name] = pod_path
+    end
+
+    def delete_local(pod_name)
+      config_hash[LOCAL_OVERRIDES] ||= {}
+      config_hash[LOCAL_OVERRIDES][project_name].delete(pod_name)
+    end
+
+    def delete_global(pod_name)
+      config_hash[GLOBAL_OVERRIDES] ||= {}
+      config_hash[GLOBAL_OVERRIDES].delete(pod_name)
+    end
+
+    def config_hash
+      @config_hash ||= load_config
+    end
+
+    def load_config
+      FileUtils.touch(user_settings_file) unless File.exists? user_settings_file
+      YAML.load(File.open(user_settings_file)) || {}
+    end
+
+    def project_name
+      `basename #{Dir.pwd}`.chomp
+    end
+
+    def write_config_to_file
+      File.open(user_settings_file, 'w') { |f| f.write(config_hash.delete_blank.to_yaml) }
+    end
+
     public
 
     #-------------------------------------------------------------------------#
@@ -369,5 +419,12 @@ module Pod
         Config.instance
       end
     end
+  end
+
+end
+
+class Hash
+  def delete_blank
+    delete_if { |k, v| v.empty? or v.instance_of?(Hash) && v.delete_blank.empty? }
   end
 end
