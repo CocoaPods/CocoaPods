@@ -145,7 +145,7 @@ module Pod
           raise Informative, "The `#{source_name}` repo is not a git repo." unless git_repo?(specified_source.repo)
           sources = [specified_source]
         else
-          sources = aggregate.all.select { |source| git_repo?(source.repo) }
+          sources = aggregate.all.select { |source| git_repo?(source.repo) && has_git_remote?(source.repo) }
         end
 
         sources.each do |source|
@@ -169,6 +169,17 @@ module Pod
       def git_repo?(dir)
         Dir.chdir(dir) { `git rev-parse  >/dev/null 2>&1` }
         $?.exitstatus.zero?
+      end
+
+      # Returns whether a source GIT repository has a remote
+      #
+      # @param [Pathname] dir
+      #        The directory where the source is stored.
+      #
+      # @return [Bool] Wether the given GIT repository has a remote endpoint.
+      #
+      def has_git_remote?(dir)
+        ! Dir.chdir(dir) { next git!('remote') }.strip.empty?
       end
 
       # Checks the version information of the source with the given directory.
