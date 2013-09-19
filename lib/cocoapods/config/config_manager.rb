@@ -32,6 +32,13 @@ module Pod
       :aggressive_cache    => false,
     }
 
+    DEFAULTS.each do |key, value|
+      define_method(key) { get_setting(key) }
+      if value.is_a?(TrueClass) || value.is_a?(FalseClass)
+        define_method("#{key}?") { get_setting(key) }
+      end
+    end
+
     class NoKeyError < ArgumentError; end
 
 

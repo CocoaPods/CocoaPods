@@ -45,39 +45,39 @@ module Pod
       end
 
       it "verbose by default is false" do
-        @sut.get_setting('verbose').should == false
+        @sut.should.not.be.verbose
       end
 
       it "silent by default is false" do
-        @sut.get_setting('silent').should == false
+        @sut.should.not.be.silent
       end
 
       it "skips repo update by default is false" do
-        @sut.get_setting('skip_repo_update').should == false
+        @sut.should.not.skip_repo_update
       end
 
       it "clean by default is true" do
-        @sut.get_setting('clean').should == true
+        @sut.should.be.clean
       end
 
       it "integrate_targets by default is true" do
-        @sut.get_setting('integrate_targets').should == true
+        @sut.should.integrate_targets
       end
 
       it "new_version_message by default is true" do
-        @sut.get_setting('new_version_message').should == true
+        @sut.should.new_version_message
       end
 
       it "cache_root returns the cache root by default" do
-        @sut.get_setting('cache_root').to_s.should.include('Library/Caches/CocoaPods')
+        @sut.cache_root.to_s.should.include('Library/Caches/CocoaPods')
       end
 
       it "max_cache_size is 500 MB by default" do
-        @sut.get_setting('max_cache_size').should == 500
+        @sut.max_cache_size.should == 500
       end
       
       it "aggressive_cache is false by default" do
-        @sut.get_setting('aggressive_cache').should == false
+        @sut.should.not.aggressive_cache
       end
 
       it "raises if there is an attempt to access an unrecognized attribute" do
