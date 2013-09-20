@@ -358,6 +358,8 @@ namespace :examples do
               command << " -sdk "
               command << Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
             end
+
+            command << " ONLY_ACTIVE_ARCH=NO"
           end
         execute_command(command)
       end
