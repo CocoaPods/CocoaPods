@@ -457,7 +457,7 @@ module Pod
         end
 
         archs = archs.compact.uniq.sort
-        if archs.count != 1
+        if archs.count > 1
           UI.warn "Found multiple values (`#{archs.join('`, `')}`) for the " \
           "architectures (`ARCHS`) build setting for the " \
           "`#{target_definition}` target definition. Using the first."
