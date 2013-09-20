@@ -48,3 +48,5 @@ Generating Pods project
   - Writing Manifest in `Pods/Manifest.lock`
 
 Integrating client project
+
+[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods` target definition. Using the first.

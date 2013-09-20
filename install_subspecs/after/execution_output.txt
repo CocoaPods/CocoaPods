@@ -76,3 +76,9 @@ Integrating client project
 Integrating Pod target `Pods-OS X App-PodTest` into aggregate target Pods-OS X App of project `SampleApp.xcodeproj`.
 
 Integrating Pod target `Pods-iOS App-PodTest` into aggregate target Pods-iOS App of project `SampleApp.xcodeproj`.
+
+[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods` target definition. Using the first.
+
+[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods-iOS App` target definition. Using the first.
+
+[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods-OS X App` target definition. Using the first.

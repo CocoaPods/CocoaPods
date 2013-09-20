@@ -122,3 +122,9 @@ Integrating Pod target `Pods-Reachability` into aggregate target Pods of project
 Integrating Pod targets `Pods-SampleApp_2-JSONKit and Pods-SampleApp_2-Reachability` into aggregate target Pods-SampleApp_2 of project `SampleApp.xcodeproj`.
 
 Integrating Pod target `Pods-test-JSONKit` into aggregate target Pods-test of project `SampleApp.xcodeproj`.
+
+[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods` target definition. Using the first.
+
+[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods-test` target definition. Using the first.
+
+[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods-SampleApp_2` target definition. Using the first.

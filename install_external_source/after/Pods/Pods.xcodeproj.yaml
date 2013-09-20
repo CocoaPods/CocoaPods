@@ -45,7 +45,6 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           GCC_C_LANGUAGE_STANDARD: gnu99
@@ -55,9 +54,9 @@ Targets:
           GCC_DYNAMIC_NO_PIC: 'NO'
           GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
           GCC_OPTIMIZATION_LEVEL: '0'
-          ARCHS: $(ARCHS_STANDARD_32_BIT)
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           ALWAYS_SEARCH_USER_PATHS: 'NO'
+          PRODUCT_NAME: $(TARGET_NAME)
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - $(inherited)
@@ -82,7 +81,6 @@ Targets:
           - $(inherited)
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ARCHS: $(ARCHS_STANDARD_32_BIT)
           PRODUCT_NAME: $(TARGET_NAME)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
@@ -105,7 +103,6 @@ Targets:
     - Debug:
         Build Settings:
           OTHER_LDFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           GCC_C_LANGUAGE_STANDARD: gnu99
@@ -115,9 +112,9 @@ Targets:
           GCC_DYNAMIC_NO_PIC: 'NO'
           GCC_OPTIMIZATION_LEVEL: '0'
           GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
-          ARCHS: $(ARCHS_STANDARD_32_BIT)
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          PRODUCT_NAME: $(TARGET_NAME)
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - $(inherited)
@@ -143,7 +140,6 @@ Targets:
           - $(inherited)
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ARCHS: $(ARCHS_STANDARD_32_BIT)
           PRODUCT_NAME: $(TARGET_NAME)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
