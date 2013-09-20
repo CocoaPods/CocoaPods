@@ -147,6 +147,7 @@ Targets:
 Build Configurations:
 - Debug:
     Build Settings:
+      ONLY_ACTIVE_ARCH: 'YES'
       STRIP_INSTALLED_PRODUCT: 'NO'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
 - Release:

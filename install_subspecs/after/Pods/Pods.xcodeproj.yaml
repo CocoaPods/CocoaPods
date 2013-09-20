@@ -59,7 +59,6 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          ONLY_ACTIVE_ARCH: 'YES'
           SDKROOT: macosx
           GCC_C_LANGUAGE_STANDARD: gnu99
           GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
@@ -117,28 +116,27 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          COPY_PHASE_STRIP: 'NO'
+          SDKROOT: macosx
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          MACOSX_DEPLOYMENT_TARGET: '10.6'
+          SKIP_INSTALL: 'YES'
           DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - $(inherited)
-          ONLY_ACTIVE_ARCH: 'YES'
-          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
-          MACOSX_DEPLOYMENT_TARGET: '10.6'
-          GCC_PREFIX_HEADER: Pods-OS X App-PodTest-prefix.pch
-          GCC_OPTIMIZATION_LEVEL: '0'
-          GCC_C_LANGUAGE_STANDARD: gnu99
           OTHER_LDFLAGS: ''
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
-          COPY_PHASE_STRIP: 'NO'
-          SDKROOT: macosx
-          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
-          GCC_DYNAMIC_NO_PIC: 'NO'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
-          SKIP_INSTALL: 'YES'
-          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
           COMBINE_HIDPI_IMAGES: 'YES'
+          GCC_PREFIX_HEADER: Pods-OS X App-PodTest-prefix.pch
         Base Configuration: Pods-OS X App-PodTest-Private.xcconfig
     - Release:
         Build Settings:
@@ -284,8 +282,9 @@ Build Configurations:
       STRIP_INSTALLED_PRODUCT: 'NO'
       IPHONEOS_DEPLOYMENT_TARGET: '4.3'
       MACOSX_DEPLOYMENT_TARGET: '10.6'
+      ONLY_ACTIVE_ARCH: 'YES'
 - Release:
     Build Settings:
+      MACOSX_DEPLOYMENT_TARGET: '10.6'
       STRIP_INSTALLED_PRODUCT: 'NO'
       IPHONEOS_DEPLOYMENT_TARGET: '4.3'
-      MACOSX_DEPLOYMENT_TARGET: '10.6'
