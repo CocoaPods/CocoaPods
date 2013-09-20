@@ -2,41 +2,69 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+## 0.25.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.24.0...0.25.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.24.0...0.25.0)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.10.1...0.11.0)
+
+###### Enhancements
+
+* Added support for Xcode 5.
+
+  The generated Pods Xcode project is now compatible with `arm64` projects and
+  is updated to use Xcode 5’s default settings removing all warnings.
+
+  **NOTE to Xcode 4 users:**
+  1. This means that the Pods Xcode project now sets the `ONLY_ACTIVE_ARCH`
+     build setting to `YES` in the `Debug` configuration. You’ll have to set the
+     same on your project/target, otherwise the build _will_ fail.
+  2. When building a **iOS** project from the command-line with the `xcodebuild`
+     tool you’ll need to completely disable this setting by appending to your
+     build command: `ONLY_ACTIVE_ARCH=NO`.
+
+* Speed up project generation in `pod install` and `pod update`.
+
+* The pre and post install hooks that have been deprecated now include the name
+  and version of the spec that’s using them.
 
 ###### Bug Fixes
 
-* Only create a single resource bundle for all targets. Prior to this change a resource bundle included
-  into multiple targets within the project would create duplicately named targets in the Pods Xcode project,
-  causing duplicately named Schemes to be created on each invocation of `pod install`. All targets that reference
-  a given resource bundle now have dependencies on a single common target.
+* Only create a single resource bundle for all targets. Prior to this change a
+  resource bundle included into multiple targets within the project would create
+  duplicately named targets in the Pods Xcode project, causing duplicately named
+  Schemes to be created on each invocation of `pod install`. All targets that
+  reference a given resource bundle now have dependencies on a single common
+  target.
 
   [Blake Watters](https://github.com/blakewatters)
   [#1338](https://github.com/CocoaPods/CocoaPods/issues/1338)
-  
+
 * Solved outstanding issues with CocoaPods resource bundles and Archive builds:
-  1. The rsync task copies symlinks into the App Bundle, producing an invalid app. This change add `--copy-links`
-  to the rsync invocation to ensure the target files are copied rather than the symlink.
-  2. The Copy Resources script uses `TARGET_BUILD_DIR` which points to the App Archiving folder during an Archive action. 
-  Switching to `BUILT_PRODUCTS_DIR` instead ensures that the path is correct for all actions and configurations.
+  1. The rsync task copies symlinks into the App Bundle, producing an invalid
+     app. This change add `--copy-links` to the rsync invocation to ensure the
+     target files are copied rather than the symlink.
+  2. The Copy Resources script uses `TARGET_BUILD_DIR` which points to the App
+     Archiving folder during an Archive action. Switching to
+     `BUILT_PRODUCTS_DIR` instead ensures that the path is correct for all
+     actions and configurations.
 
   [Blake Watters](https://github.com/blakewatters)
   [#1309](https://github.com/CocoaPods/CocoaPods/issues/1309)
   [#1329](https://github.com/CocoaPods/CocoaPods/issues/1329)
-  
-* Ensure resource bundles are copied to installation location on install actions
 
+* Ensure resource bundles are copied to installation location on install actions
   [Chris Gummer](https://github.com/chrisgummer)
   [#1364](https://github.com/CocoaPods/CocoaPods/issues/1364)
 
-## 0.24.0
+* Various bugfixes in Xcodeproj, refer to its [CHANGELOG](https://github.com/CocoaPods/Xcodeproj/blob/0.11.0/CHANGELOG.md)
+  for details.
 
-###### Enhancements
+
+## 0.24.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.3...0.23.0.rc1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.3...0.23.0.rc1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.1...0.9.0)
-• [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.1.1...0.1.2)
-
+• [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.1.1...0.2.0)
 
 ###### Enhancements
 
@@ -44,21 +72,20 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   targets of the project stored in the working directory and to the templates
   stored in the `~/.cocoapods/templates` folder. Two templates are supported: 
     - the `Podfile.default` template for regular targets.
-    - and the `Podfile.test` template for test targets.  
-
+    - and the `Podfile.test` template for test targets.
   [Ian Ynda-Hummel](https://github.com/ianyh)
-  [#1106](https://github.com/CocoaPods/CocoaPods/issues/1106)  
-  [#1045](https://github.com/CocoaPods/CocoaPods/issues/1045)  
+  [#1106](https://github.com/CocoaPods/CocoaPods/issues/1106)
+  [#1045](https://github.com/CocoaPods/CocoaPods/issues/1045)
 
 * CocoaPods will now leverage the [xcproj](https://github.com/0xced/xcproj)
   command line tool if available in the path of the user to touch saved
   projects. This will result in projects being serialized in the exact format
   used by Xcode eliminating merge conflicts and other related issues. To learn
   more about how to install xcproj see its
-  [readme](https://github.com/0xced/xcproj).  
-  [Cédric Luthi](https://github.com/0xced)  
-  [#1275](https://github.com/CocoaPods/CocoaPods/issues/1275)  
-  
+  [readme](https://github.com/0xced/xcproj).
+  [Cédric Luthi](https://github.com/0xced)
+  [#1275](https://github.com/CocoaPods/CocoaPods/issues/1275)
+
 * Rationalized and cleaned up Pods project group structure and path specification.
 
 * Create all necessary build configurations for *Pods.xcodeproj* at the project level. If the user’s project has more than just *Debug* and *Release* build configurations, they may be explicitly specified in the Podfile:  
@@ -100,12 +127,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 
 ## 0.23.0.rc1
-
-###### Enhancements
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.3...0.23.0.rc1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.3...0.23.0.rc1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.1...0.9.0)
 • [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.1.1...0.1.2)
+
+###### Enhancements
 
 * Added `prepare_command` attribute to Specification DSL. The prepare command
   will replace the `pre_install` hook. The `post_install` hook has also been

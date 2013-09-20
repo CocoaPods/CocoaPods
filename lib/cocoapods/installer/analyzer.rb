@@ -35,6 +35,7 @@ module Pod
 
         @update_mode = false
         @allow_pre_downloads = true
+        @archs_by_target_def = {}
       end
 
       # Performs the analysis.
@@ -176,6 +177,7 @@ module Pod
             target.client_root = project_path.dirname
             target.user_target_uuids = native_targets.map(&:uuid)
             target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
+            target.archs = @archs_by_target_def[target_definition]
           else
             target.client_root = config.installation_root
             target.user_target_uuids = []
@@ -189,6 +191,7 @@ module Pod
           grouped_specs.each do |pod_specs|
             pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
             pod_target.user_build_configurations = target.user_build_configurations
+            pod_target.archs = @archs_by_target_def[target_definition]
             target.pod_targets << pod_target
           end
         end
@@ -437,6 +440,31 @@ module Pod
         Platform.new(name, deployment_target)
       end
 
+      # @return [Platform] The platform for the library.
+      #
+      # @note   This resolves to the lowest deployment target across the user
+      #         targets.
+      #
+      # @todo   Is assigning the platform to the target definition the best way
+      #         to go?
+      #
+      def compute_archs_for_target_definition(target_definition, user_targets)
+        archs = []
+        user_targets.each do |target|
+          target.build_configurations.each do |configuration|
+            archs << configuration.build_settings['ARCHS']
+          end
+        end
+
+        archs = archs.compact.uniq.sort
+        if archs.count > 1
+          UI.warn "Found multiple values (`#{archs.join('`, `')}`) for the " \
+          "architectures (`ARCHS`) build setting for the " \
+          "`#{target_definition}` target definition. Using the first."
+        end
+        archs.first
+      end
+
       # Precompute the platforms for each target_definition in the Podfile
       #
       # @note The platforms are computed and added to each target_definition
@@ -452,6 +480,8 @@ module Pod
             user_project = Xcodeproj::Project.open(project_path)
             targets = compute_user_project_targets(target_definition, user_project)
             platform = compute_platform_for_target_definition(target_definition, targets)
+            archs = compute_archs_for_target_definition(target_definition, targets)
+            @archs_by_target_def[target_definition] = archs
           else
             unless target_definition.platform
               raise Informative, "It is necessary to specify the platform in the Podfile if not integrating."

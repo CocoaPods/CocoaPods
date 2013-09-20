@@ -29,20 +29,5 @@ module Pod
       @installer = Installer::TargetInstaller.new(config.sandbox, @pod_target)
     end
 
-    it "sets the ARCHS" do
-      @installer.send(:add_target)
-      target = @project.targets.first
-      target.build_settings('Debug')["ONLY_ACTIVE_ARCH"].should.be.nil
-      target.build_settings('AppStore')["ONLY_ACTIVE_ARCH"].should.be.nil
-    end
-
-    it "sets ARCHS to 'armv6 armv7' for both configurations if the deployment target is less than 4.3 for iOS targets" do
-      @pod_target.stubs(:platform).returns(Platform.new(:ios, '4.0'))
-      @installer.send(:add_target)
-      target = @project.targets.first
-      target.build_settings('Debug')["ARCHS"].should == "armv6 armv7"
-      target.build_settings('Release')["ARCHS"].should == "armv6 armv7"
-    end
-
   end
 end
