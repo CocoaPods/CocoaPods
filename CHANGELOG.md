@@ -22,6 +22,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
      tool you’ll need to completely disable this setting by appending to your
      build command: `ONLY_ACTIVE_ARCH=NO`.
 
+  [#1352](https://github.com/CocoaPods/CocoaPods/pull/1352)
+
 * Speed up project generation in `pod install` and `pod update`.
 
 * The pre and post install hooks that have been deprecated now include the name
