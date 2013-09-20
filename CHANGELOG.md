@@ -23,6 +23,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Blake Watters](https://github.com/blakewatters)
   [#1309](https://github.com/CocoaPods/CocoaPods/issues/1309)
   [#1329](https://github.com/CocoaPods/CocoaPods/issues/1329)
+  
+* Ensure resource bundles are copied to installation location on install actions
+
+  [Chris Gummer](https://github.com/chrisgummer)
+  [#1364](https://github.com/CocoaPods/CocoaPods/issues/1364)
 
 ## 0.24.0
 
