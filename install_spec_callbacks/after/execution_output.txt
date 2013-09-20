@@ -68,8 +68,6 @@ Integrating client project
 
 Integrating Pod target `Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
 
-[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods` target definition. Using the first.
-
 [!] [Reachability (3.1.0)] The use of `pre_install` by overriding the method is deprecated.
 
 [!] [Reachability (3.1.0)] The use of `post_install` by overriding the method is deprecated.

@@ -77,9 +77,3 @@ Generating Pods project
 Integrating client projects
 
 [!] From now on use `Workspace.xcworkspace`.
-
-[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods` target definition. Using the first.
-
-[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods-SampleApp_1` target definition. Using the first.
-
-[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods-SampleApp_2` target definition. Using the first.

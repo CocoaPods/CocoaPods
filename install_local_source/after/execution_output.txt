@@ -49,6 +49,4 @@ Integrating client project
 
 Integrating Pod target `Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
 
-[!] Found multiple values (``) for the architectures (`ARCHS`) build setting for the `Pods` target definition. Using the first.
-
 [!] The `:local` option of the Podfile has been renamed to `:path` and is deprecated.
