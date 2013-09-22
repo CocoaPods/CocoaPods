@@ -42,6 +42,15 @@ module Pod
     class NoKeyError < ArgumentError; end
 
 
+    # @!group Singleton
+
+    # @return [Config] the current config instance creating one if needed.
+    #
+    def self.instance
+      @instance ||= new
+    end
+
+
     def get_setting(keypath)
       value = global_config[keypath] || get_environment(keypath) || DEFAULTS[keypath.to_sym]
       if value.nil?
