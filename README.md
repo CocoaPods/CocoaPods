@@ -53,14 +53,14 @@ CocoaPods is composed by the following projects:
 All CocoaPods development happens on GitHub, contributions make good karma and
 we welcome with joy new contributors.
 
-# Donations
+# Sponsors
 
 - [@fngtps](http://twitter.com/fngtps) is donating time to work on the design
   of the forthcoming cocoapods.org website and donated the money to hire [Max
   Steenbergen](http://twitter.com/maxsteenbergen) to design [an
   icon](http://drbl.in/cpmL) for it.
 - [@sauspiel](http://twitter.com/Sauspiel) uses CocoaPods for their games and
-  have hired me to add features and specs they needed. These are Nimbus,
+  have hired @alloy to add features and specs they needed. These are Nimbus,
   QuincyKit, and HockeyKit. For the [Nimbus
   spec](https://github.com/CocoaPods/Specs/blob/master/Nimbus/0.9.0/Nimbus.podspec),
   the ‘subspecs’ feature was added.
