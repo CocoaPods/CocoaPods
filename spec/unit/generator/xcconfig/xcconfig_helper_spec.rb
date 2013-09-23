@@ -167,6 +167,15 @@ module Pod
             frameworks_search_paths.should.include?('"$(SDKROOT)/Developer/Library/Frameworks"')
             frameworks_search_paths.should.include?('"$(DEVELOPER_LIBRARY_DIR)/Frameworks"')
           end
+
+          it "adds the developer frameworks search paths to the xcconfig if XCTest has been detected" do
+            xcconfig = Xcodeproj::Config.new({'OTHER_LDFLAGS' => '-framework XCTest'})
+            @sut.add_developers_frameworks_if_needed(xcconfig)
+            frameworks_search_paths = xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS']
+            frameworks_search_paths.should.include?('$(inherited)')
+            frameworks_search_paths.should.include?('"$(SDKROOT)/Developer/Library/Frameworks"')
+            frameworks_search_paths.should.include?('"$(DEVELOPER_LIBRARY_DIR)/Frameworks"')
+          end
         end
 
         #---------------------------------------------------------------------#

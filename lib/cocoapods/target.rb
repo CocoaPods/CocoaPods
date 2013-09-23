@@ -188,6 +188,10 @@ module Pod
     attr_accessor :generate_bridge_support
     alias :generate_bridge_support? :generate_bridge_support
 
+    # @return [String] The value for the ARCHS build setting.
+    #
+    attr_accessor :archs
+
 
     public
 

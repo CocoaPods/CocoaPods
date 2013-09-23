@@ -121,7 +121,8 @@ module Pod
         # @return [void]
         #
         def self.add_developers_frameworks_if_needed(xcconfig)
-          if xcconfig.frameworks.include?('SenTestingKit')
+          matched_frameworks = xcconfig.frameworks & ['XCTest', 'SenTestingKit']
+          unless matched_frameworks.empty?
             search_paths = xcconfig.attributes['FRAMEWORK_SEARCH_PATHS'] ||= ''
             DEVELOPER_FRAMEWORKS_SEARCH_PATHS.each do |search_path|
               unless search_paths.include?(search_path)
