@@ -9,6 +9,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The Pods project now is sorted by name.  
   [#1389](https://github.com/CocoaPods/CocoaPods/pull/1389)
 
+###### Bug Fixes
+
+* The search paths of vendored frameworks and libraries now are always
+  specified relatively.  
+  [#1405](https://github.com/CocoaPods/CocoaPods/pull/1405)
+
 
 ## 0.25.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.24.0...0.25.0)
