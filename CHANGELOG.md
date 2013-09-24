@@ -9,6 +9,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The Pods project now is sorted by name.  
   [#1389](https://github.com/CocoaPods/CocoaPods/pull/1389)
 
+* Added the `documentation_url` DSL attribute to the specifications.  
+  [#1273](https://github.com/CocoaPods/CocoaPods/pull/1273)
+
 ###### Bug Fixes
 
 * The search paths of vendored frameworks and libraries now are always
