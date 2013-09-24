@@ -2,6 +2,14 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+###### Enhancements
+
+* The Pods project now is sorted by name.  
+  [#1389](https://github.com/CocoaPods/CocoaPods/pull/1389)
+
+
 ## 0.25.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.24.0...0.25.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.24.0...0.25.0)
