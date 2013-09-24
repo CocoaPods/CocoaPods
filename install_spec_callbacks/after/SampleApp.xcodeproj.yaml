@@ -49,7 +49,7 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           WRAPPER_EXTENSION: app
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods.xcconfig
     - Release:
         Build Settings:
@@ -58,7 +58,7 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           WRAPPER_EXTENSION: app
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods.xcconfig
 
 
@@ -70,7 +70,7 @@ Build Configurations:
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
-      - $(inherited)
+      - "$(inherited)"
       ONLY_ACTIVE_ARCH: 'YES'
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
@@ -87,7 +87,7 @@ Build Configurations:
       COPY_PHASE_STRIP: 'NO'
       SDKROOT: macosx
       GCC_DYNAMIC_NO_PIC: 'NO'
-      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
       GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
       CLANG_CXX_LIBRARY: libc++
       GCC_WARN_UNUSED_VARIABLE: 'YES'
@@ -105,7 +105,7 @@ Build Configurations:
       CLANG_WARN_EMPTY_BODY: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
-      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
       CLANG_WARN_ENUM_CONVERSION: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'

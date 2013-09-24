@@ -21,9 +21,10 @@ Downloading dependencies
    true
    $ /usr/bin/git rev-list --max-count=1 v3.1.0
    f7176f4798d068d233dca5223ae4bd9c8059e830
-   $ /usr/bin/git clone 'CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6' 'ROOT/tmp/install_spec_callbacks/Pods/Reachability'
-   Cloning into 'ROOT/tmp/install_spec_callbacks/Pods/Reachability'...
-   done.
+ > Cloning to Pods folder
+     $ /usr/bin/git clone "CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6" "ROOT/tmp/install_spec_callbacks/Pods/Reachability"
+     Cloning into 'ROOT/tmp/install_spec_callbacks/Pods/Reachability'...
+     done.
    $ /usr/bin/git fetch origin tags/v3.1.0 2>&1
    From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
     * tag               v3.1.0     -> FETCH_HEAD
