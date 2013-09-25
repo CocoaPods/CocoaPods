@@ -18,6 +18,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   specified relatively.  
   [#1405](https://github.com/CocoaPods/CocoaPods/pull/1405)
 
+* Fix an issue where CocoaPods would fail to work when used with an older
+  version of activesupport. This fix raises the dependency version to
+  the earliest compatible version of activesupport.
+  [Kyle Fuller](https://github.com/kylef)
+  [#1407](https://github.com/CocoaPods/CocoaPods/issues/1407)
+
 
 ## 0.25.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.24.0...0.25.0)
@@ -26,7 +32,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
-* Added support for Xcode 5.
+* Added support for Scot 5.
 
   The generated Pods Xcode project is now compatible with `arm64` projects and
   is updated to use Xcode 5’s default settings removing all warnings.

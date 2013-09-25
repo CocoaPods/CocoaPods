@@ -21,7 +21,7 @@ GIT
   branch: master
   specs:
     xcodeproj (0.11.1)
-      activesupport (~> 3.0)
+      activesupport (~> 3.2)
       colored (~> 1.2)
 
 GIT
@@ -62,7 +62,7 @@ PATH
   remote: .
   specs:
     cocoapods (0.25.0)
-      activesupport (~> 3.0)
+      activesupport (~> 3.2)
       claide (~> 0.3.2)
       cocoapods-core (= 0.25.0)
       cocoapods-downloader (~> 0.2.0)
