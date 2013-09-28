@@ -6,7 +6,8 @@ module Pod
     #
     class Analyzer
 
-      include Config::Mixin
+      include Config::Manager
+      include Config::Environment
 
       autoload :SandboxAnalyzer, 'cocoapods/installer/analyzer/sandbox_analyzer'
 
@@ -179,7 +180,7 @@ module Pod
             target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
             target.archs = @archs_by_target_def[target_definition]
           else
-            target.client_root = config.installation_root
+            target.client_root = environment.installation_root
             target.user_target_uuids = []
             target.user_build_configurations = {}
           end
@@ -339,7 +340,7 @@ module Pod
       #
       def compute_user_project_path(target_definition)
         if target_definition.user_project_path
-          path = config.installation_root + target_definition.user_project_path
+          path = environment.installation_root + target_definition.user_project_path
           path = "#{path}.xcodeproj" unless File.extname(path) == '.xcodeproj'
           path = Pathname.new(path)
           unless path.exist?
@@ -348,7 +349,7 @@ module Pod
           end
 
         else
-          xcodeprojs = Pathname.glob(config.installation_root + '*.xcodeproj')
+          xcodeprojs = Pathname.glob(environment.installation_root + '*.xcodeproj')
           if xcodeprojs.size == 1
             path = xcodeprojs.first
           else
@@ -479,6 +480,7 @@ module Pod
             project_path = compute_user_project_path(target_definition)
             user_project = Xcodeproj::Project.open(project_path)
             targets = compute_user_project_targets(target_definition, user_project)
+            # TODO: this is unused
             platform = compute_platform_for_target_definition(target_definition, targets)
             archs = compute_archs_for_target_definition(target_definition, targets)
             @archs_by_target_def[target_definition] = archs

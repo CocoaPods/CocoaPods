@@ -79,7 +79,7 @@ module Pod
     describe "Updating Sources" do
       extend SpecHelper::TemporaryRepos
 
-      it "update source backed by a git repository" do
+      it "updates source backed by a git repository" do
         set_up_test_repo
         upstream = SpecHelper.temporary_directory + 'upstream'
         FileUtils.cp_r(test_repo_path, upstream)
@@ -89,7 +89,7 @@ module Pod
           `git fetch -q`
           `git branch --set-upstream master origin/master`
         end
-        config.repos_dir = SpecHelper.tmp_repos_path
+        config.stubs(:repos_dir).returns(SpecHelper.tmp_repos_path)
 
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.output.should.match /Already up-to-date/

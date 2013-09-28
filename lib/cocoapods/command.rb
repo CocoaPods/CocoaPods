@@ -23,6 +23,8 @@ module Pod
     require 'cocoapods/command/spec'
     require 'cocoapods/command/init'
 
+    include Pod::Config::Manager
+
     self.abstract_command = true
     self.default_subcommand = 'install'
     self.command = 'pod'
@@ -56,7 +58,7 @@ module Pod
     def self.report_error(exception)
       if exception.is_a?(Interrupt)
         puts "[!] Cancelled".red
-        Pod::Config.instance.verbose? ? raise : exit(1)
+        config.verbose? ? raise : exit(1)
       else
         if ENV['COCOA_PODS_ENV'] != 'development'
           puts UI::ErrorReport.report(exception)
@@ -88,7 +90,6 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    include Pod::Config::Mixin
 
     private
 

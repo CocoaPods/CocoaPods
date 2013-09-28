@@ -4,7 +4,7 @@ module Pod
   describe Project do
 
     before do
-      @project = Project.new(config.sandbox.project_path)
+      @project = Project.new(environment.sandbox.project_path)
     end
 
     #-------------------------------------------------------------------------#
@@ -137,8 +137,8 @@ module Pod
       describe "#reference_for_path" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
-          @file = config.sandbox.pod_dir('BananaLib') + "file.m"
+          @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'), false)
+          @file = environment.sandbox.pod_dir('BananaLib') + "file.m"
           @group = @project.group_for_spec('BananaLib', :source_files)
         end
 
@@ -167,8 +167,8 @@ module Pod
       describe "#reference_for_path" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
-          @file = config.sandbox.pod_dir('BananaLib') + "file.m"
+          @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'), false)
+          @file = environment.sandbox.pod_dir('BananaLib') + "file.m"
           @group = @project.group_for_spec('BananaLib', :source_files)
           @project.add_file_reference(@file, @group)
         end
@@ -179,7 +179,7 @@ module Pod
         end
 
         it "returns nil if no reference for the given path is available" do
-          another_file = config.sandbox.pod_dir('BananaLib') + "another_file.m"
+          another_file = environment.sandbox.pod_dir('BananaLib') + "another_file.m"
           ref = @project.reference_for_path(another_file)
           ref.should.be.nil
         end
@@ -189,13 +189,12 @@ module Pod
             @project.reference_for_path('relative/path/to/file.m')
           end.message.should.match /Paths must be absolute/
         end
-
       end
 
       #----------------------------------------#
 
       it "adds the Podfile configured as a Ruby file" do
-        @project.add_podfile(config.sandbox.root + '../Podfile')
+        @project.add_podfile(environment.sandbox.root + '../Podfile')
         f = @project['Podfile']
         f.source_tree.should == 'SOURCE_ROOT'
         f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
@@ -211,7 +210,7 @@ module Pod
       describe "#spec_group" do
 
         before do
-          @project.add_pod_group('JSONKit', config.sandbox.pod_dir('JSONKit'))
+          @project.add_pod_group('JSONKit', environment.sandbox.pod_dir('JSONKit'))
         end
 
         it "returns the Pod group for root specifications" do

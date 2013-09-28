@@ -17,6 +17,9 @@ module Pod
 
     class << self
 
+      include Config::Manager
+      include Config::Environment
+
       attr_accessor :indentation_level
       attr_accessor :title_level
       attr_accessor :warnings
@@ -147,7 +150,7 @@ module Pod
       #
       def path(pathname)
         if pathname
-          path = pathname.relative_path_from((config.podfile_path.dirname if config.podfile_path) || Pathname.pwd)
+          path = pathname.relative_path_from((environment.podfile_path.dirname if environment.podfile_path) || Pathname.pwd)
           "`#{path}`"
         else
           ''
@@ -279,17 +282,12 @@ module Pod
         end
       end
 
-      def config
-        Config::ConfigManager.instance
-      end
+      # @return [bool] whatever ConfigurationManager returns
+      #
       def verbose?
-        Config::ConfigManager.instance.verbose? && !silent?
+        config.verbose?
       end
 
-      def silent?
-        Config::ConfigManager.instance.silent?
-      end
-      
     end
   end
   UI = UserInterface

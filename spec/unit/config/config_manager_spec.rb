@@ -10,38 +10,42 @@ module Pod
       @config_file_path = temporary_directory + 'config.yaml'
 
       before do
-        @subject = Config::ConfigManager.instance
-        @subject.stubs(:home_dir).returns(temporary_directory)
+        FileUtils.rm_rf(@config_file_path)
+        @subject = Config::ConfigManager.new
+      end
+
+      it "has a singleton" do
+        Config::ConfigManager.instance.should === Config::ConfigManager.instance
       end
 
       it "creates a global config file if one didn't exist" do
         FileUtils.rm_rf(@config_file_path)
-        @subject.set_global('verbose', 'true')
+        @subject.set_global('verbose', true)
         @config_file_path.should.exist
       end
 
       it "stores a global setting" do
-        @subject.set_global('verbose', 'true')
+        @subject.set_global('verbose', true)
         yaml = YAML.load_file(@config_file_path)
         yaml['verbose'].should == true
       end
 
       it "preserves the existing settings of the configuration file" do
-        @subject.set_global('silent', 'true')
-        @subject.set_global('verbose', 'true')
+        @subject.set_global('silent', true)
+        @subject.set_global('verbose', true)
         yaml = YAML.load_file(@config_file_path)
         yaml['silent'].should == true
       end
 
-      xit "allows to store a development pod" do
+      it "allows to store a development pod" do
         @subject.set_global('development.ObjectiveSugar', '~/code/OS')
         yaml = YAML.load_file(@config_file_path)
         yaml['development.ObjectiveSugar'].should == '~/code/OS'
       end
 
       it "returns a globally decided setting" do
-        @subject.set_global('user_name', 'Super Marin')
-        @subject.get_setting('user_name').should == 'Super Marin'
+        @subject.set_global('silent', true)
+        @subject.should.be.silent
       end
 
       it "verbose by default is false" do
@@ -52,8 +56,15 @@ module Pod
         @subject.should.not.be.silent
       end
 
+      it "is verbose only if silent is false and verbose is true" do
+        @subject.set_global('silent', true)
+        @subject.set_global('verbose', true)
+
+        @subject.should.not.be.verbose
+      end
+
       it "skips repo update by default is false" do
-        @subject.should.not.skip_repo_update
+        @subject.should.not.skip_repo_update?
       end
 
       it "clean by default is true" do
@@ -68,14 +79,10 @@ module Pod
         @subject.should.new_version_message
       end
 
-      it "cache_root returns the cache root by default" do
-        @subject.cache_root.to_s.should.include('Library/Caches/CocoaPods')
-      end
-
       it "max_cache_size is 500 MB by default" do
         @subject.max_cache_size.should == 500
       end
-      
+
       it "aggressive_cache is false by default" do
         @subject.should.not.aggressive_cache
       end
@@ -87,17 +94,23 @@ module Pod
       end
 
       it "can accept aggressive cache from ENV" do
-        ENV.stubs(:[]).returns('TRUE')
+        @subject.set_global('aggressive_cache', false)
+        ENV['CP_AGGRESSIVE_CACHE'] = 'TRUE'
         @subject.get_setting('aggressive_cache').should == true
+        ENV.delete('CP_AGGRESSIVE_CACHE')
       end
 
-    end
+      describe "development repos" do
 
-    xit "writes local repos for each project" do
-      @subject.set_local('verbose', 'true')
-      yaml['verbose'].should == true
+        xit "has a friendly API for development repos" do
+          @subject.set_global('development.ObjectiveSugar', '~/code/OS')
+          @subject.devevelopment_pod('ObjectiveSugar').should.equal '~/code/OS'
+        end
+
+      end
     end
 
   end
 
 end
+

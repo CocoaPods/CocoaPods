@@ -9,10 +9,10 @@ module Pod
           @spec = fixture_spec('banana-lib/BananaLib.podspec')
           @consumer = @spec.consumer(:ios)
           target_definition = Podfile::TargetDefinition.new('Pods', nil)
-          @target = AggregateTarget.new(target_definition, config.sandbox)
-          @target.client_root = config.sandbox.root.dirname
+          @target = AggregateTarget.new(target_definition, environment.sandbox)
+          @target.client_root = environment.sandbox.root.dirname
           @target.stubs(:platform).returns(:ios)
-          @pod_target = PodTarget.new([@spec], target_definition, config.sandbox)
+          @pod_target = PodTarget.new([@spec], target_definition, environment.sandbox)
           @pod_target.stubs(:platform).returns(:ios)
           @pod_target.stubs(:spec_consumers).returns([@consumer])
           @target.pod_targets = [@pod_target]
@@ -56,7 +56,7 @@ module Pod
         end
 
         it 'adds the sandbox public headers search paths to the xcconfig, with quotes' do
-          expected = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
+          expected = "\"#{environment.sandbox.public_headers.search_paths.join('" "')}\""
           @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == expected
         end
 

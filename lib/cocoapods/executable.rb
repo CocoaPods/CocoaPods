@@ -13,6 +13,8 @@ module Pod
   #
   module Executable
 
+    extend Pod::Config::Manager
+
     # Creates the methods for the executable with the given name.
     #
     # @param  [Symbol] name
@@ -59,7 +61,7 @@ module Pod
 
       full_command = "#{bin} #{command}"
 
-      if Config.instance.verbose?
+      if config.verbose?
         UI.message("$ #{full_command}")
         stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
       else

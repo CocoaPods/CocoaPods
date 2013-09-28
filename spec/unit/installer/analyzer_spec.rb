@@ -20,7 +20,7 @@ def create_analyzer
   lockfile = Pod::Lockfile.new(hash)
 
   SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-  analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, lockfile)
+  Pod::Installer::Analyzer.new(environment.sandbox, @podfile, lockfile)
 end
 
 #-----------------------------------------------------------------------------#
@@ -61,13 +61,13 @@ module Pod
       #--------------------------------------#
 
       it "updates the repositories by default" do
-        config.skip_repo_update = false
+        config.stubs(:skip_repo_update).returns(false)
         SourcesManager.expects(:update).once
         @analyzer.analyze
       end
 
       it "does not updates the repositories if config indicates to skip them" do
-        config.skip_repo_update = true
+        config.stubs(:skip_repo_update).returns(true)
         SourcesManager.expects(:update).never
         @analyzer.analyze
       end
@@ -82,7 +82,7 @@ module Pod
           'Pods-SVPullToRefresh',
           'Pods-libextobjc'
         ].sort
-        target.support_files_root.should == config.sandbox.root
+        target.support_files_root.should == environment.sandbox.root
 
         target.user_project_path.to_s.should.include 'SampleProject/SampleProject'
         target.client_root.to_s.should.include 'SampleProject'
@@ -94,10 +94,10 @@ module Pod
       end
 
       it "generates the integration library appropriately if the installation will not integrate" do
-        config.integrate_targets = false
+        config.stubs(:integrate_targets).returns(false)
         target = @analyzer.analyze.targets.first
 
-        target.client_root.should == config.installation_root
+        target.client_root.should == environment.installation_root
         target.user_target_uuids.should == []
         target.user_build_configurations.should == {}
         target.platform.to_s.should == 'iOS 6.0'
@@ -215,7 +215,7 @@ module Pod
 
         it "if not specified in the target definition if looks if there is only one project" do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
-          config.installation_root = config.installation_root + 'SampleProject'
+          environment.installation_root = environment.installation_root + 'SampleProject'
 
           path = @analyzer.send(:compute_user_project_path, target_definition)
           path.to_s.should.include 'SampleProject/SampleProject.xcodeproj'

@@ -107,26 +107,26 @@ module Pod
 
         describe "::add_framework_build_settings" do
           it "adds the build settings of a framework to the given xcconfig" do
-            framework_path = config.sandbox.root + 'Parse/Parse.framework'
+            framework_path = environment.sandbox.root + 'Parse/Parse.framework'
             xcconfig = Xcodeproj::Config.new
-            @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
+            @sut.add_framework_build_settings(framework_path, xcconfig, environment.sandbox.root)
             hash_config = xcconfig.to_hash
             hash_config['OTHER_LDFLAGS'].should == "-framework Parse"
             hash_config['FRAMEWORK_SEARCH_PATHS'].should == '"$(PODS_ROOT)/Parse"'
           end
 
           it "doesn't ovverides exiting linker flags" do
-            framework_path = config.sandbox.root + 'Parse/Parse.framework'
+            framework_path = environment.sandbox.root + 'Parse/Parse.framework'
             xcconfig = Xcodeproj::Config.new( { 'OTHER_LDFLAGS' => '-framework CoreAnimation' } )
-            @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
+            @sut.add_framework_build_settings(framework_path, xcconfig, environment.sandbox.root)
             hash_config = xcconfig.to_hash
             hash_config['OTHER_LDFLAGS'].should == "-framework CoreAnimation -framework Parse"
           end
 
           it "doesn't ovverides exiting frameworks search paths" do
-            framework_path = config.sandbox.root + 'Parse/Parse.framework'
+            framework_path = environment.sandbox.root + 'Parse/Parse.framework'
             xcconfig = Xcodeproj::Config.new( { 'FRAMEWORK_SEARCH_PATHS' => '"path/to/frameworks"' } )
-            @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
+            @sut.add_framework_build_settings(framework_path, xcconfig, environment.sandbox.root)
             hash_config = xcconfig.to_hash
             hash_config['FRAMEWORK_SEARCH_PATHS'].should == '"path/to/frameworks" "$(PODS_ROOT)/Parse"'
           end
@@ -136,9 +136,9 @@ module Pod
 
         describe "::add_library_build_settings" do
           it "adds the build settings of a framework to the given xcconfig" do
-            path = config.sandbox.root + 'MapBox/Proj4/libProj4.a'
+            path = environment.sandbox.root + 'MapBox/Proj4/libProj4.a'
             xcconfig = Xcodeproj::Config.new
-            @sut.add_library_build_settings(path, xcconfig, config.sandbox.root)
+            @sut.add_library_build_settings(path, xcconfig, environment.sandbox.root)
             hash_config = xcconfig.to_hash
             hash_config['OTHER_LDFLAGS'].should == "-lProj4"
             hash_config['LIBRARY_SEARCH_PATHS'].should == '"$(PODS_ROOT)/MapBox/Proj4"'
@@ -173,3 +173,4 @@ module Pod
     end
   end
 end
+

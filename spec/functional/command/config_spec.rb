@@ -11,13 +11,13 @@ module Pod
     pod_path = '~/code/OSS/ObjectiveSugar'
     project_name = 'SampleProject'
 
+    @config_file_path = temporary_directory + 'config.yaml'
+
     before do
-      # Dir.stubs(:pwd).returns('~/code/OSS/SampleProject')
-
-      @config_file_path = temporary_directory + "mock_config.yaml"
-      Pod::Config.instance.stubs(:user_settings_file).returns(@config_file_path)
+      FileUtils.rm_rf(@config_file_path)
+      @subject = Config::ConfigManager.new
+      # TODO: stub the file accessor
     end
-
 
     it "writes local repos for each project" do
       run_command('config', "--local", pod_name, pod_path)
@@ -34,54 +34,41 @@ module Pod
     end
 
     it "deletes global configuration" do
-        run_command('config', "--global", pod_name, pod_path)
-        run_command('config', "--global", "--delete", pod_name)
-        yaml = YAML.load(File.open(@config_file_path))
+      run_command('config', "--global", pod_name, pod_path)
+      run_command('config', "--global", "--delete", pod_name)
+      yaml = YAML.load(File.open(@config_file_path))
 
-        yaml.should.not.has_key? GLOBAL_OVERRIDES
+      yaml.should.not.has_key? GLOBAL_OVERRIDES
     end
 
 
 
-      it "defaults to local scope" do
-        run_command('config', pod_name, pod_path)
-        yaml = YAML.load(File.open(@config_file_path))
+    it "defaults to local scope" do
+      run_command('config', pod_name, pod_path)
+      yaml = YAML.load(File.open(@config_file_path))
 
-        yaml[LOCAL_OVERRIDES][project_name][pod_name].should.equal pod_path
-      end
+      yaml[LOCAL_OVERRIDES][project_name][pod_name].should.equal pod_path
+    end
 
-      it "raises help! if invalid args are provided" do
-        [
-          lambda { run_command("config", 'ObjectiveSugar') },
-          lambda { run_command("config", "--local", 'ObjectiveSugar') },
-          lambda { run_command("config", "--global", 'ObjectiveSugar') },
-          lambda { run_command("config", '~/code/OSS/ObjectiveSugar') },
-        ].each { |invalid| invalid.should.raise CLAide::Help }
-      end
+    it "raises help! if invalid args are provided" do
+      [
+        lambda { run_command("config", 'ObjectiveSugar') },
+        lambda { run_command("config", "--local", 'ObjectiveSugar') },
+        lambda { run_command("config", "--global", 'ObjectiveSugar') },
+        lambda { run_command("config", '~/code/OSS/ObjectiveSugar') },
+      ].each { |invalid| invalid.should.raise CLAide::Help }
+    end
 
-      xit "deletes local configuration by default" do
-        run_command('config', "--global", pod_name, pod_path)
-        run_command('config', "--local", pod_name, pod_path)
-        run_command('config', "--delete", pod_name)
-        yaml = YAML.load(File.open(@config_file_path))
-        puts yaml
-        yaml.should.not.has_key? LOCAL_OVERRIDES
-        yaml[GLOBAL_OVERRIDES][pod_name].should.equal pod_path
-      end
+    xit "deletes local configuration by default" do
+      run_command('config', "--global", pod_name, pod_path)
+      run_command('config', "--local", pod_name, pod_path)
+      run_command('config', "--delete", pod_name)
+      yaml = YAML.load(File.open(@config_file_path))
+      puts yaml
+      yaml.should.not.has_key? LOCAL_OVERRIDES
+      yaml[GLOBAL_OVERRIDES][pod_name].should.equal pod_path
+    end
 
   end
 end
 
-# ===================
-# Config file format
-# ===================
-#
-# ---
-# LOCAL_OVERRIDES:
-#   SampleApp:
-#     ARAnalytics: ~/code/ARAnalytics
-# 
-# GLOBAL_OVERRIDES:
-#   ObjectiveRecord: ~/code/OSS/ObjectiveRecord
-#   ObjectiveSugar: ~/code/OSS/ObjectiveSugar
-# 

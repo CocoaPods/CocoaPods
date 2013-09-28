@@ -7,7 +7,7 @@ module Pod
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.link_with_first_target = true
-        @lib = AggregateTarget.new(@target_definition, config.sandbox)
+        @lib = AggregateTarget.new(@target_definition, environment.sandbox)
       end
 
       it "returns the target_definition that generated it" do
@@ -31,8 +31,8 @@ module Pod
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.link_with_first_target = true
-        @lib = AggregateTarget.new(@target_definition, config.sandbox)
-        @lib.client_root = config.sandbox.root.dirname
+        @lib = AggregateTarget.new(@target_definition, environment.sandbox)
+        @lib.client_root = environment.sandbox.root.dirname
       end
 
       it "returns the absolute path of the xcconfig file" do

@@ -81,7 +81,7 @@ PROFILE_ERB_TEMPLATE = <<-EOS
     #"^<%= ruby_prefix %>"
     #"^<%= pod_prefix %>"
     #"^<%= xcode_app_path %>"
-    #"^<%= Pod::Config.instance.repos_dir %>"
+    #"^<%= Pod::Config::ConfigEnvironment.repos_dir %>"
 <% prefixes.each do |prefix| %>
     #"^<%= prefix %>/*"
 <% end %>
@@ -94,8 +94,8 @@ PROFILE_ERB_TEMPLATE = <<-EOS
     "/dev/null"
   )
   (regex
-    #"^<%= Pod::Config.instance.project_root %>"
-    #"^<%= Pod::Config.instance.repos_dir %>"
+    #"^<%= Pod::Config::ConfigEnvironment.instance.project_root %>"
+    #"^<%= Pod::Config::ConfigEnvironment.instance.repos_dir %>"
     #"^/Users/[^.]+/Library/Caches/CocoaPods/*"
     #"^/dev/tty"
     #"^/private/var"
