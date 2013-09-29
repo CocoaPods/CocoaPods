@@ -110,6 +110,8 @@ install_resource()
       echo "xcrun momc \\"${PODS_ROOT}/$1\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodeld`.momd\\""
       xcrun momc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodeld`.momd"
       ;;
+    *.xcassets)
+      ;;
     /*)
       echo "$1"
       echo "$1" >> "$RESOURCES_TO_COPY"
