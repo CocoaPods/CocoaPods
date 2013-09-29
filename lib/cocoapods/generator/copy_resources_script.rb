@@ -73,6 +73,7 @@ module Pod
           script += %Q[install_resource "#{resource}"\n]
         end
         script += RSYNC_CALL
+        script += XCASSETS_COMPILE
         script
       end
 
@@ -131,6 +132,11 @@ fi
 rm -f "$RESOURCES_TO_COPY"
 EOS
 
+
+      XCASSETS_COMPILE = <<EOS
+
+actool --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${IPHONEOS_DEPLOYMENT_TARGET}" --target-device `if [ "${TARGETED_DEVICE_FAMILY}" -eq 1 ]; then echo "iphone"; else echo "ipad"; fi` --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app" `find . -name '*.xcassets'`
+EOS
     end
   end
 end
