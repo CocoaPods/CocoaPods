@@ -140,7 +140,7 @@ EOS
 if [ `find . -name '*.xcassets' | wc -l` -ne 0 ]
 then
   DEVICE=`if [ "${TARGETED_DEVICE_FAMILY}" -eq 1 ]; then echo "iphone"; else echo "ipad"; fi`
-  actool --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${IPHONEOS_DEPLOYMENT_TARGET}" --target-device ${DEVICE} --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app" `find . -name '*.xcassets'`
+  actool --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${IPHONEOS_DEPLOYMENT_TARGET}" --target-device ${DEVICE} --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app" `find $PWD -name '*.xcassets'`
 fi
 EOS
     end
