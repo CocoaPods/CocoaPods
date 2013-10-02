@@ -37,11 +37,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   The generated Pods Xcode project is now compatible with `arm64` projects and
   is updated to use Xcode 5’s default settings removing all warnings.
 
-  **NOTE to Xcode 4 users:**
-  1. This means that the Pods Xcode project now sets the `ONLY_ACTIVE_ARCH`
-     build setting to `YES` in the `Debug` configuration. You’ll have to set the
-     same on your project/target, otherwise the build _will_ fail.
-  2. When building a **iOS** project from the command-line with the `xcodebuild`
+  **NOTE to users migrating projects from Xcode 4, or are still using Xcode 4:**
+  1. The Pods Xcode project now sets the `ONLY_ACTIVE_ARCH` build setting to
+     `YES` in the `Debug` configuration. You _will_ have to set the same on your
+     project/target, otherwise the build _will_ fail.
+  2. Ensure your project/target has an `ARCHS` value set, otherwise the build
+     _will_ fail.
+  3. When building a **iOS** project from the command-line with the `xcodebuild`
      tool you’ll need to completely disable this setting by appending to your
      build command: `ONLY_ACTIVE_ARCH=NO`.
 
