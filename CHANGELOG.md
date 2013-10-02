@@ -43,9 +43,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
      project/target, otherwise the build _will_ fail.
   2. Ensure your project/target has an `ARCHS` value set, otherwise the build
      _will_ fail.
-  3. When building a **iOS** project from the command-line with the `xcodebuild`
-     tool you’ll need to completely disable this setting by appending to your
-     build command: `ONLY_ACTIVE_ARCH=NO`.
+  3. When building a **iOS** project from the command-line, with the `xcodebuild`
+     tool that comes with Xcode 4, you’ll need to completely disable this setting
+     by appending to your build command: `ONLY_ACTIVE_ARCH=NO`.
 
   [#1352](https://github.com/CocoaPods/CocoaPods/pull/1352)
 
