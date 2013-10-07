@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 24b9357066e2d174d5e066de78b82e57b94a593a
+  revision: 49b1d82ff9fccc5cd10db9ddec71658c90686f23
   branch: master
   specs:
     cocoapods-core (0.25.0)
@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 12c03cded738b149371e0aecc344d4436061c38c
+  revision: 0f41aaf98dc8c595561338023caf08ee7f0758be
   branch: master
   specs:
     xcodeproj (0.11.1)
@@ -47,17 +47,6 @@ GIT
     prettybacon (0.0.1)
       bacon (~> 1.2)
 
-GIT
-  remote: https://github.com/lemurheavy/coveralls-ruby.git
-  revision: b1a5dcc23a4a9cb02a6a1560c63861d102530cd9
-  specs:
-    coveralls (0.7.0)
-      multi_json (~> 1.3)
-      rest-client
-      simplecov (>= 0.7)
-      term-ansicolor
-      thor
-
 PATH
   remote: .
   specs:
@@ -82,6 +71,12 @@ GEM
     bacon (1.2.0)
     coderay (1.0.9)
     colored (1.2)
+    coveralls (0.7.0)
+      multi_json (~> 1.3)
+      rest-client
+      simplecov (>= 0.7)
+      term-ansicolor
+      thor
     diffy (3.0.1)
     escape (0.0.4)
     ffi (1.9.0)
@@ -142,7 +137,7 @@ DEPENDENCIES
   cocoapods!
   cocoapods-core!
   cocoapods-downloader!
-  coveralls!
+  coveralls
   diffy
   github-markup
   kicker!
