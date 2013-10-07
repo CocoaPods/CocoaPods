@@ -182,7 +182,9 @@ module Pod
             target.client_root = config.installation_root
             target.user_target_uuids = []
             target.user_build_configurations = {}
-            target.archs = '$(ARCHS_STANDARD)'
+            if target_definition.platform.name == :osx
+              target.archs = '$(ARCHS_STANDARD_64_BIT)'
+            end
           end
 
           grouped_specs = specs.map do |spec|

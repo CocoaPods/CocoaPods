@@ -45,7 +45,7 @@ module Pod
 
         settings = {}
         if library.archs
-        settings['ARCHS'] = library.archs
+          settings['ARCHS'] = library.archs
         else
           settings.delete('ARCHS')
         end
