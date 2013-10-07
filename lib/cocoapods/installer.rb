@@ -28,13 +28,10 @@ module Pod
   #
   class Installer
 
-    autoload :Analyzer,                 'cocoapods/installer/analyzer'
-    autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
-    autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
-    autoload :TargetInstaller,          'cocoapods/installer/target_installer'
-    autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
-    autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
-    autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
+    autoload :Analyzer,              'cocoapods/installer/analyzer'
+    autoload :PodSourceInstaller,    'cocoapods/installer/pod_source_installer'
+    autoload :PodsProjectGenerator,  'cocoapods/installer/pods_project_generator'
+    autoload :UserProjectIntegrator, 'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
 
@@ -83,13 +80,14 @@ module Pod
     # @return [void]
     #
     def install!
-      resolve_dependencies
-      download_dependencies
+      analyze_dependencies
+      download_sources
       generate_pods_project
+      write_lockfiles
       integrate_user_project if config.integrate_targets?
     end
 
-    def resolve_dependencies
+    def analyze_dependencies
       UI.section "Analyzing dependencies" do
         analyze
         prepare_for_legacy_compatibility
@@ -97,25 +95,25 @@ module Pod
       end
     end
 
-    def download_dependencies
+    def download_sources
       UI.section "Downloading dependencies" do
         create_file_accessors
         install_pod_sources
         run_pre_install_hooks
         clean_pod_sources
+        refresh_file_accessors
+        link_headers
       end
     end
 
     def generate_pods_project
       UI.section "Generating Pods project" do
-        prepare_pods_project
-        install_file_references
-        install_libraries
-        set_target_dependencies
-        link_aggregate_target
+        installer = PodsProjectGenerator.new(sandbox, aggregate_targets)
+        installer.user_build_configurations = analysis_result.all_user_build_configurations
+        installer.podfile_path = config.podfile_path
+        installer.install
         run_post_install_hooks
-        write_pod_project
-        write_lockfiles
+        installer.write_project
       end
     end
 
@@ -130,11 +128,8 @@ module Pod
     #
     attr_reader :analysis_result
 
-    # @return [Pod::Project] the `Pods/Pods.xcodeproj` project.
-    #
-    attr_reader :pods_project
-
     # @return [Array<String>] The Pods that should be installed.
+    # TODO
     #
     attr_reader :names_of_pods_to_install
 
@@ -146,6 +141,10 @@ module Pod
     # @return [Array<Specification>] The specifications that where installed.
     #
     attr_accessor :installed_specs
+
+    def pods_project
+      sandbox.project
+    end
 
     #-------------------------------------------------------------------------#
 
@@ -192,12 +191,12 @@ module Pod
     def clean_sandbox
       sandbox.public_headers.implode!
       pod_targets.each do |pod_target|
-        pod_target.build_headers.implode!
+        pod_target.private_headers_store.implode!
       end
 
-      unless sandbox_state.deleted.empty?
+      unless sandbox.state.deleted.empty?
         title_options = { :verbose_prefix => "-> ".red }
-        sandbox_state.deleted.each do |pod_name|
+        sandbox.state.deleted.each do |pod_name|
           UI.titled_section("Removing #{pod_name}".red, title_options) do
             sandbox.clean_pod(pod_name)
           end
@@ -210,7 +209,7 @@ module Pod
     #
     def create_file_accessors
       aggregate_targets.each do |target|
-        target.pod_targets.each do |pod_target|
+        target.children.each do |pod_target|
           pod_root = sandbox.pod_dir(pod_target.root_spec.name)
           path_list = Sandbox::PathList.new(pod_root)
           file_accessors = pod_target.specs.map do |spec|
@@ -229,7 +228,7 @@ module Pod
     #
     def install_pod_sources
       @installed_specs = []
-      pods_to_install = sandbox_state.added | sandbox_state.changed
+      pods_to_install = sandbox.state.added | sandbox.state.changed
       title_options = { :verbose_prefix => "-> ".green }
       root_specs.sort_by(&:name).each do |spec|
         if pods_to_install.include?(spec.name)
@@ -277,132 +276,77 @@ module Pod
       end
     end
 
-    # Creates the Pods project from scratch if it doesn't exists.
+
+    # Reads the file accessors contents from the file system.
+    #
+    # @note   The contents of the file accessors are modified by the clean
+    #         step of the #{PodSourceInstaller} and by the pre install hooks.
     #
     # @return [void]
     #
-    # @todo   Clean and modify the project if it exists.
-    #
-    def prepare_pods_project
-      UI.message "- Creating Pods project" do
-        @pods_project = Pod::Project.new(sandbox.project_path)
-
-        analysis_result.all_user_build_configurations.each do |name, type|
-          @pods_project.add_build_configuration(name, type)
-        end
-
-        pod_names = pod_targets.map(&:pod_name).uniq
-        pod_names.each do |pod_name|
-          path = sandbox.pod_dir(pod_name)
-          local = sandbox.local?(pod_name)
-          @pods_project.add_pod_group(pod_name, path, local)
-        end
-
-        if config.podfile_path
-          @pods_project.add_podfile(config.podfile_path)
-        end
-
-        sandbox.project = @pods_project
-        platforms = aggregate_targets.map(&:platform)
-        osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
-        ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
-        @pods_project.build_configurations.each do |build_configuration|
-          build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
-          build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
-          build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
-        end
+    def refresh_file_accessors
+      pod_targets.map(&:file_accessors).flatten.each do |file_accessor|
+        file_accessor.refresh
       end
     end
 
-
-    # Installs the file references in the Pods project. This is done once per
-    # Pod as the same file reference might be shared by multiple aggregate
-    # targets.
+    # Creates the link to the headers of the Pod in the sandbox.
     #
     # @return [void]
     #
-    def install_file_references
-      installer = FileReferencesInstaller.new(sandbox, pod_targets, pods_project)
-      installer.install!
-    end
-
-    # Installs the aggregate targets of the Pods projects and generates their
-    # support files.
-    #
-    # @return [void]
-    #
-    def install_libraries
-      UI.message"- Installing libraries" do
-        pod_targets.sort_by(&:name).each do |pod_target|
-          next if pod_target.target_definition.empty?
-          target_installer = PodTargetInstaller.new(sandbox, pod_target)
-          target_installer.install!
-        end
-
-        aggregate_targets.sort_by(&:name).each do |target|
-          next if target.target_definition.empty?
-          target_installer = AggregateTargetInstaller.new(sandbox, target)
-          target_installer.install!
-        end
-
-        # TODO
-        # Move and add specs
-        pod_targets.sort_by(&:name).each do |pod_target|
+    def link_headers
+      UI.section "Linking headers" do
+        pod_targets.each do |pod_target|
           pod_target.file_accessors.each do |file_accessor|
-            file_accessor.spec_consumer.frameworks.each do |framework|
-              pod_target.target.add_system_framework(framework)
+            headers_sandbox = Pathname.new(file_accessor.spec.root.name)
+            pod_target.private_headers_store.add_search_path(headers_sandbox)
+            sandbox.public_headers.add_search_path(headers_sandbox)
+
+            header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
+              pod_target.private_headers_store.add_files(namespaced_path, files)
+            end
+
+            header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
+              sandbox.public_headers.add_files(namespaced_path, files)
             end
           end
         end
       end
     end
 
-    def set_target_dependencies
-      aggregate_targets.each do |aggregate_target|
-        aggregate_target.pod_targets.each do |pod_target|
-          aggregate_target.target.add_dependency(pod_target.target)
-          pod_target.dependencies.each do |dep|
+    # Computes the destination sub-directory in the sandbox
+    #
+    # @param  [Pathname] headers_sandbox
+    #         The sandbox where the headers links should be stored for this
+    #         Pod.
+    #
+    # @param  [Specification::Consumer] consumer
+    #         The consumer for which the headers need to be linked.
+    #
+    # @param  [Array<Pathname>] headers
+    #         The absolute paths of the headers which need to be mapped.
+    #
+    # @return [Hash{Pathname => Array<Pathname>}] A hash containing the
+    #         headers folders as the keys and the absolute paths of the
+    #         header files as the values.
+    #
+    def header_mappings(headers_sandbox, file_accessor, headers)
+      consumer = file_accessor.spec_consumer
+      dir = headers_sandbox
+      dir = dir + consumer.header_dir if consumer.header_dir
 
-            unless dep == pod_target.pod_name
-              pod_dependency_target = aggregate_target.pod_targets.find { |target| target.pod_name == dep }
-              # TODO remove me
-              unless pod_dependency_target
-                puts "[BUG] DEP: #{dep}"
-              end
-              pod_target.target.add_dependency(pod_dependency_target.target)
-            end
-          end
+      mappings = {}
+      headers.each do |header|
+        sub_dir = dir
+        if consumer.header_mappings_dir
+          header_mappings_dir = file_accessor.path_list.root + consumer.header_mappings_dir
+          relative_path = header.relative_path_from(header_mappings_dir)
+          sub_dir = sub_dir + relative_path.dirname
         end
+        mappings[sub_dir] ||= []
+        mappings[sub_dir] << header
       end
-    end
-
-    # Links the aggregate targets with all the dependent libraries.
-    #
-    # @note   This is run in the integration step to ensure that targets
-    #         have been created for all per spec libraries.
-    #
-    def link_aggregate_target
-      aggregate_targets.each do |aggregate_target|
-        native_target = aggregate_target.target
-        aggregate_target.pod_targets.each do |pod_target|
-          product = pod_target.target.product_reference
-          native_target.frameworks_build_phase.add_file_reference(product)
-        end
-      end
-    end
-
-    # Writes the Pods project to the disk.
-    #
-    # @return [void]
-    #
-    def write_pod_project
-      UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
-        pods_project.pods.remove_from_project if pods_project.pods.empty?
-        pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
-        pods_project.sort
-        pods_project.recreate_user_schemes(false)
-        pods_project.save
-      end
+      mappings
     end
 
     # Writes the Podfile and the lock files.
@@ -412,15 +356,17 @@ module Pod
     # @return [void]
     #
     def write_lockfiles
-      # checkout_options = sandbox.checkout_options
-      @lockfile = Lockfile.generate(podfile, analysis_result.specifications)
+      UI.section "Writing Lockfiles" do
+        # checkout_options = sandbox.checkout_options
+        @lockfile = Lockfile.generate(podfile, analysis_result.specifications)
 
-      UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
-        @lockfile.write_to_disk(config.lockfile_path)
-      end
+        UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
+          @lockfile.write_to_disk(config.lockfile_path)
+        end
 
-      UI.message "- Writing Manifest in #{UI.path sandbox.manifest_path}" do
-        @lockfile.write_to_disk(sandbox.manifest_path)
+        UI.message "- Writing Manifest in #{UI.path sandbox.manifest_path}" do
+          @lockfile.write_to_disk(sandbox.manifest_path)
+        end
       end
     end
 
@@ -617,7 +563,7 @@ module Pod
     #
     def libraries_using_spec(spec)
       aggregate_targets.select do |aggregate_target|
-        aggregate_target.pod_targets.any? { |pod_target| pod_target.specs.include?(spec) }
+        aggregate_target.children.any? { |pod_target| pod_target.specs.include?(spec) }
       end
     end
 
@@ -625,7 +571,7 @@ module Pod
     #         process.
     #
     def pod_targets
-      aggregate_targets.map(&:pod_targets).flatten
+      aggregate_targets.map(&:children).flatten
     end
 
     #-------------------------------------------------------------------------#
@@ -639,12 +585,6 @@ module Pod
     #
     def root_specs
       analysis_result.specifications.map { |spec| spec.root }.uniq
-    end
-
-    # @return [SpecsState] The state of the sandbox returned by the analyzer.
-    #
-    def sandbox_state
-      analysis_result.sandbox_state
     end
 
     #-------------------------------------------------------------------------#

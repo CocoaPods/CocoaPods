@@ -11,22 +11,14 @@ module Pod
 
         #---------------------------------------------------------------------#
 
-        describe "::default_ld_flags" do
-          it "returns the default linker flags" do
-            podfile = stub( :set_arc_compatibility_flag? => false )
-            target_definition = stub( :podfile => podfile )
-            target = stub( :target_definition => target_definition )
-            result = @sut.default_ld_flags(target)
-            result.should == '-ObjC'
+        describe "::prefix" do
+          it "returns the prefix to use for the target with the given name" do
+            @sut.prefix('Pods').should == 'PODS_'
+            @sut.prefix('Pods-BananaLib').should == 'PODS_BANANALIB_'
           end
 
-          it "includes the ARC compatibility flag if required by the Podfile" do
-            podfile = stub( :set_arc_compatibility_flag? => true )
-            target_definition = stub( :podfile => podfile )
-            spec_consumer = stub( :requires_arc? => true )
-            target = stub( :target_definition => target_definition,  :spec_consumers => [spec_consumer] )
-            result = @sut.default_ld_flags(target)
-            result.should == '-ObjC -fobjc-arc'
+          it "replaces any non character which is not in the alphabet with an underscore" do
+            @sut.prefix('Pods-BananaLib+Categories').should == 'PODS_BANANALIB_CATEGORIES_'
           end
         end
 
@@ -36,6 +28,25 @@ module Pod
           it "quotes strings" do
             result = @sut.quote(['string1', 'string2'])
             result.should == '"string1" "string2"'
+          end
+        end
+
+        #---------------------------------------------------------------------#
+
+        describe "::default_ld_flags" do
+          it "returns the default linker flags" do
+            target = Target.new('BananaLib')
+            target.set_arc_compatibility_flag = false
+            result = @sut.default_ld_flags(target)
+            result.should == '-ObjC'
+          end
+
+          it "includes the ARC compatibility flag if required by the Podfile" do
+            target = Target.new('BananaLib')
+            target.set_arc_compatibility_flag = true
+            target.stubs(:spec_consumers).returns([stub( :requires_arc? => true )])
+            result = @sut.default_ld_flags(target)
+            result.should == '-ObjC -fobjc-arc'
           end
         end
 

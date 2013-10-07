@@ -7,7 +7,8 @@ module Pod
       @target_definition = Podfile::TargetDefinition.new('MyApp', nil)
       @spec = Spec.new
       @spec.name = 'RestKit'
-      @lib = AggregateTarget.new(@target_definition, config.sandbox)
+      @lib = Target.new('Pods-MyApp', nil)
+      @lib.target_definition = @target_definition
       @rep = Hooks::LibraryRepresentation.new(config.sandbox, @lib)
     end
 
@@ -29,10 +30,12 @@ module Pod
       end
 
       it "returns the path of the prefix header" do
+        @lib.prefix_header_path = temporary_directory + 'Pods/Pods-MyApp-prefix.pch'
         @rep.prefix_header_path.should == temporary_directory + 'Pods/Pods-MyApp-prefix.pch'
       end
 
       it "returns the path of the copy resources script" do
+        @lib.copy_resources_script_path = temporary_directory + 'Pods/Pods-MyApp-resources.sh'
         @rep.copy_resources_script_path.should == temporary_directory + 'Pods/Pods-MyApp-resources.sh'
       end
 
@@ -62,7 +65,7 @@ module Pod
 
       it "returns the native target" do
         target = stub()
-        @lib.target = target
+        @lib.native_target = target
         @rep.target.should == target
       end
 

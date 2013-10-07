@@ -38,6 +38,11 @@ module Pod
         @accessor.platform_name.should == :ios
       end
 
+      it "can be refreshed" do
+        Sandbox::PathList.any_instance.expects(:read_file_system)
+        @accessor.refresh
+      end
+
     end
 
     #-------------------------------------------------------------------------#

@@ -70,7 +70,7 @@ module Pod
       #         process.
       #
       def target
-        library.target
+        library.native_target
       end
 
       #-----------------------------------------------------------------------#
@@ -83,7 +83,6 @@ module Pod
       def initialize(sandbox, library)
         @sandbox = sandbox
         @library = library
-        raise "[BUG]" unless library.is_a?(AggregateTarget)
       end
 
       #-----------------------------------------------------------------------#

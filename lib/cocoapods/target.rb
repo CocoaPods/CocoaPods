@@ -8,42 +8,169 @@ module Pod
   #
   class Target
 
-    # @return [PBXNativeTarget] the target definition of the Podfile that
-    #         generated this target.
+    # @return [String]
     #
-    attr_reader :target_definition
+    attr_accessor :short_name
 
-    # @return [Sandbox] The sandbox where the Pods should be installed.
+    # @return [Target]
     #
-    attr_reader :sandbox
+    attr_accessor :parent
+
+    def initialize(short_name, parent = nil)
+      @short_name = short_name
+      @parent = parent
+      @children = []
+      @pod_targets = []
+      @specs = []
+      @file_accessors = []
+      @user_target_uuids = []
+      @user_build_configurations = {}
+
+      if parent
+        parent.children << self
+      end
+    end
+
+    # @return [Array]
+    #
+    attr_accessor :children
+
+    # @return [Target]
+    #
+    def root
+      if parent
+        parent
+      else
+        self
+      end
+    end
+
+    # @return [Bool]
+    #
+    def root?
+      parent.nil?
+    end
 
     # @return [String] the name of the library.
     #
     def name
-      label
+      if root?
+        short_name
+      else
+        "#{parent.name}-#{short_name}"
+      end
     end
 
     # @return [String] the name of the library.
     #
     def product_name
-      "lib#{label}.a"
-    end
-
-    # @return [String] the XCConfig namespaced prefix.
-    #
-    def xcconfig_prefix
-      label.upcase.gsub(/[^A-Z]/, '_') + '_'
+      "lib#{name}.a"
     end
 
     # @return [String] A string suitable for debugging.
     #
     def inspect
-      "<#{self.class} name=#{name} >"
+      "<#{self.class} name=#{name}>"
     end
 
+    # @return [String]
+    #
+    def to_s
+      s = "#{name}"
+      s << " #{platform}" if platform
+      s
+    end
+
+
+    public
+
+    # @!group Support files
     #-------------------------------------------------------------------------#
 
-    # @!group Information storage
+    # @return [PBXNativeTarget] The Xcode native target generated in the Pods
+    #         project.
+    #
+    attr_accessor :native_target
+
+    # @return [Pathname] The directory where the support files are stored.
+    #
+    attr_accessor :support_files_root
+
+    # @return [HeadersStore] the build header store.
+    #
+    attr_accessor :private_headers_store
+
+    # @return [HeadersStore] the public header store.
+    #
+    attr_accessor :public_headers_store
+
+    # @return [Xcodeproj::Config] The public configuration.
+    #
+    attr_accessor :xcconfig
+
+    # @return [Pathname] The path of the public configuration.
+    #
+    attr_accessor :xcconfig_path
+
+    # @return [Pathname] The path of the copy resources script
+    #
+    attr_accessor :copy_resources_script_path
+
+    # @return [Pathname] The path of the prefix header file.
+    #
+    attr_accessor :prefix_header_path
+
+
+    public
+
+    # @!group Aggregate
+    #-------------------------------------------------------------------------#
+
+    #
+    #
+    def aggregate?
+      root?
+    end
+
+    #----------------------------------------#
+
+    # @return [Platform] the platform for this library.
+    #
+    def platform
+      if root?
+        @platform
+      else
+        root.platform
+      end
+    end
+
+    # Sets the platform of the target
+    #
+    def platform=(platform)
+      if root?
+        @platform = platform
+      else
+        raise "The platform must be set in the root target"
+      end
+    end
+
+    #----------------------------------------#
+
+    # @return [Pathname] the path of the user project that this target will
+    #         integrate as identified by the analyzer.
+    #
+    # @note   The project instance is not stored to prevent editing different
+    #         instances.
+    #
+    attr_accessor :user_project_path
+
+    # @return [String] the list of the UUIDs of the user targets that will be
+    #         integrated by this target as identified by the analyzer.
+    #
+    # @note   The target instances are not stored to prevent editing different
+    #         instances.
+    #
+    attr_accessor :user_target_uuids
 
     # @return [Hash{String=>Symbol}] A hash representing the user build
     #         configurations where each key corresponds to the name of a
@@ -51,68 +178,92 @@ module Pod
     #
     attr_accessor :user_build_configurations
 
-    # @return [PBXNativeTarget] the target generated in the Pods project for
-    #         this library.
+    # @return [Bool]
     #
-    attr_accessor :target
+    attr_accessor :set_arc_compatibility_flag
+    alias :set_arc_compatibility_flag? :set_arc_compatibility_flag
 
-    # @return [Platform] the platform for this library.
+    # @return [Bool]
     #
-    def platform
-      @platform ||= target_definition.platform
-    end
+    attr_accessor :generate_bridge_support
+    alias :generate_bridge_support? :generate_bridge_support
 
     # @return [String] The value for the ARCHS build setting.
     #
     attr_accessor :archs
 
+
+    public
+
+    # @!group Specs
     #-------------------------------------------------------------------------#
 
-    # @!group Support files
+    attr_accessor :specs
 
-    # @return [Pathname] the folder where to store the support files of this
-    #         library.
+    # @return [Specification] the spec for the target.
     #
-    def support_files_root
-      @sandbox.library_support_files_dir(name)
+    def specs
+      (@specs + children.map(&:specs)).flatten
     end
 
-    # @return [Pathname] the absolute path of the xcconfig file.
+    # @return [Array<Specification::Consumer>] The consumers of the Pod.
     #
-    def xcconfig_path
-      support_files_root + "#{label}.xcconfig"
+    def spec_consumers
+      specs.map { |spec| spec.consumer(platform) }
     end
 
-    # @return [Pathname] the absolute path of the private xcconfig file.
+    # @return [Specification] The root specification for the target.
     #
-    def xcconfig_private_path
-      support_files_root + "#{label}-Private.xcconfig"
+    def root_spec
+      specs.first.root
     end
 
-    # @return [Pathname] the absolute path of the header file which contains
-    #         the information about the installed pods.
+    # @return [String] The name of the Pod that this target refers to.
     #
-    def target_environment_header_path
-      support_files_root + "#{target_definition.label.to_s}-environment.h"
+    def pod_name
+      root_spec.name
     end
 
-    # @return [Pathname] the absolute path of the prefix header file.
+    # @return [Array<Sandbox::FileAccessor>] the file accessors for the
+    #         specifications of this target.
     #
-    def prefix_header_path
-      support_files_root + "#{label}-prefix.pch"
+    attr_accessor :file_accessors
+
+    # @return [Array<String>] The names of the Pods on which this target
+    #         depends.
+    #
+    def dependencies
+      specs.map do |spec|
+        spec.consumer(platform).dependencies.map { |dep| Specification.root_name(dep.name) }
+      end.flatten.reject { |dep| dep == pod_name }
     end
 
-    # @return [Pathname] the absolute path of the bridge support file.
+    # @return [Array<String>]
     #
-    def bridge_support_path
-      support_files_root + "#{label}.bridgesupport"
+    def frameworks
+      spec_consumers.map(&:frameworks).flatten.uniq
     end
 
-    # @return [Pathname] the path of the dummy source generated by CocoaPods
+    # @return [Array<String>]
     #
-    def dummy_source_path
-      support_files_root + "#{label}-dummy.m"
+    def libraries
+      spec_consumers.map(&:libraries).flatten.uniq
     end
+
+    # @return [Bool]
+    #
+    attr_accessor :inhibits_warnings
+    alias :inhibits_warnings? :inhibits_warnings
+
+
+    public
+
+    # @!group Deprecated
+    #-------------------------------------------------------------------------#
+
+    # TODO: This has been preserved only for the LibraryRepresentation.
+    #
+    attr_accessor :target_definition
 
     #-------------------------------------------------------------------------#
 

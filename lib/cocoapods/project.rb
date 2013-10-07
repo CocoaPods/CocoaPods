@@ -15,11 +15,7 @@ module Pod
     #
     def initialize(path, skip_initialization = false)
       super(path, skip_initialization)
-      @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
-      @pods = new_group('Pods')
-      @development_pods = new_group('Development Pods')
-      set_cocoapods_defaults
     end
 
     # @return [void] Prepares the project with the build settings used by
@@ -31,27 +27,55 @@ module Pod
       end
     end
 
+    # @return [Hash] The names of the specification subgroups by key.
+    #
+    ROOT_GROUPS = {
+      :support_files    => 'Target Files',
+      :pods             => 'Pods',
+      :development_pods => 'Development Pods',
+    }
+
     # @return [PBXGroup] The group for the support files of the aggregate
     #         targets.
     #
-    attr_reader :support_files_group
+    def support_files_group
+      create_group_if_needed(ROOT_GROUPS[:support_files])
+    end
 
     # @return [PBXGroup] The group for the Pods.
     #
-    attr_reader :pods
+    def pods
+      name = 'Pods'
+      create_group_if_needed(ROOT_GROUPS[:pods])
+    end
 
     # @return [PBXGroup] The group for Development Pods.
     #
-    attr_reader :development_pods
+    def development_pods
+      name = 'Development Pods'
+      create_group_if_needed(ROOT_GROUPS[:development_pods])
+    end
+
+    # Cleans up the project to prepare it for serialization.
+    #
+    # @return [void]
+    #
+    def prepare_for_serialization
+      set_cocoapods_defaults
+      recreate_user_schemes(false)
+      pods.remove_from_project if pods.empty?
+      development_pods.remove_from_project if development_pods.empty?
+      sort
+    end
 
 
     public
 
-    # @!group Pod Groups
+    # @!group Groups
     #-------------------------------------------------------------------------#
 
-    # Creates a new group for the Pod with the given name and configures its
-    # path.
+    # Creates a new group for the sources of the Pod with the given name and
+    # configures its path.
     #
     # @param  [String] pod_name
     #         The name of the Pod.
@@ -68,13 +92,9 @@ module Pod
     # @return [PBXGroup] The new group.
     #
     def add_pod_group(pod_name, path, development = false, absolute = false)
-      raise "[BUG]" if pod_group(pod_name)
-
       parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
       group = parent_group.new_group(pod_name, path, source_tree)
-      support_files_group = group.new_group(SPEC_SUBGROUPS[:support_files])
-      support_files_group.source_tree = 'SOURCE_ROOT'
       group
     end
 
@@ -92,18 +112,15 @@ module Pod
     # @return [PBXGroup] The group.
     #
     def pod_group(pod_name)
-      pod_groups.find { |group| group.name == pod_name }
+      pod_groups.find { |group| group.display_name == pod_name }
     end
 
     # @return [Hash] The names of the specification subgroups by key.
     #
     SPEC_SUBGROUPS = {
-      :source_files             => 'Source Files',
       :resources                => 'Resources',
       :frameworks_and_libraries => 'Frameworks & Libraries',
-      :support_files            => 'Support Files',
       :subspecs                 => 'Subspecs',
-      :products                 => 'Products',
     }
 
     # Returns the group for the specification with the give name creating it if
@@ -120,12 +137,90 @@ module Pod
     def group_for_spec(spec_name, subgroup_key = nil)
       spec_group = spec_group(spec_name)
       if subgroup_key
-        subgroup = SPEC_SUBGROUPS[subgroup_key]
-        raise ArgumentError, "Unrecognized subgroup `#{subgroup_key}`" unless subgroup
-        spec_group.find_subpath(subgroup, true)
+        if subgroup_key == :source_files
+          spec_group
+        else
+          subgroup = SPEC_SUBGROUPS[subgroup_key]
+          raise ArgumentError, "Unrecognized subgroup `#{subgroup_key}`" unless subgroup
+          spec_group.find_subpath(subgroup, true)
+        end
       else
         spec_group
       end
+    end
+
+    # Creates a new group for the aggregate target with the given name and
+    # path.
+    #
+    # @param  [String] name
+    #         The name of the target.
+    #
+    # @param  [#to_s] path
+    #         The path where the files of the target are stored.
+    #
+    # @return [PBXGroup] The new group.
+    #
+    def add_aggregate_group(name, path)
+      # TODO TMP
+      if existing = support_files_group[name]
+        existing
+      else
+        support_files_group.new_group(name, path)
+      end
+    end
+
+    # Returns the group for the aggregate target with the given name.
+    #
+    # @param  [String] pod_name
+    #         The name of the Pod.
+    #
+    # @return [PBXGroup] The group.
+    #
+    def aggregate_group(name)
+      support_files_group[name]
+    end
+
+    # @return [Array<PBXGroup>] Returns the list of the aggregate groups.
+    #
+    def aggregate_groups
+      support_files_group.children
+    end
+
+    # Creates a new group for the pod target with the given name and aggregate.
+    #
+    # @param  [String] aggregate_name
+    #         The name of the target.
+    #
+    # @param  [String] path
+    #         The name of the Pod.
+    #
+    # @param  [#to_s] path
+    #         The path where the files of the target are stored.
+    #
+    # @return [PBXGroup] The new group.
+    #
+    def add_aggregate_pod_group(aggregate_name, pod_name, path)
+      if existing = aggregate_pod_group(aggregate_name, pod_name)
+        existing
+      else
+        aggregate_group = aggregate_group(aggregate_name)
+        aggregate_group.new_group(pod_name, path)
+      end
+    end
+
+    # Returns the group for the pod target with the given name and aggregate.
+    # path.
+    #
+    # @param  [String] aggregate_name
+    #         The name of the target.
+    #
+    # @param  [String] path
+    #         The name of the Pod.
+    #
+    # @return [PBXGroup] The group.
+    #
+    def aggregate_pod_group(aggregate_name, pod_name)
+      aggregate_group(aggregate_name)[pod_name]
     end
 
 
@@ -178,13 +273,27 @@ module Pod
     # @param  [#to_s] podfile_path
     #         The path of the Podfile.
     #
-    # @return [PBXFileReference] The new file reference.
+    # @return [void] The new file reference.
     #
-    def add_podfile(podfile_path)
-      podfile_ref = new_file(podfile_path, :project)
-      podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
-      podfile_ref.last_known_file_type = 'text'
-      podfile_ref
+    def set_podfile(podfile_path)
+      if podfile_path
+        if podfile
+          podfile_ref = podfile
+          podfile_ref.set_path(podfile_path)
+        else
+          podfile_ref = new_file(podfile_path, :project)
+        end
+        podfile_ref.name = 'Podfile'
+        podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
+        podfile_ref.last_known_file_type = 'text'
+        podfile_ref
+      end
+    end
+
+    # @return [PBXFileReference] The file reference of the Podfile.
+    #
+    def podfile
+      main_group['Podfile']
     end
 
 
@@ -192,6 +301,21 @@ module Pod
 
     # @!group Private helpers
     #-------------------------------------------------------------------------#
+
+    # Returns the group with the given name, creating it if needed.
+    #
+    # @param  [String] name
+    #         The name of the group.
+    #
+    # @param  [String, Nil] parent
+    #         The parent group. If nil resolves to the main group.
+    #
+    # @return [PBXGroup] The group.
+    #
+    def create_group_if_needed(name, parent = nil)
+      parent ||= main_group
+      parent[name] || parent.new_group(name)
+    end
 
     # @return [Hash{String => PBXFileReference}] The file references grouped
     #         by absolute path.
@@ -212,7 +336,7 @@ module Pod
       if spec_name != pod_name
         subspecs_names = spec_name.gsub(pod_name + '/', '').split('/')
         subspecs_names.each do |name|
-          subspecs_group = group[SPEC_SUBGROUPS[:subspecs]] || group.new_group(SPEC_SUBGROUPS[:subspecs])
+          subspecs_group = create_group_if_needed(SPEC_SUBGROUPS[:subspecs], group)
           group = subspecs_group[name] || subspecs_group.new_group(name)
         end
       end

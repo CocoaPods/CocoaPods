@@ -14,11 +14,13 @@ module Pod
       # @return [Target] the target represented by this xcconfig.
       #
       attr_reader :target
+      attr_reader :sandbox_root
 
       # @param  [Target] target @see target
       #
-      def initialize(target)
+      def initialize(target, sanbox_root)
         @target = target
+        @sandbox_root = sanbox_root
       end
 
       # @return [Xcodeproj::Config] The generated xcconfig.
@@ -33,7 +35,7 @@ module Pod
       # @return [void]
       #
       def save_as(path)
-        generate.save_as(path, target.xcconfig_prefix)
+        generate.save_as(path, XCConfigHelper.prefix(target.name))
       end
 
       # Generates the xcconfig for the target.
@@ -45,10 +47,10 @@ module Pod
         target.file_accessors.each do |file_accessor|
           XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
           file_accessor.vendored_frameworks.each do |vendored_framework|
-            XCConfigHelper.add_framework_build_settings(vendored_framework, @xcconfig, target.sandbox.root)
+            XCConfigHelper.add_framework_build_settings(vendored_framework, @xcconfig, sandbox_root)
           end
           file_accessor.vendored_libraries.each do |vendored_library|
-            XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, target.sandbox.root)
+            XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, sandbox_root)
           end
         end
         @xcconfig

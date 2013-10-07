@@ -6,6 +6,18 @@ module Pod
       #
       module XCConfigHelper
 
+        # Returns the XCConfig namespaced prefix to use for the target with the
+        # given name.
+        #
+        # @param  [Array<String>] target_name
+        #         the name of the target.
+        #
+        # @return [String] the prefix for the target.
+        #
+        def self.prefix(target_name)
+          target_name.upcase.gsub(/[^A-Z]/, '_') + '_'
+        end
+
         # Converts an array of strings to a single string where the each string
         # is surrounded by double quotes and separated by a space. Used to
         # represent strings in a xcconfig file.
@@ -19,13 +31,16 @@ module Pod
           strings.sort.map { |s| %W|"#{s}"| }.join(" ")
         end
 
+        # Configures the project to load all members that implement Objective-c
+        # classes or categories from the static library#
+        #
         # @return [String] the default linker flags. `-ObjC` is always included
         #         while `-fobjc-arc` is included only if requested in the
         #         Podfile.
         #
         def self.default_ld_flags(target)
           ld_flags = '-ObjC'
-          if target.target_definition.podfile.set_arc_compatibility_flag? and
+          if target.set_arc_compatibility_flag? and
             target.spec_consumers.any? { |consumer| consumer.requires_arc? }
             ld_flags << ' -fobjc-arc'
           end

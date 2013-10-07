@@ -57,7 +57,7 @@ module Pod
         @result.specs_by_target = resolve_dependencies
         @result.specifications  = generate_specifications
         @result.targets         = generate_targets
-        @result.sandbox_state   = generate_sandbox_state
+        generate_sandbox_state
         @result
       end
 
@@ -82,7 +82,7 @@ module Pod
       # @return [Bool] Whether the sandbox is in synch with the lockfile.
       #
       def sandbox_needs_install?(analysis_result)
-        state = analysis_result.sandbox_state
+        state = sandbox.state
         needing_install = state.added + state.changed + state.deleted
         !needing_install.empty?
       end
@@ -124,8 +124,8 @@ module Pod
       #         the name of the Pod (root name of the dependencies) and doesn't
       #         group them by target definition.
       #
-      # @todo   [CocoaPods > 0.18] If there isn't a Lockfile all the Pods should
-      #         be marked as added.
+      # @todo   If Pod changes platform it should be marked as added. This
+      #         information currently is not stored in the Lockfile.
       #
       def generate_podfile_state
         if lockfile
@@ -165,34 +165,51 @@ module Pod
       def generate_targets
         targets = []
         result.specs_by_target.each do |target_definition, specs|
-          target = AggregateTarget.new(target_definition, sandbox)
-          targets << target
+          # TODO: install named targets even if empty
+          # TODO: add spec for aggregate targets to install
+          unless target_definition.empty?
+            target = Target.new(target_definition.label)
+            targets << target
 
-          if config.integrate_targets?
-            project_path = compute_user_project_path(target_definition)
-            user_project = Xcodeproj::Project.open(project_path)
-            native_targets = compute_user_project_targets(target_definition, user_project)
+            target.target_definition = target_definition
+            target.platform = target_definition.platform
+            target.support_files_root = sandbox.library_support_files_dir(target.name)
+            target.set_arc_compatibility_flag = podfile.set_arc_compatibility_flag?
+            target.generate_bridge_support = podfile.generate_bridge_support?
+            target.public_headers_store = sandbox.public_headers
+            target.private_headers_store = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
 
-            target.user_project_path = project_path
-            target.client_root = project_path.dirname
-            target.user_target_uuids = native_targets.map(&:uuid)
-            target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
-            target.archs = @archs_by_target_def[target_definition]
-          else
-            target.client_root = config.installation_root
-            target.user_target_uuids = []
-            target.user_build_configurations = {}
-          end
+            if config.integrate_targets?
+              project_path = compute_user_project_path(target_definition)
+              user_project = Xcodeproj::Project.open(project_path)
+              native_targets = compute_user_project_targets(target_definition, user_project)
 
-          grouped_specs = specs.map do |spec|
-            specs.select { |s| s.root == spec.root }
-          end.uniq
+              target.user_project_path = project_path
+              target.user_target_uuids = native_targets.map(&:uuid)
+              target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
+              target.archs = @archs_by_target_def[target_definition]
+            else
+              target.user_target_uuids = []
+              target.user_build_configurations = {}
+            end
 
-          grouped_specs.each do |pod_specs|
-            pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
-            pod_target.user_build_configurations = target.user_build_configurations
-            pod_target.archs = @archs_by_target_def[target_definition]
-            target.pod_targets << pod_target
+            grouped_specs = specs.map do |spec|
+              specs.select { |s| s.root == spec.root }
+            end.uniq
+
+            grouped_specs.each do |pod_specs|
+              pod_name = pod_specs.first.root.name
+              pod_target = Target.new(pod_name, target)
+              pod_target.specs = [pod_specs]
+              pod_target.support_files_root = sandbox.library_support_files_dir(target.name)
+              pod_target.user_build_configurations = target.user_build_configurations
+              pod_target.set_arc_compatibility_flag = podfile.set_arc_compatibility_flag?
+              pod_target.generate_bridge_support = podfile.generate_bridge_support?
+              pod_target.private_headers_store = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
+              pod_target.public_headers_store = sandbox.public_headers
+              pod_target.inhibits_warnings = target_definition.inhibits_warnings_for_pod?(pod_name)
+              pod_target.archs = @archs_by_target_def[target_definition]
+            end
           end
         end
         targets
@@ -310,6 +327,7 @@ module Pod
           sandbox_state = sandbox_analyzer.analyze
           sandbox_state.print
         end
+        sandbox.state = sandbox_state
         sandbox_state
       end
 
@@ -507,11 +525,6 @@ module Pod
         #         version of Pods that should be installed.
         #
         attr_accessor :specifications
-
-        # @return [SpecsState] the states of the {Sandbox} respect the resolved
-        #         specifications.
-        #
-        attr_accessor :sandbox_state
 
         # @return [Array<Target>] The Podfile targets containing library
         #         dependencies.

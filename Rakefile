@@ -188,15 +188,14 @@ namespace :spec do
       exit 1
     end
 
-    sh "bundle exec bacon spec/integration.rb"
+    binary_path = "#{Dir.pwd}/bin/pod"
+    Dir.chdir('spec/cocoapods-integration-specs') do
+      sh "CP_TEST_POD_BINARY='#{binary_path}' bundle exec rake run"
+    end
   end
 
   # Default task
   #--------------------------------------#
-  #
-  # The specs helper interfere with the integration 2 specs and thus they need
-  # to be run separately.
-  #
   task :all => :unpack_fixture_tarballs do
     ENV['GENERATE_COVERAGE'] = 'true'
 
@@ -204,7 +203,7 @@ namespace :spec do
     sh    "bundle exec bacon #{specs('**')}"
 
     title 'Running Integration tests'
-    sh    "bundle exec bacon spec/integration.rb"
+    Rake::Task['spec:integration'].invoke
 
     title 'Running examples'
     Rake::Task['examples:build'].invoke
@@ -212,9 +211,6 @@ namespace :spec do
 
   # Travis
   #--------------------------------------#
-  #
-  # The integration 2 tests and the examples use the normal CocoaPods setup.
-  #
   desc "Run all specs and build all examples"
   task :ci => :unpack_fixture_tarballs do
     title 'Running the specs'
@@ -227,7 +223,7 @@ namespace :spec do
     end
 
     title 'Running Integration tests'
-    sh "bundle exec bacon spec/integration.rb"
+    Rake::Task['spec:integration'].invoke
 
     title 'Running examples'
     Rake::Task['examples:build'].invoke
@@ -268,29 +264,10 @@ namespace :spec do
 
   desc "Rebuilds integration fixtures"
   task :rebuild_integration_fixtures do
-    title 'Running Integration tests'
-    `bundle exec bacon spec/integration.rb`
-
-    title 'Storing fixtures'
-    # Copy the files to the files produced by the specs to the after folders
-    FileList['tmp/*'].each do |source|
-      destination = "spec/cocoapods-integration-specs/#{source.gsub('tmp/','')}/after"
-      if File.exists?(destination)
-        sh "rm -rf #{destination}"
-        sh "mv #{source} #{destination}"
-      end
+    binary_path = "#{Dir.pwd}/bin/pod"
+    Dir.chdir('spec/cocoapods-integration-specs') do
+      sh "CP_TEST_POD_BINARY='#{binary_path}' bundle exec rake rebuild_after_folders"
     end
-
-    # Remove files not used for the comparison
-    # To keep the git diff clean
-    files_to_delete = FileList['spec/cocoapods-integration-specs/*/after/{Podfile,*.podspec,**/*.xcodeproj,PodTest-hg-source}']
-    files_to_delete.exclude('/spec/cocoapods-integration-specs/init_single_platform/**/*.*')
-    files_to_delete.each do |file_to_delete|
-      sh "rm -rf #{file_to_delete}"
-    end
-
-    puts
-    puts "Integration fixtures updated, commit and push in the `spec/cocoapods-integration-specs` submodule"
   end
 
   #--------------------------------------#
@@ -335,10 +312,6 @@ namespace :examples do
 
   desc "Build all examples"
   task :build do
-
-    # TODO: sometimes it uses the installed gem
-    # Rake::Task['gem:install'].invoke
-
     examples.entries.each do |example|
       puts "Building example: #{example}"
       Dir.chdir(example.to_s) do

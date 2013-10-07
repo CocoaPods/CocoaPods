@@ -209,7 +209,7 @@ module Pod
       installer.install!
 
       file_accessors = installer.aggregate_targets.map do |target|
-        target.pod_targets.map(&:file_accessors)
+        target.children.map(&:file_accessors)
       end.flatten
 
       @file_accessor = file_accessors.find { |accessor| accessor.spec.root.name == spec.root.name }

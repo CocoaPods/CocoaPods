@@ -18,11 +18,12 @@ module Pod
         end
         config.sandbox.project = Project.new(config.sandbox.project_path)
         Xcodeproj::Project.new(config.sandbox.project_path).save
-        @library = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
-        @library.client_root = sample_project_path.dirname
+        @library = Target.new('Pods')
         @library.user_project_path  = sample_project_path
         @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
-        empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], config.sandbox)
+        @library.xcconfig_path  = config.sandbox.root + 'Pods.xcconfig'
+        @library.copy_resources_script_path  = config.sandbox.root + 'Pods-resources.sh'
+        empty_library = Target.new('Empty')
         @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library, empty_library])
       end
 
@@ -145,11 +146,6 @@ module Pod
 
         it "returns the paths of the user projects" do
           @integrator.send(:user_project_paths).should == [ @sample_project_path ]
-        end
-
-        it "skips libraries with empty target definitions" do
-          @integrator.targets.map(&:name).should == ["Pods", "Pods-empty"]
-          @integrator.send(:targets_to_integrate).map(&:name).should == ['Pods']
         end
 
       end
