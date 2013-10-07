@@ -18,6 +18,15 @@ module Pod
       @refs_by_absolute_path = {}
     end
 
+    # @return [void] Prepares the project with the build settings used by
+    #         CocoaPods.
+    #
+    def set_cocoapods_defaults
+      build_configurations.each do |configuration|
+        configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'NO'
+      end
+    end
+
     # @return [Hash] The names of the specification subgroups by key.
     #
     ROOT_GROUPS = {
@@ -52,6 +61,8 @@ module Pod
     # @return [void]
     #
     def prepare_for_serialization
+      set_cocoapods_defaults
+      recreate_user_schemes(false)
       pods.remove_from_project if pods.empty?
       development_pods.remove_from_project if development_pods.empty?
       sort

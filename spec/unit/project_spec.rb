@@ -38,6 +38,14 @@ module Pod
           @sut.pods.children.map(&:name).should == ["group_1", "group_2"]
         end
       end
+
+      it "sets the default build settings of CocoaPods" do
+        @sut.prepare_for_serialization
+        @sut.build_configurations.each do |configuration|
+          configuration.build_settings['CLANG_ENABLE_OBJC_ARC'].should== 'NO'
+        end
+      end
+
     end
 
     #-------------------------------------------------------------------------#

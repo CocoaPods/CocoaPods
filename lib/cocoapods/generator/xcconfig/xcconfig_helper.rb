@@ -75,7 +75,7 @@ module Pod
         #
         def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root)
           name = File.basename(framework_path, ".framework")
-          dirname = File.dirname(framework_path).sub(sandbox_root.to_s, '$(PODS_ROOT)')
+          dirname = '$(PODS_ROOT)/' + framework_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'OTHER_LDFLAGS' => "-framework #{name}",
             'FRAMEWORK_SEARCH_PATHS' => quote([dirname])
@@ -94,7 +94,7 @@ module Pod
         #
         def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
           name = File.basename(library_path, ".a").sub(/\Alib/, '')
-          dirname = File.dirname(library_path).sub(sandbox_root.to_s, '$(PODS_ROOT)')
+          dirname = '$(PODS_ROOT)/' + library_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'OTHER_LDFLAGS' => "-l#{name}",
             'LIBRARY_SEARCH_PATHS' => quote([dirname])

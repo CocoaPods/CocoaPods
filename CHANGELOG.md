@@ -2,6 +2,41 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+###### Enhancements
+
+* CocoaPods now creates and hides the schemes of its targets during the
+  installation.  
+  [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
+  [@irrationalfab](https://github.com/irrationalfab)
+
+* The Pods project now is sorted by name.  
+  [#1389](https://github.com/CocoaPods/CocoaPods/pull/1389)
+  [@irrationalfab](https://github.com/irrationalfab)
+
+* Added the `documentation_url` DSL attribute to the specifications.  
+  [#1273](https://github.com/CocoaPods/CocoaPods/pull/1273)
+  [@irrationalfab](https://github.com/irrationalfab)
+
+###### Bug Fixes
+
+* The search paths of vendored frameworks and libraries now are always
+  specified relatively.  
+  [#1405](https://github.com/CocoaPods/CocoaPods/pull/1405)
+  [@irrationalfab](https://github.com/irrationalfab)
+
+* Fix an issue where CocoaPods would fail to work when used with an older
+  version of activesupport. This fix raises the dependency version to
+  the earliest compatible version of activesupport.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#1407](https://github.com/CocoaPods/CocoaPods/issues/1407)
+
+* CocoaPods will not attempt to load anymore all the version of a specification
+  preventing crashes if those are incompatible.  
+  [#1272](https://github.com/CocoaPods/CocoaPods/pull/1272)
+  [@irrationalfab](https://github.com/irrationalfab)
+
 ## 0.25.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.24.0...0.25.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.24.0...0.25.0)
@@ -14,13 +49,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   The generated Pods Xcode project is now compatible with `arm64` projects and
   is updated to use Xcode 5’s default settings removing all warnings.
 
-  **NOTE to Xcode 4 users:**
-  1. This means that the Pods Xcode project now sets the `ONLY_ACTIVE_ARCH`
-     build setting to `YES` in the `Debug` configuration. You’ll have to set the
-     same on your project/target, otherwise the build _will_ fail.
-  2. When building a **iOS** project from the command-line with the `xcodebuild`
-     tool you’ll need to completely disable this setting by appending to your
-     build command: `ONLY_ACTIVE_ARCH=NO`.
+  **NOTE to users migrating projects from Xcode 4, or are still using Xcode 4:**
+  1. The Pods Xcode project now sets the `ONLY_ACTIVE_ARCH` build setting to
+     `YES` in the `Debug` configuration. You _will_ have to set the same on your
+     project/target, otherwise the build _will_ fail.
+  2. Ensure your project/target has an `ARCHS` value set, otherwise the build
+     _will_ fail.
+  3. When building a **iOS** project from the command-line, with the `xcodebuild`
+     tool that comes with Xcode 4, you’ll need to completely disable this setting
+     by appending to your build command: `ONLY_ACTIVE_ARCH=NO`.
 
   [#1352](https://github.com/CocoaPods/CocoaPods/pull/1352)
 

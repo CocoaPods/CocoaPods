@@ -22,6 +22,13 @@ module Pod
 
       describe "#integrate!" do
 
+        it 'returns the targets that need to be integrated' do
+          pods_library = @project.frameworks_group.new_product_ref_for_target('Pods', :static_library)
+          @native_target.frameworks_build_phase.add_file_reference(pods_library)
+          @sut.stubs(:user_project).returns(@project)
+          @sut.send(:native_targets).map(&:name).should.be.empty?
+        end
+
         before do
           @sut.integrate!
         end
@@ -81,7 +88,7 @@ module Pod
           end
 
           it 'returns the targets that need to be integrated' do
-            pods_library = @project.frameworks_group.new_static_library('Pods')
+            pods_library = @project.frameworks_group.new_product_ref_for_target('Pods', :static_library)
             @native_target.frameworks_build_phase.add_file_reference(pods_library)
             @sut.stubs(:user_project).returns(@project)
             @sut.send(:native_targets).map(&:name).should.be.empty?
