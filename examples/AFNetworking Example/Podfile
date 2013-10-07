@@ -1,0 +1,17 @@
+### Implicit target definition :-/
+xcodeproj "AFNetworking Mac Example.xcodeproj"
+####
+
+workspace 'AFNetworking Examples.xcworkspace'
+
+target "AFNetworking Example" do
+  platform :osx, '10.8'
+  xcodeproj "AFNetworking Mac Example.xcodeproj"
+  pod "AFNetworking", "1.3.3"
+end
+
+target "AFNetworking iOS Example" do
+  platform :ios, '7.0'
+  xcodeproj "AFNetworking iOS Example.xcodeproj"
+  pod "AFNetworking", "1.3.3"
+end
