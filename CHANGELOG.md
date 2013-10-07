@@ -6,6 +6,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
+* CocoaPods now creates and hides the schemes of its targets during the 
+  installation.
+  [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
+
 * The Pods project now is sorted by name.  
   [#1389](https://github.com/CocoaPods/CocoaPods/pull/1389)
 
