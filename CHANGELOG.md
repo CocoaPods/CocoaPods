@@ -11,6 +11,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
 
+* Non integrating installations now set the architecture of the Pod targets to
+  the `$(ARCHS_STANDARD)` value.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
+
 * The Pods project now is sorted by name.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1389](https://github.com/CocoaPods/CocoaPods/pull/1389)
