@@ -29,7 +29,7 @@ module Pod
       end
 
       it 'returns the targets that need to be integrated' do
-        pods_library = @sample_project.frameworks_group.new_static_library('Pods')
+        pods_library = @sample_project.frameworks_group.new_product_ref_for_target('Pods', :static_library)
         @target.frameworks_build_phase.add_file_reference(pods_library)
         @target_integrator.stubs(:user_project).returns(@sample_project)
         @target_integrator.native_targets.map(&:name).should.be.empty?
