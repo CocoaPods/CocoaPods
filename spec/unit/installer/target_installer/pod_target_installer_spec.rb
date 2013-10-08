@@ -47,7 +47,7 @@ module Pod
       it 'adds the target for the static library to the project' do
         @installer.install!
         @project.targets.count.should == 1
-        @project.targets.first.name.should == 'Pods-BananaLib' 
+        @project.targets.first.name.should == 'Pods-BananaLib'
       end
 
      it "sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets" do
@@ -102,8 +102,10 @@ module Pod
 
       #--------------------------------------#
 
-      xit 'adds the resource bundle targets' do
-
+      it 'adds the resource bundle targets' do
+        @pod_target.file_accessors.first.stubs(:resource_bundles).returns({'banana_bundle' => []})
+        @installer.install!
+        @project.targets.map(&:name).should == ["Pods-BananaLib", "banana_bundle"]
       end
 
       xit 'adds the build configurations to the resources bundle targets' do

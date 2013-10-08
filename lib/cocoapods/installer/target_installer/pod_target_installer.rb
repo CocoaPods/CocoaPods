@@ -42,7 +42,6 @@ module Pod
             source_files = file_accessor.source_files
             file_refs = source_files.map { |sf| project.reference_for_path(sf) }
             target.add_file_references(file_refs, flags)
-
           end
         end
       end
@@ -64,7 +63,6 @@ module Pod
                 next
               end
               file_references = paths.map { |sf| project.reference_for_path(sf) }
-              group = project.group_for_spec(file_accessor.spec.name, :products)
               bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
               bundle_target.add_resources(file_references)
 
@@ -87,12 +85,7 @@ module Pod
         public_gen = Generator::XCConfig::PublicPodXCConfig.new(library)
         UI.message "- Generating public xcconfig file at #{UI.path(path)}" do
           public_gen.save_as(path)
-          #
-          # TODO
           add_file_to_support_group(path)
-          # relative_path = path.relative_path_from(sandbox.root)
-          # group = project.group_for_spec(library.root_spec.name, :support_files)
-          # group.new_file(relative_path)
         end
 
         path = library.xcconfig_private_path
