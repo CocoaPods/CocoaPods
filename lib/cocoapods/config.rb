@@ -149,8 +149,10 @@ module Pod
     #
     def podfile_repos_dirs
       pathnames = []
-      self.podfile.sources.each do |source_name|
-        pathnames << source_repo_dir(source_name)
+      if self.podfile
+        self.podfile.sources.each do |source_name|
+          pathnames << source_repo_dir(source_name)
+        end
       end
       pathnames
     end
