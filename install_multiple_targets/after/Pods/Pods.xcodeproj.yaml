@@ -1,17 +1,13 @@
 
 File References:
+- Podfile
 - Frameworks:
   - Foundation.framework
   - SystemConfiguration.framework
-- Podfile
 - Pods:
   - JSONKit:
-    - Products:
-      - libPods-SampleApp_2-JSONKit.a
-      - libPods-test-JSONKit.a
-    - Source Files:
-      - JSONKit.h
-      - JSONKit.m
+    - JSONKit.h
+    - JSONKit.m
     - Support Files:
       - Pods-SampleApp_2-JSONKit.xcconfig
       - Pods-SampleApp_2-JSONKit-Private.xcconfig
@@ -22,12 +18,8 @@ File References:
       - Pods-test-JSONKit-dummy.m
       - Pods-test-JSONKit-prefix.pch
   - Reachability:
-    - Products:
-      - libPods-Reachability.a
-      - libPods-SampleApp_2-Reachability.a
-    - Source Files:
-      - Reachability.h
-      - Reachability.m
+    - Reachability.h
+    - Reachability.m
     - Support Files:
       - Pods-Reachability.xcconfig
       - Pods-Reachability-Private.xcconfig
@@ -39,8 +31,12 @@ File References:
       - Pods-SampleApp_2-Reachability-prefix.pch
 - Products:
   - libPods.a
+  - libPods-Reachability.a
   - libPods-SampleApp_2.a
+  - libPods-SampleApp_2-JSONKit.a
+  - libPods-SampleApp_2-Reachability.a
   - libPods-test.a
+  - libPods-test-JSONKit.a
 - Targets Support Files:
   - Pods:
     - Pods.xcconfig
