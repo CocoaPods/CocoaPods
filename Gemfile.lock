@@ -7,21 +7,21 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 11e6a7fad3231da7f58cb5d9e39b8bde75adb5dd
+  revision: 661e5cb45a2c5a3590dca93062fccd8375b14463
   branch: master
   specs:
-    cocoapods-core (0.25.0)
+    cocoapods-core (0.26.0)
       activesupport (~> 3.0)
       json (~> 1.8)
       nap (~> 0.5)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 5bee3d3b08e7f8de793e7bda3851ed5f47496400
+  revision: c080ecf4951cb4df66824dcd384c5082762955ae
   branch: master
   specs:
-    xcodeproj (0.11.1)
-      activesupport (~> 3.2)
+    xcodeproj (0.12.0)
+      activesupport (~> 3.0)
       colored (~> 1.2)
 
 GIT
@@ -50,16 +50,16 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.25.0)
+    cocoapods (0.26.0)
       activesupport (~> 3.2)
       claide (~> 0.3.2)
-      cocoapods-core (= 0.25.0)
+      cocoapods-core (= 0.26.0)
       cocoapods-downloader (~> 0.2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json (~> 1.8)
       open4 (~> 1.3)
-      xcodeproj (~> 0.11.0)
+      xcodeproj (~> 0.12.0)
 
 GEM
   remote: http://rubygems.org/
@@ -67,7 +67,7 @@ GEM
     activesupport (3.2.14)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
-    awesome_print (1.1.0)
+    awesome_print (1.2.0)
     bacon (1.2.0)
     coderay (1.0.9)
     colored (1.2)
@@ -94,7 +94,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    multi_json (1.8.0)
+    multi_json (1.8.1)
     nap (0.5.1)
     open4 (1.3.0)
     posix-spawn (0.3.6)
@@ -123,7 +123,7 @@ GEM
     term-ansicolor (1.2.2)
       tins (~> 0.8)
     thor (0.18.1)
-    tins (0.10.0)
+    tins (0.11.0)
     yajl-ruby (1.1.0)
     yard (0.8.7.2)
 
