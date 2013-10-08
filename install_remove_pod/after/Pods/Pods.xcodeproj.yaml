@@ -2,8 +2,9 @@
 File References:
 - Podfile
 - Frameworks:
-  - Foundation.framework
-  - SystemConfiguration.framework
+  - iOS:
+    - Foundation.framework
+    - SystemConfiguration.framework
 - Pods:
   - Reachability:
     - Reachability.h

@@ -2,8 +2,10 @@
 File References:
 - Podfile
 - Frameworks:
-  - Cocoa.framework
-  - Foundation.framework
+  - OS X:
+    - Cocoa.framework
+  - iOS:
+    - Foundation.framework
 - Pods:
   - PodTest:
     - Support Files:

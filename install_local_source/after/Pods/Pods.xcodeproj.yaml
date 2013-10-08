@@ -11,8 +11,9 @@ File References:
       - Pods-Reachability-dummy.m
       - Pods-Reachability-prefix.pch
 - Frameworks:
-  - Foundation.framework
-  - SystemConfiguration.framework
+  - iOS:
+    - Foundation.framework
+    - SystemConfiguration.framework
 - Products:
   - libPods.a
   - libPods-Reachability.a
