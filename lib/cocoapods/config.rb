@@ -139,6 +139,22 @@ module Pod
       @home_dir ||= Pathname.new(ENV['CP_HOME_DIR'] || "~/.cocoapods").expand_path
     end
 
+    # @return [Pathname] the directory where a given CocoaPods source is stored.
+    #
+    def source_repo_dir(name)
+      self.repos_dir = self.repos_dir + name
+    end
+
+    # @return [<Array>Pathname] directories of all specified sources in Podfile
+    #
+    def podfile_repos_dirs
+      pathnames = []
+      self.podfile.sources.each do |source_name|
+        pathnames << source_repo_dir(source_name)
+      end
+      pathnames
+    end
+
     # @return [Pathname] the directory where the CocoaPods sources are stored.
     #
     def repos_dir
