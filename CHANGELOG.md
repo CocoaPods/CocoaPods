@@ -10,14 +10,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   installation. The schemes are not shared because the flag which keeps track
   whether they should be visible is a user only flag. The schemes are still
   present and to debug a single Pod it is possible to make its scheme visible
-  in the Schemes manager of Xcode. This is rarely needed thought because the
+  in the Schemes manager of Xcode. This is rarely needed though because the
   user targets trigger the compilation of the Pod targets.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
 
-* Non integrating installations now set the architecture of
-  OS X Pod targets to `$(ARCHS_STANDARD_64_BIT)` (Xcode 4 default value for new
-  targets). This fixes lint issues with Xcode 4.  
+* Installations which don't integrate a user target (lint subcommands and
+  `--no-integrate` option) now set the architecture of OS X Pod targets to
+  `$(ARCHS_STANDARD_64_BIT)` (Xcode 4 default value for new targets). This
+  fixes lint issues with Xcode 4.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
 
