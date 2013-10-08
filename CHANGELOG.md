@@ -2,7 +2,7 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## 0.26.0
+## 0.26.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.25.0...0.26.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.0)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.11.1...0.12.0)
