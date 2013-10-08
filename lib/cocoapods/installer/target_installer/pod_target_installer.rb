@@ -13,7 +13,6 @@ module Pod
       def install!
         UI.message "- Installing target `#{library.name}` #{library.platform}" do
           add_target
-          move_target_product_file_reference
           add_files_to_build_phases
           add_resources_bundle_targets
           # create_suport_files_group
@@ -48,12 +47,6 @@ module Pod
         end
       end
 
-      def move_target_product_file_reference
-        pod_name = library.pod_name
-        group = project.group_for_spec(pod_name, :products)
-        target.product_reference.move(group)
-      end
-
       # Adds the resources of the Pods to the Pods project.
       #
       # @note   The source files are grouped by Pod and in turn by subspec
@@ -72,8 +65,7 @@ module Pod
               end
               file_references = paths.map { |sf| project.reference_for_path(sf) }
               group = project.group_for_spec(file_accessor.spec.name, :products)
-              product_group = project.group_for_spec(file_accessor.spec.name, :resources)
-              bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name, product_group)
+              bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
               bundle_target.add_resources(file_references)
 
               library.user_build_configurations.each do |bc_name, type|
@@ -201,7 +193,7 @@ module Pod
       #
       def add_file_to_support_group(path)
         pod_name = library.pod_name
-        group = project.group_for_spec(pod_name, :support_files)
+        group = project.pod_support_files_group(pod_name)
         group.new_file(path)
       end
 

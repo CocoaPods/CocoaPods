@@ -70,11 +70,6 @@ module Pod
           Pathname.new(group.path).should.be.absolute
         end
 
-        it "creates a support file group relative to the project" do
-          group = @project.add_pod_group('BananaLib', @path, false, true)
-          group['Support Files'].source_tree.should == 'SOURCE_ROOT'
-          group['Support Files'].path.should.be.nil
-        end
       end
 
       #----------------------------------------#
@@ -114,25 +109,53 @@ module Pod
 
         it "returns the group for the spec with the given name" do
           group = @project.group_for_spec('BananaLib/Tree')
-          group.hierarchy_path.should == '/Pods/BananaLib/Subspecs/Tree'
-        end
-
-        it "returns the requested subgroup" do
-          group = @project.group_for_spec('BananaLib/Tree', :source_files)
-          group.hierarchy_path.should == '/Pods/BananaLib/Subspecs/Tree/Source Files'
-        end
-
-        it "raises if unable to recognize the subgroup key" do
-          should.raise ArgumentError do
-            @project.group_for_spec('BananaLib/Tree', :unknown)
-          end.message.should.match /Unrecognized subgroup/
+          group.hierarchy_path.should == '/Pods/BananaLib/Tree'
         end
 
         it "doesn't duplicate the groups" do
-          group_1 = @project.group_for_spec('BananaLib/Tree', :source_files)
-          group_2 = @project.group_for_spec('BananaLib/Tree', :source_files)
+          group_1 = @project.group_for_spec('BananaLib/Tree')
+          group_2 = @project.group_for_spec('BananaLib/Tree')
           group_1.uuid.should == group_2.uuid
         end
+
+        it "returns the subgroup with the given key" do
+          group = @project.group_for_spec('BananaLib/Tree', :resources)
+          group.hierarchy_path.should == '/Pods/BananaLib/Tree/Resources'
+        end
+
+        it "doesn't duplicates subgroups" do
+          group_1 = @project.group_for_spec('BananaLib/Tree', :resources)
+          group_2 = @project.group_for_spec('BananaLib/Tree', :resources)
+          group_1.uuid.should == group_2.uuid
+        end
+
+        it "raises if the subgroup key is unrecognized" do
+          should.raise ArgumentError do
+            @project.group_for_spec('BananaLib/Tree', :bananaland)
+          end.message.should.match /Unrecognized.*key/
+        end
+      end
+
+      #----------------------------------------#
+
+      describe "#pod_support_files_group" do
+
+        before do
+          @project.add_pod_group('BananaLib', @path, false, true)
+        end
+
+        it "creates a support file group relative to the project" do
+          group = @project.pod_support_files_group('BananaLib')
+          group.source_tree.should == 'SOURCE_ROOT'
+          group.path.should.be.nil
+        end
+
+        it "doesn't duplicate the groups" do
+          group_1 = @project.pod_support_files_group('BananaLib')
+          group_2 = @project.pod_support_files_group('BananaLib')
+          group_1.uuid.should == group_2.uuid
+        end
+
       end
     end
 
@@ -145,12 +168,12 @@ module Pod
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + "file.m"
-          @group = @project.group_for_spec('BananaLib', :source_files)
+          @group = @project.group_for_spec('BananaLib')
         end
 
         it "adds a file references to the given file" do
           ref = @project.add_file_reference(@file, @group)
-          ref.hierarchy_path.should == '/Pods/BananaLib/Source Files/file.m'
+          ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
         end
 
         it "it doesn't duplicate file references for a single path" do
@@ -175,13 +198,13 @@ module Pod
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + "file.m"
-          @group = @project.group_for_spec('BananaLib', :source_files)
+          @group = @project.group_for_spec('BananaLib')
           @project.add_file_reference(@file, @group)
         end
 
         it "returns the reference for the given path" do
           ref = @project.reference_for_path(@file)
-          ref.hierarchy_path.should == '/Pods/BananaLib/Source Files/file.m'
+          ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
         end
 
         it "returns nil if no reference for the given path is available" do
@@ -208,29 +231,6 @@ module Pod
         f.path.should == '../Podfile'
       end
 
-    end
-
-    #-------------------------------------------------------------------------#
-
-    describe "Private helpers" do
-
-      describe "#spec_group" do
-
-        before do
-          @project.add_pod_group('JSONKit', config.sandbox.pod_dir('JSONKit'))
-        end
-
-        it "returns the Pod group for root specifications" do
-          group = @project.send(:spec_group, 'JSONKit')
-          group.hierarchy_path.should == '/Pods/JSONKit'
-        end
-
-        it "returns the group for subspecs" do
-          group = @project.send(:spec_group, 'JSONKit/Parsing')
-          group.hierarchy_path.should == '/Pods/JSONKit/Subspecs/Parsing'
-        end
-
-      end
     end
 
     #-------------------------------------------------------------------------#

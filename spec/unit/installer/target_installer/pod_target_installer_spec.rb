@@ -16,7 +16,7 @@ module Pod
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
         @project.add_pod_group('BananaLib', fixture('banana-lib'))
-        group = @project.group_for_spec('BananaLib', :source_files)
+        group = @project.group_for_spec('BananaLib')
         file_accessor.source_files.each do |file|
           @project.add_file_reference(file, group)
         end

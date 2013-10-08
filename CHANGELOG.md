@@ -21,9 +21,18 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
 
-* The Pods project now is sorted by name.  
+* Further improvements to the organization of the Pods project  
+
+  - The project is now is sorted by name with groups at the bottom.
+  - Source files are now stored in the root group of the spec, subspecs are not
+    stored in a `Subspec` group anymore and the products of the Pods all are
+    stored in the products group of the project.
+  - The frameworks are referenced relative to the Developer directory and
+    namespaced per platform.
+
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1389](https://github.com/CocoaPods/CocoaPods/pull/1389)
+  [#1420](https://github.com/CocoaPods/CocoaPods/pull/1420)
 
 * Added the `documentation_url` DSL attribute to the specifications.  
   [Fabio Pelosin](https://github.com/irrationalfab)
