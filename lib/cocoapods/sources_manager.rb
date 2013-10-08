@@ -8,6 +8,13 @@ module Pod
 
       include Config::Mixin
 
+      # @return [Source::Aggregate] the aggregate of all the sources
+      #         listed by the current Podifle.
+      #
+      def podfile_aggregate
+        Source::Aggregate.new config.podfile_repos_dirs
+      end
+
       # @return [Source::Aggregate] the aggregate of all the sources known to
       #         this installation of CocoaPods.
       #
