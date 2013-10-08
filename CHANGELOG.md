@@ -6,13 +6,18 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
-* CocoaPods now creates and hides the schemes of its targets during the
-  installation.  
+* CocoaPods now creates and hides the schemes of its targets after every
+  installation. The schemes are not shared because the flag which keeps track
+  whether they should be visible is a user only flag. The schemes are still
+  present and to debug a single Pod it is possible to make its scheme visible
+  in the Schemes manager of Xcode. This is rarely needed thought because the
+  user targets trigger the compilation of the Pod targets.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
 
-* Non integrating installations for OS X targets now set the architecture of
-* the Pod targets to `$(ARCHS_STANDARD_64_BIT)`.  
+* Non integrating installations now set the architecture of
+  OS X Pod targets to `$(ARCHS_STANDARD_64_BIT)` (Xcode 4 default value for new
+  targets). This fixes lint issues with Xcode 4.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
 
@@ -32,8 +37,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1405](https://github.com/CocoaPods/CocoaPods/pull/1405)
 
 * Fix an issue where CocoaPods would fail to work when used with an older
-  version of activesupport. This fix raises the dependency version to
-  the earliest compatible version of activesupport.  
+  version of the Active Support gem. This fix raises the dependency version to
+  the earliest compatible version of Active Support.  
   [Kyle Fuller](https://github.com/kylef)
   [#1407](https://github.com/CocoaPods/CocoaPods/issues/1407)
 
