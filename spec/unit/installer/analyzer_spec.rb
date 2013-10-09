@@ -345,11 +345,8 @@ module Pod
         it "infers the platform from the user targets" do
           user_project = Xcodeproj::Project.new('path')
           target = user_project.new_target(:application, 'Target', :ios)
-          configuration = target.build_configuration_list.build_configurations.first
-          configuration.build_settings = {
-            'SDKROOT' => 'iphoneos',
-            'IPHONEOS_DEPLOYMENT_TARGET' => '4.0'
-          }
+          target.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
+          target.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '4.0')
 
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_targets = [target]
@@ -362,16 +359,12 @@ module Pod
           user_project = Xcodeproj::Project.new('path')
           target1 = user_project.new_target(:application, 'Target', :ios)
           configuration1 = target1.build_configuration_list.build_configurations.first
-          configuration1.build_settings = {
-            'SDKROOT' => 'iphoneos',
-            'IPHONEOS_DEPLOYMENT_TARGET' => '4.0'
-          }
+          target1.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
+          target1.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '4.0')
+
           target2 = user_project.new_target(:application, 'Target', :ios)
-          configuration2 = target2.build_configuration_list.build_configurations.first
-          configuration2.build_settings = {
-            'SDKROOT' => 'iphoneos',
-            'IPHONEOS_DEPLOYMENT_TARGET' => '6.0'
-          }
+          target2.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
+          target2.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '6.0')
 
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_targets = [target1, target2]
@@ -383,17 +376,12 @@ module Pod
         it "raises if the user targets have a different platform" do
           user_project = Xcodeproj::Project.new('path')
           target1 = user_project.new_target(:application, 'Target', :ios)
-          configuration1 = target1.build_configuration_list.build_configurations.first
-          configuration1.build_settings = {
-            'SDKROOT' => 'iphoneos',
-            'IPHONEOS_DEPLOYMENT_TARGET' => '4.0'
-          }
+          target1.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
+          target1.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '4.0')
+
           target2 = user_project.new_target(:application, 'Target', :ios)
-          configuration2 = target2.build_configuration_list.build_configurations.first
-          configuration2.build_settings = {
-            'SDKROOT' => 'macosx',
-            'IPHONEOS_DEPLOYMENT_TARGET' => '10.6'
-          }
+          target2.build_configuration_list.set_setting('SDKROOT', 'macosx')
+          target2.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '10.6')
 
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_targets = [target1, target2]
