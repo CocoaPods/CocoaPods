@@ -2,7 +2,10 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+## 0.26.2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.1...0.26.2)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.1...0.26.2)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.11.1...0.13.0)
 
 ###### Bug Fixes
 
@@ -23,8 +26,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 
 ## 0.26.1
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.25.0...0.26.0)
-• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.0)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.25.0...0.26.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.11.1...0.12.0)
 
 ###### Enhancements
