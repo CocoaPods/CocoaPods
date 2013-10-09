@@ -19,16 +19,6 @@ module Pod
       @refs_by_absolute_path = {}
       @pods = new_group('Pods')
       @development_pods = new_group('Development Pods')
-      set_cocoapods_defaults
-    end
-
-    # @return [void] Prepares the project with the build settings used by
-    #         CocoaPods.
-    #
-    def set_cocoapods_defaults
-      build_configurations.each do |configuration|
-        configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'NO'
-      end
     end
 
     # @return [PBXGroup] The group for the support files of the aggregate

@@ -23,12 +23,6 @@ module Pod
         @project.development_pods.name.should == 'Development Pods'
       end
 
-      it "sets the default build settings of CocoaPods" do
-        @project.build_configurations.each do |configuration|
-          configuration.build_settings['CLANG_ENABLE_OBJC_ARC'].should== 'NO'
-        end
-      end
-
     end
 
     #-------------------------------------------------------------------------#

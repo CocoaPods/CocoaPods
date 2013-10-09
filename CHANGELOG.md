@@ -12,6 +12,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#1456](https://github.com/CocoaPods/CocoaPods/issues/1456)
 
+* The Pods project now properly configures ARC on all build configurations.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1454](https://github.com/CocoaPods/CocoaPods/issues/1454)
+
+
 ## 0.26.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.25.0...0.26.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.0)
