@@ -39,21 +39,22 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           GCC_C_LANGUAGE_STANDARD: gnu99
           SKIP_INSTALL: 'YES'
-          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
-          DSTROOT: "/tmp/xcodeproj.dst"
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
           GCC_DYNAMIC_NO_PIC: 'NO'
           GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
           GCC_OPTIMIZATION_LEVEL: '0'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           ALWAYS_SEARCH_USER_PATHS: 'NO'
-          PRODUCT_NAME: "$(TARGET_NAME)"
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
-          - "$(inherited)"
+          - $(inherited)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'NO'
@@ -64,23 +65,24 @@ Targets:
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
-          - "-DNS_BLOCK_ASSERTIONS=1"
-          - "$(inherited)"
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
           GCC_C_LANGUAGE_STANDARD: gnu99
           SKIP_INSTALL: 'YES'
-          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
-          DSTROOT: "/tmp/xcodeproj.dst"
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
           OTHER_CPLUSPLUSFLAGS:
-          - "-DNS_BLOCK_ASSERTIONS=1"
-          - "$(inherited)"
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'YES'
-          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
         Base Configuration: Pods.xcconfig
 - Pods-Reachability:
     Build Phases:
@@ -96,21 +98,22 @@ Targets:
     - Debug:
         Build Settings:
           OTHER_LDFLAGS: ''
-          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           GCC_C_LANGUAGE_STANDARD: gnu99
           SKIP_INSTALL: 'YES'
-          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
-          DSTROOT: "/tmp/xcodeproj.dst"
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
           GCC_DYNAMIC_NO_PIC: 'NO'
           GCC_OPTIMIZATION_LEVEL: '0'
           GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           ALWAYS_SEARCH_USER_PATHS: 'NO'
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
-          - "$(inherited)"
+          - $(inherited)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'NO'
@@ -118,22 +121,23 @@ Targets:
         Base Configuration: Pods-Reachability-Private.xcconfig
     - Release:
         Build Settings:
-          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
-          - "-DNS_BLOCK_ASSERTIONS=1"
-          - "$(inherited)"
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
           GCC_C_LANGUAGE_STANDARD: gnu99
           SKIP_INSTALL: 'YES'
-          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
-          DSTROOT: "/tmp/xcodeproj.dst"
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
           OTHER_CPLUSPLUSFLAGS:
-          - "-DNS_BLOCK_ASSERTIONS=1"
-          - "$(inherited)"
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
@@ -151,7 +155,7 @@ Build Configurations:
       GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
-      - "$(inherited)"
+      - $(inherited)
       ONLY_ACTIVE_ARCH: 'YES'
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       CLANG_ENABLE_MODULES: 'YES'
