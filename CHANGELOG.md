@@ -12,6 +12,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#1456](https://github.com/CocoaPods/CocoaPods/issues/1456)
 
+* If an user target doesn't specify an architecture the value specified for the
+  project is used in CocoaPods targets.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1450](https://github.com/CocoaPods/CocoaPods/issues/1450)
+
 * The Pods project now properly configures ARC on all build configurations.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1454](https://github.com/CocoaPods/CocoaPods/issues/1454)

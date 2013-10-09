@@ -461,9 +461,7 @@ module Pod
       def compute_archs_for_target_definition(target_definition, user_targets)
         archs = []
         user_targets.each do |target|
-          target.build_configurations.each do |configuration|
-            archs << configuration.build_settings['ARCHS']
-          end
+          archs << target.common_resolved_build_setting('ARCHS')
         end
 
         archs = archs.compact.uniq.sort
