@@ -2,6 +2,16 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+###### Bug Fixes
+
+* Fixed a crash which was causing a failure in `pod lib create` if the name of
+  the Pod included spaces. As spaces are not supported now this is gracefully
+  handled with an informative message.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#1456](https://github.com/CocoaPods/CocoaPods/issues/1456)
+
 ## 0.26.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.25.0...0.26.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.0)
