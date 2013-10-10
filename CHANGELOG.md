@@ -12,6 +12,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
   [#1463](https://github.com/CocoaPods/CocoaPods/issues/1463)
   [#1457](https://github.com/CocoaPods/CocoaPods/issues/1457)
+  
+* Fixed a defect which prevented subspecs from being dependant on a pod with a
+  name closely matching the name of one of the subspec's parents.
+  
+  [Noah McCann](https://github.com/nmccann)
+  [#29](https://github.com/CocoaPods/Core/pull/29) 
 
 
 ## 0.26.2
