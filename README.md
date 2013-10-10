@@ -55,40 +55,6 @@ we welcome with joy new contributors.
 
 # Sponsors
 
-- [@fngtps](http://twitter.com/fngtps) is donating time to work on the design
-  of the forthcoming cocoapods.org website and donated the money to hire [Max
-  Steenbergen](http://twitter.com/maxsteenbergen) to design [an
-  icon](http://drbl.in/cpmL) for it.
-- [@sauspiel](http://twitter.com/Sauspiel) uses CocoaPods for their games and
-  have hired @alloy to add features and specs they needed. These are Nimbus,
-  QuincyKit, and HockeyKit. For the [Nimbus
-  spec](https://github.com/CocoaPods/Specs/blob/master/Nimbus/0.9.0/Nimbus.podspec),
-  the ‘subspecs’ feature was added.
-
-# Endorsements
-
-- “I am crazy excited about this. With the growing number of Objective-C
-  libraries, this will make things so much better.” –– [Sam
-  Soffes](http://news.ycombinator.com/item?id=3009154)
-- “Are you doing open source iOS components? You really should support
-  @CocoaPods!” –– [Matthias
-  Tretter](http://twitter.com/#!/myell0w/status/134955697740840961)
-- “So glad someone has finally done this...” –– [Tom
-  Wilson](http://news.ycombinator.com/item?id=3009349)
-- “Anybody who has tasted the coolness of RubyGems (and @gembundler)
-  understands how cool CocoaPods might be.” –– [StuFF
-  mc](http://twitter.com/#!/stuffmc/status/115374231591731200)
-- “I will be working on getting several of my Objective-C libraries ready for
-  CocoaPods this week!” –– [Luke
-  Redpath](http://twitter.com/#!/lukeredpath/status/115510581921988608)
-- “Really digg how @alloy is building a potential game changer” –– [Klaas
-  Speller](https://twitter.com/#!/spllr/status/115914209438601216)
-- “@alloy's making an Objective-C package manager. This is fantastic news
-  kids!” –– [Josh
-  Abernathy](http://twitter.com/#!/joshaber/status/115273577703555073)
-- “A package manager for Cocoa/Objective-C, built with @MacRuby. Awesomeness!”
-  –– [Johannes
-  Fahrenkrug](http://twitter.com/#!/jfahrenkrug/status/115303240286998528)
-- “This is awesome, I love endorsements!” –– [Appie
-  Durán](http://twitter.com/#!/AppieDuran)
-
+Lovingly sponsored by [Fingertips](http://www.fngtps.com),
+[Hipbyte](http://www.hipbyte.com), [Artsy](http://artsy.net) and
+[Sauspiel](https://www.sauspiel.de).
