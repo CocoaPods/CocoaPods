@@ -2,6 +2,18 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+###### Bug Fixes
+
+* Fixed a crash related to CocoaPods being unable to resolve an unique build
+  setting of an user target with custom build configurations.
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
+  [#1463](https://github.com/CocoaPods/CocoaPods/issues/1463)
+  [#1457](https://github.com/CocoaPods/CocoaPods/issues/1457)
+
+
 ## 0.26.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.1...0.26.2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.1...0.26.2)
