@@ -1,11 +1,12 @@
-# CocoaPods – an Objective-C library manager
+# CocoaPods
+
+### the Objective-C dependency manager
 
 [![Build Status](https://travis-ci.org/CocoaPods/CocoaPods.png?branch=master)](https://travis-ci.org/CocoaPods/CocoaPods)
-[![Code Climate](https://codeclimate.com/github/CocoaPods/CocoaPods.png)](https://codeclimate.com/github/CocoaPods/CocoaPods)
-[![Dependency Status](https://gemnasium.com/CocoaPods/CocoaPods.png)](https://gemnasium.com/CocoaPods/CocoaPods)
 [![Gem Version](https://badge.fury.io/rb/cocoapods.png)](http://badge.fury.io/rb/cocoapods)
+[![Code Climate](https://codeclimate.com/github/CocoaPods/CocoaPods.png)](https://codeclimate.com/github/CocoaPods/CocoaPods)
 
-CocoaPods manages library dependencies for your Xcode project.
+CocoaPods manages dependencies for your Xcode project.
 
 You specify the dependencies for your project in one easy text file. CocoaPods
 resolves dependencies between libraries, fetches source code for the
@@ -22,17 +23,28 @@ See the [NSScreencast](https://twitter.com/NSScreencast) episode about [using
 CocoaPods](http://nsscreencast.com/episodes/5-cocoapods) for a quick overview.
 
 
+## Sponsors
+
+Lovingly sponsored by [Fingertips](http://www.fngtps.com),
+[Hipbyte](http://www.hipbyte.com), [Artsy](http://artsy.net) and
+[Sauspiel](https://www.sauspiel.de).
+
+## Collaborate
+
+All CocoaPods development happens on GitHub, contributions make good karma and
+we welcome with joy new contributors.
+
 ## Links
 
 | Link | Description |
 | :----- | :------ |
 [CocoaPods.org](http://cocoapods.org/) | Homepage and search for Pods.
-[@CocoaPods](http://twitter.com/CocoaPods) | Follow CocoaPods on Twitter to get up to date information about what's going on in the CocoaPods world.
-[Mailing List](http://groups.google.com/group/cocoapods) | Announcements and support. Feel free to ask any kind of question.
+[@CocoaPods](http://twitter.com/CocoaPods) | Follow CocoaPods on Twitter to stay up to date.
+[Blog](http://blog.cocoapods.org) | The CocoaPods blog.
+[Mailing List](http://groups.google.com/group/cocoapods) | Feel free to ask any kind of question.
 [Documentation](http://docs.cocoapods.org) | Everything you want to know about CocoaPods.
 [Changelog](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md) | See the changes introduced by each CocoaPods version.
-[RSS feed](http://feeds.cocoapods.org/new-pods.rss) | Don't miss any new Pod.
-
+[New Pods RSS](http://feeds.cocoapods.org/new-pods.rss) | Don't miss any new Pod.
 
 ## Projects
 
@@ -47,14 +59,3 @@ CocoaPods is composed by the following projects:
 | [![Build Status](https://travis-ci.org/CocoaPods/CLAide.png?branch=master)](https://travis-ci.org/CocoaPods/CLAide) | [CLAide](https://github.com/CocoaPods/CLAide) | A small command-line interface framework.  | [docs](http://docs.cocoapods.org/claide/index.html)
 | [![Build Status](https://secure.travis-ci.org/CocoaPods/Specs.png?branch=master)](http://travis-ci.org/CocoaPods/Specs) | [Master Repo ](https://github.com/CocoaPods/Specs) | Master repository of specifications. | [guide](http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html)
 
-
-## Collaborate
-
-All CocoaPods development happens on GitHub, contributions make good karma and
-we welcome with joy new contributors.
-
-# Sponsors
-
-Lovingly sponsored by [Fingertips](http://www.fngtps.com),
-[Hipbyte](http://www.hipbyte.com), [Artsy](http://artsy.net) and
-[Sauspiel](https://www.sauspiel.de).
