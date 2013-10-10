@@ -1,0 +1,353 @@
+
+File References:
+- Podfile
+- Frameworks:
+  - iOS:
+    - Foundation.framework
+    - SystemConfiguration.framework
+- Pods:
+  - Reachability:
+    - Reachability.h
+    - Reachability.m
+    - Support Files:
+      - Pods-Reachability.xcconfig
+      - Pods-Reachability-Private.xcconfig
+      - Pods-Reachability-dummy.m
+      - Pods-Reachability-prefix.pch
+- Products:
+  - libPods.a
+  - libPods-Reachability.a
+- Targets Support Files:
+  - Pods:
+    - Pods.xcconfig
+    - Pods-acknowledgements.markdown
+    - Pods-acknowledgements.plist
+    - Pods-dummy.m
+    - Pods-environment.h
+    - Pods-resources.sh
+
+
+
+Targets:
+- Pods:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+      - libPods-Reachability.a
+    Build Configurations:
+    - 'Custom Debug - missing some settings ':
+        Build Settings:
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+        Base Configuration: Pods.xcconfig
+    - Custom Release:
+        Build Settings:
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+        Base Configuration: Pods.xcconfig
+    - Debug:
+        Build Settings:
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - $(inherited)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          OTHER_LDFLAGS: ''
+        Base Configuration: Pods.xcconfig
+    - Release:
+        Build Settings:
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+        Base Configuration: Pods.xcconfig
+- Pods-Reachability:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-Reachability-dummy.m
+      - Reachability.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+      - SystemConfiguration.framework
+    - HeadersBuildPhase:
+      - Reachability.h
+    Build Configurations:
+    - 'Custom Debug - missing some settings ':
+        Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+        Base Configuration: Pods-Reachability-Private.xcconfig
+    - Custom Release:
+        Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+        Base Configuration: Pods-Reachability-Private.xcconfig
+    - Debug:
+        Build Settings:
+          OTHER_LDFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - $(inherited)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+        Base Configuration: Pods-Reachability-Private.xcconfig
+    - Release:
+        Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          GCC_C_LANGUAGE_STANDARD: gnu99
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+        Base Configuration: Pods-Reachability-Private.xcconfig
+
+
+
+Build Configurations:
+- 'Custom Debug - missing some settings ':
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      VALIDATE_PRODUCT: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+      CLANG_ENABLE_MODULES: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'NO'
+      CLANG_ENABLE_OBJC_ARC: 'NO'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      ENABLE_NS_ASSERTIONS: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+- Custom Release:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      VALIDATE_PRODUCT: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+      CLANG_ENABLE_MODULES: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'NO'
+      CLANG_ENABLE_OBJC_ARC: 'NO'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      ENABLE_NS_ASSERTIONS: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+- Debug:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - $(inherited)
+      ONLY_ACTIVE_ARCH: 'YES'
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'NO'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+- Release:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      VALIDATE_PRODUCT: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+      CLANG_ENABLE_MODULES: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'NO'
+      CLANG_ENABLE_OBJC_ARC: 'NO'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      ENABLE_NS_ASSERTIONS: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'

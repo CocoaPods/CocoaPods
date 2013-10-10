@@ -1,0 +1,179 @@
+
+File References:
+- SampleApp:
+  - CPAppDelegate.h
+  - CPAppDelegate.m
+  - MainMenu.xib:
+    - en
+  - Supporting Files:
+    - SampleApp-Info.plist
+    - InfoPlist.strings:
+      - en
+    - main.m
+    - SampleApp-Prefix.pch
+    - Credits.rtf:
+      - en
+- Frameworks:
+  - Cocoa.framework
+  - Other Frameworks:
+    - AppKit.framework
+    - CoreData.framework
+    - Foundation.framework
+  - libPods.a
+- Products:
+  - SampleApp.app
+- Pods.xcconfig
+
+
+
+Targets:
+- SampleApp:
+    Build Phases:
+    - Check Pods Manifest.lock: []
+    - SourcesBuildPhase:
+      - main.m
+      - CPAppDelegate.m
+    - FrameworksBuildPhase:
+      - Cocoa.framework
+      - libPods.a
+    - ResourcesBuildPhase:
+      - InfoPlist.strings
+      - Credits.rtf
+      - MainMenu.xib
+    - Copy Pods Resources: []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
+          COMBINE_HIDPI_IMAGES: 'YES'
+          GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
+          WRAPPER_EXTENSION: app
+          PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods.xcconfig
+    - 'Custom Debug - missing some settings ':
+        Build Settings:
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
+          COMBINE_HIDPI_IMAGES: 'YES'
+          GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
+          WRAPPER_EXTENSION: app
+          PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods.xcconfig
+    - Release:
+        Build Settings:
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
+          COMBINE_HIDPI_IMAGES: 'YES'
+          GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
+          WRAPPER_EXTENSION: app
+          PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods.xcconfig
+    - Custom Release:
+        Build Settings:
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
+          COMBINE_HIDPI_IMAGES: 'YES'
+          GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
+          WRAPPER_EXTENSION: app
+          PRODUCT_NAME: $(TARGET_NAME)
+        Base Configuration: Pods.xcconfig
+
+
+
+Build Configurations:
+- 'Custom Debug - missing some settings ':
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - $(inherited)
+      ONLY_ACTIVE_ARCH: 'YES'
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'NO'
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+- Custom Release:
+    Build Settings:
+      DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      SDKROOT: macosx
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_CXX_LIBRARY: libc++
+- Debug:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - $(inherited)
+      ONLY_ACTIVE_ARCH: 'YES'
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'NO'
+      SDKROOT: macosx
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+- Release:
+    Build Settings:
+      DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      SDKROOT: macosx
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_CXX_LIBRARY: libc++
