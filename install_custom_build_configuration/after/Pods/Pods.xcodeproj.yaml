@@ -53,6 +53,7 @@ Targets:
           - $(inherited)
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           PRODUCT_NAME: $(TARGET_NAME)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
@@ -76,6 +77,7 @@ Targets:
           - $(inherited)
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           PRODUCT_NAME: $(TARGET_NAME)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
@@ -158,6 +160,7 @@ Targets:
           - $(inherited)
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           PRODUCT_NAME: $(TARGET_NAME)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
@@ -182,6 +185,7 @@ Targets:
           - $(inherited)
           ALWAYS_SEARCH_USER_PATHS: 'NO'
           GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           PRODUCT_NAME: $(TARGET_NAME)
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           OTHER_LDFLAGS: ''
