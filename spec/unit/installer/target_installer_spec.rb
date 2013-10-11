@@ -16,7 +16,7 @@ module Pod
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
       @project.add_pod_group('BananaLib', fixture('banana-lib'))
-      group = @project.group_for_spec('BananaLib', :source_files)
+      group = @project.group_for_spec('BananaLib')
       file_accessor.source_files.each do |file|
         @project.add_file_reference(file, group)
       end
@@ -27,6 +27,17 @@ module Pod
       @pod_target.file_accessors = [file_accessor]
 
       @installer = Installer::TargetInstaller.new(config.sandbox, @pod_target)
+    end
+
+    it "Adds the architectures to the custom build configurations of the user target" do
+      @pod_target.archs = "$(ARCHS_STANDARD_64_BIT)"
+      @installer.send(:add_target)
+      @installer.send(:target).resolved_build_setting('ARCHS').should == {
+        "Release"=>"$(ARCHS_STANDARD_64_BIT)",
+        "Debug"=>"$(ARCHS_STANDARD_64_BIT)",
+        "AppStore"=>"$(ARCHS_STANDARD_64_BIT)",
+        "Test"=>"$(ARCHS_STANDARD_64_BIT)"
+      }
     end
 
   end

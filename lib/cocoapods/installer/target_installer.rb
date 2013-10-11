@@ -43,18 +43,18 @@ module Pod
         deployment_target = library.platform.deployment_target.to_s
         @target = project.new_target(:static_library, name, platform, deployment_target)
 
+        library.user_build_configurations.each do |bc_name, type|
+          configuration = @target.add_build_configuration(bc_name, type)
+        end
+
+
         settings = {}
         if library.archs
           settings['ARCHS'] = library.archs
-        else
-          settings.delete('ARCHS')
         end
 
-        @target.build_settings('Debug').merge!(settings)
-        @target.build_settings('Release').merge!(settings)
-
-        library.user_build_configurations.each do |bc_name, type|
-          @target.add_build_configuration(bc_name, type)
+        @target.build_configurations.each do |configuration|
+          configuration.build_settings.merge!(settings)
         end
 
         library.target = @target

@@ -12,8 +12,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Adam Sharp](https://github.com/sharplet)
   [Core#30](https://github.com/CocoaPods/Core/pull/30)
 
-
 ###### Bug Fixes
+
+* The architecture is now set in the build settings of the user build
+  configurations.
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1450](https://github.com/CocoaPods/CocoaPods/issues/1462)
+  [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
 
 * Fixed a crash related to CocoaPods being unable to resolve an unique build
   setting of an user target with custom build configurations.  
@@ -21,12 +26,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
   [#1463](https://github.com/CocoaPods/CocoaPods/issues/1463)
   [#1457](https://github.com/CocoaPods/CocoaPods/issues/1457)
-  
+
 * Fixed a defect which prevented subspecs from being dependant on a pod with a
-  name closely matching the name of one of the subspec's parents.
-  
+  name closely matching the name of one of the subspec's parents.  
   [Noah McCann](https://github.com/nmccann)
-  [#29](https://github.com/CocoaPods/Core/pull/29) 
+  [#29](https://github.com/CocoaPods/Core/pull/29)
 
 
 ## 0.26.2
