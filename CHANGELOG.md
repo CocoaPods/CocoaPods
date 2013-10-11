@@ -16,7 +16,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ###### Bug Fixes
 
 * Fixed a crash related to CocoaPods being unable to resolve an unique build
-  setting of an user target with custom build configurations.
+  setting of an user target with custom build configurations.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
   [#1463](https://github.com/CocoaPods/CocoaPods/issues/1463)
