@@ -4,6 +4,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
+* Targets passed to the `link_with` method of the Podfile DSL no longer need
+  to be explicitly passed as an array. `link_with ['target1', 'target2']` can
+  now be written as `link_with 'target1', 'target2'`.  
+  [Adam Sharp](https://github.com/sharplet)
+  [Core#30](https://github.com/CocoaPods/Core/pull/30)
+
+
 ###### Bug Fixes
 
 * Fixed a crash related to CocoaPods being unable to resolve an unique build
