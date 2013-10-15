@@ -13,8 +13,8 @@ module Pod
         platform :ios
         pod 'JSONKit'
       end
-      config.integrate_targets = false
-      @installer = Installer.new(config.sandbox, podfile)
+      config.stubs(:integrate_targets).returns(false)
+      @installer = Installer.new(environment.sandbox, podfile)
       @installer.send(:analyze)
       @specs = @installer.aggregate_targets.first.pod_targets.first.specs
       @installer.stubs(:installed_specs).returns(@specs)
@@ -26,7 +26,7 @@ module Pod
     describe "Public Hooks API" do
 
       it "returns the sandbox root" do
-        @rep.sandbox_root.should == config.sandbox.root
+        @rep.sandbox_root.should == environment.sandbox.root
       end
 
       it "returns the pods project" do
@@ -63,7 +63,7 @@ module Pod
     describe "Unsafe Hooks API" do
 
       it "returns the sandbox" do
-        @rep.sandbox.should == config.sandbox
+        @rep.sandbox.should == environment.sandbox
       end
 
       it "returns the config" do
