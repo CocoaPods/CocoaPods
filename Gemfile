@@ -18,7 +18,7 @@ group :development do
   gem "mocha-on-bacon"
   gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
   gem "rake"
-  gem 'coveralls', :require => false, :git => 'https://github.com/lemurheavy/coveralls-ruby.git'
+  gem 'coveralls', :require => false
   # Explicitly add this, otherwise it might sometimes be missing:
   # https://github.com/lemurheavy/coveralls-ruby/blob/master/coveralls-ruby.gemspec#L23.
   gem 'simplecov'

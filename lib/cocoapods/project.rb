@@ -63,8 +63,6 @@ module Pod
       parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
       group = parent_group.new_group(pod_name, path, source_tree)
-      support_files_group = group.new_group(SPEC_SUBGROUPS[:support_files])
-      support_files_group.source_tree = 'SOURCE_ROOT'
       group
     end
 
@@ -88,12 +86,8 @@ module Pod
     # @return [Hash] The names of the specification subgroups by key.
     #
     SPEC_SUBGROUPS = {
-      :source_files             => 'Source Files',
-      :resources                => 'Resources',
-      :frameworks_and_libraries => 'Frameworks & Libraries',
-      :support_files            => 'Support Files',
-      :subspecs                 => 'Subspecs',
-      :products                 => 'Products',
+      :resources  => 'Resources',
+      :frameworks => 'Frameworks',
     }
 
     # Returns the group for the specification with the give name creating it if
@@ -102,22 +96,44 @@ module Pod
     # @param [String] spec_name
     #                 The full name of the specification.
     #
-    # @param [Symbol] subgroup_key
-    #                 The optional key of the subgroup (@see #{SPEC_SUBGROUPS})
-    #
     # @return [PBXGroup] The group.
     #
     def group_for_spec(spec_name, subgroup_key = nil)
-      spec_group = spec_group(spec_name)
-      if subgroup_key
-        subgroup = SPEC_SUBGROUPS[subgroup_key]
-        raise ArgumentError, "Unrecognized subgroup `#{subgroup_key}`" unless subgroup
-        spec_group.find_subpath(subgroup, true)
-      else
-        spec_group
+      pod_name = Specification.root_name(spec_name)
+      group = pod_group(pod_name)
+      raise "[Bug] Unable to locate group for Pod named `#{pod_name}`" unless group
+      if spec_name != pod_name
+        subspecs_names = spec_name.gsub(pod_name + '/', '').split('/')
+        subspecs_names.each do |name|
+          group = group[name] || group.new_group(name)
+        end
       end
+
+      if subgroup_key
+        subgroup_name = SPEC_SUBGROUPS[subgroup_key]
+        raise ArgumentError, "Unrecognized subgroup key `#{subgroup_key}`" unless subgroup_name
+        group = group[subgroup_name] || group.new_group(subgroup_name)
+      end
+
+      group
     end
 
+    # Returns the support files group for the Pod with the given name.
+    #
+    # @param  [String] pod_name
+    #         The name of the Pod.
+    #
+    # @return [PBXGroup] The group.
+    #
+    def pod_support_files_group(pod_name)
+      group = pod_group(pod_name)
+      support_files_group = group['Support Files']
+      unless support_files_group
+        support_files_group = group.new_group('Support Files')
+        support_files_group.source_tree = 'SOURCE_ROOT'
+      end
+      support_files_group
+    end
 
     public
 
@@ -187,27 +203,6 @@ module Pod
     #         by absolute path.
     #
     attr_reader :refs_by_absolute_path
-
-    # Returns the group for the given specification creating it if needed.
-    #
-    # @param  [String] spec_name
-    #         The full name of the specification.
-    #
-    # @return [PBXGroup] The group for the spec with the given name.
-    #
-    def spec_group(spec_name)
-      pod_name = Specification.root_name(spec_name)
-      group = pod_group(pod_name)
-      raise "[Bug] Unable to locate group for Pod named `#{pod_name}`" unless group
-      if spec_name != pod_name
-        subspecs_names = spec_name.gsub(pod_name + '/', '').split('/')
-        subspecs_names.each do |name|
-          subspecs_group = group[SPEC_SUBGROUPS[:subspecs]] || group.new_group(SPEC_SUBGROUPS[:subspecs])
-          group = subspecs_group[name] || subspecs_group.new_group(name)
-        end
-      end
-      group
-    end
 
     #-------------------------------------------------------------------------#
 

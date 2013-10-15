@@ -347,6 +347,10 @@ describe "Integration" do
       check "install --no-repo-update", "install_custom_workspace"
     end
 
+    describe "Integrates a target with custom build settings" do
+      check "install --no-repo-update", "install_custom_build_configuration"
+    end
+
     # @todo add tests for all the hooks API
     #
     describe "Runs the Podfile callbacks" do

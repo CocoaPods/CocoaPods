@@ -24,17 +24,23 @@ module Pod
 
       it "adds file references of the source files the Pods project" do
         @installer.install!
-        file_ref = @installer.pods_project['Pods/BananaLib/Source Files/Banana.m']
+        file_ref = @installer.pods_project['Pods/BananaLib/Banana.m']
         file_ref.should.be.not.nil
         file_ref.path.should == "Classes/Banana.m"
       end
 
-      xit "adds the file references of the frameworks of the projet" do
-
+      it "adds the file references of the frameworks of the project" do
+        @installer.install!
+        file_ref = @installer.pods_project['Pods/BananaLib/Frameworks/Bananalib.framework']
+        file_ref.should.be.not.nil
+        file_ref.path.should == "Bananalib.framework"
       end
 
-      xit "adds the file references of the libraries of the project" do
-
+      it "adds the file references of the libraries of the project" do
+        @installer.install!
+        file_ref = @installer.pods_project['Pods/BananaLib/Frameworks/libBananalib.a']
+        file_ref.should.be.not.nil
+        file_ref.path.should == "libBananalib.a"
       end
 
       it "adds file references of the resources the Pods project" do
@@ -87,13 +93,7 @@ module Pod
         end
       end
 
-      describe "#add_file_accessors_paths_to_pods_group" do 
-        xit "adds the paths of the paths of the file accessor corresponding to the given key to the Pods project" do
-
-        end
-      end
-
-      describe "#add_file_accessors_paths_to_pods_group" do 
+      describe "#header_mappings" do
         it "returns the header mappings" do
           headers_sandbox = Pathname.new('BananaLib')
           headers = [Pathname.new('BananaLib/Banana.h')]

@@ -1,6 +1,0 @@
-platform :ios
-
-target :test, :exclusive => true do
-  link_with 'TargetTest'
-  pod 'JSONKit'
-end

@@ -6,23 +6,113 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
-* The Pods project now is sorted by name.  
+* Targets passed to the `link_with` method of the Podfile DSL no longer need
+  to be explicitly passed as an array. `link_with ['target1', 'target2']` can
+  now be written as `link_with 'target1', 'target2'`.  
+  [Adam Sharp](https://github.com/sharplet)
+  [Core#30](https://github.com/CocoaPods/Core/pull/30)
+
+###### Bug Fixes
+
+* The architecture is now set in the build settings of the user build
+  configurations.
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1450](https://github.com/CocoaPods/CocoaPods/issues/1462)
+  [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
+
+* Fixed a crash related to CocoaPods being unable to resolve an unique build
+  setting of an user target with custom build configurations.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
+  [#1463](https://github.com/CocoaPods/CocoaPods/issues/1463)
+  [#1457](https://github.com/CocoaPods/CocoaPods/issues/1457)
+
+* Fixed a defect which prevented subspecs from being dependant on a pod with a
+  name closely matching the name of one of the subspec's parents.  
+  [Noah McCann](https://github.com/nmccann)
+  [#29](https://github.com/CocoaPods/Core/pull/29)
+
+
+## 0.26.2
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.1...0.26.2)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.1...0.26.2)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.11.1...0.13.0)
+
+###### Bug Fixes
+
+* Fixed a crash which was causing a failure in `pod lib create` if the name of
+  the Pod included spaces. As spaces are not supported now this is gracefully
+  handled with an informative message.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#1456](https://github.com/CocoaPods/CocoaPods/issues/1456)
+
+* If an user target doesn't specify an architecture the value specified for the
+  project is used in CocoaPods targets.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1450](https://github.com/CocoaPods/CocoaPods/issues/1450)
+
+* The Pods project now properly configures ARC on all build configurations.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1454](https://github.com/CocoaPods/CocoaPods/issues/1454)
+
+
+## 0.26.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.25.0...0.26.1)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.1)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.11.1...0.12.0)
+
+###### Enhancements
+
+* CocoaPods now creates and hides the schemes of its targets after every
+  installation. The schemes are not shared because the flag which keeps track
+  whether they should be visible is a user only flag. The schemes are still
+  present and to debug a single Pod it is possible to make its scheme visible
+  in the Schemes manager of Xcode. This is rarely needed though because the
+  user targets trigger the compilation of the Pod targets.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
+
+* Installations which don't integrate a user target (lint subcommands and
+  `--no-integrate` option) now set the architecture of OS X Pod targets to
+  `$(ARCHS_STANDARD_64_BIT)` (Xcode 4 default value for new targets). This
+  fixes lint issues with Xcode 4.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
+
+* Further improvements to the organization of the Pods project  
+
+  - The project is now is sorted by name with groups at the bottom.
+  - Source files are now stored in the root group of the spec, subspecs are not
+    stored in a `Subspec` group anymore and the products of the Pods all are
+    stored in the products group of the project.
+  - The frameworks are referenced relative to the Developer directory and
+    namespaced per platform.
+
+  [Fabio Pelosin](https://github.com/irrationalfab)
   [#1389](https://github.com/CocoaPods/CocoaPods/pull/1389)
+  [#1420](https://github.com/CocoaPods/CocoaPods/pull/1420)
 
 * Added the `documentation_url` DSL attribute to the specifications.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
   [#1273](https://github.com/CocoaPods/CocoaPods/pull/1273)
 
 ###### Bug Fixes
 
 * The search paths of vendored frameworks and libraries now are always
   specified relatively.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
   [#1405](https://github.com/CocoaPods/CocoaPods/pull/1405)
 
 * Fix an issue where CocoaPods would fail to work when used with an older
-  version of activesupport. This fix raises the dependency version to
-  the earliest compatible version of activesupport.  
+  version of the Active Support gem. This fix raises the dependency version to
+  the earliest compatible version of Active Support.  
   [Kyle Fuller](https://github.com/kylef)
   [#1407](https://github.com/CocoaPods/CocoaPods/issues/1407)
+
+* CocoaPods will not attempt to load anymore all the version of a specification
+  preventing crashes if those are incompatible.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1272](https://github.com/CocoaPods/CocoaPods/pull/1272)
 
 
 ## 0.25.0
@@ -37,13 +127,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   The generated Pods Xcode project is now compatible with `arm64` projects and
   is updated to use Xcode 5’s default settings removing all warnings.
 
-  **NOTE to Xcode 4 users:**
-  1. This means that the Pods Xcode project now sets the `ONLY_ACTIVE_ARCH`
-     build setting to `YES` in the `Debug` configuration. You’ll have to set the
-     same on your project/target, otherwise the build _will_ fail.
-  2. When building a **iOS** project from the command-line with the `xcodebuild`
-     tool you’ll need to completely disable this setting by appending to your
-     build command: `ONLY_ACTIVE_ARCH=NO`.
+  **NOTE to users migrating projects from Xcode 4, or are still using Xcode 4:**
+  1. The Pods Xcode project now sets the `ONLY_ACTIVE_ARCH` build setting to
+     `YES` in the `Debug` configuration. You _will_ have to set the same on your
+     project/target, otherwise the build _will_ fail.
+  2. Ensure your project/target has an `ARCHS` value set, otherwise the build
+     _will_ fail.
+  3. When building a **iOS** project from the command-line, with the `xcodebuild`
+     tool that comes with Xcode 4, you’ll need to completely disable this setting
+     by appending to your build command: `ONLY_ACTIVE_ARCH=NO`.
 
   [#1352](https://github.com/CocoaPods/CocoaPods/pull/1352)
 

@@ -23,6 +23,7 @@ module Pod
         def validate!
           super
           help! "A name for the Pod is required." unless @name
+          help! "The Pod name cannot contain spaces." if @name.match(/\s/)
         end
 
         def run

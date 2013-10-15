@@ -183,6 +183,9 @@ module Pod
             target.client_root = environment.installation_root
             target.user_target_uuids = []
             target.user_build_configurations = {}
+            if target_definition.platform.name == :osx
+              target.archs = '$(ARCHS_STANDARD_64_BIT)'
+            end
           end
 
           grouped_specs = specs.map do |spec|
@@ -191,8 +194,15 @@ module Pod
 
           grouped_specs.each do |pod_specs|
             pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
+          if config.integrate_targets?
             pod_target.user_build_configurations = target.user_build_configurations
             pod_target.archs = @archs_by_target_def[target_definition]
+          else
+            pod_target.user_build_configurations = {}
+            if target_definition.platform.name == :osx
+              pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
+            end
+          end
             target.pod_targets << pod_target
           end
         end
@@ -452,9 +462,7 @@ module Pod
       def compute_archs_for_target_definition(target_definition, user_targets)
         archs = []
         user_targets.each do |target|
-          target.build_configurations.each do |configuration|
-            archs << configuration.build_settings['ARCHS']
-          end
+          archs << target.common_resolved_build_setting('ARCHS')
         end
 
         archs = archs.compact.uniq.sort

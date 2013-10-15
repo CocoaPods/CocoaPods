@@ -312,6 +312,7 @@ module Pod
           build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
           build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
           build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
+          build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'NO'
         end
       end
     end
@@ -401,7 +402,8 @@ module Pod
       UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
         pods_project.pods.remove_from_project if pods_project.pods.empty?
         pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
-        pods_project.sort
+        pods_project.sort({:groups_position => :below})
+        pods_project.recreate_user_schemes(false)
         pods_project.save
       end
     end
