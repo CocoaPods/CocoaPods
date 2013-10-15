@@ -92,7 +92,7 @@ module Pod
         config.repos_dir = SpecHelper.tmp_repos_path
 
         SourcesManager.update(test_repo_path.basename.to_s, true)
-        UI.output.should.match /Already up-to-date/
+        UI.output.should.match /(Already)|(is) up.to.date/
       end
 
       it "returns whether a source is backed by a git repo" do
