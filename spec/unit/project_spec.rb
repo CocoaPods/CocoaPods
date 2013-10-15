@@ -190,15 +190,9 @@ module Pod
       describe "#reference_for_path" do
 
         before do
-<<<<<<< HEAD
           @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'), false)
           @file = environment.sandbox.pod_dir('BananaLib') + "file.m"
-          @group = @project.group_for_spec('BananaLib', :source_files)
-=======
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
-          @file = config.sandbox.pod_dir('BananaLib') + "file.m"
           @group = @project.group_for_spec('BananaLib')
->>>>>>> master
           @project.add_file_reference(@file, @group)
         end
 
@@ -234,34 +228,6 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-<<<<<<< HEAD
-    describe "Private helpers" do
-
-      describe "#spec_group" do
-
-        before do
-          @project.add_pod_group('JSONKit', environment.sandbox.pod_dir('JSONKit'))
-        end
-
-        it "returns the Pod group for root specifications" do
-          group = @project.send(:spec_group, 'JSONKit')
-          group.hierarchy_path.should == '/Pods/JSONKit'
-        end
-
-        it "returns the group for subspecs" do
-          group = @project.send(:spec_group, 'JSONKit/Parsing')
-          group.hierarchy_path.should == '/Pods/JSONKit/Subspecs/Parsing'
-        end
-
-      end
-    end
-
-    #-------------------------------------------------------------------------#
-
-=======
->>>>>>> master
   end
 end
-
-
 
