@@ -11,7 +11,7 @@ module Bacon
       environment.stubs(:home_dir).returns(SpecHelper.temporary_directory)
 
       config.stubs(:silent).returns(true)
-      config.stubs('skip_repo_update').returns(true)
+      config.stubs(:skip_repo_update).returns(true)
 
       ::Pod::UI.output = ''
       # The following prevents a nasty behaviour where the increments are not

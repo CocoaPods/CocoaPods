@@ -221,7 +221,6 @@ module Pod
       end.flatten
 
       @file_accessor = file_accessors.find { |accessor| accessor.spec.root.name == spec.root.name }
-      #config.silent
     end
 
     # Performs platform specific analysis. It requires to download the source

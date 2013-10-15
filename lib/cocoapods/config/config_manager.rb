@@ -10,81 +10,81 @@ module Pod
     class ConfigManager
 
 
-    # The default settings for the configuration.
-    #
-    # Users can specify custom settings in `~/.cocoapods/config.yaml`.
-    # An example of the contents of this file might look like:
-    #
-    #     ---
-    #     skip_repo_update: true
-    #     new_version_message: false
-    #
-    DEFAULTS = {
-      'verbose'             => false,
-      'silent'              => false,
-      'skip_repo_update'    => false,
+      # The default settings for the configuration.
+      #
+      # Users can specify custom settings in `~/.cocoapods/config.yaml`.
+      # An example of the contents of this file might look like:
+      #
+      #     ---
+      #     skip_repo_update: true
+      #     new_version_message: false
+      #
+      DEFAULTS = {
+        'verbose'             => false,
+        'silent'              => false,
+        'skip_repo_update'    => false,
 
-      'clean'               => true,
-      'integrate_targets'   => true,
-      'new_version_message' => true,
+        'clean'               => true,
+        'integrate_targets'   => true,
+        'new_version_message' => true,
 
-      'max_cache_size'      => 500,
-      'aggressive_cache'    => false,
-    }
+        'max_cache_size'      => 500,
+        'aggressive_cache'    => false,
+      }
 
-    DEFAULTS.each do |key, value|
-      define_method(key) { get_setting(key) }
-      if value.is_a?(TrueClass) || value.is_a?(FalseClass)
-        define_method("#{key}?") { get_setting(key) }
+      DEFAULTS.each do |key, value|
+        define_method(key) { get_setting(key) }
+        if value.is_a?(TrueClass) || value.is_a?(FalseClass)
+          define_method("#{key}?") { get_setting(key) }
+        end
       end
-    end
 
-    class NoKeyError < ArgumentError; end
+      class NoKeyError < ArgumentError; end
 
 
-    # @!group Singleton
+      # @!group Singleton
 
-    # @return [Config] the current config instance creating one if needed.
-    #
-    def self.instance
-      @instance ||= new
-    end
-
-    def get_setting(keypath)
-      value = global_config[keypath] || value_from_env(keypath) || DEFAULTS[keypath]
-      if value.nil?
-        raise NoKeyError, "Unrecognized keypath for configuration `#{keypath}`. " \
-        "\nSupported ones are:\n - #{DEFAULTS.keys.join("\n - ")}"
+      # @return [Config] the current config instance creating one if needed.
+      #
+      def self.instance
+        @instance ||= new
       end
-      value
-    end
 
-    def set_global(keypath, value)
-      hash = load_configuration
-      if value == 'true'
-        value = true
+      def get_setting(keypath)
+        value = global_config[keypath] || value_from_env(keypath) || DEFAULTS[keypath]
+        if value.nil?
+          raise NoKeyError, "Unrecognized keypath for configuration `#{keypath}`. " \
+            "\nSupported ones are:\n - #{DEFAULTS.keys.join("\n - ")}"
+        end
+        value
       end
-      hash[keypath] = value
-      store_configuration(hash)
-    end
 
-    def unset_global(keypath)
+      def set_global(keypath, value)
+        hash = load_configuration
+        if value == 'true'
+          value = true
+        end
+        hash[keypath] = value
+        store_configuration(hash)
+      end
 
-    end
+      def unset_global(keypath)
+        # @todo implement / test
+      end
 
-    # @group Helpers
-    #
-    #
+      # @group Helpers
+      #
+      #
 
-    def verbose?
-      get_setting('verbose') && !silent?
-    end
+      def verbose?
+        get_setting('verbose') && !silent?
+      end
 
-    private
+      private
 
-    def global_config
-      @global_config ||= load_configuration
-    end
+      def global_config
+        @global_config ||= load_configuration
+      end
 
       # @return [Hash]
       #

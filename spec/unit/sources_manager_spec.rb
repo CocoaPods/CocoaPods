@@ -89,7 +89,7 @@ module Pod
           `git fetch -q`
           `git branch --set-upstream master origin/master`
         end
-        config.stubs(:repos_dir).returns(SpecHelper.tmp_repos_path)
+        environment.stubs(:repos_dir).returns(SpecHelper.tmp_repos_path)
 
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.output.should.match /Already up-to-date/
@@ -150,7 +150,7 @@ module Pod
 
       it "returns whether the master repo is functional" do
         SourcesManager.master_repo_functional?.should.be.true
-        config.repos_dir = SpecHelper.temporary_directory
+        environment.stubs(:repos_dir).returns(SpecHelper.tmp_repos_path)
         SourcesManager.master_repo_functional?.should.be.false
       end
 

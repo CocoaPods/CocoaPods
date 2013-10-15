@@ -81,7 +81,8 @@ module Pod
     #
     def initialize(argv)
       super
-      config.silent = argv.flag?('silent', config.silent)
+      # @todo Refactor / fix this. This shouldn't be set directly from here
+      #config.silent = argv.flag?('silent', config.silent)
       config.verbose = self.verbose? unless self.verbose.nil?
       unless self.colorize_output?
         String.send(:define_method, :colorize) { |string , _| string }

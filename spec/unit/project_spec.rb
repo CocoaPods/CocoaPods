@@ -32,7 +32,7 @@ module Pod
       describe "#add_pod_group" do
 
         before do
-          @path = config.sandbox.pod_dir('BananaLib')
+          @path = environment.sandbox.pod_dir('BananaLib')
         end
 
         it "adds the group for a Pod" do
@@ -42,14 +42,12 @@ module Pod
         end
 
         it "adds the group for a development Pod" do
-          path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path, true)
           group.parent.should == @project.development_pods
           group.name.should == 'BananaLib'
         end
 
         it "configures the path of a new Pod group" do
-          path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path)
           group.source_tree.should == '<group>'
           group.path.should == 'BananaLib'
@@ -57,7 +55,6 @@ module Pod
         end
 
         it "configures the path of a new Pod group as absolute if requested" do
-          path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path, false, true)
           group.source_tree.should == '<absolute>'
           group.path.should == @path.to_s
@@ -71,8 +68,8 @@ module Pod
       describe "#pod_groups" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
-          @project.add_pod_group('OrangeLib', config.sandbox.pod_dir('OrangeLib'), true)
+          @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'))
+          @project.add_pod_group('OrangeLib', environment.sandbox.pod_dir('OrangeLib'), true)
         end
 
         it "returns the pod groups" do
@@ -89,7 +86,7 @@ module Pod
       #----------------------------------------#
 
       it "returns the group of a Pod with a given name" do
-        @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
+        @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'))
         @project.pod_group('BananaLib').name.should == 'BananaLib'
       end
 
@@ -98,7 +95,7 @@ module Pod
       describe "#group_for_spec" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
+          @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'))
         end
 
         it "returns the group for the spec with the given name" do

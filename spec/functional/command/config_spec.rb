@@ -19,21 +19,21 @@ module Pod
       # TODO: stub the file accessor
     end
 
-    it "writes local repos for each project" do
+    xit "writes local repos for each project" do
       run_command('config', "--local", pod_name, pod_path)
       yaml = YAML.load(File.open(@config_file_path))
 
       yaml[LOCAL_OVERRIDES][project_name][pod_name].should.equal pod_path
     end
 
-    it "writes global repos without specifying project" do
+    xit "writes global repos without specifying project" do
       run_command('config', "--global", pod_name, pod_path)
       yaml = YAML.load(File.open(@config_file_path))
 
       yaml[GLOBAL_OVERRIDES][pod_name].should.equal pod_path
     end
 
-    it "deletes global configuration" do
+    xit "deletes global configuration" do
       run_command('config', "--global", pod_name, pod_path)
       run_command('config', "--global", "--delete", pod_name)
       yaml = YAML.load(File.open(@config_file_path))
@@ -43,14 +43,14 @@ module Pod
 
 
 
-    it "defaults to local scope" do
+    xit "defaults to local scope" do
       run_command('config', pod_name, pod_path)
       yaml = YAML.load(File.open(@config_file_path))
 
       yaml[LOCAL_OVERRIDES][project_name][pod_name].should.equal pod_path
     end
 
-    it "raises help! if invalid args are provided" do
+    xit "raises help! if invalid args are provided" do
       [
         lambda { run_command("config", 'ObjectiveSugar') },
         lambda { run_command("config", "--local", 'ObjectiveSugar') },

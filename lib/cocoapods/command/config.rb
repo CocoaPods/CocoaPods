@@ -17,6 +17,8 @@ module Pod
     #
     class Config < Command
 
+      include Pod::Config::Manager
+
       self.summary = 'Something like `bundle config` ... but better.'
       self.description = <<-DESC
         Use `pod config` when you're developing a pod that uses another pod of yours.
@@ -41,8 +43,8 @@ module Pod
       end
 
       def run
-        help! unless args_are_valid?
-        update_config
+        #help! unless args_are_valid?
+        #update_config
       end
 
 
@@ -63,9 +65,6 @@ module Pod
         config.write_config_to_file
       end
 
-      def config
-        Pod::Config.instance
-      end
     end
   end
 end
