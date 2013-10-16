@@ -9,7 +9,7 @@ module Pod
   #
   module Config
 
-    autoload :Manager, 'cocoapods/config/config_manager'
+    autoload :Manager, 'cocoapods/config/manager'
     autoload :Environment, 'cocoapods/config/environment'
 
     # Provides support for accessing the configuration manager

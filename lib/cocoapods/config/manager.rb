@@ -9,7 +9,6 @@ module Pod
     # 
     class Manager
 
-
       # The default settings for the configuration.
       #
       # Users can specify custom settings in `~/.cocoapods/config.yaml`.
