@@ -12,6 +12,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Added the `documentation_url` DSL attribute to the specifications.  
   [#1273](https://github.com/CocoaPods/CocoaPods/pull/1273)
 
+* Compiles xcassets from pods.
+	[#1427](https://github.com/CocoaPods/CocoaPods/pull/1427)
+
 ###### Bug Fixes
 
 * The search paths of vendored frameworks and libraries now are always
