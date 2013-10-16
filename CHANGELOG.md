@@ -13,6 +13,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1273](https://github.com/CocoaPods/CocoaPods/pull/1273)
 
 * Compiles xcassets from pods.
+	[Ulrik Damm](https://github.com/ulrikdamm)
 	[#1427](https://github.com/CocoaPods/CocoaPods/pull/1427)
 
 ###### Bug Fixes
