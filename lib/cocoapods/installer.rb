@@ -36,8 +36,7 @@ module Pod
     autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
     autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
 
-    include Config::Manager
-    include Config::Environment
+    include Config
 
 
     # @return [Sandbox] The sandbox where the Pods should be installed.

@@ -13,7 +13,7 @@ module Pod
   #
   module Executable
 
-    extend Pod::Config::Manager
+    extend Pod::Config
 
     # Creates the methods for the executable with the given name.
     #

@@ -6,8 +6,7 @@ module Pod
 
     class << self
 
-      include Config::Manager
-      include Config::Environment
+      include Config
 
       # @return [Source::Aggregate] the aggregate of all the sources known to
       #         this installation of CocoaPods.

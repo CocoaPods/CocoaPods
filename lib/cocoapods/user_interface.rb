@@ -17,8 +17,7 @@ module Pod
 
     class << self
 
-      include Config::Manager
-      include Config::Environment
+      include Config
 
       attr_accessor :indentation_level
       attr_accessor :title_level

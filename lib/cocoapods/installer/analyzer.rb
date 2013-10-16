@@ -6,8 +6,7 @@ module Pod
     #
     class Analyzer
 
-      include Config::Manager
-      include Config::Environment
+      include Config
 
       autoload :SandboxAnalyzer, 'cocoapods/installer/analyzer/sandbox_analyzer'
 

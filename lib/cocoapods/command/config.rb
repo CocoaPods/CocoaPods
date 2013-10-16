@@ -17,7 +17,7 @@ module Pod
     #
     class Config < Command
 
-      include Pod::Config::Manager
+      include Pod::Config
 
       self.summary = 'Something like `bundle config` ... but better.'
       self.description = <<-DESC

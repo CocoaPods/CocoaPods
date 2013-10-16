@@ -3,7 +3,7 @@ require 'yaml'
 
 module Pod
 
-  describe Config::ConfigManager do
+  describe Config::Manager do
 
     describe "global" do
 
@@ -11,11 +11,11 @@ module Pod
 
       before do
         FileUtils.rm_rf(@config_file_path)
-        @subject = Config::ConfigManager.new
+        @subject = Config::Manager.new
       end
 
       it "has a singleton" do
-        Config::ConfigManager.instance.should === Config::ConfigManager.instance
+        Config::Manager.instance.should === Config::Manager.instance
       end
 
       it "creates a global config file if one didn't exist" do

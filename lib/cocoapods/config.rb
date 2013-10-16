@@ -9,32 +9,27 @@ module Pod
   #
   module Config
 
-    autoload :ConfigManager, 'cocoapods/config/config_manager'
-    autoload :ConfigEnvironment, 'cocoapods/config/environment'
-
+    autoload :Manager, 'cocoapods/config/config_manager'
+    autoload :Environment, 'cocoapods/config/environment'
 
     # Provides support for accessing the configuration manager
     # instance in other scopes.
     #
-    module Manager
-      def config
-        ConfigManager.instance
-      end
+    def config
+      Manager.instance
     end
 
     # Provides support for accessing the environment instance in other
     # scopes.
     #
-    module Environment
-      def environment
-        ConfigEnvironment.instance
-      end
+    def environment
+      Environment.instance
     end
 
     public
 
-    extend Environment
-    extend Manager
+    #extend Environment
+    #extend Manager
     #-------------------------------------------------------------------------#
 
     # @!group Dependency Injection

@@ -2,9 +2,9 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
 
-  describe Config::ConfigEnvironment do
+  describe Config::Environment do
     before do
-      @sut = Config::ConfigEnvironment.new
+      @sut = Config::Environment.new
     end
 
     describe "In general" do

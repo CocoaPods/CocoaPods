@@ -15,7 +15,7 @@ module Pod
 
     before do
       FileUtils.rm_rf(@config_file_path)
-      @subject = Config::ConfigManager.new
+      @subject = Config::Manager.new
       # TODO: stub the file accessor
     end
 

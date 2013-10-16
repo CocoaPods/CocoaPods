@@ -7,7 +7,7 @@ module Pod
     # The config manager is responsible for reading and writing the config.yaml
     # file. 
     # 
-    class ConfigManager
+    class Manager
 
 
       # The default settings for the configuration.
@@ -106,7 +106,7 @@ module Pod
       # @return [Pathname] The path of the file which contains the user settings.
       #
       def global_config_filepath
-        Config::ConfigEnvironment.instance.home_dir + "config.yaml"
+        Config::Environment.instance.home_dir + "config.yaml"
       end
 
       def local_config_filepath

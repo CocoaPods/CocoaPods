@@ -11,8 +11,7 @@ module Pod
   #
   class Validator
 
-    include Config::Manager
-    include Config::Environment
+    include Config
 
     # @return [Specification::Linter] the linter instance from CocoaPods
     #         Core.

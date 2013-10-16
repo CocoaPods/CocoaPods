@@ -23,7 +23,7 @@ module Pod
     require 'cocoapods/command/spec'
     require 'cocoapods/command/init'
 
-    include Pod::Config::Manager
+    include Pod::Config
 
     self.abstract_command = true
     self.default_subcommand = 'install'

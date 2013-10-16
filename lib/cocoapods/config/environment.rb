@@ -7,7 +7,7 @@ module Pod
     # The config manager is responsible for reading and writing the config.yaml
     # file. 
     # 
-    class ConfigEnvironment
+    class Environment
 
       # @!group Singleton
 
