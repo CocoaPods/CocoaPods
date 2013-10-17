@@ -32,6 +32,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Noah McCann](https://github.com/nmccann)
   [#29](https://github.com/CocoaPods/Core/pull/29)
 
+* Allow using local git based spec repositories which do not have a remote.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#1378](https://github.com/CocoaPods/CocoaPods/issues/1378)
 
 ## 0.26.2
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.1...0.26.2)
