@@ -46,7 +46,7 @@ module Pod
           xcconfig.libraries.merge(consumer.libraries)
           xcconfig.frameworks.merge(consumer.frameworks)
           xcconfig.weak_frameworks.merge(consumer.weak_frameworks)
-          add_developers_frameworks_if_needed(xcconfig)
+          add_developers_frameworks_if_needed(xcconfig, consumer.platform_name)
         end
 
         # Configures the given Xcconfig with the the build settings for the given
@@ -87,14 +87,6 @@ module Pod
           xcconfig.merge!(build_settings)
         end
 
-        # @return [Array<String>] The search paths for the developer frameworks.
-        #
-        DEVELOPER_FRAMEWORKS_SEARCH_PATHS = [
-          '$(inherited)',
-          '"$(SDKROOT)/Developer/Library/Frameworks"',
-          '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
-        ]
-
         # Adds the search paths of the developer frameworks to the specification
         # if needed. This is done because the `SenTestingKit` requires them and
         # adding them to each specification which requires it is repetitive and
@@ -105,16 +97,23 @@ module Pod
         #
         # @return [void]
         #
-        def self.add_developers_frameworks_if_needed(xcconfig)
+        def self.add_developers_frameworks_if_needed(xcconfig, platform)
           matched_frameworks = xcconfig.frameworks & ['XCTest', 'SenTestingKit']
           unless matched_frameworks.empty?
             search_paths = xcconfig.attributes['FRAMEWORK_SEARCH_PATHS'] ||= ''
-            DEVELOPER_FRAMEWORKS_SEARCH_PATHS.each do |search_path|
+            search_paths_to_add = []
+            search_paths_to_add << '$(inherited)'
+            search_paths_to_add << '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
+            if platform == :ios
+              search_paths_to_add << '"$(SDKROOT)/Developer/Library/Frameworks"'
+            end
+            search_paths_to_add.each do |search_path|
               unless search_paths.include?(search_path)
                 search_paths << ' ' unless search_paths.empty?
                 search_paths << search_path
               end
             end
+            search_paths
           end
         end
 

@@ -49,6 +49,7 @@ module Pod
               :libraries => [],
               :frameworks => [],
               :weak_frameworks => [],
+              :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework SenTestingKit'
@@ -61,6 +62,7 @@ module Pod
               :libraries => ['xml2'],
               :frameworks => [],
               :weak_frameworks => [],
+              :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-lxml2'
@@ -73,6 +75,7 @@ module Pod
               :libraries => [],
               :frameworks => ['CoreAnimation'],
               :weak_frameworks => [],
+              :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework CoreAnimation'
@@ -85,6 +88,7 @@ module Pod
               :libraries => [],
               :frameworks => [],
               :weak_frameworks => ['iAd'],
+              :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-weak_framework iAd'
@@ -97,6 +101,7 @@ module Pod
               :libraries => [],
               :frameworks => ['SenTestingKit'],
               :weak_frameworks => [],
+              :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('DEVELOPER_LIBRARY_DIR')
@@ -150,7 +155,7 @@ module Pod
         describe "::add_framework_build_settings" do
           it "adds the developer frameworks search paths to the xcconfig if SenTestingKit has been detected" do
             xcconfig = Xcodeproj::Config.new({'OTHER_LDFLAGS' => '-framework SenTestingKit'})
-            @sut.add_developers_frameworks_if_needed(xcconfig)
+            @sut.add_developers_frameworks_if_needed(xcconfig, :ios)
             frameworks_search_paths = xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS']
             frameworks_search_paths.should.include?('$(inherited)')
             frameworks_search_paths.should.include?('"$(SDKROOT)/Developer/Library/Frameworks"')
@@ -159,11 +164,24 @@ module Pod
 
           it "adds the developer frameworks search paths to the xcconfig if XCTest has been detected" do
             xcconfig = Xcodeproj::Config.new({'OTHER_LDFLAGS' => '-framework XCTest'})
-            @sut.add_developers_frameworks_if_needed(xcconfig)
+            @sut.add_developers_frameworks_if_needed(xcconfig, :ios)
             frameworks_search_paths = xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS']
             frameworks_search_paths.should.include?('$(inherited)')
             frameworks_search_paths.should.include?('"$(SDKROOT)/Developer/Library/Frameworks"')
             frameworks_search_paths.should.include?('"$(DEVELOPER_LIBRARY_DIR)/Frameworks"')
+          end
+
+          it "doesn't adds the developer frameworks relative to the SDK for OS X" do
+            xcconfig = Xcodeproj::Config.new({'OTHER_LDFLAGS' => '-framework XCTest'})
+            @sut.add_developers_frameworks_if_needed(xcconfig, :ios)
+            frameworks_search_paths = xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS']
+            frameworks_search_paths.should.include?('"$(SDKROOT)/Developer/Library/Frameworks"')
+
+
+            xcconfig = Xcodeproj::Config.new({'OTHER_LDFLAGS' => '-framework XCTest'})
+            @sut.add_developers_frameworks_if_needed(xcconfig, :osx)
+            frameworks_search_paths = xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS']
+            frameworks_search_paths.should.not.include?('"$(SDKROOT)/Developer/Library/Frameworks"')
           end
         end
 

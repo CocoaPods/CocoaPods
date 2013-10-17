@@ -19,7 +19,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ###### Bug Fixes
 
 * The architecture is now set in the build settings of the user build
-  configurations.
+  configurations.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1450](https://github.com/CocoaPods/CocoaPods/issues/1462)
   [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
@@ -35,6 +35,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   name closely matching the name of one of the subspec's parents.  
   [Noah McCann](https://github.com/nmccann)
   [#29](https://github.com/CocoaPods/Core/pull/29)
+
+* The developer dir relative to the SDK is not added anymore if testing 
+  frameworks are detected in OS X targets, as it doesn't exists, avoiding the
+  presentation of the relative warning in Xcode.
+  [Fabio Pelosin](https://github.com/irrationalfab)
 
 
 ## 0.26.2
