@@ -12,6 +12,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Adam Sharp](https://github.com/sharplet)
   [Core#30](https://github.com/CocoaPods/Core/pull/30)
 
+* The copy resources script now compiles xcassets resources.  
+  [Ulrik Damm](https://github.com/ulrikdamm)
+  [#1427](https://github.com/CocoaPods/CocoaPods/pull/1427)
+
 ###### Bug Fixes
 
 * The architecture is now set in the build settings of the user build
@@ -95,10 +99,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Added the `documentation_url` DSL attribute to the specifications.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1273](https://github.com/CocoaPods/CocoaPods/pull/1273)
-
-* Compiles xcassets from pods.
-	[Ulrik Damm](https://github.com/ulrikdamm)
-	[#1427](https://github.com/CocoaPods/CocoaPods/pull/1427)
 
 ###### Bug Fixes
 
