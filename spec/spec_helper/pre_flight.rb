@@ -8,7 +8,7 @@ module Bacon
 
       environment.stubs(:repos_dir).returns(fixture('spec-repos'))
       environment.stubs(:installation_root).returns(SpecHelper.temporary_directory)
-      environment.stubs(:home_dir).returns(SpecHelper.temporary_directory)
+      environment.stubs(:verbose).returns(true)
 
       config.stubs(:silent).returns(true)
       config.stubs(:skip_repo_update).returns(true)

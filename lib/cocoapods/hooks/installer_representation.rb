@@ -13,7 +13,7 @@ module Pod
       UI.warn "TargetDefinition#copy_resources_script_name is deprecated. " \
         "The value is accessible directly from the representation of the " \
         "library using the #copy_resources_script_path method."
-      Config.instance.sandbox.root + "#{label}-resources.sh"
+      Pod::Config::Environment.instance.sandbox.root + "#{label}-resources.sh"
     end
   end
 
@@ -22,6 +22,8 @@ module Pod
     # The installer representation to pass to the hooks.
     #
     class InstallerRepresentation
+
+      include Pod::Config
 
       public
 
@@ -97,19 +99,6 @@ module Pod
       #
       # The interface of the following objects might change at any time.
       # If there some information which is needed, please open an issue.
-
-      # @return [Sandbox] sandbox the sandbox where the support files should
-      #         be generated.
-      #
-      def sandbox
-        installer.sandbox
-      end
-
-      # @return [Config] The config singleton used for the installation.
-      #
-      def config
-        Config.instance
-      end
 
       # @return [Installer] The installer described by this instance.
       #
