@@ -54,6 +54,13 @@ module Pod
         run_command('repo', 'update', 'repo2')
         (repo2 + 'README').read.should.include 'Updated'
       end
+
+      it "removes a spec-repo" do
+        upstream = SpecHelper.temporary_directory + 'upstream'
+        FileUtils.cp_r(test_repo_path, upstream)
+        lambda { run_command('repo', 'remove', upstream) }.should.not.raise
+        File.directory?(test_repo_path + upstream).should.be.false?
+      end
     end
   end
 end

@@ -133,6 +133,33 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
+      class Remove < Repo
+        self.summary = 'Remove a spec repo'
+
+        self.description = <<-DESC
+          Deletes the remote named `NAME` from the local spec-repos directory at `~/.cocoapods/repos/.`
+        DESC
+
+        self.arguments = 'NAME'
+
+        def initialize(argv)
+          @name = argv.shift_argument
+          super
+        end
+
+        def validate!
+          super
+          help! 'Deleting a repo needs a `NAME`.' unless @name
+          help! "repo #{@name} does not exist" unless File.directory?(dir)
+        end
+
+        def run
+          UI.section("Removing spec repo `#{@name}`") do
+            FileUtils.rm_rf(dir)
+          end
+        end
+      end
+
       extend Executable
       executable :git
 
