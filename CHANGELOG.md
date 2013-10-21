@@ -16,6 +16,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Ulrik Damm](https://github.com/ulrikdamm)
   [#1427](https://github.com/CocoaPods/CocoaPods/pull/1427)
 
+* `pod repo` now support a `remove ['repo_name']` command.
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1493](https://github.com/CocoaPods/CocoaPods/issues/1493)
+  [#1484](https://github.com/CocoaPods/CocoaPods/issues/1484)
+
 ###### Bug Fixes
 
 * The architecture is now set in the build settings of the user build
