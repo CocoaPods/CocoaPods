@@ -167,9 +167,16 @@ namespace :spec do
 
   #--------------------------------------#
 
+  unit_specs_command = "bundle exec bacon #{specs('unit/**')}"
+
   desc "Run the unit specs"
   task :unit => :unpack_fixture_tarballs do
-    sh "bundle exec bacon #{specs('unit/**')} -q"
+    sh unit_specs_command
+  end
+
+  desc "Run the unit specs quietly (fail fast, display only one failure)"
+  task :unit_quiet => :unpack_fixture_tarballs do
+    sh "#{unit_specs_command} -q"
   end
 
   #--------------------------------------#
