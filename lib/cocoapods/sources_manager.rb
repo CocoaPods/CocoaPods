@@ -12,14 +12,20 @@ module Pod
       #         listed by the current Podifle.
       #
       def podfile_aggregate
-        Source::Aggregate.new config.podfile_repos_dirs
+        podfile_repos = config.podfile_repos_dirs
+        if podfile_repos.empty?
+          aggregate
+        else
+          Source::Aggregate.new podfile_repos
+        end
       end
 
       # @return [Source::Aggregate] the aggregate of all the sources known to
       #         this installation of CocoaPods.
       #
       def aggregate
-        Source::Aggregate.new(config.repos_dir)
+        all_repos = config.repos_dir.children.select(&:directory?)
+        Source::Aggregate.new(all_repos)
       end
 
       # @return [Array<Source>] the list of all the sources known to this
