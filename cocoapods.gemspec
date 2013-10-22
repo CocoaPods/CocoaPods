@@ -36,7 +36,7 @@ s.add_runtime_dependency 'xcodeproj',            '~> 0.13.1'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
   s.add_runtime_dependency 'json',          '~> 1.8'
   s.add_runtime_dependency 'open4',         '~> 1.3'
-  s.add_runtime_dependency 'activesupport', '~> 3.2'
+  s.add_runtime_dependency 'activesupport', '>= 3.2.15', '< 4'
 
   s.add_development_dependency 'bacon', '~> 1.1'
 
