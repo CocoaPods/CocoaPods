@@ -9,9 +9,9 @@ module Pod
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions['Pods']
-        @project = Project.new(config.sandbox.project_path)
+        @project = Project.new(environment.sandbox.project_path)
 
-        config.sandbox.project = @project
+        environment.sandbox.project = @project
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
@@ -21,20 +21,20 @@ module Pod
           @project.add_file_reference(file, group)
         end
 
-        @target = AggregateTarget.new(@target_definition, config.sandbox)
+        @target = AggregateTarget.new(@target_definition, environment.sandbox)
         @target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-        @target.user_project_path = config.sandbox.root + '../user_project.xcodeproj'
-        @target.client_root = config.sandbox.root.dirname
+        @target.user_project_path = environment.sandbox.root + '../user_project.xcodeproj'
+        @target.client_root = environment.sandbox.root.dirname
         @target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
 
-        @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
+        @pod_target = PodTarget.new([@spec], @target_definition, environment.sandbox)
         @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         @pod_target.user_build_configurations = @target.user_build_configurations
         @pod_target.file_accessors = [file_accessor]
 
         @target.pod_targets = [@pod_target]
 
-        @installer = Installer::AggregateTargetInstaller.new(config.sandbox, @target)
+        @installer = Installer::AggregateTargetInstaller.new(environment.sandbox, @target)
 
         @spec.prefix_header_contents = '#import "BlocksKit.h"'
       end
@@ -114,14 +114,14 @@ module Pod
 
       it "creates the xcconfig file" do
         @installer.install!
-        file = config.sandbox.root + @target.xcconfig_path
+        file = environment.sandbox.root + @target.xcconfig_path
         xcconfig = Xcodeproj::Config.new(file)
         xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
       end
 
       it "creates a header for the target which contains the information about the installed Pods" do
         @installer.install!
-        file = config.sandbox.root + 'Pods-environment.h'
+        file = environment.sandbox.root + 'Pods-environment.h'
         contents = file.read
         contents.should.include?('#define COCOAPODS_POD_AVAILABLE_BananaLib')
         contents.should.include?('#define COCOAPODS_VERSION_MAJOR_BananaLib 1')
@@ -137,7 +137,7 @@ module Pod
 
       it "creates a create copy resources script" do
         @installer.install!
-        script = config.sandbox.root + 'Pods-resources.sh'
+        script = environment.sandbox.root + 'Pods-resources.sh'
         script.read.should.include?('logo-sidebar.png')
       end
 
@@ -151,9 +151,9 @@ module Pod
 
       it "creates the acknowledgements files " do
         @installer.install!
-        markdown = config.sandbox.root + 'Pods-acknowledgements.markdown'
+        markdown = environment.sandbox.root + 'Pods-acknowledgements.markdown'
         markdown.read.should.include?('Permission is hereby granted')
-        plist = config.sandbox.root + 'Pods-acknowledgements.plist'
+        plist = environment.sandbox.root + 'Pods-acknowledgements.plist'
         plist.read.should.include?('Permission is hereby granted')
       end
 
@@ -163,9 +163,10 @@ module Pod
         build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-dummy.m') }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-dummy.m'
-        dummy = config.sandbox.root + 'Pods-dummy.m'
+        dummy = environment.sandbox.root + 'Pods-dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
     end
   end
 end
+

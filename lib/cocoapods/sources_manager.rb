@@ -6,13 +6,13 @@ module Pod
 
     class << self
 
-      include Config::Mixin
+      include Config
 
       # @return [Source::Aggregate] the aggregate of all the sources known to
       #         this installation of CocoaPods.
       #
       def aggregate
-        Source::Aggregate.new(config.repos_dir)
+        Source::Aggregate.new(environment.repos_dir)
       end
 
       # @return [Array<Source>] the list of all the sources known to this
@@ -120,7 +120,7 @@ module Pod
       # @return [Pathname] The path where the search index should be stored.
       #
       def search_index_path
-        Config.instance.search_index_file
+        environment.search_index_file
       end
 
       public
@@ -256,7 +256,7 @@ module Pod
       # @return [Pathname] The path of the master repo.
       #
       def master_repo_dir
-        config.repos_dir + 'master'
+        environment.repos_dir + 'master'
       end
 
       # @return [Bool] Checks if the master repo is usable.

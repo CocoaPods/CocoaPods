@@ -9,11 +9,11 @@ module Pod
           pod 'BlocksKit', '1.5.2'
         end
         locked_deps = [Dependency.new('BlocksKit', '1.5.2')]
-        @resolver = Resolver.new(config.sandbox, @podfile, locked_deps)
+        @resolver = Resolver.new(environment.sandbox, @podfile, locked_deps)
       end
 
       it "returns the sandbox" do
-        @resolver.sandbox.should == config.sandbox
+        @resolver.sandbox.should == environment.sandbox
       end
 
       it "returns the podfile" do
@@ -50,12 +50,12 @@ module Pod
       it "it resolves specifications from external sources" do
         podspec = fixture('integration/Reachability/Reachability.podspec')
         spec = Specification.from_file(podspec)
-        config.sandbox.expects(:specification).with('Reachability').returns(spec)
+        environment.sandbox.expects(:specification).with('Reachability').returns(spec)
         podfile = Podfile.new do
           platform :ios
           pod "Reachability", :podspec => podspec
         end
-        resolver = Resolver.new(config.sandbox, podfile)
+        resolver = Resolver.new(environment.sandbox, podfile)
         resolver.resolve
         specs = resolver.specs_by_target.values.flatten
         specs.map(&:to_s).should == ['Reachability (3.0.0)']
@@ -70,7 +70,7 @@ module Pod
           platform :ios, '6.0'
           pod 'BlocksKit', '1.5.2'
         end
-        @resolver = Resolver.new(config.sandbox, @podfile)
+        @resolver = Resolver.new(environment.sandbox, @podfile)
       end
 
       it "cross resolves dependencies" do
@@ -80,7 +80,7 @@ module Pod
           pod 'AFQuickLookView', '=  0.1.0' # requires  'AFNetworking', '>= 0.9.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(environment.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == ["AFNetworking (0.9.1)", "AFQuickLookView (0.1.0)"]
       end
@@ -110,7 +110,7 @@ module Pod
           platform :ios
           pod 'RestKit', '0.10.3'
         end
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(environment.sandbox, @podfile)
         resolver.resolve.values.flatten.map(&:name).sort.should == %w{
         FileMD5Hash
         ISO8601DateFormatter
@@ -145,8 +145,8 @@ module Pod
             fss.subspec 'SecondSubSpec'
           end
         end
-        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
-        resolver = Resolver.new(config.sandbox, @podfile)
+        environment.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        resolver = Resolver.new(environment.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:name).sort
         specs.should == %w{ MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec }
       end
@@ -157,12 +157,12 @@ module Pod
           pod 'FileMD5Hash'
           pod 'JSONKit', :head
         end
-        resolver = Resolver.new(config.sandbox, podfile)
+        resolver = Resolver.new(environment.sandbox, podfile)
         filemd5hash, jsonkit = resolver.resolve.values.first.sort_by(&:name)
         filemd5hash.version.should.not.be.head
         jsonkit.version.should.be.head
-        config.sandbox.head_pod?('FileMD5Hash').should.be.false
-        config.sandbox.head_pod?('JSONKit').should.be.true
+        environment.sandbox.head_pod?('FileMD5Hash').should.be.false
+        environment.sandbox.head_pod?('JSONKit').should.be.true
       end
 
       it "raises if it finds two conflicting dependencies" do
@@ -171,7 +171,7 @@ module Pod
           pod 'JSONKit', "1.4"
           pod 'JSONKit', "1.5pre"
         end
-        resolver = Resolver.new(config.sandbox, podfile)
+        resolver = Resolver.new(environment.sandbox, podfile)
         e = lambda {resolver.resolve}.should.raise Pod::Informative
         e.message.should.match(/already activated version/)
       end
@@ -181,12 +181,12 @@ module Pod
           platform :ios
           pod 'JSONKit', "<= 1.5pre"
         end
-        resolver = Resolver.new(config.sandbox, podfile)
+        resolver = Resolver.new(environment.sandbox, podfile)
         version = resolver.resolve.values.flatten.first.version
         version.to_s.should == '1.5pre'
 
         locked_deps = [Dependency.new('JSONKit', "= 1.4")]
-        resolver = Resolver.new(config.sandbox, podfile, locked_deps)
+        resolver = Resolver.new(environment.sandbox, podfile, locked_deps)
         version = resolver.resolve.values.flatten.first.version
         version.to_s.should == '1.4'
       end

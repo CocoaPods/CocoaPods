@@ -146,7 +146,7 @@ module Pod
       #         source.
       #
       def downloader
-        @downloader ||= Config.instance.downloader(root, root_spec.source.dup)
+        @downloader ||= Config.downloader(root, root_spec.source.dup)
       end
 
       #-----------------------------------------------------------------------#

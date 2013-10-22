@@ -9,9 +9,9 @@ module Pod
         xcodeproj 'dummy'
       end
       @target_definition = @podfile.target_definitions['Pods']
-      @project = Project.new(config.sandbox.project_path)
+      @project = Project.new(environment.sandbox.project_path)
 
-      config.sandbox.project = @project
+      environment.sandbox.project = @project
       path_list = Sandbox::PathList.new(fixture('banana-lib'))
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
@@ -21,12 +21,12 @@ module Pod
         @project.add_file_reference(file, group)
       end
 
-      @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
+      @pod_target = PodTarget.new([@spec], @target_definition, environment.sandbox)
       @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
       @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
       @pod_target.file_accessors = [file_accessor]
 
-      @installer = Installer::TargetInstaller.new(config.sandbox, @pod_target)
+      @installer = Installer::TargetInstaller.new(environment.sandbox, @pod_target)
     end
 
     it "Adds the architectures to the custom build configurations of the user target" do
@@ -42,3 +42,4 @@ module Pod
 
   end
 end
+

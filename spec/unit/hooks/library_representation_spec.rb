@@ -7,8 +7,8 @@ module Pod
       @target_definition = Podfile::TargetDefinition.new('MyApp', nil)
       @spec = Spec.new
       @spec.name = 'RestKit'
-      @lib = AggregateTarget.new(@target_definition, config.sandbox)
-      @rep = Hooks::LibraryRepresentation.new(config.sandbox, @lib)
+      @lib = AggregateTarget.new(@target_definition, environment.sandbox)
+      @rep = Hooks::LibraryRepresentation.new(environment.sandbox, @lib)
     end
 
     #-------------------------------------------------------------------------#
@@ -38,7 +38,7 @@ module Pod
 
       it "returns the pods project" do
         project = stub()
-        config.sandbox.project = project
+        environment.sandbox.project = project
         @rep.project.should == project
       end
 
@@ -53,7 +53,7 @@ module Pod
     describe "Unsafe Hooks API" do
 
       it "returns the sandbox" do
-        @rep.sandbox.should == config.sandbox
+        @rep.sandbox.should == environment.sandbox
       end
 
       it "returns the library" do

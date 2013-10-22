@@ -17,7 +17,7 @@ module Pod
 
     class << self
 
-      include Config::Mixin
+      include Config
 
       attr_accessor :indentation_level
       attr_accessor :title_level
@@ -40,8 +40,9 @@ module Pod
       # @todo Refactor to title (for always visible titles like search)
       #       and sections (titles that represent collapsible sections).
       #
+
       def section(title, verbose_prefix = '', relative_indentation = 0)
-        if config.verbose?
+        if verbose?
           title(title, verbose_prefix, relative_indentation)
         elsif title_level < 1
           puts title
@@ -62,7 +63,7 @@ module Pod
       def titled_section(title, options = {})
         relative_indentation = options[:relative_indentation] || 0
         verbose_prefix = options[:verbose_prefix] || ''
-        if config.verbose?
+        if verbose?
           title(title, verbose_prefix, relative_indentation)
         else
           puts title
@@ -81,7 +82,7 @@ module Pod
         if(@treat_titles_as_messages)
           message(title, verbose_prefix)
         else
-          title = verbose_prefix + title if config.verbose?
+          title = verbose_prefix + title if verbose?
           title = "\n#{title}" if @title_level < 2
           if (color = @title_colors[@title_level])
             title = title.send(color)
@@ -106,8 +107,8 @@ module Pod
       # @todo Clean interface.
       #
       def message(message, verbose_prefix = '', relative_indentation = 2)
-        message = verbose_prefix + message if config.verbose?
-        puts_indented message if config.verbose?
+        message = verbose_prefix + message if verbose?
+        puts_indented message if verbose?
 
         self.indentation_level += relative_indentation
         yield if block_given?
@@ -121,7 +122,7 @@ module Pod
       # Any title printed in the optional block is treated as a message.
       #
       def info(message)
-        indentation = config.verbose? ? self.indentation_level : 0
+        indentation = verbose? ? self.indentation_level : 0
         indented = wrap_string(message, " " * indentation)
         puts(indented)
 
@@ -148,7 +149,7 @@ module Pod
       #
       def path(pathname)
         if pathname
-          path = pathname.relative_path_from((config.podfile_path.dirname if config.podfile_path) || Pathname.pwd)
+          path = pathname.relative_path_from((environment.podfile_path.dirname if environment.podfile_path) || Pathname.pwd)
           "`#{path}`"
         else
           ''
@@ -214,7 +215,7 @@ module Pod
       def print_warnings
         STDOUT.flush
         warnings.each do |warning|
-          next if warning[:verbose_only] && !config.verbose?
+          next if warning[:verbose_only] && !verbose?
           STDERR.puts("\n[!] #{warning[:message]}".yellow)
           warning[:actions].each do |action|
             indented = wrap_string(action, "    - ")
@@ -231,13 +232,13 @@ module Pod
       # prints a message followed by a new line unless config is silent.
       #
       def puts(message = '')
-        STDOUT.puts(message) unless config.silent?
+        STDOUT.puts(message) unless silent?
       end
 
       # prints a message followed by a new line unless config is silent.
       #
       def print(message)
-        STDOUT.print(message) unless config.silent?
+        STDOUT.print(message) unless silent?
       end
 
       # Stores important warning to the user optionally followed by actions
@@ -279,6 +280,13 @@ module Pod
           txt.strip.gsub(/(.{1,#{width}})( +|$)\n?|(.{#{width}})/, indent + "\\1\\3\n")
         end
       end
+
+      # @return [bool] whatever ConfigurationManager returns
+      #
+      def verbose?
+        config.verbose?
+      end
+
     end
   end
   UI = UserInterface

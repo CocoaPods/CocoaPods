@@ -10,7 +10,7 @@ module Pod
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
             @consumer = @spec.consumer(:ios)
             target_definition = Podfile::TargetDefinition.new('Pods', nil)
-            @pod_target = PodTarget.new([@spec], target_definition, config.sandbox)
+            @pod_target = PodTarget.new([@spec], target_definition, environment.sandbox)
             @pod_target.stubs(:platform).returns(:ios)
             public_xcconfig = Xcodeproj::Config.new({"OTHER_LDFLAGS"=>"-framework SystemConfiguration"})
             @generator = PrivatePodXCConfig.new(@pod_target, public_xcconfig)
@@ -45,7 +45,7 @@ module Pod
 
           it 'adds the library build headers and public headers search paths to the xcconfig, with quotes' do
             private_headers = "\"#{@pod_target.build_headers.search_paths.join('" "')}\""
-            public_headers = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
+            public_headers = "\"#{environment.sandbox.public_headers.search_paths.join('" "')}\""
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include private_headers
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include public_headers
           end

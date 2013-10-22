@@ -14,7 +14,7 @@ end
 # @return [Podfile]
 #
 def generate_podfile(pods = ['JSONKit'])
-  podfile = Pod::Podfile.new do
+  Pod::Podfile.new do
     platform :ios
     xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     pods.each { |name| pod name }
@@ -29,8 +29,8 @@ module Pod
     before do
       podfile = generate_podfile
       lockfile = generate_lockfile
-      config.integrate_targets = false
-      @installer = Installer.new(config.sandbox, podfile, lockfile)
+      config.stubs(:integrate_targets).returns(false)
+      @installer = Installer.new(environment.sandbox, podfile, lockfile)
     end
 
     #-------------------------------------------------------------------------#
@@ -76,13 +76,13 @@ module Pod
       end
 
       it "integrates the user targets if the corresponding config is set" do
-        config.integrate_targets = true
+        config.stubs(:integrate_targets).returns(true)
         @installer.expects(:integrate_user_project)
         @installer.install!
       end
 
       it "doesn't integrates the user targets if the corresponding config is not set" do
-        config.integrate_targets = false
+        config.stubs(:integrate_targets).returns(false)
         @installer.expects(:integrate_user_project).never
         @installer.install!
       end
@@ -130,13 +130,13 @@ module Pod
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = []
           @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new()
-          @pod_targets = [PodTarget.new([], nil, config.sandbox)]
+          @pod_targets = [PodTarget.new([], nil, environment.sandbox)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
         end
 
         it "cleans the header stores" do
-          config.sandbox.public_headers.expects(:implode!)
+          environment.sandbox.public_headers.expects(:implode!)
           @installer.pod_targets.each do |pods_target|
             pods_target.build_headers.expects(:implode!)
           end
@@ -145,7 +145,7 @@ module Pod
 
         it "deletes the sources of the removed Pods" do
           @analysis_result.sandbox_state.add_name('Deleted-Pod', :deleted)
-          config.sandbox.expects(:clean_pod).with('Deleted-Pod')
+          environment.sandbox.expects(:clean_pod).with('Deleted-Pod')
           @installer.send(:clean_sandbox)
         end
 
@@ -175,7 +175,7 @@ module Pod
 
         it "correctly configures the Pod source installer" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new([spec], nil, config.sandbox)
+          pod_target = PodTarget.new([spec], nil, environment.sandbox)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -185,7 +185,7 @@ module Pod
 
         it "maintains the list of the installed specs" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new([spec], nil, config.sandbox)
+          pod_target = PodTarget.new([spec], nil, environment.sandbox)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target, pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -199,7 +199,7 @@ module Pod
         describe "#clean" do
 
           it "it cleans only if the config instructs to do it" do
-            config.clean = false
+            config.stubs(:clean).returns(false)
             @installer.send(:clean_pod_sources)
             Installer::PodSourceInstaller.any_instance.expects(:install!).never
           end
@@ -222,14 +222,14 @@ module Pod
         end
 
         it "creates build configurations for all of the user's targets" do
-          config.integrate_targets = true
+          config.stubs(:integrate_targets).returns(true)
           @installer.send(:analyze)
           @installer.send(:prepare_pods_project)
           @installer.pods_project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
         end
 
         it "sets STRIP_INSTALLED_PRODUCT to NO for all configurations for the whole project" do
-          config.integrate_targets = true
+          config.stubs(:integrate_targets).returns(true)
           @installer.send(:analyze)
           @installer.send(:prepare_pods_project)
           @installer.pods_project.build_settings('Debug')["STRIP_INSTALLED_PRODUCT"].should == "NO"
@@ -254,8 +254,8 @@ module Pod
         end
 
         it "sets the deployment target for the whole project" do
-          pod_target_ios = PodTarget.new([], nil, config.sandbox)
-          pod_target_osx = PodTarget.new([], nil, config.sandbox)
+          pod_target_ios = PodTarget.new([], nil, environment.sandbox)
+          pod_target_osx = PodTarget.new([], nil, environment.sandbox)
           pod_target_ios.stubs(:platform).returns(Platform.new(:ios, '6.0'))
           pod_target_osx.stubs(:platform).returns(Platform.new(:osx, '10.8'))
           @installer.stubs(:aggregate_targets).returns([pod_target_ios, pod_target_osx])
@@ -290,7 +290,7 @@ module Pod
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.store_pod('BananaLib')
-          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          pod_target = PodTarget.new([spec], target_definition, environment.sandbox)
           @installer.stubs(:aggregate_targets).returns([])
           @installer.stubs(:pod_targets).returns([pod_target])
           Installer::PodTargetInstaller.any_instance.expects(:install!)
@@ -300,7 +300,7 @@ module Pod
         it "skips empty pod targets" do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
-          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          pod_target = PodTarget.new([spec], target_definition, environment.sandbox)
           @installer.stubs(:aggregate_targets).returns([])
           @installer.stubs(:pod_targets).returns([pod_target])
           Installer::PodTargetInstaller.any_instance.expects(:install!).never
@@ -350,7 +350,6 @@ module Pod
         end
 
         it "saves the project to the given path" do
-          path = temporary_directory + 'Pods/Pods.xcodeproj'
           @installer.pods_project.expects(:save)
           @installer.send(:write_pod_project)
         end
@@ -395,17 +394,16 @@ module Pod
       it "links the pod targets with the aggregate integration library target" do
         spec = fixture_spec('banana-lib/BananaLib.podspec')
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        target = AggregateTarget.new(target_definition, config.sandbox)
+        target = AggregateTarget.new(target_definition, environment.sandbox)
         lib_definition = Podfile::TargetDefinition.new('BananaLib', nil)
         lib_definition.store_pod('BananaLib')
-        pod_target = PodTarget.new([spec], lib_definition, config.sandbox)
+        pod_target = PodTarget.new([spec], lib_definition, environment.sandbox)
         target.pod_targets = [pod_target]
 
         project = Xcodeproj::Project.new('path')
         pods_target = project.new_target(:static_library, target.name, :ios)
         target.target = pods_target
 
-        native_target = project.new_target(:static_library, pod_target.name, :ios)
         pod_target.target = pods_target
 
         @installer.stubs(:pods_project).returns(project)
@@ -417,7 +415,7 @@ module Pod
       end
 
       it "integrates the client projects" do
-        @installer.stubs(:aggregate_targets).returns([AggregateTarget.new(nil, config.sandbox)])
+        @installer.stubs(:aggregate_targets).returns([AggregateTarget.new(nil, environment.sandbox)])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)
       end
@@ -461,12 +459,10 @@ module Pod
       end
 
       it "calls the hooks in the specs for each target" do
-        pod_target_ios = PodTarget.new([@spec], nil, config.sandbox)
-        pod_target_osx = PodTarget.new([@spec], nil, config.sandbox)
+        pod_target_ios = PodTarget.new([@spec], nil, environment.sandbox)
+        pod_target_osx = PodTarget.new([@spec], nil, environment.sandbox)
         pod_target_ios.stubs(:name).returns('label')
         pod_target_osx.stubs(:name).returns('label')
-        library_ios_rep = stub()
-        library_osx_rep = stub()
         target_installer_data = stub()
 
         @installer.stubs(:pod_targets).returns([pod_target_ios, pod_target_osx])

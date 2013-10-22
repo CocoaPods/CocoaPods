@@ -2,16 +2,16 @@ module Pod
 
   # Validates a Specification.
   #
-  # Extends the Linter from the Core to add additional which require the
-  # LocalPod and the Installer.
+  # Extends Linter from Core to add some additional functionality which requires
+  # LocalPod and Installer.
   #
-  # In detail it checks that the file patterns defined by the user match
-  # actually do match at least a file and that the Pod builds, by installing
+  # In detail it checks that file patterns defined by the user
+  # actually match at least a file and that the Pod builds, by installing
   # it without integration and building the project with xcodebuild.
   #
   class Validator
 
-    include Config::Mixin
+    include Config
 
     # @return [Specification::Linter] the linter instance from CocoaPods
     #         Core.
@@ -183,13 +183,20 @@ module Pod
 
     attr_accessor :consumer
 
+    # Currently, this method swizzles the singleton implementation, 
+    # and changes some values.
+    # Maybe we'd want to make another config for this purposes
+    #
     def setup_validation_environment
       validation_dir.rmtree if validation_dir.exist?
       validation_dir.mkpath
-      @original_config = Config.instance.clone
-      config.installation_root = validation_dir
-      config.sandbox_root      = validation_dir + 'Pods'
-      config.silent            = !config.verbose
+      @original_config = config.clone
+      @original_environment = environment.clone
+
+      environment.installation_root = validation_dir
+      environment.sandbox_root      = validation_dir + 'Pods'
+
+      config.silent            = !config.verbose?
       config.integrate_targets = false
       config.skip_repo_update  = true
     end
@@ -204,7 +211,7 @@ module Pod
     #
     def install_pod
       podfile = podfile_from_spec(consumer.platform_name, spec.deployment_target(consumer.platform_name))
-      sandbox = Sandbox.new(config.sandbox_root)
+      sandbox = Sandbox.new(environment.sandbox_root)
       installer = Installer.new(sandbox, podfile)
       installer.install!
 
@@ -213,7 +220,6 @@ module Pod
       end.flatten
 
       @file_accessor = file_accessors.find { |accessor| accessor.spec.root.name == spec.root.name }
-      config.silent
     end
 
     # Performs platform specific analysis. It requires to download the source
@@ -229,7 +235,7 @@ module Pod
         UI.warn "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow
       else
         UI.message "\nBuilding with xcodebuild.\n".yellow do
-          output = Dir.chdir(config.sandbox_root) { xcodebuild }
+          output = Dir.chdir(environment.sandbox_root) { xcodebuild }
           UI.puts output
           parsed_output  = parse_xcodebuild_output(output)
           parsed_output.each do |message|

@@ -1,6 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
+
   describe Installer::UserProjectIntegrator do
 
     describe "In general" do
@@ -16,14 +17,14 @@ module Pod
 
           end
         end
-        config.sandbox.project = Project.new(config.sandbox.project_path)
-        Xcodeproj::Project.new(config.sandbox.project_path).save
-        @library = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
+        environment.sandbox.project = Project.new(environment.sandbox.project_path)
+        Xcodeproj::Project.new(environment.sandbox.project_path).save
+        @library = AggregateTarget.new(@podfile.target_definitions['Pods'], environment.sandbox)
         @library.client_root = sample_project_path.dirname
         @library.user_project_path  = sample_project_path
         @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
-        empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], config.sandbox)
-        @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library, empty_library])
+        empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], environment.sandbox)
+        @integrator = Installer::UserProjectIntegrator.new(@podfile, environment.sandbox, temporary_directory, [@library, empty_library])
       end
 
       #-----------------------------------------------------------------------#
@@ -140,7 +141,7 @@ module Pod
 
         it "raises if no workspace could be selected" do
           @integrator.expects(:user_project_paths).returns(%w[ project1 project2 ])
-          e = lambda { @integrator.send(:workspace_path) }.should.raise Informative
+          lambda { @integrator.send(:workspace_path) }.should.raise Informative
         end
 
         it "returns the paths of the user projects" do
@@ -159,3 +160,4 @@ module Pod
     end
   end
 end
+

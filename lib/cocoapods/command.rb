@@ -14,6 +14,7 @@ module Pod
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
     require 'cocoapods/command/podfile_info'
+    require 'cocoapods/command/config'
     require 'cocoapods/command/project'
     require 'cocoapods/command/push'
     require 'cocoapods/command/repo'
@@ -21,6 +22,8 @@ module Pod
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
     require 'cocoapods/command/init'
+
+    include Pod::Config
 
     self.abstract_command = true
     self.default_subcommand = 'install'
@@ -55,7 +58,7 @@ module Pod
     def self.report_error(exception)
       if exception.is_a?(Interrupt)
         puts "[!] Cancelled".red
-        Config.instance.verbose? ? raise : exit(1)
+        config.verbose? ? raise : exit(1)
       else
         if ENV['COCOA_PODS_ENV'] != 'development'
           puts UI::ErrorReport.report(exception)
@@ -78,7 +81,8 @@ module Pod
     #
     def initialize(argv)
       super
-      config.silent = argv.flag?('silent', config.silent)
+      # @todo Refactor / fix this. This shouldn't be set directly from here
+      #config.silent = argv.flag?('silent', config.silent)
       config.verbose = self.verbose? unless self.verbose.nil?
       unless self.colorize_output?
         String.send(:define_method, :colorize) { |string , _| string }
@@ -87,7 +91,6 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    include Config::Mixin
 
     private
 

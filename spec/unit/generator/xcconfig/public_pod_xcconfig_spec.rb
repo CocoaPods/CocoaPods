@@ -8,7 +8,7 @@ module Pod
         before do
           @spec = fixture_spec('banana-lib/BananaLib.podspec')
           @target_definition = Podfile::TargetDefinition.new('Pods', nil)
-          @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
+          @pod_target = PodTarget.new([@spec], @target_definition, environment.sandbox)
           @pod_target.stubs(:platform).returns(:ios)
           @generator = PublicPodXCConfig.new(@pod_target)
 
@@ -18,7 +18,7 @@ module Pod
           @spec.weak_frameworks = ['iAd']
           @spec.libraries = ['xml2']
           file_accessors = [Sandbox::FileAccessor.new(fixture('banana-lib'), @spec.consumer(:ios))]
-          # vendored_framework_paths = [config.sandbox.root + 'BananaLib/BananaLib.framework']
+          # vendored_framework_paths = [environment.sandbox.root + 'BananaLib/BananaLib.framework']
           # Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks).returns(vendored_framework_paths)
 
           @pod_target.target_definition.stubs(:podfile).returns(@podfile)
@@ -65,13 +65,13 @@ module Pod
         end
 
         it "includes the build settings of the frameworks bundles of the spec" do
-          config.sandbox.stubs(:root).returns(fixture(''))
+          environment.sandbox.stubs(:root).returns(fixture(''))
           xcconfig = @generator.generate
           xcconfig.to_hash["FRAMEWORK_SEARCH_PATHS"].should.include?('"$(PODS_ROOT)/banana-lib"')
         end
 
         it "includes the build settings of the libraries shipped with the spec" do
-          config.sandbox.stubs(:root).returns(fixture(''))
+          environment.sandbox.stubs(:root).returns(fixture(''))
           xcconfig = @generator.generate
           xcconfig.to_hash["LIBRARY_SEARCH_PATHS"].should.include?('"$(PODS_ROOT)/banana-lib"')
         end

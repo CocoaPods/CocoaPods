@@ -7,7 +7,7 @@ module Pod
 
     before do
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
-      @sandbox = config.sandbox
+      @sandbox = environment.sandbox
       lockfile_hash = { 'PODS' => ['BananaLib (1.0)'] }
       @manifest = Pod::Lockfile.new(lockfile_hash)
       @sandbox.stubs(:manifest).returns(@manifest)

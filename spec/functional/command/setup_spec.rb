@@ -7,7 +7,7 @@ module Pod
     extend SpecHelper::TemporaryRepos
 
     before do
-      config.repos_dir = SpecHelper.tmp_repos_path
+      environment.stubs(:repos_dir).returns(SpecHelper.tmp_repos_path)
     end
 
     it "returns the read only URL of the `master` spec-repo" do
@@ -16,7 +16,7 @@ module Pod
     end
 
     it "returns the push URL of the `master` spec-repo" do
-      config.silent = true
+      config.stubs(:silent).returns(true)
       cmd = Command::Setup.new(argv('--push'))
       cmd.url.should == 'git@github.com:CocoaPods/Specs.git'
     end
@@ -24,7 +24,7 @@ module Pod
     before do
       set_up_test_repo
       Command::Setup.any_instance.stubs(:read_only_url).returns(test_repo_path.to_s)
-      config.repos_dir = SpecHelper.temporary_directory
+      environment.stubs(:repos_dir).returns(SpecHelper.temporary_directory)
     end
 
     it "runs with correct parameters" do
@@ -49,7 +49,7 @@ module Pod
     before do
       FileUtils.rm_rf(test_repo_path)
       set_up_old_test_repo
-      config.repos_dir = SpecHelper.temporary_directory + 'cocoapods/repos'
+      config.stubs(:repos_dir).returns(SpecHelper.temporary_directory + 'cocoapods/repos')
       Command::Setup.any_instance.stubs(:old_master_repo_dir).returns(SpecHelper.temporary_directory + 'cocoapods/master')
     end
 
@@ -60,7 +60,7 @@ module Pod
       source.should.exist?
       target.should.not.exist?
 
-      output = run_command('setup')
+      run_command('setup')
 
       source.should.not.exist?
       target.should.exist?

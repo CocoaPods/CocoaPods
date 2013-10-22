@@ -4,7 +4,7 @@ module Pod
   describe Project do
 
     before do
-      @project = Project.new(config.sandbox.project_path)
+      @project = Project.new(environment.sandbox.project_path)
     end
 
     #-------------------------------------------------------------------------#
@@ -32,7 +32,7 @@ module Pod
       describe "#add_pod_group" do
 
         before do
-          @path = config.sandbox.pod_dir('BananaLib')
+          @path = environment.sandbox.pod_dir('BananaLib')
         end
 
         it "adds the group for a Pod" do
@@ -42,14 +42,12 @@ module Pod
         end
 
         it "adds the group for a development Pod" do
-          path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path, true)
           group.parent.should == @project.development_pods
           group.name.should == 'BananaLib'
         end
 
         it "configures the path of a new Pod group" do
-          path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path)
           group.source_tree.should == '<group>'
           group.path.should == 'BananaLib'
@@ -57,7 +55,6 @@ module Pod
         end
 
         it "configures the path of a new Pod group as absolute if requested" do
-          path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path, false, true)
           group.source_tree.should == '<absolute>'
           group.path.should == @path.to_s
@@ -71,8 +68,8 @@ module Pod
       describe "#pod_groups" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
-          @project.add_pod_group('OrangeLib', config.sandbox.pod_dir('OrangeLib'), true)
+          @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'))
+          @project.add_pod_group('OrangeLib', environment.sandbox.pod_dir('OrangeLib'), true)
         end
 
         it "returns the pod groups" do
@@ -89,7 +86,7 @@ module Pod
       #----------------------------------------#
 
       it "returns the group of a Pod with a given name" do
-        @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
+        @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'))
         @project.pod_group('BananaLib').name.should == 'BananaLib'
       end
 
@@ -98,7 +95,7 @@ module Pod
       describe "#group_for_spec" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
+          @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'))
         end
 
         it "returns the group for the spec with the given name" do
@@ -160,8 +157,8 @@ module Pod
       describe "#reference_for_path" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
-          @file = config.sandbox.pod_dir('BananaLib') + "file.m"
+          @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'), false)
+          @file = environment.sandbox.pod_dir('BananaLib') + "file.m"
           @group = @project.group_for_spec('BananaLib')
         end
 
@@ -190,8 +187,8 @@ module Pod
       describe "#reference_for_path" do
 
         before do
-          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
-          @file = config.sandbox.pod_dir('BananaLib') + "file.m"
+          @project.add_pod_group('BananaLib', environment.sandbox.pod_dir('BananaLib'), false)
+          @file = environment.sandbox.pod_dir('BananaLib') + "file.m"
           @group = @project.group_for_spec('BananaLib')
           @project.add_file_reference(@file, @group)
         end
@@ -202,7 +199,7 @@ module Pod
         end
 
         it "returns nil if no reference for the given path is available" do
-          another_file = config.sandbox.pod_dir('BananaLib') + "another_file.m"
+          another_file = environment.sandbox.pod_dir('BananaLib') + "another_file.m"
           ref = @project.reference_for_path(another_file)
           ref.should.be.nil
         end
@@ -212,13 +209,12 @@ module Pod
             @project.reference_for_path('relative/path/to/file.m')
           end.message.should.match /Paths must be absolute/
         end
-
       end
 
       #----------------------------------------#
 
       it "adds the Podfile configured as a Ruby file" do
-        @project.add_podfile(config.sandbox.root + '../Podfile')
+        @project.add_podfile(environment.sandbox.root + '../Podfile')
         f = @project['Podfile']
         f.source_tree.should == 'SOURCE_ROOT'
         f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
@@ -231,6 +227,4 @@ module Pod
 
   end
 end
-
-
 

@@ -5,14 +5,13 @@ module Bacon
     old_run_requirement = instance_method(:run_requirement)
 
     define_method(:run_requirement) do |description, spec|
-      ::Pod::Config.instance = nil
-      ::Pod::Config.instance.tap do |c|
-        c.verbose           =  false
-        c.silent            =  true
-        c.repos_dir         =  fixture('spec-repos')
-        c.installation_root =  SpecHelper.temporary_directory
-        c.skip_repo_update  =  true
-      end
+
+      environment.stubs(:repos_dir).returns(fixture('spec-repos'))
+      environment.stubs(:installation_root).returns(SpecHelper.temporary_directory)
+      environment.stubs(:verbose).returns(true)
+
+      config.stubs(:silent).returns(true)
+      config.stubs(:skip_repo_update).returns(true)
 
       ::Pod::UI.output = ''
       # The following prevents a nasty behaviour where the increments are not

@@ -6,7 +6,7 @@ module Pod
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.link_with_first_target = true
-        @target = AggregateTarget.new(@target_definition, config.sandbox)
+        @target = AggregateTarget.new(@target_definition, environment.sandbox)
       end
 
       it "returns the target_definition that generated it" do
@@ -30,8 +30,8 @@ module Pod
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.link_with_first_target = true
-        @target = AggregateTarget.new(@target_definition, config.sandbox)
-        @target.client_root = config.sandbox.root.dirname
+        @target = AggregateTarget.new(@target_definition, environment.sandbox)
+        @target.client_root = environment.sandbox.root.dirname
       end
 
       it "returns the absolute path of the xcconfig file" do
@@ -73,8 +73,8 @@ module Pod
       before do
         spec = fixture_spec('banana-lib/BananaLib.podspec')
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        pod_target = PodTarget.new([spec], target_definition, config.sandbox)
-        @target = AggregateTarget.new(target_definition, config.sandbox)
+        pod_target = PodTarget.new([spec], target_definition, environment.sandbox)
+        @target = AggregateTarget.new(target_definition, environment.sandbox)
         @target.stubs(:platform).returns(:ios)
         @target.pod_targets = [pod_target]
       end

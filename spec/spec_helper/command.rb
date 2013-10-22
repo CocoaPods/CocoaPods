@@ -14,12 +14,11 @@ module SpecHelper
         Pod::UI.output = ''
         # @todo Remove this once all cocoapods has
         # been converted to use the UI.puts
-        config_silent = config.silent?
-        config.silent = false
+        config.stubs(:silent).returns(false)
         cmd = command(*args)
         cmd.validate!
         cmd.run
-        config.silent = config_silent
+        config.unstub(:silent)
         Pod::UI.output
       end
     end

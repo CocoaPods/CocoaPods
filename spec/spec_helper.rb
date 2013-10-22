@@ -79,7 +79,7 @@ Bacon.summary_at_exit
 
 module Bacon
   class Context
-    include Pod::Config::Mixin
+    include Pod::Config
     include SpecHelper::Fixture
     include SpecHelper::Command
 

@@ -7,7 +7,7 @@ module Pod
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       @spec.source = { :git => SpecHelper.fixture('banana-lib') }
       specs_by_platform = { :ios => [@spec] }
-      @installer = Installer::PodSourceInstaller.new(config.sandbox, specs_by_platform)
+      @installer = Installer::PodSourceInstaller.new(environment.sandbox, specs_by_platform)
     end
 
     #-------------------------------------------------------------------------#
@@ -29,16 +29,16 @@ module Pod
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
           @installer.specific_source.should.be.nil
-          pod_folder = config.sandbox.root + 'BananaLib'
+          pod_folder = environment.sandbox.root + 'BananaLib'
           pod_folder.should.exist
         end
 
         it "downloads the head source if specified source" do
-          config.sandbox.store_head_pod('BananaLib')
+          environment.sandbox.store_head_pod('BananaLib')
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
           @installer.specific_source[:commit].should == "0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc"
-          pod_folder = config.sandbox.root + 'BananaLib'
+          pod_folder = environment.sandbox.root + 'BananaLib'
           pod_folder.should.exist
         end
 
@@ -46,12 +46,12 @@ module Pod
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :branch => 'topicbranch' }
           @installer.install!
           @installer.specific_source[:commit].should == "446b22414597f1bb4062a62c4eed7af9627a3f1b"
-          pod_folder = config.sandbox.root + 'BananaLib'
+          pod_folder = environment.sandbox.root + 'BananaLib'
           pod_folder.should.exist
         end
 
         it "stores the checkout options in the sandbox" do
-          config.sandbox.store_head_pod('BananaLib')
+          environment.sandbox.store_head_pod('BananaLib')
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
           sources = @installer.sandbox.checkout_sources
@@ -92,14 +92,14 @@ module Pod
         it "cleans the paths non used by the installation" do
           @installer.install!
           @installer.clean!
-          unused_file = config.sandbox.root + 'BananaLib/sub-dir/sub-dir-2/somefile.txt'
+          unused_file = environment.sandbox.root + 'BananaLib/sub-dir/sub-dir-2/somefile.txt'
           unused_file.should.not.exist
         end
 
         it "preserves important files like the LICENSE and the README" do
           @installer.install!
           @installer.clean!
-          readme_file = config.sandbox.root + 'BananaLib/README'
+          readme_file = environment.sandbox.root + 'BananaLib/README'
           readme_file.should.exist
         end
 
@@ -117,13 +117,13 @@ module Pod
         end
 
         it "doesn't downloads the source if the pod has a local source" do
-          config.sandbox.store_local_path('BananaLib', 'Some Path')
+          environment.sandbox.store_local_path('BananaLib', 'Some Path')
           @installer.expects(:download_source).never
           @installer.install!
         end
 
         it "doesn't clean the installation if the pod has a local source" do
-          config.sandbox.store_local_path('BananaLib', 'Some Path')
+          environment.sandbox.store_local_path('BananaLib', 'Some Path')
           @installer.expects(:clean_installation).never
           @installer.install!
         end
@@ -176,7 +176,7 @@ module Pod
         ios_spec = spec.dup
         osx_spec = spec.dup
         specs_by_platform = { :ios => [ios_spec], :osx => [osx_spec] }
-        @installer = Installer::PodSourceInstaller.new(config.sandbox, specs_by_platform)
+        @installer = Installer::PodSourceInstaller.new(environment.sandbox, specs_by_platform)
         @installer.send(:download_source)
         paths = @installer.send(:used_files)
         relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '')}
