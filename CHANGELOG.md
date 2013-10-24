@@ -2,17 +2,26 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+## 0.27.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.2...0.27.0)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.13.0...0.14.0)
 
 ###### Enhancements
 
+* The xcodeproj gem now comes bundled with prebuilt binaries for the Ruby
+  versions that come with OS X 10.8 and 10.9. Users now no longer need to
+  install the Xcode Command Line Tools or deal with the Ruby C header location.
+  [Eloy Durán](https://github.com/alloy)
+  [Xcodeproj#88](https://github.com/CocoaPods/Xcodeproj/issues/88)
+
 * Targets passed to the `link_with` method of the Podfile DSL no longer need
   to be explicitly passed as an array. `link_with ['target1', 'target2']` can
-  now be written as `link_with 'target1', 'target2'`.  
+  now be written as `link_with 'target1', 'target2'`.
   [Adam Sharp](https://github.com/sharplet)
   [Core#30](https://github.com/CocoaPods/Core/pull/30)
 
-* The copy resources script now compiles xcassets resources.  
+* The copy resources script now compiles xcassets resources.
   [Ulrik Damm](https://github.com/ulrikdamm)
   [#1427](https://github.com/CocoaPods/CocoaPods/pull/1427)
 
@@ -24,7 +33,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ###### Bug Fixes
 
 * The architecture is now set in the build settings of the user build
-  configurations.  
+  configurations.
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1450](https://github.com/CocoaPods/CocoaPods/issues/1462)
   [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
