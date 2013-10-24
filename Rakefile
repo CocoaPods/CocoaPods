@@ -105,8 +105,10 @@ namespace :gem do
     puts "* Updating Bundle"
     silent_sh('bundle update')
 
-    #puts "* Running specs"
-    #silent_sh('rake spec:all')
+    unless ENV['SKIP_SPECS']
+      puts "* Running specs"
+      silent_sh('rake spec:all')
+    end
 
     tmp = File.expand_path('../tmp', __FILE__)
     tmp_gems = File.join(tmp, 'gems')
