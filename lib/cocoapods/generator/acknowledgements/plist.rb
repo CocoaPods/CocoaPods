@@ -2,13 +2,12 @@ module Pod
   module Generator
 
     class Plist < Acknowledgements
-      require "xcodeproj/xcodeproj_ext"
-
       def self.path_from_basepath(path)
         Pathname.new(path.dirname + "#{path.basename.to_s}.plist")
       end
 
       def save_as(path)
+        require 'xcodeproj/ext'
         Xcodeproj.write_plist(plist, path)
       end
 
