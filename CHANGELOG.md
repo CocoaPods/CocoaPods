@@ -11,21 +11,21 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * The xcodeproj gem now comes bundled with prebuilt binaries for the Ruby
   versions that come with OS X 10.8 and 10.9. Users now no longer need to
-  install the Xcode Command Line Tools or deal with the Ruby C header location.
+  install the Xcode Command Line Tools or deal with the Ruby C header location.  
   [Eloy Durán](https://github.com/alloy)
   [Xcodeproj#88](https://github.com/CocoaPods/Xcodeproj/issues/88)
 
 * Targets passed to the `link_with` method of the Podfile DSL no longer need
   to be explicitly passed as an array. `link_with ['target1', 'target2']` can
-  now be written as `link_with 'target1', 'target2'`.
+  now be written as `link_with 'target1', 'target2'`.  
   [Adam Sharp](https://github.com/sharplet)
   [Core#30](https://github.com/CocoaPods/Core/pull/30)
 
-* The copy resources script now compiles xcassets resources.
+* The copy resources script now compiles xcassets resources.  
   [Ulrik Damm](https://github.com/ulrikdamm)
   [#1427](https://github.com/CocoaPods/CocoaPods/pull/1427)
 
-* `pod repo` now support a `remove ['repo_name']` command.
+* `pod repo` now support a `remove ['repo_name']` command.  
   [Joshua Kalpin](https://github.com/Kapin)
   [#1493](https://github.com/CocoaPods/CocoaPods/issues/1493)
   [#1484](https://github.com/CocoaPods/CocoaPods/issues/1484)
@@ -33,7 +33,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ###### Bug Fixes
 
 * The architecture is now set in the build settings of the user build
-  configurations.
+  configurations.  
   [Fabio Pelosin](https://github.com/irrationalfab)
   [#1450](https://github.com/CocoaPods/CocoaPods/issues/1462)
   [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
@@ -52,7 +52,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * The developer dir relative to the SDK is not added anymore if testing 
   frameworks are detected in OS X targets, as it doesn't exists, avoiding the
-  presentation of the relative warning in Xcode.
+  presentation of the relative warning in Xcode.  
   [Fabio Pelosin](https://github.com/irrationalfab)
 
 
