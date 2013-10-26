@@ -12,6 +12,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Noah McCann](https://github.com/nmccann)
   [#1521](https://github.com/CocoaPods/CocoaPods/pull/1521)
 
+* Added additional condition to check if `actool` is available when compiling `xcassets`.
+  This prevents build failures of Xcode 5 projects on Travis CI (or lower Xcode versions).
+  [Michal Konturek](https://github.com/michalkonturek)
+  [#1511](https://github.com/CocoaPods/CocoaPods/pull/1511)
+
 
 ## 0.27.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
