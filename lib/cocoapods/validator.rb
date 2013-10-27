@@ -177,7 +177,7 @@ module Pod
     # @return [Pathname] the temporary directory used by the linter.
     #
     def validation_dir
-      Pathname.new('/tmp/CocoaPods/Lint')
+      Pathname.new(File.join(Pathname.new('/tmp').realpath,'CocoaPods/Lint'))
     end
 
     #-------------------------------------------------------------------------#

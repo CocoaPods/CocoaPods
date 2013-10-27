@@ -135,7 +135,7 @@ module Pod
         end
 
         def podspecs_tmp_dir
-          Pathname.new('/tmp/CocoaPods/Lint_podspec')
+          Pathname.new(File.join(Pathname.new('/tmp').realpath, '/CocoaPods/Lint_podspec'))
         end
       end
 
