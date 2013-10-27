@@ -31,7 +31,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1643][https://github.com/CocoaPods/CocoaPods/pull/1643]
 
 * Pod lib lint now accepts multiple podspecs in the same folder.  
-  [Kra Larivain/OpenTable](https://github.com/opentable)
+  [kra Larivain/OpenTable](https://github.com/opentable)
   [#1635](https://github.com/CocoaPods/CocoaPods/pull/1635)
 
 * The `pod push` command will now silently test the upcoming CocoaPods trunk
@@ -92,6 +92,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   architecture is specified.
   [Carson McDonald](https://github.com/carsonmcdonald)
   [#1628](https://github.com/CocoaPods/CocoaPods/issues/1628)
+
+* Fixed all issues caused by /tmp being a symlink to /private/tmp. This affected mostly pod lib lint, causing it to fail when the pod used prefix_header_* or when the pod headers imported .h using the namespaced syntax (e.g. #import <MyPod/Header.h>)
+  [kra Larivain/OpenTable](https://github.com/opentable)
+  [#1514](https://github.com/CocoaPods/CocoaPods/pull/1514)
 
 ## 0.28.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.27.1...0.28.0)

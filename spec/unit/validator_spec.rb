@@ -69,6 +69,13 @@ module Pod
         sut.results.map(&:to_s).first.should.match /summary.*meaningful/
         sut.validated?.should.be.true
       end
+
+      it "handles symlinks" do
+        file = write_podspec(stub_podspec)
+        validator = Validator.new(file)
+        validator.validate
+        validator.validation_dir.should.be == Pathname.new("/private/tmp/CocoaPods/Lint")
+      end
     end
 
     #-------------------------------------------------------------------------#
@@ -136,7 +143,6 @@ module Pod
         sut.validated?.should.be.true
       end
     end
-
     #-------------------------------------------------------------------------#
 
   end
