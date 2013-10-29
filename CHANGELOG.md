@@ -2,6 +2,13 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+##### Enhancements
+
+* Added the `pod repo list` command which lists all the repositories.  
+  [Luis Ascorbe](https://github.com/lascorbe)
+  [#1455](https://github.com/CocoaPods/CocoaPods/issues/1455)
 
 ## 0.34.0.rc2
 
