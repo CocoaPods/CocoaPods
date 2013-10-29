@@ -9,6 +9,7 @@ module Pod
       # @todo should not show a usage banner!
       #
       self.summary = 'Manage spec-repositories'
+      self.default_subcommand = 'list'
 
       class Add < Repo
         self.summary = 'Add a spec repo.'
@@ -185,11 +186,95 @@ module Pod
         end
       end
 
+      #-----------------------------------------------------------------------#
+
+      class List < Repo
+        self.summary = 'List repos'
+
+        self.description = <<-DESC
+            List the repos from the local spec-repos directory at `~/.cocoapods/repos/.`
+        DESC
+        
+        def self.options
+          [["--count", "Show the total number of repos"]].concat(super)
+        end
+
+        def initialize(argv)
+          @count = argv.flag?('count')
+          super
+        end
+
+        # @output  Examples:
+        #
+        #          master
+        #          - type: git (origin)
+        #          - URL:  https://github.com/CocoaPods/Specs.git
+        #          - path: /Users/lascorbe/.cocoapods/repos/master
+        #
+        #          test
+        #          - type: local copy
+        #          - path: /Users/lascorbe/.cocoapods/repos/test
+        #
+        def run
+          sources = SourcesManager.all
+          sources.each do |source|
+            path = source.data_provider.repo
+            UI.title source.name do
+              Dir.chdir(path) do
+                if SourcesManager.git_repo?(path)
+                  branch_name = get_branch_name
+                  remote_name = get_branch_remote_name(branch_name)
+                  if remote_name
+                    UI.puts "- Type: git (#{remote_name})"
+                    url = get_url_of_git_repo(remote_name)
+                    UI.puts "- URL:  #{url}"
+                  else
+                    UI.puts "- Type: git (no remote information available)"
+                  end
+                else
+                  UI.puts "- Type: local copy"
+                end
+                UI.puts "- Path: #{path}"
+              end
+            end
+          end
+          if @count
+            number_of_repos = sources.length
+            repo_string = number_of_repos != 1 ? 'repos' : 'repo'
+            UI.puts "\n#{number_of_repos} #{repo_string}".green
+          end
+        end
+      end
+
       extend Executable
       executable :git
 
       def dir
         config.repos_dir + @name
+      end
+
+      # Returns the branch name (i.e. master)
+      #
+      def get_branch_name
+        git!("name-rev --name-only HEAD").strip
+      end
+
+      # Returns the branch remote name (i.e. origin)
+      #
+      # @param  [BranchName] branch_name
+      #         The branch name to look for the remote name.
+      #
+      def get_branch_remote_name(branch_name)
+        `git config branch.#{branch_name}.remote`.strip
+      end
+
+      # Returns the url of the given remote name (i.e. git@github.com:CocoaPods/Specs.git)
+      #
+      # @param  [RemoteName] remote_name
+      #         The branch remote name to look for the url.
+      #
+      def get_url_of_git_repo(remote_name)
+        `git config remote.#{remote_name}.url`.strip
       end
     end
   end

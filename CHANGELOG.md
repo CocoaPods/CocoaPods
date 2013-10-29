@@ -47,6 +47,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Ladislav Martincik](https://github.com/martincik)
   [#2482](https://github.com/CocoaPods/CocoaPods/issues/2482)
 
+##### Enhancements
+
+* Added the `pod repo list` command which lists all the repositories.  
+  [Luis Ascorbe](https://github.com/lascorbe)
+  [#1455](https://github.com/CocoaPods/CocoaPods/issues/1455)
+
+
 ## 0.34.0.rc2
 
 ##### Bug Fixes

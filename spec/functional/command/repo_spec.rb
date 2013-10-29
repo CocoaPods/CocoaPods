@@ -120,6 +120,34 @@ module Pod
         lambda { run_command('repo', 'remove', upstream) }.should.not.raise
         File.directory?(test_repo_path + upstream).should.be.false?
       end
+
+    end
+
+    describe Command::Repo::List do
+      extend SpecHelper::Command
+      extend SpecHelper::TemporaryRepos
+
+      before do
+        set_up_test_repo
+        config.repos_dir = SpecHelper.tmp_repos_path
+      end
+
+      it 'lists a repository' do
+        lambda { run_command('repo', 'list') }.should.not.raise
+      end
+
+      it 'lists a repository (checking the output)' do
+        config.repos_dir = fixture('spec-repos')
+        output = run_command('repo', 'list')
+        output.should.include? '- Type:'
+      end
+
+      it 'lists a repository with count' do
+        config.repos_dir = fixture('spec-repos')
+        output = run_command('repo', 'list', '--count')
+        output.should.include? 'repo'
+      end
+
     end
   end
 end
