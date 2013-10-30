@@ -26,6 +26,8 @@ s.files = Dir["lib/**/*.rb"] + %w{ bin/pod bin/sandbox-pod README.md LICENSE CHA
   s.executables   = %w{ pod sandbox-pod }
   s.require_paths = %w{ lib }
 
+  # Installing cocoapods on Mavericks system ruby fails without Rake.
+  s.add_runtime_dependency 'rake'
   # Link with the version of CocoaPods-Core
   s.add_runtime_dependency 'cocoapods-core',       "= #{Pod::VERSION}"
   s.add_runtime_dependency 'claide',               '~> 0.3.2'
