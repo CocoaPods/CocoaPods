@@ -137,8 +137,7 @@ EOS
 
       XCASSETS_COMPILE = <<EOS
 
-XCODE_MAJOR_VERSION=`xcodebuild -version | awk 'NR == 1 {print substr($2,1,1)}'`
-if [ "$XCODE_MAJOR_VERSION" -ge "5" ]; then
+if [ `xcrun --find actool` ]; then 
   if [ `find . -name '*.xcassets' | wc -l` -ne 0 ]
   then
     DEVICE=`if [ "${TARGETED_DEVICE_FAMILY}" -eq 1 ]; then echo "iphone"; else echo "ipad"; fi`
