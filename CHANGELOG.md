@@ -6,11 +6,17 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Bug Fixes
 
-* Added a condition to avoid compiling xcassets when WRAPPER_EXTENSION
+* Added a condition to avoid compiling xcassets when `WRAPPER_EXTENSION`
   is undefined, as it would be in the case of static libraries. This prevents
   trying to copy the compiled files to a directory that does not exist.
   [Noah McCann](https://github.com/nmccann)
   [#1521](https://github.com/CocoaPods/CocoaPods/pull/1521)
+
+* Added additional condition to check if `actool` is available when compiling
+  `xcassets`. This prevents build failures of Xcode 5 projects on Travis CI (or
+  lower Xcode versions).
+  [Michal Konturek](https://github.com/michalkonturek)
+  [#1511](https://github.com/CocoaPods/CocoaPods/pull/1511)
 
 
 ## 0.27.1
