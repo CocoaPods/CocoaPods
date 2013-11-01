@@ -17,12 +17,13 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 33d4a70380f1a141dec3a7da727e7c77ed191e0e
+  revision: ceae7a7be45e760830ee95a7b4481bdab6df149d
   branch: master
   specs:
-    xcodeproj (0.14.0)
+    xcodeproj (0.14.1)
       activesupport (~> 3.0)
       colored (~> 1.2)
+      rake
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
@@ -79,7 +80,7 @@ GEM
       thor
     diffy (3.0.1)
     escape (0.0.4)
-    ffi (1.9.0)
+    ffi (1.9.3)
     github-markup (0.7.5)
     i18n (0.6.5)
     json_pure (1.8.1)
@@ -141,6 +142,7 @@ DEPENDENCIES
   diffy
   github-markup
   kicker!
+  mime-types (< 2)
   mocha
   mocha-on-bacon
   prettybacon!
