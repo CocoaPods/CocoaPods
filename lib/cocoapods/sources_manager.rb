@@ -8,11 +8,12 @@ module Pod
 
       include Config::Mixin
 
+
       # @return [Source::Aggregate] the aggregate of all the sources
       #         listed by the current Podifle.
       #
       def podfile_aggregate
-        podfile_repos = config.podfile_repos_dirs
+        podfile_repos = self.podfile_repos_dirs
         if podfile_repos.empty?
           aggregate
         else
@@ -295,7 +296,28 @@ module Pod
         master_repo_dir.exist? && repo_compatible?(master_repo_dir)
       end
 
+      public
+
+      # @!group Source repos
       #-----------------------------------------------------------------------#
+
+      # @return [<Array>Pathname] directories of all specified sources in Podfile
+      #
+      def podfile_repos_dirs
+        pathnames = []
+        if config.podfile
+          config.podfile.sources.each do |source_name|
+            pathnames << source_repo_dir(source_name)
+          end
+        end
+        pathnames
+      end
+
+      # @return [Pathname] the directory where a given CocoaPods source is stored.
+      #
+      def source_repo_dir(name)
+        config.repos_dir + name
+      end
 
     end
   end
