@@ -99,6 +99,38 @@ module Pod
           end
           podspecs_tmp_dir.rmtree if podspecs_tmp_dir.exist?
         end
+
+        private
+
+        def podspecs_to_lint
+          @podspecs_to_lint ||= begin
+            files = []
+            @podspecs_paths << '.' if @podspecs_paths.empty?
+            @podspecs_paths.each do |path|
+              if path =~ /https?:\/\//
+                require 'open-uri'
+                output_path = podspecs_tmp_dir + File.basename(path)
+                output_path.dirname.mkpath
+                open(path) do |io|
+                  output_path.open('w') { |f| f << io.read }
+                end
+                files << output_path
+              else if (pathname = Pathname.new(path)).directory?
+                     files += Pathname.glob(pathname + '**/*.podspec')
+                     raise Informative, "No specs found in the current directory." if files.empty?
+                   else
+                     files << (pathname = Pathname.new(path))
+                     raise Informative, "Unable to find a spec named `#{path}'." unless pathname.exist? && path.include?('.podspec')
+                   end
+              end
+            end
+            files
+          end
+        end
+
+        def podspecs_tmp_dir
+          Pathname.new('/tmp/CocoaPods/Lint_podspec')
+        end
       end
 
       #-----------------------------------------------------------------------#
@@ -343,36 +375,6 @@ module Pod
         end
 
         return best_source.specification(set.name, best_version), best_source
-      end
-
-      def podspecs_to_lint
-        @podspecs_to_lint ||= begin
-          files = []
-          @podspecs_paths << '.' if @podspecs_paths.empty?
-          @podspecs_paths.each do |path|
-            if path =~ /https?:\/\//
-              require 'open-uri'
-              output_path = podspecs_tmp_dir + File.basename(path)
-              output_path.dirname.mkpath
-              open(path) do |io|
-                output_path.open('w') { |f| f << io.read }
-              end
-              files << output_path
-            else if (pathname = Pathname.new(path)).directory?
-              files += Pathname.glob(pathname + '**/*.podspec')
-              raise Informative, "No specs found in the current directory." if files.empty?
-            else
-              files << (pathname = Pathname.new(path))
-              raise Informative, "Unable to find a spec named `#{path}'." unless pathname.exist? && path.include?('.podspec')
-            end
-          end
-        end
-          files
-        end
-      end
-
-      def podspecs_tmp_dir
-         Pathname.new('/tmp/CocoaPods/Lint_podspec')
       end
 
       #--------------------------------------#
