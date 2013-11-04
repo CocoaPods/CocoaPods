@@ -15,6 +15,7 @@ module Pod
         lambda { run_command('spec', 'which') }.should.raise CLAide::Help
         lambda { run_command('spec', 'cat') }.should.raise CLAide::Help
         lambda { run_command('spec', 'edit') }.should.raise CLAide::Help
+        lambda { run_command('spec', 'browse') }.should.raise CLAide::Help
       end
     end
 
@@ -174,32 +175,50 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe Command::Spec::Which do
+    def it_should_check_for_existence(command)
       it "errors if a given podspec doesn't exist" do
-        e = lambda { command('spec', 'which', 'some_pod_that_doesnt_exist').run }.should.raise Informative
+        e = lambda { command('spec', command, 'some_pod_that_doesnt_exist').run }.should.raise Informative
         e.message.should.match /Unable to find a pod with/
       end
+    end
+
+    def it_should_check_for_ambiguity(command)
+      it "complains provided spec name is ambigious" do
+        e = lambda { command('spec', command, 'AF').run }.should.raise Informative
+        e.message.should.match /More than one/
+      end
+    end
+
+    describe Command::Spec::Which do
+      it_should_check_for_existence("which")
+      it_should_check_for_ambiguity("which")
 
       it "prints the path of a given podspec" do
         lambda { command('spec', 'which', 'AFNetworking').run }.should.not.raise
         text = "AFNetworking.podspec"
         UI.output.should.include text.gsub(/\n/, '')
       end
-
-      it "complains provided spec name is ambigious" do
-        e = lambda { command('spec', 'cat', 'AF').run }.should.raise Informative
-        e.message.should.match /More than one/
-      end
     end
 
     #-------------------------------------------------------------------------#
 
     describe Command::Spec::Cat do
+      it_should_check_for_existence("cat")
+      it_should_check_for_ambiguity("cat")
     end
 
     #-------------------------------------------------------------------------#
 
     describe Command::Spec::Edit do
+      it_should_check_for_existence("edit")
+      it_should_check_for_ambiguity("edit")
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe Command::Spec::Browse do
+      it_should_check_for_existence("browse")
+      it_should_check_for_ambiguity("browse")
     end
 
     #-------------------------------------------------------------------------#
