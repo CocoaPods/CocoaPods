@@ -207,6 +207,35 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
+      class Browse < Spec
+        self.summary = "Open the spec's website"
+
+        self.description = <<-DESC
+          Open's NAME.podspec's homepage in the default browser.
+        DESC
+
+        def validate!
+          super
+          help! "A podspec name is required." unless @specName
+        end
+
+        def initialize(argv)
+          @specName = argv.shift_argument
+          @specName = @specName.gsub('.podspec', '') unless @specName.nil?
+          super
+        end
+
+        def run
+          filepath = get_path_of_spec(@specName)
+          spec = Specification.from_file(filepath)
+
+          UI.puts "Opening #{spec.homepage}"
+          `open "#{spec.homepage}"`
+        end
+      end
+
+      #-----------------------------------------------------------------------#
+
       class Edit < Spec
         self.summary = 'Edit a spec file.'
 
