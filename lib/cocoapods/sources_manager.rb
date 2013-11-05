@@ -17,7 +17,7 @@ module Pod
         if podfile_repos.empty?
           aggregate
         else
-          Source::Aggregate.new podfile_repos
+          Source::Aggregate.new(podfile_repos)
         end
       end
 

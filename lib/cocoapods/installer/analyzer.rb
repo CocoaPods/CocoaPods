@@ -178,7 +178,7 @@ module Pod
           else
             podfile.sources.each do |source|
               UI.section "Updating spec repository #{source}" do
-                SourcesManager.update source
+                SourcesManager.update(source)
               end
             end
           end
