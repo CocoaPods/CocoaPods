@@ -9,16 +9,15 @@ module Pod
       include Config::Mixin
 
 
-      # @return [Source::Aggregate] the aggregate of all the sources
-      #         listed by the current Podifle.
+      # @return [Array<Source>] the sources listed by the current Podfile.
       #
       def podfile_sources
-        podfile_repos = self.podfile_repos_dirs
-        if podfile_repos.empty?
-          aggregate
-        else
-          Source::Aggregate.new(podfile_repos)
+        sources = []
+        self.podfile_repos_dirs.each do |repo|
+          sources << Source.new(repo)
         end
+        sources << Source.new(master_repo_dir) if sources.empty?
+        sources
       end
 
       # @return [Source::Aggregate] the aggregate of all the sources known to
