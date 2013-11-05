@@ -301,7 +301,7 @@ module Pod
       # @!group Source repos
       #-----------------------------------------------------------------------#
 
-      # @return [<Array>Pathname] directories of all specified sources in Podfile
+      # @return [Array<Pathname>] directories of all specified sources in Podfile
       #
       def podfile_repos_dirs
         pathnames = []
