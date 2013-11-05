@@ -20,12 +20,18 @@ module Pod
         sources
       end
 
+      # @param  [Bool] podfile use podfile sources
+      #
       # @return [Source::Aggregate] the aggregate of all the sources known to
       #         this installation of CocoaPods.
       #
-      def aggregate
-        all_repos = config.repos_dir.children.select(&:directory?)
-        Source::Aggregate.new(all_repos)
+      def aggregate(podfile = false)
+        if podfile
+          repos = podfile_repos_dirs
+        else
+          repos = config.repos_dir.children.select(&:directory?)
+        end
+        Source::Aggregate.new(repos)
       end
 
       # @return [Array<Source>] the list of all the sources known to this
