@@ -53,7 +53,7 @@ module Pod
     #         definition.
     #
     def resolve
-      @cached_sources  = SourcesManager.podfile_aggregate
+      @cached_sources  = SourcesManager.podfile_sources
       @cached_sets     = {}
       @cached_specs    = {}
       @specs_by_target = {}

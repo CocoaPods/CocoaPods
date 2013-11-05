@@ -12,7 +12,7 @@ module Pod
       # @return [Source::Aggregate] the aggregate of all the sources
       #         listed by the current Podifle.
       #
-      def podfile_aggregate
+      def podfile_sources
         podfile_repos = self.podfile_repos_dirs
         if podfile_repos.empty?
           aggregate
