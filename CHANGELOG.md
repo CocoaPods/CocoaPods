@@ -4,6 +4,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
+* CLAide now supports gem plugins. An example CocoaPods plugin can be found at
+  [open\_pod\_bay](https://github.com/leshill/open_pod_bay).
+  [Les Hill](https://github.com/leshill)
+  [CLAide#1](https://github.com/CocoaPods/CLAide/pull/1)
+
 ###### Bug Fixes
 
 * Added a condition to avoid compiling xcassets when `WRAPPER_EXTENSION`
