@@ -20,6 +20,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Bug Fixes
 
+* Compiling `xcassets` with `actool` now uses `UNLOCALIZED_RESOURCES_FOLDER_PATH`
+  instead of `PRODUCT_NAME.WRAPPER_EXTENSION` as output directory as it is more
+  accurate and allows the project to overwrite `WRAPPER_NAME`.
+  [Marc Knaup](https://github.com/fluidsonic)
+  [#1556](https://github.com/CocoaPods/CocoaPods/pull/1556)
+
 * Added a condition to avoid compiling xcassets when `WRAPPER_EXTENSION`
   is undefined, as it would be in the case of static libraries. This prevents
   trying to copy the compiled files to a directory that does not exist.
