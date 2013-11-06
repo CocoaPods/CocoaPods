@@ -171,12 +171,13 @@ module Pod
       #
       def update_repositories_if_needed
         unless config.skip_repo_update?
-          if podfile.sources.empty?
+          sources = SourcesManager.podfile_sources
+          if sources.empty?
             UI.section 'Updating spec repositories' do
               SourcesManager.update
             end
           else
-            podfile.sources.each do |source|
+            sources.each do |source|
               UI.section "Updating spec repository #{source}" do
                 SourcesManager.update(source)
               end
