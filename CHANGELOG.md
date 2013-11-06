@@ -18,6 +18,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Michal Konturek](https://github.com/michalkonturek)
   [#1511](https://github.com/CocoaPods/CocoaPods/pull/1511)
 
+* Vendored Libraries now correctly affect whether a podspec is considered empty
+  [Joshua Kalpin](https://github.com/Kapin)
+  [Core#38](https://github.com/CocoaPods/Core/pull/38)
+
+* Gists are now correctly accepted with https
+  [Joshua Kalpin](https://github.com/Kapin)
+  [Core#38](https://github.com/CocoaPods/Core/pull/38)
+
 
 ## 0.27.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
