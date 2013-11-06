@@ -8,6 +8,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * CLAide now supports gem plugins. An example CocoaPods plugin can be found at
   [open\_pod\_bay](https://github.com/leshill/open_pod_bay).
+
+  As of yet there are no promises made yet on the APIs, so try to fail as
+  gracefully as possible in case a CocoaPods update breaks your usage. In these
+  cases, also please let us know what you would need, so we can take this into
+  account when we do finalize APIs.
+
   [Les Hill](https://github.com/leshill)
   [CLAide#1](https://github.com/CocoaPods/CLAide/pull/1)
   [#959](https://github.com/CocoaPods/CocoaPods/issues/959)
