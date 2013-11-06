@@ -63,6 +63,7 @@ module Pod
         @installer.stubs(:install_file_references)
         @installer.stubs(:install_libraries)
         @installer.stubs(:link_aggregate_target)
+        @installer.stubs(:link_linked_dependencies)
         @installer.stubs(:write_lockfiles)
         @installer.stubs(:aggregate_targets).returns([])
         @installer.unstub(:generate_pods_project)
@@ -514,6 +515,25 @@ module Pod
       end
 
     end
+
+    #-------------------------------------------------------------------------#
+
+    describe "Private helpers" do
+
+      before do
+        @installer.send(:analyze)
+        @specs = @installer.pod_targets.map(&:specs).flatten
+        @spec = @specs.find { |spec| spec && spec.name == 'JSONKit' }
+      end
+
+      it "finds a pod from a given pod target" do
+        pod_target = @installer.pod_targets.find { |x| x.specs.first.root.name == 'JSONKit' }
+        @installer.send(:pod_for_target, pod_target).name.should == 'JSONKit'
+      end
+
+    end
+
+    #-------------------------------------------------------------------------#
 
   end
 end

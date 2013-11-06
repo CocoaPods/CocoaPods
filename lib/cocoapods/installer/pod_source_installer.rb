@@ -231,6 +231,12 @@ module Pod
       # @return [Array<Strings>] The paths that can be deleted.
       #
       def clean_paths
+        has_xcodeproj = specs_by_platform.any? do |platform, specs|
+          specs.any? { |spec| spec.consumer(platform).xcodeproj.present? }
+        end
+
+        return [] if has_xcodeproj
+
         cached_used = used_files
         glob_options = File::FNM_DOTMATCH | File::FNM_CASEFOLD
         files = Pathname.glob(root + "**/*", glob_options).map(&:to_s)
