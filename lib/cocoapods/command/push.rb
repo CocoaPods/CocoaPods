@@ -139,7 +139,7 @@ module Pod
       #
       def push_repo
         UI.puts "\nPushing the `#{@repo}' repo\n".yellow
-        Dir.chdir(repo_dir) { UI.puts `git push 2>&1` }
+        Dir.chdir(repo_dir) { UI.puts `git push origin master 2>&1` }
       end
 
       #-----------------------------------------------------------------------#
