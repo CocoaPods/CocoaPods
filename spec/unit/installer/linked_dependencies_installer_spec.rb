@@ -57,7 +57,6 @@ module Pod
       @pod_target.target.frameworks_build_phase.files_references.map(&:path).should.include('libSample Lib.a')
     end
 
-
     it "adds linked projects" do
       path = SpecHelper::Fixture.fixture('SampleProject/Sample Lib/Sample Lib.xcodeproj')
       @installer.stubs(:linked_project_specs).returns({
@@ -66,6 +65,19 @@ module Pod
       @installer.send(:add_linked_projects)
 
       @project.reference_for_path(path).isa.should.be == 'PBXFileReference'
+    end
+
+    it "does not add linked projects twice" do
+      path = SpecHelper::Fixture.fixture('SampleProject/Sample Lib/Sample Lib.xcodeproj')
+      @installer.stubs(:linked_project_specs).returns({
+        path => [@file_accessor.spec]
+      })
+      @installer.send(:add_linked_projects)
+      @installer.send(:add_linked_projects)
+
+      @project.objects.find_all do |child|
+        child.isa == 'PBXFileReference' && child.real_path == path
+      end.length.should.be == 1
     end
 
   end
