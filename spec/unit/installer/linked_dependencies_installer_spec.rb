@@ -145,6 +145,20 @@ module Pod
       end.message.should.match /Could not find native target/
     end
 
+    it "extracts a single xcodeproj from a consumer object" do
+      spec = @file_accessor.spec
+      spec.xcodeproj = { :project => 'hello' }
+      @installer.send(:xcodeprojs_from_consumer, spec.consumer(:ios)).should.be == [{ "project" => "hello" }]
+    end
+
+    it "extracts two xcodeprojs from a consumer object" do
+      spec = @file_accessor.spec
+      spec.xcodeprojs = [{ :project => 'hello' }, { 'project' => 'hello2' }]
+
+      xcodeprojs = @installer.send(:xcodeprojs_from_consumer, spec.consumer(:ios))
+      xcodeprojs.should.be == [{ "project" => "hello" }, { "project" => "hello2" }]
+    end
+
     it "finds the spec file path correctly" do
       @installer.send(:spec_file).should.be == @file_accessor.spec.defined_in_file
     end

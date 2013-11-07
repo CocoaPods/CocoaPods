@@ -232,7 +232,7 @@ module Pod
       #
       def clean_paths
         has_xcodeproj = specs_by_platform.any? do |platform, specs|
-          specs.any? { |spec| spec.consumer(platform).xcodeproj.present? }
+          specs.any? { |spec| spec.consumer(platform).xcodeprojs.present? }
         end
 
         return [] if has_xcodeproj
