@@ -42,7 +42,8 @@ module Pod
         source_files.should == [
           "Classes/Banana.h",
           "Classes/Banana.m",
-          "Classes/BananaPrivate.h"
+          "Classes/BananaPrivate.h",
+          "Classes/BananaTrace.d"
         ]
       end
 
