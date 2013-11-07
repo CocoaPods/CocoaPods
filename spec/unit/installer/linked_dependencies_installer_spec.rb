@@ -1,5 +1,14 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
+def execute_command(command)
+  if ENV['VERBOSE']
+    sh(command)
+  else
+    output = `#{command} 2>&1`
+    raise output unless $?.success?
+  end
+end
+
 module Pod
   describe Installer::LinkedDependenciesInstaller do
 
@@ -173,6 +182,34 @@ module Pod
 
     it "finds the spec file path correctly" do
       @installer.send(:spec_file).should.be == @file_accessor.spec.defined_in_file
+    end
+
+  end
+
+  #-------------------------------------------------------------------------#
+
+  describe "Functional Tests" do
+
+    it "actually compiles and links properly" do
+      load(fixture('XcodeprojTest/clean.rb'))
+
+      begin
+        Dir.chdir(fixture('XcodeprojTest')) do
+          pod_command = 'bundle exec ../../../bin/sandbox-pod'
+          execute_command "#{pod_command} install --verbose --no-repo-update 2>&1"
+
+          # Create the XcodeprojTest scheme, in order to be able to build with xcodebuild
+          testproj = Xcodeproj::Project.open(fixture('XcodeprojTest/XcodeprojTest.xcodeproj'))
+          testproj.recreate_user_schemes
+
+          execute_command "xcodebuild -workspace XcodeprojTest.xcworkspace -scheme XcodeprojTest -configuration Release install DSTROOT=$(pwd)"
+
+          `./usr/local/bin/XcodeprojTest 2>&1`.should.match /Success/
+          $?.success?.should.be.true
+        end
+      ensure
+        load(fixture('XcodeprojTest/clean.rb'))
+      end
     end
 
   end
