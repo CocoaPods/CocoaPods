@@ -105,8 +105,9 @@ module Pod
             search_paths_to_add << '$(inherited)'
             if platform == :ios
               search_paths_to_add << '"$(SDKROOT)/Developer/Library/Frameworks"'
+            else
+              search_paths_to_add << '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
             end
-            search_paths_to_add << '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
             search_paths_to_add.each do |search_path|
               unless search_paths.include?(search_path)
                 search_paths << ' ' unless search_paths.empty?
