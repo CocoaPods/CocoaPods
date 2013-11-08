@@ -46,6 +46,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Joshua Kalpin](https://github.com/Kapin)
   [Core#38](https://github.com/CocoaPods/Core/pull/38)
 
+* Dtrace files are now properly left unflagged when installing, regardless of configuration
+  [Swizzlr](https://github.com/swizzlr)
+  [#1560](https://github.com/CocoaPods/CocoaPods/pull/1560)
+
 
 ## 0.27.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
