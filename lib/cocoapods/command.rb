@@ -26,6 +26,7 @@ module Pod
     self.default_subcommand = 'install'
     self.command = 'pod'
     self.description = 'CocoaPods, the Objective-C library package manager.'
+    self.plugin_prefix = 'cocoapods'
 
     def self.options
       [
