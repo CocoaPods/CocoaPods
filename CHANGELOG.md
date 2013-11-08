@@ -46,6 +46,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Joshua Kalpin](https://github.com/Kapin)
   [Core#38](https://github.com/CocoaPods/Core/pull/38)
 
+* Altered Framework_Search_Paths required by SenTestingKit so that
+  $(SDKROOT)/Developer/Library/Frameworks is used for iOS and 
+  $(DEVELOPER_LIBRARY_DIR)/Frameworks is used for OSX
+  [Kevin Wales](https://github.com/kwales)
+  [#1562](https://github.com/CocoaPods/pull/1562)
+
 
 ## 0.27.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
