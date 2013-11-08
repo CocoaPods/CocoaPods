@@ -48,7 +48,7 @@ module Pod
         @accessor.source_files.sort.should == [
           @root + "Classes/Banana.h",
           @root + "Classes/Banana.m",
-          @root + "Classes/BananaPrivate.h"
+          @root + "Classes/BananaPrivate.h",
           @root + "Classes/BananaTrace.d"
         ]
       end
@@ -149,6 +149,7 @@ module Pod
         @accessor.source_files.sort.should == [
           @root + "Classes/Banana.h",
           @root + "Classes/Banana.m",
+          @root + "Classes/BananaTrace.d"
         ]
       end
 
@@ -161,7 +162,7 @@ module Pod
       describe "#paths_for_attribute" do
 
         it "takes into account dir patterns and excluded files" do
-          file_patterns = ["Classes/*.{h,m}", "Vendor"]
+          file_patterns = ["Classes/*.{h,m,d}", "Vendor"]
           options = {
             :exclude_patterns => ["Classes/**/osx/**/*", "Resources/**/osx/**/*"],
             :dir_pattern => "*.{h,hpp,hh,m,mm,c,cpp}",
