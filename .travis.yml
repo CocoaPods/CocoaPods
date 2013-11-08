@@ -5,7 +5,7 @@ env:
   - RVM_RUBY_VERSION=1.9.3-p392 NOEXEC_DISABLE=1 RUBY_VERSION_SPECIFIC='sudo ln -s /usr/bin/llvm-gcc-4.2 /usr/bin/gcc-4.2 && curl http://curl.haxx.se/ca/cacert.pem -o /usr/local/share/cacert.pem' SSL_CERT_FILE=/usr/local/share/cacert.pem GIT_AUTHOR_NAME=CocoaPods GIT_AUTHOR_EMAIL=cocoapods@example.com
 before_install:
   - source ~/.rvm/scripts/rvm && rvm use $RVM_RUBY_VERSION
-  - brew update && brew install curl-ca-bundle && export PYTHONPATH=/usr/local/lib/python2.7/site-packages && brew install bzr
+  - export SSL_CERT_FILE=/usr/local/share/cacert.pem && export PYTHONPATH=/usr/local/lib/python2.7/site-packages && brew update && brew install bzr
 install: eval $RUBY_VERSION_SPECIFIC && rake bootstrap[use_bundle_dir]
 script: bundle exec rake spec:ci
 notifications:
