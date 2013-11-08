@@ -1,18 +1,19 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 7fae7e88dea3cb93748e0c5356e5a0314c8cca7a
+  revision: 2de0aea368f02407540138bb3ec284b88fbde2ce
   branch: master
   specs:
     claide (0.3.2)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 77399f24469bee9a6f196914b538e4c51cb8ca37
+  revision: a777f7fb09d486ef54bfd1a1c14adc7e4380c50c
   branch: master
   specs:
     cocoapods-core (0.27.1)
       activesupport (>= 3.2.15, < 4)
-      json_pure (~> 1.8)
+      fuzzy_match (~> 2.0.4)
+      json (~> 1.8)
       nap (~> 0.5)
 
 GIT
@@ -27,7 +28,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 899f3face9d432b4084e78842776e249b77a1b8a
+  revision: b3a95be1468bd6d8a46a82a027460965581e2c21
   branch: master
   specs:
     cocoapods-downloader (0.2.0)
@@ -81,8 +82,10 @@ GEM
     diffy (3.0.1)
     escape (0.0.4)
     ffi (1.9.3)
+    fuzzy_match (2.0.4)
     github-markup (0.7.5)
     i18n (0.6.5)
+    json (1.8.1)
     json_pure (1.8.1)
     listen (1.1.6)
       rb-fsevent (>= 0.9.3)
@@ -103,7 +106,7 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)
-    pygments.rb (0.5.2)
+    pygments.rb (0.5.4)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
     rake (10.1.0)
@@ -126,7 +129,7 @@ GEM
     thor (0.18.1)
     tins (0.12.0)
     yajl-ruby (1.1.0)
-    yard (0.8.7.2)
+    yard (0.8.7.3)
 
 PLATFORMS
   ruby
