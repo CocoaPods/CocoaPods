@@ -121,7 +121,12 @@ module Pod
           if validator.validated?
             UI.puts "#{validator.spec.name} passed validation.".green
           else
-            raise Informative, "#{validator.spec.name} did not pass validation."
+            message = "#{validator.spec.name} did not pass validation."
+            if @clean
+              message << "\nYou can use the `--no-clean` option to inspect " \
+                "any issue."
+            end
+            raise Informative, message
           end
         end
 
