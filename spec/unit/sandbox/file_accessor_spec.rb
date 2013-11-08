@@ -49,6 +49,7 @@ module Pod
           @root + "Classes/Banana.h",
           @root + "Classes/Banana.m",
           @root + "Classes/BananaPrivate.h"
+          @root + "Classes/BananaTrace.d"
         ]
       end
 
