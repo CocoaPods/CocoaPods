@@ -46,7 +46,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Joshua Kalpin](https://github.com/Kapin)
   [Core#38](https://github.com/CocoaPods/Core/pull/38)
 
-* Vendored Libraries' paths are now validated correctly
+* Vendored Libraries and Vendored Frameworks now have their paths validated correctly.
   [Joshua Kalpin](https://github.com/Kapin)
   [#1567](https://github.com/CocoaPods/CocoaPods/pull/1567)
 
