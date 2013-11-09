@@ -250,7 +250,7 @@ module Pod
     # @return [void]
     #
     def check_file_patterns
-      [:source_files, :resources, :preserve_paths].each do |attr_name|
+      [:source_files, :resources, :preserve_paths, :vendored_libraries].each do |attr_name|
         # file_attr = Specification::DSL.attributes.values.find{|attr| attr.name == attr_name }
         if !file_accessor.spec_consumer.send(attr_name).empty? && file_accessor.send(attr_name).empty?
           error "The `#{attr_name}` pattern did not match any file."
