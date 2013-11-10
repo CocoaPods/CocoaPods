@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 if RUBY_VERSION > '1.8.7' && Encoding.default_external != Encoding::UTF_8
-  raise Informative 'CocoaPods requires your terminal to be using UTF-8 encoding'
+  raise 'CocoaPods requires your terminal to be using UTF-8 encoding'
 end
 
 if $0 == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
