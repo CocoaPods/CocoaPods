@@ -58,6 +58,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Swizzlr](https://github.com/swizzlr)
   [#1560](https://github.com/CocoaPods/CocoaPods/pull/1560)
 
+* Users are now warned if their terminal encoding is not UTF-8. This fixes an issue
+  with a small percentage of pod names that are incompatible with ASCII.
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1570](https://github.com/CocoaPods/CocoaPods/pull/1570)
+
 
 ## 0.27.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
