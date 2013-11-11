@@ -46,6 +46,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Joshua Kalpin](https://github.com/Kapin)
   [Core#38](https://github.com/CocoaPods/Core/pull/38)
 
+* Pod Push is now more specific about the branch it pushes to
+  [orta](http://orta.github.io)
+  [#1561](https://github.com/CocoaPods/CocoaPods/pull/1561)
+
 
 ## 0.27.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
