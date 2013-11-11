@@ -40,7 +40,7 @@ module Pod
       def add_target
         name = library.label
         platform = library.platform.name
-        deployment_target = library.platform.deployment_target.to_s
+        deployment_target = project.build_configurations[0].build_settings[platform.downcase == :ios ? 'IPHONEOS_DEPLOYMENT_TARGET' : 'MACOSX_DEPLOYMENT_TARGET']
         @target = project.new_target(:static_library, name, platform, deployment_target)
 
         library.user_build_configurations.each do |bc_name, type|

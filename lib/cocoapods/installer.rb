@@ -304,8 +304,8 @@ module Pod
 
         sandbox.project = @pods_project
         platforms = aggregate_targets.map(&:platform)
-        osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
-        ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
+        osx_deployment_target = user_project.build_configurations[0].build_settings['MACOSX_DEPLOYMENT_TARGET']
+        ios_deployment_target = user_project.build_configurations[0].build_settings['IPHONEOS_DEPLOYMENT_TARGET']
         @pods_project.build_configurations.each do |build_configuration|
           build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
           build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
