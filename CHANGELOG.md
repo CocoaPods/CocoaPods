@@ -50,6 +50,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [orta](http://orta.github.io)
   [#1561](https://github.com/CocoaPods/CocoaPods/pull/1561)
 
+* Vendored Libraries and Vendored Frameworks now have their paths validated correctly.
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1567](https://github.com/CocoaPods/CocoaPods/pull/1567)
+
 
 ## 0.27.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
