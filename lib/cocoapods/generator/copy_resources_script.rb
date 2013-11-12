@@ -139,17 +139,19 @@ EOS
 
 if [[ -n "${WRAPPER_EXTENSION}" ]] && [ `xcrun --find actool` ] && [ `find . -name '*.xcassets' | wc -l` -ne 0 ]
 then
-  TARGET_DEVICE_SWITCH="--target-device"
   case "${TARGETED_DEVICE_FAMILY}" in 
     1,2)
-      TARGET_DEVICE_ARGS="${TARGET_DEVICE_SWITCH} ipad ${TARGET_DEVICE_SWITCH} iphone"
+      TARGET_DEVICE_ARGS="--target-device ipad --target-device iphone"
       ;;
     1)
-      TARGET_DEVICE_ARGS="${TARGET_DEVICE_SWITCH} iphone"
+      TARGET_DEVICE_ARGS="--target-device iphone"
       ;;
     2)
-      TARGET_DEVICE_ARGS="${TARGET_DEVICE_SWITCH} ipad"
+      TARGET_DEVICE_ARGS="--target-device ipad"
       ;;
+    3)
+      TARGET_DEVICE_ARGS="--target-device mac"
+      ;;  
   esac 
   find "${PWD}" -name "*.xcassets" -print0 | xargs -0 actool --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${IPHONEOS_DEPLOYMENT_TARGET}" ${TARGET_DEVICE_ARGS} --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.${WRAPPER_EXTENSION}"
 fi
