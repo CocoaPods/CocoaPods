@@ -149,7 +149,7 @@ then
     2)
       TARGET_DEVICE_ARGS="--target-device ipad"
       ;;
-    3)
+    *)
       TARGET_DEVICE_ARGS="--target-device mac"
       ;;  
   esac 
