@@ -39,9 +39,12 @@ module Pod
           library.file_accessors.each do |file_accessor|
             consumer = file_accessor.spec_consumer
             flags = compiler_flags_for_consumer(consumer)
-            source_files = file_accessor.source_files
-            file_refs = source_files.map { |sf| project.reference_for_path(sf) }
-            target.add_file_references(file_refs, flags)
+            all_source_files = file_accessor.source_files
+            regular_source_files = all_source_files.reject { |sf| sf.extname == ".d" }
+            regular_file_refs = regular_source_files.map { |sf| project.reference_for_path(sf) }
+            target.add_file_references(regular_file_refs, flags)
+            other_file_refs = (all_source_files - regular_source_files).map { |sf| project.reference_for_path(sf) }
+            target.add_file_references(other_file_refs, nil)
           end
         end
       end

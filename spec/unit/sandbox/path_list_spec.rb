@@ -20,6 +20,7 @@ module Pod
           Classes/Banana.m
           Classes/BananaLib.pch
           Classes/BananaPrivate.h
+          Classes/BananaTrace.d
           README
           Resources/logo-sidebar.png
           Resources/sub_dir/logo-sidebar.png
@@ -104,6 +105,7 @@ module Pod
         paths.sort.should == %w[
           Classes/Banana.h
           Classes/BananaLib.pch
+          Classes/BananaTrace.d
         ]
       end
 
