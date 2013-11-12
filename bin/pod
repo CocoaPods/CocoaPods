@@ -1,7 +1,14 @@
 #!/usr/bin/env ruby
 
 if RUBY_VERSION > '1.8.7' && Encoding.default_external != Encoding::UTF_8
-  raise 'CocoaPods requires your terminal to be using UTF-8 encoding'
+  class String
+    def yellow
+      "\e[33m#{self}\e[0m"
+    end
+  end
+
+  puts 'WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.'.yellow
+  puts 'See https://github.com/CocoaPods/guides.cocoapods.org/issues/26 for details on how to fix this'.yellow
 end
 
 if $0 == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
