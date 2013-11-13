@@ -22,44 +22,44 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Compiling `xcassets` with `actool` now uses `UNLOCALIZED_RESOURCES_FOLDER_PATH`
   instead of `PRODUCT_NAME.WRAPPER_EXTENSION` as output directory as it is more
-  accurate and allows the project to overwrite `WRAPPER_NAME`.
+  accurate and allows the project to overwrite `WRAPPER_NAME`.  
   [Marc Knaup](https://github.com/fluidsonic)
   [#1556](https://github.com/CocoaPods/CocoaPods/pull/1556)
 
 * Added a condition to avoid compiling xcassets when `WRAPPER_EXTENSION`
   is undefined, as it would be in the case of static libraries. This prevents
-  trying to copy the compiled files to a directory that does not exist.
+  trying to copy the compiled files to a directory that does not exist.  
   [Noah McCann](https://github.com/nmccann)
   [#1521](https://github.com/CocoaPods/CocoaPods/pull/1521)
 
 * Added additional condition to check if `actool` is available when compiling
   `xcassets`. This prevents build failures of Xcode 5 projects on Travis CI (or
-  lower Xcode versions).
+  lower Xcode versions).  
   [Michal Konturek](https://github.com/michalkonturek)
   [#1511](https://github.com/CocoaPods/CocoaPods/pull/1511)
 
-* Vendored Libraries now correctly affect whether a podspec is considered empty
+* Vendored Libraries now correctly affect whether a podspec is considered empty.  
   [Joshua Kalpin](https://github.com/Kapin)
   [Core#38](https://github.com/CocoaPods/Core/pull/38)
 
-* Gists are now correctly accepted with https
-  [Joshua Kalpin](https://github.com/Kapin)
-  [Core#38](https://github.com/CocoaPods/Core/pull/38)
-
-* Pod Push is now more specific about the branch it pushes to
-  [orta](http://orta.github.io)
-  [#1561](https://github.com/CocoaPods/CocoaPods/pull/1561)
-
-* Vendored Libraries and Vendored Frameworks now have their paths validated correctly.
+* Vendored Libraries and Vendored Frameworks now have their paths validated correctly.  
   [Joshua Kalpin](https://github.com/Kapin)
   [#1567](https://github.com/CocoaPods/CocoaPods/pull/1567)
 
-* Dtrace files are now properly left unflagged when installing, regardless of configuration
+* Gists are now correctly accepted with https.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [Core#38](https://github.com/CocoaPods/Core/pull/38)
+
+* The `pod push` command is now more specific about the branch it pushes to.  
+  [orta](http://orta.github.io)
+  [#1561](https://github.com/CocoaPods/CocoaPods/pull/1561)
+
+* Dtrace files are now properly left unflagged when installing, regardless of configuration.  
   [Swizzlr](https://github.com/swizzlr)
   [#1560](https://github.com/CocoaPods/CocoaPods/pull/1560)
 
 * Users are now warned if their terminal encoding is not UTF-8. This fixes an issue
-  with a small percentage of pod names that are incompatible with ASCII.
+  with a small percentage of pod names that are incompatible with ASCII.  
   [Joshua Kalpin](https://github.com/Kapin)
   [#1570](https://github.com/CocoaPods/CocoaPods/pull/1570)
 
