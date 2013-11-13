@@ -15,10 +15,7 @@ elsif ENV['COCOAPODS_NO_BUNDLER']
   gem "cocoapods"
 end
 
-if ENV['CP_STDOUT_SYNC'] == 'TRUE'
-  STDOUT.sync = true
-end
+STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
 
 require 'cocoapods'
-
 Pod::Command.run(ARGV)
