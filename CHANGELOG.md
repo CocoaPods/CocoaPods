@@ -18,6 +18,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Michal Konturek](https://github.com/michalkonturek)
   [#1511](https://github.com/CocoaPods/CocoaPods/pull/1511)
 
+* Added a condition to properly handle universal or mac apps when compiling 
+  xcassets.This prevents build errors in the xcassets compilation stage 
+  particularly when using xctool to build.
+  [Ryan Marsh](https://github.com/ryanwmarsh)
+  [#1552](https://github.com/CocoaPods/CocoaPods/pull/1552)
 
 ## 0.27.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
