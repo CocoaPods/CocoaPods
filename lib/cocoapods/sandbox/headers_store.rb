@@ -25,15 +25,17 @@ module Pod
       def initialize(sandbox, relative_path)
         @sandbox       = sandbox
         @relative_path = relative_path
-        @search_paths  = [relative_path]
+        @search_paths  = []
       end
 
       # @return [Array<String>] All the search paths of the header directory in
       #         xcconfig format. The paths are specified relative to the pods
       #         root with the `${PODS_ROOT}` variable.
       #
-      def search_paths
-        @search_paths.uniq.map { |path| "${PODS_ROOT}/#{path}" }
+      def search_paths(platform)
+        platform_path_entries = @search_paths.select {|entry| entry[:platform] == platform }
+
+        ["${PODS_ROOT}/#{@relative_path}"] + platform_path_entries.uniq.map { |entry| "${PODS_ROOT}/#{entry[:path]}" }
       end
 
       # Removes the directory as it is regenerated from scratch during each
@@ -64,8 +66,8 @@ module Pod
       #
       # @return [Pathname]
       #
-      def add_files(namespace, relative_header_paths)
-        add_search_path(namespace)
+      def add_files(namespace, relative_header_paths, platform)
+        add_search_path(namespace, platform)
         namespaced_path = root + namespace
         namespaced_path.mkpath unless File.exist?(namespaced_path)
 
@@ -84,10 +86,13 @@ module Pod
       # @param  [Pathname] path
       #         the path tho add.
       #
+      # @param  [String] platform
+      #         the platform the search path applies to
+      #
       # @return [void]
       #
-      def add_search_path(path)
-        @search_paths << Pathname.new(@relative_path) + path
+      def add_search_path(path, platform)
+        @search_paths << {:platform => platform, :path => (Pathname.new(@relative_path) + path) }
       end
 
       #-----------------------------------------------------------------------#
