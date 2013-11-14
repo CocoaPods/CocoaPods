@@ -216,13 +216,6 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe Command::Spec::Browse do
-      it_should_check_for_existence("browse")
-      it_should_check_for_ambiguity("browse")
-    end
-
-    #-------------------------------------------------------------------------#
-
     describe "Private helpers" do
 
       describe "#get_path_of_spec" do
