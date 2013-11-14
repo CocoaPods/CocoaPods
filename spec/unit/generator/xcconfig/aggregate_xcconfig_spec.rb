@@ -59,6 +59,12 @@ module Pod
           expected = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
           @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == expected
         end
+        
+        it 'sets search path as system header given pod warning inhibition' do
+          @target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          @xcconfig = @generator.generate
+          @xcconfig.to_hash['OTHER_CFLAGS'].should.not.be.nil #TODO: fix up with better expectation
+        end
 
         it 'adds the COCOAPODS macro definition' do
           @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should.include 'COCOAPODS=1'
