@@ -90,13 +90,17 @@ module Pod
         def self.options
           [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
             ["--only-errors", "Lint validates even if warnings are present"],
+            ["--subspec=NAME","Lint validates only the given subspec"],
+            ["--no-subspecs", "Lint skips validation of subspecs"],
             ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
         end
 
         def initialize(argv)
-          @quick       =  argv.flag?('quick')
-          @only_errors =  argv.flag?('only-errors')
-          @clean       =  argv.flag?('clean', true)
+          @quick        = argv.flag?('quick')
+          @only_errors  = argv.flag?('only-errors')
+          @clean        = argv.flag?('clean', true)
+          @subspecs     = argv.flag?('subspecs', true)
+          @only_subspec = argv.option('subspec')
           @podspecs_paths = argv.arguments!
           super
         end
@@ -114,6 +118,8 @@ module Pod
             validator.quick       = @quick
             validator.no_clean    = !@clean
             validator.only_errors = @only_errors
+            validator.no_subspecs = !@subspecs || @only_subspec
+            validator.only_subspec = @only_subspec
             validator.validate
 
             unless @clean
