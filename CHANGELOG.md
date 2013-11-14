@@ -2,6 +2,17 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+###### Bug Fixes
+
+* When updating the pod repos, repositories with unreachable remotes
+  are now ignored. This fixes an issue with certain private repositories.
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1595](https://github.com/CocoaPods/CocoaPods/pull/1595)
+  [#1571](https://github.com/CocoaPods/CocoaPods/issues/1571)
+
+
 ## 0.28.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.27.1...0.28.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.27.1...0.28.0)
