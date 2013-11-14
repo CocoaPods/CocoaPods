@@ -82,6 +82,15 @@ module Pod
         sut.validation_dir.should.exist
       end
 
+      it "builds the pod per platform" do
+        file = write_podspec(stub_podspec)
+        sut = Validator.new(file)
+        sut.expects(:install_pod).twice
+        sut.expects(:build_pod).twice
+        sut.expects(:check_file_patterns).twice
+        sut.validate
+      end
+
       it "uses the deployment target of the specification" do
         sut = Validator.new(podspec_path)
         podfile = sut.send(:podfile_from_spec, :ios, '5.0')
