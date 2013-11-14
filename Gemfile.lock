@@ -1,16 +1,16 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 21f4fdcb4d7ddc5809c345a9bb0f2b2a37d0c466
+  revision: b662b54098aa6ba5832c2382342cc363111bb3e6
   branch: master
   specs:
-    claide (0.3.2)
+    claide (0.4.0)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: d9d9498f4a4b6ddf5e55ea5ffec7c43559f2dd65
+  revision: 16b15ee5d783653ba2ccac8735abd49c039ca4d3
   branch: master
   specs:
-    cocoapods-core (0.27.1)
+    cocoapods-core (0.28.0)
       activesupport (>= 3.2.15, < 4)
       fuzzy_match (~> 2.0.4)
       json (~> 1.8)
@@ -52,16 +52,16 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.27.1)
+    cocoapods (0.28.0)
       activesupport (>= 3.2.15, < 4)
-      claide (~> 0.3.2)
-      cocoapods-core (= 0.27.1)
+      claide (~> 0.4.0)
+      cocoapods-core (= 0.28.0)
       cocoapods-downloader (~> 0.2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
       open4 (~> 1.3)
-      xcodeproj (~> 0.14.0)
+      xcodeproj (~> 0.14.1)
 
 GEM
   remote: http://rubygems.org/
