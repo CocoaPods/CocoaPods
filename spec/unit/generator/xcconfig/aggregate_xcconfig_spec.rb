@@ -55,15 +55,13 @@ module Pod
           @xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
         end
 
-        it 'adds the sandbox public headers search paths to the xcconfig, with quotes' do
-          expected = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
-          @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == expected
-        end
+#         it 'adds the sandbox public headers search paths to the xcconfig, with quotes' do
+#           expected = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
+#           @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == expected
+#         end
         
-        it 'sets search path as system header given pod warning inhibition' do
+        it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as system headers' do
           expected = "\"-isystem#{config.sandbox.public_headers.search_paths.join('" -isystem"')}\""
-          @target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
-          @xcconfig = @generator.generate
           @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
         end
 
