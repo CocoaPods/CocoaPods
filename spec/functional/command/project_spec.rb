@@ -15,9 +15,28 @@ module Pod
 
   describe Command::Install do
 
-    it "tells the user that no Podfile or podspec was found in the current working dir" do
+    it "tells the user that no Podfile or podspec was found in the current working dir or subdirs" do
       exception = lambda { run_command('install', '--no-repo-update') }.should.raise Informative
       exception.message.should.include "No `Podfile' found in the current working directory."
+    end
+    
+    describe "concerning recursive searches of Podfiles and podspecs" do
+      before do
+        @prevdir = (Dir.getwd)
+        Dir.mkdir(temporary_directory + 'subdir')
+        file = temporary_directory + 'subdir/' + 'Podfile'
+        File.open(file, 'w') {|f| f.write('platform :ios') }
+        Dir.chdir(temporary_directory)
+      end
+      
+      after do
+        File.delete(temporary_directory + 'subdir/' + 'Podfile')
+        Dir.rmdir(temporary_directory + 'subdir/')
+        Dir.chdir(@prevdir)
+      end
+      it "finds the Podfile in subdir" do
+        lambda { run_command('install', '--no-repo-update') }.should.not.raise Informative
+      end
     end
 
   end
