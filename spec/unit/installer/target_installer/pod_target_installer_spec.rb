@@ -147,76 +147,91 @@ module Pod
         dummy = config.sandbox.root + 'Pods-BananaLib-dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
-
+      
+      
       #--------------------------------------------------------------------------------#
+			describe "concerning compiler flags" do
+			 	before do
+					@spec = Pod::Spec.new
+			 	end
+			
+				it "flags should not be added to dtrace files" do
+					@installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+					@installer.install!
 
-      describe "concerning ARC before and after iOS 6.0 and OS X 10.8" do
-        before do
-          @spec = Pod::Spec.new
-        end
+					dtrace_files = @installer.library.target.source_build_phase.files.reject {|sf| 
+						!(File.extname(sf.file_ref.path) == '.d')
+					}
+					dtrace_files.each do |dt|
+						dt.settings.should.be.nil
+					end
+				end
+      
+				it "adds -w per pod if target definition inhibits warnings for that pod" do
+					@installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+					flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
 
-        it "does not do anything if ARC is *not* required" do
-          @spec.requires_arc = false
-          @spec.ios.deployment_target = '5'
-          @spec.osx.deployment_target = '10.6'
-          ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
-          osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
-          ios_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
-          osx_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
-        end
+					flags.should.include?('-w')
+				end
 
-        it "does *not* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required and has a deployment target of >= iOS 6.0 or OS X 10.8" do
-          @spec.requires_arc = false
-          @spec.ios.deployment_target = '6'
-          @spec.osx.deployment_target = '10.8'
-          ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
-          osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
-          ios_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
-          osx_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
-        end
+				it "doesn't inhibit warnings by default" do
+					flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+					flags.should.not.include?('-w')
+				end
 
-        it "*does* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required but has a deployment target < iOS 6.0 or OS X 10.8" do
-          @spec.requires_arc = true
-          @spec.ios.deployment_target = '5.1'
-          @spec.osx.deployment_target = '10.7.2'
-          ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
-          osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
-          ios_flags.should.include '-DOS_OBJECT_USE_OBJC'
-          osx_flags.should.include '-DOS_OBJECT_USE_OBJC'
-        end
+				it "adds -Xanalyzer -analyzer-disable-checker per pod" do
+					@installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+					flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
 
-        it "*does* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required and *no* deployment target is specified" do
-          @spec.requires_arc = true
-          ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
-          osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
-          ios_flags.should.include '-DOS_OBJECT_USE_OBJC'
-          osx_flags.should.include '-DOS_OBJECT_USE_OBJC'
-        end
+					flags.should.include?('-Xanalyzer -analyzer-disable-checker')
+				end
 
-        it "adds -w per pod if target definition inhibits warnings for that pod" do
-          @installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
-          flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+				it "doesn't inhibit analyzer warnings by default" do
+					flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+					flags.should.not.include?('-Xanalyzer -analyzer-disable-checker')
+				end
+				 
+				describe "concerning ARC before and after iOS 6.0 and OS X 10.8" do
 
-          flags.should.include?('-w')
-        end
+					it "does not do anything if ARC is *not* required" do
+						@spec.requires_arc = false
+						@spec.ios.deployment_target = '5'
+						@spec.osx.deployment_target = '10.6'
+						ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+						osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
+						ios_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+						osx_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+					end
 
-        it "doesn't inhibit warnings by default" do
-          flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
-          flags.should.not.include?('-w')
-        end
+					it "does *not* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required and has a deployment target of >= iOS 6.0 or OS X 10.8" do
+						@spec.requires_arc = false
+						@spec.ios.deployment_target = '6'
+						@spec.osx.deployment_target = '10.8'
+						ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+						osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
+						ios_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+						osx_flags.should.not.include '-DOS_OBJECT_USE_OBJC'
+					end
 
-        it "adds -Xanalyzer -analyzer-disable-checker per pod" do
-          @installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
-          flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+					it "*does* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required but has a deployment target < iOS 6.0 or OS X 10.8" do
+						@spec.requires_arc = true
+						@spec.ios.deployment_target = '5.1'
+						@spec.osx.deployment_target = '10.7.2'
+						ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+						osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
+						ios_flags.should.include '-DOS_OBJECT_USE_OBJC'
+						osx_flags.should.include '-DOS_OBJECT_USE_OBJC'
+					end
 
-          flags.should.include?('-Xanalyzer -analyzer-disable-checker')
-        end
-
-        it "doesn't inhibit analyzer warnings by default" do
-          flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
-          flags.should.not.include?('-Xanalyzer -analyzer-disable-checker')
-        end
-      end
+					it "*does* disable the `OS_OBJECT_USE_OBJC` flag if ARC is required and *no* deployment target is specified" do
+						@spec.requires_arc = true
+						ios_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
+						osx_flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:osx))
+						ios_flags.should.include '-DOS_OBJECT_USE_OBJC'
+						osx_flags.should.include '-DOS_OBJECT_USE_OBJC'
+					end
+				end
+			end
     end
   end
 end

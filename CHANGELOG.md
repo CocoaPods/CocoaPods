@@ -2,6 +2,87 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+###### Bug Fixes
+
+* Fixed the developer frameworks search paths so that
+  `$(SDKROOT)/Developer/Library/Frameworks` is used for iOS and
+  `$(DEVELOPER_LIBRARY_DIR)/Frameworks` is used for OS X  
+  [Kevin Wales](https://github.com/kwales)
+  [#1562](https://github.com/CocoaPods/pull/1562)
+
+## 0.28.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.27.1...0.28.0)
+• [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.27.1...0.28.0)
+• [CLAide](https://github.com/CocoaPods/CLAide/compare/0.3.2...0.4.0)
+
+###### Enhancements
+
+* CLAide now supports gem plugins. An example CocoaPods plugin can be found at
+  [open\_pod\_bay](https://github.com/leshill/open_pod_bay).
+
+  As of yet there are no promises made yet on the APIs, so try to fail as
+  gracefully as possible in case a CocoaPods update breaks your usage. In these
+  cases, also please let us know what you would need, so we can take this into
+  account when we do finalize APIs.
+
+  [Les Hill](https://github.com/leshill)
+  [CLAide#1](https://github.com/CocoaPods/CLAide/pull/1)
+  [#959](https://github.com/CocoaPods/CocoaPods/issues/959)
+
+###### Bug Fixes
+
+* Compiling `xcassets` with `actool` now uses `UNLOCALIZED_RESOURCES_FOLDER_PATH`
+  instead of `PRODUCT_NAME.WRAPPER_EXTENSION` as output directory as it is more
+  accurate and allows the project to overwrite `WRAPPER_NAME`.  
+  [Marc Knaup](https://github.com/fluidsonic)
+  [#1556](https://github.com/CocoaPods/CocoaPods/pull/1556)
+
+* Added a condition to avoid compiling xcassets when `WRAPPER_EXTENSION`
+  is undefined, as it would be in the case of static libraries. This prevents
+  trying to copy the compiled files to a directory that does not exist.  
+  [Noah McCann](https://github.com/nmccann)
+  [#1521](https://github.com/CocoaPods/CocoaPods/pull/1521)
+
+* Added additional condition to check if `actool` is available when compiling
+  `xcassets`. This prevents build failures of Xcode 5 projects on Travis CI (or
+  lower Xcode versions).  
+  [Michal Konturek](https://github.com/michalkonturek)
+  [#1511](https://github.com/CocoaPods/CocoaPods/pull/1511)
+
+* Added a condition to properly handle universal or mac apps when compiling
+  xcassets. This prevents build errors in the xcassets compilation stage
+  particularly when using xctool to build.  
+  [Ryan Marsh](https://github.com/ryanwmarsh)
+  [#1594](https://github.com/CocoaPods/CocoaPods/pull/1594)
+
+* Vendored Libraries now correctly affect whether a podspec is considered empty.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [Core#38](https://github.com/CocoaPods/Core/pull/38)
+
+* Vendored Libraries and Vendored Frameworks now have their paths validated correctly.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1567](https://github.com/CocoaPods/CocoaPods/pull/1567)
+
+* Gists are now correctly accepted with https.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [Core#38](https://github.com/CocoaPods/Core/pull/38)
+
+* The `pod push` command is now more specific about the branch it pushes to.  
+  [orta](http://orta.github.io)
+  [#1561](https://github.com/CocoaPods/CocoaPods/pull/1561)
+
+* Dtrace files are now properly left unflagged when installing, regardless of configuration.  
+  [Swizzlr](https://github.com/swizzlr)
+  [#1560](https://github.com/CocoaPods/CocoaPods/pull/1560)
+
+* Users are now warned if their terminal encoding is not UTF-8. This fixes an issue
+  with a small percentage of pod names that are incompatible with ASCII.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1570](https://github.com/CocoaPods/CocoaPods/pull/1570)
+
+
 ## 0.27.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.2...0.27.1)

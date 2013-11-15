@@ -1,32 +1,34 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: c12d8bdd0579807fd8a265cf1a0e2d8fbb36e90d
+  revision: b662b54098aa6ba5832c2382342cc363111bb3e6
   branch: master
   specs:
-    claide (0.3.2)
+    claide (0.4.0)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 26f43e2487ef158e1c01f7d2594fe6e3a1034bf0
+  revision: 16b15ee5d783653ba2ccac8735abd49c039ca4d3
   branch: master
   specs:
-    cocoapods-core (0.27.1)
+    cocoapods-core (0.28.0)
       activesupport (>= 3.2.15, < 4)
-      json_pure (~> 1.8)
+      fuzzy_match (~> 2.0.4)
+      json (~> 1.8)
       nap (~> 0.5)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 33d4a70380f1a141dec3a7da727e7c77ed191e0e
+  revision: ceae7a7be45e760830ee95a7b4481bdab6df149d
   branch: master
   specs:
-    xcodeproj (0.14.0)
+    xcodeproj (0.14.1)
       activesupport (~> 3.0)
       colored (~> 1.2)
+      rake
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 899f3face9d432b4084e78842776e249b77a1b8a
+  revision: b3a95be1468bd6d8a46a82a027460965581e2c21
   branch: master
   specs:
     cocoapods-downloader (0.2.0)
@@ -50,16 +52,16 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.27.1)
+    cocoapods (0.28.0)
       activesupport (>= 3.2.15, < 4)
-      claide (~> 0.3.2)
-      cocoapods-core (= 0.27.1)
+      claide (~> 0.4.0)
+      cocoapods-core (= 0.28.0)
       cocoapods-downloader (~> 0.2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
       open4 (~> 1.3)
-      xcodeproj (~> 0.14.0)
+      xcodeproj (~> 0.14.1)
 
 GEM
   remote: http://rubygems.org/
@@ -69,7 +71,7 @@ GEM
       multi_json (~> 1.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
-    coderay (1.0.9)
+    coderay (1.1.0)
     colored (1.2)
     coveralls (0.7.0)
       multi_json (~> 1.3)
@@ -78,15 +80,19 @@ GEM
       term-ansicolor
       thor
     diffy (3.0.1)
+    docile (1.1.0)
     escape (0.0.4)
-    ffi (1.9.0)
+    ffi (1.9.3)
+    fuzzy_match (2.0.4)
     github-markup (0.7.5)
     i18n (0.6.5)
+    json (1.8.1)
     json_pure (1.8.1)
     listen (1.1.6)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
+    lockfile (2.1.0)
     metaclass (0.0.1)
     method_source (0.8.2)
     mime-types (1.25)
@@ -98,11 +104,11 @@ GEM
     nap (0.5.1)
     open4 (1.3.0)
     posix-spawn (0.3.6)
-    pry (0.9.12.2)
-      coderay (~> 1.0.5)
+    pry (0.9.12.3)
+      coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
-    pygments.rb (0.5.2)
+    pygments.rb (0.5.4)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
     rake (10.1.0)
@@ -115,17 +121,19 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     ruby-prof (0.13.0)
-    simplecov (0.7.1)
-      multi_json (~> 1.0)
-      simplecov-html (~> 0.7.1)
-    simplecov-html (0.7.1)
+    simplecov (0.8.1)
+      docile (~> 1.1.0)
+      lockfile (>= 2.1.0)
+      multi_json
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
     slop (3.4.6)
     term-ansicolor (1.2.2)
       tins (~> 0.8)
     thor (0.18.1)
-    tins (0.12.0)
+    tins (0.13.1)
     yajl-ruby (1.1.0)
-    yard (0.8.7.2)
+    yard (0.8.7.3)
 
 PLATFORMS
   ruby
@@ -141,6 +149,7 @@ DEPENDENCIES
   diffy
   github-markup
   kicker!
+  mime-types (< 2)
   mocha
   mocha-on-bacon
   prettybacon!

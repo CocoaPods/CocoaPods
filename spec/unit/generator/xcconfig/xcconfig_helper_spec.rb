@@ -94,7 +94,7 @@ module Pod
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-weak_framework iAd'
           end
 
-          it "adds the developer frameworks search paths if needed" do
+          it "adds the ios developer frameworks search paths if needed" do
             xcconfig = Xcodeproj::Config.new
             consumer = stub({
               :xcconfig => {},
@@ -104,7 +104,22 @@ module Pod
               :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
+            xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('SDKROOT')
+            xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('DEVELOPER_LIBRARY_DIR')
+          end
+
+          it "adds the osx developer frameworks search paths if needed" do
+            xcconfig = Xcodeproj::Config.new
+            consumer = stub({
+              :xcconfig => {},
+              :libraries => [],
+              :frameworks => ['SenTestingKit'],
+              :weak_frameworks => [],
+              :platform_name => :osx
+            })
+            @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('DEVELOPER_LIBRARY_DIR')
+            xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('SDKROOT')
           end
         end
 
@@ -159,7 +174,7 @@ module Pod
             frameworks_search_paths = xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS']
             frameworks_search_paths.should.include?('$(inherited)')
             frameworks_search_paths.should.include?('"$(SDKROOT)/Developer/Library/Frameworks"')
-            frameworks_search_paths.should.include?('"$(DEVELOPER_LIBRARY_DIR)/Frameworks"')
+            frameworks_search_paths.should.not.include?('"$(DEVELOPER_LIBRARY_DIR)/Frameworks"')
           end
 
           it "adds the developer frameworks search paths to the xcconfig if XCTest has been detected" do
@@ -168,7 +183,7 @@ module Pod
             frameworks_search_paths = xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS']
             frameworks_search_paths.should.include?('$(inherited)')
             frameworks_search_paths.should.include?('"$(SDKROOT)/Developer/Library/Frameworks"')
-            frameworks_search_paths.should.include?('"$(DEVELOPER_LIBRARY_DIR)/Frameworks"')
+            frameworks_search_paths.should.not.include?('"$(DEVELOPER_LIBRARY_DIR)/Frameworks"')
           end
 
           it "doesn't adds the developer frameworks relative to the SDK for OS X" do

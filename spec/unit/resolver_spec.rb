@@ -173,7 +173,7 @@ module Pod
         end
         resolver = Resolver.new(config.sandbox, podfile)
         e = lambda {resolver.resolve}.should.raise Pod::Informative
-        e.message.should.match(/already activated version/)
+        e.message.should.match(/Unable to satisfy the following requirements/)
       end
 
       it "takes into account locked dependencies" do
