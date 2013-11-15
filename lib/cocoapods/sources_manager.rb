@@ -167,8 +167,8 @@ module Pod
       # @return [Bool] Whether the given source's remote is reachable.
       #
       def git_remote_reachable?(dir)
-        Dir.chdir(dir) { `git ls-remote` }
-        $?.exitstatus.zero?
+        Dir.chdir(dir) { git('ls-remote') }
+        $?.success?
       end
 
       # Returns whether a source is a GIT repo.
@@ -179,8 +179,8 @@ module Pod
       # @return [Bool] Whether the given source is a GIT repo.
       #
       def git_repo?(dir)
-        Dir.chdir(dir) { `git rev-parse  >/dev/null 2>&1` }
-        $?.exitstatus.zero?
+        Dir.chdir(dir) { git('rev-parse  >/dev/null 2>&1') }
+        $?.success?
       end
 
       # Checks the version information of the source with the given directory.
