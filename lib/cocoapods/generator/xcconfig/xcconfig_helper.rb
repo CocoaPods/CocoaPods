@@ -103,9 +103,10 @@ module Pod
             search_paths = xcconfig.attributes['FRAMEWORK_SEARCH_PATHS'] ||= ''
             search_paths_to_add = []
             search_paths_to_add << '$(inherited)'
-            search_paths_to_add << '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
             if platform == :ios
               search_paths_to_add << '"$(SDKROOT)/Developer/Library/Frameworks"'
+            else
+              search_paths_to_add << '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
             end
             search_paths_to_add.each do |search_path|
               unless search_paths.include?(search_path)
