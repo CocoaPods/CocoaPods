@@ -44,6 +44,8 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
+      	header_search_paths = target.sandbox.public_headers.search_paths
+      	warning_suppressed_paths = target.pod_targets.each
         @xcconfig = Xcodeproj::Config.new({
           'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
           'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(target.sandbox.public_headers.search_paths),
@@ -59,6 +61,11 @@ module Pod
             end
             file_accessor.vendored_libraries.each do |vendored_library|
               XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, target.sandbox.root)
+            end
+            @xcconfig.merge!('OTHER_CFLAGS' => '$(inherited)')
+            if pod_target.target_definition.inhibits_warnings_for_pod?(file_accessor.spec.root.name) 
+            	#then @xcconfig.merge!('OTHER_CFLAGS' => "$(inherited) #{XCConfigHelper.quote(pod_target.build_headers.search_paths)}") 
+            	else UI.warn('do not inhibit') 
             end
           end
         end
