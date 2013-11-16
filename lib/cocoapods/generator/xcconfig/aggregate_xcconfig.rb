@@ -49,7 +49,7 @@ module Pod
           'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
           'PODS_ROOT' => target.relative_pods_root,
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
-          'OTHER_CFLAGS' => '$(inherited)' + XCConfigHelper.quote(header_search_path_flags)
+          'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_path_flags)
         })
 
         target.pod_targets.each do |pod_target|
