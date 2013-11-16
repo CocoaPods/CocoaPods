@@ -95,6 +95,11 @@ module Pod
         UI.output.should.match /Already up-to-date/
       end
 
+      it 'returns whether a source has a reachable git remote' do
+        SourcesManager.git_remote_reachable?(repo_make('a_new_repo_that_is_new')).should.be.false
+        SourcesManager.git_remote_reachable?(SourcesManager.master_repo_dir).should.be.true
+      end
+
       it "returns whether a source is backed by a git repo" do
         SourcesManager.git_repo?(SourcesManager.master_repo_dir).should.be.true
         SourcesManager.git_repo?(Pathname.new('/tmp')).should.be.false

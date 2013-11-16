@@ -145,7 +145,7 @@ module Pod
           raise Informative, "The `#{source_name}` repo is not a git repo." unless git_repo?(specified_source.repo)
           sources = [specified_source]
         else
-          sources = aggregate.all.select { |source| git_repo?(source.repo) }
+          sources = aggregate.all.select { |source| git_repo?(source.repo) && git_remote_reachable?(source.repo) }
         end
 
         sources.each do |source|
@@ -159,16 +159,28 @@ module Pod
         end
       end
 
+      # Returns whether a git repo's remote is reachable.
+      #
+      # @param  [Pathname] dir
+      #         The directory where the source is stored.
+      #
+      # @return [Bool] Whether the given source's remote is reachable.
+      #
+      def git_remote_reachable?(dir)
+        Dir.chdir(dir) { git('ls-remote') }
+        $?.success?
+      end
+
       # Returns whether a source is a GIT repo.
       #
       # @param  [Pathname] dir
       #         The directory where the source is stored.
       #
-      # @return [Bool] Wether the given source is a GIT repo.
+      # @return [Bool] Whether the given source is a GIT repo.
       #
       def git_repo?(dir)
-        Dir.chdir(dir) { `git rev-parse  >/dev/null 2>&1` }
-        $?.exitstatus.zero?
+        Dir.chdir(dir) { git('rev-parse  >/dev/null 2>&1') }
+        $?.success?
       end
 
       # Checks the version information of the source with the given directory.
