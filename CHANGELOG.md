@@ -6,6 +6,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Bug Fixes
 
+* Fixed a bug which resulted in `pod lib lint` not being able to find the
+  headers.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1566](https://github.com/CocoaPods/CocoaPods/issues/1566)
+
 * Fixed the developer frameworks search paths so that
   `$(SDKROOT)/Developer/Library/Frameworks` is used for iOS and
   `$(DEVELOPER_LIBRARY_DIR)/Frameworks` is used for OS X  

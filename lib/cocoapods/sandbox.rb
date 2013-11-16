@@ -62,13 +62,13 @@ module Pod
     # @param [String, Pathname] root @see root
     #
     def initialize(root)
-      @root = Pathname.new(root)
+      FileUtils.mkdir_p(root)
+      @root = Pathname.new(root).realpath
       @public_headers = HeadersStore.new(self, "Headers")
       @predownloaded_pods = []
       @head_pods = []
       @checkout_sources = {}
       @development_pods = {}
-      FileUtils.mkdir_p(@root)
     end
 
     # @return [Lockfile] the manifest which contains the information about the

@@ -11,6 +11,15 @@ module Pod
 
     describe "In general" do
 
+      it "reads the real path of the root so it can be used to build relative paths" do
+        root_realpath = temporary_directory + 'Folder/SubFolder'
+        FileUtils.mkdir_p(root_realpath)
+        symlink = temporary_directory + 'symlink'
+        File.symlink(root_realpath, symlink)
+        sandbox = Pod::Sandbox.new(symlink + 'Sandbox')
+        sandbox.root.to_s.should.end_with 'Folder/SubFolder/Sandbox'
+      end
+
       it "automatically creates its root if it doesn't exist" do
         File.directory?(temporary_directory + 'Sandbox').should.be.true
       end

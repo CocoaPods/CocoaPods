@@ -9,7 +9,7 @@ module Pod
       # @return [Pathname] the absolute path of this header directory.
       #
       def root
-        @sandbox.root + @relative_path
+        @root ||= @sandbox.root + @relative_path
       end
 
       # @return [Sandbox] the sandbox where this header directory is stored.
@@ -70,7 +70,8 @@ module Pod
         namespaced_path.mkpath unless File.exist?(namespaced_path)
 
         relative_header_paths.map do |relative_header_path|
-          source = (@sandbox.root + relative_header_path).relative_path_from(namespaced_path)
+          absolute_source = (@sandbox.root + relative_header_path)
+          source = absolute_source.relative_path_from(namespaced_path)
           Dir.chdir(namespaced_path) do
             FileUtils.ln_sf(source, relative_header_path.basename)
           end
