@@ -17,4 +17,3 @@
 [submodule "spec/fixtures/integration/Reachability"]
 	path = spec/fixtures/integration/Reachability
 	url = https://github.com/tonymillion/Reachability.git
-
