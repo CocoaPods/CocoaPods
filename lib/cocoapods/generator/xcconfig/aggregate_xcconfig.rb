@@ -49,7 +49,7 @@ module Pod
           'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
           'PODS_ROOT' => target.relative_pods_root,
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
-          'OTHER_CFLAGS' => XCConfigHelper.quote(header_search_path_flags)
+          'OTHER_CFLAGS' => '$(inherited)' + XCConfigHelper.quote(header_search_path_flags)
         })
 
         target.pod_targets.each do |pod_target|
@@ -60,11 +60,6 @@ module Pod
             end
             file_accessor.vendored_libraries.each do |vendored_library|
               XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, target.sandbox.root)
-            end
-            @xcconfig.merge!('OTHER_CFLAGS' => '$(inherited)')
-            if pod_target.target_definition.inhibits_warnings_for_pod?(file_accessor.spec.root.name) 
-            	#then @xcconfig.merge!('OTHER_CFLAGS' => "$(inherited) #{XCConfigHelper.quote(pod_target.build_headers.search_paths)}") 
-            	else UI.warn('do not inhibit') 
             end
           end
         end
