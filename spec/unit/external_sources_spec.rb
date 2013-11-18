@@ -148,6 +148,31 @@ module Pod
 
   #---------------------------------------------------------------------------#
 
+  describe ExternalSources::BazaarSource do
+
+    before do
+      dependency = Dependency.new("BazaarSource", :bzr => fixture('bzr-repo'))
+      @external_source = ExternalSources.from_dependency(dependency, nil)
+    end
+
+    it "creates a copy of the podspec" do
+      @external_source.fetch(config.sandbox)
+      path = config.sandbox.root + 'Local Podspecs/BazaarSource.podspec'
+      path.should.exist?
+    end
+
+    it "marks a LocalPod as downloaded" do
+      @external_source.fetch(config.sandbox)
+      config.sandbox.predownloaded_pods.should == ["BazaarSource"]
+    end
+
+    it "returns the description" do
+      @external_source.description.should.match %r|from `.*/bzr-repo`|
+    end
+  end
+
+  #---------------------------------------------------------------------------#
+
   describe ExternalSources::PodspecSource do
 
     before do

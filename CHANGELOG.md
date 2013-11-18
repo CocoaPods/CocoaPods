@@ -4,6 +4,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
+* Add Bazaar support for installing directly from a repo  
+  [Fred McCann](https://github.com/fmccann)
+  [#1579](https://github.com/CocoaPods/CocoaPods/pull/1579)
+
 ###### Bug Fixes
 
 * Fixed a bug which resulted in `pod lib lint` not being able to find the
@@ -15,7 +21,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   `$(SDKROOT)/Developer/Library/Frameworks` is used for iOS and
   `$(DEVELOPER_LIBRARY_DIR)/Frameworks` is used for OS X  
   [Kevin Wales](https://github.com/kwales)
-  [#1562](https://github.com/CocoaPods/pull/1562)
+  [#1562](https://github.com/CocoaPods/CocoaPods/pull/1562)
 
 * When updating the pod repos, repositories with unreachable remotes
   are now ignored. This fixes an issue with certain private repositories.
