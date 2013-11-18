@@ -19,5 +19,4 @@
 	url = https://github.com/tonymillion/Reachability.git
 [submodule "spec/cocoapods-integration-specs"]
 	path = spec/cocoapods-integration-specs
-	url = https://github.com/swizzlr/cocoapods-integration-specs.git
-	branch = system_header_inhibition
+	url = https://github.com/CocoaPods/cocoapods-integration-specs.git
