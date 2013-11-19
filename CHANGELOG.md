@@ -4,6 +4,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Refactor
+
+* The command `podfile_info` is now a plugin offered by CocoaPods.
+  As a result, the command has been removed from CocoaPods.
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1602](https://github.com/CocoaPods/CocoaPods/pull/1602)
+  [#1589](https://github.com/CocoaPods/CocoaPods/issues/1589)
+
 ###### Bug Fixes
 
 * Fixed a bug which resulted in `pod lib lint` not being able to find the
