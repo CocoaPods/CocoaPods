@@ -4,6 +4,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Enhancements
+
+* Pod headers are now provided to the user target as a system
+  header. This means that any warnings in a Pod's code will show
+  under its target in Xcode's build navigator, and never under the
+  user target.  
+  [Swizzlr](https://github.com/swizzlr)
+  [#1596](https://github.com/CocoaPods/CocoaPods/pull/1596)
+
 ###### Bug Fixes
 
 * Fixed a bug which resulted in `pod lib lint` not being able to find the
