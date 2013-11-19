@@ -9,7 +9,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Pod headers are now provided to the user target as a system
   header. This means that any warnings in a Pod's code will show
   under its target in Xcode's build navigator, and never under the
-  user target. 
+  user target.  
   [Swizzlr](https://github.com/swizzlr)
   [#1596](https://github.com/CocoaPods/CocoaPods/pull/1596)
 
