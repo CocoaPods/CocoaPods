@@ -47,11 +47,11 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
-        search_pahts = target.build_headers.search_paths.concat(target.sandbox.public_headers.search_paths)
+        search_paths = target.build_headers.search_paths.concat(target.sandbox.public_headers.search_paths)
         config = {
           'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
           'PODS_ROOT'  => '${SRCROOT}',
-          'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_pahts),
+          'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
           'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1',
           # 'USE_HEADERMAP' => 'NO'
         }
