@@ -298,7 +298,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E74E8E7AFD3F4DCF9FEAB5B4 /* Pods-AFNetworking Example.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "AFNetworking Example.entitlements";
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -313,7 +312,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E74E8E7AFD3F4DCF9FEAB5B4 /* Pods-AFNetworking Example.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "AFNetworking Example.entitlements";
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
