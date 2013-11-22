@@ -28,6 +28,18 @@ module Pod
       out.should.include('BananaLib')
       out.should.not.include('JSONKit')
     end
+    
+    it "presents the known pods with versions when using --pod-versions" do
+      sets = SourcesManager.all_sets
+      jsonkit_set = sets.find { |s| s.name == 'JSONKit' }
+      
+      out = run_command('list','--pod-versions')
+      [ /BananaLib 1.0/,
+        /JSONKit #{jsonkit_set.versions.first}/,
+        /\d+ pods were found/
+      ].each { |regex| out.should =~ regex }
+    end
+    
   end
 end
 
