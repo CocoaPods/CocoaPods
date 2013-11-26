@@ -19,6 +19,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Bug Fixes
 
+* Fixed a bug where header search paths for targets for different platforms
+  would get cross-linked.
+  [Michael Melanson](https://github.com/michaelmelanson)
+  [#904](https://github.com/CocoaPods/CocoaPods/issues/904)
+
 * Fixed a bug which resulted in `pod lib lint` not being able to find the
   headers.  
   [Fabio Pelosin](https://github.com/irrationalfab)
