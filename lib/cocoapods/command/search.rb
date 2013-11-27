@@ -26,6 +26,7 @@ module Pod
         @supported_on_ios = argv.flag?('ios')
         @supported_on_osx = argv.flag?('osx')
         @query = argv.shift_argument
+        config.silent = false
         super
       end
 
