@@ -4,7 +4,7 @@ env:
   - RVM_RUBY_VERSION=system NOEXEC_DISABLE=1 RUBY_VERSION_SPECIFIC='sudo gem install bundler --no-ri --no-rdoc' GIT_AUTHOR_NAME=CocoaPods GIT_AUTHOR_EMAIL=cocoapods@example.com
   - RVM_RUBY_VERSION=1.8.7-p358 NOEXEC_DISABLE=1 RUBY_VERSION_SPECIFIC='sudo ln -s /usr/bin/llvm-gcc-4.2 /usr/bin/gcc-4.2 && curl http://curl.haxx.se/ca/cacert.pem -o /usr/local/share/cacert.pem' SSL_CERT_FILE=/usr/local/share/cacert.pem GIT_AUTHOR_NAME=CocoaPods GIT_AUTHOR_EMAIL=cocoapods@example.com
 before_install:
-  - [ $RVM_RUBY_VERSION != "system" ] && rvm install RVM_RUBY_VERSION
+  - [ $RVM_RUBY_VERSION != "system" ] && rvm install $RVM_RUBY_VERSION
   - source ~/.rvm/scripts/rvm && rvm use $RVM_RUBY_VERSION
 install: eval $RUBY_VERSION_SPECIFIC && rake bootstrap[use_bundle_dir]
 script: bundle exec rake spec:ci
