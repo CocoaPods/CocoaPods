@@ -36,6 +36,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1595](https://github.com/CocoaPods/CocoaPods/pull/1595)
   [#1571](https://github.com/CocoaPods/CocoaPods/issues/1571)
 
+* The linter will now display an error if a pod's name contains whitespace.
+  [Joshua Kalpin](https://github.com/Kapin)
+  [Core#39](https://github.com/CocoaPods/Core/pull/39)
+  [#1610](https://github.com/CocoaPods/CocoaPods/issues/1610)
+
 
 ## 0.28.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.27.1...0.28.0)
