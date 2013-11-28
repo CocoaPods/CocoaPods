@@ -16,6 +16,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Support LZMA2 compressed tarballs in the downloader  
   [Kyle Fuller](https://github.com/kylef)
   [cocoapods-downloader#5](https://github.com/CocoaPods/cocoapods-downloader/pull/5)
+  
+* Add Bazaar support for installing directly from a repo  
+  [Fred McCann](https://github.com/fmccann)
+  [#1632](https://github.com/CocoaPods/CocoaPods/pull/1632)  
 
 ###### Bug Fixes
 
@@ -28,7 +32,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   `$(SDKROOT)/Developer/Library/Frameworks` is used for iOS and
   `$(DEVELOPER_LIBRARY_DIR)/Frameworks` is used for OS X  
   [Kevin Wales](https://github.com/kwales)
-  [#1562](https://github.com/CocoaPods/pull/1562)
+  [#1562](https://github.com/CocoaPods/CocoaPods/pull/1562)
 
 * When updating the pod repos, repositories with unreachable remotes
   are now ignored. This fixes an issue with certain private repositories.
