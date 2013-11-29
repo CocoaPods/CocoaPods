@@ -13,11 +13,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Swizzlr](https://github.com/swizzlr)
   [#1596](https://github.com/CocoaPods/CocoaPods/pull/1596)
 
-* Support LZMA2 compressed tarballs in the downloader  
+* Support LZMA2 compressed tarballs in the downloader.  
   [Kyle Fuller](https://github.com/kylef)
   [cocoapods-downloader#5](https://github.com/CocoaPods/cocoapods-downloader/pull/5)
   
-* Add Bazaar support for installing directly from a repo  
+* Add Bazaar support for installing directly from a repo.  
   [Fred McCann](https://github.com/fmccann)
   [#1632](https://github.com/CocoaPods/CocoaPods/pull/1632)  
 
@@ -30,17 +30,17 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Fixed the developer frameworks search paths so that
   `$(SDKROOT)/Developer/Library/Frameworks` is used for iOS and
-  `$(DEVELOPER_LIBRARY_DIR)/Frameworks` is used for OS X  
+  `$(DEVELOPER_LIBRARY_DIR)/Frameworks` is used for OS X.  
   [Kevin Wales](https://github.com/kwales)
   [#1562](https://github.com/CocoaPods/CocoaPods/pull/1562)
 
 * When updating the pod repos, repositories with unreachable remotes
-  are now ignored. This fixes an issue with certain private repositories.
+  are now ignored. This fixes an issue with certain private repositories.  
   [Joshua Kalpin](https://github.com/Kapin)
   [#1595](https://github.com/CocoaPods/CocoaPods/pull/1595)
   [#1571](https://github.com/CocoaPods/CocoaPods/issues/1571)
 
-* The linter will now display an error if a pod's name contains whitespace.
+* The linter will now display an error if a Pod's name contains whitespace.  
   [Joshua Kalpin](https://github.com/Kapin)
   [Core#39](https://github.com/CocoaPods/Core/pull/39)
   [#1610](https://github.com/CocoaPods/CocoaPods/issues/1610)
