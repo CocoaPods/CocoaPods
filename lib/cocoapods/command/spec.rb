@@ -512,7 +512,7 @@ Pod::Spec.new do |s|
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  Specify the location from where the source should be retrieved.
-  #  Supports git, hg, svn and HTTP.
+  #  Supports git, hg, bzr, svn and HTTP.
   #
 
   s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
