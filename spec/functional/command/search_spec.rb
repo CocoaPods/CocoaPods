@@ -46,7 +46,7 @@ module Pod
       output.should.not.include? 'BananaLib'
     end
 
-    it "gives output when the silent config is true" do
+    it "outputs with the silent parameter" do
       output = run_command('search', 'BananaLib', '--silent')
       output.should.include? 'BananaLib'
     end
