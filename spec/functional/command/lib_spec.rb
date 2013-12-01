@@ -12,5 +12,23 @@ module Pod
       lambda { run_command('lib', 'create', 'Pod Name With Spaces') }.should.raise CLAide::Help
     end
   end
+
+  describe Command::Lib::Lint do
+    it "lints the current working directory" do
+        Dir.chdir(fixture('integration/Reachability')) do
+          cmd = command('lib', 'lint', '--only-errors')
+          cmd.run
+          UI.output.should.include "passed validation"
+        end
+    end
+
+    it "lints a single spec in the current working directory" do
+        Dir.chdir(fixture('integration/Reachability')) do
+          cmd = command('lib', 'lint', 'Reachability.podspec', '--quick', '--only-errors')
+          cmd.run
+          UI.output.should.include "passed validation"
+        end
+    end
+  end
 end
 

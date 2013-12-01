@@ -97,6 +97,7 @@ module Pod
           @quick       =  argv.flag?('quick')
           @only_errors =  argv.flag?('only-errors')
           @clean       =  argv.flag?('clean', true)
+          @podspecs_paths = argv.arguments!
           super
         end
 
@@ -106,27 +107,29 @@ module Pod
 
         def run
           UI.puts
-          validator             = Validator.new(podspec_to_lint)
-          validator.local       = true
-          validator.quick       = @quick
-          validator.no_clean    = !@clean
-          validator.only_errors = @only_errors
-          validator.validate
+          podspecs_to_lint.each do |podspec|
 
-          unless @clean
-            UI.puts "Pods project available at `#{validator.validation_dir}/Pods/Pods.xcodeproj` for inspection."
-            UI.puts
-          end
+            validator             = Validator.new(podspec)
+            validator.local       = true
+            validator.quick       = @quick
+            validator.no_clean    = !@clean
+            validator.only_errors = @only_errors
+            validator.validate
 
-          if validator.validated?
-            UI.puts "#{validator.spec.name} passed validation.".green
-          else
-            message = "#{validator.spec.name} did not pass validation."
-            if @clean
-              message << "\nYou can use the `--no-clean` option to inspect " \
-                "any issue."
+            unless @clean
+              UI.puts "Pods project available at `#{validator.validation_dir}/Pods/Pods.xcodeproj` for inspection."
+              UI.puts
             end
-            raise Informative, message
+            if validator.validated?
+              UI.puts "#{validator.spec.name} passed validation.".green
+            else
+              message = "#{validator.spec.name} did not pass validation."
+              if @clean
+                message << "\nYou can use the `--no-clean` option to inspect " \
+                  "any issue."
+              end
+              raise Informative, message
+            end
           end
         end
 
@@ -142,11 +145,14 @@ module Pod
         # @raise  If no podspec is found.
         # @raise  If multiple podspecs are found.
         #
-        def podspec_to_lint
-          podspecs = Pathname.glob(Pathname.pwd + '*.podspec{.yaml,}')
-          raise Informative, "Unable to find a podspec in the working directory" if podspecs.count.zero?
-          raise Informative, "Multiple podspecs detected in the working directory" if podspecs.count > 1
-          podspecs.first
+        def podspecs_to_lint
+          if !@podspecs_paths.empty? then
+            Array(@podspecs_paths)
+          else 
+            podspecs = Pathname.glob(Pathname.pwd + '*.podspec{.yaml,}')
+            raise Informative, "Unable to find a podspec in the working directory" if podspecs.count.zero?
+            podspecs
+          end
         end
 
       end
