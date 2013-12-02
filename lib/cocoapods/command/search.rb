@@ -17,7 +17,7 @@ module Pod
           ["--stats", "Show additional stats (like GitHub watchers and forks)"],
           ["--ios",   "Restricts the search to Pods supported on iOS"],
           ["--osx",   "Restricts the search to Pods supported on OS X"]
-        ].concat(super)
+        ].concat(super.reject { |option, _| option == '--silent' })
       end
 
       def initialize(argv)
@@ -26,6 +26,7 @@ module Pod
         @supported_on_ios = argv.flag?('ios')
         @supported_on_osx = argv.flag?('osx')
         @query = argv.shift_argument
+        config.silent = false
         super
       end
 

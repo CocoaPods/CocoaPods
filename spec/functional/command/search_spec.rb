@@ -45,5 +45,10 @@ module Pod
       output = run_command('search', 'BananaLib', '--osx')
       output.should.not.include? 'BananaLib'
     end
+
+    it "outputs with the silent parameter" do
+      output = run_command('search', 'BananaLib', '--silent')
+      output.should.include? 'BananaLib'
+    end
   end
 end
