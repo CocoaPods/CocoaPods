@@ -461,10 +461,11 @@ module Pod
       def compute_archs_for_target_definition(target_definition, user_targets)
         archs = []
         user_targets.each do |target|
-          archs << target.common_resolved_build_setting('ARCHS')
+          target_archs = target.common_resolved_build_setting('ARCHS')
+          archs.push(Array(target_archs))
         end
 
-        archs = archs.compact.uniq.sort
+        archs = archs.flatten.compact.uniq.sort
         if archs.count > 1
           UI.warn "Found multiple values (`#{archs.join('`, `')}`) for the " \
           "architectures (`ARCHS`) build setting for the " \
