@@ -45,7 +45,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Core#39](https://github.com/CocoaPods/Core/pull/39)
   [#1610](https://github.com/CocoaPods/CocoaPods/issues/1610)
 * Having the silent flag enabled in the config will no longer cause issues
-  with `pod search`. In addition the flag `--silent` is no longer supported
+  with `pod search`. In addition, the flag `--silent` is no longer supported
   for the command.  
   [Joshua Kalpin](https://github.com/Kapin)
   [#1627](https://github.com/CocoaPods/CocoaPods/pull/1627)
