@@ -6,6 +6,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
+* Introduced `pod try` the easiest way to test the example project of a pod.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1568](https://github.com/CocoaPods/CocoaPods/pull/1568)
+
 * Pod headers are now provided to the user target as a system
   header. This means that any warnings in a Pod's code will show
   under its target in Xcode's build navigator, and never under the
@@ -16,7 +20,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Support LZMA2 compressed tarballs in the downloader.  
   [Kyle Fuller](https://github.com/kylef)
   [cocoapods-downloader#5](https://github.com/CocoaPods/cocoapods-downloader/pull/5)
-  
+
 * Add Bazaar support for installing directly from a repo.  
   [Fred McCann](https://github.com/fmccann)
   [#1632](https://github.com/CocoaPods/CocoaPods/pull/1632)  
