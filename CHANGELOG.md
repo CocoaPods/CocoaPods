@@ -66,6 +66,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Joshua Kalpin](https://github.com/Kapin)
   [Core#44](https://github.com/CocoaPods/Core/issues/44)
 
+* The ARCHS build setting can come back as an array when more than one
+  architecture is specified.
+  [Carson McDonald](https://github.com/carsonmcdonald)
+  [#1628](https://github.com/CocoaPods/CocoaPods/issues/1628)
 
 ## 0.28.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.27.1...0.28.0)
