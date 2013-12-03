@@ -61,7 +61,7 @@ module Pod
       def search_by_name(query, full_text_search = false)
         if full_text_search
           set_names = []
-          query_regexp = %r{#{query}}i
+          query_regexp = /#{query}/i
           updated_search_index.each do |name, set_data|
             texts = [name]
             if full_text_search
