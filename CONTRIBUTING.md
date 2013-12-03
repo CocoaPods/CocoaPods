@@ -50,6 +50,10 @@ Code/comments should adhere to the following rules:
 
 * Names should be descriptive and concise.
 * Use two spaces and no tabs.
+* All changes require test coverage to ensure it does not break during refactor
+  work. (There are a few exceptions to this, which can be recognized by there
+  not being any coverage for similar code.)
+* All enhancements and bug fixes need to be documented in the CHANGELOG.
 * When writing comments, use properly constructed sentences, including
   punctuation.
 * When documenting APIs and/or source code, don't make assumptions or make
