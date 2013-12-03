@@ -21,6 +21,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fred McCann](https://github.com/fmccann)
   [#1632](https://github.com/CocoaPods/CocoaPods/pull/1632)  
 
+* pod lib lint now accepts multiple podspecs in the same folder.
+[kra Larivain/OpenTable](https://github.com/opentable)
+[#1635](https://github.com/CocoaPods/CocoaPods/pull/1635)
+
 ###### Bug Fixes
 
 * Fixed a bug which resulted in `pod lib lint` not being able to find the
