@@ -50,11 +50,11 @@ Code/comments should adhere to the following rules:
 
 * Names should be descriptive and concise.
 * Use two spaces and no tabs.
+* When writing comments, use properly constructed sentences, including
+  punctuation.
 * When documenting APIs and/or source code, don't make assumptions or make
   implications about race, gender, religion, political orientation or anything
   else that isn't relevant to the project.
-* When writing comments, use properly constructed sentences, including
-  punctuation.
 * Remember that source code usually gets written once and read often: ensure
   the reader doesn't have to make guesses. Make sure that the purpose and inner
   logic are either obvious to a reasonably skilled professional, or add a
