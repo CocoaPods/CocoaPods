@@ -31,12 +31,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1643][https://github.com/CocoaPods/CocoaPods/pull/1643]
 
 * Pod lib lint now accepts multiple podspecs in the same folder.  
-  [kra Larivain/OpenTable](https://github.com/opentable)
+  [Kra Larivain/OpenTable](https://github.com/opentable)
   [#1635](https://github.com/CocoaPods/CocoaPods/pull/1635)
 
-* The `pod push` command will not test silently the upcoming CocoaPods trunk
+* The `pod push` command will now silently test the upcoming CocoaPods trunk
   service. The service is only tested when pushing to the master repo and
-  doesn't affects the normal workflow of the operations.  
+  doesn't affect the normal workflow.  
   [Fabio Pelosin](https://github.com/irrationalfab)
 
 ###### Bug Fixes

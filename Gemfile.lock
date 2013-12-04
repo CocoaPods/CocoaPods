@@ -61,6 +61,7 @@ PATH
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
+      nap (~> 0.5)
       open4 (~> 1.3)
       xcodeproj (~> 0.14.1)
 
