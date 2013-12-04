@@ -61,14 +61,15 @@ module Pod
       def search_by_name(query, full_text_search = false)
         if full_text_search
           set_names = []
+          query_regexp = /#{query}/i
           updated_search_index.each do |name, set_data|
-            text = name.dup
+            texts = [name]
             if full_text_search
-              text << set_data['authors'].to_s if set_data['authors']
-              text << set_data['summary']      if set_data['summary']
-              text << set_data['description']  if set_data['description']
+              texts << set_data['authors'].to_s if set_data['authors']
+              texts << set_data['summary']      if set_data['summary']
+              texts << set_data['description']  if set_data['description']
             end
-            set_names << name if text.downcase.include?(query.downcase)
+            set_names << name unless texts.grep(query_regexp).empty?
           end
           sets = set_names.sort.map { |name| aggregate.represenative_set(name) }
         else

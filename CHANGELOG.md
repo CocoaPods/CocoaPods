@@ -23,7 +23,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Add Bazaar support for installing directly from a repo.  
   [Fred McCann](https://github.com/fmccann)
-  [#1632](https://github.com/CocoaPods/CocoaPods/pull/1632)  
+  [#1632](https://github.com/CocoaPods/CocoaPods/pull/1632)
+  
+* The `pod search <query>` command now supports regular expressions
+  for the query parameter when searching using the option `--full`.
+  [Florian Hanke](https://github.com/floere)
+  [#1643][https://github.com/CocoaPods/CocoaPods/pull/1643]
 
 ###### Bug Fixes
 
