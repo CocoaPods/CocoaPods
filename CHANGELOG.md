@@ -35,8 +35,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1635](https://github.com/CocoaPods/CocoaPods/pull/1635)
 
 * The `pod push` command will now silently test the upcoming CocoaPods trunk
-  service. The service is only tested when pushing to the master repo and
-  doesn't affect the normal workflow.  
+  service. The service is only tested when pushing to the master repo and the
+  test doesn't affect the normal workflow.  
   [Fabio Pelosin](https://github.com/irrationalfab)
 
 ###### Bug Fixes
