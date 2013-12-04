@@ -331,6 +331,71 @@ module Pod
 
       #--------------------------------------#
 
+      describe "#compute_archs_for_target_definition" do
+
+        # def compute_archs_for_target_definition(target_definition, user_targets)
+        # TODO it "returns the first ARCH specified in the user targets if there is more than one" do
+        
+        it "handles a single ARCH defined in a single user target" do
+          user_project = Xcodeproj::Project.new('path')
+          target = user_project.new_target(:application, 'Target', :ios)
+          target.build_configuration_list.set_setting('ARCHS', 'armv7')
+
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
+          target_definition.set_platform(:ios, '4.0')
+          user_targets = [target]
+
+          archs = @analyzer.send(:compute_archs_for_target_definition, target_definition, user_targets)
+          archs.should == 'armv7'
+        end
+
+        it "handles a single ARCH defined in multiple user targets" do
+          user_project = Xcodeproj::Project.new('path')
+          targeta = user_project.new_target(:application, 'Target', :ios)
+          targeta.build_configuration_list.set_setting('ARCHS', 'armv7')
+          targetb = user_project.new_target(:application, 'Target', :ios)
+          targetb.build_configuration_list.set_setting('ARCHS', 'armv7')
+
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
+          target_definition.set_platform(:ios, '4.0')
+          user_targets = [targeta, targetb]
+
+          archs = @analyzer.send(:compute_archs_for_target_definition, target_definition, user_targets)
+          archs.should == 'armv7'
+        end
+
+        it "handles an Array of ARCHs defined in a single user target" do
+          user_project = Xcodeproj::Project.new('path')
+          target = user_project.new_target(:application, 'Target', :ios)
+          target.build_configuration_list.set_setting('ARCHS', 'armv7')
+
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
+          target_definition.set_platform(:ios, '4.0')
+          user_targets = [target]
+
+          archs = @analyzer.send(:compute_archs_for_target_definition, target_definition, user_targets)
+          archs.should == 'armv7'
+        end
+
+        it "handles an Array of ARCHs defined multiple user targets" do
+          user_project = Xcodeproj::Project.new('path')
+          targeta = user_project.new_target(:application, 'Target', :ios)
+          targeta.build_configuration_list.set_setting('ARCHS', 'armv7')
+          targetb = user_project.new_target(:application, 'Target', :ios)
+          targetb.build_configuration_list.set_setting('ARCHS', ['armv7', 'i386'])
+
+          target_definition = Podfile::TargetDefinition.new(:default, nil)
+          target_definition.set_platform(:ios, '4.0')
+          user_targets = [targeta, targetb]
+
+          archs = @analyzer.send(:compute_archs_for_target_definition, target_definition, user_targets)
+          archs.should == 'armv7'
+        end
+
+      end
+
+      #--------------------------------------#
+
       describe "#compute_platform_for_target_definition" do
 
         it "returns the platform specified in the target definition" do
