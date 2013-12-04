@@ -490,10 +490,10 @@ Pod::Spec.new do |s|
   #  found CocoaPods accept just the names.
   #
 
-  s.author       = { "#{data[:author_name]}" => "#{data[:author_email]}" }
-  # s.authors      = { "#{data[:author_name]}" => "#{data[:author_email]}", "other author" => "email@address.com" }
-  # s.author       = '#{data[:author_name]}', 'other author'
-
+  s.author             = { "#{data[:author_name]}" => "#{data[:author_email]}" }
+  # s.authors          = { "#{data[:author_name]}" => "#{data[:author_email]}", "other author" => "email@address.com" }
+  # s.author           = '#{data[:author_name]}', 'other author'
+  # s.social_media_url = "http://twitter.com/#{data[:author_name]}"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
