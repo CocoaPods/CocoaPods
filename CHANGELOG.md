@@ -62,7 +62,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Core#45](https://github.com/CocoaPods/Core/pull/45)
 
 * The linter will now display an error if a library ends with `.a` or `.dylib`
-  (i.e. `libz.dylib`)  
+  (i.e. `libz.dylib`). It will also display an error if it begins with `lib`  
   [Joshua Kalpin](https://github.com/Kapin)
   [Core#44](https://github.com/CocoaPods/Core/issues/44)
 
