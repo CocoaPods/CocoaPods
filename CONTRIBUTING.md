@@ -63,3 +63,7 @@ Code/comments should adhere to the following rules:
   the reader doesn't have to make guesses. Make sure that the purpose and inner
   logic are either obvious to a reasonably skilled professional, or add a
   comment that explains it.
+* The message of the commit should be prefixed by the name of the file which is
+  the main focus of the patch enclosed by square brackets (.e.g. `[Installer]
+  install pods`).
+
