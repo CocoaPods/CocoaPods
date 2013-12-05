@@ -13,7 +13,6 @@ module Pod
     require 'cocoapods/command/lib'
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
-    require 'cocoapods/command/podfile_info'
     require 'cocoapods/command/project'
     require 'cocoapods/command/push'
     require 'cocoapods/command/repo'
