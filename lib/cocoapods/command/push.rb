@@ -42,6 +42,7 @@ module Pod
 
       def run
         validate_podspec_files
+        test_trunk
         check_repo_status
         update_repo
         add_specs_to_repo
@@ -56,6 +57,21 @@ module Pod
 
       extend Executable
       executable :git
+
+      # @return [void] Silently test the CocoaPods trunk service.
+      #
+      def test_trunk
+        return unless @repo == "master"
+        require 'rest'
+        token = "65185722a2a4d074856fc07e8382e7f3"
+        base_url = 'https://trunk.cocoapods.org/api/v1'
+        podspec_files.each do |spec_file|
+          spec = Pod::Specification.from_file(spec_file)
+          REST.post("#{base_url}/pods", spec.to_yaml, 'Content-Type' => 'text/yaml', 'Authorization' => "Token #{token}")
+        end
+      rescue Exception
+        # Nothing
+      end
 
       # Performs a full lint against the podspecs.
       #

@@ -38,6 +38,7 @@ s.files = Dir["lib/**/*.rb"] + %w{ bin/pod bin/sandbox-pod README.md LICENSE CHA
   s.add_runtime_dependency 'json_pure',     '~> 1.8'
   s.add_runtime_dependency 'open4',         '~> 1.3'
   s.add_runtime_dependency 'activesupport', '>= 3.2.15', '< 4'
+  s.add_runtime_dependency 'nap',           '~> 0.5'
 
   s.add_development_dependency 'bacon', '~> 1.1'
 
