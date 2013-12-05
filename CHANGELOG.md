@@ -39,6 +39,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   test doesn't affect the normal workflow.  
   [Fabio Pelosin](https://github.com/irrationalfab)
 
+* Validation of all subspecs
+  The validation done by `pod spec lint` and `pod lib lint` commands
+  now checks that all subspecs build independently.
+  This new behavior can be disabled with `--no-subspecs`.
+  The validation of a single subspec can be done with `--subspec=NAME`.
+  [Marc C](https://github.com/yalp)
+  [#1588](https://github.com/CocoaPods/CocoaPods/pull/1588)
+
 ###### Bug Fixes
 
 * Fixed a bug which resulted in `pod lib lint` not being able to find the
