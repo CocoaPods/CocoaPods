@@ -24,15 +24,20 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Add Bazaar support for installing directly from a repo.  
   [Fred McCann](https://github.com/fmccann)
   [#1632](https://github.com/CocoaPods/CocoaPods/pull/1632)
-  
+
 * The `pod search <query>` command now supports regular expressions
-  for the query parameter when searching using the option `--full`.
+  for the query parameter when searching using the option `--full`.  
   [Florian Hanke](https://github.com/floere)
   [#1643][https://github.com/CocoaPods/CocoaPods/pull/1643]
 
-* pod lib lint now accepts multiple podspecs in the same folder.
-[kra Larivain/OpenTable](https://github.com/opentable)
-[#1635](https://github.com/CocoaPods/CocoaPods/pull/1635)
+* Pod lib lint now accepts multiple podspecs in the same folder.  
+  [Kra Larivain/OpenTable](https://github.com/opentable)
+  [#1635](https://github.com/CocoaPods/CocoaPods/pull/1635)
+
+* The `pod push` command will now silently test the upcoming CocoaPods trunk
+  service. The service is only tested when pushing to the master repo and the
+  test doesn't affect the normal workflow.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
 
 ###### Bug Fixes
 
