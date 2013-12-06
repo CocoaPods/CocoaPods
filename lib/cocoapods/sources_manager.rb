@@ -71,7 +71,7 @@ module Pod
             end
             set_names << name unless texts.grep(query_regexp).empty?
           end
-          sets = set_names.sort.map { |name| aggregate.represenative_set(name) }
+          sets = set_names.sort.map { |name| aggregate.representative_set(name) }
         else
           sets = aggregate.search_by_name(query, false)
         end
