@@ -29,7 +29,7 @@ $ xcodeproj project-diff
 
 If you are familiar with Ruby, making a pull request with a failing test case
 can speed up the resolution of the bug. If the issue is more complex you can
-add an [integration test](https://github.com/CocoaPods/CocoaPods/tree/master/spec/integration)
+add an [integration test](https://github.com/CocoaPods/cocoapods-integration-specs/)
 which doesn't require any ruby knowledge.
 
 
