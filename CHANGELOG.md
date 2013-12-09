@@ -89,11 +89,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Core#44](https://github.com/CocoaPods/Core/issues/44)
 
 * The ARCHS build setting can come back as an array when more than one
-  architecture is specified.
+  architecture is specified.  
   [Carson McDonald](https://github.com/carsonmcdonald)
   [#1628](https://github.com/CocoaPods/CocoaPods/issues/1628)
 
-* Fixed all issues caused by /tmp being a symlink to /private/tmp. This affected mostly pod lib lint, causing it to fail when the pod used prefix_header_* or when the pod headers imported .h using the namespaced syntax (e.g. #import <MyPod/Header.h>)
+* Fixed all issues caused by `/tmp` being a symlink to `/private/tmp`. 
+  This affected mostly `pod lib lint`, causing it to fail when the 
+  Pod used `prefix_header_*` or when the pod headers imported headers 
+  using the namespaced syntax (e.g. `#import <MyPod/Header.h>`).  
   [kra Larivain/OpenTable](https://github.com/opentable)
   [#1514](https://github.com/CocoaPods/CocoaPods/pull/1514)
 
