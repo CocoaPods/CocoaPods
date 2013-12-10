@@ -123,9 +123,7 @@ module Pod
     def submit_statistics
       UI.section "Submitting Statistics" do
         stats = Statistics.new
-        @installed_specs.each do |spec|
-          stats.submit_statistics(spec)
-        end
+        stats.submit_statistics(@installed_specs)
       end
     end
 

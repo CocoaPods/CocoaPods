@@ -1,5 +1,5 @@
-require 'net/http'
-require 'uri'
+require 'json'
+require 'rest'
 module Pod
   class Statistics
 
@@ -7,28 +7,31 @@ module Pod
 
     public
 
-    def submit_statistics(spec)
-      request = submit_install_request
-      request.set_form_data form_data(spec)
-      http_client.request request
+    def submit_statistics(specs)
+      request = REST::Request.new(:post,
+                                  install_uri,
+                                  json_body(specs), 
+                                  @request_options)
+      request.perform
     end
 
     private
+    @request_options = {'Content-Type' => 'application/json; charset=utf-8'}
 
-    def form_data(spec)
-      form_data = spec.source
-      form_data["name"] = spec.name
-      form_data["version"] = spec.version
-      form_data
+    def json_body(specs)
+      body = {}
+      specs.each do |spec|
+        spec_data = spec.source
+        spec_data["version"] = spec.version
+
+        body[spec.name] = spec_data
+      end
+      body.to_json
     end
 
-    def http_client
-      uri = URI.parse config.stat_server
-      Net::HTTP.new(uri.host,uri.port)
+    def install_uri
+      URI.join(config.stat_server, "/installs")
     end
 
-    def submit_install_request
-      Net::HTTP::Post.new("/install")
-    end
   end
 end
