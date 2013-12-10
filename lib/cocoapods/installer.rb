@@ -232,6 +232,8 @@ module Pod
       pods_to_install = sandbox_state.added | sandbox_state.changed
       title_options = { :verbose_prefix => "-> ".green }
       root_specs.sort_by(&:name).each do |spec|
+        stats = Statistics.new
+        stats.submit_statistics(spec)
         if pods_to_install.include?(spec.name)
           UI.titled_section("Installing #{spec}".green, title_options) do
             install_source_of_pod(spec.name)

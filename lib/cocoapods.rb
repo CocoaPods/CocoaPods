@@ -20,6 +20,7 @@ module Pod
   autoload :Command,                   'cocoapods/command'
   autoload :Executable,                'cocoapods/executable'
   autoload :ExternalSources,           'cocoapods/external_sources'
+  autoload :Statistics,                'cocoapods/statistics' 
   autoload :Installer,                 'cocoapods/installer'
   autoload :SourcesManager,            'cocoapods/sources_manager'
   autoload :Target,                    'cocoapods/target'
