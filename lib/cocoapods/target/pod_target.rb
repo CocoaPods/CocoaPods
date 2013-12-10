@@ -64,5 +64,11 @@ module Pod
       end.flatten
     end
 
+    # @param [String] build_config Name of the build configuration that caller is unsure if this target should
+    #                 be linked with.
+    def include_in_build_config? build_config
+      true
+    end
+
   end
 end

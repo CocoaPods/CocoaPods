@@ -32,15 +32,14 @@ module Pod
       # @return [void]
       #
       def create_xcconfig_file
-        path = library.xcconfig_path
-        UI.message "- Generating xcconfig file at #{UI.path(path)}" do
-          gen = Generator::XCConfig::AggregateXCConfig.new(library)
-          gen.save_as(path)
-          library.xcconfig = gen.xcconfig
-          xcconfig_file_ref = add_file_to_support_group(path)
-
-          target.build_configurations.each do |c|
-            c.base_configuration_reference = xcconfig_file_ref
+        target.build_configurations.each do |build_config|
+          path = library.xcconfig_path build_config
+          UI.message "- Generating #{build_config.name} xcconfig file at #{UI.path(path)}" do
+            gen = Generator::XCConfig::AggregateXCConfig.new(library, build_config)
+            gen.save_as(path)
+            library.xcconfigs[build_config.name] = gen.xcconfig
+            xcconfig_file_ref = add_file_to_support_group(path)
+            build_config.base_configuration_reference = xcconfig_file_ref
           end
         end
       end
