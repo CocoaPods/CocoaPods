@@ -79,8 +79,8 @@ module Pod
 
     # @return [Pathname] the absolute path of the xcconfig file.
     #
-    def xcconfig_path
-      support_files_root + "#{label}.xcconfig"
+    def xcconfig_path variant
+      support_files_root + "#{label}-#{variant}.xcconfig"
     end
 
     # @return [Pathname] the absolute path of the private xcconfig file.
