@@ -97,7 +97,7 @@ module Pod
     #         the user project.
     #
     def xcconfig_relative_path config_name
-      relative_to_srcroot(xcconfig_path, config_name).to_s
+      relative_to_srcroot(xcconfig_path config_name).to_s
     end
 
     # @return [String] The path of the copy resources script relative to the
