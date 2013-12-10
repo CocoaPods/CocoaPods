@@ -87,6 +87,7 @@ module Pod
       download_dependencies
       generate_pods_project
       integrate_user_project if config.integrate_targets?
+      submit_statistics
     end
 
     def resolve_dependencies
@@ -116,6 +117,15 @@ module Pod
         run_post_install_hooks
         write_pod_project
         write_lockfiles
+      end
+    end
+
+    def submit_statistics
+      UI.section "Submitting Statistics" do
+        stats = Statistics.new
+        @installed_specs.each do |spec|
+          stats.submit_statistics(spec)
+        end
       end
     end
 
@@ -232,8 +242,6 @@ module Pod
       pods_to_install = sandbox_state.added | sandbox_state.changed
       title_options = { :verbose_prefix => "-> ".green }
       root_specs.sort_by(&:name).each do |spec|
-        stats = Statistics.new
-        stats.submit_statistics(spec)
         if pods_to_install.include?(spec.name)
           UI.titled_section("Installing #{spec}".green, title_options) do
             install_source_of_pod(spec.name)
