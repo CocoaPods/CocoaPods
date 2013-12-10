@@ -1,6 +1,9 @@
 require 'net/http'
+require 'uri'
 module Pod
   class Statistics
+
+    include Config::Mixin
 
     public
 
@@ -20,7 +23,8 @@ module Pod
     end
 
     def http_client
-      Net::HTTP.new("localhost",4567)
+      uri = URI.parse config.stat_server
+      Net::HTTP.new(uri.host,uri.port)
     end
 
     def submit_install_request
