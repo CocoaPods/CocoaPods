@@ -87,7 +87,7 @@ module Pod
       download_dependencies
       generate_pods_project
       integrate_user_project if config.integrate_targets?
-      submit_statistics if config.submit_stats?
+      submit_statistics if config.submit_stats? && !@installed_specs.empty?
     end
 
     def resolve_dependencies
