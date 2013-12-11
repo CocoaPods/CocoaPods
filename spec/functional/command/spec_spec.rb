@@ -205,6 +205,17 @@ module Pod
     describe Command::Spec::Cat do
       it_should_check_for_existence("cat")
       it_should_check_for_ambiguity("cat")
+
+      it "cats the given podspec" do
+        lambda { command('spec', 'cat', 'AFNetworking').run }.should.not.raise
+        UI.output.should.include fixture('spec-repos/master/AFNetworking/1.2.0/AFNetworking.podspec').read
+      end
+
+      it "cats the first podspec from all podspecs" do
+        STDIN = StringIO.new("1\n", 'r')
+        run_command('spec', 'cat', '--show-all', 'AFNetworking')
+        UI.output.should.include fixture('spec-repos/master/AFNetworking/1.2.0/AFNetworking.podspec').read
+      end
     end
 
     #-------------------------------------------------------------------------#
