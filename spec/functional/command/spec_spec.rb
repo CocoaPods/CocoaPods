@@ -212,9 +212,10 @@ module Pod
       end
 
       it "cats the first podspec from all podspecs" do
-        STDIN = StringIO.new("1\n", 'r')
+        $stdin = StringIO.new("1\n", 'r')
         run_command('spec', 'cat', '--show-all', 'AFNetworking')
         UI.output.should.include fixture('spec-repos/master/AFNetworking/1.2.0/AFNetworking.podspec').read
+        $stdin = STDIN
       end
     end
 
