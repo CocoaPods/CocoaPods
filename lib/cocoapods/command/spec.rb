@@ -300,7 +300,7 @@ module Pod
           UI.puts "#{ index + 1 }: #{ item }"
         end
 
-        print message
+        UI.puts message
 
         index = $stdin.gets.chomp.to_i - 1
         if index < 0 || index > array.count
