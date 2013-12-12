@@ -66,8 +66,8 @@ module Pod
 
     # @param [String] build_config Name of the build configuration that caller is unsure if this target should
     #                 be linked with.
-    def include_in_build_config? build_config
-      true
+    def include_in_build_config?(build_config)
+      @target_definition.is_pod_whitelisted_for_configuration?(@specs[0].name, build_config)
     end
 
   end
