@@ -112,7 +112,7 @@ module Pod
         install_file_references
         install_libraries
         set_target_dependencies
-        link_aggregate_target
+        # note: linking with pod libraries is now done by aggregate_xcconfig's OTHER_LDFLAGS
         run_post_install_hooks
         write_pod_project
         write_lockfiles
@@ -373,21 +373,6 @@ module Pod
               pod_target.target.add_dependency(pod_dependency_target.target)
             end
           end
-        end
-      end
-    end
-
-    # Links the aggregate targets with all the dependent libraries.
-    #
-    # @note   This is run in the integration step to ensure that targets
-    #         have been created for all per spec libraries.
-    #
-    def link_aggregate_target
-      aggregate_targets.each do |aggregate_target|
-        native_target = aggregate_target.target
-        aggregate_target.pod_targets.each do |pod_target|
-          product = pod_target.target.product_reference
-          native_target.frameworks_build_phase.add_file_reference(product)
         end
       end
     end
