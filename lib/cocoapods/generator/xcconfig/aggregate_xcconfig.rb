@@ -67,6 +67,11 @@ module Pod
               XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, target.sandbox.root)
             end
           end
+
+          # This is how the Pods project now links with dependencies, instead of a "Link with Libraries" build phase
+          @xcconfig.merge!({
+            'OTHER_LDFLAGS' => "-l#{pod_target.name}"
+          })
         end
 
         # TODO Need to decide how we are going to ensure settings like these
