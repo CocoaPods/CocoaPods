@@ -300,10 +300,10 @@ module Pod
           UI.puts "#{ index + 1 }: #{ item }"
         end
 
-        print message
+        UI.puts message
 
-        index = STDIN.gets.chomp.to_i - 1
-        if index < 0 || index > array.count
+        index = $stdin.gets.chomp.to_i - 1
+        if index < 0 || index > array.count - 1
           raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
         else
           index
