@@ -365,12 +365,8 @@ task :bootstrap, :use_bundle_dir? do |t, args|
   execute_command "git submodule update --init --recursive"
 
   puts "Installing gems"
-  if args[:use_bundle_dir?]
-    sh "ruby --version"
-    sh "XCODEPROJ_BUILD=1 bundle install --path ./travis_bundle_dir"
-  else
-    execute_command "bundle install"
-  end
+  sh "ruby --version"
+  sh "env XCODEPROJ_BUILD=1 bundle install --path ./travis_bundle_dir"
 end
 
 #-----------------------------------------------------------------------------#
