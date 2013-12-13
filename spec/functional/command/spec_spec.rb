@@ -230,17 +230,37 @@ module Pod
 
     describe "Private helpers" do
 
+      before do
+        # TODO Use class methods
+        @sut = Command::Spec.new(CLAide::ARGV.new([]))
+
+      end
+
       describe "#get_path_of_spec" do
-
-        before do
-          # TODO Use class methods
-          @sut = Command::Spec.new(CLAide::ARGV.new([]))
-
-        end
 
         it "returns the path of the specification with the given name" do
           path = @sut.send(:get_path_of_spec, 'AFNetworking')
           path.should == fixture('spec-repos') + 'master/AFNetworking/1.2.0/AFNetworking.podspec'
+        end
+
+      end
+
+      describe "#choose_from_array" do
+
+        it "should return a valid index for the given array" do
+          $stdin = StringIO.new("1\n", 'r')
+          index = @sut.send(:choose_from_array, ['item1', 'item2', 'item3'], 'A message')
+          UI.output.should.include "1: item1\n2: item2\n3: item3\nA message\n"
+          index.should == 0
+          $stdin = STDIN
+        end
+
+        it "should raise when the index is out of bounds" do
+          $stdin = StringIO.new("4\n", 'r')
+          lambda { @sut.send(:choose_from_array, ['item1', 'item2', 'item3'], 'A message') }.should.raise Pod::Informative
+          $stdin = StringIO.new("0\n", 'r')
+          lambda { @sut.send(:choose_from_array, ['item1', 'item2', 'item3'], 'A message') }.should.raise Pod::Informative
+          $stdin = STDIN
         end
 
       end
