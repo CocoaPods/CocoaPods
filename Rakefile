@@ -367,7 +367,7 @@ task :bootstrap, :use_bundle_dir? do |t, args|
   puts "Installing gems"
   if args[:use_bundle_dir?]
     sh "ruby --version"
-    sh "bundle install --path ./travis_bundle_dir"
+    sh "XCODEPROJ_BUILD=1 bundle install --path ./travis_bundle_dir"
   else
     execute_command "bundle install"
   end
