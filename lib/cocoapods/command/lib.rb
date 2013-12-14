@@ -44,6 +44,7 @@ module Pod
 
         TEMPLATE_REPO = "https://github.com/CocoaPods/pod-template.git"
         TEMPLATE_INFO_URL = "https://github.com/CocoaPods/pod-template"
+        CREATE_NEW_POD_INFO_URL = "http://guides.cocoapods.org/making/making-a-cocoapod"
 
         # Clones the template from the remote in the working directory using
         # the name of the Pod.
@@ -74,6 +75,7 @@ module Pod
         #
         def print_info
           UI.puts "\nTo learn more about the template see `#{TEMPLATE_INFO_URL}`."
+          UI.puts "To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`."
         end
 
       end
