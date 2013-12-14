@@ -19,6 +19,9 @@ group :development do
   gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
   gem "rake"
 
+  # For the integration tests
+  gem "diffy"
+
   gem 'mime-types', '< 2' # v2 is 1.9.x only
   gem 'coveralls', :require => false
   # Explicitly add this, otherwise it might sometimes be missing:
@@ -31,7 +34,6 @@ group :debugging do
   gem "kicker", :git => "https://github.com/alloy/kicker.git", :branch => "master"
   gem "awesome_print"
   gem "pry"
-  gem "diffy"
   gem "ruby-prof"
 end
 
