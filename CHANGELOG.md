@@ -39,6 +39,17 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   test doesn't affect the normal workflow.  
   [Fabio Pelosin](https://github.com/irrationalfab)
 
+* The `pod search <query>` command now supports searching on cocoapods.org
+  when searching using the option `--web`. Options `--ios` and `--osx` are
+  fully supported.
+  [Florian Hanke](https://github.com/floere)
+  [#1643][https://github.com/CocoaPods/CocoaPods/pull/1682]
+
+* The `pod search <query>` command now supports multiword queries when using
+  the `--web` option.
+  [Florian Hanke](https://github.com/floere)
+  [#1643][https://github.com/CocoaPods/CocoaPods/pull/1682]
+
 ###### Refactor
 
 * The command `podfile_info` is now a plugin offered by CocoaPods.
