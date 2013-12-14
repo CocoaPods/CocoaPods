@@ -35,7 +35,7 @@ $:.unshift((ROOT + 'spec').to_s)
 
 require 'cocoapods'
 require 'claide'
-require 'awesome_print'
+#require 'awesome_print'
 
 require 'spec_helper/command'         # Allows to run Pod commands and returns their output.
 require 'spec_helper/fixture'         # Provides access to the fixtures and unpacks them if needed.
