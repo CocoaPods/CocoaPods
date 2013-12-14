@@ -16,7 +16,8 @@ module Pod
           ["--full",  "Search by name, summary, and description"],
           ["--stats", "Show additional stats (like GitHub watchers and forks)"],
           ["--ios",   "Restricts the search to Pods supported on iOS"],
-          ["--osx",   "Restricts the search to Pods supported on OS X"]
+          ["--osx",   "Restricts the search to Pods supported on OS X"],
+          ["--web",   "Searches on cocoapods.org"]
         ].concat(super.reject { |option, _| option == '--silent' })
       end
 
@@ -25,7 +26,8 @@ module Pod
         @stats = argv.flag?('stats')
         @supported_on_ios = argv.flag?('ios')
         @supported_on_osx = argv.flag?('osx')
-        @query = argv.shift_argument
+        @web = argv.flag?('web')
+        @query = argv.arguments! unless argv.arguments.empty?
         config.silent = false
         super
       end
@@ -36,7 +38,29 @@ module Pod
       end
 
       def run
-        sets = SourcesManager.search_by_name(@query.strip, @full_text_search)
+        if @web
+          web_search
+        else
+          local_search
+        end
+      end
+
+      extend Executable
+      executable :open
+
+      def web_search
+        query_parameter = [
+          ('on%3Aosx' if @supported_on_osx),
+          ('on%3Aios' if @supported_on_ios),
+          @query
+        ].compact.flatten.join('%20')
+        url = "http://cocoapods.org/?q=#{query_parameter}"
+        UI.puts("Opening #{url}")
+        open!(url)
+      end
+
+      def local_search
+        sets = SourcesManager.search_by_name(@query.join(' ').strip, @full_text_search)
         if @supported_on_ios
           sets.reject!{ |set| !set.specification.available_platforms.map(&:name).include?(:ios) }
         end
@@ -57,6 +81,7 @@ module Pod
           end
         end
       end
+
     end
   end
 end
