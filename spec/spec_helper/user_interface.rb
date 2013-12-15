@@ -25,6 +25,9 @@ module Pod
       def print(message)
         @output << message
       end
+
+      def print_warnings
+      end
     end
   end
 end
