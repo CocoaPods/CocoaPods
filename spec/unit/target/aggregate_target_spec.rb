@@ -35,7 +35,7 @@ module Pod
       end
 
       it "returns the absolute path of the xcconfig file" do
-        @target.xcconfig_path.to_s.should.include?('Pods/Pods.xcconfig')
+        @target.xcconfig_path("Release").to_s.should.include?('Pods/Pods.Release.xcconfig')
       end
 
       it "returns the absolute path of the resources script" do
@@ -65,7 +65,7 @@ module Pod
       end
 
       it "returns the path of the xcconfig file relative to the user project" do
-        @target.xcconfig_relative_path.should == 'Pods/Pods.xcconfig'
+        @target.xcconfig_relative_path("Release").should == 'Pods/Pods.Release.xcconfig'
       end
     end
 
