@@ -45,8 +45,8 @@ module Pod
     def self.run(argv)
       argv = CLAide::ARGV.new(argv)
       if argv.flag?('version')
-        puts VERSION
-        exit!(0)
+        UI.puts VERSION
+        exit 0
       end
       super(argv)
       UI.print_warnings
