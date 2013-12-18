@@ -302,7 +302,7 @@ module Pod
 
         UI.puts message
 
-        index = $stdin.gets.chomp.to_i - 1
+        index = UI.gets.chomp.to_i - 1
         if index < 0 || index > array.count - 1
           raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
         else

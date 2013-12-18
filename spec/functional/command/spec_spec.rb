@@ -212,10 +212,9 @@ module Pod
       end
 
       it "cats the first podspec from all podspecs" do
-        $stdin = StringIO.new("1\n", 'r')
+        UI.next_input = "1\n"
         run_command('spec', 'cat', '--show-all', 'AFNetworking')
         UI.output.should.include fixture('spec-repos/master/AFNetworking/1.2.0/AFNetworking.podspec').read
-        $stdin = STDIN
       end
     end
 
@@ -248,19 +247,17 @@ module Pod
       describe "#choose_from_array" do
 
         it "should return a valid index for the given array" do
-          $stdin = StringIO.new("1\n", 'r')
+          UI.next_input = "1\n"
           index = @sut.send(:choose_from_array, ['item1', 'item2', 'item3'], 'A message')
           UI.output.should.include "1: item1\n2: item2\n3: item3\nA message\n"
           index.should == 0
-          $stdin = STDIN
         end
 
         it "should raise when the index is out of bounds" do
-          $stdin = StringIO.new("4\n", 'r')
+          UI.next_input = "4\n"
           lambda { @sut.send(:choose_from_array, ['item1', 'item2', 'item3'], 'A message') }.should.raise Pod::Informative
-          $stdin = StringIO.new("0\n", 'r')
+          UI.next_input = "0\n"
           lambda { @sut.send(:choose_from_array, ['item1', 'item2', 'item3'], 'A message') }.should.raise Pod::Informative
-          $stdin = STDIN
         end
 
       end
