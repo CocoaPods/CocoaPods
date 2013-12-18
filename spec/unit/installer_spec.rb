@@ -392,30 +392,6 @@ module Pod
 
     describe "Integrating client projects" do
 
-      it "links the pod targets with the aggregate integration library target" do
-        spec = fixture_spec('banana-lib/BananaLib.podspec')
-        target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        target = AggregateTarget.new(target_definition, config.sandbox)
-        lib_definition = Podfile::TargetDefinition.new('BananaLib', nil)
-        lib_definition.store_pod('BananaLib')
-        pod_target = PodTarget.new([spec], lib_definition, config.sandbox)
-        target.pod_targets = [pod_target]
-
-        project = Xcodeproj::Project.new('path')
-        pods_target = project.new_target(:static_library, target.name, :ios)
-        target.target = pods_target
-
-        native_target = project.new_target(:static_library, pod_target.name, :ios)
-        pod_target.target = pods_target
-
-        @installer.stubs(:pods_project).returns(project)
-        @installer.stubs(:aggregate_targets).returns([target])
-        @installer.stubs(:pod_targets).returns([pod_target])
-
-        @installer.send(:link_aggregate_target)
-        pods_target.frameworks_build_phase.files.map(&:file_ref).should.include?(pod_target.target.product_reference)
-      end
-
       it "integrates the client projects" do
         @installer.stubs(:aggregate_targets).returns([AggregateTarget.new(nil, config.sandbox)])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)

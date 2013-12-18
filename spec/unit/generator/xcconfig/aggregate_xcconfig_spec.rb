@@ -9,6 +9,7 @@ module Pod
           @spec = fixture_spec('banana-lib/BananaLib.podspec')
           @consumer = @spec.consumer(:ios)
           target_definition = Podfile::TargetDefinition.new('Pods', nil)
+          target_definition.whitelist_pod_for_configuration("BananaLib", "Release")
           @target = AggregateTarget.new(target_definition, config.sandbox)
           @target.client_root = config.sandbox.root.dirname
           @target.stubs(:platform).returns(:ios)
@@ -16,7 +17,7 @@ module Pod
           @pod_target.stubs(:platform).returns(:ios)
           @pod_target.stubs(:spec_consumers).returns([@consumer])
           @target.pod_targets = [@pod_target]
-          @generator = AggregateXCConfig.new(@target)
+          @generator = AggregateXCConfig.new(@target, "Release")
         end
 
         it "returns the path of the pods root relative to the user project" do
@@ -71,6 +72,16 @@ module Pod
 
         it 'inherits the parent GCC_PREPROCESSOR_DEFINITIONS value' do
           @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should.include '$(inherited)'
+        end
+
+        it "links the pod targets with the aggregate integration library target" do
+          @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-lPods-BananaLib'
+        end
+
+        it "does not links the pod targets with the aggregate integration library target for non-whitelisted configuration" do
+          @generator = AggregateXCConfig.new(@target, "Debug")
+          @xcconfig = @generator.generate
+          @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-lPods-BananaLib'
         end
 
         #-----------------------------------------------------------------------#

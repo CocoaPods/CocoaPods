@@ -11,9 +11,11 @@ module Pod
       attr_reader :target
 
       # @param  [Target] target @see target
+      # @param  [String] build_config Name of the build config to generate this xcconfig for
       #
-      def initialize(target)
+      def initialize(target, build_config)
         @target = target
+        @build_config = build_config
       end
 
       # @return [Xcodeproj::Config] The generated xcconfig.
@@ -54,6 +56,8 @@ module Pod
         })
 
         target.pod_targets.each do |pod_target|
+          next unless pod_target.include_in_build_config? @build_config
+
           pod_target.file_accessors.each do |file_accessor|
             XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
             file_accessor.vendored_frameworks.each do |vendored_framework|
@@ -63,6 +67,11 @@ module Pod
               XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, target.sandbox.root)
             end
           end
+
+          # This is how the Pods project now links with dependencies, instead of a "Link with Libraries" build phase
+          @xcconfig.merge!({
+            'OTHER_LDFLAGS' => "-l#{pod_target.name}"
+          })
         end
 
         # TODO Need to decide how we are going to ensure settings like these
