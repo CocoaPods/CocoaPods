@@ -67,7 +67,7 @@ module Pod
         base_url = 'https://trunk.cocoapods.org/api/v1'
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
-          REST.post("#{base_url}/pods", spec.to_yaml, 'Content-Type' => 'text/yaml', 'Authorization' => "Token #{tokens.sample}")
+          REST.post("#{base_url}/pods", spec.to_json, 'Content-Type' => 'text/yaml', 'Authorization' => "Token #{tokens.sample}")
         end
       rescue Exception
         # Nothing

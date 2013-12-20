@@ -13,12 +13,11 @@ module Pod
 
     describe Command::IPC::Spec do
 
-      it "converts a podspec to yaml and prints it to STDOUT" do
+      it "converts a podspec to JSON and prints it to STDOUT" do
         out = run_command('ipc', 'spec', fixture('banana-lib/BananaLib.podspec'))
-        out.should.include('---')
-        out.should.match /name: BananaLib/
-        out.should.match /version: .1\.0./
-        out.should.match /description: Full of chunky bananas./
+        out.should.match /"name": "BananaLib"/
+        out.should.match /"version": "1.0"/
+        out.should.match /"description": "Full of chunky bananas."/
       end
 
     end
@@ -41,7 +40,7 @@ module Pod
 
     describe Command::IPC::List do
 
-      it "converts a podspec to yaml and prints it to STDOUT" do
+      it "prints a list of podspecs in the yaml format and prints it to STDOUT" do
         spec = fixture_spec('banana-lib/BananaLib.podspec')
         set = Specification.new('BananaLib')
         set.stubs(:specification).returns(spec)

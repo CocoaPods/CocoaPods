@@ -13,8 +13,8 @@ module Pod
 
       class Spec < IPC
 
-        self.summary = 'Converts a podspec to YAML.'
-        self.description = 'Converts a podspec to YAML and prints it to STDOUT.'
+        self.summary = 'Converts a podspec to JSON.'
+        self.description = 'Converts a podspec to JSON and prints it to STDOUT.'
         self.arguments = 'PATH'
 
         def initialize(argv)
@@ -29,7 +29,7 @@ module Pod
 
         def run
           spec = Specification.from_file(@path)
-          output_pipe.puts spec.to_yaml
+          output_pipe.puts spec.to_json
         end
 
       end

@@ -4,6 +4,20 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+###### Breaking
+
+* The command `podfile_info` is now a plugin offered by CocoaPods.
+  As a result, the command has been removed from CocoaPods.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1589](https://github.com/CocoaPods/CocoaPods/issues/1589)
+
+* JSON has been adopted as the format to store specifications. As a result
+  the `pod ipc spec` command returns a JSON representation and the YAML
+  specifications are not supported anymore. JSON specifications adopt the
+  `.podspec.json` extension.
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1568](https://github.com/CocoaPods/CocoaPods/pull/1568)
+
 ###### Enhancements
 
 * Introduced `pod try` the easiest way to test the example project of a pod.  
@@ -49,13 +63,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   the `--web` option.
   [Florian Hanke](https://github.com/floere)
   [#1643][https://github.com/CocoaPods/CocoaPods/pull/1682]
-
-###### Refactor
-
-* The command `podfile_info` is now a plugin offered by CocoaPods.
-  As a result, the command has been removed from CocoaPods.  
-  [Joshua Kalpin](https://github.com/Kapin)
-  [#1589](https://github.com/CocoaPods/CocoaPods/issues/1589)
 
 ###### Bug Fixes
 
