@@ -143,19 +143,19 @@ module Pod
         if source_name
           specified_source = aggregate.all.find { |s| s.name == source_name }
           raise Informative, "Unable to find the `#{source_name}` repo."    unless specified_source
-          raise Informative, "The `#{source_name}` repo is not a git repo." unless git_repo?(specified_source.repo)
+          raise Informative, "The `#{source_name}` repo is not a git repo." unless git_repo?(specified_source.data_provider.repo)
           sources = [specified_source]
         else
-          sources = aggregate.all.select { |source| git_repo?(source.repo) && git_remote_reachable?(source.repo) }
+          sources = aggregate.all.select { |source| git_repo?(source.data_provider.repo) && git_remote_reachable?(source.data_provider.repo) }
         end
 
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            Dir.chdir(source.repo) do
+            Dir.chdir(source.data_provider.repo) do
               output = git!("pull")
               UI.puts output if show_output && !config.verbose?
             end
-            check_version_information(source.repo)
+            check_version_information(source.data_provider.repo)
           end
         end
       end
