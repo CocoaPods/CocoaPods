@@ -1,22 +1,21 @@
 # Set up coverage analysis
 #-----------------------------------------------------------------------------#
 
-
-if Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new("1.9")
-  if ENV['CI'] || ENV['GENERATE_COVERAGE']
-    require 'simplecov'
-    require 'coveralls'
-
-    if ENV['CI']
-      SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-    elsif ENV['GENERATE_COVERAGE']
-      SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
-    end
-    SimpleCov.start do
-      add_filter "/spec_helper/"
-    end
-  end
-end
+# if Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new("1.9")
+#   if ENV['CI'] || ENV['GENERATE_COVERAGE']
+#     require 'simplecov'
+#     require 'coveralls'
+#
+#     if ENV['CI']
+#       SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+#     elsif ENV['GENERATE_COVERAGE']
+#       SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
+#     end
+#     SimpleCov.start do
+#       add_filter "/spec_helper/"
+#     end
+#   end
+# end
 
 # Set up
 #-----------------------------------------------------------------------------#
