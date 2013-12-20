@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 3f71c7e99a4e7919053ff00787974638fd1fdc16
+  revision: e82b1c846c85486f725fab849ec0d1bab5631dc7
   branch: master
   specs:
     cocoapods-core (0.28.0)
@@ -35,15 +35,16 @@ GIT
 
 GIT
   remote: https://github.com/alloy/kicker.git
-  revision: 56d7bc857278cc00900d37ef0cf2167cf606b57c
+  revision: 87b0047202c0320d4ef62e1f1a4b2cbdefadf008
   branch: master
   specs:
-    kicker (2.6.1)
-      listen (~> 1.1.0)
+    kicker (3.0.0)
+      listen (~> 1.3.0)
+      notify (~> 0.5.2)
 
 GIT
   remote: https://github.com/irrationalfab/PrettyBacon.git
-  revision: 926c214ade1ec1cbc9544d603e36f15a780f7e68
+  revision: eaf7e6c786fd5ccc6fb88e943bf7c5e6c27569a3
   branch: master
   specs:
     prettybacon (0.0.1)
@@ -68,7 +69,7 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.2.15)
+    activesupport (3.2.16)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     awesome_print (1.2.0)
@@ -83,54 +84,53 @@ GEM
       term-ansicolor
       thor
     diffy (3.0.1)
-    docile (1.1.0)
+    docile (1.1.1)
     escape (0.0.4)
     ffi (1.9.3)
     fuzzy_match (2.0.4)
-    github-markup (0.7.5)
-    i18n (0.6.5)
+    github-markup (1.0.0)
+    i18n (0.6.9)
     json (1.8.1)
     json_pure (1.8.1)
-    listen (1.1.6)
+    listen (1.3.1)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
-    lockfile (2.1.0)
     metaclass (0.0.1)
     method_source (0.8.2)
-    mime-types (1.25)
+    mime-types (1.25.1)
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
     multi_json (1.8.2)
-    nap (0.5.1)
+    nap (0.6.0)
+    notify (0.5.2)
     open4 (1.3.0)
-    posix-spawn (0.3.6)
-    pry (0.9.12.3)
+    posix-spawn (0.3.8)
+    pry (0.9.12.4)
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
     pygments.rb (0.5.4)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
-    rake (10.1.0)
+    rake (10.1.1)
     rb-fsevent (0.9.3)
-    rb-inotify (0.9.2)
+    rb-inotify (0.9.3)
       ffi (>= 0.5.0)
     rb-kqueue (0.2.0)
       ffi (>= 0.5.0)
     redcarpet (2.3.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    ruby-prof (0.13.0)
-    simplecov (0.8.1)
+    ruby-prof (0.13.1)
+    simplecov (0.8.2)
       docile (~> 1.1.0)
-      lockfile (>= 2.1.0)
       multi_json
       simplecov-html (~> 0.8.0)
     simplecov-html (0.8.0)
-    slop (3.4.6)
+    slop (3.4.7)
     term-ansicolor (1.2.2)
       tins (~> 0.8)
     thor (0.18.1)
