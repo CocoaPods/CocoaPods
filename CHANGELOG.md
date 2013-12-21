@@ -42,7 +42,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The `pod search <query>` command now supports regular expressions
   for the query parameter when searching using the option `--full`.  
   [Florian Hanke](https://github.com/floere)
-  [#1643][https://github.com/CocoaPods/CocoaPods/pull/1643]
+  [#1643](https://github.com/CocoaPods/CocoaPods/pull/1643)
 
 * Pod lib lint now accepts multiple podspecs in the same folder.  
   [kra Larivain/OpenTable](https://github.com/opentable)
@@ -57,12 +57,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   when searching using the option `--web`. Options `--ios` and `--osx` are
   fully supported.
   [Florian Hanke](https://github.com/floere)
-  [#1643][https://github.com/CocoaPods/CocoaPods/pull/1682]
+  [#1643](https://github.com/CocoaPods/CocoaPods/pull/1682)
 
 * The `pod search <query>` command now supports multiword queries when using
   the `--web` option.
   [Florian Hanke](https://github.com/floere)
-  [#1643][https://github.com/CocoaPods/CocoaPods/pull/1682]
+  [#1643](https://github.com/CocoaPods/CocoaPods/pull/1682)
 
 ###### Bug Fixes
 
