@@ -15,9 +15,9 @@ module Pod
 
       it "converts a podspec to JSON and prints it to STDOUT" do
         out = run_command('ipc', 'spec', fixture('banana-lib/BananaLib.podspec'))
-        out.should.match /"name": "BananaLib"/
-        out.should.match /"version": "1.0"/
-        out.should.match /"description": "Full of chunky bananas."/
+        out.should.match /"name":"BananaLib"/
+        out.should.match /"version":"1.0"/
+        out.should.match /"description":"Full of chunky bananas."/
       end
 
     end
