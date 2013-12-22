@@ -34,7 +34,8 @@ group :debugging do
   gem "kicker", :git => "https://github.com/alloy/kicker.git", :branch => "master"
   gem "awesome_print"
   gem "pry"
-  gem "ruby-prof"
+  # The released gem leads to stack too deep when profiling a full run.
+  gem "ruby-prof", :git => "https://github.com/ruby-prof/ruby-prof.git"
 end
 
 group :documentation do
