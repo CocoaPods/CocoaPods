@@ -6,6 +6,9 @@ end
 gemspec
 
 group :development do
+  # Only while we test the trunk app.
+  gem 'cocoapods-trunk', :git => "https://github.com/alloy/cocoapods-trunk.git"
+
   # To develop the deps in tandem use the `LOCAL GIT REPOS` feature of Bundler.
   # For more info see http://bundler.io/git.html#local
   gem 'cocoapods-core',       :git => "https://github.com/CocoaPods/Core.git", :branch => 'master'

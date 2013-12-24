@@ -34,6 +34,15 @@ GIT
     cocoapods-downloader (0.3.0)
 
 GIT
+  remote: https://github.com/alloy/cocoapods-trunk.git
+  revision: bb56344df6085d1e9329a40fa7b62ec1b9b54335
+  specs:
+    cocoapods-trunk (0.0.1)
+      json (~> 1.8)
+      nap (>= 0.6)
+      netrc
+
+GIT
   remote: https://github.com/alloy/kicker.git
   revision: 87b0047202c0320d4ef62e1f1a4b2cbdefadf008
   branch: master
@@ -96,6 +105,7 @@ GEM
     fuzzy_match (2.0.4)
     github-markup (1.0.0)
     i18n (0.6.9)
+    json (1.8.1)
     json_pure (1.8.1)
     listen (1.3.1)
       rb-fsevent (>= 0.9.3)
@@ -110,6 +120,7 @@ GEM
       mocha (>= 0.13.0)
     multi_json (1.8.2)
     nap (0.6.0)
+    netrc (0.7.7)
     notify (0.5.2)
     open4 (1.3.0)
     posix-spawn (0.3.8)
@@ -152,6 +163,7 @@ DEPENDENCIES
   cocoapods!
   cocoapods-core!
   cocoapods-downloader!
+  cocoapods-trunk!
   coveralls
   diffy
   github-markup
