@@ -68,7 +68,7 @@ module Pod
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
           REST.post("#{base_url}/pods", spec.to_json, 'Content-Type' => 'application/json; charset=utf-8',
-                                                      'Authorization' => "Token 46dbd9b53eedd840355750621e6385dd")
+                                                      'Authorization' => "Token 9300632274827cd3e6dde24bf9c608c3")
         end
       rescue Exception
         # Nothing
