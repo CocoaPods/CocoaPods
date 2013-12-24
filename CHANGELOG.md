@@ -2,7 +2,10 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+## 0.29.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
+• [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)
+• [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.2.0...0.3.0)
 
 ###### Breaking
 
@@ -117,6 +120,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   using the namespaced syntax (e.g. `#import <MyPod/Header.h>`).  
   [kra Larivain/OpenTable](https://github.com/opentable)
   [#1514](https://github.com/CocoaPods/CocoaPods/pull/1514)
+
 
 ## 0.28.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.27.1...0.28.0)

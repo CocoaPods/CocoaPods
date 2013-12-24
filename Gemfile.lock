@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 8e106c6346de4c8896079f7926785679997e4093
+  revision: 64a6edae072712a65ddacb8db6375635cb00c7dc
   branch: master
   specs:
     cocoapods-core (0.28.0)
@@ -52,7 +52,7 @@ GIT
 
 GIT
   remote: https://github.com/ruby-prof/ruby-prof.git
-  revision: befe13fdb4a89a3b86d15552c9bb732a9f9c3875
+  revision: 14754897372e986b26a803d412140bc322c8dadd
   specs:
     ruby-prof (0.13.1)
 
