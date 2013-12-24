@@ -61,16 +61,19 @@ module Pod
       # @return [void] Silently test the CocoaPods trunk service.
       #
       def test_trunk
+        return if skip_test_trunk
         return unless @repo == "master"
         require 'rest'
         base_url = 'https://trunk.cocoapods.org/api/v1'
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
-          REST.post("#{base_url}/pods", spec.to_json, 'Content-Type' => 'application/json; charset=utf-8', 'Authorization' => "Token 46dbd9b53eedd840355750621e6385dd")
+          REST.post("#{base_url}/pods", spec.to_json, 'Content-Type' => 'application/json; charset=utf-8',
+                                                      'Authorization' => "Token 46dbd9b53eedd840355750621e6385dd")
         end
       rescue Exception
         # Nothing
       end
+      attr_accessor :skip_test_trunk
 
       # Performs a full lint against the podspecs.
       #
