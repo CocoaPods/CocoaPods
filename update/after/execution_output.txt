@@ -15,23 +15,24 @@ Downloading dependencies
 
 -> Installing Reachability (3.1.0)
  > GitHub download
-   $ /usr/local/bin/git config core.bare
+   $ /usr/bin/git config core.bare
    true
-   $ /usr/local/bin/git config core.bare
+   $ /usr/bin/git config core.bare
    true
-   $ /usr/local/bin/git rev-list --max-count=1 v3.1.0
+   $ /usr/bin/git rev-list --max-count=1 v3.1.0
    f7176f4798d068d233dca5223ae4bd9c8059e830
  > Cloning to Pods folder
-     $ /usr/local/bin/git clone "CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6"
+     $ /usr/bin/git clone "CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6"
      "ROOT/tmp/update/Pods/Reachability"
      Cloning into 'ROOT/tmp/update/Pods/Reachability'...
      done.
-   $ /usr/local/bin/git fetch origin tags/v3.1.0 2>&1
+     Checking connectivity... done
+   $ /usr/bin/git fetch origin tags/v3.1.0 2>&1
    From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
     * tag               v3.1.0     -> FETCH_HEAD
-   $ /usr/local/bin/git reset --hard FETCH_HEAD
+   $ /usr/bin/git reset --hard FETCH_HEAD
    HEAD is now at f7176f4 updated podspec
-   $ /usr/local/bin/git checkout -b activated-pod-commit 2>&1
+   $ /usr/bin/git checkout -b activated-pod-commit 2>&1
    Switched to a new branch 'activated-pod-commit'
   - Running pre install hooks
 
