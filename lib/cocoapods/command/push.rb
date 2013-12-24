@@ -61,7 +61,6 @@ module Pod
       # @return [void] Silently test the CocoaPods trunk service.
       #
       def test_trunk
-        return if skip_test_trunk
         return unless @repo == "master"
         require 'rest'
         base_url = 'https://trunk.cocoapods.org/api/v1'
@@ -73,7 +72,6 @@ module Pod
       rescue Exception
         # Nothing
       end
-      attr_accessor :skip_test_trunk
 
       # Performs a full lint against the podspecs.
       #
