@@ -28,10 +28,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 9ab905033f9ea9230b462b430a6aca0ffd7efa2a
+  revision: 522b3bbb344c5dad1bf8b7b54ab73f2b04b7898e
   branch: master
   specs:
-    cocoapods-downloader (0.2.0)
+    cocoapods-downloader (0.3.0)
 
 GIT
   remote: https://github.com/alloy/kicker.git
@@ -63,7 +63,7 @@ PATH
       activesupport (>= 3.2.15, < 4)
       claide (~> 0.4.0)
       cocoapods-core (= 0.28.0)
-      cocoapods-downloader (~> 0.2.0)
+      cocoapods-downloader (~> 0.3.0)
       cocoapods-try (~> 0.1.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
