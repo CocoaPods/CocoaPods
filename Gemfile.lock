@@ -35,7 +35,7 @@ GIT
 
 GIT
   remote: https://github.com/alloy/cocoapods-trunk.git
-  revision: bb56344df6085d1e9329a40fa7b62ec1b9b54335
+  revision: 974d3497714139d49079187836cfbc15b18bcf37
   specs:
     cocoapods-trunk (0.0.1)
       json (~> 1.8)
@@ -61,7 +61,7 @@ GIT
 
 GIT
   remote: https://github.com/ruby-prof/ruby-prof.git
-  revision: 14754897372e986b26a803d412140bc322c8dadd
+  revision: 39757dfe15d7ffb31dcb5b8f18a30b694d6445f9
   specs:
     ruby-prof (0.13.1)
 
@@ -73,7 +73,7 @@ PATH
       claide (~> 0.4.0)
       cocoapods-core (= 0.28.0)
       cocoapods-downloader (~> 0.3.0)
-      cocoapods-try (~> 0.1.0)
+      cocoapods-try-release-fix (~> 0.1.1)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
@@ -89,7 +89,7 @@ GEM
       multi_json (~> 1.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
-    cocoapods-try (0.1.0)
+    cocoapods-try-release-fix (0.1.1)
     coderay (1.1.0)
     colored (1.2)
     coveralls (0.7.0)
