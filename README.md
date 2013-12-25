@@ -1,12 +1,12 @@
-# CocoaPods
+![CocoaPods Logo](https://raw.github.com/CocoaPods/shared_resources/master/assets/cocoapods-banner-readme.png)
 
-### The Objective-C dependency manager
+### CocoaPods: The Objective-C dependency manager
 
 [![Build Status](https://travis-ci.org/CocoaPods/CocoaPods.png?branch=master)](https://travis-ci.org/CocoaPods/CocoaPods)
 [![Gem Version](https://badge.fury.io/rb/cocoapods.png)](http://badge.fury.io/rb/cocoapods)
 [![Code Climate](https://codeclimate.com/github/CocoaPods/CocoaPods.png)](https://codeclimate.com/github/CocoaPods/CocoaPods)
 
-CocoaPods manages dependencies for your Xcode project.
+CocoaPods manages dependencies for your Xcode projects.
 
 You specify the dependencies for your project in one easy text file. CocoaPods
 resolves dependencies between libraries, fetches source code for the
