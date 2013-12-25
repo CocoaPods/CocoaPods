@@ -1,6 +1,6 @@
 # CocoaPods
 
-### the Objective-C dependency manager
+### The Objective-C dependency manager
 
 [![Build Status](https://travis-ci.org/CocoaPods/CocoaPods.png?branch=master)](https://travis-ci.org/CocoaPods/CocoaPods)
 [![Gem Version](https://badge.fury.io/rb/cocoapods.png)](http://badge.fury.io/rb/cocoapods)
@@ -17,10 +17,8 @@ Ultimately, the goal is to improve discoverability of, and engagement in, third
 party open-source libraries, by creating a more centralized ecosystem.
 
 Installing and updating CocoaPods is very easy. Don't miss the [Installation
-guide](http://docs.cocoapods.org/guides/installing_cocoapods.html) and the
-[Getting started guide](http://docs.cocoapods.org/guides/getting_started.html).
-See the [NSScreencast](https://twitter.com/NSScreencast) episode about [using
-CocoaPods](http://nsscreencast.com/episodes/5-cocoapods) for a quick overview.
+guide](http://guides.cocoapods.org/using/getting-started.html#installation) and the
+[Getting started guide](http://guides.cocoapods.org/using/getting-started.html).
 
 
 ## Sponsors
