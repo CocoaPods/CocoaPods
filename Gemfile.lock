@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: ceae7a7be45e760830ee95a7b4481bdab6df149d
+  revision: 0704b7772370feb8be154ace0ce48e09f215aeaf
   branch: master
   specs:
     xcodeproj (0.14.1)
@@ -61,9 +61,9 @@ GIT
 
 GIT
   remote: https://github.com/ruby-prof/ruby-prof.git
-  revision: 39757dfe15d7ffb31dcb5b8f18a30b694d6445f9
+  revision: b56c1268ba001f5eb55f940ca1c83bc6b83a9752
   specs:
-    ruby-prof (0.13.1)
+    ruby-prof (0.14.2)
 
 PATH
   remote: .
@@ -132,7 +132,7 @@ GEM
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
     rake (10.1.1)
-    rb-fsevent (0.9.3)
+    rb-fsevent (0.9.4)
     rb-inotify (0.9.3)
       ffi (>= 0.5.0)
     rb-kqueue (0.2.0)
