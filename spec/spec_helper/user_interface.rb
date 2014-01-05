@@ -31,6 +31,9 @@ module Pod
       def gets
         @next_input
       end
+
+      def print_warnings
+      end
     end
   end
 end
