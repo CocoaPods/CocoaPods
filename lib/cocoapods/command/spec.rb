@@ -492,13 +492,16 @@ Pod::Spec.new do |s|
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  Specify the authors of the library, with email addresses. Email addresses
-  #  of the authors by using the SCM log. E.g. $ git log. If no email can be
-  #  found CocoaPods accept just the names.
+  #  of the authors are extracted from the SCM log. E.g. $ git log. CocoaPods also
+  #  accepts just a name if you'd rather not provide an email addresses.
   #
-
+  #  Specify a social_media_url where others can refer to, for example a twitter
+  #  profile URL.
+  #
+  
   s.author             = { "#{data[:author_name]}" => "#{data[:author_email]}" }
-  # s.authors          = { "#{data[:author_name]}" => "#{data[:author_email]}", "other author" => "email@address.com" }
-  # s.author           = '#{data[:author_name]}', 'other author'
+  # Or just: s.author  = '#{data[:author_name]}'
+  # s.authors          = { "#{data[:author_name]}" => "#{data[:author_email]}" }
   # s.social_media_url = "http://twitter.com/#{data[:author_name]}"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
