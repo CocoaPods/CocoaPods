@@ -67,6 +67,24 @@ module Pod
   end
 end
 
+# README!
+#
+# Adds {Command::Spec::Edit#exec} to fake the {Kernel#exec} call that would
+# normally be made during an edit.
+#
+module Pod
+  class Command
+    class Spec
+      class Edit
+        def exec(cmd, *args)
+          UI.puts "#{cmd} #{args.join(' ')}"
+          raise SystemExit
+        end
+      end
+    end
+  end
+end
+
 #-----------------------------------------------------------------------------#
 
 ENV['SKIP_SETUP'] = 'true'
