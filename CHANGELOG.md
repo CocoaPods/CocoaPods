@@ -100,6 +100,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [kra Larivain/OpenTable](https://github.com/opentable)
   [#1514](https://github.com/CocoaPods/CocoaPods/pull/1514)
 
+* `pod push` now properly checks that the repo has changed before attempting
+  to commit. This only affected pods with special characters (such as `+`) in
+  their names.
+  [Gordon Fontenot](https://github.com/gfontenot)
+  [#1739](https://github.com/CocoaPods/CocoaPods/pull/1739)
+
 ## 0.28.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.27.1...0.28.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.27.1...0.28.0)
