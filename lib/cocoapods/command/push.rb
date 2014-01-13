@@ -138,7 +138,7 @@ module Pod
           FileUtils.cp(spec_file, output_path)
           Dir.chdir(repo_dir) do
             # only commit if modified
-            if git!("status --porcelain 2>&1").include? spec.name
+            if git!("status --porcelain 2>&1").include?(spec.name)
               UI.puts " - #{message}"
               git!("add #{spec.name}")
               git!("commit --no-verify -m '#{message}'")
