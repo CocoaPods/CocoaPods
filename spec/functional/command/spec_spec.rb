@@ -221,8 +221,43 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe Command::Spec::Edit do
+      before do
+        @path_saved = ENV['PATH']
+      end
+
+      after do
+        ENV['PATH'] = @path_saved
+      end
+
       it_should_check_for_existence("edit")
       it_should_check_for_ambiguity("edit")
+
+      it "would execute the editor specified in ENV with the given podspec" do
+        ENV['EDITOR'] = 'podspeceditor'
+        lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise SystemExit
+        UI.output.should.include '/bin/sh -i -c podspeceditor "$@" --'
+        UI.output.should.include 'fixtures/spec-repos/master/AFNetworking'
+      end
+
+      it "will raise if no editor is found" do
+        ENV['PATH'] = ''
+        ENV['EDITOR'] = nil
+        lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise Informative
+      end
+
+      it "would execute an editor with the first podspec from all podspecs" do
+        ENV['EDITOR'] = 'podspeceditor'
+        UI.next_input = "1\n"
+        lambda { command('spec', 'edit', '--show-all', 'AFNetworking').run }.should.raise SystemExit
+        UI.output.should.include '/bin/sh -i -c podspeceditor "$@" --'
+        UI.output.should.include 'fixtures/spec-repos/master/AFNetworking/1.2.0/AFNetworking.podspec'
+      end
+
+      it "complains if it can't find a spec file for the given spec" do
+        File.stubs(:exists?).returns(false)
+        lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise Informative
+        File.unstub(:exists?)
+      end
     end
 
     #-------------------------------------------------------------------------#
