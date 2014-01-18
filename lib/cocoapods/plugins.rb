@@ -11,6 +11,12 @@ module Pod
   # hooks and not remove keys from the options hash (honoured
   # strictly from version 1.0).
   #
+  # The supported hook names are:
+  #
+  # - post_install: Called after CocoaPods completed the installation and has
+  #   written all files to disk (if plugins want to modify the projet they need
+  #   to open it). Receives the complete list of the specifications.
+  #
   module Plugins
     class << self
 

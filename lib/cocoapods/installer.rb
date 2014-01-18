@@ -116,6 +116,7 @@ module Pod
         run_post_install_hooks
         write_pod_project
         write_lockfiles
+        run_plugins_post_install_hooks
       end
     end
 
@@ -445,6 +446,21 @@ module Pod
       end
     end
 
+    # Runs the regiesred calbakcs for the plugins post install hooks.
+    #
+    def run_plugins_post_install_hooks
+      user_targets = []
+      aggregate_targets.each do |aggregate_target|
+        user_targets.concat(aggregate_target.user_target_descriptions)
+      end
+
+      options = {
+        :user_targets => user_targets,
+        :sandbox_root => sandbox.root.to_s,
+      }
+      Plugins.run(:post_install, options)
+    end
+
     #-------------------------------------------------------------------------#
 
     private
@@ -528,7 +544,6 @@ module Pod
         UI.message "- Podfile" if executed
       end
     end
-
 
     # Runs the post install hook of the given specification with the given
     # library representation.
