@@ -27,6 +27,41 @@ module Pod
           UI.output.should.include "passed validation"
         end
     end
+
+    it "fails to lint a broken spec file and cleans up" do
+        Dir.chdir(temporary_directory) do
+          open(temporary_directory + 'Broken.podspec', 'w') { |f|
+            f << 'Pod::Spec.new do |spec|'
+            f << "spec.name         = 'Broken'"
+            f << 'end'
+          }
+          tmp_validator = Validator.new('Broken.podspec')
+          lint_path = tmp_validator.validation_dir
+
+          lambda { run_command('lib', 'lint', 'Broken.podspec') }.should.raise Pod::Informative
+
+          UI.output.should.include "Missing required attribute"
+
+          lint_path.exist?.should == false
+        end
+    end
+
+    it "fails to lint a broken spec file and leaves lint directory" do
+        Dir.chdir(temporary_directory) do
+          open(temporary_directory + 'Broken.podspec', 'w') { |f|
+            f << 'Pod::Spec.new do |spec|'
+            f << "spec.name         = 'Broken'"
+            f << 'end'
+          }
+          lambda { run_command('lib', 'lint', 'Broken.podspec', '--no-clean') }.should.raise Pod::Informative
+
+          UI.output.should.include "Pods project available at"
+          UI.output.should.include "Missing required attribute"
+
+          lint_dir = UI.output[/.*Pods project available at `(.*)` for inspection./,1]
+          Pathname.new(lint_dir).exist?.should == true
+        end
+    end
   end
 
   describe Command::Lib do
