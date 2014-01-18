@@ -2,15 +2,14 @@ module Pod
 
   # Simple hook system for plugins.
   #
-  # The system is based around the concept that plugins can
-  # register blocks for hooks with the given name. The blocks,
-  # to prevent compatibility issues, will receive one and
-  # only one argument: a hash which can include one or more
-  # keys.
+  # Plugins can register blocks for hooks with the given name.
+  # The blocks, to prevent compatibility issues, will receive
+  # one and only one argument: a hash which can include one or
+  # more keys.
   #
   # The implicipt promise of the plugin system is not to remove
-  # hooks and not remove keys from the options hash (honored
-  # strictly since version 1.0).
+  # hooks and not remove keys from the options hash (honoured
+  # strictly from version 1.0).
   #
   module Plugins
     class << self
@@ -30,7 +29,7 @@ module Pod
       #
       def register(name, &block)
         unless block
-          raise ArgumentError, "Unable to register non given block for #{name}"
+          raise ArgumentError, "Unable to register #{name} without being given a block"
         end
         @registrations ||= Hash.new
         @registrations[name] ||= Array.new
@@ -59,6 +58,8 @@ module Pod
           end
         end
       end
+
+      #-----------------------------------------------------------------------#
 
     end
   end
