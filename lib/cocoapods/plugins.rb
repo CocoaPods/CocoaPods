@@ -50,10 +50,12 @@ module Pod
       # @return [void]
       #
       def run(name, options)
-        blocks = @registrations[name]
-        if blocks
-          blocks.each do |block|
-            block.call(options)
+        if @registrations
+          blocks = @registrations[name]
+          if blocks
+            blocks.each do |block|
+              block.call(options)
+            end
           end
         end
       end

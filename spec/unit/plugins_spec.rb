@@ -23,8 +23,23 @@ module Pod
       @sut.register(:post_install) do |options|
         true.should.be.true
       end
-      options = {}
-      @sut.run(:post_install, options)
+      @sut.run(:post_install, {})
+    end
+
+    it "doesn't raises if no plugins have been registered" do
+      should.not.raise do
+        @sut.run(:post_install, {})
+      end
+    end
+
+
+    it "doesn't raises if no plugins for a specific hook have been registered" do
+      @sut.register(:post_install) do |options|
+        true.should.be.true
+      end
+      should.not.raise do
+        @sut.run(:pre_install, {})
+      end
     end
   end
 end
