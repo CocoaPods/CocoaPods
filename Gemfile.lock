@@ -34,6 +34,13 @@ GIT
     cocoapods-downloader (0.3.0)
 
 GIT
+  remote: https://github.com/CocoaPods/cocoapods-install-metadata/
+  revision: 5cca64b241288b396e39685cb553746abc337783
+  branch: master
+  specs:
+    cocoapods-install-metadata (0.1.0)
+
+GIT
   remote: https://github.com/alloy/cocoapods-trunk.git
   revision: 974d3497714139d49079187836cfbc15b18bcf37
   specs:
@@ -73,6 +80,7 @@ PATH
       claide (~> 0.4.0)
       cocoapods-core (= 0.29.0)
       cocoapods-downloader (~> 0.3.0)
+      cocoapods-install-metadata (~> 0.1.0)
       cocoapods-try-release-fix (~> 0.1.1)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -163,6 +171,7 @@ DEPENDENCIES
   cocoapods!
   cocoapods-core!
   cocoapods-downloader!
+  cocoapods-install-metadata!
   cocoapods-trunk!
   coveralls
   diffy
