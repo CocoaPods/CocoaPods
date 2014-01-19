@@ -42,6 +42,7 @@ module Pod
         @installer.stubs(:download_dependencies)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
+        @installer.stubs(:run_plugins_post_install_hooks)
       end
 
       it "in runs the pre-install hooks before cleaning the Pod sources" do

@@ -119,6 +119,7 @@ module Pod
         user_target[:specs] = specs
         user_target[:platform_name] = platform.name
         user_target[:platform_deployment_target] = platform.deployment_target.to_s
+        user_target[:cocoapods_target_label] = label
         user_targets << user_target
       end
       user_targets

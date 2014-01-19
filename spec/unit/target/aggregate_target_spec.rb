@@ -109,7 +109,8 @@ module Pod
           :user_project_path=>"SampleProject/SampleProject",
           :specs=>[@spec],
           :platform_name=>:ios,
-          :platform_deployment_target=>"7.0"
+          :platform_deployment_target=>"7.0",
+          :cocoapods_target_label=>"Pods"
         }]
         @sut.user_target_descriptions.should == expected
       end

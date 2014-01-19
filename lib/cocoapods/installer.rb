@@ -87,6 +87,7 @@ module Pod
       download_dependencies
       generate_pods_project
       integrate_user_project if config.integrate_targets?
+      run_plugins_post_install_hooks
     end
 
     def resolve_dependencies
@@ -116,7 +117,6 @@ module Pod
         run_post_install_hooks
         write_pod_project
         write_lockfiles
-        run_plugins_post_install_hooks
       end
     end
 
@@ -451,7 +451,9 @@ module Pod
     def run_plugins_post_install_hooks
       user_targets = []
       aggregate_targets.each do |aggregate_target|
-        user_targets.concat(aggregate_target.user_target_descriptions)
+        unless aggregate_target.specs.empty?
+          user_targets.concat(aggregate_target.user_target_descriptions)
+        end
       end
 
       options = {
