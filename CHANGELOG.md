@@ -16,6 +16,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Improves the error message when searching with an invalid regular expression.  
   [Kyle Fuller](https://github.com/kylef)
 
+* Improves `pod init` to save Xcode project file in Podfile when one was supplied.  
+  [Kyle Fuller](https://github.com/kylef)
+
 
 ## 0.29.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
