@@ -370,6 +370,16 @@ task :bootstrap, :use_bundle_dir? do |t, args|
   else
     execute_command "env XCODEPROJ_BUILD=1 bundle install"
   end
+
+  puts "Checking for hg and bzr..."
+  if `which hg`.strip.empty?
+    puts "Please install Mercurial: `brew install hg`"
+  end
+
+  if `which bzr`.strip.empty?
+    puts "Please install Bazaar: `brew install bzr`"
+  end
+  puts "done."
 end
 
 #-----------------------------------------------------------------------------#
