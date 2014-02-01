@@ -1,13 +1,13 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: b662b54098aa6ba5832c2382342cc363111bb3e6
+  revision: f5e4752d8cc4ba055e1d96713275e9955fea9f37
   branch: master
   specs:
     claide (0.4.0)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 316bcb444b7b06eb4c7e1d3244ff6739b5ccb398
+  revision: d281be39c464418c0b0ee8ba4788c4d2ce074de6
   branch: master
   specs:
     cocoapods-core (0.29.0)
@@ -28,14 +28,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 522b3bbb344c5dad1bf8b7b54ab73f2b04b7898e
+  revision: 103b49e41d1ed8aae2c8358abba4104ca06fc4d6
   branch: master
   specs:
     cocoapods-downloader (0.3.0)
 
 GIT
   remote: https://github.com/alloy/cocoapods-trunk.git
-  revision: 974d3497714139d49079187836cfbc15b18bcf37
+  revision: 20b9a8bb60ad6e59df4df7d4a960a4dd4a41afa0
   specs:
     cocoapods-trunk (0.0.1)
       json (~> 1.8)
@@ -99,7 +99,7 @@ GEM
       term-ansicolor
       thor
     diffy (3.0.1)
-    docile (1.1.1)
+    docile (1.1.2)
     escape (0.0.4)
     ffi (1.9.3)
     fuzzy_match (2.0.4)
@@ -111,20 +111,20 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
-    metaclass (0.0.1)
+    metaclass (0.0.2)
     method_source (0.8.2)
     mime-types (1.25.1)
-    mocha (0.14.0)
+    mocha (1.0.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    multi_json (1.8.2)
+    multi_json (1.8.4)
     nap (0.6.0)
     netrc (0.7.7)
     notify (0.5.2)
     open4 (1.3.0)
     posix-spawn (0.3.8)
-    pry (0.9.12.4)
+    pry (0.9.12.6)
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
