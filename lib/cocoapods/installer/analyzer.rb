@@ -415,9 +415,7 @@ module Pod
       def compute_user_build_configurations(target_definition, user_targets)
         if user_targets
           user_targets.map { |t| t.build_configurations.map(&:name) }.flatten.inject({}) do |hash, name|
-            unless name == 'Debug' || name == 'Release'
-              hash[name] = :release
-            end
+            hash[name] = name == 'Debug' ? :debug : :release
             hash
           end.merge(target_definition.build_configurations || {})
         else
