@@ -94,7 +94,7 @@ module Pod
           `git remote add origin #{upstream}`
           `git remote -v`
           `git fetch -q`
-          `git branch --set-upstream master origin/master`
+          `git branch --set-upstream-to=origin/master master`
         end
         config.repos_dir = SpecHelper.tmp_repos_path
 
