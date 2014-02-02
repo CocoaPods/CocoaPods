@@ -80,7 +80,7 @@ module Pod
       super
       config.silent = argv.flag?('silent', config.silent)
       config.verbose = self.verbose? unless self.verbose.nil?
-      unless self.colorize_output?
+      unless self.ansi_output?
         String.send(:define_method, :colorize) { |string , _| string }
       end
     end

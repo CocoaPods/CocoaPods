@@ -89,7 +89,7 @@ end
 #         environment.
 #
 def launch_binary(arguments, folder)
-  command = "CP_AGGRESSIVE_CACHE=TRUE #{POD_BINARY} #{arguments} --verbose --no-color 2>&1"
+  command = "CP_AGGRESSIVE_CACHE=TRUE #{POD_BINARY} #{arguments} --verbose --no-ansi 2>&1"
   Dir.chdir(TMP_DIR + folder) do
     output = `#{command}`
     it "$ pod #{arguments}" do
