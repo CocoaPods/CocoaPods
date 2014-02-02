@@ -46,7 +46,7 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
-      	header_search_path_flags = target.sandbox.public_headers.search_paths.map {|path| '-isystem'+path}
+        header_search_path_flags = target.sandbox.public_headers.search_paths.map { |path| "-isystem #{path}" }
         @xcconfig = Xcodeproj::Config.new({
           'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
           'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(target.sandbox.public_headers.search_paths),
@@ -56,7 +56,7 @@ module Pod
         })
 
         target.pod_targets.each do |pod_target|
-          next unless pod_target.include_in_build_config? @build_config
+          next unless pod_target.include_in_build_config?(@build_config)
 
           pod_target.file_accessors.each do |file_accessor|
             XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
