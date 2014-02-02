@@ -1,3 +1,5 @@
+require 'active_support/core_ext/string/inflections'
+
 module Pod
 
   # The Installer is responsible of taking a Podfile and transform it in the
