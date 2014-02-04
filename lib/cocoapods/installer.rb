@@ -94,6 +94,7 @@ module Pod
     def resolve_dependencies
       UI.section "Analyzing dependencies" do
         analyze
+        validate_whitelisted_configurations
         prepare_for_legacy_compatibility
         clean_sandbox
       end
@@ -172,6 +173,19 @@ module Pod
       analyzer.update_mode = update_mode
       @analysis_result = analyzer.analyze
       @aggregate_targets = analyzer.result.targets
+    end
+
+    # @raise  Raises an informative if the hooks raises.
+    def validate_whitelisted_configurations
+      whitelisted_configs = pod_targets.map do |target|
+        target.target_definition.all_whitelisted_configurations
+      end.flatten.uniq
+      all_user_configurations = analysis_result.all_user_build_configurations.keys
+
+      remainder = whitelisted_configs - all_user_configurations
+      unless remainder.empty?
+        raise Informative, "Unknown #{'configuration'.pluralize(remainder.size)} whitelisted: #{remainder.sort.to_sentence}."
+      end
     end
 
     # Prepares the Pods folder in order to be compatible with the most recent

@@ -181,7 +181,7 @@ module Pod
           else
             target.client_root = config.installation_root
             target.user_target_uuids = []
-            target.user_build_configurations = {}
+            target.user_build_configurations = target_definition.build_configurations || {}
             if target_definition.platform.name == :osx
               target.archs = '$(ARCHS_STANDARD_64_BIT)'
             end

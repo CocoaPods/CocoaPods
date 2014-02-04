@@ -124,6 +124,28 @@ module Pod
 
       #--------------------------------------#
 
+      describe "#validate_whitelisted_configurations" do
+        it "raises when a whitelisted configuration doesn’t exist in the user's project" do
+          target_definition = @installer.podfile.target_definitions.values.first
+          target_definition.whitelist_pod_for_configuration('JSONKit', 'YOLO')
+          @installer.send(:analyze)
+          should.raise Informative do
+            @installer.send(:validate_whitelisted_configurations)
+          end
+        end
+
+        it "does not raise if all whitelisted configurations exist in the user's project" do
+          target_definition = @installer.podfile.target_definitions.values.first
+          target_definition.whitelist_pod_for_configuration('JSONKit', 'Test')
+          @installer.send(:analyze)
+          should.not.raise do
+            @installer.send(:validate_whitelisted_configurations)
+          end
+        end
+      end
+
+      #--------------------------------------#
+
       describe "#clean_sandbox" do
 
         before do

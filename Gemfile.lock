@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 73c5a6b0c6331c4bfdc0d58360abf0f3f13beb56
+  revision: c53a14e82afa7bf03bcc6175c747a173d00c69b4
   branch: lookback-pods-by-config
   specs:
     cocoapods-core (0.29.0)
@@ -103,7 +103,7 @@ GEM
     escape (0.0.4)
     ffi (1.9.3)
     fuzzy_match (2.0.4)
-    github-markup (1.0.0)
+    github-markup (1.0.1)
     i18n (0.6.9)
     json (1.8.1)
     json_pure (1.8.1)
