@@ -2,6 +2,18 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+###### Bug Fixes
+
+* Properly quote the `-isystem` values in the xcconfig files.
+  [Eloy Durán](https://github.com/alloy)
+
+* Include configurations a user explicitely specifies in their Podfile when the
+  `--no-integrate` option is specified.
+  [Eloy Durán](https://github.com/alloy)
+
+
 ## 0.29.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)
