@@ -44,13 +44,13 @@ module Pod
       # @return [Xcodeproj::Config]
       #
       def generate
-      	header_search_path_flags = target.sandbox.public_headers.search_paths.map {|path| '-isystem'+path}
+        header_search_path_flags = target.sandbox.public_headers.search_paths
         @xcconfig = Xcodeproj::Config.new({
           'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
           'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(target.sandbox.public_headers.search_paths),
           'PODS_ROOT' => target.relative_pods_root,
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
-          'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_path_flags)
+          'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_path_flags, '-isystem')
         })
 
         target.pod_targets.each do |pod_target|

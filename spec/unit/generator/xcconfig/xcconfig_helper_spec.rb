@@ -37,6 +37,11 @@ module Pod
             result = @sut.quote(['string1', 'string2'])
             result.should == '"string1" "string2"'
           end
+
+          it "inserts an optional string and then the normal quoted string" do
+            result = @sut.quote(['string1', 'string2'], '-isystem')
+            result.should == '-isystem "string1" -isystem "string2"'
+          end
         end
 
         #---------------------------------------------------------------------#

@@ -13,10 +13,13 @@ module Pod
         # @param  [Array<String>] strings
         #         a list of strings.
         #
+        # @param  [String] optional prefix, such as a flag or option.
+        #
         # @return [String] the resulting string.
         #
-        def self.quote(strings)
-          strings.sort.map { |s| %W|"#{s}"| }.join(" ")
+        def self.quote(strings, prefix = nil)
+          prefix = "#{prefix} " if prefix
+          strings.sort.map { |s| %W|#{prefix}"#{s}"| }.join(" ")
         end
 
         # @return [String] the default linker flags. `-ObjC` is always included
