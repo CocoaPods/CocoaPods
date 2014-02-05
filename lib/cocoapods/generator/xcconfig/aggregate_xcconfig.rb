@@ -11,11 +11,13 @@ module Pod
       attr_reader :target
 
       # @param  [Target] target @see target
-      # @param  [String] build_config Name of the build config to generate this xcconfig for
       #
-      def initialize(target, build_config)
+      # @param  [String] configuration_name Name of the build configuration to
+      #         generate this xcconfig for.
+      #
+      def initialize(target, configuration_name)
         @target = target
-        @build_config = build_config
+        @configuration_name = configuration_name
       end
 
       # @return [Xcodeproj::Config] The generated xcconfig.
@@ -56,7 +58,7 @@ module Pod
         })
 
         target.pod_targets.each do |pod_target|
-          next unless pod_target.include_in_build_config?(@build_config)
+          next unless pod_target.include_in_build_config?(@configuration_name)
 
           pod_target.file_accessors.each do |file_accessor|
             XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
@@ -68,7 +70,8 @@ module Pod
             end
           end
 
-          # This is how the Pods project now links with dependencies, instead of a "Link with Libraries" build phase
+          # Add pod static lib to list of libraries that are to be linked with
+          # the user’s project.
           @xcconfig.merge!({
             'OTHER_LDFLAGS' => "-l#{pod_target.name}"
           })

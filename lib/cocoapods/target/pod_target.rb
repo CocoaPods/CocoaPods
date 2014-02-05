@@ -64,10 +64,11 @@ module Pod
       end.flatten
     end
 
-    # @param [String] build_config Name of the build configuration that caller is unsure if this target should
-    #                 be linked with.
-    def include_in_build_config?(build_config)
-      @target_definition.pod_whitelisted_for_configuration?(@specs[0].name, build_config)
+    # @param [String] configuration_name Name of the build configuration that
+    #        the caller is unsure of if this target should be linked with.
+    #
+    def include_in_build_config?(configuration_name)
+      @target_definition.pod_whitelisted_for_configuration?(pod_name, configuration_name)
     end
 
   end

@@ -35,7 +35,7 @@ module Pod
         target.build_configurations.each do |build_config|
           path = library.xcconfig_path build_config
           UI.message "- Generating #{build_config.name} xcconfig file at #{UI.path(path)}" do
-            gen = Generator::XCConfig::AggregateXCConfig.new(library, build_config)
+            gen = Generator::XCConfig::AggregateXCConfig.new(library, build_config.name)
             gen.save_as(path)
             library.xcconfigs[build_config.name] = gen.xcconfig
             xcconfig_file_ref = add_file_to_support_group(path)
