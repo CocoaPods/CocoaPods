@@ -15,14 +15,18 @@ module Pod
       DESC
 
       def self.options
-        [["--push", "Use this option to enable push access once granted"]].concat(super)
+        [
+          ["--no-shallow", "Clone full history so push will work"],
+          ["--push",       "Use this option to enable push access once granted"],
+        ].concat(super)
       end
 
       extend Executable
       executable :git
 
       def initialize(argv)
-        @push_option  = argv.flag?('push')
+        @shallow     = argv.flag?('shallow', true)
+        @push_option = argv.flag?('push')
         super
       end
 
@@ -77,7 +81,11 @@ module Pod
       # @return [void]
       #
       def add_master_repo
-        @command ||= Repo::Add.parse(['master', url, 'master']).run
+        @command ||= begin
+          cmd = ['master', url, 'master']
+          cmd << '--shallow' if @shallow
+          Repo::Add.parse(cmd).run
+        end
       end
 
       # Updates the master repo against the remote.
