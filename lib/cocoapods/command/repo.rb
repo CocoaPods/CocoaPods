@@ -19,7 +19,14 @@ module Pod
 
         self.arguments = 'NAME URL [BRANCH]'
 
+        def self.options
+          [
+            ["--shallow", "Create a shallow clone (fast clone, but no push capabilities)"],
+          ].concat(super)
+        end
+
         def initialize(argv)
+          @shallow = argv.flag?('shallow', false)
           @name, @url, @branch = argv.shift_argument, argv.shift_argument, argv.shift_argument
           super
         end
@@ -32,9 +39,14 @@ module Pod
         end
 
         def run
-          UI.section("Cloning spec repo `#{@name}` from `#{@url}`#{" (branch `#{@branch}`)" if @branch}") do
+          prefix = @shallow ? 'Creating shallow clone of' : 'Cloning'
+          UI.section("#{prefix} spec repo `#{@name}` from `#{@url}`#{" (branch `#{@branch}`)" if @branch}") do
             config.repos_dir.mkpath
-            Dir.chdir(config.repos_dir) { git!("clone --depth=1 '#{@url}' #{@name}") }
+            Dir.chdir(config.repos_dir) do
+              command = "clone '#{@url}' #{@name}"
+              command << ' --depth=1' if @shallow
+              git!(command)
+            end
             Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
             SourcesManager.check_version_information(dir)
           end

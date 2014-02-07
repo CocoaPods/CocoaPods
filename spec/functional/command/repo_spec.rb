@@ -46,6 +46,17 @@ module Pod
         Dir.chdir(repo2.dir) { `git symbolic-ref HEAD` }.should.include? 'my-branch'
       end
 
+      it "adds a spec-repo by creating a shallow clone" do
+        Dir.chdir(test_repo_path) do
+          `echo 'touch' > touch && git add touch && git commit -m 'updated'`
+        end
+        # Need to use file:// to test local use of --depth=1
+        run_command('repo', 'add', 'private', '--shallow', "file://#{test_repo_path}")
+        Dir.chdir(config.repos_dir + 'private') do
+          `git log --pretty=oneline`.strip.split("\n").size.should == 1
+        end
+      end
+
       it "updates a spec-repo" do
         repo1 = repo_make('repo1')
         repo2 = repo_clone('repo1', 'repo2')
