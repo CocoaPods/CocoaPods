@@ -61,6 +61,18 @@ module Pod
       end
     end
 
+    it "creates a full clone of the `master` repo when push access is requested" do
+      Dir.chdir(test_repo_path) do
+        `echo 'touch' > touch && git add touch && git commit -m 'updated'`
+      end
+      # Need to use file:// to test local use of --depth=1
+      Command::Setup.any_instance.stubs(:read_write_url).returns("file://#{test_repo_path}")
+      cmd = run_command('setup', '--push')
+      Dir.chdir(config.repos_dir + 'master') do
+        `git log --pretty=oneline`.strip.split("\n").size.should > 1
+      end
+    end
+
     it "preserves push access for the `master` repo" do
       output = run_command('setup')
       output.should.not.include "push"

@@ -25,8 +25,8 @@ module Pod
       executable :git
 
       def initialize(argv)
-        @shallow     = argv.flag?('shallow', true)
         @push_option = argv.flag?('push')
+        @shallow     = argv.flag?('shallow', !@push_option)
         super
       end
 
@@ -81,11 +81,9 @@ module Pod
       # @return [void]
       #
       def add_master_repo
-        @command ||= begin
-          cmd = ['master', url, 'master']
-          cmd << '--shallow' if @shallow
-          Repo::Add.parse(cmd).run
-        end
+        cmd = ['master', url, 'master']
+        cmd << '--shallow' if @shallow
+        Repo::Add.parse(cmd).run
       end
 
       # Updates the master repo against the remote.
@@ -117,7 +115,7 @@ module Pod
       #         be enabled.
       #
       def url
-        (push?) ? read_write_url : read_only_url
+        push? ? read_write_url : read_only_url
       end
 
       # @return [String] the read only url of the master repo.
