@@ -2,6 +2,15 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+[CocoaPods](https://github.com/jverkoey/CocoaPods/compare/0.29.0...master)
+
+###### Enhancements
+
+* Radically reduce first run pod setup bandwidth.  
+  [Jeff Verkoeyen](https://github.com/jverkoey)
+  [#1803](https://github.com/CocoaPods/CocoaPods/pull/1803)
+
 ## 0.29.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)
