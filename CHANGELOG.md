@@ -7,7 +7,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ###### Enhancements
 
-* Radically reduce first run pod setup bandwidth.  
+* Radically reduce first run pod setup bandwidth by creating a shallow clone of
+  the ‘master’ repo by default. Use the `--no-shallow` option to perform a full
+  clone instead.  
   [Jeff Verkoeyen](https://github.com/jverkoey)
   [#1803](https://github.com/CocoaPods/CocoaPods/pull/1803)
 
