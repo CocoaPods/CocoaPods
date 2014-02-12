@@ -461,9 +461,9 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "#{data[:name]}"
-  s.version      = "#{data[:version]}"
-  s.summary      = "#{data[:summary]}"
+  s.name         = '#{data[:name]}'
+  s.version      = '#{data[:version]}'
+  s.summary      = '#{data[:summary]}'
 
   s.description  = <<-DESC
                    A longer description of #{data[:name]} in Markdown format.
@@ -474,8 +474,8 @@ Pod::Spec.new do |s|
                    * Finally, don't worry about the indent, CocoaPods strips it!
                    DESC
 
-  s.homepage     = "#{data[:homepage]}"
-  # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.homepage     = '#{data[:homepage]}'
+  # s.screenshots  = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
 
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -499,10 +499,10 @@ Pod::Spec.new do |s|
   #  profile URL.
   #
   
-  s.author             = { "#{data[:author_name]}" => "#{data[:author_email]}" }
+  s.author             = { '#{data[:author_name]}' => '#{data[:author_email]}' }
   # Or just: s.author  = '#{data[:author_name]}'
-  # s.authors          = { "#{data[:author_name]}" => "#{data[:author_email]}" }
-  # s.social_media_url = "http://twitter.com/#{data[:author_name]}"
+  # s.authors          = { '#{data[:author_name]}' => '#{data[:author_email]}' }
+  # s.social_media_url = 'http://twitter.com/#{data[:author_name]}'
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -524,7 +524,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
+  s.source       = { :git => '#{data[:source_url]}', #{data[:ref_type]} => '#{data[:ref]}' }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -549,10 +549,10 @@ Pod::Spec.new do |s|
   #  non-essential files like tests, examples and documentation.
   #
 
-  # s.resource  = "icon.png"
-  # s.resources = "Resources/*.png"
+  # s.resource  = 'icon.png'
+  # s.resources = 'Resources/*.png'
 
-  # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
+  # s.preserve_paths = 'FilesToSave', 'MoreFilesToSave'
 
 
   # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
