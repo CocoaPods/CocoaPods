@@ -13,6 +13,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Jeff Verkoeyen](https://github.com/jverkoey)
   [#1803](https://github.com/CocoaPods/CocoaPods/pull/1803)
 
+* Improves the error message when searching with an invalid regular expression.  
+  [Kyle Fuller](https://github.com/kylef)
+
+
 ## 0.29.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)
