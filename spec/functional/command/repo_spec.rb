@@ -96,6 +96,14 @@ module Pod
         config.repos_dir = SpecHelper.tmp_repos_path
       end
 
+      it "complains when a repository name is missing" do
+        lambda { run_command('repo', 'remove') }.should.raise CLAide::Help
+      end
+
+      it "complains if the repository doesn't exist" do
+        lambda { run_command('repo', 'remove', 'nonexistant') }.should.raise CLAide::Help
+      end
+
       it "removes a spec-repo" do
         upstream = SpecHelper.temporary_directory + 'upstream'
         FileUtils.cp_r(test_repo_path, upstream)
