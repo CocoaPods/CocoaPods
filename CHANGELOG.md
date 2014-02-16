@@ -19,6 +19,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Improves `pod init` to save Xcode project file in Podfile when one was supplied.  
   [Kyle Fuller](https://github.com/kylef)
 
+###### Bug Fixes
+
+* Fixes a bug with `pod repo remove` silently handling permission errors.  
+  [Kyle Fuller](https://github.com/kylef)
+  #1778
+
 
 ## 0.29.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)

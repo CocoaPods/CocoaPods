@@ -163,6 +163,8 @@ module Pod
           super
           help! 'Deleting a repo needs a `NAME`.' unless @name
           help! "repo #{@name} does not exist" unless File.directory?(dir)
+          help! "You do not have permission to delete the #{@name} repository." \
+                "Perhaps try prefixing this command with sudo." unless File.writable?(dir)
         end
 
         def run

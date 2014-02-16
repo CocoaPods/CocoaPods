@@ -104,6 +104,14 @@ module Pod
         lambda { run_command('repo', 'remove', 'nonexistant') }.should.raise CLAide::Help
       end
 
+      it "complains if we do not have permission" do
+        File.stubs(:writable?).returns(false)
+        upstream = SpecHelper.temporary_directory + 'upstream'
+        FileUtils.cp_r(test_repo_path, upstream)
+        lambda { run_command('repo', 'remove', upstream) }.should.raise CLAide::Help
+        FileUtils.rm_rf(upstream)
+      end
+
       it "removes a spec-repo" do
         upstream = SpecHelper.temporary_directory + 'upstream'
         FileUtils.cp_r(test_repo_path, upstream)
