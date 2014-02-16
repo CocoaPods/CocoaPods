@@ -2,7 +2,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Command::Repo do
-    describe "In general" do
+    describe Command::Repo::Update do
       extend SpecHelper::Command
       extend SpecHelper::TemporaryRepos
 
@@ -23,9 +23,38 @@ module Pod
         lambda { command('repo', 'update').run }.should.not.raise
       end
 
+      it "updates a spec-repo" do
+        repo1 = repo_make('repo1')
+        repo2 = repo_clone('repo1', 'repo2')
+        repo_make_readme_change(repo1, 'Updated')
+        Dir.chdir(repo1) {`git commit -a -m "Update"`}
+        run_command('repo', 'update', 'repo2')
+        (repo2 + 'README').read.should.include 'Updated'
+      end
+    end
+
+    describe Command::Repo::Lint do
+      extend SpecHelper::Command
+      extend SpecHelper::TemporaryRepos
+
+      before do
+        set_up_test_repo
+        config.repos_dir = SpecHelper.tmp_repos_path
+      end
+
       it "lints a repository" do
         repo = fixture('spec-repos/test_repo').to_s
         lambda { run_command('repo', 'lint', repo) }.should.not.raise
+      end
+    end
+
+    describe Command::Repo::Add do
+      extend SpecHelper::Command
+      extend SpecHelper::TemporaryRepos
+
+      before do
+        set_up_test_repo
+        config.repos_dir = SpecHelper.tmp_repos_path
       end
 
       it "adds a spec-repo" do
@@ -56,14 +85,15 @@ module Pod
           `git log --pretty=oneline`.strip.split("\n").size.should == 1
         end
       end
+    end
 
-      it "updates a spec-repo" do
-        repo1 = repo_make('repo1')
-        repo2 = repo_clone('repo1', 'repo2')
-        repo_make_readme_change(repo1, 'Updated')
-        Dir.chdir(repo1) {`git commit -a -m "Update"`}
-        run_command('repo', 'update', 'repo2')
-        (repo2 + 'README').read.should.include 'Updated'
+    describe Command::Repo::Remove do
+      extend SpecHelper::Command
+      extend SpecHelper::TemporaryRepos
+
+      before do
+        set_up_test_repo
+        config.repos_dir = SpecHelper.tmp_repos_path
       end
 
       it "removes a spec-repo" do
