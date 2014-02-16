@@ -43,11 +43,14 @@ module Pod
     end
 
     def self.run(argv)
+      help! "You cannot run CocoaPods as root" if Process.uid == 0
+
       argv = CLAide::ARGV.new(argv)
       if argv.flag?('version')
         UI.puts VERSION
         exit 0
       end
+
       super(argv)
       UI.print_warnings
     end
