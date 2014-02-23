@@ -50,13 +50,18 @@ module Pod
       output.should.include? 'BananaLib'
     end
 
-    it "shows a friendly message when searching with invalid regex" do
+    it "shows a friendly message when locally searching with invalid regex" do
       lambda { run_command('search', '+') }.should.raise CLAide::Help
     end
 
     describe "option --web" do
 
       extend SpecHelper::TemporaryRepos
+
+      it "searches with invalid regex" do
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=NSAttributedString+CCLFormat')
+        run_command('search', '--web', 'NSAttributedString+CCLFormat')
+      end
 
       it "searches the web via the open! command" do
         Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=bananalib')

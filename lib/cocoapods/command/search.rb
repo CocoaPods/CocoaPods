@@ -36,9 +36,13 @@ module Pod
         super
         help! "A search query is required." unless @query
 
-        /#{@query.join(' ').strip}/
-      rescue RegexpError
-        help! "A valid regular expression is required."
+        unless @web
+          begin
+            /#{@query.join(' ').strip}/
+          rescue RegexpError
+            help! "A valid regular expression is required."
+          end
+        end
       end
 
       def run
