@@ -379,7 +379,6 @@ task :bootstrap, :use_bundle_dir? do |t, args|
   if `which bzr`.strip.empty?
     puts "Please install Bazaar: `brew install bzr`"
   end
-  puts "done."
 end
 
 #-----------------------------------------------------------------------------#
