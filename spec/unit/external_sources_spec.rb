@@ -295,7 +295,7 @@ module Pod
       it "raises if the podspec cannot be found" do
         @external_source.stubs(:params).returns(:path => temporary_directory)
         e = lambda { @external_source.send(:podspec_path) }.should.raise Informative
-        e.message.should.match /No podspec found/
+        e.message.should.match /No podspec found for `Reachability` in `#{temporary_directory}`/
       end
     end
   end
