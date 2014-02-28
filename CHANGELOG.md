@@ -2,6 +2,30 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+[CocoaPods](https://github.com/jverkoey/CocoaPods/compare/0.29.0...master)
+
+###### Enhancements
+
+* Radically reduce first run pod setup bandwidth by creating a shallow clone of
+  the ‘master’ repo by default. Use the `--no-shallow` option to perform a full
+  clone instead.  
+  [Jeff Verkoeyen](https://github.com/jverkoey)
+  [#1803](https://github.com/CocoaPods/CocoaPods/pull/1803)
+
+* Improves the error message when searching with an invalid regular expression.  
+  [Kyle Fuller](https://github.com/kylef)
+
+* Improves `pod init` to save Xcode project file in Podfile when one was supplied.  
+  [Kyle Fuller](https://github.com/kylef)
+
+###### Bug Fixes
+
+* Fixes a bug with `pod repo remove` silently handling permission errors.  
+  [Kyle Fuller](https://github.com/kylef)
+  #1778
+
+
 ## 0.29.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)

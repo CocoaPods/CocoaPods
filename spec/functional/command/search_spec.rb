@@ -49,7 +49,11 @@ module Pod
       output = run_command('search', 'BananaLib', '--silent')
       output.should.include? 'BananaLib'
     end
-    
+
+    it "shows a friendly message when searching with invalid regex" do
+      lambda { run_command('search', '+') }.should.raise CLAide::Help
+    end
+
     describe "option --web" do
 
       extend SpecHelper::TemporaryRepos

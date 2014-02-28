@@ -31,12 +31,13 @@ module Pod
         raise Informative, "Existing Podfile found in directory" unless config.podfile.nil?
         if @project_path
           help! "Xcode project at #{@project_path} does not exist" unless File.exist? @project_path
+          project_path = @project_path
         else
           raise Informative, "No xcode project found, please specify one" unless @project_paths.length > 0
           raise Informative, "Multiple xcode projects found, please specify one" unless @project_paths.length == 1
-          @project_path = @project_paths.first
+          project_path = @project_paths.first
         end
-        @xcode_project = Xcodeproj::Project.open(@project_path)
+        @xcode_project = Xcodeproj::Project.open(project_path)
       end
 
       def run
@@ -51,7 +52,9 @@ module Pod
       # @return [String] the text of the Podfile for the provided project
       #
       def podfile_template(project)
-        podfile = <<-PLATFORM.strip_heredoc
+        podfile = ''
+        podfile << "xcodeproj '#{@project_path}'\n\n" if @project_path
+        podfile << <<-PLATFORM.strip_heredoc
           # Uncomment this line to define a global platform for your project
           # platform :ios, "6.0"
         PLATFORM
