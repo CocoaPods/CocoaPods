@@ -64,7 +64,7 @@ module Pod
         stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
       elsif show_stdout
         stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
-        stdout.indent = 4
+        stdout.indent = ' ' * 4
       else
         stdout, stderr = Indenter.new, Indenter.new
       end
