@@ -22,12 +22,14 @@ module Pod
     #
     def executable(name)
 
-      define_method(name) do |command|
-        Executable.execute_command(name, command, false)
+      define_method(name) do |command, *optional_args|
+        output = optional_args[0] || false
+        Executable.execute_command(name, command, output, false)
       end
 
-      define_method(name.to_s + "!") do |command|
-        Executable.execute_command(name, command, true)
+      define_method(name.to_s + "!") do |command, *optional_args|
+        output = optional_args[0] || false
+        Executable.execute_command(name, command, output, true)
       end
     end
 
@@ -50,7 +52,7 @@ module Pod
     #
     # @todo   Find a way to display the live output of the commands.
     #
-    def self.execute_command(executable, command, raise_on_failure)
+    def self.execute_command(executable, command, show_stdout, raise_on_failure)
 
       bin = `which #{executable}`.strip
       raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
@@ -62,6 +64,9 @@ module Pod
       if Config.instance.verbose?
         UI.message("$ #{full_command}")
         stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
+      elsif show_stdout
+        stdout, stderr = Indenter.new(STDOUT), Indenter.new
+        stdout.indent = '>>  '
       else
         stdout, stderr = Indenter.new, Indenter.new
       end

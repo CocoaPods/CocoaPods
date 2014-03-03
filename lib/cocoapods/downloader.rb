@@ -7,7 +7,7 @@ module Pod
       override_api do
 
         def execute_command(executable, command, raise_on_failure = false)
-          Executable.execute_command(executable, command, raise_on_failure)
+          Executable.execute_command(executable, command, false, raise_on_failure)
         end
 
         # Indicates that an action will be performed. The action is passed as a
