@@ -22,11 +22,13 @@ module Pod
     #
     def executable(name)
 
-      define_method(name) do |command, output=false|
+      define_method(name) do |command, *optional_args|
+        output = optional_args[0] || false
         Executable.execute_command(name, command, output, false)
       end
 
-      define_method(name.to_s + "!") do |command, output=false|
+      define_method(name.to_s + "!") do |command, *optional_args|
+        output = optional_args[0] || false
         Executable.execute_command(name, command, output, true)
       end
     end
@@ -63,8 +65,8 @@ module Pod
         UI.message("$ #{full_command}")
         stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
       elsif show_stdout
-        stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
-        stdout.indent = ' ' * 4
+        stdout, stderr = Indenter.new(STDOUT), Indenter.new
+        stdout.indent = '>>  '
       else
         stdout, stderr = Indenter.new, Indenter.new
       end
