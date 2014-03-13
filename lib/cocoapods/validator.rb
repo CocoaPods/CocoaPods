@@ -392,9 +392,10 @@ module Pod
     end
 
     # @return [String] Executes xcodebuild in the current working directory and
-    #         returns its output (bot STDOUT and STDERR).
+    #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
+      UI.puts 'xcodebuild clean build -target Pods' if config.verbose?
       `xcodebuild clean build -target Pods 2>&1`
     end
 
