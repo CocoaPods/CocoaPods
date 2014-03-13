@@ -60,8 +60,8 @@ module Pod
       # Replace default spec with a subspec if asked for
       a_spec = spec
       if spec && @only_subspec
-          a_spec = spec.subspec_by_name(@only_subspec)
-          @subspec_name = a_spec.name
+        a_spec = spec.subspec_by_name(@only_subspec)
+        @subspec_name = a_spec.name
       end
 
       UI.print " -> #{a_spec ? a_spec.name : file.basename}\r" unless config.silent?
