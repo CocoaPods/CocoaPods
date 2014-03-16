@@ -58,11 +58,11 @@ module Pod
 
       def web_search
         query_parameter = [
-          ('on%3Aosx' if @supported_on_osx),
-          ('on%3Aios' if @supported_on_ios),
+          ('on:osx' if @supported_on_osx),
+          ('on:ios' if @supported_on_ios),
           @query
-        ].compact.flatten.join('%20')
-        url = "http://cocoapods.org/?q=#{query_parameter}"
+        ].compact.flatten.join(' ')
+        url = "http://cocoapods.org/?q=#{CGI.escape(query_parameter).gsub("+", "%20")}"
         UI.puts("Opening #{url}")
         open!(url)
       end

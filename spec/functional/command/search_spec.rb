@@ -59,7 +59,12 @@ module Pod
       extend SpecHelper::TemporaryRepos
 
       it "searches with invalid regex" do
-        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=NSAttributedString+CCLFormat')
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=NSAttributedString%2BCCLFormat')
+        run_command('search', '--web', 'NSAttributedString+CCLFormat')
+      end
+
+      it "should url encode search queries" do
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=NSAttributedString%2BCCLFormat')
         run_command('search', '--web', 'NSAttributedString+CCLFormat')
       end
 
