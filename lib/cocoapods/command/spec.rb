@@ -207,7 +207,7 @@ module Pod
             get_path_of_spec(@spec)
           end
 
-          UI.puts File.open(filepath).read
+          UI.puts File.read(filepath)
         end
       end
 

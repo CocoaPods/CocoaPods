@@ -186,8 +186,8 @@ end
 #        The file in the temporary directory after running the pod command.
 #
 def yaml_should_match(expected, produced)
-  expected_yaml = YAML::load(File.open(expected))
-  produced_yaml = YAML::load(File.open(produced))
+  expected_yaml = File.open(expected) { |f| YAML.load(f) }
+  produced_yaml = File.open(produced) { |f| YAML.load(f) }
   # Remove CocoaPods version
   expected_yaml.delete('COCOAPODS')
   produced_yaml.delete('COCOAPODS')
