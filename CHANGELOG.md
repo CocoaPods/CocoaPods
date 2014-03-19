@@ -2,20 +2,20 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-
 ## Master
 
-* Display indication for deprecated pods when searching for pods
+* Display indication for deprecated pods when searching for Pods. 
   [Hugo Tunius][k0nserv]
   [#2180](https://github.com/CocoaPods/CocoaPods/issues/2180)
 
 ##### Bug Fixes
 
-* Fixed pod repo push to first check if Specs directory exists and if so push there.
+* Fixed pod repo push to first check if Specs directory exists and if so push
+  there.  
   [Edward Valentini](edwardvalentini)
   [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
 
-* Fixed `pod outdated` to not include subspecs.
+* Fixed `pod outdated` to not include subspecs.  
   [Ash Furrow](ashfurrow)
   [#2136](https://github.com/CocoaPods/CocoaPods/issues/2136)
 
@@ -33,10 +33,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Paddy O'Brien](tapi)
   [#2181](https://github.com/CocoaPods/CocoaPods/issues/2181)
 
-
-* Fixed missing XCTest framework in Xcode 6
+* Fixed missing XCTest framework in Xcode 6.  
   [Paul Williamson](squarefrog)
   [#2296](https://github.com/CocoaPods/CocoaPods/issues/2296)
+
+* Support multiple values in ARCHS.  
+  [Robert Zuber](https://github.com/z00b)
+  [#1904](https://github.com/CocoaPods/CocoaPods/issues/1904)
 
 
 ## 0.33.1
@@ -244,11 +247,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin][irrationalfab]
   [#1021](https://github.com/CocoaPods/CocoaPods/issues/1021)
 
-
-
 * Warn when including deprecated pods
   [Samuel E. Giddins](https://github.com/segiddins)
   [#2003](https://github.com/CocoaPods/CocoaPods/issues/2003)
+
 
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)

@@ -364,20 +364,20 @@ module Pod
         it "handles an Array of ARCHs defined in a single user target" do
           user_project = Xcodeproj::Project.new('path')
           target = user_project.new_target(:application, 'Target', :ios)
-          target.build_configuration_list.set_setting('ARCHS', 'armv7')
+          target.build_configuration_list.set_setting('ARCHS', ['armv7', 'i386'])
 
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.set_platform(:ios, '4.0')
           user_targets = [target]
 
           archs = @analyzer.send(:compute_archs_for_target_definition, target_definition, user_targets)
-          archs.should == 'armv7'
+          ['armv7', 'i386'].each { |a| archs.should.include a }
         end
 
         it "handles an Array of ARCHs defined multiple user targets" do
           user_project = Xcodeproj::Project.new('path')
           targeta = user_project.new_target(:application, 'Target', :ios)
-          targeta.build_configuration_list.set_setting('ARCHS', 'armv7')
+          targeta.build_configuration_list.set_setting('ARCHS', ['armv7', 'armv7s'])
           targetb = user_project.new_target(:application, 'Target', :ios)
           targetb.build_configuration_list.set_setting('ARCHS', ['armv7', 'i386'])
 
@@ -386,9 +386,8 @@ module Pod
           user_targets = [targeta, targetb]
 
           archs = @analyzer.send(:compute_archs_for_target_definition, target_definition, user_targets)
-          archs.should == 'armv7'
+          ['armv7', 'armv7s', 'i386'].each { |a| archs.should.include a }
         end
-
       end
 
       #--------------------------------------#
