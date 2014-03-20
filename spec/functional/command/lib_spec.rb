@@ -77,5 +77,22 @@ module Pod
       output = run_command('lib', 'create', 'TestPod')
       output.should.include? 'http://guides.cocoapods.org/making/making-a-cocoapod'
     end
+
+    before do
+      Command::Lib::Create.any_instance.stubs(:configure_template)
+      Command::Lib::Create.any_instance.stubs(:git!)
+    end
+
+    it "should use the given template URL" do
+      template_url = 'https://github.com/custom/template.git'
+      Command::Lib::Create.any_instance.expects(:git!).with("clone '#{template_url}' TestPod").once
+      sut = run_command('lib', 'create', 'TestPod', template_url)
+    end
+
+    it "should use the default URL if no template URL is given" do
+      template_url = 'https://github.com/CocoaPods/pod-template.git'
+      Command::Lib::Create.any_instance.expects(:git!).with("clone '#{template_url}' TestPod").once
+      run_command('lib', 'create', 'TestPod')
+    end
   end
 end

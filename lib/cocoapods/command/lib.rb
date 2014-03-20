@@ -13,10 +13,11 @@ module Pod
           Creates a new Pod with the given name from the template in the working directory.
         DESC
 
-        self.arguments = '[NAME]'
+        self.arguments = '[NAME] [TEMPLATE_URL]'
 
         def initialize(argv)
           @name = argv.shift_argument
+          @template_url = argv.shift_argument
           super
         end
 
@@ -53,7 +54,7 @@ module Pod
         #
         def clone_template
           UI.section("Creating `#{@name}` Pod") do
-            git!"clone '#{TEMPLATE_REPO}' #{@name}"
+            git!"clone '#{template_repo_url}' #{@name}"
           end
         end
 
@@ -74,10 +75,17 @@ module Pod
         # @return [void]
         #
         def print_info
-          UI.puts "\nTo learn more about the template see `#{TEMPLATE_INFO_URL}`."
+          UI.puts "\nTo learn more about the template see `#{template_repo_url}`."
           UI.puts "To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`."
         end
 
+        # Checks if a template URL is given else returns the TEMPLATE_REPO URL
+        #
+        # @return String
+        #
+        def template_repo_url
+          @template_url || TEMPLATE_REPO
+        end
       end
 
       #-----------------------------------------------------------------------#
