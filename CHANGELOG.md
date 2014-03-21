@@ -19,6 +19,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Improves `pod init` to save Xcode project file in Podfile when one was supplied.  
   [Kyle Fuller](https://github.com/kylef)
 
+* Adds functionality to specify a template URL for the `pod lib create` command.  
+  [Piet Brauer](https://github.com/pietbrauer)
+
 ###### Bug Fixes
 
 * Fixes a bug with `pod repo remove` silently handling permission errors.  
