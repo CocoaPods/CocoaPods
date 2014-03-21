@@ -11,6 +11,8 @@ module Pod
 
         self.description = <<-DESC
           Creates a new Pod with the given name from the template in the working directory.
+
+          A template URL is optional. If no URL is specified it will use the default template provided by CocoaPods.
         DESC
 
         self.arguments = '[NAME] [TEMPLATE_URL]'
