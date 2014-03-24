@@ -9,7 +9,7 @@ module Pod
         description of the pods.
       DESC
 
-      self.arguments = '[QUERY]'
+      self.arguments = 'QUERY'
 
       def self.options
         [
