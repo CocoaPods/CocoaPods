@@ -36,8 +36,8 @@ module Pod
     #
     attr_accessor :user_project_path
 
-    # @return [String] the list of the UUIDs of the user targets that will be
-    #         integrated by this target as identified by the analizer.
+    # @return [Array<String>] the list of the UUIDs of the user targets that
+    #         will be integrated by this target as identified by the analizer.
     #
     # @note   The target instances are not stored to prevent editing different
     #         instances.
@@ -102,6 +102,27 @@ module Pod
     #
     def copy_resources_script_relative_path
       "${SRCROOT}/#{relative_to_srcroot(copy_resources_script_path)}"
+    end
+
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Transitional Methods
+
+    def user_target_descriptions
+      user_targets = []
+      user_target_uuids.each do |uuid|
+        user_target = {}
+        user_target[:uuid] = uuid
+        user_target[:user_project_path] = user_project_path
+        user_target[:specs] = specs
+        user_target[:platform_name] = platform.name
+        user_target[:platform_deployment_target] = platform.deployment_target.to_s
+        user_target[:cocoapods_target_label] = label
+        user_targets << user_target
+      end
+      user_targets
     end
 
     #-------------------------------------------------------------------------#

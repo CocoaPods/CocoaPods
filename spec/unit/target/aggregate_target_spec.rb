@@ -89,5 +89,34 @@ module Pod
       end
     end
 
+    #-------------------------------------------------------------------------#
+
+    describe "Transitional Methods" do
+
+      before do
+        @target_definition = Podfile::TargetDefinition.new('Pods', nil)
+        @target_definition.stubs(:platform).returns(Platform.new(:ios, '7.0'))
+        @sut = AggregateTarget.new(@target_definition, config.sandbox)
+        @sut.user_project_path = 'SampleProject/SampleProject'
+        @sut.user_target_uuids = ["A346496C14F9BE9A0080D870"]
+        @spec = fixture_spec('banana-lib/BananaLib.podspec')
+        @sut.stubs(:specs).returns([@spec])
+      end
+
+      it "returns the description of the user targets" do
+        expected = [{
+          :uuid=>"A346496C14F9BE9A0080D870",
+          :user_project_path=>"SampleProject/SampleProject",
+          :specs=>[@spec],
+          :platform_name=>:ios,
+          :platform_deployment_target=>"7.0",
+          :cocoapods_target_label=>"Pods"
+        }]
+        @sut.user_target_descriptions.should == expected
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
   end
 end
