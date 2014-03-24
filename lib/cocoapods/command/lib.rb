@@ -10,8 +10,6 @@ module Pod
         self.summary = 'Creates a new Pod'
 
         self.description = <<-DESC
-          Creates a new Pod with the given name from the template in the working directory.
-
           Creates a scaffold for the development of a new Pod according to the CocoaPods best practices.
           If a `TEMPLATE_URL`, pointing to a git repo containing a compatible template, is specified, it will be used in place of the default one.
         DESC
