@@ -15,7 +15,7 @@ module Pod
           A template URL is optional. If no URL is specified it will use the default template provided by CocoaPods.
         DESC
 
-        self.arguments = '[NAME] [TEMPLATE_URL]'
+        self.arguments = 'NAME [TEMPLATE_URL]'
 
         def initialize(argv)
           @name = argv.shift_argument
