@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: f5e4752d8cc4ba055e1d96713275e9955fea9f37
+  revision: 60327a3d623a9036e2fcb1d52eee6979f63780d7
   branch: master
   specs:
     claide (0.4.0)
@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 0704b7772370feb8be154ace0ce48e09f215aeaf
+  revision: d05d9ee1d43425c177e64a7eb8d2810d491a0c1b
   branch: master
   specs:
     xcodeproj (0.14.1)
@@ -28,10 +28,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 4a95877b20893b374dfd43624e12bac167feef05
+  revision: 9ae16ffd41f9c056fa3d47c40bdc04aa28d2897c
   branch: master
   specs:
-    cocoapods-downloader (0.3.0)
+    cocoapods-downloader (0.4.0)
 
 GIT
   remote: https://github.com/alloy/cocoapods-trunk.git
@@ -72,7 +72,7 @@ PATH
       activesupport (>= 3.2.15, < 4)
       claide (~> 0.4.0)
       cocoapods-core (= 0.29.0)
-      cocoapods-downloader (~> 0.3.0)
+      cocoapods-downloader (~> 0.4.0)
       cocoapods-try-release-fix (~> 0.1.1)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -89,7 +89,7 @@ GEM
       multi_json (~> 1.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
-    cocoapods-try-release-fix (0.1.1)
+    cocoapods-try-release-fix (0.1.2)
     coderay (1.1.0)
     colored (1.2)
     coveralls (0.7.0)
@@ -122,7 +122,7 @@ GEM
     nap (0.6.0)
     netrc (0.7.7)
     notify (0.5.2)
-    open4 (1.3.0)
+    open4 (1.3.3)
     posix-spawn (0.3.8)
     pry (0.9.12.6)
       coderay (~> 1.0)
