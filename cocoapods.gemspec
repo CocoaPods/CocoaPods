@@ -28,7 +28,7 @@ s.files = Dir["lib/**/*.rb"] + %w{ bin/pod bin/sandbox-pod README.md LICENSE CHA
 
   # Link with the version of CocoaPods-Core
   s.add_runtime_dependency 'cocoapods-core',            "= #{Pod::VERSION}"
-  s.add_runtime_dependency 'claide',                    '~> 0.4.0'
+  s.add_runtime_dependency 'claide',                    '~> 0.5.0'
   s.add_runtime_dependency 'cocoapods-downloader',      '~> 0.4.0'
   s.add_runtime_dependency 'xcodeproj',                 '~> 0.14.1'
   s.add_runtime_dependency 'cocoapods-try-release-fix', '~> 0.1.1'
