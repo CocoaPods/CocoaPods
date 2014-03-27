@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: e8c929f5e242647590a162477c0f11f65bc8fb2c
+  revision: 985c0c973f27267824500ef5ab1ec399231349f1
   branch: master
   specs:
     xcodeproj (0.15.0)
@@ -130,7 +130,7 @@ GEM
     pygments.rb (0.5.4)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
-    rake (10.2.1)
+    rake (10.1.1)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.3)
       ffi (>= 0.5.0)
@@ -173,7 +173,7 @@ DEPENDENCIES
   prettybacon!
   pry
   pygments.rb
-  rake
+  rake (~> 10.1.0)
   rb-fsevent
   redcarpet (< 3.0.0)
   ruby-prof!

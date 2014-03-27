@@ -17,7 +17,7 @@ group :development do
   gem "bacon"
   gem "mocha-on-bacon"
   gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
-  gem "rake"
+  gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
 
   # For the integration tests
   gem "diffy"
