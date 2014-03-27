@@ -1,4 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-color 2>&1
+CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1
 Analyzing dependencies
 
 Fetching external sources
@@ -41,7 +41,6 @@ Generating Pods project
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
-[deprecated] I18n.enforce_available_locales will default to true in the future. If you really want to skip validation of your locale you can set I18n.enforce_available_locales = false to avoid this message.
   - Writing Manifest in `Pods/Manifest.lock`
 
 Integrating client project

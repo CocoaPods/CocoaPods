@@ -1,4 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-color 2>&1
+CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1
 Analyzing dependencies
 
 Finding Podfile changes
@@ -18,19 +18,18 @@ Downloading dependencies
 
 -> Installing JSONKit (1.5pre)
  > GitHub download
-   $ /usr/bin/git config core.bare
+   $ /usr/local/bin/git config core.bare
    true
-   $ /usr/bin/git config core.bare
+   $ /usr/local/bin/git config core.bare
    true
-   $ /usr/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+   $ /usr/local/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
    0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
  > Cloning to Pods folder
-     $ /usr/bin/git clone "CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f"
-     "ROOT/tmp/install_add_pod/Pods/JSONKit"
+     $ /usr/local/bin/git clone CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f
+     ROOT/tmp/install_add_pod/Pods/JSONKit
      Cloning into 'ROOT/tmp/install_add_pod/Pods/JSONKit'...
      done.
-     Checking connectivity... done
-   $ /usr/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
+   $ /usr/local/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
    Switched to a new branch 'activated-pod-commit'
 
 -> Using Reachability (3.1.0)

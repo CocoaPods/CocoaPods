@@ -1,4 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-color 2>&1
+CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1
 Analyzing dependencies
 
 Resolving dependencies of `Podfile`
@@ -12,24 +12,23 @@ Downloading dependencies
 
 -> Installing Reachability (3.1.0)
  > GitHub download
-   $ /usr/bin/git config core.bare
+   $ /usr/local/bin/git config core.bare
    true
-   $ /usr/bin/git config core.bare
+   $ /usr/local/bin/git config core.bare
    true
-   $ /usr/bin/git rev-list --max-count=1 v3.1.0
+   $ /usr/local/bin/git rev-list --max-count=1 v3.1.0
    f7176f4798d068d233dca5223ae4bd9c8059e830
  > Cloning to Pods folder
-     $ /usr/bin/git clone "CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6"
-     "ROOT/tmp/install_new/Pods/Reachability"
+     $ /usr/local/bin/git clone CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+     ROOT/tmp/install_new/Pods/Reachability
      Cloning into 'ROOT/tmp/install_new/Pods/Reachability'...
      done.
-     Checking connectivity... done
-   $ /usr/bin/git fetch origin tags/v3.1.0 2>&1
+   $ /usr/local/bin/git fetch origin tags/v3.1.0 2>&1
    From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
     * tag               v3.1.0     -> FETCH_HEAD
-   $ /usr/bin/git reset --hard FETCH_HEAD
+   $ /usr/local/bin/git reset --hard FETCH_HEAD
    HEAD is now at f7176f4 updated podspec
-   $ /usr/bin/git checkout -b activated-pod-commit 2>&1
+   $ /usr/local/bin/git checkout -b activated-pod-commit 2>&1
    Switched to a new branch 'activated-pod-commit'
   - Running pre install hooks
 
@@ -58,7 +57,6 @@ Generating Pods project
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
-[deprecated] I18n.enforce_available_locales will default to true in the future. If you really want to skip validation of your locale you can set I18n.enforce_available_locales = false to avoid this message.
   - Writing Manifest in `Pods/Manifest.lock`
 
 Integrating client project
