@@ -1,5 +1,6 @@
 # Do’s and Don’ts
 
+* **Search the solutions in the [troubleshooting guide](http://guides.cocoapods.org/using/troubleshooting.html).** Or any of the many other [guides](http://guides.cocoapods.org).
 * **Search tickets before you file a new one.** Add to tickets if you have new information about the issue.
 * **Only file tickets about the CocoaPods tool itself.** This includes [CocoaPods](https://github.com/CocoaPods/CocoaPods/issues),
   [CocoaPods/Core](https://github.com/CocoaPods/Core/issues), and [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/issues).
@@ -37,6 +38,12 @@ which doesn't require any ruby knowledge.
 
 Please try to be precise about the proposed outcome of the feature and how it
 would related to existing features.
+
+From the [CocoaPods blog](http://blog.cocoapods.org/CocoaPods-0.28/):
+
+> Fighting feature creep in CocoaPods is not easy. We hear about a lot of great ideas and many of them don't make the cut as they would not be useful for at least 80% of our users.
+
+Should you require a feature isn't suited for mainstream users, consider suggesting a [CocoaPods plugin](http://blog.cocoapods.org/CocoaPods-0.28/) instead.
 
 
 ## Pull Requests

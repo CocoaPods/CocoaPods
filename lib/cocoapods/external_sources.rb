@@ -378,7 +378,7 @@ module Pod
         pathname      = Pathname.new(absolute_path)
 
         unless pathname.exist?
-          raise Informative, "No podspec found for `#{name}` in `#{params[:local]}`"
+          raise Informative, "No podspec found for `#{name}` in `#{declared_path}`"
         end
         pathname
       end

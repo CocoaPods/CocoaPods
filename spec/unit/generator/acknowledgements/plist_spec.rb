@@ -1,5 +1,7 @@
 require File.expand_path("../../../../spec_helper", __FILE__)
 
+require 'xcodeproj'
+
 describe Pod::Generator::Plist do
   before do
     @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')

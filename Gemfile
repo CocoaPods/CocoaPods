@@ -12,12 +12,16 @@ group :development do
   gem 'xcodeproj',            :git => "https://github.com/CocoaPods/Xcodeproj.git", :branch => 'master'
   gem 'cocoapods-downloader', :git => "https://github.com/CocoaPods/cocoapods-downloader.git", :branch => 'master'
   gem 'claide',               :git => 'https://github.com/CocoaPods/CLAide.git', :branch => 'master'
+  gem 'cocoapods-try',        :git => 'https://github.com/CocoaPods/cocoapods-try.git', :branch => 'master'
 
   gem "mocha"
   gem "bacon"
   gem "mocha-on-bacon"
   gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
-  gem "rake"
+  gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
+
+  # For the integration tests
+  gem "diffy"
 
   gem 'mime-types', '< 2' # v2 is 1.9.x only
   gem 'coveralls', :require => false
@@ -27,12 +31,15 @@ group :development do
 end
 
 group :debugging do
+  # Only while we test the trunk app.
+  gem 'cocoapods-trunk', :git => "https://github.com/alloy/cocoapods-trunk.git"
+
   gem "rb-fsevent"
   gem "kicker", :git => "https://github.com/alloy/kicker.git", :branch => "master"
   gem "awesome_print"
   gem "pry"
-  gem "diffy"
-  gem "ruby-prof"
+  # The released gem leads to stack too deep when profiling a full run.
+  gem "ruby-prof", :git => "https://github.com/ruby-prof/ruby-prof.git"
 end
 
 group :documentation do

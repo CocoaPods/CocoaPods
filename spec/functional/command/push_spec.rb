@@ -5,6 +5,11 @@ module Pod
     extend SpecHelper::Command
     extend SpecHelper::TemporaryRepos
 
+    # Don't test push the spec to the trunk app
+    def command(*a)
+      super.tap { |cmd| cmd.stubs(:test_trunk) }
+    end
+
     before do
       config.repos_dir = SpecHelper.tmp_repos_path
     end
@@ -49,7 +54,7 @@ module Pod
         `git remote add origin #{@upstream}`
         `git remote -v`
         `git fetch -q`
-        `git branch --set-upstream master origin/master`
+        `git branch --set-upstream-to=origin/master master`
       end
 
       # prepare the spec

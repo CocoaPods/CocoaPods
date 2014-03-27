@@ -240,6 +240,12 @@ module Pod
         STDOUT.print(message) unless config.silent?
       end
 
+      # gets input from $stdin
+      #
+      def gets
+        $stdin.gets
+      end
+
       # Stores important warning to the user optionally followed by actions
       # that the user should take. To print them use {#print_warnings}.
       #

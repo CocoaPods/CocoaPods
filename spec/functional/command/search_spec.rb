@@ -18,7 +18,6 @@ module Pod
 
     it "complains for wrong parameters" do
       lambda { run_command('search') }.should.raise CLAide::Help
-      lambda { run_command('search', 'too', 'many') }.should.raise CLAide::Help
       lambda { run_command('search', 'too', '--wrong') }.should.raise CLAide::Help
       lambda { run_command('search', '--wrong') }.should.raise CLAide::Help
     end
@@ -50,5 +49,49 @@ module Pod
       output = run_command('search', 'BananaLib', '--silent')
       output.should.include? 'BananaLib'
     end
+
+    it "shows a friendly message when locally searching with invalid regex" do
+      lambda { run_command('search', '+') }.should.raise CLAide::Help
+    end
+
+    describe "option --web" do
+
+      extend SpecHelper::TemporaryRepos
+
+      it "searches with invalid regex" do
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=NSAttributedString%2BCCLFormat')
+        run_command('search', '--web', 'NSAttributedString+CCLFormat')
+      end
+
+      it "should url encode search queries" do
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=NSAttributedString%2BCCLFormat')
+        run_command('search', '--web', 'NSAttributedString+CCLFormat')
+      end
+
+      it "searches the web via the open! command" do
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=bananalib')
+        run_command('search', '--web', 'bananalib')
+      end
+
+      it "includes option --osx correctly" do
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=on%3Aosx%20bananalib')
+        run_command('search', '--web', '--osx', 'bananalib')
+      end
+
+      it "includes option --ios correctly" do
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=on%3Aios%20bananalib')
+        run_command('search', '--web', '--ios', 'bananalib')
+      end
+
+      it "does not matter in which order the ios/osx options are set" do
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=on%3Aosx%20on%3Aios%20bananalib')
+        run_command('search', '--web', '--ios', '--osx', 'bananalib')
+
+        Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=on%3Aosx%20on%3Aios%20bananalib')
+        run_command('search', '--web', '--osx', '--ios', 'bananalib')
+      end
+
+    end
+
   end
 end

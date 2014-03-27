@@ -366,10 +366,18 @@ task :bootstrap, :use_bundle_dir? do |t, args|
 
   puts "Installing gems"
   if args[:use_bundle_dir?]
-    sh "ruby --version"
-    sh "XCODEPROJ_BUILD=1 bundle install --path ./travis_bundle_dir"
+    execute_command "env XCODEPROJ_BUILD=1 bundle install --path ./travis_bundle_dir"
   else
-    execute_command "bundle install"
+    execute_command "env XCODEPROJ_BUILD=1 bundle install"
+  end
+
+  puts "Checking for hg and bzr..."
+  if `which hg`.strip.empty?
+    puts "Please install Mercurial: `brew install hg`"
+  end
+
+  if `which bzr`.strip.empty?
+    puts "Please install Bazaar: `brew install bzr`"
   end
 end
 

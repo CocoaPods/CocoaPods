@@ -212,18 +212,52 @@ module Pod
       end
 
       it "cats the first podspec from all podspecs" do
-        $stdin = StringIO.new("1\n", 'r')
+        UI.next_input = "1\n"
         run_command('spec', 'cat', '--show-all', 'AFNetworking')
         UI.output.should.include fixture('spec-repos/master/AFNetworking/1.2.0/AFNetworking.podspec').read
-        $stdin = STDIN
       end
     end
 
     #-------------------------------------------------------------------------#
 
     describe Command::Spec::Edit do
+      before do
+        @path_saved = ENV['PATH']
+      end
+
+      after do
+        ENV['PATH'] = @path_saved
+      end
+
       it_should_check_for_existence("edit")
       it_should_check_for_ambiguity("edit")
+
+      it "would execute the editor specified in ENV with the given podspec" do
+        ENV['EDITOR'] = 'podspeceditor'
+        lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise SystemExit
+        UI.output.should.include '/bin/sh -i -c podspeceditor "$@" --'
+        UI.output.should.include 'fixtures/spec-repos/master/AFNetworking'
+      end
+
+      it "will raise if no editor is found" do
+        ENV['PATH'] = ''
+        ENV['EDITOR'] = nil
+        lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise Informative
+      end
+
+      it "would execute an editor with the first podspec from all podspecs" do
+        ENV['EDITOR'] = 'podspeceditor'
+        UI.next_input = "1\n"
+        lambda { command('spec', 'edit', '--show-all', 'AFNetworking').run }.should.raise SystemExit
+        UI.output.should.include '/bin/sh -i -c podspeceditor "$@" --'
+        UI.output.should.include 'fixtures/spec-repos/master/AFNetworking/1.2.0/AFNetworking.podspec'
+      end
+
+      it "complains if it can't find a spec file for the given spec" do
+        File.stubs(:exists?).returns(false)
+        lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise Informative
+        File.unstub(:exists?)
+      end
     end
 
     #-------------------------------------------------------------------------#
@@ -248,19 +282,17 @@ module Pod
       describe "#choose_from_array" do
 
         it "should return a valid index for the given array" do
-          $stdin = StringIO.new("1\n", 'r')
+          UI.next_input = "1\n"
           index = @sut.send(:choose_from_array, ['item1', 'item2', 'item3'], 'A message')
           UI.output.should.include "1: item1\n2: item2\n3: item3\nA message\n"
           index.should == 0
-          $stdin = STDIN
         end
 
         it "should raise when the index is out of bounds" do
-          $stdin = StringIO.new("4\n", 'r')
+          UI.next_input = "4\n"
           lambda { @sut.send(:choose_from_array, ['item1', 'item2', 'item3'], 'A message') }.should.raise Pod::Informative
-          $stdin = StringIO.new("0\n", 'r')
+          UI.next_input = "0\n"
           lambda { @sut.send(:choose_from_array, ['item1', 'item2', 'item3'], 'A message') }.should.raise Pod::Informative
-          $stdin = STDIN
         end
 
       end

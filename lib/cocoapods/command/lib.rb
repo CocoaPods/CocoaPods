@@ -10,13 +10,15 @@ module Pod
         self.summary = 'Creates a new Pod'
 
         self.description = <<-DESC
-          Creates a new Pod with the given name from the template in the working directory.
+          Creates a scaffold for the development of a new Pod according to the CocoaPods best practices.
+          If a `TEMPLATE_URL`, pointing to a git repo containing a compatible template, is specified, it will be used in place of the default one.
         DESC
 
-        self.arguments = '[NAME]'
+        self.arguments = 'NAME [TEMPLATE_URL]'
 
         def initialize(argv)
           @name = argv.shift_argument
+          @template_url = argv.shift_argument
           super
         end
 
@@ -44,6 +46,7 @@ module Pod
 
         TEMPLATE_REPO = "https://github.com/CocoaPods/pod-template.git"
         TEMPLATE_INFO_URL = "https://github.com/CocoaPods/pod-template"
+        CREATE_NEW_POD_INFO_URL = "http://guides.cocoapods.org/making/making-a-cocoapod"
 
         # Clones the template from the remote in the working directory using
         # the name of the Pod.
@@ -52,7 +55,7 @@ module Pod
         #
         def clone_template
           UI.section("Creating `#{@name}` Pod") do
-            git!"clone '#{TEMPLATE_REPO}' #{@name}"
+            git!"clone '#{template_repo_url}' #{@name}"
           end
         end
 
@@ -73,9 +76,17 @@ module Pod
         # @return [void]
         #
         def print_info
-          UI.puts "\nTo learn more about the template see `#{TEMPLATE_INFO_URL}`."
+          UI.puts "\nTo learn more about the template see `#{template_repo_url}`."
+          UI.puts "To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`."
         end
 
+        # Checks if a template URL is given else returns the TEMPLATE_REPO URL
+        #
+        # @return String
+        #
+        def template_repo_url
+          @template_url || TEMPLATE_REPO
+        end
       end
 
       #-----------------------------------------------------------------------#

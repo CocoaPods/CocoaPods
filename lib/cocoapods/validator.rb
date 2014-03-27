@@ -60,8 +60,8 @@ module Pod
       # Replace default spec with a subspec if asked for
       a_spec = spec
       if spec && @only_subspec
-          a_spec = spec.subspec_by_name(@only_subspec)
-          @subspec_name = a_spec.name
+        a_spec = spec.subspec_by_name(@only_subspec)
+        @subspec_name = a_spec.name
       end
 
       UI.print " -> #{a_spec ? a_spec.name : file.basename}\r" unless config.silent?
@@ -392,9 +392,10 @@ module Pod
     end
 
     # @return [String] Executes xcodebuild in the current working directory and
-    #         returns its output (bot STDOUT and STDERR).
+    #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
+      UI.puts 'xcodebuild clean build -target Pods' if config.verbose?
       `xcodebuild clean build -target Pods 2>&1`
     end
 

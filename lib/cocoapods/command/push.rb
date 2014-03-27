@@ -63,11 +63,11 @@ module Pod
       def test_trunk
         return unless @repo == "master"
         require 'rest'
-        tokens = ["48c432065a97f5281c2b60c5987ec9fc", "07d9732784771e33ffccb5dd280a6cb9"]
         base_url = 'https://trunk.cocoapods.org/api/v1'
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
-          REST.post("#{base_url}/pods", spec.to_yaml, 'Content-Type' => 'text/yaml', 'Authorization' => "Token #{tokens.sample}")
+          REST.post("#{base_url}/pods", spec.to_json, 'Content-Type' => 'application/json; charset=utf-8',
+                                                      'Authorization' => "Token 9300632274827cd3e6dde24bf9c608c3")
         end
       rescue Exception
         # Nothing
