@@ -12,6 +12,7 @@ group :development do
   gem 'xcodeproj',            :git => "https://github.com/CocoaPods/Xcodeproj.git", :branch => 'master'
   gem 'cocoapods-downloader', :git => "https://github.com/CocoaPods/cocoapods-downloader.git", :branch => 'master'
   gem 'claide',               :git => 'https://github.com/CocoaPods/CLAide.git', :branch => 'master'
+  gem 'cocoapods-try',        :git => 'https://github.com/CocoaPods/cocoapods-try.git', :branch => 'master'
 
   gem "mocha"
   gem "bacon"

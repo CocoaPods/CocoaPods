@@ -33,6 +33,13 @@ GIT
     cocoapods-downloader (0.4.0)
 
 GIT
+  remote: https://github.com/CocoaPods/cocoapods-try.git
+  revision: 748f146c173db3cfcdc3f0d15290f9c1fa791130
+  branch: master
+  specs:
+    cocoapods-try (0.1.2)
+
+GIT
   remote: https://github.com/alloy/cocoapods-trunk.git
   revision: 20b9a8bb60ad6e59df4df7d4a960a4dd4a41afa0
   specs:
@@ -72,7 +79,7 @@ PATH
       claide (~> 0.5.0)
       cocoapods-core (= 0.29.0)
       cocoapods-downloader (~> 0.4.0)
-      cocoapods-try-release-fix (~> 0.1.1)
+      cocoapods-try (~> 0.1.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
@@ -88,7 +95,6 @@ GEM
       multi_json (~> 1.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
-    cocoapods-try-release-fix (0.1.2)
     coderay (1.1.0)
     colored (1.2)
     coveralls (0.7.0)
@@ -163,6 +169,7 @@ DEPENDENCIES
   cocoapods-core!
   cocoapods-downloader!
   cocoapods-trunk!
+  cocoapods-try!
   coveralls
   diffy
   github-markup
