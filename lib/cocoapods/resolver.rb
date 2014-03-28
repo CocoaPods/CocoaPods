@@ -148,7 +148,7 @@ module Pod
         dependency = locked_dep if locked_dep
 
         UI.message("- #{dependency}", '', 2) do
-          set = find_cached_set(dependency)
+          set = find_cached_set(dependency, dependent_spec)
           set.required_by(dependency, dependent_spec.to_s)
 
           unless @loaded_specs.include?(dependency.name)
@@ -174,7 +174,13 @@ module Pod
     # @param  [Dependency] dependency
     #         The dependency for which the set is needed.
     #
-    def find_cached_set(dependency)
+    # @param  [#to_s] dependent_spec
+    #         the specification whose dependencies are being resolved. Used
+    #         only for UI purposes.
+    #
+    # @return [Set] the cached set for a given dependency.
+    #
+    def find_cached_set(dependency, dependent_spec)
       name = dependency.root_name
       unless cached_sets[name]
         if dependency.external_source
@@ -189,8 +195,8 @@ module Pod
         end
         cached_sets[name] = set
         unless set
-          raise Informative, "Unable to find a specification " \
-            "for `#{dependency}`."
+          raise Informative, "Unable to find a specification for " \
+            "`#{dependency}` dependent by #{dependent_spec}."
         end
       end
       cached_sets[name]
