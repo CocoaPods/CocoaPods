@@ -52,6 +52,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          PRODUCT_NAME: "$(TARGET_NAME)"
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           GCC_C_LANGUAGE_STANDARD: gnu99
@@ -70,10 +71,11 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'NO'
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          OTHER_LDFLAGS: ''
         Base Configuration: Pods-SampleApp_1.xcconfig
     - Release:
         Build Settings:
+          SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
           - "-DNS_BLOCK_ASSERTIONS=1"
@@ -90,10 +92,10 @@ Targets:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           PRODUCT_NAME: "$(TARGET_NAME)"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'YES'
-          SDKROOT: iphoneos
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
         Base Configuration: Pods-SampleApp_1.xcconfig
 - Pods-SampleApp_1-Reachability:
     Build Phases:
@@ -108,6 +110,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          OTHER_LDFLAGS: ''
           PRODUCT_NAME: "$(TARGET_NAME)"
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
@@ -131,6 +134,7 @@ Targets:
         Base Configuration: Pods-SampleApp_1-Reachability-Private.xcconfig
     - Release:
         Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
@@ -148,7 +152,7 @@ Targets:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           PRODUCT_NAME: "$(TARGET_NAME)"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'YES'
           GCC_PREFIX_HEADER: Pods-SampleApp_1-Reachability-prefix.pch
@@ -163,6 +167,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          PRODUCT_NAME: "$(TARGET_NAME)"
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           GCC_C_LANGUAGE_STANDARD: gnu99
@@ -181,10 +186,11 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'NO'
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          OTHER_LDFLAGS: ''
         Base Configuration: Pods-SampleApp_2.xcconfig
     - Release:
         Build Settings:
+          SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
           - "-DNS_BLOCK_ASSERTIONS=1"
@@ -201,10 +207,10 @@ Targets:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           PRODUCT_NAME: "$(TARGET_NAME)"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'YES'
-          SDKROOT: iphoneos
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
         Base Configuration: Pods-SampleApp_2.xcconfig
 - Pods-SampleApp_2-Reachability:
     Build Phases:
@@ -219,6 +225,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          OTHER_LDFLAGS: ''
           PRODUCT_NAME: "$(TARGET_NAME)"
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
@@ -242,6 +249,7 @@ Targets:
         Base Configuration: Pods-SampleApp_2-Reachability-Private.xcconfig
     - Release:
         Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
@@ -259,7 +267,7 @@ Targets:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           PRODUCT_NAME: "$(TARGET_NAME)"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'YES'
           GCC_PREFIX_HEADER: Pods-SampleApp_2-Reachability-prefix.pch
