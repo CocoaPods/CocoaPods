@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: e1edf213a96e72263d18547bfc4f0fa47f81189c
+  revision: d14c7622e87fb19e3158656b2a459c284fbe4015
   branch: master
   specs:
     claide (0.5.0)
@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 985c0c973f27267824500ef5ab1ec399231349f1
+  revision: 524d79df5e5e8d5af9c047682bd21de87c3bb593
   branch: master
   specs:
     xcodeproj (0.15.0)
@@ -27,17 +27,17 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 9ae16ffd41f9c056fa3d47c40bdc04aa28d2897c
+  revision: d064235f1ddc2823cb5f5f1d32f51f36e719051a
   branch: master
   specs:
     cocoapods-downloader (0.4.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 748f146c173db3cfcdc3f0d15290f9c1fa791130
+  revision: 0dff2c697f487bf1b3b3ecf21deefa99020b948e
   branch: master
   specs:
-    cocoapods-try (0.1.2)
+    cocoapods-try (0.2.0)
 
 GIT
   remote: https://github.com/alloy/cocoapods-trunk.git
@@ -79,7 +79,7 @@ PATH
       claide (~> 0.5.0)
       cocoapods-core (= 0.29.0)
       cocoapods-downloader (~> 0.4.0)
-      cocoapods-try (~> 0.1.0)
+      cocoapods-try (~> 0.2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
