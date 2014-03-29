@@ -370,14 +370,19 @@ module Pod
       def spec_and_source_from_set(set)
         sources = set.sources
 
-        best_source = sources.first
-        best_version = best_source.versions(set.name).first
+        best_source = best_version = nil
         sources.each do |source|
-          version = source.versions(set.name).first
-          if version > best_version
+          versions = source.versions(set.name)
+          versions.each do |version|
+            if !best_version or version > best_version
               best_source = source
               best_version = version
+            end
           end
+        end
+
+        if !best_source or !best_version
+          raise Informative, "Unable to locate highest known specification for `#{ set.name }'"
         end
 
         return best_source.specification(set.name, best_version), best_source
