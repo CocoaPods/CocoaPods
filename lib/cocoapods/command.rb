@@ -22,7 +22,7 @@ module Pod
     require 'cocoapods/command/init'
 
     self.abstract_command = true
-    self.default_subcommand = 'install'
+    self.default_subcommand = 'help'
     self.command = 'pod'
     self.description = 'CocoaPods, the Objective-C library package manager.'
     self.plugin_prefix = 'cocoapods'
