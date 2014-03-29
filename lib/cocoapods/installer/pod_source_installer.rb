@@ -120,6 +120,7 @@ module Pod
         return unless root_spec.prepare_command
         UI.section(" > Running prepare command", '', 1) do
           Dir.chdir(root) do
+            ENV.delete('CDPATH')
             prepare_command = root_spec.prepare_command.strip_heredoc.chomp
             full_command = "\nset -e\n" + prepare_command
             bash!(full_command)
