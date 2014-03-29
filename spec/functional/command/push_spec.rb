@@ -5,11 +5,6 @@ module Pod
     extend SpecHelper::Command
     extend SpecHelper::TemporaryRepos
 
-    # Don't test push the spec to the trunk app
-    def command(*a)
-      super.tap { |cmd| cmd.stubs(:test_trunk) }
-    end
-
     before do
       config.repos_dir = SpecHelper.tmp_repos_path
     end

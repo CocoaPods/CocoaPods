@@ -7,6 +7,33 @@ def execute_command(command)
   end
 end
 
+# Bootstrap task
+#-----------------------------------------------------------------------------#
+
+desc "Initializes your working copy to run the specs"
+task :bootstrap, :use_bundle_dir? do |t, args|
+  title "Environment bootstrap"
+
+  puts "Updating submodules"
+  execute_command "git submodule update --init --recursive"
+
+  puts "Installing gems"
+  if args[:use_bundle_dir?]
+    execute_command "env XCODEPROJ_BUILD=1 bundle install --path ./travis_bundle_dir"
+  else
+    execute_command "env XCODEPROJ_BUILD=1 bundle install"
+  end
+
+  puts "Checking for hg and bzr..."
+  if `which hg`.strip.empty?
+    puts "Please install Mercurial: `brew install hg`"
+  end
+
+  if `which bzr`.strip.empty?
+    puts "Please install Bazaar: `brew install bzr`"
+  end
+end
+
 #-----------------------------------------------------------------------------#
 
 namespace :gem do
@@ -330,7 +357,10 @@ namespace :examples do
   task :build do
     Dir.chdir("examples/AFNetworking Example") do
       puts "Installing Pods"
-      pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
+      # pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
+      # TODO: The sandbox is blocking local git repos making bundler crash
+      pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/pod'
+
       execute_command "rm -rf Pods"
       execute_command "#{pod_command} install --verbose --no-repo-update"
 
@@ -353,32 +383,6 @@ namespace :examples do
 
   #--------------------------------------#
 
-end
-
-#-----------------------------------------------------------------------------#
-
-desc "Initializes your working copy to run the specs"
-task :bootstrap, :use_bundle_dir? do |t, args|
-  title "Environment bootstrap"
-
-  puts "Updating submodules"
-  execute_command "git submodule update --init --recursive"
-
-  puts "Installing gems"
-  if args[:use_bundle_dir?]
-    execute_command "env XCODEPROJ_BUILD=1 bundle install --path ./travis_bundle_dir"
-  else
-    execute_command "env XCODEPROJ_BUILD=1 bundle install"
-  end
-
-  puts "Checking for hg and bzr..."
-  if `which hg`.strip.empty?
-    puts "Please install Mercurial: `brew install hg`"
-  end
-
-  if `which bzr`.strip.empty?
-    puts "Please install Bazaar: `brew install bzr`"
-  end
 end
 
 #-----------------------------------------------------------------------------#
