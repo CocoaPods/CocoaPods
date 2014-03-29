@@ -207,7 +207,7 @@ module Pod
 
         if config.new_version_message? && cocoapods_update?(versions)
           UI.puts "\nCocoaPods #{versions['last']} is available.\n" \
-            "To update use: [sudo] gem update cocoapods\n".green
+            "To update use: [sudo] gem install cocoapods\n".green
         end
       end
 
