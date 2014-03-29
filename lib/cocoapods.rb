@@ -65,3 +65,24 @@ if ENV['COCOA_PODS_ENV'] == 'development'
   # require 'awesome_print'
   # require 'pry'
 end
+
+# TODO remove for CocoaPods 0.31
+#
+module Pod
+  class Specification
+    def pre_install(&block)
+      UI.warn "[#{self}] The pre install hook of the specification " \
+        "DSL has been deprecated, use the `resource_bundles` or the " \
+        "`prepare_command` attributes."
+      UI.puts "[#{self}] The pre_install hook will be removed in the next release".red
+      @pre_install_callback = block
+    end
+    def post_install(&block)
+      UI.warn "[#{self}] The post install hook of the specification " \
+        "DSL has been deprecated, use the `resource_bundles` or the " \
+        "`prepare_command` attributes."
+      UI.puts "[#{self}] The post_install hook will be removed in the next release".red
+      @post_install_callback = block
+    end
+  end
+end

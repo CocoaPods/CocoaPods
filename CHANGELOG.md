@@ -2,8 +2,8 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
-[CocoaPods](https://github.com/jverkoey/CocoaPods/compare/0.29.0...master)
+## 0.30.0
+[CocoaPods](https://github.com/jverkoey/CocoaPods/compare/0.29.0...0.30.0)
 
 ###### Enhancements
 
