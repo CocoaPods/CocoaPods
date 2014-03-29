@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CocoaPods Blog - Important</title>
+    <description>Posts categorized as 'important'</description>
+    <link>http://blog.cocoapods.org</link>
+    <atom:link href="http://blog.cocoapods.org/important.xml" rel="self" type="application/rss+xml" />
+
+      <item>
+        <title>BREAKING: CocoaPods is awesome!!!</title>
+        <description></description>
+        <pubDate>Sat, 29 Mar 2013 00:00:00 -0400</pubDate>
+        <link>http://blog.cocoapods.org/CocoaPods-is-awesome</link>
+        <guid isPermaLink="true">http://blog.cocoapods.org/CocoaPods-Is-Awesome</guid>
+      </item>
+
+      <item>
+        <title>We broke everything</title>
+        <description></description>
+        <pubDate>Fri, 28 Mar 2013 00:00:00 -0400</pubDate>
+        <link>http://blog.cocoapods.org/We-broke-everything</link>
+        <guid isPermaLink="true">http://blog.cocoapods.org/We-broke-everything</guid>
+      </item>
+
+  </channel>
+</rss>

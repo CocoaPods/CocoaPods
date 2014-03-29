@@ -103,9 +103,14 @@ GEM
       simplecov (>= 0.7)
       term-ansicolor
       thor
+    curb (0.8.5)
     diffy (3.0.3)
     docile (1.1.3)
     escape (0.0.4)
+    feedjira (1.1.0)
+      curb (~> 0.8.1)
+      loofah (~> 1.2.1)
+      sax-machine (~> 0.2.1)
     ffi (1.9.3)
     fuzzy_match (2.0.4)
     github-markup (1.1.0)
@@ -116,9 +121,12 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
+    loofah (1.2.1)
+      nokogiri (>= 1.4.4)
     metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (1.25.1)
+    mini_portile (0.5.3)
     mocha (1.0.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
@@ -126,6 +134,8 @@ GEM
     multi_json (1.9.2)
     nap (0.6.0)
     netrc (0.7.7)
+    nokogiri (1.6.1)
+      mini_portile (~> 0.5.0)
     notify (0.5.2)
     open4 (1.3.3)
     posix-spawn (0.3.8)
@@ -145,6 +155,8 @@ GEM
     redcarpet (2.3.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    sax-machine (0.2.1)
+      nokogiri (~> 1.6.0)
     simplecov (0.8.2)
       docile (~> 1.1.0)
       multi_json
@@ -172,6 +184,7 @@ DEPENDENCIES
   cocoapods-try!
   coveralls
   diffy
+  feedjira
   github-markup
   kicker!
   mime-types (< 2)

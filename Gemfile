@@ -19,6 +19,7 @@ group :development do
   gem "mocha-on-bacon"
   gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
   gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
+  gem 'feedjira'
 
   # For the integration tests
   gem "diffy"

@@ -14,5 +14,15 @@ module Pod
       UI.output.should.include 'spec/fixtures/spec-repos/master/AFNetworking'
     end
 
+    it "displays all news items from the blog" do
+      feed_xml = File.read('spec/fixtures/important.xml')
+      feed = Feedjira::Feed.parse(feed_xml)
+      Feedjira::Feed.stubs(:fetch_and_parse).returns(feed)
+
+      Pod::Command.run(['spec', 'which', 'AFNetworking'])
+      UI.warnings.should.include "BREAKING: CocoaPods is awesome!!!"
+      UI.warnings.should.include "We broke everything"
+    end
+
   end
 end

@@ -1,5 +1,8 @@
 require 'colored'
 require 'claide'
+require 'feedjira'
+
+NEWS_FEED_URL = "http://blog.cocoapods.org/feed.xml"
 
 module Pod
   class PlainInformative
@@ -48,6 +51,7 @@ module Pod
         UI.puts VERSION
         exit 0
       end
+      self.check_for_news
       super(argv)
       UI.print_warnings
     end
@@ -112,6 +116,13 @@ module Pod
     def verify_lockfile_exists!
       unless config.lockfile
         raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."
+      end
+    end
+
+    def self.check_for_news
+      feed = Feedjira::Feed.fetch_and_parse NEWS_FEED_URL
+      feed.entries.each do |post|
+        UI.warn post.title
       end
     end
   end
