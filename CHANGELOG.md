@@ -38,7 +38,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Fixes a bug with `pod repo remove` silently handling permission errors.  
   [Kyle Fuller](https://github.com/kylef)
-  #1778
+  [#1778](https://github.com/CocoaPods/CocoaPods/issues/1778)
 
 * `pod push` now properly checks that the repo has changed before attempting
   to commit. This only affected pods with special characters (such as `+`) in
