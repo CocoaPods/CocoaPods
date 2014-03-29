@@ -123,7 +123,13 @@ module Pod
 
   #---------------------------------------------------------------------------#
 
-  describe ExternalSources::MercurialSource do
+  RSpec.configure do |c|
+    hg_installed = system("which hg > /dev/null 2>&1")
+    puts "Skipping ExternalSources::MercurialSource specs because `hg` cannot be found" unless hg_installed
+    c.filter_run_excluding hg_not_installed: !hg_installed
+  end
+
+  describe ExternalSources::MercurialSource, hg_not_installed: true do
 
     before do
       dependency = Dependency.new("MercurialSource", :hg => fixture('mercurial-repo'))
