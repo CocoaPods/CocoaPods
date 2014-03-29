@@ -2,6 +2,15 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+[CocoaPods](https://github.com/jverkoey/CocoaPods/compare/0.30.0...master)
+
+###### Enhancements
+
+* Unset the `CDPATH` env variable before shelling-out on `prepare_command`  
+  [Marc Boquet](https://github.com/apalancat)
+  [#1943](https://github.com/CocoaPods/CocoaPods/pull/1943)
+
 ## 0.30.0
 [CocoaPods](https://github.com/jverkoey/CocoaPods/compare/0.29.0...0.30.0)
 
