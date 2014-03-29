@@ -96,7 +96,11 @@ module Pod
         root.rmtree if root.exist?
         if head_pod?
           downloader.download_head
-          @specific_source = downloader.checkout_options
+          if downloader.options_specific?
+            @specific_source = downloader.checkout_options
+          else
+            @specific_source = {}
+          end
         else
           downloader.download
           unless downloader.options_specific?
