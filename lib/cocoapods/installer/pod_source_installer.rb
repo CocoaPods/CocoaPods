@@ -63,6 +63,10 @@ module Pod
       def install!
         download_source unless predownloaded? || local?
         run_prepare_command
+      rescue => e
+        UI.notice("Error installing #{root_spec.name}")
+        clean!
+        raise
       end
 
       # Cleans the installations if appropriate.
