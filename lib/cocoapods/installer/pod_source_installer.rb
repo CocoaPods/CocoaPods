@@ -114,6 +114,10 @@ module Pod
 
       # Runs the prepare command bash script of the spec.
       #
+      # @note   Unsets the `CDPATH` env variable before running the
+      #         shell script to avoid issues with relative paths
+      #         (issue #1694).
+      #
       # @return [void]
       #
       def run_prepare_command
