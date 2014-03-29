@@ -122,5 +122,27 @@ module Pod
       end
     end
 
+    it "saves xcode project file in Podfile if one was supplied" do
+      Dir.chdir(temporary_directory) do
+        Xcodeproj::Project.new(temporary_directory + 'test1.xcodeproj').save
+        Xcodeproj::Project.new(temporary_directory + 'Project.xcodeproj').save
+
+        run_command('init', 'Project.xcodeproj')
+
+        target_definition = config.podfile.target_definitions.values.first
+        target_definition.user_project_path.should == 'Project.xcodeproj'
+      end
+    end
+
+    it "doesn't save xcode project file in Podfile if one wasn't supplied" do
+      Dir.chdir(temporary_directory) do
+        Xcodeproj::Project.new(temporary_directory + 'Project.xcodeproj').save
+
+        run_command('init')
+
+        target_definition = config.podfile.target_definitions.values.first
+        target_definition.user_project_path.should == nil
+      end
+    end
   end
 end

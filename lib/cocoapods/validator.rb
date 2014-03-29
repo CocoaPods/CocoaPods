@@ -46,7 +46,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    # Lints the specification adding a {Specification::Linter::Result} for any
+    # Lints the specification adding a {Result} for any
     # failed check to the {#results} list.
     #
     # @note   This method shows immediately which pod is being processed and
@@ -56,13 +56,21 @@ module Pod
     #
     def validate
       @results  = []
-      UI.print " -> #{spec ? spec.name : file.basename}\r" unless config.silent?
+
+      # Replace default spec with a subspec if asked for
+      a_spec = spec
+      if spec && @only_subspec
+        a_spec = spec.subspec_by_name(@only_subspec)
+        @subspec_name = a_spec.name
+      end
+
+      UI.print " -> #{a_spec ? a_spec.name : file.basename}\r" unless config.silent?
       $stdout.flush
 
       perform_linting
-      perform_extensive_analysis if spec && !quick
+      perform_extensive_analysis(a_spec) if a_spec && !quick
 
-      UI.puts " -> ".send(result_color) << (spec ? spec.to_s : file.basename.to_s)
+      UI.puts " -> ".send(result_color) << (a_spec ? a_spec.to_s : file.basename.to_s)
       print_results
       validated?
     end
@@ -79,12 +87,22 @@ module Pod
           platform_message = "[OSX] "
         end
 
+        subspecs_message = ""
+        if result.is_a?(Result)
+            subspecs = result.subspecs.uniq
+            if subspecs.count > 2
+                subspecs_message = "[" + subspecs[0..2].join(', ') + ", and more...] "
+            elsif subspecs.count > 0
+                subspecs_message = "[" + subspecs.join(',') + "] "
+            end
+        end
+
         case result.type
         when :error   then type = "ERROR"
         when :warning then type = "WARN"
         when :note    then type = "NOTE"
         else raise "#{result.type}" end
-        UI.puts "    - #{type.ljust(5)} | #{platform_message}#{result.message}"
+        UI.puts "    - #{type.ljust(5)} | #{platform_message}#{subspecs_message}#{result.message}"
       end
       UI.puts
     end
@@ -115,6 +133,14 @@ module Pod
     #         on warnings.
     #
     attr_accessor :only_errors
+
+    # @return [String] name of the subspec to check, if nil all subspecs are checked.
+    #
+    attr_accessor :only_subspec
+
+    # @return [Bool] Whether the validator should validate all subspecs
+    #
+    attr_accessor :no_subspecs
 
     #-------------------------------------------------------------------------#
 
@@ -151,7 +177,7 @@ module Pod
     # @return [Pathname] the temporary directory used by the linter.
     #
     def validation_dir
-      Pathname.new('/tmp/CocoaPods/Lint')
+      Pathname.new(File.join(Pathname.new('/tmp').realpath,'CocoaPods/Lint'))
     end
 
     #-------------------------------------------------------------------------#
@@ -167,9 +193,9 @@ module Pod
       @results.concat(linter.results)
     end
 
+    # Perform analysis for a given spec (or subspec)
     #
-    #
-    def perform_extensive_analysis
+    def perform_extensive_analysis(spec)
       spec.available_platforms.each do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
         @consumer = spec.consumer(platform)
@@ -179,9 +205,20 @@ module Pod
         check_file_patterns
         tear_down_validation_environment
       end
+      perform_extensive_subspec_analysis(spec) unless @no_subspecs
+    end
+
+    # Recurively perform the extensive analysis on all subspecs
+    #
+    def perform_extensive_subspec_analysis(spec)
+        spec.subspecs.each do |subspec|
+            @subspec_name = subspec.name
+            perform_extensive_analysis(subspec)
+        end
     end
 
     attr_accessor :consumer
+    attr_accessor :subspec_name
 
     def setup_validation_environment
       validation_dir.rmtree if validation_dir.exist?
@@ -283,10 +320,24 @@ module Pod
     def add_result(type, message)
       result = results.find { |r| r.type == type && r.message == message }
       unless result
-        result = Specification::Linter::Result.new(type, message)
+        result = Result.new(type, message)
         results << result
       end
       result.platforms << consumer.platform_name if consumer
+      result.subspecs << subspec_name if subspec_name && !result.subspecs.include?(subspec_name)
+    end
+
+    # Specialized Result to support subspecs aggregation
+    #
+    class Result < Specification::Linter::Result
+
+        def initialize(type, message)
+            super(type, message)
+            @subspecs = []
+        end
+
+        attr_reader :subspecs
+
     end
 
     #-------------------------------------------------------------------------#
@@ -302,7 +353,7 @@ module Pod
     #         in local mode.
     #
     def podfile_from_spec(platform_name, deployment_target)
-      name     = spec.name
+      name     = subspec_name ? subspec_name : spec.name
       podspec  = file.realpath
       local    = local?
       podfile  = Pod::Podfile.new do
@@ -341,9 +392,10 @@ module Pod
     end
 
     # @return [String] Executes xcodebuild in the current working directory and
-    #         returns its output (bot STDOUT and STDERR).
+    #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
+      UI.puts 'xcodebuild clean build -target Pods' if config.verbose?
       `xcodebuild clean build -target Pods 2>&1`
     end
 

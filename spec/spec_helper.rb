@@ -1,22 +1,21 @@
 # Set up coverage analysis
 #-----------------------------------------------------------------------------#
 
-
-if Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new("1.9")
-  if ENV['CI'] || ENV['GENERATE_COVERAGE']
-    require 'simplecov'
-    require 'coveralls'
-
-    if ENV['CI']
-      SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-    elsif ENV['GENERATE_COVERAGE']
-      SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
-    end
-    SimpleCov.start do
-      add_filter "/spec_helper/"
-    end
-  end
-end
+# if Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new("1.9")
+#   if ENV['CI'] || ENV['GENERATE_COVERAGE']
+#     require 'simplecov'
+#     require 'coveralls'
+#
+#     if ENV['CI']
+#       SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+#     elsif ENV['GENERATE_COVERAGE']
+#       SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
+#     end
+#     SimpleCov.start do
+#       add_filter "/spec_helper/"
+#     end
+#   end
+# end
 
 # Set up
 #-----------------------------------------------------------------------------#
@@ -35,7 +34,7 @@ $:.unshift((ROOT + 'spec').to_s)
 
 require 'cocoapods'
 require 'claide'
-require 'awesome_print'
+#require 'awesome_print'
 
 require 'spec_helper/command'         # Allows to run Pod commands and returns their output.
 require 'spec_helper/fixture'         # Provides access to the fixtures and unpacks them if needed.
@@ -64,6 +63,24 @@ module Pod
         # puts "MISSING fixture [#{name}]"
       end
       result
+    end
+  end
+end
+
+# README!
+#
+# Adds {Command::Spec::Edit#exec} to fake the {Kernel#exec} call that would
+# normally be made during an edit.
+#
+module Pod
+  class Command
+    class Spec
+      class Edit
+        def exec(cmd, *args)
+          UI.puts "#{cmd} #{args.join(' ')}"
+          raise SystemExit
+        end
+      end
     end
   end
 end

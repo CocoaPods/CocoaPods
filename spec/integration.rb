@@ -89,7 +89,7 @@ end
 #         environment.
 #
 def launch_binary(arguments, folder)
-  command = "CP_AGGRESSIVE_CACHE=TRUE #{POD_BINARY} #{arguments} --verbose --no-color 2>&1"
+  command = "CP_AGGRESSIVE_CACHE=TRUE #{POD_BINARY} #{arguments} --verbose --no-ansi 2>&1"
   Dir.chdir(TMP_DIR + folder) do
     output = `#{command}`
     it "$ pod #{arguments}" do
@@ -186,8 +186,8 @@ end
 #        The file in the temporary directory after running the pod command.
 #
 def yaml_should_match(expected, produced)
-  expected_yaml = YAML::load(File.open(expected))
-  produced_yaml = YAML::load(File.open(produced))
+  expected_yaml = File.open(expected) { |f| YAML.load(f) }
+  produced_yaml = File.open(produced) { |f| YAML.load(f) }
   # Remove CocoaPods version
   expected_yaml.delete('COCOAPODS')
   produced_yaml.delete('COCOAPODS')

@@ -1,157 +1,77 @@
-def execute_command(command)
-  if ENV['VERBOSE']
-    sh(command)
-  else
-    output = `#{command} 2>&1`
-    raise output unless $?.success?
-  end
+task :build do
+  title "Building the gem"
 end
 
+require "bundler/gem_tasks"
+
+# Bootstrap task
 #-----------------------------------------------------------------------------#
 
-namespace :gem do
+desc "Initializes your working copy to run the specs"
+task :bootstrap, :use_bundle_dir? do |t, args|
+  title "Environment bootstrap"
 
-  def gem_version
-    require File.expand_path('../lib/cocoapods/gem_version.rb', __FILE__)
-    Pod::VERSION
+  puts "Updating submodules"
+  execute_command "git submodule update --init --recursive"
+
+  require 'rbconfig'
+  if RbConfig::CONFIG['prefix'] == '/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr'
+    # Workaround Apple's mess. See https://github.com/CocoaPods/Xcodeproj/issues/137
+    #
+    # TODO This is not as correct as actually fixing the issue, figure out if we
+    # can override these build flags:
+    #
+    # ENV['DLDFLAGS'] = '-undefined dynamic_lookup -multiply_defined suppress'
+    ENV['ARCHFLAGS'] = '-Wno-error=unused-command-line-argument-hard-error-in-future'
   end
 
-  def gem_filename
-    "cocoapods-#{gem_version}.gem"
+  puts "Installing gems"
+  if args[:use_bundle_dir?]
+    execute_command "env XCODEPROJ_BUILD=1 bundle install --path ./travis_bundle_dir"
+  else
+    execute_command "env XCODEPROJ_BUILD=1 bundle install"
   end
 
-  #--------------------------------------#
-
-  desc "Build a gem for the current version"
-  task :build do
-    sh "gem build cocoapods.gemspec"
+  puts "Checking for hg and bzr..."
+  if `which hg`.strip.empty?
+    puts "Please install Mercurial: `brew install hg`"
   end
 
-  #--------------------------------------#
-
-  desc "Install a gem version of the current code"
-  task :install => :build do
-    sh "gem install #{gem_filename}"
-  end
-
-  #--------------------------------------#
-
-  def silent_sh(command)
-    output = `#{command} 2>&1`
-    unless $?.success?
-      puts output
-      exit 1
-    end
-    output
-  end
-
-  desc "Run all specs, build and install gem, commit version change, tag version change, and push everything"
-  task :release do
-
-    unless ENV['SKIP_CHECKS']
-      if `git symbolic-ref HEAD 2>/dev/null`.strip.split('/').last != 'master'
-        $stderr.puts "[!] You need to be on the `master' branch in order to be able to do a release."
-        exit 1
-      end
-
-      if `git tag`.strip.split("\n").include?(gem_version)
-        $stderr.puts "[!] A tag for version `#{gem_version}' already exists. Change the version in lib/cocoapods/gem_version.rb"
-        silent_sh "open lib/cocoapods/gem_version.rb"
-        exit 1
-      end
-
-      diff_lines = `git diff --name-only`.strip.split("\n")
-      diff_lines.delete('CHANGELOG.md')
-      diff_lines.delete('Gemfile.lock')
-
-      if diff_lines.size == 0
-        $stderr.puts "[!] Change the version number yourself in lib/cocoapods/gem_version.rb"
-        exit 1
-      end
-
-      if diff_lines != ['lib/cocoapods/gem_version.rb']
-        $stderr.puts "[!] Only change the version number in a release commit!"
-        exit 1
-      end
-
-      puts "You are about to release `#{gem_version}', is that correct? [y/n]"
-      exit if $stdin.gets.strip.downcase != 'y'
-
-    end
-
-    require 'date'
-
-    # First check if the required gems have been pushed
-    gem_spec = eval(File.read(File.expand_path('../cocoapods.gemspec', __FILE__)))
-    gem_names = ['xcodeproj', 'cocoapods-core', 'cocoapods-downloader', 'claide']
-    gem_names.each do |gem_name|
-      gem = gem_spec.dependencies.find { |d| d.name == gem_name }
-      required_version = gem.requirement.requirements.first.last.to_s
-
-      puts "* Checking if #{gem_name} #{required_version} exists on the gem host"
-      search_result = silent_sh("gem search --all --pre --remote #{gem_name}")
-      remote_versions = search_result.match(/#{gem_name} \((.*)\)/m)[1].split(', ')
-      unless remote_versions.include?(required_version)
-        $stderr.puts "[!] The #{gem_name} version `#{required_version}' required by " \
-          "this version of CocoaPods does not exist on the gem host. " \
-          "Either push that first, or fix the version requirement."
-        exit 1
-      end
-    end
-
-    # Ensure that the branches are up to date with the remote
-    sh "git pull"
-
-    puts "* Updating Bundle"
-    silent_sh('bundle update')
-
-    unless ENV['SKIP_SPECS']
-      puts "* Running specs"
-      silent_sh('rake spec:all')
-    end
-
-    tmp = File.expand_path('../tmp', __FILE__)
-    tmp_gems = File.join(tmp, 'gems')
-
-    Rake::Task['gem:build'].invoke
-
-    puts "* Testing gem installation (tmp/gems)"
-    silent_sh "rm -rf '#{tmp}'"
-    silent_sh "gem install --install-dir='#{tmp_gems}' #{gem_filename}"
-
-    # Then release
-    sh "git commit lib/cocoapods/gem_version.rb CHANGELOG.md Gemfile.lock -m 'Release #{gem_version}'"
-    sh "git tag -a #{gem_version} -m 'Release #{gem_version}'"
-    sh "git push origin master"
-    sh "git push origin --tags"
-    sh "gem push #{gem_filename}"
-
-    # Update the last version in CocoaPods-version.yml
-    puts "* Updating last known version in Specs repo"
-    specs_branch = 'master'
-    Dir.chdir('../Specs') do
-      puts Dir.pwd
-      sh "git checkout #{specs_branch}"
-      sh "git pull"
-
-      yaml_file  = 'CocoaPods-version.yml'
-      unless File.exist?(yaml_file)
-        $stderr.puts "[!] Unable to find #{yaml_file}!"
-        exit 1
-      end
-      require 'yaml'
-      cocoapods_version = YAML.load_file(yaml_file)
-      cocoapods_version['last'] = gem_version
-      File.open(yaml_file, "w") do |f|
-        f.write(cocoapods_version.to_yaml)
-      end
-
-      sh "git commit #{yaml_file} -m 'CocoaPods release #{gem_version}'"
-      sh "git push"
-    end
+  if `which bzr`.strip.empty?
+    puts "Please install Bazaar: `brew install bzr`"
   end
 end
 
+# Post release
+#-----------------------------------------------------------------------------#
+
+desc "Updates the last know version of CocoaPods in the specs repo"
+task :post_release do
+  title "Updating last known version in Specs repo"
+  specs_branch = 'master'
+  Dir.chdir('../Specs') do
+    puts Dir.pwd
+    sh "git checkout #{specs_branch}"
+    sh "git pull"
+
+    yaml_file  = 'CocoaPods-version.yml'
+    unless File.exist?(yaml_file)
+      $stderr.puts "[!] Unable to find #{yaml_file}!"
+      exit 1
+    end
+    require 'yaml'
+    cocoapods_version = YAML.load_file(yaml_file)
+    cocoapods_version['last'] = gem_version
+    File.open(yaml_file, "w") do |f|
+      f.write(cocoapods_version.to_yaml)
+    end
+
+    sh "git commit #{yaml_file} -m 'CocoaPods release #{gem_version}'"
+    sh "git push"
+  end
+end
+
+# Spec
 #-----------------------------------------------------------------------------#
 
 namespace :spec do
@@ -219,9 +139,6 @@ namespace :spec do
     Rake::Task['examples:build'].invoke
   end
 
-  # Travis
-  #--------------------------------------#
-  #
   # The integration 2 tests and the examples use the normal CocoaPods setup.
   #
   desc "Run all specs and build all examples"
@@ -242,8 +159,6 @@ namespace :spec do
     Rake::Task['examples:build'].invoke
   end
 
-  #--------------------------------------#
-
   desc "Rebuild all the fixture tarballs"
   task :rebuild_fixture_tarballs do
     tarballs = FileList['spec/fixtures/**/*.tar.gz']
@@ -252,8 +167,6 @@ namespace :spec do
       sh "cd #{File.dirname(tarball)} && rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{basename[0..-8]}"
     end
   end
-
-  #--------------------------------------#
 
   desc "Unpacks all the fixture tarballs"
   task :unpack_fixture_tarballs do
@@ -266,14 +179,10 @@ namespace :spec do
     end
   end
 
-  #--------------------------------------#
-
   desc "Removes the stored VCR fixture"
   task :clean_vcr do
     sh "rm -f spec/fixtures/vcr/tarballs.yml"
   end
-
-  #--------------------------------------#
 
   desc "Rebuilds integration fixtures"
   task :rebuild_integration_fixtures do
@@ -302,11 +211,10 @@ namespace :spec do
     puts "Integration fixtures updated, commit and push in the `spec/cocoapods-integration-specs` submodule"
   end
 
-  #--------------------------------------#
-
   task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
 end
 
+# Examples
 #-----------------------------------------------------------------------------#
 
 task :examples => "examples:build"
@@ -324,13 +232,14 @@ namespace :examples do
     end
   end
 
-  #--------------------------------------#
-
   desc "Build all examples"
   task :build do
     Dir.chdir("examples/AFNetworking Example") do
       puts "Installing Pods"
-      pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
+      # pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
+      # TODO: The sandbox is blocking local git repos making bundler crash
+      pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/pod'
+
       execute_command "rm -rf Pods"
       execute_command "#{pod_command} install --verbose --no-repo-update"
 
@@ -347,28 +256,7 @@ namespace :examples do
         sdk = Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
         execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean install ONLY_ACTIVE_ARCH=NO  -sdk #{sdk}"
       end
-
     end
-  end
-
-  #--------------------------------------#
-
-end
-
-#-----------------------------------------------------------------------------#
-
-desc "Initializes your working copy to run the specs"
-task :bootstrap, :use_bundle_dir? do |t, args|
-  title "Environment bootstrap"
-
-  puts "Updating submodules"
-  execute_command "git submodule update --init --recursive"
-
-  puts "Installing gems"
-  if args[:use_bundle_dir?]
-    execute_command "bundle install --path ./travis_bundle_dir"
-  else
-    execute_command "bundle install"
   end
 end
 
@@ -379,9 +267,22 @@ task :spec => 'spec:all'
 
 task :default => :spec
 
+# Helpers
 #-----------------------------------------------------------------------------#
 
-# group helpers
+def execute_command(command)
+  if ENV['VERBOSE']
+    sh(command)
+  else
+    output = `#{command} 2>&1`
+    raise output unless $?.success?
+  end
+end
+
+def gem_version
+  require File.expand_path('../lib/cocoapods/gem_version.rb', __FILE__)
+  Pod::VERSION
+end
 
 def title(title)
   cyan_title = "\033[0;36m#{title}\033[0m"

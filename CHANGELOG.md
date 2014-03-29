@@ -3,8 +3,74 @@
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
 ## Master
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.30.0...master)
+• [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.30.0...master)
+
+##### Enhancements
+
+##### Bug Fixes
+* Fix for when using s.version as the :tag for a git repository in a Podspec
+  [Joel Parsons](https://github.com/joelparsons)
+  [#1721](https://github.com/CocoaPods/CocoaPods/issues/1721)
+  [Core#72](https://github.com/CocoaPods/Core/pull/72)
+
+## 0.30.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
 
 ###### Enhancements
+
+* Radically reduce first run pod setup bandwidth by creating a shallow clone of
+  the ‘master’ repo by default. Use the `--no-shallow` option to perform a full
+  clone instead.  
+  [Jeff Verkoeyen](https://github.com/jverkoey)
+  [#1803](https://github.com/CocoaPods/CocoaPods/pull/1803)
+
+* Improves the error message when searching with an invalid regular expression.  
+  [Kyle Fuller](https://github.com/kylef)
+
+* Improves `pod init` to save Xcode project file in Podfile when one was supplied.  
+  [Kyle Fuller](https://github.com/kylef)
+
+* Adds functionality to specify a template URL for the `pod lib create` command.  
+  [Piet Brauer](https://github.com/pietbrauer)
+
+###### Bug Fixes
+
+* Fixes a bug with `pod repo remove` silently handling permission errors.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#1778](https://github.com/CocoaPods/CocoaPods/issues/1778)
+
+* `pod push` now properly checks that the repo has changed before attempting
+  to commit. This only affected pods with special characters (such as `+`) in
+  their names.  
+  [Gordon Fontenot](https://github.com/gfontenot)
+  [#1739](https://github.com/CocoaPods/CocoaPods/pull/1739)
+
+
+## 0.29.0
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
+• [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)
+• [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.2.0...0.3.0)
+
+###### Breaking
+
+* The command `podfile_info` is now a plugin offered by CocoaPods.
+  As a result, the command has been removed from CocoaPods.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1589](https://github.com/CocoaPods/CocoaPods/issues/1589)
+
+* JSON has been adopted as the format to store specifications. As a result
+  the `pod ipc spec` command returns a JSON representation and the YAML
+  specifications are not supported anymore. JSON specifications adopt the
+  `.podspec.json` extension.
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1568](https://github.com/CocoaPods/CocoaPods/pull/1568)
+
+###### Enhancements
+
+* Introduced `pod try` the easiest way to test the example project of a pod.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1568](https://github.com/CocoaPods/CocoaPods/pull/1568)
 
 * Pod headers are now provided to the user target as a system
   header. This means that any warnings in a Pod's code will show
@@ -13,9 +79,38 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Swizzlr](https://github.com/swizzlr)
   [#1596](https://github.com/CocoaPods/CocoaPods/pull/1596)
 
-* Support LZMA2 compressed tarballs in the downloader  
+* Support LZMA2 compressed tarballs in the downloader.  
   [Kyle Fuller](https://github.com/kylef)
   [cocoapods-downloader#5](https://github.com/CocoaPods/cocoapods-downloader/pull/5)
+
+* Add Bazaar support for installing directly from a repo.  
+  [Fred McCann](https://github.com/fmccann)
+  [#1632](https://github.com/CocoaPods/CocoaPods/pull/1632)
+
+* The `pod search <query>` command now supports regular expressions
+  for the query parameter when searching using the option `--full`.  
+  [Florian Hanke](https://github.com/floere)
+  [#1643](https://github.com/CocoaPods/CocoaPods/pull/1643)
+
+* Pod lib lint now accepts multiple podspecs in the same folder.  
+  [kra Larivain/OpenTable](https://github.com/opentable)
+  [#1635](https://github.com/CocoaPods/CocoaPods/pull/1635)
+
+* The `pod push` command will now silently test the upcoming CocoaPods trunk
+  service. The service is only tested when pushing to the master repo and the
+  test doesn't affect the normal workflow.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+
+* The `pod search <query>` command now supports searching on cocoapods.org
+  when searching using the option `--web`. Options `--ios` and `--osx` are
+  fully supported.
+  [Florian Hanke](https://github.com/floere)
+  [#1643](https://github.com/CocoaPods/CocoaPods/pull/1682)
+
+* The `pod search <query>` command now supports multiword queries when using
+  the `--web` option.
+  [Florian Hanke](https://github.com/floere)
+  [#1643](https://github.com/CocoaPods/CocoaPods/pull/1682)
 
 ###### Bug Fixes
 
@@ -26,15 +121,55 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Fixed the developer frameworks search paths so that
   `$(SDKROOT)/Developer/Library/Frameworks` is used for iOS and
-  `$(DEVELOPER_LIBRARY_DIR)/Frameworks` is used for OS X  
+  `$(DEVELOPER_LIBRARY_DIR)/Frameworks` is used for OS X.  
   [Kevin Wales](https://github.com/kwales)
-  [#1562](https://github.com/CocoaPods/pull/1562)
+  [#1562](https://github.com/CocoaPods/CocoaPods/pull/1562)
 
 * When updating the pod repos, repositories with unreachable remotes
-  are now ignored. This fixes an issue with certain private repositories.
+  are now ignored. This fixes an issue with certain private repositories.  
   [Joshua Kalpin](https://github.com/Kapin)
   [#1595](https://github.com/CocoaPods/CocoaPods/pull/1595)
   [#1571](https://github.com/CocoaPods/CocoaPods/issues/1571)
+
+* The linter will now display an error if a Pod's name contains whitespace.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [Core#39](https://github.com/CocoaPods/Core/pull/39)
+  [#1610](https://github.com/CocoaPods/CocoaPods/issues/1610)
+  
+* Having the silent flag enabled in the config will no longer cause issues
+  with `pod search`. In addition, the flag `--silent` is no longer supported
+  for the command.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1627](https://github.com/CocoaPods/CocoaPods/pull/1627)
+
+* The linter will now display an error if a framework ends with `.framework`
+  (i.e. `QuartzCore.framework`).  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#1331](https://github.com/CocoaPods/CocoaPods/issues/1336)
+  [Core#45](https://github.com/CocoaPods/Core/pull/45)
+
+* The linter will now display an error if a library ends with `.a` or `.dylib`
+  (i.e. `z.dylib`). It will also display an error if it begins with `lib`
+  (i.e. `libxml`).  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [Core#44](https://github.com/CocoaPods/Core/issues/44)
+
+* The ARCHS build setting can come back as an array when more than one
+  architecture is specified.  
+  [Carson McDonald](https://github.com/carsonmcdonald)
+  [#1628](https://github.com/CocoaPods/CocoaPods/issues/1628)
+
+* Fixed all issues caused by `/tmp` being a symlink to `/private/tmp`. 
+  This affected mostly `pod lib lint`, causing it to fail when the 
+  Pod used `prefix_header_*` or when the pod headers imported headers 
+  using the namespaced syntax (e.g. `#import <MyPod/Header.h>`).  
+  [kra Larivain/OpenTable](https://github.com/opentable)
+  [#1514](https://github.com/CocoaPods/CocoaPods/pull/1514)
+
+* Fixed an incorrect path being used in the example app Podfile generated by
+  `pod lib create`.
+  [Eloy Durán](https://github.com/alloy)
+  [cocoapods-try#5](https://github.com/CocoaPods/cocoapods-try/issues/5)
 
 
 ## 0.28.0

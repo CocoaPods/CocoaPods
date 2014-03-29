@@ -16,6 +16,7 @@ module Pod
       klass  =  if params.key?(:git)          then GitSource
                 elsif params.key?(:svn)       then SvnSource
                 elsif params.key?(:hg)        then MercurialSource
+                elsif params.key?(:bzr)       then BazaarSource                  
                 elsif params.key?(:podspec)   then PodspecSource
                 elsif params.key?(:path)      then PathSource
                 end
@@ -261,6 +262,35 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
+    # Provides support for fetching a specification file from a Bazaar
+    # source remote.
+    #
+    # Supports all the options of the downloader (is similar to the git key of
+    # `source` attribute of a specification).
+    #
+    # @note The podspec must be in the root of the repository and should have a
+    #       name matching the one of the dependency.
+    #
+    class BazaarSource < AbstractExternalSource
+
+      # @see AbstractExternalSource#fetch
+      #
+      def fetch(sandbox)
+        pre_download(sandbox)
+      end
+
+      # @see AbstractExternalSource#description
+      #
+      def description
+        "from `#{params[:bzr]}`".tap do |description|
+          description << ", tag `#{params[:tag]}`" if params[:tag]
+          description << ", revision `#{params[:revision]}`" if params[:revision]
+        end
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
     # Provides support for fetching a specification file from an URL. Can be
     # http, file, etc.
     #
@@ -348,7 +378,7 @@ module Pod
         pathname      = Pathname.new(absolute_path)
 
         unless pathname.exist?
-          raise Informative, "No podspec found for `#{name}` in `#{params[:local]}`"
+          raise Informative, "No podspec found for `#{name}` in `#{declared_path}`"
         end
         pathname
       end

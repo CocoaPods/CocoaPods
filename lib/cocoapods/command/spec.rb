@@ -61,13 +61,17 @@ module Pod
         def self.options
           [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
             ["--only-errors", "Lint validates even if warnings are present"],
+            ["--subspec=NAME","Lint validates only the given subspec"],
+            ["--no-subspecs", "Lint skips validation of subspecs"],
             ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
         end
 
         def initialize(argv)
-          @quick       =  argv.flag?('quick')
-          @only_errors =  argv.flag?('only-errors')
-          @clean       =  argv.flag?('clean', true)
+          @quick        = argv.flag?('quick')
+          @only_errors  = argv.flag?('only-errors')
+          @clean        = argv.flag?('clean', true)
+          @subspecs     = argv.flag?('subspecs', true)
+          @only_subspec = argv.option('subspec')
           @podspecs_paths = argv.arguments!
           super
         end
@@ -80,6 +84,8 @@ module Pod
             validator.quick       = @quick
             validator.no_clean    = !@clean
             validator.only_errors = @only_errors
+            validator.no_subspecs = !@subspecs || @only_subspec
+            validator.only_subspec = @only_subspec
             validator.validate
             invalid_count += 1 unless validator.validated?
 
@@ -129,7 +135,7 @@ module Pod
         end
 
         def podspecs_tmp_dir
-          Pathname.new('/tmp/CocoaPods/Lint_podspec')
+          Pathname.new(File.join(Pathname.new('/tmp').realpath, '/CocoaPods/Lint_podspec'))
         end
       end
 
@@ -201,7 +207,7 @@ module Pod
             get_path_of_spec(@spec)
           end
 
-          UI.puts File.open(filepath).read
+          UI.puts File.read(filepath)
         end
       end
 
@@ -294,10 +300,10 @@ module Pod
           UI.puts "#{ index + 1 }: #{ item }"
         end
 
-        print message
+        UI.puts message
 
-        index = STDIN.gets.chomp.to_i - 1
-        if index < 0 || index > array.count
+        index = UI.gets.chomp.to_i - 1
+        if index < 0 || index > array.count - 1
           raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
         else
           index
@@ -364,14 +370,19 @@ module Pod
       def spec_and_source_from_set(set)
         sources = set.sources
 
-        best_source = sources.first
-        best_version = best_source.versions(set.name).first
+        best_source = best_version = nil
         sources.each do |source|
-          version = source.versions(set.name).first
-          if version > best_version
+          versions = source.versions(set.name)
+          versions.each do |version|
+            if !best_version or version > best_version
               best_source = source
               best_version = version
+            end
           end
+        end
+
+        if !best_source or !best_version
+          raise Informative, "Unable to locate highest known specification for `#{ set.name }'"
         end
 
         return best_source.specification(set.name, best_version), best_source
@@ -479,21 +490,24 @@ Pod::Spec.new do |s|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  s.license      = 'MIT (example)'
-  # s.license      = { :type => 'MIT', :file => 'FILE_LICENSE' }
+  s.license      = "MIT (example)"
+  # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  Specify the authors of the library, with email addresses. Email addresses
-  #  of the authors by using the SCM log. E.g. $ git log. If no email can be
-  #  found CocoaPods accept just the names.
+  #  of the authors are extracted from the SCM log. E.g. $ git log. CocoaPods also
+  #  accepts just a name if you'd rather not provide an email address.
   #
-
-  s.author       = { "#{data[:author_name]}" => "#{data[:author_email]}" }
-  # s.authors      = { "#{data[:author_name]}" => "#{data[:author_email]}", "other author" => "email@address.com" }
-  # s.author       = '#{data[:author_name]}', 'other author'
-
+  #  Specify a social_media_url where others can refer to, for example a twitter
+  #  profile URL.
+  #
+  
+  s.author             = { "#{data[:author_name]}" => "#{data[:author_email]}" }
+  # Or just: s.author    = "#{data[:author_name]}"
+  # s.authors            = { "#{data[:author_name]}" => "#{data[:author_email]}" }
+  # s.social_media_url   = "http://twitter.com/#{data[:author_name]}"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -502,17 +516,17 @@ Pod::Spec.new do |s|
   #
 
   # s.platform     = :ios
-  # s.platform     = :ios, '5.0'
+  # s.platform     = :ios, "5.0"
 
   #  When using multiple platforms
-  # s.ios.deployment_target = '5.0'
-  # s.osx.deployment_target = '10.7'
+  # s.ios.deployment_target = "5.0"
+  # s.osx.deployment_target = "10.7"
 
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  Specify the location from where the source should be retrieved.
-  #  Supports git, hg, svn and HTTP.
+  #  Supports git, hg, bzr, svn and HTTP.
   #
 
   s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
@@ -526,10 +540,10 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = 'Classes', 'Classes/**/*.{h,m}'
-  s.exclude_files = 'Classes/Exclude'
+  s.source_files  = "Classes", "Classes/**/*.{h,m}"
+  s.exclude_files = "Classes/Exclude"
 
-  # s.public_header_files = 'Classes/**/*.h'
+  # s.public_header_files = "Classes/**/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -552,11 +566,11 @@ Pod::Spec.new do |s|
   #  the lib prefix of their name.
   #
 
-  # s.framework  = 'SomeFramework'
-  # s.frameworks = 'SomeFramework', 'AnotherFramework'
+  # s.framework  = "SomeFramework"
+  # s.frameworks = "SomeFramework", "AnotherFramework"
 
-  # s.library   = 'iconv'
-  # s.libraries = 'iconv', 'xml2'
+  # s.library   = "iconv"
+  # s.libraries = "iconv", "xml2"
 
 
   # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -567,8 +581,8 @@ Pod::Spec.new do |s|
 
   # s.requires_arc = true
 
-  # s.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2' }
-  # s.dependency 'JSONKit', '~> 1.4'
+  # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
+  # s.dependency "JSONKit", "~> 1.4"
 
 end
       SPEC

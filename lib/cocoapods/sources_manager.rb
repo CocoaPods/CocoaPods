@@ -61,16 +61,17 @@ module Pod
       def search_by_name(query, full_text_search = false)
         if full_text_search
           set_names = []
+          query_regexp = /#{query}/i
           updated_search_index.each do |name, set_data|
-            text = name.dup
+            texts = [name]
             if full_text_search
-              text << set_data['authors'].to_s if set_data['authors']
-              text << set_data['summary']      if set_data['summary']
-              text << set_data['description']  if set_data['description']
+              texts << set_data['authors'].to_s if set_data['authors']
+              texts << set_data['summary']      if set_data['summary']
+              texts << set_data['description']  if set_data['description']
             end
-            set_names << name if text.downcase.include?(query.downcase)
+            set_names << name unless texts.grep(query_regexp).empty?
           end
-          sets = set_names.sort.map { |name| aggregate.represenative_set(name) }
+          sets = set_names.sort.map { |name| aggregate.representative_set(name) }
         else
           sets = aggregate.search_by_name(query, false)
         end
@@ -142,19 +143,19 @@ module Pod
         if source_name
           specified_source = aggregate.all.find { |s| s.name == source_name }
           raise Informative, "Unable to find the `#{source_name}` repo."    unless specified_source
-          raise Informative, "The `#{source_name}` repo is not a git repo." unless git_repo?(specified_source.repo)
+          raise Informative, "The `#{source_name}` repo is not a git repo." unless git_repo?(specified_source.data_provider.repo)
           sources = [specified_source]
         else
-          sources = aggregate.all.select { |source| git_repo?(source.repo) && git_remote_reachable?(source.repo) }
+          sources = aggregate.all.select { |source| git_repo?(source.data_provider.repo) && git_remote_reachable?(source.data_provider.repo) }
         end
 
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            Dir.chdir(source.repo) do
+            Dir.chdir(source.data_provider.repo) do
               output = git!("pull")
               UI.puts output if show_output && !config.verbose?
             end
-            check_version_information(source.repo)
+            check_version_information(source.data_provider.repo)
           end
         end
       end
@@ -205,7 +206,8 @@ module Pod
         end
 
         if config.new_version_message? && cocoapods_update?(versions)
-          UI.puts "\nCocoaPods #{versions['last']} is available.\n".green
+          UI.puts "\nCocoaPods #{versions['last']} is available.\n" \
+            "To update use: [sudo] gem install cocoapods\n".green
         end
       end
 

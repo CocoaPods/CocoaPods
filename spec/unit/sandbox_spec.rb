@@ -89,6 +89,12 @@ module Pod
       it "returns the directory where to store the documentation" do
         @sandbox.documentation_dir.should == temporary_directory + 'Sandbox/Documentation'
       end
+
+      it "handles symlinks in /tmp" do
+        tmp_sandbox = Pod::Sandbox.new("/tmp/CocoaPods")
+        tmp_sandbox.root.should.be == Pathname.new("/private/tmp/CocoaPods")
+        tmp_sandbox.implode
+      end
     end
 
     #-------------------------------------------------------------------------#

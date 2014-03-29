@@ -13,7 +13,6 @@ module Pod
     require 'cocoapods/command/lib'
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
-    require 'cocoapods/command/podfile_info'
     require 'cocoapods/command/project'
     require 'cocoapods/command/push'
     require 'cocoapods/command/repo'
@@ -46,8 +45,8 @@ module Pod
     def self.run(argv)
       argv = CLAide::ARGV.new(argv)
       if argv.flag?('version')
-        puts VERSION
-        exit!(0)
+        UI.puts VERSION
+        exit 0
       end
       super(argv)
       UI.print_warnings
@@ -81,7 +80,7 @@ module Pod
       super
       config.silent = argv.flag?('silent', config.silent)
       config.verbose = self.verbose? unless self.verbose.nil?
-      unless self.colorize_output?
+      unless self.ansi_output?
         String.send(:define_method, :colorize) { |string , _| string }
       end
     end

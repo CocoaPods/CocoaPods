@@ -1,5 +1,6 @@
 # Do’s and Don’ts
 
+* **Search the solutions in the [troubleshooting guide](http://guides.cocoapods.org/using/troubleshooting.html).** Or any of the many other [guides](http://guides.cocoapods.org).
 * **Search tickets before you file a new one.** Add to tickets if you have new information about the issue.
 * **Only file tickets about the CocoaPods tool itself.** This includes [CocoaPods](https://github.com/CocoaPods/CocoaPods/issues),
   [CocoaPods/Core](https://github.com/CocoaPods/Core/issues), and [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/issues).
@@ -29,7 +30,7 @@ $ xcodeproj project-diff
 
 If you are familiar with Ruby, making a pull request with a failing test case
 can speed up the resolution of the bug. If the issue is more complex you can
-add an [integration test](https://github.com/CocoaPods/CocoaPods/tree/master/spec/integration)
+add an [integration test](https://github.com/CocoaPods/cocoapods-integration-specs/)
 which doesn't require any ruby knowledge.
 
 
@@ -38,11 +39,38 @@ which doesn't require any ruby knowledge.
 Please try to be precise about the proposed outcome of the feature and how it
 would related to existing features.
 
+From the [CocoaPods blog](http://blog.cocoapods.org/CocoaPods-0.28/):
+
+> Fighting feature creep in CocoaPods is not easy. We hear about a lot of great ideas and many of them don't make the cut as they would not be useful for at least 80% of our users.
+
+Should you require a feature isn't suited for mainstream users, consider suggesting a [CocoaPods plugin](http://blog.cocoapods.org/CocoaPods-0.28/) instead.
+
 
 ## Pull Requests
 
 We **love** pull requests and if a contribution is significant we tend to offer
 push access.
 
-All contributions will be licenced under the MIT license.
+All contributions _will_ be licenced under the MIT license.
+
+Code/comments should adhere to the following rules:
+
+* Names should be descriptive and concise.
+* Use two spaces and no tabs.
+* All changes require test coverage to ensure it does not break during refactor
+  work. (There are a few exceptions to this, which can be recognized by there
+  not being any coverage for similar code.)
+* All enhancements and bug fixes need to be documented in the CHANGELOG.
+* When writing comments, use properly constructed sentences, including
+  punctuation.
+* When documenting APIs and/or source code, don't make assumptions or make
+  implications about race, gender, religion, political orientation or anything
+  else that isn't relevant to the project.
+* Remember that source code usually gets written once and read often: ensure
+  the reader doesn't have to make guesses. Make sure that the purpose and inner
+  logic are either obvious to a reasonably skilled professional, or add a
+  comment that explains it.
+* The message of the commit should be prefixed by the name of the file which is
+  the main focus of the patch enclosed by square brackets (.e.g. `[Installer]
+  install pods`).
 
