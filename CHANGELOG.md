@@ -9,6 +9,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ##### Enhancements
 
 ##### Bug Fixes
+* Fix for when using s.version as the :tag for a git repository in a Podspec
+  [Joel Parsons](https://github.com/joelparsons)
+  [#1721](https://github.com/CocoaPods/CocoaPods/issues/1721)
+  [Core#72](https://github.com/CocoaPods/Core/pull/72)
 
 ## 0.30.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
