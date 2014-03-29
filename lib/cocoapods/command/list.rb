@@ -7,7 +7,8 @@ module Pod
       def self.options
         [[
           "--update", "Run `pod repo update` before listing",
-          "--stats",  "Show additional stats (like GitHub watchers and forks)"
+          "--stats",  "Show additional stats (like GitHub watchers and forks)",
+          "--pod-versions", "Show latest version of each pod"
         ]].concat(super)
       end
 
@@ -17,6 +18,7 @@ module Pod
       def initialize(argv)
         @update = argv.flag?('update')
         @stats  = argv.flag?('stats')
+        @pod_versions = argv.flag?('pod-versions')
         super
       end
 
@@ -24,7 +26,7 @@ module Pod
         update_if_necessary!
 
         sets = SourcesManager.all_sets
-        sets.each { |set| UI.pod(set, :name) }
+        sets.each { |set| UI.pod(set, @pod_versions ? :name_and_version : :name) }
         UI.puts "\n#{sets.count} pods were found"
       end
 
