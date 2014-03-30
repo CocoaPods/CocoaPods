@@ -43,7 +43,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Eloy Durán](https://github.com/alloy)
 
 * Robustness against user Git configuration and against merge commits in `pod
-  repo` subcommands.
+  repo` subcommands.  
   [Boris Bügling](https://github.com/neonichu)
   [#1949](https://github.com/CocoaPods/CocoaPods/issues/1949)
   [#1978](https://github.com/CocoaPods/CocoaPods/pull/1978)
