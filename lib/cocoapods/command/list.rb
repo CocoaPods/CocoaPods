@@ -24,7 +24,7 @@ module Pod
         update_if_necessary!
 
         sets = SourcesManager.all_sets
-        sets.each { |set| UI.pod(set, :name) }
+        sets.each { |set| UI.pod(set, :name_and_version) }
         UI.puts "\n#{sets.count} pods were found"
       end
 

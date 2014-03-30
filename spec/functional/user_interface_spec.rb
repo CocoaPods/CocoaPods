@@ -41,6 +41,12 @@ module Pod
       output = UI.output
       output.should.include? "RestKit/Network"
     end
+
+    it "presents only name and version of a specification set in :name_and_version mode" do
+      @set = SourcesManager.search_by_name('RestKit').first
+      UI.pod(@set, :name_and_version)
+      output = UI.output
+      output.should.include? "RestKit #{@set.versions.first}"
+    end
   end
 end
-
