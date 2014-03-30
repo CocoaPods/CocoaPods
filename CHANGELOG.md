@@ -15,6 +15,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
+* Fix :head option for Pods from HTTP source.
+  [Boris Bügling](https://github.com/neonichu)
+  [#1947](https://github.com/CocoaPods/CocoaPods/issues/1947)
+  [#1958](https://github.com/CocoaPods/CocoaPods/pull/1958)
+
 * Cleanup a pod directory if error occurs while downloading
   [Alex Rothenberg](https://github.com/alexrothenberg)
   [#1842](https://github.com/CocoaPods/CocoaPods/issues/1842)
