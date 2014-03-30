@@ -61,6 +61,15 @@ module Pod
           }
         end
 
+        it "fails when using :head for Http source" do
+          config.sandbox.store_head_pod('BananaLib')
+          @spec.source = { :http => 'http://dl.google.com/googleadmobadssdk/googleadmobsearchadssdkios.zip' }
+          @spec.source_files = 'GoogleAdMobSearchAdsSDK/*.h'
+          should.raise Informative do
+            @installer.install!
+          end.message.should.match /does not support the :head option, as it uses a Http source./
+        end
+
       end
 
       #--------------------------------------#
