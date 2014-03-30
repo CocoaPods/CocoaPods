@@ -99,8 +99,18 @@ module Pod
       def download_source
         root.rmtree if root.exist?
         if head_pod?
-          downloader.download_head
-          @specific_source = downloader.checkout_options
+          begin
+            downloader.download_head
+            @specific_source = downloader.checkout_options
+          rescue RuntimeError => e
+            if e.message == 'Abstract method'
+              raise Informative, "The pod '" + root_spec.name + "' does not " + 
+                "support the :head option, as it uses a " + downloader.name + 
+                " source. Remove that option to use this pod."
+            else
+              raise
+            end
+          end
         else
           downloader.download
           unless downloader.options_specific?
