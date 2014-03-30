@@ -95,6 +95,7 @@ module Pod
           `git remote -v`
           `git fetch -q`
           `git branch --set-upstream-to=origin/master master`
+          `git config branch.master.rebase true`
         end
         config.repos_dir = SpecHelper.tmp_repos_path
 
