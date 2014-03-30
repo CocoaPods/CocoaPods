@@ -29,6 +29,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
+* Make SourcesManager ignore some global git configs and prevent merge commits
+  [Boris Bügling](https://github.com/neonichu)
+  [#1949](https://github.com/CocoaPods/CocoaPods/issues/1949)
+  [#1978](https://github.com/CocoaPods/CocoaPods/pull/1978)
+
 * Fix :head option for Pods from HTTP source.
   [Boris Bügling](https://github.com/neonichu)
   [#1947](https://github.com/CocoaPods/CocoaPods/issues/1947)
