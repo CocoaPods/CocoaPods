@@ -9,7 +9,10 @@ require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/array/conversions'
 # TODO check what this actually does by the time we're going to add support for
 # other locales.
-I18n.enforce_available_locales = false
+require 'i18n'
+if I18n.respond_to?(:enforce_available_locales=)
+  I18n.enforce_available_locales = false
+end
 
 module Pod
   require 'pathname'

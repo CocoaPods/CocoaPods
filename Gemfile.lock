@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 76c726cb88ec60dc64c62e2a87b1845319e84569
+  revision: 7af0d1097b00248e37576101f9330cb959fb5f9f
   branch: master
   specs:
     cocoapods-core (0.30.0)
@@ -109,7 +109,7 @@ GEM
     ffi (1.9.3)
     fuzzy_match (2.0.4)
     github-markup (1.1.0)
-    i18n (0.6.9)
+    i18n (0.6.4)
     json (1.8.1)
     json_pure (1.8.1)
     listen (1.3.1)
@@ -173,6 +173,7 @@ DEPENDENCIES
   coveralls
   diffy
   github-markup
+  i18n (= 0.6.4)
   kicker!
   mime-types (< 2)
   mocha

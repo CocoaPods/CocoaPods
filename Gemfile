@@ -23,6 +23,10 @@ group :development do
   # For the integration tests
   gem "diffy"
 
+  # Lock the current lowest requirement for ActiveSupport 3 to ensure we don't
+  # re-introduce https://github.com/CocoaPods/CocoaPods/issues/1950
+  gem 'i18n', '0.6.4'
+
   gem 'mime-types', '< 2' # v2 is 1.9.x only
   gem 'coveralls', :require => false
   # Explicitly add this, otherwise it might sometimes be missing:
