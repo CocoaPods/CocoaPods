@@ -13,6 +13,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Robert Zuber](https://github.com/z00b)
   [#1617](https://github.com/CocoaPods/CocoaPods/issues/1617)
 
+* The linter will now display an error if a Pod's homepage isn't accessible. (e.g. HTTP 404)
+  [Richard Lee](https://github.com/dlackty)
+  [#1704](https://github.com/CocoaPods/CocoaPods/issues/1704)
+  [Core#70](https://github.com/CocoaPods/Core/pull/70)
+
+* Display advised settings for Travis CI users when they're warned that their terminal encoding is not UTF-8.
+  [Richard Lee](https://github.com/dlackty)
+  [#1933](https://github.com/CocoaPods/CocoaPods/issues/1933)
+  [#1941](https://github.com/CocoaPods/CocoaPods/pull/1941)
+
 ##### Bug Fixes
 
 * Fix :head option for Pods from HTTP source.
@@ -38,6 +48,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Joel Parsons](https://github.com/joelparsons)
   [#1721](https://github.com/CocoaPods/CocoaPods/issues/1721)
   [Core#72](https://github.com/CocoaPods/Core/pull/72)
+
+* Podspec without explicitly set `requires_arc` attribute no longer passes the lint.
+  [Richard Lee](https://github.com/dlackty)
+  [#1840](https://github.com/CocoaPods/CocoaPods/issues/1840)
+  [Core#71](https://github.com/CocoaPods/Core/pull/71)
 
 
 ## 0.30.0
