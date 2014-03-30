@@ -8,62 +8,66 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
-* Add version to output of `pod list`
+* Include the versions of the Pods to the output of `pod list`.  
   [Stefan Damm](https://github.com/StefanDamm)
   [Robert Zuber](https://github.com/z00b)
   [#1617](https://github.com/CocoaPods/CocoaPods/issues/1617)
 
-* The linter will now display an error if a Pod's homepage isn't accessible. (e.g. HTTP 404)
+* The linter will now check the homepage of Podspecs.  
   [Richard Lee](https://github.com/dlackty)
   [#1704](https://github.com/CocoaPods/CocoaPods/issues/1704)
   [Core#70](https://github.com/CocoaPods/Core/pull/70)
 
-* Display advised settings for Travis CI users when they're warned that their terminal encoding is not UTF-8.
+* Display advised settings for Travis CI in the warning related presented when
+  the terminal encoding is not set to UTF-8.  
   [Richard Lee](https://github.com/dlackty)
   [#1933](https://github.com/CocoaPods/CocoaPods/issues/1933)
   [#1941](https://github.com/CocoaPods/CocoaPods/pull/1941)
 
-* Unset the `CDPATH` env variable before shelling-out on `prepare_command`  
+* Unset the `CDPATH` env variable before shelling-out to `prepare_command`.  
   [Marc Boquet](https://github.com/apalancat)
   [#1943](https://github.com/CocoaPods/CocoaPods/pull/1943)
 
 ##### Bug Fixes
 
-* Make SourcesManager ignore some global git configs and prevent merge commits
+* Robustness against user Git configuration and against merge commits in `pod
+  repo` subcommands.
   [Boris Bügling](https://github.com/neonichu)
   [#1949](https://github.com/CocoaPods/CocoaPods/issues/1949)
   [#1978](https://github.com/CocoaPods/CocoaPods/pull/1978)
 
-* Fix :head option for Pods from HTTP source.
+* Fix `:head` option for Pods from HTTP source.  
   [Boris Bügling](https://github.com/neonichu)
   [#1947](https://github.com/CocoaPods/CocoaPods/issues/1947)
   [#1958](https://github.com/CocoaPods/CocoaPods/pull/1958)
 
-* Cleanup a pod directory if error occurs while downloading
+* Cleanup a pod directory if error occurs while downloading.  
   [Alex Rothenberg](https://github.com/alexrothenberg)
   [#1842](https://github.com/CocoaPods/CocoaPods/issues/1842)
   [#1960](https://github.com/CocoaPods/CocoaPods/pull/1960)
 
-* No longer warn for Github repositories with OAuth authentication
+* No longer warn for Github repositories with OAuth authentication.  
   [Boris Bügling](https://github.com/neonichu)
   [#1928](https://github.com/CocoaPods/CocoaPods/issues/1928)
   [Core#77](https://github.com/CocoaPods/Core/pull/77)
 
-* Only silence the I18n deprecation warning when it's actually needed.
+* Only silence the I18n deprecation warning when it's actually needed.  
   [Eloy Durán](https://github.com/alloy)
   [#1950](https://github.com/CocoaPods/CocoaPods/issues/1950)
 
-* Fix for when using s.version as the :tag for a git repository in a Podspec
+* Fix for when using `s.version` as the `:tag` for a git repository in a
+  Podspec.  
   [Joel Parsons](https://github.com/joelparsons)
   [#1721](https://github.com/CocoaPods/CocoaPods/issues/1721)
   [Core#72](https://github.com/CocoaPods/Core/pull/72)
 
-* Podspec without explicitly set `requires_arc` attribute no longer passes the lint.
+* Podspec without explicitly set `requires_arc` attribute no longer passes the
+  lint.  
   [Richard Lee](https://github.com/dlackty)
   [#1840](https://github.com/CocoaPods/CocoaPods/issues/1840)
   [Core#71](https://github.com/CocoaPods/Core/pull/71)
 
-* Fix compilation issues related to the native Extension of Xcodeproj.
+* Fix compilation issues related to the native Extension of Xcodeproj.  
   [Eloy Durán](https://github.com/alloy)
 
 
