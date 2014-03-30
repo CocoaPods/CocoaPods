@@ -1,5 +1,19 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
+def set_up_test_repo_for_update
+  set_up_test_repo
+  upstream = SpecHelper.temporary_directory + 'upstream'
+  FileUtils.cp_r(test_repo_path, upstream)
+  Dir.chdir(test_repo_path) do
+    `git remote add origin #{upstream}`
+    `git remote -v`
+    `git fetch -q`
+    `git branch --set-upstream-to=origin/master master`
+    `git config branch.master.rebase true`
+  end
+  config.repos_dir = SpecHelper.tmp_repos_path
+end
+
 module Pod
   describe SourcesManager do
 
@@ -87,20 +101,24 @@ module Pod
       extend SpecHelper::TemporaryRepos
 
       it "update source backed by a git repository" do
-        set_up_test_repo
-        upstream = SpecHelper.temporary_directory + 'upstream'
-        FileUtils.cp_r(test_repo_path, upstream)
-        Dir.chdir(test_repo_path) do
-          `git remote add origin #{upstream}`
-          `git remote -v`
-          `git fetch -q`
-          `git branch --set-upstream-to=origin/master master`
-          `git config branch.master.rebase true`
-        end
-        config.repos_dir = SpecHelper.tmp_repos_path
+        set_up_test_repo_for_update
 
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.output.should.match /Already up-to-date/
+      end
+
+      it "is robust against user settings for git repos" do
+        set_up_test_repo_for_update
+
+        SourcesManager.expects(:git!).with() { |options| options.should.match /--no-rebase/ }
+        SourcesManager.update(test_repo_path.basename.to_s, true)
+      end
+
+      it "doesn't allow merge commits" do
+        set_up_test_repo_for_update
+
+        SourcesManager.expects(:git!).with() { |options| options.should.match /--no-commit/ }
+        SourcesManager.update(test_repo_path.basename.to_s, true)
       end
 
       it 'returns whether a source has a reachable git remote' do
