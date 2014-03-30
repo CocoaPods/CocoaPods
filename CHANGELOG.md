@@ -13,6 +13,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1617](https://github.com/CocoaPods/CocoaPods/issues/1617)
 
 ##### Bug Fixes
+* No longer warn for Github repositories with OAuth authentication
+  [Boris Bügling](https://github.com/neonichu)
+  [#1928](https://github.com/CocoaPods/CocoaPods/issues/1928)
+  [Core#77](https://github.com/CocoaPods/Core/pull/77)
+  
 * Fix for when using s.version as the :tag for a git repository in a Podspec
   [Joel Parsons](https://github.com/joelparsons)
   [#1721](https://github.com/CocoaPods/CocoaPods/issues/1721)
