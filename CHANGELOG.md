@@ -76,6 +76,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1840](https://github.com/CocoaPods/CocoaPods/issues/1840)
   [Core#71](https://github.com/CocoaPods/Core/pull/71)
 
+* Fix to keep absolute paths specified for local pods as is.
+  [Samuel Ford](https://github.com/samuelwford)
+  [#1042](https://github.com/CocoaPods/CocoaPods/issues/1042)
 
 ## 0.30.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
