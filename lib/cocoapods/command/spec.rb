@@ -79,8 +79,14 @@ module Pod
         def run
           UI.puts
           invalid_count = 0
+
+          # Validating with ".local = true" first which is basically identical
+          # to lib lint... if that passes then move on to testing the network
+          # Not DRY and totally smelly, but "resolves" issue 1745
+          # https://github.com/CocoaPods/CocoaPods/issues/1745
           podspecs_to_lint.each do |podspec|
             validator             = Validator.new(podspec)
+            validator.local       = true
             validator.quick       = @quick
             validator.no_clean    = !@clean
             validator.only_errors = @only_errors
@@ -92,6 +98,24 @@ module Pod
             unless @clean
               UI.puts "Pods project available at `#{validator.validation_dir}/Pods/Pods.xcodeproj` for inspection."
               UI.puts
+            end
+          end
+          
+          unless invalid_count
+            podspecs_to_lint.each do |podspec|
+              validator             = Validator.new(podspec)
+              validator.quick       = @quick
+              validator.no_clean    = !@clean
+              validator.only_errors = @only_errors
+              validator.no_subspecs = !@subspecs || @only_subspec
+              validator.only_subspec = @only_subspec
+              validator.validate
+              invalid_count += 1 unless validator.validated?
+
+              unless @clean
+                UI.puts "Pods project available at `#{validator.validation_dir}/Pods/Pods.xcodeproj` for inspection."
+                UI.puts
+              end
             end
           end
 
