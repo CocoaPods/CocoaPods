@@ -15,6 +15,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
+* No longer warn for Github repositories with OAuth authentication
+  [Boris Bügling](https://github.com/neonichu)
+  [#1928](https://github.com/CocoaPods/CocoaPods/issues/1928)
+  [Core#77](https://github.com/CocoaPods/Core/pull/77)
+
 * Only silence the I18n deprecation warning when it's actually needed.
   [Eloy Durán](https://github.com/alloy)
   [#1950](https://github.com/CocoaPods/CocoaPods/issues/1950)
@@ -23,6 +28,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Joel Parsons](https://github.com/joelparsons)
   [#1721](https://github.com/CocoaPods/CocoaPods/issues/1721)
   [Core#72](https://github.com/CocoaPods/Core/pull/72)
+
 
 ## 0.30.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
