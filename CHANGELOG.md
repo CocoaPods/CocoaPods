@@ -63,6 +63,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1840](https://github.com/CocoaPods/CocoaPods/issues/1840)
   [Core#71](https://github.com/CocoaPods/Core/pull/71)
 
+* Fix compilation issues related to the native Extension of Xcodeproj.
+  [Eloy Durán](https://github.com/alloy)
+
 
 ## 0.30.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
