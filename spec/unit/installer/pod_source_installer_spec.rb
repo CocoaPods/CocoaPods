@@ -113,6 +113,13 @@ module Pod
             @installer.install!
           end.message.should.match /command not found/
         end
+
+        it "unsets $CDPATH environment variable" do
+          ENV['CDPATH'] = "BogusPath"
+          @spec.prepare_command = "cd Classes;ls Banana.h"
+          lambda { @installer.install! }.should.not.raise
+        end
+        
       end
 
       #--------------------------------------#
