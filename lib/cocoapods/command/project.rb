@@ -64,6 +64,7 @@ module Pod
       DESC
 
       def run
+        help! if invoked_as_default && !config.podfile
         verify_podfile_exists!
         run_install_with_update(false)
       end
@@ -85,4 +86,3 @@ module Pod
 
   end
 end
-
