@@ -7,12 +7,18 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.30.0...master)
 
 ##### Enhancements
+
 * Add version to output of `pod list`
   [Stefan Damm](https://github.com/StefanDamm)
   [Robert Zuber](https://github.com/z00b)
   [#1617](https://github.com/CocoaPods/CocoaPods/issues/1617)
 
 ##### Bug Fixes
+
+* Only silence the I18n deprecation warning when it's actually needed.
+  [Eloy Durán](https://github.com/alloy)
+  [#1950](https://github.com/CocoaPods/CocoaPods/issues/1950)
+
 * Fix for when using s.version as the :tag for a git repository in a Podspec
   [Joel Parsons](https://github.com/joelparsons)
   [#1721](https://github.com/CocoaPods/CocoaPods/issues/1721)
