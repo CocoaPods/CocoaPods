@@ -15,6 +15,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
+* Cleanup a pod directory if error occurs while downloading
+  [Alex Rothenberg](https://github.com/alexrothenberg)
+  [#1842](https://github.com/CocoaPods/CocoaPods/issues/1842)
+  [#1960](https://github.com/CocoaPods/CocoaPods/pull/1960)
+
 * No longer warn for Github repositories with OAuth authentication
   [Boris Bügling](https://github.com/neonichu)
   [#1928](https://github.com/CocoaPods/CocoaPods/issues/1928)
