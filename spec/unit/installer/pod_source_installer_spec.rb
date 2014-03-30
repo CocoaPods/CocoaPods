@@ -65,13 +65,16 @@ module Pod
           config.sandbox.store_head_pod('BananaLib')
           pod_folder = config.sandbox.root + 'BananaLib'
           partially_downloaded_file = pod_folder + 'partially_downloaded_file'
+
           mock_downloader = Object.new
-          mock_downloader.define_singleton_method(:download_head) do
+          singleton_class = class << mock_downloader; self; end
+          singleton_class.send(:define_method, :download_head) do
             FileUtils.mkdir_p(pod_folder)
             FileUtils.touch(partially_downloaded_file)
             raise("some network error")
           end
           @installer.stubs(:downloader).returns(mock_downloader)
+
           lambda {
             @installer.install!
           }.should.raise(RuntimeError).message.should.equal('some network error')
