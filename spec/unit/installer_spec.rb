@@ -247,6 +247,13 @@ module Pod
           @installer.pods_project.class.should == Pod::Project
         end
 
+        it "set the path of the Pod group to an absolute path if local" do
+          podfile_path = Pathname.new('/Podfile')
+          config.stubs(:podfile_path).returns(podfile_path)
+          @installer.send(:prepare_pods_project)
+          @installer.pods_project['Podfile'].path.should == podfile_path
+        end
+
         it "adds the Podfile to the Pods project" do
           config.stubs(:podfile_path).returns(Pathname.new('/Podfile'))
           @installer.send(:prepare_pods_project)
