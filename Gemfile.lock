@@ -18,19 +18,19 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 74cca1c36ab235caa70969b68d0d883237f75493
+  revision: 357d061b0b3a60fa6ac0a40cb3da6ce7689e3c9e
   branch: master
   specs:
-    xcodeproj (0.15.3)
+    xcodeproj (0.16.0)
       activesupport (~> 3.0)
       colored (~> 1.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 7e65134dc2bbf919acb3b0fe17bf9020a6a374ce
+  revision: 706a632aa569fed60057cbc2049d96d3e0851579
   branch: master
   specs:
-    cocoapods-downloader (0.4.0)
+    cocoapods-downloader (0.4.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
@@ -78,14 +78,14 @@ PATH
       activesupport (>= 3.2.15, < 4)
       claide (~> 0.5.0)
       cocoapods-core (= 0.30.0)
-      cocoapods-downloader (~> 0.4.0)
+      cocoapods-downloader (~> 0.4.1)
       cocoapods-try (~> 0.2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
       nap (~> 0.5)
       open4 (~> 1.3)
-      xcodeproj (~> 0.15.3)
+      xcodeproj (~> 0.16.0)
 
 GEM
   remote: http://rubygems.org/
