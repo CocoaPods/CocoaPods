@@ -34,6 +34,7 @@ $:.unshift((ROOT + 'spec').to_s)
 
 require 'cocoapods'
 require 'claide'
+require 'feedjira'
 #require 'awesome_print'
 
 require 'spec_helper/command'         # Allows to run Pod commands and returns their output.
