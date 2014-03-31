@@ -81,6 +81,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1840](https://github.com/CocoaPods/CocoaPods/issues/1840)
   [Core#71](https://github.com/CocoaPods/Core/pull/71)
 
+* Properly quote headers in the `-isystem` compiler flag of the aggregate
+  targets.  
+  [Eloy Durán](https://github.com/alloy)
+  [#1862](https://github.com/CocoaPods/CocoaPods/issues/1862)
+  [#1894](https://github.com/CocoaPods/CocoaPods/pull/1894)
 
 ## 0.30.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
