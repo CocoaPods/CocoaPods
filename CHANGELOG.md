@@ -8,6 +8,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
+* Generated prefix header file will now have unique prefix_header_contents for
+  Pods with subspecs.
+  [Luis de la Rosa](https://github.com/luisdelarosa)
+  [#1449](https://github.com/CocoaPods/CocoaPods/issues/1449)
+  
 * Add version to output of `pod list`
   [Stefan Damm](https://github.com/StefanDamm)
   [Robert Zuber](https://github.com/z00b)
