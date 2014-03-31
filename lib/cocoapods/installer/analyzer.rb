@@ -33,7 +33,7 @@ module Pod
         @podfile  = podfile
         @lockfile = lockfile
 
-        @update_mode = false
+        @update = false
         @allow_pre_downloads = true
         @archs_by_target_def = {}
       end
@@ -91,11 +91,17 @@ module Pod
 
       # @!group Configuration
 
+      # @return [Hash, Boolean, nil] Pods that have been requested to be
+      #         updated or true if all Pods should be updated
+      #
+      attr_accessor :update
+
       # @return [Bool] Whether the version of the dependencies which did non
       #         change in the Podfile should be locked.
       #
-      attr_accessor :update_mode
-      alias_method  :update_mode?, :update_mode
+      def update_mode?
+        !!update
+      end
 
       # @return [Bool] Whether the analysis allows pre-downloads and thus
       #         modifications to the sandbox.
@@ -316,7 +322,7 @@ module Pod
       def generate_sandbox_state
         sandbox_state = nil
         UI.section "Comparing resolved specification to the sandbox manifest" do
-          sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode, lockfile)
+          sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode?, lockfile)
           sandbox_state = sandbox_analyzer.analyze
           sandbox_state.print
         end

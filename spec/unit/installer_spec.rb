@@ -114,7 +114,7 @@ module Pod
 
         it "configures the analyzer to use update mode if appropriate" do
           @installer.update = true
-          Installer::Analyzer.any_instance.expects(:update_mode=).with(true)
+          Installer::Analyzer.any_instance.expects(:update=).with(true)
           @installer.send(:analyze)
           @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
           @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']

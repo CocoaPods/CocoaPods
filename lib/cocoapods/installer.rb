@@ -170,7 +170,7 @@ module Pod
       end
 
       analyzer = Analyzer.new(sandbox, podfile, lockfile)
-      analyzer.update_mode = update
+      analyzer.update = update
       @analysis_result = analyzer.analyze
       @aggregate_targets = analyzer.result.targets
     end
