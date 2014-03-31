@@ -64,11 +64,12 @@ module Pod
       @lockfile = lockfile
     end
 
-    # @return [Bool] Whether the installer is in update mode. In update mode
-    #         the contents of the Lockfile are not taken into account for
-    #         deciding what Pods to install.
+    # @return [Hash, Boolean, nil] Pods that have been requested to be
+    #         updated or true if all Pods should be updated.
+    #         If all Pods should been updated the contents of the Lockfile are
+    #         not taken into account for deciding what Pods to install.
     #
-    attr_accessor :update_mode
+    attr_accessor :update
 
     # Installs the Pods.
     #
@@ -169,7 +170,7 @@ module Pod
       end
 
       analyzer = Analyzer.new(sandbox, podfile, lockfile)
-      analyzer.update_mode = update_mode
+      analyzer.update_mode = update
       @analysis_result = analyzer.analyze
       @aggregate_targets = analyzer.result.targets
     end
