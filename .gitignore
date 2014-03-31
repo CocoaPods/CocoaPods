@@ -30,4 +30,6 @@ examples/RelativePathProject/RelativePathProject/RelativePathProject.xcodeproj
 coverage/
 .coveralls.yml
 
+# IDEs
 *.xccheckout
+.idea/
