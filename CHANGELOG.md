@@ -8,6 +8,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
+* Warnings are not promoted to errors anymore to maximise compatibility with
+  existing libraries.  
+  [Fabio Pelosin](https://github.com/irrationalfab)
+  [#1629](https://github.com/CocoaPods/CocoaPods/issues/1629)
+
 * Include the versions of the Pods to the output of `pod list`.  
   [Stefan Damm](https://github.com/StefanDamm)
   [Robert Zuber](https://github.com/z00b)
