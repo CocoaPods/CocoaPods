@@ -40,6 +40,7 @@ module Pod
       before do
         set_up_test_repo
         config.repos_dir = SpecHelper.tmp_repos_path
+        require 'rest'
         ::REST.stubs(:head => stub(:success? => true))
       end
 
