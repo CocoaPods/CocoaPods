@@ -73,11 +73,6 @@ module Pod
       end
     end
 
-    it "should show link to new pod guide after creation" do
-      output = run_command('lib', 'create', 'TestPod')
-      output.should.include? 'http://guides.cocoapods.org/making/making-a-cocoapod'
-    end
-
     before do
       Command::Lib::Create.any_instance.stubs(:configure_template)
       Command::Lib::Create.any_instance.stubs(:git!)
