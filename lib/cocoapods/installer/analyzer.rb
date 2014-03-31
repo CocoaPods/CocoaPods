@@ -103,6 +103,19 @@ module Pod
         !!update
       end
 
+      # @return [Symbol] Whether and how the dependencies in the Podfile
+      #                  should be updated.
+      #
+      def update_mode
+        if !update
+          :none
+        elsif update == true
+          :all
+        elsif update[:pods] != nil
+          :selected
+        end
+      end
+
       # @return [Bool] Whether the analysis allows pre-downloads and thus
       #         modifications to the sandbox.
       #
@@ -225,9 +238,11 @@ module Pod
       #         that prevent the resolver to update a Pod.
       #
       def generate_version_locking_dependencies
-        if update_mode?
+        # TODO: Add a case for specific pods
+        case update_mode
+        when :all
           []
-        else
+        when :none
           result.podfile_state.unchanged.map do |pod|
             lockfile.dependency_to_lock_pod_named(pod)
           end
@@ -258,9 +273,11 @@ module Pod
         deps_to_fetch = []
         deps_to_fetch_if_needed = []
         deps_with_external_source = podfile.dependencies.select { |dep| dep.external_source }
-        if update_mode?
+        # TODO: Add a case for specific pods
+        case update_mode
+        when :all
           deps_to_fetch = deps_with_external_source
-        else
+        when :none
           pods_to_fetch = result.podfile_state.added + result.podfile_state.changed
           deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.root_name) }
           deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.root_name) }
