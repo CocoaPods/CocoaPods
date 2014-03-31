@@ -22,6 +22,11 @@ module Pod
   require 'cocoapods/config'
   require 'cocoapods/downloader'
 
+  # Loaded immediately after dependencies to ensure proper override of their
+  # UI methods.
+  #
+  require 'cocoapods/user_interface'
+
   # Indicates an user error. This is defined in cocoapods-core.
   #
   class Informative < PlainInformative
@@ -41,7 +46,6 @@ module Pod
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'
   autoload :Sandbox,                   'cocoapods/sandbox'
-  autoload :UI,                        'cocoapods/user_interface'
   autoload :Validator,                 'cocoapods/validator'
 
   module Generator
