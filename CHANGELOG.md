@@ -75,6 +75,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1721](https://github.com/CocoaPods/CocoaPods/issues/1721)
   [Core#72](https://github.com/CocoaPods/Core/pull/72)
 
+* Improved escaping of paths in Git downloader.  
+  [Vladimir Burdukov](https://github.com/chipp)
+  [cocoapods-downloader#14](https://github.com/CocoaPods/cocoapods-downloader/pull/14)
+
 * Podspec without explicitly set `requires_arc` attribute no longer passes the
   lint.  
   [Richard Lee](https://github.com/dlackty)
