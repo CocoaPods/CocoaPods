@@ -28,7 +28,9 @@ module Pod
 
       # Runs the installer.
       #
-      # @param  [update] whether the installer should be run in update mode.
+      # @param  [Hash, Boolean, nil] update
+      #         Pods that have been requested to be updated or true if all Pods
+      #         should be updated
       #
       # @return [void]
       #
@@ -98,7 +100,8 @@ module Pod
           verify_lockfile_exists!
 
           # TODO: Check if all given pods are installed unless no pods are given
-          # TODO: Handle update of specific pods only
+
+          run_install_with_update(pods: @pods)
         else
           UI.puts "Update all pods".yellow unless @pods
           run_install_with_update(true)
