@@ -14,11 +14,12 @@ group :development do
   gem 'claide',               :git => 'https://github.com/CocoaPods/CLAide.git', :branch => 'master'
   gem 'cocoapods-try',        :git => 'https://github.com/CocoaPods/cocoapods-try.git', :branch => 'master'
 
+  gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
   gem "mocha"
   gem "bacon"
   gem "mocha-on-bacon"
   gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
-  gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
+  gem 'webmock', "< 1.16"
 
   # For the integration tests
   gem "diffy"

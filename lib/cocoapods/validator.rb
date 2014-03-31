@@ -196,6 +196,8 @@ module Pod
     # Perform analysis for a given spec (or subspec)
     #
     def perform_extensive_analysis(spec)
+      validate_homepage(spec)
+
       spec.available_platforms.each do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
         @consumer = spec.consumer(platform)
@@ -208,17 +210,37 @@ module Pod
       perform_extensive_subspec_analysis(spec) unless @no_subspecs
     end
 
-    # Recurively perform the extensive analysis on all subspecs
+    # Recursively perform the extensive analysis on all subspecs
     #
     def perform_extensive_subspec_analysis(spec)
-        spec.subspecs.each do |subspec|
-            @subspec_name = subspec.name
-            perform_extensive_analysis(subspec)
-        end
+      spec.subspecs.each do |subspec|
+        @subspec_name = subspec.name
+        perform_extensive_analysis(subspec)
+      end
     end
 
     attr_accessor :consumer
     attr_accessor :subspec_name
+
+    # Performs validations related to the `homepage` attribute.
+    #
+    def validate_homepage(spec)
+      require 'rest'
+      homepage = spec.homepage
+      return unless homepage
+      homepage += '/' unless homepage.end_with?('/')
+
+      begin
+        resp = ::REST.head(homepage)
+      rescue
+        warning "There was a problem validating the homepage."
+        resp = nil
+      end
+
+      if resp && !resp.success?
+        warning "The homepage is not reachable."
+      end
+    end
 
     def setup_validation_environment
       validation_dir.rmtree if validation_dir.exist?

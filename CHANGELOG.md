@@ -18,8 +18,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Robert Zuber](https://github.com/z00b)
   [#1617](https://github.com/CocoaPods/CocoaPods/issues/1617)
 
-* The linter will now check the homepage of Podspecs.  
+* The linter will now check the reachability of the homepage of Podspecs during
+  a full lint.  
   [Richard Lee](https://github.com/dlackty)
+  [Fabio Pelosin](https://github.com/irrationalfab)
   [#1704](https://github.com/CocoaPods/CocoaPods/issues/1704)
   [Core#70](https://github.com/CocoaPods/Core/pull/70)
 
