@@ -53,12 +53,24 @@ module Pod
           result << %|\n#import "#{import}"|
         end
 
-        file_accessors.each do |file_accessor|
+        # collect all the prefix_header_contents and only get the unique contents so that we don't have duplicates
+        all_prefix_header_contents = file_accessors.collect do |file_accessor|
+          file_accessor.spec_consumer.prefix_header_contents
+        end
+        unique_and_non_nil_prefix_header_contents = all_prefix_header_contents.compact.uniq
+
+        # newline to separate prefix_headers and prefix_header_contents from the imports
+        result << "\n"
+        
+        # output those unique prefix_header_contents
+        unique_and_non_nil_prefix_header_contents.each do |prefix_header_contents|
+          result << prefix_header_contents
           result << "\n"
-          if prefix_header_contents = file_accessor.spec_consumer.prefix_header_contents
-            result << prefix_header_contents
-            result << "\n"
-          end
+        end
+        
+        # output the prefix_headers
+        # todo check to see if we have a similar duplicating issue with these
+        file_accessors.each do |file_accessor|
           if prefix_header = file_accessor.prefix_header
             result << Pathname(prefix_header).read
           end

@@ -331,6 +331,10 @@ describe "Integration" do
       check "install --no-repo-update", "install_subspecs"
     end
 
+    describe "Installs a Pod with subspecs and does not duplicate the prefix header" do
+      check "install --no-repo-update", "install_subspecs_no_duplicate_prefix"
+    end
+
     describe "Installs a Pod with a local source" do
       check "install --no-repo-update", "install_local_source"
     end
