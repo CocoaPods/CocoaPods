@@ -76,10 +76,33 @@ module Pod
 
       self.summary = 'Update outdated project dependencies'
 
+      self.description = <<-DESC
+        Update the pods specified (all pods, if none are specified), ignoring the previously
+        installed pods specified in the Podfile.lock. In general, you should use pod install
+        to install the same exact gems and versions across machines.
+
+        You would use pod update to explicitly update the version of a gem.
+      DESC
+
+      self.arguments = '[PODS]'
+
+      def initialize(argv)
+        @pods = argv.arguments! unless argv.arguments.empty?
+        super
+      end
+
       def run
         verify_podfile_exists!
-        verify_lockfile_exists!
-        run_install_with_update(true)
+
+        if @pods
+          verify_lockfile_exists!
+
+          # TODO: Check if all given pods are installed unless no pods are given
+          # TODO: Handle update of specific pods only
+        else
+          UI.puts "Update all pods".yellow unless @pods
+          run_install_with_update(true)
+        end
       end
     end
 
