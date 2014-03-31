@@ -1,2 +1,0 @@
-platform :ios
-pod "Reachability", :local => "Reachability"

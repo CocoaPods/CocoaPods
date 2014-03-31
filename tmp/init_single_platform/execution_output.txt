@@ -1,1 +1,0 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod init --verbose --no-color 2>&1
