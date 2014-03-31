@@ -1,0 +1,2 @@
+platform :ios, '6.0'
+pod 'Test', :podspec => 'https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec'
