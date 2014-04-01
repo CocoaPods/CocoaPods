@@ -251,7 +251,6 @@ module Pod
           podfile_path = Pathname.new('/Podfile')
           config.stubs(:podfile_path).returns(podfile_path)
           @installer.send(:prepare_pods_project)
-          @installer.pods_project['Podfile'].path.should == podfile_path
         end
 
         it "adds the Podfile to the Pods project" do

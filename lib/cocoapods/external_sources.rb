@@ -352,7 +352,7 @@ module Pod
         UI.titled_section("Fetching podspec for `#{name}` #{description}", { :verbose_prefix => "-> " }) do
           podspec = podspec_path
           store_podspec(sandbox, podspec)
-          sandbox.store_local_path(name, podspec.dirname, Pathname.new(declared_path).absolute?)
+          sandbox.store_local_path(name, podspec.dirname)
         end
       end
 

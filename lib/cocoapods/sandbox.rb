@@ -69,7 +69,6 @@ module Pod
       @head_pods = []
       @checkout_sources = {}
       @development_pods = {}
-      @development_pods_were_absolute = {}
     end
 
     # @return [Lockfile] the manifest which contains the information about the
@@ -160,16 +159,6 @@ module Pod
       end
     end
 
-    # Returns true if the path as originally specified was absolute.
-    #
-    # @param  [String] name
-    #
-    # @return [Bool] true if originally absolute
-    #
-    def local_path_was_absolute?(name)
-      @development_pods_were_absolute[name]
-    end
-    
     # @return [Pathname] the directory where to store the documentation.
     #
     def documentation_dir
@@ -354,10 +343,9 @@ module Pod
     #
     # @return [void]
     #
-    def store_local_path(name, path, was_absolute = false)
+    def store_local_path(name, path)
       root_name = Specification.root_name(name)
       development_pods[root_name] = path.to_s
-      @development_pods_were_absolute[root_name] = was_absolute
     end
 
     # @return [Hash{String=>String}] The path of the Pods with a local source
