@@ -33,3 +33,8 @@ coverage/
 # IDEs
 *.xccheckout
 .idea/
+
+# RVM files
+/.rvmrc
+/.ruby-version
+/.ruby-gemset
