@@ -44,7 +44,7 @@ module Pod
       it "cleans any trace of the Pod with the given name" do
         pod_root = @sandbox.root + 'BananaLib'
         pod_root.mkpath
-        @sandbox.store_podspec('BananaLib', fixture('banana-lib/BananaLib.podspec'))
+        @sandbox.store_podspec('BananaLib', fixture('banana-lib/BananaLib.podspec'), nil)
         specification_path = @sandbox.specification_path('BananaLib')
         @sandbox.clean_pod('BananaLib')
         pod_root.should.not.exist
@@ -118,7 +118,7 @@ module Pod
       end
 
       it "stores a podspec with a given path into the sandbox" do
-        @sandbox.store_podspec('BananaLib', fixture('banana-lib/BananaLib.podspec'))
+        @sandbox.store_podspec('BananaLib', fixture('banana-lib/BananaLib.podspec'), nil)
         path = @sandbox.root + 'Local Podspecs/BananaLib.podspec'
         path.should.exist
         @sandbox.specification_path('BananaLib').should == path
@@ -126,7 +126,7 @@ module Pod
 
       it "stores a podspec with the given string into the sandbox" do
         podspec_string = fixture('banana-lib/BananaLib.podspec').read
-        @sandbox.store_podspec('BananaLib', podspec_string)
+        @sandbox.store_podspec('BananaLib', 'BananaLib.podspec', podspec_string)
         path = @sandbox.root + 'Local Podspecs/BananaLib.podspec'
         path.should.exist
         @sandbox.specification_path('BananaLib').should == path

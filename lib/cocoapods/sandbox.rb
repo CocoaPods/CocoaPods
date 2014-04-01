@@ -205,32 +205,40 @@ module Pod
     # @return [Nil] if the podspec is not stored.
     #
     def specification_path(name)
-      path = specifications_dir + "#{name}.podspec"
-      path.exist? ? path : nil
+      spec_path = specifications_dir + "#{name}.podspec"
+      json_path = spec_path.sub_ext('.podspec.json')
+
+      if spec_path.exist?
+        spec_path
+      elsif json_path.exist?
+        json_path
+      end
     end
 
     # Stores a specification in the `Local Podspecs` folder.
     #
-    # @param  [Sandbox] sandbox
-    #         the sandbox where the podspec should be stored.
+    # @param  [Name] name
+    #         The name of the Pod for the provided podspec file / name.
     #
-    # @param  [String, Pathname] podspec
-    #         The contents of the specification (String) or the path to a
-    #         podspec file (Pathname).
+    # @param  [Pathname, String] path
+    #         The path or filename of the podspec file.
+    #
+    # @param  [String] podspec
+    #         The contents of the specification (String) or nil.
     #
     # @todo   Store all the specifications (including those not originating
     #         from external sources) so users can check them.
     #
-    def store_podspec(name, podspec, external_source = false)
-      output_path = specifications_dir(external_source) + "#{name}.podspec"
+    def store_podspec(name, path, podspec, external_source = false)
+      output_path = specifications_dir(external_source) + File.basename(path)
       output_path.dirname.mkpath
-      if podspec.is_a?(String)
+      if podspec
         output_path.open('w') { |f| f.puts(podspec) }
       else
-        unless podspec.exist?
-          raise Informative, "No podspec found for `#{name}` in #{podspec}"
+        unless path.exist?
+          raise Informative, "No podspec found for `#{name}` in #{path}"
         end
-        FileUtils.copy(podspec, output_path)
+        FileUtils.copy(path, output_path)
       end
       spec = Specification.from_file(output_path)
       unless spec.name == name
@@ -368,4 +376,3 @@ module Pod
 
   end
 end
-
