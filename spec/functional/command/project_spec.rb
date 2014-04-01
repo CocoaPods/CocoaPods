@@ -44,6 +44,44 @@ module Pod
       end
     end
 
+    describe "tells the user that the Pods cannot be updated unless they are installed" do
+      extend SpecHelper::TemporaryRepos
+
+      before do
+        file = temporary_directory + 'Podfile'
+        File.open(file, 'w') do |f|
+          f.puts('platform :ios')
+          f.puts('pod "BananaLib", "1.0"')
+        end
+
+        podfile = Podfile.new do
+          platform :ios
+          pod 'BananaLib', '1.0'
+        end
+        specs = [
+            Specification.new do |s|
+              s.name = 'BananaLib'
+              s.version = '1.0'
+            end
+        ]
+        Lockfile.generate(podfile, specs).write_to_disk(temporary_directory + 'Podfile.lock')
+      end
+
+      it "for a single missing Pod" do
+        Dir.chdir(temporary_directory) do
+          exception = lambda { run_command('update', 'Reachability', '--no-repo-update') }.should.raise Informative
+          exception.message.should.include "Pod `Reachability' is not installed and cannot be updated"
+        end
+      end
+
+      it "for multiple missing Pods" do
+        Dir.chdir(temporary_directory) do
+          exception = lambda { run_command('update', 'Reachability', 'BananaLib2', '--no-repo-update') }.should.raise Informative
+          exception.message.should.include "Pods `Reachability', `BananaLib2' are not installed and cannot be updated"
+        end
+      end
+  end
+
   end
 
   #---------------------------------------------------------------------------#
