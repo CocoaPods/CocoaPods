@@ -1,0 +1,79 @@
+CP_AGGRESSIVE_CACHE=TRUE $ pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
+
+Analyzing dependencies
+
+Finding Podfile changes
+  - JSONKit
+  - Reachability
+
+Resolving dependencies of `Podfile`
+Resolving dependencies for target `Pods' (iOS 6.0)
+  - Reachability (<= 3.1.1)
+  - JSONKit (= 1.4)
+
+Comparing resolved specification to the sandbox manifest
+  M Reachability
+  - JSONKit
+
+Downloading dependencies
+
+-> Using JSONKit (1.4)
+
+-> Installing Reachability (3.1.1)
+ > GitHub download
+   $ /usr/local/bin/git config core.bare
+   true
+   $ /usr/local/bin/git config core.bare
+   true
+ > Updating cache git repo (/Users/Marius/Library/Caches/CocoaPods/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6)
+     $ /usr/local/bin/git remote update
+     Fetching origin
+ > Cloning to Pods folder
+     $ /usr/local/bin/git clone /Users/Marius/Library/Caches/CocoaPods/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+     /Users/Marius/Development/CocoaPods-Org/CocoaPods/spec/cocoapods-integration-specs/update_selected/after/Pods/Reachability
+     Cloning into '/Users/Marius/Development/CocoaPods-Org/CocoaPods/spec/cocoapods-integration-specs/update_selected/after/Pods/Reachability'...
+     done.
+   $ /usr/local/bin/git fetch origin tags/v3.1.1 2>&1
+   From /Users/Marius/Library/Caches/CocoaPods/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+    * tag               v3.1.1     -> FETCH_HEAD
+   $ /usr/local/bin/git reset --hard FETCH_HEAD
+   HEAD is now at 7ea54e9 Merge pull request #45 from sethfri/master
+   $ /usr/local/bin/git checkout -b activated-pod-commit 2>&1
+   Switched to a new branch 'activated-pod-commit'
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Linking headers
+  - Installing libraries
+    - Installing target `Pods-JSONKit` iOS 6.0
+      - Adding Build files
+      - Adding resource bundles to Pods project
+      - Generating public xcconfig file at `Pods/Pods-JSONKit.xcconfig`
+      - Generating private xcconfig file at `Pods/Pods-JSONKit-Private.xcconfig`
+      - Generating prefix header at `Pods/Pods-JSONKit-prefix.pch`
+      - Generating dummy source file at `Pods/Pods-JSONKit-dummy.m`
+    - Installing target `Pods-Reachability` iOS 6.0
+      - Adding Build files
+      - Adding resource bundles to Pods project
+      - Generating public xcconfig file at `Pods/Pods-Reachability.xcconfig`
+      - Generating private xcconfig file at `Pods/Pods-Reachability-Private.xcconfig`
+      - Generating prefix header at `Pods/Pods-Reachability-prefix.pch`
+      - Generating dummy source file at `Pods/Pods-Reachability-dummy.m`
+    - Installing target `Pods` iOS 6.0
+      - Generating xcconfig file at `Pods/Pods.xcconfig`
+      - Generating target environment header at `Pods/Pods-environment.h`
+      - Generating copy resources script at `Pods/Pods-resources.sh`
+      - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
+      - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
+      - Generating dummy source file at `Pods/Pods-dummy.m`
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
