@@ -2,13 +2,24 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+## 0.31.1
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
+• [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)
+
+##### Minor Enhancements
+
+* The specification now strips the indentation of the `prefix_header` and
+  `prepare_command` to aide their declaration as a here document (similarly to
+  what it already does with the description).  
+  [Fabio Pelosin][irrationalfab]
+  [Core#51](https://github.com/CocoaPods/Core/issues/51)
 
 ##### Bug Fixes
 
-* Fix linting source of a spec for certain URLs.
+* Fix linting for Pods which declare a private repo as the source.  
   [Boris Bügling](https://github.com/neonichu)
-  [#82](https://github.com/CocoaPods/Core/issues/82)
+  [Core#82](https://github.com/CocoaPods/Core/issues/82)
+
 
 ## 0.31.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.30.0...0.31.0)
@@ -2195,3 +2206,6 @@ allowing you to automate Xcode related tasks.
 [5]: https://github.com/tomaz/appledoc
 [6]: https://github.com/CocoaPods/CocoaPods/compare/0.5.1...0.6.0
 [7]: https://github.com/CocoaPods/CocoaPods/compare/0.3.10...0.5.0
+
+[irrationalfab]: https://github.com/irrationalfab
+
