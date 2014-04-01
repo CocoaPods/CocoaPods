@@ -99,7 +99,14 @@ module Pod
         if @pods
           verify_lockfile_exists!
 
-          # TODO: Check if all given pods are installed unless no pods are given
+          # Check if all given pods are installed
+          missing_pods = @pods.select { |pod| !config.lockfile.pod_names.include?(pod) }
+          if missing_pods.length > 0
+            raise Informative, (missing_pods.length > 1 \
+              ? "Pods %s are not installed and cannot be updated" \
+              : "Pod %s is not installed and cannot be updated"
+            ) % missing_pods.map { |p| "`#{p}'" }.join(', ')
+          end
 
           run_install_with_update(pods: @pods)
         else
