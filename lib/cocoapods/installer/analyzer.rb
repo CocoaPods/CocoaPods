@@ -238,12 +238,15 @@ module Pod
       #         that prevent the resolver to update a Pod.
       #
       def generate_version_locking_dependencies
-        # TODO: Add a case for specific pods
-        case update_mode
-        when :all
+        if update_mode == :all
           []
-        when :none
-          result.podfile_state.unchanged.map do |pod|
+        else
+          locking_pods = result.podfile_state.unchanged
+          if update_mode == :selected
+            # If selected Pods should been updated, filter them out of the list
+            locking_pods.select! { |pod| !update[:pods].include?(pod) }
+          end
+          locking_pods.map do |pod|
             lockfile.dependency_to_lock_pod_named(pod)
           end
         end
@@ -273,12 +276,14 @@ module Pod
         deps_to_fetch = []
         deps_to_fetch_if_needed = []
         deps_with_external_source = podfile.dependencies.select { |dep| dep.external_source }
-        # TODO: Add a case for specific pods
-        case update_mode
-        when :all
+
+        if update_mode == :all
           deps_to_fetch = deps_with_external_source
-        when :none
+        else
           pods_to_fetch = result.podfile_state.added + result.podfile_state.changed
+          if update_mode == :selected
+            pods_to_fetch += update[:pods]
+          end
           deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.root_name) }
           deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.root_name) }
           deps_to_fetch += deps_to_fetch_if_needed.select { |dep| sandbox.specification(dep.root_name).nil? || !dep.external_source[:local].nil? || !dep.external_source[:path].nil? }
