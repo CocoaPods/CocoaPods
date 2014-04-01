@@ -2,6 +2,14 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+##### Bug Fixes
+
+* Fix linting source of a spec for certain URLs.
+  [Boris Bügling](https://github.com/neonichu)
+  [#82](https://github.com/CocoaPods/Core/issues/82)
+
 ## 0.31.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.30.0...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.30.0...0.31.0)
