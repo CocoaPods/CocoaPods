@@ -38,3 +38,6 @@ coverage/
 /.rvmrc
 /.ruby-version
 /.ruby-gemset
+
+# Bundler files
+/.bundle
