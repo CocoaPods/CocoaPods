@@ -370,7 +370,7 @@ describe "Integration" do
   describe "Pod update" do
 
     describe "Updates an existing installation" do
-      check "update --no-repo-update", "update"
+      check "update --no-repo-update", "update_all"
     end
 
   end
