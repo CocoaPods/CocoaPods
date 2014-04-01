@@ -3,9 +3,10 @@
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
 * `pod lib create` is now using the `configure` file instead of the `_CONFIGURE.rb` file
-    [Orta Therox](https://github.com/orta)
-    [Piet Brauer](https://github.com/pietbrauer)
-    [#1990](https://github.com/CocoaPods/CocoaPods/pull/1990)
+
+  [Orta Therox](https://github.com/orta)
+  [Piet Brauer](https://github.com/pietbrauer)
+  [#1990](https://github.com/CocoaPods/CocoaPods/pull/1990)
 
 ## 0.31.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.30.0...0.31.0)
