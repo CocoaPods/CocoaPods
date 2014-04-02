@@ -2,6 +2,18 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...master)
+• [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...master)
+
+##### Enhancements
+
+##### Bug Fixes
+* Support multiple values in ARCHS
+  [Robert Zuber](https://github.com/z00b)
+  [#1904](https://github.com/CocoaPods/CocoaPods/issues/1904)
+
+
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)
