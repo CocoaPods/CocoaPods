@@ -16,6 +16,15 @@ module Pod
         response = open('https://raw.githubusercontent.com/CocoaPods/cocoapods.org/master/data/plugins.json')
         @json = JSON.parse(response.read)
       end
+      
+      def gem_available?(gemname)
+        if Gem::Specification.methods.include?(:find_all_by_name) 
+          Gem::Specification.find_all_by_name(gemname).any?
+        else
+          # Fallback to Gem.available? for old versions of rubygems
+          Gem.available?(gemname)
+        end
+       end
 
       def is_installed?(gemname)
         return Gem::Specification::find_all_by_name(gemname).any?
