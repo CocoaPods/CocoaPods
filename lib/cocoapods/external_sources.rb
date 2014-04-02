@@ -368,10 +368,10 @@ module Pod
 
       # @!group Helpers
 
-      # @return [String] the path as declared in the podspec
+      # @return [Pathname] the path as declared in the podspec
       #
       def declared_path
-        (params[:path] || params[:local]).to_s
+        Pathname.new params[:path] || params[:local]
       end
       
       # @return [Pathname] the path of the podspec.

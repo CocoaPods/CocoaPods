@@ -338,9 +338,6 @@ module Pod
     # @param  [#to_s] path
     #         The local path where the Pod is stored.
     #
-    # @param  [Bool] was_absolute
-    #         True if the specified local path was absolute.
-    #
     # @return [void]
     #
     def store_local_path(name, path)
