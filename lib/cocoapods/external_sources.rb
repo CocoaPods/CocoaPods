@@ -156,10 +156,10 @@ module Pod
       # @param  [Sandbox] sandbox
       #         The sandbox where the specification should be stored.
       #
-      # @param  [Pathname, String] path
+      # @param  [Pathname, String] filename
       #         The path or filename of the podspec file.
       #
-      # @param  [String, nil] spec
+      # @param  [String, nil] contents
       #         The contents of the specification, or nil.
       #
       # @note   All the concrete implementations of #{fetch} should invoke this
@@ -170,10 +170,22 @@ module Pod
       #
       # @return [void]
       #
-      def store_podspec(sandbox, path, spec = nil)
-        sandbox.store_podspec(name, path, spec, true)
+      def store_podspec(sandbox, filename, contents = nil)
+        sandbox.store_podspec(name, filename, contents, true)
       end
 
+      # Assembles a path to a podspec file based on the provided path and the
+      # spec name. Assumes `.podspec` extension if none provided.
+      #
+      # @param  [String] declared_path
+      #         The provided path to the podspec or its container directory.
+      #
+      # @return [String] The path to the podspec file with extension.
+      #
+      def inferred_spec_path(declared_path)
+        file_ext = File.extname(declared_path)
+        (file_ext == '.podspec' || file_ext == '.json') ? declared_path : "#{declared_path}/#{name}.podspec"
+      end
     end
 
     #-------------------------------------------------------------------------#
@@ -332,8 +344,7 @@ module Pod
         if declared_path.match(%r{^.+://})
           declared_path
         else
-          file_ext = File.extname(declared_path)
-          path_with_ext = (file_ext == '.podspec' || file_ext == '.json') ? declared_path : "#{declared_path}/#{name}.podspec"
+          path_with_ext = inferred_spec_path(declared_path)
           podfile_dir   = File.dirname(podfile_path || '')
           absolute_path = File.expand_path(path_with_ext, podfile_dir)
           absolute_path
@@ -375,8 +386,7 @@ module Pod
       #
       def podspec_path
         declared_path = (params[:path] || params[:local]).to_s
-        file_ext = File.extname(declared_path)
-        path_with_ext = (file_ext == '.podspec' || file_ext == '.json') ? declared_path : "#{declared_path}/#{name}.podspec"
+        path_with_ext = inferred_spec_path(declared_path)
         podfile_dir   = File.dirname(podfile_path || '')
         absolute_path = File.expand_path(path_with_ext, podfile_dir)
         pathname      = Pathname.new(absolute_path)

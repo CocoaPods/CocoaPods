@@ -206,7 +206,7 @@ module Pod
     #
     def specification_path(name)
       spec_path = specifications_dir + "#{name}.podspec"
-      json_path = spec_path.sub_ext('.podspec.json')
+      json_path = specifications_dir + "#{name}.podspec.json"
 
       if spec_path.exist?
         spec_path
@@ -220,25 +220,25 @@ module Pod
     # @param  [Name] name
     #         The name of the Pod for the provided podspec file / name.
     #
-    # @param  [Pathname, String] path
+    # @param  [Pathname, String] filename
     #         The path or filename of the podspec file.
     #
-    # @param  [String] podspec
+    # @param  [String] contents
     #         The contents of the specification (String) or nil.
     #
     # @todo   Store all the specifications (including those not originating
     #         from external sources) so users can check them.
     #
-    def store_podspec(name, path, podspec, external_source = false)
-      output_path = specifications_dir(external_source) + File.basename(path)
+    def store_podspec(name, filename, contents = nil, external_source = false)
+      output_path = specifications_dir(external_source) + File.basename(filename)
       output_path.dirname.mkpath
-      if podspec
-        output_path.open('w') { |f| f.puts(podspec) }
+      if contents
+        output_path.open('w') { |f| f.puts(contents) }
       else
-        unless path.exist?
-          raise Informative, "No podspec found for `#{name}` in #{path}"
+        unless filename.exist?
+          raise Informative, "No podspec found for `#{name}` in #{filename}"
         end
-        FileUtils.copy(path, output_path)
+        FileUtils.copy(filename, output_path)
       end
       spec = Specification.from_file(output_path)
       unless spec.name == name
