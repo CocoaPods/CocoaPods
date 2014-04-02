@@ -3,7 +3,7 @@ PODS:
   - Reachability (3.1.1)
 
 DEPENDENCIES:
-  - JSONKit (= 1.4)
+  - JSONKit (<= 1.5)
   - Reachability (<= 3.1.1)
 
 SPEC CHECKSUMS:
