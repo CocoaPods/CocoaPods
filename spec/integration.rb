@@ -370,7 +370,11 @@ describe "Integration" do
   describe "Pod update" do
 
     describe "Updates an existing installation" do
-      check "update --no-repo-update", "update"
+      check "update --no-repo-update", "update_all"
+    end
+
+    describe "Updates a selected Pod in an existing installation" do
+      check "update Reachability --no-repo-update", "update_selected"
     end
 
   end

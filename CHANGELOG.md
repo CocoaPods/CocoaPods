@@ -2,6 +2,20 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.31.1)
+• [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/master...0.31.1)
+
+##### Enhancements
+
+* Allow to update only a list of given pods with `pod update [POD_NAMES...]`.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [CocoaPods#760](https://github.com/CocoaPods/CocoaPods/issues/760)
+
+* `pod update` falls back to `pod install` if no Lockfile is present.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)

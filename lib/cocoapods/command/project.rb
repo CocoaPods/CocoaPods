@@ -28,13 +28,15 @@ module Pod
 
       # Runs the installer.
       #
-      # @param  [update] whether the installer should be run in update mode.
+      # @param  [Hash, Boolean, nil] update
+      #         Pods that have been requested to be updated or true if all Pods
+      #         should be updated
       #
       # @return [void]
       #
       def run_install_with_update(update)
         installer = Installer.new(config.sandbox, config.podfile, config.lockfile)
-        installer.update_mode = update
+        installer.update = update
         installer.install!
       end
     end
@@ -76,10 +78,40 @@ module Pod
 
       self.summary = 'Update outdated project dependencies'
 
+      self.description = <<-DESC
+        Updates the Pods identified by the specified POD_NAMES. If no POD_NAMES are
+        specified it updates all the Pods ignoring the contents of the Podfile.lock.
+        This command is reserved to the update of dependencies and pod install should
+        be used to install changes to the Podfile.
+      DESC
+
+      self.arguments = '[POD_NAMES...]'
+
+      def initialize(argv)
+        @pods = argv.arguments! unless argv.arguments.empty?
+        super
+      end
+
       def run
         verify_podfile_exists!
-        verify_lockfile_exists!
-        run_install_with_update(true)
+
+        if @pods
+          verify_lockfile_exists!
+
+          # Check if all given pods are installed
+          missing_pods = @pods.select { |pod| !config.lockfile.pod_names.include?(pod) }
+          if missing_pods.length > 0
+            raise Informative, (missing_pods.length > 1 \
+              ? "Pods %s are not installed and cannot be updated" \
+              : "Pod %s is not installed and cannot be updated"
+            ) % missing_pods.map { |p| "`#{p}'" }.join(', ')
+          end
+
+          run_install_with_update(:pods => @pods)
+        else
+          UI.puts "Update all pods".yellow unless @pods
+          run_install_with_update(true)
+        end
       end
     end
 

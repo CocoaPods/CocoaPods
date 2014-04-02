@@ -77,7 +77,7 @@ end
 namespace :spec do
 
   def specs(dir)
-    FileList["spec/#{dir}/*_spec.rb"].shuffle.join(' ')
+    FileList["spec/#{dir}_spec.rb"].shuffle.join(' ')
   end
 
   #--------------------------------------#
@@ -89,7 +89,7 @@ namespace :spec do
 
   #--------------------------------------#
 
-  unit_specs_command = "bundle exec bacon #{specs('unit/**')}"
+  unit_specs_command = "bundle exec bacon #{specs('unit/**/*')}"
 
   desc "Run the unit specs"
   task :unit => :unpack_fixture_tarballs do
@@ -104,8 +104,9 @@ namespace :spec do
   #--------------------------------------#
 
   desc "Run the functional specs"
-  task :functional => :unpack_fixture_tarballs do
-    sh "bundle exec bacon #{specs('functional/**')}"
+  task :functional, [:spec] => :unpack_fixture_tarballs do |t, args|
+    args.with_defaults(:spec => '**/*')
+    sh "bundle exec bacon #{specs("functional/#{args[:spec]}")}"
   end
 
   #--------------------------------------#
@@ -130,7 +131,7 @@ namespace :spec do
     ENV['GENERATE_COVERAGE'] = 'true'
 
     title 'Running the specs'
-    sh    "bundle exec bacon #{specs('**')}"
+    sh    "bundle exec bacon #{specs('**/*')}"
 
     title 'Running Integration tests'
     sh    "bundle exec bacon spec/integration.rb"
@@ -144,7 +145,7 @@ namespace :spec do
   desc "Run all specs and build all examples"
   task :ci => :unpack_fixture_tarballs do
     title 'Running the specs'
-    sh "bundle exec bacon #{specs('**')}"
+    sh "bundle exec bacon #{specs('**/*')}"
 
     require 'pathname'
     unless Pathname.new(ENV['HOME']+'/.cocoapods/repos/master').exist?

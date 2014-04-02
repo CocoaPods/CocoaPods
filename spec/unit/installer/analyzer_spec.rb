@@ -117,7 +117,7 @@ module Pod
       end
 
       it "does not lock the dependencies in update mode" do
-        @analyzer.update_mode = true
+        @analyzer.update = true
         @analyzer.analyze
         @analyzer.send(:locked_dependencies).map(&:to_s).should == []
       end

@@ -33,7 +33,7 @@ module Pod
         @podfile  = podfile
         @lockfile = lockfile
 
-        @update_mode = false
+        @update = false
         @allow_pre_downloads = true
         @archs_by_target_def = {}
       end
@@ -91,11 +91,30 @@ module Pod
 
       # @!group Configuration
 
+      # @return [Hash, Boolean, nil] Pods that have been requested to be
+      #         updated or true if all Pods should be updated
+      #
+      attr_accessor :update
+
       # @return [Bool] Whether the version of the dependencies which did non
       #         change in the Podfile should be locked.
       #
-      attr_accessor :update_mode
-      alias_method  :update_mode?, :update_mode
+      def update_mode?
+        !!update
+      end
+
+      # @return [Symbol] Whether and how the dependencies in the Podfile
+      #                  should be updated.
+      #
+      def update_mode
+        if !update
+          :none
+        elsif update == true
+          :all
+        elsif update[:pods] != nil
+          :selected
+        end
+      end
 
       # @return [Bool] Whether the analysis allows pre-downloads and thus
       #         modifications to the sandbox.
@@ -219,10 +238,15 @@ module Pod
       #         that prevent the resolver to update a Pod.
       #
       def generate_version_locking_dependencies
-        if update_mode?
+        if update_mode == :all
           []
         else
-          result.podfile_state.unchanged.map do |pod|
+          locking_pods = result.podfile_state.unchanged
+          if update_mode == :selected
+            # If selected Pods should been updated, filter them out of the list
+            locking_pods = locking_pods.select { |pod| !update[:pods].include?(pod) }
+          end
+          locking_pods.map do |pod|
             lockfile.dependency_to_lock_pod_named(pod)
           end
         end
@@ -252,10 +276,14 @@ module Pod
         deps_to_fetch = []
         deps_to_fetch_if_needed = []
         deps_with_external_source = podfile.dependencies.select { |dep| dep.external_source }
-        if update_mode?
+
+        if update_mode == :all
           deps_to_fetch = deps_with_external_source
         else
           pods_to_fetch = result.podfile_state.added + result.podfile_state.changed
+          if update_mode == :selected
+            pods_to_fetch += update[:pods]
+          end
           deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.root_name) }
           deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.root_name) }
           deps_to_fetch += deps_to_fetch_if_needed.select { |dep| sandbox.specification(dep.root_name).nil? || !dep.external_source[:local].nil? || !dep.external_source[:path].nil? }
@@ -316,7 +344,7 @@ module Pod
       def generate_sandbox_state
         sandbox_state = nil
         UI.section "Comparing resolved specification to the sandbox manifest" do
-          sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode, lockfile)
+          sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode?, lockfile)
           sandbox_state = sandbox_analyzer.analyze
           sandbox_state.print
         end
