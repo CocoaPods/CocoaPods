@@ -13,7 +13,7 @@ module Pod
       DESC
 
       def download_json
-        response = open('https://yetanotherbucket.s3.amazonaws.com/plugins.json')
+        response = open('https://raw.githubusercontent.com/CocoaPods/cocoapods.org/master/data/plugins.json')
         @json = JSON.parse(response.read)
       end
 
