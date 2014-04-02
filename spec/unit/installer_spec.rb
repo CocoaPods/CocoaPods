@@ -21,6 +21,16 @@ def generate_podfile(pods = ['JSONKit'])
   end
 end
 
+# @return [Podfile]
+#
+def generate_local_podfile
+  podfile = Pod::Podfile.new do
+    platform :ios
+    xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
+    pod 'SSToolkit', :path => SpecHelper.fixture('integration/sstoolkit')
+  end
+end
+
 #-----------------------------------------------------------------------------#
 
 module Pod
@@ -247,10 +257,13 @@ module Pod
           @installer.pods_project.class.should == Pod::Project
         end
 
-        it "set the path of the Pod group to an absolute path if local" do
-          podfile_path = Pathname.new('/Podfile')
-          config.stubs(:podfile_path).returns(podfile_path)
-          @installer.send(:prepare_pods_project)
+        it "sets the path of the Pod group to an absolute path if local" do
+          local_podfile = generate_local_podfile
+          local_installer = Installer.new(config.sandbox, local_podfile)
+          local_installer.send(:analyze)
+          local_installer.send(:prepare_pods_project)
+          group = local_installer.pods_project.group_for_spec('SSToolkit')
+          Pathname.new(group.path).should.be.absolute
         end
 
         it "adds the Podfile to the Pods project" do

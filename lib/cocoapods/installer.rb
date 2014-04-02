@@ -297,7 +297,7 @@ module Pod
         pod_names.each do |pod_name|
           local = sandbox.local?(pod_name)
           path = sandbox.pod_dir(pod_name)
-          @pods_project.add_pod_group(pod_name, path, local, local )
+          @pods_project.add_pod_group(pod_name, path, local, local)
         end
 
         if config.podfile_path
