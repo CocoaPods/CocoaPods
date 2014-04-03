@@ -16,6 +16,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * `pod update` falls back to `pod install` if no Lockfile is present.  
   [Marius Rackwitz](https://github.com/mrackwitz)
 
+* `pod lib create` is now using the `configure` file instead of the `_CONFIGURE.rb` file.  
+  [Piet Brauer](https://github.com/pietbrauer)
+  [Orta Therox](https://github.com/orta)
+
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)

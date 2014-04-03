@@ -66,7 +66,11 @@ module Pod
         def configure_template
           UI.section("Configuring template") do
             Dir.chdir(@name) do
-              ruby! "_CONFIGURE.rb #{@name}"
+              if File.exists? "configure"
+                system "./configure #{@name}"
+              else
+                UI.warn "Template does not have a configure file."
+              end
             end
           end
         end

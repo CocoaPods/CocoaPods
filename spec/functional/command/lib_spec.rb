@@ -27,7 +27,8 @@ module Pod
       @sut.any_instance.stubs(:clone_template)
       dir = SpecHelper.temporary_directory + 'TestPod'
       dir.mkpath
-      @sut.any_instance.expects(:ruby!).with("_CONFIGURE.rb TestPod").once
+      File.stubs(:exists?).with("configure").returns(true)
+      @sut.any_instance.expects(:system).with("./configure TestPod").once
       run_command('lib', 'create', 'TestPod')
     end
 
