@@ -102,13 +102,6 @@ module Pod
           @sut.results.map(&:to_s).first.should.match /The homepage is not reachable/
         end
 
-        it "checks if that the homepage validates without a trailing slash" do
-          WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
-          Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local')
-          @sut.validate
-          @sut.results.should.be.empty?
-        end
-
         it "indicates if it was not able to validate the homepage" do
           WebMock::API.stub_request(:head, 'banana-corp.local').to_raise(SocketError)
           Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/')

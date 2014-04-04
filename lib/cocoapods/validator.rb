@@ -228,7 +228,6 @@ module Pod
       require 'rest'
       homepage = spec.homepage
       return unless homepage
-      homepage += '/' unless homepage.end_with?('/')
 
       begin
         resp = ::REST.head(homepage)
