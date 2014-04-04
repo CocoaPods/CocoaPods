@@ -257,7 +257,7 @@ module Pod
           @installer.pods_project.class.should == Pod::Project
         end
 
-        it "sets the path of the Pod group to an absolute path if local" do
+        it "preserves Pod paths specified as absolute or rooted to home" do
           local_podfile = generate_local_podfile
           local_installer = Installer.new(config.sandbox, local_podfile)
           local_installer.send(:analyze)
