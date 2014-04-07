@@ -121,20 +121,20 @@ module Pod
           @sut.stubs(:check_file_patterns)
           @sut.stubs(:tear_down_validation_environment)
           @sut.stubs(:validate_homepage)
+          WebMock::API.stub_request(:head, 'banana-corp.local/valid-image.png').to_return(:status => 200, :headers => { 'Content-Type' => 'image/png' })
         end
 
         it "checks if the screenshots are valid" do
-          WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
-          Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/first.png', 'http://banana-corp.local/second.png'])
+          Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/valid-image.png'])
           @sut.validate
           @sut.results.should.be.empty?
         end
 
-        it "should fail if any of the screenshots is not valid" do
-          WebMock::API.stub_request(:head, /not-found/).to_raise(SocketError)
-          Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/first.png', 'http://banana-corp.local/not-found/second.png'])
+        it "should fail if any of the screenshots URLS do not return an image" do
+          WebMock::API.stub_request(:head, 'banana-corp.local/').to_return(:status => 200)
+          Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/valid-image.png', 'http://banana-corp.local/'])
           @sut.validate
-          @sut.results.map(&:to_s).first.should.match /There was a problem validating the URL/
+          @sut.results.map(&:to_s).first.should.match /The screenshot .* is not a valid image/
         end
       end
 

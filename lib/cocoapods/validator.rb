@@ -238,6 +238,8 @@ module Pod
       if resp && !resp.success?
         warning "The URL (#{url}) is not reachable."
       end
+
+      resp
     end
 
     # Performs validations related to the `homepage` attribute.
@@ -252,7 +254,10 @@ module Pod
     #
     def validate_screenshots(spec)
       spec.screenshots.each do |screenshot|
-        validate_url(screenshot)
+        request = validate_url(screenshot)
+        if request && !(request.headers['content-type'] && request.headers['content-type'].first =~ /image\/.*/i)
+          warning "The screenshot #{screenshot} is not a valid image."
+        end
       end
     end
 
