@@ -222,6 +222,8 @@ module Pod
     attr_accessor :consumer
     attr_accessor :subspec_name
 
+    MAX_HTTP_REDIRECTS = 3
+
     # Performs validations related to the `homepage` attribute.
     #
     def validate_homepage(spec)
@@ -230,6 +232,7 @@ module Pod
       return unless homepage
 
       begin
+        redirects = 0
         resp = nil
         loop do
           resp = ::REST.head(homepage)
@@ -240,9 +243,12 @@ module Pod
 
           if [301, 302, 303, 307, 308].include? resp.status_code
             homepage = resp.headers['location'].first
+            redirects += 1
           else
             break
           end
+
+          break unless redirects < MAX_HTTP_REDIRECTS
         end
       rescue
         warning "There was a problem validating the homepage."
