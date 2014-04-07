@@ -20,6 +20,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Piet Brauer](https://github.com/pietbrauer)
   [Orta Therox](https://github.com/orta)
 
+* Validate the reachability of screenshot URLs in podspecs while linting a
+  specification.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2010](https://github.com/CocoaPods/CocoaPods/issues/2010)
+
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)

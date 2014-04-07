@@ -197,6 +197,7 @@ module Pod
     #
     def perform_extensive_analysis(spec)
       validate_homepage(spec)
+      validate_screenshots(spec)
 
       spec.available_platforms.each do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
@@ -222,22 +223,41 @@ module Pod
     attr_accessor :consumer
     attr_accessor :subspec_name
 
-    # Performs validations related to the `homepage` attribute.
+    # Performs validation of a URL
     #
-    def validate_homepage(spec)
+    def validate_url(url)
       require 'rest'
-      homepage = spec.homepage
-      return unless homepage
 
       begin
-        resp = ::REST.head(homepage)
+        resp = ::REST.head(url)
       rescue
-        warning "There was a problem validating the homepage."
+        warning "There was a problem validating the URL #{url}."
         resp = nil
       end
 
       if resp && !resp.success?
-        warning "The homepage is not reachable."
+        warning "The URL (#{url}) is not reachable."
+      end
+
+      resp
+    end
+
+    # Performs validations related to the `homepage` attribute.
+    #
+    def validate_homepage(spec)
+      if spec.homepage
+        validate_url(spec.homepage)
+      end
+    end
+
+    # Performs validation related to the `screenshots` attribute.
+    #
+    def validate_screenshots(spec)
+      spec.screenshots.each do |screenshot|
+        request = validate_url(screenshot)
+        if request && !(request.headers['content-type'] && request.headers['content-type'].first =~ /image\/.*/i)
+          warning "The screenshot #{screenshot} is not a valid image."
+        end
       end
     end
 
