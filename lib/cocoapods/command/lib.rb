@@ -54,7 +54,7 @@ module Pod
         # @return [void]
         #
         def clone_template
-          UI.section("Creating `#{@name}` Pod") do
+          UI.section("Cloning `#{template_repo_url}` into `#{@name}`.") do
             git!"clone '#{template_repo_url}' #{@name}"
           end
         end
@@ -64,7 +64,7 @@ module Pod
         # @return [void]
         #
         def configure_template
-          UI.section("Configuring template") do
+          UI.section("Configuring #{@name} template.") do
             Dir.chdir(@name) do
               if File.exists? "configure"
                 system "./configure #{@name}"
