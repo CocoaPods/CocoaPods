@@ -238,7 +238,7 @@ module Pod
             resp = ::REST.get(homepage)
           end
 
-          if resp.status_code == 301
+          if [301, 302, 303, 307, 308].include? resp.status_code
             homepage = resp.headers['location'].first
           else
             break
