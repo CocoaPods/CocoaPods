@@ -99,14 +99,41 @@ module Pod
           WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
           Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/not-found/')
           @sut.validate
-          @sut.results.map(&:to_s).first.should.match /The homepage is not reachable/
+          @sut.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
         end
 
         it "indicates if it was not able to validate the homepage" do
           WebMock::API.stub_request(:head, 'banana-corp.local').to_raise(SocketError)
           Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/')
           @sut.validate
-          @sut.results.map(&:to_s).first.should.match /There was a problem validating the homepage/
+          @sut.results.map(&:to_s).first.should.match /There was a problem validating the URL/
+        end
+      end
+
+      describe "Screenshot validation" do
+        require 'webmock'
+
+        before do
+          @sut = Validator.new(podspec_path)
+          @sut.stubs(:install_pod)
+          @sut.stubs(:build_pod)
+          @sut.stubs(:check_file_patterns)
+          @sut.stubs(:tear_down_validation_environment)
+          @sut.stubs(:validate_homepage)
+        end
+
+        it "checks if the screenshots are valid" do
+          WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
+          Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/first.png', 'http://banana-corp.local/second.png'])
+          @sut.validate
+          @sut.results.should.be.empty?
+        end
+
+        it "should fail if any of the screenshots is not valid" do
+          WebMock::API.stub_request(:head, /not-found/).to_raise(SocketError)
+          Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/first.png', 'http://banana-corp.local/not-found/second.png'])
+          @sut.validate
+          @sut.results.map(&:to_s).first.should.match /There was a problem validating the URL/
         end
       end
 
