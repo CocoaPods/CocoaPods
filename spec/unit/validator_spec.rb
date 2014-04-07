@@ -108,6 +108,23 @@ module Pod
           @sut.validate
           @sut.results.map(&:to_s).first.should.match /There was a problem validating the homepage/
         end
+
+        it "does not fail if the homepage redirects" do
+          WebMock::API.stub_request(:head, /redirect/).to_return(
+            :status => 301, :headers => { 'Location' => 'http://banana-corp.local/found/' } )
+          WebMock::API.stub_request(:head, /found/).to_return( :status => 200 )
+          Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/redirect/')
+          @sut.validate
+          @sut.results.length.should.equal 0
+        end
+
+        it "does not fail if the homepage does not support HEAD" do
+          WebMock::API.stub_request(:head, /page/).to_return( :status => 405 )
+          WebMock::API.stub_request(:get, /page/).to_return( :status => 200 )
+          Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
+          @sut.validate
+          @sut.results.length.should.equal 0
+        end
       end
 
       it "respects the no clean option" do

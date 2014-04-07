@@ -230,7 +230,20 @@ module Pod
       return unless homepage
 
       begin
-        resp = ::REST.head(homepage)
+        resp = nil
+        loop do
+          resp = ::REST.head(homepage)
+
+          if resp.status_code == 405
+            resp = ::REST.get(homepage)
+          end
+
+          if resp.status_code == 301
+            homepage = resp.headers['location'].first
+          else
+            break
+          end
+        end
       rescue
         warning "There was a problem validating the homepage."
         resp = nil
