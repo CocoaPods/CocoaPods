@@ -60,6 +60,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Robert Zuber](https://github.com/z00b)
   [#1617](https://github.com/CocoaPods/CocoaPods/issues/1617)
 
+* Generated prefix header file will now have unique prefix_header_contents for
+  Pods with subspecs.  
+  [Luis de la Rosa](https://github.com/luisdelarosa)
+  [#1449](https://github.com/CocoaPods/CocoaPods/issues/1449)
+
 * The linter will now check the reachability of the homepage of Podspecs during
   a full lint.  
   [Richard Lee](https://github.com/dlackty)

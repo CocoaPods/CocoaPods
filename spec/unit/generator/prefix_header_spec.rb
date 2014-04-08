@@ -21,6 +21,43 @@ module Pod
       EOS
     end
 
+    # @note Declaring a subspec was found in issue #1449 to generate duplicates of the prefix_header_contents
+    it "does not duplicate the contents of the specification's prefix header when a subspec is declared" do
+      @spec.prefix_header_contents = '#import "BlocksKit.h"'
+      @spec.prefix_header_file = nil
+      @spec.subspec 'UI' do |subspec|
+        subspec.source_files = 'Source/UI/*.{h,m}'
+      end
+      @gen.generate.should == <<-EOS.strip_heredoc
+      #ifdef __OBJC__
+      #import <UIKit/UIKit.h>
+      #endif
+
+      #import "BlocksKit.h"
+      EOS
+    end
+
+    # @note Declaring a subspec was found in issue #1449 to generate duplicates of the prefix_header_contents
+    it "does not duplicate the contents of the specification's prefix header when a subspec is declared multiple times" do
+      @spec.prefix_header_contents = '#import "BlocksKit.h"'
+      @spec.prefix_header_file = nil
+      @spec.subspec 'UI' do |su|
+          su.source_files = 'Source/UI/*.{h,m}'
+      end
+    
+      @spec.subspec 'Helpers' do |sh|
+          sh.source_files = 'Source/Helpers/*.{h,m}'
+      end
+
+      @gen.generate.should == <<-EOS.strip_heredoc
+      #ifdef __OBJC__
+      #import <UIKit/UIKit.h>
+      #endif
+
+      #import "BlocksKit.h"
+      EOS
+    end
+
     it "includes the contents of the specification's prefix header file" do
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
