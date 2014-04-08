@@ -20,6 +20,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Piet Brauer](https://github.com/pietbrauer)
   [Orta Therox](https://github.com/orta)
 
+* `pod lib create` now disallows any pod name that begins with a `.` 
+  [Dustin Clark](https://github.com/clarkda)
+  [Core#97](https://github.com/CocoaPods/Core/pull/97)
+  [Core#98](https://github.com/CocoaPods/Core/issues/98)
+
+
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)
