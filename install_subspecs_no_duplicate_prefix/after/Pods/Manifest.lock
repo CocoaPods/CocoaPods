@@ -1,0 +1,16 @@
+PODS:
+  - Test (0.0.1):
+    - Test/Foo
+  - Test/Foo (0.0.1)
+
+DEPENDENCIES:
+  - Test (from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`)
+
+EXTERNAL SOURCES:
+  Test:
+    :podspec: https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec
+
+SPEC CHECKSUMS:
+  Test: 015c315085e89cf22c211271c817a23ed1ad09c8
+
+COCOAPODS: 0.30.0
