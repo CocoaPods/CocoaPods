@@ -1,5 +1,4 @@
 CP_AGGRESSIVE_CACHE=TRUE $ pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
-
 Analyzing dependencies
 
 Finding Podfile changes
@@ -25,16 +24,15 @@ Downloading dependencies
    true
    $ /usr/local/bin/git config core.bare
    true
- > Updating cache git repo (/Users/Marius/Library/Caches/CocoaPods/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6)
-     $ /usr/local/bin/git remote update
-     Fetching origin
+   $ /usr/local/bin/git rev-list --max-count=1 v3.1.1
+   7ea54e98cdc439bedda279c5ad9031822269ce3c
  > Cloning to Pods folder
-     $ /usr/local/bin/git clone /Users/Marius/Library/Caches/CocoaPods/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
-     /Users/Marius/Development/CocoaPods-Org/CocoaPods/spec/cocoapods-integration-specs/update_selected/after/Pods/Reachability
-     Cloning into '/Users/Marius/Development/CocoaPods-Org/CocoaPods/spec/cocoapods-integration-specs/update_selected/after/Pods/Reachability'...
+     $ /usr/local/bin/git clone CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+     ROOT/tmp/update_selected/Pods/Reachability
+     Cloning into 'ROOT/tmp/update_selected/Pods/Reachability'...
      done.
    $ /usr/local/bin/git fetch origin tags/v3.1.1 2>&1
-   From /Users/Marius/Library/Caches/CocoaPods/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+   From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
     * tag               v3.1.1     -> FETCH_HEAD
    $ /usr/local/bin/git reset --hard FETCH_HEAD
    HEAD is now at 7ea54e9 Merge pull request #45 from sethfri/master

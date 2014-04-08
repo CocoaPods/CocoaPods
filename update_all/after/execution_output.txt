@@ -1,4 +1,5 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod update --no-repo-update --verbose --no-ansi 2>&1
+CP_AGGRESSIVE_CACHE=TRUE $ pod update --no-repo-update --verbose --no-ansi 2>&1Update all pods
+
 Analyzing dependencies
 
 Finding Podfile changes
@@ -23,8 +24,8 @@ Downloading dependencies
    f7176f4798d068d233dca5223ae4bd9c8059e830
  > Cloning to Pods folder
      $ /usr/local/bin/git clone CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
-     ROOT/tmp/update/Pods/Reachability
-     Cloning into 'ROOT/tmp/update/Pods/Reachability'...
+     ROOT/tmp/update_all/Pods/Reachability
+     Cloning into 'ROOT/tmp/update_all/Pods/Reachability'...
      done.
    $ /usr/local/bin/git fetch origin tags/v3.1.0 2>&1
    From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
