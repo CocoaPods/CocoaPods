@@ -196,8 +196,7 @@ module Pod
     # Perform analysis for a given spec (or subspec)
     #
     def perform_extensive_analysis(spec)
-      validate_homepage(spec)
-      validate_screenshots(spec)
+      validate_urls(spec)
 
       spec.available_platforms.each do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
@@ -222,6 +221,13 @@ module Pod
 
     attr_accessor :consumer
     attr_accessor :subspec_name
+
+    # Performs all the validations for URLs
+    #
+    def validate_urls(spec)
+      validate_homepage(spec)
+      validate_screenshots(spec)
+    end
 
     # Performs validation of a URL
     #
