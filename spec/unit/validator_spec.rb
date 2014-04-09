@@ -1,6 +1,18 @@
 require File.expand_path('../../spec_helper', __FILE__)
 require 'webmock'
 
+module Bacon
+  class Context
+    alias_method :after_webmock, :after
+    def after(&block)
+      after_webmock do
+        block.call()
+        WebMock.reset!
+      end
+    end
+  end
+end
+
 module Pod
   describe Validator do
 
