@@ -25,6 +25,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#2010](https://github.com/CocoaPods/CocoaPods/issues/2010)
 
+* Prevent the user from using `pod` commands as root  
+  [Kyle Fuller](https://github.com/kylef)
+  [#1815](https://github.com/CocoaPods/CocoaPods/issues/1815)
+
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)
