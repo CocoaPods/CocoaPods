@@ -205,32 +205,40 @@ module Pod
     # @return [Nil] if the podspec is not stored.
     #
     def specification_path(name)
-      path = specifications_dir + "#{name}.podspec"
-      path.exist? ? path : nil
+      spec_path = specifications_dir + "#{name}.podspec"
+      json_path = specifications_dir + "#{name}.podspec.json"
+
+      if spec_path.exist?
+        spec_path
+      elsif json_path.exist?
+        json_path
+      end
     end
 
     # Stores a specification in the `Local Podspecs` folder.
     #
-    # @param  [Sandbox] sandbox
-    #         the sandbox where the podspec should be stored.
+    # @param  [Name] name
+    #         The name of the Pod for the provided podspec file / name.
     #
-    # @param  [String, Pathname] podspec
-    #         The contents of the specification (String) or the path to a
-    #         podspec file (Pathname).
+    # @param  [Pathname, String] filename
+    #         The path or filename of the podspec file.
+    #
+    # @param  [String] contents
+    #         The contents of the specification (String) or nil.
     #
     # @todo   Store all the specifications (including those not originating
     #         from external sources) so users can check them.
     #
-    def store_podspec(name, podspec, external_source = false)
-      output_path = specifications_dir(external_source) + "#{name}.podspec"
+    def store_podspec(name, filename, contents = nil, external_source = false)
+      output_path = specifications_dir(external_source) + File.basename(filename)
       output_path.dirname.mkpath
-      if podspec.is_a?(String)
-        output_path.open('w') { |f| f.puts(podspec) }
+      if contents
+        output_path.open('w') { |f| f.puts(contents) }
       else
-        unless podspec.exist?
-          raise Informative, "No podspec found for `#{name}` in #{podspec}"
+        unless filename.exist?
+          raise Informative, "No podspec found for `#{name}` in #{filename}"
         end
-        FileUtils.copy(podspec, output_path)
+        FileUtils.copy(filename, output_path)
       end
       spec = Specification.from_file(output_path)
       unless spec.name == name
@@ -368,4 +376,3 @@ module Pod
 
   end
 end
-
