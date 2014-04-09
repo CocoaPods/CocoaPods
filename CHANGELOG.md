@@ -20,10 +20,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Piet Brauer](https://github.com/pietbrauer)
   [Orta Therox](https://github.com/orta)
 
-* Validate the reachability of screenshot URLs in podspecs while linting a
-  specification.  
+* Validate the reachability of screenshot, documentation, docset and
+  social media URLs in podspecs while linting a specification. 
   [Kyle Fuller](https://github.com/kylef)
   [#2010](https://github.com/CocoaPods/CocoaPods/issues/2010)
+  [#2025](https://github.com/CocoaPods/CocoaPods/pulls/2025)
 
 * Prevent the user from using `pod` commands as root  
   [Kyle Fuller](https://github.com/kylef)

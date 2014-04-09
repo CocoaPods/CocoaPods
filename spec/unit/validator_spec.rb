@@ -1,4 +1,5 @@
 require File.expand_path('../../spec_helper', __FILE__)
+require 'webmock'
 
 module Pod
   describe Validator do
@@ -84,9 +85,7 @@ module Pod
 
     describe "Extensive analysis" do
 
-      describe "Homepage validation" do
-        require 'webmock'
-
+      describe "URL validation" do
         before do
           @sut = Validator.new(podspec_path)
           @sut.stubs(:install_pod)
@@ -95,45 +94,100 @@ module Pod
           @sut.stubs(:tear_down_validation_environment)
         end
 
-        it "checks if the homepage is valid" do
-          WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
-          Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/not-found/')
-          @sut.validate
-          @sut.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
+        describe "Homepage validation" do
+          it "checks if the homepage is valid" do
+            WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
+            Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/not-found/')
+            @sut.validate
+            @sut.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
+          end
+
+          it "indicates if it was not able to validate the homepage" do
+            WebMock::API.stub_request(:head, 'banana-corp.local').to_raise(SocketError)
+            Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/')
+            @sut.validate
+            @sut.results.map(&:to_s).first.should.match /There was a problem validating the URL/
+          end
         end
 
-        it "indicates if it was not able to validate the homepage" do
-          WebMock::API.stub_request(:head, 'banana-corp.local').to_raise(SocketError)
-          Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/')
-          @sut.validate
-          @sut.results.map(&:to_s).first.should.match /There was a problem validating the URL/
-        end
-      end
+        describe "Screenshot validation" do
+          before do
+            @sut.stubs(:validate_homepage)
+            WebMock::API.stub_request(:head, 'banana-corp.local/valid-image.png').to_return(:status => 200, :headers => { 'Content-Type' => 'image/png' })
+          end
 
-      describe "Screenshot validation" do
-        require 'webmock'
+          it "checks if the screenshots are valid" do
+            Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/valid-image.png'])
+            @sut.validate
+            @sut.results.should.be.empty?
+          end
 
-        before do
-          @sut = Validator.new(podspec_path)
-          @sut.stubs(:install_pod)
-          @sut.stubs(:build_pod)
-          @sut.stubs(:check_file_patterns)
-          @sut.stubs(:tear_down_validation_environment)
-          @sut.stubs(:validate_homepage)
-          WebMock::API.stub_request(:head, 'banana-corp.local/valid-image.png').to_return(:status => 200, :headers => { 'Content-Type' => 'image/png' })
-        end
-
-        it "checks if the screenshots are valid" do
-          Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/valid-image.png'])
-          @sut.validate
-          @sut.results.should.be.empty?
+          it "should fail if any of the screenshots URLS do not return an image" do
+            WebMock::API.stub_request(:head, 'banana-corp.local/').to_return(:status => 200)
+            Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/valid-image.png', 'http://banana-corp.local/'])
+            @sut.validate
+            @sut.results.map(&:to_s).first.should.match /The screenshot .* is not a valid image/
+          end
         end
 
-        it "should fail if any of the screenshots URLS do not return an image" do
-          WebMock::API.stub_request(:head, 'banana-corp.local/').to_return(:status => 200)
-          Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/valid-image.png', 'http://banana-corp.local/'])
-          @sut.validate
-          @sut.results.map(&:to_s).first.should.match /The screenshot .* is not a valid image/
+        describe "documentation URL validation" do
+          before do
+            @sut.stubs(:validate_homepage)
+          end
+
+          it "checks if the documentation URL is valid" do
+            Specification.any_instance.stubs(:documentation_url).returns('http://banana-corp.local/')
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
+            @sut.validate
+            @sut.results.should.be.empty?
+          end
+
+          it "should fail validation if it wasn't able to validate the URL" do
+            Specification.any_instance.stubs(:documentation_url).returns('http://banana-corp.local/')
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 404)
+            @sut.validate
+            @sut.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
+          end
+        end
+
+        describe "docset URL validation" do
+          before do
+            @sut.stubs(:validate_homepage)
+          end
+
+          it "checks if the docset URL is valid" do
+            Specification.any_instance.stubs(:docset_url).returns('http://banana-corp.local/')
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
+            @sut.validate
+            @sut.results.should.be.empty?
+          end
+
+          it "should fail validation if it wasn't able to validate the URL" do
+            Specification.any_instance.stubs(:docset_url).returns('http://banana-corp.local/')
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 404)
+            @sut.validate
+            @sut.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
+          end
+        end
+
+        describe "social media URL validation" do
+          before do
+            @sut.stubs(:validate_homepage)
+          end
+
+          it "checks if the social media URL is valid" do
+            Specification.any_instance.stubs(:social_media_urlon_url).returns('http://banana-corp.local/')
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
+            @sut.validate
+            @sut.results.should.be.empty?
+          end
+
+          it "should fail validation if it wasn't able to validate the URL" do
+            Specification.any_instance.stubs(:social_media_url).returns('http://banana-corp.local/')
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 404)
+            @sut.validate
+            @sut.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
+          end
         end
       end
 
