@@ -196,8 +196,7 @@ module Pod
     # Perform analysis for a given spec (or subspec)
     #
     def perform_extensive_analysis(spec)
-      validate_homepage(spec)
-      validate_screenshots(spec)
+      validate_urls(spec)
 
       spec.available_platforms.each do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
@@ -222,6 +221,16 @@ module Pod
 
     attr_accessor :consumer
     attr_accessor :subspec_name
+
+    # Performs all the validations for URLs
+    #
+    def validate_urls(spec)
+      validate_homepage(spec)
+      validate_screenshots(spec)
+      validate_documentation_url(spec)
+      validate_docset_url(spec)
+      validate_social_media_url(spec)
+    end
 
     # Performs validation of a URL
     #
@@ -258,6 +267,30 @@ module Pod
         if request && !(request.headers['content-type'] && request.headers['content-type'].first =~ /image\/.*/i)
           warning "The screenshot #{screenshot} is not a valid image."
         end
+      end
+    end
+
+    # Performs validations related to the `documentation_url` attribute.
+    #
+    def validate_documentation_url(spec)
+      if spec.documentation_url
+        validate_url(spec.documentation_url)
+      end
+    end
+
+    # Performs validations related to the `docset_url` attribute.
+    #
+    def validate_docset_url(spec)
+      if spec.docset_url
+        validate_url(spec.docset_url)
+      end
+    end
+
+    # Performs validations related to the `social_media_url` attribute.
+    #
+    def validate_social_media_url(spec)
+      if spec.social_media_url
+        validate_url(spec.social_media_url)
       end
     end
 
