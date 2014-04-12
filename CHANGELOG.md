@@ -20,6 +20,19 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Piet Brauer](https://github.com/pietbrauer)
   [Orta Therox](https://github.com/orta)
 
+* Validate the reachability of screenshot URLs in podspecs while linting a
+  specification.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2010](https://github.com/CocoaPods/CocoaPods/issues/2010)
+
+* Prevent the user from using `pod` commands as root  
+  [Kyle Fuller](https://github.com/kylef)
+  [#1815](https://github.com/CocoaPods/CocoaPods/issues/1815)
+
+* Fix to keep absolute paths specified for local pods as is.
+  [Samuel Ford](https://github.com/samuelwford)
+  [#1042](https://github.com/CocoaPods/CocoaPods/issues/1042)
+
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)
@@ -54,6 +67,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Stefan Damm](https://github.com/StefanDamm)
   [Robert Zuber](https://github.com/z00b)
   [#1617](https://github.com/CocoaPods/CocoaPods/issues/1617)
+
+* Generated prefix header file will now have unique prefix_header_contents for
+  Pods with subspecs.  
+  [Luis de la Rosa](https://github.com/luisdelarosa)
+  [#1449](https://github.com/CocoaPods/CocoaPods/issues/1449)
 
 * The linter will now check the reachability of the homepage of Podspecs during
   a full lint.  

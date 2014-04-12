@@ -197,6 +197,7 @@ module Pod
     #
     def perform_extensive_analysis(spec)
       validate_homepage(spec)
+      validate_screenshots(spec)
 
       spec.available_platforms.each do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
@@ -224,25 +225,23 @@ module Pod
 
     MAX_HTTP_REDIRECTS = 3
 
-    # Performs validations related to the `homepage` attribute.
+    # Performs validation of a URL
     #
-    def validate_homepage(spec)
+    def validate_url(url)
       require 'rest'
-      homepage = spec.homepage
-      return unless homepage
 
       begin
         redirects = 0
         resp = nil
         loop do
-          resp = ::REST.head(homepage)
+          resp = ::REST.head(url)
 
           if resp.status_code == 405
-            resp = ::REST.get(homepage)
+            resp = ::REST.get(url)
           end
 
           if [301, 302, 303, 307, 308].include? resp.status_code
-            homepage = resp.headers['location'].first
+            url = resp.headers['location'].first
             redirects += 1
           else
             break
@@ -251,12 +250,33 @@ module Pod
           break unless redirects < MAX_HTTP_REDIRECTS
         end
       rescue
-        warning "There was a problem validating the homepage."
+        warning "There was a problem validating the URL #{url}."
         resp = nil
       end
 
       if resp && !resp.success?
-        warning "The homepage is not reachable."
+        warning "The URL (#{url}) is not reachable."
+      end
+
+      resp
+    end
+
+    # Performs validations related to the `homepage` attribute.
+    #
+    def validate_homepage(spec)
+      if spec.homepage
+        validate_url(spec.homepage)
+      end
+    end
+
+    # Performs validation related to the `screenshots` attribute.
+    #
+    def validate_screenshots(spec)
+      spec.screenshots.each do |screenshot|
+        request = validate_url(screenshot)
+        if request && !(request.headers['content-type'] && request.headers['content-type'].first =~ /image\/.*/i)
+          warning "The screenshot #{screenshot} is not a valid image."
+        end
       end
     end
 

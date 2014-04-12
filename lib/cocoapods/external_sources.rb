@@ -352,7 +352,8 @@ module Pod
         UI.titled_section("Fetching podspec for `#{name}` #{description}", { :verbose_prefix => "-> " }) do
           podspec = podspec_path
           store_podspec(sandbox, podspec)
-          sandbox.store_local_path(name, podspec.dirname)
+          path_is_absolute_or_rooted_to_home = declared_path.absolute? || declared_path.to_s.start_with?('~')
+          sandbox.store_local_path(name, podspec.dirname, path_is_absolute_or_rooted_to_home)
         end
       end
 
@@ -368,10 +369,15 @@ module Pod
 
       # @!group Helpers
 
+      # @return [Pathname] the path as declared in the podspec
+      #
+      def declared_path
+        Pathname.new params[:path] || params[:local]
+      end
+      
       # @return [Pathname] the path of the podspec.
       #
       def podspec_path
-        declared_path = (params[:path] || params[:local]).to_s
         path_with_ext = File.extname(declared_path) == '.podspec' ? declared_path : "#{declared_path}/#{name}.podspec"
         podfile_dir   = File.dirname(podfile_path || '')
         absolute_path = File.expand_path(path_with_ext, podfile_dir)
