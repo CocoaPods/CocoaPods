@@ -204,6 +204,23 @@ module Pod
           @installer.installed_specs.should == [spec]
         end
 
+        it "prints the previous version of a pod while updating the spec" do
+          spec = Spec.new
+          spec.name = 'RestKit'
+          spec.version = '2.0'
+          manifest = Lockfile.new({})
+          manifest.stubs(:version).with('RestKit').returns('1.0')
+          @installer.sandbox.stubs(:manifest).returns(manifest)
+          # Lockfile.any_instance.stubs(:version).with('RestKit').returns('1.0')
+          @installer.stubs(:root_specs).returns([spec])
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.changed << 'RestKit'
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.expects(:install_source_of_pod).with('RestKit')
+          @installer.send(:install_pod_sources)
+          UI.output.should.include 'was 1.0'
+        end
+
         #--------------------------------------#
 
         describe "#clean" do
