@@ -211,7 +211,6 @@ module Pod
           manifest = Lockfile.new({})
           manifest.stubs(:version).with('RestKit').returns('1.0')
           @installer.sandbox.stubs(:manifest).returns(manifest)
-          # Lockfile.any_instance.stubs(:version).with('RestKit').returns('1.0')
           @installer.stubs(:root_specs).returns([spec])
           sandbox_state = Installer::Analyzer::SpecsState.new
           sandbox_state.changed << 'RestKit'
