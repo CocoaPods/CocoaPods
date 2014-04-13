@@ -272,7 +272,7 @@ module Pod
     # Performs validation related to the `screenshots` attribute.
     #
     def validate_screenshots(spec)
-      spec.screenshots.each do |screenshot|
+      spec.screenshots.compact.each do |screenshot|
         request = validate_url(screenshot)
         if request && !(request.headers['content-type'] && request.headers['content-type'].first =~ /image\/.*/i)
           warning "The screenshot #{screenshot} is not a valid image."
