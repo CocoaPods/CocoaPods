@@ -109,6 +109,33 @@ module Pod
           @sut.validate
           @sut.results.map(&:to_s).first.should.match /There was a problem validating the URL/
         end
+
+        it "does not fail if the homepage redirects" do
+          WebMock::API.stub_request(:head, /redirect/).to_return(
+            :status => 301, :headers => { 'Location' => 'http://banana-corp.local/found/' } )
+          WebMock::API.stub_request(:head, /found/).to_return( :status => 200 )
+          Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/redirect/')
+          @sut.validate
+          @sut.results.length.should.equal 0
+        end
+
+        it "does not fail if the homepage does not support HEAD" do
+          WebMock::API.stub_request(:head, /page/).to_return( :status => 405 )
+          WebMock::API.stub_request(:get, /page/).to_return( :status => 200 )
+          Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
+          @sut.validate
+          @sut.results.length.should.equal 0
+        end
+
+        it "does not follow redirects infinitely" do
+          WebMock::API.stub_request(:head, /redirect/).to_return(
+            :status => 301,
+            :headers => { 'Location' => 'http://banana-corp.local/redirect/' } )
+          Specification.any_instance.stubs(:homepage).returns(
+            'http://banana-corp.local/redirect/')
+          @sut.validate
+          @sut.results.map(&:to_s).first.should.match /The URL \(.*\) is not reachable/
+        end
       end
 
       describe "Screenshot validation" do

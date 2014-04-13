@@ -223,13 +223,32 @@ module Pod
     attr_accessor :consumer
     attr_accessor :subspec_name
 
+    MAX_HTTP_REDIRECTS = 3
+
     # Performs validation of a URL
     #
     def validate_url(url)
       require 'rest'
 
       begin
-        resp = ::REST.head(url)
+        redirects = 0
+        resp = nil
+        loop do
+          resp = ::REST.head(url)
+
+          if resp.status_code == 405
+            resp = ::REST.get(url)
+          end
+
+          if [301, 302, 303, 307, 308].include? resp.status_code
+            url = resp.headers['location'].first
+            redirects += 1
+          else
+            break
+          end
+
+          break unless redirects < MAX_HTTP_REDIRECTS
+        end
       rescue
         warning "There was a problem validating the URL #{url}."
         resp = nil
@@ -253,7 +272,7 @@ module Pod
     # Performs validation related to the `screenshots` attribute.
     #
     def validate_screenshots(spec)
-      spec.screenshots.each do |screenshot|
+      spec.screenshots.compact.each do |screenshot|
         request = validate_url(screenshot)
         if request && !(request.headers['content-type'] && request.headers['content-type'].first =~ /image\/.*/i)
           warning "The screenshot #{screenshot} is not a valid image."
