@@ -98,6 +98,7 @@ module Pod
 
         it "checks if the homepage is valid" do
           WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
+          WebMock::API.stub_request(:get, /not-found/).to_return(:status => 404)
           Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/not-found/')
           @sut.validate
           @sut.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
@@ -121,6 +122,14 @@ module Pod
 
         it "does not fail if the homepage does not support HEAD" do
           WebMock::API.stub_request(:head, /page/).to_return( :status => 405 )
+          WebMock::API.stub_request(:get, /page/).to_return( :status => 200 )
+          Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
+          @sut.validate
+          @sut.results.length.should.equal 0
+        end
+
+        it "does not fail if the homepage errors on HEAD" do
+          WebMock::API.stub_request(:head, /page/).to_return( :status => 500 )
           WebMock::API.stub_request(:get, /page/).to_return( :status => 200 )
           Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
           @sut.validate

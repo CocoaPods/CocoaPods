@@ -236,7 +236,7 @@ module Pod
         loop do
           resp = ::REST.head(url)
 
-          if resp.status_code == 405
+          if resp.status_code >= 400
             resp = ::REST.get(url)
           end
 
