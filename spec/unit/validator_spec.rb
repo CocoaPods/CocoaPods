@@ -129,8 +129,10 @@ module Pod
 
         it "does not follow redirects infinitely" do
           WebMock::API.stub_request(:head, /redirect/).to_return(
-            :status => 301, :headers => { 'Location' => 'http://banana-corp.local/redirect/' } )
-          Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/redirect/')
+            :status => 301,
+            :headers => { 'Location' => 'http://banana-corp.local/redirect/' } )
+          Specification.any_instance.stubs(:homepage).returns(
+            'http://banana-corp.local/redirect/')
           @sut.validate
           @sut.results.map(&:to_s).first.should.match /The URL \(.*\) is not reachable/
         end
