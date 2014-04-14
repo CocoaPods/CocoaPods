@@ -188,7 +188,8 @@ namespace :spec do
   desc "Rebuilds integration fixtures"
   task :rebuild_integration_fixtures do
     title 'Running Integration tests'
-    `bundle exec bacon spec/integration.rb`
+    sh 'rm -rf spec/cocoapods-integration-specs/tmp'
+    Rake::Task['spec:integration'].invoke
 
     title 'Storing fixtures'
     # Copy the files to the files produced by the specs to the after folders
