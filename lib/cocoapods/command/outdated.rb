@@ -29,13 +29,18 @@ module Pod
         lockfile = config.lockfile
         pods = lockfile.pod_names
         updates = []
+        deprecated = []
         pods.each do |pod_name|
           set = SourcesManager.search(Dependency.new(pod_name))
           next unless set
+          spec = set.specification
           source_version = set.versions.first
           lockfile_version = lockfile.version(pod_name)
           if source_version > lockfile_version
             updates << [pod_name, lockfile_version, source_version]
+          end
+          if spec.deprecated || spec.deprecated_in_favor_of
+            deprecated << spec
           end
         end
 
@@ -48,6 +53,20 @@ module Pod
             end
           end
         end
+
+        if deprecated.any?
+          UI.section 'The following pods are deprecated:' do
+            deprecated.each do |spec|
+              if spec.deprecated_in_favor_of
+                UI.puts "- #{spec.name} in " \
+                  "favor of #{spec.deprecated_in_favor_of}"
+              else
+                UI.puts "- #{spec.name}"
+              end
+            end
+          end
+        end
+
       end
     end
   end
