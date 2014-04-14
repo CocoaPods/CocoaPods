@@ -90,6 +90,7 @@ module Pod
       download_dependencies
       generate_pods_project
       integrate_user_project if config.integrate_targets?
+      perform_post_install_actions
     end
 
     def resolve_dependencies
@@ -283,6 +284,32 @@ module Pod
       return unless @pod_installers
       @pod_installers.each do |pod_installer|
         pod_installer.clean!
+      end
+    end
+
+    # Performs any post-installation actions
+    #
+    # @return [void]
+    #
+    def perform_post_install_actions
+      warn_for_deprecations
+    end
+
+    # Prints a warning for any pods that are deprecated
+    #
+    # @return [void]
+    #
+    def warn_for_deprecations
+      deprecated_pods = root_specs.select do |spec|
+        spec.deprecated || spec.deprecated_in_favor_of
+      end
+      deprecated_pods.each do |spec|
+        if spec.deprecated_in_favor_of
+          UI.warn "#{spec.name} has been deprecated in " \
+            "favor of #{spec.deprecated_in_favor_of}"
+        else
+          UI.warn "#{spec.name} has been deprecated"
+        end
       end
     end
 
