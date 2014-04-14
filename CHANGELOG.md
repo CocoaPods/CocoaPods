@@ -33,6 +33,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Ford](https://github.com/samuelwford)
   [#1042](https://github.com/CocoaPods/CocoaPods/issues/1042)
 
+* `pod update` prints the previous version of the updated pods.  
+  [Andrea Mazzini](https://github.com/andreamazz)
+  [#2008](https://github.com/CocoaPods/CocoaPods/issues/2008)
+
 ##### Bug Fixes
 
 * Support HTTP redirects when linting homepage and screenshots.

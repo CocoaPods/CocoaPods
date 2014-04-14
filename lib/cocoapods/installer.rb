@@ -236,7 +236,13 @@ module Pod
       title_options = { :verbose_prefix => "-> ".green }
       root_specs.sort_by(&:name).each do |spec|
         if pods_to_install.include?(spec.name)
-          UI.titled_section("Installing #{spec}".green, title_options) do
+          if sandbox_state.changed.include?(spec.name) && sandbox.manifest
+            previous = sandbox.manifest.version(spec.name)
+            title = "Installing #{spec.name} #{spec.version} (was #{previous})"
+          else
+            title = "Installing #{spec}"
+          end
+          UI.titled_section(title.green, title_options) do
             install_source_of_pod(spec.name)
           end
         else
