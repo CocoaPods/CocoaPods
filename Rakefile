@@ -129,6 +129,7 @@ namespace :spec do
   #
   task :all => :unpack_fixture_tarballs do
     ENV['GENERATE_COVERAGE'] = 'true'
+    puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
     title 'Running the specs'
     sh    "bundle exec bacon #{specs('**/*')}"
