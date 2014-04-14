@@ -18,7 +18,7 @@ Downloading dependencies
 
 -> Using JSONKit (1.4)
 
--> Installing Reachability (3.1.1)
+-> Installing Reachability 3.1.1 (was 3.0.0)
  > GitHub download
    $ /usr/local/bin/git config core.bare
    true
