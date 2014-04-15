@@ -36,9 +36,6 @@ group :development do
 end
 
 group :debugging do
-  # Only while we test the trunk app.
-  gem 'cocoapods-trunk', :git => "https://github.com/alloy/cocoapods-trunk.git"
-
   gem "rb-fsevent"
   gem "kicker"
   gem "awesome_print"

@@ -40,15 +40,6 @@ GIT
     cocoapods-try (0.2.0)
 
 GIT
-  remote: https://github.com/alloy/cocoapods-trunk.git
-  revision: febc522b4e462bacd013a48adb704c769586bd7e
-  specs:
-    cocoapods-trunk (0.0.1)
-      json (~> 1.8)
-      nap (>= 0.6)
-      netrc
-
-GIT
   remote: https://github.com/ruby-prof/ruby-prof.git
   revision: b56c1268ba001f5eb55f940ca1c83bc6b83a9752
   specs:
@@ -96,7 +87,6 @@ GEM
     fuzzy_match (2.0.4)
     github-markup (1.1.0)
     i18n (0.6.4)
-    json (1.8.1)
     json_pure (1.8.1)
     kicker (3.0.0)
       listen (~> 1.3.0)
@@ -114,7 +104,6 @@ GEM
       mocha (>= 0.13.0)
     multi_json (1.9.2)
     nap (0.7.0)
-    netrc (0.7.7)
     notify (0.5.2)
     open4 (1.3.3)
     posix-spawn (0.3.8)
@@ -163,7 +152,6 @@ DEPENDENCIES
   cocoapods!
   cocoapods-core!
   cocoapods-downloader!
-  cocoapods-trunk!
   cocoapods-try!
   coveralls
   diffy
