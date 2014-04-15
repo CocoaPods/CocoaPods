@@ -17,8 +17,8 @@ module Pod
           create_xcconfig_file
           create_target_environment_header
           create_bridge_support_file
-          create_copy_resources_script
           create_acknowledgements
+          create_copy_resources_script
           create_dummy_source
         end
       end
@@ -91,10 +91,12 @@ module Pod
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
           file_accessors = library.pod_targets.map(&:file_accessors).flatten
           resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map { |res| res.relative_path_from(project.path.dirname) }}.flatten
+          acknowledgements_paths = Pathname.glob("#{library.acknowledgements_basepath}*").map { |path| path.relative_path_from(project.path.dirname).to_s }.flatten
           resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map {|name| "${BUILT_PRODUCTS_DIR}/#{name}.bundle" } }.flatten
           resources = []
           resources.concat(resource_paths)
           resources.concat(resource_bundles)
+          resources.concat(acknowledgements_paths)
           resources << bridge_support_file if bridge_support_file
           generator = Generator::CopyResourcesScript.new(resources, library.platform)
           generator.save_as(path)
