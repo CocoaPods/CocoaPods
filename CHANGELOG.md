@@ -2,6 +2,15 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## 0.32.1
+
+##### Bug Fixes
+
+* Fixed the Podfile `default_subspec` attribute in nested subspecs.  
+  [Fabio Pelosin][irrationalfab]
+  [#2050](https://github.com/CocoaPods/CocoaPods/issues/2050)
+
+
 ## 0.32.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.31.1)
