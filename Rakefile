@@ -129,6 +129,7 @@ namespace :spec do
   #
   task :all => :unpack_fixture_tarballs do
     ENV['GENERATE_COVERAGE'] = 'true'
+    puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
     title 'Running the specs'
     sh    "bundle exec bacon #{specs('**/*')}"
@@ -188,7 +189,8 @@ namespace :spec do
   desc "Rebuilds integration fixtures"
   task :rebuild_integration_fixtures do
     title 'Running Integration tests'
-    `bundle exec bacon spec/integration.rb`
+    sh 'rm -rf spec/cocoapods-integration-specs/tmp'
+    Rake::Task['spec:integration'].invoke
 
     title 'Storing fixtures'
     # Copy the files to the files produced by the specs to the after folders

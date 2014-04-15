@@ -26,6 +26,28 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Core#97](https://github.com/CocoaPods/Core/pull/97)
   [Core#98](https://github.com/CocoaPods/Core/issues/98)
 
+* Validate the reachability of screenshot URLs in podspecs while linting a
+  specification.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2010](https://github.com/CocoaPods/CocoaPods/issues/2010)
+
+* Prevent the user from using `pod` commands as root  
+  [Kyle Fuller](https://github.com/kylef)
+  [#1815](https://github.com/CocoaPods/CocoaPods/issues/1815)
+
+* Fix to keep absolute paths specified for local pods as is.
+  [Samuel Ford](https://github.com/samuelwford)
+  [#1042](https://github.com/CocoaPods/CocoaPods/issues/1042)
+
+* `pod update` prints the previous version of the updated pods.  
+  [Andrea Mazzini](https://github.com/andreamazz)
+  [#2008](https://github.com/CocoaPods/CocoaPods/issues/2008)
+
+##### Bug Fixes
+
+* Support HTTP redirects when linting homepage and screenshots.
+  [Boris Bügling](https://github.com/neonichu)
+  [#2027](https://github.com/CocoaPods/CocoaPods/pull/2027)
 
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
@@ -61,6 +83,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Stefan Damm](https://github.com/StefanDamm)
   [Robert Zuber](https://github.com/z00b)
   [#1617](https://github.com/CocoaPods/CocoaPods/issues/1617)
+
+* Generated prefix header file will now have unique prefix_header_contents for
+  Pods with subspecs.  
+  [Luis de la Rosa](https://github.com/luisdelarosa)
+  [#1449](https://github.com/CocoaPods/CocoaPods/issues/1449)
 
 * The linter will now check the reachability of the homepage of Podspecs during
   a full lint.  

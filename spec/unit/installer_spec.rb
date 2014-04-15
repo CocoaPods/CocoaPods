@@ -21,6 +21,16 @@ def generate_podfile(pods = ['JSONKit'])
   end
 end
 
+# @return [Podfile]
+#
+def generate_local_podfile
+  podfile = Pod::Podfile.new do
+    platform :ios
+    xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
+    pod 'SSToolkit', :path => SpecHelper.fixture('integration/sstoolkit')
+  end
+end
+
 #-----------------------------------------------------------------------------#
 
 module Pod
@@ -194,6 +204,22 @@ module Pod
           @installer.installed_specs.should == [spec]
         end
 
+        it "prints the previous version of a pod while updating the spec" do
+          spec = Spec.new
+          spec.name = 'RestKit'
+          spec.version = '2.0'
+          manifest = Lockfile.new({})
+          manifest.stubs(:version).with('RestKit').returns('1.0')
+          @installer.sandbox.stubs(:manifest).returns(manifest)
+          @installer.stubs(:root_specs).returns([spec])
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.changed << 'RestKit'
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.expects(:install_source_of_pod).with('RestKit')
+          @installer.send(:install_pod_sources)
+          UI.output.should.include 'was 1.0'
+        end
+
         #--------------------------------------#
 
         describe "#clean" do
@@ -245,6 +271,15 @@ module Pod
         it "creates the Pods project" do
           @installer.send(:prepare_pods_project)
           @installer.pods_project.class.should == Pod::Project
+        end
+
+        it "preserves Pod paths specified as absolute or rooted to home" do
+          local_podfile = generate_local_podfile
+          local_installer = Installer.new(config.sandbox, local_podfile)
+          local_installer.send(:analyze)
+          local_installer.send(:prepare_pods_project)
+          group = local_installer.pods_project.group_for_spec('SSToolkit')
+          Pathname.new(group.path).should.be.absolute
         end
 
         it "adds the Podfile to the Pods project" do

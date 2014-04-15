@@ -480,7 +480,7 @@ Pod::Spec.new do |s|
                    DESC
 
   s.homepage     = "#{data[:homepage]}"
-  # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
