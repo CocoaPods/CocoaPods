@@ -37,15 +37,14 @@ module Pod
       }
     end
 
-      it "raises if the podspec cannot be found" do
-        @subject.stubs(:params).returns(:path => temporary_directory)
-        should.raise Informative do
-          @subject.fetch(config.sandbox)
-        end.message.should.match /No podspec found for `Reachability` in `#{temporary_directory}`/
-      end
+    it "raises if the podspec cannot be found" do
+      @subject.stubs(:params).returns(:path => temporary_directory)
+      should.raise Informative do
+        @subject.fetch(config.sandbox)
+      end.message.should.match /No podspec found for `Reachability` in `#{temporary_directory}`/
+    end
 
-    describe "Helpers" do
-
+    describe "#podspec_path" do
       it "handles absolute paths" do
         @subject.stubs(:params).returns(:path => fixture('integration/Reachability'))
         path = @subject.send(:podspec_path)
@@ -71,6 +70,23 @@ module Pod
         Pathname.any_instance.stubs(:exist?).returns(true)
         path = @subject.send(:podspec_path)
         path.should == Pathname(ENV['HOME']) + 'Reachability/Reachability.podspec'
+      end
+    end
+
+    describe '#absolute?' do
+      it 'returns that a path is relative' do
+        result = @subject.send(:absolute?, './ThirdPartyCode/UrbanAirship')
+        result.should.be.false
+      end
+
+      it 'returns that a path is absolute' do
+        result = @subject.send(:absolute?, '/path/to/UrbanAirship')
+        result.should.be.true
+      end
+
+      it 'considers absolute paths specified with the tilde' do
+        result = @subject.send(:absolute?, '~/path/to/UrbanAirship')
+        result.should.be.true
       end
     end
   end
