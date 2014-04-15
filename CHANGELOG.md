@@ -13,10 +13,56 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Marius Rackwitz](https://github.com/mrackwitz)
   [CocoaPods#760](https://github.com/CocoaPods/CocoaPods/issues/760)
 
+* `pod update` prints the previous version of the updated pods.  
+  [Andrea Mazzini](https://github.com/andreamazz)
+  [#2008](https://github.com/CocoaPods/CocoaPods/issues/2008)
+
 * `pod update` falls back to `pod install` if no Lockfile is present.  
   [Marius Rackwitz](https://github.com/mrackwitz)
 
-* `pod lib create` is now using the `configure` file instead of the `_CONFIGURE.rb` file.  
+* File references in the Pods project for development Pods now are absolute if
+  the dependency is specified with an absolute paths.  
+  [Samuel Ford](https://github.com/samuelwford)
+  [#1042](https://github.com/CocoaPods/CocoaPods/issues/1042)
+
+* Added `deprecated` and `deprecated_in_favor_of` attributes to Specification
+  DSL.  
+  [Paul Young](https://github.com/paulyoung)
+  [Core#87](https://github.com/CocoaPods/Core/pull/87)
+
+* Numerous improvements to the validator and to the linter.
+  * Validate the reachability of screenshot URLs in podspecs while linting a
+    specification.  
+    [Kyle Fuller](https://github.com/kylef)
+    [#2010](https://github.com/CocoaPods/CocoaPods/issues/2010)
+  * Support HTTP redirects when linting homepage and screenshots.  
+    [Boris Bügling](https://github.com/neonichu)
+    [#2027](https://github.com/CocoaPods/CocoaPods/pull/2027)
+  * The linter now checks `framework` and `library` attributes for invalid
+    strings.  
+    [Paul Williamson](https://github.com/squarefrog)
+    [Fabio Pelosin](irrationalfab)
+    [Core#66](https://github.com/CocoaPods/Core/issues/66)
+    [Core#96](https://github.com/CocoaPods/Core/pull/96)
+    [Core#105](https://github.com/CocoaPods/Core/issues/105)
+  * The Linter will not check for comments anymore.  
+    [Fabio Pelosin][irrationalfab]
+    [Core#108](https://github.com/CocoaPods/Core/issues/108)
+  * Removed legacy checks from the linter.  
+    [Fabio Pelosin][irrationalfab]
+    [Core#108](https://github.com/CocoaPods/Core/issues/108)
+  * Added logic to handle subspecs and platform scopes to linter check of
+    the `requries_arc` attribute.  
+    [Fabio Pelosin][irrationalfab]
+    [CocoaPods#2005](https://github.com/CocoaPods/CocoaPods/issues/2005)
+  * The linter no longer considers empty a Specification if it only specifies the
+    `resource_bundle` attribute.  
+    [Joshua Kalpin][Kapin]
+    [#63](https://github.com/CocoaPods/Core/issues/63)
+    [#95](https://github.com/CocoaPods/Core/pull/95)
+
+* `pod lib create` is now using the `configure` file instead of the
+  `_CONFIGURE.rb` file.  
   [Piet Brauer](https://github.com/pietbrauer)
   [Orta Therox](https://github.com/orta)
 
@@ -26,32 +72,27 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Core#97](https://github.com/CocoaPods/Core/pull/97)
   [Core#98](https://github.com/CocoaPods/Core/issues/98)
 
-* Validate the reachability of screenshot URLs in podspecs while linting a
-  specification.  
-  [Kyle Fuller](https://github.com/kylef)
-  [#2010](https://github.com/CocoaPods/CocoaPods/issues/2010)
-
-* Prevent the user from using `pod` commands as root  
+* Prevent the user from using `pod` commands as root.  
   [Kyle Fuller](https://github.com/kylef)
   [#1815](https://github.com/CocoaPods/CocoaPods/issues/1815)
-
-* Fix to keep absolute paths specified for local pods as is.
-  [Samuel Ford](https://github.com/samuelwford)
-  [#1042](https://github.com/CocoaPods/CocoaPods/issues/1042)
-
-* `pod update` prints the previous version of the updated pods.  
-  [Andrea Mazzini](https://github.com/andreamazz)
-  [#2008](https://github.com/CocoaPods/CocoaPods/issues/2008)
 
 * Dependencies declared with external sources now support HTTP downloads and
   have improved support for all the options supported by the downloader.  
   [Fabio Pelosin][irrationalfab]
 
+* An informative error message is presented when merge conflict is detected in
+  a YAML file.  
+  [Luis de la Rosa](https://github.com/luisdelarosa)
+  [#69](https://github.com/CocoaPods/Core/issues/69)
+  [#100](https://github.com/CocoaPods/Core/pull/100)
+
 ##### Bug Fixes
 
-* Support HTTP redirects when linting homepage and screenshots.
-  [Boris Bügling](https://github.com/neonichu)
-  [#2027](https://github.com/CocoaPods/CocoaPods/pull/2027)
+* Fixed the Podfile `default_subspec` attribute in nested subspecs.  
+  [Fabio Pelosin][irrationalfab]
+  [#1021](https://github.com/CocoaPods/CocoaPods/issues/1021)
+
+
 
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
