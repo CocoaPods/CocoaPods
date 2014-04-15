@@ -2,7 +2,7 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+## 0.32.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.31.1)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/master...0.31.1)
