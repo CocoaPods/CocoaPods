@@ -1,16 +1,6 @@
-[submodule "spec/fixtures/integration/ASIHTTPRequest"]
-	path = spec/fixtures/integration/ASIHTTPRequest
-	url = https://github.com/pokeb/asi-http-request.git
-[submodule "spec/fixtures/integration/SSZipArchive"]
-	path = spec/fixtures/integration/SSZipArchive
-	url = https://github.com/samsoffes/ssziparchive.git
 [submodule "spec/fixtures/integration/JSONKit"]
 	path = spec/fixtures/integration/JSONKit
 	url = https://github.com/johnezang/JSONKit.git
-[submodule "spec/fixtures/integration/sstoolkit"]
-	path = spec/fixtures/integration/sstoolkit
-	url = https://github.com/samsoffes/sstoolkit.git
-  ignore = dirty
 [submodule "spec/fixtures/spec-repos/master"]
 	path = spec/fixtures/spec-repos/master
 	url = https://github.com/CocoaPods/Specs.git

@@ -27,7 +27,7 @@ def generate_local_podfile
   podfile = Pod::Podfile.new do
     platform :ios
     xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
-    pod 'SSToolkit', :path => SpecHelper.fixture('integration/sstoolkit')
+    pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
   end
 end
 
@@ -278,7 +278,7 @@ module Pod
           local_installer = Installer.new(config.sandbox, local_podfile)
           local_installer.send(:analyze)
           local_installer.send(:prepare_pods_project)
-          group = local_installer.pods_project.group_for_spec('SSToolkit')
+          group = local_installer.pods_project.group_for_spec('Reachability')
           Pathname.new(group.path).should.be.absolute
         end
 
