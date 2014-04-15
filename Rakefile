@@ -145,20 +145,14 @@ namespace :spec do
   #
   desc "Run all specs and build all examples"
   task :ci => :unpack_fixture_tarballs do
-    title 'Running the specs'
-    sh "bundle exec bacon #{specs('**/*')}"
-
     require 'pathname'
+    title 'Ensuring specs repo is up to date'
     unless Pathname.new(ENV['HOME']+'/.cocoapods/repos/master').exist?
-      title 'Ensuring specs repo is up to date'
-      sh    "./bin/pod setup"
+      sh "./bin/pod setup"
     end
+    sh "./bin/pod repo update"
 
-    title 'Running Integration tests'
-    sh "bundle exec bacon spec/integration.rb"
-
-    title 'Running examples'
-    Rake::Task['examples:build'].invoke
+    Rake::Task['spec:all'].invoke
   end
 
   desc "Rebuild all the fixture tarballs"
