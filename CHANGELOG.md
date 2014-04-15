@@ -15,6 +15,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   docset_url in podspecs we while linting a specification.  
   [Kyle Fuller](https://github.com/kylef)
   [#2025](https://github.com/CocoaPods/CocoaPods/issues/2025)
+  
+* Print current version when the repo/lockfile requires a higher version
+  [Samuel E. Giddins](https://github.com/segiddins)
+  [#2049](https://github.com/CocoaPods/CocoaPods/issues/2049)
 
 ##### Bug Fixes
 
