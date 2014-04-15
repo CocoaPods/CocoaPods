@@ -18,7 +18,7 @@ group :development do
   gem "mocha"
   gem "bacon"
   gem "mocha-on-bacon"
-  gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
+  gem 'prettybacon'
   gem 'webmock', "< 1.16"
 
   # For the integration tests

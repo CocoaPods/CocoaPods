@@ -49,14 +49,6 @@ GIT
       netrc
 
 GIT
-  remote: https://github.com/irrationalfab/PrettyBacon.git
-  revision: 1eeb06f7d381acd65414b86b42fdf3538faae01c
-  branch: master
-  specs:
-    prettybacon (0.0.2)
-      bacon (~> 1.2)
-
-GIT
   remote: https://github.com/ruby-prof/ruby-prof.git
   revision: b56c1268ba001f5eb55f940ca1c83bc6b83a9752
   specs:
@@ -126,6 +118,8 @@ GEM
     notify (0.5.2)
     open4 (1.3.3)
     posix-spawn (0.3.8)
+    prettybacon (0.0.2)
+      bacon (~> 1.2)
     pry (0.9.12.6)
       coderay (~> 1.0)
       method_source (~> 0.8)
@@ -179,7 +173,7 @@ DEPENDENCIES
   mime-types (< 2)
   mocha
   mocha-on-bacon
-  prettybacon!
+  prettybacon
   pry
   pygments.rb
   rake (~> 10.1.0)
