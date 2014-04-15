@@ -40,7 +40,7 @@ group :debugging do
   gem 'cocoapods-trunk', :git => "https://github.com/alloy/cocoapods-trunk.git"
 
   gem "rb-fsevent"
-  gem "kicker", :git => "https://github.com/alloy/kicker.git", :branch => "master"
+  gem "kicker"
   gem "awesome_print"
   gem "pry"
   # The released gem leads to stack too deep when profiling a full run.
