@@ -19,7 +19,7 @@ module Pod
               "`#{declared_path}`"
           end
           store_podspec(sandbox, podspec)
-          is_absolute = absolute?(podspec)
+          is_absolute = absolute?(declared_path)
           sandbox.store_local_path(name, podspec.dirname, is_absolute)
         end
       end

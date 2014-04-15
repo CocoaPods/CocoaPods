@@ -42,6 +42,22 @@ module Pod
       should.raise Informative do
         @subject.fetch(config.sandbox)
       end.message.should.match /No podspec found for `Reachability` in `#{temporary_directory}`/
+
+      it "marks a pod as relative" do
+        @subject.stubs(:params).returns(:path => './Reachability')
+        Pathname.any_instance.stubs(:exist?).returns(true)
+        config.sandbox.stubs(:store_podspec)
+        @subject.fetch(config.sandbox)
+        config.sandbox.local_path_was_absolute?('Reachability').should.be.false
+      end
+
+      it "marks a pod as absolute" do
+        @subject.stubs(:params).returns(:path => '/path/Reachability')
+        Pathname.any_instance.stubs(:exist?).returns(true)
+        config.sandbox.stubs(:store_podspec)
+        @subject.fetch(config.sandbox)
+        config.sandbox.local_path_was_absolute?('Reachability').should.be.true
+      end
     end
 
     describe "#podspec_path" do
@@ -75,6 +91,11 @@ module Pod
 
     describe '#absolute?' do
       it 'returns that a path is relative' do
+        result = @subject.send(:absolute?, './ThirdPartyCode/UrbanAirship')
+        result.should.be.false
+      end
+
+      it "consider relative paths not explicitly set from the current dir" do
         result = @subject.send(:absolute?, './ThirdPartyCode/UrbanAirship')
         result.should.be.false
       end

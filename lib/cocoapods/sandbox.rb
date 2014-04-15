@@ -159,7 +159,7 @@ module Pod
         root + root_name
       end
     end
-    
+
     # Returns true if the path as originally specified was absolute.
     #
     # @param  [String] name
@@ -169,7 +169,7 @@ module Pod
     def local_path_was_absolute?(name)
       @pods_with_absolute_path.include? name
     end
-    
+
     # @return [Pathname] the directory where to store the documentation.
     #
     def documentation_dir
