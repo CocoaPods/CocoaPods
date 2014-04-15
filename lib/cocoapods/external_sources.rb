@@ -79,23 +79,6 @@ module Pod
 
       public
 
-      # @!group Fetching
-
-      # Fetches the external source from the remote according to the params.
-      #
-      # @param  [Sandbox] sandbox
-      #         the sandbox where the specification should be stored.
-      #
-      # @return [void]
-      #
-      def fetch(sandbox)
-        raise "Abstract method"
-      end
-
-      #--------------------------------------#
-
-      public
-
       # @!group Subclasses hooks
 
       # Fetches the external source from the remote according to the params.
@@ -113,6 +96,26 @@ module Pod
       #
       def description
         raise "Abstract method"
+      end
+
+      #--------------------------------------#
+
+      protected
+
+      # @return [String] The uri of the podspec appending the name of the file
+      #         and expanding it if necessary.
+      #
+      # @note   If the declared path is expanded only if the represents a path
+      #         relative to the file system.
+      #
+      def normalized_podspec_path(declared_path)
+        if File.extname(declared_path) == '.podspec'
+          path_with_ext = declared_path
+        else
+          path_with_ext = "#{declared_path}/#{name}.podspec"
+        end
+        podfile_dir = File.dirname(podfile_path || '')
+        File.expand_path(path_with_ext, podfile_dir)
       end
 
       #--------------------------------------#
@@ -174,7 +177,6 @@ module Pod
       def store_podspec(sandbox, spec)
         sandbox.store_podspec(name, spec, true)
       end
-
     end
 
     #-------------------------------------------------------------------------#
@@ -217,7 +219,8 @@ module Pod
       # @see AbstractExternalSource#fetch
       #
       def fetch(sandbox)
-        UI.titled_section("Fetching podspec for `#{name}` #{description}", { :verbose_prefix => "-> " }) do
+        title = "Fetching podspec for `#{name}` #{description}"
+        UI.titled_section(title, { :verbose_prefix => "-> " }) do
           require 'open-uri'
           open(podspec_uri) { |io| store_podspec(sandbox, io.read) }
         end
@@ -228,8 +231,6 @@ module Pod
       def description
         "from `#{params[:podspec]}`"
       end
-
-      #--------------------------------------#
 
       private
 
@@ -246,10 +247,7 @@ module Pod
         if declared_path.match(%r{^.+://})
           declared_path
         else
-          path_with_ext = File.extname(declared_path) == '.podspec' ? declared_path : "#{declared_path}/#{name}.podspec"
-          podfile_dir   = File.dirname(podfile_path || '')
-          absolute_path = File.expand_path(path_with_ext, podfile_dir)
-          absolute_path
+          normalized_podspec_path(declared_path)
         end
       end
     end
@@ -266,11 +264,16 @@ module Pod
       # @see  AbstractExternalSource#fetch
       #
       def fetch(sandbox)
-        UI.titled_section("Fetching podspec for `#{name}` #{description}", { :verbose_prefix => "-> " }) do
+        title = "Fetching podspec for `#{name}` #{description}"
+        UI.titled_section(title, { :verbose_prefix => "-> " }) do
           podspec = podspec_path
+          unless podspec.exist?
+            raise Informative, "No podspec found for `#{name}` in " \
+              "`#{declared_path}`"
+          end
           store_podspec(sandbox, podspec)
-          path_is_absolute_or_rooted_to_home = declared_path.absolute? || declared_path.to_s.start_with?('~')
-          sandbox.store_local_path(name, podspec.dirname, path_is_absolute_or_rooted_to_home)
+          is_absolute = absolute?(podspec)
+          sandbox.store_local_path(name, podspec.dirname, is_absolute)
         end
       end
 
@@ -280,30 +283,27 @@ module Pod
         "from `#{params[:path] || params[:local]}`"
       end
 
-      #--------------------------------------#
-
       private
 
       # @!group Helpers
 
-      # @return [Pathname] the path as declared in the podspec
+      # @return [String] The path as declared by the user.
       #
       def declared_path
-        Pathname.new params[:path] || params[:local]
+        result = params[:path] || params[:local]
+        result.to_s if result
       end
 
-      # @return [Pathname] the path of the podspec.
+      # @return [Pathname] The absolute path of the podspec.
       #
       def podspec_path
-        path_with_ext = File.extname(declared_path) == '.podspec' ? declared_path : "#{declared_path}/#{name}.podspec"
-        podfile_dir   = File.dirname(podfile_path || '')
-        absolute_path = File.expand_path(path_with_ext, podfile_dir)
-        pathname      = Pathname.new(absolute_path)
+        Pathname(normalized_podspec_path(declared_path))
+      end
 
-        unless pathname.exist?
-          raise Informative, "No podspec found for `#{name}` in `#{declared_path}`"
-        end
-        pathname
+      # @return [Bool]
+      #
+      def absolute?(path)
+        Pathname(path).absolute? || path.to_s.start_with?('~')
       end
     end
 

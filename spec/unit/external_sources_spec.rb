@@ -161,6 +161,7 @@ module Pod
       end
 
       it "expands the tilde" do
+        File.stubs(:exist?).returns(true)
         @subject.stubs(:params).returns(:podspec => '~/Reachability')
         path = @subject.send(:podspec_uri)
         path.should == ENV['HOME'] + '/Reachability/Reachability.podspec'
@@ -179,8 +180,8 @@ module Pod
   describe ExternalSources::PathSource do
 
     before do
-      podspec_path = fixture('integration/Reachability/Reachability.podspec')
-      dependency = Dependency.new("Reachability", :path => fixture('integration/Reachability'))
+      params = { :path => fixture('integration/Reachability') }
+      dependency = Dependency.new("Reachability", params)
       podfile_path = fixture('integration/Podfile')
       @subject = ExternalSources.from_dependency(dependency, podfile_path)
     end
@@ -191,11 +192,12 @@ module Pod
       path.should.exist?
     end
 
-    it "creates a copy of the podspec [Deprecated local option]" do
-      dependency = Dependency.new("Reachability", :local => fixture('integration/Reachability'))
+    it "supports the deprecated local key" do
+      params = { :local => fixture('integration/Reachability') }
+      dependency = Dependency.new("Reachability", params)
       podfile_path = fixture('integration/Podfile')
-      external_source = ExternalSources.from_dependency(dependency, podfile_path)
-      external_source.fetch(config.sandbox)
+      @subject = ExternalSources.from_dependency(dependency, podfile_path)
+      @subject.fetch(config.sandbox)
       path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
       path.should.exist?
     end
@@ -210,6 +212,13 @@ module Pod
         "Reachability" => fixture('integration/Reachability').to_s
       }
     end
+
+      it "raises if the podspec cannot be found" do
+        @subject.stubs(:params).returns(:path => temporary_directory)
+        should.raise Informative do
+          @subject.fetch(config.sandbox)
+        end.message.should.match /No podspec found for `Reachability` in `#{temporary_directory}`/
+      end
 
     describe "Helpers" do
 
@@ -233,17 +242,13 @@ module Pod
       end
 
       it "expands the tilde" do
+        File.stubs(:exist?).returns(true)
         @subject.stubs(:params).returns(:path => '~/Reachability')
         Pathname.any_instance.stubs(:exist?).returns(true)
         path = @subject.send(:podspec_path)
         path.should == Pathname(ENV['HOME']) + 'Reachability/Reachability.podspec'
       end
 
-      it "raises if the podspec cannot be found" do
-        @subject.stubs(:params).returns(:path => temporary_directory)
-        e = lambda { @subject.send(:podspec_path) }.should.raise Informative
-        e.message.should.match /No podspec found for `Reachability` in `#{temporary_directory}`/
-      end
     end
   end
 
