@@ -20,6 +20,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Piet Brauer](https://github.com/pietbrauer)
   [Orta Therox](https://github.com/orta)
 
+* `pod lib create` now disallows any pod name that begins with a `.`  
+  [Dustin Clark](https://github.com/clarkda)
+  [#2026](https://github.com/CocoaPods/CocoaPods/pull/2026)
+  [Core#97](https://github.com/CocoaPods/Core/pull/97)
+  [Core#98](https://github.com/CocoaPods/Core/issues/98)
+
 * Validate the reachability of screenshot URLs in podspecs while linting a
   specification.  
   [Kyle Fuller](https://github.com/kylef)

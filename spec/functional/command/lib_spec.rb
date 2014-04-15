@@ -16,6 +16,10 @@ module Pod
       lambda { run_command('lib', 'create', 'Pod Name With Spaces') }.should.raise CLAide::Help
     end
 
+    it "complains if pod name begins with a period" do
+      lambda { run_command('lib', 'create', '.HiddenPod') }.should.raise CLAide::Help
+    end
+
     it "should create a new dir for the newly created pod" do
       @sut.any_instance.stubs(:configure_template)
       url = @sut::TEMPLATE_REPO
