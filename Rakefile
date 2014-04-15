@@ -141,7 +141,7 @@ namespace :spec do
     unless Pathname.new(ENV['HOME']+'/.cocoapods/repos/master').exist?
       sh "./bin/pod setup"
     end
-    sh "./bin/pod repo update"
+    sh "./bin/pod repo update --silent"
 
     Rake::Task['spec:all'].invoke
   end
