@@ -13,24 +13,27 @@ module Pod
       name   = dependency.root_name
       params = dependency.external_source
 
-      klass  =  if params.key?(:git)          then GitSource
-                elsif params.key?(:svn)       then SvnSource
-                elsif params.key?(:hg)        then MercurialSource
-                elsif params.key?(:bzr)       then BazaarSource                  
-                elsif params.key?(:podspec)   then PodspecSource
-                elsif params.key?(:path)      then PathSource
-                end
-
-      if params.key?(:local)
-        klass = PathSource
-        UI.warn "The `:local` option of the Podfile has been renamed to `:path` and is deprecated." \
-      end
-
-      if klass
+      if klass = concrete_class_from_params(params)
         klass.new(name, params, podfile_path)
       else
         msg = "Unknown external source parameters for `#{name}`: `#{params}`"
         raise Informative, msg
+      end
+    end
+
+    # @return [Class]
+    #
+    def self.concrete_class_from_params(params)
+      if params.key?(:podspec)
+        PodspecSource
+      elsif params.key?(:path)
+        PathSource
+      elsif params.key?(:local)
+        UI.warn "The `:local` option of the Podfile has been " \
+          "renamed to `:path` and it is deprecated."
+        PathSource
+      elsif Downloader.strategy_from_options(params)
+        DownloaderSource
       end
     end
 
@@ -134,7 +137,8 @@ module Pod
       # @return [void]
       #
       def pre_download(sandbox)
-        UI.titled_section("Pre-downloading: `#{name}` #{description}", { :verbose_prefix => "-> " }) do
+        title = "Pre-downloading: `#{name}` #{description}"
+        UI.titled_section(title, { :verbose_prefix => "-> " }) do
           target = sandbox.root + name
           target.rmtree if target.exist?
           downloader = Config.instance.downloader(target, params)
@@ -175,15 +179,13 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    # Provides support for fetching a specification file from a Git remote.
-    #
-    # Supports all the options of the downloader (is similar to the git key of
-    # `source` attribute of a specification).
+    # Provides support for fetching a specification file from a source handled
+    # by the downloader. Supports all the options of the downloader
     #
     # @note The podspec must be in the root of the repository and should have a
     #       name matching the one of the dependency.
     #
-    class GitSource < AbstractExternalSource
+    class DownloaderSource < AbstractExternalSource
 
       # @see AbstractExternalSource#fetch
       #
@@ -194,98 +196,14 @@ module Pod
       # @see AbstractExternalSource#description
       #
       def description
-        "from `#{params[:git]}`".tap do |description|
-          description << ", commit `#{params[:commit]}`" if params[:commit]
-          description << ", branch `#{params[:branch]}`" if params[:branch]
-          description << ", tag `#{params[:tag]}`" if params[:tag]
+        strategy = Downloader.strategy_from_options(params)
+        options = params.dup
+        url = options.delete(strategy)
+        result = "from `#{url}`"
+        options.each do |key, value|
+          result << ", #{key} `#{value}`"
         end
-      end
-    end
-
-    #-------------------------------------------------------------------------#
-
-    # Provides support for fetching a specification file from a SVN source
-    # remote.
-    #
-    # Supports all the options of the downloader (is similar to the git key of
-    # `source` attribute of a specification).
-    #
-    # @note The podspec must be in the root of the repository and should have a
-    #       name matching the one of the dependency.
-    #
-    class SvnSource < AbstractExternalSource
-
-      # @see AbstractExternalSource#fetch
-      #
-      def fetch(sandbox)
-        pre_download(sandbox)
-      end
-
-      # @see AbstractExternalSource#description
-      #
-      def description
-        "from `#{params[:svn]}`".tap do |description|
-          description << ", folder `#{params[:folder]}`" if params[:folder]
-          description << ", tag `#{params[:tag]}`" if params[:tag]
-          description << ", revision `#{params[:revision]}`" if params[:revision]
-        end
-      end
-    end
-
-    #-------------------------------------------------------------------------#
-
-    # Provides support for fetching a specification file from a Mercurial
-    # source remote.
-    #
-    # Supports all the options of the downloader (is similar to the git key of
-    # `source` attribute of a specification).
-    #
-    # @note The podspec must be in the root of the repository and should have a
-    #       name matching the one of the dependency.
-    #
-    class MercurialSource < AbstractExternalSource
-
-      # @see AbstractExternalSource#fetch
-      #
-      def fetch(sandbox)
-        pre_download(sandbox)
-      end
-
-      # @see AbstractExternalSource#description
-      #
-      def description
-        "from `#{params[:hg]}`".tap do |description|
-          description << ", revision `#{params[:revision]}`" if params[:revision]
-        end
-      end
-    end
-
-    #-------------------------------------------------------------------------#
-
-    # Provides support for fetching a specification file from a Bazaar
-    # source remote.
-    #
-    # Supports all the options of the downloader (is similar to the git key of
-    # `source` attribute of a specification).
-    #
-    # @note The podspec must be in the root of the repository and should have a
-    #       name matching the one of the dependency.
-    #
-    class BazaarSource < AbstractExternalSource
-
-      # @see AbstractExternalSource#fetch
-      #
-      def fetch(sandbox)
-        pre_download(sandbox)
-      end
-
-      # @see AbstractExternalSource#description
-      #
-      def description
-        "from `#{params[:bzr]}`".tap do |description|
-          description << ", tag `#{params[:tag]}`" if params[:tag]
-          description << ", revision `#{params[:revision]}`" if params[:revision]
-        end
+        result
       end
     end
 
@@ -300,7 +218,6 @@ module Pod
       #
       def fetch(sandbox)
         UI.titled_section("Fetching podspec for `#{name}` #{description}", { :verbose_prefix => "-> " }) do
-
           require 'open-uri'
           open(podspec_uri) { |io| store_podspec(sandbox, io.read) }
         end
@@ -374,7 +291,7 @@ module Pod
       def declared_path
         Pathname.new params[:path] || params[:local]
       end
-      
+
       # @return [Pathname] the path of the podspec.
       #
       def podspec_path

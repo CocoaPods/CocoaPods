@@ -43,6 +43,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Andrea Mazzini](https://github.com/andreamazz)
   [#2008](https://github.com/CocoaPods/CocoaPods/issues/2008)
 
+* Dependencies declared with external sources now support HTTP downloads and
+  have improved support for all the options supported by the downloader.  
+  [Fabio Pelosin][irrationalfab]
+
 ##### Bug Fixes
 
 * Support HTTP redirects when linting homepage and screenshots.
