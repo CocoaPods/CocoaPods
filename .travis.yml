@@ -7,7 +7,6 @@ before_install:
   - curl http://curl.haxx.se/ca/cacert.pem -o /usr/local/share/cacert.pem
   # - sh -c 'if [ "$RVM_RUBY_VERSION" != "system" ]; then rvm install $RVM_RUBY_VERSION --without-tcl --without-tk; fi'
   - source ~/.rvm/scripts/rvm && rvm use $RVM_RUBY_VERSION
-  - brew update && brew install bzr
 install: eval $RUBY_VERSION_SPECIFIC && rake bootstrap[use_bundle_dir]
 script: bundle exec rake spec:ci
 notifications:
