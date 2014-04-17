@@ -132,20 +132,6 @@ namespace :spec do
     Rake::Task['examples:build'].invoke
   end
 
-  # The integration 2 tests and the examples use the normal CocoaPods setup.
-  #
-  desc "Run all specs and build all examples"
-  task :ci => :unpack_fixture_tarballs do
-    require 'pathname'
-    title 'Ensuring specs repo is up to date'
-    unless Pathname.new(ENV['HOME']+'/.cocoapods/repos/master').exist?
-      sh "./bin/pod setup"
-    end
-    sh "./bin/pod repo update --silent"
-
-    Rake::Task['spec:all'].invoke
-  end
-
   desc "Rebuild all the fixture tarballs"
   task :rebuild_fixture_tarballs do
     tarballs = FileList['spec/fixtures/**/*.tar.gz']
