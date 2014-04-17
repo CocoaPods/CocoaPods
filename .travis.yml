@@ -9,6 +9,7 @@ env:
   - RVM_RUBY_VERSION=1.8.7-p358
 
 before_install:
+  - export LANG=en_US.UTF-8
   - curl http://curl.haxx.se/ca/cacert.pem -o /usr/local/share/cacert.pem
   - source ~/.rvm/scripts/rvm
   - if [[ $RVM_RUBY_VERSION != 'system' ]]; then rvm install $RVM_RUBY_VERSION; fi
