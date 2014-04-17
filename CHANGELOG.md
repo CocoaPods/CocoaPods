@@ -2,6 +2,12 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+* Show deprecated specs when invoking `pod outdated`
+  [Samuel E. Giddins](https://github.com/segiddins)
+  [#2003](https://github.com/CocoaPods/CocoaPods/issues/2003)
+
 ## 0.32.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.31.1)
