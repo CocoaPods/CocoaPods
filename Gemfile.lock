@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 60c297e6dd8b04ba055b1350d72a7ef0f1092879
+  revision: 1f41acdf579b347e5dfb4de709900354aac20980
   branch: master
   specs:
     xcodeproj (0.16.1)
@@ -29,20 +29,21 @@ GIT
     cocoapods-try (0.2.0)
 
 GIT
+  remote: https://github.com/netbe/Core.git
+  revision: 0ff050e1cb0b3edec0af1bbe59671dac81807780
+  branch: feature/specs-sources
+  specs:
+    cocoapods-core (0.32.1)
+      activesupport (>= 3.2.15, < 4)
+      fuzzy_match (~> 2.0.4)
+      json_pure (~> 1.8)
+      nap (~> 0.5)
+
+GIT
   remote: https://github.com/ruby-prof/ruby-prof.git
   revision: b56c1268ba001f5eb55f940ca1c83bc6b83a9752
   specs:
     ruby-prof (0.14.2)
-
-GIT
-  remote: https://github.com/netbe/Core.git
-  revision: 88b3a9b4b1c01e3e2d2b5ac1efa7e1bcd06545d7
-  branch: feature/specs-sources
-  specs:
-    cocoapods-core (0.27.1)
-      activesupport (>= 3.2.15, < 4)
-      json_pure (~> 1.8)
-      nap (~> 0.5)
 
 PATH
   remote: .
