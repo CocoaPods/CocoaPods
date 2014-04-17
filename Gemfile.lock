@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 6d0bc86794e1bc727cbec76e6ffc5393b8c04306
+  revision: 60c297e6dd8b04ba055b1350d72a7ef0f1092879
   branch: master
   specs:
     xcodeproj (0.16.1)
@@ -27,7 +27,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: c004c28547c0a670a15bc7cef195d7b9e1944c0d
+  revision: 224c8a191ef6b98d538d6228b0549d05194944ee
   branch: master
   specs:
     cocoapods-downloader (0.5.0)
