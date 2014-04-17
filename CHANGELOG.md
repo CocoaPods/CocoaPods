@@ -11,6 +11,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin][irrationalfab]
   [Xcodeproj#105](https://github.com/CocoaPods/Xcodeproj/pull/150)
 
+* Show a helpful error message when reading version information with merge conflict
+  [Samuel E. Giddins][segiddins]
+  [#1853](https://github.com/CocoaPods/CocoaPods/issues/1853)
+
 ## 0.32.1
 
 ##### Bug Fixes

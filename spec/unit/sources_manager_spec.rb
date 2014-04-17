@@ -14,6 +14,18 @@ def set_up_test_repo_for_update
   config.repos_dir = SpecHelper.tmp_repos_path
 end
 
+def merge_conflict_version_yaml
+  text = <<-VERSION.strip_heredoc
+    ---
+    <<<<<<< HEAD
+    min: 0.18.1
+    =======
+    min: 0.29.0
+    >>>>>>> 8365d0ad18508175bbde31b9dd2bdaf1be49214f
+    last: 0.29.0
+  VERSION
+end
+
 module Pod
   describe SourcesManager do
 
@@ -63,7 +75,7 @@ module Pod
         sets.all?{ |s| s.class == Specification::Set}.should.be.true
         sets.any?{ |s| s.name  == 'BananaLib'}.should.be.true
       end
-      
+
       it "can perform a full text regexp search of the sets" do
         Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
         sets = SourcesManager.search_by_name('Ch[aeiou]nky', true)
@@ -144,6 +156,12 @@ module Pod
         SourcesManager.stubs(:version_information).returns({ 'max' => '0.0.1' })
         e = lambda { SourcesManager.check_version_information(temporary_directory) }.should.raise Informative
         e.message.should.match /Update CocoaPods/
+      end
+
+      it 'raises when reading version information with merge conflict' do
+        Pathname.any_instance.stubs(:read).returns(merge_conflict_version_yaml)
+        e = lambda { SourcesManager.version_information(SourcesManager.master_repo_dir) }.should.raise Informative
+        e.message.should.match /Repairing-Our-Broken-Specs-Repository/
       end
 
       it "returns whether a repository is compatible" do
