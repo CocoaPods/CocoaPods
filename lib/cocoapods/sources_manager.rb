@@ -152,7 +152,7 @@ module Pod
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
             Dir.chdir(source.data_provider.repo) do
-              output = git!("pull")
+              output = git!("pull --no-rebase --no-commit")
               UI.puts output if show_output && !config.verbose?
             end
             check_version_information(source.data_provider.repo)

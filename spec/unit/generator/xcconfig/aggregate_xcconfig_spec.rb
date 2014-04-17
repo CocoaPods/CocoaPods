@@ -61,7 +61,7 @@ module Pod
         end
 
         it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as system headers' do
-          expected = "$(inherited) \"-isystem#{config.sandbox.public_headers.search_paths.join('" -isystem"')}\""
+          expected = "$(inherited) -isystem \"#{config.sandbox.public_headers.search_paths.join('" -isystem "')}\""
           @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
         end
 

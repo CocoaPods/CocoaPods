@@ -34,7 +34,10 @@ module Pod
           @integrator.integrate!
           workspace_path = @integrator.send(:workspace_path)
           workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          workspace.projpaths.find { |path| path =~ /Pods.xcodeproj/ }.should.not.be.nil
+          pods_project_ref = workspace.file_references.find do |ref|
+            ref.path =~ /Pods.xcodeproj/
+          end
+          pods_project_ref.should.not.be.nil
         end
 
         it "integrates the user targets" do
@@ -60,7 +63,7 @@ module Pod
           @integrator.send(:create_workspace)
           workspace_path = @integrator.send(:workspace_path)
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          saved.projpaths.should == [
+          saved.file_references.map(&:path).should == [
             "SampleProject/SampleProject.xcodeproj",
             "Pods/Pods.xcodeproj"
           ]
@@ -68,22 +71,24 @@ module Pod
 
         it "updates an existing workspace if needed" do
           workspace_path = @integrator.send(:workspace_path)
-          workspace = Xcodeproj::Workspace.new('SampleProject/SampleProject.xcodeproj')
+          ref = Xcodeproj::Workspace::FileReference.new('SampleProject/SampleProject.xcodeproj', 'group')
+          workspace = Xcodeproj::Workspace.new(ref)
           workspace.save_as(workspace_path)
           @integrator.send(:create_workspace)
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          saved.projpaths.should == [
+          saved.file_references.map(&:path).should == [
             "SampleProject/SampleProject.xcodeproj",
             "Pods/Pods.xcodeproj"
           ]
         end
 
         it "doesn't write the workspace if not needed" do
-          projpaths = [
-            "SampleProject/SampleProject.xcodeproj",
-            "Pods/Pods.xcodeproj"
+          file_references = [
+            Xcodeproj::Workspace::FileReference.new('SampleProject/SampleProject.xcodeproj', 'group'),
+            Xcodeproj::Workspace::FileReference.new('Pods/Pods.xcodeproj', 'group')
           ]
-          workspace = Xcodeproj::Workspace.new(projpaths)
+
+          workspace = Xcodeproj::Workspace.new(file_references)
           workspace_path = @integrator.send(:workspace_path)
           workspace.save_as(workspace_path)
           Xcodeproj::Workspace.expects(:save_as).never
@@ -91,12 +96,13 @@ module Pod
         end
 
         it "only appends projects to the workspace and never deletes one" do
-          workspace = Xcodeproj::Workspace.new('user_added_project.xcodeproj')
+          ref = Xcodeproj::Workspace::FileReference.new('user_added_project.xcodeproj', 'group')
+          workspace = Xcodeproj::Workspace.new(ref)
           workspace_path = @integrator.send(:workspace_path)
           workspace.save_as(workspace_path)
           @integrator.send(:create_workspace)
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          saved.projpaths.should == [
+          saved.file_references.map(&:path).should == [
             'user_added_project.xcodeproj',
             "SampleProject/SampleProject.xcodeproj",
             "Pods/Pods.xcodeproj"
@@ -104,16 +110,17 @@ module Pod
         end
 
         it "preserves the order of the projects in the workspace" do
-          projpaths = [
-            "Pods/Pods.xcodeproj",
-            "SampleProject/SampleProject.xcodeproj",
+          file_references = [
+            Xcodeproj::Workspace::FileReference.new('Pods/Pods.xcodeproj', 'group'),
+            Xcodeproj::Workspace::FileReference.new('SampleProject/SampleProject.xcodeproj', 'group'),
           ]
-          workspace = Xcodeproj::Workspace.new(projpaths)
+
+          workspace = Xcodeproj::Workspace.new(file_references)
           workspace_path = @integrator.send(:workspace_path)
           workspace.save_as(workspace_path)
           @integrator.send(:create_workspace)
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          saved.projpaths.should == [
+          saved.file_references.map(&:path).should == [
             "Pods/Pods.xcodeproj",
             "SampleProject/SampleProject.xcodeproj",
           ]

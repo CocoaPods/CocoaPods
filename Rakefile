@@ -31,15 +31,6 @@ task :bootstrap, :use_bundle_dir? do |t, args|
   else
     execute_command "env XCODEPROJ_BUILD=1 bundle install"
   end
-
-  puts "Checking for hg and bzr..."
-  if `which hg`.strip.empty?
-    puts "Please install Mercurial: `brew install hg`"
-  end
-
-  if `which bzr`.strip.empty?
-    puts "Please install Bazaar: `brew install bzr`"
-  end
 end
 
 # Post release
@@ -77,7 +68,7 @@ end
 namespace :spec do
 
   def specs(dir)
-    FileList["spec/#{dir}/*_spec.rb"].shuffle.join(' ')
+    FileList["spec/#{dir}_spec.rb"].shuffle.join(' ')
   end
 
   #--------------------------------------#
@@ -89,7 +80,7 @@ namespace :spec do
 
   #--------------------------------------#
 
-  unit_specs_command = "bundle exec bacon #{specs('unit/**')}"
+  unit_specs_command = "bundle exec bacon #{specs('unit/**/*')}"
 
   desc "Run the unit specs"
   task :unit => :unpack_fixture_tarballs do
@@ -104,8 +95,9 @@ namespace :spec do
   #--------------------------------------#
 
   desc "Run the functional specs"
-  task :functional => :unpack_fixture_tarballs do
-    sh "bundle exec bacon #{specs('functional/**')}"
+  task :functional, [:spec] => :unpack_fixture_tarballs do |t, args|
+    args.with_defaults(:spec => '**/*')
+    sh "bundle exec bacon #{specs("functional/#{args[:spec]}")}"
   end
 
   #--------------------------------------#
@@ -128,32 +120,13 @@ namespace :spec do
   #
   task :all => :unpack_fixture_tarballs do
     ENV['GENERATE_COVERAGE'] = 'true'
+    puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
     title 'Running the specs'
-    sh    "bundle exec bacon #{specs('**')}"
+    sh    "bundle exec bacon #{specs('**/*')}"
 
     title 'Running Integration tests'
     sh    "bundle exec bacon spec/integration.rb"
-
-    title 'Running examples'
-    Rake::Task['examples:build'].invoke
-  end
-
-  # The integration 2 tests and the examples use the normal CocoaPods setup.
-  #
-  desc "Run all specs and build all examples"
-  task :ci => :unpack_fixture_tarballs do
-    title 'Running the specs'
-    sh "bundle exec bacon #{specs('**')}"
-
-    require 'pathname'
-    unless Pathname.new(ENV['HOME']+'/.cocoapods/repos/master').exist?
-      title 'Ensuring specs repo is up to date'
-      sh    "./bin/pod setup"
-    end
-
-    title 'Running Integration tests'
-    sh "bundle exec bacon spec/integration.rb"
 
     title 'Running examples'
     Rake::Task['examples:build'].invoke
@@ -187,7 +160,8 @@ namespace :spec do
   desc "Rebuilds integration fixtures"
   task :rebuild_integration_fixtures do
     title 'Running Integration tests'
-    `bundle exec bacon spec/integration.rb`
+    sh 'rm -rf spec/cocoapods-integration-specs/tmp'
+    Rake::Task['spec:integration'].invoke
 
     title 'Storing fixtures'
     # Copy the files to the files produced by the specs to the after folders

@@ -26,6 +26,7 @@ module Pod
           super
           help! "A name for the Pod is required." unless @name
           help! "The Pod name cannot contain spaces." if @name.match(/\s/)
+          help! "The Pod name cannot begin with a '.'" if @name[0, 1] == '.'
         end
 
         def run
@@ -54,7 +55,7 @@ module Pod
         # @return [void]
         #
         def clone_template
-          UI.section("Creating `#{@name}` Pod") do
+          UI.section("Cloning `#{template_repo_url}` into `#{@name}`.") do
             git!"clone '#{template_repo_url}' #{@name}"
           end
         end
@@ -64,9 +65,13 @@ module Pod
         # @return [void]
         #
         def configure_template
-          UI.section("Configuring template") do
+          UI.section("Configuring #{@name} template.") do
             Dir.chdir(@name) do
-              ruby! "_CONFIGURE.rb #{@name}"
+              if File.exists? "configure"
+                system "./configure #{@name}"
+              else
+                UI.warn "Template does not have a configure file."
+              end
             end
           end
         end

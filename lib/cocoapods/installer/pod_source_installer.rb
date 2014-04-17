@@ -63,6 +63,12 @@ module Pod
       def install!
         download_source unless predownloaded? || local?
         run_prepare_command
+      rescue Informative
+        raise
+      rescue Object => e
+        UI.notice("Error installing #{root_spec.name}")
+        clean!
+        raise
       end
 
       # Cleans the installations if appropriate.
@@ -95,8 +101,18 @@ module Pod
       def download_source
         root.rmtree if root.exist?
         if head_pod?
-          downloader.download_head
-          @specific_source = downloader.checkout_options
+          begin
+            downloader.download_head
+            @specific_source = downloader.checkout_options
+          rescue RuntimeError => e
+            if e.message == 'Abstract method'
+              raise Informative, "The pod '" + root_spec.name + "' does not " + 
+                "support the :head option, as it uses a " + downloader.name + 
+                " source. Remove that option to use this pod."
+            else
+              raise
+            end
+          end
         else
           downloader.download
           unless downloader.options_specific?
@@ -114,12 +130,17 @@ module Pod
 
       # Runs the prepare command bash script of the spec.
       #
+      # @note   Unsets the `CDPATH` env variable before running the
+      #         shell script to avoid issues with relative paths
+      #         (issue #1694).
+      #
       # @return [void]
       #
       def run_prepare_command
         return unless root_spec.prepare_command
         UI.section(" > Running prepare command", '', 1) do
           Dir.chdir(root) do
+            ENV.delete('CDPATH')
             prepare_command = root_spec.prepare_command.strip_heredoc.chomp
             full_command = "\nset -e\n" + prepare_command
             bash!(full_command)

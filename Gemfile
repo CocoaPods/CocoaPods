@@ -14,14 +14,19 @@ group :development do
   gem 'claide',               :git => 'https://github.com/CocoaPods/CLAide.git', :branch => 'master'
   gem 'cocoapods-try',        :git => 'https://github.com/CocoaPods/cocoapods-try.git', :branch => 'master'
 
+  gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
   gem "mocha"
   gem "bacon"
   gem "mocha-on-bacon"
-  gem 'prettybacon', :git => 'https://github.com/irrationalfab/PrettyBacon.git', :branch => 'master'
-  gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
+  gem 'prettybacon'
+  gem 'webmock', "< 1.16"
 
   # For the integration tests
   gem "diffy"
+
+  # Lock the current lowest requirement for ActiveSupport 3 to ensure we don't
+  # re-introduce https://github.com/CocoaPods/CocoaPods/issues/1950
+  gem 'i18n', '0.6.4'
 
   gem 'mime-types', '< 2' # v2 is 1.9.x only
   gem 'coveralls', :require => false
@@ -31,11 +36,8 @@ group :development do
 end
 
 group :debugging do
-  # Only while we test the trunk app.
-  gem 'cocoapods-trunk', :git => "https://github.com/alloy/cocoapods-trunk.git"
-
   gem "rb-fsevent"
-  gem "kicker", :git => "https://github.com/alloy/kicker.git", :branch => "master"
+  gem "kicker"
   gem "awesome_print"
   gem "pry"
   # The released gem leads to stack too deep when profiling a full run.

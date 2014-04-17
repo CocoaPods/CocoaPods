@@ -9,7 +9,10 @@ require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/array/conversions'
 # TODO check what this actually does by the time we're going to add support for
 # other locales.
-I18n.enforce_available_locales = false
+require 'i18n'
+if I18n.respond_to?(:enforce_available_locales=)
+  I18n.enforce_available_locales = false
+end
 
 module Pod
   require 'pathname'
@@ -18,6 +21,11 @@ module Pod
   require 'cocoapods-core'
   require 'cocoapods/config'
   require 'cocoapods/downloader'
+
+  # Loaded immediately after dependencies to ensure proper override of their
+  # UI methods.
+  #
+  require 'cocoapods/user_interface'
 
   # Indicates an user error. This is defined in cocoapods-core.
   #
@@ -38,7 +46,6 @@ module Pod
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'
   autoload :Sandbox,                   'cocoapods/sandbox'
-  autoload :UI,                        'cocoapods/user_interface'
   autoload :Validator,                 'cocoapods/validator'
 
   module Generator
@@ -64,25 +71,4 @@ end
 if ENV['COCOA_PODS_ENV'] == 'development'
   # require 'awesome_print'
   # require 'pry'
-end
-
-# TODO remove for CocoaPods 0.31
-#
-module Pod
-  class Specification
-    def pre_install(&block)
-      UI.warn "[#{self}] The pre install hook of the specification " \
-        "DSL has been deprecated, use the `resource_bundles` or the " \
-        "`prepare_command` attributes."
-      UI.puts "[#{self}] The pre_install hook will be removed in the next release".red
-      @pre_install_callback = block
-    end
-    def post_install(&block)
-      UI.warn "[#{self}] The post install hook of the specification " \
-        "DSL has been deprecated, use the `resource_bundles` or the " \
-        "`prepare_command` attributes."
-      UI.puts "[#{self}] The post_install hook will be removed in the next release".red
-      @post_install_callback = block
-    end
-  end
 end

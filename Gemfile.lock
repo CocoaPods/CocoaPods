@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 76c726cb88ec60dc64c62e2a87b1845319e84569
+  revision: e8216e010d9d1141a234da4d9d01cbd8416785b1
   branch: master
   specs:
-    cocoapods-core (0.30.0)
+    cocoapods-core (0.32.1)
       activesupport (>= 3.2.15, < 4)
       fuzzy_match (~> 2.0.4)
       json_pure (~> 1.8)
@@ -18,19 +18,19 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 4cc95f412d47fe8b31c5619c6705070b7849663f
+  revision: 60c297e6dd8b04ba055b1350d72a7ef0f1092879
   branch: master
   specs:
-    xcodeproj (0.15.3)
+    xcodeproj (0.16.1)
       activesupport (~> 3.0)
       colored (~> 1.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: d064235f1ddc2823cb5f5f1d32f51f36e719051a
+  revision: 224c8a191ef6b98d538d6228b0549d05194944ee
   branch: master
   specs:
-    cocoapods-downloader (0.4.0)
+    cocoapods-downloader (0.5.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
@@ -38,32 +38,6 @@ GIT
   branch: master
   specs:
     cocoapods-try (0.2.0)
-
-GIT
-  remote: https://github.com/alloy/cocoapods-trunk.git
-  revision: febc522b4e462bacd013a48adb704c769586bd7e
-  specs:
-    cocoapods-trunk (0.0.1)
-      json (~> 1.8)
-      nap (>= 0.6)
-      netrc
-
-GIT
-  remote: https://github.com/alloy/kicker.git
-  revision: 87b0047202c0320d4ef62e1f1a4b2cbdefadf008
-  branch: master
-  specs:
-    kicker (3.0.0)
-      listen (~> 1.3.0)
-      notify (~> 0.5.2)
-
-GIT
-  remote: https://github.com/irrationalfab/PrettyBacon.git
-  revision: eaf7e6c786fd5ccc6fb88e943bf7c5e6c27569a3
-  branch: master
-  specs:
-    prettybacon (0.0.1)
-      bacon (~> 1.2)
 
 GIT
   remote: https://github.com/ruby-prof/ruby-prof.git
@@ -74,18 +48,18 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.30.0)
+    cocoapods (0.32.1)
       activesupport (>= 3.2.15, < 4)
       claide (~> 0.5.0)
-      cocoapods-core (= 0.30.0)
-      cocoapods-downloader (~> 0.4.0)
+      cocoapods-core (= 0.32.1)
+      cocoapods-downloader (~> 0.5.0)
       cocoapods-try (~> 0.2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
-      nap (~> 0.5)
+      nap (~> 0.7)
       open4 (~> 1.3)
-      xcodeproj (~> 0.15.0)
+      xcodeproj (~> 0.16.1)
 
 GEM
   remote: http://rubygems.org/
@@ -93,6 +67,7 @@ GEM
     activesupport (3.2.17)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
+    addressable (2.3.6)
     awesome_print (1.2.0)
     bacon (1.2.0)
     coderay (1.1.0)
@@ -103,15 +78,20 @@ GEM
       simplecov (>= 0.7)
       term-ansicolor
       thor
-    diffy (3.0.3)
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
+    diffy (3.0.4)
     docile (1.1.3)
     escape (0.0.4)
     ffi (1.9.3)
     fuzzy_match (2.0.4)
-    github-markup (1.1.0)
-    i18n (0.6.9)
-    json (1.8.1)
+    github-markup (1.1.1)
+      posix-spawn (~> 0.3.8)
+    i18n (0.6.4)
     json_pure (1.8.1)
+    kicker (3.0.0)
+      listen (~> 1.3.0)
+      notify (~> 0.5.2)
     listen (1.3.1)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -124,11 +104,12 @@ GEM
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
     multi_json (1.9.2)
-    nap (0.6.0)
-    netrc (0.7.7)
+    nap (0.7.0)
     notify (0.5.2)
     open4 (1.3.3)
     posix-spawn (0.3.8)
+    prettybacon (0.0.2)
+      bacon (~> 1.2)
     pry (0.9.12.6)
       coderay (~> 1.0)
       method_source (~> 0.8)
@@ -145,6 +126,7 @@ GEM
     redcarpet (2.3.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    safe_yaml (1.0.2)
     simplecov (0.8.2)
       docile (~> 1.1.0)
       multi_json
@@ -154,7 +136,10 @@ GEM
     term-ansicolor (1.3.0)
       tins (~> 1.0)
     thor (0.19.1)
-    tins (1.0.1)
+    tins (1.1.0)
+    webmock (1.15.2)
+      addressable (>= 2.2.7)
+      crack (>= 0.3.2)
     yajl-ruby (1.1.0)
     yard (0.8.7.4)
 
@@ -168,16 +153,16 @@ DEPENDENCIES
   cocoapods!
   cocoapods-core!
   cocoapods-downloader!
-  cocoapods-trunk!
   cocoapods-try!
   coveralls
   diffy
   github-markup
-  kicker!
+  i18n (= 0.6.4)
+  kicker
   mime-types (< 2)
   mocha
   mocha-on-bacon
-  prettybacon!
+  prettybacon
   pry
   pygments.rb
   rake (~> 10.1.0)
@@ -185,5 +170,6 @@ DEPENDENCIES
   redcarpet (< 3.0.0)
   ruby-prof!
   simplecov
+  webmock (< 1.16)
   xcodeproj!
   yard
