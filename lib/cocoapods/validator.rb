@@ -241,7 +241,14 @@ module Pod
           end
 
           if [301, 302, 303, 307, 308].include? resp.status_code
-            url = resp.headers['location'].first
+            location = resp.headers['location'].first
+
+            if location =~ /:\/\//
+              url = location
+            else
+              url = url + location
+            end
+
             redirects += 1
           else
             break

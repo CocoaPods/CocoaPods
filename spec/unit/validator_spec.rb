@@ -145,6 +145,18 @@ module Pod
           @sut.validate
           @sut.results.map(&:to_s).first.should.match /The URL \(.*\) is not reachable/
         end
+
+        it "supports relative redirects" do
+          WebMock::API.stub_request(:head, /redirect$/).to_return(
+            :status => 302,
+            :headers => { 'Location' => '/' })
+          WebMock::API.stub_request(:head, /redirect\/$/).to_return(
+            :status => 200 )
+          Specification.any_instance.stubs(:homepage).returns(
+            'http://banana-corp.local/redirect')
+          @sut.validate
+          @sut.results.length.should.equal 0
+        end
       end
 
       describe "Screenshot validation" do
