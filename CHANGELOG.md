@@ -11,6 +11,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin][irrationalfab]
   [Xcodeproj#105](https://github.com/CocoaPods/Xcodeproj/pull/150)
 
+* Fix failing HTTPS requests for certain sites.
+  [Carson McDonald](https://github.com/carsonmcdonald)
+
 ## 0.32.1
 
 ##### Bug Fixes
