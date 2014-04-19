@@ -11,6 +11,8 @@ module Pod
       def fetch(sandbox)
         title = "Fetching podspec for `#{name}` #{description}"
         UI.titled_section(title, { :verbose_prefix => "-> " }) do
+          require 'openssl'
+          OpenSSL::SSL::SSLContext::DEFAULT_PARAMS[:ssl_version] = 'SSLv3' if OpenSSL::OPENSSL_VERSION == 'OpenSSL 0.9.8y 5 Feb 2013'
           require 'open-uri'
           open(podspec_uri) { |io| store_podspec(sandbox, io.read) }
         end
