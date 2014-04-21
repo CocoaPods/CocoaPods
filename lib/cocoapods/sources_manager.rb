@@ -152,8 +152,13 @@ module Pod
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
             Dir.chdir(source.data_provider.repo) do
-              output = git!("pull --no-rebase --no-commit")
-              UI.puts output if show_output && !config.verbose?
+              begin
+                output = git!("pull --no-rebase --no-commit")
+                UI.puts output if show_output && !config.verbose?
+              rescue Informative => e
+                raise Informative, 'An error occurred while performing ' \
+                  "`git pull` on repo `#{source.name}`.\n" + e.message
+              end
             end
             check_version_information(source.data_provider.repo)
           end
