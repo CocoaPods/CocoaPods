@@ -6,19 +6,8 @@ GIT
     claide (0.5.0)
 
 GIT
-  remote: https://github.com/CocoaPods/Core.git
-  revision: e8216e010d9d1141a234da4d9d01cbd8416785b1
-  branch: master
-  specs:
-    cocoapods-core (0.32.1)
-      activesupport (>= 3.2.15, < 4)
-      fuzzy_match (~> 2.0.4)
-      json_pure (~> 1.8)
-      nap (~> 0.5)
-
-GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 60c297e6dd8b04ba055b1350d72a7ef0f1092879
+  revision: 1f41acdf579b347e5dfb4de709900354aac20980
   branch: master
   specs:
     xcodeproj (0.16.1)
@@ -38,6 +27,17 @@ GIT
   branch: master
   specs:
     cocoapods-try (0.2.0)
+
+GIT
+  remote: https://github.com/netbe/Core.git
+  revision: 0ff050e1cb0b3edec0af1bbe59671dac81807780
+  branch: feature/specs-sources
+  specs:
+    cocoapods-core (0.32.1)
+      activesupport (>= 3.2.15, < 4)
+      fuzzy_match (~> 2.0.4)
+      json_pure (~> 1.8)
+      nap (~> 0.5)
 
 GIT
   remote: https://github.com/ruby-prof/ruby-prof.git
