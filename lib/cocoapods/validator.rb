@@ -223,45 +223,14 @@ module Pod
     attr_accessor :consumer
     attr_accessor :subspec_name
 
-    MAX_HTTP_REDIRECTS = 3
-
     # Performs validation of a URL
     #
     def validate_url(url)
-      require 'rest'
+      resp = Pod::HTTP::validate_url(url)
 
-      begin
-        redirects = 0
-        resp = nil
-        loop do
-          resp = ::REST.head(url)
-
-          if resp.status_code >= 400
-            resp = ::REST.get(url)
-          end
-
-          if [301, 302, 303, 307, 308].include? resp.status_code
-            location = resp.headers['location'].first
-
-            if location =~ /:\/\//
-              url = location
-            else
-              url = url + location
-            end
-
-            redirects += 1
-          else
-            break
-          end
-
-          break unless redirects < MAX_HTTP_REDIRECTS
-        end
-      rescue
+      if !resp
         warning "There was a problem validating the URL #{url}."
-        resp = nil
-      end
-
-      if resp && !resp.success?
+      elsif !resp.success?
         warning "The URL (#{url}) is not reachable."
       end
 
