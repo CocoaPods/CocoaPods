@@ -17,11 +17,11 @@ before_install:
   - if [[ $RVM_RUBY_VERSION == 'system' ]]; then export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future; fi
   - if [[ $RVM_RUBY_VERSION == 'system' ]]; then sudo gem install bundler --no-ri --no-rdoc; else gem install bundler --no-ri --no-rdoc; fi
 
-  # CocoaPods/CocoaPods specific
-  - ./bin/pod repo update --silent
-
 install:
   - bundle install --without=debugging documentation --path ./travis_bundle_dir
+
+  # CocoaPods/CocoaPods specific
+  - ./bin/pod repo update --silent
 
 script: rake spec
 
