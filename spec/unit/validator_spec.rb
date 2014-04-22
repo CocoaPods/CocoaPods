@@ -147,10 +147,10 @@ module Pod
         end
 
         it "supports relative redirects" do
-          WebMock::API.stub_request(:head, /redirect$/).to_return(
+          WebMock::API.stub_request(:head, /redirect/).to_return(
             :status => 302,
-            :headers => { 'Location' => '/' })
-          WebMock::API.stub_request(:head, /redirect\/$/).to_return(
+            :headers => { 'Location' => '/foo' })
+          WebMock::API.stub_request(:head, /foo/).to_return(
             :status => 200 )
           Specification.any_instance.stubs(:homepage).returns(
             'http://banana-corp.local/redirect')
