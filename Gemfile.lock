@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: e8216e010d9d1141a234da4d9d01cbd8416785b1
+  revision: bb05ef7ba950275b2fcdb5199ee297c4e5a641db
   branch: master
   specs:
     cocoapods-core (0.32.1)
@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 60c297e6dd8b04ba055b1350d72a7ef0f1092879
+  revision: 1f41acdf579b347e5dfb4de709900354aac20980
   branch: master
   specs:
     xcodeproj (0.16.1)
@@ -85,7 +85,7 @@ GEM
     escape (0.0.4)
     ffi (1.9.3)
     fuzzy_match (2.0.4)
-    github-markup (1.1.1)
+    github-markup (1.2.1)
       posix-spawn (~> 0.3.8)
     i18n (0.6.4)
     json_pure (1.8.1)
@@ -119,14 +119,14 @@ GEM
       yajl-ruby (~> 1.1.0)
     rake (10.1.1)
     rb-fsevent (0.9.4)
-    rb-inotify (0.9.3)
+    rb-inotify (0.9.4)
       ffi (>= 0.5.0)
     rb-kqueue (0.2.2)
       ffi (>= 0.5.0)
     redcarpet (2.3.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    safe_yaml (1.0.2)
+    safe_yaml (1.0.3)
     simplecov (0.8.2)
       docile (~> 1.1.0)
       multi_json
