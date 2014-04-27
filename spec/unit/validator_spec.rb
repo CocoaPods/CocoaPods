@@ -104,12 +104,12 @@ module Pod
           @sut.stubs(:build_pod)
           @sut.stubs(:check_file_patterns)
           @sut.stubs(:tear_down_validation_environment)
+          WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
+          WebMock::API.stub_request(:get, /not-found/).to_return(:status => 404)
         end
 
         describe "Homepage validation" do
           it "checks if the homepage is valid" do
-            WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
-            WebMock::API.stub_request(:get, /not-found/).to_return(:status => 404)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/not-found/')
             @sut.validate
             @sut.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
@@ -187,6 +187,26 @@ module Pod
             Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/valid-image.png', 'http://banana-corp.local/'])
             @sut.validate
             @sut.results.map(&:to_s).first.should.match /The screenshot .* is not a valid image/
+          end
+        end
+
+        describe "social media URL validation" do
+          before do
+            @sut.stubs(:validate_homepage)
+          end
+
+          it "checks if the social media URL is valid" do
+            Specification.any_instance.stubs(:social_media_urlon_url).returns('http://banana-corp.local/')
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
+            @sut.validate
+            @sut.results.should.be.empty?
+          end
+
+          it "should fail validation if it wasn't able to validate the URL" do
+            Specification.any_instance.stubs(:social_media_url).returns('http://banana-corp.local/not-found/')
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 404)
+            @sut.validate
+            @sut.results.map(&:to_s).first.should.match /The URL \(.*\) is not reachable/
           end
         end
       end

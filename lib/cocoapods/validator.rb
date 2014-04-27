@@ -198,6 +198,7 @@ module Pod
     def perform_extensive_analysis(spec)
       validate_homepage(spec)
       validate_screenshots(spec)
+      validate_social_media_url(spec)
 
       spec.available_platforms.each do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
@@ -254,6 +255,12 @@ module Pod
           warning "The screenshot #{screenshot} is not a valid image."
         end
       end
+    end
+
+    # Performs validations related to the `social_media_url` attribute.
+    #
+    def validate_social_media_url(spec)
+      validate_url(spec.social_media_url) if spec.social_media_url
     end
 
     def setup_validation_environment
