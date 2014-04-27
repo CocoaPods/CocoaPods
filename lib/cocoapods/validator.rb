@@ -199,6 +199,7 @@ module Pod
       validate_homepage(spec)
       validate_screenshots(spec)
       validate_social_media_url(spec)
+      validate_documentation_url(spec)
 
       spec.available_platforms.each do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
@@ -261,6 +262,12 @@ module Pod
     #
     def validate_social_media_url(spec)
       validate_url(spec.social_media_url) if spec.social_media_url
+    end
+
+    # Performs validations related to the `documentation_url` attribute.
+    #
+    def validate_documentation_url(spec)
+      validate_url(spec.documentation_url) if spec.documentation_url
     end
 
     def setup_validation_environment

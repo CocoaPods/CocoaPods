@@ -209,6 +209,25 @@ module Pod
             @sut.results.map(&:to_s).first.should.match /The URL \(.*\) is not reachable/
           end
         end
+
+        describe "documentation URL validation" do
+          before do
+            @sut.stubs(:validate_homepage)
+          end
+
+          it "checks if the documentation URL is valid" do
+            Specification.any_instance.stubs(:documentation_url).returns('http://banana-corp.local/')
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
+            @sut.validate
+            @sut.results.should.be.empty?
+          end
+
+          it "should fail validation if it wasn't able to validate the URL" do
+            Specification.any_instance.stubs(:documentation_url).returns('http://banana-corp.local/not-found')
+            @sut.validate
+            @sut.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
+          end
+        end
       end
 
       it "respects the no clean option" do

@@ -6,8 +6,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
-* Validate the reachability of social media URLs in podspecs while linting a
-  specification.  
+* Validate the reachability of social_media_url, documentation_url in
+  podspecs while linting a specification.  
   [Kyle Fuller](https://github.com/kylef)
   [#2025](https://github.com/CocoaPods/CocoaPods/issues/2025)
 
