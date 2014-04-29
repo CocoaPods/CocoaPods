@@ -6,6 +6,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
+* The extremely meta `cocoaPods-plugin` is now installed by default providing
+  information about the available and the installed plug-ins.
+  [Fabio Pelosin][irrationalfab]
+  [#2092](https://github.com/CocoaPods/CocoaPods/issues/2092)
+
 * Validate the reachability of social_media_url, documentation_url and
   docset_url in podspecs we while linting a specification.  
   [Kyle Fuller](https://github.com/kylef)

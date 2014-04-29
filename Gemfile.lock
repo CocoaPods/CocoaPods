@@ -33,6 +33,14 @@ GIT
     cocoapods-downloader (0.5.0)
 
 GIT
+  remote: https://github.com/CocoaPods/cocoapods-plugins.git
+  revision: ce2d30ff9bd4570708e51a2bdac4d8de60fe9bfc
+  branch: master
+  specs:
+    cocoapods-plugins (0.1.1)
+      nap
+
+GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
   revision: 0dff2c697f487bf1b3b3ecf21deefa99020b948e
   branch: master
@@ -53,6 +61,7 @@ PATH
       claide (~> 0.5.0)
       cocoapods-core (= 0.32.1)
       cocoapods-downloader (~> 0.5.0)
+      cocoapods-plugins (~> 0.1.0)
       cocoapods-try (~> 0.2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -153,6 +162,7 @@ DEPENDENCIES
   cocoapods!
   cocoapods-core!
   cocoapods-downloader!
+  cocoapods-plugins!
   cocoapods-try!
   coveralls
   diffy
