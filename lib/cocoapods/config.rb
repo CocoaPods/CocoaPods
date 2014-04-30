@@ -25,6 +25,9 @@ module Pod
       :cache_root          => Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods')),
       :max_cache_size      => 500,
       :aggressive_cache    => false,
+
+      :submit_stats        => true,
+      :stat_server         => "http://localhost:4567"
     }
 
     public
@@ -105,6 +108,20 @@ module Pod
     def aggressive_cache?
       @aggressive_cache || (ENV['CP_AGGRESSIVE_CACHE'] == 'TRUE')
     end
+
+    public
+
+    #-------------------------------------------------------------------------#
+
+    # @!group Statistics
+  
+    # @return [Bool] Whether spec download statistics should be sent to the
+    #         server.
+    attr_accessor :submit_stats
+    alias_method  :submit_stats?, :submit_stats
+
+    # @return [URL] The address to send spec download statistics to
+    attr_accessor :stat_server
 
     public
 

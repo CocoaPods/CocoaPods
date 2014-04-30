@@ -90,6 +90,7 @@ module Pod
       download_dependencies
       generate_pods_project
       integrate_user_project if config.integrate_targets?
+      submit_statistics if config.submit_stats? && !@installed_specs.empty?
     end
 
     def resolve_dependencies
@@ -119,6 +120,13 @@ module Pod
         run_post_install_hooks
         write_pod_project
         write_lockfiles
+      end
+    end
+
+    def submit_statistics
+      UI.section "Submitting Statistics" do
+        stats = Statistics.new
+        stats.submit_statistics(@installed_specs)
       end
     end
 
