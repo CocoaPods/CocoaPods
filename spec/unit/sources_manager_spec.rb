@@ -164,6 +164,12 @@ module Pod
         e.message.should.match /Repairing-Our-Broken-Specs-Repository/
       end
 
+      it 'returns whether a path is writable' do
+        path = '/Users/'
+        Pathname.any_instance.stubs(:writable?).returns(true)
+        SourcesManager.send(:path_writable?, path).should.be.true
+      end
+
       it "returns whether a repository is compatible" do
         SourcesManager.stubs(:version_information).returns({ 'min' => '0.0.1' })
         SourcesManager.repo_compatible?('stub').should.be.true

@@ -210,9 +210,12 @@ module Pod
           "Update CocoaPods, or checkout the appropriate tag in the repo."
         end
 
+        needs_sudo = path_writable?(__FILE__)
+
         if config.new_version_message? && cocoapods_update?(versions)
           UI.puts "\nCocoaPods #{versions['last']} is available.\n" \
-            "To update use: [sudo] gem install cocoapods\n".green
+            "To update use: #{needs_sudo ? 'sudo ' : ''}" \
+            'gem install cocoapods\n'.green
         end
       end
 
@@ -297,6 +300,12 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
+
+      private
+
+      def path_writable?(path)
+        Pathname(path).dirname.writable?
+      end
 
     end
   end
