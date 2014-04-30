@@ -5,11 +5,11 @@ module Pod
     def remove_color(string)
       string.gsub(/\e\[(\d+)m/, '')
     end
-    
+
     describe 'In general' do
       before do
         @exception = Informative.exception('at - (~/code.rb):')
-        @exception.stubs(:backtrace).returns(['Line 1', 'Line 2'])
+        @exception.stubs(:backtrace).returns(%w{Line 1 Line 2})
         @report = UserInterface::ErrorReport
       end
 
@@ -81,7 +81,7 @@ EOS
         report = remove_color(@report.report(@exception))
         report.should == expected
       end
-      
+
       it 'strips the local path from the exception message' do
         message = @report.pathless_exception_message(@exception.message)
         message = remove_color(message)
