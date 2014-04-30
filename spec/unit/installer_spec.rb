@@ -52,6 +52,7 @@ module Pod
         @installer.stubs(:download_dependencies)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
+        @installer.stubs(:perform_post_install_actions)
       end
 
       it "in runs the pre-install hooks before cleaning the Pod sources" do
@@ -95,6 +96,19 @@ module Pod
         config.integrate_targets = false
         @installer.expects(:integrate_user_project).never
         @installer.install!
+      end
+
+      it 'prints a list of deprecated pods' do
+        spec = Spec.new
+        spec.name = 'RestKit'
+        spec.deprecated_in_favor_of = 'AFNetworking'
+        spec_two = Spec.new
+        spec_two.name = 'BlocksKit'
+        spec_two.deprecated = true
+        @installer.stubs(:root_specs).returns([spec, spec_two])
+        @installer.send(:warn_for_deprecations)
+        UI.warnings.should.include 'deprecated in favor of AFNetworking'
+        UI.warnings.should.include 'BlocksKit has been deprecated'
       end
 
     end

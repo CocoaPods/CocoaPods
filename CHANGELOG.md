@@ -131,6 +131,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 
 
+* Warn when including deprecated pods
+  [Samuel E. Giddins](https://github.com/segiddins)
+  [#2003](https://github.com/CocoaPods/CocoaPods/issues/2003)
+
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)
