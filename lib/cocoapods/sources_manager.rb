@@ -264,7 +264,16 @@ module Pod
       def version_information(dir)
         require 'yaml'
         yaml_file  = dir + 'CocoaPods-version.yml'
-        yaml_file.exist? ? YAML.load_file(yaml_file) : {}
+        return {} unless yaml_file.exist?
+        begin
+          yaml = Pathname.new(yaml_file).read
+          YAMLHelper.load(yaml)
+        rescue Informative => e
+          raise Informative, "There was an error reading '#{yaml_file}'.\n" \
+            'Please consult http://blog.cocoapods.org/' \
+            'Repairing-Our-Broken-Specs-Repository/ ' \
+            'for more information.'
+        end
       end
 
       public
