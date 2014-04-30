@@ -63,7 +63,7 @@ module Pod
         sets.all?{ |s| s.class == Specification::Set}.should.be.true
         sets.any?{ |s| s.name  == 'BananaLib'}.should.be.true
       end
-      
+
       it "can perform a full text regexp search of the sets" do
         Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
         sets = SourcesManager.search_by_name('Ch[aeiou]nky', true)
@@ -144,6 +144,12 @@ module Pod
         SourcesManager.stubs(:version_information).returns({ 'max' => '0.0.1' })
         e = lambda { SourcesManager.check_version_information(temporary_directory) }.should.raise Informative
         e.message.should.match /Update CocoaPods/
+      end
+
+      it 'returns whether a path is writable' do
+        path = '/Users/'
+        Pathname.any_instance.stubs(:writable?).returns(true)
+        SourcesManager.send(:path_writable?, path).should.be.true
       end
 
       it "returns whether a repository is compatible" do
