@@ -10,7 +10,7 @@ module Pod
         def pathless_exception_message(message)
           message.gsub(/- \(.*\):/, '-')
         end
-        
+
         def report(exception)
           return <<-EOS
 
