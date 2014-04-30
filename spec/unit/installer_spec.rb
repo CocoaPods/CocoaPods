@@ -102,9 +102,13 @@ module Pod
         spec = Spec.new
         spec.name = 'RestKit'
         spec.deprecated_in_favor_of = 'AFNetworking'
-        @installer.stubs(:root_specs).returns([spec])
+        spec_two = Spec.new
+        spec_two.name = 'BlocksKit'
+        spec_two.deprecated = true
+        @installer.stubs(:root_specs).returns([spec, spec_two])
         @installer.send(:warn_for_deprecations)
         UI.warnings.should.include 'deprecated in favor of AFNetworking'
+        UI.warnings.should.include 'BlocksKit has been deprecated'
       end
 
     end
