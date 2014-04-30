@@ -17,6 +17,15 @@ module Pod
         exception.message.should.include "No `Podfile.lock' found in the current working directory"
       end
     end
+
+    it 'tells the user about deprecated pods' do
+      spec = Specification.new(nil, 'AFNetworking')
+      spec.deprecated_in_favor_of = 'BlocksKit'
+      Command::Outdated.any_instance.stubs(:deprecated_pods).returns([spec])
+      Command::Outdated.any_instance.stubs(:updates).returns([])
+      run_command('outdated', '--no-repo-update')
+      UI.output.should.include('in favor of BlocksKit')
+    end
   end
 end
 

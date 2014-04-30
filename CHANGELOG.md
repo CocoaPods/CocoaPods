@@ -27,6 +27,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel E. Giddins][segiddins]
   [#1853](https://github.com/CocoaPods/CocoaPods/issues/1853)
 
+* Show deprecated specs when invoking `pod outdated`
+  [Samuel E. Giddins](https://github.com/segiddins)
+  [#2003](https://github.com/CocoaPods/CocoaPods/issues/2003)
+
 ## 0.32.1
 
 ##### Bug Fixes
@@ -34,7 +38,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Fixed the Podfile `default_subspec` attribute in nested subspecs.  
   [Fabio Pelosin][irrationalfab]
   [#2050](https://github.com/CocoaPods/CocoaPods/issues/2050)
-
 
 ## 0.32.0
 
