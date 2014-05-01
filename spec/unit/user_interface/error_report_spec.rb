@@ -9,7 +9,7 @@ module Pod
     describe 'In general' do
       before do
         @exception = Informative.exception('at - (~/code.rb):')
-        @exception.stubs(:backtrace).returns(%w{Line 1 Line 2})
+        @exception.stubs(:backtrace).returns(['Line 1', 'Line 2'])
         @report = UserInterface::ErrorReport
       end
 
@@ -59,7 +59,7 @@ Line 2
 [!] Oh no, an error occurred.
 
 Search for existing github issues similar to yours:
-https://github.com/CocoaPods/CocoaPods/search?q=%1B%5B31m%5B%21%5D+at+-%1B%5B0m&type=Issues
+https://github.com/CocoaPods/CocoaPods/search?q=%5B%21%5D+at+-&type=Issues
 
 If none exists, create a ticket, with the template displayed above, on:
 https://github.com/CocoaPods/CocoaPods/issues/new
@@ -79,11 +79,12 @@ EOS
         @report.stubs(:xcode_information).returns(':xcode_information')
         @report.stubs(:repo_information).returns(['repo_1', 'repo_2'])
         report = remove_color(@report.report(@exception))
+        puts report
         report.should == expected
       end
 
       it 'strips the local path from the exception message' do
-        message = @report.pathless_exception_message(@exception.message)
+        message = @report.send(:pathless_exception_message, @exception.message)
         message = remove_color(message)
         message.should == '[!] at -'
       end
