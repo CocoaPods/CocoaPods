@@ -7,7 +7,6 @@ module Pod
   module UserInterface
     module ErrorReport
       class << self
-
         def report(exception)
           return <<-EOS
 

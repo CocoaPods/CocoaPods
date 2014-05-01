@@ -79,7 +79,6 @@ EOS
         @report.stubs(:xcode_information).returns(':xcode_information')
         @report.stubs(:repo_information).returns(['repo_1', 'repo_2'])
         report = remove_color(@report.report(@exception))
-        puts report
         report.should == expected
       end
 
