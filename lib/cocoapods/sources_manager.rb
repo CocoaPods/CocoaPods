@@ -206,7 +206,7 @@ module Pod
           min, max = versions['min'], versions['max']
           version_msg = ( min == max ) ? min : "#{min} - #{max}"
           raise Informative, "The `#{dir.basename}` repo requires " \
-          "CocoaPods #{version_msg}\n".red +
+          "CocoaPods #{version_msg} (currently using #{Pod::VERSION})\n".red +
           "Update CocoaPods, or checkout the appropriate tag in the repo."
         end
 

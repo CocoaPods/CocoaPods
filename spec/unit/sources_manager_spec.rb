@@ -153,9 +153,11 @@ module Pod
         SourcesManager.stubs(:version_information).returns({ 'min' => '999.0' })
         e = lambda { SourcesManager.check_version_information(temporary_directory) }.should.raise Informative
         e.message.should.match /Update CocoaPods/
+        e.message.should.match /(currently using #{Pod::VERSION})/
         SourcesManager.stubs(:version_information).returns({ 'max' => '0.0.1' })
         e = lambda { SourcesManager.check_version_information(temporary_directory) }.should.raise Informative
         e.message.should.match /Update CocoaPods/
+        e.message.should.match /(currently using #{Pod::VERSION})/
       end
 
       it 'raises when reading version information with merge conflict' do
