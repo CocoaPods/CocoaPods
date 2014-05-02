@@ -45,7 +45,7 @@ Repositories : #{repo_information.join("\n               ")}
 #{'[!] Oh no, an error occurred.'.red}
 #{error_from_podfile(exception)}
 #{'Search for existing github issues similar to yours:'.yellow}
-#{"https://github.com/CocoaPods/CocoaPods/search?q=#{CGI.escape(exception.message)}&type=Issues"}
+#{issues_url(exception)}
 
 #{'If none exists, create a ticket, with the template displayed above, on:'.yellow}
 https://github.com/CocoaPods/CocoaPods/issues/new
@@ -56,6 +56,10 @@ EOS
         end
 
         private
+
+        def pathless_exception_message(message)
+          message.gsub(/- \(.*\):/, '-')
+        end
 
         def markdown_podfile
           return '' unless Config.instance.podfile_path && Config.instance.podfile_path.exist?
@@ -73,6 +77,16 @@ EOS
           if error.message =~ /Podfile:(\d*)/
             "\nIt appears to have originated from your Podfile at line #{$1}.\n"
           end
+        end
+
+        def remove_color(string)
+          string.gsub(/\e\[(\d+)m/, '')
+        end
+
+        def issues_url(exception)
+          message = remove_color(pathless_exception_message(exception.message))
+          'https://github.com/CocoaPods/CocoaPods/search?q=' \
+          "#{CGI.escape(message)}&type=Issues"
         end
 
         def host_information
