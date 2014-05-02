@@ -20,6 +20,13 @@ module Pod
       exception.message.should.include "No `Podfile' found in the current working directory."
     end
 
+    it "shows help when runned as default command but no Podfile found" do
+      command = Command::Install.new(CLAide::ARGV.new([]))
+      command.invoked_as_default = true
+      exception = lambda { command.run }.should.raise CLAide::Help
+      exception.message.should.include "CocoaPods, the Objective-C library package manager."
+    end
+
   end
 
   #---------------------------------------------------------------------------#
@@ -87,4 +94,3 @@ module Pod
   #---------------------------------------------------------------------------#
 
 end
-
