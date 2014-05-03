@@ -5,8 +5,7 @@ module Pod
     extend SpecHelper::Command
 
     it "displays the current version number with the --version flag" do
-      lambda { Pod::Command.run(['--version']) }.should.raise SystemExit
-      UI.output.should.include VERSION
+      Pod::Command.version.should == VERSION
     end
 
     it "reports the location of the AFNetworking spec" do

@@ -23,13 +23,13 @@ module Pod
 
     self.abstract_command = true
     self.command = 'pod'
+    self.version = VERSION
     self.description = 'CocoaPods, the Objective-C library package manager.'
     self.plugin_prefix = 'cocoapods'
 
     def self.options
       [
         ['--silent',   'Show nothing'],
-        ['--version',  'Show the version of CocoaPods'],
       ].concat(super)
     end
 
@@ -43,13 +43,6 @@ module Pod
 
     def self.run(argv)
       help! "You cannot run CocoaPods as root." if Process.uid == 0
-
-      argv = CLAide::ARGV.new(argv)
-      if argv.flag?('version')
-        UI.puts VERSION
-        exit 0
-      end
-
       super(argv)
       UI.print_warnings
     end

@@ -6,8 +6,17 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
-* The extremely meta `cocoaPods-plugin` is now installed by default providing
-  information about the available and the installed plug-ins.
+* The `--version` flag is now only supported for the root `pod` command. If
+  used in conjunction with the `--verbose` flag the version of the detected
+  plugins will be printed as well.  
+  [Fabio Pelosin][irrationalfab]
+  [CLAide#13](https://github.com/CocoaPods/CLAide/issues/13)
+  [CLAide#14](https://github.com/CocoaPods/CLAide/issues/14)
+
+* The extremely meta `cocoaPods-plugins` is now installed by default providing
+  information about the available and the installed plug-ins.  
+  [David Grandinetti](https://github.com/dbgrandi)
+  [Olivier Halligon](https://github.com/AliSoftware)
   [Fabio Pelosin][irrationalfab]
   [#2092](https://github.com/CocoaPods/CocoaPods/issues/2092)
 
@@ -15,8 +24,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   docset_url in podspecs we while linting a specification.  
   [Kyle Fuller](https://github.com/kylef)
   [#2025](https://github.com/CocoaPods/CocoaPods/issues/2025)
-  
-* Print current version when the repo/lockfile requires a higher version
+
+* Print current version when the repo/lockfile requires a higher version.  
   [Samuel E. Giddins](https://github.com/segiddins)
   [#2049](https://github.com/CocoaPods/CocoaPods/issues/2049)
 
@@ -27,7 +36,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
-* Show the actual executable when external commands fail.
+* Show the actual executable when external commands fail.  
   [Boris Bügling][neonichu]
   [#2102](https://github.com/CocoaPods/CocoaPods/issues/2102)
 
@@ -36,11 +45,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin][irrationalfab]
   [Xcodeproj#105](https://github.com/CocoaPods/Xcodeproj/pull/150)
 
-* Show a helpful error message when reading version information with merge conflict
+* Show a helpful error message when reading version information with merge
+  conflict.  
   [Samuel E. Giddins][segiddins]
   [#1853](https://github.com/CocoaPods/CocoaPods/issues/1853)
 
-* Show deprecated specs when invoking `pod outdated`
+* Show deprecated specs when invoking `pod outdated`.  
   [Samuel E. Giddins](https://github.com/segiddins)
   [#2003](https://github.com/CocoaPods/CocoaPods/issues/2003)
 
