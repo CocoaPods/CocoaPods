@@ -71,7 +71,7 @@ module Pod
       output  = stdout.join("\n") + stderr.join("\n")
       unless status.success?
         if raise_on_failure
-          raise Informative, "#{name} #{command}\n\n#{output}"
+          raise Informative, "#{full_command}\n\n#{output}"
         else
           UI.message("[!] Failed: #{full_command}".red)
         end
