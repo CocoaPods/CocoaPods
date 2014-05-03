@@ -54,6 +54,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel E. Giddins](https://github.com/segiddins)
   [#2003](https://github.com/CocoaPods/CocoaPods/issues/2003)
 
+* Fixes an issue where `pod repo update` may start an un-committed merge.  
+  [Kyle Fuller][kylef]
+  [#2024](https://github.com/CocoaPods/CocoaPods/issues/2024)
+
 ## 0.32.1
 
 ##### Bug Fixes

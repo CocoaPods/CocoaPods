@@ -153,7 +153,7 @@ module Pod
           UI.section "Updating spec repo `#{source.name}`" do
             Dir.chdir(source.data_provider.repo) do
               begin
-                output = git!("pull --no-rebase --no-commit")
+                output = git!("pull --ff-only")
                 UI.puts output if show_output && !config.verbose?
               rescue Informative => e
                 raise Informative, 'An error occurred while performing ' \
