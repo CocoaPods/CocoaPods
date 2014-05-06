@@ -63,11 +63,11 @@ module Pod
 
       class List < IPC
 
-        self.summary = 'Lists the specifications know to CocoaPods.'
+        self.summary = 'Lists the specifications known to CocoaPods.'
         self.description = <<-DESC
           Prints to STDOUT a YAML dictionary where the keys are the name of the
-          specifications and the values are a dictionary with the following
-          keys.
+          specifications and each corresponding value is a dictionary with
+          the following keys:
 
           - defined_in_file
           - version
