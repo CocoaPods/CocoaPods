@@ -184,10 +184,10 @@ module Pod
 
       # Prints a message with a label.
       #
-      def labeled(label, value)
+      def labeled(label, value, justification = 16)
         if value
           ''.tap do |t|
-            t << "    - #{label}:".ljust(16)
+            t << "    - #{label}:".ljust(justification)
             if value.is_a?(Array)
               separator = "\n  - "
               puts_indented t << separator << value.join(separator)
