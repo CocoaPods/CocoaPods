@@ -8,7 +8,7 @@ module Pod
       module Options
         def options
           [
-            ["--no-clean",       "Leave SCM dirs like `.git' and `.svn' intact after downloading"],
+            ["--no-clean",       "Leave SCM dirs like `.git` and `.svn` intact after downloading"],
             ["--no-integrate",   "Skip integration of the Pods libraries in the Xcode project(s)"],
             ["--no-repo-update", "Skip running `pod repo update` before install"],
           ].concat(super)
@@ -49,15 +49,15 @@ module Pod
       self.summary = 'Install project dependencies'
 
       self.description = <<-DESC
-        Downloads all dependencies defined in `Podfile' and creates an Xcode
-        Pods library project in `./Pods'.
+        Downloads all dependencies defined in `Podfile` and creates an Xcode
+        Pods library project in `./Pods`.
 
         The Xcode project file should be specified in your `Podfile` like this:
 
-          xcodeproj 'path/to/XcodeProject'
+            xcodeproj 'path/to/XcodeProject'
 
         If no xcodeproj is specified, then a search for an Xcode project will
-        be made.  If more than one Xcode project is found, the command will
+        be made. If more than one Xcode project is found, the command will
         raise an error.
 
         This will configure the project to reference the Pods static library,
@@ -104,7 +104,7 @@ module Pod
             raise Informative, (missing_pods.length > 1 \
               ? "Pods %s are not installed and cannot be updated" \
               : "Pod %s is not installed and cannot be updated"
-            ) % missing_pods.map { |p| "`#{p}'" }.join(', ')
+            ) % missing_pods.map { |p| "`#{p}`" }.join(', ')
           end
 
           run_install_with_update(:pods => @pods)
