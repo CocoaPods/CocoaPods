@@ -70,14 +70,14 @@ module Pod
       it "for a single missing Pod" do
         Dir.chdir(temporary_directory) do
           exception = lambda { run_command('update', 'Reachability', '--no-repo-update') }.should.raise Informative
-          exception.message.should.include "Pod `Reachability' is not installed and cannot be updated"
+          exception.message.should.include "Pod `Reachability` is not installed and cannot be updated"
         end
       end
 
       it "for multiple missing Pods" do
         Dir.chdir(temporary_directory) do
           exception = lambda { run_command('update', 'Reachability', 'BananaLib2', '--no-repo-update') }.should.raise Informative
-          exception.message.should.include "Pods `Reachability', `BananaLib2' are not installed and cannot be updated"
+          exception.message.should.include "Pods `Reachability`, `BananaLib2` are not installed and cannot be updated"
         end
       end
   end
