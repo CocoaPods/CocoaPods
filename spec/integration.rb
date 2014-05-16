@@ -152,12 +152,11 @@ def check_with_folder(folder)
       end
 
       it relative_path do
+        file_should_exist(produced)
         case expected_path
         when %r[Podfile\.lock$], %r[Manifest\.lock$], %r[xcodeproj\.yaml$]
-          file_should_exist(produced)
           yaml_should_match(expected, produced)
         else
-          file_should_exist(produced)
           file_should_match(expected, produced)
         end
       end
