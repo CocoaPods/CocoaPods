@@ -2,7 +2,9 @@ module Pod
   class Command
     class Help < Command
       self.summary = 'Show help for the given command.'
-      self.arguments = '[COMMAND]'
+      self.arguments = [
+          ['COMMAND', :optional]
+      ]
 
       def initialize(argv)
         @help_command = Pod::Command.parse(argv)

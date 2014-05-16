@@ -85,7 +85,9 @@ module Pod
         be used to install changes to the Podfile.
       DESC
 
-      self.arguments = '[POD_NAMES...]'
+      self.arguments = [
+          ['POD_NAMES...', :optional]
+      ]
 
       def initialize(argv)
         @pods = argv.arguments! unless argv.arguments.empty?

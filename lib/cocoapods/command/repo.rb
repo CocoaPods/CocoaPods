@@ -17,7 +17,11 @@ module Pod
           remote can later be referred to by `NAME`.
         DESC
 
-        self.arguments = 'NAME URL [BRANCH]'
+        self.arguments = [
+            ['NAME',   :required],
+            ['URL',    :required],
+            ['BRANCH', :optional]
+        ]
 
         def self.options
           [
@@ -63,7 +67,9 @@ module Pod
           this will update all spec-repos in `~/.cocoapods/repos`.
         DESC
 
-        self.arguments = '[NAME]'
+        self.arguments = [
+            ['NAME', :optional]
+        ]
 
         def initialize(argv)
           @name = argv.shift_argument
@@ -86,7 +92,9 @@ module Pod
           will lint all the spec-repos known to CocoaPods.
         DESC
 
-        self.arguments = '[ NAME | DIRECTORY ]'
+        self.arguments = [
+            ['NAME | DIRECTORY', :optional]
+        ]
 
         def self.options
           [["--only-errors", "Lint presents only the errors"]].concat(super)
@@ -152,7 +160,9 @@ module Pod
           Deletes the remote named `NAME` from the local spec-repos directory at `~/.cocoapods/repos/.`
         DESC
 
-        self.arguments = 'NAME'
+        self.arguments = [
+            ['NAME', :required]
+        ]
 
         def initialize(argv)
           @name = argv.shift_argument

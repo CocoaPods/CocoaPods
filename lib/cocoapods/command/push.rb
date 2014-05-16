@@ -13,7 +13,10 @@ module Pod
         directory, and finally it pushes REPO to its remote.
       DESC
 
-      self.arguments = 'REPO [NAME.podspec]'
+      self.arguments = [
+          ['REPO',         :required],
+          ['NAME.podspec', :optional]
+      ]
 
       def self.options
         [ ["--allow-warnings", "Allows pushing even if there are warnings"],

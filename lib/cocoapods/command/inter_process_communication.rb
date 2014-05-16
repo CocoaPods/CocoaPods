@@ -15,7 +15,9 @@ module Pod
 
         self.summary = 'Converts a podspec to JSON.'
         self.description = 'Converts a podspec to JSON and prints it to STDOUT.'
-        self.arguments = 'PATH'
+        self.arguments = [
+            ['PATH', :required]
+        ]
 
         def initialize(argv)
           @path = argv.shift_argument
@@ -40,7 +42,9 @@ module Pod
 
         self.summary = 'Converts a Podfile to YAML.'
         self.description = 'Converts a Podfile to YAML and prints it to STDOUT.'
-        self.arguments = 'PATH'
+        self.arguments = [
+            ['PATH', :required]
+        ]
 
         def initialize(argv)
           @path = argv.shift_argument

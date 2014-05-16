@@ -17,7 +17,9 @@ module Pod
         (test targets) files which should be stored in the
         `~/.cocoapods/templates` folder.
       DESC
-      self.arguments = '[XCODEPROJ]'
+      self.arguments = [
+          ['XCODEPROJ', :optional]
+      ]
 
       def initialize(argv)
         @podfile_path = Pathname.pwd + "Podfile"

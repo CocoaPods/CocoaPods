@@ -18,7 +18,9 @@ module Pod
           If a GitHub url is passed the spec is prepopulated.
         DESC
 
-        self.arguments = '[ NAME | https://github.com/USER/REPO ]'
+        self.arguments = [
+            ['NAME | https://github.com/USER/REPO', :optional]
+        ]
 
         def initialize(argv)
           @name_or_url, @url = argv.shift_argument, argv.shift_argument
@@ -56,7 +58,9 @@ module Pod
           the argument is omitted, it defaults to the current working dir.
         DESC
 
-        self.arguments = '[ NAME.podspec | DIRECTORY | http://PATH/NAME.podspec, ... ]'
+        self.arguments = [
+            ['NAME.podspec | DIRECTORY | http://PATH/NAME.podspec, ...', :optional]
+        ]
 
         def self.options
           [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
@@ -148,7 +152,9 @@ module Pod
           Prints the path of 'NAME.podspec'
         DESC
 
-        self.arguments = '[ NAME ]'
+        self.arguments = [
+            ['NAME', :optional]
+        ]
 
         def self.options
           [["--show-all", "Print all versions of the given podspec"]].concat(super)
@@ -180,7 +186,9 @@ module Pod
           Prints 'NAME.podspec' to standard output.
         DESC
 
-        self.arguments = '[ NAME ]'
+        self.arguments = [
+            ['NAME', :optional]
+        ]
 
         def self.options
           [["--show-all", "Pick from all versions of the given podspec"]].concat(super)
@@ -220,7 +228,9 @@ module Pod
           Opens 'NAME.podspec' to be edited.
         DESC
 
-        self.arguments = '[ NAME ]'
+        self.arguments = [
+            ['NAME', :optional]
+        ]
 
         def self.options
           [["--show-all", "Pick which spec to edit from all available versions of the given podspec"]].concat(super)

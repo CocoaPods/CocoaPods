@@ -15,7 +15,7 @@ module Pod
     end
 
     it "shows the right usage" do
-      Pod::Command::Help.arguments.should.equal '[COMMAND]'
+      Pod::Command::Help.arguments.should.equal [['COMMAND', :optional]]
     end
 
   end
