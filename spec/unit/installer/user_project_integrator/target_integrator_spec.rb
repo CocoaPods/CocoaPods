@@ -23,7 +23,7 @@ module Pod
         @lib.user_target_uuids  = [@target.uuid]
         @target_integrator = TargetIntegrator.new(@lib)
         @sample_config = Xcodeproj::Project::XCBuildConfiguration.new(@sample_project, @sample_project.generate_uuid)
-        @sample_config.name = "NotPods"
+        @sample_config.name = 'NotPods'
       end
 
       it 'returns the targets that need to be integrated' do
