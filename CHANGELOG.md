@@ -6,6 +6,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
+* Integration with user project will no longer replace an existing
+  base build configuration.
+  [Robert Jones][redshirtrob]
+
 * The `--version` flag is now only supported for the root `pod` command. If
   used in conjunction with the `--verbose` flag the version of the detected
   plugins will be printed as well.  

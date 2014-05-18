@@ -22,6 +22,8 @@ module Pod
         @lib.client_root = sample_project_path.dirname
         @lib.user_target_uuids  = [@target.uuid]
         @target_integrator = TargetIntegrator.new(@lib)
+        @sample_config = Xcodeproj::Project::XCBuildConfiguration.new(@sample_project, @sample_project.generate_uuid)
+        @sample_config.name = "NotPods"
       end
 
       it 'returns the targets that need to be integrated' do
@@ -58,6 +60,16 @@ module Pod
         @target_integrator.expects(:add_copy_resources_script_phase).never
         @target_integrator.expects(:save_user_project).never
         @target_integrator.integrate!
+      end
+
+      it 'does not set the Pods xcconfig as the base config if the base config is already set' do
+        @target.build_configurations.each do |config|
+          config.stubs(:base_configuration_reference).returns(@sample_config)
+        end
+        @target_integrator.integrate!
+        @target.build_configurations.each do |config|
+          config.base_configuration_reference.should == @sample_config
+        end
       end
 
       before do
