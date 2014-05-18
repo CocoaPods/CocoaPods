@@ -16,6 +16,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [#2577](https://github.com/CocoaPods/CocoaPods/issues/2577)
 
+* Integration with user project will no longer replace an existing
+  base build configuration.  
+  [Robert Jones](https://github.com/redshirtrob)
+
 ##### Bug Fixes
 
 * Improved sanitizing of configuration names to avoid generating invalid

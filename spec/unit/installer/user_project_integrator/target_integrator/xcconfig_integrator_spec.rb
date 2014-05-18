@@ -48,5 +48,19 @@ module Pod
       config.base_configuration_reference.should.equal existing
     end
 
+    it 'does not set the Pods xcconfig as the base config if the base ' \
+       'config is already set' do
+      sample_config = @project.new_file('SampleConfig.xcconfig')
+      @target.build_configurations.each do |config|
+        config.base_configuration_reference = sample_config
+      end
+      XCConfigIntegrator.integrate(@pod_bundle, [@target])
+      @target.build_configurations.each do |config|
+        config.base_configuration_reference.should == sample_config
+      end
+
+      UI.warnings.should.match /not set.*base configuration/
+    end
+
   end
 end
