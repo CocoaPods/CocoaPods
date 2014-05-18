@@ -154,9 +154,15 @@ module Pod
       # @return [Pathname] The directory of the repository.
       #
       def repo_dir
+        specs_dir = Pathname.new(File.join(config.repos_dir, @repo, 'Specs'))
         dir = config.repos_dir + @repo
-        raise Informative, "`#{@repo}` repo not found" unless dir.exist?
-        dir
+        if specs_dir.exist?
+          dir = specs_dir
+        elsif dir.exist?
+          dir
+        else
+          raise Informative, "`#{@repo}` repo not found either in #{specs_dir} or #{dir}"
+        end
       end
 
       # @return [Array<Pathname>] The path of the specifications to push.
