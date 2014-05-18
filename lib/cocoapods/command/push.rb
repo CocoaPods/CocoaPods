@@ -151,7 +151,7 @@ module Pod
       # @return [Pathname] The directory of the repository.
       #
       def repo_dir
-        specs_dir = Pathname.new(File.join(config.repos_dir,@repo,"Specs"))
+        specs_dir = Pathname.new(File.join(config.repos_dir, @repo, "Specs"))
         dir = config.repos_dir + @repo
         if specs_dir.exist?
           dir = specs_dir
