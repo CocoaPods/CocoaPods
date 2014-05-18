@@ -113,7 +113,7 @@ module Pod
               if not config.base_configuration_reference
                 config.base_configuration_reference = xcconfig
               else
-                UI.notice "Using existing base configuration " \
+                UI.notice 'Using existing base configuration ' \
                           "`#{config.base_configuration_reference.name}`"
               end
             end
