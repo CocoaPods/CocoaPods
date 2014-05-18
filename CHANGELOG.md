@@ -7,6 +7,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   
 * Make `pod push ...` use new Specs organizational pattern by checking for Specs directory in repo first.
   [Edward Valentini](https://github.com/edwardvalentini)
+  [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
  
 ## 0.32.1
 
