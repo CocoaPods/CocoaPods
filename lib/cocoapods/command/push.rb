@@ -110,6 +110,7 @@ module Pod
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
           output_path = File.join(repo_dir, spec.name, spec.version.to_s)
+          UI.puts "\n\n\n\n\n\n\nDebugging ----------> repo_dir is #{repo_dir} ---------------------------------------------\n\n\n\n\n\n\n".magenta.bold
           if Pathname.new(output_path).exist?
             message = "[Fix] #{spec}"
           elsif Pathname.new(File.join(repo_dir, spec.name)).exist?
@@ -151,9 +152,15 @@ module Pod
       # @return [Pathname] The directory of the repository.
       #
       def repo_dir
+        specs_dir = Pathname.new(File.join(config.repos_dir,@repo,"Specs"))
         dir = config.repos_dir + @repo
-        raise Informative, "`#{@repo}` repo not found" unless dir.exist?
-        dir
+        if specs_dir.exist?
+          dir = specs_dir
+        elsif dir.exist?
+          dir
+        else
+          raise Informative, "`#{@repo}` repo not found either in #{specs_dir} or #{dir}"
+        end
       end
 
       # @return [Array<Pathname>] The path of the specifications to push.
