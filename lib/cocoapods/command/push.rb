@@ -110,7 +110,6 @@ module Pod
         podspec_files.each do |spec_file|
           spec = Pod::Specification.from_file(spec_file)
           output_path = File.join(repo_dir, spec.name, spec.version.to_s)
-          UI.puts "\n\n\n\n\n\n\nDebugging ----------> repo_dir is #{repo_dir} ---------------------------------------------\n\n\n\n\n\n\n".magenta.bold
           if Pathname.new(output_path).exist?
             message = "[Fix] #{spec}"
           elsif Pathname.new(File.join(repo_dir, spec.name)).exist?
