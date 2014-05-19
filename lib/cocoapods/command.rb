@@ -20,6 +20,9 @@ module Pod
     require 'cocoapods/command/spec'
     require 'cocoapods/command/init'
 
+    # TODO: remove
+    require 'cocoapods/command/push'
+
     self.abstract_command = true
     self.command = 'pod'
     self.version = VERSION
