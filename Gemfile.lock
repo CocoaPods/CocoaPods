@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 0202035e1757464d857a0cde9a7627b1084597b2
+  revision: d7ffa0b6464370ee20805c7c53ed36509ad072bb
   branch: master
   specs:
     cocoapods-core (0.32.1)
@@ -41,8 +41,8 @@ GIT
       nap
 
 GIT
-  remote: https://github.com/CocoaPods/cocoapods-trunk.cocoapods.org.git
-  revision: b69df132728699da99ad42eba1e7bebe09c7e7f5
+  remote: https://github.com/CocoaPods/cocoapods-trunk.git
+  revision: 4dcaed7fc44e5f552985379fece9620d2bf88a53
   branch: master
   specs:
     cocoapods-trunk (0.0.1)

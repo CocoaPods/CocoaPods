@@ -14,7 +14,7 @@ group :development do
   gem 'cocoapods-downloader', :git => "https://github.com/CocoaPods/cocoapods-downloader.git", :branch => 'master'
   gem 'cocoapods-try',        :git => 'https://github.com/CocoaPods/cocoapods-try.git', :branch => 'master'
   gem 'cocoapods-plugins',    :git => 'https://github.com/CocoaPods/cocoapods-plugins.git', :branch => 'master'
-  gem 'cocoapods-trunk',    :git => 'https://github.com/CocoaPods/cocoapods-trunk.cocoapods.org.git', :branch => 'master'
+  gem 'cocoapods-trunk',      :git => 'https://github.com/CocoaPods/cocoapods-trunk.git', :branch => 'master'
 
   gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
   gem "mocha"
