@@ -4,7 +4,41 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+##### Breaking
+
+* The deprecated `pre_install` and the `pod_install` hooks of the specification
+  class have been removed.  
+  [Fabio Pelosin][irrationalfab]
+  [#2151](https://github.com/CocoaPods/CocoaPods/issues/2151)
+  [#2153](https://github.com/CocoaPods/CocoaPods/pull/2153)
+
 ##### Enhancements
+
+* Added the `cocoapods-trunk` plugin which introduces the `trunk` subcommand.  
+  [Fabio Pelosin][irrationalfab]
+  [#2151](https://github.com/CocoaPods/CocoaPods/issues/2151)
+  [#2153](https://github.com/CocoaPods/CocoaPods/pull/2153)
+
+* The `pod push` sub-command has been moved to the `pod repo push` sub-command.
+  Moreover pushing to the master repo from it has been disabled.  
+  [Fabio Pelosin][irrationalfab]
+  [#2151](https://github.com/CocoaPods/CocoaPods/issues/2151)
+  [#2153](https://github.com/CocoaPods/CocoaPods/pull/2153)
+
+* Overhauled command line interface. Add support for auto-completion script
+  (d). If auto-completion is enabled for your shell you can configure it for
+  CocoaPods with the following command:
+      rm -f /usr/local/share/zsh/site-functions/_pod
+      dpod --completion-script > /usr/local/share/zsh/site-functions/_pod
+      exec zsh
+
+  Currently only the Z shell is supported.  
+  [Fabio Pelosin][irrationalfab]
+  [CLAide#25](https://github.com/CocoaPods/CLAide/issues/25)
+  [CLAide#20](https://github.com/CocoaPods/CLAide/issues/20)
+  [CLAide#19](https://github.com/CocoaPods/CLAide/issues/19)
+  [CLAide#17](https://github.com/CocoaPods/CLAide/issues/17)
+  [CLAide#12](https://github.com/CocoaPods/CLAide/issues/12)
 
 * The `--version` flag is now only supported for the root `pod` command. If
   used in conjunction with the `--verbose` flag the version of the detected
@@ -20,12 +54,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin][irrationalfab]
   [#2092](https://github.com/CocoaPods/CocoaPods/issues/2092)
 
-* Validate the reachability of social_media_url, documentation_url and
-  docset_url in podspecs we while linting a specification.  
+* Validate the reachability of `social_media_url`, `documentation_url` and
+  `docset_url` in podspecs we while linting a specification.  
   [Kyle Fuller](https://github.com/kylef)
   [#2025](https://github.com/CocoaPods/CocoaPods/issues/2025)
 
-* Print current version when the repo/lockfile requires a higher version.  
+* Print the current version when the repo/lockfile requires a higher version.  
   [Samuel E. Giddins](https://github.com/segiddins)
   [#2049](https://github.com/CocoaPods/CocoaPods/issues/2049)
 
@@ -2374,3 +2408,5 @@ allowing you to automate Xcode related tasks.
 
 [irrationalfab]: https://github.com/irrationalfab
 [kylef]: (https://github.com/kylef)
+[neonichu]: (https://github.com/neonichu)
+
