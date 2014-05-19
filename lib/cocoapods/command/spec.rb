@@ -352,7 +352,7 @@ module Pod
       # @return [Pathname] the absolute path of the given spec and source
       #
       def pathname_from_spec(spec, source)
-        config.repos_dir + "#{source}/#{spec.name}/#{spec.version}/#{spec.name}.podspec"
+        Pathname(spec.defined_in_file)
       end
 
       # @return [String] of spec paths one on each line
