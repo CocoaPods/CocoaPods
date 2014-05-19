@@ -1,7 +1,7 @@
 module Pod
   class Command
     class Push < Command
-      self.summary = 'Temporary placeholder for the `pod repo push` command'
+      self.summary = 'Temporary alias for the `pod repo push` command'
 
 
       def initialize(argv)
