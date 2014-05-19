@@ -27,20 +27,16 @@ module Pod
         @allow_warnings = argv.flag?('allow-warnings')
         @local_only = argv.flag?('local-only')
         @repo = argv.shift_argument
-        if @repo.nil?
-          @repo = "master"
-        elsif @repo.end_with? ".podspec"
-          @podspec = @repo
-          @repo = "master"
-        else
-          @podspec = argv.shift_argument
-        end
+        @podspec = argv.shift_argument
         super
       end
 
       def validate!
         super
         help! "A spec-repo name is required." unless @repo
+        if @repo == 'master'
+          help! "To push to the master repo use the `pod trunk push` command"
+        end
       end
 
       def run

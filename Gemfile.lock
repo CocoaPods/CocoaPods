@@ -34,7 +34,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: ce2d30ff9bd4570708e51a2bdac4d8de60fe9bfc
+  revision: 413e7ba6c956f798af05db4aa66941c010a1517b
   branch: master
   specs:
     cocoapods-plugins (0.1.1)
@@ -42,7 +42,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 4dcaed7fc44e5f552985379fece9620d2bf88a53
+  revision: d53eebda39d05bd08fdba5bb2c568b535d3cec4e
   branch: master
   specs:
     cocoapods-trunk (0.0.1)
@@ -52,7 +52,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 87294fd83feda93ec242270c452ce8f025429778
+  revision: bd65e634ffe50e37b549ce0a386ff0628289c7ed
   branch: master
   specs:
     cocoapods-try (0.2.0)
