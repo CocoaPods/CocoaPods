@@ -5,8 +5,8 @@ module Pod
     extend SpecHelper::Command
 
     it "invokes the right command with --help flag" do
-      command = command('help', 'push')
-      command.send(:help_command).should.be.instance_of Pod::Command::Push
+      command = command('help', 'repo', 'push')
+      command.send(:help_command).should.be.instance_of Pod::Command::Repo::Push
       lambda { command.run }.should.raise CLAide::Help
     end
 
