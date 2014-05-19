@@ -49,7 +49,7 @@ Should you require a feature isn't suited for mainstream users, consider suggest
 ## Pull Requests
 
 We **love** pull requests and if a contribution is significant we tend to offer
-push access.
+push access. We suggest you take a look at our [Contributing guide](http://guides.cocoapods.org/contributing/contribute-to-cocoapods.html) for info on development setup, and some of our best practices.
 
 All contributions _will_ be licenced under the MIT license.
 
