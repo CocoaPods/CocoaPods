@@ -102,9 +102,6 @@ module Pod
         #         configurations overrides the `xcconfig` file and warns the
         #         user.
         #
-        # @todo   If the xcconfig is already set don't override it and inform
-        #         the user.
-        #
         # @return [void]
         #
         def add_xcconfig_base_configuration
@@ -113,7 +110,12 @@ module Pod
           native_targets.each do |native_target|
             check_overridden_build_settings(target.xcconfig, native_target)
             native_target.build_configurations.each do |config|
-              config.base_configuration_reference = xcconfig
+              if not config.base_configuration_reference
+                config.base_configuration_reference = xcconfig
+              else
+                UI.notice 'Using existing base configuration ' \
+                          "`#{config.base_configuration_reference.name}`"
+              end
             end
           end
         end
