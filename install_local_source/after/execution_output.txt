@@ -49,7 +49,7 @@ Integrating client project
 
 Integrating Pod target `Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
 
-[!] The `:local` option of the Podfile has been renamed to `:path` and is deprecated.
+[!] The `:local` option of the Podfile has been renamed to `:path` and it is deprecated.
 
 [!] The target `iOS App [Release]` overrides the `OTHER_CFLAGS` build setting defined in `Pods/Pods.xcconfig'.
     - Use the `$(inherited)` flag, or

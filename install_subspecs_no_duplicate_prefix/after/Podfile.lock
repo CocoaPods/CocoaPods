@@ -11,6 +11,6 @@ EXTERNAL SOURCES:
     :podspec: https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec
 
 SPEC CHECKSUMS:
-  Test: 6d5d4175fdc8f26ad6387eecd835c08fdaad86a7
+  Test: 015c315085e89cf22c211271c817a23ed1ad09c8
 
 COCOAPODS: 0.32.1
