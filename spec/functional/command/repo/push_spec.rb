@@ -1,7 +1,7 @@
-require File.expand_path('../../../spec_helper', __FILE__)
+require File.expand_path('../../../../spec_helper', __FILE__)
 
 module Pod
-  describe Command::Push do
+  describe Command::Repo::Push do
     extend SpecHelper::Command
     extend SpecHelper::TemporaryRepos
 
@@ -11,7 +11,7 @@ module Pod
 
     it "complains if it can't find the repo" do
       Dir.chdir(fixture('banana-lib')) do
-        cmd = command('push', 'missing_repo')
+        cmd = command('repo', 'push', 'missing_repo')
         cmd.expects(:validate_podspec_files).returns(true)
         e = lambda { cmd.run }.should.raise Informative
         e.message.should.match(/repo not found/)
@@ -20,7 +20,7 @@ module Pod
 
     it "complains if it can't find a spec" do
       repo_make('test_repo')
-      e = lambda { run_command('push', 'test_repo') }.should.raise Pod::Informative
+      e = lambda { run_command('repo', 'push', 'test_repo') }.should.raise Pod::Informative
       e.message.should.match(/Couldn't find any .podspec/)
     end
 
@@ -29,7 +29,7 @@ module Pod
       Dir.chdir(temporary_directory) do
         spec = "Spec.new do |s|; s.name = 'Broken'; s.version = '1.0' end"
         File.open('Broken.podspec',  'w') {|f| f.write(spec) }
-        cmd = command('push', 'test_repo')
+        cmd = command('repo', 'push', 'test_repo')
         Validator.any_instance.stubs(:validated?).returns(false)
 
         e = lambda { cmd.run }.should.raise Pod::Informative
@@ -68,7 +68,7 @@ module Pod
       Dir.chdir(test_repo_path) do
         `touch DIRTY_FILE`
       end
-      cmd = command('push', 'master')
+      cmd = command('repo', 'push', 'master')
       cmd.expects(:validate_podspec_files).returns(true)
       e = lambda { cmd.run }.should.raise Pod::Informative
       e.message.should.match(/repo.*not clean/)
@@ -76,8 +76,7 @@ module Pod
     end
 
     it "successfully pushes a spec" do
-
-      cmd = command('push', 'master')
+      cmd = command('repo', 'push', 'master')
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
       cmd.expects(:validate_podspec_files).returns(true)
       Dir.chdir(temporary_directory) { cmd.run }

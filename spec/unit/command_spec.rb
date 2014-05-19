@@ -7,7 +7,6 @@ module Pod
       Command.parse(%w{ install     }).should.be.instance_of Command::Install
       Command.parse(%w{ list        }).should.be.instance_of Command::List
       Command.parse(%w{ outdated    }).should.be.instance_of Command::Outdated
-      Command.parse(%w{ push        }).should.be.instance_of Command::Push
       Command.parse(%w{ repo        }).should.be.instance_of Command::Repo
       Command.parse(%w{ repo add    }).should.be.instance_of Command::Repo::Add
       Command.parse(%w{ repo lint   }).should.be.instance_of Command::Repo::Lint

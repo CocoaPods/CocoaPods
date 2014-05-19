@@ -14,12 +14,14 @@ module Pod
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
     require 'cocoapods/command/project'
-    require 'cocoapods/command/push'
     require 'cocoapods/command/repo'
     require 'cocoapods/command/search'
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
     require 'cocoapods/command/init'
+
+    # TODO: remove
+    require 'cocoapods/command/push'
 
     self.abstract_command = true
     self.command = 'pod'

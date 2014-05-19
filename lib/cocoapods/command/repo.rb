@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'cocoapods/command/repo/push'
 
 module Pod
   class Command

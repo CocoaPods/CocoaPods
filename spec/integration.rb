@@ -360,13 +360,6 @@ describe "Integration" do
     describe "Runs the Podfile callbacks" do
       check "install --no-repo-update", "install_podfile_callbacks"
     end
-
-    # @todo add tests for all the hooks API
-    #
-    describe "Runs the specification callbacks" do
-      check "install --no-repo-update", "install_spec_callbacks"
-    end
-
   end
 
   #--------------------------------------#

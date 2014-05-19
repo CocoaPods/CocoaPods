@@ -495,40 +495,9 @@ module Pod
     #
     def run_pre_install_hooks
       UI.message "- Running pre install hooks" do
-        analysis_result.specifications.each do |spec|
-          executed = false
-          libraries_using_spec(spec).each do |lib|
-            lib_representation = library_rep(lib)
-            executed ||= run_spec_pre_install_hook(spec, lib_representation)
-          end
-          UI.message "- #{spec.name}" if executed
-        end
-
         executed = run_podfile_pre_install_hook
         UI.message "- Podfile" if executed
       end
-    end
-
-    # Runs the pre install hook of the given specification with the given
-    # library representation.
-    #
-    # @param  [Specification] spec
-    #         The spec for which the pre install hook should be run.
-    #
-    # @param  [Hooks::LibraryRepresentation] lib_representation
-    #         The library representation to be passed as an argument to the
-    #         hook.
-    #
-    # @raise  Raises an informative if the hooks raises.
-    #
-    # @return [Bool] Whether the hook was run.
-    #
-    def run_spec_pre_install_hook(spec, lib_representation)
-      spec.pre_install!(pod_rep(spec.root.name), lib_representation)
-    rescue => e
-      raise Informative, "An error occurred while processing the pre-install " \
-        "hook of #{spec}." \
-        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
     # Runs the pre install hook of the Podfile
@@ -554,40 +523,9 @@ module Pod
     #
     def run_post_install_hooks
       UI.message "- Running post install hooks" do
-        analysis_result.specifications.each do |spec|
-          executed = false
-          libraries_using_spec(spec).each do |lib|
-            lib_representation = library_rep(lib)
-            executed ||= run_spec_post_install_hook(spec, lib_representation)
-          end
-          UI.message "- #{spec.name}" if executed
-        end
         executed = run_podfile_post_install_hook
         UI.message "- Podfile" if executed
       end
-    end
-
-
-    # Runs the post install hook of the given specification with the given
-    # library representation.
-    #
-    # @param  [Specification] spec
-    #         The spec for which the post install hook should be run.
-    #
-    # @param  [Hooks::LibraryRepresentation] lib_representation
-    #         The library representation to be passed as an argument to the
-    #         hook.
-    #
-    # @raise  Raises an informative if the hooks raises.
-    #
-    # @return [Bool] Whether the hook was run.
-    #
-    def run_spec_post_install_hook(spec, lib_representation)
-      spec.post_install!(lib_representation)
-    rescue => e
-      raise Informative, "An error occurred while processing the post-install " \
-        "hook of #{spec}." \
-        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
     # Runs the post install hook of the Podfile
