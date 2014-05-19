@@ -42,17 +42,17 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: d53eebda39d05bd08fdba5bb2c568b535d3cec4e
+  revision: b1ffdd2f574cceddadf2b123ed7d3656ae68ff57
   branch: master
   specs:
-    cocoapods-trunk (0.0.1)
+    cocoapods-trunk (0.1.0)
       json (~> 1.8)
       nap (>= 0.6)
       netrc
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: bd65e634ffe50e37b549ce0a386ff0628289c7ed
+  revision: 42b89e0be51405014126c7954d2fce1aa187626a
   branch: master
   specs:
     cocoapods-try (0.2.0)
@@ -72,7 +72,7 @@ PATH
       cocoapods-core (= 0.32.1)
       cocoapods-downloader (~> 0.5.0)
       cocoapods-plugins (~> 0.1.0)
-      cocoapods-trunk (~> 0.0.1)
+      cocoapods-trunk (~> 0.1.0)
       cocoapods-try (~> 0.2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -128,7 +128,7 @@ GEM
     nap (0.7.0)
     netrc (0.7.7)
     notify (0.5.2)
-    open4 (1.3.3)
+    open4 (1.3.4)
     posix-spawn (0.3.8)
     prettybacon (0.0.2)
       bacon (~> 1.2)
