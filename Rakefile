@@ -45,7 +45,7 @@ begin
 
   # Post release
   #-----------------------------------------------------------------------------#
-  
+
   desc "Updates the last know version of CocoaPods in the specs repo"
   task :post_release do
     title "Updating last known version in Specs repo"
@@ -54,7 +54,7 @@ begin
       puts Dir.pwd
       sh "git checkout #{specs_branch}"
       sh "git pull"
-  
+
       yaml_file  = 'CocoaPods-version.yml'
       unless File.exist?(yaml_file)
         $stderr.puts red("[!] Unable to find #{yaml_file}!")
@@ -66,62 +66,62 @@ begin
       File.open(yaml_file, "w") do |f|
         f.write(cocoapods_version.to_yaml)
       end
-  
+
       sh "git commit #{yaml_file} -m 'CocoaPods release #{gem_version}'"
       sh "git push"
     end
   end
-  
+
   # Spec
   #-----------------------------------------------------------------------------#
-  
+
   namespace :spec do
-  
+
     def specs(dir)
       FileList["spec/#{dir}_spec.rb"].shuffle.join(' ')
     end
-  
+
     #--------------------------------------#
-  
+
     desc "Automatically run specs for updated files"
     task :kick do
       exec "bundle exec kicker -c"
     end
-  
+
     #--------------------------------------#
-  
+
     unit_specs_command = "bundle exec bacon #{specs('unit/**/*')}"
-  
+
     desc "Run the unit specs"
     task :unit => :unpack_fixture_tarballs do
       sh unit_specs_command
     end
-  
+
     desc "Run the unit specs quietly (fail fast, display only one failure)"
     task :unit_quiet => :unpack_fixture_tarballs do
       sh "#{unit_specs_command} -q"
     end
-  
+
     #--------------------------------------#
-  
+
     desc "Run the functional specs"
     task :functional, [:spec] => :unpack_fixture_tarballs do |t, args|
       args.with_defaults(:spec => '**/*')
       sh "bundle exec bacon #{specs("functional/#{args[:spec]}")}"
     end
-  
+
     #--------------------------------------#
-  
+
     desc "Run the integration spec"
     task :integration do
       unless File.exists?('spec/cocoapods-integration-specs')
         $stderr.puts red("Integration files not checked out. Run `rake bootstrap`")
         exit 1
       end
-  
+
       sh "bundle exec bacon spec/integration.rb"
     end
-  
+
     # Default task
     #--------------------------------------#
     #
@@ -131,17 +131,17 @@ begin
     task :all => :unpack_fixture_tarballs do
       ENV['GENERATE_COVERAGE'] = 'true'
       puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
-  
+
       title 'Running the specs'
       sh    "bundle exec bacon #{specs('**/*')}"
-  
+
       title 'Running Integration tests'
       sh    "bundle exec bacon spec/integration.rb"
-  
+
       title 'Running examples'
       Rake::Task['examples:build'].invoke
     end
-  
+
     desc "Rebuild all the fixture tarballs"
     task :rebuild_fixture_tarballs do
       tarballs = FileList['spec/fixtures/**/*.tar.gz']
@@ -150,7 +150,7 @@ begin
         sh "cd #{File.dirname(tarball)} && rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{basename[0..-8]}"
       end
     end
-  
+
     desc "Unpacks all the fixture tarballs"
     task :unpack_fixture_tarballs do
       tarballs = FileList['spec/fixtures/**/*.tar.gz']
@@ -161,18 +161,18 @@ begin
         end
       end
     end
-  
+
     desc "Removes the stored VCR fixture"
     task :clean_vcr do
       sh "rm -f spec/fixtures/vcr/tarballs.yml"
     end
-  
+
     desc "Rebuilds integration fixtures"
     task :rebuild_integration_fixtures do
       title 'Running Integration tests'
       sh 'rm -rf spec/cocoapods-integration-specs/tmp'
-      Rake::Task['spec:integration'].invoke
-  
+      puts `bundle exec bacon spec/integration.rb`
+
       title 'Storing fixtures'
       # Copy the files to the files produced by the specs to the after folders
       FileList['tmp/*'].each do |source|
@@ -182,7 +182,7 @@ begin
           sh "mv #{source} #{destination}"
         end
       end
-  
+
       # Remove files not used for the comparison
       # To keep the git diff clean
       files_to_delete = FileList['spec/cocoapods-integration-specs/*/after/{Podfile,*.podspec,**/*.xcodeproj,PodTest-hg-source}']
@@ -190,20 +190,20 @@ begin
       files_to_delete.each do |file_to_delete|
         sh "rm -rf #{file_to_delete}"
       end
-  
+
       puts
       puts "Integration fixtures updated, commit and push in the `spec/cocoapods-integration-specs` submodule"
     end
-  
+
     task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
   end
-  
+
   # Examples
   #-----------------------------------------------------------------------------#
-  
+
   task :examples => "examples:build"
   namespace :examples do
-  
+
     desc "Open all example workspaces in Xcode, which recreates the schemes."
     task :recreate_workspace_schemes do
       examples.each do |example|
@@ -215,7 +215,7 @@ begin
         end
       end
     end
-  
+
     desc "Build all examples"
     task :build do
       Dir.chdir("examples/AFNetworking Example") do
@@ -223,13 +223,13 @@ begin
         # pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
         # TODO: The sandbox is blocking local git repos making bundler crash
         pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/pod'
-  
+
         execute_command "rm -rf Pods"
         execute_command "#{pod_command} install --verbose --no-repo-update"
-  
+
         puts "Building example: AFNetworking Mac Example'"
         execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking Example' clean install"
-  
+
         puts "Building example: AFNetworking iOS Example'"
         xcode_version = `xcodebuild -version`.scan(/Xcode (.*)\n/).first.first
         major_version = xcode_version.split('.').first.to_i
@@ -243,12 +243,12 @@ begin
       end
     end
   end
-  
+
   #-----------------------------------------------------------------------------#
-  
+
   desc "Run all specs"
   task :spec => 'spec:all'
-  
+
   task :default => :spec
 
 rescue LoadError
