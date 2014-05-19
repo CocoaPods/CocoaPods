@@ -491,9 +491,6 @@ module Pod
         library_rep = stub()
 
         @installer.expects(:installer_rep).returns(installer_rep)
-        @installer.expects(:pod_rep).with('JSONKit').returns(pod_rep)
-        @installer.expects(:library_rep).with(@aggregate_target).returns(library_rep)
-        @spec.expects(:pre_install!)
         @installer.podfile.expects(:pre_install!).with(installer_rep)
         @installer.send(:run_pre_install_hooks)
       end
@@ -503,8 +500,6 @@ module Pod
         target_installer_data = stub()
 
         @installer.expects(:installer_rep).returns(installer_rep)
-        @installer.expects(:library_rep).with(@aggregate_target).returns(target_installer_data)
-        @spec.expects(:post_install!)
         @installer.podfile.expects(:post_install!).with(installer_rep)
         @installer.send(:run_post_install_hooks)
       end
@@ -520,11 +515,7 @@ module Pod
 
         @installer.stubs(:pod_targets).returns([pod_target_ios, pod_target_osx])
         @installer.stubs(:installer_rep).returns(stub())
-        @installer.stubs(:library_rep).with(@aggregate_target).returns(target_installer_data).twice
-
         @installer.podfile.expects(:pre_install!)
-        @spec.expects(:post_install!).with(target_installer_data).once
-
         @installer.send(:run_pre_install_hooks)
         @installer.send(:run_post_install_hooks)
       end
@@ -561,9 +552,7 @@ module Pod
         libs = @installer.send(:libraries_using_spec, @spec)
         libs.map(&:name).should == ['Pods']
       end
-
     end
-
   end
 end
 
