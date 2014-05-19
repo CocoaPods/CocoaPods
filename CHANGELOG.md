@@ -28,6 +28,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Overhauled command line interface. Add support for auto-completion script
   (d). If auto-completion is enabled for your shell you can configure it for
   CocoaPods with the following command:
+
       rm -f /usr/local/share/zsh/site-functions/_pod
       dpod --completion-script > /usr/local/share/zsh/site-functions/_pod
       exec zsh
