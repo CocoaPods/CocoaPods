@@ -1,13 +1,13 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: fbbb2a35e92f03ac034175daa6d8e34cd8426852
+  revision: fc70a4b2e6d7b436b06501c48a909c0f8a4d370e
   branch: master
   specs:
     claide (0.5.0)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: fa565c17339bf624dc309e6d8cd81894f3865868
+  revision: 0202035e1757464d857a0cde9a7627b1084597b2
   branch: master
   specs:
     cocoapods-core (0.32.1)
@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 1f41acdf579b347e5dfb4de709900354aac20980
+  revision: 14799a979aa0bfb958497c5571234ada8462bff1
   branch: master
   specs:
     xcodeproj (0.16.1)
@@ -27,7 +27,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 224c8a191ef6b98d538d6228b0549d05194944ee
+  revision: a1a2eeab728b931cbbba112840e5d570b97543d2
   branch: master
   specs:
     cocoapods-downloader (0.5.0)
@@ -41,8 +41,18 @@ GIT
       nap
 
 GIT
+  remote: https://github.com/CocoaPods/cocoapods-trunk.cocoapods.org.git
+  revision: b69df132728699da99ad42eba1e7bebe09c7e7f5
+  branch: master
+  specs:
+    cocoapods-trunk (0.0.1)
+      json (~> 1.8)
+      nap (>= 0.6)
+      netrc
+
+GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 0dff2c697f487bf1b3b3ecf21deefa99020b948e
+  revision: 87294fd83feda93ec242270c452ce8f025429778
   branch: master
   specs:
     cocoapods-try (0.2.0)
@@ -62,6 +72,7 @@ PATH
       cocoapods-core (= 0.32.1)
       cocoapods-downloader (~> 0.5.0)
       cocoapods-plugins (~> 0.1.0)
+      cocoapods-trunk (~> 0.0.1)
       cocoapods-try (~> 0.2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -97,6 +108,7 @@ GEM
     github-markup (1.2.1)
       posix-spawn (~> 0.3.8)
     i18n (0.6.4)
+    json (1.8.1)
     json_pure (1.8.1)
     kicker (3.0.0)
       listen (~> 1.3.0)
@@ -114,6 +126,7 @@ GEM
       mocha (>= 0.13.0)
     multi_json (1.9.2)
     nap (0.7.0)
+    netrc (0.7.7)
     notify (0.5.2)
     open4 (1.3.3)
     posix-spawn (0.3.8)
@@ -163,6 +176,7 @@ DEPENDENCIES
   cocoapods-core!
   cocoapods-downloader!
   cocoapods-plugins!
+  cocoapods-trunk!
   cocoapods-try!
   coveralls
   diffy
