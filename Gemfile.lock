@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 071a5df7b602c23be527a10cc8df4c415bd5cf2f
+  revision: dc0824a1d7a03dc67b9e3dbfccdd4992241ddc0b
   branch: master
   specs:
-    claide (0.6.0)
+    claide (0.6.1)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
@@ -27,7 +27,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: c1e2527f5134ec4662f7e66bd5b720f3951cb067
+  revision: 3075d0aa20246f99718cfe7ef22b4c7c4230dc95
   branch: master
   specs:
     cocoapods-downloader (0.6.0)
