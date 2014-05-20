@@ -42,10 +42,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 19032d81ab9cf9477bdb92d1bd8d68daa8d8821d
+  revision: 951bb3baf2c26aa5b0e3dd4b472271cf5a45b954
   branch: master
   specs:
-    cocoapods-trunk (0.1.0)
+    cocoapods-trunk (0.1.1)
       json (~> 1.8)
       nap (>= 0.6)
       netrc
@@ -72,7 +72,7 @@ PATH
       cocoapods-core (= 0.33.0)
       cocoapods-downloader (~> 0.6.1)
       cocoapods-plugins (~> 0.2.0)
-      cocoapods-trunk (~> 0.1.0)
+      cocoapods-trunk (~> 0.1.1)
       cocoapods-try (~> 0.3.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
