@@ -12,6 +12,7 @@ module Pod
     it "complains if it can't find the repo" do
       Dir.chdir(fixture('banana-lib')) do
         cmd = command('repo', 'push', 'missing_repo')
+        cmd.expects(:check_if_master_repo)
         cmd.expects(:validate_podspec_files).returns(true)
         e = lambda { cmd.run }.should.raise Informative
         e.message.should.match(/repo not found/)
@@ -62,6 +63,15 @@ module Pod
       File.open(temporary_directory + 'JSONKit.podspec',  'w') {|f| f.write(spec_fix) }
       File.open(temporary_directory + 'PushTest.podspec', 'w') {|f| f.write(spec_add) }
       File.open(temporary_directory + 'BananaLib.podspec', 'w') {|f| f.write(spec_clean) }
+    end
+
+    it "refuses to push if the repo is not clean" do
+      Dir.chdir(test_repo_path) do
+        `git remote set-url origin https://github.com/CocoaPods/Specs.git`
+      end
+      cmd = command('repo', 'push', 'master')
+      e = lambda { cmd.run }.should.raise Pod::Informative
+      e.message.should.match(/use the `pod trunk push` command/)
     end
 
     it "refuses to push if the repo is not clean" do

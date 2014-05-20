@@ -35,12 +35,10 @@ module Pod
         def validate!
           super
           help! "A spec-repo name is required." unless @repo
-          if @repo == 'master'
-            help! "To push to the master repo use the `pod trunk push` command"
-          end
         end
 
         def run
+          check_if_master_repo
           validate_podspec_files
           check_repo_status
           update_repo
@@ -56,6 +54,29 @@ module Pod
 
         extend Executable
         executable :git
+
+        # Temporary check to ensure that users do not push accidentally private
+        # specs to the master repo.
+        #
+        def check_if_master_repo
+          remotes = Dir.chdir(repo_dir) { `git remote -v 2>&1` }
+          master_repo_urls = [
+            'git@github.com:CocoaPods/Specs.git',
+            'https://github.com/CocoaPods/Specs.git',
+          ]
+          is_master_repo = master_repo_urls.any? do |url|
+            remotes.include?(url)
+          end
+
+          if is_master_repo
+            raise Informative, "To push to the CocoaPods master repo use " \
+              "the `pod trunk push` command.\n\nIf you are using a fork of " \
+              "the master repo for private purposes we recommend to migrate " \
+              "to a clean private repo. To disable this check remove the " \
+              "remote pointing to the CocoaPods master repo."
+          end
+        end
+
 
         # Performs a full lint against the podspecs.
         #
