@@ -2,13 +2,21 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+## 0.33.1
 
 ##### Bug Fixes
 
 * Fix `pod spec lint` for `json` podspecs.  
   [Fabio Pelosin][irrationalfab]
   [#2157](https://github.com/CocoaPods/CocoaPods/issues/2157)
+
+* Fixed downloader issues related to `json` podspecs.  
+  [Fabio Pelosin][irrationalfab]
+  [#2158](https://github.com/CocoaPods/CocoaPods/issues/2158)
+
+* Fixed `--no-ansi` flag in help banners.  
+  [Fabio Pelosin][irrationalfab]
+  [#34](https://github.com/CocoaPods/CLAide/issues/34)
 
 ## 0.33.0
 
