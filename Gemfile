@@ -17,7 +17,7 @@ group :development do
   gem 'cocoapods-trunk',      :git => 'https://github.com/CocoaPods/cocoapods-trunk.git', :branch => 'master'
 
   gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
-  gem "mocha"
+  gem "mocha", '~> 1.0.0'   # Issues with Ruby 2.0.0 on Travis
   gem "bacon"
   gem "mocha-on-bacon"
   gem 'prettybacon'

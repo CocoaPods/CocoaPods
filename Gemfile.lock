@@ -120,7 +120,7 @@ GEM
     metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (1.25.1)
-    mocha (1.1.0)
+    mocha (1.0.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
@@ -184,7 +184,7 @@ DEPENDENCIES
   i18n (= 0.6.4)
   kicker
   mime-types (< 2)
-  mocha
+  mocha (~> 1.0.0)
   mocha-on-bacon
   prettybacon
   pry
