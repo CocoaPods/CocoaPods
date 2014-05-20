@@ -6,7 +6,8 @@ Fetching external sources
 
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `Pods' (iOS 6.0)
-  - Test (from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`)
+  - Test (from
+  `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`)
     - Test/Foo
 
 Comparing resolved specification to the sandbox manifest
