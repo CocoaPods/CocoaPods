@@ -6,6 +6,6 @@ DEPENDENCIES:
   - Reachability (= 3.1.0)
 
 SPEC CHECKSUMS:
-  Reachability: 308e359ab9edc0992ae7881b7f631a8c34a51f16
+  Reachability: 14a77fa94dd71d434503d2d550d1881fb00a5d86
 
 COCOAPODS: 0.33.0

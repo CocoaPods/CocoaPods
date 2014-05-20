@@ -7,7 +7,8 @@ Fetching external sources
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `Pods' (iOS 6.0)
   - Test (from
-  `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`)
+  `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87
+  304d0cda5e8b6afbe702e1dab55392/Test.spec`)
     - Test/Foo
 
 Comparing resolved specification to the sandbox manifest
@@ -25,8 +26,11 @@ Downloading dependencies
      $ /usr/local/bin/git remote update
      Fetching origin
  > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/ac2e144ba86f0bc59ac0f1d79e724d89f220e1b6
-     ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test
+     $ /usr/local/bin/git clone
+     CACHES_DIR/GitHub/ac2e144ba86f0bc59ac0f1d79e724d89f220e1b
+     6
+     ROOT/tmp/install_subsp
+     ecs_no_duplicate_prefix/Pods/Test
      Cloning into 'ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test'...
      done.
   - Running pre install hooks

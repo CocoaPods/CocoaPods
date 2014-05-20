@@ -5,13 +5,15 @@ Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
    $ /usr/local/bin/hg clone PodTest-hg-source
-   ROOT/tmp/install_subspecs/Pods/PodTest
+   ROOT/tmp/install_subspec
+   s/Pods/PodTest
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
    $ /usr/local/bin/hg clone PodTest-hg-source
-   ROOT/tmp/install_subspecs/Pods/PodTest
+   ROOT/tmp/install_subspec
+   s/Pods/PodTest
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 

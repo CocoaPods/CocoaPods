@@ -22,8 +22,11 @@ Downloading dependencies
    $ /usr/local/bin/git rev-list --max-count=1 v3.1.0
    f7176f4798d068d233dca5223ae4bd9c8059e830
  > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
-     ROOT/tmp/install_custom_workspace/Pods/Reachability
+     $ /usr/local/bin/git clone
+     CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab
+     6
+     ROOT/tmp/install_custo
+     m_workspace/Pods/Reachability
      Cloning into 'ROOT/tmp/install_custom_workspace/Pods/Reachability'...
      done.
    $ /usr/local/bin/git fetch origin tags/v3.1.0 2>&1
@@ -47,14 +50,16 @@ Generating Pods project
       - Adding Build files
       - Adding resource bundles to Pods project
       - Generating public xcconfig file at `Pods/Pods-SampleApp_1-Reachability.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-SampleApp_1-Reachability-Private.xcconfig`
+      - Generating private xcconfig file at
+      `Pods/Pods-SampleApp_1-Reachability-Private.xcconfig`
       - Generating prefix header at `Pods/Pods-SampleApp_1-Reachability-prefix.pch`
       - Generating dummy source file at `Pods/Pods-SampleApp_1-Reachability-dummy.m`
     - Installing target `Pods-SampleApp_2-Reachability` iOS 6.0
       - Adding Build files
       - Adding resource bundles to Pods project
       - Generating public xcconfig file at `Pods/Pods-SampleApp_2-Reachability.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-SampleApp_2-Reachability-Private.xcconfig`
+      - Generating private xcconfig file at
+      `Pods/Pods-SampleApp_2-Reachability-Private.xcconfig`
       - Generating prefix header at `Pods/Pods-SampleApp_2-Reachability-prefix.pch`
       - Generating dummy source file at `Pods/Pods-SampleApp_2-Reachability-dummy.m`
     - Installing target `Pods-SampleApp_1` iOS 6.0

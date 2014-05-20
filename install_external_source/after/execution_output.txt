@@ -5,7 +5,8 @@ Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
    $ /usr/local/bin/hg clone PodTest-hg-source
-   ROOT/tmp/install_external_source/Pods/PodTest
+   ROOT/tmp/install_externa
+   l_source/Pods/PodTest
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 

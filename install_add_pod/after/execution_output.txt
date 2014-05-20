@@ -12,7 +12,7 @@ Resolving dependencies for target `Pods' (iOS 6.0)
 
 Comparing resolved specification to the sandbox manifest
   A JSONKit
-  - Reachability
+  M Reachability
 
 Downloading dependencies
 
@@ -25,14 +25,40 @@ Downloading dependencies
    $ /usr/local/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
    0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
  > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f
-     ROOT/tmp/install_add_pod/Pods/JSONKit
+     $ /usr/local/bin/git clone
+     CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900
+     f
+     ROOT/tmp/install_add_p
+     od/Pods/JSONKit
      Cloning into 'ROOT/tmp/install_add_pod/Pods/JSONKit'...
      done.
-   $ /usr/local/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
+   $ /usr/local/bin/git checkout -b activated-pod-commit
+   0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
    Switched to a new branch 'activated-pod-commit'
 
--> Using Reachability (3.1.0)
+-> Installing Reachability (3.1.0)
+ > GitHub download
+   $ /usr/local/bin/git config core.bare
+   true
+   $ /usr/local/bin/git config core.bare
+   true
+   $ /usr/local/bin/git rev-list --max-count=1 v3.1.0
+   f7176f4798d068d233dca5223ae4bd9c8059e830
+ > Cloning to Pods folder
+     $ /usr/local/bin/git clone
+     CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab
+     6
+     ROOT/tmp/install_add_p
+     od/Pods/Reachability
+     Cloning into 'ROOT/tmp/install_add_pod/Pods/Reachability'...
+     done.
+   $ /usr/local/bin/git fetch origin tags/v3.1.0 2>&1
+   From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+    * tag               v3.1.0     -> FETCH_HEAD
+   $ /usr/local/bin/git reset --hard FETCH_HEAD
+   HEAD is now at f7176f4 updated podspec
+   $ /usr/local/bin/git checkout -b activated-pod-commit 2>&1
+   Switched to a new branch 'activated-pod-commit'
   - Running pre install hooks
 
 Generating Pods project
