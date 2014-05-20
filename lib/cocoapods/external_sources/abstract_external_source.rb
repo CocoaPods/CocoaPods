@@ -67,7 +67,8 @@ module Pod
       #         relative to the file system.
       #
       def normalized_podspec_path(declared_path)
-        if File.extname(declared_path) == '.podspec'
+        extension = File.extname(declared_path)
+        if extension == '.podspec' || extension == '.json'
           path_with_ext = declared_path
         else
           path_with_ext = "#{declared_path}/#{name}.podspec"
@@ -130,8 +131,8 @@ module Pod
       #
       # @return [void]
       #
-      def store_podspec(sandbox, spec)
-        sandbox.store_podspec(name, spec, true)
+      def store_podspec(sandbox, spec, json = false)
+        sandbox.store_podspec(name, spec, true, json)
       end
     end
   end

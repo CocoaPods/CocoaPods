@@ -11,8 +11,9 @@ module Pod
       def fetch(sandbox)
         title = "Fetching podspec for `#{name}` #{description}"
         UI.titled_section(title, { :verbose_prefix => "-> " }) do
+          is_json = podspec_uri.split('.').last == 'json'
           require 'open-uri'
-          open(podspec_uri) { |io| store_podspec(sandbox, io.read) }
+          open(podspec_uri) { |io| store_podspec(sandbox, io.read, is_json) }
         end
       end
 

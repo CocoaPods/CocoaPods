@@ -2,6 +2,14 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+##### Bug Fixes
+
+* Fix `pod spec lint` for `json` podspecs.  
+  [Fabio Pelosin][irrationalfab]
+  [#2157](https://github.com/CocoaPods/CocoaPods/issues/2157)
+
 ## 0.33.0
 
 ##### Breaking

@@ -217,7 +217,16 @@ module Pod
     #
     def specification_path(name)
       path = specifications_dir + "#{name}.podspec"
-      path.exist? ? path : nil
+      if path.exist?
+        path
+      else
+        path = specifications_dir + "#{name}.podspec.json"
+        if path.exist?
+          path
+        else
+          nil
+        end
+      end
     end
 
     # Stores a specification in the `Local Podspecs` folder.
@@ -232,8 +241,9 @@ module Pod
     # @todo   Store all the specifications (including those not originating
     #         from external sources) so users can check them.
     #
-    def store_podspec(name, podspec, external_source = false)
-      output_path = specifications_dir(external_source) + "#{name}.podspec"
+    def store_podspec(name, podspec, external_source = false, json = false)
+      file_name = json ? "#{name}.podspec.json" : "#{name}.podspec"
+      output_path = specifications_dir(external_source) + file_name
       output_path.dirname.mkpath
       if podspec.is_a?(String)
         output_path.open('w') { |f| f.puts(podspec) }
