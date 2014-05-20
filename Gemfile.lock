@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: c8532fa4cb8a4a225436fb11d672ec1f6ab5cd23
+  revision: 071a5df7b602c23be527a10cc8df4c415bd5cf2f
   branch: master
   specs:
     claide (0.6.0)
@@ -34,15 +34,15 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 413e7ba6c956f798af05db4aa66941c010a1517b
+  revision: f03cfe8c39172ba1dd9b714a91e04e79a68d0711
   branch: master
   specs:
-    cocoapods-plugins (0.1.1)
+    cocoapods-plugins (0.2.0)
       nap
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: b1ffdd2f574cceddadf2b123ed7d3656ae68ff57
+  revision: 19032d81ab9cf9477bdb92d1bd8d68daa8d8821d
   branch: master
   specs:
     cocoapods-trunk (0.1.0)
@@ -59,7 +59,7 @@ GIT
 
 GIT
   remote: https://github.com/ruby-prof/ruby-prof.git
-  revision: 7282ba9a3c72de827830aebfe2c3ca41ab6840f9
+  revision: 84f086b5ecb02cf8f077acc537cadc639ccf2520
   specs:
     ruby-prof (0.15.1)
 
@@ -71,7 +71,7 @@ PATH
       claide (~> 0.6.0)
       cocoapods-core (= 0.32.1)
       cocoapods-downloader (~> 0.6.0)
-      cocoapods-plugins (~> 0.1.0)
+      cocoapods-plugins (~> 0.2.0)
       cocoapods-trunk (~> 0.1.0)
       cocoapods-try (~> 0.3.0)
       colored (~> 1.2)
@@ -124,7 +124,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    multi_json (1.10.0)
+    multi_json (1.10.1)
     nap (0.7.0)
     netrc (0.7.7)
     notify (0.5.2)
