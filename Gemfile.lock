@@ -42,7 +42,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 951bb3baf2c26aa5b0e3dd4b472271cf5a45b954
+  revision: fa7230a543bbb4861d70d388d58552d1326dd39b
   branch: master
   specs:
     cocoapods-trunk (0.1.1)
