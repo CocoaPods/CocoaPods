@@ -10,13 +10,15 @@ module Pod
         self.summary = 'Creates a new Pod'
 
         self.description = <<-DESC
-          Creates a scaffold for the development of a new Pod according to the CocoaPods best practices.
-          If a `TEMPLATE_URL`, pointing to a git repo containing a compatible template, is specified, it will be used in place of the default one.
+          Creates a scaffold for the development of a new Pod named `NAME`
+          according to the CocoaPods best practices.
+          If a `TEMPLATE_URL`, pointing to a git repo containing a compatible
+          template, is specified, it will be used in place of the default one.
         DESC
 
         self.arguments = [
-            ['NAME',         :required],
-            ['TEMPLATE_URL', :optional]
+            CLAide::Argument['NAME', true],
+            CLAide::Argument['TEMPLATE_URL', false]
         ]
 
         def initialize(argv)

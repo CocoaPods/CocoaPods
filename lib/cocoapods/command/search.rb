@@ -10,7 +10,7 @@ module Pod
       DESC
 
       self.arguments = [
-          ['QUERY', :required]
+          CLAide::Argument['QUERY', true]
       ]
 
       def self.options

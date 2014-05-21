@@ -19,7 +19,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME | https://github.com/USER/REPO', :optional]
+            CLAide::Argument[%w(NAME https://github.com/USER/REPO), false]
         ]
 
         def initialize(argv)
@@ -59,7 +59,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME.podspec | DIRECTORY | http://PATH/NAME.podspec, ...', :optional]
+            CLAide::Argument[%w(NAME.podspec DIRECTORY http://PATH/NAME.podspec ...'), false]
         ]
 
         def self.options
@@ -153,7 +153,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME', :optional]
+            CLAide::Argument['NAME', false]
         ]
 
         def self.options
@@ -187,7 +187,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME', :optional]
+            CLAide::Argument['NAME', false]
         ]
 
         def self.options
@@ -229,7 +229,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME', :optional]
+            CLAide::Argument['NAME', false]
         ]
 
         def self.options
