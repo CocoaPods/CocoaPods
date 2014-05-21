@@ -59,7 +59,8 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new(%w(NAME.podspec DIRECTORY http://PATH/NAME.podspec ...), false)
+          CLAide::Argument.new(%w(NAME.podspec DIRECTORY http://PATH/NAME.podspec), false),
+          CLAide::Argument.ellipsis
         ]
 
         def self.options
