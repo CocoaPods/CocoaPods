@@ -2,6 +2,13 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+* Fixed `pod outdated` to not include subspecs.
+  [Ash Furrow](ashfurrow]
+  [#2136](https://github.com/CocoaPods/CocoaPods/issues/2136)
+
+
 ## 0.33.1
 
 ##### Bug Fixes
