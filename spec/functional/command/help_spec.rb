@@ -15,7 +15,8 @@ module Pod
     end
 
     it "shows the right usage" do
-      Pod::Command::Help.arguments.should.equal [['COMMAND', :optional]]
+      args = [CLAide::Argument.new('COMMAND', false)]
+      Pod::Command::Help.arguments.should.equal args
     end
 
   end

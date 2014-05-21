@@ -15,8 +15,8 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument['REPO', true],
-            CLAide::Argument['NAME.podspec', false]
+            CLAide::Argument.new('REPO', true),
+            CLAide::Argument.new('NAME.podspec', false)
         ]
 
         def self.options

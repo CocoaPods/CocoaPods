@@ -16,7 +16,7 @@ module Pod
         self.summary = 'Converts a podspec to JSON.'
         self.description = 'Converts a podspec to JSON and prints it to STDOUT.'
         self.arguments = [
-            CLAide::Argument['PATH', true]
+            CLAide::Argument.new('PATH', true)
         ]
 
         def initialize(argv)
@@ -43,7 +43,7 @@ module Pod
         self.summary = 'Converts a Podfile to YAML.'
         self.description = 'Converts a Podfile to YAML and prints it to STDOUT.'
         self.arguments = [
-            CLAide::Argument['PATH', true]
+            CLAide::Argument.new('PATH', true)
         ]
 
         def initialize(argv)

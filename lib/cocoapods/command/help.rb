@@ -3,7 +3,7 @@ module Pod
     class Help < Command
       self.summary = 'Show help for the given command.'
       self.arguments = [
-          CLAide::Argument['COMMAND', false]
+          CLAide::Argument.new('COMMAND', false)
       ]
 
       def initialize(argv)

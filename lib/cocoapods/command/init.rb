@@ -18,7 +18,7 @@ module Pod
         `~/.cocoapods/templates` folder.
       DESC
       self.arguments = [
-          CLAide::Argument['XCODEPROJ', :false]
+          CLAide::Argument.new('XCODEPROJ', :false)
       ]
 
       def initialize(argv)

@@ -87,7 +87,7 @@ module Pod
       DESC
 
       self.arguments = [
-          CLAide::Argument['POD_NAMES...', false]
+          CLAide::Argument.new('POD_NAMES...', false)
       ]
 
       def initialize(argv)
