@@ -18,6 +18,23 @@ module Pod
       end
     end
 
+    it 'tells the user only about podspecs that have no parent' do
+      spec = Specification.new(nil, 'BlocksKit')
+      subspec = Specification.new(spec, 'UIKit')
+      set = mock
+      set.stubs(:versions).returns(['2.0'])
+      set.stubs(:specification).returns(spec)
+      subset = mock
+      subset.stubs(:specification).returns(subspec)
+      subset.stubs(:versions).returns(['2.0'])
+      version = mock
+      version.stubs(:version).returns('1.0')
+      Command::Outdated.any_instance.stubs(:spec_sets).returns([set, subset])
+      Command::Outdated.any_instance.stubs(:lockfile).returns(version)
+      run_command('outdated', '--no-repo-update')
+      UI.output.should.not.include('UIKit')
+    end
+
     it 'tells the user about deprecated pods' do
       spec = Specification.new(nil, 'AFNetworking')
       spec.deprecated_in_favor_of = 'BlocksKit'

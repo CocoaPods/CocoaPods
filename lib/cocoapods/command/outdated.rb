@@ -56,7 +56,7 @@ module Pod
           spec_sets.map do |set|
             spec = set.specification
             source_version = set.versions.first
-            pod_name = spec.name
+            pod_name = spec.root.name
             lockfile_version = lockfile.version(pod_name)
             if source_version > lockfile_version
               [pod_name, lockfile_version, source_version]
