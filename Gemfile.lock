@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: dc0824a1d7a03dc67b9e3dbfccdd4992241ddc0b
-  branch: master
+  revision: c6441fe2b6bf8773e730e02a426bacd6fc2a38b2
+  branch: CLAide-Argument
   specs:
     claide (0.6.1)
 
@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 0d910d0f7ff7f83f12c79cb3ac8b4a2c568d2460
+  revision: 46542abf3e1a835e7862feff57e3e14a89e70dbc
   branch: master
   specs:
     xcodeproj (0.17.0)
@@ -34,16 +34,16 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: f03cfe8c39172ba1dd9b714a91e04e79a68d0711
-  branch: master
+  revision: 84c1da50be78efcca2c420876bedf46d05de093e
+  branch: CLAide-Argument
   specs:
     cocoapods-plugins (0.2.0)
       nap
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: fa7230a543bbb4861d70d388d58552d1326dd39b
-  branch: master
+  revision: 0a0d001230b8caa9a568a502422b5c5860d0c328
+  branch: CLAide-Argument
   specs:
     cocoapods-trunk (0.1.1)
       json (~> 1.8)
@@ -52,8 +52,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 40d716f925e7b9c3f014b93a0a78d7bf94e9a0b3
-  branch: master
+  revision: fbdccaede69bb9a30195e92f050225bda0c5fb3a
+  branch: CLAide-Argument
   specs:
     cocoapods-try (0.3.0)
 
