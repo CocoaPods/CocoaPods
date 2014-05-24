@@ -79,14 +79,15 @@ module Pod
       self.summary = 'Update outdated project dependencies'
 
       self.description = <<-DESC
-        Updates the Pods identified by the specified POD_NAMES. If no POD_NAMES are
-        specified it updates all the Pods ignoring the contents of the Podfile.lock.
-        This command is reserved to the update of dependencies and pod install should
-        be used to install changes to the Podfile.
+        Updates the Pods identified by the specified `POD_NAMES`. If no
+        `POD_NAMES` are specified it updates all the Pods ignoring the contents
+        of the Podfile.lock.
+        This command is reserved to the update of dependencies and pod install
+        should be used to install changes to the Podfile.
       DESC
 
       self.arguments = [
-          ['POD_NAMES...', :optional]
+        CLAide::Argument.new('POD_NAMES', false, true),
       ]
 
       def initialize(argv)

@@ -19,9 +19,9 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME',   :required],
-            ['URL',    :required],
-            ['BRANCH', :optional]
+            CLAide::Argument.new('NAME',   true),
+            CLAide::Argument.new('URL',    true),
+            CLAide::Argument.new('BRANCH', false)
         ]
 
         def self.options
@@ -69,7 +69,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME', :optional]
+            CLAide::Argument.new('NAME', false)
         ]
 
         def initialize(argv)
@@ -94,7 +94,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME | DIRECTORY', :optional]
+            CLAide::Argument.new(%w(NAME DIRECTORY), false)
         ]
 
         def self.options
@@ -162,7 +162,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME', :required]
+            CLAide::Argument.new('NAME', true)
         ]
 
         def initialize(argv)

@@ -19,7 +19,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME | https://github.com/USER/REPO', :optional]
+            CLAide::Argument.new(%w(NAME https://github.com/USER/REPO), false)
         ]
 
         def initialize(argv)
@@ -53,13 +53,13 @@ module Pod
         self.summary = 'Validates a spec file.'
 
         self.description = <<-DESC
-          Validates `NAME.podspec'. If a directory is provided it validates
+          Validates `NAME.podspec`. If a `DIRECTORY` is provided, it validates
           the podspec files found, including subfolders. In case
           the argument is omitted, it defaults to the current working dir.
         DESC
 
         self.arguments = [
-            ['NAME.podspec | DIRECTORY | http://PATH/NAME.podspec, ...', :optional]
+          CLAide::Argument.new(%w(NAME.podspec DIRECTORY http://PATH/NAME.podspec), false, true),
         ]
 
         def self.options
@@ -153,7 +153,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME', :optional]
+            CLAide::Argument.new('NAME', false)
         ]
 
         def self.options
@@ -187,7 +187,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME', :optional]
+            CLAide::Argument.new('NAME', false)
         ]
 
         def self.options
@@ -229,7 +229,7 @@ module Pod
         DESC
 
         self.arguments = [
-            ['NAME', :optional]
+            CLAide::Argument.new('NAME', false)
         ]
 
         def self.options
