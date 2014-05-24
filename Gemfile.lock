@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: c6441fe2b6bf8773e730e02a426bacd6fc2a38b2
-  branch: CLAide-Argument
+  revision: c25117279c38d6fc0ed289e5ad946e1b225eb30f
+  branch: master
   specs:
     claide (0.6.1)
 
@@ -27,33 +27,33 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 6b2fbda4342ced96df16a55dfa907636dc366b53
+  revision: 2ae40775be20a4e49b8662f47007ac7480aa7171
   branch: master
   specs:
     cocoapods-downloader (0.6.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 84c1da50be78efcca2c420876bedf46d05de093e
-  branch: CLAide-Argument
+  revision: c38ce91f94a426109ffaa76d1317afd4a7e7b7c5
+  branch: master
   specs:
     cocoapods-plugins (0.2.0)
       nap
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 0a0d001230b8caa9a568a502422b5c5860d0c328
-  branch: CLAide-Argument
+  revision: 7489b03f144b9659ae0457bcdafc35f701a6775b
+  branch: master
   specs:
-    cocoapods-trunk (0.1.1)
-      json (~> 1.8)
+    cocoapods-trunk (0.1.3)
+      json_pure (~> 1.8)
       nap (>= 0.6)
       netrc
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
   revision: fbdccaede69bb9a30195e92f050225bda0c5fb3a
-  branch: CLAide-Argument
+  branch: master
   specs:
     cocoapods-try (0.3.0)
 
@@ -108,7 +108,6 @@ GEM
     github-markup (1.2.1)
       posix-spawn (~> 0.3.8)
     i18n (0.6.4)
-    json (1.8.1)
     json_pure (1.8.1)
     kicker (3.0.0)
       listen (~> 1.3.0)

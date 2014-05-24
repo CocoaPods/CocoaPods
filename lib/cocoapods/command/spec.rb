@@ -53,7 +53,7 @@ module Pod
         self.summary = 'Validates a spec file.'
 
         self.description = <<-DESC
-          Validates `NAME.podspec`. If a directory is provided it validates
+          Validates `NAME.podspec`. If a `DIRECTORY` is provided, it validates
           the podspec files found, including subfolders. In case
           the argument is omitted, it defaults to the current working dir.
         DESC
