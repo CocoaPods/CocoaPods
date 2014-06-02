@@ -40,6 +40,14 @@ Repositories : repo_1
                repo_2
 ```
 
+### Plugins
+
+```
+cocoapods         : #{Pod::VERSION}
+cocoapods-core    : #{Pod::VERSION}
+cocoapods-plugins : 1.2.3
+```
+
 ### Podfile
 
 ```ruby
@@ -78,6 +86,11 @@ EOS
         @report.stubs(:host_information).returns(':host_information')
         @report.stubs(:xcode_information).returns(':xcode_information')
         @report.stubs(:repo_information).returns(%w(repo_1 repo_2))
+        @report.stubs(:installed_plugins).returns({
+                                                    'cocoapods' => Pod::VERSION,
+                                                    'cocoapods-core' => Pod::VERSION,
+                                                    'cocoapods-plugins' => '1.2.3'
+                                                  })
         report = remove_color(@report.report(@exception))
         report.should == expected
       end

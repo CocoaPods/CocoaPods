@@ -32,6 +32,12 @@ module Pod
 Ruby lib dir : #{RbConfig::CONFIG['libdir']}
 Repositories : #{repo_information.join("\n               ")}
 ```
+
+### Plugins
+
+```
+#{plugins_string}
+```
 #{markdown_podfile}
 ### Error
 
@@ -97,6 +103,19 @@ EOS
         def xcode_information
           version, build = `xcodebuild -version`.strip.split("\n").map { |line| line.split(' ').last }
           "#{version} (#{build})"
+        end
+
+        def installed_plugins
+          CLAide::Command::PluginsHelper.specifications.
+            reduce({}) { |hash, s| hash.tap { |h| h[s.name] = s.version.to_s } }
+        end
+
+        def plugins_string
+          plugins = installed_plugins
+          max_name_length = plugins.keys.map(&:length).max
+          plugins.map do |name, version|
+            "#{name.ljust(max_name_length)} : #{version}"
+          end.sort.join("\n")
         end
 
         def repo_information
