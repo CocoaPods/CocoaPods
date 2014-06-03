@@ -12,7 +12,7 @@ module Pod
       GLOB_PATTERNS = {
         :readme              => 'readme{*,.*}'.freeze,
         :license             => 'licen{c,s}e{*,.*}'.freeze,
-        :source_files        => '*.{h,hpp,hh,m,mm,c,cpp}'.freeze,
+        :source_files        => '*.{h,hpp,hh,m,mm,c,cpp,swift}'.freeze,
         :public_header_files => "*{#{HEADER_EXTENSIONS.join(',')}}".freeze,
       }.freeze
 
