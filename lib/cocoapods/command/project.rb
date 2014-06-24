@@ -46,7 +46,7 @@ module Pod
     class Install < Command
       include Project
 
-      self.summary = 'Install project dependencies'
+      self.summary = 'Install project dependencies to Podfile.lock versions'
 
       self.description = <<-DESC
         Downloads all dependencies defined in `Podfile` and creates an Xcode
@@ -76,7 +76,7 @@ module Pod
     class Update < Command
       include Project
 
-      self.summary = 'Update outdated project dependencies'
+      self.summary = 'Update outdated project dependencies and create new Podfile.lock'
 
       self.description = <<-DESC
         Updates the Pods identified by the specified `POD_NAMES`. If no
