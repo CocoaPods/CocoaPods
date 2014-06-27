@@ -13,6 +13,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Ash Furrow](ashfurrow]
   [#2136](https://github.com/CocoaPods/CocoaPods/issues/2136)
 
+* Always evaluate podspecs from the original podspec directory. This fixes
+  issues when you are using relative paths inside ruby podspecs and using a
+  pod's via `:path`.  
+  [Kyle Fuller](kylef)
+  [pod-template#50](https://github.com/CocoaPods/pod-template/issues/50)
+
 
 ## 0.33.1
 

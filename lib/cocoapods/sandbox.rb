@@ -191,7 +191,8 @@ module Pod
     #
     def specification(name)
       if file = specification_path(name)
-        Specification.from_file(file)
+        original_path = development_pods[name]
+        Dir.chdir(original_path || Dir.pwd) { Specification.from_file(file) }
       end
     end
 
@@ -253,9 +254,13 @@ module Pod
         end
         FileUtils.copy(podspec, output_path)
       end
-      spec = Specification.from_file(output_path)
-      unless spec.name == name
-        raise Informative, "The name of the given podspec `#{spec.name}` doesn't match the expected one `#{name}`"
+
+      Dir.chdir(podspec.is_a?(Pathname) ? File.dirname(podspec) : Dir.pwd) do
+        spec = Specification.from_file(output_path)
+
+        unless spec.name == name
+          raise Informative, "The name of the given podspec `#{spec.name}` doesn't match the expected one `#{name}`"
+        end
       end
     end
 

@@ -107,6 +107,18 @@ module Pod
         @sandbox.specification('BananaLib').name.should == 'BananaLib'
       end
 
+      it "loads the stored specification from the original path" do
+        spec_file = fixture('banana-lib/BananaLib.podspec')
+        spec = Specification.from_file(spec_file)
+        Specification.expects(:from_file).with do
+          Dir.pwd == fixture('banana-lib').to_s
+        end.twice.returns(spec)
+
+        @sandbox.store_podspec('BananaLib', spec_file)
+        @sandbox.store_local_path('BananaLib', fixture('banana-lib'))
+        @sandbox.specification('BananaLib')
+      end
+
       it "returns the directory where to store the specifications" do
         @sandbox.specifications_dir.should == temporary_directory + 'Sandbox/Local Podspecs'
       end
