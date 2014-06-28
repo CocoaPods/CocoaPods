@@ -115,5 +115,31 @@ module Pod
         consumer_reps.should == [['BananaLib', :ios]]
       end
     end
+
+    describe 'Product type dependent helpers' do
+      describe 'With libraries' do
+        before do
+          @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+          @target = AggregateTarget.new(@pod_target.target_definition, config.sandbox)
+          @target.pod_targets = [@pod_target]
+        end
+
+        it 'returns that it does not use swift' do
+          @target.uses_swift?.should == false
+        end
+      end
+
+      describe 'With frameworks' do
+        before do
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec')
+          @target = AggregateTarget.new(@pod_target.target_definition, config.sandbox)
+          @target.pod_targets = [@pod_target]
+        end
+
+        it 'returns that it uses swift' do
+          @target.uses_swift?.should == true
+        end
+      end
+    end
   end
 end
