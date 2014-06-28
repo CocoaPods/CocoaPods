@@ -96,5 +96,27 @@ module Pod
       end
     end
 
+    describe 'Product type dependent helpers' do
+      describe 'With libraries' do
+        before do
+          @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+        end
+
+        it 'returns that it does not use swift' do
+          @pod_target.uses_swift?.should == false
+        end
+      end
+
+      describe 'With frameworks' do
+        before do
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec')
+        end
+
+        it 'returns that it uses swift' do
+          @pod_target.uses_swift?.should == true
+        end
+      end
+    end
+
   end
 end
