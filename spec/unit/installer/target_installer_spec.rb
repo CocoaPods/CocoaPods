@@ -32,7 +32,7 @@ module Pod
     it 'adds the architectures to the custom build configurations of the user target' do
       @pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
       @installer.send(:add_target)
-      @installer.send(:target).resolved_build_setting('ARCHS').should == {
+      @installer.send(:native_target).resolved_build_setting('ARCHS').should == {
         'Release' => '$(ARCHS_STANDARD_64_BIT)',
         'Debug' => '$(ARCHS_STANDARD_64_BIT)',
         'AppStore' => '$(ARCHS_STANDARD_64_BIT)',

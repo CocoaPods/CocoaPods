@@ -43,7 +43,7 @@ module Pod
       # @return [void]
       #
       def create_xcconfig_file
-        target.build_configurations.each do |configuration|
+        native_target.build_configurations.each do |configuration|
           path = library.xcconfig_path(configuration.name)
           gen = Generator::XCConfig::AggregateXCConfig.new(library, configuration.name)
           gen.save_as(path)
@@ -74,7 +74,7 @@ module Pod
       def create_bridge_support_file
         if target_definition.podfile.generate_bridge_support?
           path = library.bridge_support_path
-          headers = target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }
+          headers = native_target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }
           generator = Generator::BridgeSupport.new(headers)
           generator.save_as(path)
           add_file_to_support_group(path)

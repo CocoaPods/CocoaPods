@@ -39,9 +39,9 @@ module Pod
           all_source_files = file_accessor.source_files
           regular_source_files = all_source_files.reject { |sf| sf.extname == '.d' }
           regular_file_refs = regular_source_files.map { |sf| project.reference_for_path(sf) }
-          target.add_file_references(regular_file_refs, flags)
+          native_target.add_file_references(regular_file_refs, flags)
           other_file_refs = (all_source_files - regular_source_files).map { |sf| project.reference_for_path(sf) }
-          target.add_file_references(other_file_refs, nil)
+          native_target.add_file_references(other_file_refs, nil)
         end
       end
 
@@ -57,7 +57,7 @@ module Pod
           file_accessor.resource_bundles.each do |bundle_name, paths|
             # Add a dependency on an existing Resource Bundle target if possible
             if bundle_target = project.targets.find { |target| target.name == bundle_name }
-              target.add_dependency(bundle_target)
+              native_target.add_dependency(bundle_target)
               next
             end
             file_references = paths.map { |sf| project.reference_for_path(sf) }
@@ -68,7 +68,7 @@ module Pod
               bundle_target.add_build_configuration(bc_name, type)
             end
 
-            target.add_dependency(bundle_target)
+            native_target.add_dependency(bundle_target)
           end
         end
       end
@@ -88,7 +88,7 @@ module Pod
         private_gen.save_as(path)
         xcconfig_file_ref = add_file_to_support_group(path)
 
-        target.build_configurations.each do |c|
+        native_target.build_configurations.each do |c|
           c.base_configuration_reference = xcconfig_file_ref
         end
       end
@@ -106,7 +106,7 @@ module Pod
         generator.save_as(path)
         add_file_to_support_group(path)
 
-        target.build_configurations.each do |c|
+        native_target.build_configurations.each do |c|
           relative_path = path.relative_path_from(project.path.dirname)
           c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
         end
