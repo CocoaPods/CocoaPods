@@ -188,6 +188,7 @@ module Pod
             user_project = Xcodeproj::Project.open(project_path)
             native_targets = compute_user_project_targets(target_definition, user_project)
 
+            target.host_requires_framework |= compute_user_project_targets_require_framework(native_targets)
             target.user_project_path = project_path
             target.client_root = project_path.dirname
             target.user_target_uuids = native_targets.map(&:uuid)
@@ -210,6 +211,7 @@ module Pod
           # Create a target for each spec group and add it to the aggregate target
           grouped_specs.each do |pod_specs|
             pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
+            pod_target.host_requires_framework |= target.host_requires_framework
             if config.integrate_targets?
               pod_target.user_build_configurations = target.user_build_configurations
               pod_target.archs = @archs_by_target_def[target_definition]
@@ -465,6 +467,22 @@ module Pod
       def native_targets(user_project)
         user_project.targets.reject do |target|
           target.is_a? Xcodeproj::Project::Object::PBXAggregateTarget
+        end
+      end
+
+      # Checks if any of the targets for the {TargetDefinition} computed before
+      # by #compute_user_project_targets require to be build as a framework due
+      # the presence of Swift source code in any of the source build phases.
+      #
+      # @param  [Array<PBXNativeTarget>] native_targets
+      #         the targets which are checked for presence of Swift source code
+      #
+      # @return [Boolean] Whether the user project targets to integrate into
+      #         uses Swift
+      #
+      def compute_user_project_targets_require_framework(native_targets)
+        native_targets.any? do |target|
+          target.source_build_phase.files.any? { |f| f.file_ref.last_known_file_type == 'sourcecode.swift' }
         end
       end
 
