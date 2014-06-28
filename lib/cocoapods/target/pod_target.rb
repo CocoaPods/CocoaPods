@@ -41,6 +41,14 @@ module Pod
       specs.map { |spec| spec.consumer(platform) }
     end
 
+    # @return [Boolean] Whether the target uses Swift code
+    #
+    def uses_swift?
+      file_accessors.any? do |file_accessor|
+        file_accessor.source_files.any? { |sf| sf.extname == ".swift" }
+      end
+    end
+
     # @return [Specification] The root specification for the target.
     #
     def root_spec

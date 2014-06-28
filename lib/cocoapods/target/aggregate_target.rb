@@ -96,6 +96,12 @@ module Pod
       specs.map { |spec| spec.consumer(platform) }
     end
 
+    # @return [Boolean] Whether the target uses Swift code
+    #
+    def uses_swift?
+      pod_targets.any?(&:uses_swift?)
+    end
+
     #-------------------------------------------------------------------------#
 
     # @!group Support files
