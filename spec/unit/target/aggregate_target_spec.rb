@@ -127,6 +127,26 @@ module Pod
         it 'returns that it does not use swift' do
           @target.uses_swift?.should == false
         end
+
+        describe 'Host requires frameworks' do
+          before do
+            @target.host_requires_framework = true
+          end
+
+          it 'returns that it requires being built as framework' do
+            @target.requires_framework?.should == true
+          end
+        end
+
+        describe 'Host does not requires frameworks' do
+          it 'returns :static_library as product type' do
+            @target.product_type.should == :static_library
+          end
+
+          it 'returns that it does not require being built as framework' do
+            @target.requires_framework?.should == false
+          end
+        end
       end
 
       describe 'With frameworks' do
@@ -138,6 +158,10 @@ module Pod
 
         it 'returns that it uses swift' do
           @target.uses_swift?.should == true
+        end
+
+        it 'returns that it requires being built as framework' do
+          @target.requires_framework?.should == true
         end
       end
     end

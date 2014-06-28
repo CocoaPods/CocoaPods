@@ -15,6 +15,12 @@ module Pod
     #
     attr_reader :sandbox
 
+    # @return [Boolean] Whether the target needs to be implemented as a framework.
+    #         Computed by analyzer.
+    #
+    attr_accessor :host_requires_framework
+    alias_method :host_requires_framework?, :host_requires_framework
+
     # @return [String] the name of the library.
     #
     def name
@@ -37,6 +43,20 @@ module Pod
     #
     def inspect
       "<#{self.class} name=#{name} >"
+    end
+
+    #-------------------------------------------------------------------------#
+
+    # @return [Boolean] whether the generated target need to be implemented
+    #         as a framework
+    #
+    # @note This applies either if Swift was used by the host, which was checked
+    #       eagerly by the analyzer before, or in the given target or its
+    #       dependents, which can only be checked after the specs were been
+    #       fetched.
+    #
+    def requires_framework?
+      host_requires_framework? || uses_swift?
     end
 
     #-------------------------------------------------------------------------#

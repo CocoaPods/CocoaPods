@@ -36,10 +36,11 @@ module Pod
       # @return [void]
       #
       def add_target
+        product_type = target.requires_framework? ? :framework : :static_library
         name = target.label
         platform = target.platform.name
         deployment_target = target.platform.deployment_target.to_s
-        @native_target = project.new_target(:static_library, name, platform, deployment_target)
+        @native_target = project.new_target(product_type, name, platform, deployment_target)
 
         target.user_build_configurations.each do |bc_name, type|
           configuration = @native_target.add_build_configuration(bc_name, type)
