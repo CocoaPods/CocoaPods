@@ -179,6 +179,7 @@ module Pod
       def generate_targets
         targets = []
         result.specs_by_target.each do |target_definition, specs|
+          # Setup the aggregate target
           target = AggregateTarget.new(target_definition, sandbox)
           targets << target
 
@@ -201,10 +202,12 @@ module Pod
             end
           end
 
+          # Group specs and subspecs by their root
           grouped_specs = specs.map do |spec|
             specs.select { |s| s.root == spec.root }
           end.uniq
 
+          # Create a target for each spec group and add it to the aggregate target
           grouped_specs.each do |pod_specs|
             pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
             if config.integrate_targets?
