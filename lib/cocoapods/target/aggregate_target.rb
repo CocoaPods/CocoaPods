@@ -96,6 +96,10 @@ module Pod
       specs.map { |spec| spec.consumer(platform) }
     end
 
+    #-------------------------------------------------------------------------#
+
+    # @!group Support files
+
     # @return [Pathname] The absolute path of acknowledgements file.
     #
     # @note   The acknowledgements generators add the extension according to
