@@ -6,7 +6,7 @@ module Pod
   # This class is used to represent both the targets and their libraries.
   #
   class Target
-    # @return [PBXNativeTarget] the target definition of the Podfile that
+    # @return [TargetDefinition] the target definition of the Podfile that
     #         generated this target.
     #
     attr_reader :target_definition

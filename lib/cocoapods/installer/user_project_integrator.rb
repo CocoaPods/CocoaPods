@@ -40,7 +40,7 @@ module Pod
       # @param  [Podfile]  podfile @see #podfile
       # @param  [Sandbox]  sandbox @see #sandbox
       # @param  [Pathname] installation_root @see #installation_root
-      # @param  [Library]  libraries @see #libraries
+      # @param  [Target]   targets @see #targets
       #
       # @todo   Too many initialization arguments
       #

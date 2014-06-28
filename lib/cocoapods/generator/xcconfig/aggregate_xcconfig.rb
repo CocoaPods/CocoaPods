@@ -26,7 +26,7 @@ module Pod
         # Generates and saves the xcconfig to the given path.
         #
         # @param  [Pathname] path
-        #         the path where the prefix header should be stored.
+        #         the path where the xcconfig should be stored.
         #
         # @return [void]
         #

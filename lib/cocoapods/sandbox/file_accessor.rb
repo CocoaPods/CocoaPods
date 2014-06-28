@@ -168,7 +168,7 @@ module Pod
       end
 
       # @return [Hash{String => Array<Pathname>}] A hash that describes the
-      #         resource bundles of the Pod. The keys reppresent the name of
+      #         resource bundles of the Pod. The keys represent the name of
       #         the bundle while the values the path of the resources.
       #
       def resource_bundles

@@ -70,10 +70,10 @@ module Pod
           add_developers_frameworks_if_needed(xcconfig, consumer.platform_name)
         end
 
-        # Configures the given Xcconfig with the the build settings for the given
+        # Configures the given Xcconfig with the build settings for the given
         # framework path.
         #
-        # @param  [Pathanme] framework_path
+        # @param  [Pathname] framework_path
         #         The path of the framework.
         #
         # @param  [Xcodeproj::Config] xcconfig
@@ -92,11 +92,11 @@ module Pod
           xcconfig.merge!(build_settings)
         end
 
-        # Configures the given Xcconfig with the the build settings for the given
+        # Configures the given Xcconfig with the build settings for the given
         # library path.
         #
-        # @param  [Pathanme] framework_path
-        #         The path of the framework.
+        # @param  [Pathname] library_path
+        #         The path of the library.
         #
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
