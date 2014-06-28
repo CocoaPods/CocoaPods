@@ -42,8 +42,8 @@ module Pod
 
     it 'always clears the OTHER_LDFLAGS and OTHER_LIBTOOLFLAGS, because these lib targets do not ever need any' do
       @installer.send(:add_target)
-      @installer.send(:target).resolved_build_setting('OTHER_LDFLAGS').values.uniq.should == ['']
-      @installer.send(:target).resolved_build_setting('OTHER_LIBTOOLFLAGS').values.uniq.should == ['']
+      @installer.send(:native_target).resolved_build_setting('OTHER_LDFLAGS').values.uniq.should == ['']
+      @installer.send(:native_target).resolved_build_setting('OTHER_LIBTOOLFLAGS').values.uniq.should == ['']
     end
 
   end

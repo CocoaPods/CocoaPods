@@ -88,7 +88,7 @@ module Pod
 
       it 'does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default' do
         @installer.install!
-        @installer.library.native_target.build_configurations.each do |config|
+        @installer.target.native_target.build_configurations.each do |config|
           config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should.be.nil
         end
       end
@@ -97,7 +97,7 @@ module Pod
 
       it 'adds the source files of each pod to the target of the Pod library' do
         @installer.install!
-        names = @installer.library.native_target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
+        names = @installer.target.native_target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
         names.should.include('Banana.m')
       end
 
@@ -142,7 +142,7 @@ module Pod
 
       it 'creates a dummy source to ensure the compilation of libraries with only categories' do
         @installer.install!
-        build_files = @installer.library.native_target.source_build_phase.files
+        build_files = @installer.target.native_target.source_build_phase.files
         build_file = build_files.find { |bf| bf.file_ref.display_name == 'Pods-BananaLib-dummy.m' }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-BananaLib-dummy.m'
@@ -158,10 +158,10 @@ module Pod
         end
 
         it 'flags should not be added to dtrace files' do
-          @installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          @installer.target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
           @installer.install!
 
-          dtrace_files = @installer.library.native_target.source_build_phase.files.reject do |sf|
+          dtrace_files = @installer.target.native_target.source_build_phase.files.reject do |sf|
             !(File.extname(sf.file_ref.path) == '.d')
           end
           dtrace_files.each do |dt|
@@ -170,7 +170,7 @@ module Pod
         end
 
         it 'adds -w per pod if target definition inhibits warnings for that pod' do
-          @installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          @installer.target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
           flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
 
           flags.should.include?('-w')
@@ -182,7 +182,7 @@ module Pod
         end
 
         it 'adds -Xanalyzer -analyzer-disable-checker per pod' do
-          @installer.library.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          @installer.target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
           flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
 
           flags.should.include?('-Xanalyzer -analyzer-disable-checker')

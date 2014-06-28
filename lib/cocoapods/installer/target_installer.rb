@@ -10,16 +10,16 @@ module Pod
       #
       attr_reader :sandbox
 
-      # @return [Library] The library whose target needs to be generated.
+      # @return [Target] The library whose target needs to be generated.
       #
-      attr_reader :library
+      attr_reader :target
 
       # @param  [Project] project @see project
-      # @param  [Library] library @see library
+      # @param  [Target]  target  @see target
       #
-      def initialize(sandbox, library)
+      def initialize(sandbox, target)
         @sandbox = sandbox
-        @library = library
+        @target = target
       end
 
       private
@@ -36,31 +36,31 @@ module Pod
       # @return [void]
       #
       def add_target
-        name = library.label
-        platform = library.platform.name
-        deployment_target = library.platform.deployment_target.to_s
+        name = target.label
+        platform = target.platform.name
+        deployment_target = target.platform.deployment_target.to_s
         @native_target = project.new_target(:static_library, name, platform, deployment_target)
 
-        library.user_build_configurations.each do |bc_name, type|
+        target.user_build_configurations.each do |bc_name, type|
           configuration = @native_target.add_build_configuration(bc_name, type)
         end
 
         settings = { 'OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '' }
-        if library.archs
-          settings['ARCHS'] = library.archs
+        if target.archs
+          settings['ARCHS'] = target.archs
         end
 
         @native_target.build_configurations.each do |configuration|
           configuration.build_settings.merge!(settings)
         end
 
-        library.native_target = @native_target
+        target.native_target = @native_target
       end
 
       # Creates the directory where to store the support files of the target.
       #
       def create_support_files_dir
-        library.support_files_dir.mkdir
+        target.support_files_dir.mkdir
       end
 
       # Generates a dummy source file for each target so libraries that contain
@@ -69,8 +69,8 @@ module Pod
       # @return [void]
       #
       def create_dummy_source
-        path = library.dummy_source_path
-        generator = Generator::DummySource.new(library.label)
+        path = target.dummy_source_path
+        generator = Generator::DummySource.new(target.label)
         generator.save_as(path)
         file_reference = add_file_to_support_group(path)
         native_target.source_build_phase.add_file_reference(file_reference)
@@ -98,7 +98,7 @@ module Pod
       # @return [TargetDefinition] the target definition of the library.
       #
       def target_definition
-        library.target_definition
+        target.target_definition
       end
 
       # @return [PBXGroup] the group where the file references to the support
