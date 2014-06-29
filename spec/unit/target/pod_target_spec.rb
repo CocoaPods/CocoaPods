@@ -117,12 +117,28 @@ module Pod
             @pod_target.host_requires_framework = true
           end
 
+          it 'returns the product name' do
+            @pod_target.product_name.should == 'Pods-BananaLib.framework'
+          end
+
+          it 'returns :framework as product type' do
+            @pod_target.product_type.should == :framework
+          end
+
           it 'returns that it requires being built as framework' do
             @pod_target.requires_framework?.should == true
           end
         end
 
         describe 'Host does not requires frameworks' do
+          it 'returns the product name' do
+            @pod_target.product_name.should == 'libPods-BananaLib.a'
+          end
+
+          it 'returns :static_library as product type' do
+            @pod_target.product_type.should == :static_library
+          end
+
           it 'returns that it does not require being built as framework' do
             @pod_target.requires_framework?.should == false
           end
@@ -136,6 +152,14 @@ module Pod
 
         it 'returns that it uses swift' do
           @pod_target.uses_swift?.should == true
+        end
+
+        it 'returns the product name' do
+          @pod_target.product_name.should == 'Pods-OrangeFramework.framework'
+        end
+
+        it 'returns :framework as product type' do
+          @pod_target.product_type.should == :framework
         end
 
         it 'returns that it requires being built as framework' do
