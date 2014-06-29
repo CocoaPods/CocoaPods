@@ -27,10 +27,21 @@ module Pod
       label
     end
 
-    # @return [String] the name of the library.
+    # @return [String] the name of the product.
     #
     def product_name
-      "lib#{label}.a"
+      if requires_framework?
+        "#{label}.framework"
+      else
+        "lib#{label}.a"
+      end
+    end
+
+    # @return [Symbol] either :framework or :static_library, depends on
+    #         #requires_framework?.
+    #
+    def product_type
+      requires_framework? ? :framework : :static_library
     end
 
     # @return [String] the XCConfig namespaced prefix.

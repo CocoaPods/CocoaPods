@@ -36,7 +36,7 @@ module Pod
       # @return [void]
       #
       def add_target
-        product_type = target.requires_framework? ? :framework : :static_library
+        product_type = target.product_type
         name = target.label
         platform = target.platform.name
         deployment_target = target.platform.deployment_target.to_s
