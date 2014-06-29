@@ -133,12 +133,24 @@ module Pod
             @target.host_requires_framework = true
           end
 
+          it 'returns the product name' do
+            @target.product_name.should == 'Pods.framework'
+          end
+
+          it 'returns :framework as product type' do
+            @target.product_type.should == :framework
+          end
+
           it 'returns that it requires being built as framework' do
             @target.requires_framework?.should == true
           end
         end
 
         describe 'Host does not requires frameworks' do
+          it 'returns the product name' do
+            @target.product_name.should == 'libPods.a'
+          end
+
           it 'returns :static_library as product type' do
             @target.product_type.should == :static_library
           end
@@ -158,6 +170,14 @@ module Pod
 
         it 'returns that it uses swift' do
           @target.uses_swift?.should == true
+        end
+
+        it 'returns the product name' do
+          @target.product_name.should == 'Pods.framework'
+        end
+
+        it 'returns :framework as product type' do
+          @target.product_type.should == :framework
         end
 
         it 'returns that it requires being built as framework' do
