@@ -91,9 +91,9 @@ module Pod
           changes
         end
 
-        # Adds spec libraries to the frameworks build phase of the
+        # Adds spec product reference to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to
-        # the library of the {TargetDefinition} and adds it to the frameworks
+        # the frameworks group of the project and adds it to the frameworks
         # build phase of the targets.
         #
         # @return [void]
@@ -101,10 +101,23 @@ module Pod
         def add_pods_library
           frameworks = user_project.frameworks_group
           native_targets_to_integrate.each do |native_target|
-            library = frameworks.files.select { |f| f.path == target.product_name }.first ||
-              frameworks.new_product_ref_for_target(target.name, target.product_type)
-            unless native_target.frameworks_build_phase.files_references.include?(library)
-              native_target.frameworks_build_phase.add_file_reference(library)
+            build_phase = native_target.frameworks_build_phase
+
+            # Find and delete possible reference for the other product type
+            old_product_name = target.requires_framework? ? target.static_library_name : target.framework_name
+            old_product_ref = frameworks.files.find { |f| f.path == old_product_name }
+            if old_product_ref.present?
+              UI.message("Remove old Pod product reference #{old_product_name} from project.")
+              build_phase.remove_file_reference(old_product_ref)
+              frameworks.remove_reference(old_product_ref)
+            end
+
+            # Find or create and add a reference for the current product type
+            target_basename = target.label
+            new_product_ref = frameworks.files.find { |f| f.path == target.product_name } ||
+              frameworks.new_product_ref_for_target(target_basename, target.product_type)
+            unless build_phase.files_references.include?(new_product_ref)
+              build_phase.add_file_reference(new_product_ref)
             end
           end
         end
