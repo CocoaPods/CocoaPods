@@ -31,10 +31,22 @@ module Pod
     #
     def product_name
       if requires_framework?
-        "#{label}.framework"
+        framework_name
       else
-        "lib#{label}.a"
+        static_library_name
       end
+    end
+
+    # @return [String] the name of the framework.
+    #
+    def framework_name
+      "#{label}.framework"
+    end
+
+    # @return [String] the name of the library.
+    #
+    def static_library_name
+      "lib#{label}.a"
     end
 
     # @return [Symbol] either :framework or :static_library, depends on
