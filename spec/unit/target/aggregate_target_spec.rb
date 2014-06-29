@@ -137,6 +137,14 @@ module Pod
             @target.product_name.should == 'Pods.framework'
           end
 
+          it 'returns the framework name' do
+            @target.framework_name.should == 'Pods.framework'
+          end
+
+          it 'returns the library name' do
+            @target.static_library_name.should == 'libPods.a'
+          end
+
           it 'returns :framework as product type' do
             @target.product_type.should == :framework
           end
@@ -149,6 +157,14 @@ module Pod
         describe 'Host does not requires frameworks' do
           it 'returns the product name' do
             @target.product_name.should == 'libPods.a'
+          end
+
+          it 'returns the framework name' do
+            @target.framework_name.should == 'Pods.framework'
+          end
+
+          it 'returns the library name' do
+            @target.static_library_name.should == 'libPods.a'
           end
 
           it 'returns :static_library as product type' do
@@ -174,6 +190,14 @@ module Pod
 
         it 'returns the product name' do
           @target.product_name.should == 'Pods.framework'
+        end
+
+        it 'returns the framework name' do
+          @target.framework_name.should == 'Pods.framework'
+        end
+
+        it 'returns the library name' do
+          @target.static_library_name.should == 'libPods.a'
         end
 
         it 'returns :framework as product type' do
