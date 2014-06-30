@@ -17,6 +17,7 @@ module Pod
           if target.requires_framework?
             create_info_plist_file
             create_umbrella_header
+            create_embed_frameworks_script
           end
           create_target_environment_header
           create_bridge_support_file
@@ -104,6 +105,28 @@ module Pod
         resources.concat(resource_bundles)
         resources << bridge_support_file if bridge_support_file
         generator = Generator::CopyResourcesScript.new(resources, target.platform)
+        generator.save_as(path)
+        add_file_to_support_group(path)
+      end
+
+      # Creates a script that embeds the frameworks to the bundle of the client
+      # target.
+      #
+      # @note   We can't use Xcode default copy bundle resource phase, because
+      #         we need to ensure that we only copy the resources, which are
+      #         relevant for the current build configuration.
+      #
+      # @return [void]
+      #
+      def create_embed_frameworks_script
+        path = target.embed_frameworks_script_path
+        frameworks_by_config = {}
+        target.user_build_configurations.keys.each do |config|
+          frameworks_by_config[config] = target.pod_targets.select do |pod_target|
+            pod_target.include_in_build_config?(config)
+          end.map(&:product_name)
+        end
+        generator = Generator::EmbedFrameworksScript.new(frameworks_by_config)
         generator.save_as(path)
         add_file_to_support_group(path)
       end
