@@ -56,6 +56,7 @@ module Pod
     autoload :BridgeSupport,           'cocoapods/generator/bridge_support'
     autoload :CopyResourcesScript,     'cocoapods/generator/copy_resources_script'
     autoload :DummySource,             'cocoapods/generator/dummy_source'
+    autoload :EmbedFrameworksScript,   'cocoapods/generator/embed_frameworks_script'
     autoload :Header,                  'cocoapods/generator/header'
     autoload :InfoPlistFile,           'cocoapods/generator/info_plist_file'
     autoload :PrefixHeader,            'cocoapods/generator/prefix_header'

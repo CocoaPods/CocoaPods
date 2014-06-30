@@ -129,6 +129,12 @@ module Pod
       support_files_dir + "#{label}-resources.sh"
     end
 
+    # @return [Pathname] The absolute path of the embed frameworks script.
+    #
+    def embed_frameworks_script_path
+      support_files_dir + "#{label}-frameworks.sh"
+    end
+
     # @return [String] The xcconfig path of the root from the `$(SRCROOT)`
     #         variable of the user's project.
     #
@@ -149,6 +155,13 @@ module Pod
     #
     def copy_resources_script_relative_path
       "${SRCROOT}/#{relative_to_srcroot(copy_resources_script_path)}"
+    end
+
+    # @return [String] The path of the embed frameworks relative to the
+    #         root of the user project.
+    #
+    def embed_frameworks_script_relative_path
+      "${SRCROOT}/#{relative_to_srcroot(embed_frameworks_script_path)}"
     end
 
     private
