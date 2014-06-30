@@ -33,6 +33,7 @@ module Pod
               update_to_cocoapods_0_34,
               unless native_targets_to_integrate.empty?
                 add_pods_library
+                add_embed_frameworks_script_phase if target.requires_framework?
                 add_copy_resources_script_phase
                 add_check_manifest_lock_script_phase
                 true
@@ -119,6 +120,24 @@ module Pod
             unless build_phase.files_references.include?(new_product_ref)
               build_phase.add_file_reference(new_product_ref)
             end
+          end
+        end
+
+        # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
+        #
+        # @return [void]
+        #
+        def add_embed_frameworks_script_phase
+          phase_name = 'Embed Pods Frameworks'
+          native_targets_to_integrate.each do |native_target|
+            embed_build_phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first
+            unless embed_build_phase.present?
+              UI.message("Add Build Phase '#{phase_name}' to project.")
+              embed_build_phase = native_target.new_shell_script_build_phase(phase_name)
+            end
+            script_path = target.embed_frameworks_script_relative_path
+            embed_build_phase.shell_script = %("#{script_path}"\n)
+            embed_build_phase.show_env_vars_in_log = '0'
           end
         end
 
