@@ -51,6 +51,10 @@ module Pod
         @target.copy_resources_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-resources.sh')
       end
 
+      it 'returns the absolute path of the frameworks script' do
+        @target.embed_frameworks_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-frameworks.sh')
+      end
+
       it 'returns the absolute path of the target header file' do
         @target.target_environment_header_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-environment.h')
       end
@@ -69,6 +73,10 @@ module Pod
 
       it 'returns the path of the resources script relative to the user project' do
         @target.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh'
+      end
+
+      it 'returns the path of the frameworks script relative to the user project' do
+        @target.embed_frameworks_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh'
       end
 
       it 'returns the path of the xcconfig file relative to the user project' do
