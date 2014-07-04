@@ -88,6 +88,24 @@ module Pod
           xcconfig.merge!(build_settings)
         end
 
+        # Checks if the given target requires language specific settings and
+        # configures the given Xcconfig.
+        #
+        # @param  [Target] target
+        #         The target.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_language_specific_settings(target, xcconfig)
+          if target.uses_swift?
+            build_settings = {
+              'OTHER_SWIFT_FLAGS' => quote(['-D COCOAPODS']),
+            }
+            xcconfig.merge!(build_settings)
+          end
+        end
+
         # Adds the search paths of the developer frameworks to the specification
         # if needed. This is done because the `SenTestingKit` requires them and
         # adding them to each specification which requires it is repetitive and
