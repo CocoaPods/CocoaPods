@@ -14,6 +14,7 @@ module Pod
           create_support_files_dir
           create_suport_files_group
           create_xcconfig_file
+          create_info_plist_file if target.requires_framework?
           create_target_environment_header
           create_bridge_support_file
           create_copy_resources_script
