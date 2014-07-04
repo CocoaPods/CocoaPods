@@ -57,6 +57,7 @@ module Pod
     autoload :CopyResourcesScript,     'cocoapods/generator/copy_resources_script'
     autoload :DummySource,             'cocoapods/generator/dummy_source'
     autoload :Header,                  'cocoapods/generator/header'
+    autoload :InfoPlistFile,           'cocoapods/generator/info_plist_file'
     autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
     autoload :TargetEnvironmentHeader, 'cocoapods/generator/target_environment_header'
     autoload :XCConfig,                'cocoapods/generator/xcconfig'

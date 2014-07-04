@@ -64,6 +64,24 @@ module Pod
         target.support_files_dir.mkdir
       end
 
+      # Creates the Info.plist file which sets public framework attributes
+      #
+      # @return [void]
+      #
+      def create_info_plist_file
+        path = target.info_plist_path
+        UI.message "- Generating Info.plist file at #{UI.path(path)}" do
+          generator = Generator::InfoPlistFile.new(target)
+          generator.save_as(path)
+          add_file_to_support_group(path)
+
+          native_target.build_configurations.each do |c|
+            relative_path = path.relative_path_from(sandbox.root)
+            c.build_settings['INFOPLIST_FILE'] = relative_path.to_s
+          end
+        end
+      end
+
       # Generates a dummy source file for each target so libraries that contain
       # only categories build.
       #
