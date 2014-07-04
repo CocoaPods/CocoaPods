@@ -59,7 +59,7 @@ module Pod
 
           xcconfig_hash = add_xcconfig_namespaced_keys(public_xcconfig.to_hash, config, target.xcconfig_prefix)
           @xcconfig = Xcodeproj::Config.new(xcconfig_hash)
-          XCConfigHelper.add_language_specific_settings(target, @xcconfig)
+          XCConfigHelper.add_target_specific_settings(target, @xcconfig)
           @xcconfig.includes = [target.name]
           @xcconfig
         end

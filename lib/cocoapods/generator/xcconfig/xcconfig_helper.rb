@@ -88,6 +88,19 @@ module Pod
           xcconfig.merge!(build_settings)
         end
 
+        # Checks if the given target requires specific settings and configures
+        # the given Xcconfig.
+        #
+        # @param  [Target] target
+        #         The target.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_target_specific_settings(target, xcconfig)
+          add_language_specific_settings(target, xcconfig)
+        end
+
         # Checks if the given target requires language specific settings and
         # configures the given Xcconfig.
         #
