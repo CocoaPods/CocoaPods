@@ -86,6 +86,12 @@ module Pod
         )
       end
 
+      it 'returns the absolute path of the info plist file' do
+        @pod_target.info_plist_path.to_s.should.include?(
+          'Pods/Target Support Files/Pods-BananaLib/Info.plist'
+        )
+      end
+
       it 'returns the absolute path of the public and private xcconfig files' do
         @pod_target.xcconfig_path.to_s.should.include?(
           'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.xcconfig'
