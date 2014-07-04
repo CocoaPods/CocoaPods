@@ -57,6 +57,8 @@ module Pod
                                               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_path_flags, '-isystem')
                                             )
 
+          XCConfigHelper.add_language_specific_settings(target, @xcconfig)
+
           target.pod_targets.each do |pod_target|
             next unless pod_target.include_in_build_config?(@configuration_name)
 
