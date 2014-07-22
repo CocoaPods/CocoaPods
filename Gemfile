@@ -16,6 +16,10 @@ group :development do
   gem 'cocoapods-plugins',    :git => 'https://github.com/CocoaPods/cocoapods-plugins.git', :branch => 'master'
   gem 'cocoapods-trunk',      :git => 'https://github.com/CocoaPods/cocoapods-trunk.git', :branch => 'master'
 
+
+  # TODO: for some reason this is not being picked up from the gemspec of Xcodeproj
+  gem 'CFPropertyList'
+
   gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
   gem "mocha", '~> 1.0.0'   # Issues with Ruby 2.0.0 on Travis
   gem "bacon"
