@@ -6,7 +6,7 @@ language: objective-c
 
 env:
   - RVM_RUBY_VERSION=system
-  - RVM_RUBY_VERSION=1.8.7-p358
+  # - RVM_RUBY_VERSION=1.8.7-p358
 
 before_install:
   - export LANG=en_US.UTF-8
