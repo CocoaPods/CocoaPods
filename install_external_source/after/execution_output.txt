@@ -1,12 +1,13 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1
+CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::Register: `[["EMAIL", :required], ["NAME", :optional]]`)[39m
+[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::AddOwner: `[["POD", :required], ["OWNER-EMAIL", :required]]`)[39m
+[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::Push: `[["PATH", :required]]`)[39m
+
 Analyzing dependencies
 
 Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
-   $ /usr/local/bin/hg clone PodTest-hg-source
-   ROOT/tmp/install_externa
-   l_source/Pods/PodTest
+   $ /usr/local/bin/hg clone PodTest-hg-source ROOT/tmp/install_external_source/Pods/PodTest
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 
@@ -56,6 +57,9 @@ Integrating client project
 [!] From now on use `SampleApp.xcworkspace`.
 
 Integrating Pod target `Pods-PodTest` into aggregate target Pods of project `SampleApp.xcodeproj`.
+
+[!] Xcodeproj is using a fall back solution for parsing XML. To use a faster alternative install libxml:
+`$ gem install libxml-ruby`
 
 [!] The target `iOS App [Release]` overrides the `OTHER_CFLAGS` build setting defined in `Pods/Pods.xcconfig'.
     - Use the `$(inherited)` flag, or

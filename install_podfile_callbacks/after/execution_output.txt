@@ -1,4 +1,7 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1
+CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::Register: `[["EMAIL", :required], ["NAME", :optional]]`)[39m
+[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::AddOwner: `[["POD", :required], ["OWNER-EMAIL", :required]]`)[39m
+[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::Push: `[["PATH", :required]]`)[39m
+
 Analyzing dependencies
 
 Resolving dependencies of `Podfile`
@@ -19,11 +22,8 @@ Downloading dependencies
    $ /usr/local/bin/git rev-list --max-count=1 v3.1.0
    f7176f4798d068d233dca5223ae4bd9c8059e830
  > Cloning to Pods folder
-     $ /usr/local/bin/git clone
-     CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab
-     6
-     ROOT/tmp/install_podfi
-     le_callbacks/Pods/Reachability
+     $ /usr/local/bin/git clone CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
+     ROOT/tmp/install_podfile_callbacks/Pods/Reachability
      Cloning into 'ROOT/tmp/install_podfile_callbacks/Pods/Reachability'...
      done.
    $ /usr/local/bin/git fetch origin tags/v3.1.0 2>&1
@@ -69,5 +69,8 @@ Integrating client project
 [!] From now on use `SampleApp.xcworkspace`.
 
 Integrating Pod target `Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
+
+[!] Xcodeproj is using a fall back solution for parsing XML. To use a faster alternative install libxml:
+`$ gem install libxml-ruby`
 
 [!] Podfile#config is deprecated. The config is accessible from the parameter passed to the hooks

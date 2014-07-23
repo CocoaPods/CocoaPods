@@ -66,33 +66,33 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          WRAPPER_EXTENSION: app
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           FRAMEWORK_SEARCH_PATHS:
           - "$(inherited)"
           - '"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks"'
-          IPHONEOS_DEPLOYMENT_TARGET: '6.1'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          INFOPLIST_FILE: iOS App/iOS App-Info.plist
-          SDKROOT: iphoneos
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           GCC_PREFIX_HEADER: iOS App/iOS App-Prefix.pch
+          INFOPLIST_FILE: iOS App/iOS App-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '6.1'
           PRODUCT_NAME: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          WRAPPER_EXTENSION: app
         Base Configuration: Pods-iOS App.xcconfig
     - Release:
         Build Settings:
-          VALIDATE_PRODUCT: 'YES'
-          WRAPPER_EXTENSION: app
-          OTHER_CFLAGS: "-DNS_BLOCK_ASSERTIONS=1"
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           FRAMEWORK_SEARCH_PATHS:
           - "$(inherited)"
           - '"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks"'
-          IPHONEOS_DEPLOYMENT_TARGET: '6.1'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          INFOPLIST_FILE: iOS App/iOS App-Info.plist
-          SDKROOT: iphoneos
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           GCC_PREFIX_HEADER: iOS App/iOS App-Prefix.pch
+          INFOPLIST_FILE: iOS App/iOS App-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '6.1'
+          OTHER_CFLAGS: "-DNS_BLOCK_ASSERTIONS=1"
           PRODUCT_NAME: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          WRAPPER_EXTENSION: app
         Base Configuration: Pods-iOS App.xcconfig
 - OS X App:
     Build Phases:
@@ -111,21 +111,21 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          WRAPPER_EXTENSION: app
           COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          INFOPLIST_FILE: OS X App/OS X App-Info.plist
           GCC_PREFIX_HEADER: OS X App/OS X App-Prefix.pch
+          INFOPLIST_FILE: OS X App/OS X App-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
+          WRAPPER_EXTENSION: app
         Base Configuration: Pods-OS X App.xcconfig
     - Release:
         Build Settings:
-          WRAPPER_EXTENSION: app
           COMBINE_HIDPI_IMAGES: 'YES'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          INFOPLIST_FILE: OS X App/OS X App-Info.plist
           GCC_PREFIX_HEADER: OS X App/OS X App-Prefix.pch
+          INFOPLIST_FILE: OS X App/OS X App-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
+          WRAPPER_EXTENSION: app
         Base Configuration: Pods-OS X App.xcconfig
 
 
@@ -133,49 +133,49 @@ Targets:
 Build Configurations:
 - Debug:
     Build Settings:
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
       CLANG_WARN_ENUM_CONVERSION: 'YES'
-      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      COPY_PHASE_STRIP: 'NO'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
       - "$(inherited)"
-      ONLY_ACTIVE_ARCH: 'YES'
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
-      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
-      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
-      CLANG_WARN_INT_CONVERSION: 'YES'
-      MACOSX_DEPLOYMENT_TARGET: '10.8'
-      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
-      GCC_OPTIMIZATION_LEVEL: '0'
-      GCC_C_LANGUAGE_STANDARD: gnu99
-      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
-      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
-      CLANG_WARN_EMPTY_BODY: 'YES'
-      ALWAYS_SEARCH_USER_PATHS: 'NO'
-      COPY_PHASE_STRIP: 'NO'
-      SDKROOT: macosx
-      GCC_DYNAMIC_NO_PIC: 'NO'
-      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
-      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
-      CLANG_CXX_LIBRARY: libc++
-      GCC_WARN_UNUSED_VARIABLE: 'YES'
-- Release:
-    Build Settings:
-      DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
-      GCC_WARN_UNUSED_VARIABLE: 'YES'
-      GCC_C_LANGUAGE_STANDARD: gnu99
-      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
-      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
-      MACOSX_DEPLOYMENT_TARGET: '10.8'
-      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
-      CLANG_WARN_EMPTY_BODY: 'YES'
-      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
-      CLANG_WARN_INT_CONVERSION: 'YES'
-      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
-      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
-      ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_ENUM_CONVERSION: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      ONLY_ACTIVE_ARCH: 'YES'
       SDKROOT: macosx
-      COPY_PHASE_STRIP: 'YES'
+- Release:
+    Build Settings:
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      COPY_PHASE_STRIP: 'YES'
+      DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      SDKROOT: macosx
