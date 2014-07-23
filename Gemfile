@@ -35,6 +35,11 @@ group :development do
   # Explicitly add this, otherwise it might sometimes be missing:
   # https://github.com/lemurheavy/coveralls-ruby/blob/master/coveralls-ruby.gemspec#L23.
   gem 'simplecov'
+
+  if RUBY_PLATFORM.include?('darwin')
+    # Make Xcodeproj faster
+    gem 'libxml-ruby'
+  end
 end
 
 group :debugging do
