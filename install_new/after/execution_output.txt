@@ -67,6 +67,3 @@ Integrating client project
 [!] From now on use `SampleApp.xcworkspace`.
 
 Integrating Pod target `Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
-
-[!] Xcodeproj is using a fall back solution for parsing XML. To use a faster alternative install libxml:
-`$ gem install libxml-ruby`

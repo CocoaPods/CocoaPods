@@ -9,7 +9,9 @@ Fetching external sources
 
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `Pods' (iOS 6.0)
-  - Test (from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`)
+  - Test (from
+  `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87
+  304d0cda5e8b6afbe702e1dab55392/Test.spec`)
     - Test/Foo
 
 Comparing resolved specification to the sandbox manifest
@@ -27,8 +29,11 @@ Downloading dependencies
      $ /usr/local/bin/git remote update
      Fetching origin
  > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/ac2e144ba86f0bc59ac0f1d79e724d89f220e1b6
-     ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test
+     $ /usr/local/bin/git clone
+     CACHES_DIR/GitHub/ac2e144ba86f0bc59ac0f1d79e724d89f220e1b
+     6
+     ROOT/tmp/install_subsp
+     ecs_no_duplicate_prefix/Pods/Test
      Cloning into 'ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test'...
      done.
   - Running pre install hooks
@@ -65,9 +70,6 @@ Integrating client project
 [!] From now on use `SampleApp.xcworkspace`.
 
 Integrating Pod target `Pods-Test` into aggregate target Pods of project `SampleApp.xcodeproj`.
-
-[!] Xcodeproj is using a fall back solution for parsing XML. To use a faster alternative install libxml:
-`$ gem install libxml-ruby`
 
 [!] The target `iOS App [Release]` overrides the `OTHER_CFLAGS` build setting defined in `Pods/Pods.xcconfig'.
     - Use the `$(inherited)` flag, or

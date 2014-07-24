@@ -22,8 +22,11 @@ Downloading dependencies
    $ /usr/local/bin/git rev-list --max-count=1 v3.1.0
    f7176f4798d068d233dca5223ae4bd9c8059e830
  > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
-     ROOT/tmp/install_custom_build_configuration/Pods/Reachability
+     $ /usr/local/bin/git clone
+     CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab
+     6
+     ROOT/tmp/install_custo
+     m_build_configuration/Pods/Reachability
      Cloning into 'ROOT/tmp/install_custom_build_configuration/Pods/Reachability'...
      done.
    $ /usr/local/bin/git fetch origin tags/v3.1.0 2>&1
@@ -67,6 +70,3 @@ Integrating client project
 [!] From now on use `SampleApp.xcworkspace`.
 
 Integrating Pod target `Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
-
-[!] Xcodeproj is using a fall back solution for parsing XML. To use a faster alternative install libxml:
-`$ gem install libxml-ruby`

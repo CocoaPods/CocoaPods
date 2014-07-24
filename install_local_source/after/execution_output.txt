@@ -52,9 +52,6 @@ Integrating client project
 
 Integrating Pod target `Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
 
-[!] Xcodeproj is using a fall back solution for parsing XML. To use a faster alternative install libxml:
-`$ gem install libxml-ruby`
-
 [!] The `:local` option of the Podfile has been renamed to `:path` and it is deprecated.
 
 [!] The target `iOS App [Release]` overrides the `OTHER_CFLAGS` build setting defined in `Pods/Pods.xcconfig'.
