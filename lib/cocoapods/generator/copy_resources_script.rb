@@ -137,7 +137,7 @@ EOS
 
       XCASSETS_COMPILE = <<EOS
 
-if [[ -n "${WRAPPER_EXTENSION}" ]] && [ `xcrun --find actool` ] && [ `find . -name '*.xcassets' | wc -l` -ne 0 ]
+if [[ -n "${WRAPPER_EXTENSION}" ]] && [ `xcrun --find actool` ] && [ `find ${PODS_ROOT} -name '*.xcassets' | wc -l` -ne 0 ]
 then
   case "${TARGETED_DEVICE_FAMILY}" in 
     1,2)

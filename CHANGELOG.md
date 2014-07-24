@@ -5,6 +5,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+* Restrict xcassets compilation to those in pod root
+  [Clément Beffa](https://github.com/cl3m)
+  [#2323](https://github.com/CocoaPods/CocoaPods/pull/2323)
+ 
 * Fixed pod repo push to first check if Specs directory exists and if so push there.
   [Edward Valentini](edwardvalentini)
   [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
