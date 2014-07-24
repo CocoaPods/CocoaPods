@@ -10,7 +10,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
 
 * Fixed `pod outdated` to not include subspecs.
-  [Ash Furrow](ashfurrow]
+  [Ash Furrow](ashfurrow)
   [#2136](https://github.com/CocoaPods/CocoaPods/issues/2136)
 
 * Always evaluate podspecs from the original podspec directory. This fixes
@@ -18,6 +18,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   pod's via `:path`.  
   [Kyle Fuller](kylef)
   [pod-template#50](https://github.com/CocoaPods/pod-template/issues/50)
+
+* Fixed missing XCTest framework in Xcode 6
+  [Paul Williamson](squarefrog)
+  [#2296](https://github.com/CocoaPods/CocoaPods/issues/2296)
 
 
 ## 0.33.1

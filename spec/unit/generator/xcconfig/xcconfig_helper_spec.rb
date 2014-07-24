@@ -188,6 +188,8 @@ module Pod
             frameworks_search_paths = xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS']
             frameworks_search_paths.should.include?('$(inherited)')
             frameworks_search_paths.should.include?('"$(SDKROOT)/Developer/Library/Frameworks"')
+            frameworks_path = '"$(PLATFORM_DIR)/Developer/Library/Frameworks"'
+            frameworks_search_paths.should.include?(frameworks_path)
             frameworks_search_paths.should.not.include?('"$(DEVELOPER_LIBRARY_DIR)/Frameworks"')
           end
 
