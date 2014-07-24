@@ -394,11 +394,13 @@ module Pod
         end
 
         it "recursively sorts the project" do
+          Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
           @installer.pods_project.main_group.expects(:sort)
           @installer.send(:write_pod_project)
         end
 
         it "saves the project to the given path" do
+          Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
           path = temporary_directory + 'Pods/Pods.xcodeproj'
           @installer.pods_project.expects(:save)
           @installer.send(:write_pod_project)
