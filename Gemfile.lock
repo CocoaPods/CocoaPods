@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 873f7dddd593a3622644989aacce4f9191f0a050
+  revision: ca32661ceb9cd65cfe17eb6e05a420945c2ba9cc
   branch: master
   specs:
     cocoapods-core (0.33.1)
@@ -102,7 +102,7 @@ GEM
       thor
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
-    diffy (3.0.5)
+    diffy (3.0.6)
     docile (1.1.5)
     escape (0.0.4)
     ffi (1.9.3)
