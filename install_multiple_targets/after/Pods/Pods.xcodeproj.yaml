@@ -40,26 +40,29 @@ File References:
   - libPods-test-JSONKit.a
 - Targets Support Files:
   - Pods:
-    - Pods.xcconfig
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
     - Pods-dummy.m
     - Pods-environment.h
     - Pods-resources.sh
+    - Pods.Debug.xcconfig
+    - Pods.Release.xcconfig
   - Pods-SampleApp_2:
-    - Pods-SampleApp_2.xcconfig
     - Pods-SampleApp_2-acknowledgements.markdown
     - Pods-SampleApp_2-acknowledgements.plist
     - Pods-SampleApp_2-dummy.m
     - Pods-SampleApp_2-environment.h
     - Pods-SampleApp_2-resources.sh
+    - Pods-SampleApp_2.Debug.xcconfig
+    - Pods-SampleApp_2.Release.xcconfig
   - Pods-test:
-    - Pods-test.xcconfig
     - Pods-test-acknowledgements.markdown
     - Pods-test-acknowledgements.plist
     - Pods-test-dummy.m
     - Pods-test-environment.h
     - Pods-test-resources.sh
+    - Pods-test.Debug.xcconfig
+    - Pods-test.Release.xcconfig
 
 
 
@@ -70,7 +73,6 @@ Targets:
       - Pods-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
-      - libPods-Reachability.a
     Build Configurations:
     - Debug:
         Build Settings:
@@ -92,7 +94,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -114,7 +116,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Release.xcconfig
 - Pods-Reachability:
     Build Phases:
     - SourcesBuildPhase:
@@ -177,8 +179,6 @@ Targets:
       - Pods-SampleApp_2-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
-      - libPods-SampleApp_2-JSONKit.a
-      - libPods-SampleApp_2-Reachability.a
     Build Configurations:
     - Debug:
         Build Settings:
@@ -200,7 +200,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-SampleApp_2.xcconfig
+        Base Configuration: Pods-SampleApp_2.Debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -222,7 +222,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods-SampleApp_2.xcconfig
+        Base Configuration: Pods-SampleApp_2.Release.xcconfig
 - Pods-SampleApp_2-JSONKit:
     Build Phases:
     - SourcesBuildPhase:
@@ -340,7 +340,6 @@ Targets:
       - Pods-test-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
-      - libPods-test-JSONKit.a
     Build Configurations:
     - Debug:
         Build Settings:
@@ -362,7 +361,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-test.xcconfig
+        Base Configuration: Pods-test.Debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -384,7 +383,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods-test.xcconfig
+        Base Configuration: Pods-test.Release.xcconfig
 - Pods-test-JSONKit:
     Build Phases:
     - SourcesBuildPhase:

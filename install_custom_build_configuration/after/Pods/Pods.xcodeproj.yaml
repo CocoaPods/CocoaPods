@@ -19,12 +19,15 @@ File References:
   - libPods-Reachability.a
 - Targets Support Files:
   - Pods:
-    - Pods.xcconfig
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
     - Pods-dummy.m
     - Pods-environment.h
     - Pods-resources.sh
+    - Pods.Custom Debug - missing some settings .xcconfig
+    - Pods.Custom Release.xcconfig
+    - Pods.Debug.xcconfig
+    - Pods.Release.xcconfig
 
 
 
@@ -35,7 +38,6 @@ Targets:
       - Pods-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
-      - libPods-Reachability.a
     Build Configurations:
     - 'Custom Debug - missing some settings ':
         Build Settings:
@@ -58,7 +60,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Custom Debug - missing some settings .xcconfig
     - Custom Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -80,7 +82,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Custom Release.xcconfig
     - Debug:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -101,7 +103,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -123,7 +125,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Release.xcconfig
 - Pods-Reachability:
     Build Phases:
     - SourcesBuildPhase:

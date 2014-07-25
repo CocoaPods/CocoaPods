@@ -21,12 +21,13 @@ File References:
   - libPods-Test.a
 - Targets Support Files:
   - Pods:
-    - Pods.xcconfig
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
     - Pods-dummy.m
     - Pods-environment.h
     - Pods-resources.sh
+    - Pods.Debug.xcconfig
+    - Pods.Release.xcconfig
 
 
 
@@ -37,7 +38,6 @@ Targets:
       - Pods-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
-      - libPods-Test.a
     Build Configurations:
     - Debug:
         Build Settings:
@@ -59,7 +59,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -81,7 +81,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Release.xcconfig
 - Pods-Test:
     Build Phases:
     - SourcesBuildPhase:

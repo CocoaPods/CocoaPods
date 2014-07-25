@@ -40,8 +40,10 @@ File References:
 - Products:
   - iOS App.app
   - OS X App.app
-- Pods-OS X App.xcconfig
-- Pods-iOS App.xcconfig
+- Pods-OS X App.Debug.xcconfig
+- Pods-OS X App.Release.xcconfig
+- Pods-iOS App.Debug.xcconfig
+- Pods-iOS App.Release.xcconfig
 
 
 
@@ -77,7 +79,7 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods-iOS App.xcconfig
+        Base Configuration: Pods-iOS App.Debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
@@ -93,7 +95,7 @@ Targets:
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods-iOS App.xcconfig
+        Base Configuration: Pods-iOS App.Release.xcconfig
 - OS X App:
     Build Phases:
     - Check Pods Manifest.lock: []
@@ -117,7 +119,7 @@ Targets:
           INFOPLIST_FILE: OS X App/OS X App-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods-OS X App.xcconfig
+        Base Configuration: Pods-OS X App.Debug.xcconfig
     - Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -126,7 +128,7 @@ Targets:
           INFOPLIST_FILE: OS X App/OS X App-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods-OS X App.xcconfig
+        Base Configuration: Pods-OS X App.Release.xcconfig
 
 
 

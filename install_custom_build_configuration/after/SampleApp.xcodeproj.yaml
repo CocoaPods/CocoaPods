@@ -22,7 +22,10 @@ File References:
   - libPods.a
 - Products:
   - SampleApp.app
-- Pods.xcconfig
+- Pods.Debug.xcconfig
+- Pods.Custom Debug - missing some settings .xcconfig
+- Pods.Release.xcconfig
+- Pods.Custom Release.xcconfig
 
 
 
@@ -50,7 +53,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Debug.xcconfig
     - 'Custom Debug - missing some settings ':
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -59,7 +62,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Custom Debug - missing some settings .xcconfig
     - Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -68,7 +71,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Release.xcconfig
     - Custom Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -77,7 +80,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Custom Release.xcconfig
 
 
 
