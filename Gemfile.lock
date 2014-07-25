@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 1f6273aeb346b9d21008438b37594106fca4b7f6
-  branch: lookback-pods-by-config
+  revision: cda7ff3144a8b2db46a5bfd1a627af3b34835f41
+  branch: lookback-pods-by-config-2
   specs:
     cocoapods-core (0.33.1)
       activesupport (>= 3.2.15)
