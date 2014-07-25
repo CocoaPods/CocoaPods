@@ -106,7 +106,8 @@ Targets:
     Build Phases:
     - SourcesBuildPhase:
       - Pods-OS X App-PodTest-dummy.m
-      - subspec_2.m
+      - subspec_2.m:
+          COMPILER_FLAGS: "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"
     - FrameworksBuildPhase:
       - Cocoa.framework
     - HeadersBuildPhase:
@@ -216,7 +217,8 @@ Targets:
     Build Phases:
     - SourcesBuildPhase:
       - Pods-iOS App-PodTest-dummy.m
-      - subspec_1.m
+      - subspec_1.m:
+          COMPILER_FLAGS: "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
