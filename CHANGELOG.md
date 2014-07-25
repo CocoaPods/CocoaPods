@@ -5,6 +5,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+##### Bug Fixes
+
 * Fixed pod repo push to first check if Specs directory exists and if so push there.
   [Edward Valentini](edwardvalentini)
   [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
@@ -18,6 +20,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   pod's via `:path`.  
   [Kyle Fuller](kylef)
   [pod-template#50](https://github.com/CocoaPods/pod-template/issues/50)
+
+* Fixed spec linting to not warn for missing license file in subspecs.  
+  [Fabio Pelosin][irrationalfab]
+  [Core#132](https://github.com/CocoaPods/Core/issues/132)
 
 
 ## 0.33.1
