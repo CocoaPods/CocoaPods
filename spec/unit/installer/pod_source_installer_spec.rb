@@ -61,6 +61,36 @@ module Pod
           }
         end
 
+        it "cleans up directory when an error occurs during download" do
+          config.sandbox.store_head_pod('BananaLib')
+          pod_folder = config.sandbox.root + 'BananaLib'
+          partially_downloaded_file = pod_folder + 'partially_downloaded_file'
+
+          mock_downloader = Object.new
+          singleton_class = class << mock_downloader; self; end
+          singleton_class.send(:define_method, :download_head) do
+            FileUtils.mkdir_p(pod_folder)
+            FileUtils.touch(partially_downloaded_file)
+            raise("some network error")
+          end
+          @installer.stubs(:downloader).returns(mock_downloader)
+
+          lambda {
+            @installer.install!
+          }.should.raise(RuntimeError).message.should.equal('some network error')
+          partially_downloaded_file.should.not.exist
+        end
+
+        it "fails when using :head for Http source" do
+          config.sandbox.store_head_pod('BananaLib')
+          @spec.source = { :http => 'http://dl.google.com/googleadmobadssdk/googleadmobsearchadssdkios.zip' }
+          @spec.source_files = 'GoogleAdMobSearchAdsSDK/*.h'
+          Pod::Downloader::Http.any_instance.stubs(:download_head)
+          should.raise Informative do
+            @installer.install!
+          end.message.should.match /does not support the :head option, as it uses a Http source./
+        end
+
       end
 
       #--------------------------------------#
@@ -83,6 +113,13 @@ module Pod
             @installer.install!
           end.message.should.match /command not found/
         end
+
+        it "unsets $CDPATH environment variable" do
+          ENV['CDPATH'] = "BogusPath"
+          @spec.prepare_command = "cd Classes;ls Banana.h"
+          lambda { @installer.install! }.should.not.raise
+        end
+        
       end
 
       #--------------------------------------#

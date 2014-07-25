@@ -14,23 +14,24 @@ module Pod
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
     require 'cocoapods/command/project'
-    require 'cocoapods/command/push'
     require 'cocoapods/command/repo'
     require 'cocoapods/command/search'
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
     require 'cocoapods/command/init'
 
+    # TODO: remove
+    require 'cocoapods/command/push'
+
     self.abstract_command = true
-    self.default_subcommand = 'install'
     self.command = 'pod'
+    self.version = VERSION
     self.description = 'CocoaPods, the Objective-C library package manager.'
     self.plugin_prefix = 'cocoapods'
 
     def self.options
       [
         ['--silent',   'Show nothing'],
-        ['--version',  'Show the version of CocoaPods'],
       ].concat(super)
     end
 
@@ -43,11 +44,7 @@ module Pod
     end
 
     def self.run(argv)
-      argv = CLAide::ARGV.new(argv)
-      if argv.flag?('version')
-        UI.puts VERSION
-        exit 0
-      end
+      help! "You cannot run CocoaPods as root." if Process.uid == 0
       super(argv)
       UI.print_warnings
     end

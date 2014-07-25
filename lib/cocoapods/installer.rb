@@ -64,11 +64,12 @@ module Pod
       @lockfile = lockfile
     end
 
-    # @return [Bool] Whether the installer is in update mode. In update mode
-    #         the contents of the Lockfile are not taken into account for
-    #         deciding what Pods to install.
+    # @return [Hash, Boolean, nil] Pods that have been requested to be
+    #         updated or true if all Pods should be updated.
+    #         If all Pods should been updated the contents of the Lockfile are
+    #         not taken into account for deciding what Pods to install.
     #
-    attr_accessor :update_mode
+    attr_accessor :update
 
     # Installs the Pods.
     #
@@ -89,6 +90,7 @@ module Pod
       download_dependencies
       generate_pods_project
       integrate_user_project if config.integrate_targets?
+      perform_post_install_actions
     end
 
     def resolve_dependencies
@@ -164,13 +166,14 @@ module Pod
     #
     def analyze
       if lockfile && lockfile.cocoapods_version > Version.new(VERSION)
-        STDERR.puts '[!] The version of CocoaPods used to generate the lockfile is '\
-          'higher than the version of the current executable. Incompatibility ' \
-          'issues may arise.'.yellow
+        STDERR.puts '[!] The version of CocoaPods used to generate ' \
+          "the lockfile (#{lockfile.cocoapods_version}) is "\
+          "higher than the version of the current executable (#{VERSION}). " \
+          'Incompatibility issues may arise.'.yellow
       end
 
       analyzer = Analyzer.new(sandbox, podfile, lockfile)
-      analyzer.update_mode = update_mode
+      analyzer.update = update
       @analysis_result = analyzer.analyze
       @aggregate_targets = analyzer.result.targets
     end
@@ -249,7 +252,13 @@ module Pod
       title_options = { :verbose_prefix => "-> ".green }
       root_specs.sort_by(&:name).each do |spec|
         if pods_to_install.include?(spec.name)
-          UI.titled_section("Installing #{spec}".green, title_options) do
+          if sandbox_state.changed.include?(spec.name) && sandbox.manifest
+            previous = sandbox.manifest.version(spec.name)
+            title = "Installing #{spec.name} #{spec.version} (was #{previous})"
+          else
+            title = "Installing #{spec}"
+          end
+          UI.titled_section(title.green, title_options) do
             install_source_of_pod(spec.name)
           end
         else
@@ -293,6 +302,32 @@ module Pod
       end
     end
 
+    # Performs any post-installation actions
+    #
+    # @return [void]
+    #
+    def perform_post_install_actions
+      warn_for_deprecations
+    end
+
+    # Prints a warning for any pods that are deprecated
+    #
+    # @return [void]
+    #
+    def warn_for_deprecations
+      deprecated_pods = root_specs.select do |spec|
+        spec.deprecated || spec.deprecated_in_favor_of
+      end
+      deprecated_pods.each do |spec|
+        if spec.deprecated_in_favor_of
+          UI.warn "#{spec.name} has been deprecated in " \
+            "favor of #{spec.deprecated_in_favor_of}"
+        else
+          UI.warn "#{spec.name} has been deprecated"
+        end
+      end
+    end
+
     # Creates the Pods project from scratch if it doesn't exists.
     #
     # @return [void]
@@ -309,9 +344,10 @@ module Pod
 
         pod_names = pod_targets.map(&:pod_name).uniq
         pod_names.each do |pod_name|
-          path = sandbox.pod_dir(pod_name)
           local = sandbox.local?(pod_name)
-          @pods_project.add_pod_group(pod_name, path, local)
+          path = sandbox.pod_dir(pod_name)
+          was_absolute = sandbox.local_path_was_absolute?(pod_name)
+          @pods_project.add_pod_group(pod_name, path, local, was_absolute)
         end
 
         if config.podfile_path
@@ -458,40 +494,9 @@ module Pod
     #
     def run_pre_install_hooks
       UI.message "- Running pre install hooks" do
-        analysis_result.specifications.each do |spec|
-          executed = false
-          libraries_using_spec(spec).each do |lib|
-            lib_representation = library_rep(lib)
-            executed ||= run_spec_pre_install_hook(spec, lib_representation)
-          end
-          UI.message "- #{spec.name}" if executed
-        end
-
         executed = run_podfile_pre_install_hook
         UI.message "- Podfile" if executed
       end
-    end
-
-    # Runs the pre install hook of the given specification with the given
-    # library representation.
-    #
-    # @param  [Specification] spec
-    #         The spec for which the pre install hook should be run.
-    #
-    # @param  [Hooks::LibraryRepresentation] lib_representation
-    #         The library representation to be passed as an argument to the
-    #         hook.
-    #
-    # @raise  Raises an informative if the hooks raises.
-    #
-    # @return [Bool] Whether the hook was run.
-    #
-    def run_spec_pre_install_hook(spec, lib_representation)
-      spec.pre_install!(pod_rep(spec.root.name), lib_representation)
-    rescue => e
-      raise Informative, "An error occurred while processing the pre-install " \
-        "hook of #{spec}." \
-        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
     # Runs the pre install hook of the Podfile
@@ -517,40 +522,9 @@ module Pod
     #
     def run_post_install_hooks
       UI.message "- Running post install hooks" do
-        analysis_result.specifications.each do |spec|
-          executed = false
-          libraries_using_spec(spec).each do |lib|
-            lib_representation = library_rep(lib)
-            executed ||= run_spec_post_install_hook(spec, lib_representation)
-          end
-          UI.message "- #{spec.name}" if executed
-        end
         executed = run_podfile_post_install_hook
         UI.message "- Podfile" if executed
       end
-    end
-
-
-    # Runs the post install hook of the given specification with the given
-    # library representation.
-    #
-    # @param  [Specification] spec
-    #         The spec for which the post install hook should be run.
-    #
-    # @param  [Hooks::LibraryRepresentation] lib_representation
-    #         The library representation to be passed as an argument to the
-    #         hook.
-    #
-    # @raise  Raises an informative if the hooks raises.
-    #
-    # @return [Bool] Whether the hook was run.
-    #
-    def run_spec_post_install_hook(spec, lib_representation)
-      spec.post_install!(lib_representation)
-    rescue => e
-      raise Informative, "An error occurred while processing the post-install " \
-        "hook of #{spec}." \
-        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
     # Runs the post install hook of the Podfile

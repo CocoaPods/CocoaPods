@@ -21,6 +21,16 @@ def generate_podfile(pods = ['JSONKit'])
   end
 end
 
+# @return [Podfile]
+#
+def generate_local_podfile
+  podfile = Pod::Podfile.new do
+    platform :ios
+    xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
+    pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
+  end
+end
+
 #-----------------------------------------------------------------------------#
 
 module Pod
@@ -42,6 +52,7 @@ module Pod
         @installer.stubs(:download_dependencies)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
+        @installer.stubs(:perform_post_install_actions)
       end
 
       it "in runs the pre-install hooks before cleaning the Pod sources" do
@@ -87,6 +98,19 @@ module Pod
         @installer.install!
       end
 
+      it 'prints a list of deprecated pods' do
+        spec = Spec.new
+        spec.name = 'RestKit'
+        spec.deprecated_in_favor_of = 'AFNetworking'
+        spec_two = Spec.new
+        spec_two.name = 'BlocksKit'
+        spec_two.deprecated = true
+        @installer.stubs(:root_specs).returns([spec, spec_two])
+        @installer.send(:warn_for_deprecations)
+        UI.warnings.should.include 'deprecated in favor of AFNetworking'
+        UI.warnings.should.include 'BlocksKit has been deprecated'
+      end
+
     end
 
     #-------------------------------------------------------------------------#
@@ -113,8 +137,8 @@ module Pod
         end
 
         it "configures the analyzer to use update mode if appropriate" do
-          @installer.update_mode = true
-          Installer::Analyzer.any_instance.expects(:update_mode=).with(true)
+          @installer.update = true
+          Installer::Analyzer.any_instance.expects(:update=).with(true)
           @installer.send(:analyze)
           @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
           @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
@@ -216,6 +240,22 @@ module Pod
           @installer.installed_specs.should == [spec]
         end
 
+        it "prints the previous version of a pod while updating the spec" do
+          spec = Spec.new
+          spec.name = 'RestKit'
+          spec.version = '2.0'
+          manifest = Lockfile.new({})
+          manifest.stubs(:version).with('RestKit').returns('1.0')
+          @installer.sandbox.stubs(:manifest).returns(manifest)
+          @installer.stubs(:root_specs).returns([spec])
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.changed << 'RestKit'
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.expects(:install_source_of_pod).with('RestKit')
+          @installer.send(:install_pod_sources)
+          UI.output.should.include 'was 1.0'
+        end
+
         #--------------------------------------#
 
         describe "#clean" do
@@ -267,6 +307,15 @@ module Pod
         it "creates the Pods project" do
           @installer.send(:prepare_pods_project)
           @installer.pods_project.class.should == Pod::Project
+        end
+
+        it "preserves Pod paths specified as absolute or rooted to home" do
+          local_podfile = generate_local_podfile
+          local_installer = Installer.new(config.sandbox, local_podfile)
+          local_installer.send(:analyze)
+          local_installer.send(:prepare_pods_project)
+          group = local_installer.pods_project.group_for_spec('Reachability')
+          Pathname.new(group.path).should.be.absolute
         end
 
         it "adds the Podfile to the Pods project" do
@@ -367,11 +416,13 @@ module Pod
         end
 
         it "recursively sorts the project" do
+          Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
           @installer.pods_project.main_group.expects(:sort)
           @installer.send(:write_pod_project)
         end
 
         it "saves the project to the given path" do
+          Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
           path = temporary_directory + 'Pods/Pods.xcodeproj'
           @installer.pods_project.expects(:save)
           @installer.send(:write_pod_project)
@@ -440,9 +491,6 @@ module Pod
         library_rep = stub()
 
         @installer.expects(:installer_rep).returns(installer_rep)
-        @installer.expects(:pod_rep).with('JSONKit').returns(pod_rep)
-        @installer.expects(:library_rep).with(@aggregate_target).returns(library_rep)
-        @spec.expects(:pre_install!)
         @installer.podfile.expects(:pre_install!).with(installer_rep)
         @installer.send(:run_pre_install_hooks)
       end
@@ -452,8 +500,6 @@ module Pod
         target_installer_data = stub()
 
         @installer.expects(:installer_rep).returns(installer_rep)
-        @installer.expects(:library_rep).with(@aggregate_target).returns(target_installer_data)
-        @spec.expects(:post_install!)
         @installer.podfile.expects(:post_install!).with(installer_rep)
         @installer.send(:run_post_install_hooks)
       end
@@ -469,11 +515,7 @@ module Pod
 
         @installer.stubs(:pod_targets).returns([pod_target_ios, pod_target_osx])
         @installer.stubs(:installer_rep).returns(stub())
-        @installer.stubs(:library_rep).with(@aggregate_target).returns(target_installer_data).twice
-
         @installer.podfile.expects(:pre_install!)
-        @spec.expects(:post_install!).with(target_installer_data).once
-
         @installer.send(:run_pre_install_hooks)
         @installer.send(:run_post_install_hooks)
       end
@@ -510,9 +552,7 @@ module Pod
         libs = @installer.send(:libraries_using_spec, @spec)
         libs.map(&:name).should == ['Pods']
       end
-
     end
-
   end
 end
 

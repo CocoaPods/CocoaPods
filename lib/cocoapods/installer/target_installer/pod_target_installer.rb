@@ -15,7 +15,6 @@ module Pod
           add_target
           add_files_to_build_phases
           add_resources_bundle_targets
-          # create_suport_files_group
           create_xcconfig_file
           create_prefix_header
           create_dummy_source

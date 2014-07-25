@@ -1,5 +1,6 @@
 # Do’s and Don’ts
 
+* **Search the solutions in the [troubleshooting guide](http://guides.cocoapods.org/using/troubleshooting.html).** Or any of the many other [guides](http://guides.cocoapods.org).
 * **Search tickets before you file a new one.** Add to tickets if you have new information about the issue.
 * **Only file tickets about the CocoaPods tool itself.** This includes [CocoaPods](https://github.com/CocoaPods/CocoaPods/issues),
   [CocoaPods/Core](https://github.com/CocoaPods/Core/issues), and [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/issues).
@@ -48,7 +49,7 @@ Should you require a feature isn't suited for mainstream users, consider suggest
 ## Pull Requests
 
 We **love** pull requests and if a contribution is significant we tend to offer
-push access.
+push access. We suggest you take a look at our [Contributing guide](http://guides.cocoapods.org/contributing/contribute-to-cocoapods.html) for info on development setup, and some of our best practices.
 
 All contributions _will_ be licenced under the MIT license.
 

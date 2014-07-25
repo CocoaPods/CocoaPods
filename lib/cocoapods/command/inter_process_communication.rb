@@ -15,7 +15,9 @@ module Pod
 
         self.summary = 'Converts a podspec to JSON.'
         self.description = 'Converts a podspec to JSON and prints it to STDOUT.'
-        self.arguments = 'PATH'
+        self.arguments = [
+            CLAide::Argument.new('PATH', true)
+        ]
 
         def initialize(argv)
           @path = argv.shift_argument
@@ -40,7 +42,9 @@ module Pod
 
         self.summary = 'Converts a Podfile to YAML.'
         self.description = 'Converts a Podfile to YAML and prints it to STDOUT.'
-        self.arguments = 'PATH'
+        self.arguments = [
+            CLAide::Argument.new('PATH', true)
+        ]
 
         def initialize(argv)
           @path = argv.shift_argument
@@ -63,11 +67,11 @@ module Pod
 
       class List < IPC
 
-        self.summary = 'Lists the specifications know to CocoaPods.'
+        self.summary = 'Lists the specifications known to CocoaPods.'
         self.description = <<-DESC
           Prints to STDOUT a YAML dictionary where the keys are the name of the
-          specifications and the values are a dictionary with the following
-          keys.
+          specifications and each corresponding value is a dictionary with
+          the following keys:
 
           - defined_in_file
           - version

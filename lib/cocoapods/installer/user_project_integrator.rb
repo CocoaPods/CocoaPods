@@ -81,21 +81,22 @@ module Pod
       #
       def create_workspace
         all_projects = user_project_paths.sort.push(sandbox.project_path).uniq
-        projpaths = all_projects.map do |path|
-          path.relative_path_from(workspace_path.dirname).to_s
+        file_references = all_projects.map do |path|
+          relative_path = path.relative_path_from(workspace_path.dirname).to_s
+          Xcodeproj::Workspace::FileReference.new(relative_path, 'group')
         end
 
         if workspace_path.exist?
           workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          new_projpaths = projpaths - workspace.projpaths
-          unless new_projpaths.empty?
-            workspace.projpaths.concat(new_projpaths)
+          new_file_references = file_references - workspace.file_references
+          unless new_file_references.empty?
+            workspace.file_references.concat(new_file_references)
             workspace.save_as(workspace_path)
           end
 
         else
           UI.notice "From now on use `#{workspace_path.basename}`."
-          workspace = Xcodeproj::Workspace.new(*projpaths)
+          workspace = Xcodeproj::Workspace.new(*file_references)
           workspace.save_as(workspace_path)
         end
       end

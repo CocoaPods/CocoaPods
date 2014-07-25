@@ -128,7 +128,7 @@ module Pod
       end
 
       it "does not lock the dependencies in update mode" do
-        @analyzer.update_mode = true
+        @analyzer.update = true
         @analyzer.analyze
         @analyzer.send(:locked_dependencies).map(&:to_s).should == []
       end
@@ -140,19 +140,19 @@ module Pod
         podfile_state.added << "BananaLib"
         @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
         @podfile.stubs(:dependencies).returns([Dependency.new('BananaLib', :git => "example.com")])
-        ExternalSources::GitSource.any_instance.expects(:fetch)
+        ExternalSources::DownloaderSource.any_instance.expects(:fetch)
         @analyzer.send(:fetch_external_sources)
       end
 
       xit "it fetches the specification from either the sandbox or from the remote be default" do
         dependency = Dependency.new('Name', :git => 'www.example.com')
-        ExternalSources::GitSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
+        ExternalSources::DownloaderSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
         @resolver.send(:set_from_external_source, dependency)
       end
 
       xit "it fetches the specification from the remote if in update mode" do
         dependency = Dependency.new('Name', :git => 'www.example.com')
-        ExternalSources::GitSource.any_instance.expects(:specification).returns(Specification.new).once
+        ExternalSources::DownloaderSource.any_instance.expects(:specification).returns(Specification.new).once
         @resolver.update_external_specs = false
         @resolver.send(:set_from_external_source, dependency)
       end

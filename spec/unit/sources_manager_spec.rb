@@ -1,5 +1,31 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
+def set_up_test_repo_for_update
+  set_up_test_repo
+  upstream = SpecHelper.temporary_directory + 'upstream'
+  FileUtils.cp_r(test_repo_path, upstream)
+  Dir.chdir(test_repo_path) do
+    `git remote add origin #{upstream}`
+    `git remote -v`
+    `git fetch -q`
+    `git branch --set-upstream-to=origin/master master`
+    `git config branch.master.rebase true`
+  end
+  config.repos_dir = SpecHelper.tmp_repos_path
+end
+
+def merge_conflict_version_yaml
+  text = <<-VERSION.strip_heredoc
+    ---
+    <<<<<<< HEAD
+    min: 0.18.1
+    =======
+    min: 0.29.0
+    >>>>>>> 8365d0ad18508175bbde31b9dd2bdaf1be49214f
+    last: 0.29.0
+  VERSION
+end
+
 module Pod
   describe SourcesManager do
 
@@ -49,7 +75,7 @@ module Pod
         sets.all?{ |s| s.class == Specification::Set}.should.be.true
         sets.any?{ |s| s.name  == 'BananaLib'}.should.be.true
       end
-      
+
       it "can perform a full text regexp search of the sets" do
         Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
         sets = SourcesManager.search_by_name('Ch[aeiou]nky', true)
@@ -87,19 +113,17 @@ module Pod
       extend SpecHelper::TemporaryRepos
 
       it "update source backed by a git repository" do
-        set_up_test_repo
-        upstream = SpecHelper.temporary_directory + 'upstream'
-        FileUtils.cp_r(test_repo_path, upstream)
-        Dir.chdir(test_repo_path) do
-          `git remote add origin #{upstream}`
-          `git remote -v`
-          `git fetch -q`
-          `git branch --set-upstream-to=origin/master master`
-        end
-        config.repos_dir = SpecHelper.tmp_repos_path
+        set_up_test_repo_for_update
 
         SourcesManager.update(test_repo_path.basename.to_s, true)
-        UI.output.should.match /Already up-to-date/
+        UI.output.should.match /is up to date/
+      end
+
+      it "uses the only fast forward git option" do
+        set_up_test_repo_for_update
+
+        SourcesManager.expects(:git!).with() { |options| options.should.match /--ff-only/ }
+        SourcesManager.update(test_repo_path.basename.to_s, true)
       end
 
       it 'returns whether a source has a reachable git remote' do
@@ -122,9 +146,23 @@ module Pod
         SourcesManager.stubs(:version_information).returns({ 'min' => '999.0' })
         e = lambda { SourcesManager.check_version_information(temporary_directory) }.should.raise Informative
         e.message.should.match /Update CocoaPods/
+        e.message.should.match /(currently using #{Pod::VERSION})/
         SourcesManager.stubs(:version_information).returns({ 'max' => '0.0.1' })
         e = lambda { SourcesManager.check_version_information(temporary_directory) }.should.raise Informative
         e.message.should.match /Update CocoaPods/
+        e.message.should.match /(currently using #{Pod::VERSION})/
+      end
+
+      it 'raises when reading version information with merge conflict' do
+        Pathname.any_instance.stubs(:read).returns(merge_conflict_version_yaml)
+        e = lambda { SourcesManager.version_information(SourcesManager.master_repo_dir) }.should.raise Informative
+        e.message.should.match /Repairing-Our-Broken-Specs-Repository/
+      end
+
+      it 'returns whether a path is writable' do
+        path = '/Users/'
+        Pathname.any_instance.stubs(:writable?).returns(true)
+        SourcesManager.send(:path_writable?, path).should.be.true
       end
 
       it "returns whether a repository is compatible" do

@@ -152,8 +152,13 @@ module Pod
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
             Dir.chdir(source.data_provider.repo) do
-              output = git!("pull")
-              UI.puts output if show_output && !config.verbose?
+              begin
+                output = git!("pull --ff-only")
+                UI.puts output if show_output && !config.verbose?
+              rescue Informative => e
+                raise Informative, 'An error occurred while performing ' \
+                  "`git pull` on repo `#{source.name}`.\n" + e.message
+              end
             end
             check_version_information(source.data_provider.repo)
           end
@@ -201,12 +206,16 @@ module Pod
           min, max = versions['min'], versions['max']
           version_msg = ( min == max ) ? min : "#{min} - #{max}"
           raise Informative, "The `#{dir.basename}` repo requires " \
-          "CocoaPods #{version_msg}\n".red +
+          "CocoaPods #{version_msg} (currently using #{Pod::VERSION})\n".red +
           "Update CocoaPods, or checkout the appropriate tag in the repo."
         end
 
+        needs_sudo = path_writable?(__FILE__)
+
         if config.new_version_message? && cocoapods_update?(versions)
-          UI.puts "\nCocoaPods #{versions['last']} is available.\n".green
+          UI.puts "\nCocoaPods #{versions['last']} is available.\n" \
+            "To update use: #{needs_sudo ? 'sudo ' : ''}" \
+            'gem install cocoapods\n'.green
         end
       end
 
@@ -258,7 +267,16 @@ module Pod
       def version_information(dir)
         require 'yaml'
         yaml_file  = dir + 'CocoaPods-version.yml'
-        yaml_file.exist? ? YAML.load_file(yaml_file) : {}
+        return {} unless yaml_file.exist?
+        begin
+          yaml = Pathname.new(yaml_file).read
+          YAMLHelper.load(yaml)
+        rescue Informative => e
+          raise Informative, "There was an error reading '#{yaml_file}'.\n" \
+            'Please consult http://blog.cocoapods.org/' \
+            'Repairing-Our-Broken-Specs-Repository/ ' \
+            'for more information.'
+        end
       end
 
       public
@@ -282,6 +300,12 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
+
+      private
+
+      def path_writable?(path)
+        Pathname(path).dirname.writable?
+      end
 
     end
   end

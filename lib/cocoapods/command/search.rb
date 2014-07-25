@@ -4,12 +4,14 @@ module Pod
       self.summary = 'Searches for pods'
 
       self.description = <<-DESC
-        Searches for pods, ignoring case, whose name matches `QUERY'. If the
-        `--full' option is specified, this will also search in the summary and
+        Searches for pods, ignoring case, whose name matches `QUERY`. If the
+        `--full` option is specified, this will also search in the summary and
         description of the pods.
       DESC
 
-      self.arguments = '[QUERY]'
+      self.arguments = [
+          CLAide::Argument.new('QUERY', true)
+      ]
 
       def self.options
         [
@@ -35,6 +37,14 @@ module Pod
       def validate!
         super
         help! "A search query is required." unless @query
+
+        unless @web
+          begin
+            /#{@query.join(' ').strip}/
+          rescue RegexpError
+            help! "A valid regular expression is required."
+          end
+        end
       end
 
       def run
@@ -50,11 +60,11 @@ module Pod
 
       def web_search
         query_parameter = [
-          ('on%3Aosx' if @supported_on_osx),
-          ('on%3Aios' if @supported_on_ios),
+          ('on:osx' if @supported_on_osx),
+          ('on:ios' if @supported_on_ios),
           @query
-        ].compact.flatten.join('%20')
-        url = "http://cocoapods.org/?q=#{query_parameter}"
+        ].compact.flatten.join(' ')
+        url = "http://cocoapods.org/?q=#{CGI.escape(query_parameter).gsub("+", "%20")}"
         UI.puts("Opening #{url}")
         open!(url)
       end

@@ -17,8 +17,8 @@ module Pod
       output.should.include? '1.1'
       output.should.include? '[master repo]'
       output.should.include? 'A fast & simple, yet powerful & flexible logging framework for Mac and iOS.'
-      output.should.include? 'https://github.com/robbiehanson/CocoaLumberjack'
-      output.should.include? 'https://github.com/robbiehanson/CocoaLumberjack.git'
+      output.should.include? 'https://github.com/CocoaLumberjack/CocoaLumberjack'
+      output.should.include? 'https://github.com/CocoaLumberjack/CocoaLumberjack.git'
     end
 
     it "presents the stats of a specification set" do
@@ -36,11 +36,17 @@ module Pod
     end
 
     it "should print at least one subspec" do
-      @set = SourcesManager.search_by_name('RestKit').first
+      @set = SourcesManager.search(Dependency.new('RestKit'))
       UI.pod(@set)
       output = UI.output
       output.should.include? "RestKit/Network"
     end
+
+    it "presents only name and version of a specification set in :name_and_version mode" do
+      @set = SourcesManager.search_by_name('RestKit').first
+      UI.pod(@set, :name_and_version)
+      output = UI.output
+      output.should.include? "RestKit #{@set.versions.first}"
+    end
   end
 end
-

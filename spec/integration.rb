@@ -186,8 +186,8 @@ end
 #        The file in the temporary directory after running the pod command.
 #
 def yaml_should_match(expected, produced)
-  expected_yaml = YAML::load(File.open(expected))
-  produced_yaml = YAML::load(File.open(produced))
+  expected_yaml = File.open(expected) { |f| YAML.load(f) }
+  produced_yaml = File.open(produced) { |f| YAML.load(f) }
   # Remove CocoaPods version
   expected_yaml.delete('COCOAPODS')
   produced_yaml.delete('COCOAPODS')
@@ -331,6 +331,10 @@ describe "Integration" do
       check "install --no-repo-update", "install_subspecs"
     end
 
+    describe "Installs a Pod with subspecs and does not duplicate the prefix header" do
+      check "install --no-repo-update", "install_subspecs_no_duplicate_prefix"
+    end
+
     describe "Installs a Pod with a local source" do
       check "install --no-repo-update", "install_local_source"
     end
@@ -356,13 +360,6 @@ describe "Integration" do
     describe "Runs the Podfile callbacks" do
       check "install --no-repo-update", "install_podfile_callbacks"
     end
-
-    # @todo add tests for all the hooks API
-    #
-    describe "Runs the specification callbacks" do
-      check "install --no-repo-update", "install_spec_callbacks"
-    end
-
   end
 
   #--------------------------------------#
@@ -370,7 +367,11 @@ describe "Integration" do
   describe "Pod update" do
 
     describe "Updates an existing installation" do
-      check "update --no-repo-update", "update"
+      check "update --no-repo-update", "update_all"
+    end
+
+    describe "Updates a selected Pod in an existing installation" do
+      check "update Reachability --no-repo-update", "update_selected"
     end
 
   end

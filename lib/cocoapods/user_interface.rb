@@ -158,8 +158,8 @@ module Pod
       # Prints the textual representation of a given set.
       #
       def pod(set, mode = :normal, statistics_provider = nil)
-        if mode == :name
-          puts_indented set.name
+        if mode == :name_and_version
+          puts_indented "#{set.name} #{set.versions.first.version}"
         else
           pod = Specification::Set::Presenter.new(set, statistics_provider)
           title("\n-> #{pod.name} (#{pod.version})".green, '', 1) do
@@ -184,10 +184,10 @@ module Pod
 
       # Prints a message with a label.
       #
-      def labeled(label, value)
+      def labeled(label, value, justification = 16)
         if value
           ''.tap do |t|
-            t << "    - #{label}:".ljust(16)
+            t << "    - #{label}:".ljust(justification)
             if value.is_a?(Array)
               separator = "\n  - "
               puts_indented t << separator << value.join(separator)

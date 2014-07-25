@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'cocoapods/command/repo/push'
 
 module Pod
   class Command
@@ -17,9 +18,20 @@ module Pod
           remote can later be referred to by `NAME`.
         DESC
 
-        self.arguments = 'NAME URL [BRANCH]'
+        self.arguments = [
+            CLAide::Argument.new('NAME',   true),
+            CLAide::Argument.new('URL',    true),
+            CLAide::Argument.new('BRANCH', false)
+        ]
+
+        def self.options
+          [
+            ["--shallow", "Create a shallow clone (fast clone, but no push capabilities)"],
+          ].concat(super)
+        end
 
         def initialize(argv)
+          @shallow = argv.flag?('shallow', false)
           @name, @url, @branch = argv.shift_argument, argv.shift_argument, argv.shift_argument
           super
         end
@@ -32,9 +44,14 @@ module Pod
         end
 
         def run
-          UI.section("Cloning spec repo `#{@name}` from `#{@url}`#{" (branch `#{@branch}`)" if @branch}") do
+          prefix = @shallow ? 'Creating shallow clone of' : 'Cloning'
+          UI.section("#{prefix} spec repo `#{@name}` from `#{@url}`#{" (branch `#{@branch}`)" if @branch}") do
             config.repos_dir.mkpath
-            Dir.chdir(config.repos_dir) { git!("clone '#{@url}' #{@name}") }
+            Dir.chdir(config.repos_dir) do
+              command = "clone '#{@url}' #{@name}"
+              command << ' --depth=1' if @shallow
+              git!(command)
+            end
             Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
             SourcesManager.check_version_information(dir)
           end
@@ -51,7 +68,9 @@ module Pod
           this will update all spec-repos in `~/.cocoapods/repos`.
         DESC
 
-        self.arguments = '[NAME]'
+        self.arguments = [
+            CLAide::Argument.new('NAME', false)
+        ]
 
         def initialize(argv)
           @name = argv.shift_argument
@@ -74,7 +93,9 @@ module Pod
           will lint all the spec-repos known to CocoaPods.
         DESC
 
-        self.arguments = '[ NAME | DIRECTORY ]'
+        self.arguments = [
+            CLAide::Argument.new(%w(NAME DIRECTORY), false)
+        ]
 
         def self.options
           [["--only-errors", "Lint presents only the errors"]].concat(super)
@@ -140,7 +161,9 @@ module Pod
           Deletes the remote named `NAME` from the local spec-repos directory at `~/.cocoapods/repos/.`
         DESC
 
-        self.arguments = 'NAME'
+        self.arguments = [
+            CLAide::Argument.new('NAME', true)
+        ]
 
         def initialize(argv)
           @name = argv.shift_argument
@@ -151,6 +174,8 @@ module Pod
           super
           help! 'Deleting a repo needs a `NAME`.' unless @name
           help! "repo #{@name} does not exist" unless File.directory?(dir)
+          help! "You do not have permission to delete the #{@name} repository." \
+                "Perhaps try prefixing this command with sudo." unless File.writable?(dir)
         end
 
         def run

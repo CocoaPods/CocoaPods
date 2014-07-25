@@ -9,7 +9,10 @@ require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/array/conversions'
 # TODO check what this actually does by the time we're going to add support for
 # other locales.
-I18n.enforce_available_locales = false
+require 'i18n'
+if I18n.respond_to?(:enforce_available_locales=)
+  I18n.enforce_available_locales = false
+end
 
 module Pod
   require 'pathname'
@@ -18,6 +21,11 @@ module Pod
   require 'cocoapods-core'
   require 'cocoapods/config'
   require 'cocoapods/downloader'
+
+  # Loaded immediately after dependencies to ensure proper override of their
+  # UI methods.
+  #
+  require 'cocoapods/user_interface'
 
   # Indicates an user error. This is defined in cocoapods-core.
   #
@@ -38,7 +46,6 @@ module Pod
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'
   autoload :Sandbox,                   'cocoapods/sandbox'
-  autoload :UI,                        'cocoapods/user_interface'
   autoload :Validator,                 'cocoapods/validator'
 
   module Generator

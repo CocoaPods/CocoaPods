@@ -10,13 +10,20 @@ module Pod
         self.summary = 'Creates a new Pod'
 
         self.description = <<-DESC
-          Creates a new Pod with the given name from the template in the working directory.
+          Creates a scaffold for the development of a new Pod named `NAME`
+          according to the CocoaPods best practices.
+          If a `TEMPLATE_URL`, pointing to a git repo containing a compatible
+          template, is specified, it will be used in place of the default one.
         DESC
 
-        self.arguments = '[NAME]'
+        self.arguments = [
+            CLAide::Argument.new('NAME', true),
+            CLAide::Argument.new('TEMPLATE_URL', false)
+        ]
 
         def initialize(argv)
           @name = argv.shift_argument
+          @template_url = argv.shift_argument
           super
         end
 
@@ -24,6 +31,7 @@ module Pod
           super
           help! "A name for the Pod is required." unless @name
           help! "The Pod name cannot contain spaces." if @name.match(/\s/)
+          help! "The Pod name cannot begin with a '.'" if @name[0, 1] == '.'
         end
 
         def run
@@ -52,8 +60,8 @@ module Pod
         # @return [void]
         #
         def clone_template
-          UI.section("Creating `#{@name}` Pod") do
-            git!"clone '#{TEMPLATE_REPO}' #{@name}"
+          UI.section("Cloning `#{template_repo_url}` into `#{@name}`.") do
+            git!"clone '#{template_repo_url}' #{@name}"
           end
         end
 
@@ -62,9 +70,13 @@ module Pod
         # @return [void]
         #
         def configure_template
-          UI.section("Configuring template") do
+          UI.section("Configuring #{@name} template.") do
             Dir.chdir(@name) do
-              ruby! "_CONFIGURE.rb #{@name}"
+              if File.exists? "configure"
+                system "./configure #{@name}"
+              else
+                UI.warn "Template does not have a configure file."
+              end
             end
           end
         end
@@ -74,10 +86,17 @@ module Pod
         # @return [void]
         #
         def print_info
-          UI.puts "\nTo learn more about the template see `#{TEMPLATE_INFO_URL}`."
+          UI.puts "\nTo learn more about the template see `#{template_repo_url}`."
           UI.puts "To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`."
         end
 
+        # Checks if a template URL is given else returns the TEMPLATE_REPO URL
+        #
+        # @return String
+        #
+        def template_repo_url
+          @template_url || TEMPLATE_REPO
+        end
       end
 
       #-----------------------------------------------------------------------#
