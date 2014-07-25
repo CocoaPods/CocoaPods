@@ -22,7 +22,7 @@ module Pod
 
     # @return [void]
     #
-    def write_podspec(text, name = 'JSONKit.podspec')
+    def write_podspec(text, name = 'JSONKit.podspec.json')
       file = temporary_directory + name
       File.open(file, 'w') {|f| f.write(text) }
       file
@@ -31,7 +31,7 @@ module Pod
     # @return [String]
     #
     def stub_podspec(pattern = nil, replacement = nil)
-      spec = (fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec').read
+      spec = (fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json').read
       spec.gsub!(/https:\/\/github\.com\/johnezang\/JSONKit\.git/, fixture('integration/JSONKit').to_s)
       spec.gsub!(pattern, replacement) if pattern && replacement
       spec
@@ -40,7 +40,7 @@ module Pod
     # @return [Pathname]
     #
     def podspec_path
-      fixture('spec-repos') + 'master/JSONKit/1.4/JSONKit.podspec'
+      fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json'
     end
 
     #-------------------------------------------------------------------------#
@@ -55,7 +55,7 @@ module Pod
       end
 
       it "lints the podspec during validation" do
-        podspec = stub_podspec(/s.name.*$/, 's.name = "TEST"')
+        podspec = stub_podspec(/.*name.*/, '"name": "TEST",')
         file = write_podspec(podspec)
         sut = Validator.new(file)
         sut.quick = true
@@ -73,7 +73,7 @@ module Pod
       end
 
       it "respects the only errors option" do
-        podspec = stub_podspec(/s.summary.*/, "s.summary = 'A short description of'")
+        podspec = stub_podspec(/.*summary.*/, '"summary": "A short description of",')
         file = write_podspec(podspec)
         sut = Validator.new(file)
         sut.quick = true
@@ -297,7 +297,7 @@ module Pod
       end
 
       it "checks for file patterns" do
-        file = write_podspec(stub_podspec(/s\.source_files = 'JSONKit\.\*'/, "s.source_files = 'wrong_paht.*'"))
+        file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "wrong_paht.*",'))
         sut = Validator.new(file)
         sut.stubs(:build_pod)
         sut.stubs(:validate_url)
@@ -307,10 +307,10 @@ module Pod
       end
 
       it "validates a podspec with dependencies" do
-        podspec = stub_podspec(/s.name.*$/, 's.name = "ZKit"')
-        podspec.gsub!(/s.requires_arc/, "s.dependency 'SBJson', '~> 3.2'\n  s.requires_arc")
-        podspec.gsub!(/s.license.*$/, 's.license = "Public Domain"')
-        file = write_podspec(podspec, "ZKit.podspec")
+        podspec = stub_podspec(/.*name.*/, '"name": "ZKit",')
+        podspec.gsub!(/.*requires_arc.*/, '"dependencies": { "SBJson": [ "~> 3.2" ] }, "requires_arc": false')
+        podspec.gsub!(/.*license.*$/, '"license": "Public Domain",')
+        file = write_podspec(podspec, "ZKit.podspec.json")
 
         spec = Specification.from_file(file)
         sut = Validator.new(spec)

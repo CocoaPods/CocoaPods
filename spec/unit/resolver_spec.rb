@@ -32,7 +32,7 @@ module Pod
         specs.map(&:to_s).should == [
           "A2DynamicDelegate (2.0.2)",
           "BlocksKit (1.5.2)",
-          "libffi (3.0.11)"
+          "libffi (3.0.13)"
         ]
       end
 
@@ -43,7 +43,7 @@ module Pod
         specs.map(&:to_s).should == [
           "A2DynamicDelegate (2.0.2)",
           "BlocksKit (1.5.2)",
-          "libffi (3.0.11)"
+          "libffi (3.0.13)"
         ]
       end
 
@@ -107,7 +107,7 @@ module Pod
 
       it "includes all the subspecs of a specification node" do
         @podfile = Podfile.new do
-          platform :ios
+          platform :ios, '7.0'
           pod 'RestKit', '0.10.3'
         end
         resolver = Resolver.new(config.sandbox, @podfile)
@@ -121,11 +121,14 @@ module Pod
         RestKit
         RestKit/JSON
         RestKit/Network
+        RestKit/ObjectMapping
         RestKit/ObjectMapping/Core
         RestKit/ObjectMapping/CoreData
         RestKit/ObjectMapping/JSON
+        RestKit/ObjectMapping/XML
         RestKit/UI
         SOCKit
+        XMLReader
         cocoa-oauth
         }
       end
