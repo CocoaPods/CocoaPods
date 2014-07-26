@@ -33,7 +33,7 @@ module Pod
       #
       def create_xcconfig_file
         target.build_configurations.each do |configuration|
-          path = library.xcconfig_path(configuration)
+          path = library.xcconfig_path(configuration.name)
           UI.message "- Generating #{configuration.name} xcconfig file at #{UI.path(path)}" do
             gen = Generator::XCConfig::AggregateXCConfig.new(library, configuration.name)
             gen.save_as(path)
