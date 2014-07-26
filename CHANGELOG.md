@@ -4,6 +4,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+##### Enhancements
+
+* Add support to specify dependencies per build configuration.  
+  [Joachim Bengtsson](https://github.com/nevyn)
+  [Eloy Durán](https://github.com/alloy)
+  [Fabio Pelosin][irrationalfab]
+  [#1791](https://github.com/CocoaPods/CocoaPods/pull/1791)
+  [#1668](https://github.com/CocoaPods/CocoaPods/pull/1668)
+  [#731](https://github.com/CocoaPods/CocoaPods/pull/731)
+
 * Include configurations a user explicitly specifies in their Podfile when the
   `--no-integrate` option is specified.  
   [Eloy Durán](https://github.com/alloy)
