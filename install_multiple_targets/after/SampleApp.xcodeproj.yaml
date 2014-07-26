@@ -61,12 +61,12 @@ File References:
   - SampleAppTests.octest
   - SampleApp_2.app
   - NonIntegrated.app
-- Pods.Debug.xcconfig
-- Pods.Release.xcconfig
-- Pods-SampleApp_2.Debug.xcconfig
-- Pods-SampleApp_2.Release.xcconfig
-- Pods-test.Debug.xcconfig
-- Pods-test.Release.xcconfig
+- Pods.debug.xcconfig
+- Pods.release.xcconfig
+- Pods-SampleApp_2.debug.xcconfig
+- Pods-SampleApp_2.release.xcconfig
+- Pods-test.debug.xcconfig
+- Pods-test.release.xcconfig
 
 
 
@@ -94,7 +94,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.Debug.xcconfig
+        Base Configuration: Pods.debug.xcconfig
     - Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -103,7 +103,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.Release.xcconfig
+        Base Configuration: Pods.release.xcconfig
 - SampleAppTests:
     Build Phases:
     - Check Pods Manifest.lock: []
@@ -129,7 +129,7 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME)"
           TEST_HOST: "$(BUNDLE_LOADER)"
           WRAPPER_EXTENSION: octest
-        Base Configuration: Pods-test.Debug.xcconfig
+        Base Configuration: Pods-test.debug.xcconfig
     - Release:
         Build Settings:
           BUNDLE_LOADER: "$(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp"
@@ -141,7 +141,7 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME)"
           TEST_HOST: "$(BUNDLE_LOADER)"
           WRAPPER_EXTENSION: octest
-        Base Configuration: Pods-test.Release.xcconfig
+        Base Configuration: Pods-test.release.xcconfig
 - SampleApp_2:
     Build Phases:
     - Check Pods Manifest.lock: []
@@ -165,7 +165,7 @@ Targets:
           INFOPLIST_FILE: SampleApp_2/SampleApp_2-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods-SampleApp_2.Debug.xcconfig
+        Base Configuration: Pods-SampleApp_2.debug.xcconfig
     - Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -174,7 +174,7 @@ Targets:
           INFOPLIST_FILE: SampleApp_2/SampleApp_2-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods-SampleApp_2.Release.xcconfig
+        Base Configuration: Pods-SampleApp_2.release.xcconfig
 - NonIntegrated:
     Build Phases:
     - SourcesBuildPhase:

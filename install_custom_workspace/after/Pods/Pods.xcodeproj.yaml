@@ -30,16 +30,16 @@ File References:
     - Pods-SampleApp_1-dummy.m
     - Pods-SampleApp_1-environment.h
     - Pods-SampleApp_1-resources.sh
-    - Pods-SampleApp_1.Debug.xcconfig
-    - Pods-SampleApp_1.Release.xcconfig
+    - Pods-SampleApp_1.debug.xcconfig
+    - Pods-SampleApp_1.release.xcconfig
   - Pods-SampleApp_2:
     - Pods-SampleApp_2-acknowledgements.markdown
     - Pods-SampleApp_2-acknowledgements.plist
     - Pods-SampleApp_2-dummy.m
     - Pods-SampleApp_2-environment.h
     - Pods-SampleApp_2-resources.sh
-    - Pods-SampleApp_2.Debug.xcconfig
-    - Pods-SampleApp_2.Release.xcconfig
+    - Pods-SampleApp_2.debug.xcconfig
+    - Pods-SampleApp_2.release.xcconfig
 
 
 
@@ -71,7 +71,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-SampleApp_1.Debug.xcconfig
+        Base Configuration: Pods-SampleApp_1.debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -93,7 +93,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods-SampleApp_1.Release.xcconfig
+        Base Configuration: Pods-SampleApp_1.release.xcconfig
 - Pods-SampleApp_1-Reachability:
     Build Phases:
     - SourcesBuildPhase:
@@ -177,7 +177,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-SampleApp_2.Debug.xcconfig
+        Base Configuration: Pods-SampleApp_2.debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -199,7 +199,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods-SampleApp_2.Release.xcconfig
+        Base Configuration: Pods-SampleApp_2.release.xcconfig
 - Pods-SampleApp_2-Reachability:
     Build Phases:
     - SourcesBuildPhase:

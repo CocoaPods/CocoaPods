@@ -24,8 +24,8 @@ File References:
     - Pods-dummy.m
     - Pods-environment.h
     - Pods-resources.sh
-    - Pods.Debug.xcconfig
-    - Pods.Release.xcconfig
+    - Pods.debug.xcconfig
+    - Pods.release.xcconfig
 
 
 
@@ -57,7 +57,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.Debug.xcconfig
+        Base Configuration: Pods.debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -79,7 +79,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods.Release.xcconfig
+        Base Configuration: Pods.release.xcconfig
 - Pods-Reachability:
     Build Phases:
     - SourcesBuildPhase:

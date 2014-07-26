@@ -52,8 +52,8 @@ Generating Pods project
       - Generating prefix header at `Pods/Pods-Reachability-prefix.pch`
       - Generating dummy source file at `Pods/Pods-Reachability-dummy.m`
     - Installing target `Pods` iOS 6.0
-      - Generating Release xcconfig file at `Pods/Pods.Release.xcconfig`
-      - Generating Debug xcconfig file at `Pods/Pods.Debug.xcconfig`
+      - Generating Release xcconfig file at `Pods/Pods.release.xcconfig`
+      - Generating Debug xcconfig file at `Pods/Pods.debug.xcconfig`
       - Generating target environment header at `Pods/Pods-environment.h`
       - Generating copy resources script at `Pods/Pods-resources.sh`
       - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`

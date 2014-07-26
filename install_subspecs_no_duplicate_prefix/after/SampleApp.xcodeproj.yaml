@@ -39,8 +39,8 @@ File References:
 - Products:
   - iOS App.app
   - OS X App.app
-- Pods.Debug.xcconfig
-- Pods.Release.xcconfig
+- Pods.debug.xcconfig
+- Pods.release.xcconfig
 
 
 
@@ -76,7 +76,7 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.Debug.xcconfig
+        Base Configuration: Pods.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
@@ -92,7 +92,7 @@ Targets:
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.Release.xcconfig
+        Base Configuration: Pods.release.xcconfig
 - OS X App:
     Build Phases:
     - SourcesBuildPhase:

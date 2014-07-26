@@ -35,16 +35,16 @@ File References:
     - Pods-OS X App-dummy.m
     - Pods-OS X App-environment.h
     - Pods-OS X App-resources.sh
-    - Pods-OS X App.Debug.xcconfig
-    - Pods-OS X App.Release.xcconfig
+    - Pods-OS X App.debug.xcconfig
+    - Pods-OS X App.release.xcconfig
   - Pods-iOS App:
     - Pods-iOS App-acknowledgements.markdown
     - Pods-iOS App-acknowledgements.plist
     - Pods-iOS App-dummy.m
     - Pods-iOS App-environment.h
     - Pods-iOS App-resources.sh
-    - Pods-iOS App.Debug.xcconfig
-    - Pods-iOS App.Release.xcconfig
+    - Pods-iOS App.debug.xcconfig
+    - Pods-iOS App.release.xcconfig
 
 
 
@@ -78,7 +78,7 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-OS X App.Debug.xcconfig
+        Base Configuration: Pods-OS X App.debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -102,7 +102,7 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-OS X App.Release.xcconfig
+        Base Configuration: Pods-OS X App.release.xcconfig
 - Pods-OS X App-PodTest:
     Build Phases:
     - SourcesBuildPhase:
@@ -190,7 +190,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-iOS App.Debug.xcconfig
+        Base Configuration: Pods-iOS App.debug.xcconfig
     - Release:
         Build Settings:
           ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -212,7 +212,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Pods-iOS App.Release.xcconfig
+        Base Configuration: Pods-iOS App.release.xcconfig
 - Pods-iOS App-PodTest:
     Build Phases:
     - SourcesBuildPhase:
