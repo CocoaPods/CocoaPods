@@ -85,7 +85,7 @@ module Pod
     #
     def xcconfig_path(variant = nil)
       if variant
-        support_files_root + "#{label}.#{variant}.xcconfig"
+        support_files_root + "#{label}.#{variant.downcase}.xcconfig"
       else
         support_files_root + "#{label}.xcconfig"
       end
