@@ -96,7 +96,7 @@ module Pod
     def resolve_dependencies
       UI.section "Analyzing dependencies" do
         analyze
-        validate_whitelisted_configurations
+        validate_build_configurations
         prepare_for_legacy_compatibility
         clean_sandbox
       end
@@ -183,11 +183,11 @@ module Pod
     #
     # @raise  If a unknown user configuration is found.
     #
-    def validate_whitelisted_configurations
+    def validate_build_configurations
       whitelisted_configs = pod_targets.map do |target|
         target.target_definition.all_whitelisted_configurations
       end.flatten.uniq
-      all_user_configurations = analysis_result.all_user_build_configurations.keys
+      all_user_configurations = analysis_result.all_user_build_configurations.keys.map(&:downcase)
 
       remainder = whitelisted_configs - all_user_configurations
       unless remainder.empty?
