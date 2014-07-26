@@ -1,7 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
-  describe Installer::UserProjectIntegrator do
+  describe UserProjectIntegrator = Installer::UserProjectIntegrator do
 
     describe "In general" do
 
@@ -23,7 +23,7 @@ module Pod
         @library.user_project_path  = sample_project_path
         @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
         empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], config.sandbox)
-        @integrator = Installer::UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library, empty_library])
+        @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library, empty_library])
       end
 
       #-----------------------------------------------------------------------#
@@ -31,6 +31,7 @@ module Pod
       describe "In general" do
 
         it "adds the Pods project to the workspace" do
+          UserProjectIntegrator::TargetIntegrator.any_instance.stubs(:integrate!)
           @integrator.integrate!
           workspace_path = @integrator.send(:workspace_path)
           workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
@@ -41,10 +42,8 @@ module Pod
         end
 
         it "integrates the user targets" do
+          UserProjectIntegrator::TargetIntegrator.any_instance.expects(:integrate!)
           @integrator.integrate!
-          user_project = Xcodeproj::Project.open(@sample_project_path)
-          target = user_project.objects_by_uuid[@library.user_target_uuids.first]
-          target.frameworks_build_phase.files.map(&:display_name).should.include('libPods.a')
         end
 
         it "warns if the podfile does not contain any dependency" do
