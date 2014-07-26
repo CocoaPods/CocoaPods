@@ -112,7 +112,6 @@ module Pod
             native_target.build_configurations.each do |config|
               path = target.xcconfig_relative_path(config.name)
               xcconfig = user_project.files.select { |f| f.path == path }.first || user_project.new_file(path)
-
               check_overridden_build_settings(target.xcconfigs[config.name], native_target)
               config.base_configuration_reference = xcconfig
             end

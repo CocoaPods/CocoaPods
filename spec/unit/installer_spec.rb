@@ -154,7 +154,7 @@ module Pod
           target_definition.whitelist_pod_for_configuration('JSONKit', 'YOLO')
           @installer.send(:analyze)
           should.raise Informative do
-            @installer.send(:validate_whitelisted_configurations)
+            @installer.send(:validate_build_configurations)
           end
         end
 
@@ -163,7 +163,7 @@ module Pod
           target_definition.whitelist_pod_for_configuration('JSONKit', 'Test')
           @installer.send(:analyze)
           should.not.raise do
-            @installer.send(:validate_whitelisted_configurations)
+            @installer.send(:validate_build_configurations)
           end
         end
       end
