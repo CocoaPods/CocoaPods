@@ -30,10 +30,11 @@ module Pod
         def integrate!
           UI.section(integration_message) do
             XCConfigIntegrator.integrate(target, native_targets)
-            return if native_targets_to_integrate.empty?
-            add_pods_library
-            add_copy_resources_script_phase
-            add_check_manifest_lock_script_phase
+            unless native_targets_to_integrate.empty?
+              add_pods_library
+              add_copy_resources_script_phase
+              add_check_manifest_lock_script_phase
+            end
             user_project.save
           end
         end
