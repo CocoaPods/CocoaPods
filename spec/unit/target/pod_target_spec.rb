@@ -41,7 +41,7 @@ module Pod
 
     describe "Support files" do
       it "returns the absolute path of the xcconfig file" do
-        @pod_target.xcconfig_path("Release").to_s.should.include 'Pods/Pods-BananaLib.Release.xcconfig'
+        @pod_target.xcconfig_path("Release").to_s.should.include 'Pods/Pods-BananaLib.release.xcconfig'
       end
 
       it "returns the absolute path of the target header file" do

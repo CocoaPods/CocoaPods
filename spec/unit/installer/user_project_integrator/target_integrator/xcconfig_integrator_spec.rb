@@ -37,7 +37,7 @@ module Pod
     it 'sets the Pods xcconfig as the base config for each build configuration' do
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @target.build_configurations.each do |config|
-        xcconfig_file = @project.files.find { |f| f.path == @pod_bundle.xcconfig_relative_path(config) }
+        xcconfig_file = @project.files.find { |f| f.path == @pod_bundle.xcconfig_relative_path(config.name) }
         config.base_configuration_reference.should == xcconfig_file
       end
     end

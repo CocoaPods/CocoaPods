@@ -48,10 +48,10 @@ module Pod
           "Pods-dummy.m",
           "Pods-environment.h",
           "Pods-resources.sh",
-          "Pods.AppStore.xcconfig",
-          "Pods.Debug.xcconfig",
-          "Pods.Release.xcconfig",
-          "Pods.Test.xcconfig"
+          "Pods.appstore.xcconfig",
+          "Pods.debug.xcconfig",
+          "Pods.release.xcconfig",
+          "Pods.test.xcconfig"
         ]
       end
 
