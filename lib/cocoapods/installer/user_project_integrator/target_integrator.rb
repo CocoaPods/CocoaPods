@@ -9,6 +9,8 @@ module Pod
       #
       class TargetIntegrator
 
+        autoload :XCConfigIntegrator, 'cocoapods/installer/user_project_integrator/target_integrator/xcconfig_integrator'
+
         # @return [Target] the target that should be integrated.
         #
         attr_reader :target
@@ -26,47 +28,14 @@ module Pod
         # @return [void]
         #
         def integrate!
-          return if native_targets.empty?
           UI.section(integration_message) do
-            add_xcconfig_base_configuration
+            XCConfigIntegrator.integrate(target, native_targets)
+            return if native_targets_to_integrate.empty?
             add_pods_library
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
             user_project.save
           end
-        end
-
-        # @return [Array<PBXNativeTarget>] the user targets for integration.
-        #
-        def native_targets
-          unless @native_targets
-            target_uuids = target.user_target_uuids
-            native_targets = target_uuids.map do |uuid|
-              native_target = user_project.objects_by_uuid[uuid]
-              unless native_target
-                raise Informative, "[Bug] Unable to find the target with " \
-                  "the `#{uuid}` UUID for the `#{target}` integration library"
-              end
-              native_target
-            end
-            non_integrated = native_targets.reject do |native_target|
-              native_target.frameworks_build_phase.files.any? do |build_file|
-                file_ref = build_file.file_ref
-                file_ref &&
-                  file_ref.isa == 'PBXFileReference' &&
-                  file_ref.display_name == target.product_name
-              end
-            end
-            @native_targets = non_integrated
-          end
-          @native_targets
-        end
-
-        # Read the project from the disk to ensure that it is up to date as
-        # other TargetIntegrators might have modified it.
-        #
-        def user_project
-          @user_project ||= Xcodeproj::Project.open(target.user_project_path)
         end
 
         # @return [String] a string representation suitable for debugging.
@@ -75,41 +44,11 @@ module Pod
           "#<#{self.class} for target `#{target.label}'>"
         end
 
-        #---------------------------------------------------------------------#
-
-        # @!group Integration steps
 
         private
 
-        # @return [Specification::Consumer] the consumer for the specifications.
-        #
-        def spec_consumers
-          @spec_consumers ||= target.pod_targets.map(&:file_accessors).flatten.map(&:spec_consumer)
-        end
-
-        # Adds the `xcconfig` configurations files generated for the current
-        # {TargetDefinition} to the build configurations of the targets that
-        # should be integrated.
-        #
-        # @note   It also checks if any build setting of the build
-        #         configurations overrides the `xcconfig` file and warns the
-        #         user.
-        #
-        # @todo   If the xcconfig is already set don't override it and inform
-        #         the user.
-        #
-        # @return [void]
-        #
-        def add_xcconfig_base_configuration
-          native_targets.each do |native_target|
-            native_target.build_configurations.each do |config|
-              path = target.xcconfig_relative_path(config.name)
-              xcconfig = user_project.files.select { |f| f.path == path }.first || user_project.new_file(path)
-              check_overridden_build_settings(target.xcconfigs[config.name], native_target)
-              config.base_configuration_reference = xcconfig
-            end
-          end
-        end
+        # @!group Integration steps
+        #---------------------------------------------------------------------#
 
         # Adds spec libraries to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to
@@ -120,7 +59,7 @@ module Pod
         #
         def add_pods_library
           frameworks = user_project.frameworks_group
-          native_targets.each do |native_target|
+          native_targets_to_integrate.each do |native_target|
             library = frameworks.files.select { |f| f.path == target.product_name }.first ||
                       frameworks.new_product_ref_for_target(target.name, :static_library)
             unless native_target.frameworks_build_phase.files_references.include?(library)
@@ -137,7 +76,7 @@ module Pod
         #
         def add_copy_resources_script_phase
           phase_name = "Copy Pods Resources"
-          native_targets.each do |native_target|
+          native_targets_to_integrate.each do |native_target|
             phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first ||
                     native_target.new_shell_script_build_phase(phase_name)
             path  = target.copy_resources_script_relative_path
@@ -157,7 +96,7 @@ module Pod
         #
         def add_check_manifest_lock_script_phase
           phase_name = 'Check Pods Manifest.lock'
-          native_targets.each do |native_target|
+          native_targets_to_integrate.each do |native_target|
             next if native_target.shell_script_build_phases.any? { |phase| phase.name == phase_name }
             phase = native_target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
             native_target.build_phases.unshift(phase)
@@ -175,42 +114,58 @@ module Pod
           end
         end
 
-        #---------------------------------------------------------------------#
-
-        # @!group Private helpers.
-
         private
 
-        # Informs the user about any build setting of the target which might
-        # override the given xcconfig file.
-        #
-        # @return [void]
-        #
-        def check_overridden_build_settings(xcconfig, native_target)
-          return unless xcconfig
+        # @!group Private helpers
+        #---------------------------------------------------------------------#
 
-          configs_by_overridden_key = {}
-          native_target.build_configurations.each do |config|
-            xcconfig.attributes.keys.each do |key|
-              target_value = config.build_settings[key]
-
-              if target_value && !target_value.include?('$(inherited)')
-                configs_by_overridden_key[key] ||= []
-                configs_by_overridden_key[key] << config.name
+        # @return [Array<PBXNativeTarget>] The list of all the targets that
+        #         match the given target.
+        #
+        def native_targets
+          unless @native_targets
+            target_uuids = target.user_target_uuids
+            @native_targets = target_uuids.map do |uuid|
+              native_target = user_project.objects_by_uuid[uuid]
+              unless native_target
+                raise Informative, "[Bug] Unable to find the target with " \
+                  "the `#{uuid}` UUID for the `#{target}` integration library"
               end
-            end
-
-            configs_by_overridden_key.each do |key, config_names|
-              name    = "#{native_target.name} [#{config_names.join(' - ')}]"
-              actions = [
-                "Use the `$(inherited)` flag, or",
-                "Remove the build settings from the target."
-              ]
-              UI.warn("The target `#{name}` overrides the `#{key}` build " \
-                      "setting defined in `#{target.xcconfig_relative_path(config.name)}'.",
-                      actions)
+              native_target
             end
           end
+          @native_targets
+        end
+
+        # @return [Array<PBXNativeTarget>] The list of the targets
+        #         that have not been integrated by past installations
+        #         of
+        #
+        def native_targets_to_integrate
+          unless @native_targets_to_integrate
+            @native_targets_to_integrate = native_targets.reject do |native_target|
+              native_target.frameworks_build_phase.files.any? do |build_file|
+                file_ref = build_file.file_ref
+                file_ref &&
+                  file_ref.isa == 'PBXFileReference' &&
+                  file_ref.display_name == target.product_name
+              end
+            end
+          end
+          @native_targets_to_integrate
+        end
+
+        # Read the project from the disk to ensure that it is up to date as
+        # other TargetIntegrators might have modified it.
+        #
+        def user_project
+          @user_project ||= Xcodeproj::Project.open(target.user_project_path)
+        end
+
+        # @return [Specification::Consumer] the consumer for the specifications.
+        #
+        def spec_consumers
+          @spec_consumers ||= target.pod_targets.map(&:file_accessors).flatten.map(&:spec_consumer)
         end
 
         # @return [String] the message that should be displayed for the target
@@ -222,9 +177,6 @@ module Pod
             "into aggregate target #{target.name} " \
             "of project #{UI.path target.user_project_path}."
         end
-
-        #---------------------------------------------------------------------#
-
       end
     end
   end
