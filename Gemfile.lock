@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 2d1ade5e062be937e630920c7399dbe1bee48d93
+  revision: e64c76edd9dbc540776772097b78ae27720eccbb
   branch: master
   specs:
     claide (0.6.1)
@@ -43,7 +43,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: c62f86f83bf77faf8baf80359cc511dd1014fcfb
+  revision: 803009460af05d363f2783cdbff3457e232f5ce1
   branch: master
   specs:
     cocoapods-trunk (0.1.4)
