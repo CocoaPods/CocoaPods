@@ -77,12 +77,14 @@ module Pod
       @sandbox.library_support_files_dir(name)
     end
 
-    # @param  [String] variant (optional) If you have multiple variants of xcconfigs for this target
-    # =>                       (e g per build configuration), provide the variant type here.
+    # @param  [String] variant
+    #         The variant of the xcconfig. Used to differentiate build
+    #         configurations.
+    #
     # @return [Pathname] the absolute path of the xcconfig file.
     #
-    def xcconfig_path(variant)
-      if variant then
+    def xcconfig_path(variant = nil)
+      if variant
         support_files_root + "#{label}.#{variant}.xcconfig"
       else
         support_files_root + "#{label}.xcconfig"

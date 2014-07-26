@@ -12,8 +12,9 @@ module Pod
 
       # @param  [Target] target @see target
       #
-      # @param  [String] configuration_name Name of the build configuration to
-      #         generate this xcconfig for.
+      # @param  [String] configuration_name
+      #         The name of the build configuration to generate this xcconfig
+      #         for.
       #
       def initialize(target, configuration_name)
         @target = target

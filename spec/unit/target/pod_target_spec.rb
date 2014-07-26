@@ -57,7 +57,7 @@ module Pod
       end
 
       it "returns the absolute path of the public and private xcconfig files" do
-        @pod_target.xcconfig_path(nil).to_s.should.include 'Pods/Pods-BananaLib.xcconfig'
+        @pod_target.xcconfig_path.to_s.should.include 'Pods/Pods-BananaLib.xcconfig'
         @pod_target.xcconfig_private_path.to_s.should.include 'Pods/Pods-BananaLib-Private.xcconfig'
       end
     end
