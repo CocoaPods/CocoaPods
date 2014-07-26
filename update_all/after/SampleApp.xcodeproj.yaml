@@ -22,7 +22,8 @@ File References:
   - libPods.a
 - Products:
   - SampleApp.app
-- Pods.xcconfig
+- Pods.Debug.xcconfig
+- Pods.Release.xcconfig
 
 
 
@@ -49,7 +50,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Debug.xcconfig
     - Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -58,7 +59,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: "$(TARGET_NAME)"
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.xcconfig
+        Base Configuration: Pods.Release.xcconfig
 
 
 

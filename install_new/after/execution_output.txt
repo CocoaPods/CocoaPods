@@ -1,7 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::Register: `[["EMAIL", :required], ["NAME", :optional]]`)[39m
-[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::AddOwner: `[["POD", :required], ["OWNER-EMAIL", :required]]`)[39m
-[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::Push: `[["PATH", :required]]`)[39m
-
+CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1
 Analyzing dependencies
 
 Resolving dependencies of `Podfile`

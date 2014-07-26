@@ -1,7 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::Register: `[["EMAIL", :required], ["NAME", :optional]]`)[39m
-[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::AddOwner: `[["POD", :required], ["OWNER-EMAIL", :required]]`)[39m
-[33m[!] The signature of CLAide#arguments has changed. Use CLAide::Argument (Pod::Command::Trunk::Push: `[["PATH", :required]]`)[39m
-
+CP_AGGRESSIVE_CACHE=TRUE $ pod install --no-repo-update --verbose --no-ansi 2>&1
 Analyzing dependencies
 
 Resolving dependencies of `Podfile`
@@ -84,3 +81,9 @@ Generating Pods project
 Integrating client projects
 
 [!] From now on use `Workspace.xcworkspace`.
+
+Integrating Pod target `Pods-SampleApp_1-Reachability` into aggregate target Pods-SampleApp_1 of project `SampleApp_1.xcodeproj`.
+  - Removing (Pods/Pods-SampleApp_1.xcconfig)
+
+Integrating Pod target `Pods-SampleApp_2-Reachability` into aggregate target Pods-SampleApp_2 of project `SampleApp_2.xcodeproj`.
+  - Removing (Pods/Pods-SampleApp_2.xcconfig)
