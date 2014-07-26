@@ -135,7 +135,6 @@ module Pod
           podspecs_to_lint.each do |podspec|
 
             validator             = Validator.new(podspec)
-            validator.local       = true
             validator.quick       = @quick
             validator.no_clean    = !@clean
             validator.only_errors = @only_errors
