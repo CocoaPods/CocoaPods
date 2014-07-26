@@ -178,7 +178,11 @@ module Pod
       @aggregate_targets = analyzer.result.targets
     end
 
-    # @raise  Raises an informative if the hooks raises.
+    # Ensures that the white-listed build configurations are known to prevent
+    # silent typos.
+    #
+    # @raise  If a unknown user configuration is found.
+    #
     def validate_whitelisted_configurations
       whitelisted_configs = pod_targets.map do |target|
         target.target_definition.all_whitelisted_configurations
