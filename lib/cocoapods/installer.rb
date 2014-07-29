@@ -117,7 +117,6 @@ module Pod
         install_file_references
         install_libraries
         set_target_dependencies
-        # note: linking with pod libraries is now done by aggregate_xcconfig's OTHER_LDFLAGS
         run_post_install_hooks
         write_pod_project
         write_lockfiles
@@ -185,7 +184,7 @@ module Pod
     #
     def validate_build_configurations
       whitelisted_configs = pod_targets.map do |target|
-        target.target_definition.all_whitelisted_configurations
+        target.target_definition.all_whitelisted_configurations.map(&:downcase)
       end.flatten.uniq
       all_user_configurations = analysis_result.all_user_build_configurations.keys.map(&:downcase)
 
