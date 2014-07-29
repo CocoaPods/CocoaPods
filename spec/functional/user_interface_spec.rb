@@ -21,6 +21,25 @@ module Pod
       output.should.include? 'https://github.com/CocoaLumberjack/CocoaLumberjack.git'
     end
 
+    it "Presents information about deprecation if the pod is deprecated" do
+      specification = @set.specification
+      specification.deprecated = true
+      @set.expects(:specification).returns(specification)
+      UI.pod(@set)
+      output = UI.output
+      output.should.include? "[DEPRECATED]"
+    end
+
+    it "Presents information about the deprecation in favor of another pod" do
+      specification = @set.specification
+      specification.deprecated_in_favor_of = "NewMoreAwesomePod"
+      @set.expects(:specification).returns(specification)
+
+      UI.pod(@set)
+      output = UI.output
+      output.should.include? "[DEPRECATED in favor of NewMoreAwesomePod]"
+    end
+
     it "presents the stats of a specification set" do
       Specification::Set::Presenter.any_instance.expects(:github_last_activity).returns('more than a year ago')
       Specification::Set::Presenter.any_instance.expects(:github_watchers).returns('318')

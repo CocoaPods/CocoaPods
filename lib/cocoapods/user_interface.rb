@@ -162,7 +162,15 @@ module Pod
           puts_indented "#{set.name} #{set.versions.first.version}"
         else
           pod = Specification::Set::Presenter.new(set, statistics_provider)
-          title("\n-> #{pod.name} (#{pod.version})".green, '', 1) do
+          title = "\n-> #{pod.name} (#{pod.version})"
+          if pod.deprecated?
+            title += " #{pod.deprecation_description}"
+            colored_title = title.red
+          else
+            colored_title = title.green
+          end
+
+          title(colored_title, "", 1) do
             puts_indented pod.summary
             puts_indented "pod '#{pod.name}', '~> #{pod.version}'"
             labeled('Homepage', pod.homepage)
