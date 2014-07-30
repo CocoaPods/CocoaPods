@@ -37,9 +37,7 @@
 		17E95B75D4453CE0BA3028FF /* Pods-AFNetworking iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.debug.xcconfig"; path = "Pods/Pods-AFNetworking iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
 		2982AD3117107C0000FFF048 /* adn.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = adn.cer; sourceTree = SOURCE_ROOT; };
 		50ABD6EC159FC2CE001BE42C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		7384432FCC95B62DB577C5D3 /* Pods-AFNetworking iOS Example.Release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.Release.xcconfig"; path = "Pods/Pods-AFNetworking iOS Example.Release.xcconfig"; sourceTree = "<group>"; };
 		9D87F8FEDE4A4313B0D579A3 /* libPods-AFNetworking iOS Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking iOS Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B5BF8B2301C54A4C220FBB61 /* Pods-AFNetworking iOS Example.Debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.Debug.xcconfig"; path = "Pods/Pods-AFNetworking iOS Example.Debug.xcconfig"; sourceTree = "<group>"; };
 		F8129C3815910830009BFE23 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
 		F8129C7215910C37009BFE23 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		F8129C7315910C37009BFE23 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -133,8 +131,6 @@
 				F8E469ED1395812A00DB05C8 /* Images */,
 				F8E469631395739D00DB05C8 /* Frameworks */,
 				F8E469611395739C00DB05C8 /* Products */,
-				B5BF8B2301C54A4C220FBB61 /* Pods-AFNetworking iOS Example.Debug.xcconfig */,
-				7384432FCC95B62DB577C5D3 /* Pods-AFNetworking iOS Example.Release.xcconfig */,
 				17E95B75D4453CE0BA3028FF /* Pods-AFNetworking iOS Example.debug.xcconfig */,
 				08ACA902EBEF3347432C3442 /* Pods-AFNetworking iOS Example.release.xcconfig */,
 			);
