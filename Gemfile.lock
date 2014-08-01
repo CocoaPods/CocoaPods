@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 01a86d5160700165a7e75b0c98c00d5d5ea48a4e
+  revision: a2f2d2405323a478ea2c91776220b82fbf6ec987
   branch: lookback-pods-by-config-2
   specs:
     cocoapods-core (0.33.1)
@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 96d04e9f2d96b848bb36d5fe214843f8cfac2664
+  revision: 730a09310e986bb2ec5430ef303f8453537d01ac
   branch: master
   specs:
     xcodeproj (0.18.0)

@@ -75,7 +75,7 @@ module Pod
         end
 
         it "links the pod targets with the aggregate integration library target" do
-          @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-lPods-BananaLib'
+          @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l "Pods-BananaLib"'
         end
 
         it "does not links the pod targets with the aggregate integration library target for non-whitelisted configuration" do
