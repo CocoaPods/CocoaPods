@@ -21,6 +21,7 @@ group :development do
   gem "bacon"
   gem "mocha-on-bacon"
   gem 'prettybacon'
+  gem 'clintegracon'
   gem 'webmock', "< 1.16"
 
   # For the integration tests
