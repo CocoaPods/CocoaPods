@@ -73,8 +73,9 @@ module Pod
 
           # Add pod static lib to list of libraries that are to be linked with
           # the user’s project.
+
           @xcconfig.merge!({
-            'OTHER_LDFLAGS' => "-l#{pod_target.name}"
+            'OTHER_LDFLAGS' => %Q(-l "#{pod_target.name}")
           })
         end
 
