@@ -71,12 +71,32 @@ module Pod
 
     describe "Pod targets" do
       before do
-        spec = fixture_spec('banana-lib/BananaLib.podspec')
-        target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        pod_target = PodTarget.new([spec], target_definition, config.sandbox)
-        @target = AggregateTarget.new(target_definition, config.sandbox)
+        @spec = fixture_spec('banana-lib/BananaLib.podspec')
+        @target_definition = Podfile::TargetDefinition.new('Pods', nil)
+        @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
+        @target = AggregateTarget.new(@target_definition, config.sandbox)
         @target.stubs(:platform).returns(:ios)
-        @target.pod_targets = [pod_target]
+        @target.pod_targets = [@pod_target]
+      end
+
+      it "returns pod targets by build configuration" do
+        pod_target_release = PodTarget.new([@spec], @target_definition, config.sandbox)
+        pod_target_release.expects(:include_in_build_config?).with("Debug").returns(false)
+        pod_target_release.expects(:include_in_build_config?).with("Release").returns(true)
+        @target.pod_targets = [@pod_target, pod_target_release]
+        @target.user_build_configurations = {
+          "Debug" => :debug,
+          "Release" => :release
+        }
+        expected = {
+          "Debug" => @pod_target.specs,
+          "Release" => (@pod_target.specs + pod_target_release.specs)
+        }
+        @target.specs_by_build_configuration.should == expected
+      end
+
+      it "returns the specs of the Pods used by this aggregate target" do
+        @target.specs.map(&:name).should == ["BananaLib"]
       end
 
       it "returns the specs of the Pods used by this aggregate target" do

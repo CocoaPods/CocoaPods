@@ -4,7 +4,7 @@ describe Pod::Generator::TargetEnvironmentHeader do
 
   before do
     specification = fixture_spec('banana-lib/BananaLib.podspec')
-    @gen = Pod::Generator::TargetEnvironmentHeader.new([specification])
+    @gen = Pod::Generator::TargetEnvironmentHeader.new({'Debug' => [specification]})
   end
 
   it "generates a header files which include macro definitions for installed Pods" do
