@@ -1,3 +1,5 @@
+require 'active_support/core_ext/string/strip'
+
 module Pod
   module Generator
 
@@ -23,14 +25,15 @@ module Pod
     #
     class TargetEnvironmentHeader
 
-      # @return [Array<LocalPod>] the specifications installed for the target.
+      # @return [Hash{String => LocalPod}] the specifications installed for
+      #         the target by build configuration name.
       #
-      attr_reader :specs
+      attr_reader :specs_by_build_configuration
 
       # @param  [Array<LocalPod>] pods @see pods
       #
-      def initialize(specs)
-        @specs = specs
+      def initialize(specs_by_build_configuration)
+        @specs_by_build_configuration = specs_by_build_configuration
       end
 
       # Generates and saves the file.
@@ -50,7 +53,7 @@ module Pod
           source.puts "// project."
           source.puts
           source.puts
-          specs.each do |spec|
+          common_specs(specs_by_build_configuration).each do |spec|
             spec_name = safe_spec_name(spec.name)
             source.puts "// #{spec.name}"
             source.puts "#define COCOAPODS_POD_AVAILABLE_#{spec_name}"
@@ -77,6 +80,14 @@ module Pod
 
       def safe_spec_name(spec_name)
         spec_name.gsub(/[^\w]/,'_')
+      end
+
+      def common_specs(specs_by_build_configuration)
+        result = specs_by_build_configuration.values.flatten.uniq
+        specs_by_build_configuration.values.each do |build_configuration_specs|
+          result = result & build_configuration_specs
+        end
+        result
       end
 
       #-----------------------------------------------------------------------#

@@ -64,6 +64,19 @@ module Pod
       pod_targets.map(&:specs).flatten
     end
 
+    # @return [Hash{Symbol => Array<PodTarget>}] The pod targets for each
+    #         build configuration.
+    #
+    def specs_by_build_configuration
+      result = {}
+      user_build_configurations.keys.each do |build_configuration|
+        result[build_configuration] = pod_targets.select do |pod_target|
+          pod_target.include_in_build_config?(build_configuration)
+        end.map(&:specs).flatten
+      end
+      result
+    end
+
     # @return [Array<Specification::Consumer>] The consumers of the Pod.
     #
     def spec_consumers
