@@ -1,4 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE $ pod update --no-repo-update --verbose --no-ansi 2>&1Update all pods
+CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE  $ pod update --no-repo-update --verbose --no-ansi 2>&1Update all pods
 
 Analyzing dependencies
 
