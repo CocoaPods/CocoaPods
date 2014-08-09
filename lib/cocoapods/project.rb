@@ -215,12 +215,13 @@ module Pod
       build_configuration = super
       values = ["#{name.gsub(' ', '_').upcase}=1"]
       settings = build_configuration.build_settings
+      definitions = Array(settings['GCC_PREPROCESSOR_DEFINITIONS'])
       values.each do |value|
-        definitions = settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= []
         unless definitions.include?(value)
           definitions << value
         end
       end
+      settings['GCC_PREPROCESSOR_DEFINITIONS'] = definitions
       build_configuration
     end
 
