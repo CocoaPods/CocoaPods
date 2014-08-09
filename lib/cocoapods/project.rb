@@ -193,6 +193,36 @@ module Pod
       podfile_ref
     end
 
+    # Adds a new build configuration to the project and populates its with
+    # default settings according to the provided type.
+    #
+    # @note   This method extends the original Xcodeproj implementation to
+    #         include a preprocessor definition named after the build
+    #         setting. This is done to support the TargetEnvironmentHeader
+    #         specification of Pods available only on certain build
+    #         configurations.
+    #
+    # @param  [String] name
+    #         The name of the build configuration.
+    #
+    # @param  [Symbol] type
+    #         The type of the build configuration used to populate the build
+    #         settings, must be :debug or :release.
+    #
+    # @return [XCBuildConfiguration] The new build configuration.
+    #
+    def add_build_configuration(name, type)
+      build_configuration = super
+      values = ["#{name.gsub(' ', '_').upcase}=1"]
+      settings = build_configuration.build_settings
+      values.each do |value|
+        definitions = settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= []
+        unless definitions.include?(value)
+          definitions << value
+        end
+      end
+      build_configuration
+    end
 
     private
 
