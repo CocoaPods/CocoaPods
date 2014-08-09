@@ -51,7 +51,8 @@ module Pod
           end
 
           it 'adds the COCOAPODS macro definition' do
-            @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should.include 'COCOAPODS=1'
+            expected = '$(inherited) COCOAPODS=1'
+            @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == expected
           end
 
           it 'adds the pod namespaced configuration items' do
