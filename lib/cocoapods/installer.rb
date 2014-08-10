@@ -30,13 +30,14 @@ module Pod
   #
   class Installer
 
-    autoload :Analyzer,                 'cocoapods/installer/analyzer'
-    autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
-    autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
-    autoload :TargetInstaller,          'cocoapods/installer/target_installer'
-    autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
-    autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
-    autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
+    autoload :Analyzer,                    'cocoapods/installer/analyzer'
+    autoload :FileReferencesInstaller,     'cocoapods/installer/file_references_installer'
+    autoload :PodSourceInstaller,          'cocoapods/installer/pod_source_installer'
+    autoload :TargetInstaller,             'cocoapods/installer/target_installer'
+    autoload :AggregateTargetInstaller,    'cocoapods/installer/target_installer/aggregate_target_installer'
+    autoload :PodTargetInstaller,          'cocoapods/installer/target_installer/pod_target_installer'
+    autoload :UserProjectIntegrator,       'cocoapods/installer/user_project_integrator'
+    autoload :LinkedDependenciesInstaller, 'cocoapods/installer/linked_dependencies_installer'
 
     include Config::Mixin
 
@@ -117,6 +118,7 @@ module Pod
         install_file_references
         install_libraries
         set_target_dependencies
+        link_linked_dependencies
         run_post_install_hooks
         write_pod_project
         write_lockfiles
@@ -432,6 +434,19 @@ module Pod
       end
     end
 
+    # Adds the linked dependencies to the pod targets.
+    #
+    # @return [void]
+    #
+    def link_linked_dependencies
+      pod_targets.each do |pod_target|
+        pod_root = pod_for_target(pod_target).root
+
+        installer = LinkedDependenciesInstaller.new(pods_project, pod_root, pod_target)
+        installer.install!
+      end
+    end
+
     # Writes the Pods project to the disk.
     #
     # @return [void]
@@ -624,6 +639,16 @@ module Pod
     #
     def sandbox_state
       analysis_result.sandbox_state
+    end
+
+    # Finds the PodRepresentation object for a given Target.
+    #
+    # @param [Target] The target for which the representation should be found.
+    #
+    # @return [PodRepresentation] The pod for a given target.
+    #
+    def pod_for_target(pod_target)
+      pod_reps.find { |pod_rep| pod_rep.name == pod_target.root_spec.name }
     end
 
     #-------------------------------------------------------------------------#

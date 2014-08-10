@@ -20,7 +20,7 @@ module Pod
 
       # @param [Sandbox] sandbox @see sandbox
       # @param [Array<Library>] libraries @see libraries
-      # @param [Project] libraries @see libraries
+      # @param [Project] pods_project @see pods_project
       #
       def initialize(sandbox, libraries, pods_project)
         @sandbox = sandbox

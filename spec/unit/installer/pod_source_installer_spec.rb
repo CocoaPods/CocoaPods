@@ -189,6 +189,14 @@ module Pod
         ]
       end
 
+      it "returns no clean paths for specs that have linked projects" do
+        spec = fixture_spec('banana-lib/BananaLib.podspec')
+        spec.xcodeproj = { :project => 'hello' }
+        specs_by_platform = { :ios => [spec] }
+        @installer = Installer::PodSourceInstaller.new(config.sandbox, specs_by_platform)
+        @installer.send(:clean_paths).should.be == []
+      end
+
       it "returns the used files" do
         @installer.send(:download_source)
         paths = @installer.send(:used_files)

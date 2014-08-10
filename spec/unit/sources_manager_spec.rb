@@ -116,7 +116,7 @@ module Pod
         set_up_test_repo_for_update
 
         SourcesManager.update(test_repo_path.basename.to_s, true)
-        UI.output.should.match /is up to date/
+        UI.output.should.match /(Already)|(is) up.to.date/
       end
 
       it "uses the only fast forward git option" do
