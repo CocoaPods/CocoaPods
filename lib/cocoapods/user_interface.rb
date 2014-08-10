@@ -163,7 +163,7 @@ module Pod
         else
           pod = Specification::Set::Presenter.new(set, statistics_provider)
           title = "\n-> #{pod.name} (#{pod.version})"
-          if pod.deprecated?
+          if pod.spec.deprecated?
             title += " #{pod.deprecation_description}"
             colored_title = title.red
           else
