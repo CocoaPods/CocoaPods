@@ -320,6 +320,8 @@ module Pod
       'Podfile',
     ]
 
+    public
+
     # Returns the path of the Podfile in the given dir if any exists.
     #
     # @param  [Pathname] dir
