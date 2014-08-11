@@ -35,17 +35,17 @@ module Pod
     end
   end
 
+  autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
   autoload :Command,                   'cocoapods/command'
   autoload :Executable,                'cocoapods/executable'
   autoload :ExternalSources,           'cocoapods/external_sources'
   autoload :Installer,                 'cocoapods/installer'
-  autoload :SourcesManager,            'cocoapods/sources_manager'
-  autoload :Target,                    'cocoapods/target'
-  autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
   autoload :PodTarget,                 'cocoapods/target/pod_target'
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'
   autoload :Sandbox,                   'cocoapods/sandbox'
+  autoload :SourcesManager,            'cocoapods/sources_manager'
+  autoload :Target,                    'cocoapods/target'
   autoload :Validator,                 'cocoapods/validator'
 
   module Generator
