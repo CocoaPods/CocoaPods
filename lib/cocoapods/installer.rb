@@ -37,6 +37,7 @@ module Pod
     autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
     autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
     autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
+    autoload :HooksContext,             'cocoapods/installer/hooks_context'
 
     include Config::Mixin
 
@@ -117,7 +118,7 @@ module Pod
         install_libraries
         set_target_dependencies
         link_aggregate_target
-        run_post_install_hooks
+        run_podfile_post_install_hooks
         write_pod_project
         write_lockfiles
       end
@@ -293,7 +294,15 @@ module Pod
     # @return [void]
     #
     def perform_post_install_actions
+      run_plugins_post_install_hooks
       warn_for_deprecations
+    end
+
+    # Runs the registered callbacks for the plugins post install hooks.
+    #
+    def run_plugins_post_install_hooks
+      context = HooksContext.generate(sandbox, aggregate_targets)
+      HooksManager.run(:post_install, context)
     end
 
     # Prints a warning for any pods that are deprecated
@@ -521,7 +530,7 @@ module Pod
     #
     # @return [void]
     #
-    def run_post_install_hooks
+    def run_podfile_post_install_hooks
       UI.message "- Running post install hooks" do
         executed = run_podfile_post_install_hook
         UI.message "- Podfile" if executed
