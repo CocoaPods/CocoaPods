@@ -4,9 +4,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
-* Display indication for deprecated pods when searching for Pods. 
+##### Enhancements
+
+* Display indication for deprecated pods when searching for Pods.
   [Hugo Tunius][k0nserv]
   [#2180](https://github.com/CocoaPods/CocoaPods/issues/2180)
+
+* Use gem CLIntegracon for the integration tests.  
+  [Marius Rackwitz][mrackwitz]
+  [#2371](https://github.com/CocoaPods/CocoaPods/issues/2371)
 
 ##### Bug Fixes
 
@@ -2465,5 +2471,5 @@ allowing you to automate Xcode related tasks.
 [irrationalfab]: https://github.com/irrationalfab
 [kylef]: (https://github.com/kylef)
 [neonichu]: (https://github.com/neonichu)
+[mrackwitz]: https://github.com/mrackwitz
 [k0nserv]: https://github.com/k0nserv
-
