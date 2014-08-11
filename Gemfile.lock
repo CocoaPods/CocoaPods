@@ -92,7 +92,7 @@ GEM
     addressable (2.3.6)
     awesome_print (1.2.0)
     bacon (1.2.0)
-    clintegracon (0.5.0)
+    clintegracon (0.5.2)
       colored (~> 1.2)
       diffy
     coderay (1.1.0)
