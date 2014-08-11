@@ -494,12 +494,8 @@ module Pod
         end
 
         archs = archs.compact.uniq.sort
-        if archs.count > 1
-          UI.warn "Found multiple values (`#{archs.join('`, `')}`) for the " \
-          "architectures (`ARCHS`) build setting for the " \
-          "`#{target_definition}` target definition. Using the first."
-        end
-        archs.first
+        UI.puts("Using `ARCHS` setting to build architectures: (`#{archs.join('`, `')}`)")
+        archs.length > 1 ? archs : archs.first
       end
 
       # Precompute the platforms for each target_definition in the Podfile

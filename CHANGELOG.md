@@ -2,12 +2,11 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-
 ## Master
 
 ##### Enhancements
 
-* Display indication for deprecated pods when searching for pods
+* Display indication for deprecated pods when searching for Pods.
   [Hugo Tunius][k0nserv]
   [#2180](https://github.com/CocoaPods/CocoaPods/issues/2180)
 
@@ -17,11 +16,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
-* Fixed pod repo push to first check if Specs directory exists and if so push there.
+* Fixed pod repo push to first check if Specs directory exists and if so push
+  there.  
   [Edward Valentini](edwardvalentini)
   [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
 
-* Fixed `pod outdated` to not include subspecs.
+* Fixed `pod outdated` to not include subspecs.  
   [Ash Furrow](ashfurrow)
   [#2136](https://github.com/CocoaPods/CocoaPods/issues/2136)
 
@@ -35,9 +35,17 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin][irrationalfab]
   [Core#132](https://github.com/CocoaPods/Core/issues/132)
 
-* Fixed missing XCTest framework in Xcode 6
+* Fixed `pod init` so that it doesn't recurse when checking for Podfiles.
+  [Paddy O'Brien](tapi)
+  [#2181](https://github.com/CocoaPods/CocoaPods/issues/2181)
+
+* Fixed missing XCTest framework in Xcode 6.  
   [Paul Williamson](squarefrog)
   [#2296](https://github.com/CocoaPods/CocoaPods/issues/2296)
+
+* Support multiple values in ARCHS.  
+  [Robert Zuber](https://github.com/z00b)
+  [#1904](https://github.com/CocoaPods/CocoaPods/issues/1904)
 
 
 ## 0.33.1
@@ -245,11 +253,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin][irrationalfab]
   [#1021](https://github.com/CocoaPods/CocoaPods/issues/1021)
 
-
-
 * Warn when including deprecated pods
   [Samuel E. Giddins](https://github.com/segiddins)
   [#2003](https://github.com/CocoaPods/CocoaPods/issues/2003)
+
 
 ## 0.31.1
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
@@ -487,7 +494,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Joshua Kalpin](https://github.com/Kapin)
   [Core#39](https://github.com/CocoaPods/Core/pull/39)
   [#1610](https://github.com/CocoaPods/CocoaPods/issues/1610)
-  
+
 * Having the silent flag enabled in the config will no longer cause issues
   with `pod search`. In addition, the flag `--silent` is no longer supported
   for the command.  
@@ -511,9 +518,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Carson McDonald](https://github.com/carsonmcdonald)
   [#1628](https://github.com/CocoaPods/CocoaPods/issues/1628)
 
-* Fixed all issues caused by `/tmp` being a symlink to `/private/tmp`. 
-  This affected mostly `pod lib lint`, causing it to fail when the 
-  Pod used `prefix_header_*` or when the pod headers imported headers 
+* Fixed all issues caused by `/tmp` being a symlink to `/private/tmp`.
+  This affected mostly `pod lib lint`, causing it to fail when the
+  Pod used `prefix_header_*` or when the pod headers imported headers
   using the namespaced syntax (e.g. `#import <MyPod/Header.h>`).  
   [kra Larivain/OpenTable](https://github.com/opentable)
   [#1514](https://github.com/CocoaPods/CocoaPods/pull/1514)
@@ -643,7 +650,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Noah McCann](https://github.com/nmccann)
   [#29](https://github.com/CocoaPods/Core/pull/29)
 
-* The developer dir relative to the SDK is not added anymore if testing 
+* The developer dir relative to the SDK is not added anymore if testing
   frameworks are detected in OS X targets, as it doesn't exists, avoiding the
   presentation of the relative warning in Xcode.  
   [Fabio Pelosin](https://github.com/irrationalfab)
@@ -803,7 +810,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Added `pod init` command which generates a Podfile according to the
   targets of the project stored in the working directory and to the templates
-  stored in the `~/.cocoapods/templates` folder. Two templates are supported: 
+  stored in the `~/.cocoapods/templates` folder. Two templates are supported:
     - the `Podfile.default` template for regular targets.
     - and the `Podfile.test` template for test targets.
   [Ian Ynda-Hummel](https://github.com/ianyh)
@@ -2466,4 +2473,3 @@ allowing you to automate Xcode related tasks.
 [neonichu]: (https://github.com/neonichu)
 [mrackwitz]: https://github.com/mrackwitz
 [k0nserv]: https://github.com/k0nserv
-

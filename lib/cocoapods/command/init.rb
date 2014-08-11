@@ -30,7 +30,7 @@ module Pod
 
       def validate!
         super
-        raise Informative, "Existing Podfile found in directory" unless config.podfile.nil?
+        raise Informative, "Existing Podfile found in directory" unless config.podfile_path_in_dir(Pathname.pwd).nil?
         if @project_path
           help! "Xcode project at #{@project_path} does not exist" unless File.exist? @project_path
           project_path = @project_path

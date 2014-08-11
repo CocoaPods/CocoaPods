@@ -195,8 +195,104 @@ module Pod
       end
     end
 
-
     #-------------------------------------------------------------------------#
 
+    describe "Pre-release versions" do
+
+      it "resolves explicitly requested pre-release versions" do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'AFNetworking', '1.0RC3'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should == ["AFNetworking (1.0RC3)"]
+      end
+
+      xit "resolves to latest minor version even when explicitly requesting pre-release versions when using ~>" do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'AFNetworking', '~> 1.0RC3'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should != ["AFNetworking (1.0RC3)"]
+        specs.should == ["AFNetworking (1.2.0)"]
+      end
+
+      it "does not resolve to a pre-release version implicitly when matching exact version" do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'AFNetworking', '1.0'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should != ["AFNetworking (1.0RC3)"]
+        specs.should == ["AFNetworking (1.0)"]
+      end
+
+      xit "does not resolve to a pre-release version implicitly when using <" do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'AFNetworking', '< 1.0'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should != ["AFNetworking (1.0RC3)"]
+        specs.should == ["AFNetworking (0.10.1)"]
+      end
+
+      it "does not resolve to a pre-release version implicitly when using <=" do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'AFNetworking', '<= 1.0'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should != ["AFNetworking (1.0RC3)"]
+        specs.should == ["AFNetworking (1.0)"]
+      end
+
+      it "does not resolve to a pre-release version implicitly when using >" do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'AFNetworking', '> 1.0', '< 1.3'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should != ["AFNetworking (1.0RC3)"]
+        specs.should == ["AFNetworking (1.2.1)"]
+      end
+
+      it "does not resolve to a pre-release version implicitly when using >=" do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'AFNetworking', '>= 1.0', '< 1.3'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should != ["AFNetworking (1.0RC3)"]
+        specs.should == ["AFNetworking (1.2.1)"]
+      end
+
+      it "does not resolve to a pre-release version implicitly when using ~>" do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'AFNetworking', '~> 1.0', '< 1.3'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should != ["AFNetworking (1.0RC3)"]
+        specs.should == ["AFNetworking (1.2.1)"]
+      end
+    end
   end
 end
