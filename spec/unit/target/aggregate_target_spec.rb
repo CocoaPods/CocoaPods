@@ -58,8 +58,6 @@ module Pod
         @target.acknowledgements_basepath.to_s.should.include?('Pods/Pods-acknowledgements')
       end
 
-      #--------------------------------------#
-
       it "returns the path of the resources script relative to the user project" do
         @target.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Pods-resources.sh'
       end
@@ -88,6 +86,5 @@ module Pod
         consumer_reps.should == [["BananaLib", :ios]]
       end
     end
-
   end
 end

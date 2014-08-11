@@ -36,8 +36,8 @@ module Pod
     #
     attr_accessor :user_project_path
 
-    # @return [String] the list of the UUIDs of the user targets that will be
-    #         integrated by this target as identified by the analizer.
+    # @return [Array<String>] the list of the UUIDs of the user targets that
+    #         will be integrated by this target as identified by the analizer.
     #
     # @note   The target instances are not stored to prevent editing different
     #         instances.
@@ -104,11 +104,10 @@ module Pod
       "${SRCROOT}/#{relative_to_srcroot(copy_resources_script_path)}"
     end
 
-    #-------------------------------------------------------------------------#
+    private
 
     # @!group Private Helpers
-
-    private
+    #-------------------------------------------------------------------------#
 
     # Computes the relative path of a sandboxed file from the `$(SRCROOT)`
     # variable of the user's project.
@@ -121,8 +120,5 @@ module Pod
     def relative_to_srcroot(path)
       path.relative_path_from(client_root).to_s
     end
-
-    #-------------------------------------------------------------------------#
-
   end
 end
