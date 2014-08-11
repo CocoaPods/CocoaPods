@@ -269,8 +269,7 @@ module Pod
         yaml_file  = dir + 'CocoaPods-version.yml'
         return {} unless yaml_file.exist?
         begin
-          yaml = Pathname.new(yaml_file).read
-          YAMLHelper.load(yaml)
+          YAMLHelper.load_file(yaml_file)
         rescue Informative => e
           raise Informative, "There was an error reading '#{yaml_file}'.\n" \
             'Please consult http://blog.cocoapods.org/' \

@@ -154,7 +154,7 @@ module Pod
       end
 
       it 'raises when reading version information with merge conflict' do
-        Pathname.any_instance.stubs(:read).returns(merge_conflict_version_yaml)
+        File.stubs(:read).returns(merge_conflict_version_yaml)
         e = lambda { SourcesManager.version_information(SourcesManager.master_repo_dir) }.should.raise Informative
         e.message.should.match /Repairing-Our-Broken-Specs-Repository/
       end
