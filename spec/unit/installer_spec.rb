@@ -52,6 +52,7 @@ module Pod
         @installer.stubs(:download_dependencies)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
+        @installer.stubs(:run_plugins_post_install_hooks)
         @installer.stubs(:perform_post_install_actions)
       end
 
@@ -77,7 +78,7 @@ module Pod
         @installer.stubs(:write_lockfiles)
         @installer.stubs(:aggregate_targets).returns([])
         @installer.unstub(:generate_pods_project)
-        def @installer.run_post_install_hooks
+        def @installer.run_podfile_post_install_hooks
           @hook_called = true
         end
         def @installer.write_pod_project
@@ -475,6 +476,22 @@ module Pod
 
     end
 
+    describe "Plugins Hooks" do
+      before do
+        @installer.send(:analyze)
+        @specs = @installer.pod_targets.map(&:specs).flatten
+        @spec = @specs.find { |spec| spec && spec.name == 'JSONKit' }
+        @installer.stubs(:installed_specs).returns(@specs)
+      end
+
+      it "runs plugins post install hook" do
+        context = stub()
+        Installer::HooksContext.expects(:generate).returns(context)
+        HooksManager.expects(:run).with(:post_install, context)
+        @installer.send(:run_plugins_post_install_hooks)
+      end
+    end
+
     #-------------------------------------------------------------------------#
 
     describe "Hooks" do
@@ -497,13 +514,13 @@ module Pod
         @installer.send(:run_pre_install_hooks)
       end
 
-      it "run_post_install_hooks" do
+      it "run_podfile_post_install_hooks" do
         installer_rep = stub()
         target_installer_data = stub()
 
         @installer.expects(:installer_rep).returns(installer_rep)
         @installer.podfile.expects(:post_install!).with(installer_rep)
-        @installer.send(:run_post_install_hooks)
+        @installer.send(:run_podfile_post_install_hooks)
       end
 
       it "calls the hooks in the specs for each target" do
@@ -519,7 +536,7 @@ module Pod
         @installer.stubs(:installer_rep).returns(stub())
         @installer.podfile.expects(:pre_install!)
         @installer.send(:run_pre_install_hooks)
-        @installer.send(:run_post_install_hooks)
+        @installer.send(:run_podfile_post_install_hooks)
       end
 
       it "returns the hook representation of the installer" do

@@ -6,7 +6,20 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
-* Display indication for deprecated pods when searching for Pods.
+* Added hooks for plugins. Currently only the installer hook is supported.
+  A plugin can register itself to be activated after the installation with the
+  following syntax:
+
+      Pod::HooksManager.register(:post_install) do |installer_context|
+        # implementation
+      end
+
+  The `installer_context` is an instance of the `Pod::Installer:HooksContext`
+  class which provides the information about the installation.  
+  [Fabio Pelosin][irrationalfab]
+  [Core#132](https://github.com/CocoaPods/Core/pull/1755)
+
+* Display indication for deprecated pods when searching for Pods.  
   [Hugo Tunius][k0nserv]
   [#2180](https://github.com/CocoaPods/CocoaPods/issues/2180)
 
