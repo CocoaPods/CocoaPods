@@ -12,8 +12,13 @@ module Pod
 
       # @param  [Target] target @see target
       #
-      def initialize(target)
+      # @param  [String] configuration_name
+      #         The name of the build configuration to generate this xcconfig
+      #         for.
+      #
+      def initialize(target, configuration_name)
         @target = target
+        @configuration_name = configuration_name
       end
 
       # @return [Xcodeproj::Config] The generated xcconfig.
@@ -54,6 +59,8 @@ module Pod
         })
 
         target.pod_targets.each do |pod_target|
+          next unless pod_target.include_in_build_config?(@configuration_name)
+
           pod_target.file_accessors.each do |file_accessor|
             XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
             file_accessor.vendored_frameworks.each do |vendored_framework|
@@ -63,6 +70,13 @@ module Pod
               XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, target.sandbox.root)
             end
           end
+
+          # Add pod static lib to list of libraries that are to be linked with
+          # the user’s project.
+
+          @xcconfig.merge!({
+            'OTHER_LDFLAGS' => %Q(-l "#{pod_target.name}")
+          })
         end
 
         # TODO Need to decide how we are going to ensure settings like these

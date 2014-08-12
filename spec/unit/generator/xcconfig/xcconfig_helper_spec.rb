@@ -57,7 +57,7 @@ module Pod
               :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework SenTestingKit'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == %q(-framework "SenTestingKit")
           end
 
           it "adds the libraries of the xcconfig" do
@@ -70,7 +70,7 @@ module Pod
               :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-lxml2'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == %q(-l "xml2")
           end
 
           it "adds the frameworks of the xcconfig" do
@@ -83,7 +83,7 @@ module Pod
               :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework CoreAnimation'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == %q(-framework "CoreAnimation")
           end
 
           it "adds the weak frameworks of the xcconfig" do
@@ -96,7 +96,7 @@ module Pod
               :platform_name => :ios
             })
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-weak_framework iAd'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == %q(-weak_framework "iAd")
           end
 
           it "adds the ios developer frameworks search paths if needed" do
@@ -136,7 +136,7 @@ module Pod
             xcconfig = Xcodeproj::Config.new
             @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
-            hash_config['OTHER_LDFLAGS'].should == "-framework Parse"
+            hash_config['OTHER_LDFLAGS'].should == %q(-framework "Parse")
             hash_config['FRAMEWORK_SEARCH_PATHS'].should == '"$(PODS_ROOT)/Parse"'
           end
 
@@ -145,7 +145,7 @@ module Pod
             xcconfig = Xcodeproj::Config.new( { 'OTHER_LDFLAGS' => '-framework CoreAnimation' } )
             @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
-            hash_config['OTHER_LDFLAGS'].should == "-framework CoreAnimation -framework Parse"
+            hash_config['OTHER_LDFLAGS'].should == %q(-framework "CoreAnimation" -framework "Parse")
           end
 
           it "doesn't ovverides exiting frameworks search paths" do
@@ -165,7 +165,7 @@ module Pod
             xcconfig = Xcodeproj::Config.new
             @sut.add_library_build_settings(path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
-            hash_config['OTHER_LDFLAGS'].should == "-lProj4"
+            hash_config['OTHER_LDFLAGS'].should == %q(-l "Proj4")
             hash_config['LIBRARY_SEARCH_PATHS'].should == '"$(PODS_ROOT)/MapBox/Proj4"'
           end
         end

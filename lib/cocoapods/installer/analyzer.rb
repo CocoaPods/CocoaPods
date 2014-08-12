@@ -200,7 +200,7 @@ module Pod
           else
             target.client_root = config.installation_root
             target.user_target_uuids = []
-            target.user_build_configurations = {}
+            target.user_build_configurations = target_definition.build_configurations || {}
             if target_definition.platform.name == :osx
               target.archs = '$(ARCHS_STANDARD_64_BIT)'
             end
@@ -443,9 +443,7 @@ module Pod
       def compute_user_build_configurations(target_definition, user_targets)
         if user_targets
           user_targets.map { |t| t.build_configurations.map(&:name) }.flatten.inject({}) do |hash, name|
-            unless name == 'Debug' || name == 'Release'
-              hash[name] = :release
-            end
+            hash[name] = name == 'Debug' ? :debug : :release
             hash
           end.merge(target_definition.build_configurations || {})
         else

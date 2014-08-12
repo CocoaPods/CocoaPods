@@ -9,18 +9,18 @@ module Pod
     #
     class PrefixHeader
 
+      # @return [Array<FileAccessor>] The file accessors for which to generate
+      #         the prefix header.
+      #
+      attr_reader :file_accessors
+
       # @return [Platform] the platform for which the prefix header will be
       #         generated.
       #
-      attr_reader :file_accessors
       attr_reader :platform
 
-      # @return [Array<LocalPod>] the LocalPod for the target for which the
-      #         prefix header needs to be generated.
-      #
-      # attr_reader :consumers
-
-      # @return [Array<String>] any header to import (with quotes).
+      # @return [Array<String>] The list of the headers to import (with
+      #         quotes).
       #
       attr_reader :imports
 
@@ -40,12 +40,14 @@ module Pod
       #         added to the top of the prefix header. For OS X `Cocoa/Cocoa.h`
       #         is imported.
       #
-      # @note   Only unique prefix_header_contents are added to the prefix header.
+      # @note   Only unique prefix_header_contents are added to the prefix
+      #         header.
       #
       # @return [String]
       #
       # @todo   Subspecs can specify prefix header information too.
-      # @todo   Check to see if we have a similar duplication issue with file_accessor.prefix_header.
+      # @todo   Check to see if we have a similar duplication issue with
+      #         file_accessor.prefix_header.
       #
       def generate
         result =  "#ifdef __OBJC__\n"
@@ -59,14 +61,14 @@ module Pod
         unique_prefix_header_contents = file_accessors.collect do |file_accessor|
           file_accessor.spec_consumer.prefix_header_contents
         end.compact.uniq
-        
+
         result << "\n"
-        
+
         unique_prefix_header_contents.each do |prefix_header_contents|
           result << prefix_header_contents
           result << "\n"
         end
-        
+
         file_accessors.each do |file_accessor|
           if prefix_header = file_accessor.prefix_header
             result << Pathname(prefix_header).read

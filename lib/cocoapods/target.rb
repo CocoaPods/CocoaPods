@@ -77,10 +77,18 @@ module Pod
       @sandbox.library_support_files_dir(name)
     end
 
+    # @param  [String] variant
+    #         The variant of the xcconfig. Used to differentiate build
+    #         configurations.
+    #
     # @return [Pathname] the absolute path of the xcconfig file.
     #
-    def xcconfig_path
-      support_files_root + "#{label}.xcconfig"
+    def xcconfig_path(variant = nil)
+      if variant
+        support_files_root + "#{label}.#{variant.downcase}.xcconfig"
+      else
+        support_files_root + "#{label}.xcconfig"
+      end
     end
 
     # @return [Pathname] the absolute path of the private xcconfig file.

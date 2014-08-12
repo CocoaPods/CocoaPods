@@ -37,11 +37,32 @@ module Pod
       it "returns the name of the Pods on which this target depends" do
         @pod_target.dependencies.should == ["monkey"]
       end
+
+      it "returns whether it is whitelisted in a build configuration" do
+        @target_definition.store_pod('BananaLib')
+        @target_definition.whitelist_pod_for_configuration('BananaLib', 'debug')
+        @pod_target.include_in_build_config?('Debug').should.be.true
+        @pod_target.include_in_build_config?('Release').should.be.false
+      end
+
+      it "is whitelisted on all build configurations of it is a dependency of other Pods" do
+        @pod_target.include_in_build_config?('Debug').should.be.true
+        @pod_target.include_in_build_config?('Release').should.be.true
+      end
+
+      it "raises if a Pod is whitelisted for different build configurations" do
+        @target_definition.store_pod('BananaLib')
+        @target_definition.store_pod('BananaLib/Subspec')
+        @target_definition.whitelist_pod_for_configuration('BananaLib', 'debug')
+        should.raise Informative do
+          @pod_target.include_in_build_config?('release').should.be.true
+        end.message.should.match /subspecs across different build configurations/
+      end
     end
 
     describe "Support files" do
       it "returns the absolute path of the xcconfig file" do
-        @pod_target.xcconfig_path.to_s.should.include 'Pods/Pods-BananaLib.xcconfig'
+        @pod_target.xcconfig_path("Release").to_s.should.include 'Pods/Pods-BananaLib.release.xcconfig'
       end
 
       it "returns the absolute path of the target header file" do

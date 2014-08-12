@@ -97,6 +97,7 @@ module Pod
     def resolve_dependencies
       UI.section "Analyzing dependencies" do
         analyze
+        validate_build_configurations
         prepare_for_legacy_compatibility
         clean_sandbox
       end
@@ -117,7 +118,6 @@ module Pod
         install_file_references
         install_libraries
         set_target_dependencies
-        link_aggregate_target
         run_podfile_post_install_hooks
         write_pod_project
         write_lockfiles
@@ -176,6 +176,23 @@ module Pod
       analyzer.update = update
       @analysis_result = analyzer.analyze
       @aggregate_targets = analyzer.result.targets
+    end
+
+    # Ensures that the white-listed build configurations are known to prevent
+    # silent typos.
+    #
+    # @raise  If a unknown user configuration is found.
+    #
+    def validate_build_configurations
+      whitelisted_configs = pod_targets.map do |target|
+        target.target_definition.all_whitelisted_configurations.map(&:downcase)
+      end.flatten.uniq
+      all_user_configurations = analysis_result.all_user_build_configurations.keys.map(&:downcase)
+
+      remainder = whitelisted_configs - all_user_configurations
+      unless remainder.empty?
+        raise Informative, "Unknown #{'configuration'.pluralize(remainder.size)} whitelisted: #{remainder.sort.to_sentence}."
+      end
     end
 
     # Prepares the Pods folder in order to be compatible with the most recent
@@ -420,21 +437,6 @@ module Pod
               pod_target.target.add_dependency(pod_dependency_target.target)
             end
           end
-        end
-      end
-    end
-
-    # Links the aggregate targets with all the dependent libraries.
-    #
-    # @note   This is run in the integration step to ensure that targets
-    #         have been created for all per spec libraries.
-    #
-    def link_aggregate_target
-      aggregate_targets.each do |aggregate_target|
-        native_target = aggregate_target.target
-        aggregate_target.pod_targets.each do |pod_target|
-          product = pod_target.target.product_reference
-          native_target.frameworks_build_phase.add_file_reference(product)
         end
       end
     end

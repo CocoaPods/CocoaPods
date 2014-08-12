@@ -50,7 +50,6 @@ require 'colored'
 require "clintegracon"
 require "integration/xcodeproj_project_yaml"
 
-
 CLIntegracon.configure do |c|
   c.spec_path = ROOT + "spec/cocoapods-integration-specs"
   c.temp_path = ROOT + "tmp"
@@ -105,7 +104,8 @@ describe_cli "pod" do
   subject do |s|
     s.executable = "ruby #{ROOT + "bin/pod"}"
     s.environment_vars = {
-      "CP_AGGRESSIVE_CACHE" => "TRUE"
+      "CP_AGGRESSIVE_CACHE" => "TRUE",
+      "XCODEPROJ_DISABLE_XCPROJ" => "TRUE",
     }
     s.default_args = [
       "--verbose",

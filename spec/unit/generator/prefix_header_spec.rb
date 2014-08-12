@@ -44,7 +44,7 @@ module Pod
       @spec.subspec 'UI' do |su|
           su.source_files = 'Source/UI/*.{h,m}'
       end
-    
+
       @spec.subspec 'Helpers' do |sh|
           sh.source_files = 'Source/Helpers/*.{h,m}'
       end

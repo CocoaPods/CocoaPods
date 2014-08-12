@@ -48,7 +48,10 @@ module Pod
           "Pods-dummy.m",
           "Pods-environment.h",
           "Pods-resources.sh",
-          "Pods.xcconfig"
+          "Pods.appstore.xcconfig",
+          "Pods.debug.xcconfig",
+          "Pods.release.xcconfig",
+          "Pods.test.xcconfig"
         ]
       end
 
@@ -114,7 +117,7 @@ module Pod
 
       it "creates the xcconfig file" do
         @installer.install!
-        file = config.sandbox.root + @target.xcconfig_path
+        file = config.sandbox.root + @target.xcconfig_path("Release")
         xcconfig = Xcodeproj::Config.new(file)
         xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
       end

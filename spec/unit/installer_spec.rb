@@ -149,6 +149,28 @@ module Pod
 
       #--------------------------------------#
 
+      describe "#validate_whitelisted_configurations" do
+        it "raises when a whitelisted configuration doesn’t exist in the user's project" do
+          target_definition = @installer.podfile.target_definitions.values.first
+          target_definition.whitelist_pod_for_configuration('JSONKit', 'YOLO')
+          @installer.send(:analyze)
+          should.raise Informative do
+            @installer.send(:validate_build_configurations)
+          end
+        end
+
+        it "does not raise if all whitelisted configurations exist in the user's project" do
+          target_definition = @installer.podfile.target_definitions.values.first
+          target_definition.whitelist_pod_for_configuration('JSONKit', 'Test')
+          @installer.send(:analyze)
+          should.not.raise do
+            @installer.send(:validate_build_configurations)
+          end
+        end
+      end
+
+      #--------------------------------------#
+
       describe "#clean_sandbox" do
 
         before do
@@ -443,30 +465,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe "Integrating client projects" do
-
-      it "links the pod targets with the aggregate integration library target" do
-        spec = fixture_spec('banana-lib/BananaLib.podspec')
-        target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        target = AggregateTarget.new(target_definition, config.sandbox)
-        lib_definition = Podfile::TargetDefinition.new('BananaLib', nil)
-        lib_definition.store_pod('BananaLib')
-        pod_target = PodTarget.new([spec], lib_definition, config.sandbox)
-        target.pod_targets = [pod_target]
-
-        project = Xcodeproj::Project.new('path')
-        pods_target = project.new_target(:static_library, target.name, :ios)
-        target.target = pods_target
-
-        native_target = project.new_target(:static_library, pod_target.name, :ios)
-        pod_target.target = pods_target
-
-        @installer.stubs(:pods_project).returns(project)
-        @installer.stubs(:aggregate_targets).returns([target])
-        @installer.stubs(:pod_targets).returns([pod_target])
-
-        @installer.send(:link_aggregate_target)
-        pods_target.frameworks_build_phase.files.map(&:file_ref).should.include?(pod_target.target.product_reference)
-      end
 
       it "integrates the client projects" do
         @installer.stubs(:aggregate_targets).returns([AggregateTarget.new(nil, config.sandbox)])

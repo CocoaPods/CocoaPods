@@ -64,5 +64,40 @@ module Pod
       end.flatten
     end
 
+    # Checks if the target should be included in the build configuration with
+    # the given name.
+    #
+    # @param  [String] configuration_name
+    #         The name of the build configuration.
+    #
+    def include_in_build_config?(configuration_name)
+      whitelists = target_definition_dependencies.map do |dependency|
+        target_definition.pod_whitelisted_for_configuration?(dependency.name, configuration_name)
+      end.uniq
+
+      if whitelists.empty?
+        return true
+      elsif whitelists.count == 1
+        whitelists.first
+      else
+        raise Informative, "The subspecs of `#{pod_name}` are linked to " \
+          "different build configurations for the `#{target_definition}` " \
+          "target. CocoaPods does not support subspecs across different " \
+          "build configurations."
+      end
+    end
+
+    private
+
+    # @return [Array<Dependency>] The dependency of the target definition for
+    #         this Pod. Return an empty array if the Pod is not a direct
+    #         dependency of the target definition but the dependency of one or
+    #         more Pods.
+    #
+    def target_definition_dependencies
+      target_definition.dependencies.select do |dependency|
+        Specification.root_name(dependency.name) == pod_name
+      end
+    end
   end
 end

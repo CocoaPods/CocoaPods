@@ -36,15 +36,15 @@ module Pod
         end
 
         it "includes the libraries for the specifications" do
-          @xcconfig.to_hash["OTHER_LDFLAGS"].should.include('-lxml2')
+          @xcconfig.to_hash["OTHER_LDFLAGS"].should.include(%q(-l "xml2"))
         end
 
         it "includes the frameworks of the specifications" do
-          @xcconfig.to_hash["OTHER_LDFLAGS"].should.include('-framework QuartzCore')
+          @xcconfig.to_hash["OTHER_LDFLAGS"].should.include(%q(-framework "QuartzCore"))
         end
 
         it "includes the weak-frameworks of the specifications" do
-          @xcconfig.to_hash["OTHER_LDFLAGS"].should.include('-weak_framework iAd')
+          @xcconfig.to_hash["OTHER_LDFLAGS"].should.include(%q(-weak_framework "iAd"))
         end
 
         it "includes the developer frameworks search paths when SenTestingKit is detected" do

@@ -52,7 +52,7 @@ module Pod
           'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
           'PODS_ROOT'  => '${SRCROOT}',
           'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
-          'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1',
+          'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
           # 'USE_HEADERMAP' => 'NO'
         }
 

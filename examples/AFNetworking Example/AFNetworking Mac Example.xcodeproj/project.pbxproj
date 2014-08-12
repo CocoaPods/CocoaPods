@@ -19,9 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1489BC7C65DCCDA21BD9C10D /* Pods-AFNetworking Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.release.xcconfig"; path = "Pods/Pods-AFNetworking Example.release.xcconfig"; sourceTree = "<group>"; };
+		206C0CA2FCD1CCE9783CC39F /* Pods-AFNetworking Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.debug.xcconfig"; path = "Pods/Pods-AFNetworking Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6935B1E417A24F0E958977ED /* libPods-AFNetworking Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B304CCE7177D58DD00F4FC85 /* adn.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = adn.cer; sourceTree = SOURCE_ROOT; };
-		E74E8E7AFD3F4DCF9FEAB5B4 /* Pods-AFNetworking Example.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.xcconfig"; path = "Pods/Pods-AFNetworking Example.xcconfig"; sourceTree = "<group>"; };
 		F8129BFB1591061B009BFE23 /* AFNetworking Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFNetworking Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8129BFF1591061B009BFE23 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F8129C021591061B009BFE23 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -60,7 +61,8 @@
 				F8129C051591061B009BFE23 /* Classes */,
 				F8129BFE1591061B009BFE23 /* Frameworks */,
 				F8129BFC1591061B009BFE23 /* Products */,
-				E74E8E7AFD3F4DCF9FEAB5B4 /* Pods-AFNetworking Example.xcconfig */,
+				206C0CA2FCD1CCE9783CC39F /* Pods-AFNetworking Example.debug.xcconfig */,
+				1489BC7C65DCCDA21BD9C10D /* Pods-AFNetworking Example.release.xcconfig */,
 			);
 			indentWidth = 4;
 			sourceTree = "<group>";
@@ -296,7 +298,7 @@
 		};
 		F8129C1A1591061B009BFE23 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E74E8E7AFD3F4DCF9FEAB5B4 /* Pods-AFNetworking Example.xcconfig */;
+			baseConfigurationReference = 206C0CA2FCD1CCE9783CC39F /* Pods-AFNetworking Example.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -310,7 +312,7 @@
 		};
 		F8129C1B1591061B009BFE23 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E74E8E7AFD3F4DCF9FEAB5B4 /* Pods-AFNetworking Example.xcconfig */;
+			baseConfigurationReference = 1489BC7C65DCCDA21BD9C10D /* Pods-AFNetworking Example.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;

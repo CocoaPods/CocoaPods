@@ -24,6 +24,15 @@ module Pod
       it "returns the name of its product" do
         @target.product_name.should == 'libPods.a'
       end
+
+      it 'returns the user targets' do
+        project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
+        @target.user_project_path = project_path
+        @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
+        targets = @target.user_targets
+        targets.count.should == 1
+        targets.first.class.should == Xcodeproj::Project::PBXNativeTarget
+      end
     end
 
     describe "Support files" do
@@ -35,7 +44,7 @@ module Pod
       end
 
       it "returns the absolute path of the xcconfig file" do
-        @target.xcconfig_path.to_s.should.include?('Pods/Pods.xcconfig')
+        @target.xcconfig_path("Release").to_s.should.include?('Pods/Pods.release.xcconfig')
       end
 
       it "returns the absolute path of the resources script" do
@@ -63,18 +72,38 @@ module Pod
       end
 
       it "returns the path of the xcconfig file relative to the user project" do
-        @target.xcconfig_relative_path.should == 'Pods/Pods.xcconfig'
+        @target.xcconfig_relative_path("Release").should == 'Pods/Pods.release.xcconfig'
       end
     end
 
     describe "Pod targets" do
       before do
-        spec = fixture_spec('banana-lib/BananaLib.podspec')
-        target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        pod_target = PodTarget.new([spec], target_definition, config.sandbox)
-        @target = AggregateTarget.new(target_definition, config.sandbox)
+        @spec = fixture_spec('banana-lib/BananaLib.podspec')
+        @target_definition = Podfile::TargetDefinition.new('Pods', nil)
+        @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
+        @target = AggregateTarget.new(@target_definition, config.sandbox)
         @target.stubs(:platform).returns(:ios)
-        @target.pod_targets = [pod_target]
+        @target.pod_targets = [@pod_target]
+      end
+
+      it "returns pod targets by build configuration" do
+        pod_target_release = PodTarget.new([@spec], @target_definition, config.sandbox)
+        pod_target_release.expects(:include_in_build_config?).with("Debug").returns(false)
+        pod_target_release.expects(:include_in_build_config?).with("Release").returns(true)
+        @target.pod_targets = [@pod_target, pod_target_release]
+        @target.user_build_configurations = {
+          "Debug" => :debug,
+          "Release" => :release
+        }
+        expected = {
+          "Debug" => @pod_target.specs,
+          "Release" => (@pod_target.specs + pod_target_release.specs)
+        }
+        @target.specs_by_build_configuration.should == expected
+      end
+
+      it "returns the specs of the Pods used by this aggregate target" do
+        @target.specs.map(&:name).should == ["BananaLib"]
       end
 
       it "returns the specs of the Pods used by this aggregate target" do
