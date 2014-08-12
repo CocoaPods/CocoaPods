@@ -144,7 +144,7 @@ module Pod
             user_target.build_configurations.each do |config|
               xcconfig = aggregate_target.xcconfigs[config.name]
               if xcconfig
-                xcconfig.attributes.keys.each do |key|
+                xcconfig.to_hash.keys.each do |key|
                   target_value = config.build_settings[key]
                   if target_value && !target_value.include?('$(inherited)')
                     print_override_warning(aggregate_target, user_target, config, key)

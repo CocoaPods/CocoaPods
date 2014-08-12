@@ -61,7 +61,7 @@ module Pod
           user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
           @library.stubs(:user_targets).returns([user_target])
 
-          @library.xcconfigs['Release'] = stub(:attributes => {'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1'})
+          @library.xcconfigs['Release'] = {'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1'}
           @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library])
 
           @integrator.unstub(:warn_about_xcconfig_overrides)
@@ -76,7 +76,7 @@ module Pod
           user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
           @library.stubs(:user_targets).returns([user_target])
 
-          @library.xcconfigs['Release'] = stub(:attributes => {'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1'})
+          @library.xcconfigs['Release'] = {'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1'}
           @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library])
 
           @integrator.unstub(:warn_about_xcconfig_overrides)
