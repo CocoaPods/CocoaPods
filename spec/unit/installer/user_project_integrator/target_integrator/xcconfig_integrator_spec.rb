@@ -50,22 +50,7 @@ module Pod
       config.base_configuration_reference.should.equal existing
     end
 
-    it 'check that the integrated target does not override the CocoaPods build settings' do
-      UI.warnings = ''
-      config = @target.build_configuration_list['Release']
-      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = 'FLAG=1'
-      XCConfigIntegrator.integrate(@pod_bundle, [@target])
-      UI.warnings.should.include 'The `SampleProject [Release]` target ' \
-        'overrides the `GCC_PREPROCESSOR_DEFINITIONS` build setting'
-    end
 
-    it 'allows build settings which inherit the settings form the CocoaPods xcconfig' do
-      UI.warnings = ''
-      config = @target.build_configuration_list['Release']
-      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = '$(inherited)'
-      XCConfigIntegrator.integrate(@pod_bundle, [@target])
-      UI.warnings.should.not.include 'GCC_PREPROCESSOR_DEFINITIONS'
-    end
   end
 end
 

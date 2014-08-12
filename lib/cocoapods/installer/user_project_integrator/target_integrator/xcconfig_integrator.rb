@@ -20,7 +20,6 @@ module Pod
               target.build_configurations.each do |config|
                 update_from_cocoapods_0_33_1(pod_bundle, targets)
                 set_target_xcconfig(pod_bundle, config)
-                check_overrides(pod_bundle, target, config)
               end
             end
           end
@@ -72,28 +71,6 @@ module Pod
             config.base_configuration_reference = file_ref
           end
 
-          # Checks whether the settings of the CocoaPods generated xcconfig are
-          # overridden by the build configuration of a target and prints a
-          # warning to inform the user if needed.
-          #
-          # @param  [Target::AggregateTarget] pod_bundle
-          #         The Pods bundle.
-          #
-          # @param  [XcodeProj::PBXNativeTarget] target
-          #         The native target.
-          #
-          # @param  [Xcodeproj::XCBuildConfiguration] config
-          #         The build configuration.
-          #
-          def self.check_overrides(pod_bundle, target, config)
-            xcconfig = pod_bundle.xcconfigs[config.name]
-            xcconfig.attributes.keys.each do |key|
-              target_value = config.build_settings[key]
-              if target_value && !target_value.include?('$(inherited)')
-                print_override_warning(pod_bundle, target, config, key)
-              end
-            end
-          end
 
           private
 

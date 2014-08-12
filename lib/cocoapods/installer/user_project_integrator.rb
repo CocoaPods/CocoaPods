@@ -62,6 +62,7 @@ module Pod
         create_workspace
         integrate_user_targets
         warn_about_empty_podfile
+        warn_about_xcconfig_overrides
       end
 
       #-----------------------------------------------------------------------#
@@ -133,6 +134,28 @@ module Pod
         end
       end
 
+      # Checks whether the settings of the CocoaPods generated xcconfig are
+      # overridden by the build configuration of a target and prints a
+      # warning to inform the user if needed.
+      #
+      def warn_about_xcconfig_overrides
+        targets.each do |aggregate_target|
+          aggregate_target.user_targets.each do |user_target|
+            user_target.build_configurations.each do |config|
+              xcconfig = aggregate_target.xcconfigs[config.name]
+              if xcconfig
+                xcconfig.attributes.keys.each do |key|
+                  target_value = config.build_settings[key]
+                  if target_value && !target_value.include?('$(inherited)')
+                    print_override_warning(aggregate_target, user_target, config, key)
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+
       private
 
       # @!group Private Helpers
@@ -169,9 +192,35 @@ module Pod
         end.compact.uniq
       end
 
-
       def targets_to_integrate
         targets.reject { |target| target.target_definition.empty? }
+      end
+
+      # Prints a warning informing the user that a build configuration of
+      # the integrated target is overriding the CocoaPods build settings.
+      #
+      # @param  [Target::AggregateTarget] aggregate_target
+      #         The umbrella target.
+      #
+      # @param  [XcodeProj::PBXNativeTarget] user_target
+      #         The native target.
+      #
+      # @param  [Xcodeproj::XCBuildConfiguration] config
+      #         The build configuration.
+      #
+      # @param  [String] key
+      #         The key of the overridden build setting.
+      #
+      def print_override_warning(aggregate_target, user_target, config, key)
+        actions = [
+          "Use the `$(inherited)` flag, or",
+          "Remove the build settings from the target."
+        ]
+        message = "The `#{user_target.name} [#{config.name}]` " \
+          "target overrides the `#{key}` build setting defined in " \
+          "`#{aggregate_target.xcconfig_relative_path(config.name)}'. " \
+          "This can lead to problems with the CocoaPods installation"
+        UI.warn(message, actions)
       end
 
       #-----------------------------------------------------------------------#
