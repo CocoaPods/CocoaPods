@@ -31,7 +31,7 @@ module Pod
           #-------------------------------------------------------------------#
 
           # Removes the xcconfig used up to CocoaPods 0.33 from the project and
-          # deletes the file it if exists.
+          # deletes the file if it exists.
           #
           # @param  [Target::AggregateTarget] pod_bundle
           #         The Pods bundle.

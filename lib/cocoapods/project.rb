@@ -193,7 +193,7 @@ module Pod
       podfile_ref
     end
 
-    # Adds a new build configuration to the project and populates its with
+    # Adds a new build configuration to the project and populates it with
     # default settings according to the provided type.
     #
     # @note   This method extends the original Xcodeproj implementation to
