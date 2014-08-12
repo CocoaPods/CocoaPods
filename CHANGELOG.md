@@ -35,8 +35,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin][irrationalfab]
   [Core#132](https://github.com/CocoaPods/Core/issues/132)
 
-* Fixed `pod init` so that it doesn't recurse when checking for Podfiles.
-  [Paddy O'Brien](tapi)
+* Fixed `pod init` so that it doesn't recurse when checking for Podfiles.  
+  [Paddy O'Brien](https://github.com/tapi)
   [#2181](https://github.com/CocoaPods/CocoaPods/issues/2181)
 
 * Fixed missing XCTest framework in Xcode 6.  
