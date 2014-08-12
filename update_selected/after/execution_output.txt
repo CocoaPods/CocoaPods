@@ -1,9 +1,11 @@
-CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE  $ pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
+CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
+
 Analyzing dependencies
 
 Finding Podfile changes
   - JSONKit
   - Reachability
+Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `Pods' (iOS 6.0)

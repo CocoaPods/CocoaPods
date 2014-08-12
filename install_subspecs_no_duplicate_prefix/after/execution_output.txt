@@ -1,5 +1,7 @@
-CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE  $ pod install --no-repo-update --verbose --no-ansi 2>&1
+CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
+
 Analyzing dependencies
+Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Fetching external sources
 -> Fetching podspec for `Test` from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`
@@ -64,6 +66,6 @@ Integrating client project
 
 Integrating Pod target `Pods-Test` into aggregate target Pods of project `SampleApp.xcodeproj`.
 
-[!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Pods.release.xcconfig'.This can lead to problems with the CocoaPods installation
+[!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Pods.release.xcconfig'. This can lead to problems with the CocoaPods installation
     - Use the `$(inherited)` flag, or
     - Remove the build settings from the target.
