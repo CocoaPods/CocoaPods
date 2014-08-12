@@ -124,18 +124,7 @@ module Pod
         #         match the given target.
         #
         def native_targets
-          unless @native_targets
-            target_uuids = target.user_target_uuids
-            @native_targets = target_uuids.map do |uuid|
-              native_target = user_project.objects_by_uuid[uuid]
-              unless native_target
-                raise Informative, "[Bug] Unable to find the target with " \
-                  "the `#{uuid}` UUID for the `#{target}` integration library"
-              end
-              native_target
-            end
-          end
-          @native_targets
+          @native_targets ||= target.user_targets(user_project)
         end
 
         # @return [Array<PBXNativeTarget>] The list of the targets

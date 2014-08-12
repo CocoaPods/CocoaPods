@@ -38,12 +38,27 @@ module Pod
     attr_accessor :user_project_path
 
     # @return [String] the list of the UUIDs of the user targets that will be
-    #         integrated by this target as identified by the analizer.
+    #         integrated by this target as identified by the analyzer.
     #
     # @note   The target instances are not stored to prevent editing different
     #         instances.
     #
     attr_accessor :user_target_uuids
+
+    # @return [Array<PBXNativeTarget>] The list of all the user targets that
+    #         will be integrated by this target.
+    #
+    def user_targets(project = nil)
+      project ||= Xcodeproj::Project.open(user_project_path)
+      user_target_uuids.map do |uuid|
+        native_target = project.objects_by_uuid[uuid]
+        unless native_target
+          raise Informative, "[Bug] Unable to find the target with " \
+            "the `#{uuid}` UUID for the `#{self}` integration library"
+        end
+        native_target
+      end
+    end
 
     # @return [Hash<String, Xcodeproj::Config>] Map from configuration name to
     #         configuration file for the target

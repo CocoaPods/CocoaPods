@@ -101,7 +101,7 @@ module Pod
         it 'returns the targets that need to be integrated' do
           pods_library = @project.frameworks_group.new_product_ref_for_target('Pods', :static_library)
           @target.frameworks_build_phase.add_file_reference(pods_library)
-          @target_integrator.stubs(:user_project).returns(@project)
+          @project.save
           @target_integrator.send(:native_targets_to_integrate).map(&:name).should.be.empty
         end
 

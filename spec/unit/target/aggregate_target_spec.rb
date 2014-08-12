@@ -24,6 +24,15 @@ module Pod
       it "returns the name of its product" do
         @target.product_name.should == 'libPods.a'
       end
+
+      it 'returns the user targets' do
+        project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
+        @target.user_project_path = project_path
+        @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
+        targets = @target.user_targets
+        targets.count.should == 1
+        targets.first.class.should == Xcodeproj::Project::PBXNativeTarget
+      end
     end
 
     describe "Support files" do
