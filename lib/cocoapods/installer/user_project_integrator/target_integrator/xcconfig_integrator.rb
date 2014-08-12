@@ -122,7 +122,7 @@ module Pod
             ]
             message = "The `#{target.name} [#{config.name}]` " \
               "target overrides the `#{key}` build setting defined in " \
-              "`#{pod_bundle.xcconfig_relative_path(config.name)}'." \
+              "`#{pod_bundle.xcconfig_relative_path(config.name)}'. " \
               "This can lead to problems with the CocoaPods installation"
             UI.warn(message, actions)
           end
