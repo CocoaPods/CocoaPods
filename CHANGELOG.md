@@ -8,7 +8,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Add support to specify dependencies per build configuration.
 
-      pod 'PonyDebugger', :configurations => ['Debug']
+      pod 'Lookback', :configurations => ['Debug']
 
   Currently configurations can only be specified per single Pod.  
   [Joachim Bengtsson](https://github.com/nevyn)
