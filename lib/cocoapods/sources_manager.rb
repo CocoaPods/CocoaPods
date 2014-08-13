@@ -71,13 +71,16 @@ module Pod
             end
             set_names << name unless texts.grep(query_regexp).empty?
           end
-          sets = set_names.sort.map { |name| aggregate.representative_set(name) }
+          sets = set_names.sort.map do |name|
+            aggregate.representative_set(name)
+          end
         else
           sets = aggregate.search_by_name(query, false)
         end
         if sets.empty?
           extra = ", author, summary, or description" if full_text_search
-          raise Informative, "Unable to find a pod with name#{extra} matching `#{query}`"
+          raise Informative, "Unable to find a pod with name#{extra}" \
+            "matching `#{query}`"
         end
         sets
       end
@@ -108,7 +111,9 @@ module Pod
             search_index = aggregate.generate_search_index
           end
 
-          File.open(search_index_path, 'w') {|f| f.write(search_index.to_yaml) }
+          File.open(search_index_path, 'w') do |file|
+            file.write(search_index.to_yaml)
+          end
           @updated_search_index = search_index
         end
         @updated_search_index
@@ -141,12 +146,9 @@ module Pod
       #
       def update(source_name = nil, show_output = false)
         if source_name
-          specified_source = aggregate.all.find { |s| s.name == source_name }
-          raise Informative, "Unable to find the `#{source_name}` repo."    unless specified_source
-          raise Informative, "The `#{source_name}` repo is not a git repo." unless git_repo?(specified_source.data_provider.repo)
-          sources = [specified_source]
+          sources = [git_source_named(source_name)]
         else
-          sources = aggregate.all.select { |source| git_repo?(source.data_provider.repo) && git_remote_reachable?(source.data_provider.repo) }
+          sources =  git_sources
         end
 
         sources.each do |source|
@@ -302,10 +304,40 @@ module Pod
 
       private
 
+      # @return [Bool] Whether the given path is writable by the current user.
+      #
+      # @param  [#to_s] path
+      #         The path.
+      #
       def path_writable?(path)
         Pathname(path).dirname.writable?
       end
 
+      # @return [Source] The git source with the given name. If no git source
+      #         with given name is found it raises.
+      #
+      # @param  [String] name
+      #         The name of the source.
+      #
+      def git_source_named(name)
+        specified_source = aggregate.all.find { |s| s.name == name }
+        unless specified_source
+          raise Informative, "Unable to find the `#{name}` repo."
+        end
+        unless git_repo?(specified_source.data_provider.repo)
+          raise Informative, "The `#{name}` repo is not a git repo."
+        end
+        specified_source
+      end
+
+      # @return [Source] The list of the git sources.
+      #
+      def git_sources
+        aggregate.all.select do |source|
+          git_repo?(source.data_provider.repo) &&
+            git_remote_reachable?(source.data_provider.repo)
+        end
+      end
     end
   end
 end

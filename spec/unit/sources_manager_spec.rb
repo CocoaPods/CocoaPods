@@ -114,14 +114,12 @@ module Pod
 
       it "update source backed by a git repository" do
         set_up_test_repo_for_update
-
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.output.should.match /is up to date/
       end
 
       it "uses the only fast forward git option" do
         set_up_test_repo_for_update
-
         SourcesManager.expects(:git!).with() { |options| options.should.match /--ff-only/ }
         SourcesManager.update(test_repo_path.basename.to_s, true)
       end
