@@ -169,18 +169,6 @@ module Pod
         end
       end
 
-      # Returns whether a git repo's remote is reachable.
-      #
-      # @param  [Pathname] dir
-      #         The directory where the source is stored.
-      #
-      # @return [Bool] Whether the given source's remote is reachable.
-      #
-      def git_remote_reachable?(dir)
-        Dir.chdir(dir) { git('ls-remote') }
-        $?.success?
-      end
-
       # Returns whether a source is a GIT repo.
       #
       # @param  [Pathname] dir
