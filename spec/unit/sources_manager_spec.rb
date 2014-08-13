@@ -124,6 +124,16 @@ module Pod
         SourcesManager.update(test_repo_path.basename.to_s, true)
       end
 
+      it "prints a warning if the update failed" do
+        UI.warnings = ''
+        set_up_test_repo_for_update
+        Dir.chdir(test_repo_path) do
+          `git remote set-url origin https://example.com`
+        end
+        SourcesManager.update(test_repo_path.basename.to_s, true)
+        UI.warnings.should.include('not able to update the `master` repo')
+      end
+
       it 'returns whether a source has a reachable git remote' do
         SourcesManager.git_remote_reachable?(repo_make('a_new_repo_that_is_new')).should.be.false
         SourcesManager.git_remote_reachable?(SourcesManager.master_repo_dir).should.be.true

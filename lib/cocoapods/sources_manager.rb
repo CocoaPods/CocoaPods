@@ -158,8 +158,10 @@ module Pod
                 output = git!("pull --ff-only")
                 UI.puts output if show_output && !config.verbose?
               rescue Informative => e
-                raise Informative, 'An error occurred while performing ' \
-                  "`git pull` on repo `#{source.name}`.\n" + e.message
+                UI.warn "CocoaPods was not able to update the " \
+                  "`#{source.name}` repo. If this is an unexpected issue " \
+                  "and persists you can inspect it running " \
+                  "`pod repo update --verbose`"
               end
             end
             check_version_information(source.data_provider.repo)
@@ -334,8 +336,7 @@ module Pod
       #
       def git_sources
         aggregate.all.select do |source|
-          git_repo?(source.data_provider.repo) &&
-            git_remote_reachable?(source.data_provider.repo)
+          git_repo?(source.data_provider.repo)
         end
       end
     end
