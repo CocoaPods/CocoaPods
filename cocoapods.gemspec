@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
                   "in, third party open-source libraries, by creating a more centralized " \
                   "ecosystem."
 
-s.files = Dir["lib/**/*.rb"] + %w{ bin/pod bin/sandbox-pod README.md LICENSE CHANGELOG.md }
+  s.files = Dir["lib/**/*.rb"] + %w{ bin/pod bin/sandbox-pod README.md LICENSE CHANGELOG.md }
 
   s.executables   = %w{ pod sandbox-pod }
   s.require_paths = %w{ lib }
@@ -49,23 +49,4 @@ s.files = Dir["lib/**/*.rb"] + %w{ bin/pod bin/sandbox-pod README.md LICENSE CHA
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.required_ruby_version = '>= 1.8.7'
   s.specification_version = 3 if s.respond_to? :specification_version
-
-  changelog_path = File.expand_path('../CHANGELOG.md', __FILE__)
-  if File.exists?(changelog_path)
-    title_token = '## '
-    current_verison_title = title_token +  Pod::VERSION.to_s
-    text = File.open(changelog_path, "r:UTF-8") { |f| f.read }
-    lines = text.split("\n")
-
-    current_version_index = lines.find_index { |line| line =~ (/^#{current_verison_title}/) }
-    unless current_version_index
-      raise "Update the changelog for the last version"
-    end
-    previous_version_lines = lines[(current_version_index+1)...-1]
-    previous_version_index = current_version_index + previous_version_lines.find_index { |line| line =~ (/^#{title_token}/) && !line.include?('rc') }
-
-    relevant = lines[current_version_index..previous_version_index]
-
-    s.post_install_message = "\nCHANGELOG:\n\n" + relevant.join("\n") + "\n"
-  end
 end

@@ -46,6 +46,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Properly quote the `-isystem` values in the xcconfig files.  
   [Eloy Durán](https://github.com/alloy)
 
+* The post install message with the Changelog has been removed from the
+  gemspec.  
+  [Fabio Pelosin][irrationalfab]
+  [Eloy Durán](https://github.com/alloy)
 
 ##### Bug Fixes
 
