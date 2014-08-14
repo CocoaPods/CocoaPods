@@ -1,41 +1,33 @@
-source "http://rubygems.org"
-
-unless defined?(Pod::VERSION)
-  ::BUNDLER_GEMSPEC = true unless defined?(::BUNDLER_GEMSPEC)
+# Declares a dependency to the git repo of CocoaPods gem. This declaration is
+# compatible with the local git repos feature of Bundler.
+#
+def cp_gem(name, repo_name, branch = 'master')
+  url = "https://github.com/CocoaPods/#{repo_name}.git"
+  gem name, :git => url, :branch => branch
 end
+
+source 'http://rubygems.org'
+
 gemspec
 
 group :development do
-  # To develop the deps in tandem use the `LOCAL GIT REPOS` feature of Bundler.
-  # For more info see http://bundler.io/git.html#local
-  gem 'cocoapods-core',       :git => "https://github.com/CocoaPods/Core.git", :branch => 'master'
-  gem 'xcodeproj',            :git => "https://github.com/CocoaPods/Xcodeproj.git", :branch => 'master'
-  gem 'claide',               :git => 'https://github.com/CocoaPods/CLAide.git', :branch => 'master'
-  gem 'cocoapods-downloader', :git => "https://github.com/CocoaPods/cocoapods-downloader.git", :branch => 'master'
-  gem 'cocoapods-try',        :git => 'https://github.com/CocoaPods/cocoapods-try.git', :branch => 'master'
-  gem 'cocoapods-plugins',    :git => 'https://github.com/CocoaPods/cocoapods-plugins.git', :branch => 'master'
-  gem 'cocoapods-trunk',      :git => 'https://github.com/CocoaPods/cocoapods-trunk.git', :branch => 'master'
+  cp_gem 'claide',               'CLAide'
+  cp_gem 'cocoapods-core',       'Core'
+  cp_gem 'cocoapods-downloader', 'cocoapods-downloader'
+  cp_gem 'cocoapods-plugins',    'cocoapods-plugins'
+  cp_gem 'cocoapods-trunk',      'cocoapods-trunk'
+  cp_gem 'cocoapods-try',        'cocoapods-try'
+  cp_gem 'xcodeproj',            'Xcodeproj'
 
-  gem 'rake', '~> 10.1.0'   # Ruby 1.8.7
-  gem "mocha", '~> 1.0.0'   # Issues with Ruby 2.0.0 on Travis
-  gem "bacon"
-  gem "mocha-on-bacon"
+  gem 'bacon'
+  gem 'mocha'
+  gem 'mocha-on-bacon'
   gem 'prettybacon'
+  gem 'webmock'
+
+  # Integration tests
+  gem 'diffy'
   gem 'clintegracon'
-  gem 'webmock', "< 1.16"
-
-  # For the integration tests
-  gem "diffy"
-
-  # Lock the current lowest requirement for ActiveSupport 3 to ensure we don't
-  # re-introduce https://github.com/CocoaPods/CocoaPods/issues/1950
-  gem 'i18n', '0.6.4'
-
-  gem 'mime-types', '< 2' # v2 is 1.9.x only
-  gem 'coveralls', :require => false
-  # Explicitly add this, otherwise it might sometimes be missing:
-  # https://github.com/lemurheavy/coveralls-ruby/blob/master/coveralls-ruby.gemspec#L23.
-  gem 'simplecov'
 
   if RUBY_VERSION >= '1.9.3'
     gem 'rubocop'
@@ -48,18 +40,16 @@ group :development do
 end
 
 group :debugging do
-  gem "rb-fsevent"
-  gem "kicker"
-  gem "awesome_print"
-  gem "pry"
-  # The released gem leads to stack too deep when profiling a full run.
-  gem "ruby-prof", :git => "https://github.com/ruby-prof/ruby-prof.git"
+  gem 'rb-fsevent'
+  gem 'kicker'
+  gem 'awesome_print'
+  gem 'pry'
 end
 
-group :documentation do
-  gem 'yard'
-  gem 'redcarpet', '< 3.0.0' # Not compatible with MRI 1.8.7
-  gem 'github-markup'
-  gem 'pygments.rb'
+group :ruby_1_8_7 do
+  # Lock the current lowest requirement for ActiveSupport 3 to ensure we don't
+  # re-introduce https://github.com/CocoaPods/CocoaPods/issues/1950
+  gem 'i18n', '0.6.4'
+  gem 'mime-types', '< 2.0'
+  gem 'activesupport', '< 4'
 end
-
