@@ -12,16 +12,6 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "In General" do
-
-      it "doesn't use an aggressive cache by default" do
-        @installer.should.not.aggressive_cache?
-      end
-
-    end
-
-    #-------------------------------------------------------------------------#
-
     describe "Installation" do
 
       describe "Download" do
@@ -33,7 +23,7 @@ module Pod
           pod_folder.should.exist
         end
 
-        it "downloads the head source if specified source" do
+        it "downloads the head source even if a specific source is present specified source" do
           config.sandbox.store_head_pod('BananaLib')
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!

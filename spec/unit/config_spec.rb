@@ -32,13 +32,6 @@ module Pod
         @sut.default_test_podfile_path.should == Pathname.new("~/.cocoapods/templates/Podfile.test").expand_path
       end
 
-      it "allows to specify whether the aggressive cache should be used with an environment variable" do
-        @sut.aggressive_cache = false
-        ENV['CP_AGGRESSIVE_CACHE'] = 'TRUE'
-        @sut.aggressive_cache?.should.be.true
-        ENV.delete('CP_AGGRESSIVE_CACHE')
-      end
-
       it "allows to specify the home dir with an environment variable" do
         ENV['CP_HOME_DIR'] = '~/custom_home_dir'
         @sut.home_dir.should == Pathname.new("~/custom_home_dir").expand_path
@@ -154,32 +147,14 @@ module Pod
         @sut.should.clean
       end
 
-      it "has a default cache size of 500" do
-        @sut.max_cache_size.should == 500
-      end
-
       it "returns the cache root" do
         @sut.cache_root.should == Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
       end
-
-      it "doesn't use aggressive cache" do
-        @sut.should.not.aggressive_cache?
-      end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe "Dependency Injection" do
-
-      it "returns the downloader" do
-        downloader = @sut.downloader(Pathname.new(''), { :git => 'example.com' })
-        downloader.target_path.should == Pathname.new('')
-        downloader.url.should == 'example.com'
-        downloader.cache_root.should == @sut.cache_root
-        downloader.max_cache_size.should == 500
-        downloader.aggressive_cache.should.be.false
-      end
 
       it "returns the specification statistics provider" do
         stats_provider = @sut.spec_statistics_provider

@@ -25,8 +25,6 @@ module Pod
       def initialize(sandbox, specs_by_platform)
         @sandbox = sandbox
         @specs_by_platform = specs_by_platform
-
-        @aggressive_cache = false
       end
 
       # @return [String] A string suitable for debugging.
@@ -34,21 +32,6 @@ module Pod
       def inspect
         "<#{self.class} sandbox=#{sandbox.root} pod=#{root_spec.name}"
       end
-
-      #-----------------------------------------------------------------------#
-
-      public
-
-      # @!group Configuration
-
-      # @return [Bool] whether the downloader should always check against the
-      #         remote if issues might be generated (mostly useful to speed up
-      #         testing).
-      #
-      # @note   This might be removed in future.
-      #
-      attr_accessor :aggressive_cache
-      alias_method  :aggressive_cache?, :aggressive_cache
 
       #-----------------------------------------------------------------------#
 
@@ -167,7 +150,7 @@ module Pod
       #         source.
       #
       def downloader
-        @downloader ||= Config.instance.downloader(root, root_spec.source.dup)
+        @downloader ||= Downloader.for_target(root, root_spec.source.dup)
       end
 
       #-----------------------------------------------------------------------#

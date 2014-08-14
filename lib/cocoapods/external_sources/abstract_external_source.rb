@@ -101,7 +101,7 @@ module Pod
         UI.titled_section(title, { :verbose_prefix => "-> " }) do
           target = sandbox.root + name
           target.rmtree if target.exist?
-          downloader = Config.instance.downloader(target, params)
+          downloader = Downloader.for_target(target, params)
           downloader.download
           store_podspec(sandbox, target + "#{name}.podspec")
           sandbox.store_pre_downloaded_pod(name)

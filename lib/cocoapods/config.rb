@@ -23,8 +23,6 @@ module Pod
       :new_version_message => true,
 
       :cache_root          => Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods')),
-      :max_cache_size      => 500,
-      :aggressive_cache    => false,
     }
 
     public
@@ -77,10 +75,6 @@ module Pod
 
     # @!group Cache
 
-    # @return [Fixnum] The maximum size for the cache expressed in Mb.
-    #
-    attr_accessor :max_cache_size
-
     # @return [Pathname] The directory where CocoaPods should cache remote data
     #         and other expensive to compute information.
     #
@@ -89,21 +83,6 @@ module Pod
     def cache_root
       @cache_root.mkpath unless @cache_root.exist?
       @cache_root
-    end
-
-    # Allows to set whether the downloader should use more aggressive caching
-    # options.
-    #
-    # @note The aggressive cache has lead to issues if a tag is updated to
-    #       point to another commit.
-    #
-    attr_writer :aggressive_cache
-
-    # @return [Bool] Whether the downloader should use more aggressive caching
-    #         options.
-    #
-    def aggressive_cache?
-      @aggressive_cache || (ENV['CP_AGGRESSIVE_CACHE'] == 'TRUE')
     end
 
     public
@@ -266,17 +245,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     # @!group Dependency Injection
-
-    # @return [Downloader] The downloader to use for the retrieving remote
-    #         source.
-    #
-    def downloader(target_path, options)
-      downloader = Downloader.for_target(target_path, options)
-      downloader.cache_root = cache_root
-      downloader.max_cache_size = max_cache_size
-      downloader.aggressive_cache = aggressive_cache?
-      downloader
-    end
 
     # @return [Specification::Set::Statistics] The statistic provider to use
     #         for specifications.
