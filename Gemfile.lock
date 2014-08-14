@@ -1,69 +1,3 @@
-GIT
-  remote: https://github.com/CocoaPods/CLAide.git
-  revision: 303b96021e0fdd0003a71f1f9bf6823a6262ba12
-  branch: master
-  specs:
-    claide (0.6.1)
-
-GIT
-  remote: https://github.com/CocoaPods/Core.git
-  revision: 2e66303717d72b23a98ea5341dc5b627f3eb97e7
-  branch: master
-  specs:
-    cocoapods-core (0.33.1)
-      activesupport (>= 3.2.15)
-      fuzzy_match (~> 2.0.4)
-      json_pure (~> 1.8)
-      nap (~> 0.5)
-
-GIT
-  remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 13733a36b29d2a9698c3e2563b52a0b6339e90df
-  branch: master
-  specs:
-    xcodeproj (0.18.0)
-      CFPropertyList (~> 2.2)
-      activesupport (~> 3.0)
-      colored (~> 1.2)
-
-GIT
-  remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 0e02c9da094a82c5049cbf7266d9eefef2fd5552
-  branch: master
-  specs:
-    cocoapods-downloader (0.6.1)
-
-GIT
-  remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 0740e01bc8b99cbd8249e766fc4a87eae71e995e
-  branch: master
-  specs:
-    cocoapods-plugins (0.2.0)
-      nap
-
-GIT
-  remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 72e02a7ad3f429a6e76e602a238e91eb55c44165
-  branch: master
-  specs:
-    cocoapods-trunk (0.1.4)
-      json_pure (~> 1.8)
-      nap (>= 0.6)
-      netrc
-
-GIT
-  remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 754e53f3c3eec4c5ba129d6955484fb27631d1d5
-  branch: master
-  specs:
-    cocoapods-try (0.3.0)
-
-GIT
-  remote: https://github.com/ruby-prof/ruby-prof.git
-  revision: e3317c4bf0b58dceee86e5dd9cf03165fcfd964f
-  specs:
-    ruby-prof (0.15.1)
-
 PATH
   remote: .
   specs:
@@ -82,6 +16,72 @@ PATH
       open4 (~> 1.3)
       xcodeproj (~> 0.18.0)
 
+GIT
+  remote: https://github.com/ruby-prof/ruby-prof.git
+  revision: e3317c4bf0b58dceee86e5dd9cf03165fcfd964f
+  specs:
+    ruby-prof (0.15.1)
+
+GIT
+  remote: https://github.com/CocoaPods/cocoapods-trunk.git
+  revision: 72e02a7ad3f429a6e76e602a238e91eb55c44165
+  branch: master
+  specs:
+    cocoapods-trunk (0.1.4)
+      json_pure (~> 1.8)
+      nap (>= 0.6)
+      netrc
+
+GIT
+  remote: https://github.com/CocoaPods/cocoapods-plugins.git
+  revision: 0740e01bc8b99cbd8249e766fc4a87eae71e995e
+  branch: master
+  specs:
+    cocoapods-plugins (0.2.0)
+      nap
+
+GIT
+  remote: https://github.com/CocoaPods/cocoapods-try.git
+  revision: 754e53f3c3eec4c5ba129d6955484fb27631d1d5
+  branch: master
+  specs:
+    cocoapods-try (0.3.0)
+
+GIT
+  remote: https://github.com/CocoaPods/cocoapods-downloader.git
+  revision: 0e02c9da094a82c5049cbf7266d9eefef2fd5552
+  branch: master
+  specs:
+    cocoapods-downloader (0.6.1)
+
+GIT
+  remote: https://github.com/CocoaPods/CLAide.git
+  revision: 303b96021e0fdd0003a71f1f9bf6823a6262ba12
+  branch: master
+  specs:
+    claide (0.6.1)
+
+GIT
+  remote: https://github.com/CocoaPods/Xcodeproj.git
+  revision: de7a0fa64bc9a0d72278b4d384539ce748df6220
+  branch: master
+  specs:
+    xcodeproj (0.18.0)
+      CFPropertyList (~> 2.2)
+      activesupport (~> 3.0)
+      colored (~> 1.2)
+
+GIT
+  remote: https://github.com/CocoaPods/Core.git
+  revision: 97e961955a9d230aa5d2291dc1d323d283f1d49f
+  branch: master
+  specs:
+    cocoapods-core (0.33.1)
+      activesupport (>= 3.2.15)
+      fuzzy_match (~> 2.0.4)
+      json_pure (~> 1.8)
+      nap (~> 0.5)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -90,6 +90,7 @@ GEM
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     addressable (2.3.6)
+    ast (2.0.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
     clintegracon (0.5.2)
@@ -113,6 +114,7 @@ GEM
     github-markup (1.2.1)
       posix-spawn (~> 0.3.8)
     i18n (0.6.4)
+    json (1.8.1)
     json_pure (1.8.1)
     kicker (3.0.0)
       listen (~> 1.3.0)
@@ -134,7 +136,11 @@ GEM
     netrc (0.7.7)
     notify (0.5.2)
     open4 (1.3.4)
+    parser (2.2.0.pre.4)
+      ast (>= 1.1, < 3.0)
+      slop (~> 3.4, >= 3.4.5)
     posix-spawn (0.3.8)
+    powerpack (0.0.9)
     prettybacon (0.0.2)
       bacon (~> 1.2)
     pry (0.10.0)
@@ -144,6 +150,7 @@ GEM
     pygments.rb (0.6.0)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
+    rainbow (2.0.0)
     rake (10.1.1)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
@@ -154,6 +161,13 @@ GEM
     rest-client (1.7.2)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    rubocop (0.24.1)
+      json (>= 1.7.7, < 2)
+      parser (>= 2.2.0.pre.3, < 3.0)
+      powerpack (~> 0.0.6)
+      rainbow (>= 1.99.1, < 3.0)
+      ruby-progressbar (~> 1.4)
+    ruby-progressbar (1.5.1)
     safe_yaml (1.0.3)
     simplecov (0.9.0)
       docile (~> 1.1.0)
@@ -200,6 +214,7 @@ DEPENDENCIES
   rake (~> 10.1.0)
   rb-fsevent
   redcarpet (< 3.0.0)
+  rubocop
   ruby-prof!
   simplecov
   webmock (< 1.16)

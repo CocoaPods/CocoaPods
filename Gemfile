@@ -37,6 +37,10 @@ group :development do
   # https://github.com/lemurheavy/coveralls-ruby/blob/master/coveralls-ruby.gemspec#L23.
   gem 'simplecov'
 
+  if RUBY_VERSION >= '1.9.3'
+    gem 'rubocop'
+  end
+
   if RUBY_PLATFORM.include?('darwin')
     # Make Xcodeproj faster
     gem 'libxml-ruby'

@@ -140,6 +140,9 @@ begin
 
       title 'Running examples'
       Rake::Task['examples:build'].invoke
+
+      title 'Running RuboCop'
+      Rake::Task['rubocop'].invoke if RUBY_VERSION >= '1.9.3'
     end
 
     desc "Rebuild all the fixture tarballs"
@@ -251,11 +254,21 @@ begin
 
   task :default => :spec
 
+  #-- Rubocop ----------------------------------------------------------------#
+
+  if RUBY_VERSION >= '1.9.3'
+    require 'rubocop/rake_task'
+    RuboCop::RakeTask.new
+  end
+
 rescue LoadError
   $stderr.puts "\033[0;31m" \
     '[!] Some Rake tasks haven been disabled because the environment' \
     ' couldn’t be loaded. Be sure to run `rake bootstrap` first.' \
     "\e[0m"
+  $stderr.puts e.message
+  $stderr.puts e.backtrace
+  $stderr.puts
 end
 
 # Helpers
