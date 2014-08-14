@@ -327,7 +327,7 @@ module Pod
           UI.puts output
           parsed_output  = parse_xcodebuild_output(output)
           parsed_output.each do |message|
-            if message.include?('error: ')
+            if message.include?('error: ') && !message.include?("'InputFile' should have")
               error "[xcodebuild] #{message}"
             else
               note "[xcodebuild] #{message}"
