@@ -2,6 +2,11 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## 0.33.1.1
+
+##### Bug Fixes
+* Fix an issue where a pod lib lint with xcode 6 could be reported as failed when it actually succeeded
+
 ## 0.33.1
 
 ##### Bug Fixes
