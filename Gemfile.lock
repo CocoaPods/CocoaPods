@@ -40,7 +40,7 @@ GIT
   specs:
     cocoapods-trunk (0.1.4)
       json_pure (~> 1.8)
-      nap (>= 0.6)
+      nap (>= 0.8)
       netrc
 
 GIT
@@ -67,7 +67,7 @@ GIT
       activesupport (>= 3.2.15)
       fuzzy_match (~> 2.0.4)
       json_pure (~> 1.8)
-      nap (~> 0.5)
+      nap (~> 0.8.0)
 
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
@@ -112,7 +112,7 @@ GEM
     metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (1.25.1)
-    mocha (1.0.0)
+    mocha (1.1.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
@@ -146,8 +146,8 @@ GEM
     ruby-progressbar (1.5.1)
     safe_yaml (1.0.3)
     slop (3.6.0)
-    webmock (1.15.2)
-      addressable (>= 2.2.7)
+    webmock (1.18.0)
+      addressable (>= 2.3.6)
       crack (>= 0.3.2)
 
 PLATFORMS
