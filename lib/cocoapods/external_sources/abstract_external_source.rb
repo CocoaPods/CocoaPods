@@ -103,7 +103,15 @@ module Pod
           target.rmtree if target.exist?
           downloader = Config.instance.downloader(target, params)
           downloader.download
-          store_podspec(sandbox, target + "#{name}.podspec")
+
+          podspec_path = target + "#{name}.podspec"
+          json = false
+          unless Pathname(podspec_path).exist?
+            podspec_path = target + "#{name}.podspec.json"
+            json = true
+          end
+
+          store_podspec(sandbox, target + podspec_path, json)
           sandbox.store_pre_downloaded_pod(name)
           if downloader.options_specific?
             source = params

@@ -47,6 +47,22 @@ module Pod
           }
         }
       end
+
+      it "pre-downloads the Pod with a JSON podspec and stores the relevant information in the sandbox" do
+        dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'), :branch => 'json_podspec')
+        source = ExternalSources.from_dependency(dependency, nil)
+        sandbox = config.sandbox
+        source.send(:pre_download, sandbox)
+        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path.should.exist?
+        sandbox.predownloaded_pods.should == ["Reachability"]
+        sandbox.checkout_sources.should == {
+          "Reachability" => {
+            :git => fixture('integration/Reachability'),
+            :commit => "4ec575e4b074dcc87c44018cce656672a979b34a"
+          }
+        }
+      end
     end
   end
 end
