@@ -42,6 +42,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activesupport', '>= 3.2.15', '< 4'
   s.add_runtime_dependency 'nap',           '~> 0.8'
 
+  s.add_development_dependency 'bundler', '~> 1.3'
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'bacon', '~> 1.1'
 
   ## Make sure you can build the gem on older versions of RubyGems too:
