@@ -18,7 +18,7 @@ PATH
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: de7a0fa64bc9a0d72278b4d384539ce748df6220
+  revision: de62dd92e4f10b008711393a0a257dd5130ce948
   branch: master
   specs:
     xcodeproj (0.18.0)
@@ -28,14 +28,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 754e53f3c3eec4c5ba129d6955484fb27631d1d5
+  revision: f91e069f1f1b22cef5bbd788835f1803e6dce24e
   branch: master
   specs:
     cocoapods-try (0.3.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 72e02a7ad3f429a6e76e602a238e91eb55c44165
+  revision: ed920119fa850d66ee8fbe1873ae9ee0d4e46905
   branch: master
   specs:
     cocoapods-trunk (0.1.4)
@@ -45,7 +45,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 3e155c3aca043a70e9a43138520a1ae75bf59d3d
+  revision: b989190a02875d16482d2e440a34a54b8559996c
   branch: master
   specs:
     cocoapods-plugins (0.2.0)
@@ -53,14 +53,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 0e02c9da094a82c5049cbf7266d9eefef2fd5552
+  revision: 025395e3fd53d23b74b9f55ac0a5750fa92f82e3
   branch: master
   specs:
     cocoapods-downloader (0.6.1)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: b997f050f65b2823bbf3539308206b1b0e630932
+  revision: d696bf6a34eb837d8e89fc1fc9170cff1a1256e4
   branch: master
   specs:
     cocoapods-core (0.33.1)
@@ -71,7 +71,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 303b96021e0fdd0003a71f1f9bf6823a6262ba12
+  revision: c4c75f833db97173fca7380890ed99affad2bbab
   branch: master
   specs:
     claide (0.6.1)
@@ -99,7 +99,6 @@ GEM
     ffi (1.9.3)
     fuzzy_match (2.0.4)
     i18n (0.6.4)
-    json (1.8.1)
     json_pure (1.8.1)
     kicker (3.0.0)
       listen (~> 1.3.0)
@@ -127,19 +126,19 @@ GEM
     powerpack (0.0.9)
     prettybacon (0.0.2)
       bacon (~> 1.2)
-    pry (0.10.0)
+    pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rainbow (2.0.0)
+    rake (10.3.2)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     rb-kqueue (0.2.3)
       ffi (>= 0.5.0)
-    rubocop (0.24.1)
-      json (>= 1.7.7, < 2)
-      parser (>= 2.2.0.pre.3, < 3.0)
+    rubocop (0.25.0)
+      parser (>= 2.2.0.pre.4, < 3.0)
       powerpack (~> 0.0.6)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
@@ -157,6 +156,7 @@ DEPENDENCIES
   activesupport (< 4)
   awesome_print
   bacon
+  bundler (~> 1.3)
   claide!
   clintegracon
   cocoapods!
@@ -174,6 +174,7 @@ DEPENDENCIES
   mocha-on-bacon
   prettybacon
   pry
+  rake
   rb-fsevent
   rubocop
   webmock
