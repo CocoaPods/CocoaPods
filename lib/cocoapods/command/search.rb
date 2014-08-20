@@ -10,16 +10,16 @@ module Pod
       DESC
 
       self.arguments = [
-          CLAide::Argument.new('QUERY', true)
+        CLAide::Argument.new('QUERY', true),
       ]
 
       def self.options
         [
-          ["--full",  "Search by name, summary, and description"],
-          ["--stats", "Show additional stats (like GitHub watchers and forks)"],
-          ["--ios",   "Restricts the search to Pods supported on iOS"],
-          ["--osx",   "Restricts the search to Pods supported on OS X"],
-          ["--web",   "Searches on cocoapods.org"]
+          ['--full',  'Search by name, summary, and description'],
+          ['--stats', 'Show additional stats (like GitHub watchers and forks)'],
+          ['--ios',   'Restricts the search to Pods supported on iOS'],
+          ['--osx',   'Restricts the search to Pods supported on OS X'],
+          ['--web',   'Searches on cocoapods.org'],
         ].concat(super.reject { |option, _| option == '--silent' })
       end
 
@@ -36,13 +36,13 @@ module Pod
 
       def validate!
         super
-        help! "A search query is required." unless @query
+        help! 'A search query is required.' unless @query
 
         unless @web
           begin
             /#{@query.join(' ').strip}/
           rescue RegexpError
-            help! "A valid regular expression is required."
+            help! 'A valid regular expression is required.'
           end
         end
       end
@@ -62,9 +62,9 @@ module Pod
         query_parameter = [
           ('on:osx' if @supported_on_osx),
           ('on:ios' if @supported_on_ios),
-          @query
+          @query,
         ].compact.flatten.join(' ')
-        url = "http://cocoapods.org/?q=#{CGI.escape(query_parameter).gsub("+", "%20")}"
+        url = "http://cocoapods.org/?q=#{CGI.escape(query_parameter).gsub('+', '%20')}"
         UI.puts("Opening #{url}")
         open!(url)
       end
@@ -72,10 +72,10 @@ module Pod
       def local_search
         sets = SourcesManager.search_by_name(@query.join(' ').strip, @full_text_search)
         if @supported_on_ios
-          sets.reject!{ |set| !set.specification.available_platforms.map(&:name).include?(:ios) }
+          sets.reject! { |set| !set.specification.available_platforms.map(&:name).include?(:ios) }
         end
         if @supported_on_osx
-          sets.reject!{ |set| !set.specification.available_platforms.map(&:name).include?(:osx) }
+          sets.reject! { |set| !set.specification.available_platforms.map(&:name).include?(:osx) }
         end
 
         statistics_provider = Config.instance.spec_statistics_provider
@@ -91,7 +91,6 @@ module Pod
           end
         end
       end
-
     end
   end
 end

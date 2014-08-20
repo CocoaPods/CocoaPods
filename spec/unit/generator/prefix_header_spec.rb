@@ -42,11 +42,11 @@ module Pod
       @spec.prefix_header_contents = '#import "BlocksKit.h"'
       @spec.prefix_header_file = nil
       @spec.subspec 'UI' do |su|
-          su.source_files = 'Source/UI/*.{h,m}'
+        su.source_files = 'Source/UI/*.{h,m}'
       end
 
       @spec.subspec 'Helpers' do |sh|
-          sh.source_files = 'Source/Helpers/*.{h,m}'
+        sh.source_files = 'Source/Helpers/*.{h,m}'
       end
 
       @gen.generate.should == <<-EOS.strip_heredoc
@@ -68,8 +68,8 @@ module Pod
       EOS
     end
 
-    it "includes the imports" do
-      @gen.imports << "header.h"
+    it 'includes the imports' do
+      @gen.imports << 'header.h'
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
       #import <UIKit/UIKit.h>
@@ -80,17 +80,17 @@ module Pod
       EOS
     end
 
-    it "imports UIKit in iOS platforms" do
+    it 'imports UIKit in iOS platforms' do
       @gen.stubs(:platform).returns(Pod::Platform.ios)
       @gen.generate.should.include?('#import <UIKit/UIKit.h>')
     end
 
-    it "imports Cocoa for OS X platforms" do
+    it 'imports Cocoa for OS X platforms' do
       @gen.stubs(:platform).returns(Pod::Platform.osx)
       @gen.generate.should.include?('#import <Cocoa/Cocoa.h>')
     end
 
-    it "writes the prefix header file to the disk" do
+    it 'writes the prefix header file to the disk' do
       path = temporary_directory + 'Test.pch'
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc

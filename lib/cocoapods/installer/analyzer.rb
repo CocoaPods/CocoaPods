@@ -1,11 +1,9 @@
 module Pod
   class Installer
-
     # Analyzes the Podfile, the Lockfile, and the sandbox manifest to generate
     # the information relative to a CocoaPods installation.
     #
     class Analyzer
-
       include Config::Mixin
 
       autoload :SandboxAnalyzer, 'cocoapods/installer/analyzer/sandbox_analyzer'
@@ -111,7 +109,7 @@ module Pod
           :none
         elsif update == true
           :all
-        elsif update[:pods] != nil
+        elsif !update[:pods].nil?
           :selected
         end
       end
@@ -125,7 +123,7 @@ module Pod
       #         modification of the sandbox in the resolution process.
       #
       attr_accessor :allow_pre_downloads
-      alias_method  :allow_pre_downloads?, :allow_pre_downloads
+      alias_method :allow_pre_downloads?, :allow_pre_downloads
 
       #-----------------------------------------------------------------------#
 
@@ -149,7 +147,7 @@ module Pod
       def generate_podfile_state
         if lockfile
           pods_state = nil
-          UI.section "Finding Podfile changes" do
+          UI.section 'Finding Podfile changes' do
             pods_by_state = lockfile.detect_changes_with_podfile(podfile)
             pods_by_state.dup.each do |state, full_names|
               pods_by_state[state] = full_names.map { |fn| Specification.root_name(fn) }
@@ -212,15 +210,15 @@ module Pod
 
           grouped_specs.each do |pod_specs|
             pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
-          if config.integrate_targets?
-            pod_target.user_build_configurations = target.user_build_configurations
-            pod_target.archs = @archs_by_target_def[target_definition]
-          else
-            pod_target.user_build_configurations = {}
-            if target_definition.platform.name == :osx
-              pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
+            if config.integrate_targets?
+              pod_target.user_build_configurations = target.user_build_configurations
+              pod_target.archs = @archs_by_target_def[target_definition]
+            else
+              pod_target.user_build_configurations = {}
+              if target_definition.platform.name == :osx
+                pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
+              end
             end
-          end
             target.pod_targets << pod_target
           end
         end
@@ -290,7 +288,7 @@ module Pod
         end
 
         unless deps_to_fetch.empty?
-          UI.section "Fetching external sources" do
+          UI.section 'Fetching external sources' do
             deps_to_fetch.uniq.sort.each do |dependency|
               source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
               source.fetch(sandbox)
@@ -343,7 +341,7 @@ module Pod
       #
       def generate_sandbox_state
         sandbox_state = nil
-        UI.section "Comparing resolved specification to the sandbox manifest" do
+        UI.section 'Comparing resolved specification to the sandbox manifest' do
           sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode?, lockfile)
           sandbox_state = sandbox_analyzer.analyze
           sandbox_state.print
@@ -381,7 +379,7 @@ module Pod
           path = "#{path}.xcodeproj" unless File.extname(path) == '.xcodeproj'
           path = Pathname.new(path)
           unless path.exist?
-            raise Informative, "Unable to find the Xcode project " \
+            raise Informative, 'Unable to find the Xcode project ' \
               "`#{path}` for the target `#{target_definition.label}`."
           end
 
@@ -390,7 +388,7 @@ module Pod
           if xcodeprojs.size == 1
             path = xcodeprojs.first
           else
-            raise Informative, "Could not automatically select an Xcode project. " \
+            raise Informative, 'Could not automatically select an Xcode project. ' \
               "Specify one in your Podfile like so:\n\n" \
               "    xcodeproj 'path/to/Project.xcodeproj'\n"
           end
@@ -417,12 +415,12 @@ module Pod
           targets = native_targets(user_project).select { |t| link_with.include?(t.name) }
           raise Informative, "Unable to find the targets named `#{link_with.to_sentence}` to link with target definition `#{target_definition.name}`" if targets.empty?
         elsif target_definition.link_with_first_target?
-          targets = [ native_targets(user_project).first ].compact
-          raise Informative, "Unable to find a target" if targets.empty?
+          targets = [native_targets(user_project).first].compact
+          raise Informative, 'Unable to find a target' if targets.empty?
         else
           target = native_targets(user_project).find { |t| t.name == target_definition.name.to_s }
-          targets = [ target ].compact
-          raise Informative, "Unable to find a target named `#{target_definition.name.to_s}`" if targets.empty?
+          targets = [target].compact
+          raise Informative, "Unable to find a target named `#{target_definition.name}`" if targets.empty?
         end
         targets
       end
@@ -442,7 +440,7 @@ module Pod
       #
       def compute_user_build_configurations(target_definition, user_targets)
         if user_targets
-          user_targets.map { |t| t.build_configurations.map(&:name) }.flatten.inject({}) do |hash, name|
+          user_targets.map { |t| t.build_configurations.map(&:name) }.flatten.reduce({}) do |hash, name|
             hash[name] = name == 'Debug' ? :debug : :release
             hash
           end.merge(target_definition.build_configurations || {})
@@ -466,7 +464,7 @@ module Pod
 
         user_targets.each do |target|
           name ||= target.platform_name
-          raise Informative, "Targets with different platforms" unless name == target.platform_name
+          raise Informative, 'Targets with different platforms' unless name == target.platform_name
           if !deployment_target || deployment_target > Version.new(target.deployment_target)
             deployment_target = Version.new(target.deployment_target)
           end
@@ -484,7 +482,7 @@ module Pod
       # @todo   Is assigning the platform to the target definition the best way
       #         to go?
       #
-      def compute_archs_for_target_definition(target_definition, user_targets)
+      def compute_archs_for_target_definition(_target_definition, user_targets)
         archs = []
         user_targets.each do |target|
           target_archs = target.common_resolved_build_setting('ARCHS')
@@ -515,7 +513,7 @@ module Pod
             @archs_by_target_def[target_definition] = archs
           else
             unless target_definition.platform
-              raise Informative, "It is necessary to specify the platform in the Podfile if not integrating."
+              raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
             end
           end
         end
@@ -524,7 +522,6 @@ module Pod
       #-----------------------------------------------------------------------#
 
       class AnalysisResult
-
         # @return [SpecsState] the states of the Podfile specs.
         #
         attr_accessor :podfile_state
@@ -555,7 +552,7 @@ module Pod
         #         its type (`:debug` or `:release`).
         #
         def all_user_build_configurations
-          targets.inject({}) do |result, target|
+          targets.reduce({}) do |result, target|
             result.merge(target.user_build_configurations)
           end
         end
@@ -572,7 +569,6 @@ module Pod
       #       subspecs are added instead of the name of the Pods.
       #
       class SpecsState
-
         # @param  [Hash{Symbol=>String}] pods_by_state
         #         The **root** name of the pods grouped by their state
         #         (`:added`, `:removed`, `:changed` or `:unchanged`).
@@ -612,10 +608,10 @@ module Pod
         # @return [void]
         #
         def print
-          added    .sort.each { |pod| UI.message("A".green  + " #{pod}", '', 2) }
-          deleted  .sort.each { |pod| UI.message("R".red    + " #{pod}", '', 2) }
-          changed  .sort.each { |pod| UI.message("M".yellow + " #{pod}", '', 2) }
-          unchanged.sort.each { |pod| UI.message("-"        + " #{pod}", '', 2) }
+          added    .sort.each { |pod| UI.message('A'.green  + " #{pod}", '', 2) }
+          deleted  .sort.each { |pod| UI.message('R'.red    + " #{pod}", '', 2) }
+          changed  .sort.each { |pod| UI.message('M'.yellow + " #{pod}", '', 2) }
+          unchanged.sort.each { |pod| UI.message('-'        + " #{pod}", '', 2) }
         end
 
         # Adds the name of a Pod to the give state.
@@ -631,10 +627,9 @@ module Pod
         # @return [void]
         #
         def add_name(name, state)
-          raise "[Bug] Attempt to add subspec to the pods state" if name.include?('/')
-          self.send(state) << name
+          raise '[Bug] Attempt to add subspec to the pods state' if name.include?('/')
+          send(state) << name
         end
-
       end
     end
   end

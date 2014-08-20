@@ -9,7 +9,7 @@ module Pod
       DESC
 
       def self.options
-        [["--no-repo-update", "Skip running `pod repo update` before install"]].concat(super)
+        [['--no-repo-update', 'Skip running `pod repo update` before install']].concat(super)
       end
 
       def initialize(argv)
@@ -23,11 +23,10 @@ module Pod
       # @todo fix.
       #
       def run
-
         if updates.empty?
-          UI.puts "No updates are available.".yellow
+          UI.puts 'No updates are available.'.yellow
         else
-          UI.section "The following updates are available:" do
+          UI.section 'The following updates are available:' do
             updates.each do |(name, from_version, to_version)|
               UI.puts "- #{name} #{from_version} -> #{to_version}"
             end
@@ -46,7 +45,6 @@ module Pod
             end
           end
         end
-
       end
 
       private
@@ -97,9 +95,6 @@ module Pod
           config.lockfile
         end
       end
-
     end
   end
 end
-
-

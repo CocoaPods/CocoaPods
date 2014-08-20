@@ -66,7 +66,6 @@ module Pod
     autoload :LibraryRepresentation,   'cocoapods/hooks/library_representation'
     autoload :PodRepresentation,       'cocoapods/hooks/pod_representation'
   end
-
 end
 
 if ENV['COCOA_PODS_ENV'] == 'development'

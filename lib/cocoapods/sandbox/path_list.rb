@@ -1,6 +1,5 @@
 module Pod
   class Sandbox
-
     # The PathList class is designed to perform multiple glob matches against
     # a given directory. Basically, it generates a list of all the children
     # paths and matches the globs patterns against them, resulting in just one
@@ -11,7 +10,6 @@ module Pod
     #         {#read_file_system}
     #
     class PathList
-
       # @return [Pathname] The root of the list whose files and directories
       #         are used to perform the matching operations.
       #
@@ -46,15 +44,15 @@ module Pod
         unless root.exist?
           raise Informative, "Attempt to read non existent folder `#{root}`."
         end
-        root_length  = root.to_s.length+1
+        root_length  = root.to_s.length + 1
         escaped_root = escape_path_for_glob(root)
-        paths  = Dir.glob(escaped_root + "**/*", File::FNM_DOTMATCH)
+        paths  = Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH)
         absolute_dirs  = paths.select { |path| File.directory?(path) }
         relative_dirs  = absolute_dirs.map  { |p| p[root_length..-1] }
         absolute_paths = paths.reject { |p| p == "#{root}/." || p == "#{root}/.." }
         relative_paths = absolute_paths.map { |p| p[root_length..-1] }
         @files = relative_paths - relative_dirs
-        @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/,'') }.reject { |d| d == '.' || d == '..' } .uniq
+        @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/, '') }.reject { |d| d == '.' || d == '..' } .uniq
       end
 
       #-----------------------------------------------------------------------#
@@ -67,7 +65,7 @@ module Pod
       #         paths.
       #
       def glob(patterns, options = {})
-        relative_glob(patterns, options).map {|p| root + p }
+        relative_glob(patterns, options).map { |p| root + p }
       end
 
       # @return [Array<Pathname>] The list of relative paths that are case
@@ -164,9 +162,9 @@ module Pod
         end
 
         if values_by_set.empty?
-          [ pattern ]
+          [pattern]
         else
-          patterns = [ pattern ]
+          patterns = [pattern]
           values_by_set.each do |set, values|
             patterns = patterns.map do |old_pattern|
               values.map do |value|
@@ -192,13 +190,12 @@ module Pod
         result = path.to_s
         characters_to_escape = ['[', ']', '{', '}', '?', '*']
         characters_to_escape.each do |character|
-          result.gsub!(character, "\\#{character}" )
+          result.gsub!(character, "\\#{character}")
         end
         Pathname.new(result)
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end

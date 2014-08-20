@@ -1,19 +1,16 @@
 module Pod
-
   class Specification
     def config
       UI.warn "[#{name}] Specification#config is deprecated. The config is accessible from " \
-        "the parameter passed to the hooks"
+        'the parameter passed to the hooks'
       Config.instance
     end
   end
 
   module Hooks
-
     # Stores the information of the Installer for the hooks
     #
     class PodRepresentation
-
       # @return [String]
       #
       attr_accessor :name
@@ -68,7 +65,6 @@ module Pod
       attr_reader :file_accessors
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end

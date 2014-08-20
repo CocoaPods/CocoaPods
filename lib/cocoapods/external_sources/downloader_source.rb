@@ -1,6 +1,5 @@
 module Pod
   module ExternalSources
-
     # Provides support for fetching a specification file from a source handled
     # by the downloader. Supports all the options of the downloader
     #
@@ -8,7 +7,6 @@ module Pod
     #       name matching the one of the dependency.
     #
     class DownloaderSource < AbstractExternalSource
-
       # @see AbstractExternalSource#fetch
       #
       def fetch(sandbox)

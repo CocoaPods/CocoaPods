@@ -3,7 +3,6 @@ require 'cocoapods-downloader'
 module Pod
   module Downloader
     class Base
-
       override_api do
 
         def execute_command(executable, command, raise_on_failure = false)

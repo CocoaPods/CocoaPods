@@ -1,10 +1,8 @@
 module Pod
-
   # Stores the information relative to the target used to compile a single Pod.
   # A pod can have one or more activated spec/subspecs.
   #
   class PodTarget < Target
-
     # @return [Specification] the spec for the target.
     #
     attr_reader :specs
@@ -21,14 +19,14 @@ module Pod
       @specs = specs
       @target_definition = target_definition
       @sandbox = sandbox
-      @build_headers  = Sandbox::HeadersStore.new(sandbox, "BuildHeaders")
+      @build_headers  = Sandbox::HeadersStore.new(sandbox, 'BuildHeaders')
       @file_accessors = []
     end
 
     # @return [String] the label for the target.
     #
     def label
-      "#{target_definition.label.to_s}-#{root_spec.name}"
+      "#{target_definition.label}-#{root_spec.name}"
     end
 
     # @return [Array<Sandbox::FileAccessor>] the file accessors for the
@@ -82,8 +80,8 @@ module Pod
       else
         raise Informative, "The subspecs of `#{pod_name}` are linked to " \
           "different build configurations for the `#{target_definition}` " \
-          "target. CocoaPods does not support subspecs across different " \
-          "build configurations."
+          'target. CocoaPods does not support subspecs across different ' \
+          'build configurations.'
       end
     end
 

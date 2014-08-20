@@ -71,7 +71,6 @@ module Pod
             config.base_configuration_reference = file_ref
           end
 
-
           private
 
           # @!group Private helpers
@@ -94,13 +93,13 @@ module Pod
           #
           def self.print_override_warning(pod_bundle, target, config, key)
             actions = [
-              "Use the `$(inherited)` flag, or",
-              "Remove the build settings from the target."
+              'Use the `$(inherited)` flag, or',
+              'Remove the build settings from the target.',
             ]
             message = "The `#{target.name} [#{config.name}]` " \
               "target overrides the `#{key}` build setting defined in " \
               "`#{pod_bundle.xcconfig_relative_path(config.name)}'. " \
-              "This can lead to problems with the CocoaPods installation"
+              'This can lead to problems with the CocoaPods installation'
             UI.warn(message, actions)
           end
         end

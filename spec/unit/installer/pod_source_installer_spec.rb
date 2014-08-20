@@ -12,10 +12,10 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "Installation" do
+    describe 'Installation' do
 
-      describe "Download" do
-        it "downloads the source" do
+      describe 'Download' do
+        it 'downloads the source' do
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
           @installer.specific_source.should.be.nil
@@ -23,35 +23,35 @@ module Pod
           pod_folder.should.exist
         end
 
-        it "downloads the head source even if a specific source is present specified source" do
+        it 'downloads the head source even if a specific source is present specified source' do
           config.sandbox.store_head_pod('BananaLib')
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
-          @installer.specific_source[:commit].should == "0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc"
+          @installer.specific_source[:commit].should == '0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc'
           pod_folder = config.sandbox.root + 'BananaLib'
           pod_folder.should.exist
         end
 
-        it "returns the checkout options of the downloader if any" do
+        it 'returns the checkout options of the downloader if any' do
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :branch => 'topicbranch' }
           @installer.install!
-          @installer.specific_source[:commit].should == "446b22414597f1bb4062a62c4eed7af9627a3f1b"
+          @installer.specific_source[:commit].should == '446b22414597f1bb4062a62c4eed7af9627a3f1b'
           pod_folder = config.sandbox.root + 'BananaLib'
           pod_folder.should.exist
         end
 
-        it "stores the checkout options in the sandbox" do
+        it 'stores the checkout options in the sandbox' do
           config.sandbox.store_head_pod('BananaLib')
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
           sources = @installer.sandbox.checkout_sources
-          sources.should == { "BananaLib" => {
+          sources.should == { 'BananaLib' => {
             :git => SpecHelper.fixture('banana-lib'),
-            :commit=>"0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc" }
+            :commit => '0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc' },
           }
         end
 
-        it "cleans up directory when an error occurs during download" do
+        it 'cleans up directory when an error occurs during download' do
           config.sandbox.store_head_pod('BananaLib')
           pod_folder = config.sandbox.root + 'BananaLib'
           partially_downloaded_file = pod_folder + 'partially_downloaded_file'
@@ -61,17 +61,17 @@ module Pod
           singleton_class.send(:define_method, :download_head) do
             FileUtils.mkdir_p(pod_folder)
             FileUtils.touch(partially_downloaded_file)
-            raise("some network error")
+            raise('some network error')
           end
           @installer.stubs(:downloader).returns(mock_downloader)
 
-          lambda {
+          lambda do
             @installer.install!
-          }.should.raise(RuntimeError).message.should.equal('some network error')
+          end.should.raise(RuntimeError).message.should.equal('some network error')
           partially_downloaded_file.should.not.exist
         end
 
-        it "fails when using :head for Http source" do
+        it 'fails when using :head for Http source' do
           config.sandbox.store_head_pod('BananaLib')
           @spec.source = { :http => 'http://dl.google.com/googleadmobadssdk/googleadmobsearchadssdkios.zip' }
           @spec.source_files = 'GoogleAdMobSearchAdsSDK/*.h'
@@ -85,9 +85,9 @@ module Pod
 
       #--------------------------------------#
 
-      describe "Prepare command" do
-        it "runs the prepare command if one has been declared in the spec" do
-          @spec.prepare_command = "echo test"
+      describe 'Prepare command' do
+        it 'runs the prepare command if one has been declared in the spec' do
+          @spec.prepare_command = 'echo test'
           @installer.expects(:bash!).once
           @installer.install!
         end
@@ -97,33 +97,33 @@ module Pod
           @installer.install!
         end
 
-        it "raises if the prepare command fails" do
-          @spec.prepare_command = "missing_command"
+        it 'raises if the prepare command fails' do
+          @spec.prepare_command = 'missing_command'
           should.raise Informative do
             @installer.install!
           end.message.should.match /command not found/
         end
 
-        it "unsets $CDPATH environment variable" do
-          ENV['CDPATH'] = "BogusPath"
-          @spec.prepare_command = "cd Classes;ls Banana.h"
+        it 'unsets $CDPATH environment variable' do
+          ENV['CDPATH'] = 'BogusPath'
+          @spec.prepare_command = 'cd Classes;ls Banana.h'
           lambda { @installer.install! }.should.not.raise
         end
-        
+
       end
 
       #--------------------------------------#
 
-      describe "Cleaning" do
+      describe 'Cleaning' do
 
-        it "cleans the paths non used by the installation" do
+        it 'cleans the paths non used by the installation' do
           @installer.install!
           @installer.clean!
           unused_file = config.sandbox.root + 'BananaLib/sub-dir/sub-dir-2/somefile.txt'
           unused_file.should.not.exist
         end
 
-        it "preserves important files like the LICENSE and the README" do
+        it 'preserves important files like the LICENSE and the README' do
           @installer.install!
           @installer.clean!
           readme_file = config.sandbox.root + 'BananaLib/README'
@@ -134,7 +134,7 @@ module Pod
 
       #--------------------------------------#
 
-      describe "Options" do
+      describe 'Options' do
 
         it "doesn't downloads the source if the pod was already downloaded" do
           @installer.stubs(:predownloaded?).returns(true)
@@ -163,38 +163,38 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "Private Helpers" do
+    describe 'Private Helpers' do
 
-      it "returns the clean paths" do
+      it 'returns the clean paths' do
         @installer.send(:download_source)
         paths = @installer.send(:clean_paths)
-        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '')}
+        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
         paths_without_git = relative_paths.reject { |p| p.include? 'Pods/BananaLib/.git' }
         paths_without_git.sort.should == [
-          "Pods/BananaLib/BananaLib.podspec",
-          "Pods/BananaLib/libPusher",
-          "Pods/BananaLib/sub-dir",
-          "Pods/BananaLib/sub-dir/sub-dir-2",
-          "Pods/BananaLib/sub-dir/sub-dir-2/somefile.txt"
+          'Pods/BananaLib/BananaLib.podspec',
+          'Pods/BananaLib/libPusher',
+          'Pods/BananaLib/sub-dir',
+          'Pods/BananaLib/sub-dir/sub-dir-2',
+          'Pods/BananaLib/sub-dir/sub-dir-2/somefile.txt',
         ]
       end
 
-      it "returns the used files" do
+      it 'returns the used files' do
         @installer.send(:download_source)
         paths = @installer.send(:used_files)
-        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '')}
+        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
         relative_paths.sort.should == [
-          "Pods/BananaLib/Classes/Banana.h",
-          "Pods/BananaLib/Classes/Banana.m",
-          "Pods/BananaLib/Classes/BananaLib.pch",
-          "Pods/BananaLib/Classes/BananaPrivate.h",
-          "Pods/BananaLib/LICENSE",
-          "Pods/BananaLib/README",
-          "Pods/BananaLib/Resources/logo-sidebar.png"
+          'Pods/BananaLib/Classes/Banana.h',
+          'Pods/BananaLib/Classes/Banana.m',
+          'Pods/BananaLib/Classes/BananaLib.pch',
+          'Pods/BananaLib/Classes/BananaPrivate.h',
+          'Pods/BananaLib/LICENSE',
+          'Pods/BananaLib/README',
+          'Pods/BananaLib/Resources/logo-sidebar.png',
         ]
       end
 
-      it "handles Pods with multiple file accessors" do
+      it 'handles Pods with multiple file accessors' do
         spec = fixture_spec('banana-lib/BananaLib.podspec')
         spec.source = { :git => SpecHelper.fixture('banana-lib') }
         spec.source_files = []
@@ -206,19 +206,19 @@ module Pod
         @installer = Installer::PodSourceInstaller.new(config.sandbox, specs_by_platform)
         @installer.send(:download_source)
         paths = @installer.send(:used_files)
-        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '')}
+        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
         relative_paths.sort.should == [
-          "Pods/BananaLib/Classes/Banana.h",
-          "Pods/BananaLib/Classes/Banana.m",
-          "Pods/BananaLib/Classes/BananaLib.pch",
-          "Pods/BananaLib/Classes/BananaPrivate.h",
-          "Pods/BananaLib/LICENSE",
-          "Pods/BananaLib/README",
-          "Pods/BananaLib/Resources/logo-sidebar.png"
+          'Pods/BananaLib/Classes/Banana.h',
+          'Pods/BananaLib/Classes/Banana.m',
+          'Pods/BananaLib/Classes/BananaLib.pch',
+          'Pods/BananaLib/Classes/BananaPrivate.h',
+          'Pods/BananaLib/LICENSE',
+          'Pods/BananaLib/README',
+          'Pods/BananaLib/Resources/logo-sidebar.png',
         ]
       end
 
-      it "compacts the used files as nil would be converted to the empty string" do
+      it 'compacts the used files as nil would be converted to the empty string' do
         Sandbox::FileAccessor.any_instance.stubs(:source_files)
         Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries)
         Sandbox::FileAccessor.any_instance.stubs(:resources).returns(nil)

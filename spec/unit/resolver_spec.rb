@@ -2,7 +2,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
   describe Resolver do
-    describe "In general" do
+    describe 'In general' do
       before do
         @podfile = Podfile.new do
           platform :ios
@@ -12,48 +12,48 @@ module Pod
         @resolver = Resolver.new(config.sandbox, @podfile, locked_deps)
       end
 
-      it "returns the sandbox" do
+      it 'returns the sandbox' do
         @resolver.sandbox.should == config.sandbox
       end
 
-      it "returns the podfile" do
+      it 'returns the podfile' do
         @resolver.podfile.should == @podfile
       end
 
-      it "returns the locked dependencies" do
+      it 'returns the locked dependencies' do
         @resolver.locked_dependencies.should == [Dependency.new('BlocksKit', '1.5.2')]
       end
 
       #--------------------------------------#
 
-      it "resolves the specification of the podfile" do
+      it 'resolves the specification of the podfile' do
         target_definition = @podfile.target_definitions['Pods']
         specs = @resolver.resolve[target_definition]
         specs.map(&:to_s).should == [
-          "A2DynamicDelegate (2.0.2)",
-          "BlocksKit (1.5.2)",
-          "libffi (3.0.13)"
+          'A2DynamicDelegate (2.0.2)',
+          'BlocksKit (1.5.2)',
+          'libffi (3.0.13)',
         ]
       end
 
-      it "returns the resolved specifications grouped by target definition" do
+      it 'returns the resolved specifications grouped by target definition' do
         @resolver.resolve
         target_definition = @podfile.target_definitions['Pods']
         specs = @resolver.specs_by_target[target_definition]
         specs.map(&:to_s).should == [
-          "A2DynamicDelegate (2.0.2)",
-          "BlocksKit (1.5.2)",
-          "libffi (3.0.13)"
+          'A2DynamicDelegate (2.0.2)',
+          'BlocksKit (1.5.2)',
+          'libffi (3.0.13)',
         ]
       end
 
-      it "it resolves specifications from external sources" do
+      it 'it resolves specifications from external sources' do
         podspec = fixture('integration/Reachability/Reachability.podspec')
         spec = Specification.from_file(podspec)
         config.sandbox.expects(:specification).with('Reachability').returns(spec)
         podfile = Podfile.new do
           platform :ios
-          pod "Reachability", :podspec => podspec
+          pod 'Reachability', :podspec => podspec
         end
         resolver = Resolver.new(config.sandbox, podfile)
         resolver.resolve
@@ -64,7 +64,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "Resolution" do
+    describe 'Resolution' do
       before do
         @podfile = Podfile.new do
           platform :ios, '6.0'
@@ -73,7 +73,7 @@ module Pod
         @resolver = Resolver.new(config.sandbox, @podfile)
       end
 
-      it "cross resolves dependencies" do
+      it 'cross resolves dependencies' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking',    '<  0.9.2' # 0.9.1 exits
@@ -82,58 +82,58 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should == ["AFNetworking (0.9.1)", "AFQuickLookView (0.1.0)"]
+        specs.should == ['AFNetworking (0.9.1)', 'AFQuickLookView (0.1.0)']
       end
 
-      it "holds the context state, such as cached specification sets" do
+      it 'holds the context state, such as cached specification sets' do
         @resolver.resolve
         cached_sets = @resolver.send(:cached_sets)
         cached_sets.values.sort_by(&:name).should == [
           SourcesManager.search_by_name('A2DynamicDelegate').first,
           SourcesManager.search_by_name('BlocksKit').first,
-          SourcesManager.search_by_name('libffi').first
+          SourcesManager.search_by_name('libffi').first,
         ].sort_by(&:name)
       end
 
-      it "raises once any of the dependencies does not match the platform of its podfile target" do
+      it 'raises once any of the dependencies does not match the platform of its podfile target' do
         Specification.any_instance.stubs(:available_platforms).returns([Platform.new(:ios, '999')])
         e = lambda { @resolver.resolve }.should.raise Informative
         e.message.should.match(/platform .* not compatible/)
       end
 
-      it "does not raise if all dependencies are supported by the platform of the target definition" do
+      it 'does not raise if all dependencies are supported by the platform of the target definition' do
         lambda { @resolver.resolve }.should.not.raise
       end
 
-      it "includes all the subspecs of a specification node" do
+      it 'includes all the subspecs of a specification node' do
         @podfile = Podfile.new do
           platform :ios, '7.0'
           pod 'RestKit', '0.10.3'
         end
         resolver = Resolver.new(config.sandbox, @podfile)
-        resolver.resolve.values.flatten.map(&:name).sort.should == %w{
-        FileMD5Hash
-        ISO8601DateFormatter
-        JSONKit
-        LibComponentLogging-Core
-        LibComponentLogging-NSLog
-        NSData+Base64
-        RestKit
-        RestKit/JSON
-        RestKit/Network
-        RestKit/ObjectMapping
-        RestKit/ObjectMapping/Core
-        RestKit/ObjectMapping/CoreData
-        RestKit/ObjectMapping/JSON
-        RestKit/ObjectMapping/XML
-        RestKit/UI
-        SOCKit
-        XMLReader
-        cocoa-oauth
-        }
+        resolver.resolve.values.flatten.map(&:name).sort.should == %w(
+          FileMD5Hash
+          ISO8601DateFormatter
+          JSONKit
+          LibComponentLogging-Core
+          LibComponentLogging-NSLog
+          NSData+Base64
+          RestKit
+          RestKit/JSON
+          RestKit/Network
+          RestKit/ObjectMapping
+          RestKit/ObjectMapping/Core
+          RestKit/ObjectMapping/CoreData
+          RestKit/ObjectMapping/JSON
+          RestKit/ObjectMapping/XML
+          RestKit/UI
+          SOCKit
+          XMLReader
+          cocoa-oauth
+        )
       end
 
-      it "handles correctly subspecs from external sources" do
+      it 'handles correctly subspecs from external sources' do
         @podfile = Podfile.new do
           platform :ios
           pod 'MainSpec/FirstSubSpec', :git => 'GIT-URL'
@@ -151,7 +151,7 @@ module Pod
         config.sandbox.expects(:specification).with('MainSpec').returns(spec)
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:name).sort
-        specs.should == %w{ MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec }
+        specs.should == %w(        MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec        )
       end
 
       it "marks a specification's version to be a HEAD version" do
@@ -168,27 +168,27 @@ module Pod
         config.sandbox.head_pod?('JSONKit').should.be.true
       end
 
-      it "raises if it finds two conflicting dependencies" do
+      it 'raises if it finds two conflicting dependencies' do
         podfile = Podfile.new do
           platform :ios
-          pod 'JSONKit', "1.4"
-          pod 'JSONKit', "1.5pre"
+          pod 'JSONKit', '1.4'
+          pod 'JSONKit', '1.5pre'
         end
         resolver = Resolver.new(config.sandbox, podfile)
-        e = lambda {resolver.resolve}.should.raise Pod::Informative
+        e = lambda { resolver.resolve }.should.raise Pod::Informative
         e.message.should.match(/Unable to satisfy the following requirements/)
       end
 
-      it "takes into account locked dependencies" do
+      it 'takes into account locked dependencies' do
         podfile = Podfile.new do
           platform :ios
-          pod 'JSONKit', "<= 1.5pre"
+          pod 'JSONKit', '<= 1.5pre'
         end
         resolver = Resolver.new(config.sandbox, podfile)
         version = resolver.resolve.values.flatten.first.version
         version.to_s.should == '1.5pre'
 
-        locked_deps = [Dependency.new('JSONKit', "= 1.4")]
+        locked_deps = [Dependency.new('JSONKit', '= 1.4')]
         resolver = Resolver.new(config.sandbox, podfile, locked_deps)
         version = resolver.resolve.values.flatten.first.version
         version.to_s.should == '1.4'
@@ -197,9 +197,9 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "Pre-release versions" do
+    describe 'Pre-release versions' do
 
-      it "resolves explicitly requested pre-release versions" do
+      it 'resolves explicitly requested pre-release versions' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '1.0RC3'
@@ -207,10 +207,10 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should == ["AFNetworking (1.0RC3)"]
+        specs.should == ['AFNetworking (1.0RC3)']
       end
 
-      xit "resolves to latest minor version even when explicitly requesting pre-release versions when using ~>" do
+      xit 'resolves to latest minor version even when explicitly requesting pre-release versions when using ~>' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '~> 1.0RC3'
@@ -218,11 +218,11 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ["AFNetworking (1.0RC3)"]
-        specs.should == ["AFNetworking (1.2.0)"]
+        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should == ['AFNetworking (1.2.0)']
       end
 
-      it "does not resolve to a pre-release version implicitly when matching exact version" do
+      it 'does not resolve to a pre-release version implicitly when matching exact version' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '1.0'
@@ -230,11 +230,11 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ["AFNetworking (1.0RC3)"]
-        specs.should == ["AFNetworking (1.0)"]
+        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should == ['AFNetworking (1.0)']
       end
 
-      xit "does not resolve to a pre-release version implicitly when using <" do
+      xit 'does not resolve to a pre-release version implicitly when using <' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '< 1.0'
@@ -242,11 +242,11 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ["AFNetworking (1.0RC3)"]
-        specs.should == ["AFNetworking (0.10.1)"]
+        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should == ['AFNetworking (0.10.1)']
       end
 
-      it "does not resolve to a pre-release version implicitly when using <=" do
+      it 'does not resolve to a pre-release version implicitly when using <=' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '<= 1.0'
@@ -254,11 +254,11 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ["AFNetworking (1.0RC3)"]
-        specs.should == ["AFNetworking (1.0)"]
+        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should == ['AFNetworking (1.0)']
       end
 
-      it "does not resolve to a pre-release version implicitly when using >" do
+      it 'does not resolve to a pre-release version implicitly when using >' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '> 1.0', '< 1.3'
@@ -266,11 +266,11 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ["AFNetworking (1.0RC3)"]
-        specs.should == ["AFNetworking (1.2.1)"]
+        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should == ['AFNetworking (1.2.1)']
       end
 
-      it "does not resolve to a pre-release version implicitly when using >=" do
+      it 'does not resolve to a pre-release version implicitly when using >=' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '>= 1.0', '< 1.3'
@@ -278,11 +278,11 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ["AFNetworking (1.0RC3)"]
-        specs.should == ["AFNetworking (1.2.1)"]
+        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should == ['AFNetworking (1.2.1)']
       end
 
-      it "does not resolve to a pre-release version implicitly when using ~>" do
+      it 'does not resolve to a pre-release version implicitly when using ~>' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '~> 1.0', '< 1.3'
@@ -290,8 +290,8 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ["AFNetworking (1.0RC3)"]
-        specs.should == ["AFNetworking (1.2.1)"]
+        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should == ['AFNetworking (1.2.1)']
       end
     end
   end

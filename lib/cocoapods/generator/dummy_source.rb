@@ -10,11 +10,11 @@ module Pod
 
       def save_as(pathname)
         pathname.open('w') do |source|
-          source.puts "#import <Foundation/Foundation.h>"
+          source.puts '#import <Foundation/Foundation.h>'
           source.puts "@interface #{class_name} : NSObject"
-          source.puts "@end"
+          source.puts '@end'
           source.puts "@implementation #{class_name}"
-          source.puts "@end"
+          source.puts '@end'
         end
       end
     end

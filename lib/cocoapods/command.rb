@@ -7,7 +7,6 @@ module Pod
   end
 
   class Command < CLAide::Command
-
     require 'cocoapods/command/help'
     require 'cocoapods/command/inter_process_communication'
     require 'cocoapods/command/lib'
@@ -44,14 +43,14 @@ module Pod
     end
 
     def self.run(argv)
-      help! "You cannot run CocoaPods as root." if Process.uid == 0
+      help! 'You cannot run CocoaPods as root.' if Process.uid == 0
       super(argv)
       UI.print_warnings
     end
 
     def self.report_error(exception)
       if exception.is_a?(Interrupt)
-        puts "[!] Cancelled".red
+        puts '[!] Cancelled'.red
         Config.instance.verbose? ? raise : exit(1)
       else
         if ENV['COCOA_PODS_ENV'] != 'development'
@@ -76,9 +75,9 @@ module Pod
     def initialize(argv)
       super
       config.silent = argv.flag?('silent', config.silent)
-      config.verbose = self.verbose? unless self.verbose.nil?
+      config.verbose = self.verbose? unless verbose.nil?
       unless self.ansi_output?
-        String.send(:define_method, :colorize) { |string , _| string }
+        String.send(:define_method, :colorize) { |string, _| string }
       end
     end
 
@@ -113,4 +112,3 @@ module Pod
     end
   end
 end
-

@@ -4,10 +4,10 @@ describe Pod::Generator::TargetEnvironmentHeader do
 
   before do
     spec = fixture_spec('banana-lib/BananaLib.podspec')
-    @gen = Pod::Generator::TargetEnvironmentHeader.new({'Debug' => [spec]})
+    @gen = Pod::Generator::TargetEnvironmentHeader.new('Debug' => [spec])
   end
 
-  it "generates a header files which include macro definitions for installed Pods" do
+  it 'generates a header files which include macro definitions for installed Pods' do
     file = temporary_directory + 'Pods-environment.h'
     @gen.save_as(file)
     file.read.should == <<-EOS.strip_heredoc
@@ -28,17 +28,17 @@ describe Pod::Generator::TargetEnvironmentHeader do
     EOS
   end
 
-  it "handles specifications with special characters" do
+  it 'handles specifications with special characters' do
     name = @gen.send(:safe_spec_name, 'AppleCoreAudioUtilityClasses@thehtb')
     name.should == 'AppleCoreAudioUtilityClasses_thehtb'
   end
 
-  it "includes conditional statements for specifications not present in all build configurations" do
+  it 'includes conditional statements for specifications not present in all build configurations' do
     spec = fixture_spec('banana-lib/BananaLib.podspec')
     debug_spec = stub(:name => 'DebugPod', :version => Pod::Version.new('1.2.3'))
     specs_by_configuration = {
       'Debug' => [spec, debug_spec],
-      'Release' => [spec]
+      'Release' => [spec],
     }
     @gen = Pod::Generator::TargetEnvironmentHeader.new(specs_by_configuration)
     @gen.generate.should == <<-EOS.strip_heredoc
@@ -69,15 +69,14 @@ describe Pod::Generator::TargetEnvironmentHeader do
     EOS
   end
 
-  it "normalizes the name of the build configuration" do
+  it 'normalizes the name of the build configuration' do
     spec = fixture_spec('banana-lib/BananaLib.podspec')
     specs_by_configuration = {
       'Debug' => [],
-      'build configuration copy' => [spec]
+      'build configuration copy' => [spec],
     }
     @gen = Pod::Generator::TargetEnvironmentHeader.new(specs_by_configuration)
     @gen.generate.should.include 'BUILD_CONFIGURATION_COPY'
   end
 
 end
-

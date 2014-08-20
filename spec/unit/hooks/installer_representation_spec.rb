@@ -23,34 +23,34 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "Public Hooks API" do
+    describe 'Public Hooks API' do
 
-      it "returns the sandbox root" do
+      it 'returns the sandbox root' do
         @rep.sandbox_root.should == config.sandbox.root
       end
 
-      it "returns the pods project" do
-        project = stub()
+      it 'returns the pods project' do
+        project = stub
         safe_stub(@installer, :pods_project, project)
         @rep.project.should == project
       end
 
-      it "the hook representation of the pods" do
+      it 'the hook representation of the pods' do
         @rep.pods.map(&:name).should == ['JSONKit']
       end
 
-      it "the hook representation of the libraries" do
+      it 'the hook representation of the libraries' do
         @rep.libraries.map(&:name).sort.should == ['Pods'].sort
       end
 
-      it "returns the specs by library representation" do
+      it 'returns the specs by library representation' do
         specs_by_lib = @rep.specs_by_lib
         lib_rep = specs_by_lib.keys.first
         lib_rep.name.should == 'Pods'
         specs_by_lib.should == { lib_rep => @specs }
       end
 
-      it "returns the pods representation by library representation" do
+      it 'returns the pods representation by library representation' do
         pods_by_lib = @rep.pods_by_lib
         target_definition = @installer.aggregate_targets.first.pod_targets.first.target_definition
         pods_by_lib[target_definition].map(&:name).should == ['JSONKit']
@@ -60,17 +60,17 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "Unsafe Hooks API" do
+    describe 'Unsafe Hooks API' do
 
-      it "returns the sandbox" do
+      it 'returns the sandbox' do
         @rep.sandbox.should == config.sandbox
       end
 
-      it "returns the config" do
+      it 'returns the config' do
         @rep.config.should == config
       end
 
-      it "returns the installer" do
+      it 'returns the installer' do
         @rep.installer.should == @installer
       end
 

@@ -1,7 +1,6 @@
 require 'fileutils'
 
 module Pod
-
   # The sandbox provides support for the directory that CocoaPods uses for an
   # installation. In this directory the Pods projects, the support files and
   # the sources of the Pods are stored.
@@ -46,7 +45,6 @@ module Pod
   # See #833
   #
   class Sandbox
-
     autoload :FileAccessor, 'cocoapods/sandbox/file_accessor'
     autoload :HeadersStore, 'cocoapods/sandbox/headers_store'
     autoload :PathList,     'cocoapods/sandbox/path_list'
@@ -64,7 +62,7 @@ module Pod
     def initialize(root)
       FileUtils.mkdir_p(root)
       @root = Pathname.new(root).realpath
-      @public_headers = HeadersStore.new(self, "Headers")
+      @public_headers = HeadersStore.new(self, 'Headers')
       @predownloaded_pods = []
       @head_pods = []
       @checkout_sources = {}
@@ -120,13 +118,13 @@ module Pod
     # @return [Pathname] the path of the manifest.
     #
     def manifest_path
-      root + "Manifest.lock"
+      root + 'Manifest.lock'
     end
 
     # @return [Pathname] the path of the Pods project.
     #
     def project_path
-      root + "Pods.xcodeproj"
+      root + 'Pods.xcodeproj'
     end
 
     # Returns the path for the directory where to store the support files of
@@ -137,7 +135,7 @@ module Pod
     #
     # @return [Pathname] the path of the support files.
     #
-    def library_support_files_dir(name)
+    def library_support_files_dir(_name)
       # root + "Target Support Files/#{name}"
       root
     end
@@ -202,9 +200,9 @@ module Pod
     # @todo   Migrate old installations and store the for all the pods.
     #         Two folders should be created `External Sources` and `Podspecs`.
     #
-    def specifications_dir(external_source = false)
+    def specifications_dir(_external_source = false)
       # root + "Specifications"
-      root + "Local Podspecs"
+      root + 'Local Podspecs'
     end
 
     # Returns the path of the specification for the Pod with the
@@ -395,7 +393,5 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end
-

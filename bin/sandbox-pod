@@ -52,7 +52,7 @@ PROFILE_ERB_TEMPLATE = <<-EOS
     "<%= pod_bin %>"
     "<%= ruby_bin %>"
   )
-  (regex 
+  (regex
 <% prefixes.each do |prefix| %>
     #"^<%= prefix %>/*"
 <% end %>
@@ -105,9 +105,7 @@ PROFILE_ERB_TEMPLATE = <<-EOS
 (deny default)
 EOS
 
-
 class Profile
-
   def pod_bin
     File.expand_path('../pod', __FILE__)
   end
@@ -159,14 +157,12 @@ class Profile
   def generate
     ERB.new(PROFILE_ERB_TEMPLATE, 0, '>').result(binding)
   end
-
 end
 
 # Ensure the `pod` bin doesn’t think it needs to use Bundler.
 ENV['COCOAPODS_NO_BUNDLER'] = '1'
 
 profile = Profile.new
-#puts profile.generate
+# puts profile.generate
 command = ['/usr/bin/sandbox-exec', '-p', profile.generate, profile.pod_bin, *ARGV]
 exec(*command)
-

@@ -1,10 +1,8 @@
 module Pod
-
   # Stores the information relative to the target used to cluster the targets
   # of the single Pods. The client targets will then depend on this one.
   #
   class AggregateTarget < Target
-
     # @param [TargetDefinition] target_definition @see target_definition
     # @param [Sandbox] sandbox @see sandbox
     #
@@ -53,7 +51,7 @@ module Pod
       user_target_uuids.map do |uuid|
         native_target = project.objects_by_uuid[uuid]
         unless native_target
-          raise Informative, "[Bug] Unable to find the target with " \
+          raise Informative, '[Bug] Unable to find the target with ' \
             "the `#{uuid}` UUID for the `#{self}` integration library"
         end
         native_target
@@ -68,7 +66,6 @@ module Pod
     #         values.
     #
     attr_reader :xcconfigs
-
 
     # @return [Array<PodTarget>] The dependencies for this target.
     #

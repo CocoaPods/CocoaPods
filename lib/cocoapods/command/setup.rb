@@ -16,8 +16,8 @@ module Pod
 
       def self.options
         [
-          ["--no-shallow", "Clone full history so push will work"],
-          ["--push",       "Use this option to enable push access once granted"],
+          ['--no-shallow', 'Clone full history so push will work'],
+          ['--push',       'Use this option to enable push access once granted'],
         ].concat(super)
       end
 
@@ -31,7 +31,7 @@ module Pod
       end
 
       def run
-        UI.section "Setting up CocoaPods master repo" do
+        UI.section 'Setting up CocoaPods master repo' do
           if master_repo_dir.exist?
             set_master_repo_url
             set_master_repo_branch
@@ -43,7 +43,7 @@ module Pod
           end
         end
 
-        access_type = push? ? "push" : "read-only"
+        access_type = push? ? 'push' : 'read-only'
         UI.puts "Setup completed (#{access_type} access)".green
       end
 
@@ -103,7 +103,7 @@ module Pod
       #
       def set_master_repo_branch
         Dir.chdir(master_repo_dir) do
-          git("checkout master")
+          git('checkout master')
         end
       end
 

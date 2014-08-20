@@ -14,9 +14,9 @@ module Pod
       @pod_bundle.user_project_path  = project_path
       @pod_bundle.client_root = project_path.dirname
       @pod_bundle.user_target_uuids  = [@target.uuid]
-      configuration = Xcodeproj::Config.new({
+      configuration = Xcodeproj::Config.new(
         'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1'
-      })
+      )
       @pod_bundle.xcconfigs['Debug'] = configuration
       @pod_bundle.xcconfigs['Test'] = configuration
       @pod_bundle.xcconfigs['Release'] = configuration
@@ -50,7 +50,5 @@ module Pod
       config.base_configuration_reference.should.equal existing
     end
 
-
   end
 end
-

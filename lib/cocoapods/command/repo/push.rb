@@ -15,13 +15,13 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new('REPO', true),
-            CLAide::Argument.new('NAME.podspec', false)
+          CLAide::Argument.new('REPO', true),
+          CLAide::Argument.new('NAME.podspec', false),
         ]
 
         def self.options
-          [ ["--allow-warnings", "Allows pushing even if there are warnings"],
-            ["--local-only", "Does not perform the step of pushing REPO to its remote"] ].concat(super)
+          [['--allow-warnings', 'Allows pushing even if there are warnings'],
+           ['--local-only', 'Does not perform the step of pushing REPO to its remote']].concat(super)
         end
 
         def initialize(argv)
@@ -34,7 +34,7 @@ module Pod
 
         def validate!
           super
-          help! "A spec-repo name is required." unless @repo
+          help! 'A spec-repo name is required.' unless @repo
         end
 
         def run
@@ -69,14 +69,13 @@ module Pod
           end
 
           if is_master_repo
-            raise Informative, "To push to the CocoaPods master repo use " \
+            raise Informative, 'To push to the CocoaPods master repo use ' \
               "the `pod trunk push` command.\n\nIf you are using a fork of " \
-              "the master repo for private purposes we recommend to migrate " \
-              "to a clean private repo. To disable this check remove the " \
-              "remote pointing to the CocoaPods master repo."
+              'the master repo for private purposes we recommend to migrate ' \
+              'to a clean private repo. To disable this check remove the ' \
+              'remote pointing to the CocoaPods master repo.'
           end
         end
-
 
         # Performs a full lint against the podspecs.
         #
@@ -87,7 +86,7 @@ module Pod
             validator.only_errors = @allow_warnings
             begin
               validator.validate
-            rescue Exception
+            rescue
               raise Informative, "The `#{podspec}` specification does not validate."
             end
             raise Informative, "The `#{podspec}` specification does not validate." unless validator.validated?
@@ -143,7 +142,7 @@ module Pod
             FileUtils.cp(spec_file, output_path)
             Dir.chdir(repo_dir) do
               # only commit if modified
-              if git!("status --porcelain 2>&1").include?(spec.name)
+              if git!('status --porcelain 2>&1').include?(spec.name)
                 UI.puts " - #{message}"
                 git!("add #{spec.name}")
                 git!("commit --no-verify -m '#{message}'")
@@ -187,7 +186,7 @@ module Pod
         # @return [Array<Pathname>] The path of the specifications to push.
         #
         def podspec_files
-          files = Pathname.glob(@podspec || "*.podspec")
+          files = Pathname.glob(@podspec || '*.podspec')
           raise Informative, "Couldn't find any .podspec file in current directory" if files.empty?
           files
         end
@@ -199,7 +198,6 @@ module Pod
         end
 
         #---------------------------------------------------------------------#
-
       end
     end
   end

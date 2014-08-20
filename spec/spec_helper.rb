@@ -26,7 +26,7 @@ require 'bacon'
 require 'mocha-on-bacon'
 require 'pretty_bacon'
 require 'pathname'
-require "active_support/core_ext/string/strip"
+require 'active_support/core_ext/string/strip'
 
 ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 $:.unshift((ROOT + 'lib').to_s)
@@ -34,7 +34,7 @@ $:.unshift((ROOT + 'spec').to_s)
 
 require 'cocoapods'
 require 'claide'
-#require 'awesome_print'
+# require 'awesome_print'
 
 require 'spec_helper/command'         # Allows to run Pod commands and returns their output.
 require 'spec_helper/fixture'         # Provides access to the fixtures and unpacks them if needed.
@@ -52,7 +52,7 @@ require 'spec_helper/github'          # Stubs Github API to return always the va
 #
 module Pod
   class Specification
-    alias :original_source :source
+    alias_method :original_source, :source
     def source
       fixture = SpecHelper.fixture("integration/#{name}")
       result = super
@@ -117,7 +117,7 @@ module SpecHelper
 end
 
 def temporary_sandbox
-  Pod::Sandbox.new(temporary_directory + "Pods")
+  Pod::Sandbox.new(temporary_directory + 'Pods')
 end
 
 def fixture_spec(name)
@@ -135,4 +135,3 @@ end
 #-----------------------------------------------------------------------------#
 
 SpecHelper::Fixture.fixture('banana-lib') # ensure it exists
-

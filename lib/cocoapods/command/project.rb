@@ -1,6 +1,5 @@
 module Pod
   class Command
-
     # Provides support the common behaviour of the `install` and `update`
     # commands.
     #
@@ -8,9 +7,9 @@ module Pod
       module Options
         def options
           [
-            ["--no-clean",       "Leave SCM dirs like `.git` and `.svn` intact after downloading"],
-            ["--no-integrate",   "Skip integration of the Pods libraries in the Xcode project(s)"],
-            ["--no-repo-update", "Skip running `pod repo update` before install"],
+            ['--no-clean',       'Leave SCM dirs like `.git` and `.svn` intact after downloading'],
+            ['--no-integrate',   'Skip integration of the Pods libraries in the Xcode project(s)'],
+            ['--no-repo-update', 'Skip running `pod repo update` before install'],
           ].concat(super)
         end
       end
@@ -105,19 +104,17 @@ module Pod
           missing_pods = @pods.select { |pod| !config.lockfile.pod_names.include?(pod) }
           if missing_pods.length > 0
             raise Informative, (missing_pods.length > 1 \
-              ? "Pods %s are not installed and cannot be updated" \
-              : "Pod %s is not installed and cannot be updated"
+              ? 'Pods %s are not installed and cannot be updated' \
+              : 'Pod %s is not installed and cannot be updated'
             ) % missing_pods.map { |p| "`#{p}`" }.join(', ')
           end
 
           run_install_with_update(:pods => @pods)
         else
-          UI.puts "Update all pods".yellow unless @pods
+          UI.puts 'Update all pods'.yellow unless @pods
           run_install_with_update(true)
         end
       end
     end
-
   end
 end
-

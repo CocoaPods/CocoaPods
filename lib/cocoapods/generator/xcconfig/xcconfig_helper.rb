@@ -1,11 +1,9 @@
 module Pod
   module Generator
     module XCConfig
-
       # Stores the shared logic of the classes of the XCConfig module.
       #
       module XCConfigHelper
-
         # Converts an array of strings to a single string where the each string
         # is surrounded by double quotes and separated by a space. Used to
         # represent strings in a xcconfig file.
@@ -19,7 +17,7 @@ module Pod
         #
         def self.quote(strings, prefix = nil)
           prefix = "#{prefix} " if prefix
-          strings.sort.map { |s| %W|#{prefix}"#{s}"| }.join(" ")
+          strings.sort.map { |s| %W(          #{prefix}"#{s}"          ) }.join(' ')
         end
 
         # @return [String] the default linker flags. `-ObjC` is always included
@@ -28,7 +26,7 @@ module Pod
         #
         def self.default_ld_flags(target)
           ld_flags = '-ObjC'
-          if target.target_definition.podfile.set_arc_compatibility_flag? and
+          if target.target_definition.podfile.set_arc_compatibility_flag? &&
             target.spec_consumers.any? { |consumer| consumer.requires_arc? }
             ld_flags << ' -fobjc-arc'
           end
@@ -62,11 +60,11 @@ module Pod
         #         The xcconfig to edit.
         #
         def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root)
-          name = File.basename(framework_path, ".framework")
+          name = File.basename(framework_path, '.framework')
           dirname = '$(PODS_ROOT)/' + framework_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'OTHER_LDFLAGS' => "-framework #{name}",
-            'FRAMEWORK_SEARCH_PATHS' => quote([dirname])
+            'FRAMEWORK_SEARCH_PATHS' => quote([dirname]),
           }
           xcconfig.merge!(build_settings)
         end
@@ -81,11 +79,11 @@ module Pod
         #         The xcconfig to edit.
         #
         def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
-          name = File.basename(library_path, ".a").sub(/\Alib/, '')
+          name = File.basename(library_path, '.a').sub(/\Alib/, '')
           dirname = '$(PODS_ROOT)/' + library_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'OTHER_LDFLAGS' => "-l#{name}",
-            'LIBRARY_SEARCH_PATHS' => quote([dirname])
+            'LIBRARY_SEARCH_PATHS' => quote([dirname]),
           }
           xcconfig.merge!(build_settings)
         end
@@ -101,7 +99,7 @@ module Pod
         # @return [void]
         #
         def self.add_developers_frameworks_if_needed(xcconfig, platform)
-          matched_frameworks = xcconfig.frameworks & ['XCTest', 'SenTestingKit']
+          matched_frameworks = xcconfig.frameworks & %w(XCTest SenTestingKit)
           unless matched_frameworks.empty?
             search_paths = xcconfig.attributes['FRAMEWORK_SEARCH_PATHS'] ||= ''
             search_paths_to_add = []

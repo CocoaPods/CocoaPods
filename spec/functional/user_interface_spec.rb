@@ -9,7 +9,7 @@ module Pod
       @set = SourcesManager.search(Dependency.new('CocoaLumberjack'))
     end
 
-    it "presents the name, version, description, homepage and source of a specification set" do
+    it 'presents the name, version, description, homepage and source of a specification set' do
       UI.pod(@set)
       output = UI.output
       output.should.include? 'CocoaLumberjack'
@@ -21,26 +21,26 @@ module Pod
       output.should.include? 'https://github.com/CocoaLumberjack/CocoaLumberjack.git'
     end
 
-    it "Presents information about deprecation if the pod is deprecated" do
+    it 'Presents information about deprecation if the pod is deprecated' do
       specification = @set.specification
       specification.deprecated = true
       @set.expects(:specification).returns(specification)
       UI.pod(@set)
       output = UI.output
-      output.should.include? "[DEPRECATED]"
+      output.should.include? '[DEPRECATED]'
     end
 
-    it "Presents information about the deprecation in favor of another pod" do
+    it 'Presents information about the deprecation in favor of another pod' do
       specification = @set.specification
-      specification.deprecated_in_favor_of = "NewMoreAwesomePod"
+      specification.deprecated_in_favor_of = 'NewMoreAwesomePod'
       @set.expects(:specification).returns(specification)
 
       UI.pod(@set)
       output = UI.output
-      output.should.include? "[DEPRECATED in favor of NewMoreAwesomePod]"
+      output.should.include? '[DEPRECATED in favor of NewMoreAwesomePod]'
     end
 
-    it "presents the stats of a specification set" do
+    it 'presents the stats of a specification set' do
       Specification::Set::Presenter.any_instance.expects(:github_last_activity).returns('more than a year ago')
       Specification::Set::Presenter.any_instance.expects(:github_watchers).returns('318')
       Specification::Set::Presenter.any_instance.expects(:github_forks).returns('42')
@@ -54,14 +54,14 @@ module Pod
       output.should.include? 'Pushed:   more than a year ago'
     end
 
-    it "should print at least one subspec" do
+    it 'should print at least one subspec' do
       @set = SourcesManager.search(Dependency.new('RestKit'))
       UI.pod(@set)
       output = UI.output
-      output.should.include? "RestKit/Network"
+      output.should.include? 'RestKit/Network'
     end
 
-    it "presents only name and version of a specification set in :name_and_version mode" do
+    it 'presents only name and version of a specification set in :name_and_version mode' do
       @set = SourcesManager.search_by_name('RestKit').first
       UI.pod(@set, :name_and_version)
       output = UI.output

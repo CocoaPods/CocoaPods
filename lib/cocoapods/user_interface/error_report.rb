@@ -8,7 +8,7 @@ module Pod
     module ErrorReport
       class << self
         def report(exception)
-          return <<-EOS
+          <<-EOS
 
 #{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
@@ -75,7 +75,7 @@ EOS
 
         def error_from_podfile(error)
           if error.message =~ /Podfile:(\d*)/
-            "\nIt appears to have originated from your Podfile at line #{$1}.\n"
+            "\nIt appears to have originated from your Podfile at line #{Regexp.last_match[1]}.\n"
           end
         end
 
@@ -90,12 +90,12 @@ EOS
         end
 
         def host_information
-          product, version, build =`sw_vers`.strip.split("\n").map { |line| line.split(":").last.strip }
+          product, version, build = `sw_vers`.strip.split("\n").map { |line| line.split(':').last.strip }
           "#{product} #{version} (#{build})"
         end
 
         def xcode_information
-          version, build = `xcodebuild -version`.strip.split("\n").map { |line| line.split(" ").last }
+          version, build = `xcodebuild -version`.strip.split("\n").map { |line| line.split(' ').last }
           "#{version} (#{build})"
         end
 

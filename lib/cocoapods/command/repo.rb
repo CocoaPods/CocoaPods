@@ -19,14 +19,14 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new('NAME',   true),
-            CLAide::Argument.new('URL',    true),
-            CLAide::Argument.new('BRANCH', false)
+          CLAide::Argument.new('NAME',   true),
+          CLAide::Argument.new('URL',    true),
+          CLAide::Argument.new('BRANCH', false),
         ]
 
         def self.options
           [
-            ["--shallow", "Create a shallow clone (fast clone, but no push capabilities)"],
+            ['--shallow', 'Create a shallow clone (fast clone, but no push capabilities)'],
           ].concat(super)
         end
 
@@ -39,7 +39,7 @@ module Pod
         def validate!
           super
           unless @name && @url
-            help! "Adding a repo needs a `NAME` and a `URL`."
+            help! 'Adding a repo needs a `NAME` and a `URL`.'
           end
         end
 
@@ -69,7 +69,7 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new('NAME', false)
+          CLAide::Argument.new('NAME', false),
         ]
 
         def initialize(argv)
@@ -94,11 +94,11 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new(%w(NAME DIRECTORY), false)
+          CLAide::Argument.new(%w(NAME DIRECTORY), false),
         ]
 
         def self.options
-          [["--only-errors", "Lint presents only the errors"]].concat(super)
+          [['--only-errors', 'Lint presents only the errors']].concat(super)
         end
 
         def initialize(argv)
@@ -114,16 +114,16 @@ module Pod
         #
         def run
           if @name
-            dirs = File.exists?(@name) ? [ Pathname.new(@name) ] : [ dir ]
+            dirs = File.exist?(@name) ? [Pathname.new(@name)] : [dir]
           else
-            dirs = config.repos_dir.children.select {|c| c.directory?}
+            dirs = config.repos_dir.children.select { |c| c.directory? }
           end
           dirs.each do |dir|
             SourcesManager.check_version_information(dir)
             UI.puts "\nLinting spec repo `#{dir.realpath.basename}`\n".yellow
 
             validator = Source::HealthReporter.new(dir)
-            validator.pre_check do |name, version|
+            validator.pre_check do |_name, _version|
               UI.print '.'
             end
             report = validator.analyze
@@ -144,7 +144,7 @@ module Pod
 
             UI.puts "Analyzed #{report.analyzed_paths.count} podspecs files.\n\n"
             if report.pods_by_error.count.zero?
-              UI.puts "All the specs passed validation.".green << "\n\n"
+              UI.puts 'All the specs passed validation.'.green << "\n\n"
             else
               raise Informative, "#{report.pods_by_error.count} podspecs failed validation."
             end
@@ -162,7 +162,7 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new('NAME', true)
+          CLAide::Argument.new('NAME', true),
         ]
 
         def initialize(argv)
@@ -175,7 +175,7 @@ module Pod
           help! 'Deleting a repo needs a `NAME`.' unless @name
           help! "repo #{@name} does not exist" unless File.directory?(dir)
           help! "You do not have permission to delete the #{@name} repository." \
-                "Perhaps try prefixing this command with sudo." unless File.writable?(dir)
+                'Perhaps try prefixing this command with sudo.' unless File.writable?(dir)
         end
 
         def run
@@ -194,4 +194,3 @@ module Pod
     end
   end
 end
-

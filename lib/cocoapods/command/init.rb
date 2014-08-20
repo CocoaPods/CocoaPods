@@ -4,7 +4,6 @@ require 'active_support/core_ext/string/strip'
 module Pod
   class Command
     class Init < Command
-
       self.summary = 'Generate a Podfile for the current directory.'
       self.description = <<-DESC
         Creates a Podfile for the current directory if none currently exists. If
@@ -18,11 +17,11 @@ module Pod
         `~/.cocoapods/templates` folder.
       DESC
       self.arguments = [
-          CLAide::Argument.new('XCODEPROJ', :false)
+        CLAide::Argument.new('XCODEPROJ', :false),
       ]
 
       def initialize(argv)
-        @podfile_path = Pathname.pwd + "Podfile"
+        @podfile_path = Pathname.pwd + 'Podfile'
         @project_path = argv.shift_argument
         @project_paths = Pathname.pwd.children.select { |pn| pn.extname == '.xcodeproj' }
         super
@@ -30,13 +29,13 @@ module Pod
 
       def validate!
         super
-        raise Informative, "Existing Podfile found in directory" unless config.podfile_path_in_dir(Pathname.pwd).nil?
+        raise Informative, 'Existing Podfile found in directory' unless config.podfile_path_in_dir(Pathname.pwd).nil?
         if @project_path
           help! "Xcode project at #{@project_path} does not exist" unless File.exist? @project_path
           project_path = @project_path
         else
-          raise Informative, "No xcode project found, please specify one" unless @project_paths.length > 0
-          raise Informative, "Multiple xcode projects found, please specify one" unless @project_paths.length == 1
+          raise Informative, 'No xcode project found, please specify one' unless @project_paths.length > 0
+          raise Informative, 'Multiple xcode projects found, please specify one' unless @project_paths.length == 1
           project_path = @project_paths.first
         end
         @xcode_project = Xcodeproj::Project.open(project_path)
@@ -82,12 +81,11 @@ module Pod
         target_module << "\nend\n"
       end
 
-
       def template_contents(path)
         if path.exist?
-          path.read.chomp.lines.map{ |line| "  #{line}" }.join("\n")
+          path.read.chomp.lines.map { |line| "  #{line}" }.join("\n")
         else
-          String.new
+          ''
         end
       end
     end

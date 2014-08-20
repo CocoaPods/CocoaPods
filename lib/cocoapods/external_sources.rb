@@ -4,12 +4,10 @@ require 'cocoapods/external_sources/path_source'
 require 'cocoapods/external_sources/podspec_source'
 
 module Pod
-
   # Provides support for initializing the correct concrete class of an external
   # source.
   #
   module ExternalSources
-
     # @return [AbstractExternalSource] an initialized instance of the concrete
     #         external source class associated with the option specified in the
     #         hash.
@@ -34,8 +32,8 @@ module Pod
       elsif params.key?(:path)
         PathSource
       elsif params.key?(:local)
-        UI.warn "The `:local` option of the Podfile has been " \
-          "renamed to `:path` and it is deprecated."
+        UI.warn 'The `:local` option of the Podfile has been ' \
+          'renamed to `:path` and it is deprecated.'
         PathSource
       elsif Downloader.strategy_from_options(params)
         DownloaderSource

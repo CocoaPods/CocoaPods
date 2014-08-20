@@ -1,5 +1,4 @@
 module Pod
-
   # Validates a Specification.
   #
   # Extends the Linter from the Core to add additional which require the
@@ -10,7 +9,6 @@ module Pod
   # it without integration and building the project with xcodebuild.
   #
   class Validator
-
     include Config::Mixin
 
     # @return [Specification::Linter] the linter instance from CocoaPods
@@ -70,7 +68,7 @@ module Pod
       perform_linting
       perform_extensive_analysis(a_spec) if a_spec && !quick
 
-      UI.puts " -> ".send(result_color) << (a_spec ? a_spec.to_s : file.basename.to_s)
+      UI.puts ' -> '.send(result_color) << (a_spec ? a_spec.to_s : file.basename.to_s)
       print_results
       validated?
     end
@@ -82,25 +80,25 @@ module Pod
     def print_results
       results.each do |result|
         if result.platforms == [:ios]
-          platform_message = "[iOS] "
+          platform_message = '[iOS] '
         elsif result.platforms == [:osx]
-          platform_message = "[OSX] "
+          platform_message = '[OSX] '
         end
 
-        subspecs_message = ""
+        subspecs_message = ''
         if result.is_a?(Result)
-            subspecs = result.subspecs.uniq
-            if subspecs.count > 2
-                subspecs_message = "[" + subspecs[0..2].join(', ') + ", and more...] "
-            elsif subspecs.count > 0
-                subspecs_message = "[" + subspecs.join(',') + "] "
-            end
+          subspecs = result.subspecs.uniq
+          if subspecs.count > 2
+            subspecs_message = '[' + subspecs[0..2].join(', ') + ', and more...] '
+          elsif subspecs.count > 0
+            subspecs_message = '[' + subspecs.join(',') + '] '
+          end
         end
 
         case result.type
-        when :error   then type = "ERROR"
-        when :warning then type = "WARN"
-        when :note    then type = "NOTE"
+        when :error   then type = 'ERROR'
+        when :warning then type = 'WARN'
+        when :note    then type = 'NOTE'
         else raise "#{result.type}" end
         UI.puts "    - #{type.ljust(5)} | #{platform_message}#{subspecs_message}#{result.message}"
       end
@@ -109,7 +107,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    # @!group Configuration
+    #  @!group Configuration
 
     # @return [Bool] whether the validation should skip the checks that
     #         requires the download of the library.
@@ -127,7 +125,9 @@ module Pod
     # @note   Uses the `:path` option of the Podfile.
     #
     attr_writer :local
-    def local?; @local; end
+    def local?
+      @local
+    end
 
     # @return [Bool] Whether the validator should fail only on errors or also
     #         on warnings.
@@ -177,7 +177,7 @@ module Pod
     # @return [Pathname] the temporary directory used by the linter.
     #
     def validation_dir
-      Pathname.new(File.join(Pathname.new('/tmp').realpath,'CocoaPods/Lint'))
+      Pathname.new(File.join(Pathname.new('/tmp').realpath, 'CocoaPods/Lint'))
     end
 
     #-------------------------------------------------------------------------#
@@ -229,7 +229,7 @@ module Pod
     # Performs validation of a URL
     #
     def validate_url(url)
-      resp = Pod::HTTP::validate_url(url)
+      resp = Pod::HTTP.validate_url(url)
 
       if !resp
         warning "There was a problem validating the URL #{url}."
@@ -352,8 +352,8 @@ module Pod
       end
 
       if consumer.spec.root?
-        unless file_accessor.license || spec.license && ( spec.license[:type] == 'Public Domain' || spec.license[:text] )
-          warning "Unable to find a license file"
+        unless file_accessor.license || spec.license && ( spec.license[:type] == 'Public Domain' || spec.license[:text])
+          warning 'Unable to find a license file'
         end
       end
     end
@@ -389,14 +389,12 @@ module Pod
     # Specialized Result to support subspecs aggregation
     #
     class Result < Specification::Linter::Result
+      def initialize(type, message)
+        super(type, message)
+        @subspecs = []
+      end
 
-        def initialize(type, message)
-            super(type, message)
-            @subspecs = []
-        end
-
-        attr_reader :subspecs
-
+      attr_reader :subspecs
     end
 
     #-------------------------------------------------------------------------#
@@ -417,7 +415,7 @@ module Pod
       local    = local?
       podfile  = Pod::Podfile.new do
         platform(platform_name, deployment_target)
-        if (local)
+        if local
           pod name, :path => podspec.dirname.to_s
         else
           pod name, :podspec => podspec.to_s
@@ -445,8 +443,8 @@ module Pod
           l.include?('note: ') && (l !~ /expanded from macro/)
       end
       selected_lines.map do |l|
-        new = l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//,'')
-        new.gsub!(/^ */,' ')
+        new = l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//, '')
+        new.gsub!(/^ */, ' ')
       end
     end
 
@@ -459,6 +457,5 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

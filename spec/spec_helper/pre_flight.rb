@@ -31,4 +31,3 @@ module Bacon
     end
   end
 end
-

@@ -37,29 +37,28 @@
 
 #-----------------------------------------------------------------------------#
 
-
 # @return [Pathname] The root of the repo.
 #
-ROOT = Pathname.new(File.expand_path("../../", __FILE__)) unless defined? ROOT
+ROOT = Pathname.new(File.expand_path('../../', __FILE__)) unless defined? ROOT
 $:.unshift((ROOT + 'spec').to_s)
 
 require 'rubygems'
 require 'bundler/setup'
 require 'pretty_bacon'
 require 'colored'
-require "clintegracon"
-require "integration/xcodeproj_project_yaml"
+require 'clintegracon'
+require 'integration/xcodeproj_project_yaml'
 
 CLIntegracon.configure do |c|
-  c.spec_path = ROOT + "spec/cocoapods-integration-specs"
-  c.temp_path = ROOT + "tmp"
+  c.spec_path = ROOT + 'spec/cocoapods-integration-specs'
+  c.temp_path = ROOT + 'tmp'
 
   # Transform produced project files to YAMLs
-  c.transform_produced "**/*.xcodeproj" do |path|
+  c.transform_produced '**/*.xcodeproj' do |path|
     # Creates a YAML representation of the Xcodeproj files
     # which should be used as a reference for comparison.
     xcodeproj = Xcodeproj::Project.open(path)
-    File.open("#{path}.yaml", "w") do |file|
+    File.open("#{path}.yaml", 'w') do |file|
       file.write xcodeproj.to_yaml
     end
   end
@@ -67,156 +66,155 @@ CLIntegracon.configure do |c|
   # Register special handling for YAML files
   paths = [%r{Podfile\.lock}, %r{Manifest\.lock$}, %r{xcodeproj\.yaml$}]
   c.has_special_handling_for *paths do |path|
-    if RUBY_VERSION < "1.9"
+    if RUBY_VERSION < '1.9'
       nil # CP is not sorting array derived from hashes whose order is
-          # undefined in 1.8.7
+    # undefined in 1.8.7
     else
       # Remove CocoaPods version
       yaml = File.open(path) { |f| YAML.load(f) }
-      yaml.delete("COCOAPODS")
+      yaml.delete('COCOAPODS')
       yaml.to_s
     end
   end
 
   # So we don't need to compare them directly
   c.ignores %r{\.xcodeproj/}
-  c.ignores "Podfile"
+  c.ignores 'Podfile'
 
   # Ignore certain OSX files
-  c.ignores ".DS_Store"
+  c.ignores '.DS_Store'
 
   # Ignore xcuserdata
   c.ignores %r{/xcuserdata/}
 
   # TODO The output from the caches changes on Travis
-  c.ignores "execution_output.txt"
+  c.ignores 'execution_output.txt'
 
   # Needed for some test cases
-  c.ignores "Reachability.podspec"
-  c.ignores "PodTest-hg-source/**"
+  c.ignores 'Reachability.podspec'
+  c.ignores 'PodTest-hg-source/**'
 
   c.hook_into :bacon
 end
 
-
-describe_cli "pod" do
+describe_cli 'pod' do
 
   subject do |s|
-    s.executable = "ruby #{ROOT + "bin/pod"}"
+    s.executable = "ruby #{ROOT + 'bin/pod'}"
     s.environment_vars = {
-      "CP_AGGRESSIVE_CACHE" => "TRUE",
-      "XCODEPROJ_DISABLE_XCPROJ" => "TRUE",
+      'CP_AGGRESSIVE_CACHE' => 'TRUE',
+      'XCODEPROJ_DISABLE_XCPROJ' => 'TRUE',
     }
     s.default_args = [
-      "--verbose",
-      "--no-ansi"
+      '--verbose',
+      '--no-ansi',
     ]
-    s.replace_path ROOT.to_s, "ROOT"
-    s.replace_user_path "Library/Caches/CocoaPods", "CACHES_DIR"
+    s.replace_path ROOT.to_s, 'ROOT'
+    s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
   end
 
-  describe "Pod install" do
+  describe 'Pod install' do
 
     # Test installation with no integration
     # Test subspecs inheritance
 
-    describe "Integrates a project with CocoaPods" do
-      behaves_like cli_spec "install_new",
-                            "install --no-repo-update"
+    describe 'Integrates a project with CocoaPods' do
+      behaves_like cli_spec 'install_new',
+                            'install --no-repo-update'
     end
 
-    describe "Adds a Pod to an existing installation" do
-      behaves_like cli_spec "install_add_pod",
-                            "install --no-repo-update"
+    describe 'Adds a Pod to an existing installation' do
+      behaves_like cli_spec 'install_add_pod',
+                            'install --no-repo-update'
     end
 
-    describe "Removes a Pod from an existing installation" do
-      behaves_like cli_spec "install_remove_pod",
-                            "install --no-repo-update"
+    describe 'Removes a Pod from an existing installation' do
+      behaves_like cli_spec 'install_remove_pod',
+                            'install --no-repo-update'
     end
 
-    describe "Creates an installation with multiple target definitions" do
-      behaves_like cli_spec "install_multiple_targets",
-                            "install --no-repo-update"
+    describe 'Creates an installation with multiple target definitions' do
+      behaves_like cli_spec 'install_multiple_targets',
+                            'install --no-repo-update'
     end
 
-    describe "Installs a Pod with different subspecs activated across different targets" do
-      behaves_like cli_spec "install_subspecs",
-                            "install --no-repo-update"
+    describe 'Installs a Pod with different subspecs activated across different targets' do
+      behaves_like cli_spec 'install_subspecs',
+                            'install --no-repo-update'
     end
 
-    describe "Installs a Pod with subspecs and does not duplicate the prefix header" do
-      behaves_like cli_spec "install_subspecs_no_duplicate_prefix",
-                            "install --no-repo-update"
+    describe 'Installs a Pod with subspecs and does not duplicate the prefix header' do
+      behaves_like cli_spec 'install_subspecs_no_duplicate_prefix',
+                            'install --no-repo-update'
     end
 
-    describe "Installs a Pod with a local source" do
-      behaves_like cli_spec "install_local_source",
-                            "install --no-repo-update"
+    describe 'Installs a Pod with a local source' do
+      behaves_like cli_spec 'install_local_source',
+                            'install --no-repo-update'
     end
 
-    describe "Installs a Pod with an external source" do
-      behaves_like cli_spec "install_external_source",
-                            "install --no-repo-update"
+    describe 'Installs a Pod with an external source' do
+      behaves_like cli_spec 'install_external_source',
+                            'install --no-repo-update'
     end
 
-    describe "Installs a Pod given the podspec" do
-      behaves_like cli_spec "install_podspec",
-                            "install --no-repo-update"
+    describe 'Installs a Pod given the podspec' do
+      behaves_like cli_spec 'install_podspec',
+                            'install --no-repo-update'
     end
 
-    describe "Performs an installation using a custom workspace" do
-      behaves_like cli_spec "install_custom_workspace",
-                            "install --no-repo-update"
+    describe 'Performs an installation using a custom workspace' do
+      behaves_like cli_spec 'install_custom_workspace',
+                            'install --no-repo-update'
     end
 
-    describe "Integrates a target with custom build settings" do
-      behaves_like cli_spec "install_custom_build_configuration",
-                            "install --no-repo-update"
+    describe 'Integrates a target with custom build settings' do
+      behaves_like cli_spec 'install_custom_build_configuration',
+                            'install --no-repo-update'
     end
 
     # @todo add tests for all the hooks API
     #
-    describe "Runs the Podfile callbacks" do
-      behaves_like cli_spec "install_podfile_callbacks",
-                            "install --no-repo-update"
+    describe 'Runs the Podfile callbacks' do
+      behaves_like cli_spec 'install_podfile_callbacks',
+                            'install --no-repo-update'
     end
   end
 
   #--------------------------------------#
 
-  describe "Pod update" do
+  describe 'Pod update' do
 
-    describe "Updates an existing installation" do
-      behaves_like cli_spec "update_all",
-                            "update --no-repo-update"
+    describe 'Updates an existing installation' do
+      behaves_like cli_spec 'update_all',
+                            'update --no-repo-update'
     end
 
-    describe "Updates a selected Pod in an existing installation" do
-      behaves_like cli_spec "update_selected",
-                            "update Reachability --no-repo-update"
-    end
-
-  end
-
-  #--------------------------------------#
-
-  describe "Pod lint" do
-
-    describe "Lints a Pod" do
-      behaves_like cli_spec "spec_lint",
-                            "spec lint --quick"
+    describe 'Updates a selected Pod in an existing installation' do
+      behaves_like cli_spec 'update_selected',
+                            'update Reachability --no-repo-update'
     end
 
   end
 
   #--------------------------------------#
 
-  describe "Pod init" do
+  describe 'Pod lint' do
 
-    describe "Initializes a Podfile with a single platform" do
-      behaves_like cli_spec "init_single_platform",
-                            "init"
+    describe 'Lints a Pod' do
+      behaves_like cli_spec 'spec_lint',
+                            'spec lint --quick'
+    end
+
+  end
+
+  #--------------------------------------#
+
+  describe 'Pod init' do
+
+    describe 'Initializes a Podfile with a single platform' do
+      behaves_like cli_spec 'init_single_platform',
+                            'init'
     end
 
   end

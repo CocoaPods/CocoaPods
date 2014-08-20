@@ -1,28 +1,25 @@
 module Pod
-
   class Podfile
     def config
-      UI.warn "Podfile#config is deprecated. The config is accessible from " \
-        "the parameter passed to the hooks"
+      UI.warn 'Podfile#config is deprecated. The config is accessible from ' \
+        'the parameter passed to the hooks'
       Config.instance
     end
   end
 
   class Podfile::TargetDefinition
     def copy_resources_script_name
-      UI.warn "TargetDefinition#copy_resources_script_name is deprecated. " \
-        "The value is accessible directly from the representation of the " \
-        "library using the #copy_resources_script_path method."
+      UI.warn 'TargetDefinition#copy_resources_script_name is deprecated. ' \
+        'The value is accessible directly from the representation of the ' \
+        'library using the #copy_resources_script_path method.'
       Config.instance.sandbox.root + "#{label}-resources.sh"
     end
   end
 
   module Hooks
-
     # The installer representation to pass to the hooks.
     #
     class InstallerRepresentation
-
       public
 
       # @!group Public Hooks API
@@ -79,15 +76,16 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
+
       public
 
       # @!group Compatibility
       #
       # The following aliases provides compatibility with CP < 0.17
 
-      alias :target_installers :libraries
-      alias :specs_by_target :specs_by_lib
-      alias :local_pods_by_target :pods_by_lib
+      alias_method :target_installers, :libraries
+      alias_method :specs_by_target, :specs_by_lib
+      alias_method :local_pods_by_target, :pods_by_lib
 
       #-----------------------------------------------------------------------#
 
@@ -126,9 +124,6 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end
-
-

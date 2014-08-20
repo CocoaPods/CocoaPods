@@ -1,14 +1,12 @@
 require 'xcodeproj'
 
 module Pod
-
   # The Pods project.
   #
   # Model class which provides helpers for working with the Pods project
   # through the installation process.
   #
   class Project < Xcodeproj::Project
-
     # @param  [Pathname, String] path @see path
     # @param  [Bool] skip_initialization
     #         Wether the project should be initialized from scratch.
@@ -34,7 +32,6 @@ module Pod
     #
     attr_reader :development_pods
 
-
     public
 
     # @!group Pod Groups
@@ -58,7 +55,7 @@ module Pod
     # @return [PBXGroup] The new group.
     #
     def add_pod_group(pod_name, path, development = false, absolute = false)
-      raise "[BUG]" if pod_group(pod_name)
+      raise '[BUG]' if pod_group(pod_name)
 
       parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
@@ -236,6 +233,5 @@ module Pod
     attr_reader :refs_by_absolute_path
 
     #-------------------------------------------------------------------------#
-
   end
 end

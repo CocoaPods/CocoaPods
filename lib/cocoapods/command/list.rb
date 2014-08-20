@@ -6,8 +6,8 @@ module Pod
 
       def self.options
         [[
-          "--update", "Run `pod repo update` before listing",
-          "--stats",  "Show additional stats (like GitHub watchers and forks)"
+          '--update', 'Run `pod repo update` before listing',
+          '--stats',  'Show additional stats (like GitHub watchers and forks)'
         ]].concat(super)
       end
 
@@ -31,7 +31,7 @@ module Pod
       def update_if_necessary!
         if @update && config.verbose?
           UI.section("\nUpdating Spec Repositories\n".yellow) do
-            Repo.new(ARGV.new(["update"])).run
+            Repo.new(ARGV.new(['update'])).run
           end
         end
       end
@@ -44,9 +44,9 @@ module Pod
         def run
           update_if_necessary!
 
-          days = [1,2,3,5,8]
+          days = [1, 2, 3, 5, 8]
           dates, groups = {}, {}
-          days.each {|d| dates[d] = Time.now - 60 * 60 * 24 * d}
+          days.each { |d| dates[d] = Time.now - 60 * 60 * 24 * d }
           sets = SourcesManager.all_sets
           statistics_provider = Config.instance.spec_statistics_provider
           creation_dates = statistics_provider.creation_dates(sets)
@@ -64,8 +64,8 @@ module Pod
           days.reverse.each do |d|
             sets = groups[d]
             next unless sets
-            UI.section("\nPods added in the last #{"day".pluralize(d)}".yellow) do
-              sorted = sets.sort_by {|s| creation_dates[s.name]}
+            UI.section("\nPods added in the last #{'day'.pluralize(d)}".yellow) do
+              sorted = sets.sort_by { |s| creation_dates[s.name] }
               mode = @stats ? :stats : :name
               sorted.each { |set| UI.pod(set, mode, statistics_provider) }
             end

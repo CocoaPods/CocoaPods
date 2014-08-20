@@ -2,7 +2,6 @@ require 'active_support/core_ext/string/strip'
 
 module Pod
   module Generator
-
     # Generates a header which allows to inspect at compile time the installed
     # pods and the installed specifications of a pod.
     #
@@ -24,7 +23,6 @@ module Pod
     #     #endif
     #
     class TargetEnvironmentHeader
-
       # @return [Hash{String => LocalPod}] the specifications installed for
       #         the target by build configuration name.
       #
@@ -104,7 +102,7 @@ module Pod
       #         The name of the spec.
       #
       def safe_spec_name(spec_name)
-        spec_name.gsub(/[^\w]/,'_')
+        spec_name.gsub(/[^\w]/, '_')
       end
 
       # @return [String]
@@ -136,13 +134,13 @@ module Pod
 
       def indent(string, indent_count)
         indent = ' ' * (indent_count * 2)
-        lines = string.lines.map { |line|
+        lines = string.lines.map do |line|
           if line == "\n"
             line
           else
             "#{indent}#{line}"
           end
-        }
+        end
         lines.join
       end
 
@@ -169,7 +167,6 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end

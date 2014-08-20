@@ -1,18 +1,16 @@
 module Pod
   module ExternalSources
-
     # Provides support for fetching a specification file from a path local to
     # the machine running the installation.
     #
     # Works with the {LocalPod::LocalSourcedPod} class.
     #
     class PathSource < AbstractExternalSource
-
       # @see  AbstractExternalSource#fetch
       #
       def fetch(sandbox)
         title = "Fetching podspec for `#{name}` #{description}"
-        UI.titled_section(title, { :verbose_prefix => "-> " }) do
+        UI.titled_section(title,  :verbose_prefix => '-> ') do
           podspec = podspec_path
           unless podspec.exist?
             raise Informative, "No podspec found for `#{name}` in " \
@@ -55,4 +53,3 @@ module Pod
     end
   end
 end
-

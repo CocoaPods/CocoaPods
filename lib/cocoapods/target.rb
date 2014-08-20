@@ -1,5 +1,4 @@
 module Pod
-
   # Model class which describes a Pods target.
   #
   # The Target class stores and provides the information necessary for
@@ -7,7 +6,6 @@ module Pod
   # This class is used to represent both the targets and their libraries.
   #
   class Target
-
     # @return [PBXNativeTarget] the target definition of the Podfile that
     #         generated this target.
     #
@@ -101,7 +99,7 @@ module Pod
     #         the information about the installed pods.
     #
     def target_environment_header_path
-      support_files_root + "#{target_definition.label.to_s}-environment.h"
+      support_files_root + "#{target_definition.label}-environment.h"
     end
 
     # @return [Pathname] the absolute path of the prefix header file.
@@ -123,6 +121,5 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

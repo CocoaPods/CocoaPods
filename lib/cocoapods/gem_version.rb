@@ -3,4 +3,3 @@ module Pod
   #
   VERSION = '0.33.1' unless defined? Pod::VERSION
 end
-

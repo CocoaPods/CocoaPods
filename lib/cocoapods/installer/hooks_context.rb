@@ -1,11 +1,9 @@
 module Pod
   class Installer
-
     # Context object designed to be used with the HooksManager which describes
     # the context of the installer.
     #
     class HooksContext
-
       # @return [String] The path to the sandbox root (`Pods` directory).
       #
       attr_accessor :sandbox_root
@@ -40,7 +38,6 @@ module Pod
       # Pure data class which describes and umbrella target.
       #
       class UmbrellaTargetDescription
-
         # @return [String] The path of the user project
         #         integrated by this target.
         #

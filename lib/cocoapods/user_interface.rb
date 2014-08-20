@@ -1,22 +1,19 @@
 require 'cocoapods/user_interface/error_report'
 
 module Pod
-
   # Provides support for UI output. It provides support for nested sections of
   # information and for a verbose mode.
   #
   module UserInterface
-
     require 'colored'
 
-    @title_colors      =  %w|yellow green|
+    @title_colors      =  %w(    yellow green    )
     @title_level       =  0
     @indentation_level =  2
     @treat_titles_as_messages = false
     @warnings = []
 
     class << self
-
       include Config::Mixin
 
       attr_accessor :indentation_level
@@ -27,7 +24,7 @@ module Pod
       #         terminal should be disabled.
       #
       attr_accessor :disable_wrap
-      alias_method  :disable_wrap?, :disable_wrap
+      alias_method :disable_wrap?, :disable_wrap
 
       # Prints a title taking an optional verbose prefix and
       # a relative indentation valid for the UI action in the passed
@@ -78,7 +75,7 @@ module Pod
       # A title opposed to a section is always visible
       #
       def title(title, verbose_prefix = '', relative_indentation = 2)
-        if(@treat_titles_as_messages)
+        if @treat_titles_as_messages
           message(title, verbose_prefix)
         else
           title = verbose_prefix + title if config.verbose?
@@ -122,7 +119,7 @@ module Pod
       #
       def info(message)
         indentation = config.verbose? ? self.indentation_level : 0
-        indented = wrap_string(message, " " * indentation)
+        indented = wrap_string(message, ' ' * indentation)
         puts(indented)
 
         self.indentation_level += 2
@@ -170,7 +167,7 @@ module Pod
             colored_title = title.green
           end
 
-          title(colored_title, "", 1) do
+          title(colored_title, '', 1) do
             puts_indented pod.summary
             puts_indented "pod '#{pod.name}', '~> #{pod.version}'"
             labeled('Homepage', pod.homepage)
@@ -210,7 +207,7 @@ module Pod
       # wrapping it to the terminal width if necessary.
       #
       def puts_indented(message = '')
-        indented = wrap_string(message, " " * self.indentation_level)
+        indented = wrap_string(message, ' ' * self.indentation_level)
         puts(indented)
       end
 
@@ -225,7 +222,7 @@ module Pod
           next if warning[:verbose_only] && !config.verbose?
           STDERR.puts("\n[!] #{warning[:message]}".yellow)
           warning[:actions].each do |action|
-            indented = wrap_string(action, "    - ")
+            indented = wrap_string(action, '    - ')
             puts(indented)
           end
         end
@@ -302,9 +299,7 @@ module Pod
   # Redirects cocoapods-core UI.
   #
   module CoreUI
-
     class << self
-
       def puts(message)
         UI.puts message
       end
@@ -316,14 +311,12 @@ module Pod
   end
 end
 
-  #---------------------------------------------------------------------------#
+#---------------------------------------------------------------------------#
 
 module Xcodeproj
-
   # Redirects xcodeproj UI.
   #
   module UserInterface
-
     def self.puts(message)
       ::Pod::UI.puts message
     end
@@ -331,7 +324,5 @@ module Xcodeproj
     def self.warn(message)
       ::Pod::UI.warn message
     end
-
   end
 end
-

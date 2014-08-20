@@ -1,11 +1,9 @@
 module Pod
   class Sandbox
-
     # Provides support for managing a header directory. It also keeps track of
     # the header search paths.
     #
     class HeadersStore
-
       # @return [Pathname] the absolute path of this header directory.
       #
       def root
@@ -91,7 +89,6 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end

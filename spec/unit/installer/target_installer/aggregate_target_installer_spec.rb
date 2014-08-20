@@ -2,7 +2,7 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 
 module Pod
   describe Installer::AggregateTargetInstaller do
-    describe "In General" do
+    describe 'In General' do
       before do
         @podfile = Podfile.new do
           platform :ios
@@ -39,19 +39,19 @@ module Pod
         @spec.prefix_header_contents = '#import "BlocksKit.h"'
       end
 
-      it "adds file references for the support files of the target" do
+      it 'adds file references for the support files of the target' do
         @installer.install!
         group = @project.support_files_group['Pods']
         group.children.map(&:display_name).sort.should == [
-          "Pods-acknowledgements.markdown",
-          "Pods-acknowledgements.plist",
-          "Pods-dummy.m",
-          "Pods-environment.h",
-          "Pods-resources.sh",
-          "Pods.appstore.xcconfig",
-          "Pods.debug.xcconfig",
-          "Pods.release.xcconfig",
-          "Pods.test.xcconfig"
+          'Pods-acknowledgements.markdown',
+          'Pods-acknowledgements.plist',
+          'Pods-dummy.m',
+          'Pods-environment.h',
+          'Pods-resources.sh',
+          'Pods.appstore.xcconfig',
+          'Pods.debug.xcconfig',
+          'Pods.release.xcconfig',
+          'Pods.test.xcconfig',
         ]
       end
 
@@ -63,50 +63,50 @@ module Pod
         @project.targets.first.name.should == @target_definition.label
       end
 
-      it "adds the user build configurations to the target" do
+      it 'adds the user build configurations to the target' do
         @installer.install!
         target = @project.targets.first
-        target.build_settings('Test')["VALIDATE_PRODUCT"].should == nil
-        target.build_settings('AppStore')["VALIDATE_PRODUCT"].should == "YES"
+        target.build_settings('Test')['VALIDATE_PRODUCT'].should.nil?
+        target.build_settings('AppStore')['VALIDATE_PRODUCT'].should == 'YES'
       end
 
-      it "sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets" do
+      it 'sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets' do
         @installer.install!
         target = @project.targets.first
-        target.build_settings('Release')["VALIDATE_PRODUCT"].should == "YES"
+        target.build_settings('Release')['VALIDATE_PRODUCT'].should == 'YES'
       end
 
-      it "sets the platform and the deployment target for iOS targets" do
+      it 'sets the platform and the deployment target for iOS targets' do
         @installer.install!
         target = @project.targets.first
         target.platform_name.should == :ios
-        target.deployment_target.should == "6.0"
-        target.build_settings('Debug')["IPHONEOS_DEPLOYMENT_TARGET"].should == "6.0"
-        target.build_settings('AppStore')["IPHONEOS_DEPLOYMENT_TARGET"].should == "6.0"
+        target.deployment_target.should == '6.0'
+        target.build_settings('Debug')['IPHONEOS_DEPLOYMENT_TARGET'].should == '6.0'
+        target.build_settings('AppStore')['IPHONEOS_DEPLOYMENT_TARGET'].should == '6.0'
       end
 
-      it "sets the platform and the deployment target for OS X targets" do
+      it 'sets the platform and the deployment target for OS X targets' do
         @target.stubs(:platform).returns(Platform.new(:osx, '10.8'))
         @installer.install!
         target = @project.targets.first
         target.platform_name.should == :osx
-        target.deployment_target.should == "10.8"
-        target.build_settings('Debug')["MACOSX_DEPLOYMENT_TARGET"].should == "10.8"
-        target.build_settings('AppStore')["MACOSX_DEPLOYMENT_TARGET"].should == "10.8"
+        target.deployment_target.should == '10.8'
+        target.build_settings('Debug')['MACOSX_DEPLOYMENT_TARGET'].should == '10.8'
+        target.build_settings('AppStore')['MACOSX_DEPLOYMENT_TARGET'].should == '10.8'
       end
 
       it "adds the user's build configurations to the target" do
         @installer.install!
-        @project.targets.first.build_configurations.map(&:name).sort.should == %w{ AppStore Debug Release Test }
+        @project.targets.first.build_configurations.map(&:name).sort.should == %w(        AppStore Debug Release Test        )
       end
 
-      it "it creates different hash instances for the build settings of various build configurations" do
+      it 'it creates different hash instances for the build settings of various build configurations' do
         @installer.install!
         build_settings = @project.targets.first.build_configurations.map(&:build_settings)
         build_settings.map(&:object_id).uniq.count.should == 4
       end
 
-      it "does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default" do
+      it 'does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default' do
         @installer.install!
         @installer.library.target.build_configurations.each do |config|
           config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should.be.nil
@@ -115,14 +115,14 @@ module Pod
 
       #--------------------------------------#
 
-      it "creates the xcconfig file" do
+      it 'creates the xcconfig file' do
         @installer.install!
-        file = config.sandbox.root + @target.xcconfig_path("Release")
+        file = config.sandbox.root + @target.xcconfig_path('Release')
         xcconfig = Xcodeproj::Config.new(file)
         xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
       end
 
-      it "creates a header for the target which contains the information about the installed Pods" do
+      it 'creates a header for the target which contains the information about the installed Pods' do
         @installer.install!
         file = config.sandbox.root + 'Pods-environment.h'
         contents = file.read
@@ -132,27 +132,27 @@ module Pod
         contents.should.include?('#define COCOAPODS_VERSION_PATCH_BananaLib 0')
       end
 
-      it "creates a bridge support file" do
+      it 'creates a bridge support file' do
         Podfile.any_instance.stubs(:generate_bridge_support? => true)
         Generator::BridgeSupport.any_instance.expects(:save_as).once
         @installer.install!
       end
 
-      it "creates a create copy resources script" do
+      it 'creates a create copy resources script' do
         @installer.install!
         script = config.sandbox.root + 'Pods-resources.sh'
         script.read.should.include?('logo-sidebar.png')
       end
 
-      xit "adds the resources bundles to the copy resources script" do
+      xit 'adds the resources bundles to the copy resources script' do
 
       end
 
-      xit "adds the bridge support file to the copy resources script, if one was created" do
+      xit 'adds the bridge support file to the copy resources script, if one was created' do
 
       end
 
-      it "creates the acknowledgements files " do
+      it 'creates the acknowledgements files ' do
         @installer.install!
         markdown = config.sandbox.root + 'Pods-acknowledgements.markdown'
         markdown.read.should.include?('Permission is hereby granted')
@@ -160,7 +160,7 @@ module Pod
         plist.read.should.include?('Permission is hereby granted')
       end
 
-      it "creates a dummy source to ensure the creation of a single base library" do
+      it 'creates a dummy source to ensure the creation of a single base library' do
         @installer.install!
         build_files = @installer.library.target.source_build_phase.files
         build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-dummy.m') }

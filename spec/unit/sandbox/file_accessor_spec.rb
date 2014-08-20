@@ -11,14 +11,14 @@ module Pod
       @accessor = FileAccessor.new(@path_list, @spec_consumer)
     end
 
-    describe "In general" do
+    describe 'In general' do
 
-      it "raises if the consumer is nil" do
+      it 'raises if the consumer is nil' do
         e = lambda { FileAccessor.new(@path_list, nil) }.should.raise Informative
         e.message.should.match /without a specification consumer/
       end
 
-      it "raises if the root does not exits" do
+      it 'raises if the root does not exits' do
         root = temporary_directory + 'missing_folder'
         path_list = Sandbox::PathList.new(root)
         file_accessor = FileAccessor.new(path_list, @spec_consumer)
@@ -26,15 +26,15 @@ module Pod
         e.message.should.match /non existent folder/
       end
 
-      it "returns the root" do
+      it 'returns the root' do
         @accessor.root.should == @path_list.root
       end
 
-      it "returns the specification" do
+      it 'returns the specification' do
         @accessor.spec.should == @spec
       end
 
-      it "returns the platform for which the spec is being consumed" do
+      it 'returns the platform for which the spec is being consumed' do
         @accessor.platform_name.should == :ios
       end
 
@@ -42,114 +42,114 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "Returning files" do
+    describe 'Returning files' do
 
-      it "returns the source files" do
+      it 'returns the source files' do
         @accessor.source_files.sort.should == [
-          @root + "Classes/Banana.h",
-          @root + "Classes/Banana.m",
-          @root + "Classes/BananaPrivate.h",
-          @root + "Classes/BananaTrace.d"
+          @root + 'Classes/Banana.h',
+          @root + 'Classes/Banana.m',
+          @root + 'Classes/BananaPrivate.h',
+          @root + 'Classes/BananaTrace.d',
         ]
       end
 
-      it "returns the header files" do
+      it 'returns the header files' do
         @accessor.headers.sort.should == [
-          @root + "Classes/Banana.h",
-          @root + "Classes/BananaPrivate.h"
+          @root + 'Classes/Banana.h',
+          @root + 'Classes/BananaPrivate.h',
         ]
       end
 
-      it "returns the public headers" do
+      it 'returns the public headers' do
         @accessor.public_headers.sort.should == [
-          @root + "Classes/Banana.h"
+          @root + 'Classes/Banana.h',
         ]
       end
 
-      it "returns all the headers if no public headers are defined" do
+      it 'returns all the headers if no public headers are defined' do
         @spec_consumer.stubs(:public_header_files).returns([])
         @accessor.public_headers.sort.should == [
-          @root + "Classes/Banana.h",
-          @root + "Classes/BananaPrivate.h"
+          @root + 'Classes/Banana.h',
+          @root + 'Classes/BananaPrivate.h',
         ]
       end
 
-      it "filters the private headers form the public headers" do
+      it 'filters the private headers form the public headers' do
         @spec_consumer.stubs(:public_header_files).returns([])
         @spec_consumer.stubs(:private_header_files).returns(['**/*Private*'])
         @accessor.public_headers.sort.should == [
-          @root + "Classes/Banana.h",
+          @root + 'Classes/Banana.h',
         ]
       end
 
-      it "returns the resources" do
+      it 'returns the resources' do
         @accessor.resources.sort.should == [
-          @root + "Resources/logo-sidebar.png",
-          @root + "Resources/sub_dir",
+          @root + 'Resources/logo-sidebar.png',
+          @root + 'Resources/sub_dir',
         ]
       end
 
-      it "includes folders in the resources" do
-        @accessor.resources.should.include?(@root + "Resources/sub_dir")
+      it 'includes folders in the resources' do
+        @accessor.resources.should.include?(@root + 'Resources/sub_dir')
       end
 
-      it "returns the preserve paths" do
+      it 'returns the preserve paths' do
         @accessor.preserve_paths.sort.should == [
-          @root + "preserve_me.txt"
+          @root + 'preserve_me.txt',
         ]
       end
 
-      it "includes folders in the preserve paths" do
-        @spec_consumer.stubs(:preserve_paths).returns(["Resources"])
-        @accessor.preserve_paths.should.include?(@root + "Resources")
+      it 'includes folders in the preserve paths' do
+        @spec_consumer.stubs(:preserve_paths).returns(['Resources'])
+        @accessor.preserve_paths.should.include?(@root + 'Resources')
       end
 
-      it "returns the paths of the framework bundles" do
-        @accessor.vendored_frameworks.should.include?(@root + "Bananalib.framework")
+      it 'returns the paths of the framework bundles' do
+        @accessor.vendored_frameworks.should.include?(@root + 'Bananalib.framework')
       end
 
-      it "returns the paths of the library files" do
-        @accessor.vendored_libraries.should.include?(@root + "libBananalib.a")
+      it 'returns the paths of the library files' do
+        @accessor.vendored_libraries.should.include?(@root + 'libBananalib.a')
       end
 
-      it "returns the resource bundles of the pod" do
-        @spec_consumer.stubs(:resource_bundles).returns({"BananaLib" => "Resources/*"})
+      it 'returns the resource bundles of the pod' do
+        @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')
         resource_paths = [
-          @root + "Resources/logo-sidebar.png",
-          @root + "Resources/sub_dir",
+          @root + 'Resources/logo-sidebar.png',
+          @root + 'Resources/sub_dir',
         ]
-        @accessor.resource_bundles.should == { "BananaLib" => resource_paths }
+        @accessor.resource_bundles.should == { 'BananaLib' => resource_paths }
       end
 
-      it "returns the paths of the files of the resource bundles" do
-        @spec_consumer.stubs(:resource_bundles).returns({"BananaLib" => "Resources/*"})
+      it 'returns the paths of the files of the resource bundles' do
+        @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')
         resource_paths = [
-          @root + "Resources/logo-sidebar.png",
-          @root + "Resources/sub_dir",
+          @root + 'Resources/logo-sidebar.png',
+          @root + 'Resources/sub_dir',
         ]
         @accessor.resource_bundle_files.should == resource_paths
       end
 
-      it "returns the prefix header of the specification" do
+      it 'returns the prefix header of the specification' do
         @accessor.prefix_header.should == @root + 'Classes/BananaLib.pch'
       end
 
-      it "returns the README file of the specification" do
+      it 'returns the README file of the specification' do
         @accessor.readme.should == @root + 'README'
       end
 
-      it "returns the license file of the specification" do
+      it 'returns the license file of the specification' do
         @accessor.license.should == @root + 'LICENSE'
       end
 
       #--------------------------------------#
 
-      it "respects the exclude files" do
-        @spec_consumer.stubs(:exclude_files).returns(["Classes/BananaPrivate.h"])
+      it 'respects the exclude files' do
+        @spec_consumer.stubs(:exclude_files).returns(['Classes/BananaPrivate.h'])
         @accessor.source_files.sort.should == [
-          @root + "Classes/Banana.h",
-          @root + "Classes/Banana.m",
-          @root + "Classes/BananaTrace.d"
+          @root + 'Classes/Banana.h',
+          @root + 'Classes/Banana.m',
+          @root + 'Classes/BananaTrace.d',
         ]
       end
 
@@ -157,15 +157,15 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe "Private helpers" do
+    describe 'Private helpers' do
 
-      describe "#paths_for_attribute" do
+      describe '#paths_for_attribute' do
 
-        it "takes into account dir patterns and excluded files" do
-          file_patterns = ["Classes/*.{h,m,d}", "Vendor"]
+        it 'takes into account dir patterns and excluded files' do
+          file_patterns = ['Classes/*.{h,m,d}', 'Vendor']
           options = {
-            :exclude_patterns => ["Classes/**/osx/**/*", "Resources/**/osx/**/*"],
-            :dir_pattern => "*.{h,hpp,hh,m,mm,c,cpp}",
+            :exclude_patterns => ['Classes/**/osx/**/*', 'Resources/**/osx/**/*'],
+            :dir_pattern => '*.{h,hpp,hh,m,mm,c,cpp}',
             :include_dirs => false,
           }
           @spec.exclude_files = options[:exclude_patterns]

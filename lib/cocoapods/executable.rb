@@ -1,5 +1,4 @@
 module Pod
-
   # Module which provides support for running executables.
   #
   # In a class it can be used as:
@@ -12,7 +11,6 @@ module Pod
   # output of the command.
   #
   module Executable
-
     # Creates the methods for the executable with the given name.
     #
     # @param  [Symbol] name
@@ -21,12 +19,11 @@ module Pod
     # @return [void]
     #
     def executable(name)
-
       define_method(name) do |command|
         Executable.execute_command(name, command, false)
       end
 
-      define_method(name.to_s + "!") do |command|
+      define_method(name.to_s + '!') do |command|
         Executable.execute_command(name, command, true)
       end
     end
@@ -51,7 +48,6 @@ module Pod
     # @todo   Find a way to display the live output of the commands.
     #
     def self.execute_command(executable, command, raise_on_failure)
-
       bin = `which #{executable}`.strip
       raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
 
@@ -66,7 +62,7 @@ module Pod
         stdout, stderr = Indenter.new, Indenter.new
       end
 
-      options = {:stdout => stdout, :stderr => stderr, :status => true}
+      options = { :stdout => stdout, :stderr => stderr, :status => true }
       status  = Open4.spawn(full_command, options)
       output  = stdout.join("\n") + stderr.join("\n")
       unless status.success?
@@ -85,7 +81,6 @@ module Pod
     # the UI indentation lever.
     #
     class Indenter < ::Array
-
       # @return [Fixnum] The indentation level of the UI.
       #
       attr_accessor :indent

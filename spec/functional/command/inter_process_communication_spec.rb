@@ -13,7 +13,7 @@ module Pod
 
     describe Command::IPC::Spec do
 
-      it "converts a podspec to JSON and prints it to STDOUT" do
+      it 'converts a podspec to JSON and prints it to STDOUT' do
         out = run_command('ipc', 'spec', fixture('banana-lib/BananaLib.podspec'))
         out.should.match /"name":"BananaLib"/
         out.should.match /"version":"1.0"/
@@ -26,7 +26,7 @@ module Pod
 
     describe Command::IPC::Podfile do
 
-      it "converts a Podfile to yaml and prints it to STDOUT" do
+      it 'converts a Podfile to yaml and prints it to STDOUT' do
         out = run_command('ipc', 'podfile', fixture('Podfile'))
         out.should.include('---')
         out.should.match /target_definitions:/
@@ -40,7 +40,7 @@ module Pod
 
     describe Command::IPC::List do
 
-      it "prints a list of podspecs in the yaml format and prints it to STDOUT" do
+      it 'prints a list of podspecs in the yaml format and prints it to STDOUT' do
         spec = fixture_spec('banana-lib/BananaLib.podspec')
         set = Specification.new('BananaLib')
         set.stubs(:specification).returns(spec)
@@ -58,7 +58,7 @@ module Pod
 
     describe Command::IPC::UpdateSearchIndex do
 
-      it "updates the search index and prints its path to STDOUT" do
+      it 'updates the search index and prints its path to STDOUT' do
         SourcesManager.expects(:updated_search_index)
         out = run_command('ipc', 'update-search-index')
         out.should.include(SourcesManager.search_index_path.to_s)
@@ -70,7 +70,7 @@ module Pod
 
     describe Command::IPC::Repl do
 
-      it "prints the version of CocoaPods as its first message" do
+      it 'prints the version of CocoaPods as its first message' do
         command = Command::IPC::Repl.new(CLAide::ARGV.new([]))
         command.stubs(:listen)
         command.run
@@ -79,7 +79,7 @@ module Pod
         out.should.match /version: '#{Pod::VERSION}'/
       end
 
-      it "converts forwards the commands to the other ipc subcommands prints the result to STDOUT" do
+      it 'converts forwards the commands to the other ipc subcommands prints the result to STDOUT' do
         command = Command::IPC::Repl.new(CLAide::ARGV.new([]))
         command.execute_repl_command("podfile #{fixture('Podfile')}")
 

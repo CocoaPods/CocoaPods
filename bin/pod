@@ -2,7 +2,7 @@
 
 if RUBY_VERSION > '1.8.7' && Encoding.default_external != Encoding::UTF_8
   puts "\e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding."
-  if ENV["TRAVIS"]
+  if ENV['TRAVIS']
     puts <<-DOC
 Consider adding the following settings to .travis.yml
 
@@ -19,12 +19,12 @@ end
 
 if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
   ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
-  require "rubygems"
-  require "bundler/setup"
+  require 'rubygems'
+  require 'bundler/setup'
   $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 elsif ENV['COCOAPODS_NO_BUNDLER']
-  require "rubygems"
-  gem "cocoapods"
+  require 'rubygems'
+  gem 'cocoapods'
 end
 
 STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'

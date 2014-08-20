@@ -3,19 +3,18 @@ require File.expand_path('../../../spec_helper', __FILE__)
 require 'xcodeproj'
 
 module Pod
-
   describe Command::Init do
 
-    it "complains if project does not exist" do
+    it 'complains if project does not exist' do
       lambda { run_command('init') }.should.raise Informative
       lambda { run_command('init', 'foo.xcodeproj') }.should.raise CLAide::Help
     end
 
-    it "complains if wrong parameters" do
+    it 'complains if wrong parameters' do
       lambda { run_command('too', 'many') }.should.raise CLAide::Help
     end
 
-    it "complains if more than one project exists and none is specified" do
+    it 'complains if more than one project exists and none is specified' do
       Dir.chdir(temporary_directory) do
         Xcodeproj::Project.new(temporary_directory + 'test2.xcodeproj').save
         Xcodeproj::Project.new(temporary_directory + 'test1.xcodeproj').save
@@ -23,7 +22,7 @@ module Pod
       end
     end
 
-    it "complains if a Podfile already exists" do
+    it 'complains if a Podfile already exists' do
       Dir.chdir(temporary_directory) do
         (Pathname.pwd + 'Podfile').open('w') { |f| f << "pod 'AFNetworking'" }
         Xcodeproj::Project.new(temporary_directory + 'test1.xcodeproj').save
@@ -31,7 +30,7 @@ module Pod
       end
     end
 
-    it "creates a Podfile for a project in current directory" do
+    it 'creates a Podfile for a project in current directory' do
       Dir.chdir(temporary_directory) do
         Xcodeproj::Project.new(temporary_directory + 'test1.xcodeproj').save
         run_command('init')
@@ -39,7 +38,7 @@ module Pod
       end
     end
 
-    it "creates a Podfile for a specified project" do
+    it 'creates a Podfile for a specified project' do
       Dir.chdir(temporary_directory) do
         Xcodeproj::Project.new(temporary_directory + 'test1.xcodeproj').save
         Xcodeproj::Project.new(temporary_directory + 'test2.xcodeproj').save
@@ -49,23 +48,23 @@ module Pod
       end
     end
 
-    it "creates a Podfile with targets from the project" do
+    it 'creates a Podfile with targets from the project' do
       Dir.chdir(temporary_directory) do
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
-        target1 = project.new_target(:application, "AppA", :ios)
-        target2 = project.new_target(:application, "AppB", :ios)
+        target1 = project.new_target(:application, 'AppA', :ios)
+        target2 = project.new_target(:application, 'AppB', :ios)
         project.save
 
         run_command('init')
 
         config.podfile.nil?.should == false
         config.podfile.target_definitions.length.should == project.targets.length + 1
-        config.podfile.target_definitions["AppA"].nil?.should == false
-        config.podfile.target_definitions["AppB"].nil?.should == false
+        config.podfile.target_definitions['AppA'].nil?.should == false
+        config.podfile.target_definitions['AppB'].nil?.should == false
       end
     end
 
-    it "includes default pods in a Podfile" do
+    it 'includes default pods in a Podfile' do
       Dir.chdir(temporary_directory) do
         tmp_templates_dir = Pathname.pwd + 'templates_dir'
         tmp_templates_dir.mkpath
@@ -76,15 +75,15 @@ module Pod
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
         project.new_target(:application, 'AppA', :ios)
         project.save
-        
+
         run_command('init')
 
-        dependencies = config.podfile.target_definitions["AppA"].dependencies
-        dependencies.map(&:name).should == ["AFNetworking"]
+        dependencies = config.podfile.target_definitions['AppA'].dependencies
+        dependencies.map(&:name).should == ['AFNetworking']
       end
     end
 
-    it "includes default test pods in test targets in a Podfile" do
+    it 'includes default test pods in test targets in a Podfile' do
       Dir.chdir(temporary_directory) do
         tmp_templates_dir = Pathname.pwd + 'templates_dir'
         tmp_templates_dir.mkpath
@@ -93,17 +92,17 @@ module Pod
         open(config.default_test_podfile_path, 'w') { |f| f << "pod 'Kiwi'" }
 
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
-        project.new_target(:application, "AppTests", :ios)
+        project.new_target(:application, 'AppTests', :ios)
         project.save
 
         run_command('init')
 
-        dependencies = config.podfile.target_definitions["AppTests"].dependencies
-        dependencies.map(&:name).should == ["Kiwi"]
+        dependencies = config.podfile.target_definitions['AppTests'].dependencies
+        dependencies.map(&:name).should == ['Kiwi']
       end
     end
 
-    it "does not include default test pods if there are no test targets" do
+    it 'does not include default test pods if there are no test targets' do
       Dir.chdir(temporary_directory) do
         tmp_templates_dir = Pathname.pwd + 'templates_dir'
         tmp_templates_dir.mkpath
@@ -112,7 +111,7 @@ module Pod
         open(config.default_test_podfile_path, 'w') { |f| f << "pod 'Kiwi'" }
 
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
-        project.new_target(:application, "App", :ios)
+        project.new_target(:application, 'App', :ios)
         project.save
 
         run_command('init')
@@ -122,7 +121,7 @@ module Pod
       end
     end
 
-    it "saves xcode project file in Podfile if one was supplied" do
+    it 'saves xcode project file in Podfile if one was supplied' do
       Dir.chdir(temporary_directory) do
         Xcodeproj::Project.new(temporary_directory + 'test1.xcodeproj').save
         Xcodeproj::Project.new(temporary_directory + 'Project.xcodeproj').save
@@ -141,7 +140,7 @@ module Pod
         run_command('init')
 
         target_definition = config.podfile.target_definitions.values.first
-        target_definition.user_project_path.should == nil
+        target_definition.user_project_path.should.nil?
       end
     end
   end

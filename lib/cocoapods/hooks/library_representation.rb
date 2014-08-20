@@ -1,7 +1,6 @@
 module Pod
   module Hooks
     class LibraryRepresentation
-
       # Stores the information of the target installer
 
       #-----------------------------------------------------------------------#
@@ -27,11 +26,11 @@ module Pod
       # @return [Pathname] The path of the prefix_header
       #
       def prefix_header_path
-        UI.warn "LibraryRepresentation#prefix_header_path is deprecated. " \
-          "Use the specification `prefix_header_contents` attribute."
+        UI.warn 'LibraryRepresentation#prefix_header_path is deprecated. ' \
+          'Use the specification `prefix_header_contents` attribute.'
         library.prefix_header_path
       end
-      alias :prefix_header_filename :prefix_header_path
+      alias_method :prefix_header_filename, :prefix_header_path
 
       # @return [Pathname] The path of the script used to copy the resources.
       #
@@ -83,13 +82,10 @@ module Pod
       def initialize(sandbox, library)
         @sandbox = sandbox
         @library = library
-        raise "[BUG]" unless library.is_a?(AggregateTarget)
+        raise '[BUG]' unless library.is_a?(AggregateTarget)
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end
-
-

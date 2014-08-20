@@ -29,7 +29,7 @@ module Pod
       repo_make('test_repo')
       Dir.chdir(temporary_directory) do
         spec = "Spec.new do |s|; s.name = 'Broken'; s.version = '1.0' end"
-        File.open('Broken.podspec',  'w') {|f| f.write(spec) }
+        File.open('Broken.podspec',  'w') { |f| f.write(spec) }
         cmd = command('repo', 'push', 'test_repo')
         Validator.any_instance.stubs(:validated?).returns(false)
 
@@ -60,12 +60,12 @@ module Pod
 
       spec_clean = (fixture('spec-repos') + 'test_repo/BananaLib/1.0/BananaLib.podspec').read
 
-      File.open(temporary_directory + 'JSONKit.podspec',  'w') {|f| f.write(spec_fix) }
-      File.open(temporary_directory + 'PushTest.podspec', 'w') {|f| f.write(spec_add) }
-      File.open(temporary_directory + 'BananaLib.podspec', 'w') {|f| f.write(spec_clean) }
+      File.open(temporary_directory + 'JSONKit.podspec',  'w') { |f| f.write(spec_fix) }
+      File.open(temporary_directory + 'PushTest.podspec', 'w') { |f| f.write(spec_add) }
+      File.open(temporary_directory + 'BananaLib.podspec', 'w') { |f| f.write(spec_clean) }
     end
 
-    it "refuses to push if the repo is not clean" do
+    it 'refuses to push if the repo is not clean' do
       Dir.chdir(test_repo_path) do
         `git remote set-url origin https://github.com/CocoaPods/Specs.git`
       end
@@ -74,7 +74,7 @@ module Pod
       e.message.should.match(/use the `pod trunk push` command/)
     end
 
-    it "refuses to push if the repo is not clean" do
+    it 'refuses to push if the repo is not clean' do
       Dir.chdir(test_repo_path) do
         `touch DIRTY_FILE`
       end
@@ -85,7 +85,7 @@ module Pod
       (@upstream + 'PushTest/1.4/PushTest.podspec').should.not.exist?
     end
 
-    it "successfully pushes a spec" do
+    it 'successfully pushes a spec' do
       cmd = command('repo', 'push', 'master')
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
       cmd.expects(:validate_podspec_files).returns(true)

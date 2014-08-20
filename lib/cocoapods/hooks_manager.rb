@@ -1,5 +1,4 @@
 module Pod
-
   # Provides support for the hook system of CocoaPods. The system is designed
   # especially for plugins. Interested clients can register to notifications by
   # name.
@@ -16,7 +15,6 @@ module Pod
   #
   module HooksManager
     class << self
-
       # @return [Hash{Symbol => Proc}] The list of the blocks that are
       #         registered for each notification name.
       #
@@ -34,8 +32,8 @@ module Pod
         raise ArgumentError, 'Missing name' unless name
         raise ArgumentError, 'Missing block' unless block
 
-        @registrations ||= Hash.new
-        @registrations[name] ||= Array.new
+        @registrations ||= {}
+        @registrations[name] ||= []
         @registrations[name] << block
       end
 

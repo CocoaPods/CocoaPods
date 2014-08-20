@@ -77,7 +77,7 @@ EOS
 EOS
         @report.stubs(:host_information).returns(':host_information')
         @report.stubs(:xcode_information).returns(':xcode_information')
-        @report.stubs(:repo_information).returns(['repo_1', 'repo_2'])
+        @report.stubs(:repo_information).returns(%w(repo_1 repo_2))
         report = remove_color(@report.report(@exception))
         report.should == expected
       end

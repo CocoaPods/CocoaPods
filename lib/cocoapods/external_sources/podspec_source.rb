@@ -1,16 +1,14 @@
 module Pod
   module ExternalSources
-
     # Provides support for fetching a specification file from an URL. Can be
     # http, file, etc.
     #
     class PodspecSource < AbstractExternalSource
-
       # @see AbstractExternalSource#fetch
       #
       def fetch(sandbox)
         title = "Fetching podspec for `#{name}` #{description}"
-        UI.titled_section(title, { :verbose_prefix => "-> " }) do
+        UI.titled_section(title,  :verbose_prefix => '-> ') do
           is_json = podspec_uri.split('.').last == 'json'
           require 'open-uri'
           open(podspec_uri) { |io| store_podspec(sandbox, io.read, is_json) }

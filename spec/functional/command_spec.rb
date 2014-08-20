@@ -4,12 +4,12 @@ module Pod
   describe Command do
     extend SpecHelper::Command
 
-    it "displays the current version number with the --version flag" do
+    it 'displays the current version number with the --version flag' do
       Pod::Command.version.should == VERSION
     end
 
-    it "reports the location of the AFNetworking spec" do
-      lambda { Pod::Command.run(['spec', 'which', 'AFNetworking']) }.should.not.raise
+    it 'reports the location of the AFNetworking spec' do
+      lambda { Pod::Command.run(%w(spec which AFNetworking)) }.should.not.raise
       UI.output.should.include 'spec/fixtures/spec-repos/master/Specs/AFNetworking'
     end
 

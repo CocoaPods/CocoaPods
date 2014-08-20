@@ -3,7 +3,6 @@ require 'open-uri'
 # Allow OpenURI to follow http to https redirects.
 #
 module OpenURI
-
   # Whether {#open} should follow a redirect.
   #
   # Inspiration from: https://gist.github.com/1271420
@@ -17,7 +16,7 @@ module OpenURI
   # (RFC 2109 4.3.1, RFC 2965 3.3, RFC 2616 15.1.3)
   # However this is ad hoc.  It should be extensible/configurable.
   #
-  def OpenURI.redirectable?(uri1, uri2)
+  def self.redirectable?(uri1, uri2)
     uri1.scheme.downcase == uri2.scheme.downcase ||
     (/\A(?:http|ftp)\z/i =~ uri1.scheme && /\A(?:https?|ftp)\z/i =~ uri2.scheme)
   end

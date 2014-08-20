@@ -1,5 +1,4 @@
 module Pod
-
   # The resolver is responsible of generating a list of specifications grouped
   # by target for a given Podfile.
   #
@@ -15,7 +14,6 @@ module Pod
   #
   #
   class Resolver
-
     # @return [Sandbox] the Sandbox used by the resolver to find external
     #         dependencies.
     #

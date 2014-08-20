@@ -1,9 +1,8 @@
 module Pod
   module Generator
-
     class Plist < Acknowledgements
       def self.path_from_basepath(path)
-        Pathname.new(path.dirname + "#{path.basename.to_s}.plist")
+        Pathname.new(path.dirname + "#{path.basename}.plist")
       end
 
       def save_as(path)
@@ -15,12 +14,12 @@ module Pod
         {
           :Title => plist_title,
           :StringsTable => plist_title,
-          :PreferenceSpecifiers => licenses
+          :PreferenceSpecifiers => licenses,
         }
       end
 
       def plist_title
-        "Acknowledgements"
+        'Acknowledgements'
       end
 
       def licenses
@@ -36,26 +35,26 @@ module Pod
       def hash_for_spec(spec)
         if (license = license_text(spec))
           {
-            :Type => "PSGroupSpecifier",
+            :Type => 'PSGroupSpecifier',
             :Title => spec.name,
-            :FooterText => license
+            :FooterText => license,
           }
         end
       end
 
       def header_hash
         {
-          :Type => "PSGroupSpecifier",
+          :Type => 'PSGroupSpecifier',
           :Title => header_title,
-          :FooterText => header_text
+          :FooterText => header_text,
         }
       end
 
       def footnote_hash
         {
-          :Type => "PSGroupSpecifier",
+          :Type => 'PSGroupSpecifier',
           :Title => footnote_title,
-          :FooterText => footnote_text
+          :FooterText => footnote_text,
         }
       end
     end

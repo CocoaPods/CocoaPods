@@ -1,5 +1,5 @@
 # # require 'octokit'
-# 
+#
 # module SpecHelper
 #   module Github
 #     def expect_github_repo_request(data = nil)
@@ -38,7 +38,7 @@
 #       }
 #       Octokit.expects(:repo).with('lukeredpath/libPusher').returns(data)
 #     end
-# 
+#
 #     def expect_github_tags_request(data = nil)
 #       data ||= [
 #         {
@@ -89,7 +89,7 @@
 #       ]
 #       Octokit.expects(:tags).with(:username => 'lukeredpath', :repo => 'libPusher').returns(data)
 #     end
-# 
+#
 #     def expect_github_branches_request(data = nil)
 #       data ||= [
 #         {
@@ -116,7 +116,7 @@
 #       ]
 #       Octokit.expects(:branches).with(:username => 'lukeredpath', :repo => 'libPusher').returns(data)
 #     end
-# 
+#
 #     def expect_github_user_request(data = nil)
 #       data ||= {
 #         "avatar_url" => "https://secure.gravatar.com/avatar/bdd4d23d1a822b2d68b53e7c51d69a39?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png",
@@ -143,4 +143,4 @@
 #     end
 #   end
 # end
-# 
+#

@@ -3,7 +3,6 @@ module Pod
     class Push < Command
       self.summary = 'Temporary alias for the `pod repo push` command'
 
-
       def initialize(argv)
         @push_command = Repo::Push.new(argv)
         super

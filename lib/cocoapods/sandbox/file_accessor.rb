@@ -1,6 +1,5 @@
 module Pod
   class Sandbox
-
     # Resolves the file patterns of a specification against its root directory,
     # taking into account any exclude pattern and the default extensions to use
     # for directories.
@@ -8,7 +7,6 @@ module Pod
     # @note The FileAccessor always returns absolute paths.
     #
     class FileAccessor
-
       HEADER_EXTENSIONS = Xcodeproj::Constants::HEADER_FILES_EXTENSIONS
 
       # @return [Sandbox::PathList] the directory where the source of the Pod
@@ -33,7 +31,7 @@ module Pod
         @spec_consumer = spec_consumer
 
         unless @spec_consumer
-          raise Informative, "Attempt to initialize File Accessor without a specification consumer."
+          raise Informative, 'Attempt to initialize File Accessor without a specification consumer.'
         end
       end
 
@@ -151,7 +149,7 @@ module Pod
       # @return [Pathname] The path of the auto-detected README file.
       #
       def readme
-        path_list.glob(%w[ readme{*,.*} ]).first
+        path_list.glob(%w(        readme{*,.*}        )).first
       end
 
       # @return [Pathname] The path of the license file as indicated in the
@@ -161,7 +159,7 @@ module Pod
         if spec_consumer.spec.root.license[:file]
           path_list.root + spec_consumer.spec.root.license[:file]
         else
-          path_list.glob(%w[ licen{c,s}e{*,.*} ]).first
+          path_list.glob(%w(          licen{c,s}e{*,.*}          )).first
         end
       end
 
@@ -229,9 +227,6 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end
-
-

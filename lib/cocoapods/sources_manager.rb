@@ -1,11 +1,8 @@
 module Pod
-
   # Manages all the sources known to the running CocoaPods Instance.
   #
   class SourcesManager
-
     class << self
-
       include Config::Mixin
 
       # @return [Source::Aggregate] the aggregate of all the sources known to
@@ -78,7 +75,7 @@ module Pod
           sets = aggregate.search_by_name(query, false)
         end
         if sets.empty?
-          extra = ", author, summary, or description" if full_text_search
+          extra = ', author, summary, or description' if full_text_search
           raise Informative, "Unable to find a pod with name#{extra}" \
             "matching `#{query}`"
         end
@@ -155,13 +152,13 @@ module Pod
           UI.section "Updating spec repo `#{source.name}`" do
             Dir.chdir(source.data_provider.repo) do
               begin
-                output = git!("pull --ff-only")
+                output = git!('pull --ff-only')
                 UI.puts output if show_output && !config.verbose?
               rescue Informative => e
-                UI.warn "CocoaPods was not able to update the " \
+                UI.warn 'CocoaPods was not able to update the ' \
                   "`#{source.name}` repo. If this is an unexpected issue " \
-                  "and persists you can inspect it running " \
-                  "`pod repo update --verbose`"
+                  'and persists you can inspect it running ' \
+                  '`pod repo update --verbose`'
               end
             end
             check_version_information(source.data_provider.repo)
@@ -196,10 +193,10 @@ module Pod
         versions = version_information(dir)
         unless repo_compatible?(dir)
           min, max = versions['min'], versions['max']
-          version_msg = ( min == max ) ? min : "#{min} - #{max}"
+          version_msg = ( min == max) ? min : "#{min} - #{max}"
           raise Informative, "The `#{dir.basename}` repo requires " \
           "CocoaPods #{version_msg} (currently using #{Pod::VERSION})\n".red +
-          "Update CocoaPods, or checkout the appropriate tag in the repo."
+          'Update CocoaPods, or checkout the appropriate tag in the repo.'
         end
 
         needs_sudo = path_writable?(__FILE__)
@@ -330,4 +327,3 @@ module Pod
     end
   end
 end
-

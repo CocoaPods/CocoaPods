@@ -13,8 +13,8 @@ def create_analyzer
   end
 
   hash = {}
-  hash['PODS'] = ["JSONKit (1.4)", "NUI (0.2.0)", "SVPullToRefresh (0.4)"]
-  hash['DEPENDENCIES'] = ["JSONKit", "NUI", "SVPullToRefresh"]
+  hash['PODS'] = ['JSONKit (1.4)', 'NUI (0.2.0)', 'SVPullToRefresh (0.4)']
+  hash['DEPENDENCIES'] = %w(JSONKit NUI SVPullToRefresh)
   hash['SPEC CHECKSUMS'] = {}
   hash['COCOAPODS'] = Pod::VERSION
   lockfile = Pod::Lockfile.new(hash)
@@ -32,41 +32,41 @@ module Pod
       @analyzer = create_analyzer
     end
 
-    describe "Analysis" do
+    describe 'Analysis' do
 
-      it "returns whether an installation should be performed" do
+      it 'returns whether an installation should be performed' do
         @analyzer.needs_install?.should.be.true
       end
 
-      it "returns whether the Podfile has changes" do
+      it 'returns whether the Podfile has changes' do
         analysis_result = @analyzer.analyze(false)
         @analyzer.podfile_needs_install?(analysis_result).should.be.true
       end
 
-      it "returns whether the sandbox is not in sync with the lockfile" do
+      it 'returns whether the sandbox is not in sync with the lockfile' do
         analysis_result = @analyzer.analyze(false)
         @analyzer.sandbox_needs_install?(analysis_result).should.be.true
       end
 
       #--------------------------------------#
 
-      it "computes the state of the Podfile respect to the Lockfile" do
+      it 'computes the state of the Podfile respect to the Lockfile' do
         state = @analyzer.analyze.podfile_state
-        state.added.should     == ["AFNetworking", "libextobjc"]
-        state.changed.should   == ["JSONKit"]
-        state.unchanged.should == ["SVPullToRefresh"]
-        state.deleted.should   == ["NUI"]
+        state.added.should     == %w(AFNetworking libextobjc)
+        state.changed.should   == ['JSONKit']
+        state.unchanged.should == ['SVPullToRefresh']
+        state.deleted.should   == ['NUI']
       end
 
       #--------------------------------------#
 
-      it "updates the repositories by default" do
+      it 'updates the repositories by default' do
         config.skip_repo_update = false
         SourcesManager.expects(:update).once
         @analyzer.analyze
       end
 
-      it "does not updates the repositories if config indicates to skip them" do
+      it 'does not updates the repositories if config indicates to skip them' do
         config.skip_repo_update = true
         SourcesManager.expects(:update).never
         @analyzer.analyze
@@ -74,31 +74,31 @@ module Pod
 
       #--------------------------------------#
 
-      it "generates the libraries which represent the target definitions" do
+      it 'generates the libraries which represent the target definitions' do
         target = @analyzer.analyze.targets.first
         target.pod_targets.map(&:name).sort.should == [
           'Pods-JSONKit',
           'Pods-AFNetworking',
           'Pods-SVPullToRefresh',
-          'Pods-libextobjc'
+          'Pods-libextobjc',
         ].sort
         target.support_files_root.should == config.sandbox.root
 
         target.user_project_path.to_s.should.include 'SampleProject/SampleProject'
         target.client_root.to_s.should.include 'SampleProject'
-        target.user_target_uuids.should == ["A346496C14F9BE9A0080D870"]
+        target.user_target_uuids.should == ['A346496C14F9BE9A0080D870']
         user_proj = Xcodeproj::Project.open(target.user_project_path)
         user_proj.objects_by_uuid[target.user_target_uuids.first].name.should == 'SampleProject'
         target.user_build_configurations.should == {
-          "Debug"     => :debug,
-          "Release"   => :release,
-          "Test"      => :release,
-          "App Store" => :release
+          'Debug'     => :debug,
+          'Release'   => :release,
+          'Test'      => :release,
+          'App Store' => :release,
         }
         target.platform.to_s.should == 'iOS 6.0'
       end
 
-      it "generates the integration library appropriately if the installation will not integrate" do
+      it 'generates the integration library appropriately if the installation will not integrate' do
         config.integrate_targets = false
         target = @analyzer.analyze.targets.first
 
@@ -108,26 +108,26 @@ module Pod
         target.platform.to_s.should == 'iOS 6.0'
       end
 
-      it "returns all the configurations the user has in any of its projects and/or targets" do
+      it 'returns all the configurations the user has in any of its projects and/or targets' do
         target_definition = @analyzer.podfile.target_definition_list.first
-        target_definition.stubs(:build_configurations).returns("AdHoc" => :test)
+        target_definition.stubs(:build_configurations).returns('AdHoc' => :test)
         @analyzer.analyze.all_user_build_configurations.should == {
-          "Debug"     => :debug,
-          "Release"   => :release,
-          "AdHoc"     => :test,
-          "Test"      => :release,
-          "App Store" => :release
+          'Debug'     => :debug,
+          'Release'   => :release,
+          'AdHoc'     => :test,
+          'Test'      => :release,
+          'App Store' => :release,
         }
       end
 
       #--------------------------------------#
 
-      it "locks the version of the dependencies which did not change in the Podfile" do
+      it 'locks the version of the dependencies which did not change in the Podfile' do
         @analyzer.analyze
-        @analyzer.send(:locked_dependencies).map(&:to_s).should == ["SVPullToRefresh (= 0.4)"]
+        @analyzer.send(:locked_dependencies).map(&:to_s).should == ['SVPullToRefresh (= 0.4)']
       end
 
-      it "does not lock the dependencies in update mode" do
+      it 'does not lock the dependencies in update mode' do
         @analyzer.update = true
         @analyzer.analyze
         @analyzer.send(:locked_dependencies).map(&:to_s).should == []
@@ -135,29 +135,29 @@ module Pod
 
       #--------------------------------------#
 
-      it "fetches the dependencies with external sources" do
+      it 'fetches the dependencies with external sources' do
         podfile_state = Installer::Analyzer::SpecsState.new
-        podfile_state.added << "BananaLib"
+        podfile_state.added << 'BananaLib'
         @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
-        @podfile.stubs(:dependencies).returns([Dependency.new('BananaLib', :git => "example.com")])
+        @podfile.stubs(:dependencies).returns([Dependency.new('BananaLib', :git => 'example.com')])
         ExternalSources::DownloaderSource.any_instance.expects(:fetch)
         @analyzer.send(:fetch_external_sources)
       end
 
-      xit "it fetches the specification from either the sandbox or from the remote be default" do
+      xit 'it fetches the specification from either the sandbox or from the remote be default' do
         dependency = Dependency.new('Name', :git => 'www.example.com')
         ExternalSources::DownloaderSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
         @resolver.send(:set_from_external_source, dependency)
       end
 
-      xit "it fetches the specification from the remote if in update mode" do
+      xit 'it fetches the specification from the remote if in update mode' do
         dependency = Dependency.new('Name', :git => 'www.example.com')
         ExternalSources::DownloaderSource.any_instance.expects(:specification).returns(Specification.new).once
         @resolver.update_external_specs = false
         @resolver.send(:set_from_external_source, dependency)
       end
 
-      xit "it fetches the specification only from the sandbox if pre-downloads are disabled" do
+      xit 'it fetches the specification only from the sandbox if pre-downloads are disabled' do
         dependency = Dependency.new('Name', :git => 'www.example.com')
         Sandbox.any_instance.expects(:specification).returns(Specification.new).once
         @resolver.allow_pre_downloads = true
@@ -166,49 +166,49 @@ module Pod
 
       #--------------------------------------#
 
-      it "resolves the dependencies" do
+      it 'resolves the dependencies' do
         @analyzer.analyze.specifications.map(&:to_s).should == [
-          "AFNetworking (1.0.1)",
-          "JSONKit (1.5pre)",
-          "SVPullToRefresh (0.4)",
-          "libextobjc/EXTKeyPathCoding (0.2.3)"
+          'AFNetworking (1.0.1)',
+          'JSONKit (1.5pre)',
+          'SVPullToRefresh (0.4)',
+          'libextobjc/EXTKeyPathCoding (0.2.3)',
         ]
       end
 
-      xit "removes the specifications of the changed pods to prevent confusion in the resolution process" do
+      xit 'removes the specifications of the changed pods to prevent confusion in the resolution process' do
         @analyzer.allow_pre_downloads = true
         podspec = @analyzer.sandbox.root + 'Local Podspecs/JSONKit.podspec'
         podspec.dirname.mkpath
-        File.open(podspec, "w") { |f| f.puts('test') }
+        File.open(podspec, 'w') { |f| f.puts('test') }
         @analyzer.analyze
         podspec.should.not.exist?
       end
 
-      it "adds the specifications to the correspondent libraries" do
+      it 'adds the specifications to the correspondent libraries' do
         @analyzer.analyze.targets.first.pod_targets.map(&:specs).flatten.map(&:to_s).should == [
-          "AFNetworking (1.0.1)",
-          "JSONKit (1.5pre)",
-          "SVPullToRefresh (0.4)",
-          "libextobjc/EXTKeyPathCoding (0.2.3)"
+          'AFNetworking (1.0.1)',
+          'JSONKit (1.5pre)',
+          'SVPullToRefresh (0.4)',
+          'libextobjc/EXTKeyPathCoding (0.2.3)',
         ]
       end
 
       #--------------------------------------#
 
-      it "computes the state of the Sandbox respect to the resolved dependencies" do
+      it 'computes the state of the Sandbox respect to the resolved dependencies' do
         @analyzer.stubs(:lockfile).returns(nil)
         state = @analyzer.analyze.sandbox_state
-        state.added.sort.should == ["AFNetworking", "JSONKit", "SVPullToRefresh", "libextobjc"]
+        state.added.sort.should == %w(AFNetworking JSONKit SVPullToRefresh libextobjc)
       end
 
     end
 
     #-------------------------------------------------------------------------#
 
-    describe "Private helpers" do
+    describe 'Private helpers' do
 
-      describe "#compute_user_project_targets" do
-        it "uses the path specified in the target definition while computing the path of the user project" do
+      describe '#compute_user_project_targets' do
+        it 'uses the path specified in the target definition while computing the path of the user project' do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.user_project_path = 'SampleProject/SampleProject'
 
@@ -216,7 +216,7 @@ module Pod
           path.to_s.should.include 'SampleProject/SampleProject.xcodeproj'
         end
 
-        it "raises if the user project of the target definition does not exists while computing the path of the user project" do
+        it 'raises if the user project of the target definition does not exists while computing the path of the user project' do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.user_project_path = 'Test'
 
@@ -224,7 +224,7 @@ module Pod
           e.message.should.match /Unable to find/
         end
 
-        it "if not specified in the target definition if looks if there is only one project" do
+        it 'if not specified in the target definition if looks if there is only one project' do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           config.installation_root = config.installation_root + 'SampleProject'
 
@@ -232,14 +232,14 @@ module Pod
           path.to_s.should.include 'SampleProject/SampleProject.xcodeproj'
         end
 
-        it "if not specified in the target definition if looks if there is only one project" do
+        it 'if not specified in the target definition if looks if there is only one project' do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
 
           e = lambda { @analyzer.send(:compute_user_project_path, target_definition) }.should.raise Informative
           e.message.should.match /Could not.*select.*project/
         end
 
-        it "does not take aggregate targets into consideration" do
+        it 'does not take aggregate targets into consideration' do
           aggregate_class = Xcodeproj::Project::Object::PBXAggregateTarget
           sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
           sample_project = Xcodeproj::Project.open(sample_project_path)
@@ -252,9 +252,9 @@ module Pod
 
       #--------------------------------------#
 
-      describe "#compute_user_project_targets" do
+      describe '#compute_user_project_targets' do
 
-        it "returns the targets specified in the target definition" do
+        it 'returns the targets specified in the target definition' do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.link_with = ['UserTarget']
           user_project = Xcodeproj::Project.new('path')
@@ -265,7 +265,7 @@ module Pod
           targets.map(&:name).should == ['UserTarget']
         end
 
-        it "raises if it is unable to find the targets specified by the target definition" do
+        it 'raises if it is unable to find the targets specified by the target definition' do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.link_with = ['UserTarget']
           user_project = Xcodeproj::Project.new('path')
@@ -274,7 +274,7 @@ module Pod
           e.message.should.match /Unable to find the targets/
         end
 
-        it "returns the target with the same name of the target definition" do
+        it 'returns the target with the same name of the target definition' do
           target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
           user_project = Xcodeproj::Project.new('path')
           user_project.new_target(:application, 'FirstTarget', :ios)
@@ -284,14 +284,14 @@ module Pod
           targets.map(&:name).should == ['UserTarget']
         end
 
-        it "raises if the name of the target definition does not match any file" do
+        it 'raises if the name of the target definition does not match any file' do
           target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
           user_project = Xcodeproj::Project.new('path')
           e = lambda { @analyzer.send(:compute_user_project_targets, target_definition, user_project) }.should.raise Informative
           e.message.should.match /Unable to find a target named/
         end
 
-        it "returns the first target of the project if the target definition is named default" do
+        it 'returns the first target of the project if the target definition is named default' do
           target_definition = Podfile::TargetDefinition.new('Pods', nil)
           target_definition.link_with_first_target = true
           user_project = Xcodeproj::Project.new('path')
@@ -302,7 +302,7 @@ module Pod
           targets.map(&:name).should == ['FirstTarget']
         end
 
-        it "raises if the default target definition cannot be linked because there are no user targets" do
+        it 'raises if the default target definition cannot be linked because there are no user targets' do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           user_project = Xcodeproj::Project.new('path')
           e = lambda { @analyzer.send(:compute_user_project_targets, target_definition, user_project) }.should.raise Informative
@@ -313,9 +313,9 @@ module Pod
 
       #--------------------------------------#
 
-      describe "#compute_user_build_configurations" do
+      describe '#compute_user_build_configurations' do
 
-        it "returns the user build configurations of the user targets" do
+        it 'returns the user build configurations of the user targets' do
           user_project = Xcodeproj::Project.new('path')
           target = user_project.new_target(:application, 'Target', :ios)
           configuration = user_project.new(Xcodeproj::Project::Object::XCBuildConfiguration)
@@ -329,11 +329,11 @@ module Pod
           configurations.should == {
             'Debug'    => :debug,
             'Release'  => :release,
-            'AppStore' => :release
+            'AppStore' => :release,
           }
         end
 
-        it "returns the user build configurations specified in the target definition" do
+        it 'returns the user build configurations specified in the target definition' do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.build_configurations = { 'AppStore' => :release }
           user_targets = []
@@ -346,9 +346,9 @@ module Pod
 
       #--------------------------------------#
 
-      describe "#compute_archs_for_target_definition" do
+      describe '#compute_archs_for_target_definition' do
 
-        it "handles a single ARCH defined in a single user target" do
+        it 'handles a single ARCH defined in a single user target' do
           user_project = Xcodeproj::Project.new('path')
           target = user_project.new_target(:application, 'Target', :ios)
           target.build_configuration_list.set_setting('ARCHS', 'armv7')
@@ -361,7 +361,7 @@ module Pod
           archs.should == 'armv7'
         end
 
-        it "handles a single ARCH defined in multiple user targets" do
+        it 'handles a single ARCH defined in multiple user targets' do
           user_project = Xcodeproj::Project.new('path')
           targeta = user_project.new_target(:application, 'Target', :ios)
           targeta.build_configuration_list.set_setting('ARCHS', 'armv7')
@@ -376,40 +376,40 @@ module Pod
           archs.should == 'armv7'
         end
 
-        it "handles an Array of ARCHs defined in a single user target" do
+        it 'handles an Array of ARCHs defined in a single user target' do
           user_project = Xcodeproj::Project.new('path')
           target = user_project.new_target(:application, 'Target', :ios)
-          target.build_configuration_list.set_setting('ARCHS', ['armv7', 'i386'])
+          target.build_configuration_list.set_setting('ARCHS', %w(armv7 i386))
 
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.set_platform(:ios, '4.0')
           user_targets = [target]
 
           archs = @analyzer.send(:compute_archs_for_target_definition, target_definition, user_targets)
-          ['armv7', 'i386'].each { |a| archs.should.include a }
+          %w(armv7 i386).each { |a| archs.should.include a }
         end
 
-        it "handles an Array of ARCHs defined multiple user targets" do
+        it 'handles an Array of ARCHs defined multiple user targets' do
           user_project = Xcodeproj::Project.new('path')
           targeta = user_project.new_target(:application, 'Target', :ios)
-          targeta.build_configuration_list.set_setting('ARCHS', ['armv7', 'armv7s'])
+          targeta.build_configuration_list.set_setting('ARCHS', %w(armv7 armv7s))
           targetb = user_project.new_target(:application, 'Target', :ios)
-          targetb.build_configuration_list.set_setting('ARCHS', ['armv7', 'i386'])
+          targetb.build_configuration_list.set_setting('ARCHS', %w(armv7 i386))
 
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.set_platform(:ios, '4.0')
           user_targets = [targeta, targetb]
 
           archs = @analyzer.send(:compute_archs_for_target_definition, target_definition, user_targets)
-          ['armv7', 'armv7s', 'i386'].each { |a| archs.should.include a }
+          %w(armv7 armv7s i386).each { |a| archs.should.include a }
         end
       end
 
       #--------------------------------------#
 
-      describe "#compute_platform_for_target_definition" do
+      describe '#compute_platform_for_target_definition' do
 
-        it "returns the platform specified in the target definition" do
+        it 'returns the platform specified in the target definition' do
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.set_platform(:ios, '4.0')
           user_targets = []
@@ -418,7 +418,7 @@ module Pod
           configurations.should == Platform.new(:ios, '4.0')
         end
 
-        it "infers the platform from the user targets" do
+        it 'infers the platform from the user targets' do
           user_project = Xcodeproj::Project.new('path')
           target = user_project.new_target(:application, 'Target', :ios)
           target.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
@@ -431,7 +431,7 @@ module Pod
           configurations.should == Platform.new(:ios, '4.0')
         end
 
-        it "uses the lowest deployment target of the user targets if inferring the platform" do
+        it 'uses the lowest deployment target of the user targets if inferring the platform' do
           user_project = Xcodeproj::Project.new('path')
           target1 = user_project.new_target(:application, 'Target', :ios)
           configuration1 = target1.build_configuration_list.build_configurations.first
@@ -449,7 +449,7 @@ module Pod
           configurations.should == Platform.new(:ios, '4.0')
         end
 
-        it "raises if the user targets have a different platform" do
+        it 'raises if the user targets have a different platform' do
           user_project = Xcodeproj::Project.new('path')
           target1 = user_project.new_target(:application, 'Target', :ios)
           target1.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
