@@ -151,9 +151,6 @@ module Pod
           pods_state = nil
           UI.section "Finding Podfile changes" do
             pods_by_state = lockfile.detect_changes_with_podfile(podfile)
-            pods_by_state.dup.each do |state, full_names|
-              pods_by_state[state] = full_names.map { |fn| Specification.root_name(fn) }
-            end
             pods_state = SpecsState.new(pods_by_state)
             pods_state.print
           end
