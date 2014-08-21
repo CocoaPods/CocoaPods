@@ -35,7 +35,7 @@ module Pod
       #         installation of CocoaPods.
       #
       def all
-        aggregate.all
+        aggregate.sources
       end
 
       # @return [Array<Specification::Set>] the list of all the specification
@@ -329,7 +329,7 @@ module Pod
       #         The name of the source.
       #
       def git_source_named(name)
-        specified_source = aggregate.all.find { |s| s.name == name }
+        specified_source = aggregate.sources.find { |s| s.name == name }
         unless specified_source
           raise Informative, "Unable to find the `#{name}` repo."
         end
@@ -342,7 +342,7 @@ module Pod
       # @return [Source] The list of the git sources.
       #
       def git_sources
-        aggregate.all.select do |source|
+        aggregate.sources.select do |source|
           git_repo?(source.data_provider.repo)
         end
       end
