@@ -5,37 +5,44 @@ module Pod
     class << self
       include Config::Mixin
 
-
-      # @return [Array<Source>] the sources listed by the current Podfile.
+      # @return [Source::Aggregate] The aggregate of the sources with the given
+      #         Pods.
       #
-      def podfile_sources
-        sources = []
-        self.podfile_repos_dirs.each do |repo|
-          sources << Source.new(repo)
-        end
-        sources << Source.new(master_repo_dir) if sources.empty?
-        sources
-      end
-
-      # @param  [Bool] podfile use podfile sources
+      # @param  [Array<#to_s>] source_names
+      #         The names of the sources. If not given all the sources will be
+      #         returned.
       #
-      # @return [Source::Aggregate] the aggregate of all the sources known to
-      #         this installation of CocoaPods.
-      #
-      def aggregate(podfile = false)
-        if podfile
-          repos = podfile_repos_dirs
+      def aggregate(source_names = nil)
+        if source_names
+          dirs = source_names.map { |name| source_dir(name) }
         else
-          repos = config.repos_dir.children.select(&:directory?)
+          dirs = config.repos_dir.children.select(&:directory?)
         end
-        Source::Aggregate.new(repos)
+        Source::Aggregate.new(dirs)
       end
 
-      # @return [Array<Source>] the list of all the sources known to this
+      # @return [Array<Source>] The list of the sources with the given names.
+      #
+      # @param  [Array<#to_s>] names
+      #         The names of the sources.
+      #
+      def sources(names)
+        dirs = names.map { |name| source_dir(name) }
+        dirs.map { |repo| Source.new(repo) }
+      end
+
+      # @return [Array<Source>] The list of all the sources known to this
       #         installation of CocoaPods.
       #
       def all
-        aggregate.sources
+        dirs = config.repos_dir.children.select(&:directory?)
+        dirs.map { |repo| Source.new(repo) }
+      end
+
+      # @return [Source] The CocoaPods Master Repo source.
+      #
+      def master
+        sources(['master'])
       end
 
       # @return [Array<Specification::Set>] the list of all the specification
@@ -347,23 +354,18 @@ module Pod
         end
       end
 
-      # @return [Array<Pathname>] directories of all specified sources in
-      #         Podfile
+      # @return [Pathname] The path of the source with the given name.
       #
-      def podfile_repos_dirs
-        pathnames = []
-        if config.podfile
-          config.podfile.sources.each do |source_name|
-            pathnames << source_repo_dir(source_name)
-          end
+      # @param  [String] name
+      #         The name of the source.
+      #
+      def source_dir(name)
+        dir = config.repos_dir + name
+        if dir
+          dir
+        else
+          raise Informative, "Unable to find the `#{name}` repo."
         end
-        pathnames
-      end
-
-      # @return [Pathname] the directory where a given CocoaPods source is stored.
-      #
-      def source_repo_dir(name)
-        config.repos_dir + name
       end
     end
   end

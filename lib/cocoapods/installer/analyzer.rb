@@ -165,21 +165,10 @@ module Pod
 
       # Updates the source repositories unless the config indicates to skip it.
       #
-      # @return [void]
-      #
       def update_repositories_if_needed
         unless config.skip_repo_update?
-          sources = SourcesManager.podfile_sources
-          if sources.empty?
-            UI.section 'Updating spec repositories' do
-              SourcesManager.update
-            end
-          else
-            sources.each do |source|
-              UI.section "Updating spec repository #{source}" do
-                SourcesManager.update(source)
-              end
-            end
+          UI.section 'Updating spec repositories' do
+            SourcesManager.update
           end
         end
       end
@@ -328,7 +317,13 @@ module Pod
       def resolve_dependencies
         specs_by_target = nil
         UI.section "Resolving dependencies of #{UI.path podfile.defined_in_file}" do
-          resolver = Resolver.new(sandbox, podfile, locked_dependencies)
+          if podfile.sources.empty?
+            sources = SourcesManager.master
+          else
+            sources = SourcesManager.sources(podfile.sources)
+          end
+
+          resolver = Resolver.new(sandbox, podfile, locked_dependencies, sources)
           specs_by_target = resolver.resolve
         end
         specs_by_target

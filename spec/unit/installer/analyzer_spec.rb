@@ -464,33 +464,6 @@ module Pod
           e = lambda { @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets) }.should.raise Informative
           e.message.should.match /Targets with different platforms/
         end
-
-      end
-
-      #--------------------------------------#
-      describe "#update_repositories_if_needed" do
-        it "updates the podfile repositories" do
-          config.skip_repo_update = false
-
-
-          def @podfile.sources
-            ["netbe", "master"]
-          end
-
-          SourcesManager.expects(:update).with("netbe").once
-          SourcesManager.expects(:update).with("master").once
-          @analyzer.send(:update_repositories_if_needed)
-        end
-
-        it "updates the default repositories" do
-          config.skip_repo_update = false
-          def @podfile.sources
-            []
-          end
-          SourcesManager.expects(:update).once
-          @analyzer.send(:update_repositories_if_needed)
-        end
-
       end
     end
   end

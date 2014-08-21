@@ -28,14 +28,21 @@ module Pod
     #
     attr_reader :locked_dependencies
 
+    # @return [Array<Source>] The list of the sources which will be used for
+    #         the resolution.
+    #
+    attr_accessor :sources
+
     # @param  [Sandbox] sandbox @see sandbox
     # @param  [Podfile] podfile @see podfile
     # @param  [Array<Dependency>] locked_dependencies @see locked_dependencies
+    # @param  [Array<Source>, Source] sources @see sources
     #
-    def initialize(sandbox, podfile, locked_dependencies = [])
+    def initialize(sandbox, podfile, locked_deps, sources)
       @sandbox = sandbox
       @podfile = podfile
-      @locked_dependencies = locked_dependencies
+      @locked_dependencies = locked_deps
+      @sources = Array(sources)
     end
 
     #-------------------------------------------------------------------------#
@@ -51,14 +58,15 @@ module Pod
     #         definition.
     #
     def resolve
-      @cached_sources  = SourcesManager.aggregate(true)
       @cached_sets     = {}
       @cached_specs    = {}
       @specs_by_target = {}
 
       target_definitions = podfile.target_definition_list
       target_definitions.each do |target|
-        UI.section "Resolving dependencies for target `#{target.name}' (#{target.platform})" do
+        title = "Resolving dependencies for target `#{target.name}' " \
+          "(#{target.platform})"
+        UI.section(title) do
           @loaded_specs = []
           find_dependency_specs(podfile, target.dependencies, target)
           specs = cached_specs.values_at(*@loaded_specs).sort_by(&:name)
@@ -82,14 +90,6 @@ module Pod
     private
 
     # !@ Resolution context
-
-    # @return [Source::Aggregate] A cache of the sources needed to find the
-    #         podspecs.
-    #
-    # @note   The sources are cached because frequently accessed by the
-    #         resolver and loading them requires disk activity.
-    #
-    attr_accessor :cached_sources
 
     # @return [Hash<String => Set>] A cache that keeps tracks of the sets
     #         loaded by the resolution process.
@@ -168,13 +168,11 @@ module Pod
       end
     end
 
-    # Loads or returns a previously initialized for the Pod of the given
-    # dependency.
+    # @return [Set] Loads or returns a previously initialized set for the Pod
+    #               of the given dependency.
     #
     # @param  [Dependency] dependency
-    #         the dependency for which the set is needed.
-    #
-    # @return [Set] the cached set for a given dependency.
+    #         The dependency for which the set is needed.
     #
     def find_cached_set(dependency)
       name = dependency.root_name
@@ -182,23 +180,40 @@ module Pod
         if dependency.external_source
           spec = sandbox.specification(dependency.root_name)
           unless spec
-            raise StandardError, "[Bug] Unable to find the specification for `#{dependency}`."
+            raise StandardError, "[Bug] Unable to find the specification " \
+              "for `#{dependency}`."
           end
           set = Specification::Set::External.new(spec)
         else
-          set = cached_sources.search(dependency)
+          set = find_set_from_sources(dependency)
         end
         cached_sets[name] = set
         unless set
-          raise Informative, "Unable to find a specification for `#{dependency}`."
+          raise Informative, "Unable to find a specification " \
+            "for `#{dependency}`."
         end
       end
       cached_sets[name]
     end
 
+    # @return [Set] Loads a set for the Pod of the given dependency from the
+    #         sources. The set will be limited to the versions of the first
+    #         source which includes the Pod.
+    #
+    # @param  [Dependency] dependency
+    #         The dependency for which the set is needed.
+    #
+    def find_set_from_sources(dependency)
+      source = sources.find { |s| s.search(dependency) }
+      source.search(dependency)
+    end
+
     # Ensures that a specification is compatible with the platform of a target.
     #
     # @raise  If the specification is not supported by the target.
+    #
+    # @todo   This step is not specific to the resolution process and should be
+    #         performed later in the analysis.
     #
     # @return [void]
     #
