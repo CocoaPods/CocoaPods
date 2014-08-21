@@ -323,7 +323,7 @@ module Pod
       # @return [Source] The list of the git sources.
       #
       def git_sources
-        aggregate.sources.select do |source|
+        all.select do |source|
           git_repo?(source.data_provider.repo)
         end
       end
