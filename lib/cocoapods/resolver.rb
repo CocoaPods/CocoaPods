@@ -211,7 +211,9 @@ module Pod
     #
     def find_set_from_sources(dependency)
       source = sources.find { |s| s.search(dependency) }
-      source.search(dependency)
+      if source
+        source.search(dependency)
+      end
     end
 
     # Ensures that a specification is compatible with the platform of a target.

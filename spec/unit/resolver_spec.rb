@@ -101,6 +101,15 @@ module Pod
         e.message.should.match(/platform .* not compatible/)
       end
 
+      it 'raises if unable to find a specification' do
+        Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
+        message = should.raise Informative do
+          @resolver.resolve
+        end.message
+        message.should.match /Unable to find a specification/
+        message.should.match /`Windows` dependent by BlocksKit/
+      end
+
       it 'does not raise if all dependencies are supported by the platform of the target definition' do
         lambda { @resolver.resolve }.should.not.raise
       end
