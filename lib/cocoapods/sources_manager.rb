@@ -5,19 +5,11 @@ module Pod
     class << self
       include Config::Mixin
 
-      # @return [Source::Aggregate] The aggregate of the sources with the given
-      #         Pods.
+      # @return [Source::Aggregate] The aggregate of all the sources with the
+      #         known Pods.
       #
-      # @param  [Array<#to_s>] source_names
-      #         The names of the sources. If not given all the sources will be
-      #         returned.
-      #
-      def aggregate(source_names = nil)
-        if source_names
-          dirs = source_names.map { |name| source_dir(name) }
-        else
-          dirs = config.repos_dir.children.select(&:directory?)
-        end
+      def aggregate
+        dirs = config.repos_dir.children.select(&:directory?)
         Source::Aggregate.new(dirs)
       end
 
@@ -43,13 +35,6 @@ module Pod
       #
       def master
         sources(['master'])
-      end
-
-      # @return [Array<Specification::Set>] the list of all the specification
-      #         sets know to this installation of CocoaPods.
-      #
-      def all_sets
-        aggregate.all_sets
       end
 
       # Search all the sources to match the set for the given dependency.
@@ -152,10 +137,7 @@ module Pod
         Config.instance.search_index_file
       end
 
-      public
-
       # @!group Updating Sources
-      #-----------------------------------------------------------------------#
 
       extend Executable
       executable :git
@@ -293,10 +275,7 @@ module Pod
         end
       end
 
-      public
-
       # @!group Master repo
-      #-----------------------------------------------------------------------#
 
       # @return [Pathname] The path of the master repo.
       #
@@ -312,11 +291,6 @@ module Pod
       def master_repo_functional?
         master_repo_dir.exist? && repo_compatible?(master_repo_dir)
       end
-
-      public
-
-      # @!group Source repos
-      #-----------------------------------------------------------------------#
 
       private
 
@@ -360,8 +334,7 @@ module Pod
       #         The name of the source.
       #
       def source_dir(name)
-        dir = config.repos_dir + name
-        if dir
+        if dir = config.repos_dir + name
           dir
         else
           raise Informative, "Unable to find the `#{name}` repo."

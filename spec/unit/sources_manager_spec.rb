@@ -48,10 +48,6 @@ module Pod
         SourcesManager.all.map(&:name).should == %w[master test_repo]
       end
 
-      it "returns all the sets" do
-        SourcesManager.all_sets.map(&:name).should.include?('BananaLib')
-      end
-
       it "searches for the set of a dependency" do
         set = SourcesManager.search(Dependency.new('BananaLib'))
         set.class.should == Specification::Set

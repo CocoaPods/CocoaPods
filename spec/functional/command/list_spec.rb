@@ -18,7 +18,7 @@ module Pod
     end
 
     it 'returns the new pods' do
-      sets = SourcesManager.all_sets
+      sets = SourcesManager.aggregate.all_sets
       jsonkit_set = sets.find { |s| s.name == 'JSONKit' }
       dates = {
         'BananaLib' => Time.now,
@@ -30,7 +30,7 @@ module Pod
     end
 
     it 'presents the known pods with versions' do
-      sets = SourcesManager.all_sets
+      sets = SourcesManager.aggregate.all_sets
       jsonkit_set = sets.find { |s| s.name == 'JSONKit' }
 
       out = run_command('list')
