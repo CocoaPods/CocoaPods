@@ -35,12 +35,11 @@ module Pod
     describe 'Subclasses helpers' do
 
       it 'pre-downloads the Pod and stores the relevant information in the sandbox' do
-        sandbox = config.sandbox
-        @subject.send(:pre_download, sandbox)
+        @subject.send(:pre_download, config.sandbox)
         path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
         path.should.exist?
-        sandbox.predownloaded_pods.should == ['Reachability']
-        sandbox.checkout_sources.should == {
+        config.sandbox.predownloaded_pods.should == ['Reachability']
+        config.sandbox.checkout_sources.should == {
           'Reachability' => {
             :git => fixture('integration/Reachability'),
             :commit => '4ec575e4b074dcc87c44018cce656672a979b34a',
@@ -48,20 +47,15 @@ module Pod
         }
       end
 
-      it "pre-downloads the Pod with a JSON podspec and stores the relevant information in the sandbox" do
-        dependency = Dependency.new("Reachability", :git => fixture('integration/Reachability'), :branch => 'json_podspec')
-        source = ExternalSources.from_dependency(dependency, nil)
-        sandbox = config.sandbox
-        source.send(:pre_download, sandbox)
-        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
-        path.should.exist?
-        sandbox.predownloaded_pods.should == ["Reachability"]
-        sandbox.checkout_sources.should == {
-          "Reachability" => {
-            :git => fixture('integration/Reachability'),
-            :commit => "4ec575e4b074dcc87c44018cce656672a979b34a"
-          }
-        }
+      it "checks for JSON podspecs" do
+        path = config.sandbox.root + 'Reachability'
+        podspec_path = path + 'Reachability.podspec.json'
+        Dir.mkdir(path)
+        File.open(podspec_path, "w") {}
+        Pathname.any_instance.stubs(:rmtree)
+        Downloader::Git.any_instance.stubs(:download)
+        config.sandbox.expects(:store_podspec).with('Reachability', podspec_path, true, true)
+        @subject.send(:pre_download, config.sandbox)
       end
     end
   end
