@@ -52,7 +52,7 @@ module Pod
           path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path)
           group.source_tree.should == '<group>'
-          group.path.should == 'BananaLib'
+          group.path.should == 'Sources/BananaLib'
           Pathname.new(group.path).should.be.relative
         end
 
@@ -222,7 +222,7 @@ module Pod
         f = @project['Podfile']
         f.source_tree.should == 'SOURCE_ROOT'
         f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
-        f.path.should == '../Podfile'
+        f.path.should == '../../Podfile'
       end
 
       #----------------------------------------#

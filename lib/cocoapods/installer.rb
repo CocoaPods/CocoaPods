@@ -28,14 +28,16 @@ module Pod
   # source control.
   #
   class Installer
+
+    autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
     autoload :Analyzer,                 'cocoapods/installer/analyzer'
     autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
-    autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
-    autoload :TargetInstaller,          'cocoapods/installer/target_installer'
-    autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
-    autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
-    autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
     autoload :HooksContext,             'cocoapods/installer/hooks_context'
+    autoload :Migrator,                 'cocoapods/installer/migrator'
+    autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
+    autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
+    autoload :TargetInstaller,          'cocoapods/installer/target_installer'
+    autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
 
@@ -85,11 +87,19 @@ module Pod
     # @return [void]
     #
     def install!
+      migrate_installation_if_needed
       resolve_dependencies
       download_dependencies
       generate_pods_project
       integrate_user_project if config.integrate_targets?
       perform_post_install_actions
+    end
+
+    def migrate_installation_if_needed
+      UI.section "Performing existing installation migration" do
+        migrator = Migrator.new(sandbox)
+        migrator.migrate!
+      end
     end
 
     def resolve_dependencies

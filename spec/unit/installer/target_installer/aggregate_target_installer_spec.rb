@@ -119,12 +119,12 @@ module Pod
         @installer.install!
         file = config.sandbox.root + @target.xcconfig_path('Release')
         xcconfig = Xcodeproj::Config.new(file)
-        xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
+        xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods/Generated'
       end
 
       it 'creates a header for the target which contains the information about the installed Pods' do
         @installer.install!
-        file = config.sandbox.root + 'Pods-environment.h'
+        file = config.sandbox.generated_dir_root + 'Pods-environment.h'
         contents = file.read
         contents.should.include?('#define COCOAPODS_POD_AVAILABLE_BananaLib')
         contents.should.include?('#define COCOAPODS_VERSION_MAJOR_BananaLib 1')
@@ -140,7 +140,7 @@ module Pod
 
       it 'creates a create copy resources script' do
         @installer.install!
-        script = config.sandbox.root + 'Pods-resources.sh'
+        script = config.sandbox.generated_dir_root + 'Pods-resources.sh'
         script.read.should.include?('logo-sidebar.png')
       end
 
@@ -154,9 +154,9 @@ module Pod
 
       it 'creates the acknowledgements files ' do
         @installer.install!
-        markdown = config.sandbox.root + 'Pods-acknowledgements.markdown'
+        markdown = config.sandbox.generated_dir_root + 'Pods-acknowledgements.markdown'
         markdown.read.should.include?('Permission is hereby granted')
-        plist = config.sandbox.root + 'Pods-acknowledgements.plist'
+        plist = config.sandbox.generated_dir_root + 'Pods-acknowledgements.plist'
         plist.read.should.include?('Permission is hereby granted')
       end
 
@@ -166,7 +166,7 @@ module Pod
         build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-dummy.m') }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-dummy.m'
-        dummy = config.sandbox.root + 'Pods-dummy.m'
+        dummy = config.sandbox.generated_dir_root + 'Pods-dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
     end

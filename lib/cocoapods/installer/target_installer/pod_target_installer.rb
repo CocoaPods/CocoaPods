@@ -117,7 +117,7 @@ module Pod
           add_file_to_support_group(path)
 
           target.build_configurations.each do |c|
-            relative_path = path.relative_path_from(sandbox.root)
+            relative_path = path.relative_path_from(project.path.dirname)
             c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
           end
         end

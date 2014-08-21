@@ -100,7 +100,7 @@ module Pod
             native_target.build_phases.unshift(phase)
             phase.name = phase_name
             phase.shell_script = <<-EOS.strip_heredoc
-              diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+              diff "${PODS_ROOT}/../../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
               if [[ $? != 0 ]] ; then
                   cat << EOM
               error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.

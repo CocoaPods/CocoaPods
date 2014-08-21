@@ -124,7 +124,7 @@ module Pod
       it "creates a prefix header, including the contents of the specification's prefix header" do
         @spec.prefix_header_contents = '#import "BlocksKit.h"'
         @installer.install!
-        prefix_header = config.sandbox.root + 'Pods-BananaLib-prefix.pch'
+        prefix_header = config.sandbox.generated_dir_root + 'Pods-BananaLib-prefix.pch'
         generated = prefix_header.read
         expected = <<-EOS.strip_heredoc
           #ifdef __OBJC__
@@ -144,7 +144,7 @@ module Pod
         build_file = build_files.find { |bf| bf.file_ref.display_name == 'Pods-BananaLib-dummy.m' }
         build_file.should.be.not.nil
         build_file.file_ref.path.should == 'Pods-BananaLib-dummy.m'
-        dummy = config.sandbox.root + 'Pods-BananaLib-dummy.m'
+        dummy = config.sandbox.generated_dir_root + 'Pods-BananaLib-dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
 

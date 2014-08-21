@@ -36,7 +36,7 @@ module Pod
 
       it 'pre-downloads the Pod and stores the relevant information in the sandbox' do
         @subject.send(:pre_download, config.sandbox)
-        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+        path = config.sandbox.specifications_dir + 'Reachability.podspec'
         path.should.exist?
         config.sandbox.predownloaded_pods.should == ['Reachability']
         config.sandbox.checkout_sources.should == {
@@ -48,8 +48,9 @@ module Pod
       end
 
       it "checks for JSON podspecs" do
-        path = config.sandbox.root + 'Reachability'
+        path = config.sandbox.pod_dir('Reachability')
         podspec_path = path + 'Reachability.podspec.json'
+        Dir.mkdir(config.sandbox.sources_root)
         Dir.mkdir(path)
         File.open(podspec_path, "w") {}
         Pathname.any_instance.stubs(:rmtree)

@@ -96,7 +96,7 @@ module Pod
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           saved.file_references.map(&:path).should == [
             'SampleProject/SampleProject.xcodeproj',
-            'Pods/Pods.xcodeproj',
+            "Pods/Generated/Pods.xcodeproj"
           ]
         end
 
@@ -109,14 +109,14 @@ module Pod
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           saved.file_references.map(&:path).should == [
             'SampleProject/SampleProject.xcodeproj',
-            'Pods/Pods.xcodeproj',
+            "Pods/Generated/Pods.xcodeproj"
           ]
         end
 
         it "doesn't write the workspace if not needed" do
           file_references = [
             Xcodeproj::Workspace::FileReference.new('SampleProject/SampleProject.xcodeproj', 'group'),
-            Xcodeproj::Workspace::FileReference.new('Pods/Pods.xcodeproj', 'group'),
+            Xcodeproj::Workspace::FileReference.new('Pods/Generated/Pods.xcodeproj', 'group'),
           ]
 
           workspace = Xcodeproj::Workspace.new(file_references)
@@ -136,13 +136,13 @@ module Pod
           saved.file_references.map(&:path).should == [
             'user_added_project.xcodeproj',
             'SampleProject/SampleProject.xcodeproj',
-            'Pods/Pods.xcodeproj',
+            'Pods/Generated/Pods.xcodeproj',
           ]
         end
 
         it 'preserves the order of the projects in the workspace' do
           file_references = [
-            Xcodeproj::Workspace::FileReference.new('Pods/Pods.xcodeproj', 'group'),
+            Xcodeproj::Workspace::FileReference.new('Pods/Generated/Pods.xcodeproj', 'group'),
             Xcodeproj::Workspace::FileReference.new('SampleProject/SampleProject.xcodeproj', 'group'),
           ]
 
@@ -152,7 +152,7 @@ module Pod
           @integrator.send(:create_workspace)
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           saved.file_references.map(&:path).should == [
-            'Pods/Pods.xcodeproj',
+            'Pods/Generated/Pods.xcodeproj',
             'SampleProject/SampleProject.xcodeproj',
           ]
         end
