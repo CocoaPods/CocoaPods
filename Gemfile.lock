@@ -60,7 +60,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 9d9842612c254900fbf515bab5ec3eec32f34947
+  revision: 85ef1bf5917c853def368d6ca5a5ab955486b4d7
   branch: fabio/specs-sources
   specs:
     cocoapods-core (0.33.1)

@@ -150,7 +150,8 @@ module Pod
           UI.section 'Finding Podfile changes' do
             pods_by_state = lockfile.detect_changes_with_podfile(podfile)
             pods_by_state.dup.each do |state, full_names|
-              pods_by_state[state] = full_names.map { |fn| Specification.root_name(fn) }
+              pods = full_names.map { |fn| Specification.root_name(fn) }.uniq
+              pods_by_state[state] = pods
             end
             pods_state = SpecsState.new(pods_by_state)
             pods_state.print
@@ -243,8 +244,8 @@ module Pod
             locking_pods = locking_pods.select { |pod| !update[:pods].include?(pod) }
           end
           locking_pods.map do |pod|
-            lockfile.dependency_to_lock_pod_named(pod)
-          end
+            lockfile.dependencies_to_lock_pod_named(pod)
+          end.flatten
         end
       end
 
