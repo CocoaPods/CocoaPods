@@ -175,10 +175,10 @@ module Pod
             @sut.stubs(:validate_homepage)
             WebMock::API.
               stub_request(:head, 'banana-corp.local/valid-image.png').
-              to_return({
+              to_return(
                 :status => 200,
                 :headers => { 'Content-Type' => 'image/png' }
-              })
+              )
           end
 
           it 'checks if the screenshots are valid' do

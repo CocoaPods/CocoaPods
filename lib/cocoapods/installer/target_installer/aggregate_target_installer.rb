@@ -45,13 +45,11 @@ module Pod
       def create_xcconfig_file
         target.build_configurations.each do |configuration|
           path = library.xcconfig_path(configuration.name)
-          UI.message "- Generating #{configuration.name} xcconfig file at #{UI.path(path)}" do
-            gen = Generator::XCConfig::AggregateXCConfig.new(library, configuration.name)
-            gen.save_as(path)
-            library.xcconfigs[configuration.name] = gen.xcconfig
-            xcconfig_file_ref = add_file_to_support_group(path)
-            configuration.base_configuration_reference = xcconfig_file_ref
-          end
+          gen = Generator::XCConfig::AggregateXCConfig.new(library, configuration.name)
+          gen.save_as(path)
+          library.xcconfigs[configuration.name] = gen.xcconfig
+          xcconfig_file_ref = add_file_to_support_group(path)
+          configuration.base_configuration_reference = xcconfig_file_ref
         end
       end
 
@@ -60,11 +58,9 @@ module Pod
       #
       def create_target_environment_header
         path = library.target_environment_header_path
-        UI.message "- Generating target environment header at #{UI.path(path)}" do
-          generator = Generator::TargetEnvironmentHeader.new(library.specs_by_build_configuration)
-          generator.save_as(path)
-          add_file_to_support_group(path)
-        end
+        generator = Generator::TargetEnvironmentHeader.new(library.specs_by_build_configuration)
+        generator.save_as(path)
+        add_file_to_support_group(path)
       end
 
       # Generates the bridge support metadata if requested by the {Podfile}.
@@ -78,13 +74,11 @@ module Pod
       def create_bridge_support_file
         if target_definition.podfile.generate_bridge_support?
           path = library.bridge_support_path
-          UI.message "- Generating BridgeSupport metadata at #{UI.path(path)}" do
-            headers = target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }
-            generator = Generator::BridgeSupport.new(headers)
-            generator.save_as(path)
-            add_file_to_support_group(path)
-            @bridge_support_file = path.relative_path_from(sandbox.root)
-          end
+          headers = target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }
+          generator = Generator::BridgeSupport.new(headers)
+          generator.save_as(path)
+          add_file_to_support_group(path)
+          @bridge_support_file = path.relative_path_from(sandbox.root)
         end
       end
 
@@ -98,18 +92,16 @@ module Pod
       #
       def create_copy_resources_script
         path = library.copy_resources_script_path
-        UI.message "- Generating copy resources script at #{UI.path(path)}" do
-          file_accessors = library.pod_targets.map(&:file_accessors).flatten
-          resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map { |res| res.relative_path_from(project.path.dirname) } }.flatten
-          resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name}.bundle" } }.flatten
-          resources = []
-          resources.concat(resource_paths)
-          resources.concat(resource_bundles)
-          resources << bridge_support_file if bridge_support_file
-          generator = Generator::CopyResourcesScript.new(resources, library.platform)
-          generator.save_as(path)
-          add_file_to_support_group(path)
-        end
+        file_accessors = library.pod_targets.map(&:file_accessors).flatten
+        resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map { |res| res.relative_path_from(project.path.dirname) } }.flatten
+        resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name}.bundle" } }.flatten
+        resources = []
+        resources.concat(resource_paths)
+        resources.concat(resource_bundles)
+        resources << bridge_support_file if bridge_support_file
+        generator = Generator::CopyResourcesScript.new(resources, library.platform)
+        generator.save_as(path)
+        add_file_to_support_group(path)
       end
 
       # Generates the acknowledgement files (markdown and plist) for the target.
@@ -120,12 +112,10 @@ module Pod
         basepath = library.acknowledgements_basepath
         Generator::Acknowledgements.generators.each do |generator_class|
           path = generator_class.path_from_basepath(basepath)
-          UI.message "- Generating acknowledgements at #{UI.path(path)}" do
-            file_accessors = library.pod_targets.map(&:file_accessors).flatten
-            generator = generator_class.new(file_accessors)
-            generator.save_as(path)
-            add_file_to_support_group(path)
-          end
+          file_accessors = library.pod_targets.map(&:file_accessors).flatten
+          generator = generator_class.new(file_accessors)
+          generator.save_as(path)
+          add_file_to_support_group(path)
         end
       end
 

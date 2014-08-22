@@ -47,10 +47,10 @@ module Pod
       def analyze(allow_fetches = true)
         update_repositories_if_needed if allow_fetches
         @result = AnalysisResult.new
+        compute_target_platforms
         @result.podfile_state = generate_podfile_state
         @locked_dependencies  = generate_version_locking_dependencies
 
-        compute_target_platforms
         fetch_external_sources if allow_fetches
         @result.specs_by_target = resolve_dependencies
         @result.specifications  = generate_specifications
@@ -487,7 +487,7 @@ module Pod
       # @todo   Is assigning the platform to the target definition the best way
       #         to go?
       #
-      def compute_archs_for_target_definition(_target_definition, user_targets)
+      def compute_archs_for_target_definition(target_definition, user_targets)
         archs = []
         user_targets.each do |target|
           target_archs = target.common_resolved_build_setting('ARCHS')
@@ -495,7 +495,9 @@ module Pod
         end
 
         archs = archs.compact.uniq.sort
-        UI.puts("Using `ARCHS` setting to build architectures: (`#{archs.join('`, `')}`)")
+        UI.message("Using `ARCHS` setting to build architectures of " \
+                   "target `#{target_definition.label}`: " \
+                   "(`#{archs.join('`, `')}`)")
         archs.length > 1 ? archs : archs.first
       end
 
@@ -508,17 +510,19 @@ module Pod
       # @return [void]
       #
       def compute_target_platforms
-        podfile.target_definition_list.each do |target_definition|
-          if config.integrate_targets?
-            project_path = compute_user_project_path(target_definition)
-            user_project = Xcodeproj::Project.open(project_path)
-            targets = compute_user_project_targets(target_definition, user_project)
-            platform = compute_platform_for_target_definition(target_definition, targets)
-            archs = compute_archs_for_target_definition(target_definition, targets)
-            @archs_by_target_def[target_definition] = archs
-          else
-            unless target_definition.platform
-              raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
+        UI.section 'Inspecting targets to integrate' do
+          podfile.target_definition_list.each do |target_definition|
+            if config.integrate_targets?
+              project_path = compute_user_project_path(target_definition)
+              user_project = Xcodeproj::Project.open(project_path)
+              targets = compute_user_project_targets(target_definition, user_project)
+              platform = compute_platform_for_target_definition(target_definition, targets)
+              archs = compute_archs_for_target_definition(target_definition, targets)
+              @archs_by_target_def[target_definition] = archs
+            else
+              unless target_definition.platform
+                raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
+              end
             end
           end
         end

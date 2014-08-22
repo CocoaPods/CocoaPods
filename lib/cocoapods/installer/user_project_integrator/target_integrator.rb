@@ -178,10 +178,8 @@ module Pod
         #         integration.
         #
         def integration_message
-          "Integrating Pod #{'target'.pluralize(target.pod_targets.size)} " \
-            "`#{target.pod_targets.map(&:name).to_sentence}` " \
-            "into aggregate target #{target.name} " \
-            "of project #{UI.path target.user_project_path}."
+          "Integrating target `#{target.name}` " \
+            "(#{UI.path target.user_project_path} project)"
         end
       end
     end
