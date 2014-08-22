@@ -72,8 +72,9 @@ module Pod
           #
           def self.set_target_xcconfig(pod_bundle, config)
             path = pod_bundle.xcconfig_relative_path(config.name)
-            file_ref = config.project.files.find { |f| f.path == path }
-            file_ref ||= config.project.new_file(path)
+            group = config.project['Pods'] || config.project.new_group('Pods')
+            file_ref = group.files.find { |f| f.path == path }
+            file_ref ||= group.new_file(path)
             config.base_configuration_reference = file_ref
           end
 
