@@ -1,12 +1,10 @@
 module Pod
   class Installer
-
     # Controller class responsible of creating and configuring the static
     # library target in Pods project. It also creates the support file needed
     # by the target.
     #
     class TargetInstaller
-
       # @return [Sandbox] sandbox the sandbox where the support files should
       #         be generated.
       #
@@ -46,7 +44,6 @@ module Pod
         library.user_build_configurations.each do |bc_name, type|
           configuration = @target.add_build_configuration(bc_name, type)
         end
-
 
         settings = {}
         if library.archs
@@ -126,8 +123,6 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end
-

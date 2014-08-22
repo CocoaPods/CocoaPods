@@ -54,7 +54,7 @@ module Pod
               :libraries => [],
               :frameworks => [],
               :weak_frameworks => [],
-              :platform_name => :ios
+              :platform_name => :ios,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework "SenTestingKit"'
@@ -67,7 +67,7 @@ module Pod
               :libraries => ['xml2'],
               :frameworks => [],
               :weak_frameworks => [],
-              :platform_name => :ios
+              :platform_name => :ios,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l "xml2"'
@@ -80,7 +80,7 @@ module Pod
               :libraries => [],
               :frameworks => ['CoreAnimation'],
               :weak_frameworks => [],
-              :platform_name => :ios
+              :platform_name => :ios,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework "CoreAnimation"'
@@ -93,7 +93,7 @@ module Pod
               :libraries => [],
               :frameworks => [],
               :weak_frameworks => ['iAd'],
-              :platform_name => :ios
+              :platform_name => :ios,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-weak_framework "iAd"'
@@ -106,7 +106,7 @@ module Pod
               :libraries => [],
               :frameworks => ['SenTestingKit'],
               :weak_frameworks => [],
-              :platform_name => :ios
+              :platform_name => :ios,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('SDKROOT')
@@ -120,7 +120,7 @@ module Pod
               :libraries => [],
               :frameworks => ['SenTestingKit'],
               :weak_frameworks => [],
-              :platform_name => :osx
+              :platform_name => :osx,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('DEVELOPER_LIBRARY_DIR')

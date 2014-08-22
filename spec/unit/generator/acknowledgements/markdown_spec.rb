@@ -30,10 +30,10 @@ describe Pod::Generator::Markdown do
     given_path = @generator.class.path_from_basepath(basepath)
     expected_path = config.sandbox.root + 'Pods-acknowledgements.markdown'
 
-    mockFile = mock
-    mockFile.expects(:write).with(equals(@generator.licenses))
-    mockFile.expects(:close)
-    File.expects(:new).with(equals(expected_path), equals('w')).returns(mockFile)
+    file = mock
+    file.expects(:write).with(equals(@generator.licenses))
+    file.expects(:close)
+    File.expects(:new).with(equals(expected_path), equals('w')).returns(file)
     @generator.save_as(given_path)
   end
 end

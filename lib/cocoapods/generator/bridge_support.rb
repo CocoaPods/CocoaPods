@@ -15,7 +15,7 @@ module Pod
       end
 
       def save_as(pathname)
-        gen_bridge_metadata %{-c "#{search_paths.join(' ')}" -o '#{pathname}' '#{headers.join("' '")}'}
+        gen_bridge_metadata %(-c "#{search_paths.join(' ')}" -o '#{pathname}' '#{headers.join("' '")}')
       end
     end
   end

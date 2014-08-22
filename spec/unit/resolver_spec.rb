@@ -210,15 +210,15 @@ module Pod
           platform :ios
           pod 'JSONKit'
         end
-        sources = SourcesManager.sources(['master', 'test_repo'])
+        sources = SourcesManager.sources(%w(master test_repo))
         resolver = Resolver.new(config.sandbox, podfile, [], sources)
         version = resolver.resolve.values.flatten.first.version
-        version.to_s.should.not == "999.999.999"
+        version.to_s.should.not == '999.999.999'
 
-        sources = SourcesManager.sources(['test_repo', 'master'])
+        sources = SourcesManager.sources(%w(test_repo master))
         resolver = Resolver.new(config.sandbox, podfile, [], sources)
         version = resolver.resolve.values.flatten.first.version
-        version.to_s.should == "999.999.999"
+        version.to_s.should == '999.999.999'
       end
     end
 

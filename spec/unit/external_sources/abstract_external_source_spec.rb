@@ -48,11 +48,11 @@ module Pod
         }
       end
 
-      it "checks for JSON podspecs" do
+      it 'checks for JSON podspecs' do
         path = config.sandbox.pod_dir('Reachability')
         podspec_path = path + 'Reachability.podspec.json'
         Dir.mkdir(path)
-        File.open(podspec_path, "w") {}
+        File.open(podspec_path, 'w') {}
         Pathname.any_instance.stubs(:rmtree)
         Downloader::Git.any_instance.stubs(:download)
         config.sandbox.expects(:store_podspec).with('Reachability', podspec_path, true, true)

@@ -96,7 +96,7 @@ module Pod
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           saved.file_references.map(&:path).should == [
             'SampleProject/SampleProject.xcodeproj',
-            "Pods/Pods.xcodeproj"
+            'Pods/Pods.xcodeproj',
           ]
         end
 
@@ -109,7 +109,7 @@ module Pod
           saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           saved.file_references.map(&:path).should == [
             'SampleProject/SampleProject.xcodeproj',
-            "Pods/Pods.xcodeproj"
+            'Pods/Pods.xcodeproj',
           ]
         end
 

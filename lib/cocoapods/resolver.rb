@@ -186,7 +186,7 @@ module Pod
         if dependency.external_source
           spec = sandbox.specification(dependency.root_name)
           unless spec
-            raise StandardError, "[Bug] Unable to find the specification " \
+            raise StandardError, '[Bug] Unable to find the specification ' \
               "for `#{dependency}`."
           end
           set = Specification::Set::External.new(spec)
@@ -195,7 +195,7 @@ module Pod
         end
         cached_sets[name] = set
         unless set
-          raise Informative, "Unable to find a specification for " \
+          raise Informative, 'Unable to find a specification for ' \
             "`#{dependency}` depended upon by #{dependent_spec}."
         end
       end

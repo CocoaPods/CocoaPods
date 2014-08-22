@@ -21,8 +21,8 @@ module Pod
         # Migrates from CocoaPods versions previous to 0.34.
         #
         def migrate_to_0_34(sandbox)
-          title_options = { :verbose_prefix => "-> ".green }
-          UI.titled_section("Migrating to CocoaPods 0.34".green, title_options) do
+          title_options = { :verbose_prefix => '-> '.green }
+          UI.titled_section('Migrating to CocoaPods 0.34'.green, title_options) do
             delete(sandbox.root + 'Headers')
             make_path(sandbox.headers_root)
 

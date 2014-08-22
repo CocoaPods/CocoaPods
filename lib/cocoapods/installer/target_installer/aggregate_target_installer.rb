@@ -1,11 +1,9 @@
 module Pod
   class Installer
-
     # Creates the targets which aggregate the Pods libraries in the Pods
     # project and the relative support files.
     #
     class AggregateTargetInstaller < TargetInstaller
-
       # Creates the target in the Pods project and the relative support files.
       #
       # @return [void]
@@ -89,8 +87,8 @@ module Pod
         path = library.copy_resources_script_path
         UI.message "- Generating copy resources script at #{UI.path(path)}" do
           file_accessors = library.pod_targets.map(&:file_accessors).flatten
-          resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map { |res| res.relative_path_from(project.path.dirname) }}.flatten
-          resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map {|name| "${BUILT_PRODUCTS_DIR}/#{name}.bundle" } }.flatten
+          resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map { |res| res.relative_path_from(project.path.dirname) } }.flatten
+          resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name}.bundle" } }.flatten
           resources = []
           resources.concat(resource_paths)
           resources.concat(resource_bundles)
@@ -126,7 +124,6 @@ module Pod
       attr_reader :bridge_support_file
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end

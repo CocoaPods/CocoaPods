@@ -28,7 +28,6 @@ module Pod
   # source control.
   #
   class Installer
-
     autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
     autoload :Analyzer,                 'cocoapods/installer/analyzer'
     autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
@@ -96,7 +95,7 @@ module Pod
     end
 
     def prepare
-      UI.section "Preparing" do
+      UI.section 'Preparing' do
         sandbox.prepare
         Migrator.migrate(sandbox)
       end
@@ -403,7 +402,7 @@ module Pod
     # @return [void]
     #
     def install_libraries
-      UI.message'- Installing libraries' do
+      UI.message '- Installing libraries' do
         pod_targets.sort_by(&:name).each do |pod_target|
           next if pod_target.target_definition.empty?
           target_installer = PodTargetInstaller.new(sandbox, pod_target)

@@ -1,6 +1,5 @@
 module Pod
   module Generator
-
     # Generates a prefix header file for a Pods library. The prefix header is
     # generated according to the platform of the target and the pods.
     #
@@ -8,7 +7,6 @@ module Pod
     # `Cocoa/Cocoa.h`.
     #
     class PrefixHeader
-
       # @return [Array<FileAccessor>] The file accessors for which to generate
       #         the prefix header.
       #
@@ -55,10 +53,10 @@ module Pod
         result << "#endif\n"
 
         imports.each do |import|
-          result << %|\n#import "#{import}"|
+          result << %(\n#import "#{import}")
         end
 
-        unique_prefix_header_contents = file_accessors.collect do |file_accessor|
+        unique_prefix_header_contents = file_accessors.map do |file_accessor|
           file_accessor.spec_consumer.prefix_header_contents
         end.compact.uniq
 
@@ -87,7 +85,6 @@ module Pod
       def save_as(path)
         path.open('w') { |header| header.write(generate) }
       end
-
     end
   end
 end

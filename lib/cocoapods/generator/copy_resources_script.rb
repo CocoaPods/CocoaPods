@@ -1,7 +1,6 @@
 module Pod
   module Generator
     class CopyResourcesScript
-
       # @return [Array<#to_s>] A list of files relative to the project pods
       #         root.
       #
@@ -44,7 +43,7 @@ module Pod
       #
       EXTERNAL_STRINGS_FILE_MIMINUM_DEPLOYMENT_TARGET = {
         :ios => Version.new('6.0'),
-        :osx => Version.new('10.8')
+        :osx => Version.new('10.8'),
       }
 
       # @return [Bool] Whether the external strings file is supported by the
@@ -58,11 +57,11 @@ module Pod
       # @return [String] The install resources shell function.
       #
       def install_resources_function
-          if use_external_strings_file?
-            INSTALL_RESOURCES_FUCTION
-          else
-            INSTALL_RESOURCES_FUCTION.gsub(' --reference-external-strings-file', '')
-          end
+        if use_external_strings_file?
+          INSTALL_RESOURCES_FUCTION
+        else
+          INSTALL_RESOURCES_FUCTION.gsub(' --reference-external-strings-file', '')
+        end
       end
 
       # @return [String] The contents of the copy resources script.
@@ -70,13 +69,12 @@ module Pod
       def script
         script = install_resources_function
         resources.each do |resource|
-          script += %Q[install_resource "#{resource}"\n]
+          script += %(          install_resource "#{resource}"\n          )
         end
         script += RSYNC_CALL
         script += XCASSETS_COMPILE
         script
       end
-
 
       INSTALL_RESOURCES_FUCTION = <<EOS
 #!/bin/sh
@@ -124,7 +122,6 @@ install_resource()
 }
 EOS
 
-
       RSYNC_CALL = <<EOS
 
 rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
@@ -134,12 +131,11 @@ fi
 rm -f "$RESOURCES_TO_COPY"
 EOS
 
-
       XCASSETS_COMPILE = <<EOS
 
 if [[ -n "${WRAPPER_EXTENSION}" ]] && [ `xcrun --find actool` ] && [ `find . -name '*.xcassets' | wc -l` -ne 0 ]
 then
-  case "${TARGETED_DEVICE_FAMILY}" in 
+  case "${TARGETED_DEVICE_FAMILY}" in
     1,2)
       TARGET_DEVICE_ARGS="--target-device ipad --target-device iphone"
       ;;
@@ -151,8 +147,8 @@ then
       ;;
     *)
       TARGET_DEVICE_ARGS="--target-device mac"
-      ;;  
-  esac 
+      ;;
+  esac
   find "${PWD}" -name "*.xcassets" -print0 | xargs -0 actool --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${IPHONEOS_DEPLOYMENT_TARGET}" ${TARGET_DEVICE_ARGS} --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 fi
 EOS

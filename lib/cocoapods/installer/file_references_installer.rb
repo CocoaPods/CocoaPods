@@ -183,7 +183,7 @@ module Pod
       def header_mappings(headers_sandbox, file_accessor, headers)
         consumer = file_accessor.spec_consumer
         dir = headers_sandbox
-        dir = dir + consumer.header_dir if consumer.header_dir
+        dir += consumer.header_dir if consumer.header_dir
 
         mappings = {}
         headers.each do |header|
@@ -191,7 +191,7 @@ module Pod
           if consumer.header_mappings_dir
             header_mappings_dir = file_accessor.path_list.root + consumer.header_mappings_dir
             relative_path = header.relative_path_from(header_mappings_dir)
-            sub_dir = sub_dir + relative_path.dirname
+            sub_dir += relative_path.dirname
           end
           mappings[sub_dir] ||= []
           mappings[sub_dir] << header

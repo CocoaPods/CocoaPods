@@ -68,8 +68,10 @@ module Pod
 
       it 'for a single missing Pod' do
         Dir.chdir(temporary_directory) do
-          exception = lambda { run_command('update', 'Reachability', '--no-repo-update') }.should.raise Informative
-          exception.message.should.include 'Pod `Reachability` is not installed and cannot be updated'
+          should.raise Informative do
+            run_command('update', 'Reachability', '--no-repo-update')
+          end.message.should.include 'The `Reachability` Pod is not ' \
+          'installed and cannot be updated'
         end
       end
 

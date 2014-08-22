@@ -19,7 +19,7 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new(%w(NAME https://github.com/USER/REPO), false)
+          CLAide::Argument.new(%w(NAME https://github.com/USER/REPO), false),
         ]
 
         def initialize(argv)
@@ -29,7 +29,7 @@ module Pod
 
         def validate!
           super
-          help! "A pod name or repo URL is required." unless @name_or_url
+          help! 'A pod name or repo URL is required.' unless @name_or_url
         end
 
         def run
@@ -63,11 +63,11 @@ module Pod
         ]
 
         def self.options
-          [ ["--quick",       "Lint skips checks that would require to download and build the spec"],
-            ["--only-errors", "Lint validates even if warnings are present"],
-            ["--subspec=NAME","Lint validates only the given subspec"],
-            ["--no-subspecs", "Lint skips validation of subspecs"],
-            ["--no-clean",    "Lint leaves the build directory intact for inspection"] ].concat(super)
+          [['--quick',       'Lint skips checks that would require to download and build the spec'],
+           ['--only-errors', 'Lint validates even if warnings are present'],
+           ['--subspec=NAME', 'Lint validates only the given subspec'],
+           ['--no-subspecs', 'Lint skips validation of subspecs'],
+           ['--no-clean',    'Lint leaves the build directory intact for inspection']].concat(super)
         end
 
         def initialize(argv)
@@ -102,10 +102,10 @@ module Pod
           count = podspecs_to_lint.count
           UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n"
           if invalid_count == 0
-            lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : "All the specs passed validation."
+            lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : 'All the specs passed validation.'
             UI.puts lint_passed_message.green << "\n\n"
           else
-            raise Informative, count == 1 ? "The spec did not pass validation." : "#{invalid_count} out of #{count} specs failed validation."
+            raise Informative, count == 1 ? 'The spec did not pass validation.' : "#{invalid_count} out of #{count} specs failed validation."
           end
           podspecs_tmp_dir.rmtree if podspecs_tmp_dir.exist?
         end
@@ -114,32 +114,32 @@ module Pod
 
         def podspecs_to_lint
           @podspecs_to_lint ||= begin
-            files = []
-            @podspecs_paths << '.' if @podspecs_paths.empty?
-            @podspecs_paths.each do |path|
-              if path =~ /https?:\/\//
-                require 'open-uri'
-                output_path = podspecs_tmp_dir + File.basename(path)
-                output_path.dirname.mkpath
-                open(path) do |io|
-                  output_path.open('w') { |f| f << io.read }
-                end
-                files << output_path
-              else if (pathname = Pathname.new(path)).directory?
-                files += Pathname.glob(pathname + '**/*.podspec{.json,}')
-                raise Informative, "No specs found in the current directory." if files.empty?
-              else
-                files << (pathname = Pathname.new(path))
-                raise Informative, "Unable to find a spec named `#{path}'." unless pathname.exist? && path.include?('.podspec')
+          files = []
+          @podspecs_paths << '.' if @podspecs_paths.empty?
+          @podspecs_paths.each do |path|
+            if path =~ /https?:\/\//
+              require 'open-uri'
+              output_path = podspecs_tmp_dir + File.basename(path)
+              output_path.dirname.mkpath
+              open(path) do |io|
+                output_path.open('w') { |f| f << io.read }
               end
+              files << output_path
+            else if (pathname = Pathname.new(path)).directory?
+                   files += Pathname.glob(pathname + '**/*.podspec{.json,}')
+                   raise Informative, 'No specs found in the current directory.' if files.empty?
+            else
+              files << (pathname = Pathname.new(path))
+              raise Informative, "Unable to find a spec named `#{path}'." unless pathname.exist? && path.include?('.podspec')
             end
+          end
           end
           files
         end
       end
 
         def podspecs_tmp_dir
-          Pathname.new(File.join(Pathname.new('/tmp').realpath, '/CocoaPods/Lint_podspec'))
+          Pathname(File.join(Pathname.new('/tmp').realpath, '/CocoaPods/Lint_podspec'))
         end
       end
 
@@ -153,11 +153,13 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new('NAME', false)
+          CLAide::Argument.new('NAME', false),
         ]
 
         def self.options
-          [["--show-all", "Print all versions of the given podspec"]].concat(super)
+          [
+            ['--show-all', 'Print all versions of the given podspec'],
+          ].concat(super)
         end
 
         def initialize(argv)
@@ -169,7 +171,7 @@ module Pod
 
         def validate!
           super
-          help! "A podspec name is required." unless @spec
+          help! 'A podspec name is required.' unless @spec
         end
 
         def run
@@ -187,11 +189,11 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new('NAME', false)
+          CLAide::Argument.new('NAME', false),
         ]
 
         def self.options
-          [["--show-all", "Pick from all versions of the given podspec"]].concat(super)
+          [['--show-all', 'Pick from all versions of the given podspec']].concat(super)
         end
 
         def initialize(argv)
@@ -203,14 +205,14 @@ module Pod
 
         def validate!
           super
-          help! "A podspec name is required." unless @spec
+          help! 'A podspec name is required.' unless @spec
         end
 
         def run
           filepath = if @show_all
-            specs = get_path_of_spec(@spec, @show_all).split(/\n/)
-            index = choose_from_array(specs, "Which spec would you like to print [1-#{ specs.count }]? ")
-            specs[index]
+                       specs = get_path_of_spec(@spec, @show_all).split(/\n/)
+                       index = choose_from_array(specs, "Which spec would you like to print [1-#{ specs.count }]? ")
+                       specs[index]
           else
             get_path_of_spec(@spec)
           end
@@ -229,11 +231,12 @@ module Pod
         DESC
 
         self.arguments = [
-            CLAide::Argument.new('NAME', false)
+          CLAide::Argument.new('NAME', false),
         ]
 
         def self.options
-          [["--show-all", "Pick which spec to edit from all available versions of the given podspec"]].concat(super)
+          [['--show-all', 'Pick which spec to edit from all available' \
+            'versions of the given podspec']].concat(super)
         end
 
         def initialize(argv)
@@ -245,19 +248,20 @@ module Pod
 
         def validate!
           super
-          help! "A podspec name is required." unless @spec
+          help! 'A podspec name is required.' unless @spec
         end
 
         def run
-          filepath = if @show_all
+          if @show_all
             specs = get_path_of_spec(@spec, @show_all).split(/\n/)
-            index = choose_from_array(specs, "Which spec would you like to edit [1-#{ specs.count }]? ")
-            specs[index]
+            message = "Which spec would you like to edit [1-#{specs.count}]? "
+            index = choose_from_array(specs, message)
+            filepath = specs[index]
           else
-            get_path_of_spec(@spec)
+            filepath = get_path_of_spec(@spec)
           end
 
-          exec_editor(filepath.to_s) if File.exists? filepath
+          exec_editor(filepath.to_s) if File.exist? filepath
           raise Informative, "#{ filepath } doesn't exist."
         end
 
@@ -284,7 +288,7 @@ module Pod
           raise Informative, "Failed to open editor. Set your 'EDITOR' environment variable."
         end
 
-        def exec_editor *args
+        def exec_editor(*args)
           return if args.to_s.empty?
           safe_exec(which_editor, *args)
         end
@@ -292,7 +296,7 @@ module Pod
         def safe_exec(cmd, *args)
           # This buys us proper argument quoting and evaluation
           # of environment variables in the cmd parameter.
-          exec "/bin/sh", "-i", "-c", cmd + ' "$@"', "--", *args
+          exec('/bin/sh', '-i', '-c', cmd + ' "$@"', '--', *args)
         end
       end
 
@@ -337,7 +341,7 @@ module Pod
         elsif sets.map(&:name).include?(spec)
           set = sets.find { |s| s.name == spec }
         else
-          names = sets.collect(&:name) * ', '
+          names = sets.map(&:name) * ', '
           raise Informative, "More than one spec found for '#{ spec }':\n#{ names }"
         end
 
@@ -346,19 +350,19 @@ module Pod
           return pathname_from_spec(best_spec, spec_source)
         end
 
-        return all_paths_from_set(set)
+        all_paths_from_set(set)
       end
 
       # @return [Pathname] the absolute path of the given spec and source
       #
-      def pathname_from_spec(spec, source)
+      def pathname_from_spec(spec, _source)
         Pathname(spec.defined_in_file)
       end
 
       # @return [String] of spec paths one on each line
       #
       def all_paths_from_set(set)
-        paths = ""
+        paths = ''
 
         sources = set.sources
 
@@ -384,18 +388,18 @@ module Pod
         sources.each do |source|
           versions = source.versions(set.name)
           versions.each do |version|
-            if !best_version or version > best_version
+            if !best_version || version > best_version
               best_source = source
               best_version = version
             end
           end
         end
 
-        if !best_source or !best_version
+        if !best_source || !best_version
           raise Informative, "Unable to locate highest known specification for `#{ set.name }'"
         end
 
-        return best_source.specification(set.name, best_version), best_source
+        [best_source.specification(set.name, best_version), best_source]
       end
 
       #--------------------------------------#
@@ -427,7 +431,7 @@ module Pod
 
         data[:name]          = repo['name']
         data[:summary]       = (repo['description'] || '').gsub(/["]/, '\"')
-        data[:homepage]      = (repo['homepage'] && !repo['homepage'].empty? ) ? repo['homepage'] : repo['html_url']
+        data[:homepage]      = (repo['homepage'] && !repo['homepage'].empty?) ? repo['homepage'] : repo['html_url']
         data[:author_name]   = user['name']  || user['login']
         data[:author_email]  = user['email'] || 'email@address.com'
         data[:source_url]    = repo['clone_url']
@@ -436,18 +440,18 @@ module Pod
       end
 
       def suggested_ref_and_version(repo)
-        tags = GitHub.tags(repo['html_url']).map {|tag| tag["name"]}
+        tags = GitHub.tags(repo['html_url']).map { |tag| tag['name'] }
         versions_tags = {}
         tags.each do |tag|
-          clean_tag = tag.gsub(/^v(er)? ?/,'')
+          clean_tag = tag.gsub(/^v(er)? ?/, '')
           versions_tags[Gem::Version.new(clean_tag)] = tag if Gem::Version.correct?(clean_tag)
         end
         version = versions_tags.keys.sort.last || '0.0.1'
-        data = {:version => version}
+        data = { :version => version }
         if version == '0.0.1'
           branches        = GitHub.branches(repo['html_url'])
           master_name     = repo['master_branch'] || 'master'
-          master          = branches.find {|branch| branch['name'] == master_name }
+          master          = branches.find { |branch| branch['name'] == master_name }
           data[:ref_type] = ':commit'
           data[:ref]      = master['commit']['sha']
         else
@@ -458,7 +462,7 @@ module Pod
       end
 
       def spec_template(data)
-        return <<-SPEC
+        <<-SPEC
 #
 #  Be sure to run `pod spec lint #{data[:name]}.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
@@ -513,7 +517,7 @@ Pod::Spec.new do |s|
   #  Specify a social_media_url where others can refer to, for example a twitter
   #  profile URL.
   #
-  
+
   s.author             = { "#{data[:author_name]}" => "#{data[:author_email]}" }
   # Or just: s.author    = "#{data[:author_name]}"
   # s.authors            = { "#{data[:author_name]}" => "#{data[:author_email]}" }
@@ -599,7 +603,7 @@ end
     end
 
       def semantic_versioning_notice(repo_id, repo)
-        return <<-EOS
+        <<-EOS
 
 #{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 

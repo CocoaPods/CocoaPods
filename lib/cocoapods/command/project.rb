@@ -33,7 +33,7 @@ module Pod
       #
       # @return [void]
       #
-        def run_install_with_update(update)
+      def run_install_with_update(update)
         installer = Installer.new(config.sandbox, config.podfile, config.lockfile)
         installer.update = update
         installer.install!
@@ -75,7 +75,8 @@ module Pod
     class Update < Command
       include Project
 
-      self.summary = 'Update outdated project dependencies and create new Podfile.lock'
+      self.summary = 'Update outdated project dependencies and create new ' \
+        'Podfile.lock'
 
       self.description = <<-DESC
         Updates the Pods identified by the specified `POD_NAMES`. If no
@@ -101,12 +102,19 @@ module Pod
           verify_lockfile_exists!
 
           # Check if all given pods are installed
-          missing_pods = @pods.select { |pod| !config.lockfile.pod_names.include?(pod) }
+          missing_pods = @pods.select do |pod|
+            !config.lockfile.pod_names.include?(pod)
+          end
+
           if missing_pods.length > 0
-            raise Informative, (missing_pods.length > 1 \
-              ? 'Pods %s are not installed and cannot be updated' \
-              : 'Pod %s is not installed and cannot be updated'
-            ) % missing_pods.map { |p| "`#{p}`" }.join(', ')
+            if missing_pods.length > 1
+              message = "Pods `#{missing_pods.join('`, `')}` are not " \
+                'installed and cannot be updated'
+            else
+              message = "The `#{missing_pods.first}` Pod is not installed " \
+                'and cannot be updated'
+            end
+            raise Informative, message
           end
 
           run_install_with_update(:pods => @pods)
