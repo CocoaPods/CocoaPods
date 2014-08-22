@@ -40,10 +40,11 @@ File References:
 - Products:
   - iOS App.app
   - OS X App.app
-- Pods-OS X App.debug.xcconfig
-- Pods-OS X App.release.xcconfig
-- Pods-iOS App.debug.xcconfig
-- Pods-iOS App.release.xcconfig
+- Pods:
+  - Pods-OS X App.debug.xcconfig
+  - Pods-OS X App.release.xcconfig
+  - Pods-iOS App.debug.xcconfig
+  - Pods-iOS App.release.xcconfig
 
 
 

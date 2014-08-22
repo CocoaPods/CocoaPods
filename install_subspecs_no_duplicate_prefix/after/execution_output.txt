@@ -1,7 +1,11 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
 
+Preparing
+
 Analyzing dependencies
-Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Fetching external sources
 -> Fetching podspec for `Test` from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`
@@ -17,19 +21,11 @@ Comparing resolved specification to the sandbox manifest
 Downloading dependencies
 
 -> Installing Test (0.0.1)
- > GitHub download
-   $ /usr/local/bin/git config core.bare
-   true
-   $ /usr/local/bin/git config core.bare
-   true
- > Updating cache git repo (CACHES_DIR/GitHub/ac2e144ba86f0bc59ac0f1d79e724d89f220e1b6)
-     $ /usr/local/bin/git remote update
-     Fetching origin
- > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/ac2e144ba86f0bc59ac0f1d79e724d89f220e1b6
-     ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test
-     Cloning into 'ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test'...
-     done.
+ > Git download
+ > Git download
+     $ /usr/local/bin/git clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git
+     ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Sources/Test --single-branch --depth 1
+     Cloning into 'ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Sources/Test'...
   - Running pre install hooks
 
 Generating Pods project
@@ -39,22 +35,9 @@ Generating Pods project
   - Adding libraries to Pods project
   - Adding resources to Pods project
   - Linking headers
-  - Installing libraries
+  - Installing targets
     - Installing target `Pods-Test` iOS 6.0
-      - Adding Build files
-      - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-Test.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-Test-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-Test-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-Test-dummy.m`
     - Installing target `Pods` iOS 6.0
-      - Generating Release xcconfig file at `Pods/Pods.release.xcconfig`
-      - Generating Debug xcconfig file at `Pods/Pods.debug.xcconfig`
-      - Generating target environment header at `Pods/Pods-environment.h`
-      - Generating copy resources script at `Pods/Pods-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
@@ -64,8 +47,8 @@ Integrating client project
 
 [!] From now on use `SampleApp.xcworkspace`.
 
-Integrating Pod target `Pods-Test` into aggregate target Pods of project `SampleApp.xcodeproj`.
+Integrating target `Pods` (`SampleApp.xcodeproj` project)
 
-[!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Pods.release.xcconfig'. This can lead to problems with the CocoaPods installation
+[!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Target Support Files/Pods/Pods.release.xcconfig'. This can lead to problems with the CocoaPods installation
     - Use the `$(inherited)` flag, or
     - Remove the build settings from the target.

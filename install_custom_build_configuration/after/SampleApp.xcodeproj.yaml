@@ -22,10 +22,11 @@ File References:
   - libPods.a
 - Products:
   - SampleApp.app
-- Pods.debug.xcconfig
-- Pods.custom debug - missing some settings .xcconfig
-- Pods.release.xcconfig
-- Pods.custom release.xcconfig
+- Pods:
+  - Pods.debug.xcconfig
+  - Pods.custom debug - missing some settings .xcconfig
+  - Pods.release.xcconfig
+  - Pods.custom release.xcconfig
 
 
 

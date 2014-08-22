@@ -38,8 +38,9 @@ File References:
   - libPods.a
 - Products:
   - iOS App.app
-- Pods.debug.xcconfig
-- Pods.release.xcconfig
+- Pods:
+  - Pods.debug.xcconfig
+  - Pods.release.xcconfig
 
 
 

@@ -1,0 +1,1 @@
+../../../Sources/Test/FakeSubspec/Foo.h

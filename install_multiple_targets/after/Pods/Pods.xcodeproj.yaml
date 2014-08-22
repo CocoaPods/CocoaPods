@@ -137,7 +137,7 @@ Targets:
           GCC_DYNAMIC_NO_PIC: 'NO'
           GCC_OPTIMIZATION_LEVEL: '0'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - "$(inherited)"
@@ -157,7 +157,7 @@ Targets:
           COPY_PHASE_STRIP: 'YES'
           DSTROOT: "/tmp/xcodeproj.dst"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
           INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           OTHER_CFLAGS:
@@ -242,7 +242,7 @@ Targets:
           GCC_DYNAMIC_NO_PIC: 'NO'
           GCC_OPTIMIZATION_LEVEL: '0'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-SampleApp_2-JSONKit-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp_2-JSONKit/Pods-SampleApp_2-JSONKit-prefix.pch
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - "$(inherited)"
@@ -262,7 +262,7 @@ Targets:
           COPY_PHASE_STRIP: 'YES'
           DSTROOT: "/tmp/xcodeproj.dst"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-SampleApp_2-JSONKit-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp_2-JSONKit/Pods-SampleApp_2-JSONKit-prefix.pch
           INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           OTHER_CFLAGS:
@@ -298,7 +298,7 @@ Targets:
           GCC_DYNAMIC_NO_PIC: 'NO'
           GCC_OPTIMIZATION_LEVEL: '0'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-SampleApp_2-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp_2-Reachability/Pods-SampleApp_2-Reachability-prefix.pch
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - "$(inherited)"
@@ -318,7 +318,7 @@ Targets:
           COPY_PHASE_STRIP: 'YES'
           DSTROOT: "/tmp/xcodeproj.dst"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-SampleApp_2-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp_2-Reachability/Pods-SampleApp_2-Reachability-prefix.pch
           INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           OTHER_CFLAGS:
@@ -403,7 +403,7 @@ Targets:
           GCC_DYNAMIC_NO_PIC: 'NO'
           GCC_OPTIMIZATION_LEVEL: '0'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-test-JSONKit-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-test-JSONKit/Pods-test-JSONKit-prefix.pch
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - "$(inherited)"
@@ -423,7 +423,7 @@ Targets:
           COPY_PHASE_STRIP: 'YES'
           DSTROOT: "/tmp/xcodeproj.dst"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-test-JSONKit-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-test-JSONKit/Pods-test-JSONKit-prefix.pch
           INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           OTHER_CFLAGS:

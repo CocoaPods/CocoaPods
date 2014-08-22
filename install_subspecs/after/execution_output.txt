@@ -1,19 +1,23 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
 
+Preparing
+
 Analyzing dependencies
-Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
-Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
-Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-iOS App`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-OS X App`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
-   $ /usr/local/bin/hg clone PodTest-hg-source ROOT/tmp/install_subspecs/Pods/PodTest
+   $ /usr/local/bin/hg clone PodTest-hg-source ROOT/tmp/install_subspecs/Pods/Sources/PodTest
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
-   $ /usr/local/bin/hg clone PodTest-hg-source ROOT/tmp/install_subspecs/Pods/PodTest
+   $ /usr/local/bin/hg clone PodTest-hg-source ROOT/tmp/install_subspecs/Pods/Sources/PodTest
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 
@@ -39,37 +43,11 @@ Generating Pods project
   - Adding libraries to Pods project
   - Adding resources to Pods project
   - Linking headers
-  - Installing libraries
+  - Installing targets
     - Installing target `Pods-OS X App-PodTest` OS X 10.6
-      - Adding Build files
-      - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-OS X App-PodTest.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-OS X App-PodTest-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-OS X App-PodTest-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-OS X App-PodTest-dummy.m`
     - Installing target `Pods-iOS App-PodTest` iOS 4.3
-      - Adding Build files
-      - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-iOS App-PodTest.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-iOS App-PodTest-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-iOS App-PodTest-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-iOS App-PodTest-dummy.m`
     - Installing target `Pods-OS X App` OS X 10.6
-      - Generating Release xcconfig file at `Pods/Pods-OS X App.release.xcconfig`
-      - Generating Debug xcconfig file at `Pods/Pods-OS X App.debug.xcconfig`
-      - Generating target environment header at `Pods/Pods-OS X App-environment.h`
-      - Generating copy resources script at `Pods/Pods-OS X App-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-OS X App-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-OS X App-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-OS X App-dummy.m`
     - Installing target `Pods-iOS App` iOS 4.3
-      - Generating Release xcconfig file at `Pods/Pods-iOS App.release.xcconfig`
-      - Generating Debug xcconfig file at `Pods/Pods-iOS App.debug.xcconfig`
-      - Generating target environment header at `Pods/Pods-iOS App-environment.h`
-      - Generating copy resources script at `Pods/Pods-iOS App-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-iOS App-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-iOS App-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-iOS App-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
@@ -79,10 +57,10 @@ Integrating client project
 
 [!] From now on use `SampleApp.xcworkspace`.
 
-Integrating Pod target `Pods-OS X App-PodTest` into aggregate target Pods-OS X App of project `SampleApp.xcodeproj`.
+Integrating target `Pods-OS X App` (`SampleApp.xcodeproj` project)
 
-Integrating Pod target `Pods-iOS App-PodTest` into aggregate target Pods-iOS App of project `SampleApp.xcodeproj`.
+Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
 
-[!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Pods-iOS App.release.xcconfig'. This can lead to problems with the CocoaPods installation
+[!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Target Support Files/Pods-iOS App/Pods-iOS App.release.xcconfig'. This can lead to problems with the CocoaPods installation
     - Use the `$(inherited)` flag, or
     - Remove the build settings from the target.

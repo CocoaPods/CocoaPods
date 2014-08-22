@@ -1,11 +1,35 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
 
+Preparing
+  Migrating to CocoaPods 0.34
+    - Deleting `Pods/Headers`
+    - Making path `Pods/Headers`
+    - Deleting `Pods/BuildHeaders`
+    - Moving `Pods/JSONKit` to `Pods/Sources/JSONKit`
+    - Deleting `Pods/Pods-acknowledgements.markdown`
+    - Deleting `Pods/Pods-acknowledgements.plist`
+    - Deleting `Pods/Pods-dummy.m`
+    - Deleting `Pods/Pods-environment.h`
+    - Deleting `Pods/Pods-JSONKit-dummy.m`
+    - Deleting `Pods/Pods-JSONKit-prefix.pch`
+    - Deleting `Pods/Pods-JSONKit-Private.xcconfig`
+    - Deleting `Pods/Pods-JSONKit.xcconfig`
+    - Deleting `Pods/Pods-Reachability-dummy.m`
+    - Deleting `Pods/Pods-Reachability-prefix.pch`
+    - Deleting `Pods/Pods-Reachability-Private.xcconfig`
+    - Deleting `Pods/Pods-Reachability.xcconfig`
+    - Deleting `Pods/Pods-resources.sh`
+    - Deleting `Pods/Pods.xcconfig`
+    - Moving `Pods/Reachability` to `Pods/Sources/Reachability`
+
 Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Finding Podfile changes
   - JSONKit
   - Reachability
-Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `Pods' (iOS 6.0)
@@ -19,46 +43,40 @@ Comparing resolved specification to the sandbox manifest
 Downloading dependencies
 
 -> Installing JSONKit 1.4 (was 1.4)
- > GitHub download
-   $ /usr/local/bin/git config core.bare
-   true
-   $ /usr/local/bin/git config core.bare
-   true
-   $ /usr/local/bin/git rev-list --max-count=1 v1.4
-   99930114548f9cedc8070a3bd4d9a217adc218ca
- > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f
-     ROOT/tmp/update_selected/Pods/JSONKit
-     Cloning into 'ROOT/tmp/update_selected/Pods/JSONKit'...
-     done.
-   $ /usr/local/bin/git fetch origin tags/v1.4 2>&1
-   From CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f
-    * tag               v1.4       -> FETCH_HEAD
-   $ /usr/local/bin/git reset --hard FETCH_HEAD
-   HEAD is now at 9993011 Record a few more things in the changelog for v1.4.
-   $ /usr/local/bin/git checkout -b activated-pod-commit 2>&1
-   Switched to a new branch 'activated-pod-commit'
+ > Git download
+ > Git download
+     $ /usr/local/bin/git clone https://github.com/johnezang/JSONKit.git ROOT/tmp/update_selected/Pods/Sources/JSONKit
+     --single-branch --depth 1 --branch v1.4
+     Cloning into 'ROOT/tmp/update_selected/Pods/Sources/JSONKit'...
+     Note: checking out '99930114548f9cedc8070a3bd4d9a217adc218ca'.
+     
+     You are in 'detached HEAD' state. You can look around, make experimental
+     changes and commit them, and you can discard any commits you make in this
+     state without impacting any branches by performing another checkout.
+     
+     If you want to create a new branch to retain commits you create, you may
+     do so (now or later) by using -b with the checkout command again. Example:
+     
+       git checkout -b new_branch_name
+     
 
 -> Installing Reachability 3.1.1 (was 3.0.0)
- > GitHub download
-   $ /usr/local/bin/git config core.bare
-   true
-   $ /usr/local/bin/git config core.bare
-   true
-   $ /usr/local/bin/git rev-list --max-count=1 v3.1.1
-   7ea54e98cdc439bedda279c5ad9031822269ce3c
- > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
-     ROOT/tmp/update_selected/Pods/Reachability
-     Cloning into 'ROOT/tmp/update_selected/Pods/Reachability'...
-     done.
-   $ /usr/local/bin/git fetch origin tags/v3.1.1 2>&1
-   From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
-    * tag               v3.1.1     -> FETCH_HEAD
-   $ /usr/local/bin/git reset --hard FETCH_HEAD
-   HEAD is now at 7ea54e9 Merge pull request #45 from sethfri/master
-   $ /usr/local/bin/git checkout -b activated-pod-commit 2>&1
-   Switched to a new branch 'activated-pod-commit'
+ > Git download
+ > Git download
+     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git
+     ROOT/tmp/update_selected/Pods/Sources/Reachability --single-branch --depth 1 --branch v3.1.1
+     Cloning into 'ROOT/tmp/update_selected/Pods/Sources/Reachability'...
+     Note: checking out '7ea54e98cdc439bedda279c5ad9031822269ce3c'.
+     
+     You are in 'detached HEAD' state. You can look around, make experimental
+     changes and commit them, and you can discard any commits you make in this
+     state without impacting any branches by performing another checkout.
+     
+     If you want to create a new branch to retain commits you create, you may
+     do so (now or later) by using -b with the checkout command again. Example:
+     
+       git checkout -b new_branch_name
+     
   - Running pre install hooks
 
 Generating Pods project
@@ -68,29 +86,10 @@ Generating Pods project
   - Adding libraries to Pods project
   - Adding resources to Pods project
   - Linking headers
-  - Installing libraries
+  - Installing targets
     - Installing target `Pods-JSONKit` iOS 6.0
-      - Adding Build files
-      - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-JSONKit.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-JSONKit-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-JSONKit-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-JSONKit-dummy.m`
     - Installing target `Pods-Reachability` iOS 6.0
-      - Adding Build files
-      - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-Reachability.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-Reachability-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-Reachability-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-Reachability-dummy.m`
     - Installing target `Pods` iOS 6.0
-      - Generating Release xcconfig file at `Pods/Pods.release.xcconfig`
-      - Generating Debug xcconfig file at `Pods/Pods.debug.xcconfig`
-      - Generating target environment header at `Pods/Pods-environment.h`
-      - Generating copy resources script at `Pods/Pods-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
@@ -98,5 +97,5 @@ Generating Pods project
 
 Integrating client project
 
-Integrating Pod targets `Pods-JSONKit and Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
+Integrating target `Pods` (`SampleApp.xcodeproj` project)
   - Removing (Pods/Pods.xcconfig)

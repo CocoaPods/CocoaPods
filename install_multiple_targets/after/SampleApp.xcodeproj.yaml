@@ -61,12 +61,13 @@ File References:
   - SampleAppTests.octest
   - SampleApp_2.app
   - NonIntegrated.app
-- Pods.debug.xcconfig
-- Pods.release.xcconfig
-- Pods-SampleApp_2.debug.xcconfig
-- Pods-SampleApp_2.release.xcconfig
-- Pods-test.debug.xcconfig
-- Pods-test.release.xcconfig
+- Pods:
+  - Pods.debug.xcconfig
+  - Pods.release.xcconfig
+  - Pods-SampleApp_2.debug.xcconfig
+  - Pods-SampleApp_2.release.xcconfig
+  - Pods-test.debug.xcconfig
+  - Pods-test.release.xcconfig
 
 
 

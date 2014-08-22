@@ -22,8 +22,9 @@ File References:
   - libPods-SampleApp_2.a
 - Products:
   - SampleApp.app
-- Pods-SampleApp_2.debug.xcconfig
-- Pods-SampleApp_2.release.xcconfig
+- Pods:
+  - Pods-SampleApp_2.debug.xcconfig
+  - Pods-SampleApp_2.release.xcconfig
 
 
 

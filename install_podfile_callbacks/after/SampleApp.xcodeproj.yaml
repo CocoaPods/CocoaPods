@@ -22,8 +22,9 @@ File References:
   - libPods.a
 - Products:
   - SampleApp.app
-- Pods.debug.xcconfig
-- Pods.release.xcconfig
+- Pods:
+  - Pods.debug.xcconfig
+  - Pods.release.xcconfig
 
 
 

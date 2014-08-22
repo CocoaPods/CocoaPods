@@ -101,7 +101,7 @@ Targets:
           GCC_ENABLE_OBJC_GC: supported
           GCC_OPTIMIZATION_LEVEL: '0'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - "$(inherited)"
@@ -122,7 +122,7 @@ Targets:
           DSTROOT: "/tmp/xcodeproj.dst"
           GCC_ENABLE_OBJC_GC: supported
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
-          GCC_PREFIX_HEADER: Pods-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
           INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           OTHER_CFLAGS:

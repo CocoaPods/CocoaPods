@@ -1,9 +1,13 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
 
+Preparing
+
 Analyzing dependencies
-Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
-Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
-Using `ARCHS` setting to build architectures: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-test`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp_2`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Resolving dependencies of `Podfile`
 Resolving dependencies for target `Pods' (iOS 6.0)
@@ -21,41 +25,31 @@ Comparing resolved specification to the sandbox manifest
 Downloading dependencies
 
 -> Installing JSONKit (1.5pre)
- > GitHub download
-   $ /usr/local/bin/git config core.bare
-   true
-   $ /usr/local/bin/git config core.bare
-   true
-   $ /usr/local/bin/git rev-list --max-count=1 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
-   0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
- > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/de3e1c97c03ac13b29e7533beea2d2131589900f
-     ROOT/tmp/install_multiple_targets/Pods/JSONKit
-     Cloning into 'ROOT/tmp/install_multiple_targets/Pods/JSONKit'...
-     done.
-   $ /usr/local/bin/git checkout -b activated-pod-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce 2>&1
-   Switched to a new branch 'activated-pod-commit'
+ > Git download
+ > Git download
+     $ /usr/local/bin/git clone https://github.com/johnezang/JSONKit.git
+     ROOT/tmp/install_multiple_targets/Pods/Sources/JSONKit
+     Cloning into 'ROOT/tmp/install_multiple_targets/Pods/Sources/JSONKit'...
+   $ /usr/local/bin/git checkout -b activated-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+   Switched to a new branch 'activated-commit'
 
 -> Installing Reachability (3.1.0)
- > GitHub download
-   $ /usr/local/bin/git config core.bare
-   true
-   $ /usr/local/bin/git config core.bare
-   true
-   $ /usr/local/bin/git rev-list --max-count=1 v3.1.0
-   f7176f4798d068d233dca5223ae4bd9c8059e830
- > Cloning to Pods folder
-     $ /usr/local/bin/git clone CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
-     ROOT/tmp/install_multiple_targets/Pods/Reachability
-     Cloning into 'ROOT/tmp/install_multiple_targets/Pods/Reachability'...
-     done.
-   $ /usr/local/bin/git fetch origin tags/v3.1.0 2>&1
-   From CACHES_DIR/GitHub/48f11286750afa2e2eb80564e288f42eed7cbab6
-    * tag               v3.1.0     -> FETCH_HEAD
-   $ /usr/local/bin/git reset --hard FETCH_HEAD
-   HEAD is now at f7176f4 updated podspec
-   $ /usr/local/bin/git checkout -b activated-pod-commit 2>&1
-   Switched to a new branch 'activated-pod-commit'
+ > Git download
+ > Git download
+     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git
+     ROOT/tmp/install_multiple_targets/Pods/Sources/Reachability --single-branch --depth 1 --branch v3.1.0
+     Cloning into 'ROOT/tmp/install_multiple_targets/Pods/Sources/Reachability'...
+     Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
+     
+     You are in 'detached HEAD' state. You can look around, make experimental
+     changes and commit them, and you can discard any commits you make in this
+     state without impacting any branches by performing another checkout.
+     
+     If you want to create a new branch to retain commits you create, you may
+     do so (now or later) by using -b with the checkout command again. Example:
+     
+       git checkout -b new_branch_name
+     
   - Running pre install hooks
 
 Generating Pods project
@@ -65,59 +59,14 @@ Generating Pods project
   - Adding libraries to Pods project
   - Adding resources to Pods project
   - Linking headers
-  - Installing libraries
+  - Installing targets
     - Installing target `Pods-Reachability` iOS 6.0
-      - Adding Build files
-      - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-Reachability.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-Reachability-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-Reachability-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-Reachability-dummy.m`
     - Installing target `Pods-SampleApp_2-JSONKit` iOS 6.0
-      - Adding Build files
-      - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-SampleApp_2-JSONKit.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-SampleApp_2-JSONKit-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-SampleApp_2-JSONKit-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-SampleApp_2-JSONKit-dummy.m`
     - Installing target `Pods-SampleApp_2-Reachability` iOS 6.0
-      - Adding Build files
-      - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-SampleApp_2-Reachability.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-SampleApp_2-Reachability-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-SampleApp_2-Reachability-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-SampleApp_2-Reachability-dummy.m`
     - Installing target `Pods-test-JSONKit` iOS 6.0
-      - Adding Build files
-      - Adding resource bundles to Pods project
-      - Generating public xcconfig file at `Pods/Pods-test-JSONKit.xcconfig`
-      - Generating private xcconfig file at `Pods/Pods-test-JSONKit-Private.xcconfig`
-      - Generating prefix header at `Pods/Pods-test-JSONKit-prefix.pch`
-      - Generating dummy source file at `Pods/Pods-test-JSONKit-dummy.m`
     - Installing target `Pods` iOS 6.0
-      - Generating Release xcconfig file at `Pods/Pods.release.xcconfig`
-      - Generating Debug xcconfig file at `Pods/Pods.debug.xcconfig`
-      - Generating target environment header at `Pods/Pods-environment.h`
-      - Generating copy resources script at `Pods/Pods-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-dummy.m`
     - Installing target `Pods-SampleApp_2` iOS 6.0
-      - Generating Release xcconfig file at `Pods/Pods-SampleApp_2.release.xcconfig`
-      - Generating Debug xcconfig file at `Pods/Pods-SampleApp_2.debug.xcconfig`
-      - Generating target environment header at `Pods/Pods-SampleApp_2-environment.h`
-      - Generating copy resources script at `Pods/Pods-SampleApp_2-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-SampleApp_2-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-SampleApp_2-dummy.m`
     - Installing target `Pods-test` iOS 6.0
-      - Generating Release xcconfig file at `Pods/Pods-test.release.xcconfig`
-      - Generating Debug xcconfig file at `Pods/Pods-test.debug.xcconfig`
-      - Generating target environment header at `Pods/Pods-test-environment.h`
-      - Generating copy resources script at `Pods/Pods-test-resources.sh`
-      - Generating acknowledgements at `Pods/Pods-test-acknowledgements.plist`
-      - Generating acknowledgements at `Pods/Pods-test-acknowledgements.markdown`
-      - Generating dummy source file at `Pods/Pods-test-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
@@ -127,8 +76,8 @@ Integrating client project
 
 [!] From now on use `SampleApp.xcworkspace`.
 
-Integrating Pod target `Pods-Reachability` into aggregate target Pods of project `SampleApp.xcodeproj`.
+Integrating target `Pods` (`SampleApp.xcodeproj` project)
 
-Integrating Pod targets `Pods-SampleApp_2-JSONKit and Pods-SampleApp_2-Reachability` into aggregate target Pods-SampleApp_2 of project `SampleApp.xcodeproj`.
+Integrating target `Pods-SampleApp_2` (`SampleApp.xcodeproj` project)
 
-Integrating Pod target `Pods-test-JSONKit` into aggregate target Pods-test of project `SampleApp.xcodeproj`.
+Integrating target `Pods-test` (`SampleApp.xcodeproj` project)
