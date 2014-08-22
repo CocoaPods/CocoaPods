@@ -11,6 +11,7 @@ module Pod
       def install!
         UI.message "- Installing target `#{library.name}` #{library.platform}" do
           add_target
+          create_support_files_dir
           add_files_to_build_phases
           add_resources_bundle_targets
           create_xcconfig_file
@@ -186,7 +187,8 @@ module Pod
       #
       def add_file_to_support_group(path)
         pod_name = library.pod_name
-        group = project.pod_support_files_group(pod_name)
+        dir = library.support_files_dir
+        group = project.pod_support_files_group(pod_name, dir)
         group.new_file(path)
       end
 

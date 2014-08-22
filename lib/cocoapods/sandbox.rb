@@ -132,8 +132,8 @@ module Pod
     #
     # @return [Pathname] the path of the support files.
     #
-    def target_support_files_dir(_name)
-      target_support_files_root
+    def target_support_files_dir(name)
+      target_support_files_root + name
     end
 
     # Returns the path where the Pod with the given name is stored, taking into
