@@ -28,6 +28,8 @@ module Pod
         def integrate!
           UI.section(integration_message) do
             XCConfigIntegrator.integrate(target, native_targets)
+            update_to_cocoapods_0_34
+
             unless native_targets_to_integrate.empty?
               add_pods_library
               add_copy_resources_script_phase
@@ -47,6 +49,23 @@ module Pod
 
         # @!group Integration steps
         #---------------------------------------------------------------------#
+
+        # Fixes the paths of the copy resource scripts.
+        #
+        # @todo   This can be removed for CocoaPods 1.0
+        #
+        def update_to_cocoapods_0_34
+          phases = native_targets.map do |target|
+            target.shell_script_build_phases.select do |bp|
+              bp.name == 'Copy Pods Resources'
+            end
+          end.flatten
+
+          script_path = target.copy_resources_script_relative_path
+          phases.each do |phase|
+            phase.shell_script = %("#{script_path}"\n)
+          end
+        end
 
         # Adds spec libraries to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to
@@ -75,9 +94,9 @@ module Pod
         def add_copy_resources_script_phase
           phase_name = 'Copy Pods Resources'
           native_targets_to_integrate.each do |native_target|
-            phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first ||
-                    native_target.new_shell_script_build_phase(phase_name)
-            script_path  = target.copy_resources_script_relative_path
+            phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first
+            phase ||= native_target.new_shell_script_build_phase(phase_name)
+            script_path = target.copy_resources_script_relative_path
             phase.shell_script = %("#{script_path}"\n)
             phase.show_env_vars_in_log = '0'
           end

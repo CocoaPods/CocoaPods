@@ -18,7 +18,7 @@ module Pod
           def self.integrate(pod_bundle, targets)
             targets.each do |target|
               target.build_configurations.each do |config|
-                update_from_cocoapods_0_33_1(pod_bundle, targets)
+                update_to_cocoapods_0_34(pod_bundle, targets)
                 set_target_xcconfig(pod_bundle, config)
               end
             end
@@ -40,7 +40,7 @@ module Pod
           #
           # @todo   This can be removed for CocoaPods 1.0
           #
-          def self.update_from_cocoapods_0_33_1(pod_bundle, targets)
+          def self.update_to_cocoapods_0_34(pod_bundle, targets)
             sandbox = pod_bundle.sandbox
             targets.map(&:project).uniq.each do |project|
               file_refs = project.files.select do |file_ref|

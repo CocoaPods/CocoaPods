@@ -41,6 +41,15 @@ module Pod
           @target_integrator.integrate!
         end
 
+        it 'fixes the copy resource scripts of legacy installations' do
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Copy Pods Resources' }
+          phase.shell_script = %("${SRCROOT}/../Pods/Pods-resources.sh"\n)
+          @target_integrator.integrate!
+          phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Target Support Files/Pods-resources.sh\""
+        end
+
         it 'adds references to the Pods static libraries to the Frameworks group' do
           @target_integrator.integrate!
           @target_integrator.send(:user_project)['Frameworks/libPods.a'].should.not.nil?
