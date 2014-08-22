@@ -4,6 +4,7 @@ module Pod
   describe Installer::AggregateTargetInstaller do
     describe 'In General' do
       before do
+        config.sandbox.prepare
         @podfile = Podfile.new do
           platform :ios
           xcodeproj 'dummy'

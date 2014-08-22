@@ -41,14 +41,20 @@ module Pod
           # @todo   This can be removed for CocoaPods 1.0
           #
           def self.update_from_cocoapods_0_33_1(pod_bundle, targets)
+            sandbox = pod_bundle.sandbox
             targets.map(&:project).uniq.each do |project|
-              path = pod_bundle.xcconfig_relative_path(nil)
-              file_ref = project.files.find { |f| f.path == path }
-              if file_ref
-                UI.message "- Removing (#{path})" do
+              file_refs = project.files.select do |file_ref|
+                path = file_ref.path.to_s
+                if File.extname(path) == '.xcconfig'
+                  absolute_path = file_ref.real_path.to_s
+                  absolute_path.start_with?(sandbox.root.to_s) &&
+                    !absolute_path.start_with?(sandbox.target_support_files_root.to_s)
+                end
+              end
+
+              file_refs.uniq.each do |file_ref|
+                UI.message "- Removing (#{file_ref.path})" do
                   file_ref.remove_from_project
-                  absolute_path = pod_bundle.xcconfig_path
-                  File.delete(absolute_path) if File.exist?(absolute_path)
                 end
               end
             end

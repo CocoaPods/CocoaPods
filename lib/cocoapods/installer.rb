@@ -87,7 +87,7 @@ module Pod
     # @return [void]
     #
     def install!
-      migrate_installation_if_needed
+      prepare
       resolve_dependencies
       download_dependencies
       generate_pods_project
@@ -95,10 +95,10 @@ module Pod
       perform_post_install_actions
     end
 
-    def migrate_installation_if_needed
-      UI.section "Performing existing installation migration" do
-        migrator = Migrator.new(sandbox)
-        migrator.migrate!
+    def prepare
+      UI.section "Preparing" do
+        sandbox.prepare
+        Migrator.migrate(sandbox)
       end
     end
 

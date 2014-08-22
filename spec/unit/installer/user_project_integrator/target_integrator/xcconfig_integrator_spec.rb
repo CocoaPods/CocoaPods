@@ -28,8 +28,6 @@ module Pod
       file_ref = @project.new_file(path)
       config = @target.build_configuration_list['Release']
       config.base_configuration_reference = file_ref
-      File.expects(:exist?).returns(true)
-      File.expects(:delete).with(path)
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @project.files.find { |f| f.path == path }.should.be.nil
     end

@@ -12,7 +12,7 @@ module Pod
 
     it "creates a copy of the podspec" do
       @subject.fetch(config.sandbox)
-      path = config.sandbox.specifications_dir + 'Reachability.podspec'
+      path = config.sandbox.specifications_root + 'Reachability.podspec'
       path.should.exist?
     end
 

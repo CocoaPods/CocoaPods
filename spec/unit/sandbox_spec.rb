@@ -94,8 +94,8 @@ module Pod
     describe 'Specification store' do
 
       it 'loads the stored specification with the given name' do
-        (@sandbox.specifications_dir).mkdir
-        FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.specifications_dir)
+        (@sandbox.specifications_root).mkdir
+        FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.specifications_root)
         @sandbox.specification('BananaLib').name.should == 'BananaLib'
       end
 
@@ -112,7 +112,7 @@ module Pod
       end
 
       it 'returns the directory where to store the specifications' do
-        @sandbox.specifications_dir.should == temporary_directory + 'Sandbox/Local Podspecs'
+        @sandbox.specifications_root.should == temporary_directory + 'Sandbox/Local Podspecs'
       end
 
       it "returns the path to a spec file in the 'Local Podspecs' dir" do

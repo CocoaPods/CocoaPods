@@ -6,6 +6,7 @@ module Pod
     before do
       dependency = Dependency.new('Reachability', :git => fixture('integration/Reachability'))
       @subject = ExternalSources.from_dependency(dependency, nil)
+      config.sandbox.prepare
     end
 
     #--------------------------------------#
@@ -36,7 +37,7 @@ module Pod
 
       it 'pre-downloads the Pod and stores the relevant information in the sandbox' do
         @subject.send(:pre_download, config.sandbox)
-        path = config.sandbox.specifications_dir + 'Reachability.podspec'
+        path = config.sandbox.specifications_root + 'Reachability.podspec'
         path.should.exist?
         config.sandbox.predownloaded_pods.should == ['Reachability']
         config.sandbox.checkout_sources.should == {

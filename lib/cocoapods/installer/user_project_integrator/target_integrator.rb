@@ -77,8 +77,8 @@ module Pod
           native_targets_to_integrate.each do |native_target|
             phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first ||
                     native_target.new_shell_script_build_phase(phase_name)
-            path  = target.copy_resources_script_relative_path
-            phase.shell_script = %(            "#{path}"\n            )
+            script_path  = target.copy_resources_script_relative_path
+            phase.shell_script = %("#{script_path}"\n)
             phase.show_env_vars_in_log = '0'
           end
         end
