@@ -43,6 +43,8 @@ module Pod
               end
             end
           end
+
+          delete(Pathname(File.join(ENV['HOME'], 'Library/Caches/CocoaPods/Git')))
         end
 
         # @!group Private helpers
