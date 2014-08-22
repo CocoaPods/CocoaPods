@@ -107,7 +107,7 @@ module Pod
           @resolver.resolve
         end.message
         message.should.match /Unable to find a specification/
-        message.should.match /`Windows` dependent by BlocksKit/
+        message.should.match /`Windows` depended upon by BlocksKit/
       end
 
       it 'does not raise if all dependencies are supported by the platform of the target definition' do

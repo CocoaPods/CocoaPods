@@ -196,7 +196,7 @@ module Pod
         cached_sets[name] = set
         unless set
           raise Informative, "Unable to find a specification for " \
-            "`#{dependency}` dependent by #{dependent_spec}."
+            "`#{dependency}` depended upon by #{dependent_spec}."
         end
       end
       cached_sets[name]
