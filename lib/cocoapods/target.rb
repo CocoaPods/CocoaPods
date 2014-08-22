@@ -72,7 +72,7 @@ module Pod
     #         library.
     #
     def support_files_root
-      @sandbox.library_support_files_dir(name)
+      @sandbox.target_support_files_dir(name)
     end
 
     # @param  [String] variant

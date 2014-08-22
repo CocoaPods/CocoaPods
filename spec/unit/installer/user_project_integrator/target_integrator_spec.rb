@@ -58,7 +58,7 @@ module Pod
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == 'Copy Pods Resources' }
-          phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Generated/Pods-resources.sh\""
+          phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Target Support Files/Pods-resources.sh\""
         end
 
         it 'adds a Check Manifest.lock build phase to each target' do

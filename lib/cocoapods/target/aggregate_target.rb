@@ -115,7 +115,7 @@ module Pod
     #         variable of the user's project.
     #
     def relative_pods_root
-      "${SRCROOT}/#{support_files_root.relative_path_from(client_root)}"
+      "${SRCROOT}/#{sandbox.root.relative_path_from(client_root)}"
     end
 
     # @param  [String] config_name The build configuration name to get the xcconfig for

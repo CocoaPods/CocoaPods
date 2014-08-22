@@ -50,7 +50,6 @@ module Pod
       it "checks for JSON podspecs" do
         path = config.sandbox.pod_dir('Reachability')
         podspec_path = path + 'Reachability.podspec.json'
-        Dir.mkdir(config.sandbox.sources_root)
         Dir.mkdir(path)
         File.open(podspec_path, "w") {}
         Pathname.any_instance.stubs(:rmtree)

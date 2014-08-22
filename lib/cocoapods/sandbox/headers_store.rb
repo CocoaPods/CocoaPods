@@ -31,7 +31,7 @@ module Pod
       #         root with the `${PODS_ROOT}` variable.
       #
       def search_paths
-        headers_dir = root.relative_path_from(sandbox.generated_dir_root).dirname
+        headers_dir = root.relative_path_from(sandbox.root).dirname
         @search_paths.uniq.map { |path| "${PODS_ROOT}/#{headers_dir}/#{path}" }
       end
 

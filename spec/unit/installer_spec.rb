@@ -424,7 +424,7 @@ module Pod
 
         it 'saves the project to the given path' do
           Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
-          path = temporary_directory + 'Pods/Generated/Pods.xcodeproj'
+          path = temporary_directory + 'Pods/Pods.xcodeproj'
           @installer.pods_project.expects(:save)
           @installer.send(:write_pod_project)
         end
@@ -454,7 +454,7 @@ module Pod
 
         it 'writes the sandbox manifest' do
           @installer.send(:write_lockfiles)
-          lockfile = Lockfile.from_file(temporary_directory + 'Pods/Generated/Manifest.lock')
+          lockfile = Lockfile.from_file(temporary_directory + 'Pods/Manifest.lock')
           lockfile.pod_names.should == ['BananaLib']
         end
 

@@ -21,7 +21,7 @@ module Pod
         end
 
         it 'returns the path of the pods root relative to the user project' do
-          @generator.target.relative_pods_root.should == '${SRCROOT}/Pods/Generated'
+          @generator.target.relative_pods_root.should == '${SRCROOT}/Pods'
         end
 
         #-----------------------------------------------------------------------#
@@ -53,7 +53,7 @@ module Pod
         end
 
         it 'sets the PODS_ROOT build variable' do
-          @xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods/Generated'
+          @xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
         end
 
         it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as header search paths' do

@@ -33,7 +33,7 @@ module Pod
       end
 
       it 'returns the public headers store' do
-        @sandbox.public_headers.root.should == temporary_directory + 'Sandbox/Generated/Headers/Headers'
+        @sandbox.public_headers.root.should == temporary_directory + 'Sandbox/Headers/Public'
       end
 
       it 'cleans any trace of the Pod with the given name' do
@@ -61,19 +61,19 @@ module Pod
     describe 'Paths' do
 
       it 'returns the path of the manifest' do
-        @sandbox.manifest_path.should == temporary_directory + 'Sandbox/Generated/Manifest.lock'
+        @sandbox.manifest_path.should == temporary_directory + 'Sandbox/Manifest.lock'
       end
 
       it 'returns the path of the Pods project' do
-        @sandbox.project_path.should == temporary_directory + 'Sandbox/Generated/Pods.xcodeproj'
+        @sandbox.project_path.should == temporary_directory + 'Sandbox/Pods.xcodeproj'
       end
 
       it 'returns the directory for the support files of a library' do
-        @sandbox.library_support_files_dir('Pods').should == temporary_directory + 'Sandbox/Generated'
+        @sandbox.target_support_files_dir('Pods').should == temporary_directory + 'Sandbox/Target Support Files'
       end
 
       it 'returns the directory where a Pod is stored' do
-        @sandbox.pod_dir('JSONKit').should == temporary_directory + 'Sandbox/Generated/Sources/JSONKit'
+        @sandbox.pod_dir('JSONKit').should == temporary_directory + 'Sandbox/Sources/JSONKit'
       end
 
       it 'returns the directory where a local Pod is stored' do
@@ -112,18 +112,18 @@ module Pod
       end
 
       it 'returns the directory where to store the specifications' do
-        @sandbox.specifications_dir.should == temporary_directory + 'Sandbox/Generated/Local Podspecs'
+        @sandbox.specifications_dir.should == temporary_directory + 'Sandbox/Local Podspecs'
       end
 
       it "returns the path to a spec file in the 'Local Podspecs' dir" do
-        (@sandbox.root + 'Generated/Local Podspecs').mkdir
-        FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.root + 'Generated/Local Podspecs')
-        @sandbox.specification_path('BananaLib').should == @sandbox.root + 'Generated/Local Podspecs/BananaLib.podspec'
+        (@sandbox.root + 'Local Podspecs').mkdir
+        FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.root + 'Local Podspecs')
+        @sandbox.specification_path('BananaLib').should == @sandbox.root + 'Local Podspecs/BananaLib.podspec'
       end
 
       it 'stores a podspec with a given path into the sandbox' do
         @sandbox.store_podspec('BananaLib', fixture('banana-lib/BananaLib.podspec'))
-        path = @sandbox.root + 'Generated/Local Podspecs/BananaLib.podspec'
+        path = @sandbox.root + 'Local Podspecs/BananaLib.podspec'
         path.should.exist
         @sandbox.specification_path('BananaLib').should == path
       end
@@ -131,7 +131,7 @@ module Pod
       it 'stores a podspec with the given string into the sandbox' do
         podspec_string = fixture('banana-lib/BananaLib.podspec').read
         @sandbox.store_podspec('BananaLib', podspec_string)
-        path = @sandbox.root + 'Generated/Local Podspecs/BananaLib.podspec'
+        path = @sandbox.root + 'Local Podspecs/BananaLib.podspec'
         path.should.exist
         @sandbox.specification_path('BananaLib').should == path
       end

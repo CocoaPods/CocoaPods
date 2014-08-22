@@ -119,12 +119,13 @@ module Pod
         @installer.install!
         file = config.sandbox.root + @target.xcconfig_path('Release')
         xcconfig = Xcodeproj::Config.new(file)
-        xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods/Generated'
+        xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
       end
 
       it 'creates a header for the target which contains the information about the installed Pods' do
         @installer.install!
-        file = config.sandbox.generated_dir_root + 'Pods-environment.h'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods')
+        file = support_files_dir + 'Pods-environment.h'
         contents = file.read
         contents.should.include?('#define COCOAPODS_POD_AVAILABLE_BananaLib')
         contents.should.include?('#define COCOAPODS_VERSION_MAJOR_BananaLib 1')
@@ -140,7 +141,8 @@ module Pod
 
       it 'creates a create copy resources script' do
         @installer.install!
-        script = config.sandbox.generated_dir_root + 'Pods-resources.sh'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods')
+        script = support_files_dir + 'Pods-resources.sh'
         script.read.should.include?('logo-sidebar.png')
       end
 
@@ -154,9 +156,10 @@ module Pod
 
       it 'creates the acknowledgements files ' do
         @installer.install!
-        markdown = config.sandbox.generated_dir_root + 'Pods-acknowledgements.markdown'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods')
+        markdown = support_files_dir + 'Pods-acknowledgements.markdown'
         markdown.read.should.include?('Permission is hereby granted')
-        plist = config.sandbox.generated_dir_root + 'Pods-acknowledgements.plist'
+        plist = support_files_dir + 'Pods-acknowledgements.plist'
         plist.read.should.include?('Permission is hereby granted')
       end
 
@@ -165,8 +168,9 @@ module Pod
         build_files = @installer.library.target.source_build_phase.files
         build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-dummy.m') }
         build_file.should.be.not.nil
-        build_file.file_ref.path.should == 'Pods-dummy.m'
-        dummy = config.sandbox.generated_dir_root + 'Pods-dummy.m'
+        build_file.file_ref.path.should == 'Target Support Files/Pods-dummy.m'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods')
+        dummy = support_files_dir + 'Pods-dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
     end
