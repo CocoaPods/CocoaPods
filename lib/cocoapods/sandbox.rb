@@ -163,7 +163,7 @@ module Pod
       @pods_with_absolute_path.include? name
     end
 
-    # @return [Pathname] The directory where to store the headers.
+    # @return [Pathname] The directory where headers are stored.
     #
     def headers_root
       root + 'Headers'
