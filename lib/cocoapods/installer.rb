@@ -72,7 +72,7 @@ module Pod
 
     # Installs the Pods.
     #
-    # The installation process of is mostly linear with few minor complications
+    # The installation process is mostly linear with a few minor complications
     # to keep in mind:
     #
     # - The stored podspecs need to be cleaned before the resolution step
