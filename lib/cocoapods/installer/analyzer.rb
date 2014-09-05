@@ -196,7 +196,8 @@ module Pod
             target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
             target.archs = @archs_by_target_def[target_definition]
           else
-            target.client_root = config.installation_root
+            #In --no-integrate option client root will be in Pods directory
+            target.client_root = config.installation_root+"Pods/"
             target.user_target_uuids = []
             target.user_build_configurations = target_definition.build_configurations || {}
             if target_definition.platform.name == :osx
