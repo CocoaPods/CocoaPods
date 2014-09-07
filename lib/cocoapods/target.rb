@@ -37,10 +37,16 @@ module Pod
       end
     end
 
-    # @return [String] the name of the product excluding the file extension.
+    # @return [String] the name of the product excluding the file extension or
+    #         a product type specific prefix, depends on #requires_framework?
+    #         and #product_module_name or #label.
     #
     def product_basename
-      label
+      if requires_framework?
+        product_module_name
+      else
+        label
+      end
     end
 
     # @return [String] the name of the framework, depends on #product_basename.

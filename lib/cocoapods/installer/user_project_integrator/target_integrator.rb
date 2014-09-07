@@ -113,7 +113,7 @@ module Pod
             end
 
             # Find or create and add a reference for the current product type
-            target_basename = target.label
+            target_basename = target.product_basename
             new_product_ref = frameworks.files.find { |f| f.path == target.product_name } ||
               frameworks.new_product_ref_for_target(target_basename, target.product_type)
             unless build_phase.files_references.include?(new_product_ref)

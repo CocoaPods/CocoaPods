@@ -29,6 +29,14 @@ module Pod
       "#{target_definition.label}-#{root_spec.name}"
     end
 
+    # @return [String] The name to use for the source code module constructed
+    #         for this target, and which will be used to import the module in
+    #         implementation source files.
+    #
+    def product_module_name
+      c99ext_identifier(pod_name)
+    end
+
     # @return [Array<Sandbox::FileAccessor>] the file accessors for the
     #         specifications of this target.
     #

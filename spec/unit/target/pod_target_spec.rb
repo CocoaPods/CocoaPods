@@ -124,11 +124,11 @@ module Pod
           end
 
           it 'returns the product name' do
-            @pod_target.product_name.should == 'Pods-BananaLib.framework'
+            @pod_target.product_name.should == 'BananaLib.framework'
           end
 
           it 'returns the framework name' do
-            @pod_target.framework_name.should == 'Pods-BananaLib.framework'
+            @pod_target.framework_name.should == 'BananaLib.framework'
           end
 
           it 'returns the library name' do
@@ -150,7 +150,7 @@ module Pod
           end
 
           it 'returns the framework name' do
-            @pod_target.framework_name.should == 'Pods-BananaLib.framework'
+            @pod_target.framework_name.should == 'BananaLib.framework'
           end
 
           it 'returns the library name' do
@@ -176,12 +176,16 @@ module Pod
           @pod_target.uses_swift?.should == true
         end
 
+        it 'returns the product module name' do
+          @pod_target.product_module_name.should == 'OrangeFramework'
+        end
+
         it 'returns the product name' do
-          @pod_target.product_name.should == 'Pods-OrangeFramework.framework'
+          @pod_target.product_name.should == 'OrangeFramework.framework'
         end
 
         it 'returns the framework name' do
-          @pod_target.framework_name.should == 'Pods-OrangeFramework.framework'
+          @pod_target.framework_name.should == 'OrangeFramework.framework'
         end
 
         it 'returns the library name' do
