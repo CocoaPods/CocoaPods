@@ -20,6 +20,14 @@ module Pod
       target_definition.label.to_s
     end
 
+    # @return [String] the name to use for the source code module constructed
+    #         for this target, and which will be used to import the module in
+    #         implementation source files.
+    #
+    def product_module_name
+      c99ext_identifier(label)
+    end
+
     # @return [Pathname] the folder where the client is stored used for
     #         computing the relative paths. If integrating it should be the
     #         folder where the user project is stored, otherwise it should
