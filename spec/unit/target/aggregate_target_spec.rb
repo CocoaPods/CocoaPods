@@ -188,12 +188,16 @@ module Pod
           @target.uses_swift?.should == true
         end
 
+        it 'returns the product module name' do
+          @target.product_module_name.should == 'Pods_iOS_Example'
+        end
+
         it 'returns the product name' do
-          @target.product_name.should == 'Pods-iOS Example.framework'
+          @target.product_name.should == 'Pods_iOS_Example.framework'
         end
 
         it 'returns the framework name' do
-          @target.framework_name.should == 'Pods-iOS Example.framework'
+          @target.framework_name.should == 'Pods_iOS_Example.framework'
         end
 
         it 'returns the library name' do
