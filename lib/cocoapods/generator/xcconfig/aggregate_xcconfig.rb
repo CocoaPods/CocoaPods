@@ -72,11 +72,14 @@ module Pod
               end
             end
 
-            # Add pod static lib to list of libraries that are to be linked with
-            # the user’s project.
-
+            # Add pod framework to list of frameworks / libraries that are
+            # linked with the user’s project.
             next unless pod_target.should_build?
-            @xcconfig.merge!('OTHER_LDFLAGS' => %(-l "#{pod_target.name}"))
+            if pod_target.requires_framework?
+              @xcconfig.merge!('OTHER_LDFLAGS' => %(-framework "#{pod_target.product_basename}"))
+            else
+              @xcconfig.merge!('OTHER_LDFLAGS' => %(-l "#{pod_target.product_basename}"))
+            end
           end
 
           # TODO Need to decide how we are going to ensure settings like these
