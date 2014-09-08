@@ -78,7 +78,7 @@ module Pod
     #-------------------------------------------------------------------------#
 
     # Helper class that allows to write to an {IO} instance taking into account
-    # the UI indentation lever.
+    # the UI indentation level.
     #
     class Indenter < ::Array
       # @return [Fixnum] The indentation level of the UI.
