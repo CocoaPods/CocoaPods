@@ -52,6 +52,8 @@ module Pod
       if exception.is_a?(Interrupt)
         puts '[!] Cancelled'.red
         Config.instance.verbose? ? raise : exit(1)
+      elsif exception.is_a?(SystemExit)
+        raise exception
       else
         if ENV['COCOA_PODS_ENV'] != 'development'
           puts UI::ErrorReport.report(exception)
