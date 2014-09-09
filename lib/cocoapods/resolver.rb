@@ -38,10 +38,10 @@ module Pod
     # @param  [Array<Dependency>] locked_dependencies @see locked_dependencies
     # @param  [Array<Source>, Source] sources @see sources
     #
-    def initialize(sandbox, podfile, locked_deps, sources)
+    def initialize(sandbox, podfile, locked_dependencies, sources)
       @sandbox = sandbox
       @podfile = podfile
-      @locked_dependencies = locked_deps
+      @locked_dependencies = locked_dependencies
       @sources = Array(sources)
     end
 
