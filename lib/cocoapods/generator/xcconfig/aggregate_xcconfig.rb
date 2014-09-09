@@ -56,18 +56,18 @@ module Pod
                                               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_path_flags, '-isystem')
                                             )
 
-          target.pod_targets.each do |pod_target|
-            next unless pod_target.include_in_build_config?(@configuration_name)
+          #target.pod_targets.each do |pod_target|
+          #  next unless pod_target.include_in_build_config?(@configuration_name)
 
-            pod_target.file_accessors.each do |file_accessor|
-              XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
-              file_accessor.vendored_frameworks.each do |vendored_framework|
-                XCConfigHelper.add_framework_build_settings(vendored_framework, @xcconfig, target.sandbox.root)
-              end
-              file_accessor.vendored_libraries.each do |vendored_library|
-                XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, target.sandbox.root)
-              end
-            end
+          #  pod_target.file_accessors.each do |file_accessor|
+          #    XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
+          #    file_accessor.vendored_frameworks.each do |vendored_framework|
+          #      XCConfigHelper.add_framework_build_settings(vendored_framework, @xcconfig, target.sandbox.root)
+          #    end
+          #    file_accessor.vendored_libraries.each do |vendored_library|
+          #      XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, target.sandbox.root)
+          #    end
+          #  end
 
             # Add pod static lib to list of libraries that are to be linked with
             # the user’s project.
