@@ -48,11 +48,12 @@ module Pod
     end
 
     def self.report_error(exception)
-      if exception.is_a?(Interrupt)
+      case exception
+      when Interrupt
         puts '[!] Cancelled'.red
         Config.instance.verbose? ? raise : exit(1)
-      elsif exception.is_a?(SystemExit)
-        raise exception
+      when SystemExit
+        raise
       else
         if ENV['COCOA_PODS_ENV'] != 'development'
           puts UI::ErrorReport.report(exception)
