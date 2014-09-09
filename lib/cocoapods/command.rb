@@ -7,7 +7,6 @@ module Pod
   end
 
   class Command < CLAide::Command
-    require 'cocoapods/command/help'
     require 'cocoapods/command/inter_process_communication'
     require 'cocoapods/command/lib'
     require 'cocoapods/command/list'

@@ -3,7 +3,6 @@ require File.expand_path('../../spec_helper', __FILE__)
 module Pod
   describe Command do
     it 'returns the proper command class' do
-      Command.parse(%w(      help      )).should.be.instance_of Command::Help
       Command.parse(%w(      install      )).should.be.instance_of Command::Install
       Command.parse(%w(      list      )).should.be.instance_of Command::List
       Command.parse(%w(      outdated      )).should.be.instance_of Command::Outdated
