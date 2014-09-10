@@ -210,9 +210,9 @@ module Pod
     #         The dependency for which the set is needed.
     #
     def find_set_from_sources(dependency)
-      source = sources.find { |s| s.search(dependency) }
-      if source
-        source.search(dependency)
+      sources.each_with_object(nil) do |source, _|
+        set = source.search(dependency)
+        return set if set
       end
     end
 
