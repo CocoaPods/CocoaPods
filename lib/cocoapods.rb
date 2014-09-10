@@ -60,6 +60,7 @@ module Pod
     autoload :InfoPlistFile,           'cocoapods/generator/info_plist_file'
     autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
     autoload :TargetEnvironmentHeader, 'cocoapods/generator/target_environment_header'
+    autoload :UmbrellaHeader,          'cocoapods/generator/umbrella_header'
     autoload :XCConfig,                'cocoapods/generator/xcconfig'
   end
 
