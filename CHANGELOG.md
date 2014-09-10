@@ -92,6 +92,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Robert Zuber](https://github.com/z00b)
   [#1904](https://github.com/CocoaPods/CocoaPods/issues/1904)
 
+* Fixed static analysis in Xcode 6
+  [Samuel Giddins](segiddins)
+  [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
+
 * Fixes an issue where version of a spec will not be locked when using multiple
   subspecs of a podspec.  
   [Kyle Fuller](https://github.com/kylef)
