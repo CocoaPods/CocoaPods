@@ -59,6 +59,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin][FabioPelosin]
   [Eloy Durán](https://github.com/alloy)
 
+* Add support for user-specified project directories with the
+  `--project-directory` option
+  [Samuel Giddins](segiddins)
+  [#2183](https://github.com/CocoaPods/CocoaPods/issues/2183)
+
 ##### Bug Fixes
 
 * Fixed pod repo push to first check if Specs directory exists and if so push

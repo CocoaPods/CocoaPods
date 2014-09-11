@@ -27,6 +27,8 @@ module Pod
     self.description = 'CocoaPods, the Objective-C library package manager.'
     self.plugin_prefix = 'cocoapods'
 
+    [Install, Update, Outdated, IPC::Podfile, IPC::Repl].each { |c| c.send(:include, ProjectDirectory) }
+
     def self.options
       [
         ['--silent',   'Show nothing'],
@@ -97,7 +99,7 @@ module Pod
     #
     def verify_podfile_exists!
       unless config.podfile
-        raise Informative, "No `Podfile' found in the current working directory."
+        raise Informative, "No `Podfile' found in the project directory."
       end
     end
 
@@ -109,7 +111,7 @@ module Pod
     #
     def verify_lockfile_exists!
       unless config.lockfile
-        raise Informative, "No `Podfile.lock' found in the current working directory, run `pod install'."
+        raise Informative, "No `Podfile.lock' found in the project directory, run `pod install'."
       end
     end
   end
