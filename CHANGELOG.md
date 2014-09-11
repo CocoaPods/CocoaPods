@@ -76,8 +76,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#2136](https://github.com/CocoaPods/CocoaPods/issues/2136)
 
 * Always evaluate podspecs from the original podspec directory. This fixes
-  issues when you are using relative paths inside ruby podspecs and depending
-  on a pod via `:path`.  
+  an issue when depending on a pod via `:path` and that pod's podspec uses
+  relative paths.  
   [Kyle Fuller](kylef)
   [pod-template#50](https://github.com/CocoaPods/pod-template/issues/50)
 
