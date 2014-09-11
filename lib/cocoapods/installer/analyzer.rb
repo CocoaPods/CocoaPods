@@ -272,7 +272,7 @@ module Pod
         return unless allow_pre_downloads?
         deps_to_fetch = []
         deps_to_fetch_if_needed = []
-        deps_with_external_source = podfile.dependencies.select { |dep| dep.external_source }
+        deps_with_external_source = podfile.dependencies.select(&:external_source)
 
         if update_mode == :all
           deps_to_fetch = deps_with_external_source

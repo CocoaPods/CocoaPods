@@ -307,9 +307,7 @@ module Pod
     def clean_pod_sources
       return unless config.clean?
       return unless @pod_installers
-      @pod_installers.each do |pod_installer|
-        pod_installer.clean!
-      end
+      @pod_installers.each(&:clean!)
     end
 
     # Performs any post-installation actions
@@ -598,7 +596,7 @@ module Pod
     # @return [Array<PodRepresentation>]
     #
     def pod_reps
-      root_specs.sort_by { |spec| spec.name }.map { |spec| pod_rep(spec.name) }
+      root_specs.sort_by(&:name).map { |spec| pod_rep(spec.name) }
     end
 
     # Returns the libraries which use the given specification.
@@ -631,7 +629,7 @@ module Pod
     #         installation.
     #
     def root_specs
-      analysis_result.specifications.map { |spec| spec.root }.uniq
+      analysis_result.specifications.map(&:root).uniq
     end
 
     # @return [SpecsState] The state of the sandbox returned by the analyzer.

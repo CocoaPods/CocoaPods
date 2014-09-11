@@ -127,7 +127,7 @@ module Pod
       # @return [void]
       #
       def warn_about_empty_podfile
-        if podfile.target_definitions.values.all? { |td| td.empty? }
+        if podfile.target_definitions.values.all?(&:empty?)
           UI.warn '[!] The Podfile does not contain any dependencies.'
         end
       end
@@ -185,9 +185,7 @@ module Pod
       # @note   Empty target definitions are ignored.
       #
       def user_project_paths
-        targets.map do |target|
-          target.user_project_path
-        end.compact.uniq
+        targets.map(&:user_project_path).compact.uniq
       end
 
       def targets_to_integrate

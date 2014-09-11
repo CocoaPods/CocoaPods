@@ -116,7 +116,7 @@ module Pod
           if @name
             dirs = File.exist?(@name) ? [Pathname.new(@name)] : [dir]
           else
-            dirs = config.repos_dir.children.select { |c| c.directory? }
+            dirs = config.repos_dir.children.select(&:directory?)
           end
           dirs.each do |dir|
             SourcesManager.check_version_information(dir)

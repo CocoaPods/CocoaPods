@@ -263,7 +263,7 @@ module Pod
           file_accessors.map(&:source_files),
         ]
 
-        files.flatten.compact.map { |path| path.to_s }.uniq
+        files.flatten.compact.map(&:to_s).uniq
       end
 
       #-----------------------------------------------------------------------#
