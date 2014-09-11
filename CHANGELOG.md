@@ -18,7 +18,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1668](https://github.com/CocoaPods/CocoaPods/pull/1668)
   [#731](https://github.com/CocoaPods/CocoaPods/pull/731)
 
-* Added specific repo sources support. Allows to specify in podfile
+* Add specific repo sources support. Allows to specify in podfile
   which sources should be used to retrieve specs from and the priority
   order. Example: `source 'netbe'`, or `source 'master'`. 'master' being
   the default GitHub CocoaPods spec-repo.
@@ -26,7 +26,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1143](https://github.com/CocoaPods/CocoaPods/pull/1143)
   [Core#19](https://github.com/CocoaPods/Core/pull/19)
 
-* Added hooks for plugins. Currently only the installer hook is supported.
+* Add hooks for plugins. Currently only the installer hook is supported.
   A plugin can register itself to be activated after the installation with the
   following syntax:
 
@@ -66,12 +66,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
-* Fixed pod repo push to first check if Specs directory exists and if so push
+* Fixes pod repo push to first check if Specs directory exists and if so push
   there.  
   [Edward Valentini](edwardvalentini)
   [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
 
-* Fixed `pod outdated` to not include subspecs.  
+* Fixes `pod outdated` to not include subspecs.  
   [Ash Furrow](ashfurrow)
   [#2136](https://github.com/CocoaPods/CocoaPods/issues/2136)
 
@@ -81,15 +81,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](kylef)
   [pod-template#50](https://github.com/CocoaPods/pod-template/issues/50)
 
-* Fixed spec linting to not warn for missing license file in subspecs.  
+* Fixes spec linting to not warn for missing license file in subspecs.  
   [Fabio Pelosin][FabioPelosin]
   [Core#132](https://github.com/CocoaPods/Core/issues/132)
 
-* Fixed `pod init` so that it doesn't recurse when checking for Podfiles.  
+* Fixes `pod init` so that it doesn't recurse when checking for Podfiles.  
   [Paddy O'Brien](https://github.com/tapi)
   [#2181](https://github.com/CocoaPods/CocoaPods/issues/2181)
 
-* Fixed missing XCTest framework in Xcode 6.  
+* Fixes missing XCTest framework in Xcode 6.  
   [Paul Williamson](squarefrog)
   [#2296](https://github.com/CocoaPods/CocoaPods/issues/2296)
 
@@ -97,7 +97,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Robert Zuber](https://github.com/z00b)
   [#1904](https://github.com/CocoaPods/CocoaPods/issues/1904)
 
-* Fixed static analysis in Xcode 6
+* Fixes static analysis in Xcode 6
   [Samuel Giddins](segiddins)
   [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
 
