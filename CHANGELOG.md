@@ -20,8 +20,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Added specific repo sources support. Allows to specify in podfile
   which sources should be used to retrieve specs from and the priority
-  order. Example: `source 'netbe'`, or source 'master'. 'master' being
-  default github cocoapods specs repo.
+  order. Example: `source 'netbe'`, or `source 'master'`. 'master' being
+  the default GitHub CocoaPods spec-repo.
   [François Benaiteau](https://github.com/netbe)
   [#1143](https://github.com/CocoaPods/CocoaPods/pull/1143)
   [Core#19](https://github.com/CocoaPods/Core/pull/19)
@@ -43,11 +43,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Hugo Tunius][k0nserv]
   [#2180](https://github.com/CocoaPods/CocoaPods/issues/2180)
 
-* Use gem CLIntegracon for the integration tests.  
+* Use the CLIntegracon gem for the integration tests.  
   [Marius Rackwitz][mrackwitz]
   [#2371](https://github.com/CocoaPods/CocoaPods/issues/2371)
 
-* Include configurations a user explicitly specifies in their Podfile when the
+* Include configurations that a user explicitly specifies, in their Podfile, when the
   `--no-integrate` option is specified.  
   [Eloy Durán](https://github.com/alloy)
 
