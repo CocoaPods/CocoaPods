@@ -1,11 +1,9 @@
 module Pod
   class Installer
-
     # Creates the target for the Pods libraries in the Pods project and the
     # relative support files.
     #
     class PodTargetInstaller < TargetInstaller
-
       # Creates the target in the Pods project and the relative support files.
       #
       # @return [void]
@@ -13,6 +11,7 @@ module Pod
       def install!
         UI.message "- Installing target `#{library.name}` #{library.platform}" do
           add_target
+          create_support_files_dir
           add_files_to_build_phases
           add_resources_bundle_targets
           create_xcconfig_file
@@ -34,17 +33,15 @@ module Pod
       # @return [void]
       #
       def add_files_to_build_phases
-        UI.message "- Adding Build files" do
-          library.file_accessors.each do |file_accessor|
-            consumer = file_accessor.spec_consumer
-            flags = compiler_flags_for_consumer(consumer)
-            all_source_files = file_accessor.source_files
-            regular_source_files = all_source_files.reject { |sf| sf.extname == ".d" }
-            regular_file_refs = regular_source_files.map { |sf| project.reference_for_path(sf) }
-            target.add_file_references(regular_file_refs, flags)
-            other_file_refs = (all_source_files - regular_source_files).map { |sf| project.reference_for_path(sf) }
-            target.add_file_references(other_file_refs, nil)
-          end
+        library.file_accessors.each do |file_accessor|
+          consumer = file_accessor.spec_consumer
+          flags = compiler_flags_for_consumer(consumer)
+          all_source_files = file_accessor.source_files
+          regular_source_files = all_source_files.reject { |sf| sf.extname == '.d' }
+          regular_file_refs = regular_source_files.map { |sf| project.reference_for_path(sf) }
+          target.add_file_references(regular_file_refs, flags)
+          other_file_refs = (all_source_files - regular_source_files).map { |sf| project.reference_for_path(sf) }
+          target.add_file_references(other_file_refs, nil)
         end
       end
 
@@ -56,24 +53,22 @@ module Pod
       # @return [void]
       #
       def add_resources_bundle_targets
-        UI.message "- Adding resource bundles to Pods project" do
-          library.file_accessors.each do |file_accessor|
-            file_accessor.resource_bundles.each do |bundle_name, paths|
-              # Add a dependency on an existing Resource Bundle target if possible
-              if bundle_target = project.targets.detect { |target| target.name == bundle_name }
-                target.add_dependency(bundle_target)
-                next
-              end
-              file_references = paths.map { |sf| project.reference_for_path(sf) }
-              bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
-              bundle_target.add_resources(file_references)
-
-              library.user_build_configurations.each do |bc_name, type|
-                bundle_target.add_build_configuration(bc_name, type)
-              end
-
+        library.file_accessors.each do |file_accessor|
+          file_accessor.resource_bundles.each do |bundle_name, paths|
+            # Add a dependency on an existing Resource Bundle target if possible
+            if bundle_target = project.targets.find { |target| target.name == bundle_name }
               target.add_dependency(bundle_target)
+              next
             end
+            file_references = paths.map { |sf| project.reference_for_path(sf) }
+            bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
+            bundle_target.add_resources(file_references)
+
+            library.user_build_configurations.each do |bc_name, type|
+              bundle_target.add_build_configuration(bc_name, type)
+            end
+
+            target.add_dependency(bundle_target)
           end
         end
       end
@@ -85,20 +80,16 @@ module Pod
       def create_xcconfig_file
         path = library.xcconfig_path
         public_gen = Generator::XCConfig::PublicPodXCConfig.new(library)
-        UI.message "- Generating public xcconfig file at #{UI.path(path)}" do
-          public_gen.save_as(path)
-          add_file_to_support_group(path)
-        end
+        public_gen.save_as(path)
+        add_file_to_support_group(path)
 
         path = library.xcconfig_private_path
         private_gen = Generator::XCConfig::PrivatePodXCConfig.new(library, public_gen.xcconfig)
-        UI.message "- Generating private xcconfig file at #{UI.path(path)}" do
-          private_gen.save_as(path)
-          xcconfig_file_ref = add_file_to_support_group(path)
+        private_gen.save_as(path)
+        xcconfig_file_ref = add_file_to_support_group(path)
 
-          target.build_configurations.each do |c|
-            c.base_configuration_reference = xcconfig_file_ref
-          end
+        target.build_configurations.each do |c|
+          c.base_configuration_reference = xcconfig_file_ref
         end
       end
 
@@ -110,22 +101,20 @@ module Pod
       #
       def create_prefix_header
         path = library.prefix_header_path
-        UI.message "- Generating prefix header at #{UI.path(path)}" do
-          generator = Generator::PrefixHeader.new(library.file_accessors, library.platform)
-          generator.imports << library.target_environment_header_path.basename
-          generator.save_as(path)
-          add_file_to_support_group(path)
+        generator = Generator::PrefixHeader.new(library.file_accessors, library.platform)
+        generator.imports << library.target_environment_header_path.basename
+        generator.save_as(path)
+        add_file_to_support_group(path)
 
-          target.build_configurations.each do |c|
-            relative_path = path.relative_path_from(sandbox.root)
-            c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
-          end
+        target.build_configurations.each do |c|
+          relative_path = path.relative_path_from(project.path.dirname)
+          c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
         end
       end
 
       ENABLE_OBJECT_USE_OBJC_FROM = {
         :ios => Version.new('6'),
-        :osx => Version.new('10.8')
+        :osx => Version.new('10.8'),
       }
 
       # Returns the compiler flags for the source files of the given specification.
@@ -176,7 +165,7 @@ module Pod
         if target_definition.inhibits_warnings_for_pod?(consumer.spec.root.name)
           flags << '-w -Xanalyzer -analyzer-disable-checker'
         end
-        flags * " "
+        flags * ' '
       end
 
       # Adds a reference to the given file in the support group of this target.
@@ -188,12 +177,12 @@ module Pod
       #
       def add_file_to_support_group(path)
         pod_name = library.pod_name
-        group = project.pod_support_files_group(pod_name)
+        dir = library.support_files_dir
+        group = project.pod_support_files_group(pod_name, dir)
         group.new_file(path)
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end

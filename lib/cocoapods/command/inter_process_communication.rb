@@ -28,8 +28,9 @@ module Pod
         end
 
         def run
+          require 'json'
           spec = Specification.from_file(@path)
-          output_pipe.puts spec.to_json
+          output_pipe.puts(JSON.pretty_generate(spec))
         end
       end
 

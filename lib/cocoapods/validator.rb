@@ -124,10 +124,8 @@ module Pod
     #
     # @note   Uses the `:path` option of the Podfile.
     #
-    attr_writer :local
-    def local?
-      @local
-    end
+    attr_accessor :local
+    alias_method :local?, :local
 
     # @return [Bool] Whether the validator should fail only on errors or also
     #         on warnings.

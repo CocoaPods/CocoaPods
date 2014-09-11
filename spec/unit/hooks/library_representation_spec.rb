@@ -29,11 +29,13 @@ module Pod
       end
 
       it 'returns the path of the prefix header' do
-        @rep.prefix_header_path.should == temporary_directory + 'Pods/Pods-MyApp-prefix.pch'
+        @rep.prefix_header_path.should == temporary_directory +
+          'Pods/Target Support Files/Pods-MyApp/Pods-MyApp-prefix.pch'
       end
 
       it 'returns the path of the copy resources script' do
-        @rep.copy_resources_script_path.should == temporary_directory + 'Pods/Pods-MyApp-resources.sh'
+        @rep.copy_resources_script_path.should == temporary_directory +
+          'Pods/Target Support Files/Pods-MyApp/Pods-MyApp-resources.sh'
       end
 
       it 'returns the pods project' do

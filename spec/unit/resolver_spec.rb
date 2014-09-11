@@ -9,7 +9,7 @@ module Pod
           pod 'BlocksKit', '1.5.2'
         end
         locked_deps = [Dependency.new('BlocksKit', '1.5.2')]
-        @resolver = Resolver.new(config.sandbox, @podfile, locked_deps)
+        @resolver = Resolver.new(config.sandbox, @podfile, locked_deps, SourcesManager.all)
       end
 
       it 'returns the sandbox' do
@@ -55,7 +55,7 @@ module Pod
           platform :ios
           pod 'Reachability', :podspec => podspec
         end
-        resolver = Resolver.new(config.sandbox, podfile)
+        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
         resolver.resolve
         specs = resolver.specs_by_target.values.flatten
         specs.map(&:to_s).should == ['Reachability (3.0.0)']
@@ -70,7 +70,7 @@ module Pod
           platform :ios, '6.0'
           pod 'BlocksKit', '1.5.2'
         end
-        @resolver = Resolver.new(config.sandbox, @podfile)
+        @resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
       end
 
       it 'cross resolves dependencies' do
@@ -80,7 +80,7 @@ module Pod
           pod 'AFQuickLookView', '=  0.1.0' # requires  'AFNetworking', '>= 0.9.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == ['AFNetworking (0.9.1)', 'AFQuickLookView (0.1.0)']
       end
@@ -101,6 +101,15 @@ module Pod
         e.message.should.match(/platform .* not compatible/)
       end
 
+      it 'raises if unable to find a specification' do
+        Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
+        message = should.raise Informative do
+          @resolver.resolve
+        end.message
+        message.should.match /Unable to find a specification/
+        message.should.match /`Windows` depended upon by BlocksKit/
+      end
+
       it 'does not raise if all dependencies are supported by the platform of the target definition' do
         lambda { @resolver.resolve }.should.not.raise
       end
@@ -110,7 +119,7 @@ module Pod
           platform :ios, '7.0'
           pod 'RestKit', '0.10.3'
         end
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         resolver.resolve.values.flatten.map(&:name).sort.should == %w(
           FileMD5Hash
           ISO8601DateFormatter
@@ -149,9 +158,11 @@ module Pod
           end
         end
         config.sandbox.expects(:specification).with('MainSpec').returns(spec)
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:name).sort
-        specs.should == %w(        MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec        )
+        specs.should == %w(
+          MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec
+        )
       end
 
       it "marks a specification's version to be a HEAD version" do
@@ -160,7 +171,7 @@ module Pod
           pod 'FileMD5Hash'
           pod 'JSONKit', :head
         end
-        resolver = Resolver.new(config.sandbox, podfile)
+        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
         filemd5hash, jsonkit = resolver.resolve.values.first.sort_by(&:name)
         filemd5hash.version.should.not.be.head
         jsonkit.version.should.be.head
@@ -174,7 +185,7 @@ module Pod
           pod 'JSONKit', '1.4'
           pod 'JSONKit', '1.5pre'
         end
-        resolver = Resolver.new(config.sandbox, podfile)
+        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
         e = lambda { resolver.resolve }.should.raise Pod::Informative
         e.message.should.match(/Unable to satisfy the following requirements/)
       end
@@ -184,14 +195,30 @@ module Pod
           platform :ios
           pod 'JSONKit', '<= 1.5pre'
         end
-        resolver = Resolver.new(config.sandbox, podfile)
+        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
         version = resolver.resolve.values.flatten.first.version
         version.to_s.should == '1.5pre'
 
         locked_deps = [Dependency.new('JSONKit', '= 1.4')]
-        resolver = Resolver.new(config.sandbox, podfile, locked_deps)
+        resolver = Resolver.new(config.sandbox, podfile, locked_deps, SourcesManager.all)
         version = resolver.resolve.values.flatten.first.version
         version.to_s.should == '1.4'
+      end
+
+      it 'takes into account the order of the sources' do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit'
+        end
+        sources = SourcesManager.sources(%w(master test_repo))
+        resolver = Resolver.new(config.sandbox, podfile, [], sources)
+        version = resolver.resolve.values.flatten.first.version
+        version.to_s.should.not == '999.999.999'
+
+        sources = SourcesManager.sources(%w(test_repo master))
+        resolver = Resolver.new(config.sandbox, podfile, [], sources)
+        version = resolver.resolve.values.flatten.first.version
+        version.to_s.should == '999.999.999'
       end
     end
 
@@ -205,7 +232,7 @@ module Pod
           pod 'AFNetworking', '1.0RC3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == ['AFNetworking (1.0RC3)']
       end
@@ -216,7 +243,7 @@ module Pod
           pod 'AFNetworking', '~> 1.0RC3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.0)']
@@ -228,7 +255,7 @@ module Pod
           pod 'AFNetworking', '1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
@@ -240,7 +267,7 @@ module Pod
           pod 'AFNetworking', '< 1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (0.10.1)']
@@ -252,7 +279,7 @@ module Pod
           pod 'AFNetworking', '<= 1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
@@ -264,7 +291,7 @@ module Pod
           pod 'AFNetworking', '> 1.0', '< 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
@@ -276,7 +303,7 @@ module Pod
           pod 'AFNetworking', '>= 1.0', '< 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
@@ -288,7 +315,7 @@ module Pod
           pod 'AFNetworking', '~> 1.0', '< 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile)
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']

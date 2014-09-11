@@ -5,25 +5,36 @@ module Pod
     class << self
       include Config::Mixin
 
-      # @return [Source::Aggregate] the aggregate of all the sources known to
-      #         this installation of CocoaPods.
+      # @return [Source::Aggregate] The aggregate of all the sources with the
+      #         known Pods.
       #
       def aggregate
-        Source::Aggregate.new(config.repos_dir)
+        dirs = config.repos_dir.children.select(&:directory?)
+        Source::Aggregate.new(dirs)
       end
 
-      # @return [Array<Source>] the list of all the sources known to this
+      # @return [Array<Source>] The list of the sources with the given names.
+      #
+      # @param  [Array<#to_s>] names
+      #         The names of the sources.
+      #
+      def sources(names)
+        dirs = names.map { |name| source_dir(name) }
+        dirs.map { |repo| Source.new(repo) }
+      end
+
+      # @return [Array<Source>] The list of all the sources known to this
       #         installation of CocoaPods.
       #
       def all
-        aggregate.all
+        dirs = config.repos_dir.children.select(&:directory?)
+        dirs.map { |repo| Source.new(repo) }
       end
 
-      # @return [Array<Specification::Set>] the list of all the specification
-      #         sets know to this installation of CocoaPods.
+      # @return [Source] The CocoaPods Master Repo source.
       #
-      def all_sets
-        aggregate.all_sets
+      def master
+        sources(['master'])
       end
 
       # Search all the sources to match the set for the given dependency.
@@ -126,10 +137,7 @@ module Pod
         Config.instance.search_index_file
       end
 
-      public
-
       # @!group Updating Sources
-      #-----------------------------------------------------------------------#
 
       extend Executable
       executable :git
@@ -267,10 +275,7 @@ module Pod
         end
       end
 
-      public
-
       # @!group Master repo
-      #-----------------------------------------------------------------------#
 
       # @return [Pathname] The path of the master repo.
       #
@@ -286,8 +291,6 @@ module Pod
       def master_repo_functional?
         master_repo_dir.exist? && repo_compatible?(master_repo_dir)
       end
-
-      #-----------------------------------------------------------------------#
 
       private
 
@@ -307,7 +310,7 @@ module Pod
       #         The name of the source.
       #
       def git_source_named(name)
-        specified_source = aggregate.all.find { |s| s.name == name }
+        specified_source = aggregate.sources.find { |s| s.name == name }
         unless specified_source
           raise Informative, "Unable to find the `#{name}` repo."
         end
@@ -320,8 +323,21 @@ module Pod
       # @return [Source] The list of the git sources.
       #
       def git_sources
-        aggregate.all.select do |source|
+        all.select do |source|
           git_repo?(source.data_provider.repo)
+        end
+      end
+
+      # @return [Pathname] The path of the source with the given name.
+      #
+      # @param  [String] name
+      #         The name of the source.
+      #
+      def source_dir(name)
+        if dir = config.repos_dir + name
+          dir
+        else
+          raise Informative, "Unable to find the `#{name}` repo."
         end
       end
     end

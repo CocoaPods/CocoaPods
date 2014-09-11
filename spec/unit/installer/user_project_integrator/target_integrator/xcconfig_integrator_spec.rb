@@ -15,7 +15,7 @@ module Pod
       @pod_bundle.client_root = project_path.dirname
       @pod_bundle.user_target_uuids  = [@target.uuid]
       configuration = Xcodeproj::Config.new(
-        'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1'
+        'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
       )
       @pod_bundle.xcconfigs['Debug'] = configuration
       @pod_bundle.xcconfigs['Test'] = configuration
@@ -28,8 +28,6 @@ module Pod
       file_ref = @project.new_file(path)
       config = @target.build_configuration_list['Release']
       config.base_configuration_reference = file_ref
-      File.expects(:exist?).returns(true)
-      File.expects(:delete).with(path)
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @project.files.find { |f| f.path == path }.should.be.nil
     end

@@ -28,6 +28,8 @@ module Pod
         def integrate!
           UI.section(integration_message) do
             XCConfigIntegrator.integrate(target, native_targets)
+            update_to_cocoapods_0_34
+
             unless native_targets_to_integrate.empty?
               add_pods_library
               add_copy_resources_script_phase
@@ -47,6 +49,23 @@ module Pod
 
         # @!group Integration steps
         #---------------------------------------------------------------------#
+
+        # Fixes the paths of the copy resource scripts.
+        #
+        # @todo   This can be removed for CocoaPods 1.0
+        #
+        def update_to_cocoapods_0_34
+          phases = native_targets.map do |target|
+            target.shell_script_build_phases.select do |bp|
+              bp.name == 'Copy Pods Resources'
+            end
+          end.flatten
+
+          script_path = target.copy_resources_script_relative_path
+          phases.each do |phase|
+            phase.shell_script = %("#{script_path}"\n)
+          end
+        end
 
         # Adds spec libraries to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to
@@ -75,10 +94,10 @@ module Pod
         def add_copy_resources_script_phase
           phase_name = 'Copy Pods Resources'
           native_targets_to_integrate.each do |native_target|
-            phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first ||
-                    native_target.new_shell_script_build_phase(phase_name)
-            path  = target.copy_resources_script_relative_path
-            phase.shell_script = %(            "#{path}"\n            )
+            phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first
+            phase ||= native_target.new_shell_script_build_phase(phase_name)
+            script_path = target.copy_resources_script_relative_path
+            phase.shell_script = %("#{script_path}"\n)
             phase.show_env_vars_in_log = '0'
           end
         end
@@ -100,7 +119,7 @@ module Pod
             native_target.build_phases.unshift(phase)
             phase.name = phase_name
             phase.shell_script = <<-EOS.strip_heredoc
-              diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+              diff "${PODS_ROOT}/../../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
               if [[ $? != 0 ]] ; then
                   cat << EOM
               error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
@@ -159,10 +178,8 @@ module Pod
         #         integration.
         #
         def integration_message
-          "Integrating Pod #{'target'.pluralize(target.pod_targets.size)} " \
-            "`#{target.pod_targets.map(&:name).to_sentence}` " \
-            "into aggregate target #{target.name} " \
-            "of project #{UI.path target.user_project_path}."
+          "Integrating target `#{target.name}` " \
+            "(#{UI.path target.user_project_path} project)"
         end
       end
     end

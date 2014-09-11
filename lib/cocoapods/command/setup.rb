@@ -17,7 +17,7 @@ module Pod
       def self.options
         [
           ['--no-shallow', 'Clone full history so push will work'],
-          ['--push',       'Use this option to enable push access once granted'],
+          ['--push', 'Use this option to enable push access once granted'],
         ].concat(super)
       end
 
@@ -51,16 +51,17 @@ module Pod
 
       # @!group Setup steps
 
-      # Migrates any repos from the old directory structure to the new directory
-      # structure.
+      # Migrates any repos from the old directory structure to the new
+      # directory structure.
       #
-      # @return [void]
+      # @todo: Remove by 1.0
+      #
       def migrate_repos
         config.repos_dir.mkpath
         Dir.foreach old_master_repo_dir.parent do |repo_dir|
           source_repo_dir = old_master_repo_dir.parent + repo_dir
           target_repo_dir = config.repos_dir + repo_dir
-          if not repo_dir =~ /\.+/ and source_repo_dir != config.repos_dir
+          if repo_dir !~ /\.+/ && source_repo_dir != config.repos_dir
             FileUtils.mv source_repo_dir, target_repo_dir
           end
         end

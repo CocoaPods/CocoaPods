@@ -173,11 +173,17 @@ module Pod
         describe 'Screenshot validation' do
           before do
             @sut.stubs(:validate_homepage)
-            WebMock::API.stub_request(:head, 'banana-corp.local/valid-image.png').to_return(:status => 200, :headers => { 'Content-Type' => 'image/png' })
+            WebMock::API.
+              stub_request(:head, 'banana-corp.local/valid-image.png').
+              to_return(
+                :status => 200,
+                :headers => { 'Content-Type' => 'image/png' }
+              )
           end
 
           it 'checks if the screenshots are valid' do
-            Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/valid-image.png'])
+            Specification.any_instance.stubs(:screenshots).
+              returns(['http://banana-corp.local/valid-image.png'])
             @sut.validate
             @sut.results.should.be.empty?
           end

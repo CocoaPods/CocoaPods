@@ -82,7 +82,7 @@ module Pod
           'Pods-SVPullToRefresh',
           'Pods-libextobjc',
         ].sort
-        target.support_files_root.should == config.sandbox.root
+        target.support_files_dir.should == config.sandbox.target_support_files_dir('Pods')
 
         target.user_project_path.to_s.should.include 'SampleProject/SampleProject'
         target.client_root.to_s.should.include 'SampleProject'
@@ -464,11 +464,7 @@ module Pod
           e = lambda { @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets) }.should.raise Informative
           e.message.should.match /Targets with different platforms/
         end
-
       end
-
-      #--------------------------------------#
-
     end
   end
 end

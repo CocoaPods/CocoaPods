@@ -19,7 +19,7 @@ module Pod
       @specs = specs
       @target_definition = target_definition
       @sandbox = sandbox
-      @build_headers  = Sandbox::HeadersStore.new(sandbox, 'BuildHeaders')
+      @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Build')
       @file_accessors = []
     end
 
@@ -80,8 +80,8 @@ module Pod
       else
         raise Informative, "The subspecs of `#{pod_name}` are linked to " \
           "different build configurations for the `#{target_definition}` " \
-          'target. CocoaPods does not support subspecs across different ' \
-          'build configurations.'
+          'target. CocoaPods does not currently support subspecs across ' \
+          'different build configurations.'
       end
     end
 

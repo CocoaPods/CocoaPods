@@ -47,10 +47,10 @@ module Pod
       def analyze(allow_fetches = true)
         update_repositories_if_needed if allow_fetches
         @result = AnalysisResult.new
+        compute_target_platforms
         @result.podfile_state = generate_podfile_state
         @locked_dependencies  = generate_version_locking_dependencies
 
-        compute_target_platforms
         fetch_external_sources if allow_fetches
         @result.specs_by_target = resolve_dependencies
         @result.specifications  = generate_specifications
@@ -150,7 +150,8 @@ module Pod
           UI.section 'Finding Podfile changes' do
             pods_by_state = lockfile.detect_changes_with_podfile(podfile)
             pods_by_state.dup.each do |state, full_names|
-              pods_by_state[state] = full_names.map { |fn| Specification.root_name(fn) }
+              pods = full_names.map { |fn| Specification.root_name(fn) }.uniq
+              pods_by_state[state] = pods
             end
             pods_state = SpecsState.new(pods_by_state)
             pods_state.print
@@ -164,8 +165,6 @@ module Pod
       end
 
       # Updates the source repositories unless the config indicates to skip it.
-      #
-      # @return [void]
       #
       def update_repositories_if_needed
         unless config.skip_repo_update?
@@ -245,8 +244,8 @@ module Pod
             locking_pods = locking_pods.select { |pod| !update[:pods].include?(pod) }
           end
           locking_pods.map do |pod|
-            lockfile.dependency_to_lock_pod_named(pod)
-          end
+            lockfile.dependencies_to_lock_pod_named(pod)
+          end.flatten
         end
       end
 
@@ -319,7 +318,13 @@ module Pod
       def resolve_dependencies
         specs_by_target = nil
         UI.section "Resolving dependencies of #{UI.path podfile.defined_in_file}" do
-          resolver = Resolver.new(sandbox, podfile, locked_dependencies)
+          if podfile.sources.empty?
+            sources = SourcesManager.master
+          else
+            sources = SourcesManager.sources(podfile.sources)
+          end
+
+          resolver = Resolver.new(sandbox, podfile, locked_dependencies, sources)
           specs_by_target = resolver.resolve
         end
         specs_by_target
@@ -482,7 +487,7 @@ module Pod
       # @todo   Is assigning the platform to the target definition the best way
       #         to go?
       #
-      def compute_archs_for_target_definition(_target_definition, user_targets)
+      def compute_archs_for_target_definition(target_definition, user_targets)
         archs = []
         user_targets.each do |target|
           target_archs = target.common_resolved_build_setting('ARCHS')
@@ -490,7 +495,9 @@ module Pod
         end
 
         archs = archs.compact.uniq.sort
-        UI.puts("Using `ARCHS` setting to build architectures: (`#{archs.join('`, `')}`)")
+        UI.message("Using `ARCHS` setting to build architectures of " \
+                   "target `#{target_definition.label}`: " \
+                   "(`#{archs.join('`, `')}`)")
         archs.length > 1 ? archs : archs.first
       end
 
@@ -503,17 +510,19 @@ module Pod
       # @return [void]
       #
       def compute_target_platforms
-        podfile.target_definition_list.each do |target_definition|
-          if config.integrate_targets?
-            project_path = compute_user_project_path(target_definition)
-            user_project = Xcodeproj::Project.open(project_path)
-            targets = compute_user_project_targets(target_definition, user_project)
-            platform = compute_platform_for_target_definition(target_definition, targets)
-            archs = compute_archs_for_target_definition(target_definition, targets)
-            @archs_by_target_def[target_definition] = archs
-          else
-            unless target_definition.platform
-              raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
+        UI.section 'Inspecting targets to integrate' do
+          podfile.target_definition_list.each do |target_definition|
+            if config.integrate_targets?
+              project_path = compute_user_project_path(target_definition)
+              user_project = Xcodeproj::Project.open(project_path)
+              targets = compute_user_project_targets(target_definition, user_project)
+              platform = compute_platform_for_target_definition(target_definition, targets)
+              archs = compute_archs_for_target_definition(target_definition, targets)
+              @archs_by_target_def[target_definition] = archs
+            else
+              unless target_definition.platform
+                raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
+              end
             end
           end
         end

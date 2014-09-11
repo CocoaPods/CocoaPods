@@ -102,20 +102,20 @@ module Pod
     #         the file type.
     #
     def acknowledgements_basepath
-      support_files_root + "#{label}-acknowledgements"
+      support_files_dir + "#{label}-acknowledgements"
     end
 
     # @return [Pathname] The absolute path of the copy resources script.
     #
     def copy_resources_script_path
-      support_files_root + "#{label}-resources.sh"
+      support_files_dir + "#{label}-resources.sh"
     end
 
     # @return [String] The xcconfig path of the root from the `$(SRCROOT)`
     #         variable of the user's project.
     #
     def relative_pods_root
-      "${SRCROOT}/#{support_files_root.relative_path_from(client_root)}"
+      "${SRCROOT}/#{sandbox.root.relative_path_from(client_root)}"
     end
 
     # @param  [String] config_name The build configuration name to get the xcconfig for

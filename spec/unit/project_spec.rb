@@ -52,7 +52,7 @@ module Pod
           path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path)
           group.source_tree.should == '<group>'
-          group.path.should == 'BananaLib'
+          group.path.should == 'Sources/BananaLib'
           Pathname.new(group.path).should.be.relative
         end
 
@@ -139,14 +139,13 @@ module Pod
         end
 
         it 'creates a support file group relative to the project' do
-          group = @project.pod_support_files_group('BananaLib')
-          group.source_tree.should == 'SOURCE_ROOT'
-          group.path.should.be.nil
+          group = @project.pod_support_files_group('BananaLib', 'path')
+          group.path.should == 'path'
         end
 
         it "doesn't duplicate the groups" do
-          group_1 = @project.pod_support_files_group('BananaLib')
-          group_2 = @project.pod_support_files_group('BananaLib')
+          group_1 = @project.pod_support_files_group('BananaLib', 'path')
+          group_2 = @project.pod_support_files_group('BananaLib', 'path')
           group_1.uuid.should == group_2.uuid
         end
 

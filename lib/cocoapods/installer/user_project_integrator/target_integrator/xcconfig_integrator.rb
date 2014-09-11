@@ -18,7 +18,7 @@ module Pod
           def self.integrate(pod_bundle, targets)
             targets.each do |target|
               target.build_configurations.each do |config|
-                update_from_cocoapods_0_33_1(pod_bundle, targets)
+                update_to_cocoapods_0_34(pod_bundle, targets)
                 set_target_xcconfig(pod_bundle, config)
               end
             end
@@ -40,15 +40,21 @@ module Pod
           #
           # @todo   This can be removed for CocoaPods 1.0
           #
-          def self.update_from_cocoapods_0_33_1(pod_bundle, targets)
+          def self.update_to_cocoapods_0_34(pod_bundle, targets)
+            sandbox = pod_bundle.sandbox
             targets.map(&:project).uniq.each do |project|
-              path = pod_bundle.xcconfig_relative_path(nil)
-              file_ref = project.files.find { |f| f.path == path }
-              if file_ref
-                UI.message "- Removing (#{path})" do
+              file_refs = project.files.select do |file_ref|
+                path = file_ref.path.to_s
+                if File.extname(path) == '.xcconfig'
+                  absolute_path = file_ref.real_path.to_s
+                  absolute_path.start_with?(sandbox.root.to_s) &&
+                    !absolute_path.start_with?(sandbox.target_support_files_root.to_s)
+                end
+              end
+
+              file_refs.uniq.each do |file_ref|
+                UI.message "- Removing (#{file_ref.path})" do
                   file_ref.remove_from_project
-                  absolute_path = pod_bundle.xcconfig_path
-                  File.delete(absolute_path) if File.exist?(absolute_path)
                 end
               end
             end
@@ -66,8 +72,9 @@ module Pod
           #
           def self.set_target_xcconfig(pod_bundle, config)
             path = pod_bundle.xcconfig_relative_path(config.name)
-            file_ref = config.project.files.find { |f| f.path == path }
-            file_ref ||= config.project.new_file(path)
+            group = config.project['Pods'] || config.project.new_group('Pods')
+            file_ref = group.files.find { |f| f.path == path }
+            file_ref ||= group.new_file(path)
             config.base_configuration_reference = file_ref
           end
 

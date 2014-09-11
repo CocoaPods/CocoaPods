@@ -23,7 +23,7 @@ module Pod
       def run
         update_if_necessary!
 
-        sets = SourcesManager.all_sets
+        sets = SourcesManager.aggregate.all_sets
         sets.each { |set| UI.pod(set, :name_and_version) }
         UI.puts "\n#{sets.count} pods were found"
       end
@@ -47,7 +47,7 @@ module Pod
           days = [1, 2, 3, 5, 8]
           dates, groups = {}, {}
           days.each { |d| dates[d] = Time.now - 60 * 60 * 24 * d }
-          sets = SourcesManager.all_sets
+          sets = SourcesManager.aggregate.all_sets
           statistics_provider = Config.instance.spec_statistics_provider
           creation_dates = statistics_provider.creation_dates(sets)
 

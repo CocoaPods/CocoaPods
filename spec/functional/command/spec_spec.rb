@@ -1,5 +1,23 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
+# README!
+#
+# Adds {Command::Spec::Edit#exec} to fake the {Kernel#exec} call that would
+# normally be made during an edit.
+#
+module Pod
+  class Command
+    class Spec
+      class Edit
+        def exec(cmd, *args)
+          UI.puts "#{cmd} #{args.join(' ')}"
+          raise SystemExit
+        end
+      end
+    end
+  end
+end
+
 module Pod
   describe Command::Spec do
 
@@ -254,7 +272,7 @@ module Pod
       end
 
       it "complains if it can't find a spec file for the given spec" do
-        File.stubs(:exists?).returns(false)
+        File.stubs(:exist?).returns(false)
         lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise Informative
         File.unstub(:exists?)
       end

@@ -122,12 +122,11 @@ module Pod
     #
     # @return [PBXGroup] The group.
     #
-    def pod_support_files_group(pod_name)
+    def pod_support_files_group(pod_name, dir)
       group = pod_group(pod_name)
       support_files_group = group['Support Files']
       unless support_files_group
-        support_files_group = group.new_group('Support Files')
-        support_files_group.source_tree = 'SOURCE_ROOT'
+        support_files_group = group.new_group('Support Files', dir)
       end
       support_files_group
     end

@@ -7,7 +7,7 @@ module Pod
       # @return [Pathname] the absolute path of this header directory.
       #
       def root
-        @root ||= @sandbox.root + @relative_path
+        sandbox.headers_root + @relative_path
       end
 
       # @return [Sandbox] the sandbox where this header directory is stored.
@@ -31,7 +31,8 @@ module Pod
       #         root with the `${PODS_ROOT}` variable.
       #
       def search_paths
-        @search_paths.uniq.map { |path| "${PODS_ROOT}/#{path}" }
+        headers_dir = root.relative_path_from(sandbox.root).dirname
+        @search_paths.uniq.map { |path| "${PODS_ROOT}/#{headers_dir}/#{path}" }
       end
 
       # Removes the directory as it is regenerated from scratch during each
@@ -56,7 +57,8 @@ module Pod
       #         headers directory.
       #
       # @param  [Pathname] relative_header_path
-      #         the path of the header file relative to the sandbox.
+      #         the path of the header file relative to the Pods project
+      #         (`PODS_ROOT` variable of the xcconfigs).
       #
       # @note   This method adds the files to the search paths.
       #
@@ -68,7 +70,7 @@ module Pod
         namespaced_path.mkpath unless File.exist?(namespaced_path)
 
         relative_header_paths.map do |relative_header_path|
-          absolute_source = (@sandbox.root + relative_header_path)
+          absolute_source = (sandbox.root + relative_header_path)
           source = absolute_source.relative_path_from(namespaced_path)
           Dir.chdir(namespaced_path) do
             FileUtils.ln_sf(source, relative_header_path.basename)

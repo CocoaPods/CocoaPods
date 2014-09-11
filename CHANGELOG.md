@@ -18,6 +18,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1668](https://github.com/CocoaPods/CocoaPods/pull/1668)
   [#731](https://github.com/CocoaPods/CocoaPods/pull/731)
 
+* Added specific repo sources support. Allows to specify in podfile
+  which sources should be used to retrieve specs from and the priority
+  order. Example: `source 'netbe'`, or source 'master'. 'master' being
+  default github cocoapods specs repo.
+  [François Benaiteau](https://github.com/netbe)
+  [#1143](https://github.com/CocoaPods/CocoaPods/pull/1143)
+  [Core#19](https://github.com/CocoaPods/Core/pull/19)
+
 * Added hooks for plugins. Currently only the installer hook is supported.
   A plugin can register itself to be activated after the installation with the
   following syntax:
@@ -84,6 +92,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Robert Zuber](https://github.com/z00b)
   [#1904](https://github.com/CocoaPods/CocoaPods/issues/1904)
 
+* Fixes an issue where version of a spec will not be locked when using multiple
+  subspecs of a podspec.  
+  [Kyle Fuller](https://github.com/kylef)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+  [#2135](https://github.com/CocoaPods/CocoaPods/issues/2135)
+
+* Fixes an issue using JSON podspecs from a repository.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2320](https://github.com/CocoaPods/CocoaPods/issues/2320)
+
 
 ## 0.33.1
 
@@ -100,6 +118,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Fixed `--no-ansi` flag in help banners.  
   [Fabio Pelosin][FabioPelosin]
   [#34](https://github.com/CocoaPods/CLAide/issues/34)
+
 
 ## 0.33.0
 

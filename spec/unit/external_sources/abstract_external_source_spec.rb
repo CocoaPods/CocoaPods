@@ -6,6 +6,7 @@ module Pod
     before do
       dependency = Dependency.new('Reachability', :git => fixture('integration/Reachability'))
       @subject = ExternalSources.from_dependency(dependency, nil)
+      config.sandbox.prepare
     end
 
     #--------------------------------------#
@@ -35,17 +36,27 @@ module Pod
     describe 'Subclasses helpers' do
 
       it 'pre-downloads the Pod and stores the relevant information in the sandbox' do
-        sandbox = config.sandbox
-        @subject.send(:pre_download, sandbox)
-        path = config.sandbox.root + 'Local Podspecs/Reachability.podspec'
+        @subject.send(:pre_download, config.sandbox)
+        path = config.sandbox.specifications_root + 'Reachability.podspec'
         path.should.exist?
-        sandbox.predownloaded_pods.should == ['Reachability']
-        sandbox.checkout_sources.should == {
+        config.sandbox.predownloaded_pods.should == ['Reachability']
+        config.sandbox.checkout_sources.should == {
           'Reachability' => {
             :git => fixture('integration/Reachability'),
             :commit => '4ec575e4b074dcc87c44018cce656672a979b34a',
           },
         }
+      end
+
+      it 'checks for JSON podspecs' do
+        path = config.sandbox.pod_dir('Reachability')
+        podspec_path = path + 'Reachability.podspec.json'
+        Dir.mkdir(path)
+        File.open(podspec_path, 'w') {}
+        Pathname.any_instance.stubs(:rmtree)
+        Downloader::Git.any_instance.stubs(:download)
+        config.sandbox.expects(:store_podspec).with('Reachability', podspec_path, true, true)
+        @subject.send(:pre_download, config.sandbox)
       end
     end
   end
