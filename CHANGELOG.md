@@ -19,9 +19,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#731](https://github.com/CocoaPods/CocoaPods/pull/731)
 
 * Add 'specific repo sources' support. Allows one to specify in their Podfile
-  which sources should be used to retrieve specs from and the priority
-  order thereof. For example: `source 'netbe'`, or `source 'master'`, with 'master' being
-  the default GitHub CocoaPods spec-repo.
+  which sources should be used to retrieve specs from and the priority order
+  thereof. For example: `source 'netbe'`, or `source 'master'`, with 'master'
+  being the default GitHub CocoaPods spec-repo.  
   [François Benaiteau](https://github.com/netbe)
   [#1143](https://github.com/CocoaPods/CocoaPods/pull/1143)
   [Core#19](https://github.com/CocoaPods/Core/pull/19)
@@ -47,8 +47,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Marius Rackwitz][mrackwitz]
   [#2371](https://github.com/CocoaPods/CocoaPods/issues/2371)
 
-* Include configurations that a user explicitly specifies, in their Podfile, when the
-  `--no-integrate` option is specified.  
+* Include configurations that a user explicitly specifies, in their Podfile,
+  when the `--no-integrate` option is specified.  
   [Eloy Durán](https://github.com/alloy)
 
 * Properly quote the `-isystem` values in the xcconfig files.  
@@ -66,8 +66,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
-* Fixes `pod repo push` to first check if a Specs directory exists and if so push
-  there.  
+* Fixes `pod repo push` to first check if a Specs directory exists and if so
+  push there.  
   [Edward Valentini](edwardvalentini)
   [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
 
@@ -76,8 +76,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#2136](https://github.com/CocoaPods/CocoaPods/issues/2136)
 
 * Always evaluate podspecs from the original podspec directory. This fixes
-  issues when you are using relative paths inside ruby podspecs and using a
-  pod's via `:path`.  
+  issues when you are using relative paths inside ruby podspecs and depending
+  on a pod via `:path`.  
   [Kyle Fuller](kylef)
   [pod-template#50](https://github.com/CocoaPods/pod-template/issues/50)
 
@@ -101,13 +101,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](segiddins)
   [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
 
-* Fixes an issue where a version of a spec will not be locked when using multiple
-  subspecs of a podspec.  
+* Fixes an issue where a version of a spec will not be locked when using
+  multiple subspecs of a podspec.  
   [Kyle Fuller](https://github.com/kylef)
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2135](https://github.com/CocoaPods/CocoaPods/issues/2135)
 
-* Fixes an issue using JSON podspecs installed directly from a lib's repository.  
+* Fixes an issue using JSON podspecs installed directly from a lib's
+  repository.  
   [Kyle Fuller](https://github.com/kylef)
   [#2320](https://github.com/CocoaPods/CocoaPods/issues/2320)
 
