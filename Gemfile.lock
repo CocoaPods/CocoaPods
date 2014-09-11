@@ -1,3 +1,63 @@
+GIT
+  remote: https://github.com/CocoaPods/CLAide.git
+  revision: c4c75f833db97173fca7380890ed99affad2bbab
+  branch: master
+  specs:
+    claide (0.6.1)
+
+GIT
+  remote: https://github.com/CocoaPods/Core.git
+  revision: 2c5be5dbb1157c10e86ff75223a119b74d01ae7f
+  branch: master
+  specs:
+    cocoapods-core (0.33.1)
+      activesupport (>= 3.2.15)
+      fuzzy_match (~> 2.0.4)
+      json_pure (~> 1.8)
+      nap (~> 0.8.0)
+
+GIT
+  remote: https://github.com/CocoaPods/Xcodeproj.git
+  revision: 8cebb41a5630053109da9720454a2ae3eecfee3c
+  branch: master
+  specs:
+    xcodeproj (0.18.0)
+      CFPropertyList (~> 2.2)
+      activesupport (~> 3.0)
+      colored (~> 1.2)
+
+GIT
+  remote: https://github.com/CocoaPods/cocoapods-downloader.git
+  revision: a8710a42b1ce379fb2afe66ce9f98a08b58fb482
+  branch: master
+  specs:
+    cocoapods-downloader (0.6.1)
+
+GIT
+  remote: https://github.com/CocoaPods/cocoapods-plugins.git
+  revision: 110d18e51f2db545096262832413d31a22e0461a
+  branch: master
+  specs:
+    cocoapods-plugins (0.2.0)
+      nap
+
+GIT
+  remote: https://github.com/CocoaPods/cocoapods-trunk.git
+  revision: 62bca8ec7073fc59d4137818bd78e0bbc8b1718f
+  branch: master
+  specs:
+    cocoapods-trunk (0.1.4)
+      json_pure (~> 1.8)
+      nap (>= 0.8)
+      netrc
+
+GIT
+  remote: https://github.com/CocoaPods/cocoapods-try.git
+  revision: 59a225cd4dd1868da4be7c4cc870cae427f04bf9
+  branch: master
+  specs:
+    cocoapods-try (0.3.0)
+
 PATH
   remote: .
   specs:
@@ -16,66 +76,6 @@ PATH
       open4 (~> 1.3)
       xcodeproj (~> 0.18.0)
 
-GIT
-  remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: de62dd92e4f10b008711393a0a257dd5130ce948
-  branch: master
-  specs:
-    xcodeproj (0.18.0)
-      CFPropertyList (~> 2.2)
-      activesupport (~> 3.0)
-      colored (~> 1.2)
-
-GIT
-  remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 59a225cd4dd1868da4be7c4cc870cae427f04bf9
-  branch: master
-  specs:
-    cocoapods-try (0.3.0)
-
-GIT
-  remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 62bca8ec7073fc59d4137818bd78e0bbc8b1718f
-  branch: master
-  specs:
-    cocoapods-trunk (0.1.4)
-      json_pure (~> 1.8)
-      nap (>= 0.8)
-      netrc
-
-GIT
-  remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: f1364dd91ea334e46b2f37455aef46147d14575a
-  branch: master
-  specs:
-    cocoapods-plugins (0.2.0)
-      nap
-
-GIT
-  remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: a8710a42b1ce379fb2afe66ce9f98a08b58fb482
-  branch: master
-  specs:
-    cocoapods-downloader (0.6.1)
-
-GIT
-  remote: https://github.com/CocoaPods/Core.git
-  revision: 85ef1bf5917c853def368d6ca5a5ab955486b4d7
-  branch: fabio/specs-sources
-  specs:
-    cocoapods-core (0.33.1)
-      activesupport (>= 3.2.15)
-      fuzzy_match (~> 2.0.4)
-      json_pure (~> 1.8)
-      nap (~> 0.8.0)
-
-GIT
-  remote: https://github.com/CocoaPods/CLAide.git
-  revision: c4c75f833db97173fca7380890ed99affad2bbab
-  branch: master
-  specs:
-    claide (0.6.1)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -85,6 +85,8 @@ GEM
       multi_json (~> 1.0)
     addressable (2.3.6)
     ast (2.0.0)
+    astrolabe (1.3.0)
+      parser (>= 2.2.0.pre.3, < 3.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
     clintegracon (0.5.2)
@@ -137,7 +139,8 @@ GEM
       ffi (>= 0.5.0)
     rb-kqueue (0.2.3)
       ffi (>= 0.5.0)
-    rubocop (0.25.0)
+    rubocop (0.26.0)
+      astrolabe (~> 1.3)
       parser (>= 2.2.0.pre.4, < 3.0)
       powerpack (~> 0.0.6)
       rainbow (>= 1.99.1, < 3.0)
