@@ -18,9 +18,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1668](https://github.com/CocoaPods/CocoaPods/pull/1668)
   [#731](https://github.com/CocoaPods/CocoaPods/pull/731)
 
-* Add specific repo sources support. Allows to specify in podfile
+* Add 'specific repo sources' support. Allows one to specify in their Podfile
   which sources should be used to retrieve specs from and the priority
-  order. Example: `source 'netbe'`, or `source 'master'`. 'master' being
+  order thereof. For example: `source 'netbe'`, or `source 'master'`, with 'master' being
   the default GitHub CocoaPods spec-repo.
   [François Benaiteau](https://github.com/netbe)
   [#1143](https://github.com/CocoaPods/CocoaPods/pull/1143)
@@ -54,7 +54,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Properly quote the `-isystem` values in the xcconfig files.  
   [Eloy Durán](https://github.com/alloy)
 
-* The post install message with the Changelog has been removed from the
+* The post install message with the CHANGELOG has been removed from the
   gemspec.  
   [Fabio Pelosin][FabioPelosin]
   [Eloy Durán](https://github.com/alloy)
@@ -66,7 +66,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
-* Fixes pod repo push to first check if Specs directory exists and if so push
+* Fixes `pod repo push` to first check if a Specs directory exists and if so push
   there.  
   [Edward Valentini](edwardvalentini)
   [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
@@ -101,13 +101,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](segiddins)
   [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
 
-* Fixes an issue where version of a spec will not be locked when using multiple
+* Fixes an issue where a version of a spec will not be locked when using multiple
   subspecs of a podspec.  
   [Kyle Fuller](https://github.com/kylef)
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2135](https://github.com/CocoaPods/CocoaPods/issues/2135)
 
-* Fixes an issue using JSON podspecs from a repository.  
+* Fixes an issue using JSON podspecs installed directly from a lib's repository.  
   [Kyle Fuller](https://github.com/kylef)
   [#2320](https://github.com/CocoaPods/CocoaPods/issues/2320)
 
