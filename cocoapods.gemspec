@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'xcodeproj',            '~> 0.18.0'
   s.add_runtime_dependency 'cocoapods-downloader', '~> 0.6.1'
   s.add_runtime_dependency 'cocoapods-plugins',    '~> 0.3.0'
-  s.add_runtime_dependency 'cocoapods-try',        '~> 0.3.0'
+  s.add_runtime_dependency 'cocoapods-try',        '~> 0.4.0'
   s.add_runtime_dependency 'cocoapods-trunk',      '~> 0.1.4'
 
   s.add_runtime_dependency 'colored',       '~> 1.2'
