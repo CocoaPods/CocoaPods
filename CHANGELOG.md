@@ -6,9 +6,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
-* Add support to specify dependencies per build configuration.
+* Add support to specify dependencies per build configuration:
 
-      pod 'Lookback', :configurations => ['Debug']
+        pod 'Lookback', :configurations => ['Debug']
 
   Currently configurations can only be specified per single Pod.  
   [Joachim Bengtsson](https://github.com/nevyn)
