@@ -6,7 +6,7 @@ module Pod
       module Options
         def options
           [
-            ['--project-directory=/path/to/project/directory/', 'The path to the root of the project directory'],
+            ['--project-directory=/project/dir/', 'The path to the root of the project directory'],
           ].concat(super)
         end
       end
