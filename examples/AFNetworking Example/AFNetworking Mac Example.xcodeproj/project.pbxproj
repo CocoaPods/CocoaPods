@@ -20,11 +20,9 @@
 
 /* Begin PBXFileReference section */
 		3C79D6B3AA6A1DBBAE48A944 /* Pods-AFNetworking Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example.debug.xcconfig"; sourceTree = "<group>"; };
-		53763FEA1CCF8658D4ACFFCE /* Pods-AFNetworking Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6935B1E417A24F0E958977ED /* libPods-AFNetworking Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A67B777556EF5D95EAFA5CF8 /* Pods-AFNetworking Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example.release.xcconfig"; sourceTree = "<group>"; };
 		B304CCE7177D58DD00F4FC85 /* adn.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = adn.cer; sourceTree = SOURCE_ROOT; };
-		B3341CC0913DB5992CDCDDF6 /* Pods-AFNetworking Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example.release.xcconfig"; sourceTree = "<group>"; };
 		F8129BFB1591061B009BFE23 /* AFNetworking Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFNetworking Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8129BFF1591061B009BFE23 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		F8129C021591061B009BFE23 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -59,8 +57,6 @@
 		A052BC91C16D94336357A93A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				53763FEA1CCF8658D4ACFFCE /* Pods-AFNetworking Example.debug.xcconfig */,
-				B3341CC0913DB5992CDCDDF6 /* Pods-AFNetworking Example.release.xcconfig */,
 				3C79D6B3AA6A1DBBAE48A944 /* Pods-AFNetworking Example.debug.xcconfig */,
 				A67B777556EF5D95EAFA5CF8 /* Pods-AFNetworking Example.release.xcconfig */,
 			);
