@@ -157,6 +157,15 @@ module Pod
     end
 
     # @return [Pathname] the absolute path of the header file which contains
+    #         the exported foundation constants with framework version
+    #         information and all headers, which should been exported in the
+    #         module map.
+    #
+    def umbrella_header_path
+      support_files_dir + target_definition.label + "#{product_module_name}.h"
+    end
+
+    # @return [Pathname] the absolute path of the header file which contains
     #         the information about the installed pods.
     #
     def target_environment_header_path

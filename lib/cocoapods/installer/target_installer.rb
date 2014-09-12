@@ -86,6 +86,31 @@ module Pod
         end
       end
 
+      # Generates a header which ensures that all header files are exported
+      # in the module map
+      #
+      # @yield_param [Generator::UmbrellaHeader]
+      #              yielded once to configure the imports
+      #
+      def create_umbrella_header
+        path = target.umbrella_header_path
+        UI.message "- Generating umbrella header at #{UI.path(path)}" do
+          generator = Generator::UmbrellaHeader.new(target)
+          yield generator if block_given?
+          generator.save_as(path)
+
+          # Add the file to the support group and the native target,
+          # so it will been added to the header build phase
+          file_ref = add_file_to_support_group(path)
+          native_target.add_file_references([file_ref])
+
+          # Make the umbrella header public
+          build_file = native_target.headers_build_phase.build_file(file_ref)
+          build_file.settings ||= {}
+          build_file.settings['ATTRIBUTES'] = ['Public']
+        end
+      end
+
       # Generates a dummy source file for each target so libraries that contain
       # only categories build.
       #

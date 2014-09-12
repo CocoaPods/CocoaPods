@@ -15,7 +15,12 @@ module Pod
           add_files_to_build_phases
           add_resources_bundle_targets
           create_xcconfig_file
-          create_info_plist_file if target.requires_framework?
+          if target.requires_framework?
+            create_info_plist_file
+            create_umbrella_header do |generator|
+              generator.imports += target.file_accessors.map(&:public_headers).flatten.map(&:basename)
+            end
+          end
           create_prefix_header
           create_dummy_source
         end
