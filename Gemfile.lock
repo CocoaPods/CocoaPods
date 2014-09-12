@@ -1,13 +1,13 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 31e74fae76461e9832e488f77a9e8116703c201b
+  revision: ce2a7890dbfcaecd38347195d5c753cdb893e636
   branch: master
   specs:
     claide (0.7.0)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 2c5be5dbb1157c10e86ff75223a119b74d01ae7f
+  revision: 34e217967230dc9d1905e1a731458fc2f3f7c950
   branch: master
   specs:
     cocoapods-core (0.33.1)
@@ -18,10 +18,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: c73e635eeed9f33c5d52380a9c99061d15165df2
+  revision: 49d003dc68837a679c5e09eea438b2ef44423586
   branch: master
   specs:
-    xcodeproj (0.19.0)
+    xcodeproj (0.19.1)
       CFPropertyList (~> 2.2)
       activesupport (~> 3.0)
       colored (~> 1.2)
@@ -35,10 +35,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 37d967b2df55b8fbd743c70278666de70648283c
+  revision: b681dc7abcbc332c0a7197fb232d3bf7c449f00a
   branch: master
   specs:
-    cocoapods-plugins (0.3.0)
+    cocoapods-plugins (0.3.1)
       nap
 
 GIT
@@ -53,7 +53,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: d256af3c264e5c097f9d0923036c1c60881f1d7e
+  revision: 477d0e58299f03d9048048af2e46cfb95e06d19d
   branch: master
   specs:
     cocoapods-try (0.4.0)
@@ -66,7 +66,7 @@ PATH
       claide (~> 0.7.0)
       cocoapods-core (= 0.33.1)
       cocoapods-downloader (~> 0.7.0)
-      cocoapods-plugins (~> 0.3.0)
+      cocoapods-plugins (~> 0.3.1)
       cocoapods-trunk (~> 0.2.0)
       cocoapods-try (~> 0.4.0)
       colored (~> 1.2)
@@ -74,7 +74,7 @@ PATH
       json_pure (~> 1.8)
       nap (~> 0.8)
       open4 (~> 1.3)
-      xcodeproj (~> 0.19.0)
+      xcodeproj (~> 0.19.1)
 
 GEM
   remote: http://rubygems.org/
