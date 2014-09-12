@@ -13,7 +13,7 @@ module Pod
 
       # @return [Array<String>] The list of the headers to import.
       #
-      attr_reader :imports
+      attr_accessor :imports
 
       # @param  [Symbol] platform
       #         @see platform
