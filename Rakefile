@@ -244,10 +244,10 @@ begin
         execute_command "rm -rf Pods"
         execute_command "#{pod_command} install --verbose --no-repo-update"
 
-        puts "Building example: AFNetworking Mac Example'"
+        puts "Building example: AFNetworking Mac Example"
         execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking Example' clean install"
 
-        puts "Building example: AFNetworking iOS Example'"
+        puts "Building example: AFNetworking iOS Example"
         xcode_version = `xcodebuild -version`.scan(/Xcode (.*)\n/).first.first
         major_version = xcode_version.split('.').first.to_i
         # Specifically build against the simulator SDK so we don't have to deal with code signing.
