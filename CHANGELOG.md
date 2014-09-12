@@ -74,7 +74,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Eloy Durán](https://github.com/alloy)
 
 * Add support for user-specified project directories with the
-  `--project-directory` option
+  `--project-directory` option.  
   [Samuel Giddins](segiddins)
   [#2183](https://github.com/CocoaPods/CocoaPods/issues/2183)
 
@@ -111,7 +111,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Robert Zuber](https://github.com/z00b)
   [#1904](https://github.com/CocoaPods/CocoaPods/issues/1904)
 
-* Fixes static analysis in Xcode 6
+* Fixes static analysis in Xcode 6.  
   [Samuel Giddins](segiddins)
   [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
 
