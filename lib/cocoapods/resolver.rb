@@ -210,10 +210,11 @@ module Pod
     #         The dependency for which the set is needed.
     #
     def find_set_from_sources(dependency)
-      sources.each_with_object(nil) do |source, _|
+      sources.each do |source|
         set = source.search(dependency)
         return set if set
       end
+      nil
     end
 
     # Ensures that a specification is compatible with the platform of a target.
