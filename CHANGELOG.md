@@ -4,6 +4,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+* The use of `$PODS_ROOT` environment variable has been deprecated and should
+  not be used. It will be removed in future versions of CocoaPods.
+  [#2449](https://github.com/CocoaPods/CocoaPods/issues/2449)
+
 ##### Enhancements
 
 * Add support to specify dependencies per build configuration:
