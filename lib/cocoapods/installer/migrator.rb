@@ -28,14 +28,14 @@ module Pod
             sandbox.root.children.each do |child|
               relative = child.relative_path_from(sandbox.root)
               case relative.to_s
-              when 'Manifest.lock', 'Pods.xcodeproj', 'Sources', 'Headers',
+              when 'Manifest.lock', 'Pods.xcodeproj', 'Headers',
                 'Target Support Files', 'Local Podspecs'
                 next
               when 'BuildHeaders', 'PublicHeaders'
                 delete(child)
               else
                 if child.directory? && child.extname != '.xcodeproj'
-                  move(child, sandbox.sources_root + relative)
+                  next
                 else
                   delete(child)
                 end

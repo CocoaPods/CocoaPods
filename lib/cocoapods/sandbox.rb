@@ -29,8 +29,7 @@ module Pod
   #     |       +-- Pods-prefix.pch
   #     |       +-- Pods.xcconfig
   #     |
-  #     +-- Sources
-  #     |   +-- [Pod Name]
+  #     +-- [Pod Name]
   #     |
   #     +-- Manifest.lock
   #     |
@@ -173,7 +172,7 @@ module Pod
     #         the Pods are stored.
     #
     def sources_root
-      root + 'Sources'
+      root
     end
 
     # @return [Pathname] the path for the directory where the

@@ -78,7 +78,7 @@ module Pod
 
       it 'returns the directory where a Pod is stored' do
         @sandbox.pod_dir('JSONKit').should ==
-          temporary_directory + 'Sandbox/Sources/JSONKit'
+          temporary_directory + 'Sandbox/JSONKit'
       end
 
       it 'returns the directory where a local Pod is stored' do
