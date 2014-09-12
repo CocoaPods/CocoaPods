@@ -104,6 +104,7 @@ describe_cli 'pod' do
     s.environment_vars = {
       'CP_AGGRESSIVE_CACHE' => 'TRUE',
       'XCODEPROJ_DISABLE_XCPROJ' => 'TRUE',
+      'FIXED_WIDTH' => 'TRUE',
     }
     s.default_args = [
       '--verbose',
