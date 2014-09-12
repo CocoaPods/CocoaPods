@@ -245,17 +245,17 @@ begin
         execute_command "#{pod_command} install --verbose --no-repo-update"
 
         puts "Building example: AFNetworking Mac Example"
-        execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking Example' clean install"
+        execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking Example' clean build"
 
         puts "Building example: AFNetworking iOS Example"
         xcode_version = `xcodebuild -version`.scan(/Xcode (.*)\n/).first.first
         major_version = xcode_version.split('.').first.to_i
         # Specifically build against the simulator SDK so we don't have to deal with code signing.
         if  major_version > 4
-          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean install ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch)'"
+          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch)'"
         else
           sdk = Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
-          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean install ONLY_ACTIVE_ARCH=NO  -sdk #{sdk}"
+          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean build ONLY_ACTIVE_ARCH=NO  -sdk #{sdk}"
         end
       end
     end
