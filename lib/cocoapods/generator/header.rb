@@ -64,6 +64,7 @@ module Pod
       # @return [void]
       #
       def save_as(path)
+        FileUtils.mkdir_p(path + '..')
         path.open('w') { |header| header.write(generate) }
       end
 
