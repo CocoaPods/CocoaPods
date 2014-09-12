@@ -52,7 +52,7 @@ module Pod
           path = config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path)
           group.source_tree.should == '<group>'
-          group.path.should == 'Sources/BananaLib'
+          group.path.should == 'BananaLib'
           Pathname.new(group.path).should.be.relative
         end
 

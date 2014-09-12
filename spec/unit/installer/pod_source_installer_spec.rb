@@ -119,14 +119,14 @@ module Pod
         it 'cleans the paths non used by the installation' do
           @installer.install!
           @installer.clean!
-          unused_file = config.sandbox.root + 'Sources/BananaLib/sub-dir/sub-dir-2/somefile.txt'
+          unused_file = config.sandbox.root + 'BananaLib/sub-dir/sub-dir-2/somefile.txt'
           unused_file.should.not.exist
         end
 
         it 'preserves important files like the LICENSE and the README' do
           @installer.install!
           @installer.clean!
-          readme_file = config.sandbox.root + 'Sources/BananaLib/README'
+          readme_file = config.sandbox.root + 'BananaLib/README'
           readme_file.should.exist
         end
 
@@ -169,13 +169,13 @@ module Pod
         @installer.send(:download_source)
         paths = @installer.send(:clean_paths)
         relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
-        paths_without_git = relative_paths.reject { |p| p.include? 'Pods/Sources/BananaLib/.git' }
+        paths_without_git = relative_paths.reject { |p| p.include? 'Pods/BananaLib/.git' }
         paths_without_git.sort.should == [
-          'Pods/Sources/BananaLib/BananaLib.podspec',
-          'Pods/Sources/BananaLib/libPusher',
-          'Pods/Sources/BananaLib/sub-dir',
-          'Pods/Sources/BananaLib/sub-dir/sub-dir-2',
-          'Pods/Sources/BananaLib/sub-dir/sub-dir-2/somefile.txt',
+          'Pods/BananaLib/BananaLib.podspec',
+          'Pods/BananaLib/libPusher',
+          'Pods/BananaLib/sub-dir',
+          'Pods/BananaLib/sub-dir/sub-dir-2',
+          'Pods/BananaLib/sub-dir/sub-dir-2/somefile.txt',
         ]
       end
 
@@ -184,13 +184,13 @@ module Pod
         paths = @installer.send(:used_files)
         relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
         relative_paths.sort.should == [
-          'Pods/Sources/BananaLib/Classes/Banana.h',
-          'Pods/Sources/BananaLib/Classes/Banana.m',
-          'Pods/Sources/BananaLib/Classes/BananaLib.pch',
-          'Pods/Sources/BananaLib/Classes/BananaPrivate.h',
-          'Pods/Sources/BananaLib/LICENSE',
-          'Pods/Sources/BananaLib/README',
-          'Pods/Sources/BananaLib/Resources/logo-sidebar.png',
+          'Pods/BananaLib/Classes/Banana.h',
+          'Pods/BananaLib/Classes/Banana.m',
+          'Pods/BananaLib/Classes/BananaLib.pch',
+          'Pods/BananaLib/Classes/BananaPrivate.h',
+          'Pods/BananaLib/LICENSE',
+          'Pods/BananaLib/README',
+          'Pods/BananaLib/Resources/logo-sidebar.png',
         ]
       end
 
@@ -208,13 +208,13 @@ module Pod
         paths = @installer.send(:used_files)
         relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
         relative_paths.sort.should == [
-          'Pods/Sources/BananaLib/Classes/Banana.h',
-          'Pods/Sources/BananaLib/Classes/Banana.m',
-          'Pods/Sources/BananaLib/Classes/BananaLib.pch',
-          'Pods/Sources/BananaLib/Classes/BananaPrivate.h',
-          'Pods/Sources/BananaLib/LICENSE',
-          'Pods/Sources/BananaLib/README',
-          'Pods/Sources/BananaLib/Resources/logo-sidebar.png',
+          'Pods/BananaLib/Classes/Banana.h',
+          'Pods/BananaLib/Classes/Banana.m',
+          'Pods/BananaLib/Classes/BananaLib.pch',
+          'Pods/BananaLib/Classes/BananaPrivate.h',
+          'Pods/BananaLib/LICENSE',
+          'Pods/BananaLib/README',
+          'Pods/BananaLib/Resources/logo-sidebar.png',
         ]
       end
 
