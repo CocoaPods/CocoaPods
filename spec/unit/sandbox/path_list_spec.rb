@@ -64,12 +64,12 @@ module Pod
 
       it 'can return the absolute paths from glob' do
         paths = @path_list.glob('Classes/*.{h,m}')
-        paths.all? { |p| p.absolute? }.should == true
+        paths.all?(&:absolute?).should == true
       end
 
       it 'can return the relative paths from glob' do
         paths = @path_list.relative_glob('Classes/*.{h,m}')
-        paths.any? { |p| p.absolute? }.should == false
+        paths.any?(&:absolute?).should == false
       end
 
       it 'supports the `**` glob pattern' do
