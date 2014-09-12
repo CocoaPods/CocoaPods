@@ -14,7 +14,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   intervention in projects where CocoaPods generated files have been imported
   (common with the acknowledgements).  
   [#1055](https://github.com/CocoaPods/CocoaPods/pull/1055)
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [Michele Titolo](https://github.com/mtitolo)
 
 
@@ -27,7 +27,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   Currently configurations can only be specified per single Pod.  
   [Joachim Bengtsson](https://github.com/nevyn)
   [Eloy Durán](https://github.com/alloy)
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1791](https://github.com/CocoaPods/CocoaPods/pull/1791)
   [#1668](https://github.com/CocoaPods/CocoaPods/pull/1668)
   [#731](https://github.com/CocoaPods/CocoaPods/pull/731)
@@ -50,7 +50,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
   The `installer_context` is an instance of the `Pod::Installer:HooksContext`
   class which provides the information about the installation.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [Core#132](https://github.com/CocoaPods/Core/pull/1755)
 
 * Display indication for deprecated pods when searching for Pods.  
@@ -70,7 +70,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * The post install message with the CHANGELOG has been removed from the
   gemspec.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [Eloy Durán](https://github.com/alloy)
 
 * Add support for user-specified project directories with the
@@ -96,7 +96,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [pod-template#50](https://github.com/CocoaPods/pod-template/issues/50)
 
 * Fixes spec linting to not warn for missing license file in subspecs.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [Core#132](https://github.com/CocoaPods/Core/issues/132)
 
 * Fixes `pod init` so that it doesn't recurse when checking for Podfiles.  
@@ -132,15 +132,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ##### Bug Fixes
 
 * Fix `pod spec lint` for `json` podspecs.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2157](https://github.com/CocoaPods/CocoaPods/issues/2157)
 
 * Fixed downloader issues related to `json` podspecs.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2158](https://github.com/CocoaPods/CocoaPods/issues/2158)
 
 * Fixed `--no-ansi` flag in help banners.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#34](https://github.com/CocoaPods/CLAide/issues/34)
 
 
@@ -150,20 +150,20 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * The deprecated `pre_install` and the `pod_install` hooks of the specification
   class have been removed.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2151](https://github.com/CocoaPods/CocoaPods/issues/2151)
   [#2153](https://github.com/CocoaPods/CocoaPods/pull/2153)
 
 ##### Enhancements
 
 * Added the `cocoapods-trunk` plugin which introduces the `trunk` subcommand.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2151](https://github.com/CocoaPods/CocoaPods/issues/2151)
   [#2153](https://github.com/CocoaPods/CocoaPods/pull/2153)
 
 * The `pod push` sub-command has been moved to the `pod repo push` sub-command.
   Moreover pushing to the master repo from it has been disabled.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2151](https://github.com/CocoaPods/CocoaPods/issues/2151)
   [#2153](https://github.com/CocoaPods/CocoaPods/pull/2153)
 
@@ -176,7 +176,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
       exec zsh
 
   Currently only the Z shell is supported.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [CLAide#25](https://github.com/CocoaPods/CLAide/issues/25)
   [CLAide#20](https://github.com/CocoaPods/CLAide/issues/20)
   [CLAide#19](https://github.com/CocoaPods/CLAide/issues/19)
@@ -186,7 +186,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The `--version` flag is now only supported for the root `pod` command. If
   used in conjunction with the `--verbose` flag the version of the detected
   plugins will be printed as well.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [CLAide#13](https://github.com/CocoaPods/CLAide/issues/13)
   [CLAide#14](https://github.com/CocoaPods/CLAide/issues/14)
 
@@ -194,7 +194,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   information about the available and the installed plug-ins.  
   [David Grandinetti](https://github.com/dbgrandi)
   [Olivier Halligon](https://github.com/AliSoftware)
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2092](https://github.com/CocoaPods/CocoaPods/issues/2092)
 
 * Validate the reachability of `social_media_url`, `documentation_url` and
@@ -219,7 +219,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Fixed support for file references in the workspace generated by CocoaPods.  
   [Kyle Fuller][kylef]
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [Xcodeproj#105](https://github.com/CocoaPods/Xcodeproj/pull/150)
 
 * Show a helpful error message when reading version information with merge
@@ -240,7 +240,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ##### Bug Fixes
 
 * Fixed the Podfile `default_subspec` attribute in nested subspecs.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2050](https://github.com/CocoaPods/CocoaPods/issues/2050)
 
 ## 0.32.0
@@ -282,19 +282,19 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   * The linter now checks `framework` and `library` attributes for invalid
     strings.  
     [Paul Williamson](https://github.com/squarefrog)
-    [Fabio Pelosin](FabioPelosin)
+    [Fabio Pelosin](fabiopelosin)
     [Core#66](https://github.com/CocoaPods/Core/issues/66)
     [Core#96](https://github.com/CocoaPods/Core/pull/96)
     [Core#105](https://github.com/CocoaPods/Core/issues/105)
   * The Linter will not check for comments anymore.  
-    [Fabio Pelosin][FabioPelosin]
+    [Fabio Pelosin](https://github.com/fabiopelosin)
     [Core#108](https://github.com/CocoaPods/Core/issues/108)
   * Removed legacy checks from the linter.  
-    [Fabio Pelosin][FabioPelosin]
+    [Fabio Pelosin](https://github.com/fabiopelosin)
     [Core#108](https://github.com/CocoaPods/Core/issues/108)
   * Added logic to handle subspecs and platform scopes to linter check of
     the `requries_arc` attribute.  
-    [Fabio Pelosin][FabioPelosin]
+    [Fabio Pelosin](https://github.com/fabiopelosin)
     [CocoaPods#2005](https://github.com/CocoaPods/CocoaPods/issues/2005)
   * The linter no longer considers empty a Specification if it only specifies the
     `resource_bundle` attribute.  
@@ -319,7 +319,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Dependencies declared with external sources now support HTTP downloads and
   have improved support for all the options supported by the downloader.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
 
 * An informative error message is presented when merge conflict is detected in
   a YAML file.  
@@ -330,7 +330,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ##### Bug Fixes
 
 * Fixed the Podfile `default_subspec` attribute in nested subspecs.  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1021](https://github.com/CocoaPods/CocoaPods/issues/1021)
 
 * Warn when including deprecated pods
@@ -347,7 +347,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The specification now strips the indentation of the `prefix_header` and
   `prepare_command` to aide their declaration as a here document (similarly to
   what it already does with the description).  
-  [Fabio Pelosin][FabioPelosin]
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [Core#51](https://github.com/CocoaPods/Core/issues/51)
 
 ##### Bug Fixes
@@ -365,7 +365,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Warnings are not promoted to errors anymore to maximise compatibility with
   existing libraries.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1629](https://github.com/CocoaPods/CocoaPods/issues/1629)
 
 * Include the versions of the Pods to the output of `pod list`.  
@@ -381,7 +381,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The linter will now check the reachability of the homepage of Podspecs during
   a full lint.  
   [Richard Lee](https://github.com/dlackty)
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1704](https://github.com/CocoaPods/CocoaPods/issues/1704)
   [Core#70](https://github.com/CocoaPods/Core/pull/70)
 
@@ -502,13 +502,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   the `pod ipc spec` command returns a JSON representation and the YAML
   specifications are not supported anymore. JSON specifications adopt the
   `.podspec.json` extension.
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1568](https://github.com/CocoaPods/CocoaPods/pull/1568)
 
 ###### Enhancements
 
 * Introduced `pod try` the easiest way to test the example project of a pod.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1568](https://github.com/CocoaPods/CocoaPods/pull/1568)
 
 * Pod headers are now provided to the user target as a system
@@ -538,7 +538,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The `pod push` command will now silently test the upcoming CocoaPods trunk
   service. The service is only tested when pushing to the master repo and the
   test doesn't affect the normal workflow.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
 
 * The `pod search <query>` command now supports searching on cocoapods.org
   when searching using the option `--web`. Options `--ios` and `--osx` are
@@ -555,7 +555,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Fixed a bug which resulted in `pod lib lint` not being able to find the
   headers.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1566](https://github.com/CocoaPods/CocoaPods/issues/1566)
 
 * Fixed the developer frameworks search paths so that
@@ -714,13 +714,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * The architecture is now set in the build settings of the user build
   configurations.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1450](https://github.com/CocoaPods/CocoaPods/issues/1462)
   [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
 
 * Fixed a crash related to CocoaPods being unable to resolve an unique build
   setting of an user target with custom build configurations.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1462](https://github.com/CocoaPods/CocoaPods/issues/1462)
   [#1463](https://github.com/CocoaPods/CocoaPods/issues/1463)
   [#1457](https://github.com/CocoaPods/CocoaPods/issues/1457)
@@ -733,7 +733,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The developer dir relative to the SDK is not added anymore if testing
   frameworks are detected in OS X targets, as it doesn't exists, avoiding the
   presentation of the relative warning in Xcode.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
 
 
 ## 0.26.2
@@ -751,11 +751,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * If an user target doesn't specify an architecture the value specified for the
   project is used in CocoaPods targets.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1450](https://github.com/CocoaPods/CocoaPods/issues/1450)
 
 * The Pods project now properly configures ARC on all build configurations.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1454](https://github.com/CocoaPods/CocoaPods/issues/1454)
 
 
@@ -772,14 +772,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   present and to debug a single Pod it is possible to make its scheme visible
   in the Schemes manager of Xcode. This is rarely needed though because the
   user targets trigger the compilation of the Pod targets.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
 
 * Installations which don't integrate a user target (lint subcommands and
   `--no-integrate` option) now set the architecture of OS X Pod targets to
   `$(ARCHS_STANDARD_64_BIT)` (Xcode 4 default value for new targets). This
   fixes lint issues with Xcode 4.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1185](https://github.com/CocoaPods/CocoaPods/pull/1185)
 
 * Further improvements to the organization of the Pods project  
@@ -791,19 +791,19 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   - The frameworks are referenced relative to the Developer directory and
     namespaced per platform.
 
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1389](https://github.com/CocoaPods/CocoaPods/pull/1389)
   [#1420](https://github.com/CocoaPods/CocoaPods/pull/1420)
 
 * Added the `documentation_url` DSL attribute to the specifications.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1273](https://github.com/CocoaPods/CocoaPods/pull/1273)
 
 ###### Bug Fixes
 
 * The search paths of vendored frameworks and libraries now are always
   specified relatively.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1405](https://github.com/CocoaPods/CocoaPods/pull/1405)
 
 * Fix an issue where CocoaPods would fail to work when used with an older
@@ -814,7 +814,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * CocoaPods will not attempt to load anymore all the version of a specification
   preventing crashes if those are incompatible.  
-  [Fabio Pelosin](https://github.com/FabioPelosin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1272](https://github.com/CocoaPods/CocoaPods/pull/1272)
 
 
@@ -1297,7 +1297,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Compile time introspection. Macro definitions which allow to inspect the
   installed Pods and their version have been introduced in the build
   environment of the Pod libraries
-  ([example](https://gist.github.com/FabioPelosin/5348551)).
+  ([example](https://gist.github.com/fabiopelosin/5348551)).
 * CocoaPods now defines the `COCOAPODS=1` macro in the Pod and the Client
   targets. This is useful for libraries which conditionally expose interfaces.
   [#903](https://github.com/CocoaPods/CocoaPods/issues/903)
@@ -2548,7 +2548,6 @@ allowing you to automate Xcode related tasks.
 [6]: https://github.com/CocoaPods/CocoaPods/compare/0.5.1...0.6.0
 [7]: https://github.com/CocoaPods/CocoaPods/compare/0.3.10...0.5.0
 
-[FabioPelosin]: https://github.com/FabioPelosin
 [kylef]: (https://github.com/kylef)
 [neonichu]: (https://github.com/neonichu)
 [mrackwitz]: https://github.com/mrackwitz
