@@ -16,16 +16,16 @@ Resolving dependencies for target `Pods' (iOS 6.0)
   - Reachability (<= 3.1.0)
 
 Comparing resolved specification to the sandbox manifest
-  A Reachability
+  M Reachability
 
 Downloading dependencies
 
 -> Installing Reachability (3.1.0)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git
-     ROOT/tmp/update_all/Pods/Sources/Reachability --single-branch --depth 1 --branch v3.1.0
-     Cloning into 'ROOT/tmp/update_all/Pods/Sources/Reachability'...
+     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git ROOT/tmp/update_all/Pods/Reachability
+     --single-branch --depth 1 --branch v3.1.0
+     Cloning into 'ROOT/tmp/update_all/Pods/Reachability'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
      
      You are in 'detached HEAD' state. You can look around, make experimental

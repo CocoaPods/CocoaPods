@@ -50,7 +50,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           WRAPPER_EXTENSION: app
         Base Configuration: Pods.debug.xcconfig
     - Release:
@@ -59,7 +59,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           WRAPPER_EXTENSION: app
         Base Configuration: Pods.release.xcconfig
 
@@ -69,7 +69,7 @@ Build Configurations:
 - Debug:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+      ARCHS: $(ARCHS_STANDARD_64_BIT)
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_CXX_LIBRARY: libc++
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
@@ -84,7 +84,7 @@ Build Configurations:
       GCC_OPTIMIZATION_LEVEL: '0'
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
@@ -96,7 +96,7 @@ Build Configurations:
 - Release:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+      ARCHS: $(ARCHS_STANDARD_64_BIT)
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_CXX_LIBRARY: libc++
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'

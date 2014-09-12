@@ -5,7 +5,6 @@ Preparing
     - Deleting `Pods/Headers`
     - Making path `Pods/Headers`
     - Deleting `Pods/BuildHeaders`
-    - Moving `Pods/JSONKit` to `Pods/Sources/JSONKit`
     - Deleting `Pods/Pods-acknowledgements.markdown`
     - Deleting `Pods/Pods-acknowledgements.plist`
     - Deleting `Pods/Pods-dummy.m`
@@ -20,7 +19,6 @@ Preparing
     - Deleting `Pods/Pods-Reachability.xcconfig`
     - Deleting `Pods/Pods-resources.sh`
     - Deleting `Pods/Pods.xcconfig`
-    - Moving `Pods/Reachability` to `Pods/Sources/Reachability`
 
 Analyzing dependencies
 
@@ -45,9 +43,9 @@ Downloading dependencies
 -> Installing JSONKit 1.4 (was 1.4)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/johnezang/JSONKit.git ROOT/tmp/update_selected/Pods/Sources/JSONKit
-     --single-branch --depth 1 --branch v1.4
-     Cloning into 'ROOT/tmp/update_selected/Pods/Sources/JSONKit'...
+     $ /usr/local/bin/git clone https://github.com/johnezang/JSONKit.git ROOT/tmp/update_selected/Pods/JSONKit --single-branch
+     --depth 1 --branch v1.4
+     Cloning into 'ROOT/tmp/update_selected/Pods/JSONKit'...
      Note: checking out '99930114548f9cedc8070a3bd4d9a217adc218ca'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -63,9 +61,9 @@ Downloading dependencies
 -> Installing Reachability 3.1.1 (was 3.0.0)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git
-     ROOT/tmp/update_selected/Pods/Sources/Reachability --single-branch --depth 1 --branch v3.1.1
-     Cloning into 'ROOT/tmp/update_selected/Pods/Sources/Reachability'...
+     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git ROOT/tmp/update_selected/Pods/Reachability
+     --single-branch --depth 1 --branch v3.1.1
+     Cloning into 'ROOT/tmp/update_selected/Pods/Reachability'...
      Note: checking out '7ea54e98cdc439bedda279c5ad9031822269ce3c'.
      
      You are in 'detached HEAD' state. You can look around, make experimental

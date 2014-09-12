@@ -1,1 +1,1 @@
-../../../Sources/Test/FakeSubspec/Foo.h
+../../../Test/FakeSubspec/Foo.h

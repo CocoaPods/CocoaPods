@@ -24,8 +24,8 @@ Downloading dependencies
  > Git download
  > Git download
      $ /usr/local/bin/git clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git
-     ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Sources/Test --single-branch --depth 1
-     Cloning into 'ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Sources/Test'...
+     ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test --single-branch --depth 1
+     Cloning into 'ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test'...
   - Running pre install hooks
 
 Generating Pods project

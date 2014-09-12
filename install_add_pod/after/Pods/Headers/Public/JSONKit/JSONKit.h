@@ -1,1 +1,1 @@
-../../../Sources/JSONKit/JSONKit.h
+../../../JSONKit/JSONKit.h

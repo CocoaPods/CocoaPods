@@ -1,19 +1,48 @@
-This is Apple’s [example code][apple] of the SystemConfiguration Reachability
-APIs, adapted by [Andrew Donoho][donoho], split-off from the
-[ASIHTTPRequest source][asi].
+# Reachability
 
-### This code needs an actual maintainer.
+This is a drop-in replacement for Apples Reachability class. It is ARC compatible, uses the new GCD methods to notify of network interface changes.
 
-It is currently only on the CocoaPods gihub account, because ASIHTTPRequest
-(which has afaik the most up-to-date version) is no longer actively maintained.
+In addition to the standard NSNotification it supports the use of Blocks for when the network becomes reachable and unreachable.
 
-If you use Reachability and/or would like to step-up as the maintainer, please
-contact us and we’ll gladly hand over this repository to you.
+Finally you can specify wether or not a WWAN connection is considered "reachable".
 
-Also see the [TODO][todo].
+## A Simple example
+This sample uses Blocks to tell you when the interface state has changed. The blocks will be called on a BACKGROUND THREAD so you need to dispatch UI updates onto the main thread.
 
+	// allocate a reachability object
+	Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
 
-[apple]: http://developer.apple.com/library/ios/#samplecode/Reachability/Introduction/Intro.html
-[donoho]: http://blog.ddg.com/?p=24
-[asi]: https://github.com/pokeb/asi-http-request/tree/4282568eec0b487a98e312ce49b523350ffa4a6b/External/Reachability
-[todo]: https://github.com/CocoaPods/unmaintained-pod-Reachability/blob/master/TODO
+	// set the blocks 
+	reach.reachableBlock = ^(Reachability*reach)
+	{
+		NSLog(@"REACHABLE!");
+	};
+
+	reach.unreachableBlock = ^(Reachability*reach)
+	{
+		NSLog(@"UNREACHABLE!");
+	};
+
+	// start the notifier which will cause the reachability object to retain itself!
+	[reach startNotifier];
+
+## Another simple example
+This sample will use NSNotifications to tell you when the interface has changed, they will be delivered on the MAIN THREAD so you *can* do UI updates from within the function.
+
+In addition it asks the Reachability object to consider the WWAN (3G/EDGE/CDMA) as a non-reachable connection (you might use this if you are writing a video streaming app, for example, to save the users data plan).
+
+	// allocate a reachability object
+	Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+
+	// tell the reachability that we DONT want to be reachable on 3G/EDGE/CDMA
+	reach.reachableOnWWAN = NO;
+	
+	// here we set up a NSNotification observer. The Reachability that caused the notification
+	// is passed in the object parameter
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(reachabilityChanged:) 
+												 name:kReachabilityChangedNotification 
+											   object:nil];
+											
+	[reach startNotifier]
+	

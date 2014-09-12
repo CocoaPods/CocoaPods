@@ -1,1 +1,1 @@
-../../../Sources/PodTest/subspec_1.h
+../../../PodTest/subspec_1.h
