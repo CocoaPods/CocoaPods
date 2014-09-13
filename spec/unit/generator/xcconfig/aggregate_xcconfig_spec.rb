@@ -81,7 +81,7 @@ module Pod
         it 'does not links the pod targets with the aggregate integration library target for non-whitelisted configuration' do
           @generator = AggregateXCConfig.new(@target, 'Debug')
           @xcconfig = @generator.generate
-          @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l "Pods-BananaLib"'
+          @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
         end
 
         #-----------------------------------------------------------------------#
