@@ -172,6 +172,8 @@ module Pod
 
     # @!group Installation steps
 
+    # Performs the analysis.
+    #
     # @return [void]
     #
     # @note   The warning about the version of the Lockfile doesn't use the
@@ -707,18 +709,20 @@ module Pod
 
     # @!group Hooks Data
 
+    # Creates a hook representation for this installer.
+    #
     # @return [InstallerRepresentation]
     #
     def installer_rep
       Hooks::InstallerRepresentation.new(self)
     end
 
-    # @return [PodRepresentation] The hook representation of a Pod.
+    # Creates a hook representation for a Pod.
     #
     # @param  [String] pod
     #         The name of the pod.
     #
-    # @return [PodRepresentation] The pod representation.
+    # @return [PodRepresentation]
     #
     def pod_rep(pod)
       all_file_accessors = pod_targets.map(&:file_accessors).flatten.compact
@@ -726,18 +730,27 @@ module Pod
       Hooks::PodRepresentation.new(pod, file_accessors)
     end
 
+    # Creates a hook representation for a given aggregate target.
+    #
+    # @param  [AggregateTarget] aggregate_target
+    #         the aggregate target
+    #
     # @return [LibraryRepresentation]
     #
     def library_rep(aggregate_target)
       Hooks::LibraryRepresentation.new(sandbox, aggregate_target)
     end
 
+    # Creates hook representations for all aggregate targets.
+    #
     # @return [Array<LibraryRepresentation>]
     #
     def library_reps
       @library_reps ||= aggregate_targets.map { |lib| library_rep(lib) }
     end
 
+    # Creates hook representations for all #root_specs.
+    #
     # @return [Array<PodRepresentation>]
     #
     def pod_reps

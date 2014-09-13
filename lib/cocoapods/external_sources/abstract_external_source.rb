@@ -41,7 +41,7 @@ module Pod
 
       # Fetches the external source from the remote according to the params.
       #
-      # @param  [Sandbox] sandbox
+      # @param  [Sandbox] _sandbox
       #         the sandbox where the specification should be stored.
       #
       # @return [void]
@@ -58,6 +58,11 @@ module Pod
 
       protected
 
+      # Return the normalized path for a podspec for a relative declared path.
+      #
+      # @param  [String] declared_path
+      #         The path declared in the podfile.
+      #
       # @return [String] The uri of the podspec appending the name of the file
       #         and expanding it if necessary.
       #

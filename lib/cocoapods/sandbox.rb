@@ -246,6 +246,8 @@ module Pod
     #         The contents of the specification (String) or the path to a
     #         podspec file (Pathname).
     #
+    # @return [void]
+    #
     # @todo   Store all the specifications (including those not originating
     #         from external sources) so users can check them.
     #

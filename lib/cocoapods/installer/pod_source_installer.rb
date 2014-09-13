@@ -8,7 +8,7 @@ module Pod
     # @note This class needs to consider all the activated specs of a Pod.
     #
     class PodSourceInstaller
-      # @return [Sandbox]
+      # @return [Sandbox] The installation target.
       #
       attr_reader :sandbox
 
@@ -68,7 +68,7 @@ module Pod
         lock_installation unless local?
       end
 
-      # @return [Hash]
+      # @return [Hash] @see Downloader#checkout_options
       #
       attr_reader :specific_source
 

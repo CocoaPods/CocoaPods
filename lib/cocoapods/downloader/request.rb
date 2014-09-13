@@ -59,6 +59,9 @@ module Pod
       # @param  [Hash<#to_s, #to_s>] params
       #         the download parameters of the pod being downloaded.
       #
+      # @param  [Specification] spec
+      #         the specification of the pod being downloaded.
+      #
       # @return [String] The slug used to store the files resulting from this
       #         download request.
       #

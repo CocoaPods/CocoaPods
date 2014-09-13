@@ -61,23 +61,40 @@ module Pod
 
       # @!group Globbing
 
-      # @return [Array<Pathname>] Similar to {glob} but returns the absolute
-      #         paths.
+      # Similar to {glob} but returns the absolute paths.
+      #
+      # @param  [String,Array<String>] patterns
+      #         @see #relative_glob
+      #
+      # @param  [Hash] options
+      #         @see #relative_glob
+      #
+      # @return [Array<Pathname>]
       #
       def glob(patterns, options = {})
         relative_glob(patterns, options).map { |p| root + p }
       end
 
-      # @return [Array<Pathname>] The list of relative paths that are case
-      #         insensitively matched by a given pattern. This method emulates
-      #         {Dir#glob} with the {File::FNM_CASEFOLD} option.
+      # The list of relative paths that are case insensitively matched by a
+      # given pattern. This method emulates {Dir#glob} with the
+      # {File::FNM_CASEFOLD} option.
       #
       # @param  [String,Array<String>] patterns
       #         A single {Dir#glob} like pattern, or a list of patterns.
       #
-      # @param  [String] dir_pattern
+      # @param  [Hash] options
+      #
+      # @option options [String] :dir_pattern
       #         An optional pattern to append to a pattern, if it is the path
       #         to a directory.
+      #
+      # @option options [Array<String>] :exclude_patterns
+      #         Exclude specific paths given by those patterns.
+      #
+      # @option options [Array<String>] :include_dirs
+      #         Additional paths to take into account for matching.
+      #
+      # @return [Array<Pathname>]
       #
       def relative_glob(patterns, options = {})
         return [] if patterns.empty?

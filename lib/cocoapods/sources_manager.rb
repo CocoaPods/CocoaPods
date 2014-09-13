@@ -195,7 +195,9 @@ module Pod
       # Updates the local clone of the spec-repo with the given name or of all
       # the git repos if the name is omitted.
       #
-      # @param  [String] name
+      # @param  [String] source_name
+      #
+      # @param  [Bool] show_output
       #
       # @return [void]
       #

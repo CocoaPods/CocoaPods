@@ -66,7 +66,7 @@ module Pod
         # Performs the analysis to the detect the state of the sandbox respect
         # to the resolved specifications.
         #
-        # @return [SpecsState] the state of the sandbox.
+        # @return [void]
         #
         def analyze
           state = SpecsState.new

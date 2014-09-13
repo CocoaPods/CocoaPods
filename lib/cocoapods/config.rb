@@ -28,6 +28,11 @@ module Pod
     # Applies the given changes to the config for the duration of the given
     # block.
     #
+    # @param [Hash<#to_sym,Object>] changes
+    #        the changes to merge temporarily with the current config
+    #
+    # @yield [] is called while the changes are applied
+    #
     def with_changes(changes)
       old = {}
       changes.keys.each do |key|

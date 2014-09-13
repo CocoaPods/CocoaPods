@@ -257,6 +257,8 @@ module Pod
         # Read the project from the disk to ensure that it is up to date as
         # other TargetIntegrators might have modified it.
         #
+        # @return [Project]
+        #
         def user_project
           @user_project ||= Xcodeproj::Project.open(target.user_project_path)
         end

@@ -11,7 +11,8 @@ module Pod
         # @param  [Array<String>] strings
         #         a list of strings.
         #
-        # @param  [String] optional prefix, such as a flag or option.
+        # @param  [String] prefix
+        #         optional prefix, such as a flag or option.
         #
         # @return [String] the resulting string.
         #
@@ -20,6 +21,12 @@ module Pod
           strings.sort.map { |s| %W(          #{prefix}"#{s}"          ) }.join(' ')
         end
 
+        # Return the default linker flags
+        #
+        # @param  [Target] target
+        #         the target, which is used to check if the ARC compatibility
+        #         flag is required.
+        #
         # @return [String] the default linker flags. `-ObjC` is always included
         #         while `-fobjc-arc` is included only if requested in the
         #         Podfile.
@@ -35,7 +42,7 @@ module Pod
 
         # Configures the given Xcconfig
         #
-        # @param  [PodTarget] pod_target
+        # @param  [PodTarget] target
         #         The pod target, which holds the list of +Spec::FileAccessor+.
         #
         # @param  [Xcodeproj::Config] xcconfig

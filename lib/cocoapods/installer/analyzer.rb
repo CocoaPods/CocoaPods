@@ -44,6 +44,9 @@ module Pod
       # compute which specification should be installed. The manifest of the
       # sandbox returns which specifications are installed.
       #
+      # @param  [Bool] allow_fetches
+      #         whether external sources may be fetched
+      #
       # @return [AnalysisResult]
       #
       def analyze(allow_fetches = true)
@@ -72,6 +75,9 @@ module Pod
         podfile_needs_install?(analysis_result) || sandbox_needs_install?(analysis_result)
       end
 
+      # @param  [AnalysisResult] analysis_result
+      #         the analysis result to check for changes
+      #
       # @return [Bool] Whether the podfile has changes respect to the lockfile.
       #
       def podfile_needs_install?(analysis_result)
@@ -80,6 +86,9 @@ module Pod
         !needing_install.empty?
       end
 
+      # @param  [AnalysisResult] analysis_result
+      #         the analysis result to check for changes
+      #
       # @return [Bool] Whether the sandbox is in synch with the lockfile.
       #
       def sandbox_needs_install?(analysis_result)
@@ -804,10 +813,10 @@ module Pod
 
         # Adds the name of a Pod to the give state.
         #
-        # @param  [String]
+        # @param  [String] name
         #         the name of the Pod.
         #
-        # @param  [Symbol]
+        # @param  [Symbol] state
         #         the state of the Pod.
         #
         # @return [void]
