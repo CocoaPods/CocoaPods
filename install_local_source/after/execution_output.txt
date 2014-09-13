@@ -1,4 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
+CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
 
 Preparing
 

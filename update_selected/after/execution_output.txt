@@ -1,4 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
+CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
 
 Preparing
   Migrating to CocoaPods 0.34
@@ -43,8 +43,7 @@ Downloading dependencies
 -> Installing JSONKit 1.4 (was 1.4)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/johnezang/JSONKit.git ROOT/tmp/update_selected/Pods/JSONKit --single-branch
-     --depth 1 --branch v1.4
+     $ /usr/local/bin/git clone https://github.com/johnezang/JSONKit.git ROOT/tmp/update_selected/Pods/JSONKit --single-branch --depth 1 --branch v1.4
      Cloning into 'ROOT/tmp/update_selected/Pods/JSONKit'...
      Note: checking out '99930114548f9cedc8070a3bd4d9a217adc218ca'.
      
@@ -61,8 +60,7 @@ Downloading dependencies
 -> Installing Reachability 3.1.1 (was 3.0.0)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git ROOT/tmp/update_selected/Pods/Reachability
-     --single-branch --depth 1 --branch v3.1.1
+     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git ROOT/tmp/update_selected/Pods/Reachability --single-branch --depth 1 --branch v3.1.1
      Cloning into 'ROOT/tmp/update_selected/Pods/Reachability'...
      Note: checking out '7ea54e98cdc439bedda279c5ad9031822269ce3c'.
      

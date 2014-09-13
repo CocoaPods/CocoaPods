@@ -1,4 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
+CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
 
 Preparing
 
@@ -23,8 +23,7 @@ Downloading dependencies
 -> Installing Test (0.0.1)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git
-     ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test --single-branch --depth 1
+     $ /usr/local/bin/git clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test --single-branch --depth 1
      Cloning into 'ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test'...
   - Running pre install hooks
 

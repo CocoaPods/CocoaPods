@@ -1,4 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
+CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
 
 Preparing
 
@@ -19,8 +19,7 @@ Downloading dependencies
 -> Installing Reachability (3.1.0)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git
-     ROOT/tmp/install_podfile_callbacks/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
+     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_podfile_callbacks/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
      Cloning into 'ROOT/tmp/install_podfile_callbacks/Pods/Reachability'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
      
