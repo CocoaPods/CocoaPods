@@ -9,6 +9,7 @@ module Pod
           @spec = fixture_spec('banana-lib/BananaLib.podspec')
           @consumer = @spec.consumer(:ios)
           target_definition = Podfile::TargetDefinition.new('Pods', nil)
+          target_definition.store_pod('BananaLib')
           target_definition.whitelist_pod_for_configuration('BananaLib', 'Release')
           @target = AggregateTarget.new(target_definition, config.sandbox)
           @target.client_root = config.sandbox.root.dirname
