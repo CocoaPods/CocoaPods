@@ -251,11 +251,10 @@ begin
         xcode_version = `xcodebuild -version`.scan(/Xcode (.*)\n/).first.first
         major_version = xcode_version.split('.').first.to_i
         # Specifically build against the simulator SDK so we don't have to deal with code signing.
-        if  major_version > 4
-          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch)'"
+        if  major_version > 5
+          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 6'"
         else
-          sdk = Dir.glob("#{`xcode-select -print-path`.chomp}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator*.sdk").last
-          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean build ONLY_ACTIVE_ARCH=NO  -sdk #{sdk}"
+          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch)'"
         end
       end
     end
