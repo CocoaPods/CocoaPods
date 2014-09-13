@@ -36,7 +36,7 @@ module Pod
         end
 
         it 'includes the libraries for the specifications' do
-          @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-l "xml2"')
+          @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-l"xml2"')
         end
 
         it 'includes the frameworks of the specifications' do

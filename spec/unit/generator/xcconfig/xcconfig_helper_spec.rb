@@ -70,7 +70,7 @@ module Pod
               :platform_name => :ios
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l "xml2"'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"xml2"'
           end
 
           it 'adds the frameworks of the xcconfig' do
@@ -165,7 +165,7 @@ module Pod
             xcconfig = Xcodeproj::Config.new
             @sut.add_library_build_settings(path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
-            hash_config['OTHER_LDFLAGS'].should == '-l "Proj4"'
+            hash_config['OTHER_LDFLAGS'].should == '-l"Proj4"'
             hash_config['LIBRARY_SEARCH_PATHS'].should == '"$(PODS_ROOT)/MapBox/Proj4"'
           end
         end
