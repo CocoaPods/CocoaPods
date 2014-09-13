@@ -141,6 +141,9 @@ begin
 
       title 'Running RuboCop'
       Rake::Task['rubocop'].invoke
+
+      title 'Running Inch'
+      Rake::Task['inch:spec'].invoke
     end
 
     namespace :fixture_tarballs do
@@ -293,6 +296,18 @@ begin
   desc 'Check code against RuboCop rules'
   task :rubocop do
     sh 'bundle exec rubocop lib spec Rakefile'
+  end
+
+  #-- Inch -------------------------------------------------------------------#
+
+  namespace :inch do
+    desc 'Lint the completeness of the documentation with Inch'
+    task :spec do
+      sh "inch --all --no-undocumented list | tee tmp/inch.txt"
+      sh "grep -q 'Nothing to suggest.' tmp/inch.txt" do |ok, _|
+        fail red('✗ Improve above suggestions.') unless ok
+      end
+    end
   end
 
 rescue LoadError, NameError => e
