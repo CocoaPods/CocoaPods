@@ -12,6 +12,8 @@ module Pod
       #
       attr_reader :path
 
+      # Initialize a new instance
+      #
       # @param [Specification] spec the root specification of the Pod.
       # @param [Pathname] path the folder where the source of the Pod is located.
       #

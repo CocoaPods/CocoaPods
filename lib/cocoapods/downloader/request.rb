@@ -28,6 +28,8 @@ module Pod
       attr_reader :head
       alias_method :head?, :head
 
+      # Initialize a new instance
+      #
       # @param  [Specification,Nil] spec
       #         see {#spec}
       #

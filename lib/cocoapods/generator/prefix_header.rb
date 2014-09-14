@@ -12,6 +12,8 @@ module Pod
       #
       attr_reader :file_accessors
 
+      # Initialize a new instance
+      #
       # @param  [Array<FileAccessor>] file_accessors
       #         @see file_accessors
       #

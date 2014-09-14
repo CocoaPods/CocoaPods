@@ -3,6 +3,8 @@ module Pod
   # of the single Pods. The client targets will then depend on this one.
   #
   class AggregateTarget < Target
+    # Initialize a new instance
+    #
     # @param [TargetDefinition] target_definition @see target_definition
     # @param [Sandbox] sandbox @see sandbox
     #

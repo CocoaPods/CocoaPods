@@ -17,6 +17,8 @@ module Pod
       #
       attr_reader :specs_by_platform
 
+      # Initialize a new instance
+      #
       # @param [Sandbox] sandbox @see sandbox
       # @param [Hash{Symbol=>Array}] specs_by_platform @see specs_by_platform
       #

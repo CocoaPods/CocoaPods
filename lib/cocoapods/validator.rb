@@ -16,6 +16,8 @@ module Pod
     #
     attr_reader :linter
 
+    # Initialize a new instance
+    #
     # @param  [Specification, Pathname, String] spec_or_path
     #         the Specification or the path of the `podspec` file to lint.
     #

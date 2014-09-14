@@ -7,6 +7,8 @@ module Pod
   # through the installation process.
   #
   class Project < Xcodeproj::Project
+    # Initialize a new instance
+    #
     # @param  [Pathname, String] path @see path
     # @param  [Bool] skip_initialization
     #         Whether the project should be initialized from scratch.

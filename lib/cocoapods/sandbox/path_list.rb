@@ -15,6 +15,8 @@ module Pod
       #
       attr_accessor :root
 
+      # Initialize a new instance
+      #
       # @param  [Pathname] root The root of the PathList.
       #
       def initialize(root)

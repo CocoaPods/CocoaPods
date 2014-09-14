@@ -18,6 +18,8 @@ module Pod
         #
         attr_reader :target
 
+        # Init a new TargetIntegrator
+        #
         # @param  [Target] target @see #target_definition
         #
         def initialize(target)

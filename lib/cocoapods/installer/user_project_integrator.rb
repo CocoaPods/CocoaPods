@@ -37,6 +37,8 @@ module Pod
       #
       attr_reader :targets
 
+      # Init a new UserProjectIntegrator
+      #
       # @param  [Podfile]  podfile @see #podfile
       # @param  [Sandbox]  sandbox @see #sandbox
       # @param  [Pathname] installation_root @see #installation_root

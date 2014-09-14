@@ -24,6 +24,8 @@ module Pod
       #
       attr_reader :lockfile
 
+      # Initialize a new instance
+      #
       # @param  [Sandbox]  sandbox     @see sandbox
       # @param  [Podfile]  podfile     @see podfile
       # @param  [Lockfile] lockfile    @see lockfile
@@ -766,6 +768,8 @@ module Pod
       #       subspecs are added instead of the name of the Pods.
       #
       class SpecsState
+        # Initialize a new instance
+        #
         # @param  [Hash{Symbol=>String}] pods_by_state
         #         The name of the pods grouped by their state
         #         (`:added`, `:removed`, `:changed` or `:unchanged`).

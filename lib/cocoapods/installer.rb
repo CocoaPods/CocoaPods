@@ -55,6 +55,8 @@ module Pod
     #
     attr_reader :lockfile
 
+    # Initialize a new instance
+    #
     # @param  [Sandbox]  sandbox     @see sandbox
     # @param  [Podfile]  podfile     @see podfile
     # @param  [Lockfile] lockfile    @see lockfile

@@ -17,6 +17,8 @@ module Pod
       #
       attr_reader :podfile_path
 
+      # Initialize a new instance
+      #
       # @param [String] name @see name
       # @param [Hash] params @see params
       # @param [String] podfile_path @see podfile_path

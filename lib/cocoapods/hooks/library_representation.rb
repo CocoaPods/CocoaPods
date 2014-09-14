@@ -76,6 +76,8 @@ module Pod
 
       # @!group Private implementation
 
+      # Initialize a new instance
+      #
       # @param [Sandbox] sandbox @see sandbox
       # @param [Target]  library @see library
       #

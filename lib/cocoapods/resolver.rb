@@ -25,6 +25,8 @@ module Pod
     #
     attr_accessor :sources
 
+    # Init a new Resolver
+    #
     # @param  [Sandbox] sandbox @see sandbox
     # @param  [Podfile] podfile @see podfile
     # @param  [Array<Dependency>] locked_dependencies @see locked_dependencies

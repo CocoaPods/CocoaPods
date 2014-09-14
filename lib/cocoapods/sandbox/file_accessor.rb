@@ -27,6 +27,8 @@ module Pod
       #
       attr_reader :spec_consumer
 
+      # Initialize a new instance
+      #
       # @param [Sandbox::PathList, Pathname] path_list @see path_list
       # @param [Specification::Consumer] spec_consumer @see spec_consumer
       #

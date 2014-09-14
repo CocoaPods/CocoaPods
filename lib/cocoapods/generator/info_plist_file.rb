@@ -9,6 +9,8 @@ module Pod
       #
       attr_reader :target
 
+      # Initialize a new instance
+      #
       # @param  [Target] target @see target
       #
       def initialize(target)

@@ -51,6 +51,8 @@ module Pod
         #
         attr_reader :lockfile
 
+        # Init a new SandboxAnalyzer
+        #
         # @param [Sandbox] sandbox @see sandbox
         # @param [Array<Specifications>] specs @see specs
         # @param [Bool] update_mode @see update_mode

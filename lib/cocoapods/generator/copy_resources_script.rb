@@ -13,6 +13,8 @@ module Pod
       #
       attr_reader :platform
 
+      # Initialize a new instance
+      #
       # @param  [Hash<String, Array<String>>] resources_by_config
       #         @see resources_by_config
       #

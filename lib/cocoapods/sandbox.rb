@@ -50,6 +50,8 @@ module Pod
     #
     attr_reader :public_headers
 
+    # Initialize a new instance
+    #
     # @param [String, Pathname] root @see root
     #
     def initialize(root)

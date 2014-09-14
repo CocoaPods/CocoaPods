@@ -16,6 +16,8 @@ module Pod
       #
       attr_reader :pods_project
 
+      # Initialize a new instance
+      #
       # @param [Sandbox] sandbox @see sandbox
       # @param [Array<PodTarget>] libraries @see libraries
       # @param [Project] libraries @see libraries
