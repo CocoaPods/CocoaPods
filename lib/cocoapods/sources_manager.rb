@@ -199,8 +199,8 @@ module Pod
       #
       def check_version_information(dir)
         versions = version_information(dir)
-        min, max = versions['min'], versions['max']
         unless repo_compatible?(dir)
+          min, max = versions['min'], versions['max']
           version_msg = ( min == max) ? min : "#{min} - #{max}"
           raise Informative, "The `#{dir.basename}` repo requires " \
           "CocoaPods #{version_msg} (currently using #{Pod::VERSION})\n".red +
@@ -210,9 +210,10 @@ module Pod
         needs_sudo = path_writable?(__FILE__)
 
         if config.new_version_message? && cocoapods_update?(versions)
+          last = versions['last']
           install_message = needs_sudo ? 'sudo ' : ''
           install_message << 'gem install cocoapods'
-          install_message << ' --pre' if Gem::Version.new(max).prerelease?
+          install_message << ' --pre' if Gem::Version.new(last).prerelease?
           UI.puts "\nCocoaPods #{versions['last']} is available.\n" \
             "To update use: `#{install_message}`\n".green
         end
