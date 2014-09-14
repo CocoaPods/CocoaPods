@@ -209,9 +209,10 @@ module Pod
         def add_check_manifest_lock_script_phase
           phase_name = 'Check Pods Manifest.lock'
           native_targets_to_integrate.each do |native_target|
-            next if native_target.shell_script_build_phases.any? { |phase| phase.name == phase_name }
-            phase = native_target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
-            native_target.build_phases.unshift(phase)
+            phase = native_target.shell_script_build_phases.find { |phase| phase.name == phase_name }
+            phase ||= native_target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase).tap do |phase|
+              native_target.build_phases.unshift(phase)
+            end
             phase.name = phase_name
             phase.shell_script = <<-EOS.strip_heredoc
               diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
