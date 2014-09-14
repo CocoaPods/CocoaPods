@@ -108,5 +108,14 @@ module Pod
         UI.output.should.include 'Pods project available at'
       end
     end
+
+    it 'fails to lint if the spec is not loaded' do
+      Dir.chdir(temporary_directory) do
+        should.raise Pod::Informative do
+          run_command('lib', 'lint', '404.podspec')
+        end
+        UI.output.should.include 'could not be loaded'
+      end
+    end
   end
 end

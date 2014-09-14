@@ -2,6 +2,16 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+##### Bug Fixes
+
+* Fixes an issue where `pod lib lint` would crash if a podspec couldn't be
+  loaded.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2147](https://github.com/CocoaPods/CocoaPods/issues/2147)
+
+
 ## 0.34.0.rc1
 
 ##### Breaking
