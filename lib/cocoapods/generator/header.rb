@@ -35,10 +35,10 @@ module Pod
         result = ""
         result << generate_platform_import_header
 
-        unless imports.empty?
-          imports.each do |import|
-            result << %|\n#import "#{import}"|
-          end
+        result << "\n"
+
+        imports.each do |import|
+          result << %|#import "#{import}"\n|
         end
 
         result

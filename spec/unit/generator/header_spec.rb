@@ -9,7 +9,7 @@ module Pod
 
     it 'includes the imports' do
       @gen.imports << 'header.h'
-      @gen.generate.should == <<-EOS.strip_heredoc.chomp
+      @gen.generate.should == <<-EOS.strip_heredoc
       #import <UIKit/UIKit.h>
 
       #import "header.h"
@@ -31,6 +31,7 @@ module Pod
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc
       #import <UIKit/UIKit.h>
+
       EOS
     end
   end

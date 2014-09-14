@@ -38,8 +38,6 @@ module Pod
       def generate
         result = super
 
-        result << "\n"
-
         unique_prefix_header_contents = file_accessors.map do |file_accessor|
           file_accessor.spec_consumer.prefix_header_contents
         end.compact.uniq
