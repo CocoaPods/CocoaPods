@@ -11,6 +11,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#2147](https://github.com/CocoaPods/CocoaPods/issues/2147)
 
+* Fixes an issue where `pod init` would not add `source 'master'` to newly 
+  created Podfiles.  
+  [Ash Furrow](https://github.com/AshFurrow)
+  [#2473](https://github.com/CocoaPods/CocoaPods/issues/2473)
+
 
 ## 0.34.0.rc1
 
