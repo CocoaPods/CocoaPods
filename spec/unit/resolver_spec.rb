@@ -205,6 +205,35 @@ module Pod
         version.to_s.should == '1.4'
       end
 
+      xit 'takes into account locked implicit dependencies' do
+        podfile = Podfile.new do
+          platform :ios, '8.0'
+          pod 'ARAnalytics/Mixpanel'
+        end
+        lockfile_yaml = <<-EOS
+PODS:
+  - ARAnalytics/CoreIOS (2.8.0)
+  - ARAnalytics/Mixpanel (2.8.0):
+    - ARAnalytics/CoreIOS
+    - Mixpanel
+  - Mixpanel (2.5.1)
+
+DEPENDENCIES:
+  - ARAnalytics/Mixpanel
+
+SPEC CHECKSUMS:
+  ARAnalytics: 93c5b65989145f88f4d45e262612eac277b0c219
+  Mixpanel: 0115466ba70fd12e67ac4d3d071408dd1d489657
+
+COCOAPODS: 0.33.1
+        EOS
+        lockfile = Lockfile.new(YAMLHelper.load_string(lockfile_yaml))
+        resolver = Resolver.new(config.sandbox, podfile, lockfile.dependencies, SourcesManager.all)
+        resolver.resolve.values.first.
+          find { |s| s.name == 'Mixpanel' }.
+          version.to_s.should == '2.5.1'
+      end
+
       it 'takes into account the order of the sources' do
         podfile = Podfile.new do
           platform :ios
