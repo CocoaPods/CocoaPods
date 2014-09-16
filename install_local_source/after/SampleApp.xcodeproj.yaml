@@ -67,13 +67,13 @@ Targets:
         Build Settings:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           FRAMEWORK_SEARCH_PATHS:
-          - $(inherited)
+          - "$(inherited)"
           - '"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks"'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           GCC_PREFIX_HEADER: iOS App/iOS App-Prefix.pch
           INFOPLIST_FILE: iOS App/iOS App-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '6.1'
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           WRAPPER_EXTENSION: app
         Base Configuration: Pods.debug.xcconfig
@@ -81,14 +81,14 @@ Targets:
         Build Settings:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           FRAMEWORK_SEARCH_PATHS:
-          - $(inherited)
+          - "$(inherited)"
           - '"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks"'
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           GCC_PREFIX_HEADER: iOS App/iOS App-Prefix.pch
           INFOPLIST_FILE: iOS App/iOS App-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '6.1'
-          OTHER_CFLAGS: -DNS_BLOCK_ASSERTIONS=1
-          PRODUCT_NAME: $(TARGET_NAME)
+          OTHER_CFLAGS: "-DNS_BLOCK_ASSERTIONS=1"
+          PRODUCT_NAME: "$(TARGET_NAME)"
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           WRAPPER_EXTENSION: app
@@ -100,7 +100,7 @@ Build Configurations:
 - Debug:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_CXX_LIBRARY: libc++
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
@@ -115,7 +115,7 @@ Build Configurations:
       GCC_OPTIMIZATION_LEVEL: '0'
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
-      - $(inherited)
+      - "$(inherited)"
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
@@ -127,7 +127,7 @@ Build Configurations:
 - Release:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_CXX_LIBRARY: libc++
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
