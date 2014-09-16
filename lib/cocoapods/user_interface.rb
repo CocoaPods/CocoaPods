@@ -119,7 +119,7 @@ module Pod
       #
       def info(message)
         indentation = config.verbose? ? self.indentation_level : 0
-        indented = wrap_string(message, ' ' * indentation)
+        indented = wrap_string(message, indentation)
         puts(indented)
 
         self.indentation_level += 2
@@ -209,7 +209,7 @@ module Pod
       # wrapping it to the terminal width if necessary.
       #
       def puts_indented(message = '')
-        indented = wrap_string(message, ' ' * self.indentation_level)
+        indented = wrap_string(message, self.indentation_level)
         puts(indented)
       end
 
@@ -224,8 +224,9 @@ module Pod
           next if warning[:verbose_only] && !config.verbose?
           STDERR.puts("\n[!] #{warning[:message]}".yellow)
           warning[:actions].each do |action|
-            indented = wrap_string(action, '    - ')
-            puts(indented)
+            string = "- #{action}"
+            string = wrap_string(string, 4)
+            puts(string)
           end
         end
       end
@@ -283,13 +284,13 @@ module Pod
       # @note If CocoaPods is not being run in a terminal or the width of the
       # terminal is too small a width of 80 is assumed.
       #
-      def wrap_string(txt, indent = '')
-        if disable_wrap || !STDIN.tty?
-          txt
+      def wrap_string(string, indent = 0)
+        if disable_wrap
+          string
         else
-          width = `stty size`.split(' ')[1].to_i - indent.length
-          width = 80 unless width >= 10
-          txt.strip.gsub(/(.{1,#{width}})( +|$)\n?|(.{#{width}})/, indent + "\\1\\3\n")
+          first_space = ' ' * indent
+          indented = CLAide::Helper.wrap_with_indent(string, indent, 9999)
+          first_space + indented
         end
       end
     end
