@@ -215,7 +215,7 @@ module Pod
           install_message << 'gem install cocoapods'
           install_message << ' --pre' if Gem::Version.new(last).prerelease?
           UI.puts "\nCocoaPods #{versions['last']} is available.\n" \
-            "To update use: `#{install_message}`\n".green
+            "To update use: `#{install_message}`".green + "\n"
         end
       end
 
