@@ -53,6 +53,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Ladislav Martincik](https://github.com/martincik)
   [#2482](https://github.com/CocoaPods/CocoaPods/issues/2482)
 
+* Fix crash when the URL of a private GitHub repo is passed to `pod spec
+  create` as an argument.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+  [#1543](https://github.com/CocoaPods/CocoaPods/issues/1543)
+
 
 ## 0.34.0.rc2
 

@@ -426,7 +426,9 @@ module Pod
 
       def github_data_for_template(repo_id)
         repo = GitHub.repo(repo_id)
+        raise Informative, "Unable to fetch data for `#{repo_id}`" unless repo
         user = GitHub.user(repo['owner']['login'])
+        raise Informative, "Unable to fetch data for `#{repo['owner']['login']}`" unless user
         data = {}
 
         data[:name]          = repo['name']
