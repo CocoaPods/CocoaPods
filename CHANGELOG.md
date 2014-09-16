@@ -2,7 +2,8 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+
+## 0.34.0.rc2
 
 ##### Bug Fixes
 
