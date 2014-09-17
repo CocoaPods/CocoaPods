@@ -35,6 +35,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
         source 'master'
 
   [François Benaiteau](https://github.com/netbe)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
   [#1143](https://github.com/CocoaPods/CocoaPods/pull/1143)
   [Core#19](https://github.com/CocoaPods/Core/pull/19)
   
@@ -45,7 +46,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [Michele Titolo](https://github.com/mtitolo)
 
+* Plugins are now expected to include the `cocoapods-plugin.rb` file in
+  `./lib`.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+  [CLAide#28](https://github.com/CocoaPods/CLAide/pull/28)
 
+* The specification `requires_arc` attribute now defaults to true.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+  [CocoaPods#267](https://github.com/CocoaPods/CocoaPods/issues/267)
+  
 ##### Enhancements
 
 * Add support to specify dependencies per build configuration:
@@ -59,6 +68,17 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#1791](https://github.com/CocoaPods/CocoaPods/pull/1791)
   [#1668](https://github.com/CocoaPods/CocoaPods/pull/1668)
   [#731](https://github.com/CocoaPods/CocoaPods/pull/731)
+
+* Improved performance of git downloads using shallow clone.  
+  [Marin Usalj](https://github.com/supermarin)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+  [cocoapods-downloader#29](https://github.com/CocoaPods/cocoapods-downloader/pull/29)
+
+* Greatly simplified installation: CococaPods doesn't require anymore the
+  compilation of native extensions.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+  [Xcodeproj#168](https://github.com/CocoaPods/Xcodeproj/pull/168)
+  [Xcodeproj#167](https://github.com/CocoaPods/Xcodeproj/issues/167)
 
 * Add hooks for plugins. Currently only the installer hook is supported.
   A plugin can register itself to be activated after the installation with the
@@ -97,6 +117,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   `--project-directory` option.  
   [Samuel Giddins](segiddins)
   [#2183](https://github.com/CocoaPods/CocoaPods/issues/2183)
+
+* Now the `plutil` tool is used when available to produce
+  output consistent with Xcode.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
 
 ##### Bug Fixes
 
@@ -146,6 +170,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#2320](https://github.com/CocoaPods/CocoaPods/issues/2320)
 
+* Quotes are now properly handled in `OTHER_LDFLAGS` and used to not
+  create issues with targets including a space character.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+
+* Generate the workspaces using the same output of Xcode.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
 
 ## 0.33.1
 
