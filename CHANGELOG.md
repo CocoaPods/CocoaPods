@@ -54,7 +54,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * The specification `requires_arc` attribute now defaults to true.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [CocoaPods#267](https://github.com/CocoaPods/CocoaPods/issues/267)
-  
+
 ##### Enhancements
 
 * Add support to specify dependencies per build configuration:
@@ -74,8 +74,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [cocoapods-downloader#29](https://github.com/CocoaPods/cocoapods-downloader/pull/29)
 
-* Greatly simplified installation: CococaPods doesn't require anymore the
-  compilation of native extensions.  
+* Simplify installation: CocoaPods doesn't require anymore the
+  compilation of the troublesome native extensions.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [Xcodeproj#168](https://github.com/CocoaPods/Xcodeproj/pull/168)
   [Xcodeproj#167](https://github.com/CocoaPods/Xcodeproj/issues/167)
@@ -93,7 +93,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [Core#132](https://github.com/CocoaPods/Core/pull/1755)
 
-* Display indication for deprecated pods when searching for Pods.  
+* Add a support for migrating the sandbox to new versions of CocoaPods.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+
+* Display an indication for deprecated Pods in the command line search.  
   [Hugo Tunius][k0nserv]
   [#2180](https://github.com/CocoaPods/CocoaPods/issues/2180)
 
@@ -108,8 +111,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Properly quote the `-isystem` values in the xcconfig files.  
   [Eloy Durán](https://github.com/alloy)
 
-* The post install message with the CHANGELOG has been removed from the
-  gemspec.  
+* Remove the installation post install message which presents the CHANGELOG.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [Eloy Durán](https://github.com/alloy)
 
@@ -122,14 +124,28 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   output consistent with Xcode.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
+* Indicate the name of the pod whose requirements cannot be satisfied.  
+  [Seivan Heidari](https://github.com/seivan)
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+  [#1938](https://github.com/CocoaPods/CocoaPods/issues/1938)
+
+* Add support for JSON specs to external sources (`:path`, `:git`, etc)
+  options.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2320](https://github.com/CocoaPods/CocoaPods/issues/2320)
+
+* Generate the workspaces using the same output of Xcode.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+
+
 ##### Bug Fixes
 
-* Fixes `pod repo push` to first check if a Specs directory exists and if so
+* Fix `pod repo push` to first check if a Specs directory exists and if so
   push there.  
   [Edward Valentini](edwardvalentini)
   [#2060](https://github.com/CocoaPods/CocoaPods/issues/2060)
 
-* Fixes `pod outdated` to not include subspecs.  
+* Fix `pod outdated` to not include subspecs.  
   [Ash Furrow](ashfurrow)
   [#2136](https://github.com/CocoaPods/CocoaPods/issues/2136)
 
@@ -139,43 +155,41 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](kylef)
   [pod-template#50](https://github.com/CocoaPods/pod-template/issues/50)
 
-* Fixes spec linting to not warn for missing license file in subspecs.  
+* Fix spec linting to not warn for missing license file in subspecs.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [Core#132](https://github.com/CocoaPods/Core/issues/132)
 
-* Fixes `pod init` so that it doesn't recurse when checking for Podfiles.  
+* Fix `pod init` so that it doesn't recurse when checking for Podfiles.  
   [Paddy O'Brien](https://github.com/tapi)
   [#2181](https://github.com/CocoaPods/CocoaPods/issues/2181)
 
-* Fixes missing XCTest framework in Xcode 6.  
+* Fix missing XCTest framework in Xcode 6.  
   [Paul Williamson](squarefrog)
   [#2296](https://github.com/CocoaPods/CocoaPods/issues/2296)
 
-* Support multiple values in ARCHS.  
+* Support multiple values in `ARCHS`.  
   [Robert Zuber](https://github.com/z00b)
   [#1904](https://github.com/CocoaPods/CocoaPods/issues/1904)
 
-* Fixes static analysis in Xcode 6.  
+* Fix static analysis in Xcode 6.  
   [Samuel Giddins](segiddins)
   [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
 
-* Fixes an issue where a version of a spec will not be locked when using
+* Fix an issue where a version of a spec will not be locked when using
   multiple subspecs of a podspec.  
   [Kyle Fuller](https://github.com/kylef)
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2135](https://github.com/CocoaPods/CocoaPods/issues/2135)
 
-* Fixes an issue using JSON podspecs installed directly from a lib's
+* Fix an issue using JSON podspecs installed directly from a lib's
   repository.  
   [Kyle Fuller](https://github.com/kylef)
   [#2320](https://github.com/CocoaPods/CocoaPods/issues/2320)
 
-* Quotes are now properly handled in `OTHER_LDFLAGS` and used to not
-  create issues with targets including a space character.  
+* Support and use quotes in the `OTHER_LDFLAGS` of xcconfigs to prevent
+  issues with targets containing a space character in their name.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
-* Generate the workspaces using the same output of Xcode.  
-  [Fabio Pelosin](https://github.com/fabiopelosin)
 
 ## 0.33.1
 
