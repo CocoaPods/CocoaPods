@@ -88,6 +88,24 @@ module Pod
           xcconfig.merge!(build_settings)
         end
 
+        # Add the code signing settings for generated targets to ensure that
+        # frameworks are correctly signed to be integrated and re-signed when
+        # building the application and embedding the framework
+        #
+        # @param  [Target] target
+        #         The target.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_code_signing_settings(target, xcconfig)
+          build_settings = {}
+          if target.platform.to_sym == :osx
+            build_settings['CODE_SIGN_IDENTITY'] = ''
+          end
+          xcconfig.merge!(build_settings)
+        end
+
         # Checks if the given target requires specific settings and configures
         # the given Xcconfig.
         #
@@ -98,6 +116,9 @@ module Pod
         #         The xcconfig to edit.
         #
         def self.add_target_specific_settings(target, xcconfig)
+          if target.requires_framework?
+            add_code_signing_settings(target, xcconfig)
+          end
           add_language_specific_settings(target, xcconfig)
         end
 
