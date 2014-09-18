@@ -197,7 +197,7 @@ module Pod
       #
       def glob_for_attribute(attrbute)
         globs = {
-          :source_files => '*.{h,hpp,hh,m,mm,c,cpp}'.freeze,
+          :source_files => '*.{h,hpp,hh,m,mm,c,cpp,swift}'.freeze,
           :public_header_files => "*.{#{ HEADER_EXTENSIONS * ',' }}".freeze,
         }
         globs[attrbute]

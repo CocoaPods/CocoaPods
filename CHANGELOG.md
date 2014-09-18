@@ -2,6 +2,12 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+##### Enhancements
+
+* Added support for swift source files.
+  [Kyle Fuller][kylef]
 
 ## 0.34.0.rc2
 
