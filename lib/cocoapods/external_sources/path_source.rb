@@ -16,7 +16,7 @@ module Pod
             raise Informative, "No podspec found for `#{name}` in " \
               "`#{declared_path}`"
           end
-          store_podspec(sandbox, podspec)
+          store_podspec(sandbox, podspec, podspec.extname == '.json')
           is_absolute = absolute?(declared_path)
           sandbox.store_local_path(name, podspec.dirname, is_absolute)
         end
@@ -42,7 +42,8 @@ module Pod
       # @return [Pathname] The absolute path of the podspec.
       #
       def podspec_path
-        Pathname(normalized_podspec_path(declared_path))
+        path = Pathname(normalized_podspec_path(declared_path))
+        path.exist? ? path : Pathname("#{path}.json")
       end
 
       # @return [Bool]
