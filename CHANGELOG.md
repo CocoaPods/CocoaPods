@@ -74,7 +74,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [cocoapods-downloader#29](https://github.com/CocoaPods/cocoapods-downloader/pull/29)
 
-* Simplify installation: CocoaPods doesn't require anymore the
+* Simplify installation: CocoaPods no longer requires the
   compilation of the troublesome native extensions.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [Xcodeproj#168](https://github.com/CocoaPods/Xcodeproj/pull/168)
@@ -186,7 +186,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#2320](https://github.com/CocoaPods/CocoaPods/issues/2320)
 
-* Support and use quotes in the `OTHER_LDFLAGS` of xcconfigs to prevent
+* Support and use quotes in the `OTHER_LDFLAGS` of xcconfigs to avoid
   issues with targets containing a space character in their name.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
