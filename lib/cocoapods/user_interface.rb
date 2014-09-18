@@ -170,7 +170,7 @@ module Pod
           end
 
           title(colored_title, '', 1) do
-            puts_indented pod.summary
+            puts_indented pod.summary if pod.summary
             puts_indented "pod '#{pod.name}', '~> #{pod.version}'"
             labeled('Homepage', pod.homepage)
             labeled('Source',   pod.source_url)
