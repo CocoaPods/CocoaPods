@@ -36,8 +36,8 @@ module Pod
         if (license = license_text(spec))
           {
             :Type => 'PSGroupSpecifier',
-            :Title => spec.name,
-            :FooterText => license,
+            :Title => sanitize_encoding(spec.name),
+            :FooterText => sanitize_encoding(license),
           }
         end
       end
@@ -45,18 +45,37 @@ module Pod
       def header_hash
         {
           :Type => 'PSGroupSpecifier',
-          :Title => header_title,
-          :FooterText => header_text,
+          :Title => sanitize_encoding(header_title),
+          :FooterText => sanitize_encoding(header_text),
         }
       end
 
       def footnote_hash
         {
           :Type => 'PSGroupSpecifier',
-          :Title => footnote_title,
-          :FooterText => footnote_text,
+          :Title => sanitize_encoding(footnote_title),
+          :FooterText => sanitize_encoding(footnote_text),
         }
       end
+
+      #-----------------------------------------------------------------------#
+
+      private
+
+      # !@group Private methods
+
+      # Returns the sanitized text with UTF-8 eliminating invalid characters.
+      #
+      # @param  [String] text
+      #         the text we want to sanitize.
+      #
+      # @return [String] The sanitized text.
+      #
+      def sanitize_encoding(text)
+        text.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+      end
+
+      #-----------------------------------------------------------------------#
     end
   end
 end
