@@ -2,6 +2,14 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+##### Bug Fixes
+
+* Fixes the detection of JSON podspecs included via `:path`.
+  [laiso](https://github.com/laiso)
+  [#2489](https://github.com/CocoaPods/CocoaPods/pull/2489)
+
 
 ## 0.34.0.rc2
 

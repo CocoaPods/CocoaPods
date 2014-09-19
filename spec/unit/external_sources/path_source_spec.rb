@@ -87,6 +87,13 @@ module Pod
         path = @subject.send(:podspec_path)
         path.should == Pathname(ENV['HOME']) + 'Reachability/Reachability.podspec'
       end
+
+      it 'falls back to .podspec.json when .podspec doesnt exist' do
+        @subject.stubs(:params).returns(:path => 'Reachability')
+        Pathname.any_instance.stubs(:exist?).returns(false)
+        path = @subject.send(:podspec_path)
+        path.should == fixture('integration/Reachability/Reachability.podspec.json')
+      end
     end
 
     describe '#absolute?' do
