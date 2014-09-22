@@ -72,7 +72,7 @@ module Pod
       # @return [String] The sanitized text.
       #
       def sanitize_encoding(text)
-        text.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+        text.encode('UTF-8', 'binary', :invalid => :replace, :undef => :replace, :replace => '')
       end
 
       #-----------------------------------------------------------------------#
