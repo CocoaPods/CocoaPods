@@ -6,9 +6,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
-* Fixes the detection of JSON podspecs included via `:path`.
+* Fixes the detection of JSON podspecs included via `:path`.  
   [laiso](https://github.com/laiso)
   [#2489](https://github.com/CocoaPods/CocoaPods/pull/2489)
+
+* Fixes `pod lib lint` when using Xcode 6's `xcodebuild`.  
+  [segiddins](https://github.com/segiddins)
+  [#2394](https://github.com/CocoaPods/CocoaPods/issues/2394)
 
 
 ## 0.34.0.rc2
