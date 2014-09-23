@@ -73,7 +73,7 @@ module Pod
 
       it 'returns the directory for the support files of a library' do
         @sandbox.target_support_files_dir('Pods').should ==
-          temporary_directory + 'Sandbox/Target Support Files/Pods'
+          temporary_directory + 'Sandbox/TargetSupportFiles/Pods'
       end
 
       it 'returns the directory where a Pod is stored' do

@@ -36,37 +36,37 @@ module Pod
       end
 
       it 'returns the absolute path of the xcconfig file' do
-        @lib.xcconfig_path('Release').to_s.should.include?('Pods/Target Support Files/Pods/Pods.release.xcconfig')
+        @lib.xcconfig_path('Release').to_s.should.include?('Pods/TargetSupportFiles/Pods/Pods.release.xcconfig')
       end
 
       it 'returns the absolute path of the resources script' do
-        @lib.copy_resources_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-resources.sh')
+        @lib.copy_resources_script_path.to_s.should.include?('Pods/TargetSupportFiles/Pods/Pods-resources.sh')
       end
 
       it 'returns the absolute path of the target header file' do
-        @lib.target_environment_header_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-environment.h')
+        @lib.target_environment_header_path.to_s.should.include?('Pods/TargetSupportFiles/Pods/Pods-environment.h')
       end
 
       it 'returns the absolute path of the prefix header file' do
-        @lib.prefix_header_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-prefix.pch')
+        @lib.prefix_header_path.to_s.should.include?('Pods/TargetSupportFiles/Pods/Pods-prefix.pch')
       end
 
       it 'returns the absolute path of the bridge support file' do
-        @lib.bridge_support_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods.bridgesupport')
+        @lib.bridge_support_path.to_s.should.include?('Pods/TargetSupportFiles/Pods/Pods.bridgesupport')
       end
 
       it 'returns the absolute path of the acknowledgements files without extension' do
-        @lib.acknowledgements_basepath.to_s.should.include?('Pods/Target Support Files/Pods/Pods-acknowledgements')
+        @lib.acknowledgements_basepath.to_s.should.include?('Pods/TargetSupportFiles/Pods/Pods-acknowledgements')
       end
 
       #--------------------------------------#
 
       it 'returns the path of the resources script relative to the user project' do
-        @lib.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh'
+        @lib.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/TargetSupportFiles/Pods/Pods-resources.sh'
       end
 
       it 'returns the path of the xcconfig file relative to the user project' do
-        @lib.xcconfig_relative_path('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
+        @lib.xcconfig_relative_path('Release').should == 'Pods/TargetSupportFiles/Pods/Pods.release.xcconfig'
       end
 
     end
