@@ -318,12 +318,6 @@ module Pod
       def resolve_dependencies
         specs_by_target = nil
         UI.section "Resolving dependencies of #{UI.path podfile.defined_in_file}" do
-          if podfile.sources.empty?
-            sources = SourcesManager.master
-          else
-            sources = SourcesManager.sources(podfile.sources)
-          end
-
           resolver = Resolver.new(sandbox, podfile, locked_dependencies, sources)
           specs_by_target = resolver.resolve
         end
@@ -366,6 +360,27 @@ module Pod
       #-----------------------------------------------------------------------#
 
       private
+
+      # Returns the sources used to query for specifications
+      #
+      # @return [Array<Source>] the sources to be used in finding
+      #         specifications, as specified by the {#podfile}, defaulting to
+      #         {SourcesManager.master}
+      #
+      def sources
+        @sources ||= begin
+          sources = podfile.sources
+          if sources.empty?
+            SourcesManager.master
+          else
+            urls = sources.select { |s| s =~ /\A#{URI.regexp}\z/ }
+            url_sources = urls.map do |url|
+              SourcesManager.find_or_create_source_with_url!(url)
+            end
+            SourcesManager.sources(sources - urls) + url_sources
+          end
+        end
+      end
 
       # @!group Analysis sub-steps
 

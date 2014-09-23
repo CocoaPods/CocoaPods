@@ -23,6 +23,44 @@ module Pod
         dirs.map { |repo| Source.new(repo) }
       end
 
+      # Returns the source whose {Source#url} is equal to `url`, adding the repo
+      # in a manner similarly to `pod repo add` if it is not found.
+      #
+      # @raise If no source with the given `url` could be created,
+      #
+      # @return [Source] The source whose {Source#url} is equal to `url`,
+      #
+      # @param [String] url
+      #        The URL of the source.
+      #
+      def find_or_create_source_with_url(url)
+        unless source = source_with_url(url)
+          name = URI(url).path.split('/')[-2]
+          UI.section("Cloning spec repo `#{name}` from `#{url}`") do
+            config.repos_dir.mkpath
+            Dir.chdir(config.repos_dir) do
+              command = "clone '#{url}' #{name}"
+              output = git(command)
+            end
+            check_version_information(config.repos_dir + name)
+            source = sources([name]).find
+
+          end
+        end
+        raise Informative, "Unable to add a source with url `#{url}`:\n\n" +
+          output unless source
+        source
+      end
+
+      # @return [Source] The source whose {Source#url} is equal to `url`.
+      #
+      # @param [String] url
+      #        The URL of the source.
+      #
+      def source_with_url(url)
+        aggregate.sources.find { |s| s.url == url }
+      end
+
       # @return [Array<Source>] The list of all the sources known to this
       #         installation of CocoaPods.
       #
@@ -31,7 +69,7 @@ module Pod
         dirs.map { |repo| Source.new(repo) }
       end
 
-      # @return [Source] The CocoaPods Master Repo source.
+      # @return [Array<Source>] The CocoaPods Master Repo source.
       #
       def master
         sources(['master'])
