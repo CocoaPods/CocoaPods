@@ -21,7 +21,7 @@ module Pod
   #     |   +-- External Sources
   #     |   +-- Normal Sources
   #     |
-  #     +-- Target Support Files
+  #     +-- TargetSupportFiles
   #     |   +-- [Target Name]
   #     |       +-- Pods-acknowledgements.markdown
   #     |       +-- Pods-acknowledgements.plist
@@ -186,7 +186,7 @@ module Pod
     #         CocoaPods to support the umbrella targets are stored.
     #
     def target_support_files_root
-      root + 'Target Support Files'
+      root + 'TargetSupportFiles'
     end
 
     #-------------------------------------------------------------------------#

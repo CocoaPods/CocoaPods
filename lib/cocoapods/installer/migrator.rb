@@ -29,7 +29,7 @@ module Pod
               relative = child.relative_path_from(sandbox.root)
               case relative.to_s
               when 'Manifest.lock', 'Pods.xcodeproj', 'Headers',
-                'Target Support Files', 'Local Podspecs'
+                'TargetSupportFiles', 'Local Podspecs'
                 next
               when 'BuildHeaders', 'PublicHeaders'
                 delete(child)
