@@ -6,6 +6,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
+* Works around an Xcode issue where linting would fail even though `xcodebuild`
+  actually succeeds. Xcode.app also doesn't fail when this issue occurs, so it's
+  safe for us to do the same.
+  [Kra Larivain](https://github.com/olarivain)
+  [Boris Bügling](https://github.com/neonichu)
+  [Eloy Durán](https://github.com/alloy)
+  [Samuel E. Giddins](https://github.com/segiddins)
+  [#2394](https://github.com/CocoaPods/CocoaPods/issues/2394)
+  [#2395](https://github.com/CocoaPods/CocoaPods/pull/2395)
+
 * Fixes the detection of JSON podspecs included via `:path`.
   [laiso](https://github.com/laiso)
   [#2489](https://github.com/CocoaPods/CocoaPods/pull/2489)

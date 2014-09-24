@@ -325,7 +325,14 @@ module Pod
           UI.puts output
           parsed_output  = parse_xcodebuild_output(output)
           parsed_output.each do |message|
-            if message.include?('error: ')
+            # Checking the error for `InputFile` is to work around an Xcode
+            # issue where linting would fail even though `xcodebuild` actually
+            # succeeds. Xcode.app also doesn't fail when this issue occurs, so
+            # it's safe for us to do the same.
+            #
+            # For more details see https://github.com/CocoaPods/CocoaPods/issues/2394#issuecomment-56658587
+            #
+            if message.include?('error: ') && !message.include?("'InputFile' should have")
               error "[xcodebuild] #{message}"
             else
               note "[xcodebuild] #{message}"
