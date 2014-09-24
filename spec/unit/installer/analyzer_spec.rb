@@ -468,7 +468,7 @@ module Pod
 
       #--------------------------------------#
 
-      describe 'sources' do
+      describe '#sources' do
         describe 'when there are no explicit sources' do
           it 'defaults to all sources' do
             @analyzer.send(:sources).map(&:url).should ==
