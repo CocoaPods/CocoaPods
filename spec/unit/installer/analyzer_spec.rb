@@ -465,6 +465,49 @@ module Pod
           e.message.should.match /Targets with different platforms/
         end
       end
+
+      #--------------------------------------#
+
+      describe 'sources' do
+        describe 'when there are no explicit sources' do
+          it 'defaults to all sources' do
+            @analyzer.send(:sources).map(&:url).should ==
+              SourcesManager.all.map(&:url)
+          end
+
+          it 'prints a warning about the deprecation of implicit sources' do
+            @analyzer.send(:sources)
+            UI.warnings.should.match /implicit(.+)sources(.+)deprecated/
+          end
+
+          it 'prints a warning about how to add explicit sources' do
+            @analyzer.send(:sources)
+            UI.warnings.should.
+              match %r{^source 'https://github.com/CocoaPods/Specs.git'$}
+          end
+        end
+
+        describe 'when there are explicit sources' do
+          it 'raises if no specs repo with that URL could be added' do
+            podfile = Podfile.new do
+              source 'not-a-git-repo'
+            end
+            @analyzer.instance_variable_set(:@podfile, podfile)
+            should.raise Informative do
+              @analyzer.send(:sources)
+            end.message.should.match /not a valid URL/
+          end
+
+          it 'fetches a specs repo that is specified by the podfile' do
+            podfile = Podfile.new do
+              source 'https://github.com/artsy/Specs.git'
+            end
+            @analyzer.instance_variable_set(:@podfile, podfile)
+            SourcesManager.expects(:find_or_create_source_with_url).once
+            @analyzer.send(:sources)
+          end
+        end
+      end
     end
   end
 end

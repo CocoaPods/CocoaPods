@@ -26,39 +26,23 @@ module Pod
       # Returns the source whose {Source#url} is equal to `url`, adding the repo
       # in a manner similarly to `pod repo add` if it is not found.
       #
-      # @raise If no source with the given `url` could be created,
+      # @raise  If no source with the given `url` could be created,
       #
       # @return [Source] The source whose {Source#url} is equal to `url`,
       #
-      # @param [String] url
-      #        The URL of the source.
+      # @param  [String] url
+      #         The URL of the source.
       #
       def find_or_create_source_with_url(url)
         unless source = source_with_url(url)
-          name = URI(url).path.split('/')[-2]
-          UI.section("Cloning spec repo `#{name}` from `#{url}`") do
-            config.repos_dir.mkpath
-            Dir.chdir(config.repos_dir) do
-              command = "clone '#{url}' #{name}"
-              output = git(command)
-            end
-            check_version_information(config.repos_dir + name)
-            source = sources([name]).find
-
-          end
+          name = name_for_url(url)
+          Command::Repo::Add.new(CLAide::ARGV.new([name, url])).run
+          source = source_with_url(url)
         end
-        raise Informative, "Unable to add a source with url `#{url}`:\n\n" +
-          output unless source
+        raise Informative, "Unable to add a source with url `#{url}` named " \
+          "`#{name}`.\nYou can add it manually via `pod repo add NAME " \
+          "#{url}`.\n\n#{output}" unless source
         source
-      end
-
-      # @return [Source] The source whose {Source#url} is equal to `url`.
-      #
-      # @param [String] url
-      #        The URL of the source.
-      #
-      def source_with_url(url)
-        aggregate.sources.find { |s| s.url == url }
       end
 
       # @return [Array<Source>] The list of all the sources known to this
@@ -380,6 +364,56 @@ module Pod
         else
           raise Informative, "Unable to find the `#{name}` repo."
         end
+      end
+
+      # @return [Source] The source whose {Source#url} is equal to `url`.
+      #
+      # @param  [String] url
+      #         The URL of the source.
+      #
+      def source_with_url(url)
+        aggregate.sources.find { |s| s.url == url }
+      end
+
+      # Returns a suitable repository name for `url`.
+      #
+      # @example A GitHub.com URL
+      #
+      #          name_for_url('https://github.com/Artsy/Specs.git')
+      #            # "artsy"
+      #          name_for_url('https://github.com/Artsy/Specs.git')
+      #            # "artsy-1"
+      #
+      # @example A non-Github.com URL
+      #
+      #          name_for_url('https://sourceforge.org/Artsy/Specs.git')
+      #            # sourceforge-artsy-specs
+      #
+      # @param  [#to_s] url
+      #         The URL of the source.
+      #
+      # @return [String] A suitable repository name for `url`.
+      #
+      def name_for_url(url)
+        case url.downcase
+        when %r{github.com(:|/)cocoapods/specs}
+          base = 'master'
+        when %r{github.com(:|/)(.+)/(.+)}
+          base = Regexp.last_match[2]
+        else
+          raise Informative,
+                "`#{url}` is not a valid URL." unless url =~ URI.regexp
+          url = URI(url.downcase)
+          base = url.host.split('.')[-2] +
+            url.path.gsub(/.git$/, '').split('/').join('-')
+        end
+        name = base
+        infinity = 1.0 / 0
+        (1..infinity).each do |i|
+          break unless source_dir(name).exist?
+          name = "#{base}-#{i}"
+        end
+        name
       end
     end
   end

@@ -371,13 +371,16 @@ module Pod
         @sources ||= begin
           sources = podfile.sources
           if sources.empty?
-            SourcesManager.master
-          else
-            urls = sources.select { |s| s =~ /\A#{URI.regexp}\z/ }
-            url_sources = urls.map do |url|
-              SourcesManager.find_or_create_source_with_url!(url)
+            SourcesManager.all.tap do |all|
+              UI.warn all.reduce("The use of implicit sources has been " \
+                "deprecated. To replicate the previous behavior, add the " \
+                "following to your Podfile:") \
+                { |w, s| w << "\nsource '#{s.url}'" }
             end
-            SourcesManager.sources(sources - urls) + url_sources
+          else
+            sources.map do |url|
+              SourcesManager.find_or_create_source_with_url(url)
+            end
           end
         end
       end

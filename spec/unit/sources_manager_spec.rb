@@ -101,6 +101,62 @@ module Pod
         path = SourcesManager.search_index_path.to_s
         path.should.match %r{Library/Caches/CocoaPods/search_index.yaml}
       end
+
+      describe 'managing sources by URL' do
+        describe 'generating a repo name from a URL' do
+          it 'uses `master` for the master CocoaPods repository' do
+            url = 'https://github.com/CocoaPods/Specs.git'
+            Pathname.any_instance.stubs(:exist?).
+              returns(false).then.returns(true)
+            SourcesManager.send(:name_for_url, url).should == 'master'
+
+            url = 'git@github.com:CocoaPods/Specs.git'
+            Pathname.any_instance.stubs(:exist?).
+              returns(false).then.returns(true)
+            SourcesManager.send(:name_for_url, url).should == 'master'
+          end
+
+          it 'uses the organization name for github.com URLs' do
+            url = 'https://github.com/segiddins/banana.git'
+            SourcesManager.send(:name_for_url, url).should == 'segiddins'
+          end
+
+          it 'uses a combination of host and path for other URLs' do
+            url = 'https://sourceforge.org/Artsy/Specs.git'
+            SourcesManager.send(:name_for_url, url).
+              should == 'sourceforge-artsy-specs'
+          end
+
+          it 'appends a number to the name if the base name dir exists' do
+            url = 'https://github.com/segiddins/banana.git'
+            Pathname.any_instance.stubs(:exist?).
+              returns(true).then.returns(false)
+            SourcesManager.send(:name_for_url, url).should == 'segiddins-1'
+
+            url = 'https://sourceforge.org/Artsy/Specs.git'
+            Pathname.any_instance.stubs(:exist?).
+              returns(true).then.returns(false)
+            SourcesManager.send(:name_for_url, url).
+              should == 'sourceforge-artsy-specs-1'
+          end
+        end
+
+        describe 'finding or creating a source by URL' do
+          it 'returns an existing matching source' do
+            Source.any_instance.stubs(:url).returns('url')
+            SourcesManager.expects(:name_for_url).never
+            SourcesManager.find_or_create_source_with_url('url').url.
+              should == 'url'
+          end
+
+          it 'runs `pod repo add` when there is no matching source' do
+            Command::Repo::Add.any_instance.stubs(:run).once
+            SourcesManager.stubs(:source_with_url).returns(nil).then.returns(true)
+            SourcesManager.find_or_create_source_with_url('https://banana.com/local/specs.git').
+              should == true
+          end
+        end
+      end
     end
 
     #-------------------------------------------------------------------------#
