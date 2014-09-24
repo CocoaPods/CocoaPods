@@ -256,7 +256,7 @@ module Pod
       # Returns the branch name (i.e. master)
       #
       def get_branch_name
-        git!("name-rev --name-only HEAD").strip
+        `git name-rev --name-only HEAD`.strip
       end
 
       # Returns the branch remote name (i.e. origin)
