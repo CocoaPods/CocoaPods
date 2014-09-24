@@ -363,9 +363,12 @@ module Pod
 
       # Returns the sources used to query for specifications
       #
+      # @note Currently, this defaults to {SourcesManager.all} when no
+      #       Podfile sources are defined, but this implicit declaration of
+      #       sources is deprecated.
+      #
       # @return [Array<Source>] the sources to be used in finding
-      #         specifications, as specified by the {#podfile}, defaulting to
-      #         {SourcesManager.master}
+      #         specifications, as specified by the {#podfile}.
       #
       def sources
         @sources ||= begin
