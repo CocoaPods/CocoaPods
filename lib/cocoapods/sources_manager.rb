@@ -39,9 +39,11 @@ module Pod
           Command::Repo::Add.new(CLAide::ARGV.new([name, url])).run
           source = source_with_url(url)
         end
-        raise Informative, "Unable to add a source with url `#{url}` named " \
-          "`#{name}`.\nYou can add it manually via `pod repo add NAME " \
-          "#{url}`.\n\n#{output}" unless source
+        unless source
+          raise Informative, "Unable to add a source with url `#{url}` named " \
+            "`#{name}`.\nYou can add it manually via `pod repo add NAME " \
+            "#{url}`.\n\n#{output}"
+        end
         source
       end
 
