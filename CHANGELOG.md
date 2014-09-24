@@ -16,7 +16,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#2394](https://github.com/CocoaPods/CocoaPods/issues/2394)
   [#2395](https://github.com/CocoaPods/CocoaPods/pull/2395)
 
-* Fixes the detection of JSON podspecs included via `:path`.
+* Fixes the detection of JSON podspecs included via `:path`.  
   [laiso](https://github.com/laiso)
   [#2489](https://github.com/CocoaPods/CocoaPods/pull/2489)
 
