@@ -200,7 +200,7 @@ module Pod
         end
 
         def initialize(argv)
-          @count = argv.flag?('count')
+          @should_count_number_of_repos = argv.flag?('count')
           super
         end
 
@@ -238,7 +238,7 @@ module Pod
               end
             end
           end
-          if @count
+          if @should_count_number_of_repos
             number_of_repos = sources.length
             repo_string = number_of_repos != 1 ? 'repos' : 'repo'
             UI.puts "\n#{number_of_repos} #{repo_string}".green
