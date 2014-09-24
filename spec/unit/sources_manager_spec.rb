@@ -151,9 +151,9 @@ module Pod
 
           it 'runs `pod repo add` when there is no matching source' do
             Command::Repo::Add.any_instance.stubs(:run).once
-            SourcesManager.stubs(:source_with_url).returns(nil).then.returns(true)
+            SourcesManager.stubs(:source_with_url).returns(nil).then.returns('Source')
             SourcesManager.find_or_create_source_with_url('https://banana.com/local/specs.git').
-              should == true
+              should == 'Source'
           end
         end
       end
