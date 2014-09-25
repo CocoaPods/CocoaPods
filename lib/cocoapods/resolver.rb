@@ -74,7 +74,6 @@ module Pod
         end
       end
 
-      cached_specs.values.sort_by(&:name)
       specs_by_target
     end
 
