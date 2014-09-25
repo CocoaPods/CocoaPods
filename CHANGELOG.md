@@ -2,16 +2,15 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+## 0.34.0
 
 ##### Breaking
 
 * Add support for loading podspecs from *only* specific spec-repos via
   `sources`. By default, when there are no sources specified in a Podfile all
-  source repos will be used. This has always been the case.
-  However, this implicit use of sources is now deprecated.
-  Once you specify specific sources, **no** repos wil be included by
-  default. For example:
+  source repos will be used. This has always been the case. However, this
+  implicit use of sources is now deprecated. Once you specify specific sources,
+  **no** repos wil be included by default. For example:
 
         source 'https://banana.com/corp/private-spec-repo.git'
         source 'https://github.com/CocoaPods/Specs.git'
