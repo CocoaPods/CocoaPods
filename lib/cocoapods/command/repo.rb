@@ -194,13 +194,13 @@ module Pod
         self.description = <<-DESC
             List the repos from the local spec-repos directory at `~/.cocoapods/repos/.`
         DESC
-        
+
         def self.options
-          [["--count", "Show the total number of repos"]].concat(super)
+          [["--count-only", "Show the total number of repos"]].concat(super)
         end
 
         def initialize(argv)
-          @should_count_number_of_repos = argv.flag?('count')
+          @count_only = argv.flag?('count-only')
           super
         end
 
@@ -217,34 +217,69 @@ module Pod
         #
         def run
           sources = SourcesManager.all
-          sources.each do |source|
-            path = source.data_provider.repo
-            UI.title source.name do
-              Dir.chdir(path) do
-                if SourcesManager.git_repo?(path)
-                  branch_name = get_branch_name
-                  remote_name = get_branch_remote_name(branch_name)
-                  if remote_name
-                    UI.puts "- Type: git (#{remote_name})"
-                    url = get_url_of_git_repo(remote_name)
-                    UI.puts "- URL:  #{url}"
-                  else
-                    UI.puts "- Type: git (no remote information available)"
-                  end
-                else
-                  UI.puts "- Type: local copy"
-                end
-                UI.puts "- Path: #{path}"
+          print_sources(sources) unless @count_only
+          print_count_of_sources(sources)
+        end
+
+        private
+
+        # Pretty-prints the source at the given path.
+        #
+        # @param  [String,Pathname] path
+        #         The path of the source to be printed.
+        #
+        # @return [void]
+        #
+        def print_source_at_path(path)
+          Dir.chdir(path) do
+            if SourcesManager.git_repo?(path)
+              branch_name = get_branch_name
+              remote_name = get_branch_remote_name(branch_name)
+              if remote_name
+                UI.puts "- Type: git (#{remote_name})"
+                url = get_url_of_git_repo(remote_name)
+                UI.puts "- URL:  #{url}"
+              else
+                UI.puts "- Type: git (no remote information available)"
               end
+            else
+              UI.puts "- Type: local copy"
             end
-          end
-          if @should_count_number_of_repos
-            number_of_repos = sources.length
-            repo_string = number_of_repos != 1 ? 'repos' : 'repo'
-            UI.puts "\n#{number_of_repos} #{repo_string}".green
+            UI.puts "- Path: #{path}"
           end
         end
+
+        # Pretty-prints the given sources.
+        #
+        # @param  [Array<Source>] sources
+        #         The sources that should be printed.
+        #
+        # @return [void]
+        #
+        def print_sources(sources)
+          sources.each do |source|
+            UI.title source.name do
+              print_source_at_path source.data_provider.repo
+            end
+          end
+          UI.puts "\n"
+        end
+
+        # Pretty-prints the number of sources.
+        #
+        # @param  [Array<Source>] sources
+        #         The sources whose count should be printed.
+        #
+        # @return [void]
+        #
+        def print_count_of_sources(sources)
+          number_of_repos = sources.length
+          repo_string = number_of_repos != 1 ? 'repos' : 'repo'
+          UI.puts "#{number_of_repos} #{repo_string}".green
+        end
       end
+
+      #-----------------------------------------------------------------------#
 
       extend Executable
       executable :git
@@ -253,25 +288,32 @@ module Pod
         config.repos_dir + @name
       end
 
-      # Returns the branch name (i.e. master)
+      # Returns the branch name (i.e. master).
+      #
+      # @return [String] The name of the current branch.
       #
       def get_branch_name
         `git name-rev --name-only HEAD`.strip
       end
 
-      # Returns the branch remote name (i.e. origin)
+      # Returns the branch remote name (i.e. origin).
       #
-      # @param  [BranchName] branch_name
+      # @param  [#to_s] branch_name
       #         The branch name to look for the remote name.
+      #
+      # @return [String] The given branch's remote name.
       #
       def get_branch_remote_name(branch_name)
         `git config branch.#{branch_name}.remote`.strip
       end
 
-      # Returns the url of the given remote name (i.e. git@github.com:CocoaPods/Specs.git)
+      # Returns the url of the given remote name
+      # (i.e. git@github.com:CocoaPods/Specs.git).
       #
-      # @param  [RemoteName] remote_name
+      # @param  [#to_s] remote_name
       #         The branch remote name to look for the url.
+      #
+      # @return [String] The URL of the given remote.
       #
       def get_url_of_git_repo(remote_name)
         `git config remote.#{remote_name}.url`.strip
