@@ -62,7 +62,14 @@ module Pod
 
       it 'updates the repositories by default' do
         config.skip_repo_update = false
-        SourcesManager.expects(:update).once
+        SourcesManager.expects(:update).twice
+        @analyzer.analyze
+      end
+
+      it 'does not update unused sources' do
+        config.skip_repo_update = false
+        @analyzer.stubs(:sources).returns(SourcesManager.master)
+        SourcesManager.expects(:update).once.with('master')
         @analyzer.analyze
       end
 

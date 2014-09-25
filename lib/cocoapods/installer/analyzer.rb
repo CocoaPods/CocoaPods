@@ -169,7 +169,7 @@ module Pod
       def update_repositories_if_needed
         unless config.skip_repo_update?
           UI.section 'Updating spec repositories' do
-            SourcesManager.update
+            sources.each { |source| SourcesManager.update(source.name) }
           end
         end
       end
