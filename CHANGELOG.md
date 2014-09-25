@@ -26,6 +26,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Core#170](https://github.com/CocoaPods/Core/issues/170)
   [#2515](https://github.com/CocoaPods/CocoaPods/issues/2515)
 
+##### Enhancements
+
+* Added the `pod repo list` command which lists all the repositories.  
+  [Luis Ascorbe](https://github.com/lascorbe)
+  [#1455](https://github.com/CocoaPods/CocoaPods/issues/1455)
+
 ##### Bug Fixes
 
 * Works around an Xcode issue where linting would fail even though `xcodebuild`
@@ -43,9 +49,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#2489](https://github.com/CocoaPods/CocoaPods/pull/2489)
 
 * Fixes an issue where `pod install` would crash during Plist building if any
-  pod has invalid UTF-8 characters in their title or description.
+  pod has invalid UTF-8 characters in their title or description.  
   [Ladislav Martincik](https://github.com/martincik)
   [#2482](https://github.com/CocoaPods/CocoaPods/issues/2482)
+
 
 ## 0.34.0.rc2
 
