@@ -95,7 +95,7 @@ module Pod
     end
 
     def prepare
-      UI.section 'Preparing' do
+      UI.message 'Preparing' do
         sandbox.prepare
         Migrator.migrate(sandbox)
       end
