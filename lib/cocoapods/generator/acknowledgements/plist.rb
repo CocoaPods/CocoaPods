@@ -74,7 +74,7 @@ module Pod
       #
       def sanitize_encoding(text)
         if RUBY_VERSION >= '1.9'
-          text.encode('UTF-8', 'binary', :invalid => :replace, :undef => :replace, :replace => '')
+          text.encode('UTF-8', :invalid => :replace, :undef => :replace, :replace => '')
         else
           text
         end

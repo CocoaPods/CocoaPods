@@ -27,6 +27,18 @@ describe Pod::Generator::Plist do
     }
   end
 
+  if RUBY_VERSION >= '1.9'
+    it 'returns a correctly sanitized license hash for each pod' do
+      license_text = 'Copyright © 2013–2014 Boris Bügling'
+      @generator.stubs(:license_text).returns(license_text)
+      @generator.hash_for_spec(@spec).should == {
+        :Type => 'PSGroupSpecifier',
+        :Title => 'POD_NAME',
+        :FooterText => license_text,
+      }
+    end
+  end
+
   it 'returns nil for a pod with no license text' do
     @generator.expects(:license_text).returns(nil)
     @generator.hash_for_spec(@spec).should.be.nil
