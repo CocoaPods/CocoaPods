@@ -20,7 +20,6 @@ Installing and updating CocoaPods is very easy. Don't miss the [Installation
 guide](http://guides.cocoapods.org/using/getting-started.html#installation) and the
 [Getting started guide](http://guides.cocoapods.org/using/getting-started.html).
 
-
 ## Sponsors
 
 Lovingly sponsored by [Fingertips](http://www.fngtps.com),
@@ -41,12 +40,12 @@ we welcome with joy new contributors.
 [Blog](http://blog.cocoapods.org) | The CocoaPods blog.
 [Mailing List](http://groups.google.com/group/cocoapods) | Feel free to ask any kind of question.
 [Documentation](http://docs.cocoapods.org) | Everything you want to know about CocoaPods.
-[Changelog](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md) | See the changes introduced by each CocoaPods version.
-[New Pods RSS](http://feeds.cocoapods.org/new-pods.rss) | Don't miss any new Pod.
+[Changelog](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md) | See the changes introduced in each CocoaPods version.
+[New Pods RSS](http://feeds.cocoapods.org/new-pods.rss) | Don't miss any new Pods.
 
 ## Projects
 
-CocoaPods is composed by the following projects:
+CocoaPods is composed of the following projects:
 
 | Status | Project | Description | Info |
 | :----- | :------ | :--- | :--- |
