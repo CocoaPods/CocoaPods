@@ -78,17 +78,9 @@ module Pod
 
       def unlocked_pods
         @unlocked_pods ||= begin
-          sources = if config.podfile.sources.empty?
-                      SourcesManager.master
-                    else
-                      SourcesManager.sources(config.podfile.sources)
-                    end
-          Resolver.new(
-            config.sandbox,
-            config.podfile,
-            [],
-            sources
-          ).resolve.values.flatten
+          Installer::Analyzer.new(config.sandbox, config.podfile).
+            analyze(false).
+            specs_by_target.values.flatten.uniq
         end
       end
 
