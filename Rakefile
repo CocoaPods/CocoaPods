@@ -57,6 +57,16 @@ begin
 
   require "bundler/gem_tasks"
 
+  # Pre release
+  #-----------------------------------------------------------------------------#
+
+  desc "Prepares for a release"
+  task :pre_release do
+    unless File.exist?('../Specs')
+      raise 'Ensure that the specs repo exits in the `../Specs` location'
+    end
+  end
+
   # Post release
   #-----------------------------------------------------------------------------#
 
