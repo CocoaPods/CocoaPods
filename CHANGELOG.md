@@ -12,7 +12,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   implicit use of sources is now deprecated. Once you specify specific sources,
   **no** repos wil be included by default. For example:
 
-        source 'https://banana.com/corp/private-spec-repo.git'
+        source 'https://github.com/artsy/Specs.git'
         source 'https://github.com/CocoaPods/Specs.git'
 
   Any source URLs specified that have not yet been added will be cloned before
