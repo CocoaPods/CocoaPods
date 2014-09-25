@@ -43,8 +43,8 @@ module Pod
             Command::Repo::Add.new(CLAide::ARGV.new([name, url])).run
           rescue Informative => e
             raise Informative, "Unable to add a source with url `#{url}` " \
-              "named `#{name}`.\nYou can add it manually via " \
-              "`pod repo add NAME #{url}`."
+              "named `#{name}`.\nYou can try adding it manually in " \
+              '`~/.cocoapods/repos` or via `pod repo add`.'
           ensure
             UI.title_level = previous_title_level
           end
