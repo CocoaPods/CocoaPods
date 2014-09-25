@@ -116,18 +116,18 @@ module Pod
       #         be enabled.
       #
       def url
-        push? ? read_write_url : read_only_url
+        push? ? self.class.read_write_url : self.class.read_only_url
       end
 
       # @return [String] the read only url of the master repo.
       #
-      def read_only_url
+      def self.read_only_url
         'https://github.com/CocoaPods/Specs.git'
       end
 
       # @return [String] the read-write url of the master repo.
       #
-      def read_write_url
+      def self.read_write_url
         'git@github.com:CocoaPods/Specs.git'
       end
 
@@ -146,7 +146,7 @@ module Pod
         return false unless master_repo_dir.exist?
         Dir.chdir(master_repo_dir) do
           url = git('config --get remote.origin.url')
-          url.chomp == read_write_url
+          url.chomp == self.class.read_write_url
         end
       end
 
