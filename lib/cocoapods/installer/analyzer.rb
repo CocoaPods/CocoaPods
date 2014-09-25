@@ -94,7 +94,7 @@ module Pod
       #
       attr_accessor :update
 
-      # @return [Bool] Whether the version of the dependencies which did non
+      # @return [Bool] Whether the version of the dependencies which did not
       #         change in the Podfile should be locked.
       #
       def update_mode?
