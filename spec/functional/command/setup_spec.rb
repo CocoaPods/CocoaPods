@@ -23,7 +23,7 @@ module Pod
 
     before do
       set_up_test_repo
-      Command::Setup.any_instance.stubs(:read_only_url).returns(test_repo_path.to_s)
+      Command::Setup.stubs(:read_only_url).returns(test_repo_path.to_s)
       config.repos_dir = SpecHelper.temporary_directory
     end
 
@@ -44,7 +44,7 @@ module Pod
         `echo 'touch' > touch && git add touch && git commit -m 'updated'`
       end
       # Need to use file:// to test local use of --depth=1
-      Command::Setup.any_instance.stubs(:read_only_url).returns("file://#{test_repo_path}")
+      Command::Setup.stubs(:read_only_url).returns("file://#{test_repo_path}")
       run_command('setup')
       Dir.chdir(config.repos_dir + 'master') do
         `git log --pretty=oneline`.strip.split("\n").size.should == 1
@@ -66,7 +66,7 @@ module Pod
         `echo 'touch' > touch && git add touch && git commit -m 'updated'`
       end
       # Need to use file:// to test local use of --depth=1
-      Command::Setup.any_instance.stubs(:read_write_url).returns("file://#{test_repo_path}")
+      Command::Setup.stubs(:read_write_url).returns("file://#{test_repo_path}")
       cmd = run_command('setup', '--push')
       Dir.chdir(config.repos_dir + 'master') do
         `git log --pretty=oneline`.strip.split("\n").size.should > 1
