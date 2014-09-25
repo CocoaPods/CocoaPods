@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: b9dcb24367e8215637cdee840af58a9f0bf62568
+  revision: 4bf3f01cefeeaab56ed781dca7eaffafee4bd57a
   branch: master
   specs:
-    cocoapods-core (0.34.0.rc2)
+    cocoapods-core (0.34.0)
       activesupport (>= 3.2.15)
       fuzzy_match (~> 2.0.4)
       json_pure (~> 1.8)
@@ -18,10 +18,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 4066d3b7526ec1165c1e62d8534fcfff6d57b606
+  revision: fca2eb86cac05920305a5f0336ec75df56e1473d
   branch: master
   specs:
-    xcodeproj (0.19.1)
+    xcodeproj (0.19.2)
       CFPropertyList (~> 2.2)
       activesupport (~> 3.0)
       colored (~> 1.2)
@@ -35,7 +35,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: b681dc7abcbc332c0a7197fb232d3bf7c449f00a
+  revision: 69f42c9c9891cf49ccc75c10376b2d6a34a72b7f
   branch: master
   specs:
     cocoapods-plugins (0.3.1)
@@ -53,7 +53,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 477d0e58299f03d9048048af2e46cfb95e06d19d
+  revision: 3791686a045a67532dd4f5c9c8da207f8ee16d90
   branch: master
   specs:
     cocoapods-try (0.4.0)
@@ -61,10 +61,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.34.0.rc2)
+    cocoapods (0.34.0)
       activesupport (>= 3.2.15, < 4)
       claide (~> 0.7.0)
-      cocoapods-core (= 0.34.0.rc2)
+      cocoapods-core (= 0.34.0)
       cocoapods-downloader (~> 0.7.0)
       cocoapods-plugins (~> 0.3.1)
       cocoapods-trunk (~> 0.2.0)
@@ -74,7 +74,7 @@ PATH
       json_pure (~> 1.8)
       nap (~> 0.8)
       open4 (~> 1.3)
-      xcodeproj (~> 0.19.1)
+      xcodeproj (~> 0.19.2)
 
 GEM
   remote: http://rubygems.org/
@@ -98,7 +98,7 @@ GEM
       safe_yaml (~> 1.0.0)
     diffy (3.0.6)
     escape (0.0.4)
-    ffi (1.9.3)
+    ffi (1.9.5)
     fuzzy_match (2.0.4)
     i18n (0.6.4)
     json_pure (1.8.1)
@@ -139,13 +139,13 @@ GEM
       ffi (>= 0.5.0)
     rb-kqueue (0.2.3)
       ffi (>= 0.5.0)
-    rubocop (0.26.0)
+    rubocop (0.26.1)
       astrolabe (~> 1.3)
       parser (>= 2.2.0.pre.4, < 3.0)
       powerpack (~> 0.0.6)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
-    ruby-progressbar (1.5.1)
+    ruby-progressbar (1.6.0)
     safe_yaml (1.0.3)
     slop (3.6.0)
     webmock (1.18.0)
