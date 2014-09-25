@@ -376,9 +376,9 @@ module Pod
           if sources.empty?
             SourcesManager.all.tap do |all|
               UI.warn all.reduce("The use of implicit sources has been " \
-                "deprecated. To replicate the previous behavior, add the " \
-                "following to your Podfile:") \
-                { |w, s| w << "\nsource '#{s.url}'" }
+                "deprecated. To continue using all of the sources currently " \
+                "on your machine, add the following to the top of your " \
+                "Podfile:\n") { |w, s| w << "\n    source '#{s.url}'" } + "\n"
             end
           else
             sources.map do |url|
