@@ -142,10 +142,11 @@ module Pod
         output.should.include? '- Type:'
       end
 
-      it 'lists a repository with count' do
+      it 'only prints a count when invoked with --count-only' do
         config.repos_dir = fixture('spec-repos')
-        output = run_command('repo', 'list', '--count')
+        output = run_command('repo', 'list', '--count-only')
         output.should.include? 'repo'
+        output.should.not.include? '- Type:'
       end
 
     end
