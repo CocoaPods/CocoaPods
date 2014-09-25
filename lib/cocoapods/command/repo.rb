@@ -233,11 +233,10 @@ module Pod
         def print_source_at_path(path)
           Dir.chdir(path) do
             if SourcesManager.git_repo?(path)
-              branch_name = get_branch_name
-              remote_name = get_branch_remote_name(branch_name)
+              remote_name = branch_remote_name(branch_name)
               if remote_name
                 UI.puts "- Type: git (#{remote_name})"
-                url = get_url_of_git_repo(remote_name)
+                url = url_of_git_repo(remote_name)
                 UI.puts "- URL:  #{url}"
               else
                 UI.puts "- Type: git (no remote information available)"
@@ -292,7 +291,7 @@ module Pod
       #
       # @return [String] The name of the current branch.
       #
-      def get_branch_name
+      def branch_name
         `git name-rev --name-only HEAD`.strip
       end
 
@@ -303,7 +302,7 @@ module Pod
       #
       # @return [String] The given branch's remote name.
       #
-      def get_branch_remote_name(branch_name)
+      def branch_remote_name(branch_name)
         `git config branch.#{branch_name}.remote`.strip
       end
 
@@ -315,7 +314,7 @@ module Pod
       #
       # @return [String] The URL of the given remote.
       #
-      def get_url_of_git_repo(remote_name)
+      def url_of_git_repo(remote_name)
         `git config remote.#{remote_name}.url`.strip
       end
     end
