@@ -20,6 +20,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [laiso](https://github.com/laiso)
   [#2489](https://github.com/CocoaPods/CocoaPods/pull/2489)
 
+* Fixes an issue where `pod install` would crash during Plist building if any
+  pod has invalid UTF-8 characters in their title or description.
+  [Ladislav Martincik](https://github.com/martincik)
+  [#2482](https://github.com/CocoaPods/CocoaPods/issues/2482)
 
 ## 0.34.0.rc2
 
