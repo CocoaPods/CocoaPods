@@ -374,7 +374,8 @@ module Pod
       #         The URL of the source.
       #
       def source_with_url(url)
-        aggregate.sources.find { |s| s.url == url }
+        url = url.downcase
+        aggregate.sources.find { |s| s.url.downcase == url }
       end
 
       # Returns a suitable repository name for `url`.
