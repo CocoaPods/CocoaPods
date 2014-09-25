@@ -36,12 +36,17 @@ module Pod
       def find_or_create_source_with_url(url)
         unless source = source_with_url(url)
           name = name_for_url(url)
+          # Hack to ensure that `repo add` output is shown.
+          previous_title_level = UI.title_level
+          UI.title_level = 0
           begin
             Command::Repo::Add.new(CLAide::ARGV.new([name, url])).run
           rescue Informative => e
             raise Informative, "Unable to add a source with url `#{url}` " \
               "named `#{name}`.\nYou can add it manually via " \
               "`pod repo add NAME #{url}`."
+          ensure
+            UI.title_level = previous_title_level
           end
           source = source_with_url(url)
         end
