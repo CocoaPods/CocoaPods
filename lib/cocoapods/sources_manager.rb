@@ -36,14 +36,16 @@ module Pod
       def find_or_create_source_with_url(url)
         unless source = source_with_url(url)
           name = name_for_url(url)
-          Command::Repo::Add.new(CLAide::ARGV.new([name, url])).run
+          begin
+            Command::Repo::Add.new(CLAide::ARGV.new([name, url])).run
+          rescue Informative => e
+            raise Informative, "Unable to add a source with url `#{url}` " \
+              "named `#{name}`.\nYou can add it manually via " \
+              "`pod repo add NAME #{url}`."
+          end
           source = source_with_url(url)
         end
-        unless source
-          raise Informative, "Unable to add a source with url `#{url}` named " \
-            "`#{name}`.\nYou can add it manually via `pod repo add NAME " \
-            "#{url}`.\n\n#{output}"
-        end
+
         source
       end
 
