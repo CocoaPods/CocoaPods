@@ -483,7 +483,7 @@ module Pod
           it 'prints a warning about how to add explicit sources' do
             @analyzer.send(:sources)
             UI.warnings.should.
-              match %r{^source 'https://github.com/CocoaPods/Specs.git'$}
+              match %r{source 'https://github.com/CocoaPods/Specs.git'}
           end
         end
 
