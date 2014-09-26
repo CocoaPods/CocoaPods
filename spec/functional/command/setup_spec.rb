@@ -15,12 +15,6 @@ module Pod
       cmd.url.should == 'https://github.com/CocoaPods/Specs.git'
     end
 
-    it 'returns the push URL of the `master` spec-repo' do
-      config.silent = true
-      cmd = Command::Setup.new(argv('--push'))
-      cmd.url.should == 'git@github.com:CocoaPods/Specs.git'
-    end
-
     before do
       set_up_test_repo
       Command::Setup.stubs(:read_only_url).returns(test_repo_path.to_s)
@@ -34,7 +28,6 @@ module Pod
     it 'creates the local spec-repos directory and creates a clone of the `master` repo' do
       output = run_command('setup')
       output.should.include 'Setup completed'
-      output.should.not.include 'push'
       url = Dir.chdir(config.repos_dir + 'master') { `git config --get remote.origin.url`.chomp }
       url.should == test_repo_path.to_s
     end
@@ -59,25 +52,6 @@ module Pod
       Dir.chdir(config.repos_dir + 'master') do
         `git log --pretty=oneline`.strip.split("\n").size.should > 1
       end
-    end
-
-    it 'creates a full clone of the `master` repo when push access is requested' do
-      Dir.chdir(test_repo_path) do
-        `echo 'touch' > touch && git add touch && git commit -m 'updated'`
-      end
-      # Need to use file:// to test local use of --depth=1
-      Command::Setup.stubs(:read_write_url).returns("file://#{test_repo_path}")
-      cmd = run_command('setup', '--push')
-      Dir.chdir(config.repos_dir + 'master') do
-        `git log --pretty=oneline`.strip.split("\n").size.should > 1
-      end
-    end
-
-    it 'preserves push access for the `master` repo' do
-      output = run_command('setup')
-      output.should.not.include 'push'
-      Dir.chdir(config.repos_dir + 'master') { `git remote set-url origin git@github.com:CocoaPods/Specs.git` }
-      command('setup').url.should == 'git@github.com:CocoaPods/Specs.git'
     end
 
     before do

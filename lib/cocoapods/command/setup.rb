@@ -17,7 +17,6 @@ module Pod
       def self.options
         [
           ['--no-shallow', 'Clone full history so push will work'],
-          ['--push', 'Use this option to enable push access once granted'],
         ].concat(super)
       end
 
@@ -25,8 +24,7 @@ module Pod
       executable :git
 
       def initialize(argv)
-        @push_option = argv.flag?('push')
-        @shallow     = argv.flag?('shallow', !@push_option)
+        @shallow = argv.flag?('shallow', true)
         super
       end
 
@@ -43,8 +41,7 @@ module Pod
           end
         end
 
-        access_type = push? ? 'push' : 'read-only'
-        UI.puts "Setup completed (#{access_type} access)".green
+        UI.puts "Setup completed".green
       end
 
       #--------------------------------------#
@@ -116,38 +113,13 @@ module Pod
       #         be enabled.
       #
       def url
-        push? ? self.class.read_write_url : self.class.read_only_url
+        self.class.read_only_url
       end
 
       # @return [String] the read only url of the master repo.
       #
       def self.read_only_url
         'https://github.com/CocoaPods/Specs.git'
-      end
-
-      # @return [String] the read-write url of the master repo.
-      #
-      def self.read_write_url
-        'git@github.com:CocoaPods/Specs.git'
-      end
-
-      # Checks if the user asked to setup the master repo in push mode or if
-      # the repo was already in push mode.
-      #
-      # @return [String] whether the master repo should be set up in push mode.
-      #
-      def push?
-        @push ||= (@push_option || master_repo_is_push?)
-      end
-
-      # @return [Bool] if the master repo is already configured in push mode.
-      #
-      def master_repo_is_push?
-        return false unless master_repo_dir.exist?
-        Dir.chdir(master_repo_dir) do
-          url = git('config --get remote.origin.url')
-          url.chomp == self.class.read_write_url
-        end
       end
 
       # @return [Pathname] the directory of the master repo.
