@@ -381,8 +381,8 @@ module Pod
       #         The URL of the source.
       #
       def source_with_url(url)
-        url = url.downcase
-        aggregate.sources.find { |s| s.url.downcase == url }
+        url = url.downcase.gsub(/.git$/, '')
+        aggregate.sources.find { |s| s.url.downcase.gsub(/.git$/, '') == url }
       end
 
       # Returns a suitable repository name for `url`.
