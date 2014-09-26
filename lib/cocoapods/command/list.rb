@@ -11,9 +11,6 @@ module Pod
         ]].concat(super)
       end
 
-      extend Executable
-      executable :git
-
       def initialize(argv)
         @update = argv.flag?('update')
         @stats  = argv.flag?('stats')

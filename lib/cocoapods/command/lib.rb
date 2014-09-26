@@ -48,7 +48,6 @@ module Pod
 
         extend Executable
         executable :git
-        executable :ruby
 
         TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'
         TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'
