@@ -28,10 +28,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 13d36d08a42102ac162cd204f199d31099f21e14
+  revision: 25a40b20a06780ff858fd5089358e111ebd1a85d
   branch: master
   specs:
-    cocoapods-downloader (0.7.0)
+    cocoapods-downloader (0.7.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
@@ -65,7 +65,7 @@ PATH
       activesupport (>= 3.2.15, < 4)
       claide (~> 0.7.0)
       cocoapods-core (= 0.34.0)
-      cocoapods-downloader (~> 0.7.0)
+      cocoapods-downloader (~> 0.7.1)
       cocoapods-plugins (~> 0.3.1)
       cocoapods-trunk (~> 0.2.0)
       cocoapods-try (~> 0.4.0)
