@@ -2,6 +2,16 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+##  Master
+
+##### Bug Fixes
+
+* Doesn't take into account the trailing `.git` in repository URLs when
+  trying to find a matching specs repo.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2526](https://github.com/CocoaPods/CocoaPods/issues/2526)
+
+
 ## 0.34.0
 
 ##### Breaking
