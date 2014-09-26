@@ -47,7 +47,7 @@ module Pod
       # Generates and saves the header to the given path.
       #
       # @param  [Pathname] path
-      #         the path where the header should be stored.
+      #         The path where the header should be stored.
       #
       # @return [void]
       #
