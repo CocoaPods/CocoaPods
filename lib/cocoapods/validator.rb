@@ -357,7 +357,7 @@ module Pod
       end
 
       if consumer.spec.root?
-        unless file_accessor.license || spec.license && ( spec.license[:type] == 'Public Domain' || spec.license[:text])
+        unless file_accessor.license || spec.license && (spec.license[:type] == 'Public Domain' || spec.license[:text])
           warning 'Unable to find a license file'
         end
       end

@@ -232,7 +232,7 @@ module Pod
         versions = version_information(dir)
         unless repo_compatible?(dir)
           min, max = versions['min'], versions['max']
-          version_msg = ( min == max) ? min : "#{min} - #{max}"
+          version_msg = (min == max) ? min : "#{min} - #{max}"
           raise Informative, "The `#{dir.basename}` repo requires " \
           "CocoaPods #{version_msg} (currently using #{Pod::VERSION})\n".red +
           'Update CocoaPods, or checkout the appropriate tag in the repo.'
