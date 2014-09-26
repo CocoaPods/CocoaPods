@@ -57,7 +57,7 @@ module Pod
         podfile << "xcodeproj '#{@project_path}'\n\n" if @project_path
         podfile << <<-PLATFORM.strip_heredoc
           # Uncomment this line to define a global platform for your project
-          # platform :ios, "6.0"
+          # platform :ios, '6.0'
 
           source '#{Command::Setup.read_only_url}'
         PLATFORM
@@ -74,7 +74,7 @@ module Pod
       # @return [String] the text for the target module
       #
       def target_module(target)
-        target_module = "\ntarget \"#{target.name}\" do\n"
+        target_module = "\ntarget '#{target.name}' do\n"
 
         if target.name =~ /tests?/i
           target_module << template_contents(config.default_test_podfile_path)
