@@ -180,52 +180,67 @@ module Pod
       def generate_targets
         targets = []
         result.specs_by_target.each do |target_definition, specs|
-          # Setup the aggregate target
-          target = AggregateTarget.new(target_definition, sandbox)
-          targets << target
-
-          if config.integrate_targets?
-            project_path = compute_user_project_path(target_definition)
-            user_project = Xcodeproj::Project.open(project_path)
-            native_targets = compute_user_project_targets(target_definition, user_project)
-
-            target.host_requires_framework |= compute_user_project_targets_require_framework(native_targets)
-            target.user_project_path = project_path
-            target.client_root = project_path.dirname
-            target.user_target_uuids = native_targets.map(&:uuid)
-            target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
-            target.archs = @archs_by_target_def[target_definition]
-          else
-            target.client_root = config.installation_root
-            target.user_target_uuids = []
-            target.user_build_configurations = target_definition.build_configurations || {}
-            if target_definition.platform.name == :osx
-              target.archs = '$(ARCHS_STANDARD_64_BIT)'
-            end
-          end
-
-          # Group specs and subspecs by their root
-          grouped_specs = specs.map do |spec|
-            specs.select { |s| s.root == spec.root }
-          end.uniq
-
-          # Create a target for each spec group and add it to the aggregate target
-          grouped_specs.each do |pod_specs|
-            pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
-            pod_target.host_requires_framework |= target.host_requires_framework
-            if config.integrate_targets?
-              pod_target.user_build_configurations = target.user_build_configurations
-              pod_target.archs = @archs_by_target_def[target_definition]
-            else
-              pod_target.user_build_configurations = {}
-              if target_definition.platform.name == :osx
-                pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
-              end
-            end
-            target.pod_targets << pod_target
-          end
+          targets << generate_target(target_definition, specs)
         end
         targets
+      end
+
+      # Setup the aggregate target for a single user target
+      #
+      # @param  [TargetDefinition] target_definition
+      #         the target definition for the user target.
+      #
+      # @param  [Array<Specification>] specs
+      #         the specifications that need to be installed grouped by the
+      #         given target definition.
+      #
+      # @return [AggregateTarget]
+      #
+      def generate_target(target_definition, specs)
+        target = AggregateTarget.new(target_definition, sandbox)
+
+        if config.integrate_targets?
+          project_path = compute_user_project_path(target_definition)
+          user_project = Xcodeproj::Project.open(project_path)
+          native_targets = compute_user_project_targets(target_definition, user_project)
+
+          target.host_requires_framework |= compute_user_project_targets_require_framework(native_targets)
+          target.user_project_path = project_path
+          target.client_root = project_path.dirname
+          target.user_target_uuids = native_targets.map(&:uuid)
+          target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
+          target.archs = @archs_by_target_def[target_definition]
+        else
+          target.client_root = config.installation_root
+          target.user_target_uuids = []
+          target.user_build_configurations = target_definition.build_configurations || {}
+          if target_definition.platform.name == :osx
+            target.archs = '$(ARCHS_STANDARD_64_BIT)'
+          end
+        end
+
+        # Group specs and subspecs by their root
+        grouped_specs = specs.map do |spec|
+          specs.select { |s| s.root == spec.root }
+        end.uniq
+
+        # Create a target for each spec group and add it to the aggregate target
+        grouped_specs.each do |pod_specs|
+          pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
+          pod_target.host_requires_framework |= target.host_requires_framework
+          if config.integrate_targets?
+            pod_target.user_build_configurations = target.user_build_configurations
+            pod_target.archs = @archs_by_target_def[target_definition]
+          else
+            pod_target.user_build_configurations = {}
+            if target_definition.platform.name == :osx
+              pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
+            end
+          end
+          target.pod_targets << pod_target
+        end
+
+        target
       end
 
       # Generates dependencies that require the specific version of the Pods
