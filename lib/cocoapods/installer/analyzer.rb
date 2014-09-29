@@ -218,7 +218,7 @@ module Pod
           end
         end
 
-        generate_pod_targets(target, specs)
+        target.pod_targets = generate_pod_targets(target, specs)
 
         target
       end
@@ -239,20 +239,33 @@ module Pod
           specs.select { |s| s.root == spec.root }
         end.uniq
 
-        # Create a target for each spec group and add it to the aggregate target
-        grouped_specs.each do |pod_specs|
-          pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
-          pod_target.host_requires_framework |= target.host_requires_framework
-          if config.integrate_targets?
-            pod_target.user_build_configurations = target.user_build_configurations
-            pod_target.archs = @archs_by_target_def[target_definition]
-          else
-            pod_target.user_build_configurations = {}
-            if target_definition.platform.name == :osx
-              pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
-            end
+        grouped_specs.map do |pod_specs|
+          generate_pod_target(target, pod_specs)
+        end
+      end
+
+      # Create a target for each spec group and add it to the aggregate target
+      #
+      # @param  [AggregateTarget] target
+      #         the aggregate target
+      #
+      # @param  [Array<Specification>] specs
+      #         the specifications of an equal root.
+      #
+      # @return [PodTarget]
+      #
+      def generate_pod_target(target, pod_specs)
+        pod_target = PodTarget.new(pod_specs, target.target_definition, sandbox)
+
+        pod_target.host_requires_framework |= target.host_requires_framework
+        if config.integrate_targets?
+          pod_target.user_build_configurations = target.user_build_configurations
+          pod_target.archs = target.archs
+        else
+          pod_target.user_build_configurations = {}
+          if target.platform.name == :osx
+            pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
           end
-          target.pod_targets << pod_target
         end
 
         pod_target
