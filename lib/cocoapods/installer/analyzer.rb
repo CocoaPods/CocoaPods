@@ -219,7 +219,23 @@ module Pod
           end
         end
 
-        # Group specs and subspecs by their root
+        generate_pod_targets(target, specs)
+
+        target
+      end
+
+      # Setup the pod targets for an aggregate target. Group specs and subspecs
+      # by their root to create a {PodTarget} for each spec.
+      #
+      # @param  [AggregateTarget] target
+      #         the aggregate target
+      #
+      # @param  [Array<Specification>] specs
+      #         the specifications that need to be installed.
+      #
+      # @return [Array<PodTarget>]
+      #
+      def generate_pod_targets(target, specs)
         grouped_specs = specs.map do |spec|
           specs.select { |s| s.root == spec.root }
         end.uniq
@@ -240,7 +256,7 @@ module Pod
           target.pod_targets << pod_target
         end
 
-        target
+        pod_target
       end
 
       # Generates dependencies that require the specific version of the Pods
