@@ -2,6 +2,16 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+##### Bug Fixes
+
+* Improved sanitizing of configuration names to avoid generating invalid
+  preprocessor definitions.
+  [Boris Bügling](https://github.com/neonichu)
+  [#2542](https://github.com/CocoaPods/CocoaPods/issues/2542)
+
+
 ## 0.34.1
 
 ##### Bug Fixes
