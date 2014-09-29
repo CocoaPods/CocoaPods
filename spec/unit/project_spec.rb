@@ -233,6 +233,12 @@ module Pod
           settings['GCC_PREPROCESSOR_DEFINITIONS'].should.include('RELEASE=1')
         end
 
+        it "doesn't create invalid preprocessor definitions for configurations" do
+          configuration = @project.add_build_configuration('Release-Foo.bar', :release)
+          settings = configuration.build_settings
+          settings['GCC_PREPROCESSOR_DEFINITIONS'].should.include('RELEASE_FOO_BAR=1')
+        end
+
         it "doesn't duplicate values" do
           original = @project.build_configuration_list['Debug']
           original_settings = original.build_settings
