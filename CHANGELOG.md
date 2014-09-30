@@ -21,6 +21,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [#2494](https://github.com/CocoaPods/CocoaPods/issues/2494)
 
+* Only setup the master specs repo if required
+  [Daniel Tomlinson](https://github.com/DanielTomlinson)
+  [#2562](https://github.com/CocoaPods/CocoaPods/issues/2562)
 
 ## 0.34.2
 
@@ -44,20 +47,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ##### Bug Fixes
 
 * Improved sanitizing of configuration names to avoid generating invalid
-  preprocessor definitions.  
+  preprocessor definitions.
   [Boris Bügling](https://github.com/neonichu)
   [#2542](https://github.com/CocoaPods/CocoaPods/issues/2542)
 
-* More robust generation of source names from URLs.  
+* More robust generation of source names from URLs.
   [Samuel Giddins](https://github.com/segiddins)
   [#2534](https://github.com/CocoaPods/CocoaPods/issues/2534)
-
-* Allow the `Validator` to only use specific sources.
-  Allows customizable source for `pod spec lint` and `pod lib lint`,
-  with both defaulting to `master`.  
-  [Samuel Giddins](https://github.com/segiddins)
-  [#2543](https://github.com/CocoaPods/CocoaPods/issues/2543)
-  [cocoapods-trunk#28](https://github.com/CocoaPods/cocoapods-trunk/issues/28)
 
 * Takes into account the sources specified in `Podfile` running
   `pod outdated`.  
