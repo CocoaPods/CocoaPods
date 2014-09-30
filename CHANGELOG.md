@@ -11,6 +11,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Boris Bügling](https://github.com/neonichu)
   [#2542](https://github.com/CocoaPods/CocoaPods/issues/2542)
 
+* More robust generation of source names from URLs.
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2534](https://github.com/CocoaPods/CocoaPods/issues/2534)
+
 
 ## 0.34.1
 

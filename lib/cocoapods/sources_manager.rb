@@ -405,18 +405,27 @@ module Pod
       # @return [String] A suitable repository name for `url`.
       #
       def name_for_url(url)
-        case url.downcase
+        base_from_host_and_path = lambda do |host, path|
+          base = host.split('.')[-2] || host
+          base += '-' + path.gsub(/.git$/, '').gsub(/^\//, '').
+            split('/').join('-')
+        end
+
+        case url.to_s.downcase
         when %r{github.com(:|/)cocoapods/specs}
           base = 'master'
         when %r{github.com(:|/)(.+)/(.+)}
           base = Regexp.last_match[2]
-        else
-          raise Informative,
-                "`#{url}` is not a valid URL." unless url =~ URI.regexp
+        when URI.regexp
           url = URI(url.downcase)
-          base = url.host.split('.')[-2] +
-            url.path.gsub(/.git$/, '').split('/').join('-')
+          base = base_from_host_and_path[url.host, url.path]
+        when %r{^\S+@(\S+)[:/](.+)$}
+          host, path = Regexp.last_match.captures
+          base = base_from_host_and_path[host, path]
+        else
+          url.to_s.downcase
         end
+
         name = base
         infinity = 1.0 / 0
         (1..infinity).each do |i|

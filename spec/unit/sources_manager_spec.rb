@@ -127,6 +127,24 @@ module Pod
               should == 'sourceforge-artsy-specs'
           end
 
+          it 'supports scp-style URLs' do
+            url = 'git@git-host.com/specs.git'
+            SourcesManager.send(:name_for_url, url).
+              should == 'git-host-specs'
+          end
+
+          it 'supports ssh URLs with an aliased hostname' do
+            url = 'ssh://user@companyalias/pod-specs'
+            SourcesManager.send(:name_for_url, url).
+              should == 'companyalias-pod-specs'
+          end
+
+          it 'supports ssh URLs with no user component' do
+            url = 'ssh://company.com/pods/specs.git'
+            SourcesManager.send(:name_for_url, url).
+              should == 'company-pods-specs'
+          end
+
           it 'appends a number to the name if the base name dir exists' do
             url = 'https://github.com/segiddins/banana.git'
             Pathname.any_instance.stubs(:exist?).
