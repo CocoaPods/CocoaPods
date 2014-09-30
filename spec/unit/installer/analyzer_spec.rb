@@ -502,7 +502,7 @@ module Pod
             @analyzer.instance_variable_set(:@podfile, podfile)
             should.raise Informative do
               @analyzer.send(:sources)
-            end.message.should.match /not a valid URL/
+            end.message.should.match /Unable to add/
           end
 
           it 'fetches a specs repo that is specified by the podfile' do

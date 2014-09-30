@@ -423,7 +423,7 @@ module Pod
           host, path = Regexp.last_match.captures
           base = base_from_host_and_path[host, path]
         else
-          url.to_s.downcase
+          base = url.to_s.downcase
         end
 
         name = base
