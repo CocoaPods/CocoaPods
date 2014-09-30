@@ -41,9 +41,7 @@ module Pod
 
     def self.parse(argv)
       command = super
-      unless SourcesManager.master_repo_functional? || command.is_a?(Setup) || command.is_a?(Repo::Add) || ENV['SKIP_SETUP']
-        Setup.new(CLAide::ARGV.new([])).run
-      end
+      
       command
     end
 
@@ -88,6 +86,16 @@ module Pod
       config.verbose = self.verbose? unless verbose.nil?
       unless self.ansi_output?
         String.send(:define_method, :colorize) { |string, _| string }
+      end
+    end
+
+    # Ensure that the master spec repo exists
+    #
+    # @return [void]
+    #
+    def ensure_master_spec_repo_exists!
+      unless SourcesManager.master_repo_functional?
+        Setup.new(CLAide::ARGV.new([])).run
       end
     end
 
