@@ -48,6 +48,7 @@ module Pod
       end
 
       def run
+        ensure_master_spec_repo_exists!
         if @web
           web_search
         else
