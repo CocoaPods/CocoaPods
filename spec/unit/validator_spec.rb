@@ -302,6 +302,15 @@ module Pod
         sut.result_type.should == :note
       end
 
+      it 'does filter InputFile errors completely' do
+        sut = Validator.new(podspec_path)
+        sut.stubs(:check_file_patterns)
+        sut.stubs(:xcodebuild).returns("2014-10-01 06:27:36.693 xcodebuild[61207:2007] error: InputFile    Target Support Files/Pods-OneUpFoundation/Pods-OneUpFoundation-prefix.pch 0 1412159238 77 33188... malformed line 10; 'InputFile' should have exactly five arguments")
+        sut.stubs(:validate_url)
+        sut.validate
+        sut.results.count.should == 0
+      end
+
       it 'checks for file patterns' do
         file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "wrong_paht.*",'))
         sut = Validator.new(file)
