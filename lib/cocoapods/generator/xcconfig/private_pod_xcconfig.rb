@@ -45,7 +45,10 @@ module Pod
         # @return [Xcodeproj::Config]
         #
         def generate
-          search_paths = target.build_headers.search_paths.concat(target.sandbox.public_headers.search_paths)
+          target_search_paths = target.build_headers.search_paths(target.platform)
+          sandbox_search_paths = target.sandbox.public_headers.search_paths(target.platform)
+          search_paths = target_search_paths.concat(sandbox_search_paths).uniq
+
           config = {
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
             'PODS_ROOT'  => '${SRCROOT}',

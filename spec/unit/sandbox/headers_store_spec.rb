@@ -22,7 +22,7 @@ module Pod
       relative_header_paths.each do |path|
         File.open(@sandbox.root + path, 'w') { |file| file.write('hello') }
       end
-      symlink_paths = @header_dir.add_files(namespace_path, relative_header_paths)
+      symlink_paths = @header_dir.add_files(namespace_path, relative_header_paths, :fake_platform)
       symlink_paths.each do |path|
         path.should.be.symlink
         File.read(path).should == 'hello'
@@ -39,12 +39,12 @@ module Pod
       relative_header_paths.each do |path|
         File.open(@sandbox.root + path, 'w') { |file| file.write('hello') }
       end
-      @header_dir.add_files(namespace_path, relative_header_paths)
-      @header_dir.search_paths.should.include('${PODS_ROOT}/Headers/Public/ExampleLib')
+      @header_dir.add_files(namespace_path, relative_header_paths, :fake_platform)
+      @header_dir.search_paths(:fake_platform).should.include('${PODS_ROOT}/Headers/Public/ExampleLib')
     end
 
     it 'always adds the Headers root to the header search paths' do
-      @header_dir.search_paths.should.include('${PODS_ROOT}/Headers/Public')
+      @header_dir.search_paths(:fake_platform).should.include('${PODS_ROOT}/Headers/Public')
     end
   end
 end

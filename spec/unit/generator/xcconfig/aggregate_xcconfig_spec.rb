@@ -58,12 +58,12 @@ module Pod
         end
 
         it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as header search paths' do
-          expected = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
+          expected = "\"#{config.sandbox.public_headers.search_paths(:ios).join('" "')}\""
           @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == expected
         end
 
         it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as system headers' do
-          expected = "$(inherited) -isystem \"#{config.sandbox.public_headers.search_paths.join('" -isystem "')}\""
+          expected = "$(inherited) -isystem \"#{config.sandbox.public_headers.search_paths(:ios).join('" -isystem "')}\""
           @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
         end
 
