@@ -332,7 +332,11 @@ module Pod
             #
             # For more details see https://github.com/CocoaPods/CocoaPods/issues/2394#issuecomment-56658587
             #
-            if message.include?('error: ') && !message.include?("'InputFile' should have")
+            if message.include?("'InputFile' should have")
+              next
+            end
+
+            if message.include?('error: ')
               error "[xcodebuild] #{message}"
             else
               note "[xcodebuild] #{message}"
