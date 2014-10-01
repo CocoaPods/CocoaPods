@@ -416,12 +416,10 @@ module Pod
 
     # !@group Helpers
 
-    # @return [Array<Source>] an array of sources used to create the
+    # @return [Array<String>] an array of source URLs used to create the
     #         {Podfile} used in the linting process
     #
-    def sources
-      @sources ||= @source_urls.map { |url| SourcesManager.find_or_create_source_with_url(url) }
-    end
+    attr_reader :source_urls
 
     # @return [Podfile] a podfile that requires the specification on the
     # current platform.
@@ -433,8 +431,9 @@ module Pod
       name     = subspec_name ? subspec_name : spec.name
       podspec  = file.realpath
       local    = local?
+      urls     = source_urls
       podfile  = Pod::Podfile.new do
-        sources.each { |s| source(s.url) }
+        urls.each { |u| source(u) }
         platform(platform_name, deployment_target)
         if local
           pod name, :path => podspec.dirname.to_s

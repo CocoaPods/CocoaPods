@@ -291,6 +291,14 @@ module Pod
         deployment_target.to_s.should == '5.0'
       end
 
+      it 'repects the source_urls parameter' do
+        sources = %w(https://github.com/CocoaPods/Specs.git https://github.com/artsy/Specs.git)
+        sut = Validator.new(podspec_path, sources)
+        sut.stubs(:validate_url)
+        podfile = sut.send(:podfile_from_spec, :ios, '5.0')
+        podfile.sources.should == sources
+      end
+
       it 'uses xcodebuild to generate notes and warnings' do
         sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         sut.stubs(:check_file_patterns)
