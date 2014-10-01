@@ -47,7 +47,7 @@ module Pod
 
     describe 'Quick mode' do
       it 'validates a correct podspec' do
-        sut = Validator.new(podspec_path)
+        sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         sut.quick = true
         sut.validate
         sut.results.should == []
@@ -57,7 +57,7 @@ module Pod
       it 'lints the podspec during validation' do
         podspec = stub_podspec(/.*name.*/, '"name": "TEST",')
         file = write_podspec(podspec)
-        sut = Validator.new(file)
+        sut = Validator.new(file, SourcesManager.master.map(&:url))
         sut.quick = true
         sut.validate
         sut.results.map(&:to_s).first.should.match /should match the name/
@@ -66,7 +66,7 @@ module Pod
 
       it 'respects quick mode' do
         file = write_podspec(stub_podspec)
-        sut = Validator.new(file)
+        sut = Validator.new(file, SourcesManager.master.map(&:url))
         sut.quick = true
         sut.expects(:perform_extensive_analysis).never
         sut.validate
@@ -75,7 +75,7 @@ module Pod
       it 'respects the only errors option' do
         podspec = stub_podspec(/.*summary.*/, '"summary": "A short description of",')
         file = write_podspec(podspec)
-        sut = Validator.new(file)
+        sut = Validator.new(file, SourcesManager.master.map(&:url))
         sut.quick = true
         sut.only_errors = true
         sut.validate
@@ -85,7 +85,7 @@ module Pod
 
       it 'handles symlinks' do
         file = write_podspec(stub_podspec)
-        validator = Validator.new(file)
+        validator = Validator.new(file, SourcesManager.master.map(&:url))
         validator.quick = true
         validator.stubs(:validate_url)
         validator.validate
@@ -99,7 +99,7 @@ module Pod
 
       describe 'URL validation' do
         before do
-          @sut = Validator.new(podspec_path)
+          @sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
           @sut.stubs(:install_pod)
           @sut.stubs(:build_pod)
           @sut.stubs(:check_file_patterns)
@@ -257,7 +257,7 @@ module Pod
 
       it 'respects the no clean option' do
         file = write_podspec(stub_podspec)
-        sut = Validator.new(file)
+        sut = Validator.new(file, SourcesManager.master.map(&:url))
         sut.stubs(:validate_url)
         sut.no_clean = true
         sut.validate
@@ -266,7 +266,7 @@ module Pod
 
       it 'builds the pod per platform' do
         file = write_podspec(stub_podspec)
-        sut = Validator.new(file)
+        sut = Validator.new(file, SourcesManager.master.map(&:url))
         sut.stubs(:validate_url)
         sut.expects(:install_pod).twice
         sut.expects(:build_pod).twice
@@ -275,7 +275,7 @@ module Pod
       end
 
       it 'uses the deployment target of the specification' do
-        sut = Validator.new(podspec_path)
+        sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         sut.stubs(:validate_url)
         sut.stubs(:validate_screenshots)
         podfile = sut.send(:podfile_from_spec, :ios, '5.0')
@@ -284,7 +284,7 @@ module Pod
       end
 
       it 'respects the local option' do
-        sut = Validator.new(podspec_path)
+        sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         sut.stubs(:validate_url)
         podfile = sut.send(:podfile_from_spec, :ios, '5.0')
         deployment_target = podfile.target_definitions['Pods'].platform.deployment_target
@@ -292,7 +292,7 @@ module Pod
       end
 
       it 'uses xcodebuild to generate notes and warnings' do
-        sut = Validator.new(podspec_path)
+        sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         sut.stubs(:check_file_patterns)
         sut.stubs(:xcodebuild).returns("file.m:1:1: warning: direct access to objective-c's isa is deprecated")
         sut.stubs(:validate_url)
@@ -313,7 +313,7 @@ module Pod
 
       it 'checks for file patterns' do
         file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "wrong_paht.*",'))
-        sut = Validator.new(file)
+        sut = Validator.new(file, SourcesManager.master.map(&:url))
         sut.stubs(:build_pod)
         sut.stubs(:validate_url)
         sut.validate
@@ -328,7 +328,7 @@ module Pod
         file = write_podspec(podspec, 'ZKit.podspec.json')
 
         spec = Specification.from_file(file)
-        sut = Validator.new(spec)
+        sut = Validator.new(spec, SourcesManager.master.map(&:url))
         sut.stubs(:validate_url)
         sut.stubs(:build_pod)
         sut.validate
