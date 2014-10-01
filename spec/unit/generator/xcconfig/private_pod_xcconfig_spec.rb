@@ -44,8 +44,8 @@ module Pod
           end
 
           it 'adds the library build headers and public headers search paths to the xcconfig, with quotes' do
-            private_headers = "\"#{@pod_target.build_headers.search_paths.join('" "')}\""
-            public_headers = "\"#{config.sandbox.public_headers.search_paths.join('" "')}\""
+            private_headers = "\"#{@pod_target.build_headers.search_paths(:ios).join('" "')}\""
+            public_headers = "\"#{config.sandbox.public_headers.search_paths(:ios).join('" "')}\""
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include private_headers
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include public_headers
           end
