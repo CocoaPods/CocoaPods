@@ -6,6 +6,7 @@ module Pod
     before do
       @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
       @pod_target = PodTarget.new([], nil, config.sandbox)
+      @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
       @pod_target.file_accessors = [@file_accessor]
       @project = Project.new(config.sandbox.project_path)
       @project.add_pod_group('BananaLib', fixture('banana-lib'))
