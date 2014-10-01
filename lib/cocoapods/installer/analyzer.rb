@@ -359,7 +359,7 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
-      private
+      public
 
       # Returns the sources used to query for specifications
       #
@@ -387,6 +387,10 @@ module Pod
           end
         end
       end
+
+      #-----------------------------------------------------------------------#
+
+      private
 
       # @!group Analysis sub-steps
 

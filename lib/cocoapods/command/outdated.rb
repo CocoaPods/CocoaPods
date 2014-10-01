@@ -49,6 +49,13 @@ module Pod
 
       private
 
+      def analyzer
+        @analyzer ||= begin
+          verify_podfile_exists!
+          Installer::Analyzer.new(config.sandbox, config.podfile, config.lockfile)
+        end
+      end
+
       def updates
         @updates ||= begin
           spec_sets.map do |set|
@@ -75,8 +82,9 @@ module Pod
 
       def spec_sets
         @spec_sets ||= begin
+          aggregate = Source::Aggregate.new(analyzer.sources.map(&:name))
           installed_pods.map do |pod_name|
-            SourcesManager.search(Dependency.new(pod_name))
+            aggregate.search(Dependency.new(pod_name))
           end.compact.uniq
         end
       end

@@ -22,6 +22,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#2543](https://github.com/CocoaPods/CocoaPods/issues/2543)
   [cocoapods-trunk#28](https://github.com/CocoaPods/cocoapods-trunk/issues/28)
 
+* Takes into account the sources specified in `Podfile` running
+  `pod outdated`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2553](https://github.com/CocoaPods/CocoaPods/issues/2553)
+
 
 ## 0.34.1
 
