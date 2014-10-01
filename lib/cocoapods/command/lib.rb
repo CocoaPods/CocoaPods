@@ -112,7 +112,9 @@ module Pod
            ['--only-errors', 'Lint validates even if warnings are present'],
            ['--subspec=NAME', 'Lint validates only the given subspec'],
            ['--no-subspecs', 'Lint skips validation of subspecs'],
-           ['--no-clean',    'Lint leaves the build directory intact for inspection']].concat(super)
+           ['--no-clean',    'Lint leaves the build directory intact for inspection'],
+           ['--sources=https://github.com/artsy/Specs', 'The sources to pull dependant pods from ' \
+            '(defaults to https://github.com/CocoaPods/Specs.git)']].concat(super)
         end
 
         def initialize(argv)
@@ -121,6 +123,7 @@ module Pod
           @clean        = argv.flag?('clean', true)
           @subspecs     = argv.flag?('subspecs', true)
           @only_subspec = argv.option('subspec')
+          @sources      = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
           @podspecs_paths = argv.arguments!
           super
         end
@@ -133,7 +136,7 @@ module Pod
           UI.puts
           podspecs_to_lint.each do |podspec|
 
-            validator             = Validator.new(podspec)
+            validator             = Validator.new(podspec, sources)
             validator.local       = true
             validator.quick       = @quick
             validator.no_clean    = !@clean
@@ -165,6 +168,10 @@ module Pod
         private
 
         #----------------------------------------#
+
+        def sources
+          @sources ||= @source_urls.map { |url| SourcesManager.find_or_create_source_with_url(url) }
+        end
 
         # !@group Private helpers
 
