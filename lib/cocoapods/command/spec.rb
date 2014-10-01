@@ -87,7 +87,7 @@ module Pod
           UI.puts
           invalid_count = 0
           podspecs_to_lint.each do |podspec|
-            validator             = Validator.new(podspec, sources)
+            validator             = Validator.new(podspec, @source_urls)
             validator.quick       = @quick
             validator.no_clean    = !@clean
             validator.only_errors = @only_errors
@@ -114,10 +114,6 @@ module Pod
         end
 
         private
-
-        def sources
-          @sources ||= @source_urls.map { |url| SourcesManager.find_or_create_source_with_url(url) }
-        end
 
         def podspecs_to_lint
           @podspecs_to_lint ||= begin

@@ -19,8 +19,11 @@ module Pod
     # @param  [Specification, Pathname, String] spec_or_path
     #         the Specification or the path of the `podspec` file to lint.
     #
-    def initialize(spec_or_path, sources)
-      @sources = sources
+    # @param  [Array<String>] source_urls
+    #         the Source URLs to use in creating a {Podfile}.
+    #
+    def initialize(spec_or_path, source_urls)
+      @source_urls = source_urls
       @linter = Specification::Linter.new(spec_or_path)
     end
 
@@ -412,7 +415,9 @@ module Pod
     # @return [Array<Source>] an array of sources used to create the
     #         {Podfile} used in the linting process
     #
-    attr_reader :sources
+    def sources
+      @sources ||= @source_urls.map { |url| SourcesManager.find_or_create_source_with_url(url) }
+    end
 
     # @return [Podfile] a podfile that requires the specification on the
     # current platform.

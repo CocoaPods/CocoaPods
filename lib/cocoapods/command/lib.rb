@@ -123,7 +123,7 @@ module Pod
           @clean        = argv.flag?('clean', true)
           @subspecs     = argv.flag?('subspecs', true)
           @only_subspec = argv.option('subspec')
-          @sources      = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
+          @source_urls  = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
           @podspecs_paths = argv.arguments!
           super
         end
@@ -136,7 +136,7 @@ module Pod
           UI.puts
           podspecs_to_lint.each do |podspec|
 
-            validator             = Validator.new(podspec, sources)
+            validator             = Validator.new(podspec, @source_urls)
             validator.local       = true
             validator.quick       = @quick
             validator.no_clean    = !@clean
@@ -168,10 +168,6 @@ module Pod
         private
 
         #----------------------------------------#
-
-        def sources
-          @sources ||= @source_urls.map { |url| SourcesManager.find_or_create_source_with_url(url) }
-        end
 
         # !@group Private helpers
 
