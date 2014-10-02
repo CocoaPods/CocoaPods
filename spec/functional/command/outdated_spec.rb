@@ -4,6 +4,10 @@ module Pod
   describe Command::Outdated do
     extend SpecHelper::TemporaryRepos
 
+    before do
+      Command::Outdated.any_instance.stubs(:unlocked_pods).returns([])
+    end
+
     it 'tells the user that no Podfile was found in the project dir' do
       exception = lambda { run_command('outdated', '--no-repo-update') }.should.raise Informative
       exception.message.should.include "No `Podfile' found in the project directory."
