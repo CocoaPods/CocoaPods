@@ -4,6 +4,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+##### Enhancements
+
+* Make the output of `pod outdated` show what running `pod update` will do.
+  Takes into account the sources specified in the `Podfile`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2470](https://github.com/CocoaPods/CocoaPods/issues/2470)
+
 ##### Bug Fixes
 
 * Improved sanitizing of configuration names to avoid generating invalid

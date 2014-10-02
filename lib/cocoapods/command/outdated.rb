@@ -29,7 +29,7 @@ module Pod
           UI.section 'The following updates are available:' do
             updates.each do |(name, from_version, matching_version, to_version)|
               UI.puts "- #{name} #{from_version} -> #{matching_version} " \
-                "(last version #{to_version})"
+                "(latest version #{to_version})"
             end
           end
         end
@@ -78,9 +78,13 @@ module Pod
 
       def unlocked_pods
         @unlocked_pods ||= begin
-          Installer::Analyzer.new(config.sandbox, config.podfile).
-            analyze(false).
-            specs_by_target.values.flatten.uniq
+          pods = []
+          UI.titled_section('Analyzing dependencies') do
+            pods = Installer::Analyzer.new(config.sandbox, config.podfile).
+              analyze(false).
+              specs_by_target.values.flatten.uniq
+          end
+          pods
         end
       end
 
@@ -94,7 +98,7 @@ module Pod
 
       def spec_sets
         @spec_sets ||= begin
-          aggregate = Source::Aggregate.new(analyzer.sources.map(&:name))
+          aggregate = Source::Aggregate.new(analyzer.sources)
           installed_pods.map do |pod_name|
             aggregate.search(Dependency.new(pod_name))
           end.compact.uniq
