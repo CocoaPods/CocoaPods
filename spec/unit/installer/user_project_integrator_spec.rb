@@ -70,6 +70,20 @@ module Pod
             'overrides the `GCC_PREPROCESSOR_DEFINITIONS` build setting'
         end
 
+        it 'allows the use of the alternate form of the inherited flag' do
+          UI.warnings = ''
+          target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => 'FLAG=1 ${inherited}' })
+          user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
+          @library.stubs(:user_targets).returns([user_target])
+
+          @library.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }
+          @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library])
+
+          @integrator.unstub(:warn_about_xcconfig_overrides)
+          @integrator.send(:warn_about_xcconfig_overrides)
+          UI.warnings.should.not.include 'GCC_PREPROCESSOR_DEFINITIONS'
+        end
+
         it 'allows build settings which inherit the settings form the CocoaPods xcconfig' do
           UI.warnings = ''
           target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => 'FLAG=1 $(inherited)' })

@@ -11,6 +11,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [#2470](https://github.com/CocoaPods/CocoaPods/issues/2470)
 
+* Allows the use of the `GCC_PREPROCESSOR_DEFINITION` flag `${inherited}`
+  without emitting a warning.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2577](https://github.com/CocoaPods/CocoaPods/issues/2577)
+
 ##### Bug Fixes
 
 * Improved sanitizing of configuration names to avoid generating invalid
