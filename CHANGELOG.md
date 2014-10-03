@@ -44,6 +44,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [#2553](https://github.com/CocoaPods/CocoaPods/issues/2553)
 
+* Proper scoping of header search paths to the target platform.
+  [Michael Melanson](https://github.com/michaelmelanson)
+  [#1249](https://github.com/CocoaPods/CocoaPods/issues/1249)
 
 ## 0.34.1
 
