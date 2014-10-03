@@ -169,8 +169,14 @@ module Pod
         @installer.send(:download_source)
         paths = @installer.send(:clean_paths)
         relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
-        paths_without_git = relative_paths.reject { |p| p.include? 'Pods/BananaLib/.git' }
+
+        # Because there are thousands of files inside .git/, we're excluding
+        # them from the comparison.
+        paths_without_git = relative_paths.reject { |p| p.include? 'Pods/BananaLib/.git/' }
+
         paths_without_git.sort.should == [
+          'Pods/BananaLib/.git',
+          'Pods/BananaLib/.gitmodules',
           'Pods/BananaLib/BananaLib.podspec',
           'Pods/BananaLib/libPusher',
           'Pods/BananaLib/sub-dir',
