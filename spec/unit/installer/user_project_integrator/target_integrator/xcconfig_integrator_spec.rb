@@ -48,8 +48,8 @@ module Pod
       config.base_configuration_reference.should.equal existing
     end
 
-    it 'does not set the Pods xcconfig as the base config if the base ' \
-       'config is already set' do
+    it 'does not set the Pods xcconfig as the base config if the user ' \
+       'has already set a config of their own' do
       sample_config = @project.new_file('SampleConfig.xcconfig')
       @target.build_configurations.each do |config|
         config.base_configuration_reference = sample_config

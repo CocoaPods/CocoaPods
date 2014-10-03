@@ -78,10 +78,12 @@ module Pod
             group = config.project['Pods'] || config.project.new_group('Pods')
             file_ref = group.files.find { |f| f.path == path }
             if config.base_configuration_reference != file_ref
-              UI.warn "CocoaPods did not set the base configuration of your " \
-              "project because one is already set. Please either set the " \
-              "base configurations of the target `#{target.name}` to " \
-              "`#{path}` or include the `#{path}` in your build configuration."
+              UI.warn 'CocoaPods did not set the base configuration of your ' \
+              'project because because your project already has a custom ' \
+              'config set. In order for CocoaPods integration to work at ' \
+              'all, please either set the base configurations of the target ' \
+              "#{target.name}` to `#{path}` or include the `#{path}` in your " \
+              'build configuration.'
             else
               file_ref ||= group.new_file(path)
               config.base_configuration_reference = file_ref
