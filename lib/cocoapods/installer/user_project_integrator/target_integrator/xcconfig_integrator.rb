@@ -19,7 +19,7 @@ module Pod
             targets.each do |target|
               target.build_configurations.each do |config|
                 update_to_cocoapods_0_34(pod_bundle, targets)
-                set_target_xcconfig(pod_bundle, config)
+                set_target_xcconfig(pod_bundle, target, config)
               end
             end
           end
@@ -35,7 +35,7 @@ module Pod
           # @param  [Target::AggregateTarget] pod_bundle
           #         The Pods bundle.
           #
-          # @param  [XcodeProj::PBXNativeTarget] target
+          # @param  [Array<XcodeProj::PBXNativeTarget>] targets
           #         The native targets.
           #
           # @todo   This can be removed for CocoaPods 1.0
@@ -67,15 +67,27 @@ module Pod
           # @param  [Target::AggregateTarget] pod_bundle
           #         The Pods bundle.
           #
-          # @param  [[Xcodeproj::XCBuildConfiguration] config
+          # @param  [PBXNativeTarget] target
+          #         The native target.
+          #
+          # @param  [Xcodeproj::XCBuildConfiguration] config
           #         The build configuration.
           #
-          def self.set_target_xcconfig(pod_bundle, config)
+          def self.set_target_xcconfig(pod_bundle, target, config)
             path = pod_bundle.xcconfig_relative_path(config.name)
             group = config.project['Pods'] || config.project.new_group('Pods')
             file_ref = group.files.find { |f| f.path == path }
-            file_ref ||= group.new_file(path)
-            config.base_configuration_reference = file_ref
+            if config.base_configuration_reference != file_ref
+              UI.warn 'CocoaPods did not set the base configuration of your ' \
+              'project because because your project already has a custom ' \
+              'config set. In order for CocoaPods integration to work at ' \
+              'all, please either set the base configurations of the target ' \
+              "#{target.name}` to `#{path}` or include the `#{path}` in your " \
+              'build configuration.'
+            else
+              file_ref ||= group.new_file(path)
+              config.base_configuration_reference = file_ref
+            end
           end
 
           private
