@@ -11,11 +11,21 @@
 
 ## Bug reports
 
+We are **not** here to support your individual projects. We depend on _you_ (the community)
+to contribute in making the tool better for everyone. So debug and reduce your own issues
+before creating a ticket and let us know of all the things you tried and their outcome.
+This applies double if you cannot share a reproduction with us because of internal company
+policies.
+
 First check if you are using the latest CocoaPods version before filing a ticket.
 You can install the latest version with `$ [sudo] gem install cocoapods`.
 
-Please include _all_ relevant information, including the version of CocoaPods and
-any template printed by the tool.
+Then check if the same problem applies with the same Podfile but in a **completely new**
+and empty application Xcode project, thus excluding wether or not there is an issue with
+conflicting settings.
+
+Please include steps to reproduce and _all_ other relevant information, including the
+version of CocoaPods and any template printed by the tool.
 
 If questions in the error template are left unanswered, the issue will be closed
 as a bad bug report.
@@ -74,3 +84,9 @@ Code/comments should adhere to the following rules:
   the main focus of the patch enclosed by square brackets (.e.g. `[Installer]
   install pods`).
 
+
+## [No Brown M&M’s](http://en.wikipedia.org/wiki/Van_Halen#Contract_riders)
+
+If you made it all the way to the end, bravo dear user, we love you. You can include
+this emoji in the top of your ticket to signal to us that you did in fact read this
+file and are trying to conform to it as best as possible: 🌈
