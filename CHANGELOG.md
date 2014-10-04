@@ -55,6 +55,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#2561](https://github.com/CocoaPods/CocoaPods/issues/2561)
   [#2593](https://github.com/CocoaPods/CocoaPods/issues/2593)
 
+* Fix a crash when running `pod install` with an empty target that inherits a
+  pod from a parent target.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2591](https://github.com/CocoaPods/CocoaPods/issues/2591)
+
 
 ## 0.34.1
 
