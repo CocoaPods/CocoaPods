@@ -76,7 +76,6 @@ module Pod
 
       specs_by_target
     end
-
     # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
     #         returns the resolved specifications grouped by target.
     #
@@ -194,6 +193,7 @@ module Pod
         end
         cached_sets[name] = set
         unless set
+          binding.pry
           raise Informative, 'Unable to find a specification for ' \
             "`#{dependency}` depended upon by #{dependent_spec}."
         end
@@ -209,9 +209,9 @@ module Pod
     #         The dependency for which the set is needed.
     #
     def find_set_from_sources(dependency)
-      sources.each do |source|
-        set = source.search(dependency)
-        return set if set
+      matching_sources = sources.select { |source| source.pods.include? dependency.root_name }
+      unless matching_sources.empty?
+        return Specification::Set.new(dependency.root_name, matching_sources)
       end
       nil
     end

@@ -60,6 +60,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#2591](https://github.com/CocoaPods/CocoaPods/issues/2591)
 
+* Take into account versions of a Pod from all specified sources when
+  resolving dependencies. 
+  [Thomas Visser](https://github.com/Thomvis)
+  [#2556](https://github.com/CocoaPods/CocoaPods/issues/2556)
+
 
 ## 0.34.1
 
