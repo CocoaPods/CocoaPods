@@ -237,17 +237,20 @@ COCOAPODS: 0.33.1
       it 'takes into account the order of the sources' do
         podfile = Podfile.new do
           platform :ios
-          pod 'JSONKit'
+          pod 'JSONKit', '1.4'
         end
         sources = SourcesManager.sources(%w(master test_repo))
         resolver = Resolver.new(config.sandbox, podfile, [], sources)
-        version = resolver.resolve.values.flatten.first.version
-        version.to_s.should.not == '999.999.999'
+        spec = resolver.resolve.values.flatten.first
+        spec.version.to_s.should == '1.4'
+        spec.defined_in_file.should == fixture('spec-repos/master/Specs/JSONKit/1.4/JSONKit.podspec.json')
 
         sources = SourcesManager.sources(%w(test_repo master))
         resolver = Resolver.new(config.sandbox, podfile, [], sources)
-        version = resolver.resolve.values.flatten.first.version
-        version.to_s.should == '999.999.999'
+        spec = resolver.resolve.values.flatten.first
+        spec.version.to_s.should == '1.4'
+        resolver.resolve.values.flatten.first.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
+
       end
     end
 
