@@ -40,7 +40,9 @@ module Pod
           previous_title_level = UI.title_level
           UI.title_level = 0
           begin
-            Command::Repo::Add.new(CLAide::ARGV.new([name, url])).run
+            argv = [name, url]
+            argv << '--shallow' if name =~ /^master(-\d+)?$/
+            Command::Repo::Add.new(CLAide::ARGV.new(argv)).run
           rescue Informative => e
             raise Informative, "Unable to add a source with url `#{url}` " \
               "named `#{name}`.\nYou can try adding it manually in " \

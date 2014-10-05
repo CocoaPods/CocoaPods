@@ -44,6 +44,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [#2553](https://github.com/CocoaPods/CocoaPods/issues/2553)
 
+* Ensures that the master repo is shallow cloned when added via a Podfile
+  `source` directive.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3586](https://github.com/CocoaPods/CocoaPods/issues/2586)
+
 
 ## 0.34.1
 
