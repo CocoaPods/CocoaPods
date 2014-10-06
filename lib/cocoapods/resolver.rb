@@ -151,7 +151,7 @@ module Pod
 
           unless set.sources.empty?
             unless set.specification_paths_for_version(set.required_version).length == 1
-              UI.message("Found multiple specifications for #{dependency}:" \
+              UI.message("Found multiple specifications for #{dependency}: " \
               "#{set.specification_paths_for_version(set.required_version).join(', ')}")
             end 
           end
@@ -220,7 +220,6 @@ module Pod
       unless matching_sources.empty?
         return Specification::Set.new(dependency.root_name, matching_sources)
       end
-      nil
     end
 
     # Ensures that a specification is compatible with the platform of a target.
