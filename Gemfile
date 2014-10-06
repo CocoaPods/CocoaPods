@@ -12,7 +12,7 @@ gemspec
 
 group :development do
   cp_gem 'claide',               'CLAide'
-  cp_gem 'cocoapods-core',       'Core'
+  gem 'cocoapods-core', :git => 'https://github.com/Thomvis/Core', :branch => "issue/CocoaPods/2556"
   cp_gem 'cocoapods-downloader', 'cocoapods-downloader'
   cp_gem 'cocoapods-plugins',    'cocoapods-plugins'
   cp_gem 'cocoapods-trunk',      'cocoapods-trunk'
