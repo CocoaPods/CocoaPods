@@ -38,13 +38,13 @@ module Pod
     describe 'In general' do
 
       before do
-        Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+        SourcesManager.stubs(:all).returns([@test_source])
       end
 
       #--------------------------------------#
 
       it 'returns all the sources' do
-        Source::Aggregate.any_instance.unstub(:all)
+        SourcesManager.unstub(:all)
         SourcesManager.all.map(&:name).should == %w(master test_repo)
       end
 
@@ -66,21 +66,21 @@ module Pod
       end
 
       it 'can perform a full text search of the sets' do
-        Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+        SourcesManager.stubs(:all).returns([@test_source])
         sets = SourcesManager.search_by_name('Chunky', true)
         sets.all? { |s| s.class == Specification::Set }.should.be.true
         sets.any? { |s| s.name  == 'BananaLib' }.should.be.true
       end
 
       it 'can perform a full text regexp search of the sets' do
-        Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+        SourcesManager.stubs(:all).returns([@test_source])
         sets = SourcesManager.search_by_name('Ch[aeiou]nky', true)
         sets.all? { |s| s.class == Specification::Set }.should.be.true
         sets.any? { |s| s.name  == 'BananaLib' }.should.be.true
       end
 
       it "generates the search index before performing a search if it doesn't exits" do
-        Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+        SourcesManager.stubs(:all).returns([@test_source])
         Source::Aggregate.any_instance.expects(:generate_search_index).returns('BananaLib' => {})
         Source::Aggregate.any_instance.expects(:update_search_index).never
         SourcesManager.updated_search_index = nil
@@ -89,7 +89,7 @@ module Pod
 
       it 'updates the search index before performing a search if it exits' do
         File.open(SourcesManager.search_index_path, 'w') { |file| file.write("---\nBananaLib:\n  version: 0.0.1") }
-        Source::Aggregate.any_instance.stubs(:all).returns([@test_source])
+        SourcesManager.stubs(:all).returns([@test_source])
         Source::Aggregate.any_instance.expects(:generate_search_index).never
         Source::Aggregate.any_instance.expects(:update_search_index).returns('BananaLib' => {})
         SourcesManager.updated_search_index = nil

@@ -136,7 +136,7 @@ module Pod
           workspace = Xcodeproj::Workspace.new(file_references)
           workspace_path = @integrator.send(:workspace_path)
           workspace.save_as(workspace_path)
-          Xcodeproj::Workspace.expects(:save_as).never
+          Xcodeproj::Workspace.any_instance.expects(:save_as).never
           @integrator.send(:create_workspace)
         end
 

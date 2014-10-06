@@ -202,7 +202,7 @@ module Pod
           end
 
           it 'checks if the social media URL is valid' do
-            Specification.any_instance.stubs(:social_media_urlon_url).returns('http://banana-corp.local/')
+            Specification.any_instance.stubs(:social_media_url).returns('http://banana-corp.local/')
             WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
             @sut.validate
             @sut.results.should.be.empty?

@@ -40,6 +40,8 @@ module Pod
         #
         attr_reader :update_mode
 
+        alias_method :update_mode?, :update_mode
+
         # @return [Lockfile] The lockfile of the installation as a fall-back if
         #         there is no sandbox manifest. This is indented as a temporary
         #         solution to prevent the full re-installation from users which
