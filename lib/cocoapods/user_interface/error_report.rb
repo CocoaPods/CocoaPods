@@ -121,7 +121,7 @@ EOS
         def repo_information
           SourcesManager.all.map do |source|
             next unless source.type == 'file system'
-            repo = source.data_provider.repo
+            repo = source.repo
             Dir.chdir(repo) do
               url = `git config --get remote.origin.url 2>&1`.strip
               sha = `git rev-parse HEAD 2>&1`.strip

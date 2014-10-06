@@ -191,7 +191,7 @@ module Pod
 
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            Dir.chdir(source.data_provider.repo) do
+            Dir.chdir(source.repo) do
               begin
                 output = git!('pull --ff-only')
                 UI.puts output if show_output && !config.verbose?
@@ -202,7 +202,7 @@ module Pod
                   '`pod repo update --verbose`'
               end
             end
-            check_version_information(source.data_provider.repo)
+            check_version_information(source.repo)
           end
         end
       end
@@ -350,7 +350,7 @@ module Pod
         unless specified_source
           raise Informative, "Unable to find the `#{name}` repo."
         end
-        unless git_repo?(specified_source.data_provider.repo)
+        unless git_repo?(specified_source.repo)
           raise Informative, "The `#{name}` repo is not a git repo."
         end
         specified_source
@@ -360,7 +360,7 @@ module Pod
       #
       def git_sources
         all.select do |source|
-          git_repo?(source.data_provider.repo)
+          git_repo?(source.repo)
         end
       end
 
