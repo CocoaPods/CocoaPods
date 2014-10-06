@@ -258,7 +258,7 @@ module Pod
         def print_sources(sources)
           sources.each do |source|
             UI.title source.name do
-              print_source_at_path source.data_provider.repo
+              print_source_at_path source.repo
             end
           end
           UI.puts "\n"
