@@ -34,8 +34,8 @@ module Pod
               add_pods_library
               add_copy_resources_script_phase
               add_check_manifest_lock_script_phase
+              user_project.save
             end
-            user_project.save
           end
         end
 

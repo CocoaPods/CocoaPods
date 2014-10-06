@@ -92,6 +92,8 @@ module Bacon
   end
 end
 
+Mocha::Configuration.prevent(:stubbing_non_existent_method)
+
 module SpecHelper
   def self.temporary_directory
     ROOT + 'tmp'

@@ -74,7 +74,6 @@ module Pod
         @installer.stubs(:run_pre_install_hooks)
         @installer.stubs(:install_file_references)
         @installer.stubs(:install_libraries)
-        @installer.stubs(:link_aggregate_target)
         @installer.stubs(:write_lockfiles)
         @installer.stubs(:aggregate_targets).returns([])
         @installer.unstub(:generate_pods_project)

@@ -42,9 +42,9 @@ module Pod
 
       it 'prints a list of podspecs in the yaml format and prints it to STDOUT' do
         spec = fixture_spec('banana-lib/BananaLib.podspec')
-        set = Specification.new('BananaLib')
+        set = Specification::Set.new('BananaLib', [])
         set.stubs(:specification).returns(spec)
-        SourcesManager.stubs(:all_sets).returns([set])
+        Source.any_instance.stubs(:pod_sets).returns([set])
 
         out = run_command('ipc', 'list')
         out.should.include('---')
