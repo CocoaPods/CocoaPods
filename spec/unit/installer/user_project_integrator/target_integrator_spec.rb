@@ -97,7 +97,7 @@ module Pod
           @target_integrator.stubs(:native_targets_to_integrate).returns([])
           @target_integrator.expects(:add_pods_library).never
           @target_integrator.expects(:add_copy_resources_script_phase).never
-          @target_integrator.expects(:save_user_project).never
+          @target_integrator.send(:user_project).expects(:save).never
           @target_integrator.integrate!
         end
       end

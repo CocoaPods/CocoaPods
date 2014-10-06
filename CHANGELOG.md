@@ -49,6 +49,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [#3586](https://github.com/CocoaPods/CocoaPods/issues/2586)
 
+* Ensures that the user project is not saved when there are no
+  user targets integrated.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2561](https://github.com/CocoaPods/CocoaPods/issues/2561)
+  [#2593](https://github.com/CocoaPods/CocoaPods/issues/2593)
+
 
 ## 0.34.1
 
