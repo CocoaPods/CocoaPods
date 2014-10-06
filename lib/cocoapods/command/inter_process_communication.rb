@@ -77,7 +77,7 @@ module Pod
         DESC
 
         def run
-          sets = SourcesManager.all_sets
+          sets = SourcesManager.aggregate.all_sets
           result = {}
           sets.each do |set|
             begin
