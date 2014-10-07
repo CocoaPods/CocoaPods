@@ -244,11 +244,20 @@ module Pod
 
         if config.new_version_message? && cocoapods_update?(versions)
           last = versions['last']
+          rc = Gem::Version.new(last).prerelease?
           install_message = needs_sudo ? 'sudo ' : ''
           install_message << 'gem install cocoapods'
-          install_message << ' --pre' if Gem::Version.new(last).prerelease?
-          UI.puts "\nCocoaPods #{versions['last']} is available.\n" \
-            "To update use: `#{install_message}`".green + "\n"
+          install_message << ' --pre' if rc
+          message = [
+            "CocoaPods #{versions['last']} is available.".green,
+            "To update use: `#{install_message}`".green,
+            ("[!] This is a test version we'd love you to try.".yellow if rc),
+            '',
+            'For more information see http://blog.cocoapods.org'.green,
+            'and the CHANGELOG for this version http://git.io/BaH8pQ.'.green,
+            '',
+          ].compact.join("\n")
+          UI.puts("\n#{message}\n")
         end
       end
 
