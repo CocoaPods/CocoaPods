@@ -46,5 +46,14 @@ module Pod
     it 'always adds the Headers root to the header search paths' do
       @header_dir.search_paths(:fake_platform).should.include('${PODS_ROOT}/Headers/Public')
     end
+
+    it 'only exposes header search paths for the given platform' do
+      @header_dir.add_search_path('iOS Search Path', :ios)
+      @header_dir.add_search_path('OS X Search Path', :osx)
+      @header_dir.search_paths(:ios).sort.should == [
+        "${PODS_ROOT}/Headers/Public",
+        "${PODS_ROOT}/Headers/Public/iOS Search Path",
+      ]
+    end
   end
 end
