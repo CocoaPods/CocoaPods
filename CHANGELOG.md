@@ -65,6 +65,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Thomas Visser](https://github.com/Thomvis)
   [#2556](https://github.com/CocoaPods/CocoaPods/issues/2556)
 
+* Sanitize build configuration names in target environment header macros.  
+  [Kra Larivain](https://github.com/olarivain)
+  [#2532](https://github.com/CocoaPods/CocoaPods/pull/2532)
+
 
 ## 0.34.1
 
