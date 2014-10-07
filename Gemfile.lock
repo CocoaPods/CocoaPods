@@ -1,13 +1,13 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: ce2a7890dbfcaecd38347195d5c753cdb893e636
+  revision: 00986e2b185c6eca9d30a7d50073f2a819a0f61a
   branch: master
   specs:
     claide (0.7.0)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 10d6dc5a3615e738cd682fd05d3f658db8e53d73
+  revision: 4cff6f7267a626b6c512c47c7fe887a667ea37ce
   branch: master
   specs:
     cocoapods-core (0.34.1)
@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: fca2eb86cac05920305a5f0336ec75df56e1473d
+  revision: 0e6f9df848e1cadb316d59f758b43473b4db2830
   branch: master
   specs:
     xcodeproj (0.19.2)
@@ -28,10 +28,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 421c6d65a68c88e5bb45c57c85812be8d93c04ae
+  revision: 48024b25a74cc3b55aaf2db06dfab4e500d20583
   branch: master
   specs:
-    cocoapods-downloader (0.7.1)
+    cocoapods-downloader (0.7.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
@@ -43,7 +43,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 66f0bc0ead97d31b3b7c4154e0abd55dbdcf724f
+  revision: 16b20210ebd6a9aec195e2c6e1cdd7cd61d00e3b
   branch: master
   specs:
     cocoapods-trunk (0.2.0)
@@ -65,7 +65,7 @@ PATH
       activesupport (>= 3.2.15, < 4)
       claide (~> 0.7.0)
       cocoapods-core (= 0.34.1)
-      cocoapods-downloader (~> 0.7.1)
+      cocoapods-downloader (~> 0.7.2)
       cocoapods-plugins (~> 0.3.1)
       cocoapods-trunk (~> 0.2.0)
       cocoapods-try (~> 0.4.1)
@@ -89,7 +89,7 @@ GEM
       parser (>= 2.2.0.pre.3, < 3.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
-    clintegracon (0.5.2)
+    clintegracon (0.5.3)
       colored (~> 1.2)
       diffy
     coderay (1.1.0)
@@ -122,7 +122,7 @@ GEM
     netrc (0.7.7)
     notify (0.5.2)
     open4 (1.3.4)
-    parser (2.2.0.pre.4)
+    parser (2.2.0.pre.5)
       ast (>= 1.1, < 3.0)
       slop (~> 3.4, >= 3.4.5)
     powerpack (0.0.9)
@@ -146,9 +146,9 @@ GEM
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
     ruby-progressbar (1.6.0)
-    safe_yaml (1.0.3)
+    safe_yaml (1.0.4)
     slop (3.6.0)
-    webmock (1.18.0)
+    webmock (1.19.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
 
