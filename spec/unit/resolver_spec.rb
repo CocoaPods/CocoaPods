@@ -234,7 +234,27 @@ COCOAPODS: 0.33.1
           version.to_s.should == '2.5.1'
       end
 
-      it 'takes into account the order of the sources' do
+      it 'consults all sources when finding a matching spec' do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', '> 2'
+        end
+        file = fixture('spec-repos/test_repo/JSONKit/999.999.999/JSONKit.podspec')
+        sources = SourcesManager.sources(%w(master test_repo))
+        resolver = Resolver.new(config.sandbox, podfile, [], sources)
+        spec = resolver.resolve.values.flatten.first
+        spec.version.to_s.should == '999.999.999'
+        spec.defined_in_file.should == file
+
+        sources = SourcesManager.sources(%w(test_repo master))
+        resolver = Resolver.new(config.sandbox, podfile, [], sources)
+        spec = resolver.resolve.values.flatten.first
+        spec.version.to_s.should == '999.999.999'
+        resolver.resolve.values.flatten.first.defined_in_file.should == file
+      end
+
+      it 'warns and chooses the first source when multiple sources contain ' \
+         'a pod' do
         podfile = Podfile.new do
           platform :ios
           pod 'JSONKit', '1.4'
@@ -251,6 +271,7 @@ COCOAPODS: 0.33.1
         spec.version.to_s.should == '1.4'
         resolver.resolve.values.flatten.first.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
 
+        UI.warnings.should.match /multiple specifications/
       end
     end
 
