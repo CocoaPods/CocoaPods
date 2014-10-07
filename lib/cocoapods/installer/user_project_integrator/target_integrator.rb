@@ -65,11 +65,14 @@ module Pod
 
           script_path = target.copy_resources_script_relative_path
           shell_script = %("#{script_path}"\n)
-          phases.reduce(false) do |changes, phase|
+          changes = false
+          phases.each do |phase|
             unless phase.shell_script == shell_script
               phase.shell_script = shell_script
-            end || changes
+              changes = true
+            end
           end
+          changes
         end
 
         # Adds spec libraries to the frameworks build phase of the
