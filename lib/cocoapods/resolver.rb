@@ -150,6 +150,11 @@ module Pod
           set = find_cached_set(dependency, dependent_spec)
           set.required_by(dependency, dependent_spec.to_s)
 
+          if (paths = set.specification_paths_for_version(set.required_version)).length > 1
+            UI.warn "Found multiple specifications for #{dependency}:\n" \
+              "- #{paths.join("\n")}"
+          end
+
           unless @loaded_specs.include?(dependency.name)
             spec = set.specification.subspec_by_name(dependency.name)
             @loaded_specs << spec.name
@@ -190,7 +195,7 @@ module Pod
           end
           set = Specification::Set::External.new(spec)
         else
-          set = find_set_from_sources(dependency)
+          set = create_set_from_sources(dependency)
         end
         cached_sets[name] = set
         unless set
@@ -201,19 +206,21 @@ module Pod
       cached_sets[name]
     end
 
-    # @return [Set] Loads a set for the Pod of the given dependency from the
-    #         sources. The set will be limited to the versions of the first
-    #         source which includes the Pod.
+    # @return [Set] Creates a set for the Pod of the given dependency from the
+    #         sources. The set will contain all versions from all sources that
+    #         include the Pod.
     #
     # @param  [Dependency] dependency
     #         The dependency for which the set is needed.
     #
-    def find_set_from_sources(dependency)
-      sources.each do |source|
-        set = source.search(dependency)
-        return set if set
-      end
-      nil
+    def create_set_from_sources(dependency)
+      aggregate.search(dependency)
+    end
+
+    # @return [Source::Aggregate] The aggregate of the {#sources}.
+    #
+    def aggregate
+      @aggregate ||= Source::Aggregate.new(sources.map(&:repo))
     end
 
     # Ensures that a specification is compatible with the platform of a target.
