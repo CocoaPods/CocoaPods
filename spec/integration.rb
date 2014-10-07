@@ -73,7 +73,7 @@ CLIntegracon.configure do |c|
       # Remove CocoaPods version
       yaml = File.open(path) { |f| YAML.load(f) }
       yaml.delete('COCOAPODS')
-      yaml.to_s
+      YAML.dump(yaml)
     end
   end
 

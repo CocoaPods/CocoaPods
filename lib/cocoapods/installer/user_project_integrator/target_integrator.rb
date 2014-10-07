@@ -27,8 +27,8 @@ module Pod
         #
         def integrate!
           UI.section(integration_message) do
-            XCConfigIntegrator.integrate(target, native_targets)
-            update_to_cocoapods_0_34
+            user_project.save if XCConfigIntegrator.integrate(target, native_targets)
+            user_project.save if update_to_cocoapods_0_34
 
             unless native_targets_to_integrate.empty?
               add_pods_library
@@ -52,6 +52,8 @@ module Pod
 
         # Fixes the paths of the copy resource scripts.
         #
+        # @return [Bool] whether any changes to the project were made.
+        #
         # @todo   This can be removed for CocoaPods 1.0
         #
         def update_to_cocoapods_0_34
@@ -62,9 +64,15 @@ module Pod
           end.flatten
 
           script_path = target.copy_resources_script_relative_path
+          shell_script = %("#{script_path}"\n)
+          changes = false
           phases.each do |phase|
-            phase.shell_script = %("#{script_path}"\n)
+            unless phase.shell_script == shell_script
+              phase.shell_script = shell_script
+              changes = true
+            end
           end
+          changes
         end
 
         # Adds spec libraries to the frameworks build phase of the
