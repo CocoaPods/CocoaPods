@@ -76,6 +76,7 @@ module Pod
 
       specs_by_target
     end
+
     # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
     #         returns the resolved specifications grouped by target.
     #
@@ -149,11 +150,9 @@ module Pod
           set = find_cached_set(dependency, dependent_spec)
           set.required_by(dependency, dependent_spec.to_s)
 
-          unless set.sources.empty?
-            unless set.specification_paths_for_version(set.required_version).length == 1
-              UI.message("Found multiple specifications for #{dependency}: " \
-              "#{set.specification_paths_for_version(set.required_version).join(', ')}")
-            end 
+          if (paths = set.specification_paths_for_version(set.required_version)).length > 1
+            UI.warn "Found multiple specifications for #{dependency}:\n" \
+              "- #{paths.join("\n")}"
           end
 
           unless @loaded_specs.include?(dependency.name)
@@ -215,11 +214,13 @@ module Pod
     #         The dependency for which the set is needed.
     #
     def create_set_from_sources(dependency)
-      matching_sources = sources.select { |source| source.pods.include? dependency.root_name }
+      aggregate.search(dependency)
+    end
 
-      unless matching_sources.empty?
-        return Specification::Set.new(dependency.root_name, matching_sources)
-      end
+    # @return [Source::Aggregate] The aggregate of the {#sources}.
+    #
+    def aggregate
+      @aggregate ||= Source::Aggregate.new(sources.map(&:repo))
     end
 
     # Ensures that a specification is compatible with the platform of a target.
