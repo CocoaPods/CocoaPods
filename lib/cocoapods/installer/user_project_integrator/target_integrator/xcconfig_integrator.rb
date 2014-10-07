@@ -15,12 +15,15 @@ module Pod
           #         The native targets associated which should be integrated
           #         with the Pod bundle.
           #
+          # @return [Bool] whether any changes to the project were made.
+          #
           def self.integrate(pod_bundle, targets)
-            targets.each do |target|
-              target.build_configurations.each do |config|
-                update_to_cocoapods_0_34(pod_bundle, targets)
-                set_target_xcconfig(pod_bundle, target, config)
-              end
+            targets.reduce(false) do |changes, target|
+              target.build_configurations.reduce(false) do |c, config|
+                change = update_to_cocoapods_0_34(pod_bundle, targets)
+                change = set_target_xcconfig(pod_bundle, target, config) || change
+                change || c
+              end || changes
             end
           end
 
@@ -38,11 +41,13 @@ module Pod
           # @param  [Array<XcodeProj::PBXNativeTarget>] targets
           #         The native targets.
           #
+          # @return [Bool] whether any changes to the project were made.
+          #
           # @todo   This can be removed for CocoaPods 1.0
           #
           def self.update_to_cocoapods_0_34(pod_bundle, targets)
             sandbox = pod_bundle.sandbox
-            targets.map(&:project).uniq.each do |project|
+            targets.map(&:project).uniq.reduce(false) do |changes, project|
               file_refs = project.files.select do |file_ref|
                 path = file_ref.path.to_s
                 if File.extname(path) == '.xcconfig'
@@ -57,6 +62,8 @@ module Pod
                   file_ref.remove_from_project
                 end
               end
+
+              changes || !file_refs.empty?
             end
           end
 
@@ -84,7 +91,8 @@ module Pod
               'all, please either set the base configurations of the target ' \
               "#{target.name}` to `#{path}` or include the `#{path}` in your " \
               'build configuration.'
-            else
+              false
+            elsif !file_ref
               file_ref ||= group.new_file(path)
               config.base_configuration_reference = file_ref
             end

@@ -94,6 +94,8 @@ module Pod
         end
 
         it 'does not perform the integration if there are no targets to integrate' do
+          Installer::UserProjectIntegrator::TargetIntegrator::XCConfigIntegrator.
+            integrate(@pod_bundle, @target_integrator.send(:native_targets))
           @target_integrator.stubs(:native_targets_to_integrate).returns([])
           @target_integrator.expects(:add_pods_library).never
           @target_integrator.expects(:add_copy_resources_script_phase).never
