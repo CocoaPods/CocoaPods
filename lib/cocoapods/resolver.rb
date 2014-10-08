@@ -108,7 +108,8 @@ module Pod
         reject { |s| !prerelease_requirement && s.version.prerelease? }.
         reverse.
         map { |s| s.subspec_by_name dependency.name rescue nil }.
-        compact
+        compact.
+        each { |s| s.version.head = dependency.head? }
     end
 
     def dependencies_for(dependency)
@@ -141,7 +142,8 @@ module Pod
           specs_by_target[target] = target.dependencies.map(&:name).map do |name|
             node = @activated.vertex_named(name)
             (node.recursive_successors << node).to_a
-          end.flatten.map(&:payload).uniq.sort { |x, y| x.name <=> y.name }
+          end.flatten.map(&:payload).uniq.sort { |x, y| x.name <=> y.name }.
+            each { |s| sandbox.store_head_pod(s.name) if s.version.head }
         end
         specs_by_target
       end
