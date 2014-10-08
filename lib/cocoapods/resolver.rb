@@ -16,10 +16,27 @@ end
 module Pod
 
   class Specification::Set
-    # TODO needs to yield a lazy enumerator of lazy proxies
+    class LazySpecification
+      attr_reader :name, :version, :source
+
+      def initialize(name, version, source)
+        @name = name
+        @version = version
+        @source = source
+      end
+
+      def method_missing(method, *args, &block)
+        specification.send(method, *args, &block)
+      end
+
+      def specification
+        @specification ||= source.specification(name, version)
+      end
+    end
+
     def all_specifications
       @all_specifications ||= versions_by_source.map do |source, versions|
-        versions.map { |version| source.specification(name, version) }
+        versions.map { |version| LazySpecification.new(name, version, source) }
       end.flatten
     end
   end
