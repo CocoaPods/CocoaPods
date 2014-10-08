@@ -132,6 +132,8 @@ module Pod
         end
       end
 
+      INHERITED_FLAGS = ['$(inherited)', '${inherited}']
+
       # Checks whether the settings of the CocoaPods generated xcconfig are
       # overridden by the build configuration of a target and prints a
       # warning to inform the user if needed.
@@ -143,8 +145,9 @@ module Pod
               xcconfig = aggregate_target.xcconfigs[config.name]
               if xcconfig
                 xcconfig.to_hash.keys.each do |key|
-                  target_value = config.build_settings[key]
-                  if target_value && target_value.grep(/\$[({]inherited[})]/).empty?
+                  target_values = config.build_settings[key]
+                  if target_values &&
+                      !INHERITED_FLAGS.any? { |flag| target_values.include?(flag) }
                     print_override_warning(aggregate_target, user_target, config, key)
                   end
                 end
