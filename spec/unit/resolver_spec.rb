@@ -205,7 +205,7 @@ module Pod
         version.to_s.should == '1.4'
       end
 
-      it 'takes into account locked implicit dependencies' do
+      xit 'takes into account locked implicit dependencies' do
         podfile = Podfile.new do
           platform :ios, '8.0'
           pod 'ARAnalytics/Mixpanel'
