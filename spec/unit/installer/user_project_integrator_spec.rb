@@ -57,7 +57,7 @@ module Pod
 
         it 'check that the integrated target does not override the CocoaPods build settings' do
           UI.warnings = ''
-          target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => 'FLAG=1' })
+          target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => ['FLAG=1'] })
           user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
           @library.stubs(:user_targets).returns([user_target])
 
@@ -72,7 +72,7 @@ module Pod
 
         it 'allows the use of the alternate form of the inherited flag' do
           UI.warnings = ''
-          target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => 'FLAG=1 ${inherited}' })
+          target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => ['FLAG=1', '${inherited}'] })
           user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
           @library.stubs(:user_targets).returns([user_target])
 
@@ -86,7 +86,7 @@ module Pod
 
         it 'allows build settings which inherit the settings form the CocoaPods xcconfig' do
           UI.warnings = ''
-          target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => 'FLAG=1 $(inherited)' })
+          target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => ['FLAG=1', '$(inherited)'] })
           user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
           @library.stubs(:user_targets).returns([user_target])
 
