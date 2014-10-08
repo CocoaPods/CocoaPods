@@ -89,7 +89,7 @@ module Pod
             file_ref = group.files.find { |f| f.path == path }
             if config.base_configuration_reference != file_ref
               UI.warn 'CocoaPods did not set the base configuration of your ' \
-              'project because because your project already has a custom ' \
+              'project because your project already has a custom ' \
               'config set. In order for CocoaPods integration to work at ' \
               'all, please either set the base configurations of the target ' \
               "#{target.name}` to `#{path}` or include the `#{path}` in your " \
