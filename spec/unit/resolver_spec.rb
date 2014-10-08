@@ -228,7 +228,7 @@ SPEC CHECKSUMS:
 COCOAPODS: 0.33.1
         EOS
         lockfile = Lockfile.new(YAMLHelper.load_string(lockfile_yaml))
-        resolver = Resolver.new(config.sandbox, podfile, lockfile.dependencies, SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, podfile, lockfile.dependencies, SourcesManager.master)
         resolver.resolve.values.first.
           find { |s| s.name == 'Mixpanel' }.
           version.to_s.should == '2.5.1'

@@ -241,7 +241,7 @@ module Pod
           locking_pods = result.podfile_state.unchanged
           if update_mode == :selected
             # If selected Pods should been updated, filter them out of the list
-            locking_pods = locking_pods.select { |pod| !update[:pods].include?(pod) }
+            locking_pods = locking_pods.reject { |pod| update[:pods].include?(pod) }
           end
           locking_pods.map do |pod|
             lockfile.dependencies_to_lock_pod_named(pod)
