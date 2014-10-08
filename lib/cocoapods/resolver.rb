@@ -87,7 +87,9 @@ module Pod
       @activated = ::Resolver::Resolver.new(self,self).
         resolve(
           @podfile.target_definition_list.map(&:dependencies).flatten,
-          ::Resolver::DependencyGraph.new
+          locked_dependencies.reduce(::Resolver::DependencyGraph.new) do |graph, locked|
+            graph.tap { |g| g.add_root_vertex(locked.name, locked) }
+          end
         )
       specs_by_target
     rescue ::Resolver::ResolverError => e
