@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 4cff6f7267a626b6c512c47c7fe887a667ea37ce
+  revision: c83467a8bd7b85a090b41d6ba8c1b251105d3181
   branch: master
   specs:
     cocoapods-core (0.34.1)
@@ -18,11 +18,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 0e6f9df848e1cadb316d59f758b43473b4db2830
+  revision: eea915f579ca4d1435536c2e52bf0b5128f8decd
   branch: master
   specs:
-    xcodeproj (0.19.2)
-      CFPropertyList (~> 2.2)
+    xcodeproj (0.19.3)
       activesupport (~> 3.0)
       colored (~> 1.2)
 
@@ -43,10 +42,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 16b20210ebd6a9aec195e2c6e1cdd7cd61d00e3b
+  revision: bb225b096bc2e32253d05487f4728d96c7adbf2f
   branch: master
   specs:
-    cocoapods-trunk (0.2.0)
+    cocoapods-trunk (0.3.0)
       json_pure (~> 1.8)
       nap (>= 0.8)
       netrc
@@ -67,7 +66,7 @@ PATH
       cocoapods-core (= 0.34.1)
       cocoapods-downloader (~> 0.7.2)
       cocoapods-plugins (~> 0.3.1)
-      cocoapods-trunk (~> 0.2.0)
+      cocoapods-trunk (~> 0.3.0)
       cocoapods-try (~> 0.4.1)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -79,7 +78,6 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    CFPropertyList (2.2.8)
     activesupport (3.2.19)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
