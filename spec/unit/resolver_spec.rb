@@ -205,7 +205,7 @@ module Pod
         version.to_s.should == '1.4'
       end
 
-      xit 'takes into account locked implicit dependencies' do
+      it 'takes into account locked implicit dependencies' do
         podfile = Podfile.new do
           platform :ios, '8.0'
           pod 'ARAnalytics/Mixpanel'
@@ -290,7 +290,7 @@ COCOAPODS: 0.33.1
         specs.should == ['AFNetworking (1.0RC3)']
       end
 
-      xit 'resolves to latest minor version even when explicitly requesting pre-release versions when using ~>' do
+      it 'resolves to latest minor version even when explicitly requesting pre-release versions when using ~>' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '~> 1.0RC3'
@@ -299,10 +299,10 @@ COCOAPODS: 0.33.1
         resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
-        specs.should == ['AFNetworking (1.2.0)']
+        specs.should == ['AFNetworking (1.3.4)']
       end
 
-      xit 'does not resolve to a pre-release version implicitly when matching exact version' do
+      it 'does not resolve to a pre-release version implicitly when matching exact version' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '1.0'
@@ -314,7 +314,7 @@ COCOAPODS: 0.33.1
         specs.should == ['AFNetworking (1.0)']
       end
 
-      xit 'does not resolve to a pre-release version implicitly when using <' do
+      it 'does not resolve to a pre-release version implicitly when using <' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '< 1.0'
@@ -326,7 +326,7 @@ COCOAPODS: 0.33.1
         specs.should == ['AFNetworking (0.10.1)']
       end
 
-      xit 'does not resolve to a pre-release version implicitly when using <=' do
+      it 'does not resolve to a pre-release version implicitly when using <=' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '<= 1.0'
@@ -338,7 +338,7 @@ COCOAPODS: 0.33.1
         specs.should == ['AFNetworking (1.0)']
       end
 
-      xit 'does not resolve to a pre-release version implicitly when using >' do
+      it 'does not resolve to a pre-release version implicitly when using >' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '> 1.0', '< 1.3'
@@ -350,7 +350,7 @@ COCOAPODS: 0.33.1
         specs.should == ['AFNetworking (1.2.1)']
       end
 
-      xit 'does not resolve to a pre-release version implicitly when using >=' do
+      it 'does not resolve to a pre-release version implicitly when using >=' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '>= 1.0', '< 1.3'
@@ -362,7 +362,7 @@ COCOAPODS: 0.33.1
         specs.should == ['AFNetworking (1.2.1)']
       end
 
-      xit 'does not resolve to a pre-release version implicitly when using ~>' do
+      it 'does not resolve to a pre-release version implicitly when using ~>' do
         @podfile = Podfile.new do
           platform :ios, '6.0'
           pod 'AFNetworking', '~> 1.0', '< 1.3'

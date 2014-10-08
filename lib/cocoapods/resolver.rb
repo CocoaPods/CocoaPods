@@ -1,19 +1,43 @@
+module Resolver
+  require 'resolver'
+  class DependencyGraph
+    class Vertex
+      def recursive_successors
+        successors + successors.map(&:recursive_successors).reduce(Set.new, &:+)
+      end
+    end
+  end
+  class ResolverError
+    require 'claide'
+    include CLAide::InformativeError
+  end
+end
+
 module Pod
+
+  class Specification::Set
+    # TODO needs to yield a lazy enumerator of lazy proxies
+    def all_specifications
+      @all_specifications ||= versions_by_source.map do |source, versions|
+        versions.map { |version| source.specification(name, version) }
+      end.flatten
+    end
+  end
+
+  class Specification::Set::External
+    def all_specifications
+      [specification]
+    end
+  end
+
   # The resolver is responsible of generating a list of specifications grouped
   # by target for a given Podfile.
   #
-  # @todo Its current implementation is naive, in the sense that it can't do full
-  #   automatic resolves like Bundler:
-  #   [how-does-bundler-bundle](http://patshaughnessy.net/2011/9/24/how-does-bundler-bundle)
-  #
-  # @todo Another limitation is that the order of the dependencies matter. The
-  #   current implementation could create issues, for example, if a
-  #   specification is loaded for a target definition and later for another
-  #   target is set in head mode. The first specification will not be in head
-  #   mode.
-  #
-  #
   class Resolver
+    require 'resolver'
+    include ::Resolver::UI
+    include ::Resolver::SpecificationProvider
+
     # @return [Sandbox] the Sandbox used by the resolver to find external
     #         dependencies.
     #
@@ -58,23 +82,49 @@ module Pod
     #         definition.
     #
     def resolve
-      @cached_sets     = {}
-      @cached_specs    = {}
-      @specs_by_target = {}
-
-      target_definitions = podfile.target_definition_list
-      target_definitions.each do |target|
-        title = "Resolving dependencies for target `#{target.name}' " \
-          "(#{target.platform})"
-        UI.section(title) do
-          @loaded_specs = []
-          find_dependency_specs(podfile, target.dependencies, target)
-          specs = cached_specs.values_at(*@loaded_specs).sort_by(&:name)
-          specs_by_target[target] = specs
-        end
-      end
-
+      @cached_specs = {}
+      @cached_sets = {}
+      @activated = ::Resolver::Resolver.new(self,self).
+        resolve(
+          @podfile.target_definition_list.map(&:dependencies).flatten,
+          ::Resolver::DependencyGraph.new
+        )
       specs_by_target
+    rescue ::Resolver::ResolverError => e
+      raise Informative, e.message
+    end
+
+    def search_for(dependency)
+      prerelease_requirement = dependency.
+        requirement.
+        requirements.
+        any? { |r| Version.new(r[1].version).prerelease? }
+
+      find_cached_set(dependency).
+        all_specifications.
+        select { |s| dependency.requirement.satisfied_by? Version.new(s.version) }.
+        reject { |s| !prerelease_requirement && s.version.prerelease? }.
+        reverse.
+        map { |s| s.subspec_by_name dependency.name rescue nil }.
+        compact
+    end
+
+    def dependencies_for(dependency)
+      dependency.all_dependencies
+    end
+
+    def name_for(dependency)
+      dependency.name
+    end
+
+    def requirement_satisfied_by?(requirement, activated, spec)
+      existing = activated.vertices.values.map(&:payload).compact.find { |s| Specification.root_name(s.name) ==  Specification.root_name(requirement.name) }
+      if existing
+        existing.version == spec.version &&
+          requirement.requirement.satisfied_by?(spec.version)
+      else
+        requirement.requirement.satisfied_by? spec.version
+      end
     end
 
     # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
@@ -82,7 +132,18 @@ module Pod
     #
     # @note   The returned specifications can be subspecs.
     #
-    attr_reader :specs_by_target
+    def specs_by_target
+      @specs_by_target ||= begin
+        specs_by_target = {}
+        podfile.target_definition_list.each do |target|
+          specs_by_target[target] = target.dependencies.map(&:name).map do |name|
+            node = @activated.vertex_named(name)
+            (node.recursive_successors << node).to_a
+          end.flatten.map(&:payload).uniq.sort { |x, y| x.name <=> y.name }
+        end
+        specs_by_target
+      end
+    end
 
     #-------------------------------------------------------------------------#
 
@@ -178,13 +239,9 @@ module Pod
     # @param  [Dependency] dependency
     #         The dependency for which the set is needed.
     #
-    # @param  [#to_s] dependent_spec
-    #         the specification whose dependencies are being resolved. Used
-    #         only for UI purposes.
-    #
     # @return [Set] the cached set for a given dependency.
     #
-    def find_cached_set(dependency, dependent_spec)
+    def find_cached_set(dependency)
       name = dependency.root_name
       unless cached_sets[name]
         if dependency.external_source
@@ -200,7 +257,7 @@ module Pod
         cached_sets[name] = set
         unless set
           raise Informative, 'Unable to find a specification for ' \
-            "`#{dependency}` depended upon by #{dependent_spec}."
+            "`#{dependency}`."
         end
       end
       cached_sets[name]
@@ -221,23 +278,6 @@ module Pod
     #
     def aggregate
       @aggregate ||= Source::Aggregate.new(sources.map(&:repo))
-    end
-
-    # Ensures that a specification is compatible with the platform of a target.
-    #
-    # @raise  If the specification is not supported by the target.
-    #
-    # @todo   This step is not specific to the resolution process and should be
-    #         performed later in the analysis.
-    #
-    # @return [void]
-    #
-    def validate_platform(spec, target)
-      unless spec.available_platforms.any? { |p| target.platform.supports?(p) }
-        raise Informative, "The platform of the target `#{target.name}` "     \
-          "(#{target.platform}) is not compatible with `#{spec}` which has "  \
-          "a minimum requirement of #{spec.available_platforms.join(' - ')}."
-      end
     end
   end
 end
