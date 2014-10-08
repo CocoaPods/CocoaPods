@@ -1,24 +1,23 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
-
-Preparing
-  Migrating to CocoaPods 0.34
-    - Deleting `Pods/Headers`
-    - Making path `Pods/Headers`
-    - Deleting `Pods/BuildHeaders`
-    - Deleting `Pods/Pods-acknowledgements.markdown`
-    - Deleting `Pods/Pods-acknowledgements.plist`
-    - Deleting `Pods/Pods-dummy.m`
-    - Deleting `Pods/Pods-environment.h`
-    - Deleting `Pods/Pods-JSONKit-dummy.m`
-    - Deleting `Pods/Pods-JSONKit-prefix.pch`
-    - Deleting `Pods/Pods-JSONKit-Private.xcconfig`
-    - Deleting `Pods/Pods-JSONKit.xcconfig`
-    - Deleting `Pods/Pods-Reachability-dummy.m`
-    - Deleting `Pods/Pods-Reachability-prefix.pch`
-    - Deleting `Pods/Pods-Reachability-Private.xcconfig`
-    - Deleting `Pods/Pods-Reachability.xcconfig`
-    - Deleting `Pods/Pods-resources.sh`
-    - Deleting `Pods/Pods.xcconfig`
+  Preparing
+    Migrating to CocoaPods 0.34
+      - Deleting `Pods/Headers`
+      - Making path `Pods/Headers`
+      - Deleting `Pods/BuildHeaders`
+      - Deleting `Pods/Pods-acknowledgements.markdown`
+      - Deleting `Pods/Pods-acknowledgements.plist`
+      - Deleting `Pods/Pods-dummy.m`
+      - Deleting `Pods/Pods-environment.h`
+      - Deleting `Pods/Pods-JSONKit-dummy.m`
+      - Deleting `Pods/Pods-JSONKit-prefix.pch`
+      - Deleting `Pods/Pods-JSONKit-Private.xcconfig`
+      - Deleting `Pods/Pods-JSONKit.xcconfig`
+      - Deleting `Pods/Pods-Reachability-dummy.m`
+      - Deleting `Pods/Pods-Reachability-prefix.pch`
+      - Deleting `Pods/Pods-Reachability-Private.xcconfig`
+      - Deleting `Pods/Pods-Reachability.xcconfig`
+      - Deleting `Pods/Pods-resources.sh`
+      - Deleting `Pods/Pods.xcconfig`
 
 Analyzing dependencies
 
@@ -95,3 +94,7 @@ Integrating client project
 
 Integrating target `Pods` (`SampleApp.xcodeproj` project)
   - Removing (Pods/Pods.xcconfig)
+
+[!] The use of implicit sources has been deprecated. To continue using all of the sources currently on your machine, add the following to the top of your Podfile:
+
+    source 'https://github.com/CocoaPods/Specs.git'

@@ -1,6 +1,5 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
-
-Preparing
+  Preparing
 
 Analyzing dependencies
 
@@ -60,6 +59,10 @@ Integrating client project
 Integrating target `Pods-OS X App` (`SampleApp.xcodeproj` project)
 
 Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
+
+[!] The use of implicit sources has been deprecated. To continue using all of the sources currently on your machine, add the following to the top of your Podfile:
+
+    source 'https://github.com/CocoaPods/Specs.git'
 
 [!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Target Support Files/Pods-iOS App/Pods-iOS App.release.xcconfig'. This can lead to problems with the CocoaPods installation
     - Use the `$(inherited)` flag, or

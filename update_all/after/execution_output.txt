@@ -1,7 +1,6 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod update --no-repo-update --verbose --no-ansi 2>&1
 Update all pods
-
-Preparing
+  Preparing
 
 Analyzing dependencies
 
@@ -57,3 +56,7 @@ Integrating client project
 
 Integrating target `Pods` (`SampleApp.xcodeproj` project)
   - Removing (Pods/Pods.xcconfig)
+
+[!] The use of implicit sources has been deprecated. To continue using all of the sources currently on your machine, add the following to the top of your Podfile:
+
+    source 'https://github.com/CocoaPods/Specs.git'
