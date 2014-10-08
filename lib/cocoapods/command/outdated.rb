@@ -98,7 +98,7 @@ module Pod
 
       def spec_sets
         @spec_sets ||= begin
-          aggregate = Source::Aggregate.new(analyzer.sources)
+          aggregate = Source::Aggregate.new(analyzer.sources.map(&:repo))
           installed_pods.map do |pod_name|
             aggregate.search(Dependency.new(pod_name))
           end.compact.uniq

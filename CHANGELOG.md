@@ -2,6 +2,15 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+##### Bug Fixes
+
+* Fixes a crash when running `pod outdated`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2624](https://github.com/CocoaPods/CocoaPods/issues/2624)
+
+
 ## 0.34.2
 
 ##### Enhancements
