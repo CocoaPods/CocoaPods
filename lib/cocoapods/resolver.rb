@@ -122,19 +122,23 @@ module Pod
     end
 
     def search_for(dependency)
-      prerelease_requirement = dependency.
-        requirement.
-        requirements.
-        any? { |r| Version.new(r[1].version).prerelease? }
+      @search ||= {}
+      @search[dependency] ||= begin
+        prerelease_requirement = dependency.
+          requirement.
+          requirements.
+          any? { |r| Version.new(r[1].version).prerelease? }
 
-      find_cached_set(dependency).
-        all_specifications.
-        select { |s| dependency.requirement.satisfied_by? Version.new(s.version) }.
-        reject { |s| !prerelease_requirement && s.version.prerelease? }.
-        reverse.
-        map { |s| s.subspec_by_name dependency.name rescue nil }.
-        compact.
-        each { |s| s.version.head = dependency.head? }
+        find_cached_set(dependency).
+          all_specifications.
+          select { |s| dependency.requirement.satisfied_by? Version.new(s.version) }.
+          reject { |s| !prerelease_requirement && s.version.prerelease? }.
+          reverse.
+          map { |s| s.subspec_by_name dependency.name rescue nil }.
+          compact.
+          each { |s| s.version.head = dependency.head? }
+      end
+      @search[dependency].dup
     end
 
     def dependencies_for(dependency)
@@ -152,6 +156,24 @@ module Pod
           requirement.requirement.satisfied_by?(spec.version)
       else
         requirement.requirement.satisfied_by? spec.version
+      end
+    end
+
+    # Sort dependencies so that the ones that are easiest to resolve are first.
+    # Easiest to resolve is (usually) defined by:
+    #   1) Is this dependency already activated?
+    #   2) How relaxed are the requirements?
+    #   3) Are there any conflicts for this dependency?
+    #   4) How many possibilities are there to satisfy this dependency?
+    #
+    def sort_dependencies(dependencies, activated, conflicts)
+      dependencies.sort_by do |dependency|
+        name = name_for(dependency)
+        [
+          activated.vertex_named(name).payload ? 0 : 1,
+          conflicts[name] ? 0 : 1,
+          search_for(dependency).count,
+        ]
       end
     end
 
