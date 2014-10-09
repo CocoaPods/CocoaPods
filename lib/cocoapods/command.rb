@@ -1,6 +1,13 @@
 require 'colored'
 require 'claide'
 
+module Resolver
+  require 'resolver'
+  class ResolverError
+    include CLAide::InformativeError
+  end
+end
+
 module Pod
   class PlainInformative
     include CLAide::InformativeError
