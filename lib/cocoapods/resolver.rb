@@ -14,7 +14,6 @@ module Resolver
 end
 
 module Pod
-
   class Specification::Set
     class LazySpecification < BasicObject
       attr_reader :name, :version, :source
@@ -109,7 +108,7 @@ module Pod
     def resolve
       @cached_specs = {}
       @cached_sets = {}
-      @activated = ::Resolver::Resolver.new(self,self).
+      @activated = ::Resolver::Resolver.new(self, self).
         resolve(
           @podfile.target_definition_list.map(&:dependencies).flatten,
           locked_dependencies.reduce(::Resolver::DependencyGraph.new) do |graph, locked|
@@ -189,8 +188,19 @@ module Pod
           specs_by_target[target] = target.dependencies.map(&:name).map do |name|
             node = @activated.vertex_named(name)
             (node.recursive_successors << node).to_a
-          end.flatten.map(&:payload).uniq.sort { |x, y| x.name <=> y.name }.
-            each { |s| sandbox.store_head_pod(s.name) if s.version.head }
+          end.
+            flatten.
+            map(&:payload).
+            uniq.
+            sort { |x, y| x.name <=> y.name }.
+            each do |spec|
+              unless spec.available_platforms.any? { |p| target.platform.supports?(p) }
+                raise Informative, "The platform of the target `#{target.name}` "     \
+                  "(#{target.platform}) is not compatible with `#{spec}` which has "  \
+                  "a minimum requirement of #{spec.available_platforms.join(' - ')}."
+                end
+              sandbox.store_head_pod(spec.name) if spec.version.head
+            end
         end
         specs_by_target
       end
