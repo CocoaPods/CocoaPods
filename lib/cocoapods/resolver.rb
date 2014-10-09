@@ -1,11 +1,3 @@
-module Resolver
-  require 'resolver'
-  class ResolverError
-    require 'claide'
-    include CLAide::InformativeError
-  end
-end
-
 module Pod
   class Specification::Set
     class LazySpecification < BasicObject
