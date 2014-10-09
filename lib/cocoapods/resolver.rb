@@ -1,12 +1,5 @@
 module Resolver
   require 'resolver'
-  class DependencyGraph
-    class Vertex
-      def recursive_successors
-        successors + successors.map(&:recursive_successors).reduce(Set.new, &:+)
-      end
-    end
-  end
   class ResolverError
     require 'claide'
     include CLAide::InformativeError
