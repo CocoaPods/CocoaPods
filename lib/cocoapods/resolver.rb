@@ -91,7 +91,6 @@ module Pod
     #         definition.
     #
     def resolve
-      @cached_specs = {}
       @cached_sets = {}
       @activated = ::Resolver::Resolver.new(self, self).
         resolve(
@@ -208,76 +207,11 @@ module Pod
     #
     attr_accessor :cached_sets
 
-    # @return [Hash<String => Specification>] The loaded specifications grouped
-    #         by name.
-    #
-    attr_accessor :cached_specs
-
     #-------------------------------------------------------------------------#
 
     private
 
     # @!group Private helpers
-
-    # Resolves recursively the dependencies of a specification and stores them
-    # in the @cached_specs ivar.
-    #
-    # @param  [Podfile, Specification, #to_s] dependent_spec
-    #         the specification whose dependencies are being resolved. Used
-    #         only for UI purposes.
-    #
-    # @param  [Array<Dependency>] dependencies
-    #         the dependencies of the specification.
-    #
-    # @param  [TargetDefinition] target_definition
-    #         the target definition that owns the specification.
-    #
-    # @note   If there is a locked dependency with the same name of a
-    #         given dependency the locked one is used in place of the
-    #         dependency of the specification. In this way it is possible to
-    #         prevent the update of the version of installed pods not changed
-    #         in the Podfile.
-    #
-    # @note   The recursive process checks if a dependency has already been
-    #         loaded to prevent an infinite loop.
-    #
-    # @note   The set class merges all (of all the target definitions) the
-    #         dependencies and thus it keeps track of whether it is in head
-    #         mode or from an external source because {Dependency#merge}
-    #         preserves this information.
-    #
-    # @return [void]
-    #
-    def find_dependency_specs(dependent_spec, dependencies, target_definition)
-      dependencies.each do |dependency|
-        locked_dep = locked_dependencies.find { |ld| ld.name == dependency.name }
-        dependency = locked_dep if locked_dep
-
-        UI.message("- #{dependency}", '', 2) do
-          set = find_cached_set(dependency, dependent_spec)
-          set.required_by(dependency, dependent_spec.to_s)
-
-          if (paths = set.specification_paths_for_version(set.required_version)).length > 1
-            UI.warn "Found multiple specifications for #{dependency}:\n" \
-              "- #{paths.join("\n")}"
-          end
-
-          unless @loaded_specs.include?(dependency.name)
-            spec = set.specification.subspec_by_name(dependency.name)
-            @loaded_specs << spec.name
-            cached_specs[spec.name] = spec
-            validate_platform(spec, target_definition)
-            if dependency.head? || sandbox.head_pod?(spec.name)
-              spec.version.head = true
-              sandbox.store_head_pod(spec.name)
-            end
-
-            spec_dependencies = spec.all_dependencies(target_definition.platform)
-            find_dependency_specs(spec, spec_dependencies, target_definition)
-          end
-        end
-      end
-    end
 
     # @return [Set] Loads or returns a previously initialized set for the Pod
     #               of the given dependency.
@@ -291,7 +225,7 @@ module Pod
       name = dependency.root_name
       unless cached_sets[name]
         if dependency.external_source
-          spec = sandbox.specification(dependency.root_name)
+          spec = sandbox.specification(name)
           unless spec
             raise StandardError, '[Bug] Unable to find the specification ' \
               "for `#{dependency}`."
