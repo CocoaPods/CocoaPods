@@ -16,7 +16,7 @@ end
 module Pod
 
   class Specification::Set
-    class LazySpecification
+    class LazySpecification < BasicObject
       attr_reader :name, :version, :source
 
       def initialize(name, version, source)
@@ -27,6 +27,14 @@ module Pod
 
       def method_missing(method, *args, &block)
         specification.send(method, *args, &block)
+      end
+
+      def subspec_by_name(name = nil)
+        if !name || name == self.name
+          self
+        else
+          specification.subspec_by_name(name)
+        end
       end
 
       def specification
