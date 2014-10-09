@@ -10,6 +10,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   repo push` in CocoaPods 0.33.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
+* Refactorings in preparation to framework support, which could break usages
+  of the Hooks-API.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#2461](https://github.com/CocoaPods/CocoaPods/issues/2461)
+
 
 ## 0.34.4
 
