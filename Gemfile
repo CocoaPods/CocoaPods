@@ -1,23 +1,17 @@
-# Declares a dependency to the git repo of CocoaPods gem. This declaration is
-# compatible with the local git repos feature of Bundler.
-#
-def cp_gem(name, repo_name, branch = 'master')
-  url = "https://github.com/CocoaPods/#{repo_name}.git"
-  gem name, :git => url, :branch => branch
-end
-
 source 'http://rubygems.org'
 
 gemspec
 
 group :development do
-  cp_gem 'claide',               'CLAide'
-  cp_gem 'cocoapods-core',       'Core'
-  cp_gem 'cocoapods-downloader', 'cocoapods-downloader'
-  cp_gem 'cocoapods-plugins',    'cocoapods-plugins'
-  cp_gem 'cocoapods-trunk',      'cocoapods-trunk'
-  cp_gem 'cocoapods-try',        'cocoapods-try'
-  cp_gem 'xcodeproj',            'Xcodeproj'
+  # Declare dependencies to the git repos of CocoaPods gems. These declarations
+  # are compatible with the local git repos feature of Bundler.
+  gem 'claide',               :git => 'https://github.com/CocoaPods/CLAide.git',               :branch => 'master'
+  gem 'cocoapods-core',       :git => 'https://github.com/CocoaPods/Core.git',                 :branch => 'master'
+  gem 'cocoapods-downloader', :git => 'https://github.com/CocoaPods/cocoapods-downloader.git', :branch => 'master'
+  gem 'cocoapods-plugins',    :git => 'https://github.com/CocoaPods/cocoapods-plugins.git',    :branch => 'master'
+  gem 'cocoapods-trunk',      :git => 'https://github.com/CocoaPods/cocoapods-trunk.git',      :branch => 'master'
+  gem 'cocoapods-try',        :git => 'https://github.com/CocoaPods/cocoapods-try.git',        :branch => 'master'
+  gem 'xcodeproj',            :git => 'https://github.com/CocoaPods/Xcodeproj.git',            :branch => 'master'
 
   gem 'bacon'
   gem 'mocha'
