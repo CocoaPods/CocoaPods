@@ -6,9 +6,6 @@ module Pod
   # by target for a given Podfile.
   #
   class Resolver
-    include ::Resolver::UI
-    include ::Resolver::SpecificationProvider
-
     # @return [Sandbox] the Sandbox used by the resolver to find external
     #         dependencies.
     #
@@ -66,6 +63,40 @@ module Pod
       raise Informative, e.message
     end
 
+    # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
+    #         returns the resolved specifications grouped by target.
+    #
+    # @note   The returned specifications can be subspecs.
+    #
+    def specs_by_target
+      @specs_by_target ||= begin
+        specs_by_target = {}
+        podfile.target_definition_list.each do |target|
+          specs_by_target[target] = target.dependencies.map(&:name).map do |name|
+            node = @activated.vertex_named(name)
+            (node.recursive_successors << node).to_a
+          end.
+            flatten.
+            map(&:payload).
+            uniq.
+            sort { |x, y| x.name <=> y.name }.
+            each do |spec|
+              validate_platform(spec, target)
+              sandbox.store_head_pod(spec.name) if spec.version.head
+            end
+        end
+        specs_by_target
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Specification Provider
+
+    include ::Resolver::SpecificationProvider
+
     def search_for(dependency)
       @search ||= {}
       @search[dependency] ||= begin
@@ -117,31 +148,13 @@ module Pod
       end
     end
 
-    # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
-    #         returns the resolved specifications grouped by target.
-    #
-    # @note   The returned specifications can be subspecs.
-    #
-    def specs_by_target
-      @specs_by_target ||= begin
-        specs_by_target = {}
-        podfile.target_definition_list.each do |target|
-          specs_by_target[target] = target.dependencies.map(&:name).map do |name|
-            node = @activated.vertex_named(name)
-            (node.recursive_successors << node).to_a
-          end.
-            flatten.
-            map(&:payload).
-            uniq.
-            sort { |x, y| x.name <=> y.name }.
-            each do |spec|
-              validate_platform(spec, target)
-              sandbox.store_head_pod(spec.name) if spec.version.head
-            end
-        end
-        specs_by_target
-      end
-    end
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Resolver UI
+
+    include ::Resolver::UI
 
     #-------------------------------------------------------------------------#
 
