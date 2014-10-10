@@ -50,14 +50,12 @@ module Pod
     #         definition.
     #
     def resolve
+      dependencies = @podfile.target_definition_list.map(&:dependencies).flatten
+      base = locked_dependencies.reduce(::Resolver::DependencyGraph.new) do |graph, locked|
+        graph.tap { |g| g.add_root_vertex(locked.name, locked) }
+      end
       @cached_sets = {}
-      @activated = ::Resolver::Resolver.new(self, self).
-        resolve(
-          @podfile.target_definition_list.map(&:dependencies).flatten,
-          locked_dependencies.reduce(::Resolver::DependencyGraph.new) do |graph, locked|
-            graph.tap { |g| g.add_root_vertex(locked.name, locked) }
-          end
-        )
+      @activated = ::Resolver::Resolver.new(self, self).resolve(dependencies, base)
       specs_by_target
     rescue ::Resolver::ResolverError => e
       raise Informative, e.message
