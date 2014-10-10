@@ -67,7 +67,7 @@ module Pod
       #
       def add_source_files_references
         UI.message '- Adding source files to Pods project' do
-          add_file_accessors_paths_to_pods_group(:source_files)
+          add_file_accessors_paths_to_pods_group(:source_files, nil, true)
         end
       end
 
@@ -100,8 +100,8 @@ module Pod
       #
       def add_resources
         UI.message '- Adding resources to Pods project' do
-          add_file_accessors_paths_to_pods_group(:resources, :resources)
-          add_file_accessors_paths_to_pods_group(:resource_bundle_files, :resources)
+          add_file_accessors_paths_to_pods_group(:resources, :resources, true)
+          add_file_accessors_paths_to_pods_group(:resource_bundle_files, :resources, true)
         end
       end
 
@@ -152,14 +152,20 @@ module Pod
       # @param  [Symbol] group_key
       #         The key of the group of the Pods project.
       #
+      # @param  [Bool] group_if_development
+      #         Wether organizing the a local pod's files in subgroups inside
+      #         the pod's group is allowed.
+      #
       # @return [void]
       #
-      def add_file_accessors_paths_to_pods_group(file_accessor_key, group_key = nil)
+      def add_file_accessors_paths_to_pods_group(file_accessor_key, group_key = nil, group_if_development = false)
         file_accessors.each do |file_accessor|
+          pod_name = file_accessor.spec.name
+          local = sandbox.local?(pod_name)
           paths = file_accessor.send(file_accessor_key)
           paths.each do |path|
             group = pods_project.group_for_spec(file_accessor.spec.name, group_key)
-            pods_project.add_file_reference(path, group)
+            pods_project.add_file_reference(path, group, local && group_if_development)
           end
         end
       end

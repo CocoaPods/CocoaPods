@@ -59,6 +59,7 @@ module Pod
 
       parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
+      
       group = parent_group.new_group(pod_name, path, source_tree)
       group
     end
@@ -144,13 +145,25 @@ module Pod
     # @param  [PBXGroup] group
     #         The group for the new file reference.
     #
+    # @param  [Bool] development
+    #         Wether the file is part of a development pod.
+    #         If it is then groups will be created to reflect the code's structure in the filesystem.
+    #
     # @return [PBXFileReference] The new file reference.
     #
-    def add_file_reference(absolute_path, group)
+    def add_file_reference(absolute_path, group, development = false)
       unless Pathname.new(absolute_path).absolute?
         raise ArgumentError, "Paths must be absolute #{absolute_path}"
       end
 
+      if development
+        relative_path = Pathname.new(absolute_path).relative_path_from(group.real_path).dirname
+        relative_path.each_filename do|name| 
+          next if name == "." 
+          group = group[name] || group.new_group(name, name) 
+        end
+      end
+       
       if ref = reference_for_path(absolute_path)
         ref
       else

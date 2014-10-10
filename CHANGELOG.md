@@ -37,6 +37,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2914](https://github.com/CocoaPods/CocoaPods/issues/2914)
 
+* Installer changed to organize a development pod's source and resource files
+  into subgroups reflecting their organization in the filesystem.
+  [Imre mihaly](https://github.com/imihaly)
+
 ##### Bug Fixes
 
 * Fix updating a pod that has subspec dependencies.  
