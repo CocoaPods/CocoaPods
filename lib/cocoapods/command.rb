@@ -1,8 +1,8 @@
 require 'colored'
 require 'claide'
+require 'resolver'
 
 module Resolver
-  require 'resolver'
   class ResolverError
     include CLAide::InformativeError
   end
