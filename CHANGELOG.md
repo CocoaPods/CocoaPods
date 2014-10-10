@@ -7,7 +7,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 ##### Enhacements
 
 * The `pod push` has been removed as it has been deprecated in favour of `pod
-  repo push` in CocoaPods 0.33.
+  repo push` in CocoaPods 0.33.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
 ##### Bug Fixes
@@ -15,6 +15,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Fixes a crash when running `pod outdated`.  
   [Samuel Giddins](https://github.com/segiddins)
   [#2624](https://github.com/CocoaPods/CocoaPods/issues/2624)
+
+* Ensure that external sources (as specified in the `Podfile`) are downloaded
+  when their source is missing, even if their specification is present.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2494](https://github.com/CocoaPods/CocoaPods/issues/2494)
 
 
 ## 0.34.2
