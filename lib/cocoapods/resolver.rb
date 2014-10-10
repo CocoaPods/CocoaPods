@@ -135,11 +135,7 @@ module Pod
             uniq.
             sort { |x, y| x.name <=> y.name }.
             each do |spec|
-              unless spec.available_platforms.any? { |p| target.platform.supports?(p) }
-                raise Informative, "The platform of the target `#{target.name}` "     \
-                  "(#{target.platform}) is not compatible with `#{spec}` which has "  \
-                  "a minimum requirement of #{spec.available_platforms.join(' - ')}."
-                end
+              validate_platform(spec, target)
               sandbox.store_head_pod(spec.name) if spec.version.head
             end
         end
@@ -215,6 +211,23 @@ module Pod
     #
     def aggregate
       @aggregate ||= Source::Aggregate.new(sources.map(&:repo))
+    end
+
+    # Ensures that a specification is compatible with the platform of a target.
+    #
+    # @raise  If the specification is not supported by the target.
+    #
+    # @todo   This step is not specific to the resolution process and should be
+    #         performed later in the analysis.
+    #
+    # @return [void]
+    #
+    def validate_platform(spec, target)
+      unless spec.available_platforms.any? { |p| target.platform.supports?(p) }
+        raise Informative, "The platform of the target `#{target.name}` "     \
+          "(#{target.platform}) is not compatible with `#{spec}` which has "  \
+          "a minimum requirement of #{spec.available_platforms.join(' - ')}."
+      end
     end
   end
 end
