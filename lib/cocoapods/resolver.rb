@@ -107,15 +107,10 @@ module Pod
     def search_for(dependency)
       @search ||= {}
       @search[dependency] ||= begin
-        prerelease_requirement = dependency.
-          requirement.
-          requirements.
-          any? { |r| Version.new(r[1].version).prerelease? }
-
         find_cached_set(dependency).
           all_specifications.
           select { |s| dependency.requirement.satisfied_by? Version.new(s.version) }.
-          reject { |s| !prerelease_requirement && s.version.prerelease? }.
+          reject { |s| !dependency.prerelease? && s.version.prerelease? }.
           reverse.
           map { |s| s.subspec_by_name dependency.name rescue nil }.
           compact.
