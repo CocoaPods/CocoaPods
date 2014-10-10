@@ -85,6 +85,21 @@ module Pod
         specs.should == ['AFNetworking (0.9.1)', 'AFQuickLookView (0.1.0)']
       end
 
+      it 'resolves basic conflicts' do
+        @podfile = Podfile.new do
+          platform :ios, '7.0'
+          pod 'RestKit' # latest version requires 'AFNetworking', '~> 1.3.0'
+          pod 'AFNetworking', '~> 1.2.0'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should == ['AFNetworking (1.2.1)', 'RestKit (0.20.1)',
+                         'RestKit/Core (0.20.1)', 'RestKit/CoreData (0.20.1)',
+                         'RestKit/Network (0.20.1)', 'RestKit/ObjectMapping (0.20.1)',
+                         'RestKit/Support (0.20.1)', 'SOCKit (1.1)', 'TransitionKit (1.1.0)']
+      end
+
       it 'holds the context state, such as cached specification sets' do
         @resolver.resolve
         cached_sets = @resolver.send(:cached_sets)
