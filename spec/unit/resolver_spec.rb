@@ -88,7 +88,7 @@ module Pod
       it 'resolves basic conflicts' do
         @podfile = Podfile.new do
           platform :ios, '7.0'
-          pod 'RestKit' # latest version requires 'AFNetworking', '~> 1.3.0'
+          pod 'RestKit' # latest version (0.23.3) requires 'AFNetworking', '~> 1.3.0'
           pod 'AFNetworking', '~> 1.2.0'
         end
 
