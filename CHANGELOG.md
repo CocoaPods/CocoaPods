@@ -10,6 +10,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   repo push` in CocoaPods 0.33.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
+* Installer changed to organize a development pod's source and resource files
+  into subgroups reflecting their organization in the filesystem.
+  [Imre mihaly](https://github.com/imihaly)
+
 ##### Bug Fixes
 
 * Fixes a crash when running `pod outdated`.  
