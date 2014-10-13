@@ -194,15 +194,30 @@ module Pod
         config.sandbox.head_pod?('JSONKit').should.be.true
       end
 
-      it 'raises if it finds two conflicting dependencies' do
+      it 'raises if it finds two conflicting explicit dependencies' do
         podfile = Podfile.new do
           platform :ios
           pod 'JSONKit', '1.4'
           pod 'JSONKit', '1.5pre'
         end
         resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
-        e = lambda { resolver.resolve }.should.raise Pod::Informative
+        e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/Unable to satisfy the following requirements/)
+        e.message.should.match(/`JSONKit \(= 1.4\)` required by `Podfile`/)
+        e.message.should.match(/`JSONKit \(= 1.5pre\)` required by `Podfile`/)
+      end
+
+      it 'raises if it finds two conflicting dependencies' do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'RestKit', '0.23.3' # dependends on AFNetworking ~> 1.3.0
+          pod 'AFNetworking', '> 2'
+        end
+        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
+        e = lambda { resolver.resolve }.should.raise Informative
+        e.message.should.match(/Unable to satisfy the following requirements/)
+        e.message.should.match(/`AFNetworking \(~> 1.3.0\)` required by `RestKit\/Network \(.*\)`/)
+        e.message.should.match(/`AFNetworking \(> 2\)` required by `Podfile`/)
       end
 
       it 'takes into account locked dependencies' do
