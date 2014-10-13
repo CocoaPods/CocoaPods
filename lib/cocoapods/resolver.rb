@@ -118,8 +118,14 @@ module Pod
       dependency.name
     end
 
+    def name_for_explicit_dependency_source
+      'Podfile'
+    end
+
     def requirement_satisfied_by?(requirement, activated, spec)
-      existing = activated.vertices.values.map(&:payload).compact.find { |s| Specification.root_name(s.name) ==  Specification.root_name(requirement.name) }
+      existing = activated.vertices.values.map(&:payload).compact.find do |s|
+        Specification.root_name(s.name) ==  Specification.root_name(requirement.name)
+      end
       if existing
         existing.version == spec.version &&
           requirement.requirement.satisfied_by?(spec.version)

@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Resolver.git
-  revision: 8241b8f2079928cd4fc58416e8c7796811d541c6
+  revision: 8f5241546ce3f67756d87547154b88445b306933
   branch: master
   specs:
     resolver (0.0.1)
