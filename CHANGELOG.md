@@ -21,6 +21,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [#2494](https://github.com/CocoaPods/CocoaPods/issues/2494)
 
+* Fixes an issue where running `pod install/update` while the Xcode project
+  is open can cause the open project to have build failures until Xcode
+  is restarted.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2627](https://github.com/CocoaPods/CocoaPods/issues/2627)
+  [#2665](https://github.com/CocoaPods/CocoaPods/issues/2665)
+
 
 ## 0.34.2
 

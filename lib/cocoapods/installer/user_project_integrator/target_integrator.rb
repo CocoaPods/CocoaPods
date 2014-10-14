@@ -27,14 +27,30 @@ module Pod
         #
         def integrate!
           UI.section(integration_message) do
-            user_project.save if XCConfigIntegrator.integrate(target, native_targets)
-            user_project.save if update_to_cocoapods_0_34
+            # TODO: refactor into Xcodeproj https://github.com/CocoaPods/Xcodeproj/issues/202
+            project_is_dirty = [
+              XCConfigIntegrator.integrate(target, native_targets),
+              update_to_cocoapods_0_34,
+              unless native_targets_to_integrate.empty?
+                add_pods_library
+                add_copy_resources_script_phase
+                add_check_manifest_lock_script_phase
+                true
+              end
+            ].any?
 
-            unless native_targets_to_integrate.empty?
-              add_pods_library
-              add_copy_resources_script_phase
-              add_check_manifest_lock_script_phase
+            if project_is_dirty
               user_project.save
+            else
+              # There is a bug in Xcode where the process of deleting and
+              # re-creating the xcconfig files used in the build
+              # configuration cause building the user project to fail until
+              # Xcode is relaunched.
+              #
+              # Touching/saving the project causes Xcode to reload these.
+              #
+              # https://github.com/CocoaPods/CocoaPods/issues/2665
+              FileUtils.touch(user_project.path + 'project.pbxproj')
             end
           end
         end
