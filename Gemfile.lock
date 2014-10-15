@@ -17,11 +17,11 @@ GIT
       nap (~> 0.8.0)
 
 GIT
-  remote: https://github.com/CocoaPods/Resolver.git
-  revision: c9532593ab99e25aa1aa61c1410e72ded3c2a2f1
+  remote: https://github.com/CocoaPods/Molinillo.git
+  revision: b66281386b4d226801afc8fd02cb6514c80b81b6
   branch: master
   specs:
-    resolver (0.0.1)
+    molinillo (0.0.1)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
@@ -78,9 +78,9 @@ PATH
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
+      molinillo (~> 0)
       nap (~> 0.8)
       open4 (~> 1.3)
-      resolver (~> 0)
       xcodeproj (~> 0.19.4)
 
 GEM
@@ -181,11 +181,11 @@ DEPENDENCIES
   mime-types (< 2.0)
   mocha
   mocha-on-bacon
+  molinillo!
   prettybacon
   pry
   rake
   rb-fsevent
-  resolver!
   rubocop
   webmock
   xcodeproj!
