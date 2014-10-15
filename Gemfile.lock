@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: f971122dd0b94efcb872efbe85c2db9d0166e00f
+  revision: 6150528fee42ddfe5eb83ed21741f718da027792
   branch: master
   specs:
     cocoapods-core (0.34.2)
@@ -18,10 +18,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: ca37a9b0cc68021ba8ebd0e26faa3448952f2e02
+  revision: cc7c364ff2a8e084ff97750d2d7cb9f59844ad21
   branch: master
   specs:
-    xcodeproj (0.19.3)
+    xcodeproj (0.19.4)
       activesupport (~> 3.0)
       colored (~> 1.2)
 
@@ -42,7 +42,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: bb225b096bc2e32253d05487f4728d96c7adbf2f
+  revision: db60837c508dfc179703988a111b9928d3eafce3
   branch: master
   specs:
     cocoapods-trunk (0.3.0)
@@ -73,7 +73,7 @@ PATH
       json_pure (~> 1.8)
       nap (~> 0.8)
       open4 (~> 1.3)
-      xcodeproj (~> 0.19.3)
+      xcodeproj (~> 0.19.4)
 
 GEM
   remote: http://rubygems.org/
@@ -94,9 +94,9 @@ GEM
     colored (1.2)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
-    diffy (3.0.6)
+    diffy (3.0.7)
     escape (0.0.4)
-    ffi (1.9.5)
+    ffi (1.9.6)
     fuzzy_match (2.0.4)
     i18n (0.6.4)
     json_pure (1.8.1)
