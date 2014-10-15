@@ -1,8 +1,8 @@
 require 'colored'
 require 'claide'
-require 'resolver'
+require 'molinillo/errors'
 
-module Resolver
+module Molinillo
   class ResolverError
     include CLAide::InformativeError
   end

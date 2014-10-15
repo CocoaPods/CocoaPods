@@ -1,4 +1,4 @@
-require 'resolver'
+require 'molinillo'
 require 'cocoapods/resolver/lazy_specification'
 
 module Pod
@@ -51,13 +51,13 @@ module Pod
     #
     def resolve
       dependencies = @podfile.target_definition_list.map(&:dependencies).flatten
-      base = locked_dependencies.reduce(::Resolver::DependencyGraph.new) do |graph, locked|
+      base = locked_dependencies.reduce(Molinillo::DependencyGraph.new) do |graph, locked|
         graph.tap { |g| g.add_root_vertex(locked.name, locked) }
       end
       @cached_sets = {}
-      @activated = ::Resolver::Resolver.new(self, self).resolve(dependencies, base)
+      @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, base)
       specs_by_target
-    rescue ::Resolver::ResolverError => e
+    rescue Molinillo::ResolverError => e
       raise Informative, e.message
     end
 
@@ -93,7 +93,7 @@ module Pod
 
     # @!group Specification Provider
 
-    include ::Resolver::SpecificationProvider
+    include Molinillo::SpecificationProvider
 
     def search_for(dependency)
       @search ||= {}
@@ -165,7 +165,7 @@ module Pod
 
     # @!group Resolver UI
 
-    include ::Resolver::UI
+    include Molinillo::UI
 
     #-------------------------------------------------------------------------#
 
@@ -213,7 +213,7 @@ module Pod
         end
         cached_sets[name] = set
         unless set
-          raise ::Resolver::NoSuchDependencyError.new(dependency)
+          raise Molinillo::NoSuchDependencyError.new(dependency)
         end
       end
       cached_sets[name]
