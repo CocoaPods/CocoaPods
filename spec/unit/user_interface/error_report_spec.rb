@@ -35,6 +35,7 @@ module Pod
     RubyGems : #{Gem::VERSION}
         Host : :host_information
        Xcode : :xcode_information
+         Git : :git_information
 Ruby lib dir : #{RbConfig::CONFIG['libdir']}
 Repositories : repo_1
                repo_2
@@ -85,6 +86,7 @@ EOS
 EOS
         @report.stubs(:host_information).returns(':host_information')
         @report.stubs(:xcode_information).returns(':xcode_information')
+        @report.stubs(:git_information).returns(':git_information')
         @report.stubs(:repo_information).returns(%w(repo_1 repo_2))
         @report.stubs(:installed_plugins).returns('cocoapods' => Pod::VERSION,
                                                   'cocoapods-core' => Pod::VERSION,

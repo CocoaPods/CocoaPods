@@ -29,6 +29,7 @@ module Pod
     RubyGems : #{Gem::VERSION}
         Host : #{host_information}
        Xcode : #{xcode_information}
+         Git : #{git_information}
 Ruby lib dir : #{RbConfig::CONFIG['libdir']}
 Repositories : #{repo_information.join("\n               ")}
 ```
@@ -103,6 +104,10 @@ EOS
         def xcode_information
           version, build = `xcodebuild -version`.strip.split("\n").map { |line| line.split(' ').last }
           "#{version} (#{build})"
+        end
+
+        def git_information
+          `git --version`.strip.split("\n").first
         end
 
         def installed_plugins
