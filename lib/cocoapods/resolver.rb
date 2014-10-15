@@ -100,18 +100,23 @@ module Pod
       @search[dependency] ||= begin
         find_cached_set(dependency).
           all_specifications.
-          select { |s| dependency.requirement.satisfied_by? Version.new(s.version) }.
-          reject { |s| !dependency.prerelease? && s.version.prerelease? }.
-          reverse.
+          select { |s| dependency.requirement.satisfied_by? s.version }.
           map { |s| s.subspec_by_name dependency.name rescue nil }.
           compact.
+          reverse.
           each { |s| s.version.head = dependency.head? }
       end
       @search[dependency].dup
     end
 
-    def dependencies_for(dependency)
-      dependency.all_dependencies
+    def dependencies_for(specification)
+      specification.all_dependencies.map do |dependency|
+        if dependency.root_name == Specification.root_name(specification.name)
+          Dependency.new(dependency.name, specification.version)
+        else
+          dependency
+        end
+      end
     end
 
     def name_for(dependency)
@@ -123,15 +128,16 @@ module Pod
     end
 
     def requirement_satisfied_by?(requirement, activated, spec)
-      existing = activated.vertices.values.map(&:payload).compact.find do |s|
-        Specification.root_name(s.name) ==  Specification.root_name(requirement.name)
+      existing_vertices = activated.vertices.values.select do |v|
+        Specification.root_name(v.name) ==  requirement.root_name
       end
-      if existing
-        existing.version == spec.version &&
-          requirement.requirement.satisfied_by?(spec.version)
+      requirement_satisfied = if existing = existing_vertices.map(&:payload).compact.first
+                                existing.version == spec.version &&
+                                  requirement.requirement.satisfied_by?(spec.version)
       else
         requirement.requirement.satisfied_by? spec.version
       end
+      requirement_satisfied && !(spec.version.prerelease? && existing_vertices.flat_map(&:requirements).none?(&:prerelease?))
     end
 
     # Sort dependencies so that the ones that are easiest to resolve are first.
@@ -146,6 +152,7 @@ module Pod
         name = name_for(dependency)
         [
           activated.vertex_named(name).payload ? 0 : 1,
+          dependency.prerelease? ? 0 : 1,
           conflicts[name] ? 0 : 1,
           search_for(dependency).count,
         ]
