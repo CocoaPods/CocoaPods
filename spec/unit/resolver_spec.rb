@@ -157,6 +157,24 @@ module Pod
         )
       end
 
+      it 'handles pre-release dependencies with subspecs' do
+        @podfile = Podfile.new do
+          platform :ios, '7.0'
+          pod 'RestKit', '0.20.0-rc1'
+        end
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver.resolve.values.flatten.map(&:to_s).sort.should == [
+          'AFNetworking (1.1.0)',
+          'RestKit (0.20.0-rc1)',
+          'RestKit/Core (0.20.0-rc1)',
+          'RestKit/CoreData (0.20.0-rc1)',
+          'RestKit/Network (0.20.0-rc1)',
+          'RestKit/ObjectMapping (0.20.0-rc1)',
+          'RestKit/Support (0.20.0-rc1)',
+          'SOCKit (1.1)',
+        ]
+      end
+
       it 'handles correctly subspecs from external sources' do
         @podfile = Podfile.new do
           platform :ios
