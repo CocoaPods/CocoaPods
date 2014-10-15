@@ -45,7 +45,7 @@ module Pod
           configuration = @target.add_build_configuration(bc_name, type)
         end
 
-        settings = {}
+        settings = { 'OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '' }
         if library.archs
           settings['ARCHS'] = library.archs
         end

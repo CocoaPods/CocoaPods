@@ -32,6 +32,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kurry Tran](https://github.com/kurry)
   [#2683](https://github.com/CocoaPods/CocoaPods/issues/2683)
 
+* Fixes an issue when using pods in static library targets and building with
+  Xcode 6 which requires `OTHER_LIBTOOLFLAGS` instead of `OTHER_LDFLAGS`, thus
+  basically reverting to the previous Xcode behaviour, for now at least.  
+  [Kyle Fuller](https://github.com/kylef)
+  [Eloy Durán](https://github.com/alloy)
+  [#2666](https://github.com/CocoaPods/CocoaPods/issues/2666)
+
+
 ## 0.34.2
 
 ##### Enhancements
@@ -2619,7 +2627,7 @@ podspec, then update these method calls.
   generated Pods project file.
 
 * [#142](https://github.com/CocoaPods/CocoaPods/issues/): Add `-fobjc-arc` to
-  `OTHER_LD_FLAGS` if _any_ pods require ARC.
+  `OTHER_LDFLAGS` if _any_ pods require ARC.
 
 * [#148](https://github.com/CocoaPods/CocoaPods/issues/148): External encoding
   set to UTF-8 on Ruby 1.9 to fix crash caused by non-ascii characters in pod

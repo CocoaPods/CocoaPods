@@ -85,6 +85,10 @@ module Pod
           @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
         end
 
+        it 'should configure OTHER_LIBTOOLFLAGS flags to include OTHER_LDFLAGS' do
+          @xcconfig.to_hash['OTHER_LIBTOOLFLAGS'].should == '$(OTHER_LDFLAGS)'
+        end
+
         #-----------------------------------------------------------------------#
 
         before do
