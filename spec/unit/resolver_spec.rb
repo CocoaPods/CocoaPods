@@ -274,6 +274,17 @@ module Pod
         e.message.should.match(/`AFNetworking \(> 2\)` required by `Podfile`/)
       end
 
+      it 'raises if no such version of a dependency exists' do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'AFNetworking', '3.0.1'
+        end
+        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
+        e = lambda { resolver.resolve }.should.raise Informative
+        e.message.should.match(/Unable to satisfy the following requirements/)
+        e.message.should.match(/`AFNetworking \(= 3.0.1\)` required by `Podfile`/)
+      end
+
       it 'takes into account locked dependencies' do
         podfile = Podfile.new do
           platform :ios
