@@ -123,6 +123,19 @@ module Pod
           'AFOAuth2Client (0.1.2)', 'CargoBay (1.0.0)']
       end
 
+      it 'uses a Podfile requirement even when a previously declared ' \
+        'dependency has a different requirement' do
+          @podfile = Podfile.new do
+            platform :ios, '7.0'
+            pod 'InstagramKit' # latest version (3.5.0) requires 'AFNetworking', '~> 2.0'
+            pod 'AFNetworking', '2.0.1'
+          end
+
+          resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+          specs = resolver.resolve.values.flatten.map(&:root).map(&:to_s).uniq.sort
+          specs.should == ['AFNetworking (2.0.1)', 'InstagramKit (3.5.0)']
+        end
+
       it 'holds the context state, such as cached specification sets' do
         @resolver.resolve
         cached_sets = @resolver.send(:cached_sets)
