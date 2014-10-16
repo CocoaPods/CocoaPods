@@ -60,6 +60,15 @@ module Pod
         specs = resolver.specs_by_target.values.flatten
         specs.map(&:to_s).should == ['Reachability (3.0.0)']
       end
+
+      it 'resolves an empty podfile' do
+        @podfile = Podfile.new do
+          platform :ios
+        end
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should == []
+      end
     end
 
     #-------------------------------------------------------------------------#
@@ -98,6 +107,20 @@ module Pod
                          'RestKit/Core (0.20.1)', 'RestKit/CoreData (0.20.1)',
                          'RestKit/Network (0.20.1)', 'RestKit/ObjectMapping (0.20.1)',
                          'RestKit/Support (0.20.1)', 'SOCKit (1.1)', 'TransitionKit (1.1.0)']
+      end
+
+      it 'resolves three-way conflicts' do
+        @podfile = Podfile.new do
+          platform :ios, '7.0'
+          pod 'AFAmazonS3Client' # latest version (2.0.0) requires 'AFNetworking', '~> 2.0'
+          pod 'CargoBay' # latest version (2.1.0) requires 'AFNetworking', '~> 2.2'
+          pod 'AFOAuth2Client' # latest version (0.1.2) requires 'AFNetworking', '~> 1.3'
+        end
+
+        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should == ['AFAmazonS3Client (1.0.1)', 'AFNetworking (1.3.4)',
+          'AFOAuth2Client (0.1.2)', 'CargoBay (1.0.0)']
       end
 
       it 'holds the context state, such as cached specification sets' do
@@ -251,35 +274,6 @@ module Pod
         resolver = Resolver.new(config.sandbox, podfile, locked_deps, SourcesManager.all)
         version = resolver.resolve.values.flatten.first.version
         version.to_s.should == '1.4'
-      end
-
-      xit 'takes into account locked implicit dependencies' do
-        podfile = Podfile.new do
-          platform :ios, '8.0'
-          pod 'ARAnalytics/Mixpanel'
-        end
-        lockfile_yaml = <<-EOS
-PODS:
-  - ARAnalytics/CoreIOS (2.8.0)
-  - ARAnalytics/Mixpanel (2.8.0):
-    - ARAnalytics/CoreIOS
-    - Mixpanel
-  - Mixpanel (2.5.1)
-
-DEPENDENCIES:
-  - ARAnalytics/Mixpanel
-
-SPEC CHECKSUMS:
-  ARAnalytics: 93c5b65989145f88f4d45e262612eac277b0c219
-  Mixpanel: 0115466ba70fd12e67ac4d3d071408dd1d489657
-
-COCOAPODS: 0.33.1
-        EOS
-        lockfile = Lockfile.new(YAMLHelper.load_string(lockfile_yaml))
-        resolver = Resolver.new(config.sandbox, podfile, lockfile.dependencies, SourcesManager.master)
-        resolver.resolve.values.first.
-          find { |s| s.name == 'Mixpanel' }.
-          version.to_s.should == '2.5.1'
       end
 
       it 'consults all sources when finding a matching spec' do
