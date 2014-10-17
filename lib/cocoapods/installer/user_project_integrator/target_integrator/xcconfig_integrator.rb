@@ -82,7 +82,7 @@ module Pod
               'project because because your project already has a custom ' \
               'config set. In order for CocoaPods integration to work at ' \
               'all, please either set the base configurations of the target ' \
-              "#{target.name}` to `#{path}` or include the `#{path}` in your " \
+              "`#{target.name}` to `#{path}` or include the `#{path}` in your " \
               'build configuration.'
             else
               file_ref ||= group.new_file(path)
