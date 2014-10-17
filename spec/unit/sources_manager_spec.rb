@@ -138,6 +138,18 @@ module Pod
             SourcesManager.send(:name_for_url, url).
               should == 'companyalias-pod-specs'
           end
+          
+          it 'supports file URLs' do
+            url = 'file:///Users/kurrytran/pod-specs'
+            SourcesManager.send(:name_for_url, url).
+              should == 'users-kurrytran-pod-specs'
+          end
+          
+          it 'uses the repo name if no parent directory' do
+            url = 'file:///pod-specs'
+            SourcesManager.send(:name_for_url, url).
+              should == 'pod-specs'
+          end
 
           it 'supports ssh URLs with no user component' do
             url = 'ssh://company.com/pods/specs.git'

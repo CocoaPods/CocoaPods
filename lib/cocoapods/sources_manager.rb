@@ -410,6 +410,11 @@ module Pod
       #          name_for_url('https://sourceforge.org/Artsy/Specs.git')
       #            # sourceforge-artsy-specs
       #
+      # @example A file URL
+      # 
+      #           name_for_url('file:///Artsy/Specs.git')
+      #             # artsy-specs
+      #
       # @param  [#to_s] url
       #         The URL of the source.
       #
@@ -417,8 +422,13 @@ module Pod
       #
       def name_for_url(url)
         base_from_host_and_path = lambda do |host, path|
-          base = host.split('.')[-2] || host
-          base += '-' + path.gsub(/.git$/, '').gsub(/^\//, '').
+          if host.nil?
+            base = ''
+          else
+            base = host.split('.')[-2] || host
+            base += '-'
+          end
+          base += path.gsub(/.git$/, '').gsub(/^\//, '').
             split('/').join('-')
         end
 
