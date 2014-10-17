@@ -28,7 +28,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#2627](https://github.com/CocoaPods/CocoaPods/issues/2627)
   [#2665](https://github.com/CocoaPods/CocoaPods/issues/2665)
 
-* Fixes a crash when using file URLs as a source.
+* Fixes a crash when using file URLs as a source.  
   [Kurry Tran](https://github.com/kurry)
   [#2683](https://github.com/CocoaPods/CocoaPods/issues/2683)
 
