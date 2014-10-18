@@ -42,6 +42,12 @@ module Pod
 
     def self.run(argv)
       help! 'You cannot run CocoaPods as root.' if Process.uid == 0
+
+      # Prepend xcode developer tools usr/bin to PATH so we prefer Xcode
+      # version of tools over custom user installed tools (#2651).
+      developer_tools_bin = Pathname.new(`/usr/bin/xcode-select --print-path`.strip) + 'usr/bin'
+      ENV['PATH'] = "#{developer_tools_bin}:#{ENV['PATH']}"
+
       super(argv)
       UI.print_warnings
     end
