@@ -39,6 +39,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Eloy Durán](https://github.com/alloy)
   [#2666](https://github.com/CocoaPods/CocoaPods/issues/2666)
 
+* Fixes an issue running the resources script when Xcode is installed to a
+  directory with a space when compiling xcassets.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2684](https://github.com/CocoaPods/CocoaPods/issues/2684)
+
 
 ## 0.34.2
 
