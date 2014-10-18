@@ -7,7 +7,7 @@ module Pod
 
     before do
       @test_source = Source.new(fixture('spec-repos/test_repo'))
-      SourcesManager.stubs(:all).returns([@test_source])
+      Source::Aggregate.any_instance.stubs(:sources).returns([@test_source])
       SourcesManager.updated_search_index = nil
     end
 
@@ -40,7 +40,7 @@ module Pod
       output.should.not.include? 'BananaLib'
     end
 
-    it 'restricts the search to Pods supported on iOS' do
+    it 'restricts the search to Pods supported on OS X' do
       output = run_command('search', 'BananaLib', '--osx')
       output.should.not.include? 'BananaLib'
     end
