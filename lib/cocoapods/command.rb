@@ -42,6 +42,8 @@ module Pod
 
     def self.run(argv)
       help! 'You cannot run CocoaPods as root.' if Process.uid == 0
+      verify_git_version!
+
       super(argv)
       UI.print_warnings
     end
@@ -109,6 +111,19 @@ module Pod
     def verify_lockfile_exists!
       unless config.lockfile
         raise Informative, "No `Podfile.lock' found in the project directory, run `pod install'."
+      end
+    end
+
+    def self.verify_git_version!
+      begin
+        git_version = `git version`.strip
+      rescue Errno::ENOENT
+        help! 'CocoaPods requires you to have `git` installed.'
+      end
+
+      git_version = Version.new(git_version.split[2])
+      if git_version < Pod::Version.new('1.7.5')
+        help! 'CocoaPods requires git version 1.7.5 or newer. Please update git.'
       end
     end
   end

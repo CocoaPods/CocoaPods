@@ -49,6 +49,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#2083](https://github.com/CocoaPods/CocoaPods/issues/2083)
 
+* Ensure that git 1.7.5 or newer is installed when running pod.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2651](https://github.com/CocoaPods/CocoaPods/issues/2651)
+
 
 ## 0.34.2
 
