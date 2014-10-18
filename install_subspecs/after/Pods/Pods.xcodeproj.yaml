@@ -58,6 +58,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
@@ -81,6 +82,7 @@ Targets:
         Base Configuration: Pods-OS X App.debug.xcconfig
     - Release:
         Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           OTHER_CFLAGS:
           - -DNS_BLOCK_ASSERTIONS=1
@@ -116,34 +118,36 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          GCC_PREFIX_HEADER: Target Support Files/Pods-OS X App-PodTest/Pods-OS X
-            App-PodTest-prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
-          SDKROOT: macosx
-          SKIP_INSTALL: 'YES'
-          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
-          MACOSX_DEPLOYMENT_TARGET: '10.6'
           DSTROOT: /tmp/xcodeproj.dst
-          GCC_DYNAMIC_NO_PIC: 'NO'
-          GCC_OPTIMIZATION_LEVEL: '0'
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
           - $(inherited)
-          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          OTHER_LIBTOOLFLAGS: ''
+          GCC_PREFIX_HEADER: Target Support Files/Pods-OS X App-PodTest/Pods-OS X
+            App-PodTest-prefix.pch
+          MACOSX_DEPLOYMENT_TARGET: '10.6'
+          GCC_OPTIMIZATION_LEVEL: '0'
           OTHER_LDFLAGS: ''
-          COMBINE_HIDPI_IMAGES: 'YES'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          SDKROOT: macosx
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           COPY_PHASE_STRIP: 'NO'
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          SKIP_INSTALL: 'YES'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+          COMBINE_HIDPI_IMAGES: 'YES'
         Base Configuration: Pods-OS X App-PodTest-Private.xcconfig
     - Release:
         Build Settings:
           GCC_PREFIX_HEADER: Target Support Files/Pods-OS X App-PodTest/Pods-OS X
             App-PodTest-prefix.pch
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          OTHER_LIBTOOLFLAGS: ''
           OTHER_CFLAGS:
           - -DNS_BLOCK_ASSERTIONS=1
           - $(inherited)
@@ -174,6 +178,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -195,6 +200,7 @@ Targets:
         Base Configuration: Pods-iOS App.debug.xcconfig
     - Release:
         Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
@@ -213,7 +219,7 @@ Targets:
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           COPY_PHASE_STRIP: 'YES'
-          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods-iOS App.release.xcconfig
 - Pods-iOS App-PodTest:
     Build Phases:
@@ -229,6 +235,7 @@ Targets:
     - Debug:
         Build Settings:
           OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -250,6 +257,7 @@ Targets:
         Base Configuration: Pods-iOS App-PodTest-Private.xcconfig
     - Release:
         Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'

@@ -48,6 +48,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -69,6 +70,7 @@ Targets:
         Base Configuration: Pods.debug.xcconfig
     - Release:
         Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
@@ -87,7 +89,7 @@ Targets:
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'YES'
-          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.release.xcconfig
 - Pods-JSONKit:
     Build Phases:
@@ -102,6 +104,7 @@ Targets:
     - Debug:
         Build Settings:
           OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -123,6 +126,7 @@ Targets:
         Base Configuration: Pods-JSONKit-Private.xcconfig
     - Release:
         Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
@@ -158,6 +162,7 @@ Targets:
     - Debug:
         Build Settings:
           OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -179,6 +184,7 @@ Targets:
         Base Configuration: Pods-Reachability-Private.xcconfig
     - Release:
         Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'

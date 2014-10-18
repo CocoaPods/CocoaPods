@@ -39,6 +39,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -60,6 +61,7 @@ Targets:
         Base Configuration: Pods.debug.xcconfig
     - Release:
         Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
@@ -78,7 +80,7 @@ Targets:
           OTHER_LDFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           COPY_PHASE_STRIP: 'YES'
-          PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.release.xcconfig
 - Pods-Reachability:
     Build Phases:
@@ -95,6 +97,7 @@ Targets:
         Build Settings:
           GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
           OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -117,12 +120,13 @@ Targets:
     - Release:
         Build Settings:
           GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
+          OTHER_LIBTOOLFLAGS: ''
           PUBLIC_HEADERS_FOLDER_PATH: $(TARGET_NAME)
           SDKROOT: iphoneos
-          VALIDATE_PRODUCT: 'YES'
           OTHER_CFLAGS:
           - -DNS_BLOCK_ASSERTIONS=1
           - $(inherited)
+          VALIDATE_PRODUCT: 'YES'
           SKIP_INSTALL: 'YES'
           INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
           DSTROOT: /tmp/xcodeproj.dst
