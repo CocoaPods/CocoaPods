@@ -44,6 +44,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#2684](https://github.com/CocoaPods/CocoaPods/issues/2684)
 
+* Add Xcode's bin dir to the PATH, so we prefer tools like git from Apple over
+  custom user installed tools.
+  [Kyle Fuller](https://github.com/kylef)
+  [#2651](https://github.com/CocoaPods/CocoaPods/issues/2651)
+
 
 ## 0.34.2
 
