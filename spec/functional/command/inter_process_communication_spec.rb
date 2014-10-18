@@ -44,7 +44,7 @@ module Pod
         spec = fixture_spec('banana-lib/BananaLib.podspec')
         set = Specification::Set.new('BananaLib', [])
         set.stubs(:specification).returns(spec)
-        Source.any_instance.stubs(:pod_sets).returns([set])
+        Source::Aggregate.any_instance.stubs(:all_sets).returns([set])
 
         out = run_command('ipc', 'list')
         out.should.include('---')
