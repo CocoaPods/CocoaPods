@@ -29,7 +29,7 @@ module Pod
       @installer = Installer::TargetInstaller.new(config.sandbox, @pod_target)
     end
 
-    it 'Adds the architectures to the custom build configurations of the user target' do
+    it 'adds the architectures to the custom build configurations of the user target' do
       @pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
       @installer.send(:add_target)
       @installer.send(:target).resolved_build_setting('ARCHS').should == {
@@ -38,6 +38,12 @@ module Pod
         'AppStore' => '$(ARCHS_STANDARD_64_BIT)',
         'Test' => '$(ARCHS_STANDARD_64_BIT)',
       }
+    end
+
+    it 'always clears the OTHER_LDFLAGS and OTHER_LIBTOOLFLAGS, because these lib targets do not ever need any' do
+      @installer.send(:add_target)
+      @installer.send(:target).resolved_build_setting('OTHER_LDFLAGS').values.uniq.should == ['']
+      @installer.send(:target).resolved_build_setting('OTHER_LIBTOOLFLAGS').values.uniq.should == ['']
     end
 
   end
