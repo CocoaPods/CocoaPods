@@ -281,7 +281,10 @@ begin
 
   if RUBY_VERSION >= '1.9.3'
     require 'rubocop/rake_task'
-    RuboCop::RakeTask.new
+
+    RuboCop::RakeTask.new(:rubocop) do |task|
+      task.patterns = ['lib', 'spec']
+    end
   end
 
 rescue LoadError, NameError => e
