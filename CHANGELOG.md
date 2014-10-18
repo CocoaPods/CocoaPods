@@ -44,6 +44,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#2684](https://github.com/CocoaPods/CocoaPods/issues/2684)
 
+* Fixes an issue when installing Pods with resources to a target which
+  doesn't have any resources.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2083](https://github.com/CocoaPods/CocoaPods/issues/2083)
+
 
 ## 0.34.2
 
