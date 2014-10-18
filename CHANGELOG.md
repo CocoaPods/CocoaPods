@@ -2,6 +2,15 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
+## Master
+
+##### Enhacements
+
+* The `pod push` has been removed as it has been deprecated in favour of `pod
+  repo push` in CocoaPods 0.33.  
+  [Fabio Pelosin](https://github.com/fabiopelosin)
+
+
 ## 0.34.4
 
 ##### Bug Fixes
