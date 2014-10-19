@@ -1,5 +1,16 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
+def dependency_graph_from_array(locked_dependencies)
+  locked_dependencies.reduce(Molinillo::DependencyGraph.new) do |graph, dep|
+    graph.add_root_vertex(dep.name, dep)
+    graph
+  end
+end
+
+def empty_graph
+  Molinillo::DependencyGraph.new
+end
+
 module Pod
   describe Resolver do
     describe 'In general' do
@@ -8,7 +19,7 @@ module Pod
           platform :ios
           pod 'BlocksKit', '1.5.2'
         end
-        locked_deps = [Dependency.new('BlocksKit', '1.5.2')]
+        locked_deps = dependency_graph_from_array([Dependency.new('BlocksKit', '1.5.2')])
         @resolver = Resolver.new(config.sandbox, @podfile, locked_deps, SourcesManager.all)
       end
 
@@ -21,7 +32,8 @@ module Pod
       end
 
       it 'returns the locked dependencies' do
-        @resolver.locked_dependencies.should == [Dependency.new('BlocksKit', '1.5.2')]
+        @resolver.locked_dependencies.
+          should == dependency_graph_from_array([Dependency.new('BlocksKit', '1.5.2')])
       end
 
       #--------------------------------------#
@@ -55,7 +67,7 @@ module Pod
           platform :ios
           pod 'Reachability', :podspec => podspec
         end
-        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
         resolver.resolve
         specs = resolver.specs_by_target.values.flatten
         specs.map(&:to_s).should == ['Reachability (3.0.0)']
@@ -65,7 +77,7 @@ module Pod
         @podfile = Podfile.new do
           platform :ios
         end
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == []
       end
@@ -79,7 +91,7 @@ module Pod
           platform :ios, '6.0'
           pod 'BlocksKit', '1.5.2'
         end
-        @resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        @resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
       end
 
       it 'cross resolves dependencies' do
@@ -89,7 +101,7 @@ module Pod
           pod 'AFQuickLookView', '=  0.1.0' # requires  'AFNetworking', '>= 0.9.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == ['AFNetworking (0.9.1)', 'AFQuickLookView (0.1.0)']
       end
@@ -101,7 +113,7 @@ module Pod
           pod 'AFNetworking', '~> 1.2.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == ['AFNetworking (1.2.1)', 'RestKit (0.20.1)',
                          'RestKit/Core (0.20.1)', 'RestKit/CoreData (0.20.1)',
@@ -117,10 +129,10 @@ module Pod
           pod 'AFOAuth2Client' # latest version (0.1.2) requires 'AFNetworking', '~> 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == ['AFAmazonS3Client (1.0.1)', 'AFNetworking (1.3.4)',
-          'AFOAuth2Client (0.1.2)', 'CargoBay (1.0.0)']
+                         'AFOAuth2Client (0.1.2)', 'CargoBay (1.0.0)']
       end
 
       it 'uses a Podfile requirement even when a previously declared ' \
@@ -131,7 +143,7 @@ module Pod
             pod 'AFNetworking', '2.0.1'
           end
 
-          resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+          resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
           specs = resolver.resolve.values.flatten.map(&:root).map(&:to_s).uniq.sort
           specs.should == ['AFNetworking (2.0.1)', 'InstagramKit (3.5.0)']
         end
@@ -170,7 +182,7 @@ module Pod
           platform :ios, '7.0'
           pod 'RestKit', '0.10.3'
         end
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         resolver.resolve.values.flatten.map(&:name).sort.should == %w(
           FileMD5Hash
           ISO8601DateFormatter
@@ -198,7 +210,7 @@ module Pod
           platform :ios, '7.0'
           pod 'RestKit', '0.20.0-rc1'
         end
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         resolver.resolve.values.flatten.map(&:to_s).sort.should == [
           'AFNetworking (1.1.0)',
           'RestKit (0.20.0-rc1)',
@@ -227,7 +239,7 @@ module Pod
           end
         end
         config.sandbox.expects(:specification).with('MainSpec').returns(spec)
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:name).sort
         specs.should == %w(
           MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec
@@ -240,7 +252,7 @@ module Pod
           pod 'FileMD5Hash'
           pod 'JSONKit', :head
         end
-        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
         filemd5hash, jsonkit = resolver.resolve.values.first.sort_by(&:name)
         filemd5hash.version.should.not.be.head
         jsonkit.version.should.be.head
@@ -254,7 +266,7 @@ module Pod
           pod 'JSONKit', '1.4'
           pod 'JSONKit', '1.5pre'
         end
-        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/Unable to satisfy the following requirements/)
         e.message.should.match(/`JSONKit \(= 1.4\)` required by `Podfile`/)
@@ -267,7 +279,7 @@ module Pod
           pod 'RestKit', '0.23.3' # dependends on AFNetworking ~> 1.3.0
           pod 'AFNetworking', '> 2'
         end
-        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/Unable to satisfy the following requirements/)
         e.message.should.match(/`AFNetworking \(~> 1.3.0\)` required by `RestKit\/Network \(.*\)`/)
@@ -279,7 +291,7 @@ module Pod
           platform :ios
           pod 'AFNetworking', '3.0.1'
         end
-        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/Unable to satisfy the following requirements/)
         e.message.should.match(/`AFNetworking \(= 3.0.1\)` required by `Podfile`/)
@@ -290,11 +302,11 @@ module Pod
           platform :ios
           pod 'JSONKit', '<= 1.5pre'
         end
-        resolver = Resolver.new(config.sandbox, podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
         version = resolver.resolve.values.flatten.first.version
         version.to_s.should == '1.5pre'
 
-        locked_deps = [Dependency.new('JSONKit', '= 1.4')]
+        locked_deps = dependency_graph_from_array([Dependency.new('JSONKit', '= 1.4')])
         resolver = Resolver.new(config.sandbox, podfile, locked_deps, SourcesManager.all)
         version = resolver.resolve.values.flatten.first.version
         version.to_s.should == '1.4'
@@ -307,13 +319,13 @@ module Pod
         end
         file = fixture('spec-repos/test_repo/JSONKit/999.999.999/JSONKit.podspec')
         sources = SourcesManager.sources(%w(master test_repo))
-        resolver = Resolver.new(config.sandbox, podfile, [], sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
         spec = resolver.resolve.values.flatten.first
         spec.version.to_s.should == '999.999.999'
         spec.defined_in_file.should == file
 
         sources = SourcesManager.sources(%w(test_repo master))
-        resolver = Resolver.new(config.sandbox, podfile, [], sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
         spec = resolver.resolve.values.flatten.first
         spec.version.to_s.should == '999.999.999'
         resolver.resolve.values.flatten.first.defined_in_file.should == file
@@ -326,13 +338,13 @@ module Pod
           pod 'JSONKit', '1.4'
         end
         sources = SourcesManager.sources(%w(master test_repo))
-        resolver = Resolver.new(config.sandbox, podfile, [], sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
         spec = resolver.resolve.values.flatten.first
         spec.version.to_s.should == '1.4'
         spec.defined_in_file.should == fixture('spec-repos/master/Specs/JSONKit/1.4/JSONKit.podspec.json')
 
         sources = SourcesManager.sources(%w(test_repo master))
-        resolver = Resolver.new(config.sandbox, podfile, [], sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
         spec = resolver.resolve.values.flatten.first
         spec.version.to_s.should == '1.4'
         resolver.resolve.values.flatten.first.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
@@ -351,7 +363,7 @@ module Pod
           pod 'AFNetworking', '1.0RC3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == ['AFNetworking (1.0RC3)']
       end
@@ -362,7 +374,7 @@ module Pod
           pod 'AFNetworking', '~> 1.0RC3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.3.4)']
@@ -374,7 +386,7 @@ module Pod
           pod 'AFNetworking', '1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
@@ -386,7 +398,7 @@ module Pod
           pod 'AFNetworking', '< 1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (0.10.1)']
@@ -398,7 +410,7 @@ module Pod
           pod 'AFNetworking', '<= 1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
@@ -410,7 +422,7 @@ module Pod
           pod 'AFNetworking', '> 1.0', '< 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
@@ -422,7 +434,7 @@ module Pod
           pod 'AFNetworking', '>= 1.0', '< 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
@@ -434,7 +446,7 @@ module Pod
           pod 'AFNetworking', '~> 1.0', '< 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, [], SourcesManager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
