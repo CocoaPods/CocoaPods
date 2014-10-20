@@ -167,6 +167,10 @@ module Pod
 
     include Molinillo::UI
 
+    def output
+      UI
+    end
+
     #-------------------------------------------------------------------------#
 
     private
