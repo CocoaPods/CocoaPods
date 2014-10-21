@@ -17,5 +17,16 @@ module Pod
       generator_1.send(:script).should.not.include '--reference-external-strings-file'
       generator_2.send(:script).should.include '--reference-external-strings-file'
     end
+
+    it 'adds configuration dependent resources with a call wrapped in an if statement' do
+      resources = { 'Debug' => %w(Lookout.framework) }
+      generator = Pod::Generator::CopyResourcesScript.new(resources, Platform.new(:ios, '6.0'))
+      script = generator.send(:script)
+      script.should.include <<-eos.strip_heredoc
+        if [[ "$CONFIGURATION" == "Debug" ]]; then
+          install_resource 'Lookout.framework'
+        fi
+      eos
+    end
   end
 end
