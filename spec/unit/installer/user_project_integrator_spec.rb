@@ -18,12 +18,12 @@ module Pod
         end
         config.sandbox.project = Project.new(config.sandbox.project_path)
         Xcodeproj::Project.new(config.sandbox.project_path).save
-        @library = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
-        @library.client_root = sample_project_path.dirname
-        @library.user_project_path  = sample_project_path
-        @library.user_target_uuids  = ['A346496C14F9BE9A0080D870']
+        @target = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
+        @target.client_root = sample_project_path.dirname
+        @target.user_project_path  = sample_project_path
+        @target.user_target_uuids  = ['A346496C14F9BE9A0080D870']
         empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], config.sandbox)
-        @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library, empty_library])
+        @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target, empty_library])
       end
 
       #-----------------------------------------------------------------------#
@@ -59,10 +59,10 @@ module Pod
           UI.warnings = ''
           target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => ['FLAG=1'] })
           user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
-          @library.stubs(:user_targets).returns([user_target])
+          @target.stubs(:user_targets).returns([user_target])
 
-          @library.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }
-          @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library])
+          @target.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }
+          @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target])
 
           @integrator.unstub(:warn_about_xcconfig_overrides)
           @integrator.send(:warn_about_xcconfig_overrides)
@@ -74,10 +74,10 @@ module Pod
           UI.warnings = ''
           target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => ['FLAG=1', '${inherited}'] })
           user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
-          @library.stubs(:user_targets).returns([user_target])
+          @target.stubs(:user_targets).returns([user_target])
 
-          @library.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }
-          @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library])
+          @target.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }
+          @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target])
 
           @integrator.unstub(:warn_about_xcconfig_overrides)
           @integrator.send(:warn_about_xcconfig_overrides)
@@ -88,10 +88,10 @@ module Pod
           UI.warnings = ''
           target_config = stub(:name => 'Release', :build_settings => { 'GCC_PREPROCESSOR_DEFINITIONS' => ['FLAG=1', '$(inherited)'] })
           user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
-          @library.stubs(:user_targets).returns([user_target])
+          @target.stubs(:user_targets).returns([user_target])
 
-          @library.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }
-          @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@library])
+          @target.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }
+          @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target])
 
           @integrator.unstub(:warn_about_xcconfig_overrides)
           @integrator.send(:warn_about_xcconfig_overrides)

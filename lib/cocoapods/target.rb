@@ -52,7 +52,7 @@ module Pod
     # @return [PBXNativeTarget] the target generated in the Pods project for
     #         this library.
     #
-    attr_accessor :target
+    attr_accessor :native_target
 
     # @return [Platform] the platform for this library.
     #

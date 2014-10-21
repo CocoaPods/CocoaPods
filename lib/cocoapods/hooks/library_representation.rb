@@ -69,7 +69,7 @@ module Pod
       #         process.
       #
       def target
-        library.target
+        library.native_target
       end
 
       #-----------------------------------------------------------------------#

@@ -80,16 +80,6 @@ module Pod
       EOS
     end
 
-    it 'imports UIKit in iOS platforms' do
-      @gen.stubs(:platform).returns(Pod::Platform.ios)
-      @gen.generate.should.include?('#import <UIKit/UIKit.h>')
-    end
-
-    it 'imports Cocoa for OS X platforms' do
-      @gen.stubs(:platform).returns(Pod::Platform.osx)
-      @gen.generate.should.include?('#import <Cocoa/Cocoa.h>')
-    end
-
     it 'writes the prefix header file to the disk' do
       path = temporary_directory + 'Test.pch'
       @gen.save_as(path)

@@ -418,7 +418,7 @@ module Pod
         pod_targets.sort_by(&:name).each do |pod_target|
           pod_target.file_accessors.each do |file_accessor|
             file_accessor.spec_consumer.frameworks.each do |framework|
-              pod_target.target.add_system_framework(framework)
+              pod_target.native_target.add_system_framework(framework)
             end
           end
         end
@@ -428,7 +428,7 @@ module Pod
     def set_target_dependencies
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
-          aggregate_target.target.add_dependency(pod_target.target)
+          aggregate_target.native_target.add_dependency(pod_target.native_target)
           pod_target.dependencies.each do |dep|
 
             unless dep == pod_target.pod_name
@@ -437,7 +437,7 @@ module Pod
               unless pod_dependency_target
                 puts "[BUG] DEP: #{dep}"
               end
-              pod_target.target.add_dependency(pod_dependency_target.target)
+              pod_target.native_target.add_dependency(pod_dependency_target.native_target)
             end
           end
         end
