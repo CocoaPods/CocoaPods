@@ -59,9 +59,9 @@ module Pod
       #
       def install_resources_function
         if use_external_strings_file?
-          INSTALL_RESOURCES_FUCTION
+          INSTALL_RESOURCES_FUNCTION
         else
-          INSTALL_RESOURCES_FUCTION.gsub(' --reference-external-strings-file', '')
+          INSTALL_RESOURCES_FUNCTION.gsub(' --reference-external-strings-file', '')
         end
       end
 
@@ -83,7 +83,7 @@ module Pod
         script
       end
 
-      INSTALL_RESOURCES_FUCTION = <<EOS
+      INSTALL_RESOURCES_FUNCTION = <<EOS
 #!/bin/sh
 set -e
 
