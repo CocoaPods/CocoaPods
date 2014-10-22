@@ -93,6 +93,13 @@ module Pod
 
     include Molinillo::SpecificationProvider
 
+    # Returns (and caches) the specification that satisfy the given dependency.
+    #
+    # @return [Array<Specification>] the specifications that satisfy the given
+    #   `dependency`.
+    #
+    # @param  [Dependency] dependency the dependency that is being searched for.
+    #
     def search_for(dependency)
       @search ||= {}
       @search[dependency] ||= begin
@@ -114,6 +121,13 @@ module Pod
       @search[dependency].dup
     end
 
+    # Returns the dependencies of `specification`.
+    #
+    # @return [Array<Specification>] all dependencies of `specification`.
+    #
+    # @param  [Specification] specification the specification whose own
+    #         dependencies are being asked for.
+    #
     def dependencies_for(specification)
       specification.all_dependencies.map do |dependency|
         if dependency.root_name == Specification.root_name(specification.name)
@@ -124,14 +138,42 @@ module Pod
       end
     end
 
+    # Returns the name for the given `dependency`.
+    #
+    # @return [String] the name for the given `dependency`.
+    #
+    # @param  [Dependency] dependency the dependency whose name is being
+    #         queried.
+    #
     def name_for(dependency)
       dependency.name
     end
 
+    # @return [String] the user-facing name for a {Podfile}.
+    #
     def name_for_explicit_dependency_source
       'Podfile'
     end
 
+    # @return [String] the user-facing name for a {Lockfile}.
+    #
+    def name_for_locking_dependency_source
+      'Podfile.lock'
+    end
+
+    # Determines whether the given `requirement` is satisfied by the given
+    # `spec`, in the context of the current `activated` dependency graph.
+    #
+    # @return [Boolean] whether `requirement` is satisfied by `spec` in the
+    #         context of the current `activated` dependency graph.
+    #
+    # @param  [Dependency] requirement the dependency in question.
+    #
+    # @param  [Molinillo::DependencyGraph] activated the current dependency
+    #         graph in the resolution process.
+    #
+    # @param  [Specification] spec the specification in question.
+    #
     def requirement_satisfied_by?(requirement, activated, spec)
       existing_vertices = activated.vertices.values.select do |v|
         Specification.root_name(v.name) ==  requirement.root_name
@@ -151,6 +193,15 @@ module Pod
     #   2) How relaxed are the requirements?
     #   3) Are there any conflicts for this dependency?
     #   4) How many possibilities are there to satisfy this dependency?
+    #
+    # @return [Array<Dependency>] the sorted dependencies.
+    #
+    # @param  [Array<Dependency>] dependencies the unsorted dependencies.
+    #
+    # @param  [Molinillo::DependencyGraph] activated the dependency graph of
+    #         currently activated specs.
+    #
+    # @param  [{String => Array<Conflict>}] conflicts the current conflicts.
     #
     def sort_dependencies(dependencies, activated, conflicts)
       dependencies.sort_by do |dependency|
@@ -172,6 +223,10 @@ module Pod
 
     include Molinillo::UI
 
+    # The UI object the resolver should use for displaying user-facing output.
+    #
+    # @return [UserInterface] the normal CocoaPods UI object.
+    #
     def output
       UI
     end
