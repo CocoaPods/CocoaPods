@@ -67,10 +67,11 @@ module Pod
       @specs_by_target ||= begin
         specs_by_target = {}
         podfile.target_definition_list.each do |target|
-          specs_by_target[target] = target.dependencies.map(&:name).map do |name|
+          specs = target.dependencies.map(&:name).map do |name|
             node = @activated.vertex_named(name)
             (node.recursive_successors << node).to_a
-          end.
+          end
+          specs_by_target[target] = specs.
             flatten.
             map(&:payload).
             uniq.
@@ -95,11 +96,18 @@ module Pod
     def search_for(dependency)
       @search ||= {}
       @search[dependency] ||= begin
-        find_cached_set(dependency).
+        specs = find_cached_set(dependency).
           all_specifications.
           select { |s| dependency.requirement.satisfied_by? s.version }.
-          map { |s| s.subspec_by_name dependency.name rescue nil }.
-          compact.
+          map do |s|
+            begin
+              s.subspec_by_name dependency.name
+            rescue
+              nil
+            end
+          end.compact
+
+        specs.
           reverse.
           each { |s| s.version.head = dependency.head? }
       end
@@ -214,7 +222,7 @@ module Pod
         end
         cached_sets[name] = set
         unless set
-          raise Molinillo::NoSuchDependencyError.new(dependency)
+          raise Molinillo::NoSuchDependencyError.new(dependency) # rubocop:disable Style/RaiseArgs
         end
       end
       cached_sets[name]
