@@ -35,10 +35,15 @@ module Pod
 
       def all_specifications
         @all_specifications ||= begin
-          versions_by_source.reduce({}) do |sources_by_version, (source, versions)|
+          sources_by_version = {}
+          versions_by_source.each do |source, versions|
             versions.each { |v| (sources_by_version[v] ||= []) << source }
             sources_by_version
-          end.select { |_version, sources| sources.count > 1 }.each do |version, sources|
+          end
+
+          duplicate_versions = sources_by_version.select { |_version, sources| sources.count > 1 }
+
+          duplicate_versions.each do |version, sources|
             UI.warn "Found multiple specifications for `#{name} (#{version})`:\n" +
               sources.
                 map { |s| s.specification_path(name, version) }.

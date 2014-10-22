@@ -234,37 +234,42 @@ module Pod
       def generate_version_locking_dependencies
         require 'molinillo/dependency_graph'
         dependency_graph = Molinillo::DependencyGraph.new
+
         unless update_mode == :all || !lockfile
           explicit_dependencies = lockfile.to_hash['DEPENDENCIES'] || []
           explicit_dependencies.each do |string|
             dependency = Dependency.new(string)
             dependency_graph.add_root_vertex(dependency.name, nil)
           end
+
+          add_child_vertex = lambda do |dependency_string, parents|
+            dependency = Dependency.from_string(dependency_string)
+            dependency_graph.add_child_vertex(dependency.name, parents.empty? ? dependency : nil, parents, nil)
+            dependency
+          end
+
           add_to_dependency_graph = lambda do |object, parents|
             case object
             when String
-              dependency = Dependency.from_string(object)
-              dependency_graph.add_child_vertex(dependency.name, parents.empty? ? dependency : nil, parents, nil)
+              add_child_vertex.call(object, parents)
             when Hash
               object.each do |key, value|
-                dependency = Dependency.from_string(key)
-                dependency_graph.add_child_vertex(dependency.name, parents.empty? ? dependency : nil, parents, nil)
+                dependency = add_child_vertex.call(key, parents)
                 value.each { |v| add_to_dependency_graph.call(v, [dependency.name]) }
               end
             end
           end
+
           pods = lockfile.to_hash['PODS'] || []
-          pods.each do |p|
-            add_to_dependency_graph.call(p, [])
+          pods.each do |pod|
+            add_to_dependency_graph.call(pod, [])
           end
 
           pods_to_update = result.podfile_state.changed + result.podfile_state.deleted
-          if update_mode == :selected
-            # If selected Pods should been updated, filter them out of the list
-            pods_to_update += update[:pods]
-          end
+          pods_to_update += update[:pods] if update_mode == :selected
           pods_to_update.each { |u| dependency_graph.detach_vertex_named(u) }
         end
+
         dependency_graph
       end
 
