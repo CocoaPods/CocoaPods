@@ -231,6 +231,15 @@ module Pod
       UI
     end
 
+    # Called before resolution starts. We print out `Resolving dependencies` in
+    # the analyzer, so here we just want to print out a starting `.`.
+    #
+    # @return [Void]
+    #
+    def before_resolution
+      UI.print '.'
+    end
+
     #-------------------------------------------------------------------------#
 
     private
