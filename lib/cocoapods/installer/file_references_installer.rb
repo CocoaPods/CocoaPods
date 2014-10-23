@@ -117,11 +117,15 @@ module Pod
               library.build_headers.add_search_path(headers_sandbox, library.platform)
               sandbox.public_headers.add_search_path(headers_sandbox, library.platform)
 
-              header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
+              header_mappings(headers_sandbox, file_accessor, file_accessor.headers, false).each do |namespaced_path, files|
                 library.build_headers.add_files(namespaced_path, files, library.platform)
               end
 
-              header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
+              header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers, false).each do |namespaced_path, files|
+                sandbox.public_headers.add_files(namespaced_path, files, library.platform)
+              end
+
+              header_mappings(headers_sandbox, file_accessor, file_accessor.vendored_frameworks_headers, true).each do |namespaced_path, files|
                 sandbox.public_headers.add_files(namespaced_path, files, library.platform)
               end
             end
@@ -177,11 +181,15 @@ module Pod
       # @param  [Array<Pathname>] headers
       #         The absolute paths of the headers which need to be mapped.
       #
+      # @param  [Boolean] framework_headers
+      #         Whether or not these headers should get an extra framework name
+      #         namespace. E.g. `Bananas/Bananas.h` instead of `Bananas.h`.
+      #
       # @return [Hash{Pathname => Array<Pathname>}] A hash containing the
       #         headers folders as the keys and the absolute paths of the
       #         header files as the values.
       #
-      def header_mappings(headers_sandbox, file_accessor, headers)
+      def header_mappings(headers_sandbox, file_accessor, headers, framework_headers)
         consumer = file_accessor.spec_consumer
         dir = headers_sandbox
         dir += consumer.header_dir if consumer.header_dir
@@ -189,7 +197,12 @@ module Pod
         mappings = {}
         headers.each do |header|
           sub_dir = dir
-          if consumer.header_mappings_dir
+          if framework_headers
+            framework_filename = header.each_filename.find do |filename|
+              File.extname(filename) == '.framework'
+            end
+            sub_dir += File.basename(framework_filename, '.framework')
+          elsif consumer.header_mappings_dir
             header_mappings_dir = file_accessor.path_list.root + consumer.header_mappings_dir
             relative_path = header.relative_path_from(header_mappings_dir)
             sub_dir += relative_path.dirname

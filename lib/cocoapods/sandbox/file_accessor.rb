@@ -118,6 +118,16 @@ module Pod
         paths_for_attribute(:vendored_frameworks, true)
       end
 
+      # @return [Array<Pathname>] The paths of the framework headers that come
+      #         shipped with the Pod.
+      #
+      def vendored_frameworks_headers
+        vendored_frameworks.map do |framework|
+          headers_dir = (framework + 'Headers').realpath
+          Pathname.glob(headers_dir + GLOB_PATTERNS[:public_header_files])
+        end.flatten.uniq
+      end
+
       # @return [Array<Pathname>] The paths of the library bundles that come
       #         shipped with the Pod.
       #

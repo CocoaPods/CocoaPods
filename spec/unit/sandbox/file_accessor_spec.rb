@@ -108,6 +108,12 @@ module Pod
         @accessor.vendored_frameworks.should.include?(@root + 'Bananalib.framework')
       end
 
+      it 'returns the paths of the framework headers' do
+        @accessor.vendored_frameworks_headers.should == [
+          @root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h',
+        ]
+      end
+
       it 'returns the paths of the library files' do
         @accessor.vendored_libraries.should.include?(@root + 'libBananalib.a')
       end
