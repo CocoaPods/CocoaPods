@@ -30,11 +30,6 @@ group :development do
   gem 'diffy'
   gem 'clintegracon'
   gem 'rubocop'
-
-  if RUBY_PLATFORM.include?('darwin')
-    # Make Xcodeproj faster
-    gem 'libxml-ruby'
-  end
 end
 
 group :debugging do
