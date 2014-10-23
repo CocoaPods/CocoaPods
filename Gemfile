@@ -29,10 +29,7 @@ group :development do
   # Integration tests
   gem 'diffy'
   gem 'clintegracon'
-
-  if RUBY_VERSION >= '1.9.3'
-    gem 'rubocop'
-  end
+  gem 'rubocop'
 
   if RUBY_PLATFORM.include?('darwin')
     # Make Xcodeproj faster
@@ -48,10 +45,3 @@ group :debugging do
   gem 'ruby-prof'
 end
 
-group :ruby_1_8_7 do
-  # Lock the current lowest requirement for ActiveSupport 3 to ensure we don't
-  # re-introduce https://github.com/CocoaPods/CocoaPods/issues/1950
-  gem 'i18n', '0.6.4'
-  gem 'mime-types', '< 2.0'
-  gem 'activesupport', '< 4'
-end

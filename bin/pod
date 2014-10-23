@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-if RUBY_VERSION > '1.8.7' && Encoding.default_external != Encoding::UTF_8
+if Encoding.default_external != Encoding::UTF_8
   puts "\e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding."
   if ENV['TRAVIS']
     puts <<-DOC

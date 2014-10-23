@@ -6,9 +6,19 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Breaking
 
+* Support of older versions of Ruby has been dropped and CocoaPods now depends
+  on Ruby 2.0.0 or greater. This is due to the release of Xcode 6.0 which has
+  dropped support for OS X 10.8 which results in the minimum version of
+  Ruby pre-installed on OS X is now 2.0.0.
+
+  If you are using a custom installation of Ruby which is older than 2.0.0, you
+  will need to update. Or even better, migrate to system Ruby.  
+  [Kyle Fuller](https://github.com/kylef)
+
 * Attempts to resolve circular dependencies will now raise an exception.  
   [Samuel Giddins](https://github.com/segiddins)
   [Molinillo#6](https://github.com/CocoaPods/Molinillo/issues/6)
+
 
 ##### Enhancements
 
