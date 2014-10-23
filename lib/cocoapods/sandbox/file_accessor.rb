@@ -149,7 +149,7 @@ module Pod
       # @return [Pathname] The path of the auto-detected README file.
       #
       def readme
-        path_list.glob(%w(        readme{*,.*}        )).first
+        path_list.glob(['readme{*,.*}']).first
       end
 
       # @return [Pathname] The path of the license file as indicated in the
@@ -159,7 +159,7 @@ module Pod
         if spec_consumer.spec.root.license[:file]
           path_list.root + spec_consumer.spec.root.license[:file]
         else
-          path_list.glob(%w(          licen{c,s}e{*,.*}          )).first
+          path_list.glob(['licen{c,s}e{*,.*}']).first
         end
       end
 
@@ -195,12 +195,12 @@ module Pod
       #
       # @return [String] the glob pattern.
       #
-      def glob_for_attribute(attrbute)
+      def glob_for_attribute(attribute)
         globs = {
           :source_files => '*.{h,hpp,hh,m,mm,c,cpp}'.freeze,
           :public_header_files => "*.{#{ HEADER_EXTENSIONS * ',' }}".freeze,
         }
-        globs[attrbute]
+        globs[attribute]
       end
 
       # Matches the given patterns to the file present in the root of the path

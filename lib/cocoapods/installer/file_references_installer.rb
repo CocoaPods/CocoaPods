@@ -8,7 +8,7 @@ module Pod
       #
       attr_reader :sandbox
 
-      # @return [Array<Library>] The libraries of the installation.
+      # @return [Array<PodTarget>] The libraries of the installation.
       #
       attr_reader :libraries
 
@@ -17,7 +17,7 @@ module Pod
       attr_reader :pods_project
 
       # @param [Sandbox] sandbox @see sandbox
-      # @param [Array<Library>] libraries @see libraries
+      # @param [Array<PodTarget>] libraries @see libraries
       # @param [Project] libraries @see libraries
       #
       def initialize(sandbox, libraries, pods_project)
@@ -167,11 +167,12 @@ module Pod
       # Computes the destination sub-directory in the sandbox
       #
       # @param  [Pathname] headers_sandbox
-      #         The sandbox where the headers links should be stored for this
+      #         The sandbox where the header links should be stored for this
       #         Pod.
       #
-      # @param  [Specification::Consumer] consumer
-      #         The consumer for which the headers need to be linked.
+      # @param  [Sandbox::FileAccessor] file_accessor
+      #         The consumer file accessor for which the headers need to be
+      #         linked.
       #
       # @param  [Array<Pathname>] headers
       #         The absolute paths of the headers which need to be mapped.

@@ -74,7 +74,7 @@ module Pod
         ]
       end
 
-      it 'filters the private headers form the public headers' do
+      it 'filters the private headers from the public headers' do
         @spec_consumer.stubs(:public_header_files).returns([])
         @spec_consumer.stubs(:private_header_files).returns(['**/*Private*'])
         @accessor.public_headers.sort.should == [
