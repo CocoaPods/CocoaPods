@@ -44,6 +44,7 @@ group :debugging do
   gem 'kicker'
   gem 'awesome_print'
   gem 'pry'
+  gem 'ruby-prof'
 end
 
 group :ruby_1_8_7 do
