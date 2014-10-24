@@ -4,7 +4,13 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
-##### Enhacements
+##### Breaking
+
+* Attempts to resolve circular dependencies will now raise an exception.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Molinillo#6](https://github.com/CocoaPods/Molinillo/issues/6)
+
+##### Enhancements
 
 * The `pod push` has been removed as it has been deprecated in favour of `pod
   repo push` in CocoaPods 0.33.  
@@ -14,6 +20,26 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   of the Hooks-API.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#2461](https://github.com/CocoaPods/CocoaPods/issues/2461)
+
+* The `Resolver` has been completely rewritten to use
+  [Molinillo](https://github.com/CocoaPods/Molinillo), an iterative dependency
+  resolution algorithm that automatically resolves version conflicts.
+  The order in which dependencies are declared in the `Podfile` no longer has
+  any effect on the resolution process.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#978](https://github.com/CocoaPods/CocoaPods/issues/978)
+  [#2002](https://github.com/CocoaPods/CocoaPods/issues/2002)
+
+* Implicit dependencies are now locked, so simply running `pod install` will not
+  cause them to be updated when they shouldn't be.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2318](https://github.com/CocoaPods/CocoaPods/issues/2318)
+  [#2506](https://github.com/CocoaPods/CocoaPods/issues/2506)
+
+* Pre-release versions are only considered in the resolution process when there
+  are dependencies that explicitly reference pre-release requirements.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#1489](https://github.com/CocoaPods/CocoaPods/issues/1489)
 
 ##### Bug Fixes
 
