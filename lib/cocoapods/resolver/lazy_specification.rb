@@ -25,7 +25,7 @@ module Pod
         def specification
           @specification ||= source.specification(name, version)
         end
-    end
+      end
 
       class External
         def all_specifications
