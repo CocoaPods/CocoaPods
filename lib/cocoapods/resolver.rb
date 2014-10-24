@@ -178,12 +178,13 @@ module Pod
       existing_vertices = activated.vertices.values.select do |v|
         Specification.root_name(v.name) ==  requirement.root_name
       end
-      requirement_satisfied = if existing = existing_vertices.map(&:payload).compact.first
-                                existing.version == spec.version &&
-                                  requirement.requirement.satisfied_by?(spec.version)
-      else
-        requirement.requirement.satisfied_by? spec.version
-      end
+      existing = existing_vertices.map(&:payload).compact.first
+      requirement_satisfied =
+        if existing
+          existing.version == spec.version && requirement.requirement.satisfied_by?(spec.version)
+        else
+          requirement.requirement.satisfied_by? spec.version
+        end
       requirement_satisfied && !(spec.version.prerelease? && existing_vertices.flat_map(&:requirements).none?(&:prerelease?))
     end
 
