@@ -1,17 +1,9 @@
+require 'molinillo'
+require 'cocoapods/resolver/lazy_specification'
+
 module Pod
   # The resolver is responsible of generating a list of specifications grouped
   # by target for a given Podfile.
-  #
-  # @todo Its current implementation is naive, in the sense that it can't do full
-  #   automatic resolves like Bundler:
-  #   [how-does-bundler-bundle](http://patshaughnessy.net/2011/9/24/how-does-bundler-bundle)
-  #
-  # @todo Another limitation is that the order of the dependencies matter. The
-  #   current implementation could create issues, for example, if a
-  #   specification is loaded for a target definition and later for another
-  #   target is set in head mode. The first specification will not be in head
-  #   mode.
-  #
   #
   class Resolver
     # @return [Sandbox] the Sandbox used by the resolver to find external
@@ -58,23 +50,12 @@ module Pod
     #         definition.
     #
     def resolve
-      @cached_sets     = {}
-      @cached_specs    = {}
-      @specs_by_target = {}
-
-      target_definitions = podfile.target_definition_list
-      target_definitions.each do |target|
-        title = "Resolving dependencies for target `#{target.name}' " \
-          "(#{target.platform})"
-        UI.section(title) do
-          @loaded_specs = []
-          find_dependency_specs(podfile, target.dependencies, target)
-          specs = cached_specs.values_at(*@loaded_specs).sort_by(&:name)
-          specs_by_target[target] = specs
-        end
-      end
-
+      dependencies = @podfile.target_definition_list.map(&:dependencies).flatten
+      @cached_sets = {}
+      @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
       specs_by_target
+    rescue Molinillo::ResolverError => e
+      raise Informative, e.message
     end
 
     # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
@@ -82,7 +63,198 @@ module Pod
     #
     # @note   The returned specifications can be subspecs.
     #
-    attr_reader :specs_by_target
+    def specs_by_target
+      @specs_by_target ||= begin
+        specs_by_target = {}
+        podfile.target_definition_list.each do |target|
+          specs = target.dependencies.map(&:name).map do |name|
+            node = @activated.vertex_named(name)
+            (node.recursive_successors << node).to_a
+          end
+          specs_by_target[target] = specs.
+            flatten.
+            map(&:payload).
+            uniq.
+            sort_by(&:name).
+            each do |spec|
+              validate_platform(spec, target)
+              sandbox.store_head_pod(spec.name) if spec.version.head
+            end
+        end
+        specs_by_target
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Specification Provider
+
+    include Molinillo::SpecificationProvider
+
+    # Returns (and caches) the specification that satisfy the given dependency.
+    #
+    # @return [Array<Specification>] the specifications that satisfy the given
+    #   `dependency`.
+    #
+    # @param  [Dependency] dependency the dependency that is being searched for.
+    #
+    def search_for(dependency)
+      @search ||= {}
+      @search[dependency] ||= begin
+        specs = find_cached_set(dependency).
+          all_specifications.
+          select { |s| dependency.requirement.satisfied_by? s.version }.
+          map { |s| s.subspec_by_name(dependency.name, false) }
+
+        specs.
+          reverse.
+          each { |s| s.version.head = dependency.head? }
+      end
+      @search[dependency].dup
+    end
+
+    # Returns the dependencies of `specification`.
+    #
+    # @return [Array<Specification>] all dependencies of `specification`.
+    #
+    # @param  [Specification] specification the specification whose own
+    #         dependencies are being asked for.
+    #
+    def dependencies_for(specification)
+      specification.all_dependencies.map do |dependency|
+        if dependency.root_name == Specification.root_name(specification.name)
+          Dependency.new(dependency.name, specification.version)
+        else
+          dependency
+        end
+      end
+    end
+
+    # Returns the name for the given `dependency`.
+    #
+    # @return [String] the name for the given `dependency`.
+    #
+    # @param  [Dependency] dependency the dependency whose name is being
+    #         queried.
+    #
+    def name_for(dependency)
+      dependency.name
+    end
+
+    # @return [String] the user-facing name for a {Podfile}.
+    #
+    def name_for_explicit_dependency_source
+      'Podfile'
+    end
+
+    # @return [String] the user-facing name for a {Lockfile}.
+    #
+    def name_for_locking_dependency_source
+      'Podfile.lock'
+    end
+
+    # Determines whether the given `requirement` is satisfied by the given
+    # `spec`, in the context of the current `activated` dependency graph.
+    #
+    # @return [Boolean] whether `requirement` is satisfied by `spec` in the
+    #         context of the current `activated` dependency graph.
+    #
+    # @param  [Dependency] requirement the dependency in question.
+    #
+    # @param  [Molinillo::DependencyGraph] activated the current dependency
+    #         graph in the resolution process.
+    #
+    # @param  [Specification] spec the specification in question.
+    #
+    def requirement_satisfied_by?(requirement, activated, spec)
+      existing_vertices = activated.vertices.values.select do |v|
+        Specification.root_name(v.name) ==  requirement.root_name
+      end
+      existing = existing_vertices.map(&:payload).compact.first
+      requirement_satisfied =
+        if existing
+          existing.version == spec.version && requirement.requirement.satisfied_by?(spec.version)
+        else
+          requirement.requirement.satisfied_by? spec.version
+        end
+      requirement_satisfied && !(spec.version.prerelease? && existing_vertices.flat_map(&:requirements).none?(&:prerelease?))
+    end
+
+    # Sort dependencies so that the ones that are easiest to resolve are first.
+    # Easiest to resolve is (usually) defined by:
+    #   1) Is this dependency already activated?
+    #   2) How relaxed are the requirements?
+    #   3) Are there any conflicts for this dependency?
+    #   4) How many possibilities are there to satisfy this dependency?
+    #
+    # @return [Array<Dependency>] the sorted dependencies.
+    #
+    # @param  [Array<Dependency>] dependencies the unsorted dependencies.
+    #
+    # @param  [Molinillo::DependencyGraph] activated the dependency graph of
+    #         currently activated specs.
+    #
+    # @param  [{String => Array<Conflict>}] conflicts the current conflicts.
+    #
+    def sort_dependencies(dependencies, activated, conflicts)
+      dependencies.sort_by do |dependency|
+        name = name_for(dependency)
+        [
+          activated.vertex_named(name).payload ? 0 : 1,
+          dependency.prerelease? ? 0 : 1,
+          conflicts[name] ? 0 : 1,
+          search_for(dependency).count,
+        ]
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Resolver UI
+
+    include Molinillo::UI
+
+    include Config::Mixin
+
+    # The UI object the resolver should use for displaying user-facing output.
+    #
+    # @return [UserInterface] the normal CocoaPods UI object.
+    #
+    def output
+      UI
+    end
+
+    # Called before resolution starts. We print out `Resolving dependencies` in
+    # the analyzer, so here we just want to print out a starting `.` in verbose
+    # mode.
+    #
+    # @return [Void]
+    #
+    def before_resolution
+      UI.print '.' if config.verbose
+    end
+
+    # Called after resolution ends. We don't want to {#indicate_progress}
+    # unless in verbose mode, so we only use the default implementation then.
+    #
+    # @return [Void]
+    #
+    def after_resolution
+      super if config.verbose
+    end
+
+    # Called during resolution to indicate progress.
+    # We only use the default implementation in verbose mode.
+    #
+    # @return [Void]
+    #
+    def indicate_progress
+      super if config.verbose
+    end
 
     #-------------------------------------------------------------------------#
 
@@ -101,76 +273,11 @@ module Pod
     #
     attr_accessor :cached_sets
 
-    # @return [Hash<String => Specification>] The loaded specifications grouped
-    #         by name.
-    #
-    attr_accessor :cached_specs
-
     #-------------------------------------------------------------------------#
 
     private
 
     # @!group Private helpers
-
-    # Resolves recursively the dependencies of a specification and stores them
-    # in the @cached_specs ivar.
-    #
-    # @param  [Podfile, Specification, #to_s] dependent_spec
-    #         the specification whose dependencies are being resolved. Used
-    #         only for UI purposes.
-    #
-    # @param  [Array<Dependency>] dependencies
-    #         the dependencies of the specification.
-    #
-    # @param  [TargetDefinition] target_definition
-    #         the target definition that owns the specification.
-    #
-    # @note   If there is a locked dependency with the same name of a
-    #         given dependency the locked one is used in place of the
-    #         dependency of the specification. In this way it is possible to
-    #         prevent the update of the version of installed pods not changed
-    #         in the Podfile.
-    #
-    # @note   The recursive process checks if a dependency has already been
-    #         loaded to prevent an infinite loop.
-    #
-    # @note   The set class merges all (of all the target definitions) the
-    #         dependencies and thus it keeps track of whether it is in head
-    #         mode or from an external source because {Dependency#merge}
-    #         preserves this information.
-    #
-    # @return [void]
-    #
-    def find_dependency_specs(dependent_spec, dependencies, target_definition)
-      dependencies.each do |dependency|
-        locked_dep = locked_dependencies.find { |ld| ld.name == dependency.name }
-        dependency = locked_dep if locked_dep
-
-        UI.message("- #{dependency}", '', 2) do
-          set = find_cached_set(dependency, dependent_spec)
-          set.required_by(dependency, dependent_spec.to_s)
-
-          if (paths = set.specification_paths_for_version(set.required_version)).length > 1
-            UI.warn "Found multiple specifications for #{dependency}:\n" \
-              "- #{paths.join("\n")}"
-          end
-
-          unless @loaded_specs.include?(dependency.name)
-            spec = set.specification.subspec_by_name(dependency.name)
-            @loaded_specs << spec.name
-            cached_specs[spec.name] = spec
-            validate_platform(spec, target_definition)
-            if dependency.head? || sandbox.head_pod?(spec.name)
-              spec.version.head = true
-              sandbox.store_head_pod(spec.name)
-            end
-
-            spec_dependencies = spec.all_dependencies(target_definition.platform)
-            find_dependency_specs(spec, spec_dependencies, target_definition)
-          end
-        end
-      end
-    end
 
     # @return [Set] Loads or returns a previously initialized set for the Pod
     #               of the given dependency.
@@ -178,17 +285,13 @@ module Pod
     # @param  [Dependency] dependency
     #         The dependency for which the set is needed.
     #
-    # @param  [#to_s] dependent_spec
-    #         the specification whose dependencies are being resolved. Used
-    #         only for UI purposes.
-    #
     # @return [Set] the cached set for a given dependency.
     #
-    def find_cached_set(dependency, dependent_spec)
+    def find_cached_set(dependency)
       name = dependency.root_name
       unless cached_sets[name]
         if dependency.external_source
-          spec = sandbox.specification(dependency.root_name)
+          spec = sandbox.specification(name)
           unless spec
             raise StandardError, '[Bug] Unable to find the specification ' \
               "for `#{dependency}`."
@@ -199,8 +302,7 @@ module Pod
         end
         cached_sets[name] = set
         unless set
-          raise Informative, 'Unable to find a specification for ' \
-            "`#{dependency}` depended upon by #{dependent_spec}."
+          raise Molinillo::NoSuchDependencyError.new(dependency) # rubocop:disable Style/RaiseArgs
         end
       end
       cached_sets[name]

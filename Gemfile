@@ -12,12 +12,13 @@ gemspec
 
 group :development do
   cp_gem 'claide',               'CLAide'
-  cp_gem 'cocoapods-core',       'Core'
+  cp_gem 'cocoapods-core',       'Core', 'resolver'
   cp_gem 'cocoapods-downloader', 'cocoapods-downloader'
   cp_gem 'cocoapods-plugins',    'cocoapods-plugins'
   cp_gem 'cocoapods-trunk',      'cocoapods-trunk'
   cp_gem 'cocoapods-try',        'cocoapods-try'
   cp_gem 'xcodeproj',            'Xcodeproj'
+  cp_gem 'molinillo',            'Molinillo'
 
   gem 'bacon'
   gem 'mocha'

@@ -7,14 +7,21 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 99748b5b9fa8fe6541218f1752c0379589c7a6ee
-  branch: master
+  revision: 802401562948abf9f4f417ace4cd8e9bb8b08859
+  branch: resolver
   specs:
     cocoapods-core (0.34.4)
       activesupport (>= 3.2.15)
       fuzzy_match (~> 2.0.4)
       json_pure (~> 1.8)
       nap (~> 0.8.0)
+
+GIT
+  remote: https://github.com/CocoaPods/Molinillo.git
+  revision: 3e27234148022ba1455a9228e7b710314204d4c5
+  branch: master
+  specs:
+    molinillo (0.0.1)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
@@ -71,6 +78,7 @@ PATH
       colored (~> 1.2)
       escape (~> 0.0.4)
       json_pure (~> 1.8)
+      molinillo (~> 0)
       nap (~> 0.8)
       open4 (~> 1.3)
       xcodeproj (~> 0.19.4)
@@ -174,6 +182,7 @@ DEPENDENCIES
   mime-types (< 2.0)
   mocha
   mocha-on-bacon
+  molinillo!
   prettybacon
   pry
   rake

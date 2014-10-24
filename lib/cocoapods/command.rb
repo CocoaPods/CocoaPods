@@ -1,5 +1,12 @@
 require 'colored'
 require 'claide'
+require 'molinillo/errors'
+
+module Molinillo
+  class ResolverError
+    include CLAide::InformativeError
+  end
+end
 
 module Pod
   class PlainInformative
