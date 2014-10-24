@@ -13,9 +13,11 @@ module Pod
     #         hash.
     #
     def self.from_dependency(dependency, podfile_path)
-      name   = dependency.root_name
-      params = dependency.external_source
+      from_params(dependency.external_source, dependency, podfile_path)
+    end
 
+    def self.from_params(params, dependency, podfile_path)
+      name = dependency.root_name
       if klass = concrete_class_from_params(params)
         klass.new(name, params, podfile_path)
       else

@@ -63,7 +63,8 @@ module Pod
             s.version = '1.0'
           end,
         ]
-        Lockfile.generate(podfile, specs).write_to_disk(temporary_directory + 'Podfile.lock')
+        external_sources = {}
+        Lockfile.generate(podfile, specs, external_sources).write_to_disk(temporary_directory + 'Podfile.lock')
       end
 
       it 'for a single missing Pod' do

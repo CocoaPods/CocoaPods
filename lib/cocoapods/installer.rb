@@ -466,7 +466,7 @@ module Pod
     #
     def write_lockfiles
       # checkout_options = sandbox.checkout_options
-      @lockfile = Lockfile.generate(podfile, analysis_result.specifications)
+      @lockfile = Lockfile.generate(podfile, analysis_result.specifications, sandbox.checkout_sources)
 
       UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
         @lockfile.write_to_disk(config.lockfile_path)
