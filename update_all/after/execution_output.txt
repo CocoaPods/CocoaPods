@@ -11,8 +11,7 @@ Finding Podfile changes
   - Reachability
 
 Resolving dependencies of `Podfile`
-Resolving dependencies for target `Pods' (iOS 6.0)
-  - Reachability (<= 3.1.0)
+.
 
 Comparing resolved specification to the sandbox manifest
   M Reachability

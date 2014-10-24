@@ -7,8 +7,7 @@ Inspecting targets to integrate
   Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Resolving dependencies of `Podfile`
-Resolving dependencies for target `Pods' (iOS 6.0)
-  - Reachability (= 3.1.0)
+.
 
 Comparing resolved specification to the sandbox manifest
   A Reachability

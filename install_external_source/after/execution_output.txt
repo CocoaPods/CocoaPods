@@ -14,10 +14,7 @@ Fetching external sources
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 
 Resolving dependencies of `Podfile`
-Resolving dependencies for target `Pods' (iOS 4.3)
-  - PodTest (from `PodTest-hg-source`)
-    - PodTest/subspec_1
-    - PodTest/subspec_2
+.
 
 Comparing resolved specification to the sandbox manifest
   A PodTest

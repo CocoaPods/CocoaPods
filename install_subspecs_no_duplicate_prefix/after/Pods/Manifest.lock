@@ -1,6 +1,6 @@
 PODS:
   - Test (0.0.1):
-    - Test/Foo
+    - Test/Foo (= 0.0.1)
   - Test/Foo (0.0.1)
 
 DEPENDENCIES:
@@ -13,4 +13,4 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Test: 015c315085e89cf22c211271c817a23ed1ad09c8
 
-COCOAPODS: 0.34.2
+COCOAPODS: 0.34.4

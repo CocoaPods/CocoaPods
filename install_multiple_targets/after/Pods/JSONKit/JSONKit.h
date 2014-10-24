@@ -1,8 +1,7 @@
 //
 //  JSONKit.h
 //  http://github.com/johnezang/JSONKit
-//  Dual licensed under either the terms of the BSD License, or alternatively
-//  under the terms of the Apache License, Version 2.0, as specified below.
+//  Licensed under the terms of the BSD License, as specified below.
 //
 
 /*
@@ -35,22 +34,6 @@
  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-/*
- Copyright 2011 John Engelhart
- 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.apache.org/licenses/LICENSE-2.0
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
 */
 
 #include <stddef.h>
@@ -126,11 +109,10 @@ enum {
 typedef JKFlags JKParseOptionFlags;
 
 enum {
-  JKSerializeOptionNone                 = 0,
-  JKSerializeOptionPretty               = (1 << 0),
-  JKSerializeOptionEscapeUnicode        = (1 << 1),
-  JKSerializeOptionEscapeForwardSlashes = (1 << 4),
-  JKSerializeOptionValidFlags           = (JKSerializeOptionPretty | JKSerializeOptionEscapeUnicode | JKSerializeOptionEscapeForwardSlashes),
+  JKSerializeOptionNone           = 0,
+  JKSerializeOptionPretty         = (1 << 0),
+  JKSerializeOptionEscapeUnicode  = (1 << 1),
+  JKSerializeOptionValidFlags     = (JKSerializeOptionPretty | JKSerializeOptionEscapeUnicode),
 };
 typedef JKFlags JKSerializeOptionFlags;
 
@@ -212,35 +194,16 @@ typedef struct JKParseState JKParseState; // Opaque internal, private type.
 @interface NSArray (JSONKitSerializing)
 - (NSData *)JSONData;
 - (NSData *)JSONDataWithOptions:(JKSerializeOptionFlags)serializeOptions error:(NSError **)error;
-- (NSData *)JSONDataWithOptions:(JKSerializeOptionFlags)serializeOptions serializeUnsupportedClassesUsingDelegate:(id)delegate selector:(SEL)selector error:(NSError **)error;
 - (NSString *)JSONString;
 - (NSString *)JSONStringWithOptions:(JKSerializeOptionFlags)serializeOptions error:(NSError **)error;
-- (NSString *)JSONStringWithOptions:(JKSerializeOptionFlags)serializeOptions serializeUnsupportedClassesUsingDelegate:(id)delegate selector:(SEL)selector error:(NSError **)error;
 @end
 
 @interface NSDictionary (JSONKitSerializing)
 - (NSData *)JSONData;
 - (NSData *)JSONDataWithOptions:(JKSerializeOptionFlags)serializeOptions error:(NSError **)error;
-- (NSData *)JSONDataWithOptions:(JKSerializeOptionFlags)serializeOptions serializeUnsupportedClassesUsingDelegate:(id)delegate selector:(SEL)selector error:(NSError **)error;
 - (NSString *)JSONString;
 - (NSString *)JSONStringWithOptions:(JKSerializeOptionFlags)serializeOptions error:(NSError **)error;
-- (NSString *)JSONStringWithOptions:(JKSerializeOptionFlags)serializeOptions serializeUnsupportedClassesUsingDelegate:(id)delegate selector:(SEL)selector error:(NSError **)error;
 @end
-
-#ifdef __BLOCKS__
-
-@interface NSArray (JSONKitSerializingBlockAdditions)
-- (NSData *)JSONDataWithOptions:(JKSerializeOptionFlags)serializeOptions serializeUnsupportedClassesUsingBlock:(id(^)(id object))block error:(NSError **)error;
-- (NSString *)JSONStringWithOptions:(JKSerializeOptionFlags)serializeOptions serializeUnsupportedClassesUsingBlock:(id(^)(id object))block error:(NSError **)error;
-@end
-
-@interface NSDictionary (JSONKitSerializingBlockAdditions)
-- (NSData *)JSONDataWithOptions:(JKSerializeOptionFlags)serializeOptions serializeUnsupportedClassesUsingBlock:(id(^)(id object))block error:(NSError **)error;
-- (NSString *)JSONStringWithOptions:(JKSerializeOptionFlags)serializeOptions serializeUnsupportedClassesUsingBlock:(id(^)(id object))block error:(NSError **)error;
-@end
-  
-#endif
-
 
 #endif // __OBJC__
 

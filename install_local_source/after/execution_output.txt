@@ -10,8 +10,7 @@ Fetching external sources
 -> Fetching podspec for `Reachability` from `Reachability`
 
 Resolving dependencies of `Podfile`
-Resolving dependencies for target `Pods' (iOS 4.3)
-  - Reachability (from `Reachability`)
+.
 
 Comparing resolved specification to the sandbox manifest
   A Reachability

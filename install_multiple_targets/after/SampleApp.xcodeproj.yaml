@@ -94,7 +94,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods.debug.xcconfig
     - Release:
         Build Settings:
@@ -103,7 +103,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods.release.xcconfig
 - SampleAppTests:
     Build Phases:
@@ -124,24 +124,24 @@ Targets:
           WRAPPER_EXTENSION: octest
           COMBINE_HIDPI_IMAGES: 'YES'
           FRAMEWORK_SEARCH_PATHS: '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
-          TEST_HOST: $(BUNDLE_LOADER)
+          TEST_HOST: "$(BUNDLE_LOADER)"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleAppTests/SampleAppTests-Info.plist
-          BUNDLE_LOADER: $(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp
+          BUNDLE_LOADER: "$(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp"
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods-test.debug.xcconfig
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: octest
           COMBINE_HIDPI_IMAGES: 'YES'
           FRAMEWORK_SEARCH_PATHS: '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
-          TEST_HOST: $(BUNDLE_LOADER)
+          TEST_HOST: "$(BUNDLE_LOADER)"
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleAppTests/SampleAppTests-Info.plist
-          BUNDLE_LOADER: $(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp
+          BUNDLE_LOADER: "$(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp"
           GCC_PREFIX_HEADER: SampleApp/SampleApp-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods-test.release.xcconfig
 - SampleApp_2:
     Build Phases:
@@ -165,7 +165,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleApp_2/SampleApp_2-Info.plist
           GCC_PREFIX_HEADER: SampleApp_2/SampleApp_2-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods-SampleApp_2.debug.xcconfig
     - Release:
         Build Settings:
@@ -174,7 +174,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: SampleApp_2/SampleApp_2-Info.plist
           GCC_PREFIX_HEADER: SampleApp_2/SampleApp_2-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods-SampleApp_2.release.xcconfig
 - NonIntegrated:
     Build Phases:
@@ -195,7 +195,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: NonIntegrated/NonIntegrated-Info.plist
           GCC_PREFIX_HEADER: NonIntegrated/NonIntegrated-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: app
@@ -203,7 +203,7 @@ Targets:
           GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
           INFOPLIST_FILE: NonIntegrated/NonIntegrated-Info.plist
           GCC_PREFIX_HEADER: NonIntegrated/NonIntegrated-Prefix.pch
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
 
 
 
@@ -214,7 +214,7 @@ Build Configurations:
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
-      - $(inherited)
+      - "$(inherited)"
       ONLY_ACTIVE_ARCH: 'YES'
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
@@ -231,7 +231,7 @@ Build Configurations:
       COPY_PHASE_STRIP: 'NO'
       SDKROOT: macosx
       GCC_DYNAMIC_NO_PIC: 'NO'
-      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
       GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
       CLANG_CXX_LIBRARY: libc++
       GCC_WARN_UNUSED_VARIABLE: 'YES'
@@ -248,7 +248,7 @@ Build Configurations:
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_WARN_INT_CONVERSION: 'YES'
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
-      ARCHS: $(ARCHS_STANDARD_64_BIT)
+      ARCHS: "$(ARCHS_STANDARD_64_BIT)"
       ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_ENUM_CONVERSION: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
