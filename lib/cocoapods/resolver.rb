@@ -75,7 +75,7 @@ module Pod
             flatten.
             map(&:payload).
             uniq.
-            sort { |x, y| x.name <=> y.name }.
+            sort_by(&:name).
             each do |spec|
               validate_platform(spec, target)
               sandbox.store_head_pod(spec.name) if spec.version.head
