@@ -433,16 +433,16 @@ module Pod
         end
 
         case url.to_s.downcase
-        when %r{github.com(:|/)cocoapods/specs}
+        when %r{github.com[:/]+cocoapods/specs}
           base = 'master'
-        when %r{github.com(:|/)(.+)/(.+)}
-          base = Regexp.last_match[2]
+        when %r{github.com[:/]+(.+)/(.+)}
+          base = Regexp.last_match[1]
+        when %r{^\S+@(\S+)[:/]+(.+)$}
+          host, path = Regexp.last_match.captures
+          base = base_from_host_and_path[host, path]
         when URI.regexp
           url = URI(url.downcase)
           base = base_from_host_and_path[url.host, url.path]
-        when %r{^\S+@(\S+)[:/](.+)$}
-          host, path = Regexp.last_match.captures
-          base = base_from_host_and_path[host, path]
         else
           base = url.to_s.downcase
         end

@@ -15,6 +15,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#2461](https://github.com/CocoaPods/CocoaPods/issues/2461)
 
+##### Bug Fixes
+
+* Do not try to clone spec-repos in `/`.  
+  [Eloy Durán](https://github.com/alloy)
+  [#2723](https://github.com/CocoaPods/CocoaPods/issues/2723)
+
 
 ## 0.34.4
 

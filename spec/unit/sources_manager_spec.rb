@@ -114,6 +114,11 @@ module Pod
             Pathname.any_instance.stubs(:exist?).
               returns(false).then.returns(true)
             SourcesManager.send(:name_for_url, url).should == 'master'
+
+            url = 'git@github.com:/CocoaPods/Specs.git'
+            Pathname.any_instance.stubs(:exist?).
+              returns(false).then.returns(true)
+            SourcesManager.send(:name_for_url, url).should == 'master'
           end
 
           it 'uses the organization name for github.com URLs' do
@@ -128,7 +133,15 @@ module Pod
           end
 
           it 'supports scp-style URLs' do
+            url = 'git@git-host.com:specs.git'
+            SourcesManager.send(:name_for_url, url).
+              should == 'git-host-specs'
+
             url = 'git@git-host.com/specs.git'
+            SourcesManager.send(:name_for_url, url).
+              should == 'git-host-specs'
+
+            url = 'git@git-host.com:/specs.git'
             SourcesManager.send(:name_for_url, url).
               should == 'git-host-specs'
           end
@@ -138,13 +151,13 @@ module Pod
             SourcesManager.send(:name_for_url, url).
               should == 'companyalias-pod-specs'
           end
-          
+
           it 'supports file URLs' do
             url = 'file:///Users/kurrytran/pod-specs'
             SourcesManager.send(:name_for_url, url).
               should == 'users-kurrytran-pod-specs'
           end
-          
+
           it 'uses the repo name if no parent directory' do
             url = 'file:///pod-specs'
             SourcesManager.send(:name_for_url, url).
