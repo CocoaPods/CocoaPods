@@ -8,6 +8,8 @@ module Pod
 
       autoload :SandboxAnalyzer, 'cocoapods/installer/analyzer/sandbox_analyzer'
 
+      autoload :LockingDependencyAnalyzer, 'cocoapods/installer/analyzer/locking_dependency_analyzer'
+
       # @return [Sandbox] The sandbox where the Pods should be installed.
       #
       attr_reader :sandbox
@@ -232,45 +234,13 @@ module Pod
       #         a Pod.
       #
       def generate_version_locking_dependencies
-        require 'molinillo/dependency_graph'
-        dependency_graph = Molinillo::DependencyGraph.new
-
-        unless update_mode == :all || !lockfile
-          explicit_dependencies = lockfile.to_hash['DEPENDENCIES'] || []
-          explicit_dependencies.each do |string|
-            dependency = Dependency.new(string)
-            dependency_graph.add_root_vertex(dependency.name, nil)
-          end
-
-          add_child_vertex = lambda do |dependency_string, parents|
-            dependency = Dependency.from_string(dependency_string)
-            dependency_graph.add_child_vertex(dependency.name, parents.empty? ? dependency : nil, parents, nil)
-            dependency
-          end
-
-          add_to_dependency_graph = lambda do |object, parents|
-            case object
-            when String
-              add_child_vertex.call(object, parents)
-            when Hash
-              object.each do |key, value|
-                dependency = add_child_vertex.call(key, parents)
-                value.each { |v| add_to_dependency_graph.call(v, [dependency.name]) }
-              end
-            end
-          end
-
-          pods = lockfile.to_hash['PODS'] || []
-          pods.each do |pod|
-            add_to_dependency_graph.call(pod, [])
-          end
-
+        if update_mode == :all || !lockfile
+          LockingDependencyAnalyzer.unlocked_dependency_graph
+        else
           pods_to_update = result.podfile_state.changed + result.podfile_state.deleted
           pods_to_update += update[:pods] if update_mode == :selected
-          pods_to_update.each { |u| dependency_graph.detach_vertex_named(u) }
+          LockingDependencyAnalyzer.generate_version_locking_dependencies(lockfile, pods_to_update)
         end
-
-        dependency_graph
       end
 
       # Fetches the podspecs of external sources if modifications to the
