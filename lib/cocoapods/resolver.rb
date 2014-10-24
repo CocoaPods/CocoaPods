@@ -106,7 +106,8 @@ module Pod
         specs = find_cached_set(dependency).
           all_specifications.
           select { |s| dependency.requirement.satisfied_by? s.version }.
-          map { |s| s.subspec_by_name(dependency.name, false) }
+          map { |s| s.subspec_by_name(dependency.name, false) }.
+          compact
 
         specs.
           reverse.
