@@ -38,6 +38,17 @@ module Pod
 
       #--------------------------------------#
 
+      describe 'SpecificationProvider' do
+        it 'does not return nil specifications in #search_for even when a ' \
+          'subspec does not exist in all versions' do
+          @resolver.instance_variable_set(:@cached_sets, {})
+          possibilities = @resolver.search_for(Dependency.new('SDWebImage/Core'))
+          possibilities.should.not.include? nil
+        end
+      end
+
+      #--------------------------------------#
+
       it 'resolves the specification of the podfile' do
         target_definition = @podfile.target_definitions['Pods']
         specs = @resolver.resolve[target_definition]
