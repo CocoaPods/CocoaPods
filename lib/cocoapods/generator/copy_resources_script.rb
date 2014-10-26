@@ -68,7 +68,10 @@ module Pod
       # @return [String] The contents of the copy resources script.
       #
       def script
+        # Define install function
         script = install_resources_function
+
+        # Call function for each configuration-dependent resource
         resources_by_config.each do |config, resources|
           unless resources.empty?
             script += %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
@@ -78,6 +81,7 @@ module Pod
             script += "fi\n"
           end
         end
+
         script += RSYNC_CALL
         script += XCASSETS_COMPILE
         script
