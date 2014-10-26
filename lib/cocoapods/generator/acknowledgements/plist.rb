@@ -6,7 +6,6 @@ module Pod
       end
 
       def save_as(path)
-        require 'xcodeproj/ext'
         Xcodeproj.write_plist(plist, path)
       end
 
