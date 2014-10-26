@@ -39,12 +39,6 @@ module Pod
       ].concat(super)
     end
 
-    def self.parse(argv)
-      command = super
-      
-      command
-    end
-
     def self.run(argv)
       help! 'You cannot run CocoaPods as root.' if Process.uid == 0
       verify_git_version!
