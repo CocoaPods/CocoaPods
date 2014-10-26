@@ -51,7 +51,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [#1489](https://github.com/CocoaPods/CocoaPods/issues/1489)
 
-* Only setup the master specs repo if required
+* Only setup the master specs repo if required.  
   [Daniel Tomlinson](https://github.com/DanielTomlinson)
   [#2562](https://github.com/CocoaPods/CocoaPods/issues/2562)
 
@@ -144,7 +144,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [#2543](https://github.com/CocoaPods/CocoaPods/issues/2543)
   [cocoapods-trunk#28](https://github.com/CocoaPods/cocoapods-trunk/issues/28)
-
 
 * Takes into account the sources specified in `Podfile` running
   `pod outdated`.  
