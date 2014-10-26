@@ -111,7 +111,6 @@ GEM
     kicker (3.0.0)
       listen (~> 1.3.0)
       notify (~> 0.5.2)
-    libxml-ruby (2.7.0)
     listen (1.3.1)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -175,7 +174,6 @@ DEPENDENCIES
   cocoapods-try!
   diffy
   kicker
-  libxml-ruby
   mocha
   mocha-on-bacon
   molinillo!
