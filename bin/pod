@@ -35,9 +35,11 @@ if profile_filename = ENV['PROFILE']
   require 'ruby-prof'
   reporter = case (profile_extname = File.extname(profile_filename))
   when '.txt'
-    RubyProf::GraphPrinter
+    RubyProf::FlatPrinterWithLineNumbers
   when '.html'
     RubyProf::GraphHtmlPrinter
+  when '.callgrind'
+    RubyProf::CallTreePrinter
   else
     raise "Unknown profiler format indicated by extension: #{profile_extname}"
   end
