@@ -63,20 +63,15 @@ module Pod
 
       # !@group Private methods
 
-      # Returns the sanitized text with UTF-8 eliminating invalid characters if
-      # Ruby version >=1.9 else will return the text.
+      # Returns the sanitized text with UTF-8 invalid characters eliminated.
       #
       # @param  [String] text
       #         the text we want to sanitize.
       #
-      # @return [String] The sanitized text if Ruby >=1.9 else text.
+      # @return [String] The sanitized UTF-8 text.
       #
       def sanitize_encoding(text)
-        if RUBY_VERSION >= '1.9'
-          text.encode('UTF-8', :invalid => :replace, :undef => :replace, :replace => '')
-        else
-          text
-        end
+        text.encode('UTF-8', :invalid => :replace, :undef => :replace, :replace => '')
       end
 
       #-----------------------------------------------------------------------#

@@ -38,9 +38,8 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'colored',       '~> 1.2'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
-  s.add_runtime_dependency 'json_pure',     '~> 1.8'
   s.add_runtime_dependency 'open4',         '~> 1.3'
-  s.add_runtime_dependency 'activesupport', '>= 3.2.15', '< 4'
+  s.add_runtime_dependency 'activesupport', '>= 3.2.15'
   s.add_runtime_dependency 'nap',           '~> 0.8'
 
   s.add_development_dependency 'bundler', '~> 1.3'
