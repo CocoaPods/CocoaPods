@@ -209,7 +209,7 @@ module Pod
     #
     def add_build_configuration(name, type)
       build_configuration = super
-      values = ["#{name.gsub(/[^a-zA-Z0-9_]/, '_').gsub(/(^[0-9])/, '_\1').upcase}=1"]
+      values = ["#{name.gsub(/[^a-zA-Z0-9_]/, '_').sub(/(^[0-9])/, '_\1').upcase}=1"]
       settings = build_configuration.build_settings
       definitions = Array(settings['GCC_PREPROCESSOR_DEFINITIONS'])
       values.each do |value|
