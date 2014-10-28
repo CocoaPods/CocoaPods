@@ -82,6 +82,13 @@ module Pod
         ]
       end
 
+      it 'includes the vendored framework headers if requested' do
+        @accessor.public_headers(true).sort.should == [
+          @root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h',
+          @root + 'Classes/Banana.h',
+        ]
+      end
+
       it 'returns the resources' do
         @accessor.resources.sort.should == [
           @root + 'Resources/logo-sidebar.png',
@@ -106,6 +113,12 @@ module Pod
 
       it 'returns the paths of the framework bundles' do
         @accessor.vendored_frameworks.should.include?(@root + 'Bananalib.framework')
+      end
+
+      it 'returns the paths of the framework headers' do
+        @accessor.vendored_frameworks_headers.should == [
+          @root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h',
+        ]
       end
 
       it 'returns the paths of the library files' do

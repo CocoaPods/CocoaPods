@@ -16,6 +16,7 @@ module Pod
         end
         expected = %w(
           BananaLib.podspec
+          Bananalib.framework/Versions/A/Headers/Bananalib.h
           Classes/Banana.h
           Classes/Banana.m
           Classes/BananaLib.pch
@@ -37,7 +38,19 @@ module Pod
         dirs.reject! do |f|
           f.include?('libPusher') || f.include?('.git')
         end
-        dirs.sort.should == %w(        Bananalib.framework Classes Resources Resources/sub_dir sub-dir sub-dir/sub-dir-2        )
+        dirs.sort.should == %w(
+          Bananalib.framework
+          Bananalib.framework/Headers
+          Bananalib.framework/Versions
+          Bananalib.framework/Versions/A
+          Bananalib.framework/Versions/A/Headers
+          Bananalib.framework/Versions/Current
+          Classes
+          Resources
+          Resources/sub_dir
+          sub-dir
+          sub-dir/sub-dir-2
+        )
       end
 
       it 'handles directories with glob metacharacters' do

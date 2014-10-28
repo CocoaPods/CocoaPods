@@ -85,9 +85,13 @@ module Pod
         source_files.select { |f| extensions.include?(f.extname) }
       end
 
+      # @param [Boolean] include_frameworks
+      #        Whether or not to include the headers of the vendored frameworks.
+      #        Defaults to not include them.
+      #
       # @return [Array<Pathname>] the public headers of the specification.
       #
-      def public_headers
+      def public_headers(include_frameworks = false)
         public_headers = paths_for_attribute(:public_header_files)
         private_headers = paths_for_attribute(:private_header_files)
         if public_headers.nil? || public_headers.empty?
@@ -95,6 +99,7 @@ module Pod
         else
           header_files = public_headers
         end
+        header_files += vendored_frameworks_headers if include_frameworks
         header_files - private_headers
       end
 
@@ -116,6 +121,16 @@ module Pod
       #
       def vendored_frameworks
         paths_for_attribute(:vendored_frameworks, true)
+      end
+
+      # @return [Array<Pathname>] The paths of the framework headers that come
+      #         shipped with the Pod.
+      #
+      def vendored_frameworks_headers
+        vendored_frameworks.map do |framework|
+          headers_dir = (framework + 'Headers').realpath
+          Pathname.glob(headers_dir + GLOB_PATTERNS[:public_header_files])
+        end.flatten.uniq
       end
 
       # @return [Array<Pathname>] The paths of the library bundles that come

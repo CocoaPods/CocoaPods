@@ -51,19 +51,21 @@ module Pod
         file_ref.path.should == 'Resources/logo-sidebar.png'
       end
 
-      it 'links the build headers' do
+      it 'links the headers required for building the pod target' do
         @installer.install!
         headers_root = @pod_target.build_headers.root
-        public_header =  headers_root + 'BananaLib/Banana.h'
+        public_header = headers_root + 'BananaLib/Banana.h'
         private_header = headers_root + 'BananaLib/BananaPrivate.h'
+        framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
         public_header.should.exist
         private_header.should.exist
+        framework_header.should.not.exist
       end
 
-      it 'links the public headers' do
+      it 'links the public headers meant for the user' do
         @installer.install!
         headers_root = config.sandbox.public_headers.root
-        public_header =  headers_root + 'BananaLib/Banana.h'
+        public_header = headers_root + 'BananaLib/Banana.h'
         private_header = headers_root + 'BananaLib/BananaPrivate.h'
         public_header.should.exist
         private_header.should.not.exist
@@ -100,7 +102,7 @@ module Pod
           headers = [Pathname.new('BananaLib/Banana.h')]
           mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
           mappings.should == {
-            headers_sandbox => [Pathname.new('BananaLib/Banana.h')],
+            headers_sandbox => headers,
           }
         end
 
@@ -110,7 +112,7 @@ module Pod
           @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
           mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
           mappings.should == {
-            (headers_sandbox + 'Sub_dir') => [Pathname.new('BananaLib/Banana.h')],
+            (headers_sandbox + 'Sub_dir') => headers,
           }
         end
 
