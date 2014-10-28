@@ -65,6 +65,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Steffen Matthischke](https://github.com/HeEAaD)
   [#2700](https://github.com/CocoaPods/CocoaPods/pull/2700)
 
+* Fixes an issues where headers from a podspec with one platform are exposed to
+  targets with a different platform. The headers are now only exposed to the
+  targets with the same platform.  
+  [Michael Melanson](https://github.com/michaelmelanson)
+  [Kyle Fuller](https://github.com/kylef)
+  [#1249](https://github.com/CocoaPods/CocoaPods/issues/1249)
+
+
 ## 0.34.4
 
 ##### Bug Fixes
@@ -177,11 +185,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Sanitize build configuration names in target environment header macros.  
   [Kra Larivain](https://github.com/olarivain)
   [#2532](https://github.com/CocoaPods/CocoaPods/pull/2532)
-
-* Proper scoping of header search paths to the target platform.  
-  [Michael Melanson](https://github.com/michaelmelanson)
-  [Kyle Fuller](https://github.com/kylef)
-  [#1249](https://github.com/CocoaPods/CocoaPods/issues/1249)
 
 
 ## 0.34.1
