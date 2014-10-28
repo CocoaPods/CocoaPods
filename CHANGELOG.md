@@ -22,8 +22,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Enhancements
 
-* The `pod push` has been removed as it has been deprecated in favour of `pod
-  repo push` in CocoaPods 0.33.  
+* The `pod push` command has been removed as it has been deprecated in favour of
+  `pod repo push` in CocoaPods 0.33.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
 * Refactorings in preparation to framework support, which could break usages
@@ -54,6 +54,11 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 * Only setup the master specs repo if required.  
   [Daniel Tomlinson](https://github.com/DanielTomlinson)
   [#2562](https://github.com/CocoaPods/CocoaPods/issues/2562)
+
+* `Sandbox::FileAccessor` now optionally includes expanded paths of headers of
+  vendored frameworks in `public_headers`.
+  [Eloy Durán](https://github.com/alloy)
+  [#2722](https://github.com/CocoaPods/CocoaPods/pull/2722)
 
 ##### Bug Fixes
 

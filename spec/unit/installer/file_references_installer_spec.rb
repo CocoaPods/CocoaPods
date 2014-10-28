@@ -67,10 +67,8 @@ module Pod
         headers_root = config.sandbox.public_headers.root
         public_header = headers_root + 'BananaLib/Banana.h'
         private_header = headers_root + 'BananaLib/BananaPrivate.h'
-        framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
         public_header.should.exist
         private_header.should.not.exist
-        framework_header.should.exist
       end
 
     end
@@ -102,7 +100,7 @@ module Pod
         it 'returns the header mappings' do
           headers_sandbox = Pathname.new('BananaLib')
           headers = [Pathname.new('BananaLib/Banana.h')]
-          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers, false)
+          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
           mappings.should == {
             headers_sandbox => headers,
           }
@@ -112,7 +110,7 @@ module Pod
           headers_sandbox = Pathname.new('BananaLib')
           headers = [Pathname.new('BananaLib/Banana.h')]
           @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
-          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers, false)
+          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
           mappings.should == {
             (headers_sandbox + 'Sub_dir') => headers,
           }
@@ -124,19 +122,10 @@ module Pod
           header_2 = @file_accessor.root + 'BananaLib/sub_dir/dir_2/banana_2.h'
           headers = [header_1, header_2]
           @file_accessor.spec_consumer.stubs(:header_mappings_dir).returns('BananaLib/sub_dir')
-          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers, false)
+          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
           mappings.should == {
             (headers_sandbox + 'dir_1') => [header_1],
             (headers_sandbox + 'dir_2') => [header_2],
-          }
-        end
-
-        it 'takes into account the framework name required in the namespace' do
-          headers_sandbox = Pathname.new('BananaLib')
-          headers = [Pathname.new('BananaLib/Bananalib.framework/Versions/A/Headers/Bananalib.h')]
-          mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers, true)
-          mappings.should == {
-            (headers_sandbox + 'Bananalib') => headers,
           }
         end
       end
