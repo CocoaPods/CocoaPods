@@ -12,7 +12,7 @@ module Pod
       @header_dir.root.should == temporary_directory + 'Sandbox/Headers/Public'
     end
 
-    it "can add namespaced headers to it's header path using symlinks and return the relative path" do
+    it "can add namespaced headers to its header path using symlinks and return the relative path" do
       FileUtils.mkdir_p(@sandbox.root + 'ExampleLib/')
       namespace_path = Pathname.new('ExampleLib')
       relative_header_paths = [

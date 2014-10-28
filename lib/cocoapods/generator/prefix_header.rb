@@ -6,37 +6,25 @@ module Pod
     # According to the platform the prefix header imports `UIKit/UIKit.h` or
     # `Cocoa/Cocoa.h`.
     #
-    class PrefixHeader
+    class PrefixHeader < Header
       # @return [Array<FileAccessor>] The file accessors for which to generate
       #         the prefix header.
       #
       attr_reader :file_accessors
 
-      # @return [Platform] the platform for which the prefix header will be
-      #         generated.
+      # @param  [Array<FileAccessor>] file_accessors
+      #         @see file_accessors
       #
-      attr_reader :platform
-
-      # @return [Array<String>] The list of the headers to import (with
-      #         quotes).
-      #
-      attr_reader :imports
-
-      # @param  [Platform] platform     @see platform
-      # @param  [Array<LocalPod>] consumers  @see consumers
+      # @param  [Platform] platform
+      #         @see platform
       #
       def initialize(file_accessors, platform)
         @file_accessors = file_accessors
-        @platform = platform
-        @imports = []
+        super platform
       end
 
       # Generates the contents of the prefix header according to the platform
       # and the pods.
-      #
-      # @note   If the platform is iOS an import call to `UIKit/UIKit.h` is
-      #         added to the top of the prefix header. For OS X `Cocoa/Cocoa.h`
-      #         is imported.
       #
       # @note   Only unique prefix_header_contents are added to the prefix
       #         header.
@@ -48,19 +36,11 @@ module Pod
       #         file_accessor.prefix_header.
       #
       def generate
-        result =  "#ifdef __OBJC__\n"
-        result << "#import #{platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}\n"
-        result << "#endif\n"
-
-        imports.each do |import|
-          result << %(\n#import "#{import}")
-        end
+        result = super
 
         unique_prefix_header_contents = file_accessors.map do |file_accessor|
           file_accessor.spec_consumer.prefix_header_contents
         end.compact.uniq
-
-        result << "\n"
 
         unique_prefix_header_contents.each do |prefix_header_contents|
           result << prefix_header_contents
@@ -75,15 +55,16 @@ module Pod
         result
       end
 
-      # Generates and saves the prefix header to the given path.
+      protected
+
+      # Generates the contents of the header according to the platform.
       #
-      # @param  [Pathname] path
-      #         the path where the prefix header should be stored.
+      # @return [String]
       #
-      # @return [void]
-      #
-      def save_as(path)
-        path.open('w') { |header| header.write(generate) }
+      def generate_platform_import_header
+        result =  "#ifdef __OBJC__\n"
+        result << super
+        result << "#endif\n"
       end
     end
   end

@@ -192,7 +192,7 @@ module Pod
     #
     def perform_linting
       linter.lint
-      @results.concat(linter.results)
+      @results.concat(linter.results.to_a)
     end
 
     # Perform analysis for a given spec (or subspec)
@@ -401,7 +401,7 @@ module Pod
 
     # Specialized Result to support subspecs aggregation
     #
-    class Result < Specification::Linter::Result
+    class Result < Specification::Linter::Results::Result
       def initialize(type, message)
         super(type, message)
         @subspecs = []

@@ -226,13 +226,13 @@ module Pod
 
       it 'cats the given podspec' do
         lambda { command('spec', 'cat', 'AFNetworking').run }.should.not.raise
-        UI.output.should.include fixture('spec-repos/master/Specs/AFNetworking/2.3.1/AFNetworking.podspec.json').read
+        UI.output.should.include fixture('spec-repos/master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json').read
       end
 
       it 'cats the first podspec from all podspecs' do
         UI.next_input = "1\n"
         run_command('spec', 'cat', '--show-all', 'AFNetworking')
-        UI.output.should.include fixture('spec-repos/master/Specs/AFNetworking/2.3.1/AFNetworking.podspec.json').read
+        UI.output.should.include fixture('spec-repos/master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json').read
       end
     end
 
@@ -292,7 +292,7 @@ module Pod
 
         it 'returns the path of the specification with the given name' do
           path = @sut.send(:get_path_of_spec, 'AFNetworking')
-          path.should == fixture('spec-repos') + 'master/Specs/AFNetworking/2.3.1/AFNetworking.podspec.json'
+          path.should == fixture('spec-repos') + 'master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json'
         end
 
       end

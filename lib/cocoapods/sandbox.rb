@@ -219,6 +219,7 @@ module Pod
     # @return [Nil] if the podspec is not stored.
     #
     def specification_path(name)
+      name = Specification.root_name(name)
       path = specifications_root + "#{name}.podspec"
       if path.exist?
         path
@@ -378,7 +379,7 @@ module Pod
     end
 
     # @return [Hash{String=>String}] The path of the Pods with a local source
-    #         grouped by their name.
+    #         grouped by their root name.
     #
     # @todo   Rename (e.g. `pods_with_local_path`)
     #

@@ -13,7 +13,7 @@ def create_analyzer
   end
 
   hash = {}
-  hash['PODS'] = ['JSONKit (1.4)', 'NUI (0.2.0)', 'SVPullToRefresh (0.4)']
+  hash['PODS'] = ['JSONKit (1.5pre)', 'NUI (0.2.0)', 'SVPullToRefresh (0.4)']
   hash['DEPENDENCIES'] = %w(JSONKit NUI SVPullToRefresh)
   hash['SPEC CHECKSUMS'] = {}
   hash['COCOAPODS'] = Pod::VERSION
@@ -52,10 +52,10 @@ module Pod
 
       it 'computes the state of the Podfile respect to the Lockfile' do
         state = @analyzer.analyze.podfile_state
-        state.added.should     == %w(AFNetworking libextobjc)
-        state.changed.should   == ['JSONKit']
-        state.unchanged.should == ['SVPullToRefresh']
-        state.deleted.should   == ['NUI']
+        state.added.should     == %w(AFNetworking libextobjc/EXTKeyPathCoding)
+        state.changed.should   == %w()
+        state.unchanged.should == %w(JSONKit SVPullToRefresh)
+        state.deleted.should   == %w(NUI)
       end
 
       #--------------------------------------#
@@ -131,13 +131,35 @@ module Pod
 
       it 'locks the version of the dependencies which did not change in the Podfile' do
         @analyzer.analyze
-        @analyzer.send(:locked_dependencies).map(&:to_s).should == ['SVPullToRefresh (= 0.4)']
+        @analyzer.send(:locked_dependencies).map(&:payload).map(&:to_s).
+          should == ['JSONKit (= 1.5pre)', 'SVPullToRefresh (= 0.4)']
       end
 
       it 'does not lock the dependencies in update mode' do
         @analyzer.update = true
         @analyzer.analyze
-        @analyzer.send(:locked_dependencies).map(&:to_s).should == []
+        @analyzer.send(:locked_dependencies).to_a.map(&:payload).should == []
+      end
+
+      #--------------------------------------#
+
+      it 'takes into account locked implicit dependencies' do
+        podfile = Podfile.new do
+          platform :ios, '8.0'
+          xcodeproj 'SampleProject/SampleProject'
+          pod 'ARAnalytics/Mixpanel'
+        end
+        hash = {}
+        hash['PODS'] = ['ARAnalytics/CoreIOS (2.8.0)', {'ARAnalytics/Mixpanel (2.8.0)' => ['ARAnlytics/CoreIOS', 'Mixpanel']}, 'Mixpanel (2.5.1)']
+        hash['DEPENDENCIES'] = %w(ARAnalytics/Mixpanel)
+        hash['SPEC CHECKSUMS'] = {}
+        hash['COCOAPODS'] = Pod::VERSION
+        lockfile = Pod::Lockfile.new(hash)
+        analyzer = Installer::Analyzer.new(config.sandbox, podfile, lockfile)
+
+        analyzer.analyze.specifications.
+          find { |s| s.name == 'Mixpanel' }.
+          version.to_s.should == '2.5.1'
       end
 
       #--------------------------------------#

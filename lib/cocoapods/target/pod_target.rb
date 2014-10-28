@@ -57,8 +57,8 @@ module Pod
     #         depends.
     #
     def dependencies
-      specs.map do |spec|
-        spec.consumer(platform).dependencies.map { |dep| Specification.root_name(dep.name) }
+      spec_consumers.map do |consumer|
+        consumer.dependencies.map { |dep| Specification.root_name(dep.name) }
       end.flatten
     end
 

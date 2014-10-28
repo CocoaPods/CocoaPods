@@ -66,15 +66,10 @@ CLIntegracon.configure do |c|
   # Register special handling for YAML files
   paths = [%r{Podfile\.lock}, %r{Manifest\.lock$}, %r{xcodeproj\.yaml$}]
   c.has_special_handling_for(*paths) do |path|
-    if RUBY_VERSION < '1.9'
-      nil # CP is not sorting array derived from hashes whose order is
-    # undefined in 1.8.7
-    else
-      # Remove CocoaPods version
-      yaml = File.open(path) { |f| YAML.load(f) }
-      yaml.delete('COCOAPODS')
-      YAML.dump(yaml)
-    end
+    # Remove CocoaPods version
+    yaml = File.open(path) { |f| YAML.load(f) }
+    yaml.delete('COCOAPODS')
+    YAML.dump(yaml)
   end
 
   # So we don't need to compare them directly

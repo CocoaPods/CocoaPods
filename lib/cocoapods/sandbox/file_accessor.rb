@@ -9,6 +9,13 @@ module Pod
     class FileAccessor
       HEADER_EXTENSIONS = Xcodeproj::Constants::HEADER_FILES_EXTENSIONS
 
+      GLOB_PATTERNS = {
+        :readme              => 'readme{*,.*}'.freeze,
+        :license             => 'licen{c,s}e{*,.*}'.freeze,
+        :source_files        => '*.{h,hpp,hh,m,mm,c,cpp}'.freeze,
+        :public_header_files => "*{#{HEADER_EXTENSIONS.join(',')}}".freeze,
+      }.freeze
+
       # @return [Sandbox::PathList] the directory where the source of the Pod
       #         is located.
       #
@@ -149,7 +156,7 @@ module Pod
       # @return [Pathname] The path of the auto-detected README file.
       #
       def readme
-        path_list.glob(%w(        readme{*,.*}        )).first
+        path_list.glob([GLOB_PATTERNS[:readme]]).first
       end
 
       # @return [Pathname] The path of the license file as indicated in the
@@ -159,7 +166,7 @@ module Pod
         if spec_consumer.spec.root.license[:file]
           path_list.root + spec_consumer.spec.root.license[:file]
         else
-          path_list.glob(%w(          licen{c,s}e{*,.*}          )).first
+          path_list.glob([GLOB_PATTERNS[:license]]).first
         end
       end
 
@@ -182,25 +189,10 @@ module Pod
         file_patterns = spec_consumer.send(attribute)
         options = {
           :exclude_patterns => spec_consumer.exclude_files,
-          :dir_pattern => glob_for_attribute(attribute),
+          :dir_pattern => GLOB_PATTERNS[attribute],
           :include_dirs => include_dirs,
         }
         expanded_paths(file_patterns, options)
-      end
-
-      # Returns the pattern to use to glob a directory for an attribute.
-      #
-      # @param  [Symbol] attribute
-      #         the name of the attribute
-      #
-      # @return [String] the glob pattern.
-      #
-      def glob_for_attribute(attrbute)
-        globs = {
-          :source_files => '*.{h,hpp,hh,m,mm,c,cpp}'.freeze,
-          :public_header_files => "*.{#{ HEADER_EXTENSIONS * ',' }}".freeze,
-        }
-        globs[attrbute]
       end
 
       # Matches the given patterns to the file present in the root of the path

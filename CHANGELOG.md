@@ -4,11 +4,62 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
-##### Enhacements
+##### Breaking
+
+* Support of older versions of Ruby has been dropped and CocoaPods now depends
+  on Ruby 2.0.0 or greater. This is due to the release of Xcode 6.0 which has
+  dropped support for OS X 10.8 which results in the minimum version of
+  Ruby pre-installed on OS X is now 2.0.0.
+
+  If you are using a custom installation of Ruby which is older than 2.0.0, you
+  will need to update. Or even better, migrate to system Ruby.  
+  [Kyle Fuller](https://github.com/kylef)
+
+* Attempts to resolve circular dependencies will now raise an exception.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Molinillo#6](https://github.com/CocoaPods/Molinillo/issues/6)
+
+
+##### Enhancements
 
 * The `pod push` has been removed as it has been deprecated in favour of `pod
   repo push` in CocoaPods 0.33.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
+
+* Refactorings in preparation to framework support, which could break usages
+  of the Hooks-API.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#2461](https://github.com/CocoaPods/CocoaPods/issues/2461)
+
+* The `Resolver` has been completely rewritten to use
+  [Molinillo](https://github.com/CocoaPods/Molinillo), an iterative dependency
+  resolution algorithm that automatically resolves version conflicts.
+  The order in which dependencies are declared in the `Podfile` no longer has
+  any effect on the resolution process.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#978](https://github.com/CocoaPods/CocoaPods/issues/978)
+  [#2002](https://github.com/CocoaPods/CocoaPods/issues/2002)
+
+* Implicit dependencies are now locked, so simply running `pod install` will not
+  cause them to be updated when they shouldn't be.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2318](https://github.com/CocoaPods/CocoaPods/issues/2318)
+  [#2506](https://github.com/CocoaPods/CocoaPods/issues/2506)
+
+* Pre-release versions are only considered in the resolution process when there
+  are dependencies that explicitly reference pre-release requirements.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#1489](https://github.com/CocoaPods/CocoaPods/issues/1489)
+
+* Only setup the master specs repo if required.  
+  [Daniel Tomlinson](https://github.com/DanielTomlinson)
+  [#2562](https://github.com/CocoaPods/CocoaPods/issues/2562)
+
+##### Bug Fixes
+
+* Do not try to clone spec-repos in `/`.  
+  [Eloy Durán](https://github.com/alloy)
+  [#2723](https://github.com/CocoaPods/CocoaPods/issues/2723)
 
 
 ## 0.34.4
@@ -89,7 +140,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Allow the `Validator` to only use specific sources.
   Allows customizable source for `pod spec lint` and `pod lib lint`,
-  with both defaulting to `master`.  
+  with both defaulting to `master`.
   [Samuel Giddins](https://github.com/segiddins)
   [#2543](https://github.com/CocoaPods/CocoaPods/issues/2543)
   [cocoapods-trunk#28](https://github.com/CocoaPods/cocoapods-trunk/issues/28)
