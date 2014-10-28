@@ -234,9 +234,9 @@ module Pod
         end
 
         it "doesn't create invalid preprocessor definitions for configurations" do
-          configuration = @project.add_build_configuration('Release-Foo.bar', :release)
+          configuration = @project.add_build_configuration('1 Release-Foo.bar', :release)
           settings = configuration.build_settings
-          settings['GCC_PREPROCESSOR_DEFINITIONS'].should.include('RELEASE_FOO_BAR=1')
+          settings['GCC_PREPROCESSOR_DEFINITIONS'].should.include('_1_RELEASE_FOO_BAR=1')
         end
 
         it "doesn't duplicate values" do

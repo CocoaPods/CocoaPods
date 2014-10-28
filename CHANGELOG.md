@@ -61,6 +61,9 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Eloy Durán](https://github.com/alloy)
   [#2723](https://github.com/CocoaPods/CocoaPods/issues/2723)
 
+* Improved sanitizing of configuration names which have a number prefix.
+  [Steffen Matthischke](https://github.com/HeEAaD)
+  [#2700](https://github.com/CocoaPods/CocoaPods/pull/2700)
 
 ## 0.34.4
 
