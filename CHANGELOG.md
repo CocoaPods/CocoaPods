@@ -19,8 +19,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Samuel Giddins](https://github.com/segiddins)
   [Molinillo#6](https://github.com/CocoaPods/Molinillo/issues/6)
 
-
 ##### Enhancements
+
+* The use of implicit sources has been un-deprecated. By default, all available
+  spec-repos will be used. There should only be a need to specify explicit
+  sources if you want to specifically _exclude_ certain spec-repos, such as the
+  `master` spec-repo, if you want to declare the order of spec look-up
+  precedence, or if you want other users of a Podfile to automatically have a
+  spec-repo cloned on `pod install`.
+  [Eloy Durán](https://github.com/alloy)
 
 * The `pod push` command has been removed as it has been deprecated in favour of
   `pod repo push` in CocoaPods 0.33.  
