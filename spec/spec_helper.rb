@@ -82,6 +82,16 @@ module Bacon
     include SpecHelper::Fixture
     include SpecHelper::Command
 
+    alias_method :original_initialize, :initialize
+    def initialize(name, &block)
+      original_initialize(name, &block)
+      before do
+        Pod::UI.output = ''
+        Pod::UI.warnings = ''
+        Pod::UI.next_input = ''
+      end
+    end
+
     def skip_xcodebuild?
       ENV['SKIP_XCODEBUILD']
     end
