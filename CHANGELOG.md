@@ -96,11 +96,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Kyle Fuller](https://github.com/kylef)
   [#1249](https://github.com/CocoaPods/CocoaPods/issues/1249)
 
-* Allows using CocoaPods with only externally-sourced dependencies in a
-  `Podfile` without specifying a source or displaying a warning.  
-  [Samuel Giddins](https://github.com/segiddins)
-  [#2735](https://github.com/CocoaPods/CocoaPods/issues/2735)
-
 
 ## 0.34.4
 

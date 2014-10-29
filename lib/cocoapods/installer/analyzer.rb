@@ -379,7 +379,7 @@ module Pod
       def sources
         @sources ||= begin
           sources = podfile.sources
-          if sources.empty? && !podfile.dependencies.reject(&:external_source).empty?
+          if sources.empty?
             SourcesManager.all
           else
             sources.map do |url|

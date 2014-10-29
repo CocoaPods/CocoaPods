@@ -595,13 +595,6 @@ module Pod
             UI.warnings.should.
               match %r{source 'https://github.com/CocoaPods/Specs.git'}
           end
-
-          it 'does not warn when all dependencies have an external source' do
-            UI.warnings = ''
-            @podfile.stubs(:dependencies).returns([Dependency.new('SEGModules', :git => 'https://github.com/segiddins/SEGModules.git')])
-            @analyzer.send(:sources)
-            UI.warnings.should.be.empty?
-          end
         end
 
         describe 'when there are explicit sources' do
