@@ -12,6 +12,8 @@
 
 ## Bug reports
 
+In short, since you are most likely a developer, provide a ticket that you _yourself_ would _like_ to receive.
+
 We are **not** here to support your individual projects. We depend on _you_ (the community)
 to contribute in making the tool better for everyone. So debug and reduce your own issues
 before creating a ticket and let us know of all the things you tried and their outcome.
