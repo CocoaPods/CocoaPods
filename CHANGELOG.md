@@ -6,7 +6,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Breaking
 
-* Support of older versions of Ruby has been dropped and CocoaPods now depends
+* Support for older versions of Ruby has been dropped and CocoaPods now depends
   on Ruby 2.0.0 or greater. This is due to the release of Xcode 6.0 which has
   dropped support for OS X 10.8, which results in the minimum version of
   Ruby pre-installed on OS X now being 2.0.0.
@@ -26,15 +26,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   sources if you want to specifically _exclude_ certain spec-repos, such as the
   `master` spec-repo, if you want to declare the order of spec look-up
   precedence, or if you want other users of a Podfile to automatically have a
-  spec-repo cloned on `pod install`.
+  spec-repo cloned on `pod install`.  
   [Eloy Durán](https://github.com/alloy)
 
 * The `pod push` command has been removed as it has been deprecated in favour of
   `pod repo push` in CocoaPods 0.33.  
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
-* Refactorings in preparation to framework support, which could break usages
-  of the Hooks-API.  
+* Refactorings in preparation to framework support, which could break usage
+  of the Hooks API.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#2461](https://github.com/CocoaPods/CocoaPods/issues/2461)
 
@@ -81,8 +81,8 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
-* `XCConfigIntegrator` Fixes an issue where not all targets that need
-  integration where being integrated, but were getting incorrect warnings about
+* Fixes an issue in the `XCConfigIntegrator` where not all targets that need
+  integration were being integrated, but were getting incorrect warnings about
   the user having specified a custom base configuration.  
   [Eloy Durán](https://github.com/alloy)
   [2752](https://github.com/CocoaPods/CocoaPods/issues/2752)
@@ -91,7 +91,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Eloy Durán](https://github.com/alloy)
   [#2723](https://github.com/CocoaPods/CocoaPods/issues/2723)
 
-* Improved sanitizing of configuration names which have a number prefix.  
+* Improved sanitizing of configuration names which have a numeric prefix.  
   [Steffen Matthischke](https://github.com/HeEAaD)
   [#2700](https://github.com/CocoaPods/CocoaPods/pull/2700)
 
