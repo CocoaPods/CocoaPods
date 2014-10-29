@@ -173,6 +173,69 @@ module Pod
         @analyzer.send(:fetch_external_sources)
       end
 
+      it 'does not download the same source multiple times for different subspecs' do
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.added << 'ARAnalytics/Mixpanel' << 'ARAnalytics/HockeyApp'
+        @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
+        @podfile.stubs(:dependencies).returns([
+          Dependency.new('ARAnalytics/Mixpanel', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'),
+          Dependency.new('ARAnalytics/HockeyApp', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'),
+        ])
+        ExternalSources::DownloaderSource.any_instance.expects(:fetch).once
+        @analyzer.send(:fetch_external_sources)
+      end
+
+      it 'raises when dependencies with the same name have different ' \
+        'external sources' do
+        podfile = Podfile.new do
+          source 'https://github.com/CocoaPods/Specs.git'
+          xcodeproj 'SampleProject/SampleProject'
+          platform :ios
+          pod 'SEGModules', :git => 'https://github.com/segiddins/SEGModules.git'
+          pod 'SEGModules', :git => 'https://github.com/segiddins/Modules.git'
+        end
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        e = should.raise(Informative) { analyzer.analyze }
+
+        e.message.should.match /different sources for `SEGModules`/
+        e.message.should.match %r{SEGModules \(from `https://github.com/segiddins/SEGModules.git`\)}
+        e.message.should.match %r{SEGModules \(from `https://github.com/segiddins/Modules.git`\)}
+      end
+
+      it 'raises when dependencies with the same root name have different ' \
+        'external sources' do
+        podfile = Podfile.new do
+          source 'https://github.com/CocoaPods/Specs.git'
+          xcodeproj 'SampleProject/SampleProject'
+          platform :ios
+          pod 'RestKit/Core', :git => 'https://github.com/RestKit/RestKit.git'
+          pod 'RestKit', :git => 'https://github.com/segiddins/RestKit.git'
+        end
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        e = should.raise(Informative) { analyzer.analyze }
+
+        e.message.should.match /different sources for `RestKit`/
+        e.message.should.match %r{RestKit/Core \(from `https://github.com/RestKit/RestKit.git`\)}
+        e.message.should.match %r{RestKit \(from `https://github.com/segiddins/RestKit.git`\)}
+      end
+
+      it 'raises when dependencies with the same name have different ' \
+        'external sources with one being nil' do
+        podfile = Podfile.new do
+          source 'https://github.com/CocoaPods/Specs.git'
+          xcodeproj 'SampleProject/SampleProject'
+          platform :ios
+          pod 'RestKit', :git => 'https://github.com/RestKit/RestKit.git'
+          pod 'RestKit', '~> 0.23.0'
+        end
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        e = should.raise(Informative) { analyzer.analyze }
+
+        e.message.should.match /different sources for `RestKit`/
+        e.message.should.match %r{RestKit \(from `https://github.com/RestKit/RestKit.git`\)}
+        e.message.should.match %r{RestKit \(~> 0.23.0\)}
+      end
+
       xit 'it fetches the specification from either the sandbox or from the remote be default' do
         dependency = Dependency.new('Name', :git => 'www.example.com')
         ExternalSources::DownloaderSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
@@ -220,6 +283,24 @@ module Pod
           'SVPullToRefresh (0.4)',
           'libextobjc/EXTKeyPathCoding (0.2.3)',
         ]
+      end
+
+      #--------------------------------------#
+
+      it 'warns when a dependency is duplicated' do
+        podfile = Podfile.new do
+          source 'https://github.com/CocoaPods/Specs.git'
+          xcodeproj 'SampleProject/SampleProject'
+          platform :ios, '8.0'
+          pod 'RestKit', '~> 0.23.0'
+          pod 'RestKit', '<= 0.23.2'
+        end
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        analyzer.analyze
+
+        UI.warnings.should.match /duplicate dependencies on `RestKit`/
+        UI.warnings.should.match %r{RestKit \(~> 0.23.0\)}
+        UI.warnings.should.match %r{RestKit \(<= 0.23.2\)}
       end
 
       #--------------------------------------#
