@@ -73,6 +73,9 @@ https://github.com/CocoaPods/CocoaPods/search?q=%5B%21%5D+at+-&type=Issues
 If none exists, create a ticket, with the template displayed above, on:
 https://github.com/CocoaPods/CocoaPods/issues/new
 
+Be sure to first read the contributing guide for details on how to properly submit a ticket:
+https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md
+
 Don't forget to anonymize any private data!
 
 EOS
