@@ -367,7 +367,7 @@ module Pod
       def sources
         @sources ||= begin
           sources = podfile.sources
-          if sources.empty?
+          if sources.empty? && !podfile.dependencies.reject(&:external_source).empty?
             SourcesManager.all.tap do |all|
               UI.warn all.reduce("The use of implicit sources has been " \
                 "deprecated. To continue using all of the sources currently " \
