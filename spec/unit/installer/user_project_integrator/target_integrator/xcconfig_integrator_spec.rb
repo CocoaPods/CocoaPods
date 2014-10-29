@@ -62,5 +62,15 @@ module Pod
       UI.warnings.should.match /not set.*base configuration/
     end
 
+    it 'sets the Pods xcconfig as the base config on other targets if no base has been set yet' do
+      target = @project.targets[1]
+      XCConfigIntegrator.integrate(@pod_bundle, [@target, target])
+      target.build_configurations.each do |config|
+        config.base_configuration_reference.path.should.include 'Pods'
+      end
+
+      UI.warnings.should.not.match /not set.*base configuration/
+    end
+
   end
 end

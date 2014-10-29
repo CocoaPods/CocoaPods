@@ -81,6 +81,12 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ##### Bug Fixes
 
+* `XCConfigIntegrator` Fixes an issue where not all targets that need
+  integration where being integrated, but were getting incorrect warnings about
+  the user having specified a custom base configuration.  
+  [Eloy Durán](https://github.com/alloy)
+  [2752](https://github.com/CocoaPods/CocoaPods/issues/2752)
+
 * Do not try to clone spec-repos in `/`.  
   [Eloy Durán](https://github.com/alloy)
   [#2723](https://github.com/CocoaPods/CocoaPods/issues/2723)
