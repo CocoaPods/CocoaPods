@@ -8,10 +8,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 * Support of older versions of Ruby has been dropped and CocoaPods now depends
   on Ruby 2.0.0 or greater. This is due to the release of Xcode 6.0 which has
-  dropped support for OS X 10.8 which results in the minimum version of
-  Ruby pre-installed on OS X is now 2.0.0.
+  dropped support for OS X 10.8, which results in the minimum version of
+  Ruby pre-installed on OS X now being 2.0.0.
 
-  If you are using a custom installation of Ruby which is older than 2.0.0, you
+  If you are using a custom installation of Ruby  older than 2.0.0, you
   will need to update. Or even better, migrate to system Ruby.  
   [Kyle Fuller](https://github.com/kylef)
 
@@ -56,7 +56,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [#2562](https://github.com/CocoaPods/CocoaPods/issues/2562)
 
 * `Sandbox::FileAccessor` now optionally includes expanded paths of headers of
-  vendored frameworks in `public_headers`.
+  vendored frameworks in `public_headers`.  
   [Eloy Durán](https://github.com/alloy)
   [#2722](https://github.com/CocoaPods/CocoaPods/pull/2722)
 
@@ -66,7 +66,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Eloy Durán](https://github.com/alloy)
   [#2723](https://github.com/CocoaPods/CocoaPods/issues/2723)
 
-* Improved sanitizing of configuration names which have a number prefix.
+* Improved sanitizing of configuration names which have a number prefix.  
   [Steffen Matthischke](https://github.com/HeEAaD)
   [#2700](https://github.com/CocoaPods/CocoaPods/pull/2700)
 
