@@ -23,9 +23,7 @@ module Pod
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1'
         )
         @pod_bundle.xcconfigs['Debug'] = configuration
-        @pod_bundle.xcconfigs['Test'] = configuration
         @pod_bundle.xcconfigs['Release'] = configuration
-        @pod_bundle.xcconfigs['App Store'] = configuration
         @target_integrator = TargetIntegrator.new(@pod_bundle)
       end
 
