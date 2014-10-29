@@ -12,7 +12,7 @@ module Pod
         UI.message "- Installing target `#{target.name}` #{target.platform}" do
           add_target
           create_support_files_dir
-          create_suport_files_group
+          create_support_files_group
           create_xcconfig_file
           if target.requires_framework?
             create_info_plist_file
@@ -36,7 +36,7 @@ module Pod
       #
       # @return [void]
       #
-      def create_suport_files_group
+      def create_support_files_group
         parent = project.support_files_group
         name = target.name
         dir = target.support_files_dir
