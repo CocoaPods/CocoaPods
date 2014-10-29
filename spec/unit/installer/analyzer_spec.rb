@@ -584,17 +584,6 @@ module Pod
             @analyzer.send(:sources).map(&:url).should ==
               SourcesManager.all.map(&:url)
           end
-
-          it 'prints a warning about the deprecation of implicit sources' do
-            @analyzer.send(:sources)
-            UI.warnings.should.match /implicit(.+)sources(.+)deprecated/
-          end
-
-          it 'prints a warning about how to add explicit sources' do
-            @analyzer.send(:sources)
-            UI.warnings.should.
-              match %r{source 'https://github.com/CocoaPods/Specs.git'}
-          end
         end
 
         describe 'when there are explicit sources' do
