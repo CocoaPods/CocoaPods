@@ -106,7 +106,7 @@ module Pod
         #
         def check_repo_status
           clean = Dir.chdir(repo_dir) { `git status --porcelain  2>&1` } == ''
-          raise Informative, "The repo `#{@repo}` is not clean" unless clean
+          raise Informative, "The repo `#{@repo}` spec-repo is not clean" unless clean
         end
 
         # Updates the git repo against the remote.
