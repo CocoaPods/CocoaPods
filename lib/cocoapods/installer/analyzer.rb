@@ -268,6 +268,11 @@ module Pod
         deps_to_fetch_if_needed = []
         deps_with_external_source = podfile.dependencies.select(&:external_source)
 
+        deps_with_different_sources = podfile.dependencies.group_by(&:root_name).select { |_root_name, dependencies| dependencies.map(&:external_source).uniq.count > 1 }
+        deps_with_different_sources.each do |root_name, dependencies|
+          raise Informative, "There are multiple dependencies with different sources for `#{root_name}` in #{UI.path podfile.defined_in_file}:\n\n- #{dependencies.map(&:to_s).join("\n- ")}"
+        end
+
         if update_mode == :all
           deps_to_fetch = deps_with_external_source
         else
@@ -282,7 +287,7 @@ module Pod
 
         unless deps_to_fetch.empty?
           UI.section 'Fetching external sources' do
-            deps_to_fetch.uniq.sort.each do |dependency|
+            deps_to_fetch.uniq(&:root_name).sort.each do |dependency|
               source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
               source.fetch(sandbox)
             end
@@ -310,6 +315,13 @@ module Pod
       #         grouped by target.
       #
       def resolve_dependencies
+        duplicate_dependencies = podfile.dependencies.group_by(&:name).
+          select { |_name, dependencies| dependencies.count > 1 }
+        duplicate_dependencies.each do |name, dependencies|
+          UI.warn "There are duplicate dependencies on `#{name}` in #{UI.path podfile.defined_in_file}:\n\n" \
+           "- #{dependencies.map(&:to_s).join("\n- ")}"
+        end
+
         specs_by_target = nil
         UI.section "Resolving dependencies of #{UI.path podfile.defined_in_file}" do
           resolver = Resolver.new(sandbox, podfile, locked_dependencies, sources)

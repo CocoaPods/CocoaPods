@@ -60,6 +60,18 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   [Eloy Durán](https://github.com/alloy)
   [#2722](https://github.com/CocoaPods/CocoaPods/pull/2722)
 
+* Analysis is now halted and the user informed when there are multiple different
+  external sources for dependencies with the same root name.
+  The user is also now warned when there are duplicate dependencies in the
+  Podfile.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2738](https://github.com/CocoaPods/CocoaPods/issues/2738)
+
+* Multiple subspecs that point to the same external dependency will now only
+  cause that external source to be fetched once.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2743](https://github.com/CocoaPods/CocoaPods/issues/2743)
+
 ##### Bug Fixes
 
 * Do not try to clone spec-repos in `/`.  
