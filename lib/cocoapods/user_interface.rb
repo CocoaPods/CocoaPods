@@ -140,7 +140,7 @@ module Pod
       end
 
       # Returns a string containing relative location of a path from the Podfile.
-      # The returned path is quoted. If the argument is nit it returns the
+      # The returned path is quoted. If the argument is nil it returns the
       # empty string.
       #
       def path(pathname)
