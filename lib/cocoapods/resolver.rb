@@ -137,7 +137,7 @@ module Pod
     def dependencies_for(specification)
       specification.all_dependencies.map do |dependency|
         if dependency.root_name == Specification.root_name(specification.name)
-          Dependency.new(dependency.name, specification.version)
+          dependency.dup.tap { |d| d.specific_version = specification.version }
         else
           dependency
         end
