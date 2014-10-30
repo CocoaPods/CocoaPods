@@ -68,9 +68,20 @@ module Pod
         specs_by_target = {}
         podfile.target_definition_list.each do |target|
           specs = target.dependencies.map(&:name).map do |name|
+            s = lambda do |node|
+              d_nodes = node.outgoing_edges.select do |edge|
+                edge.requirements.any? do |dependency|
+                  !dependency.from_subspec_dependency? || edge.destination.payload.available_platforms.any? { |p| target.platform.supports?(p) }
+                end
+              end.map(&:destination)
+
+              d_nodes + d_nodes.flat_map { |n| s.call(n) }
+            end
+
             node = @activated.vertex_named(name)
-            (node.recursive_successors << node).to_a
+            s.call(node).to_a << node
           end
+
           specs_by_target[target] = specs.
             flatten.
             map(&:payload).
