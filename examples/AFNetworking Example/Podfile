@@ -2,7 +2,7 @@
 xcodeproj "AFNetworking Mac Example.xcodeproj"
 ####
 
-workspace 'AFNetworking Examples.xcworkspace'
+workspace 'Examples.xcworkspace'
 
 target "AFNetworking Example" do
   platform :osx, '10.8'
