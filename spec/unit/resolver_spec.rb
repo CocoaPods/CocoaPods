@@ -175,6 +175,23 @@ module Pod
         e.message.should.match(/platform .* not compatible/)
       end
 
+      it 'excludes subspec dependencies with incompatible platforms without' \
+        'raising' do
+        @podfile = Podfile.new do
+          platform :osx, '10.10'
+          pod 'AFNetworking', '2.4.1' # Has an 'AFNetworking/UIKit' iOS-only default subspec
+        end
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
+        resolver.resolve.values.flatten.map(&:to_s).sort.should == [
+          "AFNetworking (2.4.1)",
+          "AFNetworking/NSURLConnection (2.4.1)",
+          "AFNetworking/NSURLSession (2.4.1)",
+          "AFNetworking/Reachability (2.4.1)",
+          "AFNetworking/Security (2.4.1)",
+          "AFNetworking/Serialization (2.4.1)",
+        ]
+      end
+
       it 'raises if unable to find a specification' do
         Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
         message = should.raise Informative do
