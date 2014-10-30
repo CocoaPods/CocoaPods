@@ -235,26 +235,39 @@ begin
 
     desc "Build all examples"
     task :build do
-      Dir.chdir("examples/AFNetworking Example") do
-        puts "Installing Pods"
-        # pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
-        # TODO: The sandbox is blocking local git repos making bundler crash
-        pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/pod'
+      require 'xcodeproj'
+      Dir['examples/*'].each do |dir|
+        Dir.chdir(dir) do
+          puts "Example: #{dir}"
 
-        execute_command "rm -rf Pods"
-        execute_command "#{pod_command} install --verbose --no-repo-update"
+          puts "    Installing Pods"
+          # pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
+          # TODO: The sandbox is blocking local git repos making bundler crash
+          pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/pod'
 
-        puts "Building example: AFNetworking Mac Example"
-        execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking Example' clean build"
+          execute_command "rm -rf Pods"
+          execute_command "#{pod_command} install --verbose --no-repo-update"
 
-        puts "Building example: AFNetworking iOS Example"
-        xcode_version = `xcodebuild -version`.scan(/Xcode (.*)\n/).first.first
-        major_version = xcode_version.split('.').first.to_i
-        # Specifically build against the simulator SDK so we don't have to deal with code signing.
-        if  major_version > 5
-          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 6'"
-        else
-          execute_command "xcodebuild -workspace 'AFNetworking Examples.xcworkspace' -scheme 'AFNetworking iOS Example' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch)'"
+          workspace_path = 'Examples.xcworkspace'
+          workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
+          workspace.schemes.each do |scheme_name, project_path|
+            next if scheme_name == 'Pods'
+            puts "    Building scheme: #{scheme_name}"
+
+            project = Xcodeproj::Project.open(project_path)
+            target = project.targets.first
+
+            case target
+            when :osx
+              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build"
+            when :ios
+              xcode_version = `xcodebuild -version`.scan(/Xcode (.*)\n/).first.first
+              major_version = xcode_version.split('.').first.to_i
+              # Specifically build against the simulator SDK so we don't have to deal with code signing.
+              simulator_name = major_version > 5 ? 'iPhone 6' : 'iPhone Retina (4-inch)'
+              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=#{simulator_name}"
+            end
+          end
         end
       end
     end
