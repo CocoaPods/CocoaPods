@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 4eb2c2ea287e517e633d75bfd29b829e1a6097ae
+  revision: 8b554d8dd184e75bb79dcc86a7056e9fef35e952
   branch: master
   specs:
     cocoapods-core (0.34.4)
@@ -17,14 +17,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: e86cec392a75c577f2c803d8cc87debe41a9bdbe
+  revision: 67d09200c8baca9547f54a0145b405c658e0ba07
   branch: master
   specs:
     molinillo (0.1.0)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 7341b637687c648c9f9479a3881af47a19ff5fc7
+  revision: a37c7013fec57681594caefc717e5d03cbc06cb2
   branch: master
   specs:
     xcodeproj (0.20.1)
@@ -48,11 +48,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 418085ebd393426cc6ab16e646ae0663921dbe81
+  revision: f816ed0f9b35fe64ab0514bee2e0a2a58d167595
   branch: master
   specs:
     cocoapods-trunk (0.3.1)
-      json_pure (~> 1.8)
       nap (>= 0.8)
       netrc (= 0.7.8)
 
@@ -108,8 +107,7 @@ GEM
     ffi (1.9.6)
     fuzzy_match (2.0.4)
     i18n (0.6.11)
-    json (1.8.1)
-    json_pure (1.8.1)
+    json (1.7.7)
     kicker (3.0.0)
       listen (~> 1.3.0)
       notify (~> 0.5.2)
@@ -128,7 +126,7 @@ GEM
     netrc (0.7.8)
     notify (0.5.2)
     open4 (1.3.4)
-    parser (2.2.0.pre.5)
+    parser (2.2.0.pre.6)
       ast (>= 1.1, < 3.0)
       slop (~> 3.4, >= 3.4.5)
     powerpack (0.0.9)
@@ -178,6 +176,7 @@ DEPENDENCIES
   cocoapods-trunk!
   cocoapods-try!
   diffy
+  json (= 1.7.7)
   kicker
   mocha
   mocha-on-bacon
