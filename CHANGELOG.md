@@ -4,6 +4,21 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 ## Master
 
+##### Highlighted Enhancements That Need Testing
+
+* The `Resolver` has been completely rewritten to use
+  [Molinillo](https://github.com/CocoaPods/Molinillo), an iterative dependency
+  resolution algorithm that automatically resolves version conflicts.
+  The order in which dependencies are declared in the `Podfile` no longer has
+  any effect on the resolution process.
+
+  You should ensure that `pod install`, `pod update` and `pod update [NAME]`
+  work as expected and install the correct versions of your pods during
+  this RC1 release.
+  [Samuel Giddins](https://github.com/segiddins)
+  [#978](https://github.com/CocoaPods/CocoaPods/issues/978)
+  [#2002](https://github.com/CocoaPods/CocoaPods/issues/2002)
+
 ##### Breaking
 
 * Support for older versions of Ruby has been dropped and CocoaPods now depends
@@ -37,15 +52,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
   of the Hooks API.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#2461](https://github.com/CocoaPods/CocoaPods/issues/2461)
-
-* The `Resolver` has been completely rewritten to use
-  [Molinillo](https://github.com/CocoaPods/Molinillo), an iterative dependency
-  resolution algorithm that automatically resolves version conflicts.
-  The order in which dependencies are declared in the `Podfile` no longer has
-  any effect on the resolution process.  
-  [Samuel Giddins](https://github.com/segiddins)
-  [#978](https://github.com/CocoaPods/CocoaPods/issues/978)
-  [#2002](https://github.com/CocoaPods/CocoaPods/issues/2002)
 
 * Implicit dependencies are now locked, so simply running `pod install` will not
   cause them to be updated when they shouldn't be.  
