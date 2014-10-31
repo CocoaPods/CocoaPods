@@ -175,23 +175,6 @@ module Pod
         e.message.should.match(/platform .* not compatible/)
       end
 
-      it 'excludes dependencies from `Specification#subspec_dependencies` ' \
-        'with incompatible platforms without raising' do
-        @podfile = Podfile.new do
-          platform :osx, '10.10'
-          pod 'AFNetworking', '2.4.1' # Has an 'AFNetworking/UIKit' iOS-only default subspec
-        end
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
-        resolver.resolve.values.flatten.map(&:to_s).sort.should == [
-          "AFNetworking (2.4.1)",
-          "AFNetworking/NSURLConnection (2.4.1)",
-          "AFNetworking/NSURLSession (2.4.1)",
-          "AFNetworking/Reachability (2.4.1)",
-          "AFNetworking/Security (2.4.1)",
-          "AFNetworking/Serialization (2.4.1)",
-        ]
-      end
-
       it 'raises if unable to find a specification' do
         Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
         message = should.raise Informative do
@@ -379,6 +362,51 @@ module Pod
 
         UI.warnings.should.match /multiple specifications/
       end
+
+      describe 'concerning dependencies from `Specification#subspec_dependencies`' do
+        def resolve
+          Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all).resolve
+        end
+
+        # AFNetworking Has an 'AFNetworking/UIKit' iOS-only default subspec
+        requirement = ['AFNetworking', '2.4.1']
+        ios_subspec = 'AFNetworking/UIKit (2.4.1)'
+
+        it 'excludes those for another platform' do
+          @podfile = Podfile.new do
+            platform :osx, '10.10'
+            pod(*requirement)
+          end
+          resolve.values.flatten.map(&:to_s).should.not.include ios_subspec
+        end
+
+        it 'includes those for the requested platform' do
+          @podfile = Podfile.new do
+            platform :ios, '7'
+            pod(*requirement)
+          end
+          resolve.values.flatten.map(&:to_s).should.include ios_subspec
+        end
+
+        it 'includes those in the target for the requested platform only' do
+          @podfile = Podfile.new do
+            target 'iOS' do
+              platform :ios, '7'
+              pod(*requirement)
+            end
+            target 'OSX' do
+              platform :osx, '10.10'
+              pod(*requirement)
+            end
+          end
+          resolved = resolve
+          ios_target = resolved.keys.find { |td| td.label == 'Pods-iOS' }
+          osx_target = resolved.keys.find { |td| td.label == 'Pods-OSX' }
+          resolved[ios_target].map(&:to_s).should.include ios_subspec
+          resolved[osx_target].map(&:to_s).should.not.include ios_subspec
+        end
+      end
+
     end
 
     #-------------------------------------------------------------------------#
