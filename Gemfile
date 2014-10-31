@@ -23,6 +23,8 @@ group :development do
   cp_gem 'xcodeproj',            'Xcodeproj'
   cp_gem 'molinillo',            'Molinillo'
 
+  gem 'cocoapods-dependencies'
+
   gem 'bacon'
   gem 'mocha'
   gem 'mocha-on-bacon'
