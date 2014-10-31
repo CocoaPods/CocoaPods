@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: afa6cd5ea769a8044d36a002f7e1e2ec2710da00
-  branch: seg-from-subspec-dependencies
+  revision: 729c269f4f19d42f4d01dd6274e20486f9b8ac69
+  branch: master
   specs:
     cocoapods-core (0.34.4)
       activesupport (>= 3.2.15)
