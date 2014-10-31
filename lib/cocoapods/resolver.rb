@@ -69,8 +69,9 @@ module Pod
         podfile.target_definition_list.each do |target|
           specs = target.dependencies.map(&:name).map do |name|
             node = @activated.vertex_named(name)
-            (node.recursive_successors << node).to_a
+            valid_dependencies_for_target_from_node(target, node) << node
           end
+
           specs_by_target[target] = specs.
             flatten.
             map(&:payload).
@@ -126,7 +127,7 @@ module Pod
     def dependencies_for(specification)
       specification.all_dependencies.map do |dependency|
         if dependency.root_name == Specification.root_name(specification.name)
-          Dependency.new(dependency.name, specification.version)
+          dependency.dup.tap { |d| d.specific_version = specification.version }
         else
           dependency
         end
@@ -340,6 +341,39 @@ module Pod
         raise Informative, "The platform of the target `#{target.name}` "     \
           "(#{target.platform}) is not compatible with `#{spec}` which has "  \
           "a minimum requirement of #{spec.available_platforms.join(' - ')}."
+      end
+    end
+
+    # Returns the target-appropriate nodes that are `successors` of `node`,
+    # rejecting those that are {Dependency#from_subspec_dependency?} and have
+    # and incompatible platform.
+    #
+    # @return [Array<Molinillo::DependencyGraph::Vertex>]
+    #         An array of target-appropriate nodes whose `payload`s are
+    #         dependencies for `target`.
+    #
+    def valid_dependencies_for_target_from_node(target, node)
+      dependency_nodes = node.outgoing_edges.select do |edge|
+        edge_is_valid_for_target?(edge, target)
+      end.map(&:destination)
+
+      dependency_nodes + dependency_nodes.flat_map { |n| valid_dependencies_for_target_from_node(target, n) }
+    end
+
+    # Whether the given `edge` should be followed to find dependencies for the
+    # given `target`.
+    #
+    # @note At the moment, this method only checks whether the edge's
+    #       requirements are normal dependencies _or_ whether they are
+    #       dependencies that come from {Specification#subspec_dependencies}
+    #       and, if so, that their platforms are compatible with the target's.
+    #
+    # @return [Bool]
+    #
+    def edge_is_valid_for_target?(edge, target)
+      edge.requirements.any? do |dependency|
+        !dependency.from_subspec_dependency? ||
+          edge.destination.payload.available_platforms.any? { |p| target.platform.supports?(p) }
       end
     end
   end

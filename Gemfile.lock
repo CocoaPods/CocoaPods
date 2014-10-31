@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 8b554d8dd184e75bb79dcc86a7056e9fef35e952
-  branch: master
+  revision: afa6cd5ea769a8044d36a002f7e1e2ec2710da00
+  branch: seg-from-subspec-dependencies
   specs:
     cocoapods-core (0.34.4)
       activesupport (>= 3.2.15)
@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 67d09200c8baca9547f54a0145b405c658e0ba07
+  revision: e86cec392a75c577f2c803d8cc87debe41a9bdbe
   branch: master
   specs:
     molinillo (0.1.0)
