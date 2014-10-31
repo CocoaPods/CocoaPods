@@ -175,8 +175,8 @@ module Pod
         e.message.should.match(/platform .* not compatible/)
       end
 
-      it 'excludes subspec dependencies with incompatible platforms without' \
-        'raising' do
+      it 'excludes dependencies from `Specification#subspec_dependencies` ' \
+        'with incompatible platforms without raising' do
         @podfile = Podfile.new do
           platform :osx, '10.10'
           pod 'AFNetworking', '2.4.1' # Has an 'AFNetworking/UIKit' iOS-only default subspec
