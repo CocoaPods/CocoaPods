@@ -28,6 +28,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Hugo Tunius](https://github.com/K0nserv)
   [#2262](https://github.com/CocoaPods/CocoaPods/issues/2262)
 
+* Fixed an issue that Core Data mapping models where not compiled when
+  copying resources to main application bundle.  
+  [Yan Rabovik](https://github.com/rabovik)
+
 
 ## 0.35.0.rc2
 
