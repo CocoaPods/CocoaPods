@@ -354,13 +354,27 @@ module Pod
     #
     def valid_dependencies_for_target_from_node(target, node)
       dependency_nodes = node.outgoing_edges.select do |edge|
-        edge.requirements.any? do |dependency|
-          !dependency.from_subspec_dependency? ||
-            edge.destination.payload.available_platforms.any? { |p| target.platform.supports?(p) }
-        end
+        edge_is_valid_for_target?(edge, target)
       end.map(&:destination)
 
       dependency_nodes + dependency_nodes.flat_map { |n| valid_dependencies_for_target_from_node(target, n) }
+    end
+
+    # Whether the given `edge` should be followed to find dependencies for the
+    # given `target`.
+    #
+    # @note At the moment, this method only checks whether the edge's
+    #       requirements are normal dependencies _or_ whether they are
+    #       dependencies that come from {Specification#subspec_dependencies}
+    #       and, if so, that their platforms are compatible with the target's.
+    #
+    # @return [Bool]
+    #
+    def edge_is_valid_for_target?(edge, target)
+      edge.requirements.any? do |dependency|
+        !dependency.from_subspec_dependency? ||
+          edge.destination.payload.available_platforms.any? { |p| target.platform.supports?(p) }
+      end
     end
   end
 end
