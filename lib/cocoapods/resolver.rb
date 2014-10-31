@@ -68,20 +68,8 @@ module Pod
         specs_by_target = {}
         podfile.target_definition_list.each do |target|
           specs = target.dependencies.map(&:name).map do |name|
-
-            matching_dependencies_from_node = lambda do |node|
-              dependency_nodes = node.outgoing_edges.select do |edge|
-                edge.requirements.any? do |dependency|
-                  !dependency.from_subspec_dependency? ||
-                    edge.destination.payload.available_platforms.any? { |p| target.platform.supports?(p) }
-                end
-              end.map(&:destination)
-
-              dependency_nodes + dependency_nodes.flat_map { |n| matching_dependencies_from_node.call(n) }
-            end
-
             node = @activated.vertex_named(name)
-            matching_dependencies_from_node.call(node).to_a << node
+            valid_dependencies_for_target_from_node(target, node) << node
           end
 
           specs_by_target[target] = specs.
@@ -354,6 +342,25 @@ module Pod
           "(#{target.platform}) is not compatible with `#{spec}` which has "  \
           "a minimum requirement of #{spec.available_platforms.join(' - ')}."
       end
+    end
+
+    # Returns the target-appropriate nodes that are `successors` of `node`,
+    # rejecting those that are {Dependency#from_subspec_dependency?} and have
+    # and incompatible platform.
+    #
+    # @return [Array<Molinillo::DependencyGraph::Vertex>]
+    #         An array of target-appropriate nodes whose `payload`s are
+    #         dependencies for `target`.
+    #
+    def valid_dependencies_for_target_from_node(target, node)
+      dependency_nodes = node.outgoing_edges.select do |edge|
+        edge.requirements.any? do |dependency|
+          !dependency.from_subspec_dependency? ||
+            edge.destination.payload.available_platforms.any? { |p| target.platform.supports?(p) }
+        end
+      end.map(&:destination)
+
+      dependency_nodes + dependency_nodes.flat_map { |n| valid_dependencies_for_target_from_node(target, n) }
     end
   end
 end
