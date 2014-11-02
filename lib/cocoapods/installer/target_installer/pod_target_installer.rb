@@ -154,8 +154,9 @@ module Pod
       #
       def compiler_flags_for_consumer(consumer)
         flags = consumer.compiler_flags.dup
-        if consumer.requires_arc
-          flags << '-fobjc-arc'
+        if !consumer.requires_arc
+          flags << '-fno-objc-arc'
+        else
           platform_name = consumer.platform_name
           spec_deployment_target = consumer.spec.deployment_target(platform_name)
           if spec_deployment_target.nil? || Version.new(spec_deployment_target) < ENABLE_OBJECT_USE_OBJC_FROM[platform_name]
