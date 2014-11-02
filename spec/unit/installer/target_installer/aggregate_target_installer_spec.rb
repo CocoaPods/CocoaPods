@@ -64,19 +64,6 @@ module Pod
         @project.targets.first.name.should == @target_definition.label
       end
 
-      it 'adds the user build configurations to the target' do
-        @installer.install!
-        target = @project.targets.first
-        target.build_settings('Test')['VALIDATE_PRODUCT'].should.nil?
-        target.build_settings('AppStore')['VALIDATE_PRODUCT'].should == 'YES'
-      end
-
-      it 'sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets' do
-        @installer.install!
-        target = @project.targets.first
-        target.build_settings('Release')['VALIDATE_PRODUCT'].should == 'YES'
-      end
-
       it 'sets the platform and the deployment target for iOS targets' do
         @installer.install!
         target = @project.targets.first

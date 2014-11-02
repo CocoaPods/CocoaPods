@@ -51,12 +51,6 @@ module Pod
         @project.targets.first.name.should == 'Pods-BananaLib'
       end
 
-      it 'sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets' do
-        @installer.install!
-        target = @project.targets.first
-        target.build_settings('Release')['VALIDATE_PRODUCT'].should == 'YES'
-      end
-
       it 'sets the platform and the deployment target for iOS targets' do
         @installer.install!
         target = @project.targets.first
