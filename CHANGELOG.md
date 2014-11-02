@@ -2,7 +2,7 @@
 
 To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
 
-## Master
+## 0.35.0.rc1
 
 ##### Highlighted Enhancements That Need Testing
 
