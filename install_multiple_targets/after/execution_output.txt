@@ -81,7 +81,3 @@ Integrating target `Pods` (`SampleApp.xcodeproj` project)
 Integrating target `Pods-SampleApp_2` (`SampleApp.xcodeproj` project)
 
 Integrating target `Pods-test` (`SampleApp.xcodeproj` project)
-
-[!] The use of implicit sources has been deprecated. To continue using all of the sources currently on your machine, add the following to the top of your Podfile:
-
-    source 'https://github.com/CocoaPods/Specs.git'
