@@ -220,8 +220,6 @@ module Pod
 
     include Molinillo::UI
 
-    include Config::Mixin
-
     # The UI object the resolver should use for displaying user-facing output.
     #
     # @return [UserInterface] the normal CocoaPods UI object.
@@ -230,32 +228,43 @@ module Pod
       UI
     end
 
-    # Called before resolution starts. We print out `Resolving dependencies` in
-    # the analyzer, so here we just want to print out a starting `.` in verbose
-    # mode.
+    # Called before resolution starts.
+    #
+    # Completely silence this, as we show nothing in normal mode and debug
+    # information in verbose mode.
     #
     # @return [Void]
     #
     def before_resolution
-      UI.print '.' if config.verbose
     end
 
-    # Called after resolution ends. We don't want to {#indicate_progress}
-    # unless in verbose mode, so we only use the default implementation then.
+    # Called after resolution ends.
+    #
+    # Completely silence this, as we show nothing in normal mode and debug
+    # information in verbose mode.
     #
     # @return [Void]
     #
     def after_resolution
-      super if config.verbose
     end
 
     # Called during resolution to indicate progress.
-    # We only use the default implementation in verbose mode.
+    #
+    # Completely silence this, as we show nothing in normal mode and debug
+    # information in verbose mode.
     #
     # @return [Void]
     #
     def indicate_progress
-      super if config.verbose
+    end
+
+    # Conveys debug information to the user.
+    # By default, prints to `STDERR` instead of {#output}.
+    #
+    # @param [Integer] depth the current depth of the resolution process.
+    # @return [void]
+    def debug?
+      Config.instance.verbose?
     end
 
     #-------------------------------------------------------------------------#
