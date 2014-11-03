@@ -220,34 +220,6 @@ module Pod
 
     include Molinillo::UI
 
-    # The UI object the resolver should use for displaying user-facing output.
-    #
-    # @return [UserInterface] the normal CocoaPods UI object.
-    #
-    def output
-      UI
-    end
-
-    # Called before resolution starts.
-    #
-    # Completely silence this, as we show nothing in normal mode and debug
-    # information in verbose mode.
-    #
-    # @return [Void]
-    #
-    def before_resolution
-    end
-
-    # Called after resolution ends.
-    #
-    # Completely silence this, as we show nothing in normal mode and debug
-    # information in verbose mode.
-    #
-    # @return [Void]
-    #
-    def after_resolution
-    end
-
     # Called during resolution to indicate progress.
     #
     # Completely silence this, as we show nothing in normal mode and debug
@@ -255,16 +227,11 @@ module Pod
     #
     # @return [Void]
     #
-    def indicate_progress
-    end
-
-    # Conveys debug information to the user.
-    # By default, prints to `STDERR` instead of {#output}.
-    #
-    # @param [Integer] depth the current depth of the resolution process.
-    # @return [void]
-    def debug?
-      Config.instance.verbose?
+    def indicate_progress(resolution, step)
+      if message = super
+        depth = step == :finished_resolution ? 0 : resolution.depth
+        UI.puts('  ' * depth + message)
+      end
     end
 
     #-------------------------------------------------------------------------#

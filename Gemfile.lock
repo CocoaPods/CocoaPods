@@ -17,8 +17,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: f7ce59c9443c507d196cd0e9d7611d4ed69984eb
-  branch: master
+  revision: b46ddee792ebcdc40710c417f2de975ef8a43b6f
+  branch: delegate-all-ui-to-client
   specs:
     molinillo (0.1.0)
 
