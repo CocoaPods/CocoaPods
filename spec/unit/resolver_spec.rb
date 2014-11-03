@@ -257,6 +257,25 @@ module Pod
         )
       end
 
+      it 'allows pre-release spec versions when a requirement has an ' \
+         'external source' do
+        @podfile = Podfile.new do
+          platform :ios
+          pod 'MainSpec', :git => 'GIT-URL'
+        end
+        spec = Spec.new do |s|
+          s.name         = 'MainSpec'
+          s.version      = '1.2.3-pre'
+          s.platform     = :ios
+        end
+        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should == [
+          'MainSpec (1.2.3-pre)'
+        ]
+      end
+
       it "marks a specification's version to be a HEAD version" do
         podfile = Podfile.new do
           platform :ios

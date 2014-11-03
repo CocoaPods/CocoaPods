@@ -181,7 +181,10 @@ module Pod
         else
           requirement.requirement.satisfied_by? spec.version
         end
-      requirement_satisfied && !(spec.version.prerelease? && existing_vertices.flat_map(&:requirements).none?(&:prerelease?))
+      requirement_satisfied && !(
+        spec.version.prerelease? &&
+        existing_vertices.flat_map(&:requirements).none? { |r| r.prerelease? || r.external_source }
+      )
     end
 
     # Sort dependencies so that the ones that are easiest to resolve are first.
