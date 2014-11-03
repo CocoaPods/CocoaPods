@@ -37,16 +37,22 @@ module Pod
       end
     end
 
-    # @return [String] the name of the framework.
+    # @return [String] the name of the product excluding the file extension.
     #
-    def framework_name
-      "#{label}.framework"
+    def product_basename
+      label
     end
 
-    # @return [String] the name of the library.
+    # @return [String] the name of the framework, depends on #product_basename.
+    #
+    def framework_name
+      "#{product_basename}.framework"
+    end
+
+    # @return [String] the name of the library, depends on #product_basename.
     #
     def static_library_name
-      "lib#{label}.a"
+      "lib#{product_basename}.a"
     end
 
     # @return [Symbol] either :framework or :static_library, depends on
