@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 67d09200c8baca9547f54a0145b405c658e0ba07
+  revision: f7ce59c9443c507d196cd0e9d7611d4ed69984eb
   branch: master
   specs:
     molinillo (0.1.0)
@@ -40,10 +40,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 69f42c9c9891cf49ccc75c10376b2d6a34a72b7f
+  revision: 60cb1eae2f43b362cbefa9cb5c9ea40361e9b8b8
   branch: master
   specs:
-    cocoapods-plugins (0.3.1)
+    cocoapods-plugins (0.3.2)
       nap
 
 GIT
@@ -127,7 +127,7 @@ GEM
     netrc (0.7.8)
     notify (0.5.2)
     open4 (1.3.4)
-    parser (2.2.0.pre.6)
+    parser (2.2.0.pre.7)
       ast (>= 1.1, < 3.0)
       slop (~> 3.4, >= 3.4.5)
     powerpack (0.0.9)
@@ -157,7 +157,7 @@ GEM
     thread_safe (0.3.4)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    webmock (1.20.0)
+    webmock (1.20.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
 
