@@ -6,6 +6,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Allow the resolver to fail faster when there are unresolvable conflicts
+  involving the Lockfile.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Allows pre-release spec versions when a requirement has an external source

@@ -104,9 +104,10 @@ module Pod
     def search_for(dependency)
       @search ||= {}
       @search[dependency] ||= begin
+        requirement = Requirement.new(dependency.requirement.as_list << requirement_for_locked_pod_named(dependency.name))
         specs = find_cached_set(dependency).
           all_specifications.
-          select { |s| dependency.requirement.satisfied_by? s.version }.
+          select { |s| requirement.satisfied_by? s.version }.
           map { |s| s.subspec_by_name(dependency.name, false) }.
           compact
 
@@ -311,6 +312,16 @@ module Pod
         end
       end
       cached_sets[name]
+    end
+
+    # @return [Requirement, Nil]
+    #         The {Requirement} that locks the dependency with name `name` in
+    #         {#locked_dependencies}.
+    #
+    def requirement_for_locked_pod_named(name)
+      if vertex = locked_dependencies.vertex_named(name)
+        vertex.payload.requirement
+      end
     end
 
     # @return [Set] Creates a set for the Pod of the given dependency from the
