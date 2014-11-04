@@ -13,6 +13,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2768](https://github.com/CocoaPods/CocoaPods/issues/2768)
 
+* We no longer require git version 1.7.5 or greater.  
+  [Kyle Fuller](https://github.com/kylef)
+
 
 ## 0.35.0.rc1
 
