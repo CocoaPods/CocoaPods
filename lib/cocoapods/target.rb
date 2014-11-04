@@ -162,7 +162,14 @@ module Pod
     #         module map.
     #
     def umbrella_header_path
-      support_files_dir + target_definition.label + "#{product_module_name}.h"
+      support_files_dir + "#{label}-umbrella.h"
+    end
+
+    # @return [Pathname] the absolute path of the LLVM module map file that
+    #         defines the module structure for the compiler.
+    #
+    def module_map_path
+      support_files_dir + "#{label}.modulemap"
     end
 
     # @return [Pathname] the absolute path of the header file which contains
