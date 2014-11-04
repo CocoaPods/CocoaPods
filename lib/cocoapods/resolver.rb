@@ -374,9 +374,10 @@ module Pod
     # @return [Bool]
     #
     def edge_is_valid_for_target?(edge, target)
+      dependencies_for_target_platform =
+        edge.origin.payload.all_dependencies(target.platform).map(&:name)
       edge.requirements.any? do |dependency|
-        !dependency.from_subspec_dependency? ||
-          edge.destination.payload.available_platforms.any? { |p| target.platform.supports?(p) }
+        dependencies_for_target_platform.include?(dependency.name)
       end
     end
   end

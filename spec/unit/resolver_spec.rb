@@ -382,7 +382,7 @@ module Pod
         UI.warnings.should.match /multiple specifications/
       end
 
-      describe 'concerning dependencies from `Specification#subspec_dependencies`' do
+      describe 'concerning dependencies that are scoped by consumer platform' do
         def resolve
           Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all).resolve
         end
@@ -423,6 +423,28 @@ module Pod
           osx_target = resolved.keys.find { |td| td.label == 'Pods-OSX' }
           resolved[ios_target].map(&:to_s).should.include ios_subspec
           resolved[osx_target].map(&:to_s).should.not.include ios_subspec
+        end
+
+        it 'includes dependencies in the target for the requested platform only' do
+          osx_dependency = 'ARAnalytics/CoreMac (2.8.0)'
+          ios_dependency = 'ARAnalytics/CoreIOS (2.8.0)'
+          @podfile = Podfile.new do
+            target 'iOS' do
+              platform :ios, '8'
+              pod 'ARAnalytics', '2.8.0'
+            end
+            target 'OSX' do
+              platform :osx, '10.10'
+              pod 'ARAnalytics', '2.8.0'
+            end
+          end
+          resolved = resolve
+          ios_target = resolved.keys.find { |td| td.label == 'Pods-iOS' }
+          osx_target = resolved.keys.find { |td| td.label == 'Pods-OSX' }
+          resolved[ios_target].map(&:to_s).should.include ios_dependency
+          resolved[osx_target].map(&:to_s).should.not.include ios_dependency
+          resolved[ios_target].map(&:to_s).should.not.include osx_dependency
+          resolved[osx_target].map(&:to_s).should.include osx_dependency
         end
       end
 
