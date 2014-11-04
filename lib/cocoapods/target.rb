@@ -197,6 +197,23 @@ module Pod
       support_files_dir + "#{label}-dummy.m"
     end
 
+    # @return [String] The configuration build dir, if the target is integrated
+    #         as framework.
+    #
+    # @note   Namespace the pod target product with its target definition name.
+    #         Pod target products are named after their specs. The namespacing
+    #         cannot directly happen in the product name itself, because this
+    #         must be equal to the module name and this will be used in source
+    #         code, which should stay agnostic over the dependency manager.
+    #         We need namespacing at all because multiple targets can exist for
+    #         the same podspec and their products should not collide. This
+    #         happens when multiple user targets require the same pod, because
+    #         they could require different sets of subspecs.
+    #
+    def configuration_build_dir
+      "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/#{target_definition.label}"
+    end
+
     #-------------------------------------------------------------------------#
 
     protected

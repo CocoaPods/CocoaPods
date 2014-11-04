@@ -106,6 +106,10 @@ module Pod
           'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-Private.xcconfig'
         )
       end
+
+      it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
+        @pod_target.configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
+      end
     end
 
     describe 'Product type dependent helpers' do
