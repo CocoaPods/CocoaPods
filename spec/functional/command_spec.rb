@@ -17,15 +17,5 @@ module Pod
       Process.stubs(:uid).returns(0)
       lambda { Pod::Command.run(['--version']) }.should.raise CLAide::Help
     end
-
-    it "doesn't let you run without git installed" do
-      Pod::Command.expects(:`).with('git version').raises(Errno::ENOENT)
-      lambda { Pod::Command.run(['--version']) }.should.raise CLAide::Help
-    end
-
-    it "doesn't let you run with git version < 1.7.5" do
-      Pod::Command.expects(:`).with('git version').returns('git version 1.7.4.1 (Apple Git-50)')
-      lambda { Pod::Command.run(['--version']) }.should.raise CLAide::Help
-    end
   end
 end
