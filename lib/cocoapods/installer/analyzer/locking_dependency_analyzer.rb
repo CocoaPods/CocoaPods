@@ -32,7 +32,9 @@ module Pod
               add_to_dependency_graph(pod, [], dependency_graph)
             end
 
-            pods_to_update.each { |u| dependency_graph.detach_vertex_named(u) }
+            pods_to_update.each do |u|
+              dependency_graph.detach_vertex_named(u) if dependency_graph.vertex_named(u)
+            end
           end
 
           dependency_graph
