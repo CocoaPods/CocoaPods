@@ -16,6 +16,7 @@ module Pod
           create_xcconfig_file
           if target.requires_framework?
             create_info_plist_file
+            create_module_map
             create_umbrella_header
             create_embed_frameworks_script
           end

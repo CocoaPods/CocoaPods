@@ -17,6 +17,7 @@ module Pod
           create_xcconfig_file
           if target.requires_framework?
             create_info_plist_file
+            create_module_map
             create_umbrella_header do |generator|
               generator.imports += target.file_accessors.map(&:public_headers).flatten.map(&:basename)
             end
