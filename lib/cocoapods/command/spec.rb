@@ -68,8 +68,9 @@ module Pod
            ['--subspec=NAME', 'Lint validates only the given subspec'],
            ['--no-subspecs', 'Lint skips validation of subspecs'],
            ['--no-clean',    'Lint leaves the build directory intact for inspection'],
-           ['--sources=https://github.com/artsy/Specs', 'The sources to pull dependant pods from ' \
-            '(defaults to https://github.com/CocoaPods/Specs.git)']].concat(super)
+           ['--sources=https://github.com/artsy/Specs', 'The sources from which to pull dependant pods ' \
+            '(defaults to https://github.com/CocoaPods/Specs.git). '\
+            'Multiple sources must be comma-delimited.']].concat(super)
         end
 
         def initialize(argv)
