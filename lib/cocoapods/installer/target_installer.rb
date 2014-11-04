@@ -86,6 +86,25 @@ module Pod
         end
       end
 
+      # Creates the module map file which ensures that the umbrella header is
+      # recognized with a customized path
+      #
+      # @return [void]
+      #
+      def create_module_map
+        path = target.module_map_path
+        UI.message "- Generating module map file at #{UI.path(path)}" do
+          generator = Generator::ModuleMap.new(target)
+          generator.save_as(path)
+          add_file_to_support_group(path)
+
+          native_target.build_configurations.each do |c|
+            relative_path = path.relative_path_from(sandbox.root)
+            c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
+          end
+        end
+      end
+
       # Generates a header which ensures that all header files are exported
       # in the module map
       #

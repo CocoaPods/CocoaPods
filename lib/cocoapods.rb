@@ -59,6 +59,7 @@ module Pod
     autoload :EmbedFrameworksScript,   'cocoapods/generator/embed_frameworks_script'
     autoload :Header,                  'cocoapods/generator/header'
     autoload :InfoPlistFile,           'cocoapods/generator/info_plist_file'
+    autoload :ModuleMap,               'cocoapods/generator/module_map'
     autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
     autoload :TargetEnvironmentHeader, 'cocoapods/generator/target_environment_header'
     autoload :UmbrellaHeader,          'cocoapods/generator/umbrella_header'
