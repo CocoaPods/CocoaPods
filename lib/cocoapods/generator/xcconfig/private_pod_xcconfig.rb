@@ -57,6 +57,14 @@ module Pod
             # 'USE_HEADERMAP' => 'NO'
           }
 
+          if target.requires_framework?
+            build_settings = {
+              'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir,
+              'FRAMEWORK_SEARCH_PATHS' => XCConfigHelper.quote([target.configuration_build_dir]),
+            }
+            config.merge!(build_settings)
+          end
+
           xcconfig_hash = add_xcconfig_namespaced_keys(public_xcconfig.to_hash, config, target.xcconfig_prefix)
           @xcconfig = Xcodeproj::Config.new(xcconfig_hash)
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)

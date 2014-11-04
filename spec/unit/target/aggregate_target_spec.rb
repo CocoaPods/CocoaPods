@@ -82,6 +82,10 @@ module Pod
       it 'returns the path of the xcconfig file relative to the user project' do
         @target.xcconfig_relative_path('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
       end
+
+      it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
+        @target.configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
+      end
     end
 
     describe 'Pod targets' do
