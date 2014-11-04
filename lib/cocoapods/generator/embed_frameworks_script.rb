@@ -7,7 +7,7 @@ module Pod
       attr_reader :frameworks_by_config
 
       # @param  [Hash{String, Array{String}] frameworks_by_config
-      #         @see frameworks_by_config
+      #         @see #frameworks_by_config
       #
       def initialize(frameworks_by_config)
         @frameworks_by_config = frameworks_by_config
