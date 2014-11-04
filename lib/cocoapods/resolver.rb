@@ -348,8 +348,8 @@ module Pod
     end
 
     # Returns the target-appropriate nodes that are `successors` of `node`,
-    # rejecting those that are {Dependency#from_subspec_dependency?} and have
-    # and incompatible platform.
+    # rejecting those that are scoped by target platform and have incompatible
+    # targets.
     #
     # @return [Array<Molinillo::DependencyGraph::Vertex>]
     #         An array of target-appropriate nodes whose `payload`s are
@@ -365,11 +365,6 @@ module Pod
 
     # Whether the given `edge` should be followed to find dependencies for the
     # given `target`.
-    #
-    # @note At the moment, this method only checks whether the edge's
-    #       requirements are normal dependencies _or_ whether they are
-    #       dependencies that come from {Specification#subspec_dependencies}
-    #       and, if so, that their platforms are compatible with the target's.
     #
     # @return [Bool]
     #
