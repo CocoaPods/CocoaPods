@@ -56,6 +56,14 @@ module Pod
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_path_flags, '-isystem')
           }
+
+          if target.requires_framework?
+            build_settings = {
+              'FRAMEWORK_SEARCH_PATHS' => XCConfigHelper.quote([target.configuration_build_dir]),
+            }
+            config.merge!(build_settings)
+          end
+
           @xcconfig = Xcodeproj::Config.new(config)
 
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
