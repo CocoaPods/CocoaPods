@@ -22,6 +22,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * We no longer require git version 1.7.5 or greater.  
   [Kyle Fuller](https://github.com/kylef)
 
+* Fixed an issue that Core Data mapping models where not compiled when copying resources to main application bundle.
+  [Yan Rabovik](https://github.com/rabovik)
+  [#2766](https://github.com/CocoaPods/CocoaPods/pull/2766)
+
 
 ## 0.35.0.rc1
 
