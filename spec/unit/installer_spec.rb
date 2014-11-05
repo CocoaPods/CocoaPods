@@ -203,6 +203,22 @@ module Pod
 
     describe 'Downloading dependencies' do
 
+        it 'installs head pods' do
+          podfile = Podfile.new do
+            platform :osx, '10.10'
+            pod 'AFNetworking/NSURLSession', :head
+          end
+          @installer.stubs(:podfile).returns(podfile)
+          @installer.stubs(:lockfile).returns(nil)
+          Downloader::Git.any_instance.expects(:download_head).once
+          Downloader::Git.any_instance.expects(:checkout_options).returns({})
+          @installer.prepare
+          @installer.resolve_dependencies
+          @installer.send(:root_specs).map(&:version).map(&:head?).should == [true]
+          @installer.download_dependencies
+          UI.output.should.include 'HEAD based on 2.4.1'
+        end
+
       describe '#install_pod_sources' do
 
         it 'installs all the Pods which are marked as needing installation' do
