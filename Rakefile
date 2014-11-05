@@ -22,23 +22,12 @@ task :bootstrap, [:use_bundle_dir?] => [:check_requirements] do |t, args|
   puts "Updating submodules"
   execute_command "git submodule update --init --recursive"
 
-  require 'rbconfig'
-  if RbConfig::CONFIG['prefix'] == '/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr'
-    # Workaround Apple's mess. See https://github.com/CocoaPods/Xcodeproj/issues/137
-    #
-    # TODO This is not as correct as actually fixing the issue, figure out if we
-    # can override these build flags:
-    #
-    # ENV['DLDFLAGS'] = '-undefined dynamic_lookup -multiply_defined suppress'
-    ENV['ARCHFLAGS'] = '-Wno-error=unused-command-line-argument-hard-error-in-future'
-  end
-
   if system('which bundle')
     puts "Installing gems"
     if args[:use_bundle_dir?]
-      execute_command "env XCODEPROJ_BUILD=1 bundle install --path ./travis_bundle_dir"
+      execute_command "env bundle install --path ./travis_bundle_dir"
     else
-      execute_command "env XCODEPROJ_BUILD=1 bundle install"
+      execute_command "env bundle install"
     end
   else
     $stderr.puts "\033[0;31m" \
