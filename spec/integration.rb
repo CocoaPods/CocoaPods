@@ -104,6 +104,7 @@ describe_cli 'pod' do
     ]
     s.replace_path ROOT.to_s, 'ROOT'
     s.replace_path `which git`.chomp, 'GIT_BIN'
+    s.replace_path `which hg`.chomp, 'HG_BIN'
     s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
   end
 
