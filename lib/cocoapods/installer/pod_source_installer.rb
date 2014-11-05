@@ -60,7 +60,7 @@ module Pod
       # @return [void]
       #
       def clean!
-        clean_installation  unless local?
+        clean_installation unless local?
       end
 
       # @return [Hash]
@@ -135,7 +135,7 @@ module Pod
       # @return [void]
       #
       def clean_installation
-        clean_paths.each { |path| FileUtils.rm_rf(path) }
+        clean_paths.each { |path| FileUtils.rm_rf(path) } if root.exist?
       end
 
       #-----------------------------------------------------------------------#
