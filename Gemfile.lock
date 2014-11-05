@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: d194ce9a92a2f1f74cab6a11f60a1a0b339a7297
+  revision: d77623b7f79b9ec20176f0744aaed4495797e12d
   branch: master
   specs:
     cocoapods-core (0.35.0.rc1)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: a37c7013fec57681594caefc717e5d03cbc06cb2
+  revision: 9e228d30bb77ded13d7a65b952252afbd4b34911
   branch: master
   specs:
     xcodeproj (0.20.1)
@@ -48,10 +48,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: f816ed0f9b35fe64ab0514bee2e0a2a58d167595
+  revision: a32be4710bb9e69bb433a10ad7c8ec22a400d90c
   branch: master
   specs:
-    cocoapods-trunk (0.3.1)
+    cocoapods-trunk (0.3.2)
       nap (>= 0.8)
       netrc (= 0.7.8)
 
@@ -71,7 +71,7 @@ PATH
       cocoapods-core (= 0.35.0.rc1)
       cocoapods-downloader (~> 0.7.2)
       cocoapods-plugins (~> 0.3.1)
-      cocoapods-trunk (~> 0.3.1)
+      cocoapods-trunk (~> 0.3.2)
       cocoapods-try (~> 0.4.2)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -151,13 +151,13 @@ GEM
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
     ruby-prof (0.15.2)
-    ruby-progressbar (1.6.1)
+    ruby-progressbar (1.7.0)
     safe_yaml (1.0.4)
     slop (3.6.0)
     thread_safe (0.3.4)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    webmock (1.20.2)
+    webmock (1.20.3)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
 
