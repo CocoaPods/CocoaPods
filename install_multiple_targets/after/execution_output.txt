@@ -20,7 +20,7 @@ Downloading dependencies
 -> Installing JSONKit (1.4)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/johnezang/JSONKit.git ROOT/tmp/install_multiple_targets/Pods/JSONKit --single-branch --depth 1 --branch v1.4
+     $ GIT_BIN clone https://github.com/johnezang/JSONKit.git ROOT/tmp/install_multiple_targets/Pods/JSONKit --single-branch --depth 1 --branch v1.4
      Cloning into 'ROOT/tmp/install_multiple_targets/Pods/JSONKit'...
      Note: checking out '99930114548f9cedc8070a3bd4d9a217adc218ca'.
      
@@ -37,7 +37,7 @@ Downloading dependencies
 -> Installing Reachability (3.1.0)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_multiple_targets/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
+     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_multiple_targets/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
      Cloning into 'ROOT/tmp/install_multiple_targets/Pods/Reachability'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
      
