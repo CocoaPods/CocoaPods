@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: a2dfd2aa706ba745380d46fa34cfede404f68a51
-  branch: scope-dependencies-by-consumer
+  revision: d194ce9a92a2f1f74cab6a11f60a1a0b339a7297
+  branch: master
   specs:
     cocoapods-core (0.35.0.rc1)
       activesupport (>= 3.2.15)
