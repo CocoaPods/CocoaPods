@@ -4,8 +4,8 @@ REQUIRED_COMMANDS = %w[ git hg ]
 #-----------------------------------------------------------------------------#
 desc 'Verifies that the required third-party commands are available'
 task :check_requirements do
-  has_all_requirements = REQUIRED_COMMANDS.inject(true) do |has_requirements, required_command|
-    result = has_required_binary?(required_command)
+  has_all_requirements = REQUIRED_COMMANDS.reduce(true) do |has_requirements, required_command|
+    result = required_binary?(required_command)
     puts red("Missing required command: #{required_command}. You may need to install it.") unless result
     has_requirements && result
   end
@@ -16,7 +16,7 @@ end
 #-----------------------------------------------------------------------------#
 
 desc "Initializes your working copy to run the specs"
-task :bootstrap, [:use_bundle_dir?] => [:check_requirements] do |t, args|
+task :bootstrap, [:use_bundle_dir?] => [:check_requirements] do |_t, args|
   title "Environment bootstrap"
 
   puts "Updating submodules"
@@ -129,7 +129,7 @@ begin
     #--------------------------------------#
 
     desc "Run the functional specs"
-    task :functional, [:spec] => :unpack_fixture_tarballs do |t, args|
+    task :functional, [:spec] => :unpack_fixture_tarballs do |_t, args|
       args.with_defaults(:spec => '**/*')
       sh "bundle exec bacon #{specs("functional/#{args[:spec]}")}"
     end
@@ -138,7 +138,7 @@ begin
 
     desc "Run the integration spec"
     task :integration => :check_requirements do
-      unless File.exists?('spec/cocoapods-integration-specs')
+      unless File.exist?('spec/cocoapods-integration-specs')
         $stderr.puts red("Integration files not checked out. Run `rake bootstrap`")
         exit 1
       end
@@ -157,10 +157,10 @@ begin
       puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
       title 'Running the specs'
-      sh    "bundle exec bacon #{specs('**/*')}"
+      sh "bundle exec bacon #{specs('**/*')}"
 
       title 'Running Integration tests'
-      sh    "bundle exec bacon spec/integration.rb"
+      sh "bundle exec bacon spec/integration.rb"
 
       title 'Running examples'
       Rake::Task['examples:build'].invoke
@@ -203,8 +203,8 @@ begin
       title 'Storing fixtures'
       # Copy the files to the files produced by the specs to the after folders
       FileList['tmp/*'].each do |source|
-        destination = "spec/cocoapods-integration-specs/#{source.gsub('tmp/','')}/after"
-        if File.exists?(destination)
+        destination = "spec/cocoapods-integration-specs/#{source.gsub('tmp/', '')}/after"
+        if File.exist?(destination)
           sh "rm -rf #{destination}"
           sh "mv #{source} #{destination}"
         end
@@ -282,7 +282,7 @@ begin
   require 'rubocop/rake_task'
 
   RuboCop::RakeTask.new(:rubocop) do |task|
-    task.patterns = ['lib', 'spec', 'Rakefile']
+    task.patterns = %w(lib spec Rakefile)
   end
 
 rescue LoadError, NameError => e
@@ -325,8 +325,7 @@ def red(string)
   "\033[0;31m#{string}\e[0m"
 end
 
-def has_required_binary?(name)
+def required_binary?(name)
   `which #{name}`
   $?.success?
 end
-
