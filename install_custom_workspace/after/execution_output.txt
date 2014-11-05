@@ -19,7 +19,7 @@ Downloading dependencies
 -> Installing Reachability (3.1.0)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_custom_workspace/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
+     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_custom_workspace/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
      Cloning into 'ROOT/tmp/install_custom_workspace/Pods/Reachability'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
      
@@ -61,6 +61,7 @@ Integrating target `Pods-SampleApp_1` (`SampleApp_1.xcodeproj` project)
 Integrating target `Pods-SampleApp_2` (`SampleApp_2.xcodeproj` project)
   - Removing (Pods/Pods-SampleApp_2.xcconfig)
 
-[!] The use of implicit sources has been deprecated. To continue using all of the sources currently on your machine, add the following to the top of your Podfile:
+[!] There are duplicate dependencies on `Reachability` in `Podfile`:
 
-    source 'https://github.com/CocoaPods/Specs.git'
+- Reachability (= 3.1.0)
+- Reachability

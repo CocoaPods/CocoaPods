@@ -43,10 +43,6 @@ Integrating target `Pods` (`SampleApp.xcodeproj` project)
 
 [!] The `:local` option of the Podfile has been renamed to `:path` and it is deprecated.
 
-[!] The use of implicit sources has been deprecated. To continue using all of the sources currently on your machine, add the following to the top of your Podfile:
-
-    source 'https://github.com/CocoaPods/Specs.git'
-
 [!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Target Support Files/Pods/Pods.release.xcconfig'. This can lead to problems with the CocoaPods installation
     - Use the `$(inherited)` flag, or
     - Remove the build settings from the target.

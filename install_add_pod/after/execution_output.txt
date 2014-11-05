@@ -22,15 +22,15 @@ Downloading dependencies
 -> Installing JSONKit (1.5pre)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/johnezang/JSONKit.git ROOT/tmp/install_add_pod/Pods/JSONKit
+     $ GIT_BIN clone https://github.com/johnezang/JSONKit.git ROOT/tmp/install_add_pod/Pods/JSONKit
      Cloning into 'ROOT/tmp/install_add_pod/Pods/JSONKit'...
-   $ /usr/local/bin/git checkout -b activated-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
+   $ GIT_BIN checkout -b activated-commit 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
    Switched to a new branch 'activated-commit'
 
 -> Installing Reachability (3.1.0)
  > Git download
  > Git download
-     $ /usr/local/bin/git clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_add_pod/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
+     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_add_pod/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
      Cloning into 'ROOT/tmp/install_add_pod/Pods/Reachability'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
      
@@ -65,7 +65,3 @@ Integrating client project
 
 Integrating target `Pods` (`SampleApp.xcodeproj` project)
   - Removing (Pods/Pods.xcconfig)
-
-[!] The use of implicit sources has been deprecated. To continue using all of the sources currently on your machine, add the following to the top of your Podfile:
-
-    source 'https://github.com/CocoaPods/Specs.git'
