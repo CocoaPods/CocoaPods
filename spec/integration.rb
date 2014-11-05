@@ -82,9 +82,6 @@ CLIntegracon.configure do |c|
   # Ignore xcuserdata
   c.ignores %r{/xcuserdata/}
 
-  # TODO The output from the caches changes on Travis
-  c.ignores 'execution_output.txt'
-
   # Needed for some test cases
   c.ignores 'Reachability.podspec'
   c.ignores 'PodTest-hg-source/**'
