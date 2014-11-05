@@ -166,7 +166,7 @@ begin
       Rake::Task['examples:build'].invoke
 
       title 'Running RuboCop'
-      Rake::Task['rubocop'].invoke if RUBY_VERSION >= '1.9.3'
+      Rake::Task['rubocop'].invoke
     end
 
     desc "Rebuild all the fixture tarballs"
@@ -279,12 +279,10 @@ begin
 
   #-- Rubocop ----------------------------------------------------------------#
 
-  if RUBY_VERSION >= '1.9.3'
-    require 'rubocop/rake_task'
+  require 'rubocop/rake_task'
 
-    RuboCop::RakeTask.new(:rubocop) do |task|
-      task.patterns = ['lib', 'spec']
-    end
+  RuboCop::RakeTask.new(:rubocop) do |task|
+    task.patterns = ['lib', 'spec']
   end
 
 rescue LoadError, NameError => e
