@@ -177,5 +177,21 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
+
+    protected
+
+    # Transforms the given string into a valid +identifier+ after C99ext
+    # standard, so that it can be used in source code where escaping of
+    # ambiguous characters is not applicable.
+    #
+    # @param  [String] name
+    #         any name, which may contain leading numbers, spaces or invalid
+    #         characters.
+    #
+    # @return [String]
+    #
+    def c99ext_identifier(name)
+      name.gsub(/^([0-9])/, '_\1').gsub(/[^a-zA-Z0-9_]/, '_')
+    end
   end
 end
