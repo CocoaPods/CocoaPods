@@ -206,6 +206,7 @@ module Pod
       it 'installs head pods' do
         podfile = Podfile.new do
           platform :osx, '10.10'
+          pod 'CargoBay', '2.1.0'
           pod 'AFNetworking/NSURLSession', :head
         end
         @installer.stubs(:podfile).returns(podfile)
@@ -214,7 +215,7 @@ module Pod
         Downloader::Git.any_instance.expects(:checkout_options).returns({})
         @installer.prepare
         @installer.resolve_dependencies
-        @installer.send(:root_specs).map(&:version).map(&:head?).should == [true]
+        @installer.send(:root_specs).sort_by(&:name).map(&:version).map(&:head?).should == [true, nil]
         @installer.download_dependencies
         UI.output.should.include 'HEAD based on 2.4.1'
       end
