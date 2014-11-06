@@ -68,11 +68,12 @@ module Pod
       #
       def script
         script = install_resources_function
+        script += TARGET_DEVICE_ARGS
         resources.each do |resource|
           script += %(          install_resource "#{resource}"\n          )
         end
         script += RSYNC_CALL
-        script += XCASSETS_COMPILE
+        
         script
       end
 
@@ -111,6 +112,7 @@ install_resource()
       xcrun momc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodeld`.momd"
       ;;
     *.xcassets)
+      actool "${PODS_ROOT}/$1" --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${IPHONEOS_DEPLOYMENT_TARGET}" ${TARGET_DEVICE_ARGS} --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
       ;;
     /*)
       echo "$1"
@@ -133,25 +135,25 @@ fi
 rm -f "$RESOURCES_TO_COPY"
 EOS
 
-      XCASSETS_COMPILE = <<EOS
+      TARGET_DEVICE_ARGS = <<EOS
 
-if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ `find . -name '*.xcassets' | wc -l` -ne 0 ]
+if [[ -n "${WRAPPER_EXTENSION}" ]] && [ `xcrun --find actool` ] && [ `find . -name '*.xcassets' | wc -l` -ne 0 ]
 then
-  case "${TARGETED_DEVICE_FAMILY}" in
-    1,2)
-      TARGET_DEVICE_ARGS="--target-device ipad --target-device iphone"
-      ;;
-    1)
-      TARGET_DEVICE_ARGS="--target-device iphone"
-      ;;
-    2)
-      TARGET_DEVICE_ARGS="--target-device ipad"
-      ;;
-    *)
-      TARGET_DEVICE_ARGS="--target-device mac"
-      ;;
-  esac
-  find "${PWD}" -name "*.xcassets" -print0 | xargs -0 actool --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${IPHONEOS_DEPLOYMENT_TARGET}" ${TARGET_DEVICE_ARGS} --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+case "${TARGETED_DEVICE_FAMILY}" in
+1,2)
+TARGET_DEVICE_ARGS="--target-device ipad --target-device iphone"
+;;
+1)
+TARGET_DEVICE_ARGS="--target-device iphone"
+;;
+2)
+TARGET_DEVICE_ARGS="--target-device ipad"
+;;
+*)
+TARGET_DEVICE_ARGS="--target-device mac"
+;;
+esac
+
 fi
 EOS
     end
