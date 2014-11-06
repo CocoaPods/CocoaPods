@@ -23,7 +23,7 @@ module Pod
         end
 
         def specification
-          @specification ||= source.specification(name, version)
+          @specification ||= source.specification(name, version.version)
         end
       end
 
@@ -50,9 +50,9 @@ module Pod
                 map { |v| "- #{v}" }.join("\n")
           end
 
-          versions_by_source.map do |source, versions|
+          versions_by_source.flat_map do |source, versions|
             versions.map { |version| LazySpecification.new(name, version, source) }
-          end.flatten
+          end
         end
       end
     end

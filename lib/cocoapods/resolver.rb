@@ -79,7 +79,7 @@ module Pod
             sort_by(&:name).
             each do |spec|
               validate_platform(spec, target)
-              sandbox.store_head_pod(spec.name) if spec.version.head
+              sandbox.store_head_pod(spec.name) if spec.version.head?
             end
         end
         specs_by_target
@@ -105,15 +105,12 @@ module Pod
       @search ||= {}
       @search[dependency] ||= begin
         requirement = Requirement.new(dependency.requirement.as_list << requirement_for_locked_pod_named(dependency.name))
-        specs = find_cached_set(dependency).
+        find_cached_set(dependency).
           all_specifications.
           select { |s| requirement.satisfied_by? s.version }.
           map { |s| s.subspec_by_name(dependency.name, false) }.
-          compact
-
-        specs.
-          reverse.
-          each { |s| s.version.head = dependency.head? }
+          compact.
+          reverse
       end
       @search[dependency].dup
     end
@@ -306,6 +303,9 @@ module Pod
         else
           set = create_set_from_sources(dependency)
         end
+        if dependency.head?
+          set = Specification::Set::Head.new(set.specification)
+        end
         cached_sets[name] = set
         unless set
           raise Molinillo::NoSuchDependencyError.new(dependency) # rubocop:disable Style/RaiseArgs
@@ -320,7 +320,9 @@ module Pod
     #
     def requirement_for_locked_pod_named(name)
       if vertex = locked_dependencies.vertex_named(name)
-        vertex.payload.requirement
+        if dependency = vertex.payload
+          dependency.requirement
+        end
       end
     end
 
