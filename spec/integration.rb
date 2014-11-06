@@ -82,9 +82,6 @@ CLIntegracon.configure do |c|
   # Ignore xcuserdata
   c.ignores %r{/xcuserdata/}
 
-  # TODO The output from the caches changes on Travis
-  c.ignores 'execution_output.txt'
-
   # Needed for some test cases
   c.ignores 'Reachability.podspec'
   c.ignores 'PodTest-hg-source/**'
@@ -106,6 +103,8 @@ describe_cli 'pod' do
       '--no-ansi',
     ]
     s.replace_path ROOT.to_s, 'ROOT'
+    s.replace_path `which git`.chomp, 'GIT_BIN'
+    s.replace_path `which hg`.chomp, 'HG_BIN'
     s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
   end
 
