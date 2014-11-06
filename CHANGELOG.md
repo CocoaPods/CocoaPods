@@ -26,6 +26,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2789](https://github.com/CocoaPods/CocoaPods/issues/2789)
 
+* Show a more informative message when attempting to lint a spec whose
+  source could not be downloaded.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2667](https://github.com/CocoaPods/CocoaPods/issues/2667)
+  [#2759](https://github.com/CocoaPods/CocoaPods/issues/2759)
 
 ## 0.35.0.rc1
 
