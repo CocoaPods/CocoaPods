@@ -42,6 +42,11 @@ module Pod
         deployment_target = target.platform.deployment_target.to_s
         @native_target = project.new_target(product_type, name, platform, deployment_target)
 
+        product_name = target.product_name
+        product = @native_target.product_reference
+        product.name = product_name
+        product.path = product_name
+
         target.user_build_configurations.each do |bc_name, type|
           configuration = @native_target.add_build_configuration(bc_name, type)
         end
