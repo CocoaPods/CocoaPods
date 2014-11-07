@@ -126,7 +126,7 @@ module Pod
             pod_target.include_in_build_config?(config)
           end.map(&:product_name)
         end
-        generator = Generator::EmbedFrameworksScript.new(frameworks_by_config)
+        generator = Generator::EmbedFrameworksScript.new(target_definition, frameworks_by_config)
         generator.save_as(path)
         add_file_to_support_group(path)
       end
