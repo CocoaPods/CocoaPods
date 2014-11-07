@@ -101,6 +101,9 @@ install_resource()
       mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
       echo "rsync -av ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
       rsync -av "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+      if [[ -n "${CODE_SIGN_IDENTITY}" ]]; then
+        codesign --verbose --force --sign "${CODE_SIGN_IDENTITY}" "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/`basename \"$1\"`/Versions/A"
+      fi
       ;;
     *.xcdatamodel)
       echo "xcrun momc \\"${PODS_ROOT}/$1\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1"`.mom\\""
