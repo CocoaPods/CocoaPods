@@ -34,7 +34,19 @@ module Pod
       # @return [String] The contents of the embed frameworks script.
       #
       def script
-        script = INSTALL_FRAMEWORKS_FUNCTION
+        script = <<-eos.strip_heredoc
+          #!/bin/sh
+          set -e
+
+          echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+          mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+
+          install_framework()
+          {
+            echo "rsync --exclude '*.h' -av ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+            rsync -av "${BUILT_PRODUCTS_DIR}/$1" "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+          }
+        eos
         script += "\n" unless frameworks_by_config.values.all?(&:empty?)
         frameworks_by_config.each do |config, frameworks|
           unless frameworks.empty?
@@ -47,20 +59,6 @@ module Pod
         end
         script
       end
-
-      INSTALL_FRAMEWORKS_FUNCTION = <<EOS
-#!/bin/sh
-set -e
-
-echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-
-install_framework()
-{
-  echo "rsync --exclude '*.h' -av ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-  rsync -av "${BUILT_PRODUCTS_DIR}/$1" "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-}
-EOS
     end
   end
 end
