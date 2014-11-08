@@ -172,7 +172,7 @@ module Pod
 
         #---------------------------------------------------------------------#
 
-        describe '::add_framework_build_settings' do
+        describe '::add_developers_frameworks_if_needed' do
           it 'adds the developer frameworks search paths to the xcconfig if SenTestingKit has been detected' do
             xcconfig = Xcodeproj::Config.new('OTHER_LDFLAGS' => '-framework SenTestingKit')
             @sut.add_developers_frameworks_if_needed(xcconfig, :ios)
