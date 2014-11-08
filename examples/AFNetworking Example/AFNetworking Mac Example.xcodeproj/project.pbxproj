@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		26E82B9975F54DA9BAC1E0C9 /* libPods-AFNetworking Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6935B1E417A24F0E958977ED /* libPods-AFNetworking Example.a */; };
+		AB1F4B03E44E9AA322A3B41A /* Pods_AFNetworking_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D50EEF9D4A656DE5F65E914 /* Pods_AFNetworking_Example.framework */; };
 		B304CCE8177D58DD00F4FC85 /* adn.cer in Resources */ = {isa = PBXBuildFile; fileRef = B304CCE7177D58DD00F4FC85 /* adn.cer */; };
 		F8129C001591061B009BFE23 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8129BFF1591061B009BFE23 /* Cocoa.framework */; };
 		F8129C321591073C009BFE23 /* AFAppDotNetAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F8129C251591073C009BFE23 /* AFAppDotNetAPIClient.m */; };
@@ -20,7 +20,7 @@
 
 /* Begin PBXFileReference section */
 		3C79D6B3AA6A1DBBAE48A944 /* Pods-AFNetworking Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example.debug.xcconfig"; sourceTree = "<group>"; };
-		6935B1E417A24F0E958977ED /* libPods-AFNetworking Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D50EEF9D4A656DE5F65E914 /* Pods_AFNetworking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AFNetworking_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A67B777556EF5D95EAFA5CF8 /* Pods-AFNetworking Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example.release.xcconfig"; sourceTree = "<group>"; };
 		B304CCE7177D58DD00F4FC85 /* adn.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = adn.cer; sourceTree = SOURCE_ROOT; };
 		F8129BFB1591061B009BFE23 /* AFNetworking Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFNetworking Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,7 +47,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8129C001591061B009BFE23 /* Cocoa.framework in Frameworks */,
-				26E82B9975F54DA9BAC1E0C9 /* libPods-AFNetworking Example.a in Frameworks */,
+				AB1F4B03E44E9AA322A3B41A /* Pods_AFNetworking_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +90,7 @@
 			children = (
 				F8129BFF1591061B009BFE23 /* Cocoa.framework */,
 				F8129C011591061B009BFE23 /* Other Frameworks */,
-				6935B1E417A24F0E958977ED /* libPods-AFNetworking Example.a */,
+				6D50EEF9D4A656DE5F65E914 /* Pods_AFNetworking_Example.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -153,6 +153,7 @@
 				F8129BF81591061B009BFE23 /* Frameworks */,
 				F8129BF91591061B009BFE23 /* Resources */,
 				CC1632E381344B54BA63986B /* Copy Pods Resources */,
+				E280E7A7CEEDCCF056365DD3 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -229,6 +230,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E280E7A7CEEDCCF056365DD3 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
