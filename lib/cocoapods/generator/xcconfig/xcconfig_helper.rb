@@ -59,6 +59,9 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @param  [Pathname] sandbox_root
+        #         The path retrieved from Sandbox#root.
+        #
         def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root)
           name = File.basename(framework_path, '.framework')
           dirname = '$(PODS_ROOT)/' + framework_path.dirname.relative_path_from(sandbox_root).to_s
@@ -70,13 +73,16 @@ module Pod
         end
 
         # Configures the given Xcconfig with the the build settings for the given
-        # framework path.
+        # library path.
         #
         # @param  [Pathanme] framework_path
         #         The path of the framework.
         #
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
+        #
+        # @param  [Pathname] sandbox_root
+        #         The path retrieved from Sandbox#root.
         #
         def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
           name = File.basename(library_path, '.a').sub(/\Alib/, '')
