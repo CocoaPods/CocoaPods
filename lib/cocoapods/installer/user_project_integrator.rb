@@ -132,6 +132,7 @@ module Pod
         end
       end
 
+      IGNORED_KEYS = %w(CODE_SIGN_IDENTITY)
       INHERITED_FLAGS = ['$(inherited)', '${inherited}']
 
       # Checks whether the settings of the CocoaPods generated xcconfig are
@@ -144,7 +145,7 @@ module Pod
             user_target.build_configurations.each do |config|
               xcconfig = aggregate_target.xcconfigs[config.name]
               if xcconfig
-                xcconfig.to_hash.keys.each do |key|
+                (xcconfig.to_hash.keys - IGNORED_KEYS).each do |key|
                   target_values = config.build_settings[key]
                   if target_values &&
                       !INHERITED_FLAGS.any? { |flag| target_values.include?(flag) }
