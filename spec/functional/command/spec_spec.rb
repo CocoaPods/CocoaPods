@@ -118,6 +118,25 @@ module Pod
         spec.source.should  == { :git => 'https://github.com/lukeredpath/libPusher.git', :commit => '5f482b0693ac2ac1ad85d1aabc27ec7547cc0bc7' }
       end
 
+      it "raises an informative message when the GitHub repository doesn't have any commits" do
+        repo = {
+          'name' => 'QueryKit',
+          'owner' => { 'login' => 'QueryKit' },
+          'html_url' => 'https://github.com/QueryKit/QueryKit',
+          'description' => 'A simple CoreData query language for Swift and Objective-C.',
+          'clone_url' => 'https://github.com/QueryKit/QueryKit.git',
+        }
+        GitHub.expects(:repo).with('QueryKit/QueryKit').returns(repo)
+        GitHub.expects(:tags).with('https://github.com/QueryKit/QueryKit').returns([])
+        GitHub.expects(:branches).with('https://github.com/QueryKit/QueryKit').returns([])
+        GitHub.expects(:user).with('QueryKit').returns('name' => 'QueryKit', 'email' => 'support@querykit.org')
+
+        e = lambda do
+          run_command('spec', 'create', 'https://github.com/QueryKit/QueryKit.git')
+        end.should.raise Pod::Informative
+        e.message.should.match(/Unable to find.*commits.*master branch/)
+      end
+
       it "provides a markdown template if a github repo doesn't have semantic version tags" do
         repo = {
           'name' => 'libPusher',

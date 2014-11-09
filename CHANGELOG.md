@@ -12,6 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   pre-release version that now leads to a version conflict.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Provides a user friendly message when using `pod spec create` with a
+  repository that doesn't yet have any commits.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2803](https://github.com/CocoaPods/CocoaPods/issues/2803)
+
 
 ## 0.35.0.rc2
 

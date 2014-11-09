@@ -458,6 +458,7 @@ module Pod
           branches        = GitHub.branches(repo['html_url'])
           master_name     = repo['master_branch'] || 'master'
           master          = branches.find { |branch| branch['name'] == master_name }
+          raise Informative, "Unable to find any commits on the master branch for the repository `#{repo['html_url']}`" unless master
           data[:ref_type] = ':commit'
           data[:ref]      = master['commit']['sha']
         else
