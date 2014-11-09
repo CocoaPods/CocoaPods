@@ -1,0 +1,14 @@
+PODS:
+  - Moment (0.0.1)
+
+DEPENDENCIES:
+  - Moment (from `Moment.podspec`)
+
+EXTERNAL SOURCES:
+  Moment:
+    :podspec: Moment.podspec
+
+SPEC CHECKSUMS:
+  Moment: 9bb1e738d02622eeefa70b19abea208669a84244
+
+COCOAPODS: 0.34.4

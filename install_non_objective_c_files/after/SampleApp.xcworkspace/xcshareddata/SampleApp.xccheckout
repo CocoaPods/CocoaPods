@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1EDA6219-4EDD-4ABB-A77C-6E59B69CF2FF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SampleApp</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>87A69D687F9157B8074558139AC146FF7A957C56</key>
+		<string>github.com:k0nserv/cocoapods-integration-specs.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>install_non_objective_c_files/after/SampleApp.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>87A69D687F9157B8074558139AC146FF7A957C56</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:k0nserv/cocoapods-integration-specs.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>87A69D687F9157B8074558139AC146FF7A957C56</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>87A69D687F9157B8074558139AC146FF7A957C56</string>
+			<key>IDESourceControlWCCName</key>
+			<string>cocoapods-integration-specs</string>
+		</dict>
+	</array>
+</dict>
+</plist>
