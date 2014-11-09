@@ -46,8 +46,14 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `Pods-OS X App-PodTest` OS X 10.6
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-OS X App-PodTest/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-OS X App-PodTest/Pods-OS X App-PodTest.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-OS X App-PodTest/Pods-OS X App-PodTest-umbrella.h`
     - Installing target `Pods-iOS App-PodTest` iOS 4.3
     - Installing target `Pods-OS X App` OS X 10.6
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-OS X App/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App-umbrella.h`
     - Installing target `Pods-iOS App` iOS 4.3
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
@@ -59,6 +65,7 @@ Integrating client project
 [!] From now on use `SampleApp.xcworkspace`.
 
 Integrating target `Pods-OS X App` (`SampleApp.xcodeproj` project)
+  Add Build Phase 'Embed Pods Frameworks' to project.
 
 Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
 
