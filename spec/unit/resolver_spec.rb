@@ -342,6 +342,21 @@ module Pod
         version.to_s.should == '1.4'
       end
 
+      it 'shows a helpful error message if the old resolver incorrectly ' \
+         'activated a pre-release version that now leads to a version ' \
+         'conflict' do
+        podfile = Podfile.new do
+          platform :ios, '8.0'
+          pod 'CocoaLumberjack'
+        end
+        locked_deps = dependency_graph_from_array([Dependency.new('CocoaLumberjack', '= 2.0.0-beta2')])
+        resolver = Resolver.new(config.sandbox, podfile, locked_deps, SourcesManager.all)
+        e = lambda { puts resolver.resolve.values.flatten }.should.raise Informative
+        e.message.should.match(/you were using a pre-release version of `CocoaLumberjack`/)
+        e.message.should.match(/`pod 'CocoaLumberjack', '= 2.0.0-beta2'`/)
+        e.message.should.match(/`pod update CocoaLumberjack`/)
+      end
+
       it 'consults all sources when finding a matching spec' do
         podfile = Podfile.new do
           platform :ios

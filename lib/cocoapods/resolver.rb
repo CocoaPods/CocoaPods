@@ -55,7 +55,7 @@ module Pod
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
       specs_by_target
     rescue Molinillo::ResolverError => e
-      raise Informative, e.message
+      handle_resolver_error(e)
     end
 
     # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
@@ -358,6 +358,36 @@ module Pod
           "(#{target.platform}) is not compatible with `#{spec}` which has "  \
           "a minimum requirement of #{spec.available_platforms.join(' - ')}."
       end
+    end
+
+    # Handles errors that come out of a {Molinillo::Resolver}.
+    #
+    # @todo   The check for version conflicts coming from the {Lockfile}
+    #         requiring a pre-release version can be deleted for version 1.0,
+    #         as it is a migration step for Lockfiles coming from CocoaPods
+    #         versions before `0.35.0`.
+    #
+    # @return [void]
+    #
+    # @param  [Molinillo::ResolverError] error
+    #
+    def handle_resolver_error(error)
+      case error
+      when Molinillo::VersionConflict
+        error.conflicts.each do |name, conflict|
+          lockfile_reqs = conflict.requirements[name_for_locking_dependency_source]
+          if lockfile_reqs.last && lockfile_reqs.last.prerelease? && !conflict.existing
+            raise Informative, 'Due to the previous naïve CocoaPods resolver, ' \
+              "you were using a pre-release version of `#{name}`, " \
+              'without explicitly asking for a pre-release version, which now leads to a conflict. ' \
+              'Please decide to either use that pre-release version by adding the ' \
+              'version requirement to your Podfile ' \
+              "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
+              "or revert to a stable version by running `pod update #{name}`."
+          end
+        end
+      end
+      raise Informative, error.message
     end
 
     # Returns the target-appropriate nodes that are `successors` of `node`,
