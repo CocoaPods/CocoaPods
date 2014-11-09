@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AB1F4B03E44E9AA322A3B41A /* Pods_AFNetworking_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D50EEF9D4A656DE5F65E914 /* Pods_AFNetworking_Example.framework */; };
+		AB1F4B03E44E9AA322A3B41A /* Pods_AFNetworking_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D50EEF9D4A656DE5F65E914 /* Pods_AFNetworking_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		B304CCE8177D58DD00F4FC85 /* adn.cer in Resources */ = {isa = PBXBuildFile; fileRef = B304CCE7177D58DD00F4FC85 /* adn.cer */; };
 		F8129C001591061B009BFE23 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8129BFF1591061B009BFE23 /* Cocoa.framework */; };
 		F8129C321591073C009BFE23 /* AFAppDotNetAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F8129C251591073C009BFE23 /* AFAppDotNetAPIClient.m */; };
