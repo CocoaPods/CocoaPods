@@ -378,7 +378,7 @@ module Pod
           build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
           build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
           build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
-          build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'NO'
+          build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
         end
       end
     end
