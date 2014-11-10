@@ -98,20 +98,29 @@ module Pod
         @target.pod_targets = [@pod_target]
       end
 
-      it 'returns pod targets by build configuration' do
-        pod_target_release = PodTarget.new([@spec], @target_definition, config.sandbox)
-        pod_target_release.expects(:include_in_build_config?).with('Debug').returns(false)
-        pod_target_release.expects(:include_in_build_config?).with('Release').returns(true)
-        @target.pod_targets = [@pod_target, pod_target_release]
-        @target.user_build_configurations = {
-          'Debug' => :debug,
-          'Release' => :release,
-        }
-        expected = {
-          'Debug' => @pod_target.specs,
-          'Release' => (@pod_target.specs + pod_target_release.specs),
-        }
-        @target.specs_by_build_configuration.should == expected
+      describe 'with configuration dependent pod targets' do
+        before do
+          @pod_target_release = PodTarget.new([@spec], @target_definition, config.sandbox)
+          @pod_target_release.expects(:include_in_build_config?).with('Debug').returns(false)
+          @pod_target_release.expects(:include_in_build_config?).with('Release').returns(true)
+          @target.pod_targets = [@pod_target, @pod_target_release]
+          @target.user_build_configurations = {
+            'Debug' => :debug,
+            'Release' => :release,
+          }
+        end
+
+        it 'returns pod targets for given build configuration' do
+          @target.pod_targets_for_build_configuration('Debug').should == [@pod_target]
+          @target.pod_targets_for_build_configuration('Release').should == [@pod_target, @pod_target_release]
+        end
+
+        it 'returns pod target specs by build configuration' do
+          @target.specs_by_build_configuration.should == {
+            'Debug' => @pod_target.specs,
+            'Release' => (@pod_target.specs + @pod_target_release.specs),
+          }
+        end
       end
 
       it 'returns the specs of the Pods used by this aggregate target' do
