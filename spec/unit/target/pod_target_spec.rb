@@ -38,6 +38,11 @@ module Pod
         @pod_target.dependencies.should == ['monkey']
       end
 
+      it 'returns the name of the modules of the Pods on which this target depends' do
+        @pod_target.stubs(:dependencies).returns(['human', 'M!lk', '3xP-Blender'])
+        @pod_target.module_dependencies.should == %w(human M_lk _3xP_Blender)
+      end
+
       it 'returns whether it is whitelisted in a build configuration' do
         @target_definition.store_pod('BananaLib')
         @target_definition.whitelist_pod_for_configuration('BananaLib', 'debug')
