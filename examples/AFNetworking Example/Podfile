@@ -11,7 +11,7 @@ target "AFNetworking Example" do
 end
 
 target "AFNetworking iOS Example" do
-  platform :ios, '7.0'
+  platform :ios, '8.0'
   xcodeproj "AFNetworking iOS Example.xcodeproj"
   pod "AFNetworking", "1.3.3"
 end
