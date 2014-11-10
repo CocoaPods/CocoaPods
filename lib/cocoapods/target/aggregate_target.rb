@@ -85,7 +85,7 @@ module Pod
       pod_targets.map(&:specs).flatten
     end
 
-    # @return [Hash{Symbol => Array<PodTarget>}] The pod targets for each
+    # @return [Hash{Symbol => Array<Specification>}] The pod targets for each
     #         build configuration.
     #
     def specs_by_build_configuration
