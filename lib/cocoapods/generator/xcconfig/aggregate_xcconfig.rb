@@ -59,7 +59,8 @@ module Pod
 
           if target.requires_framework?
             build_settings = {
-              'FRAMEWORK_SEARCH_PATHS' => XCConfigHelper.quote([target.configuration_build_dir]),
+              'PODS_FRAMEWORK_BUILD_PATH' => target.configuration_build_dir,
+              'FRAMEWORK_SEARCH_PATHS' => '"$PODS_FRAMEWORK_BUILD_PATH"',
             }
             config.merge!(build_settings)
           end
