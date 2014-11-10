@@ -25,6 +25,7 @@
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
     #import "GlobalTimelineViewController.h"
 
+    #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
     #import "AFNetworkActivityIndicatorManager.h"
 
     @implementation AppDelegate
