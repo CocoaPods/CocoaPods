@@ -88,9 +88,9 @@ Targets:
     Build Phases:
     - SourcesBuildPhase:
       - AFRaptureXMLRequestOperation.m:
-          COMPILER_FLAGS: "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
       - Foo.m:
-          COMPILER_FLAGS: "-fobjc-arc -DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
       - Pods-Test-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
@@ -172,7 +172,7 @@ Build Configurations:
       CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       COPY_PHASE_STRIP: 'YES'
       CLANG_WARN_BOOL_CONVERSION: 'YES'
-      CLANG_ENABLE_OBJC_ARC: 'NO'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       GCC_DYNAMIC_NO_PIC: 'NO'
@@ -200,7 +200,7 @@ Build Configurations:
       CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       COPY_PHASE_STRIP: 'NO'
       CLANG_WARN_BOOL_CONVERSION: 'YES'
-      CLANG_ENABLE_OBJC_ARC: 'NO'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       ENABLE_NS_ASSERTIONS: 'NO'

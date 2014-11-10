@@ -123,7 +123,8 @@ Targets:
     Build Phases:
     - SourcesBuildPhase:
       - Pods-Reachability-dummy.m
-      - Reachability.m
+      - Reachability.m:
+          COMPILER_FLAGS: "-fno-objc-arc"
     - FrameworksBuildPhase:
       - Foundation.framework
       - SystemConfiguration.framework
@@ -232,7 +233,8 @@ Targets:
 - Pods-SampleApp_2-JSONKit:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m
+      - JSONKit.m:
+          COMPILER_FLAGS: "-fno-objc-arc"
       - Pods-SampleApp_2-JSONKit-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
@@ -290,7 +292,8 @@ Targets:
     Build Phases:
     - SourcesBuildPhase:
       - Pods-SampleApp_2-Reachability-dummy.m
-      - Reachability.m
+      - Reachability.m:
+          COMPILER_FLAGS: "-fno-objc-arc"
     - FrameworksBuildPhase:
       - Foundation.framework
       - SystemConfiguration.framework
@@ -399,7 +402,8 @@ Targets:
 - Pods-test-JSONKit:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m
+      - JSONKit.m:
+          COMPILER_FLAGS: "-fno-objc-arc"
       - Pods-test-JSONKit-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
@@ -480,7 +484,7 @@ Build Configurations:
       CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       COPY_PHASE_STRIP: 'YES'
       CLANG_WARN_BOOL_CONVERSION: 'YES'
-      CLANG_ENABLE_OBJC_ARC: 'NO'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       GCC_DYNAMIC_NO_PIC: 'NO'
@@ -508,7 +512,7 @@ Build Configurations:
       CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       COPY_PHASE_STRIP: 'NO'
       CLANG_WARN_BOOL_CONVERSION: 'YES'
-      CLANG_ENABLE_OBJC_ARC: 'NO'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       ENABLE_NS_ASSERTIONS: 'NO'
