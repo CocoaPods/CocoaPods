@@ -56,6 +56,10 @@ module Pod
           settings['ARCHS'] = target.archs
         end
 
+        if target.is_a? AggregateTarget
+          settings['PODS_ROOT'] = '$(SRCROOT)'
+        end
+
         if target.requires_framework?
           settings['PRODUCT_NAME'] = target.product_module_name
         else
