@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2982AD3217107C0000FFF048 /* adn.cer in Resources */ = {isa = PBXBuildFile; fileRef = 2982AD3117107C0000FFF048 /* adn.cer */; };
-		E5D2E13908F241ABAC3B554B /* libPods-AFNetworking iOS Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D87F8FEDE4A4313B0D579A3 /* libPods-AFNetworking iOS Example.a */; };
+		C1170FBA067BBD2EED83091C /* Pods_AFNetworking_iOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC9B7CE4463BBD3AA42F1BBF /* Pods_AFNetworking_iOS_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F8129C7415910C37009BFE23 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F8129C7215910C37009BFE23 /* AppDelegate.m */; };
 		F818101615E6A0C600EF93C2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ABD6EC159FC2CE001BE42C /* MobileCoreServices.framework */; };
 		F88812F016C533D6003C8B8C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8E469E013957DF100DB05C8 /* Security.framework */; };
@@ -35,11 +35,9 @@
 /* Begin PBXFileReference section */
 		2982AD3117107C0000FFF048 /* adn.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = adn.cer; sourceTree = SOURCE_ROOT; };
 		50ABD6EC159FC2CE001BE42C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		5628C4E1DE6DDC806B14CF8D /* Pods-AFNetworking iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking iOS Example.release.xcconfig"; sourceTree = "<group>"; };
 		7669B6F3267891B0317A0167 /* Pods-AFNetworking iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
-		9D87F8FEDE4A4313B0D579A3 /* libPods-AFNetworking iOS Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking iOS Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEA3D3BDD12996573240F05F /* Pods-AFNetworking iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example.release.xcconfig"; sourceTree = "<group>"; };
-		C3B414D5F7FCC5379A284B4E /* Pods-AFNetworking iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
+		DC9B7CE4463BBD3AA42F1BBF /* Pods_AFNetworking_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AFNetworking_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8129C3815910830009BFE23 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
 		F8129C7215910C37009BFE23 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		F8129C7315910C37009BFE23 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -83,7 +81,7 @@
 				F8E469DF13957DD500DB05C8 /* CoreLocation.framework in Frameworks */,
 				F8D0701B14310F4A00653FD3 /* SystemConfiguration.framework in Frameworks */,
 				F818101615E6A0C600EF93C2 /* MobileCoreServices.framework in Frameworks */,
-				E5D2E13908F241ABAC3B554B /* libPods-AFNetworking iOS Example.a in Frameworks */,
+				C1170FBA067BBD2EED83091C /* Pods_AFNetworking_iOS_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,8 +91,6 @@
 		9CE17E7C344B0E75BC0723EA /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C3B414D5F7FCC5379A284B4E /* Pods-AFNetworking iOS Example.debug.xcconfig */,
-				5628C4E1DE6DDC806B14CF8D /* Pods-AFNetworking iOS Example.release.xcconfig */,
 				7669B6F3267891B0317A0167 /* Pods-AFNetworking iOS Example.debug.xcconfig */,
 				BEA3D3BDD12996573240F05F /* Pods-AFNetworking iOS Example.release.xcconfig */,
 			);
@@ -169,7 +165,7 @@
 				F8E469641395739D00DB05C8 /* UIKit.framework */,
 				F8E469661395739D00DB05C8 /* Foundation.framework */,
 				F8E469681395739D00DB05C8 /* CoreGraphics.framework */,
-				9D87F8FEDE4A4313B0D579A3 /* libPods-AFNetworking iOS Example.a */,
+				DC9B7CE4463BBD3AA42F1BBF /* Pods_AFNetworking_iOS_Example.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -232,6 +228,7 @@
 				F8E4695D1395739C00DB05C8 /* Frameworks */,
 				F8E4695E1395739C00DB05C8 /* Resources */,
 				226FE837057C4F98AD9FFB32 /* Copy Pods Resources */,
+				D7577FEF6F12C5204E6CCD46 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -300,6 +297,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D7577FEF6F12C5204E6CCD46 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E4419DF1E8B742E49777FFE0 /* Check Pods Manifest.lock */ = {
