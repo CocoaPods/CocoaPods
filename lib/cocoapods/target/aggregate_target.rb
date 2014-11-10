@@ -79,6 +79,18 @@ module Pod
     #
     attr_accessor :pod_targets
 
+    # @param  [String] build_configuration The build configuration for which the
+    #         the pod targets should be returned.
+    #
+    # @return [Array<PodTarget>] the pod targets for the given build
+    #         configuration.
+    #
+    def pod_targets_for_build_configuration(build_configuration)
+      pod_targets.select do |pod_target|
+        pod_target.include_in_build_config?(build_configuration)
+      end
+    end
+
     # @return [Array<Specification>] The specifications used by this aggregate target.
     #
     def specs
@@ -91,9 +103,8 @@ module Pod
     def specs_by_build_configuration
       result = {}
       user_build_configurations.keys.each do |build_configuration|
-        result[build_configuration] = pod_targets.select do |pod_target|
-          pod_target.include_in_build_config?(build_configuration)
-        end.map(&:specs).flatten
+        result[build_configuration] = pod_targets_for_build_configuration(build_configuration).
+          map(&:specs).flatten
       end
       result
     end
