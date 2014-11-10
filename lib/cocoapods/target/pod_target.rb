@@ -78,6 +78,13 @@ module Pod
       end.flatten
     end
 
+    # @return [Array<String>] The module names of the Pods on which this target
+    #         depends.
+    #
+    def module_dependencies
+      dependencies.map { |dep_name| c99ext_identifier(dep_name) }
+    end
+
     # Checks if the target should be included in the build configuration with
     # the given name.
     #
