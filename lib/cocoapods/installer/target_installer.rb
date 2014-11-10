@@ -51,13 +51,15 @@ module Pod
           configuration = @native_target.add_build_configuration(bc_name, type)
         end
 
-        settings = { 'OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '' }
+        settings = {}
         if target.archs
           settings['ARCHS'] = target.archs
         end
 
         if target.requires_framework?
           settings['PRODUCT_NAME'] = target.product_module_name
+        else
+          settings.merge!('OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '')
         end
 
         @native_target.build_configurations.each do |configuration|
