@@ -58,9 +58,11 @@ module Pod
           }
 
           if target.requires_framework?
+            dependencies = target.module_dependencies.reject { |dep| dep == target.product_module_name }
             build_settings = {
               'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir,
               'FRAMEWORK_SEARCH_PATHS' => XCConfigHelper.quote([target.configuration_build_dir]),
+              'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.quote(dependencies, '-framework')
             }
             config.merge!(build_settings)
           end
