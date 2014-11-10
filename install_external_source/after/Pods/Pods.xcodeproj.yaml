@@ -44,6 +44,7 @@ Targets:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          PODS_ROOT: $(SRCROOT)
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
@@ -56,6 +57,7 @@ Targets:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          PODS_ROOT: $(SRCROOT)
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
