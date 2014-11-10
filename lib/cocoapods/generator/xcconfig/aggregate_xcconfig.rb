@@ -48,6 +48,7 @@ module Pod
         #
         def generate
           header_search_path_flags = target.sandbox.public_headers.search_paths(target.platform)
+          pod_targets = target.pod_targets_for_build_configuration(@configuration_name)
           config = {
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
             'OTHER_LIBTOOLFLAGS' => '$(OTHER_LDFLAGS)',
@@ -69,9 +70,7 @@ module Pod
 
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
 
-          target.pod_targets.each do |pod_target|
-            next unless pod_target.include_in_build_config?(@configuration_name)
-
+          pod_targets.each do |pod_target|
             pod_target.file_accessors.each do |file_accessor|
               XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
               file_accessor.vendored_frameworks.each do |vendored_framework|
