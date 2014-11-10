@@ -17,6 +17,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Kyle Fuller](https://github.com/kylef)
   [#2803](https://github.com/CocoaPods/CocoaPods/issues/2803)
 
+* Pods will use `CLANG_ENABLE_OBJC_ARC = 'YES'` instead of
+  `CLANG_ENABLE_OBJC_ARC = 'NO'`. For pods with `requires_arc = false` the
+  `-fno-objc-arc` flag will be specified for the all source files
+  [Hugo Tunius](https://github.com/K0nserv)
+
 
 ## 0.35.0.rc2
 
@@ -62,11 +67,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#978](https://github.com/CocoaPods/CocoaPods/issues/978)
   [#2002](https://github.com/CocoaPods/CocoaPods/issues/2002)
-
-* Pods will use `CLANG_ENABLE_OBJC_ARC = 'YES'` instead of
-  `CLANG_ENABLE_OBJC_ARC = 'NO'`. For pods with `requires_arc = false` the
-  `-fno-objc-arc` flag will be specified for the all source files
-  [Hugo Tunius](https://github.com/K0nserv)
 
 ##### Breaking
 
