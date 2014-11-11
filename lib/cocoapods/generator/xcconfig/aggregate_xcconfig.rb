@@ -47,21 +47,32 @@ module Pod
         # @return [Xcodeproj::Config]
         #
         def generate
-          header_search_path_flags = target.sandbox.public_headers.search_paths(target.platform)
           pod_targets = target.pod_targets_for_build_configuration(@configuration_name)
           config = {
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
             'OTHER_LIBTOOLFLAGS' => '$(OTHER_LDFLAGS)',
-            'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(header_search_path_flags),
             'PODS_ROOT' => target.relative_pods_root,
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
-            'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_path_flags, '-isystem')
           }
 
           if target.requires_framework?
+            # Framework headers are automatically discoverable by `#import <…>`.
+            header_search_paths = pod_targets.map { |target| "$PODS_FRAMEWORK_BUILD_PATH/#{target.product_name}/Headers" }
             build_settings = {
               'PODS_FRAMEWORK_BUILD_PATH' => target.configuration_build_dir,
               'FRAMEWORK_SEARCH_PATHS' => '"$PODS_FRAMEWORK_BUILD_PATH"',
+              # Make headers discoverable by `import "…"`
+              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote')
+            }
+            config.merge!(build_settings)
+          else
+            # Make headers discoverable from $PODS_ROOT/Headers directory
+            header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
+            build_settings = {
+              # by `import "…"`
+              'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(header_search_paths),
+              # by `#import <…>`
+              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-isystem')
             }
             config.merge!(build_settings)
           end
