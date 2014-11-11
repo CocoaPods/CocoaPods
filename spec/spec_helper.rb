@@ -129,3 +129,4 @@ end
 #-----------------------------------------------------------------------------#
 
 SpecHelper::Fixture.fixture('banana-lib') # ensure it exists
+SpecHelper::Fixture.fixture('orange-framework')
