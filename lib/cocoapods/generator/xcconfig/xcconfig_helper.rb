@@ -33,6 +33,26 @@ module Pod
           ld_flags
         end
 
+        # Configures the given Xcconfig
+        #
+        # @param  [PodTarget] pod_target
+        #         The pod target, which holds the list of +Spec::FileAccessor+.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_settings_for_file_accessors_of_target(target, xcconfig)
+          target.file_accessors.each do |file_accessor|
+            XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
+            file_accessor.vendored_frameworks.each do |vendored_framework|
+              XCConfigHelper.add_framework_build_settings(vendored_framework, xcconfig, target.sandbox.root)
+            end
+            file_accessor.vendored_libraries.each do |vendored_library|
+              XCConfigHelper.add_library_build_settings(vendored_library, xcconfig, target.sandbox.root)
+            end
+          end
+        end
+
         # Configures the given Xcconfig according to the build settings of the
         # given Specification.
         #
