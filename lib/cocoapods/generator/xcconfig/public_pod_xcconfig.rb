@@ -40,15 +40,7 @@ module Pod
         #
         def generate
           @xcconfig = Xcodeproj::Config.new
-          target.file_accessors.each do |file_accessor|
-            XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, @xcconfig)
-            file_accessor.vendored_frameworks.each do |vendored_framework|
-              XCConfigHelper.add_framework_build_settings(vendored_framework, @xcconfig, target.sandbox.root)
-            end
-            file_accessor.vendored_libraries.each do |vendored_library|
-              XCConfigHelper.add_library_build_settings(vendored_library, @xcconfig, target.sandbox.root)
-            end
-          end
+          XCConfigHelper.add_settings_for_file_accessors_of_target(target, @xcconfig)
           @xcconfig
         end
 
