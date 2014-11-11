@@ -577,8 +577,20 @@ module Pod
       #         uses Swift
       #
       def compute_user_project_targets_require_framework(target_definition, native_targets)
+        file_predicate = nil
+        file_predicate = proc do |file_ref|
+          if file_ref.respond_to?(:last_known_file_type)
+            file_ref.last_known_file_type == 'sourcecode.swift'
+          elsif file_ref.respond_to?(:files)
+            file_ref.files.any?(file_predicate)
+          else
+            false
+          end
+        end
         target_definition.platform.supports_dynamic_frameworks? || native_targets.any? do |target|
-          target.source_build_phase.files.any? { |f| f.file_ref.last_known_file_type == 'sourcecode.swift' }
+          target.source_build_phase.files.any? do |build_file|
+            file_predicate.call(build_file.file_ref)
+          end
         end
       end
 
