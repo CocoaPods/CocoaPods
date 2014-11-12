@@ -15,6 +15,7 @@ module Pod
 
       def self.options
         [
+          ['--regex', 'Interpret the `QUERY` as a regular expression'],
           ['--full',  'Search by name, summary, and description'],
           ['--stats', 'Show additional stats (like GitHub watchers and forks)'],
           ['--ios',   'Restricts the search to Pods supported on iOS'],
@@ -24,6 +25,7 @@ module Pod
       end
 
       def initialize(argv)
+        @use_regex = argv.flag?('regex')
         @full_text_search = argv.flag?('full')
         @stats = argv.flag?('stats')
         @supported_on_ios = argv.flag?('ios')
@@ -38,7 +40,7 @@ module Pod
         super
         help! 'A search query is required.' unless @query
 
-        unless @web
+        unless @web || !@use_regex
           begin
             /#{@query.join(' ').strip}/
           rescue RegexpError
@@ -71,7 +73,10 @@ module Pod
       end
 
       def local_search
-        sets = SourcesManager.search_by_name(@query.join(' ').strip, @full_text_search)
+        query_regex = @query.join(' ').strip
+        query_regex = Regexp.escape(query_regex) unless @use_regex
+
+        sets = SourcesManager.search_by_name(query_regex, @full_text_search)
         if @supported_on_ios
           sets.reject! { |set| !set.specification.available_platforms.map(&:name).include?(:ios) }
         end

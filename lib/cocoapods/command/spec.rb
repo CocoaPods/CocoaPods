@@ -337,7 +337,7 @@ module Pod
       # @return [Pathname] the absolute path or paths of the given podspec
       #
       def get_path_of_spec(spec, show_all = false)
-        sets = SourcesManager.search_by_name(spec)
+        sets = SourcesManager.search_by_name(Regexp.escape(spec))
 
         if sets.count == 1
           set = sets.first

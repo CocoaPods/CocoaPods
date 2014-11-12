@@ -51,7 +51,18 @@ module Pod
     end
 
     it 'shows a friendly message when locally searching with invalid regex' do
-      lambda { run_command('search', '+') }.should.raise CLAide::Help
+      lambda { run_command('search', '--regex', '+') }.should.raise CLAide::Help
+    end
+
+    it 'uses regex when asked for regex mode' do
+      output = run_command('search', '--regex', 'Ba(na)+Lib')
+      output.should.include? 'BananaLib'
+    end
+
+    it 'uses plain-text search when not asked for regex mode' do
+      output = run_command('search', 'Foo+Bar')
+      output.should.include? 'Foo+Bar'
+      output.should.not.include? 'BananaLib'
     end
 
     describe 'option --web' do
