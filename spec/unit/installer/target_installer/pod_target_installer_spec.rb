@@ -185,12 +185,12 @@ module Pod
           @installer.target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
           flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
 
-          flags.should.include?('-Xanalyzer -analyzer-disable-checker')
+          flags.should.include?('-Xanalyzer -analyzer-disable-all-checks')
         end
 
         it "doesn't inhibit analyzer warnings by default" do
           flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios))
-          flags.should.not.include?('-Xanalyzer -analyzer-disable-checker')
+          flags.should.not.include?('-Xanalyzer -analyzer-disable-all-checks')
         end
 
         describe 'concerning ARC before and after iOS 6.0 and OS X 10.8' do

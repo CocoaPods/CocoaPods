@@ -164,7 +164,7 @@ module Pod
           end
         end
         if target_definition.inhibits_warnings_for_pod?(consumer.spec.root.name)
-          flags << '-w -Xanalyzer -analyzer-disable-checker -Xanalyzer deadcode'
+          flags << '-w -Xanalyzer -analyzer-disable-all-checks'
         end
         flags * ' '
       end

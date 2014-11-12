@@ -6,6 +6,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Use `-analyzer-disable-all-checks` to disable static analyzer for
+  for pods with inhibits_warnings on. (requires Xcode >= 6.1)  
+  [Dieter Komendera](https://github.com/kommen)
+  [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
+
 ##### Bug Fixes
 
 * Show a helpful error message if the old resolver incorrectly activated a
