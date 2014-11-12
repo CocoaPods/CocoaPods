@@ -83,7 +83,7 @@ module Pod
     #
     def xcconfig_path(variant = nil)
       if variant
-        support_files_dir + "#{label}.#{variant.downcase}.xcconfig"
+        support_files_dir + "#{label}.#{variant.gsub(File::SEPARATOR, '-').downcase}.xcconfig"
       else
         support_files_dir + "#{label}.xcconfig"
       end

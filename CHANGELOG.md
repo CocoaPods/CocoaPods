@@ -17,6 +17,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Kyle Fuller](https://github.com/kylef)
   [#2803](https://github.com/CocoaPods/CocoaPods/issues/2803)
 
+* Fixes an issue with integrating into projects where there is a slash in the
+  build configuration name.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2767](https://github.com/CocoaPods/CocoaPods/issues/2767)
+
 * Pods will use `CLANG_ENABLE_OBJC_ARC = 'YES'` instead of
   `CLANG_ENABLE_OBJC_ARC = 'NO'`. For pods with `requires_arc = false` the
   `-fno-objc-arc` flag will be specified for the all source files.  
