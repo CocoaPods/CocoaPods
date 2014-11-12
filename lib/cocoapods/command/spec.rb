@@ -118,29 +118,28 @@ module Pod
 
         def podspecs_to_lint
           @podspecs_to_lint ||= begin
-          files = []
-          @podspecs_paths << '.' if @podspecs_paths.empty?
-          @podspecs_paths.each do |path|
-            if path =~ /https?:\/\//
-              require 'open-uri'
-              output_path = podspecs_tmp_dir + File.basename(path)
-              output_path.dirname.mkpath
-              open(path) do |io|
-                output_path.open('w') { |f| f << io.read }
+            files = []
+            @podspecs_paths << '.' if @podspecs_paths.empty?
+            @podspecs_paths.each do |path|
+              if path =~ /https?:\/\//
+                require 'open-uri'
+                output_path = podspecs_tmp_dir + File.basename(path)
+                output_path.dirname.mkpath
+                open(path) do |io|
+                  output_path.open('w') { |f| f << io.read }
+                end
+                files << output_path
+              elsif (pathname = Pathname.new(path)).directory?
+                files += Pathname.glob(pathname + '**/*.podspec{.json,}')
+                raise Informative, 'No specs found in the current directory.' if files.empty?
+              else
+                files << (pathname = Pathname.new(path))
+                raise Informative, "Unable to find a spec named `#{path}'." unless pathname.exist? && path.include?('.podspec')
               end
-              files << output_path
-            else if (pathname = Pathname.new(path)).directory?
-                   files += Pathname.glob(pathname + '**/*.podspec{.json,}')
-                   raise Informative, 'No specs found in the current directory.' if files.empty?
-            else
-              files << (pathname = Pathname.new(path))
-              raise Informative, "Unable to find a spec named `#{path}'." unless pathname.exist? && path.include?('.podspec')
             end
+            files
           end
-          end
-          files
         end
-      end
 
         def podspecs_tmp_dir
           Pathname(File.join(Pathname.new('/tmp').realpath, '/CocoaPods/Lint_podspec'))
