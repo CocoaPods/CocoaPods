@@ -27,7 +27,7 @@ module Pod
         def self.default_ld_flags(target)
           ld_flags = '-ObjC'
           if target.target_definition.podfile.set_arc_compatibility_flag? &&
-            target.spec_consumers.any?(&:requires_arc?)
+              target.spec_consumers.any?(&:requires_arc?)
             ld_flags << ' -fobjc-arc'
           end
           ld_flags

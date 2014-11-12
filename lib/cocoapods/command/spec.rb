@@ -216,9 +216,9 @@ module Pod
                        specs = get_path_of_spec(@spec, @show_all).split(/\n/)
                        index = choose_from_array(specs, "Which spec would you like to print [1-#{ specs.count }]? ")
                        specs[index]
-          else
-            get_path_of_spec(@spec)
-          end
+                     else
+                       get_path_of_spec(@spec)
+                     end
 
           UI.puts File.read(filepath)
         end

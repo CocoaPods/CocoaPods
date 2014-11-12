@@ -42,12 +42,34 @@ Encoding:
 TrailingComma:
   EnforcedStyleForMultiline: comma
 
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
 # Clashes with CLAide Command#validate!
 GuardClause:
   Enabled: false
 
 # Not always desirable: lib/claide/command/plugins_helper.rb:12:15
 Next:
+  Enabled: false
+
+# Arbitrary max lengths for classes simply do not work and enabling this will
+# lead to a never ending stream of annoyance and changes.
+Metrics/ClassLength:
+  Enabled: false
+
+# No enforced convention here.
+Metrics/BlockNesting:
+  Enabled: false
+
+# It will be obvious which code is complex, Rubocop should only lint simple
+# rules for us.
+Metrics/AbcSize:
+  Enabled: false
+
+# It will be obvious which code is complex, Rubocop should only lint simple
+# rules for us.
+Metrics/CyclomaticComplexity:
   Enabled: false
 
 #- CocoaPods support for Ruby 1.8.7 ------------------------------------------#

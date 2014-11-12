@@ -34,7 +34,7 @@ group :development do
   # Integration tests
   gem 'diffy'
   gem 'clintegracon'
-  gem 'rubocop', '~> 0.26.0'
+  gem 'rubocop'
 end
 
 group :debugging do

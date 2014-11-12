@@ -102,7 +102,7 @@ module Pod
           frameworks = user_project.frameworks_group
           native_targets_to_integrate.each do |native_target|
             library = frameworks.files.select { |f| f.path == target.product_name }.first ||
-                      frameworks.new_product_ref_for_target(target.name, :static_library)
+              frameworks.new_product_ref_for_target(target.name, :static_library)
             unless native_target.frameworks_build_phase.files_references.include?(library)
               native_target.frameworks_build_phase.add_file_reference(library)
             end

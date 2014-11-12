@@ -237,7 +237,7 @@ module Pod
           version_msg = (min == max) ? min : "#{min} - #{max}"
           raise Informative, "The `#{dir.basename}` repo requires " \
           "CocoaPods #{version_msg} (currently using #{Pod::VERSION})\n".red +
-          'Update CocoaPods, or checkout the appropriate tag in the repo.'
+            'Update CocoaPods, or checkout the appropriate tag in the repo.'
         end
 
         needs_sudo = path_writable?(__FILE__)
