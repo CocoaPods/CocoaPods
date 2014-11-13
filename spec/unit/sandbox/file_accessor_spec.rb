@@ -53,6 +53,19 @@ module Pod
         ]
       end
 
+      it 'returns the source files that use arc' do
+        @accessor.arc_source_files.sort.should == [
+          @root + 'Classes/Banana.h',
+          @root + 'Classes/Banana.m',
+          @root + 'Classes/BananaPrivate.h',
+          @root + 'Classes/BananaTrace.d',
+        ]
+      end
+
+      it 'returns the source files that do not use arc' do
+        @accessor.non_arc_source_files.sort.should == []
+      end
+
       it 'returns the header files' do
         @accessor.headers.sort.should == [
           @root + 'Classes/Banana.h',
@@ -164,6 +177,30 @@ module Pod
           @root + 'Classes/Banana.m',
           @root + 'Classes/BananaTrace.d',
         ]
+      end
+
+      describe 'using requires_arc' do
+        it 'when false returns all source files as non-arc' do
+          @spec_consumer.stubs(:requires_arc).returns(false)
+          @accessor.non_arc_source_files.should == @accessor.source_files
+          @accessor.arc_source_files.should.be.empty?
+        end
+
+        it 'when true returns all source files as arc' do
+          @spec_consumer.stubs(:requires_arc).returns(true)
+          @accessor.arc_source_files.should == @accessor.source_files
+          @accessor.non_arc_source_files.should.be.empty?
+        end
+
+        it 'when a file pattern returns all source files as arc that match' do
+          @spec_consumer.stubs(:requires_arc).returns(['Classes/Banana.m'])
+          @accessor.arc_source_files.should == [@root + 'Classes/Banana.m']
+          @accessor.non_arc_source_files.sort.should == [
+            @root + 'Classes/Banana.h',
+            @root + 'Classes/BananaPrivate.h',
+            @root + 'Classes/BananaTrace.d',
+          ]
+        end
       end
 
     end

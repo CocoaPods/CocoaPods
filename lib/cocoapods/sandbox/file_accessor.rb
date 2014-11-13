@@ -78,6 +78,27 @@ module Pod
         paths_for_attribute(:source_files)
       end
 
+      # @return [Array<Pathname>] the source files of the specification that
+      #                           use ARC.
+      #
+      def arc_source_files
+        case spec_consumer.requires_arc
+        when TrueClass
+          source_files
+        when FalseClass
+          []
+        else
+          paths_for_attribute(:requires_arc) & source_files
+        end
+      end
+
+      # @return [Array<Pathname>] the source files of the specification that
+      #                           do not use ARC.
+      #
+      def non_arc_source_files
+        source_files - arc_source_files
+      end
+
       # @return [Array<Pathname>] the headers of the specification.
       #
       def headers
