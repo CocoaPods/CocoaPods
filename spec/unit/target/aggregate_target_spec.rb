@@ -179,7 +179,7 @@ module Pod
 
       describe 'With frameworks' do
         before do
-          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec')
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', :ios, Podfile::TargetDefinition.new('iOS Example', nil))
           @target = AggregateTarget.new(@pod_target.target_definition, config.sandbox)
           @target.pod_targets = [@pod_target]
         end
@@ -189,15 +189,15 @@ module Pod
         end
 
         it 'returns the product name' do
-          @target.product_name.should == 'Pods.framework'
+          @target.product_name.should == 'Pods-iOS Example.framework'
         end
 
         it 'returns the framework name' do
-          @target.framework_name.should == 'Pods.framework'
+          @target.framework_name.should == 'Pods-iOS Example.framework'
         end
 
         it 'returns the library name' do
-          @target.static_library_name.should == 'libPods.a'
+          @target.static_library_name.should == 'libPods-iOS Example.a'
         end
 
         it 'returns :framework as product type' do
