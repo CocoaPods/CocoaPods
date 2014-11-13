@@ -11,8 +11,7 @@ before_script:
     DOC
   else
     puts <<-DOC
-See https://github.com/CocoaPods/guides.cocoapods.org/issues/26 for
-possible solutions.\e[0m\n
+\e[0m
     DOC
   end
 end
