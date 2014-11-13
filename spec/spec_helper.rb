@@ -128,9 +128,9 @@ def fixture_file_accessor(name, platform = :ios)
   Pod::Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
 end
 
-def fixture_pod_target(name, platform = :ios)
+def fixture_pod_target(name, platform = :ios, target_definition = nil)
   spec = fixture_spec(name)
-  target_definition = Pod::Podfile::TargetDefinition.new('Pods', nil)
+  target_definition ||= Pod::Podfile::TargetDefinition.new('Pods', nil)
   Pod::PodTarget.new([spec], target_definition, config.sandbox).tap do |pod_target|
     pod_target.stubs(:platform).returns(platform)
     pod_target.file_accessors << fixture_file_accessor(name, platform)
