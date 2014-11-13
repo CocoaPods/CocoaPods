@@ -6,6 +6,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Allow the specification of file patterns for the Podspec's `requires_arc`
+  attribute.  
+  [Kyle Fuller](https://github.com/kylef)
+  [Samuel Giddins](https://github.com/segiddins)
+  [#532](https://github.com/CocoaPods/CocoaPods/issues/532)
+
 ##### Bug Fixes
 
 * Show a helpful error message if the old resolver incorrectly activated a
