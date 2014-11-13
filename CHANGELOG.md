@@ -32,6 +32,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   copying resources to main application bundle.  
   [Yan Rabovik](https://github.com/rabovik)
 
+##### Enhancements
+
+* `pod search` now uses plain-text search by default instead of a regex,
+  allowing to run e.g. `pod search UIView+` to search for pods containing
+  `UIView+` in their name. You can still use a regular expression with the
+  new `--regex` flag of the `pod search` command.
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [Core#188](https://github.com/CocoaPods/Core/issues/188)
 
 ## 0.35.0.rc2
 
