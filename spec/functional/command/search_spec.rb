@@ -54,14 +54,20 @@ module Pod
       lambda { run_command('search', '--regex', '+') }.should.raise CLAide::Help
     end
 
-    it 'uses regex when asked for regex mode' do
+    it 'does not try to validate the query as a regex with plain-text search' do
+      lambda { run_command('search', '+') }.should.not.raise CLAide::Help
+    end
+
+    it 'uses regex search when asked for regex mode' do
       output = run_command('search', '--regex', 'Ba(na)+Lib')
       output.should.include? 'BananaLib'
+      output.should.not.include? 'Pod+With+Plus+Signs'
+      output.should.not.include? 'JSONKit'
     end
 
     it 'uses plain-text search when not asked for regex mode' do
-      output = run_command('search', 'Foo+Bar')
-      output.should.include? 'Foo+Bar'
+      output = run_command('search', 'Pod+With+Plus+Signs')
+      output.should.include? 'Pod+With+Plus+Signs'
       output.should.not.include? 'BananaLib'
     end
 

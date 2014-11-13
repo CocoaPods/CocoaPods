@@ -23,13 +23,13 @@ module Pod
       dates = {
         'BananaLib' => Time.now,
         'JSONKit'   => Time.parse('01/01/1970'),
-        'Foo+Bar'   => Time.parse('01/01/1970'),
+        'Pod+With+Plus+Signs'   => Time.parse('01/01/1970'),
       }
       Specification::Set::Statistics.any_instance.stubs(:creation_dates).returns(dates)
       out = run_command('list', 'new')
       out.should.include('BananaLib')
       out.should.not.include('JSONKit')
-      out.should.not.include('Foo+Bar')
+      out.should.not.include('Pod+With+Plus+Signs')
     end
 
     it 'presents the known pods with versions' do
