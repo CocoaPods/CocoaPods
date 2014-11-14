@@ -187,6 +187,7 @@ begin
     task :rebuild_integration_fixtures do
       title 'Running Integration tests'
       sh 'rm -rf spec/cocoapods-integration-specs/tmp'
+      title 'Building all the fixtures'
       puts `bundle exec bacon spec/integration.rb`
 
       title 'Storing fixtures'

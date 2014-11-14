@@ -106,6 +106,8 @@ describe_cli 'pod' do
     s.replace_path `which git`.chomp, 'GIT_BIN'
     s.replace_path `which hg`.chomp, 'HG_BIN'
     s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
+    s.replace_path %r(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}), '<#DATE#>'
+    s.replace_path %r(\(Took \d+.\d+ seconds\)), '(Took <#DURATION#> seconds)'
   end
 
   describe 'Pod install' do
