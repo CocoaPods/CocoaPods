@@ -330,11 +330,9 @@ module Pod
       # @raise if the query is not a valid regular expression
       #
       def validate_regex!(query)
-        begin
-          /#{query}/
-        rescue RegexpError
-          help! 'A valid regular expression is required.'
-        end
+        /#{query}/
+      rescue RegexpError
+        help! 'A valid regular expression is required.'
       end
 
       # @return [Fixnum] the index of the chosen array item
