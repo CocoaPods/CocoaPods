@@ -1,3 +1,5 @@
+require 'rubygems'
+
 module Pod
   # Provides support for the hook system of CocoaPods. The system is designed
   # especially for plugins. Interested clients can register to notifications by
@@ -15,7 +17,7 @@ module Pod
   #
   module HooksManager
     class << self
-      # @return [Hash{Symbol => Proc}] The list of the blocks that are
+      # @return [Hash{Symbol => Array<Proc>}] The list of the blocks that are
       #         registered for each notification name.
       #
       attr_reader :registrations
@@ -52,8 +54,21 @@ module Pod
         if @registrations
           blocks = @registrations[name]
           if blocks
-            blocks.each do |block|
-              block.call(context)
+            pretty_name = name.to_s.gsub('_', ' ')
+            UI.message "- Running #{pretty_name} hooks" do
+              blocks.each do |block|
+                gem_name_lambda = lambda do
+                  file, _line = block.source_location
+                  gem_spec = Gem::Specification.find do |spec|
+                    spec.require_paths.find { |f| file.include? File.join(spec.full_gem_path, f) }
+                  end
+                  gem_name = (gem_spec && gem_spec.name) || File.basename(file, '.rb')
+                end
+
+                UI.message "- #{gem_name_lambda.call}" do
+                  block.call(context)
+                end
+              end
             end
           end
         end

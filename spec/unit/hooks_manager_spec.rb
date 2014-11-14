@@ -60,6 +60,20 @@ module Pod
           @hooks_manager.run(:post_install, nil)
         end
       end
+
+      it 'prints a message in verbose mode when any hooks are run' do
+        config.verbose = true
+        @hooks_manager.register(:post_install) { |_| }
+        @hooks_manager.run(:post_install, Object.new)
+        UI.output.should.match /- Running post install hooks/
+      end
+
+      it 'prints a message in verbose mode for each hook run' do
+        config.verbose = true
+        @hooks_manager.register(:post_install) { |_| }
+        @hooks_manager.run(:post_install, Object.new)
+        UI.output.should.match /- hooks_manager_spec/
+      end
     end
   end
 end
