@@ -152,7 +152,7 @@ module Pod
         self.summary = 'Prints the path of the given spec.'
 
         self.description = <<-DESC
-          Prints the path of the .podspec file(s) whose name is matching `QUERY`
+          Prints the path of the .podspec file(s) whose name matches `QUERY`
         DESC
 
         self.arguments = [
