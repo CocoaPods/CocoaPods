@@ -58,6 +58,11 @@ Next:
 Metrics/ClassLength:
   Enabled: false
 
+# Arbitrary max lengths for methods simply do not work and enabling this will
+# lead to a never ending stream of annoyance and changes.
+Metrics/MethodLength:
+  Enabled: false
+
 # No enforced convention here.
 Metrics/BlockNesting:
   Enabled: false
