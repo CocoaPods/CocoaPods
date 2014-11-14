@@ -32,6 +32,16 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   copying resources to main application bundle.  
   [Yan Rabovik](https://github.com/rabovik)
 
+##### Enhancements
+
+* `pod search`, `pod spec which`, `pod spec cat` and `pod spec edit`
+  now use plain text search by default instead of a regex. Especially
+  `pod search UIView+UI` now searches for pods containing exactly `UIView+UI`
+  in their name, not trying to interpret the `+` as a regular expression.
+  _Note: You can still use a regular expression with the new `--regex` flag that has
+  been added to these commands, e.g. `pod search --regex "(NS|UI)Color"`._
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [Core#188](https://github.com/CocoaPods/Core/issues/188)
 
 ## 0.35.0.rc2
 

@@ -41,11 +41,6 @@ Metrics/CyclomaticComplexity:
 Metrics/LineLength:
   Max: 1060
 
-# Offense count: 106
-# Configuration parameters: CountComments.
-Metrics/MethodLength:
-  Max: 39
-
 # Offense count: 12
 Metrics/PerceivedComplexity:
   Max: 10

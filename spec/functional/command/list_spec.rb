@@ -22,11 +22,14 @@ module Pod
       jsonkit_set = sets.find { |s| s.name == 'JSONKit' }
       dates = {
         'BananaLib' => Time.now,
-        'JSONKit'   => Time.parse('01/01/1970') }
+        'JSONKit'   => Time.parse('01/01/1970'),
+        'Pod+With+Plus+Signs'   => Time.parse('01/01/1970'),
+      }
       Specification::Set::Statistics.any_instance.stubs(:creation_dates).returns(dates)
       out = run_command('list', 'new')
       out.should.include('BananaLib')
       out.should.not.include('JSONKit')
+      out.should.not.include('Pod+With+Plus+Signs')
     end
 
     it 'presents the known pods with versions' do

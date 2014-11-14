@@ -152,33 +152,37 @@ module Pod
         self.summary = 'Prints the path of the given spec.'
 
         self.description = <<-DESC
-          Prints the path of 'NAME.podspec'
+          Prints the path of the .podspec file(s) whose name is matching `QUERY`
         DESC
 
         self.arguments = [
-          CLAide::Argument.new('NAME', false),
+          CLAide::Argument.new('QUERY', false),
         ]
 
         def self.options
           [
+            ['--regex', 'Interpret the `QUERY` as a regular expression'],
             ['--show-all', 'Print all versions of the given podspec'],
           ].concat(super)
         end
 
         def initialize(argv)
+          @use_regex = argv.flag?('regex')
           @show_all = argv.flag?('show-all')
-          @spec = argv.shift_argument
-          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
+          @query = argv.shift_argument
+          @query = @query.gsub('.podspec', '') unless @query.nil?
           super
         end
 
         def validate!
           super
-          help! 'A podspec name is required.' unless @spec
+          help! 'A podspec name is required.' unless @query
+          validate_regex!(@query) if @use_regex
         end
 
         def run
-          UI.puts get_path_of_spec(@spec, @show_all)
+          query = @use_regex ? @query : Regexp.escape(@query)
+          UI.puts get_path_of_spec(query, @show_all)
         end
       end
 
@@ -188,36 +192,42 @@ module Pod
         self.summary = 'Prints a spec file.'
 
         self.description = <<-DESC
-          Prints 'NAME.podspec' to standard output.
+          Prints the content of the podspec(s) whose name matches `QUERY` to standard output.
         DESC
 
         self.arguments = [
-          CLAide::Argument.new('NAME', false),
+          CLAide::Argument.new('QUERY', false),
         ]
 
         def self.options
-          [['--show-all', 'Pick from all versions of the given podspec']].concat(super)
+          [
+            ['--regex', 'Interpret the `QUERY` as a regular expression'],
+            ['--show-all', 'Pick from all versions of the given podspec']
+          ].concat(super)
         end
 
         def initialize(argv)
+          @use_regex = argv.flag?('regex')
           @show_all = argv.flag?('show-all')
-          @spec = argv.shift_argument
-          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
+          @query = argv.shift_argument
+          @query = @query.gsub('.podspec', '') unless @query.nil?
           super
         end
 
         def validate!
           super
-          help! 'A podspec name is required.' unless @spec
+          help! 'A podspec name is required.' unless @query
+          validate_regex!(@query) if @use_regex
         end
 
         def run
+          query = @use_regex ? @query : Regexp.escape(@query)
           filepath = if @show_all
-                       specs = get_path_of_spec(@spec, @show_all).split(/\n/)
+                       specs = get_path_of_spec(query, @show_all).split(/\n/)
                        index = choose_from_array(specs, "Which spec would you like to print [1-#{ specs.count }]? ")
                        specs[index]
                      else
-                       get_path_of_spec(@spec)
+                       get_path_of_spec(query)
                      end
 
           UI.puts File.read(filepath)
@@ -230,38 +240,43 @@ module Pod
         self.summary = 'Edit a spec file.'
 
         self.description = <<-DESC
-          Opens 'NAME.podspec' to be edited.
+          Opens the podspec matching `QUERY` to be edited.
         DESC
 
         self.arguments = [
-          CLAide::Argument.new('NAME', false),
+          CLAide::Argument.new('QUERY', false),
         ]
 
         def self.options
-          [['--show-all', 'Pick which spec to edit from all available' \
-            'versions of the given podspec']].concat(super)
+          [
+            ['--regex', 'Interpret the `QUERY` as a regular expression'],
+            ['--show-all', 'Pick from all versions of the given podspec']
+          ].concat(super)
         end
 
         def initialize(argv)
+          @use_regex = argv.flag?('regex')
           @show_all = argv.flag?('show-all')
-          @spec = argv.shift_argument
-          @spec = @spec.gsub('.podspec', '') unless @spec.nil?
+          @query = argv.shift_argument
+          @query = @query.gsub('.podspec', '') unless @query.nil?
           super
         end
 
         def validate!
           super
-          help! 'A podspec name is required.' unless @spec
+          help! 'A podspec name is required.' unless @query
+          validate_regex!(@query) if @use_regex
         end
 
         def run
+          query = @use_regex ? @query : Regexp.escape(@query)
           if @show_all
-            specs = get_path_of_spec(@spec, @show_all).split(/\n/)
+            specs = get_path_of_spec(query, @show_all).split(/\n/)
             message = "Which spec would you like to edit [1-#{specs.count}]? "
             index = choose_from_array(specs, message)
             filepath = specs[index]
           else
-            filepath = get_path_of_spec(@spec)
+            filepath = get_path_of_spec(query)
           end
 
           exec_editor(filepath.to_s) if File.exist? filepath
@@ -309,6 +324,16 @@ module Pod
       #       subclasses.
 
       private
+
+      # @param [String] query the regular expression string to validate
+      #
+      # @raise if the query is not a valid regular expression
+      #
+      def validate_regex!(query)
+        /#{query}/
+      rescue RegexpError
+        help! 'A valid regular expression is required.'
+      end
 
       # @return [Fixnum] the index of the chosen array item
       #
