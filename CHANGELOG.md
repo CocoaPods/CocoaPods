@@ -39,7 +39,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   `pod search UIView+UI` now searches for pods containing exactly `UIView+UI`
   in their name, not trying to interpret the `+` as a regular expression.
   _Note: You can still use a regular expression with the new `--regex` flag that has
-  been added to these commands, e.g. `pod search --regex (NS|UI)Color`._
+  been added to these commands, e.g. `pod search --regex "(NS|UI)Color"`._
   [Olivier Halligon](https://github.com/AliSoftware)
   [Core#188](https://github.com/CocoaPods/Core/issues/188)
 
