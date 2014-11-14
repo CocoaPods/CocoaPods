@@ -72,12 +72,12 @@ module Pod
         sut.validate
       end
 
-      it 'respects the only errors option' do
+      it 'respects the allow warnings option' do
         podspec = stub_podspec(/.*summary.*/, '"summary": "A short description of",')
         file = write_podspec(podspec)
         sut = Validator.new(file, SourcesManager.master.map(&:url))
         sut.quick = true
-        sut.only_errors = true
+        sut.allow_warnings = true
         sut.validate
         sut.results.map(&:to_s).first.should.match /summary.*meaningful/
         sut.validated?.should.be.true

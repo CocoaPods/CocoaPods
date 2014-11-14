@@ -174,7 +174,7 @@ module Pod
 
       it 'lints the current working directory' do
         Dir.chdir(fixture('spec-repos') + 'master/Specs/JSONKit/1.4/') do
-          cmd = command('spec', 'lint', '--quick', '--only-errors')
+          cmd = command('spec', 'lint', '--quick', '--allow-warnings')
           cmd.run
           UI.output.should.include 'passed validation'
         end
@@ -183,7 +183,7 @@ module Pod
       # @todo VCR is required in CocoaPods only for this test.
       xit 'lints a remote podspec' do
         Dir.chdir(fixture('spec-repos') + 'master/Specs/JSONKit/1.4/') do
-          cmd = command('spec', 'lint', '--quick', '--only-errors', '--silent', 'https://github.com/CocoaPods/Specs/raw/master/A2DynamicDelegate/2.0.1/A2DynamicDelegate.podspec')
+          cmd = command('spec', 'lint', '--quick', '--allow-warnings', '--silent', 'https://github.com/CocoaPods/Specs/raw/master/A2DynamicDelegate/2.0.1/A2DynamicDelegate.podspec')
           # VCR.use_cassette('linter', :record => :new_episodes) {  }
           lambda { cmd.run }.should.not.raise
         end
@@ -203,8 +203,8 @@ module Pod
         UI.output.should.include 'Missing license type'
       end
 
-      it 'respects the -only--errors option' do
-        cmd = command('spec', 'lint', '--quick', '--only-errors', @spec_path)
+      it 'respects the --allow-warnings option' do
+        cmd = command('spec', 'lint', '--quick', '--allow-warnings', @spec_path)
         lambda { cmd.run }.should.not.raise
         UI.output.should.include 'Missing license type'
       end
