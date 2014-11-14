@@ -226,6 +226,53 @@ module Pod
       end
     end
 
+    def describe_regex_support(command, raise_class = nil)
+      describe 'RegEx support' do
+        before do
+          @test_source = Source.new(fixture('spec-repos/test_repo'))
+          Source::Aggregate.any_instance.stubs(:sources).returns([@test_source])
+          SourcesManager.updated_search_index = nil
+          yield if block_given?
+        end
+
+        it 'raise when using an invalid regex' do
+          lambda { run_command('spec', command, '--regex', '+') }.should.raise CLAide::Help
+        end
+
+        it 'does not try to validate the query as a regex with plain-text mode' do
+          l = lambda { run_command('spec', command, '+') }
+          if raise_class
+            l.should.raise raise_class
+          else
+            l.should.not.raise CLAide::Help
+          end
+        end
+
+        it 'uses regex search when asked for regex mode' do
+          l = lambda { run_command('spec', command, '--regex', 'Ba(na)+Lib') }
+          if raise_class
+            l.should.raise raise_class
+          else
+            l.should.not.raise
+          end
+          UI.output.should.include? 'BananaLib'
+          UI.output.should.not.include? 'Pod+With+Plus+Signs'
+          UI.output.should.not.include? 'JSONKit'
+        end
+
+        it 'uses plain-text search when not asked for regex mode' do
+          l = lambda { run_command('spec', command, 'Pod+With+Plus+Signs') }
+          if raise_class
+            l.should.raise raise_class
+          else
+            l.should.not.raise
+          end
+          UI.output.should.include? 'Pod+With+Plus+Signs'
+          UI.output.should.not.include? 'BananaLib'
+        end
+      end
+    end
+    
     describe Command::Spec::Which do
       it_should_check_for_existence('which')
       it_should_check_for_ambiguity('which')
@@ -235,6 +282,8 @@ module Pod
         text = 'AFNetworking.podspec'
         UI.output.should.include text.gsub(/\n/, '')
       end
+
+      describe_regex_support('which')
     end
 
     #-------------------------------------------------------------------------#
@@ -242,7 +291,7 @@ module Pod
     describe Command::Spec::Cat do
       it_should_check_for_existence('cat')
       it_should_check_for_ambiguity('cat')
-
+      
       it 'cats the given podspec' do
         lambda { command('spec', 'cat', 'AFNetworking').run }.should.not.raise
         UI.output.should.include fixture('spec-repos/master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json').read
@@ -253,6 +302,8 @@ module Pod
         run_command('spec', 'cat', '--show-all', 'AFNetworking')
         UI.output.should.include fixture('spec-repos/master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json').read
       end
+
+      describe_regex_support('cat')
     end
 
     #-------------------------------------------------------------------------#
@@ -268,7 +319,7 @@ module Pod
 
       it_should_check_for_existence('edit')
       it_should_check_for_ambiguity('edit')
-
+      
       it 'would execute the editor specified in ENV with the given podspec' do
         ENV['EDITOR'] = 'podspeceditor'
         lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise SystemExit
@@ -295,6 +346,8 @@ module Pod
         lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise Informative
         File.unstub(:exists?)
       end
+
+      describe_regex_support('edit', SystemExit) { ENV['EDITOR'] = 'podspeceditor' }
     end
 
     #-------------------------------------------------------------------------#
