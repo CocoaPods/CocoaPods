@@ -53,6 +53,7 @@ module Pod
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
         @installer.stubs(:run_plugins_post_install_hooks)
+        @installer.stubs(:ensure_plugins_are_installed!)
         @installer.stubs(:perform_post_install_actions)
       end
 
@@ -501,8 +502,35 @@ module Pod
       it 'runs plugins post install hook' do
         context = stub
         Installer::HooksContext.expects(:generate).returns(context)
-        HooksManager.expects(:run).with(:post_install, context)
+        HooksManager.expects(:run).with(:post_install, context, {})
         @installer.send(:run_plugins_post_install_hooks)
+      end
+
+      it 'only runs the podfile-specified post-install hooks' do
+        context = stub
+        Installer::HooksContext.expects(:generate).returns(context)
+        plugins_hash = {'cocoapods-keys' => {'keyring' => 'Eidolon'}}
+        @installer.podfile.stubs(:plugins).returns(plugins_hash)
+        HooksManager.expects(:run).with(:post_install, context, plugins_hash)
+        @installer.send(:run_plugins_post_install_hooks)
+      end
+
+      it 'raises if a podfile-specified plugin is not loaded' do
+        @installer.podfile.stubs(:plugins).returns('cocoapods-keys' => {})
+        Command::PluginManager.stubs(:specifications).returns([])
+        should.raise Informative do
+          @installer.send(:ensure_plugins_are_installed!)
+        end.message.should.match /require.*plugin.*`cocoapods-keys`/
+      end
+
+      it 'does not raise if all podfile-specified plugins are loaded' do
+        @installer.podfile.stubs(:plugins).returns('cocoapods-keys' => {})
+        spec = stub
+        spec.stubs(:name).returns('cocoapods-keys')
+        Command::PluginManager.stubs(:specifications).returns([spec])
+        should.not.raise do
+          @installer.send(:ensure_plugins_are_installed!)
+        end
       end
     end
 

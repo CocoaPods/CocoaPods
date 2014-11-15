@@ -4,13 +4,17 @@ module Pod
   describe HooksManager do
     before do
       @hooks_manager = Pod::HooksManager
+      @hooks_manager.instance_variable_set(:@registrations, nil)
     end
 
     describe 'register' do
       it 'allows to register a block for a notification with a given name' do
-        @hooks_manager.register(:post_install) {}
+        @hooks_manager.register(:post_install, 'plugin') {}
         @hooks_manager.registrations[:post_install].count.should == 1
-        @hooks_manager.registrations[:post_install].first.class.should == Proc
+        hook = @hooks_manager.registrations[:post_install].first
+        hook.class.should == HooksManager::Hook
+        hook.name.should == :post_install
+        hook.plugin_name.should == 'plugin'
       end
 
       it 'raises if no name is given' do
@@ -23,6 +27,11 @@ module Pod
         should.raise ArgumentError do
           @hooks_manager.register(:post_install)
         end
+      end
+
+      it 'warns if no plugin name is given' do
+        @hooks_manager.register(:post_install) {}
+        UI.warnings.should.match /hooks without.*deprecated/
       end
     end
 
@@ -49,6 +58,26 @@ module Pod
         end
       end
 
+      it 'only runs hooks from the allowed plugins' do
+        @hooks_manager.register(:post_install, 'plugin') do |_options|
+          raise 'Should not be called'
+        end
+
+        should.not.raise do
+          @hooks_manager.run(:post_install, Object.new,  'plugin2' => {})
+        end
+      end
+
+      it 'passed along user-specified options when the hook block has arity 2' do
+        @hooks_manager.register(:post_install, 'plugin') do |_options, user_options|
+          user_options['key'].should == 'value'
+        end
+
+        should.not.raise do
+          @hooks_manager.run(:post_install, Object.new,  'plugin' => {'key' => 'value'})
+        end
+      end
+
       it 'raises if no name is given' do
         should.raise ArgumentError do
           @hooks_manager.run(nil, Object.new) {}
@@ -63,16 +92,16 @@ module Pod
 
       it 'prints a message in verbose mode when any hooks are run' do
         config.verbose = true
-        @hooks_manager.register(:post_install) { |_| }
+        @hooks_manager.register(:post_install) {}
         @hooks_manager.run(:post_install, Object.new)
         UI.output.should.match /- Running post install hooks/
       end
 
       it 'prints a message in verbose mode for each hook run' do
         config.verbose = true
-        @hooks_manager.register(:post_install) { |_| }
+        @hooks_manager.register(:post_install, 'plugin') {}
         @hooks_manager.run(:post_install, Object.new)
-        UI.output.should.match /- hooks_manager_spec/
+        UI.output.should.match %r{- plugin from `spec/unit/hooks_manager_spec.rb`}
       end
     end
   end

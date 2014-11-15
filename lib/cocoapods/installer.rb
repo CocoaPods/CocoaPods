@@ -97,6 +97,7 @@ module Pod
     def prepare
       UI.message 'Preparing' do
         sandbox.prepare
+        ensure_plugins_are_installed!
         Migrator.migrate(sandbox)
       end
     end
@@ -323,7 +324,23 @@ module Pod
     #
     def run_plugins_post_install_hooks
       context = HooksContext.generate(sandbox, aggregate_targets)
-      HooksManager.run(:post_install, context)
+      HooksManager.run(:post_install, context, podfile.plugins)
+    end
+
+    # Ensures that all plugins specified in the {#podfile} are loaded.
+    #
+    # @return [void]
+    #
+    def ensure_plugins_are_installed!
+      require 'claide/command/plugin_manager'
+
+      loaded_plugins = Command::PluginManager.specifications.map(&:name)
+
+      podfile.plugins.keys.each do |plugin|
+        unless loaded_plugins.include? plugin
+          raise Informative, "Your Podfile requires that the plugin `#{plugin}` be installed. Please install it and try installation again."
+        end
+      end
     end
 
     # Prints a warning for any pods that are deprecated

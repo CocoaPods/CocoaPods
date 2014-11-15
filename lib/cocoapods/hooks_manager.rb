@@ -16,6 +16,43 @@ module Pod
   # from CocoaPods 1.0).
   #
   module HooksManager
+    # Represents a single registered hook.
+    #
+    class Hook
+      # @return [String]
+      #         The name of the hook's notification.
+      #
+      attr_reader :plugin_name
+
+      # @return [String]
+      #         The name of the plugin the hook came from.
+      #
+      attr_reader :name
+
+      # @return [Proc]
+      #         The block.
+      #
+      attr_reader :block
+
+      # @param  [String] name        @see {#name}.
+      #
+      # @param  [String] plugin_name @see {#plugin_name}.
+      #
+      # @param  [Proc]   block       @see {#block}.
+      #
+      def initialize(name, plugin_name, block)
+        raise ArgumentError, 'Missing name' unless name
+        raise ArgumentError, 'Missing block' unless block
+
+        UI.warn '[Hooks] The use of hooks without specifying a `plugin_name` ' \
+                'has been deprecated.' unless plugin_name
+
+        @name = name
+        @plugin_name = plugin_name
+        @block = block
+      end
+    end
+
     class << self
       # @return [Hash{Symbol => Array<Proc>}] The list of the blocks that are
       #         registered for each notification name.
@@ -27,16 +64,16 @@ module Pod
       # @param  [Symbol] name
       #         The name of the notification.
       #
+      # @param  [String] plugin_name
+      #         The name of the plugin the hook comes from.
+      #
       # @param  [Proc] block
       #         The block.
       #
-      def register(name, &block)
-        raise ArgumentError, 'Missing name' unless name
-        raise ArgumentError, 'Missing block' unless block
-
+      def register(name, plugin_name = nil, &block)
         @registrations ||= {}
         @registrations[name] ||= []
-        @registrations[name] << block
+        @registrations[name] << Hook.new(name, plugin_name, block)
       end
 
       # Runs all the registered blocks for the hook with the given name.
@@ -47,26 +84,30 @@ module Pod
       # @param  [Object] context
       #         The context object which should be passed to the blocks.
       #
-      def run(name, context)
+      # @param  [Hash<String, Hash>] whitelisted_plugins
+      #         The plugins that should be run, in the form of a hash keyed by
+      #         plugin name, where the values are the custom options that should
+      #         be passed to the hook's block if it supports taking a second
+      #         argument.
+      #
+      def run(name, context, whitelisted_plugins = nil)
         raise ArgumentError, 'Missing name' unless name
         raise ArgumentError, 'Missing options' unless context
 
-        if @registrations
-          blocks = @registrations[name]
-          if blocks
-            pretty_name = name.to_s.gsub('_', ' ')
-            UI.message "- Running #{pretty_name} hooks" do
-              blocks.each do |block|
-                gem_name_lambda = lambda do
-                  file, _line = block.source_location
-                  gem_spec = Gem::Specification.find do |spec|
-                    spec.require_paths.find { |f| file.include? File.join(spec.full_gem_path, f) }
+        if registrations
+          hooks = registrations[name]
+          if hooks
+            UI.message "- Running #{name.to_s.gsub('_', ' ')} hooks" do
+              hooks.each do |hook|
+                next if whitelisted_plugins && !whitelisted_plugins.key?(hook.name)
+                UI.message "- #{hook.plugin_name || 'unknown plugin'} from " \
+                           "`#{hook.block.source_location.first}`" do
+                  block = hook.block
+                  if block.arity > 1
+                    block.call(context, whitelisted_plugins[hook.name])
+                  else
+                    block.call(context)
                   end
-                  gem_name = (gem_spec && gem_spec.name) || File.basename(file, '.rb')
-                end
-
-                UI.message "- #{gem_name_lambda.call}" do
-                  block.call(context)
                 end
               end
             end
