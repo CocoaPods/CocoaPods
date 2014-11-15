@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 854ff482bc9d41b1acebbaae2fc6c67204a08d0f
+  revision: fc4833f84190943ced043f78e945207791b0c53a
   branch: lockfile-checkout-options
   specs:
     cocoapods-core (0.35.0.rc2)
