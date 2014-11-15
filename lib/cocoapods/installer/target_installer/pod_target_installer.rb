@@ -35,12 +35,20 @@ module Pod
       def add_files_to_build_phases
         target.file_accessors.each do |file_accessor|
           consumer = file_accessor.spec_consumer
-          flags = compiler_flags_for_consumer(consumer)
-          all_source_files = file_accessor.source_files
-          regular_source_files = all_source_files.reject { |sf| sf.extname == '.d' }
-          regular_file_refs = regular_source_files.map { |sf| project.reference_for_path(sf) }
-          native_target.add_file_references(regular_file_refs, flags)
-          other_file_refs = (all_source_files - regular_source_files).map { |sf| project.reference_for_path(sf) }
+
+          other_source_files = file_accessor.source_files.select { |sf| sf.extname == '.d' }
+
+          {
+            true => file_accessor.arc_source_files,
+            false => file_accessor.non_arc_source_files,
+          }.each do |arc, files|
+            files = files - other_source_files
+            flags = compiler_flags_for_consumer(consumer, arc)
+            regular_file_refs = files.map { |sf| project.reference_for_path(sf) }
+            native_target.add_file_references(regular_file_refs, flags)
+          end
+
+          other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
           native_target.add_file_references(other_file_refs, nil)
         end
       end
@@ -152,9 +160,9 @@ module Pod
       #
       # @return [String] The compiler flags.
       #
-      def compiler_flags_for_consumer(consumer)
+      def compiler_flags_for_consumer(consumer, arc)
         flags = consumer.compiler_flags.dup
-        if !consumer.requires_arc
+        if !arc
           flags << '-fno-objc-arc'
         else
           platform_name = consumer.platform_name
