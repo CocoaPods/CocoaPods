@@ -131,10 +131,9 @@ module Pod
     attr_accessor :local
     alias_method :local?, :local
 
-    # @return [Bool] Whether the validator should fail only on errors or also
-    #         on warnings.
+    # @return [Bool] Whether the validator should fail on warnings, or only on errors.
     #
-    attr_accessor :only_errors
+    attr_accessor :allow_warnings
 
     # @return [String] name of the subspec to check, if nil all subspecs are checked.
     #
@@ -155,7 +154,7 @@ module Pod
     # @return [Boolean]
     #
     def validated?
-      result_type != :error && (result_type != :warning || only_errors)
+      result_type != :error && (result_type != :warning || allow_warnings)
     end
 
     # @return [Symbol]

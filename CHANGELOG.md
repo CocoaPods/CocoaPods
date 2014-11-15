@@ -43,6 +43,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Olivier Halligon](https://github.com/AliSoftware)
   [Core#188](https://github.com/CocoaPods/Core/issues/188)
 
+* Use `--allow-warnings` rather than `--error-only` for pod spec validation
+  [Daniel Tomlinson](https://github.com/DanielTomlinson)
+  [#2820](https://github.com/CocoaPods/CocoaPods/issues/2820)
+
 ## 0.35.0.rc2
 
 ##### Enhancements
