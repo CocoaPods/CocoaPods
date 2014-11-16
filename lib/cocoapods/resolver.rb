@@ -385,7 +385,7 @@ module Pod
       when Molinillo::VersionConflict
         error.conflicts.each do |name, conflict|
           lockfile_reqs = conflict.requirements[name_for_locking_dependency_source]
-          if lockfile_reqs.last && lockfile_reqs.last.prerelease? && !conflict.existing
+          if lockfile_reqs && lockfile_reqs.last && lockfile_reqs.last.prerelease? && !conflict.existing
             raise Informative, 'Due to the previous naïve CocoaPods resolver, ' \
               "you were using a pre-release version of `#{name}`, " \
               'without explicitly asking for a pre-release version, which now leads to a conflict. ' \
