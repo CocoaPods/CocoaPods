@@ -209,11 +209,13 @@ module Pod
         #
         def native_targets_to_integrate
           unless @native_targets_to_integrate
-            @native_targets_to_integrate = native_targets.select do |native_target|
-              links_target = native_target.frameworks_build_phase.files_references.any? do |file_ref|
-                file_ref.display_name == target.product_name
+            @native_targets_to_integrate = native_targets.reject do |native_target|
+              native_target.frameworks_build_phase.files.any? do |build_file|
+                file_ref = build_file.file_ref
+                file_ref &&
+                  file_ref.isa == 'PBXFileReference' &&
+                  file_ref.display_name == target.product_name
               end
-              !links_target
             end
           end
           @native_targets_to_integrate
