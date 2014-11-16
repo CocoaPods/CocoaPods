@@ -308,10 +308,10 @@ module Pod
             deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.name) }
             deps_to_fetch += deps_to_fetch_if_needed.select do |dep|
               sandbox.specification(dep.name).nil? ||
-              !dep.external_source[:local].nil? ||
-              !dep.external_source[:path].nil? ||
-              !sandbox.pod_dir(dep.root_name).directory? ||
-              checkout_requires_update?(dep)
+                !dep.external_source[:local].nil? ||
+                !dep.external_source[:path].nil? ||
+                !sandbox.pod_dir(dep.root_name).directory? ||
+                checkout_requires_update?(dep)
             end
           end
           deps_to_fetch.uniq(&:root_name)

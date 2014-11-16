@@ -253,7 +253,7 @@ module Pod
         state.added.sort.should == %w(AFNetworking JSONKit SVPullToRefresh libextobjc)
       end
 
-    #-------------------------------------------------------------------------#
+      #-------------------------------------------------------------------------#
 
       describe 'Private helpers' do
 
