@@ -95,7 +95,7 @@ GEM
       parser (>= 2.2.0.pre.3, < 3.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
-    clintegracon (0.5.3)
+    clintegracon (0.6.0)
       colored (~> 1.2)
       diffy
     cocoapods-dependencies (0.3.2)
