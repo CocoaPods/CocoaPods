@@ -19,7 +19,7 @@ module Pod
             create_info_plist_file
             create_module_map
             create_umbrella_header do |generator|
-              generator.imports += target.file_accessors.map(&:public_headers).flatten.map(&:basename)
+              generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
             end
           end
           create_prefix_header
