@@ -46,17 +46,17 @@ module Pod
           all_source_files = file_accessor.source_files
           regular_source_files = all_source_files.reject { |sf| sf.extname == '.d' }
           regular_file_refs = regular_source_files.map { |sf| project.reference_for_path(sf) }
-          native_target.add_file_references(regular_file_refs, flags)
-          other_file_refs = (all_source_files - regular_source_files).map { |sf| project.reference_for_path(sf) }
-          native_target.add_file_references(other_file_refs, nil)
-
-          # Set added headers as public if needed
-          if native_target.symbol_type == :framework
-            native_target.headers_build_phase.files.each do |build_file|
-              build_file.settings ||= {}
-              build_file.settings['ATTRIBUTES'] = ['Public']
+          native_target.add_file_references(regular_file_refs, flags) do |build_file|
+            # Set added headers as public if needed
+            if target.requires_framework?
+              if native_target.headers_build_phase.files.include?(build_file)
+                build_file.settings ||= {}
+                build_file.settings['ATTRIBUTES'] = ['Public']
+              end
             end
           end
+          other_file_refs = (all_source_files - regular_source_files).map { |sf| project.reference_for_path(sf) }
+          native_target.add_file_references(other_file_refs, nil)
         end
       end
 
