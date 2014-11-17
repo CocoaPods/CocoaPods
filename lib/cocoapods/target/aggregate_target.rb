@@ -104,7 +104,7 @@ module Pod
       result = {}
       user_build_configurations.keys.each do |build_configuration|
         result[build_configuration] = pod_targets_for_build_configuration(build_configuration).
-          map(&:specs).flatten
+          flat_map(&:specs)
       end
       result
     end
