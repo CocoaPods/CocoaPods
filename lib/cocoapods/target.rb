@@ -223,7 +223,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    protected
+    private
 
     # Transforms the given string into a valid +identifier+ after C99ext
     # standard, so that it can be used in source code where escaping of
