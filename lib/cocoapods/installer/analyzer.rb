@@ -533,7 +533,7 @@ module Pod
           if file_ref.respond_to?(:last_known_file_type)
             file_ref.last_known_file_type == 'sourcecode.swift'
           elsif file_ref.respond_to?(:files)
-            file_ref.files.any?(file_predicate)
+            file_ref.files.any?(&file_predicate)
           else
             false
           end
