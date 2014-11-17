@@ -134,7 +134,7 @@ module Pod
         def add_embed_frameworks_script_phase
           phase_name = 'Embed Pods Frameworks'
           native_targets_to_integrate.each do |native_target|
-            embed_build_phase = native_target.shell_script_build_phases.select { |bp| bp.name == phase_name }.first
+            embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
             unless embed_build_phase.present?
               UI.message("Add Build Phase '#{phase_name}' to project.")
               embed_build_phase = native_target.new_shell_script_build_phase(phase_name)
