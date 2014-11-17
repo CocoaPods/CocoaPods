@@ -44,12 +44,14 @@ module Pod
           consumer = file_accessor.spec_consumer
           flags = compiler_flags_for_consumer(consumer)
           all_source_files = file_accessor.source_files
+          public_header_files = file_accessor.public_headers.map(&:basename).map(&:to_s)
           regular_source_files = all_source_files.reject { |sf| sf.extname == '.d' }
           regular_file_refs = regular_source_files.map { |sf| project.reference_for_path(sf) }
           native_target.add_file_references(regular_file_refs, flags) do |build_file|
             # Set added headers as public if needed
             if target.requires_framework?
-              if native_target.headers_build_phase.files.include?(build_file)
+              if native_target.headers_build_phase.files.include?(build_file) &&
+                public_header_files.include?(build_file.file_ref.name)
                 build_file.settings ||= {}
                 build_file.settings['ATTRIBUTES'] = ['Public']
               end
