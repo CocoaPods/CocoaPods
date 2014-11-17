@@ -1,9 +1,9 @@
 module Pod
   module Generator
-    # Generates the LLVM module map files. A module map file is generated for
-    # each Pod and for each Pod target definition, that requires to be built as
-    # framework. It specifies a different umbrella header then usual to avoid
-    # name conflicts with existing headers of the podspec.
+    # Generates LLVM module map files. A module map file is generated for each
+    # Pod and for each Pod target definition, that is built as framework. It
+    # specifies a different umbrella header then usual to avoid name conflicts
+    # with existing headers of the podspec.
     #
     class ModuleMap
       # @return [Target] the target represented by this Info.plist.
