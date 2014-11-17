@@ -43,28 +43,30 @@ module Pod
         target.file_accessors.each do |file_accessor|
           consumer = file_accessor.spec_consumer
 
+          headers = file_accessor.headers
           other_source_files = file_accessor.source_files.select { |sf| sf.extname == '.d' }
 
           {
             true => file_accessor.arc_source_files,
             false => file_accessor.non_arc_source_files,
           }.each do |arc, files|
-            files = files - other_source_files
+            files = files - headers - other_source_files
             flags = compiler_flags_for_consumer(consumer, arc)
             regular_file_refs = files.map { |sf| project.reference_for_path(sf) }
             native_target.add_file_references(regular_file_refs, flags)
           end
 
-          other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
-          native_target.add_file_references(other_file_refs, nil)
-
-          # Set added headers as public if needed
-          if native_target.symbol_type == :framework
-            native_target.headers_build_phase.files.each do |build_file|
+          header_file_refs = headers.map { |sf| project.reference_for_path(sf) }
+          native_target.add_file_references(header_file_refs) do |build_file|
+            # Set added headers as public if needed
+            if target.requires_framework?
               build_file.settings ||= {}
               build_file.settings['ATTRIBUTES'] = ['Public']
             end
           end
+
+          other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
+          native_target.add_file_references(other_file_refs, nil)
         end
       end
 
