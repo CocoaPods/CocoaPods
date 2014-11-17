@@ -44,6 +44,7 @@ module Pod
           consumer = file_accessor.spec_consumer
 
           headers = file_accessor.headers
+          public_headers = file_accessor.public_headers
           other_source_files = file_accessor.source_files.select { |sf| sf.extname == '.d' }
 
           {
@@ -60,8 +61,10 @@ module Pod
           native_target.add_file_references(header_file_refs) do |build_file|
             # Set added headers as public if needed
             if target.requires_framework?
-              build_file.settings ||= {}
-              build_file.settings['ATTRIBUTES'] = ['Public']
+              if public_headers.include?(build_file.file_ref.real_path)
+                build_file.settings ||= {}
+                build_file.settings['ATTRIBUTES'] = ['Public']
+              end
             end
           end
 
