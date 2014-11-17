@@ -27,7 +27,7 @@ module Pod
       end
 
       # @param  [Platform] platform
-      #         indicate for which platform the header search paths should be
+      #         the platform for which the header search paths should be
       #         returned
       #
       # @return [Array<String>] All the search paths of the header directory in

@@ -2,7 +2,7 @@ module Pod
   module Generator
     class EmbedFrameworksScript
       # @return [TargetDefinition] The target definition, whose label will be
-      #         used to locate the target specific build products.
+      #         used to locate the target-specific build products.
       #
       attr_reader :target_definition
 

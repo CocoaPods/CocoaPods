@@ -88,7 +88,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    # @return [Boolean] whether the generated target need to be implemented
+    # @return [Boolean] whether the generated target needs to be implemented
     #         as a framework
     #
     # @note This applies either if Swift was used by the host, which was checked
