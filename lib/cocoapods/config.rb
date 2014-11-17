@@ -283,7 +283,7 @@ module Pod
       'CocoaPods.podfile.yaml',
       'CocoaPods.podfile',
       'Podfile',
-    ]
+    ].freeze
 
     public
 
