@@ -81,7 +81,7 @@ module Pod
       #
       def download_source
         root.rmtree if root.exist?
-        if head_pod? && !sandbox.checkout_sources[root_spec.name]
+        if head_pod?
           begin
             downloader.download_head
             @specific_source = downloader.checkout_options
@@ -148,7 +148,7 @@ module Pod
       #         source.
       #
       def downloader
-        @downloader ||= Downloader.for_target(root, sandbox.checkout_sources[root_spec.name] || root_spec.source.dup)
+        @downloader ||= Downloader.for_target(root, root_spec.source.dup)
       end
 
       #-----------------------------------------------------------------------#
