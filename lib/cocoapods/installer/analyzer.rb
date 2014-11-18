@@ -53,6 +53,8 @@ module Pod
         @result.podfile_state = generate_podfile_state
         @locked_dependencies  = generate_version_locking_dependencies
 
+        store_existing_checkout_options
+
         fetch_external_sources if allow_fetches
         @result.specs_by_target = resolve_dependencies
         @result.specifications  = generate_specifications
@@ -332,6 +334,14 @@ module Pod
             pods_to_fetch += update[:pods]
           end
           pods_to_fetch
+        end
+      end
+
+      def store_existing_checkout_options
+        podfile.dependencies.select { |d| d.external_source || d.head? }.each do |dep|
+          if checkout_options = lockfile && lockfile.checkout_options_for_pod_named(dep.root_name)
+            sandbox.store_checkout_source(dep.root_name, checkout_options)
+          end
         end
       end
 

@@ -302,7 +302,10 @@ module Pod
     def find_cached_set(dependency)
       name = dependency.root_name
       unless cached_sets[name]
-        if dependency.external_source
+        if dependency.head?
+          spec = create_set_from_sources(dependency).specification
+          set = Specification::Set::Head.new(spec)
+        elsif dependency.external_source
           spec = sandbox.specification(name)
           unless spec
             raise StandardError, '[Bug] Unable to find the specification ' \
@@ -312,9 +315,7 @@ module Pod
         else
           set = create_set_from_sources(dependency)
         end
-        if dependency.head?
-          set = Specification::Set::Head.new(set.specification)
-        end
+
         cached_sets[name] = set
         unless set
           raise Molinillo::NoSuchDependencyError.new(dependency) # rubocop:disable Style/RaiseArgs
