@@ -16,6 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix an output formatting issue with various commands like `pod search`
+  and `pod trunk`.
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [#2603](https://github.com/CocoaPods/CocoaPods/issues/2603)
+
 * Show a helpful error message if the old resolver incorrectly activated a
   pre-release version that now leads to a version conflict.  
   [Samuel Giddins](https://github.com/segiddins)
