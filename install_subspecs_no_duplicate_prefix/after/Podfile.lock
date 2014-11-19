@@ -10,6 +10,11 @@ EXTERNAL SOURCES:
   Test:
     :podspec: https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec
 
+CHECKOUT OPTIONS:
+  Test:
+    :commit: 919903db28535c3f387c4bbaa6a3feae4428e993
+    :git: https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git
+
 SPEC CHECKSUMS:
   Test: 015c315085e89cf22c211271c817a23ed1ad09c8
 

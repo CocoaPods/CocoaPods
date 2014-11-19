@@ -1,0 +1,121 @@
+CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Finding Podfile changes
+  - AFNetworking
+  - RKValueTransformers
+  - SEGModules
+
+Fetching external sources
+-> Pre-downloading: `AFNetworking` from `https://github.com/AFNetworking/AFNetworking.git`, commit `ba7b6e541fd18bdf48da6d4845670e3e6b990637`
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/AFNetworking/AFNetworking.git ROOT/tmp/install_using_checkout_options/Pods/AFNetworking
+     Cloning into 'ROOT/tmp/install_using_checkout_options/Pods/AFNetworking'...
+   $ GIT_BIN checkout -b activated-commit ba7b6e541fd18bdf48da6d4845670e3e6b990637
+   Switched to a new branch 'activated-commit'
+-> Pre-downloading: `RKValueTransformers` from `https://github.com/RestKit/RKValueTransformers`, commit `d76a00894b8c3c9331e36d91ab952681426a49df`
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/RestKit/RKValueTransformers ROOT/tmp/install_using_checkout_options/Pods/RKValueTransformers
+     Cloning into 'ROOT/tmp/install_using_checkout_options/Pods/RKValueTransformers'...
+   $ GIT_BIN checkout -b activated-commit d76a00894b8c3c9331e36d91ab952681426a49df
+   Switched to a new branch 'activated-commit'
+Starting resolution (<#DATE#>)
+Creating possibility state (1 remaining)
+  Attempting to activate AFNetworking (2.4.1)
+  Activated AFNetworking at AFNetworking (2.4.1)
+  Requiring nested dependencies (AFNetworking/Serialization (= 2.4.1), AFNetworking/Security (= 2.4.1), AFNetworking/Reachability (= 2.4.1), AFNetworking/NSURLConnection (= 2.4.1), AFNetworking/NSURLSession (= 2.4.1), AFNetworking/UIKit (= 2.4.1))
+  Creating possibility state (1 remaining)
+    Attempting to activate SEGModules (0.1.0)
+    Activated SEGModules at SEGModules (0.1.0)
+    Requiring nested dependencies ()
+    Creating possibility state (1 remaining)
+      Attempting to activate RKValueTransformers (1.1.0)
+      Activated RKValueTransformers at RKValueTransformers (1.1.0)
+      Requiring nested dependencies ()
+      Creating possibility state (1 remaining)
+        Attempting to activate AFNetworking/Serialization (2.4.1)
+        Activated AFNetworking/Serialization at AFNetworking/Serialization (2.4.1)
+        Requiring nested dependencies ()
+        Creating possibility state (1 remaining)
+          Attempting to activate AFNetworking/Security (2.4.1)
+          Activated AFNetworking/Security at AFNetworking/Security (2.4.1)
+          Requiring nested dependencies ()
+          Creating possibility state (1 remaining)
+            Attempting to activate AFNetworking/Reachability (2.4.1)
+            Activated AFNetworking/Reachability at AFNetworking/Reachability (2.4.1)
+            Requiring nested dependencies ()
+            Creating possibility state (1 remaining)
+              Attempting to activate AFNetworking/NSURLConnection (2.4.1)
+              Activated AFNetworking/NSURLConnection at AFNetworking/NSURLConnection (2.4.1)
+              Requiring nested dependencies (AFNetworking/Serialization (= 2.4.1), AFNetworking/Reachability (= 2.4.1), AFNetworking/Security (= 2.4.1))
+              Creating possibility state (1 remaining)
+                Attempting to activate AFNetworking/Security (2.4.1)
+                Creating possibility state (1 remaining)
+                  Attempting to activate AFNetworking/Reachability (2.4.1)
+                  Creating possibility state (1 remaining)
+                    Attempting to activate AFNetworking/Serialization (2.4.1)
+                    Creating possibility state (1 remaining)
+                      Attempting to activate AFNetworking/UIKit (2.4.1)
+                      Activated AFNetworking/UIKit at AFNetworking/UIKit (2.4.1)
+                      Requiring nested dependencies (AFNetworking/NSURLConnection (= 2.4.1), AFNetworking/NSURLSession (= 2.4.1))
+                      Creating possibility state (1 remaining)
+                        Attempting to activate AFNetworking/NSURLConnection (2.4.1)
+                        Creating possibility state (1 remaining)
+                          Attempting to activate AFNetworking/NSURLSession (2.4.1)
+                          Activated AFNetworking/NSURLSession at AFNetworking/NSURLSession (2.4.1)
+                          Requiring nested dependencies (AFNetworking/Serialization (= 2.4.1), AFNetworking/Reachability (= 2.4.1), AFNetworking/Security (= 2.4.1))
+                          Creating possibility state (1 remaining)
+                            Attempting to activate AFNetworking/NSURLSession (2.4.1)
+                            Creating possibility state (1 remaining)
+                              Attempting to activate AFNetworking/Serialization (2.4.1)
+                              Creating possibility state (1 remaining)
+                                Attempting to activate AFNetworking/Reachability (2.4.1)
+                                Creating possibility state (1 remaining)
+                                  Attempting to activate AFNetworking/Security (2.4.1)
+Finished resolution (17 steps) (Took <#DURATION#> seconds) (<#DATE#>)
+Unactivated: 
+Activated: AFNetworking, SEGModules, RKValueTransformers, AFNetworking/Serialization, AFNetworking/Security, AFNetworking/Reachability, AFNetworking/NSURLConnection, AFNetworking/NSURLSession, AFNetworking/UIKit
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A AFNetworking
+  M RKValueTransformers
+  - SEGModules
+
+Downloading dependencies
+
+-> Installing AFNetworking (2.4.1)
+
+-> Installing RKValueTransformers 1.1.0 (was 1.1.0)
+
+-> Using SEGModules (0.1.0)
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `Pods-AFNetworking` iOS 6.0
+    - Installing target `Pods-RKValueTransformers` iOS 6.0
+    - Installing target `Pods-SEGModules` iOS 6.0
+    - Installing target `Pods` iOS 6.0
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+Integrating target `Pods` (`SampleApp.xcodeproj` project)

@@ -1,0 +1,419 @@
+
+File References:
+- Podfile
+- Frameworks:
+  - iOS:
+    - CoreGraphics.framework
+    - Foundation.framework
+    - MobileCoreServices.framework
+    - Security.framework
+    - SystemConfiguration.framework
+- Pods:
+  - AFNetworking:
+    - AFNetworking.h
+    - NSURLConnection:
+      - AFHTTPRequestOperation.h
+      - AFHTTPRequestOperation.m
+      - AFHTTPRequestOperationManager.h
+      - AFHTTPRequestOperationManager.m
+      - AFURLConnectionOperation.h
+      - AFURLConnectionOperation.m
+    - NSURLSession:
+      - AFHTTPSessionManager.h
+      - AFHTTPSessionManager.m
+      - AFURLSessionManager.h
+      - AFURLSessionManager.m
+    - Reachability:
+      - AFNetworkReachabilityManager.h
+      - AFNetworkReachabilityManager.m
+    - Security:
+      - AFSecurityPolicy.h
+      - AFSecurityPolicy.m
+    - Serialization:
+      - AFURLRequestSerialization.h
+      - AFURLRequestSerialization.m
+      - AFURLResponseSerialization.h
+      - AFURLResponseSerialization.m
+    - Support Files:
+      - Pods-AFNetworking.xcconfig
+      - Pods-AFNetworking-Private.xcconfig
+      - Pods-AFNetworking-dummy.m
+      - Pods-AFNetworking-prefix.pch
+    - UIKit:
+      - AFNetworkActivityIndicatorManager.h
+      - AFNetworkActivityIndicatorManager.m
+      - UIActivityIndicatorView+AFNetworking.h
+      - UIActivityIndicatorView+AFNetworking.m
+      - UIAlertView+AFNetworking.h
+      - UIAlertView+AFNetworking.m
+      - UIButton+AFNetworking.h
+      - UIButton+AFNetworking.m
+      - UIImageView+AFNetworking.h
+      - UIImageView+AFNetworking.m
+      - UIKit+AFNetworking.h
+      - UIProgressView+AFNetworking.h
+      - UIProgressView+AFNetworking.m
+      - UIRefreshControl+AFNetworking.h
+      - UIRefreshControl+AFNetworking.m
+      - UIWebView+AFNetworking.h
+      - UIWebView+AFNetworking.m
+  - RKValueTransformers:
+    - RKValueTransformers.h
+    - RKValueTransformers.m
+    - Support Files:
+      - Pods-RKValueTransformers.xcconfig
+      - Pods-RKValueTransformers-Private.xcconfig
+      - Pods-RKValueTransformers-dummy.m
+      - Pods-RKValueTransformers-prefix.pch
+  - SEGModules:
+    - SEGModule.h
+    - SEGModule.m
+    - Support Files:
+      - Pods-SEGModules.xcconfig
+      - Pods-SEGModules-Private.xcconfig
+      - Pods-SEGModules-dummy.m
+      - Pods-SEGModules-prefix.pch
+- Products:
+  - libPods.a
+  - libPods-AFNetworking.a
+  - libPods-RKValueTransformers.a
+  - libPods-SEGModules.a
+- Targets Support Files:
+  - Pods:
+    - Pods-acknowledgements.markdown
+    - Pods-acknowledgements.plist
+    - Pods-dummy.m
+    - Pods-environment.h
+    - Pods-resources.sh
+    - Pods.debug.xcconfig
+    - Pods.release.xcconfig
+
+
+
+Targets:
+- Pods:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
+          DSTROOT: "/tmp/xcodeproj.dst"
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - "$(inherited)"
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          OTHER_LDFLAGS: ''
+        Base Configuration: Pods.debug.xcconfig
+    - Release:
+        Build Settings:
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - "-DNS_BLOCK_ASSERTIONS=1"
+          - "$(inherited)"
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
+          DSTROOT: "/tmp/xcodeproj.dst"
+          OTHER_CPLUSPLUSFLAGS:
+          - "-DNS_BLOCK_ASSERTIONS=1"
+          - "$(inherited)"
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          OTHER_LIBTOOLFLAGS: ''
+        Base Configuration: Pods.release.xcconfig
+- Pods-AFNetworking:
+    Build Phases:
+    - SourcesBuildPhase:
+      - AFHTTPRequestOperation.m
+      - AFHTTPRequestOperationManager.m
+      - AFHTTPSessionManager.m
+      - AFNetworkActivityIndicatorManager.m
+      - AFNetworkReachabilityManager.m
+      - AFSecurityPolicy.m
+      - AFURLConnectionOperation.m
+      - AFURLRequestSerialization.m
+      - AFURLResponseSerialization.m
+      - AFURLSessionManager.m
+      - Pods-AFNetworking-dummy.m
+      - UIActivityIndicatorView+AFNetworking.m
+      - UIAlertView+AFNetworking.m
+      - UIButton+AFNetworking.m
+      - UIImageView+AFNetworking.m
+      - UIProgressView+AFNetworking.m
+      - UIRefreshControl+AFNetworking.m
+      - UIWebView+AFNetworking.m
+    - FrameworksBuildPhase:
+      - CoreGraphics.framework
+      - Foundation.framework
+      - MobileCoreServices.framework
+      - Security.framework
+      - SystemConfiguration.framework
+    - HeadersBuildPhase:
+      - AFHTTPRequestOperation.h
+      - AFHTTPRequestOperationManager.h
+      - AFHTTPSessionManager.h
+      - AFNetworkActivityIndicatorManager.h
+      - AFNetworkReachabilityManager.h
+      - AFNetworking.h
+      - AFSecurityPolicy.h
+      - AFURLConnectionOperation.h
+      - AFURLRequestSerialization.h
+      - AFURLResponseSerialization.h
+      - AFURLSessionManager.h
+      - UIActivityIndicatorView+AFNetworking.h
+      - UIAlertView+AFNetworking.h
+      - UIButton+AFNetworking.h
+      - UIImageView+AFNetworking.h
+      - UIKit+AFNetworking.h
+      - UIProgressView+AFNetworking.h
+      - UIRefreshControl+AFNetworking.h
+      - UIWebView+AFNetworking.h
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
+          DSTROOT: "/tmp/xcodeproj.dst"
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - "$(inherited)"
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-AFNetworking/Pods-AFNetworking-prefix.pch
+        Base Configuration: Pods-AFNetworking-Private.xcconfig
+    - Release:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - "-DNS_BLOCK_ASSERTIONS=1"
+          - "$(inherited)"
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
+          DSTROOT: "/tmp/xcodeproj.dst"
+          OTHER_CPLUSPLUSFLAGS:
+          - "-DNS_BLOCK_ASSERTIONS=1"
+          - "$(inherited)"
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-AFNetworking/Pods-AFNetworking-prefix.pch
+        Base Configuration: Pods-AFNetworking-Private.xcconfig
+- Pods-RKValueTransformers:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-RKValueTransformers-dummy.m
+      - RKValueTransformers.m:
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
+      - RKValueTransformers.h
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
+          DSTROOT: "/tmp/xcodeproj.dst"
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - "$(inherited)"
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-RKValueTransformers/Pods-RKValueTransformers-prefix.pch
+        Base Configuration: Pods-RKValueTransformers-Private.xcconfig
+    - Release:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - "-DNS_BLOCK_ASSERTIONS=1"
+          - "$(inherited)"
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
+          DSTROOT: "/tmp/xcodeproj.dst"
+          OTHER_CPLUSPLUSFLAGS:
+          - "-DNS_BLOCK_ASSERTIONS=1"
+          - "$(inherited)"
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-RKValueTransformers/Pods-RKValueTransformers-prefix.pch
+        Base Configuration: Pods-RKValueTransformers-Private.xcconfig
+- Pods-SEGModules:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-SEGModules-dummy.m
+      - SEGModule.m:
+          COMPILER_FLAGS: "-fno-objc-arc"
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
+      - SEGModule.h
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
+          DSTROOT: "/tmp/xcodeproj.dst"
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - "$(inherited)"
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'NO'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SEGModules/Pods-SEGModules-prefix.pch
+        Base Configuration: Pods-SEGModules-Private.xcconfig
+    - Release:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PUBLIC_HEADERS_FOLDER_PATH: "$(TARGET_NAME)"
+          SDKROOT: iphoneos
+          VALIDATE_PRODUCT: 'YES'
+          OTHER_CFLAGS:
+          - "-DNS_BLOCK_ASSERTIONS=1"
+          - "$(inherited)"
+          SKIP_INSTALL: 'YES'
+          INSTALL_PATH: "$(BUILT_PRODUCTS_DIR)"
+          DSTROOT: "/tmp/xcodeproj.dst"
+          OTHER_CPLUSPLUSFLAGS:
+          - "-DNS_BLOCK_ASSERTIONS=1"
+          - "$(inherited)"
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          COPY_PHASE_STRIP: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SEGModules/Pods-SEGModules-prefix.pch
+        Base Configuration: Pods-SEGModules-Private.xcconfig
+
+
+
+Build Configurations:
+- Debug:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - "$(inherited)"
+      ONLY_ACTIVE_ARCH: 'YES'
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+- Release:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      VALIDATE_PRODUCT: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - RELEASE=1
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      COPY_PHASE_STRIP: 'NO'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      ENABLE_NS_ASSERTIONS: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'

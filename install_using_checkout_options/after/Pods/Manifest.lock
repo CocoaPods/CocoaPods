@@ -1,0 +1,55 @@
+PODS:
+  - AFNetworking (2.4.1):
+    - AFNetworking/NSURLConnection (= 2.4.1)
+    - AFNetworking/NSURLSession (= 2.4.1)
+    - AFNetworking/Reachability (= 2.4.1)
+    - AFNetworking/Security (= 2.4.1)
+    - AFNetworking/Serialization (= 2.4.1)
+    - AFNetworking/UIKit (= 2.4.1)
+  - AFNetworking/NSURLConnection (2.4.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.4.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.4.1)
+  - AFNetworking/Security (2.4.1)
+  - AFNetworking/Serialization (2.4.1)
+  - AFNetworking/UIKit (2.4.1):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - RKValueTransformers (1.1.0)
+  - SEGModules (0.1.0)
+
+DEPENDENCIES:
+  - AFNetworking (from `https://github.com/AFNetworking/AFNetworking.git`)
+  - RKValueTransformers (from `https://github.com/RestKit/RKValueTransformers`)
+  - SEGModules (from `https://github.com/segiddins/SEGModules.git`)
+
+EXTERNAL SOURCES:
+  AFNetworking:
+    :git: https://github.com/AFNetworking/AFNetworking.git
+  RKValueTransformers:
+    :git: https://github.com/RestKit/RKValueTransformers
+  SEGModules:
+    :git: https://github.com/segiddins/SEGModules.git
+
+CHECKOUT OPTIONS:
+  AFNetworking:
+    :commit: ba7b6e541fd18bdf48da6d4845670e3e6b990637
+    :git: https://github.com/AFNetworking/AFNetworking.git
+  RKValueTransformers:
+    :commit: d76a00894b8c3c9331e36d91ab952681426a49df
+    :git: https://github.com/RestKit/RKValueTransformers
+  SEGModules:
+    :commit: 7d808a9b0a0f8db9ccbf70ced314b45e1b4ed926
+    :git: https://github.com/segiddins/SEGModules.git
+
+SPEC CHECKSUMS:
+  AFNetworking: 72af5ca61de0fac5773557f14decb1d635700a87
+  RKValueTransformers: 6342fc9a832ee624e231c03929ad519a8d47a484
+  SEGModules: 9046dab5b97eba8011c5464f91e44d95e935829a
+
+COCOAPODS: 0.35.0.rc2

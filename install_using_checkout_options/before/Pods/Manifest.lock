@@ -1,0 +1,27 @@
+PODS:
+  - RKValueTransformers (1.1.0)
+  - SEGModules (0.1.0)
+
+DEPENDENCIES:
+  - RKValueTransformers (from `https://github.com/RestKit/RKValueTransformers`)
+  - SEGModules (from `https://github.com/segiddins/SEGModules.git`)
+
+EXTERNAL SOURCES:
+  RKValueTransformers:
+    :git: https://github.com/RestKit/RKValueTransformers
+  SEGModules:
+    :git: https://github.com/segiddins/SEGModules.git
+
+CHECKOUT OPTIONS:
+  RKValueTransformers:
+    :commit: 82a9904d1686c7c907d099b8917d69fc0e74e260
+    :git: https://github.com/RestKit/RKValueTransformers
+  SEGModules:
+    :commit: 7d808a9b0a0f8db9ccbf70ced314b45e1b4ed926
+    :git: https://github.com/segiddins/SEGModules.git
+
+SPEC CHECKSUMS:
+  RKValueTransformers: 6342fc9a832ee624e231c03929ad519a8d47a484
+  SEGModules: 9046dab5b97eba8011c5464f91e44d95e935829a
+
+COCOAPODS: 0.35.0.rc2
