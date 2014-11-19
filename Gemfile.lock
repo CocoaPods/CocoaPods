@@ -92,7 +92,7 @@ GEM
     clintegracon (0.6.0)
       colored (~> 1.2)
       diffy
-    cocoapods-dependencies (0.3.2)
+    cocoapods-dependencies (0.4.0)
     coderay (1.1.0)
     colored (1.2)
     crack (0.4.2)
