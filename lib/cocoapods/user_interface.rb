@@ -199,7 +199,7 @@ module Pod
               indent = self.indentation_level + 2
               puts_indented t << "\n"
               value.each do |v|
-                t << wrap_string("      - #{v.to_s}\n", indent).tap do |line|
+                t << wrap_string("      - #{v}\n", indent).tap do |line|
                   puts line
                 end << "\n"
               end
