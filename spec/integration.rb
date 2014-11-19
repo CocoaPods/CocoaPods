@@ -176,6 +176,11 @@ describe_cli 'pod' do
       behaves_like cli_spec 'install_podfile_callbacks',
                             'install --no-repo-update'
     end
+
+    describe 'Uses Lockfile checkout options' do
+      behaves_like cli_spec 'install_using_checkout_options',
+                            'install --no-repo-update'
+    end
   end
 
   #--------------------------------------#

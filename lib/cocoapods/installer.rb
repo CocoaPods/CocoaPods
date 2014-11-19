@@ -465,8 +465,9 @@ module Pod
     # @return [void]
     #
     def write_lockfiles
-      # checkout_options = sandbox.checkout_options
-      @lockfile = Lockfile.generate(podfile, analysis_result.specifications)
+      external_source_pods = podfile.dependencies.select(&:external_source).map(&:root_name).uniq
+      checkout_options = sandbox.checkout_sources.select { |root_name, _| external_source_pods.include? root_name }
+      @lockfile = Lockfile.generate(podfile, analysis_result.specifications, checkout_options)
 
       UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
         @lockfile.write_to_disk(config.lockfile_path)

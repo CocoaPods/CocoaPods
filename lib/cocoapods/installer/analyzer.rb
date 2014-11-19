@@ -53,6 +53,7 @@ module Pod
         @result.podfile_state = generate_podfile_state
         @locked_dependencies  = generate_version_locking_dependencies
 
+        store_existing_checkout_options
         fetch_external_sources if allow_fetches
         @result.specs_by_target = resolve_dependencies
         @result.specifications  = generate_specifications
@@ -264,33 +265,81 @@ module Pod
       #
       def fetch_external_sources
         return unless allow_pre_downloads?
-        deps_to_fetch = []
-        deps_to_fetch_if_needed = []
-        deps_with_external_source = podfile.dependencies.select(&:external_source)
 
-        deps_with_different_sources = podfile.dependencies.group_by(&:root_name).select { |_root_name, dependencies| dependencies.map(&:external_source).uniq.count > 1 }
-        deps_with_different_sources.each do |root_name, dependencies|
-          raise Informative, "There are multiple dependencies with different sources for `#{root_name}` in #{UI.path podfile.defined_in_file}:\n\n- #{dependencies.map(&:to_s).join("\n- ")}"
+        verify_no_pods_with_different_sources!
+        unless dependencies_to_fetch.empty?
+          UI.section 'Fetching external sources' do
+            dependencies_to_fetch.sort.each do |dependency|
+              fetch_external_source(dependency, !pods_to_fetch.include?(dependency.name))
+            end
+          end
         end
+      end
 
-        if update_mode == :all
-          deps_to_fetch = deps_with_external_source
+      def verify_no_pods_with_different_sources!
+        deps_with_different_sources = podfile.dependencies.group_by(&:root_name).
+          select { |_root_name, dependencies| dependencies.map(&:external_source).uniq.count > 1 }
+        deps_with_different_sources.each do |root_name, dependencies|
+          raise Informative, "There are multiple dependencies with different " \
+          "sources for `#{root_name}` in #{UI.path podfile.defined_in_file}:" \
+          "\n\n- #{dependencies.map(&:to_s).join("\n- ")}"
+        end
+      end
+
+      def fetch_external_source(dependency, use_lockfile_options)
+        checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name) if lockfile
+        if checkout_options && use_lockfile_options
+          source = ExternalSources.from_params(checkout_options, dependency, podfile.defined_in_file)
         else
+          source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
+        end
+        source.fetch(sandbox)
+      end
+
+      def dependencies_to_fetch
+        @deps_to_fetch ||= begin
+          deps_to_fetch = []
+          deps_to_fetch_if_needed = []
+          deps_with_external_source = podfile.dependencies.select(&:external_source)
+
+          if update_mode == :all
+            deps_to_fetch = deps_with_external_source
+          else
+            deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.name) }
+            deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.name) }
+            deps_to_fetch += deps_to_fetch_if_needed.select do |dep|
+              sandbox.specification(dep.name).nil? ||
+                !dep.external_source[:local].nil? ||
+                !dep.external_source[:path].nil? ||
+                !sandbox.pod_dir(dep.root_name).directory? ||
+                checkout_requires_update?(dep)
+            end
+          end
+          deps_to_fetch.uniq(&:root_name)
+        end
+      end
+
+      def checkout_requires_update?(dependency)
+        return true unless lockfile && sandbox.manifest
+        locked_checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name)
+        sandbox_checkout_options = sandbox.manifest.checkout_options_for_pod_named(dependency.root_name)
+        locked_checkout_options != sandbox_checkout_options
+      end
+
+      def pods_to_fetch
+        @pods_to_fetch ||= begin
           pods_to_fetch = result.podfile_state.added + result.podfile_state.changed
           if update_mode == :selected
             pods_to_fetch += update[:pods]
           end
-          deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.name) }
-          deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.name) }
-          deps_to_fetch += deps_to_fetch_if_needed.select { |dep| sandbox.specification(dep.name).nil? || !dep.external_source[:local].nil? || !dep.external_source[:path].nil? || !sandbox.pod_dir(dep.name).directory? }
+          pods_to_fetch
         end
+      end
 
-        unless deps_to_fetch.empty?
-          UI.section 'Fetching external sources' do
-            deps_to_fetch.uniq(&:root_name).sort.each do |dependency|
-              source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
-              source.fetch(sandbox)
-            end
+      def store_existing_checkout_options
+        podfile.dependencies.select(&:external_source).each do |dep|
+          if checkout_options = lockfile && lockfile.checkout_options_for_pod_named(dep.root_name)
+            sandbox.store_checkout_source(dep.root_name, checkout_options)
           end
         end
       end
