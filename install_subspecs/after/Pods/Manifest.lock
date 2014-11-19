@@ -10,6 +10,11 @@ EXTERNAL SOURCES:
   PodTest:
     :hg: PodTest-hg-source
 
+CHECKOUT OPTIONS:
+  PodTest:
+    :hg: PodTest-hg-source
+    :revision: d0792d642ae4fad5d73f56b08652611148539bbc
+
 SPEC CHECKSUMS:
   PodTest: 5049980a26c8960af5a42d1c7f086483c5b29d8f
 
