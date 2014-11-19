@@ -344,7 +344,6 @@ module Pod
         end
       end
 
-
       # Converts the Podfile in a list of specifications grouped by target.
       #
       # @note   As some dependencies might have external sources the resolver
