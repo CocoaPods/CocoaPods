@@ -196,8 +196,13 @@ module Pod
           ''.tap do |t|
             t << "    - #{label}:".ljust(justification)
             if value.is_a?(Array)
-              separator = "\n  - "
-              puts_indented t << separator << value.join(separator)
+              indent = self.indentation_level + 2
+              puts_indented t << "\n"
+              value.each do |v|
+                t << wrap_string("      - #{v.to_s}\n", indent).tap do |line|
+                  puts line
+                end << "\n"
+              end
             else
               puts_indented t << value.to_s << "\n"
             end
