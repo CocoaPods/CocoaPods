@@ -1,10 +1,10 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
 Starting resolution (<#DATE#>)
-Creating possibility state (1 remaining)
+Creating possibility state for JSONKit (= 1.5pre) (1 remaining)
   Attempting to activate JSONKit (1.5pre)
   Activated JSONKit at JSONKit (1.5pre)
   Requiring nested dependencies ()
-  Creating possibility state (1 remaining)
+  Creating possibility state for Reachability (= 3.1.0) (1 remaining)
     Attempting to activate Reachability (3.1.0)
     Activated Reachability at Reachability (3.1.0)
     Requiring nested dependencies ()

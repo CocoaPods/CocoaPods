@@ -13,15 +13,15 @@ Fetching external sources
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
 Starting resolution (<#DATE#>)
-Creating possibility state (1 remaining)
+Creating possibility state for PodTest (from `PodTest-hg-source`) (1 remaining)
   Attempting to activate PodTest (1.0)
   Activated PodTest at PodTest (1.0)
   Requiring nested dependencies (PodTest/subspec_1 (= 1.0), PodTest/subspec_2 (= 1.0))
-  Creating possibility state (1 remaining)
+  Creating possibility state for PodTest/subspec_1 (= 1.0) (1 remaining)
     Attempting to activate PodTest/subspec_1 (1.0)
     Activated PodTest/subspec_1 at PodTest/subspec_1 (1.0)
     Requiring nested dependencies ()
-    Creating possibility state (1 remaining)
+    Creating possibility state for PodTest/subspec_2 (= 1.0) (1 remaining)
       Attempting to activate PodTest/subspec_2 (1.0)
       Activated PodTest/subspec_2 at PodTest/subspec_2 (1.0)
       Requiring nested dependencies ()

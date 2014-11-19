@@ -1,10 +1,10 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
 Starting resolution (<#DATE#>)
-Creating possibility state (1 remaining)
+Creating possibility state for Test (from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`) (1 remaining)
   Attempting to activate Test (0.0.1)
   Activated Test at Test (0.0.1)
   Requiring nested dependencies (Test/Foo (= 0.0.1))
-  Creating possibility state (1 remaining)
+  Creating possibility state for Test/Foo (= 0.0.1) (1 remaining)
     Attempting to activate Test/Foo (0.0.1)
     Activated Test/Foo at Test/Foo (0.0.1)
     Requiring nested dependencies ()
