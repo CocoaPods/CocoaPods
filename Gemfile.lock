@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: fc4833f84190943ced043f78e945207791b0c53a
-  branch: lockfile-checkout-options
+  revision: 320bb0cf36d38f038a6478ad87618dd8bf148ffc
+  branch: master
   specs:
     cocoapods-core (0.35.0.rc2)
       activesupport (>= 3.2.15)
@@ -69,7 +69,7 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (4.1.7)
+    activesupport (4.1.8)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
