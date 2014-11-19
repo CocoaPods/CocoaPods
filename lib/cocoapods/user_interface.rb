@@ -193,20 +193,20 @@ module Pod
       #
       def labeled(label, value, justification = 16)
         if value
-          ''.tap do |t|
-            t << "    - #{label}:".ljust(justification)
+          title = "- #{label}:".ljust(justification)
+          output = begin
             if value.is_a?(Array)
-              indent = self.indentation_level + 2
-              puts_indented t << "\n"
-              value.each do |v|
-                t << wrap_string("      - #{v}\n", indent).tap do |line|
-                  puts line
-                end << "\n"
+              lines = [wrap_string(title, self.indentation_level)]
+              lines << value.map do |v|
+                wrap_string("- #{v}", self.indentation_level + 2)
               end
+              lines.join("\n")
             else
-              puts_indented t << value.to_s << "\n"
-            end
+              wrap_string(title + "#{value}", self.indentation_level)
+            end + "\n"
           end
+          puts output
+          output
         end
       end
 
