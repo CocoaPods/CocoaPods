@@ -14,6 +14,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#532](https://github.com/CocoaPods/CocoaPods/issues/532)
 
+* Store specific checkout options of externally-sourced dependencies in the
+  `Lockfile` to guarentee that all users are using the same revision
+  (e.g. git commit).  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#1058](https://github.com/CocoaPods/CocoaPods/issues/1058)
+
 ##### Bug Fixes
 
 * Fix an output formatting issue with various commands like `pod search`
