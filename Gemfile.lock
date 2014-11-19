@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/CocoaPods/CLAide.git
-  revision: 00986e2b185c6eca9d30a7d50073f2a819a0f61a
-  branch: master
-  specs:
-    claide (0.7.0)
-
-GIT
   remote: https://github.com/CocoaPods/Core.git
   revision: 60a486e8141323390dc5ff7f6676cf893a251a48
   branch: master
@@ -14,13 +7,6 @@ GIT
       activesupport (>= 3.2.15)
       fuzzy_match (~> 2.0.4)
       nap (~> 0.8.0)
-
-GIT
-  remote: https://github.com/CocoaPods/Molinillo.git
-  revision: b9d65641b5481104571384fe5f060119af682bee
-  branch: master
-  specs:
-    molinillo (0.1.1)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
@@ -40,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 60cb1eae2f43b362cbefa9cb5c9ea40361e9b8b8
+  revision: eda56691945ca10e2ce52ef72a551acc681aabdc
   branch: master
   specs:
     cocoapods-plugins (0.3.2)
@@ -48,7 +34,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 7d5845dd63d3174238465a4aa3a760528f791096
+  revision: ecac8d4983095b621aa256d1fb841f01d47d8725
   branch: master
   specs:
     cocoapods-trunk (0.4.0)
@@ -95,6 +81,7 @@ GEM
       parser (>= 2.2.0.pre.3, < 3.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
+    claide (0.7.0)
     clintegracon (0.6.0)
       colored (~> 1.2)
       diffy
@@ -123,6 +110,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
+    molinillo (0.1.1)
     nap (0.8.0)
     netrc (0.7.8)
     notify (0.5.2)
@@ -168,7 +156,6 @@ DEPENDENCIES
   awesome_print
   bacon
   bundler (~> 1.3)
-  claide!
   clintegracon
   cocoapods!
   cocoapods-core!
@@ -182,7 +169,6 @@ DEPENDENCIES
   kicker
   mocha
   mocha-on-bacon
-  molinillo!
   prettybacon
   pry
   rake
