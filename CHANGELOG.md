@@ -14,9 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#532](https://github.com/CocoaPods/CocoaPods/issues/532)
 
-* Store specific checkout options of externally-sourced dependencies in the
-  `Lockfile` to guarentee that all users are using the same revision
-  (e.g. git commit).  
+* From now on, pods installed directly from their repositories will be recorded
+  in the `Podfile.lock` file and will be guaranteed to be checked-out using the
+  same revision on subsequent installations. Examples of this are when using
+  the `:git`, `:svn`, or `:hg` options in your `Podfile`.  
   [Samuel Giddins](https://github.com/segiddins)
   [#1058](https://github.com/CocoaPods/CocoaPods/issues/1058)
 
