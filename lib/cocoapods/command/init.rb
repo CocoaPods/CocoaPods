@@ -58,8 +58,6 @@ module Pod
         podfile << <<-PLATFORM.strip_heredoc
           # Uncomment this line to define a global platform for your project
           # platform :ios, '6.0'
-
-          source '#{Command::Setup.read_only_url}'
         PLATFORM
 
         project.targets.each do |target|
