@@ -9,6 +9,13 @@ GIT
       nap (~> 0.8.0)
 
 GIT
+  remote: https://github.com/CocoaPods/Molinillo.git
+  revision: 70a2b2a7601e1f41b433b1fff56ca120eaea0b3c
+  branch: master
+  specs:
+    molinillo (0.1.1)
+
+GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
   revision: 8bf91f215cb996f36c4028c78b033d1ea6b6f1fc
   branch: master
@@ -110,7 +117,6 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    molinillo (0.1.1)
     nap (0.8.0)
     netrc (0.7.8)
     notify (0.5.2)
@@ -169,6 +175,7 @@ DEPENDENCIES
   kicker
   mocha
   mocha-on-bacon
+  molinillo!
   prettybacon
   pry
   rake
