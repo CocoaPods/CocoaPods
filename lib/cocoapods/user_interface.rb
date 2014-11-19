@@ -191,17 +191,22 @@ module Pod
 
       # Prints a message with a label.
       #
-      def labeled(label, value, justification = 16)
+      def labeled(label, value, justification = 12)
         if value
-          ''.tap do |t|
-            t << "    - #{label}:".ljust(justification)
+          title = "- #{label}:".ljust(justification)
+          output = begin
             if value.is_a?(Array)
-              separator = "\n  - "
-              puts_indented t << separator << value.join(separator)
+              lines = [wrap_string(title, self.indentation_level)]
+              value.each do |v|
+                lines << wrap_string("- #{v}", self.indentation_level + 2)
+              end
+              lines.join("\n")
             else
-              puts_indented t << value.to_s << "\n"
-            end
+              wrap_string(title + "#{value}", self.indentation_level)
+            end + "\n"
           end
+          puts output
+          output
         end
       end
 
