@@ -197,8 +197,8 @@ module Pod
           output = begin
             if value.is_a?(Array)
               lines = [wrap_string(title, self.indentation_level)]
-              lines << value.map do |v|
-                wrap_string("- #{v}", self.indentation_level + 2)
+              value.each do |v|
+                lines << wrap_string("- #{v}", self.indentation_level + 2)
               end
               lines.join("\n")
             else
