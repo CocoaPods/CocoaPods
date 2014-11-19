@@ -191,7 +191,7 @@ module Pod
 
       # Prints a message with a label.
       #
-      def labeled(label, value, justification = 16)
+      def labeled(label, value, justification = 12)
         if value
           title = "- #{label}:".ljust(justification)
           output = begin
