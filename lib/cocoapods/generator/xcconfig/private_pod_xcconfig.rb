@@ -57,7 +57,7 @@ module Pod
             # 'USE_HEADERMAP' => 'NO'
           }
 
-          if target.requires_framework?
+          if target.requires_frameworks?
             dependencies = target.module_dependencies.reject { |dep| dep == target.product_module_name }
             build_settings = {
               'PODS_FRAMEWORK_BUILD_PATH' => target.configuration_build_dir,

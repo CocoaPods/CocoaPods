@@ -33,7 +33,7 @@ module Pod
               update_to_cocoapods_0_34,
               unless native_targets_to_integrate.empty?
                 add_pods_library
-                add_embed_frameworks_script_phase if target.requires_framework?
+                add_embed_frameworks_script_phase if target.requires_frameworks?
                 add_copy_resources_script_phase
                 add_check_manifest_lock_script_phase
                 true
@@ -105,7 +105,7 @@ module Pod
             build_phase = native_target.frameworks_build_phase
 
             # Find and delete possible reference for the other product type
-            old_product_name = target.requires_framework? ? target.static_library_name : target.framework_name
+            old_product_name = target.requires_frameworks? ? target.static_library_name : target.framework_name
             old_product_ref = frameworks.files.find { |f| f.path == old_product_name }
             if old_product_ref.present?
               UI.message("Remove old Pod product reference #{old_product_name} from project.")
@@ -120,7 +120,7 @@ module Pod
             unless build_file = build_phase.build_file(new_product_ref)
               build_file = build_phase.add_file_reference(new_product_ref)
             end
-            if target.requires_framework?
+            if target.requires_frameworks?
               build_file.settings ||= {}
               build_file.settings['ATTRIBUTES'] = ['Weak']
             end
