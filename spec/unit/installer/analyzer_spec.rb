@@ -274,7 +274,7 @@ module Pod
             e.message.should.match /Unable to find/
           end
 
-          it 'if not specified in the target definition if looks if there is only one project' do
+          it 'looks if there is only one project if not specified in the target definition' do
             target_definition = Podfile::TargetDefinition.new(:default, nil)
             config.installation_root = config.installation_root + 'SampleProject'
 
@@ -282,11 +282,21 @@ module Pod
             path.to_s.should.include 'SampleProject/SampleProject.xcodeproj'
           end
 
-          it 'if not specified in the target definition if looks if there is only one project' do
+          it 'raise if there is no project and none specified in the target definition' do
             target_definition = Podfile::TargetDefinition.new(:default, nil)
 
             e = lambda { @analyzer.send(:compute_user_project_path, target_definition) }.should.raise Informative
             e.message.should.match /Could not.*select.*project/
+          end
+
+          it 'finds project even when path contains special chars' do
+            SpecHelper.create_sample_app_copy_from_fixture('Project[With]Special{chars}in*path?')
+
+            target_definition = Podfile::TargetDefinition.new(:default, nil)
+            config.installation_root = config.installation_root + 'Project[With]Special{chars}in*path?'
+
+            path = @analyzer.send(:compute_user_project_path, target_definition)
+            path.to_s.should.include 'Project[With]Special{chars}in*path?/Project[With]Special{chars}in*path?.xcodeproj'
           end
 
           it 'does not take aggregate targets into consideration' do
