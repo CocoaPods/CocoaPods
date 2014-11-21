@@ -21,6 +21,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2639](https://github.com/CocoaPods/CocoaPods/issues/2639)
 
+##### Bug Fixes
+
+* Fix issues when trying to discover the xcodeproj automatically
+  but the path contained special chars (`[`,`]`,`{`,`}`,`*`,`?`)
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [#2852](https://github.com/CocoaPods/CocoaPods/issues/2852)
 
 ## 0.35.0
 
