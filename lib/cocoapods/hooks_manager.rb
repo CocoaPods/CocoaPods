@@ -61,19 +61,26 @@ module Pod
 
       # Registers a block for the hook with the given name.
       #
-      # @param  [Symbol] name
-      #         The name of the notification.
-      #
       # @param  [String] plugin_name
       #         The name of the plugin the hook comes from.
+      #
+      # @param  [Symbol] hook_name
+      #         The name of the notification.
       #
       # @param  [Proc] block
       #         The block.
       #
-      def register(name, plugin_name = nil, &block)
+      def register(plugin_name, hook_name = nil, &block)
+        # TODO: Remove the following. It's used to provide backwards
+        # compatibility with nameless plugins from CP 0.34.
+        if hook_name.nil?
+          hook_name = plugin_name
+          plugin_name = nil
+        end
+
         @registrations ||= {}
-        @registrations[name] ||= []
-        @registrations[name] << Hook.new(name, plugin_name, block)
+        @registrations[hook_name] ||= []
+        @registrations[hook_name] << Hook.new(hook_name, plugin_name, block)
       end
 
       # Runs all the registered blocks for the hook with the given name.
