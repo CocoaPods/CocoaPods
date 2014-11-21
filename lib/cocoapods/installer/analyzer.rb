@@ -204,7 +204,7 @@ module Pod
           user_project = Xcodeproj::Project.open(project_path)
           native_targets = compute_user_project_targets(target_definition, user_project)
 
-          target.host_requires_framework |= compute_user_project_targets_require_framework(target_definition, native_targets)
+          target.host_requires_frameworks |= compute_user_project_targets_require_framework(target_definition, native_targets)
           target.user_project_path = project_path
           target.client_root = project_path.dirname
           target.user_target_uuids = native_targets.map(&:uuid)
@@ -258,7 +258,7 @@ module Pod
       def generate_pod_target(target, pod_specs)
         pod_target = PodTarget.new(pod_specs, target.target_definition, sandbox)
 
-        pod_target.host_requires_framework |= target.host_requires_framework
+        pod_target.host_requires_frameworks |= target.host_requires_frameworks
         if config.integrate_targets?
           pod_target.user_build_configurations = target.user_build_configurations
           pod_target.archs = target.archs

@@ -55,7 +55,7 @@ module Pod
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
           }
 
-          if target.requires_framework?
+          if target.requires_frameworks?
             # Framework headers are automatically discoverable by `#import <…>`.
             header_search_paths = pod_targets.map { |target| "$PODS_FRAMEWORK_BUILD_PATH/#{target.product_name}/Headers" }
             build_settings = {
@@ -86,7 +86,7 @@ module Pod
 
             # Add pod target to list of frameworks / libraries that are
             # linked with the user’s project.
-            if pod_target.requires_framework?
+            if pod_target.requires_frameworks?
               @xcconfig.merge!('OTHER_LDFLAGS' => %(-framework "#{pod_target.product_basename}"))
             else
               @xcconfig.merge!('OTHER_LDFLAGS' => %(-l "#{pod_target.product_basename}"))

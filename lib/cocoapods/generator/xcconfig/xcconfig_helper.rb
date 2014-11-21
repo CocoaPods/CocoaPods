@@ -142,7 +142,7 @@ module Pod
         #         The xcconfig to edit.
         #
         def self.add_target_specific_settings(target, xcconfig)
-          if target.requires_framework?
+          if target.requires_frameworks?
             add_code_signing_settings(target, xcconfig)
           end
           add_language_specific_settings(target, xcconfig)

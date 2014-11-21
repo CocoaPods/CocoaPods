@@ -60,7 +60,7 @@ module Pod
           settings['PODS_ROOT'] = '$(SRCROOT)'
         end
 
-        if target.requires_framework?
+        if target.requires_frameworks?
           settings['PRODUCT_NAME'] = target.product_module_name
         else
           settings.merge!('OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '')
