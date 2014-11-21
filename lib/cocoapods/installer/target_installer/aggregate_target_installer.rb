@@ -14,7 +14,7 @@ module Pod
           create_support_files_dir
           create_support_files_group
           create_xcconfig_file
-          if target.requires_framework?
+          if target.requires_frameworks?
             create_info_plist_file
             create_module_map
             create_umbrella_header

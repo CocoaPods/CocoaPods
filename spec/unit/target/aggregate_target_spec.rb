@@ -151,7 +151,7 @@ module Pod
 
         describe 'Host requires frameworks' do
           before do
-            @target.host_requires_framework = true
+            @target.host_requires_frameworks = true
           end
 
           it 'returns the product name' do
@@ -171,7 +171,7 @@ module Pod
           end
 
           it 'returns that it requires being built as framework' do
-            @target.requires_framework?.should == true
+            @target.requires_frameworks?.should == true
           end
         end
 
@@ -193,7 +193,7 @@ module Pod
           end
 
           it 'returns that it does not require being built as framework' do
-            @target.requires_framework?.should == false
+            @target.requires_frameworks?.should == false
           end
         end
       end
@@ -230,7 +230,7 @@ module Pod
         end
 
         it 'returns that it requires being built as framework' do
-          @target.requires_framework?.should == true
+          @target.requires_frameworks?.should == true
         end
       end
     end
