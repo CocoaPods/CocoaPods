@@ -99,12 +99,12 @@ module Pod
           if hooks
             UI.message "- Running #{name.to_s.gsub('_', ' ')} hooks" do
               hooks.each do |hook|
-                next if whitelisted_plugins && !whitelisted_plugins.key?(hook.name)
+                next if whitelisted_plugins && !whitelisted_plugins.key?(hook.plugin_name)
                 UI.message "- #{hook.plugin_name || 'unknown plugin'} from " \
                            "`#{hook.block.source_location.first}`" do
                   block = hook.block
                   if block.arity > 1
-                    block.call(context, whitelisted_plugins[hook.name])
+                    block.call(context, whitelisted_plugins[hook.plugin_name])
                   else
                     block.call(context)
                   end
