@@ -9,7 +9,7 @@ module Pod
 
     describe 'register' do
       it 'allows to register a block for a notification with a given name' do
-        @hooks_manager.register(:post_install, 'plugin') {}
+        @hooks_manager.register('plugin', :post_install) {}
         @hooks_manager.registrations[:post_install].count.should == 1
         hook = @hooks_manager.registrations[:post_install].first
         hook.class.should == HooksManager::Hook
@@ -59,7 +59,7 @@ module Pod
       end
 
       it 'only runs hooks from the allowed plugins' do
-        @hooks_manager.register(:post_install, 'plugin') do |_options|
+        @hooks_manager.register('plugin', :post_install) do |_options|
           raise 'Should not be called'
         end
 
@@ -69,7 +69,7 @@ module Pod
       end
 
       it 'passed along user-specified options when the hook block has arity 2' do
-        @hooks_manager.register(:post_install, 'plugin') do |_options, user_options|
+        @hooks_manager.register('plugin', :post_install) do |_options, user_options|
           user_options['key'].should == 'value'
         end
 
@@ -99,7 +99,7 @@ module Pod
 
       it 'prints a message in verbose mode for each hook run' do
         config.verbose = true
-        @hooks_manager.register(:post_install, 'plugin') {}
+        @hooks_manager.register('plugin', :post_install) {}
         @hooks_manager.run(:post_install, Object.new)
         UI.output.should.match %r{- plugin from `spec/unit/hooks_manager_spec.rb`}
       end
