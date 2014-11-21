@@ -18,8 +18,8 @@ module Pod
     # @return [Boolean] Whether the target needs to be implemented as a framework.
     #         Computed by analyzer.
     #
-    attr_accessor :host_requires_framework
-    alias_method :host_requires_framework?, :host_requires_framework
+    attr_accessor :host_requires_frameworks
+    alias_method :host_requires_frameworks?, :host_requires_frameworks
 
     # @return [String] the name of the library.
     #
@@ -30,7 +30,7 @@ module Pod
     # @return [String] the name of the product.
     #
     def product_name
-      if requires_framework?
+      if requires_frameworks?
         framework_name
       else
         static_library_name
@@ -38,11 +38,11 @@ module Pod
     end
 
     # @return [String] the name of the product excluding the file extension or
-    #         a product type specific prefix, depends on #requires_framework?
+    #         a product type specific prefix, depends on #requires_frameworks?
     #         and #product_module_name or #label.
     #
     def product_basename
-      if requires_framework?
+      if requires_frameworks?
         product_module_name
       else
         label
@@ -51,7 +51,7 @@ module Pod
 
     # @return [String] the name of the framework, depends on #label.
     #
-    # @note This may not depend on #requires_framework? indirectly as it is
+    # @note This may not depend on #requires_frameworks? indirectly as it is
     #       used for migration.
     #
     def framework_name
@@ -60,7 +60,7 @@ module Pod
 
     # @return [String] the name of the library, depends on #label.
     #
-    # @note This may not depend on #requires_framework? indirectly as it is
+    # @note This may not depend on #requires_frameworks? indirectly as it is
     #       used for migration.
     #
     def static_library_name
@@ -68,10 +68,10 @@ module Pod
     end
 
     # @return [Symbol] either :framework or :static_library, depends on
-    #         #requires_framework?.
+    #         #requires_frameworks?.
     #
     def product_type
-      requires_framework? ? :framework : :static_library
+      requires_frameworks? ? :framework : :static_library
     end
 
     # @return [String] the XCConfig namespaced prefix.
@@ -96,8 +96,8 @@ module Pod
     #       dependents, which can only be checked after the specs were been
     #       fetched.
     #
-    def requires_framework?
-      host_requires_framework? || uses_swift?
+    def requires_frameworks?
+      host_requires_frameworks? || uses_swift?
     end
 
     #-------------------------------------------------------------------------#
