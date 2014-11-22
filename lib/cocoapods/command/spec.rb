@@ -432,7 +432,7 @@ module Pod
 
       #--------------------------------------#
 
-      # Templates and github information retrieval for spec create
+      # Templates and GitHub information retrieval for spec create
       #
       # @todo It would be nice to have a template class that accepts options
       #       and uses the default ones if not provided.

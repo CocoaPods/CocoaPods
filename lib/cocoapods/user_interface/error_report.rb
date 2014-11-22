@@ -51,7 +51,7 @@ Repositories : #{repo_information.join("\n               ")}
 
 #{'[!] Oh no, an error occurred.'.red}
 #{error_from_podfile(exception)}
-#{'Search for existing github issues similar to yours:'.yellow}
+#{'Search for existing GitHub issues similar to yours:'.yellow}
 #{issues_url(exception)}
 
 #{'If none exists, create a ticket, with the template displayed above, on:'.yellow}
