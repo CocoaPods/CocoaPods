@@ -8,7 +8,7 @@
   If your question is “How do I […]”, then please ask on [StackOverflow](http://stackoverflow.com/search?q=CocoaPods) or our [mailing-list](http://groups.google.com/group/cocoapods).
 * **Keep tickets short but sweet.** Make sure you include all the context needed to solve the issue. Don't overdo it. Great tickets allow us to focus on solving problems instead of discussing them.
 * **Take care of your ticket.** When you spend time to report a ticket with care we'll enjoy fixing it for you.
-* **Do not litter.** Don’t add +1’s _unless_ specifcally asked for and don’t discuss offtopic issues.
+* **Do not litter.** Don’t add +1’s _unless_ specifically asked for and don’t discuss offtopic issues.
 
 ## Bug reports
 
@@ -24,7 +24,7 @@ First check if you are using the latest CocoaPods version before filing a ticket
 You can install the latest version with `$ [sudo] gem install cocoapods`.
 
 Then check if the same problem applies with the same Podfile but in a **completely new**
-and empty application Xcode project, thus excluding wether or not there is an issue with
+and empty application Xcode project, thus excluding whether or not there is an issue with
 conflicting settings.
 
 Please include steps to reproduce and _all_ other relevant information, including the
@@ -64,14 +64,14 @@ Should you require a feature isn't suited for mainstream users, consider suggest
 We **love** pull requests and if a contribution is significant we tend to offer
 push access. We suggest you take a look at our [Contributing guide](http://guides.cocoapods.org/contributing/contribute-to-cocoapods.html) for info on development setup, and some of our best practices.
 
-All contributions _will_ be licenced under the MIT license.
+All contributions _will_ be licensed under the MIT license.
 
 Code/comments should adhere to the following rules:
 
 * Names should be descriptive and concise.
 * Use two spaces and no tabs.
 * All changes require test coverage to ensure it does not break during refactor
-  work. (There are a few exceptions to this, which can be recognized by there
+  work. (There are a few exceptions to this, which can be recognised by there
   not being any coverage for similar code.)
 * All enhancements and bug fixes need to be documented in the CHANGELOG.
 * When writing comments, use properly constructed sentences, including
