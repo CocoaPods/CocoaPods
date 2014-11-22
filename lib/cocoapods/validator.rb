@@ -233,9 +233,9 @@ module Pod
       resp = Pod::HTTP.validate_url(url)
 
       if !resp
-        warning "There was a problem validating the URL #{url}."
+        warning('url', "There was a problem validating the URL #{url}.")
       elsif !resp.success?
-        warning "The URL (#{url}) is not reachable."
+        warning('url', "The URL (#{url}) is not reachable.")
       end
 
       resp
@@ -255,7 +255,7 @@ module Pod
       spec.screenshots.compact.each do |screenshot|
         request = validate_url(screenshot)
         if request && !(request.headers['content-type'] && request.headers['content-type'].first =~ /image\/.*/i)
-          warning "The screenshot #{screenshot} is not a valid image."
+          warning('screenshot', "The screenshot #{screenshot} is not a valid image.")
         end
       end
     end
@@ -340,9 +340,9 @@ module Pod
             end
 
             if message.include?('error: ')
-              error "[xcodebuild] #{message}"
+              error('xcodebuild', message)
             else
-              note "[xcodebuild] #{message}"
+              note('xcodebuild', message)
             end
           end
         end
@@ -359,13 +359,13 @@ module Pod
       [:source_files, :resources, :preserve_paths, :vendored_libraries, :vendored_frameworks].each do |attr_name|
         # file_attr = Specification::DSL.attributes.values.find{|attr| attr.name == attr_name }
         if !file_accessor.spec_consumer.send(attr_name).empty? && file_accessor.send(attr_name).empty?
-          error "The `#{attr_name}` pattern did not match any file."
+          error('file patterns', "The `#{attr_name}` pattern did not match any file.")
         end
       end
 
       if consumer.spec.root?
         unless file_accessor.license || spec.license && (spec.license[:type] == 'Public Domain' || spec.license[:text])
-          warning 'Unable to find a license file'
+          warning('license', 'Unable to find a license file')
         end
       end
     end
@@ -376,22 +376,24 @@ module Pod
 
     # !@group Result Helpers
 
-    def error(message)
-      add_result(:error, message)
+    def error(attribute_name, message)
+      add_result(:error, attribute_name, message)
     end
 
-    def warning(message)
-      add_result(:warning, message)
+    def warning(attribute_name, message)
+      add_result(:warning, attribute_name, message)
     end
 
-    def note(message)
-      add_result(:note, message)
+    def note(attribute_name, message)
+      add_result(:note, attribute_name, message)
     end
 
-    def add_result(type, message)
-      result = results.find { |r| r.type == type && r.message == message }
+    def add_result(type, attribute_name, message)
+      result = results.find do |r|
+        r.type == type && r.attribute_name && r.message == message
+      end
       unless result
-        result = Result.new(type, message)
+        result = Result.new(type, attribute_name, message)
         results << result
       end
       result.platforms << consumer.platform_name if consumer
@@ -401,8 +403,8 @@ module Pod
     # Specialized Result to support subspecs aggregation
     #
     class Result < Specification::Linter::Results::Result
-      def initialize(type, message)
-        super(type, message)
+      def initialize(type, attribute_name, message)
+        super(type, attribute_name, message)
         @subspecs = []
       end
 
