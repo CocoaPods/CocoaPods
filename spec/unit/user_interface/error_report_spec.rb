@@ -67,7 +67,7 @@ Line 2
 
 [!] Oh no, an error occurred.
 
-Search for existing github issues similar to yours:
+Search for existing GitHub issues similar to yours:
 https://github.com/CocoaPods/CocoaPods/search?q=%5B%21%5D+at+-&type=Issues
 
 If none exists, create a ticket, with the template displayed above, on:
