@@ -1,4 +1,5 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
 Starting resolution (<#DATE#>)
 Creating possibility state for JSONKit (= 1.5pre) (1 remaining)
   Attempting to activate JSONKit (1.5pre)
@@ -11,7 +12,6 @@ Creating possibility state for JSONKit (= 1.5pre) (1 remaining)
 Finished resolution (2 steps) (Took <#DURATION#> seconds) (<#DATE#>)
 Unactivated: 
 Activated: Reachability, JSONKit
-  Preparing
 
 Analyzing dependencies
 

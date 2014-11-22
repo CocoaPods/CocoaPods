@@ -1,4 +1,5 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
 Starting resolution (<#DATE#>)
 Creating possibility state for Reachability (from `Reachability.podspec`) (1 remaining)
   Attempting to activate Reachability (3.1.0)
@@ -7,7 +8,6 @@ Creating possibility state for Reachability (from `Reachability.podspec`) (1 rem
 Finished resolution (1 steps) (Took <#DURATION#> seconds) (<#DATE#>)
 Unactivated: 
 Activated: Reachability
-  Preparing
 
 Analyzing dependencies
 
