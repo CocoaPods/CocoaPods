@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: e3ab1ae538f10500d5cb0035f458c71d308e68ad
-  branch: seg-podfile-plugins
+  revision: 8bfbc96858947f4db6dd1f4a3ea085b446ad35d3
+  branch: master
   specs:
     cocoapods-core (0.35.0)
       activesupport (>= 3.2.15)
