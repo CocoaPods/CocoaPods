@@ -1,6 +1,13 @@
 GIT
+  remote: https://github.com/CocoaPods/CLAide.git
+  revision: b1eccc296b68b1a432e42ecf0c4b799d8551c75c
+  branch: master
+  specs:
+    claide (0.7.0)
+
+GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 8d0a5072f64a780dc3f7ef919a66bf82dcfc524d
+  revision: 8bfbc96858947f4db6dd1f4a3ea085b446ad35d3
   branch: master
   specs:
     cocoapods-core (0.35.0)
@@ -88,7 +95,6 @@ GEM
       parser (>= 2.2.0.pre.3, < 3.0)
     awesome_print (1.2.0)
     bacon (1.2.0)
-    claide (0.7.0)
     clintegracon (0.6.0)
       colored (~> 1.2)
       diffy
@@ -162,6 +168,7 @@ DEPENDENCIES
   awesome_print
   bacon
   bundler (~> 1.3)
+  claide!
   clintegracon
   cocoapods!
   cocoapods-core!

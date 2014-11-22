@@ -4,6 +4,24 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Breaking
+
+* Only the hooks specified by usage of the `plugin` directive of the `Podfile`
+  will be run. Additionally, plugins that depend on hooks will have to update to
+  specify their 'plugin name' when registering the hooks in order to make it
+  possible for those hooks to be run.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2640](https://github.com/CocoaPods/CocoaPods/issues/2640)
+
+##### Enhancements
+
+* Show the name of the source for each hook that is run in verbose mode.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2639](https://github.com/CocoaPods/CocoaPods/issues/2639)
+
+
 ## 0.35.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.34.4...0.35.0)
