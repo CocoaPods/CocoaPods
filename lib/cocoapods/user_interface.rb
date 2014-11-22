@@ -294,7 +294,7 @@ module Pod
           string
         else
           first_space = ' ' * indent
-          indented = CLAide::Helper.wrap_with_indent(string, indent, 9999)
+          indented = CLAide::Command::Banner::TextWrapper.wrap_with_indent(string, indent, 9999)
           first_space + indented
         end
       end

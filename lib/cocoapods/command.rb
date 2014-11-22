@@ -29,7 +29,7 @@ module Pod
     self.command = 'pod'
     self.version = VERSION
     self.description = 'CocoaPods, the Objective-C library package manager.'
-    self.plugin_prefix = 'cocoapods'
+    self.plugin_prefixes = %w(claide cocoapods)
 
     [Install, Update, Outdated, IPC::Podfile, IPC::Repl].each { |c| c.send(:include, ProjectDirectory) }
 

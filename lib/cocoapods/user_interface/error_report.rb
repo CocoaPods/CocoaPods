@@ -114,7 +114,7 @@ EOS
         end
 
         def installed_plugins
-          CLAide::Command::PluginsHelper.specifications.
+          CLAide::Command::PluginManager.specifications.
             reduce({}) { |hash, s| hash.tap { |h| h[s.name] = s.version.to_s } }
         end
 

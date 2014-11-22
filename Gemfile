@@ -14,8 +14,8 @@ gemspec
 gem 'json', '1.7.7'
 
 group :development do
-  #cp_gem 'claide',               'CLAide'
-  cp_gem 'cocoapods-core',       'Core'
+  cp_gem 'claide',               'CLAide'
+  cp_gem 'cocoapods-core',       'Core', 'seg-podfile-plugins'
   cp_gem 'cocoapods-downloader', 'cocoapods-downloader'
   cp_gem 'cocoapods-plugins',    'cocoapods-plugins'
   cp_gem 'cocoapods-trunk',      'cocoapods-trunk'
