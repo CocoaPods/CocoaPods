@@ -255,10 +255,9 @@ begin
 
   #-- Rubocop ----------------------------------------------------------------#
 
-  require 'rubocop/rake_task'
-
-  RuboCop::RakeTask.new(:rubocop) do |task|
-    task.patterns = %w(lib spec Rakefile)
+  desc 'Check code against RuboCop rules'
+  task :rubocop do
+    sh 'bundle exec rubocop lib spec Rakefile'
   end
 
 rescue LoadError, NameError => e
