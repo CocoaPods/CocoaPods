@@ -2,7 +2,7 @@
 #-----------------------------------------------------------------------------#
 
 desc "Initializes your working copy to run the specs"
-task :bootstrap, :use_bundle_dir? do |t, args|
+task :bootstrap, :use_bundle_dir? do |_, args|
   title "Environment bootstrap"
 
   puts "Updating submodules"
@@ -113,7 +113,7 @@ begin
 
     desc "Run the integration spec"
     task :integration do
-      unless File.exists?('spec/cocoapods-integration-specs')
+      unless File.exist?('spec/cocoapods-integration-specs')
         $stderr.puts red("Integration files not checked out. Run `rake bootstrap`")
         exit 1
       end
@@ -301,4 +301,3 @@ end
 def red(string)
   "\033[0;31m#{string}\e[0m"
 end
-
