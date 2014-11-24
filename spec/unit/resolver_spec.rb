@@ -175,6 +175,17 @@ module Pod
         e.message.should.match(/platform .* not compatible/)
       end
 
+      it 'raises when a resolved dependency has a platform incompatibility' do
+        @podfile = Podfile.new do
+          platform :osx, '10.7'
+          pod 'ReactiveCocoa', '0.16.1' # this version is iOS-only
+        end
+        @resolver.stubs(:podfile).returns(@podfile)
+        should.raise Informative do
+          @resolver.resolve
+        end.message.should.match /platform .* not compatible/
+      end
+
       it 'raises if unable to find a specification' do
         Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
         message = should.raise Informative do

@@ -50,7 +50,7 @@ module Pod
     #         definition.
     #
     def resolve
-      dependencies = @podfile.target_definition_list.map(&:dependencies).flatten
+      dependencies = podfile.target_definition_list.map(&:dependencies).flatten
       @cached_sets = {}
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
       specs_by_target
@@ -78,7 +78,6 @@ module Pod
             uniq.
             sort_by(&:name).
             each do |spec|
-              validate_platform(spec, target)
               sandbox.store_head_pod(spec.name) if spec.version.head?
             end
         end
@@ -408,6 +407,7 @@ module Pod
     #         dependencies for `target`.
     #
     def valid_dependencies_for_target_from_node(target, node)
+      validate_platform(node.payload, target)
       dependency_nodes = node.outgoing_edges.select do |edge|
         edge_is_valid_for_target?(edge, target)
       end.map(&:destination)
