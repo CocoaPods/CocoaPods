@@ -1,5 +1,15 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
   Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Fetching external sources
+-> Fetching podspec for `Test` from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`
+
+Resolving dependencies of `Podfile`
 Starting resolution (<#DATE#>)
 Creating possibility state for Test (from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`) (1 remaining)
   Attempting to activate Test (0.0.1)
@@ -12,16 +22,6 @@ Creating possibility state for Test (from `https://raw.githubusercontent.com/lui
 Finished resolution (2 steps) (Took <#DURATION#> seconds) (<#DATE#>)
 Unactivated: 
 Activated: Test, Test/Foo
-
-Analyzing dependencies
-
-Inspecting targets to integrate
-  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
-
-Fetching external sources
--> Fetching podspec for `Test` from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`
-
-Resolving dependencies of `Podfile`
 
 Comparing resolved specification to the sandbox manifest
   A Test

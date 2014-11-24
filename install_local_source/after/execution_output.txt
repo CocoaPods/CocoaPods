@@ -1,13 +1,5 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
   Preparing
-Starting resolution (<#DATE#>)
-Creating possibility state for Reachability (from `Reachability`) (1 remaining)
-  Attempting to activate Reachability (3.1.0)
-  Activated Reachability at Reachability (3.1.0)
-  Requiring nested dependencies ()
-Finished resolution (1 steps) (Took <#DURATION#> seconds) (<#DATE#>)
-Unactivated: 
-Activated: Reachability
 
 Analyzing dependencies
 
@@ -18,6 +10,14 @@ Fetching external sources
 -> Fetching podspec for `Reachability` from `Reachability`
 
 Resolving dependencies of `Podfile`
+Starting resolution (<#DATE#>)
+Creating possibility state for Reachability (from `Reachability`) (1 remaining)
+  Attempting to activate Reachability (3.1.0)
+  Activated Reachability at Reachability (3.1.0)
+  Requiring nested dependencies ()
+Finished resolution (1 steps) (Took <#DURATION#> seconds) (<#DATE#>)
+Unactivated: 
+Activated: Reachability
 
 Comparing resolved specification to the sandbox manifest
   A Reachability

@@ -1,5 +1,16 @@
 CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
   Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Finding Podfile changes
+  A JSONKit
+  - Reachability
+
+Resolving dependencies of `Podfile`
 Starting resolution (<#DATE#>)
 Creating possibility state for JSONKit (= 1.5pre) (1 remaining)
   Attempting to activate JSONKit (1.5pre)
@@ -12,17 +23,6 @@ Creating possibility state for JSONKit (= 1.5pre) (1 remaining)
 Finished resolution (2 steps) (Took <#DURATION#> seconds) (<#DATE#>)
 Unactivated: 
 Activated: Reachability, JSONKit
-
-Analyzing dependencies
-
-Inspecting targets to integrate
-  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
-
-Finding Podfile changes
-  A JSONKit
-  - Reachability
-
-Resolving dependencies of `Podfile`
 
 Comparing resolved specification to the sandbox manifest
   A JSONKit

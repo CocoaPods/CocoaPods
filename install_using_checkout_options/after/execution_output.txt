@@ -26,6 +26,8 @@ Fetching external sources
      Cloning into 'ROOT/tmp/install_using_checkout_options/Pods/RKValueTransformers'...
    $ GIT_BIN checkout -b activated-commit d76a00894b8c3c9331e36d91ab952681426a49df
    Switched to a new branch 'activated-commit'
+
+Resolving dependencies of `Podfile`
 Starting resolution (<#DATE#>)
 Creating possibility state for AFNetworking (from `https://github.com/AFNetworking/AFNetworking.git`) (1 remaining)
   Attempting to activate AFNetworking (2.4.1)
@@ -90,8 +92,6 @@ Creating possibility state for AFNetworking (from `https://github.com/AFNetworki
 Finished resolution (17 steps) (Took <#DURATION#> seconds) (<#DATE#>)
 Unactivated: 
 Activated: AFNetworking, SEGModules, RKValueTransformers, AFNetworking/Serialization, AFNetworking/Security, AFNetworking/Reachability, AFNetworking/NSURLConnection, AFNetworking/NSURLSession, AFNetworking/UIKit
-
-Resolving dependencies of `Podfile`
 
 Comparing resolved specification to the sandbox manifest
   A AFNetworking

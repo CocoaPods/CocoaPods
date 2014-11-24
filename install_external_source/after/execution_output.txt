@@ -12,6 +12,8 @@ Fetching external sources
    $ HG_BIN clone PodTest-hg-source ROOT/tmp/install_external_source/Pods/PodTest
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
+
+Resolving dependencies of `Podfile`
 Starting resolution (<#DATE#>)
 Creating possibility state for PodTest (from `PodTest-hg-source`) (1 remaining)
   Attempting to activate PodTest (1.0)
@@ -28,8 +30,6 @@ Creating possibility state for PodTest (from `PodTest-hg-source`) (1 remaining)
 Finished resolution (3 steps) (Took <#DURATION#> seconds) (<#DATE#>)
 Unactivated: 
 Activated: PodTest, PodTest/subspec_1, PodTest/subspec_2
-
-Resolving dependencies of `Podfile`
 
 Comparing resolved specification to the sandbox manifest
   A PodTest
