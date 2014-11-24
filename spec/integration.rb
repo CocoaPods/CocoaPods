@@ -91,6 +91,8 @@ end
 
 describe_cli 'pod' do
 
+  has_mercurial = system('which hg')
+
   subject do |s|
     s.executable = "ruby #{ROOT + 'bin/pod'}"
     s.environment_vars = {
@@ -104,7 +106,7 @@ describe_cli 'pod' do
     ]
     s.replace_path ROOT.to_s, 'ROOT'
     s.replace_path `which git`.chomp, 'GIT_BIN'
-    s.replace_path `which hg`.chomp, 'HG_BIN'
+    s.replace_path `which hg`.chomp, 'HG_BIN' if has_mercurial
     s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
     s.replace_pattern %r(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}), '<#DATE#>'
     s.replace_pattern %r(\(Took \d+.\d+ seconds\)), '(Took <#DURATION#> seconds)'
@@ -135,9 +137,14 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
-    describe 'Installs a Pod with different subspecs activated across different targets' do
-      behaves_like cli_spec 'install_subspecs',
-                            'install --no-repo-update'
+    description = 'Installs a Pod with different subspecs activated across different targets'
+    if has_mercurial
+      describe description do
+        behaves_like cli_spec 'install_subspecs',
+                              'install --no-repo-update'
+      end
+    else
+      Bacon::ErrorLog << "[!] Skipping test due to missing `hg` executable: #{description}".red << "\n\n"
     end
 
     describe 'Installs a Pod with subspecs and does not duplicate the prefix header' do
@@ -150,9 +157,14 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
-    describe 'Installs a Pod with an external source' do
-      behaves_like cli_spec 'install_external_source',
-                            'install --no-repo-update'
+    description = 'Installs a Pod with an external source'
+    if has_mercurial
+      describe description do
+        behaves_like cli_spec 'install_external_source',
+                              'install --no-repo-update'
+      end
+    else
+      Bacon::ErrorLog << "[!] Skipping test due to missing `hg` executable: #{description}".red << "\n\n"
     end
 
     describe 'Installs a Pod given the podspec' do
