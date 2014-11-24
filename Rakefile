@@ -1,22 +1,8 @@
-REQUIRED_COMMANDS = %w[ git hg ]
-
-# Task check_requirements
-#-----------------------------------------------------------------------------#
-desc 'Verifies that the required third-party commands are available'
-task :check_requirements do
-  has_all_requirements = REQUIRED_COMMANDS.reduce(true) do |has_requirements, required_command|
-    result = required_binary?(required_command)
-    puts red("Missing required command: #{required_command}. You may need to install it.") unless result
-    has_requirements && result
-  end
-  raise unless has_all_requirements
-end
-
 # Bootstrap task
 #-----------------------------------------------------------------------------#
 
 desc "Initializes your working copy to run the specs"
-task :bootstrap, [:use_bundle_dir?] => [:check_requirements] do |_t, args|
+task :bootstrap, :use_bundle_dir? do |t, args|
   title "Environment bootstrap"
 
   puts "Updating submodules"
@@ -126,8 +112,8 @@ begin
     #--------------------------------------#
 
     desc "Run the integration spec"
-    task :integration => :check_requirements do
-      unless File.exist?('spec/cocoapods-integration-specs')
+    task :integration do
+      unless File.exists?('spec/cocoapods-integration-specs')
         $stderr.puts red("Integration files not checked out. Run `rake bootstrap`")
         exit 1
       end
@@ -141,7 +127,7 @@ begin
     # The specs helper interfere with the integration 2 specs and thus they need
     # to be run separately.
     #
-    task :all => [:unpack_fixture_tarballs, :check_requirements] do
+    task :all => :unpack_fixture_tarballs do
       ENV['GENERATE_COVERAGE'] = 'true'
       puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
@@ -315,7 +301,3 @@ def red(string)
   "\033[0;31m#{string}\e[0m"
 end
 
-def required_binary?(name)
-  `which #{name}`
-  $?.success?
-end
