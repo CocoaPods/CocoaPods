@@ -263,11 +263,13 @@ begin
 rescue LoadError, NameError => e
   $stderr.puts "\033[0;31m" \
     '[!] Some Rake tasks haven been disabled because the environment' \
-    ' couldn’t be loaded. Be sure to run `rake bootstrap` first.' \
-    "\e[0m"
-  $stderr.puts e.message
-  $stderr.puts e.backtrace
-  $stderr.puts
+    ' couldn’t be loaded. Be sure to run `rake bootstrap` first or use the ' \
+    "VERBOSE environment variable to see errors.\e[0m"
+  if ENV['VERBOSE']
+    $stderr.puts e.message
+    $stderr.puts e.backtrace
+    $stderr.puts
+  end
 end
 
 # Helpers
