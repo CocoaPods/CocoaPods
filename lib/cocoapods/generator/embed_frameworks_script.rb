@@ -46,29 +46,34 @@ module Pod
         script = <<-eos.strip_heredoc
           #!/bin/sh
           set -e
+          
           echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
           mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+          
           install_framework()
           {
-            source="${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1"
-            if [ -L ${source} ];then
+            local source="${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1"
+            local destination="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+            
+            if [ -L ${source} ]; then
                 echo "Symlinked..."
-                source=$(readlink ${source})
+                source=$(readlink "${source}")
             fi
-            destination="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-            echo "rsync -av ${source} ${destination}"
-            rsync -av "${source}" "${destination}"
+            
+            echo "rsync -av --exclude '*.h' ${source} ${destination}"
+            rsync -av --exclude *.h "${source}" "${destination}"
             # Resign the code if required by the build settings to avoid unstable apps
-            if [ "${CODE_SIGNING_REQUIRED}" == "YES" ];then
-                code_sign $1
+            if [ "${CODE_SIGNING_REQUIRED}" == "YES" ]; then
+                code_sign "${destination}/$1"
             fi
           }
           
+          # Signs a framework with the provided identity
           code_sign() {
             # Use the current code_sign_identitiy
             echo "Code Signing $1 with Identity ${EXPANDED_CODE_SIGN_IDENTITY_NAME}"
-            echo "codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1"
-            /usr/bin/codesign --force --sign "${EXPANDED_CODE_SIGN_IDENTITY}" --preserve-metadata=identifier,entitlements "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1"
+            echo "codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements $1"
+            /usr/bin/codesign --force --sign "${EXPANDED_CODE_SIGN_IDENTITY}" --preserve-metadata=identifier,entitlements "$1"
           }
         eos
         script += "\n" unless frameworks_by_config.values.all?(&:empty?)
