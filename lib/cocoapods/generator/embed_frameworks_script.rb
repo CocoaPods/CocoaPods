@@ -60,8 +60,9 @@ module Pod
                 source=$(readlink "${source}")
             fi
             
-            echo "rsync -av --exclude '*.h' ${source} ${destination}"
-            rsync -av --exclude *.h "${source}" "${destination}"
+            # use filter instead of exclude so missing patterns dont' throw errors
+            echo "rsync -av --filter \"- CVS/\" --filter \"- .svn/\" --filter \"- .git/\" --filter \"- .hg/\" --filter \"- Headers/\" --filter \"- PrivateHeaders/\" ${source} ${destination}"
+            rsync -av --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers/" --filter "- PrivateHeaders/" "${source}" "${destination}"
             # Resign the code if required by the build settings to avoid unstable apps
             if [ "${CODE_SIGNING_REQUIRED}" == "YES" ]; then
                 code_sign "${destination}/$1"
@@ -72,9 +73,10 @@ module Pod
           code_sign() {
             # Use the current code_sign_identitiy
             echo "Code Signing $1 with Identity ${EXPANDED_CODE_SIGN_IDENTITY_NAME}"
-            echo "codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements $1"
-            /usr/bin/codesign --force --sign "${EXPANDED_CODE_SIGN_IDENTITY}" --preserve-metadata=identifier,entitlements "$1"
+            echo "/usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements $1"
+            /usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements $1
           }
+          
         eos
         script += "\n" unless frameworks_by_config.values.all?(&:empty?)
         frameworks_by_config.each do |config, frameworks|
