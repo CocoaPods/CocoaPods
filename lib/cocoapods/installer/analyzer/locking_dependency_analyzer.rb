@@ -32,8 +32,13 @@ module Pod
               add_to_dependency_graph(pod, [], dependency_graph)
             end
 
+            pods_to_update = pods_to_update.flat_map do |u|
+              root_name = Specification.root_name(u)
+              dependency_graph.vertices.keys.select { |n| Specification.root_name(n) == root_name }
+            end
+
             pods_to_update.each do |u|
-              dependency_graph.detach_vertex_named(u) if dependency_graph.vertex_named(u)
+              dependency_graph.detach_vertex_named(u)
             end
           end
 

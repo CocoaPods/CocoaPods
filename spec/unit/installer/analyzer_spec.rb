@@ -134,6 +134,36 @@ module Pod
         @analyzer.send(:locked_dependencies).to_a.map(&:payload).should == []
       end
 
+      it 'unlocks all dependencies with the same root name in update mode' do
+        podfile = Podfile.new do
+          platform :ios, '8.0'
+          xcodeproj 'SampleProject/SampleProject'
+          pod 'AFNetworking'
+          pod 'AFNetworkActivityLogger'
+        end
+        hash = {}
+        hash['PODS'] = [
+          {"AFNetworkActivityLogger (2.0.3)" => ["AFNetworking/NSURLConnection (~> 2.0)", "AFNetworking/NSURLSession (~> 2.0)"]},
+          {"AFNetworking (2.4.0)" => ["AFNetworking/NSURLConnection (= 2.4.0)", "AFNetworking/NSURLSession (= 2.4.0)", "AFNetworking/Reachability (= 2.4.0)", "AFNetworking/Security (= 2.4.0)", "AFNetworking/Serialization (= 2.4.0)", "AFNetworking/UIKit (= 2.4.0)"]},
+          {"AFNetworking/NSURLConnection (2.4.0)" => ["AFNetworking/Reachability", "AFNetworking/Security", "AFNetworking/Serialization"]},
+          {"AFNetworking/NSURLSession (2.4.0)" => ["AFNetworking/Reachability", "AFNetworking/Security", "AFNetworking/Serialization"]},
+          "AFNetworking/Reachability (2.4.0)",
+          "AFNetworking/Security (2.4.0)",
+          "AFNetworking/Serialization (2.4.0)",
+          {"AFNetworking/UIKit (2.4.0)" => ["AFNetworking/NSURLConnection", "AFNetworking/NSURLSession"]}
+        ]
+        hash['DEPENDENCIES'] = ['AFNetworkActivityLogger', 'AFNetworking (2.4.0)']
+        hash['SPEC CHECKSUMS'] = {}
+        hash['COCOAPODS'] = Pod::VERSION
+        lockfile = Pod::Lockfile.new(hash)
+        analyzer = Installer::Analyzer.new(config.sandbox, podfile, lockfile)
+
+        analyzer.update = { :pods => %w(AFNetworking) }
+        analyzer.analyze.specifications.
+          find { |s| s.name == 'AFNetworking' }.
+          version.to_s.should == '2.4.1'
+      end
+
       #--------------------------------------#
 
       it 'takes into account locked implicit dependencies' do

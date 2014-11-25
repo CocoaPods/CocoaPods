@@ -21,6 +21,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2639](https://github.com/CocoaPods/CocoaPods/issues/2639)
 
+##### Bug Fixes
+
+* Fix updating a pod that has subspec dependencies.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2879](https://github.com/CocoaPods/CocoaPods/issues/2879)
+
 
 ## 0.35.0
 
