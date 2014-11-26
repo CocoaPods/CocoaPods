@@ -17,6 +17,9 @@ module Pod
       @refs_by_absolute_path = {}
       @pods = new_group('Pods')
       @development_pods = new_group('Development Pods')
+      configs = root_object.build_configuration_list.build_configurations
+      settings_for_all_configs = configs.map { |c| c.build_settings }
+      settings_for_all_configs.each { |settings| settings['SYMROOT'] = '${SRCROOT}/../build' }
     end
 
     # @return [PBXGroup] The group for the support files of the aggregate
