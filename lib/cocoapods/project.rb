@@ -18,7 +18,7 @@ module Pod
       @pods = new_group('Pods')
       @development_pods = new_group('Development Pods')
       configs = root_object.build_configuration_list.build_configurations
-      settings_for_all_configs = configs.map { |c| c.build_settings }
+      settings_for_all_configs = configs.map(&:build_settings)
       settings_for_all_configs.each { |settings| settings['SYMROOT'] = '${SRCROOT}/../build' }
     end
 
