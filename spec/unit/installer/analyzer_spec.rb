@@ -104,7 +104,7 @@ module Pod
 
         target.client_root.should == config.installation_root
         target.user_target_uuids.should == []
-        target.user_build_configurations.should == {}
+        target.user_build_configurations.should == { 'Release' => :release, 'Debug' => :debug }
         target.platform.to_s.should == 'iOS 6.0'
       end
 
