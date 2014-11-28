@@ -27,6 +27,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2879](https://github.com/CocoaPods/CocoaPods/issues/2879)
 
+* Restore the `#define`s in the environment header when the `--no-integrate`
+  installation option is used.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2876](https://github.com/CocoaPods/CocoaPods/issues/2876)
+
 
 ## 0.35.0
 
