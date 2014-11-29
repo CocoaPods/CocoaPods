@@ -462,9 +462,8 @@ module Pod
             raise Informative, 'Unable to find the Xcode project ' \
               "`#{path}` for the target `#{target_definition.label}`."
           end
-
         else
-          xcodeprojs = Pathname.glob(config.installation_root + '*.xcodeproj')
+          xcodeprojs = config.installation_root.children.select { |e| e.fnmatch('*.xcodeproj') }
           if xcodeprojs.size == 1
             path = xcodeprojs.first
           else
