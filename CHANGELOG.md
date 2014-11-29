@@ -40,6 +40,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.19.4...0.20.2)
 • [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.7.2...0.8.0)
 
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.35/).
+
 ##### Enhancements
 
 * Allow the specification of file patterns for the Podspec's `requires_arc`
@@ -362,6 +364,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## 0.34.0
 
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.34/).
+
 ##### Breaking
 
 * Add support for loading podspecs from *only* specific spec-repos via
@@ -623,6 +627,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## 0.33.0
 
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.33/).
+
 ##### Breaking
 
 * The deprecated `pre_install` and the `pod_install` hooks of the specification
@@ -724,6 +730,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.31.1)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/master...0.31.1)
+
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.32/).
 
 ##### Enhancements
 
@@ -838,6 +846,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.30.0...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.30.0...0.31.0)
 
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.31/).
+
 ##### Enhancements
 
 * Warnings are not promoted to errors anymore to maximise compatibility with
@@ -933,6 +943,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ## 0.30.0
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
 
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.30/).
+
 ###### Enhancements
 
 * Radically reduce first run pod setup bandwidth by creating a shallow clone of
@@ -967,6 +979,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)
 • [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.2.0...0.3.0)
+
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.29/).
 
 ###### Breaking
 
@@ -1093,6 +1107,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.27.1...0.28.0)
 • [CLAide](https://github.com/CocoaPods/CLAide/compare/0.3.2...0.4.0)
 
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.28/).
+
 ###### Enhancements
 
 * CLAide now supports gem plugins. An example CocoaPods plugin can be found at
@@ -1163,6 +1179,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.2...0.27.1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.13.0...0.14.0)
+
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.27-and-improved-installation-UX/).
 
 ###### Enhancements
 
@@ -1240,6 +1258,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.25.0...0.26.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.11.1...0.12.0)
+
+:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.26/).
 
 ###### Enhancements
 
