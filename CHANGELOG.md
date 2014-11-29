@@ -40,7 +40,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.19.4...0.20.2)
 • [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.7.2...0.8.0)
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.35/).
+For more details, see :memo: [CocoaPods 0.35](http://blog.cocoapods.org/CocoaPods-0.35/) on our Blog.
 
 ##### Enhancements
 
@@ -364,7 +364,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## 0.34.0
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.34/).
+For more details, see :memo: [CocoaPods 0.34](http://blog.cocoapods.org/CocoaPods-0.34/) on our Blog.
 
 ##### Breaking
 
@@ -627,7 +627,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## 0.33.0
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.33/).
+For more details, see :memo: [CocoaPods 0.33](http://blog.cocoapods.org/CocoaPods-0.33/) on our Blog.
 
 ##### Breaking
 
@@ -731,7 +731,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.32.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.32.0)
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.32/).
+For more details, see :memo: [CocoaPods 0.32](http://blog.cocoapods.org/CocoaPods-0.32/) on our Blog.
 
 ##### Enhancements
 
@@ -848,7 +848,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.30.0...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.30.0...0.31.0)
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.31/).
+For more details, see :memo: [CocoaPods 0.31](http://blog.cocoapods.org/CocoaPods-0.31/) on our Blog.
 
 ##### Enhancements
 
@@ -946,7 +946,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.30/).
+For more details, see :memo: [CocoaPods 0.30](http://blog.cocoapods.org/CocoaPods-0.30/) on our Blog.
 
 ###### Enhancements
 
@@ -984,7 +984,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)
 • [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.2.0...0.3.0)
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.29/).
+For more details, see :memo: [CocoaPods 0.29](http://blog.cocoapods.org/CocoaPods-0.29/) on our Blog.
 
 ###### Breaking
 
@@ -1112,7 +1112,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.27.1...0.28.0)
 • [CLAide](https://github.com/CocoaPods/CLAide/compare/0.3.2...0.4.0)
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.28/).
+For more details, see :memo: [CocoaPods 0.28](http://blog.cocoapods.org/CocoaPods-0.28/) on our Blog.
 
 ###### Enhancements
 
@@ -1186,7 +1186,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.2...0.27.1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.13.0...0.14.0)
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.27-and-improved-installation-UX/).
+For more details, see :memo: [CocoaPods 0.27 and improved installation UX](http://blog.cocoapods.org/CocoaPods-0.27-and-improved-installation-UX/) on our Blog.
 
 ###### Enhancements
 
@@ -1267,7 +1267,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.11.1...0.12.0)
 
-:book: See detailed article in the [**Blog post**](http://blog.cocoapods.org/CocoaPods-0.26/).
+For more details, see :memo: [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-0.26/) on our Blog.
 
 ###### Enhancements
 
