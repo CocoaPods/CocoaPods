@@ -40,6 +40,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.19.4...0.20.2)
 • [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.7.2...0.8.0)
 
+For more details, see :memo: [CocoaPods 0.35](http://blog.cocoapods.org/CocoaPods-0.35/) on our Blog.
+
 ##### Enhancements
 
 * Allow the specification of file patterns for the Podspec's `requires_arc`
@@ -362,6 +364,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## 0.34.0
 
+For more details, see :memo: [CocoaPods 0.34](http://blog.cocoapods.org/CocoaPods-0.34/) on our Blog.
+
 ##### Breaking
 
 * Add support for loading podspecs from *only* specific spec-repos via
@@ -623,6 +627,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## 0.33.0
 
+For more details, see :memo: [CocoaPods 0.33](http://blog.cocoapods.org/CocoaPods-0.33/) on our Blog.
+
 ##### Breaking
 
 * The deprecated `pre_install` and the `pod_install` hooks of the specification
@@ -722,8 +728,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## 0.32.0
 
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/master...0.31.1)
-• [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/master...0.31.1)
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.32.0)
+• [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.32.0)
+
+For more details, see :memo: [CocoaPods 0.32](http://blog.cocoapods.org/CocoaPods-0.32/) on our Blog.
 
 ##### Enhancements
 
@@ -816,8 +824,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.31.1
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.31.0)
-• [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.31.0)
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.0...0.31.1)
+• [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.0...0.31.1)
 
 ##### Minor Enhancements
 
@@ -835,8 +844,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.31.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.30.0...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.30.0...0.31.0)
+
+For more details, see :memo: [CocoaPods 0.31](http://blog.cocoapods.org/CocoaPods-0.31/) on our Blog.
 
 ##### Enhancements
 
@@ -931,7 +943,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#1894](https://github.com/CocoaPods/CocoaPods/pull/1894)
 
 ## 0.30.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
+
+For more details, see :memo: [CocoaPods 0.30](http://blog.cocoapods.org/CocoaPods-0.30/) on our Blog.
 
 ###### Enhancements
 
@@ -964,9 +979,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.29.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)
 • [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.2.0...0.3.0)
+
+For more details, see :memo: [CocoaPods 0.29](http://blog.cocoapods.org/CocoaPods-0.29/) on our Blog.
 
 ###### Breaking
 
@@ -1089,9 +1107,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.28.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.27.1...0.28.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.27.1...0.28.0)
 • [CLAide](https://github.com/CocoaPods/CLAide/compare/0.3.2...0.4.0)
+
+For more details, see :memo: [CocoaPods 0.28](http://blog.cocoapods.org/CocoaPods-0.28/) on our Blog.
 
 ###### Enhancements
 
@@ -1160,9 +1181,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.27.1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.2...0.27.1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.13.0...0.14.0)
+
+For more details, see :memo: [CocoaPods 0.27 and improved installation UX](http://blog.cocoapods.org/CocoaPods-0.27-and-improved-installation-UX/) on our Blog.
 
 ###### Enhancements
 
@@ -1214,6 +1238,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.26.2
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.1...0.26.2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.1...0.26.2)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.11.1...0.13.0)
@@ -1237,9 +1262,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.26.1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.25.0...0.26.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.11.1...0.12.0)
+
+For more details, see :memo: [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-0.26/) on our Blog.
 
 ###### Enhancements
 
@@ -1296,6 +1324,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.25.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.24.0...0.25.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.24.0...0.25.0)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.10.1...0.11.0)
@@ -1358,8 +1387,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.24.0
-[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.3...0.23.0.rc1)
-• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.3...0.23.0.rc1)
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.23.0...0.24.0)
+• [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.23.0...0.24.0)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.1...0.9.0)
 • [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.1.1...0.2.0)
 
@@ -1424,6 +1454,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.23.0.rc1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.3...0.23.0.rc1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.3...0.23.0.rc1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.1...0.9.0)
@@ -1492,6 +1523,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.22.3
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.22.3)
 
 ###### Enhancements
@@ -1525,6 +1557,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.22.2
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.1...0.22.2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.1...0.22.2)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.8.0...0.8.1)
@@ -1553,6 +1586,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.22.1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.0...0.22.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.0...0.22.1)
 
@@ -1563,6 +1597,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.22.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0...0.22.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.21.0...0.22.0)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.7.1...0.8.0)
@@ -1612,6 +1647,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#1063](https://github.com/CocoaPods/CocoaPods/issues/1063)
 
 ## 0.21.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0.rc1...0.21.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.21.0.rc1...0.21.0)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.7.0...0.7.1)
@@ -1626,6 +1662,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.21.0.rc1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.2...0.21.0.rc1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.20.2...0.21.0.rc1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.6.0...0.7.0)
@@ -1654,6 +1691,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#1099](https://github.com/CocoaPods/CocoaPods/issues/1099)
 
 ## 0.20.2
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.1...0.20.2)
 
 ###### Bug fixes
@@ -1665,6 +1703,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Allow sandbox-pod to execute any tool inside a rbenv prefix.
 
 ## 0.20.1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.0...0.20.1)
 • [CLAide](https://github.com/CocoaPods/CLAide/compare/0.3.0...0.3.2)
 
@@ -1679,6 +1718,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   and 0.3.1 was not correctly processed by RubyGems.
 
 ## 0.20.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.1...0.20.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.1...0.20.0)
 • [cocoapods-downloader](https://github.com/CocoaPods/CLAide/compare/0.1.0...0.1.1)
@@ -1754,6 +1794,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#1039](https://github.com/CocoaPods/CocoaPods/issues/1039)
 
 ## 0.19.1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.19.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.0...0.19.1)
 
@@ -1766,6 +1807,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#1014](https://github.com/CocoaPods/CocoaPods/issues/1014)
 
 ## 0.19.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.18.1...0.19.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.18.1...0.19.0)
 
@@ -1810,6 +1852,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#972](https://github.com/CocoaPods/CocoaPods/issues/972)
 
 ## 0.18.1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.18.0...0.18.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.18.0...0.18.)
 
@@ -1826,6 +1869,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.18.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.18.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.18.0)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.2...0.5.5)
@@ -1871,6 +1915,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.17.2
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.1...0.17.2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.1...0.17.2)
 
@@ -1893,6 +1938,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 
 ## 0.17.1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0...0.17.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0...0.17.1)
 
@@ -1902,6 +1948,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#917](https://github.com/CocoaPods/CocoaPods/issues/917)
 
 ## 0.17.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc7...0.17.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc7...0.17.0)
 
@@ -1922,6 +1969,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [motion-cocoapods#50](https://github.com/HipByte/motion-cocoapods/pull/50)
 
 #### rc7
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc6...0.17.0.rc7)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc6...0.17.0.rc7)
 
@@ -1941,6 +1989,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 - Search results are sorted.
 
 #### rc6
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc5...0.17.0.rc6)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc5...0.17.0.rc6)
 
@@ -1969,6 +2018,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 - Improved support for linting and validating specs repo.
 
 #### rc5
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc4...0.17.0.rc5)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc4...0.17.0.rc5)
 
@@ -1979,6 +2029,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 - More user errors are raised as an informative.
 
 #### rc4
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc3...0.17.0.rc4)
 
 ###### Bug fixes
@@ -2004,6 +2055,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   folders.
 
 #### rc3
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc2...0.17.0.rc3
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.5.0...0.5.1))
 
@@ -2027,6 +2079,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 - Added `pod ipc repl` subcommand.
 
 #### rc2
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc1...0.17.0.rc2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc1...0.17.0.rc2)
 
@@ -2042,6 +2095,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#823](https://github.com/CocoaPods/CocoaPods/issues/823)
 
 #### rc1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.4...0.17.0.rc1)
 • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core)
@@ -2150,6 +2204,7 @@ presented below.
   [CLAide](https://github.com/CocoaPods/CLAide).
 
 ## 0.16.4
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.3...0.16.4)
 
 ###### Enhancements
@@ -2165,6 +2220,7 @@ presented below.
   [34da3f7](https://github.com/CocoaPods/CocoaPods/commit/34da3f792b2a36fafacd4122e29025c9cf2ff38d)
 
 ## 0.16.3
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.2...0.16.3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
 
 ###### Bug fixes
@@ -2197,6 +2253,7 @@ presented below.
 
 
 ## 0.16.2
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.1...0.16.2) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.1...0.4.3)
 
 ###### Bug fixes
@@ -2225,6 +2282,7 @@ presented below.
   [#750](https://github.com/CocoaPods/CocoaPods/pull/750)
 
 ## 0.16.1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0...0.16.1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0...0.4.1)
 
 ###### Bug fixes
@@ -2249,6 +2307,7 @@ presented below.
 - Take SDKROOT into account when adding frameworks.
 
 ## 0.16.0
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc5...master)
 
 ###### Enhancements
@@ -2257,6 +2316,7 @@ presented below.
   [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
 
 ## 0.16.0.rc5
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc4...0.16.0.rc5)
 
 ###### Deprecated
@@ -2277,6 +2337,7 @@ presented below.
   [#613](https://github.com/CocoaPods/CocoaPods/issues/613)
 
 ## 0.16.0.rc4
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc3...0.16.0.rc4)
 
 ###### Bug fixes
@@ -2285,6 +2346,7 @@ presented below.
   [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
 
 ## 0.16.0.rc3
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...0.16.0.rc3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...0.4.0.rc6)
 
 ###### Enhancements
@@ -2302,6 +2364,7 @@ presented below.
   [#612](https://github.com/CocoaPods/CocoaPods/issues/612)
 
 ## 0.16.0.rc2
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc1...0.16.0.rc2)
 
 ###### Bug fixes
@@ -2309,6 +2372,7 @@ presented below.
 - Fix for uninitialized constant Xcodeproj::Constants error.
 
 ## 0.16.0.rc1
+
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.2...0.16.0.rc1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.5...0.4.0.rc1)
 
 ###### Enhancements
