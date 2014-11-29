@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: c674fd2cb5249a67f558d0fd73d42275710a11c7
-  branch: master
+  revision: 995e12321cd13b6eb66a07e4bc5d156e749b1537
+  branch: seg-podspec-eval-context
   specs:
     cocoapods-core (0.35.0)
       activesupport (>= 3.2.15)

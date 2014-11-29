@@ -12,7 +12,7 @@ module Pod
 
     it 'creates a copy of the podspec' do
       @subject.fetch(config.sandbox)
-      path = config.sandbox.specifications_root + 'Reachability.podspec'
+      path = config.sandbox.specifications_root + 'Reachability.podspec.json'
       path.should.exist?
     end
 
@@ -22,7 +22,7 @@ module Pod
       podfile_path = fixture('integration/Podfile')
       @subject = ExternalSources.from_dependency(dependency, podfile_path)
       @subject.fetch(config.sandbox)
-      path = config.sandbox.specifications_root + 'Reachability.podspec'
+      path = config.sandbox.specifications_root + 'Reachability.podspec.json'
       path.should.exist?
     end
 
@@ -52,7 +52,7 @@ module Pod
       end
 
       it 'marks a pod as absolute' do
-        @subject.stubs(:params).returns(:path => '/path/Reachability')
+        @subject.stubs(:params).returns(:path => fixture('integration/Reachability'))
         Pathname.any_instance.stubs(:exist?).returns(true)
         config.sandbox.stubs(:store_podspec)
         @subject.fetch(config.sandbox)
