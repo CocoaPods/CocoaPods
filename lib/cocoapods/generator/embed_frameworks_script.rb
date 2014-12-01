@@ -50,6 +50,8 @@ module Pod
           echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
           mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 
+          SWIFT_STDLIB_PATH="${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}"
+
           install_framework()
           {
             local source="${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1"
@@ -67,6 +69,14 @@ module Pod
             if [ "${CODE_SIGNING_REQUIRED}" == "YES" ]; then
                 code_sign "${destination}/$1"
             fi
+
+            # Embed linked Swift runtime libraries
+            local basename=$(echo $1 | sed -E s/\\\\..+//)
+            local swift_runtime_libs=$(otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1/$BASENAME" | grep libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u)
+            for lib in $swift_runtime_libs; do
+              echo "rsync -av \\"${SWIFT_STDLIB_PATH}/${lib}\\" \\"${destination}\\""
+              rsync -av "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"
+            done
           }
 
           # Signs a framework with the provided identity
