@@ -26,7 +26,7 @@ module Pod
       def save_as(path)
         FileUtils.mkdir_p(path + '..')
         contents = generate
-        File.open(path, 'w') do |f|
+        path.open('w') do |f|
           f.write(contents)
         end
       end
