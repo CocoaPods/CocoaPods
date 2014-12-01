@@ -50,10 +50,20 @@ module Pod
           echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
           mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 
+          SWIFT_STDLIB_PATH="${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}"
+
           install_framework()
           {
-            echo "rsync --exclude '*.h' -av ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-            rsync -av "${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1" "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+            DESTINATION="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+            echo "rsync -av \\"${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1\\" \\"${DESTINATION}\\""
+            rsync -av "${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1" "${DESTINATION}"
+            BASENAME=$(echo $1 | sed -E s/\\\\..+//)
+            SWIFT_RUNTIME_LIBS=$(otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1/$BASENAME" | grep libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u)
+            for LIB in $SWIFT_RUNTIME_LIBS
+            do
+              echo "rsync -av \\"${SWIFT_STDLIB_PATH}/${LIB}\\" \\"${DESTINATION}\\""
+              rsync -av "${SWIFT_STDLIB_PATH}/${LIB}" "${DESTINATION}"
+            done
           }
         eos
         script += "\n" unless frameworks_by_config.values.all?(&:empty?)
