@@ -96,7 +96,8 @@ describe_cli 'pod' do
   subject do |s|
     s.executable = "ruby #{ROOT + 'bin/pod'}"
     s.environment_vars = {
-      'CP_AGGRESSIVE_CACHE' => 'TRUE',
+      'CP_REPOS_DIR'             => ROOT + 'spec/fixtures/spec-repos',
+      'CP_AGGRESSIVE_CACHE'      => 'TRUE',
       'XCODEPROJ_DISABLE_XCPROJ' => 'TRUE',
       'CLAIDE_DISABLE_AUTO_WRAP' => 'TRUE',
     }
