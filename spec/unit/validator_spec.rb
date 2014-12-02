@@ -283,6 +283,24 @@ module Pod
         dependency.external_source.key?(:podspec).should.be.true
       end
 
+      it 'uses the deployment target of the current subspec' do
+        validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+        validator.stubs(:validate_url)
+        validator.stubs(:validate_screenshots)
+        validator.stubs(:check_file_patterns)
+        validator.stubs(:check_file_patterns)
+        Installer.any_instance.stubs(:install!)
+        Installer.any_instance.stubs(:aggregate_targets).returns([])
+        subspec = Specification.new(validator.spec, 'subspec') do |s|
+          s.ios.deployment_target = '7.0'
+        end
+        validator.spec.stubs(:subspecs).returns([subspec])
+        validator.expects(:podfile_from_spec).with(:osx, nil).once
+        validator.expects(:podfile_from_spec).with(:ios, nil).once
+        validator.expects(:podfile_from_spec).with(:ios, '7.0').once
+        podfile = validator.send(:perform_extensive_analysis, validator.spec)
+      end
+
       it 'respects the local option' do
         sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         sut.stubs(:validate_url)

@@ -298,7 +298,8 @@ module Pod
     # for all available platforms with xcodebuild.
     #
     def install_pod
-      podfile = podfile_from_spec(consumer.platform_name, spec.deployment_target(consumer.platform_name))
+      deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
+      podfile = podfile_from_spec(consumer.platform_name, deployment_target)
       sandbox = Sandbox.new(config.sandbox_root)
       installer = Installer.new(sandbox, podfile)
       installer.install!

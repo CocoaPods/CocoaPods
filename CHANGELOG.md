@@ -37,6 +37,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Olivier Halligon](https://github.com/AliSoftware)
   [#2852](https://github.com/CocoaPods/CocoaPods/issues/2852)
 
+* Fix linting subspecs that have a higher deployment target than the root
+  spec.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#1919](https://github.com/CocoaPods/CocoaPods/issues/1919)
+
 ## 0.35.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.34.4...0.35.0)
