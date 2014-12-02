@@ -91,7 +91,8 @@ end
 
 describe_cli 'pod' do
 
-  has_mercurial = system('which hg')
+  Process.wait(spawn('which hg', :err => :out, :out => '/dev/null'))
+  has_mercurial = $?.success?
 
   subject do |s|
     s.executable = "ruby #{ROOT + 'bin/pod'}"
