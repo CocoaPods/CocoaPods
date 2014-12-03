@@ -1,4 +1,4 @@
-CP_AGGRESSIVE_CACHE=TRUE XCODEPROJ_DISABLE_XCPROJ=TRUE CLAIDE_DISABLE_AUTO_WRAP=TRUE pod install --no-repo-update --verbose --no-ansi 2>&1
+CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
   Preparing
 
 Analyzing dependencies
@@ -14,8 +14,8 @@ Creating possibility state for Reachability (= 3.1.0) (1 remaining)
   Attempting to activate Reachability (3.1.0)
   Activated Reachability at Reachability (3.1.0)
   Requiring nested dependencies ()
-  Creating possibility state for Reachability (4 remaining)
-    Attempting to activate Reachability (3.2)
+  Creating possibility state for Reachability (3 remaining)
+    Attempting to activate Reachability (3.1.1)
     Found existing spec (Reachability (3.1.0))
 Finished resolution (2 steps) (Took <#DURATION#> seconds) (<#DATE#>)
 Unactivated: 
