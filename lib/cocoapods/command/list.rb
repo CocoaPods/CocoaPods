@@ -34,41 +34,6 @@ module Pod
       end
 
       #-----------------------------------------------------------------------#
-
-      class New < List
-        self.summary = 'Lists pods introduced in the master spec-repo since the last check'
-
-        def run
-          update_if_necessary!
-
-          days = [1, 2, 3, 5, 8]
-          dates, groups = {}, {}
-          days.each { |d| dates[d] = Time.now - 60 * 60 * 24 * d }
-          sets = SourcesManager.aggregate.all_sets
-          statistics_provider = Config.instance.spec_statistics_provider
-          creation_dates = statistics_provider.creation_dates(sets)
-
-          sets.each do |set|
-            set_date = creation_dates[set.name]
-            days.each do |d|
-              if set_date >= dates[d]
-                groups[d] = [] unless groups[d]
-                groups[d] << set
-                break
-              end
-            end
-          end
-          days.reverse.each do |d|
-            sets = groups[d]
-            next unless sets
-            UI.section("\nPods added in the last #{'day'.pluralize(d)}".yellow) do
-              sorted = sets.sort_by { |s| creation_dates[s.name] }
-              mode = @stats ? :stats : :name
-              sorted.each { |set| UI.pod(set, mode, statistics_provider) }
-            end
-          end
-        end
-      end
     end
   end
 end

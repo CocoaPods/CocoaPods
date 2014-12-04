@@ -84,11 +84,10 @@ module Pod
           sets.reject! { |set| !set.specification.available_platforms.map(&:name).include?(:osx) }
         end
 
-        statistics_provider = Config.instance.spec_statistics_provider
         sets.each do |set|
           begin
             if @stats
-              UI.pod(set, :stats, statistics_provider)
+              UI.pod(set, :stats)
             else
               UI.pod(set, :normal)
             end

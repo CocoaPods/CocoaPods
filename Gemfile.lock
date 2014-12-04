@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 49a91acc2b1b9812352fa3605141215fbcc1e466
-  branch: master
+  revision: 800948c15b79203c0642135a91ec29354bee3fb7
+  branch: seg-delete-statistics
   specs:
     cocoapods-core (0.35.0)
       activesupport (>= 3.2.15)

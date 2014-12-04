@@ -120,10 +120,6 @@ module Pod
         end
       end
 
-      it 'returns the statistics cache file' do
-        @sut.statistics_cache_file.to_s.should.end_with?('statistics.yml')
-      end
-
       it 'returns the search index file' do
         @sut.search_index_file.to_s.should.end_with?('search_index.yaml')
       end
@@ -149,17 +145,6 @@ module Pod
       it 'returns the cache root' do
         @sut.cache_root.should == Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
       end
-    end
-
-    #-------------------------------------------------------------------------#
-
-    describe 'Dependency Injection' do
-
-      it 'returns the specification statistics provider' do
-        stats_provider = @sut.spec_statistics_provider
-        stats_provider.cache_file.should == @sut.cache_root + 'statistics.yml'
-      end
-
     end
 
     #-------------------------------------------------------------------------#
