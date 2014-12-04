@@ -72,7 +72,7 @@ module Pod
 
             # Embed linked Swift runtime libraries
             local basename=$(echo $1 | sed -E s/\\\\..+//)
-            local swift_runtime_libs=$(otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1/$BASENAME" | grep libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u)
+            local swift_runtime_libs=$(otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1/$BASENAME" | grep @rpath/libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u)
             for lib in $swift_runtime_libs; do
               echo "rsync -av \\"${SWIFT_STDLIB_PATH}/${lib}\\" \\"${destination}\\""
               rsync -av "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"
