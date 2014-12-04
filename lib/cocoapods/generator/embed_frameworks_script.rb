@@ -58,7 +58,7 @@ module Pod
             echo "rsync -av \\"${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1\\" \\"${DESTINATION}\\""
             rsync -av "${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1" "${DESTINATION}"
             BASENAME=$(echo $1 | sed -E s/\\\\..+//)
-            SWIFT_RUNTIME_LIBS=$(otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1/$BASENAME" | grep libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u)
+            SWIFT_RUNTIME_LIBS=$(otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1/$BASENAME" | grep @rpath/libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u)
             for LIB in $SWIFT_RUNTIME_LIBS
             do
               echo "rsync -av \\"${SWIFT_STDLIB_PATH}/${LIB}\\" \\"${DESTINATION}\\""
