@@ -21,6 +21,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2639](https://github.com/CocoaPods/CocoaPods/issues/2639)
 
+* Adding Xcode Legacy build location support for default Pods.xcodeproj.
+  [Sam Marshall](https://github.com/samdmarshall)
+
 ##### Bug Fixes
 
 * Fix updating a pod that has subspec dependencies.  
