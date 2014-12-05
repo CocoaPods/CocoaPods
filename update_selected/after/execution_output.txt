@@ -18,6 +18,7 @@ CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fi
       - Deleting `Pods/Pods-Reachability.xcconfig`
       - Deleting `Pods/Pods-resources.sh`
       - Deleting `Pods/Pods.xcconfig`
+    Migrating to CocoaPods 0.36
 
 Analyzing dependencies
 
