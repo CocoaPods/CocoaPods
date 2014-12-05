@@ -91,12 +91,14 @@ end
 
 describe_cli 'pod' do
 
-  has_mercurial = system('which hg')
+  Process.wait(spawn('which hg', :err => :out, :out => '/dev/null'))
+  has_mercurial = $?.success?
 
   subject do |s|
     s.executable = "ruby #{ROOT + 'bin/pod'}"
     s.environment_vars = {
-      'CP_AGGRESSIVE_CACHE' => 'TRUE',
+      'CP_REPOS_DIR'             => ROOT + 'spec/fixtures/spec-repos',
+      'CP_AGGRESSIVE_CACHE'      => 'TRUE',
       'XCODEPROJ_DISABLE_XCPROJ' => 'TRUE',
       'CLAIDE_DISABLE_AUTO_WRAP' => 'TRUE',
     }
