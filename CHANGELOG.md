@@ -21,6 +21,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2639](https://github.com/CocoaPods/CocoaPods/issues/2639)
 
+* Move pods' private headers to `Headers/Private` from `Headers/Build`.
+  Since some SCM ignore templates include `build` by default, this makes it
+  easier to check in the `Pods/` directory.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2623](https://github.com/CocoaPods/CocoaPods/issues/2623)
+
 ##### Bug Fixes
 
 * Fix updating a pod that has subspec dependencies.  

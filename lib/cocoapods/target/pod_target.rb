@@ -19,7 +19,7 @@ module Pod
       @specs = specs
       @target_definition = target_definition
       @sandbox = sandbox
-      @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Build')
+      @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []
     end
 

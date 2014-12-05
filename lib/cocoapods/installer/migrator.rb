@@ -13,6 +13,7 @@ module Pod
         def migrate(sandbox)
           if sandbox.manifest
             migrate_to_0_34(sandbox) if installation_minor?('0.34', sandbox)
+            migrate_to_0_36(sandbox) if installation_minor?('0.36', sandbox)
           end
         end
 
@@ -44,6 +45,14 @@ module Pod
           end
 
           delete(Pathname(File.join(ENV['HOME'], 'Library/Caches/CocoaPods/Git')))
+        end
+
+        # Migrates from CocoaPods versions prior to 0.36.
+        #
+        def migrate_to_0_36(sandbox)
+          UI.message('Migrating to CocoaPods 0.36') do
+            move(sandbox.root + 'Headers/Build', sandbox.root + 'Headers/Private')
+          end
         end
 
         # @!group Private helpers
