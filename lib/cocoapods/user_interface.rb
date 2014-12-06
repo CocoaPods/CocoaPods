@@ -193,20 +193,16 @@ module Pod
       #
       def labeled(label, value, justification = 12)
         if value
-          title = "- #{label}:".ljust(justification)
-          output = begin
-            if value.is_a?(Array)
-              lines = [wrap_string(title, self.indentation_level)]
-              value.each do |v|
-                lines << wrap_string("- #{v}", self.indentation_level + 2)
-              end
-              lines.join("\n")
-            else
-              wrap_string(title + "#{value}", self.indentation_level)
-            end + "\n"
+          title = "- #{label}:"
+          if value.is_a?(Array)
+            lines = [wrap_string(title, self.indentation_level)]
+            value.each do |v|
+              lines << wrap_string("- #{v}", self.indentation_level + 2)
+            end
+            puts lines.join("\n")
+          else
+            puts wrap_string(title.ljust(justification) + "#{value}", self.indentation_level)
           end
-          puts output
-          output
         end
       end
 
@@ -291,7 +287,7 @@ module Pod
       #
       def wrap_string(string, indent = 0)
         if disable_wrap
-          string
+          (' ' * indent) + string
         else
           first_space = ' ' * indent
           indented = CLAide::Command::Banner::TextWrapper.wrap_with_indent(string, indent, 9999)
