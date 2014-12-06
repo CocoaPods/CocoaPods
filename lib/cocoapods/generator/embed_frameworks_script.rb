@@ -46,20 +46,20 @@ module Pod
         script = <<-eos.strip_heredoc
           #!/bin/sh
           set -e
-          
+
           echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
           mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-          
+
           install_framework()
           {
             local source="${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1"
             local destination="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-            
+
             if [ -L ${source} ]; then
                 echo "Symlinked..."
                 source=$(readlink "${source}")
             fi
-            
+
             # use filter instead of exclude so missing patterns dont' throw errors
             echo "rsync -av --filter \"- CVS/\" --filter \"- .svn/\" --filter \"- .git/\" --filter \"- .hg/\" --filter \"- Headers/\" --filter \"- PrivateHeaders/\" ${source} ${destination}"
             rsync -av --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers/" --filter "- PrivateHeaders/" "${source}" "${destination}"
@@ -68,7 +68,7 @@ module Pod
                 code_sign "${destination}/$1"
             fi
           }
-          
+
           # Signs a framework with the provided identity
           code_sign() {
             # Use the current code_sign_identitiy
@@ -76,7 +76,7 @@ module Pod
             echo "/usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements $1"
             /usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements $1
           }
-          
+
         eos
         script += "\n" unless frameworks_by_config.values.all?(&:empty?)
         frameworks_by_config.each do |config, frameworks|
