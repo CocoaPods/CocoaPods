@@ -225,29 +225,10 @@ module Pod
       @default_test_podfile_path ||= templates_dir + 'Podfile.test'
     end
 
-    # @return [Pathname] The file to use a cache of the statistics provider.
-    #
-    def statistics_cache_file
-      cache_root + 'statistics.yml'
-    end
-
     # @return [Pathname] The file to use to cache the search data.
     #
     def search_index_file
       cache_root + 'search_index.yaml'
-    end
-
-    public
-
-    #-------------------------------------------------------------------------#
-
-    # @!group Dependency Injection
-
-    # @return [Specification::Set::Statistics] The statistic provider to use
-    #         for specifications.
-    #
-    def spec_statistics_provider
-      Specification::Set::Statistics.new(statistics_cache_file)
     end
 
     private

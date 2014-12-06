@@ -156,11 +156,11 @@ module Pod
 
       # Prints the textual representation of a given set.
       #
-      def pod(set, mode = :normal, statistics_provider = nil)
+      def pod(set, mode = :normal)
         if mode == :name_and_version
           puts_indented "#{set.name} #{set.versions.first.version}"
         else
-          pod = Specification::Set::Presenter.new(set, statistics_provider)
+          pod = Specification::Set::Presenter.new(set)
           title = "\n-> #{pod.name} (#{pod.version})"
           if pod.spec.deprecated?
             title += " #{pod.deprecation_description}"
@@ -174,17 +174,16 @@ module Pod
             puts_indented "pod '#{pod.name}', '~> #{pod.version}'"
             labeled('Homepage', pod.homepage)
             labeled('Source',   pod.source_url)
-            labeled('Versions', pod.verions_by_source)
+            labeled('Versions', pod.versions_by_source)
             if mode == :stats
-              labeled('Pushed',   pod.github_last_activity)
               labeled('Authors',  pod.authors) if pod.authors =~ /,/
               labeled('Author',   pod.authors) if pod.authors !~ /,/
               labeled('License',  pod.license)
               labeled('Platform', pod.platform)
-              labeled('Watchers', pod.github_watchers)
+              labeled('Stars',    pod.github_stargazers)
               labeled('Forks',    pod.github_forks)
             end
-            labeled('Sub specs', pod.subspecs)
+            labeled('Subspecs', pod.subspecs)
           end
         end
       end

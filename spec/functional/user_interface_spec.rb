@@ -41,17 +41,15 @@ module Pod
     end
 
     it 'presents the stats of a specification set' do
-      Specification::Set::Presenter.any_instance.expects(:github_last_activity).returns('more than a year ago')
-      Specification::Set::Presenter.any_instance.expects(:github_watchers).returns('318')
+      Specification::Set::Presenter.any_instance.expects(:github_stargazers).returns('318')
       Specification::Set::Presenter.any_instance.expects(:github_forks).returns('42')
       UI.pod(@set, :stats)
       output = UI.output
       output.should.include? 'Author:   Robbie Hanson'
       output.should.include? 'License:  BSD'
       output.should.include? 'Platform: iOS 5.0 - OS X 10.7'
-      output.should.include? 'Watchers: 318'
+      output.should.include? 'Stars:    318'
       output.should.include? 'Forks:    42'
-      output.should.include? 'Pushed:   more than a year ago'
     end
 
     it 'should print at least one subspec' do
