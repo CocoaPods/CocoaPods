@@ -337,14 +337,36 @@ module Pod
         sut.results.count.should == 0
       end
 
-      it 'checks for file patterns' do
-        file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "wrong_paht.*",'))
-        sut = Validator.new(file, SourcesManager.master.map(&:url))
-        sut.stubs(:build_pod)
-        sut.stubs(:validate_url)
-        sut.validate
-        sut.results.map(&:to_s).first.should.match /source_files.*did not match/
-        sut.result_type.should == :error
+      describe 'file pattern validation' do
+        it 'checks for file patterns' do
+          file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "wrong_paht.*",'))
+          sut = Validator.new(file, SourcesManager.master.map(&:url))
+          sut.stubs(:build_pod)
+          sut.stubs(:validate_url)
+          sut.validate
+          sut.results.map(&:to_s).first.should.match /source_files.*did not match/
+          sut.result_type.should == :error
+        end
+
+        it 'checks private_header_files matches only headers' do
+          file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "JSONKit.*", "private_header_files": "JSONKit.m",'))
+          sut = Validator.new(file, SourcesManager.master.map(&:url))
+          sut.stubs(:build_pod)
+          sut.stubs(:validate_url)
+          sut.validate
+          sut.results.map(&:to_s).first.should.match /matches non-header files \(JSONKit\.m\)/
+          sut.result_type.should == :error
+        end
+
+        it 'checks public_header_files matches only headers' do
+          file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "JSONKit.*", "public_header_files": "JSONKit.m",'))
+          sut = Validator.new(file, SourcesManager.master.map(&:url))
+          sut.stubs(:build_pod)
+          sut.stubs(:validate_url)
+          sut.validate
+          sut.results.map(&:to_s).first.should.match /matches non-header files \(JSONKit\.m\)/
+          sut.result_type.should == :error
+        end
       end
 
       it 'validates a podspec with dependencies' do
