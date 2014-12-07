@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2982AD3217107C0000FFF048 /* adn.cer in Resources */ = {isa = PBXBuildFile; fileRef = 2982AD3117107C0000FFF048 /* adn.cer */; };
-		C1170FBA067BBD2EED83091C /* Pods_AFNetworking_iOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC9B7CE4463BBD3AA42F1BBF /* Pods_AFNetworking_iOS_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		9A67BEDAF4D3529C5380A3E2 /* libPods-AFNetworking iOS Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB1F7D464FF374F6931E274F /* libPods-AFNetworking iOS Example.a */; };
 		F8129C7415910C37009BFE23 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F8129C7215910C37009BFE23 /* AppDelegate.m */; };
 		F818101615E6A0C600EF93C2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ABD6EC159FC2CE001BE42C /* MobileCoreServices.framework */; };
 		F88812F016C533D6003C8B8C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8E469E013957DF100DB05C8 /* Security.framework */; };
@@ -37,7 +37,7 @@
 		50ABD6EC159FC2CE001BE42C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7669B6F3267891B0317A0167 /* Pods-AFNetworking iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
 		BEA3D3BDD12996573240F05F /* Pods-AFNetworking iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example.release.xcconfig"; sourceTree = "<group>"; };
-		DC9B7CE4463BBD3AA42F1BBF /* Pods_AFNetworking_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AFNetworking_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB1F7D464FF374F6931E274F /* libPods-AFNetworking iOS Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking iOS Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8129C3815910830009BFE23 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
 		F8129C7215910C37009BFE23 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		F8129C7315910C37009BFE23 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -81,7 +81,7 @@
 				F8E469DF13957DD500DB05C8 /* CoreLocation.framework in Frameworks */,
 				F8D0701B14310F4A00653FD3 /* SystemConfiguration.framework in Frameworks */,
 				F818101615E6A0C600EF93C2 /* MobileCoreServices.framework in Frameworks */,
-				C1170FBA067BBD2EED83091C /* Pods_AFNetworking_iOS_Example.framework in Frameworks */,
+				9A67BEDAF4D3529C5380A3E2 /* libPods-AFNetworking iOS Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,7 +165,7 @@
 				F8E469641395739D00DB05C8 /* UIKit.framework */,
 				F8E469661395739D00DB05C8 /* Foundation.framework */,
 				F8E469681395739D00DB05C8 /* CoreGraphics.framework */,
-				DC9B7CE4463BBD3AA42F1BBF /* Pods_AFNetworking_iOS_Example.framework */,
+				DB1F7D464FF374F6931E274F /* libPods-AFNetworking iOS Example.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

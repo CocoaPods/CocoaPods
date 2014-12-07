@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AB1F4B03E44E9AA322A3B41A /* Pods_AFNetworking_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D50EEF9D4A656DE5F65E914 /* Pods_AFNetworking_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		1A2265312C5CBC89CD477BF8 /* libPods-AFNetworking Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53BDE93051BED183E9F4D921 /* libPods-AFNetworking Example.a */; };
 		B304CCE8177D58DD00F4FC85 /* adn.cer in Resources */ = {isa = PBXBuildFile; fileRef = B304CCE7177D58DD00F4FC85 /* adn.cer */; };
 		F8129C001591061B009BFE23 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8129BFF1591061B009BFE23 /* Cocoa.framework */; };
 		F8129C321591073C009BFE23 /* AFAppDotNetAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F8129C251591073C009BFE23 /* AFAppDotNetAPIClient.m */; };
@@ -20,7 +20,7 @@
 
 /* Begin PBXFileReference section */
 		3C79D6B3AA6A1DBBAE48A944 /* Pods-AFNetworking Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example.debug.xcconfig"; sourceTree = "<group>"; };
-		6D50EEF9D4A656DE5F65E914 /* Pods_AFNetworking_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AFNetworking_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		53BDE93051BED183E9F4D921 /* libPods-AFNetworking Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A67B777556EF5D95EAFA5CF8 /* Pods-AFNetworking Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example.release.xcconfig"; sourceTree = "<group>"; };
 		B304CCE7177D58DD00F4FC85 /* adn.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = adn.cer; sourceTree = SOURCE_ROOT; };
 		F8129BFB1591061B009BFE23 /* AFNetworking Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFNetworking Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,7 +47,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8129C001591061B009BFE23 /* Cocoa.framework in Frameworks */,
-				AB1F4B03E44E9AA322A3B41A /* Pods_AFNetworking_Example.framework in Frameworks */,
+				1A2265312C5CBC89CD477BF8 /* libPods-AFNetworking Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +90,7 @@
 			children = (
 				F8129BFF1591061B009BFE23 /* Cocoa.framework */,
 				F8129C011591061B009BFE23 /* Other Frameworks */,
-				6D50EEF9D4A656DE5F65E914 /* Pods_AFNetworking_Example.framework */,
+				53BDE93051BED183E9F4D921 /* libPods-AFNetworking Example.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
