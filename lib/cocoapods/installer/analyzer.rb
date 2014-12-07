@@ -204,7 +204,7 @@ module Pod
           user_project = Xcodeproj::Project.open(project_path)
           native_targets = compute_user_project_targets(target_definition, user_project)
 
-          target.host_requires_frameworks |= compute_user_project_targets_require_framework(target_definition, native_targets)
+          target.host_requires_frameworks |= target_definition.uses_frameworks?
           target.user_project_path = project_path
           target.client_root = project_path.dirname
           target.user_target_uuids = native_targets.map(&:uuid)
