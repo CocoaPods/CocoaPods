@@ -261,7 +261,7 @@ module Pod
         pod_target.host_requires_frameworks |= target.host_requires_frameworks
         if config.integrate_targets?
           pod_target.user_build_configurations = target.user_build_configurations
-          pod_target.archs = @archs_by_target_def[target_definition]
+          pod_target.archs = @archs_by_target_def[target.target_definition]
         else
           pod_target.user_build_configurations = {}
           if target.platform.name == :osx
