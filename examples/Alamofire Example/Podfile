@@ -1,11 +1,18 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 workspace 'Examples.xcworkspace'
+xcodeproj 'iOS Example.xcodeproj'
 
 target 'iOS Example' do
-  xcodeproj 'iOS Example.xcodeproj'
   platform :ios, '8.0'
   use_frameworks!
   pod 'Alamofire', :path => '.'
+end
+
+target 'Mixed Example' do
+  xcodeproj 'Mixed Example.xcodeproj'
+  platform :ios, '8.0'
+  pod 'Alamofire', :path => '.'
+  pod 'AFNetworking'
 end
 
