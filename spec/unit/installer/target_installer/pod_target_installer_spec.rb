@@ -152,6 +152,14 @@ module Pod
       end
 
       #--------------------------------------------------------------------------------#
+
+      it 'does not create a target if the specification does not define source files' do
+        @pod_target.file_accessors.first.stubs(:source_files).returns([])
+        @installer.install!
+        @project.targets.should == []
+      end
+
+      #--------------------------------------------------------------------------------#
       describe 'concerning compiler flags' do
         before do
           @spec = Pod::Spec.new

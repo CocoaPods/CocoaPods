@@ -17,6 +17,8 @@ module Pod
           @pod_target = PodTarget.new([@spec], target_definition, config.sandbox)
           @pod_target.stubs(:platform).returns(:ios)
           @pod_target.stubs(:spec_consumers).returns([@consumer])
+          file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
+          @pod_target.stubs(:file_accessors).returns([file_accessor])
           @target.pod_targets = [@pod_target]
           @generator = AggregateXCConfig.new(@target, 'Release')
         end
@@ -77,6 +79,12 @@ module Pod
 
         it 'links the pod targets with the aggregate integration library target' do
           @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"Pods-BananaLib"'
+        end
+
+        it 'does not link with the aggregate integration library target if it does not contain source files' do
+          @pod_target.file_accessors.first.stubs(:source_files).returns([])
+          @xcconfig = @generator.generate
+          @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
         end
 
         it 'does not links the pod targets with the aggregate integration library target for non-whitelisted configuration' do
