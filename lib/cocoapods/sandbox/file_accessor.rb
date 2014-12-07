@@ -113,8 +113,8 @@ module Pod
       # @return [Array<Pathname>] the public headers of the specification.
       #
       def public_headers(include_frameworks = false)
-        public_headers = paths_for_attribute(:public_header_files)
-        private_headers = paths_for_attribute(:private_header_files)
+        public_headers = public_header_files
+        private_headers = private_header_files
         if public_headers.nil? || public_headers.empty?
           header_files = headers
         else
@@ -204,6 +204,26 @@ module Pod
         else
           path_list.glob([GLOB_PATTERNS[:license]]).first
         end
+      end
+
+      #-----------------------------------------------------------------------#
+
+      private
+
+      # @!group Private paths
+
+      # @return [Array<Pathname>] The paths of the user-specified public header
+      #         files.
+      #
+      def public_header_files
+        paths_for_attribute(:public_header_files)
+      end
+
+      # @return [Array<Pathname>] The paths of the user-specified public header
+      #         files.
+      #
+      def private_header_files
+        paths_for_attribute(:private_header_files)
       end
 
       #-----------------------------------------------------------------------#

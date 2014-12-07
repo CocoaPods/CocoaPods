@@ -27,6 +27,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2623](https://github.com/CocoaPods/CocoaPods/issues/2623)
 
+* Validate that a specification's `public_header_files` and
+  `private_header_files` file patterns only match header files.
+  Also, validate that all file patterns, if given, match at least one file.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2914](https://github.com/CocoaPods/CocoaPods/issues/2914)
+
 ##### Bug Fixes
 
 * Fix updating a pod that has subspec dependencies.  

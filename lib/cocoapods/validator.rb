@@ -350,6 +350,10 @@ module Pod
       end
     end
 
+    FILE_PATTERNS = %i(source_files resources preserve_paths vendored_libraries
+                       vendored_frameworks public_header_files preserve_paths
+                       private_header_files resource_bundles).freeze
+
     # It checks that every file pattern specified in a spec yields
     # at least one file. It requires the pods to be already present
     # in the current working directory under Pods/spec.name.
@@ -357,8 +361,11 @@ module Pod
     # @return [void]
     #
     def check_file_patterns
-      [:source_files, :resources, :preserve_paths, :vendored_libraries, :vendored_frameworks].each do |attr_name|
-        # file_attr = Specification::DSL.attributes.values.find{|attr| attr.name == attr_name }
+      FILE_PATTERNS.each do |attr_name|
+        if respond_to?("_validate_#{attr_name}", true)
+          send("_validate_#{attr_name}")
+        end
+
         if !file_accessor.spec_consumer.send(attr_name).empty? && file_accessor.send(attr_name).empty?
           error('file patterns', "The `#{attr_name}` pattern did not match any file.")
         end
@@ -368,6 +375,25 @@ module Pod
         unless file_accessor.license || spec.license && (spec.license[:type] == 'Public Domain' || spec.license[:text])
           warning('license', 'Unable to find a license file')
         end
+      end
+    end
+
+    def _validate_private_header_files
+      _validate_header_files(:private_header_files)
+    end
+
+    def _validate_public_header_files
+      _validate_header_files(:public_header_files)
+    end
+
+    # Ensures that a list of header files only contains header files.
+    #
+    def _validate_header_files(attr_name)
+      non_header_files = file_accessor.send(attr_name).
+        select { |f| !Xcodeproj::Constants::HEADER_FILES_EXTENSIONS.include?(f.extname) }.
+        map { |f| f.relative_path_from file_accessor.root }
+      unless non_header_files.empty?
+        error(attr_name, "The pattern matches non-header files (#{non_header_files.join(', ')}).")
       end
     end
 
