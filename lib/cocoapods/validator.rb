@@ -390,7 +390,7 @@ module Pod
     #
     def _validate_header_files(attr_name)
       non_header_files = file_accessor.send(attr_name).
-        select { |f| !Xcodeproj::Constants::HEADER_FILES_EXTENSIONS.include?(f.extname) }.
+        select { |f| !Sandbox::FileAccessor::HEADER_EXTENSIONS.include?(f.extname) }.
         map { |f| f.relative_path_from file_accessor.root }
       unless non_header_files.empty?
         error(attr_name, "The pattern matches non-header files (#{non_header_files.join(', ')}).")
