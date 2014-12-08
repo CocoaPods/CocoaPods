@@ -81,12 +81,6 @@ module Pod
           @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"Pods-BananaLib"'
         end
 
-        it 'does not link with the aggregate integration library target if it does not contain source files' do
-          @pod_target.file_accessors.first.stubs(:source_files).returns([])
-          @xcconfig = @generator.generate
-          @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
-        end
-
         it 'does not links the pod targets with the aggregate integration library target for non-whitelisted configuration' do
           @generator = AggregateXCConfig.new(@target, 'Debug')
           @xcconfig = @generator.generate
@@ -95,6 +89,29 @@ module Pod
 
         it 'should configure OTHER_LIBTOOLFLAGS flags to include OTHER_LDFLAGS' do
           @xcconfig.to_hash['OTHER_LIBTOOLFLAGS'].should == '$(OTHER_LDFLAGS)'
+        end
+
+        #-----------------------------------------------------------------------#
+
+        describe "if a pod target does not contain source files" do
+
+          before do
+            @pod_target.file_accessors.first.stubs(:source_files).returns([])
+            @xcconfig = @generator.generate
+          end
+
+          it 'does not link with the aggregate integration library target' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
+          end
+
+          it 'does link with vendored frameworks' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-FBananaLib'
+          end
+
+          it 'does link with vendored libraries' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-lBananaLib'
+          end
+
         end
 
         #-----------------------------------------------------------------------#
