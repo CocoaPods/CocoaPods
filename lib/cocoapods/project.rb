@@ -145,20 +145,23 @@ module Pod
     # @param  [PBXGroup] group
     #         The group for the new file reference.
     #
-    # @param  [Bool] development
-    #         Wether the file is part of a development pod.
-    #         If it is then groups will be created to reflect the code's structure in the filesystem.
+    # @param  [Bool] reflect_file_system_structure
+    #         Wether group structure should reflect the file system structure.
+    #         If yes, where needed, intermediate groups are created, similar to 
+    #         how mkdir -p operates.
     #
     # @return [PBXFileReference] The new file reference.
     #
-    def add_file_reference(absolute_path, group, development = false)
-      unless Pathname.new(absolute_path).absolute?
+    def add_file_reference(absolute_path, group, reflect_file_system_structure = false)
+      file_path_name = Pathname.new(absolute_path)
+      unless file_path_name.absolute?
         raise ArgumentError, "Paths must be absolute #{absolute_path}"
       end
 
-      if development
-        relative_path = Pathname.new(absolute_path).relative_path_from(group.real_path).dirname
-        relative_path.each_filename do|name| 
+      if reflect_file_system_structure
+        relative_path = file_path_name.relative_path_from(group.real_path)
+        relative_dir = relative_path.dirname
+        relative_dir.each_filename do|name| 
           next if name == "." 
           group = group[name] || group.new_group(name, name) 
         end

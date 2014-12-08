@@ -152,20 +152,20 @@ module Pod
       # @param  [Symbol] group_key
       #         The key of the group of the Pods project.
       #
-      # @param  [Bool] group_if_development
+      # @param  [Bool] reflect_file_system_structure_for_development
       #         Wether organizing the a local pod's files in subgroups inside
       #         the pod's group is allowed.
       #
       # @return [void]
       #
-      def add_file_accessors_paths_to_pods_group(file_accessor_key, group_key = nil, group_if_development = false)
+      def add_file_accessors_paths_to_pods_group(file_accessor_key, group_key = nil, reflect_file_system_structure_for_development = false)
         file_accessors.each do |file_accessor|
           pod_name = file_accessor.spec.name
           local = sandbox.local?(pod_name)
           paths = file_accessor.send(file_accessor_key)
           paths.each do |path|
             group = pods_project.group_for_spec(file_accessor.spec.name, group_key)
-            pods_project.add_file_reference(path, group, local && group_if_development)
+            pods_project.add_file_reference(path, group, local && reflect_file_system_structure_for_development)
           end
         end
       end
