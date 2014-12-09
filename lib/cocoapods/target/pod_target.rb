@@ -34,6 +34,14 @@ module Pod
     #
     attr_accessor :file_accessors
 
+    # @return [Bool] Whether or not this target should be build.
+    #
+    # A target should not be build if it has no source files.
+    #
+    def should_build?
+      !file_accessors.flat_map(&:source_files).empty?
+    end
+
     # @return [Array<Specification::Consumer>] the specification consumers for
     #         the target.
     #

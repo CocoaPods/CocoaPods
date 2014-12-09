@@ -73,6 +73,7 @@ module Pod
             # Add pod static lib to list of libraries that are to be linked with
             # the user’s project.
 
+            next unless pod_target.should_build?
             @xcconfig.merge!('OTHER_LDFLAGS' => %(-l "#{pod_target.name}"))
           end
 

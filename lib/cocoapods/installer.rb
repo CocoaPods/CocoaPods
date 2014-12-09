@@ -435,7 +435,9 @@ module Pod
         pod_targets.sort_by(&:name).each do |pod_target|
           pod_target.file_accessors.each do |file_accessor|
             file_accessor.spec_consumer.frameworks.each do |framework|
-              pod_target.native_target.add_system_framework(framework)
+              if pod_target.should_build?
+                pod_target.native_target.add_system_framework(framework)
+              end
             end
           end
         end
@@ -445,6 +447,7 @@ module Pod
     def set_target_dependencies
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
+          next unless pod_target.should_build?
           aggregate_target.native_target.add_dependency(pod_target.native_target)
           pod_target.dependencies.each do |dep|
 

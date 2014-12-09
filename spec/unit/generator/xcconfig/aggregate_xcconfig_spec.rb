@@ -17,6 +17,8 @@ module Pod
           @pod_target = PodTarget.new([@spec], target_definition, config.sandbox)
           @pod_target.stubs(:platform).returns(:ios)
           @pod_target.stubs(:spec_consumers).returns([@consumer])
+          file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
+          @pod_target.stubs(:file_accessors).returns([file_accessor])
           @target.pod_targets = [@pod_target]
           @generator = AggregateXCConfig.new(@target, 'Release')
         end
@@ -87,6 +89,29 @@ module Pod
 
         it 'should configure OTHER_LIBTOOLFLAGS flags to include OTHER_LDFLAGS' do
           @xcconfig.to_hash['OTHER_LIBTOOLFLAGS'].should == '$(OTHER_LDFLAGS)'
+        end
+
+        #-----------------------------------------------------------------------#
+
+        describe "if a pod target does not contain source files" do
+
+          before do
+            @pod_target.file_accessors.first.stubs(:source_files).returns([])
+            @xcconfig = @generator.generate
+          end
+
+          it 'does not link with the aggregate integration library target' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
+          end
+
+          it 'does link with vendored frameworks' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-framework "Bananalib"'
+          end
+
+          it 'does link with vendored libraries' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"Bananalib"'
+          end
+
         end
 
         #-----------------------------------------------------------------------#

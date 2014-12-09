@@ -17,6 +17,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Do not generate targets for Pods without sources.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#2918](https://github.com/CocoaPods/CocoaPods/issues/2918)
+
 * Show the name of the source for each hook that is run in verbose mode.  
   [Samuel Giddins](https://github.com/segiddins)
   [#2639](https://github.com/CocoaPods/CocoaPods/issues/2639)

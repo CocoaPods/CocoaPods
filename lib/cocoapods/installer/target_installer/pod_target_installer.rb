@@ -9,6 +9,8 @@ module Pod
       # @return [void]
       #
       def install!
+        return unless target.should_build?
+
         UI.message "- Installing target `#{target.name}` #{target.platform}" do
           add_target
           create_support_files_dir
