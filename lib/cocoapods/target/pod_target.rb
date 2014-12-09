@@ -35,7 +35,7 @@ module Pod
     #         implementation source files.
     #
     def product_module_name
-      c99ext_identifier(pod_name)
+      root_spec.module_name
     end
 
     # @return [Array<Sandbox::FileAccessor>] the file accessors for the
