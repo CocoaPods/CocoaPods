@@ -444,6 +444,11 @@ module Pod
       end
     end
 
+    # Adds a target dependency for each pod spec to each aggregate target and
+    # links the pod targets among each other.
+    #
+    # @return [void]
+    #
     def set_target_dependencies
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
