@@ -1,0 +1,17 @@
+{
+  "name": "PodTest",
+  "version": "1.0",
+  "source": {
+    "http": "./PodTest.zip"
+  },
+  "subspecs": [
+    {
+      "name": "subspec_1",
+      "source_files": "subspec_1.{h,m}"
+    },
+    {
+      "name": "subspec_2",
+      "source_files": "subspec_2.{h,m}"
+    }
+  ]
+}
