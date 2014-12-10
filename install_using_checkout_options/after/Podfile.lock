@@ -48,7 +48,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/segiddins/SEGModules.git
 
 SPEC CHECKSUMS:
-  AFNetworking: 72af5ca61de0fac5773557f14decb1d635700a87
+  AFNetworking: 41d45d2c14219af0fa5addf3cfd433a002c13c9f
   RKValueTransformers: 6342fc9a832ee624e231c03929ad519a8d47a484
   SEGModules: 9046dab5b97eba8011c5464f91e44d95e935829a
 
