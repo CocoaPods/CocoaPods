@@ -75,6 +75,7 @@ module Pod
         @installer.stubs(:run_pre_install_hooks)
         @installer.stubs(:install_file_references)
         @installer.stubs(:install_libraries)
+        @installer.stubs(:set_target_dependencies)
         @installer.stubs(:write_lockfiles)
         @installer.stubs(:aggregate_targets).returns([])
         @installer.unstub(:generate_pods_project)
@@ -417,8 +418,11 @@ module Pod
           pod_target.stubs(:should_build? => false)
           target = AggregateTarget.new(target_definition, config.sandbox)
           
-          mock_target = mock
+          mock_target = mock('PodNativeTarget')
           mock_target.expects(:add_dependency).with('dummy')
+
+          mock_project = mock('PodsProject', :frameworks_group => mock('FrameworksGroup'))
+          @installer.stubs(:pods_project).returns(mock_project)
 
           target.stubs(:native_target).returns(mock_target)
           target.stubs(:pod_targets).returns([pod_target])
