@@ -221,12 +221,6 @@ module Pod
 
         target.pod_targets = generate_pod_targets(target, specs)
 
-        # We can set host_requires_frameworks first, when the AggregateTarget
-        # does know all its PodTargets.
-        target.pod_targets.each do |pod_target|
-          pod_target.host_requires_frameworks |= target.requires_frameworks?
-        end
-
         target
       end
 
