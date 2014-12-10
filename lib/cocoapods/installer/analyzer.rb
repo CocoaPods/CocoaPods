@@ -221,6 +221,12 @@ module Pod
 
         target.pod_targets = generate_pod_targets(target, specs)
 
+        # We can set host_requires_frameworks first, when the AggregateTarget
+        # does know all its PodTargets.
+        target.pod_targets.each do |pod_target|
+          pod_target.host_requires_frameworks |= target.requires_frameworks?
+        end
+
         target
       end
 
@@ -258,7 +264,6 @@ module Pod
       def generate_pod_target(target, pod_specs)
         pod_target = PodTarget.new(pod_specs, target.target_definition, sandbox)
 
-        pod_target.host_requires_frameworks |= target.host_requires_frameworks
         if config.integrate_targets?
           pod_target.user_build_configurations = target.user_build_configurations
           pod_target.archs = @archs_by_target_def[target.target_definition]
