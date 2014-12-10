@@ -138,6 +138,10 @@ module Pod
       # @return [void]
       #
       def store_podspec(sandbox, spec, json = false)
+        if spec.is_a? Pathname
+          spec = Specification.from_file(spec).to_pretty_json
+          json = true
+        end
         sandbox.store_podspec(name, spec, true, json)
       end
     end
