@@ -450,6 +450,7 @@ module Pod
     # @return [void]
     #
     def set_target_dependencies
+      frameworks_group = pods_project.frameworks_group
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
           next unless pod_target.should_build?
@@ -463,6 +464,12 @@ module Pod
                 puts "[BUG] DEP: #{dep}"
               end
               pod_target.native_target.add_dependency(pod_dependency_target.native_target)
+
+              if pod_target.requires_frameworks?
+                product_ref = frameworks_group.files.find { |f| f.path == pod_dep_target.product_name } ||
+                  frameworks_group.new_product_ref_for_target(pod_dependency_target.product_basename, pod_dependency_target.product_type)
+                pod_target.native_target.frameworks_build_phase.add_file_reference(product_ref)
+              end
             end
           end
         end
