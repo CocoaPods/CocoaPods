@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/CocoaPods/CocoaPods"
   s.authors  = ["Eloy Duran", "Fabio Pelosin"]
 
-  s.summary     = "An Objective-C library package manager."
+  s.summary     = "The Cocoa library package manager."
   s.description = "CocoaPods manages library dependencies for your Xcode project.\n\n"     \
                   "You specify the dependencies for your project in one easy text file. "  \
                   "CocoaPods resolves dependencies between libraries, fetches source "     \
