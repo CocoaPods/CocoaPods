@@ -89,6 +89,7 @@ module Pod
       prepare
       resolve_dependencies
       download_dependencies
+      determine_dependency_product_type
       generate_pods_project
       integrate_user_project if config.integrate_targets?
       perform_post_install_actions
@@ -309,6 +310,21 @@ module Pod
       return unless config.clean?
       return unless @pod_installers
       @pod_installers.each(&:clean!)
+    end
+
+    # Determines if the dependencies need to be built as dynamic frameworks or
+    # if they can be built as static libraries by checking for the Swift source
+    # presence. Therefore it is important that the file accessors of the
+    # #pod_targets are created.
+    #
+    # @return [void]
+    #
+    def determine_dependency_product_type
+      aggregate_targets.each do |aggregate_target|
+        aggregate_target.pod_targets.each do |pod_target|
+          pod_target.host_requires_frameworks |= aggregate_target.requires_frameworks?
+        end
+      end
     end
 
     # Performs any post-installation actions
