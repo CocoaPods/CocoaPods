@@ -9,7 +9,10 @@ module Pod
       # @return [void]
       #
       def install!
-        return unless target.should_build?
+        unless target.should_build?
+          add_resources_bundle_targets
+          return
+        end
 
         UI.message "- Installing target `#{target.name}` #{target.platform}" do
           add_target
@@ -66,19 +69,29 @@ module Pod
         target.file_accessors.each do |file_accessor|
           file_accessor.resource_bundles.each do |bundle_name, paths|
             # Add a dependency on an existing Resource Bundle target if possible
-            if bundle_target = project.targets.find { |target| target.name == bundle_name }
+            bundle_target = project.targets.find { |target| target.name == bundle_name }
+
+            unless bundle_target
+              file_references = paths.map { |sf| project.reference_for_path(sf) }
+              bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
+              bundle_target.add_resources(file_references)
+
+              target.user_build_configurations.each do |bc_name, type|
+                bundle_target.add_build_configuration(bc_name, type)
+              end
+
+              if target.requires_frameworks?
+                bundle_target.build_configurations.each do |c|
+                  c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
+                end
+              end
+            end
+
+            target.resource_bundle_targets << bundle_target
+
+            if target.should_build?
               native_target.add_dependency(bundle_target)
-              next
             end
-            file_references = paths.map { |sf| project.reference_for_path(sf) }
-            bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
-            bundle_target.add_resources(file_references)
-
-            target.user_build_configurations.each do |bc_name, type|
-              bundle_target.add_build_configuration(bc_name, type)
-            end
-
-            native_target.add_dependency(bundle_target)
           end
         end
       end

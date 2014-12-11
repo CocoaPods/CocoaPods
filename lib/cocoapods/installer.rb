@@ -447,7 +447,14 @@ module Pod
     def set_target_dependencies
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
-          next unless pod_target.should_build?
+          unless pod_target.should_build?
+            pod_target.resource_bundle_targets.each do |resource_bundle_target|
+              aggregate_target.native_target.add_dependency(resource_bundle_target)
+            end
+
+            next
+          end
+
           aggregate_target.native_target.add_dependency(pod_target.native_target)
           pod_target.dependencies.each do |dep|
 

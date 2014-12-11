@@ -21,6 +21,7 @@ module Pod
       @sandbox = sandbox
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []
+      @resource_bundle_targets = []
     end
 
     # @return [String] the label for the target.
@@ -33,6 +34,10 @@ module Pod
     #         specifications of this target.
     #
     attr_accessor :file_accessors
+
+    # @return [Array<PBXTarget>] the resource bundle targets belonging
+    #         to this target.
+    attr_reader :resource_bundle_targets
 
     # @return [Bool] Whether or not this target should be build.
     #
