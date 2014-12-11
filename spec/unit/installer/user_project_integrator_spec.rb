@@ -56,10 +56,6 @@ module Pod
         end
 
         describe '#warn_about_xcconfig_overrides' do
-          before do
-            UI.warnings = ''
-          end
-
           shared 'warn_about_xcconfig_overrides' do
             target_config = stub(:name => 'Release', :build_settings => @user_target_build_settings)
             user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
