@@ -98,7 +98,10 @@ module Pod
       #
       def create_copy_resources_script
         path = target.copy_resources_script_path
-        file_accessors = target.pod_targets.map(&:file_accessors).flatten
+        library_targets = target.pod_targets.reject do |pod_target|
+          pod_target.should_build? && pod_target.requires_frameworks?
+        end
+        file_accessors = library_targets.map(&:file_accessors).flatten
         resource_paths = file_accessors.map { |accessor| accessor.resources.flatten.map { |res| res.relative_path_from(project.path.dirname) } }.flatten
         resource_bundles = file_accessors.map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name}.bundle" } }.flatten
         resources = []

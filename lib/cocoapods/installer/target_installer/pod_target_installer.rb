@@ -14,8 +14,8 @@ module Pod
         UI.message "- Installing target `#{target.name}` #{target.platform}" do
           add_target
           create_support_files_dir
-          add_files_to_build_phases
           add_resources_bundle_targets
+          add_files_to_build_phases
           create_xcconfig_file
           if target.requires_frameworks?
             create_info_plist_file
@@ -72,6 +72,22 @@ module Pod
 
           other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
           native_target.add_file_references(other_file_refs, nil)
+
+          next unless target.requires_frameworks?
+
+          resource_refs = file_accessor.resources.flatten.map do |res| 
+            project.new_file(res.relative_path_from(project.path.dirname))
+          end
+
+          project.products_group.files.each do |product_ref|
+            file_accessor.resource_bundles.keys.each do |bundle_name|
+              if product_ref.path == "#{bundle_name}.bundle"
+                resource_refs << product_ref
+              end
+            end
+          end
+
+          native_target.add_resources(resource_refs)
         end
       end
 
@@ -99,6 +115,12 @@ module Pod
             end
 
             native_target.add_dependency(bundle_target)
+
+            if target.requires_frameworks?
+              bundle_target.build_configurations.each do |c|
+                c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
+              end
+            end
           end
         end
       end
