@@ -21,6 +21,9 @@ module Pod
         file_accessor.source_files.each do |file|
           @project.add_file_reference(file, group)
         end
+        file_accessor.resources.each do |resource|
+          @project.add_file_reference(resource, group)
+        end
 
         @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
         @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
