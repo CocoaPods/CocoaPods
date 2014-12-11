@@ -79,11 +79,9 @@ module Pod
             project.new_file(res.relative_path_from(project.path.dirname))
           end
 
-          project.products_group.files.each do |product_ref|
-            file_accessor.resource_bundles.keys.each do |bundle_name|
-              if product_ref.path == "#{bundle_name}.bundle"
-                resource_refs << product_ref
-              end
+          resource_refs += project.products_group.files.select do |product_ref|
+            file_accessor.resource_bundles.keys.any? do |bundle_name|
+              product_ref.path == "#{bundle_name}.bundle"
             end
           end
 
