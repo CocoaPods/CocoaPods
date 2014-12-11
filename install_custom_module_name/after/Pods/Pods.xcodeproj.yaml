@@ -1,0 +1,451 @@
+
+File References:
+- Podfile
+- Frameworks:
+  - SocketRocket.framework
+  - iOS:
+    - CFNetwork.framework
+    - Foundation.framework
+    - Security.framework
+- Pods:
+  - SocketRocket:
+    - NSData+SRB64Additions.h
+    - NSData+SRB64Additions.m
+    - SRWebSocket.h
+    - SRWebSocket.m
+    - base64.c
+    - base64.h
+    - Support Files:
+      - Info.plist
+      - Pods-SocketRocket.modulemap
+      - Pods-SocketRocket.xcconfig
+      - Pods-SocketRocket-Private.xcconfig
+      - Pods-SocketRocket-dummy.m
+      - Pods-SocketRocket-prefix.pch
+      - Pods-SocketRocket-umbrella.h
+  - libPusher:
+    - Core:
+      - NSDictionary+QueryString.h
+      - NSDictionary+QueryString.m
+      - NSString+Hashing.h
+      - NSString+Hashing.m
+      - PTBlockEventListener.h
+      - PTBlockEventListener.m
+      - PTEventListener.h
+      - PTJSON.h
+      - PTJSON.m
+      - PTPusher.h
+      - PTPusher.m
+      - PTPusher+Testing.h
+      - PTPusher+Testing.m
+      - PTPusherAPI.h
+      - PTPusherAPI.m
+      - PTPusherChannel.h
+      - PTPusherChannel.m
+      - PTPusherChannelAuthorizationOperation.h
+      - PTPusherChannelAuthorizationOperation.m
+      - PTPusherChannel_Private.h
+      - PTPusherConnection.h
+      - PTPusherConnection.m
+      - PTPusherDelegate.h
+      - PTPusherErrors.h
+      - PTPusherEvent.h
+      - PTPusherEvent.m
+      - PTPusherEventDispatcher.h
+      - PTPusherEventDispatcher.m
+      - PTPusherEventPublisher.h
+      - PTPusherMacros.h
+      - PTPusherMockConnection.h
+      - PTPusherMockConnection.m
+      - PTPusherPresenceChannelDelegate.h
+      - PTTargetActionEventListener.h
+      - PTTargetActionEventListener.m
+      - PTURLRequestOperation.h
+      - PTURLRequestOperation.m
+      - Pusher.h
+    - Support Files:
+      - Info.plist
+      - Pods-libPusher.modulemap
+      - Pods-libPusher.xcconfig
+      - Pods-libPusher-Private.xcconfig
+      - Pods-libPusher-dummy.m
+      - Pods-libPusher-prefix.pch
+      - Pods-libPusher-umbrella.h
+- Products:
+  - Pods.framework
+  - Pusher.framework
+  - SocketRocket.framework
+- Targets Support Files:
+  - Pods:
+    - Info.plist
+    - Pods.modulemap
+    - Pods-acknowledgements.markdown
+    - Pods-acknowledgements.plist
+    - Pods-dummy.m
+    - Pods-environment.h
+    - Pods-frameworks.sh
+    - Pods-resources.sh
+    - Pods-umbrella.h
+    - Pods.debug.xcconfig
+    - Pods.release.xcconfig
+
+
+
+Targets:
+- Pods:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
+      - Pods-umbrella.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods/Pods.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: Pods
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          PODS_ROOT: $(SRCROOT)
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods.debug.xcconfig
+    - Release:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods/Pods.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: Pods
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          PODS_ROOT: $(SRCROOT)
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods.release.xcconfig
+- Pods-SocketRocket:
+    Build Phases:
+    - SourcesBuildPhase:
+      - NSData+SRB64Additions.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - Pods-SocketRocket-dummy.m
+      - SRWebSocket.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - base64.c:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+    - FrameworksBuildPhase:
+      - CFNetwork.framework
+      - Foundation.framework
+      - Security.framework
+    - HeadersBuildPhase:
+      - NSData+SRB64Additions.h:
+          ATTRIBUTES:
+          - Public
+      - Pods-SocketRocket-umbrella.h:
+          ATTRIBUTES:
+          - Public
+      - SRWebSocket.h:
+          ATTRIBUTES:
+          - Public
+      - base64.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SocketRocket/Pods-SocketRocket.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SocketRocket/Pods-SocketRocket-prefix.pch
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: SocketRocket
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SocketRocket/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SocketRocket-Private.xcconfig
+    - Release:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SocketRocket/Pods-SocketRocket.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SocketRocket/Pods-SocketRocket-prefix.pch
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: SocketRocket
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SocketRocket/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SocketRocket-Private.xcconfig
+- Pods-libPusher:
+    Build Phases:
+    - SourcesBuildPhase:
+      - NSDictionary+QueryString.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - NSString+Hashing.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTBlockEventListener.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTJSON.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTPusher+Testing.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTPusher.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTPusherAPI.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTPusherChannel.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTPusherChannelAuthorizationOperation.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTPusherConnection.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTPusherEvent.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTPusherEventDispatcher.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTPusherMockConnection.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTTargetActionEventListener.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - PTURLRequestOperation.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - Pods-libPusher-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+      - SocketRocket.framework
+    - HeadersBuildPhase:
+      - NSDictionary+QueryString.h
+      - NSString+Hashing.h
+      - PTBlockEventListener.h
+      - PTEventListener.h:
+          ATTRIBUTES:
+          - Public
+      - PTJSON.h
+      - PTPusher+Testing.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusher.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherAPI.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherChannel.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherChannelAuthorizationOperation.h
+      - PTPusherChannel_Private.h
+      - PTPusherConnection.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherDelegate.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherErrors.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherEvent.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherEventDispatcher.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherEventPublisher.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherMacros.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherMockConnection.h:
+          ATTRIBUTES:
+          - Public
+      - PTPusherPresenceChannelDelegate.h:
+          ATTRIBUTES:
+          - Public
+      - PTTargetActionEventListener.h
+      - PTURLRequestOperation.h
+      - Pods-libPusher-umbrella.h:
+          ATTRIBUTES:
+          - Public
+      - Pusher.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-libPusher/Pods-libPusher.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-libPusher/Pods-libPusher-prefix.pch
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: Pusher
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-libPusher/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-libPusher-Private.xcconfig
+    - Release:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-libPusher/Pods-libPusher.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-libPusher/Pods-libPusher-prefix.pch
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: Pusher
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-libPusher/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-libPusher-Private.xcconfig
+
+
+
+Build Configurations:
+- Debug:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - $(inherited)
+      ONLY_ACTIVE_ARCH: 'YES'
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+- Release:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      VALIDATE_PRODUCT: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - RELEASE=1
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      COPY_PHASE_STRIP: 'NO'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      ENABLE_NS_ASSERTIONS: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
