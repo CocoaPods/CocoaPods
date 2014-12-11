@@ -79,12 +79,6 @@ module Pod
               target.user_build_configurations.each do |bc_name, type|
                 bundle_target.add_build_configuration(bc_name, type)
               end
-
-              if target.requires_frameworks?
-                bundle_target.build_configurations.each do |c|
-                  c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
-                end
-              end
             end
 
             target.resource_bundle_targets << bundle_target
