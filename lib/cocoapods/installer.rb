@@ -486,6 +486,8 @@ module Pod
               unless pod_dependency_target
                 puts "[BUG] DEP: #{dep}"
               end
+
+              next unless pod_dependency_target.should_build?
               pod_target.native_target.add_dependency(pod_dependency_target.native_target)
 
               if pod_target.requires_frameworks?
