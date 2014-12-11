@@ -103,6 +103,15 @@ module Pod
         @project.targets.map(&:name).should == ['Pods-BananaLib', 'banana_bundle']
       end
 
+      it 'adds framework resources to the framework target' do
+        @pod_target.stubs(:requires_frameworks? => true)
+        @installer.install!
+        resources = @project.targets.first.resources_build_phase.files
+        resources.count.should > 0
+        resource = resources.find { |res| res.file_ref.path.include?('logo-sidebar.png') }
+        resource.should.be.not.nil
+      end
+
       xit 'adds the build configurations to the resources bundle targets' do
 
       end
