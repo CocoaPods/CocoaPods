@@ -75,7 +75,7 @@ module Pod
 
           next unless target.requires_frameworks?
 
-          resource_refs = file_accessor.resources.flatten.map do |res| 
+          resource_refs = file_accessor.resources.flatten.map do |res|
             project.new_file(res.relative_path_from(project.path.dirname))
           end
 
