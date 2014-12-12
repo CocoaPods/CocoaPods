@@ -1,0 +1,48 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Fetching external sources
+-> Fetching podspec for `res` from `res`
+
+Resolving dependencies of `Podfile`
+Starting resolution (<#DATE#>)
+Creating possibility state for res (from `res`) (1 remaining)
+  Attempting to activate res (0.1.0)
+  Activated res at res (0.1.0)
+  Requiring nested dependencies ()
+Finished resolution (1 steps) (Took <#DURATION#> seconds) (<#DATE#>)
+Unactivated: 
+Activated: res
+
+Comparing resolved specification to the sandbox manifest
+  A res
+
+Downloading dependencies
+
+-> Installing res (0.1.0)
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `Pods-SampleApp` OS X 10.8
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
+  - Removing (Pods/Pods.xcconfig)
