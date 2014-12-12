@@ -64,6 +64,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2875](https://github.com/CocoaPods/CocoaPods/issues/2875)
 
+* Fix compiling all XCAsset catalogs from all targets into each target, 
+  yielding inflated app sizes and duplication of resources
+  [Joel Parsons](https://github.com/joelparsons)
+
 ## 0.35.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.34.4...0.35.0)
