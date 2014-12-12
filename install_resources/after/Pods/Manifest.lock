@@ -1,0 +1,14 @@
+PODS:
+  - res (0.1.0)
+
+DEPENDENCIES:
+  - res (from `res`)
+
+EXTERNAL SOURCES:
+  res:
+    :path: res
+
+SPEC CHECKSUMS:
+  res: 028478018f6f82cb05f091dbc461def97982421d
+
+COCOAPODS: 0.35.0

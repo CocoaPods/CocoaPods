@@ -1,0 +1,234 @@
+
+File References:
+- Podfile
+- Development Pods:
+  - res:
+    - foo.m
+    - Resources:
+      - 512_black.png
+      - troll.png
+    - Support Files:
+      - Pods-SampleApp-res.xcconfig
+      - Pods-SampleApp-res-Private.xcconfig
+      - Pods-SampleApp-res-dummy.m
+      - Pods-SampleApp-res-prefix.pch
+- Frameworks:
+  - OS X:
+    - Cocoa.framework
+- Products:
+  - libPods-SampleApp.a
+  - libPods-SampleApp-res.a
+  - res.bundle
+- Targets Support Files:
+  - Pods-SampleApp:
+    - Pods-SampleApp-acknowledgements.markdown
+    - Pods-SampleApp-acknowledgements.plist
+    - Pods-SampleApp-dummy.m
+    - Pods-SampleApp-environment.h
+    - Pods-SampleApp-resources.sh
+    - Pods-SampleApp.debug.xcconfig
+    - Pods-SampleApp.release.xcconfig
+
+
+
+Targets:
+- Pods-SampleApp:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-SampleApp-dummy.m
+    - FrameworksBuildPhase:
+      - Cocoa.framework
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          DSTROOT: /tmp/xcodeproj.dst
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - $(inherited)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          COMBINE_HIDPI_IMAGES: 'YES'
+          COPY_PHASE_STRIP: 'NO'
+        Base Configuration: Pods-SampleApp.debug.xcconfig
+    - Release:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          SKIP_INSTALL: 'YES'
+          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          SDKROOT: macosx
+          COMBINE_HIDPI_IMAGES: 'YES'
+          COPY_PHASE_STRIP: 'YES'
+        Base Configuration: Pods-SampleApp.release.xcconfig
+- Pods-SampleApp-res:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-SampleApp-res-dummy.m
+      - foo.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+    - FrameworksBuildPhase:
+      - Cocoa.framework
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          DSTROOT: /tmp/xcodeproj.dst
+          GCC_PREPROCESSOR_DEFINITIONS:
+          - DEBUG=1
+          - $(inherited)
+          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          OTHER_LIBTOOLFLAGS: ''
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp-res/Pods-SampleApp-res-prefix.pch
+          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          GCC_OPTIMIZATION_LEVEL: '0'
+          OTHER_LDFLAGS: ''
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          SDKROOT: macosx
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          COPY_PHASE_STRIP: 'NO'
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_DYNAMIC_NO_PIC: 'NO'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          SKIP_INSTALL: 'YES'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+          COMBINE_HIDPI_IMAGES: 'YES'
+        Base Configuration: Pods-SampleApp-res-Private.xcconfig
+    - Release:
+        Build Settings:
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp-res/Pods-SampleApp-res-prefix.pch
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          OTHER_LIBTOOLFLAGS: ''
+          OTHER_CFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          SKIP_INSTALL: 'YES'
+          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
+          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
+          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          DSTROOT: /tmp/xcodeproj.dst
+          OTHER_CPLUSPLUSFLAGS:
+          - -DNS_BLOCK_ASSERTIONS=1
+          - $(inherited)
+          ALWAYS_SEARCH_USER_PATHS: 'NO'
+          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          OTHER_LDFLAGS: ''
+          SDKROOT: macosx
+          COMBINE_HIDPI_IMAGES: 'YES'
+          COPY_PHASE_STRIP: 'YES'
+        Base Configuration: Pods-SampleApp-res-Private.xcconfig
+- res:
+    Build Phases:
+    - SourcesBuildPhase: []
+    - FrameworksBuildPhase: []
+    - ResourcesBuildPhase:
+      - 512_black.png
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          WRAPPER_EXTENSION: bundle
+          COMBINE_HIDPI_IMAGES: 'YES'
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          PRODUCT_NAME: $(TARGET_NAME)
+    - Release:
+        Build Settings:
+          WRAPPER_EXTENSION: bundle
+          COMBINE_HIDPI_IMAGES: 'YES'
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          PRODUCT_NAME: $(TARGET_NAME)
+
+
+
+Build Configurations:
+- Debug:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - $(inherited)
+      ONLY_ACTIVE_ARCH: 'YES'
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+- Release:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      VALIDATE_PRODUCT: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - RELEASE=1
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      COPY_PHASE_STRIP: 'NO'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      ENABLE_NS_ASSERTIONS: 'NO'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
