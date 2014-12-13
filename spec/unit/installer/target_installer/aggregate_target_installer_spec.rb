@@ -150,6 +150,25 @@ module Pod
 
       end
 
+      it 'does add pods to the embed frameworks script' do
+        @pod_target.stubs(:requires_frameworks? => true)
+        @target.stubs(:requires_frameworks? => true)
+        @installer.install!
+        support_files_dir = config.sandbox.target_support_files_dir('Pods')
+        script = support_files_dir + 'Pods-frameworks.sh'
+        script.read.should.include?('BananaLib.framework')
+      end
+
+      it 'does not add pods to the embed frameworks script if they are not to be build' do
+        @pod_target.stubs(:should_build? => false)
+        @pod_target.stubs(:requires_frameworks? => true)
+        @target.stubs(:requires_frameworks? => true)
+        @installer.install!
+        support_files_dir = config.sandbox.target_support_files_dir('Pods')
+        script = support_files_dir + 'Pods-frameworks.sh'
+        script.read.should.not.include?('BananaLib.framework')
+      end
+
       it 'creates the acknowledgements files ' do
         @installer.install!
         support_files_dir = config.sandbox.target_support_files_dir('Pods')

@@ -1,3 +1,4 @@
+
 module Pod
   class Installer
     # Creates the targets which aggregate the Pods libraries in the Pods
@@ -127,7 +128,7 @@ module Pod
         frameworks_by_config = {}
         target.user_build_configurations.keys.each do |config|
           frameworks_by_config[config] = target.pod_targets.select do |pod_target|
-            pod_target.include_in_build_config?(config)
+            pod_target.include_in_build_config?(config) && pod_target.should_build?
           end.map(&:product_name)
         end
         generator = Generator::EmbedFrameworksScript.new(target_definition, frameworks_by_config)
