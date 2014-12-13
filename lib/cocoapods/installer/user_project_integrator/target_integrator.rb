@@ -31,6 +31,7 @@ module Pod
             project_is_dirty = [
               XCConfigIntegrator.integrate(target, native_targets),
               update_to_cocoapods_0_34,
+              remove_embed_frameworks_script_phases,
               unless native_targets_to_integrate.empty?
                 add_pods_library
                 add_embed_frameworks_script_phase if target.requires_frameworks?
@@ -143,6 +144,26 @@ module Pod
             embed_build_phase.shell_script = %("#{script_path}"\n)
             embed_build_phase.show_env_vars_in_log = '0'
           end
+        end
+
+        # Delete 'Embed Pods Frameworks' Build Phases if they exist
+        #
+        # @return [void]
+        #
+        def remove_embed_frameworks_script_phases
+          return false if target.requires_frameworks?
+
+          phase_name = 'Embed Pods Frameworks'
+          result = false
+
+          native_targets.each do |native_target|
+            embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
+            next unless embed_build_phase.present?
+            native_target.build_phases.delete(embed_build_phase)
+            result = true
+          end
+
+          result
         end
 
         # Adds a shell script build phase responsible to copy the resources
