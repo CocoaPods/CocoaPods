@@ -100,6 +100,31 @@ module Pod
           @target_integrator.send(:user_project).expects(:save).never
           @target_integrator.integrate!
         end
+
+        it 'adds an embed frameworks build phase if frameworks are used' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase.nil?.should == false
+        end
+
+        it 'does not add an embed frameworks build phase by default' do
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase.nil?.should == true
+        end
+
+        it 'removes existing embed frameworks build phases if frameworks are not used anymore' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          @pod_bundle.stubs(:requires_frameworks? => false)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase.nil?.should == true
+        end
       end
 
       describe 'Private helpers' do
