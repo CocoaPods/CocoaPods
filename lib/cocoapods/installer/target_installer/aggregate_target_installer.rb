@@ -1,4 +1,3 @@
-
 module Pod
   class Installer
     # Creates the targets which aggregate the Pods libraries in the Pods
