@@ -82,6 +82,15 @@ module Pod
       root_spec.name
     end
 
+    # @param  [String] bundle_name
+    #         The name of the bundle product, which is given by the +spec+.
+    #
+    # @return [String] The derived name of the resource bundle target.
+    #
+    def resources_bundle_target_label(bundle_name)
+      "#{label}-#{bundle_name}"
+    end
+
     # @return [Array<String>] The names of the Pods on which this target
     #         depends.
     #

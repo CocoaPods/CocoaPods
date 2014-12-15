@@ -34,6 +34,10 @@ module Pod
         @pod_target.pod_name.should == 'BananaLib'
       end
 
+      it 'returns the name of the resources bundle target' do
+        @pod_target.resources_bundle_target_label('Fruits').should == 'Pods-BananaLib-Fruits'
+      end
+
       it 'returns the name of the Pods on which this target depends' do
         @pod_target.dependencies.should == ['monkey']
       end
