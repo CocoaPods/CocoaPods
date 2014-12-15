@@ -184,6 +184,11 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+    describe 'Integrates a Pod using frameworks with resources' do
+      behaves_like cli_spec 'install_framework_resources',
+                            'install --no-repo-update'
+    end
+
     # @todo add tests for all the hooks API
     #
     describe 'Runs the Podfile callbacks' do
