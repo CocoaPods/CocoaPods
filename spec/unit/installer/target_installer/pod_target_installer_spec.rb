@@ -103,7 +103,7 @@ module Pod
       it 'adds the resource bundle targets' do
         @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
         @installer.install!
-        @project.targets.map(&:name).should == ['Pods-BananaLib', 'banana_bundle']
+        @project.targets.map(&:name).should == ['Pods-BananaLib', 'Pods-BananaLib-banana_bundle']
       end
 
       it 'adds framework resources to the framework target' do
