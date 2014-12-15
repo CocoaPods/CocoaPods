@@ -1,0 +1,6 @@
+framework module SamplePodWithResources {
+  umbrella header "Pods-SampleAppTests-SamplePodWithResources-umbrella.h"
+
+  export *
+  module * { export * }
+}
