@@ -43,6 +43,13 @@ module Pod
 
       #--------------------------------------#
 
+      it 'does not fail if the repos directory does not exist' do
+        config.stubs(:repos_dir).returns(Pathname.new('/foo/bar'))
+        SourcesManager.unstub(:all)
+        SourcesManager.aggregate.sources.should == []
+        SourcesManager.all.should == []
+      end
+
       it 'returns all the sources' do
         SourcesManager.unstub(:all)
         SourcesManager.all.map(&:name).should == %w(master test_repo)
