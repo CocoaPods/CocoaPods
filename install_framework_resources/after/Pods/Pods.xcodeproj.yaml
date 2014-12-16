@@ -79,9 +79,11 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           MODULEMAP_FILE: Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap
           CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MTL_ENABLE_DEBUG_INFO: 'YES'
           FRAMEWORK_VERSION: A
+          OTHER_LDFLAGS: ''
           DYLIB_COMPATIBILITY_VERSION: '1'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -105,10 +107,12 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           MODULEMAP_FILE: Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap
           CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MTL_ENABLE_DEBUG_INFO: 'NO'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           FRAMEWORK_VERSION: A
+          OTHER_LDFLAGS: ''
           DYLIB_COMPATIBILITY_VERSION: '1'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -238,9 +242,11 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           MODULEMAP_FILE: Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.modulemap
           CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MTL_ENABLE_DEBUG_INFO: 'YES'
           FRAMEWORK_VERSION: A
+          OTHER_LDFLAGS: ''
           DYLIB_COMPATIBILITY_VERSION: '1'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -264,10 +270,12 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           MODULEMAP_FILE: Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.modulemap
           CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MTL_ENABLE_DEBUG_INFO: 'NO'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           FRAMEWORK_VERSION: A
+          OTHER_LDFLAGS: ''
           DYLIB_COMPATIBILITY_VERSION: '1'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
