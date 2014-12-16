@@ -82,7 +82,13 @@ module Pod
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
 
           pod_targets.each do |pod_target|
-            XCConfigHelper.add_settings_for_file_accessors_of_target(pod_target, @xcconfig)
+            unless pod_target.should_build? && pod_target.requires_frameworks?
+              # In case of generated pod targets, which require frameworks, the
+              # vendored frameworks and libraries are already linked statically
+              # into the framework binary and must not be linked again to the
+              # user target.
+              XCConfigHelper.add_settings_for_file_accessors_of_target(pod_target, @xcconfig)
+            end
 
             # Add pod target to list of frameworks / libraries that are
             # linked with the user’s project.
