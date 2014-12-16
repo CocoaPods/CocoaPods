@@ -51,13 +51,23 @@ module Pod
           configuration = @native_target.add_build_configuration(bc_name, type)
         end
 
-        settings = {}
-        if target.archs
-          settings['ARCHS'] = target.archs
+        @native_target.build_configurations.each do |configuration|
+          configuration.build_settings.merge!(custom_build_settings)
         end
 
-        if target.is_a? AggregateTarget
-          settings['PODS_ROOT'] = '$(SRCROOT)'
+        target.native_target = @native_target
+      end
+
+      # Returns the customized build settings which are overridden in the build
+      # settings of the user target.
+      #
+      # @return [Hash{String => String}]
+      #
+      def custom_build_settings
+        settings = {}
+
+        if target.archs
+          settings['ARCHS'] = target.archs
         end
 
         if target.requires_frameworks?
@@ -66,11 +76,7 @@ module Pod
           settings.merge!('OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '')
         end
 
-        @native_target.build_configurations.each do |configuration|
-          configuration.build_settings.merge!(settings)
-        end
-
-        target.native_target = @native_target
+        settings
       end
 
       # Creates the directory where to store the support files of the target.
