@@ -32,8 +32,14 @@ module Pod
 
       private
 
+      # Ensure that vendored static frameworks and libraries are not linked
+      # twice to the aggregate target, which shares the xcconfig of the user
+      # target.
+      #
       def custom_build_settings
         settings = {
+          'OTHER_LDFLAGS'      => '',
+          'OTHER_LIBTOOLFLAGS' => '',
           'PODS_ROOT'          => '$(SRCROOT)',
         }
         super.merge(settings)
