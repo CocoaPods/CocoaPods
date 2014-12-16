@@ -331,6 +331,8 @@ module Pod
           pods_to_fetch = result.podfile_state.added + result.podfile_state.changed
           if update_mode == :selected
             pods_to_fetch += update[:pods]
+          elsif update_mode == :all
+            pods_to_fetch += result.podfile_state.unchanged + result.podfile_state.deleted
           end
           pods_to_fetch
         end

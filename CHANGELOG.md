@@ -64,6 +64,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2875](https://github.com/CocoaPods/CocoaPods/issues/2875)
 
+* Fix the updating of `:git`, `:svn`, and `:hg` dependencies when updating all
+  pods.  
+  [Samuel Giddins](https://github.com/CocoaPods/CocoaPods/issues/2859)
+  [#2859](https://github.com/CocoaPods/CocoaPods/issues/2859)
+
+
 ## 0.35.0
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.34.4...0.35.0)

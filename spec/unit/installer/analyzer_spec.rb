@@ -722,6 +722,28 @@ module Pod
         @analyzer.send(:fetch_external_sources)
       end
 
+      it 'ignores lockfile checkout options when updating selected pods' do
+        @analyzer.result.podfile_state.unchanged << 'BananaLib'
+        @analyzer.stubs(:update).returns(:pods => %w(BananaLib))
+
+        downloader = stub('DownloaderSource')
+        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file).returns(downloader)
+
+        downloader.expects(:fetch)
+        @analyzer.send(:fetch_external_sources)
+      end
+
+      it 'ignores lockfile checkout options when updating all pods' do
+        @analyzer.result.podfile_state.unchanged << 'BananaLib'
+        @analyzer.stubs(:update).returns(true)
+
+        downloader = stub('DownloaderSource')
+        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file).returns(downloader)
+
+        downloader.expects(:fetch)
+        @analyzer.send(:fetch_external_sources)
+      end
+
       it 'does not re-fetch the external source when the sandbox has the correct revision of the source' do
         @analyzer.result.podfile_state.unchanged << 'BananaLib'
 
