@@ -148,7 +148,7 @@ module Pod
 
         # Delete 'Embed Pods Frameworks' Build Phases if they exist
         #
-        # @return [void]
+        # @return [Bool]
         #
         def remove_embed_frameworks_script_phases
           return false if target.requires_frameworks?
