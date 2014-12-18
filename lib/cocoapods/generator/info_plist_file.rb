@@ -29,12 +29,24 @@ module Pod
         end
       end
 
+      # The version associated with the current target
+      #
+      # @return [String]
+      #
+      def target_version
+        if target && target.respond_to?(:root_spec)
+          target.root_spec.version.to_s
+        else
+          '1.0.0'
+        end
+      end
+
       # Generates the contents of the Info.plist
       #
       # @return [String]
       #
       def generate
-        FILE_CONTENTS
+        FILE_CONTENTS.sub('${CURRENT_PROJECT_VERSION_STRING}', target_version)
       end
 
       FILE_CONTENTS = <<-EOS
@@ -55,7 +67,7 @@ module Pod
   <key>CFBundlePackageType</key>
   <string>FMWK</string>
   <key>CFBundleShortVersionString</key>
-  <string>1.0</string>
+  <string>${CURRENT_PROJECT_VERSION_STRING}</string>
   <key>CFBundleSignature</key>
   <string>????</string>
   <key>CFBundleVersion</key>
