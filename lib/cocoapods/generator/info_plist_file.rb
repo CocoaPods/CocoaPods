@@ -31,6 +31,8 @@ module Pod
 
       # The version associated with the current target
       #
+      # @note Will return 1.0.0 for the AggregateTarget
+      #
       # @return [String]
       #
       def target_version
