@@ -1,3 +1,5 @@
+require 'pry-byebug'
+
 module Pod
   class Installer
     # Analyzes the Podfile, the Lockfile, and the sandbox manifest to generate
@@ -304,6 +306,7 @@ module Pod
 
           if update_mode == :all
             deps_to_fetch = deps_with_external_source
+            deps_to_fetch -= deps_to_fetch.select{ |dep| !dep.external_source[:commit].nil? && !checkout_requires_update?(dep) }
           else
             deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.name) }
             deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.name) }
