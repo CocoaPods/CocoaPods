@@ -1,5 +1,3 @@
-require 'pry-byebug'
-
 module Pod
   class Installer
     # Analyzes the Podfile, the Lockfile, and the sandbox manifest to generate
