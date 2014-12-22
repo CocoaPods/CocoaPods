@@ -449,8 +449,16 @@ module Pod
     #
     attr_reader :source_urls
 
+    # @param  [String] platform_name
+    #         the name of the platform, which should be declared
+    #         in the Podfile.
+    #
+    # @param  [String] deployment_target
+    #         the deployment target, which should be declared in
+    #         the Podfile.
+    #
     # @return [Podfile] a podfile that requires the specification on the
-    # current platform.
+    #         current platform.
     #
     # @note   The generated podfile takes into account whether the linter is
     #         in local mode.
