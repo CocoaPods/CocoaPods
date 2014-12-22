@@ -26,10 +26,10 @@ File References:
   - OS X:
     - Cocoa.framework
 - Products:
-  - Pods-SampleApp-SamplePodWithResources-SamplePodWithResources.bundle
-  - Pods-SampleAppTests-SamplePodWithResources-SamplePodWithResources.bundle
   - Pods_SampleApp.framework
   - Pods_SampleAppTests.framework
+  - SamplePodWithResources.bundle
+  - SamplePodWithResources.bundle
   - SamplePodWithResources.framework
   - SamplePodWithResources.framework
 - Targets Support Files:
@@ -138,6 +138,7 @@ Targets:
     - FrameworksBuildPhase:
       - Cocoa.framework
     - ResourcesBuildPhase:
+      - SamplePodWithResources.bundle
       - troll.png
     - HeadersBuildPhase:
       - Pods-SampleApp-SamplePodWithResources-umbrella.h:
@@ -301,6 +302,7 @@ Targets:
     - FrameworksBuildPhase:
       - Cocoa.framework
     - ResourcesBuildPhase:
+      - SamplePodWithResources.bundle
       - troll.png
     - HeadersBuildPhase:
       - Pods-SampleAppTests-SamplePodWithResources-umbrella.h:
