@@ -143,6 +143,10 @@ module Pod
     #
     attr_accessor :no_subspecs
 
+    # @return [Bool] Whether frameworks should be used for the installation.
+    #
+    attr_accessor :use_frameworks
+
     #-------------------------------------------------------------------------#
 
     # !@group Lint results
@@ -299,7 +303,7 @@ module Pod
     #
     def install_pod
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
-      podfile = podfile_from_spec(consumer.platform_name, deployment_target)
+      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks)
       sandbox = Sandbox.new(config.sandbox_root)
       installer = Installer.new(sandbox, podfile)
       installer.install!
@@ -457,19 +461,23 @@ module Pod
     #         the deployment target, which should be declared in
     #         the Podfile.
     #
+    # @param  [Bool] use_frameworks
+    #         whether frameworks should be used for the installation
+    #
     # @return [Podfile] a podfile that requires the specification on the
     #         current platform.
     #
     # @note   The generated podfile takes into account whether the linter is
     #         in local mode.
     #
-    def podfile_from_spec(platform_name, deployment_target)
+    def podfile_from_spec(platform_name, deployment_target, use_frameworks = nil)
       name     = subspec_name ? subspec_name : spec.name
       podspec  = file.realpath
       local    = local?
       urls     = source_urls
       podfile  = Pod::Podfile.new do
         urls.each { |u| source(u) }
+        use_frameworks!(use_frameworks) unless use_frameworks.nil?
         platform(platform_name, deployment_target)
         if local
           pod name, :path => podspec.dirname.to_s
