@@ -26,7 +26,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   copied into the `mainBundle`. By now Pods have to use
   `[NSBundle bundleForClass:<#Class from Pod#>]` to access provided resources
   relatively to the bundle.
-  [Bors Bügling](https://github.com/neonichu)
+  [Boris Bügling](https://github.com/neonichu)
   [#2835](https://github.com/CocoaPods/CocoaPods/issues/2730)
 
 * Only the hooks specified by usage of the `plugin` directive of the `Podfile`
