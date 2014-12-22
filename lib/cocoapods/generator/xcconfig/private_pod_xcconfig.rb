@@ -58,6 +58,8 @@ module Pod
           }
 
           if target.requires_frameworks?
+            # Only quote the FRAMEWORK_SEARCH_PATHS entry, because it’s a setting that takes multiple values.
+            # In addition, quoting CONFIGURATION_BUILD_DIR would make it be interpreted as a relative path.
             build_settings = {
               'PODS_FRAMEWORK_BUILD_PATH' => target.configuration_build_dir,
               'CONFIGURATION_BUILD_DIR' => '$PODS_FRAMEWORK_BUILD_PATH',
