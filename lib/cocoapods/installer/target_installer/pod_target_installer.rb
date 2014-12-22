@@ -82,12 +82,6 @@ module Pod
             project.reference_for_path(res)
           end
 
-          resource_refs += project.products_group.files.select do |product_ref|
-            file_accessor.resource_bundles.keys.any? do |bundle_name|
-              product_ref.path == "#{bundle_name}.bundle"
-            end
-          end
-
           native_target.add_resources(resource_refs)
         end
       end
@@ -105,6 +99,11 @@ module Pod
             file_references = paths.map { |sf| project.reference_for_path(sf) }
             label = target.resources_bundle_target_label(bundle_name)
             bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
+            bundle_target.product_reference.tap do |bundle_product|
+              bundle_file_name = "#{bundle_name}.bundle"
+              bundle_product.name = bundle_file_name
+              bundle_product.path = bundle_file_name
+            end
             bundle_target.add_resources(file_references)
 
             target.user_build_configurations.each do |bc_name, type|
@@ -115,6 +114,9 @@ module Pod
 
             if target.should_build?
               native_target.add_dependency(bundle_target)
+              if target.requires_frameworks?
+                native_target.add_resources([bundle_target.product_reference])
+              end
             end
 
             bundle_target.build_configurations.each do |c|
