@@ -10,7 +10,7 @@ module Pod
     class UmbrellaHeader < Header
       # @return [Target]
       #         the target, which provides the product name
-      attr_accessor :target
+      attr_reader :target
 
       # @param  [Target] target
       #         @see target
