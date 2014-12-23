@@ -198,13 +198,13 @@ module Pod
       #
       def generate_target(target_definition, specs)
         target = AggregateTarget.new(target_definition, sandbox)
+        target.host_requires_frameworks |= target_definition.uses_frameworks?
 
         if config.integrate_targets?
           project_path = compute_user_project_path(target_definition)
           user_project = Xcodeproj::Project.open(project_path)
           native_targets = compute_user_project_targets(target_definition, user_project)
 
-          target.host_requires_frameworks |= target_definition.uses_frameworks?
           target.user_project_path = project_path
           target.client_root = project_path.dirname
           target.user_target_uuids = native_targets.map(&:uuid)
