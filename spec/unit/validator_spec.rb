@@ -301,12 +301,31 @@ module Pod
         podfile = validator.send(:perform_extensive_analysis, validator.spec)
       end
 
-      it 'respects the local option' do
-        sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
-        sut.stubs(:validate_url)
-        podfile = sut.send(:podfile_from_spec, :ios, '5.0')
-        deployment_target = podfile.target_definitions['Pods'].platform.deployment_target
-        deployment_target.to_s.should == '5.0'
+      describe '#podfile_from_spec' do
+        before do
+          @sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+          @sut.stubs(:validate_url)
+        end
+
+        it 'configures the deployment target' do
+          podfile = @sut.send(:podfile_from_spec, :ios, '5.0')
+          target_definition = podfile.target_definitions['Pods']
+          platform = target_definition.platform
+          platform.symbolic_name.should == :ios
+          platform.deployment_target.to_s.should == '5.0'
+        end
+
+        it 'includes the use_frameworks! directive' do
+          podfile = @sut.send(:podfile_from_spec, :ios, '5.0', true)
+          target_definition = podfile.target_definitions['Pods']
+          target_definition.uses_frameworks?.should == true
+        end
+
+        it 'includes the use_frameworks!(false) directive' do
+          podfile = @sut.send(:podfile_from_spec, :ios, '5.0', false)
+          target_definition = podfile.target_definitions['Pods']
+          (!!target_definition.uses_frameworks?).should == false
+        end
       end
 
       it 'repects the source_urls parameter' do
