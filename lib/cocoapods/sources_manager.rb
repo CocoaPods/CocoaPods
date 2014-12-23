@@ -46,7 +46,7 @@ module Pod
           rescue Informative => e
             raise Informative, "Unable to add a source with url `#{url}` " \
               "named `#{name}`.\nYou can try adding it manually in " \
-              '`~/.cocoapods/repos` or via `pod repo add`.'
+              '`~/Library/cocoapods/repos` or via `pod repo add`.'
           ensure
             UI.title_level = previous_title_level
           end

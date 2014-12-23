@@ -14,7 +14,7 @@ module Pod
         It is possible to specify a list of dependencies which will be used by
         the template in the `Podfile.default` (normal targets) `Podfile.test`
         (test targets) files which should be stored in the
-        `~/.cocoapods/templates` folder.
+        `~/Library/cocoapods/templates` folder.
       DESC
       self.arguments = [
         CLAide::Argument.new('XCODEPROJ', :false),

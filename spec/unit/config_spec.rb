@@ -15,20 +15,20 @@ module Pod
       end
 
       it 'returns the path to the home dir' do
-        @sut.home_dir.should == Pathname.new('~/.cocoapods').expand_path
+        @sut.home_dir.should == Pathname.new('~/Library/cocoapods').expand_path
       end
 
       it 'returns the path to the spec-repos dir' do
-        @sut.repos_dir.should == Pathname.new('~/.cocoapods/repos').expand_path
+        @sut.repos_dir.should == Pathname.new('~/Library/cocoapods/repos').expand_path
       end
 
       it 'returns the path to the templates dir' do
-        @sut.templates_dir.should == Pathname.new('~/.cocoapods/templates').expand_path
+        @sut.templates_dir.should == Pathname.new('~/Library/cocoapods/templates').expand_path
       end
 
       it 'returns the path of the default podfiles' do
-        @sut.default_podfile_path.should == Pathname.new('~/.cocoapods/templates/Podfile.default').expand_path
-        @sut.default_test_podfile_path.should == Pathname.new('~/.cocoapods/templates/Podfile.test').expand_path
+        @sut.default_podfile_path.should == Pathname.new('~/Library/cocoapods/templates/Podfile.default').expand_path
+        @sut.default_test_podfile_path.should == Pathname.new('~/Library/cocoapods/templates/Podfile.test').expand_path
       end
 
       it 'allows to specify the home dir with an environment variable' do
@@ -152,7 +152,7 @@ module Pod
     describe 'Private helpers' do
 
       it 'returns the path of the user settings file' do
-        @sut.send(:user_settings_file).should == Pathname.new('~/.cocoapods/config.yaml').expand_path
+        @sut.send(:user_settings_file).should == Pathname.new('~/Library/cocoapods/config.yaml').expand_path
       end
 
       it 'can be configured with a hash' do

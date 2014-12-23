@@ -6,7 +6,7 @@ module Pod
       self.summary = 'Setup the CocoaPods environment'
 
       self.description = <<-DESC
-        Creates a directory at `~/.cocoapods/repos` which will hold your spec-repos.
+        Creates a directory at `~/Library/cocoapods/repos` which will hold your spec-repos.
         This is where it will create a clone of the public `master` spec-repo from:
 
             https://github.com/CocoaPods/Specs
@@ -131,7 +131,7 @@ module Pod
       # @return [Pathname] the directory of the old master repo.
       #
       def old_master_repo_dir
-        Pathname.new('~/.cocoapods/master').expand_path
+        Pathname.new('~/Library/cocoapods/master').expand_path
       end
     end
   end
