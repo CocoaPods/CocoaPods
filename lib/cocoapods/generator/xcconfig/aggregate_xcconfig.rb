@@ -107,7 +107,28 @@ module Pod
           # See https://github.com/CocoaPods/CocoaPods/issues/1216
           @xcconfig.attributes.delete('USE_HEADERMAP')
 
+          generate_ld_runpath_search_paths if target.requires_frameworks?
+
           @xcconfig
+        end
+
+        def generate_ld_runpath_search_paths
+          ld_runpath_search_paths = ['$(inherited)']
+          if target.platform.symbolic_name == :osx
+            ld_runpath_search_paths << "'@executable_path/../Frameworks'"
+            ld_runpath_search_paths << \
+              if target.native_target.symbol_type == :unit_test_bundle
+                "'@loader_path/../Frameworks'"
+              else
+                "'@loader_path/Frameworks'"
+              end
+          else
+            ld_runpath_search_paths << [
+              "'@executable_path/Frameworks'",
+              "'@loader_path/Frameworks'"
+            ]
+          end
+          @xcconfig.merge!('LD_RUNPATH_SEARCH_PATHS' => ld_runpath_search_paths.join(' '))
         end
 
         #---------------------------------------------------------------------#
