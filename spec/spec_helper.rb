@@ -139,7 +139,8 @@ def fixture_aggregate_target(pod_targets = [], platform = :ios, target_definitio
   target_definition ||= pod_targets.map(&:target_definition).first || fixture_target_definition
   target = Pod::AggregateTarget.new(target_definition, config.sandbox)
   target.client_root = config.sandbox.root.dirname
-  target.stubs(:platform).returns(platform)
+  version ||= (platform == :ios ? '4.3' : '10.6')
+  target.stubs(:platform).returns(Pod::Platform.new(platform, version))
   target.pod_targets = pod_targets
   target
 end
