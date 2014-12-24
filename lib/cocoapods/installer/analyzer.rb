@@ -236,10 +236,7 @@ module Pod
       # @return [Array<PodTarget>]
       #
       def generate_pod_targets(target, specs)
-        grouped_specs = specs.map do |spec|
-          specs.select { |s| s.root == spec.root }
-        end.uniq
-
+        grouped_specs = specs.group_by(&:root).values.uniq
         grouped_specs.map do |pod_specs|
           generate_pod_target(target, pod_specs)
         end
