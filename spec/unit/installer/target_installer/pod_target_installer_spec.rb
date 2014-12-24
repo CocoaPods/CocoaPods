@@ -169,6 +169,7 @@ module Pod
       end
 
       #--------------------------------------------------------------------------------#
+
       describe 'concerning compiler flags' do
         before do
           @spec = Pod::Spec.new
@@ -211,7 +212,6 @@ module Pod
         end
 
         describe 'concerning ARC before and after iOS 6.0 and OS X 10.8' do
-
           it 'does not do anything if ARC is *not* required' do
             @spec.ios.deployment_target = '5'
             @spec.osx.deployment_target = '10.6'
@@ -247,6 +247,33 @@ module Pod
           end
         end
       end
+
+      #--------------------------------------------------------------------------------#
+
+      describe 'concerning framework versions' do
+        before do
+          @pod_target.stubs(:requires_frameworks? => true)
+          @spec.stubs(:version => Version.new('1.2.3'))
+        end
+
+        it 'sets the project and library version' do
+          settings = @installer.send(:custom_build_settings)
+          settings['CURRENT_PROJECT_VERSION'].should == '1.2.3'
+          settings['DYLIB_CURRENT_VERSION'].should == '$(CURRENT_PROJECT_VERSION)'
+        end
+
+        it 'sets the library compatibility version to the major version' do
+          settings = @installer.send(:custom_build_settings)
+          settings['DYLIB_COMPATIBILITY_VERSION'].should == '1'
+        end
+
+        it 'sets the library compatibility version to the exact version when it is less than v1 (because SemVer makes no promises)' do
+          @spec.stubs(:version => Version.new('0.1.2'))
+          settings = @installer.send(:custom_build_settings)
+          settings['DYLIB_COMPATIBILITY_VERSION'].should == '0.1.2'
+        end
+      end
+
     end
   end
 end
