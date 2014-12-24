@@ -205,6 +205,13 @@ module Pod
             SourcesManager.find_or_create_source_with_url('https://github.com/artsy/Specs.git').
               should == 'Source'
           end
+
+          it 'handles repositories without a remote url' do # for #2965
+            Command::Repo::Add.any_instance.stubs(:run).once
+            Source.any_instance.stubs(:url).returns(nil)
+            e = lambda { SourcesManager.find_or_create_source_with_url('url') }
+            e.should.not.raise
+          end
         end
       end
     end
