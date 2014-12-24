@@ -395,7 +395,9 @@ module Pod
       #
       def source_with_url(url)
         url = url.downcase.gsub(/.git$/, '')
-        aggregate.sources.find { |s| s.url.downcase.gsub(/.git$/, '') == url }
+        aggregate.sources.find do |source|
+          source.url && source.url.downcase.gsub(/.git$/, '') == url
+        end
       end
 
       # Returns a suitable repository name for `url`.
