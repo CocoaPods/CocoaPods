@@ -122,6 +122,9 @@ module Pod
               build_file = build_phase.add_file_reference(new_product_ref)
             end
             if target.requires_frameworks?
+              # Weak link the aggregate target's product, because as it contains
+              # no symbols, it isn't copied into the app bundle. dyld will so
+              # never try to find the missing executable at runtime.
               build_file.settings ||= {}
               build_file.settings['ATTRIBUTES'] = ['Weak']
             end
