@@ -134,7 +134,7 @@ module Pod
         script.read.should.include?('logo-sidebar.png')
       end
 
-      it 'does not add framework resource to copy resources script' do
+      it 'does not add framework resources to copy resources script' do
         @pod_target.stubs(:requires_frameworks? => true)
         @installer.install!
         support_files_dir = config.sandbox.target_support_files_dir('Pods')
