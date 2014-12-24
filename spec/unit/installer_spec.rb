@@ -50,7 +50,7 @@ module Pod
       before do
         @installer.stubs(:resolve_dependencies)
         @installer.stubs(:download_dependencies)
-        @installer.stubs(:determine_dependency_product_type)
+        @installer.stubs(:determine_dependency_product_types)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
         @installer.stubs(:run_plugins_post_install_hooks)

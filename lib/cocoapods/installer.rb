@@ -89,7 +89,7 @@ module Pod
       prepare
       resolve_dependencies
       download_dependencies
-      determine_dependency_product_type
+      determine_dependency_product_types
       generate_pods_project
       integrate_user_project if config.integrate_targets?
       perform_post_install_actions
@@ -319,7 +319,7 @@ module Pod
     #
     # @return [void]
     #
-    def determine_dependency_product_type
+    def determine_dependency_product_types
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
           pod_target.host_requires_frameworks = aggregate_target.requires_frameworks?
