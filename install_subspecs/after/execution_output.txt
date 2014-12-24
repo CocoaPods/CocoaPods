@@ -65,7 +65,7 @@ Integrating client project
 [!] From now on use `SampleApp.xcworkspace`.
 
 Integrating target `Pods-OS X App` (`SampleApp.xcodeproj` project)
-  Add Build Phase 'Embed Pods Frameworks' to project.
+  Adding Build Phase 'Embed Pods Frameworks' to project.
 
 Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
 
