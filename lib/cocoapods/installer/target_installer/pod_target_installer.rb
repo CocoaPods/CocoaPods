@@ -36,6 +36,24 @@ module Pod
 
       private
 
+      # Adds the project/library and compatibility versions, which are only
+      # applicable to dynamic libraries.
+      #
+      # @return [Hash{String => String}]
+      #
+      def custom_build_settings
+        settings = super
+        if target.requires_frameworks?
+          version = target.root_spec.version
+          compatibility_version = version.segments.first
+          compatibility_version = version.version if compatibility_version < 1
+          settings['CURRENT_PROJECT_VERSION'] = version.version
+          settings['DYLIB_COMPATIBILITY_VERSION'] = compatibility_version.to_s
+          settings['DYLIB_CURRENT_VERSION'] = '$(CURRENT_PROJECT_VERSION)'
+        end
+        settings
+      end
+
       #-----------------------------------------------------------------------#
 
       SOURCE_FILE_EXTENSIONS = Sandbox::FileAccessor::SOURCE_FILE_EXTENSIONS
