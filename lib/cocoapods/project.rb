@@ -59,7 +59,7 @@ module Pod
 
       parent_group = development ? development_pods : pods
       source_tree = absolute ? :absolute : :group
-      
+
       group = parent_group.new_group(pod_name, path, source_tree)
       group
     end
@@ -147,7 +147,7 @@ module Pod
     #
     # @param  [Bool] reflect_file_system_structure
     #         Wether group structure should reflect the file system structure.
-    #         If yes, where needed, intermediate groups are created, similar to 
+    #         If yes, where needed, intermediate groups are created, similar to
     #         how mkdir -p operates.
     #
     # @return [PBXFileReference] The new file reference.
@@ -161,12 +161,12 @@ module Pod
       if reflect_file_system_structure
         relative_path = file_path_name.relative_path_from(group.real_path)
         relative_dir = relative_path.dirname
-        relative_dir.each_filename do|name| 
-          next if name == "." 
-          group = group[name] || group.new_group(name, name) 
+        relative_dir.each_filename do|name|
+          next if name == '.'
+          group = group[name] || group.new_group(name, name)
         end
       end
-       
+
       if ref = reference_for_path(absolute_path)
         ref
       else
