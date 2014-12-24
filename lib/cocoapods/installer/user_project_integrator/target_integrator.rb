@@ -148,9 +148,11 @@ module Pod
           end
         end
 
-        # Delete 'Embed Pods Frameworks' Build Phases if they exist
+        # Delete 'Embed Pods Frameworks' Build Phases, if they exist
+        # and are not needed anymore due to not integrating the
+        # dependencies by frameworks.
         #
-        # @return [Bool]
+        # @return [Bool] whether any changes to the project were made.
         #
         def remove_embed_frameworks_script_phases
           return false if target.requires_frameworks?
