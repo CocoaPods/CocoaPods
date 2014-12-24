@@ -409,6 +409,23 @@ module Pod
 
       describe '#set_target_dependencies' do
 
+        it 'sets resource bundles for not build pods as target dependencies of the user target' do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile)
+          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          pod_target.stubs(:resource_bundle_targets).returns(['dummy'])
+          pod_target.stubs(:should_build? => false)
+          target = AggregateTarget.new(target_definition, config.sandbox)
+          
+          mock_target = mock
+          mock_target.expects(:add_dependency).with('dummy')
+
+          target.stubs(:native_target).returns(mock_target)
+          target.stubs(:pod_targets).returns([pod_target])
+          @installer.stubs(:aggregate_targets).returns([target])
+          @installer.send(:set_target_dependencies)
+        end
+
         xit 'sets the pod targets as dependencies of the aggregate target' do
 
         end

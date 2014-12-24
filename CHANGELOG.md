@@ -43,6 +43,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix resource bundles for not build targets.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#2934](https://github.com/CocoaPods/CocoaPods/issues/2934)
+
 * Fix updating a pod that has subspec dependencies.  
   [Samuel Giddins](https://github.com/segiddins)
   [#2879](https://github.com/CocoaPods/CocoaPods/issues/2879)

@@ -189,6 +189,11 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+    describe 'Integrates a Pod without source files but with resources' do
+      behaves_like cli_spec 'install_resources_no_source_files',
+                            'install --no-repo-update'
+    end
+
     # @todo add tests for all the hooks API
     #
     describe 'Runs the Podfile callbacks' do
