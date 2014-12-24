@@ -133,7 +133,7 @@ module Pod
       end
 
       IGNORED_KEYS = %w(CODE_SIGN_IDENTITY).freeze
-      INHERITED_FLAGS = ['$(inherited)', '${inherited}'].freeze
+      INHERITED_FLAGS = %w($(inherited) ${inherited}).freeze
 
       # Checks whether the settings of the CocoaPods generated xcconfig are
       # overridden by the build configuration of a target and prints a
