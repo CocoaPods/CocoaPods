@@ -161,12 +161,18 @@ module Pod
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + 'file.m'
+          @nested_file = config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir/nested_file.m'
           @group = @project.group_for_spec('BananaLib')
         end
 
         it 'adds a file references to the given file' do
           ref = @project.add_file_reference(@file, @group)
           ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
+        end
+
+        it "adds subgroups for a file reference if requested" do
+          ref = @project.add_file_reference(@nested_file, @group, true)
+          ref.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/nested_file.m'	  
         end
 
         it "it doesn't duplicate file references for a single path" do
