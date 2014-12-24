@@ -69,7 +69,7 @@ module Pod
             # Make headers discoverable from $PODS_ROOT/Headers directory
             header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
             build_settings = {
-              # by `import "…"`
+              # by `#import "…"`
               'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(header_search_paths),
               # by `#import <…>`
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-isystem')
