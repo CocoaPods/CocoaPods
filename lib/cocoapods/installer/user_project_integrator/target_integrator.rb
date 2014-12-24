@@ -109,7 +109,7 @@ module Pod
             old_product_name = target.requires_frameworks? ? target.static_library_name : target.framework_name
             old_product_ref = frameworks.files.find { |f| f.path == old_product_name }
             if old_product_ref.present?
-              UI.message("Remove old Pod product reference #{old_product_name} from project.")
+              UI.message("Removing old Pod product reference #{old_product_name} from project.")
               build_phase.remove_file_reference(old_product_ref)
               frameworks.remove_reference(old_product_ref)
             end
@@ -139,7 +139,7 @@ module Pod
           native_targets_to_integrate.each do |native_target|
             embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
             unless embed_build_phase.present?
-              UI.message("Add Build Phase '#{phase_name}' to project.")
+              UI.message("Adding Build Phase '#{phase_name}' to project.")
               embed_build_phase = native_target.new_shell_script_build_phase(phase_name)
             end
             script_path = target.embed_frameworks_script_relative_path
