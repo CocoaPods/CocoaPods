@@ -69,6 +69,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/CocoaPods/CocoaPods/issues/2859)
   [#2859](https://github.com/CocoaPods/CocoaPods/issues/2859)
 
+* Fix an issue when a user doesn't yet have any spec repositories configured.  
+  [Boris Bügling](https://github.com/neonichu)
+
 
 ## 0.35.0
 

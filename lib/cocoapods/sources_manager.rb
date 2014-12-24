@@ -9,6 +9,7 @@ module Pod
       #         known Pods.
       #
       def aggregate
+        return Source::Aggregate.new([]) unless config.repos_dir.exist?
         dirs = config.repos_dir.children.select(&:directory?)
         Source::Aggregate.new(dirs)
       end
@@ -60,6 +61,7 @@ module Pod
       #         installation of CocoaPods.
       #
       def all
+        return [] unless config.repos_dir.exist?
         dirs = config.repos_dir.children.select(&:directory?)
         dirs.map { |repo| Source.new(repo) }
       end
