@@ -118,9 +118,8 @@ module Pod
             target_basename = target.product_basename
             new_product_ref = frameworks.files.find { |f| f.path == target.product_name } ||
               frameworks.new_product_ref_for_target(target_basename, target.product_type)
-            unless build_file = build_phase.build_file(new_product_ref)
-              build_file = build_phase.add_file_reference(new_product_ref)
-            end
+            build_file = build_phase.build_file(new_product_ref) ||
+              build_phase.add_file_reference(new_product_ref)
             if target.requires_frameworks?
               # Weak link the aggregate target's product, because as it contains
               # no symbols, it isn't copied into the app bundle. dyld will so
