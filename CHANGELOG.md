@@ -4,19 +4,29 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
-## Master
+## 0.36.0.beta.1
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.35.0...0.36.0.beta.1)
+• [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.35.0...0.36.0.beta.1)
+• [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.20.2...0.21.0)
+• [CLAide](https://github.com/CocoaPods/CLAide/compare/v0.7.0...0.8.0)
+• [Molinillo](https://github.com/CocoaPods/Molinillo/compare/0.1.2...0.2.0)
+• [cocoapods-downloader](https://github.com/CocoaPods/cocoapods-downloader/compare/0.8.0...0.8.1)
+• [cocoapods-try](https://github.com/CocoaPods/cocoapods-try/compare/0.4.2...0.4.3)
+• [cocoapods-trunk](https://github.com/CocoaPods/cocoapods-trunk/compare/0.4.1...0.5.0)
+• [cocoapods-plugins](https://github.com/CocoaPods/cocoapods-plugins/compare/0.3.2...0.4.0)
 
 ##### Highlighted Enhancement That Needs Testing
 
-* Support Frameworks & Swift: CocoaPods now recognizes Swift source files and 
+* Support Frameworks & Swift: CocoaPods now recognizes Swift source files and
   builds dynamic frameworks when necessary. A project can explicitly
   opt-in via `use_frameworks!` in the Podfile, or if any dependency contains
   Swift code, all pods for that target will be integrated as frameworks.
-  
-  As a pod author, you can change the module name of the built framework by 
-  specifying a `module_name` in the podspec. The built frameworks are embedded into 
-  the host application with a new shell script build phase in the user's 
-  project allowing configuration-dependent pods.  
+
+  As a pod author, you can change the module name of the built framework by
+  specifying a `module_name` in the podspec. The built frameworks are embedded into
+  the host application with a new shell script build phase in the user's
+  project allowing configuration-dependent pods.
 
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#2835](https://github.com/CocoaPods/CocoaPods/issues/2835)
@@ -61,7 +71,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#2914](https://github.com/CocoaPods/CocoaPods/issues/2914)
 
 * Installer changed to organize a development pod's source and resource files
-  into subgroups reflecting their organization in the filesystem.
+  into subgroups reflecting their organization in the filesystem.  
   [Imre mihaly](https://github.com/imihaly)
 
 ##### Bug Fixes
