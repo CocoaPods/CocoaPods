@@ -36,52 +36,30 @@ Targets:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
           PRODUCT_NAME: $(TARGET_NAME)
-          SDKROOT: macosx
-          SKIP_INSTALL: 'YES'
-          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
-          MACOSX_DEPLOYMENT_TARGET: '10.8'
-          DSTROOT: /tmp/xcodeproj.dst
-          GCC_DYNAMIC_NO_PIC: 'NO'
-          GCC_OPTIMIZATION_LEVEL: '0'
-          GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+          PODS_ROOT: $(SRCROOT)
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
-          GCC_PREPROCESSOR_DEFINITIONS:
-          - DEBUG=1
-          - $(inherited)
-          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
-          COMBINE_HIDPI_IMAGES: 'YES'
-          COPY_PHASE_STRIP: 'NO'
+          SDKROOT: macosx
+          EXECUTABLE_PREFIX: lib
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
         Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
-          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
-          OTHER_CFLAGS:
-          - -DNS_BLOCK_ASSERTIONS=1
-          - $(inherited)
-          SKIP_INSTALL: 'YES'
-          GCC_ENABLE_OBJC_EXCEPTIONS: 'YES'
-          MACOSX_DEPLOYMENT_TARGET: '10.8'
-          INSTALL_PATH: $(BUILT_PRODUCTS_DIR)
-          DSTROOT: /tmp/xcodeproj.dst
-          OTHER_CPLUSPLUSFLAGS:
-          - -DNS_BLOCK_ASSERTIONS=1
-          - $(inherited)
-          ALWAYS_SEARCH_USER_PATHS: 'NO'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          GCC_VERSION: com.apple.compilers.llvm.clang.1_0
           PRODUCT_NAME: $(TARGET_NAME)
-          GCC_PRECOMPILE_PREFIX_HEADER: 'YES'
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          PODS_ROOT: $(SRCROOT)
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           SDKROOT: macosx
-          COMBINE_HIDPI_IMAGES: 'YES'
-          COPY_PHASE_STRIP: 'YES'
+          EXECUTABLE_PREFIX: lib
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
         Base Configuration: Pods-SampleApp.release.xcconfig
-- res:
+- Pods-SampleApp-res-res:
     Build Phases:
     - SourcesBuildPhase: []
     - FrameworksBuildPhase: []
@@ -94,14 +72,18 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          PRODUCT_NAME: res
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: bundle
           COMBINE_HIDPI_IMAGES: 'YES'
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          PRODUCT_NAME: res
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
 
 
 
@@ -115,17 +97,18 @@ Build Configurations:
       - DEBUG=1
       - $(inherited)
       ONLY_ACTIVE_ARCH: 'YES'
-      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       CLANG_ENABLE_MODULES: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
       CLANG_WARN_INT_CONVERSION: 'YES'
       MACOSX_DEPLOYMENT_TARGET: '10.8'
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
       GCC_OPTIMIZATION_LEVEL: '0'
       GCC_C_LANGUAGE_STANDARD: gnu99
-      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
       CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       COPY_PHASE_STRIP: 'YES'
@@ -136,6 +119,7 @@ Build Configurations:
       GCC_DYNAMIC_NO_PIC: 'NO'
       STRIP_INSTALLED_PRODUCT: 'NO'
       CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'
 - Release:
     Build Settings:
@@ -152,8 +136,9 @@ Build Configurations:
       MACOSX_DEPLOYMENT_TARGET: '10.8'
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
       GCC_C_LANGUAGE_STANDARD: gnu99
-      CLANG_WARN_EMPTY_BODY: 'YES'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       COPY_PHASE_STRIP: 'NO'
@@ -164,4 +149,5 @@ Build Configurations:
       ENABLE_NS_ASSERTIONS: 'NO'
       STRIP_INSTALLED_PRODUCT: 'NO'
       CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'
