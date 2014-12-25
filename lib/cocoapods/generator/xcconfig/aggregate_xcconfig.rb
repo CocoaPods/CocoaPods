@@ -49,7 +49,7 @@ module Pod
         def generate
           header_search_path_flags = target.sandbox.public_headers.search_paths(target.platform)
           @xcconfig = Xcodeproj::Config.new(
-                                              'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
+                                              'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target),
                                               'OTHER_LIBTOOLFLAGS' => '$(OTHER_LDFLAGS)',
                                               'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(header_search_path_flags),
                                               'PODS_ROOT' => target.relative_pods_root,
