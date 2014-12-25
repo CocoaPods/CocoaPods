@@ -21,6 +21,9 @@ module Pod
         file_accessor.source_files.each do |file|
           @project.add_file_reference(file, group)
         end
+        file_accessor.resources.each do |resource|
+          @project.add_file_reference(resource, group)
+        end
 
         @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
         @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
@@ -49,12 +52,6 @@ module Pod
         @installer.install!
         @project.targets.count.should == 1
         @project.targets.first.name.should == 'Pods-BananaLib'
-      end
-
-      it 'sets VALIDATE_PRODUCT to YES for the Release configuration for iOS targets' do
-        @installer.install!
-        target = @project.targets.first
-        target.build_settings('Release')['VALIDATE_PRODUCT'].should == 'YES'
       end
 
       it 'sets the platform and the deployment target for iOS targets' do
@@ -106,7 +103,19 @@ module Pod
       it 'adds the resource bundle targets' do
         @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
         @installer.install!
-        @project.targets.map(&:name).should == ['Pods-BananaLib', 'banana_bundle']
+        bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
+        bundle_target.should.be.an.instance_of Xcodeproj::Project::Object::PBXNativeTarget
+        bundle_target.product_reference.name.should == 'banana_bundle.bundle'
+        bundle_target.product_reference.path.should == 'banana_bundle.bundle'
+      end
+
+      it 'adds framework resources to the framework target' do
+        @pod_target.stubs(:requires_frameworks? => true)
+        @installer.install!
+        resources = @project.targets.first.resources_build_phase.files
+        resources.count.should > 0
+        resource = resources.find { |res| res.file_ref.path.include?('logo-sidebar.png') }
+        resource.should.be.not.nil
       end
 
       xit 'adds the build configurations to the resources bundle targets' do

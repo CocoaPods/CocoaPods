@@ -180,47 +180,92 @@ module Pod
       def generate_targets
         targets = []
         result.specs_by_target.each do |target_definition, specs|
-          target = AggregateTarget.new(target_definition, sandbox)
-          targets << target
-
-          if config.integrate_targets?
-            project_path = compute_user_project_path(target_definition)
-            user_project = Xcodeproj::Project.open(project_path)
-            native_targets = compute_user_project_targets(target_definition, user_project)
-
-            target.user_project_path = project_path
-            target.client_root = project_path.dirname
-            target.user_target_uuids = native_targets.map(&:uuid)
-            target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
-            target.archs = @archs_by_target_def[target_definition]
-          else
-            target.client_root = config.installation_root
-            target.user_target_uuids = []
-            target.user_build_configurations = target_definition.build_configurations || { 'Release' => :release, 'Debug' => :debug }
-            if target_definition.platform.name == :osx
-              target.archs = '$(ARCHS_STANDARD_64_BIT)'
-            end
-          end
-
-          grouped_specs = specs.map do |spec|
-            specs.select { |s| s.root == spec.root }
-          end.uniq
-
-          grouped_specs.each do |pod_specs|
-            pod_target = PodTarget.new(pod_specs, target_definition, sandbox)
-            if config.integrate_targets?
-              pod_target.user_build_configurations = target.user_build_configurations
-              pod_target.archs = @archs_by_target_def[target_definition]
-            else
-              pod_target.user_build_configurations = {}
-              if target_definition.platform.name == :osx
-                pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
-              end
-            end
-            target.pod_targets << pod_target
-          end
+          targets << generate_target(target_definition, specs)
         end
         targets
+      end
+
+      # Setup the aggregate target for a single user target
+      #
+      # @param  [TargetDefinition] target_definition
+      #         the target definition for the user target.
+      #
+      # @param  [Array<Specification>] specs
+      #         the specifications that need to be installed grouped by the
+      #         given target definition.
+      #
+      # @return [AggregateTarget]
+      #
+      def generate_target(target_definition, specs)
+        target = AggregateTarget.new(target_definition, sandbox)
+        target.host_requires_frameworks |= target_definition.uses_frameworks?
+
+        if config.integrate_targets?
+          project_path = compute_user_project_path(target_definition)
+          user_project = Xcodeproj::Project.open(project_path)
+          native_targets = compute_user_project_targets(target_definition, user_project)
+
+          target.user_project_path = project_path
+          target.client_root = project_path.dirname
+          target.user_target_uuids = native_targets.map(&:uuid)
+          target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
+          target.archs = @archs_by_target_def[target_definition]
+        else
+          target.client_root = config.installation_root
+          target.user_target_uuids = []
+          target.user_build_configurations = target_definition.build_configurations || { 'Release' => :release, 'Debug' => :debug }
+          if target_definition.platform.name == :osx
+            target.archs = '$(ARCHS_STANDARD_64_BIT)'
+          end
+        end
+
+        target.pod_targets = generate_pod_targets(target, specs)
+
+        target
+      end
+
+      # Setup the pod targets for an aggregate target. Group specs and subspecs
+      # by their root to create a {PodTarget} for each spec.
+      #
+      # @param  [AggregateTarget] target
+      #         the aggregate target
+      #
+      # @param  [Array<Specification>] specs
+      #         the specifications that need to be installed.
+      #
+      # @return [Array<PodTarget>]
+      #
+      def generate_pod_targets(target, specs)
+        grouped_specs = specs.group_by(&:root).values.uniq
+        grouped_specs.map do |pod_specs|
+          generate_pod_target(target, pod_specs)
+        end
+      end
+
+      # Create a target for each spec group and add it to the aggregate target
+      #
+      # @param  [AggregateTarget] target
+      #         the aggregate target
+      #
+      # @param  [Array<Specification>] specs
+      #         the specifications of an equal root.
+      #
+      # @return [PodTarget]
+      #
+      def generate_pod_target(target, pod_specs)
+        pod_target = PodTarget.new(pod_specs, target.target_definition, sandbox)
+
+        if config.integrate_targets?
+          pod_target.user_build_configurations = target.user_build_configurations
+          pod_target.archs = @archs_by_target_def[target.target_definition]
+        else
+          pod_target.user_build_configurations = {}
+          if target.platform.name == :osx
+            pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
+          end
+        end
+
+        pod_target
       end
 
       # Generates dependencies that require the specific version of the Pods
@@ -512,6 +557,37 @@ module Pod
       def native_targets(user_project)
         user_project.targets.reject do |target|
           target.is_a? Xcodeproj::Project::Object::PBXAggregateTarget
+        end
+      end
+
+      # Checks if any of the targets for the {TargetDefinition} computed before
+      # by #compute_user_project_targets require to be build as a framework due
+      # the presence of Swift source code in any of the source build phases.
+      #
+      # @param  [TargetDefinition] target_definition
+      #         the target definition
+      #
+      # @param  [Array<PBXNativeTarget>] native_targets
+      #         the targets which are checked for presence of Swift source code
+      #
+      # @return [Boolean] Whether the user project targets to integrate into
+      #         uses Swift
+      #
+      def compute_user_project_targets_require_framework(target_definition, native_targets)
+        file_predicate = nil
+        file_predicate = proc do |file_ref|
+          if file_ref.respond_to?(:last_known_file_type)
+            file_ref.last_known_file_type == 'sourcecode.swift'
+          elsif file_ref.respond_to?(:files)
+            file_ref.files.any?(&file_predicate)
+          else
+            false
+          end
+        end
+        target_definition.platform.supports_dynamic_frameworks? || native_targets.any? do |target|
+          target.source_build_phase.files.any? do |build_file|
+            file_predicate.call(build_file.file_ref)
+          end
         end
       end
 

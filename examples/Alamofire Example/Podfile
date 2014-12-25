@@ -1,0 +1,11 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+workspace 'Examples.xcworkspace'
+xcodeproj 'iOS Example.xcodeproj'
+
+target 'iOS Example' do
+  platform :ios, '8.0'
+  use_frameworks!
+  pod 'Alamofire', :path => '.'
+end
+

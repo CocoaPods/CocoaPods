@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		26E82B9975F54DA9BAC1E0C9 /* libPods-AFNetworking Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6935B1E417A24F0E958977ED /* libPods-AFNetworking Example.a */; };
+		1A2265312C5CBC89CD477BF8 /* libPods-AFNetworking Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53BDE93051BED183E9F4D921 /* libPods-AFNetworking Example.a */; };
 		B304CCE8177D58DD00F4FC85 /* adn.cer in Resources */ = {isa = PBXBuildFile; fileRef = B304CCE7177D58DD00F4FC85 /* adn.cer */; };
 		F8129C001591061B009BFE23 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8129BFF1591061B009BFE23 /* Cocoa.framework */; };
 		F8129C321591073C009BFE23 /* AFAppDotNetAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F8129C251591073C009BFE23 /* AFAppDotNetAPIClient.m */; };
@@ -20,7 +20,7 @@
 
 /* Begin PBXFileReference section */
 		3C79D6B3AA6A1DBBAE48A944 /* Pods-AFNetworking Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example.debug.xcconfig"; sourceTree = "<group>"; };
-		6935B1E417A24F0E958977ED /* libPods-AFNetworking Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		53BDE93051BED183E9F4D921 /* libPods-AFNetworking Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A67B777556EF5D95EAFA5CF8 /* Pods-AFNetworking Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example.release.xcconfig"; sourceTree = "<group>"; };
 		B304CCE7177D58DD00F4FC85 /* adn.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = adn.cer; sourceTree = SOURCE_ROOT; };
 		F8129BFB1591061B009BFE23 /* AFNetworking Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFNetworking Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,7 +47,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8129C001591061B009BFE23 /* Cocoa.framework in Frameworks */,
-				26E82B9975F54DA9BAC1E0C9 /* libPods-AFNetworking Example.a in Frameworks */,
+				1A2265312C5CBC89CD477BF8 /* libPods-AFNetworking Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +90,7 @@
 			children = (
 				F8129BFF1591061B009BFE23 /* Cocoa.framework */,
 				F8129C011591061B009BFE23 /* Other Frameworks */,
-				6935B1E417A24F0E958977ED /* libPods-AFNetworking Example.a */,
+				53BDE93051BED183E9F4D921 /* libPods-AFNetworking Example.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -169,7 +169,7 @@
 		F8129BF21591061B009BFE23 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = F8129BF51591061B009BFE23 /* Build configuration list for PBXProject "AFNetworking Mac Example" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -253,13 +253,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -272,7 +275,9 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
@@ -284,20 +289,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
@@ -313,6 +323,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				INFOPLIST_FILE = "Mac-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -327,6 +338,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				INFOPLIST_FILE = "Mac-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

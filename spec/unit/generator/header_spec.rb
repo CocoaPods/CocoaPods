@@ -16,6 +16,16 @@ module Pod
       EOS
     end
 
+    it 'includes the module imports' do
+      @gen.module_imports << 'Module'
+      @gen.generate.should == <<-EOS.strip_heredoc
+      #import <UIKit/UIKit.h>
+
+
+      @import Module
+      EOS
+    end
+
     it 'imports UIKit in iOS platforms' do
       @gen.stubs(:platform).returns(Pod::Platform.ios)
       @gen.generate.should.include?('#import <UIKit/UIKit.h>')

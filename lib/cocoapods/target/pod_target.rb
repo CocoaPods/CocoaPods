@@ -30,6 +30,14 @@ module Pod
       "#{target_definition.label}-#{root_spec.name}"
     end
 
+    # @return [String] The name to use for the source code module constructed
+    #         for this target, and which will be used to import the module in
+    #         implementation source files.
+    #
+    def product_module_name
+      root_spec.module_name
+    end
+
     # @return [Array<Sandbox::FileAccessor>] the file accessors for the
     #         specifications of this target.
     #
@@ -54,6 +62,14 @@ module Pod
       specs.map { |spec| spec.consumer(platform) }
     end
 
+    # @return [Boolean] Whether the target uses Swift code
+    #
+    def uses_swift?
+      file_accessors.any? do |file_accessor|
+        file_accessor.source_files.any? { |sf| sf.extname == ".swift" }
+      end
+    end
+
     # @return [Specification] The root specification for the target.
     #
     def root_spec
@@ -64,6 +80,15 @@ module Pod
     #
     def pod_name
       root_spec.name
+    end
+
+    # @param  [String] bundle_name
+    #         The name of the bundle product, which is given by the +spec+.
+    #
+    # @return [String] The derived name of the resource bundle target.
+    #
+    def resources_bundle_target_label(bundle_name)
+      "#{label}-#{bundle_name}"
     end
 
     # @return [Array<String>] The names of the Pods on which this target

@@ -31,8 +31,10 @@ module Pod
             project_is_dirty = [
               XCConfigIntegrator.integrate(target, native_targets),
               update_to_cocoapods_0_34,
+              remove_embed_frameworks_script_phases,
               unless native_targets_to_integrate.empty?
                 add_pods_library
+                add_embed_frameworks_script_phase if target.requires_frameworks?
                 add_copy_resources_script_phase
                 add_check_manifest_lock_script_phase
                 true
@@ -91,9 +93,9 @@ module Pod
           changes
         end
 
-        # Adds spec libraries to the frameworks build phase of the
+        # Adds spec product reference to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to
-        # the library of the {TargetDefinition} and adds it to the frameworks
+        # the frameworks group of the project and adds it to the frameworks
         # build phase of the targets.
         #
         # @return [void]
@@ -101,12 +103,71 @@ module Pod
         def add_pods_library
           frameworks = user_project.frameworks_group
           native_targets_to_integrate.each do |native_target|
-            library = frameworks.files.select { |f| f.path == target.product_name }.first ||
-              frameworks.new_product_ref_for_target(target.name, :static_library)
-            unless native_target.frameworks_build_phase.files_references.include?(library)
-              native_target.frameworks_build_phase.add_file_reference(library)
+            build_phase = native_target.frameworks_build_phase
+
+            # Find and delete possible reference for the other product type
+            old_product_name = target.requires_frameworks? ? target.static_library_name : target.framework_name
+            old_product_ref = frameworks.files.find { |f| f.path == old_product_name }
+            if old_product_ref.present?
+              UI.message("Removing old Pod product reference #{old_product_name} from project.")
+              build_phase.remove_file_reference(old_product_ref)
+              frameworks.remove_reference(old_product_ref)
+            end
+
+            # Find or create and add a reference for the current product type
+            target_basename = target.product_basename
+            new_product_ref = frameworks.files.find { |f| f.path == target.product_name } ||
+              frameworks.new_product_ref_for_target(target_basename, target.product_type)
+            build_file = build_phase.build_file(new_product_ref) ||
+              build_phase.add_file_reference(new_product_ref)
+            if target.requires_frameworks?
+              # Weak link the aggregate target's product, because as it contains
+              # no symbols, it isn't copied into the app bundle. dyld will so
+              # never try to find the missing executable at runtime.
+              build_file.settings ||= {}
+              build_file.settings['ATTRIBUTES'] = ['Weak']
             end
           end
+        end
+
+        # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
+        #
+        # @return [void]
+        #
+        def add_embed_frameworks_script_phase
+          phase_name = 'Embed Pods Frameworks'
+          native_targets_to_integrate.each do |native_target|
+            embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
+            unless embed_build_phase.present?
+              UI.message("Adding Build Phase '#{phase_name}' to project.")
+              embed_build_phase = native_target.new_shell_script_build_phase(phase_name)
+            end
+            script_path = target.embed_frameworks_script_relative_path
+            embed_build_phase.shell_script = %("#{script_path}"\n)
+            embed_build_phase.show_env_vars_in_log = '0'
+          end
+        end
+
+        # Delete 'Embed Pods Frameworks' Build Phases, if they exist
+        # and are not needed anymore due to not integrating the
+        # dependencies by frameworks.
+        #
+        # @return [Bool] whether any changes to the project were made.
+        #
+        def remove_embed_frameworks_script_phases
+          return false if target.requires_frameworks?
+
+          phase_name = 'Embed Pods Frameworks'
+          result = false
+
+          native_targets.each do |native_target|
+            embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
+            next unless embed_build_phase.present?
+            native_target.build_phases.delete(embed_build_phase)
+            result = true
+          end
+
+          result
         end
 
         # Adds a shell script build phase responsible to copy the resources

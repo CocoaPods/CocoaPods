@@ -23,9 +23,7 @@ module Pod
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1'
         )
         @pod_bundle.xcconfigs['Debug'] = configuration
-        @pod_bundle.xcconfigs['Test'] = configuration
         @pod_bundle.xcconfigs['Release'] = configuration
-        @pod_bundle.xcconfigs['App Store'] = configuration
         @target_integrator = TargetIntegrator.new(@pod_bundle)
       end
 
@@ -101,6 +99,31 @@ module Pod
           @target_integrator.expects(:add_copy_resources_script_phase).never
           @target_integrator.send(:user_project).expects(:save).never
           @target_integrator.integrate!
+        end
+
+        it 'adds an embed frameworks build phase if frameworks are used' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase.nil?.should == false
+        end
+
+        it 'does not add an embed frameworks build phase by default' do
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase.nil?.should == true
+        end
+
+        it 'removes existing embed frameworks build phases if frameworks are not used anymore' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          @pod_bundle.stubs(:requires_frameworks? => false)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase.nil?.should == true
         end
       end
 

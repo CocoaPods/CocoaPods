@@ -50,6 +50,7 @@ module Pod
       before do
         @installer.stubs(:resolve_dependencies)
         @installer.stubs(:download_dependencies)
+        @installer.stubs(:determine_dependency_product_types)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
         @installer.stubs(:run_plugins_post_install_hooks)
@@ -75,6 +76,7 @@ module Pod
         @installer.stubs(:run_pre_install_hooks)
         @installer.stubs(:install_file_references)
         @installer.stubs(:install_libraries)
+        @installer.stubs(:set_target_dependencies)
         @installer.stubs(:write_lockfiles)
         @installer.stubs(:aggregate_targets).returns([])
         @installer.unstub(:generate_pods_project)
@@ -110,6 +112,37 @@ module Pod
         @installer.send(:warn_for_deprecations)
         UI.warnings.should.include 'deprecated in favor of AFNetworking'
         UI.warnings.should.include 'BlocksKit has been deprecated'
+      end
+
+    end
+    
+    #-------------------------------------------------------------------------#
+
+    describe '#determine_dependency_product_type' do
+
+      it 'does propagate that frameworks are required to all pod targets' do
+        fixture_path = ROOT + 'spec/fixtures'
+        config.repos_dir = fixture_path + 'spec-repos'
+        podfile = Pod::Podfile.new do
+          platform :ios, '8.0'
+          xcodeproj 'SampleProject/SampleProject'
+          pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
+          pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+        end
+        lockfile = generate_lockfile
+        config.integrate_targets = false
+
+        @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.install!
+
+        target = @installer.aggregate_targets.first
+        target.requires_frameworks?.should == true
+        target.pod_targets.select(&:requires_frameworks?).map(&:name).sort.should == [
+          'Pods-BananaLib',
+          'Pods-OrangeFramework',
+          'Pods-monkey',
+        ]
       end
 
     end
@@ -417,8 +450,11 @@ module Pod
           pod_target.stubs(:should_build? => false)
           target = AggregateTarget.new(target_definition, config.sandbox)
           
-          mock_target = mock
+          mock_target = mock('PodNativeTarget')
           mock_target.expects(:add_dependency).with('dummy')
+
+          mock_project = mock('PodsProject', :frameworks_group => mock('FrameworksGroup'))
+          @installer.stubs(:pods_project).returns(mock_project)
 
           target.stubs(:native_target).returns(mock_target)
           target.stubs(:pod_targets).returns([pod_target])

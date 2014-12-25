@@ -34,6 +34,10 @@ module Pod
         @pod_target.pod_name.should == 'BananaLib'
       end
 
+      it 'returns the name of the resources bundle target' do
+        @pod_target.resources_bundle_target_label('Fruits').should == 'Pods-BananaLib-Fruits'
+      end
+
       it 'returns the name of the Pods on which this target depends' do
         @pod_target.dependencies.should == ['monkey']
       end
@@ -92,6 +96,12 @@ module Pod
         )
       end
 
+      it 'returns the absolute path of the info plist file' do
+        @pod_target.info_plist_path.to_s.should.include?(
+          'Pods/Target Support Files/Pods-BananaLib/Info.plist'
+        )
+      end
+
       it 'returns the absolute path of the public and private xcconfig files' do
         @pod_target.xcconfig_path.to_s.should.include?(
           'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.xcconfig'
@@ -99,6 +109,104 @@ module Pod
         @pod_target.xcconfig_private_path.to_s.should.include(
           'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-Private.xcconfig'
         )
+      end
+
+      it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
+        @pod_target.configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
+      end
+    end
+
+    describe 'Product type dependent helpers' do
+      describe 'With libraries' do
+        before do
+          @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+        end
+
+        it 'returns that it does not use swift' do
+          @pod_target.uses_swift?.should == false
+        end
+
+        describe 'Host requires frameworks' do
+          before do
+            @pod_target.host_requires_frameworks = true
+          end
+
+          it 'returns the product name' do
+            @pod_target.product_name.should == 'BananaLib.framework'
+          end
+
+          it 'returns the framework name' do
+            @pod_target.framework_name.should == 'BananaLib.framework'
+          end
+
+          it 'returns the library name' do
+            @pod_target.static_library_name.should == 'libPods-BananaLib.a'
+          end
+
+          it 'returns :framework as product type' do
+            @pod_target.product_type.should == :framework
+          end
+
+          it 'returns that it requires being built as framework' do
+            @pod_target.requires_frameworks?.should == true
+          end
+        end
+
+        describe 'Host does not requires frameworks' do
+          it 'returns the product name' do
+            @pod_target.product_name.should == 'libPods-BananaLib.a'
+          end
+
+          it 'returns the framework name' do
+            @pod_target.framework_name.should == 'BananaLib.framework'
+          end
+
+          it 'returns the library name' do
+            @pod_target.static_library_name.should == 'libPods-BananaLib.a'
+          end
+
+          it 'returns :static_library as product type' do
+            @pod_target.product_type.should == :static_library
+          end
+
+          it 'returns that it does not require being built as framework' do
+            @pod_target.requires_frameworks?.should == false
+          end
+        end
+      end
+
+      describe 'With frameworks' do
+        before do
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec')
+        end
+
+        it 'returns that it uses swift' do
+          @pod_target.uses_swift?.should == true
+        end
+
+        it 'returns the product module name' do
+          @pod_target.product_module_name.should == 'OrangeFramework'
+        end
+
+        it 'returns the product name' do
+          @pod_target.product_name.should == 'OrangeFramework.framework'
+        end
+
+        it 'returns the framework name' do
+          @pod_target.framework_name.should == 'OrangeFramework.framework'
+        end
+
+        it 'returns the library name' do
+          @pod_target.static_library_name.should == 'libPods-OrangeFramework.a'
+        end
+
+        it 'returns :framework as product type' do
+          @pod_target.product_type.should == :framework
+        end
+
+        it 'returns that it requires being built as framework' do
+          @pod_target.requires_frameworks?.should == true
+        end
       end
     end
 

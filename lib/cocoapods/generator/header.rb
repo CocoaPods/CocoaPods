@@ -13,7 +13,11 @@ module Pod
 
       # @return [Array<String>] The list of the headers to import.
       #
-      attr_reader :imports
+      attr_accessor :imports
+
+      # @return [Array<String>] The list of the modules to import.
+      #
+      attr_accessor :module_imports
 
       # @param  [Symbol] platform
       #         @see platform
@@ -21,6 +25,7 @@ module Pod
       def initialize(platform)
         @platform = platform
         @imports = []
+        @module_imports = []
       end
 
       # Generates the contents of the header according to the platform.
@@ -39,6 +44,13 @@ module Pod
 
         imports.each do |import|
           result << %|#import "#{import}"\n|
+        end
+
+        unless module_imports.empty?
+          module_imports.each do |import|
+            result << %|\n@import #{import}|
+          end
+          result << "\n"
         end
 
         result

@@ -6,7 +6,30 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Highlighted Enhancement That Needs Testing
+
+* Support Frameworks & Swift: CocoaPods now recognizes Swift source files and 
+  builds dynamic frameworks when necessary. A project can explicitly
+  opt-in via `use_frameworks!` in the Podfile, or if any dependency contains
+  Swift code, all pods for that target will be integrated as frameworks.
+  
+  As a pod author, you can change the module name of the built framework by 
+  specifying a `module_name` in the podspec. The built frameworks are embedded into 
+  the host application with a new shell script build phase in the user's 
+  project allowing configuration-dependent pods.  
+
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#2835](https://github.com/CocoaPods/CocoaPods/issues/2835)
+
 ##### Breaking
+
+* Bundle Resources into Frameworks: Previously all resources were compiled and
+  copied into the `mainBundle`. Now Pods have to use
+  `[NSBundle bundleForClass:<#Class from Pod#>]` to access provided resources
+  relative to the bundle.
+
+  [Boris Bügling](https://github.com/neonichu)
+  [#2835](https://github.com/CocoaPods/CocoaPods/issues/2730)
 
 * Only the hooks specified by usage of the `plugin` directive of the `Podfile`
   will be run. Additionally, plugins that depend on hooks will have to update to

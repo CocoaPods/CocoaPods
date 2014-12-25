@@ -89,6 +89,7 @@ module Pod
       prepare
       resolve_dependencies
       download_dependencies
+      determine_dependency_product_types
       generate_pods_project
       integrate_user_project if config.integrate_targets?
       perform_post_install_actions
@@ -311,6 +312,21 @@ module Pod
       @pod_installers.each(&:clean!)
     end
 
+    # Determines if the dependencies need to be built as dynamic frameworks or
+    # if they can be built as static libraries by checking for the Swift source
+    # presence. Therefore it is important that the file accessors of the
+    # #pod_targets are created.
+    #
+    # @return [void]
+    #
+    def determine_dependency_product_types
+      aggregate_targets.each do |aggregate_target|
+        aggregate_target.pod_targets.each do |pod_target|
+          pod_target.host_requires_frameworks = aggregate_target.requires_frameworks?
+        end
+      end
+    end
+
     # Performs any post-installation actions
     #
     # @return [void]
@@ -444,7 +460,13 @@ module Pod
       end
     end
 
+    # Adds a target dependency for each pod spec to each aggregate target and
+    # links the pod targets among each other.
+    #
+    # @return [void]
+    #
     def set_target_dependencies
+      frameworks_group = pods_project.frameworks_group
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
           unless pod_target.should_build?
@@ -464,7 +486,15 @@ module Pod
               unless pod_dependency_target
                 puts "[BUG] DEP: #{dep}"
               end
+
+              next unless pod_dependency_target.should_build?
               pod_target.native_target.add_dependency(pod_dependency_target.native_target)
+
+              if pod_target.requires_frameworks?
+                product_ref = frameworks_group.files.find { |f| f.path == pod_dependency_target.product_name } ||
+                  frameworks_group.new_product_ref_for_target(pod_dependency_target.product_basename, pod_dependency_target.product_type)
+                pod_target.native_target.frameworks_build_phase.add_file_reference(product_ref)
+              end
             end
           end
         end

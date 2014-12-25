@@ -20,6 +20,14 @@ module Pod
       target_definition.label.to_s
     end
 
+    # @return [String] the name to use for the source code module constructed
+    #         for this target, and which will be used to import the module in
+    #         implementation source files.
+    #
+    def product_module_name
+      c99ext_identifier(label)
+    end
+
     # @return [Pathname] the folder where the client is stored used for
     #         computing the relative paths. If integrating it should be the
     #         folder where the user project is stored, otherwise it should
@@ -71,21 +79,32 @@ module Pod
     #
     attr_accessor :pod_targets
 
+    # @param  [String] build_configuration The build configuration for which the
+    #         the pod targets should be returned.
+    #
+    # @return [Array<PodTarget>] the pod targets for the given build
+    #         configuration.
+    #
+    def pod_targets_for_build_configuration(build_configuration)
+      pod_targets.select do |pod_target|
+        pod_target.include_in_build_config?(build_configuration)
+      end
+    end
+
     # @return [Array<Specification>] The specifications used by this aggregate target.
     #
     def specs
       pod_targets.map(&:specs).flatten
     end
 
-    # @return [Hash{Symbol => Array<PodTarget>}] The pod targets for each
+    # @return [Hash{Symbol => Array<Specification>}] The pod targets for each
     #         build configuration.
     #
     def specs_by_build_configuration
       result = {}
       user_build_configurations.keys.each do |build_configuration|
-        result[build_configuration] = pod_targets.select do |pod_target|
-          pod_target.include_in_build_config?(build_configuration)
-        end.map(&:specs).flatten
+        result[build_configuration] = pod_targets_for_build_configuration(build_configuration).
+          flat_map(&:specs)
       end
       result
     end
@@ -95,6 +114,16 @@ module Pod
     def spec_consumers
       specs.map { |spec| spec.consumer(platform) }
     end
+
+    # @return [Boolean] Whether the target uses Swift code
+    #
+    def uses_swift?
+      pod_targets.any?(&:uses_swift?)
+    end
+
+    #-------------------------------------------------------------------------#
+
+    # @!group Support files
 
     # @return [Pathname] The absolute path of acknowledgements file.
     #
@@ -109,6 +138,12 @@ module Pod
     #
     def copy_resources_script_path
       support_files_dir + "#{label}-resources.sh"
+    end
+
+    # @return [Pathname] The absolute path of the embed frameworks script.
+    #
+    def embed_frameworks_script_path
+      support_files_dir + "#{label}-frameworks.sh"
     end
 
     # @return [String] The xcconfig path of the root from the `$(SRCROOT)`
@@ -131,6 +166,13 @@ module Pod
     #
     def copy_resources_script_relative_path
       "${SRCROOT}/#{relative_to_srcroot(copy_resources_script_path)}"
+    end
+
+    # @return [String] The path of the embed frameworks relative to the
+    #         root of the user project.
+    #
+    def embed_frameworks_script_relative_path
+      "${SRCROOT}/#{relative_to_srcroot(embed_frameworks_script_path)}"
     end
 
     private

@@ -140,7 +140,7 @@ module Pod
             hash_config['FRAMEWORK_SEARCH_PATHS'].should == '"$(PODS_ROOT)/Parse"'
           end
 
-          it "doesn't ovverides exiting linker flags" do
+          it "doesn't override existing linker flags" do
             framework_path = config.sandbox.root + 'Parse/Parse.framework'
             xcconfig = Xcodeproj::Config.new('OTHER_LDFLAGS' => '-framework CoreAnimation')
             @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
@@ -148,7 +148,7 @@ module Pod
             hash_config['OTHER_LDFLAGS'].should == '-framework "CoreAnimation" -framework "Parse"'
           end
 
-          it "doesn't ovverides exiting frameworks search paths" do
+          it "doesn't override existing frameworks search paths" do
             framework_path = config.sandbox.root + 'Parse/Parse.framework'
             xcconfig = Xcodeproj::Config.new('FRAMEWORK_SEARCH_PATHS' => '"path/to/frameworks"')
             @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
@@ -172,7 +172,7 @@ module Pod
 
         #---------------------------------------------------------------------#
 
-        describe '::add_framework_build_settings' do
+        describe '::add_developers_frameworks_if_needed' do
           it 'adds the developer frameworks search paths to the xcconfig if SenTestingKit has been detected' do
             xcconfig = Xcodeproj::Config.new('OTHER_LDFLAGS' => '-framework SenTestingKit')
             @sut.add_developers_frameworks_if_needed(xcconfig, :ios)

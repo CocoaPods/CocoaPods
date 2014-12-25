@@ -132,7 +132,8 @@ module Pod
         end
       end
 
-      INHERITED_FLAGS = ['$(inherited)', '${inherited}']
+      IGNORED_KEYS = %w(CODE_SIGN_IDENTITY).freeze
+      INHERITED_FLAGS = %w($(inherited) ${inherited}).freeze
 
       # Checks whether the settings of the CocoaPods generated xcconfig are
       # overridden by the build configuration of a target and prints a
@@ -144,7 +145,7 @@ module Pod
             user_target.build_configurations.each do |config|
               xcconfig = aggregate_target.xcconfigs[config.name]
               if xcconfig
-                xcconfig.to_hash.keys.each do |key|
+                (xcconfig.to_hash.keys - IGNORED_KEYS).each do |key|
                   target_values = config.build_settings[key]
                   if target_values &&
                       !INHERITED_FLAGS.any? { |flag| target_values.include?(flag) }

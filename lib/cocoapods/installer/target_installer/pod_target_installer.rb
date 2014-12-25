@@ -17,9 +17,16 @@ module Pod
         UI.message "- Installing target `#{target.name}` #{target.platform}" do
           add_target
           create_support_files_dir
-          add_files_to_build_phases
           add_resources_bundle_targets
+          add_files_to_build_phases
           create_xcconfig_file
+          if target.requires_frameworks?
+            create_info_plist_file
+            create_module_map
+            create_umbrella_header do |generator|
+              generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
+            end
+          end
           create_prefix_header
           create_dummy_source
         end
@@ -41,20 +48,41 @@ module Pod
         target.file_accessors.each do |file_accessor|
           consumer = file_accessor.spec_consumer
 
+          headers = file_accessor.headers
+          public_headers = file_accessor.public_headers
           other_source_files = file_accessor.source_files.select { |sf| sf.extname == '.d' }
 
           {
             true => file_accessor.arc_source_files,
             false => file_accessor.non_arc_source_files,
           }.each do |arc, files|
-            files = files - other_source_files
+            files = files - headers - other_source_files
             flags = compiler_flags_for_consumer(consumer, arc)
             regular_file_refs = files.map { |sf| project.reference_for_path(sf) }
             native_target.add_file_references(regular_file_refs, flags)
           end
 
+          header_file_refs = headers.map { |sf| project.reference_for_path(sf) }
+          native_target.add_file_references(header_file_refs) do |build_file|
+            # Set added headers as public if needed
+            if target.requires_frameworks?
+              if public_headers.include?(build_file.file_ref.real_path)
+                build_file.settings ||= {}
+                build_file.settings['ATTRIBUTES'] = ['Public']
+              end
+            end
+          end
+
           other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
           native_target.add_file_references(other_file_refs, nil)
+
+          next unless target.requires_frameworks?
+
+          resource_refs = file_accessor.resources.flatten.map do |res|
+            project.reference_for_path(res)
+          end
+
+          native_target.add_resources(resource_refs)
         end
       end
 
@@ -68,23 +96,34 @@ module Pod
       def add_resources_bundle_targets
         target.file_accessors.each do |file_accessor|
           file_accessor.resource_bundles.each do |bundle_name, paths|
-            # Add a dependency on an existing Resource Bundle target if possible
-            bundle_target = project.targets.find { |target| target.name == bundle_name }
+            file_references = paths.map { |sf| project.reference_for_path(sf) }
+            label = target.resources_bundle_target_label(bundle_name)
+            bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
+            bundle_target.product_reference.tap do |bundle_product|
+              bundle_file_name = "#{bundle_name}.bundle"
+              bundle_product.name = bundle_file_name
+              bundle_product.path = bundle_file_name
+            end
+            bundle_target.add_resources(file_references)
 
-            unless bundle_target
-              file_references = paths.map { |sf| project.reference_for_path(sf) }
-              bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
-              bundle_target.add_resources(file_references)
-
-              target.user_build_configurations.each do |bc_name, type|
-                bundle_target.add_build_configuration(bc_name, type)
-              end
+            target.user_build_configurations.each do |bc_name, type|
+              bundle_target.add_build_configuration(bc_name, type)
             end
 
             target.resource_bundle_targets << bundle_target
 
             if target.should_build?
               native_target.add_dependency(bundle_target)
+              if target.requires_frameworks?
+                native_target.add_resources([bundle_target.product_reference])
+              end
+            end
+
+            bundle_target.build_configurations.each do |c|
+              c.build_settings['PRODUCT_NAME'] = bundle_name
+              if target.requires_frameworks?
+                c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
+              end
             end
           end
         end

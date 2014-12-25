@@ -28,7 +28,7 @@ module Pod
     self.abstract_command = true
     self.command = 'pod'
     self.version = VERSION
-    self.description = 'CocoaPods, the Objective-C library package manager.'
+    self.description = 'CocoaPods, the Cocoa library package manager.'
     self.plugin_prefixes = %w(claide cocoapods)
 
     [Install, Update, Outdated, IPC::Podfile, IPC::Repl].each { |c| c.send(:include, ProjectDirectory) }

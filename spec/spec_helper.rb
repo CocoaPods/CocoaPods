@@ -118,6 +118,34 @@ def fixture_file_accessor(name, platform = :ios)
   Pod::Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
 end
 
+def fixture_target_definition(podfile = nil, &block)
+  podfile ||= Pod::Podfile.new(&block)
+  Pod::Podfile::TargetDefinition.new('Pods', podfile)
+end
+
+def fixture_pod_target(spec_or_name, platform = :ios, target_definition = nil)
+  spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
+  target_definition ||= fixture_target_definition
+  target_definition.store_pod(spec.name)
+  Pod::PodTarget.new([spec], target_definition, config.sandbox).tap do |pod_target|
+    pod_target.stubs(:platform).returns(platform)
+    pod_target.file_accessors << fixture_file_accessor(spec.defined_in_file, platform)
+    consumer = spec.consumer(platform)
+    pod_target.spec_consumers << consumer
+  end
+end
+
+def fixture_aggregate_target(pod_targets = [], platform = :ios, target_definition = nil)
+  target_definition ||= pod_targets.map(&:target_definition).first || fixture_target_definition
+  target = Pod::AggregateTarget.new(target_definition, config.sandbox)
+  target.client_root = config.sandbox.root.dirname
+  version ||= (platform == :ios ? '4.3' : '10.6')
+  target.stubs(:platform).returns(Pod::Platform.new(platform, version))
+  target.pod_targets = pod_targets
+  target
+end
+
 #-----------------------------------------------------------------------------#
 
 SpecHelper::Fixture.fixture('banana-lib') # ensure it exists
+SpecHelper::Fixture.fixture('orange-framework')

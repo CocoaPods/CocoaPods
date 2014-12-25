@@ -26,6 +26,10 @@ module Pod
         @search_paths  = []
       end
 
+      # @param  [Platform] platform
+      #         the platform for which the header search paths should be
+      #         returned
+      #
       # @return [Array<String>] All the search paths of the header directory in
       #         xcconfig format. The paths are specified relative to the pods
       #         root with the `${PODS_ROOT}` variable.

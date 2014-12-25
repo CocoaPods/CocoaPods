@@ -33,6 +33,26 @@ module Pod
           ld_flags
         end
 
+        # Configures the given Xcconfig
+        #
+        # @param  [PodTarget] pod_target
+        #         The pod target, which holds the list of +Spec::FileAccessor+.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_settings_for_file_accessors_of_target(target, xcconfig)
+          target.file_accessors.each do |file_accessor|
+            XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
+            file_accessor.vendored_frameworks.each do |vendored_framework|
+              XCConfigHelper.add_framework_build_settings(vendored_framework, xcconfig, target.sandbox.root)
+            end
+            file_accessor.vendored_libraries.each do |vendored_library|
+              XCConfigHelper.add_library_build_settings(vendored_library, xcconfig, target.sandbox.root)
+            end
+          end
+        end
+
         # Configures the given Xcconfig according to the build settings of the
         # given Specification.
         #
@@ -59,6 +79,9 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @param  [Pathname] sandbox_root
+        #         The path retrieved from Sandbox#root.
+        #
         def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root)
           name = File.basename(framework_path, '.framework')
           dirname = '$(PODS_ROOT)/' + framework_path.dirname.relative_path_from(sandbox_root).to_s
@@ -70,13 +93,16 @@ module Pod
         end
 
         # Configures the given Xcconfig with the the build settings for the given
-        # framework path.
+        # library path.
         #
         # @param  [Pathanme] framework_path
         #         The path of the framework.
         #
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
+        #
+        # @param  [Pathname] sandbox_root
+        #         The path retrieved from Sandbox#root.
         #
         def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
           name = File.basename(library_path, '.a').sub(/\Alib/, '')
@@ -86,6 +112,58 @@ module Pod
             'LIBRARY_SEARCH_PATHS' => quote([dirname]),
           }
           xcconfig.merge!(build_settings)
+        end
+
+        # Add the code signing settings for generated targets to ensure that
+        # frameworks are correctly signed to be integrated and re-signed when
+        # building the application and embedding the framework
+        #
+        # @param  [Target] target
+        #         The target.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_code_signing_settings(target, xcconfig)
+          build_settings = {}
+          if target.platform.to_sym == :osx
+            build_settings['CODE_SIGN_IDENTITY'] = ''
+          end
+          xcconfig.merge!(build_settings)
+        end
+
+        # Checks if the given target requires specific settings and configures
+        # the given Xcconfig.
+        #
+        # @param  [Target] target
+        #         The target.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_target_specific_settings(target, xcconfig)
+          if target.requires_frameworks?
+            add_code_signing_settings(target, xcconfig)
+          end
+          add_language_specific_settings(target, xcconfig)
+        end
+
+        # Checks if the given target requires language specific settings and
+        # configures the given Xcconfig.
+        #
+        # @param  [Target] target
+        #         The target.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_language_specific_settings(target, xcconfig)
+          if target.uses_swift?
+            build_settings = {
+              'OTHER_SWIFT_FLAGS' => quote(['-D COCOAPODS']),
+            }
+            xcconfig.merge!(build_settings)
+          end
         end
 
         # Adds the search paths of the developer frameworks to the specification

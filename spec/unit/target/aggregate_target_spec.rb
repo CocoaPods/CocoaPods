@@ -51,6 +51,10 @@ module Pod
         @target.copy_resources_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-resources.sh')
       end
 
+      it 'returns the absolute path of the frameworks script' do
+        @target.embed_frameworks_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-frameworks.sh')
+      end
+
       it 'returns the absolute path of the target header file' do
         @target.target_environment_header_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-environment.h')
       end
@@ -71,8 +75,16 @@ module Pod
         @target.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh'
       end
 
+      it 'returns the path of the frameworks script relative to the user project' do
+        @target.embed_frameworks_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh'
+      end
+
       it 'returns the path of the xcconfig file relative to the user project' do
         @target.xcconfig_relative_path('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
+      end
+
+      it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
+        @target.configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
       end
     end
 
@@ -86,20 +98,29 @@ module Pod
         @target.pod_targets = [@pod_target]
       end
 
-      it 'returns pod targets by build configuration' do
-        pod_target_release = PodTarget.new([@spec], @target_definition, config.sandbox)
-        pod_target_release.expects(:include_in_build_config?).with('Debug').returns(false)
-        pod_target_release.expects(:include_in_build_config?).with('Release').returns(true)
-        @target.pod_targets = [@pod_target, pod_target_release]
-        @target.user_build_configurations = {
-          'Debug' => :debug,
-          'Release' => :release,
-        }
-        expected = {
-          'Debug' => @pod_target.specs,
-          'Release' => (@pod_target.specs + pod_target_release.specs),
-        }
-        @target.specs_by_build_configuration.should == expected
+      describe 'with configuration dependent pod targets' do
+        before do
+          @pod_target_release = PodTarget.new([@spec], @target_definition, config.sandbox)
+          @pod_target_release.expects(:include_in_build_config?).with('Debug').returns(false)
+          @pod_target_release.expects(:include_in_build_config?).with('Release').returns(true)
+          @target.pod_targets = [@pod_target, @pod_target_release]
+          @target.user_build_configurations = {
+            'Debug' => :debug,
+            'Release' => :release,
+          }
+        end
+
+        it 'returns pod targets for given build configuration' do
+          @target.pod_targets_for_build_configuration('Debug').should == [@pod_target]
+          @target.pod_targets_for_build_configuration('Release').should == [@pod_target, @pod_target_release]
+        end
+
+        it 'returns pod target specs by build configuration' do
+          @target.specs_by_build_configuration.should == {
+            'Debug' => @pod_target.specs,
+            'Release' => (@pod_target.specs + @pod_target_release.specs),
+          }
+        end
       end
 
       it 'returns the specs of the Pods used by this aggregate target' do
@@ -113,6 +134,104 @@ module Pod
       it 'returns the spec consumers for the pod targets' do
         consumer_reps = @target.spec_consumers.map { |consumer| [consumer.spec.name, consumer.platform_name] }
         consumer_reps.should == [['BananaLib', :ios]]
+      end
+    end
+
+    describe 'Product type dependent helpers' do
+      describe 'With libraries' do
+        before do
+          @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+          @target = AggregateTarget.new(@pod_target.target_definition, config.sandbox)
+          @target.pod_targets = [@pod_target]
+        end
+
+        it 'returns that it does not use swift' do
+          @target.uses_swift?.should == false
+        end
+
+        describe 'Host requires frameworks' do
+          before do
+            @target.host_requires_frameworks = true
+          end
+
+          it 'returns the product name' do
+            @target.product_name.should == 'Pods.framework'
+          end
+
+          it 'returns the framework name' do
+            @target.framework_name.should == 'Pods.framework'
+          end
+
+          it 'returns the library name' do
+            @target.static_library_name.should == 'libPods.a'
+          end
+
+          it 'returns :framework as product type' do
+            @target.product_type.should == :framework
+          end
+
+          it 'returns that it requires being built as framework' do
+            @target.requires_frameworks?.should == true
+          end
+        end
+
+        describe 'Host does not requires frameworks' do
+          it 'returns the product name' do
+            @target.product_name.should == 'libPods.a'
+          end
+
+          it 'returns the framework name' do
+            @target.framework_name.should == 'Pods.framework'
+          end
+
+          it 'returns the library name' do
+            @target.static_library_name.should == 'libPods.a'
+          end
+
+          it 'returns :static_library as product type' do
+            @target.product_type.should == :static_library
+          end
+
+          it 'returns that it does not require being built as framework' do
+            @target.requires_frameworks?.should == false
+          end
+        end
+      end
+
+      describe 'With frameworks' do
+        before do
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', :ios, Podfile::TargetDefinition.new('iOS Example', nil))
+          @target = AggregateTarget.new(@pod_target.target_definition, config.sandbox)
+          @target.pod_targets = [@pod_target]
+        end
+
+        it 'returns that it uses swift' do
+          @target.uses_swift?.should == true
+        end
+
+        it 'returns the product module name' do
+          @target.product_module_name.should == 'Pods_iOS_Example'
+        end
+
+        it 'returns the product name' do
+          @target.product_name.should == 'Pods_iOS_Example.framework'
+        end
+
+        it 'returns the framework name' do
+          @target.framework_name.should == 'Pods_iOS_Example.framework'
+        end
+
+        it 'returns the library name' do
+          @target.static_library_name.should == 'libPods-iOS Example.a'
+        end
+
+        it 'returns :framework as product type' do
+          @target.product_type.should == :framework
+        end
+
+        it 'returns that it requires being built as framework' do
+          @target.requires_frameworks?.should == true
+        end
       end
     end
   end
