@@ -171,6 +171,10 @@ begin
 
     desc "Rebuilds integration fixtures"
     task :rebuild_integration_fixtures do
+      if `which hg` && !$?.success?
+        puts red('[!] Mercurial (`hg`) must be installed to rebuild the integration fixtures.')
+        exit 1
+      end
       title 'Running Integration tests'
       sh 'rm -rf spec/cocoapods-integration-specs/tmp'
       title 'Building all the fixtures'
