@@ -11,7 +11,12 @@ module Pod
         UI.titled_section(title,  :verbose_prefix => '-> ') do
           is_json = podspec_uri.split('.').last == 'json'
           require 'open-uri'
-          open(podspec_uri) { |io| store_podspec(sandbox, io.read, is_json) }
+          begin
+            open(podspec_uri) { |io| store_podspec(sandbox, io.read, is_json) }
+          rescue OpenURI::HTTPError => e
+            status = e.io.status.join(' ')
+            raise Informative, "Failed to fetch podspec for `#{name}` at #{podspec_uri}. Error: #{status}"
+          end
         end
       end
 
