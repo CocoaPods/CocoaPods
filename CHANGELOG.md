@@ -18,6 +18,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Hugo Tunius](https://github.com/K0nserv)
   [#2579](https://github.com/CocoaPods/CocoaPods/issues/2579)
 
+* Any errors which occur during fetching of external podspecs over HTTP
+  will now be gracefully handled.  
+  [Hugo Tunius](https://github.com/K0nserv)
+  [#2823](https://github.com/CocoaPods/CocoaPods/issues/2823)
+
 ##### Enhancements
 
 * Xcodebuild warnings will now be reported as `warning` during linting
