@@ -1,0 +1,1 @@
+PODS_SOCKETROCKET_OTHER_LDFLAGS = -l"icucore" -framework "CFNetwork" -framework "Security"

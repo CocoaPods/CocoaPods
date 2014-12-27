@@ -1,0 +1,98 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (``)
+
+Resolving dependencies of `Podfile`
+Starting resolution (<#DATE#>)
+Creating possibility state for libPusher (5 remaining)
+  Attempting to activate libPusher (1.5)
+  Activated libPusher at libPusher (1.5)
+  Requiring nested dependencies (libPusher/Core (= 1.5))
+  Creating possibility state for libPusher/Core (= 1.5) (1 remaining)
+    Attempting to activate libPusher/Core (1.5)
+    Activated libPusher/Core at libPusher/Core (1.5)
+    Requiring nested dependencies (SocketRocket (= 0.3.1-beta2))
+    Creating possibility state for SocketRocket (= 0.3.1-beta2) (1 remaining)
+      Attempting to activate SocketRocket (0.3.1-beta2)
+      Activated SocketRocket at SocketRocket (0.3.1-beta2)
+      Requiring nested dependencies ()
+Finished resolution (3 steps) (Took <#DURATION#> seconds) (<#DATE#>)
+Unactivated: 
+Activated: libPusher, libPusher/Core, SocketRocket
+
+Comparing resolved specification to the sandbox manifest
+  A SocketRocket
+  A libPusher
+
+Downloading dependencies
+
+-> Installing SocketRocket (0.3.1-beta2)
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/square/SocketRocket.git ROOT/tmp/install_custom_module_name/Pods/SocketRocket --single-branch --depth 1 --branch v0.3.1-beta2
+     Cloning into 'ROOT/tmp/install_custom_module_name/Pods/SocketRocket'...
+     Note: checking out 'f61e3c3ae532bf72f0c75524c92e95d625283a13'.
+     
+     You are in 'detached HEAD' state. You can look around, make experimental
+     changes and commit them, and you can discard any commits you make in this
+     state without impacting any branches by performing another checkout.
+     
+     If you want to create a new branch to retain commits you create, you may
+     do so (now or later) by using -b with the checkout command again. Example:
+     
+       git checkout -b new_branch_name
+     
+
+-> Installing libPusher (1.5)
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/lukeredpath/libPusher.git ROOT/tmp/install_custom_module_name/Pods/libPusher --single-branch --depth 1 --branch v1.5
+     Cloning into 'ROOT/tmp/install_custom_module_name/Pods/libPusher'...
+     Note: checking out 'ac87421f81c874ad0b5116d3523a3467dff28439'.
+     
+     You are in 'detached HEAD' state. You can look around, make experimental
+     changes and commit them, and you can discard any commits you make in this
+     state without impacting any branches by performing another checkout.
+     
+     If you want to create a new branch to retain commits you create, you may
+     do so (now or later) by using -b with the checkout command again. Example:
+     
+       git checkout -b new_branch_name
+     
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `Pods-SocketRocket` iOS 8.2
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-SocketRocket/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-SocketRocket/Pods-SocketRocket.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-SocketRocket/Pods-SocketRocket-umbrella.h`
+    - Installing target `Pods-libPusher` iOS 8.2
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-libPusher/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-libPusher/Pods-libPusher.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-libPusher/Pods-libPusher-umbrella.h`
+    - Installing target `Pods` iOS 8.2
+      - Generating Info.plist file at `Pods/Target Support Files/Pods/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods/Pods.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods/Pods-umbrella.h`
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+[!] From now on use `Example.xcworkspace`.
+
+Integrating target `Pods` (`Example.xcodeproj` project)
+  Add Build Phase 'Embed Pods Frameworks' to project.

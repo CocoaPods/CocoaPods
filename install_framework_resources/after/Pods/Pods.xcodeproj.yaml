@@ -1,0 +1,458 @@
+
+File References:
+- Podfile
+- Development Pods:
+  - SamplePodWithResources:
+    - Foo.m
+    - Resources:
+      - logo.png
+      - troll.png
+    - Support Files:
+      - Info.plist
+      - Info.plist
+      - Pods-SampleApp-SamplePodWithResources.modulemap
+      - Pods-SampleApp-SamplePodWithResources.xcconfig
+      - Pods-SampleApp-SamplePodWithResources-Private.xcconfig
+      - Pods-SampleApp-SamplePodWithResources-dummy.m
+      - Pods-SampleApp-SamplePodWithResources-prefix.pch
+      - Pods-SampleApp-SamplePodWithResources-umbrella.h
+      - Pods-SampleAppTests-SamplePodWithResources.modulemap
+      - Pods-SampleAppTests-SamplePodWithResources.xcconfig
+      - Pods-SampleAppTests-SamplePodWithResources-Private.xcconfig
+      - Pods-SampleAppTests-SamplePodWithResources-dummy.m
+      - Pods-SampleAppTests-SamplePodWithResources-prefix.pch
+      - Pods-SampleAppTests-SamplePodWithResources-umbrella.h
+- Frameworks:
+  - OS X:
+    - Cocoa.framework
+- Products:
+  - Pods_SampleApp.framework
+  - Pods_SampleAppTests.framework
+  - SamplePodWithResources.bundle
+  - SamplePodWithResources.bundle
+  - SamplePodWithResources.framework
+  - SamplePodWithResources.framework
+- Targets Support Files:
+  - Pods-SampleApp:
+    - Info.plist
+    - Pods-SampleApp.modulemap
+    - Pods-SampleApp-acknowledgements.markdown
+    - Pods-SampleApp-acknowledgements.plist
+    - Pods-SampleApp-dummy.m
+    - Pods-SampleApp-environment.h
+    - Pods-SampleApp-frameworks.sh
+    - Pods-SampleApp-resources.sh
+    - Pods-SampleApp-umbrella.h
+    - Pods-SampleApp.debug.xcconfig
+    - Pods-SampleApp.release.xcconfig
+  - Pods-SampleAppTests:
+    - Info.plist
+    - Pods-SampleAppTests.modulemap
+    - Pods-SampleAppTests-acknowledgements.markdown
+    - Pods-SampleAppTests-acknowledgements.plist
+    - Pods-SampleAppTests-dummy.m
+    - Pods-SampleAppTests-environment.h
+    - Pods-SampleAppTests-frameworks.sh
+    - Pods-SampleAppTests-resources.sh
+    - Pods-SampleAppTests-umbrella.h
+    - Pods-SampleAppTests.debug.xcconfig
+    - Pods-SampleAppTests.release.xcconfig
+
+
+
+Targets:
+- Pods-SampleApp:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-SampleApp-dummy.m
+    - FrameworksBuildPhase:
+      - Cocoa.framework
+    - HeadersBuildPhase:
+      - Pods-SampleApp-umbrella.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          COMBINE_HIDPI_IMAGES: 'YES'
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          FRAMEWORK_VERSION: A
+          OTHER_LDFLAGS: ''
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: macosx
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/../Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: Pods_SampleApp
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          PODS_ROOT: $(SRCROOT)
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SampleApp/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SampleApp.debug.xcconfig
+    - Release:
+        Build Settings:
+          COMBINE_HIDPI_IMAGES: 'YES'
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          FRAMEWORK_VERSION: A
+          OTHER_LDFLAGS: ''
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: macosx
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/../Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: Pods_SampleApp
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          PODS_ROOT: $(SRCROOT)
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SampleApp/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SampleApp.release.xcconfig
+- Pods-SampleApp-SamplePodWithResources:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Foo.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - Pods-SampleApp-SamplePodWithResources-dummy.m
+    - FrameworksBuildPhase:
+      - Cocoa.framework
+    - ResourcesBuildPhase:
+      - SamplePodWithResources.bundle
+      - troll.png
+    - HeadersBuildPhase:
+      - Pods-SampleApp-SamplePodWithResources-umbrella.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          COMBINE_HIDPI_IMAGES: 'YES'
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SampleApp-SamplePodWithResources/Pods-SampleApp-SamplePodWithResources.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp-SamplePodWithResources/Pods-SampleApp-SamplePodWithResources-prefix.pch
+          FRAMEWORK_VERSION: A
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: macosx
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/../Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: SamplePodWithResources
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SampleApp-SamplePodWithResources/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SampleApp-SamplePodWithResources-Private.xcconfig
+    - Release:
+        Build Settings:
+          COMBINE_HIDPI_IMAGES: 'YES'
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SampleApp-SamplePodWithResources/Pods-SampleApp-SamplePodWithResources.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp-SamplePodWithResources/Pods-SampleApp-SamplePodWithResources-prefix.pch
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          FRAMEWORK_VERSION: A
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: macosx
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/../Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: SamplePodWithResources
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SampleApp-SamplePodWithResources/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SampleApp-SamplePodWithResources-Private.xcconfig
+- Pods-SampleApp-SamplePodWithResources-SamplePodWithResources:
+    Build Phases:
+    - SourcesBuildPhase: []
+    - FrameworksBuildPhase: []
+    - ResourcesBuildPhase:
+      - logo.png
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          PRODUCT_NAME: SamplePodWithResources
+          WRAPPER_EXTENSION: bundle
+          COMBINE_HIDPI_IMAGES: 'YES'
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleApp
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+    - Release:
+        Build Settings:
+          PRODUCT_NAME: SamplePodWithResources
+          WRAPPER_EXTENSION: bundle
+          COMBINE_HIDPI_IMAGES: 'YES'
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleApp
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+- Pods-SampleAppTests:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-SampleAppTests-dummy.m
+    - FrameworksBuildPhase:
+      - Cocoa.framework
+    - HeadersBuildPhase:
+      - Pods-SampleAppTests-umbrella.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          COMBINE_HIDPI_IMAGES: 'YES'
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          FRAMEWORK_VERSION: A
+          OTHER_LDFLAGS: ''
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: macosx
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/../Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: Pods_SampleAppTests
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          PODS_ROOT: $(SRCROOT)
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SampleAppTests/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SampleAppTests.debug.xcconfig
+    - Release:
+        Build Settings:
+          COMBINE_HIDPI_IMAGES: 'YES'
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          FRAMEWORK_VERSION: A
+          OTHER_LDFLAGS: ''
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: macosx
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/../Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: Pods_SampleAppTests
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          PODS_ROOT: $(SRCROOT)
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SampleAppTests/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SampleAppTests.release.xcconfig
+- Pods-SampleAppTests-SamplePodWithResources:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Foo.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - Pods-SampleAppTests-SamplePodWithResources-dummy.m
+    - FrameworksBuildPhase:
+      - Cocoa.framework
+    - ResourcesBuildPhase:
+      - SamplePodWithResources.bundle
+      - troll.png
+    - HeadersBuildPhase:
+      - Pods-SampleAppTests-SamplePodWithResources-umbrella.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          COMBINE_HIDPI_IMAGES: 'YES'
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SampleAppTests-SamplePodWithResources/Pods-SampleAppTests-SamplePodWithResources.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleAppTests-SamplePodWithResources/Pods-SampleAppTests-SamplePodWithResources-prefix.pch
+          FRAMEWORK_VERSION: A
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: macosx
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/../Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: SamplePodWithResources
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SampleAppTests-SamplePodWithResources/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SampleAppTests-SamplePodWithResources-Private.xcconfig
+    - Release:
+        Build Settings:
+          COMBINE_HIDPI_IMAGES: 'YES'
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-SampleAppTests-SamplePodWithResources/Pods-SampleAppTests-SamplePodWithResources.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleAppTests-SamplePodWithResources/Pods-SampleAppTests-SamplePodWithResources-prefix.pch
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          FRAMEWORK_VERSION: A
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: macosx
+          LD_RUNPATH_SEARCH_PATHS:
+          - $(inherited)
+          - '@executable_path/../Frameworks'
+          - '@loader_path/Frameworks'
+          PRODUCT_NAME: SamplePodWithResources
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-SampleAppTests-SamplePodWithResources/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-SampleAppTests-SamplePodWithResources-Private.xcconfig
+- Pods-SampleAppTests-SamplePodWithResources-SamplePodWithResources:
+    Build Phases:
+    - SourcesBuildPhase: []
+    - FrameworksBuildPhase: []
+    - ResourcesBuildPhase:
+      - logo.png
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          PRODUCT_NAME: SamplePodWithResources
+          WRAPPER_EXTENSION: bundle
+          COMBINE_HIDPI_IMAGES: 'YES'
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleAppTests
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+    - Release:
+        Build Settings:
+          PRODUCT_NAME: SamplePodWithResources
+          WRAPPER_EXTENSION: bundle
+          COMBINE_HIDPI_IMAGES: 'YES'
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleAppTests
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+
+
+
+Build Configurations:
+- Debug:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - $(inherited)
+      ONLY_ACTIVE_ARCH: 'YES'
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.10'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+- Release:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      VALIDATE_PRODUCT: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - RELEASE=1
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.10'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      COPY_PHASE_STRIP: 'NO'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      ENABLE_NS_ASSERTIONS: 'NO'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'

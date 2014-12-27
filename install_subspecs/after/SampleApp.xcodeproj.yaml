@@ -35,7 +35,7 @@ File References:
     - AppKit.framework
     - CoreData.framework
     - Foundation.framework
-  - libPods-OS X App.a
+  - Pods_OS_X_App.framework
   - libPods-iOS App.a
 - Products:
   - iOS App.app
@@ -105,11 +105,14 @@ Targets:
       - CPAppDelegate.m
     - FrameworksBuildPhase:
       - Cocoa.framework
-      - libPods-OS X App.a
+      - Pods_OS_X_App.framework:
+          ATTRIBUTES:
+          - Weak
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
+    - Embed Pods Frameworks: []
     - Copy Pods Resources: []
     Build Configurations:
     - Debug:

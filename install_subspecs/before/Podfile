@@ -5,5 +5,6 @@ end
 
 target 'OS X App' do
   platform :osx
+  use_frameworks!
   pod "PodTest/subspec_2", :hg => "PodTest-hg-source"
 end
