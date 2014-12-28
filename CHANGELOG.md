@@ -95,7 +95,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#1919](https://github.com/CocoaPods/CocoaPods/issues/1919)
 
-* Fix the reading of podspecs that come from the `:git`, `:svn`, ':http', or
+* Fix the reading of podspecs that come from the `:git`, `:svn`, `:http`, or
   `:hg` options in your `Podfile` that used context-dependent ruby code, such as
   reading a file to determine the specification version.  
   [Samuel Giddins](https://github.com/segiddins)
