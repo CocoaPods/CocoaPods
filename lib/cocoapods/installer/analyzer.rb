@@ -614,31 +614,6 @@ module Pod
       # @todo   Is assigning the platform to the target definition the best way
       #         to go?
       #
-      def compute_platform_for_target_definition(target_definition, user_targets)
-        return target_definition.platform if target_definition.platform
-        name = nil
-        deployment_target = nil
-
-        user_targets.each do |target|
-          name ||= target.platform_name
-          raise Informative, 'Targets with different platforms' unless name == target.platform_name
-          if !deployment_target || deployment_target > Version.new(target.deployment_target)
-            deployment_target = Version.new(target.deployment_target)
-          end
-        end
-
-        target_definition.set_platform(name, deployment_target)
-        Platform.new(name, deployment_target)
-      end
-
-      # @return [Platform] The platform for the library.
-      #
-      # @note   This resolves to the lowest deployment target across the user
-      #         targets.
-      #
-      # @todo   Is assigning the platform to the target definition the best way
-      #         to go?
-      #
       def compute_archs_for_target_definition(target_definition, user_targets)
         archs = []
         user_targets.each do |target|
@@ -668,7 +643,6 @@ module Pod
               project_path = compute_user_project_path(target_definition)
               user_project = Xcodeproj::Project.open(project_path)
               targets = compute_user_project_targets(target_definition, user_project)
-              platform = compute_platform_for_target_definition(target_definition, targets)
               archs = compute_archs_for_target_definition(target_definition, targets)
               @archs_by_target_def[target_definition] = archs
             else
