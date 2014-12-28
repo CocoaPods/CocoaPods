@@ -497,67 +497,6 @@ module Pod
 
         #--------------------------------------#
 
-        describe '#compute_platform_for_target_definition' do
-
-          it 'returns the platform specified in the target definition' do
-            target_definition = Podfile::TargetDefinition.new(:default, nil)
-            target_definition.set_platform(:ios, '4.0')
-            user_targets = []
-
-            configurations = @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets)
-            configurations.should == Platform.new(:ios, '4.0')
-          end
-
-          it 'infers the platform from the user targets' do
-            user_project = Xcodeproj::Project.new('path')
-            target = user_project.new_target(:application, 'Target', :ios)
-            target.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
-            target.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '4.0')
-
-            target_definition = Podfile::TargetDefinition.new(:default, nil)
-            user_targets = [target]
-
-            configurations = @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets)
-            configurations.should == Platform.new(:ios, '4.0')
-          end
-
-          it 'uses the lowest deployment target of the user targets if inferring the platform' do
-            user_project = Xcodeproj::Project.new('path')
-            target1 = user_project.new_target(:application, 'Target', :ios)
-            configuration1 = target1.build_configuration_list.build_configurations.first
-            target1.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
-            target1.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '4.0')
-
-            target2 = user_project.new_target(:application, 'Target', :ios)
-            target2.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
-            target2.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '6.0')
-
-            target_definition = Podfile::TargetDefinition.new(:default, nil)
-            user_targets = [target1, target2]
-
-            configurations = @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets)
-            configurations.should == Platform.new(:ios, '4.0')
-          end
-
-          it 'raises if the user targets have a different platform' do
-            user_project = Xcodeproj::Project.new('path')
-            target1 = user_project.new_target(:application, 'Target', :ios)
-            target1.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
-            target1.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '4.0')
-
-            target2 = user_project.new_target(:application, 'Target', :ios)
-            target2.build_configuration_list.set_setting('SDKROOT', 'macosx')
-            target2.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '10.6')
-
-            target_definition = Podfile::TargetDefinition.new(:default, nil)
-            user_targets = [target1, target2]
-            e = lambda { @analyzer.send(:compute_platform_for_target_definition, target_definition, user_targets) }.should.raise Informative
-            e.message.should.match /Targets with different platforms/
-          end
-        end
-
-        #--------------------------------------#
-
         describe '#sources' do
           describe 'when there are no explicit sources' do
             it 'defaults to all sources' do
