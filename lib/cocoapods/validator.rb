@@ -520,7 +520,7 @@ module Pod
       output = `xcodebuild clean build -target Pods 2>&1`
 
       unless $?.success?
-        message = 'Returned a non-successful exit code.'
+        message = 'Returned a unsuccessful exit code.'
         message += ' You can use `--verbose` for more information.' unless config.verbose?
         error('xcodebuild', message)
       end
