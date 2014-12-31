@@ -347,6 +347,19 @@ module Pod
         sut.result_type.should == :note
       end
 
+      it 'checks if xcodebuild returns a successful status code' do
+        Validator.any_instance.unstub(:xcodebuild)
+        sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+        sut.stubs(:check_file_patterns)
+        sut.stubs(:validate_url)
+        sut.stubs(:`).returns('Output')
+        $?.stubs(:success?).returns(false)
+        sut.validate
+        first = sut.results.map(&:to_s).first
+        first.should.include '[xcodebuild] Returned a unsuccessful exit code'
+        sut.result_type.should == :error
+      end
+
       it 'does filter InputFile errors completely' do
         sut = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         sut.stubs(:check_file_patterns)

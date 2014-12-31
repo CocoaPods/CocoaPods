@@ -517,7 +517,15 @@ module Pod
     #
     def xcodebuild
       UI.puts 'xcodebuild clean build -target Pods' if config.verbose?
-      `xcodebuild clean build -target Pods 2>&1`
+      output = `xcodebuild clean build -target Pods 2>&1`
+
+      unless $?.success?
+        message = 'Returned a unsuccessful exit code.'
+        message += ' You can use `--verbose` for more information.' unless config.verbose?
+        error('xcodebuild', message)
+      end
+
+      output
     end
 
     #-------------------------------------------------------------------------#
