@@ -20,12 +20,12 @@ module Pod
     #
     class Hook
       # @return [String]
-      #         The name of the hook's notification.
+      #         The name of the plugin that registered the hook.
       #
       attr_reader :plugin_name
 
       # @return [String]
-      #         The name of the plugin the hook came from.
+      #         The name of the hook.
       #
       attr_reader :name
 
@@ -54,8 +54,8 @@ module Pod
     end
 
     class << self
-      # @return [Hash{Symbol => Array<Proc>}] The list of the blocks that are
-      #         registered for each notification name.
+      # @return [Hash{Symbol => Array<Hook>}] The list of the hooks that are
+      #         registered for each hook name.
       #
       attr_reader :registrations
 
