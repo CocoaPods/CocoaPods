@@ -66,7 +66,7 @@ module Pod
     #
     def uses_swift?
       file_accessors.any? do |file_accessor|
-        file_accessor.source_files.any? { |sf| sf.extname == ".swift" }
+        file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
       end
     end
 

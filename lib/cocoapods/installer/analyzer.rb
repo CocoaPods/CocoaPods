@@ -325,7 +325,7 @@ module Pod
         deps_with_different_sources = podfile.dependencies.group_by(&:root_name).
           select { |_root_name, dependencies| dependencies.map(&:external_source).uniq.count > 1 }
         deps_with_different_sources.each do |root_name, dependencies|
-          raise Informative, "There are multiple dependencies with different " \
+          raise Informative, 'There are multiple dependencies with different ' \
           "sources for `#{root_name}` in #{UI.path podfile.defined_in_file}:" \
           "\n\n- #{dependencies.map(&:to_s).join("\n- ")}"
         end
@@ -646,7 +646,7 @@ module Pod
         end
 
         archs = archs.compact.uniq.sort
-        UI.message("Using `ARCHS` setting to build architectures of " \
+        UI.message('Using `ARCHS` setting to build architectures of ' \
                    "target `#{target_definition.label}`: " \
                    "(`#{archs.join('`, `')}`)")
         archs.length > 1 ? archs : archs.first

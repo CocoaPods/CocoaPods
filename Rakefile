@@ -1,19 +1,19 @@
 # Bootstrap task
 #-----------------------------------------------------------------------------#
 
-desc "Initializes your working copy to run the specs"
+desc 'Initializes your working copy to run the specs'
 task :bootstrap, :use_bundle_dir? do |_, args|
-  title "Environment bootstrap"
+  title 'Environment bootstrap'
 
-  puts "Updating submodules"
-  execute_command "git submodule update --init --recursive"
+  puts 'Updating submodules'
+  execute_command 'git submodule update --init --recursive'
 
   if system('which bundle')
-    puts "Installing gems"
+    puts 'Installing gems'
     if args[:use_bundle_dir?]
-      execute_command "env bundle install --path ./travis_bundle_dir"
+      execute_command 'env bundle install --path ./travis_bundle_dir'
     else
-      execute_command "env bundle install"
+      execute_command 'env bundle install'
     end
   else
     $stderr.puts "\033[0;31m" \
@@ -27,15 +27,15 @@ end
 begin
 
   task :build do
-    title "Building the gem"
+    title 'Building the gem'
   end
 
-  require "bundler/gem_tasks"
+  require 'bundler/gem_tasks'
 
   # Pre release
   #-----------------------------------------------------------------------------#
 
-  desc "Prepares for a release"
+  desc 'Prepares for a release'
   task :pre_release do
     unless File.exist?('../Specs')
       raise 'Ensure that the specs repo exits in the `../Specs` location'
@@ -45,14 +45,14 @@ begin
   # Post release
   #-----------------------------------------------------------------------------#
 
-  desc "Updates the last know version of CocoaPods in the specs repo"
+  desc 'Updates the last know version of CocoaPods in the specs repo'
   task :post_release do
-    title "Updating last known version in Specs repo"
+    title 'Updating last known version in Specs repo'
     specs_branch = 'master'
     Dir.chdir('../Specs') do
       puts Dir.pwd
       sh "git checkout #{specs_branch}"
-      sh "git pull"
+      sh 'git pull'
 
       yaml_file  = 'CocoaPods-version.yml'
       unless File.exist?(yaml_file)
@@ -62,12 +62,12 @@ begin
       require 'yaml'
       cocoapods_version = YAML.load_file(yaml_file)
       cocoapods_version['last'] = gem_version
-      File.open(yaml_file, "w") do |f|
+      File.open(yaml_file, 'w') do |f|
         f.write(cocoapods_version.to_yaml)
       end
 
       sh "git commit #{yaml_file} -m 'CocoaPods release #{gem_version}'"
-      sh "git push"
+      sh 'git push'
     end
   end
 
@@ -82,28 +82,28 @@ begin
 
     #--------------------------------------#
 
-    desc "Automatically run specs for updated files"
+    desc 'Automatically run specs for updated files'
     task :kick do
-      exec "bundle exec kicker -c"
+      exec 'bundle exec kicker -c'
     end
 
     #--------------------------------------#
 
     unit_specs_command = "bundle exec bacon #{specs('unit/**/*')}"
 
-    desc "Run the unit specs"
+    desc 'Run the unit specs'
     task :unit => :unpack_fixture_tarballs do
       sh unit_specs_command
     end
 
-    desc "Run the unit specs quietly (fail fast, display only one failure)"
+    desc 'Run the unit specs quietly (fail fast, display only one failure)'
     task :unit_quiet => :unpack_fixture_tarballs do
       sh "#{unit_specs_command} -q"
     end
 
     #--------------------------------------#
 
-    desc "Run the functional specs"
+    desc 'Run the functional specs'
     task :functional, [:spec] => :unpack_fixture_tarballs do |_t, args|
       args.with_defaults(:spec => '**/*')
       sh "bundle exec bacon #{specs("functional/#{args[:spec]}")}"
@@ -111,14 +111,14 @@ begin
 
     #--------------------------------------#
 
-    desc "Run the integration spec"
+    desc 'Run the integration spec'
     task :integration do
       unless File.exist?('spec/cocoapods-integration-specs')
-        $stderr.puts red("Integration files not checked out. Run `rake bootstrap`")
+        $stderr.puts red('Integration files not checked out. Run `rake bootstrap`')
         exit 1
       end
 
-      sh "bundle exec bacon spec/integration.rb"
+      sh 'bundle exec bacon spec/integration.rb'
     end
 
     # Default task
@@ -135,7 +135,7 @@ begin
       sh "bundle exec bacon #{specs('**/*')}"
 
       title 'Running Integration tests'
-      sh "bundle exec bacon spec/integration.rb"
+      sh 'bundle exec bacon spec/integration.rb'
 
       title 'Running examples'
       Rake::Task['examples:build'].invoke
@@ -144,7 +144,7 @@ begin
       Rake::Task['rubocop'].invoke
     end
 
-    desc "Rebuild all the fixture tarballs"
+    desc 'Rebuild all the fixture tarballs'
     task :rebuild_fixture_tarballs do
       tarballs = FileList['spec/fixtures/**/*.tar.gz']
       tarballs.each do |tarball|
@@ -153,7 +153,7 @@ begin
       end
     end
 
-    desc "Unpacks all the fixture tarballs"
+    desc 'Unpacks all the fixture tarballs'
     task :unpack_fixture_tarballs do
       tarballs = FileList['spec/fixtures/**/*.tar.gz']
       tarballs.each do |tarball|
@@ -164,12 +164,12 @@ begin
       end
     end
 
-    desc "Removes the stored VCR fixture"
+    desc 'Removes the stored VCR fixture'
     task :clean_vcr do
-      sh "rm -f spec/fixtures/vcr/tarballs.yml"
+      sh 'rm -f spec/fixtures/vcr/tarballs.yml'
     end
 
-    desc "Rebuilds integration fixtures"
+    desc 'Rebuilds integration fixtures'
     task :rebuild_integration_fixtures do
       if `which hg` && !$?.success?
         puts red('[!] Mercurial (`hg`) must be installed to rebuild the integration fixtures.')
@@ -199,19 +199,19 @@ begin
       end
 
       puts
-      puts "Integration fixtures updated, commit and push in the `spec/cocoapods-integration-specs` submodule"
+      puts 'Integration fixtures updated, commit and push in the `spec/cocoapods-integration-specs` submodule'
     end
 
-    task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, "ext:cleanbuild"]
+    task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, 'ext:cleanbuild']
   end
 
   # Examples
   #-----------------------------------------------------------------------------#
 
-  task :examples => "examples:build"
+  task :examples => 'examples:build'
   namespace :examples do
 
-    desc "Open all example workspaces in Xcode, which recreates the schemes."
+    desc 'Open all example workspaces in Xcode, which recreates the schemes.'
     task :recreate_workspace_schemes do
       examples.each do |example|
         Dir.chdir(example.to_s) do
@@ -223,19 +223,19 @@ begin
       end
     end
 
-    desc "Build all examples"
+    desc 'Build all examples'
     task :build do
       Bundler.require 'xcodeproj', :development
       Dir['examples/*'].each do |dir|
         Dir.chdir(dir) do
           puts "Example: #{dir}"
 
-          puts "    Installing Pods"
+          puts '    Installing Pods'
           # pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
           # TODO: The sandbox is blocking local git repos making bundler crash
           pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/pod'
 
-          execute_command "rm -rf Pods"
+          execute_command 'rm -rf Pods'
           execute_command "#{pod_command} install --verbose --no-repo-update"
 
           workspace_path = 'Examples.xcworkspace'
@@ -265,7 +265,7 @@ begin
 
   #-----------------------------------------------------------------------------#
 
-  desc "Run all specs"
+  desc 'Run all specs'
   task :spec => 'spec:all'
 
   task :default => :spec
@@ -309,9 +309,9 @@ end
 def title(title)
   cyan_title = "\033[0;36m#{title}\033[0m"
   puts
-  puts "-" * 80
+  puts '-' * 80
   puts cyan_title
-  puts "-" * 80
+  puts '-' * 80
   puts
 end
 

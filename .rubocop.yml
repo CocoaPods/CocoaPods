@@ -7,3 +7,4 @@ inherit_from:
 AllCops:
   Exclude:
     - spec/fixtures/**/*.rb
+    - spec/fixtures/banana-lib/libPusher/Scripts/pusher

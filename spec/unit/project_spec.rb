@@ -170,7 +170,7 @@ module Pod
           ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
         end
 
-        it "adds subgroups for a file reference if requested" do
+        it 'adds subgroups for a file reference if requested' do
           ref = @project.add_file_reference(@nested_file, @group, true)
           ref.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/nested_file.m'	  
         end

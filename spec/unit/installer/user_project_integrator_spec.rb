@@ -88,7 +88,7 @@ module Pod
           end
 
           it "ignores certain build settings which don't inherit the settings form the CocoaPods xcconfig" do
-            @user_target_build_settings = { 'CODE_SIGN_IDENTITY' => "Mac Developer" }
+            @user_target_build_settings = { 'CODE_SIGN_IDENTITY' => 'Mac Developer' }
             behaves_like 'warn_about_xcconfig_overrides'
             UI.warnings.should.not.include 'CODE_SIGN_IDENTITY'
           end

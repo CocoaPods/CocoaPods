@@ -9,7 +9,7 @@ module Pod
         DESC
 
         def self.options
-          [["--count-only", "Show the total number of repos"]].concat(super)
+          [['--count-only', 'Show the total number of repos']].concat(super)
         end
 
         def initialize(argv)
@@ -52,10 +52,10 @@ module Pod
                 url = url_of_git_repo(remote_name)
                 UI.puts "- URL:  #{url}"
               else
-                UI.puts "- Type: git (no remote information available)"
+                UI.puts '- Type: git (no remote information available)'
               end
             else
-              UI.puts "- Type: local copy"
+              UI.puts '- Type: local copy'
             end
             UI.puts "- Path: #{path}"
           end

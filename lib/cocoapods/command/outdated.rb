@@ -67,7 +67,7 @@ module Pod
             if source_version > lockfile_version
               matching_spec = unlocked_pods.find { |s| s.name == pod_name }
               matching_version =
-                matching_spec ? matching_spec.version : "(unused)"
+                matching_spec ? matching_spec.version : '(unused)'
               [pod_name, lockfile_version, matching_version, source_version]
             else
               nil

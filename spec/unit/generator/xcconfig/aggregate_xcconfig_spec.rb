@@ -72,7 +72,7 @@ module Pod
 
         #-----------------------------------------------------------------------#
 
-        describe "if a pod target does not contain source files" do
+        describe 'if a pod target does not contain source files' do
 
           before do
             @pod_target.file_accessors.first.stubs(:source_files).returns([])
@@ -154,7 +154,7 @@ module Pod
 
         #-----------------------------------------------------------------------#
 
-        describe "serializing and deserializing" do
+        describe 'serializing and deserializing' do
 
           before do
             @path = temporary_directory + 'sample.xcconfig'

@@ -37,7 +37,7 @@ module Pod
       # @return [String]
       #
       def generate
-        result = ""
+        result = ''
         result << generate_platform_import_header
 
         result << "\n"

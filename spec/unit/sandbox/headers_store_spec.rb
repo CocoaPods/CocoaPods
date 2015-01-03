@@ -12,7 +12,7 @@ module Pod
       @header_dir.root.should == temporary_directory + 'Sandbox/Headers/Public'
     end
 
-    it "can add namespaced headers to its header path using symlinks and return the relative path" do
+    it 'can add namespaced headers to its header path using symlinks and return the relative path' do
       FileUtils.mkdir_p(@sandbox.root + 'ExampleLib/')
       namespace_path = Pathname.new('ExampleLib')
       relative_header_paths = [
@@ -51,8 +51,8 @@ module Pod
       @header_dir.add_search_path('iOS Search Path', :ios)
       @header_dir.add_search_path('OS X Search Path', :osx)
       @header_dir.search_paths(:ios).sort.should == [
-        "${PODS_ROOT}/Headers/Public",
-        "${PODS_ROOT}/Headers/Public/iOS Search Path",
+        '${PODS_ROOT}/Headers/Public',
+        '${PODS_ROOT}/Headers/Public/iOS Search Path',
       ]
     end
   end

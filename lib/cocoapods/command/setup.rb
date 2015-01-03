@@ -41,7 +41,7 @@ module Pod
           end
         end
 
-        UI.puts "Setup completed".green
+        UI.puts 'Setup completed'.green
       end
 
       #--------------------------------------#
