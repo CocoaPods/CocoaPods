@@ -9,10 +9,6 @@
 Lint/UselessAccessModifier:
   Enabled: false
 
-# Offense count: 1
-Metrics/BlockNesting:
-  Max: 4
-
 # Offense count: 11
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
