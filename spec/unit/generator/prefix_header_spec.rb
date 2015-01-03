@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe PrefixHeader = Generator::PrefixHeader do
-
     before do
       file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
       @spec = file_accessor.spec

@@ -73,6 +73,5 @@ module Pod
       source.should.not.exist?
       target.should.exist?
     end
-
   end
 end

@@ -479,7 +479,6 @@ module Pod
 
           aggregate_target.native_target.add_dependency(pod_target.native_target)
           pod_target.dependencies.each do |dep|
-
             unless dep == pod_target.pod_name
               pod_dependency_target = aggregate_target.pod_targets.find { |target| target.pod_name == dep }
               # TODO remove me

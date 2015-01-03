@@ -27,11 +27,9 @@ module Pod
     end
 
     describe '#labeled' do
-
       it 'prints nothing if value is nil' do
         UI.labeled('label', nil)
         UI.output.should == ''
-
       end
 
       it 'prints label and value on one line if value is not an array' do
@@ -72,7 +70,6 @@ module Pod
         UI.labeled('label', values, 12)
         UI.output.should == "#{' ' * 10}- label:\n" + values.map { |v| "#{' ' * 12}- #{v}\n" }.join
       end
-
     end
   end
 end

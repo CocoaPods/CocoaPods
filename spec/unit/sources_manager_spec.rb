@@ -28,7 +28,6 @@ end
 
 module Pod
   describe SourcesManager do
-
     before do
       @test_source = Source.new(fixture('spec-repos/test_repo'))
     end
@@ -36,7 +35,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'In general' do
-
       before do
         SourcesManager.stubs(:all).returns([@test_source])
       end
@@ -299,13 +297,11 @@ module Pod
       it "it returns an empty array for the version information if the file can't be found" do
         SourcesManager.version_information(temporary_directory).should == {}
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Master repo' do
-
       it 'returns the master repo dir' do
         SourcesManager.master_repo_dir.to_s.should.match /fixtures\/spec-repos\/master/
       end
@@ -315,7 +311,6 @@ module Pod
         config.repos_dir = SpecHelper.temporary_directory
         SourcesManager.master_repo_functional?.should.be.false
       end
-
     end
   end
 end

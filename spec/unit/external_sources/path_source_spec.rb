@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe ExternalSources::PathSource do
-
     before do
       params = { :path => fixture('integration/Reachability') }
       dependency = Dependency.new('Reachability', params)

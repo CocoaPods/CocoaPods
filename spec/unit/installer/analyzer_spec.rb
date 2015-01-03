@@ -4,7 +4,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Installer::Analyzer do
-
     describe 'Analysis' do
       before do
         @podfile = Pod::Podfile.new do
@@ -286,7 +285,6 @@ module Pod
       #-------------------------------------------------------------------------#
 
       describe 'Private helpers' do
-
         describe '#compute_user_project_targets' do
           it 'uses the path specified in the target definition while computing the path of the user project' do
             target_definition = Podfile::TargetDefinition.new(:default, nil)
@@ -343,7 +341,6 @@ module Pod
         #--------------------------------------#
 
         describe '#compute_user_project_targets' do
-
           it 'returns the targets specified in the target definition' do
             target_definition = Podfile::TargetDefinition.new(:default, nil)
             target_definition.link_with = ['UserTarget']
@@ -398,13 +395,11 @@ module Pod
             e = lambda { @analyzer.send(:compute_user_project_targets, target_definition, user_project) }.should.raise Informative
             e.message.should.match /Unable to find a target/
           end
-
         end
 
         #--------------------------------------#
 
         describe '#compute_user_build_configurations' do
-
           it 'returns the user build configurations of the user targets' do
             user_project = Xcodeproj::Project.new('path')
             target = user_project.new_target(:application, 'Target', :ios)
@@ -431,13 +426,11 @@ module Pod
             configurations = @analyzer.send(:compute_user_build_configurations, target_definition, user_targets)
             configurations.should == { 'AppStore' => :release }
           end
-
         end
 
         #--------------------------------------#
 
         describe '#compute_archs_for_target_definition' do
-
           it 'handles a single ARCH defined in a single user target' do
             user_project = Xcodeproj::Project.new('path')
             target = user_project.new_target(:application, 'Target', :ios)
@@ -498,7 +491,6 @@ module Pod
         #--------------------------------------#
 
         describe '#compute_platform_for_target_definition' do
-
           it 'returns the platform specified in the target definition' do
             target_definition = Podfile::TargetDefinition.new(:default, nil)
             target_definition.set_platform(:ios, '4.0')

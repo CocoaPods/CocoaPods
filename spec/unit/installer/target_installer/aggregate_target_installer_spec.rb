@@ -143,11 +143,9 @@ module Pod
       end
 
       xit 'adds the resources bundles to the copy resources script' do
-
       end
 
       xit 'adds the bridge support file to the copy resources script, if one was created' do
-
       end
 
       it 'does add pods to the embed frameworks script' do

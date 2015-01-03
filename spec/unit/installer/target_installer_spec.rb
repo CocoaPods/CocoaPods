@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Installer::TargetInstaller do
-
     before do
       @podfile = Podfile.new do
         platform :ios
@@ -45,6 +44,5 @@ module Pod
       @installer.send(:native_target).resolved_build_setting('OTHER_LDFLAGS').values.uniq.should == ['']
       @installer.send(:native_target).resolved_build_setting('OTHER_LIBTOOLFLAGS').values.uniq.should == ['']
     end
-
   end
 end

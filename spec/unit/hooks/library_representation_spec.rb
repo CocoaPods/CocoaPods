@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Hooks::LibraryRepresentation do
-
     before do
       @target_definition = Podfile::TargetDefinition.new('MyApp', nil)
       @spec = Spec.new
@@ -14,7 +13,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Public Hooks API' do
-
       it 'returns the name' do
         @rep.name.should == 'Pods-MyApp'
       end
@@ -47,13 +45,11 @@ module Pod
       it 'returns the target definition' do
         @rep.target_definition.should == @target_definition
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Unsafe Hooks API' do
-
       it 'returns the sandbox' do
         @rep.sandbox.should == config.sandbox
       end
@@ -67,10 +63,8 @@ module Pod
         @lib.native_target = target
         @rep.target.should == target
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

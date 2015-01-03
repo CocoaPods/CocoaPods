@@ -20,9 +20,7 @@ end
 
 module Pod
   describe Command::Spec do
-
     describe 'In general' do
-
       it 'complains for wrong parameters' do
         lambda { run_command('spec') }.should.raise CLAide::Help
         lambda { run_command('spec', 'create') }.should.raise CLAide::Help
@@ -353,24 +351,19 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Private helpers' do
-
       before do
         # TODO Use class methods
         @command = Command::Spec.new(CLAide::ARGV.new([]))
-
       end
 
       describe '#get_path_of_spec' do
-
         it 'returns the path of the specification with the given name' do
           path = @command.send(:get_path_of_spec, 'AFNetworking')
           path.should == fixture('spec-repos') + 'master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json'
         end
-
       end
 
       describe '#choose_from_array' do
-
         it 'should return a valid index for the given array' do
           UI.next_input = "1\n"
           index = @command.send(:choose_from_array, %w(item1 item2 item3), 'A message')
@@ -384,12 +377,9 @@ module Pod
           UI.next_input = "0\n"
           lambda { @command.send(:choose_from_array, %w(item1 item2 item3), 'A message') }.should.raise Pod::Informative
         end
-
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

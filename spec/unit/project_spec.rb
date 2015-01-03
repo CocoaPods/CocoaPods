@@ -2,7 +2,6 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
   describe Project do
-
     before do
       @project = Project.new(config.sandbox.project_path)
     end
@@ -10,7 +9,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'In general' do
-
       it 'creates the support files group on initialization' do
         @project.support_files_group.name.should == 'Targets Support Files'
       end
@@ -22,15 +20,12 @@ module Pod
       it 'creates the development Pods group on initialization' do
         @project.development_pods.name.should == 'Development Pods'
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Pod Groups' do
-
       describe '#add_pod_group' do
-
         before do
           @path = config.sandbox.pod_dir('BananaLib')
         end
@@ -63,13 +58,11 @@ module Pod
           group.path.should == @path.to_s
           Pathname.new(group.path).should.be.absolute
         end
-
       end
 
       #----------------------------------------#
 
       describe '#pod_groups' do
-
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
           @project.add_pod_group('OrangeLib', config.sandbox.pod_dir('OrangeLib'), true)
@@ -83,7 +76,6 @@ module Pod
           @project.pods.children.map(&:name).sort.should == ['BananaLib']
           @project.development_pods.children.map(&:name).sort.should == ['OrangeLib']
         end
-
       end
 
       #----------------------------------------#
@@ -96,7 +88,6 @@ module Pod
       #----------------------------------------#
 
       describe '#group_for_spec' do
-
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'))
         end
@@ -133,7 +124,6 @@ module Pod
       #----------------------------------------#
 
       describe '#pod_support_files_group' do
-
         before do
           @project.add_pod_group('BananaLib', @path, false, true)
         end
@@ -148,16 +138,13 @@ module Pod
           group_2 = @project.pod_support_files_group('BananaLib', 'path')
           group_1.uuid.should == group_2.uuid
         end
-
       end
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'File references' do
-
       describe '#reference_for_path' do
-
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + 'file.m'
@@ -187,13 +174,11 @@ module Pod
             @project.add_file_reference('relative/path/to/file.m', @group)
           end.message.should.match /Paths must be absolute/
         end
-
       end
 
       #----------------------------------------#
 
       describe '#reference_for_path' do
-
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + 'file.m'
@@ -217,7 +202,6 @@ module Pod
             @project.reference_for_path('relative/path/to/file.m')
           end.message.should.match /Paths must be absolute/
         end
-
       end
 
       #----------------------------------------#
@@ -268,6 +252,5 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

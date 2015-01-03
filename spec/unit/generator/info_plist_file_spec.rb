@@ -1,7 +1,6 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe Pod::Generator::InfoPlistFile do
-
   describe '#target_version' do
     it 'returns 1.0.0 for the aggregate target' do
       generator = Pod::Generator::InfoPlistFile.new(fixture_aggregate_target)
@@ -26,5 +25,4 @@ describe Pod::Generator::InfoPlistFile do
     `plutil -lint #{file}`
     $?.should.be.success
   end
-
 end

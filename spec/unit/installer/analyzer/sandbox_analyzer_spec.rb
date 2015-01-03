@@ -4,7 +4,6 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 
 module Pod
   describe Installer::Analyzer::SandboxAnalyzer do
-
     before do
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       @sandbox = config.sandbox
@@ -17,7 +16,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Analysis' do
-
       it 'returns the sandbox state' do
         @analyzer.stubs(:folder_exist?).returns(true)
         @analyzer.stubs(:folder_empty?).returns(false)
@@ -31,13 +29,11 @@ module Pod
         @sandbox.stubs(:manifest)
         @analyzer.analyze.added.should == ['BananaLib']
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Analysis' do
-
       before do
         @analyzer.stubs(:folder_exist?).returns(true)
         @analyzer.stubs(:folder_empty?).returns(false)
@@ -105,13 +101,11 @@ module Pod
         @analyzer.stubs(:update_mode?).returns(false)
         @analyzer.send(:pod_changed?, 'BananaLib').should == false
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Private helpers' do
-
       it 'returns the sandbox manifest' do
         @analyzer.send(:sandbox_manifest).should == @manifest
       end
@@ -171,7 +165,6 @@ module Pod
         path = temporary_directory + 'Pods/BananaLib'
         path.mkpath
         @analyzer.send(:folder_exist?, 'BananaLib').should.be.true
-
       end
 
       it 'returns whether the folder containing the Pod with the given name is empty' do
@@ -181,10 +174,8 @@ module Pod
         File.open(path + 'file', 'w') {}
         @analyzer.send(:folder_empty?, 'BananaLib').should.be.false
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

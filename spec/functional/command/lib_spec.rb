@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Command::Lib::Create do
-
     before do
       @sut = Command::Lib::Create
     end

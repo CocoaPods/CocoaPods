@@ -61,8 +61,6 @@ module Pod
       if fixture.exist?
         # puts "Using fixture [#{name}]"
         result[:git] = fixture.to_s
-      else
-        # puts "MISSING fixture [#{name}]"
       end
       result
     end

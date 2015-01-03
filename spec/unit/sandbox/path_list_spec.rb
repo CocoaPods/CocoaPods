@@ -2,13 +2,11 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Sandbox::PathList do
-
     before do
       @path_list = Sandbox::PathList.new(fixture('banana-lib'))
     end
 
     describe 'In general' do
-
       it 'creates the list of all the files' do
         files = @path_list.files
         files.reject! do |f|
@@ -60,7 +58,6 @@ module Pod
         @path_list = Sandbox::PathList.new(root)
         @path_list.files.should == ['Class.h']
       end
-
     end
 
     #-------------------------------------------------------------------------#
@@ -134,13 +131,11 @@ module Pod
           Resources/sub_dir
         )
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Private Helpers' do
-
       describe '#directory?' do
         it 'detects a directory' do
           @path_list.send(:directory?, 'classes').should == true
@@ -178,25 +173,20 @@ module Pod
             Classes/file.m
           )
         end
-
       end
 
       #--------------------------------------#
 
       describe '#escape_path_for_glob' do
-
         it 'escapes metacharacters' do
           escaped = @path_list.send(:escape_path_for_glob, '[]{}?**')
           escaped.to_s.should == '\[\]\{\}\?\*\*'
         end
-
       end
 
       #--------------------------------------#
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

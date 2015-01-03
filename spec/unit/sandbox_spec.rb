@@ -2,7 +2,6 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
   describe Sandbox do
-
     before do
       @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')
     end
@@ -10,7 +9,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'In general' do
-
       it 'reads the real path of the root so it can be used to build relative paths' do
         root_realpath = temporary_directory + 'Folder/SubFolder'
         FileUtils.mkdir_p(root_realpath)
@@ -54,13 +52,11 @@ module Pod
         @sandbox.clean_pod('BananaLib')
         pod_root.should.exist
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Paths' do
-
       it 'returns the path of the manifest' do
         @sandbox.manifest_path.should ==
           temporary_directory + 'Sandbox/Manifest.lock'
@@ -97,7 +93,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Specification store' do
-
       it 'loads the stored specification with the given name' do
         (@sandbox.specifications_root).mkdir
         FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.specifications_root)
@@ -142,13 +137,11 @@ module Pod
         path.should.exist
         @sandbox.specification_path('BananaLib').should == path
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Pods information' do
-
       it 'stores the list of the names of the pre-downloaded pods' do
         @sandbox.store_pre_downloaded_pod('BananaLib')
         @sandbox.predownloaded_pods.should == ['BananaLib']
@@ -212,10 +205,8 @@ module Pod
         @sandbox.local?('BananaLib/Subspec').should.be.true
         @sandbox.local?('Monkey').should.be.false
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

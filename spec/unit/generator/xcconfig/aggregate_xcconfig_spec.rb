@@ -4,7 +4,6 @@ module Pod
   module Generator
     module XCConfig
       describe AggregateXCConfig do
-
         def spec
           fixture_spec('banana-lib/BananaLib.podspec')
         end
@@ -21,7 +20,6 @@ module Pod
         end
 
         shared 'AggregateXCConfig' do
-
           it 'returns the path of the pods root relative to the user project' do
             @generator.target.relative_pods_root.should == '${SRCROOT}/Pods'
           end
@@ -67,13 +65,11 @@ module Pod
           it 'should configure OTHER_LIBTOOLFLAGS flags to include OTHER_LDFLAGS' do
             @xcconfig.to_hash['OTHER_LIBTOOLFLAGS'].should == '$(OTHER_LDFLAGS)'
           end
-
         end
 
         #-----------------------------------------------------------------------#
 
         describe 'if a pod target does not contain source files' do
-
           before do
             @pod_target.file_accessors.first.stubs(:source_files).returns([])
             @xcconfig = @generator.generate
@@ -90,7 +86,6 @@ module Pod
           it 'does link with vendored libraries' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"Bananalib"'
           end
-
         end
 
         #-----------------------------------------------------------------------#
@@ -155,7 +150,6 @@ module Pod
         #-----------------------------------------------------------------------#
 
         describe 'serializing and deserializing' do
-
           before do
             @path = temporary_directory + 'sample.xcconfig'
             @generator.save_as(@path)
@@ -165,9 +159,7 @@ module Pod
             generated = Xcodeproj::Config.new(@path)
             generated.class.should == Xcodeproj::Config
           end
-
         end
-
       end
     end
   end

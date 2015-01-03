@@ -1,7 +1,6 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe Pod::Generator::TargetEnvironmentHeader do
-
   before do
     spec = fixture_spec('banana-lib/BananaLib.podspec')
     @gen = Pod::Generator::TargetEnvironmentHeader.new('Debug' => [spec])
@@ -80,5 +79,4 @@ describe Pod::Generator::TargetEnvironmentHeader do
     @gen.generate.should.include 'BUILD_CONFIGURATION_COPY'
     @gen.generate.should.include 'BUILD__CONFIG_COPY'
   end
-
 end

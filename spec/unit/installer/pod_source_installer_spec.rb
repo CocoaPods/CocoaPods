@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Installer::PodSourceInstaller do
-
     before do
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       @spec.source = { :git => SpecHelper.fixture('banana-lib') }
@@ -13,7 +12,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Installation' do
-
       describe 'Download' do
         it 'downloads the source' do
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
@@ -80,7 +78,6 @@ module Pod
             @installer.install!
           end.message.should.match /does not support the :head option, as it uses a Http source./
         end
-
       end
 
       #--------------------------------------#
@@ -109,13 +106,11 @@ module Pod
           @spec.prepare_command = 'cd Classes;ls Banana.h'
           lambda { @installer.install! }.should.not.raise
         end
-
       end
 
       #--------------------------------------#
 
       describe 'Cleaning' do
-
         it 'cleans the paths non used by the installation' do
           @installer.install!
           @installer.clean!
@@ -129,13 +124,11 @@ module Pod
           readme_file = config.sandbox.root + 'BananaLib/README'
           readme_file.should.exist
         end
-
       end
 
       #--------------------------------------#
 
       describe 'Options' do
-
         it "doesn't downloads the source if the pod was already downloaded" do
           @installer.stubs(:predownloaded?).returns(true)
           @installer.expects(:download_source).never
@@ -154,17 +147,14 @@ module Pod
           @installer.expects(:clean_installation).never
           @installer.install!
         end
-
       end
 
       #--------------------------------------#
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Private Helpers' do
-
       it 'returns the clean paths' do
         @installer.send(:download_source)
         paths = @installer.send(:clean_paths)
@@ -236,10 +226,8 @@ module Pod
         paths = @installer.send(:used_files)
         paths.should == []
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

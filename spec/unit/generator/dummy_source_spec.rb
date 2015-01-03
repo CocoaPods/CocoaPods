@@ -1,7 +1,6 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe Pod::Generator::DummySource do
-
   it 'generates a dummy source file with the appropriate class for the class name identifier' do
     generator = Pod::Generator::DummySource.new('SomeIdentification')
     file = temporary_directory + 'PodsDummy.m'
@@ -27,5 +26,4 @@ describe Pod::Generator::DummySource do
     @end
   EOS
   end
-
 end

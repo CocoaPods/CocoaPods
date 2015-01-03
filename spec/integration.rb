@@ -90,7 +90,6 @@ CLIntegracon.configure do |c|
 end
 
 describe_cli 'pod' do
-
   Process.wait(spawn('which hg', :err => :out, :out => '/dev/null'))
   has_mercurial = $?.success?
 
@@ -115,7 +114,6 @@ describe_cli 'pod' do
   end
 
   describe 'Pod install' do
-
     # Test installation with no integration
     # Test subspecs inheritance
 
@@ -215,7 +213,6 @@ describe_cli 'pod' do
   #--------------------------------------#
 
   describe 'Pod update' do
-
     describe 'Updates an existing installation' do
       behaves_like cli_spec 'update_all',
                             'update --no-repo-update'
@@ -225,31 +222,25 @@ describe_cli 'pod' do
       behaves_like cli_spec 'update_selected',
                             'update Reachability --no-repo-update'
     end
-
   end
 
   #--------------------------------------#
 
   describe 'Pod lint' do
-
     describe 'Lints a Pod' do
       behaves_like cli_spec 'spec_lint',
                             'spec lint --quick'
     end
-
   end
 
   #--------------------------------------#
 
   describe 'Pod init' do
-
     describe 'Initializes a Podfile with a single platform' do
       behaves_like cli_spec 'init_single_platform',
                             'init'
     end
-
   end
 
   #--------------------------------------#
-
 end

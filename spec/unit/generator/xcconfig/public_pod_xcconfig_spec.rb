@@ -4,7 +4,6 @@ module Pod
   module Generator
     module XCConfig
       describe PublicPodXCConfig do
-
         before do
           @spec = fixture_spec('banana-lib/BananaLib.podspec')
           @target_definition = Podfile::TargetDefinition.new('Pods', nil)
@@ -92,7 +91,6 @@ module Pod
           generated = Xcodeproj::Config.new(@path)
           generated.to_hash.each { |k, _v| k.should.start_with(@pod_target.xcconfig_prefix) }
         end
-
       end
     end
   end

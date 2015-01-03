@@ -4,7 +4,6 @@ module Pod
   module Generator
     module XCConfig
       describe PrivatePodXCConfig do
-
         describe 'in general' do
           before do
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
@@ -69,13 +68,11 @@ module Pod
             generated = Xcodeproj::Config.new(path)
             generated.class.should == Xcodeproj::Config
           end
-
         end
 
         #-------------------------------------------------------------------------#
 
         describe 'Private Helpers' do
-
           before do
             @config = PrivatePodXCConfig.new(stub, stub)
           end
@@ -83,7 +80,6 @@ module Pod
           #----------------------------------------#
 
           describe '#add_xcconfig_namespaced_keys' do
-
             it 'appends to the values of the keys of the destination the value of the keys of the source' do
               source_config = { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/MyPod' }
               destination_config = { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/BuildHeaders' }
@@ -104,13 +100,11 @@ module Pod
               result = @config.send(:add_xcconfig_namespaced_keys, source_config, destination_config, 'PREFIX_')
               result.should == { 'EXCLUDED_SOURCE_FILE_NAMES' => '${PREFIX_EXCLUDED_SOURCE_FILE_NAMES}' }
             end
-
           end
 
           #----------------------------------------#
 
           describe '#conditional_less_key' do
-
             it 'returns the key without the xcconfig conditional syntax if present' do
               result = @config.send(:conditional_less_key, 'EXCLUDED_SOURCE_FILE_NAMES[sdk=iphoneos*][arch=*]')
               result.should == 'EXCLUDED_SOURCE_FILE_NAMES'
@@ -120,13 +114,10 @@ module Pod
               result = @config.send(:conditional_less_key, 'EXCLUDED_SOURCE_FILE_NAMES')
               result.should == 'EXCLUDED_SOURCE_FILE_NAMES'
             end
-
           end
-
         end
 
         #-------------------------------------------------------------------------#
-
       end
     end
   end

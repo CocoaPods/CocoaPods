@@ -3,7 +3,6 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 module Pod
   describe TargetIntegrator = Installer::UserProjectIntegrator::TargetIntegrator do
     describe 'In general' do
-
       # The project contains a `PBXReferenceProxy` in the build files of the
       # frameworks build phase which implicitly checks for the robustness of
       # the detection of the target.

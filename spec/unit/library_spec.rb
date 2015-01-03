@@ -2,7 +2,6 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
   describe Pod::AggregateTarget do
-
     describe 'In general' do
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
@@ -68,7 +67,6 @@ module Pod
       it 'returns the path of the xcconfig file relative to the user project' do
         @lib.xcconfig_relative_path('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
       end
-
     end
   end
 end

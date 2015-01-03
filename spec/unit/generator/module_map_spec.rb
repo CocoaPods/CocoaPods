@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Generator::ModuleMap do
-
     before do
       spec = fixture_spec('banana-lib/BananaLib.podspec')
       target_definition = Podfile::TargetDefinition.new(:default, nil)
@@ -22,6 +21,5 @@ module Pod
         }
       EOS
     end
-
   end
 end

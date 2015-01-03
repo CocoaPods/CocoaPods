@@ -2,9 +2,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe UserProjectIntegrator = Installer::UserProjectIntegrator do
-
     describe 'In general' do
-
       before do
         @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
         sample_project_path = @sample_project_path
@@ -13,7 +11,6 @@ module Pod
           xcodeproj sample_project_path
           pod 'JSONKit'
           target :empty do
-
           end
         end
         config.sandbox.project = Project.new(config.sandbox.project_path)
@@ -93,13 +90,11 @@ module Pod
             UI.warnings.should.not.include 'CODE_SIGN_IDENTITY'
           end
         end
-
       end
 
       #-----------------------------------------------------------------------#
 
       describe 'Workspace creation' do
-
         it 'creates a new workspace if needed' do
           @integrator.send(:create_workspace)
           workspace_path = @integrator.send(:workspace_path)
@@ -166,13 +161,11 @@ module Pod
             'SampleProject/SampleProject.xcodeproj',
           ]
         end
-
       end
 
       #-----------------------------------------------------------------------#
 
       describe 'Private Helpers' do
-
         it 'uses the path of the workspace defined in the podfile' do
           path = 'a_path'
           @podfile.workspace(path)
@@ -199,11 +192,9 @@ module Pod
           @integrator.targets.map(&:name).should == ['Pods', 'Pods-empty']
           @integrator.send(:targets_to_integrate).map(&:name).should == ['Pods']
         end
-
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end

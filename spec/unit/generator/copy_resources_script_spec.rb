@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Generator::CopyResourcesScript do
-
     it 'returns the copy resources script' do
       resources = ['path/to/resource.png']
       generator = Pod::Generator::CopyResourcesScript.new(resources, Platform.new(:ios, '6.0'))
@@ -18,6 +17,5 @@ module Pod
       generator_1.send(:script).should.not.include '--reference-external-strings-file'
       generator_2.send(:script).should.include '--reference-external-strings-file'
     end
-
   end
 end

@@ -9,7 +9,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'In general' do
-
       it 'returns the singleton config instance' do
         @config.should.be.instance_of Config
       end
@@ -47,7 +46,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Paths' do
-
       it 'returns the working directory as the installation root if a Podfile can be found' do
         Dir.chdir(temporary_directory) do
           File.open('Podfile', 'w') {}
@@ -123,13 +121,11 @@ module Pod
       it 'returns the search index file' do
         @config.search_index_file.to_s.should.end_with?('search_index.yaml')
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Default settings' do
-
       it 'prints out normal information' do
         @config.should.not.be.silent
       end
@@ -150,7 +146,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Private helpers' do
-
       it 'returns the path of the user settings file' do
         @config.send(:user_settings_file).should == Pathname.new('~/.cocoapods/config.yaml').expand_path
       end
@@ -164,7 +159,6 @@ module Pod
       #----------------------------------------#
 
       describe '#podfile_path_in_dir' do
-
         it 'detects the CocoaPods.podfile.yaml file' do
           expected = temporary_directory + 'CocoaPods.podfile.yaml'
           File.open(expected, 'w') {}
@@ -190,11 +184,9 @@ module Pod
           path = @config.send(:podfile_path_in_dir, temporary_directory)
           path.should.nil?
         end
-
       end
 
       #-----------------------------------------------------------------------#
-
     end
   end
 end

@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe ExternalSources::PodspecSource do
-
     before do
       podspec_path = fixture('integration/Reachability/Reachability.podspec')
       dependency = Dependency.new('Reachability', :podspec => podspec_path.to_s)
@@ -21,7 +20,6 @@ module Pod
     end
 
     describe 'Helpers' do
-
       it 'handles absolute paths' do
         @subject.stubs(:params).returns(:podspec => fixture('integration/Reachability'))
         path = @subject.send(:podspec_uri)

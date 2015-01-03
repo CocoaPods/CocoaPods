@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Command::IPC do
-
     before do
       Command::IPC::Spec.any_instance.stubs(:output_pipe).returns(UI)
       Command::IPC::Podfile.any_instance.stubs(:output_pipe).returns(UI)
@@ -12,20 +11,17 @@ module Pod
     end
 
     describe Command::IPC::Spec do
-
       it 'converts a podspec to JSON and prints it to STDOUT' do
         out = run_command('ipc', 'spec', fixture('banana-lib/BananaLib.podspec'))
         out.should.match /"name": "BananaLib"/
         out.should.match /"version": "1.0"/
         out.should.match /"description": "Full of chunky bananas."/
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe Command::IPC::Podfile do
-
       it 'converts a Podfile to yaml and prints it to STDOUT' do
         out = run_command('ipc', 'podfile', fixture('Podfile'))
         out.should.include('---')
@@ -33,13 +29,11 @@ module Pod
         out.should.match /platform: ios/
         out.should.match /- SSZipArchive:/
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe Command::IPC::List do
-
       it 'prints a list of podspecs in the yaml format and prints it to STDOUT' do
         spec = fixture_spec('banana-lib/BananaLib.podspec')
         set = Specification::Set.new('BananaLib', [])
@@ -51,25 +45,21 @@ module Pod
         out.should.match /BananaLib:/
         out.should.match /description: Full of chunky bananas./
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe Command::IPC::UpdateSearchIndex do
-
       it 'updates the search index and prints its path to STDOUT' do
         SourcesManager.expects(:updated_search_index)
         out = run_command('ipc', 'update-search-index')
         out.should.include(SourcesManager.search_index_path.to_s)
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe Command::IPC::Repl do
-
       it 'prints the version of CocoaPods as its first message' do
         command = Command::IPC::Repl.new(CLAide::ARGV.new([]))
         command.stubs(:listen)
@@ -90,10 +80,8 @@ module Pod
         out.should.match /- SSZipArchive:/
         out.should.end_with?("\n\r\n")
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Installer::FileReferencesInstaller do
-
     before do
       @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
       @pod_target = PodTarget.new([], nil, config.sandbox)
@@ -16,7 +15,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Installation' do
-
       it 'adds the files references of the source files the Pods project' do
         @file_accessor.path_list.read_file_system
         @file_accessor.path_list.expects(:read_file_system)
@@ -70,13 +68,11 @@ module Pod
         public_header.should.exist
         private_header.should.not.exist
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Private Helpers' do
-
       describe '#file_accessors' do
         it 'returns the file accessors' do
           pod_target_1 = PodTarget.new([], nil, config.sandbox)
@@ -129,10 +125,8 @@ module Pod
           }
         end
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

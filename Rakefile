@@ -75,7 +75,6 @@ begin
   #-----------------------------------------------------------------------------#
 
   namespace :spec do
-
     def specs(dir)
       FileList["spec/#{dir}_spec.rb"].shuffle.join(' ')
     end
@@ -210,7 +209,6 @@ begin
 
   task :examples => 'examples:build'
   namespace :examples do
-
     desc 'Open all example workspaces in Xcode, which recreates the schemes.'
     task :recreate_workspace_schemes do
       examples.each do |example|

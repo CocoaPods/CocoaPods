@@ -7,7 +7,6 @@ module Pod
 
     class Base
       override_api do
-
         def execute_command(executable, command, raise_on_failure = false)
           Executable.execute_command(executable, command, raise_on_failure)
         rescue CLAide::InformativeError => e
@@ -56,7 +55,6 @@ module Pod
         def ui_message(message)
           UI.puts message
         end
-
       end
     end
   end

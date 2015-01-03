@@ -9,7 +9,6 @@ module Pod
     end
 
     describe 'In general' do
-
       it 'returns the classes of the concrete generators generators' do
         generators = Pod::Generator::Acknowledgements.generators
         generators.map { |g| g.name.split('::').last }.should == %w(Plist Markdown)
@@ -21,13 +20,11 @@ module Pod
         @generator.footnote_title.should.be.kind_of(String)
         @generator.footnote_text.should.be.kind_of(String)
       end
-
     end
 
     #-----------------------------------------------------------------------#
 
     describe 'Private methods' do
-
       it 'returns the root specifications' do
         generator = Pod::Generator::Acknowledgements.new([@file_accessor, @file_accessor])
         generator.send(:specs).should == [@file_accessor.spec]
@@ -49,10 +46,8 @@ module Pod
         @generator.send(:license_text, @spec)
         UI.warnings.should.include 'Unable to read the license file'
       end
-
     end
 
     #-----------------------------------------------------------------------#
-
   end
 end

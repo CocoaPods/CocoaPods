@@ -104,6 +104,5 @@ EOS
         message.should == '[!] at -'
       end
     end
-
   end
 end

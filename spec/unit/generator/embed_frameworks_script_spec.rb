@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Generator::EmbedFrameworksScript do
-
     it 'returns the embed frameworks script' do
       target_definition = Podfile::TargetDefinition.new(:default, nil)
       frameworks = {
@@ -22,6 +21,5 @@ module Pod
         fi
       eos
     end
-
   end
 end

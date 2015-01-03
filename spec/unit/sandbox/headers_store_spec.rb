@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Sandbox::HeadersStore do
-
     before do
       @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')
       @header_dir = Sandbox::HeadersStore.new(@sandbox, 'Public')

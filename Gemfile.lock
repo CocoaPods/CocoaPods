@@ -40,7 +40,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 376141a815c8dcafdb8e1ca6e16eb9a380e9641d
+  revision: 4e60d8458d374ef54d3ba7d9592bd2750344df49
   branch: master
   specs:
     cocoapods-plugins (0.4.0)
@@ -93,7 +93,7 @@ GEM
     ast (2.0.0)
     astrolabe (1.3.0)
       parser (>= 2.2.0.pre.3, < 3.0)
-    awesome_print (1.2.0)
+    awesome_print (1.6.1)
     bacon (1.2.0)
     clintegracon (0.6.1)
       colored (~> 1.2)
@@ -127,7 +127,7 @@ GEM
     netrc (0.7.8)
     notify (0.5.2)
     open4 (1.3.4)
-    parser (2.2.0.pre.7)
+    parser (2.2.0.1)
       ast (>= 1.1, < 3.0)
       slop (~> 3.4, >= 3.4.5)
     powerpack (0.0.9)
@@ -138,26 +138,26 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rainbow (2.0.0)
-    rake (10.3.2)
+    rake (10.4.2)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     rb-kqueue (0.2.3)
       ffi (>= 0.5.0)
-    rubocop (0.27.1)
+    rubocop (0.28.0)
       astrolabe (~> 1.3)
       parser (>= 2.2.0.pre.7, < 3.0)
       powerpack (~> 0.0.6)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
     ruby-prof (0.15.2)
-    ruby-progressbar (1.7.0)
+    ruby-progressbar (1.7.1)
     safe_yaml (1.0.4)
     slop (3.6.0)
     thread_safe (0.3.4)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    webmock (1.20.3)
+    webmock (1.20.4)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
 

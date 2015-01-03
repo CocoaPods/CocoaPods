@@ -4,7 +4,6 @@ module Pod
   module Generator
     module XCConfig
       describe XCConfigHelper do
-
         before do
           @sut = XCConfigHelper
         end
@@ -207,7 +206,6 @@ module Pod
         end
 
         #---------------------------------------------------------------------#
-
       end
     end
   end

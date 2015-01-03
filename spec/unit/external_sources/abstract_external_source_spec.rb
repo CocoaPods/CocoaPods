@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe ExternalSources::AbstractExternalSource do
-
     before do
       dependency = Dependency.new('Reachability', :git => fixture('integration/Reachability'))
       @subject = ExternalSources.from_dependency(dependency, nil)
@@ -12,7 +11,6 @@ module Pod
     #--------------------------------------#
 
     describe 'In general' do
-
       it 'compares to another' do
         dependency_1 = Dependency.new('Reachability', :git => 'url')
         dependency_2 = Dependency.new('Another_name', :git => 'url')
@@ -28,13 +26,11 @@ module Pod
         @subject.fetch(config.sandbox)
         config.sandbox.specification('Reachability').name.should == 'Reachability'
       end
-
     end
 
     #--------------------------------------#
 
     describe 'Subclasses helpers' do
-
       it 'pre-downloads the Pod and stores the relevant information in the sandbox' do
         @subject.send(:pre_download, config.sandbox)
         path = config.sandbox.specifications_root + 'Reachability.podspec.json'

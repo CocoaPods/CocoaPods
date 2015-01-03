@@ -35,7 +35,6 @@ end
 
 module Pod
   describe Installer do
-
     before do
       podfile = generate_podfile
       lockfile = generate_lockfile
@@ -46,7 +45,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'In general' do
-
       before do
         @installer.stubs(:resolve_dependencies)
         @installer.stubs(:download_dependencies)
@@ -113,13 +111,11 @@ module Pod
         UI.warnings.should.include 'deprecated in favor of AFNetworking'
         UI.warnings.should.include 'BlocksKit has been deprecated'
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe '#determine_dependency_product_type' do
-
       it 'does propagate that frameworks are required to all pod targets' do
         fixture_path = ROOT + 'spec/fixtures'
         config.repos_dir = fixture_path + 'spec-repos'
@@ -144,15 +140,12 @@ module Pod
           'Pods-monkey',
         ]
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Dependencies Resolution' do
-
       describe '#analyze' do
-
         it 'prints a warning if the version of the Lockfile is higher than the one of the executable' do
           Lockfile.any_instance.stubs(:cocoapods_version).returns(Version.new('999'))
           STDERR.expects(:puts)
@@ -177,7 +170,6 @@ module Pod
           @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
           @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
         end
-
       end
 
       #--------------------------------------#
@@ -205,7 +197,6 @@ module Pod
       #--------------------------------------#
 
       describe '#clean_sandbox' do
-
         before do
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = []
@@ -228,15 +219,12 @@ module Pod
           config.sandbox.expects(:clean_pod).with('Deleted-Pod')
           @installer.send(:clean_sandbox)
         end
-
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Downloading dependencies' do
-
       it 'installs head pods' do
         podfile = Podfile.new do
           platform :osx, '10.10'
@@ -255,7 +243,6 @@ module Pod
       end
 
       describe '#install_pod_sources' do
-
         it 'installs all the Pods which are marked as needing installation' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           spec_2 = Spec.new
@@ -310,26 +297,21 @@ module Pod
         #--------------------------------------#
 
         describe '#clean' do
-
           it 'it cleans only if the config instructs to do it' do
             config.clean = false
             @installer.send(:clean_pod_sources)
             Installer::PodSourceInstaller.any_instance.expects(:install!).never
           end
-
         end
 
         #--------------------------------------#
-
       end
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Generating pods project' do
-
       describe '#prepare_pods_project' do
-
         before do
           @installer.stubs(:aggregate_targets).returns([])
         end
@@ -389,25 +371,21 @@ module Pod
             build_setting['IPHONEOS_DEPLOYMENT_TARGET'].should == '6.0'
           end
         end
-
       end
 
       #--------------------------------------#
 
       describe '#install_file_references' do
-
         it 'installs the file references' do
           @installer.stubs(:pod_targets).returns([])
           Installer::FileReferencesInstaller.any_instance.expects(:install!)
           @installer.send(:install_file_references)
         end
-
       end
 
       #--------------------------------------#
 
       describe '#install_libraries' do
-
         it 'install the targets of the Pod project' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
@@ -435,13 +413,11 @@ module Pod
           names = @installer.sandbox.project['Frameworks'].children.map(&:name)
           names.sort.should == ['Foundation.framework', 'QuartzCore.framework']
         end
-
       end
 
       #--------------------------------------#
 
       describe '#set_target_dependencies' do
-
         it 'sets resource bundles for not build pods as target dependencies of the user target' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile)
@@ -463,23 +439,18 @@ module Pod
         end
 
         xit 'sets the pod targets as dependencies of the aggregate target' do
-
         end
 
         xit 'sets the dependecies of the pod targets' do
-
         end
 
         xit 'is robusts against subspecs' do
-
         end
-
       end
 
       #--------------------------------------#
 
       describe '#write_pod_project' do
-
         before do
           @installer.stubs(:aggregate_targets).returns([])
           @installer.stubs(:analysis_result).returns(stub(:all_user_build_configurations => {}))
@@ -498,13 +469,11 @@ module Pod
           @installer.pods_project.expects(:save)
           @installer.send(:write_pod_project)
         end
-
       end
 
       #--------------------------------------#
 
       describe '#write_lockfiles' do
-
         before do
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = [fixture_spec('banana-lib/BananaLib.podspec')]
@@ -527,21 +496,17 @@ module Pod
           lockfile = Lockfile.from_file(temporary_directory + 'Pods/Manifest.lock')
           lockfile.pod_names.should == ['BananaLib']
         end
-
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Integrating client projects' do
-
       it 'integrates the client projects' do
         @installer.stubs(:aggregate_targets).returns([AggregateTarget.new(nil, config.sandbox)])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)
       end
-
     end
 
     describe 'Plugins Hooks' do
@@ -590,7 +555,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Hooks' do
-
       before do
         @installer.send(:analyze)
         @specs = @installer.pod_targets.map(&:specs).flatten

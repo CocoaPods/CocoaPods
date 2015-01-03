@@ -119,7 +119,6 @@ module Pod
       end
 
       xit 'adds the build configurations to the resources bundle targets' do
-
       end
 
       #--------------------------------------#
@@ -211,7 +210,6 @@ module Pod
         end
 
         describe 'concerning ARC before and after iOS 6.0 and OS X 10.8' do
-
           it 'does not do anything if ARC is *not* required' do
             @spec.ios.deployment_target = '5'
             @spec.osx.deployment_target = '10.6'

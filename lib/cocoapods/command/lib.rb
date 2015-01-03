@@ -138,7 +138,6 @@ module Pod
         def run
           UI.puts
           podspecs_to_lint.each do |podspec|
-
             validator                = Validator.new(podspec, @source_urls)
             validator.local          = true
             validator.quick          = @quick

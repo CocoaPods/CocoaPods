@@ -473,13 +473,11 @@ module Pod
           resolved[osx_target].map(&:to_s).should.include osx_dependency
         end
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Pre-release versions' do
-
       it 'resolves explicitly requested pre-release versions' do
         @podfile = Podfile.new do
           platform :ios, '6.0'

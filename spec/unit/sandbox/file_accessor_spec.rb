@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe FileAccessor = Sandbox::FileAccessor do
-
     before do
       @root = fixture('banana-lib')
       @path_list = Sandbox::PathList.new(@root)
@@ -12,7 +11,6 @@ module Pod
     end
 
     describe 'In general' do
-
       it 'raises if the consumer is nil' do
         e = lambda { FileAccessor.new(@path_list, nil) }.should.raise Informative
         e.message.should.match /without a specification consumer/
@@ -37,13 +35,11 @@ module Pod
       it 'returns the platform for which the spec is being consumed' do
         @accessor.platform_name.should == :ios
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Returning files' do
-
       it 'returns the source files' do
         @accessor.source_files.sort.should == [
           @root + 'Classes/Banana.h',
@@ -202,15 +198,12 @@ module Pod
           ]
         end
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Private helpers' do
-
       describe '#paths_for_attribute' do
-
         it 'takes into account dir patterns and excluded files' do
           file_patterns = ['Classes/*.{h,m,d}', 'Vendor']
           options = {
@@ -222,12 +215,9 @@ module Pod
           @accessor.expects(:expanded_paths).with(file_patterns, options)
           @accessor.send(:paths_for_attribute, :source_files)
         end
-
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

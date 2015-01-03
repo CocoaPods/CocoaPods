@@ -231,8 +231,6 @@ module Pod
         path = specifications_root + "#{name}.podspec.json"
         if path.exist?
           path
-        else
-          nil
         end
       end
     end

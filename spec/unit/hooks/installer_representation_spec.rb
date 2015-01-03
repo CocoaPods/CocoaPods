@@ -7,7 +7,6 @@ end
 
 module Pod
   describe Hooks::InstallerRepresentation do
-
     before do
       podfile = Pod::Podfile.new do
         platform :ios
@@ -24,7 +23,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Public Hooks API' do
-
       it 'returns the sandbox root' do
         @rep.sandbox_root.should == config.sandbox.root
       end
@@ -55,13 +53,11 @@ module Pod
         target_definition = @installer.aggregate_targets.first.pod_targets.first.target_definition
         pods_by_lib[target_definition].map(&:name).should == ['JSONKit']
       end
-
     end
 
     #-------------------------------------------------------------------------#
 
     describe 'Unsafe Hooks API' do
-
       it 'returns the sandbox' do
         @rep.sandbox.should == config.sandbox
       end
@@ -73,10 +69,8 @@ module Pod
       it 'returns the installer' do
         @rep.installer.should == @installer
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end

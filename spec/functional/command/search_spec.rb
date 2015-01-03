@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Command::Search do
-
     extend SpecHelper::TemporaryRepos
 
     before do
@@ -72,7 +71,6 @@ module Pod
     end
 
     describe 'option --web' do
-
       extend SpecHelper::TemporaryRepos
 
       it 'searches with invalid regex' do
@@ -107,8 +105,6 @@ module Pod
         Command::Search.any_instance.expects(:open!).with('http://cocoapods.org/?q=on%3Aosx%20on%3Aios%20bananalib')
         run_command('search', '--web', '--osx', '--ios', 'bananalib')
       end
-
     end
-
   end
 end

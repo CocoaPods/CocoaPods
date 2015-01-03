@@ -15,7 +15,6 @@ end
 
 module Pod
   describe Validator do
-
     before do
       Validator.any_instance.stubs(:xcodebuild).returns('')
     end
@@ -96,7 +95,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Extensive analysis' do
-
       describe 'URL validation' do
         before do
           @validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
@@ -416,6 +414,5 @@ module Pod
       end
     end
     #-------------------------------------------------------------------------#
-
   end
 end

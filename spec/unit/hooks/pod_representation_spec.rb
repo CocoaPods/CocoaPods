@@ -2,7 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Hooks::PodRepresentation do
-
     before do
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       @root = fixture('banana-lib')
@@ -13,7 +12,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Public Hooks API' do
-
       it 'returns the name' do
         @rep.name.should == 'BananaLib'
       end
@@ -43,10 +41,8 @@ module Pod
           'Classes/BananaTrace.d',
         ]
       end
-
     end
 
     #-------------------------------------------------------------------------#
-
   end
 end
