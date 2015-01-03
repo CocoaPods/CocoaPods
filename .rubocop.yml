@@ -3,3 +3,7 @@ inherit_from:
  - .rubocop_cocoapods.yml
 
 #- CocoaPods ------------------------------------------------------------------
+
+AllCops:
+  Exclude:
+    - spec/fixtures/**/*.rb
