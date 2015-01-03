@@ -167,7 +167,8 @@ module Pod
       types = results.map(&:type).uniq
       if    types.include?(:error)   then :error
       elsif types.include?(:warning) then :warning
-      else  :note end
+      else  :note
+      end
     end
 
     # @return [Symbol]
