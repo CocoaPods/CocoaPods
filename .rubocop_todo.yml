@@ -73,11 +73,6 @@ Style/SpaceInsideHashLiteralBraces:
 Style/TrailingComma:
   Enabled: false
 
-# Offense count: 17
-# Cop supports --auto-correct.
-Style/TrailingWhitespace:
-  Enabled: false
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: ExactNameMatch, AllowPredicates, AllowDSLWriters, Whitelist.

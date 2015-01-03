@@ -415,7 +415,7 @@ module Pod
       #            # sourceforge-artsy-specs
       #
       # @example A file URL
-      # 
+      #
       #           name_for_url('file:///Artsy/Specs.git')
       #             # artsy-specs
       #

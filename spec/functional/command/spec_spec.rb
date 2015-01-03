@@ -272,7 +272,7 @@ module Pod
         end
       end
     end
-    
+
     describe Command::Spec::Which do
       it_should_check_for_existence('which')
       it_should_check_for_ambiguity('which')
@@ -291,7 +291,7 @@ module Pod
     describe Command::Spec::Cat do
       it_should_check_for_existence('cat')
       it_should_check_for_ambiguity('cat')
-      
+
       it 'cats the given podspec' do
         lambda { command('spec', 'cat', 'AFNetworking').run }.should.not.raise
         UI.output.should.include fixture('spec-repos/master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json').read
@@ -319,7 +319,7 @@ module Pod
 
       it_should_check_for_existence('edit')
       it_should_check_for_ambiguity('edit')
-      
+
       it 'would execute the editor specified in ENV with the given podspec' do
         ENV['EDITOR'] = 'podspeceditor'
         lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise SystemExit

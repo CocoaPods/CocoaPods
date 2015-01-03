@@ -115,7 +115,7 @@ module Pod
       end
 
     end
-    
+
     #-------------------------------------------------------------------------#
 
     describe '#determine_dependency_product_type' do
@@ -449,7 +449,7 @@ module Pod
           pod_target.stubs(:resource_bundle_targets).returns(['dummy'])
           pod_target.stubs(:should_build? => false)
           target = AggregateTarget.new(target_definition, config.sandbox)
-          
+
           mock_target = mock('PodNativeTarget')
           mock_target.expects(:add_dependency).with('dummy')
 
