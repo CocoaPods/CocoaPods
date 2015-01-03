@@ -77,7 +77,7 @@ module Pod
         describe 'Private Helpers' do
 
           before do
-            @sut = PrivatePodXCConfig.new(stub, stub)
+            @config = PrivatePodXCConfig.new(stub, stub)
           end
 
           #----------------------------------------#
@@ -87,21 +87,21 @@ module Pod
             it 'appends to the values of the keys of the destination the value of the keys of the source' do
               source_config = { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/MyPod' }
               destination_config = { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/BuildHeaders' }
-              result = @sut.send(:add_xcconfig_namespaced_keys, source_config, destination_config, 'PREFIX_')
+              result = @config.send(:add_xcconfig_namespaced_keys, source_config, destination_config, 'PREFIX_')
               result.should == { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/BuildHeaders ${PREFIX_HEADER_SEARCH_PATHS}' }
             end
 
             it 'uses the key of the destination xcconfig if not present in the source' do
               source_config = {}
               destination_config = { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/BuildHeaders' }
-              result = @sut.send(:add_xcconfig_namespaced_keys, source_config, destination_config, 'PREFIX_')
+              result = @config.send(:add_xcconfig_namespaced_keys, source_config, destination_config, 'PREFIX_')
               result.should == { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/BuildHeaders' }
             end
 
             it 'preserves any value of the source not present in the destination' do
               source_config = { 'EXCLUDED_SOURCE_FILE_NAMES' => 'ZBarReaderViewImpl_Simulator.m' }
               destination_config = {}
-              result = @sut.send(:add_xcconfig_namespaced_keys, source_config, destination_config, 'PREFIX_')
+              result = @config.send(:add_xcconfig_namespaced_keys, source_config, destination_config, 'PREFIX_')
               result.should == { 'EXCLUDED_SOURCE_FILE_NAMES' => '${PREFIX_EXCLUDED_SOURCE_FILE_NAMES}' }
             end
 
@@ -112,12 +112,12 @@ module Pod
           describe '#conditional_less_key' do
 
             it 'returns the key without the xcconfig conditional syntax if present' do
-              result = @sut.send(:conditional_less_key, 'EXCLUDED_SOURCE_FILE_NAMES[sdk=iphoneos*][arch=*]')
+              result = @config.send(:conditional_less_key, 'EXCLUDED_SOURCE_FILE_NAMES[sdk=iphoneos*][arch=*]')
               result.should == 'EXCLUDED_SOURCE_FILE_NAMES'
             end
 
             it 'returns the key as it is if no conditional syntax is present' do
-              result = @sut.send(:conditional_less_key, 'EXCLUDED_SOURCE_FILE_NAMES')
+              result = @config.send(:conditional_less_key, 'EXCLUDED_SOURCE_FILE_NAMES')
               result.should == 'EXCLUDED_SOURCE_FILE_NAMES'
             end
 

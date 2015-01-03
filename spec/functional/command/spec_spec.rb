@@ -356,14 +356,14 @@ module Pod
 
       before do
         # TODO Use class methods
-        @sut = Command::Spec.new(CLAide::ARGV.new([]))
+        @command = Command::Spec.new(CLAide::ARGV.new([]))
 
       end
 
       describe '#get_path_of_spec' do
 
         it 'returns the path of the specification with the given name' do
-          path = @sut.send(:get_path_of_spec, 'AFNetworking')
+          path = @command.send(:get_path_of_spec, 'AFNetworking')
           path.should == fixture('spec-repos') + 'master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json'
         end
 
@@ -373,16 +373,16 @@ module Pod
 
         it 'should return a valid index for the given array' do
           UI.next_input = "1\n"
-          index = @sut.send(:choose_from_array, %w(item1 item2 item3), 'A message')
+          index = @command.send(:choose_from_array, %w(item1 item2 item3), 'A message')
           UI.output.should.include "1: item1\n2: item2\n3: item3\nA message\n"
           index.should == 0
         end
 
         it 'should raise when the index is out of bounds' do
           UI.next_input = "4\n"
-          lambda { @sut.send(:choose_from_array, %w(item1 item2 item3), 'A message') }.should.raise Pod::Informative
+          lambda { @command.send(:choose_from_array, %w(item1 item2 item3), 'A message') }.should.raise Pod::Informative
           UI.next_input = "0\n"
-          lambda { @sut.send(:choose_from_array, %w(item1 item2 item3), 'A message') }.should.raise Pod::Informative
+          lambda { @command.send(:choose_from_array, %w(item1 item2 item3), 'A message') }.should.raise Pod::Informative
         end
 
       end
