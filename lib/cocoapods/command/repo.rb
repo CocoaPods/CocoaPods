@@ -15,7 +15,7 @@ module Pod
         self.summary = 'Add a spec repo.'
 
         self.description = <<-DESC
-          Clones `URL` in the local spec-repos directory at `~/.cocoapods/repos/`. The
+          Clones `URL` in the local spec-repos directory at `~/Library/cocoapods/repos/`. The
           remote can later be referred to by `NAME`.
         DESC
 
@@ -66,7 +66,7 @@ module Pod
 
         self.description = <<-DESC
           Updates the local clone of the spec-repo `NAME`. If `NAME` is omitted
-          this will update all spec-repos in `~/.cocoapods/repos`.
+          this will update all spec-repos in `~/Library/cocoapods/repos`.
         DESC
 
         self.arguments = [
@@ -159,7 +159,7 @@ module Pod
         self.summary = 'Remove a spec repo'
 
         self.description = <<-DESC
-          Deletes the remote named `NAME` from the local spec-repos directory at `~/.cocoapods/repos/.`
+          Deletes the remote named `NAME` from the local spec-repos directory at `~/Library/cocoapods/repos/.`
         DESC
 
         self.arguments = [
@@ -192,7 +192,7 @@ module Pod
         self.summary = 'List repos'
 
         self.description = <<-DESC
-            List the repos from the local spec-repos directory at `~/.cocoapods/repos/.`
+            List the repos from the local spec-repos directory at `~/Library/cocoapods/repos/.`
         DESC
 
         def self.options
@@ -209,11 +209,11 @@ module Pod
         #          master
         #          - type: git (origin)
         #          - URL:  https://github.com/CocoaPods/Specs.git
-        #          - path: /Users/lascorbe/.cocoapods/repos/master
+        #          - path: /Users/lascorbe/Library/cocoapods/repos/master
         #
         #          test
         #          - type: local copy
-        #          - path: /Users/lascorbe/.cocoapods/repos/test
+        #          - path: /Users/lascorbe/Library/cocoapods/repos/test
         #
         def run
           sources = SourcesManager.all

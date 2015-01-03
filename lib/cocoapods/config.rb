@@ -4,7 +4,7 @@ module Pod
   class Config
     # The default settings for the configuration.
     #
-    # Users can specify custom settings in `~/.cocoapods/config.yaml`.
+    # Users can specify custom settings in `~/Library/cocoapods/config.yaml`.
     # An example of the contents of this file might look like:
     #
     #     ---
@@ -112,13 +112,13 @@ module Pod
     #         files are stored.
     #
     def home_dir
-      @home_dir ||= Pathname.new(ENV['CP_HOME_DIR'] || '~/.cocoapods').expand_path
+      @home_dir ||= Pathname.new(ENV['CP_HOME_DIR'] || '~/Library/cocoapods').expand_path
     end
 
     # @return [Pathname] the directory where the CocoaPods sources are stored.
     #
     def repos_dir
-      @repos_dir ||= Pathname.new(ENV['CP_REPOS_DIR'] || '~/.cocoapods/repos').expand_path
+      @repos_dir ||= Pathname.new(ENV['CP_REPOS_DIR'] || '~/Library/cocoapods/repos').expand_path
     end
 
     attr_writer :repos_dir
@@ -126,7 +126,7 @@ module Pod
     # @return [Pathname] the directory where the CocoaPods templates are stored.
     #
     def templates_dir
-      @templates_dir ||= Pathname.new(ENV['CP_TEMPLATES_DIR'] || '~/.cocoapods/templates').expand_path
+      @templates_dir ||= Pathname.new(ENV['CP_TEMPLATES_DIR'] || '~/Library/cocoapods/templates').expand_path
     end
 
     # @return [Pathname] the root of the CocoaPods installation where the
