@@ -188,7 +188,7 @@ module Pod
 
         it 'raises if no workspace could be selected' do
           @integrator.expects(:user_project_paths).returns(%w(          project1 project2          ))
-          e = lambda { @integrator.send(:workspace_path) }.should.raise Informative
+          lambda { @integrator.send(:workspace_path) }.should.raise Informative
         end
 
         it 'returns the paths of the user projects' do

@@ -14,7 +14,7 @@ end
 # @return [Podfile]
 #
 def generate_podfile(pods = ['JSONKit'])
-  podfile = Pod::Podfile.new do
+  Pod::Podfile.new do
     platform :ios
     xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     pods.each { |name| pod name }
@@ -24,7 +24,7 @@ end
 # @return [Podfile]
 #
 def generate_local_podfile
-  podfile = Pod::Podfile.new do
+  Pod::Podfile.new do
     platform :ios
     xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
@@ -494,7 +494,7 @@ module Pod
 
         it 'saves the project to the given path' do
           Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
-          path = temporary_directory + 'Pods/Pods.xcodeproj'
+          temporary_directory + 'Pods/Pods.xcodeproj'
           @installer.pods_project.expects(:save)
           @installer.send(:write_pod_project)
         end
@@ -601,8 +601,6 @@ module Pod
 
       it 'runs the pre install hooks' do
         installer_rep = stub
-        pod_rep = stub
-        library_rep = stub
 
         @installer.expects(:installer_rep).returns(installer_rep)
         @installer.podfile.expects(:pre_install!).with(installer_rep)
@@ -611,7 +609,6 @@ module Pod
 
       it 'run_podfile_post_install_hooks' do
         installer_rep = stub
-        target_installer_data = stub
 
         @installer.expects(:installer_rep).returns(installer_rep)
         @installer.podfile.expects(:post_install!).with(installer_rep)
@@ -623,9 +620,6 @@ module Pod
         pod_target_osx = PodTarget.new([@spec], nil, config.sandbox)
         pod_target_ios.stubs(:name).returns('label')
         pod_target_osx.stubs(:name).returns('label')
-        library_ios_rep = stub
-        library_osx_rep = stub
-        target_installer_data = stub
 
         @installer.stubs(:pod_targets).returns([pod_target_ios, pod_target_osx])
         @installer.stubs(:installer_rep).returns(stub)

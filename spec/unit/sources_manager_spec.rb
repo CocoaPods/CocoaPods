@@ -15,7 +15,7 @@ def set_up_test_repo_for_update
 end
 
 def merge_conflict_version_yaml
-  text = <<-VERSION.strip_heredoc
+  <<-VERSION.strip_heredoc
     ---
     <<<<<<< HEAD
     min: 0.18.1
@@ -91,7 +91,7 @@ module Pod
         Source::Aggregate.any_instance.expects(:generate_search_index).returns('BananaLib' => {})
         Source::Aggregate.any_instance.expects(:update_search_index).never
         SourcesManager.updated_search_index = nil
-        sets = SourcesManager.search_by_name('BananaLib', true)
+        SourcesManager.search_by_name('BananaLib', true)
       end
 
       it 'updates the search index before performing a search if it exits' do
@@ -100,7 +100,7 @@ module Pod
         Source::Aggregate.any_instance.expects(:generate_search_index).never
         Source::Aggregate.any_instance.expects(:update_search_index).returns('BananaLib' => {})
         SourcesManager.updated_search_index = nil
-        sets = SourcesManager.search_by_name('BananaLib', true)
+        SourcesManager.search_by_name('BananaLib', true)
       end
 
       it 'returns the path of the search index' do

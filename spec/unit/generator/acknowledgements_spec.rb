@@ -46,7 +46,7 @@ module Pod
 
       it "warns the user if the file specified in the license doesn't exists" do
         @spec.stubs(:license).returns(:type => 'MIT', :file => 'MISSING')
-        text_from_spec = @generator.send(:license_text, @spec)
+        @generator.send(:license_text, @spec)
         UI.warnings.should.include 'Unable to read the license file'
       end
 

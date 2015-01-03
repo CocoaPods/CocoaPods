@@ -51,8 +51,8 @@ module Pod
     it 'creates a Podfile with targets from the project' do
       Dir.chdir(temporary_directory) do
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
-        target1 = project.new_target(:application, 'AppA', :ios)
-        target2 = project.new_target(:application, 'AppB', :ios)
+        project.new_target(:application, 'AppA', :ios)
+        project.new_target(:application, 'AppB', :ios)
         project.save
 
         run_command('init')

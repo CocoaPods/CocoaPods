@@ -68,7 +68,7 @@ module Pod
       source.should.exist?
       target.should.not.exist?
 
-      output = run_command('setup')
+      run_command('setup')
 
       source.should.not.exist?
       target.should.exist?

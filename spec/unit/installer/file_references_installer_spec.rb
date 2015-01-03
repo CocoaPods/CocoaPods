@@ -92,7 +92,7 @@ module Pod
           pod_target_1 = PodTarget.new([], nil, config.sandbox)
           pod_target_1.file_accessors = []
           installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)
-          roots = installer.send(:file_accessors).should == []
+          installer.send(:file_accessors).should == []
         end
       end
 

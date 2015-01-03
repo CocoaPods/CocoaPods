@@ -49,7 +49,7 @@ module Pod
     it 'should use the given template URL' do
       template_url = 'https://github.com/custom/template.git'
       @sut.any_instance.expects(:git!).with("clone '#{template_url}' TestPod").once
-      sut = run_command('lib', 'create', 'TestPod', template_url)
+      run_command('lib', 'create', 'TestPod', template_url)
     end
 
     it 'should use the default URL if no template URL is given' do

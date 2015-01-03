@@ -9,10 +9,6 @@
 Lint/UselessAccessModifier:
   Enabled: false
 
-# Offense count: 32
-Lint/UselessAssignment:
-  Enabled: false
-
 # Offense count: 1
 Metrics/BlockNesting:
   Max: 4

@@ -48,7 +48,7 @@ module Pod
         product.path = product_name
 
         target.user_build_configurations.each do |bc_name, type|
-          configuration = @native_target.add_build_configuration(bc_name, type)
+          @native_target.add_build_configuration(bc_name, type)
         end
 
         @native_target.build_configurations.each do |configuration|

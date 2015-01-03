@@ -524,7 +524,7 @@ module Pod
           it 'uses the lowest deployment target of the user targets if inferring the platform' do
             user_project = Xcodeproj::Project.new('path')
             target1 = user_project.new_target(:application, 'Target', :ios)
-            configuration1 = target1.build_configuration_list.build_configurations.first
+            target1.build_configuration_list.build_configurations.first
             target1.build_configuration_list.set_setting('SDKROOT', 'iphoneos')
             target1.build_configuration_list.set_setting('IPHONEOS_DEPLOYMENT_TARGET', '4.0')
 

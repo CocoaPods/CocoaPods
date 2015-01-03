@@ -298,7 +298,7 @@ module Pod
         validator.expects(:podfile_from_spec).with(:osx, nil, nil).once
         validator.expects(:podfile_from_spec).with(:ios, nil, nil).once
         validator.expects(:podfile_from_spec).with(:ios, '7.0', nil).once
-        podfile = validator.send(:perform_extensive_analysis, validator.spec)
+        validator.send(:perform_extensive_analysis, validator.spec)
       end
 
       describe '#podfile_from_spec' do

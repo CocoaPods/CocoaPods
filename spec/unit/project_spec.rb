@@ -42,14 +42,14 @@ module Pod
         end
 
         it 'adds the group for a development Pod' do
-          path = config.sandbox.pod_dir('BananaLib')
+          config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path, true)
           group.parent.should == @project.development_pods
           group.name.should == 'BananaLib'
         end
 
         it 'configures the path of a new Pod group' do
-          path = config.sandbox.pod_dir('BananaLib')
+          config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path)
           group.source_tree.should == '<group>'
           group.path.should == 'BananaLib'
@@ -57,7 +57,7 @@ module Pod
         end
 
         it 'configures the path of a new Pod group as absolute if requested' do
-          path = config.sandbox.pod_dir('BananaLib')
+          config.sandbox.pod_dir('BananaLib')
           group = @project.add_pod_group('BananaLib', @path, false, true)
           group.source_tree.should == '<absolute>'
           group.path.should == @path.to_s

@@ -344,7 +344,6 @@ module Pod
       def dependencies_to_fetch
         @deps_to_fetch ||= begin
           deps_to_fetch = []
-          deps_to_fetch_if_needed = []
           deps_with_external_source = podfile.dependencies.select(&:external_source)
 
           if update_mode == :all
@@ -668,7 +667,7 @@ module Pod
               project_path = compute_user_project_path(target_definition)
               user_project = Xcodeproj::Project.open(project_path)
               targets = compute_user_project_targets(target_definition, user_project)
-              platform = compute_platform_for_target_definition(target_definition, targets)
+              compute_platform_for_target_definition(target_definition, targets)
               archs = compute_archs_for_target_definition(target_definition, targets)
               @archs_by_target_def[target_definition] = archs
             else

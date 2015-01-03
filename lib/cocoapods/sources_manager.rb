@@ -44,7 +44,7 @@ module Pod
             argv = [name, url]
             argv << '--shallow' if name =~ /^master(-\d+)?$/
             Command::Repo::Add.new(CLAide::ARGV.new(argv)).run
-          rescue Informative => e
+          rescue Informative
             raise Informative, "Unable to add a source with url `#{url}` " \
               "named `#{name}`.\nYou can try adding it manually in " \
               '`~/.cocoapods/repos` or via `pod repo add`.'
@@ -197,7 +197,7 @@ module Pod
               begin
                 output = git!('pull --ff-only')
                 UI.puts output if show_output && !config.verbose?
-              rescue Informative => e
+              rescue Informative
                 UI.warn 'CocoaPods was not able to update the ' \
                   "`#{source.name}` repo. If this is an unexpected issue " \
                   'and persists you can inspect it running ' \
@@ -314,7 +314,7 @@ module Pod
         return {} unless yaml_file.exist?
         begin
           YAMLHelper.load_file(yaml_file)
-        rescue Informative => e
+        rescue Informative
           raise Informative, "There was an error reading '#{yaml_file}'.\n" \
             'Please consult http://blog.cocoapods.org/' \
             'Repairing-Our-Broken-Specs-Repository/ ' \
@@ -432,8 +432,8 @@ module Pod
           else
             base = ''
           end
-          base += path.gsub(/.git$/, '').gsub(/^\//, '').
-            split('/').join('-')
+
+          base + path.gsub(/.git$/, '').gsub(/^\//, '').split('/').join('-')
         end
 
         case url.to_s.downcase

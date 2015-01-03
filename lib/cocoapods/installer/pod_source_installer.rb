@@ -46,7 +46,7 @@ module Pod
         run_prepare_command
       rescue Informative
         raise
-      rescue Object => e
+      rescue Object
         UI.notice("Error installing #{root_spec.name}")
         clean!
         raise
