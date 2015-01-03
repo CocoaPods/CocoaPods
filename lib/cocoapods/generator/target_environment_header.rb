@@ -74,7 +74,7 @@ module Pod
       def common_specs(specs_by_configuration)
         result = specs_by_configuration.values.flatten.uniq
         specs_by_configuration.values.each do |configuration_specs|
-          result = result & configuration_specs
+          result &= configuration_specs
         end
         result.sort_by(&:name)
       end
