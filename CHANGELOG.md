@@ -38,6 +38,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Chris Brauchli](https://github.com/cbrauchli)
   [#2633](https://github.com/CocoaPods/CocoaPods/issues/2633)
 
+* Ensure private headers are declared as such in a framework's generated module
+  map.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2974](https://github.com/CocoaPods/CocoaPods/issues/2974)
+
 ##### Bug Fixes
 
 * Do not pass code-sign arguments to xcodebuild when linting OS X targets.  
