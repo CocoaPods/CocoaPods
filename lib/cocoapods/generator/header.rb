@@ -43,12 +43,12 @@ module Pod
         result << "\n"
 
         imports.each do |import|
-          result << %|#import "#{import}"\n|
+          result << %(#import "#{import}"\n)
         end
 
         unless module_imports.empty?
           module_imports.each do |import|
-            result << %|\n@import #{import}|
+            result << %(\n@import #{import})
           end
           result << "\n"
         end

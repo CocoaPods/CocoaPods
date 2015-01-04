@@ -110,7 +110,7 @@ describe_cli 'pod' do
     s.replace_path `which hg`.chomp, 'HG_BIN' if has_mercurial
     s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
     s.replace_pattern %r(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}), '<#DATE#>'
-    s.replace_pattern %r(\(Took \d+.\d+ seconds\)), '(Took <#DURATION#> seconds)'
+    s.replace_pattern %r{\(Took \d+.\d+ seconds\)}, '(Took <#DURATION#> seconds)'
   end
 
   describe 'Pod install' do

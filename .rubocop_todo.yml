@@ -46,12 +46,6 @@ Style/FileName:
 Style/GlobalVars:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Enabled: false
-
 # Offense count: 12
 # Configuration parameters: MaxSlashes.
 Style/RegexpLiteral:
