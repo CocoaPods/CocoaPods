@@ -74,7 +74,7 @@ module Pod
         end
 
         should.not.raise do
-          @hooks_manager.run(:post_install, Object.new,  'plugin' => {'key' => 'value'})
+          @hooks_manager.run(:post_install, Object.new,  'plugin' => { 'key' => 'value' })
         end
       end
 

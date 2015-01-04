@@ -96,7 +96,7 @@ module Pod
       # @return [void]
       #
       def add_search_path(path, platform)
-        @search_paths << {:platform => platform, :path => (Pathname.new(@relative_path) + path) }
+        @search_paths << { :platform => platform, :path => (Pathname.new(@relative_path) + path) }
       end
 
       #-----------------------------------------------------------------------#
