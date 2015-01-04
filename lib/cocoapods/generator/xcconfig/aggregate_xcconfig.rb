@@ -62,7 +62,7 @@ module Pod
               'PODS_FRAMEWORK_BUILD_PATH' => target.configuration_build_dir,
               'FRAMEWORK_SEARCH_PATHS' => '"$PODS_FRAMEWORK_BUILD_PATH"',
               # Make headers discoverable by `import "…"`
-              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote')
+              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote'),
             }
             config.merge!(build_settings)
           else
@@ -72,7 +72,7 @@ module Pod
               # by `#import "…"`
               'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(header_search_paths),
               # by `#import <…>`
-              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-isystem')
+              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-isystem'),
             }
             config.merge!(build_settings)
           end
@@ -125,7 +125,7 @@ module Pod
           else
             ld_runpath_search_paths << [
               "'@executable_path/Frameworks'",
-              "'@loader_path/Frameworks'"
+              "'@loader_path/Frameworks'",
             ]
           end
           @xcconfig.merge!('LD_RUNPATH_SEARCH_PATHS' => ld_runpath_search_paths.join(' '))

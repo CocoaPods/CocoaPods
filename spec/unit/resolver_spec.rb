@@ -283,7 +283,7 @@ module Pod
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == [
-          'MainSpec (1.2.3-pre)'
+          'MainSpec (1.2.3-pre)',
         ]
       end
 

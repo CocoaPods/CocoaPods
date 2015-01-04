@@ -149,7 +149,7 @@ module Pod
           'AFNetworking/Reachability (2.4.0)',
           'AFNetworking/Security (2.4.0)',
           'AFNetworking/Serialization (2.4.0)',
-          { 'AFNetworking/UIKit (2.4.0)' => ['AFNetworking/NSURLConnection', 'AFNetworking/NSURLSession'] }
+          { 'AFNetworking/UIKit (2.4.0)' => ['AFNetworking/NSURLConnection', 'AFNetworking/NSURLSession'] },
         ]
         hash['DEPENDENCIES'] = ['AFNetworkActivityLogger', 'AFNetworking (2.4.0)']
         hash['SPEC CHECKSUMS'] = {}

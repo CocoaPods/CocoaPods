@@ -15,7 +15,7 @@ module Pod
         def self.options
           [
             ['--regex', 'Interpret the `QUERY` as a regular expression'],
-            ['--show-all', 'Pick from all versions of the given podspec']
+            ['--show-all', 'Pick from all versions of the given podspec'],
           ].concat(super)
         end
 

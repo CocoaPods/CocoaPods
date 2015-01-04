@@ -68,46 +68,46 @@ module Pod
     describe 'Support files' do
       it 'returns the absolute path of the xcconfig file' do
         @pod_target.xcconfig_path('Release').to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.release.xcconfig'
+          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.release.xcconfig',
         )
       end
 
       it 'escapes the file separators in variant build configuration name in the xcconfig file' do
         @pod_target.xcconfig_path("Release#{File::SEPARATOR}1").to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.release-1.xcconfig'
+          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.release-1.xcconfig',
         )
       end
 
       it 'returns the absolute path of the target header file' do
         @pod_target.target_environment_header_path.to_s.should.include?(
-          'Pods/Target Support Files/Pods/Pods-environment.h'
+          'Pods/Target Support Files/Pods/Pods-environment.h',
         )
       end
 
       it 'returns the absolute path of the prefix header file' do
         @pod_target.prefix_header_path.to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-prefix.pch'
+          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-prefix.pch',
         )
       end
 
       it 'returns the absolute path of the bridge support file' do
         @pod_target.bridge_support_path.to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.bridgesupport'
+          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.bridgesupport',
         )
       end
 
       it 'returns the absolute path of the info plist file' do
         @pod_target.info_plist_path.to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Info.plist'
+          'Pods/Target Support Files/Pods-BananaLib/Info.plist',
         )
       end
 
       it 'returns the absolute path of the public and private xcconfig files' do
         @pod_target.xcconfig_path.to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.xcconfig'
+          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.xcconfig',
         )
         @pod_target.xcconfig_private_path.to_s.should.include(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-Private.xcconfig'
+          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-Private.xcconfig',
         )
       end
 

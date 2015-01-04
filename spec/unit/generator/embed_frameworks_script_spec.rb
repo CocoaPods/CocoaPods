@@ -6,7 +6,7 @@ module Pod
       target_definition = Podfile::TargetDefinition.new(:default, nil)
       frameworks = {
         'Debug'   => %w(Loopback.framework Reveal.framework),
-        'Release' => %w(CrashlyticsFramework.framework)
+        'Release' => %w(CrashlyticsFramework.framework),
       }
       generator = Pod::Generator::EmbedFrameworksScript.new(target_definition, frameworks)
       generator.send(:script).should.include <<-eos.strip_heredoc

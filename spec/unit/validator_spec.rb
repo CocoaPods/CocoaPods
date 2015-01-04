@@ -175,7 +175,7 @@ module Pod
               stub_request(:head, 'banana-corp.local/valid-image.png').
               to_return(
                 :status => 200,
-                :headers => { 'Content-Type' => 'image/png' }
+                :headers => { 'Content-Type' => 'image/png' },
               )
           end
 

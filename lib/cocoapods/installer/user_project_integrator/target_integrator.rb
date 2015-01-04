@@ -38,7 +38,7 @@ module Pod
                 add_copy_resources_script_phase
                 add_check_manifest_lock_script_phase
                 true
-              end
+              end,
             ].any?
 
             if project_is_dirty
