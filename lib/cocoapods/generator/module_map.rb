@@ -10,10 +10,15 @@ module Pod
       #
       attr_reader :target
 
+      # @return [Array] the private headers of the module
+      #
+      attr_accessor :private_headers
+
       # @param  [Target] target @see target
       #
       def initialize(target)
         @target = target
+        @private_headers = []
       end
 
       # Generates and saves the Info.plist to the given path.
@@ -35,14 +40,24 @@ module Pod
       # @return [String]
       #
       def generate
-        <<-eos.strip_heredoc
+        result = <<-eos.strip_heredoc
           framework module #{target.product_module_name} {
             umbrella header "#{target.umbrella_header_path.basename}"
 
             export *
             module * { export * }
-          }
         eos
+
+        result << "\n#{generate_private_header_exports}" unless private_headers.empty?
+        result << "}\n"
+      end
+
+      private
+
+      def generate_private_header_exports
+        private_headers.reduce('') do |string, header|
+          string << %(  private header "#{header}\n")
+        end
       end
     end
   end
