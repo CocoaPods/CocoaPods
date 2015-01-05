@@ -10,7 +10,7 @@ require gems_setup
 $LOAD_PATH.unshift(File.expand_path("../../rubylib", file_path))
 
 
-if RUBY_VERSION > '1.8.7' && Encoding.default_external != Encoding::UTF_8
+if RUBY_VERSION > '2.0.0' && Encoding.default_external != Encoding::UTF_8
   puts "\e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding."
   if ENV['TRAVIS']
     puts <<-DOC
