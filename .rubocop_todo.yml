@@ -21,8 +21,3 @@ Metrics/LineLength:
 # Offense count: 12
 Metrics/PerceivedComplexity:
   Max: 10
-
-# Offense count: 6
-# Configuration parameters: AllowedVariables.
-Style/GlobalVars:
-  Enabled: false
