@@ -1,4 +1,5 @@
 require File.expand_path('../../../spec_helper', __FILE__)
+require 'webmock'
 
 module Pod
   describe ExternalSources::PodspecSource do
@@ -50,6 +51,18 @@ module Pod
         @subject.stubs(:params).returns(:podspec => 'http://www.example.com/Reachability.podspec')
         path = @subject.send(:podspec_uri)
         path.should == 'http://www.example.com/Reachability.podspec'
+      end
+    end
+
+    describe 'http source' do
+      it 'raises an Informative error if the specified url fails to load' do
+        @subject.stubs(:params).returns(:podspec => 'https://github.com/username/TSMessages/TSMessages.podspec')
+        WebMock::API.stub_request(:get, 'https://github.com/username/TSMessages/TSMessages.podspec').
+          to_return(:status => 404)
+
+        lambda { @subject.fetch(config.sandbox) }.should.raise(Informative).
+          message.should.match(/Failed to fetch podspec for/)
+        WebMock.reset!
       end
     end
   end
