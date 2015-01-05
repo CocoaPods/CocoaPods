@@ -22,11 +22,6 @@ Metrics/LineLength:
 Metrics/PerceivedComplexity:
   Max: 10
 
-# Offense count: 7
-# Configuration parameters: Keywords.
-Style/CommentAnnotation:
-  Enabled: false
-
 # Offense count: 6
 # Configuration parameters: AllowedVariables.
 Style/GlobalVars:

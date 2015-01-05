@@ -446,8 +446,7 @@ module Pod
           target_installer.install!
         end
 
-        # TODO
-        # Move and add specs
+        # TODO: Move and add specs
         pod_targets.sort_by(&:name).each do |pod_target|
           pod_target.file_accessors.each do |file_accessor|
             file_accessor.spec_consumer.frameworks.each do |framework|
@@ -481,7 +480,7 @@ module Pod
           pod_target.dependencies.each do |dep|
             unless dep == pod_target.pod_name
               pod_dependency_target = aggregate_target.pod_targets.find { |target| target.pod_name == dep }
-              # TODO remove me
+              # TODO: remove me
               unless pod_dependency_target
                 puts "[BUG] DEP: #{dep}"
               end

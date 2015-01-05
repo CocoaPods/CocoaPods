@@ -7,7 +7,7 @@ require 'xcodeproj'
 require 'active_support/core_ext/string/strip'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/array/conversions'
-# TODO check what this actually does by the time we're going to add support for
+# TODO: check what this actually does by the time we're going to add support for
 # other locales.
 require 'i18n'
 if I18n.respond_to?(:enforce_available_locales=)

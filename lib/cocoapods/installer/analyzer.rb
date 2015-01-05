@@ -306,7 +306,7 @@ module Pod
       #
       # @return [void]
       #
-      # TODO    Specs
+      # TODO:    Specs
       #
       def fetch_external_sources
         return unless allow_pre_downloads?
