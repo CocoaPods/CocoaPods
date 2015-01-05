@@ -41,13 +41,13 @@ namespace :homebrew do
 
   desc "Checkout homebrew repo locally"
   task :checkout do
-    `git clone https://github.com/Keithbsmiley/homebrew-formulae.git #{ HOMEBREW_FORMULAE_DIR }`
+    `git clone https://github.com/CocoaPods/homebrew.git #{ HOMEBREW_FORMULAE_DIR }`
   end
 
   desc "Check in the new Homebrew formula"
   task :commit do
     Dir.chdir(HOMEBREW_FORMULAE_DIR) do
-      `git add Formula/cocoapods.rb`
+      `git add Library/Formula/cocoapods.rb`
       `git commit -m "cocoapods: Release version #{ gem_version }"`
     end
   end
@@ -73,7 +73,7 @@ namespace :homebrew do
         "__SHA__",
         `shasum #{ GH_PAGES_DIR }/cocoapods-#{ gem_version }.tar.gz`
           .split.first)
-      File.write("#{ HOMEBREW_FORMULAE_DIR }/Formula/cocoapods.rb", formula)
+      File.write("#{ HOMEBREW_FORMULAE_DIR }/Library/Formula/cocoapods.rb", formula)
     end
   end
 end
@@ -84,7 +84,7 @@ namespace :tarball do
 
   desc "Checkout gh-pages"
   task :checkout do
-    `git clone --branch gh-pages https://github.com/Keithbsmiley/cocoapods.git #{ GH_PAGES_DIR }`
+    `git clone --branch gh-pages https://github.com/CocoaPods/CocoaPods.git #{ GH_PAGES_DIR }`
   end
 
   desc "Move tarball into gh-pages"
