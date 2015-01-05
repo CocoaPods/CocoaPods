@@ -26,8 +26,3 @@ Metrics/PerceivedComplexity:
 # Configuration parameters: AllowedVariables.
 Style/GlobalVars:
   Enabled: false
-
-# Offense count: 12
-# Configuration parameters: MaxSlashes.
-Style/RegexpLiteral:
-  Enabled: false

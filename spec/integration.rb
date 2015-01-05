@@ -64,7 +64,7 @@ CLIntegracon.configure do |c|
   end
 
   # Register special handling for YAML files
-  paths = [%r{Podfile\.lock}, %r{Manifest\.lock$}, %r{xcodeproj\.yaml$}]
+  paths = [/Podfile\.lock/, /Manifest\.lock$/, /xcodeproj\.yaml$/]
   c.has_special_handling_for(*paths) do |path|
     # Remove CocoaPods version
     yaml = File.open(path) { |f| YAML.load(f) }
@@ -73,7 +73,7 @@ CLIntegracon.configure do |c|
   end
 
   # So we don't need to compare them directly
-  c.ignores %r{\.xcodeproj/}
+  c.ignores /\.xcodeproj\//
   c.ignores 'Podfile'
 
   # Ignore certain OSX files
@@ -109,8 +109,8 @@ describe_cli 'pod' do
     s.replace_path `which git`.chomp, 'GIT_BIN'
     s.replace_path `which hg`.chomp, 'HG_BIN' if has_mercurial
     s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
-    s.replace_pattern %r(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}), '<#DATE#>'
-    s.replace_pattern %r{\(Took \d+.\d+ seconds\)}, '(Took <#DURATION#> seconds)'
+    s.replace_pattern /\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}/, '<#DATE#>'
+    s.replace_pattern /\(Took \d+.\d+ seconds\)/, '(Took <#DURATION#> seconds)'
   end
 
   describe 'Pod install' do

@@ -76,7 +76,7 @@ module Pod
             files = []
             @podspecs_paths << '.' if @podspecs_paths.empty?
             @podspecs_paths.each do |path|
-              if path =~ /https?:\/\//
+              if path =~ %r{https?://}
                 require 'open-uri'
                 output_path = podspecs_tmp_dir + File.basename(path)
                 output_path.dirname.mkpath

@@ -55,7 +55,7 @@ module Pod
 
       # prepare the spec
       spec = (fixture('spec-repos') + 'test_repo/JSONKit/1.4/JSONKit.podspec').read
-      spec_fix = spec.gsub(/https:\/\/github\.com\/johnezang\/JSONKit\.git/, fixture('integration/JSONKit').to_s)
+      spec_fix = spec.gsub(%r{https://github\.com/johnezang/JSONKit\.git}, fixture('integration/JSONKit').to_s)
       spec_add = spec.gsub(/'JSONKit'/, "'PushTest'")
 
       spec_clean = (fixture('spec-repos') + 'test_repo/BananaLib/1.0/BananaLib.podspec').read

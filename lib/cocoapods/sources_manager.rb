@@ -441,7 +441,7 @@ module Pod
           base = 'master'
         when %r{github.com[:/]+(.+)/(.+)}
           base = Regexp.last_match[1]
-        when %r{^\S+@(\S+)[:/]+(.+)$}
+        when /^\S+@(\S+)[:\/]+(.+)$/
           host, path = Regexp.last_match.captures
           base = base_from_host_and_path[host, path]
         when URI.regexp

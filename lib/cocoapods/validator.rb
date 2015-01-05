@@ -510,7 +510,7 @@ module Pod
           l.include?('note: ') && (l !~ /expanded from macro/)
       end
       selected_lines.map do |l|
-        new = l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//, '')
+        new = l.gsub(%r{/tmp/CocoaPods/Lint/Pods/}, '')
         new.gsub!(/^ */, ' ')
       end
     end

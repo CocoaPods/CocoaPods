@@ -31,7 +31,7 @@ module Pod
     #
     def stub_podspec(pattern = nil, replacement = nil)
       spec = (fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json').read
-      spec.gsub!(/https:\/\/github\.com\/johnezang\/JSONKit\.git/, fixture('integration/JSONKit').to_s)
+      spec.gsub!(%r{https://github\.com/johnezang/JSONKit\.git}, fixture('integration/JSONKit').to_s)
       spec.gsub!(pattern, replacement) if pattern && replacement
       spec
     end

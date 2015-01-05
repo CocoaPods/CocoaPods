@@ -25,7 +25,7 @@ module Pod
         end
 
         def run
-          if repo_id_match = (@url || @name_or_url).match(/github.com\/([^\/\.]*\/[^\/\.]*)\.*/)
+          if repo_id_match = (@url || @name_or_url).match(%r{github.com/([^/\.]*\/[^/\.]*)\.*})
             repo_id = repo_id_match[1]
             data = github_data_for_template(repo_id)
             data[:name] = @name_or_url if @url

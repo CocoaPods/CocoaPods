@@ -16,7 +16,7 @@ module Pod
     end
 
     it 'returns the description' do
-      @subject.description.should.match %r{from `.*Reachability/Reachability.podspec`}
+      @subject.description.should.match /from `.*Reachability\/Reachability.podspec`/
     end
 
     describe 'Helpers' do
