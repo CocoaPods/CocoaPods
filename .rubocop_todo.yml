@@ -27,10 +27,6 @@ Metrics/PerceivedComplexity:
 Style/CommentAnnotation:
   Enabled: false
 
-# Offense count: 1
-Style/DoubleNegation:
-  Enabled: false
-
 # Offense count: 6
 # Configuration parameters: AllowedVariables.
 Style/GlobalVars:

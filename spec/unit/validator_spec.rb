@@ -322,7 +322,9 @@ module Pod
         it 'includes the use_frameworks!(false) directive' do
           podfile = @validator.send(:podfile_from_spec, :ios, '5.0', false)
           target_definition = podfile.target_definitions['Pods']
+          # rubocop:disable Style/DoubleNegation
           (!!target_definition.uses_frameworks?).should == false
+          # rubocop:enable Style/DoubleNegation
         end
       end
 

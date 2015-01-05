@@ -101,7 +101,7 @@ module Pod
       #         change in the Podfile should be locked.
       #
       def update_mode?
-        !!update
+        update != nil
       end
 
       # @return [Symbol] Whether and how the dependencies in the Podfile
