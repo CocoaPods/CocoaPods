@@ -27,7 +27,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dustin Clark](https://github.com/clarkda)
   [#2558](https://github.com/CocoaPods/CocoaPods/issues/2558)
 
-* Xcodebuild warnings with the string `error` in them will no longer be
+* Xcodebuild warnings with the string `error` in them will no longer be 
   linted as errors if they are in fact warnings.  
   [Hugo Tunius](https://github.com/K0nserv)
   [#2579](https://github.com/CocoaPods/CocoaPods/issues/2579)
