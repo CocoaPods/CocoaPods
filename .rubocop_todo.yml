@@ -31,11 +31,6 @@ Style/CommentAnnotation:
 Style/DoubleNegation:
   Enabled: false
 
-# Offense count: 1
-# Configuration parameters: Exclude.
-Style/FileName:
-  Enabled: false
-
 # Offense count: 6
 # Configuration parameters: AllowedVariables.
 Style/GlobalVars:
