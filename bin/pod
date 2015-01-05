@@ -26,16 +26,17 @@ require 'cocoapods'
 
 if profile_filename = ENV['PROFILE']
   require 'ruby-prof'
-  reporter = case (profile_extname = File.extname(profile_filename))
-  when '.txt'
-    RubyProf::FlatPrinterWithLineNumbers
-  when '.html'
-    RubyProf::GraphHtmlPrinter
-  when '.callgrind'
-    RubyProf::CallTreePrinter
-  else
-    raise "Unknown profiler format indicated by extension: #{profile_extname}"
-  end
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise "Unknown profiler format indicated by extension: #{profile_extname}"
+    end
   File.open(profile_filename, 'w') do |io|
     reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
   end
