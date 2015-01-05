@@ -170,6 +170,9 @@ For more details, see :memo: [CocoaPods 0.35](http://blog.cocoapods.org/CocoaPod
   copying resources to main application bundle.  
   [Yan Rabovik](https://github.com/rabovik)
 
+* Fix uninitialized constant Class::YAML crash in some cases.
+  [Tim Shadel](https://github.com/timshadel)
+
 ##### Enhancements
 
 * `pod search`, `pod spec which`, `pod spec cat` and `pod spec edit`
