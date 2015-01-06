@@ -13,6 +13,16 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#2981](https://github.com/CocoaPods/CocoaPods/issues/2981)
   [cocoapods-trunk#33](https://github.com/CocoaPods/cocoapods-trunk/issues/33)
 
+* Xcodebuild warnings with the string `error` in them will no longer be 
+  linted as errors if they are in fact warnings.  
+  [Hugo Tunius](https://github.com/K0nserv)
+  [#2579](https://github.com/CocoaPods/CocoaPods/issues/2579)
+
+##### Enhancements
+
+* Xcodebuild warnings will now be reported as `warning` during linting
+  instead of `note`.  
+  [Hugo Tunius](https://github.com/K0nserv)
 
 ## 0.36.0.beta.1
 

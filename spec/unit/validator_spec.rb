@@ -334,10 +334,21 @@ module Pod
         podfile.sources.should == sources
       end
 
-      it 'uses xcodebuild to generate notes and warnings' do
+      it 'uses xcodebuild to generate warnings' do
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
-        validator.stubs(:xcodebuild).returns("file.m:1:1: warning: direct access to objective-c's isa is deprecated")
+        validator.stubs(:xcodebuild).returns("file.m:1:1: warning: 'dataFromPropertyList:format:errorDescription:' is deprecated: first deprecated in iOS 8.0 - Use dataWithPropertyList:format:options:error: instead. [-Wdeprecated-declarations]")
+        validator.stubs(:validate_url)
+        validator.validate
+        first = validator.results.map(&:to_s).first
+        first.should.include '[xcodebuild]'
+        validator.result_type.should == :warning
+      end
+
+      it 'users xcodebuild to generate notes' do
+        validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+        validator.stubs(:check_file_patterns)
+        validator.stubs(:xcodebuild).returns("file.m:1:1: note: 'dataFromPropertyList:format:errorDescription:' has been explicitly marked deprecated here")
         validator.stubs(:validate_url)
         validator.validate
         first = validator.results.map(&:to_s).first
