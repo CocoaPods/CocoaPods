@@ -15,7 +15,7 @@ module Pod
             open(podspec_uri) { |io| store_podspec(sandbox, io.read, is_json) }
           rescue OpenURI::HTTPError => e
             status = e.io.status.join(' ')
-            raise Informative, "Failed to fetch podspec for `#{name}` at #{podspec_uri}. Error: #{status}"
+            raise Informative, "Failed to fetch podspec for `#{name}` at `#{podspec_uri}`.\n Error: #{status}"
           end
         end
       end
