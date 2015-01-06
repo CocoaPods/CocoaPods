@@ -12,3 +12,4 @@ AllCops:
 Style/FileName:
   Exclude:
     - bin/*
+    - Rakefile
