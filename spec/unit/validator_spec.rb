@@ -345,7 +345,7 @@ module Pod
         validator.result_type.should == :warning
       end
 
-      it 'users xcodebuild to generate notes' do
+      it 'uses xcodebuild to generate notes' do
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:xcodebuild).returns("file.m:1:1: note: 'dataFromPropertyList:format:errorDescription:' has been explicitly marked deprecated here")
