@@ -213,7 +213,7 @@ begin
     task :recreate_workspace_schemes do
       examples.each do |example|
         Dir.chdir(example.to_s) do
-          # TODO we need to open the workspace in Xcode at least once, otherwise it might not contain schemes.
+          # TODO: we need to open the workspace in Xcode at least once, otherwise it might not contain schemes.
           # The schemes do not seem to survive a SCM round-trip.
           sh "open '#{example.basename}.xcworkspace'"
           sleep 5

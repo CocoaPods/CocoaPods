@@ -153,7 +153,7 @@ class Profile
     File.expand_path('../..', developer_prefix)
   end
 
-  # TODO raise SAFE level (0) to 4 if possible.
+  # TODO: raise SAFE level (0) to 4 if possible.
   def generate
     ERB.new(PROFILE_ERB_TEMPLATE, 0, '>').result(binding)
   end

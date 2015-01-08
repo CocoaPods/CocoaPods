@@ -101,7 +101,7 @@ module Pod
       #         change in the Podfile should be locked.
       #
       def update_mode?
-        !!update
+        update != nil
       end
 
       # @return [Symbol] Whether and how the dependencies in the Podfile
@@ -306,7 +306,7 @@ module Pod
       #
       # @return [void]
       #
-      # TODO    Specs
+      # TODO:    Specs
       #
       def fetch_external_sources
         return unless allow_pre_downloads?

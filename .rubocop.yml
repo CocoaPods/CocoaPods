@@ -8,3 +8,8 @@ AllCops:
   Exclude:
     - spec/fixtures/**/*.rb
     - spec/fixtures/banana-lib/libPusher/Scripts/pusher
+
+Style/FileName:
+  Exclude:
+    - bin/*
+    - Rakefile

@@ -291,8 +291,8 @@ module Pod
         analyzer.analyze
 
         UI.warnings.should.match /duplicate dependencies on `RestKit`/
-        UI.warnings.should.match %r{RestKit \(~> 0.23.0\)}
-        UI.warnings.should.match %r{RestKit \(<= 0.23.2\)}
+        UI.warnings.should.match /RestKit \(~> 0.23.0\)/
+        UI.warnings.should.match /RestKit \(<= 0.23.2\)/
       end
 
       #--------------------------------------#
@@ -656,7 +656,7 @@ module Pod
 
         e.message.should.match /different sources for `RestKit`/
         e.message.should.match %r{RestKit \(from `https://github.com/RestKit/RestKit.git`\)}
-        e.message.should.match %r{RestKit \(~> 0.23.0\)}
+        e.message.should.match /RestKit \(~> 0.23.0\)/
       end
     end
 

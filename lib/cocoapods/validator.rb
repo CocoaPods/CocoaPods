@@ -345,8 +345,10 @@ module Pod
               next
             end
 
-            if message.include?('error: ')
+            if message =~ /\S+:\d+:\d+: error:/
               error('xcodebuild', message)
+            elsif message =~ /\S+:\d+:\d+: warning:/
+              warning('xcodebuild', message)
             else
               note('xcodebuild', message)
             end
@@ -508,7 +510,7 @@ module Pod
           l.include?('note: ') && (l !~ /expanded from macro/)
       end
       selected_lines.map do |l|
-        new = l.gsub(/\/tmp\/CocoaPods\/Lint\/Pods\//, '')
+        new = l.gsub(%r{/tmp/CocoaPods/Lint/Pods/}, '')
         new.gsub!(/^ */, ' ')
       end
     end

@@ -303,7 +303,7 @@ module Pod
 
     describe 'Master repo' do
       it 'returns the master repo dir' do
-        SourcesManager.master_repo_dir.to_s.should.match /fixtures\/spec-repos\/master/
+        SourcesManager.master_repo_dir.to_s.should.match %r{fixtures/spec-repos/master}
       end
 
       it 'returns whether the master repo is functional' do

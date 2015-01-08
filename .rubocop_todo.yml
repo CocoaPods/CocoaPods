@@ -21,33 +21,3 @@ Metrics/LineLength:
 # Offense count: 12
 Metrics/PerceivedComplexity:
   Max: 10
-
-# Offense count: 7
-# Configuration parameters: Keywords.
-Style/CommentAnnotation:
-  Enabled: false
-
-# Offense count: 1
-Style/DoubleNegation:
-  Enabled: false
-
-# Offense count: 1
-# Configuration parameters: Exclude.
-Style/FileName:
-  Enabled: false
-
-# Offense count: 6
-# Configuration parameters: AllowedVariables.
-Style/GlobalVars:
-  Enabled: false
-
-# Offense count: 12
-# Configuration parameters: MaxSlashes.
-Style/RegexpLiteral:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: ExactNameMatch, AllowPredicates, AllowDSLWriters, Whitelist.
-Style/TrivialAccessors:
-  Enabled: false

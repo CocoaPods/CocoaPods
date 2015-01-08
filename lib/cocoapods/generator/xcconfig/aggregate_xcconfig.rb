@@ -101,7 +101,7 @@ module Pod
             end
           end
 
-          # TODO Need to decide how we are going to ensure settings like these
+          # TODO: Need to decide how we are going to ensure settings like these
           # are always excluded from the user's project.
           #
           # See https://github.com/CocoaPods/CocoaPods/issues/1216

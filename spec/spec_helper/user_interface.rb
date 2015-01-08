@@ -27,9 +27,7 @@ module Pod
         @output << message
       end
 
-      def gets
-        @next_input
-      end
+      alias_method :gets, :next_input
 
       def print_warnings
       end

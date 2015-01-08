@@ -26,7 +26,7 @@ module Pod
     end
 
     it 'returns the description' do
-      @subject.description.should.match %r{from `.*integration/Reachability`}
+      @subject.description.should.match /from `.*integration\/Reachability`/
     end
 
     it 'marks the Pod as local in the sandbox' do

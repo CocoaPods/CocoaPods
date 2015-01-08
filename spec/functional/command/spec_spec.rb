@@ -352,7 +352,7 @@ module Pod
 
     describe 'Private helpers' do
       before do
-        # TODO Use class methods
+        # TODO: Use class methods
         @command = Command::Spec.new(CLAide::ARGV.new([]))
       end
 
