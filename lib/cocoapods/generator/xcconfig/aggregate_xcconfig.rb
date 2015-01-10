@@ -49,7 +49,7 @@ module Pod
         def generate
           pod_targets = target.pod_targets_for_build_configuration(@configuration_name)
           config = {
-            'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
+            'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target),
             'OTHER_LIBTOOLFLAGS' => '$(OTHER_LDFLAGS)',
             'PODS_ROOT' => target.relative_pods_root,
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
@@ -70,7 +70,7 @@ module Pod
             header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
             build_settings = {
               # by `#import "…"`
-              'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(header_search_paths),
+              'HEADER_SEARCH_PATHS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths),
               # by `#import <…>`
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-isystem'),
             }
