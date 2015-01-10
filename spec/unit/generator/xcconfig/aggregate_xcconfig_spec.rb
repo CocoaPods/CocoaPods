@@ -98,7 +98,7 @@ module Pod
           behaves_like 'AggregateXCConfig'
 
           it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as header search paths' do
-            expected = "\"#{config.sandbox.public_headers.search_paths(:ios).join('" "')}\""
+            expected = "$(inherited) \"#{config.sandbox.public_headers.search_paths(:ios).join('" "')}\""
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == expected
           end
 
