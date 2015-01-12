@@ -70,11 +70,13 @@ module Pod
       def script
         script = install_resources_function
         resources_by_config.each do |config, resources|
-          script += %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
-          resources.each do |resource|
-            script += "  install_resource '#{resource}'\n"
+          unless resources.empty?
+            script += %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
+            resources.each do |resource|
+              script += "  install_resource '#{resource}'\n"
+            end
+            script += "fi\n"
           end
-          script += "fi\n"
         end
         script += RSYNC_CALL
         script += XCASSETS_COMPILE
