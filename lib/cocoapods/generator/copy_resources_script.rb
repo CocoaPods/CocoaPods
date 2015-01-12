@@ -1,21 +1,22 @@
 module Pod
   module Generator
     class CopyResourcesScript
-      # @return [Array<#to_s>] A list of files relative to the project pods
-      #         root.
+      # @return [Hash{String, Array{String}] A list of files relative to the
+      #         project pods root, keyed by build configuration.
       #
-      attr_reader :resources
+      attr_reader :resources_by_config
 
       # @return [Platform] The platform of the library for which the copy
       #         resources script is needed.
       #
       attr_reader :platform
 
-      # @param  [Array<#to_s>] resources @see resources
+      # @param  [Hash{String, Array{String}]
+      #         resources_by_config @see resources_by_config
       # @param  [Platform] platform @see platform
       #
-      def initialize(resources, platform)
-        @resources = resources
+      def initialize(resources_by_config, platform)
+        @resources_by_config = resources_by_config
         @platform = platform
       end
 
@@ -68,8 +69,12 @@ module Pod
       #
       def script
         script = install_resources_function
-        resources.each do |resource|
-          script += %(          install_resource "#{resource}"\n          )
+        resources_by_config.each do |config, resources|
+          script += %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
+          resources.each do |resource|
+            script += "  install_resource '#{resource}'\n"
+          end
+          script += "fi\n"
         end
         script += RSYNC_CALL
         script += XCASSETS_COMPILE
