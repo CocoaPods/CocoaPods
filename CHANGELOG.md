@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   instead of `note`.  
   [Hugo Tunius](https://github.com/K0nserv)
 
+* Copy only the resources required for the current build configuration.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2391](https://github.com/CocoaPods/CocoaPods/issues/2391)
+
 ##### Bug Fixes
 
 * Ensure that linting fails if xcodebuild doesn't successfully build your Pod.  

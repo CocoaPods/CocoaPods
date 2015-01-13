@@ -114,14 +114,15 @@ module Pod
         library_targets = target.pod_targets.reject do |pod_target|
           pod_target.should_build? && pod_target.requires_frameworks?
         end
-        file_accessors = library_targets.flat_map(&:file_accessors)
-        resource_paths = file_accessors.flat_map { |accessor| accessor.resources.flat_map { |res| res.relative_path_from(project.path.dirname) } }
-        resource_bundles = file_accessors.flat_map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name}.bundle" } }
-        resources = []
-        resources.concat(resource_paths)
-        resources.concat(resource_bundles)
-        resources << bridge_support_file if bridge_support_file
-        generator = Generator::CopyResourcesScript.new(resources, target.platform)
+        resources_by_config = {}
+        target.user_build_configurations.keys.each do |config|
+          file_accessors = library_targets.select { |t| t.include_in_build_config?(config) }.flat_map(&:file_accessors)
+          resource_paths = file_accessors.flat_map { |accessor| accessor.resources.flat_map { |res| res.relative_path_from(project.path.dirname) } }
+          resource_bundles = file_accessors.flat_map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name}.bundle" } }
+          resources_by_config[config] = resource_paths + resource_bundles
+          resources_by_config[config] << bridge_support_file if bridge_support_file
+        end
+        generator = Generator::CopyResourcesScript.new(resources_by_config, target.platform)
         generator.save_as(path)
         add_file_to_support_group(path)
       end

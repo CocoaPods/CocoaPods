@@ -1,21 +1,22 @@
 module Pod
   module Generator
     class CopyResourcesScript
-      # @return [Array<#to_s>] A list of files relative to the project pods
-      #         root.
+      # @return [Hash{String, Array{String}] A list of files relative to the
+      #         project pods root, keyed by build configuration.
       #
-      attr_reader :resources
+      attr_reader :resources_by_config
 
       # @return [Platform] The platform of the library for which the copy
       #         resources script is needed.
       #
       attr_reader :platform
 
-      # @param  [Array<#to_s>] resources @see resources
+      # @param  [Hash{String, Array{String}]
+      #         resources_by_config @see resources_by_config
       # @param  [Platform] platform @see platform
       #
-      def initialize(resources, platform)
-        @resources = resources
+      def initialize(resources_by_config, platform)
+        @resources_by_config = resources_by_config
         @platform = platform
       end
 
@@ -58,25 +59,35 @@ module Pod
       #
       def install_resources_function
         if use_external_strings_file?
-          INSTALL_RESOURCES_FUCTION
+          INSTALL_RESOURCES_FUNCTION
         else
-          INSTALL_RESOURCES_FUCTION.gsub(' --reference-external-strings-file', '')
+          INSTALL_RESOURCES_FUNCTION.gsub(' --reference-external-strings-file', '')
         end
       end
 
       # @return [String] The contents of the copy resources script.
       #
       def script
+        # Define install function
         script = install_resources_function
-        resources.each do |resource|
-          script += %(          install_resource "#{resource}"\n          )
+
+        # Call function for each configuration-dependent resource
+        resources_by_config.each do |config, resources|
+          unless resources.empty?
+            script += %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
+            resources.each do |resource|
+              script += "  install_resource '#{resource}'\n"
+            end
+            script += "fi\n"
+          end
         end
+
         script += RSYNC_CALL
         script += XCASSETS_COMPILE
         script
       end
 
-      INSTALL_RESOURCES_FUCTION = <<EOS
+      INSTALL_RESOURCES_FUNCTION = <<EOS
 #!/bin/sh
 set -e
 
