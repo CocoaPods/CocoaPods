@@ -144,6 +144,7 @@ module Pod
       def updated_search_index
         unless @updated_search_index
           if search_index_path.exist?
+            require 'yaml'
             stored_index = YAML.load(search_index_path.read)
             if stored_index && stored_index.is_a?(Hash)
               search_index = aggregate.update_search_index(stored_index)
