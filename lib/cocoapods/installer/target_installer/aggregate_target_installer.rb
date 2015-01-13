@@ -114,7 +114,6 @@ module Pod
         library_targets = target.pod_targets.reject do |pod_target|
           pod_target.should_build? && pod_target.requires_frameworks?
         end
-        file_accessors = library_targets.flat_map(&:file_accessors)
         resources_by_config = {}
         target.user_build_configurations.keys.each do |config|
           file_accessors = library_targets.select { |t| t.include_in_build_config?(config) }.flat_map(&:file_accessors)
