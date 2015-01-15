@@ -17,15 +17,15 @@ Creating possibility state for Reachability (= 3.1.0) (1 remaining)
   Creating possibility state for Reachability (= 3.1.0) (1 remaining)
     Attempting to activate Reachability (3.1.0)
     Found existing spec (Reachability (3.1.0))
-    Creating possibility state for JSONKit (4 remaining)
+    Creating possibility state for JSONKit (2 remaining)
       Attempting to activate JSONKit (1.5pre)
       Unsatisfied by requested spec
       Unwinding for conflict: JSONKit
-    Creating possibility state for JSONKit (3 remaining)
+    Creating possibility state for JSONKit (1 remaining)
       Attempting to activate JSONKit (1.4)
       Activated JSONKit at JSONKit (1.4)
       Requiring nested dependencies ()
-      Creating possibility state for JSONKit (4 remaining)
+      Creating possibility state for JSONKit (2 remaining)
         Attempting to activate JSONKit (1.5pre)
         Found existing spec (JSONKit (1.4))
 Finished resolution (5 steps) (Took <#DURATION#> seconds) (<#DATE#>)
@@ -102,7 +102,3 @@ Integrating target `Pods` (`SampleApp.xcodeproj` project)
 Integrating target `Pods-SampleApp_2` (`SampleApp.xcodeproj` project)
 
 Integrating target `Pods-test` (`SampleApp.xcodeproj` project)
-
-[!] Found multiple specifications for `JSONKit (1.4)`:
-- ROOT/spec/fixtures/spec-repos/master/Specs/JSONKit/1.4/JSONKit.podspec.json
-- ROOT/spec/fixtures/spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec
