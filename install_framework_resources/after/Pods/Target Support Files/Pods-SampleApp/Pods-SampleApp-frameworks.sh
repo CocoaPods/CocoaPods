@@ -32,6 +32,9 @@ install_framework()
   for lib in $swift_runtime_libs; do
     echo "rsync -av \"${SWIFT_STDLIB_PATH}/${lib}\" \"${destination}\""
     rsync -av "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"
+    if [ "${CODE_SIGNING_REQUIRED}" == "YES" ]; then
+      code_sign "${destination}/${lib}"
+    fi
   done
 }
 
