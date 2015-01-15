@@ -28,10 +28,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Hugo Tunius](https://github.com/K0nserv)
   [#2579](https://github.com/CocoaPods/CocoaPods/issues/2579)
 
-* Migrate local Ruby podspecs to JSON, allowing updating those pods to work.  
-  [Samuel Giddins](https://github.com/segiddins)
-  [#3038](https://github.com/CocoaPods/CocoaPods/issues/3038)
-
 
 ## 0.36.0.beta.1
 
