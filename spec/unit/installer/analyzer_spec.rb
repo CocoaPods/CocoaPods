@@ -54,7 +54,7 @@ module Pod
 
       it 'updates the repositories by default' do
         config.skip_repo_update = false
-        SourcesManager.expects(:update).twice
+        SourcesManager.expects(:update).once
         @analyzer.analyze
       end
 
@@ -552,9 +552,9 @@ module Pod
 
         describe '#sources' do
           describe 'when there are no explicit sources' do
-            it 'defaults to all sources' do
+            it 'defaults to the master spec repository' do
               @analyzer.send(:sources).map(&:url).should ==
-                SourcesManager.all.map(&:url)
+                ['https://github.com/CocoaPods/Specs.git']
             end
           end
 

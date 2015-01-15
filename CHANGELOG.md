@@ -6,6 +6,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Breaking
+
+* Changes the default spec repositories used from all configured spec
+  repositories, to the master spec repository when no spec repositories
+  are explicitly configured in a Podfile.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2946](https://github.com/CocoaPods/CocoaPods/issues/2946)
+
 ##### Enhancements
 
 * Xcodebuild warnings will now be reported as `warning` during linting
@@ -22,6 +30,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Kyle Fuller](https://github.com/kylef)
   [#2981](https://github.com/CocoaPods/CocoaPods/issues/2981)
   [cocoapods-trunk#33](https://github.com/CocoaPods/cocoapods-trunk/issues/33)
+
+* Clone the master spec repository when no spec repositories are explicitly
+  defined in the Podfile. This fixes problems using CocoaPods for the first
+  time without any explicit spec repositories.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2946](https://github.com/CocoaPods/CocoaPods/issues/2946)
 
 * Xcodebuild warnings with the string `error` in them will no longer be
   linted as errors if they are in fact warnings.  
