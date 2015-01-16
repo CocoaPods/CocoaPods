@@ -479,8 +479,8 @@ module Pod
             url = 'https://github.com/CocoaPods/Specs.git'
             [SourcesManager.find_or_create_source_with_url(url)]
           else
-            sources.map do |url|
-              SourcesManager.find_or_create_source_with_url(url)
+            sources.map do |source_url|
+              SourcesManager.find_or_create_source_with_url(source_url)
             end
           end
         end
