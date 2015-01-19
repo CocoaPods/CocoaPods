@@ -56,7 +56,7 @@ module Pod
 
       def generate_private_header_exports
         private_headers.reduce('') do |string, header|
-          string << %(  private header "#{header}\n")
+          string << %(  private header "#{header}"\n)
         end
       end
     end
