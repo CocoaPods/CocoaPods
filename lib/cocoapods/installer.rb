@@ -467,8 +467,8 @@ module Pod
     def set_target_dependencies
       frameworks_group = pods_project.frameworks_group
       aggregate_targets.each do |aggregate_target|
-        app_extension = aggregate_target.user_targets.map { |t| t.symbol_type }.include?(:app_extension)
-        set_app_extension_api_only_for_target(aggregate_target) if app_extension
+        app_extension = aggregate_target.user_targets.map(&:symbol_type).include?(:app_extension)
+        configure_app_extension_api_only_for_target(aggregate_target) if app_extension
 
         aggregate_target.pod_targets.each do |pod_target|
           unless pod_target.should_build?
@@ -480,7 +480,7 @@ module Pod
           end
 
           aggregate_target.native_target.add_dependency(pod_target.native_target)
-          set_app_extension_api_only_for_target(pod_target) if app_extension
+          configure_app_extension_api_only_for_target(pod_target) if app_extension
 
           pod_target.dependencies.each do |dep|
             unless dep == pod_target.pod_name
@@ -492,7 +492,7 @@ module Pod
 
               next unless pod_dependency_target.should_build?
               pod_target.native_target.add_dependency(pod_dependency_target.native_target)
-              set_app_extension_api_only_for_target(pod_dependency_target) if app_extension
+              configure_app_extension_api_only_for_target(pod_dependency_target) if app_extension
 
               if pod_target.requires_frameworks?
                 product_ref = frameworks_group.files.find { |f| f.path == pod_dependency_target.product_name } ||
@@ -703,7 +703,7 @@ module Pod
     # Sets the APPLICATION_EXTENSION_API_ONLY build setting to YES for all
     # configurations of the given target
     #
-    def set_app_extension_api_only_for_target(target)
+    def configure_app_extension_api_only_for_target(target)
       target.native_target.build_configurations.each do |config|
         config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'YES'
       end
