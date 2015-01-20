@@ -418,24 +418,42 @@ module Pod
       #--------------------------------------#
 
       describe '#set_target_dependencies' do
-        it 'sets resource bundles for not build pods as target dependencies of the user target' do
+        before do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile)
-          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
-          pod_target.stubs(:resource_bundle_targets).returns(['dummy'])
-          pod_target.stubs(:should_build? => false)
-          target = AggregateTarget.new(target_definition, config.sandbox)
 
-          mock_target = mock('PodNativeTarget')
-          mock_target.expects(:add_dependency).with('dummy')
+          target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile)
+          @pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          @target = AggregateTarget.new(target_definition, config.sandbox)
+
+          @mock_target = mock('PodNativeTarget')
 
           mock_project = mock('PodsProject', :frameworks_group => mock('FrameworksGroup'))
           @installer.stubs(:pods_project).returns(mock_project)
 
-          target.stubs(:native_target).returns(mock_target)
-          target.stubs(:pod_targets).returns([pod_target])
-          @installer.stubs(:aggregate_targets).returns([target])
+          @target.stubs(:native_target).returns(@mock_target)
+          @target.stubs(:pod_targets).returns([@pod_target])
+          @installer.stubs(:aggregate_targets).returns([@target])
+        end
+
+        it 'sets resource bundles for not build pods as target dependencies of the user target' do
+          @pod_target.stubs(:resource_bundle_targets).returns(['dummy'])
+          @pod_target.stubs(:should_build? => false)
+          @mock_target.expects(:add_dependency).with('dummy')
+
           @installer.send(:set_target_dependencies)
+        end
+
+        it 'configures APPLICATION_EXTENSION_API_ONLY for app extension targets' do
+          mock_user_target = mock('UserTarget', :symbol_type => :app_extension)
+          @target.stubs(:user_targets).returns([mock_user_target])
+
+          build_settings = {}
+          mock_configuration = mock('BuildConfiguration', :build_settings => build_settings)
+          @mock_target.stubs(:build_configurations).returns([mock_configuration])
+
+          @installer.send(:set_target_dependencies)
+
+          build_settings.should == { 'APPLICATION_EXTENSION_API_ONLY' => 'YES' }
         end
 
         xit 'sets the pod targets as dependencies of the aggregate target' do
