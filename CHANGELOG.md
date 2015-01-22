@@ -51,6 +51,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dustin Clark](https://github.com/clarkda)
   [#2558](https://github.com/CocoaPods/CocoaPods/issues/2558)
 
+* Pods referenced via the `:podspec` option will have their podspecs properly
+  parsed in the local directory if the path points to a local file.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
 ## 0.36.0.beta.1
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.35.0...0.36.0.beta.1)
