@@ -12,6 +12,12 @@ module Pod
 
 #{'――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}
 
+### Command
+
+```
+#{original_command}
+```
+
 ### Report
 
 * What did you do?
@@ -136,6 +142,10 @@ EOS
               "#{repo.basename} - #{url} @ #{sha}"
             end
           end
+        end
+
+        def original_command
+          "#{$0} #{ARGV.join(' ')}"
         end
       end
     end
