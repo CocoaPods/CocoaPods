@@ -172,7 +172,7 @@ module Pod
               if SourcesManager.git_repo?(source.repo)
                 SourcesManager.update(source.name)
               else
-                UI.warn "Skipping `#{source.name}` update because the repository is not a git source repository."
+                UI.message "Skipping `#{source.name}` update because the repository is not a git source repository."
               end
             end
           end
