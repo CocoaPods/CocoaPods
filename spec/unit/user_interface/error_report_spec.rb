@@ -18,6 +18,12 @@ module Pod
 
 ――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
+### Command
+
+```
+/usr/bin/command arg1 arg2
+```
+
 ### Report
 
 * What did you do?
@@ -94,6 +100,7 @@ EOS
         @report.stubs(:installed_plugins).returns('cocoapods' => Pod::VERSION,
                                                   'cocoapods-core' => Pod::VERSION,
                                                   'cocoapods-plugins' => '1.2.3')
+        @report.stubs(:original_command).returns('/usr/bin/command arg1 arg2')
         report = remove_color(@report.report(@exception))
         report.should == expected
       end
