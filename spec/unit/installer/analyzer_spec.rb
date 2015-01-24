@@ -83,11 +83,16 @@ module Pod
           pod 'BananaLib', '1.0'
         end
         config.skip_repo_update = false
+        config.verbose = true
+
+        source = Source.new(non_git_repo)
 
         SourcesManager.expects(:update).never
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
-        analyzer.stubs(:sources).returns([Source.new(non_git_repo)])
+        analyzer.stubs(:sources).returns([source])
         analyzer.analyze
+
+        UI.output.should.match /Skipping `#{source.name}` update because the repository is not a git source repository./
 
         FileUtils.rm_rf(non_git_repo)
       end
