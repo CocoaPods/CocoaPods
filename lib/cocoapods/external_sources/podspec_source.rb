@@ -10,10 +10,10 @@ module Pod
         title = "Fetching podspec for `#{name}` #{description}"
         UI.titled_section(title,  :verbose_prefix => '-> ') do
           podspec_path = Pathname(podspec_uri)
+          is_json = podspec_path.extname == '.json'
           if podspec_path.exist?
-            store_podspec(sandbox, podspec_path, podspec_path.extname == '.json')
+            store_podspec(sandbox, podspec_path, is_json)
           else
-            is_json = podspec_uri.split('.').last == 'json'
             require 'open-uri'
             begin
               open(podspec_uri) { |io| store_podspec(sandbox, io.read, is_json) }
