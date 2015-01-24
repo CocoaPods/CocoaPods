@@ -145,7 +145,7 @@ EOS
         end
 
         def original_command
-          "#{$0} #{ARGV.join(' ')}"
+          "#{$PROGRAM_NAME} #{ARGV.join(' ')}"
         end
       end
     end
