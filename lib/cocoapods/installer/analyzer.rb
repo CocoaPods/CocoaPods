@@ -167,7 +167,7 @@ module Pod
       #
       def update_repositories_if_needed
         unless config.skip_repo_update?
-          UI.section 'Updating spec repositories' do
+          UI.titled_section '  Updating spec repositories' do
             sources.each { |source| SourcesManager.update(source.name) }
           end
         end
@@ -313,7 +313,7 @@ module Pod
 
         verify_no_pods_with_different_sources!
         unless dependencies_to_fetch.empty?
-          UI.section 'Fetching external sources' do
+          UI.titled_section '  Fetching external sources' do
             dependencies_to_fetch.sort.each do |dependency|
               fetch_external_source(dependency, !pods_to_fetch.include?(dependency.name))
             end
