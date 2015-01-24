@@ -163,12 +163,18 @@ module Pod
         end
       end
 
-      # Updates the source repositories unless the config indicates to skip it.
+      # Updates the git source repositories unless the config indicates to skip it.
       #
       def update_repositories_if_needed
         unless config.skip_repo_update?
           UI.section 'Updating spec repositories' do
-            sources.each { |source| SourcesManager.update(source.name) }
+            sources.each do |source|
+              if SourcesManager.git_repo?(source.repo)
+                SourcesManager.update(source.name)
+              else
+                UI.message "Skipping `#{source.name}` update because the repository is not a git source repository."
+              end
+            end
           end
         end
       end

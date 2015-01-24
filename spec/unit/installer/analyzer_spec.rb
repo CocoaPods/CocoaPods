@@ -71,6 +71,32 @@ module Pod
         @analyzer.analyze
       end
 
+      it 'does not update non-git repositories' do
+        tmp_directory = '/private/tmp/CocoaPods/'
+        FileUtils.mkdir_p(tmp_directory)
+        FileUtils.cp_r(ROOT + 'spec/fixtures/spec-repos/test_repo/', tmp_directory)
+        non_git_repo = tmp_directory + 'test_repo'
+
+        podfile = Podfile.new do
+          platform :ios, '8.0'
+          xcodeproj 'SampleProject/SampleProject'
+          pod 'BananaLib', '1.0'
+        end
+        config.skip_repo_update = false
+        config.verbose = true
+
+        source = Source.new(non_git_repo)
+
+        SourcesManager.expects(:update).never
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        analyzer.stubs(:sources).returns([source])
+        analyzer.analyze
+
+        UI.output.should.match /Skipping `#{source.name}` update because the repository is not a git source repository./
+
+        FileUtils.rm_rf(non_git_repo)
+      end
+
       #--------------------------------------#
 
       it 'generates the libraries which represent the target definitions' do
