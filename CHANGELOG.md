@@ -59,6 +59,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   parsed in the local directory if the path points to a local file.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Fix an issue where using Swift frameworks in an Objective-C host application
+  causes an error because the Swift frameworks we're not code signed.  
+  [Joseph Ross](https://github.com/jrosssavant)
+  [#3008](https://github.com/CocoaPods/CocoaPods/issues/3008)
+
 
 ## 0.36.0.beta.1
 
