@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Set the APPLICATION_EXTENSION_API_ONLY build setting if integrating with an app extension target.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#2980](https://github.com/CocoaPods/CocoaPods/issues/2980)
+
 * Xcodebuild warnings will now be reported as `warning` during linting
   instead of `note`.  
   [Hugo Tunius](https://github.com/K0nserv)

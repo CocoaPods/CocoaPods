@@ -55,6 +55,7 @@ module Pod
     #         will be integrated by this target.
     #
     def user_targets(project = nil)
+      return [] unless user_project_path
       project ||= Xcodeproj::Project.open(user_project_path)
       user_target_uuids.map do |uuid|
         native_target = project.objects_by_uuid[uuid]
