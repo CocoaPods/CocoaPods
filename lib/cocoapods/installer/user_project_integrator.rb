@@ -94,7 +94,7 @@ module Pod
           end
 
         else
-          UI.notice "From now on use `#{workspace_path.basename}`."
+          UI.notice "Please close any current Xcode sessions and use `#{workspace_path.basename}` for this project from now on."
           workspace = Xcodeproj::Workspace.new(*file_references)
           workspace.save_as(workspace_path)
         end

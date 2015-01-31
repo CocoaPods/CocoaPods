@@ -4,6 +4,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* Explicitly inform the user to close existing project when switching to
+  a workspace for the first time.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#2996](https://github.com/CocoaPods/CocoaPods/issues/2996)
+
+
 ## 0.36.0.beta.2
 
 [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.21.0...0.21.2)
