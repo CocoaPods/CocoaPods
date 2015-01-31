@@ -20,7 +20,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3102](https://github.com/CocoaPods/CocoaPods/issues/3102)
 
-* Correct escaping of resource bundles in 'Copy Pods Resources' script
+* Correct escaping of resource bundles in 'Copy Pods Resources' script.  
   [Seán Labastille](https://github.com/flufff42)
   [#3082](https://github.com/CocoaPods/CocoaPods/issues/3082)
 
