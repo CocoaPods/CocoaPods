@@ -63,7 +63,7 @@ Generating Pods project
 
 Integrating client projects
 
-[!] From now on use `Workspace.xcworkspace`.
+[!] Please close any current Xcode sessions and use `Workspace.xcworkspace` for this project from now on.
 
 Integrating target `Pods-SampleApp_1` (`SampleApp_1.xcodeproj` project)
   - Removing (Pods/Pods-SampleApp_1.xcconfig)
