@@ -371,6 +371,18 @@ module Pod
         validator.result_type.should == :error
       end
 
+      it 'runs xcodebuild with correct arguments for code signing' do
+        Validator.any_instance.unstub(:xcodebuild)
+        validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+        validator.stubs(:check_file_patterns)
+        validator.stubs(:validate_url)
+        validator.expects(:`).with('which xcodebuild').twice.returns('/usr/bin/xcodebuild')
+        command = 'xcodebuild clean build -target Pods CODE_SIGN_IDENTITY=-'
+        validator.expects(:`).with("#{command} 2>&1").once.returns('')
+        validator.expects(:`).with("#{command} -sdk iphonesimulator 2>&1").once.returns('')
+        validator.validate
+      end
+
       it 'does filter InputFile errors completely' do
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
