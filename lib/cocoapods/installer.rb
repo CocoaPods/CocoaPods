@@ -468,9 +468,10 @@ module Pod
       frameworks_group = pods_project.frameworks_group
       aggregate_targets.each do |aggregate_target|
         is_app_extension = aggregate_target.user_targets.map(&:symbol_type).include?(:app_extension)
-        configure_app_extension_api_only_for_target(aggregate_target) if is_app_extension
 
         aggregate_target.pod_targets.each do |pod_target|
+          configure_app_extension_api_only_for_target(aggregate_target) if is_app_extension
+
           unless pod_target.should_build?
             pod_target.resource_bundle_targets.each do |resource_bundle_target|
               aggregate_target.native_target.add_dependency(resource_bundle_target)

@@ -13,6 +13,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Kyle Fuller](https://github.com/kylef)
   [#2996](https://github.com/CocoaPods/CocoaPods/issues/2996)
 
+##### Bug Fixes
+
+* Fixed installation for app-extension targets which had no dependencies
+  configured in the Podfile.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3102](https://github.com/CocoaPods/CocoaPods/issues/3102)
+
 
 ## 0.36.0.beta.2
 

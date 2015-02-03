@@ -456,6 +456,18 @@ module Pod
           build_settings.should == { 'APPLICATION_EXTENSION_API_ONLY' => 'YES' }
         end
 
+        it 'does not try to set APPLICATION_EXTENSION_API_ONLY if there are no pod targets' do
+          lambda do
+            mock_user_target = mock('UserTarget', :symbol_type => :app_extension)
+            @target.stubs(:user_targets).returns([mock_user_target])
+
+            @target.stubs(:native_target).returns(nil)
+            @target.stubs(:pod_targets).returns([])
+
+            @installer.send(:set_target_dependencies)
+          end.should.not.raise NoMethodError
+        end
+
         xit 'sets the pod targets as dependencies of the aggregate target' do
         end
 
