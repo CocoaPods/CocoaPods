@@ -76,7 +76,7 @@ module Pod
           unless resources.empty?
             script += %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
             resources.each do |resource|
-              script += "  install_resource '#{resource}'\n"
+              script += %(  install_resource "#{resource}"\n)
             end
             script += "fi\n"
           end

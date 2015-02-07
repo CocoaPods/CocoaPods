@@ -24,7 +24,18 @@ module Pod
       script = generator.send(:script)
       script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "Debug" ]]; then
-          install_resource 'Lookout.framework'
+          install_resource "Lookout.framework"
+        fi
+      eos
+    end
+
+    it 'adds resource bundles with a call wrapped in an if statement' do
+      resources = { 'Debug' => %w(${BUILT_PRODUCTS_DIR}/Resources.bundle) }
+      generator = Pod::Generator::CopyResourcesScript.new(resources, Platform.new(:ios, '6.0'))
+      script = generator.send(:script)
+      script.should.include <<-eos.strip_heredoc
+        if [[ "$CONFIGURATION" == "Debug" ]]; then
+          install_resource "${BUILT_PRODUCTS_DIR}/Resources.bundle"
         fi
       eos
     end
