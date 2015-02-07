@@ -88,7 +88,7 @@ module Pod
               validator.validate
             rescue => e
               raise Informative, "The `#{podspec}` specification does not validate." \
-                                 "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
+                                 "\n\n#{e.message}"
             end
             raise Informative, "The `#{podspec}` specification does not validate." unless validator.validated?
           end
