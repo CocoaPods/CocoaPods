@@ -66,6 +66,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3038](https://github.com/CocoaPods/CocoaPods/issues/3038)
 
+* Removing grep color mark up in embed frameworks script.
+  [Adriano Bonat](https://github.com/tanob)
+  [#3117](https://github.com/CocoaPods/CocoaPods/issues/3117)
 
 ## 0.36.0.beta.2
 
