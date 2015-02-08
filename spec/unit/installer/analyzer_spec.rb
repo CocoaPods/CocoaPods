@@ -72,7 +72,7 @@ module Pod
       end
 
       it 'does not update non-git repositories' do
-        tmp_directory = '/private/tmp/CocoaPods/'
+        tmp_directory = Pathname(Dir.tmpdir) + 'CocoaPods'
         FileUtils.mkdir_p(tmp_directory)
         FileUtils.cp_r(ROOT + 'spec/fixtures/spec-repos/test_repo/', tmp_directory)
         non_git_repo = tmp_directory + 'test_repo'

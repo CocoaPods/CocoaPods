@@ -88,7 +88,7 @@ module Pod
         validator.quick = true
         validator.stubs(:validate_url)
         validator.validate
-        validator.validation_dir.should.be == Pathname.new('/private/tmp/CocoaPods/Lint')
+        validator.validation_dir.should.be == Pathname.new(ENV['TMPDIR']) + 'CocoaPods/Lint'
       end
     end
 

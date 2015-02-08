@@ -183,7 +183,7 @@ module Pod
     # @return [Pathname] the temporary directory used by the linter.
     #
     def validation_dir
-      Pathname.new(File.join(Pathname.new('/tmp').realpath, 'CocoaPods/Lint'))
+      Pathname(Dir.tmpdir) + 'CocoaPods/Lint'
     end
 
     #-------------------------------------------------------------------------#
@@ -510,7 +510,7 @@ module Pod
           l.include?('note: ') && (l !~ /expanded from macro/)
       end
       selected_lines.map do |l|
-        new = l.gsub(%r{/tmp/CocoaPods/Lint/Pods/}, '')
+        new = l.gsub(%r{#{validation_dir}/Pods/}, '')
         new.gsub!(/^ */, ' ')
       end
     end

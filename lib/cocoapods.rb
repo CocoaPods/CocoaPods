@@ -16,6 +16,7 @@ end
 
 module Pod
   require 'pathname'
+  require 'tmpdir'
 
   require 'cocoapods/gem_version'
   require 'cocoapods-core'
