@@ -11,7 +11,7 @@ install_framework()
   local source="${BUILT_PRODUCTS_DIR}/Pods-OS X App/$1"
   local destination="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 
-  if [ -L ${source} ]; then
+  if [ -L "${source}" ]; then
       echo "Symlinked..."
       source=$(readlink "${source}")
   fi
