@@ -57,7 +57,7 @@ module Pod
             local source="${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1"
             local destination="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 
-            if [ -L ${source} ]; then
+            if [ -L "${source}" ]; then
                 echo "Symlinked..."
                 source=$(readlink "${source}")
             fi
