@@ -13,7 +13,7 @@ module Pod
       end
 
       def initialize(argv)
-        config.skip_repo_update = argv.flag?('repo-update', config.skip_repo_update)
+        config.skip_repo_update = !argv.flag?('repo-update', !config.skip_repo_update)
         super
       end
 
@@ -96,6 +96,7 @@ module Pod
 
       def spec_sets
         @spec_sets ||= begin
+          analyzer.send(:update_repositories_if_needed)
           aggregate = Source::Aggregate.new(analyzer.sources.map(&:repo))
           installed_pods.map do |pod_name|
             aggregate.search(Dependency.new(pod_name))
