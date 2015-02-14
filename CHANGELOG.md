@@ -8,7 +8,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Build for iOS simulator only during validation. This allows validation without having 
+* Build for iOS simulator only during validation. This allows validation without having
   provisioning profiles set up.  
   [Boris Bügling](https://github.com/neonichu)
   [#3083](https://github.com/CocoaPods/CocoaPods/issues/3083)
@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   `--[no-]repo-update` flag.  
   [Samuel Giddins](https://github.com/segiddins)
   [#3137](https://github.com/CocoaPods/CocoaPods/issues/3137)
+
+* Fix the `OTHER_SWIFT_FLAGS` generated, so `#if COCOAPODS` works in Swift.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2983](https://github.com/CocoaPods/CocoaPods/issues/2983)
 
 
 ## 0.36.0.beta.2
