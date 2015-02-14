@@ -124,6 +124,12 @@ module Pod
         header_files - private_headers
       end
 
+      # @return [Array<Pathname>] The private headers of the specification.
+      #
+      def private_headers
+        private_header_files
+      end
+
       # @return [Hash{ Symbol => Array<Pathname> }] the resources of the
       #         specification grouped by destination.
       #
