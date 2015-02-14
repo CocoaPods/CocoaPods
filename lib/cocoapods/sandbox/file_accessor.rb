@@ -212,7 +212,7 @@ module Pod
         end
       end
 
-      # @return [Pathname] The path of the custom module map file of the
+      # @return [Pathname, Nil] The path of the custom module map file of the
       #         specification, if specified.
       def module_map
         if module_map = spec_consumer.spec.root.module_map
