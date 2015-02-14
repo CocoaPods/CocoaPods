@@ -8,6 +8,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Build for iOS simulator only during validation. This allows validation without having 
+  provisioning profiles set up.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3083](https://github.com/CocoaPods/CocoaPods/issues/3083)
+  [Swift#13](https://github.com/CocoaPods/swift/issues/13)
+
 * Explicitly inform the user to close existing project when switching to
   a workspace for the first time.  
   [Kyle Fuller](https://github.com/kylef)

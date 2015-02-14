@@ -519,8 +519,11 @@ module Pod
     #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
-      UI.puts 'xcodebuild clean build -target Pods' if config.verbose?
-      output = `xcodebuild clean build -target Pods 2>&1`
+      command = 'xcodebuild clean build -target Pods CODE_SIGN_IDENTITY=-'
+      command << ' -sdk iphonesimulator' if consumer.platform_name == :ios
+
+      UI.puts command if config.verbose?
+      output = `#{command} 2>&1`
 
       unless $?.success?
         message = 'Returned a unsuccessful exit code.'
