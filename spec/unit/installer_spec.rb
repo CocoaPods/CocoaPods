@@ -161,7 +161,7 @@ module Pod
         config.integrate_targets = false
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
-        should.raise { @installer.install! }.message.should.match /conflict.*monkey/
+        should.raise(Informative) { @installer.install! }.message.should.match /conflict.*monkey/
       end
     end
 

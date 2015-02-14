@@ -337,7 +337,10 @@ module Pod
           frameworks += pod_targets.select { |pt| pt.should_build? && pt.requires_frameworks? }.map(&:product_module_name)
 
           duplicates = frameworks.group_by { |f| f }.select { |_, v| v.size > 1 }.keys
-          raise "The '#{aggregate_target.label}' target has frameworks with conflicting names: #{duplicates.to_sentence}." unless duplicates.empty?
+          unless duplicates.empty?
+            raise Informative, "The '#{aggregate_target.label}' target has " \
+              "frameworks with conflicting names: #{duplicates.to_sentence}."
+          end
         end
       end
     end
