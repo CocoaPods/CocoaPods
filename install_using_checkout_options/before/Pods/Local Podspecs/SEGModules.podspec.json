@@ -1,0 +1,22 @@
+{
+  "name": "SEGModules",
+  "version": "0.1.0",
+  "summary": "A library to bring modules/mixins/concrete protocols to Objective-C.",
+  "homepage": "https://github.com/segiddins/SEGModules",
+  "license": "MIT",
+  "authors": {
+    "Samuel E. Giddins": "segiddins@segiddins.me"
+  },
+  "source": {
+    "git": "https://github.com/segiddins/SEGModules.git",
+    "tag": "v0.1.0"
+  },
+  "requires_arc": false,
+  "source_files": "Classes",
+  "ios": {
+    "exclude_files": "Classes/osx"
+  },
+  "osx": {
+    "exclude_files": "Classes/ios"
+  }
+}
