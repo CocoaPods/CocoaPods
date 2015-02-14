@@ -37,7 +37,7 @@ module Pod
     end
 
     it 'removes sandbox lockfile checkout options for the pod' do
-      config.sandbox.store_checkout_source('Reachability', http: 'https://example.com')
+      config.sandbox.store_checkout_source('Reachability', :http => 'https://example.com')
       @subject.fetch(config.sandbox)
       config.sandbox.checkout_sources['pod'].should.be.nil
     end
