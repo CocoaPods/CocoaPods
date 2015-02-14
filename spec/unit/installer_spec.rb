@@ -49,6 +49,7 @@ module Pod
         @installer.stubs(:resolve_dependencies)
         @installer.stubs(:download_dependencies)
         @installer.stubs(:determine_dependency_product_types)
+        @installer.stubs(:verify_no_duplicate_framework_names)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
         @installer.stubs(:run_plugins_post_install_hooks)
@@ -139,6 +140,28 @@ module Pod
           'Pods-OrangeFramework',
           'Pods-monkey',
         ]
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe '#verify_no_duplicate_framework_names' do
+      it 'detects duplicate framework names' do
+        Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks).returns([Pathname('monkey.framework')])
+        fixture_path = ROOT + 'spec/fixtures'
+        config.repos_dir = fixture_path + 'spec-repos'
+        podfile = Pod::Podfile.new do
+          platform :ios, '8.0'
+          xcodeproj 'SampleProject/SampleProject'
+          pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
+          pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+        end
+        lockfile = generate_lockfile
+        config.integrate_targets = false
+
+        @installer = Installer.new(config.sandbox, podfile, lockfile)
+        should.raise { @installer.install! }.message.should.match /conflict.*monkey/
       end
     end
 

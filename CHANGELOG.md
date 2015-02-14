@@ -19,6 +19,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Kyle Fuller](https://github.com/kylef)
   [#2996](https://github.com/CocoaPods/CocoaPods/issues/2996)
 
+* Automatically detect conflicts between framework names.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2943](https://github.com/CocoaPods/CocoaPods/issues/2943)
+
 ##### Bug Fixes
 
 * Fixed installation for app-extension targets which had no dependencies
