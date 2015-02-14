@@ -402,6 +402,10 @@ module Pod
         unless file_accessor.license || spec.license && (spec.license[:type] == 'Public Domain' || spec.license[:text])
           warning('license', 'Unable to find a license file')
         end
+
+        if spec.module_map && !file_accessor.module_map.exist?
+          error('module_map', "Unable to find the specified module map file.")
+        end
       end
     end
 
