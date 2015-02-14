@@ -52,6 +52,7 @@ module Pod
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
         project.new_target(:application, 'AppA', :ios)
         project.new_target(:application, 'AppB', :ios)
+        project.new_target(:application, "App'C", :ios)
         project.save
 
         run_command('init')
@@ -60,6 +61,7 @@ module Pod
         config.podfile.target_definitions.length.should == project.targets.length + 1
         config.podfile.target_definitions['AppA'].nil?.should == false
         config.podfile.target_definitions['AppB'].nil?.should == false
+        config.podfile.target_definitions["App'C"].nil?.should == false
       end
     end
 

@@ -72,7 +72,7 @@ module Pod
       # @return [String] the text for the target module
       #
       def target_module(target)
-        target_module = "\ntarget '#{target.name}' do\n"
+        target_module = "\ntarget '#{target.name.gsub(/'/, "\\\\\'")}' do\n"
 
         if target.name =~ /tests?/i
           target_module << template_contents(config.default_test_podfile_path)

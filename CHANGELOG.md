@@ -39,6 +39,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2983](https://github.com/CocoaPods/CocoaPods/issues/2983)
 
+* Output a properly-formed `Podfile` when running `pod init` with a target that
+  contains a `'` in its name.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3136](https://github.com/CocoaPods/CocoaPods/issues/3136)
+
 
 ## 0.36.0.beta.2
 
