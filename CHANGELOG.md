@@ -23,6 +23,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2943](https://github.com/CocoaPods/CocoaPods/issues/2943)
 
+* Use the proper `TMPDIR` for the CocoaPods process, instead of blindly using
+  `/tmp`.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Fixed installation for app-extension targets which had no dependencies
