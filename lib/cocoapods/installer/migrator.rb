@@ -52,6 +52,14 @@ module Pod
         def migrate_to_0_36(sandbox)
           UI.message('Migrating to CocoaPods 0.36') do
             move(sandbox.root + 'Headers/Build', sandbox.root + 'Headers/Private')
+
+            sandbox.specifications_root.children.each do |child|
+              next unless child.basename.to_s =~ /\.podspec$/
+              spec = Specification.from_file(child)
+              child.delete
+              child = Pathname("#{child}.json")
+              child.write(spec.to_pretty_json)
+            end
           end
         end
 

@@ -90,6 +90,7 @@ module Pod
       resolve_dependencies
       download_dependencies
       determine_dependency_product_types
+      verify_no_duplicate_framework_names
       generate_pods_project
       integrate_user_project if config.integrate_targets?
       perform_post_install_actions
@@ -323,6 +324,23 @@ module Pod
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
           pod_target.host_requires_frameworks = aggregate_target.requires_frameworks?
+        end
+      end
+    end
+
+    def verify_no_duplicate_framework_names
+      aggregate_targets.each do |aggregate_target|
+        aggregate_target.user_build_configurations.keys.each do |config|
+          pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
+          vendored_frameworks = pod_targets.flat_map(&:file_accessors).flat_map(&:vendored_frameworks)
+          frameworks = vendored_frameworks.map { |fw| fw.basename('.framework') }
+          frameworks += pod_targets.select { |pt| pt.should_build? && pt.requires_frameworks? }.map(&:product_module_name)
+
+          duplicates = frameworks.group_by { |f| f }.select { |_, v| v.size > 1 }.keys
+          unless duplicates.empty?
+            raise Informative, "The '#{aggregate_target.label}' target has " \
+              "frameworks with conflicting names: #{duplicates.to_sentence}."
+          end
         end
       end
     end

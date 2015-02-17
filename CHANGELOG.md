@@ -8,10 +8,20 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Build for iOS simulator only during validation. This allows validation without having
+  provisioning profiles set up.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3083](https://github.com/CocoaPods/CocoaPods/issues/3083)
+  [Swift#13](https://github.com/CocoaPods/swift/issues/13)
+
 * Explicitly inform the user to close existing project when switching to
   a workspace for the first time.  
   [Kyle Fuller](https://github.com/kylef)
   [#2996](https://github.com/CocoaPods/CocoaPods/issues/2996)
+
+* Automatically detect conflicts between framework names.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2943](https://github.com/CocoaPods/CocoaPods/issues/2943)
 
 ##### Bug Fixes
 
@@ -23,6 +33,29 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Correct escaping of resource bundles in 'Copy Pods Resources' script.  
   [Seán Labastille](https://github.com/flufff42)
   [#3082](https://github.com/CocoaPods/CocoaPods/issues/3082)
+
+* Correctly update sources when calling `pod outdated`, and also respect the
+  `--[no-]repo-update` flag.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3137](https://github.com/CocoaPods/CocoaPods/issues/3137)
+
+* Fix the `OTHER_SWIFT_FLAGS` generated, so `#if COCOAPODS` works in Swift.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2983](https://github.com/CocoaPods/CocoaPods/issues/2983)
+
+* Output a properly-formed `Podfile` when running `pod init` with a target that
+  contains a `'` in its name.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3136](https://github.com/CocoaPods/CocoaPods/issues/3136)
+
+* Remove the stored lockfile checkout source when switching to a development
+  pod.  
+  [Samuel Giddins][https://github.com/segiddins]
+  [#3141](https://github.com/CocoaPods/CocoaPods/issues/3141)
+
+* Migrate local Ruby podspecs to JSON, allowing updating those pods to work.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3038](https://github.com/CocoaPods/CocoaPods/issues/3038)
 
 
 ## 0.36.0.beta.2

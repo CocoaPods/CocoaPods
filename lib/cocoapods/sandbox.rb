@@ -354,6 +354,18 @@ module Pod
       checkout_sources[root_name] = source
     end
 
+    # Removes the checkout source of a Pod.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [void]
+    #
+    def remove_checkout_source(name)
+      root_name = Specification.root_name(name)
+      checkout_sources.delete(root_name)
+    end
+
     # @return [Hash{String=>Hash}] The options necessary to recreate the exact
     #         checkout of a given Pod grouped by its name.
     #
