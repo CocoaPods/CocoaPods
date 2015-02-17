@@ -97,7 +97,7 @@ module Pod
         end
 
         def podspecs_tmp_dir
-          Pathname.new(Dir.tmpdir) + '/CocoaPods/Lint_podspec'
+          Pathname.new(Dir.tmpdir) + 'CocoaPods/Lint_podspec'
         end
       end
     end
