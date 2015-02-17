@@ -66,6 +66,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3038](https://github.com/CocoaPods/CocoaPods/issues/3038)
 
+* Don't re-copy the Swift standard runtime libraries when possible.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3131](https://github.com/CocoaPods/CocoaPods/issues/3131)
+
 
 ## 0.36.0.beta.2
 
