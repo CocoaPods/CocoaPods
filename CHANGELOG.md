@@ -25,6 +25,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Added support for .tpp C++ header files in specs.
+  [Honza Dvorsky](https://github.com/czechboy0)
+  [#3129](https://github.com/CocoaPods/CocoaPods/pull/3129)
+
 * Fixed installation for app-extension targets which had no dependencies
   configured in the Podfile.  
   [Boris Bügling](https://github.com/neonichu)
