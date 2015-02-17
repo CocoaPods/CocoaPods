@@ -364,7 +364,9 @@ module Pod
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
         validator.stubs(:`).returns('Output')
-        $?.stubs(:success?).returns(false)
+        status = mock()
+        status.stubs(:success?).returns(false)
+        validator.stubs(:_xcodebuild).returns(['Output', status])
         validator.validate
         first = validator.results.map(&:to_s).first
         first.should.include '[xcodebuild] Returned a unsuccessful exit code'
