@@ -183,7 +183,7 @@ module Pod
     # @return [Pathname] the temporary directory used by the linter.
     #
     def validation_dir
-      Pathname.new(File.join(Pathname.new('/tmp').realpath, 'CocoaPods/Lint'))
+      Pathname(Dir.tmpdir) + 'CocoaPods/Lint'
     end
 
     #-------------------------------------------------------------------------#
@@ -510,7 +510,7 @@ module Pod
           l.include?('note: ') && (l !~ /expanded from macro/)
       end
       selected_lines.map do |l|
-        new = l.gsub(%r{/tmp/CocoaPods/Lint/Pods/}, '')
+        new = l.gsub(%r{#{validation_dir}/Pods/}, '')
         new.gsub!(/^ */, ' ')
       end
     end
@@ -521,17 +521,26 @@ module Pod
     def xcodebuild
       command = 'xcodebuild clean build -target Pods CODE_SIGN_IDENTITY=-'
       command << ' -sdk iphonesimulator' if consumer.platform_name == :ios
+      output, status = _xcodebuild "#{command} 2>&1"
 
-      UI.puts command if config.verbose?
-      output = `#{command} 2>&1`
-
-      unless $?.success?
+      unless status.success?
         message = 'Returned a unsuccessful exit code.'
         message += ' You can use `--verbose` for more information.' unless config.verbose?
         error('xcodebuild', message)
       end
 
       output
+    end
+
+    # Executes the given command in the current working directory.
+    #
+    # @return [(String, Status)] The output of the given command and its
+    #         resulting status.
+    #
+    def _xcodebuild(command)
+      UI.puts command if config.verbose
+      output = `#{command}`
+      [output, $?]
     end
 
     #-------------------------------------------------------------------------#
