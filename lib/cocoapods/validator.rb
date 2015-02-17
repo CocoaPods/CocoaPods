@@ -540,7 +540,7 @@ module Pod
     def _xcodebuild(command)
       UI.puts command if config.verbose
       output = `#{command}`
-      return output, $?
+      [output, $?]
     end
 
     #-------------------------------------------------------------------------#

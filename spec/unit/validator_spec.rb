@@ -364,7 +364,7 @@ module Pod
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
         validator.stubs(:`).returns('Output')
-        status = mock()
+        status = mock
         status.stubs(:success?).returns(false)
         validator.stubs(:_xcodebuild).returns(['Output', status])
         validator.validate
