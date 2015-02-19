@@ -54,6 +54,7 @@ module Pod
         end
 
         def run
+          require 'yaml'
           podfile = Pod::Podfile.from_file(@path)
           output_pipe.puts podfile.to_yaml
         end
@@ -77,6 +78,7 @@ module Pod
         DESC
 
         def run
+          require 'yaml'
           sets = SourcesManager.aggregate.all_sets
           result = {}
           sets.each do |set|

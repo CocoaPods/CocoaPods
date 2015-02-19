@@ -70,6 +70,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Adriano Bonat](https://github.com/tanob)
   [#3117](https://github.com/CocoaPods/CocoaPods/issues/3117)
 
+* Fixes an issue where `pod ipc list` and `pod ipc podfile` was returning an
+  error.  
+  [Kyle Fuller](https://github.com/kylef)
+  [#3134](https://github.com/CocoaPods/CocoaPods/issues/3134)
+
 
 ## 0.36.0.beta.2
 
