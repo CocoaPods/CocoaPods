@@ -59,7 +59,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Remove the stored lockfile checkout source when switching to a development
   pod.  
-  [Samuel Giddins][https://github.com/segiddins]
+  [Samuel Giddins](https://github.com/segiddins)
   [#3141](https://github.com/CocoaPods/CocoaPods/issues/3141)
 
 * Migrate local Ruby podspecs to JSON, allowing updating those pods to work.  
