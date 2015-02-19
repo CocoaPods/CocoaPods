@@ -90,7 +90,7 @@ Targets:
         Base Configuration: Pods-SampleApp-res-Private.xcconfig
     - Release:
         Build Settings:
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp-res/Pods-SampleApp-res-prefix.pch
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           OTHER_LIBTOOLFLAGS: ''
           PRODUCT_NAME: $(TARGET_NAME)
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
@@ -99,8 +99,8 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           SDKROOT: macosx
+          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp-res/Pods-SampleApp-res-prefix.pch
           EXECUTABLE_PREFIX: lib
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
         Base Configuration: Pods-SampleApp-res-Private.xcconfig
 - Pods-SampleApp-res-res:
     Build Phases:
@@ -153,10 +153,10 @@ Build Configurations:
       CLANG_WARN_EMPTY_BODY: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
-      COPY_PHASE_STRIP: 'YES'
-      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      COPY_PHASE_STRIP: 'NO'
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       GCC_DYNAMIC_NO_PIC: 'NO'
@@ -170,8 +170,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       VALIDATE_PRODUCT: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
-      GCC_PREPROCESSOR_DEFINITIONS:
-      - RELEASE=1
+      GCC_PREPROCESSOR_DEFINITIONS: RELEASE=1
       CLANG_ENABLE_MODULES: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
@@ -183,10 +182,10 @@ Build Configurations:
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       CLANG_WARN_EMPTY_BODY: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
-      COPY_PHASE_STRIP: 'NO'
-      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      COPY_PHASE_STRIP: 'YES'
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       ENABLE_NS_ASSERTIONS: 'NO'

@@ -88,10 +88,7 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
           SDKROOT: macosx
-          LD_RUNPATH_SEARCH_PATHS:
-          - $(inherited)
-          - '@executable_path/../Frameworks'
-          - '@loader_path/Frameworks'
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           PRODUCT_NAME: Pods_SampleApp
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           SKIP_INSTALL: 'YES'
@@ -117,10 +114,7 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
           SDKROOT: macosx
-          LD_RUNPATH_SEARCH_PATHS:
-          - $(inherited)
-          - '@executable_path/../Frameworks'
-          - '@loader_path/Frameworks'
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           PRODUCT_NAME: Pods_SampleApp
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           SKIP_INSTALL: 'YES'
@@ -160,10 +154,7 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
           SDKROOT: macosx
-          LD_RUNPATH_SEARCH_PATHS:
-          - $(inherited)
-          - '@executable_path/../Frameworks'
-          - '@loader_path/Frameworks'
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           PRODUCT_NAME: SamplePodWithResources
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           SKIP_INSTALL: 'YES'
@@ -187,10 +178,7 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
           SDKROOT: macosx
-          LD_RUNPATH_SEARCH_PATHS:
-          - $(inherited)
-          - '@executable_path/../Frameworks'
-          - '@loader_path/Frameworks'
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           PRODUCT_NAME: SamplePodWithResources
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           SKIP_INSTALL: 'YES'
@@ -212,8 +200,8 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleApp
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleApp
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
     - Release:
         Build Settings:
@@ -222,8 +210,8 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleApp
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleApp
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
 - Pods-SampleAppTests:
     Build Phases:
@@ -252,10 +240,7 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
           SDKROOT: macosx
-          LD_RUNPATH_SEARCH_PATHS:
-          - $(inherited)
-          - '@executable_path/../Frameworks'
-          - '@loader_path/Frameworks'
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           PRODUCT_NAME: Pods_SampleAppTests
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           SKIP_INSTALL: 'YES'
@@ -281,10 +266,7 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
           SDKROOT: macosx
-          LD_RUNPATH_SEARCH_PATHS:
-          - $(inherited)
-          - '@executable_path/../Frameworks'
-          - '@loader_path/Frameworks'
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           PRODUCT_NAME: Pods_SampleAppTests
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           SKIP_INSTALL: 'YES'
@@ -324,10 +306,7 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
           SDKROOT: macosx
-          LD_RUNPATH_SEARCH_PATHS:
-          - $(inherited)
-          - '@executable_path/../Frameworks'
-          - '@loader_path/Frameworks'
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           PRODUCT_NAME: SamplePodWithResources
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           SKIP_INSTALL: 'YES'
@@ -351,10 +330,7 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
           SDKROOT: macosx
-          LD_RUNPATH_SEARCH_PATHS:
-          - $(inherited)
-          - '@executable_path/../Frameworks'
-          - '@loader_path/Frameworks'
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           PRODUCT_NAME: SamplePodWithResources
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           SKIP_INSTALL: 'YES'
@@ -376,8 +352,8 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleAppTests
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleAppTests
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
     - Release:
         Build Settings:
@@ -386,8 +362,8 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleAppTests
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleAppTests
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
 
 
@@ -415,10 +391,10 @@ Build Configurations:
       CLANG_WARN_EMPTY_BODY: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
-      COPY_PHASE_STRIP: 'YES'
-      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      COPY_PHASE_STRIP: 'NO'
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       GCC_DYNAMIC_NO_PIC: 'NO'
@@ -432,8 +408,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       VALIDATE_PRODUCT: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
-      GCC_PREPROCESSOR_DEFINITIONS:
-      - RELEASE=1
+      GCC_PREPROCESSOR_DEFINITIONS: RELEASE=1
       CLANG_ENABLE_MODULES: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
@@ -445,10 +420,10 @@ Build Configurations:
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       CLANG_WARN_EMPTY_BODY: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
-      COPY_PHASE_STRIP: 'NO'
-      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      COPY_PHASE_STRIP: 'YES'
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       ENABLE_NS_ASSERTIONS: 'NO'

@@ -41,7 +41,7 @@ Targets:
     Build Configurations:
     - 'Custom Debug - missing some settings ':
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           PODS_ROOT: $(SRCROOT)
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -50,11 +50,11 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           PRODUCT_NAME: $(TARGET_NAME)
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.custom debug - missing some settings .xcconfig
     - Custom Release:
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           PODS_ROOT: $(SRCROOT)
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -63,11 +63,11 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           PRODUCT_NAME: $(TARGET_NAME)
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.custom release.xcconfig
     - Debug:
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           PODS_ROOT: $(SRCROOT)
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -76,11 +76,11 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           PRODUCT_NAME: $(TARGET_NAME)
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.debug.xcconfig
     - Release:
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           PODS_ROOT: $(SRCROOT)
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -89,7 +89,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           PRODUCT_NAME: $(TARGET_NAME)
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.release.xcconfig
 - Pods-Reachability:
     Build Phases:
@@ -109,8 +109,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
@@ -122,8 +122,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
@@ -135,8 +135,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
@@ -148,8 +148,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
@@ -165,8 +165,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       VALIDATE_PRODUCT: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
-      GCC_PREPROCESSOR_DEFINITIONS:
-      - CUSTOM_DEBUG___MISSING_SOME_SETTINGS_=1
+      GCC_PREPROCESSOR_DEFINITIONS: CUSTOM_DEBUG___MISSING_SOME_SETTINGS_=1
       CLANG_ENABLE_MODULES: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
@@ -177,10 +176,10 @@ Build Configurations:
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       CLANG_WARN_EMPTY_BODY: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
-      COPY_PHASE_STRIP: 'NO'
-      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      COPY_PHASE_STRIP: 'YES'
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       ENABLE_NS_ASSERTIONS: 'NO'
@@ -195,8 +194,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       VALIDATE_PRODUCT: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
-      GCC_PREPROCESSOR_DEFINITIONS:
-      - CUSTOM_RELEASE=1
+      GCC_PREPROCESSOR_DEFINITIONS: CUSTOM_RELEASE=1
       CLANG_ENABLE_MODULES: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
@@ -207,10 +205,10 @@ Build Configurations:
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       CLANG_WARN_EMPTY_BODY: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
-      COPY_PHASE_STRIP: 'NO'
-      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      COPY_PHASE_STRIP: 'YES'
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       ENABLE_NS_ASSERTIONS: 'NO'
@@ -240,10 +238,10 @@ Build Configurations:
       CLANG_WARN_EMPTY_BODY: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
-      COPY_PHASE_STRIP: 'YES'
-      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      COPY_PHASE_STRIP: 'NO'
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       GCC_DYNAMIC_NO_PIC: 'NO'
@@ -258,8 +256,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       VALIDATE_PRODUCT: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
-      GCC_PREPROCESSOR_DEFINITIONS:
-      - RELEASE=1
+      GCC_PREPROCESSOR_DEFINITIONS: RELEASE=1
       CLANG_ENABLE_MODULES: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
@@ -270,10 +267,10 @@ Build Configurations:
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       CLANG_WARN_EMPTY_BODY: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
-      COPY_PHASE_STRIP: 'NO'
-      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      COPY_PHASE_STRIP: 'YES'
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       ENABLE_NS_ASSERTIONS: 'NO'
