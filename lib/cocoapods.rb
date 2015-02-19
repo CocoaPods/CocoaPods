@@ -36,6 +36,8 @@ module Pod
     end
   end
 
+  Xcodeproj::PlainInformative.send(:include, CLAide::InformativeError)
+
   autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
   autoload :Command,                   'cocoapods/command'
   autoload :Executable,                'cocoapods/executable'
