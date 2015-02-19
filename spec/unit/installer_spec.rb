@@ -50,6 +50,7 @@ module Pod
         @installer.stubs(:download_dependencies)
         @installer.stubs(:determine_dependency_product_types)
         @installer.stubs(:verify_no_duplicate_framework_names)
+        @installer.stubs(:verify_no_static_framework_transitive_dependencies)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
         @installer.stubs(:run_plugins_post_install_hooks)
@@ -118,6 +119,7 @@ module Pod
 
     describe '#determine_dependency_product_type' do
       it 'does propagate that frameworks are required to all pod targets' do
+        Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([])
         fixture_path = ROOT + 'spec/fixtures'
         config.repos_dir = fixture_path + 'spec-repos'
         podfile = Pod::Podfile.new do
@@ -162,6 +164,28 @@ module Pod
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
         should.raise(Informative) { @installer.install! }.message.should.match /conflict.*monkey/
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe '#verify_no_static_framework_transitive_dependencies' do
+      it 'detects transitive static dependencies' do
+        Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([Pathname('libThing.a')])
+        fixture_path = ROOT + 'spec/fixtures'
+        config.repos_dir = fixture_path + 'spec-repos'
+        podfile = Pod::Podfile.new do
+          platform :ios, '8.0'
+          xcodeproj 'SampleProject/SampleProject'
+          pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
+          pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+        end
+        lockfile = generate_lockfile
+        config.integrate_targets = false
+
+        @installer = Installer.new(config.sandbox, podfile, lockfile)
+        should.raise(Informative) { @installer.install! }.message.should.match /transitive.*libThing/
       end
     end
 
