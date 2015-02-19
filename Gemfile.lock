@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 9e8b9072fd66f69b91999cd3838a4bbba043a7e5
+  revision: f94d813c3bd05377a78e92068fa886345a4c41db
   branch: master
   specs:
     claide (0.8.0)
@@ -17,14 +17,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: ede6ac4f780b6335eb863571d06c6272c98e2b1d
+  revision: ee3725d5e6008cda5e208b23f8b3e3a06db76f37
   branch: master
   specs:
     molinillo (0.2.0)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 1295f50be7ceab2eea9f069baf6c4ad98e2254e1
+  revision: 7351aa366fcda8715a258f047b5b689191d320c0
   branch: master
   specs:
     xcodeproj (0.21.2)
@@ -33,14 +33,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: c05aef09e6db99a90fad627cbbc75f24c84e8fb0
+  revision: a5a642e572937eb08097fbf65b30e1e7a3c449e9
   branch: master
   specs:
     cocoapods-downloader (0.8.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 4e60d8458d374ef54d3ba7d9592bd2750344df49
+  revision: 0dfe8054f0bb9e6f1c1d175536248ccb484afe22
   branch: master
   specs:
     cocoapods-plugins (0.4.0)
@@ -48,7 +48,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 055c6be4f7f5afb057f20c2e82f540d84f3cc1ad
+  revision: b08eb8fff3c14315b08508efc5c9ab97bf10aeb0
   branch: master
   specs:
     cocoapods-trunk (0.5.0)
