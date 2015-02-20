@@ -508,7 +508,7 @@ module Pod
     def parse_xcodebuild_output(output)
       lines = output.split("\n")
       selected_lines = lines.select do |l|
-        l.include?('error: ') &&
+        l.include?('error: ') && (l !~ /frameworks only run on iOS 8/) &&
           (l !~ /errors? generated\./) && (l !~ /error: \(null\)/)  ||
           l.include?('warning: ') && (l !~ /warnings? generated\./) ||
           l.include?('note: ') && (l !~ /expanded from macro/)
