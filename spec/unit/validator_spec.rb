@@ -440,6 +440,36 @@ module Pod
         validator.validated?.should.be.true
       end
     end
+
+    describe 'swift validation' do
+      def test_swiftpod
+        podspec = stub_podspec(/.*source_files.*/, '"source_files": "*.swift",')
+        podspec.gsub!(/.*license.*$/, '"license": "Public Domain",')
+        file = write_podspec(podspec)
+
+        Pod::Sandbox::FileAccessor.any_instance.stubs(:source_files).returns([Pathname.new('/Foo.swift')])
+        validator = Validator.new(file, SourcesManager.master.map(&:url))
+        validator.stubs(:build_pod)
+        validator.stubs(:validate_url)
+        validator.validate
+        validator
+      end
+
+      it 'fails on deployment target < iOS 8 for Swift Pods' do
+        validator = test_swiftpod
+
+        validator.results.map(&:to_s).first.should.match /dynamic frameworks.*iOS > 8/
+        validator.result_type.should == :error
+      end
+
+      it 'succeeds on deployment targets >= iOS 8 for Swift Pods' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+        validator = test_swiftpod
+
+        validator.results.count.should == 0
+      end
+    end
     #-------------------------------------------------------------------------#
   end
 end
