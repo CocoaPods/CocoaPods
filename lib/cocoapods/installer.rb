@@ -91,6 +91,7 @@ module Pod
       download_dependencies
       determine_dependency_product_types
       verify_no_duplicate_framework_names
+      verify_no_static_framework_transitive_dependencies
       generate_pods_project
       integrate_user_project if config.integrate_targets?
       perform_post_install_actions
@@ -340,6 +341,29 @@ module Pod
           unless duplicates.empty?
             raise Informative, "The '#{aggregate_target.label}' target has " \
               "frameworks with conflicting names: #{duplicates.to_sentence}."
+          end
+        end
+      end
+    end
+
+    def verify_no_static_framework_transitive_dependencies
+      aggregate_targets.each do |aggregate_target|
+        next unless aggregate_target.requires_frameworks?
+
+        aggregate_target.user_build_configurations.keys.each do |config|
+          pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
+
+          dependencies = pod_targets.flat_map(&:dependencies)
+          dependended_upon_targets = pod_targets.select { |t| dependencies.include?(t.pod_name) }
+
+          static_libs = dependended_upon_targets.flat_map(&:file_accessors).flat_map do |fa|
+            static_frameworks = fa.vendored_frameworks.reject { |fw| `file #{fw + fw.basename('.framework')} 2>&1` =~ /dynamically linked/ }
+            fa.vendored_libraries + static_frameworks
+          end
+
+          unless static_libs.empty?
+            raise Informative, "The '#{aggregate_target.label}' target has " \
+              "transitive dependencies that include static binaries: (#{static_libs.to_sentence})"
           end
         end
       end
