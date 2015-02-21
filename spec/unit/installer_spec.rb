@@ -441,6 +441,19 @@ module Pod
       #--------------------------------------#
 
       describe '#set_target_dependencies' do
+        def test_extension_target(symbol_type)
+          mock_user_target = mock('UserTarget', :symbol_type => symbol_type)
+          @target.stubs(:user_targets).returns([mock_user_target])
+
+          build_settings = {}
+          mock_configuration = mock('BuildConfiguration', :build_settings => build_settings)
+          @mock_target.stubs(:build_configurations).returns([mock_configuration])
+
+          @installer.send(:set_target_dependencies)
+
+          build_settings.should == { 'APPLICATION_EXTENSION_API_ONLY' => 'YES' }
+        end
+
         before do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
 
@@ -467,16 +480,11 @@ module Pod
         end
 
         it 'configures APPLICATION_EXTENSION_API_ONLY for app extension targets' do
-          mock_user_target = mock('UserTarget', :symbol_type => :app_extension)
-          @target.stubs(:user_targets).returns([mock_user_target])
+          test_extension_target(:app_extension)
+        end
 
-          build_settings = {}
-          mock_configuration = mock('BuildConfiguration', :build_settings => build_settings)
-          @mock_target.stubs(:build_configurations).returns([mock_configuration])
-
-          @installer.send(:set_target_dependencies)
-
-          build_settings.should == { 'APPLICATION_EXTENSION_API_ONLY' => 'YES' }
+        it 'configures APPLICATION_EXTENSION_API_ONLY for watch extension targets' do
+          test_extension_target(:watch_extension)
         end
 
         it 'does not try to set APPLICATION_EXTENSION_API_ONLY if there are no pod targets' do

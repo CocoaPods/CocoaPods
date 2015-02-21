@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Set the `APPLICATION_EXTENSION_API_ONLY` build setting if integrating with a watch extension target.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3153](https://github.com/CocoaPods/CocoaPods/issues/3153)
+
 * Build for iOS simulator only during validation. This allows validation without having
   provisioning profiles set up.  
   [Boris Bügling](https://github.com/neonichu)
