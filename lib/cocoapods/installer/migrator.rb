@@ -58,7 +58,7 @@ module Pod
               spec = Specification.from_file(child)
               child.delete
               child = Pathname("#{child}.json")
-              child.write(spec.to_pretty_json)
+              File.open(child, 'w') { |f| f.write spec.to_pretty_json }
             end
           end
         end
