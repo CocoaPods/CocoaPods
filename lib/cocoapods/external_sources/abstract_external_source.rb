@@ -141,6 +141,9 @@ module Pod
         if spec.is_a? Pathname
           spec = Specification.from_file(spec).to_pretty_json
           json = true
+        elsif spec.is_a?(String) && !json
+          spec = Specification.from_string(spec, 'spec.podspec').to_pretty_json
+          json = true
         end
         sandbox.store_podspec(name, spec, true, json)
       end
