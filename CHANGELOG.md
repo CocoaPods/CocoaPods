@@ -27,6 +27,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   `/tmp`.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Let lint fail for Swift pods supporting deployment targets below iOS 8.0.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#2963](https://github.com/CocoaPods/CocoaPods/issues/2963)
+
 ##### Bug Fixes
 
 * Added support for .tpp C++ header files in specs (previously were getting

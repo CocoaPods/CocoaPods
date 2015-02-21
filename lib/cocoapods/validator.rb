@@ -310,6 +310,11 @@ module Pod
       installer.install!
 
       file_accessors = installer.aggregate_targets.map do |target|
+        if target.pod_targets.any?(&:uses_swift?) && consumer.platform_name == :ios &&
+            (deployment_target.nil? || Version.new(deployment_target).major < 8)
+          error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.')
+        end
+
         target.pod_targets.map(&:file_accessors)
       end.flatten
 
@@ -504,7 +509,7 @@ module Pod
     def parse_xcodebuild_output(output)
       lines = output.split("\n")
       selected_lines = lines.select do |l|
-        l.include?('error: ') &&
+        l.include?('error: ') && (l !~ /frameworks only run on iOS 8/) &&
           (l !~ /errors? generated\./) && (l !~ /error: \(null\)/)  ||
           l.include?('warning: ') && (l !~ /warnings? generated\./) ||
           l.include?('note: ') && (l !~ /expanded from macro/)
