@@ -40,6 +40,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2926](https://github.com/CocoaPods/CocoaPods/issues/2926)
 
+* Do not copy Swift standard libraries multiple times.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3131](https://github.com/CocoaPods/CocoaPods/issues/3131)
+
 ##### Bug Fixes
 
 * Added support for .tpp C++ header files in specs (previously were getting
