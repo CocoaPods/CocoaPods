@@ -25,10 +25,7 @@ Creating possibility state for Reachability (= 3.1.0) (1 remaining)
       Attempting to activate JSONKit (1.4)
       Activated JSONKit at JSONKit (1.4)
       Requiring nested dependencies ()
-      Creating possibility state for JSONKit (2 remaining)
-        Attempting to activate JSONKit (1.5pre)
-        Found existing spec (JSONKit (1.4))
-Finished resolution (5 steps) (Took <#DURATION#> seconds) (<#DATE#>)
+Finished resolution (4 steps) (Took <#DURATION#> seconds) (<#DATE#>)
 Unactivated: 
 Activated: Reachability, JSONKit
 
