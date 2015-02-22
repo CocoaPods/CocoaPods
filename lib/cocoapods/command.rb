@@ -124,7 +124,7 @@ module Pod
     end
 
     def self.verify_xcode_license_approved!
-      unless !(`/usr/bin/xcrun clang 2>&1` =~ /license/ && !$?.success?)
+      if `/usr/bin/xcrun clang 2>&1` =~ /license/ && !$?.success?
         raise Informative, 'You have not agreed to the Xcode license, which ' \
           'you must do to use CocoaPods. Agree to the license by running: ' \
           '`xcodebuild -license`.'
