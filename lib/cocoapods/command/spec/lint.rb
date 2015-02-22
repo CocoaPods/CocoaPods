@@ -21,7 +21,7 @@ module Pod
            ['--no-subspecs', 'Lint skips validation of subspecs'],
            ['--no-clean', 'Lint leaves the build directory intact for inspection'],
            ['--use-frameworks', 'Lint uses frameworks to install the spec'],
-           ['--sources=https://github.com/artsy/Specs', 'The sources from which to pull dependant pods ' \
+           ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
             '(defaults to https://github.com/CocoaPods/Specs.git). '\
             'Multiple sources must be comma-delimited.']].concat(super)
         end
@@ -34,7 +34,7 @@ module Pod
           @only_subspec    = argv.option('subspec')
           @use_frameworks  = argv.flag?('use-frameworks')
           @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
-          @podspecs_paths = argv.arguments!
+          @podspecs_paths  = argv.arguments!
           super
         end
 

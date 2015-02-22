@@ -329,11 +329,12 @@ module Pod
       end
 
       it 'repects the source_urls parameter' do
-        sources = %w(https://github.com/CocoaPods/Specs.git https://github.com/artsy/Specs.git)
+        sources = %w(master https://github.com/CocoaPods/Specs.git)
+        Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(podspec_path, sources)
         validator.stubs(:validate_url)
         podfile = validator.send(:podfile_from_spec, :ios, '5.0')
-        podfile.sources.should == sources
+        podfile.sources.should == %w(https://github.com/CocoaPods/Specs.git)
       end
 
       it 'uses xcodebuild to generate warnings' do

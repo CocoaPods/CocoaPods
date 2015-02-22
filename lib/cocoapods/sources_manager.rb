@@ -57,6 +57,20 @@ module Pod
         source
       end
 
+      # Returns the source whose {Source#name} or {Source#url} is equal to the
+      # given `name_or_url`.
+      #
+      # @return [Source] The source whose {Source#name} or {Source#url} is equal to the
+      #                  given `name_or_url`.
+      #
+      # @param  [String] name_or_url
+      #                  The name or the URL of the source.
+      #
+      def source_with_name_or_url(name_or_url)
+        all.find { |s| s.name == name_or_url } ||
+          find_or_create_source_with_url(name_or_url)
+      end
+
       # @return [Array<Source>] The list of all the sources known to this
       #         installation of CocoaPods.
       #

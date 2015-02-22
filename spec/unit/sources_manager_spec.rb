@@ -211,6 +211,21 @@ module Pod
             e.should.not.raise
           end
         end
+
+        describe 'finding or creating a source by name or URL' do
+          it 'returns an existing source with a matching name' do
+            SourcesManager.expects(:name_for_url).never
+            SourcesManager.source_with_name_or_url('test_repo').name.
+              should == 'test_repo'
+          end
+
+          it 'tries by url when there is no matching name' do
+            Command::Repo::Add.any_instance.stubs(:run).once
+            SourcesManager.stubs(:source_with_url).returns(nil).then.returns('Source')
+            SourcesManager.source_with_name_or_url('https://github.com/artsy/Specs.git').
+              should == 'Source'
+          end
+        end
       end
     end
 

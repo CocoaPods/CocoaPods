@@ -52,6 +52,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2992](https://github.com/CocoaPods/CocoaPods/issues/2992)
 
+* Allow specifying repo names to `pod {spec,lib} lint --sources`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2685](https://github.com/CocoaPods/CocoaPods/issues/2685)
+
 ##### Bug Fixes
 
 * Added support for .tpp C++ header files in specs (previously were getting
