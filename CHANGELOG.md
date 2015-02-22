@@ -44,6 +44,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3131](https://github.com/CocoaPods/CocoaPods/issues/3131)
 
+* Check for Xcode License Agreement before running commands.  
+  [Xavi Matos](https://github.com/CalQL8ed-K-OS)
+  [#3002](https://github.com/CocoaPods/CocoaPods/issues/3002)
+
 ##### Bug Fixes
 
 * Added support for .tpp C++ header files in specs (previously were getting
@@ -201,10 +205,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#2640](https://github.com/CocoaPods/CocoaPods/issues/2640)
 
 ##### Enhancements
-
-* Check for Xcode License Agreement before running commands.
-  [Xavi Matos](https://github.com/CalQL8ed-K-OS)
-  [#3002](https://github.com/CocoaPods/CocoaPods/issues/3002)
 
 * Do not generate targets for Pods without sources.  
   [Boris Bügling](https://github.com/neonichu)
