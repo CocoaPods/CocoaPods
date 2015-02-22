@@ -41,6 +41,7 @@ module Pod
 
     def self.run(argv)
       help! 'You cannot run CocoaPods as root.' if Process.uid == 0
+      verify_xcode_license_approved!
 
       super(argv)
       UI.print_warnings
@@ -120,6 +121,25 @@ module Pod
       unless config.lockfile
         raise Informative, "No `Podfile.lock' found in the project directory, run `pod install'."
       end
+    end
+
+    def self.verify_xcode_license_approved!
+      unless xcode_license_approved?
+        raise Informative, xcode_license_message
+      end
+    end
+
+    def self.xcode_license_approved?
+      !(`/usr/bin/xcrun clang 2>&1` =~ /license/ && !$?.success?)
+    end
+
+    def self.xcode_license_message
+      <<-EOS.strip_heredoc
+          You have not agreed to the Xcode license.
+          The setup command requires you do so.
+          Agree to the license by running:
+          `xcodebuild -license`
+      EOS
     end
   end
 end

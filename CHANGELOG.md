@@ -202,6 +202,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Check for Xcode License Agreement before running commands.
+  [Xavi Matos](https://github.com/CalQL8ed-K-OS)
+  [#3002](https://github.com/CocoaPods/CocoaPods/issues/3002)
+
 * Do not generate targets for Pods without sources.  
   [Boris Bügling](https://github.com/neonichu)
   [#2918](https://github.com/CocoaPods/CocoaPods/issues/2918)
