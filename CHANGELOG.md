@@ -48,6 +48,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Xavi Matos](https://github.com/CalQL8ed-K-OS)
   [#3002](https://github.com/CocoaPods/CocoaPods/issues/3002)
 
+* `pod update PODNAME` will update pods in a case-insensitive manner.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2992](https://github.com/CocoaPods/CocoaPods/issues/2992)
+
 ##### Bug Fixes
 
 * Added support for .tpp C++ header files in specs (previously were getting

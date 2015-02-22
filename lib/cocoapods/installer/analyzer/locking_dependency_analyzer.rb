@@ -33,8 +33,8 @@ module Pod
             end
 
             pods_to_update = pods_to_update.flat_map do |u|
-              root_name = Specification.root_name(u)
-              dependency_graph.vertices.keys.select { |n| Specification.root_name(n) == root_name }
+              root_name = Specification.root_name(u).downcase
+              dependency_graph.vertices.keys.select { |n| Specification.root_name(n).downcase == root_name }
             end
 
             pods_to_update.each do |u|

@@ -159,6 +159,13 @@ module Pod
         @analyzer.send(:locked_dependencies).to_a.map(&:payload).should == []
       end
 
+      it 'unlocks dependencies in a case-insensitive manner' do
+        @analyzer.update =  { :pods => %w(JSONKit) }
+        @analyzer.analyze
+        @analyzer.send(:locked_dependencies).map(&:payload).map(&:to_s).
+          should == ['SVPullToRefresh (= 0.4)']
+      end
+
       it 'unlocks all dependencies with the same root name in update mode' do
         podfile = Podfile.new do
           platform :ios, '8.0'
