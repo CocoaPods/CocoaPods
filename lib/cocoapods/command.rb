@@ -124,22 +124,11 @@ module Pod
     end
 
     def self.verify_xcode_license_approved!
-      unless xcode_license_approved?
-        raise Informative, xcode_license_message
+      unless !(`/usr/bin/xcrun clang 2>&1` =~ /license/ && !$?.success?)
+        raise Informative, 'You have not agreed to the Xcode license, which ' \
+          'you must do to use CocoaPods. Agree to the license by running: ' \
+          '`xcodebuild -license`.'
       end
-    end
-
-    def self.xcode_license_approved?
-      !(`/usr/bin/xcrun clang 2>&1` =~ /license/ && !$?.success?)
-    end
-
-    def self.xcode_license_message
-      <<-EOS.strip_heredoc
-          You have not agreed to the Xcode license.
-          The setup command requires you do so.
-          Agree to the license by running:
-          `xcodebuild -license`
-      EOS
     end
   end
 end
