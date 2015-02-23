@@ -123,6 +123,10 @@ module Pod
             fixture_spec('orange-framework/OrangeFramework.podspec')
           end
 
+          before do
+            Target.any_instance.stubs(:requires_frameworks?).returns(true)
+          end
+
           behaves_like 'AggregateXCConfig'
 
           it 'sets the PODS_FRAMEWORK_BUILD_PATH build variable' do

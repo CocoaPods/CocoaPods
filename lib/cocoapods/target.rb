@@ -91,13 +91,8 @@ module Pod
     # @return [Boolean] whether the generated target needs to be implemented
     #         as a framework
     #
-    # @note This applies either if Swift was used by the host, which was checked
-    #       eagerly by the analyzer before, or in the given target or its
-    #       dependents, which can only be checked after the specs were been
-    #       fetched.
-    #
     def requires_frameworks?
-      host_requires_frameworks? || uses_swift?
+      host_requires_frameworks? || false
     end
 
     #-------------------------------------------------------------------------#

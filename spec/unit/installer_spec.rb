@@ -51,6 +51,7 @@ module Pod
         @installer.stubs(:determine_dependency_product_types)
         @installer.stubs(:verify_no_duplicate_framework_names)
         @installer.stubs(:verify_no_static_framework_transitive_dependencies)
+        @installer.stubs(:verify_framework_usage)
         @installer.stubs(:generate_pods_project)
         @installer.stubs(:integrate_user_project)
         @installer.stubs(:run_plugins_post_install_hooks)
@@ -125,6 +126,7 @@ module Pod
         podfile = Pod::Podfile.new do
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
+          use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
@@ -177,6 +179,7 @@ module Pod
         podfile = Pod::Podfile.new do
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
+          use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s

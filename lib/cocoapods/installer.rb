@@ -92,6 +92,7 @@ module Pod
       determine_dependency_product_types
       verify_no_duplicate_framework_names
       verify_no_static_framework_transitive_dependencies
+      verify_framework_usage
       generate_pods_project
       integrate_user_project if config.integrate_targets?
       perform_post_install_actions
@@ -364,6 +365,22 @@ module Pod
           unless static_libs.empty?
             raise Informative, "The '#{aggregate_target.label}' target has " \
               "transitive dependencies that include static binaries: (#{static_libs.to_sentence})"
+          end
+        end
+      end
+    end
+
+    def verify_framework_usage
+      aggregate_targets.each do |aggregate_target|
+        next if aggregate_target.requires_frameworks?
+
+        aggregate_target.user_build_configurations.keys.each do |config|
+          pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
+
+          if pod_targets.any?(&:uses_swift?)
+            raise Informative, 'Pods written in Swift can only be integrated as frameworks; this ' \
+              'feature is still in beta. Add `use_frameworks!` to your Podfile or target to opt ' \
+              'in to using it.'
           end
         end
       end

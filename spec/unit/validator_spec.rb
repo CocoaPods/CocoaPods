@@ -448,6 +448,7 @@ module Pod
         podspec.gsub!(/.*license.*$/, '"license": "Public Domain",')
         file = write_podspec(podspec)
 
+        Podfile::TargetDefinition.any_instance.stubs(:uses_frameworks?).returns(true)
         Pod::Sandbox::FileAccessor.any_instance.stubs(:source_files).returns([Pathname.new('/Foo.swift')])
         validator = Validator.new(file, SourcesManager.master.map(&:url))
         validator.stubs(:build_pod)
