@@ -529,7 +529,7 @@ module Pod
       output, status = _xcodebuild "#{command} 2>&1"
 
       unless status.success?
-        message = 'Returned a unsuccessful exit code.'
+        message = 'Returned an unsuccessful exit code.'
         message += ' You can use `--verbose` for more information.' unless config.verbose?
         error('xcodebuild', message)
       end

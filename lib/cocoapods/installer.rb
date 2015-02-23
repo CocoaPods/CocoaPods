@@ -192,7 +192,7 @@ module Pod
     # Ensures that the white-listed build configurations are known to prevent
     # silent typos.
     #
-    # @raise  If a unknown user configuration is found.
+    # @raise  If an unknown user configuration is found.
     #
     def validate_build_configurations
       whitelisted_configs = pod_targets.map do |target|

@@ -370,7 +370,7 @@ module Pod
         validator.stubs(:_xcodebuild).returns(['Output', status])
         validator.validate
         first = validator.results.map(&:to_s).first
-        first.should.include '[xcodebuild] Returned a unsuccessful exit code'
+        first.should.include '[xcodebuild] Returned an unsuccessful exit code'
         validator.result_type.should == :error
       end
 
