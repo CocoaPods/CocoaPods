@@ -53,7 +53,7 @@ module Pod
 
       require 'open4'
 
-      full_command = "#{bin} #{command}"
+      full_command = "\"#{bin}\" #{command}"
 
       if Config.instance.verbose?
         UI.message("$ #{full_command}")
