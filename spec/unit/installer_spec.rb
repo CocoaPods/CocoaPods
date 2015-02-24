@@ -194,6 +194,25 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
+    describe '#verify_framework_usage' do
+      it 'raises when Swift pods are used without explicit `use_frameworks!`' do
+        fixture_path = ROOT + 'spec/fixtures'
+        config.repos_dir = fixture_path + 'spec-repos'
+        podfile = Pod::Podfile.new do
+          platform :ios, '8.0'
+          xcodeproj 'SampleProject/SampleProject'
+          pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+        end
+        lockfile = generate_lockfile
+        config.integrate_targets = false
+
+        @installer = Installer.new(config.sandbox, podfile, lockfile)
+        should.raise(Informative) { @installer.install! }.message.should.match /use_frameworks/
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
     describe 'Dependencies Resolution' do
       describe '#analyze' do
         it 'prints a warning if the version of the Lockfile is higher than the one of the executable' do

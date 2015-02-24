@@ -380,7 +380,7 @@ module Pod
           if pod_targets.any?(&:uses_swift?)
             raise Informative, 'Pods written in Swift can only be integrated as frameworks; this ' \
               'feature is still in beta. Add `use_frameworks!` to your Podfile or target to opt ' \
-              'in to using it.'
+              'into using it.'
           end
         end
       end
