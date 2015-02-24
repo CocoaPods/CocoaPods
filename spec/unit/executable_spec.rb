@@ -11,12 +11,12 @@ module Pod
     end
 
     it 'should support spaces in the full path of the command' do
-      cmd = '/Spa ces/are/fun/false'
+      cmd = '/Spa ces/are"/fun/false'
       Executable.stubs(:`).returns(cmd)
       result = mock
       result.stubs(:success?).returns(true)
 
-      Open4.expects(:spawn).with("\"#{cmd}\" ", :stdout => [], :stderr => [], :status => true).once.returns(result)
+      Open4.expects(:spawn).with('/Spa\\ ces/are\\"/fun/false ', :stdout => [], :stderr => [], :status => true).once.returns(result)
       Executable.execute_command(cmd, '', true)
     end
   end

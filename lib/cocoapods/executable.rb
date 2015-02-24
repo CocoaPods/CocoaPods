@@ -52,8 +52,9 @@ module Pod
       raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
 
       require 'open4'
+      require 'shellwords'
 
-      full_command = "\"#{bin}\" #{command}"
+      full_command = "#{bin.shellescape} #{command}"
 
       if Config.instance.verbose?
         UI.message("$ #{full_command}")
