@@ -65,6 +65,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#2912](https://github.com/CocoaPods/CocoaPods/issues/2912)
 
+* Adding Xcode Legacy build location support for default Pods.xcodeproj.
+  It defaults to `${SRCROOT}/../build` but can be changed in a `post_install`
+  hook by using the `Project#symroot=` writer.  
+  [Sam Marshall](https://github.com/samdmarshall)
+
 ##### Bug Fixes
 
 * Added support for .tpp C++ header files in specs (previously were getting
