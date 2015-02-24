@@ -478,14 +478,14 @@ module Pod
     # @note   The generated podfile takes into account whether the linter is
     #         in local mode.
     #
-    def podfile_from_spec(platform_name, deployment_target, use_frameworks = nil)
+    def podfile_from_spec(platform_name, deployment_target, use_frameworks = true)
       name     = subspec_name ? subspec_name : spec.name
       podspec  = file.realpath
       local    = local?
       urls     = source_urls
       podfile  = Pod::Podfile.new do
         urls.each { |u| source(u) }
-        use_frameworks!(use_frameworks) unless use_frameworks.nil?
+        use_frameworks!(use_frameworks)
         platform(platform_name, deployment_target)
         if local
           pod name, :path => podspec.dirname.to_s

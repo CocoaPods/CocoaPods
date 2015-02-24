@@ -60,6 +60,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3029](https://github.com/CocoaPods/CocoaPods/issues/3029)
 
+* Lint as framework automatically. If needed, `--use-libraries` option
+  allows linting as a static library.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#2912](https://github.com/CocoaPods/CocoaPods/issues/2912)
+
 ##### Bug Fixes
 
 * Added support for .tpp C++ header files in specs (previously were getting
