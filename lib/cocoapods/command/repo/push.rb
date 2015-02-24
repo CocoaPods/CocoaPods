@@ -21,6 +21,7 @@ module Pod
 
         def self.options
           [['--allow-warnings', 'Allows pushing even if there are warnings'],
+           ['--use-libraries', 'Linter uses static libraries to install the spec'],
            ['--local-only', 'Does not perform the step of pushing REPO to its remote']].concat(super)
         end
 
@@ -29,6 +30,7 @@ module Pod
           @local_only = argv.flag?('local-only')
           @repo = argv.shift_argument
           @podspec = argv.shift_argument
+          @use_frameworks = !argv.flag?('use-libraries')
           super
         end
 
@@ -84,6 +86,7 @@ module Pod
           podspec_files.each do |podspec|
             validator = Validator.new(podspec, SourcesManager.all.map(&:url))
             validator.allow_warnings = @allow_warnings
+            validator.use_frameworks = @use_frameworks
             begin
               validator.validate
             rescue => e
