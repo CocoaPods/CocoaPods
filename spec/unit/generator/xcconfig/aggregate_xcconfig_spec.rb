@@ -65,6 +65,10 @@ module Pod
           it 'should configure OTHER_LIBTOOLFLAGS flags to include OTHER_LDFLAGS' do
             @xcconfig.to_hash['OTHER_LIBTOOLFLAGS'].should == '$(OTHER_LDFLAGS)'
           end
+
+          it 'will be skipped when installing' do
+            @xcconfig.to_hash['SKIP_INSTALL'].should == 'YES'
+          end
         end
 
         #-----------------------------------------------------------------------#

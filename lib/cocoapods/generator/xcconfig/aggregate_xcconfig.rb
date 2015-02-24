@@ -53,6 +53,7 @@ module Pod
             'OTHER_LIBTOOLFLAGS' => '$(OTHER_LDFLAGS)',
             'PODS_ROOT' => target.relative_pods_root,
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
+            'SKIP_INSTALL' => 'YES',
           }
 
           if target.requires_frameworks?
