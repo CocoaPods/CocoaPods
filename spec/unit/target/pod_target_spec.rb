@@ -178,6 +178,7 @@ module Pod
       describe 'With frameworks' do
         before do
           @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec')
+          @pod_target.host_requires_frameworks = true
         end
 
         it 'returns that it uses swift' do
