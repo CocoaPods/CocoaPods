@@ -16,6 +16,6 @@ CHECKOUT OPTIONS:
     :git: https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git
 
 SPEC CHECKSUMS:
-  Test: 015c315085e89cf22c211271c817a23ed1ad09c8
+  Test: 6dbddeeb3165e094542f6f44182d26ec1c580574
 
 COCOAPODS: 0.36.0.beta.2
