@@ -303,7 +303,6 @@ module Pod
     # for all available platforms with xcodebuild.
     #
     def install_pod
-      use_frameworks = @use_frameworks || spec.attributes_hash.has_key?('module_name')
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
       podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks)
       sandbox = Sandbox.new(config.sandbox_root)
