@@ -96,5 +96,32 @@ module Pod
       Dir.chdir(@upstream) { `git checkout master -q` }
       (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
     end
+
+    before do
+      Installer.any_instance.stubs(:aggregate_targets).returns([])
+      Installer.any_instance.stubs(:install!)
+
+      Validator.any_instance.stubs(:check_file_patterns)
+      Validator.any_instance.stubs(:validated?).returns(true)
+      Validator.any_instance.stubs(:validate_url)
+      Validator.any_instance.stubs(:validate_screenshots)
+      Validator.any_instance.stubs(:xcodebuild).returns('')
+    end
+
+    it 'validates specs as frameworks by default' do
+      Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, true).times(3)
+      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, true).twice
+
+      cmd = command('repo', 'push', 'master')
+      Dir.chdir(temporary_directory) { cmd.run }
+    end
+
+    it 'validates specs as libraries if requested' do
+      Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, false).times(3)
+      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false).twice
+
+      cmd = command('repo', 'push', 'master', '--use-libraries')
+      Dir.chdir(temporary_directory) { cmd.run }
+    end
   end
 end
