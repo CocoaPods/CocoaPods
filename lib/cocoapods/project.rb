@@ -17,9 +17,7 @@ module Pod
       @refs_by_absolute_path = {}
       @pods = new_group('Pods')
       @development_pods = new_group('Development Pods')
-      configs = root_object.build_configuration_list.build_configurations
-      settings_for_all_configs = configs.map(&:build_settings)
-      settings_for_all_configs.each { |settings| settings['SYMROOT'] = '${SRCROOT}/../build' }
+      self.symroot = LEGACY_BUILD_ROOT
     end
 
     # @return [PBXGroup] The group for the support files of the aggregate
@@ -34,6 +32,25 @@ module Pod
     # @return [PBXGroup] The group for Development Pods.
     #
     attr_reader :development_pods
+
+    public
+
+    # @!group Legacy Xcode build root
+    #-------------------------------------------------------------------------#
+
+    LEGACY_BUILD_ROOT = '${SRCROOT}/../build'
+
+    # @param [String] symroot
+    #        The build root that is used when Xcode is configured to not use the
+    #        workspace’s build root. Defaults to `${SRCROOT}/../build`.
+    #
+    # @return [void]
+    #
+    def symroot=(symroot)
+      root_object.build_configuration_list.build_configurations.each do |config|
+        config.build_settings['SYMROOT'] = symroot
+      end
+    end
 
     public
 

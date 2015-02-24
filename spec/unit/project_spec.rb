@@ -20,6 +20,21 @@ module Pod
       it 'creates the development Pods group on initialization' do
         @project.development_pods.name.should == 'Development Pods'
       end
+
+      def settings_for_root_configs(key)
+        @project.root_object.build_configuration_list.build_configurations.map do |config|
+          config.build_settings[key]
+        end
+      end
+
+      it 'assigns a SYMROOT to each root build configuration' do
+        @project.symroot = 'some/build/path'
+        settings_for_root_configs('SYMROOT').uniq.should == ['some/build/path']
+      end
+
+      it 'sets a default SYMROOT for legacy Xcode build setups' do
+        settings_for_root_configs('SYMROOT').uniq.should == [Project::LEGACY_BUILD_ROOT]
+      end
     end
 
     #-------------------------------------------------------------------------#
