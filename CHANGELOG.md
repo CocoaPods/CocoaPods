@@ -113,6 +113,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Kyle Fuller](https://github.com/kylef)
   [#3134](https://github.com/CocoaPods/CocoaPods/issues/3134)
 
+* Fixes an issue with spaces in the path to the user's developer tools.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3181](https://github.com/CocoaPods/CocoaPods/issues/3181)
+
 
 ## 0.36.0.beta.2
 
