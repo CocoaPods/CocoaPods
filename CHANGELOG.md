@@ -56,6 +56,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2685](https://github.com/CocoaPods/CocoaPods/issues/2685)
 
+* Require explicit use of `use_frameworks!` for Pods written in Swift.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3029](https://github.com/CocoaPods/CocoaPods/issues/3029)
+
 ##### Bug Fixes
 
 * Added support for .tpp C++ header files in specs (previously were getting
