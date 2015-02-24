@@ -442,6 +442,40 @@ module Pod
       end
     end
 
+    describe 'frameworks' do
+      before do
+        @validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+      end
+
+      def setup_validator
+        @validator.stubs(:validate_url)
+        @validator.stubs(:validate_screenshots)
+        @validator.stubs(:check_file_patterns)
+        Installer.any_instance.stubs(:install!)
+        Installer.any_instance.stubs(:aggregate_targets).returns([])
+      end
+
+      it 'lints as a framework if specified' do
+        @validator.use_frameworks = true
+
+        setup_validator
+
+        @validator.expects(:podfile_from_spec).with(:osx, nil, true).once
+        @validator.expects(:podfile_from_spec).with(:ios, nil, true).once
+        @validator.send(:perform_extensive_analysis, @validator.spec)
+      end
+
+      it 'lint as a static library if specified' do
+        @validator.use_frameworks = false
+
+        setup_validator
+
+        @validator.expects(:podfile_from_spec).with(:osx, nil, false).once
+        @validator.expects(:podfile_from_spec).with(:ios, nil, false).once
+        @validator.send(:perform_extensive_analysis, @validator.spec)
+      end
+    end
+
     describe 'swift validation' do
       def test_swiftpod
         podspec = stub_podspec(/.*source_files.*/, '"source_files": "*.swift",')
