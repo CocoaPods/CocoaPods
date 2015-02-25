@@ -40,10 +40,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 0dfe8054f0bb9e6f1c1d175536248ccb484afe22
+  revision: 232f08701f4184a329f7a543c8fff4cf4edf1587
   branch: master
   specs:
-    cocoapods-plugins (0.4.0)
+    cocoapods-plugins (0.4.1)
       nap
 
 GIT
@@ -70,7 +70,7 @@ PATH
       claide (~> 0.8.1)
       cocoapods-core (= 0.36.0.beta.2)
       cocoapods-downloader (~> 0.8.1)
-      cocoapods-plugins (~> 0.4.0)
+      cocoapods-plugins (~> 0.4.1)
       cocoapods-trunk (~> 0.5.0)
       cocoapods-try (~> 0.4.3)
       colored (~> 1.2)
