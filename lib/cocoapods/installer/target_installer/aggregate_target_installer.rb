@@ -41,6 +41,7 @@ module Pod
           'OTHER_LDFLAGS'      => '',
           'OTHER_LIBTOOLFLAGS' => '',
           'PODS_ROOT'          => '$(SRCROOT)',
+          'SKIP_INSTALL'       => 'YES',
         }
         super.merge(settings)
       end

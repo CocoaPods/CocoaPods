@@ -101,6 +101,13 @@ module Pod
         end
       end
 
+      it 'will be skipped when installing' do
+        @installer.install!
+        @installer.target.native_target.build_configurations.each do |config|
+          config.build_settings['SKIP_INSTALL'].should == 'YES'
+        end
+      end
+
       #--------------------------------------#
 
       it 'creates the xcconfig file' do

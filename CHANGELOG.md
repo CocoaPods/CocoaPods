@@ -72,6 +72,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Set `SKIP_INSTALL=YES` for all generated targets to avoid producing
+  *Generic Xcode Archives* on Archive.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3188](https://github.com/CocoaPods/CocoaPods/issues/3188)
+
 * Added support for .tpp C++ header files in specs (previously were getting
   filtered out and symlinks wouldn't get created in the Pods/Headers folder.)  
   [Honza Dvorsky](https://github.com/czechboy0)

@@ -62,6 +62,10 @@ module Pod
             @xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}'
           end
 
+          it 'will be skipped when installing' do
+            @xcconfig.to_hash['SKIP_INSTALL'].should == 'YES'
+          end
+
           it 'saves the xcconfig' do
             path = temporary_directory + 'sample.xcconfig'
             @generator.save_as(path)
