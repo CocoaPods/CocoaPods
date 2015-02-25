@@ -395,6 +395,15 @@ module Pod
         validator.results.count.should == 0
       end
 
+      it 'does filter embedded frameworks warnings' do
+        validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+        validator.stubs(:check_file_patterns)
+        validator.stubs(:xcodebuild).returns('ld: warning: embedded dylibs/frameworks only run on iOS 8 or later.')
+        validator.stubs(:validate_url)
+        validator.validate
+        validator.results.count.should == 0
+      end
+
       describe 'file pattern validation' do
         it 'checks for file patterns' do
           file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "wrong_paht.*",'))
