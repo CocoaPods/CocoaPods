@@ -4,6 +4,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+#### Bug Fixes
+
+* Correctly filter Xcode warnings about the use of dynamic frameworks.  
+  [Boris Bügling](https://github.com/neonichu)
+
+
 ## 0.36.0.rc.1
 
 ##### Enhancements
