@@ -6,7 +6,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
-#### Bug Fixes
+##### Bug Fixes
 
 * Correctly filter Xcode warnings about the use of dynamic frameworks.  
   [Boris Bügling](https://github.com/neonichu)
