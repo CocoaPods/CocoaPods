@@ -9,7 +9,7 @@ module Pod
   class Project < Xcodeproj::Project
     # @param  [Pathname, String] path @see path
     # @param  [Bool] skip_initialization
-    #         Wether the project should be initialized from scratch.
+    #         Whether the project should be initialized from scratch.
     #
     def initialize(path, skip_initialization = false)
       super(path, skip_initialization)
