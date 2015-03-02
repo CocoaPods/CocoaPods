@@ -172,11 +172,11 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe '#verify_no_static_framework_transitive_dependencies' do
-      it 'detects transitive static dependencies' do
-        Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([Pathname('libThing.a')])
+      before do
         fixture_path = ROOT + 'spec/fixtures'
         config.repos_dir = fixture_path + 'spec-repos'
-        podfile = Pod::Podfile.new do
+        config.integrate_targets = false
+        @podfile = Pod::Podfile.new do
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
           use_frameworks!
@@ -184,11 +184,20 @@ module Pod
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
         end
-        lockfile = generate_lockfile
-        config.integrate_targets = false
+        @lockfile = generate_lockfile
+      end
 
-        @installer = Installer.new(config.sandbox, podfile, lockfile)
+      it 'detects transitive static dependencies which are linked directly to the user target' do
+        Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([Pathname('/libThing.a')])
+        @installer = Installer.new(config.sandbox, @podfile, @lockfile)
         should.raise(Informative) { @installer.install! }.message.should.match /transitive.*libThing/
+      end
+
+      it 'allows transitive static dependencies which contain other source code' do
+        Sandbox::FileAccessor.any_instance.stubs(:source_files).returns([Pathname('/yolo.m')])
+        Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([Pathname('/libThing.a')])
+        @installer = Installer.new(config.sandbox, @podfile, @lockfile)
+        should.not.raise(Informative) { @installer.install! }
       end
     end
 
