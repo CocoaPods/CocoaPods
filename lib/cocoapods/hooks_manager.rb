@@ -45,7 +45,7 @@ module Pod
         raise ArgumentError, 'Missing block' unless block
 
         UI.warn '[Hooks] The use of hooks without specifying a `plugin_name` ' \
-                'has been deprecated.' unless plugin_name
+                "has been deprecated (from file `#{block.binding.eval('File.expand_path __FILE__')}`)." unless plugin_name
 
         @name = name
         @plugin_name = plugin_name

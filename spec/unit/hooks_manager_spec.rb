@@ -32,6 +32,7 @@ module Pod
       it 'warns if no plugin name is given' do
         @hooks_manager.register(:post_install) {}
         UI.warnings.should.match /hooks without.*deprecated/
+        UI.warnings.should.match /#{__FILE__}/
       end
     end
 
