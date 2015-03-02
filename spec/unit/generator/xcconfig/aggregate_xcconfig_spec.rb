@@ -157,7 +157,7 @@ module Pod
           end
 
           it 'adds the COCOAPODS macro definition' do
-            @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should.include '"-D" "COCOAPODS"'
+            @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should.include '$(inherited) "-D" "COCOAPODS"'
           end
         end
 
