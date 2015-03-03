@@ -129,6 +129,16 @@ module Pod
 
           behaves_like 'AggregateXCConfig'
 
+          describe 'with a vendored-library pod' do
+            def spec
+              fixture_spec('monkey/monkey.podspec')
+            end
+
+            it 'does not add the framework build path to the xcconfig' do
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil?
+            end
+          end
+
           it 'sets the PODS_FRAMEWORK_BUILD_PATH build variable' do
             @xcconfig.to_hash['PODS_FRAMEWORK_BUILD_PATH'].should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
           end
