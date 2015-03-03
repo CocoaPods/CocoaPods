@@ -11,6 +11,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Correctly filter Xcode warnings about the use of dynamic frameworks.  
   [Boris Bügling](https://github.com/neonichu)
 
+* Fixes warnings, when the aggregate target doesn't contain any pod target, which is build,
+  because `PODS_FRAMEWORK_BUILD_PATH` was added to `FRAMEWORK_SEARCH_PATHS`, but never created.
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3217](https://github.com/CocoaPods/CocoaPods/issues/3217)
+
 
 ## 0.36.0.rc.1
 
