@@ -213,6 +213,7 @@ module Pod
         @consumer = spec.consumer(platform)
         setup_validation_environment
         install_pod
+        validate_vendored_dynamic_frameworks
         build_pod
         check_file_patterns
         tear_down_validation_environment
@@ -320,6 +321,19 @@ module Pod
 
       @file_accessor = file_accessors.find { |accessor| accessor.spec.root.name == spec.root.name }
       config.silent
+    end
+
+    def validate_vendored_dynamic_frameworks
+      deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
+
+      unless file_accessor.nil?
+        dynamic_frameworks = file_accessor.vendored_frameworks.select { |fw| `file #{fw + fw.basename('.framework')} 2>&1` =~ /dynamically linked/ }
+        dynamic_libraries = file_accessor.vendored_libraries.select { |lib| `file #{lib} 2>&1` =~ /dynamically linked/ }
+        if (dynamic_frameworks.count > 0 || dynamic_libraries.count > 0) && consumer.platform_name == :ios &&
+            (deployment_target.nil? || Version.new(deployment_target).major < 8)
+          error('dynamic', 'Dynamic frameworks and libraries are only supported on iOS 8.0 and onwards.')
+        end
+      end
     end
 
     # Performs platform specific analysis. It requires to download the source
