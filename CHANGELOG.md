@@ -25,6 +25,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3194](https://github.com/CocoaPods/CocoaPods/issues/3194)
 
+* Lint to prevent dynamic libraries and frameworks from passing with iOS 7.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3193](https://github.com/CocoaPods/CocoaPods/issues/3193)
+
 
 ## 0.36.0.rc.1
 

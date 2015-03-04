@@ -485,6 +485,22 @@ module Pod
       end
     end
 
+    describe 'dynamic binaries validation' do
+      it 'fails with dynamic binaries on iOS < 8' do
+        podspec = stub_podspec(/.*license.*$/, '"license": "Public Domain",')
+        file = write_podspec(podspec)
+
+        Pod::Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([fixture('empty.dylib')])
+        validator = Validator.new(file, SourcesManager.master.map(&:url))
+        validator.stubs(:build_pod)
+        validator.stubs(:validate_url)
+        validator.validate
+
+        validator.results.map(&:to_s).first.should.match /Dynamic frameworks.*iOS 8.0 and onwards/
+        validator.result_type.should == :error
+      end
+    end
+
     describe 'swift validation' do
       def test_swiftpod
         podspec = stub_podspec(/.*source_files.*/, '"source_files": "*.swift",')
