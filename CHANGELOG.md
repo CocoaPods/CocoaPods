@@ -12,9 +12,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
 
 * Fixes warnings, when the aggregate target doesn't contain any pod target, which is build,
-  because `PODS_FRAMEWORK_BUILD_PATH` was added to `FRAMEWORK_SEARCH_PATHS`, but never created.
+  because `PODS_FRAMEWORK_BUILD_PATH` was added to `FRAMEWORK_SEARCH_PATHS`, but never created.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#3217](https://github.com/CocoaPods/CocoaPods/issues/3217)
+
+* Allows the usage of `:head` dependencies even when the most recent published
+  version was a pre-release.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3212](https://github.com/CocoaPods/CocoaPods/issues/3212)
 
 
 ## 0.36.0.rc.1

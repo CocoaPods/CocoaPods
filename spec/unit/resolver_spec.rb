@@ -287,6 +287,25 @@ module Pod
         ]
       end
 
+      it 'allows pre-release spec versions when a requirement has a ' \
+         'HEAD source' do
+        @podfile = Podfile.new do
+          platform :ios
+          pod 'MainSpec', :head
+        end
+        spec = Spec.new do |s|
+          s.name         = 'MainSpec'
+          s.version      = '1.2.3-pre'
+          s.platform     = :ios
+        end
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
+        resolver.expects(:find_cached_set).returns(Specification::Set::Head.new(spec))
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should == [
+          'MainSpec (HEAD based on 1.2.3-pre)',
+        ]
+      end
+
       it "marks a specification's version to be a HEAD version" do
         podfile = Podfile.new do
           platform :ios

@@ -180,7 +180,7 @@ module Pod
         end
       requirement_satisfied && !(
         spec.version.prerelease? &&
-        existing_vertices.flat_map(&:requirements).none? { |r| r.prerelease? || r.external_source }
+        existing_vertices.flat_map(&:requirements).none? { |r| r.prerelease? || r.external_source || r.head? }
       )
     end
 
