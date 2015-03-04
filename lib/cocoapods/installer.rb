@@ -355,7 +355,7 @@ module Pod
           pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
 
           dependencies = pod_targets.flat_map(&:dependencies)
-          dependended_upon_targets = pod_targets.select { |t| dependencies.include?(t.pod_name) }
+          dependended_upon_targets = pod_targets.select { |t| dependencies.include?(t.pod_name) && !t.should_build? }
 
           static_libs = dependended_upon_targets.flat_map(&:file_accessors).flat_map do |fa|
             static_frameworks = fa.vendored_frameworks.reject { |fw| `file #{fw + fw.basename('.framework')} 2>&1` =~ /dynamically linked/ }
