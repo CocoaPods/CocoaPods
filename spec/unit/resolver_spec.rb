@@ -320,6 +320,17 @@ module Pod
         config.sandbox.head_pod?('JSONKit').should.be.true
       end
 
+      it 'raises when unable to find a base spec for a HEAD dependency' do
+        podfile = Podfile.new do
+          platform :ios, '7.0'
+          pod 'ALEKit', :head
+        end
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
+        Source::Aggregate.any_instance.stubs(:search).with(Dependency.new('ALEKit', :head)).returns(nil)
+        e = should.raise(Informative) { resolver.resolve.values.flatten.map(&:to_s) }
+        e.message.should.match /Unable to find a specification for `ALEKit \(HEAD\)`/
+      end
+
       it 'raises if it finds two conflicting explicit dependencies' do
         podfile = Podfile.new do
           platform :ios

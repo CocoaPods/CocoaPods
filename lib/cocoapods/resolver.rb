@@ -311,7 +311,7 @@ module Pod
         else
           set = create_set_from_sources(dependency)
         end
-        if dependency.head?
+        if set && dependency.head?
           set = Specification::Set::Head.new(set.specification)
         end
         cached_sets[name] = set

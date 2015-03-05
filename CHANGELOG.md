@@ -29,6 +29,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3193](https://github.com/CocoaPods/CocoaPods/issues/3193)
 
+* Shows an informative error message when there is no base specification found
+  for a `:head` dependency.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3230](https://github.com/CocoaPods/CocoaPods/issues/3230)
+
 
 ## 0.36.0.rc.1
 
