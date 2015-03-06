@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Only copy explicitly specified xcasset files into the bundle of the integrated target.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3219](https://github.com/CocoaPods/CocoaPods/issues/3219)
+
 * Correctly filter Xcode warnings about the use of dynamic frameworks.  
   [Boris Bügling](https://github.com/neonichu)
 
