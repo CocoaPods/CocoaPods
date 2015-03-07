@@ -6,6 +6,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Allows Swift pods to have a deployment target under iOS 8.0 if they use
+  XCTest.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3225](https://github.com/CocoaPods/CocoaPods/issues/3225)
+
 ##### Bug Fixes
 
 * Correctly filter Xcode warnings about the use of dynamic frameworks.  
