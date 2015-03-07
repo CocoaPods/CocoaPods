@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3230](https://github.com/CocoaPods/CocoaPods/issues/3230)
 
+* Fix the `OTHER_SWIFT_FLAGS` generated, so it inherits previous definitions.  
+  [Daniel Thorpe](https://github.com/danthorpe)
+  [#2983](https://github.com/CocoaPods/CocoaPods/issues/2983)
+
 
 ## 0.36.0.rc.1
 
