@@ -313,7 +313,8 @@ module Pod
       file_accessors = installer.aggregate_targets.map do |target|
         if target.pod_targets.any?(&:uses_swift?) && consumer.platform_name == :ios &&
             (deployment_target.nil? || Version.new(deployment_target).major < 8)
-          error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.')
+          uses_xctest = target.spec_consumers.any? { |c| (c.frameworks + c.weak_frameworks).include? 'XCTest' }
+          error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.') unless uses_xctest
         end
 
         target.pod_targets.map(&:file_accessors)

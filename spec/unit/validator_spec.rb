@@ -523,6 +523,13 @@ module Pod
         validator.result_type.should == :error
       end
 
+      it 'succeeds on deployment target < iOS 8 for Swift Pods using XCTest' do
+        Specification::Consumer.any_instance.stubs(:frameworks).returns(%w(XCTest))
+
+        validator = test_swiftpod
+        validator.results.count.should == 0
+      end
+
       it 'succeeds on deployment targets >= iOS 8 for Swift Pods' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
