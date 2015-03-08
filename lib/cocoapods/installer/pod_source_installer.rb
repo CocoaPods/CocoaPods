@@ -76,7 +76,7 @@ module Pod
       # @return [void]
       #
       def download_source
-        released = !local? && !head_pod? &&!predownloaded?
+        released = !local? && !head_pod? && !predownloaded?
         download_result = config.download_cache.download_pod(root_spec, released, nil, head_pod?)
         root.rmtree if root.exist?
         FileUtils.cp_r(download_result.location, root)

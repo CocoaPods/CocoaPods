@@ -107,7 +107,6 @@ module Pod
         FileUtils.cp_r(source, destination)
         Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
       end
-
     end
   end
 end
