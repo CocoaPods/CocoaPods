@@ -206,7 +206,7 @@ module Pod
           sources =  git_sources
         end
 
-        sources.each do |source|
+        WorkerPool.process(sources, 4) do |source|
           UI.section "Updating spec repo `#{source.name}`" do
             begin
               output = git!("--git-dir=#{(source.repo + '.git').to_s.shellescape} --work-tree=#{source.repo.to_s.shellescape} pull --ff-only")
