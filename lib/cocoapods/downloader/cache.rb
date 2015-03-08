@@ -41,9 +41,11 @@ module Pod
 
         result = Result.new
 
-        result.checkout_options = downloader_opts
-        result.location = path_for_pod(name, version, downloader_opts) unless head
-        return result if !head && result.location.directory?
+        if !head && result.location = path_for_pod(name, version, downloader_opts)
+          result.checkout_options = downloader_opts
+          result.spec = spec || Sandbox::PodspecFinder.new(result.location).podspecs[name]
+          return result if result.location.directory?
+        end
 
         in_tmpdir do |target|
           result.checkout_options = download(name, target, downloader_opts, head)

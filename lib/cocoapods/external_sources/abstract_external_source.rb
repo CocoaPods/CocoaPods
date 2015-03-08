@@ -99,22 +99,17 @@ module Pod
         UI.titled_section(title,  :verbose_prefix => '-> ') do
           target = sandbox.pod_dir(name)
           target.rmtree if target.exist?
-          downloader = Downloader.for_target(target, params)
-          downloader.download
 
-          podspec_finder = Sandbox::PodspecFinder.new(target)
-          spec = podspec_finder.podspecs[name]
+          download_result = Config.instance.download_cache.download_pod(name, false, params)
+          FileUtils.cp_r(download_result.location, target)
+
+          spec = download_result.spec
 
           raise Informative, "Unable to find a specification for '#{name}'." unless spec
 
           store_podspec(sandbox, spec)
           sandbox.store_pre_downloaded_pod(name)
-          if downloader.options_specific?
-            source = params
-          else
-            source = downloader.checkout_options
-          end
-          sandbox.store_checkout_source(name, source)
+          sandbox.store_checkout_source(name, download_result.checkout_options)
         end
       end
 
