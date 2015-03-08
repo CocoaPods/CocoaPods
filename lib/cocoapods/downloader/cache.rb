@@ -110,6 +110,7 @@ module Pod
         destination.parent.mkpath unless destination.parent.exist?
         FileUtils.cp_r(source, destination)
         Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
+        (destination + "#{spec.name}.podspec.json").open('w') { |f| f.write spec.to_pretty_json }
       end
     end
   end
