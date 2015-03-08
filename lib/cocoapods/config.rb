@@ -137,12 +137,12 @@ module Pod
     #         Podfile is located.
     #
     def installation_root
-      current_path = Pathname.pwd
+      current_path = Pod.pwd
       unless @installation_root
         until current_path.root?
           if podfile_path_in_dir(current_path)
             @installation_root = current_path
-            unless current_path == Pathname.pwd
+            unless current_path == Pod.pwd
               UI.puts("[in #{current_path}]")
             end
             break
@@ -150,7 +150,7 @@ module Pod
             current_path = current_path.parent
           end
         end
-        @installation_root ||= Pathname.pwd
+        @installation_root ||= Pod.pwd
       end
       @installation_root
     end

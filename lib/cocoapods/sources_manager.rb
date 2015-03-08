@@ -206,18 +206,16 @@ module Pod
           sources =  git_sources
         end
 
-        sources.each do |source|
+        WorkerPool.process(sources, 4) do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            Dir.chdir(source.repo) do
-              begin
-                output = git!('pull --ff-only')
-                UI.puts output if show_output && !config.verbose?
-              rescue Informative
-                UI.warn 'CocoaPods was not able to update the ' \
-                  "`#{source.name}` repo. If this is an unexpected issue " \
-                  'and persists you can inspect it running ' \
-                  '`pod repo update --verbose`'
-              end
+            begin
+              output = git!("--git-dir=#{(source.repo + '.git').to_s.shellescape} --work-tree=#{source.repo.to_s.shellescape} pull --ff-only")
+              UI.puts output if show_output && !config.verbose?
+            rescue Informative
+              UI.warn 'CocoaPods was not able to update the ' \
+                "`#{source.name}` repo. If this is an unexpected issue " \
+                'and persists you can inspect it running ' \
+                '`pod repo update --verbose`'
             end
             check_version_information(source.repo)
           end
@@ -232,7 +230,7 @@ module Pod
       # @return [Bool] Whether the given source is a GIT repo.
       #
       def git_repo?(dir)
-        Dir.chdir(dir) { git('rev-parse  >/dev/null 2>&1') }
+        Pod.chdir(dir) { git('rev-parse  >/dev/null 2>&1') }
         $?.success?
       end
 

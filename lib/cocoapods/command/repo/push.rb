@@ -61,7 +61,7 @@ module Pod
         # specs to the master repo.
         #
         def check_if_master_repo
-          remotes = Dir.chdir(repo_dir) { `git remote -v 2>&1` }
+          remotes = Pod.chdir(repo_dir) { `git remote -v 2>&1` }
           master_repo_urls = [
             'git@github.com:CocoaPods/Specs.git',
             'https://github.com/CocoaPods/Specs.git',
@@ -109,7 +109,7 @@ module Pod
         # @return [void]
         #
         def check_repo_status
-          clean = Dir.chdir(repo_dir) { `git status --porcelain  2>&1` } == ''
+          clean = Pod.chdir(repo_dir) { `git status --porcelain  2>&1` } == ''
           raise Informative, "The repo `#{@repo}` at #{UI.path repo_dir} is not clean" unless clean
         end
 
@@ -119,7 +119,7 @@ module Pod
         #
         def update_repo
           UI.puts "Updating the `#{@repo}' repo\n".yellow
-          Dir.chdir(repo_dir) { UI.puts `git pull 2>&1` }
+          Pod.chdir(repo_dir) { UI.puts `git pull 2>&1` }
         end
 
         # Commits the podspecs to the source, which should be a git repo.
@@ -144,7 +144,7 @@ module Pod
 
             FileUtils.mkdir_p(output_path)
             FileUtils.cp(spec_file, output_path)
-            Dir.chdir(repo_dir) do
+            Pod.chdir(repo_dir) do
               # only commit if modified
               if git!('status --porcelain 2>&1').include?(spec.name)
                 UI.puts " - #{message}"
@@ -163,7 +163,7 @@ module Pod
         #
         def push_repo
           UI.puts "\nPushing the `#{@repo}' repo\n".yellow
-          Dir.chdir(repo_dir) { UI.puts `git push origin master 2>&1` }
+          Pod.chdir(repo_dir) { UI.puts `git push origin master 2>&1` }
         end
 
         #---------------------------------------------------------------------#

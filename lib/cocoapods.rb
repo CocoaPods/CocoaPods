@@ -15,6 +15,7 @@ if I18n.respond_to?(:enforce_available_locales=)
 end
 
 module Pod
+  require 'monitor'
   require 'pathname'
   require 'tmpdir'
 

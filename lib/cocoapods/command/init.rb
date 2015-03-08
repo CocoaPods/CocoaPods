@@ -21,15 +21,15 @@ module Pod
       ]
 
       def initialize(argv)
-        @podfile_path = Pathname.pwd + 'Podfile'
+        @podfile_path = Pod.pwd + 'Podfile'
         @project_path = argv.shift_argument
-        @project_paths = Pathname.pwd.children.select { |pn| pn.extname == '.xcodeproj' }
+        @project_paths = Pod.pwd.children.select { |pn| pn.extname == '.xcodeproj' }
         super
       end
 
       def validate!
         super
-        raise Informative, 'Existing Podfile found in directory' unless config.podfile_path_in_dir(Pathname.pwd).nil?
+        raise Informative, 'Existing Podfile found in directory' unless config.podfile_path_in_dir(Pod.pwd).nil?
         if @project_path
           help! "Xcode project at #{@project_path} does not exist" unless File.exist? @project_path
           project_path = @project_path

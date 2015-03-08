@@ -136,7 +136,7 @@ EOS
           SourcesManager.all.map do |source|
             next unless source.type == 'file system'
             repo = source.repo
-            Dir.chdir(repo) do
+            Pod.chdir(repo) do
               url = `git config --get remote.origin.url 2>&1`.strip
               sha = `git rev-parse HEAD 2>&1`.strip
               "#{repo.basename} - #{url} @ #{sha}"

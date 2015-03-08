@@ -35,7 +35,7 @@ module Pod
           end
 
           spec = spec_template(data)
-          (Pathname.pwd + "#{data[:name]}.podspec").open('w') { |f| f << spec }
+          (Pod.pwd + "#{data[:name]}.podspec").open('w') { |f| f << spec }
           UI.puts "\nSpecification created at #{data[:name]}.podspec".green
         end
 
