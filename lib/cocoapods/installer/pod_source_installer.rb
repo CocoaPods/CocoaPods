@@ -76,8 +76,7 @@ module Pod
       # @return [void]
       #
       def download_source
-        released = !local? && !head_pod? && !predownloaded?
-        download_result = config.download_cache.download_pod(root_spec, released, nil, head_pod?)
+        download_result = config.download_cache.download_pod(root_spec, released?, nil, head_pod?)
         root.rmtree if root.exist?
         FileUtils.cp_r(download_result.location, root)
 
@@ -160,6 +159,10 @@ module Pod
 
       def head_pod?
         sandbox.head_pod?(root_spec.name)
+      end
+
+      def released?
+        !local? && !head_pod? && !predownloaded? && sandbox.specification(root_spec.name) != root_spec
       end
 
       #-----------------------------------------------------------------------#
