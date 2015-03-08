@@ -298,7 +298,6 @@ module Pod
         end
       end
 
-
       @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
       pod_installer.install!

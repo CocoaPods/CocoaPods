@@ -77,6 +77,5 @@ module Pod
       paths = @cleaner.send(:used_files)
       paths.should == []
     end
-
   end
 end
