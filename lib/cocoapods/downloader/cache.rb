@@ -6,26 +6,11 @@ module Pod
     class Cache
       Result = Struct.new(:location, :spec, :checkout_options)
 
-      attr_accessor :root
+      attr_reader :root
 
       def initialize(root)
         @root = root
         root.mkpath unless root.exist?
-      end
-
-      def cache_key(pod_name, version = nil, downloader_opts = nil)
-        raise ArgumentError unless pod_name || (!version && !downloader_opts)
-
-        if version
-          "Release/#{pod_name}/#{version}"
-        elsif downloader_opts
-          opts = downloader_opts.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/#{File::SEPARATOR}+/, '+')
-          "External/#{pod_name}/#{opts}"
-        end
-      end
-
-      def path_for_pod(name, version = nil, downloader_opts = nil)
-        root + cache_key(name, version, downloader_opts)
       end
 
       def download_pod(name_or_spec, released = false, downloader_opts = nil, head = false)
@@ -71,6 +56,23 @@ module Pod
       rescue Object
         UI.notice("Error installing #{name}")
         raise
+      end
+
+      private
+
+      def cache_key(pod_name, version = nil, downloader_opts = nil)
+        raise ArgumentError unless pod_name || (!version && !downloader_opts)
+
+        if version
+          "Release/#{pod_name}/#{version}"
+        elsif downloader_opts
+          opts = downloader_opts.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/#{File::SEPARATOR}+/, '+')
+          "External/#{pod_name}/#{opts}"
+        end
+      end
+
+      def path_for_pod(name, version = nil, downloader_opts = nil)
+        root + cache_key(name, version, downloader_opts)
       end
 
       def download(name, target, params, head)
