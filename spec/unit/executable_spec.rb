@@ -5,7 +5,7 @@ module Pod
     it 'shows the actual command on failure' do
       e = lambda do
         Executable.execute_command('false',
-                                   '', true)
+                                   [''], true)
       end.should.raise Informative
       e.message.should.match(/false/)
     end
@@ -16,8 +16,8 @@ module Pod
       result = mock
       result.stubs(:success?).returns(true)
 
-      Open4.expects(:spawn).with('/Spa\\ ces/are\\"/fun/false ', :stdout => [], :stderr => [], :status => true).once.returns(result)
-      Executable.execute_command(cmd, '', true)
+      Open4.expects(:spawn).with('/Spa ces/are"/fun/false', [], :stdout => [], :stderr => [], :status => true).once.returns(result)
+      Executable.execute_command(cmd, [], true)
     end
   end
 end

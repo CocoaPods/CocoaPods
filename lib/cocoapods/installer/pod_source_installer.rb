@@ -124,7 +124,7 @@ module Pod
             ENV.delete('CDPATH')
             prepare_command = root_spec.prepare_command.strip_heredoc.chomp
             full_command = "\nset -e\n" + prepare_command
-            bash!(full_command)
+            bash!('-c', full_command)
           end
         end
       end

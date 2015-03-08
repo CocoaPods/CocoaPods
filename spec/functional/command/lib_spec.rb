@@ -21,7 +21,7 @@ module Pod
     it 'should create a new dir for the newly created pod' do
       @sut.any_instance.stubs(:configure_template)
       url = @sut::TEMPLATE_REPO
-      @sut.any_instance.expects(:git!).with("clone '#{url}' TestPod").once
+      @sut.any_instance.expects(:git!).with(['clone', url, 'TestPod']).once
       run_command('lib', 'create', 'TestPod')
     end
 
@@ -47,13 +47,13 @@ module Pod
 
     it 'should use the given template URL' do
       template_url = 'https://github.com/custom/template.git'
-      @sut.any_instance.expects(:git!).with("clone '#{template_url}' TestPod").once
+      @sut.any_instance.expects(:git!).with(['clone', template_url, 'TestPod']).once
       run_command('lib', 'create', 'TestPod', template_url)
     end
 
     it 'should use the default URL if no template URL is given' do
       template_url = 'https://github.com/CocoaPods/pod-template.git'
-      @sut.any_instance.expects(:git!).with("clone '#{template_url}' TestPod").once
+      @sut.any_instance.expects(:git!).with(['clone', template_url, 'TestPod']).once
       run_command('lib', 'create', 'TestPod')
     end
   end

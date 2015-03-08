@@ -19,12 +19,12 @@ module Pod
     # @return [void]
     #
     def executable(name)
-      define_method(name) do |command|
-        Executable.execute_command(name, command, false)
+      define_method(name) do |*command|
+        Executable.execute_command(name, Array(command).flatten, false)
       end
 
-      define_method(name.to_s + '!') do |command|
-        Executable.execute_command(name, command, true)
+      define_method(name.to_s + '!') do |*command|
+        Executable.execute_command(name, Array(command).flatten, true)
       end
     end
 
@@ -33,7 +33,7 @@ module Pod
     # @param  [String] bin
     #         The binary to use.
     #
-    # @param  [String] command
+    # @param  [Array<#to_s>] command
     #         The command to send to the binary.
     #
     # @param  [Bool] raise_on_failure
@@ -54,7 +54,8 @@ module Pod
       require 'open4'
       require 'shellwords'
 
-      full_command = "#{bin.shellescape} #{command}"
+      command = command.map(&:to_s)
+      full_command = "#{bin.shellescape} #{command.map(&:shellescape).join(' ')}"
 
       if Config.instance.verbose?
         UI.message("$ #{full_command}")
@@ -64,7 +65,7 @@ module Pod
       end
 
       options = { :stdout => stdout, :stderr => stderr, :status => true }
-      status  = Open4.spawn(full_command, options)
+      status  = Open4.spawn(bin, command, options)
       output  = stdout.join("\n") + stderr.join("\n")
       unless status.success?
         if raise_on_failure
