@@ -3,8 +3,6 @@ module Pod
     # Provides support for fetching a specification file from a path local to
     # the machine running the installation.
     #
-    # Works with the {LocalPod::LocalSourcedPod} class.
-    #
     class PathSource < AbstractExternalSource
       # @see  AbstractExternalSource#fetch
       #

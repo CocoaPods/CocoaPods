@@ -103,6 +103,7 @@ module Pod
 
       it 'returns the path of the search index' do
         SourcesManager.unstub(:search_index_path)
+        config.cache_root = Config::DEFAULTS[:cache_root]
         path = SourcesManager.search_index_path.to_s
         path.should.match %r{Library/Caches/CocoaPods/search_index.yaml}
       end

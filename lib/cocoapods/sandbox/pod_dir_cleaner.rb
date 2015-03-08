@@ -1,6 +1,6 @@
 module Pod
-  module Downloader
-    class Cleaner
+  class Sandbox
+    class PodDirCleaner
       attr_reader :root
       attr_reader :specs_by_platform
 
@@ -57,14 +57,13 @@ module Pod
         glob_options = File::FNM_DOTMATCH | File::FNM_CASEFOLD
         files = Pathname.glob(root + '**/*', glob_options).map(&:to_s)
 
-        files.reject! do |candidate|
+        files.reject do |candidate|
           candidate = candidate.downcase
           candidate.end_with?('.', '..') || cached_used.any? do |path|
             path = path.downcase
             path.include?(candidate) || candidate.include?(path)
           end
         end
-        files
       end
 
       # @return [Array<String>] The absolute path of all the files used by the

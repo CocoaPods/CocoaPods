@@ -8,6 +8,8 @@ module Pod
     # @note This class needs to consider all the activated specs of a Pod.
     #
     class PodSourceInstaller
+      include Config::Mixin
+
       # @return [Sandbox]
       #
       attr_reader :sandbox
@@ -44,12 +46,6 @@ module Pod
       def install!
         download_source unless predownloaded? || local?
         run_prepare_command
-      rescue Informative
-        raise
-      rescue Object
-        UI.notice("Error installing #{root_spec.name}")
-        clean!
-        raise
       end
 
       # Cleans the installations if appropriate.
@@ -80,28 +76,12 @@ module Pod
       # @return [void]
       #
       def download_source
+        released = !local? && !head_pod? &&!predownloaded?
+        download_result = config.download_cache.download_pod(root_spec, released, nil, head_pod?)
         root.rmtree if root.exist?
-        if head_pod?
-          begin
-            downloader.download_head
-            @specific_source = downloader.checkout_options
-          rescue RuntimeError => e
-            if e.message == 'Abstract method'
-              raise Informative, "The pod '" + root_spec.name + "' does not " \
-                'support the :head option, as it uses a ' + downloader.name +
-                ' source. Remove that option to use this pod.'
-            else
-              raise
-            end
-          end
-        else
-          downloader.download
-          unless downloader.options_specific?
-            @specific_source = downloader.checkout_options
-          end
-        end
+        FileUtils.cp_r(download_result.location, root)
 
-        if specific_source
+        if @specific_source = download_result.checkout_options
           sandbox.store_checkout_source(root_spec.name, specific_source)
         end
       end
@@ -135,21 +115,8 @@ module Pod
       # @return [void]
       #
       def clean_installation
-        cleaner = Downloader::Cleaner.new(root, specs_by_platform)
+        cleaner = Sandbox::PodDirCleaner.new(root, specs_by_platform)
         cleaner.clean!
-      end
-
-      #-----------------------------------------------------------------------#
-
-      public
-
-      # @!group Dependencies
-
-      # @return [Downloader] The downloader to use for the retrieving the
-      #         source.
-      #
-      def downloader
-        @downloader ||= Downloader.for_target(root, root_spec.source.dup)
       end
 
       #-----------------------------------------------------------------------#

@@ -298,7 +298,6 @@ module Pod
         end
       end
 
-      config.download_cache.download_pod(specs_by_platform.values.flatten.first.root)
 
       @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)

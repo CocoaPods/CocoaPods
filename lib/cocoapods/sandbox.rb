@@ -36,9 +36,11 @@ module Pod
   #     +-- Pods.xcodeproj
   #
   class Sandbox
-    autoload :FileAccessor, 'cocoapods/sandbox/file_accessor'
-    autoload :HeadersStore, 'cocoapods/sandbox/headers_store'
-    autoload :PathList,     'cocoapods/sandbox/path_list'
+    autoload :FileAccessor,  'cocoapods/sandbox/file_accessor'
+    autoload :HeadersStore,  'cocoapods/sandbox/headers_store'
+    autoload :PathList,      'cocoapods/sandbox/path_list'
+    autoload :PodDirCleaner, 'cocoapods/sandbox/pod_dir_cleaner'
+    autoload :PodspecFinder, 'cocoapods/sandbox/podspec_finder'
 
     # @return [Pathname] the root of the sandbox.
     #

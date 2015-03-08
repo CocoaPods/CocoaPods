@@ -102,14 +102,12 @@ module Pod
           downloader = Downloader.for_target(target, params)
           downloader.download
 
-          podspec_path = target + "#{name}.podspec"
-          json = false
-          unless Pathname(podspec_path).exist?
-            podspec_path = target + "#{name}.podspec.json"
-            json = true
-          end
+          podspec_finder = Sandbox::PodspecFinder.new(target)
+          spec = podspec_finder.podspecs[name]
 
-          store_podspec(sandbox, target + podspec_path, json)
+          raise Informative, "Unable to find a specification for '#{name}'." unless spec
+
+          store_podspec(sandbox, spec)
           sandbox.store_pre_downloaded_pod(name)
           if downloader.options_specific?
             source = params
@@ -126,7 +124,7 @@ module Pod
       # @param  [Sandbox] sandbox
       #         The sandbox where the specification should be stored.
       #
-      # @param  [Pathname, String] spec
+      # @param  [Pathname, String, Specification] spec
       #         The path of the specification or its contents.
       #
       # @note   All the concrete implementations of #{fetch} should invoke this
@@ -143,6 +141,9 @@ module Pod
           json = true
         elsif spec.is_a?(String) && !json
           spec = Specification.from_string(spec, 'spec.podspec').to_pretty_json
+          json = true
+        elsif spec.is_a?(Specification)
+          spec = spec.to_pretty_json
           json = true
         end
         sandbox.store_podspec(name, spec, true, json)
