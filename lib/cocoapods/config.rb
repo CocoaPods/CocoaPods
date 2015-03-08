@@ -82,6 +82,10 @@ module Pod
       @cache_root
     end
 
+    def download_cache
+      @download_cache ||= Downloader::Cache.new(cache_root + 'Pods')
+    end
+
     public
 
     #-------------------------------------------------------------------------#
