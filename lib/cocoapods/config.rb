@@ -20,7 +20,7 @@ module Pod
       :integrate_targets   => true,
       :new_version_message => true,
 
-      :cache_root          => Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods')),
+      :cache_root          => Pathname.new(Dir.home) + 'Library/Caches/CocoaPods',
     }
 
     public
