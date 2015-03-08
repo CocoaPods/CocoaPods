@@ -57,6 +57,10 @@ module Pod
         def ui_message(message)
           UI.puts message
         end
+
+        def chdir_monitor
+          Pod.chdir_monitor
+        end
       end
     end
   end

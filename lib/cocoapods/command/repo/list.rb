@@ -44,7 +44,7 @@ module Pod
         # @return [void]
         #
         def print_source_at_path(path)
-          Dir.chdir(path) do
+          Pod.chdir(path) do
             if SourcesManager.git_repo?(path)
               remote_name = branch_remote_name(branch_name)
               if remote_name

@@ -350,7 +350,7 @@ module Pod
         UI.warn "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow
       else
         UI.message "\nBuilding with xcodebuild.\n".yellow do
-          output = Dir.chdir(config.sandbox_root) { xcodebuild }
+          output = Pod.chdir(config.sandbox_root) { xcodebuild }
           UI.puts output
           parsed_output  = parse_xcodebuild_output(output)
           parsed_output.each do |message|

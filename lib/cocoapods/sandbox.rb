@@ -211,7 +211,7 @@ module Pod
     def specification(name)
       if file = specification_path(name)
         original_path = development_pods[name]
-        Dir.chdir(original_path || Dir.pwd) { Specification.from_file(file) }
+        Specification.from_file(file)
       end
     end
 
@@ -262,7 +262,7 @@ module Pod
         FileUtils.copy(podspec, output_path)
       end
 
-      Dir.chdir(podspec.is_a?(Pathname) ? File.dirname(podspec) : Dir.pwd) do
+      Pod.chdir(podspec.is_a?(Pathname) ? File.dirname(podspec) : Pod.pwd) do
         spec = Specification.from_file(output_path)
 
         unless spec.name == name

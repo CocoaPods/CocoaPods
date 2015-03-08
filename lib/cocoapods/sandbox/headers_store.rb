@@ -78,7 +78,7 @@ module Pod
         relative_header_paths.map do |relative_header_path|
           absolute_source = (sandbox.root + relative_header_path)
           source = absolute_source.relative_path_from(namespaced_path)
-          Dir.chdir(namespaced_path) do
+          Pod.chdir(namespaced_path) do
             FileUtils.ln_sf(source, relative_header_path.basename)
           end
           namespaced_path + relative_header_path.basename

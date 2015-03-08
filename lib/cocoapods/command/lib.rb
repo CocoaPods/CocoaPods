@@ -70,7 +70,7 @@ module Pod
         #
         def configure_template
           UI.section("Configuring #{@name} template.") do
-            Dir.chdir(@name) do
+            Pod.chdir(@name) do
               if File.exist?('configure')
                 system("./configure #{@name}")
               else
@@ -184,7 +184,7 @@ module Pod
           if !@podspecs_paths.empty?
             Array(@podspecs_paths)
           else
-            podspecs = Pathname.glob(Pathname.pwd + '*.podspec{.yaml,}')
+            podspecs = Pathname.glob(Pod.pwd + '*.podspec{.yaml,}')
             if podspecs.count.zero?
               raise Informative, 'Unable to find a podspec in the working ' \
                 'directory'

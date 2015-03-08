@@ -69,7 +69,7 @@ module Pod
       # @return [void]
       #
       def set_master_repo_url
-        Dir.chdir(master_repo_dir) do
+        Pod.chdir(master_repo_dir) do
           git("remote set-url origin '#{url}'")
         end
       end
@@ -100,7 +100,7 @@ module Pod
       # @return [void]
       #
       def set_master_repo_branch
-        Dir.chdir(master_repo_dir) do
+        Pod.chdir(master_repo_dir) do
           git('checkout master')
         end
       end
