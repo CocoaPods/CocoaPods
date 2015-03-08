@@ -40,7 +40,8 @@ module Pod
         name = target.label
         platform = target.platform.name
         deployment_target = target.platform.deployment_target.to_s
-        @native_target = project.new_target(product_type, name, platform, deployment_target)
+        language = target.uses_swift? ? :swift : :objc
+        @native_target = project.new_target(product_type, name, platform, deployment_target, nil, language)
 
         product_name = target.product_name
         product = @native_target.product_reference

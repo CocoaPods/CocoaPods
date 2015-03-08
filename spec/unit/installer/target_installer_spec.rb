@@ -44,5 +44,17 @@ module Pod
       @installer.send(:native_target).resolved_build_setting('OTHER_LDFLAGS').values.uniq.should == ['']
       @installer.send(:native_target).resolved_build_setting('OTHER_LIBTOOLFLAGS').values.uniq.should == ['']
     end
+
+    it 'adds Swift-specific build settings to the build settings' do
+      @pod_target.stubs(:requires_frameworks?).returns(true)
+      @pod_target.stubs(:uses_swift?).returns(true)
+      @installer.send(:add_target)
+      @installer.send(:native_target).resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').should == {
+        'Release' => nil,
+        'Debug' => '-Onone',
+        'Test' => nil,
+        'AppStore' => nil,
+      }
+    end
   end
 end
