@@ -3,6 +3,10 @@ require 'claide/informative_error'
 
 module Pod
   module Downloader
+    require 'cocoapods/downloader/analyzer'
+    require 'cocoapods/downloader/cache'
+    require 'cocoapods/downloader/cleaner'
+
     class DownloaderError; include CLAide::InformativeError; end
 
     class Base
