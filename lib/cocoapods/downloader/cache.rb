@@ -94,8 +94,7 @@ module Pod
         spec.available_platforms.each do |platform|
           specs_by_platform[platform] = spec.recursive_subspecs.select { |ss| ss.supported_on_platform?(platform) }
         end
-        pod_source_installer = Installer::PodSourceInstaller.new(MockSandbox.new(source), specs_by_platform)
-        pod_source_installer.clean!
+        Cleaner.new(source, specs_by_platform).clean!
         destination.parent.mkpath unless destination.parent.exist?
         FileUtils.move(source, destination)
       end
