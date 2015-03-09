@@ -6,6 +6,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+[Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.21.2...master)
+
 ##### Enhancements
 
 * Allows Swift pods to have a deployment target under iOS 8.0 if they use
@@ -14,6 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3225](https://github.com/CocoaPods/CocoaPods/issues/3225)
 
 ##### Bug Fixes
+
+* Include Swift-specific build settings on target creation, i.e. disable optimizations
+  for debug configuration.
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3238](https://github.com/CocoaPods/CocoaPods/issues/3238)
 
 * Only copy explicitly specified xcasset files into the bundle of the integrated target.  
   [Marius Rackwitz](https://github.com/mrackwitz)
