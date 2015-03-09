@@ -17,6 +17,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Include Swift-specific build settings on target creation, i.e. disable optimizations
+  for debug configuration.
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3238](https://github.com/CocoaPods/CocoaPods/issues/3238)
+
 * Only copy explicitly specified xcasset files into the bundle of the integrated target.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#3219](https://github.com/CocoaPods/CocoaPods/issues/3219)
