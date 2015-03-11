@@ -124,8 +124,7 @@ module Pod
         header_files - private_headers
       end
 
-      # @return [Hash{ Symbol => Array<Pathname> }] the resources of the
-      #         specification grouped by destination.
+      # @return [Array<Pathname>] the resources of the specification.
       #
       def resources
         paths_for_attribute(:resources, true)
