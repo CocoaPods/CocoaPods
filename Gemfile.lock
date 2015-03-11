@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 24356131dcf4dcbc9e507299eadd0a7886f1a846
+  revision: a1117396e95aefc0a53398d2c9845bd5175c4cff
   branch: master
   specs:
     cocoapods-core (0.36.0)
@@ -148,7 +148,7 @@ GEM
     ruby-progressbar (1.7.1)
     safe_yaml (1.0.4)
     slop (3.6.0)
-    thread_safe (0.3.4)
+    thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     webmock (1.20.4)
