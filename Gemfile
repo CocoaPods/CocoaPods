@@ -41,6 +41,5 @@ group :debugging do
   gem 'rb-fsevent'
   gem 'kicker'
   gem 'awesome_print'
-  gem 'pry'
   gem 'ruby-prof'
 end

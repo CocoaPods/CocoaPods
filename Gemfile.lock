@@ -99,7 +99,6 @@ GEM
       colored (~> 1.2)
       diffy
     cocoapods-dependencies (0.4.0)
-    coderay (1.1.0)
     colored (1.2)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
@@ -117,7 +116,6 @@ GEM
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
-    method_source (0.8.2)
     minitest (5.5.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
@@ -133,10 +131,6 @@ GEM
     powerpack (0.0.9)
     prettybacon (0.0.2)
       bacon (~> 1.2)
-    pry (0.10.1)
-      coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
     rainbow (2.0.0)
     rake (10.4.2)
     rb-fsevent (0.9.4)
@@ -184,7 +178,6 @@ DEPENDENCIES
   mocha-on-bacon
   molinillo!
   prettybacon
-  pry
   rake
   rb-fsevent
   rubocop
