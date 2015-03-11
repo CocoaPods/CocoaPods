@@ -4,6 +4,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+* Fix the resource script's handling of `.xcasset` files.  
+  [sodas](https://github.com/sodastsai)
+  [Tony Li](https://github.com/crazytonyli)
+  [#3247](https://github.com/CocoaPods/CocoaPods/issues/3247)
+
+
 ## 0.36.0
 
 [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.22.0...0.23.0)
