@@ -128,7 +128,7 @@ install_resource()
       xcrun mapc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcmappingmodel`.cdm"
       ;;
     *.xcassets)
-      XCASSET_FILES="$XCASSET_FILES '$1'"
+      XCASSET_FILES="$XCASSET_FILES '${PODS_ROOT}/$1'"
       ;;
     /*)
       echo "$1"
