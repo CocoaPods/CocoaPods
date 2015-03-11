@@ -38,7 +38,7 @@ install_resource()
       xcrun mapc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcmappingmodel`.cdm"
       ;;
     *.xcassets)
-      XCASSET_FILES="$XCASSET_FILES '$1'"
+      XCASSET_FILES="$XCASSET_FILES '${PODS_ROOT}/$1'"
       ;;
     /*)
       echo "$1"
@@ -57,7 +57,7 @@ if [[ "${ACTION}" == "install" ]]; then
 fi
 rm -f "$RESOURCES_TO_COPY"
 
-if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n $XCASSET_FILES ]
+if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n "$XCASSET_FILES" ]
 then
   case "${TARGETED_DEVICE_FAMILY}" in
     1,2)
