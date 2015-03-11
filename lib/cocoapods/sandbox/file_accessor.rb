@@ -254,14 +254,21 @@ module Pod
       # Matches the given patterns to the file present in the root of the path
       # list.
       #
-      # @param [Array<String>] patterns
+      # @param  [Array<String>] patterns
       #         The patterns to expand.
       #
-      # @param  [String] dir_pattern
+      # @param  [Hash] options
+      #         The options to use to expand the patterns to file paths.
+      #
+      # @option options [String] :dir_pattern
       #         The pattern to add to directories.
       #
-      # @param  [Array<String>] exclude_patterns
+      # @option options [Array<String>] :exclude_patterns
       #         The exclude patterns to pass to the PathList.
+      #
+      # @option options [Bool] :include_dirs
+      #         Whether directories should be also included or just plain
+      #         files.
       #
       # @raise  [Informative] If the pod does not exists.
       #
