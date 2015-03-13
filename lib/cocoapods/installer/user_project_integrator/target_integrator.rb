@@ -30,6 +30,7 @@ module Pod
             # TODO: refactor into Xcodeproj https://github.com/CocoaPods/Xcodeproj/issues/202
             project_is_dirty = [
               XCConfigIntegrator.integrate(target, native_targets),
+              add_pods_resources,
               update_to_cocoapods_0_34,
               remove_embed_frameworks_script_phases,
               unless native_targets_to_integrate.empty?
@@ -128,6 +129,36 @@ module Pod
               build_file.settings['ATTRIBUTES'] = ['Weak']
             end
           end
+        end
+
+        # Add a reference to pods' resources (like xcassets) to the user target
+        #
+        # @return [void]
+        #
+        def add_pods_resources
+          UI.puts "- User targets being integrated: #{native_targets.map(&:name).inspect}"
+          UI.puts "- Pod Targets = #{target.pod_targets.map(&:name)}"
+          target.pod_targets.each do |pod_target|
+            pod_name = pod_target.pod_name
+            resource_files = pod_target.file_accessors.flat_map(&:resources)
+            resource_files.each do |resource_path|
+              UI.puts "   - Adding #{resource_path} to user project"
+
+              relative_path = resource_path.relative_path_from(target.client_root).to_s
+              pods_group = user_project['Pods'] || user_project.new_group('Pods')
+              pod_subgroup = pods_group[pod_name] || pods_group.new_group(pod_name)
+              file_ref = pod_subgroup.files.find { |f| f.path == relative_path }
+              file_ref ||= pod_subgroup.new_file(relative_path)
+
+              UI.puts "   - Adding #{resource_path.basename} to targets #{native_targets.map(&:name)}"
+              native_targets.each do |user_target|
+                user_target.add_file_references([file_ref])
+              end
+            end
+          end
+
+          # TODO: Remove code in FileReferencesInstaller#add_resource that adds resources to the Pods.xcodeproj
+          # TODO: Remove Pods-resources.sh (completely or partially?)
         end
 
         # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
@@ -256,7 +287,7 @@ module Pod
         # @return [Specification::Consumer] the consumer for the specifications.
         #
         def spec_consumers
-          @spec_consumers ||= target.pod_targets.map(&:file_accessors).flatten.map(&:spec_consumer)
+          @spec_consumers ||= target.pod_targets.flat_map(&:file_accessors).map(&:spec_consumer)
         end
 
         # @return [String] the message that should be displayed for the target
