@@ -162,6 +162,8 @@ module Pod
               end              
             end
           end
+          # TODO: Remove/Deintegrate pods resources no longer in a target (remove from target,
+          #         or even from projet if no more target linked to)
           # TODO: Remove code in FileReferencesInstaller#add_resource that adds resources to the Pods.xcodeproj
           # TODO: Remove Pods-resources.sh (completely or partially?)
 
@@ -169,14 +171,14 @@ module Pod
           dirty
         end
 
-        def remove_pod_resources
+        def remove_pods_resources
           pods_group = user_project['Pods']
           return false unless pods_group
           resources_group = pods_group['Resources']
           return false unless resources_group
+          # TODO: Remove each resource from the "Copy Bundle Resources" phases too
           resources_group.remove_children_recursively
           resources_group.remove_from_project
-          # TODO: Is it properly removed from the "Copy Bundle Resources" phase too?
         end
 
         # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
