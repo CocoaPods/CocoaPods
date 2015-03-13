@@ -30,7 +30,7 @@ module Pod
             # TODO: refactor into Xcodeproj https://github.com/CocoaPods/Xcodeproj/issues/202
             project_is_dirty = [
               XCConfigIntegrator.integrate(target, native_targets),
-              add_pods_resources,
+              target.requires_frameworks? ? remove_pods_resources : add_pods_resources,
               update_to_cocoapods_0_34,
               remove_embed_frameworks_script_phases,
               unless native_targets_to_integrate.empty?
@@ -133,9 +133,11 @@ module Pod
 
         # Add a reference to pods' resources (like xcassets) to the user target
         #
-        # @return [void]
+        # @return [Boolean] true if user project has been modified
         #
         def add_pods_resources
+          dirty = false
+        
           UI.puts "- User targets being integrated: #{native_targets.map(&:name).inspect}"
           UI.puts "- Pod Targets = #{target.pod_targets.map(&:name)}"
           target.pod_targets.each do |pod_target|
@@ -145,20 +147,34 @@ module Pod
               UI.puts "   - Adding #{resource_path} to user project"
 
               relative_path = resource_path.relative_path_from(target.client_root).to_s
-              pods_group = user_project['Pods'] || user_project.new_group('Pods')
-              pod_subgroup = pods_group[pod_name] || pods_group.new_group(pod_name)
+              pods_group = user_project['Pods'] || ((dirty = true) && user_project.new_group('Pods'))
+              resources_group = pods_group['Resources'] || ((dirty = true) && pods_group.new_group('Resources'))
+              pod_subgroup = resources_group[pod_name] || ((dirty = true) && resources_group.new_group(pod_name))
               file_ref = pod_subgroup.files.find { |f| f.path == relative_path }
-              file_ref ||= pod_subgroup.new_file(relative_path)
+              file_ref ||= (dirty = true) && pod_subgroup.new_file(relative_path)
 
               UI.puts "   - Adding #{resource_path.basename} to targets #{native_targets.map(&:name)}"
               native_targets.each do |user_target|
+                # TODO: Only add file (and set dirty=trye) if file not already added to target
                 user_target.add_resources([file_ref])
+                dirty = true
               end              
             end
           end
-
           # TODO: Remove code in FileReferencesInstaller#add_resource that adds resources to the Pods.xcodeproj
           # TODO: Remove Pods-resources.sh (completely or partially?)
+
+          dirty
+        end
+
+        def remove_pod_resources
+          pods_group = user_project['Pods']
+          return false unless pods_group
+          resources_group = pods_group['Resources']
+          return false unless resources_group
+          resources_group.remove_children_recursively
+          resources_group.remove_from_project
+          # TODO: Is it properly removed from the "Copy Bundle Resources" phase too?
         end
 
         # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
