@@ -155,15 +155,17 @@ module Pod
 
               UI.puts "   - Adding #{resource_path.basename} to targets #{native_targets.map(&:name)}"
               native_targets.each do |user_target|
-                # TODO: Only add file (and set dirty=trye) if file not already added to target
-                user_target.add_resources([file_ref])
-                dirty = true
+                unless user_target.resources_build_phase.include?(file_ref)
+                  user_target.add_resources([file_ref])
+                  dirty = true
+                end
               end              
             end
           end
           # TODO: Remove code in FileReferencesInstaller#add_resource that adds resources to the Pods.xcodeproj
           # TODO: Remove Pods-resources.sh (completely or partially?)
 
+          UI.puts "==> User project dirty? #{dirty.inspect}"
           dirty
         end
 
