@@ -152,8 +152,8 @@ module Pod
 
               UI.puts "   - Adding #{resource_path.basename} to targets #{native_targets.map(&:name)}"
               native_targets.each do |user_target|
-                user_target.add_file_references([file_ref])
-              end
+                user_target.add_resources([file_ref])
+              end              
             end
           end
 
