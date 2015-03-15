@@ -171,6 +171,10 @@ module Pod
           dirty
         end
 
+        # Remove the 'Pods/Resources' group and all the pods resources from the user target
+        #
+        # @return [Boolean] true if user project has been modified
+        #
         def remove_pods_resources
           pods_group = user_project['Pods']
           return false unless pods_group
@@ -179,6 +183,7 @@ module Pod
           # TODO: Remove each resource from the "Copy Bundle Resources" phases too
           resources_group.remove_children_recursively
           resources_group.remove_from_project
+          true
         end
 
         # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
