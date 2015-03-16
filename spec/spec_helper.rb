@@ -43,7 +43,6 @@ require 'spec_helper/fixture'         # Provides access to the fixtures and unpa
 require 'spec_helper/temporary_repos' # Allows to create and modify temporary spec repositories.
 require 'spec_helper/user_interface'  # Redirects UI to UI.output & UI.warnings.
 require 'spec_helper/pre_flight'      # Cleans the temporary directory, the config & the UI.output before every test.
-require 'spec_helper/github'          # Stubs Github API to return always the values (watchers).
 
 #-----------------------------------------------------------------------------#
 

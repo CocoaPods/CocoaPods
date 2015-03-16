@@ -160,7 +160,7 @@ module Pod
               :status => 302,
               :headers => { 'Location' => '/foo' })
             WebMock::API.stub_request(:head, /foo/).to_return(
-            :status => 200)
+              :status => 200)
             Specification.any_instance.stubs(:homepage).returns(
               'http://banana-corp.local/redirect')
             @validator.validate
