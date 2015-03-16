@@ -16,6 +16,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.22.0...0.23.0)
 
+For more details, see :memo: [CocoaPods 0.36](http://blog.cocoapods.org/CocoaPods-0.36/) on our blog.
+
 ##### Enhancements
 
 * Allows Swift pods to have a deployment target under iOS 8.0 if they use
