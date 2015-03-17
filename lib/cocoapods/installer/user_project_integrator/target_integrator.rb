@@ -140,6 +140,20 @@ module Pod
         
           UI.puts "- User targets being integrated: #{native_targets.map(&:name).inspect}"
           UI.puts "- Pod Targets = #{target.pod_targets.map(&:name)}"
+
+          pods_group = user_project['Pods']
+          resources_group = pods_group ? pods_group['Resources'] : nil
+           # The files already in the target before integration
+          refs_to_remove = []
+          if resources_group
+            # Compute the list of file_refs form the Resources/ group that are 
+            # also in the native_targets Resources Build Phase
+            copied_resources_files = native_targets.map(&:resources_build_phase).flat_map(&:files_references)
+            copied_resources_paths = copied_resources_files.map(&:path).uniq
+            resources_files = resources_group.groups.flat_map(&:files)
+            refs_to_remove = resources_files.select { |ref| copied_resources_paths.include?(ref.path) }
+          end
+
           target.pod_targets.each do |pod_target|
             pod_name = pod_target.pod_name
             resource_files = pod_target.file_accessors.flat_map(&:resources)
@@ -147,25 +161,35 @@ module Pod
               UI.puts "   - Adding #{resource_path} to user project"
 
               relative_path = resource_path.relative_path_from(target.client_root).to_s
-              pods_group = user_project['Pods'] || ((dirty = true) && user_project.new_group('Pods'))
-              resources_group = pods_group['Resources'] || ((dirty = true) && pods_group.new_group('Resources'))
+              pods_group ||= ((dirty = true) && user_project.new_group('Pods'))
+              resources_group ||= ((dirty = true) && pods_group.new_group('Resources'))
               pod_subgroup = resources_group[pod_name] || ((dirty = true) && resources_group.new_group(pod_name))
               file_ref = pod_subgroup.files.find { |f| f.path == relative_path }
               file_ref ||= (dirty = true) && pod_subgroup.new_file(relative_path)
 
               UI.puts "   - Adding #{resource_path.basename} to targets #{native_targets.map(&:name)}"
               native_targets.each do |user_target|
+                refs_to_remove.delete(file_ref) # this file_ref is still needed, don't remove it later
                 unless user_target.resources_build_phase.include?(file_ref)
                   user_target.add_resources([file_ref])
                   dirty = true
                 end
-              end              
+              end
             end
           end
-          # TODO: Remove/Deintegrate pods resources no longer in a target (remove from target,
-          #         or even from projet if no more target linked to)
-          # TODO: Remove code in FileReferencesInstaller#add_resource that adds resources to the Pods.xcodeproj
-          # TODO: Remove Pods-resources.sh (completely or partially?)
+
+          # Remove the resources no longer in a target
+          refs_to_remove.each do |file_ref|
+            native_targets.each do |user_target|
+              UI.puts "   - Removing #{file_ref} from #{user_target} because it is no longer needed."
+              # FIXME: XcodeProj issue? The PBXBuildFile is replaced with (null) instead of being removed
+              user_target.resources_build_phase.remove_file_reference(file_ref)
+              dirty = true
+            end
+          end
+
+          # TODO: Change code in FileReferencesInstaller#add_resource to stop adding resources to the Pods.xcodeproj
+          # TODO: Remove code from Pods-resources.sh (except for *.framework stuff still needed)
 
           UI.puts "==> User project dirty? #{dirty.inspect}"
           dirty
@@ -180,7 +204,16 @@ module Pod
           return false unless pods_group
           resources_group = pods_group['Resources']
           return false unless resources_group
-          # TODO: Remove each resource from the "Copy Bundle Resources" phases too
+          # Remove each resource from every "Copy Bundle Resources" phases (as XcodeProj does not to it itself)
+          resources_files = resources_group.groups.flat_map(&:files)
+          native_targets.each do |user_target|
+            resources_files.each do |file_ref|
+              UI.puts "   - Removing #{file_ref} from #{user_target} because it is no longer needed."
+              # FIXME: XcodeProj issue? The PBXBuildFile is replaced with (null) instead of being removed
+              user_target.resources_build_phase.remove_file_reference(file_ref)
+            end
+          end
+          # Remove the group and its children
           resources_group.remove_children_recursively
           resources_group.remove_from_project
           true

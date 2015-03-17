@@ -113,6 +113,11 @@ module Pod
         targets_to_integrate.sort_by(&:name).each do |target|
           TargetIntegrator.new(target).integrate!
         end
+        # TODO: If a previously integrated target is removed from the Podfile,
+        #       we should remove its resources from the deintegrated target
+        
+        # TODO: Remove the file_refs in Pods/Resources if they are not linked
+        #       to any native_target anymore (which can happen after a target deintegration)
       end
 
       # Warns the user if the podfile is empty.
