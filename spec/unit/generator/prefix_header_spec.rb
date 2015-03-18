@@ -67,6 +67,25 @@ module Pod
       EOS
     end
 
+    # @note Declaring a subspec was found in issue #3283 to generate duplicates of the prefix_header
+    it "does not duplicate the contents of the specification's prefix header file when a subspec is declared multiple times" do
+      @spec.subspec 'UI' do |su|
+        su.source_files = 'Source/UI/*.{h,m}'
+      end
+
+      @gen.file_accessors << @gen.file_accessors.first.dup.tap do |fa|
+        fa.stubs(:spec_consumer).returns Specification::Consumer.new(@spec.subspec_by_name('BananaLib/UI'), Platform.ios)
+      end
+
+      @gen.generate.should == <<-EOS.strip_heredoc
+      #ifdef __OBJC__
+      #import <UIKit/UIKit.h>
+      #endif
+
+      #import <BananaTree/BananaTree.h>
+      EOS
+    end
+
     it 'includes the imports' do
       @gen.imports << 'header.h'
       @gen.generate.should == <<-EOS.strip_heredoc

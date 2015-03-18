@@ -47,11 +47,10 @@ module Pod
           result << "\n"
         end
 
-        file_accessors.each do |file_accessor|
-          if prefix_header = file_accessor.prefix_header
-            result << Pathname(prefix_header).read
-          end
+        file_accessors.map(&:prefix_header).compact.uniq.each do |prefix_header|
+          result << Pathname(prefix_header).read
         end
+
         result
       end
 
