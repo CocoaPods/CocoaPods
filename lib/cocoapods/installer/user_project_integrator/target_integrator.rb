@@ -213,9 +213,6 @@ module Pod
               user_target.resources_build_phase.remove_file_reference(file_ref)
             end
           end
-          # Remove the group and its children
-          resources_group.remove_children_recursively
-          resources_group.remove_from_project
           true
         end
 

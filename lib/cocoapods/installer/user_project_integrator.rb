@@ -118,6 +118,8 @@ module Pod
         
         # TODO: Remove the file_refs in Pods/Resources if they are not linked
         #       to any native_target anymore (which can happen after a target deintegration)
+
+        # TODO: Remove the Pods/Resources group if empty
       end
 
       # Warns the user if the podfile is empty.
