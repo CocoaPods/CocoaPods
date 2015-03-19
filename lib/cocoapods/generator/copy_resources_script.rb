@@ -17,7 +17,7 @@ module Pod
       #
       def initialize(resources_by_config, platform)
         @resources_by_config = resources_by_config
-        @platform = platform
+        @platform = platform # TODO: Remove this?
       end
 
       # Saves the resource script to the given pathname.
@@ -38,38 +38,11 @@ module Pod
 
       # @!group Private Helpers
 
-      # @return [Hash{Symbol=>Version}] The minimum deployment target which
-      #         supports the `--reference-external-strings-file` option for
-      #         the `ibtool` command.
-      #
-      EXTERNAL_STRINGS_FILE_MIMINUM_DEPLOYMENT_TARGET = {
-        :ios => Version.new('6.0'),
-        :osx => Version.new('10.8'),
-      }
-
-      # @return [Bool] Whether the external strings file is supported by the
-      #         `ibtool` according to the deployment target of the platform.
-      #
-      def use_external_strings_file?
-        minimum_deployment_target = EXTERNAL_STRINGS_FILE_MIMINUM_DEPLOYMENT_TARGET[platform.name]
-        platform.deployment_target >= minimum_deployment_target
-      end
-
-      # @return [String] The install resources shell function.
-      #
-      def install_resources_function
-        if use_external_strings_file?
-          INSTALL_RESOURCES_FUNCTION
-        else
-          INSTALL_RESOURCES_FUNCTION.gsub(' --reference-external-strings-file', '')
-        end
-      end
-
       # @return [String] The contents of the copy resources script.
       #
       def script
         # Define install function
-        script = install_resources_function
+        script = INSTALL_RESOURCES_FUNCTION
 
         # Call function for each configuration-dependent resource
         resources_by_config.each do |config, resources|
@@ -82,7 +55,6 @@ module Pod
           end
         end
 
-        script += RSYNC_CALL
         script
       end
 
@@ -92,59 +64,17 @@ set -e
 
 mkdir -p "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 
-RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
-> "$RESOURCES_TO_COPY"
-
-XCASSET_FILES=""
-
 install_resource()
 {
   case $1 in
-    *\.storyboard)
-      echo "ibtool --reference-external-strings-file --errors --warnings --notices --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$1\\" .storyboard`.storyboardc ${PODS_ROOT}/$1 --sdk ${SDKROOT}"
-      ibtool --reference-external-strings-file --errors --warnings --notices --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$1\\" .storyboard`.storyboardc" "${PODS_ROOT}/$1" --sdk "${SDKROOT}"
-      ;;
-    *\.xib)
-        echo "ibtool --reference-external-strings-file --errors --warnings --notices --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$1\\" .xib`.nib ${PODS_ROOT}/$1 --sdk ${SDKROOT}"
-      ibtool --reference-external-strings-file --errors --warnings --notices --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$1\\" .xib`.nib" "${PODS_ROOT}/$1" --sdk "${SDKROOT}"
-      ;;
     *.framework)
       echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
       mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
       echo "rsync -av ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
       rsync -av "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
       ;;
-    *.xcdatamodel)
-      echo "xcrun momc \\"${PODS_ROOT}/$1\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1"`.mom\\""
-      xcrun momc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodel`.mom"
-      ;;
-    *.xcdatamodeld)
-      echo "xcrun momc \\"${PODS_ROOT}/$1\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodeld`.momd\\""
-      xcrun momc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodeld`.momd"
-      ;;
-    *.xcmappingmodel)
-      echo "xcrun mapc \\"${PODS_ROOT}/$1\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcmappingmodel`.cdm\\""
-      xcrun mapc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcmappingmodel`.cdm"
-      ;;
-    /*)
-      echo "$1"
-      echo "$1" >> "$RESOURCES_TO_COPY"
-      ;;
-    *)
-      echo "${PODS_ROOT}/$1"
-      echo "${PODS_ROOT}/$1" >> "$RESOURCES_TO_COPY"
-      ;;
   esac
 }
-EOS
-
-      RSYNC_CALL = <<EOS
-
-rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-if [[ "${ACTION}" == "install" ]]; then
-  rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${INSTALL_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-fi
-rm -f "$RESOURCES_TO_COPY"
 EOS
 
     end
