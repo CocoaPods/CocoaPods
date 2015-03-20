@@ -29,7 +29,7 @@ Thanks to the [Bundler Code of Conduct](https://github.com/bundler/bundler/blob/
 ### License
 
 <p class="license" xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
-  To the extent possible under law, <a rel="dct:publisher" href="http:// .io">The CocoaPods Team</a> has waived all copyright and related or neighboring rights to the <span property="dct:title">CocoaPods Code of Conduct</span>. This work is published from the <span property="vcard:Country" datatype="dct:ISO3166" content="US" about="http://cocoapods.org">United States.</span>
+  To the extent possible under law, <a rel="dct:publisher" href="http://cocoapods.org/about">The CocoaPods Team</a> has waived all copyright and related or neighboring rights to the <span property="dct:title">CocoaPods Code of Conduct</span>. This work is published from the <span property="vcard:Country" datatype="dct:ISO3166" content="US" about="http://cocoapods.org">United States.</span>
   <br>
   <br>
   <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
