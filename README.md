@@ -22,14 +22,13 @@ guide](http://guides.cocoapods.org/using/getting-started.html#installation) and 
 
 ## Sponsors
 
-Lovingly sponsored by [Fingertips](http://www.fngtps.com),
-[Hipbyte](http://www.hipbyte.com), [Artsy](http://artsy.net) and
-[Sauspiel](https://www.sauspiel.de).
+Lovingly sponsored by a collection of companies, see the footer of [CocoaPods.org](http://cocoapods.org) for an up-to-date list. 
 
 ## Collaborate
 
 All CocoaPods development happens on GitHub. Contributions make for good karma and
-we welcome new contributors with joy.
+we [welcome new](http://blog.cocoapods.org/starting-open-source/) contributors with joy. We take contributors seriously, and thus have a 
+contributor [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Links
 
@@ -42,6 +41,7 @@ we welcome new contributors with joy.
 [Guides](http://guides.cocoapods.org) | Everything you want to know about CocoaPods.
 [Changelog](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md) | See the changes introduced in each CocoaPods version.
 [New Pods RSS](http://feeds.cocoapods.org/new-pods.rss) | Don't miss any new Pods.
+[Code of Conduct](CODE_OF_CONDUCT.md) | Find out the standards we hold ourselves to.
 
 ## Projects
 
