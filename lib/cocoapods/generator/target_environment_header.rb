@@ -46,10 +46,12 @@ module Pod
         common_specs = common_specs(specs_by_configuration)
         common_specs.each { |spec| result << spec_defines(spec) }
 
+        c99ext_identifier_method = Target.new.method(:c99ext_identifier)
+
         specs_by_config = specs_scoped_by_configuration(common_specs, specs_by_configuration)
         specs_by_config.each do |config, specs|
           result << "// #{config} build configuration\n"
-          result << "#ifdef #{config.gsub(/[^a-zA-Z0-9_]/, '_').upcase}\n\n"
+          result << "#ifdef #{c99ext_identifier_method[config].upcase}\n\n"
           specs.each { |spec| result << spec_defines(spec, 1) }
           result << "#endif\n"
         end

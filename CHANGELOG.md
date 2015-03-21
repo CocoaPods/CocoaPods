@@ -6,10 +6,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Bug Fixes
+
 * Fix the resource script's handling of `.xcasset` files.  
   [sodas](https://github.com/sodastsai)
   [Tony Li](https://github.com/crazytonyli)
   [#3247](https://github.com/CocoaPods/CocoaPods/issues/3247)
+
+* Fix the sanitization of configuration names in the generated target
+  environment header.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3301](https://github.com/CocoaPods/CocoaPods/issues/3301)
 
 
 ## 0.36.0

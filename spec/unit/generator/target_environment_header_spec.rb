@@ -74,9 +74,11 @@ describe Pod::Generator::TargetEnvironmentHeader do
       'Debug' => [],
       'build configuration copy' => [spec],
       'build-_config@copy' => [spec],
+      '1 - Develop' => [spec],
     }
     @gen = Pod::Generator::TargetEnvironmentHeader.new(specs_by_configuration)
     @gen.generate.should.include 'BUILD_CONFIGURATION_COPY'
     @gen.generate.should.include 'BUILD__CONFIG_COPY'
+    @gen.generate.should.include '_1___DEVELOP'
   end
 end
