@@ -182,7 +182,6 @@ module Pod
           refs_to_remove.each do |file_ref|
             native_targets.each do |user_target|
               UI.puts "   - Removing #{file_ref} from #{user_target} because it is no longer needed."
-              # FIXME: XcodeProj issue? The PBXBuildFile is replaced with (null) instead of being removed
               user_target.resources_build_phase.remove_file_reference(file_ref)
               dirty = true
             end
@@ -195,23 +194,35 @@ module Pod
           dirty
         end
 
-        # Remove the 'Pods/Resources' group and all the pods resources from the user target
+        # Remove the pods resources from the user target's Copy Resource Build Phase
         #
         # @return [Boolean] true if user project has been modified
         #
         def remove_pods_resources
-          pods_group = user_project['Pods']
+          TargetIntegrator.each_pods_resources(user_project) do |file_ref|
+            native_targets.each do |user_target|
+              UI.puts "   - Removing #{file_ref} from #{user_target} because it is no longer needed."
+              user_target.resources_build_phase.remove_file_reference(file_ref)
+            end
+          end
+        end
+
+        # Iterate over each file in the 'Pods/Resources' group of the given `project`
+        #
+        # @param [XcodeProj::Project] project
+        #        The user project
+        #
+        # TODO: Probably move this elsewhere
+        #
+        def self.each_pods_resources(project)
+          return false unless block_given?
+          pods_group = project['Pods']
           return false unless pods_group
           resources_group = pods_group['Resources']
           return false unless resources_group
-          # Remove each resource from every "Copy Bundle Resources" phases (as XcodeProj does not to it itself)
           resources_files = resources_group.groups.flat_map(&:files)
-          native_targets.each do |user_target|
-            resources_files.each do |file_ref|
-              UI.puts "   - Removing #{file_ref} from #{user_target} because it is no longer needed."
-              # FIXME: XcodeProj issue? The PBXBuildFile is replaced with (null) instead of being removed
-              user_target.resources_build_phase.remove_file_reference(file_ref)
-            end
+          resources_files.each do |file_ref|
+            yield file_ref
           end
           true
         end

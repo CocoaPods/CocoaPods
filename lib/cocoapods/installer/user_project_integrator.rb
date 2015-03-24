@@ -113,13 +113,56 @@ module Pod
         targets_to_integrate.sort_by(&:name).each do |target|
           TargetIntegrator.new(target).integrate!
         end
-        # TODO: If a previously integrated target is removed from the Podfile,
-        #       we should remove its resources from the deintegrated target
-        
-        # TODO: Remove the file_refs in Pods/Resources if they are not linked
-        #       to any native_target anymore (which can happen after a target deintegration)
 
-        # TODO: Remove the Pods/Resources group if empty
+        target_uuids_to_integrate = targets_to_integrate.flat_map(&:user_target_uuids).uniq
+        user_project_paths.each do |user_project_path|
+          project = Xcodeproj::Project.open(user_project_path)
+          
+          # TODO: Remove xcconfig files from targets_not_integrated
+          # targets_not_integrated = project.targets.reject do |user_target|
+          #   target_uuids_to_integrate.include?(user_target.uuid)
+          # end
+          
+          clean_deintegrated_targets_resources(project, target_uuids_to_integrate)
+        end
+      end
+
+      def clean_deintegrated_targets_resources(project, target_uuids_to_keep)
+        is_dirty = false
+        TargetIntegrator.each_pods_resources(project) do |file_ref|
+          puts "Analyzing Pods/Resources/#{file_ref}"
+          file_in_at_least_one_target = false
+          project.targets.each do |user_target|
+            # Seems like user_target.resources_build_phase.include?(file_ref) does not work as expected here :(
+            file_is_in_target = user_target.resources_build_phase.files_references.any? { |f| f.path == file_ref.path }
+            next unless file_is_in_target
+
+            if target_uuids_to_keep.include?(user_target.uuid)
+              # This target is one to integrate, the resource will be kept in there
+              file_in_at_least_one_target = true
+              UI.puts "   - Should be kept in for target #{user_target}"
+            else
+              UI.puts "   - Removing #{file_ref} from #{user_target} because target not integrated anymore."
+              user_target.resources_build_phase.remove_file_reference(file_ref)
+              is_dirty = true
+            end
+          end
+
+          unless file_in_at_least_one_target
+            # TODO: Remove the file_refs in Pods/Resources if they are not linked
+            #       to any native_target anymore (which can happen after a target deintegration)
+            UI.puts "   -> File #{file_ref} is not in any user target anymore, remove it from the project"
+            file_ref.remove_from_project
+            is_dirty = true
+          end
+        end
+
+        # TODO: Iterate over each subgroup of the Pods/Resources group, removing them if empty.
+        # TODO: Also remove Pods/Resources group itself if it ends up empty.
+
+        if is_dirty
+          project.save
+        end
       end
 
       # Warns the user if the podfile is empty.
