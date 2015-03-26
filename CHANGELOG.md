@@ -6,6 +6,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+[Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.23.0...0.23.1)
+
 ##### Bug Fixes
 
 * Fix the resource script's handling of `.xcasset` files.  
