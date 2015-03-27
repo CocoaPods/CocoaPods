@@ -10,7 +10,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Fix the resource script's handling of `.xcasset` files.  
+* Workarounds(✻) for the resource script's handling of `.xcasset` files.  
   [sodas](https://github.com/sodastsai)
   [Tony Li](https://github.com/crazytonyli)
   [Chongyu Zhu](https://github.com/lembacon)
@@ -22,6 +22,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3301](https://github.com/CocoaPods/CocoaPods/issues/3301)
 
+> _(✻) Note: these fixes are only temporary to avoid overriding the user project's `xcassets`.
+  We are aware that this workarounds are "too greedy" and thus user projects having different 
+  `xcassets` for different targets will still have issues; we ([@AliSoftware](https://github.com/AliSoftware))
+  are working on a deeper fix ([#3263](https://github.com/CocoaPods/CocoaPods/issues/3263)) for the next release._
 
 ## 0.36.0
 
