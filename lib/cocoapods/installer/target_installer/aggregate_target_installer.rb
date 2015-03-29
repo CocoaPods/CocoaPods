@@ -102,16 +102,11 @@ module Pod
         end
       end
 
-      # Creates a script that copies the resources to the bundle of the client
-      # target.
+      # Uniqued Resources grouped by config
       #
-      # @note   The bridge support file needs to be created before the prefix
-      #         header, otherwise it will not be added to the resources script.
+      # @return [Hash{ Symbol => Array<Pathname> }]
       #
-      # @return [void]
-      #
-      def create_copy_resources_script
-        path = target.copy_resources_script_path
+      def resources_by_config
         library_targets = target.pod_targets.reject do |pod_target|
           pod_target.should_build? && pod_target.requires_frameworks?
         end
@@ -123,6 +118,18 @@ module Pod
           resources_by_config[config] = (resource_paths + resource_bundles).uniq
           resources_by_config[config] << bridge_support_file if bridge_support_file
         end
+        resources_by_config
+      end
+
+      # Creates a script that copies the resources to the bundle of the client
+      # target.
+      #
+      # @note   The bridge support file needs to be created before the prefix
+      #         header, otherwise it will not be added to the resources script.
+      #
+      # @return [void]
+      #
+      def create_copy_resources_script
         generator = Generator::CopyResourcesScript.new(resources_by_config, target.platform)
         generator.save_as(path)
         add_file_to_support_group(path)
