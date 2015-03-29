@@ -17,10 +17,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 3e77c753e71e52241aceb8a8487dff77c5af85e3
+  revision: 5e044483654aae5c4c98c58ae0272fd0fd835e50
   branch: master
   specs:
-    molinillo (0.2.1)
+    molinillo (0.2.3)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
