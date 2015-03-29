@@ -242,7 +242,7 @@ module Pod
 
       it 'uses the only fast forward git option' do
         set_up_test_repo_for_update
-        SourcesManager.expects(:git!).with { |options| options.should.match /--ff-only/ }
+        SourcesManager.expects(:git!).with { |options| options.should.include? '--ff-only' }
         SourcesManager.update(test_repo_path.basename.to_s, true)
       end
 

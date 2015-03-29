@@ -39,11 +39,11 @@ module Pod
           UI.section("#{prefix} spec repo `#{@name}` from `#{@url}`#{" (branch `#{@branch}`)" if @branch}") do
             config.repos_dir.mkpath
             Dir.chdir(config.repos_dir) do
-              command = "clone '#{@url}' #{@name}"
-              command << ' --depth=1' if @shallow
+              command = ['clone', @url, @name]
+              command << '--depth=1' if @shallow
               git!(command)
             end
-            Dir.chdir(dir) { git!("checkout #{@branch}") } if @branch
+            Dir.chdir(dir) { git!('checkout', @branch) } if @branch
             SourcesManager.check_version_information(dir)
           end
         end

@@ -60,7 +60,7 @@ module Pod
         #
         def clone_template
           UI.section("Cloning `#{template_repo_url}` into `#{@name}`.") do
-            git! "clone '#{template_repo_url}' #{@name}"
+            git! ['clone', template_repo_url, @name]
           end
         end
 
