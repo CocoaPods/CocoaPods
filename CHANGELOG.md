@@ -8,8 +8,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 #### Enhancements
 
-* Unique resources passed to the script generator
-  [dtorres](https://github.com/dtorres)
+* Unique resources passed to the script generator  
+  [Diego Torres](https://github.com/dtorres)
   [#3315](https://github.com/CocoaPods/CocoaPods/issues/3315)
   [#3327](https://github.com/CocoaPods/CocoaPods/issues/3327)
 
