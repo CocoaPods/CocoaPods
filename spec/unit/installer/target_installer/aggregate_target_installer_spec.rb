@@ -164,6 +164,21 @@ module Pod
         script.read.should.include?('BananaLib.framework')
       end
 
+      it 'uniques resources by config' do
+        a_path = Pathname.new(@project.path.dirname + "/duplicated/path.jpg")
+        duplicated_paths = [a_path, a_path]
+        @installer.target.pod_targets.each do |pod_target|
+          pod_target.file_accessors.each do |accessor|
+            accessor.stubs(:resources => duplicated_paths)
+          end
+        end
+        resources_by_config = @installer.send(:resources_by_config)
+        resources_by_config.each_value do |resources|
+          resources.length.should == 1
+          resources[0].basename.should == a_path.basename
+        end
+      end
+
       it 'does not add pods to the embed frameworks script if they are not to be built' do
         @pod_target.stubs(:should_build? => false)
         @pod_target.stubs(:requires_frameworks? => true)
