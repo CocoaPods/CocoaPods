@@ -83,7 +83,7 @@ module Pod
       # Creates the directory where to store the support files of the target.
       #
       def create_support_files_dir
-        target.support_files_dir.mkdir
+        FileUtils.mkdir_p target.support_files_dir
       end
 
       # Creates the Info.plist file which sets public framework attributes
