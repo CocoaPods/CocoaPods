@@ -62,7 +62,8 @@ module Pod
               File.open(child, 'w') { |f| f.write spec.to_pretty_json }
               lockfile['SPEC CHECKSUMS'][spec.name] = Specification.from_file(child).checksum
             end
-            File.open(sandbox.manifest_path, 'w') { |f| f.write Lockfile.new(lockfile).to_yaml }
+            sandbox.manifest = Lockfile.new(lockfile)
+            File.open(sandbox.manifest_path, 'w') { |f| f.write sandbox.manifest.to_yaml }
           end
         end
 
