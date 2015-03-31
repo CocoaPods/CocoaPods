@@ -165,7 +165,7 @@ module Pod
       end
 
       it 'uniques resources by config' do
-        a_path = Pathname.new(@project.path.dirname + "/duplicated/path.jpg")
+        a_path = Pathname.new(@project.path.dirname + '/duplicated/path.jpg')
         duplicated_paths = [a_path, a_path]
         @installer.target.pod_targets.each do |pod_target|
           pod_target.file_accessors.each do |accessor|
