@@ -130,6 +130,7 @@ module Pod
       # @return [void]
       #
       def create_copy_resources_script
+        path = target.copy_resources_script_path
         generator = Generator::CopyResourcesScript.new(resources_by_config, target.platform)
         generator.save_as(path)
         add_file_to_support_group(path)
