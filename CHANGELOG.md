@@ -6,12 +6,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
-#### Enhancements
+#### Bug Fixes
 
-* Unique resources passed to the script generator  
+* Unique resources passed to the script generator.  
   [Diego Torres](https://github.com/dtorres)
   [#3315](https://github.com/CocoaPods/CocoaPods/issues/3315)
   [#3327](https://github.com/CocoaPods/CocoaPods/issues/3327)
+
+* Update the `Manifest.lock` when migrating local podspecs to JSON. This fixes
+  running `pod install` after upgrading to `0.36`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3292](https://github.com/CocoaPods/CocoaPods/issues/3292)
+  [#3299](https://github.com/CocoaPods/CocoaPods/issues/3299)
+
 
 ## 0.36.1
 
