@@ -54,37 +54,37 @@ module Pod
         @analyzer.send(:pod_added?, 'BananaLib').should == true
       end
 
-      it 'considers deleted a Pod without any resolved specification' do
+      it 'considers a deleted Pod without any resolved specification' do
         @analyzer.stubs(:resolved_pods).returns([])
         @analyzer.send(:pod_deleted?, 'BananaLib').should == true
       end
 
-      it 'considers changed a Pod whose versions do not match' do
+      it 'considers a changed Pod whose versions do not match' do
         @analyzer.stubs(:sandbox_version).returns(Version.new(999))
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
 
-      it 'considers changed a Pod whose checksums do not match' do
+      it 'considers a changed Pod whose checksums do not match' do
         @analyzer.stubs(:sandbox_checksum).returns('SHA')
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
 
-      it 'considers changed a Pod whose activated specifications do not match' do
+      it 'considers a changed Pod whose activated specifications do not match' do
         @analyzer.stubs(:sandbox_spec_names).returns(['BananaLib', 'BananaLib/Subspec'])
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
 
-      it 'considers changed a Pod whose folder is empty' do
+      it 'considers a changed Pod whose folder is empty' do
         @analyzer.stubs(:folder_empty?).returns(true)
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
 
-      it 'considers changed a Pod which has been pre-downloaded' do
+      it 'considers a changed Pod which has been pre-downloaded' do
         @sandbox.stubs(:predownloaded?).returns(true)
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
 
-      it "considers changed a Pod whose head state doesn't match" do
+      it "considers a changed Pod whose head state doesn't match" do
         @sandbox.stubs(:head_pod?).returns(true)
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
@@ -95,7 +95,7 @@ module Pod
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
 
-      it "doesn't consider changed a Pod whose specification is in head mode if not in update mode" do
+      it "doesn't consider a changed Pod whose specification is in head mode if not in update mode" do
         @sandbox.stubs(:head_pod?).returns(true)
         @analyzer.stubs(:sandbox_head_version?).returns(true)
         @analyzer.stubs(:update_mode?).returns(false)
