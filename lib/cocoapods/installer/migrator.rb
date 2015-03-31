@@ -53,13 +53,16 @@ module Pod
           UI.message('Migrating to CocoaPods 0.36') do
             move(sandbox.root + 'Headers/Build', sandbox.root + 'Headers/Private')
 
+            lockfile = sandbox.manifest.to_hash
             sandbox.specifications_root.children.each do |child|
               next unless child.basename.to_s =~ /\.podspec$/
               spec = Specification.from_file(child)
               child.delete
               child = Pathname("#{child}.json")
               File.open(child, 'w') { |f| f.write spec.to_pretty_json }
+              lockfile['SPEC CHECKSUMS'][spec.name] = Specification.from_file(child).checksum
             end
+            File.open(sandbox.manifest_path, 'w') { |f| f.write Lockfile.new(lockfile).to_yaml }
           end
         end
 
