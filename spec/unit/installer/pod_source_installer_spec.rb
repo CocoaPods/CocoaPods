@@ -25,7 +25,7 @@ module Pod
           config.sandbox.store_head_pod('BananaLib')
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
-          @installer.specific_source[:commit].should == '0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc'
+          @installer.specific_source[:commit].should == '9c7802033af588bed9dd5cb089bc8998a65bbd29'
           pod_folder = config.sandbox.pod_dir('BananaLib')
           pod_folder.should.exist
         end
@@ -45,7 +45,7 @@ module Pod
           sources = @installer.sandbox.checkout_sources
           sources.should == { 'BananaLib' => {
             :git => SpecHelper.fixture('banana-lib'),
-            :commit => '0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc' },
+            :commit => '9c7802033af588bed9dd5cb089bc8998a65bbd29' },
           }
         end
 

@@ -32,19 +32,26 @@ module Pod
     it 'returns the used files' do
       paths = @cleaner.send(:used_files)
       relative_paths = paths.map { |p| p.gsub("#{@root}/", '') }
+
       relative_paths.sort.should == [
+        'Bananalib.framework',
         'Classes/Banana.h',
         'Classes/Banana.m',
         'Classes/BananaLib.pch',
         'Classes/BananaPrivate.h',
+        'Classes/BananaTrace.d',
         'LICENSE',
         'README',
         'Resources/logo-sidebar.png',
+        'Resources/sub_dir',
+        'libBananalib.a',
+        'preserve_me.txt',
       ]
     end
 
     it 'handles Pods with multiple file accessors' do
       spec = fixture_spec('banana-lib/BananaLib.podspec')
+      spec.source = { :git => SpecHelper.fixture('banana-lib') }
       spec.source_files = []
       spec.ios.source_files = 'Classes/*.h'
       spec.osx.source_files = 'Classes/*.m'
@@ -55,6 +62,7 @@ module Pod
       paths = @cleaner.send(:used_files)
       relative_paths = paths.map { |p| p.gsub("#{@root}/", '') }
       relative_paths.sort.should == [
+        'Bananalib.framework',
         'Classes/Banana.h',
         'Classes/Banana.m',
         'Classes/BananaLib.pch',
@@ -62,6 +70,9 @@ module Pod
         'LICENSE',
         'README',
         'Resources/logo-sidebar.png',
+        'Resources/sub_dir',
+        'libBananalib.a',
+        'preserve_me.txt',
       ]
     end
 
