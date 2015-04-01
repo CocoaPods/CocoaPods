@@ -100,6 +100,7 @@ module Pod
 
       it 'returns the resources' do
         @accessor.resources.sort.should == [
+          @root + 'Resources/Images.xcassets',
           @root + 'Resources/logo-sidebar.png',
           @root + 'Resources/sub_dir',
         ]
