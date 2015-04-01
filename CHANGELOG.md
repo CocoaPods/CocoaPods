@@ -4,11 +4,21 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Bug Fixes
+
+* Fix using the downloader.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3344](https://github.com/CocoaPods/CocoaPods/issues/3344)
+  [#3345](https://github.com/CocoaPods/CocoaPods/issues/3345)
+
+
 ## 0.36.2
 
 [Core](https://github.com/CocoaPods/Core/compare/0.36.1...0.36.2)
 
-#### Bug Fixes
+##### Bug Fixes
 
 * Unique resources passed to the script generator.  
   [Diego Torres](https://github.com/dtorres)
