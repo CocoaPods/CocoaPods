@@ -28,7 +28,10 @@ module Pod
 
         if !head && result.location = path_for_pod(name, version, downloader_opts)
           result.checkout_options = downloader_opts
-          result.spec = spec || Sandbox::PodspecFinder.new(result.location).podspecs[name]
+          result.spec = spec || begin
+                                  cached_spec = path_for_spec(name, version, downloader_opts)
+                                  cached_spec.file? && Specification.from_file(cached_spec)
+                                end
           return result if result.location.directory?
         end
 
@@ -38,15 +41,17 @@ module Pod
           if released
             result.location = destination = path_for_pod(name, version)
             copy_and_clean(target, destination, spec)
+            write_spec spec, path_for_spec(name, version)
           else
             podspecs = Sandbox::PodspecFinder.new(target).podspecs
             podspecs[name] = spec if spec
-            podspecs.each do |_, spec|
-              destination = path_for_pod(spec.name, nil, result.checkout_options)
-              copy_and_clean(target, destination, spec)
-              if name == spec.name
+            podspecs.each do |_, found_spec|
+              destination = path_for_pod(found_spec.name, nil, result.checkout_options)
+              copy_and_clean(target, destination, found_spec)
+              write_spec found_spec, path_for_spec(found_spec.name, nil, result.checkout_options)
+              if name == found_spec.name
                 result.location = destination
-                result.spec = spec
+                result.spec = found_spec
               end
             end
           end
@@ -73,6 +78,10 @@ module Pod
 
       def path_for_pod(name, version = nil, downloader_opts = nil)
         root + cache_key(name, version, downloader_opts)
+      end
+
+      def path_for_spec(name, version = nil, downloader_opts = nil)
+        root + 'Specs' + cache_key(name, version, downloader_opts)
       end
 
       def download(name, target, params, head)
@@ -110,7 +119,12 @@ module Pod
         destination.parent.mkpath unless destination.parent.exist?
         FileUtils.cp_r(source, destination)
         Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
-        (destination + "#{spec.name}.podspec.json").open('w') { |f| f.write spec.to_pretty_json }
+      end
+
+      def write_spec(spec, path)
+        path = path.sub_ext('.podspec.json')
+        FileUtils.mkdir_p path.dirname
+        path.open('w') { |f| f.write spec.to_pretty_json }
       end
     end
   end
