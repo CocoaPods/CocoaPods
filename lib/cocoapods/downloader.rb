@@ -6,21 +6,19 @@ require 'tmpdir'
 module Pod
   module Downloader
     require 'cocoapods/downloader/cache'
+    require 'cocoapods/downloader/request'
 
     def self.download(
-      name_or_spec,
-      download_target,
-      released: false,
-      downloader_options: nil,
-      head: false,
+      request,
+      target,
       cache_path: !Config.instance.skip_download_cache && Config.instance.cache_root + 'Pods'
     )
       cache_path, tmp_cache = Pathname(Dir.mktmpdir), true unless cache_path
       cache = Cache.new(cache_path)
-      result = cache.download_pod(name_or_spec, released, downloader_options, head)
-      if download_target
-        FileUtils.rm_rf download_target
-        FileUtils.cp_r(result.location, download_target)
+      result = cache.download_pod(request)
+      if target
+        FileUtils.rm_rf target
+        FileUtils.cp_r(result.location, target)
       end
       result
     ensure

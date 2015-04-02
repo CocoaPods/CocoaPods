@@ -13,79 +13,57 @@ module Pod
         root.mkpath unless root.exist?
       end
 
-      def download_pod(name_or_spec, released = false, downloader_opts = nil, head = false)
-        spec = nil
-        if name_or_spec.is_a? Pod::Specification
-          spec = name_or_spec.root
-          name, version, downloader_opts = spec.name, spec.version, spec.source.dup
-        else
-          name = Specification.root_name(name_or_spec.to_s)
-        end
-
-        raise ArgumentError, 'Must give spec for a released download.' if released && !spec
-
-        result = cached_pod(name, spec, released && version, !released && downloader_opts)
-        result || uncached_pod(name, spec, released, version, downloader_opts, head)
+      def download_pod(request)
+        cached_pod(request) || uncached_pod(request)
       rescue Informative
         raise
       rescue
-        UI.notice("Error installing #{name}")
+        UI.notice("Error installing #{request.name}")
         raise
       end
 
       private
 
-      def cache_key(pod_name, version = nil, downloader_opts = nil)
-        raise ArgumentError, "Need a pod name (#{pod_name}), and either a version (#{version}) or downloader options (#{downloader_opts})." unless pod_name && (version || downloader_opts) && !(version && downloader_opts)
-
-        if version
-          "Release/#{pod_name}/#{version}"
-        elsif downloader_opts
-          opts = downloader_opts.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/#{File::SEPARATOR}+/, '+')
-          "External/#{pod_name}/#{opts}"
-        end
+      def path_for_pod(request)
+        root + request.slug
       end
 
-      def path_for_pod(name, version = nil, downloader_opts = nil)
-        root + cache_key(name, version, downloader_opts)
-      end
-
-      def path_for_spec(name, version = nil, downloader_opts = nil)
-        path = root + 'Specs' + cache_key(name, version, downloader_opts)
+      def path_for_spec(request)
+        path = root + 'Specs' + request.slug
         path.sub_ext('.podspec.json')
       end
 
-      def cached_pod(name, spec, version, downloader_opts)
-        path = path_for_pod(name, version, downloader_opts)
-        spec ||= cached_spec(name, version, downloader_opts)
+      def cached_pod(request)
+        path = path_for_pod(request)
+        spec = request.spec || cached_spec(request)
         return unless spec && path.directory?
-        Result.new(path, spec, downloader_opts)
+        Result.new(path, spec, request.params)
       end
 
-      def cached_spec(name, version, downloader_opts)
-        path = path_for_spec(name, version, downloader_opts)
+      def cached_spec(request)
+        path = path_for_spec(request)
         path.file? && Specification.from_file(path)
       end
 
-      def uncached_pod(name, spec, released, version, downloader_opts, head)
+      def uncached_pod(request)
         in_tmpdir do |target|
           result = Result.new
-          result.checkout_options = download(name, target, downloader_opts, head)
+          result.checkout_options = download(request.name, target, request.params, request.head?)
 
-          if released
-            result.location = destination = path_for_pod(name, version)
-            copy_and_clean(target, destination, spec)
-            write_spec spec, path_for_spec(name, version)
+          if request.released_pod?
+            result.location = destination = path_for_pod(request)
+            copy_and_clean(target, destination, request.spec)
+            write_spec(request.spec, path_for_spec(request))
           else
             podspecs = Sandbox::PodspecFinder.new(target).podspecs
-            podspecs[name] = spec if spec
-            podspecs.each do |_, found_spec|
-              destination = path_for_pod(found_spec.name, nil, result.checkout_options)
-              copy_and_clean(target, destination, found_spec)
-              write_spec found_spec, path_for_spec(found_spec.name, nil, result.checkout_options)
-              if name == found_spec.name
+            podspecs[request.name] = request.spec if request.spec
+            podspecs.each do |_, spec|
+              destination = path_for_pod(request)
+              copy_and_clean(target, destination, spec)
+              write_spec(spec, path_for_spec(request))
+              if request.name == spec.name
                 result.location = destination
-                result.spec = found_spec
+                result.spec = spec
               end
             end
           end

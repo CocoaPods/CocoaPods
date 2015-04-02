@@ -74,11 +74,19 @@ module Pod
       # @return [void]
       #
       def download_source
-        download_result = Downloader.download(root_spec, root, :released => released?, :head => head_pod?)
+        download_result = Downloader.download(download_request, root)
 
         if (@specific_source = download_result.checkout_options) && specific_source != root_spec.source
           sandbox.store_checkout_source(root_spec.name, specific_source)
         end
+      end
+
+      def download_request
+        Downloader::Request.new(
+          spec: root_spec,
+          released: released?,
+          head: head_pod?,
+        )
       end
 
       extend Executable

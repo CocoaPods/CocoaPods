@@ -4,6 +4,9 @@ inherit_from:
 
 #- CocoaPods ------------------------------------------------------------------
 
+ParameterLists:
+  CountKeywordArgs: false
+
 AllCops:
   Exclude:
     - spec/fixtures/**/*.rb

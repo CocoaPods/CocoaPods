@@ -98,7 +98,7 @@ module Pod
         title = "Pre-downloading: `#{name}` #{description}"
         UI.titled_section(title,  :verbose_prefix => '-> ') do
           target = sandbox.pod_dir(name)
-          download_result = Downloader.download(name, target, :downloader_options => params)
+          download_result = Downloader.download(download_request, target)
           spec = download_result.spec
 
           raise Informative, "Unable to find a specification for '#{name}'." unless spec
@@ -107,6 +107,13 @@ module Pod
           sandbox.store_pre_downloaded_pod(name)
           sandbox.store_checkout_source(name, download_result.checkout_options)
         end
+      end
+
+      def download_request
+        Downloader::Request.new(
+          name: name,
+          params: params
+        )
       end
 
       # Stores the podspec in the sandbox and marks it as from an external
