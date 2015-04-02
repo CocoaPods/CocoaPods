@@ -24,18 +24,52 @@ module Pod
 
         raise ArgumentError, 'Must give spec for a released download.' if released && !spec
 
-        result = Result.new
+        result = cached_pod(name, spec, released && version, !released && downloader_opts)
+        result || uncached_pod(name, spec, released, version, downloader_opts, head)
+      rescue Informative
+        raise
+      rescue
+        UI.notice("Error installing #{name}")
+        raise
+      end
 
-        if !head && result.location = path_for_pod(name, version, downloader_opts)
-          result.checkout_options = downloader_opts
-          result.spec = spec || begin
-                                  cached_spec = path_for_spec(name, version, downloader_opts)
-                                  cached_spec.file? && Specification.from_file(cached_spec)
-                                end
-          return result if result.location.directory?
+      private
+
+      def cache_key(pod_name, version = nil, downloader_opts = nil)
+        raise ArgumentError, "Need a pod name (#{pod_name}), and either a version (#{version}) or downloader options (#{downloader_opts})." unless pod_name && (version || downloader_opts) && !(version && downloader_opts)
+
+        if version
+          "Release/#{pod_name}/#{version}"
+        elsif downloader_opts
+          opts = downloader_opts.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/#{File::SEPARATOR}+/, '+')
+          "External/#{pod_name}/#{opts}"
         end
+      end
 
+      def path_for_pod(name, version = nil, downloader_opts = nil)
+        root + cache_key(name, version, downloader_opts)
+      end
+
+      def path_for_spec(name, version = nil, downloader_opts = nil)
+        path = root + 'Specs' + cache_key(name, version, downloader_opts)
+        path.sub_ext('.podspec.json')
+      end
+
+      def cached_pod(name, spec, version, downloader_opts)
+        path = path_for_pod(name, version, downloader_opts)
+        spec ||= cached_spec(name, version, downloader_opts)
+        return unless spec && path.directory?
+        Result.new(path, spec, downloader_opts)
+      end
+
+      def cached_spec(name, version, downloader_opts)
+        path = path_for_spec(name, version, downloader_opts)
+        path.file? && Specification.from_file(path)
+      end
+
+      def uncached_pod(name, spec, released, version, downloader_opts, head)
         in_tmpdir do |target|
+          result = Result.new
           result.checkout_options = download(name, target, downloader_opts, head)
 
           if released
@@ -55,34 +89,9 @@ module Pod
               end
             end
           end
+
+          result
         end
-
-        result
-      rescue Informative
-      rescue
-        UI.notice("Error installing #{name}")
-        raise
-      end
-
-      private
-
-      def cache_key(pod_name, version = nil, downloader_opts = nil)
-        raise ArgumentError unless pod_name || (!version && !downloader_opts)
-
-        if version
-          "Release/#{pod_name}/#{version}"
-        elsif downloader_opts
-          opts = downloader_opts.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/#{File::SEPARATOR}+/, '+')
-          "External/#{pod_name}/#{opts}"
-        end
-      end
-
-      def path_for_pod(name, version = nil, downloader_opts = nil)
-        root + cache_key(name, version, downloader_opts)
-      end
-
-      def path_for_spec(name, version = nil, downloader_opts = nil)
-        root + 'Specs' + cache_key(name, version, downloader_opts)
       end
 
       def download(name, target, params, head)
@@ -123,7 +132,6 @@ module Pod
       end
 
       def write_spec(spec, path)
-        path = path.sub_ext('.podspec.json')
         FileUtils.mkdir_p path.dirname
         path.open('w') { |f| f.write spec.to_pretty_json }
       end
