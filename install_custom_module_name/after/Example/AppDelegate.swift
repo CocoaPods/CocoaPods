@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Pusher
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -92,7 +92,7 @@ Generating Pods project
 
 Integrating client project
 
-[!] From now on use `Example.xcworkspace`.
+[!] Please close any current Xcode sessions and use `Example.xcworkspace` for this project from now on.
 
 Integrating target `Pods` (`Example.xcodeproj` project)
-  Add Build Phase 'Embed Pods Frameworks' to project.
+  Adding Build Phase 'Embed Pods Frameworks' to project.

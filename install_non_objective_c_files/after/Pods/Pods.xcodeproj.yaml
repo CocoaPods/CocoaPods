@@ -1,0 +1,175 @@
+
+File References:
+- Podfile
+- Frameworks:
+  - iOS:
+    - Foundation.framework
+- Pods:
+  - Moment:
+    - TimeParser.c
+    - TimeParser.h
+    - parseIt.ym
+    - tokeIt.l
+    - Support Files:
+      - Pods-Moment.xcconfig
+      - Pods-Moment-Private.xcconfig
+      - Pods-Moment-dummy.m
+      - Pods-Moment-prefix.pch
+- Products:
+  - libPods.a
+  - libPods-Moment.a
+- Targets Support Files:
+  - Pods:
+    - Pods-acknowledgements.markdown
+    - Pods-acknowledgements.plist
+    - Pods-dummy.m
+    - Pods-environment.h
+    - Pods-resources.sh
+    - Pods.debug.xcconfig
+    - Pods.release.xcconfig
+
+
+
+Targets:
+- Pods:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          PODS_ROOT: $(SRCROOT)
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LDFLAGS: ''
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          PRODUCT_NAME: $(TARGET_NAME)
+          OTHER_LIBTOOLFLAGS: ''
+        Base Configuration: Pods.debug.xcconfig
+    - Release:
+        Build Settings:
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          PODS_ROOT: $(SRCROOT)
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LDFLAGS: ''
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          PRODUCT_NAME: $(TARGET_NAME)
+          OTHER_LIBTOOLFLAGS: ''
+        Base Configuration: Pods.release.xcconfig
+- Pods-Moment:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-Moment-dummy.m
+      - TimeParser.c:
+          COMPILER_FLAGS: -fno-objc-arc
+      - parseIt.ym:
+          COMPILER_FLAGS: -fno-objc-arc
+      - tokeIt.l:
+          COMPILER_FLAGS: -fno-objc-arc
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
+      - TimeParser.h
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-Moment/Pods-Moment-prefix.pch
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Pods-Moment-Private.xcconfig
+    - Release:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-Moment/Pods-Moment-prefix.pch
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Pods-Moment-Private.xcconfig
+
+
+
+Build Configurations:
+- Debug:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      SYMROOT: ${SRCROOT}/../build
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - $(inherited)
+      ONLY_ACTIVE_ARCH: 'YES'
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'NO'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+- Release:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      SYMROOT: ${SRCROOT}/../build
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS: RELEASE=1
+      VALIDATE_PRODUCT: 'YES'
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      ENABLE_NS_ASSERTIONS: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
