@@ -111,8 +111,8 @@ module Pod
 
       def download_request
         Downloader::Request.new(
-          name: name,
-          params: params
+          :name => name,
+          :params => params,
         )
       end
 

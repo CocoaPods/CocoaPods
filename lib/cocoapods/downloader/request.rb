@@ -13,7 +13,7 @@ module Pod
 
       attr_reader :name
 
-      def initialize(spec: nil, released: false, name: nil, version: nil, params: false, head: false)
+      def initialize(spec: nil, released: false, name: nil, params: false, head: false)
         @released_pod = released
         @spec = spec
         @params = spec ? spec.source.dup : params
