@@ -31,6 +31,7 @@ module Pod
     #
     def stub_podspec(pattern = nil, replacement = nil)
       spec = (fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json').read
+      spec.gsub!(/.*license.*$/, '"license": "Public Domain",')
       spec.gsub!(%r{https://github\.com/johnezang/JSONKit\.git}, fixture('integration/JSONKit').to_s)
       spec.gsub!(pattern, replacement) if pattern && replacement
       spec
@@ -439,7 +440,6 @@ module Pod
       it 'validates a podspec with dependencies' do
         podspec = stub_podspec(/.*name.*/, '"name": "ZKit",')
         podspec.gsub!(/.*requires_arc.*/, '"dependencies": { "SBJson": [ "~> 3.2" ] }, "requires_arc": false')
-        podspec.gsub!(/.*license.*$/, '"license": "Public Domain",')
         file = write_podspec(podspec, 'ZKit.podspec.json')
 
         spec = Specification.from_file(file)
@@ -504,7 +504,6 @@ module Pod
     describe 'swift validation' do
       def test_swiftpod
         podspec = stub_podspec(/.*source_files.*/, '"source_files": "*.swift",')
-        podspec.gsub!(/.*license.*$/, '"license": "Public Domain",')
         file = write_podspec(podspec)
 
         Podfile::TargetDefinition.any_instance.stubs(:uses_frameworks?).returns(true)
