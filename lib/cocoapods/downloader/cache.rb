@@ -58,7 +58,8 @@ module Pod
         end
 
         result
-      rescue Object
+      rescue Informative
+      rescue
         UI.notice("Error installing #{name}")
         raise
       end
