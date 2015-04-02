@@ -419,8 +419,14 @@ module Pod
     end
 
     def _validate_module_map
-      if spec.module_map && !file_accessor.module_map.exist?
-        error('module_map', 'Unable to find the specified module map file.')
+      if spec.module_map
+        unless file_accessor.module_map.exist?
+          error('module_map', 'Unable to find the specified module map file.')
+        end
+        unless file_accessor.module_map.extname == '.modulemap'
+          relative_path = file_accessor.module_map.relative_path_from file_accessor.root
+          error('module_map', "Unexpected file extension for modulemap file (#{relative_path}).")
+        end
       end
     end
 
