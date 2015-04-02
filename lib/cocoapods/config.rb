@@ -15,6 +15,7 @@ module Pod
       :verbose             => false,
       :silent              => false,
       :skip_repo_update    => false,
+      :skip_download_cache => !ENV['COCOAPODS_SKIP_CACHE'].nil?,
 
       :clean               => true,
       :integrate_targets   => true,
@@ -66,6 +67,11 @@ module Pod
     attr_accessor :skip_repo_update
     alias_method :skip_repo_update?, :skip_repo_update
 
+    # @return [Bool] Whether the installer should skip the download cache.
+    #
+    attr_accessor :skip_download_cache
+    alias_method :skip_download_cache?, :skip_download_cache
+
     public
 
     #-------------------------------------------------------------------------#
@@ -80,10 +86,6 @@ module Pod
     def cache_root
       @cache_root.mkpath unless @cache_root.exist?
       @cache_root
-    end
-
-    def download_cache
-      @download_cache ||= Downloader::Cache.new(cache_root + 'Pods')
     end
 
     public

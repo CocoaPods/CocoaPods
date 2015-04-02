@@ -43,17 +43,6 @@ module Pod
           },
         }
       end
-
-      it 'checks for JSON podspecs' do
-        path = config.download_cache.send(:path_for_pod, 'Reachability', nil, @subject.params)
-        podspec_path = path + 'Reachability.podspec.json'
-        path.mkpath
-        File.open(podspec_path, 'w') { |f| f.write '{"name":"Reachability"}' }
-        Pathname.any_instance.stubs(:rmtree)
-        Downloader::Git.any_instance.stubs(:download)
-        config.sandbox.expects(:store_podspec).with('Reachability', %({\n  "name": "Reachability"\n}\n), true, true)
-        @subject.send(:pre_download, config.sandbox)
-      end
     end
   end
 end

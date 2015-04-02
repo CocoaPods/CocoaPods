@@ -8,8 +8,6 @@ module Pod
     # @note This class needs to consider all the activated specs of a Pod.
     #
     class PodSourceInstaller
-      include Config::Mixin
-
       # @return [Sandbox]
       #
       attr_reader :sandbox
@@ -76,9 +74,7 @@ module Pod
       # @return [void]
       #
       def download_source
-        download_result = config.download_cache.download_pod(root_spec, released?, nil, head_pod?)
-        root.rmtree if root.exist?
-        FileUtils.cp_r(download_result.location, root)
+        download_result = Downloader.download(root_spec, root, :released => released?, :head => head_pod?)
 
         if @specific_source = download_result.checkout_options
           sandbox.store_checkout_source(root_spec.name, specific_source)

@@ -1,9 +1,31 @@
 require 'cocoapods-downloader'
 require 'claide/informative_error'
+require 'fileutils'
+require 'tmpdir'
 
 module Pod
   module Downloader
     require 'cocoapods/downloader/cache'
+
+    def self.download(
+      name_or_spec,
+      download_target,
+      released: false,
+      downloader_options: nil,
+      head: false,
+      cache_path: !Config.instance.skip_download_cache && Config.instance.cache_root + 'Pods'
+    )
+      cache_path, tmp_cache = Pathname(Dir.mktmpdir), true unless cache_path
+      cache = Cache.new(cache_path)
+      result = cache.download_pod(name_or_spec, released, downloader_options, head)
+      if download_target
+        FileUtils.rm_rf download_target
+        FileUtils.cp_r(result.location, download_target)
+      end
+      result
+    ensure
+      FileUtils.rm_r cache_path if tmp_cache
+    end
 
     class DownloaderError; include CLAide::InformativeError; end
 

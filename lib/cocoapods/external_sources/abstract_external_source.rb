@@ -98,11 +98,7 @@ module Pod
         title = "Pre-downloading: `#{name}` #{description}"
         UI.titled_section(title,  :verbose_prefix => '-> ') do
           target = sandbox.pod_dir(name)
-          target.rmtree if target.exist?
-
-          download_result = Config.instance.download_cache.download_pod(name, false, params)
-          FileUtils.cp_r(download_result.location, target)
-
+          download_result = Downloader.download(name, target, :downloader_options => params)
           spec = download_result.spec
 
           raise Informative, "Unable to find a specification for '#{name}'." unless spec
