@@ -435,6 +435,16 @@ module Pod
           validator.results.map(&:to_s).first.should.match /matches non-header files \(JSONKit\.m\)/
           validator.result_type.should == :error
         end
+
+        it 'checks presence of license file' do
+          file = write_podspec(stub_podspec(/.*license.*$/, '"license": "MIT",'))
+          validator = Validator.new(file, SourcesManager.master.map(&:url))
+          validator.stubs(:build_pod)
+          validator.stubs(:validate_url)
+          validator.validate
+          validator.results.map(&:to_s).first.should.match /Unable to find a license file/
+          validator.result_type.should == :warning
+        end
       end
 
       it 'validates a podspec with dependencies' do
