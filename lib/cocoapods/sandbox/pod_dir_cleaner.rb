@@ -24,14 +24,9 @@ module Pod
       #         specifications on their respective platform.
       #
       def file_accessors
-        return @file_accessors if @file_accessors
-        @file_accessors = []
-        specs_by_platform.each do |platform, specs|
-          specs.each do |spec|
-            @file_accessors << Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
-          end
+        @file_accessors ||= specs_by_platform.flat_map do |platform, specs|
+          specs.flat_map { |spec| Sandbox::FileAccessor.new(path_list, spec.consumer(platform)) }
         end
-        @file_accessors
       end
 
       # @return [Sandbox::PathList] The path list for this Pod.
