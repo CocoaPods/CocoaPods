@@ -76,7 +76,7 @@ module Pod
       def download_source
         download_result = Downloader.download(root_spec, root, :released => released?, :head => head_pod?)
 
-        if @specific_source = download_result.checkout_options
+        if (@specific_source = download_result.checkout_options) && specific_source != root_spec.source
           sandbox.store_checkout_source(root_spec.name, specific_source)
         end
       end
