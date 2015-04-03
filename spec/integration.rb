@@ -172,6 +172,11 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+    describe 'Installs a Pod with a custom module name' do
+      behaves_like cli_spec 'install_custom_module_name',
+                            'install --no-repo-update'
+    end
+
     describe 'Performs an installation using a custom workspace' do
       behaves_like cli_spec 'install_custom_workspace',
                             'install --no-repo-update'
@@ -194,6 +199,11 @@ describe_cli 'pod' do
 
     describe 'Integrates a Pod using frameworks with resources' do
       behaves_like cli_spec 'install_framework_resources',
+                            'install --no-repo-update'
+    end
+
+    describe 'Integrates a Pod using non Objective-C source files' do
+      behaves_like cli_spec 'install_non_objective_c_files',
                             'install --no-repo-update'
     end
 
