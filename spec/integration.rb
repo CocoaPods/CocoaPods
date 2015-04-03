@@ -84,6 +84,7 @@ CLIntegracon.configure do |c|
 
   # Needed for some test cases
   c.ignores 'Reachability.podspec'
+  c.ignores 'Moment.podspec'
   c.ignores 'PodTest-hg-source/**'
 
   c.hook_into :bacon
