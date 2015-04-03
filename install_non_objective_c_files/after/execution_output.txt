@@ -1,0 +1,55 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Fetching external sources
+-> Fetching podspec for `Moment` from `Moment.podspec`
+
+Resolving dependencies of `Podfile`
+Starting resolution (<#DATE#>)
+Creating possibility state for Moment (from `Moment.podspec`) (1 remaining)
+  Attempting to activate Moment (0.0.1)
+  Activated Moment at Moment (0.0.1)
+  Requiring nested dependencies ()
+Finished resolution (1 steps) (Took <#DURATION#> seconds) (<#DATE#>)
+Unactivated: 
+Activated: Moment
+
+Comparing resolved specification to the sandbox manifest
+  A Moment
+
+Downloading dependencies
+
+-> Installing Moment (0.0.1)
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/kmussel/Moment.git ROOT/tmp/install_non_objective_c_files/Pods/Moment
+     Cloning into 'ROOT/tmp/install_non_objective_c_files/Pods/Moment'...
+   $ GIT_BIN checkout -b activated-commit 39f21fee0cef410c6d89c9fa94ff5638527ef7bc
+   Switched to a new branch 'activated-commit'
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `Pods-Moment` iOS 6.0
+    - Installing target `Pods` iOS 6.0
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
+
+Integrating target `Pods` (`SampleApp.xcodeproj` project)

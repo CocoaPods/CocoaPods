@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :podspec: Moment.podspec
 
 SPEC CHECKSUMS:
-  Moment: 9bb1e738d02622eeefa70b19abea208669a84244
+  Moment: 59f62e96735a23b19a63ef39b2c2f061e4ed41bb
 
-COCOAPODS: 0.34.4
+COCOAPODS: 0.36.3

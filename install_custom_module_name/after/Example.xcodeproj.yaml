@@ -32,16 +32,16 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
           INFOPLIST_FILE: Example/Info.plist
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
           PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods.debug.xcconfig
     - Release:
         Build Settings:
-          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
           INFOPLIST_FILE: Example/Info.plist
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
           PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods.release.xcconfig
 
@@ -51,8 +51,8 @@ Build Configurations:
 - Debug:
     Build Settings:
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
       CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
       SDKROOT: iphoneos
@@ -104,10 +104,10 @@ Build Configurations:
       CLANG_WARN_EMPTY_BODY: 'YES'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       ALWAYS_SEARCH_USER_PATHS: 'NO'
-      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
       COPY_PHASE_STRIP: 'YES'
-      CLANG_WARN_BOOL_CONVERSION: 'YES'
       CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
       CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
