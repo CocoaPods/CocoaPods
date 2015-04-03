@@ -1,0 +1,56 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (``)
+
+Fetching external sources
+-> Fetching podspec for `BananaLib` from `banana-lib/BananaLib.podspec`
+
+Resolving dependencies of `Podfile`
+Starting resolution (<#DATE#>)
+Creating possibility state for BananaLib (from `banana-lib/BananaLib.podspec`) (1 remaining)
+  Attempting to activate BananaLib (1.0)
+  Activated BananaLib at BananaLib (1.0)
+  Requiring nested dependencies ()
+Finished resolution (1 steps) (Took <#DURATION#> seconds) (<#DATE#>)
+Unactivated: 
+Activated: BananaLib
+
+Comparing resolved specification to the sandbox manifest
+  A BananaLib
+
+Downloading dependencies
+
+-> Installing BananaLib (1.0)
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `Pods-BananaLib` iOS 8.2
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-BananaLib/Info.plist`
+      - Copying module map file to `Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-umbrella.h`
+    - Installing target `Pods` iOS 8.2
+      - Generating Info.plist file at `Pods/Target Support Files/Pods/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods/Pods.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods/Pods-umbrella.h`
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `Example.xcworkspace` for this project from now on.
+
+Integrating target `Pods` (`Example.xcodeproj` project)
+  Adding Build Phase 'Embed Pods Frameworks' to project.
