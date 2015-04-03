@@ -380,9 +380,9 @@ module Pod
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
         validator.expects(:`).with('which xcodebuild').twice.returns('/usr/bin/xcodebuild')
-        command = 'xcodebuild clean build -target Pods CODE_SIGN_IDENTITY=-'
+        command = 'xcodebuild clean build -target Pods'
         validator.expects(:`).with("#{command} 2>&1").once.returns('')
-        validator.expects(:`).with("#{command} -sdk iphonesimulator 2>&1").once.returns('')
+        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk iphonesimulator 2>&1").once.returns('')
         validator.validate
       end
 

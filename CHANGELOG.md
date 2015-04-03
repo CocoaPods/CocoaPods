@@ -4,6 +4,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Bug Fixes
+
+* Do not pass code-sign arguments to xcodebuild when linting OS X targets.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3310](https://github.com/CocoaPods/CocoaPods/issues/3310)
+
+
 ## 0.36.3
 
 ##### Bug Fixes
