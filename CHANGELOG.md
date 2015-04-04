@@ -6,6 +6,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Allow the specification of custom module map files.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3145](https://github.com/CocoaPods/CocoaPods/issues/3145)
+
 ##### Bug Fixes
 
 * Do not pass code-sign arguments to xcodebuild when linting OS X targets.  
