@@ -173,6 +173,11 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+    describe 'Installs a Pod with a custom module map' do
+      behaves_like cli_spec 'install_custom_module_map',
+                            'install --no-repo-update'
+    end
+
     describe 'Installs a Pod with a custom module name' do
       behaves_like cli_spec 'install_custom_module_name',
                             'install --no-repo-update'
