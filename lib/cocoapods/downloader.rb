@@ -9,6 +9,21 @@ module Pod
     require 'cocoapods/downloader/request'
     require 'cocoapods/downloader/response'
 
+    # Downloads a pod from the given `request` to the given `target` location.
+    #
+    # @return [Response] The download response for this download.
+    #
+    # @param  [Request] request
+    #         the request that describes this pod download.
+    #
+    # @param  [Pathname,Nil] target
+    #         the location to which this pod should be downloaded. If `nil`,
+    #         then the pod will only be cached.
+    #
+    # @param  [Pathname,Nil] cache_path
+    #         the path used to cache pod downloads. If `nil`, then no caching
+    #         will be done.
+    #
     def self.download(
       request,
       target,
