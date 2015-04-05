@@ -25,9 +25,10 @@ module Pod
 
       def slug(name: self.name, params: self.params)
         if released_pod?
-          "Release/#{name}/#{spec.version}"
+          checksum = spec.checksum &&  '-' << spec.checksum.limit(5)
+          "Release/#{name}/#{spec.version}#{checksum}"
         else
-          opts = params.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/#{Regexp.escape File::SEPARATOR}+/, '+')
+          opts = params.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/(#{Regexp.escape File::SEPARATOR})+/, '+')
           "External/#{name}/#{opts}"
         end
       end
