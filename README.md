@@ -18,29 +18,29 @@ party open-source libraries, by creating a more centralized ecosystem.
 
 Installing and updating CocoaPods is very easy. Don't miss the [Installation
 guide](http://guides.cocoapods.org/using/getting-started.html#installation) and the
-[Getting started guide](http://guides.cocoapods.org/using/getting-started.html).
+[Getting started guide](https://guides.cocoapods.org/using/getting-started.html).
 
 ## Sponsors
 
-Lovingly sponsored by a collection of companies, see the footer of [CocoaPods.org](http://cocoapods.org) for an up-to-date list. 
+Lovingly sponsored by a collection of companies, see the footer of [CocoaPods.org](https://cocoapods.org) for an up-to-date list. 
 
 ## Collaborate
 
 All CocoaPods development happens on GitHub. Contributions make for good karma and
-we [welcome new](http://blog.cocoapods.org/starting-open-source/) contributors with joy. We take contributors seriously, and thus have a 
+we [welcome new](https://blog.cocoapods.org/starting-open-source/) contributors with joy. We take contributors seriously, and thus have a 
 contributor [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Links
 
 | Link | Description |
 | :----- | :------ |
-[CocoaPods.org](http://cocoapods.org/) | Homepage and search for Pods.
-[@CocoaPods](http://twitter.com/CocoaPods) | Follow CocoaPods on Twitter to stay up to date.
-[Blog](http://blog.cocoapods.org) | The CocoaPods blog.
+[CocoaPods.org](https://cocoapods.org/) | Homepage and search for Pods.
+[@CocoaPods](https://twitter.com/CocoaPods) | Follow CocoaPods on Twitter to stay up to date.
+[Blog](https://blog.cocoapods.org) | The CocoaPods blog.
 [Mailing List](http://groups.google.com/group/cocoapods) | Feel free to ask any kind of question.
-[Guides](http://guides.cocoapods.org) | Everything you want to know about CocoaPods.
+[Guides](https://guides.cocoapods.org) | Everything you want to know about CocoaPods.
 [Changelog](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md) | See the changes introduced in each CocoaPods version.
-[New Pods RSS](http://feeds.cocoapods.org/new-pods.rss) | Don't miss any new Pods.
+[New Pods RSS](https://feeds.cocoapods.org/new-pods.rss) | Don't miss any new Pods.
 [Code of Conduct](CODE_OF_CONDUCT.md) | Find out the standards we hold ourselves to.
 
 ## Projects
@@ -49,7 +49,7 @@ CocoaPods is composed of the following projects:
 
 | Status | Project | Description | Info |
 | :----- | :------ | :--- | :--- |
-| [![Build Status](http://img.shields.io/travis/CocoaPods/CocoaPods/master.svg?style=flat)](http://travis-ci.org/CocoaPods/CocoaPods) | [CocoaPods](https://github.com/CocoaPods/CocoaPods) | The CocoaPods command line tool. | [guides](http://guides.cocoapods.org)
+| [![Build Status](http://img.shields.io/travis/CocoaPods/CocoaPods/master.svg?style=flat)](http://travis-ci.org/CocoaPods/CocoaPods) | [CocoaPods](https://github.com/CocoaPods/CocoaPods) | The CocoaPods command line tool. | [guides](https://guides.cocoapods.org)
 | [![Build Status](http://img.shields.io/travis/CocoaPods/Core/master.svg?style=flat)](http://travis-ci.org/CocoaPods/Core) | [CocoaPods Core](https://github.com/CocoaPods/Core) | Support for working with specifications and podfiles. | [docs](http://docs.cocoapods.org/cocoapods_core)
 | [![Build Status](http://img.shields.io/travis/CocoaPods/cocoapods-downloader/master.svg?style=flat)](http://travis-ci.org/CocoaPods/cocoapods-downloader) |[CocoaPods Downloader](https://github.com/CocoaPods/cocoapods-downloader) |  Downloaders for various source types. |  [docs](http://docs.cocoapods.org/cocoapods_downloader/index.html)
 | [![Build Status](http://img.shields.io/travis/CocoaPods/Xcodeproj/master.svg?style=flat)](https://travis-ci.org/CocoaPods/Xcodeproj) | [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) | Create and modify Xcode projects from Ruby. |  [docs](http://docs.cocoapods.org/xcodeproj/index.html)
