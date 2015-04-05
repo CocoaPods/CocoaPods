@@ -17,7 +17,7 @@ module Pod
       #
       def initialize(root)
         @root = Pathname(root)
-        root.mkpath unless root.exist?
+        @root.mkpath unless @root.exist?
       end
 
       # Downloads the Pod from the given `request`
