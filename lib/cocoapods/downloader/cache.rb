@@ -23,12 +23,18 @@ module Pod
 
       private
 
-      def path_for_pod(request)
-        root + request.slug
+      # @return [Pathname] The path for the Pod downloaded from the given
+      #         `request`.
+      #
+      def path_for_pod(request, slug_opts = {})
+        root + request.slug(slug_opts)
       end
 
-      def path_for_spec(request)
-        path = root + 'Specs' + request.slug
+      # @return [Pathname] The path for the podspec downloaded from the given
+      #         `request`.
+      #
+      def path_for_spec(request, slug_opts = {})
+        path = root + 'Specs' + request.slug(slug_opts)
         path.sub_ext('.podspec.json')
       end
 
@@ -50,16 +56,16 @@ module Pod
           result.checkout_options = download(request.name, target, request.params, request.head?)
 
           if request.released_pod?
-            result.location = destination = path_for_pod(request)
+            result.location = destination = path_for_pod(request, :params => result.checkout_options)
             copy_and_clean(target, destination, request.spec)
-            write_spec(request.spec, path_for_spec(request))
+            write_spec(request.spec, path_for_spec(request, :params => result.checkout_options))
           else
             podspecs = Sandbox::PodspecFinder.new(target).podspecs
             podspecs[request.name] = request.spec if request.spec
             podspecs.each do |_, spec|
-              destination = path_for_pod(request)
+              destination = path_for_pod(request, :name => spec.name, :params => result.checkout_options)
               copy_and_clean(target, destination, spec)
-              write_spec(spec, path_for_spec(request))
+              write_spec(spec, path_for_spec(request, :name => spec.name, :params => result.checkout_options))
               if request.name == spec.name
                 result.location = destination
                 result.spec = spec

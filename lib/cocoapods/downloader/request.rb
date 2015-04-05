@@ -23,7 +23,7 @@ module Pod
         validate!
       end
 
-      def slug
+      def slug(name: self.name, params: self.params)
         if released_pod?
           "Release/#{name}/#{spec.version}"
         else
