@@ -4,7 +4,6 @@ require 'tmpdir'
 module Pod
   module Downloader
     class Cache
-      Result = Struct.new(:location, :spec, :checkout_options)
 
       attr_reader :root
 
@@ -37,7 +36,7 @@ module Pod
         path = path_for_pod(request)
         spec = request.spec || cached_spec(request)
         return unless spec && path.directory?
-        Result.new(path, spec, request.params)
+        Response.new(path, spec, request.params)
       end
 
       def cached_spec(request)
@@ -47,7 +46,7 @@ module Pod
 
       def uncached_pod(request)
         in_tmpdir do |target|
-          result = Result.new
+          result = Response.new
           result.checkout_options = download(request.name, target, request.params, request.head?)
 
           if request.released_pod?

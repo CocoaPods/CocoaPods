@@ -7,6 +7,7 @@ module Pod
   module Downloader
     require 'cocoapods/downloader/cache'
     require 'cocoapods/downloader/request'
+    require 'cocoapods/downloader/response'
 
     def self.download(
       request,
