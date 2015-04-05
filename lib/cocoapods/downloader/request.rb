@@ -45,7 +45,7 @@ module Pod
       def initialize(spec: nil, released: false, name: nil, params: false, head: false)
         @released_pod = released
         @spec = spec
-        @params = spec ? spec.source.dup : params
+        @params = spec ? (spec.source && spec.source.dup) : params
         @name = spec ? spec.name : name
         @head = head
 
@@ -63,7 +63,7 @@ module Pod
       #
       def slug(name: self.name, params: self.params)
         if released_pod?
-          checksum = spec.checksum &&  '-' << spec.checksum.limit(5)
+          checksum = spec.checksum &&  '-' << spec.checksum[0, 5]
           "Release/#{name}/#{spec.version}#{checksum}"
         else
           opts = params.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/(#{Regexp.escape File::SEPARATOR})+/, '+')
@@ -79,9 +79,9 @@ module Pod
       #
       def validate!
         raise ArgumentError, 'Requires a name' unless name
+        raise ArgumentError, 'Must give a spec for a released download request' if released_pod? && !spec
         raise ArgumentError, 'Requires a version if released' if released_pod? && !spec.version
         raise ArgumentError, 'Requires params' unless params
-        raise ArgumentError, 'Must give a spec for a released download request' if released_pod? && !spec
       end
     end
   end
