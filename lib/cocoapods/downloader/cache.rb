@@ -81,9 +81,9 @@ module Pod
         downloader = Downloader.for_target(target, params)
         if head
           unless downloader.head_supported?
-            raise Informative, "The pod '" + name + "' does not " \
-              'support the :head option, as it uses a ' + downloader.name +
-              ' source. Remove that option to use this pod.'
+            raise Informative, "The pod '#{name}' does not " \
+              "support the :head option, as it uses a #{downloader.name} " \
+              'source. Remove that option to use this pod.'
           end
           downloader.download_head
         else
