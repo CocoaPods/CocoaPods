@@ -26,7 +26,6 @@ module Pod
       attr_reader :head
       alias_method :head?, :head
 
-
       # @param  [Specification,Nil] spec
       #         see {#spec}
       #
@@ -61,13 +60,13 @@ module Pod
       # @return [String] The slug used to store the files resulting from this
       #         download request.
       #
-      def slug(name: self.name, params: self.params)
+      def slug(name: self.name, params: self.params, spec: self.spec)
+        checksum = spec && spec.checksum &&  '-' << spec.checksum[0, 5]
         if released_pod?
-          checksum = spec.checksum &&  '-' << spec.checksum[0, 5]
           "Release/#{name}/#{spec.version}#{checksum}"
         else
           opts = params.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/(#{Regexp.escape File::SEPARATOR})+/, '+')
-          "External/#{name}/#{opts}"
+          "External/#{name}/#{opts}#{checksum}"
         end
       end
 

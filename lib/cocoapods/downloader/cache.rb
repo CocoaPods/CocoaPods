@@ -80,17 +80,18 @@ module Pod
           result.checkout_options = download(request.name, target, request.params, request.head?)
 
           if request.released_pod?
+            result.spec = request.spec
             result.location = destination = path_for_pod(request, :params => result.checkout_options)
             copy_and_clean(target, destination, request.spec)
             write_spec(request.spec, path_for_spec(request, :params => result.checkout_options))
           else
             podspecs = Sandbox::PodspecFinder.new(target).podspecs
             podspecs[request.name] = request.spec if request.spec
-            podspecs.each do |_, spec|
-              destination = path_for_pod(request, :name => spec.name, :params => result.checkout_options)
+            podspecs.each do |name, spec|
+              destination = path_for_pod(request, :name => name, :params => result.checkout_options)
               copy_and_clean(target, destination, spec)
-              write_spec(spec, path_for_spec(request, :name => spec.name, :params => result.checkout_options))
-              if request.name == spec.name
+              write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
+              if request.name == name
                 result.location = destination
                 result.spec = spec
               end

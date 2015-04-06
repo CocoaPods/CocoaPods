@@ -9,7 +9,7 @@ module Pod
     #--------------------------------------#
 
     describe 'Validation' do
-      it "validates request initialization" do
+      it 'validates request initialization' do
         options = [
           { :spec => nil, :name => nil },
           { :spec => nil, :released => true },
