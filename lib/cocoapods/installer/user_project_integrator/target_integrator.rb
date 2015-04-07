@@ -149,8 +149,8 @@ module Pod
             # Compute the list of file_refs form the Resources/ group that are 
             # also in the native_targets Resources Build Phase
             copied_resources_files = native_targets.map(&:resources_build_phase).flat_map(&:files_references)
-            copied_resources_paths = copied_resources_files.map(&:path).uniq
-            resources_files = resources_group.groups.flat_map(&:files)
+            copied_resources_paths = copied_resources_files ? copied_resources_files.map(&:path).uniq : []
+            resources_files = resources_group.groups ? resources_group.groups.flat_map(&:files) : []
             refs_to_remove = resources_files.select { |ref| copied_resources_paths.include?(ref.path) }
           end
 
