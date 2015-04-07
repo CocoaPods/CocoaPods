@@ -38,27 +38,25 @@ module Pod
 
         # Pretty-prints the source at the given path.
         #
-        # @param  [String,Pathname] path
-        #         The path of the source to be printed.
+        # @param  [Source] source
+        #         The source repository to be printed.
         #
         # @return [void]
         #
-        def print_source_at_path(path)
-          Dir.chdir(path) do
-            if SourcesManager.git_repo?(path)
-              remote_name = branch_remote_name(branch_name)
-              if remote_name
-                UI.puts "- Type: git (#{remote_name})"
-                url = url_of_git_repo(remote_name)
-                UI.puts "- URL:  #{url}"
-              else
-                UI.puts '- Type: git (no remote information available)'
-              end
+        def print_source(source)
+          if SourcesManager.git_repo?(source.repo)
+            remote_name = branch_remote_name(branch_name)
+            if remote_name
+              UI.puts "- Type: git (#{remote_name})"
+              UI.puts "- URL:  #{source.url}"
             else
-              UI.puts '- Type: local copy'
+              UI.puts '- Type: git (no remote information available)'
             end
-            UI.puts "- Path: #{path}"
+          else
+            UI.puts '- Type: local copy'
           end
+
+          UI.puts "- Path: #{source.repo}"
         end
 
         # Pretty-prints the given sources.
@@ -71,7 +69,7 @@ module Pod
         def print_sources(sources)
           sources.each do |source|
             UI.title source.name do
-              print_source_at_path source.repo
+              print_source(source)
             end
           end
           UI.puts "\n"

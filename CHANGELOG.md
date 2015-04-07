@@ -12,6 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3310](https://github.com/CocoaPods/CocoaPods/issues/3310)
 
+* Fixes an issue showing the URL to remote resources in `pod repo list`.  
+  [Kyle Fuller](https://github.com/kylef)
+
 
 ## 0.36.3
 
