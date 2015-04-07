@@ -21,6 +21,8 @@ module Pod
           Classes/BananaPrivate.h
           Classes/BananaTrace.d
           README
+          Resources/Images.xcassets/Logo.imageset/Contents.json
+          Resources/Images.xcassets/Logo.imageset/logo.png
           Resources/logo-sidebar.png
           Resources/sub_dir/logo-sidebar.png
           libBananalib.a
@@ -45,6 +47,8 @@ module Pod
           Bananalib.framework/Versions/Current
           Classes
           Resources
+          Resources/Images.xcassets
+          Resources/Images.xcassets/Logo.imageset
           Resources/sub_dir
           sub-dir
           sub-dir/sub-dir-2
@@ -127,6 +131,7 @@ module Pod
       it 'can optionally include the directories in the results' do
         paths = @path_list.relative_glob('Resources/*',  :include_dirs => true).map(&:to_s)
         paths.sort.should == %w(
+          Resources/Images.xcassets
           Resources/logo-sidebar.png
           Resources/sub_dir
         )
