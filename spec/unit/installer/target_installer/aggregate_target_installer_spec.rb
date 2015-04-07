@@ -134,7 +134,8 @@ module Pod
         @installer.install!
       end
 
-      it 'creates a create copy resources script' do
+      # TODO: Remove this; the Copy Resources Script will soon be obsoleted by PR #3263
+      xit 'creates a create copy resources script' do
         @installer.install!
         support_files_dir = config.sandbox.target_support_files_dir('Pods')
         script = support_files_dir + 'Pods-resources.sh'
@@ -166,16 +167,17 @@ module Pod
 
       it 'uniques resources by config' do
         a_path = Pathname.new(@project.path.dirname + '/duplicated/path.jpg')
+        a_bundle_name = 'banana'
         duplicated_paths = [a_path, a_path]
         @installer.target.pod_targets.each do |pod_target|
           pod_target.file_accessors.each do |accessor|
-            accessor.stubs(:resources => duplicated_paths)
+            accessor.stubs(:resource_bundles => { a_bundle_name => duplicated_paths })
           end
         end
         resources_by_config = @installer.send(:resources_by_config)
         resources_by_config.each_value do |resources|
           resources.length.should == 1
-          resources[0].basename.should == a_path.basename
+          resources[0].basename.to_s.should == a_bundle_name + '.bundle'
         end
       end
 

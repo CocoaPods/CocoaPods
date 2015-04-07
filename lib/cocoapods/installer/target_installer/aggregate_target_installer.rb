@@ -113,7 +113,11 @@ module Pod
         resources_by_config = {}
         target.user_build_configurations.keys.each do |config|
           file_accessors = library_targets.select { |t| t.include_in_build_config?(config) }.flat_map(&:file_accessors)
-          resource_bundles = file_accessors.flat_map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name.shellescape}.bundle" } }
+          resource_bundles = file_accessors.flat_map do |accessor|
+            accessor.resource_bundles.keys.map do |name|
+              Pathname.new "${BUILT_PRODUCTS_DIR}/#{name.shellescape}.bundle"
+            end
+          end
           resources_by_config[config] = resource_bundles.uniq
           resources_by_config[config] << bridge_support_file if bridge_support_file
         end
