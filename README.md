@@ -13,12 +13,35 @@ resolves dependencies between libraries, fetches source code for the
 dependencies, and creates and maintains an Xcode workspace to build your
 project.
 
-Ultimately, the goal is to improve discoverability of, and engagement in, third
-party open-source libraries, by creating a more centralized ecosystem.
-
 Installing and updating CocoaPods is very easy. Don't miss the [Installation
 guide](http://guides.cocoapods.org/using/getting-started.html#installation) and the
 [Getting started guide](https://guides.cocoapods.org/using/getting-started.html).
+
+## Project Goals
+
+Ultimately, the goal of CocoaPods is to improve the engagement in, and
+discoverability of, third party open-source libraries. The following list
+includes the project goals which have influenced, and continues to
+drive the design of CocoaPods.
+
+- Being able to work in the system without creating extra work for
+  library authors. Making it possible to maintain a simple transparent
+  podspec outside of the library’s repository.
+- Not imposing any judgement of ‘correctness’ on how authors decide to
+  structure their library.
+- CocoaPods should not impose any specific requirements on source-code
+  management systems. (Currently supported are git, svn, mercurial, bazaar, and
+  various types of archives downloaded over HTTP.)
+- Provide the ability to work in a distributed way, but also provide
+  features only possible with a centralised solution to foster a community.
+- Being able to build tools on top of the system, including those typically
+  deployed to other operating systems, such as web-services.
+- Providing opinionated and automated integration, but making that completely
+  optional. It’s perfectly possible to manually integrate the CocoaPods
+  Xcode project as you see fit, with or without a workspace.
+- Not depending on Apple to fix issues with Xcode or otherwise force
+  authors to have to do a lot of Xcode work not related to their
+  library’s functionality.
 
 ## Sponsors
 
