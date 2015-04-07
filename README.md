@@ -21,7 +21,7 @@ guide](http://guides.cocoapods.org/using/getting-started.html#installation) and 
 
 Ultimately, the goal of CocoaPods is to improve the engagement in, and
 discoverability of, third party open-source libraries. The following list
-includes the project goals which have influenced, and continues to
+includes the project goals which have influenced, and continue to
 drive the design of CocoaPods.
 
 - Being able to work in the system without creating extra work for
