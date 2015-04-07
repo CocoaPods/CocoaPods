@@ -130,7 +130,6 @@ module Pod
       def clean_deintegrated_targets_resources(project, target_uuids_to_keep)
         is_dirty = false
         TargetIntegrator.each_pods_resources(project) do |file_ref|
-          puts "Analyzing Pods/Resources/#{file_ref}"
           file_in_at_least_one_target = false
           project.targets.each do |user_target|
             # Seems like user_target.resources_build_phase.include?(file_ref) does not work as expected here :(
@@ -140,9 +139,7 @@ module Pod
             if target_uuids_to_keep.include?(user_target.uuid)
               # This target is one to integrate, the resource will be kept in there
               file_in_at_least_one_target = true
-              UI.puts "   - Should be kept in for target #{user_target}"
             else
-              UI.puts "   - Removing #{file_ref} from #{user_target} because target not integrated anymore."
               user_target.resources_build_phase.remove_file_reference(file_ref)
               is_dirty = true
             end
@@ -151,7 +148,6 @@ module Pod
           unless file_in_at_least_one_target
             # TODO: Remove the file_refs in Pods/Resources if they are not linked
             #       to any native_target anymore (which can happen after a target deintegration)
-            UI.puts "   -> File #{file_ref} is not in any user target anymore, remove it from the project"
             file_ref.remove_from_project
             is_dirty = true
           end

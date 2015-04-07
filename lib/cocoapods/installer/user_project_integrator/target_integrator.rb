@@ -138,9 +138,6 @@ module Pod
         def add_pods_resources
           dirty = false
         
-          UI.puts "- User targets being integrated: #{native_targets.map(&:name).inspect}"
-          UI.puts "- Pod Targets = #{target.pod_targets.map(&:name)}"
-
           pods_group = user_project['Pods']
           resources_group = pods_group ? pods_group['Resources'] : nil
            # The files already in the target before integration
@@ -158,7 +155,6 @@ module Pod
             pod_name = pod_target.pod_name
             resource_files = pod_target.file_accessors.flat_map(&:resources)
             resource_files.each do |resource_path|
-              UI.puts "   - Adding #{resource_path} to user project"
 
               relative_path = resource_path.relative_path_from(target.client_root).to_s
               pods_group ||= ((dirty = true) && user_project.new_group('Pods'))
@@ -167,7 +163,6 @@ module Pod
               file_ref = pod_subgroup.files.find { |f| f.path == relative_path }
               file_ref ||= (dirty = true) && pod_subgroup.new_file(relative_path)
 
-              UI.puts "   - Adding #{resource_path.basename} to targets #{native_targets.map(&:name)}"
               native_targets.each do |user_target|
                 refs_to_remove.delete(file_ref) # this file_ref is still needed, don't remove it later
                 unless user_target.resources_build_phase.include?(file_ref)
@@ -181,16 +176,11 @@ module Pod
           # Remove the resources no longer in a target
           refs_to_remove.each do |file_ref|
             native_targets.each do |user_target|
-              UI.puts "   - Removing #{file_ref} from #{user_target} because it is no longer needed."
               user_target.resources_build_phase.remove_file_reference(file_ref)
               dirty = true
             end
           end
 
-          # TODO: Change code in FileReferencesInstaller#add_resource to stop adding resources to the Pods.xcodeproj
-          # TODO: Remove code from Pods-resources.sh (except for *.framework stuff still needed)
-
-          UI.puts "==> User project dirty? #{dirty.inspect}"
           dirty
         end
 
@@ -201,7 +191,6 @@ module Pod
         def remove_pods_resources
           TargetIntegrator.each_pods_resources(user_project) do |file_ref|
             native_targets.each do |user_target|
-              UI.puts "   - Removing #{file_ref} from #{user_target} because it is no longer needed."
               user_target.resources_build_phase.remove_file_reference(file_ref)
             end
           end
