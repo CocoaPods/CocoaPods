@@ -43,6 +43,18 @@ module Pod
       def branch_remote_name(branch_name)
         `git config branch.#{branch_name}.remote`.strip
       end
+
+      # Returns the url of the given remote name
+      # (i.e. git@github.com:CocoaPods/Specs.git).
+      #
+      # @param  [#to_s] remote_name
+      #         The branch remote name to look for the url.
+      #
+      # @return [String] The URL of the given remote.
+      #
+      def url_of_git_repo(remote_name)
+        `git config remote.#{remote_name}.url`.strip
+      end
     end
   end
 end
