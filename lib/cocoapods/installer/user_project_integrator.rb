@@ -131,7 +131,7 @@ module Pod
         is_dirty = false
         TargetIntegrator.each_pods_resources(project) do |file_ref|
           file_in_at_least_one_target = false
-          project.targets.each do |user_target|
+          project.native_targets.each do |user_target|
             # Seems like user_target.resources_build_phase.include?(file_ref) does not work as expected here :(
             file_is_in_target = user_target.resources_build_phase.files_references.any? { |f| f.path == file_ref.path }
             next unless file_is_in_target
