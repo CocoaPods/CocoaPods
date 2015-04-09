@@ -76,13 +76,6 @@ module Pod
           other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
           native_target.add_file_references(other_file_refs, nil)
 
-          next unless target.requires_frameworks?
-
-          resource_refs = file_accessor.resources.flatten.map do |res|
-            project.reference_for_path(res)
-          end
-
-          native_target.add_resources(resource_refs)
         end
       end
 

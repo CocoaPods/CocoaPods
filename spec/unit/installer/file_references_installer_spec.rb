@@ -42,7 +42,10 @@ module Pod
         file_ref.path.should == 'libBananalib.a'
       end
 
-      it 'adds the files references of the resources the Pods project' do
+      # TODO: Remove this as PR #3263 does not add the resources to the Pods project anymore
+      #       But we should replace this with a spec that tests that resources are added
+      #         to the User's project instead
+      xit 'adds the files references of the resources the Pods project' do
         @installer.install!
         file_ref = @installer.pods_project['Pods/BananaLib/Resources/logo-sidebar.png']
         file_ref.should.be.not.nil

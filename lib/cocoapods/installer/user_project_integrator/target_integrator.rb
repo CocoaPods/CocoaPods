@@ -30,6 +30,7 @@ module Pod
             # TODO: refactor into Xcodeproj https://github.com/CocoaPods/Xcodeproj/issues/202
             project_is_dirty = [
               XCConfigIntegrator.integrate(target, native_targets),
+              target.requires_frameworks? ? remove_pods_resources : add_pods_resources,
               update_to_cocoapods_0_34,
               remove_embed_frameworks_script_phases,
               unless native_targets_to_integrate.empty?
@@ -128,6 +129,95 @@ module Pod
               build_file.settings['ATTRIBUTES'] = ['Weak']
             end
           end
+        end
+
+        # Add a reference to pods' resources (like xcassets) to the user target
+        #
+        # @return [Boolean] true if user project has been modified
+        #
+        def add_pods_resources
+          dirty = false
+        
+          pods_group = user_project['Pods']
+          resources_group = pods_group ? pods_group['Resources'] : nil
+           # The files already in the target before integration
+          refs_to_remove = []
+          if resources_group
+            # Compute the list of file_refs form the Resources/ group that are 
+            # also in the native_targets Resources Build Phase
+            copied_resources_files = native_targets.map(&:resources_build_phase).flat_map(&:files_references)
+            copied_resources_paths = copied_resources_files ? copied_resources_files.map(&:path).uniq : []
+            resources_files = resources_group.groups ? resources_group.groups.flat_map(&:files) : []
+            refs_to_remove = resources_files.select { |ref| copied_resources_paths.include?(ref.path) }
+          end
+
+          target.pod_targets.each do |pod_target|
+            pod_name = pod_target.pod_name
+            resource_files = pod_target.file_accessors.flat_map(&:resources)
+            resource_files.each do |resource_path|
+
+              relative_path = resource_path.relative_path_from(target.client_root).to_s
+              pods_group ||= ((dirty = true) && user_project.new_group('Pods'))
+              resources_group ||= ((dirty = true) && pods_group.new_group('Resources'))
+              pod_subgroup = resources_group[pod_name] || ((dirty = true) && resources_group.new_group(pod_name))
+              file_ref = pod_subgroup.files.find { |f| f.path == relative_path }
+              file_ref ||= (dirty = true) && pod_subgroup.new_file(relative_path)
+
+              native_targets.each do |user_target|
+                refs_to_remove.delete(file_ref) # this file_ref is still needed, don't remove it later
+                unless user_target.resources_build_phase.include?(file_ref)
+                  user_target.add_resources([file_ref])
+                  dirty = true
+                end
+              end
+            end
+          end
+
+          # Remove the resources no longer in a target
+          refs_to_remove.each do |file_ref|
+            native_targets.each do |user_target|
+              if user_target.resources_build_phase.include?(file_ref)
+                user_target.resources_build_phase.remove_file_reference(file_ref)
+                dirty = true
+              end
+            end
+          end
+
+          dirty
+        end
+
+        # Remove the pods resources from the user target's Copy Resource Build Phase
+        #
+        # @return [Boolean] true if user project has been modified
+        #
+        def remove_pods_resources
+          TargetIntegrator.each_pods_resources(user_project) do |file_ref|
+            native_targets.each do |user_target|
+              if user_target.resources_build_phase.include?(file_ref)
+                user_target.resources_build_phase.remove_file_reference(file_ref)
+              end
+            end
+          end
+        end
+
+        # Iterate over each file in the 'Pods/Resources' group of the given `project`
+        #
+        # @param [XcodeProj::Project] project
+        #        The user project
+        #
+        # TODO: Probably move this elsewhere
+        #
+        def self.each_pods_resources(project)
+          return false unless block_given?
+          pods_group = project['Pods']
+          return false unless pods_group
+          resources_group = pods_group['Resources']
+          return false unless resources_group
+          resources_files = resources_group.groups.flat_map(&:files)
+          resources_files.each do |file_ref|
+            yield file_ref
+          end
+          true
         end
 
         # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
@@ -256,7 +346,7 @@ module Pod
         # @return [Specification::Consumer] the consumer for the specifications.
         #
         def spec_consumers
-          @spec_consumers ||= target.pod_targets.map(&:file_accessors).flatten.map(&:spec_consumer)
+          @spec_consumers ||= target.pod_targets.flat_map(&:file_accessors).map(&:spec_consumer)
         end
 
         # @return [String] the message that should be displayed for the target

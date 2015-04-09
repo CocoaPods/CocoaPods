@@ -100,7 +100,6 @@ module Pod
       #
       def add_resources
         UI.message '- Adding resources to Pods project' do
-          add_file_accessors_paths_to_pods_group(:resources, :resources, true)
           add_file_accessors_paths_to_pods_group(:resource_bundle_files, :resources, true)
         end
       end
