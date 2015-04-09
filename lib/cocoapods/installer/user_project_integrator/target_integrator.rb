@@ -176,8 +176,10 @@ module Pod
           # Remove the resources no longer in a target
           refs_to_remove.each do |file_ref|
             native_targets.each do |user_target|
-              user_target.resources_build_phase.remove_file_reference(file_ref)
-              dirty = true
+              if user_target.resources_build_phase.include?(file_ref)
+                user_target.resources_build_phase.remove_file_reference(file_ref)
+                dirty = true
+              end
             end
           end
 
@@ -191,7 +193,9 @@ module Pod
         def remove_pods_resources
           TargetIntegrator.each_pods_resources(user_project) do |file_ref|
             native_targets.each do |user_target|
-              user_target.resources_build_phase.remove_file_reference(file_ref)
+              if user_target.resources_build_phase.include?(file_ref)
+                user_target.resources_build_phase.remove_file_reference(file_ref)
+              end
             end
           end
         end
