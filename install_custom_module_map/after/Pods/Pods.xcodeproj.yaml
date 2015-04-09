@@ -1,0 +1,238 @@
+
+File References:
+- Podfile
+- Development Pods:
+  - BananaLib:
+    - Classes:
+      - Banana.h
+      - Banana.m
+      - BananaPrivate.h
+      - BananaProject.h
+    - Support Files:
+      - Info.plist
+      - Pods-BananaLib.modulemap
+      - Pods-BananaLib.xcconfig
+      - Pods-BananaLib-Private.xcconfig
+      - Pods-BananaLib-dummy.m
+      - Pods-BananaLib-prefix.pch
+      - Pods-BananaLib-umbrella.h
+- Frameworks:
+  - iOS:
+    - Foundation.framework
+- Products:
+  - BananaLib.framework
+  - Pods.framework
+- Targets Support Files:
+  - Pods:
+    - Info.plist
+    - Pods.modulemap
+    - Pods-acknowledgements.markdown
+    - Pods-acknowledgements.plist
+    - Pods-dummy.m
+    - Pods-environment.h
+    - Pods-frameworks.sh
+    - Pods-resources.sh
+    - Pods-umbrella.h
+    - Pods.debug.xcconfig
+    - Pods.release.xcconfig
+
+
+
+Targets:
+- Pods:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
+      - Pods-umbrella.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods/Pods.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LDFLAGS: ''
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+          PRODUCT_NAME: Pods
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          PODS_ROOT: $(SRCROOT)
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods.debug.xcconfig
+    - Release:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods/Pods.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          OTHER_LIBTOOLFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LDFLAGS: ''
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+          PRODUCT_NAME: Pods
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          PODS_ROOT: $(SRCROOT)
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods.release.xcconfig
+- Pods-BananaLib:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Banana.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - Pods-BananaLib-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
+      - Banana.h:
+          ATTRIBUTES:
+          - Public
+      - BananaPrivate.h:
+          ATTRIBUTES:
+          - Private
+      - BananaProject.h:
+          ATTRIBUTES:
+          - Project
+      - Pods-BananaLib-umbrella.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-BananaLib/Pods-BananaLib.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-BananaLib/Pods-BananaLib-prefix.pch
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+          PRODUCT_NAME: BananaLib
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-BananaLib/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-BananaLib-Private.xcconfig
+    - Release:
+        Build Settings:
+          DYLIB_CURRENT_VERSION: '1'
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
+          MODULEMAP_FILE: Target Support Files/Pods-BananaLib/Pods-BananaLib.modulemap
+          CURRENT_PROJECT_VERSION: '1'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          GCC_PREFIX_HEADER: Target Support Files/Pods-BananaLib/Pods-BananaLib-prefix.pch
+          TARGETED_DEVICE_FAMILY: '1,2'
+          DYLIB_COMPATIBILITY_VERSION: '1'
+          VERSIONING_SYSTEM: apple-generic
+          VERSION_INFO_PREFIX: ''
+          SDKROOT: iphoneos
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+          PRODUCT_NAME: BananaLib
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          SKIP_INSTALL: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          INFOPLIST_FILE: Target Support Files/Pods-BananaLib/Info.plist
+          DEFINES_MODULE: 'YES'
+        Base Configuration: Pods-BananaLib-Private.xcconfig
+
+
+
+Build Configurations:
+- Debug:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      SYMROOT: ${SRCROOT}/../build
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - $(inherited)
+      ONLY_ACTIVE_ARCH: 'YES'
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'NO'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+- Release:
+    Build Settings:
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      SYMROOT: ${SRCROOT}/../build
+      GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS: RELEASE=1
+      VALIDATE_PRODUCT: 'YES'
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      GCC_WARN_UNINITIALIZED_AUTOS: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      COPY_PHASE_STRIP: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      ENABLE_NS_ASSERTIONS: 'NO'
+      IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'

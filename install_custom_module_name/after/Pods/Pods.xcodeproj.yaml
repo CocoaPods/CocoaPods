@@ -265,13 +265,21 @@ Targets:
       - Foundation.framework
       - SocketRocket.framework
     - HeadersBuildPhase:
-      - NSDictionary+QueryString.h
-      - NSString+Hashing.h
-      - PTBlockEventListener.h
+      - NSDictionary+QueryString.h:
+          ATTRIBUTES:
+          - Private
+      - NSString+Hashing.h:
+          ATTRIBUTES:
+          - Private
+      - PTBlockEventListener.h:
+          ATTRIBUTES:
+          - Private
       - PTEventListener.h:
           ATTRIBUTES:
           - Public
-      - PTJSON.h
+      - PTJSON.h:
+          ATTRIBUTES:
+          - Private
       - PTPusher+Testing.h:
           ATTRIBUTES:
           - Public
@@ -284,8 +292,12 @@ Targets:
       - PTPusherChannel.h:
           ATTRIBUTES:
           - Public
-      - PTPusherChannelAuthorizationOperation.h
-      - PTPusherChannel_Private.h
+      - PTPusherChannelAuthorizationOperation.h:
+          ATTRIBUTES:
+          - Private
+      - PTPusherChannel_Private.h:
+          ATTRIBUTES:
+          - Private
       - PTPusherConnection.h:
           ATTRIBUTES:
           - Public
@@ -313,8 +325,12 @@ Targets:
       - PTPusherPresenceChannelDelegate.h:
           ATTRIBUTES:
           - Public
-      - PTTargetActionEventListener.h
-      - PTURLRequestOperation.h
+      - PTTargetActionEventListener.h:
+          ATTRIBUTES:
+          - Private
+      - PTURLRequestOperation.h:
+          ATTRIBUTES:
+          - Private
       - Pods-libPusher-umbrella.h:
           ATTRIBUTES:
           - Public
