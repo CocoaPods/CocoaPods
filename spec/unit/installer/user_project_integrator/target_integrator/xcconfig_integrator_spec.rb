@@ -47,7 +47,7 @@ module Pod
       config.base_configuration_reference.should.equal existing
     end
 
-    it 'does not set the Pods xcconfig as the base config if the user ' \
+    it 'logs a warning and does not set the Pods xcconfig as the base config if the user ' \
        'has already set a config of their own' do
       sample_config = @project.new_file('SampleConfig.xcconfig')
       @target.build_configurations.each do |config|
@@ -66,6 +66,41 @@ module Pod
       XCConfigIntegrator.integrate(@pod_bundle, [@target, target])
       target.build_configurations.each do |config|
         config.base_configuration_reference.path.should.include 'Pods'
+      end
+
+      UI.warnings.should.not.match /not set.*base configuration/
+    end
+
+    it 'does not log a warning if the user has set a xcconfig of their own that includes the Pods config' do
+      sample_config = @project.new_file('SampleConfig.xcconfig')
+      File.open(sample_config.real_path, 'w') do |file|
+        @target.build_configurations.each do |config|
+          file.write("\#include \"#{@pod_bundle.xcconfig_relative_path(config.name)}\"\n")
+        end
+      end
+      @target.build_configurations.each do |config|
+        config.base_configuration_reference = sample_config
+      end
+      XCConfigIntegrator.integrate(@pod_bundle, [@target])
+      @target.build_configurations.each do |config|
+        config.base_configuration_reference.should == sample_config
+      end
+
+      UI.warnings.should.not.match /not set.*base configuration/
+    end
+
+    it 'does not log a warning if the user has set a xcconfig of their own that includes the silence warnings string' do
+      SILENCE_TOKEN = '// @COCOAPODS_SILENCE_WARNINGS@ //'
+      sample_config = @project.new_file('SampleConfig.xcconfig')
+      File.open(sample_config.real_path, 'w') do |file|
+        file.write("#{SILENCE_TOKEN}\n")
+      end
+      @target.build_configurations.each do |config|
+        config.base_configuration_reference = sample_config
+      end
+      XCConfigIntegrator.integrate(@pod_bundle, [@target])
+      @target.build_configurations.each do |config|
+        config.base_configuration_reference.should == sample_config
       end
 
       UI.warnings.should.not.match /not set.*base configuration/
