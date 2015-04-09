@@ -91,12 +91,14 @@ module Pod
             file_ref = group.files.find { |f| f.path == path }
             if config.base_configuration_reference &&
                 config.base_configuration_reference != file_ref
-              UI.warn 'CocoaPods did not set the base configuration of your ' \
-              'project because your project already has a custom ' \
-              'config set. In order for CocoaPods integration to work at ' \
-              'all, please either set the base configurations of the target ' \
-              "`#{target.name}` to `#{path}` or include the `#{path}` in your " \
-              'build configuration.'
+              unless xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path)
+                UI.warn 'CocoaPods did not set the base configuration of your ' \
+                'project because your project already has a custom ' \
+                'config set. In order for CocoaPods integration to work at ' \
+                'all, please either set the base configurations of the target ' \
+                "`#{target.name}` to `#{path}` or include the `#{path}` in your " \
+                'build configuration.'
+              end
             elsif config.base_configuration_reference.nil? || file_ref.nil?
               file_ref ||= group.new_file(path)
               config.base_configuration_reference = file_ref
@@ -135,6 +137,35 @@ module Pod
               "`#{pod_bundle.xcconfig_relative_path(config.name)}'. " \
               'This can lead to problems with the CocoaPods installation'
             UI.warn(message, actions)
+          end
+
+          # Naively checks to see if a given PBXFileReference imports a given
+          # path.
+          #
+          # @param  [PBXFileReference] base_config_ref
+          #         A file reference to an `.xcconfig` file.
+          #
+          # @param  [String] target_config_path
+          #         The path to check for.
+          #
+          SILENCE_WARNINGS_STRING = '// @COCOAPODS_SILENCE_WARNINGS@ //'
+          def self.xcconfig_includes_target_xcconfig?(base_config_ref, target_config_path)
+            return unless base_config_ref && File.exist?(base_config_ref.real_path)
+            regex = /
+              ^(
+                (\s*                                  # Possible, but unlikely, space before include statement
+                  \#include\s+                        # Include statement
+                  ['"]                                # Open quote
+                  (.*\/)?                             # Possible prefix to path
+                  #{Regexp.quote(target_config_path)} # The path should end in the target_config_path
+                  ['"]                                # Close quote
+                )
+                |
+                (#{Regexp.quote(SILENCE_WARNINGS_STRING)}) # Token to treat xcconfig as good and silence pod install warnings
+              )
+            /x
+            File.foreach(base_config_ref.real_path) { |line| return true if line =~ regex }
+            false
           end
         end
       end

@@ -33,6 +33,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   linting.  
   [Marius Rackwitz](https://github.com/mrackwitz)
 
+* Naïvely prevent base xcconfig warnings for targets that have custom
+  config files set.  
+  [Chris Brauchli](https://github.com/cbrauchli)
+  [#2633](https://github.com/CocoaPods/CocoaPods/issues/2633)
+
 ##### Bug Fixes
 
 * Do not pass code-sign arguments to xcodebuild when linting OS X targets.  
