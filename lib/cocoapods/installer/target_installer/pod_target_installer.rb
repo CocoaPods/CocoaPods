@@ -50,6 +50,7 @@ module Pod
 
           headers = file_accessor.headers
           public_headers = file_accessor.public_headers
+          private_headers = file_accessor.private_headers
           other_source_files = file_accessor.source_files.select { |sf| sf.extname == '.d' }
 
           {
@@ -66,9 +67,13 @@ module Pod
           native_target.add_file_references(header_file_refs) do |build_file|
             # Set added headers as public if needed
             if target.requires_frameworks?
+              build_file.settings ||= {}
               if public_headers.include?(build_file.file_ref.real_path)
-                build_file.settings ||= {}
                 build_file.settings['ATTRIBUTES'] = ['Public']
+              elsif private_headers.include?(build_file.file_ref.real_path)
+                build_file.settings['ATTRIBUTES'] = ['Private']
+              else
+                build_file.settings['ATTRIBUTES'] = ['Project']
               end
             end
           end
@@ -237,6 +242,20 @@ module Pod
         dir = target.support_files_dir
         group = project.pod_support_files_group(pod_name, dir)
         group.new_file(path)
+      end
+
+      def create_module_map
+        return super unless module_map = target.file_accessors.first.module_map
+        path = target.module_map_path
+        UI.message "- Copying module map file to #{UI.path(path)}" do
+          FileUtils.cp(module_map, path)
+          add_file_to_support_group(path)
+
+          native_target.build_configurations.each do |c|
+            relative_path = path.relative_path_from(sandbox.root)
+            c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
+          end
+        end
       end
 
       #-----------------------------------------------------------------------#

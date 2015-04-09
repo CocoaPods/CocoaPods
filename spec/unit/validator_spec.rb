@@ -31,6 +31,7 @@ module Pod
     #
     def stub_podspec(pattern = nil, replacement = nil)
       spec = (fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json').read
+      spec.gsub!(/.*license.*$/, '"license": "Public Domain",')
       spec.gsub!(%r{https://github\.com/johnezang/JSONKit\.git}, fixture('integration/JSONKit').to_s)
       spec.gsub!(pattern, replacement) if pattern && replacement
       spec
@@ -434,12 +435,41 @@ module Pod
           validator.results.map(&:to_s).first.should.match /matches non-header files \(JSONKit\.m\)/
           validator.result_type.should == :error
         end
+
+        it 'checks presence of license file' do
+          file = write_podspec(stub_podspec(/.*license.*$/, '"license": "MIT",'))
+          validator = Validator.new(file, SourcesManager.master.map(&:url))
+          validator.stubs(:build_pod)
+          validator.stubs(:validate_url)
+          validator.validate
+          validator.results.map(&:to_s).first.should.match /Unable to find a license file/
+          validator.result_type.should == :warning
+        end
+
+        it 'checks module_map must exist if specified' do
+          file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "JSONKit.*", "module_map": "JSONKit.modulemap",'))
+          validator = Validator.new(file, SourcesManager.master.map(&:url))
+          validator.stubs(:build_pod)
+          validator.stubs(:validate_url)
+          validator.validate
+          validator.results.map(&:to_s).first.should.match /Unable to find the specified module map file./
+          validator.result_type.should == :error
+        end
+
+        it 'checks module_map accepts only modulemaps' do
+          file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "JSONKit.*", "module_map": "JSONKit.m",'))
+          validator = Validator.new(file, SourcesManager.master.map(&:url))
+          validator.stubs(:build_pod)
+          validator.stubs(:validate_url)
+          validator.validate
+          validator.results.map(&:to_s).first.should.match /Unexpected file extension for modulemap file \(JSONKit\.m\)/
+          validator.result_type.should == :error
+        end
       end
 
       it 'validates a podspec with dependencies' do
         podspec = stub_podspec(/.*name.*/, '"name": "ZKit",')
         podspec.gsub!(/.*requires_arc.*/, '"dependencies": { "SBJson": [ "~> 3.2" ] }, "requires_arc": false')
-        podspec.gsub!(/.*license.*$/, '"license": "Public Domain",')
         file = write_podspec(podspec, 'ZKit.podspec.json')
 
         spec = Specification.from_file(file)
@@ -504,7 +534,6 @@ module Pod
     describe 'swift validation' do
       def test_swiftpod
         podspec = stub_podspec(/.*source_files.*/, '"source_files": "*.swift",')
-        podspec.gsub!(/.*license.*$/, '"license": "Public Domain",')
         file = write_podspec(podspec)
 
         Podfile::TargetDefinition.any_instance.stubs(:uses_frameworks?).returns(true)

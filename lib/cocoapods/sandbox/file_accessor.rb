@@ -124,6 +124,12 @@ module Pod
         header_files - private_headers
       end
 
+      # @return [Array<Pathname>] The private headers of the specification.
+      #
+      def private_headers
+        private_header_files
+      end
+
       # @return [Hash{ Symbol => Array<Pathname> }] the resources of the
       #         specification grouped by destination.
       #
@@ -203,6 +209,14 @@ module Pod
           path_list.root + spec_consumer.spec.root.license[:file]
         else
           path_list.glob([GLOB_PATTERNS[:license]]).first
+        end
+      end
+
+      # @return [Pathname, Nil] The path of the custom module map file of the
+      #         specification, if specified.
+      def module_map
+        if module_map = spec_consumer.spec.root.module_map
+          path_list.root + module_map
         end
       end
 

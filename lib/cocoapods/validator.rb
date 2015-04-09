@@ -399,9 +399,8 @@ module Pod
       end
 
       if consumer.spec.root?
-        unless file_accessor.license || spec.license && (spec.license[:type] == 'Public Domain' || spec.license[:text])
-          warning('license', 'Unable to find a license file')
-        end
+        _validate_license
+        _validate_module_map
       end
     end
 
@@ -411,6 +410,24 @@ module Pod
 
     def _validate_public_header_files
       _validate_header_files(:public_header_files)
+    end
+
+    def _validate_license
+      unless file_accessor.license || spec.license && (spec.license[:type] == 'Public Domain' || spec.license[:text])
+        warning('license', 'Unable to find a license file')
+      end
+    end
+
+    def _validate_module_map
+      if spec.module_map
+        unless file_accessor.module_map.exist?
+          error('module_map', 'Unable to find the specified module map file.')
+        end
+        unless file_accessor.module_map.extname == '.modulemap'
+          relative_path = file_accessor.module_map.relative_path_from file_accessor.root
+          error('module_map', "Unexpected file extension for modulemap file (#{relative_path}).")
+        end
+      end
     end
 
     # Ensures that a list of header files only contains header files.
