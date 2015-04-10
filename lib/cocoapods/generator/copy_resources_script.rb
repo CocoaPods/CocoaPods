@@ -169,7 +169,7 @@ then
       TARGET_DEVICE_ARGS="--target-device mac"
       ;;
   esac
-  while read line; do XCASSET_FILES="$XCASSET_FILES '$line'"; done <<<$(find "$PWD" -name "*.xcassets" | egrep -v "^$PODS_ROOT")
+  while read line; do XCASSET_FILES="$XCASSET_FILES '$line'"; done <<<"$(find \"$PWD\" -name \"*.xcassets\" | egrep -v \"^$PODS_ROOT\")"
   echo $XCASSET_FILES | xargs actool --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${IPHONEOS_DEPLOYMENT_TARGET}" ${TARGET_DEVICE_ARGS} --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 fi
 EOS
