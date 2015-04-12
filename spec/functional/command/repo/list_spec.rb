@@ -26,5 +26,43 @@ module Pod
       output.should.include? 'repo'
       output.should.not.include? '- Type:'
     end
+
+    it 'shows the path to the spec repository' do
+      output = run_command('repo', 'list')
+      output.should.include? "- Path: #{repo_path('master')}"
+    end
+
+    it 'shows unknown as the branch when there is no branch for git repositories' do
+      path = repo_path(name)
+      path.mkpath
+      Dir.chdir(path) do
+        `git init`
+      end
+
+      output = run_command('repo', 'list')
+      output.should.include? 'git (unknown)'
+    end
+
+    describe 'with a git based spec repository with a remote' do
+      extend SpecHelper::TemporaryRepos
+
+      before do
+        config.repos_dir = tmp_repos_path
+
+        Dir.chdir(repo_make('apiary')) do
+          `git remote add origin https://github.com/apiaryio/Specs`
+        end
+      end
+
+      it 'shows the current git branch configuration' do
+        output = run_command('repo', 'list')
+        output.should.include? '- Type: git (master)'
+      end
+
+      it 'shows the git URL (when an upstream is not configured)' do
+        output = run_command('repo', 'list')
+        output.should.include? '- URL:  https://github.com/apiaryio/Specs'
+      end
+    end
   end
 end

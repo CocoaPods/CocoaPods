@@ -13,11 +13,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#3145](https://github.com/CocoaPods/CocoaPods/issues/3145)
 
+* Show the source URI for local Pod specification repositories in
+  `pod repo list`.  
+  [Kyle Fuller](https://github.com/kylef)
+
 ##### Bug Fixes
 
 * Do not pass code-sign arguments to xcodebuild when linting OS X targets.  
   [Boris Bügling](https://github.com/neonichu)
   [#3310](https://github.com/CocoaPods/CocoaPods/issues/3310)
+
+* Fixes an issue showing the URL to remote resources in `pod repo list`.  
+  [Kyle Fuller](https://github.com/kylef)
 
 
 ## 0.36.3

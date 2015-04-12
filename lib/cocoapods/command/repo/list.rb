@@ -20,12 +20,13 @@ module Pod
         # @output  Examples:
         #
         #          master
-        #          - type: git (origin)
+        #          - type: git (master)
         #          - URL:  https://github.com/CocoaPods/Specs.git
         #          - path: /Users/lascorbe/.cocoapods/repos/master
         #
         #          test
         #          - type: local copy
+        #          - URL: file:///Users/lascorbe/.cocoapods/repos/test
         #          - path: /Users/lascorbe/.cocoapods/repos/test
         #
         def run
@@ -38,27 +39,24 @@ module Pod
 
         # Pretty-prints the source at the given path.
         #
-        # @param  [String,Pathname] path
-        #         The path of the source to be printed.
+        # @param  [Source] source
+        #         The source repository to be printed.
         #
         # @return [void]
         #
-        def print_source_at_path(path)
-          Dir.chdir(path) do
-            if SourcesManager.git_repo?(path)
-              remote_name = branch_remote_name(branch_name)
-              if remote_name
-                UI.puts "- Type: git (#{remote_name})"
-                url = url_of_git_repo(remote_name)
-                UI.puts "- URL:  #{url}"
-              else
-                UI.puts '- Type: git (no remote information available)'
-              end
-            else
-              UI.puts '- Type: local copy'
+        def print_source(source)
+          if SourcesManager.git_repo?(source.repo)
+            Dir.chdir(source.repo) do
+              branch_name = `git name-rev --name-only HEAD 2>/dev/null`.strip
+              branch_name = 'unknown' if branch_name.empty?
+              UI.puts "- Type: git (#{branch_name})"
             end
-            UI.puts "- Path: #{path}"
+          else
+            UI.puts '- Type: local'
           end
+
+          UI.puts "- URL:  #{source.url}"
+          UI.puts "- Path: #{source.repo}"
         end
 
         # Pretty-prints the given sources.
@@ -71,7 +69,7 @@ module Pod
         def print_sources(sources)
           sources.each do |source|
             UI.title source.name do
-              print_source_at_path source.repo
+              print_source(source)
             end
           end
           UI.puts "\n"
