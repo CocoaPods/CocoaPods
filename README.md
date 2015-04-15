@@ -8,10 +8,10 @@
 
 CocoaPods manages dependencies for your Xcode projects.
 
-You specify the dependencies for your project in one easy text file. CocoaPods
-resolves dependencies between libraries, fetches source code for the
-dependencies, and creates and maintains an Xcode workspace to build your
-project.
+You specify the dependencies for your project in a simple text file: your `Podfile`. 
+CocoaPods recursively resolves dependencies between libraries, fetches 
+source code for all dependencies, and creates and maintains an Xcode 
+workspace to build your project.
 
 Installing and updating CocoaPods is very easy. Don't miss the [Installation
 guide](http://guides.cocoapods.org/using/getting-started.html#installation) and the
@@ -19,29 +19,27 @@ guide](http://guides.cocoapods.org/using/getting-started.html#installation) and 
 
 ## Project Goals
 
-Ultimately, the goal of CocoaPods is to improve the engagement in, and
-discoverability of, third party open-source libraries. The following list
-includes the project goals which have influenced, and continue to
-drive the design of CocoaPods.
+CocoaPods aims to improve the engagement with, and discoverability 
+of, third party open-source Cocoa libraries. These
+project goals influence and drive the design of CocoaPods:
 
-- Being able to work in the system without creating extra work for
-  library authors. Making it possible to maintain a simple transparent
-  podspec outside of the library’s repository.
-- Not imposing any judgement of ‘correctness’ on how authors decide to
-  structure their library.
-- CocoaPods should not impose any specific requirements on source-code
-  management systems. (Currently supported are git, svn, mercurial, bazaar, and
-  various types of archives downloaded over HTTP.)
-- Provide the ability to work in a distributed way, but also provide
+- Create and share libraries, and use them in your own projects,
+  without creating extra work for library authors. Integrate
+  non-CocoaPods libraries and hack on your own fork of any
+  CocoaPods library with a simple transparent `Podspec` standard.
+- Allow library authors to structure their libraries however they like.
+- Save time for library authors by automating a lot of Xcode work not 
+  related to their libraries' functionality.
+- Support any source management system. (Currently supported are git, 
+  svn, mercurial, bazaar, and various types of archives downloaded over HTTP.)
+- Promote a culture of distributed collaboration on pods, but also provide
   features only possible with a centralised solution to foster a community.
-- Being able to build tools on top of the system, including those typically
-  deployed to other operating systems, such as web-services.
-- Providing opinionated and automated integration, but making that completely
-  optional. It’s perfectly possible to manually integrate the CocoaPods
-  Xcode project as you see fit, with or without a workspace.
-- Not depending on Apple to fix issues with Xcode or otherwise force
-  authors to have to do a lot of Xcode work not related to their
-  library’s functionality.
+- Build tools on top of the core Cocoa development system, including those 
+  typically deployed to other operating systems, such as web-services.
+- Provide opinionated and automated integration, but make it completely
+  optional. You may manually integrate your CocoaPods dependencies
+  into your Xcode project as you see fit, with or without a workspace.
+- Solve everyday problems for Cocoa and Xcode developers.
 
 ## Sponsors
 
