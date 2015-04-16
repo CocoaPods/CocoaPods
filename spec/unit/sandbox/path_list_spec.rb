@@ -13,6 +13,7 @@ module Pod
           f.include?('libPusher') || f.include?('.git') || f.include?('DS_Store')
         end
         expected = %w(
+          Banana.modulemap
           BananaLib.podspec
           Bananalib.framework/Versions/A/Headers/Bananalib.h
           Classes/Banana.h
