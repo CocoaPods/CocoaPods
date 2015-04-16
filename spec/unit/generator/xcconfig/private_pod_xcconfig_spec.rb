@@ -42,11 +42,11 @@ module Pod
             @xcconfig.to_hash['PODS_ROOT'].should.not.nil?
           end
 
-          it 'adds the library build headers and public headers search paths to the xcconfig, with quotes' do
+          it 'adds the library build headers search paths to the xcconfig, with quotes' do
             private_headers = "\"#{@pod_target.build_headers.search_paths(:ios).join('" "')}\""
             public_headers = "\"#{config.sandbox.public_headers.search_paths(:ios).join('" "')}\""
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include private_headers
-            @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include public_headers
+            @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.not.include public_headers
           end
 
           it 'adds the COCOAPODS macro definition' do
