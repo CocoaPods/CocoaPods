@@ -123,6 +123,12 @@ module Pod
     #
     attr_accessor :no_clean
 
+    # @return [Bool] whether the linter should fail as soon as the first build
+    #         variant causes an error. Helpful for i.e. multi-platforms specs,
+    #         specs with subspecs.
+    #
+    attr_accessor :fail_fast
+
     # @return [Bool] whether the validation should be performed against the root of
     #         the podspec instead to its original source.
     #
@@ -208,7 +214,7 @@ module Pod
       validate_documentation_url(spec)
       validate_docset_url(spec)
 
-      spec.available_platforms.each do |platform|
+      valid = spec.available_platforms.send(fail_fast ? :all? : :each) do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
         @consumer = spec.consumer(platform)
         setup_validation_environment
@@ -217,14 +223,16 @@ module Pod
         build_pod
         check_file_patterns
         tear_down_validation_environment
+        validated?
       end
+      return false if fail_fast && !valid
       perform_extensive_subspec_analysis(spec) unless @no_subspecs
     end
 
     # Recursively perform the extensive analysis on all subspecs
     #
     def perform_extensive_subspec_analysis(spec)
-      spec.subspecs.each do |subspec|
+      spec.subspecs.send(fail_fast ? :all? : :each) do |subspec|
         @subspec_name = subspec.name
         perform_extensive_analysis(subspec)
       end
