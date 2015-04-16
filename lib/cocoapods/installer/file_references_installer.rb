@@ -155,7 +155,7 @@ module Pod
       #         The key of the group of the Pods project.
       #
       # @param  [Bool] reflect_file_system_structure_for_development
-      #         Wether organizing the a local pod's files in subgroups inside
+      #         Whether organizing a local pod's files in subgroups inside
       #         the pod's group is allowed.
       #
       # @return [void]

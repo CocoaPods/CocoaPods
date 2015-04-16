@@ -171,7 +171,7 @@ module Pod
     #         The group for the new file reference.
     #
     # @param  [Bool] reflect_file_system_structure
-    #         Wether group structure should reflect the file system structure.
+    #         Whether group structure should reflect the file system structure.
     #         If yes, where needed, intermediate groups are created, similar to
     #         how mkdir -p operates.
     #
