@@ -33,8 +33,10 @@ module Pod
       cache = Cache.new(cache_path)
       result = cache.download_pod(request)
       if target
-        FileUtils.rm_rf target
-        FileUtils.cp_r(result.location, target)
+        UI.message "Copying #{request.name} from `#{result.location}` to #{UI.path target}", '> ' do
+          FileUtils.rm_rf target
+          FileUtils.cp_r(result.location, target)
+        end
       end
       result
     ensure
