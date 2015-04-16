@@ -146,8 +146,18 @@ begin
     namespace :fixture_tarballs do
       task :default => :unpack
 
+      desc 'Check fixture tarballs for pending changes'
+      task :check_for_pending_changes do
+        repo_dir = 'spec/fixtures/banana-lib'
+        if Dir.exist?(repo_dir) && !Dir.chdir(repo_dir) { `git status --porcelain`.empty? }
+          puts red("[!] There are unsaved changes in '#{repo_dir}'. " \
+            'Please commit everything and run `rake spec:fixture_tarballs:rebuild`.')
+          exit 1
+        end
+      end
+
       desc 'Rebuild all the fixture tarballs'
-      task :rebuild do
+      task :rebuild => :check_for_pending_changes do
         tarballs = FileList['spec/fixtures/**/*.tar.gz']
         tarballs.each do |tarball|
           basename = File.basename(tarball)
@@ -156,7 +166,13 @@ begin
       end
 
       desc 'Unpacks all the fixture tarballs'
-      task :unpack do
+      task :unpack, :force do |_t, args|
+        begin
+          Rake::Task['spec:fixture_tarballs:check_for_pending_changes'].invoke
+        rescue SystemExit
+          exit 1 unless args[:force]
+          puts 'Continue anyway because `force` was applied.'
+        end
         tarballs = FileList['spec/fixtures/**/*.tar.gz']
         tarballs.each do |tarball|
           basename = File.basename(tarball)
