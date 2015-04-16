@@ -17,7 +17,7 @@ module Pod
     end
 
     after do
-      @cache.root.rmtree
+      @cache.root.rmtree if @cache.root.directory?
     end
 
     it 'returns the root' do
