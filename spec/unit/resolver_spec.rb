@@ -169,12 +169,6 @@ module Pod
         ].sort_by(&:name)
       end
 
-      it 'raises once any of the dependencies does not match the platform of its podfile target' do
-        Specification.any_instance.stubs(:available_platforms).returns([Platform.new(:ios, '999')])
-        e = lambda { @resolver.resolve }.should.raise Informative
-        e.message.should.match(/platform .* not compatible/)
-      end
-
       it 'raises when a resolved dependency has a platform incompatibility' do
         @podfile = Podfile.new do
           platform :osx, '10.7'

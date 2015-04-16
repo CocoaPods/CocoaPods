@@ -55,7 +55,7 @@ module Pod
 
         store_existing_checkout_options
         fetch_external_sources if allow_fetches
-        @result.specs_by_target = resolve_dependencies
+        @result.specs_by_target = validate_platforms(resolve_dependencies)
         @result.specifications  = generate_specifications
         @result.targets         = generate_targets
         @result.sandbox_state   = generate_sandbox_state
@@ -429,6 +429,26 @@ module Pod
           specs_by_target = resolver.resolve
         end
         specs_by_target
+      end
+
+      # Warns for any specification that is incompatible with its target.
+      #
+      # @param  [Hash{TargetDefinition => Array<Spec>}] specs_by_target
+      #         the specifications grouped by target.
+      #
+      # @return [Hash{TargetDefinition => Array<Spec>}] the specifications
+      #         grouped by target.
+      #
+      def validate_platforms(specs_by_target)
+        specs_by_target.each do |target, specs|
+          specs.each do |spec|
+            unless spec.available_platforms.any? { |p| target.platform.supports?(p) }
+              UI.warn "The platform of the target `#{target.name}` "     \
+                "(#{target.platform}) may not be compatible with `#{spec}` which has "  \
+                "a minimum requirement of #{spec.available_platforms.join(' - ')}."
+            end
+          end
+        end
       end
 
       # Returns the list of all the resolved the resolved specifications.
