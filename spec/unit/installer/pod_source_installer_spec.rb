@@ -182,6 +182,7 @@ module Pod
         paths = @installer.send(:used_files)
         relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
         relative_paths.sort.should == [
+          'Pods/BananaLib/Banana.modulemap',
           'Pods/BananaLib/Bananalib.framework',
           'Pods/BananaLib/Classes/Banana.h',
           'Pods/BananaLib/Classes/Banana.m',
@@ -212,6 +213,7 @@ module Pod
         paths = @installer.send(:used_files)
         relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
         relative_paths.sort.should == [
+          'Pods/BananaLib/Banana.modulemap',
           'Pods/BananaLib/Bananalib.framework',
           'Pods/BananaLib/Classes/Banana.h',
           'Pods/BananaLib/Classes/Banana.m',
@@ -236,6 +238,7 @@ module Pod
         Sandbox::FileAccessor.any_instance.stubs(:readme)
         Sandbox::FileAccessor.any_instance.stubs(:license)
         Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks)
+        Sandbox::FileAccessor.any_instance.stubs(:module_map)
         paths = @installer.send(:used_files)
         paths.should == []
       end

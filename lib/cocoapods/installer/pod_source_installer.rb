@@ -261,6 +261,7 @@ module Pod
           file_accessors.map(&:readme),
           file_accessors.map(&:resources),
           file_accessors.map(&:source_files),
+          file_accessors.map(&:module_map),
         ]
 
         files.flatten.compact.map(&:to_s).uniq
