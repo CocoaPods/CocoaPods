@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: ff06595f0151dd5d2ba247251f87bab63ece1cfb
-  branch: master
+  revision: 7d6bc06d7496c62e144327be28eb1d5e3dac0cb0
+  branch: 0.36.4
   specs:
-    cocoapods-core (0.36.3)
+    cocoapods-core (0.36.4)
       activesupport (>= 3.2.15)
       fuzzy_match (~> 2.0.4)
       nap (~> 0.8.0)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: c42f8f2db7475210f4c4e28e6d2bb92859bb6766
+  revision: cf1e67a3b6f5f24c1084bc25ecf47cc16bb87dd4
   branch: master
   specs:
     xcodeproj (0.23.1)
@@ -40,10 +40,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: b4b09bab2eeec759625d48b367153bdfb3280a05
+  revision: 08e88e6d8b87bf41faa81994b13a64c56b6caea4
   branch: master
   specs:
-    cocoapods-plugins (0.4.1)
+    cocoapods-plugins (0.4.2)
       nap
 
 GIT
@@ -57,7 +57,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 30b22d977b440ff4ef2c467b90f4191d321dda4b
+  revision: ed85f7469905f6d3dca3c134fd103b3a0918af15
   branch: master
   specs:
     cocoapods-try (0.4.3)
@@ -65,10 +65,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.36.3)
+    cocoapods (0.36.4)
       activesupport (>= 3.2.15)
       claide (~> 0.8.1)
-      cocoapods-core (= 0.36.3)
+      cocoapods-core (= 0.36.4)
       cocoapods-downloader (~> 0.9.0)
       cocoapods-plugins (~> 0.4.1)
       cocoapods-trunk (~> 0.6.0)
@@ -116,7 +116,7 @@ GEM
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
-    minitest (5.5.1)
+    minitest (5.6.0)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
