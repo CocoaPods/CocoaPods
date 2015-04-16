@@ -17,7 +17,7 @@ module Pod
       #
       def initialize(root)
         @root = Pathname(root)
-        @root.mkpath unless @root.exist?
+        @root.mkpath
       end
 
       # Downloads the Pod from the given `request`
@@ -163,7 +163,7 @@ module Pod
         spec.available_platforms.each do |platform|
           specs_by_platform[platform] = [spec, *spec.recursive_subspecs].select { |ss| ss.supported_on_platform?(platform) }
         end
-        destination.parent.mkpath unless destination.parent.exist?
+        destination.parent.mkpath
         FileUtils.cp_r(source, destination)
         Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
       end
@@ -179,7 +179,7 @@ module Pod
       # @return [Void]
       #
       def write_spec(spec, path)
-        FileUtils.mkdir_p path.dirname
+        path.dirname.mkpath
         path.open('w') { |f| f.write spec.to_pretty_json }
       end
     end
