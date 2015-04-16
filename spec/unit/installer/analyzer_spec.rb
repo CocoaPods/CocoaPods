@@ -271,6 +271,12 @@ module Pod
         ]
       end
 
+      it 'warns once any of the dependencies does not match the platform of its podfile target' do
+        Specification.any_instance.stubs(:available_platforms).returns([Platform.new(:ios, '999')])
+        @analyzer.analyze
+        UI.warnings.should.match(/platform .* may not be compatible/)
+      end
+
       xit 'removes the specifications of the changed pods to prevent confusion in the resolution process' do
         @analyzer.allow_pre_downloads = true
         podspec = @analyzer.sandbox.root + 'Local Podspecs/JSONKit.podspec'

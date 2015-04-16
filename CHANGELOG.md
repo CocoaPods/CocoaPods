@@ -17,6 +17,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   `pod repo list`.  
   [Kyle Fuller](https://github.com/kylef)
 
+* Only show a warning when there is a minimum deployment target mismatch
+  between target and spec, instead of throwing a hard error.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#1241](https://github.com/CocoaPods/CocoaPods/issues/1241)
+
 ##### Bug Fixes
 
 * Do not pass code-sign arguments to xcodebuild when linting OS X targets.  

@@ -355,16 +355,13 @@ module Pod
     #
     # @raise  If the specification is not supported by the target.
     #
-    # @todo   This step is not specific to the resolution process and should be
-    #         performed later in the analysis.
-    #
     # @return [void]
     #
     def validate_platform(spec, target)
-      unless spec.available_platforms.any? { |p| target.platform.supports?(p) }
+      unless spec.available_platforms.any? { |p| target.platform.to_sym == p.to_sym }
         raise Informative, "The platform of the target `#{target.name}` "     \
-          "(#{target.platform}) is not compatible with `#{spec}` which has "  \
-          "a minimum requirement of #{spec.available_platforms.join(' - ')}."
+          "(#{target.platform}) is not compatible with `#{spec}`, which does "  \
+          "not support `#{target.platform.name}`."
       end
     end
 
