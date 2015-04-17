@@ -16,7 +16,9 @@ module Pod
       result = mock
       result.stubs(:success?).returns(true)
 
-      Open4.expects(:spawn).with('/Spa ces/are"/fun/false', [], :stdout => [], :stderr => [], :status => true).once.returns(result)
+      systemu = mock
+      systemu.stubs(:systemu).returns(result)
+      SystemUniversal.expects(:new).with("#{cmd.shellescape} ", :stdout => [], :stderr => []).once.returns(systemu)
       Executable.execute_command(cmd, [], true)
     end
   end
