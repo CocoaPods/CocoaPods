@@ -43,6 +43,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Christian Sampaio](https://github.com/chrisfsampaio)
   [#3390](https://github.com/CocoaPods/CocoaPods/pull/3390)
 
+* Switch from using `Open4` to using `systemu`.
+  [Chris Brauchli](https://github.com/cbrauchli)
+  [#3101](https://github.com/CocoaPods/CocoaPods/issues/3101)
+
 
 ## 0.36.3
 

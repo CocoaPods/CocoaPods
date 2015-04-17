@@ -51,8 +51,8 @@ module Pod
       bin = `which #{executable}`.strip
       raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
 
-      require 'open4'
       require 'shellwords'
+      require 'systemu'
 
       command = command.map(&:to_s)
       full_command = "#{bin.shellescape} #{command.map(&:shellescape).join(' ')}"
@@ -64,8 +64,8 @@ module Pod
         stdout, stderr = Indenter.new, Indenter.new
       end
 
-      options = { :stdout => stdout, :stderr => stderr, :status => true }
-      status  = Open4.spawn(bin, command, options)
+      options = { :stdout => stdout, :stderr => stderr }
+      status  = systemu(full_command, options)
       output  = stdout.join("\n") + stderr.join("\n")
       unless status.success?
         if raise_on_failure
