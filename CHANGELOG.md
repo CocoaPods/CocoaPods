@@ -37,17 +37,22 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fixes an issue showing the URL to remote resources in `pod repo list`.  
   [Kyle Fuller](https://github.com/kylef)
 
+* Fixes a problem with code signing when integrating CocoaPods
+  into a Today Widget extension.  
+  [Christian Sampaio](https://github.com/chrisfsampaio)
+  [#3390](https://github.com/CocoaPods/CocoaPods/pull/3390)
+
+
+## 0.36.4
+
+##### Bug Fixes
+
 * Fixes various problems with Pods that use xcasset bundles. Pods that
   use xcassets can now be used with the `pod :path` option.  
   [Kyle Fuller](https://github.com/kylef)
   [#1549](https://github.com/CocoaPods/CocoaPods/issues/1549)
   [#3384](https://github.com/CocoaPods/CocoaPods/pull/3383)
   [#3358](https://github.com/CocoaPods/CocoaPods/pull/3358)
-
-* Fixes a problem with code signing when integrating CocoaPods
-  into a Today Widget extension.  
-  [Christian Sampaio](https://github.com/chrisfsampaio)
-  [#3390](https://github.com/CocoaPods/CocoaPods/pull/3390)
 
 
 ## 0.36.3
