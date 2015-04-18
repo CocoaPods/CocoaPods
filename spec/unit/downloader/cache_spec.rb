@@ -9,7 +9,7 @@ module Pod
       @request = Downloader::Request.new(:spec => @spec, :released => true)
       @unreleased_request = Downloader::Request.new(:name => 'BananaLib', :params => @spec.source)
       @stub_download = lambda do |cache, &blk|
-        cache.define_singleton_method(:download) do |name, target, params, head|
+        cache.define_singleton_method(:download) do |_name, target, _params, _head|
           FileUtils.mkdir_p target
           Dir.chdir(target) { blk.call }
         end
@@ -62,7 +62,7 @@ module Pod
           path_for_pod.mkpath
           Dir.chdir(path_for_pod) do
             FileUtils.mkdir_p 'Classes'
-            File.open('Classes/a.m', 'w') { }
+            File.open('Classes/a.m', 'w') {}
           end
         end
       end
