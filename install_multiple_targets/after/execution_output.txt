@@ -1,4 +1,4 @@
-CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_SKIP_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
   Preparing
 
 Analyzing dependencies
@@ -38,8 +38,8 @@ Downloading dependencies
 -> Installing JSONKit (1.4)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/johnezang/JSONKit.git ROOT/tmp/install_multiple_targets/Pods/JSONKit --single-branch --depth 1 --branch v1.4
-     Cloning into 'ROOT/tmp/install_multiple_targets/Pods/JSONKit'...
+     $ GIT_BIN clone https://github.com/johnezang/JSONKit.git TMPDIR --single-branch --depth 1 --branch v1.4
+     Cloning into 'TMPDIR'...
      Note: checking out '99930114548f9cedc8070a3bd4d9a217adc218ca'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -51,12 +51,13 @@ Downloading dependencies
      
        git checkout -b new_branch_name
      
+  > Copying JSONKit from `TMPDIR/Release/JSONKit/1.4-2111a` to `Pods/JSONKit`
 
 -> Installing Reachability (3.1.0)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_multiple_targets/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
-     Cloning into 'ROOT/tmp/install_multiple_targets/Pods/Reachability'...
+     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git TMPDIR --single-branch --depth 1 --branch v3.1.0
+     Cloning into 'TMPDIR'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -68,6 +69,7 @@ Downloading dependencies
      
        git checkout -b new_branch_name
      
+  > Copying Reachability from `TMPDIR/Release/Reachability/3.1.0-14a77` to `Pods/Reachability`
   - Running pre install hooks
 
 Generating Pods project

@@ -1,4 +1,4 @@
-CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod update --no-repo-update --verbose --no-ansi 2>&1
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_SKIP_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod update --no-repo-update --verbose --no-ansi 2>&1
 Update all pods
   Preparing
 
@@ -28,8 +28,8 @@ Downloading dependencies
 -> Installing Reachability (3.1.0)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git ROOT/tmp/update_all/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
-     Cloning into 'ROOT/tmp/update_all/Pods/Reachability'...
+     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git TMPDIR --single-branch --depth 1 --branch v3.1.0
+     Cloning into 'TMPDIR'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -41,6 +41,7 @@ Downloading dependencies
      
        git checkout -b new_branch_name
      
+  > Copying Reachability from `TMPDIR/Release/Reachability/3.1.0-14a77` to `Pods/Reachability`
   - Running pre install hooks
 
 Generating Pods project

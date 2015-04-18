@@ -1,4 +1,4 @@
-CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_SKIP_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
   Preparing
 
 Analyzing dependencies
@@ -31,8 +31,9 @@ Downloading dependencies
 -> Installing Test (0.0.1)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test --single-branch --depth 1
-     Cloning into 'ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test'...
+     $ GIT_BIN clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git TMPDIR --single-branch --depth 1
+     Cloning into 'TMPDIR'...
+  > Copying Test from `TMPDIR/External/Test/09b204fafea4e137a92c20273e81a454-6dbdd` to `Pods/Test`
   - Running pre install hooks
 
 Generating Pods project

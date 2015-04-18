@@ -1,4 +1,4 @@
-CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_SKIP_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
   Preparing
 
 Analyzing dependencies
@@ -9,9 +9,10 @@ Inspecting targets to integrate
 Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
-   $ HG_BIN clone PodTest-hg-source ROOT/tmp/install_external_source/Pods/PodTest
+   $ HG_BIN clone PodTest-hg-source TMPDIR
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
+  > Copying PodTest from `TMPDIR/External/PodTest/980b701b951d78af6633f3b3a3517275` to `Pods/PodTest`
 
 Resolving dependencies of `Podfile`
 Starting resolution (<#DATE#>)

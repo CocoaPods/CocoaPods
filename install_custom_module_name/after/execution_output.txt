@@ -1,4 +1,4 @@
-CLAIDE_DISABLE_AUTO_WRAP=TRUE CP_AGGRESSIVE_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_SKIP_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
   Preparing
 
 Analyzing dependencies
@@ -33,8 +33,8 @@ Downloading dependencies
 -> Installing SocketRocket (0.3.1-beta2)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/square/SocketRocket.git ROOT/tmp/install_custom_module_name/Pods/SocketRocket --single-branch --depth 1 --branch v0.3.1-beta2
-     Cloning into 'ROOT/tmp/install_custom_module_name/Pods/SocketRocket'...
+     $ GIT_BIN clone https://github.com/square/SocketRocket.git TMPDIR --single-branch --depth 1 --branch v0.3.1-beta2
+     Cloning into 'TMPDIR'...
      Note: checking out 'f61e3c3ae532bf72f0c75524c92e95d625283a13'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -46,12 +46,13 @@ Downloading dependencies
      
        git checkout -b new_branch_name
      
+  > Copying SocketRocket from `TMPDIR/Release/SocketRocket/0.3.1-beta2-79a68` to `Pods/SocketRocket`
 
 -> Installing libPusher (1.5)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/lukeredpath/libPusher.git ROOT/tmp/install_custom_module_name/Pods/libPusher --single-branch --depth 1 --branch v1.5
-     Cloning into 'ROOT/tmp/install_custom_module_name/Pods/libPusher'...
+     $ GIT_BIN clone https://github.com/lukeredpath/libPusher.git TMPDIR --single-branch --depth 1 --branch v1.5
+     Cloning into 'TMPDIR'...
      Note: checking out 'ac87421f81c874ad0b5116d3523a3467dff28439'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -63,6 +64,7 @@ Downloading dependencies
      
        git checkout -b new_branch_name
      
+  > Copying libPusher from `TMPDIR/Release/libPusher/1.5-58332` to `Pods/libPusher`
   - Running pre install hooks
 
 Generating Pods project
