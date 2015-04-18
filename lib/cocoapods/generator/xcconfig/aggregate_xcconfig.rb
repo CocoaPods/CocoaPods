@@ -64,7 +64,7 @@ module Pod
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote'),
             }
             if target.pod_targets.any?(&:should_build?)
-              build_settings['FRAMEWORK_SEARCH_PATHS'] = '"$PODS_FRAMEWORK_BUILD_PATH"'
+              build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
             end
             config.merge!(build_settings)
           else
