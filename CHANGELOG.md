@@ -28,6 +28,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#2863](https://github.com/CocoaPods/CocoaPods/issues/2863)
   [#3172](https://github.com/CocoaPods/CocoaPods/issues/3172)
 
+* Add a `--fail-fast` option to both `pod spec lint` and `pod lib lint` that
+  causes the linter to exit as soon as a single subspec or platform fails
+  linting.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+
 ##### Bug Fixes
 
 * Do not pass code-sign arguments to xcodebuild when linting OS X targets.  
