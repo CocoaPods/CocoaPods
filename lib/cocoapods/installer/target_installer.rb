@@ -107,12 +107,16 @@ module Pod
       # Creates the module map file which ensures that the umbrella header is
       # recognized with a customized path
       #
+      # @yield_param [Generator::ModuleMap]
+      #              yielded once to configure the private headers
+      #
       # @return [void]
       #
       def create_module_map
         path = target.module_map_path
         UI.message "- Generating module map file at #{UI.path(path)}" do
           generator = Generator::ModuleMap.new(target)
+          yield generator if block_given?
           generator.save_as(path)
           add_file_to_support_group(path)
 
