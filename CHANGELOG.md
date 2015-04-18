@@ -22,6 +22,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#1241](https://github.com/CocoaPods/CocoaPods/issues/1241)
 
+* Add download caching for pods, which speeds up `pod install` and linting,
+  potentially by several oders of magnitude.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2863](https://github.com/CocoaPods/CocoaPods/issues/2863)
+  [#3172](https://github.com/CocoaPods/CocoaPods/issues/3172)
+
 ##### Bug Fixes
 
 * Do not pass code-sign arguments to xcodebuild when linting OS X targets.  
