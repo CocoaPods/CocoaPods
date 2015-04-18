@@ -74,7 +74,7 @@ module Pod
       end
 
       it 'returns the slug' do
-        @request.slug.should == 'External/BananaLib/git=http:+banana-corp.local+banana-lib.git-tag=v1.0'
+        @request.slug.should == 'External/BananaLib/a0856313adccfbcc7c5b0ea859ee14f5'
       end
     end
   end

@@ -1,3 +1,5 @@
+require 'digest'
+
 module Pod
   module Downloader
     # This class represents a download request for a given Pod.
@@ -65,8 +67,9 @@ module Pod
         if released_pod?
           "Release/#{name}/#{spec.version}#{checksum}"
         else
-          opts = params.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-').gsub(/(#{Regexp.escape File::SEPARATOR})+/, '+')
-          "External/#{name}/#{opts}#{checksum}"
+          opts = params.to_a.sort_by(&:first).map { |k, v| "#{k}=#{v}" }.join('-')
+          digest = Digest::MD5.hexdigest(opts)
+          "External/#{name}/#{digest}#{checksum}"
         end
       end
 
