@@ -44,12 +44,6 @@ module Pod
       def install!
         download_source unless predownloaded? || local?
         run_prepare_command
-      rescue Informative
-        raise
-      rescue Object
-        UI.notice("Error installing #{root_spec.name}")
-        clean!
-        raise
       end
 
       # Cleans the installations if appropriate.
@@ -80,30 +74,19 @@ module Pod
       # @return [void]
       #
       def download_source
-        root.rmtree if root.exist?
-        if head_pod?
-          begin
-            downloader.download_head
-            @specific_source = downloader.checkout_options
-          rescue RuntimeError => e
-            if e.message == 'Abstract method'
-              raise Informative, "The pod '" + root_spec.name + "' does not " \
-                'support the :head option, as it uses a ' + downloader.name +
-                ' source. Remove that option to use this pod.'
-            else
-              raise
-            end
-          end
-        else
-          downloader.download
-          unless downloader.options_specific?
-            @specific_source = downloader.checkout_options
-          end
-        end
+        download_result = Downloader.download(download_request, root)
 
-        if specific_source
+        if (@specific_source = download_result.checkout_options) && specific_source != root_spec.source
           sandbox.store_checkout_source(root_spec.name, specific_source)
         end
+      end
+
+      def download_request
+        Downloader::Request.new(
+          :spec => root_spec,
+          :released => released?,
+          :head => head_pod?,
+        )
       end
 
       extend Executable
@@ -135,20 +118,8 @@ module Pod
       # @return [void]
       #
       def clean_installation
-        clean_paths.each { |path| FileUtils.rm_rf(path) } if root.exist?
-      end
-
-      #-----------------------------------------------------------------------#
-
-      public
-
-      # @!group Dependencies
-
-      # @return [Downloader] The downloader to use for the retrieving the
-      #         source.
-      #
-      def downloader
-        @downloader ||= Downloader.for_target(root, root_spec.source.dup)
+        cleaner = Sandbox::PodDirCleaner.new(root, specs_by_platform)
+        cleaner.clean!
       end
 
       #-----------------------------------------------------------------------#
@@ -194,76 +165,8 @@ module Pod
         sandbox.head_pod?(root_spec.name)
       end
 
-      #-----------------------------------------------------------------------#
-
-      private
-
-      # @!group Private helpers
-
-      # @return [Array<Sandbox::FileAccessor>] the file accessors for all the
-      #         specifications on their respective platform.
-      #
-      def file_accessors
-        return @file_accessors if @file_accessors
-        @file_accessors = []
-        specs_by_platform.each do |platform, specs|
-          specs.each do |spec|
-            @file_accessors << Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
-          end
-        end
-        @file_accessors
-      end
-
-      # @return [Sandbox::PathList] The path list for this Pod.
-      #
-      def path_list
-        @path_list ||= Sandbox::PathList.new(root)
-      end
-
-      # Finds the absolute paths, including hidden ones, of the files
-      # that are not used by the pod and thus can be safely deleted.
-      #
-      # @note   Implementation detail: Don't use `Dir#glob` as there is an
-      #         unexplained issue (#568, #572 and #602).
-      #
-      # @todo   The paths are down-cased for the comparison as issues similar
-      #         to #602 lead the files not being matched and so cleaning all
-      #         the files. This solution might create side effects.
-      #
-      # @return [Array<Strings>] The paths that can be deleted.
-      #
-      def clean_paths
-        cached_used = used_files
-        glob_options = File::FNM_DOTMATCH | File::FNM_CASEFOLD
-        files = Pathname.glob(root + '**/*', glob_options).map(&:to_s)
-
-        files.reject! do |candidate|
-          candidate = candidate.downcase
-          candidate.end_with?('.', '..') || cached_used.any? do |path|
-            path = path.downcase
-            path.include?(candidate) || candidate.include?(path)
-          end
-        end
-        files
-      end
-
-      # @return [Array<String>] The absolute path of all the files used by the
-      #         specifications (according to their platform) of this Pod.
-      #
-      def used_files
-        files = [
-          file_accessors.map(&:vendored_frameworks),
-          file_accessors.map(&:vendored_libraries),
-          file_accessors.map(&:resource_bundle_files),
-          file_accessors.map(&:license),
-          file_accessors.map(&:prefix_header),
-          file_accessors.map(&:preserve_paths),
-          file_accessors.map(&:readme),
-          file_accessors.map(&:resources),
-          file_accessors.map(&:source_files),
-        ]
-
-        files.flatten.compact.map(&:to_s).uniq
+      def released?
+        !local? && !head_pod? && !predownloaded? && sandbox.specification(root_spec.name) != root_spec
       end
 
       #-----------------------------------------------------------------------#

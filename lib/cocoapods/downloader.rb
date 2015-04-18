@@ -1,8 +1,48 @@
 require 'cocoapods-downloader'
 require 'claide/informative_error'
+require 'fileutils'
+require 'tmpdir'
 
 module Pod
   module Downloader
+    require 'cocoapods/downloader/cache'
+    require 'cocoapods/downloader/request'
+    require 'cocoapods/downloader/response'
+
+    # Downloads a pod from the given `request` to the given `target` location.
+    #
+    # @return [Response] The download response for this download.
+    #
+    # @param  [Request] request
+    #         the request that describes this pod download.
+    #
+    # @param  [Pathname,Nil] target
+    #         the location to which this pod should be downloaded. If `nil`,
+    #         then the pod will only be cached.
+    #
+    # @param  [Pathname,Nil] cache_path
+    #         the path used to cache pod downloads. If `nil`, then no caching
+    #         will be done.
+    #
+    def self.download(
+      request,
+      target,
+      cache_path: !Config.instance.skip_download_cache && Config.instance.cache_root + 'Pods'
+    )
+      cache_path, tmp_cache = Pathname(Dir.mktmpdir), true unless cache_path
+      cache = Cache.new(cache_path)
+      result = cache.download_pod(request)
+      if target
+        UI.message "Copying #{request.name} from `#{result.location}` to #{UI.path target}", '> ' do
+          FileUtils.rm_rf target
+          FileUtils.cp_r(result.location, target)
+        end
+      end
+      result
+    ensure
+      FileUtils.rm_r cache_path if tmp_cache
+    end
+
     class DownloaderError; include CLAide::InformativeError; end
 
     class Base

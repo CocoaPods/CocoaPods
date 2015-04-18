@@ -16,7 +16,7 @@ module Pod
         it 'downloads the source' do
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
-          @installer.specific_source.should.be.nil
+          @installer.specific_source[:tag].should == 'v1.0'
           pod_folder = config.sandbox.pod_dir('BananaLib')
           pod_folder.should.exist
         end
@@ -49,27 +49,7 @@ module Pod
           }
         end
 
-        it 'cleans up directory when an error occurs during download' do
-          config.sandbox.store_head_pod('BananaLib')
-          pod_folder = config.sandbox.pod_dir('BananaLib')
-          partially_downloaded_file = pod_folder + 'partially_downloaded_file'
-
-          mock_downloader = Object.new
-          singleton_class = class << mock_downloader; self; end
-          singleton_class.send(:define_method, :download_head) do
-            FileUtils.mkdir_p(pod_folder)
-            FileUtils.touch(partially_downloaded_file)
-            raise('some network error')
-          end
-          @installer.stubs(:downloader).returns(mock_downloader)
-
-          lambda do
-            @installer.install!
-          end.should.raise(RuntimeError).message.should.equal('some network error')
-          partially_downloaded_file.should.not.exist
-        end
-
-        it 'fails when using :head for Http source' do
+        it 'fails when using :head for http source' do
           config.sandbox.store_head_pod('BananaLib')
           @spec.source = { :http => 'http://dl.google.com/googleadmobadssdk/googleadmobsearchadssdkios.zip' }
           @spec.source_files = 'GoogleAdMobSearchAdsSDK/*.h'
@@ -150,82 +130,6 @@ module Pod
       end
 
       #--------------------------------------#
-    end
-
-    #-------------------------------------------------------------------------#
-
-    describe 'Private Helpers' do
-      it 'returns the clean paths' do
-        @installer.send(:download_source)
-        paths = @installer.send(:clean_paths)
-        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
-
-        # Because there are thousands of files inside .git/, we're excluding
-        # them from the comparison.
-        paths_without_git = relative_paths.reject { |p| p.include? 'Pods/BananaLib/.git/' }
-
-        paths_without_git.sort.should == [
-          'Pods/BananaLib/.git',
-          'Pods/BananaLib/.gitmodules',
-          'Pods/BananaLib/BananaLib.podspec',
-          'Pods/BananaLib/libPusher',
-          'Pods/BananaLib/sub-dir',
-          'Pods/BananaLib/sub-dir/sub-dir-2',
-          'Pods/BananaLib/sub-dir/sub-dir-2/somefile.txt',
-        ]
-      end
-
-      it 'returns the used files' do
-        @installer.send(:download_source)
-        paths = @installer.send(:used_files)
-        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
-        relative_paths.sort.should == [
-          'Pods/BananaLib/Classes/Banana.h',
-          'Pods/BananaLib/Classes/Banana.m',
-          'Pods/BananaLib/Classes/BananaLib.pch',
-          'Pods/BananaLib/Classes/BananaPrivate.h',
-          'Pods/BananaLib/LICENSE',
-          'Pods/BananaLib/README',
-          'Pods/BananaLib/Resources/logo-sidebar.png',
-        ]
-      end
-
-      it 'handles Pods with multiple file accessors' do
-        spec = fixture_spec('banana-lib/BananaLib.podspec')
-        spec.source = { :git => SpecHelper.fixture('banana-lib') }
-        spec.source_files = []
-        spec.ios.source_files = 'Classes/*.h'
-        spec.osx.source_files = 'Classes/*.m'
-        ios_spec = spec.dup
-        osx_spec = spec.dup
-        specs_by_platform = { :ios => [ios_spec], :osx => [osx_spec] }
-        @installer = Installer::PodSourceInstaller.new(config.sandbox, specs_by_platform)
-        @installer.send(:download_source)
-        paths = @installer.send(:used_files)
-        relative_paths = paths.map { |p| p.gsub("#{temporary_directory}/", '') }
-        relative_paths.sort.should == [
-          'Pods/BananaLib/Classes/Banana.h',
-          'Pods/BananaLib/Classes/Banana.m',
-          'Pods/BananaLib/Classes/BananaLib.pch',
-          'Pods/BananaLib/Classes/BananaPrivate.h',
-          'Pods/BananaLib/LICENSE',
-          'Pods/BananaLib/README',
-          'Pods/BananaLib/Resources/logo-sidebar.png',
-        ]
-      end
-
-      it 'compacts the used files as nil would be converted to the empty string' do
-        Sandbox::FileAccessor.any_instance.stubs(:source_files)
-        Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries)
-        Sandbox::FileAccessor.any_instance.stubs(:resources).returns(nil)
-        Sandbox::FileAccessor.any_instance.stubs(:preserve_paths)
-        Sandbox::FileAccessor.any_instance.stubs(:prefix_header)
-        Sandbox::FileAccessor.any_instance.stubs(:readme)
-        Sandbox::FileAccessor.any_instance.stubs(:license)
-        Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks)
-        paths = @installer.send(:used_files)
-        paths.should == []
-      end
     end
 
     #-------------------------------------------------------------------------#

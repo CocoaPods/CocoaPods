@@ -48,6 +48,7 @@ require 'pretty_bacon'
 require 'colored'
 require 'clintegracon'
 require 'integration/xcodeproj_project_yaml'
+require 'tmpdir'
 
 CLIntegracon.configure do |c|
   c.spec_path = ROOT + 'spec/cocoapods-integration-specs'
@@ -98,7 +99,7 @@ describe_cli 'pod' do
     s.executable = "ruby #{ROOT + 'bin/pod'}"
     s.environment_vars = {
       'CP_REPOS_DIR'             => ROOT + 'spec/fixtures/spec-repos',
-      'CP_AGGRESSIVE_CACHE'      => 'TRUE',
+      'COCOAPODS_SKIP_CACHE'     => 'TRUE',
       'XCODEPROJ_DISABLE_XCPROJ' => 'TRUE',
       'CLAIDE_DISABLE_AUTO_WRAP' => 'TRUE',
     }
@@ -110,6 +111,7 @@ describe_cli 'pod' do
     s.replace_path `which git`.chomp, 'GIT_BIN'
     s.replace_path `which hg`.chomp, 'HG_BIN' if has_mercurial
     s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
+    s.replace_pattern /#{Dir.tmpdir}\/[\w-]+/i, 'TMPDIR'
     s.replace_pattern /\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}/, '<#DATE#>'
     s.replace_pattern /\(Took \d+.\d+ seconds\)/, '(Took <#DURATION#> seconds)'
   end

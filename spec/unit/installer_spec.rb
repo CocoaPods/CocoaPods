@@ -312,7 +312,7 @@ module Pod
         @installer.stubs(:podfile).returns(podfile)
         @installer.stubs(:lockfile).returns(nil)
         Downloader::Git.any_instance.expects(:download_head).once
-        Downloader::Git.any_instance.expects(:checkout_options).returns({})
+        Downloader::Git.any_instance.stubs(:checkout_options).returns({})
         @installer.prepare
         @installer.resolve_dependencies
         @installer.send(:root_specs).sort_by(&:name).map(&:version).map(&:head?).should == [true, nil]
