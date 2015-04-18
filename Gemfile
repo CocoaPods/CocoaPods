@@ -6,7 +6,7 @@ def cp_gem(name, repo_name, branch = 'master')
   gem name, :git => url, :branch => branch
 end
 
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gemspec
 
