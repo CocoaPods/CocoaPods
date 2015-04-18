@@ -113,6 +113,7 @@ module Pod
            ['--subspec=NAME', 'Lint validates only the given subspec'],
            ['--no-subspecs', 'Lint skips validation of subspecs'],
            ['--no-clean', 'Lint leaves the build directory intact for inspection'],
+           ['--fail-fast', 'Lint stops on the first failing platform or subspec'],
            ['--use-libraries', 'Lint uses static libraries to install the spec'],
            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
             '(defaults to https://github.com/CocoaPods/Specs.git). '\
@@ -123,6 +124,7 @@ module Pod
           @quick           = argv.flag?('quick')
           @allow_warnings  = argv.flag?('allow-warnings')
           @clean           = argv.flag?('clean', true)
+          @fail_fast       = argv.flag?('fail-fast', false)
           @subspecs        = argv.flag?('subspecs', true)
           @only_subspec    = argv.option('subspec')
           @use_frameworks  = !argv.flag?('use-libraries')
@@ -142,6 +144,7 @@ module Pod
             validator.local          = true
             validator.quick          = @quick
             validator.no_clean       = !@clean
+            validator.fail_fast      = @fail_fast
             validator.allow_warnings = @allow_warnings
             validator.no_subspecs    = !@subspecs || @only_subspec
             validator.only_subspec   = @only_subspec

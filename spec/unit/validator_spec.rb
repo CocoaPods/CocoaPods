@@ -273,6 +273,17 @@ module Pod
         validator.validate
       end
 
+      it 'builds the pod only once if the first fails with fail_fast' do
+        Validator.any_instance.unstub(:xcodebuild)
+        validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+        validator.stubs(:check_file_patterns)
+        validator.stubs(:validate_url)
+        validator.fail_fast = true
+        validator.expects(:xcodebuild).once.returns('file.m:1:1: error: Pretended!')
+        validator.validate
+        validator.result_type.should == :error
+      end
+
       it 'uses the deployment target of the specification' do
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:validate_url)
@@ -284,6 +295,7 @@ module Pod
 
       it 'uses the deployment target of the current subspec' do
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+        validator.instance_variable_set(:@results, [])
         validator.stubs(:validate_url)
         validator.stubs(:validate_screenshots)
         validator.stubs(:check_file_patterns)
@@ -365,7 +377,7 @@ module Pod
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
-        validator.stubs(:`).returns('Output')
+        validator.expects(:`).with('which xcodebuild').twice.returns('/usr/bin/xcodebuild')
         status = mock
         status.stubs(:success?).returns(false)
         validator.stubs(:_xcodebuild).returns(['Output', status])
@@ -487,6 +499,7 @@ module Pod
       end
 
       def setup_validator
+        @validator.instance_variable_set(:@results, [])
         @validator.stubs(:validate_url)
         @validator.stubs(:validate_screenshots)
         @validator.stubs(:check_file_patterns)
