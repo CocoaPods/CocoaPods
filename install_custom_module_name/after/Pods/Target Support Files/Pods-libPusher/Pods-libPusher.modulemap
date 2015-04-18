@@ -3,4 +3,13 @@ framework module Pusher {
 
   export *
   module * { export * }
+
+  private header "NSDictionary+QueryString.h"
+  private header "NSString+Hashing.h"
+  private header "PTBlockEventListener.h"
+  private header "PTJSON.h"
+  private header "PTPusherChannel_Private.h"
+  private header "PTPusherChannelAuthorizationOperation.h"
+  private header "PTTargetActionEventListener.h"
+  private header "PTURLRequestOperation.h"
 }
