@@ -100,6 +100,7 @@ module Pod
 
       it 'returns the resources' do
         @accessor.resources.sort.should == [
+          @root + 'Resources/Images.xcassets',
           @root + 'Resources/logo-sidebar.png',
           @root + 'Resources/sub_dir',
         ]
@@ -138,6 +139,7 @@ module Pod
         @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')
         resource_paths = [
           @root + 'Resources/logo-sidebar.png',
+          @root + 'Resources/Images.xcassets',
           @root + 'Resources/sub_dir',
         ]
         @accessor.resource_bundles.should == { 'BananaLib' => resource_paths }
@@ -147,6 +149,7 @@ module Pod
         @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')
         resource_paths = [
           @root + 'Resources/logo-sidebar.png',
+          @root + 'Resources/Images.xcassets',
           @root + 'Resources/sub_dir',
         ]
         @accessor.resource_bundle_files.should == resource_paths

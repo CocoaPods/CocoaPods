@@ -91,19 +91,19 @@ begin
     unit_specs_command = "bundle exec bacon #{specs('unit/**/*')}"
 
     desc 'Run the unit specs'
-    task :unit => :unpack_fixture_tarballs do
+    task :unit => 'fixture_tarballs:unpack' do
       sh unit_specs_command
     end
 
     desc 'Run the unit specs quietly (fail fast, display only one failure)'
-    task :unit_quiet => :unpack_fixture_tarballs do
+    task :unit_quiet => 'fixture_tarballs:unpack' do
       sh "#{unit_specs_command} -q"
     end
 
     #--------------------------------------#
 
     desc 'Run the functional specs'
-    task :functional, [:spec] => :unpack_fixture_tarballs do |_t, args|
+    task :functional, [:spec] => 'fixture_tarballs:unpack' do |_t, args|
       args.with_defaults(:spec => '**/*')
       sh "bundle exec bacon #{specs("functional/#{args[:spec]}")}"
     end
@@ -126,7 +126,7 @@ begin
     # The specs helper interfere with the integration 2 specs and thus they need
     # to be run separately.
     #
-    task :all => :unpack_fixture_tarballs do
+    task :all => 'fixture_tarballs:unpack' do
       ENV['GENERATE_COVERAGE'] = 'true'
       puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
@@ -143,22 +143,42 @@ begin
       Rake::Task['rubocop'].invoke
     end
 
-    desc 'Rebuild all the fixture tarballs'
-    task :rebuild_fixture_tarballs do
-      tarballs = FileList['spec/fixtures/**/*.tar.gz']
-      tarballs.each do |tarball|
-        basename = File.basename(tarball)
-        sh "cd #{File.dirname(tarball)} && rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{basename[0..-8]}"
-      end
-    end
+    namespace :fixture_tarballs do
+      task :default => :unpack
 
-    desc 'Unpacks all the fixture tarballs'
-    task :unpack_fixture_tarballs do
-      tarballs = FileList['spec/fixtures/**/*.tar.gz']
-      tarballs.each do |tarball|
-        basename = File.basename(tarball)
-        Dir.chdir(File.dirname(tarball)) do
-          sh "rm -rf #{basename[0..-8]} && tar zxf #{basename}"
+      desc 'Check fixture tarballs for pending changes'
+      task :check_for_pending_changes do
+        repo_dir = 'spec/fixtures/banana-lib'
+        if Dir.exist?(repo_dir) && !Dir.chdir(repo_dir) { `git status --porcelain`.empty? }
+          puts red("[!] There are unsaved changes in '#{repo_dir}'. " \
+            'Please commit everything and run `rake spec:fixture_tarballs:rebuild`.')
+          exit 1
+        end
+      end
+
+      desc 'Rebuild all the fixture tarballs'
+      task :rebuild => :check_for_pending_changes do
+        tarballs = FileList['spec/fixtures/**/*.tar.gz']
+        tarballs.each do |tarball|
+          basename = File.basename(tarball)
+          sh "cd #{File.dirname(tarball)} && rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{basename[0..-8]}"
+        end
+      end
+
+      desc 'Unpacks all the fixture tarballs'
+      task :unpack, :force do |_t, args|
+        begin
+          Rake::Task['spec:fixture_tarballs:check_for_pending_changes'].invoke
+        rescue SystemExit
+          exit 1 unless args[:force]
+          puts 'Continue anyway because `force` was applied.'
+        end
+        tarballs = FileList['spec/fixtures/**/*.tar.gz']
+        tarballs.each do |tarball|
+          basename = File.basename(tarball)
+          Dir.chdir(File.dirname(tarball)) do
+            sh "rm -rf #{basename[0..-8]} && tar zxf #{basename}"
+          end
         end
       end
     end
@@ -201,7 +221,7 @@ begin
       puts 'Integration fixtures updated, commit and push in the `spec/cocoapods-integration-specs` submodule'
     end
 
-    task :clean_env => [:clean_vcr, :unpack_fixture_tarballs, 'ext:cleanbuild']
+    task :clean_env => [:clean_vcr, 'fixture_tarballs:unpack', 'ext:cleanbuild']
   end
 
   # Examples

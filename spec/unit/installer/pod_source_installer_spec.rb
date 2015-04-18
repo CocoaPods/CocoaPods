@@ -2,6 +2,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Installer::PodSourceInstaller do
+    FIXTURE_HEAD = Dir.chdir(SpecHelper.fixture('banana-lib')) { `git rev-parse HEAD`.chomp }
+
     before do
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       @spec.source = { :git => SpecHelper.fixture('banana-lib') }
@@ -25,7 +27,7 @@ module Pod
           config.sandbox.store_head_pod('BananaLib')
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
-          @installer.specific_source[:commit].should == '0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc'
+          @installer.specific_source[:commit].should == FIXTURE_HEAD
           pod_folder = config.sandbox.pod_dir('BananaLib')
           pod_folder.should.exist
         end
@@ -45,7 +47,7 @@ module Pod
           sources = @installer.sandbox.checkout_sources
           sources.should == { 'BananaLib' => {
             :git => SpecHelper.fixture('banana-lib'),
-            :commit => '0b8b4084a43c38cfe308efa076fdeb3a64d9d2bc' },
+            :commit => FIXTURE_HEAD },
           }
         end
 

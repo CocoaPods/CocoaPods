@@ -32,19 +32,28 @@ module Pod
     it 'returns the used files' do
       paths = @cleaner.send(:used_files)
       relative_paths = paths.map { |p| p.gsub("#{@root}/", '') }
+
       relative_paths.sort.should == [
+        'Banana.modulemap',
+        'Bananalib.framework',
         'Classes/Banana.h',
         'Classes/Banana.m',
         'Classes/BananaLib.pch',
         'Classes/BananaPrivate.h',
+        'Classes/BananaTrace.d',
         'LICENSE',
         'README',
+        'Resources/Images.xcassets',
         'Resources/logo-sidebar.png',
+        'Resources/sub_dir',
+        'libBananalib.a',
+        'preserve_me.txt',
       ]
     end
 
     it 'handles Pods with multiple file accessors' do
       spec = fixture_spec('banana-lib/BananaLib.podspec')
+      spec.source = { :git => SpecHelper.fixture('banana-lib') }
       spec.source_files = []
       spec.ios.source_files = 'Classes/*.h'
       spec.osx.source_files = 'Classes/*.m'
@@ -55,25 +64,32 @@ module Pod
       paths = @cleaner.send(:used_files)
       relative_paths = paths.map { |p| p.gsub("#{@root}/", '') }
       relative_paths.sort.should == [
+        'Banana.modulemap',
+        'Bananalib.framework',
         'Classes/Banana.h',
         'Classes/Banana.m',
         'Classes/BananaLib.pch',
         'Classes/BananaPrivate.h',
         'LICENSE',
         'README',
+        'Resources/Images.xcassets',
         'Resources/logo-sidebar.png',
+        'Resources/sub_dir',
+        'libBananalib.a',
+        'preserve_me.txt',
       ]
     end
 
     it 'compacts the used files as nil would be converted to the empty string' do
-      Sandbox::FileAccessor.any_instance.stubs(:source_files)
-      Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries)
-      Sandbox::FileAccessor.any_instance.stubs(:resources).returns(nil)
-      Sandbox::FileAccessor.any_instance.stubs(:preserve_paths)
-      Sandbox::FileAccessor.any_instance.stubs(:prefix_header)
-      Sandbox::FileAccessor.any_instance.stubs(:readme)
       Sandbox::FileAccessor.any_instance.stubs(:license)
+      Sandbox::FileAccessor.any_instance.stubs(:module_map)
+      Sandbox::FileAccessor.any_instance.stubs(:prefix_header)
+      Sandbox::FileAccessor.any_instance.stubs(:preserve_paths)
+      Sandbox::FileAccessor.any_instance.stubs(:readme)
+      Sandbox::FileAccessor.any_instance.stubs(:resources).returns(nil)
+      Sandbox::FileAccessor.any_instance.stubs(:source_files)
       Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks)
+      Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries)
       paths = @cleaner.send(:used_files)
       paths.should == []
     end
