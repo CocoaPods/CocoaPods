@@ -23,7 +23,7 @@ module Pod
       # Downloads the Pod from the given `request`
       #
       # @param  [Request] request
-      #         the request to be downloaded
+      #         the request to be downloaded.
       #
       # @return [Response] the response from downloading `request`
       #
@@ -38,6 +38,13 @@ module Pod
 
       private
 
+      # @param  [Request] request
+      #         the request to be downloaded.
+      #
+      # @param  [Hash<Symbol,String>] slug_opts
+      #         the download options that should be used in constructing the
+      #         cache slug for this request.
+      #
       # @return [Pathname] The path for the Pod downloaded from the given
       #         `request`.
       #
@@ -45,6 +52,13 @@ module Pod
         root + request.slug(slug_opts)
       end
 
+      # @param  [Request] request
+      #         the request to be downloaded.
+      #
+      # @param  [Hash<Symbol,String>] slug_opts
+      #         the download options that should be used in constructing the
+      #         cache slug for this request.
+      #
       # @return [Pathname] The path for the podspec downloaded from the given
       #         `request`.
       #
@@ -53,6 +67,9 @@ module Pod
         path.sub_ext('.podspec.json')
       end
 
+      # @param  [Request] request
+      #         the request to be downloaded.
+      #
       # @return [Response] The download response for the given `request` that
       #         was found in the download cache.
       #
@@ -63,6 +80,9 @@ module Pod
         Response.new(path, spec, request.params)
       end
 
+      # @param  [Request] request
+      #         the request to be downloaded.
+      #
       # @return [Specification] The cached specification for the given
       #         `request`.
       #
@@ -71,6 +91,9 @@ module Pod
         path.file? && Specification.from_file(path)
       end
 
+      # @param  [Request] request
+      #         the request to be downloaded.
+      #
       # @return [Response] The download response for the given `request` that
       #         was not found in the download cache.
       #
