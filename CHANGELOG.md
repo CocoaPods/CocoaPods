@@ -15,6 +15,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Adding `$(inherited)` to `FRAMEWORK_SEARCH_PATHS` build setting in xcconfig for aggregate.
+  [Tomohiro Kumagai](https://github.com/EZ-NET)
+  [#3429](https://github.com/CocoaPods/CocoaPods/pull/3429)
+
 * Don't crash when the downloader can't find an appropriate podspec in a `git`
   pod.  
   [Samuel Giddins](https://github.com/segiddins)
