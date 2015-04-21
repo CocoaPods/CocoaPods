@@ -144,7 +144,7 @@ module Pod
           end
 
           it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"$PODS_FRAMEWORK_BUILD_PATH"'
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
           end
 
           it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
