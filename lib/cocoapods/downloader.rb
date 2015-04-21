@@ -32,7 +32,7 @@ module Pod
       cache_path, tmp_cache = Pathname(Dir.mktmpdir), true unless cache_path
       cache = Cache.new(cache_path)
       result = cache.download_pod(request)
-      if target
+      if target && result.location
         UI.message "Copying #{request.name} from `#{result.location}` to #{UI.path target}", '> ' do
           FileUtils.rm_rf target
           FileUtils.cp_r(result.location, target)
