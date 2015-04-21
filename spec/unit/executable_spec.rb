@@ -16,7 +16,7 @@ module Pod
       result = mock
       result.stubs(:success?).returns(true)
 
-      Open4.expects(:spawn).with('/Spa ces/are"/fun/false', [], :stdout => [], :stderr => [], :status => true).once.returns(result)
+      Open3.expects(:popen3).with('/Spa ces/are"/fun/false').once.returns(result)
       Executable.execute_command(cmd, [], true)
     end
   end

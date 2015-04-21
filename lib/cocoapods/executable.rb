@@ -51,7 +51,7 @@ module Pod
       bin = `which #{executable}`.strip
       raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
 
-      require 'open4'
+      require 'open3'
       require 'shellwords'
 
       command = command.map(&:to_s)
@@ -64,8 +64,13 @@ module Pod
         stdout, stderr = Indenter.new, Indenter.new
       end
 
-      options = { :stdout => stdout, :stderr => stderr, :status => true }
-      status  = Open4.spawn(bin, command, options)
+      status = Open3.popen3(bin, *command) do |i, o, e, t|
+        out_reader = Thread.new { while s = o.gets; stdout << s; end }
+        err_reader = Thread.new { while s = e.gets; stderr << s; end }
+        i.close
+        [out_reader, err_reader].each(&:join)
+        t.value
+      end
       output  = stdout.join("\n") + stderr.join("\n")
       unless status.success?
         if raise_on_failure
