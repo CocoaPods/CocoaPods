@@ -132,6 +132,21 @@ module Pod
       end
 
       #--------------------------------------#
+
+      describe 'Locking' do
+        it 'locks the source files for each Pod' do
+          File.expects(:chmod).at_least_once
+          @installer.install!
+        end
+
+        it "doesn't lock local pods" do
+          @installer.stubs(:local?).returns(true)
+          File.expects(:chmod).never
+          @installer.install!
+        end
+      end
+
+      #--------------------------------------#
     end
 
     #-------------------------------------------------------------------------#
