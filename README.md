@@ -30,8 +30,8 @@ project goals influence and drive the design of CocoaPods:
 - Allow library authors to structure their libraries however they like.
 - Save time for library authors by automating a lot of Xcode work not 
   related to their libraries' functionality.
-- Support any source management system. (Currently supported are git, 
-  svn, mercurial, bazaar, and various types of archives downloaded over HTTP.)
+- Support any source management system. (Currently supported are `git`, 
+  `svn`, `mercurial`, `bazaar`, and various types of archives downloaded over HTTP.)
 - Promote a culture of distributed collaboration on pods, but also provide
   features only possible with a centralised solution to foster a community.
 - Build tools on top of the core Cocoa development system, including those 
