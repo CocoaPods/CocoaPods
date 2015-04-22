@@ -13,6 +13,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3433](https://github.com/CocoaPods/CocoaPods/issues/3433)
 
+* Automatically lock Pod source files after installing.  
+  [Mason Glidden](https://github.com/mglidden)
+  [#1154](https://github.com/CocoaPods/CocoaPods/issues/1154)
 
 ## 0.37.0.beta.1
 

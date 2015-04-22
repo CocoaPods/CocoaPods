@@ -44,6 +44,7 @@ module Pod
       def install!
         download_source unless predownloaded? || local?
         run_prepare_command
+        lock_files!
       end
 
       # Cleans the installations if appropriate.
@@ -87,6 +88,25 @@ module Pod
           :released => released?,
           :head => head_pod?,
         )
+      end
+
+      # Locks all of the files in this pod (source, license, etc). This will
+      # cause Xcode to warn you if you try to accidently edit one of the files.
+      #
+      # @return [void]
+      #
+      def lock_files!
+        if local?
+          return
+        end
+
+        # We don't want to lock diretories, as that forces you to override
+        # those permissions if you decide to delete the Pods folder.
+        Dir.glob(root + '**/*').each do |file|
+          unless File.directory?(file)
+            File.chmod(0444, file)
+          end
+        end
       end
 
       extend Executable
