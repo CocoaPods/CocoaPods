@@ -68,7 +68,7 @@ module Pod
         out_reader = Thread.new { while s = o.gets; stdout << s; end }
         err_reader = Thread.new { while s = e.gets; stderr << s; end }
         i.close
-        [out_reader, err_reader].each(&:join)
+        [out_reader, err_reader].each(&:run)
         t.value
       end
       output  = stdout.join("\n") + stderr.join("\n")
