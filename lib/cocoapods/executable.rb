@@ -64,7 +64,7 @@ module Pod
       end
 
       status = popen3(bin, command, stdout, stderr)
-      output  = stdout.join("\n") + stderr.join("\n")
+      output = stdout.join("\n") + stderr.join("\n")
       unless status.success?
         if raise_on_failure
           raise Informative, "#{full_command}\n\n#{output}"
