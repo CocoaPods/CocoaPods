@@ -268,6 +268,13 @@ module Pod
         UI.output.should.match /CocoaPods 999.0 is available/
       end
 
+      it 'skips the update message if the user disabled the notification' do
+        config.new_version_message = false
+        SourcesManager.stubs(:version_information).returns('last' => '999.0')
+        SourcesManager.check_version_information(temporary_directory)
+        UI.output.should.not.match /CocoaPods 999.0 is available/
+      end
+
       it 'raises while asked to version information of a source if it is not compatible' do
         SourcesManager.stubs(:version_information).returns('min' => '999.0')
         e = lambda { SourcesManager.check_version_information(temporary_directory) }.should.raise Informative
