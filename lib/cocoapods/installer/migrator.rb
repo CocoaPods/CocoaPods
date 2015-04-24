@@ -63,7 +63,7 @@ module Pod
               lockfile['SPEC CHECKSUMS'][spec.name] = Specification.from_file(child).checksum
             end
             sandbox.manifest = Lockfile.new(lockfile)
-            File.open(sandbox.manifest_path, 'w') { |f| f.write sandbox.manifest.to_yaml }
+            sandbox.manifest.write_to_disk(sandbox.manifest_path)
           end
         end
 
