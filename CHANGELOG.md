@@ -22,6 +22,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3101](https://github.com/CocoaPods/CocoaPods/issues/3101)
 
+* Add environment variable `COCOAPODS_SKIP_NEW_VERSION` to disable new
+  version message
+  [Andrea Mazzini](https://github.com/andreamazz)
+  [#3364](https://github.com/CocoaPods/CocoaPods/issues/3364)
 
 ## 0.37.0.beta.1
 
