@@ -17,6 +17,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Mason Glidden](https://github.com/mglidden)
   [#1154](https://github.com/CocoaPods/CocoaPods/issues/1154)
 
+* Handle subprocesses leaking STDOUT/STDERR pipes by more strictly managing
+  process lifetime and not allowing I/O to block completion of the task.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3101](https://github.com/CocoaPods/CocoaPods/issues/3101)
+
+
 ## 0.37.0.beta.1
 
 ##### Enhancements

@@ -16,8 +16,18 @@ module Pod
       result = mock
       result.stubs(:success?).returns(true)
 
-      Open4.expects(:spawn).with('/Spa ces/are"/fun/false', [], :stdout => [], :stderr => [], :status => true).once.returns(result)
+      Open3.expects(:popen3).with('/Spa ces/are"/fun/false').once.returns(result)
       Executable.execute_command(cmd, [], true)
+    end
+
+    it "doesn't hang when the spawned process forks a zombie process with the same STDOUT and STDERR" do
+      cmd = ['-e', <<-RB]
+        Process.fork { Process.daemon(nil, true); sleep(2) }
+        puts 'out'
+      RB
+      Timeout.timeout(1) do
+        Executable.execute_command('ruby', cmd, true).should == "out\n"
+      end
     end
   end
 end
