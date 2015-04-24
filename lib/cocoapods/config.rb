@@ -19,7 +19,7 @@ module Pod
 
       :clean               => true,
       :integrate_targets   => true,
-      :new_version_message => !ENV['COCOAPODS_SKIP_NEW_VERSION'].nil?,
+      :new_version_message => ENV['COCOAPODS_SKIP_NEW_VERSION'].nil?,
 
       :cache_root          => Pathname.new(Dir.home) + 'Library/Caches/CocoaPods',
     }
