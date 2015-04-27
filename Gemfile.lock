@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: b011f54a290c3544f4f57b11745b7788dc0e942a
+  revision: cc360e311dc2c2d3862c3fd8c1db0772c7ecfa3e
   branch: master
   specs:
     cocoapods-core (0.37.0.beta.1)
@@ -17,14 +17,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 5e044483654aae5c4c98c58ae0272fd0fd835e50
+  revision: 7bb5e29045c7d0b77d049a12448dd293b6d16f6f
   branch: master
   specs:
     molinillo (0.2.3)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: ba8b0cb95919550f93f268c6ba7f377a435f26bc
+  revision: 6dbb3c73e5d0de6a2c171da0cabd90a5c4d20c09
   branch: master
   specs:
     xcodeproj (0.24.0)
