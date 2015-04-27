@@ -1,6 +1,8 @@
 require 'fileutils'
 require 'tmpdir'
 
+require 'cocoapods/executable'
+
 module Pod
   module Downloader
     # The class responsible for managing Pod downloads, transparently caching
@@ -188,6 +190,7 @@ module Pod
         end
         destination.parent.mkpath
         FileUtils.cp_r(source, destination)
+        run_prepare_command(spec, destination)
         Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
       end
 
@@ -204,6 +207,29 @@ module Pod
       def write_spec(spec, path)
         path.dirname.mkpath
         path.open('w') { |f| f.write spec.to_pretty_json }
+      end
+
+      extend Executable
+      executable :bash
+
+      # Runs the prepare command bash script of the spec.
+      #
+      # @note   Unsets the `CDPATH` env variable before running the
+      #         shell script to avoid issues with relative paths
+      #         (issue #1694).
+      #
+      # @return [void]
+      #
+      def run_prepare_command(spec, root)
+        return unless spec.prepare_command
+        UI.section(' > Running prepare command', '', 1) do
+          Dir.chdir(root) do
+            ENV.delete('CDPATH')
+            prepare_command = spec.prepare_command.strip_heredoc.chomp
+            full_command = "\nset -e\n" + prepare_command
+            bash!('-c', full_command)
+          end
+        end
       end
     end
   end

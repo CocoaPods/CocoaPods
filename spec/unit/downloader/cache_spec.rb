@@ -85,5 +85,33 @@ module Pod
         end
       end
     end
+
+    #--------------------------------------#
+
+    describe 'Prepare command' do
+      it 'runs the prepare command if one has been declared in the spec' do
+        @spec.prepare_command = 'echo test'
+        @cache.expects(:bash!).once
+        @cache.download_pod(@request)
+      end
+
+      it "doesn't run the prepare command if it hasn't been declared in the spec" do
+        @cache.expects(:bash!).never
+        @cache.download_pod(@request)
+      end
+
+      it 'raises if the prepare command fails' do
+        @spec.prepare_command = 'missing_command'
+        should.raise Informative do
+          @cache.download_pod(@request)
+        end.message.should.match /command not found/
+      end
+
+      it 'unsets $CDPATH environment variable' do
+        ENV['CDPATH'] = 'BogusPath'
+        @spec.prepare_command = 'cd Classes;ls Banana.h'
+        lambda { @cache.download_pod(@request) }.should.not.raise
+      end
+    end
   end
 end

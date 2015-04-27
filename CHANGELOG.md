@@ -33,6 +33,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3101](https://github.com/CocoaPods/CocoaPods/issues/3101)
 
+* Run a pod's `prepare_command` (if it has one) before it is cleaned in the
+  download cache.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3435](https://github.com/CocoaPods/CocoaPods/issues/3435)
+
 
 ## 0.37.0.beta.1
 
