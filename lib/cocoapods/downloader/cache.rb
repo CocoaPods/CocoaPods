@@ -188,6 +188,7 @@ module Pod
         end
         destination.parent.mkpath
         FileUtils.cp_r(source, destination)
+        Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
         Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
       end
 
