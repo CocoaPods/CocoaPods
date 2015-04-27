@@ -84,8 +84,7 @@ CLIntegracon.configure do |c|
   c.ignores %r{/xcuserdata/}
 
   # Needed for some test cases
-  c.ignores 'Reachability.podspec'
-  c.ignores 'Moment.podspec'
+  c.ignores '*.podspec'
   c.ignores 'PodTest-hg-source/**'
 
   c.hook_into :bacon
@@ -245,6 +244,14 @@ describe_cli 'pod' do
   #--------------------------------------#
 
   describe 'Pod lint' do
+    describe 'Lints a Pod from source with a prepare_command' do
+      # We have to disable verbose mode by adding --no-verbose here,
+      # otherwise xcodebuild output is included in execution output.
+      behaves_like cli_spec 'lib_lint_with_prepare_command',
+                            'lib lint',
+                            '--no-verbose'
+    end
+
     describe 'Lints a Pod' do
       behaves_like cli_spec 'spec_lint',
                             'spec lint --quick'
