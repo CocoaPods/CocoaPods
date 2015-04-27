@@ -118,7 +118,15 @@ module Pod
         resource.should.be.not.nil
       end
 
-      xit 'adds the build configurations to the resources bundle targets' do
+      it 'adds the build configurations to the resources bundle targets' do
+        @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
+        @installer.install!
+        bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
+
+        file = config.sandbox.root + @pod_target.xcconfig_private_path
+        bundle_target.build_configurations.each do |bc|
+          bc.base_configuration_reference.real_path.should == file
+        end
       end
 
       #--------------------------------------#
