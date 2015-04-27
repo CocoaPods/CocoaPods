@@ -589,6 +589,23 @@ module Pod
           @installer.pods_project.expects(:save)
           @installer.send(:write_pod_project)
         end
+
+        it 'uses the user project\'s object version for the pods project' do
+          tmp_directory = Pathname(Dir.tmpdir) + 'CocoaPods'
+          FileUtils.mkdir_p(tmp_directory)
+          proj = Xcodeproj::Project.new(tmp_directory + 'Yolo.xcodeproj', false, 1)
+          proj.save
+
+          aggregate_target = AggregateTarget.new(nil, config.sandbox)
+          aggregate_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
+          aggregate_target.stubs(:user_project_path).returns(proj.path)
+          @installer.stubs(:aggregate_targets).returns([aggregate_target])
+
+          @installer.send(:prepare_pods_project)
+          @installer.pods_project.object_version.should == '1'
+
+          FileUtils.rm_rf(tmp_directory)
+        end
       end
 
       #--------------------------------------#
