@@ -156,6 +156,13 @@ module Pod
         native_target.build_configurations.each do |c|
           c.base_configuration_reference = xcconfig_file_ref
         end
+
+        # also apply the private config to resource targets
+        target.resource_bundle_targets.each do |rsrc_target|
+          rsrc_target.build_configurations.each do |rsrc_bc|
+            rsrc_bc.base_configuration_reference = xcconfig_file_ref
+          end
+        end
       end
 
       # Creates a prefix header file which imports `UIKit` or `Cocoa` according
