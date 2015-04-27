@@ -6,6 +6,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Add environment variable `COCOAPODS_SKIP_UPDATE_MESSAGE` to disable new
+  version message.  
+  [Andrea Mazzini](https://github.com/andreamazz)
+  [#3364](https://github.com/CocoaPods/CocoaPods/issues/3364)
+
 ##### Bug Fixes
 
 * Don't crash when the downloader can't find an appropriate podspec in a `git`
