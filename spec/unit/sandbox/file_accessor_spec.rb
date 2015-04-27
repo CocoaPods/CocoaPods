@@ -211,7 +211,7 @@ module Pod
           file_patterns = ['Classes/*.{h,m,d}', 'Vendor']
           options = {
             :exclude_patterns => ['Classes/**/osx/**/*', 'Resources/**/osx/**/*'],
-            :dir_pattern => '*.{h,hpp,tpp,hh,m,mm,c,cpp,swift}',
+            :dir_pattern => '*{.m,.mm,.c,.cpp,.swift,.h,.hh,.hpp,.ipp,.tpp}',
             :include_dirs => false,
           }
           @spec.exclude_files = options[:exclude_patterns]
