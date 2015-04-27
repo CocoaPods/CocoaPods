@@ -11,6 +11,11 @@ Pod::Spec.new do |s|
     :file => 'LICENSE',
     :text => 'Permission is hereby granted ...'
   }
-  s.source_files    = 'Banana.m'
-  s.prepare_command = 'rm Banana.m; echo "const int BKBananaMagicNumber = 3;" >> Banana.m'
+  s.platform        = :ios, '7.0'
+  s.source_files    = 'Banana.{h,m}'
+  s.prepare_command = <<-eos
+    rm Banana.m
+    echo "const int BKBananaMagicNumber = 3;" >> Banana.m
+    mv BananaFruit.h Banana.h
+  eos
 end
