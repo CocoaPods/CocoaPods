@@ -63,6 +63,22 @@ module Pod
         end.message
         message.should.match /subspecs across different build configurations/
       end
+
+      it 'builds a pod target if there are actual source files' do
+        fa = Sandbox::FileAccessor.new(nil, @pod_target)
+        fa.stubs(:source_files).returns([Pathname.new('foo.m')])
+        @pod_target.stubs(:file_accessors).returns([fa])
+
+        @pod_target.should_build?.should == true
+      end
+
+      it 'does not build a pod target if there are only header files' do
+        fa = Sandbox::FileAccessor.new(nil, @pod_target)
+        fa.stubs(:source_files).returns([Pathname.new('foo.h')])
+        @pod_target.stubs(:file_accessors).returns([fa])
+
+        @pod_target.should_build?.should == false
+      end
     end
 
     describe 'Support files' do

@@ -52,7 +52,9 @@ module Pod
     # A target should not be build if it has no source files.
     #
     def should_build?
-      !file_accessors.flat_map(&:source_files).empty?
+      source_files = file_accessors.flat_map(&:source_files)
+      source_files -= file_accessors.flat_map(&:headers)
+      !source_files.empty?
     end
 
     # @return [Array<Specification::Consumer>] the specification consumers for
