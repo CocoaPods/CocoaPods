@@ -120,6 +120,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: res
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Pods-SampleApp-res-Private.xcconfig
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: bundle
@@ -129,6 +130,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: res
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Pods-SampleApp-res-Private.xcconfig
 
 
 

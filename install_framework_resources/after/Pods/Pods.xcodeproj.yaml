@@ -203,6 +203,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleApp
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Pods-SampleApp-SamplePodWithResources-Private.xcconfig
     - Release:
         Build Settings:
           PRODUCT_NAME: SamplePodWithResources
@@ -213,6 +214,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleApp
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Pods-SampleApp-SamplePodWithResources-Private.xcconfig
 - Pods-SampleAppTests:
     Build Phases:
     - SourcesBuildPhase:
@@ -355,6 +357,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleAppTests
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Pods-SampleAppTests-SamplePodWithResources-Private.xcconfig
     - Release:
         Build Settings:
           PRODUCT_NAME: SamplePodWithResources
@@ -365,6 +368,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           CONFIGURATION_BUILD_DIR: $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-SampleAppTests
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Pods-SampleAppTests-SamplePodWithResources-Private.xcconfig
 
 
 
