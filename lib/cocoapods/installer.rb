@@ -444,7 +444,15 @@ module Pod
     #
     def prepare_pods_project
       UI.message '- Creating Pods project' do
-        @pods_project = Pod::Project.new(sandbox.project_path)
+        object_version = aggregate_targets.map(&:user_project_path).compact.map do |path|
+          Xcodeproj::Project.open(path).object_version.to_i
+        end.min
+
+        if object_version
+          @pods_project = Pod::Project.new(sandbox.project_path, false, object_version)
+        else
+          @pods_project = Pod::Project.new(sandbox.project_path)
+        end
 
         analysis_result.all_user_build_configurations.each do |name, type|
           @pods_project.add_build_configuration(name, type)

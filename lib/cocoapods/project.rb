@@ -10,9 +10,12 @@ module Pod
     # @param  [Pathname, String] path @see path
     # @param  [Bool] skip_initialization
     #         Whether the project should be initialized from scratch.
+    # @param  [Int] object_version
+    #         Object version to use for serialization, defaults to Xcode 3.2 compatible.
     #
-    def initialize(path, skip_initialization = false)
-      super(path, skip_initialization)
+    def initialize(path, skip_initialization = false,
+        object_version = Xcodeproj::Constants::DEFAULT_OBJECT_VERSION)
+      super(path, skip_initialization, object_version)
       @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
       @pods = new_group('Pods')
