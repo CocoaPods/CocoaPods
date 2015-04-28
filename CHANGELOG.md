@@ -4,7 +4,10 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
-## Master
+## 0.37.0.rc.1
+
+[Core](https://github.com/CocoaPods/Core/compare/0.37.0.beta.1...0.37.0.rc.1)
+[Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.24.0...0.24.1)
 
 ##### Enhancements
 
@@ -19,7 +22,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Adding `$(inherited)` to `FRAMEWORK_SEARCH_PATHS` build setting in xcconfig for aggregate.
+* Adding `$(inherited)` to `FRAMEWORK_SEARCH_PATHS` build setting in xcconfig for aggregate.  
   [Tomohiro Kumagai](https://github.com/EZ-NET)
   [#3429](https://github.com/CocoaPods/CocoaPods/pull/3429)
 
