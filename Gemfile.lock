@@ -24,10 +24,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 7c37e41dafa5f6394900dab19eac9cc6580a9718
+  revision: 62d93abc5c5bba78414db712834ecf67e60ef055
   branch: master
   specs:
-    xcodeproj (0.24.0)
+    xcodeproj (0.24.1)
       activesupport (>= 3)
       colored (~> 1.2)
 
@@ -77,7 +77,7 @@ PATH
       escape (~> 0.0.4)
       molinillo (~> 0.2.3)
       nap (~> 0.8)
-      xcodeproj (~> 0.24.0)
+      xcodeproj (~> 0.24.1)
 
 GEM
   remote: https://rubygems.org/
@@ -115,7 +115,7 @@ GEM
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
-    minitest (5.6.0)
+    minitest (5.6.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
