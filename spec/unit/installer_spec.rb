@@ -590,7 +590,7 @@ module Pod
           @installer.send(:write_pod_project)
         end
 
-        it 'uses the user project\'s object version for the pods project' do
+        it "uses the user project's object version for the pods project" do
           tmp_directory = Pathname(Dir.tmpdir) + 'CocoaPods'
           FileUtils.mkdir_p(tmp_directory)
           proj = Xcodeproj::Project.new(tmp_directory + 'Yolo.xcodeproj', false, 1)
