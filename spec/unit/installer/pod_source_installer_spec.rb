@@ -67,12 +67,12 @@ module Pod
       describe 'Prepare command' do
         it 'runs the prepare command if one has been declared in the spec' do
           @spec.prepare_command = 'echo test'
-          @installer.expects(:bash!).once
+          Installer::PodSourcePreparer.any_instance.expects(:bash!).once
           @installer.install!
         end
 
         it "doesn't run the prepare command if it hasn't been declared in the spec" do
-          @installer.expects(:bash!).never
+          Installer::PodSourcePreparer.any_instance.expects(:bash!).never
           @installer.install!
         end
 

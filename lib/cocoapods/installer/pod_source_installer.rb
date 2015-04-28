@@ -43,7 +43,7 @@ module Pod
       #
       def install!
         download_source unless predownloaded? || local?
-        run_prepare_command
+        PodSourcePreparer.new(root_spec, root).prepare! if local?
         lock_files!
       end
 
@@ -105,29 +105,6 @@ module Pod
         Dir.glob(root + '**/*').each do |file|
           unless File.directory?(file)
             File.chmod(0444, file)
-          end
-        end
-      end
-
-      extend Executable
-      executable :bash
-
-      # Runs the prepare command bash script of the spec.
-      #
-      # @note   Unsets the `CDPATH` env variable before running the
-      #         shell script to avoid issues with relative paths
-      #         (issue #1694).
-      #
-      # @return [void]
-      #
-      def run_prepare_command
-        return unless root_spec.prepare_command
-        UI.section(' > Running prepare command', '', 1) do
-          Dir.chdir(root) do
-            ENV.delete('CDPATH')
-            prepare_command = root_spec.prepare_command.strip_heredoc.chomp
-            full_command = "\nset -e\n" + prepare_command
-            bash!('-c', full_command)
           end
         end
       end
