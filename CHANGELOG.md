@@ -47,6 +47,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3436](https://github.com/CocoaPods/CocoaPods/issues/3436)
 
+* Don't set the `-fno-objc-arc` compiler flags for files for which the flag
+  makes no sense.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2559](https://github.com/CocoaPods/CocoaPods/issues/2559)
+
 
 ## 0.37.0.beta.1
 

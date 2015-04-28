@@ -8,11 +8,12 @@ module Pod
     #
     class FileAccessor
       HEADER_EXTENSIONS = Xcodeproj::Constants::HEADER_FILES_EXTENSIONS
+      SOURCE_FILE_EXTENSIONS = (%w(.m .mm .c .cpp .swift) + HEADER_EXTENSIONS).uniq.freeze
 
       GLOB_PATTERNS = {
         :readme              => 'readme{*,.*}'.freeze,
         :license             => 'licen{c,s}e{*,.*}'.freeze,
-        :source_files        => '*.{h,hpp,tpp,hh,m,mm,c,cpp,swift}'.freeze,
+        :source_files        => "*{#{SOURCE_FILE_EXTENSIONS.join(',')}}".freeze,
         :public_header_files => "*{#{HEADER_EXTENSIONS.join(',')}}".freeze,
       }.freeze
 

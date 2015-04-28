@@ -38,6 +38,8 @@ module Pod
 
       #-----------------------------------------------------------------------#
 
+      SOURCE_FILE_EXTENSIONS = Sandbox::FileAccessor::SOURCE_FILE_EXTENSIONS
+
       # Adds the build files of the pods to the target and adds a reference to
       # the frameworks of the Pods.
       #
@@ -53,7 +55,7 @@ module Pod
           headers = file_accessor.headers
           public_headers = file_accessor.public_headers
           private_headers = file_accessor.private_headers
-          other_source_files = file_accessor.source_files.select { |sf| sf.extname == '.d' }
+          other_source_files = file_accessor.source_files.reject { |sf| SOURCE_FILE_EXTENSIONS.include?(sf.extname) }
 
           {
             true => file_accessor.arc_source_files,
