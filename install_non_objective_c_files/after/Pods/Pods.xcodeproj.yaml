@@ -70,10 +70,8 @@ Targets:
       - Pods-Moment-dummy.m
       - TimeParser.c:
           COMPILER_FLAGS: -fno-objc-arc
-      - parseIt.ym:
-          COMPILER_FLAGS: -fno-objc-arc
-      - tokeIt.l:
-          COMPILER_FLAGS: -fno-objc-arc
+      - parseIt.ym
+      - tokeIt.l
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
