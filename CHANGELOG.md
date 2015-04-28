@@ -33,6 +33,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3101](https://github.com/CocoaPods/CocoaPods/issues/3101)
 
+* Do not create pod target if `source_files` only contains headers.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3106](https://github.com/CocoaPods/CocoaPods/issues/3106)
+
 
 ## 0.37.0.beta.1
 
