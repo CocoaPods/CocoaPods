@@ -24,6 +24,23 @@ module Pod
       @cache.root.should.be.directory?
     end
 
+    it 'groups subspecs by platform' do
+      @spec = Specification.new do |s|
+        s.ios.deployment_target = '6.0'
+        s.osx.deployment_target = '10.7'
+
+        s.subspec 'subspec' do |ss|
+          ss.ios.deployment_target = '8.0'
+        end
+      end
+
+      @cache.send(:group_subspecs_by_platform, @spec).should == {
+        Platform.new(:ios, '8.0') => [@spec.subspecs.first],
+        Platform.new(:ios, '6.0') => [@spec],
+        Platform.new(:osx, '10.7') => [@spec],
+      }
+    end
+
     describe 'when the download is not cached' do
       describe 'when downloading a released pod' do
         it 'downloads the source' do

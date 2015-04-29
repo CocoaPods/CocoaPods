@@ -182,14 +182,22 @@ module Pod
       # @return [Void]
       #
       def copy_and_clean(source, destination, spec)
-        specs_by_platform = {}
-        spec.available_platforms.each do |platform|
-          specs_by_platform[platform] = [spec, *spec.recursive_subspecs].select { |ss| ss.supported_on_platform?(platform) }
-        end
+        specs_by_platform = group_subspecs_by_platform(spec)
         destination.parent.mkpath
         FileUtils.cp_r(source, destination)
         Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
         Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
+      end
+
+      def group_subspecs_by_platform(spec)
+        specs_by_platform = {}
+        [spec, *spec.recursive_subspecs].each do |ss|
+          ss.available_platforms.each do |platform|
+            specs_by_platform[platform] ||= []
+            specs_by_platform[platform] << ss
+          end
+        end
+        specs_by_platform
       end
 
       # Writes the given `spec` to the given `path`.
