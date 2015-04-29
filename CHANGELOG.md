@@ -13,6 +13,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3471](https://github.com/CocoaPods/CocoaPods/issues/3471)
 
+* Automatically detect JSON podspecs in `pod lib lint`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3477](https://github.com/CocoaPods/CocoaPods/issues/3477)
+
 
 ## 0.37.0.rc.1
 

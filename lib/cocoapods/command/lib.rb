@@ -187,7 +187,7 @@ module Pod
           if !@podspecs_paths.empty?
             Array(@podspecs_paths)
           else
-            podspecs = Pathname.glob(Pathname.pwd + '*.podspec{.yaml,}')
+            podspecs = Pathname.glob(Pathname.pwd + '*.podspec{.json,}')
             if podspecs.count.zero?
               raise Informative, 'Unable to find a podspec in the working ' \
                 'directory'
