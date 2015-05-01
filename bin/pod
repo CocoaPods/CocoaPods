@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 if Encoding.default_external != Encoding::UTF_8
-  puts <<-DOC
+  STDERR.puts <<-DOC
 \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
 Consider adding the following to ~/.profile:
 
