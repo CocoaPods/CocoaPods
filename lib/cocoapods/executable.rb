@@ -80,8 +80,8 @@ module Pod
     def self.popen3(bin, command, stdout, stderr)
       require 'open3'
       Open3.popen3(bin, *command) do |i, o, e, t|
-        out_reader = Thread.new { while s = o.gets; stdout << s; end }
-        err_reader = Thread.new { while s = e.gets; stderr << s; end }
+        Thread.new { while s = o.gets; stdout << s; end }
+        Thread.new { while s = e.gets; stderr << s; end }
         i.close
         t.value
       end
