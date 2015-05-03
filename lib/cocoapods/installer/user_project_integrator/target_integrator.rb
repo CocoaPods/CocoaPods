@@ -9,6 +9,11 @@ module Pod
       class TargetIntegrator
         autoload :XCConfigIntegrator, 'cocoapods/installer/user_project_integrator/target_integrator/xcconfig_integrator'
 
+        # @return [Array<Symbol>] the symbol types, which require that the pod
+        # frameworks are embedded in the output directory / product bundle.
+        #
+        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle].freeze
+
         # @return [Target] the target that should be integrated.
         #
         attr_reader :target
@@ -136,7 +141,10 @@ module Pod
         #
         def add_embed_frameworks_script_phase
           phase_name = 'Embed Pods Frameworks'
-          native_targets_to_integrate.each do |native_target|
+          targets_to_embed_in = native_targets_to_integrate.select do |target|
+            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
+          end
+          targets_to_embed_in.each do |native_target|
             embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
             unless embed_build_phase.present?
               UI.message("Adding Build Phase '#{phase_name}' to project.")
