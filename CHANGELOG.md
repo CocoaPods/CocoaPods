@@ -6,6 +6,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## 0.37.0
 
+For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-0.37/) on our blog.
+
 ##### Bug Fixes
 
 * Print the UTF-8 warning to STDERR.  
