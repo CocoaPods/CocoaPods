@@ -83,7 +83,13 @@ module Pod
         Thread.new { while s = o.gets; stdout << s; end }
         Thread.new { while s = e.gets; stderr << s; end }
         i.close
-        t.value
+        status = t.value
+
+        o.flush
+        e.flush
+        sleep(0.01)
+
+        status
       end
     end
 
