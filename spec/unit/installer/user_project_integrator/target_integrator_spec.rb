@@ -79,6 +79,7 @@ module Pod
               raise 'Unequal' unless lockfile == manifest
             rescue
               puts "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation."
+              exit 1
             end
           EOS
         end
