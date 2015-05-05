@@ -180,6 +180,3 @@ DEPENDENCIES
   ruby-prof
   webmock
   xcodeproj!
-
-BUNDLED WITH
-  1.10.0.pre
