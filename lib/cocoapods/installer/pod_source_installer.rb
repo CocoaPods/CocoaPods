@@ -103,7 +103,7 @@ module Pod
         # We don't want to lock diretories, as that forces you to override
         # those permissions if you decide to delete the Pods folder.
         Dir.glob(root + '**/*').each do |file|
-          unless File.directory?(file)
+          if File.file?(file)
             File.chmod(0444, file)
           end
         end
