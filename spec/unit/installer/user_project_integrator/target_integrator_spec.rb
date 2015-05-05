@@ -72,13 +72,14 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == 'Check Pods Manifest.lock' }
           phase.shell_script.should == <<-EOS.strip_heredoc
-          diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-          if [[ $? != 0 ]] ; then
-              cat << EOM
-          error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-          EOM
-              exit 1
-          fi
+            require 'yaml'
+            begin
+              lockfile = YAML.load(File.read("\#{PODS_ROOT}/../Podfile.lock"))
+              manifest = YAML.load(File.read("\#{PODS_ROOT}/Manifest.lock"))
+              raise 'Unequal' unless lockfile == manifest
+            rescue
+              puts "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation."
+            end
           EOS
         end
 

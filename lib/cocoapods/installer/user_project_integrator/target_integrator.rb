@@ -198,19 +198,22 @@ module Pod
         #
         def add_check_manifest_lock_script_phase
           phase_name = 'Check Pods Manifest.lock'
+          phase_shell_path = '/usr/bin/env ruby'
           native_targets_to_integrate.each do |native_target|
-            next if native_target.shell_script_build_phases.any? { |phase| phase.name == phase_name }
+            next if native_target.shell_script_build_phases.any? { |phase| phase.name == phase_name && phase.shell_path == phase_shell_path }
             phase = native_target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
             native_target.build_phases.unshift(phase)
             phase.name = phase_name
+            phase.shell_path = phase_shell_path
             phase.shell_script = <<-EOS.strip_heredoc
-              diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-              if [[ $? != 0 ]] ; then
-                  cat << EOM
-              error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-              EOM
-                  exit 1
-              fi
+              require 'yaml'
+              begin
+                lockfile = YAML.load(File.read("\#{PODS_ROOT}/../Podfile.lock"))
+                manifest = YAML.load(File.read("\#{PODS_ROOT}/Manifest.lock"))
+                raise 'Unequal' unless lockfile == manifest
+              rescue
+                puts "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation."
+              end
             EOS
             phase.show_env_vars_in_log = '0'
           end
