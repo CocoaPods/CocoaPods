@@ -54,7 +54,7 @@ module Pod
       require 'shellwords'
 
       command = command.map(&:to_s)
-      full_command = "#{bin.shellescape} #{command.map(&:shellescape).join(' ')}"
+      full_command = "#{bin} #{command.join(' ')}"
 
       if Config.instance.verbose?
         UI.message("$ #{full_command}")
