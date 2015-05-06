@@ -33,7 +33,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3501](https://github.com/CocoaPods/CocoaPods/issues/3501)
 
 * Always copy the generated `Podfile.lock` to `Pods/Manifest.lock` so they are
-  guarenteed to match, character-by-character, after installation.  
+  guaranteed to match, character-by-character, after installation.  
   [Samuel Giddins](https://github.com/segiddins)
   [#3502](https://github.com/CocoaPods/CocoaPods/issues/3502)
 
