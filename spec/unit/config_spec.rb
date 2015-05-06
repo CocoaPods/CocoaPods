@@ -45,6 +45,48 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
+    describe '#with_changes' do
+      it 'doesnt raise when using an unknown key' do
+        should.not.raise { @config.with_changes(:foo_bar => false) }
+      end
+
+      it 'uses the new value inside the block' do
+        @config.verbose = true
+        called = false
+        @config.with_changes(:verbose => false) do
+          @config.should.not.be.verbose
+          called = true
+        end
+        called.should.be.true
+      end
+
+      it 'reverts to the previous value after the block' do
+        @config.verbose = true
+        @config.with_changes(:verbose => false)
+        @config.should.be.verbose
+      end
+
+      it 'reverts to the previous value even when an exception is raised' do
+        @config.verbose = true
+        should.raise do
+          @config.with_changes(:verbose => false) do
+            raise 'foo'
+          end
+        end
+        @config.should.be.verbose
+      end
+
+      it 'returns the return value of the block' do
+        @config.with_changes({}) do
+          'foo'
+        end.should == 'foo'
+
+        @config.with_changes({}).should.be.nil
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
     describe 'Paths' do
       it 'returns the working directory as the installation root if a Podfile can be found' do
         Dir.chdir(temporary_directory) do
