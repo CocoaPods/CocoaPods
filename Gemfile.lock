@@ -1,16 +1,16 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 00927807580554b7d3485d673c90386d3fd8fde0
+  revision: f75b6d84d898a0a61f87bd48bab87d794a91ee86
   branch: master
   specs:
     claide (0.8.1)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 493e5d33f79213eaf89588575289071baca9444b
+  revision: c32c47c5b090855d8529ed3360a9645765b2bddd
   branch: master
   specs:
-    cocoapods-core (0.37.0)
+    cocoapods-core (0.37.1)
       activesupport (>= 3.2.15)
       fuzzy_match (~> 2.0.4)
       nap (~> 0.8.0)
@@ -65,10 +65,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.37.0)
+    cocoapods (0.37.1)
       activesupport (>= 3.2.15)
       claide (~> 0.8.1)
-      cocoapods-core (= 0.37.0)
+      cocoapods-core (= 0.37.1)
       cocoapods-downloader (~> 0.9.0)
       cocoapods-plugins (~> 0.4.2)
       cocoapods-trunk (~> 0.6.0)
