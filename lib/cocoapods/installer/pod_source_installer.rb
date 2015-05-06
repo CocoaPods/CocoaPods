@@ -104,7 +104,10 @@ module Pod
         # those permissions if you decide to delete the Pods folder.
         Dir.glob(root + '**/*').each do |file|
           if File.file?(file)
-            File.chmod(0444, file)
+            # Only remove write permission, since some pods (like Crashlytics)
+            # have executable files.
+            new_permissions = File.stat(file).mode & ~0222
+            File.chmod(new_permissions, file)
           end
         end
       end
