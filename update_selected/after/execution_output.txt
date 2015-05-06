@@ -52,8 +52,8 @@ Downloading dependencies
 -> Installing JSONKit 1.4 (was 1.4)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/johnezang/JSONKit.git TMPDIR --single-branch --depth 1 --branch v1.4
-     Cloning into 'TMPDIR'...
+     $ GIT_BIN clone https://github.com/johnezang/JSONKit.git ROOT/tmp/update_selected/Pods/JSONKit --single-branch --depth 1 --branch v1.4
+     Cloning into 'ROOT/tmp/update_selected/Pods/JSONKit'...
      Note: checking out '99930114548f9cedc8070a3bd4d9a217adc218ca'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -65,13 +65,12 @@ Downloading dependencies
      
        git checkout -b new_branch_name
      
-  > Copying JSONKit from `TMPDIR/Release/JSONKit/1.4-2111a` to `Pods/JSONKit`
 
 -> Installing Reachability 3.1.1 (was 3.0.0)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git TMPDIR --single-branch --depth 1 --branch v3.1.1
-     Cloning into 'TMPDIR'...
+     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git ROOT/tmp/update_selected/Pods/Reachability --single-branch --depth 1 --branch v3.1.1
+     Cloning into 'ROOT/tmp/update_selected/Pods/Reachability'...
      Note: checking out '7ea54e98cdc439bedda279c5ad9031822269ce3c'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -83,7 +82,6 @@ Downloading dependencies
      
        git checkout -b new_branch_name
      
-  > Copying Reachability from `TMPDIR/Release/Reachability/3.1.1-8e963` to `Pods/Reachability`
   - Running pre install hooks
 
 Generating Pods project

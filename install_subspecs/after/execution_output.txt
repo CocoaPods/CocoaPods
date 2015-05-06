@@ -11,10 +11,9 @@ Inspecting targets to integrate
 Fetching external sources
 -> Pre-downloading: `PodTest` from `PodTest-hg-source`
  > Mercurial download
-   $ HG_BIN clone PodTest-hg-source TMPDIR
+   $ HG_BIN clone PodTest-hg-source ROOT/tmp/install_subspecs/Pods/PodTest
    updating to branch default
    5 files updated, 0 files merged, 0 files removed, 0 files unresolved
-  > Copying PodTest from `TMPDIR/External/PodTest/980b701b951d78af6633f3b3a3517275` to `Pods/PodTest`
 
 Resolving dependencies of `Podfile`
 Starting resolution (<#DATE#>)

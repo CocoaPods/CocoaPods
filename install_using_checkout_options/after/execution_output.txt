@@ -16,19 +16,17 @@ Fetching external sources
 -> Pre-downloading: `AFNetworking` from `https://github.com/AFNetworking/AFNetworking.git`, commit `ba7b6e541fd18bdf48da6d4845670e3e6b990637`
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/AFNetworking/AFNetworking.git TMPDIR
-     Cloning into 'TMPDIR'...
+     $ GIT_BIN clone https://github.com/AFNetworking/AFNetworking.git ROOT/tmp/install_using_checkout_options/Pods/AFNetworking
+     Cloning into 'ROOT/tmp/install_using_checkout_options/Pods/AFNetworking'...
    $ GIT_BIN checkout -b activated-commit ba7b6e541fd18bdf48da6d4845670e3e6b990637
    Switched to a new branch 'activated-commit'
-  > Copying AFNetworking from `TMPDIR/External/AFNetworking/bc64228fccb3c3f3ed59da22a365ab03` to `Pods/AFNetworking`
 -> Pre-downloading: `RKValueTransformers` from `https://github.com/RestKit/RKValueTransformers`, commit `d76a00894b8c3c9331e36d91ab952681426a49df`
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/RestKit/RKValueTransformers TMPDIR
-     Cloning into 'TMPDIR'...
+     $ GIT_BIN clone https://github.com/RestKit/RKValueTransformers ROOT/tmp/install_using_checkout_options/Pods/RKValueTransformers
+     Cloning into 'ROOT/tmp/install_using_checkout_options/Pods/RKValueTransformers'...
    $ GIT_BIN checkout -b activated-commit d76a00894b8c3c9331e36d91ab952681426a49df
    Switched to a new branch 'activated-commit'
-  > Copying RKValueTransformers from `TMPDIR/External/RKValueTransformers/f2b474ee6a811d5154d8df2de22011cc` to `Pods/RKValueTransformers`
 
 Resolving dependencies of `Podfile`
 Starting resolution (<#DATE#>)

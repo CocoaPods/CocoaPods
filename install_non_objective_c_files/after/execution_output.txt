@@ -27,11 +27,10 @@ Downloading dependencies
 -> Installing Moment (0.0.1)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/kmussel/Moment.git TMPDIR
-     Cloning into 'TMPDIR'...
+     $ GIT_BIN clone https://github.com/kmussel/Moment.git ROOT/tmp/install_non_objective_c_files/Pods/Moment
+     Cloning into 'ROOT/tmp/install_non_objective_c_files/Pods/Moment'...
    $ GIT_BIN checkout -b activated-commit 39f21fee0cef410c6d89c9fa94ff5638527ef7bc
    Switched to a new branch 'activated-commit'
-  > Copying Moment from `TMPDIR/External/Moment/36661709e941ee9665042b1c53a2cbd8-59f62` to `Pods/Moment`
   - Running pre install hooks
 
 Generating Pods project

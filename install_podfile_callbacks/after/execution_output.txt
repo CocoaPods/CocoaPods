@@ -24,8 +24,8 @@ Downloading dependencies
 -> Installing Reachability (3.1.0)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git TMPDIR --single-branch --depth 1 --branch v3.1.0
-     Cloning into 'TMPDIR'...
+     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_podfile_callbacks/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
+     Cloning into 'ROOT/tmp/install_podfile_callbacks/Pods/Reachability'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -37,7 +37,6 @@ Downloading dependencies
      
        git checkout -b new_branch_name
      
-  > Copying Reachability from `TMPDIR/Release/Reachability/3.1.0-14a77` to `Pods/Reachability`
   - Running pre install hooks
     - Podfile
 
