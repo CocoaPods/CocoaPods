@@ -12,6 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#3440](https://github.com/CocoaPods/CocoaPods/issues/3440)
 
+* C++ source files with `.cc` extension now have their compiler flags set correctly.  
+  [Chongyu Zhu](https://github.com/lembacon)
+
 
 ## 0.37.0
 
