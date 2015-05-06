@@ -27,6 +27,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Mason Glidden](https://github.com/mglidden)
   [#3501](https://github.com/CocoaPods/CocoaPods/issues/3501)
 
+* Always copy the generated `Podfile.lock` to `Pods/Manifest.lock` so they are
+  guarenteed to match, character-by-character, after installation.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3502](https://github.com/CocoaPods/CocoaPods/issues/3502)
+
+
 ## 0.37.0
 
 For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-0.37/) on our blog.
