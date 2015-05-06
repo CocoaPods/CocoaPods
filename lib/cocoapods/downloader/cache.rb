@@ -99,25 +99,14 @@ module Pod
       #
       def uncached_pod(request)
         in_tmpdir do |target|
-          result = Response.new
-          result.checkout_options = download(request.name, target, request.params, request.head?)
+          result, podspecs = download(request, target)
 
-          if request.released_pod?
-            result.spec = request.spec
-            result.location = destination = path_for_pod(request, :params => result.checkout_options)
-            copy_and_clean(target, destination, request.spec)
-            write_spec(request.spec, path_for_spec(request, :params => result.checkout_options))
-          else
-            podspecs = Sandbox::PodspecFinder.new(target).podspecs
-            podspecs[request.name] = request.spec if request.spec
-            podspecs.each do |name, spec|
-              destination = path_for_pod(request, :name => name, :params => result.checkout_options)
-              copy_and_clean(target, destination, spec)
-              write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
-              if request.name == name
-                result.location = destination
-                result.spec = spec
-              end
+          podspecs.each do |name, spec|
+            destination = path_for_pod(request, :name => name, :params => result.checkout_options)
+            copy_and_clean(target, destination, spec)
+            write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
+            if request.name == name
+              result.location = destination
             end
           end
 
@@ -125,37 +114,8 @@ module Pod
         end
       end
 
-      # Downloads a pod with the given `name` and `params` to `target`.
-      #
-      # @param  [String] name
-      #
-      # @param  [Pathname] target
-      #
-      # @param  [Hash<Symbol,String>] params
-      #
-      # @param  [Boolean] head
-      #
-      # @return [Hash] The checkout options required to re-download this exact
-      #         same source.
-      #
-      def download(name, target, params, head)
-        downloader = Downloader.for_target(target, params)
-        if head
-          unless downloader.head_supported?
-            raise Informative, "The pod '#{name}' does not " \
-              "support the :head option, as it uses a #{downloader.name} " \
-              'source. Remove that option to use this pod.'
-          end
-          downloader.download_head
-        else
-          downloader.download
-        end
-
-        if downloader.options_specific? && !head
-          params
-        else
-          downloader.checkout_options
-        end
+      def download(request, target)
+        Downloader.download_request(request, target)
       end
 
       # Performs the given block inside a temporary directory,
