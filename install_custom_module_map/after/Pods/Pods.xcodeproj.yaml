@@ -15,7 +15,6 @@ File References:
       - Pods-BananaLib-Private.xcconfig
       - Pods-BananaLib-dummy.m
       - Pods-BananaLib-prefix.pch
-      - Pods-BananaLib-umbrella.h
 - Frameworks:
   - iOS:
     - Foundation.framework
@@ -118,9 +117,6 @@ Targets:
       - BananaProject.h:
           ATTRIBUTES:
           - Project
-      - Pods-BananaLib-umbrella.h:
-          ATTRIBUTES:
-          - Public
     Build Configurations:
     - Debug:
         Build Settings:
