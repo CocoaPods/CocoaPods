@@ -24,6 +24,21 @@ module Pod
       :cache_root          => Pathname.new(Dir.home) + 'Library/Caches/CocoaPods',
     }
 
+    # Applies the given changes to the config for the duration of the given
+    # block.
+    #
+    def with_changes(changes)
+      old = {}
+      changes.keys.each do |key|
+        key = key.to_sym
+        old[key] = send(key) if respond_to?(key)
+      end
+      configure_with(changes)
+      yield if block_given?
+    ensure
+      configure_with(old)
+    end
+
     public
 
     #-------------------------------------------------------------------------#
