@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* [Cache] Fixes a bug that caused that a pod, which was cached once is not updated
+  correctly when needed e.g. for `pod spec lint`.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3498](https://github.com/CocoaPods/CocoaPods/issues/3498)
+
 * Only add the "Embed Pods Frameworks" script for application and unit test targets.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#3440](https://github.com/CocoaPods/CocoaPods/issues/3440)
