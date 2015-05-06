@@ -256,10 +256,10 @@ module Pod
       end
 
       def create_module_map
-        return super unless module_map = target.file_accessors.first.module_map
+        return super unless custom_module_map
         path = target.module_map_path
         UI.message "- Copying module map file to #{UI.path(path)}" do
-          FileUtils.cp(module_map, path)
+          FileUtils.cp(custom_module_map, path)
           add_file_to_support_group(path)
 
           native_target.build_configurations.each do |c|
@@ -267,6 +267,14 @@ module Pod
             c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
           end
         end
+      end
+
+      def create_umbrella_header
+        return super unless custom_module_map
+      end
+
+      def custom_module_map
+        @custom_module_map ||= target.file_accessors.first.module_map
       end
 
       #-----------------------------------------------------------------------#
