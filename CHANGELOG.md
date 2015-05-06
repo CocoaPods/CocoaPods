@@ -23,6 +23,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3501](https://github.com/CocoaPods/CocoaPods/issues/3501)
   [#3515](https://github.com/cocoapods/cocoapods/issues/3515)
 
+* Just remove write permissions from files, so executables are unaffected.  
+  [Mason Glidden](https://github.com/mglidden)
+  [#3501](https://github.com/CocoaPods/CocoaPods/issues/3501)
+
 ## 0.37.0
 
 For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-0.37/) on our blog.
