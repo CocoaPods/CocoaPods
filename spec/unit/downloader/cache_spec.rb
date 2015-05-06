@@ -8,10 +8,16 @@ module Pod
       @spec.source = { :git => SpecHelper.fixture('banana-lib') }
       @request = Downloader::Request.new(:spec => @spec, :released => true)
       @unreleased_request = Downloader::Request.new(:name => 'BananaLib', :params => @spec.source)
-      @stub_download = lambda do |cache, &blk|
-        cache.define_singleton_method(:download) do |_name, target, _params, _head|
+
+      @stub_download = lambda do |&blk|
+        original_download_source = Downloader.method(:download_source)
+        Downloader.define_singleton_method(:download_source) do |_name, target, _params, _head|
           FileUtils.mkdir_p target
-          Dir.chdir(target) { blk.call }
+          Dir.chdir(target) do
+            result = blk.call
+            Downloader.define_singleton_method(:download_source, original_download_source)
+            result
+          end
         end
       end
     end
@@ -53,7 +59,7 @@ module Pod
 
       describe 'when downloading an un-released pod' do
         before do
-          @stub_download.call @cache do
+          @stub_download.call do
             File.open('BananaLib.podspec.json', 'w') { |f| f << @spec.to_pretty_json }
             File.open('OrangeLib.podspec.json', 'w') { |f| f << @spec.to_pretty_json.sub(/"name": "BananaLib"/, '"name": "OrangeLib"') }
             @spec.source

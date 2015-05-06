@@ -41,6 +41,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   avoids an incomplete module map warning.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Actually allow skipping the download cache by downloading directly to the
+  download target when requested.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 0.37.0
 
