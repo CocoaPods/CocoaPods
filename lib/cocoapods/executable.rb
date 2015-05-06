@@ -87,7 +87,7 @@ module Pod
 
         o.flush
         e.flush
-        sleep(0.01)
+        sleep(0.1)
 
         status
       end

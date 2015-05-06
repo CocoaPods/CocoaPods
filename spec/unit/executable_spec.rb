@@ -22,10 +22,10 @@ module Pod
 
     it "doesn't hang when the spawned process forks a zombie process with the same STDOUT and STDERR" do
       cmd = ['-e', <<-RB]
-        Process.fork { Process.daemon(nil, true); sleep(2) }
+        Process.fork { Process.daemon(nil, true); sleep(4) }
         puts 'out'
       RB
-      Timeout.timeout(1) do
+      Timeout.timeout(2) do
         Executable.execute_command('ruby', cmd, true).should == "out\n"
       end
     end
