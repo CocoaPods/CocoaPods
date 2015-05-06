@@ -22,10 +22,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Chongyu Zhu](https://github.com/lembacon)
   [Kyle Fuller](https://github.com/kylef)
 
-* Fix an issue when installing Pods with executable files or broken symlinks
-  when installing a Pod.  
+* Handle broken symlinks when installing a Pod.  
   [Daniel Barden](https://github.com/dbarden)
-  [#3501](https://github.com/CocoaPods/CocoaPods/issues/3501)
   [#3515](https://github.com/cocoapods/cocoapods/issues/3515)
 
 * Just remove write permissions from files, so executables are unaffected.  
