@@ -15,8 +15,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * C++ source files with `.cc` extension now have their compiler flags set correctly.  
   [Chongyu Zhu](https://github.com/lembacon)
 
-* Handle broken symlinks when installing a Pod.  
+* Fix an issue when installing Pods with executable files or broken symlinks
+  when installing a Pod.  
   [Daniel Barden](https://github.com/dbarden)
+  [#3501](https://github.com/CocoaPods/CocoaPods/issues/3501)
   [#3515](https://github.com/cocoapods/cocoapods/issues/3515)
 
 ## 0.37.0
