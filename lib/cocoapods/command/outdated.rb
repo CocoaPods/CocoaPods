@@ -24,9 +24,9 @@ module Pod
       #
       def run
         if updates.empty?
-          UI.puts 'No updates are available.'.yellow
+          UI.puts 'No pod updates are available.'.yellow
         else
-          UI.section 'The following updates are available:' do
+          UI.section 'The following pod updates are available:' do
             updates.each do |(name, from_version, matching_version, to_version)|
               UI.puts "- #{name} #{from_version} -> #{matching_version} " \
                 "(latest version #{to_version})"
