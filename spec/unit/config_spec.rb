@@ -180,6 +180,10 @@ module Pod
         @config.should.clean
       end
 
+      it 'locks pod source files' do
+        @config.should.lock_pod_source
+      end
+
       it 'returns the cache root' do
         @config.cache_root.should == Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
       end

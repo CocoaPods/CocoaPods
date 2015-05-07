@@ -122,6 +122,7 @@ module Pod
         install_pod_sources
         run_pre_install_hooks
         clean_pod_sources
+        lock_pod_sources
       end
     end
 
@@ -314,6 +315,16 @@ module Pod
       return unless config.clean?
       return unless @pod_installers
       @pod_installers.each(&:clean!)
+    end
+
+    # Locks the sources of the Pods if the config instructs to do so.
+    #
+    # @todo Why the @pod_installers might be empty?
+    #
+    def lock_pod_sources
+      return unless config.lock_pod_source?
+      return unless @pod_installers
+      @pod_installers.each(&:lock_files!)
     end
 
     # Determines if the dependencies need to be built as dynamic frameworks or

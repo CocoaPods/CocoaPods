@@ -19,6 +19,7 @@ module Pod
 
       :clean               => true,
       :integrate_targets   => true,
+      :lock_pod_source     => true,
       :new_version_message => ENV['COCOAPODS_SKIP_UPDATE_MESSAGE'].nil?,
 
       :cache_root          => Pathname.new(Dir.home) + 'Library/Caches/CocoaPods',
@@ -70,6 +71,12 @@ module Pod
     #
     attr_accessor :clean
     alias_method :clean?, :clean
+
+    # @return [Bool] Whether the installer should remove write permissions for
+    #                installed pod source files after the installation.
+    #
+    attr_accessor :lock_pod_source
+    alias_method :lock_pod_source?, :lock_pod_source
 
     # @return [Bool] Whether CocoaPods should integrate a user target and build
     #         the workspace or just create the Pods project.

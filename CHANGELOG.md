@@ -4,6 +4,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* Allow opting out of pod source locking, meaning `pod try` yields editable
+  projects.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [cocoapods-try#31](https://github.com/CocoaPods/cocoapods-try/issues/31)
+
+
 ## 0.37.1
 
 ##### Bug Fixes

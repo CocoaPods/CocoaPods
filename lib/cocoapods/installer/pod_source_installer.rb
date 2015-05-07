@@ -44,7 +44,6 @@ module Pod
       def install!
         download_source unless predownloaded? || local?
         PodSourcePreparer.new(root_spec, root).prepare! if local?
-        lock_files!
       end
 
       # Cleans the installations if appropriate.
@@ -56,6 +55,17 @@ module Pod
       #
       def clean!
         clean_installation unless local?
+      end
+
+      # Locks the source files if appropriate.
+      #
+      # @todo   As the pre install hooks need to run before cleaning this
+      #         method should be refactored.
+      #
+      # @return [void]
+      #
+      def lock_files!
+        lock_installation unless local?
       end
 
       # @return [Hash]
@@ -95,11 +105,7 @@ module Pod
       #
       # @return [void]
       #
-      def lock_files!
-        if local?
-          return
-        end
-
+      def lock_installation
         # We don't want to lock diretories, as that forces you to override
         # those permissions if you decide to delete the Pods folder.
         Dir.glob(root + '**/*').each do |file|
