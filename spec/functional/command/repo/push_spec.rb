@@ -25,6 +25,12 @@ module Pod
       e.message.should.match(/Couldn't find any .podspec/)
     end
 
+    it "complains if it can't find the given podspec" do
+      repo_make('test_repo')
+      e = lambda { run_command('repo', 'push', 'test_repo', 'testspec.podspec') }.should.raise Pod::Informative
+      e.message.should.match(/Couldn't find testspec\.podspec/)
+    end
+
     it "it raises if the specification doesn't validate" do
       repo_make('test_repo')
       Dir.chdir(temporary_directory) do
