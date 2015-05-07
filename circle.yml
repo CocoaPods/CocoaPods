@@ -5,6 +5,9 @@ machine:
     version: 2.0.0-p481
   xcode:
     version: 6.3.1
+dependencies:
+  post:
+    - git submodule update --init
 test:
   override:
     - rake
