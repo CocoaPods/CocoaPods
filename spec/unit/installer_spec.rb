@@ -199,6 +199,13 @@ module Pod
         @installer = Installer.new(config.sandbox, @podfile, @lockfile)
         should.not.raise(Informative) { @installer.install! }
       end
+
+      it 'allows transitive static dependencies when both dependencies are linked against the user target' do
+        PodTarget.any_instance.stubs(:should_build? => false)
+        Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([Pathname('/libThing.a')])
+        @installer = Installer.new(config.sandbox, @podfile, @lockfile)
+        should.not.raise(Informative) { @installer.install! }
+      end
     end
 
     #-------------------------------------------------------------------------#

@@ -366,7 +366,7 @@ module Pod
         aggregate_target.user_build_configurations.keys.each do |config|
           pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
 
-          dependencies = pod_targets.flat_map(&:dependencies)
+          dependencies = pod_targets.reject { |t| !t.should_build? }.flat_map(&:dependencies)
           dependended_upon_targets = pod_targets.select { |t| dependencies.include?(t.pod_name) && !t.should_build? }
 
           static_libs = dependended_upon_targets.flat_map(&:file_accessors).flat_map do |fa|
