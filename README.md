@@ -2,7 +2,7 @@
 
 ### CocoaPods: The Cocoa dependency manager
 
-[![Build Status](http://img.shields.io/travis/CocoaPods/CocoaPods/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CocoaPods)
+[![Build Status](http://img.shields.io/circleci/project/CocoaPods/CocoaPods/master.svg?style=flat)](https://circleci.com/gh/CocoaPods/CocoaPods)
 [![Gem Version](http://img.shields.io/gem/v/cocoapods.svg?style=flat)](http://badge.fury.io/rb/cocoapods)
 [![Code Climate](http://img.shields.io/codeclimate/github/CocoaPods/CocoaPods.svg?style=flat)](https://codeclimate.com/github/CocoaPods/CocoaPods)
 
@@ -70,7 +70,7 @@ CocoaPods is composed of the following projects:
 
 | Status | Project | Description | Info |
 | :----- | :------ | :--- | :--- |
-| [![Build Status](http://img.shields.io/travis/CocoaPods/CocoaPods/master.svg?style=flat)](http://travis-ci.org/CocoaPods/CocoaPods) | [CocoaPods](https://github.com/CocoaPods/CocoaPods) | The CocoaPods command line tool. | [guides](https://guides.cocoapods.org)
+| [![Build Status](http://img.shields.io/circleci/project/CocoaPods/CocoaPods/master.svg?style=flat)](https://circleci.com/gh/CocoaPods/CocoaPods) | [CocoaPods](https://github.com/CocoaPods/CocoaPods) | The CocoaPods command line tool. | [guides](https://guides.cocoapods.org)
 | [![Build Status](http://img.shields.io/travis/CocoaPods/Core/master.svg?style=flat)](http://travis-ci.org/CocoaPods/Core) | [CocoaPods Core](https://github.com/CocoaPods/Core) | Support for working with specifications and podfiles. | [docs](http://docs.cocoapods.org/cocoapods_core)
 | [![Build Status](http://img.shields.io/travis/CocoaPods/cocoapods-downloader/master.svg?style=flat)](http://travis-ci.org/CocoaPods/cocoapods-downloader) |[CocoaPods Downloader](https://github.com/CocoaPods/cocoapods-downloader) |  Downloaders for various source types. |  [docs](http://docs.cocoapods.org/cocoapods_downloader/index.html)
 | [![Build Status](http://img.shields.io/travis/CocoaPods/Xcodeproj/master.svg?style=flat)](https://travis-ci.org/CocoaPods/Xcodeproj) | [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) | Create and modify Xcode projects from Ruby. |  [docs](http://docs.cocoapods.org/xcodeproj/index.html)
