@@ -13,6 +13,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [cocoapods-try#31](https://github.com/CocoaPods/cocoapods-try/issues/31)
 
+##### Bug Fixes
+
+* `pod repo push` will now find and push JSON podspecs.  
+  [#3494](https://github.com/CocoaPods/CocoaPods/issues/3494)
+  [Kyle Fuller](https://github.com/kylef)
+
 
 ## 0.37.1
 

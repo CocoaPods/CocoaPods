@@ -22,7 +22,7 @@ module Pod
     it "complains if it can't find a spec" do
       repo_make('test_repo')
       e = lambda { run_command('repo', 'push', 'test_repo') }.should.raise Pod::Informative
-      e.message.should.match(/Couldn't find any .podspec/)
+      e.message.should.match(/Couldn't find any podspec/)
     end
 
     it "complains if it can't find the given podspec" do
@@ -41,6 +41,16 @@ module Pod
 
         e = lambda { cmd.run }.should.raise Pod::Informative
         e.message.should.match(/Broken.podspec.*does not validate/)
+      end
+    end
+
+    it 'finds JSON podspecs' do
+      repo_make('test_repo')
+
+      Dir.chdir(temporary_directory) do
+        File.open('JSON.podspec.json',  'w') { |f| f.write('{}') }
+        cmd = command('repo', 'push', 'test_repo')
+        cmd.send(:podspec_files).should == [Pathname('JSON.podspec.json')]
       end
     end
 
