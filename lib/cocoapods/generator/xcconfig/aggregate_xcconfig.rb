@@ -57,13 +57,19 @@ module Pod
 
           if target.requires_frameworks?
             # Framework headers are automatically discoverable by `#import <…>`.
-            header_search_paths = pod_targets.map { |target| "$PODS_FRAMEWORK_BUILD_PATH/#{target.product_name}/Headers" }
+            header_search_paths = pod_targets.map do |target|
+              if target.scoped?
+                "$PODS_FRAMEWORK_BUILD_PATH/#{target.product_name}/Headers"
+              else
+                "$CONFIGURATION_BUILD_DIR/#{target.product_name}/Headers"
+              end
+            end
             build_settings = {
               'PODS_FRAMEWORK_BUILD_PATH' => target.configuration_build_dir,
               # Make headers discoverable by `import "…"`
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote'),
             }
-            if target.pod_targets.any?(&:should_build?)
+            if target.pod_targets.any? { |t| t.should_build? && t.scoped? }
               build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
             end
             config.merge!(build_settings)

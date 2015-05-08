@@ -3,13 +3,19 @@ module Pod
   # A pod can have one or more activated spec/subspecs.
   #
   class PodTarget < Target
-    # @return [Specification] the spec for the target.
+    # @return [Array<Specification>] the spec and subspecs for the target.
     #
     attr_reader :specs
 
     # @return [HeadersStore] the header directory for the target.
     #
     attr_reader :build_headers
+
+    # @return [Bool] whether the target needs to be scoped by target definition,
+    #         because the spec is used with different subspec sets across them.
+    #
+    attr_accessor :scoped
+    alias_method :scoped?, :scoped
 
     # @param [Specification] spec @see spec
     # @param [TargetDefinition] target_definition @see target_definition
@@ -27,7 +33,11 @@ module Pod
     # @return [String] the label for the target.
     #
     def label
-      "#{target_definition.label}-#{root_spec.name}"
+      if scoped?
+        "#{target_definition.label}-#{root_spec.name}"
+      else
+        root_spec.name
+      end
     end
 
     # @return [String] The name to use for the source code module constructed

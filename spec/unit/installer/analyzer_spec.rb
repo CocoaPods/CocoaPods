@@ -13,6 +13,11 @@ module Pod
           pod 'AFNetworking',                '1.0.1'
           pod 'SVPullToRefresh',             '0.4'
           pod 'libextobjc/EXTKeyPathCoding', '0.2.3'
+
+          target 'TestRunner' do
+            pod 'libextobjc/EXTKeyPathCoding', '0.2.3'
+            pod 'libextobjc/EXTSynthesize',    '0.2.3'
+          end
         end
 
         hash = {}
@@ -44,7 +49,7 @@ module Pod
 
       it 'computes the state of the Podfile respect to the Lockfile' do
         state = @analyzer.analyze.podfile_state
-        state.added.should     == %w(AFNetworking libextobjc/EXTKeyPathCoding)
+        state.added.should     == %w(AFNetworking libextobjc/EXTKeyPathCoding libextobjc/EXTSynthesize)
         state.changed.should   == %w()
         state.unchanged.should == %w(JSONKit SVPullToRefresh)
         state.deleted.should   == %w(NUI)
@@ -87,12 +92,12 @@ module Pod
 
       #--------------------------------------#
 
-      it 'generates the libraries which represent the target definitions' do
+      it 'generates the model to represent the target definitions' do
         target = @analyzer.analyze.targets.first
         target.pod_targets.map(&:name).sort.should == [
-          'Pods-JSONKit',
-          'Pods-AFNetworking',
-          'Pods-SVPullToRefresh',
+          'JSONKit',
+          'AFNetworking',
+          'SVPullToRefresh',
           'Pods-libextobjc',
         ].sort
         target.support_files_dir.should == config.sandbox.target_support_files_dir('Pods')
@@ -256,6 +261,7 @@ module Pod
           'JSONKit (1.5pre)',
           'SVPullToRefresh (0.4)',
           'libextobjc/EXTKeyPathCoding (0.2.3)',
+          'libextobjc/EXTSynthesize (0.2.3)',
         ]
       end
 
@@ -275,11 +281,18 @@ module Pod
       end
 
       it 'adds the specifications to the correspondent libraries' do
-        @analyzer.analyze.targets.first.pod_targets.map(&:specs).flatten.map(&:to_s).should == [
+        @analyzer.analyze.targets[0].pod_targets.map(&:specs).flatten.map(&:to_s).should == [
           'AFNetworking (1.0.1)',
           'JSONKit (1.5pre)',
           'SVPullToRefresh (0.4)',
           'libextobjc/EXTKeyPathCoding (0.2.3)',
+        ]
+        @analyzer.analyze.targets[1].pod_targets.map(&:specs).flatten.map(&:to_s).should == [
+          'AFNetworking (1.0.1)',
+          'JSONKit (1.5pre)',
+          'SVPullToRefresh (0.4)',
+          'libextobjc/EXTKeyPathCoding (0.2.3)',
+          'libextobjc/EXTSynthesize (0.2.3)',
         ]
       end
 

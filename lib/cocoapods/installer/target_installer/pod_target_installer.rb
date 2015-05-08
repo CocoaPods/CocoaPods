@@ -130,7 +130,7 @@ module Pod
 
             bundle_target.build_configurations.each do |c|
               c.build_settings['PRODUCT_NAME'] = bundle_name
-              if target.requires_frameworks?
+              if target.requires_frameworks? && target.scoped?
                 c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
               end
             end

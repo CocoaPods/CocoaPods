@@ -220,7 +220,7 @@ module Pod
       def generate_targets
         targets = []
         result.specs_by_target.each do |target_definition, specs|
-          targets << generate_target(target_definition, specs)
+          targets << generate_target(target_definition, specs, targets.map(&:pod_targets).flatten)
         end
         targets
       end
@@ -234,9 +234,12 @@ module Pod
       #         the specifications that need to be installed grouped by the
       #         given target definition.
       #
+      # @param  [Array<PodTarget>] pod_targets
+      #         the pod targets, which were generated so far.
+      #
       # @return [AggregateTarget]
       #
-      def generate_target(target_definition, specs)
+      def generate_target(target_definition, specs, pod_targets)
         target = AggregateTarget.new(target_definition, sandbox)
         target.host_requires_frameworks |= target_definition.uses_frameworks?
 
@@ -259,7 +262,7 @@ module Pod
           end
         end
 
-        target.pod_targets = generate_pod_targets(target, specs)
+        target.pod_targets = generate_pod_targets(target, specs, pod_targets)
 
         target
       end
@@ -273,12 +276,29 @@ module Pod
       # @param  [Array<Specification>] specs
       #         the specifications that need to be installed.
       #
+      # @param  [Array<PodTarget>] pod_targets
+      #         the pod targets, which were generated so far.
+      #
       # @return [Array<PodTarget>]
       #
-      def generate_pod_targets(target, specs)
+      def generate_pod_targets(target, specs, pod_targets)
         grouped_specs = specs.group_by(&:root).values.uniq
         grouped_specs.map do |pod_specs|
-          generate_pod_target(target, pod_specs)
+          # If there are no or already multiple pod targets with a common root,
+          # or the one which exists differs in the activated subspec set, then
+          # we need to generate another pod target
+          root_spec = pod_specs.first.root
+          common_root_pod_targets = pod_targets.select { |t| t.root_spec == root_spec  }
+          if common_root_pod_targets.count != 1 || common_root_pod_targets.first.specs != pod_specs
+            pod_target = generate_pod_target(target, pod_specs)
+            unless common_root_pod_targets.empty?
+              common_root_pod_targets.each { |t| t.scoped = true }
+              pod_target.scoped = true
+            end
+            pod_target
+          else
+            common_root_pod_targets.first
+          end
         end
       end
 
