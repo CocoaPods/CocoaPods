@@ -8,6 +8,9 @@ machine:
 checkout:
   post:
     - git submodule update --init
+dependencies:
+  override:
+    - bundle install
 test:
   override:
     - rake
