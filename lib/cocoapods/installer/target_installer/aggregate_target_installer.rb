@@ -140,9 +140,11 @@ module Pod
         target.user_build_configurations.keys.each do |config|
           frameworks_by_config[config] = target.pod_targets.select do |pod_target|
             pod_target.include_in_build_config?(config) && pod_target.should_build?
-          end.map(&:product_name)
+          end.map do |pod_target|
+            "#{target_definition.label}/#{pod_target.product_name}"
+          end
         end
-        generator = Generator::EmbedFrameworksScript.new(target_definition, frameworks_by_config)
+        generator = Generator::EmbedFrameworksScript.new(frameworks_by_config)
         generator.save_as(path)
         add_file_to_support_group(path)
       end
