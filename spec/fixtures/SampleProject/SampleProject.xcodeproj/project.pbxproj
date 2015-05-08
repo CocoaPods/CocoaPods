@@ -553,6 +553,7 @@
 				51D6A8AF16C445B800E174E1 /* App Store */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A346496714F9BE990080D870 /* Build configuration list for PBXProject "SampleProject" */ = {
 			isa = XCConfigurationList;
