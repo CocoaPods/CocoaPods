@@ -284,20 +284,24 @@ module Pod
       def generate_pod_targets(target, specs, pod_targets)
         grouped_specs = specs.group_by(&:root).values.uniq
         grouped_specs.map do |pod_specs|
-          # If there are no or already multiple pod targets with a common root,
-          # or the one which exists differs in the activated subspec set, then
-          # we need to generate another pod target
-          root_spec = pod_specs.first.root
-          common_root_pod_targets = pod_targets.select { |t| t.root_spec == root_spec  }
-          if common_root_pod_targets.count != 1 || common_root_pod_targets.first.specs != pod_specs
-            pod_target = generate_pod_target(target, pod_specs)
-            unless common_root_pod_targets.empty?
-              common_root_pod_targets.each { |t| t.scoped = true }
-              pod_target.scoped = true
+          if config.deduplicate_targets?
+            # If there are no or already multiple pod targets with a common root,
+            # or the one which exists differs in the activated subspec set, then
+            # we need to generate another pod target
+            root_spec = pod_specs.first.root
+            common_root_pod_targets = pod_targets.select { |t| t.root_spec == root_spec  }
+            if common_root_pod_targets.count != 1 || common_root_pod_targets.first.specs != pod_specs
+              pod_target = generate_pod_target(target, pod_specs)
+              unless common_root_pod_targets.empty?
+                common_root_pod_targets.each { |t| t.scoped = true }
+                pod_target.scoped = true
+              end
+              pod_target
+            else
+              common_root_pod_targets.first
             end
-            pod_target
           else
-            common_root_pod_targets.first
+            generate_pod_target(target, pod_specs).scoped
           end
         end
       end

@@ -184,6 +184,14 @@ module Pod
         @config.should.lock_pod_source
       end
 
+      it 'integrates a user target' do
+        @config.should.integrate_targets
+      end
+
+      it 'de-duplicates targets' do
+        @config.should.deduplicate_targets
+      end
+
       it 'returns the cache root' do
         @config.cache_root.should == Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
       end
