@@ -14,7 +14,7 @@ module Pod
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc
         framework module BananaLib {
-          umbrella header "Pods-default-BananaLib-umbrella.h"
+          umbrella header "BananaLib-umbrella.h"
 
           export *
           module * { export * }
@@ -26,7 +26,7 @@ module Pod
       @gen.stubs(:private_headers).returns(['Private.h'])
       @gen.generate.should == <<-EOS.strip_heredoc
         framework module BananaLib {
-          umbrella header "Pods-default-BananaLib-umbrella.h"
+          umbrella header "BananaLib-umbrella.h"
 
           export *
           module * { export * }

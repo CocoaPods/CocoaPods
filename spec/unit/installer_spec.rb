@@ -130,6 +130,10 @@ module Pod
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+
+          target 'TestRunner', :exclusive => true do
+            pod 'monkey',        :path => (fixture_path + 'monkey').to_s
+          end
         end
         lockfile = generate_lockfile
         config.integrate_targets = false
@@ -140,9 +144,9 @@ module Pod
         target = @installer.aggregate_targets.first
         target.requires_frameworks?.should == true
         target.pod_targets.select(&:requires_frameworks?).map(&:name).sort.should == [
-          'Pods-BananaLib',
-          'Pods-OrangeFramework',
-          'Pods-monkey',
+          'BananaLib',
+          'OrangeFramework',
+          'monkey',
         ]
       end
     end
@@ -261,7 +265,7 @@ module Pod
         it 'stores the targets created by the analyzer' do
           @installer.send(:analyze)
           @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
-          @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
+          @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
 
         it 'configures the analyzer to use update mode if appropriate' do
@@ -269,7 +273,7 @@ module Pod
           Installer::Analyzer.any_instance.expects(:update=).with(true)
           @installer.send(:analyze)
           @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
-          @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
+          @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
       end
 

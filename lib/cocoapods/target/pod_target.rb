@@ -30,6 +30,14 @@ module Pod
       @resource_bundle_targets = []
     end
 
+    # @return [PodTarget] the same target, but scoped.
+    #
+    def scoped
+      clone.tap do |scoped_target|
+        scoped_target.scoped = true
+      end
+    end
+
     # @return [String] the label for the target.
     #
     def label

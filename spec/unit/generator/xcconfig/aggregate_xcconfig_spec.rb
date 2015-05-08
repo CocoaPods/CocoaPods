@@ -8,9 +8,13 @@ module Pod
           fixture_spec('banana-lib/BananaLib.podspec')
         end
 
+        def pod_target(spec)
+          fixture_pod_target(spec)
+        end
+
         before do
           @spec = spec
-          @pod_target = fixture_pod_target(@spec)
+          @pod_target = pod_target(@spec)
           @consumer = @pod_target.spec_consumers.last
           @target = fixture_aggregate_target([@pod_target])
           @target.target_definition.should == @pod_target.target_definition
@@ -103,8 +107,20 @@ module Pod
             @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
           end
 
-          it 'links the pod targets with the aggregate target' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"Pods-BananaLib"'
+          describe 'with a scoped pod target' do
+            def pod_target(spec)
+              fixture_pod_target(spec).scoped
+            end
+
+            it 'links the pod targets with the aggregate target' do
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"Pods-BananaLib"'
+            end
+          end
+
+          describe 'with an unscoped pod target' do
+            it 'links the pod targets with the aggregate target' do
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaLib"'
+            end
           end
 
           it 'does not links the pod targets with the aggregate target for non-whitelisted configuration' do
@@ -139,13 +155,30 @@ module Pod
             @xcconfig.to_hash['PODS_FRAMEWORK_BUILD_PATH'].should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
           end
 
-          it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
+          describe 'with a scoped pod target' do
+            def pod_target(spec)
+              fixture_pod_target(spec).scoped
+            end
+
+            it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
+            end
+
+            it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
+              expected = '$(inherited) -iquote "$PODS_FRAMEWORK_BUILD_PATH/OrangeFramework.framework/Headers"'
+              @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
+            end
           end
 
-          it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
-            expected = '$(inherited) -iquote "$PODS_FRAMEWORK_BUILD_PATH/OrangeFramework.framework/Headers"'
-            @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
+          describe 'with an unscoped pod target' do
+            it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil
+            end
+
+            it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
+              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework.framework/Headers"'
+              @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
+            end
           end
 
           it 'links the pod targets with the aggregate target' do
