@@ -10,6 +10,7 @@ checkout:
     - git submodule update --init
 dependencies:
   override:
+    - brew install mercurial
     - bundle install
 test:
   override:
