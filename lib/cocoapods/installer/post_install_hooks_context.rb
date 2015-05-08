@@ -3,7 +3,7 @@ module Pod
     # Context object designed to be used with the HooksManager which describes
     # the context of the installer.
     #
-    class HooksContext
+    class PostInstallHooksContext
       # @return [String] The path to the sandbox root (`Pods` directory).
       #
       attr_accessor :sandbox_root
@@ -13,7 +13,7 @@ module Pod
       #
       attr_accessor :umbrella_targets
 
-      # @return [HooksContext] Convenience class method to generate the
+      # @return [PostInstallHooksContext] Convenience class method to generate the
       #         static context.
       #
       def self.generate(sandbox, aggregate_targets)

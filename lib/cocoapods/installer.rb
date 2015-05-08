@@ -31,7 +31,8 @@ module Pod
     autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
     autoload :Analyzer,                 'cocoapods/installer/analyzer'
     autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
-    autoload :HooksContext,             'cocoapods/installer/hooks_context'
+    autoload :PostInstallHooksContext,  'cocoapods/installer/post_install_hooks_context'
+    autoload :PreInstallHooksContext,   'cocoapods/installer/pre_install_hooks_context'
     autoload :Migrator,                 'cocoapods/installer/migrator'
     autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
     autoload :PodSourcePreparer,        'cocoapods/installer/pod_source_preparer'
@@ -104,6 +105,7 @@ module Pod
         sandbox.prepare
         ensure_plugins_are_installed!
         Migrator.migrate(sandbox)
+        run_plugins_pre_install_hooks
       end
     end
 
@@ -120,7 +122,7 @@ module Pod
       UI.section 'Downloading dependencies' do
         create_file_accessors
         install_pod_sources
-        run_pre_install_hooks
+        run_podfile_pre_install_hooks
         clean_pod_sources
         lock_pod_sources
       end
@@ -397,7 +399,16 @@ module Pod
         end
       end
     end
-
+    
+    # Runs the registered callbacks for the plugins pre install hooks.
+    #
+    # @return [void]
+    #
+    def run_plugins_pre_install_hooks
+      context = PreInstallHooksContext.generate(sandbox, podfile, lockfile)
+      HooksManager.run(:pre_install, context, podfile.plugins)
+    end
+    
     # Performs any post-installation actions
     #
     # @return [void]
@@ -410,7 +421,7 @@ module Pod
     # Runs the registered callbacks for the plugins post install hooks.
     #
     def run_plugins_post_install_hooks
-      context = HooksContext.generate(sandbox, aggregate_targets)
+      context = PostInstallHooksContext.generate(sandbox, aggregate_targets)
       HooksManager.run(:post_install, context, podfile.plugins)
     end
 
@@ -652,7 +663,7 @@ module Pod
     #
     # @return [void]
     #
-    def run_pre_install_hooks
+    def run_podfile_pre_install_hooks
       UI.message '- Running pre install hooks' do
         executed = run_podfile_pre_install_hook
         UI.message '- Podfile' if executed

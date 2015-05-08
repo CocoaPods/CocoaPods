@@ -2,7 +2,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
-  describe Installer::HooksContext do
+  describe Installer::PostInstallHooksContext do
     it 'offers a convenience method to be generated' do
       sandbox = stub(:root => '/path')
 
@@ -15,8 +15,8 @@ module Pod
       umbrella.stubs(:platform).returns(Platform.new(:ios, '8.0'))
       umbrella.pod_targets = [pod_target]
 
-      result = Installer::HooksContext.generate(sandbox, [umbrella])
-      result.class.should == Installer::HooksContext
+      result = Installer::PostInstallHooksContext.generate(sandbox, [umbrella])
+      result.class.should == Installer::PostInstallHooksContext
       result.sandbox_root.should == '/path'
       result.umbrella_targets.count.should == 1
       umbrella_target = result.umbrella_targets.first
