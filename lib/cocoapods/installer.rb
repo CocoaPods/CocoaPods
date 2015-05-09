@@ -179,7 +179,7 @@ module Pod
     #         generated as result of the analyzer.
     #
     def pod_targets
-      aggregate_targets.map(&:pod_targets).flatten
+      aggregate_targets.map(&:pod_targets).flatten.uniq
     end
 
     # @return [Array<Specification>] The specifications that where installed.
@@ -212,9 +212,11 @@ module Pod
     # @raise  If an unknown user configuration is found.
     #
     def validate_build_configurations
-      whitelisted_configs = pod_targets.map do |target|
-        target.target_definition.all_whitelisted_configurations.map(&:downcase)
-      end.flatten.uniq
+      whitelisted_configs = pod_targets.
+        flat_map(&:target_definitions).
+        flat_map(&:all_whitelisted_configurations).
+        map(&:downcase).
+        uniq
       all_user_configurations = analysis_result.all_user_build_configurations.keys.map(&:downcase)
 
       remainder = whitelisted_configs - all_user_configurations
@@ -537,7 +539,7 @@ module Pod
     def install_libraries
       UI.message '- Installing targets' do
         pod_targets.sort_by(&:name).each do |pod_target|
-          next if pod_target.target_definition.dependencies.empty?
+          next if pod_target.target_definitions.flat_map(&:dependencies).empty?
           target_installer = PodTargetInstaller.new(sandbox, pod_target)
           target_installer.install!
         end
