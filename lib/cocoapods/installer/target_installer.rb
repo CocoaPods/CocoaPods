@@ -184,12 +184,6 @@ module Pod
         sandbox.project
       end
 
-      # @return [TargetDefinition] the target definition of the library.
-      #
-      def target_definition
-        target.target_definition
-      end
-
       # @return [PBXGroup] the group where the file references to the support
       #         files should be stored.
       #

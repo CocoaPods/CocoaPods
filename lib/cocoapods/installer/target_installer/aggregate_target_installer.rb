@@ -31,6 +31,12 @@ module Pod
 
       private
 
+      # @return [TargetDefinition] the target definition of the library.
+      #
+      def target_definition
+        target.target_definition
+      end
+
       # Ensure that vendored static frameworks and libraries are not linked
       # twice to the aggregate target, which shares the xcconfig of the user
       # target.
