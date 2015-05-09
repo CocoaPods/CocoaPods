@@ -152,6 +152,29 @@ module Pod
       end
     end
 
+    # Checks if warnings should be inhibited for this pod.
+    #
+    # @return [Bool]
+    #
+    def inhibit_warnings?
+      whitelists = target_definitions.map do |target_definition|
+        target_definition.inhibits_warnings_for_pod?(root_spec.name)
+      end.uniq
+
+      if whitelists.empty?
+        return false
+      elsif whitelists.count == 1
+        whitelists.first
+      else
+        UI.warn "The pod `#{pod_name}` is linked to different targets " \
+          "(#{target_definitions.map(&:label)}), which contain different " \
+          'settings to inhibit warnings. CocoaPods does not currently ' \
+          'support different settings and will fall back to your preference ' \
+          'set in the root target definition.'
+        return podfile.root_target_definitions.first.inhibits_warnings_for_pod?(root_spec.name)
+      end
+    end
+
     private
 
     # @param  [TargetDefinition] target_definition

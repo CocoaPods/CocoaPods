@@ -234,7 +234,7 @@ module Pod
             flags << '-DOS_OBJECT_USE_OBJC=0'
           end
         end
-        if target_definition.inhibits_warnings_for_pod?(consumer.spec.root.name)
+        if target.inhibit_warnings?
           flags << '-w -Xanalyzer -analyzer-disable-all-checks'
         end
         flags * ' '
