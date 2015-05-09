@@ -18,12 +18,12 @@ module Pod
     alias_method :scoped?, :scoped
 
     # @param [Specification] spec @see spec
-    # @param [TargetDefinition] target_definition @see target_definition
+    # @param [Array<TargetDefinition>] target_definitions @see target_definitions
     # @param [Sandbox] sandbox @see sandbox
     #
-    def initialize(specs, target_definition, sandbox)
+    def initialize(specs, target_definitions, sandbox)
       @specs = specs
-      @target_definition = target_definition
+      @target_definitions = target_definitions
       @sandbox = sandbox
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []

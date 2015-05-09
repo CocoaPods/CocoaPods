@@ -125,7 +125,7 @@ def fixture_pod_target(spec_or_name, platform = :ios, target_definition = nil)
   spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
   target_definition ||= fixture_target_definition
   target_definition.store_pod(spec.name)
-  Pod::PodTarget.new([spec], target_definition, config.sandbox).tap do |pod_target|
+  Pod::PodTarget.new([spec], [target_definition], config.sandbox).tap do |pod_target|
     pod_target.stubs(:platform).returns(platform)
     pod_target.file_accessors << fixture_file_accessor(spec.defined_in_file, platform)
     consumer = spec.consumer(platform)

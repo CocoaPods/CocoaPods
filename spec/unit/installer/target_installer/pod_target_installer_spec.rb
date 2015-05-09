@@ -25,7 +25,7 @@ module Pod
           @project.add_file_reference(resource, group)
         end
 
-        @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
+        @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
         @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         @pod_target.file_accessors = [file_accessor]
         @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }

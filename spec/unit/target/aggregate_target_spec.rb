@@ -88,7 +88,7 @@ module Pod
       before do
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
+        @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
         @target = AggregateTarget.new(@target_definition, config.sandbox)
         @target.stubs(:platform).returns(:ios)
         @target.pod_targets = [@pod_target]
@@ -96,7 +96,7 @@ module Pod
 
       describe 'with configuration dependent pod targets' do
         before do
-          @pod_target_release = PodTarget.new([@spec], @target_definition, config.sandbox)
+          @pod_target_release = PodTarget.new([@spec], [@target_definition], config.sandbox)
           @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Debug').returns(false)
           @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Release').returns(true)
           @target.pod_targets = [@pod_target, @pod_target_release]

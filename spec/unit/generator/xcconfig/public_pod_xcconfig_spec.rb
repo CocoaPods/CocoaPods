@@ -7,7 +7,7 @@ module Pod
         before do
           @spec = fixture_spec('banana-lib/BananaLib.podspec')
           @target_definition = Podfile::TargetDefinition.new('Pods', nil)
-          @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
+          @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
           @pod_target.stubs(:platform).returns(:ios)
           @generator = PublicPodXCConfig.new(@pod_target)
 

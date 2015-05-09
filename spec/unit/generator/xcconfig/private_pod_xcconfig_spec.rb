@@ -9,7 +9,7 @@ module Pod
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
             @consumer = @spec.consumer(:ios)
             target_definition = Podfile::TargetDefinition.new('Pods', nil)
-            @pod_target = PodTarget.new([@spec], target_definition, config.sandbox)
+            @pod_target = PodTarget.new([@spec], [target_definition], config.sandbox)
             @pod_target.stubs(:platform).returns(:ios)
             public_xcconfig = Xcodeproj::Config.new('OTHER_LDFLAGS' => '-framework SystemConfiguration')
             @generator = PrivatePodXCConfig.new(@pod_target, public_xcconfig)

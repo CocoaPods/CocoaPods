@@ -8,7 +8,7 @@ module Pod
 
       spec = fixture_spec('banana-lib/BananaLib.podspec')
       target_definition = Podfile::TargetDefinition.new('Pods', nil)
-      pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+      pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
       umbrella = AggregateTarget.new(target_definition, config.sandbox)
       umbrella.user_project_path = '/path/project.xcodeproj'
       umbrella.user_target_uuids = ['UUID']
