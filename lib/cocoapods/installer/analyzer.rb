@@ -289,7 +289,9 @@ module Pod
             # or the one which exists differs in the activated subspec set, then
             # we need to generate another pod target
             root_spec = pod_specs.first.root
-            common_root_pod_targets = pod_targets.select { |t| t.root_spec == root_spec  }
+            common_root_pod_targets = pod_targets.
+                select { |t| t.platform == target.platform }.
+                select { |t| t.root_spec == root_spec  }
             if common_root_pod_targets.count != 1 || common_root_pod_targets.first.specs != pod_specs
               pod_target = generate_pod_target(target, pod_specs)
               unless common_root_pod_targets.empty?
