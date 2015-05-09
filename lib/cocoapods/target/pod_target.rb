@@ -48,6 +48,12 @@ module Pod
       end
     end
 
+    # @return [Platform] the platform for this target.
+    #
+    def platform
+      @platform ||= target_definitions.first.platform
+    end
+
     # @return [Podfile] The podfile which declares the dependency.
     #
     def podfile

@@ -18,7 +18,7 @@ module Pod
       #         @see target
       #
       def initialize(target)
-        super(target.target_definition.platform)
+        super(target.platform)
         @target = target
       end
 

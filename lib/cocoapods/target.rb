@@ -110,12 +110,6 @@ module Pod
     #
     attr_accessor :native_target
 
-    # @return [Platform] the platform for this library.
-    #
-    def platform
-      @platform ||= target_definition.platform
-    end
-
     # @return [String] The value for the ARCHS build setting.
     #
     attr_accessor :archs

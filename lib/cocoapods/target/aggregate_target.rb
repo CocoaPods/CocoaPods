@@ -30,6 +30,12 @@ module Pod
       c99ext_identifier(label)
     end
 
+    # @return [Platform] the platform for this target.
+    #
+    def platform
+      @platform ||= target_definition.platform
+    end
+
     # @return [Podfile] The podfile which declares the dependency
     #
     def podfile
