@@ -94,7 +94,7 @@ module Pod
     #
     def pod_targets_for_build_configuration(build_configuration)
       pod_targets.select do |pod_target|
-        pod_target.include_in_build_config?(build_configuration)
+        pod_target.include_in_build_config?(target_definition, build_configuration)
       end
     end
 

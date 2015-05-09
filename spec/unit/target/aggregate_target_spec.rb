@@ -97,8 +97,8 @@ module Pod
       describe 'with configuration dependent pod targets' do
         before do
           @pod_target_release = PodTarget.new([@spec], @target_definition, config.sandbox)
-          @pod_target_release.expects(:include_in_build_config?).with('Debug').returns(false)
-          @pod_target_release.expects(:include_in_build_config?).with('Release').returns(true)
+          @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Debug').returns(false)
+          @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Release').returns(true)
           @target.pod_targets = [@pod_target, @pod_target_release]
           @target.user_build_configurations = {
             'Debug' => :debug,

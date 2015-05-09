@@ -101,7 +101,7 @@ module Pod
         end
         resources_by_config = {}
         target.user_build_configurations.keys.each do |config|
-          file_accessors = library_targets.select { |t| t.include_in_build_config?(config) }.flat_map(&:file_accessors)
+          file_accessors = library_targets.select { |t| t.include_in_build_config?(target_definition, config) }.flat_map(&:file_accessors)
           resource_paths = file_accessors.flat_map { |accessor| accessor.resources.flat_map { |res| res.relative_path_from(project.path.dirname) } }
           resource_bundles = file_accessors.flat_map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name.shellescape}.bundle" } }
           resources_by_config[config] = (resource_paths + resource_bundles).uniq
@@ -139,7 +139,7 @@ module Pod
         frameworks_by_config = {}
         target.user_build_configurations.keys.each do |config|
           frameworks_by_config[config] = target.pod_targets.select do |pod_target|
-            pod_target.include_in_build_config?(config) && pod_target.should_build?
+            pod_target.include_in_build_config?(target_definition, config) && pod_target.should_build?
           end.map do |pod_target|
             "#{target_definition.label}/#{pod_target.product_name}"
           end

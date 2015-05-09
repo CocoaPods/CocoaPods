@@ -121,13 +121,16 @@ module Pod
     end
 
     # Checks if the target should be included in the build configuration with
-    # the given name.
+    # the given name of a given target definition.
+    #
+    # @param  [TargetDefinition] target_definition
+    #         The target definition to check.
     #
     # @param  [String] configuration_name
     #         The name of the build configuration.
     #
-    def include_in_build_config?(configuration_name)
-      whitelists = target_definition_dependencies.map do |dependency|
+    def include_in_build_config?(target_definition, configuration_name)
+      whitelists = target_definition_dependencies(target_definition).map do |dependency|
         target_definition.pod_whitelisted_for_configuration?(dependency.name, configuration_name)
       end.uniq
 
@@ -145,12 +148,15 @@ module Pod
 
     private
 
+    # @param  [TargetDefinition] target_definition
+    #         The target definition to check.
+    #
     # @return [Array<Dependency>] The dependency of the target definition for
     #         this Pod. Return an empty array if the Pod is not a direct
     #         dependency of the target definition but the dependency of one or
     #         more Pods.
     #
-    def target_definition_dependencies
+    def target_definition_dependencies(target_definition)
       target_definition.dependencies.select do |dependency|
         Specification.root_name(dependency.name) == pod_name
       end
