@@ -81,7 +81,7 @@ module Pod
       # @return [void]
       #
       def create_bridge_support_file
-        if target_definition.podfile.generate_bridge_support?
+        if target.podfile.generate_bridge_support?
           path = target.bridge_support_path
           headers = native_target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }
           generator = Generator::BridgeSupport.new(headers)

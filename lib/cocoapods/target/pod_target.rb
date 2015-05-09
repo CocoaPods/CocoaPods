@@ -48,6 +48,12 @@ module Pod
       end
     end
 
+    # @return [Podfile] The podfile which declares the dependency.
+    #
+    def podfile
+      target_definitions.first.podfile
+    end
+
     # @return [String] The name to use for the source code module constructed
     #         for this target, and which will be used to import the module in
     #         implementation source files.
