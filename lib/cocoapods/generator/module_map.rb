@@ -6,17 +6,17 @@ module Pod
     # with existing headers of the podspec.
     #
     class ModuleMap
-      # @return [Target] the target represented by this Info.plist.
+      # @return [PodTarget] the target represented by this Info.plist.
       #
       attr_reader :target
 
-      # @return [Array] the private headers of the module
+      # @return [Array<#to_s>] the private headers of the module
       #
       attr_accessor :private_headers
 
       # Initialize a new instance
       #
-      # @param  [Target] target @see target
+      # @param  [PodTarget] target @see target
       #
       def initialize(target)
         @target = target

@@ -14,13 +14,13 @@ module Pod
         #
         EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle].freeze
 
-        # @return [Target] the target that should be integrated.
+        # @return [AggregateTarget] the target that should be integrated.
         #
         attr_reader :target
 
         # Init a new TargetIntegrator
         #
-        # @param  [Target] target @see #target_definition
+        # @param  [AggregateTarget] target @see #target
         #
         def initialize(target)
           @target = target

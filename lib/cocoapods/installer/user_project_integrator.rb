@@ -33,7 +33,7 @@ module Pod
       #
       attr_reader :installation_root
 
-      # @return [Array<Target>] the targets represented in the Podfile.
+      # @return [Array<AggregateTarget>] the targets represented in the Podfile.
       #
       attr_reader :targets
 
@@ -42,7 +42,7 @@ module Pod
       # @param  [Podfile]  podfile @see #podfile
       # @param  [Sandbox]  sandbox @see #sandbox
       # @param  [Pathname] installation_root @see #installation_root
-      # @param  [Target]   targets @see #targets
+      # @param  [Array<AggregateTarget>]  targets @see #targets
       #
       # @todo   Too many initialization arguments
       #
