@@ -109,10 +109,9 @@ def fixture_spec(name)
   Pod::Specification.from_file(file)
 end
 
-def fixture_file_accessor(name, platform = :ios)
-  file = SpecHelper::Fixture.fixture(name)
-  spec = Pod::Specification.from_file(file)
-  path_list = Pod::Sandbox::PathList.new(file.dirname)
+def fixture_file_accessor(spec_or_name, platform = :ios)
+  spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
+  path_list = Pod::Sandbox::PathList.new(spec.defined_in_file.dirname)
   Pod::Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
 end
 
@@ -127,7 +126,7 @@ def fixture_pod_target(spec_or_name, platform = :ios, target_definition = nil)
   target_definition.store_pod(spec.name)
   Pod::PodTarget.new([spec], [target_definition], config.sandbox).tap do |pod_target|
     pod_target.stubs(:platform).returns(platform)
-    pod_target.file_accessors << fixture_file_accessor(spec.defined_in_file, platform)
+    pod_target.file_accessors << fixture_file_accessor(spec, platform)
     consumer = spec.consumer(platform)
     pod_target.spec_consumers << consumer
   end
