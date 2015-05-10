@@ -463,8 +463,9 @@ module Pod
         end
 
         it 'sets the deployment target for the whole project' do
-          pod_target_ios = PodTarget.new([], nil, config.sandbox)
-          pod_target_osx = PodTarget.new([], nil, config.sandbox)
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          pod_target_ios = PodTarget.new([spec], nil, config.sandbox)
+          pod_target_osx = PodTarget.new([spec], nil, config.sandbox)
           pod_target_ios.stubs(:platform).returns(Platform.new(:ios, '6.0'))
           pod_target_osx.stubs(:platform).returns(Platform.new(:osx, '10.8'))
           aggregate_target_ios = AggregateTarget.new(nil, config.sandbox)

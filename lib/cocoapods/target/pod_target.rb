@@ -28,6 +28,7 @@ module Pod
     # @param [Bool] scoped @see scoped
     #
     def initialize(specs, target_definitions, sandbox, scoped = false)
+      raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
       @specs = specs
       @target_definitions = target_definitions
       @sandbox = sandbox
