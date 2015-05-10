@@ -22,7 +22,7 @@ module Pod
     attr_accessor :scoped
     alias_method :scoped?, :scoped
 
-    # @param [Specification] spec @see spec
+    # @param [Array<Specification>] @spec #see spec
     # @param [Array<TargetDefinition>] target_definitions @see target_definitions
     # @param [Sandbox] sandbox @see sandbox
     # @param [Bool] scoped @see scoped
