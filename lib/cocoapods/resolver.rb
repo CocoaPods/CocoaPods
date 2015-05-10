@@ -70,13 +70,12 @@ module Pod
     def specs_by_target
       @specs_by_target ||= {}.tap do |specs_by_target|
         podfile.target_definition_list.each do |target|
-          specs = target.dependencies.map(&:name).map do |name|
+          specs = target.dependencies.map(&:name).flat_map do |name|
             node = @activated.vertex_named(name)
             valid_dependencies_for_target_from_node(target, node) << node
           end
 
           specs_by_target[target] = specs.
-            flatten.
             map(&:payload).
             uniq.
             sort_by(&:name)
