@@ -3,10 +3,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Installer::FileReferencesInstaller do
     before do
-      @file_accessor = fixture_file_accessor('banana-lib/BananaLib.podspec')
-      @pod_target = PodTarget.new([], nil, config.sandbox)
-      @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-      @pod_target.file_accessors = [@file_accessor]
+      @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+      @file_accessor = @pod_target.file_accessors.first
       @project = Project.new(config.sandbox.project_path)
       @project.add_pod_group('BananaLib', fixture('banana-lib'))
       @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)

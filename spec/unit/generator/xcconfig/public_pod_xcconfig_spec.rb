@@ -6,22 +6,15 @@ module Pod
       describe PublicPodXCConfig do
         before do
           @spec = fixture_spec('banana-lib/BananaLib.podspec')
-          @target_definition = Podfile::TargetDefinition.new('Pods', nil)
-          @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
-          @pod_target.stubs(:platform).returns(:ios)
+          @pod_target = fixture_pod_target(@spec)
           @generator = PublicPodXCConfig.new(@pod_target)
 
-          @podfile = Podfile.new
           @spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
           @spec.frameworks = ['QuartzCore']
           @spec.weak_frameworks = ['iAd']
           @spec.libraries = ['xml2']
-          file_accessors = [Sandbox::FileAccessor.new(fixture('banana-lib'), @spec.consumer(:ios))]
           # vendored_framework_paths = [config.sandbox.root + 'BananaLib/BananaLib.framework']
           # Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks).returns(vendored_framework_paths)
-
-          @pod_target.target_definition.stubs(:podfile).returns(@podfile)
-          @pod_target.stubs(:file_accessors).returns(file_accessors)
 
           @xcconfig = @generator.generate
         end

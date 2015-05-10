@@ -7,14 +7,11 @@ module Pod
         describe 'in general' do
           before do
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
-            @consumer = @spec.consumer(:ios)
-            target_definition = Podfile::TargetDefinition.new('Pods', nil)
-            @pod_target = PodTarget.new([@spec], [target_definition], config.sandbox)
-            @pod_target.stubs(:platform).returns(:ios)
+            @pod_target = fixture_pod_target(@spec)
+            @consumer = @pod_target.spec_consumers.first
+            @podfile = @pod_target.podfile
             public_xcconfig = Xcodeproj::Config.new('OTHER_LDFLAGS' => '-framework SystemConfiguration')
             @generator = PrivatePodXCConfig.new(@pod_target, public_xcconfig)
-            @podfile = Podfile.new
-            @pod_target.target_definition.stubs(:podfile).returns(@podfile)
             @xcconfig = @generator.generate
           end
 
