@@ -10,6 +10,8 @@ module Pod
       autoload :SandboxAnalyzer,           'cocoapods/installer/analyzer/sandbox_analyzer'
       autoload :SpecsState,                'cocoapods/installer/analyzer/specs_state'
       autoload :LockingDependencyAnalyzer, 'cocoapods/installer/analyzer/locking_dependency_analyzer'
+      autoload :TargetInspectionResult,    'cocoapods/installer/analyzer/target_inspection_result'
+      autoload :TargetInspector,           'cocoapods/installer/analyzer/target_inspector'
 
       # @return [Sandbox] The sandbox where the Pods should be installed.
       #
@@ -38,7 +40,6 @@ module Pod
 
         @update = false
         @allow_pre_downloads = true
-        @archs_by_target_def = {}
       end
 
       # Performs the analysis.
@@ -56,7 +57,11 @@ module Pod
         validate_podfile!
         validate_lockfile_version!
         @result = AnalysisResult.new
-        inspect_targets_to_integrate
+        if config.integrate_targets?
+          @result.target_inspections = inspect_targets_to_integrate
+        else
+          check_platform_specifications
+        end
         @result.podfile_state = generate_podfile_state
         @locked_dependencies  = generate_version_locking_dependencies
 
@@ -245,15 +250,12 @@ module Pod
         target.host_requires_frameworks |= target_definition.uses_frameworks?
 
         if config.integrate_targets?
-          project_path = compute_user_project_path(target_definition)
-          user_project = Xcodeproj::Project.open(project_path)
-          native_targets = compute_user_project_targets(target_definition, user_project)
-
-          target.user_project_path = project_path
-          target.client_root = project_path.dirname
-          target.user_target_uuids = native_targets.map(&:uuid)
-          target.user_build_configurations = compute_user_build_configurations(target_definition, native_targets)
-          target.archs = @archs_by_target_def[target_definition]
+          target_inspection = result.target_inspections[target_definition]
+          target.user_project_path = target_inspection.project_path
+          target.client_root = target.user_project_path.dirname
+          target.user_target_uuids = target_inspection.project_target_uuids
+          target.user_build_configurations = target_inspection.build_configurations
+          target.archs = target_inspection.archs
         else
           target.client_root = config.installation_root
           target.user_target_uuids = []
@@ -323,8 +325,9 @@ module Pod
         pod_target = PodTarget.new(pod_specs, target.target_definition, sandbox)
 
         if config.integrate_targets?
-          pod_target.user_build_configurations = target.user_build_configurations
-          pod_target.archs = @archs_by_target_def[target.target_definition]
+          target_inspections = result.target_inspections.select { |t, _| target_definitions.include?(t) }.values
+          pod_target.user_build_configurations = target_inspections.map(&:build_configurations).reduce({}, &:merge)
+          pod_target.archs = target_inspections.map(&:archs).uniq.sort
         else
           pod_target.user_build_configurations = {}
           if target.platform.name == :osx
@@ -580,193 +583,36 @@ module Pod
 
       # @!group Analysis sub-steps
 
-      # Returns the path of the user project that the {TargetDefinition}
-      # should integrate.
+      # Checks whether the platform is specified if not integrating
       #
-      # @raise  If the project is implicit and there are multiple projects.
+      # @return [void]
       #
-      # @raise  If the path doesn't exits.
-      #
-      # @return [Pathname] the path of the user project.
-      #
-      def compute_user_project_path(target_definition)
-        if target_definition.user_project_path
-          path = config.installation_root + target_definition.user_project_path
-          path = "#{path}.xcodeproj" unless File.extname(path) == '.xcodeproj'
-          path = Pathname.new(path)
-          unless path.exist?
-            raise Informative, 'Unable to find the Xcode project ' \
-              "`#{path}` for the target `#{target_definition.label}`."
-          end
-        else
-          xcodeprojs = config.installation_root.children.select { |e| e.fnmatch('*.xcodeproj') }
-          if xcodeprojs.size == 1
-            path = xcodeprojs.first
-          else
-            raise Informative, 'Could not automatically select an Xcode project. ' \
-              "Specify one in your Podfile like so:\n\n" \
-              "    xcodeproj 'path/to/Project.xcodeproj'\n"
-          end
-        end
-        path
-      end
-
-      # Returns a list of the targets from the project of {TargetDefinition}
-      # that needs to be integrated.
-      #
-      # @note   The method first looks if there is a target specified with
-      #         the `link_with` option of the {TargetDefinition}. Otherwise
-      #         it looks for the target that has the same name of the target
-      #         definition.  Finally if no target was found the first
-      #         encountered target is returned (it is assumed to be the one
-      #         to integrate in simple projects).
-      #
-      # @note   This will only return targets that do **not** already have
-      #         the Pods library in their frameworks build phase.
-      #
-      #
-      def compute_user_project_targets(target_definition, user_project)
-        if link_with = target_definition.link_with
-          targets = native_targets(user_project).select { |t| link_with.include?(t.name) }
-          raise Informative, "Unable to find the targets named `#{link_with.to_sentence}` to link with target definition `#{target_definition.name}`" if targets.empty?
-        elsif target_definition.link_with_first_target?
-          targets = [native_targets(user_project).first].compact
-          raise Informative, 'Unable to find a target' if targets.empty?
-        else
-          target = native_targets(user_project).find { |t| t.name == target_definition.name.to_s }
-          targets = [target].compact
-          raise Informative, "Unable to find a target named `#{target_definition.name}`" if targets.empty?
-        end
-        targets
-      end
-
-      # @return [Array<PBXNativeTarget>] Returns the user’s targets, excluding
-      #         aggregate targets.
-      #
-      def native_targets(user_project)
-        user_project.targets.reject do |target|
-          target.is_a? Xcodeproj::Project::Object::PBXAggregateTarget
-        end
-      end
-
-      # Checks if any of the targets for the {TargetDefinition} computed before
-      # by #compute_user_project_targets require to be build as a framework due
-      # the presence of Swift source code in any of the source build phases.
-      #
-      # @param  [TargetDefinition] target_definition
-      #         the target definition
-      #
-      # @param  [Array<PBXNativeTarget>] native_targets
-      #         the targets which are checked for presence of Swift source code
-      #
-      # @return [Boolean] Whether the user project targets to integrate into
-      #         uses Swift
-      #
-      def compute_user_project_targets_require_framework(target_definition, native_targets)
-        file_predicate = nil
-        file_predicate = proc do |file_ref|
-          if file_ref.respond_to?(:last_known_file_type)
-            file_ref.last_known_file_type == 'sourcecode.swift'
-          elsif file_ref.respond_to?(:files)
-            file_ref.files.any?(&file_predicate)
-          else
-            false
-          end
-        end
-        target_definition.platform.supports_dynamic_frameworks? || native_targets.any? do |target|
-          target.source_build_phase.files.any? do |build_file|
-            file_predicate.call(build_file.file_ref)
+      def check_platform_specifications
+        unless config.integrate_targets?
+          podfile.target_definition_list.each do |target_definition|
+            unless target_definition.platform
+              raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
+            end
           end
         end
       end
 
-      # @return [Hash{String=>Symbol}] A hash representing the user build
-      #         configurations where each key corresponds to the name of a
-      #         configuration and its value to its type (`:debug` or `:release`).
-      #
-      def compute_user_build_configurations(target_definition, user_targets)
-        if user_targets
-          user_targets.map { |t| t.build_configurations.map(&:name) }.flatten.reduce({}) do |hash, name|
-            hash[name] = name == 'Debug' ? :debug : :release
-            hash
-          end.merge(target_definition.build_configurations || {})
-        else
-          target_definition.build_configurations || {}
-        end
-      end
-
-      # @return [Platform] The platform for the library.
-      #
-      # @note   This resolves to the lowest deployment target across the user
-      #         targets.
-      #
-      # @todo   Is assigning the platform to the target definition the best way
-      #         to go?
-      #
-      def compute_platform_for_target_definition(target_definition, user_targets)
-        return target_definition.platform if target_definition.platform
-        name = nil
-        deployment_target = nil
-
-        user_targets.each do |target|
-          name ||= target.platform_name
-          raise Informative, 'Targets with different platforms' unless name == target.platform_name
-          if !deployment_target || deployment_target > Version.new(target.deployment_target)
-            deployment_target = Version.new(target.deployment_target)
-          end
-        end
-
-        target_definition.set_platform(name, deployment_target)
-        Platform.new(name, deployment_target)
-      end
-
-      # @return [Platform] The platform for the library.
-      #
-      # @note   This resolves to the lowest deployment target across the user
-      #         targets.
-      #
-      # @todo   Is assigning the platform to the target definition the best way
-      #         to go?
-      #
-      def compute_archs_for_target_definition(target_definition, user_targets)
-        archs = []
-        user_targets.each do |target|
-          target_archs = target.common_resolved_build_setting('ARCHS')
-          archs.concat(Array(target_archs))
-        end
-
-        archs = archs.compact.uniq.sort
-        UI.message('Using `ARCHS` setting to build architectures of ' \
-                   "target `#{target_definition.label}`: " \
-                   "(`#{archs.join('`, `')}`)")
-        archs.length > 1 ? archs : archs.first
-      end
-
-      # Precompute the platforms for each target_definition in the Podfile
+      # Precompute information for each target_definition in the Podfile
       #
       # @note The platforms are computed and added to each target_definition
       #       because it might be necessary to infer the platform from the
       #       user targets.
       #
-      # @return [void]
+      # @return [Hash{TargetDefinition => TargetInspectionResult}]
       #
       def inspect_targets_to_integrate
+        inspection_result = {}
         UI.section 'Inspecting targets to integrate' do
           podfile.target_definition_list.each do |target_definition|
-            if config.integrate_targets?
-              project_path = compute_user_project_path(target_definition)
-              user_project = Xcodeproj::Project.open(project_path)
-              targets = compute_user_project_targets(target_definition, user_project)
-              compute_platform_for_target_definition(target_definition, targets)
-              archs = compute_archs_for_target_definition(target_definition, targets)
-              @archs_by_target_def[target_definition] = archs
-            else
-              unless target_definition.platform
-                raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
-              end
-            end
+            inspection_result[target_definition] = TargetInspector.new(target_definition).inspect!
           end
         end
+        inspection_result
       end
     end
   end

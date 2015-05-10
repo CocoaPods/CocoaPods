@@ -26,6 +26,10 @@ module Pod
         #
         attr_accessor :targets
 
+        # @return [Hash{TargetDefinition => Array<TargetInspectionResult>}] the
+        #         results of inspecting the user targets
+        attr_accessor :target_inspections
+
         # @return [Hash{String=>Symbol}] A hash representing all the user build
         #         configurations across all integration targets. Each key
         #         corresponds to the name of a configuration and its value to

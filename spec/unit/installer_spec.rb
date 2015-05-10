@@ -143,11 +143,11 @@ module Pod
 
         target = @installer.aggregate_targets.first
         target.requires_frameworks?.should == true
-        target.pod_targets.select(&:requires_frameworks?).map(&:name).sort.should == [
-          'BananaLib',
-          'OrangeFramework',
-          'monkey',
-        ]
+        target.pod_targets.select(&:requires_frameworks?).map(&:name).sort.should == %w(
+          BananaLib
+          OrangeFramework
+          monkey
+        )
       end
     end
 
