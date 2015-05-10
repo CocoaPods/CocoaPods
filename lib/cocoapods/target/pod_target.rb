@@ -25,11 +25,13 @@ module Pod
     # @param [Specification] spec @see spec
     # @param [Array<TargetDefinition>] target_definitions @see target_definitions
     # @param [Sandbox] sandbox @see sandbox
+    # @param [Bool] scoped @see scoped
     #
-    def initialize(specs, target_definitions, sandbox)
+    def initialize(specs, target_definitions, sandbox, scoped = false)
       @specs = specs
       @target_definitions = target_definitions
       @sandbox = sandbox
+      @scoped = scoped
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []
       @resource_bundle_targets = []
