@@ -137,7 +137,7 @@ module Pod
       describe 'With libraries' do
         before do
           @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
-          @target = AggregateTarget.new(@pod_target.target_definition, config.sandbox)
+          @target = AggregateTarget.new(@pod_target.target_definitions.first, config.sandbox)
           @target.pod_targets = [@pod_target]
         end
 
@@ -197,7 +197,7 @@ module Pod
       describe 'With frameworks' do
         before do
           @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', :ios, Podfile::TargetDefinition.new('iOS Example', nil))
-          @target = AggregateTarget.new(@pod_target.target_definition, config.sandbox)
+          @target = AggregateTarget.new(@pod_target.target_definitions.first, config.sandbox)
           @target.stubs(:requires_frameworks?).returns(true)
           @target.pod_targets = [@pod_target]
         end

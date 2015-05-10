@@ -7,6 +7,11 @@ module Pod
     #
     attr_reader :specs
 
+    # @return [Array<PBXNativeTarget>] the target definitions of the Podfile
+    #         that generated this target.
+    #
+    attr_reader :target_definitions
+
     # @return [HeadersStore] the header directory for the target.
     #
     attr_reader :build_headers
@@ -42,7 +47,7 @@ module Pod
     #
     def label
       if scoped?
-        "#{target_definition.label}-#{root_spec.name}"
+        "#{target_definitions.first.label}-#{root_spec.name}"
       else
         root_spec.name
       end

@@ -20,8 +20,8 @@ module Pod
     end
 
     describe 'In general' do
-      it 'returns the target_definition that generated it' do
-        @pod_target.target_definition.should == @target_definition
+      it 'returns the target definitions' do
+        @pod_target.target_definitions.should == [@target_definition]
       end
 
       it 'returns its name' do

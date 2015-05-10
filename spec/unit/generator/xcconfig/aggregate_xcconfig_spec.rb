@@ -17,7 +17,7 @@ module Pod
           @pod_target = pod_target(@spec)
           @consumer = @pod_target.spec_consumers.last
           @target = fixture_aggregate_target([@pod_target])
-          @target.target_definition.should == @pod_target.target_definition
+          @target.target_definition.should == @pod_target.target_definitions.first
           @target.target_definition.whitelist_pod_for_configuration(@spec.name, 'Release')
           @podfile = @target.target_definition.podfile
           @generator = AggregateXCConfig.new(@target, 'Release')

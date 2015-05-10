@@ -134,7 +134,7 @@ def fixture_pod_target(spec_or_name, platform = :ios, target_definition = nil)
 end
 
 def fixture_aggregate_target(pod_targets = [], platform = :ios, target_definition = nil)
-  target_definition ||= pod_targets.map(&:target_definition).first || fixture_target_definition
+  target_definition ||= pod_targets.flat_map(&:target_definitions).first || fixture_target_definition
   target = Pod::AggregateTarget.new(target_definition, config.sandbox)
   target.client_root = config.sandbox.root.dirname
   version ||= (platform == :ios ? '4.3' : '10.6')
