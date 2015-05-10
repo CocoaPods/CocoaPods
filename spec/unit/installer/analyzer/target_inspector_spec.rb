@@ -207,8 +207,8 @@ module Pod
         target_definition.set_platform(:ios, '4.0')
         user_targets = []
 
-        configurations = TargetInspector.new(target_definition).send(:compute_platform, user_targets)
-        configurations.should == Platform.new(:ios, '4.0')
+        platforms = TargetInspector.new(target_definition).send(:compute_platform, user_targets)
+        platforms.should == Platform.new(:ios, '4.0')
       end
 
       it 'infers the platform from the user targets' do
@@ -220,8 +220,8 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         user_targets = [target]
 
-        configurations = TargetInspector.new(target_definition).send(:compute_platform, user_targets)
-        configurations.should == Platform.new(:ios, '4.0')
+        platforms = TargetInspector.new(target_definition).send(:compute_platform, user_targets)
+        platforms.should == Platform.new(:ios, '4.0')
       end
 
       it 'uses the lowest deployment target of the user targets if inferring the platform' do
@@ -238,8 +238,8 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         user_targets = [target1, target2]
 
-        configurations = TargetInspector.new(target_definition).send(:compute_platform, user_targets)
-        configurations.should == Platform.new(:ios, '4.0')
+        platforms = TargetInspector.new(target_definition).send(:compute_platform, user_targets)
+        platforms.should == Platform.new(:ios, '4.0')
       end
 
       it 'raises if the user targets have a different platform' do
