@@ -65,7 +65,7 @@ module Pod
               end
             end
             build_settings = {
-              'PODS_FRAMEWORK_BUILD_PATH' => target.configuration_build_dir,
+              'PODS_FRAMEWORK_BUILD_PATH' => target.scoped_configuration_build_dir,
               # Make headers discoverable by `import "…"`
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote'),
             }

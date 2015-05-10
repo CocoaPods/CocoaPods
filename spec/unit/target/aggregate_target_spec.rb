@@ -80,7 +80,7 @@ module Pod
       end
 
       it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
-        @target.configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
+        @target.scoped_configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
       end
     end
 
