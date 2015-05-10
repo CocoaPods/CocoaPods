@@ -185,14 +185,14 @@ module Pod
 
       it 'handles an Array of ARCHs defined multiple user targets' do
         user_project = Xcodeproj::Project.new('path')
-        targeta = user_project.new_target(:application, 'Target', :ios)
-        targeta.build_configuration_list.set_setting('ARCHS', %w(armv7 armv7s))
-        targetb = user_project.new_target(:application, 'Target', :ios)
-        targetb.build_configuration_list.set_setting('ARCHS', %w(armv7 i386))
+        target_a = user_project.new_target(:application, 'Target', :ios)
+        target_a.build_configuration_list.set_setting('ARCHS', %w(armv7 armv7s))
+        target_b = user_project.new_target(:application, 'Target', :ios)
+        target_b.build_configuration_list.set_setting('ARCHS', %w(armv7 i386))
 
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         target_definition.set_platform(:ios, '4.0')
-        user_targets = [targeta, targetb]
+        user_targets = [target_a, target_b]
 
         archs = TargetInspector.new(target_definition).send(:compute_archs, user_targets)
         %w(armv7 armv7s i386).each { |a| archs.should.include a }
