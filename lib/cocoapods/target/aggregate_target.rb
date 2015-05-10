@@ -3,6 +3,10 @@ module Pod
   # of the single Pods. The client targets will then depend on this one.
   #
   class AggregateTarget < Target
+    # @return [TargetDefinition] the target definition of the Podfile that
+    #         generated this target.
+    attr_reader :target_definition
+
     # Initialize a new instance
     #
     # @param [TargetDefinition] target_definition @see target_definition

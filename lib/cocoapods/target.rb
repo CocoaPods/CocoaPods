@@ -6,11 +6,6 @@ module Pod
   # This class is used to represent both the targets and their libraries.
   #
   class Target
-    # @return [TargetDefinition] the target definition of the Podfile that
-    #         generated this target.
-    #
-    attr_reader :target_definition
-
     # @return [Sandbox] The sandbox where the Pods should be installed.
     #
     attr_reader :sandbox
