@@ -53,7 +53,11 @@ module Pod
       dependencies = podfile.target_definition_list.map(&:dependencies).flatten
       @cached_sets = {}
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
-      specs_by_target
+      specs_by_target.tap do |specs_by_target|
+        specs_by_target.values.flatten.each do |spec|
+          sandbox.store_head_pod(spec.name) if spec.version.head?
+        end
+      end
     rescue Molinillo::ResolverError => e
       handle_resolver_error(e)
     end
@@ -64,8 +68,7 @@ module Pod
     # @note   The returned specifications can be subspecs.
     #
     def specs_by_target
-      @specs_by_target ||= begin
-        specs_by_target = {}
+      @specs_by_target ||= {}.tap do |specs_by_target|
         podfile.target_definition_list.each do |target|
           specs = target.dependencies.map(&:name).map do |name|
             node = @activated.vertex_named(name)
@@ -76,12 +79,8 @@ module Pod
             flatten.
             map(&:payload).
             uniq.
-            sort_by(&:name).
-            each do |spec|
-              sandbox.store_head_pod(spec.name) if spec.version.head?
-            end
+            sort_by(&:name)
         end
-        specs_by_target
       end
     end
 
