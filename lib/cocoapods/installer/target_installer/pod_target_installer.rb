@@ -63,7 +63,10 @@ module Pod
           }.each do |arc, files|
             files = files - headers - other_source_files
             flags = compiler_flags_for_consumer(consumer, arc)
-            regular_file_refs = files.map { |sf| project.reference_for_path(sf) }
+            regular_file_refs = files.map { |sf| project.reference_for_path(sf) }.reject do | file_ref|
+              native_target.source_build_phase.include? file_ref
+            end
+
             native_target.add_file_references(regular_file_refs, flags)
           end
 
