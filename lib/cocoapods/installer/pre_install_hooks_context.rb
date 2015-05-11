@@ -11,15 +11,15 @@ module Pod
       # @return [Podfile] The Podfile for the project.
       #
       attr_accessor :podfile
-      
+
       # @return [Sandbox] The Sandbox for the project.
       #
       attr_accessor :sandbox
-      
+
       # @return [Lockfile] The Lockfile for the project.
       #
       attr_accessor :lockfile
-      
+
       # @return [PreInstallHooksContext] Convenience class method to generate the
       #         static context.
       #

@@ -17,7 +17,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   does its work, and offers easy access to the sandbox, podfile and lockfile via a 
   PreInstallHooksContext object. This also renames the post-install hooks from HooksContext
   to PostInstallHooksContext.
-
   [Orta Therox](https://github.com/orta)
   [cocoapods#3540](https://github.com/CocoaPods/cocoapods/issues/3409)
 

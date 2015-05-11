@@ -399,7 +399,7 @@ module Pod
         end
       end
     end
-    
+
     # Runs the registered callbacks for the plugins pre install hooks.
     #
     # @return [void]
@@ -408,7 +408,7 @@ module Pod
       context = PreInstallHooksContext.generate(sandbox, podfile, lockfile)
       HooksManager.run(:pre_install, context, podfile.plugins)
     end
-    
+
     # Performs any post-installation actions
     #
     # @return [void]
