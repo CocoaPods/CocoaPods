@@ -8,16 +8,16 @@ File References:
       - 512_black.png
       - troll.png
     - Support Files:
-      - Pods-SampleApp-res.xcconfig
-      - Pods-SampleApp-res-Private.xcconfig
-      - Pods-SampleApp-res-dummy.m
-      - Pods-SampleApp-res-prefix.pch
+      - res.xcconfig
+      - res-Private.xcconfig
+      - res-dummy.m
+      - res-prefix.pch
 - Frameworks:
   - OS X:
     - Cocoa.framework
 - Products:
   - libPods-SampleApp.a
-  - libPods-SampleApp-res.a
+  - libres.a
   - res.bundle
 - Targets Support Files:
   - Pods-SampleApp:
@@ -67,18 +67,18 @@ Targets:
           EXECUTABLE_PREFIX: lib
           OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods-SampleApp.release.xcconfig
-- Pods-SampleApp-res:
+- res:
     Build Phases:
     - SourcesBuildPhase:
-      - Pods-SampleApp-res-dummy.m
       - foo.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - res-dummy.m
     - FrameworksBuildPhase:
       - Cocoa.framework
     Build Configurations:
     - Debug:
         Build Settings:
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp-res/Pods-SampleApp-res-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/res/res-prefix.pch
           OTHER_LIBTOOLFLAGS: ''
           PRODUCT_NAME: $(TARGET_NAME)
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -88,7 +88,7 @@ Targets:
           SDKROOT: macosx
           EXECUTABLE_PREFIX: lib
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-SampleApp-res-Private.xcconfig
+        Base Configuration: res-Private.xcconfig
     - Release:
         Build Settings:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
@@ -100,10 +100,10 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           SDKROOT: macosx
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp-res/Pods-SampleApp-res-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/res/res-prefix.pch
           EXECUTABLE_PREFIX: lib
-        Base Configuration: Pods-SampleApp-res-Private.xcconfig
-- Pods-SampleApp-res-res:
+        Base Configuration: res-Private.xcconfig
+- res-res:
     Build Phases:
     - SourcesBuildPhase: []
     - FrameworksBuildPhase: []
@@ -119,7 +119,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: res
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-SampleApp-res-Private.xcconfig
+        Base Configuration: res-Private.xcconfig
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: bundle
@@ -129,7 +129,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: res
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-SampleApp-res-Private.xcconfig
+        Base Configuration: res-Private.xcconfig
 
 
 

@@ -10,22 +10,22 @@ File References:
     - JSONKit.h
     - JSONKit.m
     - Support Files:
-      - Pods-JSONKit.xcconfig
-      - Pods-JSONKit-Private.xcconfig
-      - Pods-JSONKit-dummy.m
-      - Pods-JSONKit-prefix.pch
+      - JSONKit.xcconfig
+      - JSONKit-Private.xcconfig
+      - JSONKit-dummy.m
+      - JSONKit-prefix.pch
   - Reachability:
     - Reachability.h
     - Reachability.m
     - Support Files:
-      - Pods-Reachability.xcconfig
-      - Pods-Reachability-Private.xcconfig
-      - Pods-Reachability-dummy.m
-      - Pods-Reachability-prefix.pch
+      - Reachability.xcconfig
+      - Reachability-Private.xcconfig
+      - Reachability-dummy.m
+      - Reachability-prefix.pch
 - Products:
+  - libJSONKit.a
   - libPods.a
-  - libPods-JSONKit.a
-  - libPods-Reachability.a
+  - libReachability.a
 - Targets Support Files:
   - Pods:
     - Pods-acknowledgements.markdown
@@ -38,6 +38,43 @@ File References:
 
 
 Targets:
+- JSONKit:
+    Build Phases:
+    - SourcesBuildPhase:
+      - JSONKit-dummy.m
+      - JSONKit.m:
+          COMPILER_FLAGS: -fno-objc-arc
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
+      - JSONKit.h
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/JSONKit/JSONKit-prefix.pch
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: JSONKit-Private.xcconfig
+    - Release:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/JSONKit/JSONKit-prefix.pch
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: JSONKit-Private.xcconfig
 - Pods:
     Build Phases:
     - SourcesBuildPhase:
@@ -71,47 +108,10 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.release.xcconfig
-- Pods-JSONKit:
+- Reachability:
     Build Phases:
     - SourcesBuildPhase:
-      - JSONKit.m:
-          COMPILER_FLAGS: -fno-objc-arc
-      - Pods-JSONKit-dummy.m
-    - FrameworksBuildPhase:
-      - Foundation.framework
-    - HeadersBuildPhase:
-      - JSONKit.h
-    Build Configurations:
-    - Debug:
-        Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'YES'
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-JSONKit/Pods-JSONKit-prefix.pch
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-JSONKit-Private.xcconfig
-    - Release:
-        Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'NO'
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-JSONKit/Pods-JSONKit-prefix.pch
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-JSONKit-Private.xcconfig
-- Pods-Reachability:
-    Build Phases:
-    - SourcesBuildPhase:
-      - Pods-Reachability-dummy.m
+      - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: -fno-objc-arc
     - FrameworksBuildPhase:
@@ -130,9 +130,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-Reachability-Private.xcconfig
+        Base Configuration: Reachability-Private.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -143,9 +143,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-Reachability-Private.xcconfig
+        Base Configuration: Reachability-Private.xcconfig
 
 
 

@@ -40,14 +40,10 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `Pods-SampleApp-SamplePodWithResources` OS X 10.10
-      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp-SamplePodWithResources/Info.plist`
-      - Generating module map file at `Pods/Target Support Files/Pods-SampleApp-SamplePodWithResources/Pods-SampleApp-SamplePodWithResources.modulemap`
-      - Generating umbrella header at `Pods/Target Support Files/Pods-SampleApp-SamplePodWithResources/Pods-SampleApp-SamplePodWithResources-umbrella.h`
-    - Installing target `Pods-SampleAppTests-SamplePodWithResources` OS X 10.10
-      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleAppTests-SamplePodWithResources/Info.plist`
-      - Generating module map file at `Pods/Target Support Files/Pods-SampleAppTests-SamplePodWithResources/Pods-SampleAppTests-SamplePodWithResources.modulemap`
-      - Generating umbrella header at `Pods/Target Support Files/Pods-SampleAppTests-SamplePodWithResources/Pods-SampleAppTests-SamplePodWithResources-umbrella.h`
+    - Installing target `SamplePodWithResources` OS X 10.10
+      - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-umbrella.h`
     - Installing target `Pods-SampleApp` OS X 10.10
       - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp/Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap`

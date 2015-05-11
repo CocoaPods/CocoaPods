@@ -8,7 +8,7 @@ SWIFT_STDLIB_PATH="${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}"
 
 install_framework()
 {
-  local source="${BUILT_PRODUCTS_DIR}/Pods-OS X App/$1"
+  local source="${BUILT_PRODUCTS_DIR}/$1"
   local destination="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 
   if [ -L "${source}" ]; then
@@ -26,9 +26,9 @@ install_framework()
 
   # Embed linked Swift runtime libraries
   local basename
-  basename=$(echo $1 | sed -E s/\\..+// && exit ${PIPESTATUS[0]})
+  basename=$(basename $1 | sed -E s/\\..+// && exit ${PIPESTATUS[0]})
   local swift_runtime_libs
-  swift_runtime_libs=$(xcrun otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1/${basename}" | grep --color=never @rpath/libswift | sed -E s/@rpath\\/\(.+dylib\).*/\\1/g | uniq -u  && exit ${PIPESTATUS[0]})
+  swift_runtime_libs=$(xcrun otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/${basename}.framework/${basename}" | grep --color=never @rpath/libswift | sed -E s/@rpath\\/\(.+dylib\).*/\\1/g | uniq -u  && exit ${PIPESTATUS[0]})
   for lib in $swift_runtime_libs; do
     echo "rsync -auv \"${SWIFT_STDLIB_PATH}/${lib}\" \"${destination}\""
     rsync -auv "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"
@@ -48,8 +48,8 @@ code_sign() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework 'PodTest.framework'
+  install_framework 'Pods-OS X App/PodTest.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework 'PodTest.framework'
+  install_framework 'Pods-OS X App/PodTest.framework'
 fi

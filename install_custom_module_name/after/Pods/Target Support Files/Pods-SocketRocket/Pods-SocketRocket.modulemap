@@ -1,6 +1,0 @@
-framework module SocketRocket {
-  umbrella header "Pods-SocketRocket-umbrella.h"
-
-  export *
-  module * { export * }
-}

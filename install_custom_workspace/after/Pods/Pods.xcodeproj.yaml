@@ -10,19 +10,14 @@ File References:
     - Reachability.h
     - Reachability.m
     - Support Files:
-      - Pods-SampleApp_1-Reachability.xcconfig
-      - Pods-SampleApp_1-Reachability-Private.xcconfig
-      - Pods-SampleApp_1-Reachability-dummy.m
-      - Pods-SampleApp_1-Reachability-prefix.pch
-      - Pods-SampleApp_2-Reachability.xcconfig
-      - Pods-SampleApp_2-Reachability-Private.xcconfig
-      - Pods-SampleApp_2-Reachability-dummy.m
-      - Pods-SampleApp_2-Reachability-prefix.pch
+      - Reachability.xcconfig
+      - Reachability-Private.xcconfig
+      - Reachability-dummy.m
+      - Reachability-prefix.pch
 - Products:
   - libPods-SampleApp_1.a
-  - libPods-SampleApp_1-Reachability.a
   - libPods-SampleApp_2.a
-  - libPods-SampleApp_2-Reachability.a
+  - libReachability.a
 - Targets Support Files:
   - Pods-SampleApp_1:
     - Pods-SampleApp_1-acknowledgements.markdown
@@ -75,44 +70,6 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods-SampleApp_1.release.xcconfig
-- Pods-SampleApp_1-Reachability:
-    Build Phases:
-    - SourcesBuildPhase:
-      - Pods-SampleApp_1-Reachability-dummy.m
-      - Reachability.m:
-          COMPILER_FLAGS: -fno-objc-arc
-    - FrameworksBuildPhase:
-      - Foundation.framework
-      - SystemConfiguration.framework
-    - HeadersBuildPhase:
-      - Reachability.h
-    Build Configurations:
-    - Debug:
-        Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'YES'
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp_1-Reachability/Pods-SampleApp_1-Reachability-prefix.pch
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-SampleApp_1-Reachability-Private.xcconfig
-    - Release:
-        Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'NO'
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp_1-Reachability/Pods-SampleApp_1-Reachability-prefix.pch
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-SampleApp_1-Reachability-Private.xcconfig
 - Pods-SampleApp_2:
     Build Phases:
     - SourcesBuildPhase:
@@ -146,10 +103,10 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods-SampleApp_2.release.xcconfig
-- Pods-SampleApp_2-Reachability:
+- Reachability:
     Build Phases:
     - SourcesBuildPhase:
-      - Pods-SampleApp_2-Reachability-dummy.m
+      - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: -fno-objc-arc
     - FrameworksBuildPhase:
@@ -168,9 +125,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp_2-Reachability/Pods-SampleApp_2-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-SampleApp_2-Reachability-Private.xcconfig
+        Base Configuration: Reachability-Private.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -181,9 +138,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SampleApp_2-Reachability/Pods-SampleApp_2-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-SampleApp_2-Reachability-Private.xcconfig
+        Base Configuration: Reachability-Private.xcconfig
 
 
 

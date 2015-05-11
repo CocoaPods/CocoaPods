@@ -11,13 +11,13 @@ File References:
     - parseIt.ym
     - tokeIt.l
     - Support Files:
-      - Pods-Moment.xcconfig
-      - Pods-Moment-Private.xcconfig
-      - Pods-Moment-dummy.m
-      - Pods-Moment-prefix.pch
+      - Moment.xcconfig
+      - Moment-Private.xcconfig
+      - Moment-dummy.m
+      - Moment-prefix.pch
 - Products:
+  - libMoment.a
   - libPods.a
-  - libPods-Moment.a
 - Targets Support Files:
   - Pods:
     - Pods-acknowledgements.markdown
@@ -30,6 +30,45 @@ File References:
 
 
 Targets:
+- Moment:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Moment-dummy.m
+      - TimeParser.c:
+          COMPILER_FLAGS: -fno-objc-arc
+      - parseIt.ym
+      - tokeIt.l
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
+      - TimeParser.h
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Moment/Moment-prefix.pch
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Moment-Private.xcconfig
+    - Release:
+        Build Settings:
+          OTHER_LIBTOOLFLAGS: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/Moment/Moment-prefix.pch
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+        Base Configuration: Moment-Private.xcconfig
 - Pods:
     Build Phases:
     - SourcesBuildPhase:
@@ -63,45 +102,6 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.release.xcconfig
-- Pods-Moment:
-    Build Phases:
-    - SourcesBuildPhase:
-      - Pods-Moment-dummy.m
-      - TimeParser.c:
-          COMPILER_FLAGS: -fno-objc-arc
-      - parseIt.ym
-      - tokeIt.l
-    - FrameworksBuildPhase:
-      - Foundation.framework
-    - HeadersBuildPhase:
-      - TimeParser.h
-    Build Configurations:
-    - Debug:
-        Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'YES'
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-Moment/Pods-Moment-prefix.pch
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-Moment-Private.xcconfig
-    - Release:
-        Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'NO'
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-Moment/Pods-Moment-prefix.pch
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-Moment-Private.xcconfig
 
 
 

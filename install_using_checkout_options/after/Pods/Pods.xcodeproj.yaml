@@ -35,10 +35,10 @@ File References:
       - AFURLResponseSerialization.h
       - AFURLResponseSerialization.m
     - Support Files:
-      - Pods-AFNetworking.xcconfig
-      - Pods-AFNetworking-Private.xcconfig
-      - Pods-AFNetworking-dummy.m
-      - Pods-AFNetworking-prefix.pch
+      - AFNetworking.xcconfig
+      - AFNetworking-Private.xcconfig
+      - AFNetworking-dummy.m
+      - AFNetworking-prefix.pch
     - UIKit:
       - AFNetworkActivityIndicatorManager.h
       - AFNetworkActivityIndicatorManager.m
@@ -61,23 +61,23 @@ File References:
     - RKValueTransformers.h
     - RKValueTransformers.m
     - Support Files:
-      - Pods-RKValueTransformers.xcconfig
-      - Pods-RKValueTransformers-Private.xcconfig
-      - Pods-RKValueTransformers-dummy.m
-      - Pods-RKValueTransformers-prefix.pch
+      - RKValueTransformers.xcconfig
+      - RKValueTransformers-Private.xcconfig
+      - RKValueTransformers-dummy.m
+      - RKValueTransformers-prefix.pch
   - SEGModules:
     - SEGModule.h
     - SEGModule.m
     - Support Files:
-      - Pods-SEGModules.xcconfig
-      - Pods-SEGModules-Private.xcconfig
-      - Pods-SEGModules-dummy.m
-      - Pods-SEGModules-prefix.pch
+      - SEGModules.xcconfig
+      - SEGModules-Private.xcconfig
+      - SEGModules-dummy.m
+      - SEGModules-prefix.pch
 - Products:
+  - libAFNetworking.a
   - libPods.a
-  - libPods-AFNetworking.a
-  - libPods-RKValueTransformers.a
-  - libPods-SEGModules.a
+  - libRKValueTransformers.a
+  - libSEGModules.a
 - Targets Support Files:
   - Pods:
     - Pods-acknowledgements.markdown
@@ -90,40 +90,7 @@ File References:
 
 
 Targets:
-- Pods:
-    Build Phases:
-    - SourcesBuildPhase:
-      - Pods-dummy.m
-    - FrameworksBuildPhase:
-      - Foundation.framework
-    Build Configurations:
-    - Debug:
-        Build Settings:
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          PODS_ROOT: $(SRCROOT)
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MTL_ENABLE_DEBUG_INFO: 'YES'
-          OTHER_LDFLAGS: ''
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
-          OTHER_LIBTOOLFLAGS: ''
-        Base Configuration: Pods.debug.xcconfig
-    - Release:
-        Build Settings:
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          PODS_ROOT: $(SRCROOT)
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MTL_ENABLE_DEBUG_INFO: 'NO'
-          OTHER_LDFLAGS: ''
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
-          OTHER_LIBTOOLFLAGS: ''
-        Base Configuration: Pods.release.xcconfig
-- Pods-AFNetworking:
+- AFNetworking:
     Build Phases:
     - SourcesBuildPhase:
       - AFHTTPRequestOperation.m
@@ -131,12 +98,12 @@ Targets:
       - AFHTTPSessionManager.m
       - AFNetworkActivityIndicatorManager.m
       - AFNetworkReachabilityManager.m
+      - AFNetworking-dummy.m
       - AFSecurityPolicy.m
       - AFURLConnectionOperation.m
       - AFURLRequestSerialization.m
       - AFURLResponseSerialization.m
       - AFURLSessionManager.m
-      - Pods-AFNetworking-dummy.m
       - UIActivityIndicatorView+AFNetworking.m
       - UIAlertView+AFNetworking.m
       - UIButton+AFNetworking.m
@@ -181,9 +148,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-AFNetworking/Pods-AFNetworking-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/AFNetworking/AFNetworking-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-AFNetworking-Private.xcconfig
+        Base Configuration: AFNetworking-Private.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -194,13 +161,46 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-AFNetworking/Pods-AFNetworking-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/AFNetworking/AFNetworking-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-AFNetworking-Private.xcconfig
-- Pods-RKValueTransformers:
+        Base Configuration: AFNetworking-Private.xcconfig
+- Pods:
     Build Phases:
     - SourcesBuildPhase:
-      - Pods-RKValueTransformers-dummy.m
+      - Pods-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          PODS_ROOT: $(SRCROOT)
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LDFLAGS: ''
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          PRODUCT_NAME: $(TARGET_NAME)
+          OTHER_LIBTOOLFLAGS: ''
+        Base Configuration: Pods.debug.xcconfig
+    - Release:
+        Build Settings:
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          PODS_ROOT: $(SRCROOT)
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LDFLAGS: ''
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          PRODUCT_NAME: $(TARGET_NAME)
+          OTHER_LIBTOOLFLAGS: ''
+        Base Configuration: Pods.release.xcconfig
+- RKValueTransformers:
+    Build Phases:
+    - SourcesBuildPhase:
+      - RKValueTransformers-dummy.m
       - RKValueTransformers.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
     - FrameworksBuildPhase:
@@ -218,9 +218,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-RKValueTransformers/Pods-RKValueTransformers-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-RKValueTransformers-Private.xcconfig
+        Base Configuration: RKValueTransformers-Private.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -231,15 +231,15 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-RKValueTransformers/Pods-RKValueTransformers-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-RKValueTransformers-Private.xcconfig
-- Pods-SEGModules:
+        Base Configuration: RKValueTransformers-Private.xcconfig
+- SEGModules:
     Build Phases:
     - SourcesBuildPhase:
-      - Pods-SEGModules-dummy.m
       - SEGModule.m:
           COMPILER_FLAGS: -fno-objc-arc
+      - SEGModules-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
@@ -255,9 +255,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SEGModules/Pods-SEGModules-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-SEGModules-Private.xcconfig
+        Base Configuration: SEGModules-Private.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -268,9 +268,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SEGModules/Pods-SEGModules-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-SEGModules-Private.xcconfig
+        Base Configuration: SEGModules-Private.xcconfig
 
 
 
