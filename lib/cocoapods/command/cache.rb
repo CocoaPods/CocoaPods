@@ -28,7 +28,7 @@ module Pod
         spec_files.reduce({}) do |hash, spec_file|
           spec = Specification.from_file(spec_file)
           hash[spec.name] = {} if hash[spec.name].nil?
-          release = spec_file.to_s.start_with? (specs_dir + 'Release').to_s
+          release = spec_file.to_s.start_with?((specs_dir + 'Release').to_s)
           request = Downloader::Request.new(:spec => spec, :released => release)
           hash[spec.name][spec_file] = request
           hash
@@ -49,7 +49,7 @@ module Pod
 
         def self.options
           [[
-            '--short', 'Only print the path relative to the cache root',
+            '--short', 'Only print the path relative to the cache root'
           ]].concat(super)
         end
 
@@ -59,10 +59,9 @@ module Pod
           super
         end
 
-
         def run
           UI.puts("Cache root: #{@cache_root}") if @short_output
-          if (@podname.nil?) # Print all
+          if @podname.nil? # Print all
             cache_requests_per_pod.each do |pod, list|
               UI.title pod
               print_pod_cache_list(list)
@@ -90,12 +89,11 @@ module Pod
             type = request.released_pod? ? 'Release' : 'External'
             UI.section("#{request.spec.version} (#{type})") do
               UI.labeled('Spec', @short_output ? spec_file.relative_path_from(@cache_root) : spec_file)
-              UI.labeled('Pod', @short_output ? request.slug : @cache_root+request.slug)
+              UI.labeled('Pod', @short_output ? request.slug : @cache_root + request.slug)
             end
           end
         end
       end
-
     end
   end
 end
