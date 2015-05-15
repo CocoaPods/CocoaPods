@@ -285,15 +285,16 @@ module Pod
         end
       end
 
-      # Asks the use to choose an option from a list
+      # Presents a choice among the elements of an array to the user.
       #
-      # @param [Array<String>] array
-      #        The list of options to choose from
+      # @param  [Array<#to_s>] array
+      #         The list of the elements among which the user should make his
+      #         choice.
       #
-      # @param [String] message
-      #        The prompt to show as the question to choose from the list
+      # @param  [String] message
+      #         The message to display to the user.
       #
-      # @return [Fixnum] the index of the chosen array item
+      # @return [Fixnum] The index of the chosen array item.
       #
       def choose_from_array(array, message)
         array.each_with_index do |item, index|
