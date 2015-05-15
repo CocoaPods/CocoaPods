@@ -74,6 +74,35 @@ module Pod
       end
     end
 
+    describe 'when the cache is incomplete' do
+      before do
+        [@request, @unreleased_request].each do |request|
+          path_for_pod = @cache.send(:path_for_pod, request)
+          path_for_pod.mkpath
+          Dir.chdir(path_for_pod) do
+            FileUtils.mkdir_p 'Classes'
+            File.open('Classes/a.m', 'w') {}
+          end
+        end
+      end
+
+      describe 'when downloading a released pod' do
+        it 'does download the source' do
+          Downloader::Git.any_instance.expects(:download).never
+          @cache.expects(:uncached_pod).once
+          @cache.download_pod(@request)
+        end
+      end
+
+      describe 'when downloading an unreleased pod' do
+        it 'does download the source' do
+          Downloader::Git.any_instance.expects(:download).never
+          @cache.expects(:uncached_pod).once
+          @cache.download_pod(@unreleased_request)
+        end
+      end
+    end
+
     describe 'when the download is cached' do
       before do
         [@request, @unreleased_request].each do |request|

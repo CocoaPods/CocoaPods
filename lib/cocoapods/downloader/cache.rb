@@ -77,8 +77,9 @@ module Pod
       #
       def cached_pod(request)
         path = path_for_pod(request)
+        spec_path = path_for_spec(request)
         spec = request.spec || cached_spec(request)
-        return unless spec && path.directory?
+        return unless spec && path.directory? && spec_path.file?
         Response.new(path, spec, request.params)
       end
 
