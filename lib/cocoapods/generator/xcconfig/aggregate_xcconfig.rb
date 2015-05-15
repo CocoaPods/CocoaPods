@@ -49,7 +49,6 @@ module Pod
         # @return [Xcodeproj::Config]
         #
         def generate
-          pod_targets = target.pod_targets_for_build_configuration(@configuration_name)
           config = {
             'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target),
             'PODS_ROOT' => target.relative_pods_root,
@@ -132,6 +131,21 @@ module Pod
             ]
           end
           @xcconfig.merge!('LD_RUNPATH_SEARCH_PATHS' => ld_runpath_search_paths.join(' '))
+        end
+
+        private
+
+        #---------------------------------------------------------------------#
+
+        # !@group Private Helpers
+
+        # Returns the {PodTarget}s which are active for the current
+        # configuration name.
+        #
+        # @return [Array<PodTarget>]
+        #
+        def pod_targets
+          target.pod_targets_for_build_configuration(@configuration_name)
         end
 
         #---------------------------------------------------------------------#
