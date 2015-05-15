@@ -170,6 +170,70 @@ module Pod
             generated.class.should == Xcodeproj::Config
           end
         end
+
+        #-----------------------------------------------------------------------#
+
+        describe 'with multiple pod targets with user_target_xcconfigs' do
+          before do
+            spec_b = fixture_spec('orange-framework/OrangeFramework.podspec')
+            @pod_target_b = fixture_pod_target(spec_b)
+            @consumer_a = @consumer
+            @consumer_b = @pod_target_b.spec_consumers.last
+            @target.pod_targets << @pod_target_b
+          end
+
+          describe 'with boolean build settings' do
+            it 'does not warn if the values are equal' do
+              @consumer_a.stubs(:user_target_xcconfig).returns('ENABLE_HEADER_DEPENDENCIES' => 'YES')
+              @consumer_b.stubs(:user_target_xcconfig).returns('ENABLE_HEADER_DEPENDENCIES' => 'YES')
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['ENABLE_HEADER_DEPENDENCIES'].should == 'YES'
+            end
+
+            it 'warns if the values differ' do
+              @consumer_a.stubs(:user_target_xcconfig).returns('ENABLE_HEADER_DEPENDENCIES' => 'YES')
+              @consumer_b.stubs(:user_target_xcconfig).returns('ENABLE_HEADER_DEPENDENCIES' => 'NO')
+              @xcconfig = @generator.generate
+              UI.warnings.should.include 'Can\'t merge user_target_xcconfig for pod targets: ' \
+                '["Pods-BananaLib", "Pods-OrangeFramework"]. Boolean build setting '\
+                'ENABLE_HEADER_DEPENDENCIES has different values.'
+            end
+          end
+
+          describe 'with list build settings' do
+            it 'only adds the value once if the values are equal' do
+              @consumer_a.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-std=c++1y')
+              @consumer_b.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-std=c++1y')
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['OTHER_CPLUSPLUSFLAGS'].should == '-std=c++1y'
+            end
+
+            it 'adds both values if the values differ' do
+              @consumer_a.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-std=c++1y')
+              @consumer_b.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-stdlib=libc++')
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['OTHER_CPLUSPLUSFLAGS'].should == '-std=c++1y -stdlib=libc++'
+            end
+          end
+
+          describe 'with singular build settings' do
+            it 'does not warn if the values are equal' do
+              @consumer_a.stubs(:user_target_xcconfig).returns('STRIP_STYLE' => 'non-global')
+              @consumer_b.stubs(:user_target_xcconfig).returns('STRIP_STYLE' => 'non-global')
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['STRIP_STYLE'].should == 'non-global'
+            end
+
+            it 'does warn if the values differ' do
+              @consumer_a.stubs(:user_target_xcconfig).returns('STRIP_STYLE' => 'non-global')
+              @consumer_b.stubs(:user_target_xcconfig).returns('STRIP_STYLE' => 'all')
+              @xcconfig = @generator.generate
+              UI.warnings.should.include 'Can\'t merge user_target_xcconfig for pod targets: ' \
+                '["Pods-BananaLib", "Pods-OrangeFramework"]. Singular build setting '\
+                'STRIP_STYLE has different values.'
+            end
+          end
+        end
       end
     end
   end

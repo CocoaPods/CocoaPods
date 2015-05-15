@@ -103,6 +103,8 @@ module Pod
             end
           end
 
+          @xcconfig.merge!(merged_user_target_xcconfigs)
+
           # TODO: Need to decide how we are going to ensure settings like these
           # are always excluded from the user's project.
           #
@@ -146,6 +148,55 @@ module Pod
         #
         def pod_targets
           target.pod_targets_for_build_configuration(@configuration_name)
+        end
+
+        # Returns the +user_target_xcconfig+ for all pod targets grouped by keys
+        #
+        # @return [Hash{String,Hash{Target,String}]
+        #
+        def user_target_xcconfig_values_by_target_by_key
+          pod_targets.each_with_object({}) do |target, hash|
+            target.spec_consumers.each do |spec_consumer|
+              spec_consumer.user_target_xcconfig.each do |k, v|
+                (hash[k] ||= {})[target] = v
+              end
+            end
+          end
+        end
+
+        # Merges the +user_target_xcconfig+ for all pod targets into the
+        # #xcconfig and warns on conflicting definitions.
+        #
+        # @return [Hash{String, String}]
+        #
+        def merged_user_target_xcconfigs
+          settings = user_target_xcconfig_values_by_target_by_key
+          settings.each_with_object({}) do |(key, values_by_target), xcconfig|
+            uniq_values = values_by_target.values.uniq
+            values_are_bools = values_by_target.values.all? { |v| v =~ /(yes|no)/i }
+            if values_are_bools
+              # Boolean build settings
+              if uniq_values.count > 1
+                UI.warn 'Can\'t merge user_target_xcconfig for pod targets: ' \
+                  "#{values_by_target.keys.map(&:label)}. Boolean build "\
+                  "setting #{key} has different values."
+              else
+                xcconfig[key] = uniq_values.first
+              end
+            elsif key =~ /S$/
+              # Plural build settings
+              xcconfig[key] = uniq_values.join(' ')
+            else
+              # Singular build settings
+              if uniq_values.count > 1
+                UI.warn 'Can\'t merge user_target_xcconfig for pod targets: ' \
+                  "#{values_by_target.keys.map(&:label)}. Singular build "\
+                  "setting #{key} has different values."
+              else
+                xcconfig[key] = uniq_values.first
+              end
+            end
+          end
         end
 
         #---------------------------------------------------------------------#
