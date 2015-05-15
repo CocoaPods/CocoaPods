@@ -285,6 +285,31 @@ module Pod
         end
       end
 
+      # Asks the use to choose an option from a list
+      #
+      # @param [Array<String>] array
+      #        The list of options to choose from
+      #
+      # @param [String] message
+      #        The prompt to show as the question to choose from the list
+      #
+      # @return [Fixnum] the index of the chosen array item
+      #
+      def choose_from_array(array, message)
+        array.each_with_index do |item, index|
+          UI.puts "#{ index + 1 }: #{ item }"
+        end
+
+        UI.puts message
+
+        index = UI.gets.chomp.to_i - 1
+        if index < 0 || index > array.count - 1
+          raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
+        else
+          index
+        end
+      end
+
       public
 
       # @!group Basic methods

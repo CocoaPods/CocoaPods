@@ -71,5 +71,21 @@ module Pod
         UI.output.should == "#{' ' * 10}- label:\n" + values.map { |v| "#{' ' * 12}- #{v}\n" }.join
       end
     end
+
+    describe '#choose_from_array' do
+      it 'should return a valid index for the given array' do
+        UI.next_input = "1\n"
+        index = UI.choose_from_array(%w(item1 item2 item3), 'A message')
+        UI.output.should.include "1: item1\n2: item2\n3: item3\nA message\n"
+        index.should == 0
+      end
+
+      it 'should raise when the index is out of bounds' do
+        UI.next_input = "4\n"
+        lambda { UI.choose_from_array(%w(item1 item2 item3), 'A message') }.should.raise Pod::Informative
+        UI.next_input = "0\n"
+        lambda { UI.choose_from_array(%w(item1 item2 item3), 'A message') }.should.raise Pod::Informative
+      end
+    end
   end
 end
