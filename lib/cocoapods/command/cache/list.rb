@@ -26,39 +26,41 @@ module Pod
         end
 
         def run
-          UI.puts("Cache root: #{@cache.root}") if @short_output
+          UI.puts("$CACHE_ROOT: #{@cache.root}") if @short_output
           if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod, cache_desc|
-              UI.title pod
-              print_pod_cache_infos(cache_desc)
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
             end
           else # Print only for the requested pod
             cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
             if cache_descriptors.nil?
               UI.notice("No cache for pod named #{@pod_name} found")
             else
-              print_pod_cache_infos(cache_descriptors)
+              print_pod_cache_infos(@pod_name, cache_descriptors)
             end
           end
         end
 
         private
 
-        # Prints the list of specs & pod cache dirs for a single pod name
+        # Prints the list of specs & pod cache dirs for a single pod name.
         #
-        # @param [Array<Hash>] info_list
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
         #        The various infos about a pod cache. Keys are
         #        :spec_file, :version, :release and :slug
         #
-        def print_pod_cache_infos(info_list)
-          info_list.each do |info|
-            UI.section("#{info[:version]} (#{pod_type(info)})") do
-              if @short_output
-                [:spec_file, :slug].each { |k| info[k] = info[k].relative_path_from(@cache.root) }
-              end
-              UI.labeled('Spec', info[:spec_file])
-              UI.labeled('Pod', info[:slug])
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts "#{pod_name}:"
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
             end
+            UI.puts("  - Version: #{desc[:version]}")
+            UI.puts("    Type:    #{pod_type(desc)}")
+            UI.puts("    Spec:    #{desc[:spec_file]}")
+            UI.puts("    Pod:     #{desc[:slug]}")
           end
         end
       end
