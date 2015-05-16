@@ -26,18 +26,18 @@ module Pod
         end
 
         def run
-          UI.puts("Cache root: #{@cache_root}") if @short_output
+          UI.puts("Cache root: #{@cache.root}") if @short_output
           if @pod_name.nil? # Print all
-            cache_info_per_pod.each do |pod, infos|
+            @cache.cache_descriptors_per_pod.each do |pod, cache_desc|
               UI.title pod
-              print_pod_cache_infos(infos)
+              print_pod_cache_infos(cache_desc)
             end
           else # Print only for the requested pod
-            cache_infos = cache_info_per_pod[@pod_name]
-            if cache_infos.nil?
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
               UI.notice("No cache for pod named #{@pod_name} found")
             else
-              print_pod_cache_infos(cache_infos)
+              print_pod_cache_infos(cache_descriptors)
             end
           end
         end
@@ -54,7 +54,7 @@ module Pod
           info_list.each do |info|
             UI.section("#{info[:version]} (#{pod_type(info)})") do
               if @short_output
-                [:spec_file, :slug].each { |k| info[k] = info[k].relative_path_from(@cache_root) }
+                [:spec_file, :slug].each { |k| info[k] = info[k].relative_path_from(@cache.root) }
               end
               UI.labeled('Spec', info[:spec_file])
               UI.labeled('Pod', info[:slug])

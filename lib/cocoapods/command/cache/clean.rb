@@ -36,17 +36,17 @@ module Pod
             clear_cache
           else
             # Remove only cache for this pod
-            cache_list = cache_info_per_pod[@pod_name]
-            if cache_list.nil?
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
               UI.notice("No cache for pod named #{@pod_name} found")
-            elsif cache_list.count > 1 && !@wipe_all
+            elsif cache_descriptors.count > 1 && !@wipe_all
               # Ask which to remove
-              choices = cache_list.map { |c| "#{@pod_name} v#{c[:version]} (#{pod_type(c)})" }
+              choices = cache_descriptors.map { |c| "#{@pod_name} v#{c[:version]} (#{pod_type(c)})" }
               index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
-              remove_caches([cache_list[index]])
+              remove_caches([cache_descriptors[index]])
             else
               # Remove all found cache of this pod
-              remove_caches(cache_list)
+              remove_caches(cache_descriptors)
             end
           end
         end
@@ -63,24 +63,24 @@ module Pod
 
         # Removes the specified cache
         #
-        # @param [Array<Hash>] cache_infos
+        # @param [Array<Hash>] cache_descriptors
         #        An array of caches to remove, each specified with the same
-        #        hash as cache_info_per_pod especially :spec_file and :slug
+        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
         #
-        def remove_caches(cache_infos)
-          cache_infos.each do |info|
-            UI.message("Removing spec #{info[:spec_file]} (v#{info[:version]})") do
-              FileUtils.rm(info[:spec_file])
+        def remove_caches(cache_descriptors)
+          cache_descriptors.each do |desc|
+            UI.message("Removing spec #{desc[:spec_file]} (v#{desc[:version]})") do
+              FileUtils.rm(desc[:spec_file])
             end
-            UI.message("Removing cache #{info[:slug]}") do
-              FileUtils.rm_rf(info[:slug])
+            UI.message("Removing cache #{desc[:slug]}") do
+              FileUtils.rm_rf(desc[:slug])
             end
           end
         end
 
         def clear_cache
-          UI.message("Removing the whole cache dir #{@cache_root}") do
-            FileUtils.rm_rf(@cache_root)
+          UI.message("Removing the whole cache dir #{@cache.root}") do
+            FileUtils.rm_rf(@cache.root)
           end
         end
       end

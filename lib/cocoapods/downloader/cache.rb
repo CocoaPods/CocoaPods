@@ -38,6 +38,39 @@ module Pod
         raise
       end
 
+      # @return [Hash<String, Hash<Symbol, String>>]
+      #         A hash whose keys are the pod name
+      #         And values are a hash with the following keys:
+      #         :spec_file : path to the spec file
+      #         :name      : name of the pod
+      #         :version   : pod version
+      #         :release   : boolean to tell if that's a release pod
+      #         :slug      : the slug path where the pod cache is located
+      #
+      # @todo Move this to Pod::Downloader::Cache
+      #
+      def cache_descriptors_per_pod
+        specs_dir = root + 'Specs'
+        release_specs_dir = specs_dir + 'Release'
+        return {} unless specs_dir.exist?
+
+        spec_paths = specs_dir.find.select { |f| f.fnmatch('*.podspec.json') }
+        spec_paths.reduce({}) do |hash, spec_path|
+          spec = Specification.from_file(spec_path)
+          hash[spec.name] = [] if hash[spec.name].nil?
+          is_release = spec_path.to_s.start_with?(release_specs_dir.to_s)
+          request = Downloader::Request.new(:spec => spec, :released => is_release)
+          hash[spec.name] << {
+            :spec_file => spec_path,
+            :name => spec.name,
+            :version => spec.version,
+            :release => is_release,
+            :slug => root + request.slug,
+          }
+          hash
+        end
+      end
+
       private
 
       # Ensures the cache on disk was created with the same CocoaPods version as
