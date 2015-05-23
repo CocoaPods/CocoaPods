@@ -30,6 +30,7 @@ group :development do
   gem 'mocha-on-bacon'
   gem 'prettybacon'
   gem 'webmock'
+  gem 'inch'
 
   # Integration tests
   gem 'diffy'

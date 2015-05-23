@@ -34,10 +34,7 @@ module Pod
         @specs_by_configuration = specs_by_configuration
       end
 
-      # Generates and saves the file.
-      #
-      # @param  [Pathname] pathname
-      #         The path where to save the generated file.
+      # Generates the file contents.
       #
       # @return [void]
       #

@@ -37,6 +37,16 @@ module Pod
       # @todo Refactor to title (for always visible titles like search)
       #       and sections (titles that represent collapsible sections).
       #
+      # @param [String] title
+      #        The title to print
+      #
+      # @param [String] verbose_prefix
+      #        See #message
+      #
+      # @param [FixNum] relative_indentation
+      #        The indentation level relative to the current,
+      #        when the message is printed.
+      #
       def section(title, verbose_prefix = '', relative_indentation = 0)
         if config.verbose?
           title(title, verbose_prefix, relative_indentation)
@@ -74,6 +84,16 @@ module Pod
 
       # A title opposed to a section is always visible
       #
+      # @param [String] title
+      #        The title to print
+      #
+      # @param [String] verbose_prefix
+      #        See #message
+      #
+      # @param [FixNum] relative_indentation
+      #        The indentation level relative to the current,
+      #        when the message is printed.
+      #
       def title(title, verbose_prefix = '', relative_indentation = 2)
         if @treat_titles_as_messages
           message(title, verbose_prefix)
@@ -102,6 +122,16 @@ module Pod
       #
       # @todo Clean interface.
       #
+      # @param [String] message
+      #        The message to print.
+      #
+      # @param [String] verbose_prefix
+      #        See #message
+      #
+      # @param [FixNum] relative_indentation
+      #        The indentation level relative to the current,
+      #        when the message is printed.
+      #
       def message(message, verbose_prefix = '', relative_indentation = 2)
         message = verbose_prefix + message if config.verbose?
         puts_indented message if config.verbose?
@@ -116,6 +146,9 @@ module Pod
       # mode.
       #
       # Any title printed in the optional block is treated as a message.
+      #
+      # @param [String] message
+      #        The message to print.
       #
       def info(message)
         indentation = config.verbose? ? self.indentation_level : 0
@@ -143,6 +176,9 @@ module Pod
       # The returned path is quoted. If the argument is nil it returns the
       # empty string.
       #
+      # @param [#to_str] pathname
+      #        The path to print.
+      #
       def path(pathname)
         if pathname
           from_path = config.podfile_path.dirname if config.podfile_path
@@ -155,6 +191,12 @@ module Pod
       end
 
       # Prints the textual representation of a given set.
+      #
+      # @param  [Set] set
+      #         the set that should be presented.
+      #
+      # @param  [Symbol] mode
+      #         the presentation mode, either `:normal` or `:name_and_version`.
       #
       def pod(set, mode = :normal)
         if mode == :name_and_version
@@ -190,6 +232,15 @@ module Pod
 
       # Prints a message with a label.
       #
+      # @param [String] label
+      #        The label to print.
+      #
+      # @param [#to_s] value
+      #        The value to print.
+      #
+      # @param [FixNum] justification
+      #        The justification of the label.
+      #
       def labeled(label, value, justification = 12)
         if value
           title = "- #{label}:"
@@ -207,6 +258,9 @@ module Pod
 
       # Prints a message respecting the current indentation level and
       # wrapping it to the terminal width if necessary.
+      #
+      # @param [String] message
+      #        The message to print.
       #
       def puts_indented(message = '')
         indented = wrap_string(message, self.indentation_level)
@@ -238,11 +292,17 @@ module Pod
 
       # prints a message followed by a new line unless config is silent.
       #
+      # @param [String] message
+      #        The message to print.
+      #
       def puts(message = '')
         STDOUT.puts(message) unless config.silent?
       end
 
       # prints a message followed by a new line unless config is silent.
+      #
+      # @param [String] message
+      #        The message to print.
       #
       def print(message)
         STDOUT.print(message) unless config.silent?
@@ -259,6 +319,8 @@ module Pod
       #
       # @param [String]  message The message to print.
       # @param [Array]   actions The actions that the user should take.
+      # @param [Bool]    verbose_only
+      #        Restrict the appearance of the warning to verbose mode only
       #
       # return [void]
       #

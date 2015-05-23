@@ -51,6 +51,8 @@ module Pod
         #
         attr_reader :lockfile
 
+        # Init a new SandboxAnalyzer
+        #
         # @param [Sandbox] sandbox @see sandbox
         # @param [Array<Specifications>] specs @see specs
         # @param [Bool] update_mode @see update_mode
@@ -66,7 +68,7 @@ module Pod
         # Performs the analysis to the detect the state of the sandbox respect
         # to the resolved specifications.
         #
-        # @return [SpecsState] the state of the sandbox.
+        # @return [void]
         #
         def analyze
           state = SpecsState.new

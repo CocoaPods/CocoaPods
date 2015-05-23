@@ -16,6 +16,8 @@ module Pod
     #
     attr_reader :linter
 
+    # Initialize a new instance
+    #
     # @param  [Specification, Pathname, String] spec_or_path
     #         the Specification or the path of the `podspec` file to lint.
     #
@@ -167,7 +169,8 @@ module Pod
       result_type != :error && (result_type != :warning || allow_warnings)
     end
 
-    # @return [Symbol]
+    # @return [Symbol] The type, which should been used to display the result.
+    #         One of: `:error`, `:warning`, `:note`.
     #
     def result_type
       types = results.map(&:type).uniq
@@ -177,7 +180,8 @@ module Pod
       end
     end
 
-    # @return [Symbol]
+    # @return [Symbol] The color, which should been used to display the result.
+    #         One of: `:green`, `:yellow`, `:red`.
     #
     def result_color
       case result_type

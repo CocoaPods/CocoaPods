@@ -101,6 +101,8 @@ module Pod
       #
       attr_accessor :io
 
+      # Init a new Indenter
+      #
       # @param [IO] io @see io
       #
       def initialize(io = nil)

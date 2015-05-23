@@ -7,6 +7,8 @@ module Pod
   # through the installation process.
   #
   class Project < Xcodeproj::Project
+    # Initialize a new instance
+    #
     # @param  [Pathname, String] path @see path
     # @param  [Bool] skip_initialization
     #         Whether the project should be initialized from scratch.
@@ -169,7 +171,7 @@ module Pod
     #         The group for the new file reference.
     #
     # @param  [Bool] reflect_file_system_structure
-    #         Wether group structure should reflect the file system structure.
+    #         Whether group structure should reflect the file system structure.
     #         If yes, where needed, intermediate groups are created, similar to
     #         how mkdir -p operates.
     #

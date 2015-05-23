@@ -56,19 +56,19 @@ module Pod
 
       # @!group Adding headers
 
-      # Adds a header to the directory.
+      # Adds headers to the directory.
       #
-      # @param  [Pathname] namespace_path
+      # @param  [Pathname] namespace
       #         the path where the header file should be stored relative to the
       #         headers directory.
       #
-      # @param  [Pathname] relative_header_path
+      # @param  [Array<Pathname>] relative_header_paths
       #         the path of the header file relative to the Pods project
       #         (`PODS_ROOT` variable of the xcconfigs).
       #
       # @note   This method adds the files to the search paths.
       #
-      # @return [Pathname]
+      # @return [Array<Pathname>]
       #
       def add_files(namespace, relative_header_paths, platform)
         add_search_path(namespace, platform)

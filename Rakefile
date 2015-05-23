@@ -141,6 +141,9 @@ begin
 
       title 'Running RuboCop'
       Rake::Task['rubocop'].invoke
+
+      title 'Running Inch'
+      Rake::Task['inch:spec'].invoke
     end
 
     namespace :fixture_tarballs do
@@ -295,6 +298,60 @@ begin
     sh 'bundle exec rubocop lib spec Rakefile'
   end
 
+  #-- Inch -------------------------------------------------------------------#
+
+  namespace :inch do
+    desc 'Lint the completeness of the documentation with Inch'
+    task :spec do
+      require 'inch'
+      require 'inch/cli'
+
+      puts 'Parse docs …'
+      YARD::Parser::SourceParser.before_parse_file do |_|
+        print green('.') # Visualize progress
+      end
+
+      class ProgressEnumerable
+        include Enumerable
+
+        def initialize(array)
+          @array = array
+        end
+
+        def each
+          @array.each do |e|
+            print '.'
+            yield e
+          end
+        end
+      end
+
+      Inch::Codebase::Objects.class_eval do
+        alias_method :old_init, :initialize
+        def initialize(language, objects)
+          puts "\n\nEvaluating …"
+          old_init(language, ProgressEnumerable.new(objects))
+        end
+      end
+
+      codebase = Inch::Codebase.parse(Dir.pwd, Inch::Config.codebase)
+      context = Inch::API::List.new(codebase, {})
+      options = Inch::CLI::Command::Options::List.new
+      options.show_all = true
+      options.ui = Inch::Utils::UI.new
+      failing_grade_symbols = [:B, :C] # add :U for undocumented
+      failing_grade_list = context.grade_lists.select { |g| failing_grade_symbols.include?(g.to_sym) }
+      Inch::CLI::Command::Output::List.new(options, context.objects, failing_grade_list)
+      puts
+      if context.objects.any? { |o| failing_grade_symbols.include?(o.grade.to_sym) }
+        puts red('✗ Lint of Documentation failed: Please improve above suggestions.')
+        exit 1
+      else
+        puts green('✓ Nothing to improve detected.')
+      end
+    end
+  end
+
 rescue LoadError, NameError => e
   $stderr.puts "\033[0;31m" \
     '[!] Some Rake tasks haven been disabled because the environment' \
@@ -331,6 +388,10 @@ def title(title)
   puts cyan_title
   puts '-' * 80
   puts
+end
+
+def green(string)
+  "\033[0;32m#{string}\e[0m"
 end
 
 def red(string)

@@ -61,7 +61,7 @@ module Pod
       #
       attr_reader :sandbox
 
-      # @return [Library] The library whose target needs to be generated.
+      # @return [Target] The library whose target needs to be generated.
       #
       attr_reader :library
 
@@ -76,8 +76,10 @@ module Pod
 
       # @!group Private implementation
 
+      # Initialize a new instance
+      #
       # @param [Sandbox] sandbox @see sandbox
-      # @param [Library] library @see library
+      # @param [Target]  library @see library
       #
       def initialize(sandbox, library)
         @sandbox = sandbox

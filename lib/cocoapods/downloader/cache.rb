@@ -12,6 +12,8 @@ module Pod
       #
       attr_reader :root
 
+      # Initialize a new instance
+      #
       # @param  [Pathname,String] root
       #         see {#root}
       #

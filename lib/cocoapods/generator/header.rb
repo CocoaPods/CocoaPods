@@ -19,6 +19,8 @@ module Pod
       #
       attr_accessor :module_imports
 
+      # Initialize a new instance
+      #
       # @param  [Symbol] platform
       #         @see platform
       #

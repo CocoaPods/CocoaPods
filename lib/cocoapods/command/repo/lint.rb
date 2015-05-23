@@ -24,6 +24,8 @@ module Pod
           super
         end
 
+        # Run the command
+        #
         # @todo Part of this logic needs to be ported to cocoapods-core so web
         #       services can validate the repo.
         #

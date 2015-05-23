@@ -14,11 +14,13 @@ module Pod
         #
         EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle].freeze
 
-        # @return [Target] the target that should be integrated.
+        # @return [AggregateTarget] the target that should be integrated.
         #
         attr_reader :target
 
-        # @param  [Target] target @see #target_definition
+        # Init a new TargetIntegrator
+        #
+        # @param  [AggregateTarget] target @see #target
         #
         def initialize(target)
           @target = target
@@ -256,6 +258,8 @@ module Pod
 
         # Read the project from the disk to ensure that it is up to date as
         # other TargetIntegrators might have modified it.
+        #
+        # @return [Project]
         #
         def user_project
           @user_project ||= Xcodeproj::Project.open(target.user_project_path)
