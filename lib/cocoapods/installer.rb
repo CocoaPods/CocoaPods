@@ -615,7 +615,7 @@ module Pod
       end.flatten
 
       development_pod_targets.each do |pod_target|
-        Xcodeproj::XCScheme.share_scheme(pods_project.path, pod_target.name, ENV['USER'])
+        Xcodeproj::XCScheme.share_scheme(pods_project.path, pod_target.name)
       end
     end
 

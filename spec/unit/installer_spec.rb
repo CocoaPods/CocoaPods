@@ -600,8 +600,7 @@ module Pod
 
           Xcodeproj::XCScheme.expects(:share_scheme).with(
             @installer.pods_project.path,
-            'Pods-default-BananaLib',
-            ENV['USER'])
+            'Pods-default-BananaLib')
 
           @installer.send(:share_development_pod_schemes)
         end
