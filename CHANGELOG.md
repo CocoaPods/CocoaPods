@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Schemes of development pods will now be shared.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3600](https://github.com/CocoaPods/CocoaPods/issues/3600)
+
 * Allow opting out of pod source locking, meaning `pod try` yields editable
   projects.  
   [Samuel Giddins](https://github.com/segiddins)
