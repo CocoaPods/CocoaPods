@@ -262,16 +262,14 @@ module Pod
     #       created by the Pod source installer as well.
     #
     def create_file_accessors
-      aggregate_targets.each do |target|
-        target.pod_targets.each do |pod_target|
-          pod_root = sandbox.pod_dir(pod_target.root_spec.name)
-          path_list = Sandbox::PathList.new(pod_root)
-          file_accessors = pod_target.specs.map do |spec|
-            Sandbox::FileAccessor.new(path_list, spec.consumer(pod_target.platform))
-          end
-          pod_target.file_accessors ||= []
-          pod_target.file_accessors.concat(file_accessors)
+      pod_targets.each do |pod_target|
+        pod_root = sandbox.pod_dir(pod_target.root_spec.name)
+        path_list = Sandbox::PathList.new(pod_root)
+        file_accessors = pod_target.specs.map do |spec|
+          Sandbox::FileAccessor.new(path_list, spec.consumer(pod_target.platform))
         end
+        pod_target.file_accessors ||= []
+        pod_target.file_accessors.concat(file_accessors)
       end
     end
 
