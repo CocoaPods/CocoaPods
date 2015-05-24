@@ -136,6 +136,7 @@ module Pod
         set_target_dependencies
         run_podfile_post_install_hooks
         write_pod_project
+        share_development_pod_schemes
         write_lockfiles
       end
     end
@@ -601,6 +602,20 @@ module Pod
         pods_project.sort(:groups_position => :below)
         pods_project.recreate_user_schemes(false)
         pods_project.save
+      end
+    end
+
+    # Shares schemes of development Pods.
+    #
+    # @return [void]
+    #
+    def share_development_pod_schemes
+      development_pod_targets = sandbox.development_pods.keys.map do |pod|
+        pods_project.targets.select { |target| target.name =~ /^Pods-.*-#{pod}$/ }
+      end.flatten
+
+      development_pod_targets.each do |pod_target|
+        Xcodeproj::XCScheme.share_scheme(pods_project.path, pod_target.name, ENV['USER'])
       end
     end
 

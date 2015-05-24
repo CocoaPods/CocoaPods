@@ -590,6 +590,22 @@ module Pod
           @installer.send(:write_pod_project)
         end
 
+        it 'shares schemes of development pods' do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile)
+          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+
+          @installer.pods_project.stubs(:targets).returns([pod_target])
+          @installer.sandbox.stubs(:development_pods).returns('BananaLib' => nil)
+
+          Xcodeproj::XCScheme.expects(:share_scheme).with(
+            @installer.pods_project.path,
+            'Pods-default-BananaLib',
+            ENV['USER'])
+
+          @installer.send(:share_development_pod_schemes)
+        end
+
         it "uses the user project's object version for the pods project" do
           tmp_directory = Pathname(Dir.tmpdir) + 'CocoaPods'
           FileUtils.mkdir_p(tmp_directory)
