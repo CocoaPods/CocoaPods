@@ -76,10 +76,10 @@ module Pod
       #         was found in the download cache.
       #
       def cached_pod(request)
+        cached_spec = cached_spec(request)
         path = path_for_pod(request)
-        spec_path = path_for_spec(request)
-        spec = request.spec || cached_spec(request)
-        return unless spec && path.directory? && spec_path.file?
+        return unless cached_spec && path.directory?
+        spec = request.spec || cached_spec
         Response.new(path, spec, request.params)
       end
 
@@ -92,6 +92,8 @@ module Pod
       def cached_spec(request)
         path = path_for_spec(request)
         path.file? && Specification.from_file(path)
+      rescue JSON::ParserError
+        nil
       end
 
       # @param  [Request] request
