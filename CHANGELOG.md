@@ -12,6 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3600](https://github.com/CocoaPods/CocoaPods/issues/3600)
 
+* Recognizes incomplete cache when the original download of a pod was
+  interrupted.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3561](https://github.com/CocoaPods/CocoaPods/issues/3561)
+
 * Allow opting out of pod source locking, meaning `pod try` yields editable
   projects.  
   [Samuel Giddins](https://github.com/segiddins)
