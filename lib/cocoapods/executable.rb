@@ -43,9 +43,7 @@ module Pod
     #
     # @raise  If the command fails and the `raise_on_failure` is set to true.
     #
-    # @return [String] the output of the command (STDOUT and STDERR).
-    #
-    # @todo   Find a way to display the live output of the commands.
+    # @return [String] the output of the command.
     #
     def self.execute_command(executable, command, raise_on_failure)
       bin = `which #{executable}`.strip
