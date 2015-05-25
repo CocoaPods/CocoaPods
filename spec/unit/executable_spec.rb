@@ -52,5 +52,32 @@ module Pod
       
       Executable.execute_command('ruby', cmd, true).should == "    out\r\n    err\r\n"
     end
+    
+    it "outputs as it goes when verbose" do
+      cmd = ['-e', <<-RB]
+        puts 'out'
+        sleep 0.5
+        warn 'err'
+      RB
+      
+      Config.instance.verbose = true
+      
+      output = StringIO.new
+      
+      thread = Thread.new { Executable.with_output('ruby', cmd, output) }
+      
+      # Give Ruby a chance to start.
+      sleep 0.3
+      
+      output.string.should == ''
+      
+      sleep 0.5
+      
+      output.string.should == "out\r\n"
+      
+      sleep 0.5
+      
+      output.string.should == "out\r\nerr\r\n"
+    end
   end
 end
