@@ -59,8 +59,11 @@ module Pod
       UI.message("$ #{full_command}") if Config.instance.verbose?
       
       output = StringIO.new
+      indented = Indenter.new(output)
       status = with_verbose do
-        spawn(bin, command, Indenter.new(output))
+        spawn(bin, command) do |line|
+          indented << line
+        end
       end
       
       unless status.success?
@@ -76,11 +79,18 @@ module Pod
 
     private
     
-    def self.spawn bin, command, output
+    # Spawn a subprocess.
+    #
+    # @param bin [String] Name of the binary to use.
+    # @param arguments [Array<String>] Command arguments.
+    #
+    # @yield [String] Each output line.
+    #
+    def self.spawn bin, arguments, &block
       require 'pty'
-      PTY.spawn(bin, *command) do |r, _, pid|
+      PTY.spawn(bin, *arguments) do |r, _, pid|
         begin
-          r.each { |line| output.write line }
+          r.each(&block) if block_given?
           status = PTY.check(pid)
           return status if status
         end  
@@ -88,6 +98,8 @@ module Pod
     end
     
     # Yields to a block, redirecting STDOUT/STDERR if verbose output is used. 
+    #
+    # @yield [Array<Indenter, Indenter>] If verbose, will yield an indenter.
     #
     def self.with_verbose &block
       if Config.instance.verbose?
@@ -98,6 +110,8 @@ module Pod
     end
     
     # Redirects the output to the given stdout/stderr.
+    #
+    # @yield [void]
     #
     def self.with_redirected stdout, stderr
       old_stdout = $stdout
@@ -138,16 +152,8 @@ module Pod
       #
       # @return [void]
       #
-      def write(value)
-        @io.write "#{ indent }#{ value }"
-      end
-      
-      def string
-        @io.string
-      end
-      
-      def flush
-        # We ignore calls to flush.
+      def <<(value)
+        @io << "#{ indent }#{ value }"
       end
     end
   end
