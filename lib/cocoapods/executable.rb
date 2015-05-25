@@ -55,50 +55,67 @@ module Pod
 
       command = command.map(&:to_s)
       full_command = "#{bin} #{command.join(' ')}"
-
-      if Config.instance.verbose?
-        UI.message("$ #{full_command}")
-        stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
-      else
-        stdout, stderr = Indenter.new, Indenter.new
+      
+      UI.message("$ #{full_command}") if Config.instance.verbose?
+      
+      output = StringIO.new
+      status = with_verbose do
+        spawn(bin, command, Indenter.new(output))
       end
-
-      status = popen3(bin, command, stdout, stderr)
-      output = stdout.join("\n") + stderr.join("\n")
+      
       unless status.success?
         if raise_on_failure
-          raise Informative, "#{full_command}\n\n#{output}"
+          raise Informative, "#{full_command}\n\n#{output.string}"
         else
           UI.message("[!] Failed: #{full_command}".red)
         end
       end
-      output
+      
+      output.string
     end
 
     private
-
-    def self.popen3(bin, command, stdout, stderr)
-      require 'open3'
-      Open3.popen3(bin, *command) do |i, o, e, t|
-        Thread.new { while s = o.gets; stdout << s; end }
-        Thread.new { while s = e.gets; stderr << s; end }
-        i.close
-        status = t.value
-
-        o.flush
-        e.flush
-        sleep(0.1)
-
-        status
+    
+    def self.spawn bin, command, output
+      require 'pty'
+      PTY.spawn(bin, *command) do |r, _, pid|
+        begin
+          r.each { |line| output.write line }
+          status = PTY.check(pid)
+          return status if status
+        end  
       end
+    end
+    
+    # Yields to a block, redirecting STDOUT/STDERR if verbose output is used. 
+    #
+    def self.with_verbose &block
+      if Config.instance.verbose?
+        with_redirected(Indenter.new(STDOUT), Indenter.new(STDERR), &block)
+      else
+        block.call
+      end
+    end
+    
+    # Redirects the output to the given stdout/stderr.
+    #
+    def self.with_redirected stdout, stderr
+      old_stdout = $stdout
+      old_stderr = $stderr
+      $stdout = stdout if stdout
+      $stderr = stderr if stderr
+      yield
+    ensure
+      $stdout = old_stdout
+      $stderr = old_stderr
     end
 
     #-------------------------------------------------------------------------#
 
-    # Helper class that allows to write to an {IO} instance taking into account
+    # Helper class that allows to write to a {IO} instance taking into account
     # the UI indentation level.
     #
-    class Indenter < ::Array
+    class Indenter
       # @return [Fixnum] The indentation level of the UI.
       #
       attr_accessor :indent
@@ -109,7 +126,7 @@ module Pod
 
       # @param [IO] io @see io
       #
-      def initialize(io = nil)
+      def initialize(io)
         @io = io
         @indent = ' ' * UI.indentation_level
       end
@@ -121,10 +138,16 @@ module Pod
       #
       # @return [void]
       #
-      def <<(value)
-        super
-      ensure
-        @io << "#{ indent }#{ value }" if @io
+      def write(value)
+        @io.write "#{ indent }#{ value }"
+      end
+      
+      def string
+        @io.string
+      end
+      
+      def flush
+        # We ignore calls to flush.
       end
     end
   end
