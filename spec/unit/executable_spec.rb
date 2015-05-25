@@ -16,18 +16,41 @@ module Pod
       result = mock
       result.stubs(:success?).returns(true)
 
-      Open3.expects(:popen3).with('/Spa ces/are"/fun/false').once.returns(result)
+      PTY.expects(:spawn).with('/Spa ces/are"/fun/false').once.returns(result)
       Executable.execute_command(cmd, [], true)
     end
-
+    
     it "doesn't hang when the spawned process forks a zombie process with the same STDOUT and STDERR" do
       cmd = ['-e', <<-RB]
         Process.fork { Process.daemon(nil, true); sleep(4) }
         puts 'out'
+        warn 'err'
       RB
       Timeout.timeout(2) do
-        Executable.execute_command('ruby', cmd, true).should == "out\n"
+        Executable.execute_command('ruby', cmd, true).should == "out\r\nerr\r\n"
       end
+    end
+    
+    it "captures all output by the subprocess" do
+      cmd = ['-e', <<-RB]
+        puts 'out'
+        warn 'err'
+        p 'p'
+        print 'print'
+      RB
+      
+      Executable.execute_command('ruby', cmd, true).should == "out\r\nerr\r\n\"p\"\r\nprint"
+    end
+    
+    it "indents output correctly" do
+      cmd = ['-e', <<-RB]
+        puts 'out'
+        warn 'err'
+      RB
+      
+      UI.indentation_level = 4
+      
+      Executable.execute_command('ruby', cmd, true).should == "    out\r\n    err\r\n"
     end
   end
 end
