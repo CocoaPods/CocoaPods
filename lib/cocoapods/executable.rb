@@ -48,27 +48,16 @@ module Pod
     def self.execute_command(executable, command, raise_on_failure)
       bin = `which #{executable}`.strip
       raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
-
-      require 'shellwords'
-
-      command = command.map(&:to_s)
-      full_command = "#{bin} #{command.join(' ')}"
-      
-      UI.message("$ #{full_command}") if Config.instance.verbose?
       
       output = StringIO.new
-      indented = Indenter.new(output)
-      status = with_verbose do
-        spawn(bin, command) do |line|
-          indented << line
-        end
-      end
       
-      unless status.success?
-        if raise_on_failure
-          raise Informative, "#{full_command}\n\n#{output.string}"
-        else
-          UI.message("[!] Failed: #{full_command}".red)
+      with_output(bin, command.map(&:to_s), output) do |full_command, status|
+        unless status.success?
+          if raise_on_failure
+            raise Informative, "#{full_command}\n\n#{output.string}"
+          else
+            UI.message("[!] Failed: #{full_command}".red)
+          end
         end
       end
       
@@ -76,6 +65,25 @@ module Pod
     end
 
     private
+    
+    #
+    #
+    def self.with_output bin, command, output
+      full_command = "#{bin} #{command.join(' ')}"
+      
+      UI.message("$ #{full_command}") if Config.instance.verbose?
+      
+      indented = Indenter.new(output)
+      status = with_verbose do
+        spawn(bin, command) do |line|
+          indented.write line
+        end
+      end
+      
+      yield full_command, status if block_given?
+      
+      status
+    end
     
     # Spawn a subprocess.
     #
@@ -150,8 +158,12 @@ module Pod
       #
       # @return [void]
       #
-      def <<(value)
-        @io << "#{ indent }#{ value }"
+      def write(value)
+        @io.write "#{ indent }#{ value }"
+      end
+      
+      def flush
+        
       end
     end
   end
