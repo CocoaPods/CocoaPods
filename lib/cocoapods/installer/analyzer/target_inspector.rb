@@ -155,13 +155,10 @@ module Pod
         # @return [Array<String>]
         #
         def compute_archs(user_targets)
-          archs = []
-          user_targets.each do |target|
-            target_archs = target.common_resolved_build_setting('ARCHS')
-            archs.concat(Array(target_archs))
-          end
+          archs = user_targets.flat_map do |target|
+            Array(target.common_resolved_build_setting('ARCHS'))
+          end.compact.uniq.sort
 
-          archs = archs.compact.uniq.sort
           UI.message('Using `ARCHS` setting to build architectures of ' \
                    "target `#{target_definition.label}`: " \
                    "(`#{archs.join('`, `')}`)")
