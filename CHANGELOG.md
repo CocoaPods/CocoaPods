@@ -28,6 +28,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3494](https://github.com/CocoaPods/CocoaPods/issues/3494)
   [Kyle Fuller](https://github.com/kylef)
 
+* Flush stdin/stderr and wait a bit in `executable`.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3500](https://github.com/CocoaPods/CocoaPods/issues/3500)
+
 
 ## 0.37.1
 
