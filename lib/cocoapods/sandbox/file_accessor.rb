@@ -152,13 +152,31 @@ module Pod
         paths_for_attribute(:vendored_frameworks, true)
       end
 
+      # @param  [Pathname] framework
+      #         The vendored framework to search into.
+      # @return [Array<Pathname>] The paths of the header directory of the
+      #         vendored framework.
+      #
+      def self.vendored_frameworks_headers_dir(framework)
+        headers_dir = (framework + 'Headers').realpath
+      end
+
+      # @param  [Pathname] framework
+      #         The vendored framework to search into.
+      # @return [Array<Pathname>] The paths of the headers included in the
+      #         vendored framework.
+      #
+      def self.vendored_frameworks_headers(framework)
+        headers_dir = self.vendored_frameworks_headers_dir(framework)
+        Pathname.glob(headers_dir + GLOB_PATTERNS[:public_header_files])
+      end
+
       # @return [Array<Pathname>] The paths of the framework headers that come
       #         shipped with the Pod.
       #
       def vendored_frameworks_headers
         vendored_frameworks.map do |framework|
-          headers_dir = (framework + 'Headers').realpath
-          Pathname.glob(headers_dir + GLOB_PATTERNS[:public_header_files])
+          self.class.vendored_frameworks_headers(framework)
         end.flatten.uniq
       end
 
