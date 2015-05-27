@@ -8,6 +8,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Schemes of development pods will now be shared.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3600](https://github.com/CocoaPods/CocoaPods/issues/3600)
+
+* Recognizes incomplete cache when the original download of a pod was
+  interrupted.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3561](https://github.com/CocoaPods/CocoaPods/issues/3561)
+
 * Allow opting out of pod source locking, meaning `pod try` yields editable
   projects.  
   [Samuel Giddins](https://github.com/segiddins)
@@ -19,6 +28,16 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   to `PostInstallHooksContext`.  
   [Orta Therox](https://github.com/orta)
   [cocoapods#3540](https://github.com/CocoaPods/cocoapods/issues/3409)
+  
+##### Bug Fixes
+
+* `pod repo push` will now find and push JSON podspecs.  
+  [#3494](https://github.com/CocoaPods/CocoaPods/issues/3494)
+  [Kyle Fuller](https://github.com/kylef)
+
+* Flush stdin/stderr and wait a bit in `executable`.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3500](https://github.com/CocoaPods/CocoaPods/issues/3500)
 
 ## 0.37.1
 

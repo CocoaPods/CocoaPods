@@ -48,7 +48,14 @@ module Pod
           raise Informative, "#{ filepath } doesn't exist."
         end
 
+        # Looks up an executable in the search paths
+        #
+        # @note
         # Thank you homebrew
+        #
+        # @param [String] cmd
+        #        the executable to look up
+        #
         def which(cmd)
           dir = ENV['PATH'].split(':').find { |p| File.executable? File.join(p, cmd) }
           Pathname.new(File.join(dir, cmd)) unless dir.nil?

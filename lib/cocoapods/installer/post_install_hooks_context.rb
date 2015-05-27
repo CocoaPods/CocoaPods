@@ -13,7 +13,16 @@ module Pod
       #
       attr_accessor :umbrella_targets
 
-      # @return [PostInstallHooksContext] Convenience class method to generate the
+      # @return [PostInstallHooksContext] Convenience class generator method
+      #
+      # @param  [Sandbox] sandbox
+      #         The sandbox
+      #
+      # @param  [Array<AggregateTarget>] aggregate_targets
+      #         The aggregate targets, which will been presented by an adequate
+      #         {UmbrellaTargetDescription} in the generated context.
+      #
+      # @return [HooksContext] Convenience class method to generate the
       #         static context.
       #
       def self.generate(sandbox, aggregate_targets)

@@ -190,9 +190,15 @@ module Pod
         # @return [Array<Pathname>] The path of the specifications to push.
         #
         def podspec_files
-          files = Pathname.glob(@podspec || '*.podspec')
-          raise Informative, "Couldn't find any .podspec file in current directory" if files.empty?
-          files
+          if @podspec
+            path = Pathname(@podspec)
+            raise Informative, "Couldn't find #{@podspec}" unless path.exist?
+            [path]
+          else
+            files = Pathname.glob('*.podspec{,.json}')
+            raise Informative, "Couldn't find any podspec files in current directory" if files.empty?
+            files
+          end
         end
 
         # @return [Integer] The number of the podspec files to push.

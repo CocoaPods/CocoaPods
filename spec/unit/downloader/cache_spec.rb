@@ -74,6 +74,53 @@ module Pod
       end
     end
 
+    describe 'when the cache is incomplete' do
+      shared 'it falls back to download the pod' do
+        describe 'when downloading a released pod' do
+          it 'does download the source' do
+            Downloader::Git.any_instance.expects(:download).never
+            @cache.expects(:uncached_pod).once
+            @cache.download_pod(@request)
+          end
+        end
+
+        describe 'when downloading an unreleased pod' do
+          it 'does download the source' do
+            Downloader::Git.any_instance.expects(:download).never
+            @cache.expects(:uncached_pod).once
+            @cache.download_pod(@unreleased_request)
+          end
+        end
+      end
+
+      before do
+        [@request, @unreleased_request].each do |request|
+          path_for_pod = @cache.send(:path_for_pod, request)
+          path_for_pod.mkpath
+          Dir.chdir(path_for_pod) do
+            FileUtils.mkdir_p 'Classes'
+            File.open('Classes/a.m', 'w') {}
+          end
+        end
+      end
+
+      describe 'because the spec is missing' do
+        behaves_like 'it falls back to download the pod'
+      end
+
+      describe 'because the spec is invalid' do
+        before do
+          [@request, @unreleased_request].each do |request|
+            path_for_spec = @cache.send(:path_for_spec, request)
+            path_for_spec.dirname.mkpath
+            path_for_spec.open('w') { |f| f << '{' }
+          end
+        end
+
+        behaves_like 'it falls back to download the pod'
+      end
+    end
+
     describe 'when the download is cached' do
       before do
         [@request, @unreleased_request].each do |request|

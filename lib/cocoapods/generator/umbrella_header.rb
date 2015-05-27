@@ -12,6 +12,8 @@ module Pod
       #         the target, which provides the product name
       attr_reader :target
 
+      # Initialize a new instance
+      #
       # @param  [Target] target
       #         @see target
       #

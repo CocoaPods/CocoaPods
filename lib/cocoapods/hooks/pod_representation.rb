@@ -11,35 +11,35 @@ module Pod
     # Stores the information of the Installer for the hooks
     #
     class PodRepresentation
-      # @return [String]
+      # @return [String] the name of the pod
       #
       attr_accessor :name
 
-      # @return [Version]
+      # @return [Version] the version
       #
       def version
         root_spec.version
       end
 
-      # @return [Specification]
+      # @return [Specification] the root spec
       #
       def root_spec
         file_accessors.first.spec.root
       end
 
-      # @return [Array<Specification>]
+      # @return [Array<Specification>] the specs
       #
       def specs
         file_accessors.map(&:spec).uniq
       end
 
-      # @return [Pathname]
+      # @return [Pathname] the root path
       #
       def root
         file_accessors.first.path_list.root
       end
 
-      # @return [Array<Pathname>]
+      # @return [Array<Pathname>] the source files
       #
       def source_files
         file_accessors.map(&:source_files).flatten.uniq

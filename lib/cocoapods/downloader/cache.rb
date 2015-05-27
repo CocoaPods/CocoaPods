@@ -12,6 +12,8 @@ module Pod
       #
       attr_reader :root
 
+      # Initialize a new instance
+      #
       # @param  [Pathname,String] root
       #         see {#root}
       #
@@ -74,9 +76,10 @@ module Pod
       #         was found in the download cache.
       #
       def cached_pod(request)
+        cached_spec = cached_spec(request)
         path = path_for_pod(request)
-        spec = request.spec || cached_spec(request)
-        return unless spec && path.directory?
+        return unless cached_spec && path.directory?
+        spec = request.spec || cached_spec
         Response.new(path, spec, request.params)
       end
 
@@ -89,6 +92,8 @@ module Pod
       def cached_spec(request)
         path = path_for_spec(request)
         path.file? && Specification.from_file(path)
+      rescue JSON::ParserError
+        nil
       end
 
       # @param  [Request] request
@@ -127,7 +132,7 @@ module Pod
         tmpdir = Pathname(Dir.mktmpdir)
         blk.call(tmpdir)
       ensure
-        FileUtils.remove_entry(tmpdir) if tmpdir.exist?
+        FileUtils.remove_entry(tmpdir) if tmpdir && tmpdir.exist?
       end
 
       # Copies the `source` directory to `destination`, cleaning the directory

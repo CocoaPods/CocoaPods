@@ -17,6 +17,8 @@ module Pod
         #
         attr_reader :public_xcconfig
 
+        # Initialize a new instance
+        #
         # @param  [Target] target @see target
         # @param  [Xcodeproj::Config] public_xcconfig @see public_xcconfig
         #

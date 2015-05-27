@@ -50,6 +50,8 @@ module Pod
     #
     attr_reader :public_headers
 
+    # Initialize a new instance
+    #
     # @param [String, Pathname] root @see root
     #
     def initialize(root)
@@ -245,6 +247,8 @@ module Pod
     # @param  [String, Pathname] podspec
     #         The contents of the specification (String) or the path to a
     #         podspec file (Pathname).
+    #
+    # @return [void]
     #
     # @todo   Store all the specifications (including those not originating
     #         from external sources) so users can check them.

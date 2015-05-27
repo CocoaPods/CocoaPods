@@ -8,6 +8,14 @@ module Pod
   # source.
   #
   module ExternalSources
+    # Instantiate a matching {AbstractExternalSource} for a given dependency.
+    #
+    # @param  [Dependency] dependency
+    #         the dependency
+    #
+    # @param  [String] podfile_path
+    #         @see AbstractExternalSource#podfile_path
+    #
     # @return [AbstractExternalSource] an initialized instance of the concrete
     #         external source class associated with the option specified in the
     #         hash.
@@ -26,6 +34,11 @@ module Pod
       end
     end
 
+    # Get the class to represent the defined source type of a dependency
+    #
+    # @param  [Array<Symbol>] params
+    #         the source params of the dependency
+    #
     # @return [Class]
     #
     def self.concrete_class_from_params(params)

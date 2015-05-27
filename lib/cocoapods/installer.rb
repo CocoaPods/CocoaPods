@@ -56,6 +56,8 @@ module Pod
     #
     attr_reader :lockfile
 
+    # Initialize a new instance
+    #
     # @param  [Sandbox]  sandbox     @see sandbox
     # @param  [Podfile]  podfile     @see podfile
     # @param  [Lockfile] lockfile    @see lockfile
@@ -136,6 +138,7 @@ module Pod
         set_target_dependencies
         run_podfile_post_install_hooks
         write_pod_project
+        share_development_pod_schemes
         write_lockfiles
       end
     end
@@ -174,6 +177,8 @@ module Pod
 
     # @!group Installation steps
 
+    # Performs the analysis.
+    #
     # @return [void]
     #
     # @note   The warning about the version of the Lockfile doesn't use the
@@ -611,6 +616,20 @@ module Pod
       end
     end
 
+    # Shares schemes of development Pods.
+    #
+    # @return [void]
+    #
+    def share_development_pod_schemes
+      development_pod_targets = sandbox.development_pods.keys.map do |pod|
+        pods_project.targets.select { |target| target.name =~ /^Pods-.*-#{pod}$/ }
+      end.flatten
+
+      development_pod_targets.each do |pod_target|
+        Xcodeproj::XCScheme.share_scheme(pods_project.path, pod_target.name)
+      end
+    end
+
     # Writes the Podfile and the lock files.
     #
     # @todo   Pass the checkout options to the Lockfile.
@@ -718,18 +737,20 @@ module Pod
 
     # @!group Hooks Data
 
+    # Creates a hook representation for this installer.
+    #
     # @return [InstallerRepresentation]
     #
     def installer_rep
       Hooks::InstallerRepresentation.new(self)
     end
 
-    # @return [PodRepresentation] The hook representation of a Pod.
+    # Creates a hook representation for a Pod.
     #
     # @param  [String] pod
     #         The name of the pod.
     #
-    # @return [PodRepresentation] The pod representation.
+    # @return [PodRepresentation]
     #
     def pod_rep(pod)
       all_file_accessors = pod_targets.map(&:file_accessors).flatten.compact
@@ -737,18 +758,27 @@ module Pod
       Hooks::PodRepresentation.new(pod, file_accessors)
     end
 
+    # Creates a hook representation for a given aggregate target.
+    #
+    # @param  [AggregateTarget] aggregate_target
+    #         the aggregate target
+    #
     # @return [LibraryRepresentation]
     #
     def library_rep(aggregate_target)
       Hooks::LibraryRepresentation.new(sandbox, aggregate_target)
     end
 
+    # Creates hook representations for all aggregate targets.
+    #
     # @return [Array<LibraryRepresentation>]
     #
     def library_reps
       @library_reps ||= aggregate_targets.map { |lib| library_rep(lib) }
     end
 
+    # Creates hook representations for all #root_specs.
+    #
     # @return [Array<PodRepresentation>]
     #
     def pod_reps

@@ -13,9 +13,13 @@ module Pod
       #
       attr_reader :platform
 
-      # @param  [Hash{String, Array{String}]
-      #         resources_by_config @see resources_by_config
-      # @param  [Platform] platform @see platform
+      # Initialize a new instance
+      #
+      # @param  [Hash<String, Array<String>>] resources_by_config
+      #         @see resources_by_config
+      #
+      # @param  [Platform] platform
+      #         @see platform
       #
       def initialize(resources_by_config, platform)
         @resources_by_config = resources_by_config

@@ -11,7 +11,8 @@ module Pod
         # @param  [Array<String>] strings
         #         a list of strings.
         #
-        # @param  [String] optional prefix, such as a flag or option.
+        # @param  [String] prefix
+        #         optional prefix, such as a flag or option.
         #
         # @return [String] the resulting string.
         #
@@ -20,6 +21,12 @@ module Pod
           strings.sort.map { |s| %W(          #{prefix}"#{s}"          ) }.join(' ')
         end
 
+        # Return the default linker flags
+        #
+        # @param  [Target] target
+        #         the target, which is used to check if the ARC compatibility
+        #         flag is required.
+        #
         # @return [String] the default linker flags. `-ObjC` is always included
         #         while `-fobjc-arc` is included only if requested in the
         #         Podfile.
@@ -35,7 +42,7 @@ module Pod
 
         # Configures the given Xcconfig
         #
-        # @param  [PodTarget] pod_target
+        # @param  [PodTarget] target
         #         The pod target, which holds the list of +Spec::FileAccessor+.
         #
         # @param  [Xcodeproj::Config] xcconfig
@@ -70,10 +77,10 @@ module Pod
           add_developers_frameworks_if_needed(xcconfig, consumer.platform_name)
         end
 
-        # Configures the given Xcconfig with the the build settings for the given
+        # Configures the given Xcconfig with the build settings for the given
         # framework path.
         #
-        # @param  [Pathanme] framework_path
+        # @param  [Pathname] framework_path
         #         The path of the framework.
         #
         # @param  [Xcodeproj::Config] xcconfig
@@ -92,11 +99,11 @@ module Pod
           xcconfig.merge!(build_settings)
         end
 
-        # Configures the given Xcconfig with the the build settings for the given
+        # Configures the given Xcconfig with the build settings for the given
         # library path.
         #
-        # @param  [Pathanme] framework_path
-        #         The path of the framework.
+        # @param  [Pathname] library_path
+        #         The path of the library.
         #
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.

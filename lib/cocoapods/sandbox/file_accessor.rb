@@ -27,6 +27,8 @@ module Pod
       #
       attr_reader :spec_consumer
 
+      # Initialize a new instance
+      #
       # @param [Sandbox::PathList, Pathname] path_list @see path_list
       # @param [Specification::Consumer] spec_consumer @see spec_consumer
       #
@@ -168,7 +170,7 @@ module Pod
       end
 
       # @return [Hash{String => Array<Pathname>}] A hash that describes the
-      #         resource bundles of the Pod. The keys reppresent the name of
+      #         resource bundles of the Pod. The keys represent the name of
       #         the bundle while the values the path of the resources.
       #
       def resource_bundles

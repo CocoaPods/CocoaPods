@@ -3,6 +3,8 @@ module Pod
   # of the single Pods. The client targets will then depend on this one.
   #
   class AggregateTarget < Target
+    # Initialize a new instance
+    #
     # @param [TargetDefinition] target_definition @see target_definition
     # @param [Sandbox] sandbox @see sandbox
     #
@@ -51,8 +53,12 @@ module Pod
     #
     attr_accessor :user_target_uuids
 
-    # @return [Array<PBXNativeTarget>] The list of all the user targets that
-    #         will be integrated by this target.
+    # List all user targets that will be integrated by this #target.
+    #
+    # @param  [Xcodeproj::Project] project
+    #         The project to search for the user targets
+    #
+    # @return [Array<PBXNativeTarget>]
     #
     def user_targets(project = nil)
       return [] unless user_project_path

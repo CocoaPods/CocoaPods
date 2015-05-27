@@ -33,14 +33,16 @@ module Pod
       #
       attr_reader :installation_root
 
-      # @return [Array<Target>] the targets represented in the Podfile.
+      # @return [Array<AggregateTarget>] the targets represented in the Podfile.
       #
       attr_reader :targets
 
+      # Init a new UserProjectIntegrator
+      #
       # @param  [Podfile]  podfile @see #podfile
       # @param  [Sandbox]  sandbox @see #sandbox
       # @param  [Pathname] installation_root @see #installation_root
-      # @param  [Library]  libraries @see #libraries
+      # @param  [Array<AggregateTarget>]  targets @see #targets
       #
       # @todo   Too many initialization arguments
       #

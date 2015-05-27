@@ -17,6 +17,8 @@ module Pod
         super
       end
 
+      # Run the command
+      #
       # @todo the command report new dependencies added to the Podfile as
       #       updates.
       #

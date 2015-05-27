@@ -83,7 +83,13 @@ module Pod
         Thread.new { while s = o.gets; stdout << s; end }
         Thread.new { while s = e.gets; stderr << s; end }
         i.close
-        t.value
+        status = t.value
+
+        o.flush
+        e.flush
+        sleep(0.1)
+
+        status
       end
     end
 
@@ -101,6 +107,8 @@ module Pod
       #
       attr_accessor :io
 
+      # Init a new Indenter
+      #
       # @param [IO] io @see io
       #
       def initialize(io = nil)

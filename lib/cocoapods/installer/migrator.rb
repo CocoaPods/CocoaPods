@@ -8,7 +8,8 @@ module Pod
       class << self
         # Performs the migration.
         #
-        # @param  [Sandbox] The sandbox which should be migrated.
+        # @param  [Sandbox] sandbox
+        #         The sandbox which should be migrated.
         #
         def migrate(sandbox)
           if sandbox.manifest
@@ -20,6 +21,8 @@ module Pod
         # @!group Migration Steps
 
         # Migrates from CocoaPods versions previous to 0.34.
+        #
+        # @param [Sandbox] sandbox
         #
         def migrate_to_0_34(sandbox)
           UI.message('Migrating to CocoaPods 0.34') do
@@ -49,6 +52,8 @@ module Pod
 
         # Migrates from CocoaPods versions prior to 0.36.
         #
+        # @param [Sandbox] sandbox
+        #
         def migrate_to_0_36(sandbox)
           UI.message('Migrating to CocoaPods 0.36') do
             move(sandbox.root + 'Headers/Build', sandbox.root + 'Headers/Private')
@@ -69,6 +74,16 @@ module Pod
 
         # @!group Private helpers
 
+        # Check whether a migration is required
+        #
+        # @param [#to_s] target_version
+        #        See Version#new.
+        #
+        # @param [Sandbox] sandbox
+        #        The sandbox
+        #
+        # @return [void]
+        #
         def installation_minor?(target_version, sandbox)
           sandbox.manifest.cocoapods_version < Version.new(target_version)
         end
@@ -78,6 +93,8 @@ module Pod
         #
         # @path [#to_s] path
         #       The path.
+        #
+        # @return [void]
         #
         def make_path(path)
           return if path.exist?
@@ -94,6 +111,8 @@ module Pod
         # @path [#to_s] destination
         #       The destination path.
         #
+        # @return [void]
+        #
         def move(source, destination)
           return unless source.exist?
           make_path(destination.dirname)
@@ -107,6 +126,8 @@ module Pod
         #
         # @path [#to_s] path
         #       The path.
+        #
+        # @return [void]
         #
         def delete(path)
           return unless path.exist?
