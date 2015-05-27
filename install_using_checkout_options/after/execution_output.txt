@@ -18,15 +18,13 @@ Fetching external sources
  > Git download
      $ GIT_BIN clone https://github.com/AFNetworking/AFNetworking.git ROOT/tmp/install_using_checkout_options/Pods/AFNetworking
      Cloning into 'ROOT/tmp/install_using_checkout_options/Pods/AFNetworking'...
-   $ GIT_BIN checkout -b activated-commit ba7b6e541fd18bdf48da6d4845670e3e6b990637
-   Switched to a new branch 'activated-commit'
+   $ GIT_BIN checkout --quiet ba7b6e541fd18bdf48da6d4845670e3e6b990637
 -> Pre-downloading: `RKValueTransformers` from `https://github.com/RestKit/RKValueTransformers`, commit `d76a00894b8c3c9331e36d91ab952681426a49df`
  > Git download
  > Git download
      $ GIT_BIN clone https://github.com/RestKit/RKValueTransformers ROOT/tmp/install_using_checkout_options/Pods/RKValueTransformers
      Cloning into 'ROOT/tmp/install_using_checkout_options/Pods/RKValueTransformers'...
-   $ GIT_BIN checkout -b activated-commit d76a00894b8c3c9331e36d91ab952681426a49df
-   Switched to a new branch 'activated-commit'
+   $ GIT_BIN checkout --quiet d76a00894b8c3c9331e36d91ab952681426a49df
 
 Resolving dependencies of `Podfile`
 Starting resolution (<#DATE#>)
