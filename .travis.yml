@@ -11,6 +11,11 @@ rvm:
   # TODO: currently unavailable: https://github.com/travis-ci/travis-ci/issues/2918
   # - 2.0.0-p247
 
+branches:
+  only:
+    - master
+    - /.+-stable$/
+
 before_install:
   # There is a bug in travis. When using system ruby, bundler is not
   # installed and causes the default install action to fail.
