@@ -57,10 +57,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: f514d6325104f544f366a5960bf76c37d6c3c8b8
+  revision: e472990706d421973b98db1bb1c27aea0e5f6784
   branch: master
   specs:
-    cocoapods-try (0.4.4)
+    cocoapods-try (0.4.5)
 
 PATH
   remote: .
@@ -72,7 +72,7 @@ PATH
       cocoapods-downloader (~> 0.9.0)
       cocoapods-plugins (~> 0.4.2)
       cocoapods-trunk (~> 0.6.1)
-      cocoapods-try (~> 0.4.4)
+      cocoapods-try (~> 0.4.5)
       colored (~> 1.2)
       escape (~> 0.0.4)
       molinillo (~> 0.2.3)
