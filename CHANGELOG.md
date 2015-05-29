@@ -4,6 +4,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+### Bug Fixes
+
+* Pods can now include headers from vendored frameworks from other pods.
+  [Vincent Isambart](https://github.com/vincentisambart)
+  [#3161](https://github.com/CocoaPods/CocoaPods/issues/3161)
+
 ## 0.37.2
 
 ##### Enhancements

@@ -126,6 +126,10 @@ module Pod
               header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
                 sandbox.public_headers.add_files(namespaced_path, files, library.platform)
               end
+
+              vendored_frameworks_header_mappings(headers_sandbox, file_accessor).each do |namespaced_path, files|
+                sandbox.public_headers.add_files(namespaced_path, files, library.platform)
+              end
             end
           end
         end
@@ -204,6 +208,36 @@ module Pod
           end
           mappings[sub_dir] ||= []
           mappings[sub_dir] << header
+        end
+        mappings
+      end
+
+      # Computes the destination sub-directory in the sandbox for headers
+      # from inside vendored frameworks.
+      #
+      # @param  [Pathname] headers_sandbox
+      #         The sandbox where the header links should be stored for this
+      #         Pod.
+      #
+      # @param  [Sandbox::FileAccessor] file_accessor
+      #         The consumer file accessor for which the headers need to be
+      #         linked.
+      #
+      def vendored_frameworks_header_mappings(headers_sandbox, file_accessor)
+        mappings = {}
+        file_accessor.vendored_frameworks.each do |framework|
+          headers_dir = Sandbox::FileAccessor.vendored_frameworks_headers_dir(framework)
+          headers = Sandbox::FileAccessor.vendored_frameworks_headers(framework)
+          framework_name = framework.basename(framework.extname)
+          dir = headers_sandbox + framework_name
+          headers.each do |header|
+            # the relative path of framework headers should be kept,
+            # not flattened like is done for most public headers.
+            relative_path = header.relative_path_from(headers_dir)
+            sub_dir = dir + relative_path.dirname
+            mappings[sub_dir] ||= []
+            mappings[sub_dir] << header
+          end
         end
         mappings
       end

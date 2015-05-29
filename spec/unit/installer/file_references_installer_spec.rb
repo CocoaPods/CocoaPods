@@ -65,8 +65,10 @@ module Pod
         headers_root = config.sandbox.public_headers.root
         public_header = headers_root + 'BananaLib/Banana.h'
         private_header = headers_root + 'BananaLib/BananaPrivate.h'
+        framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
         public_header.should.exist
         private_header.should.not.exist
+        framework_header.should.exist
       end
     end
 
@@ -122,6 +124,17 @@ module Pod
           mappings.should == {
             (headers_sandbox + 'dir_1') => [header_1],
             (headers_sandbox + 'dir_2') => [header_2],
+          }
+        end
+      end
+
+      describe '#vendored_frameworks_header_mappings' do
+        it 'returns the vendored frameworks header mappings' do
+          headers_sandbox = Pathname.new('BananaLib')
+          header = @file_accessor.root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h'
+          mappings = @installer.send(:vendored_frameworks_header_mappings, headers_sandbox, @file_accessor)
+          mappings.should == {
+            (headers_sandbox + 'Bananalib') => [header],
           }
         end
       end
