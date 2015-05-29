@@ -8,7 +8,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ### Bug Fixes
 
-* Pods can now include headers from vendored frameworks from other pods.
+* Public headers of vendored frameworks are now automatically linked in
+  the sandbox. That allows transitive inclusion of headers from other pods.
   [Vincent Isambart](https://github.com/vincentisambart)
   [#3161](https://github.com/CocoaPods/CocoaPods/issues/3161)
 
