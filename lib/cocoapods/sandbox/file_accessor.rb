@@ -154,7 +154,7 @@ module Pod
 
       # @param  [Pathname] framework
       #         The vendored framework to search into.
-      # @return [Array<Pathname>] The paths of the header directory of the
+      # @return [Pathname] The path of the header directory of the
       #         vendored framework.
       #
       def self.vendored_frameworks_headers_dir(framework)

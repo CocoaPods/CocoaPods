@@ -223,10 +223,6 @@ module Pod
       #         The consumer file accessor for which the headers need to be
       #         linked.
       #
-      # @return [Hash{Pathname => Array<Pathname>}] A hash containing the
-      #         headers folders as the keys and the absolute paths of the
-      #         header files as the values.
-      #
       def vendored_frameworks_header_mappings(headers_sandbox, file_accessor)
         mappings = {}
         file_accessor.vendored_frameworks.each do |framework|
