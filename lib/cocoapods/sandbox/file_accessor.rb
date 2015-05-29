@@ -158,7 +158,7 @@ module Pod
       #         vendored framework.
       #
       def self.vendored_frameworks_headers_dir(framework)
-        headers_dir = (framework + 'Headers').realpath
+        (framework + 'Headers').realpath
       end
 
       # @param  [Pathname] framework
@@ -167,7 +167,7 @@ module Pod
       #         vendored framework.
       #
       def self.vendored_frameworks_headers(framework)
-        headers_dir = self.vendored_frameworks_headers_dir(framework)
+        headers_dir = vendored_frameworks_headers_dir(framework)
         Pathname.glob(headers_dir + GLOB_PATTERNS[:public_header_files])
       end
 
