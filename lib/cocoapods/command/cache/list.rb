@@ -5,8 +5,8 @@ module Pod
         self.summary = 'List the paths of pod caches for each known pod'
 
         self.description = <<-DESC
-          Shows the content of cache organized by pod.
-          If `NAME` is given, show the results only for that pod name.
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
         DESC
 
         self.arguments = [
