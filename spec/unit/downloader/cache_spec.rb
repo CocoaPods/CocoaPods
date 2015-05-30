@@ -30,6 +30,15 @@ module Pod
       @cache.root.should.be.directory?
     end
 
+    it 'implodes when the cache is from a different CocoaPods version' do
+      root = Pathname(Dir.mktmpdir)
+      root.+('VERSION').open('w') { |f| f << '0.0.0' }
+      root.+('FILE').open('w') { |f| f << '0.0.0' }
+      @cache = Downloader::Cache.new(root)
+      root.+('VERSION').read.should == Pod::VERSION
+      root.+('FILE').should.not.exist?
+    end
+
     it 'groups subspecs by platform' do
       @spec = Specification.new do |s|
         s.ios.deployment_target = '6.0'

@@ -6,12 +6,20 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
-### Bug Fixes
+##### Enhancements
+
+* The download cache will automatically be reset when changing CocoaPods
+  versions.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3542](https://github.com/CocoaPods/CocoaPods/issues/3542)
+
+##### Bug Fixes
 
 * Public headers of vendored frameworks are now automatically linked in
-  the sandbox. That allows transitive inclusion of headers from other pods.
+  the sandbox. That allows transitive inclusion of headers from other pods.  
   [Vincent Isambart](https://github.com/vincentisambart)
   [#3161](https://github.com/CocoaPods/CocoaPods/issues/3161)
+
 
 ## 0.37.2
 
