@@ -20,6 +20,12 @@ module Pod
       #
       attr_accessor :lockfile
 
+      # @param  [Sandbox] sandbox see {#sandbox}
+      #
+      # @param  [Podfile] podfile see {#podfile}
+      #
+      # @param  [Lockfile] lockfile see {#lockfile}
+      #
       # @return [PreInstallHooksContext] Convenience class method to generate the
       #         static context.
       #
