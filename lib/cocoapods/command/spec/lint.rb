@@ -42,7 +42,7 @@ module Pod
 
         def run
           UI.puts
-          invalid_count = 0
+          failure_reasons = []
           podspecs_to_lint.each do |podspec|
             validator                = Validator.new(podspec, @source_urls)
             validator.quick          = @quick
@@ -53,7 +53,7 @@ module Pod
             validator.only_subspec   = @only_subspec
             validator.use_frameworks = @use_frameworks
             validator.validate
-            invalid_count += 1 unless validator.validated?
+            failure_reasons << validator.failure_reason
 
             unless @clean
               UI.puts "Pods project available at `#{validator.validation_dir}/Pods/Pods.xcodeproj` for inspection."
@@ -63,11 +63,17 @@ module Pod
 
           count = podspecs_to_lint.count
           UI.puts "Analyzed #{count} #{'podspec'.pluralize(count)}.\n\n"
-          if invalid_count == 0
+
+          failure_reasons.compact!
+          if failure_reasons.empty?
             lint_passed_message = count == 1 ? "#{podspecs_to_lint.first.basename} passed validation." : 'All the specs passed validation.'
             UI.puts lint_passed_message.green << "\n\n"
           else
-            raise Informative, count == 1 ? 'The spec did not pass validation.' : "#{invalid_count} out of #{count} specs failed validation."
+            raise Informative, if count == 1
+                                 "The spec did not pass validation, due to #{failure_reasons.first}."
+                               else
+                                 "#{invalid_count} out of #{count} specs failed validation."
+                               end
           end
           podspecs_tmp_dir.rmtree if podspecs_tmp_dir.exist?
         end

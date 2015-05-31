@@ -1,3 +1,6 @@
+require 'active_support/core_ext/array'
+require 'active_support/core_ext/string/inflections'
+
 module Pod
   # Validates a Specification.
   #
@@ -109,6 +112,23 @@ module Pod
         UI.puts "    - #{type.ljust(5)} | #{platform_message}#{subspecs_message}#{result.message}"
       end
       UI.puts
+    end
+
+    def failure_reason
+      results_by_type = results.group_by(&:type)
+      results_by_type.default = []
+      return nil if validated?
+      reasons = []
+      if (size = results_by_type[:error].size) && size > 0
+        reasons << "#{size} #{'error'.pluralize(size)}"
+      end
+      if !allow_warnings && (size = results_by_type[:warning].size) && size > 0
+        reason = "#{size} #{'warning'.pluralize(size)}"
+        pronoun = size == 1 ? 'it' : 'them'
+        reason <<  " (but you can use `--allow-warnings` to ignore #{pronoun})" if reasons.empty?
+        reasons << reason
+      end
+      reasons.to_sentence
     end
 
     #-------------------------------------------------------------------------#
