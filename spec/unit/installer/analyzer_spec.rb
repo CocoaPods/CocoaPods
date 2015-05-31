@@ -52,23 +52,11 @@ module Pod
 
       #--------------------------------------#
 
-      it 'updates the repositories by default' do
-        config.skip_repo_update = false
-        SourcesManager.expects(:update).once
-        @analyzer.analyze
-      end
-
       it 'does not update unused sources' do
         config.skip_repo_update = false
         @analyzer.stubs(:sources).returns(SourcesManager.master)
         SourcesManager.expects(:update).once.with('master')
-        @analyzer.analyze
-      end
-
-      it 'does not updates the repositories if config indicates to skip them' do
-        config.skip_repo_update = true
-        SourcesManager.expects(:update).never
-        @analyzer.analyze
+        @analyzer.update_repositories
       end
 
       it 'does not update non-git repositories' do
@@ -90,7 +78,7 @@ module Pod
         SourcesManager.expects(:update).never
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         analyzer.stubs(:sources).returns([source])
-        analyzer.analyze
+        analyzer.update_repositories
 
         UI.output.should.match /Skipping `#{source.name}` update because the repository is not a git source repository./
 
