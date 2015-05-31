@@ -57,17 +57,19 @@ module Pod
           private_headers = file_accessor.private_headers
           other_source_files = file_accessor.source_files.reject { |sf| SOURCE_FILE_EXTENSIONS.include?(sf.extname) }
 
+          file_added = -> (file_ref, phase_name) { native_target.send(phase_name).include?(file_ref) }
+
           {
             true => file_accessor.arc_source_files,
             false => file_accessor.non_arc_source_files,
           }.each do |arc, files|
             files = files - headers - other_source_files
             flags = compiler_flags_for_consumer(consumer, arc)
-            regular_file_refs = files.map { |sf| project.reference_for_path(sf) }
+            regular_file_refs = files.map { |sf| project.reference_for_path(sf) }.reject { |fr| p fr; file_added[fr, :source_build_phase] }
             native_target.add_file_references(regular_file_refs, flags)
           end
 
-          header_file_refs = headers.map { |sf| project.reference_for_path(sf) }
+          header_file_refs = headers.map { |sf| project.reference_for_path(sf) }.reject { |fr| file_added[fr, :headers_build_phase] }
           native_target.add_file_references(header_file_refs) do |build_file|
             # Set added headers as public if needed
             if target.requires_frameworks?
@@ -82,14 +84,14 @@ module Pod
             end
           end
 
-          other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
+          other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }.reject { |fr| file_added[fr, :source_build_phase] }
           native_target.add_file_references(other_file_refs, nil)
 
           next unless target.requires_frameworks?
 
           resource_refs = file_accessor.resources.flatten.map do |res|
             project.reference_for_path(res)
-          end
+          end.reject { |fr| file_added[fr, :resources_build_phase] }
 
           native_target.add_resources(resource_refs)
         end
