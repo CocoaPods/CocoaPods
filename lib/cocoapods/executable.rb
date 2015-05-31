@@ -80,8 +80,9 @@ module Pod
     def self.popen3(bin, command, stdout, stderr)
       require 'open3'
       Open3.popen3(bin, *command) do |i, o, e, t|
-        Thread.new { while s = o.gets; stdout << s; end }
-        Thread.new { while s = e.gets; stderr << s; end }
+        read(o, stdout)
+        read(e, stderr)
+
         i.close
         status = t.value
 
@@ -90,6 +91,27 @@ module Pod
         sleep(0.1)
 
         status
+      end
+    end
+
+    def self.read(input, output)
+      Thread.new do
+        buf = ''
+        begin
+          while s = input.readpartial(4096)
+            buf << s
+            lines = buf.split("\n")
+            if buf[-1] == "\n"
+              buf = ''
+            else
+              buf = lines[-1]
+              lines.pop
+            end
+            lines.each { |l| output << (l << "\n") }
+          end
+        rescue EOFError
+          nil
+        end
       end
     end
 
