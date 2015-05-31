@@ -25,13 +25,13 @@ module Pod
       run_command('lib', 'create', 'TestPod')
     end
 
-    it 'configures the template after cloning it passing the name of the Pod as the argument' do
+    it 'configures the template after cloning it passing the name of the Pod and any other args as the argument' do
       @sut.any_instance.stubs(:clone_template)
       dir = SpecHelper.temporary_directory + 'TestPod'
       dir.mkpath
       File.stubs(:exist?).with('configure').returns(true)
-      @sut.any_instance.expects(:system).with('./configure TestPod').once
-      run_command('lib', 'create', 'TestPod')
+      @sut.any_instance.expects(:system).with('./configure', 'TestPod', 'foo').once
+      run_command('lib', 'create', 'TestPod', 'foo', '--verbose')
     end
 
     it 'should show link to new pod guide after creation' do
@@ -48,7 +48,7 @@ module Pod
     it 'should use the given template URL' do
       template_url = 'https://github.com/custom/template.git'
       @sut.any_instance.expects(:git!).with(['clone', template_url, 'TestPod']).once
-      run_command('lib', 'create', 'TestPod', template_url)
+      run_command('lib', 'create', 'TestPod', "--template-url=#{template_url}")
     end
 
     it 'should use the default URL if no template URL is given' do

@@ -30,8 +30,8 @@ module Pod
         def initialize(argv)
           @name = argv.shift_argument
           @template_url = argv.option('template-url', TEMPLATE_REPO)
-          @additional_args = argv.remainder
           super
+          @additional_args = argv.remainder!
         end
 
         def validate!
