@@ -22,7 +22,35 @@ module SpecHelper
       SpecHelper.temporary_directory + 'cocoapods/cache/CocoaPods'
     end
 
-    module_function :set_up_test_cache, :tmp_cache_path
+    def test_cache_yaml(short = false)
+      cache_root = "#{tmp_cache_path}/Pods"
+      root_path = short ? '' : "#{cache_root}/"
+      yaml = {
+        "AFNetworking" => [
+          { "Version"=>"2.5.4",
+            "Type" => "External",
+            "Spec" => "#{root_path}Specs/External/AFNetworking/d9ac25e7b83cea885663771c90998c47.podspec.json",
+            "Pod" => "#{root_path}External/AFNetworking/e84d20f40f2049470632ce56ff0ce26f-05edc"
+          },
+          { "Version" => "2.5.4",
+            "Type" => "Release",
+            "Spec"=>"#{root_path}Specs/Release/AFNetworking/2.5.podspec.json",
+            "Pod"=>"#{root_path}Release/AFNetworking/2.5.4-05edc"
+          }
+        ],
+        "CocoaLumberjack" => [
+          { "Version" => "2.0.0",
+            "Type" => "Release",
+            "Spec" => "#{root_path}Specs/Release/CocoaLumberjack/2.0.podspec.json",
+            "Pod" => "#{root_path}Release/CocoaLumberjack/2.0.0-a6f77"
+          }
+        ]
+      }
+      yaml['$CACHE_ROOT'] = cache_root if short
+      yaml
+    end
+
+    module_function :set_up_test_cache, :tmp_cache_path, :test_cache_yaml
 
   end
 end
