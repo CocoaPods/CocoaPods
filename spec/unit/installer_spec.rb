@@ -223,6 +223,22 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Dependencies Resolution' do
+      describe 'updating spec repos' do
+        it 'does not updates the repositories if config indicates to skip them' do
+          config.skip_repo_update = true
+          SourcesManager.expects(:update).never
+          @installer.send(:resolve_dependencies)
+        end
+
+        it 'updates the repositories by default' do
+          config.skip_repo_update = false
+          SourcesManager.expects(:update).once
+          @installer.send(:resolve_dependencies)
+        end
+      end
+
+      #--------------------------------------#
+
       describe '#analyze' do
         it 'prints a warning if the version of the Lockfile is higher than the one of the executable' do
           Lockfile.any_instance.stubs(:cocoapods_version).returns(Version.new('999'))

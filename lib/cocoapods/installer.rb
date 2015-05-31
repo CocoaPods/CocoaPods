@@ -110,8 +110,14 @@ module Pod
     end
 
     def resolve_dependencies
+      analyzer = create_analyzer
+
+      UI.section 'Updating local specs repositories' do
+        analyzer.update_repositories
+      end unless config.skip_repo_update?
+
       UI.section 'Analyzing dependencies' do
-        analyze
+        analyze(analyzer)
         validate_build_configurations
         prepare_for_legacy_compatibility
         clean_sandbox
@@ -179,22 +185,14 @@ module Pod
     #
     # @return [void]
     #
-    # @note   The warning about the version of the Lockfile doesn't use the
-    #         `UI.warn` method because it prints the output only at the end
-    #         of the installation. At that time CocoaPods could have crashed.
-    #
-    def analyze
-      if lockfile && lockfile.cocoapods_version > Version.new(VERSION)
-        STDERR.puts '[!] The version of CocoaPods used to generate ' \
-          "the lockfile (#{lockfile.cocoapods_version}) is "\
-          "higher than the version of the current executable (#{VERSION}). " \
-          'Incompatibility issues may arise.'.yellow
-      end
-
-      analyzer = Analyzer.new(sandbox, podfile, lockfile)
+    def analyze(analyzer = create_analyzer)
       analyzer.update = update
       @analysis_result = analyzer.analyze
       @aggregate_targets = analyzer.result.targets
+    end
+
+    def create_analyzer
+      Analyzer.new(sandbox, podfile, lockfile)
     end
 
     # Ensures that the white-listed build configurations are known to prevent
