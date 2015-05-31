@@ -160,7 +160,7 @@ module Pod
             else
               spec_name = podspec
               spec_name = validator.spec.name if validator.spec
-              message = "#{spec_name} did not pass validation."
+              message = "#{spec_name} did not pass validation, due to #{validator.failure_reason}."
 
               if @clean
                 message << "\nYou can use the `--no-clean` option to inspect " \

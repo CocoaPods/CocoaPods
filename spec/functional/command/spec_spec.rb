@@ -197,8 +197,10 @@ module Pod
 
       it 'lints a given podspec' do
         cmd = command('spec', 'lint', '--quick', @spec_path)
-        lambda { cmd.run }.should.raise Informative
+        exception = lambda { cmd.run }.should.raise Informative
         UI.output.should.include 'Missing license type'
+        exception.message.should.match /due to 1 warning /
+        exception.message.should.match /use `--allow-warnings` to ignore it\)/
       end
 
       it 'respects the --allow-warnings option' do
