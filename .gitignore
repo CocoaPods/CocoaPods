@@ -21,6 +21,7 @@ spec/fixtures/banana-lib
 spec/fixtures/chameleon
 spec/fixtures/integration/Headers/
 spec/fixtures/vcr
+spec/fixtures/cache/CocoaPods
 
 # Examples
 examples/**/Podfile.lock
