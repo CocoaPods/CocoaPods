@@ -167,14 +167,6 @@ module Pod
       support_files_dir + "#{label}.modulemap"
     end
 
-    # @return [Pathname] the absolute path of the header file which contains
-    #         the information about the installed pods.
-    #
-    def target_environment_header_path
-      name = target_definition.label
-      sandbox.target_support_files_dir(name) + "#{name}-environment.h"
-    end
-
     # @return [Pathname] the absolute path of the prefix header file.
     #
     def prefix_header_path

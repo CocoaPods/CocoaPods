@@ -20,7 +20,6 @@ module Pod
             create_umbrella_header
             create_embed_frameworks_script
           end
-          create_target_environment_header
           create_bridge_support_file
           create_copy_resources_script
           create_acknowledgements
@@ -71,16 +70,6 @@ module Pod
           xcconfig_file_ref = add_file_to_support_group(path)
           configuration.base_configuration_reference = xcconfig_file_ref
         end
-      end
-
-      # Generates a header which allows to inspect at compile time the installed
-      # pods and the installed specifications of a pod.
-      #
-      def create_target_environment_header
-        path = target.target_environment_header_path
-        generator = Generator::TargetEnvironmentHeader.new(target.specs_by_build_configuration)
-        generator.save_as(path)
-        add_file_to_support_group(path)
       end
 
       # Generates the bridge support metadata if requested by the {Podfile}.

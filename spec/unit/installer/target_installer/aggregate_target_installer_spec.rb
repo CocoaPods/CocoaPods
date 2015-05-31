@@ -47,7 +47,6 @@ module Pod
           'Pods-acknowledgements.markdown',
           'Pods-acknowledgements.plist',
           'Pods-dummy.m',
-          'Pods-environment.h',
           'Pods-resources.sh',
           'Pods.appstore.xcconfig',
           'Pods.debug.xcconfig',
@@ -115,17 +114,6 @@ module Pod
         file = config.sandbox.root + @target.xcconfig_path('Release')
         xcconfig = Xcodeproj::Config.new(file)
         xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}/Pods'
-      end
-
-      it 'creates a header for the target which contains the information about the installed Pods' do
-        @installer.install!
-        support_files_dir = config.sandbox.target_support_files_dir('Pods')
-        file = support_files_dir + 'Pods-environment.h'
-        contents = file.read
-        contents.should.include?('#define COCOAPODS_POD_AVAILABLE_BananaLib')
-        contents.should.include?('#define COCOAPODS_VERSION_MAJOR_BananaLib 1')
-        contents.should.include?('#define COCOAPODS_VERSION_MINOR_BananaLib 0')
-        contents.should.include?('#define COCOAPODS_VERSION_PATCH_BananaLib 0')
       end
 
       it 'creates a bridge support file' do
