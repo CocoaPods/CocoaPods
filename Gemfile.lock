@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: f75b6d84d898a0a61f87bd48bab87d794a91ee86
+  revision: 37aeefd6b4475f1920a41ea0e02386cf6d76d235
   branch: master
   specs:
     claide (0.8.1)

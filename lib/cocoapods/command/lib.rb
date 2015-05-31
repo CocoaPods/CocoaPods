@@ -18,13 +18,20 @@ module Pod
 
         self.arguments = [
           CLAide::Argument.new('NAME', true),
-          CLAide::Argument.new('TEMPLATE_URL', false),
         ]
+
+        def self.options
+          [
+            ['--template-url=URL', 'The URL of the git repo containing a ' \
+                                  'compatible template'],
+          ].concat(super)
+        end
 
         def initialize(argv)
           @name = argv.shift_argument
-          @template_url = argv.shift_argument
+          @template_url = argv.option('template-url', TEMPLATE_REPO)
           super
+          @additional_args = argv.remainder!
         end
 
         def validate!
@@ -72,7 +79,7 @@ module Pod
           UI.section("Configuring #{@name} template.") do
             Dir.chdir(@name) do
               if File.exist?('configure')
-                system("./configure #{@name}")
+                system('./configure', @name, *@additional_args)
               else
                 UI.warn 'Template does not have a configure file.'
               end

@@ -13,6 +13,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3542](https://github.com/CocoaPods/CocoaPods/issues/3542)
 
+* Supports running pre-install hooks in plugins. This happens before the resolver
+  does its work, and offers easy access to the sandbox, podfile and lockfile via a
+  `PreInstallHooksContext` object. This also renames the post-install hooks from `HooksContext`
+  to `PostInstallHooksContext`.  
+  [Orta Therox](https://github.com/orta)
+  [#3540](https://github.com/CocoaPods/cocoapods/issues/3409)
+
+* Allow passing additional arguments to `pod lib create`, which then get passed
+  as-is to the `configure` scripts.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2160](https://github.com/CocoaPods/CocoaPods/issues/2160)
+
 ##### Bug Fixes
 
 * Public headers of vendored frameworks are now automatically linked in
@@ -39,13 +51,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [cocoapods-try#31](https://github.com/CocoaPods/cocoapods-try/issues/31)
 
-* Supports running pre-install hooks in plugins. This happens before the resolver
-  does its work, and offers easy access to the sandbox, podfile and lockfile via a 
-  `PreInstallHooksContext` object. This also renames the post-install hooks from `HooksContext`
-  to `PostInstallHooksContext`.  
-  [Orta Therox](https://github.com/orta)
-  [cocoapods#3540](https://github.com/CocoaPods/cocoapods/issues/3409)
-  
 ##### Bug Fixes
 
 * `pod repo push` will now find and push JSON podspecs.  
