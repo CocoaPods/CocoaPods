@@ -29,7 +29,7 @@ module Pod
       it 'shows the long form without --short' do
         output = run_command('cache', 'list', 'AFNetworking')
         yaml = YAML.load(output)
-        yaml.should == SpecHelper::TemporaryCache.test_cache_yaml(false).select do |key,_|
+        yaml.should == SpecHelper::TemporaryCache.test_cache_yaml(false).select do |key, _|
           key == 'AFNetworking'
         end
       end
@@ -38,11 +38,10 @@ module Pod
         run_command('cache', 'list', '--short', 'bananalib')
         output = run_command('cache', 'list', 'AFNetworking')
         yaml = YAML.load(output)
-        yaml.should == SpecHelper::TemporaryCache.test_cache_yaml(false).select do |key,_|
+        yaml.should == SpecHelper::TemporaryCache.test_cache_yaml(false).select do |key, _|
           ['AFNetworking', '$CACHE_ROOT'].include?(key)
         end
       end
     end
-
   end
 end
