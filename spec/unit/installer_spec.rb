@@ -63,7 +63,7 @@ module Pod
         @installer.unstub(:download_dependencies)
         @installer.stubs(:create_file_accessors)
         @installer.stubs(:install_pod_sources)
-        def @installer.run_pre_install_hooks
+        def @installer.run_podfile_pre_install_hooks
           @hook_called = true
         end
         def @installer.clean_pod_sources
@@ -74,7 +74,7 @@ module Pod
 
       it 'in runs the post-install hooks before serializing the Pods project' do
         @installer.stubs(:prepare_pods_project)
-        @installer.stubs(:run_pre_install_hooks)
+        @installer.stubs(:run_podfile_pre_install_hooks)
         @installer.stubs(:install_file_references)
         @installer.stubs(:install_libraries)
         @installer.stubs(:set_target_dependencies)
@@ -685,16 +685,23 @@ module Pod
         @installer.stubs(:installed_specs).returns(@specs)
       end
 
+      it 'runs plugins pre install hook' do
+        context = stub
+        Installer::PreInstallHooksContext.expects(:generate).returns(context)
+        HooksManager.expects(:run).with(:pre_install, context, {})
+        @installer.send(:run_plugins_pre_install_hooks)
+      end
+
       it 'runs plugins post install hook' do
         context = stub
-        Installer::HooksContext.expects(:generate).returns(context)
+        Installer::PostInstallHooksContext.expects(:generate).returns(context)
         HooksManager.expects(:run).with(:post_install, context, {})
         @installer.send(:run_plugins_post_install_hooks)
       end
 
-      it 'only runs the podfile-specified post-install hooks' do
+      it 'only runs the podfile-specified hooks' do
         context = stub
-        Installer::HooksContext.expects(:generate).returns(context)
+        Installer::PostInstallHooksContext.expects(:generate).returns(context)
         plugins_hash = { 'cocoapods-keys' => { 'keyring' => 'Eidolon' } }
         @installer.podfile.stubs(:plugins).returns(plugins_hash)
         HooksManager.expects(:run).with(:post_install, context, plugins_hash)
@@ -722,7 +729,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe 'Hooks' do
+    describe 'Podfile Hooks' do
       before do
         @installer.send(:analyze)
         @specs = @installer.pod_targets.map(&:specs).flatten
@@ -736,7 +743,7 @@ module Pod
 
         @installer.expects(:installer_rep).returns(installer_rep)
         @installer.podfile.expects(:pre_install!).with(installer_rep)
-        @installer.send(:run_pre_install_hooks)
+        @installer.send(:run_podfile_pre_install_hooks)
       end
 
       it 'run_podfile_post_install_hooks' do
@@ -756,7 +763,7 @@ module Pod
         @installer.stubs(:pod_targets).returns([pod_target_ios, pod_target_osx])
         @installer.stubs(:installer_rep).returns(stub)
         @installer.podfile.expects(:pre_install!)
-        @installer.send(:run_pre_install_hooks)
+        @installer.send(:run_podfile_pre_install_hooks)
         @installer.send(:run_podfile_post_install_hooks)
       end
 

@@ -39,6 +39,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [cocoapods-try#31](https://github.com/CocoaPods/cocoapods-try/issues/31)
 
+* Supports running pre-install hooks in plugins. This happens before the resolver
+  does its work, and offers easy access to the sandbox, podfile and lockfile via a 
+  `PreInstallHooksContext` object. This also renames the post-install hooks from `HooksContext`
+  to `PostInstallHooksContext`.  
+  [Orta Therox](https://github.com/orta)
+  [cocoapods#3540](https://github.com/CocoaPods/cocoapods/issues/3409)
+  
 ##### Bug Fixes
 
 * `pod repo push` will now find and push JSON podspecs.  
@@ -48,7 +55,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Flush stdin/stderr and wait a bit in `executable`.  
   [Boris Bügling](https://github.com/neonichu)
   [#3500](https://github.com/CocoaPods/CocoaPods/issues/3500)
-
 
 ## 0.37.1
 
