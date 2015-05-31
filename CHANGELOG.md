@@ -20,6 +20,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Orta Therox](https://github.com/orta)
   [#3540](https://github.com/CocoaPods/cocoapods/issues/3409)
 
+* Allow passing additional arguments to `pod lib create`, which then get passed
+  as-is to the `configure` scripts.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2160](https://github.com/CocoaPods/CocoaPods/issues/2160)
+
 ##### Bug Fixes
 
 * Public headers of vendored frameworks are now automatically linked in
