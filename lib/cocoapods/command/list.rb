@@ -5,10 +5,10 @@ module Pod
       self.description = 'Lists all available pods.'
 
       def self.options
-        [[
-          '--update', 'Run `pod repo update` before listing',
-          '--stats',  'Show additional stats (like GitHub watchers and forks)'
-        ]].concat(super)
+        [
+          ['--update', 'Run `pod repo update` before listing'],
+          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
+        ].concat(super)
       end
 
       def initialize(argv)
