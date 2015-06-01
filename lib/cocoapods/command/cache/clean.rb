@@ -31,7 +31,8 @@ module Pod
         end
 
         def run
-          if @pod_name.nil? # && @wipe_all
+          if @pod_name.nil?
+            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
             # Remove all
             clear_cache
           else

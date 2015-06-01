@@ -55,7 +55,7 @@ module Pod
         spec_paths = specs_dir.find.select { |f| f.fnmatch('*.podspec.json') }
         spec_paths.reduce({}) do |hash, spec_path|
           spec = Specification.from_file(spec_path)
-          hash[spec.name] = [] if hash[spec.name].nil?
+          hash[spec.name] ||= []
           is_release = spec_path.to_s.start_with?(release_specs_dir.to_s)
           request = Downloader::Request.new(:spec => spec, :released => is_release)
           hash[spec.name] << {
