@@ -20,9 +20,11 @@ module Pod
       e.message.should == '[!] 0 is invalid [1-2]'
     end
 
-    it 'clean all matching pod when given a name and --all' do
+    it 'clean all matching pods when given a name and --all' do
       run_command('cache', 'clean', '--all', 'AFNetworking')
-      Dir.glob(tmp_cache_path + '**/AFNetworking').select { |f| File.file?(f) }.should == []
+      remaining_occurences = Dir.glob(tmp_cache_path + '**/AFNetworking')
+      # We only clean files (so there may still be some empty dirs), so check for files only
+      remaining_occurences.select { |f| File.file?(f) }.should == []
     end
 
     it 'clean all pods when given --all' do
