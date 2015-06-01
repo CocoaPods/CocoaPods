@@ -98,7 +98,8 @@ module Pod
       Thread.new do
         buf = ''
         begin
-          while s = input.readpartial(4096)
+          loop do
+            s = input.readpartial(4096)
             buf << s
             lines = buf.split("\n")
             if buf[-1] == "\n"
@@ -110,7 +111,7 @@ module Pod
             lines.each { |l| output << (l << "\n") }
           end
         rescue EOFError
-          nil
+          output << (buf << "\n") unless buf.size == 0
         end
       end
     end
