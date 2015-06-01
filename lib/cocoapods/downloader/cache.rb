@@ -47,8 +47,6 @@ module Pod
       #         :release   : boolean to tell if that's a release pod
       #         :slug      : the slug path where the pod cache is located
       #
-      # @todo Move this to Pod::Downloader::Cache
-      #
       def cache_descriptors_per_pod
         specs_dir = root + 'Specs'
         release_specs_dir = specs_dir + 'Release'
