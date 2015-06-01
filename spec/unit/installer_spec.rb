@@ -619,15 +619,14 @@ module Pod
 
         it 'shares schemes of development pods' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile)
-          pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
+          pod_target = fixture_pod_target(spec)
 
-          @installer.pods_project.stubs(:targets).returns([pod_target])
+          @installer.stubs(:pod_targets).returns([pod_target])
           @installer.sandbox.stubs(:development_pods).returns('BananaLib' => nil)
 
           Xcodeproj::XCScheme.expects(:share_scheme).with(
             @installer.pods_project.path,
-            'Pods-default-BananaLib')
+            'BananaLib')
 
           @installer.send(:share_development_pod_schemes)
         end
