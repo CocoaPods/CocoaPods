@@ -144,9 +144,10 @@ module Pod
         path = target.embed_frameworks_script_path
         frameworks_by_config = {}
         target.user_build_configurations.keys.each do |config|
-          frameworks_by_config[config] = target.pod_targets.select do |pod_target|
+          relevant_pod_targets = target.pod_targets.select do |pod_target|
             pod_target.include_in_build_config?(target_definition, config) && pod_target.should_build?
-          end.map do |pod_target|
+          end
+          frameworks_by_config[config] = relevant_pod_targets.map do |pod_target|
             "#{target_definition.label}/#{pod_target.product_name}"
           end
         end
