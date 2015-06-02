@@ -16,6 +16,7 @@ module Pod
           Banana.modulemap
           BananaLib.podspec
           Bananalib.framework/Versions/A/Headers/Bananalib.h
+          Bananalib.framework/Versions/A/Headers/SubDir/SubBananalib.h
           Classes/Banana.h
           Classes/Banana.m
           Classes/BananaLib.pch
@@ -45,6 +46,7 @@ module Pod
           Bananalib.framework/Versions
           Bananalib.framework/Versions/A
           Bananalib.framework/Versions/A/Headers
+          Bananalib.framework/Versions/A/Headers/SubDir
           Bananalib.framework/Versions/Current
           Classes
           Resources
