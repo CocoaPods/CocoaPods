@@ -115,17 +115,17 @@ module Pod
         UI.message '- Linking headers' do
           libraries.each do |library|
             library.file_accessors.each do |file_accessor|
-              framework_exp = Regexp.new "/(#{file_accessor.spec_consumer.send(:vendored_frameworks).join(')|(')})/"
+              framework_exp = /.framework\//
               headers_sandbox = Pathname.new(file_accessor.spec.root.name)
               library.build_headers.add_search_path(headers_sandbox, library.platform)
               sandbox.public_headers.add_search_path(headers_sandbox, library.platform)
 
               header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
-                library.build_headers.add_files(namespaced_path, files.select { |f| framework_exp.match(f.to_path).nil? }, library.platform)
+                library.build_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, library.platform)
               end
 
               header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
-                sandbox.public_headers.add_files(namespaced_path, files.select { |f| framework_exp.match(f.to_path).nil? }, library.platform)
+                sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, library.platform)
               end
 
               vendored_frameworks_header_mappings(headers_sandbox, file_accessor).each do |namespaced_path, files|
