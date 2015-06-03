@@ -59,17 +59,6 @@ module Pod
         clean_installation unless local?
       end
 
-      # Locks the source files if appropriate.
-      #
-      # @todo   As the pre install hooks need to run before cleaning this
-      #         method should be refactored.
-      #
-      # @return [void]
-      #
-      def lock_files!
-        lock_installation unless local?
-      end
-
       # @return [Hash] @see Downloader#checkout_options
       #
       attr_reader :specific_source
@@ -100,24 +89,6 @@ module Pod
           :released => released?,
           :head => head_pod?,
         )
-      end
-
-      # Locks all of the files in this pod (source, license, etc). This will
-      # cause Xcode to warn you if you try to accidently edit one of the files.
-      #
-      # @return [void]
-      #
-      def lock_installation
-        # We don't want to lock diretories, as that forces you to override
-        # those permissions if you decide to delete the Pods folder.
-        Dir.glob(root + '**/*').each do |file|
-          if File.file?(file)
-            # Only remove write permission, since some pods (like Crashlytics)
-            # have executable files.
-            new_permissions = File.stat(file).mode & ~0222
-            File.chmod(new_permissions, file)
-          end
-        end
       end
 
       # Removes all the files not needed for the installation according to the
