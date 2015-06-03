@@ -86,10 +86,6 @@ module Pod
         i.close
         status = t.value
 
-        o.flush
-        e.flush
-        sleep(0.1)
-
         status
       end
     end
@@ -100,11 +96,17 @@ module Pod
         begin
           loop do
             buf << input.readpartial(4096)
-            string, separator, buf = buf.rpartition(/[\r\n]/)
-            output << string << separator
+            loop do
+              string, separator, buf = buf.partition(/[\r\n]/)
+              if separator.empty?
+                buf = string
+                break
+              end
+              output << (string << separator)
+            end
           end
         rescue EOFError
-          output << buf << $/ unless buf.empty?
+          output << (buf << $/) unless buf.empty?
         end
       end
     end
@@ -141,8 +143,7 @@ module Pod
       #
       def <<(value)
         super
-      ensure
-        @io << "#{ indent }#{ value }" if @io
+        io << "#{ indent }#{ value }" if io
       end
     end
   end
