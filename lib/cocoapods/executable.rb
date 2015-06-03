@@ -139,7 +139,7 @@ module Pod
       #
       # @return [void]
       #
-      def <<(obj)
+      def <<(value)
         super
       ensure
         @io << "#{ indent }#{ value }" if @io
