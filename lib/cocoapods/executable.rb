@@ -105,8 +105,6 @@ module Pod
           end
         rescue EOFError
           output << buf unless buf.size == 0
-        ensure
-          buf
         end
       end
     end
