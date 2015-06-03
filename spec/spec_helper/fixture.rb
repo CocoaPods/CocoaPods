@@ -9,6 +9,10 @@ module SpecHelper
     fixture_copy_path + "#{fixture_name}.xcodeproj"
   end
 
+  def self.test_repo_url
+    'https://github.com/CocoaPods/test_repo.git'
+  end
+
   module Fixture
     ROOT = ::ROOT + 'spec/fixtures'
 

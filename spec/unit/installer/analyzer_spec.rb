@@ -114,6 +114,69 @@ module Pod
         target.platform.to_s.should == 'iOS 6.0'
       end
 
+      describe 'deduplication' do
+        before do
+          repos = [fixture('spec-repos/test_repo'), fixture('spec-repos/master')]
+          aggregate = Pod::Source::Aggregate.new(repos)
+          Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
+          aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
+        end
+
+        it 'deduplicate targets if possible' do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '6.0'
+            xcodeproj 'SampleProject/SampleProject'
+            pod 'BananaLib'
+            pod 'monkey'
+
+            target 'TestRunner' do
+              pod 'BananaLib'
+              pod 'monkey'
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.analyze
+
+          analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
+            Pods/BananaLib
+            Pods/monkey
+            Pods-TestRunner/BananaLib
+            Pods-TestRunner/monkey
+          ).sort
+        end
+
+        it "doesn't deduplicate targets, where transitive dependencies can't be deduplicated" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '6.0'
+            xcodeproj 'SampleProject/SampleProject'
+            pod 'BananaLib'
+            pod 'monkey'
+
+            target 'TestRunner' do
+              pod 'BananaLib'
+              pod 'monkey'
+            end
+
+            target 'CLITool' do
+              platform :osx, '10.10'
+              pod 'monkey'
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.analyze
+
+          analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
+            Pods/Pods-BananaLib
+            Pods/Pods-monkey
+            Pods-TestRunner/Pods-TestRunner-BananaLib
+            Pods-TestRunner/Pods-monkey
+            Pods-CLITool/Pods-CLITool-monkey
+          ).sort
+        end
+      end
+
       it 'generates the integration library appropriately if the installation will not integrate' do
         config.integrate_targets = false
         target = @analyzer.analyze.targets.first

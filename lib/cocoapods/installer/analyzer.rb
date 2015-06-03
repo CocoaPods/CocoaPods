@@ -289,7 +289,7 @@ module Pod
             (hash[root_spec][[specs, target_definition.platform]] ||= []) << target_definition
           end
 
-          distinct_targets.values.flat_map do |targets_by_distinctors|
+          pod_targets = distinct_targets.flat_map do |_, targets_by_distinctors|
             if targets_by_distinctors.count > 1
               # There are different sets of subspecs or the spec is used across different platforms
               targets_by_distinctors.map do |distinctor, target_definitions|
@@ -301,6 +301,17 @@ module Pod
               generate_pod_target(target_definitions, specs)
             end
           end
+
+          # A `PodTarget` can't be deduplicated if any of its
+          # transitive dependencies can't be deduplicated.
+          pod_targets.flat_map do |target|
+            dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
+            if dependent_targets.any?(&:scoped?)
+              target.scoped
+            else
+              target
+            end
+          end
         else
           specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by.group_by(&:root).values.uniq
@@ -308,6 +319,34 @@ module Pod
               generate_pod_target([target_definition], pod_specs, :scoped => true)
             end
           end
+        end
+      end
+
+      # Finds the names of the Pods on which the given target _transitively_
+      # depends.
+      #
+      # @note: This is implemented in the analyzer, because we don't have to
+      #        care about the requirements after dependency resolution.
+      #
+      # @param  [PodTarget] pod_target
+      #         The pod target, whose dependencies should be returned.
+      #
+      # @param  [Array<PodTarget>] targets
+      #         All pod targets, which are integrated alongside.
+      #
+      # @return [Array<PodTarget>]
+      #
+      def transitive_dependencies_for_pod_target(pod_target, targets)
+        if targets.any?
+          dependent_targets = pod_target.dependencies.flat_map do |dep|
+            targets.select { |t| t.pod_name == dep }
+          end
+          remaining_targets = targets - dependent_targets
+          dependent_targets + dependent_targets.flat_map do |target|
+            transitive_dependencies_for_pod_target(target, remaining_targets)
+          end
+        else
+          []
         end
       end
 
