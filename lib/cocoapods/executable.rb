@@ -100,14 +100,13 @@ module Pod
         begin
           loop do
             buf << input.readpartial(4096)
-            loop do
-              string, separator, buf = buf.partition(/[\r\n]/)
-              break if separator.empty?
-              output << [string, separator]
-            end
+            string, separator, buf = buf.rpartition(/[\r\n]/)
+            output << string << separator
           end
         rescue EOFError
           output << buf unless buf.size == 0
+        ensure
+          buf
         end
       end
     end
@@ -143,10 +142,7 @@ module Pod
       # @return [void]
       #
       def <<(obj)
-        value, newline = Array(obj)
-        newline ||= "\n"
-        value = value + newline
-        super(value)
+        super
       ensure
         @io << "#{ indent }#{ value }" if @io
       end
