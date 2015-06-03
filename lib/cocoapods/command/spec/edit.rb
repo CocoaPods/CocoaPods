@@ -38,7 +38,7 @@ module Pod
           if @show_all
             specs = get_path_of_spec(query, @show_all).split(/\n/)
             message = "Which spec would you like to edit [1-#{specs.count}]? "
-            index = choose_from_array(specs, message)
+            index = UI.choose_from_array(specs, message)
             filepath = specs[index]
           else
             filepath = get_path_of_spec(query)

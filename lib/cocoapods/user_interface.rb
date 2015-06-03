@@ -285,6 +285,32 @@ module Pod
         end
       end
 
+      # Presents a choice among the elements of an array to the user.
+      #
+      # @param  [Array<#to_s>] array
+      #         The list of the elements among which the user should make his
+      #         choice.
+      #
+      # @param  [String] message
+      #         The message to display to the user.
+      #
+      # @return [Fixnum] The index of the chosen array item.
+      #
+      def choose_from_array(array, message)
+        array.each_with_index do |item, index|
+          UI.puts "#{ index + 1 }: #{ item }"
+        end
+
+        UI.puts message
+
+        index = UI.gets.chomp.to_i - 1
+        if index < 0 || index > array.count - 1
+          raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
+        else
+          index
+        end
+      end
+
       public
 
       # @!group Basic methods

@@ -30,23 +30,6 @@ module Pod
         help! 'A valid regular expression is required.'
       end
 
-      # @return [Fixnum] the index of the chosen array item
-      #
-      def choose_from_array(array, message)
-        array.each_with_index do |item, index|
-          UI.puts "#{ index + 1 }: #{ item }"
-        end
-
-        UI.puts message
-
-        index = UI.gets.chomp.to_i - 1
-        if index < 0 || index > array.count - 1
-          raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
-        else
-          index
-        end
-      end
-
       # @param  [String] spec
       #         The name of the specification.
       #

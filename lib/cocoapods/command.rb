@@ -24,6 +24,7 @@ module Pod
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
     require 'cocoapods/command/init'
+    require 'cocoapods/command/cache'
 
     self.abstract_command = true
     self.command = 'pod'
