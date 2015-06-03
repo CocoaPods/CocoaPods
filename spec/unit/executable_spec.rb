@@ -29,25 +29,22 @@ module Pod
         Executable.execute_command('ruby', cmd, true).should == "out\n"
       end
     end
-    
-    it "returns the right output" do
+
+    it 'returns the right output' do
       cmd = ['-e', <<-RB]
         puts 'foo'
         puts 'bar'
       RB
-      Timeout.timeout(2) do
-        Executable.execute_command('ruby', cmd, true).should == "foo\nbar\n"
-      end
+      Executable.execute_command('ruby', cmd, true).should == "foo\nbar\n"
     end
-    
+
     it "handles an EOFError" do
       cmd = ['-e', <<-RB]
         puts 'foo'
         print 'bar'
       RB
-      Timeout.timeout(2) do
-        Executable.execute_command('ruby', cmd, true).should == "foo\nbar#{$/}"
-      end
+      Executable.execute_command('ruby', cmd, true).should == "foo\nbar#{$/}"
+    end
     end
   end
 end
