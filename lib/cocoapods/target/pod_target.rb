@@ -30,7 +30,7 @@ module Pod
     #         dependency, but they require different sets of subspecs or they
     #         are on different platforms.
     #
-    attr_accessor :scoped
+    attr_reader :scoped
     alias_method :scoped?, :scoped
 
     # @param [Array<Specification>] @spec #see spec
@@ -50,11 +50,16 @@ module Pod
       @resource_bundle_targets = []
     end
 
-    # @return [PodTarget] the same target, but scoped.
+    # @return [Array<PodTarget>] a scoped copy for each target definition.
     #
     def scoped
-      clone.tap do |scoped_target|
-        scoped_target.scoped = true
+      target_definitions.map do |target_definition|
+        PodTarget.new(specs, [target_definition], sandbox, true).tap do |target|
+          target.file_accessors = file_accessors
+          target.user_build_configurations = user_build_configurations
+          target.native_target = native_target
+          target.archs = archs
+        end
       end
     end
 

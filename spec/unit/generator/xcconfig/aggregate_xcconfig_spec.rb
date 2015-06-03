@@ -109,7 +109,7 @@ module Pod
 
           describe 'with a scoped pod target' do
             def pod_target(spec)
-              fixture_pod_target(spec).scoped
+              fixture_pod_target(spec).scoped.first
             end
 
             it 'links the pod targets with the aggregate target' do
@@ -157,7 +157,7 @@ module Pod
 
           describe 'with a scoped pod target' do
             def pod_target(spec)
-              fixture_pod_target(spec).scoped
+              fixture_pod_target(spec).scoped.first
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do

@@ -93,7 +93,7 @@ module Pod
 
       describe 'with a scoped pod target' do
         before do
-          @pod_target.scoped = true
+          @pod_target = @pod_target.scoped.first
         end
 
         it 'adds file references for the support files of the target' do
