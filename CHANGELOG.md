@@ -13,6 +13,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3842](https://github.com/CocoaPods/CocoaPods/issues/3842)
   [Samuel Giddins](https://github.com/segiddins)
 
+* Don't lock resource files, only source files.  
+  [Mason Glidden](https://github.com/mglidden).
+  [#3557](https://github.com/CocoaPods/CocoaPods/issues/3557)
 
 ## 0.38.0
 
@@ -141,10 +144,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   as-is to the `configure` scripts.  
   [Samuel Giddins](https://github.com/segiddins)
   [#2160](https://github.com/CocoaPods/CocoaPods/issues/2160)
-  
-* Unlock source files before running hooks and lock them after.  
-  [Mason Glidden](https://github.com/mglidden).
-  [#3529](https://github.com/CocoaPods/CocoaPods/issues/3529)
 
 * Use `-analyzer-disable-all-checks` to disable static analyzer for
   pods with `inhibit_warnings` enabled (requires Xcode >= 6.1).  
@@ -181,10 +180,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   the sandbox. That allows transitive inclusion of headers from other pods.  
   [Vincent Isambart](https://github.com/vincentisambart)
   [#3161](https://github.com/CocoaPods/CocoaPods/issues/3161)
-  
-* Don't lock resource files, only source files.  
-  [Mason Glidden](https://github.com/mglidden).
-  [#3557](https://github.com/CocoaPods/CocoaPods/issues/3557)
 
 * Fixes an issue that prevented static libraries from building. `OTHER_LIBTOOLFLAGS`
   is no longer set to the value of `OTHER_LDFLAGS`. If you want to create a static

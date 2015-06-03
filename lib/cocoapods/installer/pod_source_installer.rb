@@ -33,6 +33,11 @@ module Pod
         "<#{self.class} sandbox=#{sandbox.root} pod=#{root_spec.name}"
       end
 
+      # @return [String] The name of the pod this is installing
+      def name
+        root_spec.name
+      end
+
       #-----------------------------------------------------------------------#
 
       public
@@ -57,6 +62,31 @@ module Pod
       #
       def clean!
         clean_installation unless local?
+      end
+
+      # Locks the source files if appropriate.
+      #
+      # @todo   As the pre install hooks need to run before cleaning this
+      #         method should be refactored.
+      #
+      # @return [void]
+      #
+      def lock_files!(file_accessors)
+        if local?
+          return
+        end
+
+        file_accessors.each do |file_accessor|
+          file_accessor.source_files.each do |source_file|
+            if File.exist?(source_file)
+              file = source_file.open
+              # Only remove write permission, since some pods (like Crashlytics)
+              # have executable files.
+              new_permissions = File.stat(file).mode & ~0222
+              File.chmod(new_permissions, file)
+            end
+          end
+        end
       end
 
       # @return [Hash] @see Downloader#checkout_options

@@ -109,7 +109,6 @@ module Pod
       generate_pods_project
       integrate_user_project if config.integrate_targets?
       perform_post_install_actions
-      lock_source_files
     end
 
     def prepare
@@ -140,9 +139,9 @@ module Pod
       UI.section 'Downloading dependencies' do
         create_file_accessors
         install_pod_sources
-        unlock_source_files
         run_podfile_pre_install_hooks
         clean_pod_sources
+        lock_pod_sources
       end
     end
 
@@ -338,6 +337,19 @@ module Pod
       return unless config.clean?
       return unless @pod_installers
       @pod_installers.each(&:clean!)
+    end
+
+    # Locks the sources of the Pods if the config instructs to do so.
+    #
+    # @todo Why the @pod_installers might be empty?
+    #
+    def lock_pod_sources
+      return unless config.lock_pod_source?
+      return unless @pod_installers
+      @pod_installers.each do |installer|
+        pod_target =  pod_targets.detect {|target| target.name == installer.name}
+        installer.lock_files!(pod_target.file_accessors)
+      end
     end
 
     # Determines if the dependencies need to be built as dynamic frameworks or
@@ -752,44 +764,6 @@ module Pod
       raise Informative, 'An error occurred while processing the post-install ' \
         'hook of the Podfile.' \
         "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
-    end
-
-    # Locks all of the source files in the pod. This will cause Xcode
-    # to warn you if you try to accidently edit one of the files.
-    #
-    # @return [void]
-    #
-    def lock_source_files
-      non_local_source_files do |file|
-        new_permissions = File.stat(file).mode & ~0222
-        File.chmod(new_permissions, file)
-      end
-    end
-
-    # Unlocks all of the source files in this pod, so hooks can
-    # modify them.
-    #
-    # @return [void]
-    #
-    def unlock_source_files
-      non_local_source_files do |file|
-        new_permissions = File.stat(file).mode | 0222
-        File.chmod(new_permissions, file)
-      end
-    end
-
-    def non_local_source_files
-      installer = installer_rep
-      installer.pods.each do |pod|
-        # if the pod is actually in Pods/, and not a :path linked pod
-        if pod.root.parent == installer.sandbox_root
-          pod.source_files.each do |file|
-            if File.file?(file)
-              yield(file)
-            end
-          end
-        end
-      end
     end
 
     #-------------------------------------------------------------------------#

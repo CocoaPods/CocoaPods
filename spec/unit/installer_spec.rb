@@ -60,8 +60,6 @@ module Pod
         @installer.stubs(:run_plugins_post_install_hooks)
         @installer.stubs(:ensure_plugins_are_installed!)
         @installer.stubs(:perform_post_install_actions)
-        @installer.stubs(:lock_source_files)
-        @installer.stubs(:unlock_source_files)
       end
 
       it 'in runs the pre-install hooks before cleaning the Pod sources' do
@@ -770,17 +768,6 @@ module Pod
 
       it 'runs the post install hooks' do
         @installer.podfile.expects(:post_install!).with(@installer)
-        @installer.install!
-      end
-
-      it 'locks the sources files after running the hooks' do
-        locking = sequence('locking')
-
-        @installer.expects(:unlock_source_files).in_sequence(locking)
-        @installer.expects(:run_podfile_pre_install_hooks).in_sequence(locking)
-        @installer.expects(:run_plugins_post_install_hooks).in_sequence(locking)
-        @installer.expects(:lock_source_files).in_sequence(locking)
-
         @installer.install!
       end
     end
