@@ -29,5 +29,15 @@ module Pod
         Executable.execute_command('ruby', cmd, true).should == "out\n"
       end
     end
+    
+    it "returns the right output" do
+      cmd = ['-e', <<-RB]
+        puts 'foo'
+        puts 'bar'
+      RB
+      Timeout.timeout(2) do
+        Executable.execute_command('ruby', cmd, true).should == "foo\nbar\n"
+      end
+    end
   end
 end
