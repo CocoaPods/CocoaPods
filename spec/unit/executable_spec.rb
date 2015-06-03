@@ -59,5 +59,18 @@ module Pod
       RB
       Executable.execute_command('ruby', cmd, true).should == "foo\rbar\nbaz\r"
     end
+    
+    describe Executable::Indenter do
+      it 'indents any appended strings' do
+        UI.indentation_level = 4
+        
+        io = StringIO.new
+        indenter = Executable::Indenter.new(io)
+        
+        indenter << 'hello'
+        
+        io.string.should == '    hello'
+      end
+    end
   end
 end
