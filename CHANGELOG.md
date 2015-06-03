@@ -27,6 +27,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   into dynamic frameworks, when integrating Pods as frameworks
   [#3867](https://github.com/CocoaPods/CocoaPods/issues/3867)
   [Jonathan MacMillan](https://github.com/perotinus)
+* Don't lock resource files, only source files.  
+  [Mason Glidden](https://github.com/mglidden).
+  [#3557](https://github.com/CocoaPods/CocoaPods/issues/3557)
 
 ## 0.38.0
 
