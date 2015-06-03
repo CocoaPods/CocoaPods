@@ -27,6 +27,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Added recursive support to the public headers of vendored frameworks
+  that are automatically linked in the sandbox. This fixes and issue
+  for framework header directories that contain sub-directories.
+  [Todd Casey](https://github.com/vhariable)
+  [#3161](https://github.com/CocoaPods/CocoaPods/issues/3161)
+
 * Public headers of vendored frameworks are now automatically linked in
   the sandbox. That allows transitive inclusion of headers from other pods.  
   [Vincent Isambart](https://github.com/vincentisambart)

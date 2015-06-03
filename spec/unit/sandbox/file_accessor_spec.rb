@@ -94,6 +94,7 @@ module Pod
       it 'includes the vendored framework headers if requested' do
         @accessor.public_headers(true).sort.should == [
           @root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h',
+          @root + 'Bananalib.framework/Versions/A/Headers/SubDir/SubBananalib.h',
           @root + 'Classes/Banana.h',
         ]
       end
@@ -128,6 +129,7 @@ module Pod
       it 'returns the paths of the framework headers' do
         @accessor.vendored_frameworks_headers.should == [
           @root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h',
+          @root + 'Bananalib.framework/Versions/A/Headers/SubDir/SubBananalib.h',
         ]
       end
 

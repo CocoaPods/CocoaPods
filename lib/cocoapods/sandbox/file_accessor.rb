@@ -168,7 +168,7 @@ module Pod
       #
       def self.vendored_frameworks_headers(framework)
         headers_dir = vendored_frameworks_headers_dir(framework)
-        Pathname.glob(headers_dir + GLOB_PATTERNS[:public_header_files])
+        Pathname.glob(headers_dir + '**/' + GLOB_PATTERNS[:public_header_files])
       end
 
       # @return [Array<Pathname>] The paths of the framework headers that come
