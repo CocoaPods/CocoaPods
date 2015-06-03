@@ -45,6 +45,19 @@ module Pod
       RB
       Executable.execute_command('ruby', cmd, true).should == "foo\nbar#{$/}"
     end
+
+    it 'handles a large amount of output' do
+      cmd = ['-e', <<-RB]
+        puts File.read(#{__FILE__.inspect})
+      RB
+      Executable.execute_command('ruby', cmd, true).should == File.read(__FILE__)
+    end
+
+    it 'handles carriage returns' do
+      cmd = ['-e', <<-RB]
+        print "foo\\rbar\\nbaz\\r"
+      RB
+      Executable.execute_command('ruby', cmd, true).should == "foo\rbar\nbaz\r"
     end
   end
 end
