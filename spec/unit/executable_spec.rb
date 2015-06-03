@@ -38,7 +38,7 @@ module Pod
       Executable.execute_command('ruby', cmd, true).should == "foo\nbar\n"
     end
 
-    it "handles an EOFError" do
+    it 'handles an EOFError' do
       cmd = ['-e', <<-RB]
         puts 'foo'
         print 'bar'
