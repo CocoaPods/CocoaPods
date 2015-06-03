@@ -99,16 +99,12 @@ module Pod
         buf = ''
         begin
           loop do
-            s = input.readpartial(4096)
-            buf << s
-            lines = buf.split("\n")
-            if buf[-1] == "\n"
-              buf = ''
-            else
-              buf = lines[-1]
-              lines.pop
+            buf << input.readpartial(4096)
+            loop do
+              string, separator, buf = buf.partition(/[\n\r]/)
+              break if separator.empty?
+              output << (string << separator)
             end
-            lines.each { |l| output << (l << "\n") }
           end
         rescue EOFError
           output << (buf << "\n") unless buf.size == 0
