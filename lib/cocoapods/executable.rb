@@ -104,7 +104,7 @@ module Pod
             output << string << separator
           end
         rescue EOFError
-          output << buf unless buf.size == 0
+          output << buf << $/ unless buf.empty?
         end
       end
     end
