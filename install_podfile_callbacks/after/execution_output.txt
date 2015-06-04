@@ -61,5 +61,3 @@ Integrating client project
 [!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
 
 Integrating target `Pods` (`SampleApp.xcodeproj` project)
-
-[!] Podfile#config is deprecated. The config is accessible from the parameter passed to the hooks
