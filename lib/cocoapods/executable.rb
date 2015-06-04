@@ -64,7 +64,7 @@ module Pod
       end
 
       status = popen3(bin, command, stdout, stderr)
-      output = stdout.join("\n") + stderr.join("\n")
+      output = stdout.join + stderr.join
       unless status.success?
         if raise_on_failure
           raise Informative, "#{full_command}\n\n#{output}"
@@ -80,16 +80,34 @@ module Pod
     def self.popen3(bin, command, stdout, stderr)
       require 'open3'
       Open3.popen3(bin, *command) do |i, o, e, t|
-        Thread.new { while s = o.gets; stdout << s; end }
-        Thread.new { while s = e.gets; stderr << s; end }
+        reader(o, stdout)
+        reader(e, stderr)
+
         i.close
         status = t.value
 
-        o.flush
-        e.flush
-        sleep(0.1)
-
         status
+      end
+    end
+
+    def self.reader(input, output)
+      Thread.new do
+        buf = ''
+        begin
+          loop do
+            buf << input.readpartial(4096)
+            loop do
+              string, separator, buf = buf.partition(/[\r\n]/)
+              if separator.empty?
+                buf = string
+                break
+              end
+              output << (string << separator)
+            end
+          end
+        rescue EOFError
+          output << (buf << $/) unless buf.empty?
+        end
       end
     end
 
@@ -125,8 +143,7 @@ module Pod
       #
       def <<(value)
         super
-      ensure
-        @io << "#{ indent }#{ value }" if @io
+        io << "#{ indent }#{ value }" if io
       end
     end
   end

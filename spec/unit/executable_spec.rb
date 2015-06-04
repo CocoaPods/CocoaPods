@@ -29,5 +29,60 @@ module Pod
         Executable.execute_command('ruby', cmd, true).should == "out\n"
       end
     end
+
+    it 'returns the right output' do
+      cmd = ['-e', <<-RB]
+        puts 'foo'
+        puts 'bar'
+      RB
+      Executable.execute_command('ruby', cmd, true).should == "foo\nbar\n"
+    end
+
+    it 'handles an EOFError' do
+      cmd = ['-e', <<-RB]
+        puts 'foo'
+        print 'bar'
+      RB
+      Executable.execute_command('ruby', cmd, true).should == "foo\nbar#{$/}"
+    end
+
+    it 'handles a large amount of output' do
+      cmd = ['-e', <<-RB]
+        puts File.read(#{__FILE__.inspect})
+      RB
+      Executable.execute_command('ruby', cmd, true).should == File.read(__FILE__)
+    end
+
+    it 'handles carriage returns' do
+      cmd = ['-e', <<-RB]
+        print "foo\\rbar\\nbaz\\r"
+      RB
+      Executable.execute_command('ruby', cmd, true).should == "foo\rbar\nbaz\r"
+    end
+
+    it 'prints the correct output to the console' do
+      io = ''
+      UI.indentation_level = 1
+      config.verbose = true
+      Executable::Indenter.any_instance.stubs(:io).returns(io)
+      cmd = ['-e', <<-RB]
+        3.times { |i| puts i }
+      RB
+      Executable.execute_command('ruby', cmd, true)
+      io.should == " 0\n 1\n 2\n"
+    end
+
+    describe Executable::Indenter do
+      it 'indents any appended strings' do
+        UI.indentation_level = 4
+
+        io = StringIO.new
+        indenter = Executable::Indenter.new(io)
+
+        indenter << 'hello'
+
+        io.string.should == '    hello'
+      end
+    end
   end
 end
