@@ -168,8 +168,9 @@ module Pod
     #
     attr_reader :names_of_pods_to_install
 
-    # @return [Array<AggregateTarget>] The Podfile targets containing library
-    #         dependencies.
+    # @return [Array<AggregateTarget>] The model representations of an
+    #         aggregation of pod targets generated for a target definition
+    #         in the Podfile as result of the analyzer.
     #
     attr_reader :aggregate_targets
 
