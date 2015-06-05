@@ -126,6 +126,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   options.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Pods frameworks in codesigned Mac apps are now signed.
+  [Nikolaj Schumacher](https://github.com/nschum)
+  [#3646](https://github.com/CocoaPods/CocoaPods/issues/3646)
 
 ## 0.37.2
 
