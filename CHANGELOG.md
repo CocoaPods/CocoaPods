@@ -6,6 +6,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Breaking
+
+* The CocoaPods environment header has been removed.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2390](https://github.com/CocoaPods/CocoaPods/issues/2390)
+
 ##### Enhancements
 
 * New commands `pod cache list` and `pod cache clean` allows you to see the
