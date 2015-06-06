@@ -43,7 +43,6 @@ File References:
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
     - Pods-dummy.m
-    - Pods-environment.h
     - Pods-resources.sh
     - Pods.debug.xcconfig
     - Pods.release.xcconfig
@@ -51,7 +50,6 @@ File References:
     - Pods-SampleApp_2-acknowledgements.markdown
     - Pods-SampleApp_2-acknowledgements.plist
     - Pods-SampleApp_2-dummy.m
-    - Pods-SampleApp_2-environment.h
     - Pods-SampleApp_2-resources.sh
     - Pods-SampleApp_2.debug.xcconfig
     - Pods-SampleApp_2.release.xcconfig
@@ -59,7 +57,6 @@ File References:
     - Pods-test-acknowledgements.markdown
     - Pods-test-acknowledgements.plist
     - Pods-test-dummy.m
-    - Pods-test-environment.h
     - Pods-test-resources.sh
     - Pods-test.debug.xcconfig
     - Pods-test.release.xcconfig

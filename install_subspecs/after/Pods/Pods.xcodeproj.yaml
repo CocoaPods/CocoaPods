@@ -38,7 +38,6 @@ File References:
     - Pods-OS X App-acknowledgements.markdown
     - Pods-OS X App-acknowledgements.plist
     - Pods-OS X App-dummy.m
-    - Pods-OS X App-environment.h
     - Pods-OS X App-frameworks.sh
     - Pods-OS X App-resources.sh
     - Pods-OS X App-umbrella.h
@@ -48,7 +47,6 @@ File References:
     - Pods-iOS App-acknowledgements.markdown
     - Pods-iOS App-acknowledgements.plist
     - Pods-iOS App-dummy.m
-    - Pods-iOS App-environment.h
     - Pods-iOS App-resources.sh
     - Pods-iOS App.debug.xcconfig
     - Pods-iOS App.release.xcconfig

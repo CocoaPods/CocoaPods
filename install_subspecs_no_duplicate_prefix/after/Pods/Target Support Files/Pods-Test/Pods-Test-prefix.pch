@@ -2,5 +2,4 @@
 #import <UIKit/UIKit.h>
 #endif
 
-#import "Pods-environment.h"
 // Some great header comment

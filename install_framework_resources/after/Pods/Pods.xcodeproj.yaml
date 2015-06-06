@@ -39,7 +39,6 @@ File References:
     - Pods-SampleApp-acknowledgements.markdown
     - Pods-SampleApp-acknowledgements.plist
     - Pods-SampleApp-dummy.m
-    - Pods-SampleApp-environment.h
     - Pods-SampleApp-frameworks.sh
     - Pods-SampleApp-resources.sh
     - Pods-SampleApp-umbrella.h
@@ -51,7 +50,6 @@ File References:
     - Pods-SampleAppTests-acknowledgements.markdown
     - Pods-SampleAppTests-acknowledgements.plist
     - Pods-SampleAppTests-dummy.m
-    - Pods-SampleAppTests-environment.h
     - Pods-SampleAppTests-frameworks.sh
     - Pods-SampleAppTests-resources.sh
     - Pods-SampleAppTests-umbrella.h
