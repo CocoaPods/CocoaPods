@@ -94,12 +94,6 @@ module Pod
         )
       end
 
-      it 'returns the absolute path of the target header file' do
-        @pod_target.target_environment_header_path.to_s.should.include?(
-          'Pods/Target Support Files/Pods/Pods-environment.h',
-        )
-      end
-
       it 'returns the absolute path of the prefix header file' do
         @pod_target.prefix_header_path.to_s.should.include?(
           'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-prefix.pch',

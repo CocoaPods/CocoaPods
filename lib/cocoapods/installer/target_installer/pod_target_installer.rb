@@ -174,7 +174,6 @@ module Pod
       def create_prefix_header
         path = target.prefix_header_path
         generator = Generator::PrefixHeader.new(target.file_accessors, target.platform)
-        generator.imports << target.target_environment_header_path.basename
         generator.save_as(path)
         add_file_to_support_group(path)
 
