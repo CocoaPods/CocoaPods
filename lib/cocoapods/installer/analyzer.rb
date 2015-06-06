@@ -451,6 +451,7 @@ module Pod
         UI.section "Resolving dependencies of #{UI.path podfile.defined_in_file}" do
           resolver = Resolver.new(sandbox, podfile, locked_dependencies, sources)
           specs_by_target = resolver.resolve
+          specs_by_target.values.flatten(1).each(&:validate_cocoapods_version)
         end
         specs_by_target
       end
