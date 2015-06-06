@@ -50,6 +50,11 @@ require 'clintegracon'
 require 'integration/xcodeproj_project_yaml'
 require 'tmpdir'
 
+if (developer_bin = `xcode-select -p 2>/dev/null`.strip) && $?.success?
+  developer_bin = Pathname(developer_bin) + 'usr/bin'
+  ENV['PATH'] = "#{developer_bin}#{File::PATH_SEPARATOR}#{ENV['PATH']}"
+end
+
 CLIntegracon.configure do |c|
   c.spec_path = ROOT + 'spec/cocoapods-integration-specs'
   c.temp_path = ROOT + 'tmp'
