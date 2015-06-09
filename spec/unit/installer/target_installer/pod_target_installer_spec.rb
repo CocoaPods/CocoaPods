@@ -6,7 +6,7 @@ module Pod
       before do
         config.sandbox.prepare
         @podfile = Podfile.new do
-          platform :ios
+          platform :ios, '6.0'
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions['Pods']
@@ -26,7 +26,6 @@ module Pod
         end
 
         @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
-        @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         @pod_target.file_accessors = [file_accessor]
         @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
         @installer = Installer::PodTargetInstaller.new(config.sandbox, @pod_target)
@@ -94,11 +93,11 @@ module Pod
       describe 'with a scoped pod target' do
         before do
           @pod_target = @pod_target.scoped.first
+          @installer = Installer::PodTargetInstaller.new(config.sandbox, @pod_target)
         end
 
         it 'adds file references for the support files of the target' do
           @installer.install!
-          @project.support_files_group
           group = @project['Pods/BananaLib/Support Files']
           group.children.map(&:display_name).sort.should == [
             'Pods-BananaLib-Private.xcconfig',
