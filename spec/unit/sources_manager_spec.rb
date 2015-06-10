@@ -268,6 +268,12 @@ module Pod
         UI.output.should.match /CocoaPods 999.0 is available/
       end
 
+      it 'recommends the user to use the latest stable version' do
+        SourcesManager.stubs(:version_information).returns('last' => '999.0')
+        SourcesManager.check_version_information(temporary_directory)
+        UI.output.should.match /We strongly recommend that you use the/
+      end
+
       it 'skips the update message if the user disabled the notification' do
         config.new_version_message = false
         SourcesManager.stubs(:version_information).returns('last' => '999.0')
