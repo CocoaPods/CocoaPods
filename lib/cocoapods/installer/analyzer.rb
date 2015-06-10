@@ -168,9 +168,6 @@ module Pod
       #         the name of the Pod (root name of the dependencies) and doesn't
       #         group them by target definition.
       #
-      # @todo   [CocoaPods > 0.18] If there isn't a Lockfile all the Pods should
-      #         be marked as added.
-      #
       def generate_podfile_state
         if lockfile
           pods_state = nil
@@ -492,7 +489,7 @@ module Pod
       def generate_sandbox_state
         sandbox_state = nil
         UI.section 'Comparing resolved specification to the sandbox manifest' do
-          sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode?, lockfile)
+          sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode?)
           sandbox_state = sandbox_analyzer.analyze
           sandbox_state.print
         end

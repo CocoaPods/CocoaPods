@@ -37,7 +37,6 @@ module Pod
             # TODO: refactor into Xcodeproj https://github.com/CocoaPods/Xcodeproj/issues/202
             project_is_dirty = [
               XCConfigIntegrator.integrate(target, native_targets),
-              update_to_cocoapods_0_34,
               remove_embed_frameworks_script_phases,
               unless native_targets_to_integrate.empty?
                 add_pods_library
@@ -74,31 +73,6 @@ module Pod
 
         # @!group Integration steps
         #---------------------------------------------------------------------#
-
-        # Fixes the paths of the copy resource scripts.
-        #
-        # @return [Bool] whether any changes to the project were made.
-        #
-        # @todo   This can be removed for CocoaPods 1.0
-        #
-        def update_to_cocoapods_0_34
-          phases = native_targets.map do |target|
-            target.shell_script_build_phases.select do |bp|
-              bp.name == 'Copy Pods Resources'
-            end
-          end.flatten
-
-          script_path = target.copy_resources_script_relative_path
-          shell_script = %("#{script_path}"\n)
-          changes = false
-          phases.each do |phase|
-            unless phase.shell_script == shell_script
-              phase.shell_script = shell_script
-              changes = true
-            end
-          end
-          changes
-        end
 
         # Adds spec product reference to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to

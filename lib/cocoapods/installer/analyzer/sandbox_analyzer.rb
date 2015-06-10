@@ -42,27 +42,16 @@ module Pod
 
         alias_method :update_mode?, :update_mode
 
-        # @return [Lockfile] The lockfile of the installation as a fall-back if
-        #         there is no sandbox manifest. This is indented as a temporary
-        #         solution to prevent the full re-installation from users which
-        #         are upgrading from CP < 0.17.
-        #
-        # @todo   Remove for CP 0.18.
-        #
-        attr_reader :lockfile
-
         # Init a new SandboxAnalyzer
         #
         # @param [Sandbox] sandbox @see sandbox
         # @param [Array<Specifications>] specs @see specs
         # @param [Bool] update_mode @see update_mode
-        # @param [Lockfile] lockfile @see lockfile
         #
-        def initialize(sandbox, specs, update_mode, lockfile = nil)
+        def initialize(sandbox, specs, update_mode)
           @sandbox = sandbox
           @specs = specs
           @update_mode = update_mode
-          @lockfile = lockfile
         end
 
         # Performs the analysis to the detect the state of the sandbox respect
@@ -168,7 +157,7 @@ module Pod
         # @return [Lockfile] The manifest to use for the sandbox.
         #
         def sandbox_manifest
-          sandbox.manifest || lockfile
+          sandbox.manifest
         end
 
         #--------------------------------------#

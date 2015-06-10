@@ -110,13 +110,6 @@ module Pod
         @analyzer.send(:sandbox_manifest).should == @manifest
       end
 
-      it 'returns the lockfile as the sandbox if one is not available' do
-        lockfile = Lockfile.new({})
-        @sandbox.stubs(:manifest)
-        @analyzer.stubs(:lockfile).returns(lockfile)
-        @analyzer.send(:sandbox_manifest).should == lockfile
-      end
-
       #--------------------------------------#
 
       it 'returns the root name of the resolved Pods' do

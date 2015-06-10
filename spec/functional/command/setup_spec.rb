@@ -53,25 +53,5 @@ module Pod
         `git log --pretty=oneline`.strip.split("\n").size.should > 1
       end
     end
-
-    before do
-      FileUtils.rm_rf(test_repo_path)
-      set_up_old_test_repo
-      config.repos_dir = SpecHelper.temporary_directory + 'cocoapods/repos'
-      Command::Setup.any_instance.stubs(:old_master_repo_dir).returns(SpecHelper.temporary_directory + 'cocoapods/master')
-    end
-
-    it 'migrates repos from the old directory structure to the new one' do
-      source = SpecHelper.temporary_directory + 'cocoapods/master'
-      target = config.repos_dir + 'master'
-
-      source.should.exist?
-      target.should.not.exist?
-
-      run_command('setup')
-
-      source.should.not.exist?
-      target.should.exist?
-    end
   end
 end

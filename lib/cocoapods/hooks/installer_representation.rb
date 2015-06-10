@@ -1,23 +1,4 @@
 module Pod
-  # @todo: Remove by CocoaPods 1.0
-  #
-  class Podfile
-    def config
-      UI.warn 'Podfile#config is deprecated. The config is accessible from ' \
-        'the parameter passed to the hooks'
-      Config.instance
-    end
-
-    class TargetDefinition
-      def copy_resources_script_name
-        UI.warn 'TargetDefinition#copy_resources_script_name is deprecated. ' \
-          'The value is accessible directly from the representation of the ' \
-          'library using the #copy_resources_script_path method.'
-        Config.instance.sandbox.root + "#{label}-resources.sh"
-      end
-    end
-  end
-
   module Hooks
     # The installer representation to pass to the hooks.
     #
