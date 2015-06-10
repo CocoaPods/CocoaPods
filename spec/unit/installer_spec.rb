@@ -731,73 +731,21 @@ module Pod
 
     describe 'Podfile Hooks' do
       before do
-        @installer.send(:analyze)
-        @specs = @installer.pod_targets.map(&:specs).flatten
-        @spec = @specs.find { |spec| spec && spec.name == 'JSONKit' }
-        @installer.stubs(:installed_specs).returns(@specs)
-        @aggregate_target = @installer.aggregate_targets.first
+        podfile = Pod::Podfile.new do
+          platform :ios
+        end
+        config.integrate_targets = false
+        @installer = Installer.new(config.sandbox, podfile)
       end
 
       it 'runs the pre install hooks' do
-        installer_rep = stub
-
-        @installer.expects(:installer_rep).returns(installer_rep)
-        @installer.podfile.expects(:pre_install!).with(installer_rep)
-        @installer.send(:run_podfile_pre_install_hooks)
+        @installer.podfile.expects(:pre_install!).with(@installer)
+        @installer.install!
       end
 
-      it 'run_podfile_post_install_hooks' do
-        installer_rep = stub
-
-        @installer.expects(:installer_rep).returns(installer_rep)
-        @installer.podfile.expects(:post_install!).with(installer_rep)
-        @installer.send(:run_podfile_post_install_hooks)
-      end
-
-      it 'calls the hooks in the specs for each target' do
-        pod_target_ios = PodTarget.new([@spec], nil, config.sandbox)
-        pod_target_osx = PodTarget.new([@spec], nil, config.sandbox)
-        pod_target_ios.stubs(:name).returns('label')
-        pod_target_osx.stubs(:name).returns('label')
-
-        @installer.stubs(:pod_targets).returns([pod_target_ios, pod_target_osx])
-        @installer.stubs(:installer_rep).returns(stub)
-        @installer.podfile.expects(:pre_install!)
-        @installer.send(:run_podfile_pre_install_hooks)
-        @installer.send(:run_podfile_post_install_hooks)
-      end
-
-      it 'returns the hook representation of the installer' do
-        rep = @installer.send(:installer_rep)
-        rep.sandbox_root.should == @installer.sandbox.root
-      end
-
-      it 'returns the hook representation of a pod' do
-        file_accessor = stub(:spec => @spec)
-        @aggregate_target.pod_targets.first.stubs(:file_accessors).returns([file_accessor])
-        rep = @installer.send(:pod_rep, 'JSONKit')
-        rep.name.should == 'JSONKit'
-        rep.root_spec.should == @spec
-      end
-
-      it 'returns the hook representation of an aggregate target' do
-        rep = @installer.send(:library_rep, @aggregate_target)
-        rep.send(:library).name.should == 'Pods'
-      end
-
-      it 'returns the hook representation of all the pods' do
-        reps = @installer.send(:pod_reps)
-        reps.map(&:name).should == ['JSONKit']
-      end
-
-      it 'returns the hook representation of all the aggregate target' do
-        reps = @installer.send(:library_reps)
-        reps.map(&:name).sort.should == ['Pods'].sort
-      end
-
-      it 'returns the aggregate targets which use a given Pod' do
-        libs = @installer.send(:libraries_using_spec, @spec)
-        libs.map(&:name).should == ['Pods']
+      it 'runs the post install hooks' do
+        @installer.podfile.expects(:post_install!).with(@installer)
+        @installer.install!
       end
     end
   end
