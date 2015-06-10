@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 816eda9f90dd8fc54901b0fd4b768691fc1295bf
+  revision: e3e7bdda6c1eb5808579290d5dd9517bed3a430d
   branch: master
   specs:
     cocoapods-core (0.37.2)
@@ -122,7 +122,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.6.1)
+    minitest (5.7.0)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
@@ -200,4 +200,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.10.2
+   1.10.3
