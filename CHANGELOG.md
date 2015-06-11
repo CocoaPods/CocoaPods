@@ -105,6 +105,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Vincent Isambart](https://github.com/vincentisambart)
   [#3161](https://github.com/CocoaPods/CocoaPods/issues/3161)
 
+<<<<<<< HEAD
 * Fixes an issue that prevented static libraries from building. `OTHER_LIBTOOLFLAGS`
   is no longer set to the value of `OTHER_LDFLAGS`. If you want to create a static
   library that includes all dependencies for (internal/external) distribution then
@@ -129,6 +130,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * `pod outdated` will now accept the `--no-repo-update` and `--no-integrate`
   options.  
   [Samuel Giddins](https://github.com/segiddins)
+
+* Added a fix for a bug where some Pods containing Swift frameworks were not
+  being written to the expected directory. Alamofire seems to be a victim in many
+  circumstances. This is a temporary fix, and will be
+  removed when [#3550](https://github.com/CocoaPods/CocoaPods/pull/3550) is merged in.
+  [Tim Rosenblatt](https://github.com/timrosenblatt)
 
 
 ## 0.37.2
