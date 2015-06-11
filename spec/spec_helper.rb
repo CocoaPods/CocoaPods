@@ -109,35 +109,31 @@ def fixture_spec(name)
   Pod::Specification.from_file(file)
 end
 
-def fixture_file_accessor(spec_or_name, platform = :ios)
+def fixture_file_accessor(spec_or_name, platform = Pod::Platform.ios)
   spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
   path_list = Pod::Sandbox::PathList.new(spec.defined_in_file.dirname)
   Pod::Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
 end
 
-def fixture_target_definition(podfile = nil, &block)
-  podfile ||= Pod::Podfile.new(&block)
-  Pod::Podfile::TargetDefinition.new('Pods', podfile)
+def fixture_target_definition(name = 'Pods', platform = Pod::Platform.ios)
+  Pod::Podfile::TargetDefinition.new(name, Pod::Podfile.new, 'name' => name, 'platform' => platform)
 end
 
-def fixture_pod_target(spec_or_name, platform = :ios, target_definition = nil)
+def fixture_pod_target(spec_or_name, target_definition = nil)
   spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
   target_definition ||= fixture_target_definition
   target_definition.store_pod(spec.name)
   Pod::PodTarget.new([spec], [target_definition], config.sandbox).tap do |pod_target|
-    pod_target.stubs(:platform).returns(platform)
-    pod_target.file_accessors << fixture_file_accessor(spec, platform)
-    consumer = spec.consumer(platform)
+    pod_target.file_accessors << fixture_file_accessor(spec, pod_target.platform)
+    consumer = spec.consumer(pod_target.platform)
     pod_target.spec_consumers << consumer
   end
 end
 
-def fixture_aggregate_target(pod_targets = [], platform = :ios, target_definition = nil)
+def fixture_aggregate_target(pod_targets = [], target_definition = nil)
   target_definition ||= pod_targets.flat_map(&:target_definitions).first || fixture_target_definition
   target = Pod::AggregateTarget.new(target_definition, config.sandbox)
   target.client_root = config.sandbox.root.dirname
-  version ||= (platform == :ios ? '4.3' : '10.6')
-  target.stubs(:platform).returns(Pod::Platform.new(platform, version))
   target.pod_targets = pod_targets
   target
 end
