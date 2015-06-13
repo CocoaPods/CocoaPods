@@ -82,7 +82,7 @@ module Pod
       # @return [String]
       #
       def generate_platform_import_header
-        "#import #{platform == :ios ? '<UIKit/UIKit.h>' : '<Cocoa/Cocoa.h>'}\n"
+        "#import <Foundation/Foundation.h>\n"
       end
     end
   end
