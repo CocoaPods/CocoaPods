@@ -186,7 +186,7 @@ module Pod
       ENABLE_OBJECT_USE_OBJC_FROM = {
         :ios => Version.new('6'),
         :osx => Version.new('10.8'),
-        :watchos => Version.new('2.0')
+        :watchos => Version.new('2.0'),
       }
 
       # Returns the compiler flags for the source files of the given specification.
