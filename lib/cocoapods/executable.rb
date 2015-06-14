@@ -82,9 +82,13 @@ module Pod
       Open3.popen3(bin, *command) do |i, o, e, t|
         reader(o, stdout)
         reader(e, stderr)
-
         i.close
+
         status = t.value
+
+        o.flush
+        e.flush
+        sleep(0.01)
 
         status
       end
