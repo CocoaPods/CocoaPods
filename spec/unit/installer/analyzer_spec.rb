@@ -301,6 +301,12 @@ module Pod
         UI.warnings.should.match /RestKit \(<= 0.23.2\)/
       end
 
+      it 'raises when specs have incompatible cocoapods requirements' do
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+        Specification.any_instance.stubs(:cocoapods_version).returns(Requirement.create '= 0.1.0')
+        should.raise(Informative) { analyzer.analyze }
+      end
+
       #--------------------------------------#
 
       it 'computes the state of the Sandbox respect to the resolved dependencies' do
