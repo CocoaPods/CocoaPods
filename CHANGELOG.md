@@ -6,6 +6,25 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Highlighted Enhancement That Needs Testing
+
+* De-duplicate Pod Targets: CocoaPods now recognizes when a dependency is used
+  multiple times across different user targets, but needs to be built only once.
+  The targets in `Pods.xcodeproj` need to be duplicated when one of the following
+  applies:
+  * They are used on different platforms.
+  * They are used with differents sets of subspecs.
+  * They have any dependency which needs to be duplicated.
+
+  You can opt-out of this behavior installation-wise, by setting the following
+  option in your ``~/.cocoapods/config.yaml`:
+  ```yaml
+  deduplicate_targets: false
+  ```
+
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3550](https://github.com/CocoaPods/CocoaPods/issues/3550)
+
 ##### Breaking
 
 * The CocoaPods environment header has been removed.  
