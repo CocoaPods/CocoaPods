@@ -155,14 +155,9 @@ module Pod
         # @return [Array<String>]
         #
         def compute_archs(user_targets)
-          archs = user_targets.flat_map do |target|
+          user_targets.flat_map do |target|
             Array(target.common_resolved_build_setting('ARCHS'))
           end.compact.uniq.sort
-
-          UI.message('Using `ARCHS` setting to build architectures of ' \
-                   "target `#{target_definition.label}`: " \
-                   "(`#{archs.join('`, `')}`)")
-          archs.length > 1 ? archs : archs.first
         end
 
         # Checks if any of the targets for the {TargetDefinition} computed before

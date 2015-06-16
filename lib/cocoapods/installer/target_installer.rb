@@ -67,7 +67,7 @@ module Pod
       def custom_build_settings
         settings = {}
 
-        if target.archs
+        unless target.nil? || target.archs.empty?
           settings['ARCHS'] = target.archs
         end
 

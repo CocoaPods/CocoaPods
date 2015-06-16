@@ -100,6 +100,8 @@ module Pod
         ].sort
         target.support_files_dir.should == config.sandbox.target_support_files_dir('Pods')
 
+        target.pod_targets.map(&:archs).uniq.should == [[]]
+
         target.user_project_path.to_s.should.include 'SampleProject/SampleProject'
         target.client_root.to_s.should.include 'SampleProject'
         target.user_target_uuids.should == ['A346496C14F9BE9A0080D870']

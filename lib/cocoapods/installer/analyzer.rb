@@ -369,7 +369,7 @@ module Pod
         if config.integrate_targets?
           target_inspections = result.target_inspections.select { |t, _| target_definitions.include?(t) }.values
           pod_target.user_build_configurations = target_inspections.map(&:build_configurations).reduce({}, &:merge)
-          pod_target.archs = target_inspections.map(&:archs).uniq.sort
+          pod_target.archs = target_inspections.flat_map(&:archs).compact.uniq.sort
         else
           pod_target.user_build_configurations = {}
           if target_definitions.first.platform.name == :osx
@@ -651,7 +651,10 @@ module Pod
         inspection_result = {}
         UI.section 'Inspecting targets to integrate' do
           podfile.target_definition_list.each do |target_definition|
-            inspection_result[target_definition] = TargetInspector.new(target_definition).inspect!
+            results = TargetInspector.new(target_definition).inspect!
+            inspection_result[target_definition] = results
+            UI.message('Using `ARCHS` setting to build architectures of ' \
+              "target `#{target_definition.label}`: (`#{results.archs.join('`, `')}`)")
           end
         end
         inspection_result

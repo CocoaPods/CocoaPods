@@ -152,7 +152,7 @@ module Pod
         user_targets = [target]
 
         archs = TargetInspector.new(target_definition).send(:compute_archs, user_targets)
-        archs.should == 'armv7'
+        archs.should == %w(armv7)
       end
 
       it 'handles a single ARCH defined in multiple user targets' do
@@ -167,7 +167,7 @@ module Pod
         user_targets = [targeta, targetb]
 
         archs = TargetInspector.new(target_definition).send(:compute_archs, user_targets)
-        archs.should == 'armv7'
+        archs.should == %w(armv7)
       end
 
       it 'handles an Array of ARCHs defined in a single user target' do
