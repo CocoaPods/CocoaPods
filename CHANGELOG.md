@@ -46,6 +46,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2160](https://github.com/CocoaPods/CocoaPods/issues/2160)
 
+* Use `-analyzer-disable-all-checks` to disable static analyzer for
+  pods with `inhibit_warnings` enabled (requires Xcode >= 6.1).  
+  [Dieter Komendera](https://github.com/kommen)
+  [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
+
 ##### Bug Fixes
 
 * Added recursive support to the public headers of vendored frameworks
