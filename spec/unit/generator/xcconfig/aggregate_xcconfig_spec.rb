@@ -62,9 +62,6 @@ module Pod
             @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should.include '$(inherited)'
           end
 
-          it 'should configure OTHER_LIBTOOLFLAGS flags to include OTHER_LDFLAGS' do
-            @xcconfig.to_hash['OTHER_LIBTOOLFLAGS'].should == '$(OTHER_LDFLAGS)'
-          end
         end
 
         #-----------------------------------------------------------------------#
