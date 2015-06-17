@@ -86,7 +86,7 @@ module Pod
           roots.should == [fixture('banana-lib'), fixture('banana-lib')]
         end
 
-        it 'handles libraries empty libraries without file accessors' do
+        it 'handles pods without file accessors' do
           pod_target_1 = PodTarget.new([stub('Spec')], [stub('TargetDefinition')], config.sandbox)
           pod_target_1.file_accessors = []
           installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)

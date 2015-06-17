@@ -8,9 +8,9 @@ module Pod
       #
       attr_reader :sandbox
 
-      # @return [Array<PodTarget>] The libraries of the installation.
+      # @return [Array<PodTarget>] The pod targets of the installation.
       #
-      attr_reader :libraries
+      attr_reader :pod_targets
 
       # @return [Project] The Pods project.
       #
@@ -19,12 +19,12 @@ module Pod
       # Initialize a new instance
       #
       # @param [Sandbox] sandbox @see sandbox
-      # @param [Array<PodTarget>] libraries @see libraries
-      # @param [Project] libraries @see libraries
+      # @param [Array<PodTarget>] pod_targets @see pod_targets
+      # @param [Project] pods_project @see pod_project
       #
-      def initialize(sandbox, libraries, pods_project)
+      def initialize(sandbox, pod_targets, pods_project)
         @sandbox = sandbox
-        @libraries = libraries
+        @pod_targets = pod_targets
         @pods_project = pods_project
       end
 
@@ -113,23 +113,23 @@ module Pod
       #
       def link_headers
         UI.message '- Linking headers' do
-          libraries.each do |library|
-            library.file_accessors.each do |file_accessor|
+          pod_targets.each do |pod_target|
+            pod_target.file_accessors.each do |file_accessor|
               framework_exp = /.framework\//
               headers_sandbox = Pathname.new(file_accessor.spec.root.name)
-              library.build_headers.add_search_path(headers_sandbox, library.platform)
-              sandbox.public_headers.add_search_path(headers_sandbox, library.platform)
+              pod_target.build_headers.add_search_path(headers_sandbox, pod_target.platform)
+              sandbox.public_headers.add_search_path(headers_sandbox, pod_target.platform)
 
               header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
-                library.build_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, library.platform)
+                pod_target.build_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, pod_target.platform)
               end
 
               header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
-                sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, library.platform)
+                sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, pod_target.platform)
               end
 
               vendored_frameworks_header_mappings(headers_sandbox, file_accessor).each do |namespaced_path, files|
-                sandbox.public_headers.add_files(namespaced_path, files, library.platform)
+                sandbox.public_headers.add_files(namespaced_path, files, pod_target.platform)
               end
             end
           end
@@ -146,7 +146,7 @@ module Pod
       #         specs platform combinations.
       #
       def file_accessors
-        @file_accessors ||= libraries.map(&:file_accessors).flatten.compact
+        @file_accessors ||= pod_targets.map(&:file_accessors).flatten.compact
       end
 
       # Adds file references to the list of the paths returned by the file
