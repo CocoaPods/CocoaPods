@@ -61,7 +61,6 @@ module Pod
           it 'inherits the parent GCC_PREPROCESSOR_DEFINITIONS value' do
             @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should.include '$(inherited)'
           end
-
         end
 
         #-----------------------------------------------------------------------#
