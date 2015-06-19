@@ -47,7 +47,6 @@ module Pod
         unless root.exist?
           raise Informative, "Attempt to read non existent folder `#{root}`."
         end
-        @glob_cache = {}
         root_length  = root.to_s.length + 1
         escaped_root = escape_path_for_glob(root)
         paths  = Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH)
@@ -57,6 +56,7 @@ module Pod
         relative_paths = absolute_paths.map { |p| p[root_length..-1] }
         @files = relative_paths - relative_dirs
         @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/, '') }.reject { |d| d == '.' || d == '..' } .uniq
+        @glob_cache = {}
       end
 
       #-----------------------------------------------------------------------#
@@ -118,19 +118,15 @@ module Pod
         end
 
         list = Array(patterns).map do |pattern|
-          if pattern.is_a?(String)
-            if directory?(pattern) && dir_pattern
-              pattern += '/' unless pattern.end_with?('/')
-              pattern +=  dir_pattern
+          if directory?(pattern) && dir_pattern
+            pattern += '/' unless pattern.end_with?('/')
+            pattern += dir_pattern
+          end
+          expanded_patterns = dir_glob_equivalent_patterns(pattern)
+          full_list.select do |path|
+            expanded_patterns.any? do |p|
+              File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
             end
-            expanded_patterns = dir_glob_equivalent_patterns(pattern)
-            full_list.select do |path|
-              expanded_patterns.any? do |p|
-                File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
-              end
-            end
-          else
-            full_list.select { |path| path.match(pattern) }
           end
         end.flatten
 
