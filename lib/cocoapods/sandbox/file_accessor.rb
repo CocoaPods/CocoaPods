@@ -39,7 +39,6 @@ module Pod
           @path_list = PathList.new(path_list)
         end
         @spec_consumer = spec_consumer
-        @paths_for_attribute = { false => {}, true => {} }
 
         unless @spec_consumer
           raise Informative, 'Attempt to initialize File Accessor without a specification consumer.'
@@ -277,14 +276,13 @@ module Pod
       # @return [Array<Pathname>] the paths.
       #
       def paths_for_attribute(attribute, include_dirs = false)
-        return @paths_for_attribute[include_dirs][attribute] if @paths_for_attribute[include_dirs][attribute]
         file_patterns = spec_consumer.send(attribute)
         options = {
           :exclude_patterns => spec_consumer.exclude_files,
           :dir_pattern => GLOB_PATTERNS[attribute],
           :include_dirs => include_dirs,
         }
-        @paths_for_attribute[include_dirs][attribute] = expanded_paths(file_patterns, options)
+        expanded_paths(file_patterns, options)
       end
 
       # Matches the given patterns to the file present in the root of the path

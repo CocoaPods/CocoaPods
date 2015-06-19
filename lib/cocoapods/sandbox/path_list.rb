@@ -21,6 +21,7 @@ module Pod
       #
       def initialize(root)
         @root = root
+        @glob_cache = {}
       end
 
       # @return [Array<String>] The list of absolute the path of all the files
@@ -46,6 +47,7 @@ module Pod
         unless root.exist?
           raise Informative, "Attempt to read non existent folder `#{root}`."
         end
+        @glob_cache = {}
         root_length  = root.to_s.length + 1
         escaped_root = escape_path_for_glob(root)
         paths  = Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH)
@@ -101,6 +103,10 @@ module Pod
       def relative_glob(patterns, options = {})
         return [] if patterns.empty?
 
+        cache_key = options.merge(:patterns => patterns)
+        cached_value = @glob_cache[cache_key]
+        return cached_value if cached_value
+
         dir_pattern = options[:dir_pattern]
         exclude_patterns = options[:exclude_patterns]
         include_dirs = options[:include_dirs]
@@ -133,7 +139,7 @@ module Pod
           exclude_options = { :dir_pattern => '**/*', :include_dirs => include_dirs }
           list -= relative_glob(exclude_patterns, exclude_options)
         end
-        list
+        @glob_cache[cache_key] = list
       end
 
       #-----------------------------------------------------------------------#
