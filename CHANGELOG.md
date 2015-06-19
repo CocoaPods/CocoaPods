@@ -51,6 +51,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dieter Komendera](https://github.com/kommen)
   [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
 
+* Cache globbing in `PathList` to speed up `pod install`.
+  [Vincent Isambart](https://github.com/vincentisambart)
+
 ##### Bug Fixes
 
 * Added recursive support to the public headers of vendored frameworks
