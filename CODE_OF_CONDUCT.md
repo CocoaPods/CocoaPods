@@ -20,11 +20,13 @@ If you are being harassed, notice that someone else is being harassed, or have a
 
 We expect everyone to follow these rules anywhere in the CocoaPods project’s codebases, issue trackers, IRC channel, group chat, and mailing lists.
 
+This code of conduct applies both within project spaces and in public spaces when an individual is representing the project or its community.
+
 Finally, don't forget that it is human to make mistakes! We all do. Let’s work together to help each other, resolve issues, and learn from the mistakes that we will all inevitably make from time to time.
 
 ### Thanks
 
-Thanks to the [Bundler Code of Conduct](https://github.com/bundler/bundler/blob/e3ce14f5ecd9b729338435c8689553ef209d83aa/CODE_OF_CONDUCT.md), [JSConf Code of Conduct](http://jsconf.com/codeofconduct.html) and [Fedora Code of Conduct](http://fedoraproject.org/code-of-conduct) for inspiration and ideas.
+Thanks to the [Bundler Code of Conduct](https://github.com/bundler/bundler/blob/e3ce14f5ecd9b729338435c8689553ef209d83aa/CODE_OF_CONDUCT.md), [JSConf Code of Conduct](http://jsconf.com/codeofconduct.html), [Fedora Code of Conduct](http://fedoraproject.org/code-of-conduct), and [Contributor Covenant](http:contributor-covenant.org), version 1.1.0 for inspiration and ideas.
 
 ### License
 
