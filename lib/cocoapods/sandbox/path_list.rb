@@ -21,6 +21,7 @@ module Pod
       #
       def initialize(root)
         @root = root
+        @glob_cache = {}
       end
 
       # @return [Array<String>] The list of absolute the path of all the files
@@ -55,6 +56,7 @@ module Pod
         relative_paths = absolute_paths.map { |p| p[root_length..-1] }
         @files = relative_paths - relative_dirs
         @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/, '') }.reject { |d| d == '.' || d == '..' } .uniq
+        @glob_cache = {}
       end
 
       #-----------------------------------------------------------------------#
@@ -101,6 +103,10 @@ module Pod
       def relative_glob(patterns, options = {})
         return [] if patterns.empty?
 
+        cache_key = options.merge(:patterns => patterns)
+        cached_value = @glob_cache[cache_key]
+        return cached_value if cached_value
+
         dir_pattern = options[:dir_pattern]
         exclude_patterns = options[:exclude_patterns]
         include_dirs = options[:include_dirs]
@@ -112,19 +118,15 @@ module Pod
         end
 
         list = Array(patterns).map do |pattern|
-          if pattern.is_a?(String)
-            if directory?(pattern) && dir_pattern
-              pattern += '/' unless pattern.end_with?('/')
-              pattern +=  dir_pattern
+          if directory?(pattern) && dir_pattern
+            pattern += '/' unless pattern.end_with?('/')
+            pattern += dir_pattern
+          end
+          expanded_patterns = dir_glob_equivalent_patterns(pattern)
+          full_list.select do |path|
+            expanded_patterns.any? do |p|
+              File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
             end
-            expanded_patterns = dir_glob_equivalent_patterns(pattern)
-            full_list.select do |path|
-              expanded_patterns.any? do |p|
-                File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
-              end
-            end
-          else
-            full_list.select { |path| path.match(pattern) }
           end
         end.flatten
 
@@ -133,7 +135,7 @@ module Pod
           exclude_options = { :dir_pattern => '**/*', :include_dirs => include_dirs }
           list -= relative_glob(exclude_patterns, exclude_options)
         end
-        list
+        @glob_cache[cache_key] = list
       end
 
       #-----------------------------------------------------------------------#
