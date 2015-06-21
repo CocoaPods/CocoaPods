@@ -54,7 +54,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Cache globbing in `PathList` to speed up `pod install`.
   [Vincent Isambart](https://github.com/vincentisambart)
 
-* CocoaPods will validate your podfile and try to identify problems 
+* CocoaPods will validate your podfile and try to identify problems
   and conflicts in how you've specified the dependencies
   [Hugo Tunius](https://github.com/k0nserv)
   [#995](https://github.com/CocoaPods/CocoaPods/issues/995)
@@ -79,6 +79,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Michael Moscardini](https://github.com/themackworth)
   [#2747](https://github.com/CocoaPods/CocoaPods/issues/2747)
   [#2704](https://github.com/CocoaPods/CocoaPods/issues/2704)
+
+* The embed frameworks script will now properly filter out symlinks to the
+  directories that are filtered, which fixes an issue when submitting to the
+  Mac App Store.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 0.37.2
 
