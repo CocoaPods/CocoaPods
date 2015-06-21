@@ -52,6 +52,7 @@ module Pod
       # @return [AnalysisResult]
       #
       def analyze(allow_fetches = true)
+        validate_podfile!
         validate_lockfile_version!
         @result = AnalysisResult.new
         compute_target_platforms
@@ -142,6 +143,15 @@ module Pod
       #-----------------------------------------------------------------------#
 
       private
+
+      def validate_podfile!
+        validator = Installer::PodfileValidator.new(podfile)
+        validator.validate
+
+        unless validator.valid?
+          raise Informative, validator.message
+        end
+      end
 
       # @!group Analysis steps
 

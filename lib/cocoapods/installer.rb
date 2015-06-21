@@ -34,6 +34,7 @@ module Pod
     autoload :PostInstallHooksContext,  'cocoapods/installer/post_install_hooks_context'
     autoload :PreInstallHooksContext,   'cocoapods/installer/pre_install_hooks_context'
     autoload :Migrator,                 'cocoapods/installer/migrator'
+    autoload :PodfileValidator,         'cocoapods/installer/podfile_validator'
     autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
     autoload :PodSourcePreparer,        'cocoapods/installer/pod_source_preparer'
     autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
