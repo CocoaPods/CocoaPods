@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: e3e7bdda6c1eb5808579290d5dd9517bed3a430d
+  revision: d464a13852d6642e115cce0c00945a09cb0f6d5a
   branch: master
   specs:
     cocoapods-core (0.37.2)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 5db3688d756038531d861bb19f32eaecc2ed52e0
+  revision: 4af2c666f8515d1dc292516281796e16b7969dca
   branch: master
   specs:
     xcodeproj (0.24.2)
@@ -40,7 +40,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: cdca265b590d8f5e2d6c3532f3ccad3b49b433b8
+  revision: ce952bb658238d4f4ee5ecefa4711d71db37dd8c
   branch: master
   specs:
     cocoapods-plugins (0.4.2)
@@ -82,7 +82,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.1)
+    activesupport (4.2.2)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
