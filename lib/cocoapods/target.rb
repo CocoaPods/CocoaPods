@@ -16,6 +16,12 @@ module Pod
     attr_accessor :host_requires_frameworks
     alias_method :host_requires_frameworks?, :host_requires_frameworks
 
+    # Initialize a new target
+    #
+    def initialize
+      @archs = []
+    end
+
     # @return [String] the name of the library.
     #
     def name
@@ -105,7 +111,7 @@ module Pod
     #
     attr_accessor :native_target
 
-    # @return [String] The value for the ARCHS build setting.
+    # @return [Array<String>] The value for the ARCHS build setting.
     #
     attr_accessor :archs
 

@@ -13,6 +13,7 @@ module Pod
     # @param [Sandbox] sandbox @see sandbox
     #
     def initialize(target_definition, sandbox)
+      super()
       @target_definition = target_definition
       @sandbox = sandbox
       @pod_targets = []

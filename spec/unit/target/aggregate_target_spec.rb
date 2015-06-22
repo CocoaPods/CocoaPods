@@ -13,6 +13,10 @@ module Pod
         @target.target_definition.should == @target_definition
       end
 
+      it 'is initialized with empty archs' do
+        @target.archs.should == []
+      end
+
       it 'returns the label of the target definition' do
         @target.label.should == 'Pods'
       end

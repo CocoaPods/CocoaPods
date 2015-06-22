@@ -24,6 +24,10 @@ module Pod
         @pod_target.target_definitions.should == [@target_definition]
       end
 
+      it 'is initialized with empty archs' do
+        @pod_target.archs.should == []
+      end
+
       it 'returns its name' do
         @pod_target.name.should == 'BananaLib'
         @pod_target.scoped.first.name.should == 'Pods-BananaLib'
