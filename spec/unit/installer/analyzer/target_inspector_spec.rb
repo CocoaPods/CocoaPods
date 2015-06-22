@@ -180,7 +180,7 @@ module Pod
         user_targets = [target]
 
         archs = TargetInspector.new(target_definition).send(:compute_archs, user_targets)
-        %w(armv7 i386).each { |a| archs.should.include a }
+        archs.uniq.sort.should == %w(armv7 i386)
       end
 
       it 'handles an Array of ARCHs defined multiple user targets' do
@@ -195,7 +195,7 @@ module Pod
         user_targets = [target_a, target_b]
 
         archs = TargetInspector.new(target_definition).send(:compute_archs, user_targets)
-        %w(armv7 armv7s i386).each { |a| archs.should.include a }
+        archs.uniq.sort.should == %w(armv7 armv7s i386)
       end
     end
 
