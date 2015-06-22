@@ -6,8 +6,8 @@ module Pod
         #
         attr_accessor :podfile_state
 
-        # @return [Hash{TargetDefinition => Array<Spec>}] the specifications
-        #         grouped by target.
+        # @return [Hash{TargetDefinition => Array<Specification>}] the
+        #         specifications grouped by target.
         #
         attr_accessor :specs_by_target
 

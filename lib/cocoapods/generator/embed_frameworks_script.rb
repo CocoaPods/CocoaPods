@@ -1,12 +1,12 @@
 module Pod
   module Generator
     class EmbedFrameworksScript
-      # @return [Hash{String, Array{String}] Multiple lists of frameworks per
+      # @return [Hash{String => Array<String>}] Multiple lists of frameworks per
       #         configuration.
       #
       attr_reader :frameworks_by_config
 
-      # @param  [Hash{String, Array{String}] frameworks_by_config
+      # @param  [Hash{String => Array<String>] frameworks_by_config
       #         @see #frameworks_by_config
       #
       def initialize(frameworks_by_config)

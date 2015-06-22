@@ -84,7 +84,7 @@ module Pod
         # from the integrating target by all sort of imports, which are:
         #  - `#import <…>`
         #  - `#import "…"`
-        #  - `@import …` / `@import …;`
+        #  - `@import …;` / `import …`
         #
         def generate_settings_to_import_pod_targets
           if target.requires_frameworks?

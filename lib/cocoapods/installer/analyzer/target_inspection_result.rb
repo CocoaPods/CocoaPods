@@ -12,7 +12,7 @@ module Pod
         #
         attr_accessor :project_path
 
-        # @return [Array<String>] the uuid of the user'S targets
+        # @return [Array<String>] the uuid of the user's targets
         #
         attr_accessor :project_target_uuids
 

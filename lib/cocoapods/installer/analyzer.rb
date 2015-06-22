@@ -322,7 +322,7 @@ module Pod
         end
       end
 
-      # Finds the names of the Pods on which the given target _transitively_
+      # Finds the names of the Pods upon which the given target _transitively_
       # depends.
       #
       # @note: This is implemented in the analyzer, because we don't have to
