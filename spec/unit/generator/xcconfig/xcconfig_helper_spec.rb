@@ -49,7 +49,7 @@ module Pod
           it 'adds the build settings of the consumer' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :xcconfig => { 'OTHER_LDFLAGS' => '-framework SenTestingKit' },
+              :pod_target_xcconfig => { 'OTHER_LDFLAGS' => '-framework SenTestingKit' },
               :libraries => [],
               :frameworks => [],
               :weak_frameworks => [],
@@ -62,7 +62,7 @@ module Pod
           it 'adds the libraries of the xcconfig' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :xcconfig => {},
+              :pod_target_xcconfig => {},
               :libraries => ['xml2'],
               :frameworks => [],
               :weak_frameworks => [],
@@ -75,7 +75,7 @@ module Pod
           it 'adds the frameworks of the xcconfig' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :xcconfig => {},
+              :pod_target_xcconfig => {},
               :libraries => [],
               :frameworks => ['CoreAnimation'],
               :weak_frameworks => [],
@@ -88,7 +88,7 @@ module Pod
           it 'adds the weak frameworks of the xcconfig' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :xcconfig => {},
+              :pod_target_xcconfig => {},
               :libraries => [],
               :frameworks => [],
               :weak_frameworks => ['iAd'],
@@ -101,7 +101,7 @@ module Pod
           it 'adds the ios developer frameworks search paths if needed' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :xcconfig => {},
+              :pod_target_xcconfig => {},
               :libraries => [],
               :frameworks => ['SenTestingKit'],
               :weak_frameworks => [],
@@ -115,7 +115,7 @@ module Pod
           it 'adds the osx developer frameworks search paths if needed' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :xcconfig => {},
+              :pod_target_xcconfig => {},
               :libraries => [],
               :frameworks => ['SenTestingKit'],
               :weak_frameworks => [],
