@@ -71,12 +71,12 @@ module Pod
 
       it 'raises if it is unable to find the targets specified by the target definition' do
         target_definition = Podfile::TargetDefinition.new(:default, nil)
-        target_definition.link_with = ['UserTarget']
+        target_definition.link_with = %w(UserTarget AnotherUserTarget)
         user_project = Xcodeproj::Project.new('path')
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
         e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
-        e.message.should.match /Unable to find the targets/
+        e.message.should.match /Unable to find the targets named `UserTarget` and `AnotherUserTarget`/
       end
 
       it 'returns the target with the same name of the target definition' do
