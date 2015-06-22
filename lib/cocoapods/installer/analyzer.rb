@@ -60,7 +60,7 @@ module Pod
         if config.integrate_targets?
           @result.target_inspections = inspect_targets_to_integrate
         else
-          check_platform_specifications
+          verify_platforms_specified!
         end
         @result.podfile_state = generate_podfile_state
         @locked_dependencies  = generate_version_locking_dependencies
@@ -629,7 +629,7 @@ module Pod
       #
       # @return [void]
       #
-      def check_platform_specifications
+      def verify_platforms_specified!
         unless config.integrate_targets?
           podfile.target_definition_list.each do |target_definition|
             unless target_definition.platform
