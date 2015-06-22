@@ -401,10 +401,10 @@ module Pod
     end
 
     def plat?(dg, req, spec)
-      inc = ->(vert) {
+      inc = ->(vert) do
         pred = vert.predecessors
         pred + pred.map(&inc).reduce(Set.new, &:&) << vert
-      }
+      end
       v = dg.vertex_named(req.name)
       all_inc = inc[v]
       platforms_to_satisfy = all_inc.map(&:requirements).flat_map { |r| @platforms_by_dependency[r] }
