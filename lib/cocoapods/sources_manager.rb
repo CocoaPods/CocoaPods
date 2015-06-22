@@ -234,7 +234,7 @@ module Pod
       # @return [Bool] Whether the given source is a GIT repo.
       #
       def git_repo?(dir)
-        Dir.chdir(dir) { `git rev-parse >/dev/null 2>&1` }
+        Dir.chdir(dir) { git %(rev-parse) }
         $?.success?
       end
 
