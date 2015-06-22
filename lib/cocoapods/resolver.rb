@@ -37,6 +37,7 @@ module Pod
       @podfile = podfile
       @locked_dependencies = locked_dependencies
       @sources = Array(sources)
+      @platforms_by_dependency = Hash.new { |h, k| h[k] = [] }
     end
 
     #-------------------------------------------------------------------------#
@@ -52,7 +53,11 @@ module Pod
     #         definition.
     #
     def resolve
-      dependencies = podfile.target_definition_list.map(&:dependencies).flatten
+      dependencies = podfile.target_definition_list.flat_map do |target|
+        target.dependencies.each do |dep|
+          @platforms_by_dependency[dep] << target.platform
+        end
+      end
       @cached_sets = {}
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
       specs_by_target.tap do |specs_by_target|
@@ -181,7 +186,7 @@ module Pod
       requirement_satisfied && !(
         spec.version.prerelease? &&
         existing_vertices.flat_map(&:requirements).none? { |r| r.prerelease? || r.external_source || r.head? }
-      )
+      ) && plat?(activated, requirement, spec)
     end
 
     # Sort dependencies so that the ones that are easiest to resolve are first.
@@ -393,6 +398,17 @@ module Pod
         end
       end
       raise Informative, error.message
+    end
+
+    def plat?(dg, req, spec)
+      inc = ->(vert) {
+        pred = vert.predecessors
+        pred + pred.map(&inc).reduce(Set.new, &:&) << vert
+      }
+      v = dg.vertex_named(req.name)
+      all_inc = inc[v]
+      platforms_to_satisfy = all_inc.map(&:requirements).flat_map { |r| @platforms_by_dependency[r] }
+      platforms_to_satisfy.all? { |pts| spec.available_platforms.any? { |p| pts.supports?(p) } }
     end
 
     # Returns the target-appropriate nodes that are `successors` of `node`,
