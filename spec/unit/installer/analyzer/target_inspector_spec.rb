@@ -11,7 +11,8 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         target_definition.user_project_path = 'SampleProject/SampleProject'
 
-        path = TargetInspector.new(target_definition).send(:compute_project_path)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        path = target_inspector.send(:compute_project_path)
         path.to_s.should.include 'SampleProject/SampleProject.xcodeproj'
       end
 
@@ -19,7 +20,8 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         target_definition.user_project_path = 'Test'
 
-        e = lambda { TargetInspector.new(target_definition).send(:compute_project_path) }.should.raise Informative
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        e = lambda { target_inspector.send(:compute_project_path) }.should.raise Informative
         e.message.should.match /Unable to find/
       end
 
@@ -27,14 +29,16 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         config.installation_root = config.installation_root + 'SampleProject'
 
-        path = TargetInspector.new(target_definition).send(:compute_project_path)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        path = target_inspector.send(:compute_project_path)
         path.to_s.should.include 'SampleProject/SampleProject.xcodeproj'
       end
 
       it 'raise if there is no project and none specified in the target definition' do
         target_definition = Podfile::TargetDefinition.new(:default, nil)
 
-        e = lambda { TargetInspector.new(target_definition).send(:compute_project_path) }.should.raise Informative
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        e = lambda { target_inspector.send(:compute_project_path) }.should.raise Informative
         e.message.should.match /Could not.*select.*project/
       end
 
@@ -44,7 +48,8 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         config.installation_root = config.installation_root + 'Project[With]Special{chars}in*path?'
 
-        path = TargetInspector.new(target_definition).send(:compute_project_path)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        path = target_inspector.send(:compute_project_path)
         path.to_s.should.include 'Project[With]Special{chars}in*path?/Project[With]Special{chars}in*path?.xcodeproj'
       end
     end
@@ -59,7 +64,8 @@ module Pod
         user_project.new_target(:application, 'FirstTarget', :ios)
         user_project.new_target(:application, 'UserTarget', :ios)
 
-        targets = TargetInspector.new(target_definition).send(:compute_targets, user_project)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        targets = target_inspector.send(:compute_targets, user_project)
         targets.map(&:name).should == ['UserTarget']
       end
 
@@ -68,7 +74,8 @@ module Pod
         target_definition.link_with = ['UserTarget']
         user_project = Xcodeproj::Project.new('path')
 
-        e = lambda { TargetInspector.new(target_definition).send(:compute_targets, user_project) }.should.raise Informative
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
         e.message.should.match /Unable to find the targets/
       end
 
@@ -78,14 +85,17 @@ module Pod
         user_project.new_target(:application, 'FirstTarget', :ios)
         user_project.new_target(:application, 'UserTarget', :ios)
 
-        targets = TargetInspector.new(target_definition).send(:compute_targets, user_project)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        targets = target_inspector.send(:compute_targets, user_project)
         targets.map(&:name).should == ['UserTarget']
       end
 
       it 'raises if the name of the target definition does not match any file' do
         target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
         user_project = Xcodeproj::Project.new('path')
-        e = lambda { TargetInspector.new(target_definition).send(:compute_targets, user_project) }.should.raise Informative
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
         e.message.should.match /Unable to find a target named/
       end
 
@@ -96,14 +106,17 @@ module Pod
         user_project.new_target(:application, 'FirstTarget', :ios)
         user_project.new_target(:application, 'UserTarget', :ios)
 
-        targets = TargetInspector.new(target_definition).send(:compute_targets, user_project)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        targets = target_inspector.send(:compute_targets, user_project)
         targets.map(&:name).should == ['FirstTarget']
       end
 
       it 'raises if the default target definition cannot be linked because there are no user targets' do
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         user_project = Xcodeproj::Project.new('path')
-        e = lambda { TargetInspector.new(target_definition).send(:compute_targets, user_project) }.should.raise Informative
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
         e.message.should.match /Unable to find a target/
       end
     end
@@ -121,7 +134,8 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         user_targets = [target]
 
-        configurations = TargetInspector.new(target_definition).send(:compute_build_configurations, user_targets)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        configurations = target_inspector.send(:compute_build_configurations, user_targets)
         configurations.should == {
           'Debug'    => :debug,
           'Release'  => :release,
@@ -134,7 +148,8 @@ module Pod
         target_definition.build_configurations = { 'AppStore' => :release }
         user_targets = []
 
-        configurations = TargetInspector.new(target_definition).send(:compute_build_configurations, user_targets)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        configurations = target_inspector.send(:compute_build_configurations, user_targets)
         configurations.should == { 'AppStore' => :release }
       end
     end
@@ -151,7 +166,8 @@ module Pod
         target_definition.set_platform(:ios, '4.0')
         user_targets = [target]
 
-        archs = TargetInspector.new(target_definition).send(:compute_archs, user_targets)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        archs = target_inspector.send(:compute_archs, user_targets)
         archs.should == %w(armv7)
       end
 
@@ -166,7 +182,8 @@ module Pod
         target_definition.set_platform(:ios, '4.0')
         user_targets = [targeta, targetb]
 
-        archs = TargetInspector.new(target_definition).send(:compute_archs, user_targets)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        archs = target_inspector.send(:compute_archs, user_targets)
         archs.should == %w(armv7)
       end
 
@@ -179,7 +196,8 @@ module Pod
         target_definition.set_platform(:ios, '4.0')
         user_targets = [target]
 
-        archs = TargetInspector.new(target_definition).send(:compute_archs, user_targets)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        archs = target_inspector.send(:compute_archs, user_targets)
         archs.uniq.sort.should == %w(armv7 i386)
       end
 
@@ -194,7 +212,8 @@ module Pod
         target_definition.set_platform(:ios, '4.0')
         user_targets = [target_a, target_b]
 
-        archs = TargetInspector.new(target_definition).send(:compute_archs, user_targets)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        archs = target_inspector.send(:compute_archs, user_targets)
         archs.uniq.sort.should == %w(armv7 armv7s i386)
       end
     end
@@ -207,7 +226,8 @@ module Pod
         target_definition.set_platform(:ios, '4.0')
         user_targets = []
 
-        platforms = TargetInspector.new(target_definition).send(:compute_platform, user_targets)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        platforms = target_inspector.send(:compute_platform, user_targets)
         platforms.should == Platform.new(:ios, '4.0')
       end
 
@@ -220,7 +240,8 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         user_targets = [target]
 
-        platforms = TargetInspector.new(target_definition).send(:compute_platform, user_targets)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        platforms = target_inspector.send(:compute_platform, user_targets)
         platforms.should == Platform.new(:ios, '4.0')
       end
 
@@ -238,7 +259,8 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         user_targets = [target1, target2]
 
-        platforms = TargetInspector.new(target_definition).send(:compute_platform, user_targets)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        platforms = target_inspector.send(:compute_platform, user_targets)
         platforms.should == Platform.new(:ios, '4.0')
       end
 
@@ -254,7 +276,9 @@ module Pod
 
         target_definition = Podfile::TargetDefinition.new(:default, nil)
         user_targets = [target1, target2]
-        e = lambda { TargetInspector.new(target_definition).send(:compute_platform, user_targets) }.should.raise Informative
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        e = lambda { target_inspector.send(:compute_platform, user_targets) }.should.raise Informative
         e.message.should.match /Targets with different platforms/
       end
     end

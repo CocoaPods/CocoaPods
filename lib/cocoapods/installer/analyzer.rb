@@ -651,7 +651,8 @@ module Pod
         inspection_result = {}
         UI.section 'Inspecting targets to integrate' do
           podfile.target_definition_list.each do |target_definition|
-            results = TargetInspector.new(target_definition).inspect!
+            inspector = TargetInspector.new(target_definition, config.installation_root)
+            results = inspector.inspect!
             inspection_result[target_definition] = results
             UI.message('Using `ARCHS` setting to build architectures of ' \
               "target `#{target_definition.label}`: (`#{results.archs.join('`, `')}`)")

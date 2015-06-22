@@ -2,19 +2,25 @@ module Pod
   class Installer
     class Analyzer
       class TargetInspector
-        include Config::Mixin
-
         # @return [TargetDefinition] the target definition to inspect
         #
         attr_accessor :target_definition
 
+        # @return [Pathname] the root of the CocoaPods installation where the
+        #         Podfile is located
+        attr_accessor :installation_root
+
         # Initialize a new instance
         #
         # @param [TargetDefinition] target_definition
-        #        the target definition
+        #        @see #target_definition
         #
-        def initialize(target_definition)
+        # @param [Pathname] installation_root
+        #        @see #installation_root
+        #
+        def initialize(target_definition, installation_root)
           @target_definition = target_definition
+          @installation_root = installation_root
         end
 
         # Inspect the #target_definition
@@ -51,7 +57,7 @@ module Pod
         #
         def compute_project_path
           if target_definition.user_project_path
-            path = config.installation_root + target_definition.user_project_path
+            path = installation_root + target_definition.user_project_path
             path = "#{path}.xcodeproj" unless File.extname(path) == '.xcodeproj'
             path = Pathname.new(path)
             unless path.exist?
@@ -59,7 +65,7 @@ module Pod
               "`#{path}` for the target `#{target_definition.label}`."
             end
           else
-            xcodeprojs = config.installation_root.children.select { |e| e.fnmatch('*.xcodeproj') }
+            xcodeprojs = installation_root.children.select { |e| e.fnmatch('*.xcodeproj') }
             if xcodeprojs.size == 1
               path = xcodeprojs.first
             else
