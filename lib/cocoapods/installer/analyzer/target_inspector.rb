@@ -27,7 +27,7 @@ module Pod
         #
         # @return [TargetInspectionResult]
         #
-        def inspect!
+        def compute_results
           project_path = compute_project_path
           user_project = Xcodeproj::Project.open(project_path)
           targets = compute_targets(user_project)
