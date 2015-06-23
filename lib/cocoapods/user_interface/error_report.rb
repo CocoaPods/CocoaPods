@@ -73,7 +73,7 @@ EOS
 
         private
 
-        def `(command)
+        def `(other)
           super
         rescue Errno::ENOENT => e
           "Unable to find an executable (#{e})"
