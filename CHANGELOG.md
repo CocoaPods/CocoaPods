@@ -90,6 +90,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   Mac App Store.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* The error report template is now more robust against missing executables.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3719](https://github.com/CocoaPods/CocoaPods/issues/3719)
+
 
 ## 0.37.2
 

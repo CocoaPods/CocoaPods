@@ -73,6 +73,12 @@ EOS
 
         private
 
+        def `(command)
+          super
+        rescue Errno::ENOENT => e
+          "Unable to find an executable (#{e})"
+        end
+
         def pathless_exception_message(message)
           message.gsub(/- \(.*\):/, '-')
         end
