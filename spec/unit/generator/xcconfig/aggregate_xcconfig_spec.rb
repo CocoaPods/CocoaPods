@@ -228,7 +228,7 @@ module Pod
               @consumer_b.stubs(:user_target_xcconfig).returns('ENABLE_HEADER_DEPENDENCIES' => 'NO')
               @xcconfig = @generator.generate
               UI.warnings.should.include 'Can\'t merge user_target_xcconfig for pod targets: ' \
-                '["Pods-BananaLib", "Pods-OrangeFramework"]. Boolean build setting '\
+                '["BananaLib", "OrangeFramework"]. Boolean build setting '\
                 'ENABLE_HEADER_DEPENDENCIES has different values.'
             end
           end
@@ -262,7 +262,7 @@ module Pod
               @consumer_b.stubs(:user_target_xcconfig).returns('STRIP_STYLE' => 'all')
               @xcconfig = @generator.generate
               UI.warnings.should.include 'Can\'t merge user_target_xcconfig for pod targets: ' \
-                '["Pods-BananaLib", "Pods-OrangeFramework"]. Singular build setting '\
+                '["BananaLib", "OrangeFramework"]. Singular build setting '\
                 'STRIP_STYLE has different values.'
             end
           end
