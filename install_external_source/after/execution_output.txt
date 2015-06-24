@@ -47,7 +47,7 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `Pods-PodTest` iOS 4.3
+    - Installing target `PodTest` iOS 4.3
     - Installing target `Pods` iOS 4.3
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`

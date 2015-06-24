@@ -1,0 +1,1 @@
+REACHABILITY_OTHER_LDFLAGS = -framework "SystemConfiguration"

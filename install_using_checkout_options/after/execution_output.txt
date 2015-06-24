@@ -111,9 +111,9 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `Pods-AFNetworking` iOS 6.0
-    - Installing target `Pods-RKValueTransformers` iOS 6.0
-    - Installing target `Pods-SEGModules` iOS 6.0
+    - Installing target `AFNetworking` iOS 6.0
+    - Installing target `RKValueTransformers` iOS 6.0
+    - Installing target `SEGModules` iOS 6.0
     - Installing target `Pods` iOS 6.0
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`

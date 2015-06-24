@@ -17,12 +17,12 @@ File References:
     - base64.h
     - Support Files:
       - Info.plist
-      - Pods-SocketRocket.modulemap
-      - Pods-SocketRocket.xcconfig
-      - Pods-SocketRocket-Private.xcconfig
-      - Pods-SocketRocket-dummy.m
-      - Pods-SocketRocket-prefix.pch
-      - Pods-SocketRocket-umbrella.h
+      - SocketRocket.modulemap
+      - SocketRocket.xcconfig
+      - SocketRocket-Private.xcconfig
+      - SocketRocket-dummy.m
+      - SocketRocket-prefix.pch
+      - SocketRocket-umbrella.h
   - libPusher:
     - Core:
       - NSDictionary+QueryString.h
@@ -65,12 +65,12 @@ File References:
       - Pusher.h
     - Support Files:
       - Info.plist
-      - Pods-libPusher.modulemap
-      - Pods-libPusher.xcconfig
-      - Pods-libPusher-Private.xcconfig
-      - Pods-libPusher-dummy.m
-      - Pods-libPusher-prefix.pch
-      - Pods-libPusher-umbrella.h
+      - libPusher.modulemap
+      - libPusher.xcconfig
+      - libPusher-Private.xcconfig
+      - libPusher-dummy.m
+      - libPusher-prefix.pch
+      - libPusher-umbrella.h
 - Products:
   - Pods.framework
   - Pusher.framework
@@ -152,14 +152,14 @@ Targets:
           INFOPLIST_FILE: Target Support Files/Pods/Info.plist
           DEFINES_MODULE: 'YES'
         Base Configuration: Pods.release.xcconfig
-- Pods-SocketRocket:
+- SocketRocket:
     Build Phases:
     - SourcesBuildPhase:
       - NSData+SRB64Additions.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - Pods-SocketRocket-dummy.m
       - SRWebSocket.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - SocketRocket-dummy.m
       - base64.c:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
     - FrameworksBuildPhase:
@@ -170,10 +170,10 @@ Targets:
       - NSData+SRB64Additions.h:
           ATTRIBUTES:
           - Public
-      - Pods-SocketRocket-umbrella.h:
+      - SRWebSocket.h:
           ATTRIBUTES:
           - Public
-      - SRWebSocket.h:
+      - SocketRocket-umbrella.h:
           ATTRIBUTES:
           - Public
       - base64.h:
@@ -184,10 +184,10 @@ Targets:
         Build Settings:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
-          MODULEMAP_FILE: Target Support Files/Pods-SocketRocket/Pods-SocketRocket.modulemap
+          MODULEMAP_FILE: Target Support Files/SocketRocket/SocketRocket.modulemap
           CURRENT_PROJECT_VERSION: '1'
           MTL_ENABLE_DEBUG_INFO: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SocketRocket/Pods-SocketRocket-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/SocketRocket/SocketRocket-prefix.pch
           TARGETED_DEVICE_FAMILY: '1,2'
           DYLIB_COMPATIBILITY_VERSION: '1'
           VERSIONING_SYSTEM: apple-generic
@@ -200,17 +200,17 @@ Targets:
           SKIP_INSTALL: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '8.2'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          INFOPLIST_FILE: Target Support Files/Pods-SocketRocket/Info.plist
+          INFOPLIST_FILE: Target Support Files/SocketRocket/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: Pods-SocketRocket-Private.xcconfig
+        Base Configuration: SocketRocket-Private.xcconfig
     - Release:
         Build Settings:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
-          MODULEMAP_FILE: Target Support Files/Pods-SocketRocket/Pods-SocketRocket.modulemap
+          MODULEMAP_FILE: Target Support Files/SocketRocket/SocketRocket.modulemap
           CURRENT_PROJECT_VERSION: '1'
           MTL_ENABLE_DEBUG_INFO: 'NO'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-SocketRocket/Pods-SocketRocket-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/SocketRocket/SocketRocket-prefix.pch
           TARGETED_DEVICE_FAMILY: '1,2'
           DYLIB_COMPATIBILITY_VERSION: '1'
           VERSIONING_SYSTEM: apple-generic
@@ -223,10 +223,10 @@ Targets:
           SKIP_INSTALL: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '8.2'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          INFOPLIST_FILE: Target Support Files/Pods-SocketRocket/Info.plist
+          INFOPLIST_FILE: Target Support Files/SocketRocket/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: Pods-SocketRocket-Private.xcconfig
-- Pods-libPusher:
+        Base Configuration: SocketRocket-Private.xcconfig
+- libPusher:
     Build Phases:
     - SourcesBuildPhase:
       - NSDictionary+QueryString.m:
@@ -259,7 +259,7 @@ Targets:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - PTURLRequestOperation.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - Pods-libPusher-dummy.m
+      - libPusher-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
       - SocketRocket.framework
@@ -330,10 +330,10 @@ Targets:
       - PTURLRequestOperation.h:
           ATTRIBUTES:
           - Private
-      - Pods-libPusher-umbrella.h:
+      - Pusher.h:
           ATTRIBUTES:
           - Public
-      - Pusher.h:
+      - libPusher-umbrella.h:
           ATTRIBUTES:
           - Public
     Build Configurations:
@@ -341,10 +341,10 @@ Targets:
         Build Settings:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
-          MODULEMAP_FILE: Target Support Files/Pods-libPusher/Pods-libPusher.modulemap
+          MODULEMAP_FILE: Target Support Files/libPusher/libPusher.modulemap
           CURRENT_PROJECT_VERSION: '1'
           MTL_ENABLE_DEBUG_INFO: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-libPusher/Pods-libPusher-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/libPusher/libPusher-prefix.pch
           TARGETED_DEVICE_FAMILY: '1,2'
           DYLIB_COMPATIBILITY_VERSION: '1'
           VERSIONING_SYSTEM: apple-generic
@@ -357,17 +357,17 @@ Targets:
           SKIP_INSTALL: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '8.2'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          INFOPLIST_FILE: Target Support Files/Pods-libPusher/Info.plist
+          INFOPLIST_FILE: Target Support Files/libPusher/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: Pods-libPusher-Private.xcconfig
+        Base Configuration: libPusher-Private.xcconfig
     - Release:
         Build Settings:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
-          MODULEMAP_FILE: Target Support Files/Pods-libPusher/Pods-libPusher.modulemap
+          MODULEMAP_FILE: Target Support Files/libPusher/libPusher.modulemap
           CURRENT_PROJECT_VERSION: '1'
           MTL_ENABLE_DEBUG_INFO: 'NO'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-libPusher/Pods-libPusher-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/libPusher/libPusher-prefix.pch
           TARGETED_DEVICE_FAMILY: '1,2'
           DYLIB_COMPATIBILITY_VERSION: '1'
           VERSIONING_SYSTEM: apple-generic
@@ -380,9 +380,9 @@ Targets:
           SKIP_INSTALL: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '8.2'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          INFOPLIST_FILE: Target Support Files/Pods-libPusher/Info.plist
+          INFOPLIST_FILE: Target Support Files/libPusher/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: Pods-libPusher-Private.xcconfig
+        Base Configuration: libPusher-Private.xcconfig
 
 
 

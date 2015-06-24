@@ -73,14 +73,14 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `Pods-SocketRocket` iOS 8.2
-      - Generating Info.plist file at `Pods/Target Support Files/Pods-SocketRocket/Info.plist`
-      - Generating module map file at `Pods/Target Support Files/Pods-SocketRocket/Pods-SocketRocket.modulemap`
-      - Generating umbrella header at `Pods/Target Support Files/Pods-SocketRocket/Pods-SocketRocket-umbrella.h`
-    - Installing target `Pods-libPusher` iOS 8.2
-      - Generating Info.plist file at `Pods/Target Support Files/Pods-libPusher/Info.plist`
-      - Generating module map file at `Pods/Target Support Files/Pods-libPusher/Pods-libPusher.modulemap`
-      - Generating umbrella header at `Pods/Target Support Files/Pods-libPusher/Pods-libPusher-umbrella.h`
+    - Installing target `SocketRocket` iOS 8.2
+      - Generating Info.plist file at `Pods/Target Support Files/SocketRocket/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/SocketRocket/SocketRocket.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/SocketRocket/SocketRocket-umbrella.h`
+    - Installing target `libPusher` iOS 8.2
+      - Generating Info.plist file at `Pods/Target Support Files/libPusher/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/libPusher/libPusher.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/libPusher/libPusher-umbrella.h`
     - Installing target `Pods` iOS 8.2
       - Generating Info.plist file at `Pods/Target Support Files/Pods/Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods/Pods.modulemap`

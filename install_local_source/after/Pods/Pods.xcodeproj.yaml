@@ -6,17 +6,17 @@ File References:
     - Reachability.h
     - Reachability.m
     - Support Files:
-      - Pods-Reachability.xcconfig
-      - Pods-Reachability-Private.xcconfig
-      - Pods-Reachability-dummy.m
-      - Pods-Reachability-prefix.pch
+      - Reachability.xcconfig
+      - Reachability-Private.xcconfig
+      - Reachability-dummy.m
+      - Reachability-prefix.pch
 - Frameworks:
   - iOS:
     - Foundation.framework
     - SystemConfiguration.framework
 - Products:
   - libPods.a
-  - libPods-Reachability.a
+  - libReachability.a
 - Targets Support Files:
   - Pods:
     - Pods-acknowledgements.markdown
@@ -62,10 +62,10 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.release.xcconfig
-- Pods-Reachability:
+- Reachability:
     Build Phases:
     - SourcesBuildPhase:
-      - Pods-Reachability-dummy.m
+      - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: -fno-objc-arc
     - FrameworksBuildPhase:
@@ -84,9 +84,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-Reachability-Private.xcconfig
+        Base Configuration: Reachability-Private.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -97,9 +97,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-Reachability/Pods-Reachability-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-Reachability-Private.xcconfig
+        Base Configuration: Reachability-Private.xcconfig
 
 
 

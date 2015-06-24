@@ -12,13 +12,13 @@ File References:
       - Foo.h
       - Foo.m
     - Support Files:
-      - Pods-Test.xcconfig
-      - Pods-Test-Private.xcconfig
-      - Pods-Test-dummy.m
-      - Pods-Test-prefix.pch
+      - Test.xcconfig
+      - Test-Private.xcconfig
+      - Test-dummy.m
+      - Test-prefix.pch
 - Products:
   - libPods.a
-  - libPods-Test.a
+  - libTest.a
 - Targets Support Files:
   - Pods:
     - Pods-acknowledgements.markdown
@@ -64,14 +64,14 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods.release.xcconfig
-- Pods-Test:
+- Test:
     Build Phases:
     - SourcesBuildPhase:
       - AFRaptureXMLRequestOperation.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - Foo.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - Pods-Test-dummy.m
+      - Test-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
@@ -88,9 +88,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-Test/Pods-Test-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Test/Test-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-Test-Private.xcconfig
+        Base Configuration: Test-Private.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -101,9 +101,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-Test/Pods-Test-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/Test/Test-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-Test-Private.xcconfig
+        Base Configuration: Test-Private.xcconfig
 
 
 

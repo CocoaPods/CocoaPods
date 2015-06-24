@@ -60,7 +60,7 @@ Targets:
           EXECUTABLE_PREFIX: lib
           OTHER_LIBTOOLFLAGS: ''
         Base Configuration: Pods-SampleApp.release.xcconfig
-- Pods-SampleApp-res-res:
+- res-res:
     Build Phases:
     - SourcesBuildPhase: []
     - FrameworksBuildPhase: []
