@@ -191,7 +191,7 @@ module Pod
         generated = @pod_target.prefix_header_path.read
         expected = <<-EOS.strip_heredoc
           #ifdef __OBJC__
-          #import <Foundation/Foundation.h>
+          #import <UIKit/UIKit.h>
           #endif
 
           #import "BlocksKit.h"

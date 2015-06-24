@@ -13,7 +13,7 @@ module Pod
       @spec.prefix_header_file = nil
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <Foundation/Foundation.h>
+      #import <UIKit/UIKit.h>
       #endif
 
       #import "BlocksKit.h"
@@ -29,7 +29,7 @@ module Pod
       end
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <Foundation/Foundation.h>
+      #import <UIKit/UIKit.h>
       #endif
 
       #import "BlocksKit.h"
@@ -50,7 +50,7 @@ module Pod
 
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <Foundation/Foundation.h>
+      #import <UIKit/UIKit.h>
       #endif
 
       #import "BlocksKit.h"
@@ -60,7 +60,7 @@ module Pod
     it "includes the contents of the specification's prefix header file" do
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <Foundation/Foundation.h>
+      #import <UIKit/UIKit.h>
       #endif
 
       #import <BananaTree/BananaTree.h>
@@ -79,7 +79,7 @@ module Pod
 
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <Foundation/Foundation.h>
+      #import <UIKit/UIKit.h>
       #endif
 
       #import <BananaTree/BananaTree.h>
@@ -90,7 +90,7 @@ module Pod
       @gen.imports << 'header.h'
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <Foundation/Foundation.h>
+      #import <UIKit/UIKit.h>
       #endif
 
       #import "header.h"
@@ -103,7 +103,7 @@ module Pod
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <Foundation/Foundation.h>
+      #import <UIKit/UIKit.h>
       #endif
 
       #import <BananaTree/BananaTree.h>
