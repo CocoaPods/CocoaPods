@@ -94,6 +94,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3719](https://github.com/CocoaPods/CocoaPods/issues/3719)
 
+* Attempting to specify a `git` source where a Podspec for the requested pod is
+  not found will have a more helpful error message.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 0.37.2
 

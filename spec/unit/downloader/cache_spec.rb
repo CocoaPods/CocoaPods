@@ -99,6 +99,17 @@ module Pod
             @cache.expects(:uncached_pod).once
             @cache.download_pod(@unreleased_request)
           end
+
+          it 'does not return a location when there is no spec with the request name' do
+            @stub_download.call do
+              @spec.name = 'OrangeLib'
+              File.open('BananaLib.podspec.json', 'w') { |f| f << @spec.to_pretty_json }
+              @spec.source
+            end
+            result = @cache.download_pod(@unreleased_request)
+            result.location.should.be.nil
+            result.spec.should.be.nil
+          end
         end
       end
 

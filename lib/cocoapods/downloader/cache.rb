@@ -151,6 +151,7 @@ module Pod
       def uncached_pod(request)
         in_tmpdir do |target|
           result, podspecs = download(request, target)
+          result.location = nil
 
           podspecs.each do |name, spec|
             destination = path_for_pod(request, :name => name, :params => result.checkout_options)
