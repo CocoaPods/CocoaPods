@@ -13,17 +13,15 @@ module Pod
         describe '::default_ld_flags' do
           it 'returns the default linker flags' do
             podfile = stub(:set_arc_compatibility_flag? => false)
-            target_definition = stub(:podfile => podfile)
-            target = stub(:target_definition => target_definition)
+            target = stub(:podfile => podfile)
             result = @sut.default_ld_flags(target)
             result.should == '-ObjC'
           end
 
           it 'includes the ARC compatibility flag if required by the Podfile' do
             podfile = stub(:set_arc_compatibility_flag? => true)
-            target_definition = stub(:podfile => podfile)
             spec_consumer = stub(:requires_arc? => true)
-            target = stub(:target_definition => target_definition,  :spec_consumers => [spec_consumer])
+            target = stub(:podfile => podfile, :spec_consumers => [spec_consumer])
             result = @sut.default_ld_flags(target)
             result.should == '-ObjC -fobjc-arc'
           end

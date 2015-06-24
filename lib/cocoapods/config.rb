@@ -19,6 +19,7 @@ module Pod
 
       :clean               => true,
       :integrate_targets   => true,
+      :deduplicate_targets => true,
       :lock_pod_source     => true,
       :new_version_message => ENV['COCOAPODS_SKIP_UPDATE_MESSAGE'].nil?,
 
@@ -88,6 +89,11 @@ module Pod
     #
     attr_accessor :integrate_targets
     alias_method :integrate_targets?, :integrate_targets
+
+    # @return [Bool] Whether CocoaPods should deduplicate pod targets.
+    #
+    attr_accessor :deduplicate_targets
+    alias_method :deduplicate_targets?, :deduplicate_targets
 
     # @return [Bool] Whether the installer should skip the repos update.
     #

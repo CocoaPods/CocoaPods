@@ -6,11 +6,6 @@ module Pod
   # This class is used to represent both the targets and their libraries.
   #
   class Target
-    # @return [TargetDefinition] the target definition of the Podfile that
-    #         generated this target.
-    #
-    attr_reader :target_definition
-
     # @return [Sandbox] The sandbox where the Pods should be installed.
     #
     attr_reader :sandbox
@@ -20,6 +15,12 @@ module Pod
     #
     attr_accessor :host_requires_frameworks
     alias_method :host_requires_frameworks?, :host_requires_frameworks
+
+    # Initialize a new target
+    #
+    def initialize
+      @archs = []
+    end
 
     # @return [String] the name of the library.
     #
@@ -110,13 +111,7 @@ module Pod
     #
     attr_accessor :native_target
 
-    # @return [Platform] the platform for this library.
-    #
-    def platform
-      @platform ||= target_definition.platform
-    end
-
-    # @return [String] The value for the ARCHS build setting.
+    # @return [Array<String>] The value for the ARCHS build setting.
     #
     attr_accessor :archs
 
@@ -189,23 +184,6 @@ module Pod
     #
     def dummy_source_path
       support_files_dir + "#{label}-dummy.m"
-    end
-
-    # @return [String] The configuration build dir, if the target is integrated
-    #         as framework.
-    #
-    # @note   Namespace the pod target product with its target definition name.
-    #         Pod target products are named after their specs. The namespacing
-    #         cannot directly happen in the product name itself, because this
-    #         must be equal to the module name and this will be used in source
-    #         code, which should stay agnostic over the dependency manager.
-    #         We need namespacing at all because multiple targets can exist for
-    #         the same podspec and their products should not collide. This
-    #         happens when multiple user targets require the same pod, because
-    #         they could require different sets of subspecs.
-    #
-    def configuration_build_dir
-      "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/#{target_definition.label}"
     end
 
     #-------------------------------------------------------------------------#

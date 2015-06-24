@@ -6,7 +6,7 @@ module Pod
       before do
         config.sandbox.prepare
         @podfile = Podfile.new do
-          platform :ios
+          platform :ios, '6.0'
           xcodeproj 'dummy'
         end
         @target_definition = @podfile.target_definitions['Pods']
@@ -25,33 +25,12 @@ module Pod
           @project.add_file_reference(resource, group)
         end
 
-        @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
-        @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
+        @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
         @pod_target.file_accessors = [file_accessor]
         @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
         @installer = Installer::PodTargetInstaller.new(config.sandbox, @pod_target)
 
         @spec.prefix_header_contents = '#import "BlocksKit.h"'
-      end
-
-      it 'adds file references for the support files of the target' do
-        @installer.install!
-        @project.support_files_group
-        group = @project['Pods/BananaLib/Support Files']
-        group.children.map(&:display_name).sort.should == [
-          'Pods-BananaLib-Private.xcconfig',
-          'Pods-BananaLib-dummy.m',
-          'Pods-BananaLib-prefix.pch',
-          'Pods-BananaLib.xcconfig',
-        ]
-      end
-
-      #--------------------------------------#
-
-      it 'adds the target for the static library to the project' do
-        @installer.install!
-        @project.targets.count.should == 1
-        @project.targets.first.name.should == 'Pods-BananaLib'
       end
 
       it 'sets the platform and the deployment target for iOS targets' do
@@ -100,15 +79,6 @@ module Pod
 
       #--------------------------------------#
 
-      it 'adds the resource bundle targets' do
-        @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
-        @installer.install!
-        bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
-        bundle_target.should.be.an.instance_of Xcodeproj::Project::Object::PBXNativeTarget
-        bundle_target.product_reference.name.should == 'banana_bundle.bundle'
-        bundle_target.product_reference.path.should == 'banana_bundle.bundle'
-      end
-
       it 'adds framework resources to the framework target' do
         @pod_target.stubs(:requires_frameworks? => true)
         @installer.install!
@@ -118,14 +88,91 @@ module Pod
         resource.should.be.not.nil
       end
 
-      it 'adds the build configurations to the resources bundle targets' do
-        @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
-        @installer.install!
-        bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
+      #--------------------------------------#
 
-        file = config.sandbox.root + @pod_target.xcconfig_private_path
-        bundle_target.build_configurations.each do |bc|
-          bc.base_configuration_reference.real_path.should == file
+      describe 'with a scoped pod target' do
+        before do
+          @pod_target = @pod_target.scoped.first
+          @installer = Installer::PodTargetInstaller.new(config.sandbox, @pod_target)
+        end
+
+        it 'adds file references for the support files of the target' do
+          @installer.install!
+          group = @project['Pods/BananaLib/Support Files']
+          group.children.map(&:display_name).sort.should == [
+            'Pods-BananaLib-Private.xcconfig',
+            'Pods-BananaLib-dummy.m',
+            'Pods-BananaLib-prefix.pch',
+            'Pods-BananaLib.xcconfig',
+          ]
+        end
+
+        it 'adds the target for the static library to the project' do
+          @installer.install!
+          @project.targets.count.should == 1
+          @project.targets.first.name.should == 'Pods-BananaLib'
+        end
+
+        it 'adds the resource bundle targets' do
+          @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
+          @installer.install!
+          bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
+          bundle_target.should.be.an.instance_of Xcodeproj::Project::Object::PBXNativeTarget
+          bundle_target.product_reference.name.should == 'banana_bundle.bundle'
+          bundle_target.product_reference.path.should == 'banana_bundle.bundle'
+        end
+
+        it 'adds the build configurations to the resources bundle targets' do
+          @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
+          @installer.install!
+          bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
+
+          file = config.sandbox.root + @pod_target.xcconfig_private_path
+          bundle_target.build_configurations.each do |bc|
+            bc.base_configuration_reference.real_path.should == file
+          end
+        end
+      end
+
+      #--------------------------------------#
+
+      describe 'with an unscoped pod target' do
+        it 'adds file references for the support files of the target' do
+          @installer.install!
+          @project.support_files_group
+          group = @project['Pods/BananaLib/Support Files']
+          group.children.map(&:display_name).sort.should == [
+            'BananaLib-Private.xcconfig',
+            'BananaLib-dummy.m',
+            'BananaLib-prefix.pch',
+            'BananaLib.xcconfig',
+          ]
+        end
+
+        it 'adds the target for the static library to the project' do
+          @installer.install!
+          @project.targets.count.should == 1
+          @project.targets.first.name.should == 'BananaLib'
+        end
+
+        it 'adds the resource bundle targets' do
+          @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
+          @installer.install!
+          bundle_target = @project.targets.find { |t| t.name == 'BananaLib-banana_bundle' }
+          bundle_target.should.be.an.instance_of Xcodeproj::Project::Object::PBXNativeTarget
+          bundle_target.product_reference.name.should == 'banana_bundle.bundle'
+          bundle_target.product_reference.path.should == 'banana_bundle.bundle'
+        end
+
+        it 'adds the build configurations to the resources bundle targets' do
+          @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
+          @installer.install!
+          bundle_target = @project.targets.find { |t| t.name == 'BananaLib-banana_bundle' }
+
+          file = config.sandbox.root + @pod_target.xcconfig_private_path
+          bundle_target.build_configurations.each do |bc|
+            bc.base_configuration_reference.real_path.should == file
+          end
         end
       end
 
@@ -141,9 +188,7 @@ module Pod
       it "creates a prefix header, including the contents of the specification's prefix header" do
         @spec.prefix_header_contents = '#import "BlocksKit.h"'
         @installer.install!
-        support_files_dir = config.sandbox.target_support_files_dir('Pods-BananaLib')
-        prefix_header = support_files_dir + 'Pods-BananaLib-prefix.pch'
-        generated = prefix_header.read
+        generated = @pod_target.prefix_header_path.read
         expected = <<-EOS.strip_heredoc
           #ifdef __OBJC__
           #import <UIKit/UIKit.h>
@@ -157,13 +202,12 @@ module Pod
 
       it 'creates a dummy source to ensure the compilation of libraries with only categories' do
         @installer.install!
+        dummy_source_basename = @pod_target.dummy_source_path.basename.to_s
         build_files = @installer.target.native_target.source_build_phase.files
-        build_file = build_files.find { |bf| bf.file_ref.display_name == 'Pods-BananaLib-dummy.m' }
+        build_file = build_files.find { |bf| bf.file_ref.display_name == dummy_source_basename }
         build_file.should.be.not.nil
-        build_file.file_ref.path.should == 'Pods-BananaLib-dummy.m'
-        support_files_dir = config.sandbox.target_support_files_dir('Pods-BananaLib')
-        dummy = support_files_dir + 'Pods-BananaLib-dummy.m'
-        dummy.read.should.include?('@interface PodsDummy_Pods')
+        build_file.file_ref.path.should == dummy_source_basename
+        @pod_target.dummy_source_path.read.should.include?('@interface PodsDummy_BananaLib')
       end
 
       #--------------------------------------------------------------------------------#
@@ -181,7 +225,7 @@ module Pod
         end
 
         it 'flags should not be added to dtrace files' do
-          @installer.target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          @installer.target.target_definitions.first.stubs(:inhibits_warnings_for_pod?).returns(true)
           @installer.install!
 
           dtrace_files = @installer.target.native_target.source_build_phase.files.select do |sf|
@@ -193,7 +237,7 @@ module Pod
         end
 
         it 'adds -w per pod if target definition inhibits warnings for that pod' do
-          @installer.target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          @installer.target.target_definitions.first.stubs(:inhibits_warnings_for_pod?).returns(true)
           flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios), true)
 
           flags.should.include?('-w')
@@ -205,7 +249,7 @@ module Pod
         end
 
         it 'adds -Xanalyzer -analyzer-disable-checker per pod' do
-          @installer.target.target_definition.stubs(:inhibits_warnings_for_pod?).returns(true)
+          @installer.target.target_definitions.first.stubs(:inhibits_warnings_for_pod?).returns(true)
           flags = @installer.send(:compiler_flags_for_consumer, @spec.consumer(:ios), true)
 
           flags.should.include?('-Xanalyzer -analyzer-disable-all-checks')

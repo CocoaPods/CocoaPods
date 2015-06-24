@@ -130,7 +130,7 @@ module Pod
 
             bundle_target.build_configurations.each do |c|
               c.build_settings['PRODUCT_NAME'] = bundle_name
-              if target.requires_frameworks?
+              if target.requires_frameworks? && target.scoped?
                 c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
               end
             end
@@ -234,7 +234,7 @@ module Pod
             flags << '-DOS_OBJECT_USE_OBJC=0'
           end
         end
-        if target_definition.inhibits_warnings_for_pod?(consumer.spec.root.name)
+        if target.inhibit_warnings?
           flags << '-w -Xanalyzer -analyzer-disable-all-checks'
         end
         flags * ' '

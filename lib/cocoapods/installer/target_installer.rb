@@ -67,7 +67,7 @@ module Pod
       def custom_build_settings
         settings = {}
 
-        if target.archs
+        unless target.archs.empty?
           settings['ARCHS'] = target.archs
         end
 
@@ -182,12 +182,6 @@ module Pod
       #
       def project
         sandbox.project
-      end
-
-      # @return [TargetDefinition] the target definition of the library.
-      #
-      def target_definition
-        target.target_definition
       end
 
       # @return [PBXGroup] the group where the file references to the support

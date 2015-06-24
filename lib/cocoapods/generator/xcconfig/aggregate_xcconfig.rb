@@ -54,56 +54,16 @@ module Pod
             'PODS_ROOT' => target.relative_pods_root,
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
           }
-
-          if target.requires_frameworks?
-            # Framework headers are automatically discoverable by `#import <…>`.
-            header_search_paths = pod_targets.map { |target| "$PODS_FRAMEWORK_BUILD_PATH/#{target.product_name}/Headers" }
-            build_settings = {
-              'PODS_FRAMEWORK_BUILD_PATH' => target.configuration_build_dir,
-              # Make headers discoverable by `import "…"`
-              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote'),
-            }
-            if target.pod_targets.any?(&:should_build?)
-              build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
-            end
-            config.merge!(build_settings)
-          else
-            # Make headers discoverable from $PODS_ROOT/Headers directory
-            header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
-            build_settings = {
-              # by `#import "…"`
-              'HEADER_SEARCH_PATHS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths),
-              # by `#import <…>`
-              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-isystem'),
-            }
-            config.merge!(build_settings)
-          end
-
           @xcconfig = Xcodeproj::Config.new(config)
+
+          @xcconfig.merge!(merged_user_target_xcconfigs)
+
+          generate_settings_to_import_pod_targets
 
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
 
-          pod_targets.each do |pod_target|
-            unless pod_target.should_build? && pod_target.requires_frameworks?
-              # In case of generated pod targets, which require frameworks, the
-              # vendored frameworks and libraries are already linked statically
-              # into the framework binary and must not be linked again to the
-              # user target.
-              XCConfigHelper.add_settings_for_file_accessors_of_target(pod_target, @xcconfig)
-            end
-
-            # Add pod target to list of frameworks / libraries that are
-            # linked with the user’s project.
-            if pod_target.should_build?
-              if pod_target.requires_frameworks?
-                @xcconfig.merge!('OTHER_LDFLAGS' => %(-framework "#{pod_target.product_basename}"))
-              else
-                @xcconfig.merge!('OTHER_LDFLAGS' => %(-l "#{pod_target.product_basename}"))
-              end
-            end
-          end
-
-          @xcconfig.merge!(merged_user_target_xcconfigs)
+          generate_vendored_build_settings
+          generate_other_ld_flags
 
           # TODO: Need to decide how we are going to ensure settings like these
           # are always excluded from the user's project.
@@ -116,6 +76,88 @@ module Pod
           @xcconfig
         end
 
+        #---------------------------------------------------------------------#
+
+        private
+
+        # Add build settings, which ensure that the pod targets can be imported
+        # from the integrating target by all sort of imports, which are:
+        #  - `#import <…>`
+        #  - `#import "…"`
+        #  - `@import …;` / `import …`
+        #
+        def generate_settings_to_import_pod_targets
+          if target.requires_frameworks?
+            # Framework headers are automatically discoverable by `#import <…>`.
+            header_search_paths = target.pod_targets.map do |target|
+              if target.scoped?
+                "$PODS_FRAMEWORK_BUILD_PATH/#{target.product_name}/Headers"
+              else
+                "$CONFIGURATION_BUILD_DIR/#{target.product_name}/Headers"
+              end
+            end
+            build_settings = {
+              'PODS_FRAMEWORK_BUILD_PATH' => target.scoped_configuration_build_dir,
+              # Make headers discoverable by `import "…"`
+              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote'),
+            }
+            if target.pod_targets.any? { |t| t.should_build? && t.scoped? }
+              build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
+            end
+            @xcconfig.merge!(build_settings)
+          else
+            # Make headers discoverable from $PODS_ROOT/Headers directory
+            header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
+            build_settings = {
+              # by `#import "…"`
+              'HEADER_SEARCH_PATHS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths),
+              # by `#import <…>`
+              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-isystem'),
+            }
+            @xcconfig.merge!(build_settings)
+          end
+        end
+
+        # Add custom build settings and required build settings to link to
+        # vendored libraries and frameworks.
+        #
+        # @note
+        #   In case of generated pod targets, which require frameworks, the
+        #   vendored frameworks and libraries are already linked statically
+        #   into the framework binary and must not be linked again to the
+        #   user target.
+        #
+        def generate_vendored_build_settings
+          target.pod_targets.each do |pod_target|
+            unless pod_target.should_build? && pod_target.requires_frameworks?
+              XCConfigHelper.add_settings_for_file_accessors_of_target(pod_target, @xcconfig)
+            end
+          end
+        end
+
+        # Add pod target to list of frameworks / libraries that are linked
+        # with the user’s project.
+        #
+        def generate_other_ld_flags
+          other_ld_flags = target.pod_targets.select(&:should_build?).map do |pod_target|
+            if pod_target.requires_frameworks?
+              %(-framework "#{pod_target.product_basename}")
+            else
+              %(-l "#{pod_target.product_basename}")
+            end
+          end
+
+          @xcconfig.merge!('OTHER_LDFLAGS' => other_ld_flags.join(' '))
+        end
+
+        # Ensure to add the default linker run path search paths as they could
+        # be not present due to being historically absent in the project or
+        # target template or just being removed by being superficial when
+        # linking third-party dependencies exclusively statically. This is not
+        # something a project needs specifically for the integration with
+        # CocoaPods, but makes sure that it is self-contained for the given
+        # constraints.
+        #
         def generate_ld_runpath_search_paths
           ld_runpath_search_paths = ['$(inherited)']
           if target.platform.symbolic_name == :osx

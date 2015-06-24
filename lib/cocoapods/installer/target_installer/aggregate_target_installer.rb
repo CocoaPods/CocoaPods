@@ -31,6 +31,12 @@ module Pod
 
       private
 
+      # @return [TargetDefinition] the target definition of the library.
+      #
+      def target_definition
+        target.target_definition
+      end
+
       # Ensure that vendored static frameworks and libraries are not linked
       # twice to the aggregate target, which shares the xcconfig of the user
       # target.
@@ -81,7 +87,7 @@ module Pod
       # @return [void]
       #
       def create_bridge_support_file
-        if target_definition.podfile.generate_bridge_support?
+        if target.podfile.generate_bridge_support?
           path = target.bridge_support_path
           headers = native_target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }
           generator = Generator::BridgeSupport.new(headers)
@@ -101,7 +107,7 @@ module Pod
         end
         resources_by_config = {}
         target.user_build_configurations.keys.each do |config|
-          file_accessors = library_targets.select { |t| t.include_in_build_config?(config) }.flat_map(&:file_accessors)
+          file_accessors = library_targets.select { |t| t.include_in_build_config?(target_definition, config) }.flat_map(&:file_accessors)
           resource_paths = file_accessors.flat_map { |accessor| accessor.resources.flat_map { |res| res.relative_path_from(project.path.dirname) } }
           resource_bundles = file_accessors.flat_map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name.shellescape}.bundle" } }
           resources_by_config[config] = (resource_paths + resource_bundles).uniq
@@ -138,11 +144,14 @@ module Pod
         path = target.embed_frameworks_script_path
         frameworks_by_config = {}
         target.user_build_configurations.keys.each do |config|
-          frameworks_by_config[config] = target.pod_targets.select do |pod_target|
-            pod_target.include_in_build_config?(config) && pod_target.should_build?
-          end.map(&:product_name)
+          relevant_pod_targets = target.pod_targets.select do |pod_target|
+            pod_target.include_in_build_config?(target_definition, config) && pod_target.should_build?
+          end
+          frameworks_by_config[config] = relevant_pod_targets.map do |pod_target|
+            "#{target_definition.label}/#{pod_target.product_name}"
+          end
         end
-        generator = Generator::EmbedFrameworksScript.new(target_definition, frameworks_by_config)
+        generator = Generator::EmbedFrameworksScript.new(frameworks_by_config)
         generator.save_as(path)
         add_file_to_support_group(path)
       end

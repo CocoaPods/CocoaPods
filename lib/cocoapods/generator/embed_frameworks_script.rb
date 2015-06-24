@@ -1,24 +1,15 @@
 module Pod
   module Generator
     class EmbedFrameworksScript
-      # @return [TargetDefinition] The target definition, whose label will be
-      #         used to locate the target-specific build products.
-      #
-      attr_reader :target_definition
-
-      # @return [Hash{String, Array{String}] Multiple lists of frameworks per
+      # @return [Hash{String => Array<String>}] Multiple lists of frameworks per
       #         configuration.
       #
       attr_reader :frameworks_by_config
 
-      # @param  [TargetDefinition] target_definition
-      #         @see #target_definition
-      #
-      # @param  [Hash{String, Array{String}] frameworks_by_config
+      # @param  [Hash{String => Array<String>] frameworks_by_config
       #         @see #frameworks_by_config
       #
-      def initialize(target_definition, frameworks_by_config)
-        @target_definition = target_definition
+      def initialize(frameworks_by_config)
         @frameworks_by_config = frameworks_by_config
       end
 
@@ -54,7 +45,7 @@ module Pod
 
           install_framework()
           {
-            local source="${BUILT_PRODUCTS_DIR}/#{target_definition.label}/$1"
+            local source="${BUILT_PRODUCTS_DIR}/$1"
             local destination="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 
             if [ -L "${source}" ]; then
@@ -72,9 +63,9 @@ module Pod
 
             # Embed linked Swift runtime libraries
             local basename
-            basename=$(echo $1 | sed -E s/\\\\..+// && exit ${PIPESTATUS[0]})
+            basename=$(basename $1 | sed -E s/\\\\..+// && exit ${PIPESTATUS[0]})
             local swift_runtime_libs
-            swift_runtime_libs=$(xcrun otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/$1/${basename}" | grep --color=never @rpath/libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u  && exit ${PIPESTATUS[0]})
+            swift_runtime_libs=$(xcrun otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/${basename}.framework/${basename}" | grep --color=never @rpath/libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u  && exit ${PIPESTATUS[0]})
             for lib in $swift_runtime_libs; do
               echo "rsync -auv \\"${SWIFT_STDLIB_PATH}/${lib}\\" \\"${destination}\\""
               rsync -auv "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"

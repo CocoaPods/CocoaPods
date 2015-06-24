@@ -13,6 +13,10 @@ module Pod
         @target.target_definition.should == @target_definition
       end
 
+      it 'is initialized with empty archs' do
+        @target.archs.should == []
+      end
+
       it 'returns the label of the target definition' do
         @target.label.should == 'Pods'
       end
@@ -80,7 +84,7 @@ module Pod
       end
 
       it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
-        @target.configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
+        @target.scoped_configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
       end
     end
 
@@ -88,7 +92,7 @@ module Pod
       before do
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        @pod_target = PodTarget.new([@spec], @target_definition, config.sandbox)
+        @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
         @target = AggregateTarget.new(@target_definition, config.sandbox)
         @target.stubs(:platform).returns(:ios)
         @target.pod_targets = [@pod_target]
@@ -96,9 +100,9 @@ module Pod
 
       describe 'with configuration dependent pod targets' do
         before do
-          @pod_target_release = PodTarget.new([@spec], @target_definition, config.sandbox)
-          @pod_target_release.expects(:include_in_build_config?).with('Debug').returns(false)
-          @pod_target_release.expects(:include_in_build_config?).with('Release').returns(true)
+          @pod_target_release = PodTarget.new([@spec], [@target_definition], config.sandbox)
+          @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Debug').returns(false)
+          @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Release').returns(true)
           @target.pod_targets = [@pod_target, @pod_target_release]
           @target.user_build_configurations = {
             'Debug' => :debug,
@@ -137,7 +141,7 @@ module Pod
       describe 'With libraries' do
         before do
           @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
-          @target = AggregateTarget.new(@pod_target.target_definition, config.sandbox)
+          @target = AggregateTarget.new(@pod_target.target_definitions.first, config.sandbox)
           @target.pod_targets = [@pod_target]
         end
 
@@ -196,8 +200,8 @@ module Pod
 
       describe 'With frameworks' do
         before do
-          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', :ios, Podfile::TargetDefinition.new('iOS Example', nil))
-          @target = AggregateTarget.new(@pod_target.target_definition, config.sandbox)
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', fixture_target_definition('iOS Example'))
+          @target = AggregateTarget.new(@pod_target.target_definitions.first, config.sandbox)
           @target.stubs(:requires_frameworks?).returns(true)
           @target.pod_targets = [@pod_target]
         end

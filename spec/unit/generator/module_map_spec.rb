@@ -5,7 +5,7 @@ module Pod
     before do
       spec = fixture_spec('banana-lib/BananaLib.podspec')
       target_definition = Podfile::TargetDefinition.new(:default, nil)
-      @pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+      @pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
       @gen = Generator::ModuleMap.new(@pod_target)
     end
 
@@ -14,7 +14,7 @@ module Pod
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc
         framework module BananaLib {
-          umbrella header "Pods-default-BananaLib-umbrella.h"
+          umbrella header "BananaLib-umbrella.h"
 
           export *
           module * { export * }
@@ -26,7 +26,7 @@ module Pod
       @gen.stubs(:private_headers).returns(['Private.h'])
       @gen.generate.should == <<-EOS.strip_heredoc
         framework module BananaLib {
-          umbrella header "Pods-default-BananaLib-umbrella.h"
+          umbrella header "BananaLib-umbrella.h"
 
           export *
           module * { export * }

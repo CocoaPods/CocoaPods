@@ -130,6 +130,10 @@ module Pod
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+
+          target 'TestRunner', :exclusive => true do
+            pod 'monkey',        :path => (fixture_path + 'monkey').to_s
+          end
         end
         lockfile = generate_lockfile
         config.integrate_targets = false
@@ -139,11 +143,11 @@ module Pod
 
         target = @installer.aggregate_targets.first
         target.requires_frameworks?.should == true
-        target.pod_targets.select(&:requires_frameworks?).map(&:name).sort.should == [
-          'Pods-BananaLib',
-          'Pods-OrangeFramework',
-          'Pods-monkey',
-        ]
+        target.pod_targets.select(&:requires_frameworks?).map(&:name).sort.should == %w(
+          BananaLib
+          OrangeFramework
+          monkey
+        )
       end
     end
 
@@ -261,7 +265,7 @@ module Pod
         it 'stores the targets created by the analyzer' do
           @installer.send(:analyze)
           @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
-          @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
+          @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
 
         it 'configures the analyzer to use update mode if appropriate' do
@@ -269,7 +273,7 @@ module Pod
           Installer::Analyzer.any_instance.expects(:update=).with(true)
           @installer.send(:analyze)
           @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
-          @installer.pod_targets.map(&:name).sort.should == ['Pods-JSONKit']
+          @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
       end
 
@@ -302,7 +306,7 @@ module Pod
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = []
           @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new
-          @pod_targets = [PodTarget.new([], nil, config.sandbox)]
+          @pod_targets = [PodTarget.new([stub('Spec')], [stub('TargetDefinition')], config.sandbox)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
         end
@@ -360,7 +364,7 @@ module Pod
 
         it 'correctly configures the Pod source installer' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new([spec], nil, config.sandbox)
+          pod_target = PodTarget.new([spec], [stub('TargetDefinition')], config.sandbox)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -370,7 +374,7 @@ module Pod
 
         it 'maintains the list of the installed specs' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new([spec], nil, config.sandbox)
+          pod_target = PodTarget.new([spec], [stub('TargetDefinition')], config.sandbox)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target, pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -459,8 +463,8 @@ module Pod
         end
 
         it 'sets the deployment target for the whole project' do
-          pod_target_ios = PodTarget.new([], nil, config.sandbox)
-          pod_target_osx = PodTarget.new([], nil, config.sandbox)
+          pod_target_ios = PodTarget.new([stub('Spec')], [stub('TargetDefinition')], config.sandbox)
+          pod_target_osx = PodTarget.new([stub('Spec')], [stub('TargetDefinition')], config.sandbox)
           pod_target_ios.stubs(:platform).returns(Platform.new(:ios, '6.0'))
           pod_target_osx.stubs(:platform).returns(Platform.new(:osx, '10.8'))
           aggregate_target_ios = AggregateTarget.new(nil, config.sandbox)
@@ -495,7 +499,7 @@ module Pod
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           target_definition.store_pod('BananaLib')
-          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
           @installer.stubs(:aggregate_targets).returns([])
           @installer.stubs(:pod_targets).returns([pod_target])
           Installer::PodTargetInstaller.any_instance.expects(:install!)
@@ -505,7 +509,7 @@ module Pod
         it 'skips empty pod targets' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
-          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
           @installer.stubs(:aggregate_targets).returns([])
           @installer.stubs(:pod_targets).returns([pod_target])
           Installer::PodTargetInstaller.any_instance.expects(:install!).never
@@ -540,7 +544,7 @@ module Pod
           spec = fixture_spec('banana-lib/BananaLib.podspec')
 
           target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile)
-          @pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          @pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
           @target = AggregateTarget.new(target_definition, config.sandbox)
 
           @mock_target = mock('PodNativeTarget')
@@ -615,15 +619,14 @@ module Pod
 
         it 'shares schemes of development pods' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile)
-          pod_target = PodTarget.new([spec], target_definition, config.sandbox)
+          pod_target = fixture_pod_target(spec)
 
-          @installer.pods_project.stubs(:targets).returns([pod_target])
+          @installer.stubs(:pod_targets).returns([pod_target])
           @installer.sandbox.stubs(:development_pods).returns('BananaLib' => nil)
 
           Xcodeproj::XCScheme.expects(:share_scheme).with(
             @installer.pods_project.path,
-            'Pods-default-BananaLib')
+            'BananaLib')
 
           @installer.send(:share_development_pod_schemes)
         end

@@ -3,12 +3,17 @@ module Pod
   # of the single Pods. The client targets will then depend on this one.
   #
   class AggregateTarget < Target
+    # @return [TargetDefinition] the target definition of the Podfile that
+    #         generated this target.
+    attr_reader :target_definition
+
     # Initialize a new instance
     #
     # @param [TargetDefinition] target_definition @see target_definition
     # @param [Sandbox] sandbox @see sandbox
     #
     def initialize(target_definition, sandbox)
+      super()
       @target_definition = target_definition
       @sandbox = sandbox
       @pod_targets = []
@@ -28,6 +33,18 @@ module Pod
     #
     def product_module_name
       c99ext_identifier(label)
+    end
+
+    # @return [Platform] the platform for this target.
+    #
+    def platform
+      @platform ||= target_definition.platform
+    end
+
+    # @return [Podfile] The podfile which declares the dependency
+    #
+    def podfile
+      target_definition.podfile
     end
 
     # @return [Pathname] the folder where the client is stored used for
@@ -94,7 +111,7 @@ module Pod
     #
     def pod_targets_for_build_configuration(build_configuration)
       pod_targets.select do |pod_target|
-        pod_target.include_in_build_config?(build_configuration)
+        pod_target.include_in_build_config?(target_definition, build_configuration)
       end
     end
 
@@ -180,6 +197,13 @@ module Pod
     #
     def embed_frameworks_script_relative_path
       "${SRCROOT}/#{relative_to_srcroot(embed_frameworks_script_path)}"
+    end
+
+    # @return [String] The scoped configuration build dir, relevant if the
+    #         target is integrated as framework.
+    #
+    def scoped_configuration_build_dir
+      "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/#{target_definition.label}"
     end
 
     private
