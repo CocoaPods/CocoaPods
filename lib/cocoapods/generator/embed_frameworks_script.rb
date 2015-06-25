@@ -58,7 +58,7 @@ module Pod
             rsync -av --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${destination}"
             # Resign the code if required by the build settings to avoid unstable apps
             if [ "${CODE_SIGNING_REQUIRED}" == "YES" ]; then
-                code_sign "${destination}/$1"
+                code_sign "${destination}/$(basename "$1")"
             fi
 
             # Embed linked Swift runtime libraries
