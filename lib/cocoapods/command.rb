@@ -45,6 +45,7 @@ module Pod
       verify_xcode_license_approved!
 
       super(argv)
+    ensure
       UI.print_warnings
     end
 
