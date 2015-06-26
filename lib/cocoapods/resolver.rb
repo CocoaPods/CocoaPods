@@ -186,7 +186,7 @@ module Pod
       requirement_satisfied && !(
         spec.version.prerelease? &&
         existing_vertices.flat_map(&:requirements).none? { |r| r.prerelease? || r.external_source || r.head? }
-      ) && plat?(activated, requirement, spec)
+      ) && spec_is_platform_compatible?(activated, requirement, spec)
     end
 
     # Sort dependencies so that the ones that are easiest to resolve are first.
@@ -400,14 +400,24 @@ module Pod
       raise Informative, error.message
     end
 
-    def plat?(dg, req, spec)
-      inc = ->(vert) do
-        pred = vert.predecessors
-        pred + pred.map(&inc).reduce(Set.new, &:&) << vert
+    # Returns whether the given spec is platform-compatible with the dependency
+    # graph, taking into account the dependency that has required the spec.
+    #
+    # @param  [Molinillo::DependencyGraph] dependency_graph
+    #
+    # @param  [Dependency] dependency
+    #
+    # @param  [Specification] specification
+    #
+    # @return [Bool]
+    def spec_is_platform_compatible?(dependency_graph, dependency, spec)
+      all_predecessors = ->(vertex) do
+        pred = vertex.predecessors
+        pred + pred.map(&all_predecessors).reduce(Set.new, &:&) << vertex
       end
-      v = dg.vertex_named(req.name)
-      all_inc = inc[v]
-      platforms_to_satisfy = all_inc.map(&:requirements).flat_map { |r| @platforms_by_dependency[r] }
+      vertex = dependency_graph.vertex_named(dependency.name)
+      predecessors = all_predecessors[vertex]
+      platforms_to_satisfy = predecessors.map(&:requirements).flat_map { |r| @platforms_by_dependency[r] }
       platforms_to_satisfy.all? { |pts| spec.available_platforms.any? { |p| pts.supports?(p) } }
     end
 
