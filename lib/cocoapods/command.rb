@@ -33,6 +33,7 @@ module Pod
     self.plugin_prefixes = %w(claide cocoapods)
 
     [Install, Update, Outdated, IPC::Podfile, IPC::Repl].each { |c| c.send(:include, ProjectDirectory) }
+    [Outdated].each { |c| c.send(:include, Project) }
 
     def self.options
       [

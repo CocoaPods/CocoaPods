@@ -117,6 +117,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   not found will have a more helpful error message.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* `pod outdated` will now accept the `--no-repo-update` and `--no-integrate`
+  options.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 0.37.2
 
