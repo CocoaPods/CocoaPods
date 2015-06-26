@@ -142,19 +142,13 @@ module Pod
         # @return [void]
         #
         def add_embed_frameworks_script_phase
-          phase_name = 'Embed Pods Frameworks'
           targets_to_embed_in = native_targets_to_integrate.select do |target|
             EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
           end
           targets_to_embed_in.each do |native_target|
-            embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
-            unless embed_build_phase.present?
-              UI.message("Adding Build Phase '#{phase_name}' to project.")
-              embed_build_phase = native_target.new_shell_script_build_phase(phase_name)
-            end
+            phase = create_or_update_build_phase(native_target, 'Embed Pods Frameworks')
             script_path = target.embed_frameworks_script_relative_path
-            embed_build_phase.shell_script = %("#{script_path}"\n)
-            embed_build_phase.show_env_vars_in_log = '0'
+            phase.shell_script = %("#{script_path}"\n)
           end
         end
 
@@ -189,11 +183,9 @@ module Pod
         def add_copy_resources_script_phase
           phase_name = 'Copy Pods Resources'
           native_targets_to_integrate.each do |native_target|
-            phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
-            phase ||= native_target.new_shell_script_build_phase(phase_name)
+            phase = create_or_update_build_phase(native_target, phase_name)
             script_path = target.copy_resources_script_relative_path
             phase.shell_script = %("#{script_path}"\n)
-            phase.show_env_vars_in_log = '0'
           end
         end
 
@@ -209,11 +201,8 @@ module Pod
         def add_check_manifest_lock_script_phase
           phase_name = 'Check Pods Manifest.lock'
           native_targets_to_integrate.each do |native_target|
-            phase = native_target.shell_script_build_phases.find { |phase| phase.name == phase_name }
-            phase ||= native_target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase).tap do |phase|
-              native_target.build_phases.unshift(phase)
-            end
-            phase.name = phase_name
+            phase = create_or_update_build_phase(native_target, phase_name)
+            native_target.build_phases.unshift(phase).uniq!
             phase.shell_script = <<-EOS.strip_heredoc
               diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
               if [[ $? != 0 ]] ; then
@@ -223,7 +212,6 @@ module Pod
                   exit 1
               fi
             EOS
-            phase.show_env_vars_in_log = '0'
           end
         end
 
@@ -278,6 +266,17 @@ module Pod
         def integration_message
           "Integrating target `#{target.name}` " \
             "(#{UI.path target.user_project_path} project)"
+        end
+
+        def create_or_update_build_phase(target, phase_name, phase_class = Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
+          phase = target.build_phases.grep(phase_class).find { |phase| phase.name == phase_name } ||
+          (target.project.new(phase_class).tap do |phase|
+            UI.message("Adding Build Phase '#{phase_name}' to project.") do
+              phase.name = phase_name
+              phase.show_env_vars_in_log = '0'
+              target.build_phases << phase
+            end
+          end)
         end
       end
     end
