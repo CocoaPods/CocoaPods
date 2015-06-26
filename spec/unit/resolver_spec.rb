@@ -187,7 +187,7 @@ module Pod
         end
         @resolver.stubs(:podfile).returns(@podfile)
         @resolver.resolve.values.flatten.map(&:to_s).sort.should == [
-          'AFNetworking (1.3.4)'
+          'AFNetworking (1.3.4)',
         ]
       end
 
