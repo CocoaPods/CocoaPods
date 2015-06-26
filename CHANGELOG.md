@@ -130,6 +130,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   options.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Fixes an issue which prevented using a custom `CONFIGURATION_BUILD_DIR` when
+  integrating CocoaPods via dynamic frameworks.  
+  [Tim Rosenblatt](https://github.com/timrosenblatt)
+  [#3675](https://github.com/CocoaPods/CocoaPods/pull/3675)
+
 
 ## 0.37.2
 
