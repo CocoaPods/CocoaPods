@@ -267,9 +267,9 @@ module Pod
         file = write_podspec(stub_podspec)
         validator = Validator.new(file, SourcesManager.master.map(&:url))
         validator.stubs(:validate_url)
-        validator.expects(:install_pod).twice
-        validator.expects(:build_pod).twice
-        validator.expects(:check_file_patterns).twice
+        validator.expects(:install_pod).times(3)
+        validator.expects(:build_pod).times(3)
+        validator.expects(:check_file_patterns).times(3)
         validator.validate
       end
 
@@ -309,6 +309,7 @@ module Pod
         validator.expects(:podfile_from_spec).with(:osx, nil, nil).once
         validator.expects(:podfile_from_spec).with(:ios, nil, nil).once
         validator.expects(:podfile_from_spec).with(:ios, '7.0', nil).once
+        validator.expects(:podfile_from_spec).with(:watchos, nil, nil).once
         validator.send(:perform_extensive_analysis, validator.spec)
       end
 
@@ -377,7 +378,7 @@ module Pod
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
-        validator.expects(:`).with('which xcodebuild').twice.returns('/usr/bin/xcodebuild')
+        validator.expects(:`).with('which xcodebuild').times(3).returns('/usr/bin/xcodebuild')
         status = mock
         status.stubs(:success?).returns(false)
         validator.stubs(:_xcodebuild).returns(['Output', status])
@@ -392,9 +393,9 @@ module Pod
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
-        validator.expects(:`).with('which xcodebuild').twice.returns('/usr/bin/xcodebuild')
+        validator.expects(:`).with('which xcodebuild').times(3).returns('/usr/bin/xcodebuild')
         command = 'xcodebuild clean build -target Pods'
-        validator.expects(:`).with("#{command} 2>&1").once.returns('')
+        validator.expects(:`).with("#{command} 2>&1").twice.returns('')
         validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk iphonesimulator 2>&1").once.returns('')
         validator.validate
       end
@@ -514,6 +515,7 @@ module Pod
 
         @validator.expects(:podfile_from_spec).with(:osx, nil, true).once
         @validator.expects(:podfile_from_spec).with(:ios, nil, true).once
+        @validator.expects(:podfile_from_spec).with(:watchos, nil, true).once
         @validator.send(:perform_extensive_analysis, @validator.spec)
       end
 
@@ -524,6 +526,7 @@ module Pod
 
         @validator.expects(:podfile_from_spec).with(:osx, nil, false).once
         @validator.expects(:podfile_from_spec).with(:ios, nil, false).once
+        @validator.expects(:podfile_from_spec).with(:watchos, nil, false).once
         @validator.send(:perform_extensive_analysis, @validator.spec)
       end
     end
