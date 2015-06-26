@@ -10,167 +10,23 @@
 	<string>46</string>
 	<key>objects</key>
 	<dict>
-		<key>082730B2FA6EF3366BF43DF6</key>
+		<key>037611C37F1C9FA5C11EC0D2</key>
 		<dict>
-			<key>explicitFileType</key>
-			<string>wrapper.framework</string>
-			<key>includeInIndex</key>
-			<string>0</string>
+			<key>children</key>
+			<array>
+				<string>4990CC328E0216782022CC58</string>
+				<string>5C2B6806A87F8254E36C3BF8</string>
+				<string>B357BA941E65ECC483AE0860</string>
+				<string>41314F4384F8287A07D79620</string>
+			</array>
 			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>path</key>
-			<string>Pods_watchOSsample_WatchKit_App.framework</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>29441BC22ACFED5B2D6AB16A</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
+			<string>PBXGroup</string>
 			<key>name</key>
-			<string>Check Pods Manifest.lock</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
-if [[ $? != 0 ]] ; then
-    cat &lt;&lt; EOM
-error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-EOM
-    exit 1
-fi
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>3DC35B8EAAD01F2DA5B68FCE</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>Check Pods Manifest.lock</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
-if [[ $? != 0 ]] ; then
-    cat &lt;&lt; EOM
-error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-EOM
-    exit 1
-fi
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>3E96B34A649A4FE76F61B829</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods-watchOSsample WatchKit App.debug.xcconfig</string>
-			<key>path</key>
-			<string>Pods/Target Support Files/Pods-watchOSsample WatchKit App/Pods-watchOSsample WatchKit App.debug.xcconfig</string>
+			<string>Pods</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>6395779F8B2B92898E7454A6</key>
-		<dict>
-			<key>explicitFileType</key>
-			<string>wrapper.framework</string>
-			<key>includeInIndex</key>
-			<string>0</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>path</key>
-			<string>Pods_watchOSsample.framework</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>66BF1A4CF3F7BAC34B29E942</key>
-		<dict>
-			<key>fileRef</key>
-			<string>9A72614B380AA6283C78550E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Weak</string>
-				</array>
-			</dict>
-		</dict>
-		<key>6E546F31717D5A4A65BB0AA8</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods-watchOSsample WatchKit Extension.debug.xcconfig</string>
-			<key>path</key>
-			<string>Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension.debug.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>721B37D9D5769DB19DDDD417</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods-watchOSsample.release.xcconfig</string>
-			<key>path</key>
-			<string>Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample.release.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>7570F9FAF67C37768932DB9C</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods-watchOSsample WatchKit Extension.release.xcconfig</string>
-			<key>path</key>
-			<string>Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension.release.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>81474693BA1FD8904BEB0CFB</key>
+		<key>1E232F64274BFFA8F587E155</key>
 		<dict>
 			<key>buildActionMask</key>
 			<string>2147483647</string>
@@ -194,7 +50,7 @@ fi
 			<key>showEnvVarsInLog</key>
 			<string>0</string>
 		</dict>
-		<key>85E21040285804BCF4046DAC</key>
+		<key>1E8987D060C89B71B6F2E504</key>
 		<dict>
 			<key>buildActionMask</key>
 			<string>2147483647</string>
@@ -205,7 +61,7 @@ fi
 			<key>isa</key>
 			<string>PBXShellScriptBuildPhase</string>
 			<key>name</key>
-			<string>Copy Pods Resources</string>
+			<string>Check Pods Manifest.lock</string>
 			<key>outputPaths</key>
 			<array/>
 			<key>runOnlyForDeploymentPostprocessing</key>
@@ -213,60 +69,33 @@ fi
 			<key>shellPath</key>
 			<string>/bin/sh</string>
 			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension-resources.sh"
+			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
+if [[ $? != 0 ]] ; then
+    cat &lt;&lt; EOM
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+EOM
+    exit 1
+fi
 </string>
 			<key>showEnvVarsInLog</key>
 			<string>0</string>
 		</dict>
-		<key>8ABA9E4949E4578AA54A4391</key>
+		<key>41314F4384F8287A07D79620</key>
 		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
+			<key>includeInIndex</key>
+			<string>1</string>
 			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
 			<key>name</key>
-			<string>Copy Pods Resources</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample WatchKit App/Pods-watchOSsample WatchKit App-resources.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
+			<string>Pods-watchOSsample WatchKit Extension.release.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension.release.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
-		<key>99E72F03758F05EFC6D7DC88</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>Embed Pods Frameworks</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample-frameworks.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>9A72614B380AA6283C78550E</key>
+		<key>4450B87362C0C46870057E2E</key>
 		<dict>
 			<key>explicitFileType</key>
 			<string>wrapper.framework</string>
@@ -275,9 +104,97 @@ fi
 			<key>isa</key>
 			<string>PBXFileReference</string>
 			<key>path</key>
-			<string>Pods_watchOSsample_WatchKit_Extension.framework</string>
+			<string>Pods_watchOSsample.framework</string>
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>44A27D45218A5B2CC508009F</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>Check Pods Manifest.lock</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
+if [[ $? != 0 ]] ; then
+    cat &lt;&lt; EOM
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+EOM
+    exit 1
+fi
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>4990CC328E0216782022CC58</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-watchOSsample.debug.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample.debug.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5C2B6806A87F8254E36C3BF8</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-watchOSsample.release.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample.release.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>78F4664E1D24B9DF34442461</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4450B87362C0C46870057E2E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Weak</string>
+				</array>
+			</dict>
+		</dict>
+		<key>9452073DC3D59804A9D20751</key>
+		<dict>
+			<key>fileRef</key>
+			<string>F24E238D0AA182DCD952E71E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+			<key>settings</key>
+			<dict>
+				<key>ATTRIBUTES</key>
+				<array>
+					<string>Weak</string>
+				</array>
+			</dict>
 		</dict>
 		<key>A129F8B71B2CA81600EBC1DD</key>
 		<dict>
@@ -287,8 +204,8 @@ fi
 				<string>A129F8D61B2CA81600EBC1DD</string>
 				<string>A129F8E51B2CA81600EBC1DD</string>
 				<string>A129F8C11B2CA81600EBC1DD</string>
-				<string>F1B7D9B7FF39B473A94360B9</string>
-				<string>DB003694694CCCAA58BF32EB</string>
+				<string>037611C37F1C9FA5C11EC0D2</string>
+				<string>C290A28E12C887C892FB76B2</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -390,7 +307,7 @@ fi
 			<string>2147483647</string>
 			<key>files</key>
 			<array>
-				<string>A7CB4C4039BABC3590849224</string>
+				<string>78F4664E1D24B9DF34442461</string>
 			</array>
 			<key>isa</key>
 			<string>PBXFrameworksBuildPhase</string>
@@ -418,13 +335,13 @@ fi
 			<string>A129F8F71B2CA81700EBC1DD</string>
 			<key>buildPhases</key>
 			<array>
-				<string>29441BC22ACFED5B2D6AB16A</string>
+				<string>1E8987D060C89B71B6F2E504</string>
 				<string>A129F8BC1B2CA81600EBC1DD</string>
 				<string>A129F8BD1B2CA81600EBC1DD</string>
 				<string>A129F8BE1B2CA81600EBC1DD</string>
 				<string>A129F8F61B2CA81700EBC1DD</string>
-				<string>99E72F03758F05EFC6D7DC88</string>
-				<string>81474693BA1FD8904BEB0CFB</string>
+				<string>B55D105F75FDCEAD4A12BE64</string>
+				<string>1E232F64274BFFA8F587E155</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -640,11 +557,9 @@ fi
 			<string>A129F8F31B2CA81700EBC1DD</string>
 			<key>buildPhases</key>
 			<array>
-				<string>3DC35B8EAAD01F2DA5B68FCE</string>
 				<string>A129F8D01B2CA81600EBC1DD</string>
 				<string>A129F8F21B2CA81700EBC1DD</string>
 				<string>C0FFF303E05DCE2C96FF141A</string>
-				<string>8ABA9E4949E4578AA54A4391</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -802,7 +717,7 @@ fi
 			<string>2147483647</string>
 			<key>files</key>
 			<array>
-				<string>66BF1A4CF3F7BAC34B29E942</string>
+				<string>9452073DC3D59804A9D20751</string>
 			</array>
 			<key>isa</key>
 			<string>PBXFrameworksBuildPhase</string>
@@ -828,11 +743,11 @@ fi
 			<string>A129F8EF1B2CA81700EBC1DD</string>
 			<key>buildPhases</key>
 			<array>
-				<string>D2182AD77AB0EC1AC677B3A2</string>
+				<string>44A27D45218A5B2CC508009F</string>
 				<string>A129F8DD1B2CA81600EBC1DD</string>
 				<string>A129F8DE1B2CA81600EBC1DD</string>
 				<string>A129F8DF1B2CA81600EBC1DD</string>
-				<string>85E21040285804BCF4046DAC</string>
+				<string>CEC147330D45F32A2D56790F</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -1151,7 +1066,7 @@ fi
 		<key>A129F8F01B2CA81700EBC1DD</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>6E546F31717D5A4A65BB0AA8</string>
+			<string>B357BA941E65ECC483AE0860</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>CODE_SIGN_IDENTITY[sdk=watchos*]</key>
@@ -1181,7 +1096,7 @@ fi
 		<key>A129F8F11B2CA81700EBC1DD</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>7570F9FAF67C37768932DB9C</string>
+			<string>41314F4384F8287A07D79620</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>CODE_SIGN_IDENTITY[sdk=watchos*]</key>
@@ -1243,8 +1158,6 @@ fi
 		</dict>
 		<key>A129F8F41B2CA81700EBC1DD</key>
 		<dict>
-			<key>baseConfigurationReference</key>
-			<string>3E96B34A649A4FE76F61B829</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
@@ -1277,8 +1190,6 @@ fi
 		</dict>
 		<key>A129F8F51B2CA81700EBC1DD</key>
 		<dict>
-			<key>baseConfigurationReference</key>
-			<string>EFB64CABED853AE38A56CA64</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
@@ -1345,7 +1256,7 @@ fi
 		<key>A129F8F81B2CA81700EBC1DD</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>AD2DC042D45C8FCF0AA426A9</string>
+			<string>4990CC328E0216782022CC58</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
@@ -1367,7 +1278,7 @@ fi
 		<key>A129F8F91B2CA81700EBC1DD</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>721B37D9D5769DB19DDDD417</string>
+			<string>5C2B6806A87F8254E36C3BF8</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
@@ -1386,21 +1297,7 @@ fi
 			<key>name</key>
 			<string>Release</string>
 		</dict>
-		<key>A7CB4C4039BABC3590849224</key>
-		<dict>
-			<key>fileRef</key>
-			<string>6395779F8B2B92898E7454A6</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Weak</string>
-				</array>
-			</dict>
-		</dict>
-		<key>AD2DC042D45C8FCF0AA426A9</key>
+		<key>B357BA941E65ECC483AE0860</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -1409,26 +1306,13 @@ fi
 			<key>lastKnownFileType</key>
 			<string>text.xcconfig</string>
 			<key>name</key>
-			<string>Pods-watchOSsample.debug.xcconfig</string>
+			<string>Pods-watchOSsample WatchKit Extension.debug.xcconfig</string>
 			<key>path</key>
-			<string>Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample.debug.xcconfig</string>
+			<string>Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension.debug.xcconfig</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>C0FFF303E05DCE2C96FF141A</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>D2A37D3B11CEB086D6B67526</string>
-			</array>
-			<key>isa</key>
-			<string>PBXFrameworksBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>D2182AD77AB0EC1AC677B3A2</key>
+		<key>B55D105F75FDCEAD4A12BE64</key>
 		<dict>
 			<key>buildActionMask</key>
 			<string>2147483647</string>
@@ -1439,7 +1323,7 @@ fi
 			<key>isa</key>
 			<string>PBXShellScriptBuildPhase</string>
 			<key>name</key>
-			<string>Check Pods Manifest.lock</string>
+			<string>Embed Pods Frameworks</string>
 			<key>outputPaths</key>
 			<array/>
 			<key>runOnlyForDeploymentPostprocessing</key>
@@ -1447,38 +1331,28 @@ fi
 			<key>shellPath</key>
 			<string>/bin/sh</string>
 			<key>shellScript</key>
-			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
-if [[ $? != 0 ]] ; then
-    cat &lt;&lt; EOM
-error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-EOM
-    exit 1
-fi
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample-frameworks.sh"
 </string>
 			<key>showEnvVarsInLog</key>
 			<string>0</string>
 		</dict>
-		<key>D2A37D3B11CEB086D6B67526</key>
+		<key>C0FFF303E05DCE2C96FF141A</key>
 		<dict>
-			<key>fileRef</key>
-			<string>082730B2FA6EF3366BF43DF6</string>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
 			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>settings</key>
-			<dict>
-				<key>ATTRIBUTES</key>
-				<array>
-					<string>Weak</string>
-				</array>
-			</dict>
+			<string>PBXFrameworksBuildPhase</string>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
 		</dict>
-		<key>DB003694694CCCAA58BF32EB</key>
+		<key>C290A28E12C887C892FB76B2</key>
 		<dict>
 			<key>children</key>
 			<array>
-				<string>6395779F8B2B92898E7454A6</string>
-				<string>082730B2FA6EF3366BF43DF6</string>
-				<string>9A72614B380AA6283C78550E</string>
+				<string>4450B87362C0C46870057E2E</string>
+				<string>F24E238D0AA182DCD952E71E</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -1487,38 +1361,42 @@ fi
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>EFB64CABED853AE38A56CA64</key>
+		<key>CEC147330D45F32A2D56790F</key>
 		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>Copy Pods Resources</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension-resources.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>F24E238D0AA182DCD952E71E</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.framework</string>
 			<key>includeInIndex</key>
-			<string>1</string>
+			<string>0</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods-watchOSsample WatchKit App.release.xcconfig</string>
 			<key>path</key>
-			<string>Pods/Target Support Files/Pods-watchOSsample WatchKit App/Pods-watchOSsample WatchKit App.release.xcconfig</string>
+			<string>Pods_watchOSsample_WatchKit_Extension.framework</string>
 			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F1B7D9B7FF39B473A94360B9</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>AD2DC042D45C8FCF0AA426A9</string>
-				<string>721B37D9D5769DB19DDDD417</string>
-				<string>3E96B34A649A4FE76F61B829</string>
-				<string>EFB64CABED853AE38A56CA64</string>
-				<string>6E546F31717D5A4A65BB0AA8</string>
-				<string>7570F9FAF67C37768932DB9C</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Pods</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
+			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
 	</dict>
 	<key>rootObject</key>
