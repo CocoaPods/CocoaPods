@@ -127,6 +127,7 @@ module Pod
     it 'validates specs as frameworks by default' do
       Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, true).times(3)
       Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, true).twice
+      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, true).twice
 
       cmd = command('repo', 'push', 'master')
       Dir.chdir(temporary_directory) { cmd.run }
@@ -135,6 +136,7 @@ module Pod
     it 'validates specs as libraries if requested' do
       Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, false).times(3)
       Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false).twice
+      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, false).twice
 
       cmd = command('repo', 'push', 'master', '--use-libraries')
       Dir.chdir(temporary_directory) { cmd.run }

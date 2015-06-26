@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9B3204A8D3160EB3616BC7CB1D3FCCFBB4BF3F2C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "9B3204A8D3160EB3616BC7CB1D3FCCFBB4BF3F2C" : 0,
+    "9F9800D332981B4632368512DE7ED0F103520D36" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "95524A63-AE69-4DE3-89B6-1E907B56AA69",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "9B3204A8D3160EB3616BC7CB1D3FCCFBB4BF3F2C" : "CocoaPods\/",
+    "9F9800D332981B4632368512DE7ED0F103520D36" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "watchOSsample",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "examples\/watchOS Example\/watchOSsample.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:CocoaPods\/CocoaPods.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9B3204A8D3160EB3616BC7CB1D3FCCFBB4BF3F2C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:CocoaPods\/Rainforest.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9F9800D332981B4632368512DE7ED0F103520D36"
+    }
+  ]
+}

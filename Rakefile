@@ -249,6 +249,7 @@ begin
       Bundler.require 'xcodeproj', :development
       Dir['examples/*'].each do |dir|
         Dir.chdir(dir) do
+          next if dir == 'examples/watchOS Example'
           puts "Example: #{dir}"
 
           puts '    Installing Pods'

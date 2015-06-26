@@ -66,7 +66,7 @@ module Pod
         #
         attr_accessor :specs
 
-        # @return [Symbol] The platform (either `:ios` or `:osx`).
+        # @return [Symbol] The platform (either `:ios`, `:watchos` or `:osx`).
         #
         attr_accessor :platform_name
 

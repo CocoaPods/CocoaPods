@@ -88,6 +88,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3689](https://github.com/CocoaPods/CocoaPods/issues/3689)
 
+* Support for the new `watchos` platform.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3681](https://github.com/CocoaPods/CocoaPods/pull/3681)
+
 ##### Bug Fixes
 
 * Added recursive support to the public headers of vendored frameworks

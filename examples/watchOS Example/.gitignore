@@ -1,0 +1,24 @@
+## CocoaPods
+
+Pods
+
+## Node
+
+node_modules
+
+## OS X
+
+.DS_Store
+
+## Other
+
+.gutter.json
+.pt
+
+## Xcode
+
+*.xccheckout
+xcuserdata
+
+Gemfile.lock
+Podfile.lock
