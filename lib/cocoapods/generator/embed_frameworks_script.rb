@@ -61,10 +61,9 @@ module Pod
             # use filter instead of exclude so missing patterns dont' throw errors
             echo "rsync -av --filter \"- CVS/\" --filter \"- .svn/\" --filter \"- .git/\" --filter \"- .hg/\" --filter \"- Headers\" --filter \"- PrivateHeaders\" --filter \"- Modules\" ${source} ${destination}"
             rsync -av --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${destination}"
+
             # Resign the code if required by the build settings to avoid unstable apps
-            if [ "${CODE_SIGNING_REQUIRED}" == "YES" ]; then
-                code_sign "${destination}/$1"
-            fi
+            code_sign_if_enabled "${destination}/$(basename "$1")"
 
             # Embed linked Swift runtime libraries
             local basename
@@ -74,18 +73,18 @@ module Pod
             for lib in $swift_runtime_libs; do
               echo "rsync -auv \\"${SWIFT_STDLIB_PATH}/${lib}\\" \\"${destination}\\""
               rsync -auv "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"
-              if [ "${CODE_SIGNING_REQUIRED}" == "YES" ]; then
-                code_sign "${destination}/${lib}"
-              fi
+              code_sign_if_enabled "${destination}/${lib}"
             done
           }
 
           # Signs a framework with the provided identity
-          code_sign() {
-            # Use the current code_sign_identitiy
-            echo "Code Signing $1 with Identity ${EXPANDED_CODE_SIGN_IDENTITY_NAME}"
-            echo "/usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements $1"
-            /usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements "$1"
+          code_sign_if_enabled() {
+            if [ -n "${EXPANDED_CODE_SIGN_IDENTITY}" -a "${CODE_SIGNING_REQUIRED}" != "NO" -a "${CODE_SIGNING_ALLOWED}" != "NO" ]; then
+              # Use the current code_sign_identitiy
+              echo "Code Signing $1 with Identity ${EXPANDED_CODE_SIGN_IDENTITY_NAME}"
+              echo "/usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements $1"
+              /usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} --preserve-metadata=identifier,entitlements "$1"
+            fi
           }
 
         eos
