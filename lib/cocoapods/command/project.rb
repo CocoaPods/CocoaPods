@@ -134,8 +134,9 @@ module Pod
           verify_lockfile_exists!
 
           # Check if all given pods are installed
-          missing_pods = @pods.select do |pod|
-            !config.lockfile.pod_names.include?(pod)
+          lockfile_roots = config.lockfile.pod_names.map { |p| Specification.root_name(p) }
+          missing_pods = @pods.map { |p| Specification.root_name(p) }.select do |pod|
+            !lockfile_roots.include?(pod)
           end
 
           if missing_pods.length > 0

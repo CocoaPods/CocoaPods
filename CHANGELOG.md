@@ -83,6 +83,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Hugo Tunius](https://github.com/k0nserv)
   [#995](https://github.com/CocoaPods/CocoaPods/issues/995)
 
+* `pod update` will now accept root pod names, even when only subspecs are
+  installed.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3689](https://github.com/CocoaPods/CocoaPods/issues/3689)
+
 ##### Bug Fixes
 
 * Added recursive support to the public headers of vendored frameworks
