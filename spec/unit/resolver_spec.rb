@@ -180,6 +180,17 @@ module Pod
         end.message.should.match /platform .* not compatible/
       end
 
+      it 'selects only platform-compatible versions' do
+        @podfile = Podfile.new do
+          platform :osx, '10.7'
+          pod 'AFNetworking' # the most recent version requires 10.8
+        end
+        @resolver.stubs(:podfile).returns(@podfile)
+        @resolver.resolve.values.flatten.map(&:to_s).sort.should == [
+          'AFNetworking (1.3.4)',
+        ]
+      end
+
       it 'raises if unable to find a specification' do
         Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
         message = should.raise Informative do
@@ -340,7 +351,7 @@ module Pod
 
       it 'raises if it finds two conflicting dependencies' do
         podfile = Podfile.new do
-          platform :ios
+          platform :ios, '8.0'
           pod 'RestKit', '0.23.3' # dependends on AFNetworking ~> 1.3.0
           pod 'AFNetworking', '> 2'
         end

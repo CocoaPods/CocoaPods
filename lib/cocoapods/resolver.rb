@@ -37,6 +37,7 @@ module Pod
       @podfile = podfile
       @locked_dependencies = locked_dependencies
       @sources = Array(sources)
+      @platforms_by_dependency = Hash.new { |h, k| h[k] = [] }
     end
 
     #-------------------------------------------------------------------------#
@@ -52,7 +53,11 @@ module Pod
     #         definition.
     #
     def resolve
-      dependencies = podfile.target_definition_list.map(&:dependencies).flatten
+      dependencies = podfile.target_definition_list.flat_map do |target|
+        target.dependencies.each do |dep|
+          @platforms_by_dependency[dep].push(target.platform).uniq!
+        end
+      end
       @cached_sets = {}
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
       specs_by_target.tap do |specs_by_target|
@@ -181,7 +186,7 @@ module Pod
       requirement_satisfied && !(
         spec.version.prerelease? &&
         existing_vertices.flat_map(&:requirements).none? { |r| r.prerelease? || r.external_source || r.head? }
-      )
+      ) && spec_is_platform_compatible?(activated, requirement, spec)
     end
 
     # Sort dependencies so that the ones that are easiest to resolve are first.
@@ -393,6 +398,31 @@ module Pod
         end
       end
       raise Informative, error.message
+    end
+
+    # Returns whether the given spec is platform-compatible with the dependency
+    # graph, taking into account the dependency that has required the spec.
+    #
+    # @param  [Molinillo::DependencyGraph] dependency_graph
+    #
+    # @param  [Dependency] dependency
+    #
+    # @param  [Specification] specification
+    #
+    # @return [Bool]
+    def spec_is_platform_compatible?(dependency_graph, dependency, spec)
+      all_predecessors = ->(vertex) do
+        pred = vertex.predecessors
+        pred + pred.map(&all_predecessors).reduce(Set.new, &:&) << vertex
+      end
+      vertex = dependency_graph.vertex_named(dependency.name)
+      predecessors = all_predecessors[vertex].reject { |v| v.explicit_requirements.empty? }
+      platforms_to_satisfy = predecessors.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }
+
+      platforms_to_satisfy.all? do |platform_to_satisfy|
+        spec.available_platforms.select { |spec_platform| spec_platform.name == platform_to_satisfy.name }.
+          all? { |spec_platform| platform_to_satisfy.supports?(spec_platform) }
+      end
     end
 
     # Returns the target-appropriate nodes that are `successors` of `node`,
