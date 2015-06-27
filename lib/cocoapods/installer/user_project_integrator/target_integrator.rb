@@ -269,14 +269,14 @@ module Pod
         end
 
         def create_or_update_build_phase(target, phase_name, phase_class = Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
-          phase = target.build_phases.grep(phase_class).find { |phase| phase.name == phase_name } ||
-          (target.project.new(phase_class).tap do |phase|
-            UI.message("Adding Build Phase '#{phase_name}' to project.") do
-              phase.name = phase_name
-              phase.show_env_vars_in_log = '0'
-              target.build_phases << phase
+          target.build_phases.grep(phase_class).find { |phase| phase.name == phase_name } ||
+            target.project.new(phase_class).tap do |phase|
+              UI.message("Adding Build Phase '#{phase_name}' to project.") do
+                phase.name = phase_name
+                phase.show_env_vars_in_log = '0'
+                target.build_phases << phase
+              end
             end
-          end)
         end
       end
     end
