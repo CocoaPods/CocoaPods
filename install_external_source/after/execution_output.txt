@@ -59,6 +59,8 @@ Integrating client project
 [!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
 
 Integrating target `Pods` (`SampleApp.xcodeproj` project)
+  Adding Build Phase 'Copy Pods Resources' to project.
+  Adding Build Phase 'Check Pods Manifest.lock' to project.
 
 [!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Target Support Files/Pods/Pods.release.xcconfig'. This can lead to problems with the CocoaPods installation
     - Use the `$(inherited)` flag, or

@@ -47,3 +47,4 @@ Integrating client project
 
 Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
   - Removing (Pods/Pods.xcconfig)
+  Adding Build Phase 'Check Pods Manifest.lock' to project.

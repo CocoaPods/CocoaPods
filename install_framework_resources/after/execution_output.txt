@@ -63,6 +63,10 @@ Integrating client project
 
 Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Embed Pods Frameworks' to project.
+  Adding Build Phase 'Copy Pods Resources' to project.
+  Adding Build Phase 'Check Pods Manifest.lock' to project.
 
 Integrating target `Pods-SampleAppTests` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Embed Pods Frameworks' to project.
+  Adding Build Phase 'Copy Pods Resources' to project.
+  Adding Build Phase 'Check Pods Manifest.lock' to project.
