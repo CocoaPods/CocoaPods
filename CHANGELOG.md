@@ -38,14 +38,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3648](https://github.com/CocoaPods/CocoaPods/issues/3648)
 
 * Deprecate the `xcconfig` attribute in the Podspec DSL, which is replaced by
-  the new attributes `pod_target_xcconfig` and `user_target_xcconfig`.
+  the new attributes `pod_target_xcconfig` and `user_target_xcconfig`.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [CocoaPods#3465](https://github.com/CocoaPods/CocoaPods/issues/3465)
 
 ##### Enhancements
 
 * The notice about a new version being available will now include our
-  recommendation of using the latest stable version
+  recommendation of using the latest stable version.  
   [Hugo Tunius](https://github.com/k0nserv)
 
 * New commands `pod cache list` and `pod cache clean` allows you to see the
@@ -75,11 +75,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dieter Komendera](https://github.com/kommen)
   [#2402](https://github.com/CocoaPods/CocoaPods/issues/2402)
 
-* Cache globbing in `PathList` to speed up `pod install`.
+* Cache globbing in `PathList` to speed up `pod install`.  
   [Vincent Isambart](https://github.com/vincentisambart)
 
 * CocoaPods will validate your podfile and try to identify problems
-  and conflicts in how you've specified the dependencies
+  and conflicts in how you've specified the dependencies.  
   [Hugo Tunius](https://github.com/k0nserv)
   [#995](https://github.com/CocoaPods/CocoaPods/issues/995)
 
@@ -96,7 +96,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Added recursive support to the public headers of vendored frameworks
   that are automatically linked in the sandbox. This fixes and issue
-  for framework header directories that contain sub-directories.
+  for framework header directories that contain sub-directories.  
   [Todd Casey](https://github.com/vhariable)
   [#3161](https://github.com/CocoaPods/CocoaPods/issues/3161)
 
@@ -135,7 +135,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Tim Rosenblatt](https://github.com/timrosenblatt)
   [#3675](https://github.com/CocoaPods/CocoaPods/pull/3675)
 
-* Pods frameworks in codesigned Mac apps are now signed.
+* Pods frameworks in codesigned Mac apps are now signed.  
   [Nikolaj Schumacher](https://github.com/nschum)
   [#3646](https://github.com/CocoaPods/CocoaPods/issues/3646)
 
