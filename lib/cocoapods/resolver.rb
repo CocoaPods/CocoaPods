@@ -55,7 +55,7 @@ module Pod
     def resolve
       dependencies = podfile.target_definition_list.flat_map do |target|
         target.dependencies.each do |dep|
-          @platforms_by_dependency[dep].<<(target.platform).uniq!
+          @platforms_by_dependency[dep].push(target.platform).uniq!
         end
       end
       @cached_sets = {}
@@ -418,7 +418,11 @@ module Pod
       vertex = dependency_graph.vertex_named(dependency.name)
       predecessors = all_predecessors[vertex].reject { |v| v.explicit_requirements.empty? }
       platforms_to_satisfy = predecessors.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }
-      platforms_to_satisfy.all? { |pts| spec.available_platforms.select { |p| p.name == pts.name }.all? { |p| pts.supports?(p) } }
+
+      platforms_to_satisfy.all? do |platform_to_satisfy|
+        spec.available_platforms.select { |spec_platform| spec_platform.name == platform_to_satisfy.name }.
+          all? { |spec_platform| platform_to_satisfy.supports?(spec_platform) }
+      end
     end
 
     # Returns the target-appropriate nodes that are `successors` of `node`,
