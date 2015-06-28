@@ -13,6 +13,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2443](https://github.com/CocoaPods/CocoaPods/issues/2443)
 
+* `Pods.xcodeproj` will now be written with deterministic UUIDs, vastly reducing
+  project churn and merge conflicts.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Ensure that the `prepare_command` is run even when skipping the download
