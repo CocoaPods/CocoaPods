@@ -698,21 +698,21 @@ module Pod
       it 'runs plugins pre install hook' do
         context = stub
         Installer::PreInstallHooksContext.expects(:generate).returns(context)
-        HooksManager.expects(:run).with(:pre_install, context, {})
+        HooksManager.expects(:run).with(:pre_install, context, Installer::DEFAULT_PLUGINS)
         @installer.send(:run_plugins_pre_install_hooks)
       end
 
       it 'runs plugins post install hook' do
         context = stub
         Installer::PostInstallHooksContext.expects(:generate).returns(context)
-        HooksManager.expects(:run).with(:post_install, context, {})
+        HooksManager.expects(:run).with(:post_install, context, Installer::DEFAULT_PLUGINS)
         @installer.send(:run_plugins_post_install_hooks)
       end
 
       it 'only runs the podfile-specified hooks' do
         context = stub
         Installer::PostInstallHooksContext.expects(:generate).returns(context)
-        plugins_hash = { 'cocoapods-keys' => { 'keyring' => 'Eidolon' } }
+        plugins_hash = Installer::DEFAULT_PLUGINS.merge({ 'cocoapods-keys' => { 'keyring' => 'Eidolon' } })
         @installer.podfile.stubs(:plugins).returns(plugins_hash)
         HooksManager.expects(:run).with(:post_install, context, plugins_hash)
         @installer.send(:run_plugins_post_install_hooks)
