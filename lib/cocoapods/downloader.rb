@@ -33,7 +33,9 @@ module Pod
         cache = Cache.new(cache_path)
         result = cache.download_pod(request)
       else
+        require 'cocoapods/installer/pod_source_preparer'
         result, _ = download_request(request, target)
+        Installer::PodSourcePreparer.new(result.spec, result.location).prepare!
       end
 
       if target && result.location && target != result.location
