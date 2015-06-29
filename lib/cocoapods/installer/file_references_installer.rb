@@ -115,7 +115,7 @@ module Pod
         UI.message '- Linking headers' do
           pod_targets.each do |pod_target|
             pod_target.file_accessors.each do |file_accessor|
-              framework_exp = /.framework\//
+              framework_exp = /\.framework\//
               headers_sandbox = Pathname.new(file_accessor.spec.root.name)
               pod_target.build_headers.add_search_path(headers_sandbox, pod_target.platform)
               sandbox.public_headers.add_search_path(headers_sandbox, pod_target.platform)

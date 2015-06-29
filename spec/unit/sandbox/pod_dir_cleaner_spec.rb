@@ -46,6 +46,7 @@ module Pod
         'Resources/Images.xcassets',
         'Resources/logo-sidebar.png',
         'Resources/sub_dir',
+        'framework/Source/MoreBanana.h',
         'libBananalib.a',
         'preserve_me.txt',
       ]

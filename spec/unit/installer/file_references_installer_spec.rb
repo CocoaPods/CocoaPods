@@ -50,10 +50,10 @@ module Pod
       it 'links the headers required for building the pod target' do
         @installer.install!
         headers_root = @pod_target.build_headers.root
-        public_header = headers_root + 'BananaLib/Banana.h'
+        public_headers = [headers_root + 'BananaLib/Banana.h', headers_root + 'BananaLib/MoreBanana.h']
         private_header = headers_root + 'BananaLib/BananaPrivate.h'
         framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
-        public_header.should.exist
+        public_headers.each { |public_header| public_header.should.exist }
         private_header.should.exist
         framework_header.should.not.exist
       end
@@ -61,11 +61,11 @@ module Pod
       it 'links the public headers meant for the user' do
         @installer.install!
         headers_root = config.sandbox.public_headers.root
-        public_header = headers_root + 'BananaLib/Banana.h'
+        public_headers = [headers_root + 'BananaLib/Banana.h', headers_root + 'BananaLib/MoreBanana.h']
         private_header = headers_root + 'BananaLib/BananaPrivate.h'
         framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
         framework_subdir_header = headers_root + 'BananaLib/Bananalib/SubDir/SubBananalib.h'
-        public_header.should.exist
+        public_headers.each { |public_header| public_header.should.exist }
         private_header.should.not.exist
         framework_header.should.exist
         framework_subdir_header.should.exist

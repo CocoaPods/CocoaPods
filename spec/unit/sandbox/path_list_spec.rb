@@ -27,6 +27,7 @@ module Pod
           Resources/Images.xcassets/Logo.imageset/logo.png
           Resources/logo-sidebar.png
           Resources/sub_dir/logo-sidebar.png
+          framework/Source/MoreBanana.h
           libBananalib.a
           preserve_me.txt
           sub-dir/sub-dir-2/somefile.txt
@@ -53,6 +54,8 @@ module Pod
           Resources/Images.xcassets
           Resources/Images.xcassets/Logo.imageset
           Resources/sub_dir
+          framework
+          framework/Source
           sub-dir
           sub-dir/sub-dir-2
         )
