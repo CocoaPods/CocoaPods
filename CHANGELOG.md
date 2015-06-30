@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3674](https://github.com/CocoaPods/CocoaPods/issues/3674)
 
+* Public headers inside a directory named `framework` should be linked in the
+  sandbox.  
+  [Vincent Isambart](https://github.com/vincentisambart)
+  [#3751](https://github.com/CocoaPods/CocoaPods/issues/3751)
 
 ## 0.38.0.beta.1
 
