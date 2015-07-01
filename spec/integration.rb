@@ -106,6 +106,7 @@ describe_cli 'pod' do
       'COCOAPODS_SKIP_CACHE'     => 'TRUE',
       'XCODEPROJ_DISABLE_XCPROJ' => 'TRUE',
       'CLAIDE_DISABLE_AUTO_WRAP' => 'TRUE',
+      'COCOAPODS_DISABLE_STATS'  => 'TRUE',
     }
     s.default_args = [
       '--verbose',
