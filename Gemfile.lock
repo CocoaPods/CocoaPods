@@ -49,10 +49,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-stats.git
-  revision: 3618f77cdd6540da21a6d79cf0112cf37b441ddb
+  revision: 565e91a425fcaa26a797115d6fcdeaaa98b4f478
   branch: master
   specs:
-    cocoapods-stats (0.5.0)
+    cocoapods-stats (0.5.1)
       nap (~> 0.8)
 
 GIT
