@@ -31,8 +31,9 @@ module Pod
         #         while `-fobjc-arc` is included only if requested in the
         #         Podfile.
         #
-        def self.default_ld_flags(target)
-          ld_flags = '-ObjC'
+        def self.default_ld_flags(target, includes_static_libraries = false)
+          ld_flags = ''
+          ld_flags << '-ObjC' if includes_static_libraries
           if target.podfile.set_arc_compatibility_flag? &&
               target.spec_consumers.any?(&:requires_arc?)
             ld_flags << ' -fobjc-arc'

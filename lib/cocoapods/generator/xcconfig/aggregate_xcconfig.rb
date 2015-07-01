@@ -49,8 +49,10 @@ module Pod
         # @return [Xcodeproj::Config]
         #
         def generate
+          includes_static_libs = !target.requires_frameworks?
+          includes_static_libs ||= target.pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_libraries.empty? }
           config = {
-            'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target),
+            'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target, includes_static_libs),
             'PODS_ROOT' => target.relative_pods_root,
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
           }
