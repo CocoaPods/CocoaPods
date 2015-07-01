@@ -621,6 +621,7 @@ module Pod
         pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
         pods_project.sort(:groups_position => :below)
         pods_project.recreate_user_schemes(false)
+        pods_project.predictabilize_uuids
         pods_project.save
       end
     end
