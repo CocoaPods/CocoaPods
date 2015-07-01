@@ -1,5 +1,7 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
+require 'cocoapods_stats/sender'
+
 # @return [Lockfile]
 #
 def generate_lockfile
@@ -36,6 +38,7 @@ end
 module Pod
   describe Installer do
     before do
+      CocoaPodsStats::Sender.any_instance.stubs(:send)
       podfile = generate_podfile
       lockfile = generate_lockfile
       config.integrate_targets = false
