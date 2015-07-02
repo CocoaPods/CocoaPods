@@ -418,7 +418,7 @@ module Pod
     #
     def run_plugins_pre_install_hooks
       context = PreInstallHooksContext.generate(sandbox, podfile, lockfile)
-      HooksManager.run(:pre_install, context, podfile.plugins)
+      HooksManager.run(:pre_install, context, plugins)
     end
 
     # Performs any post-installation actions
@@ -434,7 +434,7 @@ module Pod
     #
     def run_plugins_post_install_hooks
       context = PostInstallHooksContext.generate(sandbox, aggregate_targets)
-      HooksManager.run(:post_install, context, podfile.plugins)
+      HooksManager.run(:post_install, context, plugins)
     end
 
     # Ensures that all plugins specified in the {#podfile} are loaded.
@@ -451,6 +451,17 @@ module Pod
           raise Informative, "Your Podfile requires that the plugin `#{plugin}` be installed. Please install it and try installation again."
         end
       end
+    end
+
+    DEFAULT_PLUGINS = { 'cocoapods-stats' => {} }
+
+    # Returns the plugins that should be run, as indicated by the default
+    # plugins and the podfile's plugins
+    #
+    # @return [Hash<String, Hash>] The plugins to be used
+    #
+    def plugins
+      DEFAULT_PLUGINS.merge(podfile.plugins)
     end
 
     # Prints a warning for any pods that are deprecated

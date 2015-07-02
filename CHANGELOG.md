@@ -17,6 +17,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   project churn and merge conflicts.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* [`cocoapods-stats`](https://github.com/CocoaPods/cocoapods-stats)
+  is now a default plugin.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Ensure that the `prepare_command` is run even when skipping the download

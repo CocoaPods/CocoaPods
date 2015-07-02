@@ -1,5 +1,7 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
+require 'cocoapods_stats/sender'
+
 # @return [Lockfile]
 #
 def generate_lockfile
@@ -36,6 +38,7 @@ end
 module Pod
   describe Installer do
     before do
+      CocoaPodsStats::Sender.any_instance.stubs(:send)
       podfile = generate_podfile
       lockfile = generate_lockfile
       config.integrate_targets = false
@@ -695,24 +698,34 @@ module Pod
         @installer.stubs(:installed_specs).returns(@specs)
       end
 
+      describe 'DEFAULT_PLUGINS' do
+        before do
+          @default_plugins = @installer.send(:plugins)
+        end
+
+        it 'includes cocoapods-stats' do
+          @default_plugins['cocoapods-stats'].should == {}
+        end
+      end
+
       it 'runs plugins pre install hook' do
         context = stub
         Installer::PreInstallHooksContext.expects(:generate).returns(context)
-        HooksManager.expects(:run).with(:pre_install, context, {})
+        HooksManager.expects(:run).with(:pre_install, context, Installer::DEFAULT_PLUGINS)
         @installer.send(:run_plugins_pre_install_hooks)
       end
 
       it 'runs plugins post install hook' do
         context = stub
         Installer::PostInstallHooksContext.expects(:generate).returns(context)
-        HooksManager.expects(:run).with(:post_install, context, {})
+        HooksManager.expects(:run).with(:post_install, context, Installer::DEFAULT_PLUGINS)
         @installer.send(:run_plugins_post_install_hooks)
       end
 
       it 'only runs the podfile-specified hooks' do
         context = stub
         Installer::PostInstallHooksContext.expects(:generate).returns(context)
-        plugins_hash = { 'cocoapods-keys' => { 'keyring' => 'Eidolon' } }
+        plugins_hash = Installer::DEFAULT_PLUGINS.merge('cocoapods-keys' => { 'keyring' => 'Eidolon' })
         @installer.podfile.stubs(:plugins).returns(plugins_hash)
         HooksManager.expects(:run).with(:post_install, context, plugins_hash)
         @installer.send(:run_plugins_post_install_hooks)

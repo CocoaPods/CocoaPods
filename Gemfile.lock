@@ -48,6 +48,14 @@ GIT
       nap
 
 GIT
+  remote: https://github.com/CocoaPods/cocoapods-stats.git
+  revision: 524102745303db529da8b6aa99633c5a7c60be6c
+  branch: master
+  specs:
+    cocoapods-stats (0.5.2)
+      nap (~> 0.8)
+
+GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
   revision: dbe2fc2e569dc66d652ec85e276294d02e34c3b6
   branch: master
@@ -72,6 +80,7 @@ PATH
       cocoapods-core (= 0.38.0.beta.1)
       cocoapods-downloader (~> 0.9.1)
       cocoapods-plugins (~> 0.4.2)
+      cocoapods-stats (~> 0.5.0)
       cocoapods-trunk (~> 0.6.1)
       cocoapods-try (~> 0.4.5)
       colored (~> 1.2)
@@ -183,6 +192,7 @@ DEPENDENCIES
   cocoapods-dependencies
   cocoapods-downloader!
   cocoapods-plugins!
+  cocoapods-stats!
   cocoapods-trunk!
   cocoapods-try!
   diffy

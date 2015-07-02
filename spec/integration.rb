@@ -106,6 +106,7 @@ describe_cli 'pod' do
       'COCOAPODS_SKIP_CACHE'     => 'TRUE',
       'XCODEPROJ_DISABLE_XCPROJ' => 'TRUE',
       'CLAIDE_DISABLE_AUTO_WRAP' => 'TRUE',
+      'COCOAPODS_DISABLE_STATS'  => 'TRUE',
     }
     s.default_args = [
       '--verbose',
@@ -118,6 +119,12 @@ describe_cli 'pod' do
     s.replace_pattern /#{Dir.tmpdir}\/[\w-]+/i, 'TMPDIR'
     s.replace_pattern /\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}/, '<#DATE#>'
     s.replace_pattern /\(Took \d+.\d+ seconds\)/, '(Took <#DURATION#> seconds)'
+    s.replace_path %r{
+      `[^`]*? # The opening backtick on a plugin path
+      ([[[:alnum:]]_+-]+) # The plugin name
+      (- ([[:xdigit:]]+ | #{Gem::Version::VERSION_PATTERN}))? # The version or SHA
+      /lib/cocoapods_plugin.rb # The actual plugin file that gets loaded
+    }ix, '`\1/lib/cocoapods_plugin.rb'
   end
 
   describe 'Pod install' do
