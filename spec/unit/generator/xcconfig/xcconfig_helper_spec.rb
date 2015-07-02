@@ -15,6 +15,9 @@ module Pod
             podfile = stub(:set_arc_compatibility_flag? => false)
             target = stub(:podfile => podfile)
             result = @sut.default_ld_flags(target)
+            result.should == ''
+
+            result = @sut.default_ld_flags(target, true)
             result.should == '-ObjC'
           end
 
@@ -23,6 +26,9 @@ module Pod
             spec_consumer = stub(:requires_arc? => true)
             target = stub(:podfile => podfile, :spec_consumers => [spec_consumer])
             result = @sut.default_ld_flags(target)
+            result.should == '-fobjc-arc'
+
+            result = @sut.default_ld_flags(target, true)
             result.should == '-ObjC -fobjc-arc'
           end
         end
