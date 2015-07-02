@@ -342,6 +342,7 @@ module Pod
       podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks)
       sandbox = Sandbox.new(config.sandbox_root)
       installer = Installer.new(sandbox, podfile)
+      installer.use_default_plugins = false
       installer.install!
 
       file_accessors = installer.aggregate_targets.map do |target|

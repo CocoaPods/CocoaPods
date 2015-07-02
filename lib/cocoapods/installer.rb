@@ -67,6 +67,8 @@ module Pod
       @sandbox  = sandbox
       @podfile  = podfile
       @lockfile = lockfile
+
+      @use_default_plugins = true
     end
 
     # @return [Hash, Boolean, nil] Pods that have been requested to be
@@ -75,6 +77,12 @@ module Pod
     #         not taken into account for deciding what Pods to install.
     #
     attr_accessor :update
+
+    # @return [Boolean] Whether default plugins should be used during
+    #                   installation. Defaults to true.
+    #
+    attr_accessor :use_default_plugins
+    alias_method :use_default_plugins?, :use_default_plugins
 
     # Installs the Pods.
     #
@@ -461,7 +469,11 @@ module Pod
     # @return [Hash<String, Hash>] The plugins to be used
     #
     def plugins
-      DEFAULT_PLUGINS.merge(podfile.plugins)
+      if use_default_plugins?
+        DEFAULT_PLUGINS.merge(podfile.plugins)
+      else
+        podfile.plugins
+      end
     end
 
     # Prints a warning for any pods that are deprecated
