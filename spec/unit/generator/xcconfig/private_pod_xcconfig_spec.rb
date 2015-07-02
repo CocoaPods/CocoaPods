@@ -19,8 +19,8 @@ module Pod
             @xcconfig.class.should == Xcodeproj::Config
           end
 
-          it 'configures the project to load all members that implement Objective-c classes or categories from the static library' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-ObjC'
+          it 'does not configure the project to load all members that implement Objective-c classes or categories from the static library' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-ObjC'
           end
 
           it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do

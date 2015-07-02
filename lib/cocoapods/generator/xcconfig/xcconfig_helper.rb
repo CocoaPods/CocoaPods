@@ -38,7 +38,7 @@ module Pod
               target.spec_consumers.any?(&:requires_arc?)
             ld_flags << ' -fobjc-arc'
           end
-          ld_flags
+          ld_flags.strip
         end
 
         # Configures the given Xcconfig

@@ -38,10 +38,6 @@ module Pod
             @xcconfig.class.should == Xcodeproj::Config
           end
 
-          it 'configures the project to load all members that implement Objective-c classes or categories' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-ObjC'
-          end
-
           it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do
             @consumer.stubs(:requires_arc?).returns(true)
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-fobjc-arc')
@@ -97,6 +93,10 @@ module Pod
 
           behaves_like 'AggregateXCConfig'
 
+          it 'configures the project to load all members that implement Objective-c classes or categories' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-ObjC'
+          end
+
           it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as header search paths' do
             expected = "$(inherited) \"#{config.sandbox.public_headers.search_paths(:ios).join('" "')}\""
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == expected
@@ -141,6 +141,10 @@ module Pod
 
           behaves_like 'AggregateXCConfig'
 
+          it "doesn't configure the project to load all members that implement Objective-c classes or categories" do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-ObjC'
+          end
+
           describe 'with a vendored-library pod' do
             def spec
               fixture_spec('monkey/monkey.podspec')
@@ -148,6 +152,10 @@ module Pod
 
             it 'does not add the framework build path to the xcconfig' do
               @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil?
+            end
+
+            it 'configures the project to load all members that implement Objective-c classes or categories' do
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-ObjC'
             end
           end
 
