@@ -33,6 +33,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Vincent Isambart](https://github.com/vincentisambart)
   [#3751](https://github.com/CocoaPods/CocoaPods/issues/3751)
 
+* Properly support targets with spaces in their name in the embed frameworks
+  script.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3754](https://github.com/CocoaPods/CocoaPods/issues/3754)
+
+
 ## 0.38.0.beta.1
 
 ##### Highlighted Enhancement That Needs Testing
