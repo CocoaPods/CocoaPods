@@ -698,6 +698,16 @@ module Pod
         @installer.stubs(:installed_specs).returns(@specs)
       end
 
+      describe 'DEFAULT_PLUGINS' do
+        before do
+          @default_plugins = @installer.send(:plugins)
+        end
+
+        it 'includes cocoapods-stats' do
+          @default_plugins['cocoapods-stats'].should == {}
+        end
+      end
+
       it 'runs plugins pre install hook' do
         context = stub
         Installer::PreInstallHooksContext.expects(:generate).returns(context)
