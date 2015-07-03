@@ -105,4 +105,4 @@ Integrating client project
 Integrating target `Pods` (`SampleApp.xcodeproj` project)
   - Removing (Pods/Pods.xcconfig)
   - Running post install hooks
-    - cocoapods-stats from `cocoapods-stats-524102745303/lib/cocoapods_plugin.rb`
+    - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
