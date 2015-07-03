@@ -42,6 +42,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3537](https://github.com/CocoaPods/CocoaPods/issues/3537)
 
+* Ensure that no duplicate framework or target dependencies are created.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3763](https://github.com/CocoaPods/CocoaPods/issues/3763)
+
 
 ## 0.38.0.beta.1
 
