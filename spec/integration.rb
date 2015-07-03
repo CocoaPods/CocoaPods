@@ -121,7 +121,7 @@ describe_cli 'pod' do
     s.replace_pattern /\(Took \d+.\d+ seconds\)/, '(Took <#DURATION#> seconds)'
     s.replace_path %r{
       `[^`]*? # The opening backtick on a plugin path
-      ([[[:alnum:]]_+-]+) # The plugin name
+      ([[[:alnum:]]_+-]+?) # The plugin name
       (- ([[:xdigit:]]+ | #{Gem::Version::VERSION_PATTERN}))? # The version or SHA
       /lib/cocoapods_plugin.rb # The actual plugin file that gets loaded
     }ix, '`\1/lib/cocoapods_plugin.rb'
