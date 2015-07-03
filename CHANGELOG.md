@@ -14,7 +14,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#2443](https://github.com/CocoaPods/CocoaPods/issues/2443)
 
 * `Pods.xcodeproj` will now be written with deterministic UUIDs, vastly reducing
-  project churn and merge conflicts.  
+  project churn and merge conflicts.  This behavior can be disabled via the new
+  `COCOAPODS_DISABLE_DETERMINISTIC_UUIDS` environment variable.
   [Samuel Giddins](https://github.com/segiddins)
 
 * [`cocoapods-stats`](https://github.com/CocoaPods/cocoapods-stats)
