@@ -42,6 +42,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3537](https://github.com/CocoaPods/CocoaPods/issues/3537)
 
+* Using scoped resources path on generated 'Copy Pods Resources' script file when using pod's target has to be scoped.  
+  [Virgilio Favero Neto](https://github.com/vfn)
+  [#3761](https://github.com/CocoaPods/CocoaPods/issues/3761)
 
 ## 0.38.0.beta.1
 

@@ -107,11 +107,14 @@ module Pod
         end
         resources_by_config = {}
         target.user_build_configurations.keys.each do |config|
-          file_accessors = library_targets.select { |t| t.include_in_build_config?(target_definition, config) }.flat_map(&:file_accessors)
-          resource_paths = file_accessors.flat_map { |accessor| accessor.resources.flat_map { |res| res.relative_path_from(project.path.dirname) } }
-          resource_bundles = file_accessors.flat_map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name.shellescape}.bundle" } }
-          resources_by_config[config] = (resource_paths + resource_bundles).uniq
-          resources_by_config[config] << bridge_support_file if bridge_support_file
+          library_targets.select { |t| t.include_in_build_config?(target_definition, config) }.each do |pod_target|
+            file_accessors = pod_target.file_accessors
+            resource_paths = file_accessors.flat_map { |accessor| accessor.resources.flat_map { |res| res.relative_path_from(project.path.dirname) } }
+            resource_bundles_path = pod_target.requires_frameworks? && pod_target.scoped? ? "${PODS_FRAMEWORK_BUILD_PATH}" : "${BUILT_PRODUCTS_DIR}"
+            resource_bundles = file_accessors.flat_map { |accessor| accessor.resource_bundles.keys.map { |name| "#{resource_bundles_path}/#{name.shellescape}.bundle" } }
+            resources_by_config[config] = (resource_paths + resource_bundles).uniq
+            resources_by_config[config] << bridge_support_file if bridge_support_file
+          end
         end
         resources_by_config
       end
