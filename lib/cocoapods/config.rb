@@ -20,6 +20,7 @@ module Pod
       :clean               => true,
       :integrate_targets   => true,
       :deduplicate_targets => true,
+      :deterministic_uuids => ENV['COCOAPODS_DISABLE_DETERMINISTIC_UUIDS'].nil?,
       :lock_pod_source     => true,
       :new_version_message => ENV['COCOAPODS_SKIP_UPDATE_MESSAGE'].nil?,
 
@@ -94,6 +95,12 @@ module Pod
     #
     attr_accessor :deduplicate_targets
     alias_method :deduplicate_targets?, :deduplicate_targets
+
+    # @return [Bool] Whether CocoaPods should give the pods project
+    #                deterministic UUIDs.
+    #
+    attr_accessor :deterministic_uuids
+    alias_method :deterministic_uuids?, :deterministic_uuids
 
     # @return [Bool] Whether the installer should skip the repos update.
     #

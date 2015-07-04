@@ -626,7 +626,7 @@ module Pod
               if pod_target.requires_frameworks?
                 product_ref = frameworks_group.files.find { |f| f.path == pod_dependency_target.product_name } ||
                   frameworks_group.new_product_ref_for_target(pod_dependency_target.product_basename, pod_dependency_target.product_type)
-                pod_target.native_target.frameworks_build_phase.add_file_reference(product_ref)
+                pod_target.native_target.frameworks_build_phase.add_file_reference(product_ref, true)
               end
             end
           end
@@ -644,7 +644,7 @@ module Pod
         pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
         pods_project.sort(:groups_position => :below)
         pods_project.recreate_user_schemes(false)
-        pods_project.predictabilize_uuids
+        pods_project.predictabilize_uuids if config.deterministic_uuids?
         pods_project.save
       end
     end

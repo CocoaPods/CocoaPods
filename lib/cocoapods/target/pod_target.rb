@@ -153,9 +153,9 @@ module Pod
     #         depends.
     #
     def dependencies
-      spec_consumers.map do |consumer|
+      spec_consumers.flat_map do |consumer|
         consumer.dependencies.map { |dep| Specification.root_name(dep.name) }
-      end.flatten
+      end.uniq
     end
 
     # Checks if the target should be included in the build configuration with
