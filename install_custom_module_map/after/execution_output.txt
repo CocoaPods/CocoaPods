@@ -10,14 +10,6 @@ Fetching external sources
 -> Fetching podspec for `BananaLib` from `banana-lib/BananaLib.podspec`
 
 Resolving dependencies of `Podfile`
-Starting resolution (<#DATE#>)
-Creating possibility state for BananaLib (from `banana-lib/BananaLib.podspec`) (1 remaining)
-  Attempting to activate BananaLib (1.0)
-  Activated BananaLib at BananaLib (1.0)
-  Requiring nested dependencies ()
-Finished resolution (1 steps) (Took <#DURATION#> seconds) (<#DATE#>)
-Unactivated: 
-Activated: BananaLib
 
 Comparing resolved specification to the sandbox manifest
   A BananaLib

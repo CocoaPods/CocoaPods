@@ -11,14 +11,6 @@ Fetching external sources
 -> Fetching podspec for `res` from `res`
 
 Resolving dependencies of `Podfile`
-Starting resolution (<#DATE#>)
-Creating possibility state for res (from `res`) (1 remaining)
-  Attempting to activate res (0.1.0)
-  Activated res at res (0.1.0)
-  Requiring nested dependencies ()
-Finished resolution (1 steps) (Took <#DURATION#> seconds) (<#DATE#>)
-Unactivated: 
-Activated: res
 
 Comparing resolved specification to the sandbox manifest
   A res

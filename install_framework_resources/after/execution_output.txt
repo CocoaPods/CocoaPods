@@ -12,17 +12,6 @@ Fetching external sources
 -> Fetching podspec for `SamplePodWithResources` from `SamplePodWithResources`
 
 Resolving dependencies of `Podfile`
-Starting resolution (<#DATE#>)
-Creating possibility state for SamplePodWithResources (from `SamplePodWithResources`) (1 remaining)
-  Attempting to activate SamplePodWithResources (0.1.0)
-  Activated SamplePodWithResources at SamplePodWithResources (0.1.0)
-  Requiring nested dependencies ()
-  Creating possibility state for SamplePodWithResources (from `SamplePodWithResources`) (1 remaining)
-    Attempting to activate SamplePodWithResources (0.1.0)
-    Found existing spec (SamplePodWithResources (0.1.0))
-Finished resolution (2 steps) (Took <#DURATION#> seconds) (<#DATE#>)
-Unactivated: 
-Activated: SamplePodWithResources
 
 Comparing resolved specification to the sandbox manifest
   A SamplePodWithResources

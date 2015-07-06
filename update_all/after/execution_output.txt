@@ -11,14 +11,6 @@ Finding Podfile changes
   - Reachability
 
 Resolving dependencies of `Podfile`
-Starting resolution (<#DATE#>)
-Creating possibility state for Reachability (<= 3.1.0) (2 remaining)
-  Attempting to activate Reachability (3.1.0)
-  Activated Reachability at Reachability (3.1.0)
-  Requiring nested dependencies ()
-Finished resolution (1 steps) (Took <#DURATION#> seconds) (<#DATE#>)
-Unactivated: 
-Activated: Reachability
 
 Comparing resolved specification to the sandbox manifest
   M Reachability

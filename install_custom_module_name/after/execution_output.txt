@@ -7,22 +7,6 @@ Inspecting targets to integrate
   Using `ARCHS` setting to build architectures of target `Pods`: (``)
 
 Resolving dependencies of `Podfile`
-Starting resolution (<#DATE#>)
-Creating possibility state for libPusher (5 remaining)
-  Attempting to activate libPusher (1.5)
-  Activated libPusher at libPusher (1.5)
-  Requiring nested dependencies (libPusher/Core (= 1.5))
-  Creating possibility state for libPusher/Core (= 1.5) (1 remaining)
-    Attempting to activate libPusher/Core (1.5)
-    Activated libPusher/Core at libPusher/Core (1.5)
-    Requiring nested dependencies (SocketRocket (= 0.3.1-beta2))
-    Creating possibility state for SocketRocket (= 0.3.1-beta2) (1 remaining)
-      Attempting to activate SocketRocket (0.3.1-beta2)
-      Activated SocketRocket at SocketRocket (0.3.1-beta2)
-      Requiring nested dependencies ()
-Finished resolution (3 steps) (Took <#DURATION#> seconds) (<#DATE#>)
-Unactivated: 
-Activated: libPusher, libPusher/Core, SocketRocket
 
 Comparing resolved specification to the sandbox manifest
   A SocketRocket
