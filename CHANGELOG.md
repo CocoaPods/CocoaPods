@@ -91,6 +91,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * The notice about a new version being available will now include our
   recommendation of using the latest stable version.  
   [Hugo Tunius](https://github.com/k0nserv)
+  [#3667](https://github.com/CocoaPods/CocoaPods/pull/3667)
 
 * New commands `pod cache list` and `pod cache clean` allows you to see the
   contents of the cache and clean it.  
@@ -121,6 +122,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Cache globbing in `PathList` to speed up `pod install`.  
   [Vincent Isambart](https://github.com/vincentisambart)
+  [#3699](https://github.com/CocoaPods/CocoaPods/pull/3699)
 
 * CocoaPods will validate your podfile and try to identify problems
   and conflicts in how you've specified the dependencies.  
