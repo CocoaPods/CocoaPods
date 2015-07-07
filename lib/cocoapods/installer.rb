@@ -29,18 +29,19 @@ module Pod
   # source control.
   #
   class Installer
-    autoload :AggregateTargetInstaller, 'cocoapods/installer/target_installer/aggregate_target_installer'
-    autoload :Analyzer,                 'cocoapods/installer/analyzer'
-    autoload :FileReferencesInstaller,  'cocoapods/installer/file_references_installer'
-    autoload :PostInstallHooksContext,  'cocoapods/installer/post_install_hooks_context'
-    autoload :PreInstallHooksContext,   'cocoapods/installer/pre_install_hooks_context'
-    autoload :Migrator,                 'cocoapods/installer/migrator'
-    autoload :PodfileValidator,         'cocoapods/installer/podfile_validator'
-    autoload :PodSourceInstaller,       'cocoapods/installer/pod_source_installer'
-    autoload :PodSourcePreparer,        'cocoapods/installer/pod_source_preparer'
-    autoload :PodTargetInstaller,       'cocoapods/installer/target_installer/pod_target_installer'
-    autoload :TargetInstaller,          'cocoapods/installer/target_installer'
-    autoload :UserProjectIntegrator,    'cocoapods/installer/user_project_integrator'
+    autoload :AggregateTargetInstaller,   'cocoapods/installer/target_installer/aggregate_target_installer'
+    autoload :Analyzer,                   'cocoapods/installer/analyzer'
+    autoload :FileReferencesInstaller,    'cocoapods/installer/file_references_installer'
+    autoload :PostInstallHooksContext,    'cocoapods/installer/post_install_hooks_context'
+    autoload :PreInstallHooksContext,     'cocoapods/installer/pre_install_hooks_context'
+    autoload :SourceProviderHooksContext, 'cocoapods/installer/source_provider_hooks_context'
+    autoload :Migrator,                   'cocoapods/installer/migrator'
+    autoload :PodfileValidator,           'cocoapods/installer/podfile_validator'
+    autoload :PodSourceInstaller,         'cocoapods/installer/pod_source_installer'
+    autoload :PodSourcePreparer,          'cocoapods/installer/pod_source_preparer'
+    autoload :PodTargetInstaller,         'cocoapods/installer/target_installer/pod_target_installer'
+    autoload :TargetInstaller,            'cocoapods/installer/target_installer'
+    autoload :UserProjectIntegrator,      'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
 
@@ -124,6 +125,9 @@ module Pod
 
     def resolve_dependencies
       analyzer = create_analyzer
+
+      plugin_sources = run_source_provider_hooks
+      analyzer.sources.push(*plugin_sources)
 
       UI.section 'Updating local specs repositories' do
         analyzer.update_repositories
@@ -451,6 +455,16 @@ module Pod
     def run_plugins_post_install_hooks
       context = PostInstallHooksContext.generate(sandbox, aggregate_targets)
       HooksManager.run(:post_install, context, plugins)
+    end
+
+    # Runs the registered callbacks for the source provider plugin hooks.
+    #
+    # @return [void]
+    #
+    def run_source_provider_hooks
+      context = SourceProviderHooksContext.generate
+      HooksManager.run(:source_provider, context, plugins)
+      context.sources
     end
 
     # Ensures that all plugins specified in the {#podfile} are loaded.
