@@ -235,8 +235,7 @@ module Pod
 
     # Called before resolution starts.
     #
-    # Completely silence this, as we show nothing in normal mode and debug
-    # information in verbose mode.
+    # Completely silence this, as we show nothing.
     #
     # @return [Void]
     #
@@ -245,8 +244,7 @@ module Pod
 
     # Called after resolution ends.
     #
-    # Completely silence this, as we show nothing in normal mode and debug
-    # information in verbose mode.
+    # Completely silence this, as we show nothing.
     #
     # @return [Void]
     #
@@ -255,21 +253,11 @@ module Pod
 
     # Called during resolution to indicate progress.
     #
-    # Completely silence this, as we show nothing in normal mode and debug
-    # information in verbose mode.
+    # Completely silence this, as we show nothing.
     #
     # @return [Void]
     #
     def indicate_progress
-    end
-
-    # Conveys debug information to the user.
-    # By default, prints to `STDERR` instead of {#output}.
-    #
-    # @param [Integer] depth the current depth of the resolution process.
-    # @return [void]
-    def debug?
-      Config.instance.verbose?
     end
 
     #-------------------------------------------------------------------------#
