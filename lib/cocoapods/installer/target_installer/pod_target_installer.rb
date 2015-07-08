@@ -22,13 +22,15 @@ module Pod
           create_xcconfig_file
           if target.requires_frameworks?
             create_info_plist_file
-            create_module_map do |generator|
-              generator.private_headers += target.file_accessors.flat_map(&:private_headers).map(&:basename)
-            end
-            create_umbrella_header do |generator|
-              generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
-            end
           end
+          create_module_map do |generator|
+            generator.private_headers += target.file_accessors.flat_map(&:private_headers).map(&:basename)
+          end
+          create_umbrella_header do |generator|
+            generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
+          end
+          link_module_map
+          link_umbrella_header
           create_prefix_header
           create_dummy_source
         end
@@ -183,6 +185,26 @@ module Pod
         end
       end
 
+      # Links a module map to Public headers.
+      #
+      # @return [void]
+      #
+      def link_module_map
+        module_map_path_name = Pathname.new(target.module_map_path)
+        sandbox.public_headers.add_file(target.name, module_map_path_name, "module.modulemap", target.platform)
+      end
+
+      # Links a an umbrella header to Public headers.
+      #
+      # @return [void]
+      #
+      def link_umbrella_header
+        return if custom_module_map
+
+        umbrella_header_path_name = Pathname.new(target.umbrella_header_path)
+        sandbox.public_headers.add_files(target.name, [umbrella_header_path_name], target.platform)
+      end
+
       # Creates a prefix header file which imports `UIKit` or `Cocoa` according
       # to the platform of the target. This file also include any prefix header
       # content reported by the specification of the pods.
@@ -279,6 +301,14 @@ module Pod
         UI.message "- Copying module map file to #{UI.path(path)}" do
           FileUtils.cp(custom_module_map, path)
           add_file_to_support_group(path)
+
+          unless target.requires_frameworks?
+            File.open(path) do |source_file|
+              contents = source_file.read
+              contents.gsub!(/^\s*framework\s+module/, 'module')
+              File.open(path, "w") { |f| f.write(contents) }
+            end
+          end
 
           native_target.build_configurations.each do |c|
             relative_path = path.relative_path_from(sandbox.root)

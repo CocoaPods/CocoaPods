@@ -103,6 +103,7 @@ module Pod
             'Pods-BananaLib-Private.xcconfig',
             'Pods-BananaLib-dummy.m',
             'Pods-BananaLib-prefix.pch',
+            'Pods-BananaLib.modulemap',
             'Pods-BananaLib.xcconfig',
           ]
         end
@@ -145,6 +146,7 @@ module Pod
             'BananaLib-Private.xcconfig',
             'BananaLib-dummy.m',
             'BananaLib-prefix.pch',
+            'BananaLib.modulemap',
             'BananaLib.xcconfig',
           ]
         end

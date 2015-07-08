@@ -9,8 +9,9 @@ module Pod
       @gen = Generator::ModuleMap.new(@pod_target)
     end
 
-    it 'writes the module map to the disk' do
+    it 'writes the framework module map to the disk' do
       path = temporary_directory + 'BananaLib.modulemap'
+      @pod_target.stubs(:requires_frameworks? => true)
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc
         framework module BananaLib {
@@ -22,8 +23,23 @@ module Pod
       EOS
     end
 
+    it 'writes the library module map to the disk' do
+      path = temporary_directory + 'BananaLib.modulemap'
+      @pod_target.stubs(:requires_frameworks? => false)
+      @gen.save_as(path)
+      path.read.should == <<-EOS.strip_heredoc
+        module BananaLib {
+          umbrella header "BananaLib-umbrella.h"
+
+          export *
+          module * { export * }
+        }
+      EOS
+    end
+
     it 'correctly adds private headers' do
       @gen.stubs(:private_headers).returns(['Private.h'])
+      @pod_target.stubs(:requires_frameworks? => true)
       @gen.generate.should == <<-EOS.strip_heredoc
         framework module BananaLib {
           umbrella header "BananaLib-umbrella.h"
