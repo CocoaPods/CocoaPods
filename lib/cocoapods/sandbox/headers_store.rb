@@ -71,17 +71,8 @@ module Pod
       # @return [Array<Pathname>]
       #
       def add_files(namespace, relative_header_paths, platform)
-        add_search_path(namespace, platform)
-        namespaced_path = root + namespace
-        namespaced_path.mkpath unless File.exist?(namespaced_path)
-
         relative_header_paths.map do |relative_header_path|
-          absolute_source = (sandbox.root + relative_header_path)
-          source = absolute_source.relative_path_from(namespaced_path)
-          Dir.chdir(namespaced_path) do
-            FileUtils.ln_sf(source, relative_header_path.basename)
-          end
-          namespaced_path + relative_header_path.basename
+          add_file(namespace, relative_header_path, relative_header_path.basename, platform)
         end
       end
 

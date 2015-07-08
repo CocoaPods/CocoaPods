@@ -171,9 +171,7 @@ module Pod
       # @return [void]
       #
       def link_module_map
-        # I guess, it would be better to save MODULEMAP_FILE to variable when it is created.
-        module_map = native_target.build_configurations[0].build_settings['MODULEMAP_FILE']
-        module_map_path_name = Pathname.new(module_map)
+        module_map_path_name = Pathname.new(target.module_map_path)
         umbrella_header_path_name = Pathname.new(target.umbrella_header_path)
 
         sandbox.public_headers.add_files(target.name, [umbrella_header_path_name], target.platform)
@@ -276,6 +274,14 @@ module Pod
         UI.message "- Copying module map file to #{UI.path(path)}" do
           FileUtils.cp(custom_module_map, path)
           add_file_to_support_group(path)
+
+          unless target.requires_frameworks?
+            File.open(path) do |source_file|
+              contents = source_file.read
+              contents.gsub!(/^\s*framework\s*module/, 'module')
+              File.open(path, "w+") { |f| f.write(contents) }
+            end
+          end
 
           native_target.build_configurations.each do |c|
             relative_path = path.relative_path_from(sandbox.root)
