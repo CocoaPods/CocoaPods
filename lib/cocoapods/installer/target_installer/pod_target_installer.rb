@@ -22,13 +22,14 @@ module Pod
           create_xcconfig_file
           if target.requires_frameworks?
             create_info_plist_file
-            create_module_map do |generator|
-              generator.private_headers += target.file_accessors.flat_map(&:private_headers).map(&:basename)
-            end
-            create_umbrella_header do |generator|
-              generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
-            end
           end
+          create_module_map do |generator|
+            generator.private_headers += target.file_accessors.flat_map(&:private_headers).map(&:basename)
+          end
+          create_umbrella_header do |generator|
+            generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
+          end
+          link_module_map
           create_prefix_header
           create_dummy_source
         end
@@ -163,6 +164,20 @@ module Pod
             rsrc_bc.base_configuration_reference = xcconfig_file_ref
           end
         end
+      end
+
+      # Links a module map and an umbrella header to Public headers.
+      #
+      # @return [void]
+      #
+      def link_module_map
+        # I guess, it would be better to save MODULEMAP_FILE to variable when it is created.
+        module_map = native_target.build_configurations[0].build_settings['MODULEMAP_FILE']
+        module_map_path_name = Pathname.new(module_map)
+        umbrella_header_path_name = Pathname.new(target.umbrella_header_path)
+
+        sandbox.public_headers.add_files(target.name, [umbrella_header_path_name], target.platform)
+        sandbox.public_headers.add_file(target.name, module_map_path_name, "module.modulemap", target.platform)
       end
 
       # Creates a prefix header file which imports `UIKit` or `Cocoa` according
