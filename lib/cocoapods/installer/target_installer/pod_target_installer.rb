@@ -30,6 +30,7 @@ module Pod
             generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
           end
           link_module_map
+          link_umbrella_header
           create_prefix_header
           create_dummy_source
         end
@@ -166,16 +167,24 @@ module Pod
         end
       end
 
-      # Links a module map and an umbrella header to Public headers.
+      # Links a module map to Public headers.
       #
       # @return [void]
       #
       def link_module_map
         module_map_path_name = Pathname.new(target.module_map_path)
-        umbrella_header_path_name = Pathname.new(target.umbrella_header_path)
-
-        sandbox.public_headers.add_files(target.name, [umbrella_header_path_name], target.platform)
         sandbox.public_headers.add_file(target.name, module_map_path_name, "module.modulemap", target.platform)
+      end
+
+      # Links a an umbrella header to Public headers.
+      #
+      # @return [void]
+      #
+      def link_umbrella_header
+        return if custom_module_map
+
+        umbrella_header_path_name = Pathname.new(target.umbrella_header_path)
+        sandbox.public_headers.add_files(target.name, [umbrella_header_path_name], target.platform)
       end
 
       # Creates a prefix header file which imports `UIKit` or `Cocoa` according
@@ -278,8 +287,8 @@ module Pod
           unless target.requires_frameworks?
             File.open(path) do |source_file|
               contents = source_file.read
-              contents.gsub!(/^\s*framework\s*module/, 'module')
-              File.open(path, "w+") { |f| f.write(contents) }
+              contents.gsub!(/^\s*framework\s+module/, 'module')
+              File.open(path, "w") { |f| f.write(contents) }
             end
           end
 

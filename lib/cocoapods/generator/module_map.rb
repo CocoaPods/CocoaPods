@@ -42,9 +42,9 @@ module Pod
       # @return [String]
       #
       def generate
-        header = target.requires_frameworks? ? "framework module" : "module"
+        module_declaration_qualifier = target.requires_frameworks? ? "framework " : ""
         result = <<-eos.strip_heredoc
-          #{header} #{target.product_module_name} {
+          #{module_declaration_qualifier}module #{target.product_module_name} {
             umbrella header "#{target.umbrella_header_path.basename}"
 
             export *

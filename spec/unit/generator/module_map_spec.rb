@@ -23,7 +23,7 @@ module Pod
       EOS
     end
 
-    it 'writes the module map to the disk' do
+    it 'writes the library module map to the disk' do
       path = temporary_directory + 'BananaLib.modulemap'
       @pod_target.stubs(:requires_frameworks? => false)
       @gen.save_as(path)
