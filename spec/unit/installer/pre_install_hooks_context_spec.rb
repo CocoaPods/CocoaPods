@@ -2,30 +2,15 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
-  describe Installer::PostInstallHooksContext do
+  describe Installer::PreInstallHooksContext do
     it 'offers a convenience method to be generated' do
-      sandbox = stub(:root => '/path')
+      sandbox, podfile, lockfile = stub, stub, stub
 
-      spec = fixture_spec('banana-lib/BananaLib.podspec')
-      target_definition = Podfile::TargetDefinition.new('Pods', nil)
-      pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
-      umbrella = AggregateTarget.new(target_definition, config.sandbox)
-      umbrella.user_project_path = '/path/project.xcodeproj'
-      umbrella.user_target_uuids = ['UUID']
-      umbrella.stubs(:platform).returns(Platform.new(:ios, '8.0'))
-      umbrella.pod_targets = [pod_target]
-
-      result = Installer::PostInstallHooksContext.generate(sandbox, [umbrella])
-      result.class.should == Installer::PostInstallHooksContext
-      result.sandbox_root.should == '/path'
-      result.umbrella_targets.count.should == 1
-      umbrella_target = result.umbrella_targets.first
-      umbrella_target.user_target_uuids.should == ['UUID']
-      umbrella_target.user_project_path.should == '/path/project.xcodeproj'
-      umbrella_target.specs.should == [spec]
-      umbrella_target.platform_name.should == :ios
-      umbrella_target.platform_deployment_target.should == '8.0'
-      umbrella_target.cocoapods_target_label.should == 'Pods'
+      result = Installer::PreInstallHooksContext.generate(sandbox, podfile, lockfile)
+      result.class.should == Installer::PreInstallHooksContext
+      result.sandbox.should == sandbox
+      result.podfile.should == podfile
+      result.lockfile.should == lockfile
     end
   end
 end
