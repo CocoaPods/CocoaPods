@@ -70,7 +70,7 @@ end
 #-----------------------------------------------------------------------------#
 
 ENV['SKIP_SETUP'] = 'true'
-if ENV['SKIP_XCODEBUILD'].nil? && `which xcodebuild`.strip.empty?
+if ENV['SKIP_XCODEBUILD'].nil? && Pod::Executable.which('xcodebuild').nil?
   ENV['SKIP_XCODEBUILD'] = 'true'
 end
 

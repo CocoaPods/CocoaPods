@@ -381,7 +381,7 @@ module Pod
     # @return [void]
     #
     def build_pod
-      if `which xcodebuild`.strip.empty?
+      if Executable.which('xcodebuild').nil?
         UI.warn "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow
       else
         UI.message "\nBuilding with xcodebuild.\n".yellow do

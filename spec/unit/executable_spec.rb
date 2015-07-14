@@ -12,7 +12,8 @@ module Pod
 
     it 'should support spaces in the full path of the command' do
       cmd = '/Spa ces/are"/fun/false'
-      Executable.stubs(:`).returns(cmd)
+      File.expects(:file?).with(cmd).returns(true)
+      File.expects(:executable?).with(cmd).returns(true)
       result = mock
       result.stubs(:success?).returns(true)
 

@@ -48,8 +48,8 @@ module Pod
     # @todo   Find a way to display the live output of the commands.
     #
     def self.execute_command(executable, command, raise_on_failure)
-      bin = `which #{executable}`.strip
-      raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
+      bin = which(executable)
+      raise Informative, "Unable to locate the executable `#{executable}`" unless bin
 
       require 'shellwords'
 
@@ -73,6 +73,20 @@ module Pod
         end
       end
       output
+    end
+
+    # Returns the absolute path to the binary with the given name on the current
+    # `PATH`, or `nil` if none is found.
+    #
+    def self.which(program)
+      program = program.to_s
+      ENV["PATH"].split(File::PATH_SEPARATOR).each do |path|
+        bin = File.expand_path(program, path)
+        if File.file?(bin) && File.executable?(bin)
+          return bin
+        end
+      end
+      nil
     end
 
     private

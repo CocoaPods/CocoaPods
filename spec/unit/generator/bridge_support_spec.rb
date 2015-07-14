@@ -1,7 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe 'Pod::Generator::BridgeSupport' do
-  if `which gen_bridge_metadata`.strip.empty?
+  if Executable.which('gen_bridge_metadata').nil?
     puts '  ! '.red << "Skipping because the `gen_bridge_metadata` executable can't be found."
   else
     it 'generates a metadata file with the appropriate search paths' do
