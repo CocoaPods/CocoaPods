@@ -200,7 +200,7 @@ begin
       title 'Running Integration tests'
       sh 'rm -rf spec/cocoapods-integration-specs/tmp'
       title 'Building all the fixtures'
-      sh 'bundle exec bacon spec/integration.rb' do end
+      sh('bundle exec bacon spec/integration.rb') {}
       title 'Storing fixtures'
       # Copy the files to the files produced by the specs to the after folders
       FileList['tmp/*'].each do |source|
