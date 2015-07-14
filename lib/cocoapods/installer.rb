@@ -127,7 +127,7 @@ module Pod
       analyzer = create_analyzer
 
       plugin_sources = run_source_provider_hooks
-      analyzer.sources.push(*plugin_sources)
+      analyzer.sources.insert(0, *plugin_sources)
 
       UI.section 'Updating local specs repositories' do
         analyzer.update_repositories
