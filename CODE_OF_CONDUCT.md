@@ -2,11 +2,17 @@
 
 CocoaPods strongly values contributors from anywhere, regardless of gender, sexual orientation, disability, physical appearance, body size, race, or religion. As a result, the CocoaPods team has agreed to and enforces this code of conduct in order to provide a harassment-free experience for everyone who participates in the development of CocoaPods.
 
+CocoaPods also expects PG discussion on the issue tracker. Any use of explicit language is strictly prohibited.
+
 ### Summary
 
 Harassment in code and discussion or violation of physical boundaries is completely unacceptable anywhere in CocoaPods’ codebases, issue trackers, Slack, Campfire, mailing lists, meetups, and other events. Violators will be warned and then blocked or banned by the core team at or before the 3rd violation.
 
+For language violations, you will only receive one warning.
+
 ### In detail
+
+#### Harassment
 
 Harassment includes offensive verbal comments related to gender, sexual orientation, disability, physical appearance, body size, race, religion, sexual images, deliberate intimidation, stalking, sustained disruption, and unwelcome sexual attention.
 
@@ -21,6 +27,10 @@ If you are being harassed, notice that someone else is being harassed, or have a
 We expect everyone to follow these rules anywhere in the CocoaPods project’s codebases, issue trackers, IRC channel, group chat, and mailing lists.
 
 Finally, don't forget that it is human to make mistakes! We all do. Let’s work together to help each other, resolve issues, and learn from the mistakes that we will all inevitably make from time to time.
+
+#### Language
+
+If you participate in undesired conduct with respect to language you will receive a warning. This extends to both the core team and maintainers. After your warning, further transgresions will be dealt with at the discression of the CocoaPods team.
 
 ### Thanks
 
