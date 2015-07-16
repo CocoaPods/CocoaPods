@@ -22,6 +22,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   is now a default plugin.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Improve the message shown when trying to use Swift Pods without frameworks.
+  Now it includes the offending Pods so that the user can take action to remove
+  the Pods, if they don’t want to move to frameworks yet.  
+  [#3830](https://github.com/CocoaPods/CocoaPods/pull/3830)
+  [Eloy Durán](https://github.com/alloy)
+
 ##### Bug Fixes
 
 * Ensure that the `prepare_command` is run even when skipping the download
