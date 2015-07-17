@@ -20,11 +20,15 @@ module Pod
     #
     def executable(name)
       define_method(name) do |*command|
-        Executable.execute_command(name, Array(command).flatten, false)
+        Executable.execute_command(name, Array(command).flatten, false, :message => true)
       end
 
       define_method(name.to_s + '!') do |*command|
-        Executable.execute_command(name, Array(command).flatten, true)
+        Executable.execute_command(name, Array(command).flatten, true, :message => true)
+      end
+
+      define_method(name.to_s + '?') do |*command|
+        Executable.execute_command(name, Array(command).flatten, false)
       end
     end
 
@@ -45,18 +49,14 @@ module Pod
     #
     # @return [String] the output of the command (STDOUT and STDERR).
     #
-    # @todo   Find a way to display the live output of the commands.
-    #
-    def self.execute_command(executable, command, raise_on_failure)
+    def self.execute_command(executable, command, raise_on_failure = true, message: false, output: :both)
       bin = which(executable)
-      raise Informative, "Unable to locate the executable `#{executable}`" unless bin
-
-      require 'shellwords'
+      raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
 
       command = command.map(&:to_s)
       full_command = "#{bin} #{command.join(' ')}"
 
-      if Config.instance.verbose?
+      if message && Config.instance.verbose?
         UI.message("$ #{full_command}")
         stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
       else
@@ -64,15 +64,20 @@ module Pod
       end
 
       status = popen3(bin, command, stdout, stderr)
-      output = stdout.join + stderr.join
+      stdout, stderr = stdout.join, stderr.join
       unless status.success?
         if raise_on_failure
-          raise Informative, "#{full_command}\n\n#{output}"
-        else
+          raise Informative, "#{full_command}\n\n#{stdout + stderr}"
+        elsif message
           UI.message("[!] Failed: #{full_command}".red)
         end
       end
-      output
+
+      case output
+      when :stdout then stdout
+      when :stderr then stderr
+      else stdout + stderr
+      end
     end
 
     # Returns the absolute path to the binary with the given name on the current
