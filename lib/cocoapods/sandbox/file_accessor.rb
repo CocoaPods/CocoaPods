@@ -152,6 +152,16 @@ module Pod
         paths_for_attribute(:vendored_frameworks, true)
       end
 
+      def vendored_dynamic_frameworks
+        vendored_frameworks.select do |framework|
+          dynamic_binary?(framework + framework.basename('.*'))
+        end
+      end
+
+      def vendored_static_frameworks
+        vendored_frameworks - vendored_dynamic_frameworks
+      end
+
       # @param  [Pathname] framework
       #         The vendored framework to search into.
       # @return [Pathname] The path of the header directory of the
@@ -185,6 +195,16 @@ module Pod
       #
       def vendored_libraries
         paths_for_attribute(:vendored_libraries)
+      end
+
+      def vendored_dynamic_libraries
+        vendored_libraries.select do |library|
+          dynamic_binary?(library)
+        end
+      end
+
+      def vendored_static_libraries
+        vendored_libraries - vendored_dynamic_libraries
       end
 
       # @return [Hash{String => Array<Pathname>}] A hash that describes the
@@ -313,6 +333,11 @@ module Pod
         result = []
         result << path_list.glob(patterns, options)
         result.flatten.compact.uniq
+      end
+
+      def dynamic_binary?(binary)
+        return unless binary.file?
+        Executable.execute_command('file', [binary], false) =~ /dynamically linked/
       end
 
       #-----------------------------------------------------------------------#

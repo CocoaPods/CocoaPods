@@ -53,7 +53,7 @@ module Pod
         #
         def generate
           includes_static_libs = !target.requires_frameworks?
-          includes_static_libs ||= pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_libraries.empty? }
+          includes_static_libs ||= pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_static_libraries.empty? || !fa.vendored_static_frameworks.empty? }
           config = {
             'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target, includes_static_libs),
             'PODS_ROOT' => target.relative_pods_root,

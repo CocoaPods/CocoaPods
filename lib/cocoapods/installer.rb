@@ -418,8 +418,7 @@ module Pod
           dependended_upon_targets = pod_targets.select { |t| dependencies.include?(t.pod_name) && !t.should_build? }
 
           static_libs = dependended_upon_targets.flat_map(&:file_accessors).flat_map do |fa|
-            static_frameworks = fa.vendored_frameworks.reject { |fw| `file #{fw + fw.basename('.framework')} 2>&1` =~ /dynamically linked/ }
-            fa.vendored_libraries + static_frameworks
+            fa.vendored_static_libraries + fa.vendored_static_frameworks
           end
 
           unless static_libs.empty?
