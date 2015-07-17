@@ -46,7 +46,7 @@ module Pod
               remove_embed_frameworks_script_phases,
               unless native_targets_to_integrate.empty?
                 add_pods_library
-                add_embed_frameworks_script_phase if target.requires_frameworks?
+                add_embed_frameworks_script_phase
                 add_copy_resources_script_phase
                 add_check_manifest_lock_script_phase
                 true

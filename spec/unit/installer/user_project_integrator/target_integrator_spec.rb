@@ -108,11 +108,11 @@ module Pod
           phase.nil?.should == false
         end
 
-        it 'does not add an embed frameworks build phase by default' do
+        it 'adds an embed frameworks build phase by default' do
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
-          phase.nil?.should == true
+          phase.nil?.should == false
         end
 
         it 'does not add an embed frameworks build phase if the target to integrate is a framework' do
@@ -162,14 +162,14 @@ module Pod
           phase.nil?.should == true
         end
 
-        it 'removes existing embed frameworks build phases if frameworks are not used anymore' do
+        it 'does not remove existing embed frameworks build phases if frameworks are not used anymore' do
           @pod_bundle.stubs(:requires_frameworks? => true)
           @target_integrator.integrate!
           @pod_bundle.stubs(:requires_frameworks? => false)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
-          phase.nil?.should == true
+          phase.nil?.should == false
         end
       end
 

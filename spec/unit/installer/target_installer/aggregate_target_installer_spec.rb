@@ -47,6 +47,7 @@ module Pod
           'Pods-acknowledgements.markdown',
           'Pods-acknowledgements.plist',
           'Pods-dummy.m',
+          'Pods-frameworks.sh',
           'Pods-resources.sh',
           'Pods.appstore.xcconfig',
           'Pods.debug.xcconfig',
