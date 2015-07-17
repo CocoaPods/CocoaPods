@@ -80,7 +80,7 @@ module Pod
     #
     def self.which(program)
       program = program.to_s
-      ENV["PATH"].split(File::PATH_SEPARATOR).each do |path|
+      ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
         bin = File.expand_path(program, path)
         if File.file?(bin) && File.executable?(bin)
           return bin
