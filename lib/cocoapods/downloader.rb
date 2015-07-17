@@ -125,7 +125,7 @@ module Pod
     class Base
       override_api do
         def execute_command(executable, command, raise_on_failure = false)
-          Executable.execute_command(executable, command, raise_on_failure)
+          Executable.execute_command(executable, command, raise_on_failure, :message => true)
         rescue CLAide::InformativeError => e
           raise DownloaderError, e.message
         end
