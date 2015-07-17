@@ -78,6 +78,12 @@ module Pod
     # Returns the absolute path to the binary with the given name on the current
     # `PATH`, or `nil` if none is found.
     #
+    # @param  [String] program
+    #         The name of the program being searched for.
+    #
+    # @return [String,Nil] The absolute path to the given program, or `nil` if
+    #                      it wasn't found in the current `PATH`.
+    #
     def self.which(program)
       program = program.to_s
       ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
