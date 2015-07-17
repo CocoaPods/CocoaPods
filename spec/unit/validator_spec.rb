@@ -378,7 +378,9 @@ module Pod
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
-        validator.expects(:`).with('which xcodebuild').times(3).returns('/usr/bin/xcodebuild')
+        git = Executable.which(:git)
+        Executable.stubs(:which).with('git').returns(git)
+        Executable.expects(:which).with('xcodebuild').times(3).returns('/usr/bin/xcodebuild')
         status = mock
         status.stubs(:success?).returns(false)
         validator.stubs(:_xcodebuild).returns(['Output', status])
@@ -393,7 +395,9 @@ module Pod
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
-        validator.expects(:`).with('which xcodebuild').times(3).returns('/usr/bin/xcodebuild')
+        git = Executable.which(:git)
+        Executable.stubs(:which).with('git').returns(git)
+        Executable.expects(:which).with('xcodebuild').times(3).returns('/usr/bin/xcodebuild')
         command = 'xcodebuild clean build -target Pods'
         validator.expects(:`).with("#{command} 2>&1").twice.returns('')
         validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk iphonesimulator 2>&1").once.returns('')
