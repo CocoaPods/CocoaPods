@@ -255,6 +255,14 @@ module Pod
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CPLUSPLUSFLAGS'].should == '-std=c++1y -stdlib=libc++'
             end
+
+            it 'adds values from all subspecs' do
+              @consumer_b.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-std=c++1y')
+              consumer_c = mock(:user_target_xcconfig => { 'OTHER_CPLUSPLUSFLAGS' => '-stdlib=libc++' })
+              @pod_target_b.stubs(:spec_consumers).returns([@consumer_b, consumer_c])
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['OTHER_CPLUSPLUSFLAGS'].should == '-std=c++1y -stdlib=libc++'
+            end
           end
 
           describe 'with singular build settings' do

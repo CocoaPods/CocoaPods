@@ -14,6 +14,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3830](https://github.com/CocoaPods/CocoaPods/pull/3830)
   [Eloy Durán](https://github.com/alloy)
 
+##### Bug Fixes
+
+* Properly merge the `user_target_xcconfig`s of multiple subspecs.  
+  [#3813](https://github.com/CocoaPods/CocoaPods/issues/3813)
+  [Samuel Giddins](https://github.com/segiddins)
+
+
 ## 0.38.0.beta.2
 
 ##### Enhancements

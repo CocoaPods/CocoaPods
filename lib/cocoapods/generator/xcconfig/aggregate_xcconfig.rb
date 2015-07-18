@@ -194,15 +194,16 @@ module Pod
           target.pod_targets_for_build_configuration(@configuration_name)
         end
 
-        # Returns the +user_target_xcconfig+ for all pod targets grouped by keys
+        # Returns the +user_target_xcconfig+ for all pod targets and their spec
+        # consumers grouped by keys
         #
         # @return [Hash{String,Hash{Target,String}]
         #
-        def user_target_xcconfig_values_by_target_by_key
+        def user_target_xcconfig_values_by_consumer_by_key
           pod_targets.each_with_object({}) do |target, hash|
             target.spec_consumers.each do |spec_consumer|
               spec_consumer.user_target_xcconfig.each do |k, v|
-                (hash[k] ||= {})[target] = v
+                (hash[k] ||= {})[spec_consumer] = v
               end
             end
           end
@@ -214,7 +215,7 @@ module Pod
         # @return [Hash{String, String}]
         #
         def merged_user_target_xcconfigs
-          settings = user_target_xcconfig_values_by_target_by_key
+          settings = user_target_xcconfig_values_by_consumer_by_key
           settings.each_with_object({}) do |(key, values_by_target), xcconfig|
             uniq_values = values_by_target.values.uniq
             values_are_bools = uniq_values.all? { |v| v =~ /(yes|no)/i }
@@ -222,7 +223,7 @@ module Pod
               # Boolean build settings
               if uniq_values.count > 1
                 UI.warn 'Can\'t merge user_target_xcconfig for pod targets: ' \
-                  "#{values_by_target.keys.map(&:label)}. Boolean build "\
+                  "#{values_by_target.keys.map(&:name)}. Boolean build "\
                   "setting #{key} has different values."
               else
                 xcconfig[key] = uniq_values.first
@@ -234,7 +235,7 @@ module Pod
               # Singular build settings
               if uniq_values.count > 1
                 UI.warn 'Can\'t merge user_target_xcconfig for pod targets: ' \
-                  "#{values_by_target.keys.map(&:label)}. Singular build "\
+                  "#{values_by_target.keys.map(&:name)}. Singular build "\
                   "setting #{key} has different values."
               else
                 xcconfig[key] = uniq_values.first
