@@ -4,6 +4,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* Improve the message shown when trying to use Swift Pods without frameworks.
+  Now it includes the offending Pods so that the user can take action to remove
+  the Pods, if they don’t want to move to frameworks yet.  
+  [#3830](https://github.com/CocoaPods/CocoaPods/pull/3830)
+  [Eloy Durán](https://github.com/alloy)
+
 ## 0.38.0.beta.2
 
 ##### Enhancements
@@ -21,12 +31,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * [`cocoapods-stats`](https://github.com/CocoaPods/cocoapods-stats)
   is now a default plugin.  
   [Samuel Giddins](https://github.com/segiddins)
-
-* Improve the message shown when trying to use Swift Pods without frameworks.
-  Now it includes the offending Pods so that the user can take action to remove
-  the Pods, if they don’t want to move to frameworks yet.  
-  [#3830](https://github.com/CocoaPods/CocoaPods/pull/3830)
-  [Eloy Durán](https://github.com/alloy)
 
 ##### Bug Fixes
 
