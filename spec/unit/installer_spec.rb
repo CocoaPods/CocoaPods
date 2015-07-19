@@ -194,10 +194,10 @@ module Pod
         @lockfile = generate_lockfile
       end
 
-      it 'detects transitive static dependencies which are linked directly to the user target' do
+      it 'allows singular transitive static dependencies which are linked directly to the user target' do
         Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([Pathname('/libThing.a')])
         @installer = Installer.new(config.sandbox, @podfile, @lockfile)
-        should.raise(Informative) { @installer.install! }.message.should.match /transitive.*libThing/
+        should.not.raise(Informative) { @installer.install! }
       end
 
       it 'allows transitive static dependencies which contain other source code' do

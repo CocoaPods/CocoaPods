@@ -388,12 +388,15 @@ module Pod
         aggregate_target.user_build_configurations.keys.each do |config|
           pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
 
-          dependencies = pod_targets.select(&:should_build?).flat_map(&:dependencies)
-          dependended_upon_targets = pod_targets.select { |t| dependencies.include?(t.pod_name) && !t.should_build? }
+          static_lib_targets = pod_targets.select do |pod_target|
+            pod_target.file_accessors.any? do |fa|
+              static_frameworks = fa.vendored_frameworks.reject { |fw| `file #{fw + fw.basename('.framework')} 2>&1` =~ /dynamically linked/ }
+              fa.vendored_libraries.any? || static_frameworks.any?
+            end
+          end
 
-          static_libs = dependended_upon_targets.flat_map(&:file_accessors).flat_map do |fa|
-            static_frameworks = fa.vendored_frameworks.reject { |fw| `file #{fw + fw.basename('.framework')} 2>&1` =~ /dynamically linked/ }
-            fa.vendored_libraries + static_frameworks
+          static_libs = static_lib_targets.select do |pod_target|
+            pod_targets.select { |t| t.dependencies.include?(pod_target.pod_name) && t.should_build? }.count > 1
           end
 
           unless static_libs.empty?
