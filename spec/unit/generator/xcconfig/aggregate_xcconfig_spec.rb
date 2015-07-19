@@ -214,6 +214,23 @@ module Pod
 
         #-----------------------------------------------------------------------#
 
+        describe 'when no pods are whitelisted for the given configuration' do
+          before do
+            @generator.stubs(:configuration_name).returns('.invalid')
+            @xcconfig = @generator.generate
+          end
+
+          it 'does not link with vendored frameworks' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-framework "Bananalib"'
+          end
+
+          it 'does not link with vendored libraries' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Bananalib"'
+          end
+        end
+
+        #-----------------------------------------------------------------------#
+
         describe 'with multiple pod targets with user_target_xcconfigs' do
           before do
             spec_b = fixture_spec('orange-framework/OrangeFramework.podspec')

@@ -4,6 +4,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Bug Fixes
+
+* Ensure the aggregate `.xcconfig` file only has the settings for the
+  appropriate build configuration.  
+  [#3842](https://github.com/CocoaPods/CocoaPods/issues/3842)
+  [Samuel Giddins](https://github.com/segiddins)
+
+
 ## 0.38.0
 
 ##### Enhancements
