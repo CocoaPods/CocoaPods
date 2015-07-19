@@ -8,13 +8,16 @@ module Pod
         #
         attr_reader :target
 
+        # @return [String] the name of the build configuration to generate this
+        #         xcconfig for.
+        #
+        attr_reader :configuration_name
+
         # Initialize a new instance
         #
         # @param  [Target] target @see target
         #
-        # @param  [String] configuration_name
-        #         The name of the build configuration to generate this xcconfig
-        #         for.
+        # @param  [String] configuration_name @see configuration_name
         #
         def initialize(target, configuration_name)
           @target = target
@@ -50,7 +53,7 @@ module Pod
         #
         def generate
           includes_static_libs = !target.requires_frameworks?
-          includes_static_libs ||= target.pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_libraries.empty? }
+          includes_static_libs ||= pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_libraries.empty? }
           config = {
             'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target, includes_static_libs),
             'PODS_ROOT' => target.relative_pods_root,
@@ -91,7 +94,7 @@ module Pod
         def generate_settings_to_import_pod_targets
           if target.requires_frameworks?
             # Framework headers are automatically discoverable by `#import <…>`.
-            header_search_paths = target.pod_targets.map do |target|
+            header_search_paths = pod_targets.map do |target|
               if target.scoped?
                 "$PODS_FRAMEWORK_BUILD_PATH/#{target.product_name}/Headers"
               else
@@ -103,7 +106,7 @@ module Pod
               # Make headers discoverable by `import "…"`
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote'),
             }
-            if target.pod_targets.any? { |t| t.should_build? && t.scoped? }
+            if pod_targets.any? { |t| t.should_build? && t.scoped? }
               build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
             end
             @xcconfig.merge!(build_settings)
@@ -130,7 +133,7 @@ module Pod
         #   user target.
         #
         def generate_vendored_build_settings
-          target.pod_targets.each do |pod_target|
+          pod_targets.each do |pod_target|
             unless pod_target.should_build? && pod_target.requires_frameworks?
               XCConfigHelper.add_settings_for_file_accessors_of_target(pod_target, @xcconfig)
             end
@@ -141,7 +144,7 @@ module Pod
         # with the user’s project.
         #
         def generate_other_ld_flags
-          other_ld_flags = target.pod_targets.select(&:should_build?).map do |pod_target|
+          other_ld_flags = pod_targets.select(&:should_build?).map do |pod_target|
             if pod_target.requires_frameworks?
               %(-framework "#{pod_target.product_basename}")
             else
@@ -191,7 +194,7 @@ module Pod
         # @return [Array<PodTarget>]
         #
         def pod_targets
-          target.pod_targets_for_build_configuration(@configuration_name)
+          target.pod_targets_for_build_configuration(configuration_name)
         end
 
         # Returns the +user_target_xcconfig+ for all pod targets and their spec
