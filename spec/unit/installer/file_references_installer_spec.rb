@@ -70,6 +70,22 @@ module Pod
         framework_header.should.exist
         framework_subdir_header.should.exist
       end
+
+      it 'links the public headers meant for the user, but only for Pods that are not built' do
+        Target.any_instance.stubs(:requires_frameworks?).returns(true)
+        pod_target_one = fixture_pod_target('banana-lib/BananaLib.podspec')
+        pod_target_two = fixture_pod_target('monkey/monkey.podspec')
+        project = Project.new(config.sandbox.project_path)
+        project.add_pod_group('BananaLib', fixture('banana-lib'))
+        project.add_pod_group('monkey', fixture('monkey'))
+        installer = Installer::FileReferencesInstaller.new(config.sandbox, [pod_target_one, pod_target_two], project)
+        installer.install!
+        headers_root = config.sandbox.public_headers.root
+        banana_headers = [headers_root + 'BananaLib/Banana.h', headers_root + 'BananaLib/MoreBanana.h']
+        banana_headers.each { |banana_header| banana_header.should.not.exist }
+        monkey_header = headers_root + 'monkey/monkey.h'
+        monkey_header.should.exist
+      end
     end
 
     #-------------------------------------------------------------------------#

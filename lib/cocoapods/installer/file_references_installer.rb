@@ -118,14 +118,23 @@ module Pod
               framework_exp = /\.framework\//
               headers_sandbox = Pathname.new(file_accessor.spec.root.name)
               pod_target.build_headers.add_search_path(headers_sandbox, pod_target.platform)
-              sandbox.public_headers.add_search_path(headers_sandbox, pod_target.platform)
+
+              # When integrating Pod as frameworks, built Pods are built into
+              # frameworks, whose headers are included inside the built
+              # framework. Those headers do not need to be linked from the
+              # sandbox.
+              unless pod_target.requires_frameworks? && pod_target.should_build?
+                sandbox.public_headers.add_search_path(headers_sandbox, pod_target.platform)
+              end
 
               header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
                 pod_target.build_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, pod_target.platform)
               end
 
-              header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
-                sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, pod_target.platform)
+              unless pod_target.requires_frameworks? && pod_target.should_build?
+                header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
+                  sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, pod_target.platform)
+                end
               end
 
               vendored_frameworks_header_mappings(headers_sandbox, file_accessor).each do |namespaced_path, files|
