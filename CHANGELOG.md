@@ -17,6 +17,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   least one of them fails linting.  
   [#3869](https://github.com/CocoaPods/CocoaPods/issues/3869)
   [Samuel Giddins](https://github.com/segiddins)
+
 * Set header search paths properly on the user target when `vendored_libraries`
   Pods are used while integrating Pods as frameworks.
   [#3857](https://github.com/CocoaPods/CocoaPods/issues/3857)
