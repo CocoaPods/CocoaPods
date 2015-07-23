@@ -13,6 +13,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3842](https://github.com/CocoaPods/CocoaPods/issues/3842)
   [Samuel Giddins](https://github.com/segiddins)
 
+* Show the correct error when `pod spec lint` finds multiple podspecs, and at
+  least one of them fails linting.  
+  [#3869](https://github.com/CocoaPods/CocoaPods/issues/3869)
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 0.38.0
 

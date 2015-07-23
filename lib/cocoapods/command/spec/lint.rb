@@ -72,7 +72,7 @@ module Pod
             raise Informative, if count == 1
                                  "The spec did not pass validation, due to #{failure_reasons.first}."
                                else
-                                 "#{invalid_count} out of #{count} specs failed validation."
+                                 "#{failure_reasons.count} out of #{count} specs failed validation."
                                end
           end
           podspecs_tmp_dir.rmtree if podspecs_tmp_dir.exist?
