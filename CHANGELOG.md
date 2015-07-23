@@ -40,6 +40,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add modules support for static libraries.  
+  [Tomas Linhart](https://github.com/TomasLinhart)
+
 * The resolver will now take supported platform deployment targets into account
   when resolving dependencies.  
   [Samuel Giddins](https://github.com/segiddins)
