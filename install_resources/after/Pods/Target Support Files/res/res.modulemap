@@ -1,6 +1,0 @@
-module res {
-  umbrella header "res-umbrella.h"
-
-  export *
-  module * { export * }
-}

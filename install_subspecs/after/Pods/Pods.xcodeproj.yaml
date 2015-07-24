@@ -16,12 +16,10 @@ File References:
       - Pods-OS X App-PodTest-dummy.m
       - Pods-OS X App-PodTest-prefix.pch
       - Pods-OS X App-PodTest-umbrella.h
-      - Pods-iOS App-PodTest.modulemap
       - Pods-iOS App-PodTest.xcconfig
       - Pods-iOS App-PodTest-Private.xcconfig
       - Pods-iOS App-PodTest-dummy.m
       - Pods-iOS App-PodTest-prefix.pch
-      - Pods-iOS App-PodTest-umbrella.h
     - subspec_1:
       - subspec_1.h
       - subspec_1.m
@@ -229,9 +227,6 @@ Targets:
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
-      - Pods-iOS App-PodTest-umbrella.h:
-          ATTRIBUTES:
-          - Public
       - subspec_1.h
     Build Configurations:
     - Debug:
@@ -240,9 +235,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest-prefix.pch
@@ -254,9 +248,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest-prefix.pch

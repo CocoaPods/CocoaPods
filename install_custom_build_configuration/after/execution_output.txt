@@ -40,8 +40,6 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `Reachability` iOS 6.0
-      - Generating module map file at `Pods/Target Support Files/Reachability/Reachability.modulemap`
-      - Generating umbrella header at `Pods/Target Support Files/Reachability/Reachability-umbrella.h`
     - Installing target `Pods` iOS 6.0
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`

@@ -35,12 +35,10 @@ File References:
       - AFURLResponseSerialization.h
       - AFURLResponseSerialization.m
     - Support Files:
-      - AFNetworking.modulemap
       - AFNetworking.xcconfig
       - AFNetworking-Private.xcconfig
       - AFNetworking-dummy.m
       - AFNetworking-prefix.pch
-      - AFNetworking-umbrella.h
     - UIKit:
       - AFNetworkActivityIndicatorManager.h
       - AFNetworkActivityIndicatorManager.m
@@ -63,22 +61,18 @@ File References:
     - RKValueTransformers.h
     - RKValueTransformers.m
     - Support Files:
-      - RKValueTransformers.modulemap
       - RKValueTransformers.xcconfig
       - RKValueTransformers-Private.xcconfig
       - RKValueTransformers-dummy.m
       - RKValueTransformers-prefix.pch
-      - RKValueTransformers-umbrella.h
   - SEGModules:
     - SEGModule.h
     - SEGModule.m
     - Support Files:
-      - SEGModules.modulemap
       - SEGModules.xcconfig
       - SEGModules-Private.xcconfig
       - SEGModules-dummy.m
       - SEGModules-prefix.pch
-      - SEGModules-umbrella.h
 - Products:
   - libAFNetworking.a
   - libPods.a
@@ -129,9 +123,6 @@ Targets:
       - AFHTTPSessionManager.h
       - AFNetworkActivityIndicatorManager.h
       - AFNetworkReachabilityManager.h
-      - AFNetworking-umbrella.h:
-          ATTRIBUTES:
-          - Public
       - AFNetworking.h
       - AFSecurityPolicy.h
       - AFURLConnectionOperation.h
@@ -153,9 +144,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/AFNetworking/AFNetworking.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/AFNetworking/AFNetworking-prefix.pch
@@ -167,9 +157,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/AFNetworking/AFNetworking.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/AFNetworking/AFNetworking-prefix.pch
@@ -217,9 +206,6 @@ Targets:
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
-      - RKValueTransformers-umbrella.h:
-          ATTRIBUTES:
-          - Public
       - RKValueTransformers.h
     Build Configurations:
     - Debug:
@@ -228,9 +214,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/RKValueTransformers/RKValueTransformers.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
@@ -242,9 +227,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/RKValueTransformers/RKValueTransformers.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
@@ -260,9 +244,6 @@ Targets:
       - Foundation.framework
     - HeadersBuildPhase:
       - SEGModule.h
-      - SEGModules-umbrella.h:
-          ATTRIBUTES:
-          - Public
     Build Configurations:
     - Debug:
         Build Settings:
@@ -270,9 +251,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/SEGModules/SEGModules.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch
@@ -284,9 +264,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/SEGModules/SEGModules.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch

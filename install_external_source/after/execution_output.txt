@@ -32,8 +32,6 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `PodTest` iOS 4.3
-      - Generating module map file at `Pods/Target Support Files/PodTest/PodTest.modulemap`
-      - Generating umbrella header at `Pods/Target Support Files/PodTest/PodTest-umbrella.h`
     - Installing target `Pods` iOS 4.3
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
