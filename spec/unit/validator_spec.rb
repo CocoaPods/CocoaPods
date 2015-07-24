@@ -99,9 +99,10 @@ module Pod
       describe 'URL validation' do
         before do
           @validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+          @validator.stubs(:download_pod)
+          @validator.stubs(:check_file_patterns)
           @validator.stubs(:install_pod)
           @validator.stubs(:build_pod)
-          @validator.stubs(:check_file_patterns)
           @validator.stubs(:tear_down_validation_environment)
           WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
           WebMock::API.stub_request(:get, /not-found/).to_return(:status => 404)
@@ -300,8 +301,12 @@ module Pod
         validator.stubs(:validate_screenshots)
         validator.stubs(:check_file_patterns)
         validator.stubs(:check_file_patterns)
-        Installer.any_instance.stubs(:install!)
+        validator.stubs(:install_pod)
+        %i(prepare resolve_dependencies download_dependencies).each do |m|
+          Installer.any_instance.stubs(m)
+        end
         Installer.any_instance.stubs(:aggregate_targets).returns([])
+        Installer.any_instance.stubs(:pod_targets).returns([])
         subspec = Specification.new(validator.spec, 'subspec') do |s|
           s.ios.deployment_target = '7.0'
         end
@@ -508,8 +513,12 @@ module Pod
         @validator.stubs(:validate_url)
         @validator.stubs(:validate_screenshots)
         @validator.stubs(:check_file_patterns)
-        Installer.any_instance.stubs(:install!)
+        @validator.stubs(:install_pod)
+        %i(prepare resolve_dependencies download_dependencies).each do |m|
+          Installer.any_instance.stubs(m)
+        end
         Installer.any_instance.stubs(:aggregate_targets).returns([])
+        Installer.any_instance.stubs(:pod_targets).returns([])
       end
 
       it 'lints as a framework if specified' do
