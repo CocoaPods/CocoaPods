@@ -244,19 +244,15 @@ module Pod
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
         @consumer = spec.consumer(platform)
         setup_validation_environment
-        download_pod
-        check_file_patterns
         install_pod
         validate_vendored_dynamic_frameworks
         build_pod
+        check_file_patterns
         tear_down_validation_environment
         validated?
       end
       return false if fail_fast && !valid
       perform_extensive_subspec_analysis(spec) unless @no_subspecs
-    rescue => e
-      error('unknown', "Encountered an unknown error (#{e}) during validation.")
-      false
     end
 
     # Recursively perform the extensive analysis on all subspecs
@@ -338,33 +334,29 @@ module Pod
       Config.instance = @original_config
     end
 
-    def download_pod
-      deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
-      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks)
-      sandbox = Sandbox.new(config.sandbox_root)
-      @installer = Installer.new(sandbox, podfile)
-      @installer.use_default_plugins = false
-      %i(prepare resolve_dependencies download_dependencies).each { |m| @installer.send(m) }
-      @file_accessor = @installer.pod_targets.flat_map(&:file_accessors).find { |fa| fa.spec.name == consumer.spec.name }
-    end
-
     # It creates a podfile in memory and builds a library containing the pod
     # for all available platforms with xcodebuild.
     #
     def install_pod
-      %i(determine_dependency_product_types verify_no_duplicate_framework_names
-         verify_no_static_framework_transitive_dependencies
-         verify_framework_usage generate_pods_project
-         perform_post_install_actions).each { |m| @installer.send(m) }
-
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
-      @installer.aggregate_targets.each do |target|
+      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks)
+      sandbox = Sandbox.new(config.sandbox_root)
+      installer = Installer.new(sandbox, podfile)
+      installer.use_default_plugins = false
+      installer.install!
+
+      file_accessors = installer.aggregate_targets.map do |target|
         if target.pod_targets.any?(&:uses_swift?) && consumer.platform_name == :ios &&
             (deployment_target.nil? || Version.new(deployment_target).major < 8)
           uses_xctest = target.spec_consumers.any? { |c| (c.frameworks + c.weak_frameworks).include? 'XCTest' }
           error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.') unless uses_xctest
         end
-      end
+
+        target.pod_targets.map(&:file_accessors)
+      end.flatten
+
+      @file_accessor = file_accessors.find { |accessor| accessor.spec.root.name == spec.root.name }
+      config.silent
     end
 
     def validate_vendored_dynamic_frameworks
@@ -554,11 +546,11 @@ module Pod
     #         in local mode.
     #
     def podfile_from_spec(platform_name, deployment_target, use_frameworks = true)
-      name     = subspec_name || spec.name
+      name     = subspec_name ? subspec_name : spec.name
       podspec  = file.realpath
       local    = local?
       urls     = source_urls
-      Pod::Podfile.new do
+      podfile  = Pod::Podfile.new do
         urls.each { |u| source(u) }
         use_frameworks!(use_frameworks)
         platform(platform_name, deployment_target)
@@ -568,6 +560,7 @@ module Pod
           pod name, :podspec => podspec.to_s
         end
       end
+      podfile
     end
 
     # Parse the xcode build output to identify the lines which are relevant

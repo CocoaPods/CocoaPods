@@ -114,12 +114,9 @@ module Pod
     end
 
     before do
-      %i(prepare resolve_dependencies download_dependencies).each do |m|
-        Installer.any_instance.stubs(m)
-      end
       Installer.any_instance.stubs(:aggregate_targets).returns([])
-      Installer.any_instance.stubs(:pod_targets).returns([])
-      Validator.any_instance.stubs(:install_pod)
+      Installer.any_instance.stubs(:install!)
+
       Validator.any_instance.stubs(:check_file_patterns)
       Validator.any_instance.stubs(:validated?).returns(true)
       Validator.any_instance.stubs(:validate_url)
