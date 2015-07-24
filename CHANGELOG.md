@@ -19,14 +19,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
 
 * Set header search paths properly on the user target when `vendored_libraries`
-  Pods are used while integrating Pods as frameworks.
+  Pods are used while integrating Pods as frameworks.  
   [#3857](https://github.com/CocoaPods/CocoaPods/issues/3857)
   [Jonathan MacMillan](https://github.com/perotinus)
 
 * Only link public headers in the sandbox for Pods that are not being built
-  into dynamic frameworks, when integrating Pods as frameworks
+  into dynamic frameworks, when integrating Pods as frameworks.
   [#3867](https://github.com/CocoaPods/CocoaPods/issues/3867)
   [Jonathan MacMillan](https://github.com/perotinus)
+
+* Don't lock resource files, only source files.  
+  [Mason Glidden](https://github.com/mglidden).
+  [#3557](https://github.com/CocoaPods/CocoaPods/issues/3557)
+
 
 ## 0.38.0
 

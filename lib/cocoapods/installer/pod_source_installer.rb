@@ -33,6 +33,12 @@ module Pod
         "<#{self.class} sandbox=#{sandbox.root} pod=#{root_spec.name}"
       end
 
+      # @return [String] The name of the pod this installer is installing.
+      #
+      def name
+        root_spec.name
+      end
+
       #-----------------------------------------------------------------------#
 
       public
@@ -66,8 +72,16 @@ module Pod
       #
       # @return [void]
       #
-      def lock_files!
-        lock_installation unless local?
+      def lock_files!(file_accessors)
+        return if local?
+
+        file_accessors.each do |file_accessor|
+          file_accessor.source_files.each do |source_file|
+            next unless source_file.exist?
+            new_permissions = source_file.stat.mode & ~0222
+            source_file.chmod(new_permissions)
+          end
+        end
       end
 
       # @return [Hash] @see Downloader#checkout_options
@@ -100,24 +114,6 @@ module Pod
           :released => released?,
           :head => head_pod?,
         )
-      end
-
-      # Locks all of the files in this pod (source, license, etc). This will
-      # cause Xcode to warn you if you try to accidently edit one of the files.
-      #
-      # @return [void]
-      #
-      def lock_installation
-        # We don't want to lock diretories, as that forces you to override
-        # those permissions if you decide to delete the Pods folder.
-        Dir.glob(root + '**/*').each do |file|
-          if File.file?(file)
-            # Only remove write permission, since some pods (like Crashlytics)
-            # have executable files.
-            new_permissions = File.stat(file).mode & ~0222
-            File.chmod(new_permissions, file)
-          end
-        end
       end
 
       # Removes all the files not needed for the installation according to the

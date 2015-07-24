@@ -346,7 +346,10 @@ module Pod
     def lock_pod_sources
       return unless config.lock_pod_source?
       return unless @pod_installers
-      @pod_installers.each(&:lock_files!)
+      @pod_installers.each do |installer|
+        pod_target = pod_targets.find { |target| target.pod_name == installer.name }
+        installer.lock_files!(pod_target.file_accessors)
+      end
     end
 
     # Determines if the dependencies need to be built as dynamic frameworks or
