@@ -38,6 +38,8 @@ Generating Pods project
       - Generating module map file at `Pods/Target Support Files/Pods-OS X App-PodTest/Pods-OS X App-PodTest.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/Pods-OS X App-PodTest/Pods-OS X App-PodTest-umbrella.h`
     - Installing target `Pods-iOS App-PodTest` iOS 4.3
+      - Generating module map file at `Pods/Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest-umbrella.h`
     - Installing target `Pods-OS X App` OS X 10.6
       - Generating Info.plist file at `Pods/Target Support Files/Pods-OS X App/Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App.modulemap`

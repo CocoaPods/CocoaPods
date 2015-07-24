@@ -1,0 +1,6 @@
+module Test {
+  umbrella header "Test-umbrella.h"
+
+  export *
+  module * { export * }
+}

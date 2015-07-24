@@ -8,10 +8,12 @@ File References:
       - 512_black.png
       - troll.png
     - Support Files:
+      - res.modulemap
       - res.xcconfig
       - res-Private.xcconfig
       - res-dummy.m
       - res-prefix.pch
+      - res-umbrella.h
 - Frameworks:
   - OS X:
     - Cocoa.framework
@@ -75,6 +77,10 @@ Targets:
       - res-dummy.m
     - FrameworksBuildPhase:
       - Cocoa.framework
+    - HeadersBuildPhase:
+      - res-umbrella.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:
@@ -83,6 +89,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           MACOSX_DEPLOYMENT_TARGET: '10.8'
+          MODULEMAP_FILE: Target Support Files/res/res.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           SDKROOT: macosx
@@ -91,17 +98,18 @@ Targets:
         Base Configuration: res-Private.xcconfig
     - Release:
         Build Settings:
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
+          GCC_PREFIX_HEADER: Target Support Files/res/res-prefix.pch
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           MACOSX_DEPLOYMENT_TARGET: '10.8'
+          MODULEMAP_FILE: Target Support Files/res/res.modulemap
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
-          SDKROOT: macosx
-          GCC_PREFIX_HEADER: Target Support Files/res/res-prefix.pch
           EXECUTABLE_PREFIX: lib
+          SDKROOT: macosx
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: res-Private.xcconfig
 - res-res:
     Build Phases:

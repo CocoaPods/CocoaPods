@@ -1,0 +1,6 @@
+module Moment {
+  umbrella header "Moment-umbrella.h"
+
+  export *
+  module * { export * }
+}

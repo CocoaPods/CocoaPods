@@ -32,6 +32,8 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `Test` iOS 6.0
+      - Generating module map file at `Pods/Target Support Files/Test/Test.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Test/Test-umbrella.h`
     - Installing target `Pods` iOS 6.0
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`

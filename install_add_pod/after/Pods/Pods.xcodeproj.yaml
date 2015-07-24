@@ -10,18 +10,22 @@ File References:
     - JSONKit.h
     - JSONKit.m
     - Support Files:
+      - JSONKit.modulemap
       - JSONKit.xcconfig
       - JSONKit-Private.xcconfig
       - JSONKit-dummy.m
       - JSONKit-prefix.pch
+      - JSONKit-umbrella.h
   - Reachability:
     - Reachability.h
     - Reachability.m
     - Support Files:
+      - Reachability.modulemap
       - Reachability.xcconfig
       - Reachability-Private.xcconfig
       - Reachability-dummy.m
       - Reachability-prefix.pch
+      - Reachability-umbrella.h
 - Products:
   - libJSONKit.a
   - libPods.a
@@ -47,6 +51,9 @@ Targets:
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
+      - JSONKit-umbrella.h:
+          ATTRIBUTES:
+          - Public
       - JSONKit.h
     Build Configurations:
     - Debug:
@@ -55,8 +62,9 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
+          MODULEMAP_FILE: Target Support Files/JSONKit/JSONKit.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LDFLAGS: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/JSONKit/JSONKit-prefix.pch
@@ -68,8 +76,9 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
+          MODULEMAP_FILE: Target Support Files/JSONKit/JSONKit.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LDFLAGS: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/JSONKit/JSONKit-prefix.pch
@@ -118,6 +127,9 @@ Targets:
       - Foundation.framework
       - SystemConfiguration.framework
     - HeadersBuildPhase:
+      - Reachability-umbrella.h:
+          ATTRIBUTES:
+          - Public
       - Reachability.h
     Build Configurations:
     - Debug:
@@ -126,8 +138,9 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
+          MODULEMAP_FILE: Target Support Files/Reachability/Reachability.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LDFLAGS: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
@@ -139,8 +152,9 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
+          MODULEMAP_FILE: Target Support Files/Reachability/Reachability.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LDFLAGS: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
