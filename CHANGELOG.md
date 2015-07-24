@@ -6,31 +6,41 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Set project, dylib, and compatibility versions when building pods as
+  frameworks.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+
 ##### Bug Fixes
 
 * Ensure the aggregate `.xcconfig` file only has the settings for the
   appropriate build configuration.  
-  [#3842](https://github.com/CocoaPods/CocoaPods/issues/3842)
   [Samuel Giddins](https://github.com/segiddins)
+  [#3842](https://github.com/CocoaPods/CocoaPods/issues/3842)
 
 * Show the correct error when `pod spec lint` finds multiple podspecs, and at
   least one of them fails linting.  
-  [#3869](https://github.com/CocoaPods/CocoaPods/issues/3869)
   [Samuel Giddins](https://github.com/segiddins)
+  [#3869](https://github.com/CocoaPods/CocoaPods/issues/3869)
 
 * Set header search paths properly on the user target when `vendored_libraries`
   Pods are used while integrating Pods as frameworks.  
-  [#3857](https://github.com/CocoaPods/CocoaPods/issues/3857)
   [Jonathan MacMillan](https://github.com/perotinus)
+  [#3857](https://github.com/CocoaPods/CocoaPods/issues/3857)
 
 * Only link public headers in the sandbox for Pods that are not being built
-  into dynamic frameworks, when integrating Pods as frameworks.
-  [#3867](https://github.com/CocoaPods/CocoaPods/issues/3867)
+  into dynamic frameworks, when integrating Pods as frameworks.  
   [Jonathan MacMillan](https://github.com/perotinus)
+  [#3867](https://github.com/CocoaPods/CocoaPods/issues/3867)
 
 * Don't lock resource files, only source files.  
-  [Mason Glidden](https://github.com/mglidden).
+  [Mason Glidden](https://github.com/mglidden)
   [#3557](https://github.com/CocoaPods/CocoaPods/issues/3557)
+
+* Fix copying frameworks when integrating with today extensions.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3819](https://github.com/CocoaPods/CocoaPods/issues/3819)
 
 
 ## 0.38.0
@@ -40,14 +50,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Improve the message shown when trying to use Swift Pods without frameworks.
   Now it includes the offending Pods so that the user can take action to remove
   the Pods, if they don’t want to move to frameworks yet.  
-  [#3830](https://github.com/CocoaPods/CocoaPods/pull/3830)
   [Eloy Durán](https://github.com/alloy)
+  [#3830](https://github.com/CocoaPods/CocoaPods/pull/3830)
 
 ##### Bug Fixes
 
 * Properly merge the `user_target_xcconfig`s of multiple subspecs.  
-  [#3813](https://github.com/CocoaPods/CocoaPods/issues/3813)
   [Samuel Giddins](https://github.com/segiddins)
+  [#3813](https://github.com/CocoaPods/CocoaPods/issues/3813)
 
 
 ## 0.38.0.beta.2
