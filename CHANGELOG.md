@@ -12,6 +12,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   headers.  
   [Russ Bishop](https://github.com/russbishop)
   [#3893](https://github.com/CocoaPods/CocoaPods/issues/3893)
+##### Fixed
+
+* Pods integrated as static libraries can no longer be imported as
+  modules, as that change had unexpected side-effects.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3898](https://github.com/CocoaPods/CocoaPods/pull/3898)
 
 
 ## 0.38.1
