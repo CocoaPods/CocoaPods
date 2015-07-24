@@ -33,7 +33,8 @@ module Pod
         "<#{self.class} sandbox=#{sandbox.root} pod=#{root_spec.name}"
       end
 
-      # @return [String] The name of the pod this is installing
+      # @return [String] The name of the pod this installer is installing.
+      #
       def name
         root_spec.name
       end
@@ -72,19 +73,13 @@ module Pod
       # @return [void]
       #
       def lock_files!(file_accessors)
-        if local?
-          return
-        end
+        return if local?
 
         file_accessors.each do |file_accessor|
           file_accessor.source_files.each do |source_file|
-            if File.exist?(source_file)
-              file = source_file.open
-              # Only remove write permission, since some pods (like Crashlytics)
-              # have executable files.
-              new_permissions = File.stat(file).mode & ~0222
-              File.chmod(new_permissions, file)
-            end
+            next unless source_file.exist?
+            new_permissions = source_file.stat.mode & ~0222
+            source_file.chmod(new_permissions)
           end
         end
       end

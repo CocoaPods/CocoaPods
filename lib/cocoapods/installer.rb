@@ -347,7 +347,7 @@ module Pod
       return unless config.lock_pod_source?
       return unless @pod_installers
       @pod_installers.each do |installer|
-        pod_target =  pod_targets.detect {|target| target.name == installer.name}
+        pod_target = pod_targets.find { |target| target.pod_name == installer.name }
         installer.lock_files!(pod_target.file_accessors)
       end
     end
