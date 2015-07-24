@@ -93,8 +93,7 @@ module Pod
         #
         def generate_settings_to_import_pod_targets
           if target.requires_frameworks?
-            # Framework headers are automatically discoverable by `#import <…>`.
-            header_search_paths = pod_targets.map do |target|
+            framework_header_search_paths = pod_targets.select(&:should_build?).map do |target|
               if target.scoped?
                 "$PODS_FRAMEWORK_BUILD_PATH/#{target.product_name}/Headers"
               else
@@ -103,9 +102,15 @@ module Pod
             end
             build_settings = {
               'PODS_FRAMEWORK_BUILD_PATH' => target.scoped_configuration_build_dir,
-              # Make headers discoverable by `import "…"`
-              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-iquote'),
+              # Make framework headers discoverable by `import "…"`
+              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(framework_header_search_paths, '-iquote'),
             }
+            if pod_targets.any? { |t| !t.should_build? }
+              # Make library headers discoverale by `#import "…"`
+              library_header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
+              build_settings['HEADER_SEARCH_PATHS'] = XCConfigHelper.quote(library_header_search_paths)
+              build_settings['OTHER_CFLAGS'] += XCConfigHelper.quote(library_header_search_paths, '-isystem')
+            end
             if pod_targets.any? { |t| t.should_build? && t.scoped? }
               build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
             end

@@ -18,6 +18,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3869](https://github.com/CocoaPods/CocoaPods/issues/3869)
   [Samuel Giddins](https://github.com/segiddins)
 
+* Set header search paths properly on the user target when `vendored_libraries`
+  Pods are used while integrating Pods as frameworks.
+  [#3857](https://github.com/CocoaPods/CocoaPods/issues/3857)
+  [Jonathan MacMillan](https://github.com/perotinus)
+
 
 ## 0.38.0
 
