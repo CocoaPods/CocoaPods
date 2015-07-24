@@ -22,6 +22,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   frameworks.  
   [Marius Rackwitz](https://github.com/mrackwitz)
 
+* Pods integrated as static libraries can now be imported as modules.  
+  [Tomas Linhart](https://github.com/TomasLinhart)
+  [#3874](https://github.com/CocoaPods/CocoaPods/issues/3874)
+
 ##### Bug Fixes
 
 * Ensure the aggregate `.xcconfig` file only has the settings for the
