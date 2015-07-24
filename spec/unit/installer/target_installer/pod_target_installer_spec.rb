@@ -325,7 +325,6 @@ module Pod
           settings['DYLIB_COMPATIBILITY_VERSION'].should == '0.1.2'
         end
       end
-
     end
   end
 end

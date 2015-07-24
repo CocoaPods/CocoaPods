@@ -192,7 +192,7 @@ module Pod
       def link_module_map
         return if target.requires_frameworks? && target.should_build?
 
-        sandbox.public_headers.add_file(target.name, target.module_map_path, "module.modulemap", target.platform)
+        sandbox.public_headers.add_file(target.name, target.module_map_path, 'module.modulemap', target.platform)
       end
 
       # Links a an umbrella header to Public headers.
