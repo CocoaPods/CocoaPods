@@ -17,10 +17,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: b544c8ede2458798a04fd41fbdb41a44d1043555
+  revision: 604847cee4a460590bb6c67ffac4279ea3c02b8f
   branch: master
   specs:
-    molinillo (0.3.0)
+    molinillo (0.3.1)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
@@ -85,7 +85,7 @@ PATH
       cocoapods-try (~> 0.4.5)
       colored (~> 1.2)
       escape (~> 0.0.4)
-      molinillo (~> 0.3.0)
+      molinillo (~> 0.3.1)
       nap (~> 0.8)
       xcodeproj (~> 0.26.2)
 
@@ -211,4 +211,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.10.5
+   1.10.6
