@@ -190,6 +190,8 @@ module Pod
       # @return [void]
       #
       def link_module_map
+        return if target.requires_frameworks? && target.should_build?
+
         sandbox.public_headers.add_file(target.name, target.module_map_path, "module.modulemap", target.platform)
       end
 
@@ -199,6 +201,7 @@ module Pod
       #
       def link_umbrella_header
         return if custom_module_map
+        return if target.requires_frameworks? && target.should_build?
 
         sandbox.public_headers.add_files(target.name, [target.umbrella_header_path], target.platform)
       end
