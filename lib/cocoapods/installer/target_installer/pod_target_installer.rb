@@ -190,8 +190,7 @@ module Pod
       # @return [void]
       #
       def link_module_map
-        module_map_path_name = Pathname.new(target.module_map_path)
-        sandbox.public_headers.add_file(target.name, module_map_path_name, "module.modulemap", target.platform)
+        sandbox.public_headers.add_file(target.name, target.module_map_path, "module.modulemap", target.platform)
       end
 
       # Links a an umbrella header to Public headers.
@@ -201,8 +200,7 @@ module Pod
       def link_umbrella_header
         return if custom_module_map
 
-        umbrella_header_path_name = Pathname.new(target.umbrella_header_path)
-        sandbox.public_headers.add_files(target.name, [umbrella_header_path_name], target.platform)
+        sandbox.public_headers.add_files(target.name, [target.umbrella_header_path], target.platform)
       end
 
       # Creates a prefix header file which imports `UIKit` or `Cocoa` according
@@ -303,11 +301,9 @@ module Pod
           add_file_to_support_group(path)
 
           unless target.requires_frameworks?
-            File.open(path) do |source_file|
-              contents = source_file.read
-              contents.gsub!(/^\s*framework\s+module/, 'module')
-              File.open(path, "w") { |f| f.write(contents) }
-            end
+            contents = path.read
+            contents.gsub!(/^\s*framework\s+module/, 'module')
+            path.open('w') { |f| f.write(contents) }
           end
 
           native_target.build_configurations.each do |c|
