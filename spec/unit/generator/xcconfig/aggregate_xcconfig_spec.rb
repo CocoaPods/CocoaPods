@@ -164,8 +164,10 @@ module Pod
             end
 
             it 'includes the public header paths as system headers' do
-              expected = '-isystem "${PODS_ROOT}/Headers/Public"'
-              @xcconfig.to_hash['OTHER_CFLAGS'].should.include expected
+              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public"'
+              @generator.stubs(:pod_targets).returns([@pod_target, pod_target(fixture_spec('orange-framework/OrangeFramework.podspec'))])
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
             end
 
             it 'includes the public header paths as user headers' do

@@ -4,6 +4,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Bug Fixes
+
+* Fix generation of xcconfig files that specify both `-iquote` and `-isystem`
+  headers.  
+  [Russ Bishop](https://github.com/russbishop)
+  [#3893](https://github.com/CocoaPods/CocoaPods/issues/3893)
+
+
 ## 0.38.1
 
 ##### Enhancements
