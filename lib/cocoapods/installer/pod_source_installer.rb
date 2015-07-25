@@ -78,8 +78,7 @@ module Pod
         file_accessors.each do |file_accessor|
           file_accessor.source_files.each do |source_file|
             next unless source_file.exist?
-            new_permissions = source_file.stat.mode & ~0222
-            source_file.chmod(new_permissions)
+            FileUtils.chmod('-w', source_file)
           end
         end
       end
