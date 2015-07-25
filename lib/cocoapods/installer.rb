@@ -1,4 +1,5 @@
 require 'active_support/core_ext/string/inflections'
+require 'fileutils'
 
 module Pod
   # The Installer is responsible of taking a Podfile and transform it in the
@@ -113,6 +114,7 @@ module Pod
 
     def prepare
       UI.message 'Preparing' do
+        FileUtils.chmod_R('+w', sandbox.root)
         sandbox.prepare
         ensure_plugins_are_installed!
         Migrator.migrate(sandbox)
@@ -141,7 +143,6 @@ module Pod
         install_pod_sources
         run_podfile_pre_install_hooks
         clean_pod_sources
-        lock_pod_sources
       end
     end
 
@@ -442,6 +443,7 @@ module Pod
     def perform_post_install_actions
       run_plugins_post_install_hooks
       warn_for_deprecations
+      lock_pod_sources
     end
 
     # Runs the registered callbacks for the plugins post install hooks.

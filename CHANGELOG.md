@@ -23,6 +23,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3889](https://github.com/CocoaPods/CocoaPods/issues/3889)
   [#3884](https://github.com/CocoaPods/CocoaPods/issues/3884)
 
+* Source file locking now happens after plugin and podfile post-install hooks
+  have run.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3529](https://github.com/CocoaPods/CocoaPods/issues/3529)
+
 
 ## 0.38.1
 
