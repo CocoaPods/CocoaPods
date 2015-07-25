@@ -10,12 +10,10 @@ File References:
     - Reachability.h
     - Reachability.m
     - Support Files:
-      - Reachability.modulemap
       - Reachability.xcconfig
       - Reachability-Private.xcconfig
       - Reachability-dummy.m
       - Reachability-prefix.pch
-      - Reachability-umbrella.h
 - Products:
   - libPods.a
   - libReachability.a
@@ -74,9 +72,6 @@ Targets:
       - Foundation.framework
       - SystemConfiguration.framework
     - HeadersBuildPhase:
-      - Reachability-umbrella.h:
-          ATTRIBUTES:
-          - Public
       - Reachability.h
     Build Configurations:
     - Debug:
@@ -85,9 +80,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/Reachability/Reachability.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'YES'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
@@ -99,9 +93,8 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MODULEMAP_FILE: Target Support Files/Reachability/Reachability.modulemap
-          MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
+          MTL_ENABLE_DEBUG_INFO: 'NO'
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch

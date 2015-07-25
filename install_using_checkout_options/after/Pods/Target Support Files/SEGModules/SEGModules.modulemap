@@ -1,6 +1,0 @@
-module SEGModules {
-  umbrella header "SEGModules-umbrella.h"
-
-  export *
-  module * { export * }
-}
