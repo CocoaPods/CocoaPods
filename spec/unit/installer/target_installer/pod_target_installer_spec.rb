@@ -322,6 +322,23 @@ module Pod
           settings = @installer.send(:custom_build_settings)
           settings['DYLIB_COMPATIBILITY_VERSION'].should == '0.1.2'
         end
+
+        describe 'with weird version numbers' do
+          handles = -> (version, project_version, compatibility_version) do
+            it "handles #{version}" do
+              @spec.stubs(:version => Version.new(version))
+              settings = @installer.send(:custom_build_settings)
+              settings['CURRENT_PROJECT_VERSION'].should == project_version
+              settings['DYLIB_COMPATIBILITY_VERSION'].should == compatibility_version
+            end
+          end
+
+          handles['1.alpha', '1.0.0', '1']
+          handles['0.1-alpha', '0.1.0', '0.1.0']
+          handles['1.2.3.4', '1.2.3', '1']
+          handles['0.2.3.4', '0.2.3', '0.2.3']
+          handles['1.alpha.2', '1.0.0', '1']
+        end
       end
     end
   end
