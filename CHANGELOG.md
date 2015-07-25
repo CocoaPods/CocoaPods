@@ -18,6 +18,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   modules, as that change had unexpected side-effects.  
   [Boris Bügling](https://github.com/neonichu)
   [#3898](https://github.com/CocoaPods/CocoaPods/pull/3898)
+  [#3879](https://github.com/CocoaPods/CocoaPods/issues/3879)
+  [#3888](https://github.com/CocoaPods/CocoaPods/issues/3888)
+  [#3886](https://github.com/CocoaPods/CocoaPods/issues/3886)
+  [#3889](https://github.com/CocoaPods/CocoaPods/issues/3889)
+  [#3884](https://github.com/CocoaPods/CocoaPods/issues/3884)
 
 
 ## 0.38.1
