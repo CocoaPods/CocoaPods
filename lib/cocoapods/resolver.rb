@@ -422,12 +422,9 @@ module Pod
     #
     # @return [Bool]
     def spec_is_platform_compatible?(dependency_graph, dependency, spec)
-      all_predecessors = ->(vertex) do
-        pred = vertex.predecessors
-        pred + pred.map(&all_predecessors).reduce(Set.new, &:|) << vertex
-      end
       vertex = dependency_graph.vertex_named(dependency.name)
-      predecessors = all_predecessors[vertex].reject { |v| !dependency_graph.root_vertex_named(v.name) }
+      predecessors = vertex.recursive_predecessors.select(&:root)
+      predecessors << vertex if vertex.root?
       platforms_to_satisfy = predecessors.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }
 
       platforms_to_satisfy.all? do |platform_to_satisfy|
@@ -461,9 +458,7 @@ module Pod
     def edge_is_valid_for_target?(edge, target)
       dependencies_for_target_platform =
         edge.origin.payload.all_dependencies(target.platform).map(&:name)
-      edge.requirements.any? do |dependency|
-        dependencies_for_target_platform.include?(dependency.name)
-      end
+      dependencies_for_target_platform.include?(edge.requirement.name)
     end
   end
 end
