@@ -18,6 +18,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Collapse the namespaced public and private pod xcconfig into one single
+  xcconfig file.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3916](https://github.com/CocoaPods/CocoaPods/pull/3916)
+
 * Add `--sources` option to `push` command.
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#3912](https://github.com/CocoaPods/CocoaPods/issues/3912)
