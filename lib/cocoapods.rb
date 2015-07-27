@@ -67,10 +67,4 @@ module Pod
     autoload :UmbrellaHeader,          'cocoapods/generator/umbrella_header'
     autoload :XCConfig,                'cocoapods/generator/xcconfig'
   end
-
-  module Hooks
-    autoload :InstallerRepresentation, 'cocoapods/hooks/installer_representation'
-    autoload :LibraryRepresentation,   'cocoapods/hooks/library_representation'
-    autoload :PodRepresentation,       'cocoapods/hooks/pod_representation'
-  end
 end
