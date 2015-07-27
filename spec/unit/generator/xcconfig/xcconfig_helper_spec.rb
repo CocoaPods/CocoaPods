@@ -50,19 +50,6 @@ module Pod
         #---------------------------------------------------------------------#
 
         describe '::add_spec_build_settings_to_xcconfig' do
-          it 'adds the build settings of the consumer' do
-            xcconfig = Xcodeproj::Config.new
-            consumer = stub(
-              :pod_target_xcconfig => { 'OTHER_LDFLAGS' => '-framework SenTestingKit' },
-              :libraries => [],
-              :frameworks => [],
-              :weak_frameworks => [],
-              :platform_name => :ios,
-            )
-            @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework "SenTestingKit"'
-          end
-
           it 'adds the libraries of the xcconfig' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(

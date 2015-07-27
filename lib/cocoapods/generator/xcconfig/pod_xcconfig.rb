@@ -66,6 +66,9 @@ module Pod
 
           @xcconfig = Xcodeproj::Config.new(config)
           XCConfigHelper.add_settings_for_file_accessors_of_target(target, @xcconfig)
+          target.file_accessors.each do |file_accessor|
+            @xcconfig.merge!(file_accessor.spec_consumer.pod_target_xcconfig)
+          end
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
           @xcconfig
         end

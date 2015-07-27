@@ -14,6 +14,8 @@ module Pod
 
         before do
           @spec = spec
+          @spec.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
+          @spec.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' }
           @pod_target = pod_target(@spec)
           @consumer = @pod_target.spec_consumers.last
           @target = fixture_aggregate_target([@pod_target])
@@ -36,6 +38,11 @@ module Pod
 
           it 'generates the xcconfig' do
             @xcconfig.class.should == Xcodeproj::Config
+          end
+
+          it 'includes only the user_target_xcconfig of the specifications' do
+            @xcconfig.to_hash['CLANG_CXX_LANGUAGE_STANDARD'].should.be.nil
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
           end
 
           it 'does not add the -fobjc-arc to OTHER_LDFLAGS by default as Xcode 4.3.2 does not support it' do

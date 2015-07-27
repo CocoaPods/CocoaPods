@@ -71,7 +71,6 @@ module Pod
         #         The xcconfig to edit.
         #
         def self.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
-          xcconfig.merge!(consumer.pod_target_xcconfig)
           xcconfig.libraries.merge(consumer.libraries)
           xcconfig.frameworks.merge(consumer.frameworks)
           xcconfig.weak_frameworks.merge(consumer.weak_frameworks)

@@ -12,7 +12,8 @@ module Pod
             @podfile = @pod_target.podfile
             @generator = PodXCConfig.new(@pod_target)
 
-            @spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
+            @spec.pod_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
+            @spec.user_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' }
             @spec.frameworks = ['QuartzCore']
             @spec.weak_frameworks = ['iAd']
             @spec.libraries = ['xml2']
@@ -29,7 +30,8 @@ module Pod
             @xcconfig.class.should == Xcodeproj::Config
           end
 
-          it 'includes the xcconfig of the specifications' do
+          it 'includes only the pod_target_xcconfig of the specifications' do
+            @xcconfig.to_hash['CLANG_CXX_LANGUAGE_STANDARD'].should.be.nil
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
           end
 
