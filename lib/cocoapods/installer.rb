@@ -603,7 +603,7 @@ module Pod
       frameworks_group = pods_project.frameworks_group
       aggregate_targets.each do |aggregate_target|
         is_app_extension = !(aggregate_target.user_targets.map(&:symbol_type) &
-          [:app_extension, :watch_extension]).empty?
+          [:app_extension, :watch_extension, :watch2_extension]).empty?
 
         aggregate_target.pod_targets.each do |pod_target|
           configure_app_extension_api_only_for_target(aggregate_target) if is_app_extension

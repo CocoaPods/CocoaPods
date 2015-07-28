@@ -576,6 +576,10 @@ module Pod
           test_extension_target(:watch_extension)
         end
 
+        it 'configures APPLICATION_EXTENSION_API_ONLY for watchOS 2 extension targets' do
+          test_extension_target(:watch2_extension)
+        end
+
         it 'does not try to set APPLICATION_EXTENSION_API_ONLY if there are no pod targets' do
           lambda do
             mock_user_target = mock('UserTarget', :symbol_type => :app_extension)
