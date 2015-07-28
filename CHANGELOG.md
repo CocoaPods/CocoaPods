@@ -4,6 +4,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Bug Fixes
+
+* Use APPLICATION_EXTENSION_API_ONLY for watchOS 2 extensions.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3920](https://github.com/CocoaPods/CocoaPods/pull/3920)
+
+
 ## 0.38.2
 
 ##### Bug Fixes
