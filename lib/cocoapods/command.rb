@@ -15,6 +15,7 @@ module Pod
 
   class Command < CLAide::Command
     require 'cocoapods/command/inter_process_communication'
+    require 'cocoapods/command/check'
     require 'cocoapods/command/lib'
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
