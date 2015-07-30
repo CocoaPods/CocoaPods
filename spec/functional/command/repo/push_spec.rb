@@ -113,6 +113,16 @@ module Pod
       (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
     end
 
+    it 'initializes with default sources if no custom sources specified' do
+      cmd = command('repo', 'push', 'master')
+      cmd.instance_variable_get(:@source_urls).should.equal [@upstream.to_s]
+    end
+
+    it 'initializes with custom sources if specified' do
+      cmd = command('repo', 'push', 'master', '--sources=test_repo2,test_repo1')
+      cmd.instance_variable_get(:@source_urls).should.equal %w(test_repo2 test_repo1)
+    end
+
     before do
       %i(prepare resolve_dependencies download_dependencies).each do |m|
         Installer.any_instance.stubs(m)

@@ -22,6 +22,9 @@ module Pod
         def self.options
           [['--allow-warnings', 'Allows pushing even if there are warnings'],
            ['--use-libraries', 'Linter uses static libraries to install the spec'],
+           ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
+            '(defaults to all available repos). '\
+            'Multiple sources must be comma-delimited.'],
            ['--local-only', 'Does not perform the step of pushing REPO to its remote']].concat(super)
         end
 
@@ -29,6 +32,7 @@ module Pod
           @allow_warnings = argv.flag?('allow-warnings')
           @local_only = argv.flag?('local-only')
           @repo = argv.shift_argument
+          @source_urls = argv.option('sources', SourcesManager.all.map(&:url).join(',')).split(',')
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
           super
@@ -84,7 +88,7 @@ module Pod
         def validate_podspec_files
           UI.puts "\nValidating #{'spec'.pluralize(count)}".yellow
           podspec_files.each do |podspec|
-            validator = Validator.new(podspec, SourcesManager.all.map(&:url))
+            validator = Validator.new(podspec, @source_urls)
             validator.allow_warnings = @allow_warnings
             validator.use_frameworks = @use_frameworks
             begin
