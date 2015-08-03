@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#3912](https://github.com/CocoaPods/CocoaPods/issues/3912)
 
+* Implicitly unlock all local dependencies when installing.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3764](https://github.com/CocoaPods/CocoaPods/issues/3764)
+
 
 ## 0.38.2
 

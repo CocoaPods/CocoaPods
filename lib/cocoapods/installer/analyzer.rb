@@ -397,6 +397,7 @@ module Pod
         else
           pods_to_update = result.podfile_state.changed + result.podfile_state.deleted
           pods_to_update += update[:pods] if update_mode == :selected
+          pods_to_update += podfile.dependencies.select(&:local?).map(&:name)
           LockingDependencyAnalyzer.generate_version_locking_dependencies(lockfile, pods_to_update)
         end
       end
