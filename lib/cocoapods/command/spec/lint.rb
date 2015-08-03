@@ -23,7 +23,7 @@ module Pod
            ['--fail-fast', 'Lint stops on the first failing platform or subspec'],
            ['--use-libraries', 'Lint uses static libraries to install the spec'],
            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
-            '(defaults to https://github.com/CocoaPods/Specs.git). '\
+            '(defaults to all available repos). '\
             'Multiple sources must be comma-delimited.']].concat(super)
         end
 
@@ -35,7 +35,7 @@ module Pod
           @subspecs        = argv.flag?('subspecs', true)
           @only_subspec    = argv.option('subspec')
           @use_frameworks  = !argv.flag?('use-libraries')
-          @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
+          @source_urls     = argv.option('sources', SourcesManager.all.map(&:url).join(',')).split(',')
           @podspecs_paths  = argv.arguments!
           super
         end

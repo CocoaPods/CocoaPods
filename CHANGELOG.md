@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Update `spec` and `lib` commands to use all sources by default.
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#3938](https://github.com/CocoaPods/CocoaPods/pull/3938)
+  
 * Add `--sources` option to `push` command.
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#3912](https://github.com/CocoaPods/CocoaPods/issues/3912)
