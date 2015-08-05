@@ -27,6 +27,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3926](https://github.com/CocoaPods/CocoaPods/issues/3926)
 
+* Add `:source_provider` hook to allow plugins to provide sources
+  [Eric Amorde](https://github.com/amorde)
+  [#3190](https://github.com/CocoaPods/CocoaPods/issues/3190)
+  [#3792](https://github.com/CocoaPods/CocoaPods/pull/3792)
+
 
 ## 0.38.2
 
