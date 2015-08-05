@@ -136,10 +136,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   is now a default plugin.  
   [Samuel Giddins](https://github.com/segiddins)
 
-* Added a `:source_provider` hook to allow plugins to provide their own sources
-  [Eric Amorde](https://github.com/amorde)
-  [#3792](https://github.com/CocoaPods/CocoaPods/pull/3792)
-
 ##### Bug Fixes
 
 * Ensure that the `prepare_command` is run even when skipping the download
