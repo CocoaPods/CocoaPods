@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3920](https://github.com/CocoaPods/CocoaPods/pull/3920)
 
+* Prevent copying resources to installation directory when `SKIP_INSTALL` is enabled.  
+  [Dominique d'Argent](https://github.com/nubbel)
+  [#3971](https://github.com/CocoaPods/CocoaPods/pull/3971)
+
 ##### Enhancements
 
 * Add `--sources` option to `push` command.
