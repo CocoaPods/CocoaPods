@@ -22,6 +22,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3764](https://github.com/CocoaPods/CocoaPods/issues/3764)
 
+* The resolver error message when a conflict occurred due to platform deployment
+  target mismatches will now explain that.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3926](https://github.com/CocoaPods/CocoaPods/issues/3926)
+
 
 ## 0.38.2
 

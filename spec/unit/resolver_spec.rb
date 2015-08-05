@@ -191,6 +191,16 @@ module Pod
         ]
       end
 
+      it 'raises an informative error when version conflicts are caused by platform incompatibilities' do
+        @podfile = Podfile.new do
+          platform :osx, '10.7'
+          pod 'AFNetworking', '2.0.0' # requires 10.8
+        end
+        @resolver.stubs(:podfile).returns(@podfile)
+        message = should.raise(Informative) { @resolver.resolve }.message
+        message.should.match /required a higher minimum deployment target/
+      end
+
       it 'raises if unable to find a specification' do
         Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
         message = should.raise Informative do

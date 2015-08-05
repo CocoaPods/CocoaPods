@@ -370,22 +370,30 @@ module Pod
     # @param  [Molinillo::ResolverError] error
     #
     def handle_resolver_error(error)
+      message = error.message
       case error
       when Molinillo::VersionConflict
         error.conflicts.each do |name, conflict|
           lockfile_reqs = conflict.requirements[name_for_locking_dependency_source]
           if lockfile_reqs && lockfile_reqs.last && lockfile_reqs.last.prerelease? && !conflict.existing
-            raise Informative, 'Due to the previous naïve CocoaPods resolver, ' \
+            message = 'Due to the previous naïve CocoaPods resolver, ' \
               "you were using a pre-release version of `#{name}`, " \
               'without explicitly asking for a pre-release version, which now leads to a conflict. ' \
               'Please decide to either use that pre-release version by adding the ' \
               'version requirement to your Podfile ' \
               "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
               "or revert to a stable version by running `pod update #{name}`."
+          elsif !conflict.existing
+            conflict.requirements.values.flatten.each do |r|
+              unless search_for(r).empty?
+                message << "\n\nSpecs satisfying the `#{r}` dependency were found, " \
+                  'but they required a higher minimum deployment target.'
+              end
+            end
           end
         end
       end
-      raise Informative, error.message
+      raise Informative, message
     end
 
     # Returns whether the given spec is platform-compatible with the dependency
