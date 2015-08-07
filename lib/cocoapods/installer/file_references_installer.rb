@@ -237,6 +237,9 @@ module Pod
         mappings = {}
         file_accessor.vendored_frameworks.each do |framework|
           headers_dir = Sandbox::FileAccessor.vendored_frameworks_headers_dir(framework)
+          if headers_dir.nil?
+            break
+          end
           headers = Sandbox::FileAccessor.vendored_frameworks_headers(framework)
           framework_name = framework.basename(framework.extname)
           dir = headers_sandbox + framework_name
