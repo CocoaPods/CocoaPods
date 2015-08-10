@@ -224,14 +224,14 @@ module Pod
         #
         def merged_user_target_xcconfigs
           settings = user_target_xcconfig_values_by_consumer_by_key
-          settings.each_with_object({}) do |(key, values_by_target), xcconfig|
-            uniq_values = values_by_target.values.uniq
+          settings.each_with_object({}) do |(key, values_by_consumer), xcconfig|
+            uniq_values = values_by_consumer.values.uniq
             values_are_bools = uniq_values.all? { |v| v =~ /(yes|no)/i }
             if values_are_bools
               # Boolean build settings
               if uniq_values.count > 1
                 UI.warn 'Can\'t merge user_target_xcconfig for pod targets: ' \
-                  "#{values_by_target.keys.map(&:name)}. Boolean build "\
+                  "#{values_by_consumer.keys.map(&:name)}. Boolean build "\
                   "setting #{key} has different values."
               else
                 xcconfig[key] = uniq_values.first
@@ -243,7 +243,7 @@ module Pod
               # Singular build settings
               if uniq_values.count > 1
                 UI.warn 'Can\'t merge user_target_xcconfig for pod targets: ' \
-                  "#{values_by_target.keys.map(&:name)}. Singular build "\
+                  "#{values_by_consumer.keys.map(&:name)}. Singular build "\
                   "setting #{key} has different values."
               else
                 xcconfig[key] = uniq_values.first
