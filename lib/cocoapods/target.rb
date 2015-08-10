@@ -75,12 +75,6 @@ module Pod
       requires_frameworks? ? :framework : :static_library
     end
 
-    # @return [String] the XCConfig namespaced prefix.
-    #
-    def xcconfig_prefix
-      label.upcase.gsub(/[^A-Z]/, '_') + '_'
-    end
-
     # @return [String] A string suitable for debugging.
     #
     def inspect
@@ -138,12 +132,6 @@ module Pod
       else
         support_files_dir + "#{label}.xcconfig"
       end
-    end
-
-    # @return [Pathname] the absolute path of the private xcconfig file.
-    #
-    def xcconfig_private_path
-      support_files_dir + "#{label}-Private.xcconfig"
     end
 
     # @return [Pathname] the absolute path of the header file which contains

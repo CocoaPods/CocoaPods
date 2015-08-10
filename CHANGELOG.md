@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Build settings specified in `pod_target_xcconfig` of a spec are also for
+  library targets only applied to the pod target.    
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3906](https://github.com/CocoaPods/CocoaPods/issues/3906)
+
 * Use APPLICATION_EXTENSION_API_ONLY for watchOS 2 extensions.  
   [Boris Bügling](https://github.com/neonichu)
   [#3920](https://github.com/CocoaPods/CocoaPods/pull/3920)
@@ -17,6 +22,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3971](https://github.com/CocoaPods/CocoaPods/pull/3971)
 
 ##### Enhancements
+
+* Collapse the namespaced public and private pod xcconfig into one single
+  xcconfig file.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3916](https://github.com/CocoaPods/CocoaPods/pull/3916)
 
 * Add `--sources` option to `push` command.
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
