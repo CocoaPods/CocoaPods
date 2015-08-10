@@ -8,7 +8,6 @@ File References:
   - PodTest:
     - Support Files:
       - PodTest.xcconfig
-      - PodTest-Private.xcconfig
       - PodTest-dummy.m
       - PodTest-prefix.pch
     - subspec_1:
@@ -58,7 +57,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/PodTest/PodTest-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: PodTest-Private.xcconfig
+        Base Configuration: PodTest.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -71,7 +70,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/PodTest/PodTest-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: PodTest-Private.xcconfig
+        Base Configuration: PodTest.xcconfig
 - Pods:
     Build Phases:
     - SourcesBuildPhase:

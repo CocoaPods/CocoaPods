@@ -1,1 +1,5 @@
-SOCKETROCKET_OTHER_LDFLAGS = -l"icucore" -framework "CFNetwork" -framework "Security"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/SocketRocket" "${PODS_ROOT}/Headers/Public"
+OTHER_LDFLAGS = -l"icucore" -framework "CFNetwork" -framework "Security"
+PODS_ROOT = ${SRCROOT}
+SKIP_INSTALL = YES

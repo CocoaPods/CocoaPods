@@ -12,7 +12,6 @@ File References:
     - tokeIt.l
     - Support Files:
       - Moment.xcconfig
-      - Moment-Private.xcconfig
       - Moment-dummy.m
       - Moment-prefix.pch
 - Products:
@@ -55,7 +54,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Moment/Moment-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Moment-Private.xcconfig
+        Base Configuration: Moment.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -68,7 +67,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Moment/Moment-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Moment-Private.xcconfig
+        Base Configuration: Moment.xcconfig
 - Pods:
     Build Phases:
     - SourcesBuildPhase:

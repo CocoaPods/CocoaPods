@@ -9,7 +9,6 @@ File References:
       - troll.png
     - Support Files:
       - res.xcconfig
-      - res-Private.xcconfig
       - res-dummy.m
       - res-prefix.pch
 - Frameworks:
@@ -88,7 +87,7 @@ Targets:
           SDKROOT: macosx
           EXECUTABLE_PREFIX: lib
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: res-Private.xcconfig
+        Base Configuration: res.xcconfig
     - Release:
         Build Settings:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
@@ -102,7 +101,7 @@ Targets:
           SDKROOT: macosx
           GCC_PREFIX_HEADER: Target Support Files/res/res-prefix.pch
           EXECUTABLE_PREFIX: lib
-        Base Configuration: res-Private.xcconfig
+        Base Configuration: res.xcconfig
 - res-res:
     Build Phases:
     - SourcesBuildPhase: []
@@ -119,7 +118,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: res
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: res-Private.xcconfig
+        Base Configuration: res.xcconfig
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: bundle
@@ -129,7 +128,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: res
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: res-Private.xcconfig
+        Base Configuration: res.xcconfig
 
 
 

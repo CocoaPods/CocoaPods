@@ -11,7 +11,6 @@ File References:
       - Info.plist
       - SamplePodWithResources.modulemap
       - SamplePodWithResources.xcconfig
-      - SamplePodWithResources-Private.xcconfig
       - SamplePodWithResources-dummy.m
       - SamplePodWithResources-prefix.pch
       - SamplePodWithResources-umbrella.h
@@ -212,7 +211,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           INFOPLIST_FILE: Target Support Files/SamplePodWithResources/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: SamplePodWithResources-Private.xcconfig
+        Base Configuration: SamplePodWithResources.xcconfig
     - Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -236,7 +235,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           INFOPLIST_FILE: Target Support Files/SamplePodWithResources/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: SamplePodWithResources-Private.xcconfig
+        Base Configuration: SamplePodWithResources.xcconfig
 - SamplePodWithResources-SamplePodWithResources:
     Build Phases:
     - SourcesBuildPhase: []
@@ -253,7 +252,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: SamplePodWithResources
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: SamplePodWithResources-Private.xcconfig
+        Base Configuration: SamplePodWithResources.xcconfig
     - Release:
         Build Settings:
           WRAPPER_EXTENSION: bundle
@@ -263,7 +262,7 @@ Targets:
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: SamplePodWithResources
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: SamplePodWithResources-Private.xcconfig
+        Base Configuration: SamplePodWithResources.xcconfig
 
 
 

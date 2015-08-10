@@ -19,7 +19,6 @@ File References:
       - Info.plist
       - SocketRocket.modulemap
       - SocketRocket.xcconfig
-      - SocketRocket-Private.xcconfig
       - SocketRocket-dummy.m
       - SocketRocket-prefix.pch
       - SocketRocket-umbrella.h
@@ -67,7 +66,6 @@ File References:
       - Info.plist
       - libPusher.modulemap
       - libPusher.xcconfig
-      - libPusher-Private.xcconfig
       - libPusher-dummy.m
       - libPusher-prefix.pch
       - libPusher-umbrella.h
@@ -202,7 +200,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           INFOPLIST_FILE: Target Support Files/SocketRocket/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: SocketRocket-Private.xcconfig
+        Base Configuration: SocketRocket.xcconfig
     - Release:
         Build Settings:
           DYLIB_CURRENT_VERSION: $(CURRENT_PROJECT_VERSION)
@@ -225,7 +223,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           INFOPLIST_FILE: Target Support Files/SocketRocket/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: SocketRocket-Private.xcconfig
+        Base Configuration: SocketRocket.xcconfig
 - libPusher:
     Build Phases:
     - SourcesBuildPhase:
@@ -359,7 +357,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           INFOPLIST_FILE: Target Support Files/libPusher/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: libPusher-Private.xcconfig
+        Base Configuration: libPusher.xcconfig
     - Release:
         Build Settings:
           DYLIB_CURRENT_VERSION: $(CURRENT_PROJECT_VERSION)
@@ -382,7 +380,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           INFOPLIST_FILE: Target Support Files/libPusher/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: libPusher-Private.xcconfig
+        Base Configuration: libPusher.xcconfig
 
 
 

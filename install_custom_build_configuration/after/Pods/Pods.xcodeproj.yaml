@@ -11,7 +11,6 @@ File References:
     - Reachability.m
     - Support Files:
       - Reachability.xcconfig
-      - Reachability-Private.xcconfig
       - Reachability-dummy.m
       - Reachability-prefix.pch
 - Products:
@@ -114,7 +113,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Reachability-Private.xcconfig
+        Base Configuration: Reachability.xcconfig
     - Custom Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -127,7 +126,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Reachability-Private.xcconfig
+        Base Configuration: Reachability.xcconfig
     - Debug:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -140,7 +139,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Reachability-Private.xcconfig
+        Base Configuration: Reachability.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -153,7 +152,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Reachability-Private.xcconfig
+        Base Configuration: Reachability.xcconfig
 
 
 
