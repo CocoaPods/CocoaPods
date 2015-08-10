@@ -36,7 +36,6 @@ File References:
       - AFURLResponseSerialization.m
     - Support Files:
       - AFNetworking.xcconfig
-      - AFNetworking-Private.xcconfig
       - AFNetworking-dummy.m
       - AFNetworking-prefix.pch
     - UIKit:
@@ -62,7 +61,6 @@ File References:
     - RKValueTransformers.m
     - Support Files:
       - RKValueTransformers.xcconfig
-      - RKValueTransformers-Private.xcconfig
       - RKValueTransformers-dummy.m
       - RKValueTransformers-prefix.pch
   - SEGModules:
@@ -70,7 +68,6 @@ File References:
     - SEGModule.m
     - Support Files:
       - SEGModules.xcconfig
-      - SEGModules-Private.xcconfig
       - SEGModules-dummy.m
       - SEGModules-prefix.pch
 - Products:
@@ -150,7 +147,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/AFNetworking/AFNetworking-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: AFNetworking-Private.xcconfig
+        Base Configuration: AFNetworking.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -163,7 +160,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/AFNetworking/AFNetworking-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: AFNetworking-Private.xcconfig
+        Base Configuration: AFNetworking.xcconfig
 - Pods:
     Build Phases:
     - SourcesBuildPhase:
@@ -220,7 +217,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: RKValueTransformers-Private.xcconfig
+        Base Configuration: RKValueTransformers.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -233,7 +230,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: RKValueTransformers-Private.xcconfig
+        Base Configuration: RKValueTransformers.xcconfig
 - SEGModules:
     Build Phases:
     - SourcesBuildPhase:
@@ -257,7 +254,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: SEGModules-Private.xcconfig
+        Base Configuration: SEGModules.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -270,7 +267,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: SEGModules-Private.xcconfig
+        Base Configuration: SEGModules.xcconfig
 
 
 

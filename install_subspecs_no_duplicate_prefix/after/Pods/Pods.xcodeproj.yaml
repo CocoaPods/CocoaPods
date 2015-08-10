@@ -13,7 +13,6 @@ File References:
       - Foo.m
     - Support Files:
       - Test.xcconfig
-      - Test-Private.xcconfig
       - Test-dummy.m
       - Test-prefix.pch
 - Products:
@@ -90,7 +89,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Test/Test-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Test-Private.xcconfig
+        Base Configuration: Test.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -103,7 +102,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Test/Test-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Test-Private.xcconfig
+        Base Configuration: Test.xcconfig
 
 
 

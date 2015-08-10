@@ -1,5 +1,0 @@
-#include "libPusher.xcconfig"
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 ${LIBPUSHER_GCC_PREPROCESSOR_DEFINITIONS}
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/libPusher" "${PODS_ROOT}/Headers/Private/libPusher/Pusher" "${PODS_ROOT}/Headers/Public"
-PODS_ROOT = ${SRCROOT}
-SKIP_INSTALL = YES

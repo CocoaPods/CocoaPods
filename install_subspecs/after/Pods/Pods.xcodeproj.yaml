@@ -12,12 +12,10 @@ File References:
       - Info.plist
       - Pods-OS X App-PodTest.modulemap
       - Pods-OS X App-PodTest.xcconfig
-      - Pods-OS X App-PodTest-Private.xcconfig
       - Pods-OS X App-PodTest-dummy.m
       - Pods-OS X App-PodTest-prefix.pch
       - Pods-OS X App-PodTest-umbrella.h
       - Pods-iOS App-PodTest.xcconfig
-      - Pods-iOS App-PodTest-Private.xcconfig
       - Pods-iOS App-PodTest-dummy.m
       - Pods-iOS App-PodTest-prefix.pch
     - subspec_1:
@@ -158,7 +156,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-OS X App-PodTest/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: Pods-OS X App-PodTest-Private.xcconfig
+        Base Configuration: Pods-OS X App-PodTest.xcconfig
     - Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -184,7 +182,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           DEFINES_MODULE: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-OS X App-PodTest/Info.plist
-        Base Configuration: Pods-OS X App-PodTest-Private.xcconfig
+        Base Configuration: Pods-OS X App-PodTest.xcconfig
 - Pods-iOS App:
     Build Phases:
     - SourcesBuildPhase:
@@ -241,7 +239,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-iOS App-PodTest-Private.xcconfig
+        Base Configuration: Pods-iOS App-PodTest.xcconfig
     - Release:
         Build Settings:
           OTHER_LIBTOOLFLAGS: ''
@@ -254,7 +252,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-        Base Configuration: Pods-iOS App-PodTest-Private.xcconfig
+        Base Configuration: Pods-iOS App-PodTest.xcconfig
 
 
 

@@ -11,7 +11,6 @@ File References:
     - Support Files:
       - BananaLib.modulemap
       - BananaLib.xcconfig
-      - BananaLib-Private.xcconfig
       - BananaLib-dummy.m
       - BananaLib-prefix.pch
       - Info.plist
@@ -78,7 +77,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           INFOPLIST_FILE: Target Support Files/BananaLib/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: BananaLib-Private.xcconfig
+        Base Configuration: BananaLib.xcconfig
     - Release:
         Build Settings:
           DYLIB_CURRENT_VERSION: $(CURRENT_PROJECT_VERSION)
@@ -101,7 +100,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           INFOPLIST_FILE: Target Support Files/BananaLib/Info.plist
           DEFINES_MODULE: 'YES'
-        Base Configuration: BananaLib-Private.xcconfig
+        Base Configuration: BananaLib.xcconfig
 - Pods:
     Build Phases:
     - SourcesBuildPhase:
