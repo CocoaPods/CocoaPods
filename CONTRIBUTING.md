@@ -10,7 +10,7 @@
 * **Take care of your ticket.** When you spend time to report a ticket with care we'll enjoy fixing it for you.
 * **Do not litter.** Don’t add +1’s _unless_ specifically asked for and don’t discuss offtopic issues.
 
-## Bug reports
+## Bug Reports
 
 In short, since you are most likely a developer, provide a ticket that you _yourself_ would _like_ to receive.
 
@@ -47,7 +47,7 @@ add an [integration test](https://github.com/CocoaPods/cocoapods-integration-spe
 which doesn't require any ruby knowledge.
 
 
-## Feature requests
+## Feature Requests
 
 Please try to be precise about the proposed outcome of the feature and how it
 would related to existing features.
