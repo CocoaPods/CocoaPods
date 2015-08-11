@@ -29,7 +29,7 @@ def generate_local_podfile
   Pod::Podfile.new do
     platform :ios
     xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
-    pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
+    pod 'Reachability', path: SpecHelper.fixture('integration/Reachability')
   end
 end
 
@@ -175,12 +175,12 @@ module Pod
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
           use_frameworks!
-          pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
-          pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
-          pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+          pod 'BananaLib',       path: (fixture_path + 'banana-lib').to_s
+          pod 'OrangeFramework', path: (fixture_path + 'orange-framework').to_s
+          pod 'monkey',          path: (fixture_path + 'monkey').to_s
 
-          target 'TestRunner', :exclusive => true do
-            pod 'monkey',        :path => (fixture_path + 'monkey').to_s
+          target 'TestRunner', exclusive: true do
+            pod 'monkey',        path: (fixture_path + 'monkey').to_s
           end
         end
         lockfile = generate_lockfile
@@ -209,9 +209,9 @@ module Pod
         podfile = Pod::Podfile.new do
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
-          pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
-          pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
-          pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+          pod 'BananaLib',       path: (fixture_path + 'banana-lib').to_s
+          pod 'OrangeFramework', path: (fixture_path + 'orange-framework').to_s
+          pod 'monkey',          path: (fixture_path + 'monkey').to_s
         end
         lockfile = generate_lockfile
         config.integrate_targets = false
@@ -232,9 +232,9 @@ module Pod
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
           use_frameworks!
-          pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
-          pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
-          pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+          pod 'BananaLib',       path: (fixture_path + 'banana-lib').to_s
+          pod 'OrangeFramework', path: (fixture_path + 'orange-framework').to_s
+          pod 'monkey',          path: (fixture_path + 'monkey').to_s
         end
         @lockfile = generate_lockfile
       end
@@ -269,7 +269,7 @@ module Pod
         podfile = Pod::Podfile.new do
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
-          pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'OrangeFramework', path: (fixture_path + 'orange-framework').to_s
         end
         lockfile = generate_lockfile
         config.integrate_targets = false
@@ -487,7 +487,7 @@ module Pod
         end
 
         before do
-          @installer.stubs(:analysis_result).returns(stub(:all_user_build_configurations => {}))
+          @installer.stubs(:analysis_result).returns(stub(all_user_build_configurations: {}))
         end
 
         it 'creates the Pods project' do
@@ -576,11 +576,11 @@ module Pod
 
       describe '#set_target_dependencies' do
         def test_extension_target(symbol_type)
-          mock_user_target = mock('UserTarget', :symbol_type => symbol_type)
+          mock_user_target = mock('UserTarget', symbol_type: symbol_type)
           @target.stubs(:user_targets).returns([mock_user_target])
 
           build_settings = {}
-          mock_configuration = mock('BuildConfiguration', :build_settings => build_settings)
+          mock_configuration = mock('BuildConfiguration', build_settings: build_settings)
           @mock_target.stubs(:build_configurations).returns([mock_configuration])
 
           @installer.send(:set_target_dependencies)
@@ -597,7 +597,7 @@ module Pod
 
           @mock_target = mock('PodNativeTarget')
 
-          mock_project = mock('PodsProject', :frameworks_group => mock('FrameworksGroup'))
+          mock_project = mock('PodsProject', frameworks_group: mock('FrameworksGroup'))
           @installer.stubs(:pods_project).returns(mock_project)
 
           @target.stubs(:native_target).returns(@mock_target)
@@ -627,7 +627,7 @@ module Pod
 
         it 'does not try to set APPLICATION_EXTENSION_API_ONLY if there are no pod targets' do
           lambda do
-            mock_user_target = mock('UserTarget', :symbol_type => :app_extension)
+            mock_user_target = mock('UserTarget', symbol_type: :app_extension)
             @target.stubs(:user_targets).returns([mock_user_target])
 
             @target.stubs(:native_target).returns(nil)
@@ -652,7 +652,7 @@ module Pod
       describe '#write_pod_project' do
         before do
           @installer.stubs(:aggregate_targets).returns([])
-          @installer.stubs(:analysis_result).returns(stub(:all_user_build_configurations => {}))
+          @installer.stubs(:analysis_result).returns(stub(all_user_build_configurations: {}))
           @installer.send(:prepare_pods_project)
         end
 

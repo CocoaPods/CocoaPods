@@ -8,19 +8,19 @@ module Pod
 
     describe 'from_dependency' do
       it 'supports a podspec source' do
-        dep = Dependency.new('Reachability', :podspec => '')
+        dep = Dependency.new('Reachability', podspec: '')
         klass = @subject.from_dependency(dep, nil).class
         klass.should == @subject::PodspecSource
       end
 
       it 'supports a path source' do
-        dep = Dependency.new('Reachability', :path => '')
+        dep = Dependency.new('Reachability', path: '')
         klass = @subject.from_dependency(dep, nil).class
         klass.should == @subject::PathSource
       end
 
       it 'supports a path source specified with the legacy :local key' do
-        dep = Dependency.new('Reachability', :local => '')
+        dep = Dependency.new('Reachability', local: '')
         klass = @subject.from_dependency(dep, nil).class
         klass.should == @subject::PathSource
       end

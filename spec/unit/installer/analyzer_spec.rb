@@ -216,7 +216,7 @@ module Pod
       end
 
       it 'unlocks dependencies in a case-insensitive manner' do
-        @analyzer.update =  { :pods => %w(JSONKit) }
+        @analyzer.update =  { pods: %w(JSONKit) }
         @analyzer.analyze
         @analyzer.send(:locked_dependencies).map(&:payload).map(&:to_s).
           should == ['SVPullToRefresh (= 0.4)']
@@ -246,7 +246,7 @@ module Pod
         lockfile = Pod::Lockfile.new(hash)
         analyzer = Installer::Analyzer.new(config.sandbox, podfile, lockfile)
 
-        analyzer.update = { :pods => %w(AFNetworking) }
+        analyzer.update = { pods: %w(AFNetworking) }
         analyzer.analyze.specifications.
           find { |s| s.name == 'AFNetworking' }.
           version.to_s.should == '2.4.1'
@@ -278,8 +278,8 @@ module Pod
       it 'fetches the dependencies with external sources' do
         podfile_state = Installer::Analyzer::SpecsState.new
         podfile_state.added << 'BananaLib'
-        @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
-        @podfile.stubs(:dependencies).returns([Dependency.new('BananaLib', :git => 'example.com')])
+        @analyzer.stubs(:result).returns(stub(podfile_state: podfile_state))
+        @podfile.stubs(:dependencies).returns([Dependency.new('BananaLib', git: 'example.com')])
         ExternalSources::DownloaderSource.any_instance.expects(:fetch)
         @analyzer.send(:fetch_external_sources)
       end
@@ -287,30 +287,30 @@ module Pod
       it 'does not download the same source multiple times for different subspecs' do
         podfile_state = Installer::Analyzer::SpecsState.new
         podfile_state.added << 'ARAnalytics/Mixpanel' << 'ARAnalytics/HockeyApp'
-        @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
+        @analyzer.stubs(:result).returns(stub(podfile_state: podfile_state))
         @podfile.stubs(:dependencies).returns([
-          Dependency.new('ARAnalytics/Mixpanel', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'),
-          Dependency.new('ARAnalytics/HockeyApp', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'),
+          Dependency.new('ARAnalytics/Mixpanel', git: 'https://github.com/orta/ARAnalytics', commit: '6f1a1c314894437e7e5c09572c276e644dbfb64b'),
+          Dependency.new('ARAnalytics/HockeyApp', git: 'https://github.com/orta/ARAnalytics', commit: '6f1a1c314894437e7e5c09572c276e644dbfb64b'),
         ])
         ExternalSources::DownloaderSource.any_instance.expects(:fetch).once
         @analyzer.send(:fetch_external_sources)
       end
 
       xit 'it fetches the specification from either the sandbox or from the remote be default' do
-        dependency = Dependency.new('Name', :git => 'www.example.com')
+        dependency = Dependency.new('Name', git: 'www.example.com')
         ExternalSources::DownloaderSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
         @resolver.send(:set_from_external_source, dependency)
       end
 
       xit 'it fetches the specification from the remote if in update mode' do
-        dependency = Dependency.new('Name', :git => 'www.example.com')
+        dependency = Dependency.new('Name', git: 'www.example.com')
         ExternalSources::DownloaderSource.any_instance.expects(:specification).returns(Specification.new).once
         @resolver.update_external_specs = false
         @resolver.send(:set_from_external_source, dependency)
       end
 
       xit 'it fetches the specification only from the sandbox if pre-downloads are disabled' do
-        dependency = Dependency.new('Name', :git => 'www.example.com')
+        dependency = Dependency.new('Name', git: 'www.example.com')
         Sandbox.any_instance.expects(:specification).returns(Specification.new).once
         @resolver.allow_pre_downloads = true
         @resolver.send(:set_from_external_source, dependency)
@@ -431,8 +431,8 @@ module Pod
           source 'https://github.com/CocoaPods/Specs.git'
           xcodeproj 'SampleProject/SampleProject'
           platform :ios
-          pod 'SEGModules', :git => 'https://github.com/segiddins/SEGModules.git'
-          pod 'SEGModules', :git => 'https://github.com/segiddins/Modules.git'
+          pod 'SEGModules', git: 'https://github.com/segiddins/SEGModules.git'
+          pod 'SEGModules', git: 'https://github.com/segiddins/Modules.git'
         end
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         e = should.raise(Informative) { analyzer.analyze }
@@ -448,8 +448,8 @@ module Pod
           source 'https://github.com/CocoaPods/Specs.git'
           xcodeproj 'SampleProject/SampleProject'
           platform :ios
-          pod 'RestKit/Core', :git => 'https://github.com/RestKit/RestKit.git'
-          pod 'RestKit', :git => 'https://github.com/segiddins/RestKit.git'
+          pod 'RestKit/Core', git: 'https://github.com/RestKit/RestKit.git'
+          pod 'RestKit', git: 'https://github.com/segiddins/RestKit.git'
         end
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         e = should.raise(Informative) { analyzer.analyze }
@@ -465,7 +465,7 @@ module Pod
           source 'https://github.com/CocoaPods/Specs.git'
           xcodeproj 'SampleProject/SampleProject'
           platform :ios
-          pod 'RestKit', :git => 'https://github.com/RestKit/RestKit.git'
+          pod 'RestKit', git: 'https://github.com/RestKit/RestKit.git'
           pod 'RestKit', '~> 0.23.0'
         end
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
@@ -480,11 +480,11 @@ module Pod
     describe 'using lockfile checkout options' do
       before do
         @podfile = Pod::Podfile.new do
-          pod 'BananaLib', :git => 'example.com'
+          pod 'BananaLib', git: 'example.com'
         end
         @dependency = @podfile.dependencies.first
 
-        @lockfile_checkout_options = { :git => 'example.com', :commit => 'commit' }
+        @lockfile_checkout_options = { git: 'example.com', commit: 'commit' }
         hash = {}
         hash['PODS'] = ['BananaLib (1.0.0)']
         hash['CHECKOUT OPTIONS'] = { 'BananaLib' => @lockfile_checkout_options }
@@ -533,7 +533,7 @@ module Pod
 
       it 'uses lockfile checkout options when a different checkout exists in the sandbox' do
         @analyzer.result.podfile_state.unchanged << 'BananaLib'
-        @sandbox_manifest.send(:checkout_options_data)['BananaLib'] = @lockfile_checkout_options.merge(:commit => 'other commit')
+        @sandbox_manifest.send(:checkout_options_data)['BananaLib'] = @lockfile_checkout_options.merge(commit: 'other commit')
 
         downloader = stub('DownloaderSource')
         ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file).returns(downloader)
@@ -554,7 +554,7 @@ module Pod
 
       it 'ignores lockfile checkout options when updating selected pods' do
         @analyzer.result.podfile_state.unchanged << 'BananaLib'
-        @analyzer.stubs(:update).returns(:pods => %w(BananaLib))
+        @analyzer.stubs(:update).returns(pods: %w(BananaLib))
 
         downloader = stub('DownloaderSource')
         ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file).returns(downloader)

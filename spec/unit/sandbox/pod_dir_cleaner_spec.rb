@@ -4,9 +4,9 @@ module Pod
   describe Sandbox::PodDirCleaner do
     before do
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
-      specs_by_platform = { :ios => [@spec] }
+      specs_by_platform = { ios: [@spec] }
       @root = temporary_directory + 'BananaLib'
-      Downloader.for_target(@root, :git => SpecHelper.fixture('banana-lib')).download
+      Downloader.for_target(@root, git: SpecHelper.fixture('banana-lib')).download
       @cleaner = Sandbox::PodDirCleaner.new(@root, specs_by_platform)
     end
 
@@ -54,13 +54,13 @@ module Pod
 
     it 'handles Pods with multiple file accessors' do
       spec = fixture_spec('banana-lib/BananaLib.podspec')
-      spec.source = { :git => SpecHelper.fixture('banana-lib') }
+      spec.source = { git: SpecHelper.fixture('banana-lib') }
       spec.source_files = []
       spec.ios.source_files = 'Classes/*.h'
       spec.osx.source_files = 'Classes/*.m'
       ios_spec = spec.dup
       osx_spec = spec.dup
-      specs_by_platform = { :ios => [ios_spec], :osx => [osx_spec] }
+      specs_by_platform = { ios: [ios_spec], osx: [osx_spec] }
       @cleaner = Sandbox::PodDirCleaner.new(@root, specs_by_platform)
       paths = @cleaner.send(:used_files)
       relative_paths = paths.map { |p| p.gsub("#{@root}/", '') }

@@ -294,7 +294,7 @@ module Pod
               # There are different sets of subspecs or the spec is used across different platforms
               targets_by_distinctors.map do |distinctor, target_definitions|
                 specs, _ = *distinctor
-                generate_pod_target(target_definitions, specs, :scoped => true)
+                generate_pod_target(target_definitions, specs, scoped: true)
               end
             else
               (specs, _), target_definitions = targets_by_distinctors.first
@@ -316,7 +316,7 @@ module Pod
           specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by.group_by(&:root).values.uniq
             grouped_specs.flat_map do |pod_specs|
-              generate_pod_target([target_definition], pod_specs, :scoped => true)
+              generate_pod_target([target_definition], pod_specs, scoped: true)
             end
           end
         end

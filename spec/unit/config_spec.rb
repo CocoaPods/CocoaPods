@@ -47,13 +47,13 @@ module Pod
 
     describe '#with_changes' do
       it 'doesnt raise when using an unknown key' do
-        should.not.raise { @config.with_changes(:foo_bar => false) }
+        should.not.raise { @config.with_changes(foo_bar: false) }
       end
 
       it 'uses the new value inside the block' do
         @config.verbose = true
         called = false
-        @config.with_changes(:verbose => false) do
+        @config.with_changes(verbose: false) do
           @config.should.not.be.verbose
           called = true
         end
@@ -62,14 +62,14 @@ module Pod
 
       it 'reverts to the previous value after the block' do
         @config.verbose = true
-        @config.with_changes(:verbose => false)
+        @config.with_changes(verbose: false)
         @config.should.be.verbose
       end
 
       it 'reverts to the previous value even when an exception is raised' do
         @config.verbose = true
         should.raise do
-          @config.with_changes(:verbose => false) do
+          @config.with_changes(verbose: false) do
             raise 'foo'
           end
         end
@@ -205,7 +205,7 @@ module Pod
       end
 
       it 'can be configured with a hash' do
-        hash = { :verbose => true }
+        hash = { verbose: true }
         @config.send(:configure_with, hash)
         @config.should.be.verbose
       end

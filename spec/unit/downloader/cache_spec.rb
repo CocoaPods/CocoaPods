@@ -5,9 +5,9 @@ module Pod
     before do
       @cache = Downloader::Cache.new(Dir.mktmpdir)
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
-      @spec.source = { :git => SpecHelper.fixture('banana-lib') }
-      @request = Downloader::Request.new(:spec => @spec, :released => true)
-      @unreleased_request = Downloader::Request.new(:name => 'BananaLib', :params => @spec.source)
+      @spec.source = { git: SpecHelper.fixture('banana-lib') }
+      @request = Downloader::Request.new(spec: @spec, released: true)
+      @unreleased_request = Downloader::Request.new(name: 'BananaLib', params: @spec.source)
 
       @stub_download = lambda do |&blk|
         original_download_source = Downloader.method(:download_source)

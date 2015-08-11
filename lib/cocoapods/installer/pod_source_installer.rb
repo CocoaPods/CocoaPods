@@ -109,9 +109,9 @@ module Pod
 
       def download_request
         Downloader::Request.new(
-          :spec => root_spec,
-          :released => released?,
-          :head => head_pod?,
+          spec: root_spec,
+          released: released?,
+          head: head_pod?,
         )
       end
 

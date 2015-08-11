@@ -103,7 +103,7 @@ module Pod
       def relative_glob(patterns, options = {})
         return [] if patterns.empty?
 
-        cache_key = options.merge(:patterns => patterns)
+        cache_key = options.merge(patterns: patterns)
         cached_value = @glob_cache[cache_key]
         return cached_value if cached_value
 
@@ -132,7 +132,7 @@ module Pod
 
         list = list.map { |path| Pathname.new(path) }
         if exclude_patterns
-          exclude_options = { :dir_pattern => '**/*', :include_dirs => include_dirs }
+          exclude_options = { dir_pattern: '**/*', include_dirs: include_dirs }
           list -= relative_glob(exclude_patterns, exclude_options)
         end
         @glob_cache[cache_key] = list

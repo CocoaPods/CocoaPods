@@ -13,7 +13,7 @@ module Pod
         describe '::default_ld_flags' do
           it 'returns the default linker flags' do
             podfile = stub(:set_arc_compatibility_flag? => false)
-            target = stub(:podfile => podfile)
+            target = stub(podfile: podfile)
             result = @sut.default_ld_flags(target)
             result.should == ''
 
@@ -24,7 +24,7 @@ module Pod
           it 'includes the ARC compatibility flag if required by the Podfile' do
             podfile = stub(:set_arc_compatibility_flag? => true)
             spec_consumer = stub(:requires_arc? => true)
-            target = stub(:podfile => podfile, :spec_consumers => [spec_consumer])
+            target = stub(podfile: podfile, spec_consumers: [spec_consumer])
             result = @sut.default_ld_flags(target)
             result.should == '-fobjc-arc'
 
@@ -53,11 +53,11 @@ module Pod
           it 'adds the libraries of the xcconfig' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :pod_target_xcconfig => {},
-              :libraries => ['xml2'],
-              :frameworks => [],
-              :weak_frameworks => [],
-              :platform_name => :ios,
+              pod_target_xcconfig: {},
+              libraries: ['xml2'],
+              frameworks: [],
+              weak_frameworks: [],
+              platform_name: :ios,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"xml2"'
@@ -66,11 +66,11 @@ module Pod
           it 'adds the frameworks of the xcconfig' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :pod_target_xcconfig => {},
-              :libraries => [],
-              :frameworks => ['CoreAnimation'],
-              :weak_frameworks => [],
-              :platform_name => :ios,
+              pod_target_xcconfig: {},
+              libraries: [],
+              frameworks: ['CoreAnimation'],
+              weak_frameworks: [],
+              platform_name: :ios,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework "CoreAnimation"'
@@ -79,11 +79,11 @@ module Pod
           it 'adds the weak frameworks of the xcconfig' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :pod_target_xcconfig => {},
-              :libraries => [],
-              :frameworks => [],
-              :weak_frameworks => ['iAd'],
-              :platform_name => :ios,
+              pod_target_xcconfig: {},
+              libraries: [],
+              frameworks: [],
+              weak_frameworks: ['iAd'],
+              platform_name: :ios,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-weak_framework "iAd"'
@@ -92,11 +92,11 @@ module Pod
           it 'adds the ios developer frameworks search paths if needed' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :pod_target_xcconfig => {},
-              :libraries => [],
-              :frameworks => ['SenTestingKit'],
-              :weak_frameworks => [],
-              :platform_name => :ios,
+              pod_target_xcconfig: {},
+              libraries: [],
+              frameworks: ['SenTestingKit'],
+              weak_frameworks: [],
+              platform_name: :ios,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('SDKROOT')
@@ -106,11 +106,11 @@ module Pod
           it 'adds the osx developer frameworks search paths if needed' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
-              :pod_target_xcconfig => {},
-              :libraries => [],
-              :frameworks => ['SenTestingKit'],
-              :weak_frameworks => [],
-              :platform_name => :osx,
+              pod_target_xcconfig: {},
+              libraries: [],
+              frameworks: ['SenTestingKit'],
+              weak_frameworks: [],
+              platform_name: :osx,
             )
             @sut.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('DEVELOPER_LIBRARY_DIR')

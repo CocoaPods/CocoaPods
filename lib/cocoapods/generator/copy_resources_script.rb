@@ -49,9 +49,9 @@ module Pod
       #         the `ibtool` command.
       #
       EXTERNAL_STRINGS_FILE_MIMINUM_DEPLOYMENT_TARGET = {
-        :ios => Version.new('6.0'),
-        :osx => Version.new('10.8'),
-        :watchos => Version.new('2.0'),
+        ios: Version.new('6.0'),
+        osx: Version.new('10.8'),
+        watchos: Version.new('2.0'),
       }
 
       # @return [Bool] Whether the external strings file is supported by the

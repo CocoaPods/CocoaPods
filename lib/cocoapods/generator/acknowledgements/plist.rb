@@ -11,9 +11,9 @@ module Pod
 
       def plist
         {
-          :Title => plist_title,
-          :StringsTable => plist_title,
-          :PreferenceSpecifiers => licenses,
+          Title: plist_title,
+          StringsTable: plist_title,
+          PreferenceSpecifiers: licenses,
         }
       end
 
@@ -34,26 +34,26 @@ module Pod
       def hash_for_spec(spec)
         if (license = license_text(spec))
           {
-            :Type => 'PSGroupSpecifier',
-            :Title => sanitize_encoding(spec.name),
-            :FooterText => sanitize_encoding(license),
+            Type: 'PSGroupSpecifier',
+            Title: sanitize_encoding(spec.name),
+            FooterText: sanitize_encoding(license),
           }
         end
       end
 
       def header_hash
         {
-          :Type => 'PSGroupSpecifier',
-          :Title => sanitize_encoding(header_title),
-          :FooterText => sanitize_encoding(header_text),
+          Type: 'PSGroupSpecifier',
+          Title: sanitize_encoding(header_title),
+          FooterText: sanitize_encoding(header_text),
         }
       end
 
       def footnote_hash
         {
-          :Type => 'PSGroupSpecifier',
-          :Title => sanitize_encoding(footnote_title),
-          :FooterText => sanitize_encoding(footnote_text),
+          Type: 'PSGroupSpecifier',
+          Title: sanitize_encoding(footnote_title),
+          FooterText: sanitize_encoding(footnote_text),
         }
       end
 
@@ -71,7 +71,7 @@ module Pod
       # @return [String] The sanitized UTF-8 text.
       #
       def sanitize_encoding(text)
-        text.encode('UTF-8', :invalid => :replace, :undef => :replace, :replace => '')
+        text.encode('UTF-8', invalid: :replace, undef: :replace, replace: '')
       end
 
       #-----------------------------------------------------------------------#

@@ -301,7 +301,7 @@ module Pod
       describe 'concerning framework versions' do
         before do
           @pod_target.stubs(:requires_frameworks? => true)
-          @spec.stubs(:version => Version.new('1.2.3'))
+          @spec.stubs(version: Version.new('1.2.3'))
         end
 
         it 'sets the project and library version' do
@@ -316,7 +316,7 @@ module Pod
         end
 
         it 'sets the library compatibility version to the exact version when it is less than v1 (because SemVer makes no promises)' do
-          @spec.stubs(:version => Version.new('0.1.2'))
+          @spec.stubs(version: Version.new('0.1.2'))
           settings = @installer.send(:custom_build_settings)
           settings['DYLIB_COMPATIBILITY_VERSION'].should == '0.1.2'
         end
@@ -324,7 +324,7 @@ module Pod
         describe 'with weird version numbers' do
           handles = -> (version, project_version, compatibility_version) do
             it "handles #{version}" do
-              @spec.stubs(:version => Version.new(version))
+              @spec.stubs(version: Version.new(version))
               settings = @installer.send(:custom_build_settings)
               settings['CURRENT_PROJECT_VERSION'].should == project_version
               settings['DYLIB_COMPATIBILITY_VERSION'].should == compatibility_version

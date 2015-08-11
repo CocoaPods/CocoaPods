@@ -262,7 +262,7 @@ module Pod
       end
 
       unless sandbox_state.deleted.empty?
-        title_options = { :verbose_prefix => '-> '.red }
+        title_options = { verbose_prefix: '-> '.red }
         sandbox_state.deleted.each do |pod_name|
           UI.titled_section("Removing #{pod_name}".red, title_options) do
             sandbox.clean_pod(pod_name)
@@ -294,7 +294,7 @@ module Pod
     def install_pod_sources
       @installed_specs = []
       pods_to_install = sandbox_state.added | sandbox_state.changed
-      title_options = { :verbose_prefix => '-> '.green }
+      title_options = { verbose_prefix: '-> '.green }
       root_specs.sort_by(&:name).each do |spec|
         if pods_to_install.include?(spec.name)
           if sandbox_state.changed.include?(spec.name) && sandbox.manifest
@@ -663,7 +663,7 @@ module Pod
       UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
         pods_project.pods.remove_from_project if pods_project.pods.empty?
         pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
-        pods_project.sort(:groups_position => :below)
+        pods_project.sort(groups_position: :below)
         pods_project.recreate_user_schemes(false)
         pods_project.predictabilize_uuids if config.deterministic_uuids?
         pods_project.save

@@ -103,7 +103,7 @@ module Pod
       #
       def pre_download(sandbox)
         title = "Pre-downloading: `#{name}` #{description}"
-        UI.titled_section(title,  :verbose_prefix => '-> ') do
+        UI.titled_section(title,  verbose_prefix: '-> ') do
           target = sandbox.pod_dir(name)
           download_result = Downloader.download(download_request, target)
           spec = download_result.spec
@@ -118,8 +118,8 @@ module Pod
 
       def download_request
         Downloader::Request.new(
-          :name => name,
-          :params => params,
+          name: name,
+          params: params,
         )
       end
 

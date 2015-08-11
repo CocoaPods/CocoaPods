@@ -11,9 +11,9 @@ module Pod
     describe 'Validation' do
       it 'validates request initialization' do
         options = [
-          { :spec => nil, :name => nil },
-          { :spec => nil, :released => true },
-          { :spec => @spec.dup.tap { |s| s.source = nil }, :released => true },
+          { spec: nil, name: nil },
+          { spec: nil, released: true },
+          { spec: @spec.dup.tap { |s| s.source = nil }, released: true },
         ]
 
         options.each do |params|
@@ -26,7 +26,7 @@ module Pod
 
     describe 'when released_pod? == true' do
       before do
-        @request = Downloader::Request.new(:spec => @spec, :released => true)
+        @request = Downloader::Request.new(spec: @spec, released: true)
       end
 
       it 'returns the spec' do
@@ -54,7 +54,7 @@ module Pod
 
     describe 'when released_pod? == false' do
       before do
-        @request = Downloader::Request.new(:name => 'BananaLib', :params => @spec.source)
+        @request = Downloader::Request.new(name: 'BananaLib', params: @spec.source)
       end
 
       it 'returns the spec' do

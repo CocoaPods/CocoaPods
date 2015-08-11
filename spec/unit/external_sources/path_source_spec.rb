@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe ExternalSources::PathSource do
     before do
-      params = { :path => fixture('integration/Reachability') }
+      params = { path: fixture('integration/Reachability') }
       dependency = Dependency.new('Reachability', params)
       podfile_path = fixture('integration/Podfile')
       @subject = ExternalSources.from_dependency(dependency, podfile_path)
@@ -16,7 +16,7 @@ module Pod
     end
 
     it 'supports the deprecated local key' do
-      params = { :local => fixture('integration/Reachability') }
+      params = { local: fixture('integration/Reachability') }
       dependency = Dependency.new('Reachability', params)
       podfile_path = fixture('integration/Podfile')
       @subject = ExternalSources.from_dependency(dependency, podfile_path)
@@ -37,19 +37,19 @@ module Pod
     end
 
     it 'removes sandbox lockfile checkout options for the pod' do
-      config.sandbox.store_checkout_source('Reachability', :http => 'https://example.com')
+      config.sandbox.store_checkout_source('Reachability', http: 'https://example.com')
       @subject.fetch(config.sandbox)
       config.sandbox.checkout_sources['pod'].should.be.nil
     end
 
     it 'raises if the podspec cannot be found' do
-      @subject.stubs(:params).returns(:path => temporary_directory)
+      @subject.stubs(:params).returns(path: temporary_directory)
       should.raise Informative do
         @subject.fetch(config.sandbox)
       end.message.should.match /No podspec found for `Reachability` in `#{temporary_directory}`/
 
       it 'marks a pod as relative' do
-        @subject.stubs(:params).returns(:path => './Reachability')
+        @subject.stubs(:params).returns(path: './Reachability')
         Pathname.any_instance.stubs(:exist?).returns(true)
         config.sandbox.stubs(:store_podspec)
         @subject.fetch(config.sandbox)
@@ -57,7 +57,7 @@ module Pod
       end
 
       it 'marks a pod as absolute' do
-        @subject.stubs(:params).returns(:path => fixture('integration/Reachability'))
+        @subject.stubs(:params).returns(path: fixture('integration/Reachability'))
         Pathname.any_instance.stubs(:exist?).returns(true)
         config.sandbox.stubs(:store_podspec)
         @subject.fetch(config.sandbox)
@@ -67,34 +67,34 @@ module Pod
 
     describe '#podspec_path' do
       it 'handles absolute paths' do
-        @subject.stubs(:params).returns(:path => fixture('integration/Reachability'))
+        @subject.stubs(:params).returns(path: fixture('integration/Reachability'))
         path = @subject.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
       it 'handles paths when there is no podfile path' do
         @subject.stubs(:podfile_path).returns(nil)
-        @subject.stubs(:params).returns(:path => fixture('integration/Reachability'))
+        @subject.stubs(:params).returns(path: fixture('integration/Reachability'))
         path = @subject.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
       it 'handles relative paths' do
-        @subject.stubs(:params).returns(:path => 'Reachability')
+        @subject.stubs(:params).returns(path: 'Reachability')
         path = @subject.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec')
       end
 
       it 'expands the tilde' do
         File.stubs(:exist?).returns(true)
-        @subject.stubs(:params).returns(:path => '~/Reachability')
+        @subject.stubs(:params).returns(path: '~/Reachability')
         Pathname.any_instance.stubs(:exist?).returns(true)
         path = @subject.send(:podspec_path)
         path.should == Pathname(ENV['HOME']) + 'Reachability/Reachability.podspec'
       end
 
       it 'falls back to .podspec.json when .podspec doesnt exist' do
-        @subject.stubs(:params).returns(:path => 'Reachability')
+        @subject.stubs(:params).returns(path: 'Reachability')
         Pathname.any_instance.stubs(:exist?).returns(false)
         path = @subject.send(:podspec_path)
         path.should == fixture('integration/Reachability/Reachability.podspec.json')

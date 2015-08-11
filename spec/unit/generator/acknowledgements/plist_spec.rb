@@ -21,9 +21,9 @@ describe Pod::Generator::Plist do
 
   it 'returns a correctly formed license hash for each pod' do
     @generator.hash_for_spec(@spec).should == {
-      :Type => 'PSGroupSpecifier',
-      :Title => 'POD_NAME',
-      :FooterText => 'LICENSE_TEXT',
+      Type: 'PSGroupSpecifier',
+      Title: 'POD_NAME',
+      FooterText: 'LICENSE_TEXT',
     }
   end
 
@@ -31,9 +31,9 @@ describe Pod::Generator::Plist do
     license_text = 'Copyright © 2013–2014 Boris Bügling'
     @generator.stubs(:license_text).returns(license_text)
     @generator.hash_for_spec(@spec).should == {
-      :Type => 'PSGroupSpecifier',
-      :Title => 'POD_NAME',
-      :FooterText => license_text,
+      Type: 'PSGroupSpecifier',
+      Title: 'POD_NAME',
+      FooterText: license_text,
     }
   end
 
@@ -44,9 +44,9 @@ describe Pod::Generator::Plist do
 
   it 'returns a plist containg the licenses' do
     @generator.plist.should == {
-      :Title => 'Acknowledgements',
-      :StringsTable => 'Acknowledgements',
-      :PreferenceSpecifiers => @generator.licenses,
+      Title: 'Acknowledgements',
+      StringsTable: 'Acknowledgements',
+      PreferenceSpecifiers: @generator.licenses,
     }
   end
 

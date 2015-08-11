@@ -8,7 +8,7 @@ module Pod
       #
       def fetch(sandbox)
         title = "Fetching podspec for `#{name}` #{description}"
-        UI.titled_section(title,  :verbose_prefix => '-> ') do
+        UI.titled_section(title,  verbose_prefix: '-> ') do
           podspec_path = Pathname(podspec_uri)
           is_json = podspec_path.extname == '.json'
           if podspec_path.exist?

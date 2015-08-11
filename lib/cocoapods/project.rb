@@ -109,8 +109,8 @@ module Pod
     # @return [Hash] The names of the specification subgroups by key.
     #
     SPEC_SUBGROUPS = {
-      :resources  => 'Resources',
-      :frameworks => 'Frameworks',
+      resources: 'Resources',
+      frameworks: 'Frameworks',
     }
 
     # Returns the group for the specification with the give name creating it if

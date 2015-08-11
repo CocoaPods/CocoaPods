@@ -12,19 +12,19 @@ module Pod
     #     new_version_message: false
     #
     DEFAULTS = {
-      :verbose             => false,
-      :silent              => false,
-      :skip_repo_update    => false,
-      :skip_download_cache => !ENV['COCOAPODS_SKIP_CACHE'].nil?,
+      verbose: false,
+      silent: false,
+      skip_repo_update: false,
+      skip_download_cache: !ENV['COCOAPODS_SKIP_CACHE'].nil?,
 
-      :clean               => true,
-      :integrate_targets   => true,
-      :deduplicate_targets => true,
-      :deterministic_uuids => ENV['COCOAPODS_DISABLE_DETERMINISTIC_UUIDS'].nil?,
-      :lock_pod_source     => true,
-      :new_version_message => ENV['COCOAPODS_SKIP_UPDATE_MESSAGE'].nil?,
+      clean: true,
+      integrate_targets: true,
+      deduplicate_targets: true,
+      deterministic_uuids: ENV['COCOAPODS_DISABLE_DETERMINISTIC_UUIDS'].nil?,
+      lock_pod_source: true,
+      new_version_message: ENV['COCOAPODS_SKIP_UPDATE_MESSAGE'].nil?,
 
-      :cache_root          => Pathname.new(Dir.home) + 'Library/Caches/CocoaPods',
+      cache_root: Pathname.new(Dir.home) + 'Library/Caches/CocoaPods',
     }
 
     # Applies the given changes to the config for the duration of the given
