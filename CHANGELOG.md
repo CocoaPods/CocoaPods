@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Prevent Linking Headers crash if the framework's headers is nil.
+  [christ yuj](https://github.com/christyuj)
+  [#3980](https://github.com/CocoaPods/CocoaPods/pull/3980)
+
 * Use APPLICATION_EXTENSION_API_ONLY for watchOS 2 extensions.  
   [Boris Bügling](https://github.com/neonichu)
   [#3920](https://github.com/CocoaPods/CocoaPods/pull/3920)
