@@ -159,9 +159,6 @@ module Pod
         @pod_target.xcconfig_path.to_s.should.include?(
           'Pods/Target Support Files/BananaLib/BananaLib.xcconfig',
         )
-        @pod_target.xcconfig_private_path.to_s.should.include(
-          'Pods/Target Support Files/BananaLib/BananaLib-Private.xcconfig',
-        )
       end
 
       it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do

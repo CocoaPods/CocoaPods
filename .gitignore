@@ -42,3 +42,9 @@ coverage/
 
 # Bundler files
 /.bundle
+
+spec/fixtures/spec-repos/alibaba-inc-wireless-tbmainclientspecs/
+
+spec/fixtures/spec-repos/alibaba-inc-specs-mirror/
+
+spec/fixtures/spec-repos/alibaba-inc-alipods-specs/

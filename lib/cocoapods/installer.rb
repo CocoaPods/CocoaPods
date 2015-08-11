@@ -421,9 +421,8 @@ module Pod
 
           swift_pods = pod_targets.select(&:uses_swift?)
           unless swift_pods.empty?
-            raise Informative, 'Pods written in Swift can only be integrated as frameworks; this ' \
-              'feature is still in beta. Add `use_frameworks!` to your Podfile or target to opt ' \
-              'into using it. ' \
+            raise Informative, 'Pods written in Swift can only be integrated as frameworks; ' \
+              'add `use_frameworks!` to your Podfile or target to opt into using it. ' \
               "The Swift #{swift_pods.size == 1 ? 'Pod being used is' : 'Pods being used are'}: " +
               swift_pods.map(&:name).to_sentence
           end
