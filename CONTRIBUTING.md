@@ -9,6 +9,7 @@
 * **Keep tickets short but sweet.** Make sure you include all the context needed to solve the issue. Don't overdo it. Great tickets allow us to focus on solving problems instead of discussing them.
 * **Take care of your ticket.** When you spend time to report a ticket with care we'll enjoy fixing it for you.
 * **Do not litter.** Don’t add +1’s _unless_ specifically asked for and don’t discuss offtopic issues.
+* **Spell the name of the project correctly.** It's CocoaPods. In upper camel case.
 
 ## Bug Reports
 
