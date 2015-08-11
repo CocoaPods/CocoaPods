@@ -47,9 +47,9 @@ module Pod
           {
             if [ -r "${BUILT_PRODUCTS_DIR}/$1" ]; then
               local source="${BUILT_PRODUCTS_DIR}/$1"
-            elsif [ -r "${BUILT_PRODUCTS_DIR}/$(basename "$1")" ]; then
+            elif [ -r "${BUILT_PRODUCTS_DIR}/$(basename "$1")" ]; then
               local source="${BUILT_PRODUCTS_DIR}/$(basename "$1")"
-            elsif [ -r "$1" ]; then
+            elif [ -r "$1" ]; then
               local source="$1"
             fi
 
