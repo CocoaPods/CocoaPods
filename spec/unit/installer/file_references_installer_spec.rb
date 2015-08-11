@@ -157,7 +157,7 @@ module Pod
         end
 
         it 'vendored frameworks without header' do
-          @pod_target = fixture_pod_target('banana-lib/BananaNoHeaderLib.podspec')
+          @pod_target = fixture_pod_target('BananaNoHeaderLib.podspec')
           @file_accessor = @pod_target.file_accessors.first
           headers_sandbox = Pathname.new('BananaNoHeaderLib')
           mappings = @installer.send(:vendored_frameworks_header_mappings, headers_sandbox, @file_accessor)
