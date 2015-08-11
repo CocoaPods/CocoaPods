@@ -96,7 +96,7 @@ CLIntegracon.configure do |c|
 end
 
 describe_cli 'pod' do
-  Process.wait(spawn('which hg', :err => :out, :out => '/dev/null'))
+  Process.wait(spawn('which hg', err: :out, out: '/dev/null'))
   has_mercurial = $?.success?
 
   subject do |s|

@@ -76,7 +76,7 @@ module Pod
         config.sandbox.expects(:specification).with('Reachability').returns(spec)
         podfile = Podfile.new do
           platform :ios
-          pod 'Reachability', :podspec => podspec
+          pod 'Reachability', podspec: podspec
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
         resolver.resolve
@@ -263,7 +263,7 @@ module Pod
       it 'handles correctly subspecs from external sources' do
         @podfile = Podfile.new do
           platform :ios
-          pod 'MainSpec/FirstSubSpec', :git => 'GIT-URL'
+          pod 'MainSpec/FirstSubSpec', git: 'GIT-URL'
         end
         spec = Spec.new do |s|
           s.name         = 'MainSpec'
@@ -287,7 +287,7 @@ module Pod
          'external source' do
         @podfile = Podfile.new do
           platform :ios
-          pod 'MainSpec', :git => 'GIT-URL'
+          pod 'MainSpec', git: 'GIT-URL'
         end
         spec = Spec.new do |s|
           s.name         = 'MainSpec'

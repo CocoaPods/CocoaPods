@@ -57,13 +57,13 @@ module Pod
           spec = Specification.from_file(spec_path)
           hash[spec.name] ||= []
           is_release = spec_path.to_s.start_with?(release_specs_dir.to_s)
-          request = Downloader::Request.new(:spec => spec, :released => is_release)
+          request = Downloader::Request.new(spec: spec, released: is_release)
           hash[spec.name] << {
-            :spec_file => spec_path,
-            :name => spec.name,
-            :version => spec.version,
-            :release => is_release,
-            :slug => root + request.slug,
+            spec_file: spec_path,
+            name: spec.name,
+            version: spec.version,
+            release: is_release,
+            slug: root + request.slug,
           }
           hash
         end
@@ -154,9 +154,9 @@ module Pod
           result.location = nil
 
           podspecs.each do |name, spec|
-            destination = path_for_pod(request, :name => name, :params => result.checkout_options)
+            destination = path_for_pod(request, name: name, params: result.checkout_options)
             copy_and_clean(target, destination, spec)
-            write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
+            write_spec(spec, path_for_spec(request, name: name, params: result.checkout_options))
             if request.name == name
               result.location = destination
             end

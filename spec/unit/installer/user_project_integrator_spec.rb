@@ -54,8 +54,8 @@ module Pod
 
         describe '#warn_about_xcconfig_overrides' do
           shared 'warn_about_xcconfig_overrides' do
-            target_config = stub(:name => 'Release', :build_settings => @user_target_build_settings)
-            user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
+            target_config = stub(name: 'Release', build_settings: @user_target_build_settings)
+            user_target = stub(name: 'SampleProject', build_configurations: [target_config])
             @target.stubs(:user_targets).returns([user_target])
 
             @target.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }

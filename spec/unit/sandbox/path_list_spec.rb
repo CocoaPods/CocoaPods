@@ -102,7 +102,7 @@ module Pod
       end
 
       it 'supports an optional pattern for globbing directories' do
-        paths = @path_list.relative_glob('Classes',  :dir_pattern => '*.{h,m}').map(&:to_s)
+        paths = @path_list.relative_glob('Classes',  dir_pattern: '*.{h,m}').map(&:to_s)
         paths.sort.should == %w(
           Classes/Banana.h
           Classes/Banana.m
@@ -111,7 +111,7 @@ module Pod
       end
 
       it 'handles directories specified with a trailing slash' do
-        paths = @path_list.relative_glob('Classes/',  :dir_pattern => '*.{h,m}').map(&:to_s)
+        paths = @path_list.relative_glob('Classes/',  dir_pattern: '*.{h,m}').map(&:to_s)
         paths.sort.should == %w(
           Classes/Banana.h
           Classes/Banana.m
@@ -121,7 +121,7 @@ module Pod
 
       it 'supports an optional list of patterns to exclude' do
         exclude_patterns = ['**/*.m', '**/*Private*.*']
-        paths = @path_list.relative_glob('Classes/*',  :exclude_patterns => exclude_patterns).map(&:to_s)
+        paths = @path_list.relative_glob('Classes/*',  exclude_patterns: exclude_patterns).map(&:to_s)
         paths.sort.should == %w(
           Classes/Banana.h
           Classes/BananaLib.pch
@@ -130,12 +130,12 @@ module Pod
       end
 
       it 'allows to specify folders in the exclude patterns' do
-        paths = @path_list.relative_glob('Classes/*',  :exclude_patterns => 'Classes').map(&:to_s)
+        paths = @path_list.relative_glob('Classes/*',  exclude_patterns: 'Classes').map(&:to_s)
         paths.sort.should.be.empty
       end
 
       it 'can optionally include the directories in the results' do
-        paths = @path_list.relative_glob('Resources/*',  :include_dirs => true).map(&:to_s)
+        paths = @path_list.relative_glob('Resources/*',  include_dirs: true).map(&:to_s)
         paths.sort.should == %w(
           Resources/Images.xcassets
           Resources/logo-sidebar.png

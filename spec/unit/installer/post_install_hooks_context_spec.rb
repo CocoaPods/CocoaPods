@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Installer::PostInstallHooksContext do
     it 'offers a convenience method to be generated' do
-      sandbox = stub(:root => '/path')
+      sandbox = stub(root: '/path')
 
       spec = fixture_spec('banana-lib/BananaLib.podspec')
       target_definition = Podfile::TargetDefinition.new('Pods', nil)

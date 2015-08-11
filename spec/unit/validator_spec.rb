@@ -104,8 +104,8 @@ module Pod
           @validator.stubs(:install_pod)
           @validator.stubs(:build_pod)
           @validator.stubs(:tear_down_validation_environment)
-          WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
-          WebMock::API.stub_request(:get, /not-found/).to_return(:status => 404)
+          WebMock::API.stub_request(:head, /not-found/).to_return(status: 404)
+          WebMock::API.stub_request(:get, /not-found/).to_return(status: 404)
         end
 
         describe 'Homepage validation' do
@@ -124,24 +124,24 @@ module Pod
 
           it 'does not fail if the homepage redirects' do
             WebMock::API.stub_request(:head, /redirect/).to_return(
-              :status => 301, :headers => { 'Location' => 'http://banana-corp.local/found/' })
-            WebMock::API.stub_request(:head, /found/).to_return(:status => 200)
+              status: 301, headers: { 'Location' => 'http://banana-corp.local/found/' })
+            WebMock::API.stub_request(:head, /found/).to_return(status: 200)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/redirect/')
             @validator.validate
             @validator.results.length.should.equal 0
           end
 
           it 'does not fail if the homepage does not support HEAD' do
-            WebMock::API.stub_request(:head, /page/).to_return(:status => 405)
-            WebMock::API.stub_request(:get, /page/).to_return(:status => 200)
+            WebMock::API.stub_request(:head, /page/).to_return(status: 405)
+            WebMock::API.stub_request(:get, /page/).to_return(status: 200)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
             @validator.validate
             @validator.results.length.should.equal 0
           end
 
           it 'does not fail if the homepage errors on HEAD' do
-            WebMock::API.stub_request(:head, /page/).to_return(:status => 500)
-            WebMock::API.stub_request(:get, /page/).to_return(:status => 200)
+            WebMock::API.stub_request(:head, /page/).to_return(status: 500)
+            WebMock::API.stub_request(:get, /page/).to_return(status: 200)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
             @validator.validate
             @validator.results.length.should.equal 0
@@ -149,8 +149,8 @@ module Pod
 
           it 'does not follow redirects infinitely' do
             WebMock::API.stub_request(:head, /redirect/).to_return(
-              :status => 301,
-              :headers => { 'Location' => 'http://banana-corp.local/redirect/' })
+              status: 301,
+              headers: { 'Location' => 'http://banana-corp.local/redirect/' })
             Specification.any_instance.stubs(:homepage).returns(
               'http://banana-corp.local/redirect/')
             @validator.validate
@@ -159,10 +159,10 @@ module Pod
 
           it 'supports relative redirects' do
             WebMock::API.stub_request(:head, /redirect/).to_return(
-              :status => 302,
-              :headers => { 'Location' => '/foo' })
+              status: 302,
+              headers: { 'Location' => '/foo' })
             WebMock::API.stub_request(:head, /foo/).to_return(
-              :status => 200)
+              status: 200)
             Specification.any_instance.stubs(:homepage).returns(
               'http://banana-corp.local/redirect')
             @validator.validate
@@ -176,8 +176,8 @@ module Pod
             WebMock::API.
               stub_request(:head, 'banana-corp.local/valid-image.png').
               to_return(
-                :status => 200,
-                :headers => { 'Content-Type' => 'image/png' },
+                status: 200,
+                headers: { 'Content-Type' => 'image/png' },
               )
           end
 
@@ -189,7 +189,7 @@ module Pod
           end
 
           it 'should fail if any of the screenshots URLS do not return an image' do
-            WebMock::API.stub_request(:head, 'banana-corp.local/').to_return(:status => 200)
+            WebMock::API.stub_request(:head, 'banana-corp.local/').to_return(status: 200)
             Specification.any_instance.stubs(:screenshots).returns(['http://banana-corp.local/valid-image.png', 'http://banana-corp.local/'])
             @validator.validate
             @validator.results.map(&:to_s).first.should.match /The screenshot .* is not a valid image/
@@ -203,14 +203,14 @@ module Pod
 
           it 'checks if the social media URL is valid' do
             Specification.any_instance.stubs(:social_media_url).returns('http://banana-corp.local/')
-            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(status: 200)
             @validator.validate
             @validator.results.should.be.empty?
           end
 
           it "should fail validation if it wasn't able to validate the URL" do
             Specification.any_instance.stubs(:social_media_url).returns('http://banana-corp.local/not-found/')
-            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 404)
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(status: 404)
             @validator.validate
             @validator.results.map(&:to_s).first.should.match /The URL \(.*\) is not reachable/
           end
@@ -223,7 +223,7 @@ module Pod
 
           it 'checks if the documentation URL is valid' do
             Specification.any_instance.stubs(:documentation_url).returns('http://banana-corp.local/')
-            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(status: 200)
             @validator.validate
             @validator.results.should.be.empty?
           end
@@ -242,7 +242,7 @@ module Pod
 
           it 'checks if the docset URL is valid' do
             Specification.any_instance.stubs(:docset_url).returns('http://banana-corp.local/')
-            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
+            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(status: 200)
             @validator.validate
             @validator.results.should.be.empty?
           end

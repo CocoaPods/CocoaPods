@@ -4,8 +4,8 @@ module Pod
   describe ExternalSources::DownloaderSource do
     before do
       params = {
-        :git => fixture('integration/Reachability'),
-        :branch => 'master',
+        git: fixture('integration/Reachability'),
+        branch: 'master',
       }
       dep = Dependency.new('Reachability', params)
       @subject = ExternalSources.from_dependency(dep, nil)

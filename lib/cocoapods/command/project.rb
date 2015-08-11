@@ -150,7 +150,7 @@ module Pod
             raise Informative, message
           end
 
-          run_install_with_update(:pods => @pods)
+          run_install_with_update(pods: @pods)
         else
           UI.puts 'Update all pods'.yellow unless @pods
           run_install_with_update(true)

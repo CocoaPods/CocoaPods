@@ -46,12 +46,12 @@ module Pod
         spec = Specification.from_file(path)
 
         spec.name.should         == 'Bananas'
-        spec.license.should      == { :type => 'MIT (example)' }
+        spec.license.should      == { type: 'MIT (example)' }
         spec.version.should      == Version.new('0.0.1')
         spec.summary.should      == 'A short description of Bananas.'
         spec.homepage.should     == 'http://EXAMPLE/Bananas'
         spec.authors.should      == { `git config --get user.name`.strip => `git config --get user.email`.strip }
-        spec.source.should       == { :git => 'http://EXAMPLE/Bananas.git', :tag => '0.0.1' }
+        spec.source.should       == { git: 'http://EXAMPLE/Bananas.git', tag: '0.0.1' }
         spec.consumer(:ios).source_files.should == ['Classes', 'Classes/**/*.{h,m}']
         spec.consumer(:ios).public_header_files.should == []
       end
@@ -71,12 +71,12 @@ module Pod
         path = temporary_directory + 'libPusher.podspec'
         spec = Specification.from_file(path)
         spec.name.should     == 'libPusher'
-        spec.license.should  == { :type => 'MIT (example)' }
+        spec.license.should  == { type: 'MIT (example)' }
         spec.version.should  == Version.new('1.4')
         spec.summary.should  == 'An Objective-C interface to Pusher (pusherapp.com)'
         spec.homepage.should == 'https://github.com/lukeredpath/libPusher'
         spec.authors.should  == { 'Luke Redpath' => 'luke@lukeredpath.co.uk' }
-        spec.source.should   == { :git => 'https://github.com/lukeredpath/libPusher.git', :tag => 'v1.4' }
+        spec.source.should   == { git: 'https://github.com/lukeredpath/libPusher.git', tag: 'v1.4' }
       end
 
       it 'accepts a name when creating a podspec form github' do
@@ -113,7 +113,7 @@ module Pod
         path = temporary_directory + 'libPusher.podspec'
         spec = Specification.from_file(path)
         spec.version.should == Version.new('0.0.1')
-        spec.source.should  == { :git => 'https://github.com/lukeredpath/libPusher.git', :commit => '5f482b0693ac2ac1ad85d1aabc27ec7547cc0bc7' }
+        spec.source.should  == { git: 'https://github.com/lukeredpath/libPusher.git', commit: '5f482b0693ac2ac1ad85d1aabc27ec7547cc0bc7' }
       end
 
       it "raises an informative message when the GitHub repository doesn't have any commits" do
@@ -182,7 +182,7 @@ module Pod
       xit 'lints a remote podspec' do
         Dir.chdir(fixture('spec-repos') + 'master/Specs/JSONKit/1.4/') do
           cmd = command('spec', 'lint', '--quick', '--allow-warnings', '--silent', 'https://github.com/CocoaPods/Specs/raw/master/A2DynamicDelegate/2.0.1/A2DynamicDelegate.podspec')
-          # VCR.use_cassette('linter', :record => :new_episodes) {  }
+          # VCR.use_cassette('linter', record: :new_episodes) {  }
           lambda { cmd.run }.should.not.raise
         end
       end

@@ -221,9 +221,9 @@ module Pod
         it 'takes into account dir patterns and excluded files' do
           file_patterns = ['Classes/*.{h,m,d}', 'Vendor', 'framework/Source/*.h']
           options = {
-            :exclude_patterns => ['Classes/**/osx/**/*', 'Resources/**/osx/**/*'],
-            :dir_pattern => '*{.m,.mm,.c,.cc,.cxx,.cpp,.c++,.swift,.h,.hh,.hpp,.ipp,.tpp}',
-            :include_dirs => false,
+            exclude_patterns: ['Classes/**/osx/**/*', 'Resources/**/osx/**/*'],
+            dir_pattern: '*{.m,.mm,.c,.cc,.cxx,.cpp,.c++,.swift,.h,.hh,.hpp,.ipp,.tpp}',
+            include_dirs: false,
           }
           @spec.exclude_files = options[:exclude_patterns]
           @accessor.expects(:expanded_paths).with(file_patterns, options)

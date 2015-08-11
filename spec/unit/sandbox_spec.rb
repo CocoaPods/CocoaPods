@@ -176,13 +176,13 @@ module Pod
       end
 
       it 'stores the checkout source of a Pod' do
-        source = { :git => 'example.com', :commit => 'SHA' }
+        source = { git: 'example.com', commit: 'SHA' }
         @sandbox.store_checkout_source('BananaLib/Subspec', source)
         @sandbox.checkout_sources['BananaLib'].should == source
       end
 
       it 'returns the checkout sources of the Pods' do
-        source = { :git => 'example.com', :commit => 'SHA' }
+        source = { git: 'example.com', commit: 'SHA' }
         @sandbox.store_checkout_source('BananaLib', source)
         @sandbox.checkout_sources.should == { 'BananaLib' => source }
       end

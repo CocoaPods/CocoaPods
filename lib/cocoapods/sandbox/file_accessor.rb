@@ -11,10 +11,10 @@ module Pod
       SOURCE_FILE_EXTENSIONS = (%w(.m .mm .c .cc .cxx .cpp .c++ .swift) + HEADER_EXTENSIONS).uniq.freeze
 
       GLOB_PATTERNS = {
-        :readme              => 'readme{*,.*}'.freeze,
-        :license             => 'licen{c,s}e{*,.*}'.freeze,
-        :source_files        => "*{#{SOURCE_FILE_EXTENSIONS.join(',')}}".freeze,
-        :public_header_files => "*{#{HEADER_EXTENSIONS.join(',')}}".freeze,
+        readme: 'readme{*,.*}'.freeze,
+        license: 'licen{c,s}e{*,.*}'.freeze,
+        source_files: "*{#{SOURCE_FILE_EXTENSIONS.join(',')}}".freeze,
+        public_header_files: "*{#{HEADER_EXTENSIONS.join(',')}}".freeze,
       }.freeze
 
       # @return [Sandbox::PathList] the directory where the source of the Pod
@@ -194,7 +194,7 @@ module Pod
       def resource_bundles
         result = {}
         spec_consumer.resource_bundles.each do |name, file_patterns|
-          paths = expanded_paths(file_patterns, :include_dirs => true)
+          paths = expanded_paths(file_patterns, include_dirs: true)
           result[name] = paths
         end
         result
@@ -278,9 +278,9 @@ module Pod
       def paths_for_attribute(attribute, include_dirs = false)
         file_patterns = spec_consumer.send(attribute)
         options = {
-          :exclude_patterns => spec_consumer.exclude_files,
-          :dir_pattern => GLOB_PATTERNS[attribute],
-          :include_dirs => include_dirs,
+          exclude_patterns: spec_consumer.exclude_files,
+          dir_pattern: GLOB_PATTERNS[attribute],
+          include_dirs: include_dirs,
         }
         expanded_paths(file_patterns, options)
       end

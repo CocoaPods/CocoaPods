@@ -88,7 +88,7 @@ module Pod
             versions_tags[Gem::Version.new(clean_tag)] = tag if Gem::Version.correct?(clean_tag)
           end
           version = versions_tags.keys.sort.last || '0.0.1'
-          data = { :version => version }
+          data = { version: version }
           if version == '0.0.1'
             branches        = GitHub.branches(repo['html_url'])
             master_name     = repo['master_branch'] || 'master'
@@ -146,7 +146,7 @@ Pod::Spec.new do |s|
   #
 
   s.license      = "MIT (example)"
-  # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
+  # s.license      = { type: "MIT", file: "FILE_LICENSE" }
 
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -185,7 +185,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
+  s.source       = { git: "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

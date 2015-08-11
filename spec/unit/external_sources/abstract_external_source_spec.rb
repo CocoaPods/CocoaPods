@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe ExternalSources::AbstractExternalSource do
     before do
-      dependency = Dependency.new('Reachability', :git => fixture('integration/Reachability'))
+      dependency = Dependency.new('Reachability', git: fixture('integration/Reachability'))
       @subject = ExternalSources.from_dependency(dependency, nil)
       config.sandbox.prepare
     end
@@ -12,9 +12,9 @@ module Pod
 
     describe 'In general' do
       it 'compares to another' do
-        dependency_1 = Dependency.new('Reachability', :git => 'url')
-        dependency_2 = Dependency.new('Another_name', :git => 'url')
-        dependency_3 = Dependency.new('Reachability', :git => 'another_url')
+        dependency_1 = Dependency.new('Reachability', git: 'url')
+        dependency_2 = Dependency.new('Another_name', git: 'url')
+        dependency_3 = Dependency.new('Reachability', git: 'another_url')
 
         dependency_1.should.be == dependency_1
         dependency_1.should.not.be == dependency_2
@@ -38,8 +38,8 @@ module Pod
         config.sandbox.predownloaded_pods.should == ['Reachability']
         config.sandbox.checkout_sources.should == {
           'Reachability' => {
-            :git => fixture('integration/Reachability'),
-            :commit => '4ec575e4b074dcc87c44018cce656672a979b34a',
+            git: fixture('integration/Reachability'),
+            commit: '4ec575e4b074dcc87c44018cce656672a979b34a',
           },
         }
       end

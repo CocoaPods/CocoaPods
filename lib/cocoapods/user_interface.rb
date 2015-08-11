@@ -351,7 +351,7 @@ module Pod
       # return [void]
       #
       def warn(message, actions = [], verbose_only = false)
-        warnings << { :message => message, :actions => actions, :verbose_only => verbose_only }
+        warnings << { message: message, actions: actions, verbose_only: verbose_only }
       end
 
       private

@@ -157,7 +157,7 @@ module Pod
         duplicated_paths = [a_path, a_path]
         @installer.target.pod_targets.each do |pod_target|
           pod_target.file_accessors.each do |accessor|
-            accessor.stubs(:resources => duplicated_paths)
+            accessor.stubs(resources: duplicated_paths)
           end
         end
         resources_by_config = @installer.send(:resources_by_config)
