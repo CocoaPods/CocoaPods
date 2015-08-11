@@ -8,9 +8,11 @@
   If your question is “How do I […]”, then please ask on [StackOverflow](http://stackoverflow.com/search?q=CocoaPods) or our [mailing-list](http://groups.google.com/group/cocoapods).
 * **Keep tickets short but sweet.** Make sure you include all the context needed to solve the issue. Don't overdo it. Great tickets allow us to focus on solving problems instead of discussing them.
 * **Take care of your ticket.** When you spend time to report a ticket with care we'll enjoy fixing it for you.
+* **Use [GitHub-flavored Markdown](https://help.github.com/articles/markdown-basics/).** Especially put code blocks and console outputs in backticks (```` ``` ````). That increases the readability. Bonus points for applying the appropriate syntax highlighting. (Tip: Podfiles are written in a Ruby DSL.)
 * **Do not litter.** Don’t add +1’s _unless_ specifically asked for and don’t discuss offtopic issues.
+* **Spell the name of the project correctly.** It's CocoaPods. In upper camel case.
 
-## Bug reports
+## Bug Reports
 
 In short, since you are most likely a developer, provide a ticket that you _yourself_ would _like_ to receive.
 
@@ -47,7 +49,7 @@ add an [integration test](https://github.com/CocoaPods/cocoapods-integration-spe
 which doesn't require any ruby knowledge.
 
 
-## Feature requests
+## Feature Requests
 
 Please try to be precise about the proposed outcome of the feature and how it
 would related to existing features.
