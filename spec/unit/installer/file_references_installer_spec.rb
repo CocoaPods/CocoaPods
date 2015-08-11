@@ -8,6 +8,12 @@ module Pod
       @project = Project.new(config.sandbox.project_path)
       @project.add_pod_group('BananaLib', fixture('banana-lib'))
       @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+
+      @pod_target_no_header = fixture_pod_target('BananaNoHeaderLib.podspec')
+      @file_accessor_no_header = @pod_target_no_header.file_accessors.first
+      @project_no_header = Project.new(config.sandbox.project_path)
+      @project_no_header.add_pod_group('BananaLib', fixture('banana-lib'))
+      @installer_no_header = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target_no_header], @project_no_header)
     end
 
     #-------------------------------------------------------------------------#
@@ -157,12 +163,9 @@ module Pod
         end
 
         it 'vendored frameworks without header' do
-          @pod_target = fixture_pod_target('BananaNoHeaderLib.podspec')
-          @file_accessor = @pod_target.file_accessors.first
           headers_sandbox = Pathname.new('BananaNoHeaderLib')
-          mappings = @installer.send(:vendored_frameworks_header_mappings, headers_sandbox, @file_accessor)
+          mappings = @installer_no_header.send(:vendored_frameworks_header_mappings, headers_sandbox, @file_accessor_no_header)
           mappings.should == {
-
           }
         end
       end

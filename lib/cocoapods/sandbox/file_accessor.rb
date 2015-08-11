@@ -161,6 +161,8 @@ module Pod
         headers_dir = framework + 'Headers'
         if headers_dir.exist?
           headers_dir.realpath
+        else
+          headers_dir
         end
       end
 
@@ -171,9 +173,7 @@ module Pod
       #
       def self.vendored_frameworks_headers(framework)
         headers_dir = vendored_frameworks_headers_dir(framework)
-        if headers_dir != nil
-          Pathname.glob(headers_dir + '**/' + GLOB_PATTERNS[:public_header_files])
-        end
+        Pathname.glob(headers_dir + '**/' + GLOB_PATTERNS[:public_header_files])
       end
 
       # @return [Array<Pathname>] The paths of the framework headers that come
