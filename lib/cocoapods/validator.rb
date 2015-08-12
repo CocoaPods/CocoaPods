@@ -111,7 +111,7 @@ module Pod
         when :warning then type = 'WARN'
         when :note    then type = 'NOTE'
         else raise "#{result.type}" end
-        UI.puts "    - #{type.ljust(5)} | #{platform_message}#{subspecs_message}#{result.message}"
+        UI.puts "    - #{type.ljust(5)} | #{platform_message}#{subspecs_message}#{result.attribute_name}: #{result.message}"
       end
       UI.puts
     end
