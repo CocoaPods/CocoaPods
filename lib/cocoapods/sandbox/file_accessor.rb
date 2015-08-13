@@ -337,7 +337,8 @@ module Pod
 
       def dynamic_binary?(binary)
         return unless binary.file?
-        Executable.execute_command('file', [binary], false) =~ /dynamically linked/
+        output, status = Executable.capture_command('file', [binary], :capture => :out)
+        status.success? && output =~ /dynamically linked/
       end
 
       #-----------------------------------------------------------------------#

@@ -20,15 +20,11 @@ module Pod
     #
     def executable(name)
       define_method(name) do |*command|
-        Executable.execute_command(name, Array(command).flatten, false, :message => true)
+        Executable.execute_command(name, Array(command).flatten, false)
       end
 
       define_method(name.to_s + '!') do |*command|
-        Executable.execute_command(name, Array(command).flatten, true, :message => true)
-      end
-
-      define_method(name.to_s + '?') do |*command|
-        Executable.execute_command(name, Array(command).flatten, false)
+        Executable.execute_command(name, Array(command).flatten, true)
       end
     end
 
@@ -49,14 +45,14 @@ module Pod
     #
     # @return [String] the output of the command (STDOUT and STDERR).
     #
-    def self.execute_command(executable, command, raise_on_failure = true, message: false, output: :both)
+    def self.execute_command(executable, command, raise_on_failure = true)
       bin = which(executable)
-      raise Informative, "Unable to locate the executable `#{executable}`" if bin.empty?
+      raise Informative, "Unable to locate the executable `#{executable}`" unless bin
 
       command = command.map(&:to_s)
       full_command = "#{bin} #{command.join(' ')}"
 
-      if message && Config.instance.verbose?
+      if Config.instance.verbose?
         UI.message("$ #{full_command}")
         stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
       else
@@ -65,19 +61,16 @@ module Pod
 
       status = popen3(bin, command, stdout, stderr)
       stdout, stderr = stdout.join, stderr.join
+      output = stdout + stderr
       unless status.success?
         if raise_on_failure
-          raise Informative, "#{full_command}\n\n#{stdout + stderr}"
-        elsif message
+          raise Informative, "#{full_command}\n\n#{output}"
+        else message
           UI.message("[!] Failed: #{full_command}".red)
         end
       end
 
-      case output
-      when :stdout then stdout
-      when :stderr then stderr
-      else stdout + stderr
-      end
+      output
     end
 
     # Returns the absolute path to the binary with the given name on the current
@@ -98,6 +91,37 @@ module Pod
         end
       end
       nil
+    end
+
+    # Runs the given command, capturing the desired output.
+    #
+    # @param  [String] bin
+    #         The binary to use.
+    #
+    # @param  [Array<#to_s>] command
+    #         The command to send to the binary.
+    #
+    # @param  [Symbol] capture
+    #         Whether it should raise if the command fails.
+    #
+    # @raise  If the executable could not be located.
+    #
+    # @return [(String, Process::Status)]
+    #         The desired captured output from the command, and the status from
+    #         running the command.
+    #
+    def capture_command(executable, command, capture: :merge)
+      bin = which(executable)
+      raise Informative, "Unable to locate the executable `#{executable}`" unless bin
+
+      require 'open3'
+      case capture
+      when :merge then Open3.capture2e(bin, *command)
+      when :both then Open3.capture3(bin, *command)
+      when :out then Open3.capture2(bin, *command)
+      when :err then Open3.capture3(bin, *command).drop(1)
+      when :none then Open3.capture2(bin, *command).last
+      end
     end
 
     private
