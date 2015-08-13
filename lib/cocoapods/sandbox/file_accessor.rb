@@ -207,6 +207,14 @@ module Pod
         vendored_libraries - vendored_dynamic_libraries
       end
 
+      def vendored_dynamic_artifacts
+        vendored_dynamic_libraries + vendored_dynamic_frameworks
+      end
+
+      def vendored_static_artifacts
+        vendored_static_libraries + vendored_static_frameworks
+      end
+
       # @return [Hash{String => Array<Pathname>}] A hash that describes the
       #         resource bundles of the Pod. The keys represent the name of
       #         the bundle while the values the path of the resources.

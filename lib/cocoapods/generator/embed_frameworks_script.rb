@@ -34,7 +34,7 @@ module Pod
       # @return [String] The contents of the embed frameworks script.
       #
       def script
-        script = <<-eos.strip_heredoc
+        script = <<-SH.strip_heredoc
           #!/bin/sh
           set -e
 
@@ -65,8 +65,11 @@ module Pod
             rsync -av --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${destination}"
 
             local basename
-            basename="$(basename "$1" | sed -E s/\\\\..+// && exit ${PIPESTATUS[0]})"
+            basename="$(basename -s .framework "$1")"
             binary="${destination}/${basename}.framework/${basename}"
+            if ! [ -r "$binary" ]; then
+              binary="${destination}/${basename}"
+            fi
 
             # Strip invalid architectures so "fat" simulator / device frameworks work on device
             if [[ "$(file "$binary")" == *"dynamically linked shared library"* ]]; then
@@ -114,15 +117,15 @@ module Pod
             fi
           }
 
-        eos
-        script += "\n" unless frameworks_by_config.values.all?(&:empty?)
+        SH
+        script << "\n" unless frameworks_by_config.values.all?(&:empty?)
         frameworks_by_config.each do |config, frameworks|
           unless frameworks.empty?
-            script += %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
+            script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
             frameworks.each do |framework|
-              script += "  install_framework '#{framework}'\n"
+              script << "  install_framework '#{framework}'\n"
             end
-            script += "fi\n"
+            script << "fi\n"
           end
         end
         script
