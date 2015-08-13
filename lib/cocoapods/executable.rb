@@ -65,7 +65,7 @@ module Pod
       unless status.success?
         if raise_on_failure
           raise Informative, "#{full_command}\n\n#{output}"
-        else message
+        else
           UI.message("[!] Failed: #{full_command}".red)
         end
       end
@@ -110,11 +110,12 @@ module Pod
     #         The desired captured output from the command, and the status from
     #         running the command.
     #
-    def capture_command(executable, command, capture: :merge)
+    def self.capture_command(executable, command, capture: :merge)
       bin = which(executable)
       raise Informative, "Unable to locate the executable `#{executable}`" unless bin
 
       require 'open3'
+      command = command.map(&:to_s)
       case capture
       when :merge then Open3.capture2e(bin, *command)
       when :both then Open3.capture3(bin, *command)
