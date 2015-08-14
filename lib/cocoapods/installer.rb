@@ -623,13 +623,17 @@ module Pod
 
           unless pod_target.should_build?
             pod_target.resource_bundle_targets.each do |resource_bundle_target|
-              aggregate_target.native_target.add_dependency(resource_bundle_target)
+              unless aggregate_target.requires_frameworks?
+                aggregate_target.native_target.add_dependency(resource_bundle_target)
+              end
             end
 
             next
           end
 
-          aggregate_target.native_target.add_dependency(pod_target.native_target)
+          unless aggregate_target.requires_frameworks?
+            aggregate_target.native_target.add_dependency(pod_target.native_target)
+          end
           configure_app_extension_api_only_for_target(pod_target) if is_app_extension
 
           pod_target.dependencies.each do |dep|

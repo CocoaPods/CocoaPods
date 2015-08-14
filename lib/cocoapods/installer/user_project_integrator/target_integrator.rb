@@ -100,6 +100,15 @@ module Pod
           changes
         end
 
+        def add_product_ref_for_target(build_phase, target)
+          frameworks = user_project.frameworks_group
+          target_basename = target.product_basename
+          new_product_ref = frameworks.files.find { |f| f.path == target.product_name } ||
+            frameworks.new_product_ref_for_target(target_basename, target.product_type)
+          build_file = build_phase.build_file(new_product_ref) ||
+            build_phase.add_file_reference(new_product_ref)
+        end
+
         # Adds spec product reference to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to
         # the frameworks group of the project and adds it to the frameworks
@@ -122,17 +131,20 @@ module Pod
             end
 
             # Find or create and add a reference for the current product type
-            target_basename = target.product_basename
-            new_product_ref = frameworks.files.find { |f| f.path == target.product_name } ||
-              frameworks.new_product_ref_for_target(target_basename, target.product_type)
-            build_file = build_phase.build_file(new_product_ref) ||
-              build_phase.add_file_reference(new_product_ref, true)
             if target.requires_frameworks?
-              # Weak link the aggregate target's product, because as it contains
-              # no symbols, it isn't copied into the app bundle. dyld will so
-              # never try to find the missing executable at runtime.
-              build_file.settings ||= {}
-              build_file.settings['ATTRIBUTES'] = ['Weak']
+              target.pod_targets.each do |pod_target|
+                unless pod_target.should_build?
+                  pod_target.resource_bundle_targets.each do |resource_bundle_target|
+                    add_product_ref_for_target(build_phase, resource_bundle_target)
+                  end
+
+                  next
+                end
+
+                add_product_ref_for_target(build_phase, pod_target)
+              end
+            else
+              add_product_ref_for_target(build_phase, target)
             end
           end
         end
