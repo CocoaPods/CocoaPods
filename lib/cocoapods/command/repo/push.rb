@@ -20,12 +20,15 @@ module Pod
         ]
 
         def self.options
-          [['--allow-warnings', 'Allows pushing even if there are warnings'],
-           ['--use-libraries', 'Linter uses static libraries to install the spec'],
-           ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
-            '(defaults to all available repos). '\
-            'Multiple sources must be comma-delimited.'],
-           ['--local-only', 'Does not perform the step of pushing REPO to its remote']].concat(super)
+          [
+            ['--allow-warnings', 'Allows pushing even if there are warnings'],
+            ['--use-libraries', 'Linter uses static libraries to install the spec'],
+            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
+             '(defaults to all available repos). ' \
+             'Multiple sources must be comma-delimited.'],
+            ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
+            ['--no-private', 'Lint includes checks that apply only to public repos'],
+          ].concat(super)
         end
 
         def initialize(argv)
@@ -35,6 +38,7 @@ module Pod
           @source_urls = argv.option('sources', SourcesManager.all.map(&:url).join(',')).split(',')
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
+          @private = argv.flag?('private', true)
           super
         end
 
@@ -91,6 +95,7 @@ module Pod
             validator = Validator.new(podspec, @source_urls)
             validator.allow_warnings = @allow_warnings
             validator.use_frameworks = @use_frameworks
+            validator.ignore_public_only_results = @private
             begin
               validator.validate
             rescue => e

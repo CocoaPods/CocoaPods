@@ -115,16 +115,19 @@ module Pod
         DESC
 
         def self.options
-          [['--quick',       'Lint skips checks that would require to download and build the spec'],
-           ['--allow-warnings', 'Lint validates even if warnings are present'],
-           ['--subspec=NAME', 'Lint validates only the given subspec'],
-           ['--no-subspecs', 'Lint skips validation of subspecs'],
-           ['--no-clean', 'Lint leaves the build directory intact for inspection'],
-           ['--fail-fast', 'Lint stops on the first failing platform or subspec'],
-           ['--use-libraries', 'Lint uses static libraries to install the spec'],
-           ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
-            '(defaults to https://github.com/CocoaPods/Specs.git). '\
-            'Multiple sources must be comma-delimited.']].concat(super)
+          [
+            ['--quick', 'Lint skips checks that would require to download and build the spec'],
+            ['--allow-warnings', 'Lint validates even if warnings are present'],
+            ['--subspec=NAME', 'Lint validates only the given subspec'],
+            ['--no-subspecs', 'Lint skips validation of subspecs'],
+            ['--no-clean', 'Lint leaves the build directory intact for inspection'],
+            ['--fail-fast', 'Lint stops on the first failing platform or subspec'],
+            ['--use-libraries', 'Lint uses static libraries to install the spec'],
+            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
+             '(defaults to https://github.com/CocoaPods/Specs.git). ' \
+             'Multiple sources must be comma-delimited.'],
+            ['--private', 'Lint skips checks that apply only to public specs'],
+          ].concat(super)
         end
 
         def initialize(argv)
@@ -136,6 +139,7 @@ module Pod
           @only_subspec    = argv.option('subspec')
           @use_frameworks  = !argv.flag?('use-libraries')
           @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
+          @private         = argv.flag?('private', false)
           @podspecs_paths  = argv.arguments!
           super
         end
@@ -156,6 +160,7 @@ module Pod
             validator.no_subspecs    = !@subspecs || @only_subspec
             validator.only_subspec   = @only_subspec
             validator.use_frameworks = @use_frameworks
+            validator.ignore_public_only_results = @private
             validator.validate
 
             unless @clean

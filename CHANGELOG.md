@@ -9,7 +9,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Bug Fixes
 
 * Build settings specified in `pod_target_xcconfig` of a spec are also for
-  library targets only applied to the pod target.    
+  library targets only applied to the pod target.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#3906](https://github.com/CocoaPods/CocoaPods/issues/3906)
 
@@ -50,6 +50,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#3905](https://github.com/CocoaPods/CocoaPods/issues/3905)
   [#4028](https://github.com/CocoaPods/CocoaPods/pull/4028)
+
+* Add a `--private` option to `pod spec lint`, `pod lib lint`, and
+  `pod repo push` that will ignore warnings that only apply to public
+  specifications and sources.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Core#190](https://github.com/CocoaPods/Core/issues/190)
+  [#2682](https://github.com/CocoaPods/CocoaPods/issues/2682)
 
 
 ## 0.38.2

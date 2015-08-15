@@ -15,7 +15,9 @@ module Pod
         ]
 
         def self.options
-          [['--only-errors', 'Lint presents only the errors']].concat(super)
+          [
+            ['--only-errors', 'Lint presents only the errors'],
+          ].concat(super)
         end
 
         def initialize(argv)
