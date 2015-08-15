@@ -123,7 +123,7 @@ module Pod
           unless frameworks.empty?
             script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
             frameworks.each do |framework|
-              script << "  install_framework '#{framework}'\n"
+              script << %(  install_framework "#{framework}"\n)
             end
             script << "fi\n"
           end
