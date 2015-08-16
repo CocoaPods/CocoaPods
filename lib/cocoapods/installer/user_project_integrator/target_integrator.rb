@@ -161,17 +161,22 @@ module Pod
         #
         def remove_embed_frameworks_script_phases
           return false if target.requires_frameworks?
-
-          result = false
-
-          native_targets.each do |native_target|
-            embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == EMBED_FRAMEWORK_PHASE_NAME }
-            next unless embed_build_phase.present?
-            native_target.build_phases.delete(embed_build_phase)
-            result = true
+          native_targets.any? do |native_target|
+            remove_embed_frameworks_script_phase(native_target)
           end
+        end
 
-          result
+        # Delete a 'Embed Pods Frameworks' Copy Files Build Phase if present
+        #
+        # @param [PBXNativeTarget] native_target
+        #
+        # @return [Bool] whether any changes to the project were made.
+        #
+        def remove_embed_frameworks_script_phase(native_target)
+          embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == EMBED_FRAMEWORK_PHASE_NAME }
+          return false unless embed_build_phase.present?
+          native_target.build_phases.delete(embed_build_phase)
+          true
         end
 
         # Adds a shell script build phase responsible to copy the resources
