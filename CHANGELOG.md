@@ -46,6 +46,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3190](https://github.com/CocoaPods/CocoaPods/issues/3190)
   [#3792](https://github.com/CocoaPods/CocoaPods/pull/3792)
 
+* Remove embed frameworks build phase from target types, where it is not required.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3905](https://github.com/CocoaPods/CocoaPods/issues/3905)
+  [#4028](https://github.com/CocoaPods/CocoaPods/pull/4028)
+
 
 ## 0.38.2
 
