@@ -146,10 +146,7 @@ module Pod
         # @return [void]
         #
         def add_embed_frameworks_script_phase
-          targets_to_embed_in = native_targets_to_integrate.select do |target|
-            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
-          end
-          targets_to_embed_in.each do |native_target|
+          native_targets_to_embed_in.each do |native_target|
             phase = create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
             script_path = target.embed_frameworks_script_relative_path
             phase.shell_script = %("#{script_path}"\n)
@@ -228,6 +225,16 @@ module Pod
         #
         def native_targets
           @native_targets ||= target.user_targets(user_project)
+        end
+
+        # @return [Array<PBXNativeTarget>] The list of all the targets that
+        #         require that the pod frameworks are embedded in the output
+        #         directory / product bundle.
+        #
+        def native_targets_to_embed_in
+          native_targets_to_integrate.select do |target|
+            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
+          end
         end
 
         # @return [Array<PBXNativeTarget>] The list of the targets
