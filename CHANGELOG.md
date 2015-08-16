@@ -21,6 +21,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dominique d'Argent](https://github.com/nubbel)
   [#3971](https://github.com/CocoaPods/CocoaPods/pull/3971)
 
+* Embed frameworks into app and watch extensions.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#4004](https://github.com/CocoaPods/CocoaPods/pull/4004)
+
 ##### Enhancements
 
 * Collapse the namespaced public and private pod xcconfig into one single
