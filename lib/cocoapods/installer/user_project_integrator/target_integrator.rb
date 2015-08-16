@@ -14,6 +14,10 @@ module Pod
         #
         EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle].freeze
 
+        # @return [String] the name of the embed frameworks phase
+        #
+        EMBED_FRAMEWORK_PHASE_NAME = 'Embed Pods Frameworks'.freeze
+
         # @return [AggregateTarget] the target that should be integrated.
         #
         attr_reader :target
@@ -38,6 +42,7 @@ module Pod
             project_is_dirty = [
               XCConfigIntegrator.integrate(target, native_targets),
               update_to_cocoapods_0_34,
+              update_to_cocoapods_0_37_1,
               remove_embed_frameworks_script_phases,
               unless native_targets_to_integrate.empty?
                 add_pods_library
@@ -100,6 +105,18 @@ module Pod
           changes
         end
 
+        # Removes the embed frameworks phase for target types.
+        #
+        # @return [Bool] whether any changes to the project were made.
+        #
+        # @todo   This can be removed for CocoaPods 1.0
+        #
+        def update_to_cocoapods_0_37_1
+          (native_targets - native_targets_to_embed_in).any? do |native_target|
+            remove_embed_frameworks_script_phase(native_target)
+          end
+        end
+
         # Adds spec product reference to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to
         # the frameworks group of the project and adds it to the frameworks
@@ -142,11 +159,8 @@ module Pod
         # @return [void]
         #
         def add_embed_frameworks_script_phase
-          targets_to_embed_in = native_targets_to_integrate.select do |target|
-            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
-          end
-          targets_to_embed_in.each do |native_target|
-            phase = create_or_update_build_phase(native_target, 'Embed Pods Frameworks')
+          native_targets_to_embed_in.each do |native_target|
+            phase = create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
             script_path = target.embed_frameworks_script_relative_path
             phase.shell_script = %("#{script_path}"\n)
           end
@@ -160,18 +174,22 @@ module Pod
         #
         def remove_embed_frameworks_script_phases
           return false if target.requires_frameworks?
-
-          phase_name = 'Embed Pods Frameworks'
-          result = false
-
-          native_targets.each do |native_target|
-            embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
-            next unless embed_build_phase.present?
-            native_target.build_phases.delete(embed_build_phase)
-            result = true
+          native_targets.any? do |native_target|
+            remove_embed_frameworks_script_phase(native_target)
           end
+        end
 
-          result
+        # Delete a 'Embed Pods Frameworks' Copy Files Build Phase if present
+        #
+        # @param [PBXNativeTarget] native_target
+        #
+        # @return [Bool] whether any changes to the project were made.
+        #
+        def remove_embed_frameworks_script_phase(native_target)
+          embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == EMBED_FRAMEWORK_PHASE_NAME }
+          return false unless embed_build_phase.present?
+          native_target.build_phases.delete(embed_build_phase)
+          true
         end
 
         # Adds a shell script build phase responsible to copy the resources
@@ -225,6 +243,16 @@ module Pod
         #
         def native_targets
           @native_targets ||= target.user_targets(user_project)
+        end
+
+        # @return [Array<PBXNativeTarget>] The list of all the targets that
+        #         require that the pod frameworks are embedded in the output
+        #         directory / product bundle.
+        #
+        def native_targets_to_embed_in
+          native_targets_to_integrate.select do |target|
+            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
+          end
         end
 
         # @return [Array<PBXNativeTarget>] The list of the targets
