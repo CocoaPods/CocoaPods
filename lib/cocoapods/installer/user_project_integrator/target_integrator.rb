@@ -14,6 +14,10 @@ module Pod
         #
         EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle].freeze
 
+        # @return [String] the name of the embed frameworks phase
+        #
+        EMBED_FRAMEWORK_PHASE_NAME = 'Embed Pods Frameworks'.freeze
+
         # @return [AggregateTarget] the target that should be integrated.
         #
         attr_reader :target
@@ -146,7 +150,7 @@ module Pod
             EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
           end
           targets_to_embed_in.each do |native_target|
-            phase = create_or_update_build_phase(native_target, 'Embed Pods Frameworks')
+            phase = create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
             script_path = target.embed_frameworks_script_relative_path
             phase.shell_script = %("#{script_path}"\n)
           end
@@ -161,11 +165,10 @@ module Pod
         def remove_embed_frameworks_script_phases
           return false if target.requires_frameworks?
 
-          phase_name = 'Embed Pods Frameworks'
           result = false
 
           native_targets.each do |native_target|
-            embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == phase_name }
+            embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == EMBED_FRAMEWORK_PHASE_NAME }
             next unless embed_build_phase.present?
             native_target.build_phases.delete(embed_build_phase)
             result = true
