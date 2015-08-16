@@ -42,6 +42,7 @@ module Pod
             project_is_dirty = [
               XCConfigIntegrator.integrate(target, native_targets),
               update_to_cocoapods_0_34,
+              update_to_cocoapods_0_37_1,
               remove_embed_frameworks_script_phases,
               unless native_targets_to_integrate.empty?
                 add_pods_library
@@ -102,6 +103,18 @@ module Pod
             end
           end
           changes
+        end
+
+        # Removes the embed frameworks phase for target types.
+        #
+        # @return [Bool] whether any changes to the project were made.
+        #
+        # @todo   This can be removed for CocoaPods 1.0
+        #
+        def update_to_cocoapods_0_37_1
+          (native_targets - native_targets_to_embed_in).any? do |native_target|
+            remove_embed_frameworks_script_phase(native_target)
+          end
         end
 
         # Adds spec product reference to the frameworks build phase of the
