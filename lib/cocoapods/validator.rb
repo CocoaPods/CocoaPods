@@ -62,7 +62,7 @@ module Pod
     # @return [Bool] whether the specification passed validation.
     #
     def validate
-      @results  = []
+      @results = []
 
       # Replace default spec with a subspec if asked for
       a_spec = spec
@@ -127,8 +127,12 @@ module Pod
       if !allow_warnings && (size = results_by_type[:warning].size) && size > 0
         reason = "#{size} #{'warning'.pluralize(size)}"
         pronoun = size == 1 ? 'it' : 'them'
-        reason <<  " (but you can use `--allow-warnings` to ignore #{pronoun})" if reasons.empty?
+        reason << " (but you can use `--allow-warnings` to ignore #{pronoun})" if reasons.empty?
         reasons << reason
+      end
+      if results.all?(&:public_only)
+        reasons << 'All results apply only to public specs, but you can use ' \
+                   '`--private` to ignore them if linting the specification for a private pod.'
       end
       reasons.to_sentence
     end
@@ -177,6 +181,11 @@ module Pod
     #
     attr_accessor :use_frameworks
 
+    # @return [Boolean] Whether attributes that affect only public sources
+    #         Bool be skipped.
+    #
+    attr_accessor :ignore_public_only_results
+
     #-------------------------------------------------------------------------#
 
     # !@group Lint results
@@ -195,7 +204,9 @@ module Pod
     #         One of: `:error`, `:warning`, `:note`.
     #
     def result_type
-      types = results.map(&:type).uniq
+      applicable_results = results
+      applicable_results = applicable_results.reject(&:public_only?) if ignore_public_only_results
+      types              = applicable_results.map(&:type).uniq
       if    types.include?(:error)   then :error
       elsif types.include?(:warning) then :warning
       else  :note
@@ -277,9 +288,9 @@ module Pod
       resp = Pod::HTTP.validate_url(url)
 
       if !resp
-        warning('url', "There was a problem validating the URL #{url}.")
+        warning('url', "There was a problem validating the URL #{url}.", true)
       elsif !resp.success?
-        warning('url', "The URL (#{url}) is not reachable.")
+        warning('url', "The URL (#{url}) is not reachable.", true)
       end
 
       resp
@@ -297,8 +308,8 @@ module Pod
     #
     def validate_screenshots(spec)
       spec.screenshots.compact.each do |screenshot|
-        request = validate_url(screenshot)
-        if request && !(request.headers['content-type'] && request.headers['content-type'].first =~ /image\/.*/i)
+        response = validate_url(screenshot)
+        if response && !(response.headers['content-type'] && response.headers['content-type'].first =~ /image\/.*/i)
           warning('screenshot', "The screenshot #{screenshot} is not a valid image.")
         end
       end
@@ -395,7 +406,7 @@ module Pod
         UI.message "\nBuilding with xcodebuild.\n".yellow do
           output = Dir.chdir(config.sandbox_root) { xcodebuild }
           UI.puts output
-          parsed_output  = parse_xcodebuild_output(output)
+          parsed_output = parse_xcodebuild_output(output)
           parsed_output.each do |message|
             # Checking the error for `InputFile` is to work around an Xcode
             # issue where linting would fail even though `xcodebuild` actually
@@ -490,24 +501,24 @@ module Pod
 
     # !@group Result Helpers
 
-    def error(attribute_name, message)
-      add_result(:error, attribute_name, message)
+    def error(*args)
+      add_result(:error, *args)
     end
 
-    def warning(attribute_name, message)
-      add_result(:warning, attribute_name, message)
+    def warning(*args)
+      add_result(:warning, *args)
     end
 
-    def note(attribute_name, message)
-      add_result(:note, attribute_name, message)
+    def note(*args)
+      add_result(:note, *args)
     end
 
-    def add_result(type, attribute_name, message)
+    def add_result(type, attribute_name, message, public_only = false)
       result = results.find do |r|
-        r.type == type && r.attribute_name && r.message == message
+        r.type == type && r.attribute_name && r.message == message && r.public_only? == public_only
       end
       unless result
-        result = Result.new(type, attribute_name, message)
+        result = Result.new(type, attribute_name, message, public_only)
         results << result
       end
       result.platforms << consumer.platform_name if consumer
@@ -517,8 +528,8 @@ module Pod
     # Specialized Result to support subspecs aggregation
     #
     class Result < Specification::Linter::Results::Result
-      def initialize(type, attribute_name, message)
-        super(type, attribute_name, message)
+      def initialize(type, attribute_name, message, public_only = false)
+        super(type, attribute_name, message, public_only)
         @subspecs = []
       end
 
@@ -583,7 +594,7 @@ module Pod
     def parse_xcodebuild_output(output)
       lines = output.split("\n")
       selected_lines = lines.select do |l|
-        l.include?('error: ') && (l !~ /errors? generated\./) && (l !~ /error: \(null\)/)  ||
+        l.include?('error: ') && (l !~ /errors? generated\./) && (l !~ /error: \(null\)/) ||
           l.include?('warning: ') && (l !~ /warnings? generated\./) && (l !~ /frameworks only run on iOS 8/) ||
           l.include?('note: ') && (l !~ /expanded from macro/)
       end
