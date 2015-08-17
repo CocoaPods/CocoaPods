@@ -12,7 +12,7 @@ module Pod
         # @return [Array<Symbol>] the symbol types, which require that the pod
         # frameworks are embedded in the output directory / product bundle.
         #
-        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle].freeze
+        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle, :app_extension, :watch_extension, :watch2_extension].freeze
 
         # @return [String] the name of the embed frameworks phase
         #
