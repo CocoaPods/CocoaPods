@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 2b4ef62c5e1be45d04e417b6712e1651d40f8d63
-  branch: seg-linter-private-mode
+  revision: fd41ee938a5687a39711b0f3d1f9e76dd506dd5d
+  branch: master
   specs:
     cocoapods-core (0.38.2)
       activesupport (>= 3.2.15)
