@@ -71,7 +71,6 @@ module Pod
       # @return [Array<Pathname>]
       #
       def add_files(namespace, relative_header_paths, platform)
-        add_search_path(namespace, platform)
         namespaced_path = root + namespace
         namespaced_path.mkpath unless File.exist?(namespaced_path)
 
