@@ -63,7 +63,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#2682](https://github.com/CocoaPods/CocoaPods/issues/2682)
 
 
-## 0.38.2
+## 0.38.2 (2015-07-25)
 
 ##### Bug Fixes
 
@@ -93,7 +93,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3887](https://github.com/CocoaPods/CocoaPods/issues/3887)
 
 
-## 0.38.1
+## 0.38.1 (2015-07-23)
 
 ##### Enhancements
 
@@ -136,7 +136,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3819](https://github.com/CocoaPods/CocoaPods/issues/3819)
 
 
-## 0.38.0
+## 0.38.0 (2015-07-18)
 
 ##### Enhancements
 
@@ -153,7 +153,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3813](https://github.com/CocoaPods/CocoaPods/issues/3813)
 
 
-## 0.38.0.beta.2
+## 0.38.0.beta.2 (2015-07-05)
 
 ##### Enhancements
 
@@ -197,7 +197,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3763](https://github.com/CocoaPods/CocoaPods/issues/3763)
 
 
-## 0.38.0.beta.1
+## 0.38.0.beta.1 (2015-06-26)
 
 ##### Highlighted Enhancement That Needs Testing
 
@@ -335,7 +335,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3646](https://github.com/CocoaPods/CocoaPods/issues/3646)
 
 
-## 0.37.2
+## 0.37.2 (2015-05-27)
 
 ##### Enhancements
 
@@ -363,7 +363,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3500](https://github.com/CocoaPods/CocoaPods/issues/3500)
 
-## 0.37.1
+## 0.37.1 (2015-05-06)
 
 ##### Bug Fixes
 
@@ -403,7 +403,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
 
 
-## 0.37.0
+## 0.37.0 (2015-05-03)
 
 For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-0.37/) on our blog.
 
@@ -413,7 +413,7 @@ For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-
   [Matt Holgate](https://github.com/mjholgate)
 
 
-## 0.37.0.rc.2
+## 0.37.0.rc.2 (2015-04-30)
 
 ##### Bug Fixes
 
@@ -427,7 +427,7 @@ For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-
   [#3477](https://github.com/CocoaPods/CocoaPods/issues/3477)
 
 
-## 0.37.0.rc.1
+## 0.37.0.rc.1 (2015-04-27)
 
 [Core](https://github.com/CocoaPods/Core/compare/0.37.0.beta.1...0.37.0.rc.1)
 [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.24.0...0.24.1)
@@ -483,7 +483,7 @@ For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-
   [#3463](https://github.com/CocoaPods/CocoaPods/issues/3463)
 
 
-## 0.37.0.beta.1
+## 0.37.0.beta.1 (2015-04-18)
 
 ##### Enhancements
 
@@ -537,7 +537,7 @@ For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-
   [#3390](https://github.com/CocoaPods/CocoaPods/pull/3390)
 
 
-## 0.36.4
+## 0.36.4 (2015-04-16)
 
 ##### Bug Fixes
 
@@ -549,7 +549,7 @@ For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-
   [#3358](https://github.com/CocoaPods/CocoaPods/pull/3358)
 
 
-## 0.36.3
+## 0.36.3 (2015-03-31)
 
 ##### Bug Fixes
 
@@ -559,7 +559,7 @@ For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-
   [#3345](https://github.com/CocoaPods/CocoaPods/issues/3345)
 
 
-## 0.36.2
+## 0.36.2 (2015-03-31)
 
 [Core](https://github.com/CocoaPods/Core/compare/0.36.1...0.36.2)
 
@@ -577,7 +577,7 @@ For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-
   [#3299](https://github.com/CocoaPods/CocoaPods/issues/3299)
 
 
-## 0.36.1
+## 0.36.1 (2015-03-27)
 
 [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.23.0...0.23.1)
 
@@ -600,7 +600,7 @@ For more details, see 📝 [CocoaPods 0.37](http://blog.cocoapods.org/CocoaPods-
   `xcassets` for different targets will still have issues; we ([@AliSoftware](https://github.com/AliSoftware))
   are working on a deeper fix ([#3263](https://github.com/CocoaPods/CocoaPods/issues/3263)) for the next release._
 
-## 0.36.0
+## 0.36.0 (2015-03-11)
 
 [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.22.0...0.23.0)
 
@@ -655,7 +655,7 @@ For more details, see 📝 [CocoaPods 0.36](http://blog.cocoapods.org/CocoaPods-
   [#2983](https://github.com/CocoaPods/CocoaPods/issues/2983)
 
 
-## 0.36.0.rc.1
+## 0.36.0.rc.1 (2015-02-24)
 
 ##### Enhancements
 
@@ -779,7 +779,7 @@ For more details, see 📝 [CocoaPods 0.36](http://blog.cocoapods.org/CocoaPods-
   [#3181](https://github.com/CocoaPods/CocoaPods/issues/3181)
 
 
-## 0.36.0.beta.2
+## 0.36.0.beta.2 (2015-01-28)
 
 [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.21.0...0.21.2)
 
@@ -842,7 +842,7 @@ For more details, see 📝 [CocoaPods 0.36](http://blog.cocoapods.org/CocoaPods-
   [#3008](https://github.com/CocoaPods/CocoaPods/issues/3008)
 
 
-## 0.36.0.beta.1
+## 0.36.0.beta.1 (2014-12-25)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.35.0...0.36.0.beta.1)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.35.0...0.36.0.beta.1)
@@ -953,7 +953,7 @@ For more details, see 📝 [CocoaPods 0.36](http://blog.cocoapods.org/CocoaPods-
   [#2965](https://github.com/CocoaPods/CocoaPods/issues/2965)
 
 
-## 0.35.0
+## 0.35.0 (2014-11-19)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.34.4...0.35.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.34.4...0.35.0)
@@ -1026,7 +1026,7 @@ For more details, see 📝 [CocoaPods 0.35](http://blog.cocoapods.org/CocoaPods-
   [Daniel Tomlinson](https://github.com/DanielTomlinson)
   [#2820](https://github.com/CocoaPods/CocoaPods/issues/2820)
 
-## 0.35.0.rc2
+## 0.35.0.rc2 (2014-11-06)
 
 ##### Enhancements
 
@@ -1054,7 +1054,7 @@ For more details, see 📝 [CocoaPods 0.35](http://blog.cocoapods.org/CocoaPods-
   [#2667](https://github.com/CocoaPods/CocoaPods/issues/2667)
   [#2759](https://github.com/CocoaPods/CocoaPods/issues/2759)
 
-## 0.35.0.rc1
+## 0.35.0.rc1 (2014-11-02)
 
 ##### Highlighted Enhancements That Need Testing
 
@@ -1161,7 +1161,7 @@ For more details, see 📝 [CocoaPods 0.35](http://blog.cocoapods.org/CocoaPods-
   [#1249](https://github.com/CocoaPods/CocoaPods/issues/1249)
 
 
-## 0.34.4
+## 0.34.4 (2014-10-18)
 
 ##### Bug Fixes
 
@@ -1207,7 +1207,7 @@ For more details, see 📝 [CocoaPods 0.35](http://blog.cocoapods.org/CocoaPods-
   [#2651](https://github.com/CocoaPods/CocoaPods/issues/2651)
 
 
-## 0.34.2
+## 0.34.2 (2014-10-08)
 
 ##### Enhancements
 
@@ -1275,7 +1275,7 @@ For more details, see 📝 [CocoaPods 0.35](http://blog.cocoapods.org/CocoaPods-
   [#2532](https://github.com/CocoaPods/CocoaPods/pull/2532)
 
 
-## 0.34.1
+## 0.34.1 (2014-09-26)
 
 ##### Bug Fixes
 
@@ -1285,7 +1285,7 @@ For more details, see 📝 [CocoaPods 0.35](http://blog.cocoapods.org/CocoaPods-
   [#2526](https://github.com/CocoaPods/CocoaPods/issues/2526)
 
 
-## 0.34.0
+## 0.34.0 (2014-09-26)
 
 For more details, see 📝 [CocoaPods 0.34](http://blog.cocoapods.org/CocoaPods-0.34/) on our blog.
 
@@ -1343,7 +1343,7 @@ For more details, see 📝 [CocoaPods 0.34](http://blog.cocoapods.org/CocoaPods-
   [#1543](https://github.com/CocoaPods/CocoaPods/issues/1543)
 
 
-## 0.34.0.rc2
+## 0.34.0.rc2 (2014-09-16)
 
 ##### Bug Fixes
 
@@ -1358,7 +1358,7 @@ For more details, see 📝 [CocoaPods 0.34](http://blog.cocoapods.org/CocoaPods-
   [#2473](https://github.com/CocoaPods/CocoaPods/issues/2473)
 
 
-## 0.34.0.rc1
+## 0.34.0.rc1 (2014-09-13)
 
 ##### Breaking
 
@@ -1531,7 +1531,7 @@ For more details, see 📝 [CocoaPods 0.34](http://blog.cocoapods.org/CocoaPods-
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
 
-## 0.33.1
+## 0.33.1 (2014-05-20)
 
 ##### Bug Fixes
 
@@ -1548,7 +1548,7 @@ For more details, see 📝 [CocoaPods 0.34](http://blog.cocoapods.org/CocoaPods-
   [#34](https://github.com/CocoaPods/CLAide/issues/34)
 
 
-## 0.33.0
+## 0.33.0 (2014-05-20)
 
 For more details, see 📝 [CocoaPods 0.33](http://blog.cocoapods.org/CocoaPods-0.33/) on our blog.
 
@@ -1641,7 +1641,7 @@ For more details, see 📝 [CocoaPods 0.33](http://blog.cocoapods.org/CocoaPods-
   [Kyle Fuller](https://github.com/kylef)
   [#2024](https://github.com/CocoaPods/CocoaPods/issues/2024)
 
-## 0.32.1
+## 0.32.1 (2014-04-15)
 
 ##### Bug Fixes
 
@@ -1649,7 +1649,7 @@ For more details, see 📝 [CocoaPods 0.33](http://blog.cocoapods.org/CocoaPods-
   [Fabio Pelosin](https://github.com/fabiopelosin)
   [#2050](https://github.com/CocoaPods/CocoaPods/issues/2050)
 
-## 0.32.0
+## 0.32.0 (2014-04-15)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.1...0.32.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.1...0.32.0)
@@ -1746,7 +1746,7 @@ For more details, see 📝 [CocoaPods 0.32](http://blog.cocoapods.org/CocoaPods-
   [#2003](https://github.com/CocoaPods/CocoaPods/issues/2003)
 
 
-## 0.31.1
+## 0.31.1 (2014-04-01)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.31.0...0.31.1)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.31.0...0.31.1)
@@ -1766,7 +1766,7 @@ For more details, see 📝 [CocoaPods 0.32](http://blog.cocoapods.org/CocoaPods-
   [Core#82](https://github.com/CocoaPods/Core/issues/82)
 
 
-## 0.31.0
+## 0.31.0 (2014-03-31)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.30.0...0.31.0)
 • [CocoaPods-Core](https://github.com/CocoaPods/Core/compare/0.30.0...0.31.0)
@@ -1865,7 +1865,7 @@ For more details, see 📝 [CocoaPods 0.31](http://blog.cocoapods.org/CocoaPods-
   [#1862](https://github.com/CocoaPods/CocoaPods/issues/1862)
   [#1894](https://github.com/CocoaPods/CocoaPods/pull/1894)
 
-## 0.30.0
+## 0.30.0 (2014-03-29)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.29.0...0.30.0)
 
@@ -1901,7 +1901,7 @@ For more details, see 📝 [CocoaPods 0.30](http://blog.cocoapods.org/CocoaPods-
   [#1739](https://github.com/CocoaPods/CocoaPods/pull/1739)
 
 
-## 0.29.0
+## 0.29.0 (2013-12-25)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.28.0...0.29.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.28.0...0.29.0)
@@ -2029,7 +2029,7 @@ For more details, see 📝 [CocoaPods 0.29](http://blog.cocoapods.org/CocoaPods-
   [cocoapods-try#5](https://github.com/CocoaPods/cocoapods-try/issues/5)
 
 
-## 0.28.0
+## 0.28.0 (2013-11-14)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.27.1...0.28.0)
 • [CocoaPods-core](https://github.com/CocoaPods/Core/compare/0.27.1...0.28.0)
@@ -2103,7 +2103,7 @@ For more details, see 📝 [CocoaPods 0.28](http://blog.cocoapods.org/CocoaPods-
   [#1570](https://github.com/CocoaPods/CocoaPods/pull/1570)
 
 
-## 0.27.1
+## 0.27.1 (2013-10-24)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.2...0.27.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.2...0.27.1)
@@ -2160,7 +2160,7 @@ For more details, see 📝 [CocoaPods 0.27 and improved installation UX](http://
   [Fabio Pelosin](https://github.com/fabiopelosin)
 
 
-## 0.26.2
+## 0.26.2 (2013-10-09)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.26.1...0.26.2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.26.1...0.26.2)
@@ -2184,7 +2184,7 @@ For more details, see 📝 [CocoaPods 0.27 and improved installation UX](http://
   [#1454](https://github.com/CocoaPods/CocoaPods/issues/1454)
 
 
-## 0.26.1
+## 0.26.1 (2013-10-08)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.25.0...0.26.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.25.0...0.26.1)
@@ -2246,7 +2246,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   [#1272](https://github.com/CocoaPods/CocoaPods/pull/1272)
 
 
-## 0.25.0
+## 0.25.0 (2013-09-20)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.24.0...0.25.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.24.0...0.25.0)
@@ -2309,7 +2309,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   for details.
 
 
-## 0.24.0
+## 0.24.0 (2013-09-04)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.23.0...0.24.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.23.0...0.24.0)
@@ -2373,10 +2373,10 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   [#1309](https://github.com/CocoaPods/CocoaPods/issues/1309)
 
 
-## 0.23.0
+## 0.23.0 (2013-08-08)
 
 
-## 0.23.0.rc1
+## 0.23.0.rc1 (2013-08-02)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.3...0.23.0.rc1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.3...0.23.0.rc1)
@@ -2445,7 +2445,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
 
 
 
-## 0.22.3
+## 0.22.3 (2013-07-23)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.2...0.22.3)
 
@@ -2479,7 +2479,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
 
 
 
-## 0.22.2
+## 0.22.2 (2013-07-11)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.1...0.22.2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.1...0.22.2)
@@ -2508,7 +2508,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   [#1189](https://github.com/CocoaPods/CocoaPods/issues/1189)
 
 
-## 0.22.1
+## 0.22.1 (2013-07-03)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.22.0...0.22.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.22.0...0.22.1)
@@ -2519,7 +2519,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   [#1168](https://github.com/CocoaPods/CocoaPods/issues/1168)
 
 
-## 0.22.0
+## 0.22.0 (2013-07-03)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0...0.22.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.21.0...0.22.0)
@@ -2569,7 +2569,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   Thanks to Thomas Dohmke (ashtom) for the fix.
   [#1063](https://github.com/CocoaPods/CocoaPods/issues/1063)
 
-## 0.21.0
+## 0.21.0 (2013-07-01)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.21.0.rc1...0.21.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.21.0.rc1...0.21.0)
@@ -2584,7 +2584,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   [#1152](https://github.com/CocoaPods/CocoaPods/issues/1152)
 
 
-## 0.21.0.rc1
+## 0.21.0.rc1 (2013-06-18)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.2...0.21.0.rc1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.20.2...0.21.0.rc1)
@@ -2613,7 +2613,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   file for multiple targets.
   [#1099](https://github.com/CocoaPods/CocoaPods/issues/1099)
 
-## 0.20.2
+## 0.20.2 (2013-05-26)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.1...0.20.2)
 
@@ -2625,7 +2625,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
 * Allow sandbox-pod to execute any tool inside the Xcode.app bundle.
 * Allow sandbox-pod to execute any tool inside a rbenv prefix.
 
-## 0.20.1
+## 0.20.1 (2013-05-23)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.20.0...0.20.1)
 • [CLAide](https://github.com/CocoaPods/CLAide/compare/0.3.0...0.3.2)
@@ -2640,7 +2640,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
 * Required CLAide 0.3.2 as 0.3.0 didn't include all the files in the gemspec
   and 0.3.1 was not correctly processed by RubyGems.
 
-## 0.20.0
+## 0.20.0 (2013-05-23)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.1...0.20.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.1...0.20.0)
@@ -2716,7 +2716,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   [#1046](https://github.com/CocoaPods/CocoaPods/issues/1046)
   [#1039](https://github.com/CocoaPods/CocoaPods/issues/1039)
 
-## 0.19.1
+## 0.19.1 (2013-04-30)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.19.0...0.19.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.19.0...0.19.1)
@@ -2729,7 +2729,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   created resolving interferences in the hooks.
   [#1014](https://github.com/CocoaPods/CocoaPods/issues/1014)
 
-## 0.19.0
+## 0.19.0 (2013-04-30)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.18.1...0.19.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.18.1...0.19.0)
@@ -2774,7 +2774,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
 * Fixed issue with .svn folders in copy resources script.
   [#972](https://github.com/CocoaPods/CocoaPods/issues/972)
 
-## 0.18.1
+## 0.18.1 (2013-04-10)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.18.0...0.18.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.18.0...0.18.)
@@ -2791,7 +2791,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   [#919](https://github.com/CocoaPods/CocoaPods/issues/919)
 
 
-## 0.18.0
+## 0.18.0 (2013-04-08)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.2...0.18.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.2...0.18.0)
@@ -2837,7 +2837,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
   [#659](https://github.com/CocoaPods/CocoaPods/issues/659)
 
 
-## 0.17.2
+## 0.17.2 (2013-04-03)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.1...0.17.2)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.1...0.17.2)
@@ -2860,7 +2860,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
 * The exclude patterns now handle folders automatically.
 
 
-## 0.17.1
+## 0.17.1 (2013-03-30)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0...0.17.1)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0...0.17.1)
@@ -2870,7 +2870,7 @@ For more details, see 📝 [CocoaPods 0.26](http://blog.cocoapods.org/CocoaPods-
 * Always create the CACHE_ROOT directory when performing a search.
   [#917](https://github.com/CocoaPods/CocoaPods/issues/917)
 
-## 0.17.0
+## 0.17.0 (2013-03-29)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.17.0.rc7...0.17.0)
 • [cocoapods-core](https://github.com/CocoaPods/Core/compare/0.17.0.rc7...0.17.0)
@@ -3126,7 +3126,7 @@ presented below.
 - Extracted command-line command & option handling into
   [CLAide](https://github.com/CocoaPods/CLAide).
 
-## 0.16.4
+## 0.16.4 (2013-02-25)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.3...0.16.4)
 
@@ -3142,7 +3142,7 @@ presented below.
 - Explicitely require `date` in the gemspec for Ruby 2.0.0.
   [34da3f7](https://github.com/CocoaPods/CocoaPods/commit/34da3f792b2a36fafacd4122e29025c9cf2ff38d)
 
-## 0.16.3
+## 0.16.3 (2013-02-20)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.2...0.16.3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.3...0.5.0)
 
@@ -3175,7 +3175,7 @@ presented below.
   [308941e](https://github.com/CocoaPods/Xcodeproj/commit/308941eeaa3bca817742c774fd584cc5ab1c8f84)
 
 
-## 0.16.2
+## 0.16.2 (2013-02-02)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.1...0.16.2) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.1...0.4.3)
 
@@ -3204,7 +3204,7 @@ presented below.
 - Added support for pre-download over Mercurial.
   [#750](https://github.com/CocoaPods/CocoaPods/pull/750)
 
-## 0.16.1
+## 0.16.1 (2013-01-13)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0...0.16.1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0...0.4.1)
 
@@ -3229,7 +3229,7 @@ presented below.
 - Add helpers to get platform name, deployment target, and frameworks build phases
 - Take SDKROOT into account when adding frameworks.
 
-## 0.16.0
+## 0.16.0 (2012-11-22)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc5...master)
 
@@ -3238,7 +3238,7 @@ presented below.
 - Use Rake 0.9.4
   [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
 
-## 0.16.0.rc5
+## 0.16.0.rc5 (2012-11-14)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc4...0.16.0.rc5)
 
@@ -3259,7 +3259,7 @@ presented below.
   [#614](https://github.com/CocoaPods/CocoaPods/issues/614)
   [#613](https://github.com/CocoaPods/CocoaPods/issues/613)
 
-## 0.16.0.rc4
+## 0.16.0.rc4 (2012-11-14)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc3...0.16.0.rc4)
 
@@ -3268,7 +3268,7 @@ presented below.
 - Fix for Rake 0.9.3
   [#657](https://github.com/CocoaPods/CocoaPods/issues/657)
 
-## 0.16.0.rc3
+## 0.16.0.rc3 (2012-11-02)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc2...0.16.0.rc3) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.4.0.rc1...0.4.0.rc6)
 
@@ -3286,7 +3286,7 @@ presented below.
 - Added support for PBXReferenceProxy.
   [#612](https://github.com/CocoaPods/CocoaPods/issues/612)
 
-## 0.16.0.rc2
+## 0.16.0.rc2 (2012-10-21)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.16.0.rc1...0.16.0.rc2)
 
@@ -3294,7 +3294,7 @@ presented below.
 
 - Fix for uninitialized constant Xcodeproj::Constants error.
 
-## 0.16.0.rc1
+## 0.16.0.rc1 (2012-10-21)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.2...0.16.0.rc1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.5...0.4.0.rc1)
 
@@ -3306,7 +3306,7 @@ presented below.
   - Performance improvements in the `Generating support files` phase.
   - Better support for editing existing projects and sorting groups.
 
-## 0.15.2
+## 0.15.2 (2012-10-19)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.1...0.15.2)
 
@@ -3329,7 +3329,7 @@ presented below.
 - Xcodeproj robustness against invalid values, such as malformed UTF8.
   [#592](https://github.com/CocoaPods/CocoaPods/issues/592)
 
-## 0.15.1
+## 0.15.1 (2012-10-04)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.15.0...0.15.1)
 
@@ -3348,7 +3348,7 @@ presented below.
   [#567](https://github.com/CocoaPods/CocoaPods/issues/567)
 - Fixed an issue that lead to excessively slow sets computation.
 
-## 0.15.0
+## 0.15.0 (2012-10-02)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0...0.15.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.3...0.3.4)
 
@@ -3389,7 +3389,7 @@ presented below.
 - Added support for `.hpp` headers.
   [#244](https://github.com/CocoaPods/CocoaPods/issues/244)
 
-## 0.14.0
+## 0.14.0 (2012-09-10)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc2...0.14.0) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.2...0.3.3)
 
@@ -3406,7 +3406,7 @@ presented below.
 - Fixed Xcode 4.4+ artwork warning.
   [Specs#508](https://github.com/CocoaPods/CocoaPods/issues/508)
 
-## 0.14.0.rc2
+## 0.14.0.rc2 (2012-08-30)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.14.0.rc1...0.14.0.rc2)
 
@@ -3419,7 +3419,7 @@ presented below.
 - Fixed the `uninitialized constant Pod::Lockfile::Digest` error.
   [#484](https://github.com/CocoaPods/CocoaPods/issues/484)
 
-## 0.14.0.rc1
+## 0.14.0.rc1 (2012-08-28)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.13.0...0.14.0.rc1) • [Xcodeproj](https://github.com/CocoaPods/Xcodeproj/compare/0.3.1...0.3.2)
 
@@ -3476,7 +3476,7 @@ presented below.
   workaround, remove their folder stored in `Pods`.
 
 
-## 0.13.0
+## 0.13.0 (2012-08-22)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.12.0...0.13.0)
 
@@ -3496,7 +3496,7 @@ presented below.
   [#462](https://github.com/CocoaPods/CocoaPods/issues/462)
 
 
-## 0.12.0
+## 0.12.0 (2012-08-21)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.1...0.12.0)
 
@@ -3518,7 +3518,7 @@ presented below.
   groups. [#466](https://github.com/CocoaPods/CocoaPods/pull/466)
 
 
-## 0.11.1
+## 0.11.1 (2012-08-09)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.11.0...0.11.1)
 
@@ -3530,7 +3530,7 @@ presented below.
 - Fixed SVN support for the head version. [#432]
 
 
-## 0.11.0
+## 0.11.0 (2012-08-08)
 
 [CocoaPods](https://github.com/CocoaPods/CocoaPods/compare/0.10.0...0.11.0)
 
@@ -3550,7 +3550,7 @@ presented below.
 - Resolved an issue that lead to git error messages in the error report.
 
 
-## 0.10.0
+## 0.10.0 (2012-07-29)
 
 [CocoaPods](http://git.io/4i75YA)
 
@@ -3574,7 +3574,7 @@ presented below.
 - Support `tar.gz` as filename in a HTTP source. [#428](http://git.io/qhwKkA)
 
 
-## 0.9.2
+## 0.9.2 (2012-07-16)
 
 [CocoaPods](http://git.io/AVlRKg) • [Xcodeproj](http://git.io/xHbc0w)
 
@@ -3584,7 +3584,7 @@ presented below.
 - Raise an informative error message when the platform in the `Podfile` is omitted or incorrect. [#403](http://git.io/k5EcUQ)
 
 
-## 0.9.1
+## 0.9.1 (2012-07-14)
 
 [CocoaPods](http://git.io/_kqAbw)
 
@@ -3593,7 +3593,7 @@ presented below.
 - CocoaPods 0.9.x needs Xcodeproj 0.3.0.
 
 
-## 0.9.0
+## 0.9.0 (2012-07-14)
 
 [CocoaPods](http://git.io/kucJQw) • [Xcodeproj](http://git.io/5eLL8g)
 
@@ -3611,7 +3611,7 @@ presented below.
   related to prerelease version comparisons. Unfortunately, OS X >= 10.7 ships with 1.3.6. [#398](http://git.io/Lr7DoA)
 
 
-## 0.8.0
+## 0.8.0 (2012-07-09)
 
 [CocoaPods](http://git.io/RgMF3w) • [Xcodeproj](http://git.io/KBKE_Q)
 
@@ -3630,7 +3630,7 @@ pod 'Reachability', '~> 2.0.4'
 - Properly quote all paths given to Git.
 
 
-## 0.7.0
+## 0.7.0 (2012-07-06)
 
 [CocoaPods](http://git.io/Agia6A) • [Xcodeproj](http://git.io/mlqquw)
 
@@ -3649,7 +3649,7 @@ pod 'Reachability', '~> 2.0.4'
 - CocoaPods is now case insensitive.
 
 
-## 0.6.1
+## 0.6.1 (2012-07-01)
 
 [CocoaPods](http://git.io/45wFjw) • [Xcodeproj](http://git.io/rRA4XQ)
 
@@ -3661,7 +3661,7 @@ pod 'Reachability', '~> 2.0.4'
 - Fixed a bug that caused duplication of system framworks.
 
 
-## 0.6.0
+## 0.6.0 (2012-07-01)
 
 A full list of all the changes since 0.5.1 can be found [here][6].
 
@@ -3867,7 +3867,7 @@ podspec, then update these method calls.
 * Added weak quoting to `ibtool` input paths.
 
 
-## 0.5.0
+## 0.5.0 (2011-11-22)
 
 No longer requires MacRuby. Runs on MRI 1.8.7 (OS X system version) and 1.9.3.
 
@@ -3879,7 +3879,7 @@ A full list of all the changes since 0.3.0 can be found [here][7].
 Oops, accidentally skipped this version.
 
 
-## 0.3.0
+## 0.3.0 (2011-11-12)
 
 ### Multiple targets
 
