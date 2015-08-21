@@ -158,7 +158,12 @@ module Pod
       #         vendored framework.
       #
       def self.vendored_frameworks_headers_dir(framework)
-        (framework + 'Headers').realpath
+        headers_dir = framework + 'Headers'
+        if headers_dir.exist?
+          headers_dir.realpath
+        else
+          headers_dir
+        end
       end
 
       # @param  [Pathname] framework

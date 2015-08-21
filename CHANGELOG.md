@@ -8,6 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Prevent Linking Headers crash if the framework's headers is nil.
+  [christ yuj](https://github.com/christyuj)
+  [#3980](https://github.com/CocoaPods/CocoaPods/pull/3980)
 * Build settings specified in `pod_target_xcconfig` of a spec are also for
   library targets only applied to the pod target.  
   [Marius Rackwitz](https://github.com/mrackwitz)
