@@ -6,6 +6,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Breaking
+
+* The `HEADER_SEARCH_PATHS` will no longer be constructed recursively.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [twoboxen](https://github.com/twoboxen)
+  [#1437](https://github.com/CocoaPods/CocoaPods/issues/1437)
+  [#3760](https://github.com/CocoaPods/CocoaPods/issues/3760)
+
 ##### Bug Fixes
 
 * Build settings specified in `pod_target_xcconfig` of a spec are also for
