@@ -54,6 +54,7 @@ module Pod
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []
       @resource_bundle_targets = []
+      @dependent_targets = []
     end
 
     # @return [Array<PodTarget>] a scoped copy for each target definition.
@@ -65,6 +66,7 @@ module Pod
           target.user_build_configurations = user_build_configurations
           target.native_target = native_target
           target.archs = archs
+          target.dependent_targets = dependent_targets.map(&:scoped)
         end
       end
     end
