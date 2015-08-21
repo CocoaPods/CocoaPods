@@ -37,6 +37,7 @@ group :development do
   gem 'diffy'
   gem 'clintegracon'
   gem 'rubocop'
+  cp_gem 'cocoapods-regression', 'cocoapods-regression'
 end
 
 group :debugging do

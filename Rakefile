@@ -120,6 +120,14 @@ begin
       sh 'bundle exec bacon spec/integration.rb'
     end
 
+    desc 'Run the regression suite'
+    task :regression do
+      require 'cocoapods-regression'
+      CocoaPods::Regression.apps.each do |app|
+        CocoaPods::Regression.test!(app, 'bin/pod')
+      end
+    end
+
     # Default task
     #--------------------------------------#
     #
@@ -138,6 +146,11 @@ begin
 
       title 'Running examples'
       Rake::Task['examples:build'].invoke
+
+      if true || ENV['TRAVIS_PULL_REQUEST'] == 'false'
+        title 'Running regression tests'
+        Rake::Task['spec:regression'].invoke
+      end
 
       title 'Running RuboCop'
       Rake::Task['rubocop'].invoke
