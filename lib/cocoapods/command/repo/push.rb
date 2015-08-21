@@ -23,7 +23,7 @@ module Pod
           [
             ['--allow-warnings', 'Allows pushing even if there are warnings'],
             ['--use-libraries', 'Linter uses static libraries to install the spec'],
-            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
+            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependent pods ' \
              '(defaults to all available repos). ' \
              'Multiple sources must be comma-delimited.'],
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],

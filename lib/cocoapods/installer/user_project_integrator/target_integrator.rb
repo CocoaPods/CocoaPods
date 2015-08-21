@@ -112,7 +112,10 @@ module Pod
         # @todo   This can be removed for CocoaPods 1.0
         #
         def update_to_cocoapods_0_37_1
-          (native_targets - native_targets_to_embed_in).any? do |native_target|
+          targets_to_embed = native_targets.select do |target|
+            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
+          end
+          (native_targets - targets_to_embed).any? do |native_target|
             remove_embed_frameworks_script_phase(native_target)
           end
         end
@@ -124,10 +127,7 @@ module Pod
         # @todo   This can be removed for CocoaPods 1.0
         #
         def update_to_cocoapods_0_39
-          targets_to_embed_in = native_targets_to_integrate.select do |target|
-            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
-          end
-          requires_update = targets_to_embed_in.any? do |target|
+          requires_update = native_targets_to_embed_in.any? do |target|
             !target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
           end
           if requires_update

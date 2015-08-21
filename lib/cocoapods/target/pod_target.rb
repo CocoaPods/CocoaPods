@@ -33,6 +33,11 @@ module Pod
     attr_reader :scoped
     alias_method :scoped?, :scoped
 
+    # @return [Array<PodTarget>] the targets that this target has a dependency
+    #         upon.
+    #
+    attr_accessor :dependent_targets
+
     # @param [Array<Specification>] @spec #see spec
     # @param [Array<TargetDefinition>] target_definitions @see target_definitions
     # @param [Sandbox] sandbox @see sandbox
