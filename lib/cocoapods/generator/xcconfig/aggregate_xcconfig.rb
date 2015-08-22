@@ -106,9 +106,9 @@ module Pod
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(framework_header_search_paths, '-iquote'),
             }
             if pod_targets.any? { |t| !t.should_build? }
-              # Make library headers discoverale by `#import "…"`
+              # Make library headers discoverable by `#import "…"`
               library_header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
-              build_settings['HEADER_SEARCH_PATHS'] = XCConfigHelper.quote(library_header_search_paths)
+              build_settings['HEADER_SEARCH_PATHS'] = '$(inherited) ' + XCConfigHelper.quote(library_header_search_paths)
               build_settings['OTHER_CFLAGS'] += ' ' + XCConfigHelper.quote(library_header_search_paths, '-isystem')
             end
             if pod_targets.any? { |t| t.should_build? && t.scoped? }
