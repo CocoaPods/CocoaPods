@@ -156,7 +156,7 @@ module Pod
             @sut.add_library_build_settings(path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
             hash_config['OTHER_LDFLAGS'].should == '-l"Proj4"'
-            hash_config['LIBRARY_SEARCH_PATHS'].should == '"$(PODS_ROOT)/MapBox/Proj4"'
+            hash_config['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "$(PODS_ROOT)/MapBox/Proj4"'
           end
         end
 

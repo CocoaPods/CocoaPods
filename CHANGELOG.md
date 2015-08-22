@@ -32,6 +32,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Embed frameworks into app and watch extensions.  
   [Boris Bügling](https://github.com/neonichu)
   [#4004](https://github.com/CocoaPods/CocoaPods/pull/4004)
+  
+* Fix missing `$(inherited)` for generated xcconfig `LIBRARY_SEARCH_PATHS` and `HEADER_SEARCH_PATHS` build settings.  
+  [Tyler Fox](https://github.com/smileyborg)
+  [#3908](https://github.com/CocoaPods/CocoaPods/issues/3908)
 
 ##### Enhancements
 

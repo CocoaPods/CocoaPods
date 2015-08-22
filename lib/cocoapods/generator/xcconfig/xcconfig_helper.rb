@@ -116,7 +116,7 @@ module Pod
           dirname = '$(PODS_ROOT)/' + library_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'OTHER_LDFLAGS' => "-l#{name}",
-            'LIBRARY_SEARCH_PATHS' => quote([dirname]),
+            'LIBRARY_SEARCH_PATHS' => '$(inherited) ' + quote([dirname]),
           }
           xcconfig.merge!(build_settings)
         end
