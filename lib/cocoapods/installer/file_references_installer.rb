@@ -128,17 +128,17 @@ module Pod
               end
 
               header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
-                pod_target.build_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, pod_target.platform)
+                pod_target.build_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp })
               end
 
               unless pod_target.requires_frameworks? && pod_target.should_build?
                 header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
-                  sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, pod_target.platform)
+                  sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp })
                 end
               end
 
               vendored_frameworks_header_mappings(headers_sandbox, file_accessor).each do |namespaced_path, files|
-                sandbox.public_headers.add_files(namespaced_path, files, pod_target.platform)
+                sandbox.public_headers.add_files(namespaced_path, files)
               end
             end
           end

@@ -66,13 +66,13 @@ module Pod
       #         the path of the header file relative to the Pods project
       #         (`PODS_ROOT` variable of the xcconfigs).
       #
-      # @note   This method adds the files to the search paths.
+      # @note   This method does _not_ add the files to the search paths.
       #
       # @return [Array<Pathname>]
       #
-      def add_files(namespace, relative_header_paths, platform)
+      def add_files(namespace, relative_header_paths)
         relative_header_paths.map do |relative_header_path|
-          add_file(namespace, relative_header_path, relative_header_path.basename, platform)
+          add_file(namespace, relative_header_path, relative_header_path.basename)
         end
       end
 
@@ -90,12 +90,11 @@ module Pod
       #         the name under which the file should be available in the
       #         headers directory.
       #
-      # @note   This method adds the file to the search paths.
+      # @note   This method does _not_ add the file to the search paths.
       #
       # @return [Pathname]
       #
-      def add_file(namespace, relative_header_path, final_name, platform)
-        add_search_path(namespace, platform)
+      def add_file(namespace, relative_header_path, final_name)
         namespaced_path = root + namespace
         namespaced_path.mkpath unless File.exist?(namespaced_path)
 
