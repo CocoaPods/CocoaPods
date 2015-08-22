@@ -43,7 +43,7 @@ module Pod
           target_search_paths = target.build_headers.search_paths(target.platform)
           sandbox_search_paths = target.sandbox.public_headers.search_paths(target.platform)
           search_paths = target_search_paths.concat(sandbox_search_paths).uniq
-          framework_search_paths = target.dependent_targets.flat_map(&:file_accessors).flat_map(&:vendored_frameworks).map { |fw| '${PODS_ROOT}/' << fw.dirname.relative_path_from(target.sandbox.root).to_s}
+          framework_search_paths = target.dependent_targets.flat_map(&:file_accessors).flat_map(&:vendored_frameworks).map { |fw| '${PODS_ROOT}/' << fw.dirname.relative_path_from(target.sandbox.root).to_s }
 
           config = {
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
