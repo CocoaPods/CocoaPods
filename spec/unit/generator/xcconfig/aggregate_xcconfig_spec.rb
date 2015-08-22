@@ -181,6 +181,11 @@ module Pod
               expected = '${PODS_ROOT}/Headers/Public'
               @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include expected
             end
+
+            it 'includes $(inherited) in the header search paths' do
+              expected = '$(inherited)'
+              @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include expected
+            end
           end
 
           it 'sets the PODS_FRAMEWORK_BUILD_PATH build variable' do
